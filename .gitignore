@@ -1,2 +1,11 @@
+# 모든 것을 무시
 *
-!*.cs
+
+# .gitignore 파일은 추적
+!/.gitignore
+
+# Assets 폴더의 모든 것 (하위 폴더 포함)을 무시 대상에서 제외
+!Assets/
+
+# Assets 폴더 안의 모든 파일 중, .cs 확장자만 추적 (핵심)
+!Assets/**/*.cs

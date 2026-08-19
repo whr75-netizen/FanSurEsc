@@ -2,28 +2,28 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    // ½Ì±ÛÅæ ÀÎ½ºÅÏ½º
+    // ì‹±ê¸€í†¤ ì¸ìŠ¤í„´ìŠ¤
     public static GameManager Instance { get; private set; }
 
-    // Ãß°¡ Àü¿ª µ¥ÀÌÅÍ (ÇÊ¿ä ½Ã È®Àå)
+    // ì¶”ê°€ ì „ì—­ ë°ì´í„° (í•„ìš” ì‹œ í™•ìž¥)
     [SerializeField] private int playerLevel = 1;
     [SerializeField] private bool isSoundOn = true;
 
     void Awake()
     {
-        // ½Ì±ÛÅæ ¼³Á¤
+        // ì‹±ê¸€í†¤ ì„¤ì •
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject); // ¾À ÀüÈ¯ ½Ã À¯Áö
+            DontDestroyOnLoad(gameObject); // ì”¬ ì „í™˜ ì‹œ ìœ ì§€
         }
         else if (Instance != this)
         {
-            Destroy(gameObject); // Áßº¹ ¹æÁö
+            Destroy(gameObject); // ì¤‘ë³µ ë°©ì§€
         }
     }
 
-    // Àü¿ª µ¥ÀÌÅÍ getter/setter (¿¹½Ã)
+    // ì „ì—­ ë°ì´í„° getter/setter (ì˜ˆì‹œ)
     public int PlayerLevel
     {
         get => playerLevel;
@@ -38,6 +38,6 @@ public class GameManager : MonoBehaviour
 
     public void Initialize()
     {
-        Debug.Log("GameManager ÃÊ±âÈ­ ¿Ï·á");
+        Debug.Log("GameManager ì´ˆê¸°í™” ì™„ë£Œ");
     }
 }

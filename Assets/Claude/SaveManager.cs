@@ -27,12 +27,6 @@ public static class SaveManager
     /// </summary>
     public static void Save(int slot)
     {
-        // 폴더 재확인 (안전장치)
-        if (!Directory.Exists(saveFolder))
-        {
-            Directory.CreateDirectory(saveFolder);
-        }
-        
         SaveData data = new SaveData
         {
             saveSlot = slot,

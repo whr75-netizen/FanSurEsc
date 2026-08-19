@@ -17,6 +17,12 @@ public class GameLoader : MonoBehaviour
     
     void Start()
     {
+        if (playerPrefab == null)
+        {
+            Debug.LogError("[GameLoader] Player Prefab이 할당되지 않았습니다!");
+            return;
+        }
+        
         // 저장된 데이터가 있으면 로드, 없으면 새 게임
         if (saveToLoad != null)
         {

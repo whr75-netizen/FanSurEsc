@@ -1,26 +1,26 @@
 using UnityEngine;
-using VariableInventorySystem; // ¡Ú ¿¡¼Â ³×ÀÓ½ºÆäÀÌ½º »ç¿ë
+using VariableInventorySystem; // â˜… ì—ì…‹ ë„¤ì„ìŠ¤í˜ì´ìŠ¤ ì‚¬ìš©
 
-// ÀÌ ½ºÅ©¸³Æ®¸¦ »óÀÚ ÇÁ¸®ÆÕ ¶Ç´Â °ÔÀÓ ¿ÀºêÁ§Æ®¿¡ Ãß°¡ÇÏ¼¼¿ä.
-// »óÀÚ ¿ÀºêÁ§Æ®¿¡´Â Collider ÄÄÆ÷³ÍÆ®°¡ ÀÖ¾î¾ß ÇÏ°í, IsTrigger°¡ Ã¼Å©µÇ¾î ÀÖ¾î¾ß ÇÕ´Ï´Ù.
-// ¶ÇÇÑ, ÇÃ·¹ÀÌ¾îÀÇ OnTriggerEnter/Exit¿¡¼­ °¨ÁöÇÒ ¼ö ÀÖµµ·Ï ÀûÀıÇÑ ·¹ÀÌ¾î("Chest" µî) ¶Ç´Â ÅÂ±×("Chest" µî)¸¦ ¼³Á¤ÇØ¾ß ÇÕ´Ï´Ù.
+// ì´ ìŠ¤í¬ë¦½íŠ¸ë¥¼ ìƒì í”„ë¦¬íŒ¹ ë˜ëŠ” ê²Œì„ ì˜¤ë¸Œì íŠ¸ì— ì¶”ê°€í•˜ì„¸ìš”.
+// ìƒì ì˜¤ë¸Œì íŠ¸ì—ëŠ” Collider ì»´í¬ë„ŒíŠ¸ê°€ ìˆì–´ì•¼ í•˜ê³ , IsTriggerê°€ ì²´í¬ë˜ì–´ ìˆì–´ì•¼ í•©ë‹ˆë‹¤.
+// ë˜í•œ, í”Œë ˆì´ì–´ì˜ OnTriggerEnter/Exitì—ì„œ ê°ì§€í•  ìˆ˜ ìˆë„ë¡ ì ì ˆí•œ ë ˆì´ì–´("Chest" ë“±) ë˜ëŠ” íƒœê·¸("Chest" ë“±)ë¥¼ ì„¤ì •í•´ì•¼ í•©ë‹ˆë‹¤.
 public class Chest : MonoBehaviour
 {
-    public StandardStashViewData chestInventoryData; // ÀÌ »óÀÚ¸¸ÀÇ °íÀ¯ ÀÎº¥Åä¸® µ¥ÀÌÅÍ
+    [System.NonSerialized] public StandardStashViewData chestInventoryData; // ëŸ°íƒ€ì„ ì „ìš©. ì„¸ì´ë¸Œ ë°ì´í„°ëŠ” ë³„ë„ DTOë¡œ ì—°ê²°í•œë‹¤.
 
-    [Tooltip("ÀÌ »óÀÚ ÀÎº¥Åä¸®ÀÇ °¡·Î Ä­ ¼ö")]
-    public int chestWidth = 6; // »óÀÚ¸¶´Ù ´Ù¸£°Ô ¼³Á¤ °¡´É
-    [Tooltip("ÀÌ »óÀÚ ÀÎº¥Åä¸®ÀÇ ¼¼·Î Ä­ ¼ö")]
-    public int chestHeight = 5; // »óÀÚ¸¶´Ù ´Ù¸£°Ô ¼³Á¤ °¡´É
+    [Tooltip("ì´ ìƒì ì¸ë²¤í† ë¦¬ì˜ ê°€ë¡œ ì¹¸ ìˆ˜")]
+    public int chestWidth = 6; // ìƒìë§ˆë‹¤ ë‹¤ë¥´ê²Œ ì„¤ì • ê°€ëŠ¥
+    [Tooltip("ì´ ìƒì ì¸ë²¤í† ë¦¬ì˜ ì„¸ë¡œ ì¹¸ ìˆ˜")]
+    public int chestHeight = 5; // ìƒìë§ˆë‹¤ ë‹¤ë¥´ê²Œ ì„¤ì • ê°€ëŠ¥
 
     void Awake()
     {
-        // ÀÌ »óÀÚ¸¦ À§ÇÑ ÀÎº¥Åä¸® µ¥ÀÌÅÍ ÃÊ±âÈ­
+        // ì´ ìƒìë¥¼ ìœ„í•œ ì¸ë²¤í† ë¦¬ ë°ì´í„° ì´ˆê¸°í™”
         chestInventoryData = new StandardStashViewData(chestWidth, chestHeight);
 
-        // ÇÊ¿äÇÏ´Ù¸é ¿©±â¿¡ ÀÌ »óÀÚÀÇ ÃÊ±â ¾ÆÀÌÅÛÀ» Ãß°¡ÇÏ´Â ÄÚµå¸¦ ³ÖÀ¸¼¼¿ä.
-        // ¿¹½Ã:
-        // var item = new ItemCellData(0); // ItemCellData´Â Á÷Á¢ ¸¸µå½Å ¾ÆÀÌÅÛ µ¥ÀÌÅÍ Å¬·¡½º¿©¾ß ÇÕ´Ï´Ù.
+        // í•„ìš”í•˜ë‹¤ë©´ ì—¬ê¸°ì— ì´ ìƒìì˜ ì´ˆê¸° ì•„ì´í…œì„ ì¶”ê°€í•˜ëŠ” ì½”ë“œë¥¼ ë„£ìœ¼ì„¸ìš”.
+        // ì˜ˆì‹œ:
+        // var item = new ItemCellData(0); // ItemCellDataëŠ” ì§ì ‘ ë§Œë“œì‹  ì•„ì´í…œ ë°ì´í„° í´ë˜ìŠ¤ì—¬ì•¼ í•©ë‹ˆë‹¤.
         // int? id = chestInventoryData.GetInsertableId(item);
         // if (id.HasValue)
         // {

@@ -1,16 +1,18 @@
-// ÆÄÀÏ ÀÌ¸§: InventoryUIManager.cs
-// ÇÃ·¹ÀÌ¾î °ÔÀÓ ¿ÀºêÁ§Æ®¿¡ Ãß°¡ÇÏ¼¼¿ä.
+// íŒŒì¼ ì´ë¦„: InventoryUIManager.cs
+// í”Œë ˆì´ì–´ ê²Œì„ ì˜¤ë¸Œì íŠ¸ì— ì¶”ê°€í•˜ì„¸ìš”.
 
 using UnityEngine;
-using System.Collections.Generic;
 using System.Linq;
+using FantasySurvival.Inventory;
 using VariableInventorySystem;
-using VariableInventorySystem.Sample;
 
 public class InventoryUIManager : MonoBehaviour
 {
-    #region ÇÊµå Á¤ÀÇ
+    #region í•„ë“œ ì •ì˜
     [Header("Core Component")] [SerializeField] private StandardCore standardCore;
+    [Header("Item Database")] [SerializeField] private ItemDatabase itemDatabase;
+    [SerializeField] private int startingContainerItemId = 6;
+    [SerializeField] private int[] startingItemIds = { 1, 2, 3, 4, 5 };
     [Header("Player Inventory UI")] [SerializeField] private GameObject playerInventoryPanel;
     [SerializeField] private StandardStashView playerStashView;
     private StandardStashViewData playerInventoryData;
@@ -21,78 +23,114 @@ public class InventoryUIManager : MonoBehaviour
     [Header("Settings")] [SerializeField] private float interactionRange = 3f;
     [SerializeField] private int playerInventoryWidth = 8;
     [SerializeField] private int playerInventoryHeight = 9;
-    private List<Chest> nearbyChests = new List<Chest>();
-    private Chest closestChest = null;
     private bool isPlayerViewRegistered = false;
     private bool isExternalViewRegistered = false;
-    // private bool isPlayerInventoryInitialized = false; // Apply Ç×»ó È£Ãâ ¹æ½ÄÀ¸·Î º¯°æ ½Ã ºÒÇÊ¿ä
+    private bool inputBlocked;
+    // private bool isPlayerInventoryInitialized = false; // Apply í•­ìƒ í˜¸ì¶œ ë°©ì‹ìœ¼ë¡œ ë³€ê²½ ì‹œ ë¶ˆí•„ìš”
+
+    public bool InputBlocked => inputBlocked;
 
     #endregion
 
-    #region ÃÊ±âÈ­
+    #region ì´ˆê¸°í™”
     void Awake()
     {
         if (standardCore == null) { Debug.LogError("StandardCore missing!"); enabled = false; return; }
+        if (itemDatabase == null) { Debug.LogError("ItemDatabase missing!"); enabled = false; return; }
         standardCore.Initialize();
         playerInventoryData = new StandardStashViewData(playerInventoryWidth, playerInventoryHeight);
-        InitializeStartingItems();
+        if (!TryInitializeStartingItems())
+        {
+            playerInventoryData = null;
+            enabled = false;
+            return;
+        }
         if (playerInventoryPanel == null || playerStashView == null || externalInventoryPanel == null || externalStashView == null) { Debug.LogError("UI references missing!"); enabled = false; return; }
         playerInventoryPanel.SetActive(false);
         externalInventoryPanel.SetActive(false);
     }
-    void InitializeStartingItems() { /* ÀÌÀü ´äº¯°ú µ¿ÀÏ */ if (playerInventoryData == null) return; Debug.Log("[InitializeStartingItems] Adding items..."); try { var c = new CaseCellData(0); int? s = playerInventoryData.GetInsertableId(c); if (s.HasValue) playerInventoryData.InsertInventoryItem(s.Value, c); Debug.Log($" - Case Added: Slot {s}"); } catch { } for (int i = 0; i < 5; ++i) { try { var it = new ItemCellData(i); int? s = playerInventoryData.GetInsertableId(it); if (s.HasValue) { playerInventoryData.InsertInventoryItem(s.Value, it); Debug.Log($" - Item Seed {i} Added: Slot {s}"); } else break; } catch { } } Debug.Log($"[InitializeStartingItems] Finished. Items: {playerInventoryData.CellData?.Count(slot => slot != null) ?? 0}"); }
-    #endregion
 
-    #region ¾÷µ¥ÀÌÆ® ¹× »óÈ£ÀÛ¿ë °¨Áö
-    void Update() { UpdateClosestChest(); HandleInput(); CheckInteractionDistance(); }
-    void OnTriggerEnter(Collider other) { /* ÀÌÀü ´äº¯°ú µ¿ÀÏ - Layer Ã¼Å© */ if (other.gameObject.layer == LayerMask.NameToLayer("Chest")) { Chest c = other.GetComponent<Chest>(); if (c != null && !nearbyChests.Contains(c)) nearbyChests.Add(c); } }
-    void OnTriggerExit(Collider other)
+    bool TryInitializeStartingItems()
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Chest"))
-        { // Layer Ã¼Å©
-            Chest c = other.GetComponent<Chest>();
-            if (c != null && nearbyChests.Contains(c))
+        if (playerInventoryData == null)
+        {
+            return false;
+        }
+
+        Debug.Log("[InitializeStartingItems] Adding items from ItemDatabase...");
+        if (!TryAddStartingItem(startingContainerItemId))
+        {
+            return false;
+        }
+
+        foreach (var itemId in startingItemIds)
+        {
+            if (!TryAddStartingItem(itemId))
             {
-                nearbyChests.Remove(c);
-                // ¡Ú¡Ú¡Ú ¿­·ÁÀÖ´ø »óÀÚ ¹üÀ§ ¹ş¾î³ª¸é ¸ğµÎ ´İ±â ¡Ú¡Ú¡Ú
-                if (c == currentOpenedChest)
-                {
-                    Debug.Log($"»óÀÚ({c.name}) ¹üÀ§ ¹ş¾î³². ¸ğµç ÀÎº¥Åä¸® ´İ±â ½Ãµµ.");
-                    CloseAllInventories(); // HideExternalInventoryUI() ´ë½Å È£Ãâ
-                }
-                if (c == closestChest) closestChest = null;
+                return false;
             }
         }
+
+        Debug.Log($"[InitializeStartingItems] Finished. Items: {playerInventoryData.CellData?.Count(slot => slot != null) ?? 0}");
+        return true;
     }
-    void UpdateClosestChest() { /* ÀÌÀü ´äº¯°ú µ¿ÀÏ */ closestChest = null; float minDistance = float.MaxValue; nearbyChests.RemoveAll(item => item == null); foreach (var chest in nearbyChests) { float distance = Vector3.Distance(transform.position, chest.transform.position); if (distance < minDistance) { minDistance = distance; closestChest = chest; } } }
+
+    bool TryAddStartingItem(int itemId)
+    {
+        if (!itemDatabase.TryGet(itemId, out var definition))
+        {
+            Debug.LogError($"[InitializeStartingItems] Unknown item ID: {itemId}", itemDatabase);
+            return false;
+        }
+
+        var item = InventoryItemDataFactory.Create(definition);
+        var slot = playerInventoryData.GetInsertableId(item);
+        if (!slot.HasValue)
+        {
+            Debug.LogError($"[InitializeStartingItems] No room for item {itemId} ({definition.DisplayName}).", this);
+            return false;
+        }
+
+        playerInventoryData.InsertInventoryItem(slot.Value, item);
+        Debug.Log($" - Added {definition.DisplayName} (ID {itemId}): Slot {slot.Value}");
+        return true;
+    }
+    #endregion
+
+    #region ì—…ë°ì´íŠ¸ ë° ìƒí˜¸ì‘ìš© ê°ì§€
+    void Update()
+    {
+        if (!inputBlocked)
+        {
+            HandleInput();
+        }
+
+        CheckInteractionDistance();
+    }
     void CheckInteractionDistance()
     {
         if (externalInventoryPanel != null && externalInventoryPanel.activeSelf && currentOpenedChest != null)
         {
-            // µå·¡±× Ã¼Å©´Â Hide/Close ÇÔ¼ö ³»ºÎ¿¡¼­ ÇÏ¹Ç·Î ¿©±â¼± Á¦°Å
-            if (currentOpenedChest == null) { CloseAllInventories(); return; } // ¿­¸° »óÀÚ ¾øÀ¸¸é ¸ğµÎ ´İ±â
+            // ë“œë˜ê·¸ ì²´í¬ëŠ” Hide/Close í•¨ìˆ˜ ë‚´ë¶€ì—ì„œ í•˜ë¯€ë¡œ ì—¬ê¸°ì„  ì œê±°
+            if (currentOpenedChest == null) { CloseAllInventories(); return; } // ì—´ë¦° ìƒì ì—†ìœ¼ë©´ ëª¨ë‘ ë‹«ê¸°
 
             if (Vector3.Distance(transform.position, currentOpenedChest.transform.position) > interactionRange)
             {
-                Debug.Log($"»óÀÚ({currentOpenedChest.name}) °Å¸® ¸Ö¾îÁü. ¸ğµç ÀÎº¥Åä¸® ´İ±â ½Ãµµ.");
-                CloseAllInventories(); // HideExternalInventoryUI() ´ë½Å È£Ãâ
+                Debug.Log($"ìƒì({currentOpenedChest.name}) ê±°ë¦¬ ë©€ì–´ì§. ëª¨ë“  ì¸ë²¤í† ë¦¬ ë‹«ê¸° ì‹œë„.");
+                CloseAllInventories(); // HideExternalInventoryUI() ëŒ€ì‹  í˜¸ì¶œ
             }
         }
     }
     #endregion
 
-    #region Å° ÀÔ·Â Ã³¸®
+    #region í‚¤ ì…ë ¥ ì²˜ë¦¬
     void HandleInput()
     {
-        // µå·¡±× Ã¼Å©´Â °¢ ´İ±â ÇÔ¼ö¿¡¼­ ÇÏ¹Ç·Î ¿©±â¼­´Â Á¦°Å
+        // ë“œë˜ê·¸ ì²´í¬ëŠ” ê° ë‹«ê¸° í•¨ìˆ˜ì—ì„œ í•˜ë¯€ë¡œ ì—¬ê¸°ì„œëŠ” ì œê±°
         if (Input.GetKeyDown(KeyCode.I))
         {
-            if (externalInventoryPanel != null && externalInventoryPanel.activeSelf) CloseAllInventories(); // ¿ÜºÎ ¿­·ÁÀÖÀ¸¸é ¸ğµÎ ´İ±â
-            else TogglePlayerInventoryUI(); // ¾Æ´Ï¸é ÇÃ·¹ÀÌ¾î Åä±Û
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            TryInteractWithChest();
+            if (externalInventoryPanel != null && externalInventoryPanel.activeSelf) CloseAllInventories(); // ì™¸ë¶€ ì—´ë ¤ìˆìœ¼ë©´ ëª¨ë‘ ë‹«ê¸°
+            else TogglePlayerInventoryUI(); // ì•„ë‹ˆë©´ í”Œë ˆì´ì–´ í† ê¸€
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
@@ -100,79 +138,124 @@ public class InventoryUIManager : MonoBehaviour
         }
     }
 
-    void TryInteractWithChest()
+    public bool TryToggleChestInventory(Chest chest)
     {
-        if (closestChest != null && Vector3.Distance(transform.position, closestChest.transform.position) <= interactionRange)
+        if (!isActiveAndEnabled || chest == null || chest.chestInventoryData == null)
         {
-            if (externalInventoryPanel.activeSelf && currentOpenedChest == closestChest)
-            {
-                CloseAllInventories(); // ¿­¸° »óÀÚ¸é ¸ğµÎ ´İ±â (³»ºÎ¿¡¼­ µå·¡±× Ã¼Å©)
-            }
-            else
-            {
-                OpenPlayerAndExternalInventory(closestChest); // ¿­±â ÇÔ¼ö È£Ãâ
-            }
+            return false;
         }
+
+        if (Vector3.Distance(transform.position, chest.transform.position) > interactionRange)
+        {
+            return false;
+        }
+
+        if (externalInventoryPanel.activeSelf && currentOpenedChest == chest)
+        {
+            CloseAllInventories();
+        }
+        else
+        {
+            OpenPlayerAndExternalInventory(chest);
+        }
+
+        return true;
+    }
+
+    public void SetInputBlocked(bool blocked)
+    {
+        inputBlocked = blocked;
     }
     #endregion
 
-    #region UI °ü¸® ¸Ş¼Òµå (µå·¡±× Ãë¼Ò ·ÎÁ÷ Æ÷ÇÔ)
+    #region UI ê´€ë¦¬ ë©”ì†Œë“œ (ë“œë˜ê·¸ ì·¨ì†Œ ë¡œì§ í¬í•¨)
 
-    // ÇÃ·¹ÀÌ¾î ÀÎº¥Åä¸® Åä±Û
+    // í”Œë ˆì´ì–´ ì¸ë²¤í† ë¦¬ í† ê¸€
     void TogglePlayerInventoryUI() { if (playerInventoryPanel.activeSelf) HidePlayerInventoryUI(); else OpenPlayerInventoryUI(); }
 
-    // ÇÃ·¹ÀÌ¾î ÀÎº¥Åä¸® ¿­±â (Apply Ç×»ó È£Ãâ - »óÅÂ º¹¿ø·Â)
-    void OpenPlayerInventoryUI() { if (playerInventoryPanel == null || standardCore == null ) return; if (playerInventoryPanel.activeSelf) return; playerInventoryPanel.SetActive(true); if (!isPlayerViewRegistered) { standardCore.AddInventoryView(playerStashView); isPlayerViewRegistered = true; } playerStashView.Apply(playerInventoryData); Debug.Log("Player Inventory Opened"); }
+    // í”Œë ˆì´ì–´ ì¸ë²¤í† ë¦¬ ì—´ê¸° (Apply í•­ìƒ í˜¸ì¶œ - ìƒíƒœ ë³µì›ë ¥)
+    void OpenPlayerInventoryUI() { if (playerInventoryPanel == null || standardCore == null || playerInventoryData == null) return; if (playerInventoryPanel.activeSelf) return; playerInventoryPanel.SetActive(true); if (!isPlayerViewRegistered) { standardCore.AddInventoryView(playerStashView); isPlayerViewRegistered = true; } playerStashView.Apply(playerInventoryData); Debug.Log("Player Inventory Opened"); }
 
-    // ÇÃ·¹ÀÌ¾î ÀÎº¥Åä¸® ¼û±â±â (µå·¡±× Áß Ãë¼Ò Ã³¸®)
+    // í”Œë ˆì´ì–´ ì¸ë²¤í† ë¦¬ ìˆ¨ê¸°ê¸° (ë“œë˜ê·¸ ì¤‘ ì·¨ì†Œ ì²˜ë¦¬)
     private void HidePlayerInventoryUI()
     {
-        // ¡Ú¡Ú¡Ú µå·¡±× ÁßÀÌ¸é Ãë¼ÒÇÏ°í ÇÔ¼ö Á¾·á ¡Ú¡Ú¡Ú
+        // ë“œë˜ê·¸ ì¤‘ì´ë©´ ì•„ì´í…œì„ ë³µêµ¬í•œ ë’¤ UIë¥¼ ë‹«ëŠ”ë‹¤.
         if (standardCore != null && standardCore.IsDragging())
         {
-            Debug.Log("[HidePlayerInventoryUI] µå·¡±× Áß. Ãë¼Ò Ã³¸®.");
-            //standardCore.CancelDrag();
-            return; // UI´Â ´İÁö ¾ÊÀ½
+            Debug.Log("[HidePlayerInventoryUI] ë“œë˜ê·¸ ì¤‘. ì·¨ì†Œ ì²˜ë¦¬.");
+            standardCore.CancelDrag();
         }
-        // µå·¡±× Áß ¾Æ´Ò ¶§¸¸ ½ÇÇà
         if (playerInventoryPanel == null || standardCore == null ) return; if (!playerInventoryPanel.activeSelf) return;
         if (isPlayerViewRegistered) { standardCore.RemoveInventoryView(playerStashView); isPlayerViewRegistered = false; }
         playerInventoryPanel.SetActive(false); Debug.Log("Player Inventory Hidden");
     }
 
-    // ÇÃ·¹ÀÌ¾î¿Í ¿ÜºÎ ÀÎº¥Åä¸® ÇÔ²² ¿­±â
+    // í”Œë ˆì´ì–´ì™€ ì™¸ë¶€ ì¸ë²¤í† ë¦¬ í•¨ê»˜ ì—´ê¸°
     private void OpenPlayerAndExternalInventory(Chest chestToOpen) { OpenPlayerInventoryUI(); OpenExternalInventoryUI(chestToOpen); }
 
-    // ¿ÜºÎ ÀÎº¥Åä¸® ¿­±â (Apply´Â ÇÊ¿ä½Ã)
+    // ì™¸ë¶€ ì¸ë²¤í† ë¦¬ ì—´ê¸° (ApplyëŠ” í•„ìš”ì‹œ)
     void OpenExternalInventoryUI(Chest chest) { if (externalInventoryPanel == null || /*...*/ chest == null || chest.chestInventoryData == null) return; bool needsApply = !externalInventoryPanel.activeSelf || currentOpenedChest != chest; currentOpenedChest = chest; currentExternalData = chest.chestInventoryData; externalInventoryPanel.SetActive(true); if (!isExternalViewRegistered) { standardCore.AddInventoryView(externalStashView); isExternalViewRegistered = true; } if (needsApply) { externalStashView.Apply(currentExternalData); Debug.Log($"External Applied for {chest.name}"); } else { Debug.Log($"External Shown for {chest.name}"); } }
 
-    // ¿ÜºÎ ÀÎº¥Åä¸® ¼û±â±â (µå·¡±× Áß Ãë¼Ò Ã³¸®)
+    // ì™¸ë¶€ ì¸ë²¤í† ë¦¬ ìˆ¨ê¸°ê¸° (ë“œë˜ê·¸ ì¤‘ ì·¨ì†Œ ì²˜ë¦¬)
     private void HideExternalInventoryUI()
     {
-        // ¡Ú¡Ú¡Ú µå·¡±× ÁßÀÌ¸é Ãë¼ÒÇÏ°í ÇÔ¼ö Á¾·á ¡Ú¡Ú¡Ú
+        // ë“œë˜ê·¸ ì¤‘ì´ë©´ ì•„ì´í…œì„ ë³µêµ¬í•œ ë’¤ UIë¥¼ ë‹«ëŠ”ë‹¤.
         if (standardCore != null && standardCore.IsDragging())
         {
-            Debug.Log("[HideExternalInventoryUI] µå·¡±× Áß. Ãë¼Ò Ã³¸®.");
+            Debug.Log("[HideExternalInventoryUI] ë“œë˜ê·¸ ì¤‘. ì·¨ì†Œ ì²˜ë¦¬.");
             standardCore.CancelDrag();
-            return; // UI´Â ´İÁö ¾ÊÀ½
         }
-        // µå·¡±× Áß ¾Æ´Ò ¶§¸¸ ½ÇÇà
         if (externalInventoryPanel == null || standardCore == null ) return; if (!externalInventoryPanel.activeSelf) return;
         if (isExternalViewRegistered) { standardCore.RemoveInventoryView(externalStashView); isExternalViewRegistered = false; }
         externalInventoryPanel.SetActive(false); currentOpenedChest = null; currentExternalData = null; Debug.Log("External Inventory Hidden");
     }
 
-    // ¸ğµç ÀÎº¥Åä¸® ´İ±â (Hide ÇÔ¼ö È£Ãâ)
+    // ëª¨ë“  ì¸ë²¤í† ë¦¬ ë‹«ê¸° (Hide í•¨ìˆ˜ í˜¸ì¶œ)
     public void CloseAllInventories()
     {
-        HideExternalInventoryUI(); // ³»ºÎ¿¡¼­ µå·¡±× Ã¼Å© ¹× Ãë¼Ò Ã³¸®
-        HidePlayerInventoryUI();   // ³»ºÎ¿¡¼­ µå·¡±× Ã¼Å© ¹× Ãë¼Ò Ã³¸®
+        if (standardCore != null && standardCore.IsDragging()) standardCore.CancelDrag();
+        if (standardCore != null) standardCore.CloseAllCasePopups();
+        HideExternalInventoryUI(); // ë‚´ë¶€ì—ì„œ ë“œë˜ê·¸ ì²´í¬ ë° ì·¨ì†Œ ì²˜ë¦¬
+        HidePlayerInventoryUI();   // ë‚´ë¶€ì—ì„œ ë“œë˜ê·¸ ì²´í¬ ë° ì·¨ì†Œ ì²˜ë¦¬
     }
 
-    // ÄÄÆ÷³ÍÆ® ÆÄ±« ½Ã Á¤¸®
-    void OnDestroy() { /* ÀÌÀü ÄÚµå¿Í µ¿ÀÏ */ if (standardCore != null) { if (playerStashView != null) standardCore.RemoveInventoryView(playerStashView); if (externalStashView != null) standardCore.RemoveInventoryView(externalStashView); } }
+    void OnDisable()
+    {
+        CancelActiveDrag();
+    }
+
+    // ì»´í¬ë„ŒíŠ¸ íŒŒê´´ ì‹œ ì •ë¦¬
+    void OnDestroy()
+    {
+        if (standardCore == null)
+        {
+            return;
+        }
+
+        // A dragged item temporarily lives in the scene-local core, outside CellData.
+        // Restore it before the scene unloads so the persistent inventory cannot lose it.
+        CancelActiveDrag();
+
+        if (playerStashView != null)
+        {
+            standardCore.RemoveInventoryView(playerStashView);
+        }
+
+        if (externalStashView != null)
+        {
+            standardCore.RemoveInventoryView(externalStashView);
+        }
+    }
+
+    void CancelActiveDrag()
+    {
+        if (standardCore != null && standardCore.IsDragging())
+        {
+            standardCore.CancelDrag();
+        }
+    }
 
     #endregion
 }
 
-// Chest.cs ½ºÅ©¸³Æ®´Â ÀÌÀü°ú µ¿ÀÏÇÏ°Ô ÇÁ·ÎÁ§Æ®¿¡ Á¸ÀçÇØ¾ß ÇÕ´Ï´Ù.
+// Chest.cs ìŠ¤í¬ë¦½íŠ¸ëŠ” ì´ì „ê³¼ ë™ì¼í•˜ê²Œ í”„ë¡œì íŠ¸ì— ì¡´ì¬í•´ì•¼ í•©ë‹ˆë‹¤.

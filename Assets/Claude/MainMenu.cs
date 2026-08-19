@@ -14,6 +14,18 @@ public class MainMenu : MonoBehaviour
     
     void Start()
     {
+        if (saveSlotButtons == null || saveSlotButtons.Length == 0)
+        {
+            Debug.LogError("[MainMenu] Save Slot Buttons가 할당되지 않았습니다!");
+            return;
+        }
+        
+        if (slotInfoTexts == null || slotInfoTexts.Length == 0)
+        {
+            Debug.LogError("[MainMenu] Slot Info Texts가 할당되지 않았습니다!");
+            return;
+        }
+        
         UpdateSaveSlots();
     }
     
@@ -23,9 +35,16 @@ public class MainMenu : MonoBehaviour
     void UpdateSaveSlots()
     {
         SaveInfo[] saveInfos = SaveManager.GetAllSaveInfo();
+        int slotCount = Mathf.Min(saveSlotButtons.Length, slotInfoTexts.Length, saveInfos.Length);
         
-        for (int i = 0; i < saveSlotButtons.Length; i++)
+        for (int i = 0; i < slotCount; i++)
         {
+            if (saveSlotButtons[i] == null || slotInfoTexts[i] == null)
+            {
+                Debug.LogWarning($"[MainMenu] Slot {i} UI 요소가 null입니다.");
+                continue;
+            }
+            
             int slotIndex = i; // 클로저 문제 방지
             
             if (saveInfos[i].exists)

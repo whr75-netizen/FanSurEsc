@@ -115,7 +115,7 @@
 - **[현재]** GameMap1과 GameMapTest 사이에는 MainMenuScene과 GameLoadingScene을 거치지 않는 Stage 1 전용 직접 씬 이동이 연결되어 있다.
 - **[현재]** 직접 씬 이동은 목적지 씬 이름과 SpawnPoint ID를 일회성 컨텍스트로 전달하고, 도착 배치 뒤 요청을 소비한다.
 - **[현재]** Assets/Claude/GameLoader.cs에 씬 이름과 spawnPoint를 받는 미사용 프로토타입이 남아 있지만, 어떤 씬이나 프리팹에도 연결되어 있지 않다.
-- **[현재]** GameMap1과 GameMapTest에는 scene-local Player, Camera, Inventory UI, EventSystem 복사본을 두지 않는다.
+- **[현재]** GameMap1과 GameMapTest에는 scene-local 런타임 Player, gameplay Camera, Inventory UI, EventSystem 복사본을 두지 않는다. 단, 편집 상태 Game View용 `EditorOnly` Authoring Preview Camera가 씬마다 1개 있으며 Play 중에는 비활성화되고 빌드에서는 제거된다.
 - **[현재]** 두 씬의 GameplayShellBootstrap은 PersistentGameplayShell.Instance가 없을 때만 같은 PersistentGameplayShell 프리팹을 한 번 생성한다.
 - **[현재]** PersistentGameplayShell은 DontDestroyOnLoad이며 실제 Player와 외형, PlayerMovement/PlayerStats/PlayerInteractor를 포함한 Player 스크립트, Camera, InventoryUIManager와 인벤토리 UI, EventSystem을 같은 인스턴스로 유지한다.
 - **[현재]** 각 씬은 SceneSpawnController와 SpawnPoint만 소유한다. SceneSpawnController는 기존 persistent Player를 목적지 SpawnPoint로 옮기고 Rigidbody 속도를 0으로 초기화한다.
@@ -370,7 +370,7 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 - 두 씬에 GameplayShellBootstrap 하나씩 배치
 - 각 씬에는 SceneSpawnController와 SpawnPoint만 배치
 - GameMap1의 BaseEntry와 BaseReturn SpawnPoint, GameMapTest의 RaidEntry SpawnPoint
-- 어느 씬에도 scene-local Player, Camera, Inventory UI 또는 EventSystem 복사본을 두지 않음
+- 어느 씬에도 scene-local 런타임 Player, gameplay Camera, Inventory UI 또는 EventSystem 복사본을 두지 않음. 편집 전용 `EditorOnly` Preview Camera는 런타임 셸과 분리된 예외다.
 - 씬 전환 전 인벤토리, 드래그와 컨테이너 팝업을 닫고 이동·상호작용 입력을 잠그는 처리
 
 #### 완료 기준
@@ -378,7 +378,7 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 - 두 씬 모두에서 같은 Player의 이동과 같은 Camera의 추적이 정상이다.
 - 지정 SpawnPoint에 persistent Player가 배치되고 Rigidbody 속도가 초기화된다.
 - 왕복 중 shell, Player, Camera, InventoryUIManager, StandardCore와 EventSystem의 instance ID가 바뀌지 않는다.
-- 어느 씬에서도 Player, Camera, AudioListener, EventSystem과 입력 처리기가 중복되지 않는다.
+- Play Mode의 어느 씬에서도 Player, 활성 gameplay Camera, AudioListener, EventSystem과 입력 처리기가 중복되지 않는다. 편집 전용 Preview Camera는 Play 중 비활성이다.
 - 잘못된 SpawnPoint로 도착하지 못하면 이동 요청과 입력 잠금을 해제하고 명확한 오류를 남긴다.
 
 ### Stage 1-4. 맵 선택 UI

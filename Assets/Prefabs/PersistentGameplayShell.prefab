@@ -460,6 +460,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   checkSize: {x: 0.5, y: 0.5, z: 0.5}
+  runSpeedMultiplier: 1.3
+  primaryRunKey: 304
+  secondaryRunKey: 303
+  characterAnimator: {fileID: 1704396133942622928}
+  turnSpeedDegreesPerSecond: 1080
 --- !u!114 &756799773776881561
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2747,7 +2752,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5992602035432107994, guid: 78a46e7d90be3ca479a7b378b85099fa, type: 3}
       propertyPath: m_VerticalScrollbar
-      value: 
+      value:
       objectReference: {fileID: 0}
     - target: {fileID: 5992602035692048406, guid: 78a46e7d90be3ca479a7b378b85099fa, type: 3}
       propertyPath: m_IsActive
@@ -3033,11 +3038,24 @@ PrefabInstance:
       propertyPath: m_Name
       value: uploads_files_4931206_TrialFreya_FBX
       objectReference: {fileID: 0}
+    - target: {fileID: 5866666021909216657, guid: 1d0734b94f4dfa644b161f9bb67db869, type: 3}
+      propertyPath: m_Controller
+      value:
+      objectReference: {fileID: 9100000, guid: 78f8e8b6eeab55440a329d321dedfbf6, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 1d0734b94f4dfa644b161f9bb67db869, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d0734b94f4dfa644b161f9bb67db869, type: 3}
+--- !u!95 &1704396133942622928 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: 1d0734b94f4dfa644b161f9bb67db869, type: 3}
+  m_PrefabInstance: {fileID: 5101926268965898049}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &4703754262068273322 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1d0734b94f4dfa644b161f9bb67db869, type: 3}

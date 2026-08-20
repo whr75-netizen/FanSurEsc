@@ -8,6 +8,9 @@ using VariableInventorySystem;
 
 public class InventoryUIManager : MonoBehaviour
 {
+    public const int DefaultInventoryWidth = 8;
+    public const int DefaultInventoryHeight = 9;
+
     #region 필드 정의
     [Header("Core Component")] [SerializeField] private StandardCore standardCore;
     [Header("Item Database")] [SerializeField] private ItemDatabase itemDatabase;
@@ -21,14 +24,16 @@ public class InventoryUIManager : MonoBehaviour
     private StandardStashViewData currentExternalData;
     private Chest currentOpenedChest;
     [Header("Settings")] [SerializeField] private float interactionRange = 3f;
-    [SerializeField] private int playerInventoryWidth = 8;
-    [SerializeField] private int playerInventoryHeight = 9;
+    [SerializeField] private int playerInventoryWidth = DefaultInventoryWidth;
+    [SerializeField] private int playerInventoryHeight = DefaultInventoryHeight;
     private bool isPlayerViewRegistered = false;
     private bool isExternalViewRegistered = false;
     private bool inputBlocked;
     // private bool isPlayerInventoryInitialized = false; // Apply 항상 호출 방식으로 변경 시 불필요
 
     public bool InputBlocked => inputBlocked;
+    public ItemDatabase ItemDatabase => itemDatabase;
+    public StandardStashViewData PlayerInventoryData => playerInventoryData;
 
     #endregion
 
@@ -38,10 +43,9 @@ public class InventoryUIManager : MonoBehaviour
         if (standardCore == null) { Debug.LogError("StandardCore missing!"); enabled = false; return; }
         if (itemDatabase == null) { Debug.LogError("ItemDatabase missing!"); enabled = false; return; }
         standardCore.Initialize();
-        playerInventoryData = new StandardStashViewData(playerInventoryWidth, playerInventoryHeight);
-        if (!TryInitializeStartingItems())
+        if (!TryCreateStartingInventory(out playerInventoryData, out string initializationError))
         {
-            playerInventoryData = null;
+            Debug.LogError($"[InitializeStartingItems] {initializationError}", this);
             enabled = false;
             return;
         }
@@ -50,49 +54,86 @@ public class InventoryUIManager : MonoBehaviour
         externalInventoryPanel.SetActive(false);
     }
 
-    bool TryInitializeStartingItems()
+    bool TryCreateStartingInventory(out StandardStashViewData inventoryData, out string error)
     {
-        if (playerInventoryData == null)
+        inventoryData = new StandardStashViewData(playerInventoryWidth, playerInventoryHeight);
+        if (inventoryData == null)
         {
+            error = "Could not create the player inventory grid.";
             return false;
         }
 
         Debug.Log("[InitializeStartingItems] Adding items from ItemDatabase...");
-        if (!TryAddStartingItem(startingContainerItemId))
+        if (!TryAddStartingItem(inventoryData, startingContainerItemId, out error))
         {
             return false;
         }
 
         foreach (var itemId in startingItemIds)
         {
-            if (!TryAddStartingItem(itemId))
+            if (!TryAddStartingItem(inventoryData, itemId, out error))
             {
                 return false;
             }
         }
 
-        Debug.Log($"[InitializeStartingItems] Finished. Items: {playerInventoryData.CellData?.Count(slot => slot != null) ?? 0}");
+        Debug.Log($"[InitializeStartingItems] Finished. Items: {inventoryData.CellData?.Count(slot => slot != null) ?? 0}");
+        error = null;
         return true;
     }
 
-    bool TryAddStartingItem(int itemId)
+    bool TryAddStartingItem(StandardStashViewData target, int itemId, out string error)
     {
         if (!itemDatabase.TryGet(itemId, out var definition))
         {
-            Debug.LogError($"[InitializeStartingItems] Unknown item ID: {itemId}", itemDatabase);
+            error = $"Unknown starting item ID: {itemId}.";
             return false;
         }
 
         var item = InventoryItemDataFactory.Create(definition);
-        var slot = playerInventoryData.GetInsertableId(item);
+        var slot = target.GetInsertableId(item);
         if (!slot.HasValue)
         {
-            Debug.LogError($"[InitializeStartingItems] No room for item {itemId} ({definition.DisplayName}).", this);
+            error = $"No room for starting item {itemId} ({definition.DisplayName}).";
             return false;
         }
 
-        playerInventoryData.InsertInventoryItem(slot.Value, item);
+        target.InsertInventoryItem(slot.Value, item);
         Debug.Log($" - Added {definition.DisplayName} (ID {itemId}): Slot {slot.Value}");
+        error = null;
+        return true;
+    }
+
+    public bool TryResetToStartingInventory(out string error)
+    {
+        if (!TryCreateStartingInventory(out StandardStashViewData startingInventory, out error))
+        {
+            return false;
+        }
+
+        return TryReplacePlayerInventory(startingInventory, out error);
+    }
+
+    public bool TryReplacePlayerInventory(StandardStashViewData replacement, out string error)
+    {
+        if (replacement == null)
+        {
+            error = "Replacement inventory is missing.";
+            return false;
+        }
+
+        if (replacement.CapacityWidth != playerInventoryWidth ||
+            replacement.CapacityHeight != playerInventoryHeight ||
+            replacement.CellData == null ||
+            replacement.CellData.Length != playerInventoryWidth * playerInventoryHeight)
+        {
+            error = $"Replacement inventory must be {playerInventoryWidth}x{playerInventoryHeight}.";
+            return false;
+        }
+
+        CloseAllInventories();
+        playerInventoryData = replacement;
+        error = null;
         return true;
     }
     #endregion

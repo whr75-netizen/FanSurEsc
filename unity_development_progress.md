@@ -1,7 +1,7 @@
 # Unity 개발 진행 기록
 
 **마지막 확인:** 2026-08-20
-**확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, `GameMap1`/`GameMapTest`; Player build 미검증
+**확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, `GameMap1`/`GameMapTest`; Windows Development Player build 성공
 **문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 전체 게임 방향과 Stage 의존성은 `extraction_survival_game_design_dev_plan.md`를 따른다.
 
 ## 문서 사용 규칙
@@ -24,7 +24,7 @@
 - `[Play Mode 확인]` 이 직접 왕복은 `MainMenuScene`과 `GameLoadingScene`을 거치지 않는다.
 - `[Play Mode 확인]` `PersistentGameplayShell` 하나가 실제 Player, 외형, Player 구성 스크립트, Camera, Inventory UI/Core/View와 EventSystem을 같은 인스턴스로 유지한다.
 - `[코드/씬 확인]` 두 게임플레이 씬에는 scene-local 런타임 Player/gameplay Camera/Inventory UI/EventSystem 복사본이 없다. 편집 상태 Game View용 `EditorOnly` Preview Camera만 씬마다 1개 존재한다.
-- `[Play Mode 확인]` Player 인벤토리는 왕복 중 동일 객체 그래프로 유지된다. 디스크 세이브는 아직 없다.
+- `[Play Mode 확인]` Player 인벤토리는 왕복 중 동일 객체 그래프로 유지된다. 기지에서 사용하는 단일 슬롯 디스크 세이브/로드 프로토타입도 연결되어 있다.
 - `[코드/씬 확인]` 현재 연결된 상호작용 대상은 `GameMap1`의 Chest 2개와 맵 선택 Cube 1개, `GameMapTest`의 귀환 Cube 1개다.
 - `[Play Mode 확인]` Freya 인간형 외형은 Humanoid Avatar와 Idle/Walk/Run 로코모션에 연결되어 더 이상 T포즈로 서 있지 않는다.
 - `[코드/씬 확인]` 이동 중 Left Shift 또는 Right Shift를 누르면 걷기 속도의 정확히 1.3배로 달리는 설정이 `PersistentGameplayShell`의 기존 `PlayerMovement`에 연결되어 있다.
@@ -351,4 +351,53 @@ Interactable (abstract base class)
 - `[Play Mode 확인]` `GameMap1 → GameMapTest → GameMap1` 왕복 중 shell과 실제 Camera의 Entity ID가 유지됐으며, 양쪽 씬에서 Preview Camera는 계속 비활성이었다.
 - `[Play Mode 확인]` Domain Reload와 Scene Reload를 모두 비활성화한 진입에서도 shell/활성 Camera/AudioListener는 각각 1개, Preview Camera는 0개였으며 Play 종료 뒤 미리보기가 다시 활성화됐다. 검증 후 Editor 설정은 기존 `Enter Play Mode Options 비활성/None`으로 복원했다.
 - `[Edit Mode 확인]` Play 종료 뒤 GameMap1 Preview Camera가 다시 활성화됐고 씬은 dirty가 아니었다.
-- `[미검증]` Player 빌드에서 `EditorOnly` 오브젝트 제거 여부는 아직 실제 빌드로 확인하지 않았다.
+- `[Player build 확인]` Windows Development build는 성공했다. 다만 생성된 exe를 직접 실행해 `EditorOnly` Preview Camera가 런타임에서 제거되는 장면까지 시각 확인하지는 않았다.
+
+---
+
+## 12. 최소 세이브/로드와 제품 시작 흐름
+
+### 현재 제품 흐름
+
+- `[Play Mode 확인]` `InitialLoadingScene → MainMenuScene → GameLoadingScene → GameMap1` 순서로 진입한다.
+- `[코드/씬 확인]` Main Menu에는 `NEW GAME`, `LOAD GAME`, `SETTINGS`, `EXIT` 네 기능과 각각 필요한 최소 패널이 있다.
+- `[Play Mode 확인]` New Game은 기존 저장 파일을 지우거나 덮어쓰지 않고, `GameMap1` 기지에서 초기 8×9 인벤토리와 시험 아이템 ID 1~6으로 시작한다.
+- `[Play Mode 확인]` Load 요청은 같은 로딩 씬을 거쳐 `GameMap1`에서 persistent Player의 기존 `InventoryUIManager`에 한 번만 적용된다. Player, Camera, UI 셸을 재생성하지 않는다.
+- `[코드/씬 확인]` GameLoading의 기존 Slider는 실제 비동기 로드 진행률 0~1에 연결되어 있다.
+- `[Play Mode 확인]` Settings의 Sound 토글은 슬롯 세이브와 분리된 전역 `PlayerPrefs` 설정이며 즉시 `AudioListener.pause`에 적용된다.
+- `[Play Mode 확인]` Exit는 확인 패널을 거치며, 실제 종료 호출은 `Application.Quit`이다.
+
+### 저장되는 데이터
+
+- 단일 프로토타입 슬롯 경로는 `Application.persistentDataPath/Saves/save_slot_1.json`이며 이전 정상본은 `.bak`으로 유지한다.
+- 스키마 버전은 2이고 인벤토리는 재귀 객체 대신 `flat-records-v1` 목록으로 저장한다.
+- 각 아이템은 ItemDatabase의 숫자 `definitionId`, 그리드 좌상단 슬롯 인덱스, 회전 상태, 컨테이너 부모 관계만 저장한다.
+- 컨테이너 내부 아이템은 파일 내부 관계용 `recordId`로 연결한다. 이 값은 영구 아이템 instance ID가 아니다.
+- 이름, 설명, 아이콘, 아이템 크기와 컨테이너 크기는 저장하지 않고 같은 `ItemDatabase.asset`에서 다시 조회한다.
+- 씬, Player 위치, 열린 UI, 드래그, Camera, Portal, Enemy와 일시 상호작용 상태는 저장하지 않는다. 로드 후 시작 위치는 항상 기지의 SpawnPoint다.
+
+### 기지 상태와 ItemDatabase 경계
+
+- `[코드/씬 확인]` 현재 GameMap1의 시험 Chest 2개는 stable ID가 없고 매 씬 로드마다 빈 6×5 데이터를 생성하므로 아직 기지 영속 데이터로 저장하지 않는다.
+- `[코드/씬 확인]` `BaseSaveData`에는 향후 확장용 format version만 있고, 확인되지 않은 기지 규칙이나 Chest 소유권을 임의로 만들지 않았다.
+- `[코드/씬 확인]` ItemDatabase는 기존 ScriptableObject asset 하나를 persistent shell과 Main Menu가 직접 참조한다. 별도 DontDestroy Manager나 씬별 복사본을 추가하지 않았다.
+
+### 저장·로드 안전성
+
+- 저장 전에 열린 Player/Chest UI, 드래그와 case popup을 정리한 뒤 캡처한다.
+- 쓰기 전에 DB의 null·잘못된 ID·중복 ID와 전체 인벤토리 배치·부모 관계를 검증한다.
+- 임시 파일을 먼저 쓴 뒤 정상 파일로 교체하고, 기존 정상 파일은 `.bak`으로 남긴다.
+- 로드는 primary를 전체 의미 검증한 뒤 사용하며, primary의 JSON 헤더가 정상이어도 아이템 ID·배치·부모 관계가 손상됐으면 정상 backup을 검증해 대신 선택한다.
+- 복원은 별도 8×9 후보를 완성한 뒤 한 번에 교체하므로 실패 시 현재 인벤토리를 유지한다.
+- 저장 UI는 현재 기지 `GameMap1`의 우측 상단 OnGUI 버튼과 `F5`로만 제공한다. 정식 저장 메뉴 디자인은 후속이다.
+
+### 2026-08-20 검증 결과
+
+- `[코드/씬 확인]` MainMenuManager 1개, 버튼 9개, Toggle 1개, 유효한 listener와 serialized reference, Missing Script 0을 확인했다.
+- `[Play Mode 확인]` InitialLoading부터 Main Menu에 도착한 뒤 Load/Settings/Exit 패널과 Back 동작, Sound 토글, New Game 버튼을 실제 Button listener 경로로 실행했다.
+- `[Play Mode 확인]` New Game 선택 뒤 GameLoading을 거쳐 GameMap1에 도착했고 shell, 8×9 인벤토리, 초기 아이템 6개와 BasePersistenceController를 확인했다.
+- `[Play Mode 확인]` 컨테이너 내부 회전 아이템을 포함한 사용자 정의 로드 데이터를 Main Menu 시작 요청과 GameLoading을 거쳐 GameMap1에 적용했고, 루트/내부 슬롯과 회전 상태가 동일하게 복원됐다.
+- `[코드/런타임 확인]` 중첩 컨테이너, 동일 종류 복수 아이템, 회전 상태를 `Capture → JSON → FromJson → Restore`로 왕복했고, 알 수 없는 definition ID, 겹침, 순환 부모 관계는 거부됐다.
+- `[코드/런타임 확인]` 실제 사용자 슬롯을 건드리지 않는 임시 캐시에서 `첫 저장 → 두 번째 저장 → primary 의미 손상 → 정상 backup 복구`를 통과했다.
+- `[Player build 확인]` 활성 Build Settings 5개 씬으로 Windows Development build가 성공했다. 산출물은 `Builds/SaveLoadPrototype/FantasySurvivalEscapeGame.exe`다.
+- `[미검증]` 생성된 exe를 직접 실행한 수동 UI 조작과 실제 사용자 슬롯에 대한 F5 저장은 수행하지 않았다. 기존 사용자 데이터 보호를 위해 검사 당시 존재하지 않던 실제 슬롯 파일을 자동 생성하지 않았다.

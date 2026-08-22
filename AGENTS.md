@@ -111,7 +111,7 @@
 - 활성 무기의 원본은 `EquipmentLoadoutData`와 `PlayerWeaponController.ActiveWeapon`이다. 발사 방식, RPM, 시험 피해와 사거리는 공유 `ItemDefinition`에서 읽고, `PlayerWeaponAttackController`가 런타임 `InventoryItemData`별 `WeaponFireCadence`를 소유한다. 이 cadence는 세이브 대상이나 `ItemDefinition` 상태가 아니다.
 - 단발은 마우스 누름 edge 한 번, 자동은 누른 상태를 입력으로 사용하지만 둘 다 같은 RPM 기반 쿨다운을 거친다. 현재 좌클릭과 총기별 RPM·피해 35·사거리 30은 기능 검증용 값이며 최종 키와 밸런스 확정이 아니다.
 - 카메라의 screen ray는 마우스가 가리키는 Player 발사 높이의 수평면 조준점을 계산할 때만 쓴다. 실제 피해 Raycast는 persistent Player의 `WeaponRayOrigin`에서 그 조준점 방향으로 XZ 평면상 발사하며 Camera를 공격 원점으로 사용하지 않는다.
-- `WeaponAttackAudioFeedback`는 전투 상태를 소유하지 않는 Player-local 표현 컴포넌트다. cadence를 통과해 실제 발사가 성립하면 발사음을 재생하고, `IDamageable.ApplyDamage`의 `DamageResult.WasApplied`가 참일 때만 별도 적중음을 재생한다. Collider 접촉이나 Raycast 적중 추정만으로 적중음을 내지 않는다.
+- `WeaponAttackAudioFeedback`는 전투 상태를 소유하지 않는 Player-local 표현 컴포넌트다. cadence를 통과해 실제 발사가 성립하면 발사음을 재생하고, `IDamageable.ApplyDamage`의 `DamageResult.WasApplied`가 참일 때만 별도 적중음을 약 `0.06`초 뒤 재생해 두 효과음의 시작점을 분리한다. 비활성화할 때 대기 중인 표현 재생을 취소하며, Collider 접촉이나 Raycast 적중 추정만으로 적중음을 내지 않는다.
 - `EnemyStats` 하나가 적 개체의 현재 체력과 생존·사망 전이의 유일한 권위 소유자다. 모든 피해 원인은 같은 `ApplyDamage` 진입점을 사용하고, `> 0 → 0` 전이에서만 사망을 한 번 확정한 뒤 `Died`를 통지한다.
 - 현재 적은 1회 초기화·1회 사망 수명주기다. 죽은 `EnemyStats.Initialize`로 체력만 복구하는 암묵적 부활은 금지하며, pooling이나 respawn이 필요해질 때 행동·충돌·외형까지 함께 복구하는 별도 계약을 만든다.
 - `EnemyDeathHandler`는 확정된 사망을 관찰해 AI, 피격 Collider와 현재 시험 외형만 정리한다. 체력을 쓰거나 독립적으로 사망 여부를 판정하는 두 번째 권위자가 아니다.

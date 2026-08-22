@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace FantasySurvival.Combat
@@ -11,6 +12,7 @@ namespace FantasySurvival.Combat
         [SerializeField] private AudioClip hitClip;
         [SerializeField, Range(0f, 1f)] private float fireVolume = 0.45f;
         [SerializeField, Range(0f, 1f)] private float hitVolume = 0.65f;
+        [SerializeField, Min(0f)] private float hitSeparationSeconds = 0.06f;
 
         public AudioSource AudioSource => audioSource;
         public AudioClip FireClip => fireClip;
@@ -34,6 +36,8 @@ namespace FantasySurvival.Combat
 
         private void OnDisable()
         {
+            StopAllCoroutines();
+
             if (audioSource != null)
             {
                 audioSource.Stop();
@@ -50,7 +54,25 @@ namespace FantasySurvival.Combat
 
         public void PlayHit()
         {
-            if (enabled && hitClip != null)
+            if (!enabled || audioSource == null || hitClip == null)
+            {
+                return;
+            }
+
+            if (hitSeparationSeconds <= 0f)
+            {
+                audioSource.PlayOneShot(hitClip, hitVolume);
+                return;
+            }
+
+            StartCoroutine(PlayHitSeparated());
+        }
+
+        private IEnumerator PlayHitSeparated()
+        {
+            yield return new WaitForSeconds(hitSeparationSeconds);
+
+            if (enabled && audioSource != null && hitClip != null)
             {
                 audioSource.PlayOneShot(hitClip, hitVolume);
             }
@@ -66,6 +88,7 @@ namespace FantasySurvival.Combat
 
             fireVolume = Mathf.Clamp01(fireVolume);
             hitVolume = Mathf.Clamp01(hitVolume);
+            hitSeparationSeconds = Mathf.Max(0f, hitSeparationSeconds);
         }
 #endif
     }

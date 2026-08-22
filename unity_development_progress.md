@@ -601,7 +601,7 @@ Interactable (abstract base class)
 - `[코드 확인]` Camera의 mouse screen ray는 `WeaponRayOrigin` 높이의 수평면과 교차해 탑다운 조준점을 계산한다. 실제 Physics ray는 Camera가 아니라 `WeaponRayOrigin`에서 그 점 방향으로 Y를 제거한 XZ 방향에 발사된다.
 - `[코드 확인]` `RaycastNonAlloc` 고정 버퍼를 발사 때만 사용하고 32칸이 가득 찬 조밀한 예외에서만 `RaycastAll`로 전체 후보를 다시 받아 가장 가까운 차폐 판정을 보장한다. Player 자신의 Collider와 피격 대상이 아닌 Trigger는 무시하고, 실제 Collider 장애물 또는 가장 가까운 `IDamageable`은 순서대로 막거나 피해를 받는다.
 - `[코드 확인]` 열린 플레이어·장비·외부 인벤토리, 씬 이동용 `InputBlocked`, 일시정지와 UI pointer 위에서는 공격 입력을 소비하지 않는다. 빈 활성 무기칸에서도 공격·쿨다운을 만들지 않는다.
-- `[코드/프리팹 확인]` persistent Player에 `WeaponAttackAudioFeedback`와 2D `AudioSource`가 각각 하나 있다. cadence를 통과한 `EmitRaycastShot` 시작에서 발사음을 재생하고, `ApplyDamage`가 반환한 `DamageResult.WasApplied`가 참일 때만 적중음을 추가 재생한다. 오디오 컴포넌트는 공격 성립이나 피해를 판정하지 않는다.
+- `[코드/프리팹 확인]` persistent Player에 `WeaponAttackAudioFeedback`와 2D `AudioSource`가 각각 하나 있다. cadence를 통과한 `EmitRaycastShot` 시작에서 발사음을 재생하고, `ApplyDamage`가 반환한 `DamageResult.WasApplied`가 참일 때만 적중음을 약 `0.06`초 뒤 추가 재생한다. 두 효과음의 시작점을 분리해 둔탁한 적중음이 발사음에 묻히지 않게 하며, 컴포넌트가 비활성화되면 대기 중인 재생도 취소한다. 오디오 컴포넌트는 공격 성립이나 피해를 판정하지 않는다.
 - `[에셋/라이선스 확인]` 발사음은 Kenney `Sci-Fi Sounds 1.0`의 `laserSmall_000.ogg`(0.239초), 적중음은 `Impact Sounds 1.0`의 `impactSoft_heavy_000.ogg`(0.505초)를 사용한다. 두 공식 팩 모두 CC0이며 선택 파일의 원본 이름, 출처, SHA-256과 이용 조건을 `Assets/Audio/Combat/Kenney/LICENSE.md`에 기록했다.
 - `[에셋 확인]` 두 OGG는 mono, PCM, Decompress On Load, preload 설정으로 import한다. 매 발사 파일 로드나 AudioSource 생성 없이 persistent AudioSource 하나의 `PlayOneShot`으로 겹쳐 재생한다.
 - `[코드/프리팹 확인]` 좀비의 실제 이동 자식 `ZombieAgent`에는 center `(0, 2, 0)`, height `4`, radius `0.6`인 Trigger CapsuleCollider가 하나 있다. Root의 `EnemyStats`가 부모 경로의 `IDamageable` 권위자다.
@@ -631,8 +631,9 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` 실제 persistent Player의 빈 3번 슬롯과 `InputBlocked`에서는 발사를 거부했다. W1 Handgun은 press/held/cooldown 순서, W2 Rifle은 held/RPM 순서로 Player 원점 Raycast를 실행했고 두 시험 좀비 모두 35 피해 세 번째에 한 번 죽었다. 사망 뒤 Patrol·피격 Collider·외형 비활성 및 추가 피해·중복 사망 없음도 확인했다.
 - `[Play Mode 호출 확인]` 최종 재검증에서는 기존 장비 상태를 보관하고 장비 소유 API로 시험용 W1 Handgun과 W2 Rifle을 임시 장착했다. `권총 1발 → 권총 조기 재발 거부 → 같은 시각 소총 첫 발 허용 → 권총 재선택 시 남은 cooldown 유지 → 소총 다음 허용 시각의 세 번째 총 피해로 사망`을 통과했고, `Died`와 `EnemyDeathHandler`는 한 번만 실행됐다. 시험 장비, 활성 번호, Player·Camera 위치, 입력 차단과 EventSystem 상태를 모두 원래 값으로 복구한 뒤 Edit Mode로 종료했다.
 - `[Play Mode 호출 확인]` 오디오 재검증에서 적이 없는 유효 발사는 발사 클립만 활성 재생했고, 발사 클립을 시험 중 잠시 제외한 상태에서 35 피해가 실제 적용된 적중은 적중 클립만 활성 재생했다. 두 클립을 정상 복구한 뒤 추가 두 발로 `100 → 65 → 30 → 0`, 사망·정리 1회를 다시 통과했으며 시험 장비와 모든 런타임 상태를 원복했다.
+- `[Play Mode 사용자 확인][2026-08-23]` 발사음과 같은 순간에 재생되던 둔탁한 적중음이 섞여 잘 구분되지 않았음을 확인했다. 적중음 시작을 약 `0.06`초 분리한 뒤 실제 Game View에서 효과음이 잘 들리는 것을 사용자가 확인했으며, 요청에 따라 추가 자동 공격 테스트는 생략했다.
 - `[검증 과정]` 최초 재검증 하네스 2회는 비활성 `Preview Camera`를 gameplay Camera로 고른 전제와 빈 런타임 장비칸을 고정 W1/W2로 가정해 실패했다. 실제 `Main Camera`와 장비 API를 사용하도록 하네스를 바로잡은 뒤 위 최종 검증이 통과했으며, 이 실패는 프로젝트 컴파일·전투 코드 오류가 아니었다.
 - `[Console 기준선]` 최종 import/compile 뒤 Error/Exception/Assert는 작업 전과 같은 6개다. 이전 Camera Capture 도구 2개, 이전 SerializedProperty 도구 2개, 외부 `AwaiiStudio/ASFolliage` shader keyword 2개이며 신규 전투 오류는 없다.
 - `[코드/씬 확인]` `GameMapTest`를 Preview Scene으로 열어 기존 좀비 프리팹 인스턴스가 새 `EnemyDeathHandler`와 Trigger CapsuleCollider를 상속함을 확인했고, 검사 뒤 원래 활성 `GameMap1`, dirty 상태와 Edit Mode를 그대로 복원했다.
 - `[검증 한계]` Windows 입력 자동화가 Unity 창 캡처에서 `SetIsBorderRequired` 시스템 인터페이스 오류로 중단돼 실제 좌클릭의 `Update → Input.GetMouseButtonDown/GetMouseButton` 경계는 자동 조작하지 못했다. 공개 공격 진입점의 Play Mode 호출과 공식 Unity 입력 의미·컴파일까지만 확인했으며 사용자 실제 Game View 좌클릭 확인으로 승격하지 않는다.
-- `[미검증]` 실제 Game View에서 권총 3회 클릭과 자동소총 hold의 손 입력·주관적 음색/음량 확인, 인벤토리를 연 채 실제 클릭, 벽 뒤 적 차폐, 씬 왕복 중 공격 cooldown·오디오와 Windows Player build는 이번 범위에서 수행하지 않았다.
+- `[미검증]` 실제 Game View에서 권총 3회 클릭과 자동소총 hold의 전체 입력 회귀, 인벤토리를 연 채 실제 클릭, 벽 뒤 적 차폐, 씬 왕복 중 공격 cooldown·오디오와 Windows Player build는 이번 범위에서 수행하지 않았다. 적중음의 주관적 구분은 위 사용자 확인으로 완료됐다.

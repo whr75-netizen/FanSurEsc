@@ -316,6 +316,7 @@ Interactable (abstract base class)
 - `[코드/씬 확인]` Animator의 Root Motion은 꺼져 있으며 위치 권한은 `EnemyPatrol`에만 있다.
 - `[코드/씬 확인]` `KenneyZombiePatrol.prefab`은 `ZombieAgent`와 외형·Animator를 포함하고 Missing Script가 없다.
 - `[코드/씬 확인]` GameMapTest에는 `Test_KenneyZombiePatrol` 인스턴스가 `(0, 0, 3)`에 하나 배치되어 있다. 순찰 구간은 이 기준점에서 X `-1.5`부터 `1.0`까지이며 Plane 안에 있다.
+- `[씬 확인][2026-08-23]` 기지에서 바로 전투를 확인할 수 있도록 GameMap1에도 같은 `KenneyZombiePatrol` 프리팹의 연결된 인스턴스 `Test_KenneyZombiePatrol_Base`를 `(0, 0, 5)`에 하나 배치했다. 사용자 요청에 따라 이번 추가 배치의 Play Mode 재검증은 생략했다.
 - `[의도적 보류]` Collider와 `Obstacle` 태그를 넣지 않아 현재 플레이어 이동이나 E 상호작용을 막지 않는다. 적 물리와 피격 판정은 전투 계약을 만들 때 별도로 결정한다.
 
 ### 2026-08-20 검증 결과

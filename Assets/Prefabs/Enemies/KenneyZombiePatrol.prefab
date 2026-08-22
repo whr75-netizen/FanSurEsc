@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7952717098829923281}
+  - component: {fileID: 3344706678386573918}
   m_Layer: 0
   m_Name: ZombieAgent
   m_TagString: Untagged
@@ -32,6 +33,29 @@ Transform:
   - {fileID: 7803743912603325822}
   m_Father: {fileID: 5574875849931597612}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &3344706678386573918
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5625659321238667121}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &7783077477261944068
 GameObject:
   m_ObjectHideFlags: 0
@@ -43,6 +67,7 @@ GameObject:
   - component: {fileID: 5574875849931597612}
   - component: {fileID: 1889593813852031817}
   - component: {fileID: 419036695974578800}
+  - component: {fileID: 3058496521402663053}
   m_Layer: 0
   m_Name: KenneyZombiePatrol
   m_TagString: Untagged
@@ -100,6 +125,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
   definition: {fileID: 11400000, guid: 21bd7e9325334e343b66d3b6fd495315, type: 2}
+--- !u!114 &3058496521402663053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7783077477261944068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ddb22b82ea065246a482115bf50b610, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDeathHandler
+  stats: {fileID: 419036695974578800}
+  behavioursToDisable:
+  - {fileID: 1889593813852031817}
+  collidersToDisable:
+  - {fileID: 3344706678386573918}
+  objectsToHide:
+  - {fileID: 5625659321238667121}
 --- !u!1001 &7766121946146402965
 PrefabInstance:
   m_ObjectHideFlags: 0

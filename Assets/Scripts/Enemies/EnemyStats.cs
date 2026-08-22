@@ -1,21 +1,25 @@
 using System;
+using FantasySurvival.Combat;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public sealed class EnemyStats : MonoBehaviour
+public sealed class EnemyStats : MonoBehaviour, IDamageable
 {
     [SerializeField] private EnemyDefinition definition;
 
     private float currentHealth;
     private bool isInitialized;
+    private bool isDead;
 
     public event Action<float, float> HealthChanged;
+    public event Action<EnemyStats, DamageContext> Died;
 
     public EnemyDefinition Definition => definition;
     public float MaxHealth => definition != null ? definition.MaxHealth : 0f;
     public float CurrentHealth => currentHealth;
     public bool IsInitialized => isInitialized;
-    public bool IsAlive => isInitialized && currentHealth > 0f;
+    public bool IsAlive => isInitialized && !isDead;
+    public bool IsDead => isInitialized && isDead;
 
     private void Awake()
     {
@@ -35,30 +39,52 @@ public sealed class EnemyStats : MonoBehaviour
 
     public bool Initialize(EnemyDefinition sourceDefinition)
     {
-        if (sourceDefinition == null)
+        if (sourceDefinition == null || isInitialized)
         {
             return false;
         }
 
         definition = sourceDefinition;
         isInitialized = true;
+        isDead = false;
         SetCurrentHealth(definition.MaxHealth, true);
         return true;
     }
 
     public void ApplyDamage(float amount)
     {
-        if (!isInitialized || amount <= 0f)
+        ApplyDamage(new DamageContext(amount, null, transform.position));
+    }
+
+    public DamageResult ApplyDamage(DamageContext context)
+    {
+        if (!IsAlive || context.Amount <= 0f || float.IsNaN(context.Amount))
         {
-            return;
+            return DamageResult.Ignored(currentHealth);
         }
 
-        SetCurrentHealth(currentHealth - amount);
+        float previousHealth = currentHealth;
+        float nextHealth = Mathf.Clamp(currentHealth - context.Amount, 0f, MaxHealth);
+        bool causedDeath = previousHealth > 0f && nextHealth <= 0f;
+
+        currentHealth = nextHealth;
+        if (causedDeath)
+        {
+            isDead = true;
+        }
+
+        HealthChanged?.Invoke(currentHealth, MaxHealth);
+        if (causedDeath)
+        {
+            Died?.Invoke(this, context);
+        }
+
+        return new DamageResult(true, previousHealth, currentHealth, causedDeath);
     }
 
     public void RestoreHealth(float amount)
     {
-        if (!isInitialized || amount <= 0f)
+        if (!IsAlive || amount <= 0f)
         {
             return;
         }
@@ -68,7 +94,7 @@ public sealed class EnemyStats : MonoBehaviour
 
     public void ResetHealth()
     {
-        if (!isInitialized)
+        if (!IsAlive)
         {
             return;
         }

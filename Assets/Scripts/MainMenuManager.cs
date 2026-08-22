@@ -124,7 +124,7 @@ public class MainMenuManager : MonoBehaviour
         }
 
         return InventorySaveCodec.TryRestore(
-            candidate.playerInventory,
+            candidate.playerItems,
             itemDatabase,
             InventoryUIManager.DefaultInventoryWidth,
             InventoryUIManager.DefaultInventoryHeight,

@@ -1,19 +1,68 @@
+using System;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class PlayerStats : MonoBehaviour
+[DisallowMultipleComponent]
+public sealed class PlayerStats : MonoBehaviour
 {
-    public Slider healthBar; // Inspector에서 연결
-    private float health = 100f;
+    [SerializeField, Min(1f)] private float maxHealth = 100f;
+    [SerializeField, Min(0f)] private float currentHealth = 100f;
 
-    void Update()
+    public event Action<float, float> HealthChanged;
+
+    public float MaxHealth => maxHealth;
+    public float CurrentHealth => currentHealth;
+    public bool IsAlive => currentHealth > 0f;
+
+    private void Awake()
     {
-        // 테스트용: H 누르면 체력 감소
-        if (Input.GetKeyDown(KeyCode.H))
+        NormalizeHealth();
+    }
+
+    public void ApplyDamage(float amount)
+    {
+        if (amount <= 0f)
         {
-            health -= 10f;
-            healthBar.value = health;
-            Debug.Log("체력: " + health);
+            return;
         }
+
+        SetCurrentHealth(currentHealth - amount);
+    }
+
+    public void RestoreHealth(float amount)
+    {
+        if (amount <= 0f)
+        {
+            return;
+        }
+
+        SetCurrentHealth(currentHealth + amount);
+    }
+
+    public void ResetHealth()
+    {
+        SetCurrentHealth(maxHealth);
+    }
+
+    private void SetCurrentHealth(float value)
+    {
+        float clamped = Mathf.Clamp(value, 0f, maxHealth);
+        if (Mathf.Approximately(currentHealth, clamped))
+        {
+            return;
+        }
+
+        currentHealth = clamped;
+        HealthChanged?.Invoke(currentHealth, maxHealth);
+    }
+
+    private void NormalizeHealth()
+    {
+        maxHealth = Mathf.Max(1f, maxHealth);
+        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+    }
+
+    private void OnValidate()
+    {
+        NormalizeHealth();
     }
 }

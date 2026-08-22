@@ -7,11 +7,13 @@ namespace FantasySurvival.SaveSystem
     public sealed class GameSaveData
     {
         public const string CurrentGameId = "fantasy-survival-escape";
-        public const int CurrentFormatVersion = 2;
+        public const int CurrentFormatVersion = 3;
 
         public string gameId;
         public int formatVersion;
         public string savedAtUtc;
+        public PlayerItemStateSaveData playerItems;
+        // Kept only so JsonUtility can read and migrate the development v2 schema.
         public InventoryGridSaveData playerInventory;
         public BaseSaveData baseState;
     }
@@ -37,6 +39,18 @@ namespace FantasySurvival.SaveSystem
     }
 
     [Serializable]
+    public sealed class PlayerItemStateSaveData
+    {
+        public const string FlatLayoutId = "flat-player-items-v1";
+
+        public string layoutId;
+        public int inventoryWidth;
+        public int inventoryHeight;
+        public int itemRecordCount;
+        public List<InventoryItemSaveData> items = new List<InventoryItemSaveData>();
+    }
+
+    [Serializable]
     public sealed class InventoryItemSaveData
     {
         // Save-file-local relationship key only. This is not a persistent item instance ID.
@@ -44,6 +58,8 @@ namespace FantasySurvival.SaveSystem
         public int parentContainerRecordId = -1;
         public int definitionId;
         public int slotIndex;
+        // 0 means a grid/container record. 1..14 are stable EquipmentSlotId values.
+        public int equipmentSlot;
         public bool isRotated;
     }
 }

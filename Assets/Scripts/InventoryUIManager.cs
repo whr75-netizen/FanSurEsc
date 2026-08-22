@@ -1,6 +1,7 @@
 // 파일 이름: InventoryUIManager.cs
 // 플레이어 게임 오브젝트에 추가하세요.
 
+using System;
 using UnityEngine;
 using System.Linq;
 using FantasySurvival.Inventory;
@@ -18,7 +19,9 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private int[] startingItemIds = { 1, 2, 3, 4, 5 };
     [Header("Player Inventory UI")] [SerializeField] private GameObject playerInventoryPanel;
     [SerializeField] private StandardStashView playerStashView;
-    private StandardStashViewData playerInventoryData;
+    [Header("Player Equipment UI")] [SerializeField] private GameObject equipmentPanel;
+    [SerializeField] private EquipmentPanelView equipmentView;
+    private PlayerInventoryState playerState;
     [Header("External Inventory UI")] [SerializeField] private GameObject externalInventoryPanel;
     [SerializeField] private StandardStashView externalStashView;
     private StandardStashViewData currentExternalData;
@@ -27,13 +30,22 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private int playerInventoryWidth = DefaultInventoryWidth;
     [SerializeField] private int playerInventoryHeight = DefaultInventoryHeight;
     private bool isPlayerViewRegistered = false;
+    private bool isEquipmentViewRegistered = false;
     private bool isExternalViewRegistered = false;
     private bool inputBlocked;
     // private bool isPlayerInventoryInitialized = false; // Apply 항상 호출 방식으로 변경 시 불필요
 
     public bool InputBlocked => inputBlocked;
+    public bool IsAnyInventoryOpen =>
+        (playerInventoryPanel != null && playerInventoryPanel.activeSelf) ||
+        (equipmentPanel != null && equipmentPanel.activeSelf) ||
+        (externalInventoryPanel != null && externalInventoryPanel.activeSelf);
+    public bool BlocksGameplayInput => inputBlocked || IsAnyInventoryOpen;
     public ItemDatabase ItemDatabase => itemDatabase;
-    public StandardStashViewData PlayerInventoryData => playerInventoryData;
+    public PlayerInventoryState PlayerState => playerState;
+    public StandardStashViewData PlayerInventoryData => playerState?.Inventory;
+    public EquipmentLoadoutData PlayerEquipmentData => playerState?.Equipment;
+    public event Action<PlayerInventoryState> PlayerStateChanged;
 
     #endregion
 
@@ -43,15 +55,31 @@ public class InventoryUIManager : MonoBehaviour
         if (standardCore == null) { Debug.LogError("StandardCore missing!"); enabled = false; return; }
         if (itemDatabase == null) { Debug.LogError("ItemDatabase missing!"); enabled = false; return; }
         standardCore.Initialize();
-        if (!TryCreateStartingInventory(out playerInventoryData, out string initializationError))
+        if (!TryCreateStartingInventory(out StandardStashViewData startingInventory, out string initializationError))
         {
             Debug.LogError($"[InitializeStartingItems] {initializationError}", this);
             enabled = false;
             return;
         }
-        if (playerInventoryPanel == null || playerStashView == null || externalInventoryPanel == null || externalStashView == null) { Debug.LogError("UI references missing!"); enabled = false; return; }
+        playerState = new PlayerInventoryState(startingInventory, new EquipmentLoadoutData());
+        if (playerInventoryPanel == null || playerStashView == null ||
+            equipmentPanel == null || equipmentView == null ||
+            externalInventoryPanel == null || externalStashView == null)
+        {
+            Debug.LogError("UI references missing!");
+            enabled = false;
+            return;
+        }
+        if (!equipmentView.TryValidateCells(out string equipmentError))
+        {
+            Debug.LogError(equipmentError, equipmentView);
+            enabled = false;
+            return;
+        }
         playerInventoryPanel.SetActive(false);
+        equipmentPanel.SetActive(false);
         externalInventoryPanel.SetActive(false);
+        PlayerStateChanged?.Invoke(playerState);
     }
 
     bool TryCreateStartingInventory(out StandardStashViewData inventoryData, out string error)
@@ -111,7 +139,9 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
-        return TryReplacePlayerInventory(startingInventory, out error);
+        return TryReplacePlayerState(
+            new PlayerInventoryState(startingInventory, new EquipmentLoadoutData()),
+            out error);
     }
 
     public bool TryReplacePlayerInventory(StandardStashViewData replacement, out string error)
@@ -122,17 +152,36 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
-        if (replacement.CapacityWidth != playerInventoryWidth ||
-            replacement.CapacityHeight != playerInventoryHeight ||
-            replacement.CellData == null ||
-            replacement.CellData.Length != playerInventoryWidth * playerInventoryHeight)
+        return TryReplacePlayerState(
+            new PlayerInventoryState(replacement, playerState?.Equipment ?? new EquipmentLoadoutData()),
+            out error);
+    }
+
+    public bool TryReplacePlayerState(PlayerInventoryState replacement, out string error)
+    {
+        if (replacement?.Inventory == null || replacement.Equipment == null)
+        {
+            error = "Replacement player inventory state is missing.";
+            return false;
+        }
+
+        if (replacement.Inventory.CapacityWidth != playerInventoryWidth ||
+            replacement.Inventory.CapacityHeight != playerInventoryHeight ||
+            replacement.Inventory.CellData == null ||
+            replacement.Inventory.CellData.Length != playerInventoryWidth * playerInventoryHeight)
         {
             error = $"Replacement inventory must be {playerInventoryWidth}x{playerInventoryHeight}.";
             return false;
         }
 
-        CloseAllInventories();
-        playerInventoryData = replacement;
+        if (!CloseAllInventories())
+        {
+            error = "Could not replace player state because the active drag could not be restored.";
+            return false;
+        }
+
+        playerState = replacement;
+        PlayerStateChanged?.Invoke(playerState);
         error = null;
         return true;
     }
@@ -150,16 +199,23 @@ public class InventoryUIManager : MonoBehaviour
     }
     void CheckInteractionDistance()
     {
-        if (externalInventoryPanel != null && externalInventoryPanel.activeSelf && currentOpenedChest != null)
+        if (externalInventoryPanel == null || !externalInventoryPanel.activeSelf)
         {
-            // 드래그 체크는 Hide/Close 함수 내부에서 하므로 여기선 제거
-            if (currentOpenedChest == null) { CloseAllInventories(); return; } // 열린 상자 없으면 모두 닫기
+            return;
+        }
 
-            if (Vector3.Distance(transform.position, currentOpenedChest.transform.position) > interactionRange)
-            {
-                Debug.Log($"상자({currentOpenedChest.name}) 거리 멀어짐. 모든 인벤토리 닫기 시도.");
-                CloseAllInventories(); // HideExternalInventoryUI() 대신 호출
-            }
+        // Unity의 파괴된 오브젝트는 null처럼 비교된다. 열린 상자가 사라졌다면
+        // 거리 계산보다 먼저 세 패널과 등록된 View를 한 번에 정리한다.
+        if (currentOpenedChest == null)
+        {
+            CloseAllInventories();
+            return;
+        }
+
+        if (Vector3.Distance(transform.position, currentOpenedChest.transform.position) > interactionRange)
+        {
+            Debug.Log($"상자({currentOpenedChest.name}) 거리 멀어짐. 모든 인벤토리 닫기 시도.");
+            CloseAllInventories();
         }
     }
     #endregion
@@ -177,6 +233,10 @@ public class InventoryUIManager : MonoBehaviour
         {
             CloseAllInventories();
         }
+        if (standardCore != null && standardCore.IsDragging() && Input.GetKeyDown(KeyCode.R))
+        {
+            standardCore.SwitchRotate();
+        }
     }
 
     public bool TryToggleChestInventory(Chest chest)
@@ -191,14 +251,20 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
-        if (externalInventoryPanel.activeSelf && currentOpenedChest == chest)
+        if (externalInventoryPanel.activeSelf)
         {
-            CloseAllInventories();
+            if (currentOpenedChest == chest)
+            {
+                return CloseAllInventories();
+            }
+
+            if (!CloseAllInventories())
+            {
+                return false;
+            }
         }
-        else
-        {
-            OpenPlayerAndExternalInventory(chest);
-        }
+
+        OpenPlayerAndExternalInventory(chest);
 
         return true;
     }
@@ -212,23 +278,57 @@ public class InventoryUIManager : MonoBehaviour
     #region UI 관리 메소드 (드래그 취소 로직 포함)
 
     // 플레이어 인벤토리 토글
-    void TogglePlayerInventoryUI() { if (playerInventoryPanel.activeSelf) HidePlayerInventoryUI(); else OpenPlayerInventoryUI(); }
+    void TogglePlayerInventoryUI()
+    {
+        if (playerInventoryPanel.activeSelf)
+        {
+            CloseAllInventories();
+        }
+        else
+        {
+            OpenPlayerInventoryUI();
+        }
+    }
 
     // 플레이어 인벤토리 열기 (Apply 항상 호출 - 상태 복원력)
-    void OpenPlayerInventoryUI() { if (playerInventoryPanel == null || standardCore == null || playerInventoryData == null) return; if (playerInventoryPanel.activeSelf) return; playerInventoryPanel.SetActive(true); if (!isPlayerViewRegistered) { standardCore.AddInventoryView(playerStashView); isPlayerViewRegistered = true; } playerStashView.Apply(playerInventoryData); Debug.Log("Player Inventory Opened"); }
+    void OpenPlayerInventoryUI()
+    {
+        if (playerInventoryPanel == null || equipmentPanel == null || standardCore == null || playerState == null)
+        {
+            return;
+        }
+
+        if (playerInventoryPanel.activeSelf)
+        {
+            return;
+        }
+
+        playerInventoryPanel.SetActive(true);
+        equipmentPanel.SetActive(true);
+        if (!isPlayerViewRegistered)
+        {
+            standardCore.AddInventoryView(playerStashView);
+            isPlayerViewRegistered = true;
+        }
+        if (!isEquipmentViewRegistered)
+        {
+            standardCore.AddInventoryView(equipmentView);
+            isEquipmentViewRegistered = true;
+        }
+
+        playerStashView.Apply(playerState.Inventory);
+        equipmentView.Apply(playerState.Equipment);
+        Debug.Log("Player Inventory And Equipment Opened");
+    }
 
     // 플레이어 인벤토리 숨기기 (드래그 중 취소 처리)
     private void HidePlayerInventoryUI()
     {
-        // 드래그 중이면 아이템을 복구한 뒤 UI를 닫는다.
-        if (standardCore != null && standardCore.IsDragging())
-        {
-            Debug.Log("[HidePlayerInventoryUI] 드래그 중. 취소 처리.");
-            standardCore.CancelDrag();
-        }
         if (playerInventoryPanel == null || standardCore == null ) return; if (!playerInventoryPanel.activeSelf) return;
+        if (isEquipmentViewRegistered) { standardCore.RemoveInventoryView(equipmentView); isEquipmentViewRegistered = false; }
         if (isPlayerViewRegistered) { standardCore.RemoveInventoryView(playerStashView); isPlayerViewRegistered = false; }
-        playerInventoryPanel.SetActive(false); Debug.Log("Player Inventory Hidden");
+        if (equipmentPanel != null) equipmentPanel.SetActive(false);
+        playerInventoryPanel.SetActive(false); Debug.Log("Player Inventory And Equipment Hidden");
     }
 
     // 플레이어와 외부 인벤토리 함께 열기
@@ -240,24 +340,23 @@ public class InventoryUIManager : MonoBehaviour
     // 외부 인벤토리 숨기기 (드래그 중 취소 처리)
     private void HideExternalInventoryUI()
     {
-        // 드래그 중이면 아이템을 복구한 뒤 UI를 닫는다.
-        if (standardCore != null && standardCore.IsDragging())
-        {
-            Debug.Log("[HideExternalInventoryUI] 드래그 중. 취소 처리.");
-            standardCore.CancelDrag();
-        }
         if (externalInventoryPanel == null || standardCore == null ) return; if (!externalInventoryPanel.activeSelf) return;
         if (isExternalViewRegistered) { standardCore.RemoveInventoryView(externalStashView); isExternalViewRegistered = false; }
         externalInventoryPanel.SetActive(false); currentOpenedChest = null; currentExternalData = null; Debug.Log("External Inventory Hidden");
     }
 
     // 모든 인벤토리 닫기 (Hide 함수 호출)
-    public void CloseAllInventories()
+    public bool CloseAllInventories()
     {
-        if (standardCore != null && standardCore.IsDragging()) standardCore.CancelDrag();
+        if (standardCore != null && standardCore.IsDragging() && !standardCore.CancelDrag())
+        {
+            return false;
+        }
+
         if (standardCore != null) standardCore.CloseAllCasePopups();
-        HideExternalInventoryUI(); // 내부에서 드래그 체크 및 취소 처리
-        HidePlayerInventoryUI();   // 내부에서 드래그 체크 및 취소 처리
+        HideExternalInventoryUI();
+        HidePlayerInventoryUI();
+        return true;
     }
 
     void OnDisable()
@@ -280,6 +379,11 @@ public class InventoryUIManager : MonoBehaviour
         if (playerStashView != null)
         {
             standardCore.RemoveInventoryView(playerStashView);
+        }
+
+        if (equipmentView != null)
+        {
+            standardCore.RemoveInventoryView(equipmentView);
         }
 
         if (externalStashView != null)

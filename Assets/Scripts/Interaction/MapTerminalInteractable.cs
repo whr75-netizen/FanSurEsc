@@ -26,9 +26,10 @@ namespace FantasySurvival.Interaction
             }
 
             var inventoryUI = interactor.GetComponent<InventoryUIManager>();
-            if (inventoryUI != null)
+            if (inventoryUI != null && !inventoryUI.CloseAllInventories())
             {
-                inventoryUI.CloseAllInventories();
+                Debug.LogError("Map selection was not opened because the active inventory drag could not be restored.", this);
+                return;
             }
 
             selectionOverlay.Show(interactor);

@@ -52,12 +52,16 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            inventory.CloseAllInventories();
+            if (!inventory.CloseAllInventories())
+            {
+                SetStatus("Save failed: the active inventory drag could not be restored.", true);
+                return false;
+            }
 
             if (!InventorySaveCodec.TryCapture(
-                    inventory.PlayerInventoryData,
+                    inventory.PlayerState,
                     inventory.ItemDatabase,
-                    out InventoryGridSaveData inventorySave,
+                    out PlayerItemStateSaveData inventorySave,
                     out error))
             {
                 SetStatus($"Save failed: {error}", true);
@@ -119,18 +123,18 @@ namespace FantasySurvival.SaveSystem
             }
 
             if (!InventorySaveCodec.TryRestore(
-                    saveData.playerInventory,
+                    saveData.playerItems,
                     inventory.ItemDatabase,
                     current.CapacityWidth,
                     current.CapacityHeight,
-                    out StandardStashViewData restored,
+                    out FantasySurvival.Inventory.PlayerInventoryState restored,
                     out error))
             {
                 SetStatus($"Load failed; current inventory was kept: {error}", true);
                 return;
             }
 
-            if (!inventory.TryReplacePlayerInventory(restored, out error))
+            if (!inventory.TryReplacePlayerState(restored, out error))
             {
                 SetStatus($"Load failed; current inventory was kept: {error}", true);
                 return;

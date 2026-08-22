@@ -3,7 +3,7 @@ using VariableInventorySystem;
 
 namespace FantasySurvival.Inventory
 {
-    public class InventoryItemData : IVariableInventoryCellData
+    public class InventoryItemData : IVariableInventoryOwnedCellData
     {
         private readonly IVariableInventoryAsset imageAsset;
 
@@ -13,6 +13,7 @@ namespace FantasySurvival.Inventory
         public int Height => Definition.Height;
         public bool IsRotate { get; set; }
         public IVariableInventoryAsset ImageAsset => imageAsset;
+        public IVariableInventoryViewData InventoryOwner { get; private set; }
 
         public InventoryItemData(ItemDefinition definition)
         {
@@ -20,6 +21,19 @@ namespace FantasySurvival.Inventory
                 ? definition
                 : throw new ArgumentNullException(nameof(definition));
             imageAsset = new StandardAsset(definition.Icon);
+        }
+
+        public bool TryChangeInventoryOwner(
+            IVariableInventoryViewData expectedOwner,
+            IVariableInventoryViewData newOwner)
+        {
+            if (!ReferenceEquals(InventoryOwner, expectedOwner))
+            {
+                return false;
+            }
+
+            InventoryOwner = newOwner;
+            return true;
         }
     }
 

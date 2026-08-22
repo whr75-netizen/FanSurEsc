@@ -19,14 +19,15 @@ namespace FantasySurvival.SaveSystem
             SlotOneFileName);
 
         private static string SlotOneBackupPath => SlotOnePath + ".bak";
-        public static GameSaveData CreateSave(InventoryGridSaveData playerInventory)
+        public static GameSaveData CreateSave(PlayerItemStateSaveData playerItems)
         {
             return new GameSaveData
             {
                 gameId = GameSaveData.CurrentGameId,
                 formatVersion = GameSaveData.CurrentFormatVersion,
                 savedAtUtc = DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture),
-                playerInventory = playerInventory,
+                playerItems = playerItems,
+                playerInventory = null,
                 baseState = new BaseSaveData { formatVersion = 1 }
             };
         }
@@ -44,7 +45,7 @@ namespace FantasySurvival.SaveSystem
             }
 
             if (!InventorySaveCodec.TryRestore(
-                    saveData.playerInventory,
+                    saveData.playerItems,
                     database,
                     expectedInventoryWidth,
                     expectedInventoryHeight,
@@ -164,6 +165,11 @@ namespace FantasySurvival.SaveSystem
 
                 string json = File.ReadAllText(path, Encoding.UTF8);
                 saveData = JsonUtility.FromJson<GameSaveData>(json);
+                if (!TryNormalizeToCurrentVersion(saveData, out error))
+                {
+                    saveData = null;
+                    return false;
+                }
                 if (!TryValidateHeader(saveData, out error))
                 {
                     saveData = null;
@@ -200,7 +206,7 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(saveData.savedAtUtc) || saveData.playerInventory == null)
+            if (string.IsNullOrWhiteSpace(saveData.savedAtUtc) || saveData.playerItems == null)
             {
                 error = "Save data is missing required fields.";
                 return false;
@@ -222,6 +228,61 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            error = null;
+            return true;
+        }
+
+        private static bool TryNormalizeToCurrentVersion(GameSaveData saveData, out string error)
+        {
+            if (saveData == null)
+            {
+                error = "Save data is empty or malformed.";
+                return false;
+            }
+
+            if (saveData.formatVersion == GameSaveData.CurrentFormatVersion)
+            {
+                error = null;
+                return true;
+            }
+
+            if (saveData.formatVersion != 2)
+            {
+                error = $"Unsupported save version {saveData.formatVersion}.";
+                return false;
+            }
+
+            InventoryGridSaveData legacy = saveData.playerInventory;
+            if (legacy == null || legacy.layoutId != InventoryGridSaveData.FlatLayoutId ||
+                legacy.width <= 0 || legacy.height <= 0 || legacy.items == null ||
+                legacy.itemRecordCount < 0 || legacy.itemRecordCount != legacy.items.Count)
+            {
+                error = "Legacy v2 inventory payload is missing or malformed.";
+                return false;
+            }
+
+            foreach (InventoryItemSaveData record in legacy.items)
+            {
+                if (record == null)
+                {
+                    error = "Legacy v2 inventory contains an empty item record.";
+                    return false;
+                }
+
+                // v2 had no equipment roots. Never infer equipment from a legacy file.
+                record.equipmentSlot = 0;
+            }
+
+            saveData.playerItems = new PlayerItemStateSaveData
+            {
+                layoutId = PlayerItemStateSaveData.FlatLayoutId,
+                inventoryWidth = legacy.width,
+                inventoryHeight = legacy.height,
+                itemRecordCount = legacy.itemRecordCount,
+                items = legacy.items
+            };
+            saveData.playerInventory = null;
+            saveData.formatVersion = GameSaveData.CurrentFormatVersion;
             error = null;
             return true;
         }

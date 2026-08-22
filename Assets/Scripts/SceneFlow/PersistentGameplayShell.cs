@@ -84,7 +84,12 @@ namespace FantasySurvival.SceneFlow
 
             try
             {
-                inventoryUI.CloseAllInventories();
+                if (!inventoryUI.CloseAllInventories())
+                {
+                    Debug.LogError("Cannot travel because the active inventory drag could not be restored.", this);
+                    RestoreTravelState();
+                    return false;
+                }
                 eventSystem.SetSelectedGameObject(null);
                 playerMovement.enabled = false;
                 inventoryUI.SetInputBlocked(true);

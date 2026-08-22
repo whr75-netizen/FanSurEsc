@@ -36,6 +36,11 @@ namespace VariableInventorySystem
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
             if (eventData.button != PointerEventData.InputButton.Left) return;
+            if (IsDragging())
+            {
+                Debug.LogWarning("[Core.OnBeginDrag] A previous drag is still active. New source was not detached.");
+                return;
+            }
 
             // 1. 모든 View에 OnPrePick 호출 (원본과 동일)
             foreach (var inventoryView in InventoryViews)
@@ -46,6 +51,15 @@ namespace VariableInventorySystem
             // 2. 현재 셀 데이터 저장 (원본과 동일)
             var stareData = stareCell?.CellData;
             if (stareData == null) { Debug.LogWarning("[Core.OnBeginDrag] No data in stareCell before pick."); return; }
+
+            // 드래그 표시 셀을 먼저 준비한다. 원본 아이템을 소유자에서 분리한 뒤
+            // 초기화가 실패하면 어느 컨테이너에도 속하지 않는 상태가 되기 때문이다.
+            if (effectCell == null) Initialize();
+            if (effectCell == null)
+            {
+                Debug.LogError("[Core.OnBeginDrag] effectCell is null. The source item was not detached.");
+                return;
+            }
 
             originView = null; // 초기화
 
@@ -70,8 +84,6 @@ namespace VariableInventorySystem
             }
 
             // 5. effectCell 활성화 및 데이터 적용 (원본과 동일)
-            if (effectCell == null) Initialize();
-            if (effectCell == null) { Debug.LogError("[Core.OnBeginDrag] effectCell is null!"); return; }
             effectCell.RectTransform.gameObject.SetActive(true);
             effectCell.Apply(stareData); // OnPick 전에 저장한 stareData 사용
             originEffectCellRotate = stareData.IsRotate; // 회전 상태 저장
@@ -85,8 +97,13 @@ namespace VariableInventorySystem
         {
             if (!IsDragging()) return;
             bool isRelease = false; foreach (var view in InventoryViews) { if (view.OnDrop(stareCell, effectCell)) { isRelease = true; break; } }
-            if (!isRelease && originEffectCellRotate.HasValue) { if (effectCell.CellData != null) effectCell.CellData.IsRotate = originEffectCellRotate.Value; effectCell.Apply(effectCell.CellData); }
+            if (!isRelease) RestoreOriginalRotation();
             foreach (var inventoryView in InventoryViews) inventoryView?.OnDroped(isRelease); // ★ OnDroped에서 복구 처리됨
+            if (!isRelease && IsDetachedOwnedItem())
+            {
+                Debug.LogError("[Core.OnEndDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
+                return;
+            }
             if (effectCell != null) { if (effectCell.RectTransform != null) effectCell.RectTransform.gameObject.SetActive(false); effectCell.Apply(null); }
             originEffectCellRotate = null;
             originView = null; // ★ 초기화
@@ -99,20 +116,44 @@ namespace VariableInventorySystem
         (int, int) GetRotateSize(IVariableInventoryCellData cell) { if (cell == null) return (1, 1); return (cell.IsRotate ? cell.Height : cell.Width, cell.IsRotate ? cell.Width : cell.Height); }
 
         // --- CancelDrag (OnDroped(false) 호출) ---
-        public void CancelDrag()
+        public bool CancelDrag()
         {
-            if (!IsDragging()) return;
+            if (!IsDragging()) return true;
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 시도...");
             if (originView != null)
             {
                 Debug.Log($"[VariableInventoryCore.CancelDrag] Origin View ({((Object)originView).GetEntityId()})의 OnDroped(false) 호출 시도.");
             }
             else { Debug.LogWarning("[VariableInventoryCore.CancelDrag] Origin view is unknown!"); }
+            RestoreOriginalRotation();
             foreach (var inventoryView in InventoryViews) inventoryView?.OnDroped(false);
+            if (IsDetachedOwnedItem())
+            {
+                Debug.LogError("[VariableInventoryCore.CancelDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
+                return false;
+            }
             // effectCell 정리 및 상태 초기화
             if (effectCell != null) { if (effectCell.RectTransform != null) effectCell.RectTransform.gameObject.SetActive(false); effectCell.Apply(null); }
             originEffectCellRotate = null; stareCell = null; originView = null;
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 완료.");
+            return true;
+        }
+
+        private void RestoreOriginalRotation()
+        {
+            if (!originEffectCellRotate.HasValue || effectCell?.CellData == null)
+            {
+                return;
+            }
+
+            effectCell.CellData.IsRotate = originEffectCellRotate.Value;
+            effectCell.Apply(effectCell.CellData);
+        }
+
+        private bool IsDetachedOwnedItem()
+        {
+            return effectCell?.CellData is IVariableInventoryOwnedCellData owned &&
+                   owned.InventoryOwner == null;
         }
     }
 }

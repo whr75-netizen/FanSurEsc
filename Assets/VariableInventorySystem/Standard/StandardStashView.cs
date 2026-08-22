@@ -32,6 +32,7 @@ namespace VariableInventorySystem
         int? originalId;
         IVariableInventoryCellData originalCellData;
         Vector3 conditionOffset;
+        bool conditionNeedsRefresh;
 
         Action<IVariableInventoryCell> onCellClick;
         Action<IVariableInventoryCell> onCellOptionClick;
@@ -101,18 +102,17 @@ namespace VariableInventorySystem
 
         public virtual void OnPrePick(IVariableInventoryCell stareCell)
         {
-            if (stareCell?.CellData == null)
+            if (!OwnsCell(stareCell) || stareCell.CellData == null)
             {
                 return;
             }
 
-            var (width, height) = GetRotateSize(stareCell.CellData);
-            conditionTransform.sizeDelta = new Vector2(stareCell.DefaultCellSize.x * width, stareCell.DefaultCellSize.y * height);
+            UpdateConditionSize(stareCell, stareCell.CellData);
         }
 
         public virtual bool OnPick(IVariableInventoryCell stareCell)
         {
-            if (stareCell?.CellData == null)
+            if (!OwnsCell(stareCell) || stareCell.CellData == null)
             {
                 return false;
             }
@@ -133,7 +133,7 @@ namespace VariableInventorySystem
 
         public virtual void OnDrag(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell, PointerEventData pointerEventData)
         {
-            if (stareCell == null)
+            if (!OwnsCell(stareCell))
             {
                 return;
             }
@@ -174,15 +174,16 @@ namespace VariableInventorySystem
             conditionTransform.position = stareCell.RectTransform.position + ((conditionOffset + evenNumberOffset) * stareCell.RectTransform.lossyScale.x);
 
             // update condition
-            if (prevCorner != cellCorner)
+            if (prevCorner != cellCorner || conditionNeedsRefresh)
             {
                 UpdateCondition(stareCell, effectCell);
+                conditionNeedsRefresh = false;
             }
         }
 
         public virtual bool OnDrop(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell)
         {
-            if (!itemViews.Any(item => item == stareCell))
+            if (!OwnsCell(stareCell))
             {
                 return false;
             }
@@ -226,6 +227,7 @@ namespace VariableInventorySystem
         {
             conditionTransform.gameObject.SetActive(false);
             condition.color = defaultColor;
+            conditionNeedsRefresh = false;
 
             if (!isDroped && originalId.HasValue)
             {
@@ -240,34 +242,60 @@ namespace VariableInventorySystem
 
         public virtual void OnCellEnter(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell)
         {
-            conditionTransform.gameObject.SetActive(effectCell?.CellData != null);
-            (stareCell as StandardCell).SetHighLight(true);
+            if (!OwnsCell(stareCell) || !(stareCell is StandardCell standardCell))
+            {
+                return;
+            }
+
+            bool isDragging = effectCell?.CellData != null;
+            conditionTransform.gameObject.SetActive(isDragging);
+            if (isDragging)
+            {
+                // 각 인벤토리 View는 독립적인 condition을 가진다. 다른 View에서
+                // 넘어온 아이템의 크기와 판정색을 이 View 기준으로 다시 계산한다.
+                UpdateConditionSize(stareCell, effectCell.CellData);
+                condition.color = defaultColor;
+                conditionNeedsRefresh = true;
+            }
+            standardCell.SetHighLight(true);
         }
 
         public virtual void OnCellExit(IVariableInventoryCell stareCell)
         {
+            if (!OwnsCell(stareCell) || !(stareCell is StandardCell standardCell))
+            {
+                return;
+            }
+
             conditionTransform.gameObject.SetActive(false);
             condition.color = defaultColor;
+            conditionNeedsRefresh = false;
 
             cellCorner = CellCorner.None;
 
-            (stareCell as StandardCell).SetHighLight(false);
+            standardCell.SetHighLight(false);
         }
 
         public virtual void OnSwitchRotate(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell)
         {
-            if (stareCell == null)
+            if (!OwnsCell(stareCell))
             {
                 return;
             }
 
             var (width, height) = GetRotateSize(effectCell.CellData);
-            conditionTransform.sizeDelta = new Vector2(effectCell.DefaultCellSize.x * width, effectCell.DefaultCellSize.y * height);
+            UpdateConditionSize(stareCell, effectCell.CellData);
 
             var evenNumberOffset = GetEvenNumberOffset(width, height, stareCell.DefaultCellSize.x * 0.5f, stareCell.DefaultCellSize.y * 0.5f);
             conditionTransform.position = stareCell.RectTransform.position + ((conditionOffset + evenNumberOffset) * stareCell.RectTransform.lossyScale.x);
 
             UpdateCondition(stareCell, effectCell);
+            conditionNeedsRefresh = false;
+        }
+
+        private bool OwnsCell(IVariableInventoryCell cell)
+        {
+            return cell != null && itemViews != null && itemViews.Any(item => ReferenceEquals(item, cell));
         }
 
         protected virtual int? GetIndex(IVariableInventoryCell stareCell)
@@ -410,6 +438,15 @@ namespace VariableInventorySystem
                 }
             }
         }
+
+        private void UpdateConditionSize(IVariableInventoryCell targetCell, IVariableInventoryCellData item)
+        {
+            var (width, height) = GetRotateSize(item);
+            conditionTransform.sizeDelta = new Vector2(
+                targetCell.DefaultCellSize.x * width,
+                targetCell.DefaultCellSize.y * height);
+        }
+
         protected virtual void OnEnable()
         {
             // UI가 다시 나타날 때 condition(미리보기 테두리)이
@@ -420,6 +457,7 @@ namespace VariableInventorySystem
             }
             // 필요하다면 다른 관련 상태 변수 초기화 (예: cellCorner)
             cellCorner = CellCorner.None;
+            conditionNeedsRefresh = false;
             // Debug.Log($"[StashView {GetInstanceID()}] OnEnable: Condition hidden."); // 필요시 디버그 로그
         }
     }

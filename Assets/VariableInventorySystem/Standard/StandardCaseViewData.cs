@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -18,12 +19,9 @@ namespace VariableInventorySystem
 
         public override int? GetInsertableId(IVariableInventoryCellData cellData)
         {
-            if (cellData is IStandardCaseCellData caseData)
+            if (WouldCreateContainerCycle(cellData))
             {
-                if (caseData.CaseData == this)
-                {
-                    return null;
-                }
+                return null;
             }
 
             return base.GetInsertableId(cellData);
@@ -31,15 +29,50 @@ namespace VariableInventorySystem
 
         public override bool CheckInsert(int id, VariableInventorySystem.IVariableInventoryCellData cellData)
         {
-            if (cellData is IStandardCaseCellData caseData)
+            if (WouldCreateContainerCycle(cellData))
             {
-                if (caseData.CaseData == this)
-                {
-                    return false;
-                }
+                return false;
             }
 
             return base.CheckInsert(id, cellData);
+        }
+
+        private bool WouldCreateContainerCycle(IVariableInventoryCellData cellData)
+        {
+            if (!(cellData is IStandardCaseCellData caseData) || caseData.CaseData == null)
+            {
+                return false;
+            }
+
+            return ContainsGrid(caseData.CaseData, this, new HashSet<StandardStashViewData>());
+        }
+
+        private static bool ContainsGrid(
+            StandardStashViewData current,
+            StandardStashViewData target,
+            HashSet<StandardStashViewData> visited)
+        {
+            if (ReferenceEquals(current, target))
+            {
+                return true;
+            }
+
+            // A candidate subtree that is already cyclic is invalid as well.
+            if (current == null || !visited.Add(current))
+            {
+                return current != null;
+            }
+
+            foreach (IVariableInventoryCellData item in current.CellData)
+            {
+                if (item is IStandardCaseCellData nested &&
+                    ContainsGrid(nested.CaseData, target, visited))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

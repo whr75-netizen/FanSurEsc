@@ -1,3 +1,4 @@
+using FantasySurvival.Combat;
 using UnityEngine;
 
 namespace FantasySurvival.Inventory
@@ -22,6 +23,15 @@ namespace FantasySurvival.Inventory
         [SerializeField, Min(1)] private int height = 1;
         [SerializeField] private Texture2D icon;
 
+        [Header("Equipment")]
+        [SerializeField] private EquipmentSlotType equipmentSlot;
+
+        [Header("Weapon Prototype")]
+        [SerializeField] private WeaponFireMode weaponFireMode;
+        [SerializeField, Min(1f)] private float roundsPerMinute = 300f;
+        [SerializeField, Min(0f)] private float weaponDamage = 35f;
+        [SerializeField, Min(0.1f)] private float weaponRange = 30f;
+
         [Header("Container")]
         [SerializeField] private ItemDefinitionKind kind;
         [SerializeField, Min(1)] private int containerWidth = 1;
@@ -33,10 +43,23 @@ namespace FantasySurvival.Inventory
         public int Width => width;
         public int Height => height;
         public Texture2D Icon => icon;
+        public EquipmentSlotType EquipmentSlot => equipmentSlot;
+        public bool IsEquippable => equipmentSlot != EquipmentSlotType.None;
+        public bool IsWeapon => equipmentSlot == EquipmentSlotType.Weapon;
+        public WeaponFireMode WeaponFireMode => weaponFireMode;
+        public float RoundsPerMinute => roundsPerMinute;
+        public float WeaponDamage => weaponDamage;
+        public float WeaponRange => weaponRange;
         public ItemDefinitionKind Kind => kind;
         public bool IsContainer => kind == ItemDefinitionKind.Container;
         public int ContainerWidth => containerWidth;
         public int ContainerHeight => containerHeight;
+
+        public bool CanEquipIn(EquipmentSlotId slot)
+        {
+            return slot != EquipmentSlotId.None &&
+                   equipmentSlot == EquipmentSlotCatalog.GetSlotType(slot);
+        }
 
         private void OnValidate()
         {
@@ -45,6 +68,9 @@ namespace FantasySurvival.Inventory
             height = Mathf.Max(1, height);
             containerWidth = Mathf.Max(1, containerWidth);
             containerHeight = Mathf.Max(1, containerHeight);
+            roundsPerMinute = Mathf.Max(1f, roundsPerMinute);
+            weaponDamage = Mathf.Max(0f, weaponDamage);
+            weaponRange = Mathf.Max(0.1f, weaponRange);
         }
     }
 }

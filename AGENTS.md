@@ -79,7 +79,9 @@
 
 - 싱글플레이 PvE 생존 탈출 파밍 게임이다.
 - 탑다운 시점의 Zero Sievert 계열 방향이다.
-- 멀티플레이, 랜덤 맵, 전투 수치, 사망 손실, 최종 입력키 등 미정 기능을 임의로 확정하지 않는다.
+- 멀티플레이, 전투 수치, 사망 손실, 최종 입력키 등 미정 기능을 임의로 확정하지 않는다.
+- 현재 `GameMapTest`의 도심형 공간은 런타임 seed로 연결 도로와 큐브 건물만 생성한다. 랜드마크, 지형지물, 내부, 상자·적 spawn과 seed 저장 정책은 아직 이 결정에 포함되지 않는다.
+- 지하 던전과 오염 지역은 도심 생성기의 모드나 옵션으로 섞지 않는다. 각 공간 구조가 확정될 때 별도 생성기와 계약을 설계한다.
 
 ### 현재 맵 왕복과 플레이어 수명주기
 
@@ -93,15 +95,28 @@
 - `SceneSpawnController`는 기존 persistent Player를 목적지 SpawnPoint로 이동시키고 Rigidbody 속도를 초기화할 뿐, Player를 교체하지 않는다.
 - 씬별 Player 재생성, `PlayerRuntimeState` snapshot/restore, 새 UI 재바인딩을 “Player 전체 보존”의 대체 구현으로 다시 도입하지 않는다.
 - 기존 `GameManager`는 셸과 별개의 전역 오브젝트다. 근거 없이 셸과 합치거나 GameMapTest 직접 실행에서 자동 생성하지 않는다.
-- 현재 보존 범위는 한 번의 Play Mode 실행이다. 디스크 세이브가 구현되었다고 주장하지 않는다.
+- `PersistentGameplayShell`의 동일 인스턴스 보존 범위는 한 번의 Play Mode 실행이다. 별도의 단일 슬롯 세이브/로드 프로토타입은 인벤토리 값을 디스크에 저장·복원하지만, Player·Camera·UI 오브젝트 자체를 저장하거나 재생성하는 시스템은 아니다.
 
 ### 아이템과 인벤토리
 
 - `ItemDefinition`/`ItemDatabase`의 숫자 ID는 **아이템 종류 definition ID**다.
 - 이름, 설명, 크기, 아이콘, 컨테이너 정의는 ScriptableObject 프리셋에서 조회한다.
-- 개별 영구 instance ID, 수량, 내구도, 탄약, 능력치, 저장 형식은 아직 확정하지 않는다.
+- 개별 영구 instance ID, 수량, 내구도, 탄약과 능력치는 아직 확정하지 않는다. 현재 저장 형식 v2는 definition ID, 슬롯, 회전과 컨테이너 부모 관계만 기록하며, 파일 내부 `recordId`를 영구 아이템 instance ID로 취급하지 않는다.
 - 현재 인벤토리는 persistent 셸 안의 동일 `InventoryUIManager`와 동일 런타임 객체 그래프가 유지한다. 씬 도착 때 기본 아이템을 다시 seed하지 않는다.
-- 세이브 연동은 사용자가 별도로 요청하는 후속 범위다.
+- 현재 단일 슬롯 세이브/로드 프로토타입은 구현되어 있다. 저장 대상 확장, 정식 슬롯 정책, 기지 Chest 영속화와 원정 결과 저장은 사용자가 별도로 요청하는 후속 범위다.
+
+### 현재 시험 전투 계약
+
+- 현재 공격 흐름은 `PlayerWeaponAttackController 입력 → WeaponFireCadence → Player 원점 Raycast → IDamageable.ApplyDamage(DamageContext) → EnemyStats 체력·사망 전이 → Died 완료 통지 → EnemyDeathHandler 행동·표현 정리` 순서를 유지한다.
+- 활성 무기의 원본은 `EquipmentLoadoutData`와 `PlayerWeaponController.ActiveWeapon`이다. 발사 방식, RPM, 시험 피해와 사거리는 공유 `ItemDefinition`에서 읽고, `PlayerWeaponAttackController`가 런타임 `InventoryItemData`별 `WeaponFireCadence`를 소유한다. 이 cadence는 세이브 대상이나 `ItemDefinition` 상태가 아니다.
+- 단발은 마우스 누름 edge 한 번, 자동은 누른 상태를 입력으로 사용하지만 둘 다 같은 RPM 기반 쿨다운을 거친다. 현재 좌클릭과 총기별 RPM·피해 35·사거리 30은 기능 검증용 값이며 최종 키와 밸런스 확정이 아니다.
+- 카메라의 screen ray는 마우스가 가리키는 Player 발사 높이의 수평면 조준점을 계산할 때만 쓴다. 실제 피해 Raycast는 persistent Player의 `WeaponRayOrigin`에서 그 조준점 방향으로 XZ 평면상 발사하며 Camera를 공격 원점으로 사용하지 않는다.
+- `WeaponAttackAudioFeedback`는 전투 상태를 소유하지 않는 Player-local 표현 컴포넌트다. cadence를 통과해 실제 발사가 성립하면 발사음을 재생하고, `IDamageable.ApplyDamage`의 `DamageResult.WasApplied`가 참일 때만 별도 적중음을 재생한다. Collider 접촉이나 Raycast 적중 추정만으로 적중음을 내지 않는다.
+- `EnemyStats` 하나가 적 개체의 현재 체력과 생존·사망 전이의 유일한 권위 소유자다. 모든 피해 원인은 같은 `ApplyDamage` 진입점을 사용하고, `> 0 → 0` 전이에서만 사망을 한 번 확정한 뒤 `Died`를 통지한다.
+- 현재 적은 1회 초기화·1회 사망 수명주기다. 죽은 `EnemyStats.Initialize`로 체력만 복구하는 암묵적 부활은 금지하며, pooling이나 respawn이 필요해질 때 행동·충돌·외형까지 함께 복구하는 별도 계약을 만든다.
+- `EnemyDeathHandler`는 확정된 사망을 관찰해 AI, 피격 Collider와 현재 시험 외형만 정리한다. 체력을 쓰거나 독립적으로 사망 여부를 판정하는 두 번째 권위자가 아니다.
+- 현재 하체에는 전후좌우·대각 방향 locomotion 세트가 없으므로 마우스 방향 캐릭터 회전, 후진·strafe, 조준·발사 애니메이션은 구현하지 않는다. 기존 WASD 입력 방향 회전과 장착 상체 pose는 유지하고 공격 판정만 마우스 방향을 사용한다.
+- 현재 발사·적중 구분용 Kenney CC0 시험 효과음 2개만 포함한다. 탄약, 재장전, 반동, 탄퍼짐, 총기 3D 모델, VFX, 적 음성, 3D 공간음향, 최종 사운드 디자인, 시체·드롭, 부활·respawn은 이 시험 전투 계약에 포함되지 않는다.
 
 ## 5. Unity 아키텍처 원칙
 
@@ -127,6 +142,49 @@
 - 런타임 개별 상태와 정적 정의를 섞지 않는다. 개별 상태의 소유자와 수명 범위를 명시한다.
 - 배포 빌드의 사용자 세이브를 ScriptableObject asset 변경으로 구현하지 않는다. 세이브는 별도 직렬화 DTO와 파일 정책을 설계하는 단계에서만 구현한다.
 - 현재 사용 중인 단순 구조를 실제 요구 없이 패턴·이벤트 버스·서비스 로케이터로 바꾸지 않는다. 디자인 패턴은 목표가 아니라 문제 해결 도구다.
+
+### 권위 소유자, 컨테이너 경계와 호출 추적성
+
+이 절은 RimWorld의 코드를 복제하라는 뜻이 아니다. `Game → World/Map → Thing/Pawn → Component/Tracker`처럼 권위 소유자와 수명 범위를 역추적하기 쉬운 장점만 현재 프로젝트에 맞게 적용한다.
+
+- 변하는 각 런타임 상태에는 한 시점에 권위 있는 쓰기 소유자 하나만 둔다. 같은 값을 Manager, scene object, static 필드, UI 모델 또는 복사본이 동시에 권위 있게 변경해서는 안 된다.
+- 객체 수명, 게임 규칙, 화면 표시와 저장 표현의 소유자는 서로 다를 수 있다. 예를 들어 `PersistentGameplayShell`은 Player 셸 인스턴스의 수명 소유자지만, 모든 자식의 게임 규칙까지 소유하는 만능 Manager가 아니다.
+- 소유 참조, 부모 context 참조, 읽기 전용 관찰 참조, 검색 인덱스·캐시와 immutable definition 참조를 구분한다. 참조 필드가 있다는 이유만으로 생성·파괴·저장·변경 책임까지 가진다고 판단하지 않는다.
+- 새 권위 상태 집합, 소유권·수명 경계, 컨테이너, Manager 또는 Session을 도입하거나 변경하기 전에 아래 소유권 기록을 답할 수 있어야 한다. 단순 함수 로컬 임시값이나 독립된 표시용 필드는 전체 표를 요구하지 않으며, 해당 기능에 적용되는 항목만 기록한다. 핵심 항목의 답이 없으면 구현을 시작하지 않는다.
+
+| 확인 항목 | 반드시 기록할 내용 |
+|---|---|
+| 권위 소유자 | 실제 원본 값을 쓰는 클래스 또는 객체 하나 |
+| 수명 범위 | Application, Play Session, Scene, Raid, Entity, Container 중 실제 범위 |
+| 생성·파괴 주체 | 누가 언제 만들고 정리하는지 |
+| 변경 진입점 | 값을 바꿀 수 있는 명시적 메서드와 호출자 |
+| 포함 관계 | 실제 소유하는 자식과 단순 참조·관찰 대상을 구분 |
+| 이전 규칙 | 다른 소유자나 컨테이너로 이동할 때의 원자적 절차 |
+| 파생 표현 | UI, 검색 인덱스, 캐시와 갱신·무효화 지점 |
+| 저장 경계 | 저장 대상 여부와 DTO 변환 주체; 미저장이면 그 이유 |
+| 업데이트 주체 | Update/Tick/Event 중 누가 어떤 빈도로 호출하는지 |
+
+- 런타임 개별 객체는 동시에 둘 이상의 논리 컨테이너에 소유되지 않는다. 공유되는 `ItemDefinition` 같은 immutable definition 참조는 소유권으로 취급하지 않는다.
+- 컨테이너 내부 컬렉션과 불변조건은 컨테이너 소유자만 변경한다. 외부 호출자는 명시적인 `Add`, `Remove`, `Move`, `Transfer` API를 사용하고 내부 목록·부모 역참조·검색 인덱스를 직접 수정하지 않는다.
+- 소유권 이전은 사전 검증, 기존 소유자 제거, 새 소유자 추가, 부모 역참조와 파생 인덱스 갱신을 하나의 작업 경계에서 처리한다. 실패하면 원본 상태를 그대로 유지하고 유실·복제·부분 이동을 남기지 않는다.
+- 둘 이상의 권위 소유자를 함께 변경해야 하면 coordinator는 순서, 검증과 rollback만 조정한다. 각 원본은 각 소유자의 API로 변경하고 coordinator가 별도 복사본을 새 권위 상태로 소유하지 않는다.
+- 자식이 상위 context를 알아야 하면 serialized reference, 생성자/초기화 인자 또는 등록 시 전달된 명시적 `owner`/`parent` 참조를 우선한다. 이미 경로가 있는데 `Find*`, 새 Singleton, service locator 또는 전역 이벤트로 소유자를 다시 찾지 않는다.
+- 주요 상태 변경은 `입력 소유자 → 기능 진입점 → 권위 소유자 → 상태 변경 → 완료 통지·화면 갱신` 순서로 역추적할 수 있어야 한다. 중간 계층은 검증·변환·조정 중 실제 책임이 있어야 하며, 호출을 전달만 하는 Manager/Service를 만들지 않는다.
+- 이벤트는 기본적으로 완료된 변경을 관찰자에게 알리는 통지에 사용한다. Unity 프레임워크·수명주기·입력 이벤트가 작업 진입점인 경우 listener 하나가 명시적인 권위 소유자에게 위임하고, 여러 listener가 같은 변경을 경쟁해서 결정하거나 실행하지 않게 한다. 직접 소유자를 알고 있는 명령은 명시적 메서드 호출을 우선한다.
+- UI View, 네트워크 메시지, 검색 인덱스와 캐시는 원본 상태의 파생 표현이며 원본에서 다시 만들 수 있어야 한다. Save DTO와 파일은 실행 사이 값을 운반하는 영속 표현으로만 사용하고, 로드 시 전체 검증 후 런타임 소유자에 원자적으로 적용하며 병행하는 live 권위 상태로 유지하지 않는다.
+- 여러 객체를 조정하는 상태는 실제 수명 범위에 맞는 scene/raid/base/application 소유자에 둔다. 단지 접근이 편하다는 이유로 더 넓은 전역 수명으로 올리지 않는다.
+- 이 원칙은 모든 것을 인터페이스, 상속 또는 Component로 잘게 나누라는 뜻이 아니다. 현재 책임을 가장 짧게 표현하는 일반 C# 객체와 MonoBehaviour의 합성을 우선하고, 실제 변경 이유가 함께 움직이는 작은 응집 단위는 유지한다.
+
+### 업데이트 주기, 인덱스와 캐시
+
+- 입력, 카메라와 화면 보간처럼 매 프레임 필요한 표현 로직과 게임 규칙 시뮬레이션을 구분한다. 모든 기능을 습관적으로 각 객체의 `Update()`에 넣지 않는다.
+- 같은 종류의 객체가 많아지는 시스템은 scope 소유자가 등록 목록과 Tick을 관리하는 방식을 우선 검토한다. 객체는 생성·활성화 시 한 번 등록하고 비활성화·파괴 시 한 번 해제하며, 매 Tick 전체 씬 검색으로 대체하지 않는다.
+- 각 로직은 `EveryFrame`, 고정 Tick, 저빈도 Interval, 상태 변경 Event 중 필요한 최소 빈도를 선택한다. 저빈도 로직은 경과 시간 또는 tick delta를 받아 결과가 프레임률에 따라 달라지지 않게 한다.
+- Tick 목록을 순회하는 동안 등록·해제가 발생할 수 있으면 pending add/remove를 사용하거나 안전한 작업 경계를 둔다. 순회 중 컬렉션 직접 변경에 의존하지 않는다.
+- 공간 조회, 대상 목록과 상태별 검색이 반복되면 scene/map 범위 소유자가 파생 인덱스를 유지할 수 있다. 인덱스는 생성·이동·상태 변경·파괴 경계에서만 갱신하고, 원본 소유권을 대체하지 않는다.
+- 캐시를 추가할 때는 원본 소유자, cache key, 갱신 또는 dirty 조건, 무효화 호출자와 전체 재구축 방법을 함께 구현한다. 무효화 경로가 설명되지 않는 캐시는 만들지 않는다.
+- 고비용 작업은 실제 규모와 Profiler 증거에 따라 분산 Tick, batch, time slicing 또는 Unity Job으로 이동한다. 현재 소수 객체만 있는 프로토타입에 미래 규모를 이유로 복잡한 scheduler를 먼저 만들지 않는다.
+- hot path에서는 `Find*`, LINQ·열거자 할당, 반복 `GetComponent`, 매번 새 컬렉션 생성, 불필요한 Physics 전체 탐색을 피한다. 단, 정적 추정만으로 최적화 완료를 주장하지 않고 Profiler로 병목과 개선을 검증한다.
 
 ### 코드 책임
 
@@ -197,6 +255,15 @@
 17. `[미정]` 기획을 코드나 문서에서 `[확정]`으로 승격하기
 18. 사용자 요청 없이 커밋·push·branch 변경을 수행하거나, 관련 없는 미추적 파일을 한꺼번에 stage하기
 19. 사용자에게 반말하거나, 잘못된 해석을 지적받은 뒤 같은 전제를 유지하기
+20. 하나의 mutable state를 둘 이상의 Manager, scene object, static 필드, UI 모델 또는 복사본이 동시에 권위 있게 변경하기
+21. 소유 컨테이너의 변경 API를 우회해 내부 목록, 부모 역참조 또는 검색 인덱스를 외부에서 직접 수정하기
+22. 명시적인 owner/parent 경로가 있는데 `Find*`, 임의 Singleton, service locator 또는 전역 이벤트로 권위 소유자를 숨기기
+23. Transform 부모나 `DontDestroyOnLoad` 루트라는 이유만으로 모든 자식 상태와 게임 규칙을 상위 객체에 몰아넣기
+24. UI, 캐시, 검색 인덱스, Save DTO 또는 이벤트 listener를 런타임 원본과 동등한 두 번째 권위자로 만들기
+25. 실제 책임 없이 호출을 전달하기만 하는 Manager/Service 계층이나 형식적인 인터페이스·상속 구조를 추가하기
+26. 대량으로 늘어날 같은 종류의 객체마다 필요성 검토 없이 독립 `Update()`와 전체 탐색을 추가하기
+27. 원본, 무효화 조건과 재구축 경로가 없는 캐시나 파생 인덱스를 추가하기
+28. 공격 입력, 상태이상, 애니메이션 이벤트 또는 개별 AI 행동에서 공통 `ApplyDamage`와 `EnemyStats`의 단일 사망 전이를 우회해 체력·사망 상태를 직접 쓰거나 적을 파괴하기
 
 ## 9. 완료 검증 게이트
 
@@ -216,6 +283,29 @@
 - 코드 호출로 우회하지 말고 사용자가 누를 실제 키와 UI 순서로 검사한다.
 - 정상 경로, 취소 경로, 범위 밖 입력, 빠른 중복 입력을 확인한다.
 - 중요한 흐름은 반복 실행해 이벤트 구독, UI, 데이터, 오브젝트가 누적되지 않는지 확인한다.
+
+### 공격·피해·사망 기능
+
+- 빈 활성 무기칸, 전체 입력 차단과 열린 인벤토리에서는 공격이 나가지 않는지 확인한다.
+- 단발은 누르고 있어도 한 번만 발사되고 release/repress와 RPM 쿨다운을 모두 만족해야 다음 발사가 나가는지 확인한다.
+- 자동은 누른 즉시 한 발이 나간 뒤 정의 RPM 간격으로만 반복되며, 프레임 지연 뒤 같은 프레임에 누적 발사를 몰아서 하지 않는지 확인한다.
+- Raycast가 Camera가 아니라 Player 발사 원점에서 마우스 수평 조준점 방향으로 나가고, 비피격 Trigger는 투명 장벽이 되지 않으며 실제 Collider 장애물은 뒤의 적을 막는지 확인한다.
+- 피해 한 번당 `ApplyDamage` 한 번, `> 0 → 0`에서 사망 통지 한 번만 발생해야 한다. 사망 뒤 추가 피해, AI·Collider·외형 잔류와 중복 사망 처리가 없어야 한다.
+- 유효한 빗나감에는 발사음만, `DamageResult.WasApplied=true`인 적중에는 발사음과 구분되는 적중음이 나며, 빈 칸·입력 차단·cooldown 거부 입력에는 어느 소리도 나지 않는지 확인한다.
+- 실제 마우스 입력 자동화가 불가능해 공개 공격 진입점을 직접 호출했다면 `[Play Mode 호출 확인]`으로만 기록하고 실제 좌클릭 확인으로 승격하지 않는다.
+
+### 상태 소유권, 컨테이너와 Tick 구조 변경
+
+상태 소유자, 컨테이너 이동, 검색 인덱스·캐시 또는 중앙 Tick 경계를 변경한 경우 다음을 추가로 확인한다.
+
+- 같은 런타임 상태를 권위 있게 쓰는 소유자는 정확히 하나이며, 관련 사용처 검색에서 우회 직접 쓰기가 남지 않는다.
+- 각 런타임 객체의 논리 소유 컨테이너는 정상 상태에서 0개 또는 1개다. Tick·공간·상태별 파생 목록에는 용도별로 동시에 등록될 수 있지만, 각 개별 목록 안에서는 중복이 없어야 한다.
+- 이전 성공 후 기존 소유자에는 없고 새 소유자에는 정확히 한 번 존재하며, owner/parent 역참조와 검색 인덱스가 일치한다.
+- 이전 실패 시 원본 상태가 그대로 유지되고 유실·복제·부분 이동이 없다.
+- 생성·활성화와 비활성화·파괴 뒤 Tick/인덱스 등록 수가 일치하고, 제거된 객체가 계속 갱신되지 않는다.
+- 원본 변경 뒤 파생 캐시와 UI가 갱신되며, dirty·무효화·전체 재구축 경로가 같은 결과를 만든다.
+- 씬 전환과 저장·로드 뒤에도 런타임 권위 상태, 파생 표현과 Save DTO가 서로 다른 원본으로 갈라지지 않는다.
+- 성능 개선을 목적으로 구조를 바꿨으면 대표 규모의 Profiler 전후 증거와 기능 회귀를 함께 남긴다.
 
 ### 객체 수명/씬 이동/영속 셸 변경
 
@@ -302,3 +392,7 @@ RunCommand 코드 규칙:
 - Unity Learn, Plan and scope your prototype: https://learn.unity.com/pathway/creative-core/unit/prototyping/tutorial/plan-and-scope-your-prototype-3
 - Unity Learn, Test your prototype: https://learn.unity.com/pathway/creative-core/unit/prototyping/tutorial/test-your-prototype-3
 - Unity Test Framework, Edit Mode vs Play Mode tests: https://docs.unity3d.com/Packages/com.unity.test-framework@2.0/manual/edit-mode-vs-play-mode-tests.html
+- Ludeon Studios, FAQ — RimWorld의 custom object/time handling: https://ludeon.com/blog/faq/
+- Ludeon Studios, RimWorld 1.6 Modder Primer — variable tick rate, data/behavior 분리, batch pathfinding과 cache 재사용: https://docs.google.com/document/d/e/2PACX-1vRKE9u5ZW_zG45pxzwNvy4sxvozDeqtxlxpac5jwenOeW6liQCPgmPl9bIbtcMuqL1NPIDHOLFg64M_/pub
+- Ludeon Studios, Announcing Odyssey and update 1.6 — 시스템 workload 분산과 병렬 pathfinding/lighting: https://ludeon.com/blog/2025/06/announcing-odyssey-and-update-1-6/
+- Tynan Sylvester, Reachability at last — 변경 지점에서 파생 reachability index를 갱신하는 접근: https://ludeon.com/blog/2013/07/reachability-at-last/

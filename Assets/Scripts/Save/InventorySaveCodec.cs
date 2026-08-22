@@ -9,13 +9,14 @@ namespace FantasySurvival.SaveSystem
     public static class InventorySaveCodec
     {
         private const int RootParentRecordId = -1;
+        private const int EquipmentRootSlotIndex = -1;
         private const int MaxContainerDepth = 16;
         private const int MaxItemCount = 10000;
 
         public static bool TryCapture(
-            StandardStashViewData source,
+            PlayerInventoryState source,
             ItemDatabase database,
-            out InventoryGridSaveData saveData,
+            out PlayerItemStateSaveData saveData,
             out string error)
         {
             saveData = null;
@@ -24,57 +25,99 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            if (source == null)
+            if (source?.Inventory == null || source.Equipment == null)
             {
-                error = "Player inventory data is missing.";
+                error = "Player inventory state is missing.";
                 return false;
             }
 
-            var result = new InventoryGridSaveData
+            var result = new PlayerItemStateSaveData
             {
-                layoutId = InventoryGridSaveData.FlatLayoutId,
-                width = source.CapacityWidth,
-                height = source.CapacityHeight
+                layoutId = PlayerItemStateSaveData.FlatLayoutId,
+                inventoryWidth = source.Inventory.CapacityWidth,
+                inventoryHeight = source.Inventory.CapacityHeight
             };
             var context = new CaptureContext(definitions, result.items);
-            if (!TryCaptureGrid(source, RootParentRecordId, 0, context, out error))
+            if (!TryCaptureGrid(source.Inventory, RootParentRecordId, 0, context, out error))
             {
                 return false;
+            }
+
+            foreach (EquipmentSlotId slot in EquipmentSlotCatalog.OrderedSlots)
+            {
+                IVariableInventoryCellData item = source.Equipment.GetItem(slot);
+                if (item == null)
+                {
+                    continue;
+                }
+
+                if (!(item is InventoryItemData inventoryItem) || !inventoryItem.Definition.CanEquipIn(slot))
+                {
+                    error = $"Equipment slot {slot} contains an incompatible item.";
+                    return false;
+                }
+
+                if (!TryCaptureItem(
+                        item,
+                        source.Equipment,
+                        RootParentRecordId,
+                        EquipmentRootSlotIndex,
+                        slot,
+                        0,
+                        context,
+                        out error))
+                {
+                    return false;
+                }
             }
 
             result.itemRecordCount = result.items.Count;
             saveData = result;
+            error = null;
             return true;
         }
 
         public static bool TryRestore(
-            InventoryGridSaveData saveData,
+            PlayerItemStateSaveData saveData,
             ItemDatabase database,
             int expectedWidth,
             int expectedHeight,
-            out StandardStashViewData restored,
+            out PlayerInventoryState restored,
             out string error)
         {
             restored = null;
-            if (!TryBuildDefinitionIndex(database, out Dictionary<int, ItemDefinition> definitions, out error))
+            if (!TryBuildDefinitionIndex(database, out Dictionary<int, ItemDefinition> definitions, out error) ||
+                !HasExpectedRootDimensions(saveData, expectedWidth, expectedHeight, out error) ||
+                !TryBuildRestoreContext(saveData, definitions, out RestoreContext context, out error))
             {
                 return false;
             }
 
-            if (!HasExpectedRootDimensions(saveData, expectedWidth, expectedHeight, out error))
+            var inventory = new StandardStashViewData(expectedWidth, expectedHeight);
+            var equipment = new EquipmentLoadoutData();
+            if (!TryRestoreRecords(context.RootInventoryRecords, inventory, 0, context, out error))
             {
                 return false;
             }
 
-            if (!TryBuildRestoreContext(saveData, definitions, out RestoreContext context, out error))
+            foreach (EquipmentSlotId slot in EquipmentSlotCatalog.OrderedSlots)
             {
-                return false;
-            }
+                if (!context.EquipmentRoots.TryGetValue(slot, out InventoryItemSaveData record))
+                {
+                    continue;
+                }
 
-            var candidate = new StandardStashViewData(expectedWidth, expectedHeight);
-            if (!TryRestoreChildren(RootParentRecordId, candidate, 0, context, out error))
-            {
-                return false;
+                if (!TryCreateItem(record, 0, context, out IVariableInventoryCellData item, out error) ||
+                    !equipment.TryPlace(slot, item))
+                {
+                    if (error == null)
+                    {
+                        error = $"Item ID {record.definitionId} cannot be equipped in slot {slot}.";
+                    }
+                    return false;
+                }
+
+                context.RestoredCount++;
             }
 
             if (context.RestoredCount != context.RecordsById.Count)
@@ -83,7 +126,7 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            restored = candidate;
+            restored = new PlayerInventoryState(inventory, equipment);
             error = null;
             return true;
         }
@@ -101,7 +144,7 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            if (source.CellData == null || source.CapacityWidth <= 0 || source.CapacityHeight <= 0 ||
+            if (source?.CellData == null || source.CapacityWidth <= 0 || source.CapacityHeight <= 0 ||
                 source.CellData.Length != source.CapacityWidth * source.CapacityHeight)
             {
                 error = "Inventory grid dimensions are invalid.";
@@ -117,76 +160,23 @@ namespace FantasySurvival.SaveSystem
             var occupied = new bool[source.CellData.Length];
             for (int slotIndex = 0; slotIndex < source.CellData.Length; slotIndex++)
             {
-                IVariableInventoryCellData cell = source.CellData[slotIndex];
-                if (cell == null)
+                IVariableInventoryCellData item = source.CellData[slotIndex];
+                if (item == null)
                 {
                     continue;
                 }
 
-                if (!(cell is InventoryItemData item))
+                if (!TryMarkPlacement(occupied, source.CapacityWidth, source.CapacityHeight, slotIndex, item, out error) ||
+                    !TryCaptureItem(
+                        item,
+                        source,
+                        parentContainerRecordId,
+                        slotIndex,
+                        EquipmentSlotId.None,
+                        depth,
+                        context,
+                        out error))
                 {
-                    error = $"Unsupported inventory item data at slot {slotIndex}.";
-                    return false;
-                }
-
-                context.ItemCount++;
-                if (context.ItemCount > MaxItemCount)
-                {
-                    error = $"Inventory contains more than {MaxItemCount} items.";
-                    return false;
-                }
-
-                if (!context.SeenItems.Add(cell))
-                {
-                    error = $"Inventory item at slot {slotIndex} is referenced more than once.";
-                    return false;
-                }
-
-                if (!context.Definitions.TryGetValue(item.Id, out ItemDefinition definition) ||
-                    !ReferenceEquals(definition, item.Definition))
-                {
-                    error = $"Inventory item at slot {slotIndex} is not backed by the active ItemDatabase.";
-                    return false;
-                }
-
-                if (!TryMarkPlacement(occupied, source.CapacityWidth, source.CapacityHeight, slotIndex, item, out error))
-                {
-                    return false;
-                }
-
-                int recordId = context.NextRecordId++;
-                context.Output.Add(new InventoryItemSaveData
-                {
-                    recordId = recordId,
-                    parentContainerRecordId = parentContainerRecordId,
-                    definitionId = item.Id,
-                    slotIndex = slotIndex,
-                    isRotated = item.IsRotate
-                });
-
-                if (definition.IsContainer)
-                {
-                    if (!(item is InventoryContainerItemData container) || container.CaseData == null)
-                    {
-                        error = $"Container item {item.Id} at slot {slotIndex} has no container data.";
-                        return false;
-                    }
-
-                    if (container.CaseData.CapacityWidth != definition.ContainerWidth ||
-                        container.CaseData.CapacityHeight != definition.ContainerHeight)
-                    {
-                        error = $"Container item {item.Id} has dimensions that do not match its definition.";
-                        return false;
-                    }
-
-                    if (!TryCaptureGrid(container.CaseData, recordId, depth + 1, context, out error))
-                    {
-                        return false;
-                    }
-                }
-                else if (item is InventoryContainerItemData)
-                {
-                    error = $"Standard item {item.Id} unexpectedly contains a nested inventory.";
                     return false;
                 }
             }
@@ -195,8 +185,81 @@ namespace FantasySurvival.SaveSystem
             return true;
         }
 
-        private static bool TryRestoreChildren(
-            int parentRecordId,
+        private static bool TryCaptureItem(
+            IVariableInventoryCellData cell,
+            IVariableInventoryViewData expectedOwner,
+            int parentContainerRecordId,
+            int slotIndex,
+            EquipmentSlotId equipmentSlot,
+            int depth,
+            CaptureContext context,
+            out string error)
+        {
+            if (!(cell is InventoryItemData item))
+            {
+                error = "Unsupported runtime inventory item data.";
+                return false;
+            }
+
+            context.ItemCount++;
+            if (context.ItemCount > MaxItemCount || !context.SeenItems.Add(cell))
+            {
+                error = context.ItemCount > MaxItemCount
+                    ? $"Inventory contains more than {MaxItemCount} items."
+                    : "A runtime item is owned by more than one inventory location.";
+                return false;
+            }
+
+            if (!(cell is IVariableInventoryOwnedCellData owned) ||
+                !ReferenceEquals(owned.InventoryOwner, expectedOwner))
+            {
+                error = $"Item ID {item.Id} has an inconsistent runtime owner.";
+                return false;
+            }
+
+            if (!context.Definitions.TryGetValue(item.Id, out ItemDefinition definition) ||
+                !ReferenceEquals(definition, item.Definition))
+            {
+                error = $"Item ID {item.Id} is not backed by the active ItemDatabase.";
+                return false;
+            }
+
+            int recordId = context.NextRecordId++;
+            context.Output.Add(new InventoryItemSaveData
+            {
+                recordId = recordId,
+                parentContainerRecordId = parentContainerRecordId,
+                definitionId = item.Id,
+                slotIndex = slotIndex,
+                equipmentSlot = (int)equipmentSlot,
+                isRotated = item.IsRotate
+            });
+
+            if (definition.IsContainer)
+            {
+                if (!(item is InventoryContainerItemData container) || container.CaseData == null ||
+                    container.CaseData.CapacityWidth != definition.ContainerWidth ||
+                    container.CaseData.CapacityHeight != definition.ContainerHeight)
+                {
+                    error = $"Container item {item.Id} has invalid container data.";
+                    return false;
+                }
+
+                return TryCaptureGrid(container.CaseData, recordId, depth + 1, context, out error);
+            }
+
+            if (item is InventoryContainerItemData)
+            {
+                error = $"Standard item {item.Id} unexpectedly contains a nested inventory.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool TryRestoreRecords(
+            List<InventoryItemSaveData> records,
             StandardStashViewData target,
             int depth,
             RestoreContext context,
@@ -208,45 +271,16 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            if (!context.ChildrenByParent.TryGetValue(parentRecordId, out List<InventoryItemSaveData> children))
+            if (records == null)
             {
                 error = null;
                 return true;
             }
 
-            for (int i = 0; i < children.Count; i++)
+            foreach (InventoryItemSaveData record in records)
             {
-                InventoryItemSaveData record = children[i];
-                ItemDefinition definition = context.Definitions[record.definitionId];
-                IVariableInventoryCellData item;
-                try
+                if (!TryCreateItem(record, depth, context, out IVariableInventoryCellData item, out error))
                 {
-                    item = InventoryItemDataFactory.Create(definition);
-                    item.IsRotate = record.isRotated;
-                }
-                catch (Exception exception)
-                {
-                    error = $"Could not create item definition ID {record.definitionId}: {exception.Message}";
-                    return false;
-                }
-
-                if (definition.IsContainer)
-                {
-                    if (!(item is InventoryContainerItemData container))
-                    {
-                        error = $"Item definition ID {record.definitionId} did not create a container item.";
-                        return false;
-                    }
-
-                    if (!TryRestoreChildren(record.recordId, container.CaseData, depth + 1, context, out error))
-                    {
-                        return false;
-                    }
-                }
-                else if (context.ChildrenByParent.TryGetValue(record.recordId, out List<InventoryItemSaveData> nested) &&
-                         nested.Count > 0)
-                {
-                    error = $"Standard item ID {record.definitionId} has nested inventory records.";
                     return false;
                 }
 
@@ -264,60 +298,122 @@ namespace FantasySurvival.SaveSystem
             return true;
         }
 
+        private static bool TryCreateItem(
+            InventoryItemSaveData record,
+            int depth,
+            RestoreContext context,
+            out IVariableInventoryCellData item,
+            out string error)
+        {
+            item = null;
+            ItemDefinition definition = context.Definitions[record.definitionId];
+            try
+            {
+                item = InventoryItemDataFactory.Create(definition);
+                item.IsRotate = record.isRotated;
+            }
+            catch (Exception exception)
+            {
+                error = $"Could not create item definition ID {record.definitionId}: {exception.Message}";
+                return false;
+            }
+
+            context.ChildrenByParent.TryGetValue(record.recordId, out List<InventoryItemSaveData> children);
+            if (definition.IsContainer)
+            {
+                if (!(item is InventoryContainerItemData container))
+                {
+                    error = $"Item definition ID {record.definitionId} did not create a valid container item.";
+                    return false;
+                }
+
+                if (!TryRestoreRecords(children, container.CaseData, depth + 1, context, out error))
+                {
+                    return false;
+                }
+            }
+            else if (children != null && children.Count > 0)
+            {
+                error = $"Standard item ID {record.definitionId} has nested inventory records.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
         private static bool TryBuildRestoreContext(
-            InventoryGridSaveData saveData,
+            PlayerItemStateSaveData saveData,
             Dictionary<int, ItemDefinition> definitions,
             out RestoreContext context,
             out string error)
         {
             context = new RestoreContext(definitions);
-            if (saveData.items == null)
+            if (saveData.items == null || saveData.items.Count > MaxItemCount)
             {
-                error = "Save data inventory item list is missing.";
-                return false;
-            }
-
-            if (saveData.items.Count > MaxItemCount)
-            {
-                error = $"Save data contains more than {MaxItemCount} items.";
+                error = saveData.items == null
+                    ? "Save data item list is missing."
+                    : $"Save data contains more than {MaxItemCount} items.";
                 return false;
             }
 
             for (int i = 0; i < saveData.items.Count; i++)
             {
                 InventoryItemSaveData record = saveData.items[i];
-                if (record == null)
-                {
-                    error = $"Save data contains an empty item entry at index {i}.";
-                    return false;
-                }
-
-                if (record.recordId < 0 || record.parentContainerRecordId < RootParentRecordId ||
+                if (record == null || record.recordId < 0 ||
+                    record.parentContainerRecordId < RootParentRecordId ||
                     record.recordId == record.parentContainerRecordId)
                 {
-                    error = $"Save data contains invalid relationship IDs at item index {i}.";
+                    error = $"Save data contains an invalid item entry at index {i}.";
                     return false;
                 }
 
-                if (!definitions.ContainsKey(record.definitionId))
+                if (!definitions.TryGetValue(record.definitionId, out ItemDefinition definition) ||
+                    context.RecordsById.ContainsKey(record.recordId))
                 {
-                    error = $"Save data references unknown item definition ID {record.definitionId}.";
+                    error = !definitions.ContainsKey(record.definitionId)
+                        ? $"Save data references unknown item definition ID {record.definitionId}."
+                        : $"Save data contains duplicate item record ID {record.recordId}.";
                     return false;
                 }
 
-                if (context.RecordsById.ContainsKey(record.recordId))
+                var slot = (EquipmentSlotId)record.equipmentSlot;
+                if (record.parentContainerRecordId == RootParentRecordId)
                 {
-                    error = $"Save data contains duplicate item record ID {record.recordId}.";
-                    return false;
+                    if (slot == EquipmentSlotId.None)
+                    {
+                        context.RootInventoryRecords.Add(record);
+                    }
+                    else if (!EquipmentSlotCatalog.IsValid(slot) ||
+                             record.slotIndex != EquipmentRootSlotIndex ||
+                             !definition.CanEquipIn(slot) ||
+                             context.EquipmentRoots.ContainsKey(slot))
+                    {
+                        error = $"Save data contains an invalid or duplicate equipment root at item {record.recordId}.";
+                        return false;
+                    }
+                    else
+                    {
+                        context.EquipmentRoots.Add(slot, record);
+                    }
+                }
+                else
+                {
+                    if (slot != EquipmentSlotId.None)
+                    {
+                        error = $"Nested item {record.recordId} cannot declare an equipment slot.";
+                        return false;
+                    }
+
+                    if (!context.ChildrenByParent.TryGetValue(record.parentContainerRecordId, out List<InventoryItemSaveData> children))
+                    {
+                        children = new List<InventoryItemSaveData>();
+                        context.ChildrenByParent.Add(record.parentContainerRecordId, children);
+                    }
+                    children.Add(record);
                 }
 
                 context.RecordsById.Add(record.recordId, record);
-                if (!context.ChildrenByParent.TryGetValue(record.parentContainerRecordId, out List<InventoryItemSaveData> siblings))
-                {
-                    siblings = new List<InventoryItemSaveData>();
-                    context.ChildrenByParent.Add(record.parentContainerRecordId, siblings);
-                }
-                siblings.Add(record);
             }
 
             foreach (InventoryItemSaveData record in saveData.items)
@@ -327,15 +423,10 @@ namespace FantasySurvival.SaveSystem
                     continue;
                 }
 
-                if (!context.RecordsById.TryGetValue(record.parentContainerRecordId, out InventoryItemSaveData parent))
+                if (!context.RecordsById.TryGetValue(record.parentContainerRecordId, out InventoryItemSaveData parent) ||
+                    !definitions[parent.definitionId].IsContainer)
                 {
-                    error = $"Save data item record {record.recordId} references missing parent {record.parentContainerRecordId}.";
-                    return false;
-                }
-
-                if (!definitions[parent.definitionId].IsContainer)
-                {
-                    error = $"Save data item record {record.recordId} has a non-container parent.";
+                    error = $"Item record {record.recordId} has a missing or non-container parent.";
                     return false;
                 }
             }
@@ -359,21 +450,11 @@ namespace FantasySurvival.SaveSystem
             for (int i = 0; i < database.Items.Count; i++)
             {
                 ItemDefinition definition = database.Items[i];
-                if (definition == null)
+                if (definition == null || definition.Id <= 0 || definitions.ContainsKey(definition.Id))
                 {
-                    error = $"ItemDatabase contains an empty entry at index {i}.";
-                    return false;
-                }
-
-                if (definition.Id <= 0)
-                {
-                    error = $"ItemDatabase contains invalid item ID {definition.Id}.";
-                    return false;
-                }
-
-                if (definitions.ContainsKey(definition.Id))
-                {
-                    error = $"ItemDatabase contains duplicate item ID {definition.Id}.";
+                    error = definition == null
+                        ? $"ItemDatabase contains an empty entry at index {i}."
+                        : $"ItemDatabase contains invalid or duplicate item ID {definition.Id}.";
                     return false;
                 }
 
@@ -385,34 +466,28 @@ namespace FantasySurvival.SaveSystem
         }
 
         private static bool HasExpectedRootDimensions(
-            InventoryGridSaveData saveData,
+            PlayerItemStateSaveData saveData,
             int expectedWidth,
             int expectedHeight,
             out string error)
         {
-            if (saveData == null)
+            if (saveData == null || saveData.layoutId != PlayerItemStateSaveData.FlatLayoutId)
             {
-                error = "Inventory save data is missing.";
-                return false;
-            }
-
-            if (saveData.layoutId != InventoryGridSaveData.FlatLayoutId)
-            {
-                error = "Inventory save data has a missing or unsupported layout ID.";
+                error = "Player item save data is missing or has an unsupported layout ID.";
                 return false;
             }
 
             if (saveData.items == null || saveData.itemRecordCount < 0 ||
                 saveData.itemRecordCount != saveData.items.Count)
             {
-                error = "Inventory save data item count does not match its payload.";
+                error = "Player item save data count does not match its payload.";
                 return false;
             }
 
             if (expectedWidth <= 0 || expectedHeight <= 0 ||
-                saveData.width != expectedWidth || saveData.height != expectedHeight)
+                saveData.inventoryWidth != expectedWidth || saveData.inventoryHeight != expectedHeight)
             {
-                error = $"Inventory dimensions {saveData.width}x{saveData.height} do not match expected {expectedWidth}x{expectedHeight}.";
+                error = $"Inventory dimensions {saveData.inventoryWidth}x{saveData.inventoryHeight} do not match expected {expectedWidth}x{expectedHeight}.";
                 return false;
             }
 
@@ -454,14 +529,7 @@ namespace FantasySurvival.SaveSystem
                         error = $"Inventory items overlap at slot {index}.";
                         return false;
                     }
-                }
-            }
-
-            for (int y = 0; y < height; y++)
-            {
-                for (int x = 0; x < width; x++)
-                {
-                    occupied[slotIndex + x + y * gridWidth] = true;
+                    occupied[index] = true;
                 }
             }
 
@@ -494,6 +562,10 @@ namespace FantasySurvival.SaveSystem
                 new Dictionary<int, InventoryItemSaveData>();
             public readonly Dictionary<int, List<InventoryItemSaveData>> ChildrenByParent =
                 new Dictionary<int, List<InventoryItemSaveData>>();
+            public readonly List<InventoryItemSaveData> RootInventoryRecords =
+                new List<InventoryItemSaveData>();
+            public readonly Dictionary<EquipmentSlotId, InventoryItemSaveData> EquipmentRoots =
+                new Dictionary<EquipmentSlotId, InventoryItemSaveData>();
             public int RestoredCount;
 
             public RestoreContext(Dictionary<int, ItemDefinition> definitions)

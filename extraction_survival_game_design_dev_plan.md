@@ -506,9 +506,9 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 - Player에 있던 비활성 Missing Script는 원본 파일이 없어 제거했으며, 실제 연결된 Player 컴포넌트 수와 외형은 보존했다.
 - 검증 왕복에서 새 Error, Exception, Assert는 발생하지 않았다.
 
-### Stage 2-B: RaidSession과 원정 경계 **[후속]**
+### Stage 2-B: RaidSession과 원정 경계 **[조건부 후속]**
 
-PersistentGameplayShell은 현재 플레이 중 실제 Player 상태를 유지할 뿐, 원정의 성공·실패와 소유권 규칙을 결정하지 않는다. 다음 하위 단계에서만 아래를 구현한다.
+PersistentGameplayShell은 현재 플레이 중 실제 Player 상태를 유지할 뿐, 원정의 성공·실패와 소유권 규칙을 결정하지 않는다. 그러나 현재의 고정 `GameMap1 ↔ GameMapTest` 왕복과 같은 세션 내 아이템 보존에는 별도 `RaidSession`이 필요하지 않음이 확인됐다. 성공·실패·사망 손실처럼 독립된 원정 상태가 실제 요구될 때만 아래를 구현한다.
 
 - 현재 원정 한 개를 나타내는 RaidSession
 - 원정 시작, 진행, 종료 상태와 중복 생성·종료 방지
@@ -520,40 +520,41 @@ PersistentGameplayShell은 현재 플레이 중 실제 Player 상태를 유지�
 
 ### 다음 단계가 의존하는 이유
 
-루팅 아이템의 소유권과 생환 결과를 판정하려면 어느 원정에서 어떤 아이템이 이동했는지 추적할 주체가 필요하다.
+상자에서 Player로 옮긴 아이템을 같은 실행 중 귀환 뒤 유지하는 데에는 persistent `PlayerInventoryState`와 기존 단일 소유권만으로 충분하다. 획득물과 출격 전 소지품을 구분하거나 생환·사망 결과를 서로 다르게 반영하기로 확정할 때만 어느 원정에서 어떤 아이템이 이동했는지 추적할 주체가 필요하다.
 
 ---
 
-## 8. Stage 3: 저장 없는 루팅과 생환
+## 8. Stage 3: 저장 없는 루팅과 생환 **[구현·Play Mode 호출 확인 / 결과 규칙 후속]**
 
 ### 목표
 
-고정 상자에서 아이템을 하나 획득하고 귀환했을 때, 같은 실행 세션의 생환 결과 목록에 한 번만 반영되게 한다.
+기초 목표는 고정 상자에서 아이템을 하나 획득하고 귀환했을 때 같은 `InventoryItemData`가 persistent Player 인벤토리에 한 번만 남는 것이다. 이 흐름은 구현됐고 공개 상호작용 진입점의 Play Mode 호출로 확인했다. 실제 키보드 E와 물리 마우스 드래그는 사용자 수동 검증 전까지 완료로 승격하지 않는다. 별도 생환 결과 목록과 사망 시 롤백은 해당 게임 규칙이 확정될 때 확장한다.
 
 ### 선행조건
 
-- Stage 2 RaidSession
+- Stage 2-A persistent Player inventory
 - ItemDatabase ID 조회
 - 기존 인벤토리 드래그와 컨테이너 이동
 - 범용 상호작용
-- **[미정]** Stage 1의 귀환 포탈을 생환 성공 오브젝트로 확장할지, 단순 이동으로 남기고 별도 탈출 오브젝트를 둘지 결정
+- **[조건부 후속]** 생환 결과와 사망 결과를 구분할 때 Stage 2-B RaidSession
+- **[미정]** Stage 1의 귀환 포탈을 정식 생환 성공 오브젝트로 확장할지, 단순 이동으로 남기고 별도 탈출 오브젝트를 둘지 결정
 
 ### Unity 구현물
 
-- GameMapTest의 루팅 컨테이너 1개
-- 기존 DB 아이템 ID를 사용하는 고정 시험 내용물
-- Stage 1에서 만든 상호작용 경계를 재사용하는 원정 컨테이너 연결
-- 플레이어 인벤토리로 옮긴 획득물 추적
-- 사용자에게 확정받은 탈출 오브젝트가 RaidSession의 생환 결과를 한 번만 확정
-- 획득물을 RaidSession의 extractedItems에서 선택된 영속 런타임 상태 소유자의 임시 결과 목록으로 한 번만 전달
-- 시험 상자 내용은 각 RaidSession에서 정확히 한 번만 초기화
+- **[현재]** GameMapTest의 루팅 컨테이너 1개
+- **[현재]** 기존 DB ID 1을 사용하는 고정 시험 내용물
+- **[현재]** Stage 1에서 만든 상호작용 경계를 재사용하는 원정 컨테이너 연결
+- **[현재]** 같은 `InventoryItemData`를 Chest 소유에서 persistent Player inventory 소유로 이전
+- **[조건부 후속]** 사용자에게 확정받은 탈출 오브젝트가 RaidSession의 생환 결과를 한 번만 확정
+- **[조건부 후속]** 출격 전 소지품과 원정 획득물을 구분해야 할 때 provenance 또는 결과 목록 추가
+- **[현재]** 시험 상자 내용은 해당 scene-local Chest의 `Awake`에서 한 번만 초기화
 
 ### 완료 기준
 
 - 상자를 열고 아이템을 플레이어 인벤토리로 옮길 수 있다.
 - 드래그 취소, 닫기, 다시 열기가 정상이다.
-- 사용자가 확정한 생환 오브젝트로 원정을 종료하면 획득물이 선택된 영속 런타임 상태 소유자의 임시 생환 결과 목록에 존재한다.
-- 같은 귀환을 중복 처리해 아이템이 두 번 지급되지 않는다.
+- 현재 귀환 포탈로 돌아오면 같은 아이템 객체가 persistent Player 인벤토리에 정확히 한 번 존재한다.
+- 같은 귀환을 중복 호출해 씬 이동이나 아이템이 두 번 처리되지 않는다.
 - 다시 출격해도 이전 상자 상태와 새 원정 상태가 섞이지 않는다.
 - 게임 재실행 후 유지되는 것은 이 단계의 완료 조건이 아니다.
 
@@ -966,7 +967,7 @@ Stage 1 구현 결과는 다음과 같다.
 8. **[완료]** GameMap1과 GameMapTest 왕복 3회 및 GameMapTest 직접 실행 후 귀환 검증
 9. **[완료]** Console 새 오류 0과 기존 Chest 열기/닫기 회귀 확인
 
-Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지와 플레이어 아이템 상태(인벤토리·빈 상태로 시작하는 12칸 장비 구조와 시험용 단일 Weapon 호환 정의)의 단일 슬롯 세이브/로드 프로토타입은 구현되었다. 이동 시험용 적 프로토타입도 별도 하위 작업으로 존재한다. 사용자의 우선순위 변경으로 `GameMapTest`의 도심형 도로·큐브 건물 생성은 별도 기술 스파이크로 구현되었다. 다음 핵심 게임 규칙 작업은 여전히 Stage 2-B에서 RaidSession의 정확한 경계와 원정 밖 아이템 소유 주체, 귀환 포탈의 의미를 결정하는 것이다. 레이드 결과 저장, 루팅, 전투, 사망 규칙, 도심 장식·내부·spawn과 다른 맵 유형은 아직 구현하지 않는다.
+Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지와 플레이어 아이템 상태(인벤토리·빈 상태로 시작하는 12칸 장비 구조와 시험용 단일 Weapon 호환 정의)의 단일 슬롯 세이브/로드 프로토타입은 구현되었다. `GameMapTest`에는 DB ID 1을 한 번 seed하는 시험 Chest가 있고, 같은 아이템 객체를 Player 인벤토리로 옮긴 뒤 현재 귀환 포탈로 돌아와도 유지되는 무저장 기초 루팅도 검증됐다. 이동·전투 시험용 적과 도심형 도로·큐브 건물 생성은 별도 하위 작업으로 존재한다. 다음 작업을 `RaidSession`으로 자동 고정하지 않는다. 생환·사망 결과, 원정 밖 아이템 소유 주체 또는 귀환 포탈의 정식 의미가 필요해질 때 Stage 2-B를 시작한다. 레이드 결과 저장, 사망 손실, 도심 장식·내부·동적 spawn과 다른 맵 유형은 아직 구현하지 않는다.
 
 ---
 
@@ -1003,7 +1004,7 @@ AI에게는 Stage 전체가 아니라 검증 가능한 하위 단위를 요청�
 - Stage 1-1만 진행: 기존 Chest 동작을 유지하면서 E 입력을 범용 상호작용 컴포넌트로 분리하고 Play Mode에서 검증
 - Stage 1-2만 진행: GameMap1과 GameMapTest 사이에서만 작동하는 직접 씬 이동을 구현하고 MainMenu/GameLoading 관련 파일이 바뀌지 않았는지 검증
 - GameMapTest에 SpawnPoint와 귀환 포탈만 추가하고 PersistentGameplayShell의 GameMap1 왕복을 검증
-- Stage 2-B만 진행: PersistentGameplayShell과 책임이 겹치지 않는 RaidSession 경계와 중복 종료 방지를 구현
+- 생환·사망 규칙이 확정된 경우에만 Stage 2-B 진행: PersistentGameplayShell과 책임이 겹치지 않는 RaidSession 경계와 중복 종료 방지를 구현
 - 고정 더미 표적에 대한 Health와 Damage 계약만 구현
 
 모든 요청에 포함할 항목:
@@ -1056,7 +1057,7 @@ AI가 하지 말아야 할 것:
     → 귀환 포탈
     → 반복 왕복 검증
 
-PersistentGameplayShell의 같은 Player, Camera, InventoryUIManager, EventSystem과 PlayerInventoryState 유지는 완료되었고, 기초 PlayerItemState 저장은 이미 앞당겨졌다. 그 다음에는 실제 플레이 상태와 책임이 겹치지 않는 RaidSession을 만들고 저장 없는 루팅을 붙인다. 전투와 AI를 거쳐 생환·사망 규칙이 메모리 안에서 완성되면 현재 저장 프로토타입에 레이드 결과와 기지 상태만 확장한다.
+PersistentGameplayShell의 같은 Player, Camera, InventoryUIManager, EventSystem과 PlayerInventoryState 유지는 완료되었고, 기초 PlayerItemState 저장과 같은 실행 안의 `Chest → Player → 귀환` 루팅도 구현됐다. 현재 흐름만을 위해 빈 `RaidSession`이나 별도 획득물 복사본을 추가하지 않는다. 이후 생환·사망 규칙이 실제로 확정되면 그때 원정 수명의 권위 소유자를 만들고, 메모리 규칙 검증 뒤 현재 저장 프로토타입에 레이드 결과와 기지 상태만 확장한다.
 
 도심형 도로·큐브 건물 생성은 이 순서와 별개로 공간 제작 위험을 먼저 확인한 기술 스파이크다. 현재 결과는 GameMapTest의 파생 공간만 바꾸며 Player 셸, 아이템 상태와 씬 이동의 권위 소유자를 바꾸지 않는다. 후속 랜드마크·내부·spawn 또는 다른 맵 유형은 각각 별도 요청과 검증 계약을 가진다.
 

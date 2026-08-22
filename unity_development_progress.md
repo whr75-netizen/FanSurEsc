@@ -643,3 +643,44 @@ Interactable (abstract base class)
 - `[코드/씬 확인]` `GameMapTest`를 Preview Scene으로 열어 기존 좀비 프리팹 인스턴스가 새 `EnemyDeathHandler`와 Trigger CapsuleCollider를 상속함을 확인했고, 검사 뒤 원래 활성 `GameMap1`, dirty 상태와 Edit Mode를 그대로 복원했다.
 - `[검증 한계]` Windows 입력 자동화가 Unity 창 캡처에서 `SetIsBorderRequired` 시스템 인터페이스 오류로 중단돼 실제 좌클릭의 `Update → Input.GetMouseButtonDown/GetMouseButton` 경계는 자동 조작하지 못했다. 공개 공격 진입점의 Play Mode 호출과 공식 Unity 입력 의미·컴파일까지만 확인했으며 사용자 실제 Game View 좌클릭 확인으로 승격하지 않는다.
 - `[미검증]` 실제 Game View에서 권총 3회 클릭과 자동소총 hold의 전체 입력 회귀, 인벤토리를 연 채 실제 클릭, 벽 뒤 적 차폐, 씬 왕복 중 공격 cooldown·오디오와 Windows Player build는 이번 범위에서 수행하지 않았다. 적중음의 주관적 구분은 위 사용자 확인으로 완료됐다.
+
+---
+
+## 17. 저장 없는 시험 루팅과 귀환
+
+### 사용자 요구와 범위
+
+- `[사용자 요구]` 이미 같은 인벤토리 객체를 보존하는 맵 왕복 구조를 다시 만들지 않고, 별도 `RaidSession`이 실제로 필요한지 먼저 확인한다. 정상인 부분은 건드리지 않고 실제 누락 또는 결함만 수정한다.
+- `[확정 범위]` `GameMapTest`에 디자인 없는 시험 Chest 하나와 기존 DB 아이템 하나를 두어 `상자 → 플레이어 인벤토리 → 귀환`의 같은 실행 세션 흐름만 완성한다.
+- `[제외 범위]` 생환·사망 결과 목록, 획득 provenance, 원정 스냅샷·롤백, 도심 생성기의 상자 spawn, 기지 Chest 영속화와 세이브 형식 확장은 이번 작업에 포함하지 않는다.
+
+### 상태 소유권과 호출 흐름
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 권위 소유자 | 원정 Chest 안에서는 해당 scene-local `StandardStashViewData`, 획득 뒤에는 persistent `PlayerInventoryState.Inventory`가 같은 `InventoryItemData` 객체의 유일한 소유자다. |
+| 수명 범위 | 시험 Chest와 남은 내용물은 `GameMapTest` Scene, 플레이어가 획득한 아이템은 현재 Play Session의 persistent Player 셸 수명이다. |
+| 생성·파괴 주체 | `Chest.Awake`가 직렬화된 DB ID 목록으로 런타임 grid를 한 번 만든다. Chest와 남은 내용물은 씬 unload 때 끝나며, 플레이어로 이전된 객체는 셸과 함께 유지된다. |
+| 변경 진입점 | 기존 UI 드래그가 사용하는 컨테이너 `InsertInventoryItem` 경계로 원본 소유자에서 제거한 뒤 새 소유자에 삽입한다. 별도 보상 지급이나 복사 경로는 없다. |
+| 이전 규칙 | 아이템 하나는 동시에 한 논리 컨테이너에만 존재한다. 이전 실패 시 기존 컨테이너 API의 소유권 검증과 drag 취소 경계를 사용한다. |
+| 파생 표현 | 플레이어·외부 인벤토리 View는 현재 grid의 파생 UI이며 열 때 같은 런타임 데이터를 `Apply`한다. |
+| 저장 경계 | 이번 검증은 무저장 Play Session 연속성이다. 기존 플레이어 단일 슬롯 저장은 별도 기능이며 Chest 상태·레이드 결과를 추가하지 않았다. |
+| 업데이트 주체 | Chest seed는 `Awake` 한 번뿐이며 독립 `Update`, 새 Manager 또는 `RaidSession`은 없다. |
+
+### 현재 구현
+
+- `[코드 확인]` `Chest`는 선택적인 `ItemDatabase`와 시작 definition ID 배열을 받는다. 배열이 비어 있으면 기존처럼 빈 grid를 만들므로 `GameMap1` Chest 2개의 동작은 바뀌지 않는다.
+- `[코드 확인]` 시작 목록은 임시 grid에 전부 배치할 수 있을 때만 유효하다. DB 누락, 알 수 없는 ID 또는 공간 부족이면 부분 seed를 노출하지 않고 빈 grid와 명시적 오류를 남긴다.
+- `[씬 확인]` `GameMapTest`의 `Stage3_TestLootChest`는 `RaidEntry`에서 2m 떨어진 불투명 Cube이며, 6×5 Chest, Collider, `ChestInteractable`, `ItemDatabase`, 시작 ID 1 하나와 기존 이동 충돌 규칙에 필요한 `Obstacle` 태그가 직렬화되어 있다.
+- `[구조 결정]` 현재 고정 왕복과 같은 세션 내 획득물 보존에는 `RaidSession`이 필요하지 않다. `DirectSceneTravel`이 중복 이동을 막고, persistent `PlayerInventoryState`가 획득 뒤 원본 상태를 이미 소유한다. 성공·실패·사망 손실처럼 별도 원정 상태가 생길 때만 그 수명에 맞는 소유자를 설계한다.
+
+### 2026-08-23 검증 결과와 한계
+
+- `[Play Mode 호출 확인]` `GameMap1 → GameMapTest` 도착 뒤 실제 E 입력이 호출하는 `PlayerInteractor.TryInteract` 경계로 시험 Chest를 열고, 닫고, 다시 열었다. 시작 ID 1은 같은 객체로 정확히 한 번 존재했고 열기마다 다시 seed되지 않았다.
+- `[Play Mode 호출 확인]` 같은 아이템 객체를 기존 컨테이너 API로 Player grid에 이전했다. 이전 뒤 Chest에는 0개, Player에는 정확히 1개였고 `InventoryOwner`는 Player grid 하나였다.
+- `[Play Mode 호출 확인]` 같은 원정에서 빈 Chest를 다시 열어도 아이템이 생기지 않았다. 귀환 포탈도 `PlayerInteractor.TryInteract` 경계로 호출했으며 연속 두 번째 호출은 입력 차단으로 거부됐다.
+- `[Play Mode 호출 확인]` `GameMap1` 귀환 뒤 shell, Player, `InventoryUIManager`, `PlayerState`, Player inventory와 획득 아이템이 모두 같은 참조/Entity ID였다. 슬롯, 회전과 단일 소유권도 유지됐다.
+- `[Play Mode 호출 확인]` 별도 실행에서 `GameMap1 → GameMapTest → GameMap1 → GameMapTest → GameMap1`을 수행했다. 첫 Chest 오브젝트는 unload 뒤 파괴됐고 두 번째 진입의 Chest data와 ID 1 아이템은 각각 새 객체였으며, 매 진입 seed는 하나, persistent Player state는 같은 참조였다. 두 Chest 모두 `Obstacle` 태그였다.
+- `[Console 기준선]` 검증 뒤 Error는 작업 전과 같은 7개다. 이전 Camera Capture 2개, 이전 SerializedProperty 2개, 외부 ASFolliage shader 2개와 이전 오디오 하네스 1개이며 신규 Chest·루팅 오류는 없다.
+- `[알려진 후속]` Player 아이템을 scene-local Chest에 다시 넣고 씬을 떠나면 그 Chest 수명과 함께 사라진다. `GameMap1` 기지 Chest를 영속 보관함으로 사용할지, 원정 Chest를 loot-only로 제한할지는 게임 규칙과 stable Chest ID가 필요한 별도 결정이므로 이번 작업에서 임의 수정하지 않았다.
+- `[미검증]` 실제 물리 마우스 드래그와 키보드 E 입력, Windows Player build는 이번 자동 호출 검증에 포함하지 않았다. 기존 공개 입력 진입점과 런타임 객체·UI 상태를 Play Mode에서 검증했다.

@@ -1,3 +1,5 @@
+using System;
+using FantasySurvival.Inventory;
 using UnityEngine;
 using VariableInventorySystem; // ★ 에셋 네임스페이스 사용
 
@@ -12,19 +14,58 @@ public class Chest : MonoBehaviour
     public int chestWidth = 6; // 상자마다 다르게 설정 가능
     [Tooltip("이 상자 인벤토리의 세로 칸 수")]
     public int chestHeight = 5; // 상자마다 다르게 설정 가능
+    [Header("Optional Starting Items")]
+    [SerializeField] private ItemDatabase itemDatabase;
+    [SerializeField] private int[] startingItemIds = Array.Empty<int>();
 
     void Awake()
     {
-        // 이 상자를 위한 인벤토리 데이터 초기화
-        chestInventoryData = new StandardStashViewData(chestWidth, chestHeight);
+        if (!TryCreateInitialInventory(out chestInventoryData, out string error))
+        {
+            // Keep the component usable for diagnostics without exposing a partially
+            // seeded container as valid authored loot.
+            chestInventoryData = new StandardStashViewData(chestWidth, chestHeight);
+            Debug.LogError($"[{name}] Could not initialize chest inventory: {error}", this);
+        }
+    }
 
-        // 필요하다면 여기에 이 상자의 초기 아이템을 추가하는 코드를 넣으세요.
-        // 예시:
-        // var item = new ItemCellData(0); // ItemCellData는 직접 만드신 아이템 데이터 클래스여야 합니다.
-        // int? id = chestInventoryData.GetInsertableId(item);
-        // if (id.HasValue)
-        // {
-        //     chestInventoryData.InsertInventoryItem(id.Value, item);
-        // }
+    private bool TryCreateInitialInventory(
+        out StandardStashViewData inventory,
+        out string error)
+    {
+        inventory = new StandardStashViewData(chestWidth, chestHeight);
+        if (startingItemIds == null || startingItemIds.Length == 0)
+        {
+            error = null;
+            return true;
+        }
+
+        if (itemDatabase == null)
+        {
+            error = "Starting item IDs require an ItemDatabase reference.";
+            return false;
+        }
+
+        foreach (int itemId in startingItemIds)
+        {
+            if (!itemDatabase.TryGet(itemId, out ItemDefinition definition))
+            {
+                error = $"ItemDatabase does not contain starting item ID {itemId}.";
+                return false;
+            }
+
+            IVariableInventoryCellData item = InventoryItemDataFactory.Create(definition);
+            int? slot = inventory.GetInsertableId(item);
+            if (!slot.HasValue)
+            {
+                error = $"Starting item ID {itemId} does not fit in the {chestWidth}x{chestHeight} chest.";
+                return false;
+            }
+
+            inventory.InsertInventoryItem(slot.Value, item);
+        }
+
+        error = null;
+        return true;
     }
 }

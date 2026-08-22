@@ -119,6 +119,112 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &415190454
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 415190457}
+  - component: {fileID: 415190456}
+  - component: {fileID: 415190455}
+  m_Layer: 0
+  m_Name: ProceduralUrbanMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &415190455
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415190454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cdc06aba3804b040a8198dc01c79d42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldGeneration.ProceduralUrbanMapGenerator
+  entryAnchor: {fileID: 445063166}
+  returnPortal: {fileID: 1583521341}
+  legacyGround: {fileID: 835374984}
+  additionalProtectedAnchors:
+  - {fileID: 1858696688}
+  navMeshSurface: {fileID: 415190456}
+  randomizeSeedOnAwake: 1
+  fixedSeed: 41721
+  minBlocksX: 4
+  maxBlocksX: 6
+  minBlocksZ: 4
+  maxBlocksZ: 6
+  minBlockSize: 14
+  maxBlockSize: 20
+  intersectionJitter: 1.35
+  cityRotationRange: {x: 35, y: 55}
+  outerMargin: 6
+  secondaryRoadWidth: 3.2
+  primaryRoadWidth: 5.2
+  minorRoadRemovalChance: 0.18
+  buildingSetback: 1.2
+  lotGap: 0.9
+  buildingDensity: 0.78
+  minBuildingHeight: 2.75
+  maxBuildingHeight: 8.5
+  anchorClearance: 4.5
+  protectedAnchorClearance: 3.5
+  buildRuntimeNavMesh: 1
+  navMeshSampleRadius: 2.5
+--- !u!114 &415190456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415190454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.AI.Navigation::Unity.AI.Navigation.NavMeshSurface
+  m_SerializedVersion: 0
+  m_AgentTypeID: 0
+  m_CollectObjects: 2
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 1
+  m_DefaultArea: 0
+  m_GenerateLinks: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_MinRegionArea: 1
+  m_NavMeshData: {fileID: 0}
+  m_BuildHeightMesh: 0
+--- !u!4 &415190457
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415190454}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &445063164
 GameObject:
   m_ObjectHideFlags: 0
@@ -737,6 +843,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+--- !u!4 &1858696688 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5574875849931597612, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+  m_PrefabInstance: {fileID: 1858696687}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -749,3 +860,4 @@ SceneRoots:
   - {fileID: 622244086}
   - {fileID: 1858696687}
   - {fileID: 1624039577}
+  - {fileID: 415190457}

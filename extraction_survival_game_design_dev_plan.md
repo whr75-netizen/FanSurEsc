@@ -53,8 +53,9 @@
 
 - **[확정]** 전체 루프를 한 번에 만들지 않고, 실제로 실행 가능한 작은 단위로 진행한다.
 - **[확정]** 첫 번째 기능은 맵 선택 오브젝트에서 빈 원정 맵으로 이동하고, 귀환 포탈로 원래 맵에 돌아오는 왕복 기능이다.
-- **[확정]** 세이브 파일 연동은 맵 이동과 런타임 레이드 상태가 안정된 이후에 구현한다.
-- **[확정]** 첫 원정 맵은 고정 씬을 사용한다. 랜덤 맵은 나중에 검토한다.
+- **[확정]** 기본 플레이어 아이템 영속성은 맵 왕복 안정화 뒤 단일 슬롯 프로토타입으로 구현했다. 생환·사망 결과와 기지 전체 상태 저장은 해당 런타임 규칙이 확정된 뒤 확장한다.
+- **[확정]** 첫 원정의 씬 경계는 `GameMapTest`로 고정한다. **[현재]** 그 씬 안의 도심 회색상자 공간은 런타임 seed로 도로와 큐브 건물만 절차 생성한다.
+- **[확정]** 지하 던전과 오염 지역은 도심 생성기의 옵션으로 만들지 않고, 공간 규칙이 정해질 때 별도 생성 방식으로 설계한다.
 - **[확정]** 현재 아이템 종류는 숫자 ID 기반 ItemDatabase로 관리한다.
 
 ### 1.3 아직 확정하지 않은 게임 규칙
@@ -70,7 +71,9 @@
 - 저장 슬롯, 자동 저장 시점, 강제 종료 처리
 - 아이템 능력치 구조
 - 최종 캐릭터 비율과 아트 스타일
-- 랜덤 맵 방식, 난이도 구조, 상점, 제작, 퀘스트
+- 도심 생성 seed의 저장·재현 정책과 최종 생성 수치
+- 지하 던전·오염 지역의 개별 공간 생성 규칙
+- 난이도 구조, 상점, 제작, 퀘스트
 
 ---
 
@@ -78,7 +81,7 @@
 
 이 절은 희망 구조가 아니라 실제 프로젝트에서 확인된 상태만 기록한다. 프로젝트가 변경되면 함께 갱신한다.
 
-**마지막 확인:** 2026-08-20. Unity 버전, 빌드 타깃, 활성 씬, Console 상태처럼 자주 바뀌는 값은 작업을 시작할 때 다시 확인한다.
+**마지막 확인:** 2026-08-21. Unity 버전, 빌드 타깃, 활성 씬, Console 상태처럼 자주 바뀌는 값은 작업을 시작할 때 다시 확인한다.
 
 ### 2.1 Unity와 빌드 기준
 
@@ -97,7 +100,7 @@
 | 1 | MainMenuScene | 활성 | 메인 메뉴 |
 | 2 | GameLoadingScene | 활성 | GameMap1 로딩 |
 | 3 | GameMap1 | 활성 | 현재 플레이 가능한 기본 맵 |
-| 4 | GameMapTest | 활성 | Stage 1 직접 왕복용 최소 테스트 씬 |
+| 4 | GameMapTest | 활성 | Stage 1 직접 왕복 및 도심 절차 생성 회색상자 시험 씬 |
 | 5 | Sample | 비활성 | 샘플 |
 
 현재 시작 흐름:
@@ -135,16 +138,17 @@
 ### 2.5 현재 아이템과 인벤토리 구조
 
 - **[현재]** ItemDefinition은 ScriptableObject다.
-- **[현재]** ItemDefinition에는 숫자 ID, 이름, 설명, 인벤토리 크기, 이미지, 일반 또는 컨테이너 구분, 컨테이너 내부 크기가 있다.
+- **[현재]** ItemDefinition에는 숫자 ID, 이름, 설명, 인벤토리 크기, 이미지, 장착 가능 장비 슬롯, 일반 또는 컨테이너 구분, 컨테이너 내부 크기가 있다.
 - **[현재]** 능력치, 수량, 내구도, 탄약, 월드 프리팹 정보는 아직 없다.
 - **[현재]** ItemDatabase는 ItemDefinition 목록을 보유하고 숫자 ID로 조회한다.
 - **[현재]** DB에는 ID 1부터 6까지 6개 항목이 등록되어 있다.
-- **[현재]** InventoryItemData는 ItemDefinition 참조와 회전 상태를 가지는 런타임 객체다.
+- **[현재]** ID 1~5의 시험 총기 정의는 하나의 Weapon 장착 슬롯에 호환되고, ID 6 시험 보관함은 장착 불가다. Weapon 슬롯은 공격·조준·발사 기능이나 월드 3D 표현을 아직 결정하지 않는다.
+- **[현재]** InventoryItemData는 ItemDefinition 참조, 회전 상태와 현재 grid/container/equipment 소유자를 가지는 런타임 객체다.
 - **[현재]** 숫자 아이템 ID는 아이템 종류 ID다. 실제 소유한 개별 물건의 고유 ID는 아니다.
-- **[현재]** PersistentGameplayShell이 처음 생성될 때 InventoryUIManager.Awake가 8×9 인벤토리와 시험 아이템 ID 1~6을 한 번 생성한다.
-- **[현재]** 씬 전환 때 InventoryUIManager와 playerInventoryData를 새로 만들거나 재바인딩하지 않는다. 같은 InventoryUIManager, StandardStashViewData, StandardCore, View와 UI 인스턴스가 shell 안에서 계속 유지된다.
-- **[현재]** 따라서 칸 위치, 회전, 동일 종류의 여러 런타임 객체와 컨테이너 내부 아이템은 같은 객체 그래프 그대로 유지된다.
-- **[현재]** Play Mode 종료 시 shell이 파괴되므로 다음 실행에서는 초기 시험 상태로 다시 시작한다. 디스크 저장은 없다.
+- **[현재]** PersistentGameplayShell이 처음 생성될 때 InventoryUIManager.Awake가 8×9 인벤토리, 시험 아이템 ID 1~6과 빈 12슬롯 EquipmentLoadoutData를 한 번 생성한다.
+- **[현재]** 씬 전환 때 InventoryUIManager와 PlayerInventoryState를 새로 만들거나 재바인딩하지 않는다. 같은 InventoryUIManager, StandardStashViewData, EquipmentLoadoutData, StandardCore와 UI View가 shell 안에서 계속 유지된다.
+- **[현재]** 따라서 칸 위치, 회전, 장비 슬롯, 동일 종류의 여러 런타임 객체와 컨테이너 내부 관계가 같은 객체 그래프로 유지되며, 각 아이템은 한 소유자에만 귀속된다.
+- **[현재]** Play Mode 종료 시 shell 인스턴스는 파괴된다. New Game은 초기 시험 인벤토리와 빈 장비로 시작하고, 단일 슬롯 세이브/로드 프로토타입은 플레이어 아이템 상태(인벤토리·장비)를 검증 후 새 실행에 복원한다. Player·Camera·UI 오브젝트 자체는 디스크에 저장하지 않는다.
 - **[현재]** Assets/Claude/SaveManager.cs에 현재 씬 이름과 날짜를 JSON으로 기록하는 미사용 저장 프로토타입이 있지만, 아이템 데이터를 저장하지 않고 활성 씬에도 연결되어 있지 않다.
 
 ---
@@ -155,12 +159,12 @@
 
 | 구분 | Unity 형태 | 역할 | 예시 |
 |---|---|---|---|
-| 정의 데이터 | ScriptableObject | 변하지 않는 프리셋 | ItemDefinition, 이후 MapDefinition |
-| 런타임 상태 | 일반 C# 데이터 | 현재 플레이 세션에서 변하는 값 | 아이템 위치, 회전, 현재 원정 상태 |
+| 정의 데이터 | ScriptableObject | 변하지 않는 프리셋 | ItemDefinition과 장착 가능 슬롯, 이후 MapDefinition |
+| 런타임 상태 | 일반 C# 데이터 | 현재 플레이 세션에서 변하는 값 | 아이템 위치, 회전, 장비 슬롯, 현재 소유자, 현재 원정 상태 |
 | 씬 표현 | MonoBehaviour, GameObject, UI | 입력, 충돌, 카메라, 화면 표시 | Player, Portal, Inventory UI |
-| 저장 데이터 | 직렬화 가능한 DTO | 게임 종료 후에도 유지할 값 | definitionId, 위치, 회전, 소유 컨테이너 |
+| 저장 데이터 | 직렬화 가능한 DTO | 게임 종료 후에도 유지할 값 | definitionId, 위치, 회전, 컨테이너 관계, equipmentSlot |
 
-현재 Stage 2-A는 동일 shell 인스턴스를 유지하는 런타임 프로토타입이며, 향후 save/Raid snapshot용 일반 C# 데이터와는 구분한다.
+Stage 2-A의 shell 동일 인스턴스 보존과 디스크 복원은 서로 다른 메커니즘이다. 실행 중에는 같은 PlayerInventoryState 객체가 유지되고, 재실행 로드는 DTO에서 새 PlayerInventoryState를 검증·재구성한다.
 
 중요한 규칙:
 
@@ -187,11 +191,12 @@
 - 현재 플레이 중 상태는 PersistentGameplayShell의 실제 컴포넌트 인스턴스가 유지한다. RaidSession은 원정 경계와 결과만 별도 소유한다.
 - 전역 이벤트 버스, DI 프레임워크, Addressables는 현재 필요하지 않다.
 
-### 3.4 고정 씬에서 규칙을 먼저 검증한다
+### 3.4 고정 씬 경계와 공간 생성 규칙을 분리한다
 
-- 맵 왕복, 루팅, 전투, AI는 GameMapTest 같은 고정 씬에서 먼저 검증한다.
-- 같은 버그가 씬 로딩, 랜덤 생성, AI 중 어디서 발생했는지 분리할 수 있어야 한다.
-- 고정 맵에서 최소 레이드 루프가 완성되기 전에는 절차 생성 맵을 만들지 않는다.
+- Player 수명주기, 맵 왕복, 루팅, 전투와 AI의 씬 경계는 계속 `GameMapTest`에서 독립 검증한다.
+- **[현재 적용 예외]** 사용자가 공간 제작을 먼저 시험하도록 우선순위를 바꿔, 도심형 도로와 큐브 건물 생성만 앞당겼다. 이는 루팅·전투·AI·레이드 결과 Stage까지 앞당긴다는 뜻이 아니다.
+- 생성기는 불변 layout을 먼저 계획하고 런타임 오브젝트와 NavMesh를 파생하므로, 씬 이동 오류와 공간 배치 오류를 따로 재현할 수 있어야 한다.
+- 지하 던전과 오염 지역은 도심 규칙의 분기로 누적하지 않고 각각 별도 생성 경계를 가진다.
 
 ---
 
@@ -211,7 +216,9 @@
     → Stage 9. 랜덤 맵, 난이도, 콘텐츠 확장
     → Stage 10. 설정, 최종 UI, 아트, 사운드, 최적화
 
-기본 인벤토리 저장은 기술적으로 Stage 2 또는 Stage 3이 끝난 뒤 먼저 구현할 수 있다. 다만 그 시점에는 생환과 사망 결과 규칙이 아직 없으므로 저장 구조를 두 번 확장하게 된다. 현재 권장안은 Stage 6에서 런타임 결과 규칙을 검증한 뒤 Stage 7에서 한 번에 연결하는 것이다. 사용자가 영속성 검증을 우선하면 Stage 3 뒤에 기초 저장을 별도 하위 단계로 당길 수 있다.
+기본 인벤토리 저장은 기술적으로 Stage 2 또는 Stage 3이 끝난 뒤 먼저 구현할 수 있다. **[현재 적용]** 사용자가 영속성 검증을 우선해 기본 인벤토리 단일 슬롯 세이브/로드를 별도 하위 단계로 앞당겼다. 생환·사망 결과 규칙과 그 결과의 저장 확장은 Stage 6 이후에 다룬다.
+
+**[현재 적용 예외]** 사용자의 최신 우선순위에 따라 Stage 9 전체가 아니라 도심형 도로·큐브 건물 회색상자 생성만 기술 스파이크로 앞당겼다. 랜드마크, 지형지물, 내부, spawn, 난이도와 다른 맵 유형은 자동으로 다음 작업이 되지 않는다.
 
 ### 4.1 기능별 선행조건 요약
 
@@ -226,7 +233,8 @@
 | 사망 실패 | Health와 적 공격, RaidSession | 사망한 원정의 상태를 한 번만 종료해야 함 |
 | 기본 아이템 세이브 | Stage 2 또는 3의 안정된 런타임 아이템 상태 | 실제 상태 모델이 있어야 직렬화 필드를 정할 수 있음 |
 | 생환·사망 결과 세이브 | 성공·실패 반영 규칙 | 결과 규칙 전에 만들면 저장 형식 변경이 반복됨 |
-| 랜덤 맵 | 고정 맵의 이동, 루팅, 전투, AI | 생성 버그와 게임 규칙 버그를 분리해야 함 |
+| 도심 회색상자 공간 생성 | 안정된 직접 씬 이동, SpawnPoint, 런타임 NavMesh | 공간 배치와 Player 수명주기를 분리 검증해야 함 |
+| 완전한 절차 생성 레이드 | 도심 외 맵별 규칙, 루팅, 전투, AI, RaidSession | 생성된 공간과 게임 규칙의 책임을 함께 검증해야 함 |
 
 ---
 
@@ -470,7 +478,7 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 - PersistentGameplayShell 프리팹은 Player와 외형, Player 스크립트, Camera, Inventory UI/StandardCore/View, EventSystem을 포함한다.
 - GameMap1과 GameMapTest의 GameplayShellBootstrap은 shell이 없을 때만 같은 프리팹을 한 번 생성한다.
 - shell 루트는 DontDestroyOnLoad이므로 왕복 동안 Player와 포함된 모든 컴포넌트가 같은 인스턴스다.
-- InventoryUIManager와 StandardStashViewData도 같은 객체이므로 별도 snapshot이나 새 UI 재바인딩 없이 현재 인벤토리가 그대로 유지된다.
+- InventoryUIManager, StandardStashViewData와 EquipmentLoadoutData도 같은 객체이므로 별도 snapshot이나 새 UI 재바인딩 없이 현재 인벤토리·장비가 그대로 유지된다.
 - DirectSceneTravel은 이동 전에 열린 인벤토리, 드래그와 컨테이너 팝업을 정리하고 이동·인벤토리·상호작용 입력을 잠근다.
 - 목적지 SceneSpawnController는 같은 Player를 SpawnPoint로 옮기고 Rigidbody 속도를 초기화한 뒤 입력 상태를 복원한다.
 - 이 구조는 Play Mode 메모리 유지이며 디스크 save 구조가 아니다.
@@ -480,12 +488,12 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 - Player GameObject와 전체 외형 계층
 - Player에 연결된 실제 MonoBehaviour와 런타임 필드
 - Camera와 CameraFollow 대상
-- InventoryUIManager, StandardCore, View, EventSystem과 인벤토리 객체 그래프
-- 아이템 위치, 회전, 같은 definition ID의 여러 런타임 객체와 컨테이너 내부 관계
+- InventoryUIManager, StandardCore, 인벤토리·장비 View, EventSystem과 PlayerInventoryState 객체 그래프
+- 아이템 위치, 회전, 장비 슬롯, 같은 definition ID의 여러 런타임 객체, 단일 소유권과 컨테이너 내부 관계
 - Player의 위치와 Rigidbody 속도는 목적지 씬의 SpawnPoint 규칙에 따라 바뀐다.
 - 현재 Chest와 상호작용 대상, 열린 패널, 드래그와 팝업은 씬 전환 직전에 정리한다.
 
-같은 실행 중에는 각 InventoryItemData 객체 자체가 개별 물건을 구분한다. 디스크 저장, 원정 스냅샷과 사망 롤백을 구현할 때 안정적인 instance ID와 재귀 DTO를 별도로 결정한다.
+같은 실행 중에는 각 InventoryItemData 객체 자체가 개별 물건을 구분한다. 현재 디스크 저장의 recordId는 파일 내부 부모 관계 키일 뿐 영구 instance ID가 아니다. 영구 instance ID와 원정 스냅샷·사망 롤백 식별 방식은 여전히 별도 결정한다.
 
 #### 검증 결과 — 2026-08-20
 
@@ -583,13 +591,15 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 처음부터 탄약, 부품, 내구도, 방어구, 반동을 모두 만들지 않는다. 고정 시험 공격으로 전투 흐름을 먼저 검증한 뒤 아이템 데이터에 필요한 필드만 추가한다.
 
+현재 단일 Weapon 슬롯은 인벤토리 소유권과 저장을 검증하는 장비 상태일 뿐이다. 이를 플레이어 공격의 실제 무기 선택 권한으로 사용할지, 총기 3D 모델과 장착·사격 애니메이션을 언제 연결할지는 Stage 4에서 별도로 결정한다.
+
 ### 완료 기준
 
 - 입력 한 번에 의도한 공격 한 번이 실행된다.
 - 더미 표적만 정확히 피해를 받는다.
 - 체력 0에서 사망 처리가 한 번만 실행된다.
 - 씬 재입장 시 이전 더미와 공격 상태가 남지 않는다.
-- 이 Stage에 아이템 장비 연동을 포함하기로 결정한 경우에만, 인벤토리의 아이템 ID와 실제 무기 연결을 검증한다.
+- Stage 4에서 장비 연동을 승인한 경우에만 Weapon 슬롯의 definition ID와 실제 공격 구현 연결을 검증한다.
 
 ### 다음 단계가 의존하는 이유
 
@@ -691,13 +701,13 @@ Unity AI Navigation 패키지는 설치되어 있지만 실제 게임플레이 �
 
 ---
 
-## 12. Stage 7: 세이브와 로드 — 현재 권장 배치
+## 12. Stage 7: 세이브와 로드 확장 — 기초 프로토타입 이후
 
 ### 목표
 
-Stage 6에서 검증된 원정 밖 소유 상태와 아이템 상태를 게임 재실행 후 복원한다.
+현재 단일 슬롯 프로토타입이 저장하는 플레이어 인벤토리·장비에 더해, Stage 6에서 검증된 원정 결과와 기지 상태를 게임 재실행 후 복원한다.
 
-이 Stage의 위치는 사용자 결정으로 앞당길 수 있다. Stage 3 뒤에 먼저 진행할 경우 범위는 기본 아이템과 원정 밖 런타임 소유 상태의 저장·복원으로 제한하고, 생환·사망 결과 저장은 Stage 6 이후 추가한다.
+사용자 결정으로 기본 플레이어 아이템 상태의 단일 슬롯 저장을 앞당겨 구현했다. 이 Stage의 남은 범위는 생환·사망 결과, stable ID가 확정된 기지 상태와 최종 저장 정책의 확장이다.
 
 ### 선행조건
 
@@ -705,10 +715,12 @@ Stage 6에서 검증된 원정 밖 소유 상태와 아이템 상태를 게임 �
 - 아이템 인스턴스 상태 확정
 - 생환과 사망 결과까지 저장 범위에 포함하는 경우 해당 반영 규칙 확정
 - 숫자 ItemDefinition ID가 안정됨
-- **[미정]** 저장 슬롯 수
+- **[현재 프로토타입]** 저장 슬롯 1개와 `.bak` 복구
+- **[미정]** 최종 저장 슬롯 수
 - **[미정]** 자동 저장 시점
 - **[미정]** 강제 종료 정책
-- **[미정]** 손상 파일 복구와 백업 정책
+- **[현재 프로토타입]** primary 전체 의미 검증 실패 시 `.bak` 후보 검증
+- **[미정]** 최종 손상 파일 복구와 백업 정책
 
 ### Unity 구현물
 
@@ -716,12 +728,12 @@ Stage 6에서 검증된 원정 밖 소유 상태와 아이템 상태를 게임 �
 - 저장 버전
 - 사용자가 선택한 원정 밖 아이템 소유 컨테이너 상태
 - ItemDefinition ID
-- 아이템 인스턴스 식별값
+- 파일 내부 관계용 recordId와 별도로, 실제 필요가 확정될 경우 영구 아이템 instance ID
 - 위치, 회전, 컨테이너 관계
 - 필요한 개별 상태
 - 존재하지 않는 ID 처리
 - ItemDatabase의 중복 definition ID 검증
-- 저장 데이터 안의 중복 아이템 인스턴스 ID 검증
+- 저장 데이터 안의 중복 recordId 및 소유 위치 검증
 - 저장과 로드를 호출하는 단일 소유자
 
 저장하지 않는 프리셋 정보:
@@ -790,24 +802,44 @@ Stage 6에서 검증된 원정 밖 소유 상태와 아이템 상태를 게임 �
 
 이 단계부터는 서로 독립적인 기능으로 나누어 진행한다.
 
-### 14.1 랜덤 또는 청크 맵
+### 14.1 맵 유형별 절차 생성
 
-선행조건:
+#### 현재 구현: 도심형 회색상자
 
-- 고정 맵 최소 루프 안정화
-- SpawnPoint와 NavMesh 처리 방식 확정
-- 같은 seed의 재현 필요 여부 결정
+- `GameMapTest` 씬 경계와 기존 `RaidEntry`, `ReturnPortal`, 적 시험 오브젝트는 유지한다.
+- scene-local `ProceduralUrbanMapGenerator`가 한 번의 씬 수명 동안 seed와 불변 layout 원본을 소유한다. 생성된 Ground, 도로, 건물, 경계와 NavMesh는 이 layout에서 다시 만들 수 있는 파생 표현이다.
+- 먼저 가변 간격 교차점과 연결 도로 그래프를 만든다. 주 도로를 보존하고, 보조 도로는 전체 연결성이 유지될 때만 일부 제거한다.
+- 도로 배치 뒤 남은 필지에 충돌 가능한 큐브 건물을 놓는다. 도로, `RaidEntry`, 기존 귀환 포탈 위치와 보호 대상 주변은 건물로 막지 않는다.
+- 전체 도심 루트는 약 35~55도 회전하고, 블록 수·간격·교차점 흔들림·건물 밀도와 높이를 seed로 바꿔 정사각 청크 반복감을 줄인다.
+- 기존 귀환 포탈은 재생성하지 않고 같은 scene object를 반대편 도로 노드로 이동한다.
+- 런타임 NavMesh는 생성 geometry의 콜라이더만 수집하고 `RaidEntry → ReturnPortal 접근점`의 complete path를 생성 직후 검증한다.
 
-검증 순서:
+설계 참고:
 
-1. 수동 청크 프리팹
-2. 청크 연결 규칙
-3. PlayerSpawnPoint
-4. LootSpawnPoint
-5. EnemySpawnPoint
-6. ExtractionPoint
-7. 필요하면 seed 재현
-8. 런타임 NavMesh 또는 사전 베이크 전략
+- [Parish·Müller, Procedural Modeling of Cities](https://cgl.ethz.ch/Downloads/Publications/Papers/2001/p_Par01.pdf)의 `road map → allotment → building` 단계 분리를 현재 프로토타입의 `도로 그래프 → 필지 → 큐브 건물` 순서에 적용했다.
+- [Chen et al., Interactive Procedural Street Modeling](https://www.peterwonka.net/Publications/pdfs/2008.SG.Chen.InteractiveProceduralStreetModeling.pdf)의 전역 방향과 국소 제약·noise를 함께 쓰는 관점을 주 도로, 교차점 흔들림과 연결성 제약으로 단순화했다.
+- [Unity AI Navigation](https://docs.unity3d.com/Manual/com.unity.ai.navigation.html)의 런타임 NavMesh 지원을 사용하되, layout을 원본으로 두고 NavMesh는 다시 만들 수 있는 파생 데이터로만 취급한다.
+
+#### 현재 제외 범위
+
+- 랜드마크, 가로수, 폐차, 쓰레기통, 자전거와 기타 지형지물
+- 건물 내부, 문, 층, 파괴와 실제 건축 프리팹 교체 규칙
+- 상자, 전리품, 적 spawn, 엄폐 후보와 AI 순찰 지점
+- 난이도 예산, 생환 조건, seed의 세이브·로드
+
+#### 다른 맵 유형
+
+- 지하 던전과 오염 지역은 도심 생성기의 enum 또는 옵션 분기로 추가하지 않는다.
+- 각 유형은 연결 방식, 이동 가능 면, 시야, 방 구조와 환경 위험이 확정될 때 별도의 layout planner와 runtime generator를 설계한다.
+- 공통으로 재사용할 수 있는 것은 seed 전달, 검증 결과와 SpawnPoint/NavMesh 계약뿐이며, 도심의 도로·필지 규칙을 강제로 공유하지 않는다.
+
+#### 후속 검증 순서
+
+1. 도심 생성 수치와 seed 재현 정책 확정
+2. 실제 건축 프리팹 교체 경계
+3. LootSpawnPoint와 EnemySpawnPoint 후보 데이터
+4. ExtractionPoint와 RaidSession 연결
+5. 맵 유형별 별도 planner
 
 ### 14.2 난이도와 보상
 
@@ -934,7 +966,7 @@ Stage 1 구현 결과는 다음과 같다.
 8. **[완료]** GameMap1과 GameMapTest 왕복 3회 및 GameMapTest 직접 실행 후 귀환 검증
 9. **[완료]** Console 새 오류 0과 기존 Chest 열기/닫기 회귀 확인
 
-Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지는 완료되었다. 다음 작업은 Stage 2-B에서 RaidSession의 정확한 경계와 원정 밖 아이템 소유 주체, 귀환 포탈의 의미를 결정하는 것이다. 세이브, 루팅, 전투, AI, 랜덤 맵은 아직 구현하지 않는다.
+Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지와 플레이어 아이템 상태(인벤토리·빈 상태로 시작하는 12칸 장비 구조와 시험용 단일 Weapon 호환 정의)의 단일 슬롯 세이브/로드 프로토타입은 구현되었다. 이동 시험용 적 프로토타입도 별도 하위 작업으로 존재한다. 사용자의 우선순위 변경으로 `GameMapTest`의 도심형 도로·큐브 건물 생성은 별도 기술 스파이크로 구현되었다. 다음 핵심 게임 규칙 작업은 여전히 Stage 2-B에서 RaidSession의 정확한 경계와 원정 밖 아이템 소유 주체, 귀환 포탈의 의미를 결정하는 것이다. 레이드 결과 저장, 루팅, 전투, 사망 규칙, 도심 장식·내부·spawn과 다른 맵 유형은 아직 구현하지 않는다.
 
 ---
 
@@ -954,9 +986,11 @@ Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지는 완료되었�
 | 공격, 조준, 발사 방식 | Stage 4 |
 | 첫 적의 이동과 공격 방식 | Stage 5 |
 | 사망 시 손실 규칙 | Stage 6 |
-| 저장 슬롯, 시점, 백업, 강제 종료 정책 | Stage 7 |
+| 최종 저장 슬롯, 자동 저장, 백업, 강제 종료 정책(현재 프로토타입은 1슬롯+.bak) | Stage 7 |
 | 맵 ID와 해금 규칙 | Stage 8 |
-| 랜덤 맵과 seed 필요 여부 | Stage 9 |
+| **[결정 완료]** 도심형 맵은 연결 도로를 먼저 만들고 큐브 건물을 후배치 | 도심 생성 기술 스파이크 |
+| **[결정 완료]** 지하 던전과 오염 지역은 도심과 별도 생성 규칙 사용 | 각 맵 유형 설계 시점 |
+| 도심 seed의 저장·재현·공유 정책 | RaidSession 또는 Stage 9 확장 |
 
 ---
 
@@ -987,7 +1021,7 @@ AI가 하지 말아야 할 것:
 - 프로젝트 전체 폴더 재편
 - 기존 씬과 프리팹 대량 저장
 - 저장 구조가 정해지기 전에 문자열 또는 숫자 ID 규칙 변경
-- 고정 맵이 검증되기 전에 랜덤 맵 구현
+- 고정 씬 왕복과 Player 수명주기가 검증되기 전에 절차 생성부터 구현
 - 전투 계약이 없는데 적 AI부터 구현
 
 ---
@@ -997,7 +1031,7 @@ AI가 하지 말아야 할 것:
 사용자가 우선순위를 변경하지 않는 한 다음 기능은 최소 레이드 루프의 선행조건으로 취급하지 않는다.
 
 - 멀티플레이
-- 절차 생성 또는 대규모 랜덤 월드
+- 지하·오염 지역까지 포함한 다중 맵 생성과 대규모 랜덤 월드
 - 복잡한 난이도 예산
 - 상점과 경제
 - 제작
@@ -1022,6 +1056,8 @@ AI가 하지 말아야 할 것:
     → 귀환 포탈
     → 반복 왕복 검증
 
-PersistentGameplayShell의 같은 Player, Camera, InventoryUIManager, EventSystem과 인벤토리 객체 유지는 완료되었다. 그 다음에 이 실제 플레이 상태와 책임이 겹치지 않는 RaidSession을 만들고, 저장 없는 루팅을 붙인다. 현재 권장 순서는 전투와 AI를 거쳐 생환과 사망 규칙이 메모리 안에서 완성된 뒤 세이브를 연결하는 것이다. 다만 기본 아이템 영속성을 먼저 검증할 필요가 생기면 Stage 3 뒤에 기초 저장만 앞당길 수 있다.
+PersistentGameplayShell의 같은 Player, Camera, InventoryUIManager, EventSystem과 PlayerInventoryState 유지는 완료되었고, 기초 PlayerItemState 저장은 이미 앞당겨졌다. 그 다음에는 실제 플레이 상태와 책임이 겹치지 않는 RaidSession을 만들고 저장 없는 루팅을 붙인다. 전투와 AI를 거쳐 생환·사망 규칙이 메모리 안에서 완성되면 현재 저장 프로토타입에 레이드 결과와 기지 상태만 확장한다.
+
+도심형 도로·큐브 건물 생성은 이 순서와 별개로 공간 제작 위험을 먼저 확인한 기술 스파이크다. 현재 결과는 GameMapTest의 파생 공간만 바꾸며 Player 셸, 아이템 상태와 씬 이동의 권위 소유자를 바꾸지 않는다. 후속 랜드마크·내부·spawn 또는 다른 맵 유형은 각각 별도 요청과 검증 계약을 가진다.
 
 이 순서를 지키면 Unity 씬 수명주기, 입력, 인벤토리 상태, 전투, AI, 저장 버그가 한꺼번에 섞이지 않으며, 각 단계가 실제 플레이 가능한 결과로 남는다.

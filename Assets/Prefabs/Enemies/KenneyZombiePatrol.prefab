@@ -42,6 +42,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5574875849931597612}
   - component: {fileID: 1889593813852031817}
+  - component: {fileID: 419036695974578800}
   m_Layer: 0
   m_Name: KenneyZombiePatrol
   m_TagString: Untagged
@@ -86,6 +87,19 @@ MonoBehaviour:
   turnSpeedDegreesPerSecond: 540
   arrivalDistance: 0.05
   waypointWaitSeconds: 0.5
+--- !u!114 &419036695974578800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7783077477261944068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160cc57d571396e4bbfe0097769f7e7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
+  definition: {fileID: 11400000, guid: 21bd7e9325334e343b66d3b6fd495315, type: 2}
 --- !u!1001 &7766121946146402965
 PrefabInstance:
   m_ObjectHideFlags: 0

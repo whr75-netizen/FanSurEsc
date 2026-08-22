@@ -4,9 +4,11 @@
 using System;
 using UnityEngine;
 using System.Linq;
+using FantasySurvival.Interaction;
 using FantasySurvival.Inventory;
 using VariableInventorySystem;
 
+[RequireComponent(typeof(PlayerInteractor))]
 public class InventoryUIManager : MonoBehaviour
 {
     public const int DefaultInventoryWidth = 8;
@@ -26,7 +28,8 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private StandardStashView externalStashView;
     private StandardStashViewData currentExternalData;
     private Chest currentOpenedChest;
-    [Header("Settings")] [SerializeField] private float interactionRange = 3f;
+    private PlayerInteractor playerInteractor;
+    [Header("Settings")]
     [SerializeField] private int playerInventoryWidth = DefaultInventoryWidth;
     [SerializeField] private int playerInventoryHeight = DefaultInventoryHeight;
     private bool isPlayerViewRegistered = false;
@@ -41,6 +44,8 @@ public class InventoryUIManager : MonoBehaviour
         (equipmentPanel != null && equipmentPanel.activeSelf) ||
         (externalInventoryPanel != null && externalInventoryPanel.activeSelf);
     public bool BlocksGameplayInput => inputBlocked || IsAnyInventoryOpen;
+    public bool IsExternalInventoryOpen =>
+        externalInventoryPanel != null && externalInventoryPanel.activeSelf;
     public ItemDatabase ItemDatabase => itemDatabase;
     public PlayerInventoryState PlayerState => playerState;
     public StandardStashViewData PlayerInventoryData => playerState?.Inventory;
@@ -52,6 +57,14 @@ public class InventoryUIManager : MonoBehaviour
     #region 초기화
     void Awake()
     {
+        playerInteractor = GetComponent<PlayerInteractor>();
+        if (playerInteractor == null)
+        {
+            Debug.LogError("InventoryUIManager requires PlayerInteractor on the same GameObject.", this);
+            enabled = false;
+            return;
+        }
+
         if (standardCore == null) { Debug.LogError("StandardCore missing!"); enabled = false; return; }
         if (itemDatabase == null) { Debug.LogError("ItemDatabase missing!"); enabled = false; return; }
         standardCore.Initialize();
@@ -199,7 +212,7 @@ public class InventoryUIManager : MonoBehaviour
     }
     void CheckInteractionDistance()
     {
-        if (externalInventoryPanel == null || !externalInventoryPanel.activeSelf)
+        if (!IsExternalInventoryOpen)
         {
             return;
         }
@@ -212,9 +225,13 @@ public class InventoryUIManager : MonoBehaviour
             return;
         }
 
-        if (Vector3.Distance(transform.position, currentOpenedChest.transform.position) > interactionRange)
+        ChestInteractable chestInteractable = currentOpenedChest.GetComponent<ChestInteractable>();
+        if (!currentOpenedChest.isActiveAndEnabled ||
+            chestInteractable == null ||
+            !chestInteractable.isActiveAndEnabled ||
+            !playerInteractor.IsWithinInteractionRange(currentOpenedChest.transform))
         {
-            Debug.Log($"상자({currentOpenedChest.name}) 거리 멀어짐. 모든 인벤토리 닫기 시도.");
+            Debug.Log($"상자({currentOpenedChest.name}) 상호작용 종료. 모든 인벤토리 닫기 시도.");
             CloseAllInventories();
         }
     }
@@ -246,7 +263,7 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
-        if (Vector3.Distance(transform.position, chest.transform.position) > interactionRange)
+        if (playerInteractor == null || !playerInteractor.IsWithinInteractionRange(chest.transform))
         {
             return false;
         }
@@ -267,6 +284,11 @@ public class InventoryUIManager : MonoBehaviour
         OpenPlayerAndExternalInventory(chest);
 
         return true;
+    }
+
+    public bool IsChestOpen(Chest chest)
+    {
+        return chest != null && IsExternalInventoryOpen && currentOpenedChest == chest;
     }
 
     public void SetInputBlocked(bool blocked)

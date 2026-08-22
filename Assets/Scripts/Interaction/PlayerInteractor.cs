@@ -49,7 +49,7 @@ namespace FantasySurvival.Interaction
         public void SetInteractionBlocked(bool blocked)
         {
             interactionBlocked = blocked;
-            if (blocked)
+            if (blocked && TryCancelCurrentInteraction())
             {
                 currentInteractable = null;
             }
@@ -57,15 +57,39 @@ namespace FantasySurvival.Interaction
 
         private void OnDisable()
         {
-            currentInteractable = null;
+            if (TryCancelCurrentInteraction())
+            {
+                currentInteractable = null;
+            }
+
             interactionBlocked = false;
+        }
+
+        public bool IsWithinInteractionRange(Transform target)
+        {
+            if (target == null)
+            {
+                return false;
+            }
+
+            Vector3 offset = target.position - transform.position;
+            return offset.sqrMagnitude <= interactionRange * interactionRange;
         }
 
         private void RefreshCurrentInteractable()
         {
             if (interactionBlocked)
             {
-                currentInteractable = null;
+                if (TryCancelCurrentInteraction())
+                {
+                    currentInteractable = null;
+                }
+
+                return;
+            }
+
+            if (TryKeepCurrentInteraction())
+            {
                 return;
             }
 
@@ -99,6 +123,38 @@ namespace FantasySurvival.Interaction
             }
 
             currentInteractable = nearest;
+        }
+
+        private bool TryKeepCurrentInteraction()
+        {
+            if (currentInteractable == null || !currentInteractable.IsInteractionActive(this))
+            {
+                return false;
+            }
+
+            if (currentInteractable.CanInteract(this) &&
+                IsWithinInteractionRange(currentInteractable.transform))
+            {
+                return true;
+            }
+
+            if (!currentInteractable.TryCancelInteraction(this))
+            {
+                return true;
+            }
+
+            currentInteractable = null;
+            return false;
+        }
+
+        private bool TryCancelCurrentInteraction()
+        {
+            if (currentInteractable == null || !currentInteractable.IsInteractionActive(this))
+            {
+                return true;
+            }
+
+            return currentInteractable.TryCancelInteraction(this);
         }
 
         private void OnGUI()

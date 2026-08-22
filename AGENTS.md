@@ -105,6 +105,14 @@
 - 현재 인벤토리는 persistent 셸 안의 동일 `InventoryUIManager`와 동일 런타임 객체 그래프가 유지한다. 씬 도착 때 기본 아이템을 다시 seed하지 않는다.
 - 현재 단일 슬롯 세이브/로드 프로토타입은 구현되어 있다. 저장 대상 확장, 정식 슬롯 정책, 기지 Chest 영속화와 원정 결과 저장은 사용자가 별도로 요청하는 후속 범위다.
 
+### 현재 상호작용 계약
+
+- `PlayerInteractor` 하나가 E 입력 대상과 상호작용 반경의 권위 소유자다. 지속 UI가 열린 대상이 없으면 매 검색 시 거리상 가장 가까운 `Interactable` 하나를 고른다.
+- Chest UI가 실제로 열린 동안에만 처음 연 Chest를 현재 상호작용 대상으로 유지한다. 다른 Chest가 더 가까워져도 열린 Chest를 바꾸지 않으며, 거리 판정도 그 Chest를 기준으로 한다.
+- Chest UI가 정상적으로 닫히는 즉시 대상 유지는 끝난다. 닫힌 Chest를 계속 고정하지 않으며 다음 프레임 또는 다음 E 입력에서는 다시 가장 가까운 대상을 선택한다.
+- 거리 이탈, 대상 비활성화, 상호작용 차단 또는 씬 이동 정리는 모두 같은 데이터 안전 `CloseAllInventories` 경로로 수렴한다. `PlayerInteractor`가 종료를 조정할 때는 해당 Chest의 공통 취소 진입점을 사용하며, 드래그 복구 실패로 닫기가 거부되면 UI와 대상 참조를 함께 유지해 다른 대상으로 부분 전환하지 않는다.
+- Map Terminal은 기존 modal 입력 잠금, Return Portal은 기존 즉시 씬 이동 정책을 유지한다. 지속 UI가 없는 대상에 Chest의 활성 대상 고정을 적용하지 않는다.
+
 ### 현재 시험 전투 계약
 
 - 현재 공격 흐름은 `PlayerWeaponAttackController 입력 → WeaponFireCadence → Player 원점 Raycast → IDamageable.ApplyDamage(DamageContext) → EnemyStats 체력·사망 전이 → Died 완료 통지 → EnemyDeathHandler 행동·표현 정리` 순서를 유지한다.

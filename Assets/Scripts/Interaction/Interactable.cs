@@ -11,6 +11,16 @@ namespace FantasySurvival.Interaction
             return interactor != null && isActiveAndEnabled && gameObject.activeInHierarchy;
         }
 
+        public virtual bool IsInteractionActive(PlayerInteractor interactor)
+        {
+            return false;
+        }
+
+        public virtual bool TryCancelInteraction(PlayerInteractor interactor)
+        {
+            return true;
+        }
+
         public abstract void Interact(PlayerInteractor interactor);
     }
 }

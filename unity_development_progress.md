@@ -1,6 +1,6 @@
 # Unity 개발 진행 기록
 
-**마지막 확인:** 2026-08-22
+**마지막 확인:** 2026-08-23
 **확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, `GameMap1`/`GameMapTest`; Windows Development Player build 성공
 **문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 전체 게임 방향과 Stage 의존성은 `extraction_survival_game_design_dev_plan.md`를 따른다.
 
@@ -39,11 +39,11 @@
 2. `[사용자 요구]` Chest처럼 지속 UI가 있는 상호작용 중에도 Player는 움직일 수 있다.
 3. `[사용자 요구]` 활성 상호작용 오브젝트의 허용 거리에서 벗어나면 해당 오브젝트와 연결된 UI가 자동으로 닫힌다.
 4. `[사용자 요구]` 주변에 대상이 여러 개면 거리상 가장 가까운 하나만 E 입력 대상이 된다.
-5. `[사용자 확인 필요]` 이미 지속 상호작용 중이라면 그 세션의 대상은 해당 오브젝트로 유지된다.
-6. `[사용자 확인 필요]` 유지 중인 세션의 거리 판정도 처음 상호작용한 그 오브젝트를 기준으로 한다.
+5. `[사용자 요구]` Chest UI가 실제로 열린 동안에만 처음 연 Chest를 상호작용 대상으로 유지한다.
+6. `[사용자 요구]` 유지 중인 Chest의 거리 판정도 처음 연 그 Chest를 기준으로 한다.
 7. `[사용자 요구]` Chest, Portal, Map Terminal 같은 개별 기능은 공통 상호작용 진입 경로를 재사용하고, 각 대상은 자신의 실제 행동만 구현한다.
 
-주의: 5번의 “활성 대상 유지”는 현재 공통 코드에 완전히 구현되어 있지 않다. 이것을 확정 요구사항으로 구현하기 전에는 사용자에게 한 번 더 확인한다.
+주의: 5번은 닫힌 대상을 계속 고정한다는 뜻이 아니다. Chest UI가 정상적으로 닫히는 즉시 유지 상태가 끝나며, 다음 프레임 또는 다음 E 입력의 검색에서 다시 가장 가까운 대상을 고른다.
 
 ---
 
@@ -68,7 +68,8 @@ Interactable (abstract base class)
 | 책임 | 현재 소유자 | 재사용 여부 |
 |---|---|---|
 | E 입력 | `PlayerInteractor` | 모든 현재 대상이 공유 |
-| 주변 대상 검색과 가장 가까운 하나 선택 | `PlayerInteractor` | 모든 현재 대상이 공유 |
+| 주변 대상 검색과 가장 가까운 하나 선택 | `PlayerInteractor` | 지속 UI가 열린 대상이 없을 때 모든 현재 대상이 공유 |
+| 열린 지속 상호작용 대상 유지·취소 조정 | `PlayerInteractor` → 해당 `Interactable` | 공통 흐름을 사용하고 현재는 Chest만 활성 세션을 제공 |
 | 기본 활성 상태 검사 | `Interactable.CanInteract` | 모든 현재 대상이 공유 |
 | 안내 문구 | 각 `Interactable.InteractionPrompt` | 표시 방식은 공통, 문구는 개별 |
 | Chest UI 열기/닫기 | `ChestInteractable` → `InventoryUIManager` | 모든 Chest가 같은 함수 사용 |
@@ -83,8 +84,10 @@ Interactable (abstract base class)
 - `[코드 확인]` Collider에서 부모 방향으로 `Interactable`을 찾는다.
 - `[코드 확인]` 후보 오브젝트의 Transform pivot까지의 거리를 비교해 하나를 고른다.
 - `[코드 확인]` 후보 버퍼는 32 Collider로 고정되어 있다.
-- `[코드 확인]` E 입력 직전에도 검색을 한 번 더 수행하므로 실제 실행 대상은 그 순간의 가장 가까운 대상이다.
+- `[코드 확인]` 지속 UI가 열린 대상이 없으면 E 입력 직전에도 검색을 다시 수행해 그 순간의 가장 가까운 대상을 실행한다.
+- `[코드 확인]` Chest UI가 열린 동안에는 해당 Chest가 활성·범위 안인 한 그 대상을 유지한다. UI가 닫히면 다음 검색부터 즉시 최근접 선택으로 복귀한다.
 - `[코드 확인]` E 키와 탐색 반경은 `PersistentGameplayShell.prefab`의 `PlayerInteractor`에 각각 `E`, `3`으로 직렬화되어 있다.
+- `[코드 확인]` Chest 열기와 자동 닫기도 같은 `PlayerInteractor`의 반경 판정을 사용하며 `InventoryUIManager`에는 별도의 거리 원본이 없다.
 - `[코드 확인]` 안내는 정식 UGUI가 아니라 `OnGUI` 디버그 박스다.
 
 즉, “각 오브젝트가 따로 Player 거리를 감지한다”기보다는 **Player 한 곳이 모든 후보를 중앙 검색하고, 각 오브젝트는 자신의 활성 가능 여부와 행동을 제공한다**가 정확하다.
@@ -96,11 +99,12 @@ Interactable (abstract base class)
 | 항목 | 현재 판정 | 근거 |
 |---|---|---|
 | 범위 안에서 E 안내 활성화 | 코드상 충족, 시각 미검증 | 가장 가까운 `currentInteractable` 하나의 OnGUI prompt를 표시하는 코드 확인 |
-| 대상이 여러 개면 가장 가까운 하나 선택 | 코드상 충족, 런타임 호출 확인 | 중앙 거리 비교 후 하나만 실행; 실제 E 키 입력은 미검증 |
+| 대상이 여러 개면 가장 가까운 하나 선택 | Play Mode 호출 충족 | 지속 UI가 없을 때 중앙 거리 비교 후 하나만 실행; 실제 E 키 입력은 미검증 |
 | Chest UI가 열린 동안 이동 가능 | 코드상 허용, 실제 WASD 미검증 | `PlayerMovement`를 비활성화하지 않으며 런타임에도 enabled 상태 유지 |
 | 열린 Chest에서 3m 초과 시 UI 자동 닫힘 | Play Mode 충족 | `currentOpenedChest` 기준 거리 이탈 후 Update 프레임에서 두 패널 닫힘 확인 |
-| 상호작용 중 처음 대상을 공통으로 고정 | **미충족** | Play Mode 호출 경로에서 `PlayerInteractor`가 더 가까운 대상으로 다시 선택 |
-| 활성 Chest의 거리 기준은 처음 연 Chest | 부분 충족 | Chest UI의 거리 검사는 `currentOpenedChest` 기준이지만 E 대상은 다른 오브젝트로 바뀔 수 있음 |
+| Chest UI가 열린 동안 처음 대상을 유지 | Play Mode 호출 충족 | Chest A가 열린 동안 B가 더 가까워져도 두 번째 호출은 A를 닫음 |
+| 닫힌 뒤 최근접 선택으로 복귀 | Play Mode 호출 충족 | A가 닫힌 직후 다음 호출에서 더 가까운 B가 선택되어 열림 |
+| 활성 Chest의 거리 기준은 처음 연 Chest | Play Mode 충족 | 선택과 UI 자동 종료가 모두 같은 `PlayerInteractor` 반경과 열린 Chest를 기준으로 함 |
 | 모든 상호작용이 이동 중 지속 가능 | 미충족이 아니라 종류별 정책 | Chest는 이동 가능, Map Selection은 modal이라 이동 잠금, Portal은 즉시 이동 |
 | 거리 이탈 시 모든 상호작용 UI 자동 닫힘 | Chest에만 해당 | Map Selection은 이동이 잠기며 거리 종료 없음, Portal에는 지속 UI 없음 |
 
@@ -109,6 +113,15 @@ Interactable (abstract base class)
 1. `[Play Mode 호출 확인]` Player를 `Chest` 가까이에 배치한 뒤 `PlayerInteractor.TryInteract()` 런타임 경로를 호출하자 Player/외부 인벤토리 패널이 열렸고 `PlayerMovement`는 활성 상태였다. 실제 E 키와 WASD 축 입력은 직접 검증하지 않았다.
 2. `[Play Mode 호출 확인]` 그 UI가 열린 상태로 Player를 `Chest (1)` 가까이에 배치해 같은 호출 경로를 다시 실행하자 현재 대상이 `Chest (1)`로 바뀌었다. 공통 active-target lock은 없다는 것이 확인됐다.
 3. `[Play Mode 확인]` Chest UI를 연 뒤 Player를 해당 Chest에서 3m 밖으로 배치하고 Update 한 프레임을 진행하자 외부 패널과 Player 인벤토리 패널이 모두 자동으로 닫혔다.
+
+### 2026-08-23 겹친 Chest 회귀 수정·검증
+
+1. `[원인 확인]` 기존 `PlayerInteractor`가 매 프레임과 E 입력 직전에 무조건 최근접 대상을 다시 골라, Chest A의 UI가 열린 상태에서도 더 가까운 Chest B로 전환할 수 있었다.
+2. `[코드 확인]` `Interactable`의 공통 계약에 활성 세션 확인과 취소 진입점을 추가했고, Chest만 실제 열린 UI를 활성 세션으로 보고한다. Portal과 Map Terminal은 기본 비지속 정책을 유지한다.
+3. `[Play Mode 호출 확인]` A를 연 뒤 두 Chest 범위가 겹치면서 B가 더 가까운 위치로 이동해 호출했을 때 A가 유지되어 닫혔다. A가 닫힌 직후 다음 호출에서는 B가 선택되어 열렸다.
+4. `[Play Mode 호출 확인]` 빠른 열기→닫기→열기, 열린 대상 비활성화, 범위 이탈 취소가 모두 통과했다.
+5. `[Play Mode 확인]` Chest를 연 뒤 3.5m 떨어진 위치로 옮기고 실제 Update 프레임을 진행하자 외부 UI가 자동으로 닫혔다.
+6. `[코드 확인]` 드래그 복구 실패로 UI 닫기가 거부되면 기존 대상 참조도 유지해, 열린 UI와 상호작용 대상의 원본이 갈라지거나 다른 Chest로 전환되지 않는다.
 
 ---
 
@@ -121,7 +134,7 @@ Interactable (abstract base class)
 - `ChestInteractable.Interact`는 같은 Player의 `InventoryUIManager.TryToggleChestInventory(chest)`를 호출한다.
 - 열 때 Player 인벤토리와 해당 외부 인벤토리를 함께 표시한다.
 - 같은 Chest에서 다시 E를 누르면 모두 닫는다.
-- 다른 Chest가 더 가까운 상태에서 E를 누르면 열린 대상을 그 Chest로 전환할 수 있다.
+- Chest UI가 열린 동안에는 다른 Chest가 더 가까워져도 처음 연 Chest를 유지한다. 정상적으로 닫힌 뒤 다음 E부터 다시 최근접 Chest를 선택한다.
 - `InventoryUIManager`가 열린 Chest를 `currentOpenedChest`로 기억하고 매 프레임 별도 거리 검사를 한다.
 - 거리 초과 시 드래그를 취소하고 case popup을 정리한 뒤 Player/외부 인벤토리를 모두 닫는다.
 - 각 Chest는 scene-local이며 `Awake`에서 6×5 빈 `StandardStashViewData`를 새로 만든다. 현재 Chest 내용 영속성은 없다.
@@ -164,20 +177,14 @@ Interactable (abstract base class)
 
 ### 중복 또는 임시 고정값
 
-#### 우선 해결 가치가 큰 항목
+#### 2026-08-23 해결한 항목
 
-1. **공통 active interaction session이 없다.**
-   - Chest UI가 열려도 `PlayerInteractor`는 더 가까운 다른 대상으로 바뀐다.
-   - 사용자 의도가 “처음 연 대상을 닫거나 거리 이탈할 때까지 유지”로 확정되면 현재 경계 안에서 세션 대상 고정이 필요하다.
-
-2. **상호작용 거리가 두 곳에 독립 저장되어 있다.**
-   - `PlayerInteractor.interactionRange = 3`
-   - `InventoryUIManager.interactionRange = 3`
-   - 현재 값은 같지만 한쪽만 바꾸면 prompt 범위, 열기 범위, 자동 닫힘 범위가 달라질 수 있다.
-
-3. **파괴된 Chest의 자동 UI 종료 분기가 잘못되어 있다.** `[코드 확인, Play Mode 미검증]`
-   - 거리 검사 바깥 조건이 이미 `currentOpenedChest != null`을 요구해, 내부의 null 처리 분기는 사실상 도달할 수 없다.
-   - 현재 Chest 파괴 기능은 없어서 정상 Stage 1 경로에서는 발생하지 않지만, 향후 파괴/재생성되는 컨테이너를 만들기 전에 수정해야 한다.
+1. **열린 지속 상호작용의 대상 유지 경계를 연결했다.**
+   - 열린 Chest만 활성 세션으로 취급하고 닫힘과 동시에 최근접 선택으로 복귀한다.
+2. **상호작용 거리 원본을 하나로 통합했다.**
+   - `PlayerInteractor.interactionRange = 3`만 권위 값이며 Chest 열기와 자동 닫기가 같은 판정을 호출한다.
+3. **열린 Chest의 파괴·비활성 종료 경계를 연결했다.**
+   - null, 비활성 Chest 또는 비활성 `ChestInteractable`을 감지하면 같은 전체 닫기 경로를 사용한다.
 
 #### 현재 프로토타입에서는 허용 가능한 항목
 
@@ -196,12 +203,9 @@ Interactable (abstract base class)
 
 아래는 아직 구현하지 않았다.
 
-1. `[사용자 확인 우선]` 지속 상호작용 중 처음 대상을 유지한다는 계약을 확정한다.
-2. `[후속 후보]` 새 Manager를 만들지 않고 현재 `PlayerInteractor`와 개별 UI 경계 안에서 active 대상의 시작/종료/거리 이탈을 한 흐름으로 연결한다.
-3. `[후속 후보]` 상호작용 거리의 권위 값을 하나로 통합한다.
-4. `[후속 후보]` 열린 Chest가 파괴·비활성화될 때 UI와 드래그 상태를 안전하게 정리한다.
-5. `[검증]` Chest A/B 겹침, 빠른 E, 대상 비활성화, 벽 너머 대상, Collider 32개 초과를 필요 범위에 맞춰 검사한다.
-6. 위 상호작용 계약을 안정화한 뒤 `RaidSession`과 저장 없는 루팅을 진행한다.
+1. `[사용자 수동 확인 후보]` 실제 E와 WASD 입력으로 Chest A/B 겹침, 이동 중 열린 대상 유지와 거리 이탈 체감을 확인한다.
+2. `[후속 후보]` 벽 너머 대상, Collider 32개 초과, 완전 동거리 tie-break는 실제 맵 밀도나 시야선 규칙이 필요해질 때 결정한다.
+3. 사용자 요청이 있을 때만 다음 기능인 `RaidSession`과 저장 없는 루팅을 진행한다.
 
 이 목록은 자동 작업 지시가 아니다. 최신 사용자 요청이 항상 우선한다.
 
@@ -227,12 +231,13 @@ Interactable (abstract base class)
 
 ### Unity 검사 결과
 
-- Player prefab의 `PlayerInteractor`: E, range 3, debug prompt 활성
-- Player prefab의 `InventoryUIManager`: 별도 Chest range 3
+- Player prefab의 `PlayerInteractor`: E, 유일한 interaction range 3, debug prompt 활성
+- Player prefab의 `InventoryUIManager`: 같은 PlayerInteractor를 필수 참조하며 별도 Chest range 없음
 - GameMap1: Chest 2개, Map Terminal 1개
 - GameMapTest: Return Portal 1개, 목적지 `GameMap1 / BaseReturn`
-- 검사 종료 후: Play Mode false, Pause false, 활성 씬 `GameMap1`, loaded scene 1개, scene dirty false
-- 현재 Console Error/Exception/Assert는 0개다. Warning 1개는 외부 `AnimeNaturalEnvironment/RenderTextureBaker.cs`의 obsolete URP API 경고이며 이번 Player 기능 회귀가 아니다. 현재 prefab에는 Missing Script가 없다.
+- 2026-08-23 최종 프리팹 검사: Missing Script 0, `InventoryUIManager` 필수 직렬화 참조 8/8, `PlayerInteractor`와 `InventoryUIManager` 각각 1개
+- 검사 종료 후: Play Mode false, Pause false, 활성 씬 `GameMap1`, scene dirty false
+- 2026-08-23 변경 전후 Console Error 기준선은 동일한 7개다. Unity AI Camera/SerializedProperty 도구 오류 4개, 외부 AwaiiStudio shader 오류 2개, 이전 오디오 검증 harness 오류 1개이며 이번 상호작용 변경에서 새 Error/Exception/Assert는 추가되지 않았다.
 
 ---
 

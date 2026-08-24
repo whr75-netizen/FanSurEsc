@@ -1,3 +1,4 @@
+using FantasySurvival.Raids;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -8,6 +9,7 @@ namespace FantasySurvival.SceneFlow
     {
         [SerializeField] private SceneSpawnPoint[] spawnPoints;
         [SerializeField] private string defaultSpawnId;
+        [SerializeField] private GameplaySceneKind gameplaySceneKind;
 
         private bool playerPlaced;
 
@@ -50,8 +52,9 @@ namespace FantasySurvival.SceneFlow
                 spawnId = defaultSpawnId;
             }
 
-            Transform player = PersistentGameplayShell.Instance != null
-                ? PersistentGameplayShell.Instance.PlayerTransform
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            Transform player = shell != null
+                ? shell.PlayerTransform
                 : null;
 
             if (player == null)
@@ -82,10 +85,31 @@ namespace FantasySurvival.SceneFlow
 
             Physics.SyncTransforms();
 
+            if (shell.RaidSession == null)
+            {
+                DirectSceneTravel.FailArrival(
+                    activeSceneName,
+                    $"Scene '{activeSceneName}' cannot register its gameplay context because RaidSession is missing.");
+                return;
+            }
+
+            if (!shell.RaidSession.TryEnterScene(gameplaySceneKind, out string contextError))
+            {
+                DirectSceneTravel.FailArrival(
+                    activeSceneName,
+                    $"Scene '{activeSceneName}' could not register its gameplay context: {contextError}");
+                return;
+            }
+
             if (isPendingArrival)
             {
                 DirectSceneTravel.CompleteArrival(activeSceneName);
-                PersistentGameplayShell.Instance.FinishArrival();
+                shell.FinishArrival(() =>
+                    shell.RaidSession?.CompleteSceneArrival(gameplaySceneKind));
+            }
+            else
+            {
+                shell.RaidSession.CompleteSceneArrival(gameplaySceneKind);
             }
 
             playerPlaced = true;

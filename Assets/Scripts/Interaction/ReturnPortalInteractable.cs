@@ -1,3 +1,4 @@
+using FantasySurvival.Raids;
 using FantasySurvival.SceneFlow;
 using UnityEngine;
 
@@ -10,16 +11,29 @@ namespace FantasySurvival.Interaction
         [SerializeField] private string destinationScene = "GameMap1";
         [SerializeField] private string destinationSpawnId = "BaseReturn";
 
-        public override string InteractionPrompt => "Return To GameMap1";
+        public override string InteractionPrompt => "Extract And Return To Base";
 
         public override bool CanInteract(PlayerInteractor interactor)
         {
-            return base.CanInteract(interactor) && !DirectSceneTravel.IsLoading;
+            RaidSession raidSession = PersistentGameplayShell.Instance != null
+                ? PersistentGameplayShell.Instance.RaidSession
+                : null;
+            return base.CanInteract(interactor) &&
+                   !DirectSceneTravel.IsLoading &&
+                   raidSession != null &&
+                   raidSession.IsRaidActive;
         }
 
         public override void Interact(PlayerInteractor interactor)
         {
-            DirectSceneTravel.TryLoad(destinationScene, destinationSpawnId);
+            RaidSession raidSession = PersistentGameplayShell.Instance != null
+                ? PersistentGameplayShell.Instance.RaidSession
+                : null;
+            if (raidSession == null ||
+                !raidSession.TryResolveExtraction(destinationScene, destinationSpawnId))
+            {
+                Debug.LogWarning("Extraction request was rejected because no active raid was available.", this);
+            }
         }
     }
 }

@@ -44,6 +44,26 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void EndGameplaySession()
+    {
+        if (Instance != this)
+        {
+            return;
+        }
+
+        if (baseFurnitureState != null && baseFurnitureState.HasActiveBindings)
+        {
+            Debug.LogWarning(
+                "Ending the gameplay session while base furniture views are still bound. " +
+                "The session state will still be discarded for Main Menu teardown.",
+                this);
+        }
+
+        Instance = null;
+        gameObject.SetActive(false);
+        Destroy(gameObject);
+    }
+
     public bool CanReplaceBaseFurnitureState(out string error)
     {
         if (BaseFurnitureState.HasActiveBindings)

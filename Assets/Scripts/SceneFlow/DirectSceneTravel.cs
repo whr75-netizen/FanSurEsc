@@ -11,6 +11,7 @@ namespace FantasySurvival.SceneFlow
         {
             public string DestinationScene;
             public string SpawnId;
+            public Action<bool> Completion;
         }
 
         private static PendingTravel pendingTravel;
@@ -32,33 +33,46 @@ namespace FantasySurvival.SceneFlow
 
         public static bool TryLoad(string destinationScene, string spawnId)
         {
+            return TryLoad(destinationScene, spawnId, null);
+        }
+
+        public static bool TryLoad(
+            string destinationScene,
+            string spawnId,
+            Action<bool> completion)
+        {
             if (IsLoading)
             {
+                InvokeCompletion(completion, false);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(destinationScene))
             {
                 Debug.LogError("Direct scene travel requires a destination scene.");
+                InvokeCompletion(completion, false);
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(spawnId))
             {
                 Debug.LogError("Direct scene travel requires a destination spawn ID.");
+                InvokeCompletion(completion, false);
                 return false;
             }
 
             if (!Application.CanStreamedLevelBeLoaded(destinationScene))
             {
                 Debug.LogError($"Scene '{destinationScene}' is not available in Build Settings.");
+                InvokeCompletion(completion, false);
                 return false;
             }
 
             pendingTravel = new PendingTravel
             {
                 DestinationScene = destinationScene,
-                SpawnId = spawnId
+                SpawnId = spawnId,
+                Completion = completion
             };
             hasPendingTravel = true;
             isLoading = true;
@@ -156,8 +170,10 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
+            Action<bool> completion = pendingTravel.Completion;
             pendingTravel = default;
             hasPendingTravel = false;
+            InvokeCompletion(completion, true);
         }
 
         public static void FailArrival(string activeSceneName, string reason)
@@ -197,10 +213,36 @@ namespace FantasySurvival.SceneFlow
 
         private static void ClearFailedRequest()
         {
+            Action<bool> completion = hasPendingTravel ? pendingTravel.Completion : null;
             pendingTravel = default;
             hasPendingTravel = false;
             isLoading = false;
-            PersistentGameplayShell.Instance?.CancelTravelPreparation();
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            if (shell != null)
+            {
+                shell.CancelTravelPreparation(() => InvokeCompletion(completion, false));
+            }
+            else
+            {
+                InvokeCompletion(completion, false);
+            }
+        }
+
+        private static void InvokeCompletion(Action<bool> completion, bool succeeded)
+        {
+            if (completion == null)
+            {
+                return;
+            }
+
+            try
+            {
+                completion.Invoke(succeeded);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using FantasySurvival.Interaction;
+using FantasySurvival.Raids;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -21,17 +22,26 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private InventoryUIManager inventoryUI;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private PlayerInteractor playerInteractor;
+        [SerializeField] private PlayerStats playerStats;
+        [SerializeField] private RaidSession raidSession;
+        [SerializeField] private GameplayEscapeMenuController escapeMenu;
         [SerializeField] private GameplaySceneTransitionFader sceneTransitionFader;
 
         private bool travelPrepared;
         private bool movementWasEnabled;
         private bool inventoryInputWasBlocked;
         private bool interactionWasBlocked;
+        private bool damageWasBlocked;
 
         public Transform PlayerTransform => playerTransform;
         public Camera PlayerCamera => playerCamera;
         public EventSystem PlayerEventSystem => eventSystem;
         public InventoryUIManager InventoryUI => inventoryUI;
+        public PlayerMovement PlayerMovement => playerMovement;
+        public PlayerInteractor PlayerInteractor => playerInteractor;
+        public PlayerStats PlayerStats => playerStats;
+        public RaidSession RaidSession => raidSession;
+        public GameplayEscapeMenuController EscapeMenu => escapeMenu;
         public GameplaySceneTransitionFader SceneTransitionFader => sceneTransitionFader;
         public bool IsTravelPrepared => travelPrepared;
 
@@ -83,6 +93,7 @@ namespace FantasySurvival.SceneFlow
             movementWasEnabled = playerMovement.enabled;
             inventoryInputWasBlocked = inventoryUI.InputBlocked;
             interactionWasBlocked = playerInteractor.InteractionBlocked;
+            damageWasBlocked = playerStats.DamageBlocked;
             travelPrepared = true;
 
             try
@@ -90,31 +101,32 @@ namespace FantasySurvival.SceneFlow
                 if (!inventoryUI.CloseAllInventories())
                 {
                     Debug.LogError("Cannot travel because the active inventory drag could not be restored.", this);
-                    RestoreTravelState();
+                    RestoreTravelState(true);
                     return false;
                 }
                 eventSystem.SetSelectedGameObject(null);
                 playerMovement.enabled = false;
                 inventoryUI.SetInputBlocked(true);
                 playerInteractor.SetInteractionBlocked(true);
+                playerStats.SetDamageBlocked(true);
                 return true;
             }
             catch (Exception exception)
             {
                 Debug.LogException(exception, this);
-                RestoreTravelState();
+                RestoreTravelState(true);
                 return false;
             }
         }
 
-        public void FinishArrival()
+        public void FinishArrival(Action onFinished = null)
         {
-            RevealSceneAndRestoreTravelState();
+            RevealSceneAndRestoreTravelState(false, onFinished);
         }
 
-        public void CancelTravelPreparation()
+        public void CancelTravelPreparation(Action onCancelled = null)
         {
-            RevealSceneAndRestoreTravelState();
+            RevealSceneAndRestoreTravelState(true, onCancelled);
         }
 
         public bool BeginTravelTransition(Action onCovered, Action onInterrupted)
@@ -127,23 +139,44 @@ namespace FantasySurvival.SceneFlow
             return sceneTransitionFader.TryCover(onCovered, onInterrupted);
         }
 
-        private void RevealSceneAndRestoreTravelState()
+        public void EndGameplaySession()
+        {
+            if (Instance != this)
+            {
+                return;
+            }
+
+            Instance = null;
+            travelPrepared = false;
+            gameObject.SetActive(false);
+            Destroy(gameObject);
+        }
+
+        private void RevealSceneAndRestoreTravelState(
+            bool restorePreviousDamageBlock,
+            Action onRestored = null)
         {
             if (!travelPrepared)
             {
+                onRestored?.Invoke();
                 return;
             }
 
             if (sceneTransitionFader == null || !sceneTransitionFader.isActiveAndEnabled)
             {
-                RestoreTravelState();
+                RestoreTravelState(restorePreviousDamageBlock);
+                onRestored?.Invoke();
                 return;
             }
 
-            sceneTransitionFader.Reveal(RestoreTravelState);
+            sceneTransitionFader.Reveal(() =>
+            {
+                RestoreTravelState(restorePreviousDamageBlock);
+                onRestored?.Invoke();
+            });
         }
 
-        private void RestoreTravelState()
+        private void RestoreTravelState(bool restorePreviousDamageBlock)
         {
             if (!travelPrepared)
             {
@@ -167,13 +200,20 @@ namespace FantasySurvival.SceneFlow
             {
                 playerInteractor.SetInteractionBlocked(interactionWasBlocked);
             }
+            if (restorePreviousDamageBlock && playerStats != null)
+            {
+                playerStats.SetDamageBlocked(damageWasBlocked);
+            }
             travelPrepared = false;
+            damageWasBlocked = false;
         }
 
         private bool HasRequiredReferences()
         {
             return playerTransform != null && playerCamera != null && eventSystem != null &&
                    inventoryUI != null && playerMovement != null && playerInteractor != null &&
+                   playerStats != null && raidSession != null && raidSession.IsConfigured &&
+                   escapeMenu != null && escapeMenu.IsConfigured &&
                    sceneTransitionFader != null && sceneTransitionFader.IsConfigured;
         }
     }

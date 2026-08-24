@@ -20,7 +20,7 @@
 
 ## 1. 현재 완료된 기반
 
-- `[Play Mode 확인]` `GameMap1`의 맵 선택 Cube에서 `GameMapTest`로 직접 이동하고, 귀환 Cube에서 `GameMap1`로 직접 복귀한다.
+- `[Play Mode 확인]` `GameMap1`의 맵 선택 Cube에서 `GameMapTest` 원정을 시작하고, 귀환 Cube에서 생환 성공을 한 번 확정한 뒤 최소 결과 UI를 거쳐 `GameMap1`로 직접 복귀한다.
 - `[Play Mode 확인]` 이 직접 왕복은 `MainMenuScene`과 `GameLoadingScene`을 거치지 않는다.
 - `[Play Mode 확인]` `PersistentGameplayShell` 하나가 실제 Player, 외형, Player 구성 스크립트, Camera, Inventory UI/Core/View와 EventSystem을 같은 인스턴스로 유지한다.
 - `[코드/씬 확인]` 두 게임플레이 씬에는 scene-local 런타임 Player/gameplay Camera/Inventory UI/EventSystem 복사본이 없다. 편집 상태 Game View용 `EditorOnly` Preview Camera만 씬마다 1개 존재한다.
@@ -105,8 +105,8 @@ Interactable (abstract base class)
 | Chest UI가 열린 동안 처음 대상을 유지 | Play Mode 호출 충족 | Chest A가 열린 동안 B가 더 가까워져도 두 번째 호출은 A를 닫음 |
 | 닫힌 뒤 최근접 선택으로 복귀 | Play Mode 호출 충족 | A가 닫힌 직후 다음 호출에서 더 가까운 B가 선택되어 열림 |
 | 활성 Chest의 거리 기준은 처음 연 Chest | Play Mode 충족 | 선택과 UI 자동 종료가 모두 같은 `PlayerInteractor` 반경과 열린 Chest를 기준으로 함 |
-| 모든 상호작용이 이동 중 지속 가능 | 미충족이 아니라 종류별 정책 | Chest는 이동 가능, Map Selection은 modal이라 이동 잠금, Portal은 즉시 이동 |
-| 거리 이탈 시 모든 상호작용 UI 자동 닫힘 | Chest에만 해당 | Map Selection은 이동이 잠기며 거리 종료 없음, Portal에는 지속 UI 없음 |
+| 모든 상호작용이 이동 중 지속 가능 | 미충족이 아니라 종류별 정책 | Chest는 이동 가능, Map Selection은 modal이라 이동 잠금, Portal은 생환 결과를 확정하고 결과 UI로 입력 잠금 |
+| 거리 이탈 시 모든 상호작용 UI 자동 닫힘 | Chest에만 해당 | Map Selection은 이동이 잠기며 거리 종료 없음, Portal의 결과 UI는 원정 종결 화면이라 거리 종료 대상이 아님 |
 
 ### 2026-08-20 Play Mode 호출·상태 확인
 
@@ -147,7 +147,7 @@ Interactable (abstract base class)
 - UI를 열기 전에 현재 인벤토리를 닫는다.
 - UI가 열리면 Player 이동, 다른 E 상호작용, 인벤토리 입력을 잠근다.
 - 현재 직렬화된 선택은 `GameMapTest / RaidEntry` 한 개다.
-- 취소 또는 Escape로 닫으면 이전 입력 상태를 복원한다.
+- 취소 또는 Escape로 닫으면 이전 입력 상태를 복원한다. `MapSelectionOverlay`는 Escape를 직접 읽지 않고 persistent `GameplayEscapeMenuController`에 열린 상태를 등록한다.
 - 맵 선택 UI에는 거리 이탈 자동 종료가 없다. 이동이 잠기므로 정상 입력만으로 범위를 벗어나지 않는다.
 
 ### Return Portal
@@ -155,11 +155,10 @@ Interactable (abstract base class)
 - `GameMapTest`의 `Stage1_ReturnPortal`에 `ReturnPortalInteractable`과 활성 solid BoxCollider가 있다.
 - E 안내와 가장 가까운 대상 선택은 Chest와 동일한 `PlayerInteractor` 공통 경로를 사용한다.
 - 현재 직렬화된 목적지는 `GameMap1 / BaseReturn`이다.
-- E를 누르면 `DirectSceneTravel.TryLoad`를 호출해 즉시 비동기 씬 이동을 요청한다.
-- 로딩 중에는 `CanInteract`가 false가 되어 중복 요청을 막는다.
+- E를 누르면 `RaidSession.TryResolveExtraction`이 생환 성공을 한 번만 확정하고 최소 결과 UI를 표시한다.
+- 결과 확인 뒤 `DirectSceneTravel`로 `GameMap1 / BaseReturn`에 복귀한다. 결과가 이미 확정됐거나 전환 중이면 중복 요청을 거부한다.
 - 이동 준비 과정에서 공통 셸이 열린 인벤토리, 드래그, popup과 입력 상태를 정리한다.
-- Portal은 지속 상호작용 UI가 없으므로 “거리 이탈 시 UI 닫기”나 “상호작용 대상 유지”가 적용될 세션이 없다.
-- 현재는 생환 성공 판정을 하지 않는 단순 귀환 포탈이다.
+- Portal 자체에는 지속 상호작용 UI가 없으며, 확정 뒤 표시되는 결과 UI는 persistent 원정 결과 화면이다.
 
 ---
 
@@ -170,7 +169,7 @@ Interactable (abstract base class)
 - 대상 검색, 가장 가까운 하나 선택, E 입력, 안내 표시가 `PlayerInteractor` 한 곳에 있다.
 - 모든 현재 대상은 `Interactable`의 공통 계약을 사용한다.
 - 모든 Chest는 `ChestInteractable`과 `InventoryUIManager.TryToggleChestInventory`를 재사용할 수 있다.
-- 맵 터미널과 귀환 포탈은 목적지 로드에 `DirectSceneTravel`을 공유한다.
+- 맵 터미널은 `RaidSession`의 원정 시작, 귀환 포탈은 생환 결과 확정을 호출하며 실제 게임플레이 씬 로드는 둘 다 `DirectSceneTravel` 경계로 수렴한다.
 - 씬 전환 전 정리는 `PersistentGameplayShell`과 `InventoryUIManager.CloseAllInventories`를 공유한다.
 - 관련 실행 경로에는 `GameObject.Find`, `FindAnyObjectByType`, `FindFirstObjectByType`로 매번 대상을 찾는 코드가 없다. Player-local `GetComponent`, serialized reference와 기존 Singleton을 사용한다.
 
@@ -190,7 +189,7 @@ Interactable (abstract base class)
 #### 현재 프로토타입에서는 허용 가능한 항목
 
 - E는 `PlayerInteractor`의 serialized `KeyCode`라 한 곳에서 바꿀 수 있지만 아직 리바인딩 가능한 Input Action은 아니다.
-- I와 Escape는 `InventoryUIManager`/`MapSelectionOverlay`가 직접 읽는다.
+- I는 `InventoryUIManager`가 읽고, Escape는 persistent `GameplayEscapeMenuController` 하나만 읽는다. 열린 확인창·설정·메뉴·맵 선택 UI·인벤토리를 정해진 우선순위로 한 단계씩 닫는다.
 - prompt 문구와 맵 선택 화면은 영문 OnGUI 임시 UI다.
 - 맵 터미널은 목록 데이터가 아니라 단일 serialized scene/spawn/display 값만 가진다.
 - Portal의 목적지 scene/spawn은 Inspector에서 바꿀 수 있지만 문자열 기반이다.
@@ -206,7 +205,7 @@ Interactable (abstract base class)
 
 1. `[사용자 수동 확인 후보]` 실제 E와 WASD 입력으로 Chest A/B 겹침, 이동 중 열린 대상 유지와 거리 이탈 체감을 확인한다.
 2. `[후속 후보]` 벽 너머 대상, Collider 32개 초과, 완전 동거리 tie-break는 실제 맵 밀도나 시야선 규칙이 필요해질 때 결정한다.
-3. 사용자 요청이 있을 때만 다음 기능인 `RaidSession`과 저장 없는 루팅을 진행한다.
+3. `[후속 후보]` 아이템 손실·획득 provenance·강제종료 원정 재개는 해당 규칙이 확정될 때 별도 범위로 확장한다.
 
 이 목록은 자동 작업 지시가 아니다. 최신 사용자 요청이 항상 우선한다.
 
@@ -676,7 +675,7 @@ Interactable (abstract base class)
 - `[코드 확인]` `Chest.Awake`는 외부 상태가 없을 때만 임시 grid에 authored ID 전체를 배치한 뒤 한 번에 공개한다. `GameMapTest` 시험 Chest는 기존처럼 ID 1을 만들고, 비활성 GameMap1 Chest가 store에 먼저 연결된 뒤 늦게 Awake를 실행해도 연결된 기지 원본을 초기 seed로 덮어쓰지 않는다.
 - `[코드 확인]` 시작 목록은 임시 grid에 전부 배치할 수 있을 때만 유효하다. DB 누락, 알 수 없는 ID 또는 공간 부족이면 부분 seed를 노출하지 않고 빈 grid와 명시적 오류를 남긴다.
 - `[씬 확인]` `GameMapTest`의 `Stage3_TestLootChest`는 `RaidEntry`에서 2m 떨어진 불투명 Cube이며, 6×5 Chest, Collider, `ChestInteractable`, `ItemDatabase`, 시작 ID 1 하나와 기존 이동 충돌 규칙에 필요한 `Obstacle` 태그가 직렬화되어 있다.
-- `[구조 결정]` 현재 고정 왕복과 같은 세션 내 획득물 보존에는 `RaidSession`이 필요하지 않다. `DirectSceneTravel`이 중복 이동을 막고, persistent `PlayerInventoryState`가 획득 뒤 원본 상태를 이미 소유한다. 성공·실패·사망 손실처럼 별도 원정 상태가 생길 때만 그 수명에 맞는 소유자를 설계한다.
+- `[구조 결정][당시]` 고정 왕복과 같은 세션 내 획득물 보존만으로는 `RaidSession`이 필요하지 않았다. `[후속 갱신]` 생환·사망·포기 결과가 요구된 뒤에는 그 결과와 원정 수명만 소유하는 최소 `RaidSession`을 추가했으며, 아이템 원본은 계속 persistent `PlayerInventoryState`가 소유한다.
 
 ### 2026-08-23 검증 결과와 한계
 
@@ -849,5 +848,50 @@ Interactable (abstract base class)
 - `[코드/상태 확인]` GameMapTest 도착 시 살아 있는 근접·원거리 적 2개의 시체 상호작용과 Trigger가 모두 아직 비활성임을 확인했다. 최초 로딩 흐름과 관련 Manager에는 diff가 없다.
 - `[컴파일/Console 확인]` 최종 script refresh/동적 검증 command compilation은 성공했고 Console Error 0, Warning 8 기준선에 신규 Error/Exception/Assert 또는 Warning delta가 없다. 기존 8개는 Input Manager, MCP 서명, 과거 Animator/NavMesh와 외부 RenderTextureBaker 경고다.
 - `[에디터 상태 복원]` Play Mode를 종료하고 활성 `GameMap1`, dirty false, `Application.runInBackground=false`로 복원했다. 새 직렬화 필드 때문에 생긴 scene dirty는 복구 사본과 비교해 기존 Chest prompt 두 줄뿐임을 확인한 뒤 Unity API로 저장했으며 동일한 임시 사본은 휴지통으로 옮겼다.
-- `[선행 결함/제외]` 기존 `PauseMenu`는 비활성 `PauseCanvas` 안에 붙어 있고 `pauseCanvas`가 QuitButton을 가리켜 Escape 메뉴 입력 자체가 동작하지 않는 상태다. 이번 전환이 그 깨진 프로토타입에 새로 의존하지 않게 했으며 Pause 메뉴 수정은 별도 요청 범위로 남겼다.
+- `[후속 해결]` 당시 비활성·오연결 상태였던 `PauseMenu`는 21절의 persistent 단일 Escape 소유 메뉴로 교체했다. 구형 컴포넌트와 스크립트는 참조가 없음을 확인한 뒤 제거했다.
 - `[미검증]` 물리 키보드 E와 실제 마우스 drag로 시체를 루팅하는 사용자 입력, 픽셀 캡처로 fade 중 완전 검은 화면 확인, 잘못된 Spawn ID watchdog의 실제 실행, InitialLoadingScene부터 시작하는 전체 Player build, 시체 저장·랜덤 드롭과 Profiler 수치는 이번 범위에서 확인하지 않았다.
+
+---
+
+## 21. 컨텍스트별 Escape 메뉴와 최소 원정 결과
+
+### 사용자 요구와 범위
+
+- `[사용자 요구][2026-08-24]` Escape 입력은 한 곳에서만 처리한다.
+- `[사용자 요구]` 기지에서는 실제로 게임을 일시정지하고 계속하기, 설정, 주 메뉴 이동을 제공한다. 원정 포기 버튼은 표시하지 않는다.
+- `[사용자 요구]` 원정에서는 세계를 일시정지하지 않고 Player 조작만 막는다. 계속하기, 설정, 원정 포기와 주 메뉴 이동을 제공한다.
+- `[사용자 요구]` 원정 중 포기 또는 주 메뉴 이동에는 “원정을 포기하시겠습니까?” 확인을 표시하며, 기지 또는 주 메뉴라는 목적지만 다르다.
+- `[사용자 요구]` 생환과 Player 사망은 각각 한 번만 결과를 확정하고 최소 결과 화면을 표시한다.
+- `[제외 범위]` 강제종료 뒤 원정 이어하기, 원정 snapshot·event log·좌표 replay, 도심 seed 저장, 아이템 손실·보상 확정과 최종 UI 디자인은 포함하지 않는다.
+
+### 상태 소유권과 호출 흐름
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 권위 소유자 | gameplay scene 종류, 원정 수명주기와 단 한 번의 결과는 `RaidSession`; Player HP·사망 전이·피해 허용은 `PlayerStats`; Escape 입력과 메뉴 화면 상태는 `GameplayEscapeMenuController`가 각각 하나의 원본을 가진다. |
+| 수명 범위 | `RaidSession`과 Escape 메뉴는 persistent Player Shell의 Play Session, 원정 상태는 Raid, HP는 Player Entity, 확인·결과 패널은 UI 표시 수명이다. |
+| 변경 진입점 | 맵 선택 → 원정 시작, 귀환 포탈 → 생환, `PlayerStats.Died` → 사망 실패, 확인된 포기 → 포기 결과로 수렴하며 `RaidSession`만 `Extracted`·`PlayerDied`·`Abandoned` 중 처음 한 결과를 확정한다. |
+| 파생 표현 | 메뉴 버튼·확인 패널·결과 패널은 scene 종류와 `RaidSession` 상태의 파생 UI이며 원정 결과를 별도로 쓰지 않는다. |
+| 저장 경계 | 현재 원정 상태·결과, Player 위치·HP, 적·맵 상태는 디스크에 저장하지 않는다. 기존 Player/기지 단일 슬롯 저장 형식도 이번 작업에서 확장하지 않았다. |
+| 업데이트 주체 | Escape는 persistent controller 하나가 매 프레임 읽고, 결과 전이는 명시적 호출 또는 Player 사망 완료 이벤트에서만 발생한다. |
+
+### 현재 구현
+
+- `[코드/프리팹 확인]` `GameplayEscapeMenuController`는 항상 활성인 persistent shell root에 있고, View인 `PauseCanvas`와 Main/Settings/Confirmation/Result 패널만 필요할 때 활성화한다. 버튼과 Toggle은 각각 한 개의 공개 기능 진입점에 연결돼 있다.
+- `[코드 확인]` Escape 우선순위는 결과·전환 중 무시 → 확인 취소 → 설정에서 기본 메뉴 → 기본 메뉴 닫기 → 맵 선택 취소 → 인벤토리 안전 닫기 → 새 컨텍스트 메뉴 열기다. `InventoryUIManager`와 `MapSelectionOverlay`의 별도 Escape polling은 제거했다.
+- `[코드/씬 확인]` `GameMap1`의 `SceneSpawnController`는 `Base`, `GameMapTest`는 `Raid`를 등록한다. 기지 메뉴는 `Time.timeScale = 0`, 원정 메뉴는 `Time.timeScale = 1`을 유지한다.
+- `[코드 확인]` 메뉴는 Player 이동·공격·무기 전환·인벤토리·상호작용 입력을 함께 잠근다. 닫기 또는 이동 시작 전에 자신이 획득한 이전 상태만 복원한다.
+- `[코드 확인]` 전환 시작부터 fade-in 완료까지 `PersistentGameplayShell`이 `PlayerStats`의 피해 진입점을 차단한다. 실패 취소는 이전 피해 허용 상태를 복원하고, 성공 도착은 입력 복원 뒤 `RaidSession.CompleteSceneArrival`이 새 컨텍스트에서 피해를 다시 허용한다.
+- `[코드 확인]` 생환·사망·포기 결과가 확정되면 추가 피해를 거부한다. 사망 귀환은 기지 입력 복원 전에 체력을 최대치로 초기화한다. 아이템 손실 규칙은 미정이므로 어떤 결과도 인벤토리를 변경하지 않는다.
+- `[코드 확인]` 주 메뉴 이동은 gameplay 직접 왕복과 분리된 `GameplaySessionExit`가 담당한다. 검은 fade 뒤 `MainMenuScene`을 로드하고 persistent shell과 기존 `GameManager`를 명시적으로 종료한다.
+
+### 2026-08-24 검증 결과와 한계
+
+- `[Play Mode 호출 확인]` 기지 메뉴 Main → Settings → Main → Closed를 확인했다. 메뉴가 열린 동안 `Time.timeScale=0`, Player 입력 세 종류가 잠겼고 닫은 뒤 `Time.timeScale=1`과 입력이 복원됐다.
+- `[Play Mode 호출 확인]` 원정 메뉴에서 `Time.timeScale=1`과 Player 입력 잠금을 확인했다. 약 14초 동안 두 적의 Transform이 실제로 바뀌어 AI 시뮬레이션이 계속 진행됐으며 포기·주 메뉴 확인창을 각각 취소했을 때 원정 상태와 씬이 유지됐다.
+- `[Play Mode 호출 확인]` Player 사망은 `PlayerDied` 결과와 실패 UI를 한 번 만들었고, 기지 도착 뒤 체력 100·결과 `None`·입력 정상 상태가 됐다. 포기는 `Abandoned` 한 결과로 기지에 한 번만 이동했다.
+- `[Play Mode 호출 확인]` 귀환 포탈은 `Extracted`와 성공 UI를 만들고 두 번째 상호작용을 거부했다. 결과 확정 뒤 999 시험 피해는 `WasApplied=false`, 체력 100을 유지했다.
+- `[Play Mode 호출 확인]` 원정 fade-out과 active scene의 fade-in 중 각각 999 시험 피해가 거부됐고, fade-in 완료 뒤에만 피해 허용과 Player 입력이 정상 복원됐다.
+- `[Play Mode 호출 확인]` 원정의 주 메뉴 확인 뒤 `MainMenuScene`에서 `PersistentGameplayShell.Instance`와 `GameManager.Instance`가 모두 null이었고 active Camera·AudioListener·EventSystem은 각각 1개, `Time.timeScale=1`이었다. 같은 Main Menu에서 새 게임을 시작하자 이전과 다른 Shell/Player Entity로 깨끗한 `GameMap1` 세션이 생성됐다.
+- `[프리팹/런타임 확인]` 메뉴 Canvas는 활성 상태에서 유효한 화면 Rect와 `0.62` runtime scale을 가졌다. Windows 캡처 도구는 해당 Unity 창에서 `SetIsBorderRequired` 시스템 인터페이스 오류로 실패했으므로 실제 픽셀 캡처와 물리 Escape/버튼 클릭은 미검증이다.
+- `[컴파일/Console 확인]` 최종 script refresh는 성공했고 Console Error는 0이다. 작업 전 기준 경고 11개(Input Manager, MCP 서명, Animator/NavMesh, Unity AI 계정, 외부 RenderTextureBaker)에 더해 자동 검증 하네스가 kinematic 전환 뒤 velocity를 0으로 쓰며 만든 검증 전용 경고 8개가 Console 기록에 남아 있다. 해당 stack은 동적 `CommandScript`이며 프로젝트 런타임 코드 회귀가 아니다. Console은 기준선 보존을 위해 지우지 않았다.

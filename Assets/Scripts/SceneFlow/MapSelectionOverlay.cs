@@ -1,4 +1,6 @@
+using System.Collections;
 using FantasySurvival.Interaction;
+using FantasySurvival.Raids;
 using UnityEngine;
 
 namespace FantasySurvival.SceneFlow
@@ -13,6 +15,7 @@ namespace FantasySurvival.SceneFlow
         private PlayerInteractor sourceInteractor;
         private PlayerMovement sourceMovement;
         private InventoryUIManager sourceInventoryUI;
+        private GameplayEscapeMenuController escapeMenu;
         private bool movementWasEnabled;
         private bool inventoryInputWasBlocked;
         private bool isVisible;
@@ -26,6 +29,16 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
+            GameplayEscapeMenuController inputOwner = PersistentGameplayShell.Instance != null
+                ? PersistentGameplayShell.Instance.EscapeMenu
+                : null;
+            if (inputOwner == null || !inputOwner.TryRegisterMapSelectionOverlay(this))
+            {
+                Debug.LogError("Map selection requires the persistent ESC menu input owner.", this);
+                return;
+            }
+
+            escapeMenu = inputOwner;
             sourceInteractor = interactor;
             sourceMovement = interactor.GetComponent<PlayerMovement>();
             sourceInventoryUI = interactor.GetComponent<InventoryUIManager>();
@@ -45,14 +58,6 @@ namespace FantasySurvival.SceneFlow
             isVisible = true;
         }
 
-        private void Update()
-        {
-            if (isVisible && Input.GetKeyDown(KeyCode.Escape))
-            {
-                Cancel();
-            }
-        }
-
         public void Cancel()
         {
             CloseOverlay();
@@ -68,17 +73,33 @@ namespace FantasySurvival.SceneFlow
             PlayerInteractor previousInteractor = sourceInteractor;
             CloseOverlay();
 
-            if (DirectSceneTravel.TryLoad(destinationScene, destinationSpawnId))
+            RaidSession raidSession = PersistentGameplayShell.Instance != null
+                ? PersistentGameplayShell.Instance.RaidSession
+                : null;
+            if (raidSession != null && raidSession.TryBeginRaid(destinationScene, destinationSpawnId))
             {
                 return true;
             }
 
             if (previousInteractor != null)
             {
-                Show(previousInteractor);
+                StartCoroutine(ReopenAfterTravelCleanup(previousInteractor));
             }
 
             return false;
+        }
+
+        private IEnumerator ReopenAfterTravelCleanup(PlayerInteractor interactor)
+        {
+            while (DirectSceneTravel.IsLoading)
+            {
+                yield return null;
+            }
+
+            if (isActiveAndEnabled && interactor != null)
+            {
+                Show(interactor);
+            }
         }
 
         private void OnDisable()
@@ -88,7 +109,8 @@ namespace FantasySurvival.SceneFlow
 
         private void CloseOverlay()
         {
-            if (!isVisible && sourceInteractor == null && sourceMovement == null && sourceInventoryUI == null)
+            if (!isVisible && sourceInteractor == null && sourceMovement == null &&
+                sourceInventoryUI == null && escapeMenu == null)
             {
                 return;
             }
@@ -112,6 +134,11 @@ namespace FantasySurvival.SceneFlow
             sourceInteractor = null;
             sourceMovement = null;
             sourceInventoryUI = null;
+            if (escapeMenu != null)
+            {
+                escapeMenu.UnregisterMapSelectionOverlay(this);
+                escapeMenu = null;
+            }
             movementWasEnabled = false;
             inventoryInputWasBlocked = false;
         }

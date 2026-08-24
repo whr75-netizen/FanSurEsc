@@ -271,10 +271,6 @@ public class InventoryUIManager : MonoBehaviour
             if (externalInventoryPanel != null && externalInventoryPanel.activeSelf) CloseAllInventories(); // 외부 열려있으면 모두 닫기
             else TogglePlayerInventoryUI(); // 아니면 플레이어 토글
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            CloseAllInventories();
-        }
         if (standardCore != null && standardCore.IsDragging() && Input.GetKeyDown(KeyCode.R))
         {
             standardCore.SwitchRotate();

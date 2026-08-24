@@ -706,13 +706,14 @@ Unity AI Navigation 패키지는 설치되어 있지만 실제 게임플레이 �
 
 ### 목표
 
-현재 단일 슬롯 프로토타입이 저장하는 플레이어 인벤토리·장비에 더해, Stage 6에서 검증된 원정 결과와 기지 상태를 게임 재실행 후 복원한다.
+현재 단일 슬롯 프로토타입이 저장하는 플레이어 인벤토리·장비와 정의 기반 기지 가구 상태에 더해, Stage 6에서 검증될 원정 결과를 게임 재실행 후 복원한다.
 
-사용자 결정으로 기본 플레이어 아이템 상태의 단일 슬롯 저장을 앞당겨 구현했다. 이 Stage의 남은 범위는 생환·사망 결과, stable ID가 확정된 기지 상태와 최종 저장 정책의 확장이다.
+사용자 결정으로 기본 플레이어 아이템과 GameMap1의 두 stable-ID Chest 상태 저장을 앞당겨 구현했다. 이 Stage의 남은 범위는 생환·사망 결과, 향후 배치 가능한 기지 가구의 layout migration과 최종 저장 정책이다.
 
 ### 선행조건
 
-- 선택된 영속 런타임 상태 소유자와 RaidSession의 책임 확정
+- **[현재 기지 가구]** persistent `GameManager → BaseFurnitureStateStore → BaseFurnitureRuntimeState` 권위 경계 확정
+- **[후속 원정 결과]** RaidSession이 실제로 필요해질 때 해당 영속/원정 책임 확정
 - 아이템 인스턴스 상태 확정
 - 생환과 사망 결과까지 저장 범위에 포함하는 경우 해당 반영 규칙 확정
 - 숫자 ItemDefinition ID가 안정됨
@@ -736,6 +737,8 @@ Unity AI Navigation 패키지는 설치되어 있지만 실제 게임플레이 �
 - ItemDatabase의 중복 definition ID 검증
 - 저장 데이터 안의 중복 recordId 및 소유 위치 검증
 - 저장과 로드를 호출하는 단일 소유자
+- **[현재 기지 가구]** namespaced furniture definition key, stable placed ID와 명시적 `BaseSaveData` codec
+- **[현재 기지 가구]** scene Chest는 View로만 bind하고 런타임 원본은 persistent store에 유지
 
 저장하지 않는 프리셋 정보:
 
@@ -746,6 +749,8 @@ Unity AI Navigation 패키지는 설치되어 있지만 실제 게임플레이 �
 - 고정 능력치
 
 이 정보는 로드할 때 ItemDatabase에서 ID로 다시 조회한다.
+
+가구도 같은 원칙으로 display name, storage 크기와 향후 고정 기능은 `BaseFurnitureDefinition`에서 조회한다. 현재 v4 save는 `core:home/chest_a/b` placed ID, `core:storage_chest` definition key와 두 저장 grid의 변하는 아이템 관계만 기록한다. 가구 Transform, HP, 전력, 외형과 배치 목록은 아직 저장 범위가 아니다. 제거된 모드 definition은 무음 삭제하지 않고 전체 후보를 fail-closed로 거부하며 원본 파일을 보존한다. 모드 없이도 알 수 없는 DTO를 opaque round-trip하는 정책은 아직 구현하지 않는다.
 
 ### 권장 저장 시점
 
@@ -763,6 +768,8 @@ Unity AI Navigation 패키지는 설치되어 있지만 실제 게임플레이 �
 - 잘못된 ItemDefinition ID가 침묵하지 않고 명확히 처리된다.
 - 같은 저장을 여러 번 불러도 아이템이 중복되지 않는다.
 - 저장 버전이 다른 경우의 처리 정책이 테스트된다.
+
+**[현재 부분 구현]** 위 항목 중 플레이어 아이템과 고정 GameMap1 Chest 2개의 DTO/codec/scene binding은 구현했다. 2026-08-24 Editor compile, 사용자 기준 1회 맵 왕복의 동일 grid 보존, 원정 Chest 분리, native v4 layout 불일치 primary에서 정상 backup으로의 실제 GameMap1 적용 폴백, 격리된 Windows 원자 파일 교체를 확인했다. 실제 사용자 slot을 쓰는 F5와 새 프로세스 Main Menu 버튼 Load는 사용자 파일 보호를 위해 아직 실행하지 않았다. 생환·사망 결과와 배치 가구 migration까지 포함하는 Stage 7 전체도 완료가 아니다.
 
 ### 다음 단계가 의존하는 이유
 
@@ -967,7 +974,7 @@ Stage 1 구현 결과는 다음과 같다.
 8. **[완료]** GameMap1과 GameMapTest 왕복 3회 및 GameMapTest 직접 실행 후 귀환 검증
 9. **[완료]** Console 새 오류 0과 기존 Chest 열기/닫기 회귀 확인
 
-Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지와 플레이어 아이템 상태(인벤토리·빈 상태로 시작하는 12칸 장비 구조와 시험용 단일 Weapon 호환 정의)의 단일 슬롯 세이브/로드 프로토타입은 구현되었다. `GameMapTest`에는 DB ID 1을 한 번 seed하는 시험 Chest가 있고, 같은 아이템 객체를 Player 인벤토리로 옮긴 뒤 현재 귀환 포탈로 돌아와도 유지되는 무저장 기초 루팅도 검증됐다. 이동·전투 시험용 적과 도심형 도로·큐브 건물 생성은 별도 하위 작업으로 존재한다. 다음 작업을 `RaidSession`으로 자동 고정하지 않는다. 생환·사망 결과, 원정 밖 아이템 소유 주체 또는 귀환 포탈의 정식 의미가 필요해질 때 Stage 2-B를 시작한다. 레이드 결과 저장, 사망 손실, 도심 장식·내부·동적 spawn과 다른 맵 유형은 아직 구현하지 않는다.
+Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지, 플레이어 아이템 단일 슬롯 저장과 저장 없는 시험 루팅은 구현되었다. GameMap1의 고정 Chest 2개에도 namespaced definition/stable placed ID/persistent runtime store/v4 Save DTO를 연결했고, 2026-08-24 사용자 기준 1회 맵 왕복에서 두 grid 참조와 분리된 내용·중첩 소유권 보존을 확인했다. layout 불일치 primary에서 정상 backup으로의 적용 전 폴백도 실제 GameMap1 배치 경계로 확인했다. `GameMapTest`의 DB ID 1 시험 Chest는 의도적으로 scene-local이며 기지 가구 store에 포함하지 않는다. 이동·전투 시험용 적과 도심형 도로·큐브 건물 생성은 별도 하위 작업으로 존재한다. 다음 작업을 `RaidSession`으로 자동 고정하지 않는다. 생환·사망 결과, 원정 밖 아이템 소유 주체 또는 귀환 포탈의 정식 의미가 필요해질 때 Stage 2-B를 시작한다. 레이드 결과 저장, 사망 손실, 배치 가능한 기지 layout migration, 도심 장식·내부·동적 spawn과 다른 맵 유형은 아직 구현하지 않는다.
 
 ---
 
@@ -1057,7 +1064,7 @@ AI가 하지 말아야 할 것:
     → 귀환 포탈
     → 반복 왕복 검증
 
-PersistentGameplayShell의 같은 Player, Camera, InventoryUIManager, EventSystem과 PlayerInventoryState 유지는 완료되었고, 기초 PlayerItemState 저장과 같은 실행 안의 `Chest → Player → 귀환` 루팅도 구현됐다. 현재 흐름만을 위해 빈 `RaidSession`이나 별도 획득물 복사본을 추가하지 않는다. 이후 생환·사망 규칙이 실제로 확정되면 그때 원정 수명의 권위 소유자를 만들고, 메모리 규칙 검증 뒤 현재 저장 프로토타입에 레이드 결과와 기지 상태만 확장한다.
+PersistentGameplayShell의 같은 Player, Camera, InventoryUIManager, EventSystem과 PlayerInventoryState 유지는 완료되었고, 기초 PlayerItemState 저장과 같은 실행 안의 `Chest → Player → 귀환` 루팅도 구현됐다. 기지의 고정 Chest는 `Definition → placed instance → persistent runtime state → explicit Save DTO` 경계로 확장했으며 scene View가 원본을 소유하지 않는다. 현재 흐름만을 위해 빈 `RaidSession`, 별도 획득물 복사본이나 범용 모드 프레임워크를 추가하지 않는다. 이후 생환·사망 규칙 또는 배치 가구가 실제로 확정되면 그 수명과 migration 경계를 먼저 정한 뒤 현재 저장 프로토타입을 확장한다.
 
 도심형 도로·큐브 건물 생성은 이 순서와 별개로 공간 제작 위험을 먼저 확인한 기술 스파이크다. 현재 결과는 GameMapTest의 파생 공간만 바꾸며 Player 셸, 아이템 상태와 씬 이동의 권위 소유자를 바꾸지 않는다. 후속 랜드마크·내부·spawn 또는 다른 맵 유형은 각각 별도 요청과 검증 계약을 가진다.
 

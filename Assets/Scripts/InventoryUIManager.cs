@@ -97,6 +97,15 @@ public class InventoryUIManager : MonoBehaviour
 
     bool TryCreateStartingInventory(out StandardStashViewData inventoryData, out string error)
     {
+        if (!InventoryGridConstraints.TryValidateDimensions(
+                playerInventoryWidth,
+                playerInventoryHeight,
+                out error))
+        {
+            inventoryData = null;
+            return false;
+        }
+
         inventoryData = new StandardStashViewData(playerInventoryWidth, playerInventoryHeight);
         if (inventoryData == null)
         {
@@ -131,7 +140,12 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
-        var item = InventoryItemDataFactory.Create(definition);
+        if (!InventoryItemDataFactory.TryCreate(definition, out var item, out error))
+        {
+            error = $"Starting item ID {itemId} is invalid: {error}";
+            return false;
+        }
+
         var slot = target.GetInsertableId(item);
         if (!slot.HasValue)
         {
@@ -147,14 +161,25 @@ public class InventoryUIManager : MonoBehaviour
 
     public bool TryResetToStartingInventory(out string error)
     {
+        if (!TryCreateStartingPlayerState(out PlayerInventoryState startingState, out error))
+        {
+            return false;
+        }
+
+        return TryReplacePlayerState(startingState, out error);
+    }
+
+    public bool TryCreateStartingPlayerState(out PlayerInventoryState startingState, out string error)
+    {
+        startingState = null;
         if (!TryCreateStartingInventory(out StandardStashViewData startingInventory, out error))
         {
             return false;
         }
 
-        return TryReplacePlayerState(
-            new PlayerInventoryState(startingInventory, new EquipmentLoadoutData()),
-            out error);
+        startingState = new PlayerInventoryState(startingInventory, new EquipmentLoadoutData());
+        error = null;
+        return true;
     }
 
     public bool TryReplacePlayerInventory(StandardStashViewData replacement, out string error)

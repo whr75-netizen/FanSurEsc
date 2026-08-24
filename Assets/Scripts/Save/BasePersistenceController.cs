@@ -1,3 +1,6 @@
+using System;
+using FantasySurvival.BaseBuilding;
+using FantasySurvival.Inventory;
 using FantasySurvival.SceneFlow;
 using UnityEngine;
 using VariableInventorySystem;
@@ -10,12 +13,55 @@ namespace FantasySurvival.SaveSystem
     {
         private const float StatusDuration = 8f;
 
-        private string statusMessage = "F5 or Save Slot 1 to save the current inventory.";
+        [Header("Scene-authored persistent furniture")]
+        [SerializeField] private BaseFurnitureDatabase furnitureDatabase;
+        [SerializeField] private BaseFurnitureInstance[] persistentFurniture =
+            Array.Empty<BaseFurnitureInstance>();
+
+        private string statusMessage = "F5 or Save Slot 1 to save player and base state.";
         private float statusUntil;
+        private bool baseFurnitureBound;
 
         private void Start()
         {
-            ApplyPendingStartRequest();
+            if (!TryGetInventory(out InventoryUIManager inventory, out string error))
+            {
+                SetStatus($"Base initialization failed: {error}", true);
+                return;
+            }
+
+            if (!TryGetBaseOwner(out GameManager owner, out error))
+            {
+                SetStatus($"Base initialization failed: {error}", true);
+                return;
+            }
+
+            if (!TryValidateFurnitureDefinitions(out error))
+            {
+                SetStatus($"Base initialization failed: {error}", true);
+                return;
+            }
+
+            if (!TryApplyPendingStartRequest(
+                    inventory,
+                    owner,
+                    out bool allowAuthoredFurnitureInitialization))
+            {
+                // Do not bind an authored fallback or enable F5 after a requested load failed.
+                // This prevents a content mismatch from silently replacing the selected slot.
+                return;
+            }
+
+            if (!owner.BaseFurnitureState.TryBindAll(
+                    persistentFurniture,
+                    allowAuthoredFurnitureInitialization,
+                    out string bindError))
+            {
+                SetStatus($"Base furniture binding failed: {bindError}", true);
+                return;
+            }
+
+            baseFurnitureBound = true;
         }
 
         private void Update()
@@ -40,15 +86,22 @@ namespace FantasySurvival.SaveSystem
 
             string visibleStatus = Time.unscaledTime <= statusUntil || statusUntil <= 0f
                 ? statusMessage
-                : "F5 or Save Slot 1 to save.";
+                : "F5 or Save Slot 1 to save player and base state.";
             GUI.Label(new Rect(panel.x + 12f, panel.y + 64f, width - 24f, 42f), visibleStatus);
         }
 
         public bool SaveSlotOne()
         {
-            if (!TryGetInventory(out InventoryUIManager inventory, out string error))
+            if (!TryGetInventory(out InventoryUIManager inventory, out string error) ||
+                !TryGetBaseOwner(out GameManager owner, out error))
             {
                 SetStatus($"Save failed: {error}", true);
+                return false;
+            }
+
+            if (!baseFurnitureBound)
+            {
+                SetStatus("Save failed: base furniture is not bound to its runtime state.", true);
                 return false;
             }
 
@@ -68,10 +121,22 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            GameSaveData saveData = GameSaveManager.CreateSave(inventorySave);
+            if (!BaseFurnitureSaveCodec.TryCapture(
+                    owner.BaseFurnitureState,
+                    inventory.ItemDatabase,
+                    furnitureDatabase,
+                    out BaseSaveData baseSave,
+                    out error))
+            {
+                SetStatus($"Save failed: {error}", true);
+                return false;
+            }
+
+            GameSaveData saveData = GameSaveManager.CreateSave(inventorySave, baseSave);
             if (!GameSaveManager.TryWriteSlotOne(
                     saveData,
                     inventory.ItemDatabase,
+                    furnitureDatabase,
                     inventory.PlayerInventoryData.CapacityWidth,
                     inventory.PlayerInventoryData.CapacityHeight,
                     out error))
@@ -80,67 +145,299 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            SetStatus($"Saved slot 1 at {GameSaveManager.GetDisplayTimestamp(saveData)}", false);
+            SetStatus($"Saved player and base to slot 1 at {GameSaveManager.GetDisplayTimestamp(saveData)}", false);
             return true;
         }
 
-        private void ApplyPendingStartRequest()
+        private bool TryApplyPendingStartRequest(
+            InventoryUIManager inventory,
+            GameManager owner,
+            out bool allowAuthoredFurnitureInitialization)
         {
-            if (!GameStartRequest.TryConsume(out GameStartMode mode, out GameSaveData saveData))
+            allowAuthoredFurnitureInitialization = false;
+            if (!GameStartRequest.TryConsume(
+                    out GameStartMode mode,
+                    out GameSaveData saveData,
+                    out GameSaveData fallbackSave))
             {
-                return;
-            }
-
-            if (!TryGetInventory(out InventoryUIManager inventory, out string error))
-            {
-                SetStatus($"Start request failed: {error}", true);
-                return;
+                allowAuthoredFurnitureInitialization = owner.BaseFurnitureState.StateCount == 0;
+                return true;
             }
 
             if (mode == GameStartMode.NewGame)
             {
-                if (!inventory.TryResetToStartingInventory(out error))
+                bool applied = TryApplyNewGame(inventory, owner);
+                allowAuthoredFurnitureInitialization = applied;
+                return applied;
+            }
+
+            if (mode == GameStartMode.LoadGame && saveData != null)
+            {
+                return TryApplyLoadGame(
+                    inventory,
+                    owner,
+                    saveData,
+                    fallbackSave,
+                    out allowAuthoredFurnitureInitialization);
+            }
+
+            SetStatus("Start request was invalid.", true);
+            return false;
+        }
+
+        private bool TryApplyNewGame(InventoryUIManager inventory, GameManager owner)
+        {
+            if (!inventory.TryCreateStartingPlayerState(out PlayerInventoryState playerCandidate, out string error))
+            {
+                SetStatus($"New game failed: {error}", true);
+                return false;
+            }
+
+            var baseCandidate = new BaseFurnitureStateStore();
+            if (!baseCandidate.TryValidateBindings(persistentFurniture, true, out error) ||
+                !owner.CanReplaceBaseFurnitureState(out error))
+            {
+                SetStatus($"New game failed: {error}", true);
+                return false;
+            }
+
+            BaseFurnitureStateStore previousBase = owner.BaseFurnitureState;
+            if (!owner.TryReplaceBaseFurnitureState(baseCandidate, out error))
+            {
+                SetStatus($"New game failed: {error}", true);
+                return false;
+            }
+
+            // Publish the player-state change only after the paired base state is already live.
+            // Current observers can therefore never see a new player state with the old base.
+            if (!inventory.TryReplacePlayerState(playerCandidate, out error))
+            {
+                if (!owner.TryReplaceBaseFurnitureState(previousBase, out string rollbackError))
                 {
-                    SetStatus($"New game failed: {error}", true);
-                    return;
+                    error += $" Base rollback also failed: {rollbackError}";
                 }
 
-                SetStatus("New game started at the base. Existing save slot was not overwritten.", false);
-                return;
+                SetStatus($"New game failed: {error}", true);
+                return false;
             }
 
-            if (mode != GameStartMode.LoadGame || saveData == null)
+            SetStatus("New game started at the base. Existing save slot was not overwritten.", false);
+            return true;
+        }
+
+        private bool TryApplyLoadGame(
+            InventoryUIManager inventory,
+            GameManager owner,
+            GameSaveData saveData,
+            GameSaveData fallbackSave,
+            out bool allowAuthoredFurnitureInitialization)
+        {
+            allowAuthoredFurnitureInitialization = false;
+            if (TryPrepareLoadGame(
+                    inventory,
+                    owner,
+                    saveData,
+                    out PlayerInventoryState playerCandidate,
+                    out BaseFurnitureStateStore baseCandidate,
+                    out bool primaryAllowsAuthoredInitialization,
+                    out string primaryError))
             {
-                SetStatus("Start request was invalid.", true);
-                return;
+                if (!TryApplyPreparedLoad(
+                        inventory,
+                        owner,
+                        playerCandidate,
+                        baseCandidate,
+                        out string applyError))
+                {
+                    SetStatus($"Load failed; current player and base state were kept: {applyError}", true);
+                    return false;
+                }
+
+                allowAuthoredFurnitureInitialization = primaryAllowsAuthoredInitialization;
+                SetStatus(
+                    $"Loaded player and base from slot 1 at {GameSaveManager.GetDisplayTimestamp(saveData)}",
+                    false);
+                return true;
             }
 
-            StandardStashViewData current = inventory.PlayerInventoryData;
-            if (current == null)
+            if (fallbackSave == null)
             {
-                SetStatus("Load failed: current inventory configuration is missing.", true);
-                return;
+                SetStatus(
+                    $"Load failed; current player and base state were kept: {primaryError}",
+                    true);
+                return false;
             }
 
-            if (!InventorySaveCodec.TryRestore(
-                    saveData.playerItems,
-                    inventory.ItemDatabase,
-                    current.CapacityWidth,
-                    current.CapacityHeight,
-                    out FantasySurvival.Inventory.PlayerInventoryState restored,
-                    out error))
+            if (!TryPrepareLoadGame(
+                    inventory,
+                    owner,
+                    fallbackSave,
+                    out playerCandidate,
+                    out baseCandidate,
+                    out bool fallbackAllowsAuthoredInitialization,
+                    out string fallbackError))
             {
-                SetStatus($"Load failed; current inventory was kept: {error}", true);
-                return;
+                SetStatus(
+                    $"Load failed; current player and base state were kept. " +
+                    $"Primary: {primaryError} Backup: {fallbackError}",
+                    true);
+                return false;
             }
 
-            if (!inventory.TryReplacePlayerState(restored, out error))
+            if (!TryApplyPreparedLoad(
+                    inventory,
+                    owner,
+                    playerCandidate,
+                    baseCandidate,
+                    out string fallbackApplyError))
             {
-                SetStatus($"Load failed; current inventory was kept: {error}", true);
-                return;
+                SetStatus(
+                    $"Backup load failed; current player and base state were kept: {fallbackApplyError}",
+                    true);
+                return false;
             }
 
-            SetStatus($"Loaded slot 1 from {GameSaveManager.GetDisplayTimestamp(saveData)}", false);
+            allowAuthoredFurnitureInitialization = fallbackAllowsAuthoredInitialization;
+            SetStatus(
+                $"Primary save was incompatible with the current base layout; loaded validated backup at " +
+                $"{GameSaveManager.GetDisplayTimestamp(fallbackSave)}",
+                false);
+            return true;
+        }
+
+        private bool TryPrepareLoadGame(
+            InventoryUIManager inventory,
+            GameManager owner,
+            GameSaveData saveData,
+            out PlayerInventoryState playerCandidate,
+            out BaseFurnitureStateStore baseCandidate,
+            out bool allowAuthoredFurnitureInitialization,
+            out string error)
+        {
+            playerCandidate = null;
+            baseCandidate = null;
+            allowAuthoredFurnitureInitialization =
+                saveData?.baseState != null &&
+                saveData.baseState.allowAuthoredFurnitureInitialization;
+
+            try
+            {
+                StandardStashViewData current = inventory.PlayerInventoryData;
+                if (saveData == null || current == null)
+                {
+                    error = saveData == null
+                        ? "save candidate is missing."
+                        : "current inventory configuration is missing.";
+                    return false;
+                }
+
+                if (!InventorySaveCodec.TryRestore(
+                        saveData.playerItems,
+                        inventory.ItemDatabase,
+                        current.CapacityWidth,
+                        current.CapacityHeight,
+                        out playerCandidate,
+                        out error))
+                {
+                    return false;
+                }
+
+                if (!BaseFurnitureSaveCodec.TryRestore(
+                        saveData.baseState,
+                        inventory.ItemDatabase,
+                        furnitureDatabase,
+                        out baseCandidate,
+                        out error))
+                {
+                    return false;
+                }
+
+                if (!baseCandidate.TryValidateBindings(
+                        persistentFurniture,
+                        allowAuthoredFurnitureInitialization,
+                        out error))
+                {
+                    return false;
+                }
+
+                return owner.CanReplaceBaseFurnitureState(out error);
+            }
+            catch (Exception exception)
+            {
+                playerCandidate = null;
+                baseCandidate = null;
+                error = $"save preparation failed unexpectedly: {exception.Message}";
+                return false;
+            }
+        }
+
+        private static bool TryApplyPreparedLoad(
+            InventoryUIManager inventory,
+            GameManager owner,
+            PlayerInventoryState playerCandidate,
+            BaseFurnitureStateStore baseCandidate,
+            out string error)
+        {
+            BaseFurnitureStateStore previousBase = owner.BaseFurnitureState;
+            if (!owner.TryReplaceBaseFurnitureState(baseCandidate, out error))
+            {
+                return false;
+            }
+
+            // Inventory observers are notified only once both authoritative states are current.
+            if (!inventory.TryReplacePlayerState(playerCandidate, out error))
+            {
+                if (!owner.TryReplaceBaseFurnitureState(previousBase, out string rollbackError))
+                {
+                    error += $" Base rollback also failed: {rollbackError}";
+                }
+
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        private bool TryValidateFurnitureDefinitions(out string error)
+        {
+            if (furnitureDatabase == null)
+            {
+                error = "base furniture database is missing.";
+                return false;
+            }
+
+            if (!furnitureDatabase.TryValidate(out error))
+            {
+                return false;
+            }
+
+            if (persistentFurniture == null)
+            {
+                error = "persistent furniture list is missing.";
+                return false;
+            }
+
+            foreach (BaseFurnitureInstance instance in persistentFurniture)
+            {
+                if (instance == null)
+                {
+                    error = "persistent furniture list contains a missing instance.";
+                    return false;
+                }
+
+                if (!furnitureDatabase.TryGet(
+                        instance.DefinitionKey,
+                        out BaseFurnitureDefinition registered) ||
+                    registered != instance.Definition)
+                {
+                    error = $"furniture '{instance.name}' does not reference its registered definition asset.";
+                    return false;
+                }
+            }
+
+            error = null;
+            return true;
         }
 
         private static bool TryGetInventory(out InventoryUIManager inventory, out string error)
@@ -150,6 +447,19 @@ namespace FantasySurvival.SaveSystem
             if (inventory == null || !inventory.isActiveAndEnabled)
             {
                 error = "persistent player inventory is unavailable.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool TryGetBaseOwner(out GameManager owner, out string error)
+        {
+            owner = GameManager.Instance;
+            if (owner == null || !owner.isActiveAndEnabled)
+            {
+                error = "persistent GameManager base-state owner is unavailable.";
                 return false;
             }
 

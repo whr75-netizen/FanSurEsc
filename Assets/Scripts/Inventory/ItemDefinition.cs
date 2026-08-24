@@ -61,6 +61,33 @@ namespace FantasySurvival.Inventory
                    equipmentSlot == EquipmentSlotCatalog.GetSlotType(slot);
         }
 
+        public bool TryValidateInventoryShape(out string error)
+        {
+            if (id <= 0)
+            {
+                error = $"Item definition '{name}' has an invalid ID.";
+                return false;
+            }
+
+            if (!InventoryGridConstraints.TryValidateDimensions(width, height, out error))
+            {
+                error = $"Item definition ID {id} has an invalid inventory footprint: {error}";
+                return false;
+            }
+
+            if (IsContainer && !InventoryGridConstraints.TryValidateDimensions(
+                    containerWidth,
+                    containerHeight,
+                    out error))
+            {
+                error = $"Item definition ID {id} has invalid container dimensions: {error}";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
         private void OnValidate()
         {
             id = Mathf.Max(1, id);

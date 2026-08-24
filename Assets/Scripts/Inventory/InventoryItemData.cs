@@ -3,6 +3,28 @@ using VariableInventorySystem;
 
 namespace FantasySurvival.Inventory
 {
+    public static class InventoryGridConstraints
+    {
+        public const int MaxDimension = 256;
+        public const int MaxCellCount = 65536;
+
+        public static bool TryValidateDimensions(int width, int height, out string error)
+        {
+            long cellCount = (long)width * height;
+            if (width <= 0 || width > MaxDimension ||
+                height <= 0 || height > MaxDimension ||
+                cellCount <= 0 || cellCount > MaxCellCount)
+            {
+                error = $"Inventory grid {width}x{height} exceeds the supported " +
+                        $"{MaxDimension}x{MaxDimension} / {MaxCellCount}-cell limit.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+    }
+
     public class InventoryItemData : IVariableInventoryOwnedCellData
     {
         private readonly IVariableInventoryAsset imageAsset;
@@ -20,6 +42,12 @@ namespace FantasySurvival.Inventory
             Definition = definition != null
                 ? definition
                 : throw new ArgumentNullException(nameof(definition));
+
+            if (!definition.TryValidateInventoryShape(out string error))
+            {
+                throw new ArgumentException(error, nameof(definition));
+            }
+
             imageAsset = new StandardAsset(definition.Icon);
         }
 
@@ -50,6 +78,16 @@ namespace FantasySurvival.Inventory
                     nameof(definition));
             }
 
+            if (!InventoryGridConstraints.TryValidateDimensions(
+                    definition.ContainerWidth,
+                    definition.ContainerHeight,
+                    out string error))
+            {
+                throw new ArgumentException(
+                    $"Item definition {definition.Id} has invalid container dimensions: {error}",
+                    nameof(definition));
+            }
+
             CaseData = new StandardCaseViewData(
                 definition.ContainerWidth,
                 definition.ContainerHeight);
@@ -60,14 +98,45 @@ namespace FantasySurvival.Inventory
     {
         public static IVariableInventoryCellData Create(ItemDefinition definition)
         {
-            if (definition == null)
+            if (!TryCreate(definition, out IVariableInventoryCellData item, out string error))
             {
-                throw new ArgumentNullException(nameof(definition));
+                throw new ArgumentException(error, nameof(definition));
             }
 
-            return definition.IsContainer
-                ? new InventoryContainerItemData(definition)
-                : new InventoryItemData(definition);
+            return item;
+        }
+
+        public static bool TryCreate(
+            ItemDefinition definition,
+            out IVariableInventoryCellData item,
+            out string error)
+        {
+            item = null;
+            if (definition == null)
+            {
+                error = "Item definition is missing.";
+                return false;
+            }
+
+            if (!definition.TryValidateInventoryShape(out error))
+            {
+                return false;
+            }
+
+            try
+            {
+                item = definition.IsContainer
+                    ? new InventoryContainerItemData(definition)
+                    : new InventoryItemData(definition);
+            }
+            catch (ArgumentException exception)
+            {
+                error = exception.Message;
+                return false;
+            }
+
+            error = null;
+            return true;
         }
     }
 }

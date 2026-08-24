@@ -112,7 +112,7 @@ namespace VariableInventorySystem
 
         public virtual bool CheckInsert(int id, VariableInventorySystem.IVariableInventoryCellData cellData)
         {
-            if (id < 0 || cellData == null)
+            if (id < 0 || id >= CellData.Length || cellData == null)
             {
                 return false;
             }

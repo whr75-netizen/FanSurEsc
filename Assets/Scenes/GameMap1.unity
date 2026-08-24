@@ -469,6 +469,7 @@ GameObject:
   - component: {fileID: 287777699}
   - component: {fileID: 287777703}
   - component: {fileID: 287777704}
+  - component: {fileID: 287777705}
   m_Layer: 3
   m_Name: Chest
   m_TagString: Obstacle
@@ -583,6 +584,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chestWidth: 6
   chestHeight: 5
+  itemDatabase: {fileID: 0}
+  startingItemIds: 
 --- !u!114 &287777704
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,6 +598,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8cb5f087c616b0439661d60595683f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Interaction.ChestInteractable
+--- !u!114 &287777705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 287777698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffdc6822f9990740b5ae4428c7dd74d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.BaseBuilding.BaseFurnitureInstance
+  persistentId: core:home/chest_a
+  definition: {fileID: 11400000, guid: ccc7ae4341dad4140928e10f819a57a8, type: 2}
+  storageChest: {fileID: 287777703}
 --- !u!1001 &333426423
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1480,6 +1498,7 @@ GameObject:
   - component: {fileID: 1476437391}
   - component: {fileID: 1476437395}
   - component: {fileID: 1476437396}
+  - component: {fileID: 1476437397}
   m_Layer: 3
   m_Name: Chest (1)
   m_TagString: Obstacle
@@ -1594,6 +1613,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chestWidth: 6
   chestHeight: 5
+  itemDatabase: {fileID: 0}
+  startingItemIds: 
 --- !u!114 &1476437396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1606,6 +1627,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8cb5f087c616b0439661d60595683f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Interaction.ChestInteractable
+--- !u!114 &1476437397
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1476437389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ffdc6822f9990740b5ae4428c7dd74d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.BaseBuilding.BaseFurnitureInstance
+  persistentId: core:home/chest_b
+  definition: {fileID: 11400000, guid: ccc7ae4341dad4140928e10f819a57a8, type: 2}
+  storageChest: {fileID: 1476437395}
 --- !u!1 &1597523787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1635,6 +1671,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5089fbf94f258e84e9478a03461c8d57, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.SaveSystem.BasePersistenceController
+  furnitureDatabase: {fileID: 11400000, guid: b22e0ce241fbc1e48a030cf0bba43bb5, type: 2}
+  persistentFurniture:
+  - {fileID: 287777705}
+  - {fileID: 1476437397}
 --- !u!4 &1597523789
 Transform:
   m_ObjectHideFlags: 0

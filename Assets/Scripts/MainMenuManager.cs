@@ -1,3 +1,5 @@
+using System;
+using FantasySurvival.BaseBuilding;
 using FantasySurvival.Inventory;
 using FantasySurvival.SaveSystem;
 using UnityEngine;
@@ -14,6 +16,7 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Load Slot")]
     [SerializeField] private ItemDatabase itemDatabase;
+    [SerializeField] private BaseFurnitureDatabase furnitureDatabase;
     [SerializeField] private Text loadSlotText;
     [SerializeField] private Button loadSlotButton;
 
@@ -24,6 +27,7 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private Text statusText;
 
     private GameSaveData cachedSave;
+    private GameSaveData cachedFallbackSave;
 
     private void Awake()
     {
@@ -75,7 +79,7 @@ public class MainMenuManager : MonoBehaviour
             return;
         }
 
-        if (!GameStartRequest.QueueLoad(cachedSave))
+        if (!GameStartRequest.QueueLoad(cachedSave, cachedFallbackSave))
         {
             SetStatus("Could not queue the selected save.");
             return;
@@ -87,6 +91,7 @@ public class MainMenuManager : MonoBehaviour
     private bool TrySelectLoadCandidate(out bool loadedBackup, out string status)
     {
         cachedSave = null;
+        cachedFallbackSave = null;
         loadedBackup = false;
 
         GameSaveManager.ReadSlotOneCandidates(
@@ -95,14 +100,18 @@ public class MainMenuManager : MonoBehaviour
             out GameSaveData backup,
             out string backupReadError);
 
-        if (TryValidateLoadCandidate(primary, out string primaryValidationError))
+        bool primaryValid = TryValidateLoadCandidate(primary, out string primaryValidationError);
+        bool backupValid = TryValidateLoadCandidate(backup, out string backupValidationError);
+
+        if (primaryValid)
         {
             cachedSave = primary;
+            cachedFallbackSave = backupValid ? backup : null;
             status = string.Empty;
             return true;
         }
 
-        if (TryValidateLoadCandidate(backup, out string backupValidationError))
+        if (backupValid)
         {
             cachedSave = backup;
             loadedBackup = true;
@@ -117,19 +126,38 @@ public class MainMenuManager : MonoBehaviour
 
     private bool TryValidateLoadCandidate(GameSaveData candidate, out string error)
     {
-        if (candidate == null)
+        try
         {
-            error = "No readable save.";
+            if (candidate == null)
+            {
+                error = "No readable save.";
+                return false;
+            }
+
+            if (!InventorySaveCodec.TryRestore(
+                    candidate.playerItems,
+                    itemDatabase,
+                    InventoryUIManager.DefaultInventoryWidth,
+                    InventoryUIManager.DefaultInventoryHeight,
+                    out _,
+                    out error))
+            {
+                return false;
+            }
+
+            return BaseFurnitureSaveCodec.TryRestore(
+                candidate.baseState,
+                itemDatabase,
+                furnitureDatabase,
+                out _,
+                out error);
+        }
+        catch (Exception exception)
+        {
+            // A malformed primary must never prevent validation of the backup candidate.
+            error = $"Save validation failed unexpectedly: {exception.Message}";
             return false;
         }
-
-        return InventorySaveCodec.TryRestore(
-            candidate.playerItems,
-            itemDatabase,
-            InventoryUIManager.DefaultInventoryWidth,
-            InventoryUIManager.DefaultInventoryHeight,
-            out _,
-            out error);
     }
 
     private static string CombineReadAndValidationError(string readError, string validationError)
@@ -163,6 +191,7 @@ public class MainMenuManager : MonoBehaviour
     public void ShowMainPanel()
     {
         cachedSave = null;
+        cachedFallbackSave = null;
         ShowOnly(mainPanel);
         SetStatus(string.Empty);
     }

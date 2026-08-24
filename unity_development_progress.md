@@ -1,7 +1,7 @@
 # Unity 개발 진행 기록
 
-**마지막 확인:** 2026-08-23
-**확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, `GameMap1`/`GameMapTest`; Windows Development Player build 성공
+**마지막 확인:** 2026-08-24
+**확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, `GameMap1`/`GameMapTest`; 이번 기지 가구 변경은 Editor compile과 Play Mode 확인, 마지막 Windows Development Player build는 2026-08-23 이전 변경 기준 성공
 **문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 전체 게임 방향과 Stage 의존성은 `extraction_survival_game_design_dev_plan.md`를 따른다.
 
 ## 문서 사용 규칙
@@ -137,7 +137,8 @@ Interactable (abstract base class)
 - Chest UI가 열린 동안에는 다른 Chest가 더 가까워져도 처음 연 Chest를 유지한다. 정상적으로 닫힌 뒤 다음 E부터 다시 최근접 Chest를 선택한다.
 - `InventoryUIManager`가 열린 Chest를 `currentOpenedChest`로 기억하고 매 프레임 별도 거리 검사를 한다.
 - 거리 초과 시 드래그를 취소하고 case popup을 정리한 뒤 Player/외부 인벤토리를 모두 닫는다.
-- 각 Chest는 scene-local이며 `Awake`에서 6×5 빈 `StandardStashViewData`를 새로 만든다. 현재 Chest 내용 영속성은 없다.
+- `GameMap1`의 두 Chest 오브젝트는 scene-local View이지만, 각각 `core:home/chest_a`, `core:home/chest_b`라는 stable placed ID를 가진다. 실제 6×5 내용은 persistent `GameManager`가 소유한 `BaseFurnitureStateStore`에 있으며 씬 재진입 때 새 Chest View에 같은 런타임 grid를 다시 연결한다.
+- `GameMapTest`의 시험 Chest는 이 기지 가구 목록에 등록하지 않았다. 원정 씬 진입마다 기존 authored loot를 새로 만드는 scene-local 컨테이너라는 현재 규칙을 유지한다.
 
 ### Map Selection Terminal
 
@@ -400,25 +401,28 @@ Interactable (abstract base class)
 ### 저장되는 데이터
 
 - 단일 프로토타입 슬롯 경로는 `Application.persistentDataPath/Saves/save_slot_1.json`이며 이전 정상본은 `.bak`으로 유지한다.
-- 현재 스키마 버전은 3이고 플레이어 인벤토리와 장비를 하나의 `playerItems` / `flat-player-items-v1` 목록으로 저장한다. 유효한 개발용 v2 `flat-records-v1`은 읽을 때 장비가 빈 v3 상태로 변환하며, 기존 아이템을 임의 장착하지 않는다.
+- 현재 최상위 스키마 버전은 4다. 플레이어 인벤토리와 장비는 `playerItems` / `flat-player-items-v1`, 기지 가구는 `baseState` v2 / `base-furniture-v1`으로 저장한다. 유효한 개발용 v2와 v3 저장은 읽을 때 플레이어 아이템을 보존하고 빈 기지 상태를 추가한 v4 메모리 데이터로 변환하며 원본 파일을 자동 덮어쓰지 않는다.
 - 각 아이템은 ItemDatabase의 숫자 `definitionId`, 파일 내부 `recordId`와 컨테이너 부모 관계, 그리드 슬롯 또는 `equipmentSlot`, 회전 상태를 저장한다.
 - 컨테이너 내부 아이템은 파일 내부 관계용 `recordId`로 연결한다. 이 값은 영구 아이템 instance ID가 아니다.
 - 이름, 설명, 아이콘, 아이템 크기, 컨테이너 크기와 장착 가능 슬롯은 저장하지 않고 같은 `ItemDatabase.asset`에서 다시 조회한다.
 - 씬, Player 위치, 열린 UI, 드래그, Camera, Portal, Enemy와 일시 상호작용 상태는 저장하지 않는다. 로드 후 시작 위치는 항상 기지의 SpawnPoint다.
 
-### 기지 상태와 ItemDatabase 경계
+### 기지 상태와 definition 경계
 
-- `[코드/씬 확인]` 현재 GameMap1의 시험 Chest 2개는 stable ID가 없고 매 씬 로드마다 빈 6×5 데이터를 생성하므로 아직 기지 영속 데이터로 저장하지 않는다.
-- `[코드/씬 확인]` `BaseSaveData`에는 향후 확장용 format version만 있고, 확인되지 않은 기지 규칙이나 Chest 소유권을 임의로 만들지 않았다.
-- `[코드/씬 확인]` ItemDatabase는 기존 ScriptableObject asset 하나를 persistent shell과 Main Menu가 직접 참조한다. 별도 DontDestroy Manager나 씬별 복사본을 추가하지 않았다.
+- `[코드/씬 확인]` GameMap1의 두 Chest는 각각 stable placed ID `core:home/chest_a`, `core:home/chest_b`와 공유 definition `core:storage_chest`를 가진다. 두 ID의 저장 grid는 서로 다른 객체이며 같은 내용을 공유하지 않는다.
+- `[코드 확인]` 이름과 6×5 저장 크기 같은 공유 프리셋은 `BaseFurnitureDefinition`, 개별 배치물의 변하는 내용은 `BaseFurnitureRuntimeState`에 분리했다. Save DTO는 이 원본의 직렬화 표현일 뿐 병행 권위 상태가 아니다.
+- `[코드 확인]` furniture definition key와 placed ID는 향후 모드 충돌을 줄이도록 소문자 `namespace:path` 형식이다. 알 수 없는 definition, 중복 key/placed ID, definition과 저장 크기 불일치는 조용히 대체하지 않고 로드를 거부한다.
+- `[현재 정책]` 제거된 모드의 알 수 없는 가구/아이템 DTO를 코어 게임만 로드한 뒤 opaque 상태로 재저장하지 않는다. 대신 primary 원본을 수정하지 않는 fail-closed와 정상 backup 검증을 사용한다. 모드 hot-uninstall 보존이 필요해질 때 별도 orphan-content 정책과 migration을 설계한다.
+- `[코드/씬 확인]` ItemDatabase와 BaseFurnitureDatabase는 ScriptableObject catalog를 기존 persistent shell/Main Menu/기지 controller가 직접 참조한다. 새 전역 Manager나 reflection 기반 범용 저장 프레임워크는 추가하지 않았다.
 
 ### 저장·로드 안전성
 
 - 저장 전에 열린 Player/Chest UI, 드래그와 case popup을 정리한 뒤 캡처한다.
-- 쓰기 전에 DB의 null·잘못된 ID·중복 ID, 전체 배치·부모 관계, 런타임 단일 소유권, 장비 슬롯 유효성·호환성과 중복을 검증한다.
+- 쓰기 전에 두 DB의 null·잘못된 ID·중복 ID, 전체 배치·부모 관계, 런타임 단일 소유권, 장비 슬롯 유효성·호환성과 가구별 저장 크기를 검증한다.
 - 임시 파일을 먼저 쓴 뒤 정상 파일로 교체하고, 기존 정상 파일은 `.bak`으로 남긴다.
-- 로드는 primary를 전체 의미 검증한 뒤 사용하며, primary의 JSON 헤더가 정상이어도 아이템 ID·배치·부모·장비 슬롯 관계가 손상됐으면 정상 backup을 검증해 대신 선택한다.
-- 복원은 별도 `PlayerInventoryState`(8×9 인벤토리와 12슬롯 장비) 후보를 완성한 뒤 한 번에 교체하므로 실패 시 현재 상태를 유지한다.
+- 로드는 primary를 전체 의미 검증한 뒤 사용하며, primary의 JSON 헤더가 정상이어도 아이템·가구 ID, 배치, 부모, 장비 슬롯 또는 가구 저장 관계가 손상됐으면 정상 backup을 별도로 검증해 대신 선택한다. 후보 검증 중 예외가 나도 다음 backup 검증을 막지 않는다.
+- 복원은 별도 `PlayerInventoryState`와 `BaseFurnitureStateStore` 후보를 모두 완성·검증한 뒤 적용한다. Base를 먼저 교체하고 Player 완료 이벤트를 나중에 발행하므로 현재 관찰자는 새 Player와 옛 Base가 섞인 순간을 보지 않으며, Player 적용 실패 시 이전 Base로 되돌린다.
+- 비정상 파일의 메모리 과다 할당을 막기 위해 모든 가구 레코드의 ID·definition·크기와 전체 cell/item 예산을 먼저 검사하고, 전체 선검증 뒤에만 실제 grid와 item 객체를 만든다.
 - 저장 UI는 현재 기지 `GameMap1`의 우측 상단 OnGUI 버튼과 `F5`로만 제공한다. 정식 저장 메뉴 디자인은 후속이다.
 
 ### 2026-08-20 검증 결과
@@ -451,7 +455,7 @@ Interactable (abstract base class)
 - `[코드/실행 확인]` 임시 정의 데이터로 동일 객체의 인벤토리↔장비 이동, 이중 소유 거부, 잘못된 슬롯 거부를 확인했다.
 - `[코드/실행 확인]` 장착된 가방의 내부 아이템을 포함한 4개 런타임 객체를 `Capture → JSON → FromJson → Restore`로 왕복했고, 그리드·장비·컨테이너의 소유자가 정확히 복원됐다.
 - `[코드/실행 확인]` 컨테이너 A→B→A 간접 순환 삽입을 기존 소유권 변경 없이 거부했고, 장비 셀을 기존 플레이어/상자 View에 전달해도 교차 hover 예외가 발생하지 않음을 확인했다.
-- `[코드 확인]` 유효한 v2 저장은 메모리에서 v3로 변환하며 장비를 모두 빈 상태로 둔다. 기존 v2 파일을 로드 시 자동 덮어쓰지 않고 다음 명시적 저장부터 v3로 기록한다. 기존 v3의 `equipmentSlot=12`는 그대로 `W1`을 뜻하므로 이전 단일 Weapon 저장과 호환된다.
+- `[코드 확인]` 유효한 v2 저장은 장비가 빈 플레이어 상태로, 유효한 v3 저장은 기존 장비까지 보존한 상태로 각각 v4 메모리 데이터로 변환하고 빈 기지 상태를 붙인다. 기존 파일은 로드 시 자동 덮어쓰지 않으며 다음 명시적 저장부터 v4로 기록한다. 기존 v3의 `equipmentSlot=12`는 그대로 `W1`을 뜻한다.
 - `[코드/에셋 확인]` ItemDefinition ID 1~5의 기존 총기 정의는 `EquipmentSlot.Weapon`에 호환되고 ID 6 시험 보관함은 `None`을 유지한다. 하나의 Weapon 슬롯에는 이 총기 중 한 개만 장착할 수 있으며 같은 `InventoryItemData`와 단일 `InventoryOwner` 규칙을 사용한다.
 - `[코드/에셋 확인]` 프로젝트에는 총기 2D 아이콘과 Humanoid `Pistol_*` 애니메이션 클립은 있지만 실제 총기 3D 모델·프리팹은 없다. 이 항목의 “실제 공격 미연결”은 당시 상태이며, 시험용 공격 판정은 2026-08-22 후속 `## 16`에서 구현했다.
 - `[미정]` 이 당시에는 장착 아이템을 실제 공격의 권위 있는 무기로 사용하는 방식, 조준·발사 입력, 총기 3D 표현과 사격 타이밍이 미정이었다. `## 16`의 시험 판정 뒤에도 최종 키·밸런스·표현은 확정하지 않는다.
@@ -660,16 +664,16 @@ Interactable (abstract base class)
 |---|---|
 | 권위 소유자 | 원정 Chest 안에서는 해당 scene-local `StandardStashViewData`, 획득 뒤에는 persistent `PlayerInventoryState.Inventory`가 같은 `InventoryItemData` 객체의 유일한 소유자다. |
 | 수명 범위 | 시험 Chest와 남은 내용물은 `GameMapTest` Scene, 플레이어가 획득한 아이템은 현재 Play Session의 persistent Player 셸 수명이다. |
-| 생성·파괴 주체 | `Chest.Awake`가 직렬화된 DB ID 목록으로 런타임 grid를 한 번 만든다. Chest와 남은 내용물은 씬 unload 때 끝나며, 플레이어로 이전된 객체는 셸과 함께 유지된다. |
+| 생성·파괴 주체 | persistent grid가 아직 연결되지 않은 Chest는 `Awake`에서 직렬화된 DB ID 목록을 임시 grid에 전부 배치한 뒤 authored grid를 한 번 확정한다. 이미 외부 grid가 연결된 늦은 `Awake`는 그 grid를 검증해 보존한다. Chest와 남은 내용물은 씬 unload 때 끝나며, 플레이어로 이전된 객체는 셸과 함께 유지된다. |
 | 변경 진입점 | 기존 UI 드래그가 사용하는 컨테이너 `InsertInventoryItem` 경계로 원본 소유자에서 제거한 뒤 새 소유자에 삽입한다. 별도 보상 지급이나 복사 경로는 없다. |
 | 이전 규칙 | 아이템 하나는 동시에 한 논리 컨테이너에만 존재한다. 이전 실패 시 기존 컨테이너 API의 소유권 검증과 drag 취소 경계를 사용한다. |
 | 파생 표현 | 플레이어·외부 인벤토리 View는 현재 grid의 파생 UI이며 열 때 같은 런타임 데이터를 `Apply`한다. |
 | 저장 경계 | 이번 검증은 무저장 Play Session 연속성이다. 기존 플레이어 단일 슬롯 저장은 별도 기능이며 Chest 상태·레이드 결과를 추가하지 않았다. |
-| 업데이트 주체 | Chest seed는 `Awake` 한 번뿐이며 독립 `Update`, 새 Manager 또는 `RaidSession`은 없다. |
+| 업데이트 주체 | Chest authored seed는 외부 binding이 없을 때 `Awake` 한 번뿐이며 독립 `Update`, 새 Manager 또는 `RaidSession`은 없다. |
 
 ### 현재 구현
 
-- `[코드 확인]` `Chest`는 선택적인 `ItemDatabase`와 시작 definition ID 배열을 받는다. 배열이 비어 있으면 기존처럼 빈 grid를 만들므로 `GameMap1` Chest 2개의 동작은 바뀌지 않는다.
+- `[코드 확인]` `Chest.Awake`는 외부 상태가 없을 때만 임시 grid에 authored ID 전체를 배치한 뒤 한 번에 공개한다. `GameMapTest` 시험 Chest는 기존처럼 ID 1을 만들고, 비활성 GameMap1 Chest가 store에 먼저 연결된 뒤 늦게 Awake를 실행해도 연결된 기지 원본을 초기 seed로 덮어쓰지 않는다.
 - `[코드 확인]` 시작 목록은 임시 grid에 전부 배치할 수 있을 때만 유효하다. DB 누락, 알 수 없는 ID 또는 공간 부족이면 부분 seed를 노출하지 않고 빈 grid와 명시적 오류를 남긴다.
 - `[씬 확인]` `GameMapTest`의 `Stage3_TestLootChest`는 `RaidEntry`에서 2m 떨어진 불투명 Cube이며, 6×5 Chest, Collider, `ChestInteractable`, `ItemDatabase`, 시작 ID 1 하나와 기존 이동 충돌 규칙에 필요한 `Obstacle` 태그가 직렬화되어 있다.
 - `[구조 결정]` 현재 고정 왕복과 같은 세션 내 획득물 보존에는 `RaidSession`이 필요하지 않다. `DirectSceneTravel`이 중복 이동을 막고, persistent `PlayerInventoryState`가 획득 뒤 원본 상태를 이미 소유한다. 성공·실패·사망 손실처럼 별도 원정 상태가 생길 때만 그 수명에 맞는 소유자를 설계한다.
@@ -682,5 +686,50 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` `GameMap1` 귀환 뒤 shell, Player, `InventoryUIManager`, `PlayerState`, Player inventory와 획득 아이템이 모두 같은 참조/Entity ID였다. 슬롯, 회전과 단일 소유권도 유지됐다.
 - `[Play Mode 호출 확인]` 별도 실행에서 `GameMap1 → GameMapTest → GameMap1 → GameMapTest → GameMap1`을 수행했다. 첫 Chest 오브젝트는 unload 뒤 파괴됐고 두 번째 진입의 Chest data와 ID 1 아이템은 각각 새 객체였으며, 매 진입 seed는 하나, persistent Player state는 같은 참조였다. 두 Chest 모두 `Obstacle` 태그였다.
 - `[Console 기준선]` 검증 뒤 Error는 작업 전과 같은 7개다. 이전 Camera Capture 2개, 이전 SerializedProperty 2개, 외부 ASFolliage shader 2개와 이전 오디오 하네스 1개이며 신규 Chest·루팅 오류는 없다.
-- `[알려진 후속]` Player 아이템을 scene-local Chest에 다시 넣고 씬을 떠나면 그 Chest 수명과 함께 사라진다. `GameMap1` 기지 Chest를 영속 보관함으로 사용할지, 원정 Chest를 loot-only로 제한할지는 게임 규칙과 stable Chest ID가 필요한 별도 결정이므로 이번 작업에서 임의 수정하지 않았다.
+- `[후속 반영]` 당시 후속이던 GameMap1 기지 Chest 영속 보관은 아래 `## 18`에서 구현했다. GameMapTest 원정 Chest가 씬 종료와 함께 사라지는 규칙은 그대로다.
 - `[미검증]` 실제 물리 마우스 드래그와 키보드 E 입력, Windows Player build는 이번 자동 호출 검증에 포함하지 않았다. 기존 공개 입력 진입점과 런타임 객체·UI 상태를 Play Mode에서 검증했다.
+
+---
+
+## 18. 정의 기반 기지 가구 영속성
+
+### 사용자 요구와 외부 사례에서 채택한 경계
+
+- `[사용자 요구][2026-08-23]` 기지 가구를 영속화하되 외부 유사 게임의 방식을 확인하고, RimWorld처럼 정의와 소유 경로가 선명하며 나중에 모딩 가능한 방향으로 구현한다.
+- `[조사]` RimWorld의 `Def → Thing → ThingComp` 분리는 공유 정의, 배치 인스턴스, 선택적 개별 기능/상태를 구분한다. Vintage Story는 배치된 `BlockEntity`가 개별 상태를 소유하고 namespaced asset key와 명시적 attribute 직렬화를 사용한다. Cataclysm:DDA는 문자열 definition ID, 지역 단위 소유와 버전 migration을 명시한다.
+- `[적용]` 이 프로젝트에는 필요한 최소 경계만 가져왔다. `BaseFurnitureDefinition → BaseFurnitureInstance → BaseFurnitureRuntimeState`를 두고 명시적 DTO/codec으로 저장한다. RimWorld 코드 복제, 범용 XML patch, reflection `Comp` 프레임워크, 모드 검색/로드기는 만들지 않았다.
+
+참고 자료:
+
+- [RimWorld XML Defs](https://rimworldwiki.com/wiki/Modding_Tutorials/XML_Defs), [RimWorld ThingComp](https://rimworldwiki.com/wiki/Modding_Tutorials/ThingComp)
+- [Vintage Story BlockEntityBehavior API](https://apidocs.vintagestory.at/api/Vintagestory.API.Common.BlockEntityBehavior.html), [generic container 구현](https://github.com/anegostudios/vssurvivalmod/blob/master/BlockEntity/BEGenericTypedContainer.cs), [AssetLocation 구현](https://github.com/anegostudios/vsapi/blob/master/Common/Assets/AssetLocation.cs)
+- [Cataclysm:DDA map/submap 개발 문서](https://docs.cataclysmdda.org/DEVELOPER_FAQ.html), [JSON migration 문서](https://github.com/CleverRaven/Cataclysm-DDA/blob/master/doc/JSON/OBSOLETION_AND_MIGRATION.md)
+
+### 상태 소유권과 호출 흐름
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 권위 소유자 | persistent `GameManager` 하나가 plain C# `BaseFurnitureStateStore`를 소유하고, store가 placed ID별 `BaseFurnitureRuntimeState`와 해당 `StandardStashViewData` 원본을 소유한다. |
+| 수명 범위 | store와 상태는 Play Session, GameMap1의 `BaseFurnitureInstance`·Chest·UI는 Scene/View다. 디스크 DTO는 실행 사이 값 전달용이다. |
+| 생성·파괴 주체 | GameManager가 세션 store를 만들고, GameMap1 controller가 새 게임·로드 후보를 적용한 뒤 scene instance를 bind한다. 씬 unload는 binding만 해제하고 store를 파괴하지 않는다. |
+| 변경 진입점 | 가구 내용 변경은 기존 inventory container API로만 수행한다. store 교체는 초기 GameMap1에서 `GameManager.TryReplaceBaseFurnitureState` 하나만 호출한다. |
+| 포함 관계 | definition asset은 공유 immutable 참조다. placed runtime state는 정확히 한 store, item은 정확히 한 grid/container가 소유한다. Chest와 UI는 원본을 관찰하는 파생 표현이다. |
+| 이전 규칙 | item drag는 기존 원자적 container 이전·rollback을 그대로 사용한다. scene bind는 전체 instance를 선검증한 뒤 적용하고 중간 실패 시 앞선 binding을 되돌린다. |
+| 파생 표현 | scene Chest의 `chestInventoryData`와 inventory UI는 store grid의 같은 참조다. 별도 내용 복사본이나 scene-local 권위 데이터를 만들지 않는다. |
+| 저장 경계 | v4는 placed ID, definition key와 선택적 grid의 definition ID·slot·rotation·container 관계만 저장한다. Transform, 외형, HP, 전력, 제작, 문 열림 상태는 아직 저장하지 않는다. |
+| 업데이트 주체 | 독립 Tick/Update는 없다. scene Start의 bind, 기존 drag 완료, F5 capture와 load apply 경계에서만 변경한다. |
+
+### 현재 구현과 검증 상태
+
+- `[씬/에셋 확인]` `CoreStorageChest.asset`과 `BaseFurnitureDatabase.asset`을 만들고 GameMap1 두 Chest와 MainMenu 검증 경로에 연결했다. 두 placed ID는 `core:home/chest_a/b`, definition은 `core:storage_chest`, 저장 크기는 6×5다.
+- `[정적 코드 확인]` definition·instance·runtime store·DTO·codec의 책임이 분리되어 있고, GameMapTest 시험 Chest에는 `BaseFurnitureInstance`를 붙이지 않아 원정 리셋 규칙을 보존했다.
+- `[정적 코드 확인]` v2/v3→v4 migration, primary/backup 의미 검증, 알 수 없는 definition, 중복 ID, 크기 불일치, 잘못된 slot index, 총 grid/item 예산 선검증 경로를 추가했다.
+- `[코드/Play Mode 확인]` Main Menu는 의미 검증을 통과한 primary와 backup을 함께 시작 요청에 전달한다. GameMap1 controller가 실제 placed-ID 집합으로 primary를 적용 전에 다시 검사하고, 이 단계에서만 실패하면 아직 live 상태를 바꾸지 않은 채 backup을 같은 경계로 검사한다. 선택된 후보까지 실패하면 scene fallback 가구를 bind하지 않고 F5 저장도 비활성 상태로 남긴다.
+- `[코드 확인]` native v4 payload는 저장된 placed ID 집합과 현재 GameMap1의 placed ID 집합이 정확히 일치해야 한다. 누락 ID와 현재 layout에 없는 추가 ID는 빈 가구로 대체하거나 숨겨 보존하지 않고 로드를 거부한다. 기지 데이터가 존재하지 않았던 v2/v3 migration에만 파일에 직렬화되지 않는 일회성 초기화 표식을 붙여 현재 authored Chest 2개를 생성한다.
+- `[코드 확인]` inactive scene 가구가 store에 먼저 연결된 뒤 늦게 `Chest.Awake`를 실행해도 이미 검증된 외부 grid를 authored loot로 덮지 않는다. 잘못된 외부 grid는 조용히 재초기화하지 않고 component를 비활성화한다.
+- `[코드/실행 확인][2026-08-24]` 저장 codec 순수 검증 7개, native v4 exact placed-ID 검증, v2/v3의 일회성 authored 초기화, 최대 grid와 중첩 container 총 cell 예산 선검증, bool factory 실패 경계를 통과했다. 과대 payload는 실제 grid 할당 전에 거부됐다.
+- `[Play Mode 확인][2026-08-24]` GameMap1의 서로 다른 6×5 grid에 `A: ID 1 회전`, `B: ID 6 회전 → 내부 ID 2 회전`을 배치하고 사용자 기준 1회 `GameMap1 → GameMapTest → GameMap1` 왕복을 확인했다. persistent `GameManager`, shell, Player, `InventoryUIManager`, 두 grid 참조와 두 상자의 분리된 내용·중첩 소유권이 그대로였고, scene-local Chest View만 재생성됐다. GameMapTest에는 `BaseFurnitureInstance`가 0개였으며 원정 Chest는 매 진입 ID 1 하나로 별도 초기화됐다.
+- `[Play Mode 확인][2026-08-24]` 메모리 안에서 현재 layout의 `chest_b`가 빠진 native v4 primary와 정상 backup을 함께 요청했다. controller는 primary를 live 변경 전에 거부하고 정상 backup의 두 상자·회전·중첩 관계를 복원해 bind했으며 요청은 한 번만 소비됐다.
+- `[실행 확인][2026-08-24]` `Application.temporaryCachePath`의 격리 파일로 Windows `File.Replace`를 확인했다. 정상 primary는 이전 primary를 backup으로 회전했고, 손상·layout 불일치 primary를 승격하지 않는 경로는 `null` backup 교체로 기존 정상 `.bak`을 유지했다. 시험 임시 폴더는 제거했다.
+- `[씬/직렬화 확인][2026-08-24]` GameMap1 가구 2개, Main Menu DB 참조, GameMapTest scene-local Chest 1개와 persistent 가구 0개, 세 씬 Missing Script 0을 Unity Editor API로 확인했다. 최종 project compile Error 0, Console 신규 Error/Exception/Assert 0이며 현재 Warning 6개는 Input Manager 폐기 예고, Unity MCP 서명 수집, 기존 Animator Controller, 외부 RenderTextureBaker API 경고다.
+- `[미검증]` 실제 사용자 slot 1 파일을 생성하는 F5와 새 프로세스의 Main Menu 버튼 Load는 기존 사용자 세이브를 건드리지 않기 위해 실행하지 않았다. 같은 저장 DTO·primary/backup 선택·실제 GameMap1 적용 경계는 격리 파일 및 Play Mode 메모리 후보로 검증했다.

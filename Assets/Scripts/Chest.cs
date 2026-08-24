@@ -20,7 +20,31 @@ public class Chest : MonoBehaviour
 
     void Awake()
     {
-        if (!TryCreateInitialInventory(out chestInventoryData, out string error))
+        if (!InventoryGridConstraints.TryValidateDimensions(
+                chestWidth,
+                chestHeight,
+                out string error))
+        {
+            enabled = false;
+            Debug.LogError($"[{name}] Could not allocate chest inventory: {error}", this);
+            return;
+        }
+
+        // An inactive scene object can be bound to the authoritative base store before
+        // Unity invokes this Awake. Preserve that externally supplied grid when the
+        // object is activated later instead of replacing it with authored starting loot.
+        if (chestInventoryData != null)
+        {
+            if (!CanBindInventory(chestInventoryData, out error))
+            {
+                enabled = false;
+                Debug.LogError($"[{name}] Existing chest inventory is invalid: {error}", this);
+            }
+
+            return;
+        }
+
+        if (!TryCreateAuthoredInventory(out chestInventoryData, out error))
         {
             // Keep the component usable for diagnostics without exposing a partially
             // seeded container as valid authored loot.
@@ -29,13 +53,23 @@ public class Chest : MonoBehaviour
         }
     }
 
-    private bool TryCreateInitialInventory(
+    public bool TryCreateAuthoredInventory(
         out StandardStashViewData inventory,
         out string error)
     {
-        inventory = new StandardStashViewData(chestWidth, chestHeight);
+        inventory = null;
+        if (!InventoryGridConstraints.TryValidateDimensions(
+                chestWidth,
+                chestHeight,
+                out error))
+        {
+            return false;
+        }
+
+        var candidate = new StandardStashViewData(chestWidth, chestHeight);
         if (startingItemIds == null || startingItemIds.Length == 0)
         {
+            inventory = candidate;
             error = null;
             return true;
         }
@@ -54,17 +88,62 @@ public class Chest : MonoBehaviour
                 return false;
             }
 
-            IVariableInventoryCellData item = InventoryItemDataFactory.Create(definition);
-            int? slot = inventory.GetInsertableId(item);
+            if (!InventoryItemDataFactory.TryCreate(definition, out IVariableInventoryCellData item, out error))
+            {
+                error = $"Starting item ID {itemId} is invalid: {error}";
+                return false;
+            }
+
+            int? slot = candidate.GetInsertableId(item);
             if (!slot.HasValue)
             {
                 error = $"Starting item ID {itemId} does not fit in the {chestWidth}x{chestHeight} chest.";
                 return false;
             }
 
-            inventory.InsertInventoryItem(slot.Value, item);
+            candidate.InsertInventoryItem(slot.Value, item);
         }
 
+        inventory = candidate;
+        error = null;
+        return true;
+    }
+
+    public bool CanBindInventory(StandardStashViewData inventory, out string error)
+    {
+        if (!InventoryGridConstraints.TryValidateDimensions(
+                chestWidth,
+                chestHeight,
+                out error))
+        {
+            return false;
+        }
+
+        if (inventory == null)
+        {
+            error = "Persistent storage grid is missing.";
+            return false;
+        }
+
+        if (inventory.CapacityWidth != chestWidth || inventory.CapacityHeight != chestHeight ||
+            inventory.CellData == null || inventory.CellData.Length != chestWidth * chestHeight)
+        {
+            error = $"Persistent storage grid must match the authored {chestWidth}x{chestHeight} capacity.";
+            return false;
+        }
+
+        error = null;
+        return true;
+    }
+
+    public bool TryBindInventory(StandardStashViewData inventory, out string error)
+    {
+        if (!CanBindInventory(inventory, out error))
+        {
+            return false;
+        }
+
+        chestInventoryData = inventory;
         error = null;
         return true;
     }

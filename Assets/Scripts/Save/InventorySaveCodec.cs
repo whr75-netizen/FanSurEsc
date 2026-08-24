@@ -12,6 +12,7 @@ namespace FantasySurvival.SaveSystem
         private const int EquipmentRootSlotIndex = -1;
         private const int MaxContainerDepth = 16;
         private const int MaxItemCount = 10000;
+        private const long MaxRuntimeGridCellsPerPayload = 262144;
 
         public static bool TryCapture(
             PlayerInventoryState source,
@@ -77,6 +78,41 @@ namespace FantasySurvival.SaveSystem
             return true;
         }
 
+        public static bool TryCaptureGrid(
+            StandardStashViewData source,
+            ItemDatabase database,
+            out InventoryGridSaveData saveData,
+            out string error)
+        {
+            saveData = null;
+            if (!TryBuildDefinitionIndex(database, out Dictionary<int, ItemDefinition> definitions, out error))
+            {
+                return false;
+            }
+
+            if (!HasValidGridDimensions(source, out error))
+            {
+                return false;
+            }
+
+            var result = new InventoryGridSaveData
+            {
+                layoutId = InventoryGridSaveData.FlatLayoutId,
+                width = source.CapacityWidth,
+                height = source.CapacityHeight
+            };
+            var context = new CaptureContext(definitions, result.items);
+            if (!TryCaptureGrid(source, RootParentRecordId, 0, context, out error))
+            {
+                return false;
+            }
+
+            result.itemRecordCount = result.items.Count;
+            saveData = result;
+            error = null;
+            return true;
+        }
+
         public static bool TryRestore(
             PlayerItemStateSaveData saveData,
             ItemDatabase database,
@@ -89,6 +125,16 @@ namespace FantasySurvival.SaveSystem
             if (!TryBuildDefinitionIndex(database, out Dictionary<int, ItemDefinition> definitions, out error) ||
                 !HasExpectedRootDimensions(saveData, expectedWidth, expectedHeight, out error) ||
                 !TryBuildRestoreContext(saveData, definitions, out RestoreContext context, out error))
+            {
+                return false;
+            }
+
+            if (!TryCalculateRuntimeGridCellCost(
+                    expectedWidth,
+                    expectedHeight,
+                    context,
+                    out _,
+                    out error))
             {
                 return false;
             }
@@ -129,6 +175,132 @@ namespace FantasySurvival.SaveSystem
             restored = new PlayerInventoryState(inventory, equipment);
             error = null;
             return true;
+        }
+
+        public static bool TryRestoreGrid(
+            InventoryGridSaveData saveData,
+            ItemDatabase database,
+            out StandardStashViewData restored,
+            out string error)
+        {
+            if (!TryBuildDefinitionIndex(
+                    database,
+                    out Dictionary<int, ItemDefinition> definitions,
+                    out error))
+            {
+                restored = null;
+                return false;
+            }
+
+            return TryRestoreGrid(saveData, definitions, out restored, out error);
+        }
+
+        internal static bool TryRestoreGrid(
+            InventoryGridSaveData saveData,
+            Dictionary<int, ItemDefinition> definitions,
+            out StandardStashViewData restored,
+            out string error)
+        {
+            restored = null;
+            if (!TryPrepareGridRestore(
+                    saveData,
+                    definitions,
+                    out RestoreContext context,
+                    out _,
+                    out error))
+            {
+                return false;
+            }
+
+            var candidate = new StandardStashViewData(saveData.width, saveData.height);
+            if (!TryRestoreRecords(context.RootInventoryRecords, candidate, 0, context, out error))
+            {
+                return false;
+            }
+
+            if (context.RestoredCount != context.RecordsById.Count)
+            {
+                error = "Storage grid data contains an unreachable or cyclic container relationship.";
+                return false;
+            }
+
+            restored = candidate;
+            error = null;
+            return true;
+        }
+
+        internal static bool TryGetValidatedRestoreCost(
+            InventoryGridSaveData saveData,
+            Dictionary<int, ItemDefinition> definitions,
+            out int itemCount,
+            out long runtimeGridCells,
+            out string error)
+        {
+            itemCount = 0;
+            if (!TryPrepareGridRestore(
+                    saveData,
+                    definitions,
+                    out RestoreContext context,
+                    out runtimeGridCells,
+                    out error))
+            {
+                return false;
+            }
+
+            itemCount = context.RecordsById.Count;
+            error = null;
+            return true;
+        }
+
+        private static bool TryPrepareGridRestore(
+            InventoryGridSaveData saveData,
+            Dictionary<int, ItemDefinition> definitions,
+            out RestoreContext context,
+            out long runtimeGridCells,
+            out string error)
+        {
+            context = null;
+            runtimeGridCells = 0;
+            if (definitions == null)
+            {
+                error = "Validated item definition index is missing.";
+                return false;
+            }
+
+            if (!HasValidSavedGridDimensions(saveData, out error))
+            {
+                return false;
+            }
+
+            var playerShapedPayload = new PlayerItemStateSaveData
+            {
+                layoutId = PlayerItemStateSaveData.FlatLayoutId,
+                inventoryWidth = saveData.width,
+                inventoryHeight = saveData.height,
+                itemRecordCount = saveData.itemRecordCount,
+                items = saveData.items
+            };
+            if (!TryBuildRestoreContext(
+                    playerShapedPayload,
+                    definitions,
+                    out context,
+                    out error))
+            {
+                return false;
+            }
+
+            if (context.EquipmentRoots.Count > 0)
+            {
+                error = "Storage grid data cannot contain equipment-slot roots.";
+                return false;
+            }
+
+            return TryCalculateRuntimeGridCellCost(
+                saveData.width,
+                saveData.height,
+                context,
+                out runtimeGridCells,
+                out error);
         }
 
         private static bool TryCaptureGrid(
@@ -279,6 +451,12 @@ namespace FantasySurvival.SaveSystem
 
             foreach (InventoryItemSaveData record in records)
             {
+                if (record.slotIndex < 0 || record.slotIndex >= target.CellData.Length)
+                {
+                    error = $"Item ID {record.definitionId} has an invalid slot index {record.slotIndex}.";
+                    return false;
+                }
+
                 if (!TryCreateItem(record, depth, context, out IVariableInventoryCellData item, out error))
                 {
                     return false;
@@ -307,16 +485,13 @@ namespace FantasySurvival.SaveSystem
         {
             item = null;
             ItemDefinition definition = context.Definitions[record.definitionId];
-            try
+            if (!InventoryItemDataFactory.TryCreate(definition, out item, out error))
             {
-                item = InventoryItemDataFactory.Create(definition);
-                item.IsRotate = record.isRotated;
-            }
-            catch (Exception exception)
-            {
-                error = $"Could not create item definition ID {record.definitionId}: {exception.Message}";
+                error = $"Could not create item definition ID {record.definitionId}: {error}";
                 return false;
             }
+
+            item.IsRotate = record.isRotated;
 
             context.ChildrenByParent.TryGetValue(record.recordId, out List<InventoryItemSaveData> children);
             if (definition.IsContainer)
@@ -435,7 +610,7 @@ namespace FantasySurvival.SaveSystem
             return true;
         }
 
-        private static bool TryBuildDefinitionIndex(
+        internal static bool TryBuildDefinitionIndex(
             ItemDatabase database,
             out Dictionary<int, ItemDefinition> definitions,
             out string error)
@@ -458,7 +633,53 @@ namespace FantasySurvival.SaveSystem
                     return false;
                 }
 
+                if (!definition.TryValidateInventoryShape(out error))
+                {
+                    return false;
+                }
+
                 definitions.Add(definition.Id, definition);
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool TryCalculateRuntimeGridCellCost(
+            int rootWidth,
+            int rootHeight,
+            RestoreContext context,
+            out long runtimeGridCells,
+            out string error)
+        {
+            runtimeGridCells = 0;
+            if (context == null)
+            {
+                error = "Inventory restore context is missing.";
+                return false;
+            }
+
+            if (!InventoryGridConstraints.TryValidateDimensions(rootWidth, rootHeight, out error))
+            {
+                return false;
+            }
+
+            runtimeGridCells = (long)rootWidth * rootHeight;
+            foreach (InventoryItemSaveData record in context.RecordsById.Values)
+            {
+                ItemDefinition definition = context.Definitions[record.definitionId];
+                if (!definition.IsContainer)
+                {
+                    continue;
+                }
+
+                runtimeGridCells += (long)definition.ContainerWidth * definition.ContainerHeight;
+                if (runtimeGridCells > MaxRuntimeGridCellsPerPayload)
+                {
+                    error = $"Inventory payload requires more than " +
+                            $"{MaxRuntimeGridCellsPerPayload} runtime grid cells.";
+                    return false;
+                }
             }
 
             error = null;
@@ -484,10 +705,75 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            if (expectedWidth <= 0 || expectedHeight <= 0 ||
+            if (!InventoryGridConstraints.TryValidateDimensions(
+                    expectedWidth,
+                    expectedHeight,
+                    out error) ||
                 saveData.inventoryWidth != expectedWidth || saveData.inventoryHeight != expectedHeight)
             {
-                error = $"Inventory dimensions {saveData.inventoryWidth}x{saveData.inventoryHeight} do not match expected {expectedWidth}x{expectedHeight}.";
+                if (error == null)
+                {
+                    error = $"Inventory dimensions {saveData.inventoryWidth}x{saveData.inventoryHeight} " +
+                            $"do not match expected {expectedWidth}x{expectedHeight}.";
+                }
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool HasValidGridDimensions(
+            StandardStashViewData grid,
+            out string error)
+        {
+            if (grid == null || grid.CellData == null)
+            {
+                error = "Inventory grid is missing its cell data.";
+                return false;
+            }
+
+            if (!InventoryGridConstraints.TryValidateDimensions(
+                    grid.CapacityWidth,
+                    grid.CapacityHeight,
+                    out error))
+            {
+                return false;
+            }
+
+            if (grid.CellData.Length != grid.CapacityWidth * grid.CapacityHeight)
+            {
+                error = "Inventory grid dimensions do not match its cell data length.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool HasValidSavedGridDimensions(
+            InventoryGridSaveData saveData,
+            out string error)
+        {
+            if (saveData == null || saveData.layoutId != InventoryGridSaveData.FlatLayoutId)
+            {
+                error = "Storage grid save data is missing or uses an unsupported layout ID.";
+                return false;
+            }
+
+            if (!InventoryGridConstraints.TryValidateDimensions(
+                    saveData.width,
+                    saveData.height,
+                    out error))
+            {
+                return false;
+            }
+
+            if (saveData.items == null || saveData.itemRecordCount < 0 ||
+                saveData.itemRecordCount != saveData.items.Count ||
+                saveData.items.Count > MaxItemCount)
+            {
+                error = "Storage grid save data is malformed or exceeds the supported item count.";
                 return false;
             }
 

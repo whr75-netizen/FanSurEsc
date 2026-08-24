@@ -185,7 +185,7 @@ Stage 2-A의 shell 동일 인스턴스 보존과 디스크 복원은 서로 다�
 ### 3.3 기존 시스템을 확장하고 평행 시스템을 만들지 않는다
 
 - Stage 1의 DirectSceneTravel은 두 게임플레이 씬을 빠르게 검증하기 위한 격리된 프로토타입이며 기존 GameLoadingScene 흐름과 동시에 실행하지 않는다.
-- 제품 시작 흐름을 통합할 때는 기존 GameLoadingManager를 범용화할지 DirectSceneTravel을 흡수할지 결정하고, 두 로더를 최종 구조에 병행해 남기지 않는다.
+- **[현재 확정]** 최초 실행의 `InitialLoadingScene → MainMenuScene → GameLoadingScene → GameMap1`과 게임플레이 씬 사이의 `DirectSceneTravel`은 서로 다른 수명 경계다. 전자는 최초 시작 로딩 UI를, 후자는 persistent 검은 fade와 동일 Player 배치를 담당하며 직접 왕복에 `GameLoadingScene`을 끼우지 않는다.
 - 현재 프로토타입에서는 InventoryUIManager와 인벤토리 런타임 데이터가 shell 안의 동일 인스턴스로 유지된다. 저장 단계에서는 직렬화 DTO만 분리한다.
 - 입력과 대상 탐지는 Player 상호작용 컴포넌트로 이동한다.
 - 현재 플레이 중 상태는 PersistentGameplayShell의 실제 컴포넌트 인스턴스가 유지한다. RaidSession은 원정 경계와 결과만 별도 소유한다.
@@ -434,6 +434,8 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 - 귀환 포탈용 상호작용 컴포넌트
 - 범용 상호작용 경로를 사용하는 포탈 컴포넌트
 - Inspector에서 GameMap1과 ReturnSpawnPoint를 고정 목적지로 설정한 이동 요청
+- persistent 셸에 한 번만 존재하는 공용 검은 화면 Canvas와 `GameplaySceneTransitionFader`
+- 완전히 검어진 뒤 비동기 로드하고, 동일 Player 배치 뒤 fade-in 완료 시 입력을 복원하는 `DirectSceneTravel` 경계
 
 출발 씬을 기억하는 동적 귀환 경로는 아직 만들지 않는다. 해당 책임은 Stage 2의 RaidSession에서 다룬다.
 
@@ -442,6 +444,7 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 - 귀환 Cube가 Game View 또는 Scene View에서 불투명하게 보인다.
 - 포탈 범위 밖에서는 작동하지 않는다.
 - 포탈 상호작용 시 GameMap1의 지정 위치로 돌아온다.
+- 직접 이동은 `fade-out → 검은 화면에서 씬 교체·동일 Player 배치 → fade-in` 순서를 사용하며 전환이 끝날 때까지 이동·공격·무기 전환·인벤토리·상호작용과 GameMap1 F5 저장을 막는다.
 - 맵 선택과 귀환을 3회 반복해도 오브젝트와 이벤트가 중복되지 않는다.
 - GameMap1의 기존 인벤토리와 Chest 열기/닫기에 회귀가 없다.
 - GameMapTest에서도 같은 persistent Player와 Inventory UI를 사용하며 I 입력으로 동일 인벤토리를 확인할 수 있다.
@@ -480,7 +483,8 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 - shell 루트는 DontDestroyOnLoad이므로 왕복 동안 Player와 포함된 모든 컴포넌트가 같은 인스턴스다.
 - InventoryUIManager, StandardStashViewData와 EquipmentLoadoutData도 같은 객체이므로 별도 snapshot이나 새 UI 재바인딩 없이 현재 인벤토리·장비가 그대로 유지된다.
 - DirectSceneTravel은 이동 전에 열린 인벤토리, 드래그와 컨테이너 팝업을 정리하고 이동·인벤토리·상호작용 입력을 잠근다.
-- 목적지 SceneSpawnController는 같은 Player를 SpawnPoint로 옮기고 Rigidbody 속도를 초기화한 뒤 입력 상태를 복원한다.
+- persistent `GameplaySceneTransitionFader`가 화면을 완전히 검게 덮은 뒤에만 목적지 로드를 시작한다. 씬별 fade Canvas는 만들지 않는다.
+- 목적지 SceneSpawnController는 같은 Player를 SpawnPoint로 옮기고 Rigidbody 속도를 초기화한 뒤 검은 화면을 걷는다. 입력은 fade-in이 완전히 끝난 뒤에만 복원한다.
 - 이 구조는 Play Mode 메모리 유지이며 디스크 save 구조가 아니다.
 
 #### 현재 유지되는 것과 씬별로 바뀌는 것
@@ -610,35 +614,42 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 ## 10. Stage 5: 최소 적 AI와 플레이어 사망
 
+**[현재 상태: 적 AI 1단계와 적 시체 전리품 구현, 플레이어 사망 결과 후속]**
+
 ### 목표
 
-고정 원정 맵에 실제 위협 하나를 추가한다.
+고정 원정 맵에 근접형과 원거리형의 최소 위협을 하나씩 추가하고, 이후 전술 AI가 같은 감지·기억·이동 기반을 확장할 수 있게 한다.
 
 ### 선행조건
 
 - Stage 4 전투 계약
 - GameMapTest의 이동과 충돌
-- **[미정]** 첫 적의 공격 방식
-- **[미정]** 감지 방식과 최소 행동 범위
+- **[1단계 확정]** 기존 좀비는 최단 NavMesh 경로 돌진형 근접 AI다.
+- **[1단계 확정]** primitive 원거리 적은 선호 사거리까지 추적하며 사격하고, 사거리 안에서는 정지 조준한다.
+- **[1단계 확정]** 평상시 도달 가능한 임의 순찰, 시야·총성·피격 자극, 마지막 확인 위치 기억을 사용한다.
 
 ### Unity 구현물
 
 - EnemyDefinition의 최소 데이터
-- 고정 EnemySpawnPoint
-- 프로젝트에 적합한 이동 방식
-- 최소 인식, 추적, 공격, 사망 상태
-- Player Health에 피해를 주는 공격
-- Player 사망 시 RaidSession에 실패 후보를 알리는 경계
+- GameMapTest의 근접·원거리 시험 프리팹 인스턴스
+- runtime 생성 NavMesh를 읽는 공통 순찰·추적 이동
+- `Patrol → Investigate/SearchLastKnown → Combat → Dead` 상태와 기억
+- 기존 `IDamageable` 계약으로 Player Health에 피해를 주는 근접·원거리 공격
+- `EnemyStats.IsDead`를 단일 사망 원본으로 유지하면서 root·렌더 외형은 남기고 Brain·Action·Agent·Animator·피격 Collider를 정지하는 시체 전이
+- 별도 Loot UI 없이 기존 Chest 컨테이너와 E 상호작용을 재사용하는 4×4 scene-local 시체 인벤토리
+- **[후속]** Player 체력 `> 0 → 0`의 일회성 사망 완료 통지와 RaidSession 실패 후보 경계
 
-Unity AI Navigation 패키지는 설치되어 있지만 실제 게임플레이 사용은 확인되지 않았다. NavMesh를 사용할 경우 GameMapTest에서 베이크, 장애물, 재입장 동작을 먼저 검증한다.
+`GameMapTest`의 `ProceduralUrbanMapGenerator`가 runtime NavMesh를 만들며, 두 Agent는 유효한 보행면이 확인된 뒤에만 활성화된다. 현재 Play Mode에서 완전 경로, 두 Agent의 NavMesh 배치와 실제 이동을 확인했다. `GameMap1`에는 NavMesh가 없으므로 기존 좀비는 scene override로 정지 시험 표적을 유지한다.
 
 ### 완료 기준
 
-- 적이 플레이어를 감지하고 접근한다.
-- 공격 거리에서 검증된 전투 API로 피해를 준다.
-- 플레이어와 적이 각각 사망할 수 있다.
-- 재입장 시 이전 적 상태가 남지 않는다.
-- 적 AI 오류와 전투 오류를 별도로 재현할 수 있다.
+- **[1단계 확인]** 두 적이 유효한 NavMesh에서 순찰하고, 플레이어를 감지하면 각 공격 방식에 맞게 접근한다.
+- **[1단계 확인]** 공격 거리에서 공통 피해 API로 Player 체력을 0까지 낮추고 Player가 죽은 뒤 추가 공격을 중단한다.
+- **[1단계 확인]** 적은 기존 공통 피해·사망 전이로 한 번 죽고 Brain, Action, Agent, Animator와 피격 Collider가 정지한다. root·렌더 외형은 시체로 남고 사망 뒤에만 기존 외부 인벤토리 UI로 전리품을 열 수 있다.
+- **[현재 한계]** 시체와 내용물은 scene-local이며 정식 드롭 테이블, 랜덤 보상, 시체 정리 시간과 씬 재입장 저장은 후속이다.
+- **[1단계 확인]** 총성 자극이 마지막 위치 조사를 시작하고, 시야 상실 뒤 현재 위치를 치트로 추적하지 않는다.
+- **[후속 완료 조건]** Player 체력 0이 일회성 사망 완료 통지, 입력 차단과 원정 실패 후보로 이어진다.
+- **[후속 검증]** 씬 재입장과 실제 입력 흐름에서 구독·적 상태 누적이 없음을 확인한다.
 
 ### 다음 단계가 의존하는 이유
 

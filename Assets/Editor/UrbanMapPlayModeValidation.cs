@@ -321,6 +321,26 @@ namespace FantasySurvival.EditorTools
                 return false;
             }
 
+            if (string.Equals(expectedSceneName, GameMapTestName, StringComparison.Ordinal))
+            {
+                EnemyAIController[] enemies = FindComponentsInScene<EnemyAIController>(
+                    SceneManager.GetActiveScene());
+                if (enemies.Length != 2)
+                {
+                    SessionState.SetInt(ReadyFramesKey, 0);
+                    return false;
+                }
+
+                for (int index = 0; index < enemies.Length; index++)
+                {
+                    if (!enemies[index].IsNavigationReady)
+                    {
+                        SessionState.SetInt(ReadyFramesKey, 0);
+                        return false;
+                    }
+                }
+            }
+
             int readyFrames = SessionState.GetInt(ReadyFramesKey, 0) + 1;
             SessionState.SetInt(ReadyFramesKey, readyFrames);
             return readyFrames >= ReadyObservationCount;
@@ -451,8 +471,33 @@ namespace FantasySurvival.EditorTools
             Require(Vector3.Distance(portal.position, expectedPortalPosition) <= 0.05f,
                 $"{context}: ReturnPortal was not placed at the generated portal node.");
 
-            EnemyPatrol[] enemies = FindComponentsInScene<EnemyPatrol>(activeScene);
-            Require(enemies.Length == 1, $"{context}: existing patrol enemy count changed to {enemies.Length}.");
+            EnemyAIController[] enemies = FindComponentsInScene<EnemyAIController>(activeScene);
+            Require(enemies.Length == 2, $"{context}: expected two prototype enemies, found {enemies.Length}.");
+
+            int meleeCount = 0;
+            int rangedCount = 0;
+            for (int index = 0; index < enemies.Length; index++)
+            {
+                EnemyStats stats = enemies[index].GetComponent<EnemyStats>();
+                EnemyAISettings ai = stats != null && stats.Definition != null
+                    ? stats.Definition.AI
+                    : null;
+                Require(ai != null, $"{context}: enemy '{enemies[index].name}' has no AI definition.");
+                Require(enemies[index].IsNavigationReady,
+                    $"{context}: enemy '{enemies[index].name}' is not ready on the runtime NavMesh.");
+
+                if (ai.CombatArchetype == EnemyCombatArchetype.MeleeRush)
+                {
+                    meleeCount++;
+                }
+                else if (ai.CombatArchetype == EnemyCombatArchetype.RangedPursuit)
+                {
+                    rangedCount++;
+                }
+            }
+
+            Require(meleeCount == 1 && rangedCount == 1,
+                $"{context}: expected one melee and one ranged enemy, found melee={meleeCount}, ranged={rangedCount}.");
         }
 
         private static void ValidateShellAndSpawn(string expectedSpawnId, bool captureIdentity)

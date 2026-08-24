@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FantasySurvival.AI;
 using FantasySurvival.Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -151,6 +152,21 @@ namespace FantasySurvival.Combat
             audioFeedback?.PlayFire();
 
             Vector3 origin = rayOrigin.position;
+            TryApplyRaycastDamage(definition, direction, origin);
+
+            WorldStimulusChannel.Emit(new WorldStimulus(
+                WorldStimulusKind.GunshotSound,
+                WorldStimulusResponse.Investigate,
+                origin,
+                definition.WeaponNoiseRadius,
+                gameObject));
+        }
+
+        private void TryApplyRaycastDamage(
+            ItemDefinition definition,
+            Vector3 direction,
+            Vector3 origin)
+        {
             int hitCount = Physics.RaycastNonAlloc(
                 origin,
                 direction,
@@ -188,9 +204,11 @@ namespace FantasySurvival.Combat
                 }
 
                 IDamageable damageable = hitCollider.GetComponentInParent<IDamageable>();
-                if (hitCollider.isTrigger && damageable == null)
+                if (hitCollider.isTrigger &&
+                    (damageable == null || !damageable.IsAlive))
                 {
-                    // Interaction ranges and other utility triggers must not become invisible walls.
+                    // Utility triggers and dead corpse-loot triggers must not become
+                    // invisible walls in front of a living target.
                     continue;
                 }
 

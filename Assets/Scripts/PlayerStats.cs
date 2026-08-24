@@ -1,8 +1,9 @@
 using System;
+using FantasySurvival.Combat;
 using UnityEngine;
 
 [DisallowMultipleComponent]
-public sealed class PlayerStats : MonoBehaviour
+public sealed class PlayerStats : MonoBehaviour, IDamageable
 {
     [SerializeField, Min(1f)] private float maxHealth = 100f;
     [SerializeField, Min(0f)] private float currentHealth = 100f;
@@ -20,12 +21,23 @@ public sealed class PlayerStats : MonoBehaviour
 
     public void ApplyDamage(float amount)
     {
-        if (amount <= 0f)
+        ApplyDamage(new DamageContext(amount, null, transform.position));
+    }
+
+    public DamageResult ApplyDamage(DamageContext context)
+    {
+        if (!IsAlive || context.Amount <= 0f || float.IsNaN(context.Amount))
         {
-            return;
+            return DamageResult.Ignored(currentHealth);
         }
 
-        SetCurrentHealth(currentHealth - amount);
+        float previousHealth = currentHealth;
+        SetCurrentHealth(currentHealth - context.Amount);
+        return new DamageResult(
+            true,
+            previousHealth,
+            currentHealth,
+            previousHealth > 0f && currentHealth <= 0f);
     }
 
     public void RestoreHealth(float amount)

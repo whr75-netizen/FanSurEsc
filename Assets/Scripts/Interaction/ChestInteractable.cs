@@ -6,14 +6,29 @@ namespace FantasySurvival.Interaction
     [RequireComponent(typeof(Chest))]
     public sealed class ChestInteractable : Interactable
     {
+        [SerializeField] private string interactionPrompt = "Open / Close Chest";
+
         private Chest chest;
         private InventoryUIManager inventoryUI;
 
-        public override string InteractionPrompt => "Open / Close Chest";
+        public override string InteractionPrompt => string.IsNullOrWhiteSpace(interactionPrompt)
+            ? "Open / Close Chest"
+            : interactionPrompt;
 
         private void Awake()
         {
-            chest = GetComponent<Chest>();
+            ResolveChest();
+        }
+
+        private void OnEnable()
+        {
+            ResolveChest();
+        }
+
+        public override bool CanInteract(PlayerInteractor interactor)
+        {
+            return base.CanInteract(interactor) && chest != null &&
+                   chest.isActiveAndEnabled && chest.chestInventoryData != null;
         }
 
         public override void Interact(PlayerInteractor interactor)
@@ -63,6 +78,14 @@ namespace FantasySurvival.Interaction
             }
 
             return inventoryUI;
+        }
+
+        private void ResolveChest()
+        {
+            if (chest == null)
+            {
+                chest = GetComponent<Chest>();
+            }
         }
 
         private void OnDisable()

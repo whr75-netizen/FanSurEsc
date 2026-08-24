@@ -21,6 +21,7 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private InventoryUIManager inventoryUI;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private PlayerInteractor playerInteractor;
+        [SerializeField] private GameplaySceneTransitionFader sceneTransitionFader;
 
         private bool travelPrepared;
         private bool movementWasEnabled;
@@ -31,6 +32,8 @@ namespace FantasySurvival.SceneFlow
         public Camera PlayerCamera => playerCamera;
         public EventSystem PlayerEventSystem => eventSystem;
         public InventoryUIManager InventoryUI => inventoryUI;
+        public GameplaySceneTransitionFader SceneTransitionFader => sceneTransitionFader;
+        public bool IsTravelPrepared => travelPrepared;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStaticState()
@@ -106,12 +109,38 @@ namespace FantasySurvival.SceneFlow
 
         public void FinishArrival()
         {
-            RestoreTravelState();
+            RevealSceneAndRestoreTravelState();
         }
 
         public void CancelTravelPreparation()
         {
-            RestoreTravelState();
+            RevealSceneAndRestoreTravelState();
+        }
+
+        public bool BeginTravelTransition(Action onCovered, Action onInterrupted)
+        {
+            if (!travelPrepared || sceneTransitionFader == null)
+            {
+                return false;
+            }
+
+            return sceneTransitionFader.TryCover(onCovered, onInterrupted);
+        }
+
+        private void RevealSceneAndRestoreTravelState()
+        {
+            if (!travelPrepared)
+            {
+                return;
+            }
+
+            if (sceneTransitionFader == null || !sceneTransitionFader.isActiveAndEnabled)
+            {
+                RestoreTravelState();
+                return;
+            }
+
+            sceneTransitionFader.Reveal(RestoreTravelState);
         }
 
         private void RestoreTravelState()
@@ -144,7 +173,8 @@ namespace FantasySurvival.SceneFlow
         private bool HasRequiredReferences()
         {
             return playerTransform != null && playerCamera != null && eventSystem != null &&
-                   inventoryUI != null && playerMovement != null && playerInteractor != null;
+                   inventoryUI != null && playerMovement != null && playerInteractor != null &&
+                   sceneTransitionFader != null && sceneTransitionFader.IsConfigured;
         }
     }
 }

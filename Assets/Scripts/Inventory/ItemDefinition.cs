@@ -31,6 +31,7 @@ namespace FantasySurvival.Inventory
         [SerializeField, Min(1f)] private float roundsPerMinute = 300f;
         [SerializeField, Min(0f)] private float weaponDamage = 35f;
         [SerializeField, Min(0.1f)] private float weaponRange = 30f;
+        [SerializeField, Min(0f)] private float weaponNoiseRadius = 18f;
 
         [Header("Container")]
         [SerializeField] private ItemDefinitionKind kind;
@@ -50,6 +51,7 @@ namespace FantasySurvival.Inventory
         public float RoundsPerMinute => roundsPerMinute;
         public float WeaponDamage => weaponDamage;
         public float WeaponRange => weaponRange;
+        public float WeaponNoiseRadius => weaponNoiseRadius;
         public ItemDefinitionKind Kind => kind;
         public bool IsContainer => kind == ItemDefinitionKind.Container;
         public int ContainerWidth => containerWidth;
@@ -98,6 +100,7 @@ namespace FantasySurvival.Inventory
             roundsPerMinute = Mathf.Max(1f, roundsPerMinute);
             weaponDamage = Mathf.Max(0f, weaponDamage);
             weaponRange = Mathf.Max(0.1f, weaponRange);
+            weaponNoiseRadius = Mathf.Max(0f, weaponNoiseRadius);
         }
     }
 }

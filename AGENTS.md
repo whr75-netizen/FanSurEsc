@@ -86,6 +86,7 @@
 ### 현재 맵 왕복과 플레이어 수명주기
 
 - `GameMap1`과 `GameMapTest`의 직접 왕복은 `MainMenuScene`과 `GameLoadingScene`을 거치거나 수정하지 않는다.
+- 최초 실행의 `InitialLoadingScene → MainMenuScene → GameLoadingScene → GameMap1` 로딩 흐름은 별도 시작 흐름으로 유지한다. 게임플레이 씬 사이의 직접 이동에는 이를 재사용하거나 끼워 넣지 않는다.
 - 단 하나의 `PersistentGameplayShell`이 `DontDestroyOnLoad` 루트로 존재한다.
 - 이 셸은 실제 Player, 플레이어 외형 계층, 현재 Player 구성 스크립트, Camera/AudioListener, HUD, `InventoryUIManager`와 인벤토리 UI/Core/View, EventSystem 및 기능상 필수 UI 계층을 **같은 인스턴스**로 유지한다.
 - 두 게임플레이 씬에는 scene-local **런타임** Player, gameplay Camera, Inventory UI, EventSystem 복사본을 두지 않는다.
@@ -93,6 +94,8 @@
 - Player 셸 구성에 관해서 두 게임플레이 씬은 `GameplayShellBootstrap`, scene-local `SceneSpawnController`, SpawnPoint와 맵 오브젝트만 소유한다. 위 편집 전용 Camera와 `GameMap1`의 기존 별도 `GameManager`는 이 문장의 예외이며 셸 구성요소가 아니다.
 - Bootstrap은 셸이 없을 때만 동일 프리팹을 한 번 생성한다.
 - `SceneSpawnController`는 기존 persistent Player를 목적지 SpawnPoint로 이동시키고 Rigidbody 속도를 초기화할 뿐, Player를 교체하지 않는다.
+- 게임플레이 직접 이동은 persistent 셸의 `GameplaySceneTransitionFader` 하나를 공유한다. 검은 화면이 완전히 덮인 뒤 목적지 씬을 로드하고, 같은 Player 배치가 끝난 뒤 검은 화면을 걷으며, fade-in 완료 전에는 이동·공격·무기 전환·인벤토리·상호작용 입력을 복원하지 않는다. GameMap1의 F5 저장도 전환 중에는 차단한다.
+- fade Canvas를 게임플레이 씬마다 복제하지 않는다. 도착 배치가 완료되지 않으면 다음 프레임의 공통 실패 경로가 pending 이동과 입력 잠금을 정리하고 검은 화면을 걷어야 한다.
 - 씬별 Player 재생성, `PlayerRuntimeState` snapshot/restore, 새 UI 재바인딩을 “Player 전체 보존”의 대체 구현으로 다시 도입하지 않는다.
 - 기존 `GameManager`는 셸과 별개의 전역 오브젝트다. 근거 없이 셸과 합치거나 GameMapTest 직접 실행에서 자동 생성하지 않는다.
 - `PersistentGameplayShell`의 동일 인스턴스 보존 범위는 한 번의 Play Mode 실행이다. 별도의 단일 슬롯 세이브/로드 프로토타입은 인벤토리 값을 디스크에 저장·복원하지만, Player·Camera·UI 오브젝트 자체를 저장하거나 재생성하는 시스템은 아니다.
@@ -112,6 +115,7 @@
 - Chest UI가 정상적으로 닫히는 즉시 대상 유지는 끝난다. 닫힌 Chest를 계속 고정하지 않으며 다음 프레임 또는 다음 E 입력에서는 다시 가장 가까운 대상을 선택한다.
 - 거리 이탈, 대상 비활성화, 상호작용 차단 또는 씬 이동 정리는 모두 같은 데이터 안전 `CloseAllInventories` 경로로 수렴한다. `PlayerInteractor`가 종료를 조정할 때는 해당 Chest의 공통 취소 진입점을 사용하며, 드래그 복구 실패로 닫기가 거부되면 UI와 대상 참조를 함께 유지해 다른 대상으로 부분 전환하지 않는다.
 - Map Terminal은 기존 modal 입력 잠금, Return Portal은 기존 즉시 씬 이동 정책을 유지한다. 지속 UI가 없는 대상에 Chest의 활성 대상 고정을 적용하지 않는다.
+- 죽은 적의 전리품도 별도 Loot UI나 Manager를 만들지 않고 같은 `Chest`/`ChestInteractable`/`InventoryUIManager` 경로를 사용한다. 살아 있는 동안 시체 상호작용과 Trigger는 비활성이고, 확정 사망 뒤에만 활성화된다.
 
 ### 현재 시험 전투 계약
 
@@ -122,9 +126,12 @@
 - `WeaponAttackAudioFeedback`는 전투 상태를 소유하지 않는 Player-local 표현 컴포넌트다. cadence를 통과해 실제 발사가 성립하면 발사음을 재생하고, `IDamageable.ApplyDamage`의 `DamageResult.WasApplied`가 참일 때만 별도 적중음을 약 `0.06`초 뒤 재생해 두 효과음의 시작점을 분리한다. 비활성화할 때 대기 중인 표현 재생을 취소하며, Collider 접촉이나 Raycast 적중 추정만으로 적중음을 내지 않는다.
 - `EnemyStats` 하나가 적 개체의 현재 체력과 생존·사망 전이의 유일한 권위 소유자다. 모든 피해 원인은 같은 `ApplyDamage` 진입점을 사용하고, `> 0 → 0` 전이에서만 사망을 한 번 확정한 뒤 `Died`를 통지한다.
 - 현재 적은 1회 초기화·1회 사망 수명주기다. 죽은 `EnemyStats.Initialize`로 체력만 복구하는 암묵적 부활은 금지하며, pooling이나 respawn이 필요해질 때 행동·충돌·외형까지 함께 복구하는 별도 계약을 만든다.
-- `EnemyDeathHandler`는 확정된 사망을 관찰해 AI, 피격 Collider와 현재 시험 외형만 정리한다. 체력을 쓰거나 독립적으로 사망 여부를 판정하는 두 번째 권위자가 아니다.
+- `EnemyDeathHandler`는 확정된 사망을 관찰해 Brain, 공격 Action, `NavMeshAgent`, 이동 Animator와 피격 Collider를 비활성화하고 시체 전리품 상호작용과 전용 Trigger를 활성화한다. 적 root와 렌더 외형은 시체로 남긴다. 체력을 쓰거나 독립적으로 사망 여부를 판정하는 두 번째 권위자가 아니다.
+- 시체 판정의 권위 원본은 `EnemyStats.IsDead`다. 별도 Unity 문자열 tag나 평행한 `isCorpse` 상태를 두 번째 사망 원본으로 만들지 않는다.
+- 현재 두 적의 4×4 시체 인벤토리는 Enemy Entity와 같은 scene 수명이며 시험용 definition ID 1 또는 2 하나로 시작한다. 정식 드롭 테이블, 랜덤 보상, 시체·내용물의 씬 재진입 저장은 아직 확정하지 않는다.
+- 실제 공격 Raycast는 죽은 `IDamageable`이 붙은 시체 전리품 Trigger를 비피격 utility Trigger처럼 건너뛴다. 시체 Trigger가 뒤의 살아 있는 적을 막는 투명 장벽이 되어서는 안 된다.
 - 현재 하체에는 전후좌우·대각 방향 locomotion 세트가 없으므로 마우스 방향 캐릭터 회전, 후진·strafe, 조준·발사 애니메이션은 구현하지 않는다. 기존 WASD 입력 방향 회전과 장착 상체 pose는 유지하고 공격 판정만 마우스 방향을 사용한다.
-- 현재 발사·적중 구분용 Kenney CC0 시험 효과음 2개만 포함한다. 탄약, 재장전, 반동, 탄퍼짐, 총기 3D 모델, VFX, 적 음성, 3D 공간음향, 최종 사운드 디자인, 시체·드롭, 부활·respawn은 이 시험 전투 계약에 포함되지 않는다.
+- 현재 발사·적중 구분용 Kenney CC0 시험 효과음 2개만 포함한다. 탄약, 재장전, 반동, 탄퍼짐, 총기 3D 모델, VFX, 적 음성, 3D 공간음향, 최종 사운드 디자인, 정식 드롭 테이블, 시체 저장·정리 시간, 부활·respawn은 이 시험 전투 계약에 포함되지 않는다.
 
 ## 5. Unity 아키텍처 원칙
 
@@ -298,7 +305,8 @@
 - 단발은 누르고 있어도 한 번만 발사되고 release/repress와 RPM 쿨다운을 모두 만족해야 다음 발사가 나가는지 확인한다.
 - 자동은 누른 즉시 한 발이 나간 뒤 정의 RPM 간격으로만 반복되며, 프레임 지연 뒤 같은 프레임에 누적 발사를 몰아서 하지 않는지 확인한다.
 - Raycast가 Camera가 아니라 Player 발사 원점에서 마우스 수평 조준점 방향으로 나가고, 비피격 Trigger는 투명 장벽이 되지 않으며 실제 Collider 장애물은 뒤의 적을 막는지 확인한다.
-- 피해 한 번당 `ApplyDamage` 한 번, `> 0 → 0`에서 사망 통지 한 번만 발생해야 한다. 사망 뒤 추가 피해, AI·Collider·외형 잔류와 중복 사망 처리가 없어야 한다.
+- 피해 한 번당 `ApplyDamage` 한 번, `> 0 → 0`에서 사망 통지 한 번만 발생해야 한다. 사망 뒤 추가 피해와 중복 사망 처리가 없어야 하며 Brain·공격·Agent·피격 Collider는 비활성, 시체 root·렌더·전리품 Trigger는 활성 상태여야 한다.
+- 시체 전리품은 살아 있을 때 열리지 않고 사망 뒤 E 상호작용으로 같은 외부 인벤토리 UI가 열려야 한다. 열린 시체를 유지하는 규칙과 거리 이탈 자동 닫기는 일반 Chest와 같은 계약을 통과해야 한다.
 - 유효한 빗나감에는 발사음만, `DamageResult.WasApplied=true`인 적중에는 발사음과 구분되는 적중음이 나며, 빈 칸·입력 차단·cooldown 거부 입력에는 어느 소리도 나지 않는지 확인한다.
 - 실제 마우스 입력 자동화가 불가능해 공개 공격 진입점을 직접 호출했다면 `[Play Mode 호출 확인]`으로만 기록하고 실제 좌클릭 확인으로 승격하지 않는다.
 

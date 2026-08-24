@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +17,9 @@ namespace FantasySurvival.SceneFlow
         private static bool hasPendingTravel;
         private static bool isLoading;
 
-        public static bool IsLoading => isLoading;
+        public static bool IsLoading => isLoading || hasPendingTravel ||
+                                        (PersistentGameplayShell.Instance != null &&
+                                         PersistentGameplayShell.Instance.IsTravelPrepared);
         public static bool HasPendingTravel => hasPendingTravel;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -29,7 +32,7 @@ namespace FantasySurvival.SceneFlow
 
         public static bool TryLoad(string destinationScene, string spawnId)
         {
-            if (isLoading)
+            if (IsLoading)
             {
                 return false;
             }
@@ -76,15 +79,14 @@ namespace FantasySurvival.SceneFlow
                     return false;
                 }
 
-                AsyncOperation operation = SceneManager.LoadSceneAsync(destinationScene, LoadSceneMode.Single);
-                if (operation == null)
+                if (!shell.BeginTravelTransition(
+                        () => StartSceneLoad(destinationScene),
+                        ClearFailedRequest))
                 {
                     ClearFailedRequest();
-                    Debug.LogError($"Failed to start loading scene '{destinationScene}'.");
+                    Debug.LogError("Failed to start the gameplay scene fade transition.");
                     return false;
                 }
-
-                operation.completed += _ => isLoading = false;
                 return true;
             }
             catch (Exception exception)
@@ -92,6 +94,44 @@ namespace FantasySurvival.SceneFlow
                 ClearFailedRequest();
                 Debug.LogException(exception);
                 return false;
+            }
+        }
+
+        private static void StartSceneLoad(string destinationScene)
+        {
+            try
+            {
+                AsyncOperation operation = SceneManager.LoadSceneAsync(
+                    destinationScene,
+                    LoadSceneMode.Single);
+                if (operation == null)
+                {
+                    Debug.LogError($"Failed to start loading scene '{destinationScene}'.");
+                    ClearFailedRequest();
+                    return;
+                }
+
+                operation.completed += _ =>
+                {
+                    isLoading = false;
+
+                    PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+                    if (shell != null)
+                    {
+                        shell.StartCoroutine(VerifyArrivalOnNextFrame(destinationScene));
+                    }
+                    else if (hasPendingTravel)
+                    {
+                        FailArrival(
+                            destinationScene,
+                            $"Scene '{destinationScene}' loaded, but the persistent gameplay shell was lost before arrival completed.");
+                    }
+                };
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception);
+                ClearFailedRequest();
             }
         }
 
@@ -131,6 +171,28 @@ namespace FantasySurvival.SceneFlow
 
             Debug.LogError(reason);
             ClearFailedRequest();
+        }
+
+        private static IEnumerator VerifyArrivalOnNextFrame(string destinationScene)
+        {
+            // SceneSpawnController normally completes arrival from sceneLoaded or Start.
+            // Give both lifecycle paths one frame before treating a still-pending request
+            // as a broken destination configuration.
+            yield return null;
+
+            if (!hasPendingTravel ||
+                !string.Equals(
+                    pendingTravel.DestinationScene,
+                    destinationScene,
+                    StringComparison.Ordinal))
+            {
+                yield break;
+            }
+
+            FailArrival(
+                destinationScene,
+                $"Scene '{destinationScene}' loaded without completing player placement. " +
+                "Check its active SceneSpawnController and requested spawn ID.");
         }
 
         private static void ClearFailedRequest()

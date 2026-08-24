@@ -29,7 +29,7 @@ namespace FantasySurvival.EditorTools
                 Scene scene = EditorSceneManager.OpenScene(GameMapTestPath, OpenSceneMode.Single);
                 SceneSpawnPoint raidEntry = FindComponentInScene<SceneSpawnPoint>(scene, point => point.SpawnId == "RaidEntry");
                 ReturnPortalInteractable portal = FindComponentInScene<ReturnPortalInteractable>(scene, _ => true);
-                EnemyPatrol enemy = FindComponentInScene<EnemyPatrol>(scene, _ => true);
+                EnemyAIController[] enemies = FindComponentsInScene<EnemyAIController>(scene);
                 GameObject legacyGround = FindRootByName(scene, "Plane");
 
                 if (raidEntry == null || portal == null || legacyGround == null)
@@ -76,10 +76,11 @@ namespace FantasySurvival.EditorTools
                 serializedGenerator.FindProperty("randomizeSeedOnAwake").boolValue = true;
 
                 SerializedProperty protectedAnchors = serializedGenerator.FindProperty("additionalProtectedAnchors");
-                protectedAnchors.arraySize = enemy == null ? 0 : 1;
-                if (enemy != null)
+                protectedAnchors.arraySize = enemies.Length;
+                for (int enemyIndex = 0; enemyIndex < enemies.Length; enemyIndex++)
                 {
-                    protectedAnchors.GetArrayElementAtIndex(0).objectReferenceValue = enemy.transform;
+                    protectedAnchors.GetArrayElementAtIndex(enemyIndex).objectReferenceValue =
+                        enemies[enemyIndex].transform;
                 }
 
                 serializedGenerator.ApplyModifiedPropertiesWithoutUndo();
@@ -97,7 +98,9 @@ namespace FantasySurvival.EditorTools
                     throw new BuildFailedException("Unity could not save the validated GameMapTest urban map setup.");
                 }
 
-                Debug.Log("Configured GameMapTest with one scene-local ProceduralUrbanMapGenerator and NavMeshSurface.");
+                Debug.Log(
+                    $"Configured GameMapTest with one scene-local ProceduralUrbanMapGenerator, " +
+                    $"NavMeshSurface, and {enemies.Length} protected enemy anchors.");
             }
             finally
             {

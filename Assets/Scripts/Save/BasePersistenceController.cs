@@ -66,7 +66,7 @@ namespace FantasySurvival.SaveSystem
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.F5))
+            if (!DirectSceneTravel.IsLoading && Input.GetKeyDown(KeyCode.F5))
             {
                 SaveSlotOne();
             }
@@ -74,6 +74,11 @@ namespace FantasySurvival.SaveSystem
 
         private void OnGUI()
         {
+            if (DirectSceneTravel.IsLoading)
+            {
+                return;
+            }
+
             const float width = 300f;
             const float height = 112f;
             Rect panel = new Rect(Screen.width - width - 16f, 16f, width, height);
@@ -92,6 +97,12 @@ namespace FantasySurvival.SaveSystem
 
         public bool SaveSlotOne()
         {
+            if (DirectSceneTravel.IsLoading)
+            {
+                SetStatus("Save is unavailable during gameplay scene travel.", false);
+                return false;
+            }
+
             if (!TryGetInventory(out InventoryUIManager inventory, out string error) ||
                 !TryGetBaseOwner(out GameManager owner, out error))
             {

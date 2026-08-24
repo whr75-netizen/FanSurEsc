@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7952717098829923281}
-  - component: {fileID: 3344706678386573918}
   m_Layer: 0
   m_Name: ZombieAgent
   m_TagString: Untagged
@@ -26,36 +25,13 @@ Transform:
   m_GameObject: {fileID: 5625659321238667121}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7803743912603325822}
   m_Father: {fileID: 5574875849931597612}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &3344706678386573918
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5625659321238667121}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.6
-  m_Height: 4
-  m_Direction: 1
-  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &7783077477261944068
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,9 +41,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5574875849931597612}
-  - component: {fileID: 1889593813852031817}
   - component: {fileID: 419036695974578800}
   - component: {fileID: 3058496521402663053}
+  - component: {fileID: 2330125652425958299}
+  - component: {fileID: 5304765128506002036}
+  - component: {fileID: 6888693271440616795}
+  - component: {fileID: 7569689720775425678}
+  - component: {fileID: 7141297199703957038}
+  - component: {fileID: 1838099187199406256}
   m_Layer: 0
   m_Name: KenneyZombiePatrol
   m_TagString: Untagged
@@ -89,29 +70,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7952717098829923281}
+  - {fileID: 2670272233511199635}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1889593813852031817
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7783077477261944068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0877059f01854c44abc24eed3091101c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::EnemyPatrol
-  agent: {fileID: 7952717098829923281}
-  animator: {fileID: 4227854663462637316}
-  localWaypoints:
-  - {x: -1.5, y: 0, z: 0}
-  - {x: 1, y: 0, z: 0}
-  moveSpeed: 1.25
-  turnSpeedDegreesPerSecond: 540
-  arrivalDistance: 0.05
-  waypointWaitSeconds: 0.5
 --- !u!114 &419036695974578800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,11 +100,181 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDeathHandler
   stats: {fileID: 419036695974578800}
   behavioursToDisable:
-  - {fileID: 1889593813852031817}
+  - {fileID: 6888693271440616795}
+  - {fileID: 5304765128506002036}
+  - {fileID: 2330125652425958299}
+  - {fileID: 4227854663462637316}
   collidersToDisable:
-  - {fileID: 3344706678386573918}
-  objectsToHide:
-  - {fileID: 5625659321238667121}
+  - {fileID: 7569689720775425678}
+  objectsToHide: []
+  behavioursToEnableOnDeath:
+  - {fileID: 1838099187199406256}
+  collidersToEnableOnDeath:
+  - {fileID: 2137075073019370364}
+--- !u!195 &2330125652425958299
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7783077477261944068}
+  m_Enabled: 0
+  m_AgentTypeID: 0
+  m_Radius: 0.6
+  m_Speed: 1.5
+  m_Acceleration: 14
+  avoidancePriority: 50
+  m_AngularSpeed: 720
+  m_StoppingDistance: 0.1
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 4
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &5304765128506002036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7783077477261944068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db658a78e9dbbed40a5ccce122983ea2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMeleeRushAction
+--- !u!114 &6888693271440616795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7783077477261944068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91b72687be4036541890d065ad8ad567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyAIController
+  stats: {fileID: 419036695974578800}
+  agent: {fileID: 2330125652425958299}
+  combatAction: {fileID: 5304765128506002036}
+  movementAnimator: {fileID: 4227854663462637316}
+  sightAndShotMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  eyeHeight: 1.8
+  targetAimHeight: 0.5
+  navMeshPlacementRadius: 3
+  initialThinkDelay: 0.2
+--- !u!136 &7569689720775425678
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7783077477261944068}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.6
+  m_Height: 4
+  m_Direction: 1
+  m_Center: {x: 0, y: 2, z: 0}
+--- !u!114 &7141297199703957038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7783077477261944068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8f36b178f9d8a49ba7ae9dec6f0ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chest
+  chestWidth: 4
+  chestHeight: 4
+  itemDatabase: {fileID: 11400000, guid: d38ab357628cdf24c9542351dd577b53, type: 2}
+  startingItemIds: 01000000
+--- !u!114 &1838099187199406256
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7783077477261944068}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a8cb5f087c616b0439661d60595683f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Interaction.ChestInteractable
+  interactionPrompt: Loot Corpse
+--- !u!1 &7928003692768212826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2670272233511199635}
+  - component: {fileID: 2137075073019370364}
+  m_Layer: 0
+  m_Name: CorpseInteraction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2670272233511199635
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7928003692768212826}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5574875849931597612}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &2137075073019370364
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7928003692768212826}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.7
+  m_Height: 1.7
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!1001 &7766121946146402965
 PrefabInstance:
   m_ObjectHideFlags: 0

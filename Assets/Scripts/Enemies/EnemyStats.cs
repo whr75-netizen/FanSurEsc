@@ -12,6 +12,7 @@ public sealed class EnemyStats : MonoBehaviour, IDamageable
     private bool isDead;
 
     public event Action<float, float> HealthChanged;
+    public event Action<EnemyStats, DamageContext, DamageResult> DamageApplied;
     public event Action<EnemyStats, DamageContext> Died;
 
     public EnemyDefinition Definition => definition;
@@ -73,13 +74,15 @@ public sealed class EnemyStats : MonoBehaviour, IDamageable
             isDead = true;
         }
 
+        var result = new DamageResult(true, previousHealth, currentHealth, causedDeath);
         HealthChanged?.Invoke(currentHealth, MaxHealth);
+        DamageApplied?.Invoke(this, context, result);
         if (causedDeath)
         {
             Died?.Invoke(this, context);
         }
 
-        return new DamageResult(true, previousHealth, currentHealth, causedDeath);
+        return result;
     }
 
     public void RestoreHealth(float amount)

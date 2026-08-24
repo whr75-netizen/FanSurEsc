@@ -588,7 +588,7 @@ Interactable (abstract base class)
 - `[사용자 요구]` 현재 모든 총기 피해는 기능 확인용 `35`로 통일하고, 기존 최대 체력 100 좀비가 세 번째 적중에 죽는 것까지 연결한다.
 - `[사용자 요구]` 하체에 전후좌우·대각 방향 locomotion 애니메이션 세트가 없으므로 마우스 방향 캐릭터 회전, 후진·strafe, 조준·발사 애니메이션은 이번 범위에서 건너뛴다. 기존 WASD 방향 회전과 장착 상체 pose는 보존하고 판정만 마우스 방향을 사용한다.
 - `[사용자 요구]` 발사 여부와 실제 적중 여부를 귀로 구분할 수 있도록 유효한 발사에는 짧은 “뿅” 계열 소리, 피해가 적용된 적중에는 별도의 둔탁한 소리를 사용한다. 무료로 받을 수 있고 이용 조건이 명확한 원본 파일을 사용한다.
-- `[제외 범위]` 탄약, 재장전, 반동, 탄퍼짐·명중률, 총기 3D 모델, VFX, 발사 애니메이션, 적 음성, 3D 공간음향, 최종 사운드 디자인, 시체·드롭, 부활·respawn과 정식 전투 밸런스는 구현하지 않는다.
+- `[제외 범위]` 탄약, 재장전, 반동, 탄퍼짐·명중률, 총기 3D 모델, VFX, 발사 애니메이션, 적 음성, 3D 공간음향, 최종 사운드 디자인, 정식 드롭 테이블, 시체 저장·정리 시간, 부활·respawn과 정식 전투 밸런스는 구현하지 않는다.
 
 ### 상태 소유권과 호출 흐름
 
@@ -616,7 +616,7 @@ Interactable (abstract base class)
 - `[에셋 확인]` 두 OGG는 mono, PCM, Decompress On Load, preload 설정으로 import한다. 매 발사 파일 로드나 AudioSource 생성 없이 persistent AudioSource 하나의 `PlayOneShot`으로 겹쳐 재생한다.
 - `[코드/프리팹 확인]` 좀비의 실제 이동 자식 `ZombieAgent`에는 center `(0, 2, 0)`, height `4`, radius `0.6`인 Trigger CapsuleCollider가 하나 있다. Root의 `EnemyStats`가 부모 경로의 `IDamageable` 권위자다.
 - `[코드 확인]` `EnemyStats.ApplyDamage`가 현재 체력을 0~최대로 제한하고, 살아 있는 상태의 `> 0 → 0` 전이에서 `isDead`를 먼저 확정한 뒤 `Died`를 정확히 한 번 통지한다. `Initialize`도 한 개체당 한 번만 성공하므로 죽은 뒤 피해·회복·Reset·재초기화는 체력만 되살리는 암묵적 부활을 만들지 않는다.
-- `[코드/프리팹 확인]` `EnemyDeathHandler`는 `Died` 뒤 기존 `EnemyPatrol`, 피격 CapsuleCollider와 `ZombieAgent` 외형을 비활성화한다. Root와 죽은 `EnemyStats`는 남겨 현재 사망 상태를 유지하며 시체·드롭·Destroy 정책은 후속으로 남긴다.
+- `[현재 코드/프리팹 확인]` `EnemyDeathHandler`는 `Died` 뒤 Brain, 공격 Action, Agent, Animator와 피격 Collider를 비활성화한다. Root·렌더 외형·죽은 `EnemyStats`는 시체로 남기고 기존 Chest 경로의 전리품 상호작용과 전용 Trigger를 활성화한다. 자세한 현재 계약은 20절에 기록한다.
 - `[조사 확인]` 로컬 RimWorld 1.6.4871 코드는 단순히 “상태이상 함수가 직접 사망 호출”하는 구조가 아니라 피해·Hediff 적용 뒤 `Pawn_HealthTracker.CheckForStateChange/ShouldBeDead`가 중앙 판정하고 `Pawn.Kill`이 한 번의 사망 처리를 조정한다. 현재 프로젝트에는 거대한 Hediff 체계를 복제하지 않고 공통 피해 진입점, 단일 체력 권위자, 중앙 0 전이와 사망 후 통지만 적용했다.
 - `[후속 확장 경계]` 현재 cadence registry는 공격기가 비활성화될 때 전체 정리되며, 실행 중 발사한 runtime 무기 참조는 그때까지 유지한다. 현재 3칸 시험 규모에는 문제가 없지만 대량 무기 생성·폐기가 생기면 아이템 수명 종료 통지에 맞춘 개별 제거를 함께 설계한다.
 - `[후속 확장 경계]` 현재 좀비는 serialized `EnemyDefinition`을 가진 정의별 프리팹이라 `Awake`에서 1회 초기화된다. 미래 범용 spawn 프리팹은 definition을 비워 두고 spawn 직후 최초 `Initialize`를 호출하며, 이미 초기화된 개체의 definition을 교체하는 방식은 사용하지 않는다.
@@ -638,7 +638,7 @@ Interactable (abstract base class)
 - `[코드/실행 확인]` 단발 첫 press 허용, 쿨다운 내부 press 거부, 쿨다운 이후 held만으로 반복 거부, 새 press 허용을 검사했다. 자동은 첫 held 즉시 허용, RPM 내부 거부, 이후 held 허용, 긴 프레임 지연 뒤 한 발만 허용, release 거부를 통과했다.
 - `[코드/실행 확인]` 후속 리뷰에서 확인된 공용 cooldown과 프레임 지연 누적을 수정했다. runtime `InventoryItemData` 두 개가 서로 다른 cadence를 사용하고 같은 아이템은 기존 cadence를 유지한다. 30 FPS에서 720 RPM을 3초 모사했을 때 허용 오차 안의 36발이 나왔으며, 1초 hitch 뒤 같은 timestamp의 누적 발사는 거부했다.
 - `[코드/실행 확인]` 최대 체력 100의 독립 `EnemyStats`에 피해 35를 세 번 적용해 `100 → 65 → 30 → 0`, 세 번째만 `CausedDeath=true`, `Died` 1회, 네 번째 피해 거부와 죽은 뒤 회복·Reset 거부를 확인했다.
-- `[Play Mode 호출 확인]` 실제 persistent Player의 빈 3번 슬롯과 `InputBlocked`에서는 발사를 거부했다. W1 Handgun은 press/held/cooldown 순서, W2 Rifle은 held/RPM 순서로 Player 원점 Raycast를 실행했고 두 시험 좀비 모두 35 피해 세 번째에 한 번 죽었다. 사망 뒤 Patrol·피격 Collider·외형 비활성 및 추가 피해·중복 사망 없음도 확인했다.
+- `[이전 구현 Play Mode 호출 확인]` 실제 persistent Player의 빈 3번 슬롯과 `InputBlocked`에서는 발사를 거부했다. W1 Handgun은 press/held/cooldown 순서, W2 Rifle은 held/RPM 순서로 Player 원점 Raycast를 실행했고 두 시험 좀비 모두 35 피해 세 번째에 한 번 죽었다. 당시에는 사망 뒤 Patrol·피격 Collider·외형 비활성 및 추가 피해·중복 사망 없음을 확인했으며, 현재 외형 정책은 20절의 시체 유지로 대체됐다.
 - `[Play Mode 호출 확인]` 최종 재검증에서는 기존 장비 상태를 보관하고 장비 소유 API로 시험용 W1 Handgun과 W2 Rifle을 임시 장착했다. `권총 1발 → 권총 조기 재발 거부 → 같은 시각 소총 첫 발 허용 → 권총 재선택 시 남은 cooldown 유지 → 소총 다음 허용 시각의 세 번째 총 피해로 사망`을 통과했고, `Died`와 `EnemyDeathHandler`는 한 번만 실행됐다. 시험 장비, 활성 번호, Player·Camera 위치, 입력 차단과 EventSystem 상태를 모두 원래 값으로 복구한 뒤 Edit Mode로 종료했다.
 - `[Play Mode 호출 확인]` 오디오 재검증에서 적이 없는 유효 발사는 발사 클립만 활성 재생했고, 발사 클립을 시험 중 잠시 제외한 상태에서 35 피해가 실제 적용된 적중은 적중 클립만 활성 재생했다. 두 클립을 정상 복구한 뒤 추가 두 발로 `100 → 65 → 30 → 0`, 사망·정리 1회를 다시 통과했으며 시험 장비와 모든 런타임 상태를 원복했다.
 - `[Play Mode 사용자 확인][2026-08-23]` 발사음과 같은 순간에 재생되던 둔탁한 적중음이 섞여 잘 구분되지 않았음을 확인했다. 적중음 시작을 약 `0.06`초 분리한 뒤 실제 Game View에서 효과음이 잘 들리는 것을 사용자가 확인했으며, 요청에 따라 추가 자동 공격 테스트는 생략했다.
@@ -733,3 +733,121 @@ Interactable (abstract base class)
 - `[실행 확인][2026-08-24]` `Application.temporaryCachePath`의 격리 파일로 Windows `File.Replace`를 확인했다. 정상 primary는 이전 primary를 backup으로 회전했고, 손상·layout 불일치 primary를 승격하지 않는 경로는 `null` backup 교체로 기존 정상 `.bak`을 유지했다. 시험 임시 폴더는 제거했다.
 - `[씬/직렬화 확인][2026-08-24]` GameMap1 가구 2개, Main Menu DB 참조, GameMapTest scene-local Chest 1개와 persistent 가구 0개, 세 씬 Missing Script 0을 Unity Editor API로 확인했다. 최종 project compile Error 0, Console 신규 Error/Exception/Assert 0이며 현재 Warning 6개는 Input Manager 폐기 예고, Unity MCP 서명 수집, 기존 Animator Controller, 외부 RenderTextureBaker API 경고다.
 - `[미검증]` 실제 사용자 slot 1 파일을 생성하는 F5와 새 프로세스의 Main Menu 버튼 Load는 기존 사용자 세이브를 건드리지 않기 위해 실행하지 않았다. 같은 저장 DTO·primary/backup 선택·실제 GameMap1 적용 경계는 격리 파일 및 Play Mode 메모리 후보로 검증했다.
+
+---
+
+## 19. 공통 감지 기반 근접·원거리 적 AI 1단계
+
+### 사용자 요구와 범위
+
+- `[사용자 요구][2026-08-24]` 기존 좀비는 야생형 근접 AI로 사용해 Player까지 최단 경로로 돌진시킨다. 별도 primitive 외형의 원거리 적 하나는 Player를 보면 추적하면서 사격하고, 전투 밖에서는 랜덤 지형을 읽어 순찰한다.
+- `[사용자 요구]` 시야뿐 아니라 총성·발사체·마법 같은 자극을 받을 수 있는 공통 기반을 두고, 정지 조준·도주 사격·돌진 사격·엄폐·지속 추적형 원거리 AI의 후속 설계를 정리한다.
+- `[현재 구현 범위]` 감지·기억·NavMesh 순찰, 근접 돌진, 원거리 접근·정지 조준·가상 조준 사격과 기존 피해·사망 연결까지만 구현했다.
+- `[제외 범위]` 공격 애니메이션, 탄환 오브젝트, 발소리·마법·발사체 자극 생산자, 후퇴·엄폐·측면 이동, 분대 전술, Player 사망 입력 차단과 Raid 실패 처리는 포함하지 않았다.
+
+### 조사 결과와 채택한 구조
+
+- `[조사]` The Division의 상위 상태와 cover 후보 점수 분리, The Darkness II의 perception과 last-known-position 분리, F.E.A.R. 3의 소수 상태와 plan 조합, God of War Ragnarök의 공유 core와 역할별 subtree 분리를 비교했다.
+- `[적용]` 현재 두 적 규모에는 `EnemyAIController` 하나가 저빈도 인식·기억·순찰·이동 명령을 소유하고, 근접·원거리 공격 Action만 교체하는 구성이 가장 짧다. 후속 엄폐 전술이 생길 때 `전술 선택 → 위치 후보 평가 → 행동 실행`을 추가하며 지금부터 범용 행동 트리나 중앙 scheduler를 만들지 않는다.
+- `[확정 해석]` “한 번 보면 죽을 때까지 추적”은 대상 신원과 마지막 관측 위치를 잊지 않는 기억 정책이다. 시야가 끊긴 동안 현재 Player 좌표를 벽 너머로 읽는 방식은 사용하지 않는다.
+
+참고 자료:
+
+- <https://media.gdcvault.com/gdc2016/Presentations/Dunstan_Philip_BlendingAutonomyAnd.pdf>
+- <https://media.gdcvault.com/gdc2012/slides/Summit_AI/Brewer_Daniel_D2AIPostMortem.pdf>
+- <https://gdcvault.com/play/1013282/Three-States-and-a-Plan>
+- <https://media.gdcvault.com/gdc2023/Slides/PreparingForRagnarokWithNotes.pdf>
+- <https://docs.unity3d.com/Packages/com.unity.ai.navigation%402.0/manual/index.html>
+- <https://docs.unity3d.com/6000.0/Documentation/Manual/physics-optimization-raycasts-queries.html>
+
+### 상태 소유권과 호출 흐름
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 권위 소유자 | `EnemyAIController`가 적의 인식 상태, 현재 타깃, 마지막 확인 위치, 순찰 목적지와 NavMesh 이동 명령을 소유한다. `EnemyStats`와 `PlayerStats`는 각자의 체력을 소유한다. |
+| 수명 범위 | AI 기억·공격 cooldown은 Enemy Entity, definition은 Asset, `WorldStimulus`는 통지 순간, GameMapTest NavMesh는 Scene 수명이다. |
+| 생성·파괴 주체 | 씬의 프리팹 인스턴스가 AI와 scene-local 전리품 grid를 만들고 scene unload가 정리한다. `EnemyDeathHandler`는 `EnemyStats.Died` 뒤 행동·Agent·Animator·피격 Collider를 정지하고 시체 상호작용을 열지만 체력이나 사망을 다시 판정하지 않는다. |
+| 변경 진입점 | Brain 상태는 저빈도 판단과 `HandleWorldStimulus`/`DamageApplied`로만 바뀐다. 공격은 `EnemyCombatAction`이 대상의 공통 `IDamageable.ApplyDamage`를 호출한다. |
+| 포함 관계 | Brain은 같은 Entity의 Agent와 Action에 명령하지만 체력·정의·Player를 소유하지 않는다. `WorldStimulusChannel`은 listener 기억을 소유하지 않는다. |
+| 이전 규칙 | 현재 컨테이너 소유권 이전은 없다. 타깃은 관찰 참조이며 시야·자극·사망 경계에서만 채택하거나 해제한다. |
+| 파생 표현 | NavMesh path, 이동 Animator와 primitive/좀비 visual은 원본 상태에서 다시 만들 수 있는 파생 표현이다. |
+| 저장 경계 | 적 AI 상태, 순찰점, 공격 cooldown과 NavMesh는 현재 저장하지 않는다. scene 재진입 시 새 적 Entity로 시작한다. |
+| 업데이트 주체 | 적마다 Brain `Update` 하나만 사용한다. 비전투 0.5초, 전투·수색 0.15초 판단과 0.2초 시야 검사를 개체별로 분산한다. 총성은 사건 시 한 번 통지한다. |
+
+### 현재 구현
+
+- `[코드/에셋 확인]` `EnemyDefinition`에 감지·기억·순찰·이동·공격·가상 조준 설정을 추가했다. 기존 `KenneyZombie`는 `MeleeRush`, 새 `PrototypeRangedEnemy`는 `RangedPursuit` definition을 사용한다.
+- `[프리팹/씬 확인]` `GameMapTest`에는 기존 좀비 1개와 청록색 구체 원거리 적 1개가 있다. 둘 다 root가 위치 권한을 가지며 `NavMeshAgent`, `EnemyAIController`, 대응 Action, `EnemyStats`, `EnemyDeathHandler`를 사용한다.
+- `[코드 확인]` 두 Agent는 prefab에서 비활성으로 시작한다. Brain이 `NavMesh.SamplePosition`에 성공한 뒤 Transform을 유효한 보행면으로 맞추고 Agent를 활성화하므로 runtime NavMesh 생성 전 경고와 잘못된 `SetDestination` 호출을 피한다.
+- `[코드 확인]` 순찰은 반경 안 후보를 8회까지 만들고 NavMesh 완전 경로만 채택한다. 너무 가까운 지점과 최근 두 목적지는 피하고 도착 뒤 정의 범위만큼 기다린다. 기존 고정 좌우 왕복 `EnemyPatrol`은 더 이상 참조되지 않아 제거했다.
+- `[코드 확인]` 시야는 거리·시야각 뒤 장애물 Raycast를 하며, 감지 실패 시 마지막 목격 또는 들은 위치만 수색한다. 근접은 공격 순간에도 시야선을 다시 확인해 시야 캐시 동안 벽 너머 타격하지 않는다.
+- `[코드 확인]` Player 발사는 Raycast·피해 적용을 먼저 마친 뒤 `GunshotSound`를 통지한다. 자극 listener 오류는 이미 완료된 발사 명령을 취소하지 않으며 정상 통지 경로에는 별도 배열 할당이 없다.
+- `[코드 확인]` 원거리 적은 선호 거리 8까지 접근하며 사거리 14 안에서 피해 8을 1.1초 간격으로 시도한다. 가상 조준점의 부드러운 오차가 0.8초 동안 수렴하고 이동 중 오차가 추가되며, 첫 전투 Tick에 이전 비전투 delta를 조준 시간으로 소비하지 않는다. 모두 기능 시험값이다.
+- `[코드 확인]` `PlayerStats`가 기존 호환 `ApplyDamage(float)`를 유지하면서 `IDamageable`을 구현한다. HP 0이면 AI는 대상을 더 공격하지 않지만 Player 사망 완료 통지·입력 차단·원정 실패는 후속이다.
+- `[씬 정책]` NavMesh가 없는 `GameMap1`의 기존 좀비는 scene override로 Brain, Action과 Agent를 비활성화한 정지 사격 표적을 유지한다. 공유 프리팹의 전투 구성은 보존되며 GameMapTest에서만 활성 AI로 동작한다.
+- `[도구 회귀]` `UrbanMapPrototypeSetup`은 모든 `EnemyAIController` root를 보호 anchor로 등록하며, `UrbanMapPlayModeValidation`은 근접 1·원거리 1뿐 아니라 두 Agent가 runtime NavMesh에 올라온 뒤에만 씬 준비 완료로 판정한다.
+
+### 2026-08-24 검증 결과와 한계
+
+- `[정적 Unity 확인]` 두 prefab에 Missing Script가 없고 기존 `EnemyPatrol`이 없으며 Brain, 올바른 Action, 비활성 Agent, root 피격 Collider와 사망 정리 참조가 있다. 원거리 visual에는 별도 상태 권한이 없는 청록색 Sphere만 사용한다.
+- `[씬 Unity 확인]` `GameMapTest`에는 활성 근접 Brain 1개와 원거리 Brain 1개, protected anchor 2개가 있고 `GameMap1` 시험 좀비의 Brain·Action·Agent override는 비활성이다. 두 씬 모두 Missing Script 0, 검사 뒤 dirty false였다.
+- `[Play Mode 확인]` corrected runtime NavMesh에서 두 Agent가 `isOnNavMesh=true`가 된 뒤 순찰·추적했다. 원거리 적은 7회 사격을 시도해 5회 실제 피해를 적용했고 Player 체력은 0이 됐으며, 죽은 대상을 추가 공격하지 않고 Patrol로 돌아갔다.
+- `[최종 대표 Play Mode 확인]` 사용자 기준 한 번의 `GameMapTest` 직접 실행에서 위 결과를 다시 확인했다. 두 Agent는 모두 NavMesh ready였고, 원거리 적은 7회 시도·5회 피해로 Player HP를 0까지 낮췄으며 두 적은 죽은 대상을 놓고 다시 Patrol로 전이했다.
+- `[Play Mode 호출 확인]` 근접 적과 Player를 공격 사거리 안에 둔 뒤 런타임 Cube 벽을 사이에 놓고 같은 `EnemyMeleeRushAction.TickCombat`을 호출했다. 벽이 있을 때 HP `100 → 100`, 벽을 제거한 뒤 HP `100 → 90`으로 공격 순간 LOS 차단을 확인했다.
+- `[Play Mode 수명주기 확인]` 살아 있는 근접 Brain을 비활성화·재활성화했을 때 즉시 `AwaitingNavigation`으로 재기준화됐고, 이후 `Patrol`, `isOnNavMesh=true`, 새 path와 실제 velocity를 가져 이전 순찰 목적지 플래그에 막히지 않았다.
+- `[Play Mode 호출 확인]` 공통 `DamageContext`로 원거리 적을 죽였을 때 `CausedDeath=true`, 사망 handler 1회, Brain·Action·Agent·피격 Collider 비활성화를 확인했다. 20절 후속 구현에서 같은 전이 뒤 root·렌더 유지와 시체 전리품 활성화까지 확장 확인했다.
+- `[Play Mode 호출 확인]` Player가 instigator인 총성 자극을 근접 적 청취 반경에 발행하자 같은 호출 경계에서 `Investigate`로 전이하고 마지막 확인 위치를 자극 좌표와 정확히 맞췄다. 기억 만료 뒤 Patrol로 복귀했다.
+- `[수정 과정]` 최초 smoke에서 두 Agent가 runtime NavMesh보다 먼저 활성화되어 `Failed to create agent because there is no valid NavMesh` Warning 2개가 발생했다. prefab Agent를 초기 비활성화하고 유효 보행면 확인 뒤 활성화하도록 근본 원인을 수정했으며 corrected 재실행에서는 같은 Warning이 새로 발생하지 않았다.
+- `[컴파일 확인]` 최종 경계 수정 뒤 Unity asset refresh와 script compilation이 성공했고 신규 Error/Exception/Assert는 0이다.
+- `[Console 기준선]` Console에는 Error 0, Warning 8개가 남아 있다. 기존 Input Manager 폐기 예고, MCP 서명, 이전 Animator와 외부 RenderTextureBaker 경고 6개에 더해 위 최초 smoke의 역사적 NavMesh Warning 2개이며 Console을 지우지 않았다. corrected 재실행 이후 같은 Warning delta는 0이다.
+- `[에디터 상태 복원]` 최종 검증 뒤 `Application.runInBackground=false`, Edit Mode, 활성 `GameMap1`, scene dirty false로 되돌렸다.
+- `[미검증]` 실제 키보드·마우스로 두 적을 상대하는 사용자 흐름, authored 벽을 사이에 둔 원거리 공격, 발소리·마법·발사체 생산자, Player HP 0 뒤 입력 차단과 Raid 실패, 씬 재입장 구독 누적, Windows Player build와 Profiler 수치는 이번 범위에서 확인하지 않았다.
+
+---
+
+## 20. 적 시체 전리품과 공용 게임플레이 검은 전환
+
+### 사용자 요구와 범위
+
+- `[사용자 요구][2026-08-24]` 적이 죽으면 즉시 제거하거나 외형을 숨기지 않고 시체로 남긴다. 사망 뒤 AI를 정지하고 시체에서도 인벤토리를 열 수 있어야 한다.
+- `[사용자 요구]` 최초 실행 로딩 화면은 기존 흐름으로 별도 유지하고, 그 밖의 게임플레이 씬 전환은 재사용 가능한 검은 화면으로 처리한다.
+- `[현재 구현 범위]` 두 시험 적의 scene-local 시체 전리품과 `GameMap1 ↔ GameMapTest`가 공유하는 persistent fade만 구현했다.
+- `[제외 범위]` 사망 애니메이션, ragdoll, 정식 드롭 테이블·확률·수량, 시체 정리 시간, 시체·내용물 저장, 원정 결과와 최초 로딩 UI 디자인은 포함하지 않았다.
+
+### 상태 소유권과 호출 흐름
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 권위 소유자 | 사망은 `EnemyStats.IsDead`, 시체 grid는 같은 적 root의 `Chest`, 이동 요청·pending 목적지는 `DirectSceneTravel`, 화면 alpha는 persistent `GameplaySceneTransitionFader`가 각각 하나의 원본을 가진다. |
+| 수명 범위 | 적·시체·전리품 grid는 Enemy Entity/Scene, fader와 Player 입력 보류 상태는 persistent 셸의 Play Session, fade 한 회는 Travel Transition 수명이다. |
+| 생성·파괴 주체 | 적 프리팹 인스턴스의 `Chest.Awake`가 grid를 한 번 만들고 scene unload가 시체와 함께 정리한다. fade Canvas는 `PersistentGameplayShell` 프리팹과 한 번 생성·보존된다. |
+| 변경 진입점 | `ApplyDamage → EnemyStats >0→0 → Died → EnemyDeathHandler`가 행동 정지·시체 상호작용 활성화를 수행한다. `DirectSceneTravel.TryLoad → PrepareForTravel → TryCover → LoadSceneAsync → SceneSpawnController → FinishArrival → Reveal`이 씬 전환을 수행한다. |
+| 포함 관계 | `EnemyDeathHandler`는 체력이나 grid 내용을 소유하지 않고 완료된 죽음을 관찰한다. fader는 목적지·Spawn ID·Player를 소유하지 않고 검은 화면만 표시한다. |
+| 이전 규칙 | 시체와 Player 사이 아이템 이동은 일반 Chest와 같은 기존 원자적 drag/container API를 사용한다. 전환 중에는 열린 인벤토리와 drag를 같은 `CloseAllInventories` 경로로 먼저 정리한다. |
+| 파생 표현 | 시체 root·렌더, 비활성 AI/Animator/Collider와 활성 전리품 Trigger는 `EnemyStats.IsDead`의 파생 상태다. 검은 Canvas와 입력 잠금은 pending 이동의 파생 실행 상태다. |
+| 저장 경계 | 현재 시체·적 체력·전리품 grid와 fade 상태는 저장하지 않는다. 시체 시작 아이템 ID 1/2는 시험 프리팹 데이터이며 정식 보상 확정이 아니다. |
+| 업데이트 주체 | 사망 전이는 이벤트 1회이고 별도 시체 `Update`가 없다. fade만 `Time.unscaledDeltaTime` coroutine을 사용하며 기존 씬 이동 경계 외에 새 Manager나 Tick을 만들지 않았다. |
+
+### 구현 내용
+
+- `[코드 확인]` `EnemyDeathHandler`가 사망 시 비활성화할 Behaviour/Collider와 활성화할 시체 Behaviour/Collider를 명시 배열로 나눴다. 오브젝트 제거·Destroy·두 번째 사망 bool은 추가하지 않았다.
+- `[프리팹 확인]` `KenneyZombiePatrol`과 `PrototypeRangedEnemy` root에 4×4 `Chest`와 기본 비활성 `ChestInteractable`을 연결했다. `CorpseInteraction` Trigger는 살아 있을 때 비활성이고 사망 뒤에만 켜진다. 좀비는 시험 ID 1, 원거리 적은 ID 2 하나를 가진다.
+- `[코드 확인]` 시체는 기존 `PlayerInteractor`의 거리순 선택, 열린 대상 유지, 거리 이탈 자동 닫기와 `InventoryUIManager` 외부 인벤토리 UI를 그대로 사용한다. 별도 시체 Loot Manager/UI/컨테이너 복사본은 없다.
+- `[수명 규칙]` 현재 시체는 scene unload 전 임의 비활성화·Destroy하지 않는다. 향후 despawn을 추가할 때는 먼저 공통 닫기를 요청하고 drag 복구가 거부되면 despawn 자체를 보류하는 coordinator가 필요하다.
+- `[코드 확인]` Player 공격 Raycast는 죽은 `IDamageable`의 시체 Trigger를 utility Trigger처럼 건너뛰어 뒤의 살아 있는 대상에 대한 투명 장벽이 되지 않게 했다.
+- `[코드/프리팹 확인]` persistent 셸 root sibling에 `GameplaySceneTransitionCanvas` 하나를 추가했다. 유휴 시 Canvas 비활성·alpha 0이고, 전환 중 최고 sorting order의 검은 Image가 전체 화면을 덮으며 raycast를 차단한다.
+- `[코드 확인]` `DirectSceneTravel`은 fade-out 완료 뒤에만 `LoadSceneAsync`를 시작한다. 목적지 `SceneSpawnController`가 같은 Player를 배치한 뒤 fade-in하며, 완전히 투명해진 뒤 기존 이동·인벤토리·상호작용 상태를 복원한다. 공격과 무기 전환은 같은 인벤토리 입력 차단 상태를 읽는다.
+- `[실패 경계]` 로드 완료 다음 프레임까지 목적지 배치가 완료되지 않으면 watchdog이 공통 `FailArrival`로 pending 요청과 입력 잠금을 정리한다. fade 컴포넌트가 전환 도중 비활성화되어 coroutine이 끊겨도 interruption callback이 같은 실패 정리 경로를 호출한다. 전환 중 `BasePersistenceController`의 F5와 IMGUI 저장 패널도 차단한다.
+- `[시작 흐름 보존]` `InitialLoadingManager`, `MainMenuManager`, `GameLoadingManager`와 세 시작 씬은 수정하지 않았다. 공용 검은 fade는 `DirectSceneTravel`을 쓰는 게임플레이 직접 이동에만 적용된다.
+
+### 2026-08-24 검증 결과와 한계
+
+- `[정적 Unity 확인]` 두 적 프리팹은 살아 있을 때 시체 Interactable/Trigger 비활성, 사망 뒤 활성 참조 1개씩, 숨길 외형 0개, 피격 Collider 1개와 Brain/Action/Agent(좀비 Animator 포함) 정지 참조를 가졌다. 각 4×4 grid의 시험 아이템 ID와 ItemDatabase 참조도 확인했다.
+- `[Play Mode 호출 확인]` GameMap1 좀비에 공통 `DamageContext`로 `100 → 0`을 적용했다. `CausedDeath`, `EnemyStats.IsDead`, handler 1회를 확인했고 root·Renderer는 활성, Brain·Action·Agent·Animator·피격 Collider는 비활성, 시체 Trigger와 전리품 상호작용은 활성, 아이템은 1개였다.
+- `[Play Mode 호출 확인]` 실제 persistent Player를 시체 1.25m 옆에 두고 공개 `PlayerInteractor.TryInteract` 경로로 기존 외부 인벤토리를 열었다. 열린 대상이 해당 시체로 유지됐고 5m 밖으로 이동한 다음 프레임들에 UI와 대상 참조가 자동으로 닫혔다.
+- `[Play Mode 확인]` 사용자 기준 한 번 `GameMap1 → GameMapTest → GameMap1` 왕복했다. 요청 직후 fade와 이동·인벤토리·상호작용 입력 잠금이 활성화됐고 중복 이동은 거부됐다. 양쪽 도착 뒤 같은 shell Entity와 Player Entity가 유지됐으며 active Camera, AudioListener, EventSystem은 각각 1개였다. fade-in 완료 뒤 해당 입력 상태가 복원됐다.
+- `[코드/상태 확인]` GameMapTest 도착 시 살아 있는 근접·원거리 적 2개의 시체 상호작용과 Trigger가 모두 아직 비활성임을 확인했다. 최초 로딩 흐름과 관련 Manager에는 diff가 없다.
+- `[컴파일/Console 확인]` 최종 script refresh/동적 검증 command compilation은 성공했고 Console Error 0, Warning 8 기준선에 신규 Error/Exception/Assert 또는 Warning delta가 없다. 기존 8개는 Input Manager, MCP 서명, 과거 Animator/NavMesh와 외부 RenderTextureBaker 경고다.
+- `[에디터 상태 복원]` Play Mode를 종료하고 활성 `GameMap1`, dirty false, `Application.runInBackground=false`로 복원했다. 새 직렬화 필드 때문에 생긴 scene dirty는 복구 사본과 비교해 기존 Chest prompt 두 줄뿐임을 확인한 뒤 Unity API로 저장했으며 동일한 임시 사본은 휴지통으로 옮겼다.
+- `[선행 결함/제외]` 기존 `PauseMenu`는 비활성 `PauseCanvas` 안에 붙어 있고 `pauseCanvas`가 QuitButton을 가리켜 Escape 메뉴 입력 자체가 동작하지 않는 상태다. 이번 전환이 그 깨진 프로토타입에 새로 의존하지 않게 했으며 Pause 메뉴 수정은 별도 요청 범위로 남겼다.
+- `[미검증]` 물리 키보드 E와 실제 마우스 drag로 시체를 루팅하는 사용자 입력, 픽셀 캡처로 fade 중 완전 검은 화면 확인, 잘못된 Spawn ID watchdog의 실제 실행, InitialLoadingScene부터 시작하는 전체 Player build, 시체 저장·랜덤 드롭과 Profiler 수치는 이번 범위에서 확인하지 않았다.

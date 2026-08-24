@@ -9,6 +9,8 @@ public sealed class EnemyDeathHandler : MonoBehaviour
     [SerializeField] private Behaviour[] behavioursToDisable;
     [SerializeField] private Collider[] collidersToDisable;
     [SerializeField] private GameObject[] objectsToHide;
+    [SerializeField] private Behaviour[] behavioursToEnableOnDeath;
+    [SerializeField] private Collider[] collidersToEnableOnDeath;
 
     private bool hasHandledDeath;
 
@@ -76,17 +78,41 @@ public sealed class EnemyDeathHandler : MonoBehaviour
             }
         }
 
-        if (objectsToHide == null)
+        if (objectsToHide != null)
+        {
+            for (int index = 0; index < objectsToHide.Length; index++)
+            {
+                GameObject objectToHide = objectsToHide[index];
+                if (objectToHide != null && objectToHide != gameObject)
+                {
+                    objectToHide.SetActive(false);
+                }
+            }
+        }
+
+        if (behavioursToEnableOnDeath != null)
+        {
+            for (int index = 0; index < behavioursToEnableOnDeath.Length; index++)
+            {
+                Behaviour behaviour = behavioursToEnableOnDeath[index];
+                if (behaviour != null && behaviour != this)
+                {
+                    behaviour.enabled = true;
+                }
+            }
+        }
+
+        if (collidersToEnableOnDeath == null)
         {
             return;
         }
 
-        for (int index = 0; index < objectsToHide.Length; index++)
+        for (int index = 0; index < collidersToEnableOnDeath.Length; index++)
         {
-            GameObject objectToHide = objectsToHide[index];
-            if (objectToHide != null && objectToHide != gameObject)
+            Collider interactionCollider = collidersToEnableOnDeath[index];
+            if (interactionCollider != null)
             {
-                objectToHide.SetActive(false);
+                interactionCollider.enabled = true;
             }
         }
     }

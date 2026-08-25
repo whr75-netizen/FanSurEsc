@@ -27,3 +27,12 @@
 
 # This project uses Git as its authoritative repository.
 /.plastic/
+
+# Unity crash/scene recovery snapshots are local safety artifacts, not source assets.
+/Assets/_Recovery/
+/Assets/_Recovery.meta
+
+# Unity AI Assistant connection/checkpoint preferences contain machine-local paths
+# and per-user tool state. The package version itself is tracked in Packages/.
+/ProjectSettings/AI.Assistant/
+/ProjectSettings/Packages/com.unity.ai.assistant/Settings.json

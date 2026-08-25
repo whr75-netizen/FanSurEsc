@@ -224,6 +224,23 @@ public class InventoryUIManager : MonoBehaviour
         error = null;
         return true;
     }
+
+    public bool TryDiscardAllCarriedItems(out string error)
+    {
+        if (playerState == null)
+        {
+            error = "Player inventory state is missing.";
+            return false;
+        }
+
+        if (!CloseAllInventories())
+        {
+            error = "Could not discard carried items because the active drag could not be restored.";
+            return false;
+        }
+
+        return playerState.TryDiscardAllCarriedItems(out error);
+    }
     #endregion
 
     #region 업데이트 및 상호작용 감지

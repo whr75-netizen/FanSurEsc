@@ -1,7 +1,7 @@
 # Unity 개발 진행 기록
 
-**마지막 확인:** 2026-08-24
-**확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, `GameMap1`/`GameMapTest`; 이번 기지 가구 변경은 Editor compile과 Play Mode 확인, 마지막 Windows Development Player build는 2026-08-23 이전 변경 기준 성공
+**마지막 확인:** 2026-08-25
+**확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, 활성 씬 `GameMap1`; 현재 원정 복구·아이템 정산 변경으로 Windows Development Build와 격리 Windows Player 강제종료→Resume E2E 성공
 **문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 전체 게임 방향과 Stage 의존성은 `extraction_survival_game_design_dev_plan.md`를 따른다.
 
 ## 문서 사용 규칙
@@ -205,7 +205,7 @@ Interactable (abstract base class)
 
 1. `[사용자 수동 확인 후보]` 실제 E와 WASD 입력으로 Chest A/B 겹침, 이동 중 열린 대상 유지와 거리 이탈 체감을 확인한다.
 2. `[후속 후보]` 벽 너머 대상, Collider 32개 초과, 완전 동거리 tie-break는 실제 맵 밀도나 시야선 규칙이 필요해질 때 결정한다.
-3. `[후속 후보]` 아이템 손실·획득 provenance는 해당 규칙이 확정될 때 별도 범위로 확장한다. 강제종료 원정 재개는 22절에서 구현했다.
+3. `[현재 구현 / 조건부 후속]` 생환 시 Player 소지품 전체 보존과 사망·포기·실제 복구 실패 시 소지품 전체 소실은 23절에서 구현했다. 출격 전 물건과 원정 획득물을 선별 처리해야 할 때만 영구 instance ID·획득 provenance를 별도 범위로 확장한다. 강제종료 원정 재개는 22절에서 구현했다.
 
 이 목록은 자동 작업 지시가 아니다. 최신 사용자 요청이 항상 우선한다.
 
@@ -862,7 +862,7 @@ Interactable (abstract base class)
 - `[사용자 요구]` 원정에서는 세계를 일시정지하지 않고 Player 조작만 막는다. 계속하기, 설정, 원정 포기와 주 메뉴 이동을 제공한다.
 - `[사용자 요구]` 원정 중 포기 또는 주 메뉴 이동에는 “원정을 포기하시겠습니까?” 확인을 표시하며, 기지 또는 주 메뉴라는 목적지만 다르다.
 - `[사용자 요구]` 생환과 Player 사망은 각각 한 번만 결과를 확정하고 최소 결과 화면을 표시한다.
-- `[당시 제외 / 후속 구현]` 이 단계에서는 강제종료 뒤 원정 이어하기를 제외했지만, 이후 사용자 요청으로 22절의 일반 세이브 우선 원정 체크포인트 복구를 구현했다. event log·좌표 replay, 아이템 손실·보상 확정과 최종 UI 디자인은 여전히 포함하지 않는다.
+- `[당시 제외 / 후속 구현]` 이 단계에서는 강제종료 뒤 원정 이어하기와 결과별 아이템 반영을 제외했지만, 이후 사용자 요청으로 22절의 일반 세이브 우선 원정 체크포인트 복구와 23절의 결과별 전체 소지품 정산을 구현했다. event log·좌표 replay, 별도 보상 지급과 최종 UI 디자인은 여전히 포함하지 않는다.
 
 ### 상태 소유권과 호출 흐름
 
@@ -882,7 +882,7 @@ Interactable (abstract base class)
 - `[코드/씬 확인]` `GameMap1`의 `SceneSpawnController`는 `Base`, `GameMapTest`는 `Raid`를 등록한다. 기지 메뉴는 `Time.timeScale = 0`, 원정 메뉴는 `Time.timeScale = 1`을 유지한다.
 - `[코드 확인]` 메뉴는 Player 이동·공격·무기 전환·인벤토리·상호작용 입력을 함께 잠근다. 닫기 또는 이동 시작 전에 자신이 획득한 이전 상태만 복원한다.
 - `[코드 확인]` 전환 시작부터 fade-in 완료까지 `PersistentGameplayShell`이 `PlayerStats`의 피해 진입점을 차단한다. 실패 취소는 이전 피해 허용 상태를 복원하고, 성공 도착은 입력 복원 뒤 `RaidSession.CompleteSceneArrival`이 새 컨텍스트에서 피해를 다시 허용한다.
-- `[코드 확인]` 생환·사망·포기 결과가 확정되면 추가 피해를 거부한다. 사망 귀환은 기지 입력 복원 전에 체력을 최대치로 초기화한다. 아이템 손실 규칙은 미정이므로 어떤 결과도 인벤토리를 변경하지 않는다.
+- `[코드 확인 / 후속 확장]` 생환·사망·포기 결과가 확정되면 추가 피해를 거부한다. 사망 귀환은 기지 입력 복원 전에 체력을 최대치로 초기화한다. 이후 23절에서 `Extracted`는 같은 Player 인벤토리·장비를 전부 유지하고, `PlayerDied`·`Abandoned`·실제 `RecoveryFailed`는 같은 Player 객체 그래프에서 소지품·장비를 전부 비우도록 확장했다.
 - `[코드 확인]` 주 메뉴 이동은 gameplay 직접 왕복과 분리된 `GameplaySessionExit`가 담당한다. 검은 fade 뒤 `MainMenuScene`을 로드하고 persistent shell과 기존 `GameManager`를 명시적으로 종료한다.
 
 ### 2026-08-24 검증 결과와 한계
@@ -923,6 +923,7 @@ Interactable (abstract base class)
 
 - ordinary primary를 먼저 읽는다. primary header를 읽지 못하거나 동일 원정 표식 payload의 전체 검증이 실패할 때만 backup을 후보로 사용한다. 유효한 active primary가 다른 원정이나 다른 상태라고 말하면 더 오래된 backup으로 조용히 되돌리지 않는다.
 - 새 원정 표식을 ordinary 주·백업에 먼저 기록했는데 baseline 생성 전에 종료되면, 다음 실행은 `표식 있음 + 캐시 없음`으로 판정해 실패 처리만 제시한다.
+- baseline과 출발 전 exact 상태까지 기록했지만 원정 씬 진입 전에 전환이 실패하면 그 exact payload를 출발 취소의 최종 권위로 사용한다. outcome 이름이 `RecoveryFailed`여도 실제 원정 실패의 빈 아이템 정책을 다시 적용하지 않고 출발 전 Player·기지 상태를 그대로 복원한다.
 - Active 체크포인트는 primary와 backup을 각각 전체 검증하고 같은 원정 ID에서 가장 최신 순번을 사용한다.
 - 생환·사망·포기 결과가 확정되면 Resolved 체크포인트뿐 아니라 같은 결과와 영속 payload를 exact 저널 주·백업에 즉시 고정한다. 종료 primary가 손상돼도 이전 Active backup을 이어하기로 되살리지 않는다.
 - persistent state가 없는 marker-only 저널은 `RecoveryFailed` 결과에만 유효하다. 저장 실패 중 더 최신 failure marker가 앞선 Resolved 결과를 덮는 경우에는 authoritative primary 우선 규칙으로 같은 저널을 다시 검증한 뒤에만 실패 정산을 허용한다.
@@ -945,4 +946,57 @@ Interactable (abstract base class)
 - `[Play Mode 실패 경계 확인]` ordinary 표식을 의도적으로 어긋나게 해 기지 정산을 실패시키자 settlement lock이 유지됐다. 같은 ID 표식을 복구해 재시도하자 ordinary save가 정산되고 Recovery가 삭제된 뒤 이동·인벤토리·상호작용·피해 상태가 원래대로 한 번 복원됐다.
 - `[Play Mode 부분 cleanup 확인]` 격리 저장소의 checkpoint 파일을 점유해 ordinary 주·백업 기록 뒤 Recovery 삭제만 중간 실패시켰다. baseline이 이미 삭제되고 input lock이 유지된 상태에서 재호출하자 immutable exact state와 ordinary canonical 일치를 확인하고 cleanup만 완료해 lock을 해제했다.
 - `[동적 계약 확인]` marker-only 저널은 `RecoveryFailed`만 통과하고 `Abandoned` 등 persistent state 없는 다른 terminal outcome은 거부되는 것을 확인했다.
-- `[컴파일/씬 확인]` Unity script compile 성공, 최종 `GameMap1` Edit Mode, scene dirty=false다. 모든 검증은 Editor 전용 격리 저장 루트에서 수행했으며 실제 사용자 슬롯은 변경하지 않았다.
+- `[컴파일/씬 확인]` Unity script compile 성공, 최종 `GameMap1` Edit Mode, scene dirty=false다. 이 절의 위 검증은 Editor 전용 격리 저장 루트에서 수행했으며 실제 사용자 슬롯은 변경하지 않았다. 별도의 실제 Windows 프로세스 검증은 23절에 기록한다.
+
+---
+
+## 23. 원정 결과 아이템 정산, 재현 가능한 프로젝트 기준선과 Windows 중단 복구 검증
+
+### 확정한 현재 규칙
+
+- `[사용자 승인][2026-08-25]` `Extracted`는 원정 종료 시 Player grid와 장비칸의 모든 아이템을 그대로 유지한다.
+- `PlayerDied`, `Abandoned`, 실제 원정의 `RecoveryFailed`는 Player grid와 장비칸의 모든 아이템을 잃는다. 루트 컨테이너 안의 중첩 아이템도 그 컨테이너와 함께 Player 소유에서 빠진다.
+- 기지 가구와 기지 Chest 내용은 모든 원정 결과에서 안전하며 아이템 손실 정책이 변경하지 않는다.
+- 현재 save `recordId`는 파일 안 관계 키일 뿐 영구 아이템 instance ID가 아니므로, 출격 전 소지품과 원정 획득물만 골라서 다르게 처리하지 않는다. 그런 규칙이 필요해질 때 provenance를 추가한다.
+- 원정 씬에 들어가기 전에 scene load가 실패한 **출발 취소**는 실제 원정 실패와 구분한다. 저널 outcome은 `RecoveryFailed`여도 exact payload가 출발 전 상태를 권위 있게 보존하므로 아이템을 잃지 않고 원래 상태로 되돌린다.
+
+### 권위 소유권과 호출 흐름
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 권위 소유자 | live Player grid·장비는 기존 `PlayerInventoryState`, 원정 결과는 `RaidSession`/복구 시 검증된 terminal outcome, 디스크 정산 payload는 한 번 고정된 exact settlement state가 각각 원본이다. `RaidItemSettlementPolicy`는 상태를 소유하지 않는 순수 변환 규칙이다. |
+| 수명 범위 | Player 객체 그래프는 Play Session, 원정 결과·정산은 Raid, ordinary save와 exact journal DTO는 프로세스 사이 영속 수명이다. |
+| 변경 진입점 | 정상 종료는 terminal checkpoint/저널 생성 뒤 기지의 `TryCommitTrackedRaidAtBase`; 메뉴 복구는 `BasePersistenceController`가 검증된 exact/fallback을 적용한 뒤 같은 commit 진입점으로 수렴한다. |
+| 포함 관계 | Player grid와 장비가 루트 아이템을 소유한다. 중첩 아이템은 자신의 컨테이너가 소유한다. 기지 `BaseFurnitureStateStore`는 별도 권위 경계이며 손실 정책에 포함되지 않는다. |
+| 이전 규칙 | 실패 정산은 UI/drag를 공통 안전 경로로 닫은 뒤 같은 grid·equipment 인스턴스에서 모든 Player 루트 소유권을 해제한다. 중간 실패 시 원래 배치를 복구하고 부분 소실을 성공으로 보고하지 않는다. |
+| 파생 표현 | Inventory/Equipment UI와 ordinary/Recovery DTO는 원본의 파생 표현이다. exact 저널이 생긴 뒤에는 그 immutable payload를 ordinary mirror와 cleanup 재시도에 그대로 사용한다. |
+| 저장 경계 | v4 `PlayerItemStateSaveData`의 definition ID·배치·회전·컨테이너 부모·장비칸을 정산한다. 내구도·탄약·개별 영구 ID·provenance는 아직 저장 대상이 아니다. |
+| 업데이트 주체 | 결과 확정과 기지 정산 경계에서 한 번만 실행한다. 별도 `Update`, 전역 검색, 평행한 inventory manager는 추가하지 않았다. |
+
+### 구현 내용
+
+- `[코드 확인]` `RaidItemSettlementPolicy`는 `Extracted`에서 원본 persistent payload를 유지하고, 세 실패 결과에서는 clone의 `playerItems`만 같은 크기의 빈 payload로 교체한다. `baseState`는 건드리지 않는다.
+- `[코드 확인]` `PlayerInventoryState.TryDiscardAllCarriedItems`와 `InventoryUIManager`의 공통 진입점이 같은 persistent Player grid·equipment 객체를 유지한 채 루트 아이템을 원자적으로 제거한다. Player나 UI를 재생성하지 않는다.
+- `[코드 확인]` terminal checkpoint, exact settlement journal, ordinary 주·백업 저장이 같은 결과 payload를 사용한다. 실패 정산 뒤 재실행해 더 오래된 Active inventory가 부활하지 않는다.
+- `[코드 확인]` exact journal이 있으면 outcome enum으로 다시 계산하지 않는다. exact가 빈 Player payload일 때만 live Player를 비우고 즉시 다시 캡처해 canonical 동일성을 확인한다. 출발 취소의 non-empty exact는 그대로 적용·재사용한다.
+- `[코드 확인]` 정산 저널 형식 v2는 `OutcomeSettlement`, `RecoveryFailureMarker`, `FreshDepartureRollback`을 명시적으로 구분한다. 실패 outcome의 일반 exact는 빈 Player payload만, 출발 취소 exact는 baseline `startingState`와 canonical 동일할 때만 허용한다. 구형 v1의 `RecoveryFailed + settlementState 없음` marker-only 형태는 의미가 명확해 호환하고, 종류를 구분할 수 없는 v1 exact는 추측해 변환하지 않고 fail-closed로 차단한다.
+- `[UI 확인]` 최소 결과 문구도 생환 시 전체 소지품 유지, 실패 시 전체 소지품 소실 규칙과 일치하도록 갱신했다.
+
+### 2026-08-25 검증 결과
+
+- `[동적 계약 확인]` 동일한 원본 DTO로 네 terminal outcome을 검사했다. `Extracted`만 Player item record를 그대로 유지했고 `PlayerDied`·`Abandoned`·`RecoveryFailed`는 Player payload를 비웠으며, 원본 DTO·grid 크기·base JSON은 바뀌지 않았다.
+- `[동적 객체 그래프 확인]` Player grid의 컨테이너 1개와 그 중첩 아이템, 장비 1개를 둔 상태에서 정산했다. `PlayerInventoryState`, grid, equipment 인스턴스는 같았고 Player 루트와 장비만 제거됐으며 중첩 아이템은 제거된 컨테이너의 소유로 유지됐다. equipment 변경 통지는 1회였고 빈 상태 재호출도 안전했다.
+- `[동적 참조 동일성 확인]` 값 동등성 `Equals`가 같은 서로 다른 두 `InventoryItemData`를 Player grid에 배치해도 별개 root로 인식해 둘 다 제거했다. grid·equipment 인스턴스는 그대로였고 두 번째 빈 정산 호출도 안전했다.
+- `[동적 v2 호환성 확인]` 생환 exact, 세 실패 empty exact, marker-only 실패와 출발 취소 exact를 허용하고 실패 non-empty exact, 잘못된 marker/fresh payload와 모호한 v1 exact를 거부했다. 구형 v1 marker-only 실패 호환과 `GameStartRequest`가 fresh rollback kind를 Base 진입 요청까지 그대로 운반하는 것도 확인했다.
+- `[Play Mode E2E 확인]` Editor 전용 격리 저장소에서 실제 원정을 한 번 실행했다. AI 공격으로 `PlayerDied`가 확정된 뒤 기지로 돌아오자 live Player item record `6 → 0`, ordinary primary/backup `0`, Recovery 정리 완료를 확인했다. 기지 상태 SHA-256은 전후 `C1CE71F84065618B3B71DC017633EA9617E7CBF56E02B026A2E6A1B914889BAD`로 동일했다.
+- `[Windows Build 확인]` 활성 5개 씬을 포함한 Windows Development Build가 error `0`, 기존 에셋·패키지 계열 warning `491`로 성공했다. `ProjectSettings.asset`은 빌드 전후 SHA-256 `67D9A8F5902A9FA593411515FCC3F4F1307FF37290073AFDB8A2BE1874071868`로 같았다.
+- `[실제 프로세스 중단 E2E 확인]` 사용자 저장과 분리한 company/product 저장 경로의 Windows Player에서 실제 새 원정을 시작하고 PID `26088`을 정확한 exe 경로로 재확인한 뒤 강제 종료했다. 같은 exe를 다시 실행해 실제 공개 `MainMenuManager.ResumeInterruptedRaid()` 경로로 같은 raid ID `f9c06651-7d92-4797-a8e3-0864b9701af8`를 이어서 열었다. seed `557376427`, layout hash `657E1CB91C9075AA`, Player 위치·HP `77`·item record `6`과 저장 대상 Chest/Enemy 전체의 정규화된 checkpoint JSON이 일치했다.
+- `[보호 확인]` 실제 사용자 `Saves`는 생성·변경하지 않았고 기존 `DefaultCompany` 파일의 hash와 timestamp도 같았다. 검증 전용 build, driver, LocalLow 저장소와 임시 로그는 대상 절대경로를 확인한 뒤 삭제했다. 기존 `Builds/SaveLoadPrototype`은 사용자 기존 산출물이므로 그대로 두고 ignore했다.
+- `[컴파일/씬 확인]` exact 출발 취소 예외 수정 뒤 Unity 강제 refresh와 script compilation이 다시 성공했다. 최종 상태는 Edit Mode, 활성 `GameMap1`, scene dirty=false다. 독립 코드 재검토에서도 exact non-empty 출발 취소와 exact empty 실제 실패가 각각 보존/소실로 수렴하며 새 P1/P2가 없음을 확인했다.
+- `[Console 기준선]` 최종 전체 조회는 Error `0`, 기존 build/import 기록 Warning `47`이었다. Warning은 Sentis/AI Inference 셰이더, 외부 grass 셰이더와 obsolete `RenderTextureBaker` API이며 이번 정산 코드를 지목하지 않는다. Console을 해결 수단으로 지우지 않았다.
+
+### Git·재현성 기준선과 남은 물리적 한계
+
+- `[현재 추적]` `Packages/manifest.json`, `Packages/packages-lock.json`, `.vsconfig`, `ProjectSettings`의 공유 설정을 Git 기준선에 포함한다. Unity AI 개인 연결 설정, `Assets/_Recovery`, 생성 빌드와 사용자 save는 ignore한다.
+- `[보존]` 사용자 미추적 자료 `pixel_character_pipeline.json`, `스크립트_사용_분석.md`와 기존 2026-08-20 build는 이번 변경에 포함하거나 수정하지 않는다.
+- 저장장치가 terminal checkpoint, failure marker, journal과 ordinary save의 모든 쓰기·삭제를 동시에 거부하면 다음 프로세스에 결정을 남길 물리적 매체가 없다. 최소 하나의 durable 결정이 남는 정상·부분 I/O 실패는 fail-closed 처리하지만, 전면 I/O 거부까지 성공으로 보장한다고 주장하지 않는다.

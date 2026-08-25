@@ -20,6 +20,7 @@ namespace FantasySurvival.SaveSystem
             public RaidRecoveryBaselineData RecoveryBaseline;
             public RaidCheckpointData RaidCheckpoint;
             public GameSaveData RecoverySettlementState;
+            public RaidSettlementJournalKind RecoverySettlementKind;
             public RaidOutcome RecoveryOutcome;
             public GameSaveData OrphanedRaidSave;
         }
@@ -276,6 +277,7 @@ namespace FantasySurvival.SaveSystem
                     out RaidRecoveryBaselineData recoveryBaseline,
                     out RaidCheckpointData raidCheckpoint,
                     out GameSaveData recoverySettlementState,
+                    out RaidSettlementJournalKind recoverySettlementKind,
                     out RaidOutcome recoveryOutcome))
             {
                 allowAuthoredFurnitureInitialization = owner.BaseFurnitureState.StateCount == 0;
@@ -288,6 +290,7 @@ namespace FantasySurvival.SaveSystem
                 RecoveryBaseline = recoveryBaseline,
                 RaidCheckpoint = raidCheckpoint,
                 RecoverySettlementState = recoverySettlementState,
+                RecoverySettlementKind = recoverySettlementKind,
                 RecoveryOutcome = recoveryOutcome,
                 OrphanedRaidSave = mode == GameStartMode.SettleOrphanedRaid ? saveData : null
             };
@@ -354,6 +357,7 @@ namespace FantasySurvival.SaveSystem
                         raidCheckpoint,
                         recoveryOutcome,
                         recoverySettlementState,
+                        recoverySettlementKind,
                         out preflightError))
                 {
                     SetStatus(
@@ -368,6 +372,9 @@ namespace FantasySurvival.SaveSystem
                 string journalError = null;
                 if (recoverySettlementState != null)
                 {
+                    // An exact settlement journal already owns the final persistent
+                    // payload. This also preserves the pre-departure rollback state
+                    // when a fresh raid fails before its scene is ever entered.
                     if (TryApplyRecoveryPersistentState(
                         inventory,
                         owner,
@@ -386,10 +393,11 @@ namespace FantasySurvival.SaveSystem
                 }
 
                 if (raidCheckpoint?.persistentState != null &&
-                    TryApplyRecoveryPersistentState(
+                    TryApplyRecoverySettlementPersistentState(
                         inventory,
                         owner,
                         raidCheckpoint.persistentState,
+                        recoveryOutcome,
                         out allowAuthoredFurnitureInitialization,
                         out checkpointError))
                 {
@@ -397,10 +405,11 @@ namespace FantasySurvival.SaveSystem
                 }
 
                 if (recoveryBaseline.startingState != null &&
-                    TryApplyRecoveryPersistentState(
+                    TryApplyRecoverySettlementPersistentState(
                         inventory,
                         owner,
                         recoveryBaseline.startingState,
+                        recoveryOutcome,
                         out allowAuthoredFurnitureInitialization,
                         out baselineError))
                 {
@@ -454,6 +463,33 @@ namespace FantasySurvival.SaveSystem
 
             SetStatus("Start request was invalid.", true);
             return false;
+        }
+
+        private bool TryApplyRecoverySettlementPersistentState(
+            InventoryUIManager inventory,
+            GameManager owner,
+            GameSaveData sourceState,
+            RaidOutcome outcome,
+            out bool allowAuthoredFurnitureInitialization,
+            out string error)
+        {
+            allowAuthoredFurnitureInitialization = false;
+            if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+                    sourceState,
+                    outcome,
+                    out GameSaveData settlementState,
+                    out error))
+            {
+                error = $"Could not apply the raid item settlement policy: {error}";
+                return false;
+            }
+
+            return TryApplyRecoveryPersistentState(
+                inventory,
+                owner,
+                settlementState,
+                out allowAuthoredFurnitureInitialization,
+                out error);
         }
 
         private bool TryApplyRecoveryPersistentState(
@@ -528,6 +564,7 @@ namespace FantasySurvival.SaveSystem
                         pendingStartAction.RaidCheckpoint,
                         pendingStartAction.RecoveryOutcome,
                         pendingStartAction.RecoverySettlementState,
+                        pendingStartAction.RecoverySettlementKind,
                         out string error))
                 {
                     SetStatus($"Raid recovery settlement failed: {error}", true);

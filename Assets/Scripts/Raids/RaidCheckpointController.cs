@@ -34,6 +34,7 @@ namespace FantasySurvival.Raids
         private RaidCheckpointData lastCheckpoint;
         private RaidCheckpointData pendingRestore;
         private GameSaveData pendingExactSettlementState;
+        private RaidSettlementJournalKind pendingExactSettlementKind;
         private bool ordinarySettlementMirrored;
         private RaidCheckpointSceneBinding activeSceneBinding;
         private long nextSequence;
@@ -210,6 +211,7 @@ namespace FantasySurvival.Raids
             lastCheckpoint = null;
             pendingRestore = null;
             pendingExactSettlementState = null;
+            pendingExactSettlementKind = RaidSettlementJournalKind.None;
             ordinarySettlementMirrored = false;
             nextSequence = 0;
             raidTracked = true;
@@ -404,6 +406,7 @@ namespace FantasySurvival.Raids
             lastCheckpoint = recoveredCheckpoint;
             pendingRestore = recoveredCheckpoint;
             pendingExactSettlementState = null;
+            pendingExactSettlementKind = RaidSettlementJournalKind.None;
             ordinarySettlementMirrored = false;
             nextSequence = recoveredCheckpoint.sequence;
             raidTracked = true;
@@ -633,13 +636,21 @@ namespace FantasySurvival.Raids
             RaidCheckpointData requestedCheckpoint,
             RaidOutcome settlementOutcome,
             GameSaveData exactSettlementState,
+            RaidSettlementJournalKind exactSettlementKind,
             out string error)
         {
             string raidInstanceId = requestedBaseline?.raidInstanceId;
             if (string.IsNullOrWhiteSpace(raidInstanceId) ||
-                !RaidCheckpointValidator.IsTerminalOutcome(settlementOutcome))
+                !RaidCheckpointValidator.IsTerminalOutcome(settlementOutcome) ||
+                (exactSettlementState == null &&
+                 exactSettlementKind != RaidSettlementJournalKind.None) ||
+                (exactSettlementState != null &&
+                 exactSettlementKind != RaidSettlementJournalKind.OutcomeSettlement &&
+                 exactSettlementKind != RaidSettlementJournalKind.FreshDepartureRollback) ||
+                (exactSettlementKind == RaidSettlementJournalKind.FreshDepartureRollback &&
+                 settlementOutcome != RaidOutcome.RecoveryFailed))
             {
-                error = "Recovery settlement is missing its raid identity or terminal outcome.";
+                error = "Recovery settlement is missing its identity, terminal outcome, or exact transaction kind.";
                 return false;
             }
 
@@ -700,6 +711,7 @@ namespace FantasySurvival.Raids
                     storedBaseline,
                     settlementOutcome,
                     exactSettlementState,
+                    exactSettlementKind,
                     out exactJournalError))
             {
                 error = $"Exact settlement transaction no longer matches its durable journal: {exactJournalError}";
@@ -733,6 +745,7 @@ namespace FantasySurvival.Raids
             RaidCheckpointData requestedCheckpoint,
             RaidOutcome settlementOutcome,
             GameSaveData exactSettlementState,
+            RaidSettlementJournalKind exactSettlementKind,
             out string error)
         {
             if (!TryPreflightMenuRecoverySettlement(
@@ -740,6 +753,7 @@ namespace FantasySurvival.Raids
                     requestedCheckpoint,
                     settlementOutcome,
                     exactSettlementState,
+                    exactSettlementKind,
                     out error))
             {
                 return false;
@@ -761,6 +775,9 @@ namespace FantasySurvival.Raids
             entryOrigin = RaidEntryOrigin.None;
             trackedOutcome = settlementOutcome;
             pendingExactSettlementState = exactSettlementState;
+            pendingExactSettlementKind = exactSettlementState == null
+                ? RaidSettlementJournalKind.None
+                : exactSettlementKind;
             ordinarySettlementMirrored = false;
 
             if (!TryCommitTrackedRaidAtBase(out error))
@@ -834,6 +851,16 @@ namespace FantasySurvival.Raids
 
             cleanSettlementState.raidInProgress = false;
             cleanSettlementState.activeRaidInstanceId = null;
+            if (!RaidItemSettlementPolicy.TryDiscardCarriedItems(
+                    cleanSettlementState,
+                    RaidOutcome.RecoveryFailed,
+                    out error))
+            {
+                cleanSettlementState = null;
+                error = $"Marked ordinary save could not apply raid-failure item loss: {error}";
+                return false;
+            }
+
             if (!RaidCheckpointValidator.TryValidatePersistentStateForLoad(
                     cleanSettlementState,
                     shell.InventoryUI.ItemDatabase,
@@ -920,6 +947,7 @@ namespace FantasySurvival.Raids
                      baseline,
                      settlementOutcome,
                      pendingExactSettlementState,
+                     pendingExactSettlementKind,
                      out error)))
             {
                 error = "Ordinary save no longer authorizes this tracked settlement: " +
@@ -937,10 +965,69 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            GameSaveData saveData = pendingExactSettlementState;
-            if (saveData == null && !TryCapturePersistentState(out saveData, out error))
+            GameSaveData saveData;
+            if (pendingExactSettlementState != null)
             {
-                return false;
+                // A durable exact journal already owns the final transaction payload.
+                // Do not infer its Player result from the outcome enum again: a fresh
+                // raid that failed before scene entry deliberately stores the unchanged
+                // pre-departure state under RecoveryFailed, while an actual failed raid
+                // stores an empty Player item payload under the same outcome.
+                saveData = pendingExactSettlementState;
+                if (!RaidCheckpointValidator.TryValidatePersistentStateForLoad(
+                        saveData,
+                        shell.InventoryUI.ItemDatabase,
+                        furnitureDatabase,
+                        InventoryUIManager.DefaultInventoryWidth,
+                        InventoryUIManager.DefaultInventoryHeight,
+                        out error))
+                {
+                    error = $"The exact settlement state is invalid: {error}";
+                    return false;
+                }
+
+                if (saveData.playerItems.itemRecordCount == 0 &&
+                    !shell.InventoryUI.TryDiscardAllCarriedItems(out error))
+                {
+                    error = $"Could not synchronize the live Player with the exact empty settlement: {error}";
+                    return false;
+                }
+
+                if (!InventorySaveCodec.TryCapture(
+                        shell.InventoryUI.PlayerState,
+                        shell.InventoryUI.ItemDatabase,
+                        out PlayerItemStateSaveData livePlayerItems,
+                        out error) ||
+                    !AreCanonicalJsonEquivalent(livePlayerItems, saveData.playerItems))
+                {
+                    error = $"The live Player item state does not match the exact settlement payload: " +
+                            (error ?? "captured Player items differ from the durable transaction.");
+                    return false;
+                }
+            }
+            else
+            {
+                if (RaidItemSettlementPolicy.DiscardsCarriedItems(settlementOutcome) &&
+                    !shell.InventoryUI.TryDiscardAllCarriedItems(out error))
+                {
+                    error = $"Could not apply the live Player item-loss settlement: {error}";
+                    return false;
+                }
+
+                if (!TryCapturePersistentState(out GameSaveData sourceState, out error))
+                {
+                    return false;
+                }
+
+                if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+                        sourceState,
+                        settlementOutcome,
+                        out saveData,
+                        out error))
+                {
+                    error = $"Could not create the outcome-specific settlement state: {error}";
+                    return false;
+                }
             }
 
             var journal = new RaidSettlementJournalData
@@ -949,6 +1036,9 @@ namespace FantasySurvival.Raids
                 formatVersion = RaidSettlementJournalData.CurrentFormatVersion,
                 raidInstanceId = baseline.raidInstanceId,
                 writtenAtUtc = DateTime.UtcNow.ToString("O"),
+                kind = pendingExactSettlementKind == RaidSettlementJournalKind.None
+                    ? RaidSettlementJournalKind.OutcomeSettlement
+                    : pendingExactSettlementKind,
                 outcome = settlementOutcome,
                 settlementState = saveData
             };
@@ -974,6 +1064,7 @@ namespace FantasySurvival.Raids
             // Keep reusing that snapshot if the ordinary mirrored save or cleanup
             // must be retried; recapturing live state would change an in-flight result.
             pendingExactSettlementState = saveData;
+            pendingExactSettlementKind = journal.kind;
 
             StandardStashViewData playerInventory = shell.InventoryUI.PlayerInventoryData;
             if (playerInventory == null)
@@ -1210,6 +1301,21 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            if (phase == RaidCheckpointPhase.Resolved)
+            {
+                if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+                        persistentState,
+                        outcome,
+                        out GameSaveData outcomePersistentState,
+                        out error))
+                {
+                    error = $"Could not apply the raid item settlement to the terminal checkpoint: {error}";
+                    return false;
+                }
+
+                persistentState = outcomePersistentState;
+            }
+
             var candidate = new RaidCheckpointData
             {
                 gameId = GameSaveData.CurrentGameId,
@@ -1348,6 +1454,7 @@ namespace FantasySurvival.Raids
             RaidRecoveryBaselineData storedBaseline,
             RaidOutcome settlementOutcome,
             GameSaveData exactSettlementState,
+            RaidSettlementJournalKind exactSettlementKind,
             out string error)
         {
             string stateValidationError = null;
@@ -1383,7 +1490,8 @@ namespace FantasySurvival.Raids
                         storedBaseline,
                         primary,
                         settlementOutcome,
-                        exactSettlementState))
+                        exactSettlementState,
+                        exactSettlementKind))
                 {
                     error = null;
                     return true;
@@ -1397,7 +1505,8 @@ namespace FantasySurvival.Raids
                     storedBaseline,
                     backup,
                     settlementOutcome,
-                    exactSettlementState))
+                    exactSettlementState,
+                    exactSettlementKind))
             {
                 error = null;
                 return true;
@@ -1523,13 +1632,15 @@ namespace FantasySurvival.Raids
             RaidRecoveryBaselineData storedBaseline,
             RaidSettlementJournalData journal,
             RaidOutcome settlementOutcome,
-            GameSaveData exactSettlementState)
+            GameSaveData exactSettlementState,
+            RaidSettlementJournalKind exactSettlementKind)
         {
             return RaidCheckpointValidator.TryValidateSettlementJournalStructure(
                        storedBaseline,
                        journal,
                        out _) &&
                    journal.settlementState != null &&
+                   journal.kind == exactSettlementKind &&
                    journal.outcome == settlementOutcome &&
                    AreCanonicalJsonEquivalent(
                        journal.settlementState,
@@ -1671,6 +1782,16 @@ namespace FantasySurvival.Raids
                 candidate.playerCurrentHealth = 0f;
             }
 
+            if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+                    candidate.persistentState,
+                    outcome,
+                    out GameSaveData settledPersistentState,
+                    out error))
+            {
+                return false;
+            }
+            candidate.persistentState = settledPersistentState;
+
             if (!RaidCheckpointValidator.TryValidateCheckpointStructure(
                     baseline,
                     candidate,
@@ -1717,12 +1838,18 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            // The terminal checkpoint already contains the exact outcome-specific
+            // persistent state. Reuse it at the base instead of recapturing live state.
+            pendingExactSettlementState = exactPersistentState;
+            pendingExactSettlementKind = RaidSettlementJournalKind.OutcomeSettlement;
+
             var journal = new RaidSettlementJournalData
             {
                 gameId = GameSaveData.CurrentGameId,
                 formatVersion = RaidSettlementJournalData.CurrentFormatVersion,
                 raidInstanceId = baseline.raidInstanceId,
                 writtenAtUtc = DateTime.UtcNow.ToString("O"),
+                kind = RaidSettlementJournalKind.OutcomeSettlement,
                 outcome = outcome,
                 settlementState = exactPersistentState
             };
@@ -1796,6 +1923,7 @@ namespace FantasySurvival.Raids
 
             pendingRestore = null;
             pendingExactSettlementState = null;
+            pendingExactSettlementKind = RaidSettlementJournalKind.None;
             ordinarySettlementMirrored = false;
             entryOrigin = RaidEntryOrigin.None;
             basePersistenceReady = false;
@@ -1848,6 +1976,7 @@ namespace FantasySurvival.Raids
                 formatVersion = RaidSettlementJournalData.CurrentFormatVersion,
                 raidInstanceId = baseline.raidInstanceId,
                 writtenAtUtc = DateTime.UtcNow.ToString("O"),
+                kind = RaidSettlementJournalKind.RecoveryFailureMarker,
                 outcome = RaidOutcome.RecoveryFailed,
                 settlementState = null
             };
@@ -1878,6 +2007,7 @@ namespace FantasySurvival.Raids
                 formatVersion = RaidSettlementJournalData.CurrentFormatVersion,
                 raidInstanceId = baseline.raidInstanceId,
                 writtenAtUtc = DateTime.UtcNow.ToString("O"),
+                kind = RaidSettlementJournalKind.FreshDepartureRollback,
                 outcome = RaidOutcome.RecoveryFailed,
                 settlementState = baseline.startingState
             };
@@ -2013,6 +2143,7 @@ namespace FantasySurvival.Raids
             lastCheckpoint = null;
             pendingRestore = null;
             pendingExactSettlementState = null;
+            pendingExactSettlementKind = RaidSettlementJournalKind.None;
             ordinarySettlementMirrored = false;
             nextSequence = 0;
             nextCheckpointAt = 0f;

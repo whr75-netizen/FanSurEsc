@@ -10,6 +10,14 @@ namespace FantasySurvival.Raids
         Resolved = 2
     }
 
+    public enum RaidSettlementJournalKind
+    {
+        None = 0,
+        OutcomeSettlement = 1,
+        RecoveryFailureMarker = 2,
+        FreshDepartureRollback = 3
+    }
+
     [Serializable]
     public sealed class RaidRecoveryBaselineData
     {
@@ -56,20 +64,22 @@ namespace FantasySurvival.Raids
     }
 
     /// <summary>
-    /// Durable fail/settlement intent for an interrupted raid. A record without
-    /// settlementState is a fail-closed marker. Once the Player reaches the base,
-    /// settlementState is filled with the exact ordinary-save payload so repeating
-    /// settlement after another process interruption is idempotent.
+    /// Durable fail/settlement intent for an interrupted raid. Version 2 explicitly
+    /// distinguishes an exact outcome settlement, a marker-only recovery failure, and
+    /// a pre-entry fresh-departure rollback so the shared RecoveryFailed outcome cannot
+    /// make their Player-item rules ambiguous. Exact payloads are reused unchanged when
+    /// settlement resumes after another process interruption.
     /// </summary>
     [Serializable]
     public sealed class RaidSettlementJournalData
     {
-        public const int CurrentFormatVersion = 1;
+        public const int CurrentFormatVersion = 2;
 
         public string gameId;
         public int formatVersion;
         public string raidInstanceId;
         public string writtenAtUtc;
+        public RaidSettlementJournalKind kind;
         public RaidOutcome outcome;
         public GameSaveData settlementState;
     }

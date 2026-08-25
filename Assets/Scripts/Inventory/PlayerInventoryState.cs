@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using VariableInventorySystem;
 
 namespace FantasySurvival.Inventory
@@ -297,6 +298,80 @@ namespace FantasySurvival.Inventory
             InsertInventoryItem(index, item);
             return true;
         }
+
+        internal bool TryClearAll(out string error)
+        {
+            var occupied = new List<KeyValuePair<int, InventoryItemData>>();
+            var seen = new HashSet<InventoryItemData>(
+                InventoryReferenceComparer<InventoryItemData>.Instance);
+            for (int index = 0; index < items.Length; index++)
+            {
+                IVariableInventoryCellData item = items[index];
+                if (item == null)
+                {
+                    continue;
+                }
+
+                if (!(item is InventoryItemData inventoryItem))
+                {
+                    error = $"Equipment slot {index} contains an unsupported runtime item type.";
+                    return false;
+                }
+
+                if (!seen.Add(inventoryItem))
+                {
+                    error = "The same item is equipped in more than one slot.";
+                    return false;
+                }
+
+                if (!ReferenceEquals(inventoryItem.InventoryOwner, this))
+                {
+                    error = $"Equipment slot {index} has inconsistent item ownership.";
+                    return false;
+                }
+
+                occupied.Add(new KeyValuePair<int, InventoryItemData>(index, inventoryItem));
+            }
+
+            if (occupied.Count == 0)
+            {
+                error = null;
+                return true;
+            }
+
+            int detachedCount = 0;
+            for (; detachedCount < occupied.Count; detachedCount++)
+            {
+                InventoryItemData item = occupied[detachedCount].Value;
+                if (!item.TryChangeInventoryOwner(this, null))
+                {
+                    var rollbackFailures = new List<int>();
+                    for (int rollback = detachedCount - 1; rollback >= 0; rollback--)
+                    {
+                        if (!occupied[rollback].Value.TryChangeInventoryOwner(null, this))
+                        {
+                            rollbackFailures.Add(occupied[rollback].Key);
+                        }
+                    }
+
+                    error = $"Could not detach the item in equipment slot {occupied[detachedCount].Key}." +
+                            (rollbackFailures.Count == 0
+                                ? string.Empty
+                                : $" Equipment ownership rollback also failed for slots {string.Join(", ", rollbackFailures)}.");
+                    return false;
+                }
+            }
+
+            foreach (KeyValuePair<int, InventoryItemData> placement in occupied)
+            {
+                items[placement.Key] = null;
+            }
+
+            IsDirty = true;
+            Changed?.Invoke();
+            error = null;
+            return true;
+        }
     }
 
     public sealed class PlayerInventoryState
@@ -311,5 +386,142 @@ namespace FantasySurvival.Inventory
             Inventory = inventory ?? throw new ArgumentNullException(nameof(inventory));
             Equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
         }
+
+        /// <summary>
+        /// Atomically removes every root item carried in the Player grid and equipment.
+        /// Nested container contents leave with their root container. The Player state and
+        /// both container instances stay alive so scene-persistent observers keep the same
+        /// authoritative object graph.
+        /// </summary>
+        public bool TryDiscardAllCarriedItems(out string error)
+        {
+            if (Inventory.CellData == null)
+            {
+                error = "Player inventory cell data is missing.";
+                return false;
+            }
+
+            var inventoryRoots = new List<KeyValuePair<int, InventoryItemData>>();
+            var seen = new HashSet<InventoryItemData>(
+                InventoryReferenceComparer<InventoryItemData>.Instance);
+            for (int index = 0; index < Inventory.CellData.Length; index++)
+            {
+                IVariableInventoryCellData item = Inventory.CellData[index];
+                if (item == null)
+                {
+                    continue;
+                }
+
+                if (!(item is InventoryItemData inventoryItem))
+                {
+                    error = $"Player inventory slot {index} contains an unsupported runtime item type.";
+                    return false;
+                }
+
+                if (!seen.Add(inventoryItem))
+                {
+                    error = "The same item is referenced by multiple Player inventory slots.";
+                    return false;
+                }
+
+                if (!ReferenceEquals(inventoryItem.InventoryOwner, Inventory))
+                {
+                    error = $"Player inventory slot {index} has inconsistent item ownership.";
+                    return false;
+                }
+
+                inventoryRoots.Add(
+                    new KeyValuePair<int, InventoryItemData>(index, inventoryItem));
+            }
+
+            foreach (EquipmentSlotId slot in EquipmentSlotCatalog.OrderedSlots)
+            {
+                IVariableInventoryCellData item = Equipment.GetItem(slot);
+                if (item == null)
+                {
+                    continue;
+                }
+
+                if (!(item is InventoryItemData inventoryItem))
+                {
+                    error = $"Equipment slot {slot} contains an unsupported runtime item type.";
+                    return false;
+                }
+
+                if (!seen.Add(inventoryItem))
+                {
+                    error = "The same item is owned by both the Player grid and equipment.";
+                    return false;
+                }
+
+                if (!ReferenceEquals(inventoryItem.InventoryOwner, Equipment))
+                {
+                    error = $"Equipment slot {slot} has inconsistent item ownership.";
+                    return false;
+                }
+            }
+
+            int removedInventoryRoots = 0;
+            try
+            {
+                for (; removedInventoryRoots < inventoryRoots.Count; removedInventoryRoots++)
+                {
+                    Inventory.InsertInventoryItem(inventoryRoots[removedInventoryRoots].Key, null);
+                }
+            }
+            catch (Exception exception)
+            {
+                string rollbackError = RestoreInventoryRoots(
+                    inventoryRoots,
+                    removedInventoryRoots);
+                error = "Could not clear the Player inventory: " + exception.Message + rollbackError;
+                return false;
+            }
+
+            if (!Equipment.TryClearAll(out string equipmentError))
+            {
+                string rollbackError = RestoreInventoryRoots(
+                    inventoryRoots,
+                    removedInventoryRoots);
+                error = "Could not clear Player equipment: " + equipmentError + rollbackError;
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        private string RestoreInventoryRoots(
+            IReadOnlyList<KeyValuePair<int, InventoryItemData>> roots,
+            int removedCount)
+        {
+            var failures = new List<string>();
+            for (int index = 0; index < removedCount; index++)
+            {
+                KeyValuePair<int, InventoryItemData> placement = roots[index];
+                try
+                {
+                    Inventory.InsertInventoryItem(placement.Key, placement.Value);
+                }
+                catch (Exception exception)
+                {
+                    failures.Add($"slot {placement.Key}: {exception.Message}");
+                }
+            }
+
+            return failures.Count == 0
+                ? string.Empty
+                : $" Inventory rollback also failed ({string.Join("; ", failures)}).";
+        }
+    }
+
+    internal sealed class InventoryReferenceComparer<T> : IEqualityComparer<T>
+        where T : class
+    {
+        public static readonly InventoryReferenceComparer<T> Instance =
+            new InventoryReferenceComparer<T>();
+
+        public bool Equals(T x, T y) => ReferenceEquals(x, y);
+        public int GetHashCode(T value) => RuntimeHelpers.GetHashCode(value);
     }
 }

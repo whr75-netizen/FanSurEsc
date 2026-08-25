@@ -4,6 +4,7 @@ using System.Globalization;
 using FantasySurvival.BaseBuilding;
 using FantasySurvival.Inventory;
 using FantasySurvival.SaveSystem;
+using UnityEngine;
 
 namespace FantasySurvival.Raids
 {
@@ -259,23 +260,108 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            bool isLegacyFailureMarker = journal.formatVersion == 1;
             if (journal.gameId != GameSaveData.CurrentGameId ||
-                journal.formatVersion != RaidSettlementJournalData.CurrentFormatVersion ||
+                (!isLegacyFailureMarker &&
+                 journal.formatVersion != RaidSettlementJournalData.CurrentFormatVersion) ||
                 !string.Equals(
                     journal.raidInstanceId,
                     baseline.raidInstanceId,
                     StringComparison.Ordinal) ||
                 !HasValidUtcTimestamp(journal.writtenAtUtc) ||
-                !IsTerminalOutcome(journal.outcome) ||
-                (journal.settlementState == null &&
-                 journal.outcome != RaidOutcome.RecoveryFailed))
+                !IsTerminalOutcome(journal.outcome))
             {
                 error = "Raid settlement journal has an invalid header or outcome.";
                 return false;
             }
 
+            // Version 1 had no transaction-kind field. Its marker-only RecoveryFailed
+            // shape is still unambiguous and safe to honor, but any v1 exact payload
+            // could mean either an old outcome settlement or a fresh-entry rollback.
+            // Refuse to guess between those incompatible Player-item rules.
+            if (isLegacyFailureMarker)
+            {
+                if (journal.kind != RaidSettlementJournalKind.None ||
+                    journal.outcome != RaidOutcome.RecoveryFailed ||
+                    journal.settlementState != null)
+                {
+                    error = "Legacy v1 exact settlement journals are ambiguous and unsupported.";
+                    return false;
+                }
+
+                error = null;
+                return true;
+            }
+
+            switch (journal.kind)
+            {
+                case RaidSettlementJournalKind.OutcomeSettlement:
+                    if (journal.settlementState == null ||
+                        (RaidItemSettlementPolicy.DiscardsCarriedItems(journal.outcome) &&
+                         !HasEmptyPlayerItemPayload(journal.settlementState)))
+                    {
+                        error = "Outcome settlement journal has an invalid Player item payload.";
+                        return false;
+                    }
+                    break;
+
+                case RaidSettlementJournalKind.RecoveryFailureMarker:
+                    if (journal.outcome != RaidOutcome.RecoveryFailed ||
+                        journal.settlementState != null)
+                    {
+                        error = "Recovery failure marker has an invalid outcome or exact state.";
+                        return false;
+                    }
+                    break;
+
+                case RaidSettlementJournalKind.FreshDepartureRollback:
+                    if (journal.outcome != RaidOutcome.RecoveryFailed ||
+                        journal.settlementState == null ||
+                        baseline.startingState == null ||
+                        !AreCanonicalJsonEquivalent(
+                            journal.settlementState,
+                            baseline.startingState))
+                    {
+                        error = "Fresh-departure rollback does not match the pre-departure baseline.";
+                        return false;
+                    }
+                    break;
+
+                default:
+                    error = "Raid settlement journal has an unsupported transaction kind.";
+                    return false;
+            }
+
             error = null;
             return true;
+        }
+
+        private static bool HasEmptyPlayerItemPayload(GameSaveData state)
+        {
+            return state?.playerItems != null &&
+                   state.playerItems.itemRecordCount == 0 &&
+                   state.playerItems.items != null &&
+                   state.playerItems.items.Count == 0;
+        }
+
+        private static bool AreCanonicalJsonEquivalent(object left, object right)
+        {
+            if (left == null || right == null || left.GetType() != right.GetType())
+            {
+                return false;
+            }
+
+            try
+            {
+                return string.Equals(
+                    JsonUtility.ToJson(left, false),
+                    JsonUtility.ToJson(right, false),
+                    StringComparison.Ordinal);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public static bool TryValidatePersistentStateForLoad(

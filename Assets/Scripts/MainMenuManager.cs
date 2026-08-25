@@ -48,6 +48,7 @@ public class MainMenuManager : MonoBehaviour
     private RaidRecoveryBaselineData cachedRecoveryBaseline;
     private RaidCheckpointData cachedRecoveryCheckpoint;
     private GameSaveData cachedRecoverySettlementState;
+    private RaidSettlementJournalKind cachedRecoverySettlementKind;
     private RaidOutcome cachedRecoveryOutcome;
     private GameSaveData cachedOrphanedRaidSave;
     private RaidRecoveryDecision recoveryDecision;
@@ -259,6 +260,9 @@ public class MainMenuManager : MonoBehaviour
                 cachedRecoveryBaseline,
                 settlementCheckpoint,
                 cachedRecoverySettlementState,
+                cachedRecoverySettlementState == null
+                    ? RaidSettlementJournalKind.None
+                    : cachedRecoverySettlementKind,
                 RaidCheckpointValidator.IsTerminalOutcome(cachedRecoveryOutcome)
                     ? cachedRecoveryOutcome
                     : settlementCheckpoint != null &&
@@ -561,6 +565,7 @@ public class MainMenuManager : MonoBehaviour
                         out string stateError))
                 {
                     cachedRecoverySettlementState = journal.settlementState;
+                    cachedRecoverySettlementKind = journal.kind;
                 }
                 else
                 {
@@ -682,6 +687,7 @@ public class MainMenuManager : MonoBehaviour
         cachedRecoveryBaseline = baseline;
         cachedRecoveryCheckpoint = null;
         cachedRecoverySettlementState = journal.settlementState;
+        cachedRecoverySettlementKind = journal.kind;
         cachedRecoveryOutcome = journal.outcome;
         recoveryDecisionRequired = true;
         recoveryDecision = RaidRecoveryDecision.Settle;
@@ -941,6 +947,15 @@ public class MainMenuManager : MonoBehaviour
             return false;
         }
 
+        if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+                source.persistentState,
+                RaidOutcome.RecoveryFailed,
+                out GameSaveData failedPersistentState,
+                out error))
+        {
+            return false;
+        }
+
         terminal = new RaidCheckpointData
         {
             gameId = source.gameId,
@@ -960,7 +975,7 @@ public class MainMenuManager : MonoBehaviour
             playerTransform = source.playerTransform,
             playerCurrentHealth = source.playerCurrentHealth,
             playerMaxHealth = source.playerMaxHealth,
-            persistentState = source.persistentState,
+            persistentState = failedPersistentState,
             chestRecordCount = source.chestRecordCount,
             chests = source.chests == null
                 ? null
@@ -1269,6 +1284,7 @@ public class MainMenuManager : MonoBehaviour
             formatVersion = RaidSettlementJournalData.CurrentFormatVersion,
             raidInstanceId = baseline.raidInstanceId,
             writtenAtUtc = DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture),
+            kind = RaidSettlementJournalKind.RecoveryFailureMarker,
             outcome = RaidOutcome.RecoveryFailed,
             settlementState = null
         };
@@ -1321,6 +1337,7 @@ public class MainMenuManager : MonoBehaviour
         cachedRecoveryBaseline = null;
         cachedRecoveryCheckpoint = null;
         cachedRecoverySettlementState = null;
+        cachedRecoverySettlementKind = RaidSettlementJournalKind.None;
         cachedRecoveryOutcome = RaidOutcome.None;
         cachedOrphanedRaidSave = null;
         orphanedRaidSettlementBlocked = false;

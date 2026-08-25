@@ -23,6 +23,7 @@ namespace FantasySurvival.SaveSystem
             public RaidRecoveryBaselineData RecoveryBaseline;
             public RaidCheckpointData RaidCheckpoint;
             public GameSaveData RecoverySettlementState;
+            public RaidSettlementJournalKind RecoverySettlementKind;
             public RaidOutcome RecoveryOutcome;
         }
 
@@ -84,16 +85,29 @@ namespace FantasySurvival.SaveSystem
                                   checkpoint.phase == RaidCheckpointPhase.Resolved
                 ? checkpoint.outcome
                 : RaidOutcome.RecoveryFailed;
-            return QueueRaidRecoverySettlement(baseline, checkpoint, null, outcome);
+            return QueueRaidRecoverySettlement(
+                baseline,
+                checkpoint,
+                null,
+                RaidSettlementJournalKind.None,
+                outcome);
         }
 
         public static bool QueueRaidRecoverySettlement(
             RaidRecoveryBaselineData baseline,
             RaidCheckpointData checkpoint,
             GameSaveData settlementState,
+            RaidSettlementJournalKind settlementKind,
             RaidOutcome outcome)
         {
-            if (!RaidCheckpointValidator.IsTerminalOutcome(outcome))
+            if (!RaidCheckpointValidator.IsTerminalOutcome(outcome) ||
+                (settlementState == null &&
+                 settlementKind != RaidSettlementJournalKind.None) ||
+                (settlementState != null &&
+                 settlementKind != RaidSettlementJournalKind.OutcomeSettlement &&
+                 settlementKind != RaidSettlementJournalKind.FreshDepartureRollback) ||
+                (settlementKind == RaidSettlementJournalKind.FreshDepartureRollback &&
+                 outcome != RaidOutcome.RecoveryFailed))
             {
                 return false;
             }
@@ -106,6 +120,7 @@ namespace FantasySurvival.SaveSystem
             if (queued)
             {
                 pendingRequest.RecoverySettlementState = settlementState;
+                pendingRequest.RecoverySettlementKind = settlementKind;
                 pendingRequest.RecoveryOutcome = outcome;
             }
 
@@ -146,6 +161,7 @@ namespace FantasySurvival.SaveSystem
                 out _,
                 out _,
                 out _,
+                out _,
                 out _);
         }
 
@@ -156,6 +172,7 @@ namespace FantasySurvival.SaveSystem
             out RaidRecoveryBaselineData recoveryBaseline,
             out RaidCheckpointData raidCheckpoint,
             out GameSaveData recoverySettlementState,
+            out RaidSettlementJournalKind recoverySettlementKind,
             out RaidOutcome recoveryOutcome)
         {
             PendingRequest request = pendingRequest;
@@ -165,6 +182,8 @@ namespace FantasySurvival.SaveSystem
             recoveryBaseline = request?.RecoveryBaseline;
             raidCheckpoint = request?.RaidCheckpoint;
             recoverySettlementState = request?.RecoverySettlementState;
+            recoverySettlementKind = request?.RecoverySettlementKind ??
+                                     RaidSettlementJournalKind.None;
             recoveryOutcome = request?.RecoveryOutcome ?? RaidOutcome.None;
 
             bool hasRequest = mode != GameStartMode.None;

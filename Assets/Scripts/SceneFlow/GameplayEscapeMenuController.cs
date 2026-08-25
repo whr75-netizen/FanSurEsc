@@ -444,19 +444,19 @@ namespace FantasySurvival.SceneFlow
             {
                 case RaidOutcome.Extracted:
                     resultTitleText.text = "원정 성공";
-                    resultDetailText.text = "귀환 지점에 도착했습니다.\n현재 시험 버전에서는 아이템 손실 규칙을 적용하지 않습니다.";
+                    resultDetailText.text = "귀환 지점에 도착했습니다.\n플레이어가 소지한 아이템과 장비를 유지합니다.";
                     break;
                 case RaidOutcome.PlayerDied:
                     resultTitleText.text = "원정 실패";
-                    resultDetailText.text = "플레이어가 사망했습니다.\n현재 시험 버전에서는 아이템 손실 규칙을 적용하지 않습니다.";
+                    resultDetailText.text = "플레이어가 사망했습니다.\n플레이어가 소지한 아이템과 장비를 모두 잃습니다.";
                     break;
                 case RaidOutcome.Abandoned:
                     resultTitleText.text = "원정 포기";
-                    resultDetailText.text = "원정은 포기 처리되었습니다.\n기지 이동을 다시 시도할 수 있습니다.";
+                    resultDetailText.text = "원정은 포기 처리되었습니다.\n플레이어가 소지한 아이템과 장비를 모두 잃습니다.";
                     break;
                 case RaidOutcome.RecoveryFailed:
                     resultTitleText.text = "원정 복구 실패";
-                    resultDetailText.text = "저장된 원정 상태를 안전하게 복구하지 못했습니다.\n출발 전 기준점으로 기지 상태를 정산합니다.";
+                    resultDetailText.text = "저장된 원정 상태를 안전하게 복구하지 못했습니다.\n기지 보관물은 유지하고 플레이어 소지품과 장비를 잃습니다.";
                     break;
                 default:
                     resultTitleText.text = "원정 종료";

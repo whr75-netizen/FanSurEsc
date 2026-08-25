@@ -1,6 +1,7 @@
 using System;
 using FantasySurvival.BaseBuilding;
 using FantasySurvival.Inventory;
+using FantasySurvival.Raids;
 using FantasySurvival.SceneFlow;
 using UnityEngine;
 using VariableInventorySystem;
@@ -13,6 +14,16 @@ namespace FantasySurvival.SaveSystem
     {
         private const float StatusDuration = 8f;
 
+        private struct PendingStartAction
+        {
+            public GameStartMode Mode;
+            public RaidRecoveryBaselineData RecoveryBaseline;
+            public RaidCheckpointData RaidCheckpoint;
+            public GameSaveData RecoverySettlementState;
+            public RaidOutcome RecoveryOutcome;
+            public GameSaveData OrphanedRaidSave;
+        }
+
         [Header("Scene-authored persistent furniture")]
         [SerializeField] private BaseFurnitureDatabase furnitureDatabase;
         [SerializeField] private BaseFurnitureInstance[] persistentFurniture =
@@ -21,6 +32,7 @@ namespace FantasySurvival.SaveSystem
         private string statusMessage = "F5 or Save Slot 1 to save player and base state.";
         private float statusUntil;
         private bool baseFurnitureBound;
+        private bool ordinaryMirrorRepairPending;
 
         private void Start()
         {
@@ -45,7 +57,8 @@ namespace FantasySurvival.SaveSystem
             if (!TryApplyPendingStartRequest(
                     inventory,
                     owner,
-                    out bool allowAuthoredFurnitureInitialization))
+                    out bool allowAuthoredFurnitureInitialization,
+                    out PendingStartAction pendingStartAction))
             {
                 // Do not bind an authored fallback or enable F5 after a requested load failed.
                 // This prevents a content mismatch from silently replacing the selected slot.
@@ -62,6 +75,8 @@ namespace FantasySurvival.SaveSystem
             }
 
             baseFurnitureBound = true;
+            PersistentGameplayShell.Instance?.RaidCheckpoint?.NotifyBasePersistenceReady();
+            CompleteStartActionAfterBaseBinding(pendingStartAction);
         }
 
         private void Update()
@@ -97,6 +112,11 @@ namespace FantasySurvival.SaveSystem
 
         public bool SaveSlotOne()
         {
+            return SaveSlotOne(ordinaryMirrorRepairPending);
+        }
+
+        private bool SaveSlotOne(bool mirrorOrdinarySlot)
+        {
             if (DirectSceneTravel.IsLoading)
             {
                 SetStatus("Save is unavailable during gameplay scene travel.", false);
@@ -113,6 +133,50 @@ namespace FantasySurvival.SaveSystem
             if (!baseFurnitureBound)
             {
                 SetStatus("Save failed: base furniture is not bound to its runtime state.", true);
+                return false;
+            }
+
+            RaidCheckpointController checkpoint =
+                PersistentGameplayShell.Instance?.RaidCheckpoint;
+            bool settledTrackedRaidThisSave = false;
+            if (checkpoint != null && checkpoint.HasTrackedRaid)
+            {
+                if (!checkpoint.HasPendingBaseSettlement)
+                {
+                    SetStatus(
+                        "Save is blocked while an unresolved raid recovery is waiting for retry or settlement.",
+                        true);
+                    return false;
+                }
+
+                if (!checkpoint.TryCommitTrackedRaidAtBase(out string settlementError))
+                {
+                    SetStatus($"Raid settlement save failed: {settlementError}", true);
+                    return false;
+                }
+
+                // The exact journal transaction is now complete. Continue this same F5
+                // operation and capture the current live base state as a normal save as
+                // well; the Player may have changed inventory after an earlier commit
+                // failure, and reporting success while discarding that change is unsafe.
+                settledTrackedRaidThisSave = true;
+            }
+
+            if (!ordinaryMirrorRepairPending &&
+                TryGetActiveOrdinaryRaidMarker(out string activeRaidInstanceId))
+            {
+                SetStatus(
+                    $"Save is blocked because ordinary slot 1 still declares unresolved raid " +
+                    $"'{activeRaidInstanceId}'. Resolve it from the Main Menu.",
+                    true);
+                return false;
+            }
+
+            if (RaidCheckpointStore.HasRecoveryArtifacts)
+            {
+                SetStatus(
+                    "Save is blocked because unresolved raid recovery files are present. Resolve them from the Main Menu.",
+                    true);
                 return false;
             }
 
@@ -144,36 +208,89 @@ namespace FantasySurvival.SaveSystem
             }
 
             GameSaveData saveData = GameSaveManager.CreateSave(inventorySave, baseSave);
-            if (!GameSaveManager.TryWriteSlotOne(
+            bool written = mirrorOrdinarySlot
+                ? GameSaveManager.TryWriteSlotOneMirrored(
                     saveData,
                     inventory.ItemDatabase,
                     furnitureDatabase,
                     inventory.PlayerInventoryData.CapacityWidth,
                     inventory.PlayerInventoryData.CapacityHeight,
-                    out error))
+                    out error)
+                : GameSaveManager.TryWriteSlotOne(
+                    saveData,
+                    inventory.ItemDatabase,
+                    furnitureDatabase,
+                    inventory.PlayerInventoryData.CapacityWidth,
+                    inventory.PlayerInventoryData.CapacityHeight,
+                    out error);
+            if (!written)
             {
                 SetStatus($"Save failed: {error}", true);
                 return false;
             }
 
-            SetStatus($"Saved player and base to slot 1 at {GameSaveManager.GetDisplayTimestamp(saveData)}", false);
+            if (mirrorOrdinarySlot)
+            {
+                ordinaryMirrorRepairPending = false;
+            }
+            SetStatus(
+                settledTrackedRaidThisSave
+                    ? $"Raid settlement was committed and the current base state was saved at " +
+                      GameSaveManager.GetDisplayTimestamp(saveData)
+                    : $"Saved player and base to slot 1 at {GameSaveManager.GetDisplayTimestamp(saveData)}",
+                false);
             return true;
+        }
+
+        private static bool TryGetActiveOrdinaryRaidMarker(out string raidInstanceId)
+        {
+            GameSaveManager.ReadSlotOneCandidates(
+                out GameSaveData primary,
+                out _,
+                out GameSaveData backup,
+                out _);
+            GameSaveData authoritative = primary ?? backup;
+            if (authoritative != null && authoritative.raidInProgress &&
+                Guid.TryParse(authoritative.activeRaidInstanceId, out _))
+            {
+                raidInstanceId = authoritative.activeRaidInstanceId;
+                return true;
+            }
+
+            raidInstanceId = null;
+            return false;
         }
 
         private bool TryApplyPendingStartRequest(
             InventoryUIManager inventory,
             GameManager owner,
-            out bool allowAuthoredFurnitureInitialization)
+            out bool allowAuthoredFurnitureInitialization,
+            out PendingStartAction pendingStartAction)
         {
             allowAuthoredFurnitureInitialization = false;
+            pendingStartAction = default;
             if (!GameStartRequest.TryConsume(
                     out GameStartMode mode,
                     out GameSaveData saveData,
-                    out GameSaveData fallbackSave))
+                    out GameSaveData fallbackSave,
+                    out RaidRecoveryBaselineData recoveryBaseline,
+                    out RaidCheckpointData raidCheckpoint,
+                    out GameSaveData recoverySettlementState,
+                    out RaidOutcome recoveryOutcome))
             {
                 allowAuthoredFurnitureInitialization = owner.BaseFurnitureState.StateCount == 0;
                 return true;
             }
+
+            pendingStartAction = new PendingStartAction
+            {
+                Mode = mode,
+                RecoveryBaseline = recoveryBaseline,
+                RaidCheckpoint = raidCheckpoint,
+                RecoverySettlementState = recoverySettlementState,
+                RecoveryOutcome = recoveryOutcome,
+                OrphanedRaidSave = mode == GameStartMode.SettleOrphanedRaid ? saveData : null
+            };
 
             if (mode == GameStartMode.NewGame)
             {
@@ -192,8 +309,259 @@ namespace FantasySurvival.SaveSystem
                     out allowAuthoredFurnitureInitialization);
             }
 
+            if (mode == GameStartMode.ResumeRaid &&
+                recoveryBaseline != null &&
+                raidCheckpoint?.persistentState != null)
+            {
+                RaidCheckpointController checkpoint =
+                    PersistentGameplayShell.Instance?.RaidCheckpoint;
+                string preflightError = null;
+                if (checkpoint == null ||
+                    !checkpoint.TryPreflightRecoveredRaid(
+                        recoveryBaseline,
+                        raidCheckpoint,
+                        out preflightError))
+                {
+                    SetStatus(
+                        $"Raid resume preflight failed before changing player/base state: " +
+                        $"{preflightError ?? "raid checkpoint controller is unavailable."}",
+                        true);
+                    return false;
+                }
+
+                if (TryApplyRecoveryPersistentState(
+                    inventory,
+                    owner,
+                    raidCheckpoint.persistentState,
+                    out allowAuthoredFurnitureInitialization,
+                    out string error))
+                {
+                    return true;
+                }
+
+                SetStatus($"Raid resume failed; current player and base state were kept: {error}", true);
+                return false;
+            }
+
+            if (mode == GameStartMode.SettleRaidRecovery && recoveryBaseline != null)
+            {
+                RaidCheckpointController checkpoint =
+                    PersistentGameplayShell.Instance?.RaidCheckpoint;
+                string preflightError = null;
+                if (checkpoint == null ||
+                    !checkpoint.TryPreflightMenuRecoverySettlement(
+                        recoveryBaseline,
+                        raidCheckpoint,
+                        recoveryOutcome,
+                        recoverySettlementState,
+                        out preflightError))
+                {
+                    SetStatus(
+                        $"Raid recovery settlement preflight failed before changing player/base state: " +
+                        $"{preflightError ?? "raid checkpoint controller is unavailable."}",
+                        true);
+                    return false;
+                }
+
+                string checkpointError = null;
+                string baselineError = null;
+                string journalError = null;
+                if (recoverySettlementState != null)
+                {
+                    if (TryApplyRecoveryPersistentState(
+                        inventory,
+                        owner,
+                        recoverySettlementState,
+                        out allowAuthoredFurnitureInitialization,
+                        out journalError))
+                    {
+                        return true;
+                    }
+
+                    SetStatus(
+                        "Exact raid settlement journal could not be applied; older checkpoint/baseline fallback was refused. " +
+                        journalError,
+                        true);
+                    return false;
+                }
+
+                if (raidCheckpoint?.persistentState != null &&
+                    TryApplyRecoveryPersistentState(
+                        inventory,
+                        owner,
+                        raidCheckpoint.persistentState,
+                        out allowAuthoredFurnitureInitialization,
+                        out checkpointError))
+                {
+                    return true;
+                }
+
+                if (recoveryBaseline.startingState != null &&
+                    TryApplyRecoveryPersistentState(
+                        inventory,
+                        owner,
+                        recoveryBaseline.startingState,
+                        out allowAuthoredFurnitureInitialization,
+                        out baselineError))
+                {
+                    return true;
+                }
+
+                SetStatus(
+                    "Raid recovery settlement failed; current player and base state were kept. " +
+                    $"Settlement journal: {journalError ?? "not available."} " +
+                    $"Checkpoint: {checkpointError ?? "not available."} " +
+                    $"Baseline: {baselineError ?? "not available."}",
+                    true);
+                return false;
+            }
+
+            if (mode == GameStartMode.SettleOrphanedRaid &&
+                saveData != null && saveData.raidInProgress)
+            {
+                RaidCheckpointController checkpoint =
+                    PersistentGameplayShell.Instance?.RaidCheckpoint;
+                string preflightError = null;
+                if (checkpoint == null ||
+                    !checkpoint.TryPreflightOrphanedRaidSettlement(
+                        saveData.activeRaidInstanceId,
+                        out GameSaveData authoritativeSettlementState,
+                        out preflightError))
+                {
+                    SetStatus(
+                        "Orphaned raid failure preflight failed before changing player/base state: " +
+                        (preflightError ?? "raid checkpoint controller is unavailable."),
+                        true);
+                    return false;
+                }
+
+                pendingStartAction.OrphanedRaidSave = authoritativeSettlementState;
+                if (TryApplyRecoveryPersistentState(
+                    inventory,
+                    owner,
+                    authoritativeSettlementState,
+                    out allowAuthoredFurnitureInitialization,
+                    out string error))
+                {
+                    return true;
+                }
+
+                SetStatus(
+                    $"Orphaned raid failure settlement could not restore its marked base state: {error}",
+                    true);
+                return false;
+            }
+
             SetStatus("Start request was invalid.", true);
             return false;
+        }
+
+        private bool TryApplyRecoveryPersistentState(
+            InventoryUIManager inventory,
+            GameManager owner,
+            GameSaveData persistentState,
+            out bool allowAuthoredFurnitureInitialization,
+            out string error)
+        {
+            allowAuthoredFurnitureInitialization = false;
+            if (!TryPrepareLoadGame(
+                    inventory,
+                    owner,
+                    persistentState,
+                    out PlayerInventoryState playerCandidate,
+                    out BaseFurnitureStateStore baseCandidate,
+                    out bool preparedAllowsAuthoredInitialization,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!TryApplyPreparedLoad(
+                    inventory,
+                    owner,
+                    playerCandidate,
+                    baseCandidate,
+                    out error))
+            {
+                return false;
+            }
+
+            allowAuthoredFurnitureInitialization = preparedAllowsAuthoredInitialization;
+            error = null;
+            return true;
+        }
+
+        private void CompleteStartActionAfterBaseBinding(PendingStartAction pendingStartAction)
+        {
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            if (pendingStartAction.Mode == GameStartMode.ResumeRaid)
+            {
+                string error = null;
+                if (shell?.RaidCheckpoint == null ||
+                    !shell.RaidCheckpoint.TryBeginRecoveredRaid(
+                        pendingStartAction.RecoveryBaseline,
+                        pendingStartAction.RaidCheckpoint,
+                        out error))
+                {
+                    SetStatus(
+                        $"Raid resume could not begin after base restoration: " +
+                        $"{error ?? "raid checkpoint controller is unavailable."}",
+                        true);
+                    return;
+                }
+
+                SetStatus("Recovered persistent state; loading the interrupted raid.", false);
+                return;
+            }
+
+            if (pendingStartAction.Mode == GameStartMode.SettleRaidRecovery)
+            {
+                if (shell?.PlayerStats == null || shell.RaidCheckpoint == null)
+                {
+                    SetStatus("Raid recovery settlement failed: persistent Player services are unavailable.", true);
+                    return;
+                }
+
+                shell.PlayerStats.ResetHealth();
+                if (!shell.RaidCheckpoint.TryCompleteMenuRecoverySettlementAtBase(
+                        pendingStartAction.RecoveryBaseline,
+                        pendingStartAction.RaidCheckpoint,
+                        pendingStartAction.RecoveryOutcome,
+                        pendingStartAction.RecoverySettlementState,
+                        out string error))
+                {
+                    SetStatus($"Raid recovery settlement failed: {error}", true);
+                    return;
+                }
+
+                SetStatus("Interrupted raid recovery was settled at the base.", false);
+                return;
+            }
+
+            if (pendingStartAction.Mode == GameStartMode.SettleOrphanedRaid)
+            {
+                if (shell?.PlayerStats == null)
+                {
+                    SetStatus("Orphaned raid failure settlement failed: Player services are unavailable.", true);
+                    return;
+                }
+
+                shell.PlayerStats.ResetHealth();
+                ordinaryMirrorRepairPending = true;
+                if (!SaveSlotOne(true))
+                {
+                    SetStatus(
+                        "Orphaned raid was failed, but its clean ordinary save mirror could not be completed. Retry F5.",
+                        true);
+                    return;
+                }
+
+                SetStatus(
+                    "The ordinary save showed an active raid without recovery cache. The raid was failed and settled at the base.",
+                    false);
+                return;
+            }
+
         }
 
         private bool TryApplyNewGame(InventoryUIManager inventory, GameManager owner)

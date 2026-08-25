@@ -68,7 +68,7 @@
 - 체력, 피해량, 장탄수, 장전 시간 등의 수치
 - 탈출 포탈의 작동 조건과 대기 시간
 - 사망 시 장비 및 획득물 손실 규칙
-- 저장 슬롯, 자동 저장 시점, 강제 종료 처리
+- 최종 저장 슬롯과 자동 저장 시점. 진행 중 원정의 강제 종료 처리는 Stage 7의 ordinary-marker 우선 Recovery 방식으로 현재 확정했다.
 - 아이템 능력치 구조
 - 최종 캐릭터 비율과 아트 스타일
 - 도심 생성 seed의 저장·재현 정책과 최종 생성 수치
@@ -110,6 +110,8 @@
     → 시작 버튼 선택
     → GameLoadingScene
     → GameMap1
+
+로딩 경계는 세 가지를 구분한다. `InitialLoadingScene`은 최초 실행에서 Main Menu까지 가는 전용 로딩이고, `GameLoadingScene`은 Main Menu의 New/Load/원정 복구 요청을 `GameMap1`에 적용하는 공통 진입 로딩이다. 이미 실행 중인 `GameMap1 ↔ GameMapTest` 이동은 두 로딩 씬을 거치지 않고 persistent gameplay black fader 하나를 사용한다.
 
 ### 2.3 현재 씬 이동과 플레이어 구조
 
@@ -517,11 +519,11 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 PersistentGameplayShell은 실제 Player 셸의 수명만 유지하고, persistent `RaidSession`이 기지/원정 컨텍스트와 원정 시작·진행·결과·복귀 상태를 소유한다. 결과는 `Extracted`, `PlayerDied`, `Abandoned` 중 하나만 처음 한 번 확정한다.
 
 - **[현재]** 맵 선택은 원정 시작, 귀환 포탈은 생환, `PlayerStats.Died`는 사망 실패, 확인된 포기는 포기 결과로 수렴한다.
-- **[현재]** 출발·목적 scene/spawn과 기지 복귀 route를 in-memory 상태로만 유지한다.
-- **[현재]** 별도 원정 snapshot이나 획득물 복사본을 만들지 않았고, 결과에 따라 Player 인벤토리를 변경하지 않는다.
+- **[현재]** live 출발·목적 scene/spawn과 기지 복귀 route는 `RaidSession`의 in-memory 원본이다. 프로세스 재시작용 ordinary marker와 Recovery DTO는 Stage 7에서 이 상태의 필요한 부분만 운반한다.
+- **[현재]** 별도 획득물 복사본은 만들지 않고 결과에 따라 Player 인벤토리를 변경하지 않는다. 진행 중 원정 snapshot은 Stage 7의 후속 구현을 따른다.
 - **[현재]** `PersistentGameplayShell`의 전환 잠금이 fade 전 구간에서 Player 입력과 피해를 막고, 도착 입력 복원 뒤 새 컨텍스트에서 피해를 다시 허용한다.
 - **[미정]** 원정 밖 아이템 소유 주체, 생환 반영 범위, 사망·포기 손실 범위와 획득 provenance
-- **[보류]** 강제종료 뒤 원정 이어하기, snapshot/event journal, 좌표·AI·물리 replay와 도심 seed 저장
+- **[현재 구현]** 강제종료 뒤 원정 이어하기와 snapshot, 도심 seed/layout hash 복원. event journal, 좌표·AI·물리 replay는 보류한다.
 
 ### 다음 단계가 의존하는 이유
 
@@ -718,22 +720,23 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 ### 목표
 
-현재 단일 슬롯 프로토타입이 저장하는 플레이어 인벤토리·장비와 정의 기반 기지 가구 상태에 더해, Stage 6에서 검증될 원정 결과를 게임 재실행 후 복원한다.
+현재 단일 슬롯 프로토타입이 저장하는 플레이어 인벤토리·장비와 정의 기반 기지 가구 상태에 더해, 진행 중 원정과 확정된 원정 결과를 게임 재실행 후 안전하게 판정·복원한다.
 
-사용자 결정으로 기본 플레이어 아이템과 GameMap1의 두 stable-ID Chest 상태 저장을 앞당겨 구현했다. 이 Stage의 남은 범위는 생환·사망 결과, 향후 배치 가능한 기지 가구의 layout migration과 최종 저장 정책이다.
+사용자 결정으로 기본 플레이어 아이템, GameMap1의 두 stable-ID Chest, 일반 세이브 우선 active-raid marker와 Recovery snapshot을 구현했다. 향후 배치 가능한 기지 가구의 layout migration, 아이템 손실·보상 규칙과 최종 슬롯/자동 저장 정책은 남아 있다.
 
 ### 선행조건
 
 - **[현재 기지 가구]** persistent `GameManager → BaseFurnitureStateStore → BaseFurnitureRuntimeState` 권위 경계 확정
-- **[현재 런타임/저장 제외]** `RaidSession`은 존재하지만 상태와 결과를 디스크에 저장하지 않는다.
+- **[현재]** `RaidSession`의 mutable 상태 자체를 직렬화하지 않고, ordinary active marker와 검증된 Recovery DTO가 프로세스 사이 원정 수명을 운반한다.
 - 아이템 인스턴스 상태 확정
 - 생환과 사망 결과까지 저장 범위에 포함하는 경우 해당 반영 규칙 확정
 - 숫자 ItemDefinition ID가 안정됨
 - **[현재 프로토타입]** 저장 슬롯 1개와 `.bak` 복구
 - **[미정]** 최종 저장 슬롯 수
 - **[미정]** 자동 저장 시점
-- **[미정]** 강제 종료 정책
-- **[보류]** 강제종료 뒤 진행 중 원정 이어하기, 맵 snapshot, event journal과 replay
+- **[현재 확정]** 일반 세이브의 active-raid marker를 먼저 검사하고 같은 raid ID의 Recovery가 있을 때만 이어하기를 계산한다.
+- **[현재 확정]** marker는 있지만 유효한 Recovery가 없으면 이어하기 없이 원정 실패로 처리한다. marker 없는 Recovery만으로 원정을 되살리지 않는다.
+- **[현재 구현]** 강제종료 뒤 진행 중 원정 이어하기와 맵 snapshot. event journal/replay와 프레임별 좌표 로그는 구현하지 않는다.
 - **[현재 프로토타입]** primary 전체 의미 검증 실패 시 `.bak` 후보 검증
 - **[미정]** 최종 손상 파일 복구와 백업 정책
 
@@ -752,6 +755,11 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 - 저장과 로드를 호출하는 단일 소유자
 - **[현재 기지 가구]** namespaced furniture definition key, stable placed ID와 명시적 `BaseSaveData` codec
 - **[현재 기지 가구]** scene Chest는 View로만 bind하고 런타임 원본은 persistent store에 유지
+- **[현재 원정 Recovery]** ordinary v4의 `raidInProgress/activeRaidInstanceId`가 미정산 원정 존재 여부의 첫 권위다.
+- **[현재 원정 Recovery]** baseline은 출발 전 persistent state와 raid ID, checkpoint는 Player HP·Transform, Player/기지 상태, map seed/layout hash, stable-ID Chest와 Enemy/시체 인벤토리를 기록한다.
+- **[현재 원정 Recovery]** AI 행동 상태·NavMesh 경로·감지 기억, 총알·VFX·열린 UI와 drag는 저장하지 않고 복원 뒤 재계산한다.
+- **[현재 원정 Recovery]** terminal 결과는 Resolved checkpoint와 exact settlement journal로 고정하며, 정산은 journal → ordinary 주·백업 → Recovery 삭제의 반복 가능한 경계로 처리한다.
+- **[현재 원정 Recovery]** persistent state가 없는 marker-only journal은 저장 실패를 닫는 `RecoveryFailed` 결정에만 사용한다. ordinary 반영 뒤 Recovery 삭제가 부분 실패하면 같은 실행에서는 immutable exact state와 ordinary 동일성을 확인한 후 cleanup 단계만 재시도한다.
 
 저장하지 않는 프리셋 정보:
 
@@ -771,7 +779,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 - 생환 또는 사망 결과 처리가 끝났을 때
 - 명시적으로 게임을 종료할 때
 
-초기 버전에서는 진행 중인 원정의 적 위치, 상자 열린 상태, 탄피나 투사체를 저장하지 않는다.
+현재 버전은 진행 중 원정의 Player/적 위치·HP, map seed/layout hash, stable-ID 상자·시체 인벤토리를 snapshot으로 저장한다. 열린 UI, AI의 순간 행동/기억, 경로 코너, 탄피·투사체는 저장하지 않는다.
 
 ### 완료 기준
 
@@ -781,8 +789,12 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 - 잘못된 ItemDefinition ID가 침묵하지 않고 명확히 처리된다.
 - 같은 저장을 여러 번 불러도 아이템이 중복되지 않는다.
 - 저장 버전이 다른 경우의 처리 정책이 테스트된다.
+- ordinary marker가 없는 cache는 원정을 시작시키지 않으며 격리된다.
+- ordinary marker가 있지만 cache가 없으면 실패 처리만 가능하다.
+- 유효한 Active checkpoint만 Resume을 허용하고, Resolved 결과나 settlement journal이 있으면 Resume을 허용하지 않는다.
+- 중단 후 Resume하면 같은 raid ID, map layout, Player HP·위치와 저장 대상 월드 상태가 복원된다.
 
-**[현재 부분 구현]** 위 항목 중 플레이어 아이템과 고정 GameMap1 Chest 2개의 DTO/codec/scene binding은 구현했다. 2026-08-24 Editor compile, 사용자 기준 1회 맵 왕복의 동일 grid 보존, 원정 Chest 분리, native v4 layout 불일치 primary에서 정상 backup으로의 실제 GameMap1 적용 폴백, 격리된 Windows 원자 파일 교체를 확인했다. 실제 사용자 slot을 쓰는 F5와 새 프로세스 Main Menu 버튼 Load는 사용자 파일 보호를 위해 아직 실행하지 않았다. 생환·사망 결과와 배치 가구 migration까지 포함하는 Stage 7 전체도 완료가 아니다.
+**[현재 부분 구현]** 플레이어 아이템, 고정 GameMap1 Chest 2개, ordinary active marker, baseline/checkpoint/settlement journal과 Main Menu Resume/실패 정산을 구현했다. 2026-08-25 격리 파일 상태 행렬, `GameMap1 → GameMapTest → 런타임 중단 → MainMenu → GameLoadingScene → GameMap1 → GameMapTest` Resume E2E, terminal primary 손상 시 Resume 차단, 정산 실패 input lock과 재시도 cleanup을 확인했다. 실제 사용자 slot은 보호를 위해 변경하지 않았다. 아이템 손실·보상, 배치 가구 migration, 최종 슬롯/자동 저장과 다른 맵 유형 snapshot은 아직 완료가 아니다.
 
 ### 다음 단계가 의존하는 이유
 
@@ -987,7 +999,7 @@ Stage 1 구현 결과는 다음과 같다.
 8. **[완료]** GameMap1과 GameMapTest 왕복 3회 및 GameMapTest 직접 실행 후 귀환 검증
 9. **[완료]** Console 새 오류 0과 기존 Chest 열기/닫기 회귀 확인
 
-Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지, 플레이어 아이템 단일 슬롯 저장과 저장 없는 시험 루팅은 구현되었다. GameMap1의 고정 Chest 2개에도 namespaced definition/stable placed ID/persistent runtime store/v4 Save DTO를 연결했고, 2026-08-24 사용자 기준 1회 맵 왕복에서 두 grid 참조와 분리된 내용·중첩 소유권 보존을 확인했다. layout 불일치 primary에서 정상 backup으로의 적용 전 폴백도 실제 GameMap1 배치 경계로 확인했다. `GameMapTest`의 DB ID 1 시험 Chest는 의도적으로 scene-local이며 기지 가구 store에 포함하지 않는다. 이동·전투 시험용 적과 도심형 도로·큐브 건물 생성은 별도 하위 작업으로 존재한다. 생환·사망·포기 결과가 요구되어 Stage 2-B의 최소 in-memory `RaidSession`과 컨텍스트별 Escape 메뉴를 추가했다. 아이템 손실·병합, 원정 결과 저장, 강제종료 이어하기, 배치 가능한 기지 layout migration, 도심 장식·내부·동적 spawn과 다른 맵 유형은 아직 구현하지 않는다.
+Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지, 플레이어 아이템 단일 슬롯 저장과 저장 없는 시험 루팅은 구현되었다. GameMap1의 고정 Chest 2개에도 namespaced definition/stable placed ID/persistent runtime store/v4 Save DTO를 연결했고, 2026-08-24 사용자 기준 1회 맵 왕복에서 두 grid 참조와 분리된 내용·중첩 소유권 보존을 확인했다. layout 불일치 primary에서 정상 backup으로의 적용 전 폴백도 실제 GameMap1 배치 경계로 확인했다. `GameMapTest`의 DB ID 1 시험 Chest는 기지 가구 store가 아니라 원정 Recovery snapshot에 포함되는 scene-local 컨테이너다. 이동·전투 시험용 적과 도심형 도로·큐브 건물 생성은 별도 하위 작업으로 존재한다. 생환·사망·포기 결과, 컨텍스트별 Escape 메뉴와 ordinary-marker 우선 강제종료 Resume을 구현했다. 아이템 손실·병합, 배치 가능한 기지 layout migration, 도심 장식·내부·동적 spawn과 다른 맵 유형은 아직 구현하지 않는다.
 
 ---
 
@@ -1008,7 +1020,7 @@ Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지, 플레이어 �
 | 첫 적의 이동과 공격 방식 | Stage 5 |
 | 사망 시 손실 규칙 | Stage 6 |
 | **[결정 완료]** 기지는 실제 Pause, 원정 Escape 메뉴는 world non-pause이며 포기·주 메뉴 이동에 확인 사용 | Stage 6 |
-| 최종 저장 슬롯, 자동 저장, 백업, 강제 종료 정책(현재 프로토타입은 1슬롯+.bak) | Stage 7 |
+| 최종 저장 슬롯·자동 저장 정책. **진행 중 원정 강제 종료는 ordinary marker 우선 + Recovery snapshot으로 결정 완료** | Stage 7 확장 |
 | 맵 ID와 해금 규칙 | Stage 8 |
 | **[결정 완료]** 도심형 맵은 연결 도로를 먼저 만들고 큐브 건물을 후배치 | 도심 생성 기술 스파이크 |
 | **[결정 완료]** 지하 던전과 오염 지역은 도심과 별도 생성 규칙 사용 | 각 맵 유형 설계 시점 |
@@ -1078,7 +1090,7 @@ AI가 하지 말아야 할 것:
     → 귀환 포탈
     → 반복 왕복 검증
 
-PersistentGameplayShell의 같은 Player, Camera, InventoryUIManager, EventSystem과 PlayerInventoryState 유지는 완료되었고, 기초 PlayerItemState 저장과 같은 실행 안의 `Chest → Player → 귀환` 루팅도 구현됐다. 기지의 고정 Chest는 `Definition → placed instance → persistent runtime state → explicit Save DTO` 경계로 확장했으며 scene View가 원본을 소유하지 않는다. 생환·사망·포기 결과 요구에 따라 최소 `RaidSession`이 원정 수명과 단일 결과만 소유하며, 별도 획득물 복사본이나 범용 모드 프레임워크는 추가하지 않았다. 이후 아이템 손실·병합, 강제종료 재개 또는 배치 가구가 실제로 확정되면 각 수명과 migration 경계를 먼저 정한 뒤 현재 저장 프로토타입을 확장한다.
+PersistentGameplayShell의 같은 Player, Camera, InventoryUIManager, EventSystem과 PlayerInventoryState 유지는 완료되었고, 기초 PlayerItemState 저장과 같은 실행 안의 `Chest → Player → 귀환` 루팅도 구현됐다. 기지의 고정 Chest는 `Definition → placed instance → persistent runtime state → explicit Save DTO` 경계로 확장했으며 scene View가 원본을 소유하지 않는다. 생환·사망·포기 결과 요구에 따라 `RaidSession`이 live 원정 수명과 단일 결과만 소유하고, 프로세스 재시작은 ordinary active marker를 먼저 확인한 뒤 같은 raid ID의 Recovery snapshot만 사용한다. 별도 획득물 복사본이나 범용 모드 프레임워크는 추가하지 않았다. 이후 아이템 손실·병합 또는 배치 가구가 실제로 확정되면 각 수명과 migration 경계를 먼저 정한 뒤 현재 저장 프로토타입을 확장한다.
 
 도심형 도로·큐브 건물 생성은 이 순서와 별개로 공간 제작 위험을 먼저 확인한 기술 스파이크다. 현재 결과는 GameMapTest의 파생 공간만 바꾸며 Player 셸, 아이템 상태와 씬 이동의 권위 소유자를 바꾸지 않는다. 후속 랜드마크·내부·spawn 또는 다른 맵 유형은 각각 별도 요청과 검증 계약을 가진다.
 

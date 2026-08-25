@@ -85,6 +85,14 @@ namespace FantasySurvival.WorldGeneration
 
         private void Awake()
         {
+            // RaidCheckpointSceneBinding runs earlier and may have already generated the
+            // recovered seed. Re-randomizing here would replace the authoritative layout
+            // before the world checkpoint can be applied.
+            if (CurrentLayout != null)
+            {
+                return;
+            }
+
             if (!HasValidConfiguration())
             {
                 enabled = false;

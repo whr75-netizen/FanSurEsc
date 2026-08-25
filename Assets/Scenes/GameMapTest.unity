@@ -130,6 +130,7 @@ GameObject:
   - component: {fileID: 415190457}
   - component: {fileID: 415190456}
   - component: {fileID: 415190455}
+  - component: {fileID: 415190458}
   m_Layer: 0
   m_Name: ProceduralUrbanMap
   m_TagString: Untagged
@@ -226,6 +227,30 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &415190458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415190454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 463524f81d7a55448b34958a135ba809, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Raids.RaidCheckpointSceneBinding
+  sceneStateId: core:gamemaptest:v1
+  mapGenerator: {fileID: 415190455}
+  chests:
+  - stableId: core:gamemaptest/test_loot_chest
+    chest: {fileID: 656353461}
+  enemies:
+  - stableId: core:gamemaptest/melee_enemy_01
+    stats: {fileID: 1858696690}
+    corpseInventory: {fileID: 1858696689}
+  - stableId: core:gamemaptest/ranged_enemy_01
+    stats: {fileID: 1033938571}
+    corpseInventory: {fileID: 1033938570}
 --- !u!1 &445063164
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,6 +786,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8495865292714740978, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
   m_PrefabInstance: {fileID: 1033938568}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1033938570 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4004349096574100642, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
+  m_PrefabInstance: {fileID: 1033938568}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8f36b178f9d8a49ba7ae9dec6f0ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chest
+--- !u!114 &1033938571 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4882853632966490736, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
+  m_PrefabInstance: {fileID: 1033938568}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160cc57d571396e4bbfe0097769f7e7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
 --- !u!1 &1532679701
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,6 +1102,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5574875849931597612, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
   m_PrefabInstance: {fileID: 1858696687}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1858696689 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7141297199703957038, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+  m_PrefabInstance: {fileID: 1858696687}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8f36b178f9d8a49ba7ae9dec6f0ebd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Chest
+--- !u!114 &1858696690 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 419036695974578800, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+  m_PrefabInstance: {fileID: 1858696687}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 160cc57d571396e4bbfe0097769f7e7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

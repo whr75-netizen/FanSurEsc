@@ -43,6 +43,7 @@ public class InventoryUIManager : MonoBehaviour
         (playerInventoryPanel != null && playerInventoryPanel.activeSelf) ||
         (equipmentPanel != null && equipmentPanel.activeSelf) ||
         (externalInventoryPanel != null && externalInventoryPanel.activeSelf);
+    public bool HasActiveDrag => standardCore != null && standardCore.IsDragging();
     public bool BlocksGameplayInput => inputBlocked || IsAnyInventoryOpen;
     public bool IsExternalInventoryOpen =>
         externalInventoryPanel != null && externalInventoryPanel.activeSelf;

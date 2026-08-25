@@ -71,6 +71,27 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
         damageBlocked = blocked;
     }
 
+    public bool TryRestoreCheckpointHealth(
+        float savedCurrentHealth,
+        float savedMaxHealth,
+        out string error)
+    {
+        if (float.IsNaN(savedCurrentHealth) || float.IsInfinity(savedCurrentHealth) ||
+            float.IsNaN(savedMaxHealth) || float.IsInfinity(savedMaxHealth) ||
+            savedMaxHealth <= 0f ||
+            !Mathf.Approximately(savedMaxHealth, maxHealth) ||
+            savedCurrentHealth <= 0f ||
+            savedCurrentHealth > maxHealth)
+        {
+            error = "Checkpoint Player health is incompatible with the current Player definition.";
+            return false;
+        }
+
+        SetCurrentHealth(savedCurrentHealth);
+        error = null;
+        return true;
+    }
+
     private void SetCurrentHealth(float value)
     {
         float clamped = Mathf.Clamp(value, 0f, maxHealth);

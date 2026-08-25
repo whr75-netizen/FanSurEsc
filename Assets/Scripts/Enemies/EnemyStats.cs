@@ -105,6 +105,47 @@ public sealed class EnemyStats : MonoBehaviour, IDamageable
         SetCurrentHealth(MaxHealth);
     }
 
+    public bool TryRestoreCheckpointHealth(
+        float savedCurrentHealth,
+        float savedMaxHealth,
+        out string error)
+    {
+        if (!isInitialized || isDead)
+        {
+            error = "Enemy must be a freshly initialized living entity before checkpoint restore.";
+            return false;
+        }
+
+        if (float.IsNaN(savedCurrentHealth) || float.IsInfinity(savedCurrentHealth) ||
+            float.IsNaN(savedMaxHealth) || float.IsInfinity(savedMaxHealth) ||
+            savedMaxHealth <= 0f ||
+            !Mathf.Approximately(savedMaxHealth, MaxHealth) ||
+            savedCurrentHealth < 0f ||
+            savedCurrentHealth > MaxHealth)
+        {
+            error = "Checkpoint Enemy health is incompatible with the current Enemy definition.";
+            return false;
+        }
+
+        if (savedCurrentHealth <= 0f)
+        {
+            DamageResult result = ApplyDamage(
+                new DamageContext(MaxHealth, null, transform.position));
+            if (!result.CausedDeath || !IsDead)
+            {
+                error = "Checkpoint Enemy death transition did not complete.";
+                return false;
+            }
+        }
+        else
+        {
+            SetCurrentHealth(savedCurrentHealth, true);
+        }
+
+        error = null;
+        return true;
+    }
+
     private void SetCurrentHealth(float value, bool forceNotification = false)
     {
         float clamped = Mathf.Clamp(value, 0f, MaxHealth);

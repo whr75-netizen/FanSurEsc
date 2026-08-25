@@ -205,7 +205,7 @@ Interactable (abstract base class)
 
 1. `[사용자 수동 확인 후보]` 실제 E와 WASD 입력으로 Chest A/B 겹침, 이동 중 열린 대상 유지와 거리 이탈 체감을 확인한다.
 2. `[후속 후보]` 벽 너머 대상, Collider 32개 초과, 완전 동거리 tie-break는 실제 맵 밀도나 시야선 규칙이 필요해질 때 결정한다.
-3. `[후속 후보]` 아이템 손실·획득 provenance·강제종료 원정 재개는 해당 규칙이 확정될 때 별도 범위로 확장한다.
+3. `[후속 후보]` 아이템 손실·획득 provenance는 해당 규칙이 확정될 때 별도 범위로 확장한다. 강제종료 원정 재개는 22절에서 구현했다.
 
 이 목록은 자동 작업 지시가 아니다. 최신 사용자 요청이 항상 우선한다.
 
@@ -404,7 +404,7 @@ Interactable (abstract base class)
 - 각 아이템은 ItemDatabase의 숫자 `definitionId`, 파일 내부 `recordId`와 컨테이너 부모 관계, 그리드 슬롯 또는 `equipmentSlot`, 회전 상태를 저장한다.
 - 컨테이너 내부 아이템은 파일 내부 관계용 `recordId`로 연결한다. 이 값은 영구 아이템 instance ID가 아니다.
 - 이름, 설명, 아이콘, 아이템 크기, 컨테이너 크기와 장착 가능 슬롯은 저장하지 않고 같은 `ItemDatabase.asset`에서 다시 조회한다.
-- 씬, Player 위치, 열린 UI, 드래그, Camera, Portal, Enemy와 일시 상호작용 상태는 저장하지 않는다. 로드 후 시작 위치는 항상 기지의 SpawnPoint다.
+- 이 절의 ordinary 단일 슬롯에는 씬, Player 위치, 열린 UI, 드래그, Camera, Portal, Enemy와 일시 상호작용 상태를 저장하지 않는다. 일반 로드 후 시작 위치는 항상 기지의 SpawnPoint다. 진행 중 원정의 강제 종료 복구 snapshot 범위는 아래 22절의 별도 Recovery 계약을 따른다.
 
 ### 기지 상태와 definition 경계
 
@@ -824,7 +824,7 @@ Interactable (abstract base class)
 | 포함 관계 | `EnemyDeathHandler`는 체력이나 grid 내용을 소유하지 않고 완료된 죽음을 관찰한다. fader는 목적지·Spawn ID·Player를 소유하지 않고 검은 화면만 표시한다. |
 | 이전 규칙 | 시체와 Player 사이 아이템 이동은 일반 Chest와 같은 기존 원자적 drag/container API를 사용한다. 전환 중에는 열린 인벤토리와 drag를 같은 `CloseAllInventories` 경로로 먼저 정리한다. |
 | 파생 표현 | 시체 root·렌더, 비활성 AI/Animator/Collider와 활성 전리품 Trigger는 `EnemyStats.IsDead`의 파생 상태다. 검은 Canvas와 입력 잠금은 pending 이동의 파생 실행 상태다. |
-| 저장 경계 | 현재 시체·적 체력·전리품 grid와 fade 상태는 저장하지 않는다. 시체 시작 아이템 ID 1/2는 시험 프리팹 데이터이며 정식 보상 확정이 아니다. |
+| 저장 경계 | Stage 20 구현 당시 ordinary 저장에는 시체·적 체력·전리품 grid와 fade 상태를 넣지 않았다. 이후 22절 Recovery checkpoint가 stable ID를 가진 적·시체·전리품을 저장하도록 확장됐으며 fade 상태는 여전히 저장하지 않는다. 시체 시작 아이템 ID 1/2는 시험 프리팹 데이터이며 정식 보상 확정이 아니다. |
 | 업데이트 주체 | 사망 전이는 이벤트 1회이고 별도 시체 `Update`가 없다. fade만 `Time.unscaledDeltaTime` coroutine을 사용하며 기존 씬 이동 경계 외에 새 Manager나 Tick을 만들지 않았다. |
 
 ### 구현 내용
@@ -862,7 +862,7 @@ Interactable (abstract base class)
 - `[사용자 요구]` 원정에서는 세계를 일시정지하지 않고 Player 조작만 막는다. 계속하기, 설정, 원정 포기와 주 메뉴 이동을 제공한다.
 - `[사용자 요구]` 원정 중 포기 또는 주 메뉴 이동에는 “원정을 포기하시겠습니까?” 확인을 표시하며, 기지 또는 주 메뉴라는 목적지만 다르다.
 - `[사용자 요구]` 생환과 Player 사망은 각각 한 번만 결과를 확정하고 최소 결과 화면을 표시한다.
-- `[제외 범위]` 강제종료 뒤 원정 이어하기, 원정 snapshot·event log·좌표 replay, 도심 seed 저장, 아이템 손실·보상 확정과 최종 UI 디자인은 포함하지 않는다.
+- `[당시 제외 / 후속 구현]` 이 단계에서는 강제종료 뒤 원정 이어하기를 제외했지만, 이후 사용자 요청으로 22절의 일반 세이브 우선 원정 체크포인트 복구를 구현했다. event log·좌표 replay, 아이템 손실·보상 확정과 최종 UI 디자인은 여전히 포함하지 않는다.
 
 ### 상태 소유권과 호출 흐름
 
@@ -872,7 +872,7 @@ Interactable (abstract base class)
 | 수명 범위 | `RaidSession`과 Escape 메뉴는 persistent Player Shell의 Play Session, 원정 상태는 Raid, HP는 Player Entity, 확인·결과 패널은 UI 표시 수명이다. |
 | 변경 진입점 | 맵 선택 → 원정 시작, 귀환 포탈 → 생환, `PlayerStats.Died` → 사망 실패, 확인된 포기 → 포기 결과로 수렴하며 `RaidSession`만 `Extracted`·`PlayerDied`·`Abandoned` 중 처음 한 결과를 확정한다. |
 | 파생 표현 | 메뉴 버튼·확인 패널·결과 패널은 scene 종류와 `RaidSession` 상태의 파생 UI이며 원정 결과를 별도로 쓰지 않는다. |
-| 저장 경계 | 현재 원정 상태·결과, Player 위치·HP, 적·맵 상태는 디스크에 저장하지 않는다. 기존 Player/기지 단일 슬롯 저장 형식도 이번 작업에서 확장하지 않았다. |
+| 저장 경계 | 이 단계 당시에는 원정 상태·결과, Player 위치·HP, 적·맵 상태를 디스크에 저장하지 않았다. 현재 저장 경계는 22절의 후속 구현이 대체한다. |
 | 업데이트 주체 | Escape는 persistent controller 하나가 매 프레임 읽고, 결과 전이는 명시적 호출 또는 Player 사망 완료 이벤트에서만 발생한다. |
 
 ### 현재 구현
@@ -895,3 +895,54 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` 원정의 주 메뉴 확인 뒤 `MainMenuScene`에서 `PersistentGameplayShell.Instance`와 `GameManager.Instance`가 모두 null이었고 active Camera·AudioListener·EventSystem은 각각 1개, `Time.timeScale=1`이었다. 같은 Main Menu에서 새 게임을 시작하자 이전과 다른 Shell/Player Entity로 깨끗한 `GameMap1` 세션이 생성됐다.
 - `[프리팹/런타임 확인]` 메뉴 Canvas는 활성 상태에서 유효한 화면 Rect와 `0.62` runtime scale을 가졌다. Windows 캡처 도구는 해당 Unity 창에서 `SetIsBorderRequired` 시스템 인터페이스 오류로 실패했으므로 실제 픽셀 캡처와 물리 Escape/버튼 클릭은 미검증이다.
 - `[컴파일/Console 확인]` 최종 script refresh는 성공했고 Console Error는 0이다. 작업 전 기준 경고 11개(Input Manager, MCP 서명, Animator/NavMesh, Unity AI 계정, 외부 RenderTextureBaker)에 더해 자동 검증 하네스가 kinematic 전환 뒤 velocity를 0으로 쓰며 만든 검증 전용 경고 8개가 Console 기록에 남아 있다. 해당 stack은 동적 `CommandScript`이며 프로젝트 런타임 코드 회귀가 아니다. Console은 기준선 보존을 위해 지우지 않았다.
+
+---
+
+## 22. 일반 세이브 우선 원정 중단 복구와 실시간 체크포인트
+
+### 사용자 요구와 판정 순서
+
+- `[사용자 요구][2026-08-25]` 첫 검사 대상은 복구 캐시가 아니라 일반 단일 슬롯 세이브다.
+- 일반 세이브가 `raidInProgress=false`이면 원정 이어하기를 계산하지 않는다. 참조되지 않는 Recovery는 격리하며, 이미 ordinary save까지 기록된 exact 정산 저널의 동일 상태를 마무리하는 경우만 예외다.
+- 일반 세이브가 `raidInProgress=true`이면 그 `activeRaidInstanceId`와 같은 Recovery 기준점·체크포인트를 그 다음에 검사한다.
+- 표식은 있으나 같은 ID의 유효한 캐시가 없으면 애매하게 살리지 않고 `원정 실패 처리`만 허용한다.
+- 같은 ID의 유효한 Active 체크포인트가 있을 때만 `이어하기`와 `원정 실패 처리`를 함께 표시한다.
+
+### 권위 소유권과 저장 경계
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 첫 권위 소유자 | 프로세스 사이 “미정산 원정이 존재하는가”의 원본은 ordinary `GameSaveData.raidInProgress + activeRaidInstanceId`다. Recovery 파일만으로 원정을 되살리지 않는다. |
+| 런타임 원본 | Player HP·Transform, 인벤토리, 기지 가구, Chest와 Enemy 상태는 기존 각 런타임 소유자가 계속 쓴다. `RaidCheckpointController`는 1초 간격으로 검증된 DTO를 투영할 뿐 두 번째 gameplay 권위자가 아니다. |
+| Recovery 수명 | `RaidRecoveryBaselineData`는 출발 전 상태와 원정 ID, `RaidCheckpointData`는 같은 원정의 순번별 snapshot, `RaidSettlementJournalData`는 실패·종료·exact 정산 의도를 담는다. 정상 정산 뒤 전부 삭제한다. |
+| 변경 진입점 | 새 원정 출발은 ordinary 표식 미러 저장을 먼저 완료하고 그 뒤 baseline을 만든다. 주기 snapshot은 전환·드래그 중에는 건너뛰며, 정산은 저널 → ordinary 주·백업 → Recovery 삭제 순서로 커밋한다. |
+| 저장 범위 | Player 현재 HP·Transform, Player 인벤토리/장비, 기지 가구 상태, 도심 seed·generator version·layout hash, 안정 ID가 있는 원정 Chest, Enemy 생존·HP·Transform·시체 인벤토리를 저장한다. |
+| 의도적 제외 | AI의 현재 행동 상태·경로 코너·감지 기억, 총알·VFX·SFX, 열린 UI·드래그, 프레임별 좌표 로그는 저장하지 않는다. 복원 뒤 권위 상태에서 다시 계산한다. |
+
+### 구현된 실패 폐쇄 규칙
+
+- ordinary primary를 먼저 읽는다. primary header를 읽지 못하거나 동일 원정 표식 payload의 전체 검증이 실패할 때만 backup을 후보로 사용한다. 유효한 active primary가 다른 원정이나 다른 상태라고 말하면 더 오래된 backup으로 조용히 되돌리지 않는다.
+- 새 원정 표식을 ordinary 주·백업에 먼저 기록했는데 baseline 생성 전에 종료되면, 다음 실행은 `표식 있음 + 캐시 없음`으로 판정해 실패 처리만 제시한다.
+- Active 체크포인트는 primary와 backup을 각각 전체 검증하고 같은 원정 ID에서 가장 최신 순번을 사용한다.
+- 생환·사망·포기 결과가 확정되면 Resolved 체크포인트뿐 아니라 같은 결과와 영속 payload를 exact 저널 주·백업에 즉시 고정한다. 종료 primary가 손상돼도 이전 Active backup을 이어하기로 되살리지 않는다.
+- persistent state가 없는 marker-only 저널은 `RecoveryFailed` 결과에만 유효하다. 저장 실패 중 더 최신 failure marker가 앞선 Resolved 결과를 덮는 경우에는 authoritative primary 우선 규칙으로 같은 저널을 다시 검증한 뒤에만 실패 정산을 허용한다.
+- 정산 저널이 ordinary save까지 기록된 뒤 프로세스가 종료되면, 다음 실행은 ordinary와 canonical JSON이 같은 exact 저널만 다시 적용해 미러 저장과 Recovery 정리를 반복한다.
+- 같은 실행에서 ordinary 주·백업 반영 뒤 Recovery 파일 삭제가 일부만 성공하면, immutable exact state와 ordinary canonical 일치를 다시 확인한 뒤 삭제 단계만 재시도한다. 이미 소비된 baseline·저널을 다시 요구해 입력 잠금이 영구화되지 않게 한다.
+- 정산 커밋이 실패하면 `RaidCheckpointController`가 이동·인벤토리·상호작용·피해 입력을 잠근다. 성공한 `ResetTrackedRaid`에서만 원래 입력 상태를 복원하므로 exact 저널과 이후 live 변경이 갈라지지 않는다.
+
+### 로딩 경계
+
+- `InitialLoadingScene → MainMenuScene`은 게임 최초 실행용 메인 로딩이다.
+- Main Menu의 New Game, Load Game, 원정 Resume/실패 정산은 `GameLoadingScene → GameMap1` 공통 진입을 사용한다.
+- 실행 중 `GameMap1 ↔ GameMapTest` 왕복은 위 두 로딩 씬을 거치지 않는다. persistent `GameplaySceneTransitionFader` 하나가 검은 화면으로 직접 전환을 감싼다.
+
+### 2026-08-25 검증 결과
+
+- `[격리 파일 계약 확인]` ordinary active 표식 주·백업, baseline, 회전 checkpoint, 손상 primary에서 정상 backup, exact settlement journal 주·백업과 전체 cleanup을 실제 파일로 확인했다.
+- `[메인 메뉴 상태 행렬 확인]` 표식 없음+캐시, 표식+Active, 표식만 있음, markerless exact cleanup, markerless stale journal, active invalid exact의 여섯 상태가 각각 격리·Resume/Fail·실패 전용·정산 계속·차단 규칙을 따랐다.
+- `[Play Mode E2E 확인]` 새 원정에서 ordinary 표식과 동일 ID baseline/Active checkpoint를 만든 뒤 Player 체력 77, 위치 `(17.25, 0.5, 23.75)`를 기록했다. 런타임 셸을 종료하고 Main Menu에서 Resume한 뒤 같은 GameMapTest, 원정 ID, 체력과 위치가 복원됐다.
+- `[Play Mode 회귀 확인]` `Abandoned` 종료 뒤 Resolved primary, Active backup과 exact 저널 주·백업을 확인했다. 종료 primary를 손상시킨 다음 Main Menu에서 Resume은 비활성, `정산 계속`만 활성화됐다.
+- `[Play Mode 실패 경계 확인]` ordinary 표식을 의도적으로 어긋나게 해 기지 정산을 실패시키자 settlement lock이 유지됐다. 같은 ID 표식을 복구해 재시도하자 ordinary save가 정산되고 Recovery가 삭제된 뒤 이동·인벤토리·상호작용·피해 상태가 원래대로 한 번 복원됐다.
+- `[Play Mode 부분 cleanup 확인]` 격리 저장소의 checkpoint 파일을 점유해 ordinary 주·백업 기록 뒤 Recovery 삭제만 중간 실패시켰다. baseline이 이미 삭제되고 input lock이 유지된 상태에서 재호출하자 immutable exact state와 ordinary canonical 일치를 확인하고 cleanup만 완료해 lock을 해제했다.
+- `[동적 계약 확인]` marker-only 저널은 `RecoveryFailed`만 통과하고 `Abandoned` 등 persistent state 없는 다른 terminal outcome은 거부되는 것을 확인했다.
+- `[컴파일/씬 확인]` Unity script compile 성공, 최종 `GameMap1` Edit Mode, scene dirty=false다. 모든 검증은 Editor 전용 격리 저장 루트에서 수행했으며 실제 사용자 슬롯은 변경하지 않았다.

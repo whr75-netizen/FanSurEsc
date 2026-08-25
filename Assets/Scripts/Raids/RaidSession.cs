@@ -26,7 +26,8 @@ namespace FantasySurvival.Raids
         None,
         Extracted,
         PlayerDied,
-        Abandoned
+        Abandoned,
+        RecoveryFailed
     }
 
     /// <summary>
@@ -45,6 +46,7 @@ namespace FantasySurvival.Raids
         private RaidOutcome outcome = RaidOutcome.None;
         private string returnScene;
         private string returnSpawnId;
+        private bool pendingBaseSettlement;
 
         public event Action StateChanged;
         public event Action<RaidOutcome> Resolved;
@@ -100,8 +102,98 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            RaidCheckpointController checkpoint = GetCheckpointController();
+            if (checkpoint == null || !checkpoint.IsConfigured)
+            {
+                Debug.LogError("Cannot begin a raid because its checkpoint controller is unavailable.", this);
+                return false;
+            }
+
+            if (!checkpoint.TryPrepareNewRaid(
+                    destinationScene,
+                    destinationSpawnId,
+                    out string checkpointError))
+            {
+                Debug.LogError(
+                    $"Cannot begin a raid because its durable recovery baseline could not be created: {checkpointError}",
+                    this);
+                return false;
+            }
+
+            return BeginRaidTravel(destinationScene, destinationSpawnId);
+        }
+
+        internal bool TryBeginRecoveredTravel(
+            string destinationScene,
+            string destinationSpawnId)
+        {
+            if (!isActiveAndEnabled ||
+                currentSceneKind != GameplaySceneKind.Base ||
+                state != RaidSessionState.Inactive ||
+                string.IsNullOrWhiteSpace(destinationScene) ||
+                string.IsNullOrWhiteSpace(destinationSpawnId))
+            {
+                return false;
+            }
+
+            // The checkpoint controller has already staged and validated the existing
+            // baseline/checkpoint pair. Do not create a new baseline on this path.
+            return BeginRaidTravel(destinationScene, destinationSpawnId);
+        }
+
+        internal bool TryResolveRecoveryFailure(string reason)
+        {
+            if (!string.IsNullOrWhiteSpace(reason))
+            {
+                Debug.LogError($"Raid recovery failed: {reason}", this);
+            }
+
+            return Resolve(RaidOutcome.RecoveryFailed);
+        }
+
+        internal bool TryOverrideResolvedOutcomeWithRecoveryFailure(string reason)
+        {
+            if (currentSceneKind != GameplaySceneKind.Raid ||
+                (state != RaidSessionState.Resolved && state != RaidSessionState.Returning) ||
+                outcome == RaidOutcome.None)
+            {
+                return false;
+            }
+
+            if (!string.IsNullOrWhiteSpace(reason))
+            {
+                Debug.LogError($"Resolved raid was changed to recovery failure: {reason}", this);
+            }
+
+            state = RaidSessionState.Resolved;
+            outcome = RaidOutcome.RecoveryFailed;
+            playerStats?.SetDamageBlocked(true);
+            NotifyStateChanged();
+            Resolved?.Invoke(RaidOutcome.RecoveryFailed);
+            return true;
+        }
+
+        internal bool TryAbortRecoveredEntryAsFailure()
+        {
+            if (currentSceneKind != GameplaySceneKind.Base || state != RaidSessionState.Entering)
+            {
+                return false;
+            }
+
+            state = RaidSessionState.Inactive;
+            outcome = RaidOutcome.RecoveryFailed;
+            pendingBaseSettlement = false;
+            ResetReturnRoute();
+            playerStats?.SetDamageBlocked(false);
+            NotifyStateChanged();
+            return true;
+        }
+
+        private bool BeginRaidTravel(string destinationScene, string destinationSpawnId)
+        {
             state = RaidSessionState.Entering;
             outcome = RaidOutcome.None;
+            pendingBaseSettlement = false;
             ResetReturnRoute();
             NotifyStateChanged();
 
@@ -182,7 +274,9 @@ namespace FantasySurvival.Raids
             else if (state != RaidSessionState.Inactive)
             {
                 RaidOutcome completedOutcome = outcome;
-                if (completedOutcome == RaidOutcome.PlayerDied && playerStats != null)
+                if ((completedOutcome == RaidOutcome.PlayerDied ||
+                     completedOutcome == RaidOutcome.RecoveryFailed) &&
+                    playerStats != null)
                 {
                     // A dead persistent Player must be usable again after reaching the base.
                     playerStats.ResetHealth();
@@ -196,6 +290,7 @@ namespace FantasySurvival.Raids
                 }
 
                 ResetRaidState(false);
+                pendingBaseSettlement = completedOutcome != RaidOutcome.None;
             }
 
             NotifyStateChanged();
@@ -219,6 +314,14 @@ namespace FantasySurvival.Raids
             if (canReceiveDamage)
             {
                 playerStats?.SetDamageBlocked(false);
+            }
+
+            if (sceneKind == GameplaySceneKind.Base &&
+                state == RaidSessionState.Inactive &&
+                pendingBaseSettlement)
+            {
+                pendingBaseSettlement = false;
+                GetCheckpointController()?.ConfirmBaseSettlement();
             }
         }
 
@@ -246,6 +349,7 @@ namespace FantasySurvival.Raids
         {
             if (!succeeded && state == RaidSessionState.Entering)
             {
+                GetCheckpointController()?.NotifyRaidEntryTravelFailed();
                 ResetRaidState();
             }
         }
@@ -282,6 +386,12 @@ namespace FantasySurvival.Raids
         private void NotifyStateChanged()
         {
             StateChanged?.Invoke();
+        }
+
+        private static RaidCheckpointController GetCheckpointController()
+        {
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            return shell != null ? shell.RaidCheckpoint : null;
         }
     }
 }

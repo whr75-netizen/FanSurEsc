@@ -129,6 +129,11 @@ namespace FantasySurvival.SceneFlow
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                if (shell?.RaidCheckpoint != null && shell.RaidCheckpoint.IsSettlementInputLocked)
+                {
+                    return;
+                }
+
                 HandleEscape();
             }
         }
@@ -445,9 +450,17 @@ namespace FantasySurvival.SceneFlow
                     resultTitleText.text = "원정 실패";
                     resultDetailText.text = "플레이어가 사망했습니다.\n현재 시험 버전에서는 아이템 손실 규칙을 적용하지 않습니다.";
                     break;
-                default:
+                case RaidOutcome.Abandoned:
                     resultTitleText.text = "원정 포기";
                     resultDetailText.text = "원정은 포기 처리되었습니다.\n기지 이동을 다시 시도할 수 있습니다.";
+                    break;
+                case RaidOutcome.RecoveryFailed:
+                    resultTitleText.text = "원정 복구 실패";
+                    resultDetailText.text = "저장된 원정 상태를 안전하게 복구하지 못했습니다.\n출발 전 기준점으로 기지 상태를 정산합니다.";
+                    break;
+                default:
+                    resultTitleText.text = "원정 종료";
+                    resultDetailText.text = "원정 결과를 확인할 수 없습니다.\n기지 이동을 다시 시도할 수 있습니다.";
                     break;
             }
 
@@ -456,9 +469,12 @@ namespace FantasySurvival.SceneFlow
 
         private void HandleRaidResolved(RaidOutcome resolvedOutcome)
         {
-            if (resolvedOutcome != RaidOutcome.Abandoned)
+            RaidOutcome authoritativeOutcome = raidSession != null
+                ? raidSession.Outcome
+                : resolvedOutcome;
+            if (authoritativeOutcome != RaidOutcome.Abandoned)
             {
-                ShowResult(resolvedOutcome);
+                ShowResult(authoritativeOutcome);
             }
         }
 

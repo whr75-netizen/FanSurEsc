@@ -12,6 +12,10 @@ namespace FantasySurvival.SaveSystem
         public string gameId;
         public int formatVersion;
         public string savedAtUtc;
+        // Durable cross-check for an expedition whose Recovery folder is missing.
+        // The ordinary save remains the raid-start/base payload, never live raid state.
+        public bool raidInProgress;
+        public string activeRaidInstanceId;
         public PlayerItemStateSaveData playerItems;
         // Kept only so JsonUtility can read and migrate the development v2 schema.
         public InventoryGridSaveData playerInventory;

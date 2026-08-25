@@ -5905,6 +5905,7 @@ GameObject:
   - component: {fileID: 5345335095086702783}
   - component: {fileID: 8777908275485311515}
   - component: {fileID: 7338837085774872610}
+  - component: {fileID: 2562904638754682521}
   m_Layer: 0
   m_Name: PersistentGameplayShell
   m_TagString: Untagged
@@ -5957,6 +5958,7 @@ MonoBehaviour:
   playerInteractor: {fileID: 4542784554060530587}
   playerStats: {fileID: 756799773776881561}
   raidSession: {fileID: 8777908275485311515}
+  raidCheckpoint: {fileID: 2562904638754682521}
   escapeMenu: {fileID: 7338837085774872610}
   sceneTransitionFader: {fileID: 5345335095086702783}
 --- !u!114 &5345335095086702783
@@ -6024,6 +6026,24 @@ MonoBehaviour:
   resultDetailText: {fileID: 8630415232917865554}
   resultReturnToBaseButton: {fileID: 2405903703821135097}
   resultMainMenuButton: {fileID: 5071164403677030670}
+--- !u!114 &2562904638754682521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4600585664585496124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f5b162d8adee374791428ea2ed6c41f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Raids.RaidCheckpointController
+  shell: {fileID: 7231324139644495580}
+  furnitureDatabase: {fileID: 11400000, guid: b22e0ce241fbc1e48a030cf0bba43bb5, type: 2}
+  supportedRaidScene: GameMapTest
+  supportedSceneStateId: core:gamemaptest:v1
+  checkpointIntervalSeconds: 1
+  importantChangeDelaySeconds: 0.1
 --- !u!1 &4650524401803780695
 GameObject:
   m_ObjectHideFlags: 0

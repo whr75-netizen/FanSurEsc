@@ -101,19 +101,96 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
+            bool checkpointArrivalFailed = false;
+            string checkpointArrivalError = null;
+            if (gameplaySceneKind == GameplaySceneKind.Raid)
+            {
+                RaidCheckpointController checkpoint = shell.RaidCheckpoint;
+                bool checkpointCompleted = checkpoint != null &&
+                    checkpoint.TryCompleteRaidSceneArrival(
+                        activeSceneName,
+                        out checkpointArrivalError);
+                if (!checkpointCompleted)
+                {
+                    if (checkpoint == null)
+                    {
+                        checkpointArrivalError = "The persistent raid checkpoint controller is missing.";
+                    }
+                    else if (string.IsNullOrWhiteSpace(checkpointArrivalError))
+                    {
+                        checkpointArrivalError = "The raid checkpoint could not complete scene arrival.";
+                    }
+
+                    checkpointArrivalFailed = true;
+                }
+            }
+
+            if (checkpointArrivalFailed)
+            {
+                // Persist the fail-closed decision as soon as checkpoint restore/capture
+                // is known to be unusable. The black-screen reveal may finish later, but
+                // a process interruption during that fade must not expose the old Active
+                // checkpoint as resumable on the next launch.
+                string durableFailureError = null;
+                if (shell.RaidCheckpoint == null ||
+                    !shell.RaidCheckpoint.TryMakeRecoveryFailureDurable(
+                        checkpointArrivalError,
+                        out durableFailureError))
+                {
+                    Debug.LogError(
+                        $"Raid checkpoint failure could not be made durable before reveal: " +
+                        $"{durableFailureError ?? "checkpoint controller is unavailable."}",
+                        this);
+                }
+            }
+
             if (isPendingArrival)
             {
                 DirectSceneTravel.CompleteArrival(activeSceneName);
                 shell.FinishArrival(() =>
-                    shell.RaidSession?.CompleteSceneArrival(gameplaySceneKind));
+                {
+                    if (checkpointArrivalFailed)
+                    {
+                        ResolveCheckpointArrivalFailure(shell, checkpointArrivalError);
+                    }
+
+                    shell.RaidSession?.CompleteSceneArrival(gameplaySceneKind);
+                });
             }
             else
             {
+                if (checkpointArrivalFailed)
+                {
+                    ResolveCheckpointArrivalFailure(shell, checkpointArrivalError);
+                }
+
                 shell.RaidSession.CompleteSceneArrival(gameplaySceneKind);
             }
 
             playerPlaced = true;
             Debug.Log($"Player placed at spawn '{spawnId}' in scene '{activeSceneName}'.", this);
+        }
+
+        private void ResolveCheckpointArrivalFailure(
+            PersistentGameplayShell shell,
+            string checkpointError)
+        {
+            RaidCheckpointController checkpoint = shell.RaidCheckpoint;
+            bool failureResolved = checkpoint != null &&
+                checkpoint.TryResolveRecoveryFailure(checkpointError);
+            if (!failureResolved &&
+                shell.RaidSession.Outcome != RaidOutcome.RecoveryFailed)
+            {
+                failureResolved = shell.RaidSession.TryResolveRecoveryFailure(checkpointError);
+            }
+
+            if (!failureResolved &&
+                shell.RaidSession.Outcome != RaidOutcome.RecoveryFailed)
+            {
+                Debug.LogError(
+                    $"Raid checkpoint arrival failed and could not enter the fail-closed result state: {checkpointError}",
+                    this);
+            }
         }
 
         private SceneSpawnPoint FindSpawnPoint(string spawnId)

@@ -24,6 +24,7 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private PlayerInteractor playerInteractor;
         [SerializeField] private PlayerStats playerStats;
         [SerializeField] private RaidSession raidSession;
+        [SerializeField] private RaidCheckpointController raidCheckpoint;
         [SerializeField] private GameplayEscapeMenuController escapeMenu;
         [SerializeField] private GameplaySceneTransitionFader sceneTransitionFader;
 
@@ -41,6 +42,7 @@ namespace FantasySurvival.SceneFlow
         public PlayerInteractor PlayerInteractor => playerInteractor;
         public PlayerStats PlayerStats => playerStats;
         public RaidSession RaidSession => raidSession;
+        public RaidCheckpointController RaidCheckpoint => raidCheckpoint;
         public GameplayEscapeMenuController EscapeMenu => escapeMenu;
         public GameplaySceneTransitionFader SceneTransitionFader => sceneTransitionFader;
         public bool IsTravelPrepared => travelPrepared;
@@ -62,6 +64,11 @@ namespace FantasySurvival.SceneFlow
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            if (raidCheckpoint == null)
+            {
+                raidCheckpoint = GetComponent<RaidCheckpointController>();
+            }
 
             if (!HasRequiredReferences())
             {
@@ -213,6 +220,7 @@ namespace FantasySurvival.SceneFlow
             return playerTransform != null && playerCamera != null && eventSystem != null &&
                    inventoryUI != null && playerMovement != null && playerInteractor != null &&
                    playerStats != null && raidSession != null && raidSession.IsConfigured &&
+                   raidCheckpoint != null && raidCheckpoint.IsConfigured &&
                    escapeMenu != null && escapeMenu.IsConfigured &&
                    sceneTransitionFader != null && sceneTransitionFader.IsConfigured;
         }

@@ -14,12 +14,31 @@ namespace FantasySurvival.SaveSystem
         private const string SaveFolderName = "Saves";
         private const string SlotOneFileName = "save_slot_1.json";
 
+#if UNITY_EDITOR
+        private static string editorStorageRootOverride;
+#endif
+
         public static string SlotOnePath => Path.Combine(
-            Application.persistentDataPath,
+            StorageRoot,
             SaveFolderName,
             SlotOneFileName);
 
         private static string SlotOneBackupPath => SlotOnePath + ".bak";
+
+        private static string StorageRoot
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if (!string.IsNullOrWhiteSpace(editorStorageRootOverride))
+                {
+                    return editorStorageRootOverride;
+                }
+#endif
+                return Application.persistentDataPath;
+            }
+        }
+
         public static GameSaveData CreateSave(
             PlayerItemStateSaveData playerItems,
             BaseSaveData baseState)
@@ -29,6 +48,8 @@ namespace FantasySurvival.SaveSystem
                 gameId = GameSaveData.CurrentGameId,
                 formatVersion = GameSaveData.CurrentFormatVersion,
                 savedAtUtc = DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture),
+                raidInProgress = false,
+                activeRaidInstanceId = null,
                 playerItems = playerItems,
                 playerInventory = null,
                 baseState = baseState
@@ -68,6 +89,32 @@ namespace FantasySurvival.SaveSystem
             }
 
             return TryWriteFile(saveData, SlotOnePath, rotatePrimaryToBackup, out error);
+        }
+
+        public static bool TryWriteSlotOneMirrored(
+            GameSaveData saveData,
+            ItemDatabase database,
+            BaseFurnitureDatabase furnitureDatabase,
+            int expectedInventoryWidth,
+            int expectedInventoryHeight,
+            out string error)
+        {
+            for (int copy = 0; copy < 2; copy++)
+            {
+                if (!TryWriteSlotOne(
+                        saveData,
+                        database,
+                        furnitureDatabase,
+                        expectedInventoryWidth,
+                        expectedInventoryHeight,
+                        out error))
+                {
+                    return false;
+                }
+            }
+
+            error = null;
+            return true;
         }
 
         private static bool TryValidateCompletePayload(
@@ -220,7 +267,20 @@ namespace FantasySurvival.SaveSystem
             try
             {
                 Directory.CreateDirectory(directory);
-                File.WriteAllText(temporaryPath, json, new UTF8Encoding(false));
+                using (var stream = new FileStream(
+                           temporaryPath,
+                           FileMode.Create,
+                           FileAccess.Write,
+                           FileShare.None))
+                using (var writer = new StreamWriter(stream, new UTF8Encoding(false)))
+                {
+                    writer.Write(json);
+                    writer.Flush();
+                    // Recovery is removed only after this method returns success. Force the
+                    // complete save payload through the OS cache before the atomic replace so
+                    // the ordinary slot is a genuinely durable settlement boundary.
+                    stream.Flush(true);
+                }
 
                 if (File.Exists(finalPath))
                 {
@@ -354,6 +414,15 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            bool validRaidMarker = saveData.raidInProgress
+                ? Guid.TryParse(saveData.activeRaidInstanceId, out _)
+                : string.IsNullOrEmpty(saveData.activeRaidInstanceId);
+            if (!validRaidMarker)
+            {
+                error = "Save data has an inconsistent active-raid marker.";
+                return false;
+            }
+
             if (!DateTime.TryParse(
                     saveData.savedAtUtc,
                     CultureInfo.InvariantCulture,
@@ -421,6 +490,8 @@ namespace FantasySurvival.SaveSystem
                     items = legacy.items
                 };
                 saveData.playerInventory = null;
+                saveData.raidInProgress = false;
+                saveData.activeRaidInstanceId = null;
                 saveData.baseState = BaseFurnitureSaveCodec.CreateEmptySaveData(true);
                 saveData.formatVersion = GameSaveData.CurrentFormatVersion;
                 error = null;
@@ -436,6 +507,8 @@ namespace FantasySurvival.SaveSystem
                 }
 
                 saveData.baseState = BaseFurnitureSaveCodec.CreateEmptySaveData(true);
+                saveData.raidInProgress = false;
+                saveData.activeRaidInstanceId = null;
                 saveData.formatVersion = GameSaveData.CurrentFormatVersion;
                 error = null;
                 return true;
@@ -450,5 +523,33 @@ namespace FantasySurvival.SaveSystem
             error = null;
             return true;
         }
+
+#if UNITY_EDITOR
+        public static bool SetEditorStorageRootForTests(string root, out string error)
+        {
+            if (string.IsNullOrWhiteSpace(root))
+            {
+                error = "Editor save-test storage root is empty.";
+                return false;
+            }
+
+            try
+            {
+                editorStorageRootOverride = Path.GetFullPath(root);
+                error = null;
+                return true;
+            }
+            catch (Exception exception)
+            {
+                error = $"Editor save-test storage root is invalid: {exception.Message}";
+                return false;
+            }
+        }
+
+        public static void ClearEditorStorageRootForTests()
+        {
+            editorStorageRootOverride = null;
+        }
+#endif
     }
 }

@@ -2,7 +2,7 @@
 
 **마지막 확인:** 2026-08-25
 **확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, 활성 씬 `GameMap1`; 현재 원정 복구·아이템 정산 변경으로 Windows Development Build와 격리 Windows Player 강제종료→Resume E2E 성공
-**문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 장르 방향·플레이 판단·알고리즘 불변조건은 `extraction_survival_gameplay_contract.md`, Stage 의존성과 구현 순서는 `extraction_survival_game_design_dev_plan.md`를 따른다.
+**문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 장르 방향·플레이 판단·알고리즘 불변조건은 `extraction_survival_gameplay_contract.md`, 게임 요소·기능·콘텐츠·UI/UX는 `game_design_document.md`, Stage 의존성과 구현 순서는 `extraction_survival_game_design_dev_plan.md`를 따른다.
 
 ## 문서 사용 규칙
 
@@ -1012,3 +1012,15 @@ Interactable (abstract base class)
 - `[문서 연결]` `AGENTS.md`의 내부 지시 우선순위와 재동기화 목록에 이 계약을 추가하고, `extraction_survival_game_design_dev_plan.md`는 구현 Stage 문서로서 장르 계약을 덮어쓰지 않도록 역할을 분리했다.
 - `[낡은 기록 정정]` AGENTS의 사망 손실·기지 Chest·Recovery 상태, 설계 문서의 현재 시험 Hitscan과 seed 저장 경계, `ai_generation_plan.md`의 Player 사망 단계 표시를 최신 구현 기록과 맞췄다.
 - `[제외 범위]` 이 문서 작업은 Unity 코드·씬·프리팹과 현재 게임 규칙을 변경하지 않았다. 탄약, 무게, 제한 시간, 상점, 제작, 퀘스트, provenance 선별 손실, 최종 탈출 조건과 콘텐츠 수치는 계속 `[미정]`이다.
+
+---
+
+## 25. 계층형 본 게임기획서
+
+- `[사용자 요구][2026-08-25]` 게임기획서를 `1 → 1.1 → 1.1.1`처럼 세부 항목까지 나누고, 요소·기능·콘텐츠·UI 설계를 현재 프로젝트에 맞게 일부 정리하고 새로 기획한다.
+- `[문서 적용]` `game_design_document.md`를 새로 만들었다. 문서 사용 규칙부터 게임 개요, 전체 루프, Player, 전투, 아이템·장비·루팅, AI, 맵, 기지, 성장·경제·퀘스트, UI/UX, 저장·복구, 콘텐츠 카탈로그, 세계관, 아트·사운드, 모딩, 마일스톤, 플레이테스트와 미정 결정 목록까지 계층적으로 기록했다.
+- `[상태 경계]` 사용자 결정은 `[확정]`, 검증된 프로젝트 사실은 `[현재]`, 프로토타입 동작과 수치는 `[현재 시험]`/`[현재 시험값]`, 새 기획은 `[설계 제안]`, 결정 전 항목은 `[미정]`으로 분리했다. `[설계 제안]`은 다음 구현 권한이 아니다.
+- `[문서 연결]` `AGENTS.md`, 장르 계약과 Unity Stage 문서에 본 GDD의 역할을 연결했다. 장르 불변조건은 `extraction_survival_gameplay_contract.md`, 플레이어 대상 기획은 `game_design_document.md`, 구현 의존성은 `extraction_survival_game_design_dev_plan.md`, 실제 완료 증거는 이 진행 기록이 각각 담당한다.
+- `[현재 사실 반영]` W1만 활성인 장비 UI와 데이터에 예약된 W2·W3, 현재 8×9 Player grid, definition ID와 runtime item의 차이, ordinary v4·Recovery 정산, NavMesh 기반 유동 순찰, 도심 생성기의 현재 검증과 아직 없는 raid-ready 실패 gate를 구분해 기록했다.
+- `[문서 검증]` 0~19장, 152개 절과 238개 세부 절의 부모 번호·중복·필수 장·Markdown 표·code fence를 정적 검사했다. 현재 사실, 문서 구조, UI·콘텐츠 관점의 독립 교차 검토에서 남은 P1/P2가 없음을 확인했다.
+- `[제외 범위]` Unity 코드·씬·프리팹, 현재 게임 규칙과 콘텐츠 에셋은 변경하지 않았다. 새로 제안한 경제, 퀘스트, 최종 전투, LootTable, 랜드마크, 세계관 세부와 정식 UI 아트는 사용자 결정 전까지 구현하지 않는다.

@@ -20,11 +20,12 @@
 2. 현재 대화에서 사용자가 이미 확정한 결정
 3. `unity_development_progress.md`의 최신 `[사용자 요구]` 기록
 4. `extraction_survival_gameplay_contract.md`의 `[확정]`과 `[장르 계약]`
-5. `extraction_survival_game_design_dev_plan.md`의 `[확정]` 항목
-6. Unity Editor, 코드, 씬, 프리팹에서 직접 확인한 현재 사실
-7. `unity_development_progress.md`의 최신 `[Play Mode 확인]`/`[Play Mode 호출 확인]`/`[코드/씬 확인]`/`[코드 확인]` 기록
-8. 설계 문서의 `[현재]` 기록
-9. 설계 문서나 AI의 `[권장]`, `[제안]`
+5. `game_design_document.md`의 `[확정]` 항목
+6. `extraction_survival_game_design_dev_plan.md`의 `[확정]` 항목
+7. Unity Editor, 코드, 씬, 프리팹에서 직접 확인한 현재 사실
+8. `unity_development_progress.md`의 최신 `[Play Mode 확인]`/`[Play Mode 호출 확인]`/`[코드/씬 확인]`/`[코드 확인]` 기록
+9. 설계 문서의 `[현재]` 기록
+10. 설계 문서나 AI의 `[권장]`, `[설계 제안]`, `[제안]`
 
 다음 상황에서는 편집을 계속하기 전에 반드시 작업 기준을 다시 확인한다.
 
@@ -38,6 +39,7 @@
 
 - 최신 사용자 메시지와 요구한 결과
 - `extraction_survival_gameplay_contract.md`의 관련 핵심 루프, 플레이 판단과 알고리즘 불변조건
+- `game_design_document.md`의 관련 게임 요소, 기능, 콘텐츠, 화면 흐름과 `[확정]`/`[미정]`
 - `unity_development_progress.md`의 관련 현재 동작, 알려진 차이와 미검증 항목
 - 설계 문서의 현재 Stage 및 관련 `[확정]`/`[미정]`
 - `git status`와 관련 diff
@@ -391,7 +393,8 @@ RunCommand 코드 규칙:
 ## 12. 설계 문서 관리
 
 - `extraction_survival_gameplay_contract.md`는 장르 정체성, 플레이어가 하게 될 판단과 시스템 알고리즘 불변조건의 기준 문서다. 게임 규칙·맵·AI·전투·루팅·세이브 알고리즘 작업 전에 관련 절을 읽고, 흔한 장르 관습을 사용자 결정처럼 추가하지 않는다.
-- `extraction_survival_game_design_dev_plan.md`는 설계와 단계 기록의 기준 문서다.
+- `game_design_document.md`는 플레이어가 경험할 게임 요소, 기능, 콘텐츠와 UI/UX의 본 기획서다. 관련 콘텐츠나 화면을 구현하기 전에 해당 절의 `[확정]`, `[현재]`, `[설계 제안]`과 `[미정]`을 구분하며, `[설계 제안]`은 구현 권한으로 취급하지 않는다.
+- `extraction_survival_game_design_dev_plan.md`는 Unity 기능 의존성과 구현 Stage의 기준 문서다.
 - `unity_development_progress.md`는 최근 검증된 구현 동작, 코드와 사용자 의도의 차이, 미검증 경계를 빠르게 인계하는 진행 문서다. 새 기능·버그 작업 시작 시 관련 절을 먼저 읽는다.
 - 주요 기능을 실제로 검증한 뒤에는 진행 문서를 현재 증거에 맞게 갱신한다. 코드만 읽은 사실을 Play Mode 확인으로 승격하지 않는다.
 - 사용자 요청 없이 문서 전체를 재작성하거나 Stage 순서를 바꾸지 않는다.

@@ -27,7 +27,7 @@
 3. 새 기능은 핵심 루프의 어느 단계에 속하며 플레이어에게 어떤 판단을 만드는지 설명할 수 있어야 한다.
 4. 일반적인 타르코프류 게임의 관습을 사용자 확정으로 간주하지 않는다.
 5. 이 문서의 후속 알고리즘 목록은 구현 방향의 경계이며, 다음 기능을 자동으로 구현하라는 뜻이 아니다.
-6. 실제 클래스와 현재 검증 상태는 `extraction_survival_game_design_dev_plan.md`와 `unity_development_progress.md`에서 다시 확인한다.
+6. 세부 게임 요소·콘텐츠·UI는 `game_design_document.md`, 실제 클래스와 현재 검증 상태는 `extraction_survival_game_design_dev_plan.md`와 `unity_development_progress.md`에서 다시 확인한다.
 
 ---
 
@@ -386,6 +386,7 @@ ordinary save에서 raidInProgress와 raid ID 확인
 
 - `AGENTS.md`: 모든 AI가 따라야 하는 최상위 작업·안전·아키텍처 지침
 - `extraction_survival_gameplay_contract.md`: 이 문서. 장르, 플레이 판단과 알고리즘 불변조건
+- `game_design_document.md`: 게임 요소, 기능, 콘텐츠와 UI/UX의 계층형 본 기획서
 - `extraction_survival_game_design_dev_plan.md`: Unity 기능 의존성, Stage와 구현 순서
 - `unity_development_progress.md`: 최신 사용자 요구, 현재 구현과 실제 검증 증거
 - `ai_generation_plan.md`: 적 인식·순찰·전술·사격 AI의 현재 단계와 후속 설계

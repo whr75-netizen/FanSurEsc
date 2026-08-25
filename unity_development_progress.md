@@ -2,7 +2,7 @@
 
 **마지막 확인:** 2026-08-25
 **확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, 활성 씬 `GameMap1`; 현재 원정 복구·아이템 정산 변경으로 Windows Development Build와 격리 Windows Player 강제종료→Resume E2E 성공
-**문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 전체 게임 방향과 Stage 의존성은 `extraction_survival_game_design_dev_plan.md`를 따른다.
+**문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 장르 방향·플레이 판단·알고리즘 불변조건은 `extraction_survival_gameplay_contract.md`, Stage 의존성과 구현 순서는 `extraction_survival_game_design_dev_plan.md`를 따른다.
 
 ## 문서 사용 규칙
 
@@ -655,7 +655,7 @@ Interactable (abstract base class)
 
 - `[사용자 요구]` 이미 같은 인벤토리 객체를 보존하는 맵 왕복 구조를 다시 만들지 않고, 별도 `RaidSession`이 실제로 필요한지 먼저 확인한다. 정상인 부분은 건드리지 않고 실제 누락 또는 결함만 수정한다.
 - `[확정 범위]` `GameMapTest`에 디자인 없는 시험 Chest 하나와 기존 DB 아이템 하나를 두어 `상자 → 플레이어 인벤토리 → 귀환`의 같은 실행 세션 흐름만 완성한다.
-- `[제외 범위]` 생환·사망 결과 목록, 획득 provenance, 원정 스냅샷·롤백, 도심 생성기의 상자 spawn, 기지 Chest 영속화와 세이브 형식 확장은 이번 작업에 포함하지 않는다.
+- `[당시 제외 / 후속 반영]` 이 단계에서는 생환·사망 결과 목록, 획득 provenance, 원정 스냅샷·롤백, 도심 생성기의 상자 spawn, 기지 Chest 영속화와 세이브 형식 확장을 포함하지 않았다. 이후 기지 Chest 영속화, 원정 결과와 Recovery는 18·21~23절에서 구현했고 provenance와 도심 상자 spawn은 여전히 후속이다.
 
 ### 상태 소유권과 호출 흐름
 
@@ -782,7 +782,7 @@ Interactable (abstract base class)
 - `[코드 확인]` 시야는 거리·시야각 뒤 장애물 Raycast를 하며, 감지 실패 시 마지막 목격 또는 들은 위치만 수색한다. 근접은 공격 순간에도 시야선을 다시 확인해 시야 캐시 동안 벽 너머 타격하지 않는다.
 - `[코드 확인]` Player 발사는 Raycast·피해 적용을 먼저 마친 뒤 `GunshotSound`를 통지한다. 자극 listener 오류는 이미 완료된 발사 명령을 취소하지 않으며 정상 통지 경로에는 별도 배열 할당이 없다.
 - `[코드 확인]` 원거리 적은 선호 거리 8까지 접근하며 사거리 14 안에서 피해 8을 1.1초 간격으로 시도한다. 가상 조준점의 부드러운 오차가 0.8초 동안 수렴하고 이동 중 오차가 추가되며, 첫 전투 Tick에 이전 비전투 delta를 조준 시간으로 소비하지 않는다. 모두 기능 시험값이다.
-- `[코드 확인]` `PlayerStats`가 기존 호환 `ApplyDamage(float)`를 유지하면서 `IDamageable`을 구현한다. HP 0이면 AI는 대상을 더 공격하지 않지만 Player 사망 완료 통지·입력 차단·원정 실패는 후속이다.
+- `[당시 코드 확인 / 후속 반영]` `PlayerStats`가 기존 호환 `ApplyDamage(float)`를 유지하면서 `IDamageable`을 구현했다. 당시에는 HP 0 뒤 AI 공격 중단까지만 있었지만, 이후 Player 사망 완료 통지·입력 차단·원정 실패는 21~23절에서 구현했다.
 - `[씬 정책]` NavMesh가 없는 `GameMap1`의 기존 좀비는 scene override로 Brain, Action과 Agent를 비활성화한 정지 사격 표적을 유지한다. 공유 프리팹의 전투 구성은 보존되며 GameMapTest에서만 활성 AI로 동작한다.
 - `[도구 회귀]` `UrbanMapPrototypeSetup`은 모든 `EnemyAIController` root를 보호 anchor로 등록하며, `UrbanMapPlayModeValidation`은 근접 1·원거리 1뿐 아니라 두 Agent가 runtime NavMesh에 올라온 뒤에만 씬 준비 완료로 판정한다.
 
@@ -868,9 +868,9 @@ Interactable (abstract base class)
 
 | 확인 항목 | 현재 계약 |
 |---|---|
-| 권위 소유자 | gameplay scene 종류, 원정 수명주기와 단 한 번의 결과는 `RaidSession`; Player HP·사망 전이·피해 허용은 `PlayerStats`; Escape 입력과 메뉴 화면 상태는 `GameplayEscapeMenuController`가 각각 하나의 원본을 가진다. |
+| 권위 소유자 | gameplay scene 종류, 원정 수명주기와 정상 gameplay 결과는 `RaidSession`; Player HP·사망 전이·피해 허용은 `PlayerStats`; Escape 입력과 메뉴 화면 상태는 `GameplayEscapeMenuController`가 각각 하나의 원본을 가진다. durable exact 전 저장 실패가 결과를 `RecoveryFailed`로 fail-closed 전환할 수 있는 후속 예외는 22·23절을 따른다. |
 | 수명 범위 | `RaidSession`과 Escape 메뉴는 persistent Player Shell의 Play Session, 원정 상태는 Raid, HP는 Player Entity, 확인·결과 패널은 UI 표시 수명이다. |
-| 변경 진입점 | 맵 선택 → 원정 시작, 귀환 포탈 → 생환, `PlayerStats.Died` → 사망 실패, 확인된 포기 → 포기 결과로 수렴하며 `RaidSession`만 `Extracted`·`PlayerDied`·`Abandoned` 중 처음 한 결과를 확정한다. |
+| 변경 진입점 | 맵 선택 → 원정 시작, 귀환 포탈 → 생환, `PlayerStats.Died` → 사망 실패, 확인된 포기 → 포기 결과로 수렴하며 `RaidSession`만 `Extracted`·`PlayerDied`·`Abandoned` 중 정상 gameplay 결과를 확정한다. durable exact 전 저장 실패의 `RecoveryFailed` 전환은 22·23절의 fail-closed 경계만 수행한다. |
 | 파생 표현 | 메뉴 버튼·확인 패널·결과 패널은 scene 종류와 `RaidSession` 상태의 파생 UI이며 원정 결과를 별도로 쓰지 않는다. |
 | 저장 경계 | 이 단계 당시에는 원정 상태·결과, Player 위치·HP, 적·맵 상태를 디스크에 저장하지 않았다. 현재 저장 경계는 22절의 후속 구현이 대체한다. |
 | 업데이트 주체 | Escape는 persistent controller 하나가 매 프레임 읽고, 결과 전이는 명시적 호출 또는 Player 사망 완료 이벤트에서만 발생한다. |
@@ -998,5 +998,17 @@ Interactable (abstract base class)
 ### Git·재현성 기준선과 남은 물리적 한계
 
 - `[현재 추적]` `Packages/manifest.json`, `Packages/packages-lock.json`, `.vsconfig`, `ProjectSettings`의 공유 설정을 Git 기준선에 포함한다. Unity AI 개인 연결 설정, `Assets/_Recovery`, 생성 빌드와 사용자 save는 ignore한다.
-- `[보존]` 사용자 미추적 자료 `pixel_character_pipeline.json`, `스크립트_사용_분석.md`와 기존 2026-08-20 build는 이번 변경에 포함하거나 수정하지 않는다.
+- `[보존]` 사용자 미추적 자료 `pixel_character_pipeline.json`과 기존 2026-08-20 build는 이번 변경에 포함하거나 수정하지 않는다. `스크립트_사용_분석.md`는 이후 사용자 요청으로 원문 그대로 별도 문서 커밋했다.
 - 저장장치가 terminal checkpoint, failure marker, journal과 ordinary save의 모든 쓰기·삭제를 동시에 거부하면 다음 프로세스에 결정을 남길 물리적 매체가 없다. 최소 하나의 durable 결정이 남는 정상·부분 I/O 실패는 fail-closed 처리하지만, 전면 I/O 거부까지 성공으로 보장한다고 주장하지 않는다.
+
+---
+
+## 24. 생존 탈출 장르 플레이·알고리즘 계약
+
+- `[사용자 요구][2026-08-25]` 이 프로젝트가 요구하는 생존 탈출 플레이 방식과 시스템 알고리즘을 별도로 정리해, AI가 일반 RPG·웨이브 생존·PvP·선형 던전 등의 전제를 섞어 임의 구현하지 않게 한다.
+- `[문서 적용]` `extraction_survival_gameplay_contract.md`를 새 기준 문서로 만들었다. 기지 준비 → 출격 → 탐색·루팅·교전 또는 회피 → 탈출 판단 → 권위 있는 최종 결과의 멱등 정산 → 재정비 루프와 플레이어가 각 단계에서 내려야 하는 판단을 고정했다.
+- `[장르 경계]` 적 전멸이 아니라 생환이 성공이며, 회피·후퇴·조기 탈출도 정상적인 전략이다. “생존”을 근거로 허기·갈증·제작을, “탈출”을 근거로 PvP·축소 자기장·제한 시간을 자동 추가하지 않는다.
+- `[알고리즘 경계]` 원정 수명과 단일 정산, 원자적 아이템 소유권 이전, seed 기반 제약형 맵 생성과 접근 가능성, 관측 기반 AI와 의도적으로 불완전한 사격, ordinary marker 우선 중단 복구를 장르 요구와 연결했다.
+- `[문서 연결]` `AGENTS.md`의 내부 지시 우선순위와 재동기화 목록에 이 계약을 추가하고, `extraction_survival_game_design_dev_plan.md`는 구현 Stage 문서로서 장르 계약을 덮어쓰지 않도록 역할을 분리했다.
+- `[낡은 기록 정정]` AGENTS의 사망 손실·기지 Chest·Recovery 상태, 설계 문서의 현재 시험 Hitscan과 seed 저장 경계, `ai_generation_plan.md`의 Player 사망 단계 표시를 최신 구현 기록과 맞췄다.
+- `[제외 범위]` 이 문서 작업은 Unity 코드·씬·프리팹과 현재 게임 규칙을 변경하지 않았다. 탄약, 무게, 제한 시간, 상점, 제작, 퀘스트, provenance 선별 손실, 최종 탈출 조건과 콘텐츠 수치는 계속 `[미정]`이다.

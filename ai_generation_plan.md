@@ -34,7 +34,7 @@
 | 적 체력과 생존·사망 전이 | `EnemyStats` | Enemy Entity | 모든 피해는 `IDamageable.ApplyDamage` 하나로 들어간다. |
 | 플레이어 체력 | persistent Player의 `PlayerStats` | Play Session | 적도 `IDamageable.ApplyDamage`만 호출한다. |
 | 사망 뒤 행동·피격 충돌 정지와 시체 전리품 활성화 | `EnemyDeathHandler` | Enemy Entity | `EnemyStats.Died`의 완료 통지만 관찰하고 root·렌더 외형은 시체로 남긴다. |
-| 시체 전리품 grid | 같은 적 root의 `Chest` | Enemy Entity/Scene | 기존 Chest 컨테이너 API가 소유하며 `EnemyDeathHandler`가 사망 뒤 상호작용만 연다. 현재 저장하지 않는다. |
+| 시체 전리품 grid | 같은 적 root의 `Chest` | Enemy Entity/Scene | 기존 Chest 컨테이너 API가 소유하며 `EnemyDeathHandler`가 사망 뒤 상호작용만 연다. ordinary save에는 직접 저장하지 않지만, 진행 중 원정의 stable enemy/시체 인벤토리는 Recovery checkpoint가 DTO로 운반한다. |
 | 일회성 세계 자극 전달 | `WorldStimulusChannel` | 통지 순간 | 상태를 저장하지 않고 활성 AI에 완료된 사건만 알린다. |
 | 적 외형과 이동 Animator | 적 visual/Animator | 파생 표현 | AI·이동의 확정 상태를 표시할 뿐 판단을 소유하지 않는다. |
 
@@ -203,7 +203,7 @@ AI가 렌더링 메시나 모든 Cube를 매번 검색해 이 정보를 다시 �
 1. **[현재]** NavMesh 임의 순찰, 시야·기억·총성 자극
 2. **[현재]** 근접 최단 경로 돌진과 공격
 3. **[현재]** 원거리 접근·정지 조준·가상 조준 사격
-4. **[후속]** Player 사망 완료 통지와 원정 실패 경계
+4. **[현재]** Player 사망 완료 통지와 원정 실패 경계
 5. **[후속]** 발소리·마법·발사체 위협 생산자
 6. **[후속]** 후퇴·도주 사격과 단순 엄폐
 7. **[후속]** peek, 엄폐 변경과 측면 이동

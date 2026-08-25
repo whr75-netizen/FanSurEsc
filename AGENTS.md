@@ -19,11 +19,12 @@
 1. 사용자의 가장 최근 정정과 명시적 요청
 2. 현재 대화에서 사용자가 이미 확정한 결정
 3. `unity_development_progress.md`의 최신 `[사용자 요구]` 기록
-4. `extraction_survival_game_design_dev_plan.md`의 `[확정]` 항목
-5. Unity Editor, 코드, 씬, 프리팹에서 직접 확인한 현재 사실
-6. `unity_development_progress.md`의 최신 `[Play Mode 확인]`/`[Play Mode 호출 확인]`/`[코드/씬 확인]`/`[코드 확인]` 기록
-7. 설계 문서의 `[현재]` 기록
-8. 설계 문서나 AI의 `[권장]`, `[제안]`
+4. `extraction_survival_gameplay_contract.md`의 `[확정]`과 `[장르 계약]`
+5. `extraction_survival_game_design_dev_plan.md`의 `[확정]` 항목
+6. Unity Editor, 코드, 씬, 프리팹에서 직접 확인한 현재 사실
+7. `unity_development_progress.md`의 최신 `[Play Mode 확인]`/`[Play Mode 호출 확인]`/`[코드/씬 확인]`/`[코드 확인]` 기록
+8. 설계 문서의 `[현재]` 기록
+9. 설계 문서나 AI의 `[권장]`, `[제안]`
 
 다음 상황에서는 편집을 계속하기 전에 반드시 작업 기준을 다시 확인한다.
 
@@ -36,6 +37,7 @@
 재확인할 내용:
 
 - 최신 사용자 메시지와 요구한 결과
+- `extraction_survival_gameplay_contract.md`의 관련 핵심 루프, 플레이 판단과 알고리즘 불변조건
 - `unity_development_progress.md`의 관련 현재 동작, 알려진 차이와 미검증 항목
 - 설계 문서의 현재 Stage 및 관련 `[확정]`/`[미정]`
 - `git status`와 관련 diff
@@ -79,8 +81,11 @@
 
 - 싱글플레이 PvE 생존 탈출 파밍 게임이다.
 - 탑다운 시점의 Zero Sievert 계열 방향이다.
-- 멀티플레이, 전투 수치, 사망 손실, 최종 입력키 등 미정 기능을 임의로 확정하지 않는다.
-- 현재 `GameMapTest`의 도심형 공간은 런타임 seed로 연결 도로와 큐브 건물만 생성한다. 랜드마크, 지형지물, 내부, 상자·적 spawn과 seed 저장 정책은 아직 이 결정에 포함되지 않는다.
+- 멀티플레이, 최종 전투 수치, 출격 전 휴대품과 원정 획득물의 선별 손실, 최종 입력키 등 미정 기능을 임의로 확정하지 않는다.
+- 게임 규칙, 맵, AI, 전투, 루팅 또는 세이브 알고리즘을 구현하기 전에 `extraction_survival_gameplay_contract.md`를 읽고 핵심 루프의 어느 판단을 지원하는지 확인한다. 일반 RPG·웨이브 생존·PvP·선형 던전의 전제를 섞지 않는다.
+- 원정 성공은 적 전멸이 아니라 생환이다. 탐색·루팅·교전뿐 아니라 회피·후퇴·조기 탈출도 정상적인 플레이 선택으로 유지한다.
+- 현재 생환은 Player 인벤토리·장비 전체를 보존하고 사망·포기·실제 복구 실패는 전체 휴대품을 잃으며, 기지 가구·Chest는 보존한다. provenance가 없는 현재 상태에서 선별 손실을 추측 구현하지 않는다.
+- 현재 `GameMapTest`의 도심형 공간은 런타임 seed로 연결 도로와 큐브 건물만 생성한다. 진행 중 원정 Recovery는 현재 seed·generator version·layout hash를 저장하지만, 최종 seed 선택·공유 정책은 미정이다. 랜드마크, 지형지물, 내부와 상자·적 spawn은 아직 현재 생성 범위에 포함되지 않는다.
 - 지하 던전과 오염 지역은 도심 생성기의 모드나 옵션으로 섞지 않는다. 각 공간 구조가 확정될 때 별도 생성기와 계약을 설계한다.
 
 ### 현재 맵 왕복과 플레이어 수명주기
@@ -104,13 +109,13 @@
 
 - `ItemDefinition`/`ItemDatabase`의 숫자 ID는 **아이템 종류 definition ID**다.
 - 이름, 설명, 크기, 아이콘, 컨테이너 정의는 ScriptableObject 프리셋에서 조회한다.
-- 개별 영구 instance ID, 수량, 내구도, 탄약과 능력치는 아직 확정하지 않는다. 현재 저장 형식 v2는 definition ID, 슬롯, 회전과 컨테이너 부모 관계만 기록하며, 파일 내부 `recordId`를 영구 아이템 instance ID로 취급하지 않는다.
+- 개별 영구 instance ID, 수량, 내구도, 탄약과 능력치는 아직 확정하지 않는다. 현재 ordinary save v4의 Player item record는 definition ID, 슬롯, 회전과 컨테이너 부모 관계만 기록하며, 파일 내부 `recordId`를 영구 아이템 instance ID로 취급하지 않는다. base payload v2와 settlement journal v2는 ordinary save 버전과 별개의 형식이다.
 - 현재 인벤토리는 persistent 셸 안의 동일 `InventoryUIManager`와 동일 런타임 객체 그래프가 유지한다. 씬 도착 때 기본 아이템을 다시 seed하지 않는다.
-- 현재 단일 슬롯 세이브/로드 프로토타입은 구현되어 있다. 저장 대상 확장, 정식 슬롯 정책, 기지 Chest 영속화와 원정 결과 저장은 사용자가 별도로 요청하는 후속 범위다.
+- 현재 단일 슬롯 세이브/로드, 기지 Chest 영속화, 진행 중 원정 Recovery와 결과별 전체 소지품 정산은 구현되어 있다. 정식 슬롯 정책, provenance 기반 선별 손실, 정식 드롭·보상과 저장 대상 추가는 사용자가 별도로 요청하는 후속 범위다.
 
 ### 현재 상호작용 계약
 
-- `PlayerInteractor` 하나가 E 입력 대상과 상호작용 반경의 권위 소유자다. 지속 UI가 열린 대상이 없으면 매 검색 시 거리상 가장 가까운 `Interactable` 하나를 고른다.
+- `PlayerInteractor` 하나가 현재 시험 E 상호작용 입력 대상과 상호작용 반경의 권위 소유자다. 최종 키가 바뀌어도 입력 소유자는 하나이며, 지속 UI가 열린 대상이 없으면 매 검색 시 거리상 가장 가까운 `Interactable` 하나를 고른다.
 - Chest UI가 실제로 열린 동안에만 처음 연 Chest를 현재 상호작용 대상으로 유지한다. 다른 Chest가 더 가까워져도 열린 Chest를 바꾸지 않으며, 거리 판정도 그 Chest를 기준으로 한다.
 - Chest UI가 정상적으로 닫히는 즉시 대상 유지는 끝난다. 닫힌 Chest를 계속 고정하지 않으며 다음 프레임 또는 다음 E 입력에서는 다시 가장 가까운 대상을 선택한다.
 - 거리 이탈, 대상 비활성화, 상호작용 차단 또는 씬 이동 정리는 모두 같은 데이터 안전 `CloseAllInventories` 경로로 수렴한다. `PlayerInteractor`가 종료를 조정할 때는 해당 Chest의 공통 취소 진입점을 사용하며, 드래그 복구 실패로 닫기가 거부되면 UI와 대상 참조를 함께 유지해 다른 대상으로 부분 전환하지 않는다.
@@ -385,6 +390,7 @@ RunCommand 코드 규칙:
 
 ## 12. 설계 문서 관리
 
+- `extraction_survival_gameplay_contract.md`는 장르 정체성, 플레이어가 하게 될 판단과 시스템 알고리즘 불변조건의 기준 문서다. 게임 규칙·맵·AI·전투·루팅·세이브 알고리즘 작업 전에 관련 절을 읽고, 흔한 장르 관습을 사용자 결정처럼 추가하지 않는다.
 - `extraction_survival_game_design_dev_plan.md`는 설계와 단계 기록의 기준 문서다.
 - `unity_development_progress.md`는 최근 검증된 구현 동작, 코드와 사용자 의도의 차이, 미검증 경계를 빠르게 인계하는 진행 문서다. 새 기능·버그 작업 시작 시 관련 절을 먼저 읽는다.
 - 주요 기능을 실제로 검증한 뒤에는 진행 문서를 현재 증거에 맞게 갱신한다. 코드만 읽은 사실을 Play Mode 확인으로 승격하지 않는다.

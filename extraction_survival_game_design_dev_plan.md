@@ -1,7 +1,7 @@
 # 싱글 생존 탈출 게임: Unity 중심 개발 설계 및 단계별 계획
 
 **문서 버전:** v0.2  
-**갱신일:** 2026-08-20  
+**갱신일:** 2026-08-25
 **프로젝트:** Fantasy Survival Escape Game  
 **문서 성격:** 게임 기획서가 아니라, 현재 Unity 프로젝트에서 어떤 기반을 먼저 완성해야 다음 기능을 안전하게 구현할 수 있는지 정리한 개발 의존성 문서
 
@@ -10,6 +10,8 @@
 ## 0. 문서 사용 규칙
 
 이 문서는 기능을 많이 나열하는 로드맵이 아니다. 각 기능의 Unity 선행조건과 완료 기준을 정하고, 한 단계가 실제 Play Mode에서 검증된 뒤 다음 단계로 넘어가기 위한 문서다.
+
+장르 정체성, 플레이어가 실제로 하게 될 판단과 시스템 알고리즘의 불변조건은 `extraction_survival_gameplay_contract.md`가 별도로 정의한다. 게임 규칙·맵·AI·전투·루팅·세이브 기능을 설계할 때 두 문서를 함께 읽으며, 이 Stage 문서의 구현 순서가 장르 계약을 덮어쓰지 않는다.
 
 문서의 표시는 다음 의미로 사용한다.
 
@@ -49,6 +51,8 @@
     → 결과 반영
     → 정비 후 재출격
 
+이 루프에서 원정 성공은 적 전멸이 아니라 생환이다. 플레이어는 준비, 탐색, 루팅과 전투뿐 아니라 교전 회피, 후퇴와 조기 탈출을 선택할 수 있어야 한다. 세부 플레이 판단과 이를 보장하는 알고리즘 계약은 `extraction_survival_gameplay_contract.md`를 따른다.
+
 ### 1.2 현재 확정된 개발 방식
 
 - **[확정]** 전체 루프를 한 번에 만들지 않고, 실제로 실행 가능한 작은 단위로 진행한다.
@@ -64,14 +68,14 @@
 
 - 최종 상호작용 키와 키 변경 지원 방식
 - 조준 방식과 공격 입력
-- Hitscan 또는 Projectile 여부
+- 최종 Hitscan 또는 Projectile 정책. 현재 시험 공격은 Player 원점의 마우스 방향 Hitscan이다.
 - 체력, 피해량, 장탄수, 장전 시간 등의 수치
 - 탈출 포탈의 작동 조건과 대기 시간
 - 출격 전 소지품과 원정 획득물을 구분하는 선별 손실 규칙. 현재는 provenance를 만들지 않고 결과에 따라 전체 보존 또는 전체 소실한다.
 - 최종 저장 슬롯과 자동 저장 시점. 진행 중 원정의 강제 종료 처리는 Stage 7의 ordinary-marker 우선 Recovery 방식으로 현재 확정했다.
 - 아이템 능력치 구조
 - 최종 캐릭터 비율과 아트 스타일
-- 도심 생성 seed의 저장·재현 정책과 최종 생성 수치
+- 도심 생성 seed의 최종 선택·공유 정책과 최종 생성 수치. 현재 진행 중 원정 Recovery는 seed·generator version·layout hash를 저장·검증한다.
 - 지하 던전·오염 지역의 개별 공간 생성 규칙
 - 난이도 구조, 상점, 제작, 퀘스트
 
@@ -517,7 +521,7 @@ Player와 씬을 복제하거나 프리팹화한 뒤 Missing Script를 발견하
 
 ### Stage 2-B: RaidSession과 원정 경계 **[현재 구현 / 선별 provenance·별도 보상 후속]**
 
-PersistentGameplayShell은 실제 Player 셸의 수명만 유지하고, persistent `RaidSession`이 기지/원정 컨텍스트와 원정 시작·진행·결과·복귀 상태를 소유한다. 결과는 `Extracted`, `PlayerDied`, `Abandoned` 중 하나만 처음 한 번 확정한다.
+PersistentGameplayShell은 실제 Player 셸의 수명만 유지하고, persistent `RaidSession`이 기지/원정 컨텍스트와 원정 시작·진행·결과·복귀 상태를 소유한다. 정상 gameplay 결과는 `Extracted`, `PlayerDied`, `Abandoned` 중 하나만 처음 확정한다. 단, durable exact journal 고정 전 저장 내구성 확보가 실패하면 fail-closed 경계가 `RecoveryFailed`로 결과를 바꾸고 완료를 다시 통지할 수 있으며, exact가 고정된 뒤에는 outcome과 payload를 바꾸지 않는다.
 
 - **[현재]** 맵 선택은 원정 시작, 귀환 포탈은 생환, `PlayerStats.Died`는 사망 실패, 확인된 포기는 포기 결과로 수렴한다.
 - **[현재]** live 출발·목적 scene/spawn과 기지 복귀 route는 `RaidSession`의 in-memory 원본이다. 프로세스 재시작용 ordinary marker와 Recovery DTO는 Stage 7에서 이 상태의 필요한 부분만 운반한다.
@@ -577,17 +581,19 @@ PersistentGameplayShell은 실제 Player 셸의 수명만 유지하고, persiste
 
 ## 9. Stage 4: 플레이어 전투 기반
 
+**[현재 상태: Player 원점의 마우스 방향 시험 Hitscan, definition 기반 연사 cadence와 공통 피해·사망 계약 구현]**
+
 ### 목표
 
 AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
-### 선행조건
+### 선행조건과 현재 시험 선택
 
 - 원정 씬의 Player 생명주기와 입력이 안정됨
-- **[미정]** 조준 방식
-- **[미정]** 공격 입력
-- **[미정]** Hitscan 또는 Projectile
-- **[미정]** 첫 무기의 최소 동작
+- **[현재 시험 / 최종 미정]** Camera screen ray는 Player 높이 평면의 마우스 조준점만 계산하고 실제 공격은 Player 원점에서 그 XZ 방향으로 나간다.
+- **[현재 시험 / 최종 미정]** 좌클릭 공격 입력을 사용한다.
+- **[현재 시험 / 최종 미정]** Hitscan을 사용한다.
+- **[현재]** 활성 Weapon 장비칸의 `ItemDefinition`이 발사 방식, RPM, 시험 피해와 사거리를 제공한다.
 
 ### Unity 구현물
 
@@ -600,7 +606,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 처음부터 탄약, 부품, 내구도, 방어구, 반동을 모두 만들지 않는다. 고정 시험 공격으로 전투 흐름을 먼저 검증한 뒤 아이템 데이터에 필요한 필드만 추가한다.
 
-현재 단일 Weapon 슬롯은 인벤토리 소유권과 저장을 검증하는 장비 상태일 뿐이다. 이를 플레이어 공격의 실제 무기 선택 권한으로 사용할지, 총기 3D 모델과 장착·사격 애니메이션을 언제 연결할지는 Stage 4에서 별도로 결정한다.
+현재 Weapon 장비칸과 `PlayerWeaponController.ActiveWeapon`은 실제 시험 공격의 무기 선택 권한으로 연결되어 있다. 총기 3D 모델, 완전한 장착·조준·사격 애니메이션과 최종 공격 방식은 별도 결정이다.
 
 ### 완료 기준
 

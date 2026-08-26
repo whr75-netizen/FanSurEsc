@@ -3,9 +3,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
-using System.Linq;
 using UnityEngine.UI;
 using FantasySurvival.Interaction;
 using FantasySurvival.Inventory;
@@ -44,6 +42,8 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private Button merchantOtherTabButton;
     [SerializeField] private Text merchantCatalogText;
     [SerializeField] private Text merchantStatusText;
+    [Header("Item Tooltip")]
+    [SerializeField] private InventoryItemTooltipView itemTooltipView;
     [Header("Settings")]
     [SerializeField] private int playerInventoryWidth = DefaultInventoryWidth;
     [SerializeField] private int playerInventoryHeight = DefaultInventoryHeight;
@@ -108,9 +108,16 @@ public class InventoryUIManager : MonoBehaviour
             goldAmountText == null || silverAmountText == null ||
             merchantControlsRoot == null || merchantAllTabButton == null ||
             merchantEquipmentTabButton == null || merchantOtherTabButton == null ||
-            merchantCatalogText == null || merchantStatusText == null)
+            merchantCatalogText == null || merchantStatusText == null ||
+            itemTooltipView == null)
         {
             Debug.LogError("UI references missing!");
+            enabled = false;
+            return;
+        }
+        if (!itemTooltipView.TryValidateReferences(out string tooltipError))
+        {
+            Debug.LogError(tooltipError, itemTooltipView);
             enabled = false;
             return;
         }
@@ -132,6 +139,8 @@ public class InventoryUIManager : MonoBehaviour
             RefreshOpenViews,
             SetExternalStatus);
         standardCore.SetTransferController(transferCoordinator);
+        standardCore.HoveredCellChanged += HandleHoveredCellChanged;
+        itemTooltipView.Hide();
         BindWallet(playerState.Wallet);
         PlayerStateChanged?.Invoke(playerState);
     }
@@ -163,7 +172,18 @@ public class InventoryUIManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"[InitializeStartingItems] Finished. Items: {inventoryData.CellData?.Count(slot => slot != null) ?? 0}");
+        int occupiedCellCount = 0;
+        if (inventoryData.CellData != null)
+        {
+            foreach (IVariableInventoryCellData cell in inventoryData.CellData)
+            {
+                if (cell != null)
+                {
+                    occupiedCellCount++;
+                }
+            }
+        }
+        Debug.Log($"[InitializeStartingItems] Finished. Items: {occupiedCellCount}");
         error = null;
         return true;
     }
@@ -512,9 +532,6 @@ public class InventoryUIManager : MonoBehaviour
             return;
         }
 
-        bool needsApply = !externalInventoryPanel.activeSelf ||
-                          currentExternalInteractable != interactable ||
-                          !ReferenceEquals(currentExternalData, data);
         currentOpenedChest = chest;
         currentOpenedMerchant = merchant;
         currentExternalInteractable = interactable;
@@ -532,23 +549,23 @@ public class InventoryUIManager : MonoBehaviour
         {
             merchantControlsRoot.SetActive(true);
             SetExternalStatus("Shift+클릭 또는 드래그로 구매·판매", false);
-            SetMerchantCategory(MerchantCategory.All);
+            merchantCategory = MerchantCategory.All;
+            ConfigureMerchantItemPresentation(false);
         }
         else
         {
             merchantControlsRoot.SetActive(false);
-            externalStashView.SetItemVisibilityFilter(null);
+            externalStashView.SetItemPresentation(null, null, false);
         }
 
-        if (needsApply)
+        // External grids can have different dimensions (base Chest, corpse, Merchant).
+        // Always bind the new authority once after its presentation context is set.
+        externalStashView.Apply(currentExternalData);
+        if (mode == ExternalInventoryMode.Merchant)
         {
-            externalStashView.Apply(currentExternalData);
-            Debug.Log($"External Applied for {interactable.name}");
+            RefreshMerchantPresentationLabels();
         }
-        else
-        {
-            Debug.Log($"External Shown for {interactable.name}");
-        }
+        Debug.Log($"External Applied for {interactable.name}");
     }
 
     // 외부 인벤토리 숨기기 (드래그 중 취소 처리)
@@ -556,7 +573,8 @@ public class InventoryUIManager : MonoBehaviour
     {
         if (externalInventoryPanel == null || standardCore == null ) return; if (!externalInventoryPanel.activeSelf) return;
         if (isExternalViewRegistered) { standardCore.RemoveInventoryView(externalStashView); isExternalViewRegistered = false; }
-        externalStashView.SetItemVisibilityFilter(null);
+        itemTooltipView?.Hide();
+        externalStashView.SetItemPresentation(null, null, false);
         merchantControlsRoot.SetActive(false);
         externalInventoryPanel.SetActive(false);
         currentOpenedChest = null;
@@ -577,6 +595,7 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         if (standardCore != null) standardCore.CloseAllCasePopups();
+        itemTooltipView?.Hide();
         HideExternalInventoryUI();
         HidePlayerInventoryUI();
         return true;
@@ -584,6 +603,7 @@ public class InventoryUIManager : MonoBehaviour
 
     void OnDisable()
     {
+        itemTooltipView?.Hide();
         CancelActiveDrag();
     }
 
@@ -596,6 +616,7 @@ public class InventoryUIManager : MonoBehaviour
             return;
         }
 
+        standardCore.HoveredCellChanged -= HandleHoveredCellChanged;
         standardCore.SetTransferController(null);
 
         // A dragged item temporarily lives in the scene-local core, outside CellData.
@@ -649,6 +670,7 @@ public class InventoryUIManager : MonoBehaviour
 
     private void RefreshOpenViews()
     {
+        itemTooltipView?.Hide();
         if (playerState != null && playerInventoryPanel != null && playerInventoryPanel.activeSelf)
         {
             playerStashView.Apply(playerState.Inventory);
@@ -660,7 +682,7 @@ public class InventoryUIManager : MonoBehaviour
             externalStashView.Apply(currentExternalData);
             if (currentExternalMode == ExternalInventoryMode.Merchant)
             {
-                ApplyMerchantFilter();
+                RefreshMerchantPresentationLabels();
             }
         }
     }
@@ -678,26 +700,56 @@ public class InventoryUIManager : MonoBehaviour
             return;
         }
 
+        itemTooltipView?.Hide();
         merchantCategory = category;
-        ApplyMerchantFilter();
+        ConfigureMerchantItemPresentation(true);
     }
 
-    private void ApplyMerchantFilter()
+    private void ConfigureMerchantItemPresentation(bool refreshCurrent)
     {
-        externalStashView.SetItemVisibilityFilter(item =>
+        externalStashView.SetItemPresentation(
+            IsItemVisibleInMerchantCategory,
+            GetMerchantPriceBadgeText,
+            refreshCurrent);
+        if (refreshCurrent)
         {
-            if (!(item is InventoryItemData inventoryItem))
-            {
-                return merchantCategory == MerchantCategory.All;
-            }
+            RefreshMerchantPresentationLabels();
+        }
+    }
 
-            switch (merchantCategory)
-            {
-                case MerchantCategory.Equipment: return inventoryItem.Definition.IsEquippable;
-                case MerchantCategory.Other: return !inventoryItem.Definition.IsEquippable;
-                default: return true;
-            }
-        });
+    private bool IsItemVisibleInMerchantCategory(IVariableInventoryCellData item)
+    {
+        if (!(item is InventoryItemData inventoryItem))
+        {
+            return merchantCategory == MerchantCategory.All;
+        }
+
+        switch (merchantCategory)
+        {
+            case MerchantCategory.Equipment: return inventoryItem.Definition.IsEquippable;
+            case MerchantCategory.Other: return !inventoryItem.Definition.IsEquippable;
+            default: return true;
+        }
+    }
+
+    private static string GetMerchantPriceBadgeText(IVariableInventoryCellData item)
+    {
+        if (!(item is InventoryItemData inventoryItem) ||
+            !inventoryItem.Definition.IsTradable)
+        {
+            return null;
+        }
+
+        return $"{InventoryTransferCoordinator.GetCurrencyName(inventoryItem.Definition.TradeCurrency)} " +
+               inventoryItem.Definition.TradePrice.ToString("N0");
+    }
+
+    private void RefreshMerchantPresentationLabels()
+    {
+        if (currentExternalMode != ExternalInventoryMode.Merchant)
+        {
+            return;
+        }
 
         merchantAllTabButton.interactable = merchantCategory != MerchantCategory.All;
         merchantEquipmentTabButton.interactable = merchantCategory != MerchantCategory.Equipment;
@@ -712,8 +764,8 @@ public class InventoryUIManager : MonoBehaviour
             return;
         }
 
-        var builder = new StringBuilder();
         var seen = new HashSet<IVariableInventoryCellData>();
+        int visibleItemCount = 0;
         foreach (IVariableInventoryCellData cell in currentExternalData.CellData)
         {
             if (!(cell is InventoryItemData item) || !seen.Add(item) ||
@@ -722,18 +774,33 @@ public class InventoryUIManager : MonoBehaviour
                 continue;
             }
 
-            if (builder.Length > 0)
-            {
-                builder.Append("   |   ");
-            }
-            builder.Append(item.Definition.DisplayName)
-                .Append(' ')
-                .Append(InventoryTransferCoordinator.GetCurrencyName(item.Definition.TradeCurrency))
-                .Append(' ')
-                .Append(item.Definition.TradePrice.ToString("N0"));
+            visibleItemCount++;
         }
 
-        merchantCatalogText.text = builder.Length > 0 ? builder.ToString() : "해당 분류의 상품이 없습니다.";
+        merchantCatalogText.text = visibleItemCount > 0
+            ? $"상품 {visibleItemCount}개"
+            : "해당 분류의 상품이 없습니다.";
+    }
+
+    private void HandleHoveredCellChanged(
+        IVariableInventoryView sourceView,
+        IVariableInventoryCell cell)
+    {
+        if (itemTooltipView == null || standardCore == null || standardCore.IsDragging() ||
+            !(cell?.CellData is InventoryItemData item))
+        {
+            itemTooltipView?.Hide();
+            return;
+        }
+
+        if (sourceView is StandardStashView stashView &&
+            !stashView.IsItemVisible(item))
+        {
+            itemTooltipView.Hide();
+            return;
+        }
+
+        itemTooltipView.Show(item.Definition);
     }
 
     private void SetExternalStatus(string message, bool isError)

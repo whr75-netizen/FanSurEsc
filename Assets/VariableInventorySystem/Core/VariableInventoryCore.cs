@@ -1,6 +1,7 @@
 ﻿// 파일 경로: Assets/VariableInventorySystem/Core/VariableInventoryCore.cs
 // ★★★ 이 파일 전체를 아래 내용으로 교체하세요 ★★★
 
+using System;
 using System.Collections.Generic;
 using System.Linq; // Linq.Any는 사용 안하지만 다른 곳에서 필요할 수 있음
 using UnityEngine;
@@ -23,6 +24,8 @@ namespace VariableInventorySystem
         private IVariableInventoryView originView = null; // ★ 드래그 시작 View 저장용
         private IVariableInventoryTransferController transferController;
 
+        public event Action<IVariableInventoryView, IVariableInventoryCell> HoveredCellChanged;
+
         // --- 추가/기존 메소드 ---
         public bool IsDragging() => effectCell?.CellData != null;
         public void SetTransferController(IVariableInventoryTransferController controller)
@@ -38,11 +41,57 @@ namespace VariableInventorySystem
         }
         public virtual void Initialize() { if (effectCell != null) return; if (CellPrefab == null || EffectCellParent == null) { Debug.LogError($"[{GetType().Name}] CellPrefab or EffectCellParent not set!", gameObject); return; } var e = Instantiate(CellPrefab, EffectCellParent); if (e == null) return; effectCell = e.GetComponent<IVariableInventoryCell>(); if (effectCell == null) { Destroy(e); return; } effectCell.RectTransform.gameObject.SetActive(false); effectCell.SetSelectable(false); }
         public virtual void AddInventoryView(IVariableInventoryView v) { if (v == null || InventoryViews.Contains(v)) return; InventoryViews.Add(v); v.SetCellCallback(OnCellClick, OnCellOptionClick, OnCellEnter, OnCellExit); }
-        public virtual void RemoveInventoryView(IVariableInventoryView v) { if (v == null || !InventoryViews.Contains(v)) return; InventoryViews.Remove(v); }
+        public virtual void RemoveInventoryView(IVariableInventoryView v)
+        {
+            if (v == null || !InventoryViews.Contains(v))
+            {
+                return;
+            }
+
+            if (v is IVariableInventoryBoundView boundView &&
+                boundView.ContainsCell(stareCell))
+            {
+                stareCell = null;
+                NotifyHoveredCellCleared();
+            }
+
+            InventoryViews.Remove(v);
+        }
         protected virtual void OnCellClick(IVariableInventoryCell cell) { }
         protected virtual void OnCellOptionClick(IVariableInventoryCell cell) { }
-        protected virtual void OnCellEnter(IVariableInventoryCell cell) { stareCell = cell; UpdateDropPreviewHandling(); foreach (var v in InventoryViews) v.OnCellEnter(stareCell, effectCell); }
-        protected virtual void OnCellExit(IVariableInventoryCell cell) { if (stareCell == cell) stareCell = null; UpdateDropPreviewHandling(); foreach (var v in InventoryViews) v.OnCellExit(cell); }
+        protected virtual void OnCellEnter(IVariableInventoryCell cell)
+        {
+            stareCell = cell;
+            UpdateDropPreviewHandling();
+            foreach (var view in InventoryViews)
+            {
+                view.OnCellEnter(stareCell, effectCell);
+            }
+
+            HoveredCellChanged?.Invoke(FindOwningView(cell), cell);
+        }
+
+        protected virtual void OnCellExit(IVariableInventoryCell cell)
+        {
+            bool exitedCurrentCell = ReferenceEquals(stareCell, cell);
+            if (exitedCurrentCell)
+            {
+                stareCell = null;
+            }
+
+            UpdateDropPreviewHandling();
+            foreach (var view in InventoryViews)
+            {
+                view.OnCellExit(cell);
+            }
+
+            // Pointer enter/exit events can be delivered out of order while UI changes.
+            // An older cell must not clear the tooltip of the newly entered cell.
+            if (exitedCurrentCell)
+            {
+                NotifyHoveredCellCleared();
+            }
+        }
 
         // --- ★★★ OnBeginDrag (원본 기반 최소 수정) ★★★ ---
         public virtual void OnBeginDrag(PointerEventData eventData)
@@ -94,6 +143,8 @@ namespace VariableInventorySystem
                 originView = null; // 실패 시 확실히 초기화
                 return;
             }
+
+            NotifyHoveredCellCleared();
 
             // 5. effectCell 활성화 및 데이터 적용 (원본과 동일)
             effectCell.RectTransform.gameObject.SetActive(true);
@@ -169,7 +220,7 @@ namespace VariableInventorySystem
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 시도...");
             if (originView != null)
             {
-                Debug.Log($"[VariableInventoryCore.CancelDrag] Origin View ({((Object)originView).GetEntityId()})의 OnDroped(false) 호출 시도.");
+                Debug.Log($"[VariableInventoryCore.CancelDrag] Origin View ({((UnityEngine.Object)originView).GetEntityId()})의 OnDroped(false) 호출 시도.");
             }
             else { Debug.LogWarning("[VariableInventoryCore.CancelDrag] Origin view is unknown!"); }
             RestoreOriginalRotation();
@@ -182,6 +233,7 @@ namespace VariableInventorySystem
             // effectCell 정리 및 상태 초기화
             if (effectCell != null) { if (effectCell.RectTransform != null) effectCell.RectTransform.gameObject.SetActive(false); effectCell.Apply(null); }
             originEffectCellRotate = null; stareCell = null; originView = null;
+            NotifyHoveredCellCleared();
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 완료.");
             return true;
         }
@@ -218,6 +270,25 @@ namespace VariableInventorySystem
 
                 boundView.SetDropPreviewHandling(handling);
             }
+        }
+
+        private IVariableInventoryView FindOwningView(IVariableInventoryCell cell)
+        {
+            foreach (IVariableInventoryView view in InventoryViews)
+            {
+                if (view is IVariableInventoryBoundView boundView &&
+                    boundView.ContainsCell(cell))
+                {
+                    return view;
+                }
+            }
+
+            return null;
+        }
+
+        private void NotifyHoveredCellCleared()
+        {
+            HoveredCellChanged?.Invoke(null, null);
         }
 
         private bool IsDetachedOwnedItem()

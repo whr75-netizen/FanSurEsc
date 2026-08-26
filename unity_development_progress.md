@@ -1066,3 +1066,45 @@ Interactable (abstract base class)
 - Shift+클릭과 drag로 구매·판매를 각각 한 번 실행해 잔액, first-fit, 판매 sink와 실패 rollback 표시를 확인한다.
 - 전체·장비·기타 탭과 거리 이탈 자동 닫기를 확인한다.
 - 사용자 슬롯과 분리한 저장소에서 거래 뒤 F5 → 재실행 Load로 Player 잔액과 merchant stock 복원을 확인한다.
+
+---
+
+## 27. 공용 아이템 툴팁과 상인 전용 가격 배지
+
+### 사용자 요구와 범위
+
+- `[사용자 요구][2026-08-26]` 모든 인벤토리·장비 아이템은 hover 시 설명과 현재 존재하는 능력치를 표시한다.
+- `[사용자 요구]` 가격은 상인 재고의 각 아이템에 회색 거래 표시와 함께 직접 표시하되, 같은 아이템이 Player·Chest·시체 또는 장비칸에 있을 때는 표시하지 않는다.
+- `[보존]` 기존 drag·회전·Shift 거래·분류 탭·장비·상자·시체·저장 v5와 아이템 소유권 경계를 변경하지 않는다.
+- `[제외 범위]` 새 능력치·내구도·탄약·품질 설계, 빈 description의 임의 작성, 구매가·판매가 분리, 정식 UI 아트와 해상도별 최종 배치는 포함하지 않는다.
+
+### 권위 소유권과 표시 경계
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 정의 원본 | 이름·description·크기·장비 분류·현재 무기/컨테이너 수치와 거래 가격은 immutable `ItemDefinition` 하나에서 읽는다. |
+| 런타임 원본 | `InventoryItemData`와 기존 grid·equipment owner가 아이템 배치·회전·소유권을 계속 관리한다. 툴팁과 배지는 이를 쓰지 않는다. |
+| 표시 진입점 | 등록된 공용 셀 hover는 `VariableInventoryCore.HoveredCellChanged` 완료 통지 하나로 수렴하고, `InventoryUIManager`가 정의를 공용 tooltip View에 전달한다. |
+| 가격 범위 | `InventoryUIManager`가 Merchant 모드의 `externalStashView`에만 가격 provider를 설정하고 Storage 전환·닫기에서 제거한다. |
+| 수명 범위 | tooltip View 하나는 기존 `PersistentGameplayShell`과 Play Session 동안 유지된다. 셀 배지는 공유 `StandardCell` 프리팹의 기본 비활성 파생 표현이다. |
+| 파생 표현 | 이름·설명·스탯 문자열, 가격 배지, hover 위치와 분류 필터는 모두 원본에서 다시 만들 수 있는 View다. |
+| 저장 경계 | tooltip·가격 배지·hover·분류 표시 상태는 저장하지 않는다. ordinary v5와 Recovery 형식은 변경하지 않았다. |
+| 업데이트 주체 | hover enter/exit·drag·탭·닫기 이벤트로 표시 상태를 바꾸고, 보이는 tooltip 위치만 `LateUpdate`에서 마우스를 따른다. |
+
+### 구현·근본 수정
+
+- `[코드 확인]` `InventoryItemTooltipFormatter`가 definition에서 이름·설명·분류·인벤토리 크기와 실제 정의된 장비/무기/컨테이너 수치만 만든다. 현재 비어 있는 description은 임의 설정 대신 `설명 정보가 없습니다.`로 표시한다.
+- `[코드/프리팹 확인]` persistent 셸에 공용 `InventoryItemTooltipView` 하나를 추가했다. tooltip과 배지의 모든 Graphic은 raycast를 받지 않으며 tooltip은 override sorting order 100으로 외부 인벤토리 뒤에 가려지지 않는다.
+- `[코드/프리팹 확인]` 공유 `StandardCell`은 view가 제공한 badge 문자열이 있고 아이템이 현재 보일 때만 58×19 회색 배지를 켠다. 배지는 회전하는 아이콘 target이 아니라 `sizeRoot` 아래에 있어 아이템 회전 시 글자가 돌아가지 않는다.
+- `[근본 수정]` 6×12와 8×9처럼 총 칸 수는 같지만 모양이 다른 외부 grid 전환에서도 `GridLayoutGroup`의 열 수·셀 크기·간격을 현재 데이터에 매번 다시 묶는다. 칸 수가 달라질 때는 이전 런타임 셀 오브젝트를 정리한 뒤 새 규격으로 만든다.
+- `[근본 수정]` 분류 탭으로 숨긴 상인 아이템은 일반 hover highlight도 표시하지 않는다. setup 메뉴는 두 대상 프리팹만 명시 저장하며 다른 dirty 에셋 전체를 `SaveAssets`로 덮지 않는다.
+- `[상태 정리]` drag 시작·취소, view 제거, 분류 탭 변경, 데이터 refresh, 인벤토리 닫기와 manager 비활성화에서 tooltip을 숨긴다. 늦게 도착한 이전 셀의 exit가 새 hover를 지우지 않게 현재 셀만 clear한다.
+
+### 2026-08-26 검증 결과와 한계
+
+- `[컴파일/Console 확인]` 최신 스크립트 강제 refresh와 compilation이 성공했고 새 MonoScript 3개가 정상 로드됐다. 검증 전·Play 중·종료 뒤 Console Error/Warning/Log는 모두 0이었다.
+- `[프리팹 확인]` `StandardCell`의 배지 Rect 58×19, 직렬화 참조, 기본 비활성과 pointer 통과를 확인했다. `PersistentGameplayShell`의 tooltip 참조, 기본 비활성, sorting order 100과 pointer 통과를 확인했으며 두 프리팹 모두 Missing Script 0이었다.
+- `[Play Mode 호출 확인]` Play Mode는 한 세션만 사용했다. Player를 시험 상인 가까이 배치하고 공개 `MerchantInteractable.Interact(PlayerInteractor)`를 호출한 뒤 EventSystem pointer enter/exit와 탭 Button의 `onClick`을 사용했다. 상인/Player 가격 배지는 `5/0`, 양쪽 아이템 tooltip 표시와 이름 일치, 탭 전환 뒤 tooltip 숨김, `CloseAllInventories` 뒤 tooltip과 전체 패널 닫힘을 확인했다.
+- `[보호 확인]` Computer Use와 OS 입력 모사는 사용하지 않았다. `TestMerchantGraybox.mat` 등 무관한 Unity 에셋과 사용자 미추적 `pixel_character_pipeline.json`을 변경하지 않았다.
+- `[최종 Editor 상태]` Edit Mode, 활성 `GameMap1`, scene dirty=false, playing/changing/compiling/updating=false다.
+- `[미검증]` 실제 물리 마우스 hover·E 입력과 화면 해상도별 시각 위치·가독성은 이번 호출 검증에 포함하지 않았다. 기존 거래·저장 기능의 직접 조작 검증 미완료 항목은 26절에 남겨 둔다.

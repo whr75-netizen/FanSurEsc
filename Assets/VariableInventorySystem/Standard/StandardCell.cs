@@ -13,6 +13,8 @@ namespace VariableInventorySystem
         [SerializeField] Graphic background;
         [SerializeField] RawImage cellImage;
         [SerializeField] Graphic highlight;
+        [SerializeField] GameObject itemBadgeRoot;
+        [SerializeField] Text itemBadgeText;
 
         [SerializeField] StandardButton button;
 
@@ -23,6 +25,7 @@ namespace VariableInventorySystem
 
         protected bool isSelectable = true;
         private bool contentVisible = true;
+        private string badgeText;
         private int imageRequestVersion;
         protected IVariableInventoryAsset currentImageAsset;
 
@@ -62,6 +65,12 @@ namespace VariableInventorySystem
         {
             contentVisible = visible;
             OnApply();
+        }
+
+        public void SetBadgeText(string value)
+        {
+            badgeText = value;
+            RefreshBadge();
         }
 
         protected override void OnApply()
@@ -112,6 +121,25 @@ namespace VariableInventorySystem
 
                 background.gameObject.SetActive(contentVisible && isSelectable);
             }
+
+            RefreshBadge();
+        }
+
+        private void RefreshBadge()
+        {
+            if (itemBadgeRoot == null || itemBadgeText == null)
+            {
+                return;
+            }
+
+            bool show = CellData != null && contentVisible &&
+                        !string.IsNullOrWhiteSpace(badgeText);
+            if (show)
+            {
+                itemBadgeText.text = badgeText;
+            }
+
+            itemBadgeRoot.SetActive(show);
         }
 
         protected virtual void ApplySize()

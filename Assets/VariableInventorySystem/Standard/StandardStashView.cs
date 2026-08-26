@@ -40,6 +40,7 @@ namespace VariableInventorySystem
         Action<IVariableInventoryCell> onCellEnter;
         Action<IVariableInventoryCell> onCellExit;
         Func<IVariableInventoryCellData, bool> itemVisibilityFilter;
+        Func<IVariableInventoryCellData, string> itemBadgeTextProvider;
         VariableInventoryDropHandling? dropPreviewHandling;
 
         public void SetCellCallback(
@@ -60,6 +61,7 @@ namespace VariableInventorySystem
 
             if (itemViews == null || itemViews.Length != CellCount)
             {
+                DestroyItemViews();
                 itemViews = new IVariableInventoryCell[CellCount];
 
                 for (var i = 0; i < CellCount; i++)
@@ -79,12 +81,15 @@ namespace VariableInventorySystem
                 }
 
                 background.SetAsFirstSibling();
-
-                gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
-                gridLayoutGroup.constraintCount = StashData.CapacityWidth;
-                gridLayoutGroup.cellSize = itemViews.First().DefaultCellSize;
-                gridLayoutGroup.spacing = itemViews.First().MargineSpace;
             }
+
+            // Different inventory shapes can have the same total cell count
+            // (for example 6x12 and 8x9). Keep the layout bound to the current
+            // authority even when the existing cell instances can be reused.
+            gridLayoutGroup.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            gridLayoutGroup.constraintCount = StashData.CapacityWidth;
+            gridLayoutGroup.cellSize = itemViews.First().DefaultCellSize;
+            gridLayoutGroup.spacing = itemViews.First().MargineSpace;
 
             for (var i = 0; i < StashData.CellData.Length; i++)
             {
@@ -92,14 +97,30 @@ namespace VariableInventorySystem
                 if (itemViews[i] is StandardCell standardCell)
                 {
                     standardCell.SetContentVisible(IsItemVisible(StashData.CellData[i]));
+                    standardCell.SetBadgeText(GetItemBadgeText(StashData.CellData[i]));
                 }
             }
         }
 
         public void SetItemVisibilityFilter(Func<IVariableInventoryCellData, bool> filter)
         {
-            itemVisibilityFilter = filter;
-            if (StashData != null)
+            SetItemPresentation(filter, itemBadgeTextProvider);
+        }
+
+        public void SetItemBadgeTextProvider(
+            Func<IVariableInventoryCellData, string> provider)
+        {
+            SetItemPresentation(itemVisibilityFilter, provider);
+        }
+
+        public void SetItemPresentation(
+            Func<IVariableInventoryCellData, bool> visibilityFilter,
+            Func<IVariableInventoryCellData, string> badgeTextProvider,
+            bool refreshCurrent = true)
+        {
+            itemVisibilityFilter = visibilityFilter;
+            itemBadgeTextProvider = badgeTextProvider;
+            if (refreshCurrent && StashData != null)
             {
                 Apply(StashData);
             }
@@ -108,6 +129,13 @@ namespace VariableInventorySystem
         public bool IsItemVisible(IVariableInventoryCellData item)
         {
             return item == null || itemVisibilityFilter == null || itemVisibilityFilter(item);
+        }
+
+        public string GetItemBadgeText(IVariableInventoryCellData item)
+        {
+            return item != null && itemBadgeTextProvider != null
+                ? itemBadgeTextProvider(item)
+                : null;
         }
 
         public void SetDropPreviewHandling(VariableInventoryDropHandling? handling)
@@ -290,7 +318,7 @@ namespace VariableInventorySystem
                 condition.color = defaultColor;
                 conditionNeedsRefresh = true;
             }
-            standardCell.SetHighLight(true);
+            standardCell.SetHighLight(IsItemVisible(stareCell.CellData));
         }
 
         public virtual void OnCellExit(IVariableInventoryCell stareCell)
@@ -334,6 +362,26 @@ namespace VariableInventorySystem
         public bool ContainsCell(IVariableInventoryCell cell)
         {
             return OwnsCell(cell);
+        }
+
+        private void DestroyItemViews()
+        {
+            if (itemViews == null)
+            {
+                return;
+            }
+
+            foreach (IVariableInventoryCell itemView in itemViews)
+            {
+                if (itemView?.RectTransform == null)
+                {
+                    continue;
+                }
+
+                GameObject cellObject = itemView.RectTransform.gameObject;
+                cellObject.SetActive(false);
+                Destroy(cellObject);
+            }
         }
 
         protected virtual int? GetIndex(IVariableInventoryCell stareCell)

@@ -45,13 +45,14 @@ namespace FantasySurvival.EditorTools
         {
             EnsureEditorReadyAndScenesClean();
             ConfigureTradeDefinitions();
+            InventoryItemPresentationSetup.ApplyPrefabAssets();
             ConfigureShellPrefab();
             ConfigureBaseScene();
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
             Debug.Log(
                 "Merchant prototype configured: Player-only Gold/Silver wallet, " +
-                "merchant stock IDs 1-5, tabs, and GameMap1 cube NPC.");
+                "merchant stock IDs 1-5, item presentation UI, tabs, and GameMap1 cube NPC.");
         }
 
         private static void ConfigureTradeDefinitions()
@@ -316,7 +317,8 @@ namespace FantasySurvival.EditorTools
                 "merchantEquipmentTabButton",
                 "merchantOtherTabButton",
                 "merchantCatalogText",
-                "merchantStatusText"
+                "merchantStatusText",
+                "itemTooltipView"
             };
 
             foreach (string propertyName in requiredReferences)
@@ -331,6 +333,21 @@ namespace FantasySurvival.EditorTools
             if (CountMissingScripts(root) != 0)
             {
                 throw new BuildFailedException("PersistentGameplayShell contains missing scripts after merchant setup.");
+            }
+
+            InventoryItemTooltipView tooltip =
+                serialized.FindProperty("itemTooltipView")?.objectReferenceValue as
+                    InventoryItemTooltipView;
+            if (tooltip == null)
+            {
+                throw new BuildFailedException(
+                    "PersistentGameplayShell item tooltip reference is missing.");
+            }
+
+            if (!tooltip.TryValidateReferences(out string tooltipError))
+            {
+                throw new BuildFailedException(
+                    $"PersistentGameplayShell item tooltip is invalid: {tooltipError}");
             }
         }
 

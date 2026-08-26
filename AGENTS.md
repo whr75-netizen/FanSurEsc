@@ -125,6 +125,8 @@
 - 상인 stock의 권위 원본은 `GameManager.BaseMerchantState`의 stable merchant ID별 grid다. scene Cube NPC는 이 원본을 조회하는 View이며, ordinary v5와 진행 중 Recovery가 Player 화폐와 상인 stock을 함께 운반한다.
 - Shift+클릭은 목적지의 첫 유효 빈칸을 행 우선으로 선택한다. 모든 이동·구매·판매는 사전 검증, 원본 분리, 목적지 적용 또는 판매 sink, 화폐 정산 순서로 처리하고 실패 시 원래 슬롯과 잔액을 유지한다.
 - 상인 탭은 stock 원본을 재배열하거나 복사하지 않는 표시 필터다. 거래 가능 판정과 초록·빨간 drag preview는 같은 거래 정책을 사용한다.
+- 가격 배지는 상인 stock 셀에만 회색 파생 UI로 표시한다. Player, Chest, 시체와 장비 슬롯에는 가격 배지를 표시하지 않으며, 가격 원본은 계속 immutable `ItemDefinition`이다.
+- Player grid, 상인 stock, Chest·시체와 장비 슬롯의 아이템 hover는 persistent 셸의 공용 tooltip 하나를 사용한다. 이름·설명·실제로 정의된 능력치만 `ItemDefinition`에서 읽으며 tooltip과 가격 배지는 런타임 아이템 상태나 저장 대상이 아니다.
 
 ### 현재 상호작용 계약
 

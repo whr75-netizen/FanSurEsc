@@ -56,7 +56,7 @@
 - RimWorld의 소유권 추적성과 데이터 구조 원칙을 참고하지만, 식민지 경영·Pawn 시뮬레이션 게임으로 바꾸지 않는다.
 - “생존”이라는 단어만으로 허기, 갈증, 온도, 수면, 제작, 기지 건설을 추가하지 않는다.
 - “탈출”이라는 단어만으로 축소 자기장, 강제 PvP, 제한 시간 또는 최종 1인을 추가하지 않는다.
-- 퀘스트, 상점, 제작, 레벨, 스킬 트리, 무게, 탄약, 내구도와 상태이상은 장르에서 흔할 수 있지만 현재 자동 확정 사항이 아니다.
+- 퀘스트, 상점, 제작, 레벨, 스킬 트리, 무게, 탄약, 내구도와 상태이상은 장르에서 흔할 수 있지만 정식 범위가 자동 확정되는 것은 아니다. 현재 Play Session 한정 시험 의뢰 한 종류는 명시적으로 승인된 프로토타입 예외이며 보상·반복·영속화까지 확정한 것으로 확대하지 않는다.
 
 ---
 
@@ -221,6 +221,7 @@ seed + generator version
 - 현재 시험 E 상호작용 입력의 권위 소유자는 하나여야 한다. 최종 키가 바뀌어도 입력 소유자 하나라는 규칙은 유지한다.
 - 지속 UI가 열린 대상이 없을 때만 반경 안 후보 중 가장 가까운 하나를 선택한다.
 - Chest가 실제 열려 있는 동안에는 그 대상을 유지하고 거리 이탈 시 같은 안전 닫기 경로로 종료한다.
+- 현재 시험 Quest NPC의 지속 패널도 같은 활성 대상 유지·거리 이탈 취소 규칙을 사용한다. 별도 E 입력 소유자나 거리 탐색기를 만들지 않는다.
 - 닫은 뒤에는 대상을 계속 고정하지 않고 다시 거리순으로 선택한다.
 - 상자, 시체와 향후 루팅 대상은 가능한 한 같은 `Interactable`·인벤토리 경계를 재사용한다.
 
@@ -257,6 +258,7 @@ seed + generator version
 - 살아 있는 적의 전리품 Trigger는 비활성이고 확정 사망 후에만 열린다.
 - 시체도 기존 Chest·Inventory UI 경계를 재사용하며 별도 평행 Loot Manager를 만들지 않는다.
 - 시체가 실제 공격 Raycast 뒤의 살아 있는 적을 막는 투명 장벽이 되어서는 안 된다.
+- 현재 시험 의뢰의 Player 귀속 처치는 `EnemyStats`가 사망을 확정할 때 마지막 `DamageContext.Source`가 persistent Player 또는 그 자식인 경우만 인정한다. checkpoint 시체 복원처럼 source가 없거나 Player 외 원인인 사망은 새 처치로 기록하지 않는다.
 
 ### 4.8 결과 정산
 
@@ -265,6 +267,7 @@ seed + generator version
 - 실패 손실은 같은 persistent Player grid·equipment 객체에서 원자적으로 수행하며 Player나 UI를 재생성하지 않는다.
 - exact settlement payload가 생긴 뒤에는 outcome을 근거로 다시 계산해 다른 결과를 만들지 않는다.
 - 정산 실패 중에는 입력을 잠그고 immutable exact 상태로 재시도하며 부분 적용을 성공으로 보고하지 않는다.
+- 현재 시험 의뢰의 원정 처치 수는 원정 중에는 후보 진행도일 뿐이다. `RaidCheckpointController`가 `Extracted` 정산을 실제로 commit·cleanup한 뒤에만 NPC 보고 가능 상태로 바뀌며, 사망·포기·복구 실패 또는 목표 미달 생환은 이번 시도의 처치 수만 0으로 되돌린다.
 
 ### 4.9 저장과 강제종료 복구
 
@@ -283,6 +286,7 @@ ordinary save에서 raidInProgress와 raid ID 확인
 - 정산은 `journal → ordinary primary/backup → Recovery cleanup` 순서로 중단에 안전하게 진행한다.
 - 일부 파일 작업이 실패하면 더 오래된 상태를 임의로 살리지 않고 fail-closed로 처리한다.
 - 저장장치가 모든 기록 수단을 동시에 거부하는 물리적 전면 I/O 실패까지 복원 가능하다고 주장하지 않는다.
+- 현재 Cube NPC의 시험 의뢰 진행도는 Play Session 메모리에만 있고 ordinary save·Recovery에는 없다. 이를 강제종료·Load·Resume 안전 퀘스트라고 주장하지 않으며, 정식 도입 때 별도 quest payload·migration과 원정 정산의 원자 경계를 설계한다.
 
 ### 4.10 업데이트 주기와 성능
 
@@ -306,6 +310,7 @@ ordinary save에서 raidInProgress와 raid ID 확인
 | 적 체력·사망 | `EnemyStats` | Enemy Entity | 전투 결과와 시체 전이 |
 | 적 인식·기억·이동 명령 | `EnemyAIController` | Enemy Entity/Scene | 관측 가능한 위협 행동. 현재 Recovery 저장 대상이 아니다. |
 | 상호작용 대상 | `PlayerInteractor` | 현재 상호작용 | 밀집된 전리품의 단일 입력 대상 |
+| 시험 의뢰 진행 | `QuestJournal`이 소유한 `QuestProgressState` | Play Session | 정의는 immutable `QuestDefinition`, 패널·추적기는 파생 View. 현재 디스크 저장 대상이 아니다. |
 | 원정 checkpoint 투영 | `RaidCheckpointController`가 기존 원본을 DTO로 투영하며 gameplay 상태를 소유하지 않는다. | Play Session 컴포넌트/Raid 추적 | 강제종료 뒤 권위 상태 운반 |
 | 원정 정산 규칙 | `RaidItemSettlementPolicy`는 권위 상태가 없는 순수 변환 규칙이다. | 정산 호출 | 결과별 보존·소실 규칙의 단일 계산 경계 |
 
@@ -374,7 +379,7 @@ ordinary save에서 raidInProgress와 raid ID 확인
 - 출격 전 휴대품과 원정 획득물의 provenance·선별 손실
 - 인벤토리 무게, 아이템 수량, 내구도와 상태이상
 - 적 드롭 테이블, 상자 보상, Spawn 밀도와 위험·보상 예산
-- 기지의 상점, 제작, 퀘스트, 성장과 배치 가능한 가구의 최종 범위
+- 기지의 정식 상점, 제작, 퀘스트·보상·저장, 성장과 배치 가능한 가구의 최종 범위
 - 도심 랜드마크·내부·지형지물의 최종 배치 규칙
 - 지하 던전과 오염 지역의 별도 공간 문법
 - 난이도 단계, 적 등급, 보스 전술과 최종 AI 기억 정책

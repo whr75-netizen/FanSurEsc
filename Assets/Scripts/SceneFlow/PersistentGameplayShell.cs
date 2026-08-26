@@ -1,5 +1,6 @@
 using System;
 using FantasySurvival.Interaction;
+using FantasySurvival.Quests;
 using FantasySurvival.Raids;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -25,6 +26,8 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private PlayerStats playerStats;
         [SerializeField] private RaidSession raidSession;
         [SerializeField] private RaidCheckpointController raidCheckpoint;
+        [SerializeField] private QuestJournal questJournal;
+        [SerializeField] private QuestPanelController questPanel;
         [SerializeField] private GameplayEscapeMenuController escapeMenu;
         [SerializeField] private GameplaySceneTransitionFader sceneTransitionFader;
 
@@ -43,6 +46,8 @@ namespace FantasySurvival.SceneFlow
         public PlayerStats PlayerStats => playerStats;
         public RaidSession RaidSession => raidSession;
         public RaidCheckpointController RaidCheckpoint => raidCheckpoint;
+        public QuestJournal QuestJournal => questJournal;
+        public QuestPanelController QuestPanel => questPanel;
         public GameplayEscapeMenuController EscapeMenu => escapeMenu;
         public GameplaySceneTransitionFader SceneTransitionFader => sceneTransitionFader;
         public bool IsTravelPrepared => travelPrepared;
@@ -96,6 +101,10 @@ namespace FantasySurvival.SceneFlow
                 Debug.LogError("Cannot travel because PersistentGameplayShell has missing required references.", this);
                 return false;
             }
+
+            // Close feature overlays before snapshotting their input state. Otherwise
+            // their unlock path could overwrite the travel lock later in this method.
+            questPanel.TryClose();
 
             movementWasEnabled = playerMovement.enabled;
             inventoryInputWasBlocked = inventoryUI.InputBlocked;
@@ -221,6 +230,8 @@ namespace FantasySurvival.SceneFlow
                    inventoryUI != null && playerMovement != null && playerInteractor != null &&
                    playerStats != null && raidSession != null && raidSession.IsConfigured &&
                    raidCheckpoint != null && raidCheckpoint.IsConfigured &&
+                   questJournal != null && questJournal.IsConfigured &&
+                   questPanel != null && questPanel.IsConfigured &&
                    escapeMenu != null && escapeMenu.IsConfigured &&
                    sceneTransitionFader != null && sceneTransitionFader.IsConfigured;
         }

@@ -342,6 +342,12 @@ namespace FantasySurvival.SceneFlow
                 registeredMapSelection = null;
             }
 
+            if (shell.QuestPanel != null && shell.QuestPanel.IsOpen)
+            {
+                shell.QuestPanel.TryClose();
+                return;
+            }
+
             InventoryUIManager inventory = shell.InventoryUI;
             if (inventory != null && inventory.IsAnyInventoryOpen)
             {
@@ -517,6 +523,7 @@ namespace FantasySurvival.SceneFlow
                 return true;
             }
 
+            shell.QuestPanel?.TryClose();
             InventoryUIManager inventory = shell.InventoryUI;
             bool inventoriesClosed = inventory != null && inventory.CloseAllInventories();
             if (!inventoriesClosed && requireSafeInventoryClose)

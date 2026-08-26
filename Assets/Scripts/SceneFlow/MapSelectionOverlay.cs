@@ -29,9 +29,8 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
-            GameplayEscapeMenuController inputOwner = PersistentGameplayShell.Instance != null
-                ? PersistentGameplayShell.Instance.EscapeMenu
-                : null;
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            GameplayEscapeMenuController inputOwner = shell != null ? shell.EscapeMenu : null;
             if (inputOwner == null || !inputOwner.TryRegisterMapSelectionOverlay(this))
             {
                 Debug.LogError("Map selection requires the persistent ESC menu input owner.", this);
@@ -39,6 +38,10 @@ namespace FantasySurvival.SceneFlow
             }
 
             escapeMenu = inputOwner;
+            // A persistent quest dialog owns an InventoryUI input lock. Close it
+            // before snapshotting the map overlay's previous lock state so its
+            // cancellation cannot restore a stale value after this overlay opens.
+            shell.QuestPanel?.TryClose();
             sourceInteractor = interactor;
             sourceMovement = interactor.GetComponent<PlayerMovement>();
             sourceInventoryUI = interactor.GetComponent<InventoryUIManager>();

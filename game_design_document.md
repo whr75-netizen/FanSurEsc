@@ -295,6 +295,7 @@
 
 - Player 인벤토리와 장비 확인
 - 기지 Chest와 아이템 이동
+- 시험 상인 거래와 시험 의뢰 NPC의 수락·진행 확인·완료 보고
 - 맵 선택 오브젝트 상호작용
 - 일반 저장 프로토타입 사용
 - 기지 Escape 메뉴에서 실제 일시정지, 설정과 주 메뉴 이동
@@ -502,6 +503,7 @@
 | 종류 | 현재 동작 | 이동 정책 |
 |---|---|---|
 | Chest·시체 | Player·장비·외부 인벤토리 UI | 이동 허용, 거리 이탈 시 자동 닫힘 |
+| 시험 의뢰 NPC | 수락·진행 확인·완료 보고 패널 | 이동 허용, 열린 동안 해당 NPC 유지, 거리 이탈 시 자동 닫힘 |
 | 맵 터미널 | 맵 선택 overlay | modal, Player 이동 잠금 |
 | 귀환 포탈 | 생환 결과 확정 | terminal 결과 UI와 입력 잠금 |
 
@@ -509,7 +511,7 @@
 
 - 문과 잠금장치
 - 레버·전원·환경 장치
-- NPC 대화·상점
+- 정식 NPC 대화·복수 상점·복수 의뢰 흐름
 - 채집 또는 조사 지점
 
 각 요소는 별도 키 처리기를 만들지 않고 공통 상호작용 경계를 재사용한다.
@@ -1408,6 +1410,7 @@ seed + generator version
 - `GameMap1`
 - Player 기지 SpawnPoint
 - 맵 선택 Cube와 최소 overlay
+- 적 1킬·생환 시험 의뢰를 주는 Cube NPC
 - stable placed ID를 가진 영속 Chest 두 개
 - 일반 저장 시험 UI
 - 실제 일시정지 Escape 메뉴
@@ -1479,7 +1482,9 @@ seed + generator version
 
 #### 8.5.4 의뢰·정보
 
-- 퀘스트
+- **[현재 시험]** 기지 Cube NPC에서 공통 E 상호작용으로 “적 1명 처치 후 생환” 의뢰를 수락·보고한다.
+- **[현재 시험]** 보상은 없고 진행도는 현재 Play Session에만 존재한다.
+- **[미정]** 정식 퀘스트·보상·저장·연쇄 의뢰
 - 지도 정보
 - 적·랜드마크 정보 해금
 
@@ -1513,7 +1518,8 @@ seed + generator version
 
 ### 9.1 현재 상태
 
-- **[현재]** 정식 경제, 상점, 제작, 퀘스트와 레벨 시스템이 없다.
+- **[현재 시험]** 무지갑 상인과 적 1킬·생환 의뢰 한 개가 기능 검증용으로 있다.
+- **[현재]** 정식 경제, 제작, 퀘스트 보상·저장·연쇄 의뢰와 레벨 시스템은 없다.
 - **[현재]** 생환한 물건을 보존하고 다음 원정에 사용할 수 있는 기반만 있다.
 
 ### 9.2 성장 방향 `[설계 제안]`
@@ -1563,9 +1569,19 @@ seed + generator version
 
 실제 도입 항목은 각 시스템 확정 뒤 선택한다.
 
-### 9.5 퀘스트·의뢰 `[미정]`
+### 9.5 퀘스트·의뢰 `[현재 시험/미정]`
 
-#### 9.5.1 후보 유형
+#### 9.5.1 현재 시험 의뢰
+
+- 기획 ID: `core:quest:prototype_hunt`
+- 표시명: `첫 생환 시험`
+- 상태: `Available → Active → ReadyToTurnIn → Completed`
+- 기지 Cube NPC에서 수락하고, tracked Raid 중 Player가 `EnemyStats.Died`를 일으킨 처치 1건만 기록한다.
+- 원정 중 목표 수를 채워도 영구 완료하지 않는다. committed `Extracted` 정산 뒤 `ReadyToTurnIn`이 되고, 기지 NPC에게 다시 보고할 때 `Completed`가 된다.
+- `PlayerDied`, `Abandoned`, 실제 `RecoveryFailed` 또는 목표 미달 생환은 의뢰를 취소하지 않고 이번 시도의 처치 수만 0으로 되돌린다.
+- 시험 보상은 없으며 상태는 Play Session에만 있다. ordinary save·Recovery·강제종료 이어하기 지원은 구현되지 않았다.
+
+#### 9.5.2 후보 유형
 
 - 특정 물건 확보 후 생환
 - 장소 조사
@@ -1573,7 +1589,7 @@ seed + generator version
 - 생존·탈출 조건
 - NPC 또는 세력 선택
 
-#### 9.5.2 금지 설계
+#### 9.5.3 금지 설계
 
 - 탈출과 무관하게 원정 중 즉시 영구 완료
 - 장르 루프와 상관없는 반복 수량 채우기만 제공
@@ -1634,6 +1650,7 @@ Base HUD
 
 Raid HUD
    ├─ Player Inventory + Equipment + External Chest/Corpse
+   ├─ Active Quest Tracker
    ├─ Extracted / PlayerDied / RecoveryFailed Result
    └─ Raid Escape Menu + Abandon Confirmation
 ```
@@ -1708,6 +1725,13 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - 현재 시험 E 키와 행동 이름
 - 입력 차단·거리 이탈 시 숨김
 - 최종 키 리바인딩에 따라 표시 갱신 필요
+
+#### 10.5.4 시험 의뢰 UI
+
+- 기지 NPC와 상호작용하면 중앙의 최소 대화 패널에서 수락·진행·완료 보고 상태를 표시한다.
+- `Active`와 `ReadyToTurnIn` 동안 우상단 추적기에 처치 수 또는 기지 보고 안내를 표시한다.
+- 원정 전환·결과·미정산 구간에는 추적기를 숨기고, committed 정산 뒤 권위 상태에서 다시 만든다.
+- 이 UI는 퀘스트 진행도의 원본이 아니며 별도 E 입력·거리 계산·저장 상태를 소유하지 않는다.
 
 ### 10.6 인벤토리·장비·외부 루팅 UI
 
@@ -1938,6 +1962,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - Camera
 - Portal
 - 일반 Enemy와 원정 순간 상태
+- 현재 시험 의뢰 진행도
 
 일반 Load는 기지에서 시작한다.
 
@@ -2098,6 +2123,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 | Base Chest | 기지 | 지속 인벤토리 UI, Player 이동 허용 | Base 상태; ordinary와 원정 Recovery에 포함 | 기지 안전 보관 |
 | Raid Chest | 원정 | 지속 인벤토리 UI, Player 이동 허용 | Raid/Scene; 진행 중 Recovery에만 포함 | 원정 Loot 이전 |
 | Corpse | 원정 | 사망 뒤에만 지속 인벤토리 UI | Enemy/Scene; 진행 중 Recovery에만 포함 | 시체 Loot 이전 |
+| Prototype Quest NPC | 기지 | 지속 의뢰 패널, Player 이동 허용 | NPC View는 Base/Scene, 진행도는 Play Session 메모리만 사용 | 수락·완료 보고 |
 
 ### 12.3 첫 완성형 플레이 조각 `[설계 제안]`
 
@@ -2555,11 +2581,12 @@ VFX는 실제 판정의 결과를 표시하며 별도 피해 원본이 되지 �
 
 ### 18.3 기지 확장 전에 결정
 
-1. 상점·제작·치료·퀘스트 중 우선 기능
+1. 시험 상인·의뢰 이후 정식 경제·제작·치료·퀘스트 중 다음 우선 기능
 2. 현재 시험 금·은 화폐를 유지할지와 물물교환 병행 여부
 3. 보관 용량과 가방 효과
 4. 배치 가능한 가구 범위
 5. 기지 layout migration
+6. 정식 퀘스트 보상·저장·반복·연쇄 범위
 
 ### 18.4 선별 손실 전에 결정
 

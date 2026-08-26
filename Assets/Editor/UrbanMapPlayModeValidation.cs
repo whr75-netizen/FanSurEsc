@@ -509,7 +509,8 @@ namespace FantasySurvival.EditorTools
             PersistentGameplayShell shell = shells[0];
             Require(PersistentGameplayShell.Instance == shell, "PersistentGameplayShell.Instance does not match the only shell.");
             Require(shell.PlayerTransform != null && shell.PlayerCamera != null &&
-                    shell.PlayerEventSystem != null && shell.InventoryUI != null,
+                    shell.PlayerEventSystem != null && shell.InventoryUI != null &&
+                    shell.QuestJournal != null && shell.QuestPanel != null,
                 "PersistentGameplayShell has a missing required public reference.");
 
             PlayerMovement[] players = UnityEngine.Object.FindObjectsByType<PlayerMovement>(

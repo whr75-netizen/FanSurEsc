@@ -52,6 +52,8 @@ namespace FantasySurvival.Raids
         private bool settlementInteractionWasBlocked;
         private bool settlementDamageWasBlocked;
 
+        public event Action<RaidOutcome> SettlementCommitted;
+
         public bool IsConfigured =>
             shell != null &&
             shell.PlayerTransform != null &&
@@ -1098,9 +1100,35 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            RaidOutcome committedOutcome = trackedOutcome;
             ResetTrackedRaid();
             error = null;
+            NotifySettlementCommitted(committedOutcome);
             return true;
+        }
+
+        private void NotifySettlementCommitted(RaidOutcome outcome)
+        {
+            Action<RaidOutcome> handlers = SettlementCommitted;
+            if (handlers == null)
+            {
+                return;
+            }
+
+            foreach (Delegate handler in handlers.GetInvocationList())
+            {
+                try
+                {
+                    ((Action<RaidOutcome>)handler).Invoke(outcome);
+                }
+                catch (Exception exception)
+                {
+                    // Settlement is already durable and recovery cleanup has finished.
+                    // A presentation/feature observer must not turn that committed result
+                    // into a false transaction failure or cause a duplicate retry.
+                    Debug.LogException(exception, this);
+                }
+            }
         }
 
         private bool TryAcquireSettlementInputLock(out string error)
@@ -1119,6 +1147,7 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            shell.QuestPanel?.TryClose();
             if (!shell.InventoryUI.CloseAllInventories())
             {
                 error = "The active inventory drag could not be restored before settlement.";

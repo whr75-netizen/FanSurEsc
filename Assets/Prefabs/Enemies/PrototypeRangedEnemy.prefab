@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 7192938782115725348}
   - component: {fileID: 4004349096574100642}
   - component: {fileID: 7027692000010711127}
+  - component: {fileID: 6125132339802673199}
   m_Layer: 0
   m_Name: PrototypeRangedEnemy
   m_TagString: Untagged
@@ -332,3 +333,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Interaction.ChestInteractable
   interactionPrompt: Loot Corpse
+--- !u!114 &6125132339802673199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8820537651548787075}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: df5808b44acfa2544b144e9f1631c579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Quests.QuestKillCreditReporter

@@ -1144,3 +1144,35 @@ Interactable (abstract base class)
 - `[읽기 경로]` 앞으로 기본 흐름은 `AGENTS → CURRENT_STATE → 관련 계약 → 관련 playbook → 필요할 때만 진행 이력`이다. GDD·장르 계약·Stage 문서도 전체가 아니라 관련 절만 읽는다.
 - `[보존]` 사용자 최신 정정, 동일 Player 인스턴스, 단일 권위 소유자, 원인 우선 수정, 완료 기능 재구현 금지, Computer Use opt-in, 위험 비례 검증과 검증 완료 로컬 커밋은 짧은 루트 계약에 남겼다.
 - `[범위]` Unity 코드·씬·프리팹·에셋·ProjectSettings와 현재 게임 동작은 변경하지 않았고, 완료 기능의 Play Mode 검증을 반복하지 않았다.
+
+---
+
+## 30. Play Session 한정 그레이박스 시험 의뢰
+
+### 사용자 요구와 이번 범위
+
+- `[사용자 요구][2026-08-26]` 아트·애니메이션 없이 기본 판 UI와 큐브만 사용해, 새 NPC에게서 `적 1명 처치 후 살아서 귀환` 의뢰를 받고 실제 기존 원정 흐름으로 완료할 수 있는 작은 플레이 조각을 만든다.
+- `[이번 범위]` `GameMap1`의 보라색 시험 NPC, 수락·진행·보고 UI, Player 처치 귀속, 생환 정산 커밋 뒤 보고 가능 상태까지 구현했다.
+- `[제외]` 정식 퀘스트 목록·연계·반복·보상, NPC 대화 프레임워크, ordinary save와 Recovery의 퀘스트 DTO는 이번에 만들지 않았다. 따라서 진행도는 같은 Play Session의 persistent shell에서만 유지된다.
+
+### 권위 소유권과 호출 흐름
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 정의 원본 | immutable `QuestDefinition` 에셋이 ID·표시 이름·설명·필요 처치 수·생환 필요 여부를 소유한다. |
+| 런타임 원본 | persistent shell의 `QuestJournal` 하나가 Play Session 수명의 `QuestProgressState`를 소유하고 변경한다. NPC·적·UI는 진행도를 따로 쓰지 않는다. |
+| 수락·보고 진입점 | 기존 `PlayerInteractor → QuestGiverInteractable → QuestPanelController → QuestJournal` 경로를 사용한다. 열린 패널의 대상 유지와 거리 이탈 닫기는 기존 공용 상호작용 계약을 따른다. |
+| 처치 진입점 | 기존 `EnemyStats.Died` 완료 통지를 `QuestKillCreditReporter`가 관찰한다. 마지막 `DamageContext.Source`가 persistent Player 또는 그 자식일 때, 활성 원정·활성 의뢰에만 1회를 기록한다. |
+| 생환 판정 | `RaidCheckpointController`가 ordinary save 미러와 Recovery 정리를 끝낸 뒤 발행하는 `SettlementCommitted`를 관찰한다. `Extracted`이고 목표를 채운 경우만 `ReadyToTurnIn`이 된다. |
+| 실패 규칙 | 사망·포기·복구 실패 또는 목표 미달 생환은 의뢰를 취소하지 않고 해당 원정의 처치 수만 0으로 되돌린다. NPC 보고 뒤에만 `Completed`가 된다. |
+| 파생 표현 | 중앙 의뢰 패널과 우상단 추적기는 `QuestJournal`에서 다시 만드는 UI다. 전환·정산 중에는 추적기를 숨기고, UI observer 오류가 전투 사망·이동·이미 커밋된 정산을 실패로 바꾸지 못하게 완료 통지를 격리한다. |
+| 저장 경계 | 이번 진행도는 디스크에 저장하지 않는다. 실행을 종료하거나 셸이 파괴되면 초기화되며, 원정 Recovery만으로 퀘스트를 추측 복원하지 않는다. |
+
+### 구현·검증 결과
+
+- `[코드/에셋 확인]` `Assets/GameData/Quests/PrototypeHuntQuest.asset`과 보라색 graybox material을 만들고, `PersistentGameplayShell` prefab에 `QuestJournal`, 공용 Quest Canvas·패널·추적기를 직렬화 참조로 연결했다.
+- `[씬/프리팹 확인]` `GameMap1`에 Collider와 `QuestGiverInteractable`을 가진 `Test_QuestNPC_Base` 큐브 1개를 배치했다. 두 시험 적 prefab은 각각 기존 `EnemyStats`와 같은 오브젝트에 처치 보고 컴포넌트 1개만 가진다. 세 대상과 shell의 Missing Script는 0으로 검증했다.
+- `[동적 규칙 확인]` 같은 `QuestDefinition`으로 실패 분기 1회와 성공 분기 1회를 실행했다. 처치만으로 완료되지 않음, 실패 시 `Active + 0`, 생환 커밋 뒤 `ReadyToTurnIn`, NPC 보고 뒤 `Completed`, 완료 뒤 중복 보고 거부를 확인했다.
+- `[Unity 컴파일/저장 확인]` Unity 6000.5.9f1의 script compilation과 domain reload가 성공했고, setup의 저장 후 shell·두 적 prefab·기지 scene 직렬화 참조 재검증이 통과했다. 기존 외부 `RenderTextureBaker` obsolete warning 외에 이번 코드의 compile error는 없었다.
+- `[보호 확인]` Editor setup은 전역 `AssetDatabase.SaveAssets()`를 사용하지 않고 새 Quest definition·material과 대상 prefab·scene만 명시 저장한다. 적용 과정에서 재직렬화된 무관한 `TestMerchantGraybox.mat`은 작업 전 blob으로 복원해 변경 범위에서 제외했다.
+- `[미검증]` 물리 E 입력으로 수락 → 실제 사격으로 적 처치 → 귀환 포탈 → NPC E 보고까지 이어지는 한 번의 Play Mode 사용자 흐름과 화면 해상도별 UI 가독성은 아직 직접 조작 검증하지 않았다. 현재 검증 등급은 `CODE`이며, 이 흐름을 사용자가 확인하면 `USER`로 올린다.

@@ -47,7 +47,7 @@
 | `QUEST-01` | 게임플레이 계약 §4.4·4.7~4.9·5, GDD §2.3·3.3·8.5.4·9.5·10.5.4·12.2.5 |
 | `INFO-01` | 게임플레이 계약 §4.9·5, GDD §3.4·9.1·10.2·10.15 |
 | `PIXEL-01` | GDD §14; 현재는 재사용 요청 전까지 계약을 확장하지 않음 |
-| `GAP-SPAWN` | 게임플레이 계약 §4.3, GDD §7.8~7.10, 개발계획 §14.1 |
+| `SPAWN-01` | 게임플레이 계약 §4.3, `GAME_FLOW.md` §5, GDD §7.8~7.11, 개발계획 §14.1 |
 | `GAP-POI` | 게임플레이 계약 §4.3, GDD §7.5·7.7·7.10, 개발계획 §14.1 |
 | `GAP-LOOT` | 게임플레이 계약 §4.2~4.3, GDD §5.7·7.9 |
 | `GAP-COMBAT` | 게임플레이 계약 §4.5, GDD §4.5~4.7·18.1 |
@@ -75,6 +75,7 @@
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
 | `MAP-01` | 도심 도로·Cube 건물·런타임 NavMesh | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §14 | seed 기반 연결 도로와 막힌 Cube 건물, Entry→Portal 경로 | 도로·건물 생성 규칙 직접 변경 |
 | `MAP-ARRIVAL-01` | 원정 맵 도착 안전 gate | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §32 | Ready 뒤에만 공개; Invalid는 covered 기지 복귀, 불가 시 잠금 보류 | readiness·도착·rollback·redirect 경계 변경 |
+| `SPAWN-01` | 도심 시험 적·상자 seed 배치 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §33 | 기존 Chest 1·Enemy 2를 stable ID manifest로 재배치; Entry·Portal 보호, 상호 간격, 개별 NavMesh 접근과 Resume hash 검증 | 개체 수·프리팹 카탈로그·배치 규칙·scene binding·Recovery hash 변경 |
 | `BASE-01` | 기지 Chest·가구 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §18 | stable ID별 grid와 중첩 아이템, 왕복·backup 복원 | 배치 가능한 가구나 layout migration 추가 |
 | `RAID-01` | 기지/원정 Escape·생환·사망·포기 결과 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21 | 확인창과 결과 1회 확정; 주 메뉴 이동과 기지 복귀 구분 | 메뉴나 결과 정책 직접 변경 |
 | `SAVE-01` | ordinary save·원정 Recovery·결과 정산 | `ACTIVE` | `PLAYER` | `PROTOTYPE` | 진행 §22~23 | ordinary marker 우선, 강제종료 Resume, 생환 전체 보존·세 실패 전체 휴대품 소실 | schema·정산·Recovery 경계 직접 변경 |
@@ -90,7 +91,6 @@
 
 | ID | 상태 | 실제 공백 | 선행조건·금지선 |
 |---|---|---|---|
-| `GAP-SPAWN` | `ABSENT` | raid seed/stable ID 기반 적·상자 spawn manifest 없음 | 보호 반경·NavMesh 도달·Resume 중복 방지 필요 |
 | `GAP-LOOT` | `ABSENT` | 데이터 기반 `LootTable` 없음 | 기존 ItemDatabase와 Chest owner 재사용, 재개방·Resume 재굴림 금지 |
 | `GAP-POI` | `ABSENT` | 접근 가능한 POI·건물 내부·랜드마크 없음 | Spawn→Portal 경로와 별도 접근 가능성 검증 |
 | `GAP-COMBAT` | `DECISION` | 탄약·재장전·반동·탄퍼짐·방어 계산 미정 | 사용자 전투 규칙 결정 뒤 진행 |

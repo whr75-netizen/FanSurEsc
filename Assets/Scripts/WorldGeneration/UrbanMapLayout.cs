@@ -179,6 +179,178 @@ namespace FantasySurvival.WorldGeneration
         public Rect Footprint => new Rect(Center - Size * 0.5f, Size);
     }
 
+    public enum UrbanRaidSpawnKind
+    {
+        Chest,
+        Enemy
+    }
+
+    /// <summary>
+    /// Pure input for deterministic raid placement. The values are technical prototype
+    /// safety limits, not final encounter balance.
+    /// </summary>
+    public readonly struct UrbanRaidSpawnRequest
+    {
+        public UrbanRaidSpawnRequest(
+            string stableId,
+            UrbanRaidSpawnKind kind,
+            float entryClearance,
+            float portalClearance,
+            float minimumSeparation,
+            float approachDistance)
+        {
+            StableId = stableId;
+            Kind = kind;
+            EntryClearance = entryClearance;
+            PortalClearance = portalClearance;
+            MinimumSeparation = minimumSeparation;
+            ApproachDistance = approachDistance;
+        }
+
+        public string StableId { get; }
+        public UrbanRaidSpawnKind Kind { get; }
+        public float EntryClearance { get; }
+        public float PortalClearance { get; }
+        public float MinimumSeparation { get; }
+        public float ApproachDistance { get; }
+
+        public bool TryValidate(out string error)
+        {
+            if (string.IsNullOrWhiteSpace(StableId))
+            {
+                error = "Raid spawn request has no stable ID.";
+                return false;
+            }
+
+            if (Kind != UrbanRaidSpawnKind.Chest && Kind != UrbanRaidSpawnKind.Enemy)
+            {
+                error = $"Raid spawn request '{StableId}' has an invalid kind.";
+                return false;
+            }
+
+            if (!IsFiniteNonNegative(EntryClearance) ||
+                !IsFiniteNonNegative(PortalClearance) ||
+                !IsFiniteNonNegative(MinimumSeparation) ||
+                !IsFiniteNonNegative(ApproachDistance))
+            {
+                error = $"Raid spawn request '{StableId}' has an invalid safety distance.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool IsFiniteNonNegative(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value) && value >= 0f;
+        }
+    }
+
+    public readonly struct UrbanRaidSpawnPlacement
+    {
+        public UrbanRaidSpawnPlacement(
+            string stableId,
+            UrbanRaidSpawnKind kind,
+            Vector2 localPosition,
+            float localYawDegrees,
+            Vector2 approachLocalPosition)
+        {
+            StableId = stableId;
+            Kind = kind;
+            LocalPosition = localPosition;
+            LocalYawDegrees = localYawDegrees;
+            ApproachLocalPosition = approachLocalPosition;
+        }
+
+        public string StableId { get; }
+        public UrbanRaidSpawnKind Kind { get; }
+        public Vector2 LocalPosition { get; }
+        public float LocalYawDegrees { get; }
+        public Vector2 ApproachLocalPosition { get; }
+    }
+
+    /// <summary>
+    /// Immutable, derived raid placement cache. It is rebuilt from the authoritative map
+    /// seed and stable IDs and is never a parallel owner of Chest or Enemy runtime state.
+    /// </summary>
+    public sealed class UrbanRaidSpawnManifest
+    {
+        private readonly IReadOnlyList<UrbanRaidSpawnPlacement> placements;
+
+        internal UrbanRaidSpawnManifest(
+            int version,
+            int seed,
+            IReadOnlyList<UrbanRaidSpawnPlacement> sourcePlacements)
+        {
+            Version = version;
+            Seed = seed;
+            var placementCopy = sourcePlacements == null
+                ? new List<UrbanRaidSpawnPlacement>()
+                : new List<UrbanRaidSpawnPlacement>(sourcePlacements);
+            placements = placementCopy.AsReadOnly();
+        }
+
+        public int Version { get; }
+        public int Seed { get; }
+        public int Count => placements.Count;
+        public IReadOnlyList<UrbanRaidSpawnPlacement> Placements => placements;
+
+        public bool TryGetPlacement(string stableId, out UrbanRaidSpawnPlacement placement)
+        {
+            for (int index = 0; index < placements.Count; index++)
+            {
+                if (string.Equals(placements[index].StableId, stableId, StringComparison.Ordinal))
+                {
+                    placement = placements[index];
+                    return true;
+                }
+            }
+
+            placement = default;
+            return false;
+        }
+    }
+
+    public static class UrbanRaidSpawnPrototypeRules
+    {
+        public const float ChestEntryClearance = 10f;
+        public const float ChestPortalClearance = 8f;
+        public const float EnemyPortalClearance = 10f;
+        public const float ChestMinimumSeparation = 5f;
+        public const float EnemyMinimumSeparation = 6f;
+        public const float ChestApproachDistance = 1f;
+        public const float EnemyEntrySafetyBuffer = 2f;
+
+        public static UrbanRaidSpawnRequest CreateChestRequest(string stableId)
+        {
+            return new UrbanRaidSpawnRequest(
+                stableId,
+                UrbanRaidSpawnKind.Chest,
+                ChestEntryClearance,
+                ChestPortalClearance,
+                ChestMinimumSeparation,
+                ChestApproachDistance);
+        }
+
+        public static UrbanRaidSpawnRequest CreateEnemyRequest(
+            string stableId,
+            float visionRange,
+            float patrolRadius)
+        {
+            float entryClearance = Mathf.Max(
+                ChestEntryClearance,
+                Mathf.Max(0f, visionRange) + Mathf.Max(0f, patrolRadius) + EnemyEntrySafetyBuffer);
+            return new UrbanRaidSpawnRequest(
+                stableId,
+                UrbanRaidSpawnKind.Enemy,
+                entryClearance,
+                EnemyPortalClearance,
+                EnemyMinimumSeparation,
+                approachDistance: 0f);
+        }
+    }
+
     public sealed class UrbanMapLayout
     {
         public UrbanMapLayout(
@@ -308,6 +480,11 @@ namespace FantasySurvival.WorldGeneration
 
         public static ulong ComputeStableHash(UrbanMapLayout layout)
         {
+            if (layout == null)
+            {
+                throw new ArgumentNullException(nameof(layout));
+            }
+
             const ulong offset = 1469598103934665603UL;
             const ulong prime = 1099511628211UL;
             ulong hash = offset;
@@ -357,6 +534,87 @@ namespace FantasySurvival.WorldGeneration
             void AddFloat(float value)
             {
                 AddInt(Mathf.RoundToInt(value * 1000f));
+            }
+        }
+
+        public static ulong ComputeStableHash(UrbanRaidSpawnManifest manifest)
+        {
+            if (manifest == null)
+            {
+                throw new ArgumentNullException(nameof(manifest));
+            }
+
+            const ulong offset = 1469598103934665603UL;
+            const ulong prime = 1099511628211UL;
+            ulong hash = offset;
+
+            AddInt(manifest.Version);
+            AddInt(manifest.Seed);
+            AddInt(manifest.Count);
+            for (int index = 0; index < manifest.Count; index++)
+            {
+                UrbanRaidSpawnPlacement placement = manifest.Placements[index];
+                AddString(placement.StableId);
+                AddInt((int)placement.Kind);
+                AddFloat(placement.LocalPosition.x);
+                AddFloat(placement.LocalPosition.y);
+                AddFloat(placement.LocalYawDegrees);
+                AddFloat(placement.ApproachLocalPosition.x);
+                AddFloat(placement.ApproachLocalPosition.y);
+            }
+
+            return hash;
+
+            void AddString(string value)
+            {
+                AddInt(value?.Length ?? 0);
+                if (value == null)
+                {
+                    return;
+                }
+
+                for (int index = 0; index < value.Length; index++)
+                {
+                    AddInt(value[index]);
+                }
+            }
+
+            void AddInt(int value)
+            {
+                unchecked
+                {
+                    hash ^= (uint)value;
+                    hash *= prime;
+                }
+            }
+
+            void AddFloat(float value)
+            {
+                AddInt(Mathf.RoundToInt(value * 1000f));
+            }
+        }
+
+        public static ulong ComputeStableWorldHash(
+            UrbanMapLayout layout,
+            UrbanRaidSpawnManifest spawnManifest)
+        {
+            const ulong offset = 1469598103934665603UL;
+            const ulong prime = 1099511628211UL;
+            ulong hash = offset;
+
+            AddUInt64(ComputeStableHash(layout));
+            AddUInt64(ComputeStableHash(spawnManifest));
+            return hash;
+
+            void AddUInt64(ulong value)
+            {
+                unchecked
+                {
+                    hash ^= (uint)value;
+                    hash *= prime;
+                    hash ^= (uint)(value >> 32);
+                    hash *= prime;
+                }
             }
         }
 

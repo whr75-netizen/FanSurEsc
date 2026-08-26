@@ -1311,6 +1311,7 @@ seed + generator version
 
 - `RaidEntry`에서 Player가 원정을 시작한다.
 - 기존 `ReturnPortal`을 생성 layout의 반대편 도로 노드로 배치한다.
+- 기존 Chest 1개와 근접·원거리 Enemy 각 1개는 seed·stable ID manifest의 보호된 도로 후보에 초기 배치한다.
 - 현재 포탈은 즉시 `Extracted`를 확정한다.
 
 #### 7.8.2 최종 탈출 규칙 `[미정]`
@@ -1322,9 +1323,17 @@ seed + generator version
 - 일회성 또는 변동 탈출
 - 적이 접근한 상태의 처리
 
-### 7.9 적·전리품 Spawn `[후속]`
+### 7.9 적·전리품 Spawn `[현재 시험/후속 확장]`
 
-#### 7.9.1 후보 처리 순서
+#### 7.9.1 현재 시험
+
+- 씬에 이미 직렬화된 Chest 1개와 Enemy 2개를 재사용하며 런타임 복제는 하지 않는다.
+- 같은 seed와 stable ID는 같은 초기 위치·회전을 만들고, Resume은 Enemy의 저장된 현재 Transform을 그 뒤에 복원한다.
+- Enemy Entry 보호는 각 정의의 시야·순찰 반경을 반영하고, Chest는 도로 가장자리에 두되 도로 중심의 접근점을 검증한다.
+- 후보 부족, Entry·Portal 보호 위반, 중첩 또는 개별 NavMesh 접근 실패는 맵 전체를 `Invalid`로 닫는다.
+- 현재 Chest 내용과 Enemy 종류·개수는 기존 시험 구성이며 LootTable·위험 예산·프리팹 카탈로그는 없다.
+
+#### 7.9.2 후속 후보 처리 순서
 
 ```text
 유효 layout
@@ -1337,7 +1346,7 @@ seed + generator version
 → 전체 경로·중첩 검증
 ```
 
-#### 7.9.2 금지 배치
+#### 7.9.3 금지 배치
 
 - Player Spawn 즉시 감지·집중 사격
 - 탈출점의 완전 봉쇄
@@ -1350,7 +1359,7 @@ seed + generator version
 #### 7.10.1 현재
 
 - `NavigationPathComplete` 결과를 산출한다.
-- 256개 seed의 도로 연결과 점유 충돌을 코드 검증했다.
+- 256개 seed의 도로 연결·점유 충돌과 stable ID spawn manifest의 결정성·보호 거리·상호 간격을 코드 검증했다.
 - 실제 Play Mode 생성 layout의 Spawn→Portal 완전 경로를 확인했다.
 - 완전 경로가 없으면 Player 배치·Raid Active·checkpoint·화면 공개 전에 도착을 거부하고, 기존 검은 전환을 유지한 채 기지로 복귀시킨다.
 - Fresh 생성 실패는 원정 전 exact 상태로 되돌리고 게임플레이 실패로 세지 않으며, Resume 생성 실패는 seed를 바꾸지 않고 `RecoveryFailed`로 정산한다.
@@ -1360,12 +1369,12 @@ seed + generator version
 
 - 재생성, 후보 축소 또는 선택 콘텐츠 생략으로 유효 결과를 만든다.
 - 실패한 seed·version과 이유를 기록한다.
-- 후속 POI·상자·적 배치까지 개별 접근 가능성 검증 범위를 확장한다.
+- 후속 POI·가변 상자·적·장식 배치까지 현재 개별 접근 가능성 검증 범위를 확장한다.
 
 ### 7.11 seed와 복구
 
 - 같은 seed와 generator version은 같은 핵심 layout을 만든다.
-- Recovery는 seed, version과 layout hash를 저장한다.
+- Recovery는 seed, generator version과 layout+spawn manifest world hash를 저장한다.
 - Resume 뒤 hash가 다르면 조용히 다른 맵을 사용하지 않는다.
 - **[미정]** seed 선택·공유·일일 맵 정책
 

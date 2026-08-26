@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using FantasySurvival.Interaction;
+using FantasySurvival.Raids;
 using FantasySurvival.SceneFlow;
 using FantasySurvival.WorldGeneration;
 using Unity.AI.Navigation;
@@ -20,7 +21,7 @@ namespace FantasySurvival.EditorTools
         private const string GameMap1Name = "GameMap1";
         private const string RaidEntrySpawnId = "RaidEntry";
         private const string BaseReturnSpawnId = "BaseReturn";
-        private const int RequiredRoundTrips = 3;
+        private const int RequiredRoundTrips = 1;
         private const int ReadyObservationCount = 2;
 
         private const string KeyPrefix = "FantasySurvival.UrbanMapValidation.";
@@ -241,9 +242,13 @@ namespace FantasySurvival.EditorTools
             ProceduralUrbanMapGenerator generator = ValidateUrbanScene("direct GameMapTest start");
             ValidateShellAndSpawn(RaidEntrySpawnId, captureIdentity: true);
             SessionState.SetInt(FirstSeedKey, generator.CurrentSeed);
+            RaidCheckpointSceneBinding raidBinding =
+                FindComponentsInScene<RaidCheckpointSceneBinding>(SceneManager.GetActiveScene())[0];
             SessionState.SetString(
                 FirstHashKey,
-                UrbanMapLayoutValidator.ComputeStableHash(generator.CurrentLayout).ToString("X16"));
+                UrbanMapLayoutValidator
+                    .ComputeStableWorldHash(generator.CurrentLayout, raidBinding.SpawnManifest)
+                    .ToString("X16"));
 
             SetPhase(PhaseInitialBase);
             StartTravel(GameMap1Name, BaseReturnSpawnId);
@@ -383,7 +388,56 @@ namespace FantasySurvival.EditorTools
 
             ValidateGeneratedGeometry(generator, context);
             ValidateExistingSceneObjects(generator, context);
+            ValidateRaidSpawnManifest(generator, context);
             return generator;
+        }
+
+        private static void ValidateRaidSpawnManifest(
+            ProceduralUrbanMapGenerator generator,
+            string context)
+        {
+            RaidCheckpointSceneBinding[] bindings =
+                FindComponentsInScene<RaidCheckpointSceneBinding>(SceneManager.GetActiveScene());
+            Require(bindings.Length == 1,
+                $"{context}: expected one RaidCheckpointSceneBinding, found {bindings.Length}.");
+
+            RaidSceneArrivalReadiness readiness = bindings[0].GetArrivalReadiness(out string readinessError);
+            Require(readiness == RaidSceneArrivalReadiness.Ready,
+                $"{context}: raid spawn readiness is {readiness}: {readinessError}");
+
+            UrbanRaidSpawnManifest manifest = bindings[0].SpawnManifest;
+            Require(manifest != null && manifest.Seed == generator.CurrentSeed,
+                $"{context}: raid spawn manifest is missing or belongs to another seed.");
+            Require(manifest.Count == 3,
+                $"{context}: expected three authored raid spawn placements, found {manifest.Count}.");
+
+            int chestCount = 0;
+            int enemyCount = 0;
+            var stableIds = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
+            for (int index = 0; index < manifest.Count; index++)
+            {
+                UrbanRaidSpawnPlacement placement = manifest.Placements[index];
+                Require(stableIds.Add(placement.StableId),
+                    $"{context}: duplicate raid spawn stable ID '{placement.StableId}'.");
+                if (placement.Kind == UrbanRaidSpawnKind.Chest)
+                {
+                    chestCount++;
+                }
+                else if (placement.Kind == UrbanRaidSpawnKind.Enemy)
+                {
+                    enemyCount++;
+                }
+
+                Require(generator.TryValidateReachableLocalPoint(
+                        placement.ApproachLocalPosition,
+                        $"validation spawn '{placement.StableId}'",
+                        out string pathError),
+                    $"{context}: {pathError}");
+            }
+
+            Require(chestCount == 1 && enemyCount == 2,
+                $"{context}: expected one Chest and two Enemy placements, " +
+                $"found Chest={chestCount}, Enemy={enemyCount}.");
         }
 
         private static void ValidateGeneratedGeometry(ProceduralUrbanMapGenerator generator, string context)

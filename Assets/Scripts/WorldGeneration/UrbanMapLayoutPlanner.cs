@@ -6,6 +6,9 @@ namespace FantasySurvival.WorldGeneration
     public static class UrbanMapLayoutPlanner
     {
         public const int GeneratorVersion = 1;
+        public const int SpawnManifestVersion = 1;
+
+        private static readonly float[] SpawnCandidateFractions = { 0.2f, 0.35f, 0.5f, 0.65f, 0.8f };
 
         private struct EdgeDraft
         {
@@ -55,6 +58,32 @@ namespace FantasySurvival.WorldGeneration
                 uint range = (uint)(maximumExclusive - minimumInclusive);
                 return minimumInclusive + (int)(NextUInt() % range);
             }
+        }
+
+        private readonly struct SpawnCandidate
+        {
+            public SpawnCandidate(int candidateId, Vector2 localPosition, Vector2 roadDirection)
+            {
+                CandidateId = candidateId;
+                LocalPosition = localPosition;
+                RoadDirection = roadDirection;
+            }
+
+            public int CandidateId { get; }
+            public Vector2 LocalPosition { get; }
+            public Vector2 RoadDirection { get; }
+        }
+
+        private readonly struct SelectedSpawn
+        {
+            public SelectedSpawn(UrbanRaidSpawnRequest request, UrbanRaidSpawnPlacement placement)
+            {
+                Request = request;
+                Placement = placement;
+            }
+
+            public UrbanRaidSpawnRequest Request { get; }
+            public UrbanRaidSpawnPlacement Placement { get; }
         }
 
         public static UrbanMapLayout Generate(
@@ -142,6 +171,209 @@ namespace FantasySurvival.WorldGeneration
             }
 
             return layout;
+        }
+
+        /// <summary>
+        /// Builds a pure deterministic placement manifest from the map layout and stable IDs.
+        /// NavMesh is intentionally not consulted here; runtime reachability is a separate
+        /// fail-closed validation so Resume never changes entity count by silently rerolling.
+        /// </summary>
+        public static bool TryCreateRaidSpawnManifest(
+            UrbanMapLayout layout,
+            IReadOnlyList<UrbanRaidSpawnRequest> requests,
+            out UrbanRaidSpawnManifest manifest,
+            out string error)
+        {
+            manifest = null;
+            if (layout == null || layout.Roads == null || layout.Roads.Count == 0)
+            {
+                error = "Cannot create a raid spawn manifest without a generated road layout.";
+                return false;
+            }
+
+            if (requests == null || requests.Count == 0)
+            {
+                error = "Cannot create an empty raid spawn manifest.";
+                return false;
+            }
+
+            var sortedRequests = new List<UrbanRaidSpawnRequest>(requests.Count);
+            var stableIds = new HashSet<string>(System.StringComparer.Ordinal);
+            for (int index = 0; index < requests.Count; index++)
+            {
+                UrbanRaidSpawnRequest request = requests[index];
+                if (!request.TryValidate(out error) || !stableIds.Add(request.StableId))
+                {
+                    if (error == null)
+                    {
+                        error = $"Raid spawn requests contain duplicate stable ID '{request.StableId}'.";
+                    }
+                    return false;
+                }
+
+                sortedRequests.Add(request);
+            }
+
+            sortedRequests.Sort((left, right) =>
+                System.StringComparer.Ordinal.Compare(left.StableId, right.StableId));
+
+            List<SpawnCandidate> candidates = BuildSpawnCandidates(layout.Roads);
+            if (candidates.Count < sortedRequests.Count)
+            {
+                error =
+                    $"Urban map seed {layout.Seed} has only {candidates.Count} road spawn candidates " +
+                    $"for {sortedRequests.Count} bound entities.";
+                return false;
+            }
+
+            var selected = new List<SelectedSpawn>(sortedRequests.Count);
+            var placements = new List<UrbanRaidSpawnPlacement>(sortedRequests.Count);
+            for (int requestIndex = 0; requestIndex < sortedRequests.Count; requestIndex++)
+            {
+                UrbanRaidSpawnRequest request = sortedRequests[requestIndex];
+                uint requestHash = StableStringHash(request.StableId);
+                uint selectionKey = DeriveSeed(
+                    layout.Seed,
+                    requestHash ^ ((uint)request.Kind + 1u) * 0x9E3779B9u);
+                int startIndex = (int)(selectionKey % (uint)candidates.Count);
+                int scanDirection = (selectionKey & 0x80000000u) == 0u ? 1 : -1;
+                bool found = false;
+
+                for (int scanOffset = 0; scanOffset < candidates.Count; scanOffset++)
+                {
+                    int candidateIndex = PositiveModulo(
+                        startIndex + scanOffset * scanDirection,
+                        candidates.Count);
+                    SpawnCandidate candidate = candidates[candidateIndex];
+                    bool reverseFacing = ((selectionKey ^ (uint)candidate.CandidateId * 0x85EBCA6Bu) & 1u) != 0u;
+                    Vector2 facingDirection = reverseFacing
+                        ? -candidate.RoadDirection
+                        : candidate.RoadDirection;
+                    Vector2 lateralDirection = new Vector2(-facingDirection.y, facingDirection.x);
+                    if (((selectionKey >> 1) & 1u) != 0u)
+                    {
+                        lateralDirection = -lateralDirection;
+                    }
+
+                    Vector2 placementPosition =
+                        candidate.LocalPosition + lateralDirection * request.ApproachDistance;
+                    if (!CanUseSpawnPosition(layout, request, placementPosition, selected))
+                    {
+                        continue;
+                    }
+
+                    float yaw = Mathf.Atan2(facingDirection.x, facingDirection.y) * Mathf.Rad2Deg;
+                    var placement = new UrbanRaidSpawnPlacement(
+                        request.StableId,
+                        request.Kind,
+                        placementPosition,
+                        yaw,
+                        candidate.LocalPosition);
+                    selected.Add(new SelectedSpawn(request, placement));
+                    placements.Add(placement);
+                    found = true;
+                    break;
+                }
+
+                if (!found)
+                {
+                    error =
+                        $"Urban map seed {layout.Seed} has no safe road position for raid entity " +
+                        $"'{request.StableId}'. The seed is rejected instead of rerolled.";
+                    return false;
+                }
+            }
+
+            manifest = new UrbanRaidSpawnManifest(
+                SpawnManifestVersion,
+                layout.Seed,
+                placements);
+            error = null;
+            return true;
+        }
+
+        private static List<SpawnCandidate> BuildSpawnCandidates(IReadOnlyList<UrbanRoadSegment> roads)
+        {
+            var candidates = new List<SpawnCandidate>(roads.Count * SpawnCandidateFractions.Length);
+            int candidateId = 0;
+            for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
+            {
+                UrbanRoadSegment road = roads[roadIndex];
+                Vector2 delta = road.End - road.Start;
+                if (delta.sqrMagnitude <= 0.0001f)
+                {
+                    continue;
+                }
+
+                Vector2 direction = delta.normalized;
+                for (int fractionIndex = 0; fractionIndex < SpawnCandidateFractions.Length; fractionIndex++)
+                {
+                    float fraction = SpawnCandidateFractions[fractionIndex];
+                    candidates.Add(new SpawnCandidate(
+                        candidateId++,
+                        Vector2.Lerp(road.Start, road.End, fraction),
+                        direction));
+                }
+            }
+
+            return candidates;
+        }
+
+        private static bool CanUseSpawnPosition(
+            UrbanMapLayout layout,
+            UrbanRaidSpawnRequest request,
+            Vector2 localPosition,
+            IReadOnlyList<SelectedSpawn> selected)
+        {
+            if ((localPosition - layout.EntryLocalPosition).sqrMagnitude <
+                request.EntryClearance * request.EntryClearance)
+            {
+                return false;
+            }
+
+            if ((localPosition - layout.PortalLocalPosition).sqrMagnitude <
+                request.PortalClearance * request.PortalClearance)
+            {
+                return false;
+            }
+
+            for (int index = 0; index < selected.Count; index++)
+            {
+                SelectedSpawn existing = selected[index];
+                float requiredSeparation = Mathf.Max(
+                    request.MinimumSeparation,
+                    existing.Request.MinimumSeparation);
+                if ((localPosition - existing.Placement.LocalPosition).sqrMagnitude <
+                    requiredSeparation * requiredSeparation)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static int PositiveModulo(int value, int modulus)
+        {
+            int remainder = value % modulus;
+            return remainder < 0 ? remainder + modulus : remainder;
+        }
+
+        private static uint StableStringHash(string value)
+        {
+            const uint offset = 2166136261u;
+            const uint prime = 16777619u;
+            uint hash = offset;
+            unchecked
+            {
+                for (int index = 0; index < value.Length; index++)
+                {
+                    hash ^= value[index];
+                    hash *= prime;
+                }
+            }
+
+            return hash;
         }
 
         private static float[] BuildAxisPositions(

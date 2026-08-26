@@ -52,6 +52,8 @@ namespace FantasySurvival.Raids
         public string sceneStateId;
         public int generatorVersion;
         public int mapSeed;
+        // Legacy field name: current captures store the layout + spawn-manifest world hash.
+        // Restore also accepts the old layout-only hash once for non-loss migration.
         public string layoutHash;
         public RaidTransformSaveData playerTransform;
         public float playerCurrentHealth;

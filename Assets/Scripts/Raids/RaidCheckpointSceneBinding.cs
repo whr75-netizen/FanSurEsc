@@ -70,6 +70,23 @@ namespace FantasySurvival.Raids
             public float MaxHealth;
         }
 
+        private readonly struct SpawnTransformApplication
+        {
+            public SpawnTransformApplication(
+                Transform target,
+                Vector3 position,
+                Quaternion rotation)
+            {
+                Target = target;
+                Position = position;
+                Rotation = rotation;
+            }
+
+            public Transform Target { get; }
+            public Vector3 Position { get; }
+            public Quaternion Rotation { get; }
+        }
+
         [SerializeField] private string sceneStateId = "core:gamemaptest:v1";
         [SerializeField] private ProceduralUrbanMapGenerator mapGenerator;
         [SerializeField] private ChestBinding[] chests = Array.Empty<ChestBinding>();
@@ -77,12 +94,17 @@ namespace FantasySurvival.Raids
 
         private RaidCheckpointController controller;
         private string seedPreparationError;
+        private UrbanRaidSpawnManifest spawnManifest;
+        private string spawnPreparationError;
+        private bool spawnNavigationValidated;
+        private string spawnNavigationValidationError;
 
         public string SceneStateId => sceneStateId;
         public string SceneName => gameObject.scene.name;
         public ProceduralUrbanMapGenerator MapGenerator => mapGenerator;
         public bool IsConfigured => TryBuildAuthoredIndexes(out _, out _, out _);
         public string SeedPreparationError => seedPreparationError;
+        public UrbanRaidSpawnManifest SpawnManifest => spawnManifest;
 
         public RaidSceneArrivalReadiness GetArrivalReadiness(out string error)
         {
@@ -98,6 +120,12 @@ namespace FantasySurvival.Raids
                 return RaidSceneArrivalReadiness.Invalid;
             }
 
+            if (!string.IsNullOrEmpty(spawnPreparationError))
+            {
+                error = spawnPreparationError;
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
             if (mapGenerator.NavigationBuildPending)
             {
                 error = null;
@@ -110,12 +138,37 @@ namespace FantasySurvival.Raids
                 return RaidSceneArrivalReadiness.Invalid;
             }
 
+            if (spawnManifest == null ||
+                spawnManifest.Seed != mapGenerator.CurrentSeed ||
+                spawnManifest.Seed != mapGenerator.CurrentLayout.Seed)
+            {
+                error = "Raid scene spawn manifest was not prepared for the current map seed.";
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
             if (!mapGenerator.NavigationPathComplete)
             {
                 error =
                     $"Raid map seed {mapGenerator.CurrentSeed} has no complete " +
                     "RaidEntry-to-ReturnPortal navigation path.";
                 return RaidSceneArrivalReadiness.Invalid;
+            }
+
+            if (!string.IsNullOrEmpty(spawnNavigationValidationError))
+            {
+                error = spawnNavigationValidationError;
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
+            if (!spawnNavigationValidated)
+            {
+                if (!TryValidateSpawnNavigation(out spawnNavigationValidationError))
+                {
+                    error = spawnNavigationValidationError;
+                    return RaidSceneArrivalReadiness.Invalid;
+                }
+
+                spawnNavigationValidated = true;
             }
 
             error = null;
@@ -141,9 +194,12 @@ namespace FantasySurvival.Raids
                 return;
             }
 
+            mapGenerator.LayoutGeometryGenerated += HandleLayoutGeometryGenerated;
+
             if (!controller.TryRegisterScene(this, out string registrationError))
             {
                 Debug.LogError($"Raid checkpoint scene registration failed: {registrationError}", this);
+                mapGenerator.LayoutGeometryGenerated -= HandleLayoutGeometryGenerated;
                 enabled = false;
                 return;
             }
@@ -159,11 +215,217 @@ namespace FantasySurvival.Raids
                         $"Could not generate the recovered raid map seed {resumeSeed}.";
                 }
             }
+            else if (mapGenerator.CurrentLayout != null)
+            {
+                HandleLayoutGeometryGenerated(mapGenerator.CurrentLayout);
+            }
         }
 
         private void OnDestroy()
         {
+            if (mapGenerator != null)
+            {
+                mapGenerator.LayoutGeometryGenerated -= HandleLayoutGeometryGenerated;
+            }
             controller?.UnregisterScene(this);
+        }
+
+        private void HandleLayoutGeometryGenerated(UrbanMapLayout layout)
+        {
+            spawnManifest = null;
+            spawnPreparationError = null;
+            spawnNavigationValidated = false;
+            spawnNavigationValidationError = null;
+
+            try
+            {
+                if (layout == null || mapGenerator == null || mapGenerator.GeneratedContent == null)
+                {
+                    spawnPreparationError =
+                        "Raid spawn placement requires generated map geometry and its owning Transform.";
+                    return;
+                }
+
+                if (!TryBuildSpawnRequests(out List<UrbanRaidSpawnRequest> requests, out string requestError))
+                {
+                    spawnPreparationError = requestError;
+                    return;
+                }
+
+                if (!UrbanMapLayoutPlanner.TryCreateRaidSpawnManifest(
+                        layout,
+                        requests,
+                        out UrbanRaidSpawnManifest candidate,
+                        out string manifestError))
+                {
+                    spawnPreparationError = manifestError;
+                    return;
+                }
+
+                if (!TryApplyInitialSpawnManifest(candidate, out string applicationError))
+                {
+                    spawnPreparationError = applicationError;
+                    return;
+                }
+
+                spawnManifest = candidate;
+            }
+            catch (Exception exception)
+            {
+                spawnPreparationError =
+                    $"Raid spawn manifest preparation threw an exception: {exception.Message}";
+            }
+        }
+
+        private bool TryBuildSpawnRequests(
+            out List<UrbanRaidSpawnRequest> requests,
+            out string error)
+        {
+            requests = new List<UrbanRaidSpawnRequest>(chests.Length + enemies.Length);
+            foreach (ChestBinding binding in chests)
+            {
+                requests.Add(UrbanRaidSpawnPrototypeRules.CreateChestRequest(binding.StableId));
+            }
+
+            foreach (EnemyBinding binding in enemies)
+            {
+                EnemyDefinition definition = binding.Stats.Definition;
+                EnemyAISettings ai = definition != null ? definition.AI : null;
+                if (ai == null)
+                {
+                    error = $"Raid Enemy '{binding.StableId}' has no AI definition for spawn safety.";
+                    return false;
+                }
+
+                requests.Add(UrbanRaidSpawnPrototypeRules.CreateEnemyRequest(
+                    binding.StableId,
+                    ai.VisionRange,
+                    ai.PatrolRadius));
+            }
+
+            error = null;
+            return true;
+        }
+
+        private bool TryApplyInitialSpawnManifest(
+            UrbanRaidSpawnManifest candidate,
+            out string error)
+        {
+            if (candidate == null || candidate.Count != chests.Length + enemies.Length)
+            {
+                error = "Raid spawn manifest entity count does not match the authored checkpoint bindings.";
+                return false;
+            }
+
+            var applications = new List<SpawnTransformApplication>(candidate.Count);
+            foreach (ChestBinding binding in chests)
+            {
+                if (!TryCreateSpawnApplication(
+                        candidate,
+                        binding.StableId,
+                        UrbanRaidSpawnKind.Chest,
+                        binding.Chest.transform,
+                        out SpawnTransformApplication application,
+                        out error))
+                {
+                    return false;
+                }
+
+                applications.Add(application);
+            }
+
+            foreach (EnemyBinding binding in enemies)
+            {
+                // Layout generation must happen before the normal EnemyStats/AI Awake pass.
+                // A mid-raid reroll would invalidate AI home state and Recovery ownership.
+                if (binding.Stats.IsInitialized)
+                {
+                    error =
+                        $"Raid Enemy '{binding.StableId}' was already initialized before its " +
+                        "deterministic spawn position was assigned.";
+                    return false;
+                }
+
+                if (!TryCreateSpawnApplication(
+                        candidate,
+                        binding.StableId,
+                        UrbanRaidSpawnKind.Enemy,
+                        binding.Stats.transform,
+                        out SpawnTransformApplication application,
+                        out error))
+                {
+                    return false;
+                }
+
+                applications.Add(application);
+            }
+
+            for (int index = 0; index < applications.Count; index++)
+            {
+                SpawnTransformApplication application = applications[index];
+                application.Target.SetPositionAndRotation(application.Position, application.Rotation);
+                Rigidbody body = application.Target.GetComponent<Rigidbody>();
+                if (body != null)
+                {
+                    body.linearVelocity = Vector3.zero;
+                    body.angularVelocity = Vector3.zero;
+                }
+            }
+
+            Physics.SyncTransforms();
+            error = null;
+            return true;
+        }
+
+        private bool TryCreateSpawnApplication(
+            UrbanRaidSpawnManifest candidate,
+            string stableId,
+            UrbanRaidSpawnKind expectedKind,
+            Transform target,
+            out SpawnTransformApplication application,
+            out string error)
+        {
+            application = default;
+            if (target == null ||
+                !candidate.TryGetPlacement(stableId, out UrbanRaidSpawnPlacement placement) ||
+                placement.Kind != expectedKind)
+            {
+                error = $"Raid spawn manifest is missing the expected {expectedKind} '{stableId}'.";
+                return false;
+            }
+
+            Vector3 worldPosition = mapGenerator.GeneratedContent.TransformPoint(
+                new Vector3(placement.LocalPosition.x, 0f, placement.LocalPosition.y));
+            worldPosition.y = target.position.y;
+            Quaternion worldRotation =
+                mapGenerator.GeneratedContent.rotation * Quaternion.Euler(0f, placement.LocalYawDegrees, 0f);
+            application = new SpawnTransformApplication(target, worldPosition, worldRotation);
+            error = null;
+            return true;
+        }
+
+        private bool TryValidateSpawnNavigation(out string error)
+        {
+            if (spawnManifest == null)
+            {
+                error = "Raid spawn manifest is missing.";
+                return false;
+            }
+
+            for (int index = 0; index < spawnManifest.Count; index++)
+            {
+                UrbanRaidSpawnPlacement placement = spawnManifest.Placements[index];
+                if (!mapGenerator.TryValidateReachableLocalPoint(
+                        placement.ApproachLocalPosition,
+                        $"raid {placement.Kind} '{placement.StableId}'",
+                        out error))
+                {
+                    return false;
+                }
+            }
+
+            error = null;
+            return true;
         }
 
         public bool TryCaptureWorld(
@@ -254,7 +516,7 @@ namespace FantasySurvival.Raids
             generatorVersion = mapGenerator.CurrentLayout.GeneratorVersion;
             mapSeed = mapGenerator.CurrentSeed;
             layoutHash = UrbanMapLayoutValidator
-                .ComputeStableHash(mapGenerator.CurrentLayout)
+                .ComputeStableWorldHash(mapGenerator.CurrentLayout, spawnManifest)
                 .ToString("X16");
             chestRecords = capturedChests;
             enemyRecords = capturedEnemies;
@@ -304,12 +566,31 @@ namespace FantasySurvival.Raids
             }
 
             string currentHash = UrbanMapLayoutValidator
+                .ComputeStableWorldHash(mapGenerator.CurrentLayout, spawnManifest)
+                .ToString("X16");
+            string legacyLayoutHash = UrbanMapLayoutValidator
                 .ComputeStableHash(mapGenerator.CurrentLayout)
                 .ToString("X16");
-            if (!string.Equals(currentHash, checkpoint.layoutHash, StringComparison.OrdinalIgnoreCase))
+            bool matchesCurrentWorld = string.Equals(
+                currentHash,
+                checkpoint.layoutHash,
+                StringComparison.OrdinalIgnoreCase);
+            bool matchesLegacyLayout = string.Equals(
+                legacyLayoutHash,
+                checkpoint.layoutHash,
+                StringComparison.OrdinalIgnoreCase);
+            if (!matchesCurrentWorld && !matchesLegacyLayout)
             {
-                error = "Recovered raid map layout hash does not match the checkpoint.";
+                error = "Recovered raid map layout/content hash does not match the checkpoint.";
                 return false;
+            }
+
+            if (matchesLegacyLayout && !matchesCurrentWorld)
+            {
+                Debug.Log(
+                    "Migrating a legacy layout-only raid checkpoint to the current " +
+                    "layout-and-spawn-manifest world identity.",
+                    this);
             }
 
             if (!TryIndexSavedChests(checkpoint.chests, out var savedChests, out error) ||
@@ -461,6 +742,9 @@ namespace FantasySurvival.Raids
             chestIndex = new Dictionary<string, ChestBinding>(StringComparer.Ordinal);
             enemyIndex = new Dictionary<string, EnemyBinding>(StringComparer.Ordinal);
             var allIds = new HashSet<string>(StringComparer.Ordinal);
+            var boundInventories = new HashSet<Chest>();
+            var boundEnemies = new HashSet<EnemyStats>();
+            var spawnTargets = new HashSet<Transform>();
 
             if (string.IsNullOrWhiteSpace(sceneStateId) || mapGenerator == null ||
                 chests == null || enemies == null)
@@ -474,9 +758,13 @@ namespace FantasySurvival.Raids
                 if (binding == null ||
                     string.IsNullOrWhiteSpace(binding.StableId) ||
                     binding.Chest == null ||
+                    !boundInventories.Add(binding.Chest) ||
+                    !spawnTargets.Add(binding.Chest.transform) ||
                     !allIds.Add(binding.StableId))
                 {
-                    error = "Chest bindings contain a missing component or duplicate stable ID.";
+                    error =
+                        "Chest bindings contain a missing/duplicate component or spawn target, " +
+                        "or duplicate stable ID.";
                     return false;
                 }
                 chestIndex.Add(binding.StableId, binding);
@@ -489,9 +777,14 @@ namespace FantasySurvival.Raids
                     binding.Stats == null ||
                     binding.CorpseInventory == null ||
                     binding.CorpseInventory.GetComponentInParent<EnemyStats>() != binding.Stats ||
+                    !boundInventories.Add(binding.CorpseInventory) ||
+                    !boundEnemies.Add(binding.Stats) ||
+                    !spawnTargets.Add(binding.Stats.transform) ||
                     !allIds.Add(binding.StableId))
                 {
-                    error = "Enemy bindings contain a missing component, wrong corpse container, or duplicate stable ID.";
+                    error =
+                        "Enemy bindings contain a missing/duplicate component or spawn target, " +
+                        "wrong/duplicate corpse container, or duplicate stable ID.";
                     return false;
                 }
                 enemyIndex.Add(binding.StableId, binding);

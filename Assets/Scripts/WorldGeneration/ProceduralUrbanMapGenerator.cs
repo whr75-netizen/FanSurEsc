@@ -83,6 +83,13 @@ namespace FantasySurvival.WorldGeneration
         public Transform GeneratedContent => generatedContent;
         public UrbanMapGenerationParameters GenerationParameters => CreateParameters();
 
+        /// <summary>
+        /// Published after deterministic geometry and the portal pose exist, but before the
+        /// derived NavMesh is built. Early scene bindings use this boundary to assign authored
+        /// entities before their normal Awake methods capture home positions or initialize data.
+        /// </summary>
+        public event Action<UrbanMapLayout> LayoutGeometryGenerated;
+
         private void Awake()
         {
             // RaidCheckpointSceneBinding runs earlier and may have already generated the
@@ -138,6 +145,11 @@ namespace FantasySurvival.WorldGeneration
         /// </returns>
         public bool GenerateWithSeed(int seed)
         {
+            if (!HasValidConfiguration())
+            {
+                return false;
+            }
+
             UrbanMapLayout layout;
 
             try
@@ -169,13 +181,7 @@ namespace FantasySurvival.WorldGeneration
             PlaceExistingPortal(layout);
 
             Physics.SyncTransforms();
-
-            if (!buildRuntimeNavMesh)
-            {
-                NavigationPathComplete = true;
-                LogGenerationSummary(layout);
-                return true;
-            }
+            LayoutGeometryGenerated?.Invoke(layout);
 
             NavigationPathComplete = false;
             if (Application.isPlaying && !hasStarted)
@@ -208,6 +214,58 @@ namespace FantasySurvival.WorldGeneration
                 ToPlanar(entryAnchor.position),
                 CollectProtectedWorldPositions(),
                 parameters);
+        }
+
+        public bool TryValidateReachableLocalPoint(
+            Vector2 localPosition,
+            string pointLabel,
+            out string error)
+        {
+            string label = string.IsNullOrWhiteSpace(pointLabel) ? "raid spawn" : pointLabel;
+            if (CurrentLayout == null || generatedContent == null)
+            {
+                error = $"Cannot validate {label} before the generated urban layout exists.";
+                return false;
+            }
+
+            if (NavigationBuildPending || !NavigationPathComplete || runtimeNavMeshData == null)
+            {
+                error = $"Cannot validate {label} before the generated urban NavMesh is ready.";
+                return false;
+            }
+
+            Vector3 entryWorld = generatedContent.TransformPoint(
+                new Vector3(CurrentLayout.EntryLocalPosition.x, 0f, CurrentLayout.EntryLocalPosition.y));
+            Vector3 targetWorld = generatedContent.TransformPoint(
+                new Vector3(localPosition.x, 0f, localPosition.y));
+            if (!NavMesh.SamplePosition(entryWorld, out NavMeshHit startHit, navMeshSampleRadius, NavMesh.AllAreas))
+            {
+                error = $"Generated urban map has no NavMesh near RaidEntry while validating {label}.";
+                return false;
+            }
+
+            if (!NavMesh.SamplePosition(targetWorld, out NavMeshHit targetHit, navMeshSampleRadius, NavMesh.AllAreas))
+            {
+                error = $"Generated urban map has no NavMesh near {label} at local {localPosition}.";
+                return false;
+            }
+
+            var path = new NavMeshPath();
+            bool calculated = NavMesh.CalculatePath(
+                startHit.position,
+                targetHit.position,
+                NavMesh.AllAreas,
+                path);
+            if (!calculated || path.status != NavMeshPathStatus.PathComplete)
+            {
+                error =
+                    $"Generated urban map has no complete RaidEntry-to-{label} path. " +
+                    $"Calculated={calculated}, Status={path.status}.";
+                return false;
+            }
+
+            error = null;
+            return true;
         }
 
         public void ClearGeneratedContent()
@@ -266,7 +324,16 @@ namespace FantasySurvival.WorldGeneration
                 navMeshSurface = GetComponent<NavMeshSurface>();
             }
 
-            if (buildRuntimeNavMesh && navMeshSurface == null)
+            if (!buildRuntimeNavMesh)
+            {
+                Debug.LogError(
+                    "ProceduralUrbanMapGenerator requires runtime NavMesh generation for " +
+                    "raid arrival and content reachability validation.",
+                    this);
+                return false;
+            }
+
+            if (navMeshSurface == null)
             {
                 Debug.LogError("ProceduralUrbanMapGenerator requires a NavMeshSurface.", this);
                 return false;

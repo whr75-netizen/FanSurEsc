@@ -135,6 +135,18 @@ namespace FantasySurvival.EditorTools
             int minimumBuildings = int.MaxValue;
             int maximumBuildings = int.MinValue;
             var hashes = new HashSet<ulong>();
+            UrbanRaidSpawnRequest[] spawnRequests =
+            {
+                UrbanRaidSpawnPrototypeRules.CreateChestRequest("validation:chest_01"),
+                UrbanRaidSpawnPrototypeRules.CreateEnemyRequest(
+                    "validation:melee_enemy_01",
+                    visionRange: 12f,
+                    patrolRadius: 6f),
+                UrbanRaidSpawnPrototypeRules.CreateEnemyRequest(
+                    "validation:ranged_enemy_01",
+                    visionRange: 17f,
+                    patrolRadius: 7f)
+            };
 
             for (int seed = 0; seed < seedCount; seed++)
             {
@@ -152,12 +164,40 @@ namespace FantasySurvival.EditorTools
                     throw new BuildFailedException($"Urban layout seed {seed} is not deterministic.");
                 }
 
+                bool spawnCreated = UrbanMapLayoutPlanner.TryCreateRaidSpawnManifest(
+                        layout,
+                        spawnRequests,
+                        out UrbanRaidSpawnManifest spawnManifest,
+                        out string spawnError);
+                bool repeatedSpawnCreated = UrbanMapLayoutPlanner.TryCreateRaidSpawnManifest(
+                        repeated,
+                        spawnRequests,
+                        out UrbanRaidSpawnManifest repeatedSpawnManifest,
+                        out string repeatedSpawnError);
+                if (!spawnCreated || !repeatedSpawnCreated)
+                {
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} could not prepare deterministic raid spawns: " +
+                        $"{spawnError ?? repeatedSpawnError}");
+                }
+
+                ValidateSpawnManifest(layout, spawnRequests, spawnManifest, seed);
+                ulong worldHash = UrbanMapLayoutValidator.ComputeStableWorldHash(layout, spawnManifest);
+                ulong repeatedWorldHash = UrbanMapLayoutValidator.ComputeStableWorldHash(
+                    repeated,
+                    repeatedSpawnManifest);
+                if (worldHash != repeatedWorldHash)
+                {
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} raid spawn manifest is not deterministic.");
+                }
+
                 if (layout.Buildings.Count == 0)
                 {
                     throw new BuildFailedException($"Urban layout seed {seed} generated no graybox buildings.");
                 }
 
-                hashes.Add(firstHash);
+                hashes.Add(worldHash);
                 minimumWidth = Mathf.Min(minimumWidth, layout.LocalBounds.width);
                 maximumWidth = Mathf.Max(maximumWidth, layout.LocalBounds.width);
                 minimumDepth = Mathf.Min(minimumDepth, layout.LocalBounds.height);
@@ -181,6 +221,68 @@ namespace FantasySurvival.EditorTools
                 $"Urban layout validation ({validationLabel}) passed for {seedCount} seeds. Unique={hashes.Count}, " +
                 $"Width={minimumWidth:F1}-{maximumWidth:F1}, Depth={minimumDepth:F1}-{maximumDepth:F1}, " +
                 $"Buildings={minimumBuildings}-{maximumBuildings}.");
+        }
+
+        private static void ValidateSpawnManifest(
+            UrbanMapLayout layout,
+            IReadOnlyList<UrbanRaidSpawnRequest> requests,
+            UrbanRaidSpawnManifest manifest,
+            int seed)
+        {
+            if (manifest == null || manifest.Seed != seed || manifest.Count != requests.Count)
+            {
+                throw new BuildFailedException(
+                    $"Urban layout seed {seed} produced an incomplete raid spawn manifest.");
+            }
+
+            var requestIndex = new Dictionary<string, UrbanRaidSpawnRequest>(StringComparer.Ordinal);
+            for (int index = 0; index < requests.Count; index++)
+            {
+                requestIndex.Add(requests[index].StableId, requests[index]);
+            }
+
+            var seenIds = new HashSet<string>(StringComparer.Ordinal);
+            for (int index = 0; index < manifest.Count; index++)
+            {
+                UrbanRaidSpawnPlacement placement = manifest.Placements[index];
+                if (!seenIds.Add(placement.StableId) ||
+                    !requestIndex.TryGetValue(placement.StableId, out UrbanRaidSpawnRequest request) ||
+                    placement.Kind != request.Kind)
+                {
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} produced an invalid or duplicate spawn stable ID.");
+                }
+
+                if (Vector2.Distance(placement.LocalPosition, layout.EntryLocalPosition) + 0.001f <
+                    request.EntryClearance)
+                {
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} placed '{placement.StableId}' inside RaidEntry protection.");
+                }
+
+                if (Vector2.Distance(placement.LocalPosition, layout.PortalLocalPosition) + 0.001f <
+                    request.PortalClearance)
+                {
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} placed '{placement.StableId}' inside ReturnPortal protection.");
+                }
+
+                for (int otherIndex = index + 1; otherIndex < manifest.Count; otherIndex++)
+                {
+                    UrbanRaidSpawnPlacement other = manifest.Placements[otherIndex];
+                    UrbanRaidSpawnRequest otherRequest = requestIndex[other.StableId];
+                    float requiredSeparation = Mathf.Max(
+                        request.MinimumSeparation,
+                        otherRequest.MinimumSeparation);
+                    if (Vector2.Distance(placement.LocalPosition, other.LocalPosition) + 0.001f <
+                        requiredSeparation)
+                    {
+                        throw new BuildFailedException(
+                            $"Urban layout seed {seed} overlaps raid spawns '{placement.StableId}' " +
+                            $"and '{other.StableId}'.");
+                    }
+                }
+            }
         }
 
         public static void ConfigureAndValidateBatch()

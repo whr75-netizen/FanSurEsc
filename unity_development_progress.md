@@ -1237,3 +1237,44 @@ Interactable (abstract base class)
 - `[정적 경로 확인]` Ready 성공, Fresh Invalid exact rollback, Resume Invalid fail-closed, Base redirect 동기 시작 실패와 base cleanup 재시도 분기가 각각 원본 owner를 유지하는지 코드 diff로 추적했다. `git diff --check`를 통과했다.
 - `[문서 확인]` `validate_ai_docs.ps1`로 지침 크기, 상태 ID·계약 경로, 필수 `GAME_FLOW.md`와 공백 오류를 검사해 통과했다.
 - `[Play Mode 미검증]` 현재 세션에는 호출 가능한 Unity MCP가 없고 Computer Use는 사용자 지침에 따라 사용하지 않았다. 변경 뒤 대표 `GameMap1 → Ready GameMapTest → GameMap1` 1회와 강제 Invalid 1회는 실제 Play Mode로 실행하지 않았으므로 `MAP-ARRIVAL-01`의 현재 검증 등급은 `CODE`다. 기존 정상 맵·왕복의 과거 `PLAY` 증거를 Invalid 분기 검증으로 과장하지 않는다.
+
+---
+
+## 33. Seed·stable ID 기반 시험 적·상자 배치
+
+### 사용자 요구와 범위 `[SPAWN-01]`
+
+- `[사용자 요구][2026-08-27]` 현재 완료 기능을 다시 제안하지 말고, 다음으로 실제 구현 가능한 기능이 있으면 이어서 구현한다.
+- `[이번 범위]` `GAP-SPAWN`의 최소 선행 단계로 `GameMapTest`에 이미 있는 Chest 1개와 근접·원거리 Enemy 각 1개의 **같은 scene 인스턴스**를 seed에 따라 안전한 도로 후보로 재배치한다.
+- `[보존]` 기존 stable ID 배열, Chest/EnemyStats/AI/시체 inventory, Recovery DTO, Persistent Player 셸, fade와 도착 gate를 그대로 사용한다. 새 Manager·프리팹·scene 오브젝트·save schema·runtime `Instantiate`를 추가하지 않는다.
+- `[제외]` 가변 적·상자 수, prefab/definition spawn catalog, LootTable·위험/보상 예산, POI·건물 내부·장식과 최종 난이도 수치는 후속이다.
+
+### 권위·수명과 호출 경계
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 권위 소유자 | `ProceduralUrbanMapGenerator`가 seed/layout/Nav를, 기존 `Chest`와 `EnemyStats`가 각 mutable 상태를 계속 소유한다. |
+| 파생 배치 | `RaidCheckpointSceneBinding`이 scene 수명의 immutable `UrbanRaidSpawnManifest`를 seed·layout·stable ID에서 재구축한다. manifest는 상태 원본이나 별도 저장소가 아니다. |
+| 생성·파괴 | authored 3개를 scene이 만들고 파괴한다. manifest는 새 개체를 생성하지 않고 초기 Transform만 한 번 배정한다. |
+| 변경 진입점 | Generator의 geometry 완료 통지 하나가 Binding handler로 들어가고, 모든 ID·후보를 사전검증한 뒤 Transform을 일괄 적용한다. |
+| 업데이트 | 프레임 Tick이 없으며 layout 생성 event와 도착 readiness 검사에서만 동작한다. |
+| 저장 경계 | Chest grid, Enemy Transform·체력·시체 grid는 기존 DTO가 운반한다. manifest는 저장하지 않고 같은 seed로 재구축하며 layout과 함께 world hash에 포함한다. |
+
+실행 순서는 `Binding.Awake(-10500) 구독/Resume seed 적용 → Generator.Awake(-10000) layout geometry → 동기 manifest 생성·기존 3개 배치 → EnemyStats/AI Awake → Generator.Start NavMesh → SceneSpawnController.Start 최종 Ready`다. Enemy가 먼저 초기화됐으면 중간 재굴림으로 덮지 않고 Invalid로 닫는다.
+
+### 배치·복구 불변조건
+
+- Stable ID ordinal 정렬과 자체 고정 해시만 사용한다. `UnityEngine.Random`, `string.GetHashCode`, instance ID나 검색 순서에 의존하지 않는다.
+- Chest는 Entry 10m·Portal 8m·다른 개체 5m 이상을 지키며 도로 중심에서 옆으로 1m 배치한다. 상호작용 접근점은 막히지 않은 도로 중심이다.
+- Enemy는 각 definition의 `시야 + 순찰 반경 + 2m` 이상 Entry에서 떨어지고 Portal 10m·다른 개체 6m 이상을 지킨다. 이 값은 현재 기술 안전 하한이지 최종 밸런스 확정이 아니다.
+- Entry→Portal뿐 아니라 manifest의 Chest 접근점과 두 Enemy 위치까지 각각 `PathComplete`여야 한다. 후보 부족·NavMesh 실패는 seed를 조용히 재굴림하지 않고 기존 Invalid 도착 경계로 보낸다.
+- Fresh와 Resume 모두 동일 authored 3개만 사용하므로 중복 생성이 없다. Resume은 manifest 초기 위치 뒤에 저장된 Enemy 현재 Transform·체력·시체 grid를 적용하고 Chest는 결정적 위치에서 저장 grid를 적용한다.
+- 이전 코드의 layout-only hash Recovery는 명시적 legacy hash 분기로 한 번 복원한 뒤 첫 live checkpoint에서 새 combined world hash로 마이그레이션한다. 기술적 hash 변경을 `RecoveryFailed` 휴대품 소실로 처리하지 않는다.
+- Standalone Chest와 Enemy corpse Chest를 두 역할로 중복 등록하거나 같은 Transform을 복수 stable ID에 연결하면 구성 오류로 거부한다. Chest의 authored Y·scale/구성 의미를 바꾸면 spawn version 또는 scene state identity도 함께 올린다.
+
+### 검증과 남은 확인
+
+- `[컴파일 확인]` Unity 6000.5.9f1의 실제 `Assembly-CSharp.rsp`와 Unity Roslyn compiler로 runtime assembly가 성공했고 기존 `RenderTextureBaker` obsolete warning 1개만 남았다. 누락된 과거 editor source 한 줄을 생성 response에서 일시 제외한 동일 Unity compiler로 Editor assembly도 exit code 0을 확인했으며 generated response는 즉시 원복했다.
+- `[순수 로직 확인]` 실제 컴파일된 `Assembly-CSharp.dll`을 참조한 독립 harness로 seed 0~255를 각 2회 생성했다. 256개 모두 manifest가 결정적이었고 Entry·Portal 보호와 상호 최소 간격을 통과했으며 combined world hash도 256개 모두 달랐다.
+- `[정적 경로 확인]` Fresh/Resume 수명주기, legacy hash 비손실 migration, binding 개수·ID 일치, Chest/시체 inventory 교차 중복 거부와 no-`Instantiate` 경로를 diff로 추적했다.
+- `[Play Mode 미검증]` 변경 뒤 실제 `GameMapTest`에서 3개 배치, 개별 NavMesh 이동·상자 E 상호작용, 적 전투, 강제종료 Resume의 위치·체력·inventory 복원은 아직 조작하지 않았다. 현재 검증 등급은 `CODE`이며 기존 정상 왕복 `PLAY`를 새 배치 증거로 과장하지 않는다.

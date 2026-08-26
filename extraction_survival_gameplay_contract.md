@@ -130,7 +130,7 @@
 
 - 더 좋은 전리품을 찾으려 오래·멀리 이동할수록 적과 위험에 노출될 가능성이 커져야 한다.
 - 보상 배치는 Spawn 바로 옆의 무위험 확정 보상이나 접근 불가능한 보상으로 위험·보상 판단을 무효화하지 않아야 한다.
-- 이 압박의 실제 상자·적 배치와 위험·보상 예산은 아직 후속이며 현재 구현됐다고 간주하지 않는다.
+- 현재 기존 시험 Chest 1개·Enemy 2개의 기술 안전 배치는 있으나, 전리품 가치와 적 수·등급을 연결하는 위험·보상 예산은 후속이다. 이 최소 배치를 완성된 콘텐츠 압박으로 간주하지 않는다.
 
 ### 3.4 아직 자동 추가하지 않는 압박
 
@@ -201,9 +201,9 @@ seed + generator version
 - AI는 생성 결과의 실제 NavMesh와 유효 관심 지점을 사용하며 고정 좌우 좌표를 반복하는 순찰에 의존하지 않는다.
 - 도심, 지하 던전과 오염 지역은 서로 다른 공간 문법이므로 하나의 생성기에 mode 값만 추가해 섞지 않는다.
 
-**[현재]** `GameMapTest`는 seed로 도로와 Cube 건물을 생성하고 NavMesh·layout hash와 `NavigationPathComplete` 검증 결과를 산출한다. 불완전 경로는 raid-ready로 인정하지 않고 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh 원정은 출발 전 exact 상태로 되돌린 뒤 기지로, Resume 원정은 다른 seed로 바꾸지 않고 `RecoveryFailed`로 기지 정산한다. Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid 공개 대신 검은 전환·입력 잠금을 보류한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 Recovery seed를 유지한 채 기지 정산에서 재시도한다. 자동 재생성·후보 축소 정책은 아직 구현하지 않았다.
+**[현재]** `GameMapTest`는 seed로 도로와 Cube 건물을 생성하고, 같은 seed·기존 stable ID에서 파생한 manifest로 authored Chest 1개와 근접·원거리 Enemy 각 1개의 초기 위치를 재배치한다. Enemy는 `시야 + 순찰 반경 + 2m` 밖, Chest는 Entry 10m 밖이며 모두 Portal 보호·상호 최소 간격을 지킨다. Chest는 도로 가장자리 1m에 두고 도로 중심 접근점을 사용한다. Entry→Portal과 각 콘텐츠 접근점의 NavMesh 완전 경로, layout+manifest world hash가 모두 유효해야 raid-ready다. 불완전 결과는 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh 원정은 출발 전 exact 상태로 되돌린 뒤 기지로, Resume 원정은 다른 seed로 바꾸지 않고 `RecoveryFailed`로 기지 정산한다. Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid 공개 대신 검은 전환·입력 잠금을 보류한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 Recovery seed를 유지한 채 기지 정산에서 재시도한다. 자동 재생성·후보 축소 정책은 아직 구현하지 않았다.
 
-**[후속 필수]** 랜드마크, 가로수, 폐차, 소형 지형지물, 내부, 상자·적 배치를 추가할 때 현재 준비 완료 gate를 유지하고 각 콘텐츠의 접근 가능성까지 확장해야 한다. 이 콘텐츠들은 후속 범위이며 현재 구현으로 단정하지 않는다.
+**[후속 필수]** 랜드마크, 가로수, 폐차, 소형 지형지물, 내부, 가변 개수의 상자·적과 정식 전리품을 추가할 때 현재 준비 완료 gate를 유지하고 각 콘텐츠의 접근 가능성까지 확장해야 한다. 현재 구현은 기존 3개 시험 개체의 결정적 초기 배치일 뿐 동적 프리팹 spawn이나 위험·보상 예산 구현이 아니다.
 
 #### 후속 콘텐츠 배치가 필요로 하는 평가값 `[제안/미정]`
 

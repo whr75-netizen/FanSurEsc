@@ -87,6 +87,23 @@ namespace FantasySurvival.Raids
             public Quaternion Rotation { get; }
         }
 
+        private readonly struct FreshLootApplication
+        {
+            public FreshLootApplication(
+                Chest chest,
+                StandardStashViewData original,
+                StandardStashViewData candidate)
+            {
+                Chest = chest;
+                Original = original;
+                Candidate = candidate;
+            }
+
+            public Chest Chest { get; }
+            public StandardStashViewData Original { get; }
+            public StandardStashViewData Candidate { get; }
+        }
+
         [SerializeField] private string sceneStateId = "core:gamemaptest:v1";
         [SerializeField] private ProceduralUrbanMapGenerator mapGenerator;
         [SerializeField] private ChestBinding[] chests = Array.Empty<ChestBinding>();
@@ -98,6 +115,8 @@ namespace FantasySurvival.Raids
         private string spawnPreparationError;
         private bool spawnNavigationValidated;
         private string spawnNavigationValidationError;
+        private bool freshLootInitialized;
+        private int freshLootSeed;
 
         public string SceneStateId => sceneStateId;
         public string SceneName => gameObject.scene.name;
@@ -297,10 +316,12 @@ namespace FantasySurvival.Raids
                     return false;
                 }
 
-                requests.Add(UrbanRaidSpawnPrototypeRules.CreateEnemyRequest(
-                    binding.StableId,
-                    ai.VisionRange,
-                    ai.PatrolRadius));
+                requests.Add(ai.CombatArchetype == EnemyCombatArchetype.MeleeRush
+                    ? UrbanRaidSpawnPrototypeRules.CreateNearEntryMeleeRequest(binding.StableId)
+                    : UrbanRaidSpawnPrototypeRules.CreateEnemyRequest(
+                        binding.StableId,
+                        ai.VisionRange,
+                        ai.PatrolRadius));
             }
 
             error = null;
@@ -375,6 +396,159 @@ namespace FantasySurvival.Raids
             Physics.SyncTransforms();
             error = null;
             return true;
+        }
+
+        public bool TryInitializeFreshLoot(
+            ItemDatabase authoritativeItemDatabase,
+            out string error)
+        {
+            if (authoritativeItemDatabase == null)
+            {
+                error = "Fresh raid loot requires the persistent Player ItemDatabase.";
+                return false;
+            }
+
+            if (mapGenerator == null || mapGenerator.CurrentLayout == null ||
+                spawnManifest == null || spawnManifest.Seed != mapGenerator.CurrentSeed)
+            {
+                error = "Fresh raid loot requires the current validated map and spawn manifest.";
+                return false;
+            }
+
+            if (freshLootInitialized)
+            {
+                if (freshLootSeed != mapGenerator.CurrentSeed)
+                {
+                    error = "Fresh raid loot was already initialized for a different map seed.";
+                    return false;
+                }
+
+                error = null;
+                return true;
+            }
+
+            var applications = new List<FreshLootApplication>(chests.Length + enemies.Length);
+            foreach (ChestBinding binding in chests)
+            {
+                // A LootTable is opt-in. Authored/legacy containers keep the inventory
+                // created by Chest.Awake and remain valid checkpoint participants.
+                if (binding.Chest.LootTable == null)
+                {
+                    continue;
+                }
+
+                if (!TryPrepareFreshLootForChest(
+                        binding.Chest,
+                        binding.StableId,
+                        mapGenerator.CurrentSeed,
+                        authoritativeItemDatabase,
+                        out FreshLootApplication application,
+                        out error))
+                {
+                    return false;
+                }
+
+                applications.Add(application);
+            }
+
+            foreach (EnemyBinding binding in enemies)
+            {
+                if (binding.CorpseInventory.LootTable == null)
+                {
+                    continue;
+                }
+
+                if (!TryPrepareFreshLootForChest(
+                        binding.CorpseInventory,
+                        binding.StableId + "/corpse",
+                        mapGenerator.CurrentSeed,
+                        authoritativeItemDatabase,
+                        out FreshLootApplication application,
+                        out error))
+                {
+                    return false;
+                }
+
+                applications.Add(application);
+            }
+
+            var applied = new List<FreshLootApplication>(applications.Count);
+            for (int index = 0; index < applications.Count; index++)
+            {
+                FreshLootApplication application = applications[index];
+                if (!ReferenceEquals(
+                        application.Chest.chestInventoryData,
+                        application.Original))
+                {
+                    RollbackFreshLoot(applied);
+                    error =
+                        $"Fresh raid loot owner '{application.Chest.name}' changed before apply.";
+                    return false;
+                }
+
+                if (!application.Chest.TryBindInventory(
+                        application.Candidate,
+                        out string bindingError))
+                {
+                    RollbackFreshLoot(applied);
+                    error =
+                        $"Fresh raid loot owner '{application.Chest.name}' rejected its candidate: " +
+                        bindingError;
+                    return false;
+                }
+
+                applied.Add(application);
+            }
+
+            freshLootInitialized = true;
+            freshLootSeed = mapGenerator.CurrentSeed;
+            error = null;
+            return true;
+        }
+
+        private static bool TryPrepareFreshLootForChest(
+            Chest chest,
+            string stableContainerId,
+            int mapSeed,
+            ItemDatabase authoritativeItemDatabase,
+            out FreshLootApplication application,
+            out string error)
+        {
+            application = default;
+            if (chest == null || chest.chestInventoryData == null)
+            {
+                error =
+                    $"Fresh raid loot owner '{stableContainerId}' was not initialized by Chest.Awake.";
+                return false;
+            }
+
+            if (!chest.TryCreateRaidLootInventory(
+                    authoritativeItemDatabase,
+                    mapSeed,
+                    stableContainerId,
+                    out StandardStashViewData candidate,
+                    out error) ||
+                !chest.CanBindInventory(candidate, out error))
+            {
+                error = $"Fresh raid loot '{stableContainerId}' is invalid: {error}";
+                return false;
+            }
+
+            application = new FreshLootApplication(
+                chest,
+                chest.chestInventoryData,
+                candidate);
+            error = null;
+            return true;
+        }
+
+        private static void RollbackFreshLoot(IReadOnlyList<FreshLootApplication> applied)
+        {
+            for (int index = applied.Count - 1; index >= 0; index--)
+            {
+                FreshLootApplication application = applied[index];
+                application.Chest.TryBindInventory(application.Original, out _);
+            }
         }
 
         private bool TryCreateSpawnApplication(

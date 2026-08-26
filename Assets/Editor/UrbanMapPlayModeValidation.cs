@@ -21,6 +21,13 @@ namespace FantasySurvival.EditorTools
         private const string GameMap1Name = "GameMap1";
         private const string RaidEntrySpawnId = "RaidEntry";
         private const string BaseReturnSpawnId = "BaseReturn";
+        private const string RaidChestObjectName = "Stage3_TestLootChest";
+        private const string ReturnPortalObjectName = "Stage1_ReturnPortal";
+        private const string MeleeEnemyObjectName = "Test_KenneyZombiePatrol";
+        private const string RangedEnemyObjectName = "Test_PrototypeRangedEnemy";
+        private const string RaidChestStableId = "core:gamemaptest/test_loot_chest";
+        private const string MeleeEnemyStableId = "core:gamemaptest/melee_enemy_01";
+        private const string RangedEnemyStableId = "core:gamemaptest/ranged_enemy_01";
         private const int RequiredRoundTrips = 1;
         private const int ReadyObservationCount = 2;
 
@@ -172,6 +179,10 @@ namespace FantasySurvival.EditorTools
 
             if (state == PlayModeStateChange.EnteredPlayMode)
             {
+                // Codex can drive this validator while the Unity window is not focused.
+                // Keep this Play session advancing without changing the serialized
+                // PlayerSettings value.
+                Application.runInBackground = true;
                 SetPhase(PhaseDirectMapTest);
                 return;
             }
@@ -201,6 +212,7 @@ namespace FantasySurvival.EditorTools
                 string phase = SessionState.GetString(PhaseKey, string.Empty);
                 if (EditorApplication.isPlaying && phase == PhaseEnteringPlay)
                 {
+                    Application.runInBackground = true;
                     SetPhase(PhaseDirectMapTest);
                     phase = PhaseDirectMapTest;
                 }
@@ -328,21 +340,14 @@ namespace FantasySurvival.EditorTools
 
             if (string.Equals(expectedSceneName, GameMapTestName, StringComparison.Ordinal))
             {
-                EnemyAIController[] enemies = FindComponentsInScene<EnemyAIController>(
-                    SceneManager.GetActiveScene());
-                if (enemies.Length != 2)
+                Scene scene = SceneManager.GetActiveScene();
+                EnemyAIController melee = FindEnemyByName(scene, MeleeEnemyObjectName);
+                EnemyAIController ranged = FindEnemyByName(scene, RangedEnemyObjectName);
+                if (melee == null || ranged == null ||
+                    !melee.IsNavigationReady || !ranged.IsNavigationReady)
                 {
                     SessionState.SetInt(ReadyFramesKey, 0);
                     return false;
-                }
-
-                for (int index = 0; index < enemies.Length; index++)
-                {
-                    if (!enemies[index].IsNavigationReady)
-                    {
-                        SessionState.SetInt(ReadyFramesKey, 0);
-                        return false;
-                    }
                 }
             }
 
@@ -408,24 +413,36 @@ namespace FantasySurvival.EditorTools
             UrbanRaidSpawnManifest manifest = bindings[0].SpawnManifest;
             Require(manifest != null && manifest.Seed == generator.CurrentSeed,
                 $"{context}: raid spawn manifest is missing or belongs to another seed.");
-            Require(manifest.Count == 3,
-                $"{context}: expected three authored raid spawn placements, found {manifest.Count}.");
-
-            int chestCount = 0;
-            int enemyCount = 0;
             var stableIds = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
             for (int index = 0; index < manifest.Count; index++)
             {
                 UrbanRaidSpawnPlacement placement = manifest.Placements[index];
                 Require(stableIds.Add(placement.StableId),
                     $"{context}: duplicate raid spawn stable ID '{placement.StableId}'.");
-                if (placement.Kind == UrbanRaidSpawnKind.Chest)
+                if (placement.StableId == RaidChestStableId)
                 {
-                    chestCount++;
+                    Require(placement.Kind == UrbanRaidSpawnKind.Chest,
+                        $"{context}: required test Chest stable ID has the wrong spawn kind.");
                 }
-                else if (placement.Kind == UrbanRaidSpawnKind.Enemy)
+                else if (placement.StableId == MeleeEnemyStableId ||
+                         placement.StableId == RangedEnemyStableId)
                 {
-                    enemyCount++;
+                    Require(placement.Kind == UrbanRaidSpawnKind.Enemy,
+                        $"{context}: required test Enemy stable ID has the wrong spawn kind.");
+                }
+
+                if (placement.StableId == RaidChestStableId ||
+                    placement.StableId == MeleeEnemyStableId)
+                {
+                    float maximumEntryDistance = placement.StableId == RaidChestStableId
+                        ? UrbanRaidSpawnPrototypeRules.ChestMaximumEntryDistance
+                        : UrbanRaidSpawnPrototypeRules.NearMeleeMaximumEntryDistance;
+                    Require(
+                        Vector2.Distance(
+                            placement.LocalPosition,
+                            generator.CurrentLayout.EntryLocalPosition) <=
+                        maximumEntryDistance + 0.01f,
+                        $"{context}: required nearby raid spawn '{placement.StableId}' is outside its test radius.");
                 }
 
                 Require(generator.TryValidateReachableLocalPoint(
@@ -435,9 +452,12 @@ namespace FantasySurvival.EditorTools
                     $"{context}: {pathError}");
             }
 
-            Require(chestCount == 1 && enemyCount == 2,
-                $"{context}: expected one Chest and two Enemy placements, " +
-                $"found Chest={chestCount}, Enemy={enemyCount}.");
+            Require(stableIds.Contains(RaidChestStableId),
+                $"{context}: required nearby test Chest placement is missing.");
+            Require(stableIds.Contains(MeleeEnemyStableId),
+                $"{context}: required nearby melee Enemy placement is missing.");
+            Require(stableIds.Contains(RangedEnemyStableId),
+                $"{context}: preserved ranged Enemy placement is missing.");
         }
 
         private static void ValidateGeneratedGeometry(ProceduralUrbanMapGenerator generator, string context)
@@ -508,9 +528,12 @@ namespace FantasySurvival.EditorTools
             Require(legacyGround != null && !legacyGround.activeSelf,
                 $"{context}: legacy Plane is missing or still active.");
 
-            ReturnPortalInteractable[] portals = FindComponentsInScene<ReturnPortalInteractable>(activeScene);
-            Require(portals.Length == 1, $"{context}: expected one existing ReturnPortal, found {portals.Length}.");
-            Transform portal = portals[0].transform;
+            ReturnPortalInteractable portalInteractable = FindComponentByName<ReturnPortalInteractable>(
+                activeScene,
+                ReturnPortalObjectName);
+            Require(portalInteractable != null,
+                $"{context}: required test ReturnPortal is missing.");
+            Transform portal = portalInteractable.transform;
             Require(!portal.IsChildOf(generator.GeneratedContent),
                 $"{context}: existing ReturnPortal was incorrectly reparented under generated content.");
             Require(portal.TryGetComponent(out Collider portalCollider) && portalCollider.enabled,
@@ -524,34 +547,83 @@ namespace FantasySurvival.EditorTools
                     generator.CurrentLayout.PortalLocalPosition.y));
             Require(Vector3.Distance(portal.position, expectedPortalPosition) <= 0.05f,
                 $"{context}: ReturnPortal was not placed at the generated portal node.");
+            float portalEntryDistance = Vector2.Distance(
+                generator.CurrentLayout.PortalLocalPosition,
+                generator.CurrentLayout.EntryLocalPosition);
+            Require(
+                portalEntryDistance <=
+                generator.GenerationParameters.MaxBlockSize +
+                generator.GenerationParameters.IntersectionJitter * 2f + 0.1f,
+                $"{context}: ReturnPortal is not on the first nearby road junction.");
 
-            EnemyAIController[] enemies = FindComponentsInScene<EnemyAIController>(activeScene);
-            Require(enemies.Length == 2, $"{context}: expected two prototype enemies, found {enemies.Length}.");
+            EnemyAIController melee = FindEnemyByName(activeScene, MeleeEnemyObjectName);
+            EnemyAIController ranged = FindEnemyByName(activeScene, RangedEnemyObjectName);
+            Require(melee != null, $"{context}: required melee test Enemy is missing.");
+            Require(ranged != null, $"{context}: preserved ranged test Enemy is missing.");
+            ValidateRequiredEnemy(melee, EnemyCombatArchetype.MeleeRush, context);
+            ValidateRequiredEnemy(ranged, EnemyCombatArchetype.RangedPursuit, context);
 
-            int meleeCount = 0;
-            int rangedCount = 0;
-            for (int index = 0; index < enemies.Length; index++)
+            EnemyStats meleeStats = melee.GetComponent<EnemyStats>();
+            Require(Mathf.Approximately(meleeStats.Definition.AI.AttackDamage, 1f),
+                $"{context}: prototype melee Enemy attack damage is " +
+                $"{meleeStats.Definition.AI.AttackDamage}, not 1.");
+
+            Chest raidChest = FindComponentByName<Chest>(activeScene, RaidChestObjectName);
+            Chest meleeCorpse = FindOnlyCorpseInventory(melee, context);
+            Chest rangedCorpse = FindOnlyCorpseInventory(ranged, context);
+            Require(raidChest != null,
+                $"{context}: required nearby test Chest is missing.");
+            ValidateRolledLootChest(raidChest, context);
+            ValidateRolledLootChest(meleeCorpse, context);
+            Require(rangedCorpse.chestInventoryData != null,
+                $"{context}: preserved ranged Enemy corpse inventory is not initialized.");
+        }
+
+        private static void ValidateRequiredEnemy(
+            EnemyAIController enemy,
+            EnemyCombatArchetype expectedArchetype,
+            string context)
+        {
+            EnemyStats stats = enemy.GetComponent<EnemyStats>();
+            EnemyAISettings ai = stats != null && stats.Definition != null
+                ? stats.Definition.AI
+                : null;
+            Require(ai != null, $"{context}: enemy '{enemy.name}' has no AI definition.");
+            Require(ai.CombatArchetype == expectedArchetype,
+                $"{context}: enemy '{enemy.name}' has the wrong combat archetype.");
+            Require(enemy.IsNavigationReady,
+                $"{context}: enemy '{enemy.name}' is not ready on the runtime NavMesh.");
+        }
+
+        private static Chest FindOnlyCorpseInventory(
+            EnemyAIController enemy,
+            string context)
+        {
+            Chest[] chests = enemy.GetComponentsInChildren<Chest>(true);
+            Require(chests.Length == 1,
+                $"{context}: enemy '{enemy.name}' expected one corpse inventory, found {chests.Length}.");
+            return chests[0];
+        }
+
+        private static void ValidateRolledLootChest(Chest chest, string context)
+        {
+            Require(chest.LootTable != null,
+                $"{context}: required test Chest '{chest.name}' has no LootTableDefinition.");
+            Require(chest.chestInventoryData != null,
+                $"{context}: required test Chest '{chest.name}' has no runtime inventory.");
+
+            int itemCount = 0;
+            for (int index = 0; index < chest.chestInventoryData.CellData.Length; index++)
             {
-                EnemyStats stats = enemies[index].GetComponent<EnemyStats>();
-                EnemyAISettings ai = stats != null && stats.Definition != null
-                    ? stats.Definition.AI
-                    : null;
-                Require(ai != null, $"{context}: enemy '{enemies[index].name}' has no AI definition.");
-                Require(enemies[index].IsNavigationReady,
-                    $"{context}: enemy '{enemies[index].name}' is not ready on the runtime NavMesh.");
-
-                if (ai.CombatArchetype == EnemyCombatArchetype.MeleeRush)
+                if (chest.chestInventoryData.CellData[index] != null)
                 {
-                    meleeCount++;
-                }
-                else if (ai.CombatArchetype == EnemyCombatArchetype.RangedPursuit)
-                {
-                    rangedCount++;
+                    itemCount++;
                 }
             }
 
-            Require(meleeCount == 1 && rangedCount == 1,
-                $"{context}: expected one melee and one ranged enemy, found melee={meleeCount}, ranged={rangedCount}.");
+            Require(itemCount == 1,
+                $"{context}: required test Chest '{chest.name}' expected one rolled item, " +
+                $"found {itemCount}.");
         }
 
         private static void ValidateShellAndSpawn(string expectedSpawnId, bool captureIdentity)
@@ -928,6 +1000,33 @@ namespace FantasySurvival.EditorTools
             }
 
             return components.ToArray();
+        }
+
+        private static EnemyAIController FindEnemyByName(Scene scene, string objectName)
+        {
+            return FindComponentByName<EnemyAIController>(scene, objectName);
+        }
+
+        private static T FindComponentByName<T>(Scene scene, string objectName)
+            where T : Component
+        {
+            T found = null;
+            T[] components = FindComponentsInScene<T>(scene);
+            for (int index = 0; index < components.Length; index++)
+            {
+                Transform root = components[index].transform.root;
+                if (components[index].name != objectName && root.name != objectName)
+                {
+                    continue;
+                }
+
+                Require(found == null,
+                    $"Scene '{scene.name}' contains more than one required {typeof(T).Name} " +
+                    $"named '{objectName}'.");
+                found = components[index];
+            }
+
+            return found;
         }
 
         private static GameObject FindRootByName(Scene scene, string objectName)

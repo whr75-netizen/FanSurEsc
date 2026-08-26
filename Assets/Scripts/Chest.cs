@@ -17,6 +17,11 @@ public class Chest : MonoBehaviour
     [Header("Optional Starting Items")]
     [SerializeField] private ItemDatabase itemDatabase;
     [SerializeField] private int[] startingItemIds = Array.Empty<int>();
+    [Header("Raid Loot")]
+    [Tooltip("Optional deterministic loot definition. Raid scene bindings roll it once on Fresh entry.")]
+    [SerializeField] private LootTableDefinition lootTable;
+
+    public LootTableDefinition LootTable => lootTable;
 
     void Awake()
     {
@@ -107,6 +112,31 @@ public class Chest : MonoBehaviour
         inventory = candidate;
         error = null;
         return true;
+    }
+
+    public bool TryCreateRaidLootInventory(
+        ItemDatabase authoritativeItemDatabase,
+        int mapSeed,
+        string stableContainerId,
+        out StandardStashViewData inventory,
+        out string error)
+    {
+        if (lootTable == null)
+        {
+            inventory = null;
+            error = "Raid loot requires an assigned LootTableDefinition.";
+            return false;
+        }
+
+        return LootTableRoller.TryCreateInventory(
+            lootTable,
+            authoritativeItemDatabase,
+            mapSeed,
+            stableContainerId,
+            chestWidth,
+            chestHeight,
+            out inventory,
+            out error);
     }
 
     public bool CanBindInventory(StandardStashViewData inventory, out string error)

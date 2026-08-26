@@ -177,6 +177,8 @@ Main Menu
 - grid 회전, 장비 슬롯, 중첩 컨테이너와 시체 전리품도 같은 소유권 규칙을 사용한다.
 - UI 배열이나 Save DTO를 live 아이템의 두 번째 권위 소유자로 만들지 않는다.
 
+**[현재]** 시험 `LootTableDefinition`은 ItemDatabase의 숫자 definition ID와 누적 확률을 가진 공유 정의다. Fresh 원정 도착에서 `seed + stable container ID`로 최대 한 아이템을 한 번 결정하고, 모든 후보 grid가 유효할 때만 원자적으로 적용한다. Resume은 테이블을 다시 굴리지 않고 Recovery에 저장된 실제 grid를 복원한다. LootTable이 없는 기존 컨테이너는 authored 초기값을 유지한다.
+
 ### 4.3 절차 맵 생성과 접근 가능성
 
 도심 맵의 목표 생성 순서는 다음 방향을 유지한다. 현재 구현된 도로·Cube 건물·NavMesh·검증 결과와 후속 콘텐츠 배치까지의 전체 계약을 나타내며, 모든 실패 gate가 이미 구현됐다는 뜻은 아니다.
@@ -201,7 +203,7 @@ seed + generator version
 - AI는 생성 결과의 실제 NavMesh와 유효 관심 지점을 사용하며 고정 좌우 좌표를 반복하는 순찰에 의존하지 않는다.
 - 도심, 지하 던전과 오염 지역은 서로 다른 공간 문법이므로 하나의 생성기에 mode 값만 추가해 섞지 않는다.
 
-**[현재]** `GameMapTest`는 seed로 도로와 Cube 건물을 생성하고, 같은 seed·기존 stable ID에서 파생한 manifest로 authored Chest 1개와 근접·원거리 Enemy 각 1개의 초기 위치를 재배치한다. Enemy는 `시야 + 순찰 반경 + 2m` 밖, Chest는 Entry 10m 밖이며 모두 Portal 보호·상호 최소 간격을 지킨다. Chest는 도로 가장자리 1m에 두고 도로 중심 접근점을 사용한다. Entry→Portal과 각 콘텐츠 접근점의 NavMesh 완전 경로, layout+manifest world hash가 모두 유효해야 raid-ready다. 불완전 결과는 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh 원정은 출발 전 exact 상태로 되돌린 뒤 기지로, Resume 원정은 다른 seed로 바꾸지 않고 `RecoveryFailed`로 기지 정산한다. Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid 공개 대신 검은 전환·입력 잠금을 보류한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 Recovery seed를 유지한 채 기지 정산에서 재시도한다. 자동 재생성·후보 축소 정책은 아직 구현하지 않았다.
+**[현재]** `GameMapTest`는 seed로 도로와 Cube 건물을 생성하고 같은 seed·stable ID의 manifest로 binding 목록의 기존 Chest·Enemy 초기 위치를 재배치한다. 현재 시험 fixture에서는 Chest가 Entry 3.5~8m, 근접 적이 7~16m에 놓이고 기존 원거리 적도 일반 안전 후보에 유지되며, ReturnPortal은 첫 인접 도로 교차점에 놓인다. 이 수량은 빠른 시험 구성이지 시스템의 종류별 1개 제한이 아니다. 각 개체는 Portal 보호·상호 간격과 NavMesh 접근을 만족해야 하며, layout+manifest world hash까지 유효해야 raid-ready다. 불완전 결과는 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh 원정은 출발 전 exact 상태로 되돌린 뒤 기지로, Resume 원정은 다른 seed로 바꾸지 않고 `RecoveryFailed`로 기지 정산한다. Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid 공개 대신 검은 전환·입력 잠금을 보류한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 Recovery seed를 유지한 채 기지 정산에서 재시도한다. 자동 재생성·후보 축소 정책은 아직 구현하지 않았다.
 
 **[후속 필수]** 랜드마크, 가로수, 폐차, 소형 지형지물, 내부, 가변 개수의 상자·적과 정식 전리품을 추가할 때 현재 준비 완료 gate를 유지하고 각 콘텐츠의 접근 가능성까지 확장해야 한다. 현재 구현은 기존 3개 시험 개체의 결정적 초기 배치일 뿐 동적 프리팹 spawn이나 위험·보상 예산 구현이 아니다.
 

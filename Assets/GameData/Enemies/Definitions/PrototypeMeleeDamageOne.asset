@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6badd5bbfb0417b41b36d30b813bd287, type: 3}
+  m_Name: PrototypeMeleeDamageOne
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
+  maxHealth: 100
+  ai:
+    combatArchetype: 0
+    visionRange: 12
+    visionAngle: 220
+    proximityAwarenessRange: 3
+    perceptionInterval: 0.2
+    targetMemorySeconds: 5
+    hearingMultiplier: 1
+    patrolRadius: 6
+    patrolMinimumTravel: 2
+    patrolWaitMinSeconds: 0.5
+    patrolWaitMaxSeconds: 1.5
+    nonCombatThinkInterval: 0.5
+    patrolSpeed: 1.5
+    combatSpeed: 3.4
+    acceleration: 14
+    angularSpeed: 720
+    combatThinkInterval: 0.15
+    repathInterval: 0.2
+    destinationRefreshDistance: 0.5
+    attackRange: 1.35
+    preferredRange: 1
+    attackDamage: 1
+    attackCooldownSeconds: 1
+    aimTrackingSpeed: 7
+    aimSettleSeconds: 0.8
+    initialAimErrorRadius: 1.4
+    settledAimErrorRadius: 0.15
+    movingAimErrorPenalty: 0.55
+    aimDriftFrequency: 0.7

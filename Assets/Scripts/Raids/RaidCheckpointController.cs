@@ -590,6 +590,17 @@ namespace FantasySurvival.Raids
             if (!HasTrackedRaid)
             {
                 // Direct GameMapTest authoring runs intentionally have no recovery lifetime.
+                if (activeSceneBinding != null &&
+                    string.Equals(
+                        activeSceneBinding.SceneName,
+                        activeSceneName,
+                        StringComparison.Ordinal))
+                {
+                    return activeSceneBinding.TryInitializeFreshLoot(
+                        shell.InventoryUI.ItemDatabase,
+                        out error);
+                }
+
                 error = null;
                 return true;
             }
@@ -619,12 +630,38 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (pendingRestore != null)
+            if (entryOrigin == RaidEntryOrigin.Fresh)
             {
+                if (pendingRestore != null)
+                {
+                    error = "Fresh raid entry cannot carry a recovered checkpoint.";
+                    return false;
+                }
+
+                if (!activeSceneBinding.TryInitializeFreshLoot(
+                        shell.InventoryUI.ItemDatabase,
+                        out error))
+                {
+                    return false;
+                }
+            }
+            else if (entryOrigin == RaidEntryOrigin.Recovered)
+            {
+                if (pendingRestore == null)
+                {
+                    error = "Recovered raid entry is missing its validated checkpoint.";
+                    return false;
+                }
+
                 if (!TryApplyPendingRestore(out error))
                 {
                     return false;
                 }
+            }
+            else
+            {
+                error = "Tracked raid entry has no valid Fresh or Recovered origin.";
+                return false;
             }
 
             if (!TryCaptureAndWrite(RaidCheckpointPhase.Active, RaidOutcome.None, out error))

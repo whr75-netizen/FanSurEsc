@@ -102,14 +102,14 @@ E 입력
 ```text
 GameplayShellBootstrap.Awake              [-11000]
 RaidCheckpointSceneBinding.Awake          [-10500]
-  → authored Chest 1·Enemy 2 stable binding 검증·등록
+  → authored Chest/Enemy stable binding 목록 검증·등록
   → generator의 layout-geometry 완료 통지 구독
   → Resume이면 저장된 seed를 generator에 먼저 적용
 ProceduralUrbanMapGenerator.Awake         [-10000]
   → layout·회색상자 geometry 생성
   → LayoutGeometryGenerated 동기 통지
       → seed + stable ID의 spawn manifest 생성
-      → 기존 Chest 1·Enemy 2의 초기 Transform만 배정
+      → binding에 등록된 기존 Chest/Enemy의 초기 Transform만 배정
 ProceduralUrbanMapGenerator.Start         [-10000]
   → NavMesh build와 Entry→Portal 경로 판정
 SceneSpawnController.Start                [ -9000]
@@ -119,6 +119,8 @@ SceneSpawnController.Start                [ -9000]
 
 Raid의 `SceneManager.sceneLoaded` 호출은 아무것도 확정하지 않고 반환하며 위 순서의 `Start`만 `Ready/Invalid`를 판정한다. Generator `Start` 뒤에도 `Pending`이면 안전하지 않은 도착으로 보아 Invalid와 같은 복귀/보류 경계로 보낸다. 실행 순서 숫자보다 `RaidCheckpointSceneBinding.GetArrivalReadiness` 결과가 권위다.
 
+현재 `GameMapTest` fixture에는 필수 시험 Chest·근접 적·ReturnPortal을 Entry 근처에 두고 기존 원거리 적도 유지한다. 이는 빠른 시험용 현재 구성일 뿐, 시스템이 종류별 오브젝트를 정확히 하나로 제한한다는 규칙이 아니다.
+
 ### 5.2 Ready 성공
 
 ```text
@@ -127,8 +129,9 @@ GetArrivalReadiness == Ready
   → RaidSession.TryEnterScene(Raid)              (Entering → Active)
   → RaidCheckpointController.TryCompleteRaidSceneArrival
       → readiness 재확인
-      → Resume이면 world/Player 복원
-      → Fresh/Resume 모두 첫 live Active checkpoint 생성
+      ├─ Fresh: LootTable이 지정된 Chest·시체 후보 grid를 seed+stable ID로 1회 생성해 전부 검증 후 원자 적용
+      └─ Resume: LootTable을 굴리지 않고 저장된 world/Player·실제 Chest grid 복원
+      → 첫 live Active checkpoint 생성
   → DirectSceneTravel.CompleteArrival            (pending token 소비)
   → PersistentGameplayShell.FinishArrival        (fade-in 뒤 이동·인벤토리·상호작용 복원)
   → RaidSession.CompleteSceneArrival(Raid)        (피해 차단 마지막 해제)
@@ -154,7 +157,7 @@ GetArrivalReadiness == Ready
 
 Raid가 `Active`인 동안 `RaidCheckpointController.Update → TryCaptureAndWrite(Active)`가 저빈도 Recovery checkpoint를 갱신한다. 결과는 모두 `RaidSession.Resolve` 한 곳으로 수렴하고, `RaidCheckpointController.HandleRaidResolved`가 terminal checkpoint와 settlement journal을 확보한다.
 
-Recovery의 `layoutHash` 필드는 현재 도로·건물 layout과 spawn manifest를 합친 world hash다. Resume은 같은 seed로 기존 authored 3개를 먼저 재배치한 뒤 Enemy의 저장 Transform·체력·시체 inventory와 Chest grid를 적용한다. 개체를 `Instantiate`하지 않으므로 중복 생성 경로가 없다. 이전 코드의 layout-only hash는 legacy migration으로 한 번 허용하고, 복원 직후 첫 live checkpoint에서 combined world hash로 교체한다.
+Recovery의 `layoutHash` 필드는 현재 도로·건물 layout과 spawn manifest를 합친 world hash다. Resume은 같은 seed로 binding 목록을 먼저 재배치한 뒤 Enemy의 저장 Transform·체력·시체 inventory와 Chest grid를 적용한다. LootTable은 Fresh에서만 실행하므로 재개방·Resume 재굴림 경로가 없다. 이전 layout-only hash는 legacy migration으로 한 번 허용하고, 복원 직후 첫 live checkpoint에서 combined world hash로 교체한다.
 
 | 결과 | 진입 호출 | 다음 분기 |
 |---|---|---|

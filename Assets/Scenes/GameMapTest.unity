@@ -155,7 +155,7 @@ MonoBehaviour:
   legacyGround: {fileID: 835374984}
   additionalProtectedAnchors:
   - {fileID: 1858696688}
-  - {fileID: 1033938569}
+  - {fileID: 1500323992}
   navMeshSurface: {fileID: 415190456}
   randomizeSeedOnAwake: 1
   fixedSeed: 41721
@@ -249,8 +249,8 @@ MonoBehaviour:
     stats: {fileID: 1858696690}
     corpseInventory: {fileID: 1858696689}
   - stableId: core:gamemaptest/ranged_enemy_01
-    stats: {fileID: 1033938571}
-    corpseInventory: {fileID: 1033938570}
+    stats: {fileID: 1500323991}
+    corpseInventory: {fileID: 1500323990}
 --- !u!1 &445063164
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +517,8 @@ MonoBehaviour:
   chestWidth: 6
   chestHeight: 5
   itemDatabase: {fileID: 11400000, guid: d38ab357628cdf24c9542351dd577b53, type: 2}
-  startingItemIds: 01000000
+  startingItemIds: 
+  lootTable: {fileID: 11400000, guid: 1242a792261b13741bdd37cac3da87eb, type: 2}
 --- !u!23 &656353462
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -724,7 +725,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1033938568
+--- !u!1001 &1500323989
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -781,15 +782,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
---- !u!4 &1033938569 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8495865292714740978, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
-  m_PrefabInstance: {fileID: 1033938568}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1033938570 stripped
+--- !u!114 &1500323990 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4004349096574100642, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
-  m_PrefabInstance: {fileID: 1033938568}
+  m_PrefabInstance: {fileID: 1500323989}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -797,10 +793,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb8f36b178f9d8a49ba7ae9dec6f0ebd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Chest
---- !u!114 &1033938571 stripped
+--- !u!114 &1500323991 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4882853632966490736, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
-  m_PrefabInstance: {fileID: 1033938568}
+  m_PrefabInstance: {fileID: 1500323989}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
@@ -808,6 +804,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 160cc57d571396e4bbfe0097769f7e7a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyStats
+--- !u!4 &1500323992 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8495865292714740978, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
+  m_PrefabInstance: {fileID: 1500323989}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1532679701
 GameObject:
   m_ObjectHideFlags: 0
@@ -1048,6 +1049,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 419036695974578800, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+      propertyPath: definition
+      value: 
+      objectReference: {fileID: 11400000, guid: 1c13bf6edc8e4c24581e98b707417776, type: 2}
     - target: {fileID: 5574875849931597612, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1086,6 +1091,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5574875849931597612, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7141297199703957038, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+      propertyPath: lootTable
+      value: 
+      objectReference: {fileID: 11400000, guid: a844520fafd7a7f46a7990dbab42e856, type: 2}
+    - target: {fileID: 7141297199703957038, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+      propertyPath: startingItemIds.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7783077477261944068, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
@@ -1138,4 +1151,4 @@ SceneRoots:
   - {fileID: 1624039577}
   - {fileID: 415190457}
   - {fileID: 656353465}
-  - {fileID: 1033938568}
+  - {fileID: 1500323989}

@@ -5,8 +5,8 @@ namespace FantasySurvival.WorldGeneration
 {
     public static class UrbanMapLayoutPlanner
     {
-        public const int GeneratorVersion = 1;
-        public const int SpawnManifestVersion = 1;
+        public const int GeneratorVersion = 2;
+        public const int SpawnManifestVersion = 2;
 
         private static readonly float[] SpawnCandidateFractions = { 0.2f, 0.35f, 0.5f, 0.65f, 0.8f };
 
@@ -124,7 +124,10 @@ namespace FantasySurvival.WorldGeneration
             List<UrbanRoadSegment> roads = CreateRoadSegments(edgeDrafts, nodes);
 
             Vector2 entryLocalPosition = nodes[0];
-            int portalNodeIndex = nodes.Count - 1;
+            // The current graybox slice keeps the one authored extraction portal on
+            // the first road junction so combat, loot, and extraction can be tested
+            // without crossing the whole unfinished city.
+            int portalNodeIndex = 1;
             Vector2 portalLocalPosition = nodes[portalNodeIndex];
             Vector2 portalApproach = FindPortalApproach(edgeDrafts, nodes, portalNodeIndex, parameters.AnchorClearance * 0.65f);
 
@@ -215,7 +218,18 @@ namespace FantasySurvival.WorldGeneration
             }
 
             sortedRequests.Sort((left, right) =>
-                System.StringComparer.Ordinal.Compare(left.StableId, right.StableId));
+            {
+                float leftMaximum = left.MaximumEntryDistance > 0f
+                    ? left.MaximumEntryDistance
+                    : float.PositiveInfinity;
+                float rightMaximum = right.MaximumEntryDistance > 0f
+                    ? right.MaximumEntryDistance
+                    : float.PositiveInfinity;
+                int distanceComparison = leftMaximum.CompareTo(rightMaximum);
+                return distanceComparison != 0
+                    ? distanceComparison
+                    : System.StringComparer.Ordinal.Compare(left.StableId, right.StableId);
+            });
 
             List<SpawnCandidate> candidates = BuildSpawnCandidates(layout.Roads);
             if (candidates.Count < sortedRequests.Count)
@@ -327,6 +341,13 @@ namespace FantasySurvival.WorldGeneration
         {
             if ((localPosition - layout.EntryLocalPosition).sqrMagnitude <
                 request.EntryClearance * request.EntryClearance)
+            {
+                return false;
+            }
+
+            if (request.MaximumEntryDistance > 0f &&
+                (localPosition - layout.EntryLocalPosition).sqrMagnitude >
+                request.MaximumEntryDistance * request.MaximumEntryDistance)
             {
                 return false;
             }

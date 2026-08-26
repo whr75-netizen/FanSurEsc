@@ -1278,3 +1278,35 @@ Interactable (abstract base class)
 - `[순수 로직 확인]` 실제 컴파일된 `Assembly-CSharp.dll`을 참조한 독립 harness로 seed 0~255를 각 2회 생성했다. 256개 모두 manifest가 결정적이었고 Entry·Portal 보호와 상호 최소 간격을 통과했으며 combined world hash도 256개 모두 달랐다.
 - `[정적 경로 확인]` Fresh/Resume 수명주기, legacy hash 비손실 migration, binding 개수·ID 일치, Chest/시체 inventory 교차 중복 거부와 no-`Instantiate` 경로를 diff로 추적했다.
 - `[Play Mode 미검증]` 변경 뒤 실제 `GameMapTest`에서 3개 배치, 개별 NavMesh 이동·상자 E 상호작용, 적 전투, 강제종료 Resume의 위치·체력·inventory 복원은 아직 조작하지 않았다. 현재 검증 등급은 `CODE`이며 기존 정상 왕복 `PLAY`를 새 배치 증거로 과장하지 않는다.
+
+---
+
+## 34. Entry 근처 시험 fixture와 결정적 LootTable
+
+### 사용자 정정과 범위
+
+- `[사용자 요구][2026-08-27]` 원정 진입 직후 시험하기 쉽도록 근접 적·상자·귀환 포탈을 각각 가까이 두되, 시스템이 종류별 오브젝트를 정확히 하나로 강제하는 구조로 만들지 않는다. 기존 원거리 적도 삭제하지 않는다.
+- `[사용자 요구][2026-08-27]` Inspector에서 아이템 ID와 확률을 설정할 수 있게 하고, 더 나은 모딩 친화 구조가 있으면 적용 근거를 설명한다.
+- `[이번 범위]` 현재 필수 시험 Chest는 Entry 3.5~8m, 피해 1 근접 적은 7~16m, ReturnPortal은 첫 인접 도로 교차점에 배치한다. 기존 원거리 적은 일반 안전 후보와 Recovery binding에 유지한다.
+- `[제외]` 동적 프리팹 spawn, 가변 개수·위험/보상 예산, 다중 roll·수량·희귀도·지역 조건, 정식 모드 로더와 ID migration은 만들지 않았다.
+
+### 정의·런타임·복구 경계
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 정의 원본 | 공유 `LootTableDefinition` 에셋이 ItemDatabase definition ID와 누적 확률을 소유한다. Chest는 해당 정의를 선택적으로 참조한다. |
+| Inspector | `LootTableEntryDrawer`가 ItemDatabase를 읽어 `[ID] 표시명` 팝업과 확률을 보여준다. 저장값은 ID·확률뿐이며 누락 ID는 자동 교체하지 않고 `Missing ID`로 드러낸다. |
+| 런타임 원본 | 실제 아이템과 grid는 기존 `Chest.chestInventoryData`가 소유한다. LootTable·UI·Recovery DTO는 live grid의 두 번째 원본이 아니다. |
+| Fresh 진입점 | `RaidCheckpointSceneBinding.TryInitializeFreshLoot`가 Ready 뒤 첫 checkpoint 전에 table-backed Chest·시체의 후보 grid를 모두 만들고 검증한 뒤 원자 적용한다. 같은 seed에서 재호출해도 재굴림하지 않는다. |
+| Resume | LootTable 호출 없이 Recovery에 저장된 실제 Chest·시체 grid를 복원한다. LootTable 미지정 컨테이너는 기존 authored 초기값을 유지한다. |
+| 난수 | `loot algorithm version + map seed + stable container ID`의 로컬 결정적 난수만 사용하며 `UnityEngine.Random` 전역 상태와 열기 순서에 의존하지 않는다. 현재 표는 최대 한 아이템을 고르고 합계가 100% 미만이면 나머지는 무드롭이다. |
+| 확장 | setup은 required stable ID와 적 보호 앵커를 기존 목록에 upsert할 뿐 배열을 축소하거나 미지의 binding·비-적 보호 앵커를 삭제하지 않는다. 배치·체크포인트 코드도 전체 binding 목록을 처리하므로 현재 1 Chest·2 Enemy는 fixture 수량이지 시스템 제한이 아니다. |
+
+현재 숫자 ItemDefinition ID는 기존 저장·데이터 계약 때문에 유지한다. Steam Workshop 수준의 외부 모딩에서는 모드 간 숫자 충돌을 피할 namespaced string key와 migration이 더 적합하지만, 모드 로더·충돌 정책이 확정되기 전에 ID 의미를 조용히 바꾸지 않는다.
+
+### 검증과 문서 정리
+
+- `[Editor/순수 로직 확인]` Unity setup이 256개 seed에서 도로·건물·필수 근거리 배치와 보존된 원거리 배치의 결정성·간격·접근 가능성을 통과했다. LootTable도 같은 seed 반복 일치, 50/50 두 결과 관찰, 0/100 경계와 4×4 실제 grid 생성을 확인했다.
+- `[Play Mode 확인]` `GameMapTest 직접 시작 → GameMap1 → GameMapTest → GameMap1` 대표 왕복 1회를 실행했다. 필수 근접 적·상자·포탈과 보존된 원거리 적, table-backed Chest·근접 시체의 각 1개 실제 아이템, manifest 3개, persistent shell 동일성, 런타임 오류 0을 확인했다.
+- `[검증 도구 근본 수정]` Unity 창이 비활성일 때 Editor Play 시간이 진행되지 않아 대기하던 원인은 validator가 해당 Play Session에서만 `Application.runInBackground=true`를 사용하도록 고쳤다. ProjectSettings는 변경하지 않았다.
+- `[문서 감사]` 새 Markdown을 만들지 않았다. 현재 상태는 `CURRENT_STATE`, 실제 호출 순서는 `GAME_FLOW`, 기획은 GDD·장르 계약, 상세 증거는 이 진행 파일에만 기록했다. 대형 역사 문서는 압축 뒤 기본 재로딩 대상이 아니며 필요한 절만 라우팅한다.

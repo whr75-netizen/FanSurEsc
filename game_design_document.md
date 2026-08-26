@@ -872,9 +872,11 @@ Player 입력
 - 랜드마크 전용 보상
 - 채집·조사 대상
 
-### 5.7 전리품 생성 `[후속]`
+### 5.7 전리품 생성 `[현재 시험/후속 확장]`
 
 현재 시험 상점에는 금·은 가격이 있지만 최종 경제와 전리품 가격 책정은 미정이다. 이 절의 `전리품 가치`는 시험 가격 100을 뜻하지 않고, 플레이어가 판단하는 사용 가능성, 희소성, 위험 대비 효용과 grid 공간 효율을 뜻한다.
+
+**[현재 시험]** `LootTableDefinition`은 ItemDatabase definition ID와 누적 확률을 Inspector에서 받는다. Fresh 원정에서 seed+stable container ID로 최대 한 아이템을 결정해 원자 적용하며, Resume은 저장된 실제 grid를 복원한다. 위험 예산·가중치 묶음·수량·희귀도·지역 조건은 후속이다.
 
 #### 5.7.1 제안 데이터
 
@@ -1310,8 +1312,8 @@ seed + generator version
 #### 7.8.1 현재
 
 - `RaidEntry`에서 Player가 원정을 시작한다.
-- 기존 `ReturnPortal`을 생성 layout의 반대편 도로 노드로 배치한다.
-- 기존 Chest 1개와 근접·원거리 Enemy 각 1개는 seed·stable ID manifest의 보호된 도로 후보에 초기 배치한다.
+- 기존 `ReturnPortal`을 생성 layout의 첫 인접 도로 교차점에 배치한다.
+- 현재 fixture의 필수 시험 Chest·근접 적은 Entry 근처에, 기존 원거리 적은 일반 안전 후보에 stable ID manifest로 초기 배치한다. 이는 종류별 개수 제한이 아니다.
 - 현재 포탈은 즉시 `Extracted`를 확정한다.
 
 #### 7.8.2 최종 탈출 규칙 `[미정]`
@@ -1327,11 +1329,11 @@ seed + generator version
 
 #### 7.9.1 현재 시험
 
-- 씬에 이미 직렬화된 Chest 1개와 Enemy 2개를 재사용하며 런타임 복제는 하지 않는다.
+- binding 목록의 씬 직렬화 Chest·Enemy를 재사용하며 런타임 복제는 하지 않는다. 현재 fixture가 Chest 1개·Enemy 2개인 것은 시험 편의를 위한 구성이다.
 - 같은 seed와 stable ID는 같은 초기 위치·회전을 만들고, Resume은 Enemy의 저장된 현재 Transform을 그 뒤에 복원한다.
 - Enemy Entry 보호는 각 정의의 시야·순찰 반경을 반영하고, Chest는 도로 가장자리에 두되 도로 중심의 접근점을 검증한다.
 - 후보 부족, Entry·Portal 보호 위반, 중첩 또는 개별 NavMesh 접근 실패는 맵 전체를 `Invalid`로 닫는다.
-- 현재 Chest 내용과 Enemy 종류·개수는 기존 시험 구성이며 LootTable·위험 예산·프리팹 카탈로그는 없다.
+- 현재 시험 Chest와 근접 적 시체는 `LootTableDefinition`을 사용하고, LootTable 미지정 컨테이너는 기존 authored 초기값을 유지한다. 위험 예산·가변 개수·프리팹 카탈로그는 아직 없다.
 
 #### 7.9.2 후속 후보 처리 순서
 
@@ -2388,6 +2390,7 @@ VFX는 실제 판정의 결과를 표시하며 별도 피해 원본이 되지 �
 ### 15.3 현재 데이터 기반 콘텐츠
 
 - ItemDatabase와 `ItemDefinition`
+- `LootTableDefinition`과 seed+stable container ID 기반 시험 roll
 - `EnemyDefinition`
 - BaseFurnitureDatabase와 definition key
 - stable placed furniture ID
@@ -2396,7 +2399,6 @@ VFX는 실제 판정의 결과를 표시하며 별도 피해 원본이 되지 �
 ### 15.4 후속 정의 후보
 
 - MapDefinition
-- LootTableDefinition
 - EnemySpawnProfile
 - POIDefinition
 - QuestDefinition

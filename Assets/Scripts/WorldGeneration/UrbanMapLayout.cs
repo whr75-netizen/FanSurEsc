@@ -195,6 +195,7 @@ namespace FantasySurvival.WorldGeneration
             string stableId,
             UrbanRaidSpawnKind kind,
             float entryClearance,
+            float maximumEntryDistance,
             float portalClearance,
             float minimumSeparation,
             float approachDistance)
@@ -202,6 +203,7 @@ namespace FantasySurvival.WorldGeneration
             StableId = stableId;
             Kind = kind;
             EntryClearance = entryClearance;
+            MaximumEntryDistance = maximumEntryDistance;
             PortalClearance = portalClearance;
             MinimumSeparation = minimumSeparation;
             ApproachDistance = approachDistance;
@@ -210,6 +212,7 @@ namespace FantasySurvival.WorldGeneration
         public string StableId { get; }
         public UrbanRaidSpawnKind Kind { get; }
         public float EntryClearance { get; }
+        public float MaximumEntryDistance { get; }
         public float PortalClearance { get; }
         public float MinimumSeparation { get; }
         public float ApproachDistance { get; }
@@ -229,11 +232,21 @@ namespace FantasySurvival.WorldGeneration
             }
 
             if (!IsFiniteNonNegative(EntryClearance) ||
+                !IsFiniteNonNegative(MaximumEntryDistance) ||
                 !IsFiniteNonNegative(PortalClearance) ||
                 !IsFiniteNonNegative(MinimumSeparation) ||
                 !IsFiniteNonNegative(ApproachDistance))
             {
                 error = $"Raid spawn request '{StableId}' has an invalid safety distance.";
+                return false;
+            }
+
+            if (MaximumEntryDistance > 0f &&
+                MaximumEntryDistance < EntryClearance)
+            {
+                error =
+                    $"Raid spawn request '{StableId}' has a maximum Entry distance " +
+                    "smaller than its Entry clearance.";
                 return false;
             }
 
@@ -314,13 +327,18 @@ namespace FantasySurvival.WorldGeneration
 
     public static class UrbanRaidSpawnPrototypeRules
     {
-        public const float ChestEntryClearance = 10f;
-        public const float ChestPortalClearance = 8f;
+        public const float ChestEntryClearance = 3.5f;
+        public const float ChestMaximumEntryDistance = 8f;
+        public const float ChestPortalClearance = 3f;
         public const float EnemyPortalClearance = 10f;
-        public const float ChestMinimumSeparation = 5f;
+        public const float ChestMinimumSeparation = 3f;
         public const float EnemyMinimumSeparation = 6f;
         public const float ChestApproachDistance = 1f;
         public const float EnemyEntrySafetyBuffer = 2f;
+        public const float NearMeleeEntryClearance = 7f;
+        public const float NearMeleeMaximumEntryDistance = 16f;
+        public const float NearMeleePortalClearance = 3f;
+        public const float NearMeleeMinimumSeparation = 3f;
 
         public static UrbanRaidSpawnRequest CreateChestRequest(string stableId)
         {
@@ -328,9 +346,22 @@ namespace FantasySurvival.WorldGeneration
                 stableId,
                 UrbanRaidSpawnKind.Chest,
                 ChestEntryClearance,
+                ChestMaximumEntryDistance,
                 ChestPortalClearance,
                 ChestMinimumSeparation,
                 ChestApproachDistance);
+        }
+
+        public static UrbanRaidSpawnRequest CreateNearEntryMeleeRequest(string stableId)
+        {
+            return new UrbanRaidSpawnRequest(
+                stableId,
+                UrbanRaidSpawnKind.Enemy,
+                NearMeleeEntryClearance,
+                NearMeleeMaximumEntryDistance,
+                NearMeleePortalClearance,
+                NearMeleeMinimumSeparation,
+                approachDistance: 0f);
         }
 
         public static UrbanRaidSpawnRequest CreateEnemyRequest(
@@ -345,6 +376,7 @@ namespace FantasySurvival.WorldGeneration
                 stableId,
                 UrbanRaidSpawnKind.Enemy,
                 entryClearance,
+                0f,
                 EnemyPortalClearance,
                 EnemyMinimumSeparation,
                 approachDistance: 0f);

@@ -230,15 +230,12 @@ namespace FantasySurvival.Raids
             RaidRecoveryBaselineData candidateBaseline,
             out string error)
         {
-            GameSaveData markedSave;
-            try
+            if (!GameSaveManager.TryClonePreservingMigrationContext(
+                    candidateBaseline.startingState,
+                    out GameSaveData markedSave,
+                    out error))
             {
-                markedSave = JsonUtility.FromJson<GameSaveData>(
-                    JsonUtility.ToJson(candidateBaseline.startingState));
-            }
-            catch (Exception exception)
-            {
-                error = $"Could not clone the raid-start ordinary save: {exception.Message}";
+                error = $"Could not clone the raid-start ordinary save: {error}";
                 return false;
             }
 
@@ -832,14 +829,12 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            try
+            if (!GameSaveManager.TryClonePreservingMigrationContext(
+                    markedSave,
+                    out cleanSettlementState,
+                    out error))
             {
-                cleanSettlementState = JsonUtility.FromJson<GameSaveData>(
-                    JsonUtility.ToJson(markedSave));
-            }
-            catch (Exception exception)
-            {
-                error = $"Could not clone the marked ordinary save: {exception.Message}";
+                error = $"Could not clone the marked ordinary save: {error}";
                 return false;
             }
 
@@ -1387,17 +1382,30 @@ namespace FantasySurvival.Raids
                     inventory.ItemDatabase,
                     out PlayerItemStateSaveData playerItems,
                     out error) ||
+                !PlayerCurrencySaveCodec.TryCapture(
+                    inventory.PlayerWallet,
+                    out PlayerCurrencySaveData playerCurrency,
+                    out error) ||
                 !BaseFurnitureSaveCodec.TryCapture(
                     owner.BaseFurnitureState,
                     inventory.ItemDatabase,
                     furnitureDatabase,
                     out BaseSaveData baseState,
+                    out error) ||
+                !BaseMerchantSaveCodec.TryCapture(
+                    owner.BaseMerchantState,
+                    inventory.ItemDatabase,
+                    out BaseMerchantStateSaveData baseMerchantState,
                     out error))
             {
                 return false;
             }
 
-            persistentState = GameSaveManager.CreateSave(playerItems, baseState);
+            persistentState = GameSaveManager.CreateSave(
+                playerItems,
+                playerCurrency,
+                baseState,
+                baseMerchantState);
             error = null;
             return true;
         }
@@ -1766,6 +1774,9 @@ namespace FantasySurvival.Raids
             {
                 candidate = JsonUtility.FromJson<RaidCheckpointData>(
                     JsonUtility.ToJson(source));
+                GameSaveManager.CopyRuntimeMigrationContext(
+                    source.persistentState,
+                    candidate?.persistentState);
             }
             catch (Exception exception)
             {

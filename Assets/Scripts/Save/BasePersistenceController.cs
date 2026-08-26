@@ -3,6 +3,7 @@ using FantasySurvival.BaseBuilding;
 using FantasySurvival.Inventory;
 using FantasySurvival.Raids;
 using FantasySurvival.SceneFlow;
+using FantasySurvival.Trading;
 using UnityEngine;
 using VariableInventorySystem;
 
@@ -29,6 +30,8 @@ namespace FantasySurvival.SaveSystem
         [SerializeField] private BaseFurnitureDatabase furnitureDatabase;
         [SerializeField] private BaseFurnitureInstance[] persistentFurniture =
             Array.Empty<BaseFurnitureInstance>();
+        [Header("Scene-authored persistent merchants")]
+        [SerializeField] private Merchant[] persistentMerchants = Array.Empty<Merchant>();
 
         private string statusMessage = "F5 or Save Slot 1 to save player and base state.";
         private float statusUntil;
@@ -50,6 +53,12 @@ namespace FantasySurvival.SaveSystem
             }
 
             if (!TryValidateFurnitureDefinitions(out error))
+            {
+                SetStatus($"Base initialization failed: {error}", true);
+                return;
+            }
+
+            if (!TryValidateMerchantDefinitions(inventory, out error))
             {
                 SetStatus($"Base initialization failed: {error}", true);
                 return;
@@ -197,6 +206,15 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            if (!PlayerCurrencySaveCodec.TryCapture(
+                    inventory.PlayerWallet,
+                    out PlayerCurrencySaveData currencySave,
+                    out error))
+            {
+                SetStatus($"Save failed: {error}", true);
+                return false;
+            }
+
             if (!BaseFurnitureSaveCodec.TryCapture(
                     owner.BaseFurnitureState,
                     inventory.ItemDatabase,
@@ -208,7 +226,21 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            GameSaveData saveData = GameSaveManager.CreateSave(inventorySave, baseSave);
+            if (!BaseMerchantSaveCodec.TryCapture(
+                    owner.BaseMerchantState,
+                    inventory.ItemDatabase,
+                    out BaseMerchantStateSaveData merchantSave,
+                    out error))
+            {
+                SetStatus($"Save failed: {error}", true);
+                return false;
+            }
+
+            GameSaveData saveData = GameSaveManager.CreateSave(
+                inventorySave,
+                currencySave,
+                baseSave,
+                merchantSave);
             bool written = mirrorOrdinarySlot
                 ? GameSaveManager.TryWriteSlotOneMirrored(
                     saveData,
@@ -506,6 +538,7 @@ namespace FantasySurvival.SaveSystem
                     persistentState,
                     out PlayerInventoryState playerCandidate,
                     out BaseFurnitureStateStore baseCandidate,
+                    out BaseMerchantStateStore merchantCandidate,
                     out bool preparedAllowsAuthoredInitialization,
                     out error))
             {
@@ -517,6 +550,7 @@ namespace FantasySurvival.SaveSystem
                     owner,
                     playerCandidate,
                     baseCandidate,
+                    merchantCandidate,
                     out error))
             {
                 return false;
@@ -610,29 +644,24 @@ namespace FantasySurvival.SaveSystem
             }
 
             var baseCandidate = new BaseFurnitureStateStore();
+            var merchantCandidate = new BaseMerchantStateStore();
             if (!baseCandidate.TryValidateBindings(persistentFurniture, true, out error) ||
+                !merchantCandidate.TryValidateBindings(persistentMerchants, true, out error) ||
+                !TryMaterializeMerchantStates(merchantCandidate, out error) ||
                 !owner.CanReplaceBaseFurnitureState(out error))
             {
                 SetStatus($"New game failed: {error}", true);
                 return false;
             }
 
-            BaseFurnitureStateStore previousBase = owner.BaseFurnitureState;
-            if (!owner.TryReplaceBaseFurnitureState(baseCandidate, out error))
+            if (!TryApplyPreparedLoad(
+                    inventory,
+                    owner,
+                    playerCandidate,
+                    baseCandidate,
+                    merchantCandidate,
+                    out error))
             {
-                SetStatus($"New game failed: {error}", true);
-                return false;
-            }
-
-            // Publish the player-state change only after the paired base state is already live.
-            // Current observers can therefore never see a new player state with the old base.
-            if (!inventory.TryReplacePlayerState(playerCandidate, out error))
-            {
-                if (!owner.TryReplaceBaseFurnitureState(previousBase, out string rollbackError))
-                {
-                    error += $" Base rollback also failed: {rollbackError}";
-                }
-
                 SetStatus($"New game failed: {error}", true);
                 return false;
             }
@@ -655,6 +684,7 @@ namespace FantasySurvival.SaveSystem
                     saveData,
                     out PlayerInventoryState playerCandidate,
                     out BaseFurnitureStateStore baseCandidate,
+                    out BaseMerchantStateStore merchantCandidate,
                     out bool primaryAllowsAuthoredInitialization,
                     out string primaryError))
             {
@@ -663,6 +693,7 @@ namespace FantasySurvival.SaveSystem
                         owner,
                         playerCandidate,
                         baseCandidate,
+                        merchantCandidate,
                         out string applyError))
                 {
                     SetStatus($"Load failed; current player and base state were kept: {applyError}", true);
@@ -690,6 +721,7 @@ namespace FantasySurvival.SaveSystem
                     fallbackSave,
                     out playerCandidate,
                     out baseCandidate,
+                    out merchantCandidate,
                     out bool fallbackAllowsAuthoredInitialization,
                     out string fallbackError))
             {
@@ -705,6 +737,7 @@ namespace FantasySurvival.SaveSystem
                     owner,
                     playerCandidate,
                     baseCandidate,
+                    merchantCandidate,
                     out string fallbackApplyError))
             {
                 SetStatus(
@@ -727,11 +760,13 @@ namespace FantasySurvival.SaveSystem
             GameSaveData saveData,
             out PlayerInventoryState playerCandidate,
             out BaseFurnitureStateStore baseCandidate,
+            out BaseMerchantStateStore merchantCandidate,
             out bool allowAuthoredFurnitureInitialization,
             out string error)
         {
             playerCandidate = null;
             baseCandidate = null;
+            merchantCandidate = null;
             allowAuthoredFurnitureInitialization =
                 saveData?.baseState != null &&
                 saveData.baseState.allowAuthoredFurnitureInitialization;
@@ -758,12 +793,50 @@ namespace FantasySurvival.SaveSystem
                     return false;
                 }
 
+                if (!PlayerCurrencySaveCodec.TryRestore(
+                        saveData.playerCurrency,
+                        out PlayerWallet walletCandidate,
+                        out error))
+                {
+                    return false;
+                }
+
+                playerCandidate = new PlayerInventoryState(
+                    playerCandidate.Inventory,
+                    playerCandidate.Equipment,
+                    walletCandidate);
+
                 if (!BaseFurnitureSaveCodec.TryRestore(
                         saveData.baseState,
                         inventory.ItemDatabase,
                         furnitureDatabase,
                         out baseCandidate,
                         out error))
+                {
+                    return false;
+                }
+
+                if (!BaseMerchantSaveCodec.TryRestore(
+                        saveData.baseMerchantState,
+                        inventory.ItemDatabase,
+                        out merchantCandidate,
+                        out error))
+                {
+                    return false;
+                }
+
+                bool allowAuthoredMerchantInitialization =
+                    saveData.baseMerchantState != null &&
+                    saveData.baseMerchantState.allowAuthoredMerchantInitialization;
+                if (!merchantCandidate.TryValidateBindings(
+                        persistentMerchants,
+                        allowAuthoredMerchantInitialization,
+                        out error))
+                {
+                    return false;
+                }
+
+                if (!TryMaterializeMerchantStates(merchantCandidate, out error))
                 {
                     return false;
                 }
@@ -782,6 +855,7 @@ namespace FantasySurvival.SaveSystem
             {
                 playerCandidate = null;
                 baseCandidate = null;
+                merchantCandidate = null;
                 error = $"save preparation failed unexpectedly: {exception.Message}";
                 return false;
             }
@@ -792,17 +866,32 @@ namespace FantasySurvival.SaveSystem
             GameManager owner,
             PlayerInventoryState playerCandidate,
             BaseFurnitureStateStore baseCandidate,
+            BaseMerchantStateStore merchantCandidate,
             out string error)
         {
             BaseFurnitureStateStore previousBase = owner.BaseFurnitureState;
+            BaseMerchantStateStore previousMerchants = owner.BaseMerchantState;
             if (!owner.TryReplaceBaseFurnitureState(baseCandidate, out error))
             {
+                return false;
+            }
+
+            if (!owner.TryReplaceBaseMerchantState(merchantCandidate, out error))
+            {
+                if (!owner.TryReplaceBaseFurnitureState(previousBase, out string rollbackError))
+                {
+                    error += $" Base rollback also failed: {rollbackError}";
+                }
                 return false;
             }
 
             // Inventory observers are notified only once both authoritative states are current.
             if (!inventory.TryReplacePlayerState(playerCandidate, out error))
             {
+                if (!owner.TryReplaceBaseMerchantState(previousMerchants, out string merchantRollbackError))
+                {
+                    error += $" Merchant rollback also failed: {merchantRollbackError}";
+                }
                 if (!owner.TryReplaceBaseFurnitureState(previousBase, out string rollbackError))
                 {
                     error += $" Base rollback also failed: {rollbackError}";
@@ -848,6 +937,77 @@ namespace FantasySurvival.SaveSystem
                     registered != instance.Definition)
                 {
                     error = $"furniture '{instance.name}' does not reference its registered definition asset.";
+                    return false;
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private bool TryValidateMerchantDefinitions(
+            InventoryUIManager inventory,
+            out string error)
+        {
+            if (inventory?.ItemDatabase == null || persistentMerchants == null)
+            {
+                error = "Player ItemDatabase or persistent merchant list is missing.";
+                return false;
+            }
+
+            var seenIds = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
+            foreach (Merchant merchant in persistentMerchants)
+            {
+                if (merchant == null)
+                {
+                    error = "persistent merchant list contains a missing instance.";
+                    return false;
+                }
+
+                if (!merchant.TryValidateAuthoring(out error))
+                {
+                    error = $"[{merchant.name}] {error}";
+                    return false;
+                }
+
+                if (merchant.ItemDatabase != inventory.ItemDatabase)
+                {
+                    error = $"merchant '{merchant.name}' must use the Player inventory's authoritative ItemDatabase asset.";
+                    return false;
+                }
+
+                if (!seenIds.Add(merchant.MerchantId))
+                {
+                    error = $"persistent merchant ID '{merchant.MerchantId}' is duplicated.";
+                    return false;
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private bool TryMaterializeMerchantStates(
+            BaseMerchantStateStore store,
+            out string error)
+        {
+            if (store == null || persistentMerchants == null)
+            {
+                error = "merchant state store or authored merchant list is missing.";
+                return false;
+            }
+
+            foreach (Merchant merchant in persistentMerchants)
+            {
+                if (merchant == null)
+                {
+                    error = "authored merchant list contains a missing instance.";
+                    return false;
+                }
+
+                if (!merchant.TryMaterializeIn(store, out _, out error))
+                {
+                    error = $"[{merchant.name}] {error}";
                     return false;
                 }
             }

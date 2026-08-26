@@ -7,7 +7,7 @@ namespace FantasySurvival.SaveSystem
     public sealed class GameSaveData
     {
         public const string CurrentGameId = "fantasy-survival-escape";
-        public const int CurrentFormatVersion = 4;
+        public const int CurrentFormatVersion = 5;
 
         public string gameId;
         public int formatVersion;
@@ -17,9 +17,45 @@ namespace FantasySurvival.SaveSystem
         public bool raidInProgress;
         public string activeRaidInstanceId;
         public PlayerItemStateSaveData playerItems;
+        public PlayerCurrencySaveData playerCurrency;
         // Kept only so JsonUtility can read and migrate the development v2 schema.
         public InventoryGridSaveData playerInventory;
         public BaseSaveData baseState;
+        public BaseMerchantStateSaveData baseMerchantState;
+    }
+
+    [Serializable]
+    public sealed class PlayerCurrencySaveData
+    {
+        public const int CurrentFormatVersion = 1;
+
+        public int formatVersion;
+        public int gold;
+        public int silver;
+    }
+
+    [Serializable]
+    public sealed class BaseMerchantStateSaveData
+    {
+        public const int CurrentFormatVersion = 1;
+        public const string LayoutId = "base-merchants-v1";
+
+        public int formatVersion;
+        public string layoutId;
+        public int merchantRecordCount;
+        public List<BaseMerchantSaveData> merchants = new List<BaseMerchantSaveData>();
+
+        // Durable migration provenance. Saves older than v5 had no merchant roster,
+        // so an exact Recovery settlement may need to carry this permission across a
+        // process restart until a live base capture writes the materialized roster.
+        public bool allowAuthoredMerchantInitialization;
+    }
+
+    [Serializable]
+    public sealed class BaseMerchantSaveData
+    {
+        public string merchantId;
+        public InventoryGridSaveData stock;
     }
 
     [Serializable]
@@ -33,10 +69,10 @@ namespace FantasySurvival.SaveSystem
         public int furnitureRecordCount;
         public List<BaseFurnitureSaveData> furniture = new List<BaseFurnitureSaveData>();
 
-        // Runtime-only migration context. Legacy v2/v3 files had no furniture records,
-        // so their first v4 load may initialize the authored base layout. A native v4
-        // payload must instead match the current placed-ID set exactly.
-        [NonSerialized] public bool allowAuthoredFurnitureInitialization;
+        // Durable migration provenance. Legacy v2/v3 files had no furniture records,
+        // and exact Recovery payloads can be re-serialized before a live base capture.
+        // A native payload without this permission must match the placed-ID set exactly.
+        public bool allowAuthoredFurnitureInitialization;
     }
 
     [Serializable]

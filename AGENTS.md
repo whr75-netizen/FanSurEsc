@@ -111,9 +111,20 @@
 
 - `ItemDefinition`/`ItemDatabase`의 숫자 ID는 **아이템 종류 definition ID**다.
 - 이름, 설명, 크기, 아이콘, 컨테이너 정의는 ScriptableObject 프리셋에서 조회한다.
-- 개별 영구 instance ID, 수량, 내구도, 탄약과 능력치는 아직 확정하지 않는다. 현재 ordinary save v4의 Player item record는 definition ID, 슬롯, 회전과 컨테이너 부모 관계만 기록하며, 파일 내부 `recordId`를 영구 아이템 instance ID로 취급하지 않는다. base payload v2와 settlement journal v2는 ordinary save 버전과 별개의 형식이다.
+- 개별 영구 instance ID, 수량, 내구도, 탄약과 능력치는 아직 확정하지 않는다. 현재 ordinary save v5의 Player item record는 definition ID, 슬롯, 회전과 컨테이너 부모 관계만 기록하며, 파일 내부 `recordId`를 영구 아이템 instance ID로 취급하지 않는다. base payload v2, merchant payload v1과 settlement journal v2는 ordinary save 버전과 별개의 형식이다.
 - 현재 인벤토리는 persistent 셸 안의 동일 `InventoryUIManager`와 동일 런타임 객체 그래프가 유지한다. 씬 도착 때 기본 아이템을 다시 seed하지 않는다.
 - 현재 단일 슬롯 세이브/로드, 기지 Chest 영속화, 진행 중 원정 Recovery와 결과별 전체 소지품 정산은 구현되어 있다. 정식 슬롯 정책, provenance 기반 선별 손실, 정식 드롭·보상과 저장 대상 추가는 사용자가 별도로 요청하는 후속 범위다.
+
+### 현재 시험 거래 계약
+
+- 화폐의 권위 원본은 `PlayerInventoryState`가 소유하는 `PlayerWallet` 하나다. Gold와 Silver는 서로 합산·환전하지 않는 별도 잔액이며 현재 시험 초기값은 각각 5000이다.
+- 상인은 지갑, 잔액 또는 구매 자금을 소유하지 않는다. 구매는 아이템의 Player 이전이 성공한 뒤 Player 잔액만 차감하고, 판매는 Player 원본 아이템 제거가 성공한 뒤 Player 잔액만 지급한다.
+- 판매된 아이템은 상인 grid에 넣지 않는 sink다. 따라서 상인의 자금과 빈 공간은 판매 가능 조건이 아니다.
+- 현재 시험 가격과 통화는 immutable `ItemDefinition`에서 조회한다. ID 1/3/5는 Silver 100, ID 2/4는 Gold 100이며 최종 경제 밸런스가 아니다.
+- 신규 Player와 시험 상인 초기 재고는 ID 1~5만 사용한다. Container는 신규 초기 재고와 현재 거래에서 제외하지만, 기존 세이브의 Player·기지 Container를 무음 삭제하지 않는다.
+- 상인 stock의 권위 원본은 `GameManager.BaseMerchantState`의 stable merchant ID별 grid다. scene Cube NPC는 이 원본을 조회하는 View이며, ordinary v5와 진행 중 Recovery가 Player 화폐와 상인 stock을 함께 운반한다.
+- Shift+클릭은 목적지의 첫 유효 빈칸을 행 우선으로 선택한다. 모든 이동·구매·판매는 사전 검증, 원본 분리, 목적지 적용 또는 판매 sink, 화폐 정산 순서로 처리하고 실패 시 원래 슬롯과 잔액을 유지한다.
+- 상인 탭은 stock 원본을 재배열하거나 복사하지 않는 표시 필터다. 거래 가능 판정과 초록·빨간 drag preview는 같은 거래 정책을 사용한다.
 
 ### 현재 상호작용 계약
 

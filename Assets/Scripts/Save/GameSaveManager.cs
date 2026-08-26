@@ -39,9 +39,59 @@ namespace FantasySurvival.SaveSystem
             }
         }
 
+        public static bool TryClonePreservingMigrationContext(
+            GameSaveData source,
+            out GameSaveData clone,
+            out string error)
+        {
+            clone = null;
+            if (source == null)
+            {
+                error = "Game-save clone source is missing.";
+                return false;
+            }
+
+            try
+            {
+                clone = JsonUtility.FromJson<GameSaveData>(JsonUtility.ToJson(source));
+            }
+            catch (Exception exception)
+            {
+                error = $"Could not clone game-save state: {exception.Message}";
+                return false;
+            }
+
+            if (clone == null)
+            {
+                error = "Could not clone game-save state.";
+                return false;
+            }
+
+            CopyRuntimeMigrationContext(source, clone);
+            error = null;
+            return true;
+        }
+
+        public static void CopyRuntimeMigrationContext(GameSaveData source, GameSaveData target)
+        {
+            if (source?.baseState != null && target?.baseState != null)
+            {
+                target.baseState.allowAuthoredFurnitureInitialization =
+                    source.baseState.allowAuthoredFurnitureInitialization;
+            }
+
+            if (source?.baseMerchantState != null && target?.baseMerchantState != null)
+            {
+                target.baseMerchantState.allowAuthoredMerchantInitialization =
+                    source.baseMerchantState.allowAuthoredMerchantInitialization;
+            }
+        }
+
         public static GameSaveData CreateSave(
             PlayerItemStateSaveData playerItems,
-            BaseSaveData baseState)
+            PlayerCurrencySaveData playerCurrency,
+            BaseSaveData baseState,
+            BaseMerchantStateSaveData baseMerchantState)
         {
             return new GameSaveData
             {
@@ -51,8 +101,10 @@ namespace FantasySurvival.SaveSystem
                 raidInProgress = false,
                 activeRaidInstanceId = null,
                 playerItems = playerItems,
+                playerCurrency = playerCurrency,
                 playerInventory = null,
-                baseState = baseState
+                baseState = baseState,
+                baseMerchantState = baseMerchantState
             };
         }
 
@@ -142,6 +194,15 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            if (!PlayerCurrencySaveCodec.TryRestore(
+                    saveData.playerCurrency,
+                    out _,
+                    out error))
+            {
+                error = $"Player currency validation failed: {error}";
+                return false;
+            }
+
             if (!BaseFurnitureSaveCodec.TryRestore(
                     saveData.baseState,
                     database,
@@ -150,6 +211,16 @@ namespace FantasySurvival.SaveSystem
                     out error))
             {
                 error = $"Base payload validation failed: {error}";
+                return false;
+            }
+
+            if (!BaseMerchantSaveCodec.TryRestore(
+                    saveData.baseMerchantState,
+                    database,
+                    out _,
+                    out error))
+            {
+                error = $"Base merchant payload validation failed: {error}";
                 return false;
             }
 
@@ -176,7 +247,10 @@ namespace FantasySurvival.SaveSystem
                            out _) &&
                        HasCompatibleBaseLayoutForBackup(
                            existingPrimary.baseState,
-                           currentSave?.baseState);
+                           currentSave?.baseState) &&
+                       HasCompatibleMerchantLayoutForBackup(
+                           existingPrimary.baseMerchantState,
+                           currentSave?.baseMerchantState);
             }
             catch (Exception)
             {
@@ -229,6 +303,55 @@ namespace FantasySurvival.SaveSystem
                         record.instanceId,
                         out string currentDefinition) ||
                     !string.Equals(record.definitionKey, currentDefinition, StringComparison.Ordinal))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private static bool HasCompatibleMerchantLayoutForBackup(
+            BaseMerchantStateSaveData existing,
+            BaseMerchantStateSaveData current)
+        {
+            if (existing == null || current == null)
+            {
+                return false;
+            }
+
+            if (existing.allowAuthoredMerchantInitialization)
+            {
+                return true;
+            }
+
+            if (existing.merchants == null || current.merchants == null ||
+                existing.merchantRecordCount != current.merchantRecordCount ||
+                existing.merchants.Count != current.merchants.Count)
+            {
+                return false;
+            }
+
+            var currentDimensionsById =
+                new System.Collections.Generic.Dictionary<string, Vector2Int>(StringComparer.Ordinal);
+            foreach (BaseMerchantSaveData record in current.merchants)
+            {
+                if (record == null || string.IsNullOrWhiteSpace(record.merchantId) ||
+                    record.stock == null || currentDimensionsById.ContainsKey(record.merchantId))
+                {
+                    return false;
+                }
+
+                currentDimensionsById.Add(
+                    record.merchantId,
+                    new Vector2Int(record.stock.width, record.stock.height));
+            }
+
+            foreach (BaseMerchantSaveData record in existing.merchants)
+            {
+                if (record == null || record.stock == null ||
+                    !currentDimensionsById.TryGetValue(record.merchantId, out Vector2Int dimensions) ||
+                    dimensions.x != record.stock.width || dimensions.y != record.stock.height)
                 {
                     return false;
                 }
@@ -408,7 +531,10 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(saveData.savedAtUtc) || saveData.playerItems == null)
+            if (string.IsNullOrWhiteSpace(saveData.savedAtUtc) ||
+                saveData.playerItems == null ||
+                saveData.playerCurrency == null ||
+                saveData.baseMerchantState == null)
             {
                 error = "Save data is missing required fields.";
                 return false;
@@ -444,7 +570,7 @@ namespace FantasySurvival.SaveSystem
             return true;
         }
 
-        private static bool TryNormalizeToCurrentVersion(GameSaveData saveData, out string error)
+        public static bool TryNormalizeToCurrentVersion(GameSaveData saveData, out string error)
         {
             if (saveData == null)
             {
@@ -454,6 +580,13 @@ namespace FantasySurvival.SaveSystem
 
             if (saveData.formatVersion == GameSaveData.CurrentFormatVersion)
             {
+                error = null;
+                return true;
+            }
+
+            if (saveData.formatVersion == 4)
+            {
+                ApplyVersionFiveDefaults(saveData);
                 error = null;
                 return true;
             }
@@ -493,7 +626,7 @@ namespace FantasySurvival.SaveSystem
                 saveData.raidInProgress = false;
                 saveData.activeRaidInstanceId = null;
                 saveData.baseState = BaseFurnitureSaveCodec.CreateEmptySaveData(true);
-                saveData.formatVersion = GameSaveData.CurrentFormatVersion;
+                ApplyVersionFiveDefaults(saveData);
                 error = null;
                 return true;
             }
@@ -509,7 +642,7 @@ namespace FantasySurvival.SaveSystem
                 saveData.baseState = BaseFurnitureSaveCodec.CreateEmptySaveData(true);
                 saveData.raidInProgress = false;
                 saveData.activeRaidInstanceId = null;
-                saveData.formatVersion = GameSaveData.CurrentFormatVersion;
+                ApplyVersionFiveDefaults(saveData);
                 error = null;
                 return true;
             }
@@ -522,6 +655,13 @@ namespace FantasySurvival.SaveSystem
 
             error = null;
             return true;
+        }
+
+        private static void ApplyVersionFiveDefaults(GameSaveData saveData)
+        {
+            saveData.playerCurrency = PlayerCurrencySaveCodec.CreateStartingSaveData();
+            saveData.baseMerchantState = BaseMerchantSaveCodec.CreateEmptySaveData(true);
+            saveData.formatVersion = GameSaveData.CurrentFormatVersion;
         }
 
 #if UNITY_EDITOR

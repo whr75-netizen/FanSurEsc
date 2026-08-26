@@ -349,10 +349,27 @@ public class MainMenuManager : MonoBehaviour
                 return false;
             }
 
-            return BaseFurnitureSaveCodec.TryRestore(
-                candidate.baseState,
+            if (!PlayerCurrencySaveCodec.TryRestore(
+                    candidate.playerCurrency,
+                    out _,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!BaseFurnitureSaveCodec.TryRestore(
+                    candidate.baseState,
+                    itemDatabase,
+                    furnitureDatabase,
+                    out _,
+                    out error))
+            {
+                return false;
+            }
+
+            return BaseMerchantSaveCodec.TryRestore(
+                candidate.baseMerchantState,
                 itemDatabase,
-                furnitureDatabase,
                 out _,
                 out error);
         }

@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace VariableInventorySystem
 {
-    public class StandardStashView : MonoBehaviour, IVariableInventoryView
+    public class StandardStashView : MonoBehaviour, IVariableInventoryBoundView
     {
         [SerializeField] GameObject cellPrefab;
         //[SerializeField] ScrollRect scrollRect;
@@ -23,6 +23,7 @@ namespace VariableInventorySystem
         [SerializeField] Color negativeColor;
 
         public StandardStashViewData StashData { get; private set; }
+        public IVariableInventoryViewData ViewData => StashData;
 
         public int CellCount => StashData.CapacityWidth * StashData.CapacityHeight;
 
@@ -38,6 +39,8 @@ namespace VariableInventorySystem
         Action<IVariableInventoryCell> onCellOptionClick;
         Action<IVariableInventoryCell> onCellEnter;
         Action<IVariableInventoryCell> onCellExit;
+        Func<IVariableInventoryCellData, bool> itemVisibilityFilter;
+        VariableInventoryDropHandling? dropPreviewHandling;
 
         public void SetCellCallback(
             Action<IVariableInventoryCell> onCellClick,
@@ -86,7 +89,31 @@ namespace VariableInventorySystem
             for (var i = 0; i < StashData.CellData.Length; i++)
             {
                 itemViews[i].Apply(StashData.CellData[i]);
+                if (itemViews[i] is StandardCell standardCell)
+                {
+                    standardCell.SetContentVisible(IsItemVisible(StashData.CellData[i]));
+                }
             }
+        }
+
+        public void SetItemVisibilityFilter(Func<IVariableInventoryCellData, bool> filter)
+        {
+            itemVisibilityFilter = filter;
+            if (StashData != null)
+            {
+                Apply(StashData);
+            }
+        }
+
+        public bool IsItemVisible(IVariableInventoryCellData item)
+        {
+            return item == null || itemVisibilityFilter == null || itemVisibilityFilter(item);
+        }
+
+        public void SetDropPreviewHandling(VariableInventoryDropHandling? handling)
+        {
+            dropPreviewHandling = handling;
+            conditionNeedsRefresh = true;
         }
 
         public virtual void ReApply()
@@ -113,6 +140,11 @@ namespace VariableInventorySystem
         public virtual bool OnPick(IVariableInventoryCell stareCell)
         {
             if (!OwnsCell(stareCell) || stareCell.CellData == null)
+            {
+                return false;
+            }
+
+            if (!IsItemVisible(stareCell.CellData))
             {
                 return false;
             }
@@ -225,6 +257,7 @@ namespace VariableInventorySystem
 
         public virtual void OnDroped(bool isDroped)
         {
+            dropPreviewHandling = null;
             conditionTransform.gameObject.SetActive(false);
             condition.color = defaultColor;
             conditionNeedsRefresh = false;
@@ -296,6 +329,11 @@ namespace VariableInventorySystem
         private bool OwnsCell(IVariableInventoryCell cell)
         {
             return cell != null && itemViews != null && itemViews.Any(item => ReferenceEquals(item, cell));
+        }
+
+        public bool ContainsCell(IVariableInventoryCell cell)
+        {
+            return OwnsCell(cell);
         }
 
         protected virtual int? GetIndex(IVariableInventoryCell stareCell)
@@ -418,6 +456,18 @@ namespace VariableInventorySystem
 
         protected virtual void UpdateCondition(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell)
         {
+            if (dropPreviewHandling == VariableInventoryDropHandling.AcceptWithoutInsert)
+            {
+                condition.color = positiveColor;
+                return;
+            }
+
+            if (dropPreviewHandling == VariableInventoryDropHandling.Reject)
+            {
+                condition.color = negativeColor;
+                return;
+            }
+
             var index = GetIndex(stareCell, effectCell.CellData, cellCorner);
             if ((index.HasValue && StashData.CheckInsert(index.Value, effectCell.CellData)))
             {

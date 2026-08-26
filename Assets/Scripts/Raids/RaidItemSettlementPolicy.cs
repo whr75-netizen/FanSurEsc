@@ -44,13 +44,12 @@ namespace FantasySurvival.Raids
                 return true;
             }
 
-            try
+            if (!GameSaveManager.TryClonePreservingMigrationContext(
+                    source,
+                    out settledState,
+                    out error))
             {
-                settledState = JsonUtility.FromJson<GameSaveData>(JsonUtility.ToJson(source));
-            }
-            catch (Exception exception)
-            {
-                error = $"Could not clone raid settlement state: {exception.Message}";
+                error = $"Could not clone raid settlement state: {error}";
                 return false;
             }
 

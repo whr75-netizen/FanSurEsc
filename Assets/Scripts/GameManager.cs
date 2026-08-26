@@ -1,4 +1,5 @@
 using FantasySurvival.BaseBuilding;
+using FantasySurvival.Trading;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -11,9 +12,12 @@ public class GameManager : MonoBehaviour
     [SerializeField] private bool isSoundOn = true;
 
     private BaseFurnitureStateStore baseFurnitureState;
+    private BaseMerchantStateStore baseMerchantState;
 
     public BaseFurnitureStateStore BaseFurnitureState =>
         baseFurnitureState ??= new BaseFurnitureStateStore();
+    public BaseMerchantStateStore BaseMerchantState =>
+        baseMerchantState ??= new BaseMerchantStateStore();
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStaticState()
@@ -28,6 +32,7 @@ public class GameManager : MonoBehaviour
         {
             Instance = this;
             baseFurnitureState = new BaseFurnitureStateStore();
+            baseMerchantState = new BaseMerchantStateStore();
             DontDestroyOnLoad(gameObject); // 씬 전환 시 유지
         }
         else if (Instance != this)
@@ -92,6 +97,21 @@ public class GameManager : MonoBehaviour
         }
 
         baseFurnitureState = replacement;
+        error = null;
+        return true;
+    }
+
+    public bool TryReplaceBaseMerchantState(
+        BaseMerchantStateStore replacement,
+        out string error)
+    {
+        if (replacement == null)
+        {
+            error = "Replacement base merchant state is missing.";
+            return false;
+        }
+
+        baseMerchantState = replacement;
         error = null;
         return true;
     }

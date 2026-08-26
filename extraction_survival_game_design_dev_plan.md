@@ -154,7 +154,7 @@
 - **[현재]** ID 1~5의 시험 총기 정의는 하나의 Weapon 장착 슬롯에 호환되고, ID 6 시험 보관함은 장착 불가다. Weapon 슬롯은 공격·조준·발사 기능이나 월드 3D 표현을 아직 결정하지 않는다.
 - **[현재]** InventoryItemData는 ItemDefinition 참조, 회전 상태와 현재 grid/container/equipment 소유자를 가지는 런타임 객체다.
 - **[현재]** 숫자 아이템 ID는 아이템 종류 ID다. 실제 소유한 개별 물건의 고유 ID는 아니다.
-- **[현재]** PersistentGameplayShell이 처음 생성될 때 InventoryUIManager.Awake가 8×9 인벤토리, 시험 아이템 ID 1~6과 빈 12슬롯 EquipmentLoadoutData를 한 번 생성한다.
+- **[현재]** PersistentGameplayShell이 처음 생성될 때 InventoryUIManager.Awake가 8×9 인벤토리, Container를 제외한 시험 아이템 ID 1~5와 빈 12슬롯 EquipmentLoadoutData를 한 번 생성한다.
 - **[현재]** 씬 전환 때 InventoryUIManager와 PlayerInventoryState를 새로 만들거나 재바인딩하지 않는다. 같은 InventoryUIManager, StandardStashViewData, EquipmentLoadoutData, StandardCore와 UI View가 shell 안에서 계속 유지된다.
 - **[현재]** 따라서 칸 위치, 회전, 장비 슬롯, 동일 종류의 여러 런타임 객체와 컨테이너 내부 관계가 같은 객체 그래프로 유지되며, 각 아이템은 한 소유자에만 귀속된다.
 - **[현재]** Play Mode 종료 시 shell 인스턴스는 파괴된다. New Game은 초기 시험 인벤토리와 빈 장비로 시작하고, 단일 슬롯 세이브/로드 프로토타입은 플레이어 아이템 상태(인벤토리·장비)를 검증 후 새 실행에 복원한다. Player·Camera·UI 오브젝트 자체는 디스크에 저장하지 않는다.
@@ -763,7 +763,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 - 저장과 로드를 호출하는 단일 소유자
 - **[현재 기지 가구]** namespaced furniture definition key, stable placed ID와 명시적 `BaseSaveData` codec
 - **[현재 기지 가구]** scene Chest는 View로만 bind하고 런타임 원본은 persistent store에 유지
-- **[현재 원정 Recovery]** ordinary v4의 `raidInProgress/activeRaidInstanceId`가 미정산 원정 존재 여부의 첫 권위다.
+- **[현재 원정 Recovery]** ordinary v5의 `raidInProgress/activeRaidInstanceId`가 미정산 원정 존재 여부의 첫 권위다.
 - **[현재 원정 Recovery]** baseline은 출발 전 persistent state와 raid ID, checkpoint는 Player HP·Transform, Player/기지 상태, map seed/layout hash, stable-ID Chest와 Enemy/시체 인벤토리를 기록한다.
 - **[현재 원정 Recovery]** AI 행동 상태·NavMesh 경로·감지 기억, 총알·VFX·열린 UI와 drag는 저장하지 않고 복원 뒤 재계산한다.
 - **[현재 원정 Recovery]** terminal 결과는 Resolved checkpoint와 exact settlement journal로 고정하며, 정산은 journal → ordinary 주·백업 → Recovery 삭제의 반복 가능한 경계로 처리한다.
@@ -782,7 +782,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 이 정보는 로드할 때 ItemDatabase에서 ID로 다시 조회한다.
 
-가구도 같은 원칙으로 display name, storage 크기와 향후 고정 기능은 `BaseFurnitureDefinition`에서 조회한다. 현재 v4 save는 `core:home/chest_a/b` placed ID, `core:storage_chest` definition key와 두 저장 grid의 변하는 아이템 관계만 기록한다. 가구 Transform, HP, 전력, 외형과 배치 목록은 아직 저장 범위가 아니다. 제거된 모드 definition은 무음 삭제하지 않고 전체 후보를 fail-closed로 거부하며 원본 파일을 보존한다. 모드 없이도 알 수 없는 DTO를 opaque round-trip하는 정책은 아직 구현하지 않는다.
+가구도 같은 원칙으로 display name, storage 크기와 향후 고정 기능은 `BaseFurnitureDefinition`에서 조회한다. 현재 v5 save는 `core:home/chest_a/b` placed ID, `core:storage_chest` definition key와 두 저장 grid의 변하는 아이템 관계에 더해 Player 금·은 잔액과 stable merchant ID별 stock을 기록한다. 가구 Transform, HP, 전력, 외형과 배치 목록은 아직 저장 범위가 아니다. 제거된 모드 definition은 무음 삭제하지 않고 전체 후보를 fail-closed로 거부하며 원본 파일을 보존한다. 모드 없이도 알 수 없는 DTO를 opaque round-trip하는 정책은 아직 구현하지 않는다.
 
 ### 권장 저장 시점
 

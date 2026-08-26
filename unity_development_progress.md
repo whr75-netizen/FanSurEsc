@@ -1,6 +1,6 @@
 # Unity 개발 진행 기록
 
-**마지막 확인:** 2026-08-25
+**마지막 확인:** 2026-08-26
 **확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, 활성 씬 `GameMap1`; 현재 원정 복구·아이템 정산 변경으로 Windows Development Build와 격리 Windows Player 강제종료→Resume E2E 성공
 **문서 역할:** 다음 작업에서 현재 구현을 빠르게 이어가기 위한 진행형 인계 문서다. 장르 방향·플레이 판단·알고리즘 불변조건은 `extraction_survival_gameplay_contract.md`, 게임 요소·기능·콘텐츠·UI/UX는 `game_design_document.md`, Stage 의존성과 구현 순서는 `extraction_survival_game_design_dev_plan.md`를 따른다.
 
@@ -25,7 +25,7 @@
 - `[Play Mode 확인]` `PersistentGameplayShell` 하나가 실제 Player, 외형, Player 구성 스크립트, Camera, Inventory UI/Core/View와 EventSystem을 같은 인스턴스로 유지한다.
 - `[코드/씬 확인]` 두 게임플레이 씬에는 scene-local 런타임 Player/gameplay Camera/Inventory UI/EventSystem 복사본이 없다. 편집 상태 Game View용 `EditorOnly` Preview Camera만 씬마다 1개 존재한다.
 - `[Play Mode 확인]` Player 인벤토리는 왕복 중 동일 객체 그래프로 유지된다. 기지에서 사용하는 단일 슬롯 디스크 세이브/로드 프로토타입도 연결되어 있다.
-- `[코드/씬 확인]` 현재 연결된 상호작용 대상은 `GameMap1`의 Chest 2개와 맵 선택 Cube 1개, `GameMapTest`의 귀환 Cube 1개다.
+- `[코드/씬 확인]` 현재 연결된 상호작용 대상은 `GameMap1`의 Chest 2개, 맵 선택 Cube 1개와 시험 Merchant Cube 1개, `GameMapTest`의 귀환 Cube 1개다.
 - `[Play Mode 확인]` Freya 인간형 외형은 Humanoid Avatar와 Idle/Walk/Run 로코모션에 연결되어 더 이상 T포즈로 서 있지 않는다.
 - `[코드/씬 확인]` 이동 중 Left Shift 또는 Right Shift를 누르면 걷기 속도의 정확히 1.3배로 달리는 설정이 `PersistentGameplayShell`의 기존 `PlayerMovement`에 연결되어 있다.
 
@@ -59,6 +59,7 @@ Persistent Player
 
 Interactable (abstract base class)
   ├─ ChestInteractable
+  ├─ MerchantInteractable
   ├─ MapTerminalInteractable
   └─ ReturnPortalInteractable
 ```
@@ -69,10 +70,10 @@ Interactable (abstract base class)
 |---|---|---|
 | E 입력 | `PlayerInteractor` | 모든 현재 대상이 공유 |
 | 주변 대상 검색과 가장 가까운 하나 선택 | `PlayerInteractor` | 지속 UI가 열린 대상이 없을 때 모든 현재 대상이 공유 |
-| 열린 지속 상호작용 대상 유지·취소 조정 | `PlayerInteractor` → 해당 `Interactable` | 공통 흐름을 사용하고 현재는 Chest만 활성 세션을 제공 |
+| 열린 지속 상호작용 대상 유지·취소 조정 | `PlayerInteractor` → 해당 `Interactable` | 공통 흐름을 사용하고 현재 Chest와 Merchant가 활성 세션을 제공 |
 | 기본 활성 상태 검사 | `Interactable.CanInteract` | 모든 현재 대상이 공유 |
 | 안내 문구 | 각 `Interactable.InteractionPrompt` | 표시 방식은 공통, 문구는 개별 |
-| Chest UI 열기/닫기 | `ChestInteractable` → `InventoryUIManager` | 모든 Chest가 같은 함수 사용 |
+| Chest·Merchant UI 열기/닫기 | 각 `Interactable` → `InventoryUIManager` | 공통 외부 인벤토리 수명 경계를 사용하고 Storage·Merchant 규칙만 구분 |
 | 맵 선택 UI | `MapTerminalInteractable` → `MapSelectionOverlay` | 현재 단일 터미널용 |
 | 씬 이동 요청 | `DirectSceneTravel.TryLoad` | 터미널과 포탈 경로가 공유 |
 | 씬 이동 전 UI·입력 정리 | `PersistentGameplayShell.PrepareForTravel` | 모든 직접 씬 이동이 공유 |
@@ -391,7 +392,7 @@ Interactable (abstract base class)
 
 - `[Play Mode 확인]` `InitialLoadingScene → MainMenuScene → GameLoadingScene → GameMap1` 순서로 진입한다.
 - `[코드/씬 확인]` Main Menu에는 `NEW GAME`, `LOAD GAME`, `SETTINGS`, `EXIT` 네 기능과 각각 필요한 최소 패널이 있다.
-- `[Play Mode 확인]` New Game은 기존 저장 파일을 지우거나 덮어쓰지 않고, `GameMap1` 기지에서 초기 8×9 인벤토리와 시험 아이템 ID 1~6으로 시작한다.
+- `[코드/씬 확인]` New Game은 기존 저장 파일을 지우거나 덮어쓰지 않고, `GameMap1` 기지에서 초기 8×9 인벤토리와 Container를 제외한 시험 아이템 ID 1~5로 시작한다.
 - `[Play Mode 확인]` Load 요청은 같은 로딩 씬을 거쳐 `GameMap1`에서 persistent Player의 기존 `InventoryUIManager`에 한 번만 적용된다. Player, Camera, UI 셸을 재생성하지 않는다.
 - `[코드/씬 확인]` GameLoading의 기존 Slider는 실제 비동기 로드 진행률 0~1에 연결되어 있다.
 - `[Play Mode 확인]` Settings의 Sound 토글은 슬롯 세이브와 분리된 전역 `PlayerPrefs` 설정이며 즉시 `AudioListener.pause`에 적용된다.
@@ -400,7 +401,7 @@ Interactable (abstract base class)
 ### 저장되는 데이터
 
 - 단일 프로토타입 슬롯 경로는 `Application.persistentDataPath/Saves/save_slot_1.json`이며 이전 정상본은 `.bak`으로 유지한다.
-- 현재 최상위 스키마 버전은 4다. 플레이어 인벤토리와 장비는 `playerItems` / `flat-player-items-v1`, 기지 가구는 `baseState` v2 / `base-furniture-v1`으로 저장한다. 유효한 개발용 v2와 v3 저장은 읽을 때 플레이어 아이템을 보존하고 빈 기지 상태를 추가한 v4 메모리 데이터로 변환하며 원본 파일을 자동 덮어쓰지 않는다.
+- 현재 최상위 스키마 버전은 5다. 플레이어 인벤토리와 장비는 `playerItems` / `flat-player-items-v1`, Player 금·은은 `playerCurrency` v1, 기지 가구는 `baseState` v2 / `base-furniture-v1`, stable Merchant별 재고는 `baseMerchantState` v1 / `base-merchants-v1`으로 저장한다. 유효한 개발용 v2·v3·v4 저장은 읽을 때 기존 아이템·기지 상태를 보존하고 누락된 화폐·상인 상태에 명시적 초기화 provenance를 더한 v5 메모리 데이터로 변환하며 원본 파일을 자동 덮어쓰지 않는다.
 - 각 아이템은 ItemDatabase의 숫자 `definitionId`, 파일 내부 `recordId`와 컨테이너 부모 관계, 그리드 슬롯 또는 `equipmentSlot`, 회전 상태를 저장한다.
 - 컨테이너 내부 아이템은 파일 내부 관계용 `recordId`로 연결한다. 이 값은 영구 아이템 instance ID가 아니다.
 - 이름, 설명, 아이콘, 아이템 크기, 컨테이너 크기와 장착 가능 슬롯은 저장하지 않고 같은 `ItemDatabase.asset`에서 다시 조회한다.
@@ -441,7 +442,7 @@ Interactable (abstract base class)
 
 ### 현재 구현
 
-- `[코드/프리팹 확인]` `PlayerInventoryState` 하나가 8×9 `StandardStashViewData`와 `EquipmentLoadoutData`를 함께 소유한다. New Game은 기존 시험 아이템 ID 1~6과 빈 장비 상태를 만들고, Load는 두 상태를 함께 교체한다.
+- `[코드/프리팹 확인]` `PlayerInventoryState` 하나가 8×9 `StandardStashViewData`, `EquipmentLoadoutData`와 Player 전용 `PlayerWallet`을 함께 소유한다. New Game은 Container를 제외한 시험 아이템 ID 1~5, 빈 장비와 금·은 각각 5000을 만들고, Load는 세 상태를 함께 교체한다.
 - `[코드/프리팹 확인]` 현재 실제로 노출하고 자동 장착할 수 있는 장비 슬롯은 무기 `W1` 1칸, 모자, 갑빠, 기능 신발, 가방, 목걸이, 반지, 팬던트, 꾸밈 머리·상의·하의·신발의 총 12칸이다. 각 칸은 인벤토리 아이템 크기와 무관하게 한 아이템만 가진다. 향후 무기 전환용 `W2`·`W3` 위치 ID는 데이터 구조에만 예약되어 있고 프리팹에서는 비활성화되어 있다.
 - `[코드/프리팹 확인]` 12개 장비칸은 `GridLayoutGroup`의 2열×6행으로 배치한다. 플레이어 인벤토리는 중앙 기준 x=-326의 왼쪽, 장비 패널은 x=0, 외부 인벤토리는 x=326의 오른쪽이며 중앙 anchor와 인접 배치를 유지한다.
 - `[코드 확인]` I로 열 때 플레이어 인벤토리와 장비 패널을 함께 등록·표시한다. Chest를 열면 같은 두 패널에 외부 인벤토리가 추가되며, 닫기·거리 이탈·상자 파괴 때 세 View를 함께 정리한다.
@@ -1024,3 +1025,44 @@ Interactable (abstract base class)
 - `[현재 사실 반영]` W1만 활성인 장비 UI와 데이터에 예약된 W2·W3, 현재 8×9 Player grid, definition ID와 runtime item의 차이, ordinary v4·Recovery 정산, NavMesh 기반 유동 순찰, 도심 생성기의 현재 검증과 아직 없는 raid-ready 실패 gate를 구분해 기록했다.
 - `[문서 검증]` 0~19장, 152개 절과 238개 세부 절의 부모 번호·중복·필수 장·Markdown 표·code fence를 정적 검사했다. 현재 사실, 문서 구조, UI·콘텐츠 관점의 독립 교차 검토에서 남은 P1/P2가 없음을 확인했다.
 - `[제외 범위]` Unity 코드·씬·프리팹, 현재 게임 규칙과 콘텐츠 에셋은 변경하지 않았다. 새로 제안한 경제, 퀘스트, 최종 전투, LootTable, 랜드마크, 세계관 세부와 정식 UI 아트는 사용자 결정 전까지 구현하지 않는다.
+
+---
+
+## 26. Player 화폐와 무지갑 시험 상인
+
+### 사용자 요구와 현재 시험 규칙
+
+- `[사용자 요구][2026-08-26]` Player 인벤토리 위에 금·은 액수를 표시하고 각각 5000으로 시작한다. 상인은 화폐를 갖지 않으며 Player 판매 때 상인 잔액과 공간을 검사하지 않는다.
+- `[현재 시험]` ItemDefinition ID 1~5를 Player와 상인의 동일한 초기 품목으로 사용한다. ID 1/3/5는 은 100, ID 2/4는 금 100이다. 금·은은 서로 합산하거나 환전하지 않으며 이 가격과 초기 잔액은 최종 밸런스가 아니다.
+- `[현재 시험]` 신규 Player와 시험 상인 재고 및 현재 거래에서 Container를 제외한다. 기존 저장의 Player·기지 Container는 무음 삭제하지 않는다.
+- `[현재 시험]` Player UI는 왼쪽, 장비는 그 옆, 상인 등 외부 inventory는 오른쪽이라는 기존 배치를 유지한다. 상인 쪽에는 전체·장비·기타 표시 탭을 둔다.
+
+### 권위 소유권과 거래 경계
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 화폐 원본 | `PlayerInventoryState.PlayerWallet` 하나가 Gold/Silver를 쓴다. Merchant에는 wallet·balance가 없다. |
+| 상인 재고 원본 | 기존 persistent `GameManager`의 `BaseMerchantStateStore`가 stable merchant ID별 grid를 소유한다. GameMap1 Cube는 `Merchant` View다. |
+| 변경 진입점 | drag는 기존 `VariableInventoryCore`, Shift+클릭은 같은 `InventoryTransferCoordinator`가 조정한다. grid 원본은 각 container API만 변경한다. |
+| 구매 | 거래 가능·잔액·Player 목적지 배치를 사전 검사하고 아이템 이전 성공 뒤 Player만 차감한다. 실패하면 원래 상인 슬롯과 잔액을 유지한다. |
+| 판매 | 거래 가능·Player 지급 상한을 사전 검사하고 Player 원본 제거 성공 뒤 Player만 지급한다. 판매품은 merchant grid에 넣지 않는 sink다. |
+| 파생 표현 | Wallet Text, 상품 가격 문구, 전체·장비·기타 탭과 drag 초록·빨간 preview는 원본의 View다. 탭은 stock과 배치 mask를 변경하지 않는다. |
+| 저장 경계 | ordinary v5와 Recovery persistent state가 Player currency v1과 base merchant stock v1을 함께 운반한다. 가격·탭·열린 UI는 저장하지 않고 definition/UI에서 재구성한다. |
+
+### 구현·감사 결과
+
+- `[코드 확인]` `InventoryTransferCoordinator`는 상자·시체의 기존 first-fit 이동도 같은 경계에서 처리하며, 판매 sink에 merchant 공간이나 자금을 묻지 않는다. Shift 실패는 exact source slot으로 rollback하고 화폐를 바꾸지 않는다.
+- `[코드 확인]` drag 정책과 preview가 같은 거래 판정을 사용한다. 판매 sink를 merchant grid의 점유 상태 때문에 빨간색으로 표시하거나, 잔액 부족 구매를 초록색으로 표시하던 불일치 경로를 차단했다.
+- `[버그 수정]` 거절·공간 부족·drag 취소 뒤 같은 이미지 asset을 원래 셀에 복구할 때 꺼진 아이콘이 다시 켜지지 않던 `StandardCell` cache를 정리했다. 늦은 async 이미지 callback도 현재 cell/request와 일치할 때만 반영한다.
+- `[저장 감사]` v2/v3/v4→v5 migration, ordinary/Recovery 내부 상태 정규화, 구형 journal v1 marker-only, exact DTO 재직렬화 시 authored merchant 초기화 provenance, stable ID·8×9 layout·ItemDatabase 동일성, tradable/non-container stock과 전체 allocation 예산을 검증한다.
+- `[씬/프리팹 확인]` `GameMap1`에 `base:merchant_test` Cube 하나를 `(-2, 1, 1)`에 두고 `Merchant`, `MerchantInteractable`, Collider와 `BasePersistenceController.persistentMerchants`를 연결했다. `PersistentGameplayShell`에는 Player WalletPanel과 상인 controls의 직렬화 참조 8개가 있으며 Missing Script는 0이다.
+- `[동적 순수 로직 확인]` 메모리 runtime 객체로 Shift 판매 제거·Player 지급·merchant 용량 무관 sink, Shift 구매 이전·Player 차감, 잔액 부족 양쪽 불변, Player 공간 부족 source rollback·무차감, Container 판매 거부·무지급을 포함한 11개 검사를 통과했다.
+- `[Play Mode 부분 확인]` GameMap1에 한 번 진입해 shell의 신규 Player IDs1~5 생성과 BaseEntry 배치를 확인했고 런타임 Console 오류는 0이었다. 검증 도구의 private field 접근 제한 때문에 같은 실행에서 실제 E 열기, quick 거래, 탭, 거리 이탈과 codec 호출은 완료하지 못했으며 반복 Play 검증은 하지 않았다.
+- `[최종 Editor 상태]` Edit Mode, 활성 `GameMap1`, scene dirty=false, script compile 오류 0이다. 기존 경고 3개는 Input Manager 안내, Codex 실행 파일 서명 수집과 외부 `RenderTextureBaker` obsolete API다.
+
+### 남은 직접 조작 검증
+
+- Player가 Cube 상인 가까이에서 E를 눌렀을 때 Player·장비·상인 UI가 함께 열리는지 확인한다.
+- Shift+클릭과 drag로 구매·판매를 각각 한 번 실행해 잔액, first-fit, 판매 sink와 실패 rollback 표시를 확인한다.
+- 전체·장비·기타 탭과 거리 이탈 자동 닫기를 확인한다.
+- 사용자 슬롯과 분리한 저장소에서 거래 뒤 F5 → 재실행 Load로 Player 잔액과 merchant stock 복원을 확인한다.

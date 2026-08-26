@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace FantasySurvival.Interaction
@@ -9,9 +10,10 @@ namespace FantasySurvival.Interaction
         [SerializeField, Min(0.1f)] private float interactionRange = 3f;
         [SerializeField] private bool showDebugPrompt = true;
 
-        private const int NearbyColliderCapacity = 32;
+        private const int InitialNearbyColliderCapacity = 32;
+        private const int MaxPooledNearbyColliderCapacity = 256;
 
-        private readonly Collider[] nearbyColliders = new Collider[NearbyColliderCapacity];
+        private Collider[] nearbyColliders = new Collider[InitialNearbyColliderCapacity];
         private Interactable currentInteractable;
         private bool interactionBlocked;
 
@@ -95,16 +97,55 @@ namespace FantasySurvival.Interaction
 
             Interactable nearest = null;
             float nearestDistance = interactionRange;
-            int hitCount = Physics.OverlapSphereNonAlloc(
-                transform.position,
-                interactionRange,
-                nearbyColliders,
-                Physics.AllLayers,
-                QueryTriggerInteraction.Collide);
-
-            for (int i = 0; i < hitCount; i++)
+            int hitCount;
+            do
             {
-                Collider nearbyCollider = nearbyColliders[i];
+                hitCount = Physics.OverlapSphereNonAlloc(
+                    transform.position,
+                    interactionRange,
+                    nearbyColliders,
+                    Physics.AllLayers,
+                    QueryTriggerInteraction.Collide);
+
+                if (hitCount < nearbyColliders.Length ||
+                    nearbyColliders.Length >= MaxPooledNearbyColliderCapacity)
+                {
+                    break;
+                }
+
+                Array.Resize(
+                    ref nearbyColliders,
+                    Mathf.Min(nearbyColliders.Length * 2, MaxPooledNearbyColliderCapacity));
+            }
+            while (true);
+
+            if (hitCount >= nearbyColliders.Length)
+            {
+                // Saturation is exceptional. Allocate only in this case so nearest-target
+                // correctness is not silently lost in a collider-dense area.
+                Collider[] completeResults = Physics.OverlapSphere(
+                    transform.position,
+                    interactionRange,
+                    Physics.AllLayers,
+                    QueryTriggerInteraction.Collide);
+                SelectNearest(completeResults, completeResults.Length, ref nearest, ref nearestDistance);
+                currentInteractable = nearest;
+                return;
+            }
+
+            SelectNearest(nearbyColliders, hitCount, ref nearest, ref nearestDistance);
+            currentInteractable = nearest;
+        }
+
+        private void SelectNearest(
+            Collider[] colliders,
+            int count,
+            ref Interactable nearest,
+            ref float nearestDistance)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                Collider nearbyCollider = colliders[i];
                 Interactable candidate = nearbyCollider != null
                     ? nearbyCollider.GetComponentInParent<Interactable>()
                     : null;
@@ -121,8 +162,6 @@ namespace FantasySurvival.Interaction
                     nearestDistance = distance;
                 }
             }
-
-            currentInteractable = nearest;
         }
 
         private bool TryKeepCurrentInteraction()

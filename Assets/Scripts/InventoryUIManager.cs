@@ -2,10 +2,14 @@
 // 플레이어 게임 오브젝트에 추가하세요.
 
 using System;
+using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.UI;
 using FantasySurvival.Interaction;
 using FantasySurvival.Inventory;
+using FantasySurvival.Trading;
 using VariableInventorySystem;
 
 [RequireComponent(typeof(PlayerInteractor))]
@@ -17,10 +21,11 @@ public class InventoryUIManager : MonoBehaviour
     #region 필드 정의
     [Header("Core Component")] [SerializeField] private StandardCore standardCore;
     [Header("Item Database")] [SerializeField] private ItemDatabase itemDatabase;
-    [SerializeField] private int startingContainerItemId = 6;
     [SerializeField] private int[] startingItemIds = { 1, 2, 3, 4, 5 };
     [Header("Player Inventory UI")] [SerializeField] private GameObject playerInventoryPanel;
     [SerializeField] private StandardStashView playerStashView;
+    [SerializeField] private Text goldAmountText;
+    [SerializeField] private Text silverAmountText;
     [Header("Player Equipment UI")] [SerializeField] private GameObject equipmentPanel;
     [SerializeField] private EquipmentPanelView equipmentView;
     private PlayerInventoryState playerState;
@@ -28,7 +33,17 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private StandardStashView externalStashView;
     private StandardStashViewData currentExternalData;
     private Chest currentOpenedChest;
+    private Merchant currentOpenedMerchant;
+    private Interactable currentExternalInteractable;
+    private ExternalInventoryMode currentExternalMode;
     private PlayerInteractor playerInteractor;
+    [Header("Merchant UI")]
+    [SerializeField] private GameObject merchantControlsRoot;
+    [SerializeField] private Button merchantAllTabButton;
+    [SerializeField] private Button merchantEquipmentTabButton;
+    [SerializeField] private Button merchantOtherTabButton;
+    [SerializeField] private Text merchantCatalogText;
+    [SerializeField] private Text merchantStatusText;
     [Header("Settings")]
     [SerializeField] private int playerInventoryWidth = DefaultInventoryWidth;
     [SerializeField] private int playerInventoryHeight = DefaultInventoryHeight;
@@ -36,6 +51,16 @@ public class InventoryUIManager : MonoBehaviour
     private bool isEquipmentViewRegistered = false;
     private bool isExternalViewRegistered = false;
     private bool inputBlocked;
+    private InventoryTransferCoordinator transferCoordinator;
+
+    private enum MerchantCategory
+    {
+        All,
+        Equipment,
+        Other
+    }
+
+    private MerchantCategory merchantCategory = MerchantCategory.All;
     // private bool isPlayerInventoryInitialized = false; // Apply 항상 호출 방식으로 변경 시 불필요
 
     public bool InputBlocked => inputBlocked;
@@ -51,6 +76,7 @@ public class InventoryUIManager : MonoBehaviour
     public PlayerInventoryState PlayerState => playerState;
     public StandardStashViewData PlayerInventoryData => playerState?.Inventory;
     public EquipmentLoadoutData PlayerEquipmentData => playerState?.Equipment;
+    public PlayerWallet PlayerWallet => playerState?.Wallet;
     public event Action<PlayerInventoryState> PlayerStateChanged;
 
     #endregion
@@ -78,7 +104,11 @@ public class InventoryUIManager : MonoBehaviour
         playerState = new PlayerInventoryState(startingInventory, new EquipmentLoadoutData());
         if (playerInventoryPanel == null || playerStashView == null ||
             equipmentPanel == null || equipmentView == null ||
-            externalInventoryPanel == null || externalStashView == null)
+            externalInventoryPanel == null || externalStashView == null ||
+            goldAmountText == null || silverAmountText == null ||
+            merchantControlsRoot == null || merchantAllTabButton == null ||
+            merchantEquipmentTabButton == null || merchantOtherTabButton == null ||
+            merchantCatalogText == null || merchantStatusText == null)
         {
             Debug.LogError("UI references missing!");
             enabled = false;
@@ -93,6 +123,16 @@ public class InventoryUIManager : MonoBehaviour
         playerInventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         externalInventoryPanel.SetActive(false);
+        merchantControlsRoot.SetActive(false);
+        merchantAllTabButton.onClick.AddListener(() => SetMerchantCategory(MerchantCategory.All));
+        merchantEquipmentTabButton.onClick.AddListener(() => SetMerchantCategory(MerchantCategory.Equipment));
+        merchantOtherTabButton.onClick.AddListener(() => SetMerchantCategory(MerchantCategory.Other));
+        transferCoordinator = new InventoryTransferCoordinator(
+            playerState,
+            RefreshOpenViews,
+            SetExternalStatus);
+        standardCore.SetTransferController(transferCoordinator);
+        BindWallet(playerState.Wallet);
         PlayerStateChanged?.Invoke(playerState);
     }
 
@@ -115,11 +155,6 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         Debug.Log("[InitializeStartingItems] Adding items from ItemDatabase...");
-        if (!TryAddStartingItem(inventoryData, startingContainerItemId, out error))
-        {
-            return false;
-        }
-
         foreach (var itemId in startingItemIds)
         {
             if (!TryAddStartingItem(inventoryData, itemId, out error))
@@ -192,7 +227,10 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         return TryReplacePlayerState(
-            new PlayerInventoryState(replacement, playerState?.Equipment ?? new EquipmentLoadoutData()),
+            new PlayerInventoryState(
+                replacement,
+                playerState?.Equipment ?? new EquipmentLoadoutData(),
+                playerState?.Wallet ?? new PlayerWallet()),
             out error);
     }
 
@@ -219,7 +257,10 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
+        UnbindWallet(playerState?.Wallet);
         playerState = replacement;
+        BindWallet(playerState.Wallet);
+        transferCoordinator?.SetPlayerState(playerState);
         PlayerStateChanged?.Invoke(playerState);
         error = null;
         return true;
@@ -260,21 +301,19 @@ public class InventoryUIManager : MonoBehaviour
             return;
         }
 
-        // Unity의 파괴된 오브젝트는 null처럼 비교된다. 열린 상자가 사라졌다면
-        // 거리 계산보다 먼저 세 패널과 등록된 View를 한 번에 정리한다.
-        if (currentOpenedChest == null)
+        // Unity의 파괴된 오브젝트는 null처럼 비교된다. 열린 외부 대상이
+        // 사라졌다면 거리 계산보다 먼저 세 패널과 등록된 View를 정리한다.
+        if (currentExternalInteractable == null)
         {
             CloseAllInventories();
             return;
         }
 
-        ChestInteractable chestInteractable = currentOpenedChest.GetComponent<ChestInteractable>();
-        if (!currentOpenedChest.isActiveAndEnabled ||
-            chestInteractable == null ||
-            !chestInteractable.isActiveAndEnabled ||
-            !playerInteractor.IsWithinInteractionRange(currentOpenedChest.transform))
+        if (!currentExternalInteractable.isActiveAndEnabled ||
+            !currentExternalInteractable.gameObject.activeInHierarchy ||
+            !playerInteractor.IsWithinInteractionRange(currentExternalInteractable.transform))
         {
-            Debug.Log($"상자({currentOpenedChest.name}) 상호작용 종료. 모든 인벤토리 닫기 시도.");
+            Debug.Log($"외부 인벤토리({currentExternalInteractable.name}) 상호작용 종료. 모든 인벤토리 닫기 시도.");
             CloseAllInventories();
         }
     }
@@ -320,14 +359,69 @@ public class InventoryUIManager : MonoBehaviour
             }
         }
 
-        OpenPlayerAndExternalInventory(chest);
+        ChestInteractable interactable = chest.GetComponent<ChestInteractable>();
+        if (interactable == null)
+        {
+            return false;
+        }
+
+        OpenPlayerAndExternalInventory(
+            chest.chestInventoryData,
+            interactable,
+            ExternalInventoryMode.Storage,
+            chest,
+            null);
 
         return true;
     }
 
     public bool IsChestOpen(Chest chest)
     {
-        return chest != null && IsExternalInventoryOpen && currentOpenedChest == chest;
+        return chest != null && IsExternalInventoryOpen &&
+               currentExternalMode == ExternalInventoryMode.Storage &&
+               currentOpenedChest == chest;
+    }
+
+    public bool TryToggleMerchantInventory(
+        MerchantInteractable interactable,
+        Merchant merchant,
+        StandardStashViewData merchantInventory)
+    {
+        if (!isActiveAndEnabled || interactable == null || merchant == null ||
+            merchantInventory == null ||
+            playerInteractor == null ||
+            !playerInteractor.IsWithinInteractionRange(interactable.transform))
+        {
+            return false;
+        }
+
+        if (IsExternalInventoryOpen)
+        {
+            if (currentExternalInteractable == interactable)
+            {
+                return CloseAllInventories();
+            }
+
+            if (!CloseAllInventories())
+            {
+                return false;
+            }
+        }
+
+        OpenPlayerAndExternalInventory(
+            merchantInventory,
+            interactable,
+            ExternalInventoryMode.Merchant,
+            null,
+            merchant);
+        return true;
+    }
+
+    public bool IsMerchantOpen(MerchantInteractable merchant)
+    {
+        return merchant != null && IsExternalInventoryOpen &&
+               currentExternalMode == ExternalInventoryMode.Merchant &&
+               currentExternalInteractable == merchant;
     }
 
     public void SetInputBlocked(bool blocked)
@@ -393,17 +487,85 @@ public class InventoryUIManager : MonoBehaviour
     }
 
     // 플레이어와 외부 인벤토리 함께 열기
-    private void OpenPlayerAndExternalInventory(Chest chestToOpen) { OpenPlayerInventoryUI(); OpenExternalInventoryUI(chestToOpen); }
+    private void OpenPlayerAndExternalInventory(
+        StandardStashViewData data,
+        Interactable interactable,
+        ExternalInventoryMode mode,
+        Chest chest,
+        Merchant merchant)
+    {
+        OpenPlayerInventoryUI();
+        OpenExternalInventoryUI(data, interactable, mode, chest, merchant);
+    }
 
     // 외부 인벤토리 열기 (Apply는 필요시)
-    void OpenExternalInventoryUI(Chest chest) { if (externalInventoryPanel == null || /*...*/ chest == null || chest.chestInventoryData == null) return; bool needsApply = !externalInventoryPanel.activeSelf || currentOpenedChest != chest; currentOpenedChest = chest; currentExternalData = chest.chestInventoryData; externalInventoryPanel.SetActive(true); if (!isExternalViewRegistered) { standardCore.AddInventoryView(externalStashView); isExternalViewRegistered = true; } if (needsApply) { externalStashView.Apply(currentExternalData); Debug.Log($"External Applied for {chest.name}"); } else { Debug.Log($"External Shown for {chest.name}"); } }
+    void OpenExternalInventoryUI(
+        StandardStashViewData data,
+        Interactable interactable,
+        ExternalInventoryMode mode,
+        Chest chest,
+        Merchant merchant)
+    {
+        if (externalInventoryPanel == null || data == null || interactable == null ||
+            mode == ExternalInventoryMode.None)
+        {
+            return;
+        }
+
+        bool needsApply = !externalInventoryPanel.activeSelf ||
+                          currentExternalInteractable != interactable ||
+                          !ReferenceEquals(currentExternalData, data);
+        currentOpenedChest = chest;
+        currentOpenedMerchant = merchant;
+        currentExternalInteractable = interactable;
+        currentExternalMode = mode;
+        currentExternalData = data;
+        externalInventoryPanel.SetActive(true);
+        if (!isExternalViewRegistered)
+        {
+            standardCore.AddInventoryView(externalStashView);
+            isExternalViewRegistered = true;
+        }
+
+        transferCoordinator.SetExternalSession(mode, data);
+        if (mode == ExternalInventoryMode.Merchant)
+        {
+            merchantControlsRoot.SetActive(true);
+            SetExternalStatus("Shift+클릭 또는 드래그로 구매·판매", false);
+            SetMerchantCategory(MerchantCategory.All);
+        }
+        else
+        {
+            merchantControlsRoot.SetActive(false);
+            externalStashView.SetItemVisibilityFilter(null);
+        }
+
+        if (needsApply)
+        {
+            externalStashView.Apply(currentExternalData);
+            Debug.Log($"External Applied for {interactable.name}");
+        }
+        else
+        {
+            Debug.Log($"External Shown for {interactable.name}");
+        }
+    }
 
     // 외부 인벤토리 숨기기 (드래그 중 취소 처리)
     private void HideExternalInventoryUI()
     {
         if (externalInventoryPanel == null || standardCore == null ) return; if (!externalInventoryPanel.activeSelf) return;
         if (isExternalViewRegistered) { standardCore.RemoveInventoryView(externalStashView); isExternalViewRegistered = false; }
-        externalInventoryPanel.SetActive(false); currentOpenedChest = null; currentExternalData = null; Debug.Log("External Inventory Hidden");
+        externalStashView.SetItemVisibilityFilter(null);
+        merchantControlsRoot.SetActive(false);
+        externalInventoryPanel.SetActive(false);
+        currentOpenedChest = null;
+        currentOpenedMerchant = null;
+        currentExternalInteractable = null;
+        currentExternalData = null;
+        currentExternalMode = ExternalInventoryMode.None;
+        transferCoordinator?.ClearExternalSession();
+        Debug.Log("External Inventory Hidden");
     }
 
     // 모든 인벤토리 닫기 (Hide 함수 호출)
@@ -428,10 +590,13 @@ public class InventoryUIManager : MonoBehaviour
     // 컴포넌트 파괴 시 정리
     void OnDestroy()
     {
+        UnbindWallet(playerState?.Wallet);
         if (standardCore == null)
         {
             return;
         }
+
+        standardCore.SetTransferController(null);
 
         // A dragged item temporarily lives in the scene-local core, outside CellData.
         // Restore it before the scene unloads so the persistent inventory cannot lose it.
@@ -451,6 +616,137 @@ public class InventoryUIManager : MonoBehaviour
         {
             standardCore.RemoveInventoryView(externalStashView);
         }
+    }
+
+    private void BindWallet(PlayerWallet wallet)
+    {
+        if (wallet != null)
+        {
+            wallet.Changed += RefreshWalletUI;
+        }
+        RefreshWalletUI();
+    }
+
+    private void UnbindWallet(PlayerWallet wallet)
+    {
+        if (wallet != null)
+        {
+            wallet.Changed -= RefreshWalletUI;
+        }
+    }
+
+    private void RefreshWalletUI()
+    {
+        if (goldAmountText != null)
+        {
+            goldAmountText.text = $"금  {(playerState?.Wallet.Gold ?? 0):N0}";
+        }
+        if (silverAmountText != null)
+        {
+            silverAmountText.text = $"은  {(playerState?.Wallet.Silver ?? 0):N0}";
+        }
+    }
+
+    private void RefreshOpenViews()
+    {
+        if (playerState != null && playerInventoryPanel != null && playerInventoryPanel.activeSelf)
+        {
+            playerStashView.Apply(playerState.Inventory);
+            equipmentView.Apply(playerState.Equipment);
+        }
+
+        if (currentExternalData != null && IsExternalInventoryOpen)
+        {
+            externalStashView.Apply(currentExternalData);
+            if (currentExternalMode == ExternalInventoryMode.Merchant)
+            {
+                ApplyMerchantFilter();
+            }
+        }
+    }
+
+    private void SetMerchantCategory(MerchantCategory category)
+    {
+        if (currentExternalMode != ExternalInventoryMode.Merchant || currentExternalData == null)
+        {
+            return;
+        }
+
+        if (standardCore.IsDragging() && !standardCore.CancelDrag())
+        {
+            SetExternalStatus("드래그 원본을 복구할 수 없어 탭을 바꾸지 못했습니다.", true);
+            return;
+        }
+
+        merchantCategory = category;
+        ApplyMerchantFilter();
+    }
+
+    private void ApplyMerchantFilter()
+    {
+        externalStashView.SetItemVisibilityFilter(item =>
+        {
+            if (!(item is InventoryItemData inventoryItem))
+            {
+                return merchantCategory == MerchantCategory.All;
+            }
+
+            switch (merchantCategory)
+            {
+                case MerchantCategory.Equipment: return inventoryItem.Definition.IsEquippable;
+                case MerchantCategory.Other: return !inventoryItem.Definition.IsEquippable;
+                default: return true;
+            }
+        });
+
+        merchantAllTabButton.interactable = merchantCategory != MerchantCategory.All;
+        merchantEquipmentTabButton.interactable = merchantCategory != MerchantCategory.Equipment;
+        merchantOtherTabButton.interactable = merchantCategory != MerchantCategory.Other;
+        RefreshMerchantCatalogText();
+    }
+
+    private void RefreshMerchantCatalogText()
+    {
+        if (merchantCatalogText == null || currentExternalData?.CellData == null)
+        {
+            return;
+        }
+
+        var builder = new StringBuilder();
+        var seen = new HashSet<IVariableInventoryCellData>();
+        foreach (IVariableInventoryCellData cell in currentExternalData.CellData)
+        {
+            if (!(cell is InventoryItemData item) || !seen.Add(item) ||
+                !externalStashView.IsItemVisible(item) || !item.Definition.IsTradable)
+            {
+                continue;
+            }
+
+            if (builder.Length > 0)
+            {
+                builder.Append("   |   ");
+            }
+            builder.Append(item.Definition.DisplayName)
+                .Append(' ')
+                .Append(InventoryTransferCoordinator.GetCurrencyName(item.Definition.TradeCurrency))
+                .Append(' ')
+                .Append(item.Definition.TradePrice.ToString("N0"));
+        }
+
+        merchantCatalogText.text = builder.Length > 0 ? builder.ToString() : "해당 분류의 상품이 없습니다.";
+    }
+
+    private void SetExternalStatus(string message, bool isError)
+    {
+        if (merchantStatusText == null || currentExternalMode != ExternalInventoryMode.Merchant)
+        {
+            return;
+        }
+
+        merchantStatusText.text = message ?? string.Empty;
+        merchantStatusText.color = isError
+            ? new Color(1f, 0.45f, 0.4f, 1f)
+            : new Color(0.9f, 0.9f, 0.9f, 1f);
     }
 
     void CancelActiveDrag()

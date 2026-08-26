@@ -22,6 +22,8 @@ namespace VariableInventorySystem
         protected virtual StandardAssetLoader Loader { get; set; }
 
         protected bool isSelectable = true;
+        private bool contentVisible = true;
+        private int imageRequestVersion;
         protected IVariableInventoryAsset currentImageAsset;
 
         public Vector2 GetCellSize()
@@ -56,14 +58,23 @@ namespace VariableInventorySystem
             highlight.gameObject.SetActive(value);
         }
 
+        public void SetContentVisible(bool visible)
+        {
+            contentVisible = visible;
+            OnApply();
+        }
+
         protected override void OnApply()
         {
             SetHighLight(false);
-            target.gameObject.SetActive(CellData != null);
+            target.gameObject.SetActive(CellData != null && contentVisible);
             ApplySize();
 
             if (CellData == null)
             {
+                imageRequestVersion++;
+                currentImageAsset = null;
+                cellImage.texture = null;
                 cellImage.gameObject.SetActive(false);
                 background.gameObject.SetActive(false);
             }
@@ -73,6 +84,8 @@ namespace VariableInventorySystem
                 if (currentImageAsset != CellData.ImageAsset)
                 {
                     currentImageAsset = CellData.ImageAsset;
+                    IVariableInventoryAsset requestedAsset = currentImageAsset;
+                    int requestVersion = ++imageRequestVersion;
 
                     cellImage.gameObject.SetActive(false);
                     if (Loader == null)
@@ -80,14 +93,24 @@ namespace VariableInventorySystem
                         Loader = new StandardAssetLoader();
                     }
 
-                    StartCoroutine(Loader.LoadAsync(CellData.ImageAsset, tex =>
+                    StartCoroutine(Loader.LoadAsync(requestedAsset, tex =>
                     {
+                        if (requestVersion != imageRequestVersion || CellData == null ||
+                            currentImageAsset != requestedAsset)
+                        {
+                            return;
+                        }
+
                         cellImage.texture = tex;
-                        cellImage.gameObject.SetActive(true);
+                        cellImage.gameObject.SetActive(contentVisible && tex != null);
                     }));
                 }
+                else
+                {
+                    cellImage.gameObject.SetActive(contentVisible && cellImage.texture != null);
+                }
 
-                background.gameObject.SetActive(true && isSelectable);
+                background.gameObject.SetActive(contentVisible && isSelectable);
             }
         }
 

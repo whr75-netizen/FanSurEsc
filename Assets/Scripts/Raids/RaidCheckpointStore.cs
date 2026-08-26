@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using FantasySurvival.SaveSystem;
 using UnityEngine;
 
 namespace FantasySurvival.Raids
@@ -378,6 +379,12 @@ namespace FantasySurvival.Raids
                     return false;
                 }
 
+                if (!TryNormalizeEmbeddedPersistentState(data, out error))
+                {
+                    data = null;
+                    return false;
+                }
+
                 error = null;
                 return true;
             }
@@ -387,6 +394,53 @@ namespace FantasySurvival.Raids
                 error = $"Could not read raid recovery file: {exception.Message}";
                 return false;
             }
+        }
+
+        private static bool TryNormalizeEmbeddedPersistentState(object data, out string error)
+        {
+            GameSaveData persistentState = null;
+            bool stateIsRequired = false;
+            switch (data)
+            {
+                case RaidRecoveryBaselineData baseline:
+                    persistentState = baseline.startingState;
+                    stateIsRequired = true;
+                    break;
+                case RaidCheckpointData checkpoint:
+                    persistentState = checkpoint.persistentState;
+                    stateIsRequired = true;
+                    break;
+                case RaidSettlementJournalData journal:
+                    persistentState = journal.settlementState;
+                    bool isLegacyMarkerOnlyFailure =
+                        journal.formatVersion == 1 &&
+                        journal.kind == RaidSettlementJournalKind.None &&
+                        journal.outcome == RaidOutcome.RecoveryFailed;
+                    stateIsRequired =
+                        journal.kind != RaidSettlementJournalKind.RecoveryFailureMarker &&
+                        !isLegacyMarkerOnlyFailure;
+                    break;
+            }
+
+            if (persistentState == null)
+            {
+                if (stateIsRequired)
+                {
+                    error = "Recovery payload is missing its persistent game state.";
+                    return false;
+                }
+
+                error = null;
+                return true;
+            }
+
+            if (!GameSaveManager.TryNormalizeToCurrentVersion(persistentState, out error))
+            {
+                error = $"Recovery persistent-state migration failed: {error}";
+                return false;
+            }
+
+            return true;
         }
 
         private static bool TryWriteJson(

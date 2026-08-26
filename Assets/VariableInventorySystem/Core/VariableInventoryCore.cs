@@ -21,16 +21,28 @@ namespace VariableInventorySystem
         bool? originEffectCellRotate;
         Vector2 cursorPosition;
         private IVariableInventoryView originView = null; // ★ 드래그 시작 View 저장용
+        private IVariableInventoryTransferController transferController;
 
         // --- 추가/기존 메소드 ---
         public bool IsDragging() => effectCell?.CellData != null;
+        public void SetTransferController(IVariableInventoryTransferController controller)
+        {
+            transferController = controller;
+        }
+        protected bool TryHandleQuickTransfer(
+            IVariableInventoryView sourceView,
+            IVariableInventoryCellData item)
+        {
+            return transferController != null &&
+                   transferController.HandleQuickTransfer(sourceView, item);
+        }
         public virtual void Initialize() { if (effectCell != null) return; if (CellPrefab == null || EffectCellParent == null) { Debug.LogError($"[{GetType().Name}] CellPrefab or EffectCellParent not set!", gameObject); return; } var e = Instantiate(CellPrefab, EffectCellParent); if (e == null) return; effectCell = e.GetComponent<IVariableInventoryCell>(); if (effectCell == null) { Destroy(e); return; } effectCell.RectTransform.gameObject.SetActive(false); effectCell.SetSelectable(false); }
         public virtual void AddInventoryView(IVariableInventoryView v) { if (v == null || InventoryViews.Contains(v)) return; InventoryViews.Add(v); v.SetCellCallback(OnCellClick, OnCellOptionClick, OnCellEnter, OnCellExit); }
         public virtual void RemoveInventoryView(IVariableInventoryView v) { if (v == null || !InventoryViews.Contains(v)) return; InventoryViews.Remove(v); }
         protected virtual void OnCellClick(IVariableInventoryCell cell) { }
         protected virtual void OnCellOptionClick(IVariableInventoryCell cell) { }
-        protected virtual void OnCellEnter(IVariableInventoryCell cell) { stareCell = cell; foreach (var v in InventoryViews) v.OnCellEnter(stareCell, effectCell); }
-        protected virtual void OnCellExit(IVariableInventoryCell cell) { if (stareCell == cell) stareCell = null; foreach (var v in InventoryViews) v.OnCellExit(cell); }
+        protected virtual void OnCellEnter(IVariableInventoryCell cell) { stareCell = cell; UpdateDropPreviewHandling(); foreach (var v in InventoryViews) v.OnCellEnter(stareCell, effectCell); }
+        protected virtual void OnCellExit(IVariableInventoryCell cell) { if (stareCell == cell) stareCell = null; UpdateDropPreviewHandling(); foreach (var v in InventoryViews) v.OnCellExit(cell); }
 
         // --- ★★★ OnBeginDrag (원본 기반 최소 수정) ★★★ ---
         public virtual void OnBeginDrag(PointerEventData eventData)
@@ -90,19 +102,54 @@ namespace VariableInventorySystem
         }
 
         // --- OnDrag (원본 유지) ---
-        public virtual void OnDrag(PointerEventData eventData) { if (!IsDragging()) return; foreach (var v in InventoryViews) v.OnDrag(stareCell, effectCell, eventData); RectTransformUtility.ScreenPointToLocalPointInRectangle(EffectCellParent, eventData.position, eventData.enterEventCamera, out cursorPosition); var (w, h) = GetRotateSize(effectCell.CellData); effectCell.RectTransform.localPosition = cursorPosition + new Vector2(-(w - 1) * effectCell.DefaultCellSize.x * 0.5f, (h - 1) * effectCell.DefaultCellSize.y * 0.5f); }
+        public virtual void OnDrag(PointerEventData eventData) { if (!IsDragging()) return; UpdateDropPreviewHandling(); foreach (var v in InventoryViews) v.OnDrag(stareCell, effectCell, eventData); RectTransformUtility.ScreenPointToLocalPointInRectangle(EffectCellParent, eventData.position, eventData.enterEventCamera, out cursorPosition); var (w, h) = GetRotateSize(effectCell.CellData); effectCell.RectTransform.localPosition = cursorPosition + new Vector2(-(w - 1) * effectCell.DefaultCellSize.x * 0.5f, (h - 1) * effectCell.DefaultCellSize.y * 0.5f); }
 
         // --- OnEndDrag (originView 초기화 추가) ---
         public virtual void OnEndDrag(PointerEventData eventData)
         {
             if (!IsDragging()) return;
-            bool isRelease = false; foreach (var view in InventoryViews) { if (view.OnDrop(stareCell, effectCell)) { isRelease = true; break; } }
+            IVariableInventoryCellData transferredItem = effectCell.CellData;
+            IVariableInventoryView destinationView = null;
+            VariableInventoryDropHandling handling = VariableInventoryDropHandling.Standard;
+            bool isRelease = false;
+            foreach (var view in InventoryViews)
+            {
+                if (!(view is IVariableInventoryBoundView boundView) ||
+                    !boundView.ContainsCell(stareCell))
+                {
+                    continue;
+                }
+
+                handling = transferController != null
+                    ? transferController.GetDropHandling(originView, view, transferredItem)
+                    : VariableInventoryDropHandling.Standard;
+                if (handling == VariableInventoryDropHandling.Reject)
+                {
+                    break;
+                }
+
+                isRelease = handling == VariableInventoryDropHandling.AcceptWithoutInsert ||
+                            view.OnDrop(stareCell, effectCell);
+                if (isRelease)
+                {
+                    destinationView = view;
+                }
+                break;
+            }
             if (!isRelease) RestoreOriginalRotation();
             foreach (var inventoryView in InventoryViews) inventoryView?.OnDroped(isRelease); // ★ OnDroped에서 복구 처리됨
             if (!isRelease && IsDetachedOwnedItem())
             {
                 Debug.LogError("[Core.OnEndDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
                 return;
+            }
+            if (isRelease && transferController != null)
+            {
+                transferController.OnDropCompleted(
+                    originView,
+                    destinationView,
+                    transferredItem,
+                    handling);
             }
             if (effectCell != null) { if (effectCell.RectTransform != null) effectCell.RectTransform.gameObject.SetActive(false); effectCell.Apply(null); }
             originEffectCellRotate = null;
@@ -112,7 +159,7 @@ namespace VariableInventorySystem
         }
 
         // --- SwitchRotate, GetRotateSize (원본 유지) ---
-        public virtual void SwitchRotate() { if (!IsDragging()) return; if (!originEffectCellRotate.HasValue) originEffectCellRotate = effectCell.CellData.IsRotate; effectCell.CellData.IsRotate = !effectCell.CellData.IsRotate; effectCell.Apply(effectCell.CellData); var (w, h) = GetRotateSize(effectCell.CellData); effectCell.RectTransform.localPosition = cursorPosition + new Vector2(-(w - 1) * effectCell.DefaultCellSize.x * 0.5f, (h - 1) * effectCell.DefaultCellSize.y * 0.5f); foreach (var v in InventoryViews) v.OnSwitchRotate(stareCell, effectCell); }
+        public virtual void SwitchRotate() { if (!IsDragging()) return; if (!originEffectCellRotate.HasValue) originEffectCellRotate = effectCell.CellData.IsRotate; effectCell.CellData.IsRotate = !effectCell.CellData.IsRotate; effectCell.Apply(effectCell.CellData); var (w, h) = GetRotateSize(effectCell.CellData); effectCell.RectTransform.localPosition = cursorPosition + new Vector2(-(w - 1) * effectCell.DefaultCellSize.x * 0.5f, (h - 1) * effectCell.DefaultCellSize.y * 0.5f); UpdateDropPreviewHandling(); foreach (var v in InventoryViews) v.OnSwitchRotate(stareCell, effectCell); }
         (int, int) GetRotateSize(IVariableInventoryCellData cell) { if (cell == null) return (1, 1); return (cell.IsRotate ? cell.Height : cell.Width, cell.IsRotate ? cell.Width : cell.Height); }
 
         // --- CancelDrag (OnDroped(false) 호출) ---
@@ -148,6 +195,29 @@ namespace VariableInventorySystem
 
             effectCell.CellData.IsRotate = originEffectCellRotate.Value;
             effectCell.Apply(effectCell.CellData);
+        }
+
+        private void UpdateDropPreviewHandling()
+        {
+            foreach (IVariableInventoryView view in InventoryViews)
+            {
+                if (!(view is IVariableInventoryBoundView boundView))
+                {
+                    continue;
+                }
+
+                VariableInventoryDropHandling? handling = null;
+                if (IsDragging() && stareCell != null && boundView.ContainsCell(stareCell) &&
+                    transferController != null)
+                {
+                    handling = transferController.GetDropPreviewHandling(
+                        originView,
+                        view,
+                        effectCell.CellData);
+                }
+
+                boundView.SetDropPreviewHandling(handling);
+            }
         }
 
         private bool IsDetachedOwnedItem()

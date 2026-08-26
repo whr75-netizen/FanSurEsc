@@ -40,6 +40,20 @@ namespace VariableInventorySystem
 
         protected override void OnCellClick(IVariableInventoryCell cell)
         {
+            if ((Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift)) &&
+                cell?.CellData != null)
+            {
+                foreach (IVariableInventoryView view in InventoryViews)
+                {
+                    if (view is IVariableInventoryBoundView boundView &&
+                        boundView.ContainsCell(cell) &&
+                        TryHandleQuickTransfer(view, cell.CellData))
+                    {
+                        return;
+                    }
+                }
+            }
+
             if (cell.CellData is IStandardCaseCellData caseData)
             {
                 if (popupList.Contains(caseData))

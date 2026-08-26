@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using FantasySurvival.Trading;
 using VariableInventorySystem;
 
 namespace FantasySurvival.Inventory
@@ -378,13 +379,23 @@ namespace FantasySurvival.Inventory
     {
         public StandardStashViewData Inventory { get; }
         public EquipmentLoadoutData Equipment { get; }
+        public PlayerWallet Wallet { get; }
 
         public PlayerInventoryState(
             StandardStashViewData inventory,
             EquipmentLoadoutData equipment)
+            : this(inventory, equipment, new PlayerWallet())
+        {
+        }
+
+        public PlayerInventoryState(
+            StandardStashViewData inventory,
+            EquipmentLoadoutData equipment,
+            PlayerWallet wallet)
         {
             Inventory = inventory ?? throw new ArgumentNullException(nameof(inventory));
             Equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
+            Wallet = wallet ?? throw new ArgumentNullException(nameof(wallet));
         }
 
         /// <summary>

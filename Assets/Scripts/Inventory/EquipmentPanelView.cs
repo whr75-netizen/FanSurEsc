@@ -7,15 +7,17 @@ using VariableInventorySystem;
 namespace FantasySurvival.Inventory
 {
     [DisallowMultipleComponent]
-    public sealed class EquipmentPanelView : MonoBehaviour, IVariableInventoryView
+    public sealed class EquipmentPanelView : MonoBehaviour, IVariableInventoryBoundView
     {
         [SerializeField] private EquipmentSlotCell[] slotCells;
 
         private EquipmentLoadoutData loadout;
         private EquipmentSlotId? originalSlot;
         private IVariableInventoryCellData originalItem;
+        private VariableInventoryDropHandling? dropPreviewHandling;
 
         public IReadOnlyList<EquipmentSlotCell> SlotCells => slotCells;
+        public IVariableInventoryViewData ViewData => loadout;
 
         public void SetCellCallback(
             Action<IVariableInventoryCell> onCellClick,
@@ -114,6 +116,7 @@ namespace FantasySurvival.Inventory
 
         public void OnDroped(bool isDroped)
         {
+            dropPreviewHandling = null;
             ClearHighlights();
             if (!isDroped && originalSlot.HasValue && originalItem != null)
             {
@@ -177,7 +180,8 @@ namespace FantasySurvival.Inventory
             }
 
             bool dragging = effectCell?.CellData != null;
-            bool valid = dragging && loadout != null &&
+            bool valid = dragging && dropPreviewHandling != VariableInventoryDropHandling.Reject &&
+                         loadout != null &&
                          loadout.CheckInsert(EquipmentSlotCatalog.GetIndex(cell.SlotId), effectCell.CellData);
             cell.SetHighlight(dragging, valid);
         }
@@ -198,6 +202,16 @@ namespace FantasySurvival.Inventory
             }
 
             return false;
+        }
+
+        public bool ContainsCell(IVariableInventoryCell cell)
+        {
+            return cell is EquipmentSlotCell equipmentCell && Contains(equipmentCell);
+        }
+
+        public void SetDropPreviewHandling(VariableInventoryDropHandling? handling)
+        {
+            dropPreviewHandling = handling;
         }
 
         private EquipmentSlotCell FindCell(EquipmentSlotId slot)

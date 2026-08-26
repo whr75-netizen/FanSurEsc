@@ -396,8 +396,10 @@ namespace FantasySurvival.Raids
                 saveData.raidInProgress ||
                 !string.IsNullOrEmpty(saveData.activeRaidInstanceId) ||
                 saveData.playerItems == null ||
+                saveData.playerCurrency == null ||
                 saveData.baseState == null ||
-                saveData.baseState.formatVersion != BaseSaveData.CurrentFormatVersion)
+                saveData.baseState.formatVersion != BaseSaveData.CurrentFormatVersion ||
+                saveData.baseMerchantState == null)
             {
                 error = "Persistent state has an unsupported or incomplete header.";
                 return false;
@@ -414,10 +416,27 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            return BaseFurnitureSaveCodec.TryRestore(
-                saveData.baseState,
+            if (!PlayerCurrencySaveCodec.TryRestore(
+                    saveData.playerCurrency,
+                    out _,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!BaseFurnitureSaveCodec.TryRestore(
+                    saveData.baseState,
+                    itemDatabase,
+                    furnitureDatabase,
+                    out _,
+                    out error))
+            {
+                return false;
+            }
+
+            return BaseMerchantSaveCodec.TryRestore(
+                saveData.baseMerchantState,
                 itemDatabase,
-                furnitureDatabase,
                 out _,
                 out error);
         }

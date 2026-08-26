@@ -1,4 +1,5 @@
 using FantasySurvival.Combat;
+using FantasySurvival.Trading;
 using UnityEngine;
 
 namespace FantasySurvival.Inventory
@@ -26,6 +27,11 @@ namespace FantasySurvival.Inventory
         [Header("Equipment")]
         [SerializeField] private EquipmentSlotType equipmentSlot;
 
+        [Header("Trading Prototype")]
+        [SerializeField] private bool isTradable;
+        [SerializeField] private TradeCurrency tradeCurrency = TradeCurrency.Silver;
+        [SerializeField, Min(0)] private int tradePrice;
+
         [Header("Weapon Prototype")]
         [SerializeField] private WeaponFireMode weaponFireMode;
         [SerializeField, Min(1f)] private float roundsPerMinute = 300f;
@@ -47,6 +53,10 @@ namespace FantasySurvival.Inventory
         public EquipmentSlotType EquipmentSlot => equipmentSlot;
         public bool IsEquippable => equipmentSlot != EquipmentSlotType.None;
         public bool IsWeapon => equipmentSlot == EquipmentSlotType.Weapon;
+        public bool IsTradable => isTradable && !IsContainer && tradePrice > 0 &&
+                                  PlayerWallet.IsValidCurrency(tradeCurrency);
+        public TradeCurrency TradeCurrency => tradeCurrency;
+        public int TradePrice => tradePrice;
         public WeaponFireMode WeaponFireMode => weaponFireMode;
         public float RoundsPerMinute => roundsPerMinute;
         public float WeaponDamage => weaponDamage;

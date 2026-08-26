@@ -16,6 +16,8 @@ namespace FantasySurvival.SceneFlow
         private bool isTransitionActive;
         private Action interruptionCallback;
 
+        public event Action Covered;
+
         public bool IsConfigured => transitionCanvas != null && canvasGroup != null;
         public bool IsTransitionActive => isTransitionActive;
         public bool IsCovered => IsConfigured && transitionCanvas.enabled &&
@@ -44,6 +46,16 @@ namespace FantasySurvival.SceneFlow
                 () =>
                 {
                     activeFade = null;
+                    try
+                    {
+                        Covered?.Invoke();
+                    }
+                    catch (Exception exception)
+                    {
+                        // A presentation observer must not strand the travel token on
+                        // a fully covered screen before the scene load can begin.
+                        Debug.LogException(exception, this);
+                    }
                     onCovered?.Invoke();
                 }));
             return true;

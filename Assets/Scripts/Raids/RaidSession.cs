@@ -48,6 +48,7 @@ namespace FantasySurvival.Raids
         private string returnSpawnId;
         private bool pendingBaseSettlement;
         private bool pendingFreshInvalidMapReturn;
+        private bool automaticExtractionReturn;
 
         public event Action StateChanged;
         public event Action<RaidOutcome> Resolved;
@@ -61,6 +62,7 @@ namespace FantasySurvival.Raids
         public bool IsRaidResolved =>
             currentSceneKind == GameplaySceneKind.Raid &&
             (state == RaidSessionState.Resolved || state == RaidSessionState.Returning);
+        public bool IsAutomaticExtractionReturn => automaticExtractionReturn;
         public bool IsConfigured =>
             playerStats != null &&
             !string.IsNullOrWhiteSpace(defaultBaseScene) &&
@@ -185,6 +187,7 @@ namespace FantasySurvival.Raids
             outcome = RaidOutcome.RecoveryFailed;
             pendingBaseSettlement = false;
             pendingFreshInvalidMapReturn = false;
+            automaticExtractionReturn = false;
             ResetReturnRoute();
             playerStats?.SetDamageBlocked(false);
             NotifyStateChanged();
@@ -229,6 +232,7 @@ namespace FantasySurvival.Raids
 
             pendingBaseSettlement = false;
             pendingFreshInvalidMapReturn = !recoveryFailed;
+            automaticExtractionReturn = false;
             ResetReturnRoute();
             currentSceneKind = GameplaySceneKind.Raid;
             state = RaidSessionState.Returning;
@@ -276,6 +280,7 @@ namespace FantasySurvival.Raids
             outcome = RaidOutcome.None;
             pendingBaseSettlement = false;
             pendingFreshInvalidMapReturn = false;
+            automaticExtractionReturn = false;
             ResetReturnRoute();
             NotifyStateChanged();
 
@@ -297,6 +302,22 @@ namespace FantasySurvival.Raids
             returnScene = baseScene;
             returnSpawnId = baseSpawnId;
             return Resolve(RaidOutcome.Extracted);
+        }
+
+        public bool TryResolveExtractionAndReturn(string baseScene, string baseSpawnId)
+        {
+            // CALL-ORDER INVARIANT: Resolve invokes every terminal-checkpoint observer
+            // synchronously. Start the covered Base travel only after those observers
+            // have finished securing the terminal result; never expose a result-choice
+            // screen between the two operations.
+            automaticExtractionReturn = true;
+            if (!TryResolveExtraction(baseScene, baseSpawnId))
+            {
+                automaticExtractionReturn = false;
+                return false;
+            }
+
+            return TryReturnToBase();
         }
 
         public bool TryResolveAbandonment()
@@ -473,6 +494,7 @@ namespace FantasySurvival.Raids
             state = RaidSessionState.Inactive;
             outcome = RaidOutcome.None;
             pendingFreshInvalidMapReturn = false;
+            automaticExtractionReturn = false;
             ResetReturnRoute();
             if (notify)
             {

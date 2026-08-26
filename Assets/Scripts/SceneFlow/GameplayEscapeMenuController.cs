@@ -32,6 +32,7 @@ namespace FantasySurvival.SceneFlow
 
         [Header("View roots")]
         [SerializeField] private GameObject pauseCanvas;
+        [SerializeField] private Image backdropImage;
         [SerializeField] private GameObject mainPanel;
         [SerializeField] private GameObject settingsPanel;
         [SerializeField] private GameObject confirmationPanel;
@@ -58,6 +59,7 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private Text resultTitleText;
         [SerializeField] private Text resultDetailText;
         [SerializeField] private Button resultReturnToBaseButton;
+        [SerializeField] private Text resultPrimaryButtonText;
         [SerializeField] private Button resultMainMenuButton;
 
         private MenuView currentView;
@@ -70,10 +72,16 @@ namespace FantasySurvival.SceneFlow
         private bool interactionWasBlocked;
         private bool ownsWorldPause;
         private float previousTimeScale = 1f;
+        private Color defaultBackdropColor;
+        private bool extractionSettlementFlow;
+        private bool extractionSettlementCommitted;
+        private bool extractionSettlementFailed;
+        private RaidOutcome extractionSettlementOutcome;
 
         public bool IsConfigured =>
             shell != null && raidSession != null &&
-            pauseCanvas != null && mainPanel != null && settingsPanel != null &&
+            pauseCanvas != null && backdropImage != null &&
+            mainPanel != null && settingsPanel != null &&
             confirmationPanel != null && resultPanel != null &&
             menuTitleText != null && baseResumeButton != null && raidResumeButton != null &&
             abandonButton != null && settingsButton != null && mainMenuButton != null &&
@@ -81,15 +89,29 @@ namespace FantasySurvival.SceneFlow
             confirmationText != null && confirmationAcceptButton != null &&
             confirmationCancelButton != null && resultTitleText != null &&
             resultDetailText != null && resultReturnToBaseButton != null &&
+            resultPrimaryButtonText != null &&
             resultMainMenuButton != null;
         public bool IsOpen => currentView != MenuView.Closed;
         public bool IsMapSelectionVisible =>
             registeredMapSelection != null && registeredMapSelection.IsVisible;
         public bool IsWorldPaused => ownsWorldPause && Mathf.Approximately(Time.timeScale, 0f);
         public string CurrentViewName => currentView.ToString();
+        public bool IsExtractionSettlementPending =>
+            extractionSettlementFlow &&
+            !extractionSettlementCommitted &&
+            !extractionSettlementFailed;
+        public bool IsExtractionSettlementConfirmationReady =>
+            extractionSettlementFlow && extractionSettlementCommitted;
+        public bool IsExtractionSettlementRetryVisible =>
+            extractionSettlementFlow && extractionSettlementFailed;
 
         private void Awake()
         {
+            if (backdropImage != null)
+            {
+                defaultBackdropColor = backdropImage.color;
+            }
+
             SetAllPanelsInactive();
             if (pauseCanvas != null)
             {
@@ -113,6 +135,16 @@ namespace FantasySurvival.SceneFlow
                 raidSession.Resolved += HandleRaidResolved;
                 raidSession.ReturnTravelFailed += HandleReturnTravelFailed;
             }
+
+            if (shell?.RaidCheckpoint != null)
+            {
+                shell.RaidCheckpoint.SettlementCommitted += HandleSettlementCommitted;
+                shell.RaidCheckpoint.SettlementFailed += HandleSettlementFailed;
+            }
+            if (shell?.SceneTransitionFader != null)
+            {
+                shell.SceneTransitionFader.Covered += HandleTravelCovered;
+            }
         }
 
         private void OnDisable()
@@ -123,7 +155,21 @@ namespace FantasySurvival.SceneFlow
                 raidSession.ReturnTravelFailed -= HandleReturnTravelFailed;
             }
 
+            if (shell?.RaidCheckpoint != null)
+            {
+                shell.RaidCheckpoint.SettlementCommitted -= HandleSettlementCommitted;
+                shell.RaidCheckpoint.SettlementFailed -= HandleSettlementFailed;
+            }
+            if (shell?.SceneTransitionFader != null)
+            {
+                shell.SceneTransitionFader.Covered -= HandleTravelCovered;
+            }
+
             registeredMapSelection = null;
+            extractionSettlementFlow = false;
+            extractionSettlementCommitted = false;
+            extractionSettlementFailed = false;
+            extractionSettlementOutcome = RaidOutcome.None;
             HideAllAndReleaseInput();
         }
 
@@ -289,7 +335,43 @@ namespace FantasySurvival.SceneFlow
 
         public void ReturnToBaseFromResult()
         {
-            if (currentView == MenuView.Result && raidSession.IsRaidResolved)
+            if (currentView != MenuView.Result)
+            {
+                return;
+            }
+
+            if (extractionSettlementFlow)
+            {
+                if (extractionSettlementCommitted)
+                {
+                    extractionSettlementFlow = false;
+                    extractionSettlementCommitted = false;
+                    extractionSettlementFailed = false;
+                    extractionSettlementOutcome = RaidOutcome.None;
+                    HideAllAndReleaseInput();
+                }
+                else if (extractionSettlementFailed &&
+                         shell?.RaidCheckpoint != null &&
+                         shell.RaidCheckpoint.HasPendingBaseSettlement)
+                {
+                    RaidOutcome retryOutcome = extractionSettlementOutcome;
+                    ShowExtractionSettlementProgress(retryOutcome);
+                    if (!shell.RaidCheckpoint.TryCommitTrackedRaidAtBase(out string error))
+                    {
+                        Debug.LogError($"Raid settlement retry failed: {error}", this);
+                        ShowExtractionSettlementFailure();
+                    }
+                }
+                else if (raidSession.IsRaidResolved)
+                {
+                    ShowExtractionSettlementProgress(raidSession.Outcome);
+                    raidSession.TryReturnToBase();
+                }
+
+                return;
+            }
+
+            if (raidSession.IsRaidResolved)
             {
                 BeginReturnToBase();
             }
@@ -297,7 +379,9 @@ namespace FantasySurvival.SceneFlow
 
         public void GoToMainMenuFromResult()
         {
-            if (currentView == MenuView.Result && raidSession.IsRaidResolved)
+            if (!extractionSettlementFlow &&
+                currentView == MenuView.Result &&
+                raidSession.IsRaidResolved)
             {
                 BeginMainMenuExit();
             }
@@ -410,6 +494,7 @@ namespace FantasySurvival.SceneFlow
             settingsPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(false);
+            SetExtractionBackdrop(false);
 
             bool isBase = raidSession.CurrentSceneKind == GameplaySceneKind.Base;
             bool isRaid = raidSession.CurrentSceneKind == GameplaySceneKind.Raid &&
@@ -430,6 +515,7 @@ namespace FantasySurvival.SceneFlow
             settingsPanel.SetActive(false);
             confirmationPanel.SetActive(true);
             resultPanel.SetActive(false);
+            SetExtractionBackdrop(false);
             confirmationText.text = message;
             Select(confirmationCancelButton);
         }
@@ -459,12 +545,137 @@ namespace FantasySurvival.SceneFlow
             settingsPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(true);
+            SetExtractionBackdrop(false);
+            SetResultCopy(resolvedOutcome, false);
+            resultReturnToBaseButton.gameObject.SetActive(true);
+            resultPrimaryButtonText.text = "기지로 돌아가기";
+            resultMainMenuButton.gameObject.SetActive(true);
+            Select(resultReturnToBaseButton);
+        }
 
+        private void ShowExtractionSettlementProgress(RaidOutcome resolvedOutcome)
+        {
+            extractionSettlementFlow = true;
+            extractionSettlementCommitted = false;
+            extractionSettlementFailed = false;
+            extractionSettlementOutcome = resolvedOutcome;
+            if (!inputLockHeld && !TryAcquireInputLock(false, false))
+            {
+                return;
+            }
+
+            confirmationAction = ConfirmationAction.None;
+            currentView = MenuView.Result;
+            SetAllPanelsInactive();
+            pauseCanvas.SetActive(false);
+            SetExtractionBackdrop(false);
+            resultReturnToBaseButton.gameObject.SetActive(false);
+            resultMainMenuButton.gameObject.SetActive(false);
+
+            if (shell?.SceneTransitionFader != null &&
+                shell.SceneTransitionFader.IsCovered)
+            {
+                DisplayExtractionSettlementProgress();
+            }
+        }
+
+        private void DisplayExtractionSettlementProgress()
+        {
+            if (!extractionSettlementFlow || extractionSettlementCommitted)
+            {
+                return;
+            }
+
+            pauseCanvas.SetActive(true);
+            mainPanel.SetActive(false);
+            settingsPanel.SetActive(false);
+            confirmationPanel.SetActive(false);
+            resultPanel.SetActive(true);
+            SetExtractionBackdrop(true);
+            resultTitleText.text = extractionSettlementOutcome == RaidOutcome.Extracted
+                ? "생환 처리 중"
+                : "원정 결과 처리 중";
+            resultDetailText.text =
+                "기지로 이동하고 원정 결과를 정산하고 있습니다.\n완료될 때까지 잠시 기다려 주십시오.";
+            resultReturnToBaseButton.gameObject.SetActive(false);
+            resultMainMenuButton.gameObject.SetActive(false);
+            Select(null);
+        }
+
+        private void ShowExtractionSettlementComplete(RaidOutcome committedOutcome)
+        {
+            if (!inputLockHeld && !TryAcquireInputLock(false, false))
+            {
+                return;
+            }
+
+            extractionSettlementFlow = true;
+            extractionSettlementCommitted = true;
+            extractionSettlementFailed = false;
+            extractionSettlementOutcome = committedOutcome;
+            confirmationAction = ConfirmationAction.None;
+            currentView = MenuView.Result;
+            pauseCanvas.SetActive(true);
+            mainPanel.SetActive(false);
+            settingsPanel.SetActive(false);
+            confirmationPanel.SetActive(false);
+            resultPanel.SetActive(true);
+            SetExtractionBackdrop(true);
+            SetResultCopy(committedOutcome, true);
+            resultReturnToBaseButton.gameObject.SetActive(true);
+            resultPrimaryButtonText.text = "확인";
+            resultMainMenuButton.gameObject.SetActive(false);
+            Select(resultReturnToBaseButton);
+        }
+
+        private void ShowExtractionSettlementFailure()
+        {
+            if (!extractionSettlementFlow)
+            {
+                return;
+            }
+
+            extractionSettlementCommitted = false;
+            extractionSettlementFailed = true;
+            confirmationAction = ConfirmationAction.None;
+            currentView = MenuView.Result;
+            pauseCanvas.SetActive(true);
+            mainPanel.SetActive(false);
+            settingsPanel.SetActive(false);
+            confirmationPanel.SetActive(false);
+            resultPanel.SetActive(true);
+            SetExtractionBackdrop(true);
+            resultTitleText.text = "정산 실패";
+            resultDetailText.text =
+                "세이브와 원정 복구 정보 정리를 완료하지 못했습니다.\n정산을 다시 시도해 주십시오.";
+            resultReturnToBaseButton.gameObject.SetActive(true);
+            resultPrimaryButtonText.text = "정산 재시도";
+            resultMainMenuButton.gameObject.SetActive(false);
+            Select(resultReturnToBaseButton);
+        }
+
+        private void ShowExtractionReturnRetry(RaidOutcome resolvedOutcome)
+        {
+            ShowExtractionSettlementProgress(resolvedOutcome);
+            DisplayExtractionSettlementProgress();
+            resultTitleText.text = "기지 이동 실패";
+            resultDetailText.text =
+                "원정 결과 정산은 아직 완료되지 않았습니다.\n기지 이동을 다시 시도해 주십시오.";
+            resultReturnToBaseButton.gameObject.SetActive(true);
+            resultPrimaryButtonText.text = "기지 이동 재시도";
+            resultMainMenuButton.gameObject.SetActive(false);
+            Select(resultReturnToBaseButton);
+        }
+
+        private void SetResultCopy(RaidOutcome resolvedOutcome, bool settlementComplete)
+        {
             switch (resolvedOutcome)
             {
                 case RaidOutcome.Extracted:
                     resultTitleText.text = "원정 성공";
-                    resultDetailText.text = "귀환 지점에 도착했습니다.\n플레이어가 소지한 아이템과 장비를 유지합니다.";
+                    resultDetailText.text = settlementComplete
+                        ? "정산이 완료되었습니다.\n플레이어가 소지한 아이템과 장비를 유지합니다."
+                        : "귀환 지점에 도착했습니다.\n플레이어가 소지한 아이템과 장비를 유지합니다.";
                     break;
                 case RaidOutcome.PlayerDied:
                     resultTitleText.text = "원정 실패";
@@ -480,11 +691,9 @@ namespace FantasySurvival.SceneFlow
                     break;
                 default:
                     resultTitleText.text = "원정 종료";
-                    resultDetailText.text = "원정 결과를 확인할 수 없습니다.\n기지 이동을 다시 시도할 수 있습니다.";
+                    resultDetailText.text = "원정 결과를 확인할 수 없습니다.";
                     break;
             }
-
-            Select(resultReturnToBaseButton);
         }
 
         private void HandleRaidResolved(RaidOutcome resolvedOutcome)
@@ -492,15 +701,49 @@ namespace FantasySurvival.SceneFlow
             RaidOutcome authoritativeOutcome = raidSession != null
                 ? raidSession.Outcome
                 : resolvedOutcome;
-            if (authoritativeOutcome != RaidOutcome.Abandoned)
+            bool isAutomaticExtractionReturn =
+                raidSession != null && raidSession.IsAutomaticExtractionReturn;
+            if (isAutomaticExtractionReturn || extractionSettlementFlow)
+            {
+                ShowExtractionSettlementProgress(authoritativeOutcome);
+            }
+            else if (authoritativeOutcome != RaidOutcome.Abandoned)
             {
                 ShowResult(authoritativeOutcome);
             }
         }
 
+        private void HandleSettlementCommitted(RaidOutcome committedOutcome)
+        {
+            if (extractionSettlementFlow)
+            {
+                ShowExtractionSettlementComplete(committedOutcome);
+            }
+        }
+
+        private void HandleSettlementFailed()
+        {
+            if (extractionSettlementFlow)
+            {
+                ShowExtractionSettlementFailure();
+            }
+        }
+
+        private void HandleTravelCovered()
+        {
+            DisplayExtractionSettlementProgress();
+        }
+
         private void HandleReturnTravelFailed()
         {
-            ShowResult(raidSession.Outcome);
+            if (extractionSettlementFlow)
+            {
+                ShowExtractionReturnRetry(raidSession.Outcome);
+            }
+            else
+            {
+                ShowResult(raidSession.Outcome);
+            }
         }
 
         private void BeginReturnToBase()
@@ -514,6 +757,11 @@ namespace FantasySurvival.SceneFlow
 
         private void BeginMainMenuExit()
         {
+            if (extractionSettlementFlow)
+            {
+                return;
+            }
+
             HideAllAndReleaseInput();
             GameplaySessionExit.TryExitToMainMenu(HandleMainMenuExitFailed);
         }
@@ -584,6 +832,7 @@ namespace FantasySurvival.SceneFlow
             {
                 pauseCanvas.SetActive(false);
             }
+            SetExtractionBackdrop(false);
 
             EventSystem eventSystem = shell != null ? shell.PlayerEventSystem : null;
             if (eventSystem != null)
@@ -592,6 +841,22 @@ namespace FantasySurvival.SceneFlow
             }
 
             ReleaseInputLock();
+        }
+
+        private void SetExtractionBackdrop(bool opaque)
+        {
+            if (backdropImage == null)
+            {
+                return;
+            }
+
+            Color color = defaultBackdropColor;
+            if (opaque)
+            {
+                color = Color.black;
+            }
+
+            backdropImage.color = color;
         }
 
         private void ReleaseInputLock()

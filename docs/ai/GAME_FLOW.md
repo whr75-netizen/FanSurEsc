@@ -161,13 +161,15 @@ Recovery의 `layoutHash` 필드는 현재 도로·건물 layout과 spawn manifes
 
 | 결과 | 진입 호출 | 다음 분기 |
 |---|---|---|
-| 생환 | `ReturnPortalInteractable.Interact → TryResolveExtraction → Resolve(Extracted)` | 결과 UI의 기지 복귀 → `TryReturnToBase` |
+| 생환 | `ReturnPortalInteractable.Interact → TryResolveExtractionAndReturn → Resolve(Extracted) → TryReturnToBase` | 기존 0.2초 암전 → 자동 `GameMap1` 로드 → 정산 완료 뒤 `확인` |
 | Player 사망 | `PlayerStats.Died → RaidSession.HandlePlayerDied → Resolve(PlayerDied)` | 결과 UI의 기지 복귀 또는 주 메뉴 |
 | 원정 포기→기지 | Escape 확인 → `TryResolveAbandonment → Resolve(Abandoned) → TryReturnToBase` | `GameMap1` |
 | 원정 포기→주 메뉴 | Escape 확인 → `TryResolveAbandonment → GameplaySessionExit.TryExitToMainMenu` | `MainMenuScene`; 다음 메뉴 진입에서 terminal 원정 정산을 먼저 처리 |
 | Recovery 기록 실패 | `HandleCheckpointWriteFailure → Resolve/TryOverride...(RecoveryFailed)` | 기지 정산 또는 주 메뉴 실패 처리 |
 
 ## 7. 기지 귀환과 원자적 정산
+
+정상 생환은 Raid 안에서 기지/주 메뉴 선택창을 열지 않는다. E 입력에서 `Extracted`와 피해 차단을 먼저 확정하고 기존 gameplay fade가 화면을 덮은 뒤 자동으로 기지를 로드한다.
 
 ```text
 RaidSession.TryReturnToBase              (Resolved → Returning)
@@ -190,7 +192,9 @@ fade-in 완료                            ├─ 둘 다 참일 때만 TryFinali
           6. 실제 원정 결과만 SettlementCommitted
 ```
 
-두 기지 gate의 도착 순서는 상관없고 둘 다 필요하다. ordinary mirror나 Recovery 정리가 실패하면 tracked 상태와 입력 잠금을 유지하고 기존 F5 경계에서 같은 exact 거래를 재시도한다. Fresh invalid-map rollback은 기술적 출발 취소이므로 `SettlementCommitted`와 실패 통계·퀘스트 진행을 발생시키지 않는다.
+두 기지 gate의 도착 순서는 상관없고 둘 다 필요하다. 정상 생환 UI는 완전 암전 뒤 정산 진행 화면을 표시하고, ordinary mirror와 Recovery 정리가 끝나 `SettlementCommitted`가 발생한 뒤에만 `확인` 하나를 연다. 실패하면 주 메뉴를 열지 않고 `정산 재시도`만 제공한다. Fresh invalid-map rollback은 기술적 출발 취소이므로 `SettlementCommitted`와 실패 통계·퀘스트 진행을 발생시키지 않는다.
+
+현재 포탈 E는 즉시 생환 확정하는 시험 규칙이다. 최종 탈출 대기 시간, 피격 시 중단 여부와 암전 중 사망 판정은 아직 디자인 미정이다.
 
 ## 8. 주 메뉴로 돌아가기
 
@@ -213,3 +217,4 @@ GameplaySessionExit.TryExitToMainMenu
 2. Fresh exact rollback과 Resume `RecoveryFailed` 정산을 섞지 않고, cleanup 실패만으로 tracked 상태를 지우지 않는다.
 3. 기지 정산은 `BasePersistenceReady`와 `BaseArrivalComplete` 뒤에만 실행한다.
 4. 최초 로딩과 gameplay 직접 전환을 섞지 않으며 `GameMap1 ↔ GameMapTest`는 같은 shell·Player를 유지한다.
+5. 정상 생환의 `Resolved`부터 `SettlementCommitted`까지 주 메뉴 종료 경로를 노출하지 않는다.

@@ -53,6 +53,7 @@ namespace FantasySurvival.Raids
         private bool settlementDamageWasBlocked;
 
         public event Action<RaidOutcome> SettlementCommitted;
+        public event Action SettlementFailed;
 
         public bool IsConfigured =>
             shell != null &&
@@ -742,6 +743,7 @@ namespace FantasySurvival.Raids
                     $"Raid '{baseline.raidInstanceId}' reached the base, but its ordinary save commit failed. " +
                     $"Recovery files were preserved: {commitError}",
                     this);
+                NotifySettlementFailed();
                 return;
             }
         }
@@ -1248,6 +1250,29 @@ namespace FantasySurvival.Raids
                     // Settlement is already durable and recovery cleanup has finished.
                     // A presentation/feature observer must not turn that committed result
                     // into a false transaction failure or cause a duplicate retry.
+                    Debug.LogException(exception, this);
+                }
+            }
+        }
+
+        private void NotifySettlementFailed()
+        {
+            Action handlers = SettlementFailed;
+            if (handlers == null)
+            {
+                return;
+            }
+
+            foreach (Delegate handler in handlers.GetInvocationList())
+            {
+                try
+                {
+                    ((Action)handler).Invoke();
+                }
+                catch (Exception exception)
+                {
+                    // Recovery data remains authoritative after a failed commit. A
+                    // presentation observer must not interfere with its retry boundary.
                     Debug.LogException(exception, this);
                 }
             }

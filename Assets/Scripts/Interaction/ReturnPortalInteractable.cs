@@ -30,9 +30,11 @@ namespace FantasySurvival.Interaction
                 ? PersistentGameplayShell.Instance.RaidSession
                 : null;
             if (raidSession == null ||
-                !raidSession.TryResolveExtraction(destinationScene, destinationSpawnId))
+                !raidSession.TryResolveExtractionAndReturn(destinationScene, destinationSpawnId))
             {
-                Debug.LogWarning("Extraction request was rejected because no active raid was available.", this);
+                Debug.LogWarning(
+                    "Extraction could not begin its automatic covered return to the base.",
+                    this);
             }
         }
     }

@@ -1,7 +1,7 @@
 # Unity 개발 진행 기록
 
-**마지막 확인:** 2026-08-26
-**확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, 활성 씬 `GameMap1`; 현재 원정 복구·아이템 정산 변경으로 Windows Development Build와 격리 Windows Player 강제종료→Resume E2E 성공
+**마지막 확인:** 2026-08-27
+**확인 환경:** Unity 6000.5.9f1, 활성 Build Target `StandaloneWindows64`, 활성 씬 `GameMap1`; 격리 저장 경로의 Play Mode 호출로 정상 생환→자동 기지 정산→확인 흐름을 검증
 **문서 역할:** 구현·검증 증거와 변경 이력을 보존하는 진행형 인계 문서다. 최신 구현 상태와 재개방 조건은 `docs/ai/CURRENT_STATE.md`, 장르 방향·플레이 판단·알고리즘 불변조건은 `extraction_survival_gameplay_contract.md`, 게임 요소·기능·콘텐츠·UI/UX는 `game_design_document.md`, Stage 의존성과 구현 순서는 `extraction_survival_game_design_dev_plan.md`를 따른다.
 
 ## 문서 사용 규칙
@@ -29,7 +29,7 @@
 
 ## 1. 현재 완료된 기반
 
-- `[Play Mode 확인]` `GameMap1`의 맵 선택 Cube에서 `GameMapTest` 원정을 시작하고, 귀환 Cube에서 생환 성공을 한 번 확정한 뒤 최소 결과 UI를 거쳐 `GameMap1`로 직접 복귀한다.
+- `[Play Mode 호출 확인]` `GameMap1`에서 `GameMapTest` 원정을 시작하고 귀환 Cube로 생환을 확정하면 기존 검은 전환 뒤 자동으로 기지 정산까지 진행하며, 정산 완료 뒤 `확인` 하나로 기지 입력을 연다.
 - `[Play Mode 확인]` 이 직접 왕복은 `MainMenuScene`과 `GameLoadingScene`을 거치지 않는다.
 - `[Play Mode 확인]` `PersistentGameplayShell` 하나가 실제 Player, 외형, Player 구성 스크립트, Camera, Inventory UI/Core/View와 EventSystem을 같은 인스턴스로 유지한다.
 - `[코드/씬 확인]` 두 게임플레이 씬에는 scene-local 런타임 Player/gameplay Camera/Inventory UI/EventSystem 복사본이 없다. 편집 상태 Game View용 `EditorOnly` Preview Camera만 씬마다 1개 존재한다.
@@ -165,8 +165,8 @@ Interactable (abstract base class)
 - `GameMapTest`의 `Stage1_ReturnPortal`에 `ReturnPortalInteractable`과 활성 solid BoxCollider가 있다.
 - E 안내와 가장 가까운 대상 선택은 Chest와 동일한 `PlayerInteractor` 공통 경로를 사용한다.
 - 현재 직렬화된 목적지는 `GameMap1 / BaseReturn`이다.
-- E를 누르면 `RaidSession.TryResolveExtraction`이 생환 성공을 한 번만 확정하고 최소 결과 UI를 표시한다.
-- 결과 확인 뒤 `DirectSceneTravel`로 `GameMap1 / BaseReturn`에 복귀한다. 결과가 이미 확정됐거나 전환 중이면 중복 요청을 거부한다.
+- E를 누르면 `RaidSession.TryResolveExtractionAndReturn`이 생환 성공과 피해 차단을 한 번만 확정하고 즉시 공통 검은 전환을 시작한다.
+- `DirectSceneTravel`로 `GameMap1 / BaseReturn`에 자동 복귀해 정산하며, `SettlementCommitted` 뒤에만 `확인` 하나를 표시한다. 결과가 이미 확정됐거나 전환 중이면 중복 요청을 거부한다.
 - 이동 준비 과정에서 공통 셸이 열린 인벤토리, 드래그, popup과 입력 상태를 정리한다.
 - Portal 자체에는 지속 상호작용 UI가 없으며, 확정 뒤 표시되는 결과 UI는 persistent 원정 결과 화면이다.
 
@@ -1310,3 +1310,14 @@ Interactable (abstract base class)
 - `[Play Mode 확인]` `GameMapTest 직접 시작 → GameMap1 → GameMapTest → GameMap1` 대표 왕복 1회를 실행했다. 필수 근접 적·상자·포탈과 보존된 원거리 적, table-backed Chest·근접 시체의 각 1개 실제 아이템, manifest 3개, persistent shell 동일성, 런타임 오류 0을 확인했다.
 - `[검증 도구 근본 수정]` Unity 창이 비활성일 때 Editor Play 시간이 진행되지 않아 대기하던 원인은 validator가 해당 Play Session에서만 `Application.runInBackground=true`를 사용하도록 고쳤다. ProjectSettings는 변경하지 않았다.
 - `[문서 감사]` 새 Markdown을 만들지 않았다. 현재 상태는 `CURRENT_STATE`, 실제 호출 순서는 `GAME_FLOW`, 기획은 GDD·장르 계약, 상세 증거는 이 진행 파일에만 기록했다. 대형 역사 문서는 압축 뒤 기본 재로딩 대상이 아니며 필요한 절만 라우팅한다.
+
+---
+
+## 35. 정상 생환 자동 귀환과 정산 UI
+
+- `[사용자 요구][2026-08-27]` 생환 뒤 Raid 화면에 기지/주 메뉴 선택을 남기지 않고, 생환 확정과 자연스러운 화면 전환을 분리한다. 최종 탈출 연출은 미정이므로 현재는 즉시 생환·피해 차단을 사용한다.
+- `[근본 수정]` `ReturnPortal → Resolve(Extracted) → terminal checkpoint observer → 자동 TryReturnToBase` 순서로 고정했다. 기존 0.2초 fade가 완전히 덮인 뒤 정산 화면을 불투명하게 표시하므로 Raid가 갑자기 UI로 잘리는 장면을 피한다.
+- `[정산 gate]` 기지 로드 뒤 ordinary save mirror와 Recovery 삭제가 성공해 `SettlementCommitted`가 발생하기 전에는 버튼을 숨긴다. 성공 뒤 `확인`만 표시하며 주 메뉴 경로는 차단한다. 정산 실패는 Recovery를 유지하고 `정산 재시도`만 제공한다.
+- `[Play Mode 호출 확인]` 격리된 임시 save/Recovery 경로에서 `PlayerInteractor.TryInteract()` 1회로 생환을 실행했다. E 직후 `Extracted`, 피해·이동·인벤토리·상호작용 차단과 두 결과 버튼 비활성을 확인했다.
+- `[Play Mode 호출 확인]` 같은 shell·Player·Inventory entity ID를 유지한 채 `GameMap1`에 자동 도착했고, primary/backup의 원정 표식 해제, Recovery 파일 0개, 주 메뉴 비활성, `확인` 활성 상태를 확인했다. 실제 버튼 callback 뒤 기지 입력이 복원됐으며 Console Error/Exception/Assert는 0건이었다.
+- `[미정]` 탈출 대기 시간, 피격 시 중단, 암전 중 사망 허용 여부와 최종 연출은 이번 구현으로 확정하지 않았다.

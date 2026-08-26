@@ -1645,11 +1645,13 @@ Initial Loading
 Base HUD
    ├─ Player Inventory + Equipment
    ├─ Player Inventory + Equipment + External Chest
+   ├─ Information Window (Character / Records / Encyclopedia / Quest / Upgrades)
    ├─ Map Selection → 직접 Raid 전환
    └─ Base Pause
 
 Raid HUD
    ├─ Player Inventory + Equipment + External Chest/Corpse
+   ├─ Information Window (세계는 계속 진행)
    ├─ Active Quest Tracker
    ├─ Extracted / PlayerDied / RecoveryFailed Result
    └─ Raid Escape Menu + Abandon Confirmation
@@ -1666,8 +1668,10 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 3. 설정 화면이면 해당 기본 메뉴로 복귀
 4. Escape 기본 메뉴가 열렸으면 닫기
 5. 맵 선택이 열렸으면 취소
-6. 인벤토리가 열렸으면 활성 drag를 안전하게 정리한 뒤 닫기
-7. 위 화면이 없으면 기지 또는 원정 컨텍스트 메뉴 열기
+6. 정보창이 열렸으면 닫기
+7. 시험 의뢰 대화창이 열렸으면 닫기
+8. 인벤토리가 열렸으면 활성 drag를 안전하게 정리한 뒤 닫기
+9. 위 화면이 없으면 기지 또는 원정 컨텍스트 메뉴 열기
 
 맵 선택, 인벤토리 또는 다른 Overlay가 같은 키를 별도 polling해 경쟁해서는 안 된다.
 
@@ -1925,6 +1929,23 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - 복구 불능 상태에서 실패·New·Load 버튼이 활성화되지 않는다.
 - 결과 문구와 실제 정산 payload가 일치한다.
 - Resume 가능·실패 전용·정산 계속 상태를 구분한다.
+
+### 10.15 정보창 `[현재 시험]`
+
+#### 10.15.1 현재 입력과 탭
+
+- `U`는 시험용 단일 토글 키이며 최종 입력은 미정이다.
+- 캐릭터, 기록, 사전, 의뢰, 업그레이드 다섯 탭을 같은 persistent 정보창에서 전환한다.
+- 기지와 활성 원정에서 열 수 있다. 정보창 동안 이동·공격·무기 전환·인벤토리·E 상호작용은 막지만 `Time.timeScale`은 바꾸지 않으므로 원정 세계와 피해는 계속 진행한다.
+- Escape는 정보창만 먼저 닫고, 다른 메뉴를 같은 입력으로 동시에 열지 않는다.
+
+#### 10.15.2 원본과 현재 경계
+
+- 캐릭터 탭은 `PlayerStats`, 현재 Player inventory/equipment/wallet, 활성 무기와 `RaidSession`을 읽는 파생 View다.
+- 기록 탭의 적 처치·정산 결과·완료 의뢰 합계는 persistent `PlayerSessionRecords` 하나가 이번 실행 동안만 소유한다. ordinary save와 Recovery에는 저장하지 않는다.
+- 사전 탭은 발견·해금 상태를 만들지 않고 현재 ItemDatabase와 두 시험 EnemyDefinition을 모두 표시한다. 적의 정식 ID·표시명·설명은 아직 없다.
+- 의뢰 탭은 현재 `QuestJournal`을 읽는다. 업그레이드 탭은 정의·비용·효과·저장 규칙이 미정임을 표시하며 가짜 레벨이나 구매 상태를 만들지 않는다.
+- 정식 장기 기록, 도감 발견 규칙과 업그레이드는 각 권위 데이터와 저장 migration이 확정될 때 별도 범위로 구현한다.
 
 ---
 

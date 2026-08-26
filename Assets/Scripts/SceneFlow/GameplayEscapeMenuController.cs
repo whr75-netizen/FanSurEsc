@@ -83,6 +83,8 @@ namespace FantasySurvival.SceneFlow
             resultDetailText != null && resultReturnToBaseButton != null &&
             resultMainMenuButton != null;
         public bool IsOpen => currentView != MenuView.Closed;
+        public bool IsMapSelectionVisible =>
+            registeredMapSelection != null && registeredMapSelection.IsVisible;
         public bool IsWorldPaused => ownsWorldPause && Mathf.Approximately(Time.timeScale, 0f);
         public string CurrentViewName => currentView.ToString();
 
@@ -342,6 +344,12 @@ namespace FantasySurvival.SceneFlow
                 registeredMapSelection = null;
             }
 
+            if (shell.InformationWindow != null && shell.InformationWindow.IsOpen)
+            {
+                shell.InformationWindow.TryClose();
+                return;
+            }
+
             if (shell.QuestPanel != null && shell.QuestPanel.IsOpen)
             {
                 shell.QuestPanel.TryClose();
@@ -523,6 +531,7 @@ namespace FantasySurvival.SceneFlow
                 return true;
             }
 
+            shell.InformationWindow?.TryClose();
             shell.QuestPanel?.TryClose();
             InventoryUIManager inventory = shell.InventoryUI;
             bool inventoriesClosed = inventory != null && inventory.CloseAllInventories();

@@ -38,9 +38,9 @@ namespace FantasySurvival.SceneFlow
             }
 
             escapeMenu = inputOwner;
-            // A persistent quest dialog owns an InventoryUI input lock. Close it
-            // before snapshotting the map overlay's previous lock state so its
-            // cancellation cannot restore a stale value after this overlay opens.
+            // Persistent overlays own input locks. Close them before snapshotting
+            // the map overlay's previous state so no later close restores stale values.
+            shell.InformationWindow?.TryClose();
             shell.QuestPanel?.TryClose();
             sourceInteractor = interactor;
             sourceMovement = interactor.GetComponent<PlayerMovement>();

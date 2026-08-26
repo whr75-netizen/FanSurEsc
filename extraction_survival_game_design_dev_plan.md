@@ -138,7 +138,7 @@
 ### 2.4 현재 상호작용 구조
 
 - **[현재]** PlayerInteractor가 E 입력을 한 번만 읽고 범위 안의 가장 가까운 Interactable을 선택한다.
-- **[현재]** InventoryUIManager는 I 입력과 인벤토리 상태, 상자 UI 열기와 닫기를 담당한다. Escape는 persistent `GameplayEscapeMenuController` 하나만 읽는다.
+- **[현재]** InventoryUIManager는 I 입력과 인벤토리 상태, 상자 UI 열기와 닫기를 담당한다. Escape는 persistent `GameplayEscapeMenuController` 하나만 읽고, U는 persistent `InformationWindowController` 하나만 읽는다.
 - **[현재]** GameMap1의 Chest 2개는 ChestInteractable을 통해 기존 인벤토리 UI에 연결된다.
 - **[현재]** GameMap1에는 불투명 파란 Cube 맵 선택 오브젝트와 GameMapTest 하나를 표시하는 최소 OnGUI 선택 화면이 있다.
 - **[현재]** GameMapTest에는 불투명 주황 Cube 귀환 오브젝트가 있고, 생환 성공을 한 번 확정한 최소 결과 UI 뒤 GameMap1의 BaseReturn SpawnPoint로 돌아온다.

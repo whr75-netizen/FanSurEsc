@@ -1,4 +1,5 @@
 using System;
+using FantasySurvival.Information;
 using FantasySurvival.Interaction;
 using FantasySurvival.Quests;
 using FantasySurvival.Raids;
@@ -28,6 +29,8 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private RaidCheckpointController raidCheckpoint;
         [SerializeField] private QuestJournal questJournal;
         [SerializeField] private QuestPanelController questPanel;
+        [SerializeField] private PlayerSessionRecords playerSessionRecords;
+        [SerializeField] private InformationWindowController informationWindow;
         [SerializeField] private GameplayEscapeMenuController escapeMenu;
         [SerializeField] private GameplaySceneTransitionFader sceneTransitionFader;
 
@@ -48,6 +51,8 @@ namespace FantasySurvival.SceneFlow
         public RaidCheckpointController RaidCheckpoint => raidCheckpoint;
         public QuestJournal QuestJournal => questJournal;
         public QuestPanelController QuestPanel => questPanel;
+        public PlayerSessionRecords PlayerSessionRecords => playerSessionRecords;
+        public InformationWindowController InformationWindow => informationWindow;
         public GameplayEscapeMenuController EscapeMenu => escapeMenu;
         public GameplaySceneTransitionFader SceneTransitionFader => sceneTransitionFader;
         public bool IsTravelPrepared => travelPrepared;
@@ -104,6 +109,7 @@ namespace FantasySurvival.SceneFlow
 
             // Close feature overlays before snapshotting their input state. Otherwise
             // their unlock path could overwrite the travel lock later in this method.
+            informationWindow.TryClose();
             questPanel.TryClose();
 
             movementWasEnabled = playerMovement.enabled;
@@ -232,6 +238,8 @@ namespace FantasySurvival.SceneFlow
                    raidCheckpoint != null && raidCheckpoint.IsConfigured &&
                    questJournal != null && questJournal.IsConfigured &&
                    questPanel != null && questPanel.IsConfigured &&
+                   playerSessionRecords != null && playerSessionRecords.IsConfigured &&
+                   informationWindow != null && informationWindow.IsConfigured &&
                    escapeMenu != null && escapeMenu.IsConfigured &&
                    sceneTransitionFader != null && sceneTransitionFader.IsConfigured;
         }

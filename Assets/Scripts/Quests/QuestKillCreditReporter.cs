@@ -1,12 +1,13 @@
 using FantasySurvival.Combat;
+using FantasySurvival.Information;
 using FantasySurvival.SceneFlow;
 using UnityEngine;
 
 namespace FantasySurvival.Quests
 {
     /// <summary>
-    /// Relays a confirmed EnemyStats death to the session QuestJournal. It owns no
-    /// health, death, quest progress, or persistence state.
+    /// Relays a confirmed Player-caused EnemyStats death to session consumers. It owns
+    /// no health, death, quest progress, aggregate record, or persistence state.
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(EnemyStats))]
@@ -45,8 +46,7 @@ namespace FantasySurvival.Quests
             PersistentGameplayShell shell = PersistentGameplayShell.Instance;
             Transform player = shell != null ? shell.PlayerTransform : null;
             Transform damageSource = context.Source != null ? context.Source.transform : null;
-            if (shell == null || shell.QuestJournal == null || player == null ||
-                damageSource == null ||
+            if (shell == null || player == null || damageSource == null ||
                 (damageSource != player && !damageSource.IsChildOf(player)))
             {
                 // Checkpoint corpse restoration deliberately emits Died with a null
@@ -54,7 +54,10 @@ namespace FantasySurvival.Quests
                 return;
             }
 
-            shell.QuestJournal.TryRecordPlayerEnemyKill();
+            // Consumers are independent. A temporarily missing optional record view
+            // must never suppress the already-existing quest kill flow, or vice versa.
+            shell.PlayerSessionRecords?.RecordPlayerEnemyKill();
+            shell.QuestJournal?.TryRecordPlayerEnemyKill();
         }
     }
 }

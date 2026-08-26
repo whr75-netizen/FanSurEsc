@@ -1176,3 +1176,35 @@ Interactable (abstract base class)
 - `[Unity 컴파일/저장 확인]` Unity 6000.5.9f1의 script compilation과 domain reload가 성공했고, setup의 저장 후 shell·두 적 prefab·기지 scene 직렬화 참조 재검증이 통과했다. 기존 외부 `RenderTextureBaker` obsolete warning 외에 이번 코드의 compile error는 없었다.
 - `[보호 확인]` Editor setup은 전역 `AssetDatabase.SaveAssets()`를 사용하지 않고 새 Quest definition·material과 대상 prefab·scene만 명시 저장한다. 적용 과정에서 재직렬화된 무관한 `TestMerchantGraybox.mat`은 작업 전 blob으로 복원해 변경 범위에서 제외했다.
 - `[미검증]` 물리 E 입력으로 수락 → 실제 사격으로 적 처치 → 귀환 포탈 → NPC E 보고까지 이어지는 한 번의 Play Mode 사용자 흐름과 화면 해상도별 UI 가독성은 아직 직접 조작 검증하지 않았다. 현재 검증 등급은 `CODE`이며, 이 흐름을 사용자가 확인하면 `USER`로 올린다.
+
+---
+
+## 31. Persistent 정보창과 Play Session 기록
+
+### 사용자 요구와 이번 범위
+
+- `[사용자 요구][2026-08-26]` 별도 정보창을 만들고 스탯, 다양한 기록, 사전, 퀘스트와 업그레이드 같은 정보를 한곳에서 확인한다.
+- `[현재 시험]` 충돌이 없는 `U` 하나를 토글 입력으로 사용하며 최종 키 바인딩은 미정이다. 캐릭터·기록·사전·의뢰·업그레이드 다섯 탭을 그레이박스 UI로 제공한다.
+- `[제외]` 정식 능력치 추가, 영구 통계 save schema, 도감 발견·해금, 적의 정식 ID/표시명, 업그레이드 구매·효과·저장은 만들지 않았다. 원본이 없는 탭은 준비 중임을 사실대로 표시한다.
+
+### 권위 소유권과 입력 경계
+
+| 확인 항목 | 현재 계약 |
+|---|---|
+| 기존 상태 원본 | HP는 `PlayerStats`, 위치·원정 상태는 `RaidSession`, 아이템·장비·화폐는 기존 Player state, 활성 무기는 `PlayerWeaponController`, 의뢰는 `QuestJournal`에서 읽는다. 정보창은 쓰지 않는다. |
+| 실행 기록 원본 | persistent shell의 `PlayerSessionRecords` 하나가 Player 귀속 적 처치와 committed 원정 결과, 완료 보고된 의뢰 횟수를 합산한다. |
+| 처치 진입점 | 기존 `QuestKillCreditReporter`의 Player damage-source 판정 한 곳이 확인된 처치를 기록과 의뢰에 분배한다. 별도 사망 observer로 중복 귀속하지 않는다. |
+| 정산 진입점 | `RaidCheckpointController.SettlementCommitted` 뒤에만 생환·사망·포기·복구 실패 기록을 올린다. `RaidSession.Resolved` 중간 상태를 합산하지 않는다. |
+| UI 입력 | `InformationWindowController` 하나만 U를 읽는다. 열기 전에 의뢰창과 인벤토리를 안전하게 닫고 기존 이동·인벤토리·상호작용 잠금을 snapshot한다. |
+| 중첩 방지 | Escape 메뉴, 맵 선택, 씬 전환과 정산은 자체 잠금을 저장하기 전에 정보창을 먼저 닫는다. Escape는 맵 선택 뒤, 의뢰·인벤토리 앞에서 정보창만 닫는다. |
+| 시간·피해 | Base/Raid 모두 gameplay 입력은 막지만 Time.timeScale과 DamageBlocked는 변경하지 않는다. Raid에서는 세계와 피해가 계속 진행한다. |
+| 저장 경계 | 기록과 선택 탭은 Play Session 전용이다. ordinary save·Recovery·정산 payload 버전은 변경하지 않았다. |
+
+### 구현·검증 상태
+
+- `[코드 확인]` 캐릭터 탭은 실제 HP·이동 속도·금/은·고유 grid item 수·장착 수·활성 무기 시험 수치를 표시한다. 기록 탭은 이번 실행 한정임을 명시한다.
+- `[코드 확인]` 사전은 현재 ItemDatabase와 명시적으로 등록한 두 EnemyDefinition만 표시하고 발견 상태를 가장하지 않는다. 업그레이드 탭은 정의·비용·효과·저장 규칙이 미정임을 표시한다.
+- `[코드 확인]` U controller를 기존 Player 입력보다 앞에서 실행해 연 프레임의 gameplay 입력 누수를 줄이고, Escape 단일 소유와 기존 overlay의 close-before-snapshot 순서를 유지했다. Base의 개발용 F5/Save 패널은 정보창 동안만 숨긴다.
+- `[Unity 컴파일/프리팹 확인]` Unity 6000.5.9f1에서 script refresh와 domain reload가 성공했다. Editor API setup으로 shell prefab에 기록 소유자, root controller와 sorting 20000의 초기 비활성 Canvas를 연결했으며, 저장 후 재로드해 component 활성 상태·정확한 참조·EventSystem 1개·핵심 layout·Missing Script 0을 검증했다. 기존 외부 `RenderTextureBaker` obsolete warning 외에 신규 compile error는 없었다.
+- `[보호 확인]` setup은 `PersistentGameplayShell.prefab` 하나만 명시 저장했고 scene, InputActions, ProjectSettings와 save schema는 수정하지 않았다. Computer Use는 사용하지 않았다.
+- `[미검증]` 물리 U 입력, 다섯 탭 클릭, Escape 1회 닫기와 Base/Raid의 실제 화면 가독성은 아직 직접 조작하지 않았다. 현재 검증 등급은 `CODE`이며 동일 대표 흐름을 반복 실행하지 않는다.

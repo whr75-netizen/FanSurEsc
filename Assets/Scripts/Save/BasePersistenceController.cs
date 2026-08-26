@@ -91,7 +91,8 @@ namespace FantasySurvival.SaveSystem
 
         private void Update()
         {
-            if (!DirectSceneTravel.IsLoading && Input.GetKeyDown(KeyCode.F5))
+            if (!DirectSceneTravel.IsLoading && !IsInformationWindowOpen() &&
+                Input.GetKeyDown(KeyCode.F5))
             {
                 SaveSlotOne();
             }
@@ -99,7 +100,7 @@ namespace FantasySurvival.SaveSystem
 
         private void OnGUI()
         {
-            if (DirectSceneTravel.IsLoading)
+            if (DirectSceneTravel.IsLoading || IsInformationWindowOpen())
             {
                 return;
             }
@@ -118,6 +119,13 @@ namespace FantasySurvival.SaveSystem
                 ? statusMessage
                 : "F5 or Save Slot 1 to save player and base state.";
             GUI.Label(new Rect(panel.x + 12f, panel.y + 64f, width - 24f, 42f), visibleStatus);
+        }
+
+        private static bool IsInformationWindowOpen()
+        {
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            return shell != null && shell.InformationWindow != null &&
+                   shell.InformationWindow.IsOpen;
         }
 
         public bool SaveSlotOne()

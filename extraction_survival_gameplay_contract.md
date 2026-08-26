@@ -311,6 +311,7 @@ ordinary save에서 raidInProgress와 raid ID 확인
 | 적 인식·기억·이동 명령 | `EnemyAIController` | Enemy Entity/Scene | 관측 가능한 위협 행동. 현재 Recovery 저장 대상이 아니다. |
 | 상호작용 대상 | `PlayerInteractor` | 현재 상호작용 | 밀집된 전리품의 단일 입력 대상 |
 | 시험 의뢰 진행 | `QuestJournal`이 소유한 `QuestProgressState` | Play Session | 정의는 immutable `QuestDefinition`, 패널·추적기는 파생 View. 현재 디스크 저장 대상이 아니다. |
+| 시험 누적 기록 | `PlayerSessionRecords` | Play Session | Player 귀속 처치와 durable 정산·의뢰 완료 통지를 합산한다. 정보 UI는 읽기만 하며 현재 디스크 저장 대상이 아니다. |
 | 원정 checkpoint 투영 | `RaidCheckpointController`가 기존 원본을 DTO로 투영하며 gameplay 상태를 소유하지 않는다. | Play Session 컴포넌트/Raid 추적 | 강제종료 뒤 권위 상태 운반 |
 | 원정 정산 규칙 | `RaidItemSettlementPolicy`는 권위 상태가 없는 순수 변환 규칙이다. | 정산 호출 | 결과별 보존·소실 규칙의 단일 계산 경계 |
 

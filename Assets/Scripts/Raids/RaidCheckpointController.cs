@@ -1147,6 +1147,7 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            shell.InformationWindow?.TryClose();
             shell.QuestPanel?.TryClose();
             if (!shell.InventoryUI.CloseAllInventories())
             {

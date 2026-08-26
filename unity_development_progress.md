@@ -1208,3 +1208,32 @@ Interactable (abstract base class)
 - `[Unity 컴파일/프리팹 확인]` Unity 6000.5.9f1에서 script refresh와 domain reload가 성공했다. Editor API setup으로 shell prefab에 기록 소유자, root controller와 sorting 20000의 초기 비활성 Canvas를 연결했으며, 저장 후 재로드해 component 활성 상태·정확한 참조·EventSystem 1개·핵심 layout·Missing Script 0을 검증했다. 기존 외부 `RenderTextureBaker` obsolete warning 외에 신규 compile error는 없었다.
 - `[보호 확인]` setup은 `PersistentGameplayShell.prefab` 하나만 명시 저장했고 scene, InputActions, ProjectSettings와 save schema는 수정하지 않았다. Computer Use는 사용하지 않았다.
 - `[미검증]` 물리 U 입력, 다섯 탭 클릭, Escape 1회 닫기와 Base/Raid의 실제 화면 가독성은 아직 직접 조작하지 않았다. 현재 검증 등급은 `CODE`이며 동일 대표 흐름을 반복 실행하지 않는다.
+
+---
+
+## 32. 원정 맵 도착 안전 gate와 한 판 호출 지도
+
+### 사용자 요구와 범위
+
+- `[사용자 요구][2026-08-27]` 이미 확인된 다음 선행 공백이 있으면 구현하고, AI가 Unity 생명주기와 함수 순서를 다시 추측하지 않도록 게임 실행부터 한 판 정산까지 씬·호출·분기를 가장 짧고 구체적으로 기록한다.
+- `[이번 범위][MAP-ARRIVAL-01]` `GameMapTest`의 생성 layout과 Entry→Portal NavMesh가 `Ready`일 때만 Player 배치, Raid Active, checkpoint와 화면 공개를 허용한다. `Invalid`이면 기존 검은 전환과 입력 잠금을 유지한 채 `GameMap1`로 돌아간다.
+- `[보존]` 같은 persistent Player 인스턴스, 최초 로딩과 gameplay 직접 이동의 분리, 기존 seed/hash Recovery, terminal outcome 정산, 기존 fade와 입력 잠금 소유자를 그대로 사용했다.
+- `[제외]` seed 자동 재굴림, POI·적·상자 spawn, LootTable, 퀘스트 저장, 새 UI·씬·프리팹·save schema는 변경하지 않았다.
+
+### 권위와 구현
+
+- `[권위 확인]` generator의 layout/Nav가 map 원본, `DirectSceneTravel`이 pending 이동·검은 전환, `RaidSession`이 원정 상태, `RaidCheckpointController`가 Recovery 거래의 기존 단일 소유자다. 새 Manager나 평행 상태를 만들지 않았다.
+- `[호출 순서 원본]` Unity 실행 순서와 Ready/Fresh Invalid/Resume Invalid/Base 정산의 현재 호출은 `docs/ai/GAME_FLOW.md` §4~7 한 곳에서만 유지한다.
+
+- `[근본 수정]` fresh rollback을 별도 일회성 cleanup 함수로 끝내지 않고 `BasePersistenceReady + BaseArrivalComplete → TryCommitTrackedRaidAtBase` 경로로 수렴시켰다. mirror나 cleanup이 실패해도 tracked 상태·exact 거래·F5 재시도 진입점과 입력 잠금이 남는다.
+- `[근본 수정]` Fresh exact rollback을 durable하게 확보하지 못하거나 Base redirect의 `LoadSceneAsync`가 동기적으로 시작되지 못하면 성공을 반환하거나 공통 실패 reveal을 호출하지 않는다. 현재 pending token과 검은 cover·입력 잠금을 보류해 잘못된 Raid를 공개하지 않고, 재시작의 ordinary 원정 표식 우선 판정으로 넘긴다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 표식·고정 Recovery seed가 fail-closed 권위를 유지하며, 기지 정산에서 다시 commit한다.
+- `[실패 UI]` Base 로드는 시작됐지만 Spawn/context 도착이 실패한 Fresh rollback은 `Resolved/Outcome=None`을 유지한다. 기존 결과 UI의 default 분기를 열어 gameplay 실패로 바꾸지 않고 기지 재시도와 주 메뉴 이동을 제공한다.
+- `[직접 시작 경계]` pending 이동 없이 `GameMapTest`를 직접 실행해 Invalid가 나오면 자동 기지 이동 대신 기존 travel lock으로 Player gameplay 입력과 피해를 막고 오류를 남긴다.
+- `[문서 단일 원본]` `docs/ai/GAME_FLOW.md`에 `InitialLoadingScene → MainMenuScene`의 새 게임·로드·설정·나가기·중단 원정 분기, `GameLoadingScene → GameMap1`, 원정 출발·도착·결과·기지 정산·주 메뉴 종료의 실제 메서드 순서를 기록했다. 루트 `AGENTS.md`와 문서 validator가 이 파일을 조건부 필수 경로로 관리한다.
+
+### 검증과 남은 확인
+
+- `[컴파일 확인]` Unity 6000.5.9f1이 생성한 최신 `Assembly-CSharp.rsp/rsp2`를 같은 Unity Roslyn compiler로 실행해 exit code 0을 확인했다. 외부 `RenderTextureBaker` obsolete warning 1개만 있었고 이번 변경의 compile error는 없었다.
+- `[정적 경로 확인]` Ready 성공, Fresh Invalid exact rollback, Resume Invalid fail-closed, Base redirect 동기 시작 실패와 base cleanup 재시도 분기가 각각 원본 owner를 유지하는지 코드 diff로 추적했다. `git diff --check`를 통과했다.
+- `[문서 확인]` `validate_ai_docs.ps1`로 지침 크기, 상태 ID·계약 경로, 필수 `GAME_FLOW.md`와 공백 오류를 검사해 통과했다.
+- `[Play Mode 미검증]` 현재 세션에는 호출 가능한 Unity MCP가 없고 Computer Use는 사용자 지침에 따라 사용하지 않았다. 변경 뒤 대표 `GameMap1 → Ready GameMapTest → GameMap1` 1회와 강제 Invalid 1회는 실제 Play Mode로 실행하지 않았으므로 `MAP-ARRIVAL-01`의 현재 검증 등급은 `CODE`다. 기존 정상 맵·왕복의 과거 `PLAY` 증거를 Invalid 분기 검증으로 과장하지 않는다.

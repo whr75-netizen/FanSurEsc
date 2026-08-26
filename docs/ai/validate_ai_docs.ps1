@@ -13,6 +13,7 @@ function Add-Failure {
 $requiredFiles = @(
     'AGENTS.md',
     'docs/ai/CURRENT_STATE.md',
+    'docs/ai/GAME_FLOW.md',
     'docs/ai/UNITY_ENGINEERING_PLAYBOOK.md',
     'docs/ai/README.md',
     'extraction_survival_gameplay_contract.md',
@@ -117,6 +118,7 @@ if (Test-Path -LiteralPath $statePath -PathType Leaf) {
 $instructionFiles = @(
     'AGENTS.md',
     'docs/ai/CURRENT_STATE.md',
+    'docs/ai/GAME_FLOW.md',
     'docs/ai/UNITY_ENGINEERING_PLAYBOOK.md',
     'docs/ai/README.md'
 )
@@ -142,7 +144,7 @@ foreach ($relativePath in $instructionFiles) {
 
 if (Test-Path -LiteralPath $agentsPath -PathType Leaf) {
     $agentsText = [IO.File]::ReadAllText($agentsPath)
-    foreach ($requiredReference in @('docs/ai/CURRENT_STATE.md', 'docs/ai/UNITY_ENGINEERING_PLAYBOOK.md', 'docs/ai/README.md')) {
+    foreach ($requiredReference in @('docs/ai/CURRENT_STATE.md', 'docs/ai/GAME_FLOW.md', 'docs/ai/UNITY_ENGINEERING_PLAYBOOK.md', 'docs/ai/README.md')) {
         if (-not $agentsText.Contains($requiredReference)) {
             Add-Failure "AGENTS.md does not route to $requiredReference."
         }

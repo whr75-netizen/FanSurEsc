@@ -5,6 +5,11 @@ using UnityEngine.SceneManagement;
 
 namespace FantasySurvival.SceneFlow
 {
+    /// <summary>
+    /// Owns one covered gameplay-scene transition token.
+    /// TryLoad -> shell cover/input lock -> scene load -> SceneSpawnController
+    /// placement -> CompleteArrival -> shell reveal/input restore.
+    /// </summary>
     public static class DirectSceneTravel
     {
         private struct PendingTravel
@@ -17,6 +22,7 @@ namespace FantasySurvival.SceneFlow
         private static PendingTravel pendingTravel;
         private static bool hasPendingTravel;
         private static bool isLoading;
+        private static bool pendingArrivalHeld;
 
         public static bool IsLoading => isLoading || hasPendingTravel ||
                                         (PersistentGameplayShell.Instance != null &&
@@ -29,6 +35,7 @@ namespace FantasySurvival.SceneFlow
             pendingTravel = default;
             hasPendingTravel = false;
             isLoading = false;
+            pendingArrivalHeld = false;
         }
 
         public static bool TryLoad(string destinationScene, string spawnId)
@@ -94,7 +101,13 @@ namespace FantasySurvival.SceneFlow
                 }
 
                 if (!shell.BeginTravelTransition(
-                        () => StartSceneLoad(destinationScene),
+                        () =>
+                        {
+                            StartSceneLoad(
+                                destinationScene,
+                                clearRequestOnFailure: true,
+                                out _);
+                        },
                         ClearFailedRequest))
                 {
                     ClearFailedRequest();
@@ -111,7 +124,10 @@ namespace FantasySurvival.SceneFlow
             }
         }
 
-        private static void StartSceneLoad(string destinationScene)
+        private static bool StartSceneLoad(
+            string destinationScene,
+            bool clearRequestOnFailure,
+            out string error)
         {
             try
             {
@@ -120,9 +136,22 @@ namespace FantasySurvival.SceneFlow
                     LoadSceneMode.Single);
                 if (operation == null)
                 {
-                    Debug.LogError($"Failed to start loading scene '{destinationScene}'.");
-                    ClearFailedRequest();
-                    return;
+                    error = $"Failed to start loading scene '{destinationScene}'.";
+                    Debug.LogError(error);
+                    if (clearRequestOnFailure)
+                    {
+                        ClearFailedRequest();
+                    }
+                    else
+                    {
+                        // A rejected raid scene is already active. Keep the replacement
+                        // pending token and the existing black cover/input lock so a
+                        // synchronous redirect failure cannot reveal that invalid scene.
+                        isLoading = false;
+                        pendingArrivalHeld = true;
+                    }
+
+                    return false;
                 }
 
                 operation.completed += _ =>
@@ -141,11 +170,26 @@ namespace FantasySurvival.SceneFlow
                             $"Scene '{destinationScene}' loaded, but the persistent gameplay shell was lost before arrival completed.");
                     }
                 };
+
+                error = null;
+                return true;
             }
             catch (Exception exception)
             {
                 Debug.LogException(exception);
-                ClearFailedRequest();
+                error = $"Loading scene '{destinationScene}' threw before an asynchronous load could start: " +
+                        exception.Message;
+                if (clearRequestOnFailure)
+                {
+                    ClearFailedRequest();
+                }
+                else
+                {
+                    isLoading = false;
+                    pendingArrivalHeld = true;
+                }
+
+                return false;
             }
         }
 
@@ -162,6 +206,95 @@ namespace FantasySurvival.SceneFlow
             return false;
         }
 
+        internal static bool CanRedirectPendingArrival(
+            string activeSceneName,
+            string destinationScene,
+            string spawnId,
+            out string error)
+        {
+            if (!hasPendingTravel ||
+                !string.Equals(activeSceneName, pendingTravel.DestinationScene, StringComparison.Ordinal))
+            {
+                error = $"Scene '{activeSceneName}' is not the pending travel destination.";
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(destinationScene) ||
+                string.IsNullOrWhiteSpace(spawnId))
+            {
+                error = "Arrival redirection requires a destination scene and spawn ID.";
+                return false;
+            }
+
+            if (!Application.CanStreamedLevelBeLoaded(destinationScene))
+            {
+                error = $"Scene '{destinationScene}' is not available in Build Settings.";
+                return false;
+            }
+
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            if (shell == null || !shell.IsTravelPrepared)
+            {
+                error = "Arrival redirection requires the persistent shell to remain travel-prepared.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        internal static bool TryRedirectPendingArrival(
+            string activeSceneName,
+            string destinationScene,
+            string spawnId,
+            Action<bool> completion,
+            out string error)
+        {
+            if (!CanRedirectPendingArrival(
+                    activeSceneName,
+                    destinationScene,
+                    spawnId,
+                    out error))
+            {
+                return false;
+            }
+
+            // CALL-ORDER INVARIANT: the raid owner must first secure either the fresh
+            // exact rollback or the recovered fail-closed decision. Then replace the
+            // pending token without completing/cancelling the rejected destination,
+            // releasing its input lock, or removing the existing black cover.
+            pendingTravel = new PendingTravel
+            {
+                DestinationScene = destinationScene,
+                SpawnId = spawnId,
+                Completion = completion
+            };
+            isLoading = true;
+            pendingArrivalHeld = false;
+            return StartSceneLoad(
+                destinationScene,
+                clearRequestOnFailure: false,
+                out error);
+        }
+
+        internal static void HoldPendingArrival(string activeSceneName, string reason)
+        {
+            if (!hasPendingTravel ||
+                !string.Equals(activeSceneName, pendingTravel.DestinationScene, StringComparison.Ordinal))
+            {
+                Debug.LogError(reason);
+                return;
+            }
+
+            // The destination is known to be unsafe, while its rollback/redirect could
+            // not be made restart-safe. Keep the covered pending token and every input
+            // lock. A later process start can resolve the durable ordinary marker and
+            // any Recovery artifacts without ever exposing this rejected scene.
+            isLoading = false;
+            pendingArrivalHeld = true;
+            Debug.LogError(reason);
+        }
+
         public static void CompleteArrival(string activeSceneName)
         {
             if (!hasPendingTravel ||
@@ -173,6 +306,7 @@ namespace FantasySurvival.SceneFlow
             Action<bool> completion = pendingTravel.Completion;
             pendingTravel = default;
             hasPendingTravel = false;
+            pendingArrivalHeld = false;
             InvokeCompletion(completion, true);
         }
 
@@ -196,6 +330,11 @@ namespace FantasySurvival.SceneFlow
             // as a broken destination configuration.
             yield return null;
 
+            if (pendingArrivalHeld)
+            {
+                yield break;
+            }
+
             if (!hasPendingTravel ||
                 !string.Equals(
                     pendingTravel.DestinationScene,
@@ -217,6 +356,7 @@ namespace FantasySurvival.SceneFlow
             pendingTravel = default;
             hasPendingTravel = false;
             isLoading = false;
+            pendingArrivalHeld = false;
             PersistentGameplayShell shell = PersistentGameplayShell.Instance;
             if (shell != null)
             {

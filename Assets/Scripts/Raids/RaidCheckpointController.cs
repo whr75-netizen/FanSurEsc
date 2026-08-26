@@ -517,6 +517,74 @@ namespace FantasySurvival.Raids
             return false;
         }
 
+        public RaidSceneArrivalReadiness GetRaidSceneArrivalReadiness(
+            string activeSceneName,
+            out string error)
+        {
+            if (activeSceneBinding == null ||
+                !string.Equals(activeSceneBinding.SceneName, activeSceneName, StringComparison.Ordinal))
+            {
+                error = "The arriving raid scene has no matching recovery binding.";
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
+            return activeSceneBinding.GetArrivalReadiness(out error);
+        }
+
+        internal bool TryPrepareInvalidMapReturn(
+            string reason,
+            out bool recoveryFailed,
+            out string error)
+        {
+            recoveryFailed = false;
+            if (!HasTrackedRaid)
+            {
+                error = "No tracked raid is available for an invalid-map return.";
+                return false;
+            }
+
+            if (entryOrigin == RaidEntryOrigin.Fresh)
+            {
+                bool prepared = TryPrepareFreshRaidDepartureRollback(
+                    out bool exactRollbackDurable,
+                    out error);
+                if (!prepared && exactRollbackDurable)
+                {
+                    Debug.LogError(
+                        $"Fresh raid map rejection secured its exact rollback journal, " +
+                        $"but ordinary-save mirroring will be retried at the base: {error}",
+                        this);
+                    return true;
+                }
+
+                return prepared;
+            }
+
+            if (entryOrigin != RaidEntryOrigin.Recovered)
+            {
+                error = "The tracked raid has no valid entry origin.";
+                return false;
+            }
+
+            recoveryFailed = true;
+            bool durable = TryMakeRecoveryFailureDurable(reason, out error);
+            if (!durable)
+            {
+                Debug.LogError(
+                    "Recovered raid map failure could not write a new fail-closed artifact before returning " +
+                    $"to base. The existing ordinary raid marker and fixed recovery seed remain authoritative, " +
+                    $"and base settlement will retry: {error}",
+                    this);
+            }
+
+            // TryMakeRecoveryFailureDurable still establishes the authoritative runtime
+            // failure when no new artifact can be written. A recovered entry already has
+            // an ordinary in-progress marker and fixed Recovery seed, so restart cannot
+            // silently become a successful/new Raid; Base settlement gets another commit
+            // attempt without exposing the rejected destination.
+            return true;
+        }
+
         public bool TryCompleteRaidSceneArrival(string activeSceneName, out string error)
         {
             if (!HasTrackedRaid)
@@ -537,6 +605,17 @@ namespace FantasySurvival.Raids
             if (!string.IsNullOrEmpty(activeSceneBinding.SeedPreparationError))
             {
                 error = activeSceneBinding.SeedPreparationError;
+                return false;
+            }
+
+            RaidSceneArrivalReadiness readiness = activeSceneBinding.GetArrivalReadiness(out error);
+            if (readiness != RaidSceneArrivalReadiness.Ready)
+            {
+                if (readiness == RaidSceneArrivalReadiness.Pending)
+                {
+                    error = "Raid scene navigation is still being prepared.";
+                }
+
                 return false;
             }
 
@@ -1101,9 +1180,15 @@ namespace FantasySurvival.Raids
             }
 
             RaidOutcome committedOutcome = trackedOutcome;
+            bool isFreshDepartureRollback =
+                pendingExactSettlementKind == RaidSettlementJournalKind.FreshDepartureRollback;
             ResetTrackedRaid();
             error = null;
-            NotifySettlementCommitted(committedOutcome);
+            if (!isFreshDepartureRollback)
+            {
+                NotifySettlementCommitted(committedOutcome);
+            }
+
             return true;
         }
 
@@ -2035,6 +2120,28 @@ namespace FantasySurvival.Raids
 
         private bool TryCancelFreshRaidDeparture(out string error)
         {
+            bool prepared = TryPrepareFreshRaidDepartureRollback(
+                out bool exactRollbackDurable,
+                out error);
+            if (!prepared && !exactRollbackDurable)
+            {
+                return false;
+            }
+
+            // The Player never left the fully initialized base. Reuse the same
+            // idempotent base-settlement retry boundary used after a covered redirect.
+            // If mirroring or cleanup still fails, HasPendingBaseSettlement remains
+            // true and the existing F5 path can retry without inventing a second flow.
+            basePersistenceReady = true;
+            baseArrivalComplete = true;
+            return TryCommitTrackedRaidAtBase(out error);
+        }
+
+        private bool TryPrepareFreshRaidDepartureRollback(
+            out bool exactRollbackDurable,
+            out string error)
+        {
+            exactRollbackDurable = false;
             if (!HasTrackedRaid || baseline.startingState == null)
             {
                 error = "Fresh raid departure has no recoverable starting state.";
@@ -2069,6 +2176,16 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            // TRANSACTION BOUNDARY: this exact journal commits the fresh rollback.
+            // Ordinary mirroring and Recovery cleanup may retry at Base; never reset
+            // the tracked raid until both have completed.
+            pendingExactSettlementState = baseline.startingState;
+            pendingExactSettlementKind = RaidSettlementJournalKind.FreshDepartureRollback;
+            ordinarySettlementMirrored = false;
+            basePersistenceReady = false;
+            baseArrivalComplete = false;
+            exactRollbackDurable = true;
+
             StandardStashViewData playerInventory = shell.InventoryUI.PlayerInventoryData;
             if (playerInventory == null)
             {
@@ -2082,13 +2199,12 @@ namespace FantasySurvival.Raids
                     furnitureDatabase,
                     playerInventory.CapacityWidth,
                     playerInventory.CapacityHeight,
-                    out error) ||
-                !RaidCheckpointStore.TryDeleteAll(out error))
+                    out error))
             {
                 return false;
             }
 
-            ResetTrackedRaid();
+            ordinarySettlementMirrored = true;
             error = null;
             return true;
         }

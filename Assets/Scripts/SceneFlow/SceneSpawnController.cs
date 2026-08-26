@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace FantasySurvival.SceneFlow
 {
+    [DefaultExecutionOrder(-9000)]
     [DisallowMultipleComponent]
     public sealed class SceneSpawnController : MonoBehaviour
     {
@@ -63,6 +64,81 @@ namespace FantasySurvival.SceneFlow
                     activeSceneName,
                     $"Scene '{activeSceneName}' cannot place the player because the persistent gameplay shell is missing.");
                 return;
+            }
+
+            if (gameplaySceneKind == GameplaySceneKind.Raid)
+            {
+                // CALL-ORDER INVARIANT: sceneLoaded is an early probe only; this
+                // controller's ordered Start pass is the Raid arrival commit gate.
+                // Until readiness is Ready, do not move Player, enter Raid, capture a
+                // checkpoint, complete travel, reveal, or restore gameplay input.
+                if (!allowDefaultSpawn)
+                {
+                    return;
+                }
+
+                RaidCheckpointController checkpoint = shell.RaidCheckpoint;
+                string readinessError = null;
+                RaidSceneArrivalReadiness readiness = checkpoint != null
+                    ? checkpoint.GetRaidSceneArrivalReadiness(activeSceneName, out readinessError)
+                    : RaidSceneArrivalReadiness.Invalid;
+                if (checkpoint == null)
+                {
+                    readinessError = "The persistent raid checkpoint controller is missing.";
+                }
+
+                if (readiness == RaidSceneArrivalReadiness.Pending)
+                {
+                    // sceneLoaded never reaches this branch. After the generator's
+                    // earlier ordered Start, Pending means the synchronous navigation
+                    // contract did not finish; treat it as an unsafe arrival instead of
+                    // letting the next-frame verifier reveal a half-prepared Raid.
+                    readiness = RaidSceneArrivalReadiness.Invalid;
+                    readinessError =
+                        "Raid scene navigation remained pending after the ordered generator Start.";
+                }
+
+                if (readiness == RaidSceneArrivalReadiness.Invalid)
+                {
+                    string failureReason = string.IsNullOrWhiteSpace(readinessError)
+                        ? $"Scene '{activeSceneName}' is not ready for raid arrival."
+                        : readinessError;
+                    string returnError = null;
+
+                    if (isPendingArrival &&
+                        shell.RaidSession != null &&
+                        shell.RaidSession.TryReturnFromInvalidRaidArrival(
+                            activeSceneName,
+                            failureReason,
+                            out returnError))
+                    {
+                        playerPlaced = true;
+                        return;
+                    }
+
+                    if (!isPendingArrival)
+                    {
+                        if (!shell.PrepareForTravel())
+                        {
+                            Debug.LogError(
+                                "The invalid direct raid-scene start also failed to acquire its gameplay input lock.",
+                                this);
+                        }
+
+                        Debug.LogError(
+                            $"Direct raid-scene authoring start was blocked because the map is invalid: {failureReason}",
+                            this);
+                        playerPlaced = true;
+                        return;
+                    }
+
+                    DirectSceneTravel.HoldPendingArrival(
+                        activeSceneName,
+                        $"Raid map arrival failed and could not return safely to base: " +
+                        $"{returnError ?? failureReason}");
+                    playerPlaced = true;
+                    return;
+                }
             }
 
             SceneSpawnPoint destination = FindSpawnPoint(spawnId);

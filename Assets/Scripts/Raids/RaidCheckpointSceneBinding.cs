@@ -10,6 +10,13 @@ using VariableInventorySystem;
 
 namespace FantasySurvival.Raids
 {
+    public enum RaidSceneArrivalReadiness
+    {
+        Pending,
+        Ready,
+        Invalid
+    }
+
     [DefaultExecutionOrder(-10500)]
     [DisallowMultipleComponent]
     public sealed class RaidCheckpointSceneBinding : MonoBehaviour
@@ -77,6 +84,44 @@ namespace FantasySurvival.Raids
         public bool IsConfigured => TryBuildAuthoredIndexes(out _, out _, out _);
         public string SeedPreparationError => seedPreparationError;
 
+        public RaidSceneArrivalReadiness GetArrivalReadiness(out string error)
+        {
+            if (!string.IsNullOrEmpty(seedPreparationError))
+            {
+                error = seedPreparationError;
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
+            if (mapGenerator == null)
+            {
+                error = "Raid scene map generator is missing.";
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
+            if (mapGenerator.NavigationBuildPending)
+            {
+                error = null;
+                return RaidSceneArrivalReadiness.Pending;
+            }
+
+            if (mapGenerator.CurrentLayout == null)
+            {
+                error = "Raid scene map layout was not generated.";
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
+            if (!mapGenerator.NavigationPathComplete)
+            {
+                error =
+                    $"Raid map seed {mapGenerator.CurrentSeed} has no complete " +
+                    "RaidEntry-to-ReturnPortal navigation path.";
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
+            error = null;
+            return RaidSceneArrivalReadiness.Ready;
+        }
+
         private void Awake()
         {
             controller = PersistentGameplayShell.Instance != null
@@ -136,9 +181,14 @@ namespace FantasySurvival.Raids
             chestRecords = null;
             enemyRecords = null;
 
-            if (!string.IsNullOrEmpty(seedPreparationError))
+            RaidSceneArrivalReadiness readiness = GetArrivalReadiness(out error);
+            if (readiness != RaidSceneArrivalReadiness.Ready)
             {
-                error = seedPreparationError;
+                if (readiness == RaidSceneArrivalReadiness.Pending)
+                {
+                    error = "Raid scene navigation is still being prepared.";
+                }
+
                 return false;
             }
 
@@ -227,9 +277,14 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (!string.IsNullOrEmpty(seedPreparationError))
+            RaidSceneArrivalReadiness readiness = GetArrivalReadiness(out error);
+            if (readiness != RaidSceneArrivalReadiness.Ready)
             {
-                error = seedPreparationError;
+                if (readiness == RaidSceneArrivalReadiness.Pending)
+                {
+                    error = "Recovered raid scene navigation is still being prepared.";
+                }
+
                 return false;
             }
 

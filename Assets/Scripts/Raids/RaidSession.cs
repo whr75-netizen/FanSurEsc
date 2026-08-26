@@ -47,6 +47,7 @@ namespace FantasySurvival.Raids
         private string returnScene;
         private string returnSpawnId;
         private bool pendingBaseSettlement;
+        private bool pendingFreshInvalidMapReturn;
 
         public event Action StateChanged;
         public event Action<RaidOutcome> Resolved;
@@ -183,9 +184,89 @@ namespace FantasySurvival.Raids
             state = RaidSessionState.Inactive;
             outcome = RaidOutcome.RecoveryFailed;
             pendingBaseSettlement = false;
+            pendingFreshInvalidMapReturn = false;
             ResetReturnRoute();
             playerStats?.SetDamageBlocked(false);
             NotifyStateChanged();
+            return true;
+        }
+
+        internal bool TryReturnFromInvalidRaidArrival(
+            string activeSceneName,
+            string reason,
+            out string error)
+        {
+            if (currentSceneKind != GameplaySceneKind.Base ||
+                state != RaidSessionState.Entering)
+            {
+                error = "Only a raid that is still entering can reject its destination map.";
+                return false;
+            }
+
+            RaidCheckpointController checkpoint = GetCheckpointController();
+            if (checkpoint == null || !checkpoint.IsConfigured)
+            {
+                error = "The raid checkpoint controller is unavailable.";
+                return false;
+            }
+
+            if (!DirectSceneTravel.CanRedirectPendingArrival(
+                    activeSceneName,
+                    defaultBaseScene,
+                    defaultBaseSpawnId,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!checkpoint.TryPrepareInvalidMapReturn(
+                    reason,
+                    out bool recoveryFailed,
+                    out error))
+            {
+                return false;
+            }
+
+            pendingBaseSettlement = false;
+            pendingFreshInvalidMapReturn = !recoveryFailed;
+            ResetReturnRoute();
+            currentSceneKind = GameplaySceneKind.Raid;
+            state = RaidSessionState.Returning;
+            if (recoveryFailed)
+            {
+                // A recovered exact seed must never be replaced with a different map.
+                // Preserve the established fail-closed item policy and let the normal
+                // base-arrival settlement apply it atomically.
+                outcome = RaidOutcome.RecoveryFailed;
+                playerStats?.SetDamageBlocked(true);
+            }
+            else
+            {
+                // A fresh technical generation failure is not a gameplay loss. Its
+                // checkpoint controller has durably selected the exact pre-departure
+                // state; ordinary mirroring and cleanup finish through the base gate.
+                outcome = RaidOutcome.None;
+            }
+
+            NotifyStateChanged();
+
+            if (!DirectSceneTravel.TryRedirectPendingArrival(
+                    activeSceneName,
+                    defaultBaseScene,
+                    defaultBaseSpawnId,
+                    HandleInvalidMapReturnTravelCompleted,
+                    out error))
+            {
+                // TryRedirectPendingArrival deliberately preserves the replacement
+                // pending token and black input lock when the Base load cannot even
+                // start. Do not claim a visible Raid/Base state or clear rollback data.
+                return false;
+            }
+
+            Debug.LogWarning(
+                $"Raid scene '{activeSceneName}' was rejected before arrival completed: {reason} " +
+                "The covered transition is returning to base.",
+                this);
             return true;
         }
 
@@ -194,6 +275,7 @@ namespace FantasySurvival.Raids
             state = RaidSessionState.Entering;
             outcome = RaidOutcome.None;
             pendingBaseSettlement = false;
+            pendingFreshInvalidMapReturn = false;
             ResetReturnRoute();
             NotifyStateChanged();
 
@@ -273,6 +355,7 @@ namespace FantasySurvival.Raids
             }
             else if (state != RaidSessionState.Inactive)
             {
+                bool freshInvalidMapReturn = pendingFreshInvalidMapReturn;
                 RaidOutcome completedOutcome = outcome;
                 if ((completedOutcome == RaidOutcome.PlayerDied ||
                      completedOutcome == RaidOutcome.RecoveryFailed) &&
@@ -290,7 +373,11 @@ namespace FantasySurvival.Raids
                 }
 
                 ResetRaidState(false);
-                pendingBaseSettlement = completedOutcome != RaidOutcome.None;
+                // A fresh invalid-map return has no gameplay outcome, but its exact
+                // departure rollback still must pass the normal BasePersistenceReady
+                // + arrival-complete transaction gate. The checkpoint owner suppresses
+                // SettlementCommitted for that technical rollback after cleanup.
+                pendingBaseSettlement = freshInvalidMapReturn || completedOutcome != RaidOutcome.None;
             }
 
             NotifyStateChanged();
@@ -366,10 +453,26 @@ namespace FantasySurvival.Raids
             ReturnTravelFailed?.Invoke();
         }
 
+        private void HandleInvalidMapReturnTravelCompleted(bool succeeded)
+        {
+            if (succeeded || state != RaidSessionState.Returning)
+            {
+                return;
+            }
+
+            // The redirect load started but Base arrival configuration later failed.
+            // Match normal return failure semantics so the result UI can retry Base or
+            // leave for Main Menu. Fresh technical rollback keeps Outcome=None.
+            state = RaidSessionState.Resolved;
+            NotifyStateChanged();
+            ReturnTravelFailed?.Invoke();
+        }
+
         private void ResetRaidState(bool notify = true)
         {
             state = RaidSessionState.Inactive;
             outcome = RaidOutcome.None;
+            pendingFreshInvalidMapReturn = false;
             ResetReturnRoute();
             if (notify)
             {

@@ -436,10 +436,16 @@ namespace FantasySurvival.SceneFlow
 
         private void ShowResult(RaidOutcome resolvedOutcome)
         {
-            if (resolvedOutcome == RaidOutcome.None)
+            if (resolvedOutcome == RaidOutcome.None &&
+                (raidSession == null || !raidSession.IsRaidResolved))
             {
                 return;
             }
+
+            // Outcome.None is allowed only for a resolved technical return failure,
+            // such as a fresh invalid-map rollback whose Base scene loaded but could
+            // not complete arrival. The existing default result gives that safe state
+            // explicit Retry Base and Main Menu exits without inventing a gameplay loss.
 
             if (!inputLockHeld && !TryAcquireInputLock(false, false))
             {

@@ -128,6 +128,7 @@ Unity 상태·기능·버그·구조 또는 여러 파일을 바꾸기 전에 �
 | 다음 기능 선택 | `CURRENT_STATE.md` + GDD/개발계획의 관련 절 |
 | 기능 구현·버그 수정 | `CURRENT_STATE.md`의 상태 행·계약 경로 + 관련 코드/씬 + playbook 관련 절 |
 | 게임 규칙·맵·AI·전투·루팅·세이브 알고리즘 | `extraction_survival_gameplay_contract.md` 관련 절 |
+| 게임 시작·메뉴 분기·씬 전환·한 판 호출 순서 | `docs/ai/GAME_FLOW.md` 관련 절 + 관련 코드 |
 | 콘텐츠·기지·경제·UI/UX 기획 | `game_design_document.md` 관련 절 |
 | Unity 선행조건·Stage 순서 | `extraction_survival_game_design_dev_plan.md` 관련 절. Stage는 구현 권한이 아님 |
 | Player 셸·씬·prefab·상태 소유권·캐시·검증 | `docs/ai/UNITY_ENGINEERING_PLAYBOOK.md` 관련 절 |
@@ -139,6 +140,7 @@ Unity 상태·기능·버그·구조 또는 여러 파일을 바꾸기 전에 �
 ## 10. 현재 상태와 문서 갱신
 
 - 기능의 구현·검증·재개방 조건이 바뀌면 같은 작업에서 `docs/ai/CURRENT_STATE.md`의 해당 행을 제자리 갱신한다.
+- 시작·메뉴·씬 전환·원정·정산의 실제 호출 또는 분기 순서가 바뀌면 `docs/ai/GAME_FLOW.md`도 같은 작업에서 갱신한다.
 - 현재 상태 파일에는 과거 이력이나 장문의 구현 설명을 누적하지 않는다.
 - 의미 있는 새 구현·검증 증거만 `unity_development_progress.md`에 append한다. 과거 기록을 현재 지시로 바꾸지 않는다.
 - 새 진행 이력에는 가능한 경우 관련 상태 ID를 함께 적어 이후 검색 경로를 고정한다.

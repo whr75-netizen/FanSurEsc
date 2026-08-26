@@ -201,9 +201,9 @@ seed + generator version
 - AI는 생성 결과의 실제 NavMesh와 유효 관심 지점을 사용하며 고정 좌우 좌표를 반복하는 순찰에 의존하지 않는다.
 - 도심, 지하 던전과 오염 지역은 서로 다른 공간 문법이므로 하나의 생성기에 mode 값만 추가해 섞지 않는다.
 
-**[현재]** `GameMapTest`는 seed로 도로와 Cube 건물을 생성하고 NavMesh·layout hash와 `NavigationPathComplete` 검증 결과를 산출한다. 다만 불완전 경로를 raid-ready 상태에서 자동 배제하고 재생성·후보 축소로 복구하는 gate는 아직 구현되지 않았다.
+**[현재]** `GameMapTest`는 seed로 도로와 Cube 건물을 생성하고 NavMesh·layout hash와 `NavigationPathComplete` 검증 결과를 산출한다. 불완전 경로는 raid-ready로 인정하지 않고 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh 원정은 출발 전 exact 상태로 되돌린 뒤 기지로, Resume 원정은 다른 seed로 바꾸지 않고 `RecoveryFailed`로 기지 정산한다. Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid 공개 대신 검은 전환·입력 잠금을 보류한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 Recovery seed를 유지한 채 기지 정산에서 재시도한다. 자동 재생성·후보 축소 정책은 아직 구현하지 않았다.
 
-**[후속 필수]** 랜드마크, 가로수, 폐차, 소형 지형지물, 내부, 상자·적 배치를 추가하기 전에 경로 검증을 실제 준비 완료 조건으로 연결해야 한다. 이 콘텐츠들은 후속 범위이며 현재 구현으로 단정하지 않는다.
+**[후속 필수]** 랜드마크, 가로수, 폐차, 소형 지형지물, 내부, 상자·적 배치를 추가할 때 현재 준비 완료 gate를 유지하고 각 콘텐츠의 접근 가능성까지 확장해야 한다. 이 콘텐츠들은 후속 범위이며 현재 구현으로 단정하지 않는다.
 
 #### 후속 콘텐츠 배치가 필요로 하는 평가값 `[제안/미정]`
 

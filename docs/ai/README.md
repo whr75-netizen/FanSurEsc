@@ -18,6 +18,7 @@
 ```text
 AGENTS.md
   → docs/ai/CURRENT_STATE.md
+    → 씬·한 판 순서 작업이면 docs/ai/GAME_FLOW.md
     → 관련 게임·서브시스템 계약
       → docs/ai/UNITY_ENGINEERING_PLAYBOOK.md의 관련 절
         → 필요할 때만 unity_development_progress.md의 증거 이력
@@ -27,6 +28,7 @@ AGENTS.md
 |---|---|---|
 | `AGENTS.md` | 짧은 핵심 계약, 금지선, 문서 라우터 | 항상 자동 로드 |
 | `CURRENT_STATE.md` | 현재 구현·검증·재개방 조건의 단일 인덱스 | 구현, 버그, 검증, 다음 기능 선택 |
+| `GAME_FLOW.md` | 게임 실행부터 한 판 정산까지 실제 씬·함수·분기 순서 | 시작, 메뉴, 씬 전환, 원정, 정산 순서 변경 |
 | 게임·기술 계약 | 사용자 확정 규칙과 안정된 불변조건 | 현재 작업과 관련될 때만 |
 | `UNITY_ENGINEERING_PLAYBOOK.md` | Unity 편집, 구조 변경, 검증 절차 | 필요한 절만 |
 | `unity_development_progress.md` | 상세 증거와 과거 이력 | 원인이나 증거를 추적할 때만 |
@@ -36,6 +38,7 @@ AGENTS.md
 ## 문서별 권위
 
 - 현재 구현 여부: 직접 확인한 Unity·코드 사실 → `CURRENT_STATE.md` → 최신 진행 이력
+- 실제 시작·메뉴·씬 전환·한 판 호출 순서: `GAME_FLOW.md`
 - 장르와 플레이 판단: `extraction_survival_gameplay_contract.md`
 - 게임 요소·콘텐츠·UI 기획: `game_design_document.md`
 - Unity 선행조건과 Stage 의존성: `extraction_survival_game_design_dev_plan.md`

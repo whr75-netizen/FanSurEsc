@@ -1352,13 +1352,15 @@ seed + generator version
 - `NavigationPathComplete` 결과를 산출한다.
 - 256개 seed의 도로 연결과 점유 충돌을 코드 검증했다.
 - 실제 Play Mode 생성 layout의 Spawn→Portal 완전 경로를 확인했다.
+- 완전 경로가 없으면 Player 배치·Raid Active·checkpoint·화면 공개 전에 도착을 거부하고, 기존 검은 전환을 유지한 채 기지로 복귀시킨다.
+- Fresh 생성 실패는 원정 전 exact 상태로 되돌리고 게임플레이 실패로 세지 않으며, Resume 생성 실패는 seed를 바꾸지 않고 `RecoveryFailed`로 정산한다.
+- Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid를 공개하지 않고 검은 전환과 입력 잠금을 유지한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 seed를 유지한 채 기지 정산에서 재시도한다.
 
-#### 7.10.2 후속 필수 gate
+#### 7.10.2 남은 생성 복구 정책
 
-- 불완전 경로면 raid-ready로 인정하지 않는다.
 - 재생성, 후보 축소 또는 선택 콘텐츠 생략으로 유효 결과를 만든다.
 - 실패한 seed·version과 이유를 기록한다.
-- Player 입력을 열기 전에 검증을 완료한다.
+- 후속 POI·상자·적 배치까지 개별 접근 가능성 검증 범위를 확장한다.
 
 ### 7.11 seed와 복구
 

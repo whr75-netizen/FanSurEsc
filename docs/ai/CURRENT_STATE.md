@@ -1,6 +1,6 @@
 # 현재 구현·검증 상태
 
-**마지막 갱신:** 2026-08-26
+**마지막 갱신:** 2026-08-27
 **역할:** 현재 구현 여부, 가장 강한 검증 등급과 기능을 다시 열 수 있는 조건을 기록하는 단일 인덱스
 
 ## 판정 규칙
@@ -37,17 +37,17 @@
 
 | 상태 ID | 관련 계약·기획 절 |
 |---|---|
-| `BOOT-01`, `SHELL-01`, `TRAVEL-01`, `TRANSITION-01`, `INPUT-01`, `MOVE-01` | `AGENTS.md` §4, 개발계획 §2.2~3.2, GDD §2~3 |
+| `BOOT-01`, `SHELL-01`, `TRAVEL-01`, `TRANSITION-01`, `INPUT-01`, `MOVE-01` | `AGENTS.md` §4, `GAME_FLOW.md` §1~3·8, 개발계획 §2.2~3.2, GDD §2~3 |
 | `INTERACT-01` | 게임플레이 계약 §4.4, GDD §3.3 |
 | `ITEM-01`, `BASE-01`, `MERCHANT-01`, `ITEM-UI-01` | 게임플레이 계약 §4.2·4.8·4.9, GDD §5·8~10 |
 | `COMBAT-01`, `CORPSE-01` | 게임플레이 계약 §4.5·4.7, GDD §4·6.11 |
 | `AI-01` | 게임플레이 계약 §4.6·4.10, `ai_generation_plan.md` §1~11 |
-| `MAP-01` | 게임플레이 계약 §4.3, GDD §7, 개발계획 §14 |
-| `RAID-01`, `SAVE-01` | 게임플레이 계약 §4.1·4.8·4.9, GDD §2.6~2.7·11 |
+| `MAP-01`, `MAP-ARRIVAL-01` | 게임플레이 계약 §4.3, `GAME_FLOW.md` §4~5, GDD §7, 개발계획 §14 |
+| `RAID-01`, `SAVE-01` | 게임플레이 계약 §4.1·4.8·4.9, `GAME_FLOW.md` §6~8, GDD §2.6~2.7·11 |
 | `QUEST-01` | 게임플레이 계약 §4.4·4.7~4.9·5, GDD §2.3·3.3·8.5.4·9.5·10.5.4·12.2.5 |
 | `INFO-01` | 게임플레이 계약 §4.9·5, GDD §3.4·9.1·10.2·10.15 |
 | `PIXEL-01` | GDD §14; 현재는 재사용 요청 전까지 계약을 확장하지 않음 |
-| `GAP-MAP-ARRIVAL`, `GAP-SPAWN` | 게임플레이 계약 §4.3, GDD §7.8~7.10, 개발계획 §14.1 |
+| `GAP-SPAWN` | 게임플레이 계약 §4.3, GDD §7.8~7.10, 개발계획 §14.1 |
 | `GAP-POI` | 게임플레이 계약 §4.3, GDD §7.5·7.7·7.10, 개발계획 §14.1 |
 | `GAP-LOOT` | 게임플레이 계약 §4.2~4.3, GDD §5.7·7.9 |
 | `GAP-COMBAT` | 게임플레이 계약 §4.5, GDD §4.5~4.7·18.1 |
@@ -74,6 +74,7 @@
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19 | NavMesh 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
 | `MAP-01` | 도심 도로·Cube 건물·런타임 NavMesh | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §14 | seed 기반 연결 도로와 막힌 Cube 건물, Entry→Portal 경로 | 도로·건물 생성 규칙 직접 변경 |
+| `MAP-ARRIVAL-01` | 원정 맵 도착 안전 gate | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §32 | Ready 뒤에만 공개; Invalid는 covered 기지 복귀, 불가 시 잠금 보류 | readiness·도착·rollback·redirect 경계 변경 |
 | `BASE-01` | 기지 Chest·가구 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §18 | stable ID별 grid와 중첩 아이템, 왕복·backup 복원 | 배치 가능한 가구나 layout migration 추가 |
 | `RAID-01` | 기지/원정 Escape·생환·사망·포기 결과 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21 | 확인창과 결과 1회 확정; 주 메뉴 이동과 기지 복귀 구분 | 메뉴나 결과 정책 직접 변경 |
 | `SAVE-01` | ordinary save·원정 Recovery·결과 정산 | `ACTIVE` | `PLAYER` | `PROTOTYPE` | 진행 §22~23 | ordinary marker 우선, 강제종료 Resume, 생환 전체 보존·세 실패 전체 휴대품 소실 | schema·정산·Recovery 경계 직접 변경 |
@@ -89,7 +90,6 @@
 
 | ID | 상태 | 실제 공백 | 선행조건·금지선 |
 |---|---|---|---|
-| `GAP-MAP-ARRIVAL` | `ABSENT` | `NavigationPathComplete=false`를 원정 도착 실패·기지 복귀로 연결하지 않음 | 기존 전환 잠금을 재구현하지 않고 도착 완료 조건만 확장 |
 | `GAP-SPAWN` | `ABSENT` | raid seed/stable ID 기반 적·상자 spawn manifest 없음 | 보호 반경·NavMesh 도달·Resume 중복 방지 필요 |
 | `GAP-LOOT` | `ABSENT` | 데이터 기반 `LootTable` 없음 | 기존 ItemDatabase와 Chest owner 재사용, 재개방·Resume 재굴림 금지 |
 | `GAP-POI` | `ABSENT` | 접근 가능한 POI·건물 내부·랜드마크 없음 | Spawn→Portal 경로와 별도 접근 가능성 검증 |

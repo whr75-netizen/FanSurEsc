@@ -14,6 +14,8 @@ namespace VariableInventorySystem
         [SerializeField] Graphic condition;
         [SerializeField] RectTransform conditionTransform;
         [SerializeField] RectTransform background;
+        [SerializeField] RectTransform sizeTarget;
+        [SerializeField] Vector2 sizePadding;
 
         [SerializeField] float holdScrollPadding;
         [SerializeField] float holdScrollRate;
@@ -101,6 +103,39 @@ namespace VariableInventorySystem
                     standardCell.SetBadgeText(GetItemBadgeText(StashData.CellData[i]));
                     standardCell.SetQuantityBadgeText(GetQuantityBadgeText(StashData.CellData[i]));
                 }
+            }
+
+            RefreshLayoutGeometry();
+        }
+
+        private void RefreshLayoutGeometry()
+        {
+            if (gridLayoutGroup == null || StashData == null)
+            {
+                return;
+            }
+
+            if (sizeTarget != null)
+            {
+                float width = gridLayoutGroup.padding.horizontal +
+                              StashData.CapacityWidth * gridLayoutGroup.cellSize.x +
+                              Mathf.Max(0, StashData.CapacityWidth - 1) *
+                              gridLayoutGroup.spacing.x;
+                float height = gridLayoutGroup.padding.vertical +
+                               StashData.CapacityHeight * gridLayoutGroup.cellSize.y +
+                               Mathf.Max(0, StashData.CapacityHeight - 1) *
+                               gridLayoutGroup.spacing.y;
+                sizeTarget.SetSizeWithCurrentAnchors(
+                    RectTransform.Axis.Horizontal,
+                    width + sizePadding.x);
+                sizeTarget.SetSizeWithCurrentAnchors(
+                    RectTransform.Axis.Vertical,
+                    height + sizePadding.y);
+            }
+
+            if (gridLayoutGroup.transform is RectTransform content)
+            {
+                LayoutRebuilder.ForceRebuildLayoutImmediate(content);
             }
         }
 

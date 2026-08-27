@@ -1401,3 +1401,15 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` 실제 Player inventory에서 기존 pointer drag의 취소·동일 item/slot 복원, 짧은 클릭 전체 보유, R 회전, `8/10 + 4/10→10/10 + 보유 2/10`, 취소 뒤 총량 12와 원회전 복원을 확인했다. 별도 대표 사례에서 일반 stack은 `나누기`만, 컨테이너는 `사용`만 표시되고 `사용`이 기존 컨테이너 popup을 여는 것을 확인했다. 최종 보완 뒤 점유된 잘못된 칸 click-carry 유지·명시적 취소 복원, hover를 이웃 셀로 바꿔도 pointerPress 원본을 집는 것, 기존 pointer drag의 다른 빈 칸 성공 배치와 보유 종료, 분할 `5→3+2` 뒤 `8+2→10` exact fill의 Core 보유 종료를 확인했다. 검증용 runtime item과 열린 UI는 모두 정리했다.
 - `[프리팹·컴파일 확인]` `PersistentGameplayShell`의 dialog·UseButton이 각각 1개이고 필수 참조가 완전하며 missing script 0개다. 최신 코드 컴파일 뒤 Console Error는 0건이었다.
 - `[재사용 증거·미검증]` Save schema와 codec은 변경하지 않아 §38의 양수 stack 저장 왕복과 §40의 분할 `3+2` JSON 복원 증거를 재사용한다. 실제 사용자의 Alt·마우스·R 물리 입력은 주입하지 않았으므로 코드 분기와 Play Mode 호출 확인으로만 기록한다. 실제 치료제·음식 사용 효과, 상인 stack 가격 정산과 자동 정렬은 여전히 미정이다.
+
+---
+
+## 42. 용량 연동 인벤토리 frame과 Storage Shift stack 우선 이동 `[ITEM-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-28]` grid 칸수와 따로 노는 배경·외곽 UI를 실제 용량에 맞추고, 인벤토리↔인벤토리 Shift 이동은 대상의 기존 비가득 stack을 먼저 채운 뒤 남은 수량만 빈칸으로 옮긴다. 빈칸이 없으면 합쳐지지 않은 나머지만 원본 칸에 남긴다.
+- `[UI 권위]` `StandardStashView`가 capacity, cell size, spacing에서 Content 크기를 계산하고 선택된 외곽 root에 padding만 더한다. Player와 외부 Storage view만 이 root 크기 갱신을 사용하며, 별도 popup 크기 권위를 가진 `StandardCaseView`는 기존 경로를 유지한다. 내부 배경은 Content와 같은 좌표·크기를 사용한다.
+- `[Storage 원자 이동]` `InventoryTransferCoordinator`가 같은 definition·최대 stack의 대상을 slot 순서로 계획하고 기존 owner API로 source를 한 번 분리한다. 대상 수량을 채운 뒤 남은 같은 runtime source를 첫 유효 빈 위치로 연결하거나, 빈 위치가 없으면 원래 owner·slot에 재연결한다. 전량 합치기는 0수량 item을 만들지 않는다. 중간 예외는 적용한 대상 stack을 역순 복원하고 원본 참조·수량·owner·slot을 복구하며, 복구가 끝나기 전 다른 인벤토리 mutation과 session 교체를 차단한다.
+- `[범위 보존]` Player↔Chest·시체 같은 Storage 양방향 Shift에만 stack 우선 규칙을 적용했다. 비stack item은 기존 whole-item first-fit을 사용하고, Player↔상인 구매·판매는 stack 가격 정책이 미정이므로 기존 거래 경계를 그대로 유지한다. drag·분할·Save schema와 수량 배지는 변경하지 않았다.
+- `[Editor 호출 확인]` 실제 Medicine definition과 임시 Storage grid로 전량 합치기, 여러 대상 stack의 slot 순서 채움 뒤 같은 source remainder 빈칸 이동, 역방향 부분 합치기 뒤 빈칸 부족 시 exact 원본 owner·slot 잔류, destination 부착 뒤 예외를 주입한 원자 rollback, 비stack Handgun의 기존 first-fit을 각각 1회 확인했다. 모든 case에서 총수량·runtime 참조와 grid 소유권이 기대값과 일치했다.
+- `[Play Mode 호출 확인]` Player `8×9`에서 Content·내부 배경·72개 cell 경계가 `519×584`, 외곽 root·배경이 `530×595`로 일치했다. 같은 외부 view를 `5×6 → 6×5`로 바꾸자 활성 cell 30개를 재사용하면서 Content·내부 배경·cell 경계가 `389×324`, 외곽 root·배경이 `400×335`로 함께 갱신됐다. `StandardCaseView`의 별도 크기 경로도 유지됐다.
+- `[컴파일·미검증]` 최종 프로젝트 코드와 검증 명령은 컴파일됐고 Play Mode 검증 뒤 Edit Mode·`GameMap1`로 정상 복귀했다. 후속 fault-injection은 의도한 복구 실패 오류 3건을 냈고, Edit Mode에서 같은 view를 재적용한 검증 명령은 기존 `Destroy` 경로의 Editor 진단을 남겼으나 모든 assertion과 마지막 PASS까지 실행됐다. 실제 사용자의 Shift+마우스 물리 입력은 주입하지 않았으며, 변경되지 않은 입력 분기 뒤 `HandleQuickTransfer`부터 실제 owner API 경로를 호출해 검증했다.

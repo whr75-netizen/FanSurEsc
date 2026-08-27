@@ -293,10 +293,15 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
+        if (transferCoordinator != null &&
+            !transferCoordinator.TrySetPlayerState(replacement, out error))
+        {
+            return false;
+        }
+
         UnbindWallet(playerState?.Wallet);
         playerState = replacement;
         BindWallet(playerState.Wallet);
-        transferCoordinator?.SetPlayerState(playerState);
         PlayerStateChanged?.Invoke(playerState);
         error = null;
         return true;
@@ -406,14 +411,12 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
-        OpenPlayerAndExternalInventory(
+        return OpenPlayerAndExternalInventory(
             chest.chestInventoryData,
             interactable,
             ExternalInventoryMode.Storage,
             chest,
             null);
-
-        return true;
     }
 
     public bool IsChestOpen(Chest chest)
@@ -449,13 +452,12 @@ public class InventoryUIManager : MonoBehaviour
             }
         }
 
-        OpenPlayerAndExternalInventory(
+        return OpenPlayerAndExternalInventory(
             merchantInventory,
             interactable,
             ExternalInventoryMode.Merchant,
             null,
             merchant);
-        return true;
     }
 
     public bool IsMerchantOpen(MerchantInteractable merchant)
@@ -528,7 +530,7 @@ public class InventoryUIManager : MonoBehaviour
     }
 
     // 플레이어와 외부 인벤토리 함께 열기
-    private void OpenPlayerAndExternalInventory(
+    private bool OpenPlayerAndExternalInventory(
         StandardStashViewData data,
         Interactable interactable,
         ExternalInventoryMode mode,
@@ -536,11 +538,11 @@ public class InventoryUIManager : MonoBehaviour
         Merchant merchant)
     {
         OpenPlayerInventoryUI();
-        OpenExternalInventoryUI(data, interactable, mode, chest, merchant);
+        return OpenExternalInventoryUI(data, interactable, mode, chest, merchant);
     }
 
     // 외부 인벤토리 열기 (Apply는 필요시)
-    void OpenExternalInventoryUI(
+    bool OpenExternalInventoryUI(
         StandardStashViewData data,
         Interactable interactable,
         ExternalInventoryMode mode,
@@ -550,7 +552,13 @@ public class InventoryUIManager : MonoBehaviour
         if (externalInventoryPanel == null || data == null || interactable == null ||
             mode == ExternalInventoryMode.None)
         {
-            return;
+            return false;
+        }
+
+        if (transferCoordinator != null &&
+            !transferCoordinator.TrySetExternalSession(mode, data, out _))
+        {
+            return false;
         }
 
         currentOpenedChest = chest;
@@ -565,7 +573,6 @@ public class InventoryUIManager : MonoBehaviour
             isExternalViewRegistered = true;
         }
 
-        transferCoordinator.SetExternalSession(mode, data);
         if (mode == ExternalInventoryMode.Merchant)
         {
             merchantControlsRoot.SetActive(true);
@@ -587,12 +594,20 @@ public class InventoryUIManager : MonoBehaviour
             RefreshMerchantPresentationLabels();
         }
         Debug.Log($"External Applied for {interactable.name}");
+        return true;
     }
 
     // 외부 인벤토리 숨기기 (드래그 중 취소 처리)
-    private void HideExternalInventoryUI()
+    private bool HideExternalInventoryUI()
     {
-        if (externalInventoryPanel == null || standardCore == null ) return; if (!externalInventoryPanel.activeSelf) return;
+        if (externalInventoryPanel == null || standardCore == null) return true;
+        if (!externalInventoryPanel.activeSelf) return true;
+        if (transferCoordinator != null &&
+            !transferCoordinator.TryClearExternalSession(out _))
+        {
+            return false;
+        }
+
         if (isExternalViewRegistered) { standardCore.RemoveInventoryView(externalStashView); isExternalViewRegistered = false; }
         itemTooltipView?.Hide();
         externalStashView.SetItemPresentation(null, null, false);
@@ -603,8 +618,8 @@ public class InventoryUIManager : MonoBehaviour
         currentExternalInteractable = null;
         currentExternalData = null;
         currentExternalMode = ExternalInventoryMode.None;
-        transferCoordinator?.ClearExternalSession();
         Debug.Log("External Inventory Hidden");
+        return true;
     }
 
     // 모든 인벤토리 닫기 (Hide 함수 호출)
@@ -618,7 +633,11 @@ public class InventoryUIManager : MonoBehaviour
 
         if (standardCore != null) standardCore.CloseAllCasePopups();
         itemTooltipView?.Hide();
-        HideExternalInventoryUI();
+        if (!HideExternalInventoryUI())
+        {
+            return false;
+        }
+
         HidePlayerInventoryUI();
         return true;
     }

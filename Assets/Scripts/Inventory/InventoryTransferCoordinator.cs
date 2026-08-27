@@ -193,6 +193,7 @@ namespace FantasySurvival.Inventory
         private PlayerInventoryState playerState;
         private ExternalInventoryMode externalMode;
         private StandardStashViewData externalInventory;
+        private StorageQuickTransferTransaction pendingStorageRecovery;
 
         private struct TransferReceipt
         {
@@ -201,6 +202,381 @@ namespace FantasySurvival.Inventory
             public IVariableInventoryCellData Item;
             public int SourceIndex;
             public int DestinationIndex;
+        }
+
+        private struct StorageQuickTransferResult
+        {
+            public int MovedQuantity;
+            public int SourceRemainingQuantity;
+        }
+
+        private sealed class StorageStackFillStep
+        {
+            public InventoryItemData Target;
+            public int QuantityBefore;
+            public int QuantityAfter;
+            public bool Applied;
+        }
+
+        /// <summary>
+        /// Owns one synchronous Storage quick-transfer transaction. It never owns
+        /// inventory data; it only records enough CAS state to finish or recover
+        /// mutations made through the existing source/destination owner APIs.
+        /// </summary>
+        private sealed class StorageQuickTransferTransaction
+        {
+            private readonly IVariableInventoryViewData source;
+            private readonly StandardStashViewData destination;
+            private readonly InventoryItemData sourceItem;
+            private readonly int sourceIndex;
+            private readonly int originalQuantity;
+            private readonly List<StorageStackFillStep> fillSteps;
+            private readonly int plannedStackQuantity;
+
+            private int? destinationIndex;
+            private bool started;
+            private bool committed;
+            private bool sourceQuantityChanged;
+            private bool rollbackComplete;
+
+            private StorageQuickTransferTransaction(
+                IVariableInventoryViewData source,
+                StandardStashViewData destination,
+                InventoryItemData sourceItem,
+                int sourceIndex,
+                List<StorageStackFillStep> fillSteps,
+                int plannedStackQuantity)
+            {
+                this.source = source;
+                this.destination = destination;
+                this.sourceItem = sourceItem;
+                this.sourceIndex = sourceIndex;
+                this.fillSteps = fillSteps;
+                this.plannedStackQuantity = plannedStackQuantity;
+                originalQuantity = sourceItem.Quantity;
+            }
+
+            public static bool TryCreate(
+                IVariableInventoryViewData source,
+                StandardStashViewData destination,
+                InventoryItemData sourceItem,
+                out StorageQuickTransferTransaction transaction,
+                out string error)
+            {
+                transaction = null;
+                if (source == null || destination == null || sourceItem == null ||
+                    ReferenceEquals(source, destination))
+                {
+                    error = "원본 또는 대상 인벤토리가 올바르지 않습니다.";
+                    return false;
+                }
+
+                int? sourceIndex = source.GetId(sourceItem);
+                if (!sourceIndex.HasValue ||
+                    !ReferenceEquals(sourceItem.InventoryOwner, source))
+                {
+                    error = "원본 아이템의 슬롯 또는 소유권이 올바르지 않습니다.";
+                    return false;
+                }
+
+                var fillSteps = new List<StorageStackFillStep>();
+                int quantityToPlan = sourceItem.Quantity;
+                if (sourceItem.MaxStackSize > 1)
+                {
+                    for (int i = 0; i < destination.CellData.Length && quantityToPlan > 0; i++)
+                    {
+                        if (!(destination.CellData[i] is InventoryItemData target) ||
+                            ReferenceEquals(target, sourceItem) ||
+                            !ReferenceEquals(target.InventoryOwner, destination) ||
+                            !InventoryTransferCoordinator.IsSameStackKind(sourceItem, target) ||
+                            target.Quantity >= target.MaxStackSize)
+                        {
+                            continue;
+                        }
+
+                        int moved = Mathf.Min(
+                            quantityToPlan,
+                            target.MaxStackSize - target.Quantity);
+                        fillSteps.Add(new StorageStackFillStep
+                        {
+                            Target = target,
+                            QuantityBefore = target.Quantity,
+                            QuantityAfter = target.Quantity + moved
+                        });
+                        quantityToPlan -= moved;
+                    }
+                }
+
+                transaction = new StorageQuickTransferTransaction(
+                    source,
+                    destination,
+                    sourceItem,
+                    sourceIndex.Value,
+                    fillSteps,
+                    sourceItem.Quantity - quantityToPlan);
+                error = null;
+                return true;
+            }
+
+            public bool TryExecute(
+                out StorageQuickTransferResult result,
+                out string error)
+            {
+                result = default;
+                if (started)
+                {
+                    error = "The Storage quick-transfer transaction was already started.";
+                    return false;
+                }
+
+                started = true;
+                try
+                {
+                    source.InsertInventoryItem(sourceIndex, null);
+                }
+                catch (Exception exception)
+                {
+                    error = $"원본 아이템을 분리하지 못했습니다: {exception.Message}";
+                    return false;
+                }
+
+                try
+                {
+                    destinationIndex = destination.GetInsertableId(sourceItem);
+                }
+                catch (Exception exception)
+                {
+                    error = $"대상 인벤토리의 빈 공간을 확인하지 못했습니다: {exception.Message}";
+                    return false;
+                }
+                if (plannedStackQuantity <= 0 && !destinationIndex.HasValue)
+                {
+                    error = "대상 인벤토리에 합칠 stack이나 빈 공간이 없습니다.";
+                    return false;
+                }
+
+                foreach (StorageStackFillStep step in fillSteps)
+                {
+                    if (!step.Target.TryChangeQuantity(
+                            destination,
+                            step.QuantityBefore,
+                            step.QuantityAfter,
+                            out error))
+                    {
+                        error = $"대상 stack 수량을 갱신하지 못했습니다: {error}";
+                        return false;
+                    }
+
+                    step.Applied = true;
+                }
+
+                int remainder = originalQuantity - plannedStackQuantity;
+                if (remainder > 0 && plannedStackQuantity > 0)
+                {
+                    if (!sourceItem.TryChangeQuantity(
+                            null,
+                            originalQuantity,
+                            remainder,
+                            out error))
+                    {
+                        error = $"이동 후 남은 stack 수량을 갱신하지 못했습니다: {error}";
+                        return false;
+                    }
+
+                    sourceQuantityChanged = true;
+                }
+
+                if (remainder > 0)
+                {
+                    IVariableInventoryViewData remainderOwner = destinationIndex.HasValue
+                        ? destination
+                        : source;
+                    int remainderIndex = destinationIndex ?? sourceIndex;
+                    try
+                    {
+                        remainderOwner.InsertInventoryItem(remainderIndex, sourceItem);
+                    }
+                    catch (Exception exception)
+                    {
+                        error = $"남은 stack을 배치하지 못했습니다: {exception.Message}";
+                        return false;
+                    }
+                }
+
+                committed = true;
+                result = new StorageQuickTransferResult
+                {
+                    MovedQuantity = destinationIndex.HasValue
+                        ? originalQuantity
+                        : plannedStackQuantity,
+                    SourceRemainingQuantity = destinationIndex.HasValue ? 0 : remainder
+                };
+                error = null;
+                return true;
+            }
+
+            public bool TryRollback(out string error)
+            {
+                error = null;
+                if (rollbackComplete)
+                {
+                    return true;
+                }
+
+                if (committed)
+                {
+                    error = "A committed Storage quick-transfer cannot be rolled back.";
+                    return false;
+                }
+
+                if (!TryDetachSourceItemFromUnexpectedOwner(out error))
+                {
+                    return false;
+                }
+
+                for (int i = fillSteps.Count - 1; i >= 0; i--)
+                {
+                    StorageStackFillStep step = fillSteps[i];
+                    if (!step.Applied)
+                    {
+                        continue;
+                    }
+
+                    if (ReferenceEquals(step.Target.InventoryOwner, destination) &&
+                        step.Target.Quantity == step.QuantityBefore)
+                    {
+                        step.Applied = false;
+                        continue;
+                    }
+
+                    if (!step.Target.TryChangeQuantity(
+                            destination,
+                            step.QuantityAfter,
+                            step.QuantityBefore,
+                            out error))
+                    {
+                        return false;
+                    }
+
+                    step.Applied = false;
+                }
+
+                if (sourceItem.InventoryOwner == null &&
+                    sourceItem.Quantity != originalQuantity)
+                {
+                    int expectedQuantity = originalQuantity - plannedStackQuantity;
+                    if (!sourceQuantityChanged || sourceItem.Quantity != expectedQuantity ||
+                        !sourceItem.TryChangeQuantity(
+                            null,
+                            expectedQuantity,
+                            originalQuantity,
+                            out error))
+                    {
+                        error = error ??
+                                "The detached source stack no longer matches its rollback state.";
+                        return false;
+                    }
+
+                    sourceQuantityChanged = false;
+                }
+
+                if (ReferenceEquals(sourceItem.InventoryOwner, source) &&
+                    source.GetId(sourceItem) == sourceIndex &&
+                    sourceItem.Quantity == originalQuantity)
+                {
+                    rollbackComplete = true;
+                    error = null;
+                    return true;
+                }
+
+                if (sourceItem.InventoryOwner != null ||
+                    sourceItem.Quantity != originalQuantity)
+                {
+                    error = "The source stack is not detached in its original rollback state.";
+                    return false;
+                }
+
+                try
+                {
+                    source.InsertInventoryItem(sourceIndex, sourceItem);
+                }
+                catch (Exception exception)
+                {
+                    error = $"원본 stack 복구에 실패했습니다: {exception.Message}";
+                    return false;
+                }
+
+                rollbackComplete = true;
+                error = null;
+                return true;
+            }
+
+            private bool TryDetachSourceItemFromUnexpectedOwner(out string error)
+            {
+                IVariableInventoryViewData currentOwner = sourceItem.InventoryOwner;
+                if (currentOwner == null)
+                {
+                    error = null;
+                    return true;
+                }
+
+                if (ReferenceEquals(currentOwner, source) &&
+                    source.GetId(sourceItem) == sourceIndex)
+                {
+                    if (sourceItem.Quantity == originalQuantity)
+                    {
+                        error = null;
+                        return true;
+                    }
+
+                    int expectedRemainder = originalQuantity - plannedStackQuantity;
+                    if (!sourceQuantityChanged ||
+                        sourceItem.Quantity != expectedRemainder)
+                    {
+                        error = "The source stack changed while attached to its original slot.";
+                        return false;
+                    }
+
+                    try
+                    {
+                        source.InsertInventoryItem(sourceIndex, null);
+                    }
+                    catch (Exception exception)
+                    {
+                        error = $"원본에서 남은 stack을 다시 분리하지 못했습니다: {exception.Message}";
+                        return false;
+                    }
+
+                    error = null;
+                    return true;
+                }
+
+                if (!ReferenceEquals(currentOwner, destination))
+                {
+                    error = "The source stack changed owner during Storage transfer recovery.";
+                    return false;
+                }
+
+                int? currentIndex = destination.GetId(sourceItem);
+                if (!currentIndex.HasValue)
+                {
+                    error = "The destination owner no longer contains the transferred stack.";
+                    return false;
+                }
+
+                try
+                {
+                    destination.InsertInventoryItem(currentIndex.Value, null);
+                }
+                catch (Exception exception)
+                {
+                    error = $"대상에서 stack을 회수하지 못했습니다: {exception.Message}";
+                    return false;
+                }
+
+                error = null;
+                return true;
+            }
         }
 
         private sealed class StackMergeReceipt : IVariableInventoryStackMergeReceipt
@@ -322,23 +698,51 @@ namespace FantasySurvival.Inventory
             this.reportStatus = reportStatus;
         }
 
-        public void SetPlayerState(PlayerInventoryState state)
+        public bool TrySetPlayerState(PlayerInventoryState state, out string error)
         {
-            playerState = state ?? throw new ArgumentNullException(nameof(state));
+            if (state == null)
+            {
+                error = "Player inventory state is missing.";
+                return false;
+            }
+
+            if (!EnsurePendingStorageRecovery("Player 인벤토리 교체", out error))
+            {
+                return false;
+            }
+
+            playerState = state;
+            error = null;
+            return true;
         }
 
-        public void SetExternalSession(
+        public bool TrySetExternalSession(
             ExternalInventoryMode mode,
-            StandardStashViewData inventory)
+            StandardStashViewData inventory,
+            out string error)
         {
+            if (!EnsurePendingStorageRecovery("외부 인벤토리 연결", out error))
+            {
+                return false;
+            }
+
             externalMode = mode;
             externalInventory = inventory;
+            error = null;
+            return true;
         }
 
-        public void ClearExternalSession()
+        public bool TryClearExternalSession(out string error)
         {
+            if (!EnsurePendingStorageRecovery("외부 인벤토리 닫기", out error))
+            {
+                return false;
+            }
+
             externalMode = ExternalInventoryMode.None;
             externalInventory = null;
+            error = null;
+            return true;
         }
 
         public bool TryBeginStackSplit(
@@ -349,6 +753,12 @@ namespace FantasySurvival.Inventory
             out string error)
         {
             transaction = null;
+            if (!EnsurePendingStorageRecovery("stack 나누기"))
+            {
+                error = "이전 Storage 자동이동 복구가 끝나지 않아 stack을 나눌 수 없습니다.";
+                return false;
+            }
+
             if (externalMode == ExternalInventoryMode.Merchant)
             {
                 error = "상인 거래 중에는 stack 가격 정책이 확정되지 않아 분할할 수 없습니다.";
@@ -421,6 +831,11 @@ namespace FantasySurvival.Inventory
             IVariableInventoryView sourceView,
             IVariableInventoryCellData item)
         {
+            if (!EnsurePendingStorageRecovery("빠른 이동"))
+            {
+                return true;
+            }
+
             if (externalMode == ExternalInventoryMode.None || externalInventory == null ||
                 !(sourceView is IVariableInventoryBoundView boundView) || item == null)
             {
@@ -476,6 +891,11 @@ namespace FantasySurvival.Inventory
             IVariableInventoryView destinationView,
             IVariableInventoryCellData item)
         {
+            if (!EnsurePendingStorageRecovery("아이템 이동"))
+            {
+                return VariableInventoryDropHandling.Reject;
+            }
+
             return EvaluateDropHandling(sourceView, destinationView, item, true);
         }
 
@@ -484,6 +904,12 @@ namespace FantasySurvival.Inventory
             IVariableInventoryView destinationView,
             IVariableInventoryCellData item)
         {
+            if (pendingStorageRecovery != null &&
+                !TryRecoverPendingStorageTransfer(out _))
+            {
+                return VariableInventoryDropHandling.Reject;
+            }
+
             return EvaluateDropHandling(sourceView, destinationView, item, false);
         }
 
@@ -493,15 +919,19 @@ namespace FantasySurvival.Inventory
             IVariableInventoryCell destinationCell,
             IVariableInventoryCellData item)
         {
+            if (pendingStorageRecovery != null &&
+                !TryRecoverPendingStorageTransfer(out _))
+            {
+                return false;
+            }
+
             if (sourceView == null ||
                 !(destinationView is IVariableInventoryBoundView destinationBound) ||
                 !destinationBound.ContainsCell(destinationCell) ||
                 !(item is InventoryItemData carriedItem) ||
                 !(destinationCell?.CellData is InventoryItemData targetItem) ||
                 ReferenceEquals(carriedItem, targetItem) || carriedItem.InventoryOwner != null ||
-                carriedItem.MaxStackSize <= 1 ||
-                carriedItem.Id != targetItem.Id ||
-                carriedItem.MaxStackSize != targetItem.MaxStackSize ||
+                !IsSameStackKind(carriedItem, targetItem) ||
                 targetItem.Quantity >= targetItem.MaxStackSize)
             {
                 return false;
@@ -718,6 +1148,11 @@ namespace FantasySurvival.Inventory
             IVariableInventoryCellData item,
             VariableInventoryDropHandling handling)
         {
+            if (!EnsurePendingStorageRecovery("아이템 이동 확정"))
+            {
+                return;
+            }
+
             if (externalMode != ExternalInventoryMode.Merchant || externalInventory == null ||
                 !(sourceView is IVariableInventoryBoundView sourceBound) ||
                 !(destinationView is IVariableInventoryBoundView destinationBound) ||
@@ -881,6 +1316,46 @@ namespace FantasySurvival.Inventory
             IVariableInventoryCellData item,
             string actionName)
         {
+            if (item is InventoryItemData inventoryItem &&
+                inventoryItem.MaxStackSize > 1 &&
+                destination is StandardStashViewData stashDestination)
+            {
+                if (!StorageQuickTransferTransaction.TryCreate(
+                        source,
+                        stashDestination,
+                        inventoryItem,
+                        out StorageQuickTransferTransaction transaction,
+                        out string createError))
+                {
+                    Report($"{actionName} 실패: {createError}", true);
+                    return;
+                }
+
+                if (!transaction.TryExecute(
+                        out StorageQuickTransferResult transferResult,
+                        out string transferError))
+                {
+                    if (!transaction.TryRollback(out string rollbackError))
+                    {
+                        pendingStorageRecovery = transaction;
+                        transferError =
+                            $"{transferError} 자동 복구도 완료되지 않았습니다: {rollbackError}";
+                    }
+
+                    Report($"{actionName} 실패: {transferError}", true);
+                    refreshViews?.Invoke();
+                    return;
+                }
+
+                string resultMessage = transferResult.SourceRemainingQuantity > 0
+                    ? $"{actionName} 완료: {transferResult.MovedQuantity}개 이동, " +
+                      $"{transferResult.SourceRemainingQuantity}개 원본에 남음"
+                    : $"{actionName} 완료: {transferResult.MovedQuantity}개 이동";
+                Report(resultMessage, false);
+                refreshViews?.Invoke();
+                return;
+            }
+
             if (!TryTransferFirstFit(source, destination, item, out _, out string error))
             {
                 Report($"{actionName} 실패: {error}", true);
@@ -889,6 +1364,45 @@ namespace FantasySurvival.Inventory
 
             Report($"{actionName} 완료", false);
             refreshViews?.Invoke();
+        }
+
+        private bool TryRecoverPendingStorageTransfer(out string error)
+        {
+            if (pendingStorageRecovery == null)
+            {
+                error = null;
+                return true;
+            }
+
+            if (!pendingStorageRecovery.TryRollback(out error))
+            {
+                return false;
+            }
+
+            pendingStorageRecovery = null;
+            refreshViews?.Invoke();
+            return true;
+        }
+
+        private bool EnsurePendingStorageRecovery(string actionName)
+        {
+            return EnsurePendingStorageRecovery(actionName, out _);
+        }
+
+        private bool EnsurePendingStorageRecovery(string actionName, out string error)
+        {
+            if (TryRecoverPendingStorageTransfer(out error))
+            {
+                return true;
+            }
+
+            string message =
+                $"{actionName} 차단: 이전 Storage 자동이동 복구가 끝나지 않았습니다. {error}";
+            Debug.LogError(message);
+            Report(message, true);
+            refreshViews?.Invoke();
+            error = message;
+            return false;
         }
 
         private static bool TryTransferFirstFit(
@@ -994,6 +1508,16 @@ namespace FantasySurvival.Inventory
                 error = exception.Message;
                 return false;
             }
+        }
+
+        private static bool IsSameStackKind(
+            InventoryItemData first,
+            InventoryItemData second)
+        {
+            return first != null && second != null &&
+                   first.MaxStackSize > 1 &&
+                   first.Id == second.Id &&
+                   first.MaxStackSize == second.MaxStackSize;
         }
 
         private bool IsPlayerOwned(IVariableInventoryViewData candidate)

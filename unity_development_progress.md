@@ -1441,3 +1441,15 @@ Interactable (abstract base class)
 - `[입력·grid 경계]` `StandardCore`는 click-carry+Ctrl 단독만 연속 분배로 해석하고 같은 drag 제스처에서 방문한 cell을 한 번만 처리한다. Unity가 pointer enter를 BeginDrag보다 먼저 보내는 순서에 맞춰 누른 cell과 임계값을 넘긴 현재 cell을 모두 처리하며 EndDrag의 기존 전량 drop은 소비한다. 점유칸·원래 picked footprint·grid 밖/겹침은 무동작이고 Ctrl 전용 판정색도 같은 빈칸 규칙을 사용한다. Merchant session은 stack 단가 정책이 미정이라 양방향 분배를 차단한다.
 - `[Editor 호출/순수 로직 확인]` `5→4+detached 1→rollback 5`, `held 5→placed 1+held 4→receipt rollback 5`, split 3을 두 빈칸에 1개씩 놓은 뒤 취소하여 `placed 2+source 3`, 마지막 1개의 동일 runtime 연결·원복, 점유칸 무변경과 Merchant 양방향 차단을 확인했다. Core 호출로 누른 cell+현재 cell 동시 처리, 재방문 1회 제한, EndDrag 뒤 잔량 유지, 마지막 동일 runtime commit과 Ctrl 전용 거부 판정도 확인했다. 프로젝트 컴파일을 통과했다.
 - `[보존·미검증]` 우클릭/Alt 분할·일반 click·pointer drag·R 회전·Storage Shift·stack 합치기·장비·저장 schema는 기존 경로를 유지했다. 실제 사용자의 Ctrl 키와 마우스 물리 입력은 주입하지 않았으므로 통과했다고 기록하지 않는다.
+
+---
+
+## 46. 메인 메뉴·게임 내 공용 키 설정 `[INPUT-01]`
+
+- `[사용자 요구][2026-08-28]` 지금까지 실제로 쓰는 조작키를 정리하고, 메인 메뉴 Settings와 게임 내 Escape Settings에서 바로 확인·변경할 수 있게 했다.
+- `[입력 권위]` 기존 project-wide `InputSystem_Actions`에 `Gameplay` map 16개 action·32개 기본/보조 binding을 추가했다. 이동·달리기·상호작용·공격·무기 1~3·인벤토리·정보창·아이템 회전과 Shift·Alt·Ctrl 보조 동작의 기존 기능 진입점만 공용 `GameInputBindings`로 교체했다. Escape 단일 소유자, UI pointer 입력과 개발용 F5는 고정 경계를 유지했다.
+- `[저장·충돌]` mutable override 원본은 기존 `GameUserSettings`가 `PlayerPrefs` JSON으로 소유하며 게임 save와 Recovery schema는 바꾸지 않았다. 실제 ButtonControl을 canonical path로 저장·비교해 alias 중복, synthetic·비버튼 입력, Escape/F5를 거부한다. 일반 동시 중복은 원자 거부하고 `Run ↔ QuickTransferModifier`의 의도된 중복만 허용한다. 손상·구버전 값은 자동 덮어쓰지 않고 기본값으로 안전 복귀하며 변경·초기화 저장 실패 시 runtime과 저장 원본을 복원한다.
+- `[공용 UI]` `KeyBindingSettingsPanel.prefab` 하나를 `MainMenuScene/Canvas/SettingsPanel`과 `PersistentGameplayShell/PauseCanvas/SettingsPanel`에 각각 배치했다. View는 상태를 소유하지 않고 16개 행·기본/보조 키·스크롤·기본값 복원만 제공한다. 재바인딩 중 Escape는 변경만 취소하고 같은 설정 화면을 유지한다.
+- `[Editor/저장 확인]` catalog 16 action·32 binding, 공용 prefab과 두 진입점 참조, 각 위치 인스턴스 1개, missing script 0을 확인했다. 임시 override를 원상복구하는 검증에서 변경·재적용·일반/alias 중복·Escape/F5·비버튼 거부·의도 중복·초기화·손상 JSON 보존/기본값 fallback 21/21 case가 통과했고, 원래 PlayerPrefs 없음·Interact E 상태로 복원했다.
+- `[Play Mode 호출 확인]` MainMenu Settings와 `GameMap1` Base Escape Settings가 각각 활성화되어 16개 runtime 행을 만들고 project-wide Gameplay map이 활성화된 것을 확인했다. Base는 기존대로 `Time.timeScale=0`, 메뉴 종료 뒤 1로 복원됐다. 실제 행 버튼에서 재바인딩을 시작한 뒤 취소하면 같은 frame Escape 소비와 원 binding 보존, Settings 화면 유지가 확인됐다.
+- `[보존·미검증]` Raid non-pause 분기는 변경하지 않아 기존 §21 Play 증거를 재사용한다. 실제 사용자의 키보드·마우스 물리 입력, 게임패드, 그래픽·세부 오디오 설정과 최종 UI 아트는 이번 범위에 포함하지 않았다. 손상 JSON case는 의도된 경고 1건을 냈고 값을 복구한 뒤 새 컴파일·runtime Error/Exception은 확인되지 않았다.

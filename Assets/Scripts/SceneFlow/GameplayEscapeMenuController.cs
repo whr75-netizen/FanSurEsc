@@ -1,3 +1,4 @@
+using FantasySurvival.Controls;
 using FantasySurvival.Raids;
 using FantasySurvival.SaveSystem;
 using UnityEngine;
@@ -48,6 +49,7 @@ namespace FantasySurvival.SceneFlow
 
         [Header("Settings")]
         [SerializeField] private Toggle soundToggle;
+        [SerializeField] private KeyBindingSettingsPanel keyBindingPanel;
         [SerializeField] private Button settingsBackButton;
 
         [Header("Confirmation")]
@@ -85,7 +87,7 @@ namespace FantasySurvival.SceneFlow
             confirmationPanel != null && resultPanel != null &&
             menuTitleText != null && baseResumeButton != null && raidResumeButton != null &&
             abandonButton != null && settingsButton != null && mainMenuButton != null &&
-            soundToggle != null && settingsBackButton != null &&
+            soundToggle != null && keyBindingPanel != null && settingsBackButton != null &&
             confirmationText != null && confirmationAcceptButton != null &&
             confirmationCancelButton != null && resultTitleText != null &&
             resultDetailText != null && resultReturnToBaseButton != null &&
@@ -238,6 +240,7 @@ namespace FantasySurvival.SceneFlow
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(false);
             soundToggle.SetIsOnWithoutNotify(GameUserSettings.SoundEnabled);
+            keyBindingPanel.Refresh();
             Select(settingsBackButton);
         }
 
@@ -407,6 +410,11 @@ namespace FantasySurvival.SceneFlow
 
             if (currentView == MenuView.Settings)
             {
+                if (keyBindingPanel.TryCancelPendingRebind())
+                {
+                    return;
+                }
+
                 ShowMainPanel();
                 return;
             }

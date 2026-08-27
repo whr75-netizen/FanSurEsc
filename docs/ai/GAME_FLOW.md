@@ -1,6 +1,6 @@
 # 게임 한 판 호출·분기 지도
 
-**마지막 갱신:** 2026-08-27
+**마지막 갱신:** 2026-08-28
 **역할:** 현재 코드에서 실제로 실행되는 씬 전환, 사용자 분기와 권위 상태 변경의 단일 순서표
 
 이 문서는 기획 백로그가 아니다. 시작·메뉴·씬 전환·원정·정산 코드를 바꾸기 전에 관련 구간을 읽고, 호출 순서가 달라졌으면 코드와 이 문서를 같은 작업에서 함께 고친다.
@@ -37,12 +37,14 @@ MainMenuManager.Awake
 |---|---|
 | 새로 시작 | `StartNewGame → GameStartRequest.QueueNewGame → LoadScene("GameLoadingScene")` |
 | 게임 로드 | `OpenLoadPanel → TrySelectLoadCandidate(primary 우선, backup 대체) → LoadSelectedGame → QueueLoad → GameLoadingScene` |
-| 설정 | `OpenSettingsPanel → SetSoundEnabled`; `MainMenuScene` 유지 |
+| 설정 | `OpenSettingsPanel → KeyBindingSettingsPanel.Refresh`; Sound와 키 override는 `GameUserSettings`, `MainMenuScene` 유지 |
 | 나가기 | `OpenExitPanel → QuitGame → Application.Quit`; Editor에서는 종료 대신 로그 |
 | 중단 원정 이어하기 | `ResumeInterruptedRaid → QueueResumeRaid → GameLoadingScene`; Base 상태를 먼저 적용한 뒤 같은 seed의 Raid로 직접 이동 |
 | 중단 원정 실패 처리 | `FailInterruptedRaid → 실패 결정을 durable하게 기록 → QueueRaidRecoverySettlement/QueueOrphanedRaidFailure → GameLoadingScene` |
 
 원정 표식이 미정산 상태면 `BlockNormalStartForRaidRecovery`가 새로 시작과 일반 로드를 막는다. 세이브와 backup이 모두 검증 실패하면 주 메뉴에 남고, 손상 상태를 임의 초기화하지 않는다.
+
+메인 메뉴와 `GameplayEscapeMenuController.OpenSettings`는 같은 키 설정 prefab을 쓰되 각 화면 수명에 맞는 인스턴스를 가진다. 재바인딩 중 Escape는 키 변경 취소를 먼저 소비하고 설정 화면을 유지하며, Base pause/Raid non-pause 정책은 기존 Escape 소유자가 계속 적용한다.
 
 ## 3. 공통 로딩과 기지 진입
 

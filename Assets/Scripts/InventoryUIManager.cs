@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using FantasySurvival.Controls;
 using FantasySurvival.Interaction;
 using FantasySurvival.Inventory;
 using FantasySurvival.Trading;
@@ -376,12 +377,13 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         // 드래그 체크는 각 닫기 함수에서 하므로 여기서는 제거
-        if (Input.GetKeyDown(KeyCode.I))
+        if (GameInputBindings.WasPressedThisFrame(GameInputActionId.Inventory))
         {
             if (externalInventoryPanel != null && externalInventoryPanel.activeSelf) CloseAllInventories(); // 외부 열려있으면 모두 닫기
             else TogglePlayerInventoryUI(); // 아니면 플레이어 토글
         }
-        if (standardCore != null && standardCore.IsDragging() && Input.GetKeyDown(KeyCode.R))
+        if (standardCore != null && standardCore.IsDragging() &&
+            GameInputBindings.WasPressedThisFrame(GameInputActionId.RotateItem))
         {
             standardCore.SwitchRotate();
         }

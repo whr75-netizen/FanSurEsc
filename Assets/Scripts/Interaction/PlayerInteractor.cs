@@ -1,5 +1,6 @@
 using System;
 using FantasySurvival.Actions;
+using FantasySurvival.Controls;
 using UnityEngine;
 
 namespace FantasySurvival.Interaction
@@ -8,7 +9,6 @@ namespace FantasySurvival.Interaction
     [RequireComponent(typeof(PlayerActionController))]
     public sealed class PlayerInteractor : MonoBehaviour
     {
-        [SerializeField] private KeyCode interactionKey = KeyCode.E;
         [SerializeField, Min(0.1f)] private float interactionRange = 3f;
         [SerializeField] private bool showDebugPrompt = true;
 
@@ -28,7 +28,8 @@ namespace FantasySurvival.Interaction
         {
             RefreshCurrentInteractable();
 
-            if (!interactionBlocked && Input.GetKeyDown(interactionKey))
+            if (!interactionBlocked &&
+                GameInputBindings.WasPressedThisFrame(GameInputActionId.Interact))
             {
                 TryInteract();
             }
@@ -221,6 +222,9 @@ namespace FantasySurvival.Interaction
             const float width = 280f;
             const float height = 34f;
             var rect = new Rect((Screen.width - width) * 0.5f, Screen.height - 80f, width, height);
+            string interactionKey = GameInputBindings.GetBindingDisplayName(
+                GameInputActionId.Interact,
+                GameInputBindingSlot.Primary);
             GUI.Box(rect, $"[{interactionKey}] {currentInteractable.InteractionPrompt}");
         }
     }

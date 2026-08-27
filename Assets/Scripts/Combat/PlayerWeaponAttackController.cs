@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using FantasySurvival.Actions;
 using FantasySurvival.AI;
+using FantasySurvival.Controls;
 using FantasySurvival.Inventory;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -21,8 +22,6 @@ namespace FantasySurvival.Combat
         [SerializeField] private EventSystem pointerEventSystem;
         [SerializeField] private WeaponAttackAudioFeedback audioFeedback;
         [SerializeField] private LayerMask hitMask = ~0;
-        [SerializeField, Range(0, 6)] private int attackMouseButton;
-
         private readonly Dictionary<InventoryItemData, WeaponFireCadence> weaponCadences =
             new Dictionary<InventoryItemData, WeaponFireCadence>();
         private readonly RaycastHit[] raycastHits = new RaycastHit[RaycastBufferSize];
@@ -63,8 +62,8 @@ namespace FantasySurvival.Combat
         private void Update()
         {
             ProcessFireInput(
-                Input.GetMouseButtonDown(attackMouseButton),
-                Input.GetMouseButton(attackMouseButton),
+                GameInputBindings.WasPressedThisFrame(GameInputActionId.Attack),
+                GameInputBindings.IsPressed(GameInputActionId.Attack),
                 Input.mousePosition,
                 Time.time);
         }

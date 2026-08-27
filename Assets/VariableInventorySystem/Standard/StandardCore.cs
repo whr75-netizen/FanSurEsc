@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FantasySurvival.Controls;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -84,12 +85,12 @@ namespace VariableInventorySystem
 
         protected override void OnCellClick(IVariableInventoryCell cell)
         {
-            bool altHeld = Input.GetKey(KeyCode.LeftAlt) ||
-                           Input.GetKey(KeyCode.RightAlt);
-            bool controlHeld = Input.GetKey(KeyCode.LeftControl) ||
-                               Input.GetKey(KeyCode.RightControl);
-            bool shiftHeld = Input.GetKey(KeyCode.LeftShift) ||
-                             Input.GetKey(KeyCode.RightShift);
+            bool altHeld = GameInputBindings.IsPressed(
+                GameInputActionId.AlternateItemModifier);
+            bool controlHeld = GameInputBindings.IsPressed(
+                GameInputActionId.SingleItemModifier);
+            bool shiftHeld = GameInputBindings.IsPressed(
+                GameInputActionId.QuickTransferModifier);
 
             if (IsClickCarryActive)
             {
@@ -254,12 +255,12 @@ namespace VariableInventorySystem
         public override void OnBeginDrag(PointerEventData eventData)
         {
             consumeReleasedBeginDragEnd = false;
-            bool altHeld = Input.GetKey(KeyCode.LeftAlt) ||
-                           Input.GetKey(KeyCode.RightAlt);
-            bool controlHeld = Input.GetKey(KeyCode.LeftControl) ||
-                               Input.GetKey(KeyCode.RightControl);
-            bool shiftHeld = Input.GetKey(KeyCode.LeftShift) ||
-                             Input.GetKey(KeyCode.RightShift);
+            bool altHeld = GameInputBindings.IsPressed(
+                GameInputActionId.AlternateItemModifier);
+            bool controlHeld = GameInputBindings.IsPressed(
+                GameInputActionId.SingleItemModifier);
+            bool shiftHeld = GameInputBindings.IsPressed(
+                GameInputActionId.QuickTransferModifier);
             IVariableInventoryCell currentCell = ResolveCurrentCell(eventData);
             IVariableInventoryCell pressedCell = ResolvePressedCell(eventData);
             if (pressedCell != null)
@@ -382,12 +383,12 @@ namespace VariableInventorySystem
 
         protected virtual bool IsSinglePlacementModifierHeld()
         {
-            bool controlHeld = Input.GetKey(KeyCode.LeftControl) ||
-                               Input.GetKey(KeyCode.RightControl);
-            bool altHeld = Input.GetKey(KeyCode.LeftAlt) ||
-                           Input.GetKey(KeyCode.RightAlt);
-            bool shiftHeld = Input.GetKey(KeyCode.LeftShift) ||
-                             Input.GetKey(KeyCode.RightShift);
+            bool controlHeld = GameInputBindings.IsPressed(
+                GameInputActionId.SingleItemModifier);
+            bool altHeld = GameInputBindings.IsPressed(
+                GameInputActionId.AlternateItemModifier);
+            bool shiftHeld = GameInputBindings.IsPressed(
+                GameInputActionId.QuickTransferModifier);
             return controlHeld && !altHeld && !shiftHeld;
         }
 

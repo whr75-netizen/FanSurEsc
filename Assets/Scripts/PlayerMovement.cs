@@ -1,4 +1,5 @@
 using FantasySurvival.Actions;
+using FantasySurvival.Controls;
 using UnityEngine;
 
 [DisallowMultipleComponent]
@@ -11,8 +12,6 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 checkSize = new Vector3(0.5f, 0.5f, 0.5f);
 
     [SerializeField, Min(1f)] private float runSpeedMultiplier = 1.3f;
-    [SerializeField] private KeyCode primaryRunKey = KeyCode.LeftShift;
-    [SerializeField] private KeyCode secondaryRunKey = KeyCode.RightShift;
     [SerializeField] private Animator characterAnimator;
     [SerializeField, Min(0f)] private float turnSpeedDegreesPerSecond = 1080f;
 
@@ -30,8 +29,9 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        float moveX = Input.GetAxisRaw("Horizontal");
-        float moveZ = Input.GetAxisRaw("Vertical");
+        Vector2 moveInput = GameInputBindings.ReadMovement();
+        float moveX = moveInput.x;
+        float moveZ = moveInput.y;
         Vector3 inputDirection = new Vector3(moveX, 0, moveZ).normalized;
         if (inputDirection.sqrMagnitude > 0f)
         {
@@ -71,7 +71,7 @@ public class PlayerMovement : MonoBehaviour
 
     private bool IsRunKeyHeld()
     {
-        return Input.GetKey(primaryRunKey) || Input.GetKey(secondaryRunKey);
+        return GameInputBindings.IsPressed(GameInputActionId.Run);
     }
 
     private void UpdateFacingDirection(Vector3 inputDirection)

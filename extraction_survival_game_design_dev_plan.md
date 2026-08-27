@@ -916,7 +916,8 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 다음 요소는 핵심 루프가 안정된 후 진행한다.
 
-- 해상도, 전체화면, 볼륨, 키 설정
+- **[현재]** 메인 메뉴·게임 내 공용 키보드/마우스 키 설정과 사용자별 저장
+- 해상도, 전체화면과 세부 볼륨
 - 최종 HUD와 결과 화면
 - 캐릭터와 장비 외형
 - 환경 아트, 이펙트, 사운드
@@ -1025,7 +1026,7 @@ Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지, 플레이어 �
 | 결정 | 필요한 시점 |
 |---|---|
 | **[결정 완료]** 기존 GameMapTest를 최소 원정 시험 씬으로 재사용 | Stage 1 |
-| 최종 상호작용 키와 입력 리매핑 | 입력 설정 또는 Stage 1 확장 |
+| **[결정 완료]** 현재 gameplay 키보드·마우스 리매핑. Escape·UI 클릭·개발용 F5는 고정, 게임패드는 미정 | 입력 설정 또는 Stage 1 확장 |
 | **[결정 완료]** Player 소지품은 persistent Player inventory/equipment, 기지 가구 내용은 별도 persistent base store가 소유 | Stage 2 |
 | **[결정 완료]** 현재 시험 귀환 포탈은 즉시 생환 성공을 확정. 최종 조건·대기 시간은 미정 | Stage 3 확장 |
 | **[결정 완료]** 왕복 중 실제 Player, 외형, Player 스크립트, Camera, Inventory UI/EventSystem과 인벤토리 객체를 같은 shell 인스턴스로 유지 | Stage 2-A |

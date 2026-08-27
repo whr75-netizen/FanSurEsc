@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using FantasySurvival.BaseBuilding;
+using FantasySurvival.Controls;
 using FantasySurvival.Inventory;
 using FantasySurvival.Raids;
 using FantasySurvival.SaveSystem;
@@ -39,6 +40,7 @@ public class MainMenuManager : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private Toggle soundToggle;
+    [SerializeField] private KeyBindingSettingsPanel keyBindingPanel;
 
     [Header("Status")]
     [SerializeField] private Text statusText;
@@ -394,6 +396,7 @@ public class MainMenuManager : MonoBehaviour
         }
 
         ShowOnly(settingsPanel);
+        keyBindingPanel?.Refresh();
         SetStatus(string.Empty);
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using FantasySurvival.Controls;
 using FantasySurvival.Inventory;
 using FantasySurvival.Quests;
 using FantasySurvival.Raids;
@@ -35,9 +36,6 @@ namespace FantasySurvival.Information
         [SerializeField] private PlayerWeaponController weaponController;
         [SerializeField] private EnemyDefinition[] enemyDefinitions = Array.Empty<EnemyDefinition>();
 
-        [Header("Input")]
-        [SerializeField] private KeyCode toggleKey = KeyCode.U;
-
         [Header("View")]
         [SerializeField] private GameObject informationCanvas;
         [SerializeField] private Text sectionTitleText;
@@ -71,7 +69,10 @@ namespace FantasySurvival.Information
             upgradesTabButton != null && closeButton != null;
         public bool IsOpen => isOpen;
         public InformationSection CurrentSection => currentSection;
-        public KeyCode ToggleKey => toggleKey;
+        public string ToggleBindingDisplayName =>
+            GameInputBindings.GetBindingDisplayName(
+                GameInputActionId.Information,
+                GameInputBindingSlot.Primary);
 
         private void Awake()
         {
@@ -176,7 +177,7 @@ namespace FantasySurvival.Information
 
         private void Update()
         {
-            if (Input.GetKeyDown(toggleKey))
+            if (GameInputBindings.WasPressedThisFrame(GameInputActionId.Information))
             {
                 if (isOpen)
                 {

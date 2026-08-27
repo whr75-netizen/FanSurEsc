@@ -2416,8 +2416,6 @@ MonoBehaviour:
   speed: 5
   checkSize: {x: 0.5, y: 0.5, z: 0.5}
   runSpeedMultiplier: 1.3
-  primaryRunKey: 304
-  secondaryRunKey: 303
   characterAnimator: {fileID: 1704396133942622928}
   turnSpeedDegreesPerSecond: 1080
 --- !u!114 &756799773776881561
@@ -2528,7 +2526,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d9fb14101ce11740ab20a70af848cab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Interaction.PlayerInteractor
-  interactionKey: 101
   interactionRange: 3
   showDebugPrompt: 1
 --- !u!114 &296348050223975317
@@ -2547,9 +2544,6 @@ MonoBehaviour:
   characterAnimator: {fileID: 1704396133942622928}
   upperBodyLayerName: Weapon Upper Body
   activeWeaponNumber: 1
-  weapon1Key: 49
-  weapon2Key: 50
-  weapon3Key: 51
 --- !u!114 &2339209880917924434
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2571,7 +2565,6 @@ MonoBehaviour:
   hitMask:
     serializedVersion: 2
     m_Bits: 4294967295
-  attackMouseButton: 0
 --- !u!82 &7031763297200606156
 AudioSource:
   m_ObjectHideFlags: 0
@@ -3311,7 +3304,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 20}
+  m_AnchoredPosition: {x: 0, y: 295}
   m_SizeDelta: {x: 320, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8519579978400358845
@@ -9508,6 +9501,7 @@ MonoBehaviour:
   settingsButton: {fileID: 1938357018048627502}
   mainMenuButton: {fileID: 142465003126062437}
   soundToggle: {fileID: 8519579978400358845}
+  keyBindingPanel: {fileID: 7364670303008076490}
   settingsBackButton: {fileID: 6317693387985089721}
   confirmationText: {fileID: 4320211330771847461}
   confirmationAcceptButton: {fileID: 4624191617263326754}
@@ -9582,7 +9576,6 @@ MonoBehaviour:
   enemyDefinitions:
   - {fileID: 11400000, guid: 21bd7e9325334e343b66d3b6fd495315, type: 2}
   - {fileID: 11400000, guid: 14f2928c4c2267c47add9c171cfc815f, type: 2}
-  toggleKey: 117
   informationCanvas: {fileID: 4847513123590942050}
   sectionTitleText: {fileID: 5206195336377221183}
   contentText: {fileID: 2714588302864770047}
@@ -11235,7 +11228,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 350}
   m_SizeDelta: {x: 380, y: 48}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4708144331332187090
@@ -12920,12 +12913,13 @@ RectTransform:
   - {fileID: 5179133333404871182}
   - {fileID: 426056074094657747}
   - {fileID: 9184450181752546096}
+  - {fileID: 518456882278737116}
   m_Father: {fileID: 122261585789272112}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 440, y: 300}
+  m_SizeDelta: {x: 820, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4714117462944289085
 CanvasRenderer:
@@ -14294,7 +14288,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -80}
+  m_AnchoredPosition: {x: 0, y: -360}
   m_SizeDelta: {x: 320, y: 52}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2875410231590422597
@@ -19341,3 +19335,116 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1d0734b94f4dfa644b161f9bb67db869, type: 3}
   m_PrefabInstance: {fileID: 5101926268965898049}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &5627942889614670043
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 667434415875020927}
+    m_Modifications:
+    - target: {fileID: 1285411633953349648, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_Name
+      value: KeyBindingSettingsPanel
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 740
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 570
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -20
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+--- !u!224 &518456882278737116 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5272472668069583879, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+  m_PrefabInstance: {fileID: 5627942889614670043}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7364670303008076490 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2895507399857195537, guid: 39f28fc22f03c544b97cf2ad16285eb0, type: 3}
+  m_PrefabInstance: {fileID: 5627942889614670043}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 12e35500eb228624b8c95b8213b74f81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Controls.KeyBindingSettingsPanel

@@ -1,5 +1,6 @@
 using System;
 using FantasySurvival.Actions;
+using FantasySurvival.Controls;
 using FantasySurvival.Inventory;
 using UnityEngine;
 
@@ -14,10 +15,6 @@ public sealed class PlayerWeaponController : MonoBehaviour
     [SerializeField] private string upperBodyLayerName = UpperBodyLayerName;
     [SerializeField, Range(1, EquipmentSlotCatalog.WeaponSlotCount)]
     private int activeWeaponNumber = 1;
-    [SerializeField] private KeyCode weapon1Key = KeyCode.Alpha1;
-    [SerializeField] private KeyCode weapon2Key = KeyCode.Alpha2;
-    [SerializeField] private KeyCode weapon3Key = KeyCode.Alpha3;
-
     private EquipmentLoadoutData observedLoadout;
     private int upperBodyLayerIndex = -1;
     private PlayerActionController actionController;
@@ -69,15 +66,15 @@ public sealed class PlayerWeaponController : MonoBehaviour
             return;
         }
 
-        if (Input.GetKeyDown(weapon1Key))
+        if (GameInputBindings.WasPressedThisFrame(GameInputActionId.Weapon1))
         {
             ProcessWeaponSelectionInput(1);
         }
-        else if (Input.GetKeyDown(weapon2Key))
+        else if (GameInputBindings.WasPressedThisFrame(GameInputActionId.Weapon2))
         {
             ProcessWeaponSelectionInput(2);
         }
-        else if (Input.GetKeyDown(weapon3Key))
+        else if (GameInputBindings.WasPressedThisFrame(GameInputActionId.Weapon3))
         {
             ProcessWeaponSelectionInput(3);
         }

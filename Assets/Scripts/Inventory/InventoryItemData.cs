@@ -25,7 +25,7 @@ namespace FantasySurvival.Inventory
         }
     }
 
-    public class InventoryItemData : IVariableInventoryOwnedCellData
+    public class InventoryItemData : IVariableInventoryOwnedCellData, IVariableInventoryStackCellData
     {
         private readonly IVariableInventoryAsset imageAsset;
         private int quantity;

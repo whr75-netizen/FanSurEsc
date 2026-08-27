@@ -157,6 +157,7 @@ public class InventoryUIManager : MonoBehaviour
         standardCore.HoveredCellChanged += HandleHoveredCellChanged;
         standardCore.ItemContextRequested += HandleItemContextRequested;
         standardCore.AlternateItemActionRequested += HandleAlternateItemActionRequested;
+        standardCore.SingleItemPickupRequested += HandleSingleItemPickupRequested;
         itemTooltipView.Hide();
         stackSplitDialog.Close();
         BindWallet(playerState.Wallet);
@@ -667,6 +668,7 @@ public class InventoryUIManager : MonoBehaviour
         standardCore.HoveredCellChanged -= HandleHoveredCellChanged;
         standardCore.ItemContextRequested -= HandleItemContextRequested;
         standardCore.AlternateItemActionRequested -= HandleAlternateItemActionRequested;
+        standardCore.SingleItemPickupRequested -= HandleSingleItemPickupRequested;
         standardCore.SetTransferController(null);
         stackSplitDialog?.Close();
 
@@ -974,6 +976,30 @@ public class InventoryUIManager : MonoBehaviour
         }
     }
 
+    private void HandleSingleItemPickupRequested(
+        IVariableInventoryView sourceView,
+        IVariableInventoryCell sourceCell)
+    {
+        if (inputBlocked || standardCore == null || standardCore.IsDragging() ||
+            sourceView == null || !(sourceCell?.CellData is InventoryItemData sourceItem) ||
+            sourceItem.Quantity <= 1 || sourceItem.MaxStackSize <= 1)
+        {
+            return;
+        }
+
+        itemTooltipView?.Hide();
+        string error = TryBeginStackSplit(
+            sourceView,
+            sourceCell,
+            sourceItem,
+            1,
+            VariableInventoryCarryMode.Click);
+        if (!string.IsNullOrEmpty(error))
+        {
+            Debug.LogWarning($"Single-item pickup failed: {error}", this);
+        }
+    }
+
     private string TryBeginStackSplit(
         IVariableInventoryView sourceView,
         IVariableInventoryCell sourceCell,
@@ -1021,21 +1047,21 @@ public class InventoryUIManager : MonoBehaviour
             return true;
         }
 
-        bool RecordStackMerge(
+        bool RecordPartialTransfer(
             IVariableInventoryCellData target,
             int movedQuantity,
             int remainingQuantity)
         {
-            string mergeError = null;
+            string transferError = null;
             if (!(target is InventoryItemData targetItem) ||
-                !transaction.TryRecordStackMerge(
+                !transaction.TryRecordPartialTransfer(
                     targetItem,
                     movedQuantity,
                     remainingQuantity,
-                    out mergeError))
+                    out transferError))
             {
                 Debug.LogError(
-                    $"Stack split merge record failed: {mergeError ?? "invalid target item"}",
+                    $"Stack split partial transfer record failed: {transferError ?? "invalid target item"}",
                     this);
                 return false;
             }
@@ -1050,7 +1076,7 @@ public class InventoryUIManager : MonoBehaviour
                 carryMode,
                 Rollback,
                 Commit,
-                RecordStackMerge,
+                RecordPartialTransfer,
                 out error))
         {
             if (!transaction.TryRollback(out string rollbackError))

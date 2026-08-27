@@ -31,8 +31,9 @@ namespace VariableInventorySystem
         private VariableInventoryCarryMode carryMode;
         private Func<bool> carryRollback;
         private Func<bool> carryCommit;
-        private Func<IVariableInventoryCellData, int, int, bool> carryStackMergeRecorded;
+        private Func<IVariableInventoryCellData, int, int, bool> carryPartialTransferRecorded;
         private IVariableInventoryStackMergeReceipt pendingStackMergeRecovery;
+        private IVariableInventorySinglePlacementReceipt pendingSinglePlacementRecovery;
         private PointerEventData clickCarryPointerEvent;
         private EventSystem clickCarryEventSystem;
 
@@ -41,6 +42,7 @@ namespace VariableInventorySystem
         // --- 추가/기존 메소드 ---
         public bool IsDragging() => effectCell?.CellData != null;
         public bool IsClickCarryActive => carryMode == VariableInventoryCarryMode.Click && IsDragging();
+        protected IVariableInventoryView CarryOriginView => originView;
         private bool HasCarryTransaction => carryRollback != null || carryCommit != null;
         public void SetTransferController(IVariableInventoryTransferController controller)
         {
@@ -52,6 +54,17 @@ namespace VariableInventorySystem
         {
             return transferController != null &&
                    transferController.HandleQuickTransfer(sourceView, item);
+        }
+        protected bool CanPlaceSingleFromCarriedStack(
+            IVariableInventoryView sourceView,
+            IVariableInventoryView destinationView,
+            IVariableInventoryCellData item)
+        {
+            return transferController != null &&
+                   transferController.CanPlaceSingleFromCarriedStack(
+                       sourceView,
+                       destinationView,
+                       item);
         }
         public virtual void Initialize() { if (effectCell != null) return; if (CellPrefab == null || EffectCellParent == null) { Debug.LogError($"[{GetType().Name}] CellPrefab or EffectCellParent not set!", gameObject); return; } var e = Instantiate(CellPrefab, EffectCellParent); if (e == null) return; effectCell = e.GetComponent<IVariableInventoryCell>(); if (effectCell == null) { Destroy(e); return; } effectCell.RectTransform.gameObject.SetActive(false); effectCell.SetSelectable(false); }
         public virtual void AddInventoryView(IVariableInventoryView v) { if (v == null || InventoryViews.Contains(v)) return; InventoryViews.Add(v); v.SetCellCallback(OnCellClick, OnCellOptionClick, OnCellEnter, OnCellExit); }
@@ -122,7 +135,7 @@ namespace VariableInventorySystem
             VariableInventoryCarryMode mode,
             Func<bool> rollback,
             Func<bool> commit,
-            Func<IVariableInventoryCellData, int, int, bool> stackMergeRecorded,
+            Func<IVariableInventoryCellData, int, int, bool> partialTransferRecorded,
             out string error)
         {
             if (IsDragging())
@@ -132,7 +145,7 @@ namespace VariableInventorySystem
             }
 
             if (sourceView == null || sourceCell == null || carriedItem == null ||
-                rollback == null || commit == null || stackMergeRecorded == null ||
+                rollback == null || commit == null || partialTransferRecorded == null ||
                 !InventoryViews.Contains(sourceView) ||
                 !(sourceView is IVariableInventoryBoundView boundView) ||
                 !boundView.ContainsCell(sourceCell))
@@ -169,7 +182,7 @@ namespace VariableInventorySystem
             originEffectCellRotate = carriedItem.IsRotate;
             carryRollback = rollback;
             carryCommit = commit;
-            carryStackMergeRecorded = stackMergeRecorded;
+            carryPartialTransferRecorded = partialTransferRecorded;
             carryMode = mode;
 
             effectCell.RectTransform.gameObject.SetActive(true);
@@ -203,6 +216,120 @@ namespace VariableInventorySystem
             stareCell = destinationCell;
             UpdateClickCarryPointer();
             return FinishCurrentDrag();
+        }
+
+        public bool TryPlaceSingleFromClickCarry(IVariableInventoryCell destinationCell)
+        {
+            if (!IsClickCarryActive || destinationCell == null ||
+                destinationCell.CellData != null ||
+                !(effectCell.CellData is IVariableInventoryStackCellData stackData) ||
+                stackData.MaxStackSize <= 1 || stackData.Quantity <= 0 ||
+                !(FindOwningView(destinationCell) is IVariableInventoryPartialDropView destinationView))
+            {
+                return false;
+            }
+
+            if (!TryRecoverPendingSinglePlacement() || !TryRecoverPendingStackMerge())
+            {
+                return false;
+            }
+
+            stareCell = destinationCell;
+            UpdateClickCarryPointer();
+
+            // The final unit stays the same runtime item. The ordinary drop path
+            // attaches it and closes the carry without ever creating quantity zero.
+            bool placingFinalUnit = stackData.Quantity == 1;
+            if (placingFinalUnit && !HasCarryTransaction)
+            {
+                return FinishCurrentDrag();
+            }
+
+            IVariableInventorySinglePlacementReceipt placementReceipt = null;
+            string placementError = null;
+            if (transferController == null ||
+                !transferController.TryPlaceSingleFromCarriedStack(
+                    originView,
+                    destinationView,
+                    destinationCell,
+                    effectCell.CellData,
+                    out placementReceipt,
+                    out placementError))
+            {
+                if (placementReceipt != null)
+                {
+                    pendingSinglePlacementRecovery = placementReceipt;
+                    if (!TryRecoverPendingSinglePlacement())
+                    {
+                        Debug.LogError(
+                            $"[Core] Single-item placement left an unresolved mutation: {placementError}",
+                            this);
+                    }
+                }
+
+                return false;
+            }
+
+            if (placingFinalUnit && HasCarryTransaction)
+            {
+                if (carryCommit == null || !carryCommit())
+                {
+                    if (!placementReceipt.TryRollback(out string rollbackError))
+                    {
+                        pendingSinglePlacementRecovery = placementReceipt;
+                        Debug.LogError(
+                            $"[Core] Final single-item placement commit and rollback both failed: {rollbackError}",
+                            this);
+                        return false;
+                    }
+
+                    destinationView.ReApply();
+                    OnCarriedItemChanged();
+                    UpdateClickCarryPointer();
+                    return false;
+                }
+
+                IVariableInventoryCellData transferredItem = effectCell.CellData;
+                foreach (IVariableInventoryView inventoryView in InventoryViews)
+                {
+                    inventoryView?.OnDroped(true);
+                }
+
+                transferController.OnDropCompleted(
+                    originView,
+                    destinationView,
+                    transferredItem,
+                    VariableInventoryDropHandling.Standard);
+                ClearDragState();
+                return true;
+            }
+
+            if (HasCarryTransaction &&
+                (carryPartialTransferRecorded == null ||
+                 !carryPartialTransferRecorded(
+                     placementReceipt.PlacedItem,
+                     placementReceipt.MovedQuantity,
+                     placementReceipt.RemainingQuantity)))
+            {
+                if (!placementReceipt.TryRollback(out string rollbackError))
+                {
+                    pendingSinglePlacementRecovery = placementReceipt;
+                    Debug.LogError(
+                        $"[Core] Single-item placement transaction and rollback both failed: {rollbackError}",
+                        this);
+                    return false;
+                }
+
+                destinationView.ReApply();
+                OnCarriedItemChanged();
+                UpdateClickCarryPointer();
+                return false;
+            }
+
+            destinationView.ReApply();
+            OnCarriedItemChanged();
+            UpdateClickCarryPointer();
+            return true;
         }
 
         public virtual void OnBeginDrag(PointerEventData eventData)
@@ -276,7 +403,7 @@ namespace VariableInventorySystem
             carryMode = mode;
             carryRollback = null;
             carryCommit = null;
-            carryStackMergeRecorded = null;
+            carryPartialTransferRecorded = null;
             NotifyHoveredCellCleared();
             effectCell.RectTransform.gameObject.SetActive(true);
             effectCell.Apply(sourceData);
@@ -305,7 +432,7 @@ namespace VariableInventorySystem
                 return false;
             }
 
-            if (!TryRecoverPendingStackMerge())
+            if (!TryRecoverPendingSinglePlacement() || !TryRecoverPendingStackMerge())
             {
                 return false;
             }
@@ -366,8 +493,8 @@ namespace VariableInventorySystem
                     }
 
                     if (HasCarryTransaction &&
-                        (carryStackMergeRecorded == null ||
-                         !carryStackMergeRecorded(
+                        (carryPartialTransferRecorded == null ||
+                         !carryPartialTransferRecorded(
                              mergeReceipt.TargetItem,
                              mergeReceipt.MovedQuantity,
                              mergeReceipt.RemainingQuantity)))
@@ -479,6 +606,13 @@ namespace VariableInventorySystem
         {
             if (!IsDragging()) return true;
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 시도...");
+            if (!TryRecoverPendingSinglePlacement())
+            {
+                Debug.LogError(
+                    "[VariableInventoryCore.CancelDrag] Pending single-item placement recovery failed. Carry state was kept.");
+                return false;
+            }
+
             if (!TryRecoverPendingStackMerge())
             {
                 Debug.LogError(
@@ -554,8 +688,10 @@ namespace VariableInventorySystem
             carryMode = VariableInventoryCarryMode.Pointer;
             carryRollback = null;
             carryCommit = null;
-            carryStackMergeRecorded = null;
+            carryPartialTransferRecorded = null;
             pendingStackMergeRecovery = null;
+            pendingSinglePlacementRecovery = null;
+            OnCarryStateCleared();
         }
 
         private bool TryRecoverPendingStackMerge()
@@ -574,6 +710,32 @@ namespace VariableInventorySystem
             }
 
             pendingStackMergeRecovery = null;
+            foreach (IVariableInventoryView inventoryView in InventoryViews)
+            {
+                inventoryView?.ReApply();
+            }
+
+            OnCarriedItemChanged();
+            UpdateDropPreviewHandling();
+            return true;
+        }
+
+        private bool TryRecoverPendingSinglePlacement()
+        {
+            if (pendingSinglePlacementRecovery == null)
+            {
+                return true;
+            }
+
+            if (!pendingSinglePlacementRecovery.TryRollback(out string error))
+            {
+                Debug.LogError(
+                    $"[VariableInventoryCore] Pending single-item placement rollback failed: {error}",
+                    this);
+                return false;
+            }
+
+            pendingSinglePlacementRecovery = null;
             foreach (IVariableInventoryView inventoryView in InventoryViews)
             {
                 inventoryView?.ReApply();
@@ -618,7 +780,7 @@ namespace VariableInventorySystem
             effectCell.Apply(effectCell.CellData);
         }
 
-        private void UpdateDropPreviewHandling()
+        protected void UpdateDropPreviewHandling()
         {
             foreach (IVariableInventoryView view in InventoryViews)
             {
@@ -636,11 +798,20 @@ namespace VariableInventorySystem
                         view,
                         effectCell.CellData);
                     if (handling == VariableInventoryDropHandling.Standard &&
-                        transferController.CanMergeStack(
-                            originView,
+                        TryGetDropPreviewHandlingOverride(
                             view,
                             stareCell,
-                            effectCell.CellData))
+                            effectCell.CellData,
+                            out VariableInventoryDropHandling previewOverride))
+                    {
+                        handling = previewOverride;
+                    }
+                    else if (handling == VariableInventoryDropHandling.Standard &&
+                             transferController.CanMergeStack(
+                                 originView,
+                                 view,
+                                 stareCell,
+                                 effectCell.CellData))
                     {
                         handling = VariableInventoryDropHandling.AcceptWithoutInsert;
                     }
@@ -648,6 +819,16 @@ namespace VariableInventorySystem
 
                 boundView.SetDropPreviewHandling(handling);
             }
+        }
+
+        protected virtual bool TryGetDropPreviewHandlingOverride(
+            IVariableInventoryView destinationView,
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData carriedItem,
+            out VariableInventoryDropHandling handling)
+        {
+            handling = VariableInventoryDropHandling.Standard;
+            return false;
         }
 
         protected IVariableInventoryView FindOwningView(IVariableInventoryCell cell)
@@ -676,6 +857,10 @@ namespace VariableInventorySystem
         }
 
         protected virtual void OnCarriedItemChanged()
+        {
+        }
+
+        protected virtual void OnCarryStateCleared()
         {
         }
     }

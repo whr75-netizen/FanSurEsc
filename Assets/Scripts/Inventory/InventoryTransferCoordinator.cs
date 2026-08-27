@@ -27,7 +27,7 @@ namespace FantasySurvival.Inventory
         private readonly int initialSplitQuantity;
         private int expectedSourceQuantity;
         private int outstandingQuantity;
-        private int committedMergeQuantity;
+        private int committedTransferQuantity;
         private TransactionState state;
 
         internal InventoryStackSplitTransaction(
@@ -72,6 +72,7 @@ namespace FantasySurvival.Inventory
 
             IVariableInventoryViewData splitOwner = SplitItem?.InventoryOwner;
             if (SplitItem == null || splitOwner == null ||
+                SplitItem.Quantity != outstandingQuantity || outstandingQuantity <= 0 ||
                 !splitOwner.GetId(SplitItem).HasValue)
             {
                 error = "The split stack was not attached to a destination inventory.";
@@ -83,7 +84,7 @@ namespace FantasySurvival.Inventory
             return true;
         }
 
-        public bool TryRecordStackMerge(
+        public bool TryRecordPartialTransfer(
             InventoryItemData targetItem,
             int movedQuantity,
             int remainingCarriedQuantity,
@@ -99,7 +100,7 @@ namespace FantasySurvival.Inventory
                 movedQuantity + remainingCarriedQuantity != outstandingQuantity ||
                 SplitItem == null || SplitItem.InventoryOwner != null)
             {
-                error = "The stack merge does not match the outstanding split quantity.";
+                error = "The partial transfer does not match the outstanding split quantity.";
                 return false;
             }
 
@@ -108,7 +109,7 @@ namespace FantasySurvival.Inventory
                 : outstandingQuantity;
             if (SplitItem.Quantity != expectedDetachedQuantity)
             {
-                error = "The detached split quantity changed during stack merge.";
+                error = "The detached split quantity changed during the partial transfer.";
                 return false;
             }
 
@@ -121,19 +122,26 @@ namespace FantasySurvival.Inventory
                 sourceItem.Quantity != sourceQuantityAfterMerge ||
                 !sourceOwner.GetId(sourceItem).HasValue)
             {
-                error = "The source stack changed during stack merge.";
+                error = "The source stack changed during the partial transfer.";
                 return false;
             }
 
-            int mergedQuantityAfter = committedMergeQuantity + movedQuantity;
-            if (mergedQuantityAfter > initialSplitQuantity)
+            IVariableInventoryViewData targetOwner = targetItem.InventoryOwner;
+            if (targetOwner == null || !targetOwner.GetId(targetItem).HasValue)
             {
-                error = "The merged quantity exceeded the original split quantity.";
+                error = "The partial transfer target is not attached to an inventory.";
+                return false;
+            }
+
+            int transferredQuantityAfter = committedTransferQuantity + movedQuantity;
+            if (transferredQuantityAfter > initialSplitQuantity)
+            {
+                error = "The transferred quantity exceeded the original split quantity.";
                 return false;
             }
 
             expectedSourceQuantity = sourceQuantityAfterMerge;
-            committedMergeQuantity = mergedQuantityAfter;
+            committedTransferQuantity = transferredQuantityAfter;
             outstandingQuantity = remainingCarriedQuantity;
 
             if (outstandingQuantity == 0)
@@ -688,6 +696,103 @@ namespace FantasySurvival.Inventory
             }
         }
 
+        private sealed class SingleStackPlacementReceipt : IVariableInventorySinglePlacementReceipt
+        {
+            private readonly InventoryItemData placedItem;
+            private readonly IVariableInventoryViewData destinationOwner;
+            private readonly int destinationIndex;
+            private readonly InventoryItemData carriedItem;
+            private readonly bool restoreCarriedQuantity;
+            private readonly int carriedQuantityBefore;
+            private readonly int carriedQuantityAfter;
+            private bool placedItemRemoved;
+            private bool carriedQuantityRestored;
+            private bool rolledBack;
+
+            public SingleStackPlacementReceipt(
+                InventoryItemData placedItem,
+                IVariableInventoryViewData destinationOwner,
+                int destinationIndex,
+                InventoryItemData carriedItem,
+                bool restoreCarriedQuantity,
+                int carriedQuantityBefore,
+                int carriedQuantityAfter)
+            {
+                this.placedItem = placedItem;
+                this.destinationOwner = destinationOwner;
+                this.destinationIndex = destinationIndex;
+                this.carriedItem = carriedItem;
+                this.restoreCarriedQuantity = restoreCarriedQuantity;
+                this.carriedQuantityBefore = carriedQuantityBefore;
+                this.carriedQuantityAfter = carriedQuantityAfter;
+            }
+
+            public IVariableInventoryCellData PlacedItem => placedItem;
+            public int MovedQuantity => 1;
+            public int RemainingQuantity => carriedQuantityAfter;
+
+            public bool TryRollback(out string error)
+            {
+                if (rolledBack)
+                {
+                    error = null;
+                    return true;
+                }
+
+                if (!placedItemRemoved)
+                {
+                    int? currentIndex = destinationOwner?.GetId(placedItem);
+                    if (!currentIndex.HasValue || currentIndex.Value != destinationIndex ||
+                        !ReferenceEquals(placedItem.InventoryOwner, destinationOwner))
+                    {
+                        error = "The separated item is no longer at its placement destination.";
+                        return false;
+                    }
+
+                    try
+                    {
+                        destinationOwner.InsertInventoryItem(destinationIndex, null);
+                        placedItemRemoved = true;
+                    }
+                    catch (Exception exception)
+                    {
+                        error = $"Could not remove the separated item: {exception.Message}";
+                        return false;
+                    }
+                }
+
+                if (restoreCarriedQuantity && !carriedQuantityRestored)
+                {
+                    if (carriedItem == null || carriedItem.InventoryOwner != null)
+                    {
+                        error = "The carried stack is no longer detached during placement rollback.";
+                        return false;
+                    }
+
+                    if (carriedItem.Quantity == carriedQuantityBefore)
+                    {
+                        carriedQuantityRestored = true;
+                    }
+                    else if (!carriedItem.TryChangeQuantity(
+                                 null,
+                                 carriedQuantityAfter,
+                                 carriedQuantityBefore,
+                                 out error))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        carriedQuantityRestored = true;
+                    }
+                }
+
+                rolledBack = true;
+                error = null;
+                return true;
+            }
+        }
+
         public InventoryTransferCoordinator(
             PlayerInventoryState playerState,
             Action refreshViews,
@@ -1132,6 +1237,199 @@ namespace FantasySurvival.Inventory
                 carriedChanged);
             error = null;
             return true;
+        }
+
+        public bool TryPlaceSingleFromCarriedStack(
+            IVariableInventoryView sourceView,
+            IVariableInventoryPartialDropView destinationView,
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData item,
+            out IVariableInventorySinglePlacementReceipt receipt,
+            out string error)
+        {
+            receipt = null;
+            error = null;
+            if (!EnsurePendingStorageRecovery("stack 한 개 배치", out error))
+            {
+                return false;
+            }
+
+            if (externalMode == ExternalInventoryMode.Merchant)
+            {
+                error = "상인 거래 중에는 stack 단위 가격 정책이 확정되지 않아 한 개씩 배치할 수 없습니다.";
+                return false;
+            }
+
+            if (sourceView == null || destinationView == null ||
+                !destinationView.ContainsCell(destinationCell) ||
+                destinationCell?.CellData != null ||
+                !(item is InventoryItemData carriedItem) ||
+                carriedItem.InventoryOwner != null ||
+                carriedItem.MaxStackSize <= 1 || carriedItem.Quantity <= 0)
+            {
+                error = "Only a detached stack item can place one item into an empty grid cell.";
+                return false;
+            }
+
+            if (EvaluateDropHandling(sourceView, destinationView, carriedItem, true) !=
+                VariableInventoryDropHandling.Standard)
+            {
+                error = "This inventory boundary does not allow single-item placement.";
+                return false;
+            }
+
+            int carriedBefore = carriedItem.Quantity;
+            InventoryItemData placedItem = carriedItem;
+            if (carriedBefore > 1)
+            {
+                if (!InventoryItemDataFactory.TryCreate(
+                        carriedItem.Definition,
+                        1,
+                        out IVariableInventoryCellData created,
+                        out error) ||
+                    !(created is InventoryItemData createdItem))
+                {
+                    error = error ?? "Could not create the separated item.";
+                    return false;
+                }
+
+                placedItem = createdItem;
+            }
+
+            placedItem.IsRotate = carriedItem.IsRotate;
+            if (!destinationView.TryResolvePartialDrop(
+                    destinationCell,
+                    placedItem,
+                    out IVariableInventoryViewData destinationOwner,
+                    out int destinationIndex,
+                    out error))
+            {
+                return false;
+            }
+
+            if (destinationOwner == null || destinationIndex < 0 ||
+                !ReferenceEquals(destinationOwner, destinationView.ViewData) ||
+                !destinationOwner.CheckInsert(destinationIndex, placedItem))
+            {
+                error = "The destination view returned an invalid single-item placement.";
+                return false;
+            }
+
+            try
+            {
+                destinationOwner.InsertInventoryItem(destinationIndex, placedItem);
+            }
+            catch (Exception exception)
+            {
+                if (ReferenceEquals(placedItem.InventoryOwner, destinationOwner) &&
+                    destinationOwner.GetId(placedItem) == destinationIndex)
+                {
+                    var insertionRecovery = new SingleStackPlacementReceipt(
+                        placedItem,
+                        destinationOwner,
+                        destinationIndex,
+                        carriedItem,
+                        false,
+                        carriedBefore,
+                        carriedBefore);
+                    if (!insertionRecovery.TryRollback(out string rollbackError))
+                    {
+                        receipt = insertionRecovery;
+                        error = $"Could not attach the separated item: {exception.Message}. " +
+                                $"Rollback also failed: {rollbackError}";
+                        return false;
+                    }
+                }
+
+                error = $"Could not attach the separated item: {exception.Message}";
+                return false;
+            }
+
+            if (!ReferenceEquals(placedItem.InventoryOwner, destinationOwner) ||
+                destinationOwner.GetId(placedItem) != destinationIndex)
+            {
+                var invalidPlacementRecovery = new SingleStackPlacementReceipt(
+                    placedItem,
+                    destinationOwner,
+                    destinationIndex,
+                    carriedItem,
+                    false,
+                    carriedItem.Quantity,
+                    carriedItem.Quantity);
+                if (!invalidPlacementRecovery.TryRollback(out string rollbackError))
+                {
+                    receipt = invalidPlacementRecovery;
+                    error = $"The separated item attachment was inconsistent and rollback failed: {rollbackError}";
+                    return false;
+                }
+
+                error = "The separated item attachment was inconsistent.";
+                return false;
+            }
+
+            if (carriedBefore == 1)
+            {
+                receipt = new SingleStackPlacementReceipt(
+                    placedItem,
+                    destinationOwner,
+                    destinationIndex,
+                    carriedItem,
+                    false,
+                    carriedBefore,
+                    0);
+                error = null;
+                return true;
+            }
+
+            if (!carriedItem.TryChangeQuantity(
+                    null,
+                    carriedBefore,
+                    carriedBefore - 1,
+                    out string quantityError))
+            {
+                var recovery = new SingleStackPlacementReceipt(
+                    placedItem,
+                    destinationOwner,
+                    destinationIndex,
+                    carriedItem,
+                    false,
+                    carriedBefore,
+                    carriedBefore);
+                if (!recovery.TryRollback(out string rollbackError))
+                {
+                    receipt = recovery;
+                    error = $"{quantityError} Placement rollback also failed: {rollbackError}";
+                    return false;
+                }
+
+                error = quantityError;
+                return false;
+            }
+
+            receipt = new SingleStackPlacementReceipt(
+                placedItem,
+                destinationOwner,
+                destinationIndex,
+                carriedItem,
+                true,
+                carriedBefore,
+                carriedBefore - 1);
+            error = null;
+            return true;
+        }
+
+        public bool CanPlaceSingleFromCarriedStack(
+            IVariableInventoryView sourceView,
+            IVariableInventoryView destinationView,
+            IVariableInventoryCellData item)
+        {
+            return externalMode != ExternalInventoryMode.Merchant &&
+                   sourceView != null && destinationView != null &&
+                   item is InventoryItemData carriedItem &&
+                   carriedItem.InventoryOwner == null &&
+                   carriedItem.MaxStackSize > 1 && carriedItem.Quantity > 0 &&
+                   EvaluateDropHandling(sourceView, destinationView, carriedItem, false) ==
+                   VariableInventoryDropHandling.Standard;
         }
 
         private VariableInventoryDropHandling EvaluateDropHandling(

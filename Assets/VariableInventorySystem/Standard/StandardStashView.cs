@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace VariableInventorySystem
 {
-    public class StandardStashView : MonoBehaviour, IVariableInventoryBoundView
+    public class StandardStashView : MonoBehaviour, IVariableInventoryPartialDropView
     {
         [SerializeField] GameObject cellPrefab;
         //[SerializeField] ScrollRect scrollRect;
@@ -34,6 +34,7 @@ namespace VariableInventorySystem
 
         int? originalId;
         IVariableInventoryCellData originalCellData;
+        bool? originalCellRotate;
         Vector3 conditionOffset;
         bool conditionNeedsRefresh;
 
@@ -237,6 +238,7 @@ namespace VariableInventorySystem
             {
                 originalId = id;
                 originalCellData = stareCell.CellData;
+                originalCellRotate = originalCellData.IsRotate;
 
                 itemViews[id.Value].Apply(null);
                 StashData.InsertInventoryItem(id.Value, null);
@@ -322,6 +324,7 @@ namespace VariableInventorySystem
 
                         originalId = null;
                         originalCellData = null;
+                        originalCellRotate = null;
                         return true;
                     }
                 }
@@ -335,6 +338,36 @@ namespace VariableInventorySystem
 
             originalId = null;
             originalCellData = null;
+            originalCellRotate = null;
+            return true;
+        }
+
+        public bool TryResolvePartialDrop(
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData detachedItem,
+            out IVariableInventoryViewData destinationOwner,
+            out int destinationIndex,
+            out string error)
+        {
+            destinationOwner = null;
+            destinationIndex = -1;
+            error = null;
+            if (!OwnsCell(destinationCell) || detachedItem == null ||
+                destinationCell.CellData != null)
+            {
+                return false;
+            }
+
+            int? index = GetIndex(destinationCell, detachedItem, cellCorner);
+            if (!index.HasValue ||
+                OverlapsReservedPickFootprint(index.Value, detachedItem) ||
+                !StashData.CheckInsert(index.Value, detachedItem))
+            {
+                return false;
+            }
+
+            destinationOwner = StashData;
+            destinationIndex = index.Value;
             return true;
         }
 
@@ -347,6 +380,15 @@ namespace VariableInventorySystem
 
             if (!isDroped && originalId.HasValue)
             {
+                if (!StashData.CheckInsert(originalId.Value, originalCellData))
+                {
+                    Debug.LogError(
+                        "The picked item's original footprint is no longer available. " +
+                        "Rollback was stopped without replacing the occupying item.",
+                        this);
+                    return;
+                }
+
                 // revert
                 itemViews[originalId.Value].Apply(originalCellData);
                 StashData.InsertInventoryItem(originalId.Value, originalCellData);
@@ -354,6 +396,7 @@ namespace VariableInventorySystem
 
             originalId = null;
             originalCellData = null;
+            originalCellRotate = null;
         }
 
         public virtual void OnCellEnter(IVariableInventoryCell stareCell, IVariableInventoryCell effectCell)
@@ -478,6 +521,35 @@ namespace VariableInventorySystem
             index -= (width - 1) / 2;
             index -= (height - 1) / 2 * StashData.CapacityWidth;
             return index;
+        }
+
+        private bool OverlapsReservedPickFootprint(
+            int destinationId,
+            IVariableInventoryCellData destinationItem)
+        {
+            if (!originalId.HasValue || originalCellData == null)
+            {
+                return false;
+            }
+
+            bool originalRotation = originalCellRotate ?? originalCellData.IsRotate;
+            int originalWidth = originalRotation
+                ? originalCellData.Height
+                : originalCellData.Width;
+            int originalHeight = originalRotation
+                ? originalCellData.Width
+                : originalCellData.Height;
+            var (destinationWidth, destinationHeight) = GetRotateSize(destinationItem);
+            int originalX = originalId.Value % StashData.CapacityWidth;
+            int originalY = originalId.Value / StashData.CapacityWidth;
+            int destinationX = destinationId % StashData.CapacityWidth;
+            int destinationY = destinationId / StashData.CapacityWidth;
+
+            bool separatedHorizontally = destinationX + destinationWidth <= originalX ||
+                                         originalX + originalWidth <= destinationX;
+            bool separatedVertically = destinationY + destinationHeight <= originalY ||
+                                       originalY + originalHeight <= destinationY;
+            return !separatedHorizontally && !separatedVertically;
         }
 
         protected virtual (int, int) GetRotateSize(IVariableInventoryCellData cell)

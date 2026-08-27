@@ -1431,3 +1431,13 @@ Interactable (abstract base class)
 - `[입력 순서]` `StandardCore`는 Alt 입력을 `AlternateItemActionRequested` 하나로 전달한다. `InventoryUIManager`가 `Click + IsEquippable`을 먼저 장착/해제로 처리하고 return하며, 그 외 click·pointer만 기존 비장비 stack 절반 분할로 보낸다. 우클릭·Shift·일반 click/drag는 기존 경로를 유지한다.
 - `[소유권·UI]` `InventoryTransferCoordinator.TryToggleEquipment`가 장비 root owner면 Player root grid first-fit으로, 그 외 허용된 Player·Storage owner면 기존 빈 primary 장비칸으로 같은 runtime item을 원자 이전한다. 점유·공간 부족은 원 owner·slot으로 복구한다. 성공 뒤 source view도 재적용해 열린 중첩 가방 popup에 stale item을 남기지 않는다. 현재 무기 자동 대상은 W1뿐이다.
 - `[Play Mode 호출 확인]` 같은 Handgun 객체의 Player slot 0→W1→Player first-fit 0 왕복, W1 점유 실패의 양쪽 원본 보존, 가득 찬 Player grid에서 해제 실패 후 같은 W1 복구를 각각 한 번 확인했다. 별도 Medicine `5→3+detached 2→rollback 5`로 비장비 stack 분할도 보존됐다. 프로젝트 컴파일은 통과했으며 실제 Alt 키 물리 입력은 주입하지 않았다.
+
+---
+
+## 45. Ctrl 1개 집기와 빈칸 연속 분배 `[ITEM-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-28]` 중첩 item을 Ctrl+좌클릭하면 1개만 들고, 이미 짧은 클릭으로 든 여러 수량은 Ctrl+좌클릭 또는 Ctrl+drag로 빈칸마다 1개씩 놓은 뒤 나머지를 계속 든다. pointer drag로 든 item에는 이 분배를 적용하지 않는다.
+- `[수량·소유권]` 기존 `InventoryStackSplitTransaction`과 transfer coordinator를 확장했다. 한 개 배치는 destination owner API로 새 수량 1 runtime item을 연결한 뒤 detached 원본 수량을 exact CAS로 1 줄이며, 어느 단계든 실패하면 receipt가 owner·slot·before/after 수량을 확인해 원복한다. 마지막 1개는 0수량 복사본 없이 들고 있던 같은 runtime item을 연결한다. 이미 놓은 낱개는 확정되고 취소 시 아직 든 나머지만 원본 stack으로 돌아간다.
+- `[입력·grid 경계]` `StandardCore`는 click-carry+Ctrl 단독만 연속 분배로 해석하고 같은 drag 제스처에서 방문한 cell을 한 번만 처리한다. Unity가 pointer enter를 BeginDrag보다 먼저 보내는 순서에 맞춰 누른 cell과 임계값을 넘긴 현재 cell을 모두 처리하며 EndDrag의 기존 전량 drop은 소비한다. 점유칸·원래 picked footprint·grid 밖/겹침은 무동작이고 Ctrl 전용 판정색도 같은 빈칸 규칙을 사용한다. Merchant session은 stack 단가 정책이 미정이라 양방향 분배를 차단한다.
+- `[Editor 호출/순수 로직 확인]` `5→4+detached 1→rollback 5`, `held 5→placed 1+held 4→receipt rollback 5`, split 3을 두 빈칸에 1개씩 놓은 뒤 취소하여 `placed 2+source 3`, 마지막 1개의 동일 runtime 연결·원복, 점유칸 무변경과 Merchant 양방향 차단을 확인했다. Core 호출로 누른 cell+현재 cell 동시 처리, 재방문 1회 제한, EndDrag 뒤 잔량 유지, 마지막 동일 runtime commit과 Ctrl 전용 거부 판정도 확인했다. 프로젝트 컴파일을 통과했다.
+- `[보존·미검증]` 우클릭/Alt 분할·일반 click·pointer drag·R 회전·Storage Shift·stack 합치기·장비·저장 schema는 기존 경로를 유지했다. 실제 사용자의 Ctrl 키와 마우스 물리 입력은 주입하지 않았으므로 통과했다고 기록하지 않는다.

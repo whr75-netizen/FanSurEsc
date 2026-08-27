@@ -15,6 +15,14 @@ namespace VariableInventorySystem
         bool TryRollback(out string error);
     }
 
+    public interface IVariableInventorySinglePlacementReceipt
+    {
+        IVariableInventoryCellData PlacedItem { get; }
+        int MovedQuantity { get; }
+        int RemainingQuantity { get; }
+        bool TryRollback(out string error);
+    }
+
     /// <summary>
     /// Optional game-rule boundary around the inventory asset's drag mechanics.
     /// The core still owns pick/drop/rollback; this controller only authorizes and
@@ -52,6 +60,19 @@ namespace VariableInventorySystem
             out IVariableInventoryStackMergeReceipt receipt,
             out string error);
 
+        bool TryPlaceSingleFromCarriedStack(
+            IVariableInventoryView sourceView,
+            IVariableInventoryPartialDropView destinationView,
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData item,
+            out IVariableInventorySinglePlacementReceipt receipt,
+            out string error);
+
+        bool CanPlaceSingleFromCarriedStack(
+            IVariableInventoryView sourceView,
+            IVariableInventoryView destinationView,
+            IVariableInventoryCellData item);
+
         void OnDropCompleted(
             IVariableInventoryView sourceView,
             IVariableInventoryView destinationView,
@@ -64,5 +85,15 @@ namespace VariableInventorySystem
         IVariableInventoryViewData ViewData { get; }
         bool ContainsCell(IVariableInventoryCell cell);
         void SetDropPreviewHandling(VariableInventoryDropHandling? handling);
+    }
+
+    public interface IVariableInventoryPartialDropView : IVariableInventoryBoundView
+    {
+        bool TryResolvePartialDrop(
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData detachedItem,
+            out IVariableInventoryViewData destinationOwner,
+            out int destinationIndex,
+            out string error);
     }
 }

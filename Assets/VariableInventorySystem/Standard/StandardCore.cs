@@ -23,7 +23,7 @@ namespace VariableInventorySystem
                 IVariableInventoryView,
                 IVariableInventoryCell,
                 VariableInventoryCarryMode>
-            StackSplitRequested;
+            AlternateItemActionRequested;
 
         public void SetQuantityBadgeTextProvider(
             System.Func<IVariableInventoryCellData, string> provider)
@@ -102,7 +102,7 @@ namespace VariableInventorySystem
             IVariableInventoryView sourceView = FindOwningView(cell);
             if (altHeld)
             {
-                StackSplitRequested?.Invoke(
+                AlternateItemActionRequested?.Invoke(
                     sourceView,
                     cell,
                     VariableInventoryCarryMode.Click);
@@ -239,7 +239,7 @@ namespace VariableInventorySystem
             {
                 if (stareCell?.CellData != null)
                 {
-                    StackSplitRequested?.Invoke(
+                    AlternateItemActionRequested?.Invoke(
                         FindOwningView(stareCell),
                         stareCell,
                         VariableInventoryCarryMode.Pointer);

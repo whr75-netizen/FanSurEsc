@@ -806,6 +806,19 @@ namespace FantasySurvival.Inventory
             return true;
         }
 
+        public bool TryToggleEquipment(
+            IVariableInventoryView sourceView,
+            InventoryItemData item,
+            out string error)
+        {
+            if (IsEquippedSource(sourceView, item))
+            {
+                return TryUnequipToPlayerInventory(sourceView, item, out error);
+            }
+
+            return TryEquip(sourceView, item, out error);
+        }
+
         public bool TryBeginStackSplit(
             IVariableInventoryView sourceView,
             InventoryItemData sourceItem,
@@ -1483,6 +1496,53 @@ namespace FantasySurvival.Inventory
 
             error = null;
             return true;
+        }
+
+        private bool TryUnequipToPlayerInventory(
+            IVariableInventoryView sourceView,
+            InventoryItemData item,
+            out string error)
+        {
+            if (!EnsurePendingStorageRecovery("장착 해제", out error))
+            {
+                return false;
+            }
+
+            if (!IsEquippedSource(sourceView, item))
+            {
+                error = "장착 해제할 아이템의 소유권을 확인할 수 없습니다.";
+                return false;
+            }
+
+            IVariableInventoryViewData source =
+                ((IVariableInventoryBoundView)sourceView).ViewData;
+            if (!TryTransferFirstFit(
+                    source,
+                    playerState.Inventory,
+                    item,
+                    out _,
+                    out error))
+            {
+                Report($"장착 해제 실패: {error}", true);
+                return false;
+            }
+
+            Report($"장착 해제 완료: {item.Definition.DisplayName}", false);
+            refreshViews?.Invoke();
+            error = null;
+            return true;
+        }
+
+        private bool IsEquippedSource(
+            IVariableInventoryView sourceView,
+            InventoryItemData item)
+        {
+            IVariableInventoryViewData source =
+                (sourceView as IVariableInventoryBoundView)?.ViewData;
+            return source != null && item != null &&
+                   ReferenceEquals(source, playerState.Equipment) &&
+                   ReferenceEquals(item.InventoryOwner, source) &&
+                   source.GetId(item).HasValue;
         }
 
         private bool EnsurePendingStorageRecovery(string actionName)

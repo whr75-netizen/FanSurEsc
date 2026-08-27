@@ -156,7 +156,7 @@ public class InventoryUIManager : MonoBehaviour
         standardCore.SetTransferController(transferCoordinator);
         standardCore.HoveredCellChanged += HandleHoveredCellChanged;
         standardCore.ItemContextRequested += HandleItemContextRequested;
-        standardCore.StackSplitRequested += HandleStackSplitRequested;
+        standardCore.AlternateItemActionRequested += HandleAlternateItemActionRequested;
         itemTooltipView.Hide();
         stackSplitDialog.Close();
         BindWallet(playerState.Wallet);
@@ -666,7 +666,7 @@ public class InventoryUIManager : MonoBehaviour
 
         standardCore.HoveredCellChanged -= HandleHoveredCellChanged;
         standardCore.ItemContextRequested -= HandleItemContextRequested;
-        standardCore.StackSplitRequested -= HandleStackSplitRequested;
+        standardCore.AlternateItemActionRequested -= HandleAlternateItemActionRequested;
         standardCore.SetTransferController(null);
         stackSplitDialog?.Close();
 
@@ -879,7 +879,10 @@ public class InventoryUIManager : MonoBehaviour
                         out string equipError))
                 {
                     Debug.LogWarning($"Equip failed: {equipError}", this);
+                    return;
                 }
+
+                ReApplyViewIfAlive(sourceView);
             };
         }
 
@@ -915,14 +918,36 @@ public class InventoryUIManager : MonoBehaviour
                 : null);
     }
 
-    private void HandleStackSplitRequested(
+    private void HandleAlternateItemActionRequested(
         IVariableInventoryView sourceView,
         IVariableInventoryCell sourceCell,
         VariableInventoryCarryMode carryMode)
     {
         if (inputBlocked || standardCore == null || standardCore.IsDragging() ||
-            sourceView == null || !(sourceCell?.CellData is InventoryItemData sourceItem) ||
-            sourceItem.Quantity <= 1 || sourceItem.MaxStackSize <= 1)
+            sourceView == null || !(sourceCell?.CellData is InventoryItemData sourceItem))
+        {
+            return;
+        }
+
+        if (carryMode == VariableInventoryCarryMode.Click &&
+            sourceItem.Definition.IsEquippable)
+        {
+            itemTooltipView?.Hide();
+            if (transferCoordinator == null ||
+                !transferCoordinator.TryToggleEquipment(
+                    sourceView,
+                    sourceItem,
+                    out _))
+            {
+                return;
+            }
+
+            ReApplyViewIfAlive(sourceView);
+
+            return;
+        }
+
+        if (sourceItem.Quantity <= 1 || sourceItem.MaxStackSize <= 1)
         {
             return;
         }

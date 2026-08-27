@@ -1422,3 +1422,12 @@ Interactable (abstract base class)
 - `[속성·소유권 경계]` 새 tag나 분기표를 만들지 않고 기존 `ItemDefinition.EquipmentSlot`·`IsEquippable`을 capability 원본으로 사용한다. Player 또는 열린 Storage 소유 item만 현재 활성 primary 슬롯이 비었을 때 기존 원자 이전 API로 장착하며, 상인 stock과 이미 장착된 item은 직접 장착하지 않는다. 현재 무기는 기존 계약대로 W1만 자동 대상이다.
 - `[UI 경계]` 공용 context는 `사용`·`장착`·`나누기` callback 유무로 버튼과 높이를 구성한다. 전체 화면 raycast overlay가 활성 panel 밖 좌·우 클릭을 받으면 callback 없이 닫고, panel 내부와 버튼 클릭은 유지한다.
 - `[Play Mode 호출 확인]` 실제 `Handgun` definition과 persistent shell UI로 `장착`만 표시, 외부 좌클릭 취소 시 원 owner·빈 W1 유지, 다시 연 뒤 버튼 호출 시 같은 runtime item이 Player grid에서 W1로 이동하는 것을 한 번 확인했다. Merchant stock의 직접 장착도 차단됐다. 프로젝트와 검증 명령은 컴파일됐으며 실제 물리적 우클릭 입력은 주입하지 않았다.
+
+---
+
+## 44. Alt+클릭 장비 즉시장착·해제 `[ITEM-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-28]` 미장착 장비를 Alt+좌클릭하면 비어 있는 호환 장비칸에 즉시 장착하고, 장비칸의 item을 Alt+좌클릭하면 Player 인벤토리로 즉시 해제한다. 점유 장비 교환은 하지 않는다.
+- `[입력 순서]` `StandardCore`는 Alt 입력을 `AlternateItemActionRequested` 하나로 전달한다. `InventoryUIManager`가 `Click + IsEquippable`을 먼저 장착/해제로 처리하고 return하며, 그 외 click·pointer만 기존 비장비 stack 절반 분할로 보낸다. 우클릭·Shift·일반 click/drag는 기존 경로를 유지한다.
+- `[소유권·UI]` `InventoryTransferCoordinator.TryToggleEquipment`가 장비 root owner면 Player root grid first-fit으로, 그 외 허용된 Player·Storage owner면 기존 빈 primary 장비칸으로 같은 runtime item을 원자 이전한다. 점유·공간 부족은 원 owner·slot으로 복구한다. 성공 뒤 source view도 재적용해 열린 중첩 가방 popup에 stale item을 남기지 않는다. 현재 무기 자동 대상은 W1뿐이다.
+- `[Play Mode 호출 확인]` 같은 Handgun 객체의 Player slot 0→W1→Player first-fit 0 왕복, W1 점유 실패의 양쪽 원본 보존, 가득 찬 Player grid에서 해제 실패 후 같은 W1 복구를 각각 한 번 확인했다. 별도 Medicine `5→3+detached 2→rollback 5`로 비장비 stack 분할도 보존됐다. 프로젝트 컴파일은 통과했으며 실제 Alt 키 물리 입력은 주입하지 않았다.

@@ -44,6 +44,8 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private Text merchantStatusText;
     [Header("Item Tooltip")]
     [SerializeField] private InventoryItemTooltipView itemTooltipView;
+    [Header("Stack Split UI")]
+    [SerializeField] private InventoryStackSplitDialog stackSplitDialog;
     [Header("Settings")]
     [SerializeField] private int playerInventoryWidth = DefaultInventoryWidth;
     [SerializeField] private int playerInventoryHeight = DefaultInventoryHeight;
@@ -69,6 +71,8 @@ public class InventoryUIManager : MonoBehaviour
         (equipmentPanel != null && equipmentPanel.activeSelf) ||
         (externalInventoryPanel != null && externalInventoryPanel.activeSelf);
     public bool HasActiveDrag => standardCore != null && standardCore.IsDragging();
+    public bool IsStackSplitQuantityEntryOpen =>
+        stackSplitDialog != null && stackSplitDialog.IsQuantityEntryOpen;
     public bool BlocksGameplayInput => inputBlocked || IsAnyInventoryOpen;
     public bool IsExternalInventoryOpen =>
         externalInventoryPanel != null && externalInventoryPanel.activeSelf;
@@ -109,7 +113,7 @@ public class InventoryUIManager : MonoBehaviour
             merchantControlsRoot == null || merchantAllTabButton == null ||
             merchantEquipmentTabButton == null || merchantOtherTabButton == null ||
             merchantCatalogText == null || merchantStatusText == null ||
-            itemTooltipView == null)
+            itemTooltipView == null || stackSplitDialog == null)
         {
             Debug.LogError("UI references missing!");
             enabled = false;
@@ -118,6 +122,12 @@ public class InventoryUIManager : MonoBehaviour
         if (!itemTooltipView.TryValidateReferences(out string tooltipError))
         {
             Debug.LogError(tooltipError, itemTooltipView);
+            enabled = false;
+            return;
+        }
+        if (!stackSplitDialog.TryValidateReferences(out string splitDialogError))
+        {
+            Debug.LogError(splitDialogError, stackSplitDialog);
             enabled = false;
             return;
         }
@@ -143,7 +153,9 @@ public class InventoryUIManager : MonoBehaviour
             SetExternalStatus);
         standardCore.SetTransferController(transferCoordinator);
         standardCore.HoveredCellChanged += HandleHoveredCellChanged;
+        standardCore.StackSplitRequested += HandleStackSplitRequested;
         itemTooltipView.Hide();
+        stackSplitDialog.Close();
         BindWallet(playerState.Wallet);
         PlayerStateChanged?.Invoke(playerState);
     }
@@ -345,6 +357,11 @@ public class InventoryUIManager : MonoBehaviour
     #region 키 입력 처리
     void HandleInput()
     {
+        if (IsStackSplitQuantityEntryOpen)
+        {
+            return;
+        }
+
         // 드래그 체크는 각 닫기 함수에서 하므로 여기서는 제거
         if (Input.GetKeyDown(KeyCode.I))
         {
@@ -592,6 +609,7 @@ public class InventoryUIManager : MonoBehaviour
     // 모든 인벤토리 닫기 (Hide 함수 호출)
     public bool CloseAllInventories()
     {
+        stackSplitDialog?.Close();
         if (standardCore != null && standardCore.IsDragging() && !standardCore.CancelDrag())
         {
             return false;
@@ -607,6 +625,7 @@ public class InventoryUIManager : MonoBehaviour
     void OnDisable()
     {
         itemTooltipView?.Hide();
+        stackSplitDialog?.Close();
         CancelActiveDrag();
     }
 
@@ -620,7 +639,9 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         standardCore.HoveredCellChanged -= HandleHoveredCellChanged;
+        standardCore.StackSplitRequested -= HandleStackSplitRequested;
         standardCore.SetTransferController(null);
+        stackSplitDialog?.Close();
 
         // A dragged item temporarily lives in the scene-local core, outside CellData.
         // Restore it before the scene unloads so the persistent inventory cannot lose it.
@@ -793,6 +814,125 @@ public class InventoryUIManager : MonoBehaviour
         merchantCatalogText.text = visibleItemCount > 0
             ? $"상품 {visibleItemCount}개"
             : "해당 분류의 상품이 없습니다.";
+    }
+
+    private void HandleStackSplitRequested(
+        IVariableInventoryView sourceView,
+        IVariableInventoryCell sourceCell,
+        bool quickHalf)
+    {
+        if (inputBlocked || standardCore == null || standardCore.IsDragging() ||
+            sourceView == null || !(sourceCell?.CellData is InventoryItemData sourceItem) ||
+            sourceItem.Quantity <= 1 || sourceItem.MaxStackSize <= 1)
+        {
+            return;
+        }
+
+        if (currentExternalMode == ExternalInventoryMode.Merchant)
+        {
+            SetExternalStatus(
+                "Stack 단가 정책이 확정되기 전에는 상인 거래 중 분할할 수 없습니다.",
+                true);
+            return;
+        }
+
+        itemTooltipView?.Hide();
+        if (quickHalf)
+        {
+            int half = sourceItem.Quantity / 2;
+            string error = TryBeginStackSplit(sourceView, sourceCell, sourceItem, half);
+            if (!string.IsNullOrEmpty(error))
+            {
+                Debug.LogWarning($"Stack split failed: {error}", this);
+            }
+            return;
+        }
+
+        stackSplitDialog.OpenContext(
+            sourceItem.Definition.DisplayName,
+            sourceItem.Quantity - 1,
+            Input.mousePosition,
+            quantity => TryBeginStackSplit(sourceView, sourceCell, sourceItem, quantity));
+    }
+
+    private string TryBeginStackSplit(
+        IVariableInventoryView sourceView,
+        IVariableInventoryCell sourceCell,
+        InventoryItemData sourceItem,
+        int splitQuantity)
+    {
+        if (transferCoordinator == null || standardCore == null)
+        {
+            return "인벤토리 분할 시스템이 준비되지 않았습니다.";
+        }
+
+        if (!transferCoordinator.TryBeginStackSplit(
+                sourceView,
+                sourceItem,
+                splitQuantity,
+                out InventoryStackSplitTransaction transaction,
+                out string error))
+        {
+            return error;
+        }
+
+        bool Rollback()
+        {
+            bool restored = transaction.TryRollback(out string rollbackError);
+            if (!restored)
+            {
+                Debug.LogError($"Stack split rollback failed: {rollbackError}", this);
+                return false;
+            }
+
+            ReApplyViewIfAlive(sourceView);
+            RefreshOpenViews();
+            return true;
+        }
+
+        bool Commit()
+        {
+            if (!transaction.TryCommit(out string commitError))
+            {
+                Debug.LogError($"Stack split commit failed: {commitError}", this);
+                return false;
+            }
+
+            return true;
+        }
+
+        if (!standardCore.TryBeginStackSplitCarry(
+                sourceView,
+                sourceCell,
+                transaction.SplitItem,
+                Rollback,
+                Commit,
+                out error))
+        {
+            if (!transaction.TryRollback(out string rollbackError))
+            {
+                error = $"{error} Rollback also failed: {rollbackError}";
+            }
+
+            ReApplyViewIfAlive(sourceView);
+            RefreshOpenViews();
+            return error;
+        }
+
+        ReApplyViewIfAlive(sourceView);
+        RefreshOpenViews();
+        return null;
+    }
+
+    private static void ReApplyViewIfAlive(IVariableInventoryView view)
+    {
+        if (view == null ||
+            (view is UnityEngine.Object unityView && unityView == null))
+        {
+            return;
+        }
+
+        view.ReApply();
     }
 
     private void HandleHoveredCellChanged(

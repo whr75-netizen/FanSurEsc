@@ -28,7 +28,7 @@ namespace FantasySurvival.Inventory
     public class InventoryItemData : IVariableInventoryOwnedCellData
     {
         private readonly IVariableInventoryAsset imageAsset;
-        private readonly int quantity;
+        private int quantity;
 
         public ItemDefinition Definition { get; }
         public int Id => Definition.Id;
@@ -74,6 +74,42 @@ namespace FantasySurvival.Inventory
             }
 
             InventoryOwner = newOwner;
+            return true;
+        }
+
+        public bool TryChangeQuantity(
+            IVariableInventoryViewData expectedOwner,
+            int expectedQuantity,
+            int newQuantity,
+            out string error)
+        {
+            if (expectedOwner == null ||
+                !ReferenceEquals(InventoryOwner, expectedOwner))
+            {
+                error = "The item owner changed before its quantity could be updated.";
+                return false;
+            }
+
+            if (quantity != expectedQuantity)
+            {
+                error = "The item quantity changed before the requested update.";
+                return false;
+            }
+
+            if (newQuantity <= 0 || newQuantity > MaxStackSize)
+            {
+                error = $"Item definition {Definition.Id} requires a quantity from 1 to " +
+                        $"{MaxStackSize}.";
+                return false;
+            }
+
+            quantity = newQuantity;
+            if (InventoryOwner != null)
+            {
+                InventoryOwner.IsDirty = true;
+            }
+
+            error = null;
             return true;
         }
     }

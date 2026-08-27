@@ -1373,3 +1373,17 @@ Interactable (abstract base class)
 - `[보존]` `PlayerInteractor`의 최근접 선택·열린 대상 유지·거리 이탈 종료, `InventoryUIManager`의 같은 Chest UI 경계, 공용 `PlayerActionController`와 기존 이동·공격·장비 전환 취소 규칙을 그대로 재사용했다. 열린 대상의 닫기는 즉시다.
 - `[Play Mode 호출 확인]` I 개인 인벤토리와 `GameMap1` 기지 Chest는 행동 없이 같은 호출에서 열고 닫혔다. `GameMapTest` 시험 Chest는 즉시 열리지 않고 1초 행동을 소유했으며, 기존 controller 완료 경로 호출 뒤 열리고 다시 즉시 닫혔다. MCP 명령 중 Editor 프레임이 진행되지 않아 실제 1초 경과는 반복 측정하지 않았고, 시간 경과 자체는 변경되지 않은 §37 증거를 재사용한다.
 - `[컴파일·Console 확인]` 변경 뒤 Unity 동적 검증 코드와 프로젝트 참조가 컴파일됐고 최종 Console Error/Exception은 0건이었다. 실제 E·I 키 입력 주입과 최종 진행 UI는 확인하지 않았다.
+
+---
+
+## 40. Stack 분할과 클릭 보유 트랜잭션 `[ITEM-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-27]` 수량 stack을 우클릭 `나누기`로 열어 기본값 1과 직접 입력 수량만큼 들고, Ctrl+좌클릭은 절반을 즉시 나눈 채 들도록 한다.
+- `[수량·소유권 권위]` `InventoryItemData.TryChangeQuantity`가 예상 owner·기존 수량·최대 stack을 함께 검사한다. 분할 시작은 기존 원본 runtime item과 slot·owner를 유지한 채 수량만 줄이고, `InventoryItemDataFactory`가 만든 새 runtime item 하나만 기존 `StandardCore` drag 권위에 둔다.
+- `[원자 경계]` `InventoryStackSplitTransaction`은 새 item이 실제 destination owner에 연결되고 원본 잔량·owner·slot이 그대로일 때만 확정한다. 취소·무효 배치·I/Escape/거리 이탈·씬/저장 정리는 기존 drag 취소 경계에서 분할 item을 버리고 원수량을 복원한다. 중첩 컨테이너 View는 rollback 뒤 다시 그려 stale 수량 배지를 남기지 않는다.
+- `[입력·UI]` 우클릭은 context의 `나누기/닫기`, 다음 modal은 `1..현재-1`, 기본값 1, 확인/취소를 제공한다. Ctrl+좌클릭은 `floor(현재/2)`, Shift는 기존 빠른 이동, Ctrl+Shift는 무동작이다. 수량 입력 중 1~3 무기 전환과 I/R을 차단하고 drag ghost에도 수량 배지를 표시한다. 중간 마우스 버튼은 우클릭으로 취급하지 않는다.
+- `[거래 경계]` 현재 상인 가격은 stack 단가·총액 정책이 확정되지 않았으므로 Merchant UI가 열린 동안 우클릭과 Ctrl 분할을 모두 데이터 무변경으로 차단한다. 동일 stack 자동 합치기와 수량별 거래 정산은 후속 결정이다.
+- `[Editor/순수 로직 확인]` 실제 Medicine definition과 임시 grid에서 `5→4+1→취소 5`, 홀수 절반 `5→3+2`, destination owner 연결 뒤 commit, `Capture→JSON→Restore`의 `3+2`, 수량 1·전체 수량 거부와 Merchant 차단을 각각 확인했다. 원본 참조·slot·owner와 총량 5가 유지됐다.
+- `[Play Mode 호출 확인]` 실제 persistent Player stack을 검증 중에만 5로 바꾸고 `StandardButton` 우클릭 callback → `나누기` → 기본값 1 → 확인을 호출했다. Manager가 참조한 Core에서 원본 4와 detached 1, 활성 drag를 확인하고 취소하자 같은 원본·slot·owner의 5로 복원됐다. 수량 1 우클릭은 UI를 열지 않았고 검증 뒤 시작 수량 1·닫힌 UI로 복원했다.
+- `[프리팹·컴파일 확인]` `PersistentGameplayShell`에는 inactive `StackSplitOverlay`와 dialog 1개만 추가됐고 Manager 참조, 필수 UI 경로 9개, sorting 160, raycast 차단, 기존 GameObject 186개 보존과 missing script 0을 확인했다. 최종 Unity Console Error/Exception은 0건이다.
+- `[실제 입력 미검증]` 실제 사용자의 Ctrl 키·마우스 클릭과 다른 grid 빈 칸으로의 클릭 배치는 호출/순수 로직으로 분리 확인했으며 물리 입력 자체를 통과했다고 기록하지 않는다. Enter 확정, 배경 클릭 닫기, 동일 stack 합치기와 자동 정렬은 이번 범위에 포함하지 않았다.

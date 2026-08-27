@@ -13,6 +13,107 @@ namespace FantasySurvival.Inventory
         Merchant = 2
     }
 
+    public sealed class InventoryStackSplitTransaction
+    {
+        private enum TransactionState
+        {
+            Pending,
+            Committed,
+            RolledBack
+        }
+
+        private readonly InventoryItemData sourceItem;
+        private readonly IVariableInventoryViewData sourceOwner;
+        private readonly int originalQuantity;
+        private readonly int remainingQuantity;
+        private TransactionState state;
+
+        internal InventoryStackSplitTransaction(
+            InventoryItemData sourceItem,
+            IVariableInventoryViewData sourceOwner,
+            InventoryItemData splitItem,
+            int originalQuantity,
+            int remainingQuantity)
+        {
+            this.sourceItem = sourceItem;
+            this.sourceOwner = sourceOwner;
+            SplitItem = splitItem;
+            this.originalQuantity = originalQuantity;
+            this.remainingQuantity = remainingQuantity;
+        }
+
+        public InventoryItemData SplitItem { get; }
+
+        public bool TryCommit(out string error)
+        {
+            if (state == TransactionState.Committed)
+            {
+                error = null;
+                return true;
+            }
+
+            if (state != TransactionState.Pending)
+            {
+                error = "The stack split was already rolled back.";
+                return false;
+            }
+
+            if (sourceOwner == null ||
+                !ReferenceEquals(sourceItem.InventoryOwner, sourceOwner) ||
+                sourceItem.Quantity != remainingQuantity ||
+                !sourceOwner.GetId(sourceItem).HasValue)
+            {
+                error = "The source stack changed before the split could be committed.";
+                return false;
+            }
+
+            IVariableInventoryViewData splitOwner = SplitItem?.InventoryOwner;
+            if (SplitItem == null || splitOwner == null ||
+                !splitOwner.GetId(SplitItem).HasValue)
+            {
+                error = "The split stack was not attached to a destination inventory.";
+                return false;
+            }
+
+            state = TransactionState.Committed;
+            error = null;
+            return true;
+        }
+
+        public bool TryRollback(out string error)
+        {
+            if (state == TransactionState.RolledBack)
+            {
+                error = null;
+                return true;
+            }
+
+            if (state != TransactionState.Pending)
+            {
+                error = "A committed stack split cannot be rolled back.";
+                return false;
+            }
+
+            if (SplitItem == null || SplitItem.InventoryOwner != null)
+            {
+                error = "The split stack is no longer detached from an inventory.";
+                return false;
+            }
+
+            if (!sourceItem.TryChangeQuantity(
+                    sourceOwner,
+                    remainingQuantity,
+                    originalQuantity,
+                    out error))
+            {
+                return false;
+            }
+
+            state = TransactionState.RolledBack;
+            return true;
+        }
+    }
+
     /// <summary>
     /// Coordinates cross-container moves without becoming another inventory owner.
     /// Every mutation still goes through the authoritative source/destination data APIs.
@@ -62,6 +163,82 @@ namespace FantasySurvival.Inventory
         {
             externalMode = ExternalInventoryMode.None;
             externalInventory = null;
+        }
+
+        public bool TryBeginStackSplit(
+            IVariableInventoryView sourceView,
+            InventoryItemData sourceItem,
+            int splitQuantity,
+            out InventoryStackSplitTransaction transaction,
+            out string error)
+        {
+            transaction = null;
+            if (externalMode == ExternalInventoryMode.Merchant)
+            {
+                error = "상인 거래 중에는 stack 가격 정책이 확정되지 않아 분할할 수 없습니다.";
+                return false;
+            }
+
+            if (!(sourceView is IVariableInventoryBoundView boundView) || sourceItem == null)
+            {
+                error = "분할할 아이템의 원본 인벤토리를 찾을 수 없습니다.";
+                return false;
+            }
+
+            if (sourceView is StandardStashView stashView &&
+                !stashView.IsItemVisible(sourceItem))
+            {
+                error = "현재 숨겨진 아이템은 분할할 수 없습니다.";
+                return false;
+            }
+
+            IVariableInventoryViewData sourceOwner = boundView.ViewData;
+            int originalQuantity = sourceItem.Quantity;
+            if (sourceOwner == null ||
+                !ReferenceEquals(sourceItem.InventoryOwner, sourceOwner) ||
+                !sourceOwner.GetId(sourceItem).HasValue)
+            {
+                error = "아이템 소유권이 원본 인벤토리와 일치하지 않습니다.";
+                return false;
+            }
+
+            if (sourceItem.MaxStackSize <= 1 || splitQuantity <= 0 ||
+                splitQuantity >= originalQuantity)
+            {
+                error = $"나눌 수량은 1부터 {Mathf.Max(0, originalQuantity - 1)}까지여야 합니다.";
+                return false;
+            }
+
+            if (!InventoryItemDataFactory.TryCreate(
+                    sourceItem.Definition,
+                    splitQuantity,
+                    out IVariableInventoryCellData created,
+                    out error) ||
+                !(created is InventoryItemData splitItem))
+            {
+                error = error ?? "분할 아이템을 생성할 수 없습니다.";
+                return false;
+            }
+
+            splitItem.IsRotate = sourceItem.IsRotate;
+            int remainingQuantity = originalQuantity - splitQuantity;
+            if (!sourceItem.TryChangeQuantity(
+                    sourceOwner,
+                    originalQuantity,
+                    remainingQuantity,
+                    out error))
+            {
+                return false;
+            }
+
+            transaction = new InventoryStackSplitTransaction(
+                sourceItem,
+                sourceOwner,
+                splitItem,
+                originalQuantity,
+                remainingQuantity);
+            error = null;
+            return true;
         }
 
         public bool HandleQuickTransfer(

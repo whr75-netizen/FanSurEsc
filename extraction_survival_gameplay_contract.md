@@ -179,6 +179,8 @@ Main Menu
 - stack 가능한 종류의 최대 수량은 공유 `ItemDefinition`, 현재 수량은 개별 `InventoryItemData` 하나가 소유한다. UI와 Save DTO는 그 값을 표시·운반할 뿐 별도 원본이 아니다.
 - UI 배열이나 Save DTO를 live 아이템의 두 번째 권위 소유자로 만들지 않는다.
 
+**[현재 시험]** 수량이 2 이상인 stack은 우클릭 `나누기`에서 기본값 1과 `1..현재-1`을 입력하거나, Ctrl+좌클릭으로 절반을 빠르게 나눈다. 홀수는 커서에 작은 쪽(`floor`)을 든다. 원본 runtime item은 같은 owner·slot에 남아 수량만 줄고 새 runtime item만 기존 drag 권위에 들어간다. 배치 성공 시 새 owner에 연결해 확정하며, 취소·무효 배치·UI/전환 정리 시 원본 수량을 정확히 복원한다. 상인 거래 중에는 stack 단가 정책이 미정이므로 분할을 데이터 무변경으로 차단한다.
+
 **[현재]** 시험 `LootTableDefinition`은 ItemDatabase의 숫자 definition ID와 누적 확률을 가진 공유 정의다. Fresh 원정 도착에서 `seed + stable container ID`로 최대 한 아이템을 한 번 결정하고, 모든 후보 grid가 유효할 때만 원자적으로 적용한다. Resume은 테이블을 다시 굴리지 않고 Recovery에 저장된 실제 grid를 복원한다. LootTable이 없는 기존 컨테이너는 authored 초기값을 유지한다. 기존 수량 필드가 없던 item record의 `0`은 복원 시 1개로 정규화하며, 현재 writer는 유효한 양수만 기록한다.
 
 ### 4.3 절차 맵 생성과 접근 가능성

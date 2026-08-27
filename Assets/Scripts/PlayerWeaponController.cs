@@ -63,7 +63,8 @@ public sealed class PlayerWeaponController : MonoBehaviour
 
     private void Update()
     {
-        if (inventoryManager != null && inventoryManager.InputBlocked)
+        if (inventoryManager != null &&
+            (inventoryManager.InputBlocked || inventoryManager.IsStackSplitQuantityEntryOpen))
         {
             return;
         }

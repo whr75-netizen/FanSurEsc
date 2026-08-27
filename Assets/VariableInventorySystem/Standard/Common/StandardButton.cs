@@ -58,7 +58,7 @@ namespace VariableInventorySystem
             {
                 onPointerClick?.Invoke();
             }
-            else
+            else if (eventData.button == PointerEventData.InputButton.Right)
             {
                 onPointerOptionClick?.Invoke();
             }

@@ -23,11 +23,17 @@ namespace VariableInventorySystem
         Vector2 cursorPosition;
         private IVariableInventoryView originView = null; // ★ 드래그 시작 View 저장용
         private IVariableInventoryTransferController transferController;
+        private bool isClickCarry;
+        private Func<bool> clickCarryRollback;
+        private Func<bool> clickCarryCommit;
+        private PointerEventData clickCarryPointerEvent;
+        private EventSystem clickCarryEventSystem;
 
         public event Action<IVariableInventoryView, IVariableInventoryCell> HoveredCellChanged;
 
         // --- 추가/기존 메소드 ---
         public bool IsDragging() => effectCell?.CellData != null;
+        public bool IsClickCarryActive => isClickCarry && IsDragging();
         public void SetTransferController(IVariableInventoryTransferController controller)
         {
             transferController = controller;
@@ -91,6 +97,87 @@ namespace VariableInventorySystem
             {
                 NotifyHoveredCellCleared();
             }
+        }
+
+        protected virtual void Update()
+        {
+            if (IsClickCarryActive)
+            {
+                UpdateClickCarryPointer();
+            }
+        }
+
+        protected bool TryBeginClickCarry(
+            IVariableInventoryView sourceView,
+            IVariableInventoryCell sourceCell,
+            IVariableInventoryCellData carriedItem,
+            Func<bool> rollback,
+            Func<bool> commit,
+            out string error)
+        {
+            if (IsDragging())
+            {
+                error = "Another inventory drag is already active.";
+                return false;
+            }
+
+            if (sourceView == null || sourceCell == null || carriedItem == null ||
+                rollback == null || commit == null || !InventoryViews.Contains(sourceView) ||
+                !(sourceView is IVariableInventoryBoundView boundView) ||
+                !boundView.ContainsCell(sourceCell))
+            {
+                error = "The split stack source is not registered with this inventory core.";
+                return false;
+            }
+
+            if (carriedItem is IVariableInventoryOwnedCellData owned &&
+                owned.InventoryOwner != null)
+            {
+                error = "The split stack already belongs to an inventory.";
+                return false;
+            }
+
+            if (effectCell == null)
+            {
+                Initialize();
+            }
+
+            if (effectCell == null)
+            {
+                error = "The inventory drag display cell is unavailable.";
+                return false;
+            }
+
+            foreach (IVariableInventoryView inventoryView in InventoryViews)
+            {
+                inventoryView.OnPrePick(sourceCell);
+            }
+
+            originView = sourceView;
+            stareCell = sourceCell;
+            originEffectCellRotate = carriedItem.IsRotate;
+            clickCarryRollback = rollback;
+            clickCarryCommit = commit;
+            isClickCarry = true;
+
+            effectCell.RectTransform.gameObject.SetActive(true);
+            effectCell.Apply(carriedItem);
+            NotifyHoveredCellCleared();
+            UpdateClickCarryPointer();
+            error = null;
+            return true;
+        }
+
+        protected bool TryReleaseClickCarry(IVariableInventoryCell destinationCell)
+        {
+            if (!IsClickCarryActive || destinationCell == null)
+            {
+                return false;
+            }
+
+            stareCell = destinationCell;
+            UpdateClickCarryPointer();
+            return FinishCurrentDrag();
         }
 
         // --- ★★★ OnBeginDrag (원본 기반 최소 수정) ★★★ ---
@@ -158,7 +245,16 @@ namespace VariableInventorySystem
         // --- OnEndDrag (originView 초기화 추가) ---
         public virtual void OnEndDrag(PointerEventData eventData)
         {
-            if (!IsDragging()) return;
+            FinishCurrentDrag();
+        }
+
+        private bool FinishCurrentDrag()
+        {
+            if (!IsDragging())
+            {
+                return false;
+            }
+
             IVariableInventoryCellData transferredItem = effectCell.CellData;
             IVariableInventoryView destinationView = null;
             VariableInventoryDropHandling handling = VariableInventoryDropHandling.Standard;
@@ -187,12 +283,38 @@ namespace VariableInventorySystem
                 }
                 break;
             }
-            if (!isRelease) RestoreOriginalRotation();
-            foreach (var inventoryView in InventoryViews) inventoryView?.OnDroped(isRelease); // ★ OnDroped에서 복구 처리됨
-            if (!isRelease && IsDetachedOwnedItem())
+            if (!isRelease)
+            {
+                RestoreOriginalRotation();
+            }
+
+            if (!isRelease && isClickCarry)
+            {
+                if (!TryRollbackClickCarry())
+                {
+                    Debug.LogError(
+                        "[Core] Split-stack rollback failed. Drag state was kept instead of discarding the detached item reference.");
+                    return false;
+                }
+            }
+
+            if (isRelease && isClickCarry &&
+                (clickCarryCommit == null || !clickCarryCommit()))
+            {
+                Debug.LogError(
+                    "[Core] Split-stack commit failed. Drag state was kept for diagnosis instead of silently discarding its transaction boundary.");
+                return false;
+            }
+
+            foreach (var inventoryView in InventoryViews)
+            {
+                inventoryView?.OnDroped(isRelease); // ★ 일반 드래그의 원본 복구 소유자
+            }
+
+            if (!isRelease && !isClickCarry && IsDetachedOwnedItem())
             {
                 Debug.LogError("[Core.OnEndDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
-                return;
+                return false;
             }
             if (isRelease && transferController != null)
             {
@@ -202,11 +324,10 @@ namespace VariableInventorySystem
                     transferredItem,
                     handling);
             }
-            if (effectCell != null) { if (effectCell.RectTransform != null) effectCell.RectTransform.gameObject.SetActive(false); effectCell.Apply(null); }
-            originEffectCellRotate = null;
-            originView = null; // ★ 초기화
-            stareCell = null; // 상태 초기화
+
+            ClearDragState();
             Debug.Log($"[Core.OnEndDrag] Drag ended. Drop Success: {isRelease}");
+            return isRelease;
         }
 
         // --- SwitchRotate, GetRotateSize (원본 유지) ---
@@ -224,18 +345,91 @@ namespace VariableInventorySystem
             }
             else { Debug.LogWarning("[VariableInventoryCore.CancelDrag] Origin view is unknown!"); }
             RestoreOriginalRotation();
-            foreach (var inventoryView in InventoryViews) inventoryView?.OnDroped(false);
-            if (IsDetachedOwnedItem())
+            if (isClickCarry)
+            {
+                if (!TryRollbackClickCarry())
+                {
+                    Debug.LogError(
+                        "[VariableInventoryCore.CancelDrag] Split-stack rollback failed. Drag state was kept.");
+                    return false;
+                }
+            }
+
+            foreach (var inventoryView in InventoryViews)
+            {
+                inventoryView?.OnDroped(false);
+            }
+
+            if (!isClickCarry && IsDetachedOwnedItem())
             {
                 Debug.LogError("[VariableInventoryCore.CancelDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
                 return false;
             }
-            // effectCell 정리 및 상태 초기화
-            if (effectCell != null) { if (effectCell.RectTransform != null) effectCell.RectTransform.gameObject.SetActive(false); effectCell.Apply(null); }
-            originEffectCellRotate = null; stareCell = null; originView = null;
+            ClearDragState();
             NotifyHoveredCellCleared();
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 완료.");
             return true;
+        }
+
+        private bool TryRollbackClickCarry()
+        {
+            if (!isClickCarry || clickCarryRollback == null)
+            {
+                return false;
+            }
+
+            try
+            {
+                return clickCarryRollback();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+                return false;
+            }
+        }
+
+        private void ClearDragState()
+        {
+            if (effectCell != null)
+            {
+                if (effectCell.RectTransform != null)
+                {
+                    effectCell.RectTransform.gameObject.SetActive(false);
+                }
+
+                effectCell.Apply(null);
+            }
+
+            originEffectCellRotate = null;
+            originView = null;
+            stareCell = null;
+            isClickCarry = false;
+            clickCarryRollback = null;
+            clickCarryCommit = null;
+        }
+
+        private void UpdateClickCarryPointer()
+        {
+            EventSystem currentEventSystem = EventSystem.current;
+            if (!IsClickCarryActive || currentEventSystem == null)
+            {
+                return;
+            }
+
+            if (clickCarryPointerEvent == null ||
+                clickCarryEventSystem != currentEventSystem)
+            {
+                clickCarryPointerEvent = new PointerEventData(currentEventSystem);
+                clickCarryEventSystem = currentEventSystem;
+            }
+            else
+            {
+                clickCarryPointerEvent.Reset();
+            }
+
+            clickCarryPointerEvent.position = Input.mousePosition;
+            OnDrag(clickCarryPointerEvent);
         }
 
         private void RestoreOriginalRotation()
@@ -272,7 +466,7 @@ namespace VariableInventorySystem
             }
         }
 
-        private IVariableInventoryView FindOwningView(IVariableInventoryCell cell)
+        protected IVariableInventoryView FindOwningView(IVariableInventoryCell cell)
         {
             foreach (IVariableInventoryView view in InventoryViews)
             {

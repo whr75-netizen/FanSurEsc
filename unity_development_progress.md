@@ -1413,3 +1413,12 @@ Interactable (abstract base class)
 - `[Editor 호출 확인]` 실제 Medicine definition과 임시 Storage grid로 전량 합치기, 여러 대상 stack의 slot 순서 채움 뒤 같은 source remainder 빈칸 이동, 역방향 부분 합치기 뒤 빈칸 부족 시 exact 원본 owner·slot 잔류, destination 부착 뒤 예외를 주입한 원자 rollback, 비stack Handgun의 기존 first-fit을 각각 1회 확인했다. 모든 case에서 총수량·runtime 참조와 grid 소유권이 기대값과 일치했다.
 - `[Play Mode 호출 확인]` Player `8×9`에서 Content·내부 배경·72개 cell 경계가 `519×584`, 외곽 root·배경이 `530×595`로 일치했다. 같은 외부 view를 `5×6 → 6×5`로 바꾸자 활성 cell 30개를 재사용하면서 Content·내부 배경·cell 경계가 `389×324`, 외곽 root·배경이 `400×335`로 함께 갱신됐다. `StandardCaseView`의 별도 크기 경로도 유지됐다.
 - `[컴파일·미검증]` 최종 프로젝트 코드와 검증 명령은 컴파일됐고 Play Mode 검증 뒤 Edit Mode·`GameMap1`로 정상 복귀했다. 후속 fault-injection은 의도한 복구 실패 오류 3건을 냈고, Edit Mode에서 같은 view를 재적용한 검증 명령은 기존 `Destroy` 경로의 Editor 진단을 남겼으나 모든 assertion과 마지막 PASS까지 실행됐다. 실제 사용자의 Shift+마우스 물리 입력은 주입하지 않았으며, 변경되지 않은 입력 분기 뒤 `HandleQuickTransfer`부터 실제 owner API 경로를 호출해 검증했다.
+
+---
+
+## 43. 우클릭 속성 기반 장착과 외부 클릭 닫기 `[ITEM-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-28]` 무기·장비처럼 장착 속성이 있는 item은 우클릭 메뉴에 `장착`을 표시하고, 가벼운 context UI는 메뉴 밖 클릭으로 취소한다.
+- `[속성·소유권 경계]` 새 tag나 분기표를 만들지 않고 기존 `ItemDefinition.EquipmentSlot`·`IsEquippable`을 capability 원본으로 사용한다. Player 또는 열린 Storage 소유 item만 현재 활성 primary 슬롯이 비었을 때 기존 원자 이전 API로 장착하며, 상인 stock과 이미 장착된 item은 직접 장착하지 않는다. 현재 무기는 기존 계약대로 W1만 자동 대상이다.
+- `[UI 경계]` 공용 context는 `사용`·`장착`·`나누기` callback 유무로 버튼과 높이를 구성한다. 전체 화면 raycast overlay가 활성 panel 밖 좌·우 클릭을 받으면 callback 없이 닫고, panel 내부와 버튼 클릭은 유지한다.
+- `[Play Mode 호출 확인]` 실제 `Handgun` definition과 persistent shell UI로 `장착`만 표시, 외부 좌클릭 취소 시 원 owner·빈 W1 유지, 다시 연 뒤 버튼 호출 시 같은 runtime item이 Player grid에서 W1로 이동하는 것을 한 번 확인했다. Merchant stock의 직접 장착도 차단됐다. 프로젝트와 검증 명령은 컴파일됐으며 실제 물리적 우클릭 입력은 주입하지 않았다.

@@ -88,7 +88,7 @@ namespace FantasySurvival.EditorTools
             RectTransform contextPanel = ConfigurePanel(
                 overlay.transform,
                 "ContextPanel",
-                new Vector2(220f, 166f));
+                new Vector2(220f, 206f));
             contextPanel.anchorMin = new Vector2(0.5f, 0.5f);
             contextPanel.anchorMax = new Vector2(0.5f, 0.5f);
             contextPanel.pivot = new Vector2(0f, 1f);
@@ -110,19 +110,26 @@ namespace FantasySurvival.EditorTools
                 font,
                 new Vector2(10f, -42f),
                 new Vector2(200f, 32f));
+            Button equipActionButton = ConfigureButton(
+                contextPanel,
+                "EquipButton",
+                "장착",
+                font,
+                new Vector2(10f, -82f),
+                new Vector2(200f, 32f));
             Button splitActionButton = ConfigureButton(
                 contextPanel,
                 "SplitButton",
                 "나누기",
                 font,
-                new Vector2(10f, -82f),
+                new Vector2(10f, -122f),
                 new Vector2(200f, 32f));
             Button contextCancelButton = ConfigureButton(
                 contextPanel,
                 "CloseButton",
                 "닫기",
                 font,
-                new Vector2(10f, -122f),
+                new Vector2(10f, -162f),
                 new Vector2(200f, 30f));
 
             RectTransform quantityPanel = ConfigurePanel(
@@ -192,6 +199,7 @@ namespace FantasySurvival.EditorTools
             dialogSerialized.FindProperty("contextPanel").objectReferenceValue = contextPanel;
             dialogSerialized.FindProperty("contextItemText").objectReferenceValue = contextItemText;
             dialogSerialized.FindProperty("useActionButton").objectReferenceValue = useActionButton;
+            dialogSerialized.FindProperty("equipActionButton").objectReferenceValue = equipActionButton;
             dialogSerialized.FindProperty("splitActionButton").objectReferenceValue = splitActionButton;
             dialogSerialized.FindProperty("contextCancelButton").objectReferenceValue = contextCancelButton;
             dialogSerialized.FindProperty("quantityPanel").objectReferenceValue = quantityPanel;

@@ -866,9 +866,26 @@ public class InventoryUIManager : MonoBehaviour
             };
         }
 
+        Action equipAction = null;
+        if (sourceItem.Definition.IsEquippable &&
+            transferCoordinator != null &&
+            transferCoordinator.CanEquip(sourceView, sourceItem))
+        {
+            equipAction = () =>
+            {
+                if (!transferCoordinator.TryEquip(
+                        sourceView,
+                        sourceItem,
+                        out string equipError))
+                {
+                    Debug.LogWarning($"Equip failed: {equipError}", this);
+                }
+            };
+        }
+
         bool canSplit = sourceItem.Quantity > 1 && sourceItem.MaxStackSize > 1 &&
                         currentExternalMode != ExternalInventoryMode.Merchant;
-        if (!canSplit && useAction == null)
+        if (!canSplit && useAction == null && equipAction == null)
         {
             if (currentExternalMode == ExternalInventoryMode.Merchant &&
                 sourceItem.Quantity > 1 && sourceItem.MaxStackSize > 1)
@@ -885,6 +902,7 @@ public class InventoryUIManager : MonoBehaviour
         stackSplitDialog.OpenContext(
             sourceItem.Definition.DisplayName,
             useAction,
+            equipAction,
             canSplit ? sourceItem.Quantity - 1 : 0,
             Input.mousePosition,
             canSplit

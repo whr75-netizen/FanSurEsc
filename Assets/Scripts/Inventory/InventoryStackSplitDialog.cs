@@ -1,11 +1,12 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace FantasySurvival.Inventory
 {
     [DisallowMultipleComponent]
-    public sealed class InventoryStackSplitDialog : MonoBehaviour
+    public sealed class InventoryStackSplitDialog : MonoBehaviour, IPointerClickHandler
     {
         [Header("Canvas")]
         [SerializeField] private Canvas rootCanvas;
@@ -13,6 +14,7 @@ namespace FantasySurvival.Inventory
         [SerializeField] private RectTransform contextPanel;
         [SerializeField] private Text contextItemText;
         [SerializeField] private Button useActionButton;
+        [SerializeField] private Button equipActionButton;
         [SerializeField] private Button splitActionButton;
         [SerializeField] private Button contextCancelButton;
         [Header("Quantity Entry")]
@@ -26,6 +28,7 @@ namespace FantasySurvival.Inventory
 
         private Func<int, string> confirmSplit;
         private Action useAction;
+        private Action equipAction;
         private int maximumSplitQuantity;
 
         public bool IsOpen => gameObject.activeSelf;
@@ -35,6 +38,7 @@ namespace FantasySurvival.Inventory
         private void Awake()
         {
             useActionButton.onClick.AddListener(UseSelectedItem);
+            equipActionButton.onClick.AddListener(EquipSelectedItem);
             splitActionButton.onClick.AddListener(ShowQuantityEntry);
             contextCancelButton.onClick.AddListener(Close);
             confirmButton.onClick.AddListener(Confirm);
@@ -53,6 +57,11 @@ namespace FantasySurvival.Inventory
             if (splitActionButton != null)
             {
                 splitActionButton.onClick.RemoveListener(ShowQuantityEntry);
+            }
+
+            if (equipActionButton != null)
+            {
+                equipActionButton.onClick.RemoveListener(EquipSelectedItem);
             }
 
             if (contextCancelButton != null)
@@ -74,6 +83,7 @@ namespace FantasySurvival.Inventory
         private void OnDisable()
         {
             useAction = null;
+            equipAction = null;
             confirmSplit = null;
             maximumSplitQuantity = 0;
         }
@@ -81,18 +91,21 @@ namespace FantasySurvival.Inventory
         public void OpenContext(
             string itemDisplayName,
             Action onUse,
+            Action onEquip,
             int maxSplitQuantity,
             Vector2 screenPosition,
             Func<int, string> onConfirm)
         {
             bool canUse = onUse != null;
+            bool canEquip = onEquip != null;
             bool canSplit = maxSplitQuantity >= 1 && onConfirm != null;
-            if (!canUse && !canSplit)
+            if (!canUse && !canEquip && !canSplit)
             {
                 return;
             }
 
             useAction = canUse ? onUse : null;
+            equipAction = canEquip ? onEquip : null;
             maximumSplitQuantity = canSplit ? maxSplitQuantity : 0;
             confirmSplit = canSplit ? onConfirm : null;
             gameObject.SetActive(true);
@@ -103,8 +116,9 @@ namespace FantasySurvival.Inventory
             contextPanel.gameObject.SetActive(true);
             quantityPanel.gameObject.SetActive(false);
             useActionButton.gameObject.SetActive(canUse);
+            equipActionButton.gameObject.SetActive(canEquip);
             splitActionButton.gameObject.SetActive(canSplit);
-            LayoutContextActions(canUse, canSplit);
+            LayoutContextActions(canUse, canEquip, canSplit);
             errorText.text = string.Empty;
             PositionContextPanel(screenPosition);
         }
@@ -112,6 +126,7 @@ namespace FantasySurvival.Inventory
         public void Close()
         {
             useAction = null;
+            equipAction = null;
             confirmSplit = null;
             maximumSplitQuantity = 0;
             if (contextPanel != null)
@@ -133,7 +148,7 @@ namespace FantasySurvival.Inventory
         public bool TryValidateReferences(out string error)
         {
             if (rootCanvas == null || contextPanel == null || contextItemText == null ||
-                useActionButton == null || splitActionButton == null ||
+                useActionButton == null || equipActionButton == null || splitActionButton == null ||
                 contextCancelButton == null ||
                 quantityPanel == null || titleText == null || rangeText == null ||
                 errorText == null || quantityInput == null || confirmButton == null ||
@@ -154,14 +169,57 @@ namespace FantasySurvival.Inventory
             selectedAction?.Invoke();
         }
 
-        private void LayoutContextActions(bool canUse, bool canSplit)
+        private void EquipSelectedItem()
+        {
+            Action selectedAction = equipAction;
+            Close();
+            selectedAction?.Invoke();
+        }
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (!IsOpen || eventData == null || eventData.button == PointerEventData.InputButton.Middle)
+            {
+                return;
+            }
+
+            RectTransform activePanel = quantityPanel != null && quantityPanel.gameObject.activeSelf
+                ? quantityPanel
+                : contextPanel;
+            Camera eventCamera = rootCanvas != null &&
+                                 rootCanvas.renderMode != RenderMode.ScreenSpaceOverlay
+                ? rootCanvas.worldCamera
+                : null;
+            if (activePanel != null &&
+                RectTransformUtility.RectangleContainsScreenPoint(
+                    activePanel,
+                    eventData.position,
+                    eventCamera))
+            {
+                return;
+            }
+
+            Close();
+        }
+
+        private void LayoutContextActions(bool canUse, bool canEquip, bool canSplit)
         {
             float y = -42f;
+            int actionCount = 0;
             if (canUse)
             {
                 useActionButton.GetComponent<RectTransform>().anchoredPosition =
                     new Vector2(10f, y);
                 y -= 40f;
+                actionCount++;
+            }
+
+            if (canEquip)
+            {
+                equipActionButton.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector2(10f, y);
+                y -= 40f;
+                actionCount++;
             }
 
             if (canSplit)
@@ -169,13 +227,14 @@ namespace FantasySurvival.Inventory
                 splitActionButton.GetComponent<RectTransform>().anchoredPosition =
                     new Vector2(10f, y);
                 y -= 40f;
+                actionCount++;
             }
 
             contextCancelButton.GetComponent<RectTransform>().anchoredPosition =
                 new Vector2(10f, y);
             contextPanel.sizeDelta = new Vector2(
                 contextPanel.sizeDelta.x,
-                canUse && canSplit ? 166f : 126f);
+                86f + actionCount * 40f);
         }
 
         private void ShowQuantityEntry()

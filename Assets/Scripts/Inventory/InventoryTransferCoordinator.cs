@@ -745,6 +745,67 @@ namespace FantasySurvival.Inventory
             return true;
         }
 
+        public bool CanEquip(
+            IVariableInventoryView sourceView,
+            InventoryItemData item)
+        {
+            if (pendingStorageRecovery != null ||
+                !TryResolveEquipSource(
+                    sourceView,
+                    item,
+                    out IVariableInventoryViewData source,
+                    out _) ||
+                ReferenceEquals(source, playerState.Equipment))
+            {
+                return false;
+            }
+
+            EquipmentSlotId slot = EquipmentSlotCatalog.GetPrimarySlot(
+                item.Definition.EquipmentSlot);
+            return playerState.Equipment.GetItem(slot) == null;
+        }
+
+        public bool TryEquip(
+            IVariableInventoryView sourceView,
+            InventoryItemData item,
+            out string error)
+        {
+            if (!EnsurePendingStorageRecovery("장착", out error))
+            {
+                return false;
+            }
+
+            if (!TryResolveEquipSource(sourceView, item, out IVariableInventoryViewData source, out error))
+            {
+                return false;
+            }
+
+            EquipmentSlotId slot = EquipmentSlotCatalog.GetPrimarySlot(
+                item.Definition.EquipmentSlot);
+            if (playerState.Equipment.GetItem(slot) != null)
+            {
+                error = $"{EquipmentSlotCatalog.GetDisplayName(slot)} 칸이 이미 사용 중입니다.";
+                Report($"장착 실패: {error}", true);
+                return false;
+            }
+
+            if (!TryTransferFirstFit(
+                    source,
+                    playerState.Equipment,
+                    item,
+                    out _,
+                    out error))
+            {
+                Report($"장착 실패: {error}", true);
+                return false;
+            }
+
+            Report($"장착 완료: {item.Definition.DisplayName}", false);
+            refreshViews?.Invoke();
+            error = null;
+            return true;
+        }
+
         public bool TryBeginStackSplit(
             IVariableInventoryView sourceView,
             InventoryItemData sourceItem,
@@ -1381,6 +1442,46 @@ namespace FantasySurvival.Inventory
 
             pendingStorageRecovery = null;
             refreshViews?.Invoke();
+            return true;
+        }
+
+        private bool TryResolveEquipSource(
+            IVariableInventoryView sourceView,
+            InventoryItemData item,
+            out IVariableInventoryViewData source,
+            out string error)
+        {
+            source = (sourceView as IVariableInventoryBoundView)?.ViewData;
+            if (source == null || item == null || !item.Definition.IsEquippable)
+            {
+                error = "장착 가능한 아이템이 아닙니다.";
+                return false;
+            }
+
+            if (ReferenceEquals(source, playerState.Equipment))
+            {
+                error = "이미 장착된 아이템입니다.";
+                return false;
+            }
+
+            if (!ReferenceEquals(item.InventoryOwner, source) ||
+                !source.GetId(item).HasValue)
+            {
+                error = "장착할 아이템의 원본 소유권을 확인할 수 없습니다.";
+                return false;
+            }
+
+            bool playerOwned = IsPlayerOwned(source);
+            bool storageOwned = externalMode == ExternalInventoryMode.Storage &&
+                                externalInventory != null &&
+                                IsNestedIn(externalInventory, source);
+            if (!playerOwned && !storageOwned)
+            {
+                error = "현재 소유권에서는 이 아이템을 바로 장착할 수 없습니다.";
+                return false;
+            }
+
+            error = null;
             return true;
         }
 

@@ -234,7 +234,9 @@ namespace FantasySurvival.Information
             shell.PlayerEventSystem?.SetSelectedGameObject(null);
             shell.PlayerMovement.enabled = false;
             shell.InventoryUI.SetInputBlocked(true);
-            shell.PlayerInteractor.SetInteractionBlocked(true);
+            // U owns a modal input lock, but it is informational rather than a new
+            // gameplay action. Keep any already-running timed interaction alive.
+            shell.PlayerInteractor.SetInteractionBlocked(true, false);
 
             isOpen = true;
             informationCanvas.SetActive(true);

@@ -127,6 +127,9 @@ public class InventoryUIManager : MonoBehaviour
             enabled = false;
             return;
         }
+        // StandardCore also applies this shared presentation policy to nested
+        // container popups created after initialization.
+        standardCore.SetQuantityBadgeTextProvider(GetItemQuantityBadgeText);
         playerInventoryPanel.SetActive(false);
         equipmentPanel.SetActive(false);
         externalInventoryPanel.SetActive(false);
@@ -742,6 +745,16 @@ public class InventoryUIManager : MonoBehaviour
 
         return $"{InventoryTransferCoordinator.GetCurrencyName(inventoryItem.Definition.TradeCurrency)} " +
                inventoryItem.Definition.TradePrice.ToString("N0");
+    }
+
+    private static string GetItemQuantityBadgeText(IVariableInventoryCellData item)
+    {
+        if (!(item is InventoryItemData inventoryItem) || inventoryItem.MaxStackSize <= 1)
+        {
+            return null;
+        }
+
+        return $"{inventoryItem.Quantity}/{inventoryItem.MaxStackSize}";
     }
 
     private void RefreshMerchantPresentationLabels()

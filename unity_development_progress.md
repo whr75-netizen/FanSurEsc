@@ -1347,3 +1347,18 @@ Interactable (abstract base class)
 - `[검증 도구 근본 수정]` 도시맵 검증기의 `Application.runInBackground=true`가 `ProjectSettings`를 1로 남기던 원인을 확인했다. 시작 전 값을 저장하고 성공·실패의 Play Mode 종료 전과 Edit Mode 마무리에서 복원하도록 바꿨으며, 최종 왕복 뒤 `ProjectSettings/ProjectSettings.asset`이 clean임을 확인했다.
 - `[프리팹/Console 확인]` `PersistentGameplayShell/Player`에 `PlayerInteractor`, `PlayerActionController`, `PlayerStats`가 각각 하나이고 같은 GameObject에 있으며 missing script는 0개다. 신규 Error/Exception/Assert는 0건이다. 컴포넌트 자동 보완 시 authoring 경고가 한 번 발생했지만 저장 뒤 재검사에서는 재발하지 않았다.
 - `[미검증·미정]` 실제 키보드 E 입력과 원형 UI는 이번 검증에서 확인하지 않았다. 장전·회복·먹기의 시간·자원 소비·이동·피격·사격에 따른 중단 정책은 구현하거나 확정하지 않았다.
+
+---
+
+## 38. 행동 입력 취소 계약과 시험 resource stack `[ACTION-01][ITEM-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-27]` 진행 중 행동은 WASD 같은 이동 의도, 공격과 장비 선택 입력으로 취소하고 U 정보창·I 인벤토리는 유지한다. 행동시간 자체도 같은 공용 경계에서 하나만 진행한다. 치료제·탄약·음식은 1×1 시험 아이템과 `현재/최대` 수량 표시를 만들되 실제 소비 규칙은 후속으로 둔다.
+- `[입력 경계]` 기존 `PlayerMovement`, `PlayerWeaponAttackController`, `PlayerWeaponController`가 각자 유효 입력을 판정한 뒤 같은 Player의 `PlayerActionController.CancelActive`를 호출한다. 공용 controller는 동시 행동과 취소 사유만 소유하고 이동·발사·장비 효과를 대신 실행하지 않는다. 현재 실제 장비 슬롯은 W1~W3뿐이므로 W4를 임의 추가하지 않았다.
+- `[U·I 보존]` 정보창은 새 상호작용 입력만 막되 이미 시작한 행동과 대상은 유지하는 기존 `PlayerInteractor` 경로를 사용한다. I 경로는 행동 controller를 건드리지 않는다. 거리 이탈·대상 비활성·Player 사망·일반 전환 차단·씬 전환의 안전 취소는 유지했다.
+- `[수량 권위]` 최대 stack은 공유 `ItemDefinition`, 현재 수량은 개별 `InventoryItemData`가 소유한다. grid UI는 읽기 전용 파생 표시이며 `InventoryItemSaveData`는 ordinary save, 기지·상인, 원정 Chest·시체와 Recovery에서 같은 값을 운반한다. 기존 수량 필드가 없는 record의 0은 1개로 정규화하고 현재 writer는 양수만 기록한다.
+- `[시험 데이터]` definition ID 7 치료제(초록 원), 8 총알(노랑 원), 9 음식(파랑 원)을 각각 1×1·최대 10으로 ItemDatabase와 Player 시험 시작 목록에 추가했다. 세 아이콘은 투명 배경 64×64 임시 PNG다. 최초 stack은 각각 1개다.
+- `[UI 경계]` `StandardCell`의 상인 가격 배지와 stack 수량 배지를 분리했다. 공용 `StandardCore`가 Player·외부 Chest/시체와 동적으로 여는 중첩 컨테이너 View까지 수량 공급자를 전달하므로 grid가 바뀌어도 같은 runtime 값을 읽는다.
+- `[Editor/데이터 확인]` ID 7~9 유일성, 64×64 아이콘, 1×1·최대 10, 6/10 메모리 저장 왕복, legacy 0→1 정규화, 11/10 거부, 가격·수량 prefab 참조 분리와 Player 시작 ID를 확인했다.
+- `[Play Mode 호출 확인]` 실제 persistent shell에서 세 시험 아이템 셀이 각각 `1/10`을 표시했다. 임시 상호작용 행동에 대해 U와 I 호출이 행동·현재 대상을 유지했고, W1 선택과 유효 공격 호출은 각각 `EquipmentSwitchInput`, `AttackInput` 사유로 취소했다. 임시 대상과 무기·UI 상태는 검증 뒤 복원했으며 종료 후 Console Error/Exception/Assert는 0건이었다.
+- `[코드·컴파일 확인]` 0이 아닌 이동 축이 `MovementInput` 취소 뒤 기존 이동을 계속하는 경로를 확인했고 Unity 컴파일을 통과했다.
+- `[실제 입력 미검증]` 실제 키보드 WASD·U·I·숫자키와 마우스 클릭 주입은 수행하지 않았다. 장전·회복·먹기 효과, stack 합치기·분할·소비, 무기 탄창·탄약 소비와 drag ghost의 수량 표시는 이번 범위에 포함하지 않았다.

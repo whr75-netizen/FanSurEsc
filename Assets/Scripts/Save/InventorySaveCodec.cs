@@ -396,6 +396,12 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            if (item.Quantity <= 0 || item.Quantity > definition.MaxStackSize)
+            {
+                error = $"Item ID {item.Id} has invalid runtime quantity {item.Quantity}.";
+                return false;
+            }
+
             int recordId = context.NextRecordId++;
             context.Output.Add(new InventoryItemSaveData
             {
@@ -404,7 +410,8 @@ namespace FantasySurvival.SaveSystem
                 definitionId = item.Id,
                 slotIndex = slotIndex,
                 equipmentSlot = (int)equipmentSlot,
-                isRotated = item.IsRotate
+                isRotated = item.IsRotate,
+                quantity = item.Quantity
             });
 
             if (definition.IsContainer)
@@ -485,7 +492,8 @@ namespace FantasySurvival.SaveSystem
         {
             item = null;
             ItemDefinition definition = context.Definitions[record.definitionId];
-            if (!InventoryItemDataFactory.TryCreate(definition, out item, out error))
+            if (!TryResolveSavedQuantity(record, definition, out int quantity, out error) ||
+                !InventoryItemDataFactory.TryCreate(definition, quantity, out item, out error))
             {
                 error = $"Could not create item definition ID {record.definitionId}: {error}";
                 return false;
@@ -552,6 +560,12 @@ namespace FantasySurvival.SaveSystem
                     return false;
                 }
 
+                if (!TryResolveSavedQuantity(record, definition, out _, out error))
+                {
+                    error = $"Item record {record.recordId} has invalid quantity: {error}";
+                    return false;
+                }
+
                 var slot = (EquipmentSlotId)record.equipmentSlot;
                 if (record.parentContainerRecordId == RootParentRecordId)
                 {
@@ -604,6 +618,23 @@ namespace FantasySurvival.SaveSystem
                     error = $"Item record {record.recordId} has a missing or non-container parent.";
                     return false;
                 }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool TryResolveSavedQuantity(
+            InventoryItemSaveData record,
+            ItemDefinition definition,
+            out int quantity,
+            out string error)
+        {
+            quantity = record.quantity == 0 ? 1 : record.quantity;
+            if (quantity <= 0 || quantity > definition.MaxStackSize)
+            {
+                error = $"expected 1..{definition.MaxStackSize}, found {record.quantity}.";
+                return false;
             }
 
             error = null;

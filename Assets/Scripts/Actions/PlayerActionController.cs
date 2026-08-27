@@ -10,6 +10,9 @@ namespace FantasySurvival.Actions
         SourceUnavailable,
         PlayerDied,
         SceneTravel,
+        MovementInput,
+        AttackInput,
+        EquipmentSwitchInput,
         ControllerDisabled
     }
 

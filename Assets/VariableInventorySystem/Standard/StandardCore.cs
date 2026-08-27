@@ -14,6 +14,32 @@ namespace VariableInventorySystem
         protected override RectTransform EffectCellParent => effectCellParent;
 
         protected List<IStandardCaseCellData> popupList = new List<IStandardCaseCellData>();
+        private System.Func<IVariableInventoryCellData, string> quantityBadgeTextProvider;
+
+        public void SetQuantityBadgeTextProvider(
+            System.Func<IVariableInventoryCellData, string> provider)
+        {
+            quantityBadgeTextProvider = provider;
+            foreach (IVariableInventoryView view in InventoryViews)
+            {
+                if (view is StandardStashView stashView)
+                {
+                    stashView.SetQuantityBadgeTextProvider(provider);
+                }
+            }
+        }
+
+        public override void AddInventoryView(IVariableInventoryView view)
+        {
+            if (view is StandardStashView stashView)
+            {
+                stashView.SetQuantityBadgeTextProvider(
+                    quantityBadgeTextProvider,
+                    false);
+            }
+
+            base.AddInventoryView(view);
+        }
 
         public void CloseAllCasePopups()
         {

@@ -41,6 +41,7 @@ namespace VariableInventorySystem
         Action<IVariableInventoryCell> onCellExit;
         Func<IVariableInventoryCellData, bool> itemVisibilityFilter;
         Func<IVariableInventoryCellData, string> itemBadgeTextProvider;
+        Func<IVariableInventoryCellData, string> quantityBadgeTextProvider;
         VariableInventoryDropHandling? dropPreviewHandling;
 
         public void SetCellCallback(
@@ -98,6 +99,7 @@ namespace VariableInventorySystem
                 {
                     standardCell.SetContentVisible(IsItemVisible(StashData.CellData[i]));
                     standardCell.SetBadgeText(GetItemBadgeText(StashData.CellData[i]));
+                    standardCell.SetQuantityBadgeText(GetQuantityBadgeText(StashData.CellData[i]));
                 }
             }
         }
@@ -111,6 +113,17 @@ namespace VariableInventorySystem
             Func<IVariableInventoryCellData, string> provider)
         {
             SetItemPresentation(itemVisibilityFilter, provider);
+        }
+
+        public void SetQuantityBadgeTextProvider(
+            Func<IVariableInventoryCellData, string> provider,
+            bool refreshCurrent = true)
+        {
+            quantityBadgeTextProvider = provider;
+            if (refreshCurrent && StashData != null)
+            {
+                Apply(StashData);
+            }
         }
 
         public void SetItemPresentation(
@@ -135,6 +148,13 @@ namespace VariableInventorySystem
         {
             return item != null && itemBadgeTextProvider != null
                 ? itemBadgeTextProvider(item)
+                : null;
+        }
+
+        public string GetQuantityBadgeText(IVariableInventoryCellData item)
+        {
+            return item != null && quantityBadgeTextProvider != null
+                ? quantityBadgeTextProvider(item)
                 : null;
         }
 

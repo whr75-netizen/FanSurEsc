@@ -41,6 +41,9 @@ namespace FantasySurvival.EditorTools
             TradeCurrency.Silver
         };
 
+        private static readonly int[] PlayerStartingItemIds = { 1, 2, 3, 4, 5, 7, 8, 9 };
+        private static readonly int[] MerchantStartingItemIds = { 1, 2, 3, 4, 5 };
+
         [MenuItem("Tools/Fantasy Survival/Merchant/Apply Prototype")]
         public static void ApplyAll()
         {
@@ -213,7 +216,9 @@ namespace FantasySurvival.EditorTools
                 managerSerialized.FindProperty("merchantOtherTabButton").objectReferenceValue = otherButton;
                 managerSerialized.FindProperty("merchantCatalogText").objectReferenceValue = catalogText;
                 managerSerialized.FindProperty("merchantStatusText").objectReferenceValue = statusText;
-                SetStartingItemIds(managerSerialized.FindProperty("startingItemIds"));
+                SetStartingItemIds(
+                    managerSerialized.FindProperty("startingItemIds"),
+                    PlayerStartingItemIds);
                 managerSerialized.ApplyModifiedPropertiesWithoutUndo();
 
                 controlsRoot.SetActive(false);
@@ -289,7 +294,9 @@ namespace FantasySurvival.EditorTools
                 merchantSerialized.FindProperty("itemDatabase").objectReferenceValue = itemDatabase;
                 merchantSerialized.FindProperty("inventoryWidth").intValue = 8;
                 merchantSerialized.FindProperty("inventoryHeight").intValue = 9;
-                SetStartingItemIds(merchantSerialized.FindProperty("startingItemIds"));
+                SetStartingItemIds(
+                    merchantSerialized.FindProperty("startingItemIds"),
+                    MerchantStartingItemIds);
                 merchantSerialized.ApplyModifiedPropertiesWithoutUndo();
                 EditorUtility.SetDirty(merchant);
 
@@ -564,17 +571,17 @@ namespace FantasySurvival.EditorTools
             return value;
         }
 
-        private static void SetStartingItemIds(SerializedProperty property)
+        private static void SetStartingItemIds(SerializedProperty property, int[] itemIds)
         {
-            if (property == null || !property.isArray)
+            if (property == null || !property.isArray || itemIds == null)
             {
                 throw new BuildFailedException("Starting item ID array is missing.");
             }
 
-            property.arraySize = 5;
-            for (int index = 0; index < 5; index++)
+            property.arraySize = itemIds.Length;
+            for (int index = 0; index < itemIds.Length; index++)
             {
-                property.GetArrayElementAtIndex(index).intValue = index + 1;
+                property.GetArrayElementAtIndex(index).intValue = itemIds[index];
             }
         }
 

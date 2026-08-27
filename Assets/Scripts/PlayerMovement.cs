@@ -1,5 +1,8 @@
+using FantasySurvival.Actions;
 using UnityEngine;
 
+[DisallowMultipleComponent]
+[RequireComponent(typeof(PlayerActionController))]
 public class PlayerMovement : MonoBehaviour
 {
     public const string LocomotionSpeedParameter = "LocomotionSpeed";
@@ -14,16 +17,27 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField, Min(0f)] private float turnSpeedDegreesPerSecond = 1080f;
 
     private static readonly int LocomotionSpeedHash = Animator.StringToHash(LocomotionSpeedParameter);
+    private PlayerActionController actionController;
 
     public float CurrentMoveSpeed { get; private set; }
     public bool IsRunning { get; private set; }
     public float RunSpeed => speed * runSpeedMultiplier;
+
+    private void Awake()
+    {
+        actionController = GetComponent<PlayerActionController>();
+    }
 
     void Update()
     {
         float moveX = Input.GetAxisRaw("Horizontal");
         float moveZ = Input.GetAxisRaw("Vertical");
         Vector3 inputDirection = new Vector3(moveX, 0, moveZ).normalized;
+        if (inputDirection.sqrMagnitude > 0f)
+        {
+            actionController.CancelActive(PlayerActionCancelReason.MovementInput);
+        }
+
         UpdateFacingDirection(inputDirection);
 
         bool runRequested = inputDirection.sqrMagnitude > 0f && IsRunKeyHeld();

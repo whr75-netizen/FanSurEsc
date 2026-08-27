@@ -121,5 +121,8 @@ namespace FantasySurvival.SaveSystem
         // 0 means a grid/container record. 1..14 are stable EquipmentSlotId values.
         public int equipmentSlot;
         public bool isRotated;
+        // Zero is reserved for additive compatibility with records written before
+        // stack quantities existed. InventorySaveCodec restores that legacy value as 1.
+        public int quantity;
     }
 }

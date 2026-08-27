@@ -1,8 +1,10 @@
 using System;
+using FantasySurvival.Actions;
 using FantasySurvival.Inventory;
 using UnityEngine;
 
 [DisallowMultipleComponent]
+[RequireComponent(typeof(PlayerActionController))]
 public sealed class PlayerWeaponController : MonoBehaviour
 {
     public const string UpperBodyLayerName = "Weapon Upper Body";
@@ -18,6 +20,7 @@ public sealed class PlayerWeaponController : MonoBehaviour
 
     private EquipmentLoadoutData observedLoadout;
     private int upperBodyLayerIndex = -1;
+    private PlayerActionController actionController;
 
     public event Action WeaponStateChanged;
 
@@ -27,6 +30,7 @@ public sealed class PlayerWeaponController : MonoBehaviour
 
     private void Awake()
     {
+        actionController = GetComponent<PlayerActionController>();
         activeWeaponNumber = Mathf.Clamp(
             activeWeaponNumber,
             1,
@@ -66,16 +70,27 @@ public sealed class PlayerWeaponController : MonoBehaviour
 
         if (Input.GetKeyDown(weapon1Key))
         {
-            SelectWeapon(1);
+            ProcessWeaponSelectionInput(1);
         }
         else if (Input.GetKeyDown(weapon2Key))
         {
-            SelectWeapon(2);
+            ProcessWeaponSelectionInput(2);
         }
         else if (Input.GetKeyDown(weapon3Key))
         {
-            SelectWeapon(3);
+            ProcessWeaponSelectionInput(3);
         }
+    }
+
+    public bool ProcessWeaponSelectionInput(int oneBasedNumber)
+    {
+        if (EquipmentSlotCatalog.GetWeaponSlot(oneBasedNumber) == EquipmentSlotId.None)
+        {
+            return false;
+        }
+
+        actionController.CancelActive(PlayerActionCancelReason.EquipmentSwitchInput);
+        return SelectWeapon(oneBasedNumber);
     }
 
     public bool SelectWeapon(int oneBasedNumber)

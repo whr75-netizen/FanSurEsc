@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using FantasySurvival.Actions;
 using FantasySurvival.AI;
 using FantasySurvival.Inventory;
 using UnityEngine;
@@ -7,6 +8,7 @@ using UnityEngine.EventSystems;
 namespace FantasySurvival.Combat
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(PlayerActionController))]
     public sealed class PlayerWeaponAttackController : MonoBehaviour
     {
         private const int RaycastBufferSize = 32;
@@ -24,6 +26,7 @@ namespace FantasySurvival.Combat
         private readonly Dictionary<InventoryItemData, WeaponFireCadence> weaponCadences =
             new Dictionary<InventoryItemData, WeaponFireCadence>();
         private readonly RaycastHit[] raycastHits = new RaycastHit[RaycastBufferSize];
+        private PlayerActionController actionController;
 
         public float NextAllowedFireTime
         {
@@ -40,6 +43,7 @@ namespace FantasySurvival.Combat
 
         private void Awake()
         {
+            actionController = GetComponent<PlayerActionController>();
             if (HasRequiredReferences())
             {
                 return;
@@ -82,6 +86,18 @@ namespace FantasySurvival.Combat
             {
                 return false;
             }
+
+            bool attackRequested = definition.WeaponFireMode == WeaponFireMode.Automatic
+                ? held
+                : pressedThisFrame;
+            if (!attackRequested)
+            {
+                return false;
+            }
+
+            // A valid gameplay attack input supersedes the timed action, but the
+            // weapon's own aim and cadence rules still decide whether a shot fires.
+            actionController.CancelActive(PlayerActionCancelReason.AttackInput);
 
             if (!TryGetShotDirection(screenPosition, out Vector3 shotDirection))
             {
@@ -238,7 +254,7 @@ namespace FantasySurvival.Combat
 
         private bool HasRequiredReferences()
         {
-            return weaponController != null && inventoryManager != null &&
+            return actionController != null && weaponController != null && inventoryManager != null &&
                    aimCamera != null && rayOrigin != null;
         }
     }

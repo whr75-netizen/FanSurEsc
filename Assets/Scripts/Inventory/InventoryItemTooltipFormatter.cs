@@ -43,6 +43,10 @@ namespace FantasySurvival.Inventory
             var stats = new StringBuilder(160);
             AppendStat(stats, "분류", GetCategoryName(definition));
             AppendStat(stats, "인벤토리 크기", $"{definition.Width} × {definition.Height}");
+            if (definition.MaxStackSize > 1)
+            {
+                AppendStat(stats, "최대 수량", definition.MaxStackSize.ToString());
+            }
 
             if (definition.IsEquippable)
             {
@@ -93,6 +97,21 @@ namespace FantasySurvival.Inventory
             if (definition.IsContainer)
             {
                 return "컨테이너";
+            }
+
+            if (definition.IsMedicine)
+            {
+                return "치료제";
+            }
+
+            if (definition.IsAmmunition)
+            {
+                return "탄약";
+            }
+
+            if (definition.IsFood)
+            {
+                return "음식";
             }
 
             return definition.IsEquippable ? "장비" : "일반";

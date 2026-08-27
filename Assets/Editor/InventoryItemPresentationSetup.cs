@@ -22,7 +22,7 @@ namespace FantasySurvival.EditorTools
             AssetDatabase.Refresh();
             Debug.Log(
                 "Item presentation UI configured: one shared item tooltip and " +
-                "merchant-only price badge support.");
+                "separate merchant price and stack quantity badges.");
         }
 
         internal static void ApplyPrefabAssets()
@@ -92,8 +92,50 @@ namespace FantasySurvival.EditorTools
 
                 cellSerialized.FindProperty("itemBadgeRoot").objectReferenceValue = badgeRoot;
                 cellSerialized.FindProperty("itemBadgeText").objectReferenceValue = priceText;
+
+                GameObject quantityBadgeRoot = GetOrCreateRectObject(sizeRoot, "ItemQuantityBadge");
+                RectTransform quantityBadgeRect = quantityBadgeRoot.GetComponent<RectTransform>();
+                quantityBadgeRect.anchorMin = new Vector2(1f, 1f);
+                quantityBadgeRect.anchorMax = new Vector2(1f, 1f);
+                quantityBadgeRect.pivot = new Vector2(1f, 1f);
+                quantityBadgeRect.anchoredPosition = new Vector2(-3f, -3f);
+                quantityBadgeRect.sizeDelta = new Vector2(48f, 18f);
+                quantityBadgeRect.localScale = Vector3.one;
+                quantityBadgeRect.SetAsLastSibling();
+
+                Image quantityBackground = GetOrAddComponent<Image>(quantityBadgeRoot);
+                quantityBackground.color = new Color(0.08f, 0.09f, 0.11f, 0.94f);
+                quantityBackground.raycastTarget = false;
+
+                CanvasGroup quantityCanvasGroup = GetOrAddComponent<CanvasGroup>(quantityBadgeRoot);
+                quantityCanvasGroup.alpha = 1f;
+                quantityCanvasGroup.interactable = false;
+                quantityCanvasGroup.blocksRaycasts = false;
+                quantityCanvasGroup.ignoreParentGroups = false;
+
+                GameObject quantityObject = GetOrCreateRectObject(
+                    quantityBadgeRoot.transform,
+                    "QuantityText");
+                RectTransform quantityRect = quantityObject.GetComponent<RectTransform>();
+                StretchToParent(quantityRect, new Vector2(2f, 1f), new Vector2(-2f, -1f));
+                Text quantityText = GetOrAddComponent<Text>(quantityObject);
+                quantityText.font = font;
+                quantityText.fontSize = 12;
+                quantityText.resizeTextForBestFit = true;
+                quantityText.resizeTextMinSize = 8;
+                quantityText.resizeTextMaxSize = 12;
+                quantityText.alignment = TextAnchor.MiddleCenter;
+                quantityText.color = Color.white;
+                quantityText.raycastTarget = false;
+                quantityText.text = "1/10";
+
+                cellSerialized.FindProperty("quantityBadgeRoot").objectReferenceValue =
+                    quantityBadgeRoot;
+                cellSerialized.FindProperty("quantityBadgeText").objectReferenceValue =
+                    quantityText;
                 cellSerialized.ApplyModifiedPropertiesWithoutUndo();
                 badgeRoot.SetActive(false);
+                quantityBadgeRoot.SetActive(false);
 
                 ValidateCellPrefab(root, cell);
                 PrefabUtility.SaveAsPrefabAsset(root, CellPrefabPath);
@@ -296,10 +338,24 @@ namespace FantasySurvival.EditorTools
                 throw new BuildFailedException("StandardCell price badge references are incomplete.");
             }
 
+            GameObject quantityBadgeRoot =
+                serialized.FindProperty("quantityBadgeRoot")?.objectReferenceValue as GameObject;
+            if (quantityBadgeRoot == null ||
+                serialized.FindProperty("quantityBadgeText")?.objectReferenceValue == null)
+            {
+                throw new BuildFailedException("StandardCell quantity badge references are incomplete.");
+            }
+
             CanvasGroup group = badgeRoot.GetComponent<CanvasGroup>();
             if (group == null || group.blocksRaycasts || group.interactable)
             {
                 throw new BuildFailedException("StandardCell price badge can intercept pointer input.");
+            }
+
+            CanvasGroup quantityGroup = quantityBadgeRoot.GetComponent<CanvasGroup>();
+            if (quantityGroup == null || quantityGroup.blocksRaycasts || quantityGroup.interactable)
+            {
+                throw new BuildFailedException("StandardCell quantity badge can intercept pointer input.");
             }
 
             if (CountMissingScripts(root) != 0)

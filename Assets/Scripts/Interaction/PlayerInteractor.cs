@@ -18,6 +18,7 @@ namespace FantasySurvival.Interaction
         private Collider[] nearbyColliders = new Collider[InitialNearbyColliderCapacity];
         private Interactable currentInteractable;
         private bool interactionBlocked;
+        private bool preserveCurrentInteractionWhileBlocked;
 
         public Interactable CurrentInteractable => currentInteractable;
         public bool InteractionBlocked => interactionBlocked;
@@ -50,10 +51,11 @@ namespace FantasySurvival.Interaction
             return true;
         }
 
-        public void SetInteractionBlocked(bool blocked)
+        public void SetInteractionBlocked(bool blocked, bool cancelCurrentInteraction = true)
         {
             interactionBlocked = blocked;
-            if (blocked && TryCancelCurrentInteraction())
+            preserveCurrentInteractionWhileBlocked = blocked && !cancelCurrentInteraction;
+            if (blocked && cancelCurrentInteraction && TryCancelCurrentInteraction())
             {
                 currentInteractable = null;
             }
@@ -67,6 +69,7 @@ namespace FantasySurvival.Interaction
             }
 
             interactionBlocked = false;
+            preserveCurrentInteractionWhileBlocked = false;
         }
 
         public bool IsWithinInteractionRange(Transform target)
@@ -84,6 +87,16 @@ namespace FantasySurvival.Interaction
         {
             if (interactionBlocked)
             {
+                if (preserveCurrentInteractionWhileBlocked)
+                {
+                    if (!TryKeepCurrentInteraction())
+                    {
+                        currentInteractable = null;
+                    }
+
+                    return;
+                }
+
                 if (TryCancelCurrentInteraction())
                 {
                     currentInteractable = null;

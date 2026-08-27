@@ -7,7 +7,10 @@ namespace FantasySurvival.Inventory
     public enum ItemDefinitionKind
     {
         Standard,
-        Container
+        Container,
+        Medicine,
+        Ammunition,
+        Food
     }
 
     [CreateAssetMenu(
@@ -23,6 +26,7 @@ namespace FantasySurvival.Inventory
         [SerializeField, Min(1)] private int width = 1;
         [SerializeField, Min(1)] private int height = 1;
         [SerializeField] private Texture2D icon;
+        [SerializeField, Min(1)] private int maxStackSize = 1;
 
         [Header("Equipment")]
         [SerializeField] private EquipmentSlotType equipmentSlot;
@@ -39,8 +43,9 @@ namespace FantasySurvival.Inventory
         [SerializeField, Min(0.1f)] private float weaponRange = 30f;
         [SerializeField, Min(0f)] private float weaponNoiseRadius = 18f;
 
-        [Header("Container")]
+        [Header("Item Type")]
         [SerializeField] private ItemDefinitionKind kind;
+        [Header("Container")]
         [SerializeField, Min(1)] private int containerWidth = 1;
         [SerializeField, Min(1)] private int containerHeight = 1;
 
@@ -50,6 +55,7 @@ namespace FantasySurvival.Inventory
         public int Width => width;
         public int Height => height;
         public Texture2D Icon => icon;
+        public int MaxStackSize => maxStackSize;
         public EquipmentSlotType EquipmentSlot => equipmentSlot;
         public bool IsEquippable => equipmentSlot != EquipmentSlotType.None;
         public bool IsWeapon => equipmentSlot == EquipmentSlotType.Weapon;
@@ -64,6 +70,9 @@ namespace FantasySurvival.Inventory
         public float WeaponNoiseRadius => weaponNoiseRadius;
         public ItemDefinitionKind Kind => kind;
         public bool IsContainer => kind == ItemDefinitionKind.Container;
+        public bool IsMedicine => kind == ItemDefinitionKind.Medicine;
+        public bool IsAmmunition => kind == ItemDefinitionKind.Ammunition;
+        public bool IsFood => kind == ItemDefinitionKind.Food;
         public int ContainerWidth => containerWidth;
         public int ContainerHeight => containerHeight;
 
@@ -87,6 +96,18 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            if (maxStackSize <= 0)
+            {
+                error = $"Item definition ID {id} has an invalid maximum stack size.";
+                return false;
+            }
+
+            if ((IsContainer || IsEquippable) && maxStackSize != 1)
+            {
+                error = $"Container or equipment definition ID {id} must have a maximum stack size of 1.";
+                return false;
+            }
+
             if (IsContainer && !InventoryGridConstraints.TryValidateDimensions(
                     containerWidth,
                     containerHeight,
@@ -105,6 +126,7 @@ namespace FantasySurvival.Inventory
             id = Mathf.Max(1, id);
             width = Mathf.Max(1, width);
             height = Mathf.Max(1, height);
+            maxStackSize = IsContainer || IsEquippable ? 1 : Mathf.Max(1, maxStackSize);
             containerWidth = Mathf.Max(1, containerWidth);
             containerHeight = Mathf.Max(1, containerHeight);
             roundsPerMinute = Mathf.Max(1f, roundsPerMinute);

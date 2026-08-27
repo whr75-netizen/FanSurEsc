@@ -66,9 +66,9 @@
 | `TRANSITION-01` | 검은 전환과 입력·피해 잠금 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20·21 | fade 동안 이동·공격·무기·인벤토리·상호작용·저장·피해 차단 후 복원 | 전환 잠금 소유자나 복원 순서 직접 변경 |
 | `INPUT-01` | 씬별 Escape·입력·UI 분기 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21 | Base pause, Raid non-pause 메뉴, 별도 Main Menu | 새 scene kind나 허용 규칙 추가 |
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
-| `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37 | 동시 행동 1개·진행률 소유; Chest 열기 1초, 닫기 즉시, 거리·입력·씬 전환 시 취소 | 취소 정책·UI 또는 장전·회복·먹기 연결 |
+| `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37·38 | 동시 1개; Chest 1초, 이동·공격·W1~W3 취소, U·I 유지 | 취소 정책·UI 또는 장전·회복·먹기 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
-| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·현재 장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13 | definition ID, 원자적 이동/rollback, W1 장착, 저장·왕복 보존; W2·W3는 예약 | 소유권·grid·장비·저장 형식 변경 또는 W2·W3 노출 요청 |
+| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·현재 장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38 | definition/runtime 수량 분리, 원자 이동, W1 장착·저장; W2·W3 예약 | 소유권·수량·grid·장비·저장 형식 변경 또는 W2·W3 노출 요청 |
 | `COMBAT-01` | 시험 총기 공격·피해·사망·효과음 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §16 | Player 원점 마우스 XZ Raycast, 단발/자동 RPM, 피해 35 시험값 | 사용자가 탄약·재장전·최종 조준 등 새 범위 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19 | NavMesh 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
@@ -82,7 +82,7 @@
 | `MERCHANT-01` | Player Gold/Silver와 무지갑 시험 상인 | `ACTIVE` | `USER` | `PROTOTYPE` | 진행 §26 사용자 확인·순수 거래 11경로 | 상인 자금 없음, 판매 sink, 이전 성공 뒤 정산, 실패 rollback | 가격 정책·상인 자금·정식 재고 결정 |
 | `QUEST-01` | Cube NPC의 적 1킬·생환 시험 의뢰 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §30 | 공통 E로 수락, Player 귀속 처치, committed `Extracted` 뒤 보고 가능, NPC 보고로 완료; 보상 없음·Play Session 한정 | 퀘스트 규칙·보상·저장 schema 또는 관련 상호작용·사망·정산 경계 변경 |
 | `INFO-01` | U 정보창과 실행 기록 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §31 | 캐릭터·기록·사전·의뢰·업그레이드 5탭; 기존 원본 읽기, 실행 기록만 별도 권위 소유; 업그레이드는 미구현 표시 | 정보 항목·입력·기록 저장·도감 해금·업그레이드 규칙 변경 |
-| `ITEM-UI-01` | 공용 아이템 tooltip·상인 전용 가격 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27 | 모든 아이템 tooltip, 상인 stock에만 가격 표시, 탭·닫기 정리 | 표시 필드나 UI 배치 직접 변경 |
+| `ITEM-UI-01` | 아이템 tooltip·가격·수량 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38 | 상인 가격과 stack `현재/최대` 분리; 모든 Standard grid 공용 | 표시 필드나 UI 배치 직접 변경 |
 | `PIXEL-01` | 3D 픽셀아트 시험 효과 | `DISABLED` | `PLAY` | `PROTOTYPE` | 진행 §15 | 사용자 요청으로 비활성 | 사용자가 재사용을 요청할 때만 |
 
 ## 확인된 실제 공백과 결정 대기
@@ -92,7 +92,7 @@
 | ID | 상태 | 실제 공백 | 선행조건·금지선 |
 |---|---|---|---|
 | `GAP-POI` | `ABSENT` | 접근 가능한 POI·건물 내부·랜드마크 없음 | Spawn→Portal 경로와 별도 접근 가능성 검증 |
-| `GAP-COMBAT` | `DECISION` | 탄약·재장전·반동·탄퍼짐·방어 계산 미정 | 사용자 전투 규칙 결정 뒤 진행 |
+| `GAP-COMBAT` | `DECISION` | 시험 탄약 stack만 존재; 무기 소비·탄창·재장전·반동·탄퍼짐·방어 미정 | 사용자 전투 규칙 결정 뒤 진행 |
 | `GAP-AI-TACTICS` | `DECISION` | 엄폐·도주·저격·분대 전술 미구현 | `AI-01`을 폐기하지 않고 다음 전술 단계로 확장 |
 | `GAP-LOSS` | `DECISION` | provenance 기반 선별 손실 미정 | 현재 전체 보존/전체 소실 정산을 임의 변경하지 않음 |
 | `GAP-EXTRACTION` | `DECISION` | 최종 탈출 대기 시간·피격 중단·암전 중 사망 판정 미정 | 현재 시험 포탈의 즉시 생환·피해 차단·자동 기지 정산은 임시 유지 |

@@ -28,6 +28,7 @@ namespace FantasySurvival.Inventory
     public class InventoryItemData : IVariableInventoryOwnedCellData
     {
         private readonly IVariableInventoryAsset imageAsset;
+        private readonly int quantity;
 
         public ItemDefinition Definition { get; }
         public int Id => Definition.Id;
@@ -36,8 +37,10 @@ namespace FantasySurvival.Inventory
         public bool IsRotate { get; set; }
         public IVariableInventoryAsset ImageAsset => imageAsset;
         public IVariableInventoryViewData InventoryOwner { get; private set; }
+        public int Quantity => quantity;
+        public int MaxStackSize => Definition.MaxStackSize;
 
-        public InventoryItemData(ItemDefinition definition)
+        public InventoryItemData(ItemDefinition definition, int quantity = 1)
         {
             Definition = definition != null
                 ? definition
@@ -48,6 +51,16 @@ namespace FantasySurvival.Inventory
                 throw new ArgumentException(error, nameof(definition));
             }
 
+            if (quantity <= 0 || quantity > definition.MaxStackSize)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(quantity),
+                    quantity,
+                    $"Item definition {definition.Id} requires a quantity from 1 to " +
+                    $"{definition.MaxStackSize}.");
+            }
+
+            this.quantity = quantity;
             imageAsset = new StandardAsset(definition.Icon);
         }
 
@@ -69,7 +82,8 @@ namespace FantasySurvival.Inventory
     {
         public StandardCaseViewData CaseData { get; }
 
-        public InventoryContainerItemData(ItemDefinition definition) : base(definition)
+        public InventoryContainerItemData(ItemDefinition definition, int quantity = 1)
+            : base(definition, quantity)
         {
             if (!definition.IsContainer)
             {
@@ -96,9 +110,9 @@ namespace FantasySurvival.Inventory
 
     public static class InventoryItemDataFactory
     {
-        public static IVariableInventoryCellData Create(ItemDefinition definition)
+        public static IVariableInventoryCellData Create(ItemDefinition definition, int quantity = 1)
         {
-            if (!TryCreate(definition, out IVariableInventoryCellData item, out string error))
+            if (!TryCreate(definition, quantity, out IVariableInventoryCellData item, out string error))
             {
                 throw new ArgumentException(error, nameof(definition));
             }
@@ -108,6 +122,15 @@ namespace FantasySurvival.Inventory
 
         public static bool TryCreate(
             ItemDefinition definition,
+            out IVariableInventoryCellData item,
+            out string error)
+        {
+            return TryCreate(definition, 1, out item, out error);
+        }
+
+        public static bool TryCreate(
+            ItemDefinition definition,
+            int quantity,
             out IVariableInventoryCellData item,
             out string error)
         {
@@ -126,8 +149,8 @@ namespace FantasySurvival.Inventory
             try
             {
                 item = definition.IsContainer
-                    ? new InventoryContainerItemData(definition)
-                    : new InventoryItemData(definition);
+                    ? new InventoryContainerItemData(definition, quantity)
+                    : new InventoryItemData(definition, quantity);
             }
             catch (ArgumentException exception)
             {

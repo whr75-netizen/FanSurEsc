@@ -1,4 +1,5 @@
 using System;
+using FantasySurvival.Actions;
 using FantasySurvival.Information;
 using FantasySurvival.Interaction;
 using FantasySurvival.Quests;
@@ -24,6 +25,7 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private InventoryUIManager inventoryUI;
         [SerializeField] private PlayerMovement playerMovement;
         [SerializeField] private PlayerInteractor playerInteractor;
+        [SerializeField] private PlayerActionController playerActionController;
         [SerializeField] private PlayerStats playerStats;
         [SerializeField] private RaidSession raidSession;
         [SerializeField] private RaidCheckpointController raidCheckpoint;
@@ -38,6 +40,7 @@ namespace FantasySurvival.SceneFlow
         private bool movementWasEnabled;
         private bool inventoryInputWasBlocked;
         private bool interactionWasBlocked;
+        private bool actionsWereBlocked;
         private bool damageWasBlocked;
 
         public Transform PlayerTransform => playerTransform;
@@ -46,6 +49,7 @@ namespace FantasySurvival.SceneFlow
         public InventoryUIManager InventoryUI => inventoryUI;
         public PlayerMovement PlayerMovement => playerMovement;
         public PlayerInteractor PlayerInteractor => playerInteractor;
+        public PlayerActionController PlayerActionController => playerActionController;
         public PlayerStats PlayerStats => playerStats;
         public RaidSession RaidSession => raidSession;
         public RaidCheckpointController RaidCheckpoint => raidCheckpoint;
@@ -115,6 +119,7 @@ namespace FantasySurvival.SceneFlow
             movementWasEnabled = playerMovement.enabled;
             inventoryInputWasBlocked = inventoryUI.InputBlocked;
             interactionWasBlocked = playerInteractor.InteractionBlocked;
+            actionsWereBlocked = playerActionController.ActionsBlocked;
             damageWasBlocked = playerStats.DamageBlocked;
             travelPrepared = true;
 
@@ -126,6 +131,9 @@ namespace FantasySurvival.SceneFlow
                     RestoreTravelState(true);
                     return false;
                 }
+                playerActionController.SetActionsBlocked(
+                    true,
+                    PlayerActionCancelReason.SceneTravel);
                 eventSystem.SetSelectedGameObject(null);
                 playerMovement.enabled = false;
                 inventoryUI.SetInputBlocked(true);
@@ -222,6 +230,10 @@ namespace FantasySurvival.SceneFlow
             {
                 playerInteractor.SetInteractionBlocked(interactionWasBlocked);
             }
+            if (playerActionController != null)
+            {
+                playerActionController.SetActionsBlocked(actionsWereBlocked);
+            }
             if (restorePreviousDamageBlock && playerStats != null)
             {
                 playerStats.SetDamageBlocked(damageWasBlocked);
@@ -234,7 +246,8 @@ namespace FantasySurvival.SceneFlow
         {
             return playerTransform != null && playerCamera != null && eventSystem != null &&
                    inventoryUI != null && playerMovement != null && playerInteractor != null &&
-                   playerStats != null && raidSession != null && raidSession.IsConfigured &&
+                   playerActionController != null && playerStats != null &&
+                   raidSession != null && raidSession.IsConfigured &&
                    raidCheckpoint != null && raidCheckpoint.IsConfigured &&
                    questJournal != null && questJournal.IsConfigured &&
                    questPanel != null && questPanel.IsConfigured &&

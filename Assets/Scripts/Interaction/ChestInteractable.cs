@@ -1,3 +1,4 @@
+using FantasySurvival.Actions;
 using UnityEngine;
 
 namespace FantasySurvival.Interaction
@@ -6,14 +7,19 @@ namespace FantasySurvival.Interaction
     [RequireComponent(typeof(Chest))]
     public sealed class ChestInteractable : Interactable
     {
+        private const string OpenChestActionId = "core:action:open_chest";
+
         [SerializeField] private string interactionPrompt = "Open / Close Chest";
+        [SerializeField, Min(0f)] private float openActionDurationSeconds = 1f;
 
         private Chest chest;
         private InventoryUIManager inventoryUI;
+        private PlayerActionController actionController;
 
         public override string InteractionPrompt => string.IsNullOrWhiteSpace(interactionPrompt)
             ? "Open / Close Chest"
             : interactionPrompt;
+        public float OpenActionDurationSeconds => Mathf.Max(0f, openActionDurationSeconds);
 
         private void Awake()
         {
@@ -45,17 +51,48 @@ namespace FantasySurvival.Interaction
                 return;
             }
 
-            resolvedInventoryUI.TryToggleChestInventory(chest);
+            if (resolvedInventoryUI.IsChestOpen(chest))
+            {
+                resolvedInventoryUI.TryToggleChestInventory(chest);
+                return;
+            }
+
+            PlayerActionController resolvedActionController = ResolveActionController(interactor);
+            if (resolvedActionController == null)
+            {
+                Debug.LogWarning("Chest interaction requires PlayerActionController on the player.", this);
+                return;
+            }
+
+            if (resolvedActionController.IsActionOwnedBy(this))
+            {
+                return;
+            }
+
+            resolvedActionController.TryBegin(
+                OpenChestActionId,
+                this,
+                OpenActionDurationSeconds,
+                () => CanContinueOpening(interactor),
+                () => CompleteOpen(interactor));
         }
 
         public override bool IsInteractionActive(PlayerInteractor interactor)
         {
             InventoryUIManager resolvedInventoryUI = ResolveInventoryUI(interactor);
-            return resolvedInventoryUI != null && resolvedInventoryUI.IsChestOpen(chest);
+            PlayerActionController resolvedActionController = ResolveActionController(interactor);
+            return (resolvedActionController != null && resolvedActionController.IsActionOwnedBy(this)) ||
+                   (resolvedInventoryUI != null && resolvedInventoryUI.IsChestOpen(chest));
         }
 
         public override bool TryCancelInteraction(PlayerInteractor interactor)
         {
+            PlayerActionController resolvedActionController = ResolveActionController(interactor);
+            if (resolvedActionController != null && resolvedActionController.IsActionOwnedBy(this))
+            {
+                resolvedActionController.TryCancel(this);
+            }
+
             InventoryUIManager resolvedInventoryUI = ResolveInventoryUI(interactor);
             if (resolvedInventoryUI == null || !resolvedInventoryUI.IsChestOpen(chest))
             {
@@ -63,6 +100,25 @@ namespace FantasySurvival.Interaction
             }
 
             return resolvedInventoryUI.CloseAllInventories();
+        }
+
+        private bool CanContinueOpening(PlayerInteractor interactor)
+        {
+            InventoryUIManager resolvedInventoryUI = ResolveInventoryUI(interactor);
+            return CanInteract(interactor) &&
+                   interactor.IsWithinInteractionRange(transform) &&
+                   resolvedInventoryUI != null &&
+                   !resolvedInventoryUI.IsChestOpen(chest);
+        }
+
+        private void CompleteOpen(PlayerInteractor interactor)
+        {
+            if (!CanContinueOpening(interactor))
+            {
+                return;
+            }
+
+            ResolveInventoryUI(interactor)?.TryToggleChestInventory(chest);
         }
 
         private InventoryUIManager ResolveInventoryUI(PlayerInteractor interactor)
@@ -80,6 +136,21 @@ namespace FantasySurvival.Interaction
             return inventoryUI;
         }
 
+        private PlayerActionController ResolveActionController(PlayerInteractor interactor)
+        {
+            if (interactor == null)
+            {
+                return actionController;
+            }
+
+            if (actionController == null || actionController.gameObject != interactor.gameObject)
+            {
+                actionController = interactor.GetComponent<PlayerActionController>();
+            }
+
+            return actionController;
+        }
+
         private void ResolveChest()
         {
             if (chest == null)
@@ -90,6 +161,11 @@ namespace FantasySurvival.Interaction
 
         private void OnDisable()
         {
+            if (actionController != null && actionController.IsActionOwnedBy(this))
+            {
+                actionController.TryCancel(this);
+            }
+
             if (inventoryUI != null && inventoryUI.IsChestOpen(chest))
             {
                 inventoryUI.CloseAllInventories();

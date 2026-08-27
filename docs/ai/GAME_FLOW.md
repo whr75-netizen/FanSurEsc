@@ -89,6 +89,7 @@ E 입력
   → RaidSession.BeginRaidTravel (Inactive → Entering)
   → DirectSceneTravel.TryLoad
   → PersistentGameplayShell.PrepareForTravel
+      → 진행 행동 취소 + 새 행동 차단
   → GameplaySceneTransitionFader.TryCover
   → 검은 화면이 완전히 덮인 뒤 LoadSceneAsync("GameMapTest")
 ```
@@ -133,7 +134,7 @@ GetArrivalReadiness == Ready
       └─ Resume: LootTable을 굴리지 않고 저장된 world/Player·실제 Chest grid 복원
       → 첫 live Active checkpoint 생성
   → DirectSceneTravel.CompleteArrival            (pending token 소비)
-  → PersistentGameplayShell.FinishArrival        (fade-in 뒤 이동·인벤토리·상호작용 복원)
+  → PersistentGameplayShell.FinishArrival        (fade-in 뒤 이동·인벤토리·상호작용·행동 허용 상태 복원)
   → RaidSession.CompleteSceneArrival(Raid)        (피해 차단 마지막 해제)
 ```
 
@@ -201,6 +202,7 @@ fade-in 완료                            ├─ 둘 다 참일 때만 TryFinali
 ```text
 GameplaySessionExit.TryExitToMainMenu
   → PersistentGameplayShell.PrepareForTravel
+      → 진행 행동 취소 + 새 행동 차단
   → 검은 화면 cover
   → LoadSceneAsync("MainMenuScene")
   → CompleteExit
@@ -218,3 +220,4 @@ GameplaySessionExit.TryExitToMainMenu
 3. 기지 정산은 `BasePersistenceReady`와 `BaseArrivalComplete` 뒤에만 실행한다.
 4. 최초 로딩과 gameplay 직접 전환을 섞지 않으며 `GameMap1 ↔ GameMapTest`는 같은 shell·Player를 유지한다.
 5. 정상 생환의 `Resolved`부터 `SettlementCommitted`까지 주 메뉴 종료 경로를 노출하지 않는다.
+6. `PrepareForTravel`은 진행 행동을 취소하고 새 행동을 막으며, 도착·전환 취소에서 이전 허용 상태만 복원한다.

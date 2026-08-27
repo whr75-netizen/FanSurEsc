@@ -42,6 +42,7 @@ namespace FantasySurvival.EditorTools
         private const string FailureKey = KeyPrefix + "Failure";
         private const string SuccessKey = KeyPrefix + "Success";
         private const string OriginalSceneSetupKey = KeyPrefix + "OriginalSceneSetup";
+        private const string OriginalRunInBackgroundKey = KeyPrefix + "OriginalRunInBackground";
         private const string DeadlineKey = KeyPrefix + "Deadline";
         private const string ShellIdKey = KeyPrefix + "ShellId";
         private const string PlayerIdKey = KeyPrefix + "PlayerId";
@@ -161,6 +162,7 @@ namespace FantasySurvival.EditorTools
             }
 
             ClearSessionState();
+            SessionState.SetBool(OriginalRunInBackgroundKey, PlayerSettings.runInBackground);
             SessionState.SetBool(RunningKey, true);
             SessionState.SetBool(ExitWhenDoneKey, exitWhenDone);
             SessionState.SetString(OriginalSceneSetupKey, serializedSceneSetup);
@@ -180,8 +182,7 @@ namespace FantasySurvival.EditorTools
             if (state == PlayModeStateChange.EnteredPlayMode)
             {
                 // Codex can drive this validator while the Unity window is not focused.
-                // Keep this Play session advancing without changing the serialized
-                // PlayerSettings value.
+                // FinishInEditMode restores the snapshotted PlayerSettings value.
                 Application.runInBackground = true;
                 SetPhase(PhaseDirectMapTest);
                 return;
@@ -723,6 +724,7 @@ namespace FantasySurvival.EditorTools
             SessionState.SetBool(SuccessKey, true);
             SessionState.SetString(FailureKey, string.Empty);
             SessionState.SetString(PhaseKey, PhaseExitingPlay);
+            RestoreRunInBackground();
             EditorApplication.isPlaying = false;
         }
 
@@ -740,6 +742,7 @@ namespace FantasySurvival.EditorTools
 
             if (EditorApplication.isPlaying)
             {
+                RestoreRunInBackground();
                 EditorApplication.isPlaying = false;
             }
             else
@@ -757,6 +760,18 @@ namespace FantasySurvival.EditorTools
 
             bool success = SessionState.GetBool(SuccessKey, false);
             string failure = SessionState.GetString(FailureKey, string.Empty);
+            try
+            {
+                RestoreRunInBackground();
+            }
+            catch (Exception exception)
+            {
+                success = false;
+                failure = AppendFailure(
+                    failure,
+                    $"Could not restore runInBackground after validation: {exception.Message}");
+            }
+
             Scene activeScene = SceneManager.GetActiveScene();
             if (!activeScene.IsValid() ||
                 !string.Equals(activeScene.path, GameMapTestPath, StringComparison.Ordinal))
@@ -870,6 +885,13 @@ namespace FantasySurvival.EditorTools
         private static string AppendFailure(string existing, string addition)
         {
             return string.IsNullOrEmpty(existing) ? addition : existing + " " + addition;
+        }
+
+        private static void RestoreRunInBackground()
+        {
+            bool originalValue = SessionState.GetBool(OriginalRunInBackgroundKey, false);
+            Application.runInBackground = originalValue;
+            PlayerSettings.runInBackground = originalValue;
         }
 
         private static bool HasTimedOut()
@@ -1055,6 +1077,7 @@ namespace FantasySurvival.EditorTools
             SessionState.SetString(FailureKey, string.Empty);
             SessionState.SetBool(SuccessKey, false);
             SessionState.SetString(OriginalSceneSetupKey, string.Empty);
+            SessionState.SetBool(OriginalRunInBackgroundKey, false);
             SessionState.SetString(DeadlineKey, string.Empty);
             SessionState.SetString(ShellIdKey, string.Empty);
             SessionState.SetString(PlayerIdKey, string.Empty);

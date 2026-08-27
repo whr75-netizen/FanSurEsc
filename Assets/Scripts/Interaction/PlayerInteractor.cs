@@ -1,9 +1,11 @@
 using System;
+using FantasySurvival.Actions;
 using UnityEngine;
 
 namespace FantasySurvival.Interaction
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(PlayerActionController))]
     public sealed class PlayerInteractor : MonoBehaviour
     {
         [SerializeField] private KeyCode interactionKey = KeyCode.E;

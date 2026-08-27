@@ -5,11 +5,9 @@
 
 ## 판정 규칙
 
-- 현재 구현 사실은 이번 작업에서 직접 확인한 Unity Editor·코드·씬·프리팹 → 이 인덱스 → `unity_development_progress.md`의 최신 상세 증거 → 과거 이력 순서로 판정한다.
-- 직접 확인한 사실과 이 표가 다르면 원인을 확인한다. 읽기 전용 요청에서는 차이만 보고하고, 쓰기가 허용된 구현·수정 작업에서 표를 갱신한다.
-- `ACTIVE` 기능은 재개방 조건이나 새 회귀 증거가 없으면 다시 구현하거나 다음 작업으로 제안하지 않는다.
-- 기능 변경 뒤에는 해당 행을 제자리에서 교체한다. 과거 상태와 긴 증거는 이 파일에 누적하지 않고 진행 이력에 남긴다.
-- 목록 밖의 공백을 제안하려면 먼저 현재 코드에 실제로 없다는 근거를 확인한다.
+- 판정 우선순위는 직접 확인한 Unity·코드·에셋 → 이 인덱스 → 최신 진행 증거 → 과거 이력이다. 차이가 있으면 원인을 확인하고 쓰기 허용 작업에서만 갱신한다.
+- `ACTIVE`는 재개방 조건이나 회귀가 없으면 다시 구현·제안하지 않는다. 변경 시 행을 교체하고 상세 이력은 진행 문서에 남긴다.
+- 목록 밖 공백은 현재 코드에 없음을 확인한 뒤 제안한다.
 
 ### 상태 표기
 
@@ -38,7 +36,7 @@
 | 상태 ID | 관련 계약·기획 절 |
 |---|---|
 | `BOOT-01`, `SHELL-01`, `TRAVEL-01`, `TRANSITION-01`, `INPUT-01`, `MOVE-01` | `AGENTS.md` §4, `GAME_FLOW.md` §1~3·8, 개발계획 §2.2~3.2, GDD §2~3 |
-| `INTERACT-01` | 게임플레이 계약 §4.4, GDD §3.3 |
+| `INTERACT-01`, `ACTION-01` | 게임플레이 계약 §4.4~4.5, GDD §3.3·4.6 |
 | `ITEM-01`, `BASE-01`, `MERCHANT-01`, `ITEM-UI-01` | 게임플레이 계약 §4.2·4.8·4.9, GDD §5·8~10 |
 | `COMBAT-01`, `CORPSE-01` | 게임플레이 계약 §4.5·4.7, GDD §4·6.11 |
 | `AI-01` | 게임플레이 계약 §4.6·4.10, `ai_generation_plan.md` §1~11 |
@@ -68,6 +66,7 @@
 | `TRANSITION-01` | 검은 전환과 입력·피해 잠금 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20·21 | fade 동안 이동·공격·무기·인벤토리·상호작용·저장·피해 차단 후 복원 | 전환 잠금 소유자나 복원 순서 직접 변경 |
 | `INPUT-01` | 씬별 Escape·입력·UI 분기 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21 | Base pause, Raid non-pause 메뉴, 별도 Main Menu | 새 scene kind나 허용 규칙 추가 |
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
+| `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37 | 동시 행동 1개·진행률 소유; Chest 열기 1초, 닫기 즉시, 거리·입력·씬 전환 시 취소 | 취소 정책·UI 또는 장전·회복·먹기 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·현재 장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13 | definition ID, 원자적 이동/rollback, W1 장착, 저장·왕복 보존; W2·W3는 예약 | 소유권·grid·장비·저장 형식 변경 또는 W2·W3 노출 요청 |
 | `COMBAT-01` | 시험 총기 공격·피해·사망·효과음 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §16 | Player 원점 마우스 XZ Raycast, 단발/자동 RPM, 피해 35 시험값 | 사용자가 탄약·재장전·최종 조준 등 새 범위 결정 |

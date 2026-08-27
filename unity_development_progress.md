@@ -1332,3 +1332,18 @@ Interactable (abstract base class)
 - `[재발 방지]` `MerchantPrototypeSetup`과 `QuestPrototypeSetup`이 태그와 solid Collider를 설정하고, `Obstacle + non-trigger Collider + Rigidbody 없음`을 검증하도록 고쳤다. 생성 도구를 다시 실행해도 원래 결함으로 돌아가지 않는다.
 - `[Play Mode 호출 확인]` 한 Play Session에서 두 NPC 각각에 대해 PlayerMovement와 동일한 `OverlapBox + Obstacle` 쿼리가 차단을 반환했고, `PlayerInteractor.TryInteract()`로 최근접 대상 열기·닫기를 확인했다. 실제 WASD 키를 계속 누르는 수동 접촉 검증은 실행하지 않았으므로 키 입력을 확인했다고 기록하지 않는다.
 - `[Editor 확인]` Quest authoring validator와 상인 고정 장애물 검사를 통과했고 GameMap1은 저장 뒤 clean이었다. Console 신규 Error는 0건이며 기존 Input Manager deprecation·Codex 서명 경고 2건만 남았다.
+
+---
+
+## 37. Player 공용 행동시간과 Chest 열기 연동 `[ACTION-01]`
+
+- `[사용자 요구][2026-08-27]` 장전·회복·먹기·상자 열기가 공유할 행동시간 경계를 만들고, 외부 아트가 필요한 원형 UI와 아직 없는 실제 장전·회복·먹기 기능은 제외한다.
+- `[권위 소유자]` 같은 런타임 인스턴스로 유지되는 Player의 `PlayerActionController` 하나가 동시 행동 하나, 소스·ID·경과·남은 시간·진행률을 소유한다. 호출자는 `TryBegin`의 완료·취소 콜백으로 연결하며 UI는 후속에 읽기 전용 진행률만 관찰할 수 있다. 행동 차단 상태는 현재 `PersistentGameplayShell`의 전환 경계만 쓴다.
+- `[원자 경계]` 행동 상태를 먼저 정리한 뒤 완료 콜백을 호출하므로 효과는 완료 시점에만 기존 기능 API로 적용되고 콜백 재진입도 새 행동으로 명확히 구분된다. 다른 행동이 진행 중이면 새 요청은 원본을 건드리지 않고 거부한다.
+- `[Chest 연동]` 닫힌 Chest는 시험값 1초 뒤 기존 `InventoryUIManager.TryToggleChestInventory`로 연다. 대기 중에는 같은 Chest를 활성 대상으로 유지하고 이동은 허용하되 거리 이탈·상호작용 차단·대상 비활성화·Player 사망 시 취소한다. 열린 Chest 닫기는 기존처럼 즉시 처리한다.
+- `[Play Mode 호출 확인]` 한 Play Session에서 0.75초 시험 행동의 즉시 UI 미개방, 중복 E 무재시작, 병렬 행동 거부, 완료 뒤 열림과 즉시 닫힘을 확인했다. 이어 5초 행동에서 거리 이탈 취소와 상호작용 차단 취소를 각각 확인했으며 UI는 열리지 않고 controller는 유휴 상태로 돌아왔다.
+- `[전환 경계 확인]` 30초 행동 중 `PrepareForTravel`을 호출하자 완료 효과 없이 `SceneTravel` 사유로 취소됐다. 차단 상태를 먼저 확정하므로 취소 콜백의 재시작과 전환 중 외부 시작 요청이 모두 거부됐고, 전환 취소·fade 복원 뒤에는 새 행동이 다시 허용됐다.
+- `[Play Mode 확인]` 기존 도시맵 검증기로 `GameMapTest` 직접 시작과 `GameMapTest → GameMap1 → GameMapTest → GameMap1` 1회 왕복을 통과했다. Shell·Player·Camera·Inventory·EventSystem 동일성, Spawn, NavMesh와 런타임 Error 0건을 확인했다.
+- `[검증 도구 근본 수정]` 도시맵 검증기의 `Application.runInBackground=true`가 `ProjectSettings`를 1로 남기던 원인을 확인했다. 시작 전 값을 저장하고 성공·실패의 Play Mode 종료 전과 Edit Mode 마무리에서 복원하도록 바꿨으며, 최종 왕복 뒤 `ProjectSettings/ProjectSettings.asset`이 clean임을 확인했다.
+- `[프리팹/Console 확인]` `PersistentGameplayShell/Player`에 `PlayerInteractor`, `PlayerActionController`, `PlayerStats`가 각각 하나이고 같은 GameObject에 있으며 missing script는 0개다. 신규 Error/Exception/Assert는 0건이다. 컴포넌트 자동 보완 시 authoring 경고가 한 번 발생했지만 저장 뒤 재검사에서는 재발하지 않았다.
+- `[미검증·미정]` 실제 키보드 E 입력과 원형 UI는 이번 검증에서 확인하지 않았다. 장전·회복·먹기의 시간·자원 소비·이동·피격·사격에 따른 중단 정책은 구현하거나 확정하지 않았다.

@@ -15,11 +15,13 @@ public class InventoryUIManager : MonoBehaviour
 {
     public const int DefaultInventoryWidth = 8;
     public const int DefaultInventoryHeight = 9;
+    public const int DefaultStartingStackQuantity = 5;
 
     #region 필드 정의
     [Header("Core Component")] [SerializeField] private StandardCore standardCore;
     [Header("Item Database")] [SerializeField] private ItemDatabase itemDatabase;
     [SerializeField] private int[] startingItemIds = { 1, 2, 3, 4, 5 };
+    [SerializeField, Min(1)] private int startingStackQuantity = DefaultStartingStackQuantity;
     [Header("Player Inventory UI")] [SerializeField] private GameObject playerInventoryPanel;
     [SerializeField] private StandardStashView playerStashView;
     [SerializeField] private Text goldAmountText;
@@ -212,7 +214,10 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
-        if (!InventoryItemDataFactory.TryCreate(definition, out var item, out error))
+        int quantity = definition.MaxStackSize > 1
+            ? Mathf.Min(startingStackQuantity, definition.MaxStackSize)
+            : 1;
+        if (!InventoryItemDataFactory.TryCreate(definition, quantity, out var item, out error))
         {
             error = $"Starting item ID {itemId} is invalid: {error}";
             return false;
@@ -226,7 +231,8 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         target.InsertInventoryItem(slot.Value, item);
-        Debug.Log($" - Added {definition.DisplayName} (ID {itemId}): Slot {slot.Value}");
+        Debug.Log(
+            $" - Added {definition.DisplayName} (ID {itemId}) x{quantity}: Slot {slot.Value}");
         error = null;
         return true;
     }

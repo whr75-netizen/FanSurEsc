@@ -3,6 +3,12 @@ using UnityEngine;
 
 namespace FantasySurvival.Interaction
 {
+    public enum ChestOpenMode
+    {
+        Immediate = 0,
+        TimedSearch = 1
+    }
+
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Chest))]
     public sealed class ChestInteractable : Interactable
@@ -10,7 +16,8 @@ namespace FantasySurvival.Interaction
         private const string OpenChestActionId = "core:action:open_chest";
 
         [SerializeField] private string interactionPrompt = "Open / Close Chest";
-        [SerializeField, Min(0f)] private float openActionDurationSeconds = 1f;
+        [SerializeField] private ChestOpenMode openMode = ChestOpenMode.Immediate;
+        [SerializeField, Min(0.01f)] private float openActionDurationSeconds = 1f;
 
         private Chest chest;
         private InventoryUIManager inventoryUI;
@@ -19,6 +26,8 @@ namespace FantasySurvival.Interaction
         public override string InteractionPrompt => string.IsNullOrWhiteSpace(interactionPrompt)
             ? "Open / Close Chest"
             : interactionPrompt;
+        public ChestOpenMode OpenMode => openMode;
+        public bool UsesTimedSearch => openMode == ChestOpenMode.TimedSearch;
         public float OpenActionDurationSeconds => Mathf.Max(0f, openActionDurationSeconds);
 
         private void Awake()
@@ -52,6 +61,12 @@ namespace FantasySurvival.Interaction
             }
 
             if (resolvedInventoryUI.IsChestOpen(chest))
+            {
+                resolvedInventoryUI.TryToggleChestInventory(chest);
+                return;
+            }
+
+            if (!UsesTimedSearch)
             {
                 resolvedInventoryUI.TryToggleChestInventory(chest);
                 return;
@@ -157,6 +172,27 @@ namespace FantasySurvival.Interaction
             {
                 chest = GetComponent<Chest>();
             }
+        }
+
+        public bool TryValidateOpenConfiguration(out string error)
+        {
+            if (openMode != ChestOpenMode.Immediate && openMode != ChestOpenMode.TimedSearch)
+            {
+                error = $"Unsupported chest open mode value {(int)openMode}.";
+                return false;
+            }
+
+            if (UsesTimedSearch &&
+                (float.IsNaN(openActionDurationSeconds) ||
+                 float.IsInfinity(openActionDurationSeconds) ||
+                 openActionDurationSeconds <= 0f))
+            {
+                error = "Timed chest search requires a positive action duration.";
+                return false;
+            }
+
+            error = null;
+            return true;
         }
 
         private void OnDisable()

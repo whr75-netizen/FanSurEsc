@@ -1362,3 +1362,14 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` 실제 persistent shell에서 세 시험 아이템 셀이 각각 `1/10`을 표시했다. 임시 상호작용 행동에 대해 U와 I 호출이 행동·현재 대상을 유지했고, W1 선택과 유효 공격 호출은 각각 `EquipmentSwitchInput`, `AttackInput` 사유로 취소했다. 임시 대상과 무기·UI 상태는 검증 뒤 복원했으며 종료 후 Console Error/Exception/Assert는 0건이었다.
 - `[코드·컴파일 확인]` 0이 아닌 이동 축이 `MovementInput` 취소 뒤 기존 이동을 계속하는 경로를 확인했고 Unity 컴파일을 통과했다.
 - `[실제 입력 미검증]` 실제 키보드 WASD·U·I·숫자키와 마우스 클릭 주입은 수행하지 않았다. 장전·회복·먹기 효과, stack 합치기·분할·소비, 무기 탄창·탄약 소비와 drag ghost의 수량 표시는 이번 범위에 포함하지 않았다.
+
+---
+
+## 39. 기지·원정 Loot 행동시간 정책 분리 `[ACTION-01][INTERACT-01]`
+
+- `[사용자 요구][2026-08-27]` 상자라는 이유만으로 모두 행동시간을 사용하지 않는다. I 개인 인벤토리와 기지 창고는 즉시 열고, 현재는 야외 원정 파밍 Chest·시체에만 조사 시간을 적용한다.
+- `[구조 결정]` 오브젝트 태그를 행동 권위로 쓰거나 런타임 `AddComponent`로 스크립트를 보완하지 않았다. 기존 `ChestInteractable`에 직렬화된 `Immediate`·`TimedSearch` 정책을 두고 안전한 기본값을 `Immediate`로 정했다. 서로 다른 용도는 prefab variant 또는 scene instance override로 authoring할 수 있다.
+- `[현재 authoring]` 공유 근접·원거리 Enemy 프리팹은 기지 시험 개체에도 쓰이므로 `Immediate`를 유지했다. `GameMapTest`의 시험 원정 Chest와 두 Enemy 시체 인스턴스만 `TimedSearch(1초)` override를 가진다. 도시맵 구성 도구도 같은 세 대상을 설정·검증한다.
+- `[보존]` `PlayerInteractor`의 최근접 선택·열린 대상 유지·거리 이탈 종료, `InventoryUIManager`의 같은 Chest UI 경계, 공용 `PlayerActionController`와 기존 이동·공격·장비 전환 취소 규칙을 그대로 재사용했다. 열린 대상의 닫기는 즉시다.
+- `[Play Mode 호출 확인]` I 개인 인벤토리와 `GameMap1` 기지 Chest는 행동 없이 같은 호출에서 열고 닫혔다. `GameMapTest` 시험 Chest는 즉시 열리지 않고 1초 행동을 소유했으며, 기존 controller 완료 경로 호출 뒤 열리고 다시 즉시 닫혔다. MCP 명령 중 Editor 프레임이 진행되지 않아 실제 1초 경과는 반복 측정하지 않았고, 시간 경과 자체는 변경되지 않은 §37 증거를 재사용한다.
+- `[컴파일·Console 확인]` 변경 뒤 Unity 동적 검증 코드와 프로젝트 참조가 컴파일됐고 최종 Console Error/Exception은 0건이었다. 실제 E·I 키 입력 주입과 최종 진행 UI는 확인하지 않았다.

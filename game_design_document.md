@@ -504,7 +504,9 @@
 
 | 종류 | 현재 동작 | 이동 정책 |
 |---|---|---|
-| Chest·시체 | 1초 열기 뒤 Player·장비·외부 인벤토리 UI | 열기 중 이동 의도·유효 공격·W1~W3 선택·거리 이탈 시 취소, U·I는 유지; 열린 뒤 이동 가능하되 이탈 시 자동 닫힘, 닫기는 즉시 |
+| 개인 인벤토리 | I 입력 즉시 Player·장비 UI | 행동시간 없음; 기존 Player 이동·UI 입력 정책 유지 |
+| 기지 Chest | 즉시 Player·장비·외부 인벤토리 UI | 행동시간 없음; 열린 뒤 이동 가능하되 거리 이탈 시 자동 닫힘, 닫기는 즉시 |
+| 원정 Chest·시체 | 1초 조사 뒤 Player·장비·외부 인벤토리 UI | 조사 중 이동 의도·유효 공격·W1~W3 선택·거리 이탈 시 취소, U·I는 유지; 열린 뒤 이동 가능하되 이탈 시 자동 닫힘, 닫기는 즉시 |
 | 시험 의뢰 NPC | 수락·진행 확인·완료 보고 패널 | 이동 허용, 열린 동안 해당 NPC 유지, 거리 이탈 시 자동 닫힘 |
 | 맵 터미널 | 맵 선택 overlay | modal, Player 이동 잠금 |
 | 귀환 포탈 | 생환 결과 확정 | terminal 결과 UI와 입력 잠금 |
@@ -522,6 +524,7 @@
 
 - 영속 Player의 단일 소유자가 동시에 하나의 행동, 경과 시간과 진행률을 관리한다.
 - 실제 결과와 자원 소비는 행동 완료 시점에만 각 기능의 기존 권위 소유자 API로 적용한다.
+- 행동시간 적용 여부는 태그나 런타임 컴포넌트 추가로 추론하지 않고 각 `ChestInteractable`의 직렬화 정책으로 authoring한다. 기본은 즉시이며 현재 원정 파밍 Chest·시체만 `TimedSearch`를 명시한다.
 - 씬 전환이 시작되면 진행 행동을 취소하고 도착 또는 전환 취소로 기존 입력 상태를 복원할 때까지 새 행동을 막는다.
 - 0이 아닌 이동 의도, 실제로 성립하는 공격 입력과 W1~W3 장비 선택 입력은 현재 행동을 취소한 뒤 해당 명령을 계속 수행한다. 같은 슬롯을 다시 누른 경우도 장비 선택 행동으로 본다.
 - U 정보창과 I 인벤토리는 진행 행동을 취소하지 않는다. 정보창이 상호작용 입력을 막는 동안에도 이미 시작한 행동과 대상은 유지한다.
@@ -2169,9 +2172,9 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 |---|---|---|---|---|
 | Map Terminal | 기지 | Map Selection modal | scene-local 표시, 별도 상태 저장 없음 | 원정 선택·시작 |
 | Return Portal | 원정 | 지속 UI 없음, 즉시 상호작용 | scene/layout 구성, 별도 개체 상태 저장 없음 | `Extracted` |
-| Base Chest | 기지 | 지속 인벤토리 UI, Player 이동 허용 | Base 상태; ordinary와 원정 Recovery에 포함 | 기지 안전 보관 |
-| Raid Chest | 원정 | 지속 인벤토리 UI, Player 이동 허용 | Raid/Scene; 진행 중 Recovery에만 포함 | 원정 Loot 이전 |
-| Corpse | 원정 | 사망 뒤에만 지속 인벤토리 UI | Enemy/Scene; 진행 중 Recovery에만 포함 | 시체 Loot 이전 |
+| Base Chest | 기지 | 즉시 지속 인벤토리 UI, Player 이동 허용 | Base 상태; ordinary와 원정 Recovery에 포함 | 기지 안전 보관 |
+| Raid Chest | 원정 | 1초 조사 뒤 지속 인벤토리 UI, Player 이동 허용 | Raid/Scene; 진행 중 Recovery에만 포함 | 원정 Loot 이전 |
+| Corpse | 원정 | 사망 뒤 1초 조사로 지속 인벤토리 UI | Enemy/Scene; 진행 중 Recovery에만 포함 | 시체 Loot 이전 |
 | Prototype Quest NPC | 기지 | 지속 의뢰 패널, Player 이동 허용 | NPC View는 Base/Scene, 진행도는 Play Session 메모리만 사용 | 수락·완료 보고 |
 
 ### 12.3 첫 완성형 플레이 조각 `[설계 제안]`

@@ -320,6 +320,7 @@ MonoBehaviour:
   chestHeight: 4
   itemDatabase: {fileID: 11400000, guid: d38ab357628cdf24c9542351dd577b53, type: 2}
   startingItemIds: 02000000
+  lootTable: {fileID: 0}
 --- !u!114 &7027692000010711127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +334,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Interaction.ChestInteractable
   interactionPrompt: Loot Corpse
+  openMode: 0
+  openActionDurationSeconds: 1
 --- !u!114 &6125132339802673199
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -502,6 +502,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Interaction.ChestInteractable
   interactionPrompt: Open / Close Chest
+  openMode: 1
+  openActionDurationSeconds: 1
 --- !u!114 &656353461
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -733,6 +735,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7027692000010711127, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
+      propertyPath: openMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8495865292714740978, guid: eaae6cecda5993b4ea797dbe4128f480, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6
@@ -1053,6 +1059,10 @@ PrefabInstance:
       propertyPath: definition
       value: 
       objectReference: {fileID: 11400000, guid: 1c13bf6edc8e4c24581e98b707417776, type: 2}
+    - target: {fileID: 1838099187199406256, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+      propertyPath: openMode
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5574875849931597612, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

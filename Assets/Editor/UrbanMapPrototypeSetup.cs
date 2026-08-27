@@ -36,6 +36,7 @@ namespace FantasySurvival.EditorTools
         private const string RaidChestStableId = "core:gamemaptest/test_loot_chest";
         private const string MeleeEnemyStableId = "core:gamemaptest/melee_enemy_01";
         private const string RangedEnemyStableId = "core:gamemaptest/ranged_enemy_01";
+        private const float PrototypeLootSearchDurationSeconds = 1f;
 
         [MenuItem("Tools/Fantasy Survival/Urban Map/Configure GameMapTest")]
         public static void ConfigureGameMapTest()
@@ -79,6 +80,9 @@ namespace FantasySurvival.EditorTools
                 AssignEnemyDefinition(meleeStats, testMeleeDefinition);
                 ConfigureRaidLootChest(raidChest, raidChestLoot);
                 ConfigureRaidLootChest(meleeCorpseInventory, meleeCorpseLoot);
+                ConfigureTimedLootInteraction(raidChest);
+                ConfigureTimedLootInteraction(meleeCorpseInventory);
+                ConfigureTimedLootInteraction(rangedCorpseInventory);
 
                 GameObject generatorObject = FindRootByName(scene, GeneratorObjectName);
                 if (generatorObject == null)
@@ -621,6 +625,38 @@ namespace FantasySurvival.EditorTools
             EditorUtility.SetDirty(chest);
         }
 
+        private static void ConfigureTimedLootInteraction(Chest chest)
+        {
+            ChestInteractable interactable = chest != null
+                ? chest.GetComponent<ChestInteractable>()
+                : null;
+            if (interactable == null)
+            {
+                throw new BuildFailedException(
+                    $"Raid loot Chest '{chest?.name ?? "<missing>"}' has no ChestInteractable.");
+            }
+
+            Undo.RecordObject(interactable, "Configure Timed Raid Loot Interaction");
+            var serialized = new SerializedObject(interactable);
+            SerializedProperty openMode = serialized.FindProperty("openMode");
+            SerializedProperty duration = serialized.FindProperty("openActionDurationSeconds");
+            if (openMode == null || duration == null)
+            {
+                throw new BuildFailedException(
+                    "ChestInteractable timed-search serialized fields are missing.");
+            }
+
+            openMode.intValue = (int)ChestOpenMode.TimedSearch;
+            duration.floatValue = PrototypeLootSearchDurationSeconds;
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            if (PrefabUtility.IsPartOfPrefabInstance(interactable))
+            {
+                PrefabUtility.RecordPrefabInstancePropertyModifications(interactable);
+            }
+
+            EditorUtility.SetDirty(interactable);
+        }
+
         private static void ConfigureRaidSceneBinding(
             RaidCheckpointSceneBinding binding,
             ProceduralUrbanMapGenerator generator,
@@ -916,6 +952,15 @@ namespace FantasySurvival.EditorTools
                     "GameMapTest prototype Chest or corpse inventory has conflicting loot sources.");
             }
 
+            if (!HasExpectedTimedLootInteraction(raidChest) ||
+                !HasExpectedTimedLootInteraction(corpseChest) ||
+                !HasExpectedTimedLootInteraction(rangedCorpseChest))
+            {
+                throw new BuildFailedException(
+                    "GameMapTest raid Chest and corpse inventories must use the explicit " +
+                    "prototype timed-search policy.");
+            }
+
             RaidCheckpointSceneBinding[] raidBindings =
                 FindComponentsInScene<RaidCheckpointSceneBinding>(scene);
             if (raidBindings.Length != 1 || !raidBindings[0].IsConfigured)
@@ -967,6 +1012,18 @@ namespace FantasySurvival.EditorTools
             var serialized = new SerializedObject(chest);
             SerializedProperty startingItems = serialized.FindProperty("startingItemIds");
             return startingItems == null || startingItems.arraySize != 0;
+        }
+
+        private static bool HasExpectedTimedLootInteraction(Chest chest)
+        {
+            ChestInteractable interactable = chest != null
+                ? chest.GetComponent<ChestInteractable>()
+                : null;
+            return interactable != null && interactable.UsesTimedSearch &&
+                   Mathf.Approximately(
+                       interactable.OpenActionDurationSeconds,
+                       PrototypeLootSearchDurationSeconds) &&
+                   interactable.TryValidateOpenConfiguration(out _);
         }
 
         private static bool HasChestBinding(

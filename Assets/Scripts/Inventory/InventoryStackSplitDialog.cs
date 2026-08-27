@@ -12,6 +12,7 @@ namespace FantasySurvival.Inventory
         [Header("Context Menu")]
         [SerializeField] private RectTransform contextPanel;
         [SerializeField] private Text contextItemText;
+        [SerializeField] private Button useActionButton;
         [SerializeField] private Button splitActionButton;
         [SerializeField] private Button contextCancelButton;
         [Header("Quantity Entry")]
@@ -24,6 +25,7 @@ namespace FantasySurvival.Inventory
         [SerializeField] private Button cancelButton;
 
         private Func<int, string> confirmSplit;
+        private Action useAction;
         private int maximumSplitQuantity;
 
         public bool IsOpen => gameObject.activeSelf;
@@ -32,6 +34,7 @@ namespace FantasySurvival.Inventory
 
         private void Awake()
         {
+            useActionButton.onClick.AddListener(UseSelectedItem);
             splitActionButton.onClick.AddListener(ShowQuantityEntry);
             contextCancelButton.onClick.AddListener(Close);
             confirmButton.onClick.AddListener(Confirm);
@@ -42,6 +45,11 @@ namespace FantasySurvival.Inventory
 
         private void OnDestroy()
         {
+            if (useActionButton != null)
+            {
+                useActionButton.onClick.RemoveListener(UseSelectedItem);
+            }
+
             if (splitActionButton != null)
             {
                 splitActionButton.onClick.RemoveListener(ShowQuantityEntry);
@@ -65,23 +73,28 @@ namespace FantasySurvival.Inventory
 
         private void OnDisable()
         {
+            useAction = null;
             confirmSplit = null;
             maximumSplitQuantity = 0;
         }
 
         public void OpenContext(
             string itemDisplayName,
+            Action onUse,
             int maxSplitQuantity,
             Vector2 screenPosition,
             Func<int, string> onConfirm)
         {
-            if (maxSplitQuantity < 1 || onConfirm == null)
+            bool canUse = onUse != null;
+            bool canSplit = maxSplitQuantity >= 1 && onConfirm != null;
+            if (!canUse && !canSplit)
             {
                 return;
             }
 
-            maximumSplitQuantity = maxSplitQuantity;
-            confirmSplit = onConfirm;
+            useAction = canUse ? onUse : null;
+            maximumSplitQuantity = canSplit ? maxSplitQuantity : 0;
+            confirmSplit = canSplit ? onConfirm : null;
             gameObject.SetActive(true);
 
             contextItemText.text = string.IsNullOrWhiteSpace(itemDisplayName)
@@ -89,12 +102,16 @@ namespace FantasySurvival.Inventory
                 : itemDisplayName;
             contextPanel.gameObject.SetActive(true);
             quantityPanel.gameObject.SetActive(false);
+            useActionButton.gameObject.SetActive(canUse);
+            splitActionButton.gameObject.SetActive(canSplit);
+            LayoutContextActions(canUse, canSplit);
             errorText.text = string.Empty;
             PositionContextPanel(screenPosition);
         }
 
         public void Close()
         {
+            useAction = null;
             confirmSplit = null;
             maximumSplitQuantity = 0;
             if (contextPanel != null)
@@ -116,7 +133,8 @@ namespace FantasySurvival.Inventory
         public bool TryValidateReferences(out string error)
         {
             if (rootCanvas == null || contextPanel == null || contextItemText == null ||
-                splitActionButton == null || contextCancelButton == null ||
+                useActionButton == null || splitActionButton == null ||
+                contextCancelButton == null ||
                 quantityPanel == null || titleText == null || rangeText == null ||
                 errorText == null || quantityInput == null || confirmButton == null ||
                 cancelButton == null)
@@ -127,6 +145,37 @@ namespace FantasySurvival.Inventory
 
             error = null;
             return true;
+        }
+
+        private void UseSelectedItem()
+        {
+            Action selectedAction = useAction;
+            Close();
+            selectedAction?.Invoke();
+        }
+
+        private void LayoutContextActions(bool canUse, bool canSplit)
+        {
+            float y = -42f;
+            if (canUse)
+            {
+                useActionButton.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector2(10f, y);
+                y -= 40f;
+            }
+
+            if (canSplit)
+            {
+                splitActionButton.GetComponent<RectTransform>().anchoredPosition =
+                    new Vector2(10f, y);
+                y -= 40f;
+            }
+
+            contextCancelButton.GetComponent<RectTransform>().anchoredPosition =
+                new Vector2(10f, y);
+            contextPanel.sizeDelta = new Vector2(
+                contextPanel.sizeDelta.x,
+                canUse && canSplit ? 166f : 126f);
         }
 
         private void ShowQuantityEntry()

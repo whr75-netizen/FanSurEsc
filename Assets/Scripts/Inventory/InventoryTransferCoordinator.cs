@@ -24,8 +24,10 @@ namespace FantasySurvival.Inventory
 
         private readonly InventoryItemData sourceItem;
         private readonly IVariableInventoryViewData sourceOwner;
-        private readonly int originalQuantity;
-        private readonly int remainingQuantity;
+        private readonly int initialSplitQuantity;
+        private int expectedSourceQuantity;
+        private int outstandingQuantity;
+        private int committedMergeQuantity;
         private TransactionState state;
 
         internal InventoryStackSplitTransaction(
@@ -38,8 +40,9 @@ namespace FantasySurvival.Inventory
             this.sourceItem = sourceItem;
             this.sourceOwner = sourceOwner;
             SplitItem = splitItem;
-            this.originalQuantity = originalQuantity;
-            this.remainingQuantity = remainingQuantity;
+            initialSplitQuantity = originalQuantity - remainingQuantity;
+            expectedSourceQuantity = remainingQuantity;
+            outstandingQuantity = initialSplitQuantity;
         }
 
         public InventoryItemData SplitItem { get; }
@@ -60,7 +63,7 @@ namespace FantasySurvival.Inventory
 
             if (sourceOwner == null ||
                 !ReferenceEquals(sourceItem.InventoryOwner, sourceOwner) ||
-                sourceItem.Quantity != remainingQuantity ||
+                sourceItem.Quantity != expectedSourceQuantity ||
                 !sourceOwner.GetId(sourceItem).HasValue)
             {
                 error = "The source stack changed before the split could be committed.";
@@ -80,6 +83,68 @@ namespace FantasySurvival.Inventory
             return true;
         }
 
+        public bool TryRecordStackMerge(
+            InventoryItemData targetItem,
+            int movedQuantity,
+            int remainingCarriedQuantity,
+            out string error)
+        {
+            if (state != TransactionState.Pending)
+            {
+                error = "The stack split is no longer pending.";
+                return false;
+            }
+
+            if (targetItem == null || movedQuantity <= 0 || remainingCarriedQuantity < 0 ||
+                movedQuantity + remainingCarriedQuantity != outstandingQuantity ||
+                SplitItem == null || SplitItem.InventoryOwner != null)
+            {
+                error = "The stack merge does not match the outstanding split quantity.";
+                return false;
+            }
+
+            int expectedDetachedQuantity = remainingCarriedQuantity > 0
+                ? remainingCarriedQuantity
+                : outstandingQuantity;
+            if (SplitItem.Quantity != expectedDetachedQuantity)
+            {
+                error = "The detached split quantity changed during stack merge.";
+                return false;
+            }
+
+            int sourceQuantityAfterMerge = expectedSourceQuantity +
+                                           (ReferenceEquals(targetItem, sourceItem)
+                                               ? movedQuantity
+                                               : 0);
+            if (sourceOwner == null ||
+                !ReferenceEquals(sourceItem.InventoryOwner, sourceOwner) ||
+                sourceItem.Quantity != sourceQuantityAfterMerge ||
+                !sourceOwner.GetId(sourceItem).HasValue)
+            {
+                error = "The source stack changed during stack merge.";
+                return false;
+            }
+
+            int mergedQuantityAfter = committedMergeQuantity + movedQuantity;
+            if (mergedQuantityAfter > initialSplitQuantity)
+            {
+                error = "The merged quantity exceeded the original split quantity.";
+                return false;
+            }
+
+            expectedSourceQuantity = sourceQuantityAfterMerge;
+            committedMergeQuantity = mergedQuantityAfter;
+            outstandingQuantity = remainingCarriedQuantity;
+
+            if (outstandingQuantity == 0)
+            {
+                state = TransactionState.Committed;
+            }
+
+            error = null;
+            return true;
+        }
+
         public bool TryRollback(out string error)
         {
             if (state == TransactionState.RolledBack)
@@ -94,16 +159,18 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            if (SplitItem == null || SplitItem.InventoryOwner != null)
+            if (SplitItem == null || SplitItem.InventoryOwner != null ||
+                SplitItem.Quantity != outstandingQuantity)
             {
                 error = "The split stack is no longer detached from an inventory.";
                 return false;
             }
 
+            int restoredQuantity = expectedSourceQuantity + outstandingQuantity;
             if (!sourceItem.TryChangeQuantity(
                     sourceOwner,
-                    remainingQuantity,
-                    originalQuantity,
+                    expectedSourceQuantity,
+                    restoredQuantity,
                     out error))
             {
                 return false;
@@ -134,6 +201,115 @@ namespace FantasySurvival.Inventory
             public IVariableInventoryCellData Item;
             public int SourceIndex;
             public int DestinationIndex;
+        }
+
+        private sealed class StackMergeReceipt : IVariableInventoryStackMergeReceipt
+        {
+            private readonly InventoryItemData targetItem;
+            private readonly IVariableInventoryViewData targetOwner;
+            private readonly InventoryItemData carriedItem;
+            private readonly int targetQuantityBefore;
+            private readonly int targetQuantityAfter;
+            private readonly int carriedQuantityBefore;
+            private readonly int carriedQuantityAfter;
+            private readonly bool carriedQuantityChanged;
+            private readonly bool requireCarriedOriginalState;
+            private bool targetRolledBack;
+            private bool carriedRolledBack;
+            private bool rolledBack;
+
+            public StackMergeReceipt(
+                InventoryItemData targetItem,
+                IVariableInventoryViewData targetOwner,
+                InventoryItemData carriedItem,
+                int targetQuantityBefore,
+                int targetQuantityAfter,
+                int carriedQuantityBefore,
+                int carriedQuantityAfter,
+                bool carriedQuantityChanged,
+                bool targetAlreadyRolledBack = false,
+                bool requireCarriedOriginalState = false)
+            {
+                this.targetItem = targetItem;
+                this.targetOwner = targetOwner;
+                this.carriedItem = carriedItem;
+                this.targetQuantityBefore = targetQuantityBefore;
+                this.targetQuantityAfter = targetQuantityAfter;
+                this.carriedQuantityBefore = carriedQuantityBefore;
+                this.carriedQuantityAfter = carriedQuantityAfter;
+                this.carriedQuantityChanged = carriedQuantityChanged;
+                this.requireCarriedOriginalState = requireCarriedOriginalState;
+                targetRolledBack = targetAlreadyRolledBack;
+            }
+
+            public IVariableInventoryCellData TargetItem => targetItem;
+            public int MovedQuantity => targetQuantityAfter - targetQuantityBefore;
+            public int RemainingQuantity => carriedQuantityAfter;
+
+            public bool TryRollback(out string error)
+            {
+                if (rolledBack)
+                {
+                    error = null;
+                    return true;
+                }
+
+                if (!targetRolledBack)
+                {
+                    if (targetItem.Quantity == targetQuantityBefore &&
+                        ReferenceEquals(targetItem.InventoryOwner, targetOwner))
+                    {
+                        targetRolledBack = true;
+                    }
+                    else if (!targetItem.TryChangeQuantity(
+                                 targetOwner,
+                                 targetQuantityAfter,
+                                 targetQuantityBefore,
+                                 out error))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        targetRolledBack = true;
+                    }
+                }
+
+                if (carriedQuantityChanged && !carriedRolledBack)
+                {
+                    if (carriedItem.Quantity == carriedQuantityBefore &&
+                        carriedItem.InventoryOwner == null)
+                    {
+                        carriedRolledBack = true;
+                    }
+                    else if (!carriedItem.TryChangeQuantity(
+                                 null,
+                                 carriedQuantityAfter,
+                                 carriedQuantityBefore,
+                                 out error))
+                    {
+                        // Keep the target rollback applied. A later retry can finish
+                        // restoring the carried quantity without re-mutating target.
+                        return false;
+                    }
+                    else
+                    {
+                        carriedRolledBack = true;
+                    }
+                }
+
+                if (requireCarriedOriginalState &&
+                    (carriedItem.InventoryOwner != null ||
+                     carriedItem.Quantity != carriedQuantityBefore))
+                {
+                    error = "The carried stack changed during merge failure recovery.";
+                    return false;
+                }
+
+                rolledBack = true;
+                error = null;
+                return true;
+            }
         }
 
         public InventoryTransferCoordinator(
@@ -309,6 +485,149 @@ namespace FantasySurvival.Inventory
             IVariableInventoryCellData item)
         {
             return EvaluateDropHandling(sourceView, destinationView, item, false);
+        }
+
+        public bool CanMergeStack(
+            IVariableInventoryView sourceView,
+            IVariableInventoryView destinationView,
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData item)
+        {
+            if (sourceView == null ||
+                !(destinationView is IVariableInventoryBoundView destinationBound) ||
+                !destinationBound.ContainsCell(destinationCell) ||
+                !(item is InventoryItemData carriedItem) ||
+                !(destinationCell?.CellData is InventoryItemData targetItem) ||
+                ReferenceEquals(carriedItem, targetItem) || carriedItem.InventoryOwner != null ||
+                carriedItem.MaxStackSize <= 1 ||
+                carriedItem.Id != targetItem.Id ||
+                carriedItem.MaxStackSize != targetItem.MaxStackSize ||
+                targetItem.Quantity >= targetItem.MaxStackSize)
+            {
+                return false;
+            }
+
+            IVariableInventoryViewData targetOwner = destinationBound.ViewData;
+            if (targetOwner == null ||
+                !ReferenceEquals(targetItem.InventoryOwner, targetOwner) ||
+                !targetOwner.GetId(targetItem).HasValue)
+            {
+                return false;
+            }
+
+            if (externalMode != ExternalInventoryMode.Merchant)
+            {
+                return true;
+            }
+
+            if (externalInventory == null ||
+                !(sourceView is IVariableInventoryBoundView sourceBound))
+            {
+                return false;
+            }
+
+            IVariableInventoryViewData sourceOwner = sourceBound.ViewData;
+            bool samePlayerSide = IsPlayerOwned(sourceOwner) && IsPlayerOwned(targetOwner);
+            bool sameMerchantSide = IsNestedIn(externalInventory, sourceOwner) &&
+                                    IsNestedIn(externalInventory, targetOwner);
+            return samePlayerSide || sameMerchantSide;
+        }
+
+        public bool TryMergeStack(
+            IVariableInventoryView sourceView,
+            IVariableInventoryView destinationView,
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData item,
+            out IVariableInventoryStackMergeReceipt receipt,
+            out string error)
+        {
+            receipt = null;
+            error = null;
+            if (!CanMergeStack(sourceView, destinationView, destinationCell, item) ||
+                !(destinationView is IVariableInventoryBoundView destinationBound) ||
+                !(item is InventoryItemData carriedItem) ||
+                !(destinationCell.CellData is InventoryItemData targetItem))
+            {
+                error = "The selected cells cannot merge these stacks.";
+                return false;
+            }
+
+            IVariableInventoryViewData targetOwner = destinationBound.ViewData;
+            int targetBefore = targetItem.Quantity;
+            int carriedBefore = carriedItem.Quantity;
+            int movedQuantity = Mathf.Min(
+                carriedBefore,
+                targetItem.MaxStackSize - targetBefore);
+            int targetAfter = targetBefore + movedQuantity;
+            int carriedAfter = carriedBefore - movedQuantity;
+
+            if (movedQuantity <= 0 ||
+                !targetItem.TryChangeQuantity(
+                    targetOwner,
+                    targetBefore,
+                    targetAfter,
+                    out error))
+            {
+                error = error ?? "There is no room in the destination stack.";
+                return false;
+            }
+
+            bool carriedChanged = carriedAfter > 0;
+            if (carriedChanged &&
+                !carriedItem.TryChangeQuantity(
+                    null,
+                    carriedBefore,
+                    carriedAfter,
+                    out string carriedError))
+            {
+                bool carriedStillOriginal = carriedItem.InventoryOwner == null &&
+                                            carriedItem.Quantity == carriedBefore;
+                bool targetRollbackSucceeded = targetItem.TryChangeQuantity(
+                    targetOwner,
+                    targetAfter,
+                    targetBefore,
+                    out string rollbackError);
+                if (!targetRollbackSucceeded &&
+                    targetItem.Quantity == targetBefore &&
+                    ReferenceEquals(targetItem.InventoryOwner, targetOwner))
+                {
+                    targetRollbackSucceeded = true;
+                }
+
+                if (targetRollbackSucceeded && carriedStillOriginal)
+                {
+                    error = carriedError;
+                    return false;
+                }
+
+                receipt = new StackMergeReceipt(
+                    targetItem,
+                    targetOwner,
+                    carriedItem,
+                    targetBefore,
+                    targetAfter,
+                    carriedBefore,
+                    carriedBefore,
+                    false,
+                    targetRollbackSucceeded,
+                    true);
+                error = targetRollbackSucceeded
+                    ? $"{carriedError} The carried stack no longer matches its original state."
+                    : $"{carriedError} Target rollback also failed: {rollbackError}";
+                return false;
+            }
+
+            receipt = new StackMergeReceipt(
+                targetItem,
+                targetOwner,
+                carriedItem,
+                targetBefore,
+                targetAfter,
+                carriedBefore,
+                carriedAfter,
+                carriedChanged);
+            error = null;
+            return true;
         }
 
         private VariableInventoryDropHandling EvaluateDropHandling(

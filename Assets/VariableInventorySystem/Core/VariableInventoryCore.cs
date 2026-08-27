@@ -3,12 +3,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq; // Linq.Any는 사용 안하지만 다른 곳에서 필요할 수 있음
 using UnityEngine;
 using UnityEngine.EventSystems;
 
 namespace VariableInventorySystem
 {
+    public enum VariableInventoryCarryMode
+    {
+        Pointer = 0,
+        Click = 1
+    }
+
     public abstract class VariableInventoryCore : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         // --- 필드 ---
@@ -23,9 +28,11 @@ namespace VariableInventorySystem
         Vector2 cursorPosition;
         private IVariableInventoryView originView = null; // ★ 드래그 시작 View 저장용
         private IVariableInventoryTransferController transferController;
-        private bool isClickCarry;
-        private Func<bool> clickCarryRollback;
-        private Func<bool> clickCarryCommit;
+        private VariableInventoryCarryMode carryMode;
+        private Func<bool> carryRollback;
+        private Func<bool> carryCommit;
+        private Func<IVariableInventoryCellData, int, int, bool> carryStackMergeRecorded;
+        private IVariableInventoryStackMergeReceipt pendingStackMergeRecovery;
         private PointerEventData clickCarryPointerEvent;
         private EventSystem clickCarryEventSystem;
 
@@ -33,7 +40,8 @@ namespace VariableInventorySystem
 
         // --- 추가/기존 메소드 ---
         public bool IsDragging() => effectCell?.CellData != null;
-        public bool IsClickCarryActive => isClickCarry && IsDragging();
+        public bool IsClickCarryActive => carryMode == VariableInventoryCarryMode.Click && IsDragging();
+        private bool HasCarryTransaction => carryRollback != null || carryCommit != null;
         public void SetTransferController(IVariableInventoryTransferController controller)
         {
             transferController = controller;
@@ -107,12 +115,14 @@ namespace VariableInventorySystem
             }
         }
 
-        protected bool TryBeginClickCarry(
+        protected bool TryBeginDetachedCarry(
             IVariableInventoryView sourceView,
             IVariableInventoryCell sourceCell,
             IVariableInventoryCellData carriedItem,
+            VariableInventoryCarryMode mode,
             Func<bool> rollback,
             Func<bool> commit,
+            Func<IVariableInventoryCellData, int, int, bool> stackMergeRecorded,
             out string error)
         {
             if (IsDragging())
@@ -122,7 +132,8 @@ namespace VariableInventorySystem
             }
 
             if (sourceView == null || sourceCell == null || carriedItem == null ||
-                rollback == null || commit == null || !InventoryViews.Contains(sourceView) ||
+                rollback == null || commit == null || stackMergeRecorded == null ||
+                !InventoryViews.Contains(sourceView) ||
                 !(sourceView is IVariableInventoryBoundView boundView) ||
                 !boundView.ContainsCell(sourceCell))
             {
@@ -156,16 +167,30 @@ namespace VariableInventorySystem
             originView = sourceView;
             stareCell = sourceCell;
             originEffectCellRotate = carriedItem.IsRotate;
-            clickCarryRollback = rollback;
-            clickCarryCommit = commit;
-            isClickCarry = true;
+            carryRollback = rollback;
+            carryCommit = commit;
+            carryStackMergeRecorded = stackMergeRecorded;
+            carryMode = mode;
 
             effectCell.RectTransform.gameObject.SetActive(true);
             effectCell.Apply(carriedItem);
             NotifyHoveredCellCleared();
-            UpdateClickCarryPointer();
+            if (mode == VariableInventoryCarryMode.Click)
+            {
+                UpdateClickCarryPointer();
+            }
             error = null;
             return true;
+        }
+
+        protected bool TryBeginPickedClickCarry(
+            IVariableInventoryCell sourceCell,
+            out string error)
+        {
+            return TryBeginPickedCarry(
+                sourceCell,
+                VariableInventoryCarryMode.Click,
+                out error);
         }
 
         protected bool TryReleaseClickCarry(IVariableInventoryCell destinationCell)
@@ -180,63 +205,88 @@ namespace VariableInventorySystem
             return FinishCurrentDrag();
         }
 
-        // --- ★★★ OnBeginDrag (원본 기반 최소 수정) ★★★ ---
         public virtual void OnBeginDrag(PointerEventData eventData)
         {
-            if (eventData.button != PointerEventData.InputButton.Left) return;
+            if (eventData.button != PointerEventData.InputButton.Left)
+            {
+                return;
+            }
+
+            if (!TryBeginPickedCarry(
+                    stareCell,
+                    VariableInventoryCarryMode.Pointer,
+                    out string error) && !string.IsNullOrEmpty(error))
+            {
+                Debug.LogWarning($"[Core.OnBeginDrag] {error}", this);
+            }
+        }
+
+        private bool TryBeginPickedCarry(
+            IVariableInventoryCell sourceCell,
+            VariableInventoryCarryMode mode,
+            out string error)
+        {
             if (IsDragging())
             {
-                Debug.LogWarning("[Core.OnBeginDrag] A previous drag is still active. New source was not detached.");
-                return;
+                error = "A previous inventory carry is still active.";
+                return false;
             }
 
-            // 1. 모든 View에 OnPrePick 호출 (원본과 동일)
-            foreach (var inventoryView in InventoryViews)
+            IVariableInventoryCellData sourceData = sourceCell?.CellData;
+            if (sourceData == null)
             {
-                inventoryView.OnPrePick(stareCell);
+                error = null;
+                return false;
             }
 
-            // 2. 현재 셀 데이터 저장 (원본과 동일)
-            var stareData = stareCell?.CellData;
-            if (stareData == null) { Debug.LogWarning("[Core.OnBeginDrag] No data in stareCell before pick."); return; }
-
-            // 드래그 표시 셀을 먼저 준비한다. 원본 아이템을 소유자에서 분리한 뒤
-            // 초기화가 실패하면 어느 컨테이너에도 속하지 않는 상태가 되기 때문이다.
-            if (effectCell == null) Initialize();
             if (effectCell == null)
             {
-                Debug.LogError("[Core.OnBeginDrag] effectCell is null. The source item was not detached.");
-                return;
+                Initialize();
             }
 
-            originView = null; // 초기화
+            if (effectCell == null)
+            {
+                error = "The inventory carry display cell is unavailable.";
+                return false;
+            }
 
-            // 3. OnPick 성공 여부 확인 및 originView 저장 (Linq.Any 대신 foreach 사용)
-            bool isHold = false;
             foreach (var inventoryView in InventoryViews)
             {
-                if (inventoryView.OnPick(stareCell)) // OnPick 호출 (아이템 제거 및 상태 저장)
+                inventoryView.OnPrePick(sourceCell);
+            }
+
+            originView = null;
+            foreach (var inventoryView in InventoryViews)
+            {
+                if (inventoryView.OnPick(sourceCell))
                 {
-                    isHold = true;
-                    originView = inventoryView; // ★ OnPick 성공한 View를 originView에 저장
-                    break; // 첫 성공 시 루프 중단 (Any와 동일 효과)
+                    originView = inventoryView;
+                    break;
                 }
             }
 
-            // 4. 집기 실패 시 종료 (원본과 동일)
-            if (!isHold)
+            if (originView == null)
             {
-                Debug.LogWarning("[Core.OnBeginDrag] OnPick failed for all views.");
-                originView = null; // 실패 시 확실히 초기화
-                return;
+                error = null;
+                return false;
             }
 
+            stareCell = sourceCell;
+            originEffectCellRotate = sourceData.IsRotate;
+            carryMode = mode;
+            carryRollback = null;
+            carryCommit = null;
+            carryStackMergeRecorded = null;
             NotifyHoveredCellCleared();
-
-            // 5. effectCell 활성화 및 데이터 적용 (원본과 동일)
             effectCell.RectTransform.gameObject.SetActive(true);
-            effectCell.Apply(stareData); // OnPick 전에 저장한 stareData 사용
-            originEffectCellRotate = stareData.IsRotate; // 회전 상태 저장
+            effectCell.Apply(sourceData);
+            if (mode == VariableInventoryCarryMode.Click)
+            {
+                UpdateClickCarryPointer();
+            }
+
+            error = null;
+            return true;
         }
 
         // --- OnDrag (원본 유지) ---
@@ -255,10 +305,16 @@ namespace VariableInventorySystem
                 return false;
             }
 
+            if (!TryRecoverPendingStackMerge())
+            {
+                return false;
+            }
+
             IVariableInventoryCellData transferredItem = effectCell.CellData;
             IVariableInventoryView destinationView = null;
             VariableInventoryDropHandling handling = VariableInventoryDropHandling.Standard;
             bool isRelease = false;
+            bool transactionFinalizedByMerge = false;
             foreach (var view in InventoryViews)
             {
                 if (!(view is IVariableInventoryBoundView boundView) ||
@@ -275,34 +331,118 @@ namespace VariableInventorySystem
                     break;
                 }
 
-                isRelease = handling == VariableInventoryDropHandling.AcceptWithoutInsert ||
-                            view.OnDrop(stareCell, effectCell);
+                bool canMerge = handling == VariableInventoryDropHandling.Standard &&
+                                transferController != null &&
+                                transferController.CanMergeStack(
+                                    originView,
+                                    view,
+                                    stareCell,
+                                    transferredItem);
+                if (canMerge)
+                {
+                    if (!transferController.TryMergeStack(
+                            originView,
+                            view,
+                            stareCell,
+                            transferredItem,
+                            out IVariableInventoryStackMergeReceipt mergeReceipt,
+                            out string mergeError))
+                    {
+                        if (mergeReceipt != null)
+                        {
+                            pendingStackMergeRecovery = mergeReceipt;
+                            if (!TryRecoverPendingStackMerge())
+                            {
+                                Debug.LogError(
+                                    $"[Core] Stack merge left an unresolved mutation: {mergeError}. " +
+                                    "Carry state was preserved for recovery.",
+                                    this);
+                                return false;
+                            }
+                        }
+
+                        Debug.LogError($"[Core] Stack merge failed: {mergeError}", this);
+                        break;
+                    }
+
+                    if (HasCarryTransaction &&
+                        (carryStackMergeRecorded == null ||
+                         !carryStackMergeRecorded(
+                             mergeReceipt.TargetItem,
+                             mergeReceipt.MovedQuantity,
+                             mergeReceipt.RemainingQuantity)))
+                    {
+                        if (!mergeReceipt.TryRollback(out string rollbackError))
+                        {
+                            pendingStackMergeRecovery = mergeReceipt;
+                            Debug.LogError(
+                                $"[Core] Stack merge transaction and rollback both failed: {rollbackError}",
+                                this);
+                            return false;
+                        }
+
+                        break;
+                    }
+
+                    destinationView = view;
+                    if (mergeReceipt.RemainingQuantity > 0)
+                    {
+                        carryMode = VariableInventoryCarryMode.Click;
+                        view.ReApply();
+                        OnCarriedItemChanged();
+                        UpdateClickCarryPointer();
+                        Debug.Log(
+                            $"[Core] Stack merge moved {mergeReceipt.MovedQuantity}; " +
+                            $"{mergeReceipt.RemainingQuantity} remains carried.",
+                            this);
+                        return true;
+                    }
+
+                    isRelease = true;
+                    transactionFinalizedByMerge = HasCarryTransaction;
+                }
+                else
+                {
+                    isRelease = handling == VariableInventoryDropHandling.AcceptWithoutInsert ||
+                                view.OnDrop(stareCell, effectCell);
+                }
+
                 if (isRelease)
                 {
                     destinationView = view;
                 }
                 break;
             }
+
+            // A click-carry is an explicit held state. Clicking an invalid cell must
+            // not silently turn it into a cancelled drag; the next valid click or an
+            // explicit cancel still owns the resolution.
+            if (!isRelease && carryMode == VariableInventoryCarryMode.Click)
+            {
+                UpdateDropPreviewHandling();
+                return false;
+            }
+
             if (!isRelease)
             {
                 RestoreOriginalRotation();
             }
 
-            if (!isRelease && isClickCarry)
+            if (!isRelease && HasCarryTransaction)
             {
-                if (!TryRollbackClickCarry())
+                if (!TryRollbackCarryTransaction())
                 {
                     Debug.LogError(
-                        "[Core] Split-stack rollback failed. Drag state was kept instead of discarding the detached item reference.");
+                        "[Core] Carry transaction rollback failed. Carry state was kept instead of discarding the detached item reference.");
                     return false;
                 }
             }
 
-            if (isRelease && isClickCarry &&
-                (clickCarryCommit == null || !clickCarryCommit()))
+            if (isRelease && HasCarryTransaction && !transactionFinalizedByMerge &&
+                (carryCommit == null || !carryCommit()))
             {
                 Debug.LogError(
-                    "[Core] Split-stack commit failed. Drag state was kept for diagnosis instead of silently discarding its transaction boundary.");
+                    "[Core] Carry transaction commit failed. Carry state was kept for diagnosis instead of silently discarding its transaction boundary.");
                 return false;
             }
 
@@ -311,7 +451,7 @@ namespace VariableInventorySystem
                 inventoryView?.OnDroped(isRelease); // ★ 일반 드래그의 원본 복구 소유자
             }
 
-            if (!isRelease && !isClickCarry && IsDetachedOwnedItem())
+            if (!isRelease && !HasCarryTransaction && IsDetachedOwnedItem())
             {
                 Debug.LogError("[Core.OnEndDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
                 return false;
@@ -339,18 +479,25 @@ namespace VariableInventorySystem
         {
             if (!IsDragging()) return true;
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 시도...");
+            if (!TryRecoverPendingStackMerge())
+            {
+                Debug.LogError(
+                    "[VariableInventoryCore.CancelDrag] Pending stack merge recovery failed. Carry state was kept.");
+                return false;
+            }
+
             if (originView != null)
             {
                 Debug.Log($"[VariableInventoryCore.CancelDrag] Origin View ({((UnityEngine.Object)originView).GetEntityId()})의 OnDroped(false) 호출 시도.");
             }
             else { Debug.LogWarning("[VariableInventoryCore.CancelDrag] Origin view is unknown!"); }
             RestoreOriginalRotation();
-            if (isClickCarry)
+            if (HasCarryTransaction)
             {
-                if (!TryRollbackClickCarry())
+                if (!TryRollbackCarryTransaction())
                 {
                     Debug.LogError(
-                        "[VariableInventoryCore.CancelDrag] Split-stack rollback failed. Drag state was kept.");
+                        "[VariableInventoryCore.CancelDrag] Carry transaction rollback failed. Carry state was kept.");
                     return false;
                 }
             }
@@ -360,7 +507,7 @@ namespace VariableInventorySystem
                 inventoryView?.OnDroped(false);
             }
 
-            if (!isClickCarry && IsDetachedOwnedItem())
+            if (!HasCarryTransaction && IsDetachedOwnedItem())
             {
                 Debug.LogError("[VariableInventoryCore.CancelDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
                 return false;
@@ -371,16 +518,16 @@ namespace VariableInventorySystem
             return true;
         }
 
-        private bool TryRollbackClickCarry()
+        private bool TryRollbackCarryTransaction()
         {
-            if (!isClickCarry || clickCarryRollback == null)
+            if (!HasCarryTransaction || carryRollback == null)
             {
                 return false;
             }
 
             try
             {
-                return clickCarryRollback();
+                return carryRollback();
             }
             catch (Exception exception)
             {
@@ -404,9 +551,37 @@ namespace VariableInventorySystem
             originEffectCellRotate = null;
             originView = null;
             stareCell = null;
-            isClickCarry = false;
-            clickCarryRollback = null;
-            clickCarryCommit = null;
+            carryMode = VariableInventoryCarryMode.Pointer;
+            carryRollback = null;
+            carryCommit = null;
+            carryStackMergeRecorded = null;
+            pendingStackMergeRecovery = null;
+        }
+
+        private bool TryRecoverPendingStackMerge()
+        {
+            if (pendingStackMergeRecovery == null)
+            {
+                return true;
+            }
+
+            if (!pendingStackMergeRecovery.TryRollback(out string error))
+            {
+                Debug.LogError(
+                    $"[VariableInventoryCore] Pending stack merge rollback failed: {error}",
+                    this);
+                return false;
+            }
+
+            pendingStackMergeRecovery = null;
+            foreach (IVariableInventoryView inventoryView in InventoryViews)
+            {
+                inventoryView?.ReApply();
+            }
+
+            OnCarriedItemChanged();
+            UpdateDropPreviewHandling();
+            return true;
         }
 
         private void UpdateClickCarryPointer()
@@ -460,6 +635,15 @@ namespace VariableInventorySystem
                         originView,
                         view,
                         effectCell.CellData);
+                    if (handling == VariableInventoryDropHandling.Standard &&
+                        transferController.CanMergeStack(
+                            originView,
+                            view,
+                            stareCell,
+                            effectCell.CellData))
+                    {
+                        handling = VariableInventoryDropHandling.AcceptWithoutInsert;
+                    }
                 }
 
                 boundView.SetDropPreviewHandling(handling);
@@ -489,6 +673,10 @@ namespace VariableInventorySystem
         {
             return effectCell?.CellData is IVariableInventoryOwnedCellData owned &&
                    owned.InventoryOwner == null;
+        }
+
+        protected virtual void OnCarriedItemChanged()
+        {
         }
     }
 }

@@ -68,7 +68,7 @@
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39 | 동시 1개; 개인 인벤토리·기지 Chest 즉시, 원정 Chest·시체 1초; 행동 입력 취소, U·I 유지 | 취소 정책·UI 또는 장전·회복·먹기 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
-| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·현재 장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40 | definition/runtime 수량 분리, 원자 이동·stack 분할, W1 장착·저장; W2·W3 예약 | 소유권·수량·grid·장비·저장 형식 변경 또는 W2·W3 노출 요청 |
+| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·현재 장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~41 | definition/runtime 수량 분리, 클릭·drag 보유와 원자 분할·합치기; W1 장착·저장 | 소유권·수량·grid·장비·저장 형식 변경 또는 W2·W3 노출 요청 |
 | `COMBAT-01` | 시험 총기 공격·피해·사망·효과음 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §16 | Player 원점 마우스 XZ Raycast, 단발/자동 RPM, 피해 35 시험값 | 사용자가 탄약·재장전·최종 조준 등 새 범위 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19 | NavMesh 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
@@ -82,7 +82,7 @@
 | `MERCHANT-01` | Player Gold/Silver와 무지갑 시험 상인 | `ACTIVE` | `USER` | `PROTOTYPE` | 진행 §26 사용자 확인·순수 거래 11경로 | 상인 자금 없음, 판매 sink, 이전 성공 뒤 정산, 실패 rollback | 가격 정책·상인 자금·정식 재고 결정 |
 | `QUEST-01` | Cube NPC의 적 1킬·생환 시험 의뢰 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §30 | 공통 E로 수락, Player 귀속 처치, committed `Extracted` 뒤 보고 가능, NPC 보고로 완료; 보상 없음·Play Session 한정 | 퀘스트 규칙·보상·저장 schema 또는 관련 상호작용·사망·정산 경계 변경 |
 | `INFO-01` | U 정보창과 실행 기록 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §31 | 캐릭터·기록·사전·의뢰·업그레이드 5탭; 기존 원본 읽기, 실행 기록만 별도 권위 소유; 업그레이드는 미구현 표시 | 정보 항목·입력·기록 저장·도감 해금·업그레이드 규칙 변경 |
-| `ITEM-UI-01` | 아이템 tooltip·가격·수량 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38·40 | 공용 배지·drag 수량, 우클릭 분할·Ctrl 절반; 상인은 분할 차단 | 표시 필드나 UI 배치 직접 변경 |
+| `ITEM-UI-01` | 아이템 tooltip·가격·수량 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38·40~41 | 클릭 보유·drag·R, capability 메뉴·Alt 절반·부분 합치기; 상인 거래 경계 차단 | 표시 필드나 UI 배치 직접 변경 |
 | `PIXEL-01` | 3D 픽셀아트 시험 효과 | `DISABLED` | `PLAY` | `PROTOTYPE` | 진행 §15 | 사용자 요청으로 비활성 | 사용자가 재사용을 요청할 때만 |
 
 ## 확인된 실제 공백과 결정 대기

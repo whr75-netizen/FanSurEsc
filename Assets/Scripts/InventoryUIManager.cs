@@ -153,6 +153,7 @@ public class InventoryUIManager : MonoBehaviour
             SetExternalStatus);
         standardCore.SetTransferController(transferCoordinator);
         standardCore.HoveredCellChanged += HandleHoveredCellChanged;
+        standardCore.ItemContextRequested += HandleItemContextRequested;
         standardCore.StackSplitRequested += HandleStackSplitRequested;
         itemTooltipView.Hide();
         stackSplitDialog.Close();
@@ -639,6 +640,7 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         standardCore.HoveredCellChanged -= HandleHoveredCellChanged;
+        standardCore.ItemContextRequested -= HandleItemContextRequested;
         standardCore.StackSplitRequested -= HandleStackSplitRequested;
         standardCore.SetTransferController(null);
         stackSplitDialog?.Close();
@@ -816,10 +818,64 @@ public class InventoryUIManager : MonoBehaviour
             : "해당 분류의 상품이 없습니다.";
     }
 
+    private void HandleItemContextRequested(
+        IVariableInventoryView sourceView,
+        IVariableInventoryCell sourceCell)
+    {
+        if (inputBlocked || standardCore == null || standardCore.IsDragging() ||
+            sourceView == null || !(sourceCell?.CellData is InventoryItemData sourceItem))
+        {
+            return;
+        }
+
+        Action useAction = null;
+        if (sourceItem is IStandardCaseCellData &&
+            standardCore.CanOpenCase(sourceView, sourceCell))
+        {
+            useAction = () =>
+            {
+                if (!standardCore.TryOpenCase(sourceView, sourceCell))
+                {
+                    Debug.LogWarning("Container use failed because its source cell changed.", this);
+                }
+            };
+        }
+
+        bool canSplit = sourceItem.Quantity > 1 && sourceItem.MaxStackSize > 1 &&
+                        currentExternalMode != ExternalInventoryMode.Merchant;
+        if (!canSplit && useAction == null)
+        {
+            if (currentExternalMode == ExternalInventoryMode.Merchant &&
+                sourceItem.Quantity > 1 && sourceItem.MaxStackSize > 1)
+            {
+                SetExternalStatus(
+                    "Stack 단가 정책이 확정되기 전에는 상인 거래 중 분할할 수 없습니다.",
+                    true);
+            }
+
+            return;
+        }
+
+        itemTooltipView?.Hide();
+        stackSplitDialog.OpenContext(
+            sourceItem.Definition.DisplayName,
+            useAction,
+            canSplit ? sourceItem.Quantity - 1 : 0,
+            Input.mousePosition,
+            canSplit
+                ? quantity => TryBeginStackSplit(
+                    sourceView,
+                    sourceCell,
+                    sourceItem,
+                    quantity,
+                    VariableInventoryCarryMode.Click)
+                : null);
+    }
+
     private void HandleStackSplitRequested(
         IVariableInventoryView sourceView,
         IVariableInventoryCell sourceCell,
-        bool quickHalf)
+        VariableInventoryCarryMode carryMode)
     {
         if (inputBlocked || standardCore == null || standardCore.IsDragging() ||
             sourceView == null || !(sourceCell?.CellData is InventoryItemData sourceItem) ||
@@ -837,29 +893,25 @@ public class InventoryUIManager : MonoBehaviour
         }
 
         itemTooltipView?.Hide();
-        if (quickHalf)
+        int half = sourceItem.Quantity / 2;
+        string error = TryBeginStackSplit(
+            sourceView,
+            sourceCell,
+            sourceItem,
+            half,
+            carryMode);
+        if (!string.IsNullOrEmpty(error))
         {
-            int half = sourceItem.Quantity / 2;
-            string error = TryBeginStackSplit(sourceView, sourceCell, sourceItem, half);
-            if (!string.IsNullOrEmpty(error))
-            {
-                Debug.LogWarning($"Stack split failed: {error}", this);
-            }
-            return;
+            Debug.LogWarning($"Stack split failed: {error}", this);
         }
-
-        stackSplitDialog.OpenContext(
-            sourceItem.Definition.DisplayName,
-            sourceItem.Quantity - 1,
-            Input.mousePosition,
-            quantity => TryBeginStackSplit(sourceView, sourceCell, sourceItem, quantity));
     }
 
     private string TryBeginStackSplit(
         IVariableInventoryView sourceView,
         IVariableInventoryCell sourceCell,
         InventoryItemData sourceItem,
-        int splitQuantity)
+        int splitQuantity,
+        VariableInventoryCarryMode carryMode)
     {
         if (transferCoordinator == null || standardCore == null)
         {
@@ -901,12 +953,36 @@ public class InventoryUIManager : MonoBehaviour
             return true;
         }
 
+        bool RecordStackMerge(
+            IVariableInventoryCellData target,
+            int movedQuantity,
+            int remainingQuantity)
+        {
+            string mergeError = null;
+            if (!(target is InventoryItemData targetItem) ||
+                !transaction.TryRecordStackMerge(
+                    targetItem,
+                    movedQuantity,
+                    remainingQuantity,
+                    out mergeError))
+            {
+                Debug.LogError(
+                    $"Stack split merge record failed: {mergeError ?? "invalid target item"}",
+                    this);
+                return false;
+            }
+
+            return true;
+        }
+
         if (!standardCore.TryBeginStackSplitCarry(
                 sourceView,
                 sourceCell,
                 transaction.SplitItem,
+                carryMode,
                 Rollback,
                 Commit,
+                RecordStackMerge,
                 out error))
         {
             if (!transaction.TryRollback(out string rollbackError))

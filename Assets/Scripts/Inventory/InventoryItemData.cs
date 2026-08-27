@@ -83,8 +83,7 @@ namespace FantasySurvival.Inventory
             int newQuantity,
             out string error)
         {
-            if (expectedOwner == null ||
-                !ReferenceEquals(InventoryOwner, expectedOwner))
+            if (!ReferenceEquals(InventoryOwner, expectedOwner))
             {
                 error = "The item owner changed before its quantity could be updated.";
                 return false;

@@ -1387,3 +1387,17 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` 실제 persistent Player stack을 검증 중에만 5로 바꾸고 `StandardButton` 우클릭 callback → `나누기` → 기본값 1 → 확인을 호출했다. Manager가 참조한 Core에서 원본 4와 detached 1, 활성 drag를 확인하고 취소하자 같은 원본·slot·owner의 5로 복원됐다. 수량 1 우클릭은 UI를 열지 않았고 검증 뒤 시작 수량 1·닫힌 UI로 복원했다.
 - `[프리팹·컴파일 확인]` `PersistentGameplayShell`에는 inactive `StackSplitOverlay`와 dialog 1개만 추가됐고 Manager 참조, 필수 UI 경로 9개, sorting 160, raycast 차단, 기존 GameObject 186개 보존과 missing script 0을 확인했다. 최종 Unity Console Error/Exception은 0건이다.
 - `[실제 입력 미검증]` 실제 사용자의 Ctrl 키·마우스 클릭과 다른 grid 빈 칸으로의 클릭 배치는 호출/순수 로직으로 분리 확인했으며 물리 입력 자체를 통과했다고 기록하지 않는다. Enter 확정, 배경 클릭 닫기, 동일 stack 합치기와 자동 정렬은 이번 범위에 포함하지 않았다.
+
+---
+
+## 41. 짧은 클릭 보유·capability 메뉴·원자 stack 합치기 `[ITEM-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-28]` 좌클릭을 짧게 눌렀다 떼면 item/stack 전체를 즉시 들고, 기존 hold-drag도 별도 입력으로 유지한다. 우클릭은 실제 가능한 `사용`·`나누기`만 표시하고, Alt+좌클릭과 Alt+drag는 같은 절반 분할을 사용한다. 같은 stack 합치기는 최대치까지만 채우고 나머지를 계속 들어야 한다.
+- `[입력 경계]` 고정 0.2초 지연을 새로 만들지 않고 Unity EventSystem의 click과 drag 이동 임계값을 사용한다. 짧은 클릭과 pointer drag는 같은 `OnPick → 보유 → OnDroped` 소유권 경로를 공유하되 보유 방식만 `Click`·`Pointer`로 구분한다. drag 원점은 임계값 시점 hover가 아니라 `pointerPress`의 실제 누른 셀로 고정한다. R 회전, Shift 빠른 이동과 취소·UI 정리 경계는 유지했으며 최신 요구에 따라 빠른 절반 분할 키는 Ctrl에서 Alt로 바꿨다.
+- `[우클릭 capability]` 공용 context가 `사용`·`나누기` callback 유무로 버튼을 구성한다. 현재 실제 사용 기능이 있는 컨테이너만 `사용`을 제공하고, 수량 2 이상 stack만 `나누기`를 제공한다. 사용 효과가 아직 없는 치료제·음식에 임의 효과를 만들지 않았다. 이미 열린 컨테이너에는 실패할 `사용`을 다시 노출하지 않는다.
+- `[원자 합치기]` 기존 transfer coordinator가 같은 definition·같은 최대 stack·정상 target owner를 확인하고 대상 수량을 먼저 CAS 변경한 뒤 detached 보유 수량을 변경한다. 두 번째 변경 실패 시 대상 수량을 원복하고 보유 item도 원래 owner 없음·원수량인지 확인하는 receipt를 사용한다. 어느 쪽도 확인되지 않은 불확정 상태는 원본을 다시 넣지 않고 보유와 recovery receipt를 유지해 다음 취소·배치에서 재복구한다. `2/5 + 4/5 → 5/5 + 보유 1/5`를 지원하고, 정확히 다 채우면 별도 0수량 item을 만들지 않고 보유를 끝낸다.
+- `[분할 재기준]` 분할 item 일부가 다른 stack에 합쳐지면 합쳐진 수량은 확정되고 transaction의 미처리 수량만 갱신한다. 이후 취소는 아직 들고 있는 나머지만 원본에 돌려 총량을 보존한다. 상인 화면은 분할과 Player↔상인 거래 경계 합치기를 차단하되 Player 내부·상인 내부 합치기는 기존 일반 이동 경계와 같이 허용한다.
+- `[Editor/순수 로직 확인]` `2+4→5+1`, merge receipt rollback `5+1→2+4`, 분할 부분 합치기 뒤 취소의 `source 2 + target 5 = 총 7`, 정확한 전량 합치기를 확인했다. 최종 보완 뒤 `8/10+4/10→10/10+2/10`과 receipt 원복, 상인 같은 쪽 합치기 허용·거래 경계 차단도 다시 확인했다.
+- `[Play Mode 호출 확인]` 실제 Player inventory에서 기존 pointer drag의 취소·동일 item/slot 복원, 짧은 클릭 전체 보유, R 회전, `8/10 + 4/10→10/10 + 보유 2/10`, 취소 뒤 총량 12와 원회전 복원을 확인했다. 별도 대표 사례에서 일반 stack은 `나누기`만, 컨테이너는 `사용`만 표시되고 `사용`이 기존 컨테이너 popup을 여는 것을 확인했다. 최종 보완 뒤 점유된 잘못된 칸 click-carry 유지·명시적 취소 복원, hover를 이웃 셀로 바꿔도 pointerPress 원본을 집는 것, 기존 pointer drag의 다른 빈 칸 성공 배치와 보유 종료, 분할 `5→3+2` 뒤 `8+2→10` exact fill의 Core 보유 종료를 확인했다. 검증용 runtime item과 열린 UI는 모두 정리했다.
+- `[프리팹·컴파일 확인]` `PersistentGameplayShell`의 dialog·UseButton이 각각 1개이고 필수 참조가 완전하며 missing script 0개다. 최신 코드 컴파일 뒤 Console Error는 0건이었다.
+- `[재사용 증거·미검증]` Save schema와 codec은 변경하지 않아 §38의 양수 stack 저장 왕복과 §40의 분할 `3+2` JSON 복원 증거를 재사용한다. 실제 사용자의 Alt·마우스·R 물리 입력은 주입하지 않았으므로 코드 분기와 Play Mode 호출 확인으로만 기록한다. 실제 치료제·음식 사용 효과, 상인 stack 가격 정산과 자동 정렬은 여전히 미정이다.

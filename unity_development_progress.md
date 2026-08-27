@@ -1321,3 +1321,14 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` 격리된 임시 save/Recovery 경로에서 `PlayerInteractor.TryInteract()` 1회로 생환을 실행했다. E 직후 `Extracted`, 피해·이동·인벤토리·상호작용 차단과 두 결과 버튼 비활성을 확인했다.
 - `[Play Mode 호출 확인]` 같은 shell·Player·Inventory entity ID를 유지한 채 `GameMap1`에 자동 도착했고, primary/backup의 원정 표식 해제, Recovery 파일 0개, 주 메뉴 비활성, `확인` 활성 상태를 확인했다. 실제 버튼 callback 뒤 기지 입력이 복원됐으며 Console Error/Exception/Assert는 0건이었다.
 - `[미정]` 탈출 대기 시간, 피격 시 중단, 암전 중 사망 허용 여부와 최종 연출은 이번 구현으로 확정하지 않았다.
+
+---
+
+## 36. 고정 기지 NPC 충돌 안정화 `[INTERACT-01]`
+
+- `[사용자 요구][2026-08-27]` 상인·의뢰 NPC와 부딪힐 때 물리 엔진이 버벅이지 않고 상자처럼 벽으로 안정 정지하게 한다. 겹치기 방식은 이번 선택에서 사용하지 않는다.
+- `[근본 원인]` Player는 `Update`에서 Transform을 이동하고 `PlayerMovement.IsColliding`은 `Obstacle` 태그만 이동 전에 차단한다. Chest는 solid Collider·`Obstacle`·Rigidbody 없음이었지만 두 고정 NPC만 solid Collider·`Untagged`·Rigidbody 없음이라, 이동 코드의 관통과 물리 solver의 밀어내기가 프레임 경계에서 경쟁했다.
+- `[최소 수정]` `GameMap1`의 상인·의뢰 NPC를 `Obstacle`로 맞추고 solid Collider·Rigidbody 없음·기존 layer 0을 유지했다. `PlayerMovement`, Chest layer와 상호작용 소유자는 변경하지 않았다.
+- `[재발 방지]` `MerchantPrototypeSetup`과 `QuestPrototypeSetup`이 태그와 solid Collider를 설정하고, `Obstacle + non-trigger Collider + Rigidbody 없음`을 검증하도록 고쳤다. 생성 도구를 다시 실행해도 원래 결함으로 돌아가지 않는다.
+- `[Play Mode 호출 확인]` 한 Play Session에서 두 NPC 각각에 대해 PlayerMovement와 동일한 `OverlapBox + Obstacle` 쿼리가 차단을 반환했고, `PlayerInteractor.TryInteract()`로 최근접 대상 열기·닫기를 확인했다. 실제 WASD 키를 계속 누르는 수동 접촉 검증은 실행하지 않았으므로 키 입력을 확인했다고 기록하지 않는다.
+- `[Editor 확인]` Quest authoring validator와 상인 고정 장애물 검사를 통과했고 GameMap1은 저장 뒤 clean이었다. Console 신규 Error는 0건이며 기존 Input Manager deprecation·Codex 서명 경고 2건만 남았다.

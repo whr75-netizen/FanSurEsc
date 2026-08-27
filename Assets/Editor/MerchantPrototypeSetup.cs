@@ -21,6 +21,7 @@ namespace FantasySurvival.EditorTools
         private const string ItemDatabasePath = "Assets/GameData/Items/ItemDatabase.asset";
         private const string MerchantObjectName = "Test_MerchantNPC_Base";
         private const string MerchantMaterialPath = "Assets/GameData/Trading/TestMerchantGraybox.mat";
+        private const string ObstacleTag = "Obstacle";
 
         private static readonly string[] DefinitionPaths =
         {
@@ -248,6 +249,17 @@ namespace FantasySurvival.EditorTools
                     SceneManager.MoveGameObjectToScene(merchantObject, scene);
                 }
 
+                Undo.RecordObject(merchantObject, "Configure Test Merchant Collision");
+                merchantObject.tag = ObstacleTag;
+
+                Collider merchantCollider = merchantObject.GetComponent<Collider>();
+                if (merchantCollider == null)
+                {
+                    merchantCollider = Undo.AddComponent<BoxCollider>(merchantObject);
+                }
+                Undo.RecordObject(merchantCollider, "Configure Test Merchant Collision");
+                merchantCollider.isTrigger = false;
+
                 Undo.RecordObject(merchantObject.transform, "Configure Test Merchant Transform");
                 merchantObject.transform.SetPositionAndRotation(
                     new Vector3(-2f, 1f, 1f),
@@ -366,11 +378,14 @@ namespace FantasySurvival.EditorTools
                 }
             }
 
+            Collider merchantCollider = merchant.GetComponent<Collider>();
             if (matchingIdCount != 1 || merchant.GetComponent<MerchantInteractable>() == null ||
-                merchant.GetComponent<Collider>() == null)
+                merchantCollider == null || merchantCollider.isTrigger ||
+                !merchant.CompareTag(ObstacleTag) || merchant.GetComponent<Rigidbody>() != null)
             {
                 throw new BuildFailedException(
-                    "GameMap1 test merchant validation failed: invalid component or duplicate ID.");
+                    "GameMap1 test merchant validation failed: invalid component, duplicate ID, " +
+                    "or fixed-obstacle collision configuration.");
             }
 
             if (!merchant.TryValidateAuthoring(out string error))

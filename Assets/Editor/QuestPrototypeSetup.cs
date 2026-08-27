@@ -22,6 +22,7 @@ namespace FantasySurvival.EditorTools
         private const string QuestMaterialPath = QuestFolder + "/TestQuestGiverGraybox.mat";
         private const string QuestNpcName = "Test_QuestNPC_Base";
         private const string QuestCanvasName = "QuestCanvas";
+        private const string ObstacleTag = "Obstacle";
 
         private static readonly string[] EnemyPrefabPaths =
         {
@@ -325,6 +326,17 @@ namespace FantasySurvival.EditorTools
                     SceneManager.MoveGameObjectToScene(npc, scene);
                 }
 
+                Undo.RecordObject(npc, "Configure Test Quest NPC Collision");
+                npc.tag = ObstacleTag;
+
+                Collider npcCollider = npc.GetComponent<Collider>();
+                if (npcCollider == null)
+                {
+                    npcCollider = Undo.AddComponent<BoxCollider>(npc);
+                }
+                Undo.RecordObject(npcCollider, "Configure Test Quest NPC Collision");
+                npcCollider.isTrigger = false;
+
                 QuestGiverInteractable interactable = npc.GetComponent<QuestGiverInteractable>();
                 if (interactable == null)
                 {
@@ -539,8 +551,13 @@ namespace FantasySurvival.EditorTools
                 AssetDatabase.LoadAssetAtPath<QuestDefinition>(QuestAssetPath);
             Require(interactable.gameObject.name == QuestNpcName,
                 $"Quest NPC must use the stable authoring name '{QuestNpcName}'.");
-            Require(interactable.GetComponent<Collider>() != null,
-                "Quest NPC needs a Collider for PlayerInteractor discovery.");
+            Collider npcCollider = interactable.GetComponent<Collider>();
+            Require(npcCollider != null && !npcCollider.isTrigger,
+                "Quest NPC needs a solid Collider for interaction and movement blocking.");
+            Require(interactable.CompareTag(ObstacleTag),
+                $"Quest NPC must use the '{ObstacleTag}' tag for PlayerMovement blocking.");
+            Require(interactable.GetComponent<Rigidbody>() == null,
+                "Quest NPC must remain a fixed obstacle without a Rigidbody.");
             Require(expectedDefinition != null && interactable.QuestDefinition == expectedDefinition,
                 "Quest NPC definition reference is missing or incorrect.");
             Require(CountMissingScripts(interactable.gameObject) == 0,

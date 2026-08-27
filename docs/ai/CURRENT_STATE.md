@@ -1,7 +1,7 @@
 # 현재 구현·검증 상태
 
 **마지막 갱신:** 2026-08-28
-**역할:** 현재 구현 여부, 가장 강한 검증 등급과 기능을 다시 열 수 있는 조건을 기록하는 단일 인덱스
+**역할:** 현재 구현·검증과 재개방 조건의 단일 인덱스
 
 ## 판정 규칙
 
@@ -64,7 +64,7 @@
 | `SHELL-01` | 게임플레이 Player 셸 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §1·9·13 | Player·외형·Camera·HUD·Inventory UI·EventSystem이 같은 `PersistentGameplayShell` 인스턴스로 왕복 | 셸 계층·참조·생성/종료 경계 직접 변경 |
 | `TRAVEL-01` | `GameMap1 ↔ GameMapTest` 직접 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §1·14·20 | 시작 로딩 씬을 거치지 않고 기존 Player를 SpawnPoint로 이동 | `DirectSceneTravel`, Spawn, 도착 완료 경계 직접 변경 |
 | `TRANSITION-01` | 검은 전환과 입력·피해 잠금 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20·21 | fade 동안 이동·공격·무기·인벤토리·상호작용·저장·피해 차단 후 복원 | 전환 잠금 소유자나 복원 순서 직접 변경 |
-| `INPUT-01` | Escape·입력·키 설정 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·46 | Base pause/Raid non-pause; Main/ESC 공용 키 리바인딩 | 입력 action·scene 규칙 변경 |
+| `INPUT-01` | Escape·입력·키 설정 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·46·47 | Base pause/Raid non-pause; Main/ESC 리바인딩; 별도 설정 파일·legacy 이관 | 입력·scene 또는 설정 schema·migration·복구 변경 |
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39 | 동시 1개; 개인 인벤토리·기지 Chest 즉시, 원정 Chest·시체 1초; 행동 입력 취소, U·I 유지 | 취소 정책·UI 또는 장전·회복·먹기 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |

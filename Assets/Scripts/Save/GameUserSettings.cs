@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using FantasySurvival.Controls;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,42 +8,61 @@ namespace FantasySurvival.SaveSystem
 {
     public static class GameUserSettings
     {
-        private const string SoundEnabledKey = "settings.soundEnabled";
-        private const string InputBindingOverridesKey = "settings.inputBindingOverrides";
-        private const string InputBindingFormatVersionKey = "settings.inputBindingFormatVersion";
-        private const int CurrentInputBindingFormatVersion = 1;
-        private const int MaximumInputBindingJsonLength = 65536;
+        private const string SettingsFolderName = "Settings";
+        private const string SettingsFileName = "user_settings.json";
 
-        private readonly struct StoredInputBindings
-        {
-            public StoredInputBindings(
-                bool hasOverrides,
-                string overrides,
-                bool hasVersion,
-                int version)
-            {
-                HasOverrides = hasOverrides;
-                Overrides = overrides;
-                HasVersion = hasVersion;
-                Version = version;
-            }
+        // Read only when no settings file exists. These keys are removed only after
+        // the separate settings file has been durably written.
+        private const string LegacySoundEnabledKey = "settings.soundEnabled";
+        private const string LegacyInputBindingOverridesKey = "settings.inputBindingOverrides";
+        private const string LegacyInputBindingFormatVersionKey =
+            "settings.inputBindingFormatVersion";
 
-            public bool HasOverrides { get; }
-            public string Overrides { get; }
-            public bool HasVersion { get; }
-            public int Version { get; }
-        }
-
+        private static UserSettingsData currentSettings;
+        private static bool settingsLoaded;
         private static bool invalidInputSettingsWarningReported;
+        private static bool settingsStorageWarningReported;
+
+#if UNITY_EDITOR
+        private static string editorStorageRootOverride;
+#endif
 
         public static event Action InputBindingsChanged;
 
-        public static bool SoundEnabled => PlayerPrefs.GetInt(SoundEnabledKey, 1) != 0;
+        public static string SettingsFilePath => Path.Combine(
+            StorageRoot,
+            SettingsFolderName,
+            SettingsFileName);
+
+        public static bool SoundEnabled
+        {
+            get
+            {
+                EnsureSettingsLoaded();
+                return currentSettings.soundEnabled;
+            }
+        }
+
+        private static string SettingsBackupPath => SettingsFilePath + ".bak";
+
+        private static string StorageRoot
+        {
+            get
+            {
+#if UNITY_EDITOR
+                if (!string.IsNullOrWhiteSpace(editorStorageRootOverride))
+                {
+                    return editorStorageRootOverride;
+                }
+#endif
+                return Application.persistentDataPath;
+            }
+        }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetRuntimeState()
         {
-            invalidInputSettingsWarningReported = false;
+            ResetLoadedSettingsState();
             InputBindingsChanged = null;
         }
 
@@ -54,19 +74,41 @@ namespace FantasySurvival.SaveSystem
 
         public static void SetSoundEnabled(bool enabled)
         {
-            PlayerPrefs.SetInt(SoundEnabledKey, enabled ? 1 : 0);
-            PlayerPrefs.Save();
-            Apply();
+            if (!TrySetSoundEnabled(enabled, out string error))
+            {
+                Debug.LogError(error);
+            }
+        }
+
+        public static bool TrySetSoundEnabled(bool enabled, out string error)
+        {
+            EnsureSettingsLoaded();
+            UserSettingsData previousSettings = currentSettings.Clone();
+            currentSettings.soundEnabled = enabled;
+            if (!TryPersistCurrentSettings(out string persistenceError))
+            {
+                currentSettings = previousSettings;
+                AudioListener.pause = !currentSettings.soundEnabled;
+                error =
+                    $"소리 설정을 저장하지 못해 이전 값으로 복원했습니다: {persistenceError}";
+                return false;
+            }
+
+            AudioListener.pause = !currentSettings.soundEnabled;
+            error = null;
+            return true;
         }
 
         public static void Apply()
         {
-            AudioListener.pause = !SoundEnabled;
+            EnsureSettingsLoaded();
+            AudioListener.pause = !currentSettings.soundEnabled;
             ApplyInputBindings();
         }
 
         public static bool ApplyInputBindings()
         {
+            EnsureSettingsLoaded();
             InputActionMap map = GameInputBindings.GameplayMap;
             if (map == null)
             {
@@ -85,16 +127,16 @@ namespace FantasySurvival.SaveSystem
             try
             {
                 map.RemoveAllBindingOverrides();
-                if (!PlayerPrefs.HasKey(InputBindingOverridesKey))
+                string json = currentSettings.inputBindingOverrides;
+                if (!currentSettings.hasInputBindingOverrides)
                 {
                     return true;
                 }
 
-                int version = PlayerPrefs.GetInt(InputBindingFormatVersionKey, 0);
-                string json = PlayerPrefs.GetString(InputBindingOverridesKey, string.Empty);
-                if (version != CurrentInputBindingFormatVersion ||
+                if (currentSettings.inputBindingFormatVersion !=
+                        UserSettingsData.CurrentInputBindingFormatVersion ||
                     string.IsNullOrWhiteSpace(json) ||
-                    json.Length > MaximumInputBindingJsonLength)
+                    json.Length > UserSettingsData.MaximumInputBindingJsonLength)
                 {
                     applied = false;
                     ReportInvalidInputSettingsOnce(
@@ -140,6 +182,7 @@ namespace FantasySurvival.SaveSystem
             string controlPath,
             out string error)
         {
+            EnsureSettingsLoaded();
             if (!GameInputBindings.TryGetCanonicalRebindPath(
                     controlPath,
                     out string canonicalPath))
@@ -212,6 +255,7 @@ namespace FantasySurvival.SaveSystem
 
         public static bool TryResetInputBindings(out string error)
         {
+            EnsureSettingsLoaded();
             InputActionMap map = GameInputBindings.GameplayMap;
             if (map == null)
             {
@@ -220,7 +264,7 @@ namespace FantasySurvival.SaveSystem
             }
 
             string previousOverrides = map.SaveBindingOverridesAsJson();
-            StoredInputBindings previousStoredBindings = CaptureStoredInputBindings();
+            UserSettingsData previousSettings = currentSettings.Clone();
 
             bool wasEnabled = map.enabled;
             if (wasEnabled)
@@ -231,14 +275,21 @@ namespace FantasySurvival.SaveSystem
             try
             {
                 map.RemoveAllBindingOverrides();
-                PlayerPrefs.DeleteKey(InputBindingOverridesKey);
-                PlayerPrefs.DeleteKey(InputBindingFormatVersionKey);
-                PlayerPrefs.Save();
+                currentSettings.hasInputBindingOverrides = false;
+                currentSettings.inputBindingFormatVersion =
+                    UserSettingsData.CurrentInputBindingFormatVersion;
+                currentSettings.inputBindingOverrides = string.Empty;
+                if (!TryPersistCurrentSettings(out error))
+                {
+                    currentSettings = previousSettings;
+                    RestoreMapOverrides(map, previousOverrides);
+                    return false;
+                }
             }
             catch (Exception exception)
             {
+                currentSettings = previousSettings;
                 RestoreMapOverrides(map, previousOverrides);
-                RestoreStoredInputBindings(previousStoredBindings);
                 error = $"기본 키 설정을 저장하지 못했습니다: {exception.Message}";
                 return false;
             }
@@ -258,82 +309,230 @@ namespace FantasySurvival.SaveSystem
 
         private static bool TrySaveInputBindingOverrides(out string error)
         {
-            StoredInputBindings previousStoredBindings = CaptureStoredInputBindings();
+            InputActionMap map = GameInputBindings.GameplayMap;
+            if (map == null)
+            {
+                error = "Gameplay Input Action Map이 없습니다.";
+                return false;
+            }
+
+            string json = map.SaveBindingOverridesAsJson();
+            if (json.Length > UserSettingsData.MaximumInputBindingJsonLength)
+            {
+                error = "키 설정 데이터가 허용 크기를 초과했습니다.";
+                return false;
+            }
+
+            UserSettingsData previousSettings = currentSettings.Clone();
+            currentSettings.hasInputBindingOverrides = true;
+            currentSettings.inputBindingFormatVersion =
+                UserSettingsData.CurrentInputBindingFormatVersion;
+            currentSettings.inputBindingOverrides = json;
+            if (TryPersistCurrentSettings(out error))
+            {
+                return true;
+            }
+
+            currentSettings = previousSettings;
+            error = $"키 설정을 저장하지 못했습니다: {error}";
+            return false;
+        }
+
+        private static void EnsureSettingsLoaded()
+        {
+            if (settingsLoaded)
+            {
+                return;
+            }
+
             try
             {
-                InputActionMap map = GameInputBindings.GameplayMap;
-                if (map == null)
-                {
-                    error = "Gameplay Input Action Map이 없습니다.";
-                    return false;
-                }
-
-                string json = map.SaveBindingOverridesAsJson();
-                if (json.Length > MaximumInputBindingJsonLength)
-                {
-                    error = "키 설정 데이터가 허용 크기를 초과했습니다.";
-                    return false;
-                }
-
-                PlayerPrefs.SetInt(
-                    InputBindingFormatVersionKey,
-                    CurrentInputBindingFormatVersion);
-                PlayerPrefs.SetString(InputBindingOverridesKey, json);
-                PlayerPrefs.Save();
-                error = null;
-                return true;
+                currentSettings = LoadSettings() ?? UserSettingsData.CreateDefault();
             }
             catch (Exception exception)
             {
-                RestoreStoredInputBindings(previousStoredBindings);
-                error = $"키 설정을 저장하지 못했습니다: {exception.Message}";
+                currentSettings = UserSettingsData.CreateDefault();
+                Debug.LogError(
+                    $"사용자 설정 초기화 중 예상하지 못한 오류가 발생해 런타임 기본값을 사용합니다. " +
+                    $"설정 파일은 자동으로 덮어쓰지 않습니다: {exception.Message}");
+            }
+
+            settingsLoaded = true;
+        }
+
+        private static UserSettingsData LoadSettings()
+        {
+            string primaryPath = SettingsFilePath;
+            string backupPath = SettingsBackupPath;
+            bool primaryExists = File.Exists(primaryPath);
+            bool backupExists = File.Exists(backupPath);
+
+            if (UserSettingsFileStore.TryRead(
+                    primaryPath,
+                    out UserSettingsData primary,
+                    out string primaryError))
+            {
+                return primary;
+            }
+
+            if (UserSettingsFileStore.TryRead(
+                    backupPath,
+                    out UserSettingsData backup,
+                    out string backupError))
+            {
+                string preservationMessage = string.Empty;
+                bool primaryReadyForRestore = true;
+                if (primaryExists)
+                {
+                    if (UserSettingsFileStore.TryQuarantine(
+                            primaryPath,
+                            out string preservedPath,
+                            out string quarantineError))
+                    {
+                        preservationMessage = $" 손상 원본 보존: {preservedPath}.";
+                    }
+                    else
+                    {
+                        primaryReadyForRestore = false;
+                        preservationMessage = $" 손상 원본 보존 실패: {quarantineError}.";
+                    }
+                }
+
+                string restoreMessage = string.Empty;
+                if (primaryReadyForRestore &&
+                    !UserSettingsFileStore.TryWrite(primaryPath, backup, out string restoreError))
+                {
+                    restoreMessage = $" 기본 파일 복구 실패: {restoreError}.";
+                }
+
+                ReportSettingsStorageWarningOnce(
+                    $"사용자 설정 기본 파일을 읽지 못해 유효한 백업을 사용합니다. " +
+                    $"기본 파일 오류: {primaryError}.{preservationMessage}{restoreMessage}");
+                return backup;
+            }
+
+            UserSettingsData settings = CaptureLegacySettings(out bool hasLegacySettings);
+            string primaryPreservation = PreserveInvalidCandidate(
+                primaryExists,
+                primaryPath,
+                primaryError);
+            string backupPreservation = PreserveInvalidCandidate(
+                backupExists,
+                backupPath,
+                backupError);
+
+            if (UserSettingsFileStore.TryWrite(primaryPath, settings, out string writeError))
+            {
+                if (hasLegacySettings)
+                {
+                    TryClearLegacyPreferences();
+                }
+            }
+            else
+            {
+                Debug.LogError(
+                    $"사용자 설정 파일을 만들지 못했습니다. 런타임에서는 복원된 값 또는 기본값을 " +
+                    $"사용하며 기존 PlayerPrefs는 보존합니다: {writeError}");
+            }
+
+            if (primaryExists || backupExists)
+            {
+                ReportSettingsStorageWarningOnce(
+                    $"유효한 사용자 설정 파일이 없어 복원된 값 또는 기본값을 사용합니다. " +
+                    $"기본 파일 오류: {primaryError}. 백업 오류: {backupError}." +
+                    $"{primaryPreservation}{backupPreservation}");
+            }
+
+            return settings;
+        }
+
+        private static UserSettingsData CaptureLegacySettings(out bool hasLegacySettings)
+        {
+            bool hasSound = PlayerPrefs.HasKey(LegacySoundEnabledKey);
+            bool hasOverrides = PlayerPrefs.HasKey(LegacyInputBindingOverridesKey);
+            bool hasBindingVersion = PlayerPrefs.HasKey(LegacyInputBindingFormatVersionKey);
+            hasLegacySettings = hasSound || hasOverrides || hasBindingVersion;
+
+            UserSettingsData settings = UserSettingsData.CreateDefault();
+            if (hasSound)
+            {
+                settings.soundEnabled = PlayerPrefs.GetInt(LegacySoundEnabledKey, 1) != 0;
+            }
+
+            if (hasOverrides)
+            {
+                settings.hasInputBindingOverrides = true;
+                settings.inputBindingOverrides = PlayerPrefs.GetString(
+                    LegacyInputBindingOverridesKey,
+                    string.Empty);
+                settings.inputBindingFormatVersion = PlayerPrefs.GetInt(
+                    LegacyInputBindingFormatVersionKey,
+                    0);
+            }
+            else if (hasBindingVersion)
+            {
+                settings.inputBindingFormatVersion = PlayerPrefs.GetInt(
+                    LegacyInputBindingFormatVersionKey,
+                    0);
+            }
+
+            return settings;
+        }
+
+        private static bool TryPersistCurrentSettings(out string error)
+        {
+            if (!UserSettingsFileStore.TryWrite(SettingsFilePath, currentSettings, out error))
+            {
                 return false;
             }
+
+            TryClearLegacyPreferences();
+            return true;
         }
 
-        private static StoredInputBindings CaptureStoredInputBindings()
+        private static void TryClearLegacyPreferences()
         {
-            bool hasOverrides = PlayerPrefs.HasKey(InputBindingOverridesKey);
-            bool hasVersion = PlayerPrefs.HasKey(InputBindingFormatVersionKey);
-            return new StoredInputBindings(
-                hasOverrides,
-                hasOverrides
-                    ? PlayerPrefs.GetString(InputBindingOverridesKey, string.Empty)
-                    : string.Empty,
-                hasVersion,
-                hasVersion
-                    ? PlayerPrefs.GetInt(InputBindingFormatVersionKey, 0)
-                    : 0);
-        }
-
-        private static void RestoreStoredInputBindings(StoredInputBindings snapshot)
-        {
-            if (snapshot.HasOverrides)
+            if (!PlayerPrefs.HasKey(LegacySoundEnabledKey) &&
+                !PlayerPrefs.HasKey(LegacyInputBindingOverridesKey) &&
+                !PlayerPrefs.HasKey(LegacyInputBindingFormatVersionKey))
             {
-                PlayerPrefs.SetString(InputBindingOverridesKey, snapshot.Overrides);
-            }
-            else
-            {
-                PlayerPrefs.DeleteKey(InputBindingOverridesKey);
-            }
-
-            if (snapshot.HasVersion)
-            {
-                PlayerPrefs.SetInt(InputBindingFormatVersionKey, snapshot.Version);
-            }
-            else
-            {
-                PlayerPrefs.DeleteKey(InputBindingFormatVersionKey);
+                return;
             }
 
             try
             {
+                PlayerPrefs.DeleteKey(LegacySoundEnabledKey);
+                PlayerPrefs.DeleteKey(LegacyInputBindingOverridesKey);
+                PlayerPrefs.DeleteKey(LegacyInputBindingFormatVersionKey);
                 PlayerPrefs.Save();
             }
-            catch (Exception)
+            catch (Exception exception)
             {
-                // The caller already reports the original persistence failure.
+                Debug.LogWarning(
+                    $"사용자 설정 파일 저장은 완료됐지만 이전 PlayerPrefs 설정 정리는 실패했습니다. " +
+                    $"새 설정 파일이 계속 우선됩니다: {exception.Message}");
             }
+        }
+
+        private static string PreserveInvalidCandidate(
+            bool exists,
+            string path,
+            string readError)
+        {
+            if (!exists)
+            {
+                return string.Empty;
+            }
+
+            if (UserSettingsFileStore.TryQuarantine(
+                    path,
+                    out string preservedPath,
+                    out string quarantineError))
+            {
+                return $" 손상 파일 보존: {preservedPath} ({readError}).";
+            }
+
+            return $" 손상 파일 보존 실패: {quarantineError} ({readError}).";
         }
 
         private static void RestoreMapOverrides(InputActionMap map, string json)
@@ -368,6 +567,14 @@ namespace FantasySurvival.SaveSystem
                 });
         }
 
+        private static void ResetLoadedSettingsState()
+        {
+            currentSettings = null;
+            settingsLoaded = false;
+            invalidInputSettingsWarningReported = false;
+            settingsStorageWarningReported = false;
+        }
+
         private static void ReportInvalidInputSettingsOnce(string message)
         {
             if (invalidInputSettingsWarningReported)
@@ -378,5 +585,51 @@ namespace FantasySurvival.SaveSystem
             invalidInputSettingsWarningReported = true;
             Debug.LogWarning(message);
         }
+
+        private static void ReportSettingsStorageWarningOnce(string message)
+        {
+            if (settingsStorageWarningReported)
+            {
+                return;
+            }
+
+            settingsStorageWarningReported = true;
+            Debug.LogWarning(message);
+        }
+
+#if UNITY_EDITOR
+        public static bool SetEditorStorageRootForTests(string root, out string error)
+        {
+            if (string.IsNullOrWhiteSpace(root))
+            {
+                error = "Editor settings-test storage root is empty.";
+                return false;
+            }
+
+            try
+            {
+                editorStorageRootOverride = Path.GetFullPath(root);
+                ResetLoadedSettingsState();
+                error = null;
+                return true;
+            }
+            catch (Exception exception)
+            {
+                error = $"Editor settings-test storage root is invalid: {exception.Message}";
+                return false;
+            }
+        }
+
+        public static void ReloadFromDiskForTests()
+        {
+            ResetLoadedSettingsState();
+        }
+
+        public static void ClearEditorStorageRootForTests()
+        {
+            editorStorageRootOverride = null;
+            ResetLoadedSettingsState();
+        }
+#endif
     }
 }

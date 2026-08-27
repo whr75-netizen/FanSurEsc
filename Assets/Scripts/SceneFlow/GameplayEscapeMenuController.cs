@@ -254,7 +254,13 @@ namespace FantasySurvival.SceneFlow
 
         public void SetSoundEnabled(bool enabled)
         {
-            GameUserSettings.SetSoundEnabled(enabled);
+            if (GameUserSettings.TrySetSoundEnabled(enabled, out string error))
+            {
+                return;
+            }
+
+            soundToggle.SetIsOnWithoutNotify(GameUserSettings.SoundEnabled);
+            Debug.LogError(error, this);
         }
 
         public void RequestAbandonToBase()

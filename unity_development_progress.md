@@ -1453,3 +1453,15 @@ Interactable (abstract base class)
 - `[Editor/저장 확인]` catalog 16 action·32 binding, 공용 prefab과 두 진입점 참조, 각 위치 인스턴스 1개, missing script 0을 확인했다. 임시 override를 원상복구하는 검증에서 변경·재적용·일반/alias 중복·Escape/F5·비버튼 거부·의도 중복·초기화·손상 JSON 보존/기본값 fallback 21/21 case가 통과했고, 원래 PlayerPrefs 없음·Interact E 상태로 복원했다.
 - `[Play Mode 호출 확인]` MainMenu Settings와 `GameMap1` Base Escape Settings가 각각 활성화되어 16개 runtime 행을 만들고 project-wide Gameplay map이 활성화된 것을 확인했다. Base는 기존대로 `Time.timeScale=0`, 메뉴 종료 뒤 1로 복원됐다. 실제 행 버튼에서 재바인딩을 시작한 뒤 취소하면 같은 frame Escape 소비와 원 binding 보존, Settings 화면 유지가 확인됐다.
 - `[보존·미검증]` Raid non-pause 분기는 변경하지 않아 기존 §21 Play 증거를 재사용한다. 실제 사용자의 키보드·마우스 물리 입력, 게임패드, 그래픽·세부 오디오 설정과 최종 UI 아트는 이번 범위에 포함하지 않았다. 손상 JSON case는 의도된 경고 1건을 냈고 값을 복구한 뒤 새 컴파일·runtime Error/Exception은 확인되지 않았다.
+
+---
+
+## 47. 별도 사용자 설정 파일과 PlayerPrefs 이관 `[INPUT-01]`
+
+- `[사용자 요구][2026-08-28]` Sound와 키 설정을 gameplay 저장 슬롯·원정 Recovery에 섞지 않고 게임 저장 데이터 영역의 별도 사용자 설정 파일에 보관하도록 변경했다.
+- `[저장 권위]` 기존 `GameUserSettings`를 단일 진입점으로 유지하고 `Application.persistentDataPath/Settings/user_settings.json` v1에 Sound, 키 override 존재 여부·버전·payload를 저장한다. `GameSaveData`와 Recovery schema는 변경하지 않았다.
+- `[내구성·복구]` UTF-8 JSON을 `.tmp`에 flush한 뒤 원자 교체하고 이전의 유효한 primary를 `.bak`으로 회전한다. 읽을 수 없는 primary·backup은 `.corrupt-*`로 보존하며, primary가 무효이고 backup이 유효하면 backup을 적용하고 primary 복구를 시도한다.
+- `[마이그레이션·실패 원자성]` 유효 설정 파일이 없을 때만 기존 PlayerPrefs를 한 번 이관하고, 별도 파일 쓰기 성공 뒤 legacy key를 정리한다. override 존재 여부와 원본 버전을 함께 보존해 손상 legacy 값을 정상값으로 가장하지 않는다. Sound·키 저장 실패 시 runtime 값과 설정 UI 표시를 이전 확정값으로 복원한다.
+- `[Editor 저장 검증]` 프로젝트 내부 격리 루트에서 완전한 PlayerPrefs 이관, Sound·키 저장 후 reload와 backup, 키 초기화 시 Sound 보존, 손상 primary 격리·backup 복구, 버전 key가 빠진 부분 legacy의 원본 보존·기본키 fallback, 쓰기 실패 시 Sound·키 rollback, 실제 Settings·ordinary save·Recovery 지문 불변의 7-case matrix가 최종 7/7을 반환했다. 검증 뒤 PlayerPrefs·InputAction override·map enabled·AudioListener와 임시 파일을 원상복구했다.
+- `[검증 도구 반복 주의]` 쓰기 차단 case의 의도된 Error를 Unity MCP가 명령 실패로 분류해 같은 검증 함수를 67회 자동 재호출했다. 이는 수명·간헐성 검증을 위한 요청 반복이 아니며 추가 실행을 중단했다. 매 호출은 GUID 격리 root와 `finally` 원복을 사용했고, 종료 뒤 임시 폴더 부재와 실제 Settings·ordinary save·Recovery 지문 불변을 다시 확인했다.
+- `[보존·미검증]` 기존 Main/ESC 설정 UI와 Base pause/Raid non-pause는 구현을 바꾸지 않아 §21·46 Play 증거를 재사용한다. 한 matrix의 손상·부분 legacy·쓰기 차단 case에는 의도된 Warning 2건과 Error 1건이 있으며, 정리 뒤 최종 프로젝트 컴파일이 통과했다. 실제 전원 차단 순간의 원자성, 물리 키 입력과 Player build는 이번 변경 뒤 실행하지 않았다.

@@ -402,8 +402,14 @@ public class MainMenuManager : MonoBehaviour
 
     public void SetSoundEnabled(bool enabled)
     {
-        GameUserSettings.SetSoundEnabled(enabled);
-        SetStatus(enabled ? "Sound enabled." : "Sound disabled.");
+        if (GameUserSettings.TrySetSoundEnabled(enabled, out string error))
+        {
+            SetStatus(enabled ? "Sound enabled." : "Sound disabled.");
+            return;
+        }
+
+        soundToggle?.SetIsOnWithoutNotify(GameUserSettings.SoundEnabled);
+        SetStatus(error);
     }
 
     public void OpenExitPanel()

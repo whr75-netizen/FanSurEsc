@@ -86,11 +86,18 @@ namespace FantasySurvival.SaveSystem
                 target.baseMerchantState.allowAuthoredMerchantInitialization =
                     source.baseMerchantState.allowAuthoredMerchantInitialization;
             }
+
+            if (source?.playerProgress != null && target?.playerProgress != null)
+            {
+                target.playerProgress.allowAuthoredQuestInitialization =
+                    source.playerProgress.allowAuthoredQuestInitialization;
+            }
         }
 
         public static GameSaveData CreateSave(
             PlayerItemStateSaveData playerItems,
             PlayerCurrencySaveData playerCurrency,
+            PlayerProgressSaveData playerProgress,
             BaseSaveData baseState,
             BaseMerchantStateSaveData baseMerchantState)
         {
@@ -103,6 +110,7 @@ namespace FantasySurvival.SaveSystem
                 activeRaidInstanceId = null,
                 playerItems = playerItems,
                 playerCurrency = playerCurrency,
+                playerProgress = playerProgress,
                 playerInventory = null,
                 baseState = baseState,
                 baseMerchantState = baseMerchantState
@@ -204,6 +212,14 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            if (!PlayerProgressSaveCodec.TryValidateStructure(
+                    saveData.playerProgress,
+                    out error))
+            {
+                error = $"Player progress validation failed: {error}";
+                return false;
+            }
+
             if (!BaseFurnitureSaveCodec.TryRestore(
                     saveData.baseState,
                     database,
@@ -251,7 +267,10 @@ namespace FantasySurvival.SaveSystem
                            currentSave?.baseState) &&
                        HasCompatibleMerchantLayoutForBackup(
                            existingPrimary.baseMerchantState,
-                           currentSave?.baseMerchantState);
+                           currentSave?.baseMerchantState) &&
+                       HasCompatiblePlayerProgressForBackup(
+                           existingPrimary.playerProgress,
+                           currentSave?.playerProgress);
             }
             catch (Exception)
             {
@@ -359,6 +378,30 @@ namespace FantasySurvival.SaveSystem
             }
 
             return true;
+        }
+
+        private static bool HasCompatiblePlayerProgressForBackup(
+            PlayerProgressSaveData existing,
+            PlayerProgressSaveData current)
+        {
+            if (existing == null || current == null)
+            {
+                return false;
+            }
+
+            if (existing.allowAuthoredQuestInitialization)
+            {
+                return true;
+            }
+
+            return existing.questRecordCount == 1 && current.questRecordCount == 1 &&
+                   existing.quests != null && current.quests != null &&
+                   existing.quests.Count == 1 && current.quests.Count == 1 &&
+                   existing.quests[0] != null && current.quests[0] != null &&
+                   string.Equals(
+                       existing.quests[0].questId,
+                       current.quests[0].questId,
+                       StringComparison.Ordinal);
         }
 
         private static bool TryWriteFile(
@@ -535,6 +578,7 @@ namespace FantasySurvival.SaveSystem
             if (string.IsNullOrWhiteSpace(saveData.savedAtUtc) ||
                 saveData.playerItems == null ||
                 saveData.playerCurrency == null ||
+                saveData.playerProgress == null ||
                 saveData.baseMerchantState == null)
             {
                 error = "Save data is missing required fields.";
@@ -564,6 +608,14 @@ namespace FantasySurvival.SaveSystem
                 saveData.baseState.formatVersion != BaseSaveData.CurrentFormatVersion)
             {
                 error = "Save data has an unsupported base-state version.";
+                return false;
+            }
+
+            if (!PlayerProgressSaveCodec.TryValidateStructure(
+                    saveData.playerProgress,
+                    out error))
+            {
+                error = $"Save data has invalid Player progress: {error}";
                 return false;
             }
 
@@ -645,6 +697,11 @@ namespace FantasySurvival.SaveSystem
                 ApplyVersionSixDefaults(saveData);
             }
 
+            if (saveData.formatVersion == 6)
+            {
+                ApplyVersionSevenDefaults(saveData);
+            }
+
             if (saveData.formatVersion != GameSaveData.CurrentFormatVersion)
             {
                 error = $"Unsupported save version {saveData.formatVersion}.";
@@ -683,6 +740,13 @@ namespace FantasySurvival.SaveSystem
                 }
             }
 
+            saveData.formatVersion = 6;
+        }
+
+        private static void ApplyVersionSevenDefaults(GameSaveData saveData)
+        {
+            saveData.playerProgress =
+                PlayerProgressSaveCodec.CreateEmptySaveData(true);
             saveData.formatVersion = GameSaveData.CurrentFormatVersion;
         }
 

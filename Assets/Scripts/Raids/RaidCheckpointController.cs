@@ -863,6 +863,7 @@ namespace FantasySurvival.Raids
             RaidOutcome settlementOutcome,
             GameSaveData exactSettlementState,
             RaidSettlementJournalKind exactSettlementKind,
+            GameSaveData preparedSettlementState,
             out string error)
         {
             if (!TryPreflightMenuRecoverySettlement(
@@ -873,6 +874,23 @@ namespace FantasySurvival.Raids
                     exactSettlementKind,
                     out error))
             {
+                return false;
+            }
+
+            if (!TryBuildMenuRecoverySettlementState(
+                    requestedBaseline,
+                    requestedCheckpoint,
+                    settlementOutcome,
+                    exactSettlementState,
+                    out GameSaveData expectedSettlementState,
+                    out error) ||
+                preparedSettlementState == null ||
+                !AreCanonicalJsonEquivalent(
+                    expectedSettlementState,
+                    preparedSettlementState))
+            {
+                error = "Prepared recovery settlement no longer matches its validated source: " +
+                        (error ?? "persistent states differ.");
                 return false;
             }
 
@@ -891,9 +909,9 @@ namespace FantasySurvival.Raids
             baseArrivalComplete = true;
             entryOrigin = RaidEntryOrigin.None;
             trackedOutcome = settlementOutcome;
-            pendingExactSettlementState = exactSettlementState;
+            pendingExactSettlementState = preparedSettlementState;
             pendingExactSettlementKind = exactSettlementState == null
-                ? RaidSettlementJournalKind.None
+                ? RaidSettlementJournalKind.OutcomeSettlement
                 : exactSettlementKind;
             ordinarySettlementMirrored = false;
 
@@ -904,6 +922,108 @@ namespace FantasySurvival.Raids
 
             error = null;
             return true;
+        }
+
+        public bool TryPrepareMenuRecoverySettlementState(
+            RaidRecoveryBaselineData requestedBaseline,
+            RaidCheckpointData requestedCheckpoint,
+            RaidOutcome settlementOutcome,
+            GameSaveData exactSettlementState,
+            RaidSettlementJournalKind exactSettlementKind,
+            out GameSaveData preparedSettlementState,
+            out string error)
+        {
+            preparedSettlementState = null;
+            if (!TryPreflightMenuRecoverySettlement(
+                    requestedBaseline,
+                    requestedCheckpoint,
+                    settlementOutcome,
+                    exactSettlementState,
+                    exactSettlementKind,
+                    out error))
+            {
+                return false;
+            }
+
+            return TryBuildMenuRecoverySettlementState(
+                requestedBaseline,
+                requestedCheckpoint,
+                settlementOutcome,
+                exactSettlementState,
+                out preparedSettlementState,
+                out error);
+        }
+
+        private bool TryBuildMenuRecoverySettlementState(
+            RaidRecoveryBaselineData requestedBaseline,
+            RaidCheckpointData requestedCheckpoint,
+            RaidOutcome settlementOutcome,
+            GameSaveData exactSettlementState,
+            out GameSaveData preparedSettlementState,
+            out string error)
+        {
+            preparedSettlementState = null;
+            if (exactSettlementState != null)
+            {
+                preparedSettlementState = exactSettlementState;
+                return RaidCheckpointValidator.TryValidatePersistentStateForLoad(
+                    preparedSettlementState,
+                    shell.InventoryUI.ItemDatabase,
+                    furnitureDatabase,
+                    InventoryUIManager.DefaultInventoryWidth,
+                    InventoryUIManager.DefaultInventoryHeight,
+                    out error);
+            }
+
+            GameSaveData sourceState;
+            if (requestedCheckpoint == null)
+            {
+                sourceState = requestedBaseline?.startingState;
+            }
+            else if (requestedCheckpoint.phase == RaidCheckpointPhase.Resolved &&
+                     requestedCheckpoint.outcome != settlementOutcome)
+            {
+                // A marker-only RecoveryFailed decision can override an earlier terminal
+                // outcome. Re-project from the pre-raid baseline, never from the already
+                // transformed result of the superseded outcome.
+                sourceState = requestedBaseline?.startingState;
+            }
+            else if (requestedCheckpoint.phase == RaidCheckpointPhase.Resolved &&
+                     PlayerProgressSaveCodec.HasProjectedRaidOutcome(
+                         requestedCheckpoint.persistentState?.playerProgress,
+                         settlementOutcome))
+            {
+                preparedSettlementState = requestedCheckpoint.persistentState;
+                return RaidCheckpointValidator.TryValidatePersistentStateForLoad(
+                    preparedSettlementState,
+                    shell.InventoryUI.ItemDatabase,
+                    furnitureDatabase,
+                    InventoryUIManager.DefaultInventoryWidth,
+                    InventoryUIManager.DefaultInventoryHeight,
+                    out error);
+            }
+            else
+            {
+                sourceState = requestedCheckpoint.persistentState;
+            }
+
+            if (!RaidPersistentSettlementPolicy.TryCreateStateForOutcome(
+                    sourceState,
+                    settlementOutcome,
+                    shell.QuestJournal?.Definition,
+                    out preparedSettlementState,
+                    out error))
+            {
+                return false;
+            }
+
+            return RaidCheckpointValidator.TryValidatePersistentStateForLoad(
+                preparedSettlementState,
+                shell.InventoryUI.ItemDatabase,
+                furnitureDatabase,
+                InventoryUIManager.DefaultInventoryWidth,
+                InventoryUIManager.DefaultInventoryHeight,
+                out error);
         }
 
         public bool TryPreflightOrphanedRaidSettlement(
@@ -949,12 +1069,14 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (!GameSaveManager.TryClonePreservingMigrationContext(
+            if (!RaidPersistentSettlementPolicy.TryCreateStateForOutcome(
                     markedSave,
+                    RaidOutcome.RecoveryFailed,
+                    shell.QuestJournal?.Definition,
                     out cleanSettlementState,
                     out error))
             {
-                error = $"Could not clone the marked ordinary save: {error}";
+                error = $"Could not create the orphaned-raid failure state: {error}";
                 return false;
             }
 
@@ -966,16 +1088,6 @@ namespace FantasySurvival.Raids
 
             cleanSettlementState.raidInProgress = false;
             cleanSettlementState.activeRaidInstanceId = null;
-            if (!RaidItemSettlementPolicy.TryDiscardCarriedItems(
-                    cleanSettlementState,
-                    RaidOutcome.RecoveryFailed,
-                    out error))
-            {
-                cleanSettlementState = null;
-                error = $"Marked ordinary save could not apply raid-failure item loss: {error}";
-                return false;
-            }
-
             if (!RaidCheckpointValidator.TryValidatePersistentStateForLoad(
                     cleanSettlementState,
                     shell.InventoryUI.ItemDatabase,
@@ -1122,25 +1234,26 @@ namespace FantasySurvival.Raids
             }
             else
             {
-                if (RaidItemSettlementPolicy.DiscardsCarriedItems(settlementOutcome) &&
-                    !shell.InventoryUI.TryDiscardAllCarriedItems(out error))
-                {
-                    error = $"Could not apply the live Player item-loss settlement: {error}";
-                    return false;
-                }
-
                 if (!TryCapturePersistentState(out GameSaveData sourceState, out error))
                 {
                     return false;
                 }
 
-                if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+                if (!RaidPersistentSettlementPolicy.TryCreateStateForOutcome(
                         sourceState,
                         settlementOutcome,
+                        shell.QuestJournal?.Definition,
                         out saveData,
                         out error))
                 {
                     error = $"Could not create the outcome-specific settlement state: {error}";
+                    return false;
+                }
+
+                if (RaidItemSettlementPolicy.DiscardsCarriedItems(settlementOutcome) &&
+                    !shell.InventoryUI.TryDiscardAllCarriedItems(out error))
+                {
+                    error = $"Could not apply the live Player item-loss settlement: {error}";
                     return false;
                 }
             }
@@ -1212,6 +1325,17 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            if (!PlayerProgressSaveCodec.TryPrepareRestore(
+                    pendingExactSettlementState.playerProgress,
+                    shell.QuestJournal,
+                    shell.PlayerSessionRecords,
+                    out PlayerProgressSaveCodec.RestorePlan progressPlan,
+                    out error))
+            {
+                error = $"The committed Player progress cannot be applied safely: {error}";
+                return false;
+            }
+
             if (!RaidCheckpointStore.TryDeleteAll(out error))
             {
                 error = $"The raid was durably settled, but its recovery files could not be removed: {error}";
@@ -1222,6 +1346,10 @@ namespace FantasySurvival.Raids
             bool isFreshDepartureRollback =
                 pendingExactSettlementKind == RaidSettlementJournalKind.FreshDepartureRollback;
             ResetTrackedRaid();
+            PlayerProgressSaveCodec.ApplyPreparedRestore(
+                shell.QuestJournal,
+                shell.PlayerSessionRecords,
+                progressPlan);
             error = null;
             if (!isFreshDepartureRollback)
             {
@@ -1475,9 +1603,10 @@ namespace FantasySurvival.Raids
 
             if (phase == RaidCheckpointPhase.Resolved)
             {
-                if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+                if (!RaidPersistentSettlementPolicy.TryCreateStateForOutcome(
                         persistentState,
                         outcome,
+                        shell.QuestJournal?.Definition,
                         out GameSaveData outcomePersistentState,
                         out error))
                 {
@@ -1573,6 +1702,11 @@ namespace FantasySurvival.Raids
                     owner.BaseMerchantState,
                     inventory.ItemDatabase,
                     out BaseMerchantStateSaveData baseMerchantState,
+                    out error) ||
+                !PlayerProgressSaveCodec.TryCapture(
+                    shell.QuestJournal,
+                    shell.PlayerSessionRecords,
+                    out PlayerProgressSaveData playerProgress,
                     out error))
             {
                 return false;
@@ -1581,6 +1715,7 @@ namespace FantasySurvival.Raids
             persistentState = GameSaveManager.CreateSave(
                 playerItems,
                 playerCurrency,
+                playerProgress,
                 baseState,
                 baseMerchantState);
             error = null;
@@ -1970,9 +2105,10 @@ namespace FantasySurvival.Raids
                 candidate.playerCurrentHealth = 0f;
             }
 
-            if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+            if (!RaidPersistentSettlementPolicy.TryCreateStateForOutcome(
                     candidate.persistentState,
                     outcome,
+                    shell.QuestJournal?.Definition,
                     out GameSaveData settledPersistentState,
                     out error))
             {

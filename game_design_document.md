@@ -1542,8 +1542,8 @@ seed + generator version
 #### 8.5.4 의뢰·정보
 
 - **[현재 시험]** 기지 Cube NPC에서 공통 E 상호작용으로 “적 1명 처치 후 생환” 의뢰를 수락·보고한다.
-- **[현재 시험]** 보상은 없고 진행도는 현재 Play Session에만 존재한다.
-- **[미정]** 정식 퀘스트·보상·저장·연쇄 의뢰
+- **[현재 시험]** 보상은 없고 진행도는 ordinary save와 원정 Recovery에 영속화된다.
+- **[미정]** 정식 다중 퀘스트·보상·반복·연쇄 의뢰
 - 지도 정보
 - 적·랜드마크 정보 해금
 
@@ -1578,7 +1578,7 @@ seed + generator version
 ### 9.1 현재 상태
 
 - **[현재 시험]** 무지갑 상인과 적 1킬·생환 의뢰 한 개가 기능 검증용으로 있다.
-- **[현재]** 정식 경제, 제작, 퀘스트 보상·저장·연쇄 의뢰와 레벨 시스템은 없다.
+- **[현재]** 정식 경제, 제작, 퀘스트 보상·반복·연쇄 의뢰와 레벨 시스템은 없다.
 - **[현재]** 생환한 물건을 보존하고 다음 원정에 사용할 수 있는 기반만 있다.
 
 ### 9.2 성장 방향 `[설계 제안]`
@@ -1638,7 +1638,7 @@ seed + generator version
 - 기지 Cube NPC에서 수락하고, tracked Raid 중 Player가 `EnemyStats.Died`를 일으킨 처치 1건만 기록한다.
 - 원정 중 목표 수를 채워도 영구 완료하지 않는다. committed `Extracted` 정산 뒤 `ReadyToTurnIn`이 되고, 기지 NPC에게 다시 보고할 때 `Completed`가 된다.
 - `PlayerDied`, `Abandoned`, 실제 `RecoveryFailed` 또는 목표 미달 생환은 의뢰를 취소하지 않고 이번 시도의 처치 수만 0으로 되돌린다.
-- 시험 보상은 없으며 상태는 Play Session에만 있다. ordinary save·Recovery·강제종료 이어하기 지원은 구현되지 않았다.
+- 시험 보상은 없다. 진행도는 ordinary save와 Recovery checkpoint에 포함되며, 생환·사망·포기·복구 실패 결과는 terminal exact 상태로 한 번만 투영된다.
 
 #### 9.5.2 후보 유형
 
@@ -2012,10 +2012,10 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 #### 10.15.2 원본과 현재 경계
 
 - 캐릭터 탭은 `PlayerStats`, 현재 Player inventory/equipment/wallet, 활성 무기와 `RaidSession`을 읽는 파생 View다.
-- 기록 탭의 적 처치·정산 결과·완료 의뢰 합계는 persistent `PlayerSessionRecords` 하나가 이번 실행 동안만 소유한다. ordinary save와 Recovery에는 저장하지 않는다.
+- 기록 탭의 적 처치·정산 결과·완료 의뢰 합계는 persistent `PlayerSessionRecords` 하나가 런타임 원본으로 소유하고 ordinary save와 Recovery가 값을 운반한다.
 - 사전 탭은 발견·해금 상태를 만들지 않고 현재 ItemDatabase와 두 시험 EnemyDefinition을 모두 표시한다. 적의 정식 ID·표시명·설명은 아직 없다.
 - 의뢰 탭은 현재 `QuestJournal`을 읽는다. 업그레이드 탭은 정의·비용·효과·저장 규칙이 미정임을 표시하며 가짜 레벨이나 구매 상태를 만들지 않는다.
-- 정식 장기 기록, 도감 발견 규칙과 업그레이드는 각 권위 데이터와 저장 migration이 확정될 때 별도 범위로 구현한다.
+- 세부 장기 기록 항목, 도감 발견 규칙과 업그레이드는 각 권위 데이터와 저장 migration이 확정될 때 별도 범위로 구현한다.
 
 ---
 
@@ -2216,7 +2216,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 | Base Chest | 기지 | 즉시 지속 인벤토리 UI, Player 이동 허용 | Base 상태; ordinary와 원정 Recovery에 포함 | 기지 안전 보관 |
 | Raid Chest | 원정 | 1초 조사 뒤 지속 인벤토리 UI, Player 이동 허용 | Raid/Scene; 진행 중 Recovery에만 포함 | 원정 Loot 이전 |
 | Corpse | 원정 | 사망 뒤 1초 조사로 지속 인벤토리 UI | Enemy/Scene; 진행 중 Recovery에만 포함 | 시체 Loot 이전 |
-| Prototype Quest NPC | 기지 | 지속 의뢰 패널, Player 이동 허용 | NPC View는 Base/Scene, 진행도는 Play Session 메모리만 사용 | 수락·완료 보고 |
+| Prototype Quest NPC | 기지 | 지속 의뢰 패널, Player 이동 허용 | NPC View는 Base/Scene, 진행도 원본은 `QuestJournal`, ordinary·Recovery DTO가 운반 | 수락·완료 보고 |
 
 ### 12.3 첫 완성형 플레이 조각 `[설계 제안]`
 
@@ -2679,7 +2679,7 @@ VFX는 실제 판정의 결과를 표시하며 별도 피해 원본이 되지 �
 3. 보관 용량과 가방 효과
 4. 배치 가능한 가구 범위
 5. 기지 layout migration
-6. 정식 퀘스트 보상·저장·반복·연쇄 범위
+6. 정식 다중 퀘스트·보상·반복·연쇄 범위
 
 ### 18.4 선별 손실 전에 결정
 

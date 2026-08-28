@@ -56,7 +56,7 @@
 - RimWorld의 소유권 추적성과 데이터 구조 원칙을 참고하지만, 식민지 경영·Pawn 시뮬레이션 게임으로 바꾸지 않는다.
 - “생존”이라는 단어만으로 허기, 갈증, 온도, 수면, 제작, 기지 건설을 추가하지 않는다.
 - “탈출”이라는 단어만으로 축소 자기장, 강제 PvP, 제한 시간 또는 최종 1인을 추가하지 않는다.
-- 퀘스트, 상점, 제작, 레벨, 스킬 트리, 무게, 탄약, 내구도와 상태이상은 장르에서 흔할 수 있지만 정식 범위가 자동 확정되는 것은 아니다. 현재 Play Session 한정 시험 의뢰 한 종류는 명시적으로 승인된 프로토타입 예외이며 보상·반복·영속화까지 확정한 것으로 확대하지 않는다.
+- 퀘스트, 상점, 제작, 레벨, 스킬 트리, 무게, 탄약, 내구도와 상태이상은 장르에서 흔할 수 있지만 정식 범위가 자동 확정되는 것은 아니다. 현재 영속화된 시험 의뢰 한 종류는 명시적으로 승인된 프로토타입 예외이며 보상·반복·다중 의뢰까지 확정한 것으로 확대하지 않는다.
 
 ---
 
@@ -304,7 +304,7 @@ ordinary save에서 raidInProgress와 raid ID 확인
 - 정산은 `journal → ordinary primary/backup → Recovery cleanup` 순서로 중단에 안전하게 진행한다.
 - 일부 파일 작업이 실패하면 더 오래된 상태를 임의로 살리지 않고 fail-closed로 처리한다.
 - 저장장치가 모든 기록 수단을 동시에 거부하는 물리적 전면 I/O 실패까지 복원 가능하다고 주장하지 않는다.
-- 현재 Cube NPC의 시험 의뢰 진행도는 Play Session 메모리에만 있고 ordinary save·Recovery에는 없다. 이를 강제종료·Load·Resume 안전 퀘스트라고 주장하지 않으며, 정식 도입 때 별도 quest payload·migration과 원정 정산의 원자 경계를 설계한다.
+- 현재 Cube NPC의 시험 의뢰 진행도와 누적 기록은 `GameSaveData` v7의 player-progress payload로 ordinary save와 Recovery에 함께 운반한다. 원정 결과는 terminal checkpoint에서 한 번 순수 투영한 exact 상태를 settlement journal·ordinary save·live owner까지 재사용하며, v2~v6 저장은 명시적으로 v7로 이관한다.
 
 ### 4.10 업데이트 주기와 성능
 
@@ -328,8 +328,8 @@ ordinary save에서 raidInProgress와 raid ID 확인
 | 적 체력·사망 | `EnemyStats` | Enemy Entity | 전투 결과와 시체 전이 |
 | 적 인식·기억·이동 명령 | `EnemyAIController` | Enemy Entity/Scene | 관측 가능한 위협 행동. 현재 Recovery 저장 대상이 아니다. |
 | 상호작용 대상 | `PlayerInteractor` | 현재 상호작용 | 밀집된 전리품의 단일 입력 대상 |
-| 시험 의뢰 진행 | `QuestJournal`이 소유한 `QuestProgressState` | Play Session | 정의는 immutable `QuestDefinition`, 패널·추적기는 파생 View. 현재 디스크 저장 대상이 아니다. |
-| 시험 누적 기록 | `PlayerSessionRecords` | Play Session | Player 귀속 처치와 durable 정산·의뢰 완료 통지를 합산한다. 정보 UI는 읽기만 하며 현재 디스크 저장 대상이 아니다. |
+| 시험 의뢰 진행 | `QuestJournal`이 소유한 `QuestProgressState` | Play Session 권위 + Save DTO 운반 | 정의는 immutable `QuestDefinition`, 패널·추적기는 파생 View. ordinary·Recovery load는 검증 뒤 exact replacement한다. |
+| 시험 누적 기록 | `PlayerSessionRecords` | Play Session 권위 + Save DTO 운반 | Player 귀속 처치와 durable 정산·실제 의뢰 완료 통지를 합산한다. 정보 UI는 읽기만 한다. |
 | 원정 checkpoint 투영 | `RaidCheckpointController`가 기존 원본을 DTO로 투영하며 gameplay 상태를 소유하지 않는다. | Play Session 컴포넌트/Raid 추적 | 강제종료 뒤 권위 상태 운반 |
 | 원정 정산 규칙 | `RaidItemSettlementPolicy`는 권위 상태가 없는 순수 변환 규칙이다. | 정산 호출 | 결과별 보존·소실 규칙의 단일 계산 경계 |
 
@@ -398,7 +398,7 @@ ordinary save에서 raidInProgress와 raid ID 확인
 - 출격 전 휴대품과 원정 획득물의 provenance·선별 손실
 - 인벤토리 무게, 아이템 수량, 내구도와 상태이상
 - 적 드롭 테이블, 상자 보상, Spawn 밀도와 위험·보상 예산
-- 기지의 정식 상점, 제작, 퀘스트·보상·저장, 성장과 배치 가능한 가구의 최종 범위
+- 기지의 정식 상점, 제작, 다중 퀘스트·보상·반복, 성장과 배치 가능한 가구의 최종 범위
 - 도심 랜드마크·내부·지형지물의 최종 배치 규칙
 - 지하 던전과 오염 지역의 별도 공간 문법
 - 난이도 단계, 적 등급, 보스 전술과 최종 AI 기억 정책

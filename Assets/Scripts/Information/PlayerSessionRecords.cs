@@ -1,21 +1,20 @@
 using System;
 using FantasySurvival.Quests;
 using FantasySurvival.Raids;
+using FantasySurvival.SaveSystem;
 using UnityEngine;
 
 namespace FantasySurvival.Information
 {
     /// <summary>
-    /// Owns lightweight aggregate records for the current persistent gameplay shell.
-    /// These values intentionally live for one Play Session and are not save data.
+    /// Owns aggregate Player records for the current persistent gameplay shell.
+    /// Save DTOs transport exact snapshots; this component remains the sole runtime writer.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class PlayerSessionRecords : MonoBehaviour
     {
         [SerializeField] private QuestJournal questJournal;
         [SerializeField] private RaidCheckpointController raidCheckpoint;
-
-        private QuestProgressStatus previousQuestStatus;
 
         public event Action Changed;
 
@@ -25,8 +24,15 @@ namespace FantasySurvival.Information
         public int Abandonments { get; private set; }
         public int RecoveryFailures { get; private set; }
         public int CompletedQuests { get; private set; }
-        public int SettledRaids =>
-            SuccessfulExtractions + PlayerDeaths + Abandonments + RecoveryFailures;
+        public int SettledRaids
+        {
+            get
+            {
+                long total = (long)SuccessfulExtractions + PlayerDeaths +
+                             Abandonments + RecoveryFailures;
+                return total >= int.MaxValue ? int.MaxValue : (int)total;
+            }
+        }
         public bool IsConfigured => questJournal != null && raidCheckpoint != null;
 
         private void Awake()
@@ -40,17 +46,9 @@ namespace FantasySurvival.Information
 
         private void OnEnable()
         {
-            previousQuestStatus = questJournal != null
-                ? questJournal.Status
-                : QuestProgressStatus.Available;
-
             if (questJournal != null)
             {
-                questJournal.Changed += HandleQuestChanged;
-            }
-            if (raidCheckpoint != null)
-            {
-                raidCheckpoint.SettlementCommitted += HandleSettlementCommitted;
+                questJournal.QuestCompleted += HandleQuestCompleted;
             }
         }
 
@@ -58,11 +56,7 @@ namespace FantasySurvival.Information
         {
             if (questJournal != null)
             {
-                questJournal.Changed -= HandleQuestChanged;
-            }
-            if (raidCheckpoint != null)
-            {
-                raidCheckpoint.SettlementCommitted -= HandleSettlementCommitted;
+                questJournal.QuestCompleted -= HandleQuestCompleted;
             }
         }
 
@@ -76,46 +70,54 @@ namespace FantasySurvival.Information
                 return;
             }
 
-            EnemyKills++;
+            if (EnemyKills < int.MaxValue)
+            {
+                EnemyKills++;
+            }
             NotifyChangedSafely();
         }
 
-        private void HandleSettlementCommitted(RaidOutcome outcome)
+        internal void ApplyPreparedRecords(
+            PlayerProgressSaveData snapshot,
+            bool notify)
         {
-            switch (outcome)
+            if (snapshot == null)
             {
-                case RaidOutcome.Extracted:
-                    SuccessfulExtractions++;
-                    break;
-                case RaidOutcome.PlayerDied:
-                    PlayerDeaths++;
-                    break;
-                case RaidOutcome.Abandoned:
-                    Abandonments++;
-                    break;
-                case RaidOutcome.RecoveryFailed:
-                    RecoveryFailures++;
-                    break;
-                default:
-                    return;
+                throw new ArgumentNullException(nameof(snapshot));
             }
 
-            NotifyChangedSafely();
-        }
-
-        private void HandleQuestChanged()
-        {
-            QuestProgressStatus currentStatus = questJournal != null
-                ? questJournal.Status
-                : QuestProgressStatus.Available;
-            if (previousQuestStatus != QuestProgressStatus.Completed &&
-                currentStatus == QuestProgressStatus.Completed)
+            EnemyKills = snapshot.enemyKills;
+            SuccessfulExtractions = snapshot.successfulExtractions;
+            PlayerDeaths = snapshot.playerDeaths;
+            Abandonments = snapshot.abandonments;
+            RecoveryFailures = snapshot.recoveryFailures;
+            CompletedQuests = snapshot.completedQuests;
+            if (notify)
             {
-                CompletedQuests++;
                 NotifyChangedSafely();
             }
+        }
 
-            previousQuestStatus = currentStatus;
+        internal void PublishCurrentState()
+        {
+            NotifyChangedSafely();
+        }
+
+        private void HandleQuestCompleted(string questId)
+        {
+            if (!isActiveAndEnabled || questJournal == null ||
+                questJournal.Definition == null ||
+                !string.Equals(
+                    questJournal.Definition.QuestId,
+                    questId,
+                    StringComparison.Ordinal) ||
+                CompletedQuests == int.MaxValue)
+            {
+                return;
+            }
+
+            CompletedQuests++;
+            NotifyChangedSafely();
         }
 
         private void NotifyChangedSafely()

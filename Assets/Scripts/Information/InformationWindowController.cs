@@ -480,7 +480,7 @@ namespace FantasySurvival.Information
         private void BuildRecordsContent(StringBuilder builder)
         {
             PlayerSessionRecords records = shell.PlayerSessionRecords;
-            builder.AppendLine("이번 실행 기록 (세이브되지 않음)");
+            builder.AppendLine("누적 기록 (세이브됨)");
             builder.AppendLine();
             builder.AppendLine($"플레이어가 처치한 적: {records.EnemyKills}");
             builder.AppendLine($"정산이 완료된 원정: {records.SettledRaids}");

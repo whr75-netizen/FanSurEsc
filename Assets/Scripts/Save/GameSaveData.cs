@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FantasySurvival.Quests;
 
 namespace FantasySurvival.SaveSystem
 {
@@ -7,7 +8,7 @@ namespace FantasySurvival.SaveSystem
     public sealed class GameSaveData
     {
         public const string CurrentGameId = "fantasy-survival-escape";
-        public const int CurrentFormatVersion = 6;
+        public const int CurrentFormatVersion = 7;
 
         public string gameId;
         public int formatVersion;
@@ -18,10 +19,40 @@ namespace FantasySurvival.SaveSystem
         public string activeRaidInstanceId;
         public PlayerItemStateSaveData playerItems;
         public PlayerCurrencySaveData playerCurrency;
+        public PlayerProgressSaveData playerProgress;
         // Kept only so JsonUtility can read and migrate the development v2 schema.
         public InventoryGridSaveData playerInventory;
         public BaseSaveData baseState;
         public BaseMerchantStateSaveData baseMerchantState;
+    }
+
+    [Serializable]
+    public sealed class PlayerProgressSaveData
+    {
+        public const int CurrentFormatVersion = 1;
+
+        public int formatVersion;
+        public int questRecordCount;
+        public List<QuestProgressSaveData> quests = new List<QuestProgressSaveData>();
+
+        // A v6-or-older save has no quest roster. This migration provenance allows
+        // the current authored definition to materialize as Available on first load.
+        public bool allowAuthoredQuestInitialization;
+
+        public int enemyKills;
+        public int successfulExtractions;
+        public int playerDeaths;
+        public int abandonments;
+        public int recoveryFailures;
+        public int completedQuests;
+    }
+
+    [Serializable]
+    public sealed class QuestProgressSaveData
+    {
+        public string questId;
+        public QuestProgressStatus status;
+        public int enemyKills;
     }
 
     [Serializable]

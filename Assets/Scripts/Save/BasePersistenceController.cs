@@ -23,6 +23,7 @@ namespace FantasySurvival.SaveSystem
             public GameSaveData RecoverySettlementState;
             public RaidSettlementJournalKind RecoverySettlementKind;
             public RaidOutcome RecoveryOutcome;
+            public GameSaveData PreparedRecoverySettlementState;
             public GameSaveData OrphanedRaidSave;
         }
 
@@ -244,9 +245,21 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            if (!PlayerProgressSaveCodec.TryCapture(
+                    shell?.QuestJournal,
+                    shell?.PlayerSessionRecords,
+                    out PlayerProgressSaveData progressSave,
+                    out error))
+            {
+                SetStatus($"Save failed: {error}", true);
+                return false;
+            }
+
             GameSaveData saveData = GameSaveManager.CreateSave(
                 inventorySave,
                 currencySave,
+                progressSave,
                 baseSave,
                 merchantSave);
             bool written = mirrorOrdinarySlot
@@ -392,12 +405,13 @@ namespace FantasySurvival.SaveSystem
                     PersistentGameplayShell.Instance?.RaidCheckpoint;
                 string preflightError = null;
                 if (checkpoint == null ||
-                    !checkpoint.TryPreflightMenuRecoverySettlement(
+                    !checkpoint.TryPrepareMenuRecoverySettlementState(
                         recoveryBaseline,
                         raidCheckpoint,
                         recoveryOutcome,
                         recoverySettlementState,
                         recoverySettlementKind,
+                        out GameSaveData preparedSettlementState,
                         out preflightError))
                 {
                     SetStatus(
@@ -407,60 +421,20 @@ namespace FantasySurvival.SaveSystem
                     return false;
                 }
 
-                string checkpointError = null;
-                string baselineError = null;
-                string journalError = null;
-                if (recoverySettlementState != null)
-                {
-                    // An exact settlement journal already owns the final persistent
-                    // payload. This also preserves the pre-departure rollback state
-                    // when a fresh raid fails before its scene is ever entered.
-                    if (TryApplyRecoveryPersistentState(
-                        inventory,
-                        owner,
-                        recoverySettlementState,
-                        out allowAuthoredFurnitureInitialization,
-                        out journalError))
-                    {
-                        return true;
-                    }
-
-                    SetStatus(
-                        "Exact raid settlement journal could not be applied; older checkpoint/baseline fallback was refused. " +
-                        journalError,
-                        true);
-                    return false;
-                }
-
-                if (raidCheckpoint?.persistentState != null &&
-                    TryApplyRecoverySettlementPersistentState(
-                        inventory,
-                        owner,
-                        raidCheckpoint.persistentState,
-                        recoveryOutcome,
-                        out allowAuthoredFurnitureInitialization,
-                        out checkpointError))
-                {
-                    return true;
-                }
-
-                if (recoveryBaseline.startingState != null &&
-                    TryApplyRecoverySettlementPersistentState(
-                        inventory,
-                        owner,
-                        recoveryBaseline.startingState,
-                        recoveryOutcome,
-                        out allowAuthoredFurnitureInitialization,
-                        out baselineError))
+                pendingStartAction.PreparedRecoverySettlementState = preparedSettlementState;
+                if (TryApplyRecoveryPersistentState(
+                    inventory,
+                    owner,
+                    preparedSettlementState,
+                    out allowAuthoredFurnitureInitialization,
+                    out string error))
                 {
                     return true;
                 }
 
                 SetStatus(
                     "Raid recovery settlement failed; current player and base state were kept. " +
-                    $"Settlement journal: {journalError ?? "not available."} " +
-                    $"Checkpoint: {checkpointError ?? "not available."} " +
-                    $"Baseline: {baselineError ?? "not available."}",
+                    error,
                     true);
                 return false;
             }
@@ -505,33 +479,6 @@ namespace FantasySurvival.SaveSystem
             return false;
         }
 
-        private bool TryApplyRecoverySettlementPersistentState(
-            InventoryUIManager inventory,
-            GameManager owner,
-            GameSaveData sourceState,
-            RaidOutcome outcome,
-            out bool allowAuthoredFurnitureInitialization,
-            out string error)
-        {
-            allowAuthoredFurnitureInitialization = false;
-            if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
-                    sourceState,
-                    outcome,
-                    out GameSaveData settlementState,
-                    out error))
-            {
-                error = $"Could not apply the raid item settlement policy: {error}";
-                return false;
-            }
-
-            return TryApplyRecoveryPersistentState(
-                inventory,
-                owner,
-                settlementState,
-                out allowAuthoredFurnitureInitialization,
-                out error);
-        }
-
         private bool TryApplyRecoveryPersistentState(
             InventoryUIManager inventory,
             GameManager owner,
@@ -547,6 +494,7 @@ namespace FantasySurvival.SaveSystem
                     out PlayerInventoryState playerCandidate,
                     out BaseFurnitureStateStore baseCandidate,
                     out BaseMerchantStateStore merchantCandidate,
+                    out PlayerProgressSaveCodec.RestorePlan progressPlan,
                     out bool preparedAllowsAuthoredInitialization,
                     out error))
             {
@@ -559,6 +507,7 @@ namespace FantasySurvival.SaveSystem
                     playerCandidate,
                     baseCandidate,
                     merchantCandidate,
+                    progressPlan,
                     out error))
             {
                 return false;
@@ -607,6 +556,7 @@ namespace FantasySurvival.SaveSystem
                         pendingStartAction.RecoveryOutcome,
                         pendingStartAction.RecoverySettlementState,
                         pendingStartAction.RecoverySettlementKind,
+                        pendingStartAction.PreparedRecoverySettlementState,
                         out string error))
                 {
                     SetStatus($"Raid recovery settlement failed: {error}", true);
@@ -653,9 +603,16 @@ namespace FantasySurvival.SaveSystem
 
             var baseCandidate = new BaseFurnitureStateStore();
             var merchantCandidate = new BaseMerchantStateStore();
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
             if (!baseCandidate.TryValidateBindings(persistentFurniture, true, out error) ||
                 !merchantCandidate.TryValidateBindings(persistentMerchants, true, out error) ||
                 !TryMaterializeMerchantStates(merchantCandidate, out error) ||
+                !PlayerProgressSaveCodec.TryPrepareRestore(
+                    PlayerProgressSaveCodec.CreateEmptySaveData(true),
+                    shell?.QuestJournal,
+                    shell?.PlayerSessionRecords,
+                    out PlayerProgressSaveCodec.RestorePlan progressPlan,
+                    out error) ||
                 !owner.CanReplaceBaseFurnitureState(out error))
             {
                 SetStatus($"New game failed: {error}", true);
@@ -668,6 +625,7 @@ namespace FantasySurvival.SaveSystem
                     playerCandidate,
                     baseCandidate,
                     merchantCandidate,
+                    progressPlan,
                     out error))
             {
                 SetStatus($"New game failed: {error}", true);
@@ -693,6 +651,7 @@ namespace FantasySurvival.SaveSystem
                     out PlayerInventoryState playerCandidate,
                     out BaseFurnitureStateStore baseCandidate,
                     out BaseMerchantStateStore merchantCandidate,
+                    out PlayerProgressSaveCodec.RestorePlan progressPlan,
                     out bool primaryAllowsAuthoredInitialization,
                     out string primaryError))
             {
@@ -702,6 +661,7 @@ namespace FantasySurvival.SaveSystem
                         playerCandidate,
                         baseCandidate,
                         merchantCandidate,
+                        progressPlan,
                         out string applyError))
                 {
                     SetStatus($"Load failed; current player and base state were kept: {applyError}", true);
@@ -730,6 +690,7 @@ namespace FantasySurvival.SaveSystem
                     out playerCandidate,
                     out baseCandidate,
                     out merchantCandidate,
+                    out progressPlan,
                     out bool fallbackAllowsAuthoredInitialization,
                     out string fallbackError))
             {
@@ -746,6 +707,7 @@ namespace FantasySurvival.SaveSystem
                     playerCandidate,
                     baseCandidate,
                     merchantCandidate,
+                    progressPlan,
                     out string fallbackApplyError))
             {
                 SetStatus(
@@ -769,12 +731,14 @@ namespace FantasySurvival.SaveSystem
             out PlayerInventoryState playerCandidate,
             out BaseFurnitureStateStore baseCandidate,
             out BaseMerchantStateStore merchantCandidate,
+            out PlayerProgressSaveCodec.RestorePlan progressPlan,
             out bool allowAuthoredFurnitureInitialization,
             out string error)
         {
             playerCandidate = null;
             baseCandidate = null;
             merchantCandidate = null;
+            progressPlan = null;
             allowAuthoredFurnitureInitialization =
                 saveData?.baseState != null &&
                 saveData.baseState.allowAuthoredFurnitureInitialization;
@@ -857,6 +821,17 @@ namespace FantasySurvival.SaveSystem
                     return false;
                 }
 
+                PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+                if (!PlayerProgressSaveCodec.TryPrepareRestore(
+                        saveData.playerProgress,
+                        shell?.QuestJournal,
+                        shell?.PlayerSessionRecords,
+                        out progressPlan,
+                        out error))
+                {
+                    return false;
+                }
+
                 return owner.CanReplaceBaseFurnitureState(out error);
             }
             catch (Exception exception)
@@ -864,17 +839,19 @@ namespace FantasySurvival.SaveSystem
                 playerCandidate = null;
                 baseCandidate = null;
                 merchantCandidate = null;
+                progressPlan = null;
                 error = $"save preparation failed unexpectedly: {exception.Message}";
                 return false;
             }
         }
 
-        private static bool TryApplyPreparedLoad(
+        private bool TryApplyPreparedLoad(
             InventoryUIManager inventory,
             GameManager owner,
             PlayerInventoryState playerCandidate,
             BaseFurnitureStateStore baseCandidate,
             BaseMerchantStateStore merchantCandidate,
+            PlayerProgressSaveCodec.RestorePlan progressPlan,
             out string error)
         {
             BaseFurnitureStateStore previousBase = owner.BaseFurnitureState;
@@ -908,6 +885,11 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            PlayerProgressSaveCodec.ApplyPreparedRestore(
+                shell.QuestJournal,
+                shell.PlayerSessionRecords,
+                progressPlan);
             error = null;
             return true;
         }

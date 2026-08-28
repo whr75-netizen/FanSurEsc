@@ -52,7 +52,6 @@
 | `GAP-LOSS` | 게임플레이 계약 §3.1·4.8, GDD §5.8·18.4 |
 | `GAP-EXTRACTION` | 게임플레이 계약 §2·3.1·4.1, GDD §2.5.4·7.8 |
 | `GAP-SAVE-POLICY` | 게임플레이 계약 §4.9, GDD §11.8·18.5 |
-| `GAP-QUEST-PERSISTENCE` | 게임플레이 계약 §4.9, GDD §9.5.1·11.2.3 |
 | `GAP-BASE-CONTENT` | GDD §8~9·18.3 |
 
 ## 현재 동작 중인 기능
@@ -77,10 +76,10 @@
 | `LOOT-01` | seed 기반 시험 LootTable | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §34 | `Chest → LootTable → ItemDatabase`; Fresh 1회 원자 적용, Resume은 저장 grid 복원, table 미지정은 기존 초기값 유지 | 다중 roll·수량·희귀도·위험 예산·모드 ID 정책 추가 |
 | `BASE-01` | 기지 Chest·가구 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §18 | stable ID별 grid와 중첩 아이템, 왕복·backup 복원 | 배치 가능한 가구나 layout migration 추가 |
 | `RAID-01` | 기지/원정 Escape·생환·사망·포기 결과 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §21·35 | 생환은 즉시 확정·피해 차단 뒤 자동 기지 정산, commit 뒤 `확인`만 표시; 포기·사망 분기는 기존 정책 유지 | 메뉴나 결과 정책 직접 변경 |
-| `SAVE-01` | ordinary save·원정 Recovery·결과 정산 | `ACTIVE` | `PLAYER` | `PROTOTYPE` | 진행 §22~23·48 | ordinary marker 우선, 강제종료 Resume, 생환 전체 보존·세 실패 전체 휴대품 소실; v6 runtime 총 장전탄 운반·v5 빈 탄창 이관 | schema·정산·Recovery 경계 직접 변경 |
+| `SAVE-01` | ordinary save·원정 Recovery·결과 정산 | `ACTIVE` | `PLAYER` | `PROTOTYPE` | 진행 §22~23·48·52 | ordinary marker 우선, 강제종료 Resume, 생환 전체 보존·세 실패 전체 휴대품 소실; v7이 runtime 총 장전탄·시험 의뢰·누적 기록을 운반하고 v2~v6를 이관 | schema·정산·Recovery 경계 직접 변경 |
 | `MERCHANT-01` | Player Gold/Silver와 무지갑 시험 상인 | `ACTIVE` | `USER` | `PROTOTYPE` | 진행 §26 사용자 확인·순수 거래 11경로 | 상인 자금 없음, 판매 sink, 이전 성공 뒤 정산, 실패 rollback | 가격 정책·상인 자금·정식 재고 결정 |
-| `QUEST-01` | Cube NPC의 적 1킬·생환 시험 의뢰 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §30 | 공통 E로 수락, Player 귀속 처치, committed `Extracted` 뒤 보고 가능, NPC 보고로 완료; 보상 없음·Play Session 한정 | 퀘스트 규칙·보상·저장 schema 또는 관련 상호작용·사망·정산 경계 변경 |
-| `INFO-01` | U 정보창과 실행 기록 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §31 | 캐릭터·기록·사전·의뢰·업그레이드 5탭; 기존 원본 읽기, 실행 기록만 별도 권위 소유; 업그레이드는 미구현 표시 | 정보 항목·입력·기록 저장·도감 해금·업그레이드 규칙 변경 |
+| `QUEST-01` | Cube NPC의 적 1킬·생환 시험 의뢰 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §30·52 | 공통 E로 수락, Player 귀속 처치, committed `Extracted` 뒤 보고 가능, NPC 보고로 완료; ordinary·Recovery exact 저장, 보상 없음 | 퀘스트 규칙·보상·다중 의뢰 schema 또는 관련 상호작용·사망·정산 경계 변경 |
+| `INFO-01` | U 정보창과 누적 기록 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §31·52 | 캐릭터·기록·사전·의뢰·업그레이드 5탭; 기존 원본 읽기, 누적 기록은 단일 권위 소유 후 ordinary·Recovery exact 저장; 업그레이드는 미구현 표시 | 정보 항목·기록 종류·도감 해금·업그레이드 규칙 변경 |
 | `ITEM-UI-01` | 아이템 tooltip·가격·수량·탄창 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38·40~45·48~50 | grid context·수량 조작·장착·drag·R; 치료제 사용·회복 정보; 하단 무기 슬롯·탄창 | 표시 필드나 UI 배치 직접 변경 |
 | `PIXEL-01` | 3D 픽셀아트 시험 효과 | `DISABLED` | `PLAY` | `PROTOTYPE` | 진행 §15 | 사용자 요청으로 비활성 | 사용자가 재사용을 요청할 때만 |
 
@@ -96,5 +95,4 @@
 | `GAP-LOSS` | `DECISION` | provenance 기반 선별 손실 미정 | 현재 전체 보존/전체 소실 정산을 임의 변경하지 않음 |
 | `GAP-EXTRACTION` | `DECISION` | 최종 탈출 대기 시간·피격 중단·암전 중 사망 판정 미정 | 현재 시험 포탈의 즉시 생환·피해 차단·자동 기지 정산은 임시 유지 |
 | `GAP-SAVE-POLICY` | `DECISION` | 정식 저장 슬롯·자동 저장 정책 미정 | 현재 단일 슬롯 ordinary/Recovery를 미완성으로 오해하지 않음 |
-| `GAP-QUEST-PERSISTENCE` | `ABSENT` | 시험 의뢰 진행도가 ordinary save·Recovery payload에 없음 | 현재 Play Session 범위를 저장 안전하다고 주장하지 않고 schema·migration·원정 정산의 원자 경계를 함께 설계 |
 | `GAP-BASE-CONTENT` | `DECISION` | 시험 상인·의뢰 이후의 기지 성장·정식 경제·제작·치료·정식 퀘스트 범위 미정 | GDD에서 다음 우선 기능과 정식 범위를 결정한 뒤 진행 |

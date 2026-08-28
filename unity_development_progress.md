@@ -1513,3 +1513,15 @@ Interactable (abstract base class)
 - `[취소]` `MovementInput`은 External만 취소하고 Self에서는 행동을 유지한다. 공격·W1~W3·Requested·사망·씬 전환·source 소실·continuation 실패·컴포넌트 비활성화는 양쪽 모두 기존 취소 경로를 유지한다. 외부 조사의 거리 이탈·대상 비활성화와 열린 UI 자동 닫기도 바꾸지 않았다.
 - `[코드/Play Mode 호출 확인]` 모든 `TryBegin` overload가 scope를 필수 인수로 요구하고 세 runtime 호출부가 명시된 것을 컴파일로 확인했다. 한 `GameMap1` Play Session에서 Self는 이동 취소 요청 뒤 계속 진행·Player anchor·시간 UI 표시를 유지했고 AttackInput에서 효과 없이 종료됐다. External은 실제 `ChestInteractable` source anchor를 사용하고 이동 요청 즉시 종료·시간 UI 숨김이 됐다. 잘못된 scope 값도 시작을 거부했다.
 - `[보존·미검증]` 실제 물리 WASD·R·우클릭 입력은 주입하지 않아 호출 확인으로 기록한다. 재장전·치료 완료 효과는 §48·50, Chest/시체 거리·UI 흐름은 §39·49의 기존 증거를 재사용한다. save/Recovery schema와 prefab·scene은 변경하지 않았고 Console에는 §49의 기존 미해결 원정 보호 오류만 남았다.
+
+---
+
+## 52. 시험 의뢰·누적 기록 ordinary/Recovery 영속화 `[SAVE-01][QUEST-01][INFO-01]`
+
+- `[사용자 요청][2026-08-29]` 반복해서 “세이브 연동 필요”로 제안되던 항목을 실제 구현과 대조했다. 인벤토리·장비·화폐·기지 가구·상인 상태는 이미 저장됐지만, 시험 의뢰와 누적 기록은 v6 payload에 없던 실제 공백이었다.
+- `[권위·schema]` 기존 `QuestJournal`과 `PlayerSessionRecords`를 유일한 runtime 쓰기 권위로 유지하고 `GameSaveData`를 v7로 올렸다. 새 `PlayerProgressSaveData`는 stable quest ID·상태·처치 수와 적 처치·생환·사망·포기·복구 실패·완료 의뢰 누계를 운반할 뿐 원본이 아니다. v2~v6는 명시적으로 v7로 이관하며 과거 저장의 비어 있는 시험 의뢰 roster만 authored 초기화를 허용한다.
+- `[원정 원자 경계]` `RaidPersistentSettlementPolicy`가 아이템 손실과 player-progress 결과를 한 번에 순수 계산한다. terminal checkpoint에서 준비된 exact 상태를 settlement journal→ordinary save→live owner에 그대로 재사용해 결과를 중복 가산하지 않는다. fresh-departure rollback은 baseline을 그대로 쓰고, marker-only 복구 실패는 baseline에서 한 번만 실패 결과를 만든다.
+- `[완료 통지]` 정산 중 상태 전이는 저장된 exact 상태로 적용하고, 실제 NPC 보고 완료만 `QuestCompleted` 의미 이벤트를 낸다. 따라서 load·Recovery가 완료 의뢰 누계를 다시 올리지 않는다. 정보창 표시는 “이번 실행 기록”에서 “누적 기록”으로 맞췄다.
+- `[Unity 컴파일/순수 로직 확인]` Unity project compilation이 성공했다. 한 Editor matrix에서 v6→v7 migration, v7 JSON 왕복, 생환/복구 실패 투영, 원본 불변, 아이템+진행도 복합 정산과 잘못된 payload 거부를 확인했다.
+- `[Play Mode 호출 확인]` 실제 `GameMap1` persistent owner에 완료 의뢰와 여섯 누계 값을 exact replacement하고 값 일치·의뢰 완료 의미 이벤트 0회를 확인한 뒤 원래 runtime snapshot으로 복원했다.
+- `[보존·미검증]` 기존 인벤토리·장비·화폐·기지·상인·원정 marker/Resume/정산 흐름과 단일 시험 의뢰 규칙은 유지했다. 다중·반복 의뢰, 보상, 새 UI와 최종 저장 슬롯 정책은 이번 범위가 아니다. Console에는 §49에서 이미 진단한 미해결 원정 보호 오류만 남았으며 이번 변경의 신규 오류는 확인되지 않았다.

@@ -397,11 +397,19 @@ namespace FantasySurvival.Raids
                 !string.IsNullOrEmpty(saveData.activeRaidInstanceId) ||
                 saveData.playerItems == null ||
                 saveData.playerCurrency == null ||
+                saveData.playerProgress == null ||
                 saveData.baseState == null ||
                 saveData.baseState.formatVersion != BaseSaveData.CurrentFormatVersion ||
                 saveData.baseMerchantState == null)
             {
                 error = "Persistent state has an unsupported or incomplete header.";
+                return false;
+            }
+
+            if (!PlayerProgressSaveCodec.TryValidateStructure(
+                    saveData.playerProgress,
+                    out error))
+            {
                 return false;
             }
 

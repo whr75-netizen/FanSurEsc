@@ -1,13 +1,14 @@
+using System;
 using FantasySurvival.Raids;
 
 namespace FantasySurvival.Quests
 {
     public enum QuestProgressStatus
     {
-        Available,
-        Active,
-        ReadyToTurnIn,
-        Completed
+        Available = 0,
+        Active = 1,
+        ReadyToTurnIn = 2,
+        Completed = 3
     }
 
     /// <summary>
@@ -30,6 +31,61 @@ namespace FantasySurvival.Quests
         public QuestProgressStatus Status => status;
         public int EnemyKills => enemyKills;
         public int RequiredEnemyKills => definition != null ? definition.RequiredEnemyKills : 0;
+
+        internal static bool TryCreateRestored(
+            QuestDefinition definition,
+            QuestProgressStatus restoredStatus,
+            int restoredEnemyKills,
+            out QuestProgressState restored,
+            out string error)
+        {
+            restored = null;
+            if (definition == null)
+            {
+                error = "Quest definition is unavailable.";
+                return false;
+            }
+
+            if (!definition.TryValidate(out error))
+            {
+                error = $"Quest definition is invalid: {error}";
+                return false;
+            }
+
+            if (!Enum.IsDefined(typeof(QuestProgressStatus), restoredStatus) ||
+                restoredEnemyKills < 0 ||
+                restoredEnemyKills > definition.RequiredEnemyKills)
+            {
+                error = "Saved quest status or enemy-kill progress is out of range.";
+                return false;
+            }
+
+            bool validCombination = restoredStatus switch
+            {
+                QuestProgressStatus.Available => restoredEnemyKills == 0,
+                QuestProgressStatus.Active =>
+                    definition.RequiresSuccessfulExtraction ||
+                    restoredEnemyKills < definition.RequiredEnemyKills,
+                QuestProgressStatus.ReadyToTurnIn =>
+                    restoredEnemyKills == definition.RequiredEnemyKills,
+                QuestProgressStatus.Completed =>
+                    restoredEnemyKills == definition.RequiredEnemyKills,
+                _ => false
+            };
+            if (!validCombination)
+            {
+                error = "Saved quest status and enemy-kill progress are inconsistent.";
+                return false;
+            }
+
+            restored = new QuestProgressState(definition)
+            {
+                status = restoredStatus,
+                enemyKills = restoredEnemyKills
+            };
+            error = null;
+            return true;
+        }
 
         public bool TryAccept()
         {

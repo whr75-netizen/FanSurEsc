@@ -359,6 +359,13 @@ public class MainMenuManager : MonoBehaviour
                 return false;
             }
 
+            if (!PlayerProgressSaveCodec.TryValidateStructure(
+                    candidate.playerProgress,
+                    out error))
+            {
+                return false;
+            }
+
             if (!BaseFurnitureSaveCodec.TryRestore(
                     candidate.baseState,
                     itemDatabase,
@@ -973,9 +980,10 @@ public class MainMenuManager : MonoBehaviour
             return false;
         }
 
-        if (!RaidItemSettlementPolicy.TryCreatePersistentStateForOutcome(
+        if (!RaidPersistentSettlementPolicy.TryCreateStateForOutcome(
                 source.persistentState,
                 RaidOutcome.RecoveryFailed,
+                null,
                 out GameSaveData failedPersistentState,
                 out error))
         {

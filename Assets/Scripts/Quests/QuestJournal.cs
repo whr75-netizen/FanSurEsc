@@ -5,8 +5,8 @@ using UnityEngine;
 namespace FantasySurvival.Quests
 {
     /// <summary>
-    /// Owns the single prototype quest's mutable state for this gameplay session.
-    /// It observes committed raid settlement, but does not own raid state or disk saves.
+    /// Owns the single prototype quest's mutable state. Save DTOs transport this state,
+    /// while this journal remains the sole runtime writer.
     /// </summary>
     [DisallowMultipleComponent]
     public sealed class QuestJournal : MonoBehaviour
@@ -18,6 +18,7 @@ namespace FantasySurvival.Quests
         private QuestProgressState progress;
 
         public event Action Changed;
+        public event Action<string> QuestCompleted;
 
         public QuestDefinition Definition => prototypeQuest;
         public QuestProgressStatus Status => progress?.Status ?? QuestProgressStatus.Available;
@@ -58,10 +59,6 @@ namespace FantasySurvival.Quests
 
         private void OnEnable()
         {
-            if (raidCheckpoint != null)
-            {
-                raidCheckpoint.SettlementCommitted += HandleSettlementCommitted;
-            }
             if (raidSession != null)
             {
                 raidSession.StateChanged += HandleRaidStateChanged;
@@ -70,10 +67,6 @@ namespace FantasySurvival.Quests
 
         private void OnDisable()
         {
-            if (raidCheckpoint != null)
-            {
-                raidCheckpoint.SettlementCommitted -= HandleSettlementCommitted;
-            }
             if (raidSession != null)
             {
                 raidSession.StateChanged -= HandleRaidStateChanged;
@@ -96,6 +89,29 @@ namespace FantasySurvival.Quests
             return true;
         }
 
+        internal void ApplyPreparedProgress(
+            QuestProgressState restoredProgress,
+            bool notify)
+        {
+            if (restoredProgress == null || restoredProgress.Definition != prototypeQuest)
+            {
+                throw new ArgumentException(
+                    "Prepared quest progress does not belong to this journal.",
+                    nameof(restoredProgress));
+            }
+
+            progress = restoredProgress;
+            if (notify)
+            {
+                NotifyChangedSafely();
+            }
+        }
+
+        internal void PublishCurrentState()
+        {
+            NotifyChangedSafely();
+        }
+
         public bool TryRecordPlayerEnemyKill()
         {
             if (progress == null || raidSession == null || raidCheckpoint == null ||
@@ -116,6 +132,7 @@ namespace FantasySurvival.Quests
                 return false;
             }
 
+            NotifyQuestCompletedSafely(prototypeQuest.QuestId);
             NotifyChangedSafely();
             return true;
         }
@@ -125,20 +142,6 @@ namespace FantasySurvival.Quests
             return isActiveAndEnabled && OwnsDefinition(definition) && raidSession != null &&
                    raidSession.CurrentSceneKind == GameplaySceneKind.Base &&
                    raidSession.State == RaidSessionState.Inactive;
-        }
-
-        private void HandleSettlementCommitted(RaidOutcome outcome)
-        {
-            if (progress == null)
-            {
-                return;
-            }
-
-            progress.ApplyCommittedRaidOutcome(outcome);
-            // Even when the quest values stay Active + 0, the checkpoint owner has
-            // just cleared its tracked raid. Refresh the derived tracker so it does
-            // not remain hidden after a failed or objective-missing settlement.
-            NotifyChangedSafely();
         }
 
         private void HandleRaidStateChanged()
@@ -168,6 +171,29 @@ namespace FantasySurvival.Quests
                     // Quest progress is already authoritative at this point. A UI or
                     // other observer must not abort raid travel, death handling, or a
                     // committed settlement after the state change has succeeded.
+                    Debug.LogException(exception, this);
+                }
+            }
+        }
+
+        private void NotifyQuestCompletedSafely(string questId)
+        {
+            Action<string> handlers = QuestCompleted;
+            if (handlers == null)
+            {
+                return;
+            }
+
+            foreach (Delegate handler in handlers.GetInvocationList())
+            {
+                try
+                {
+                    ((Action<string>)handler).Invoke(questId);
+                }
+                catch (Exception exception)
+                {
+                    // Completion is already authoritative. Record/UI observers cannot
+                    // turn a successful report into a failed quest transaction.
                     Debug.LogException(exception, this);
                 }
             }

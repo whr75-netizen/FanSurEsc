@@ -15,16 +15,25 @@ MonoBehaviour:
   morningPreviewHour: 7.5
   dayPreviewHour: 12
   nightPreviewHour: 22
+  minimumDirectionalElevationDegrees: 12
+  fullSunlightElevationDegrees: 15
+  noShadowElevationDegrees: 8
+  fullShadowElevationDegrees: 20
+  fullMoonlightElevationDegrees: 15
+  directionTransitionElevationDegrees: 5
+  horizonMoonlightWeight: 0.5
   keyframes:
   - hour: 0
     phase: 2
-    ambientSkyColor: {r: 0.035, g: 0.05, b: 0.11, a: 1}
-    ambientEquatorColor: {r: 0.025, g: 0.035, b: 0.075, a: 1}
-    ambientGroundColor: {r: 0.01, g: 0.015, b: 0.03, a: 1}
-    ambientIntensity: 0.32
-    reflectionIntensity: 0.12
+    ambientSkyColor: {r: 0.085, g: 0.11, b: 0.22, a: 1}
+    ambientEquatorColor: {r: 0.055, g: 0.075, b: 0.15, a: 1}
+    ambientGroundColor: {r: 0.022, g: 0.032, b: 0.065, a: 1}
+    ambientIntensity: 0.5
+    reflectionIntensity: 0.18
     sunColor: {r: 0.54, g: 0.62, b: 0.82, a: 1}
     sunIntensity: 0
+    moonColor: {r: 0.46, g: 0.56, b: 0.82, a: 1}
+    moonIntensity: 0.14
     shadowStrength: 0
   - hour: 6.5
     phase: 0
@@ -35,6 +44,8 @@ MonoBehaviour:
     reflectionIntensity: 0.28
     sunColor: {r: 1, g: 0.56, b: 0.3, a: 1}
     sunIntensity: 0.7
+    moonColor: {r: 0.45, g: 0.55, b: 0.82, a: 1}
+    moonIntensity: 0.04
     shadowStrength: 0.72
   - hour: 10
     phase: 1
@@ -45,6 +56,8 @@ MonoBehaviour:
     reflectionIntensity: 0.48
     sunColor: {r: 1, g: 0.95, b: 0.82, a: 1}
     sunIntensity: 1.15
+    moonColor: {r: 0.45, g: 0.55, b: 0.82, a: 1}
+    moonIntensity: 0
     shadowStrength: 0.86
   - hour: 16
     phase: 1
@@ -55,14 +68,18 @@ MonoBehaviour:
     reflectionIntensity: 0.4
     sunColor: {r: 1, g: 0.74, b: 0.46, a: 1}
     sunIntensity: 0.82
+    moonColor: {r: 0.45, g: 0.55, b: 0.82, a: 1}
+    moonIntensity: 0.02
     shadowStrength: 0.8
   - hour: 19.5
     phase: 2
-    ambientSkyColor: {r: 0.06, g: 0.075, b: 0.15, a: 1}
-    ambientEquatorColor: {r: 0.045, g: 0.05, b: 0.1, a: 1}
-    ambientGroundColor: {r: 0.015, g: 0.02, b: 0.04, a: 1}
-    ambientIntensity: 0.36
-    reflectionIntensity: 0.16
+    ambientSkyColor: {r: 0.1, g: 0.13, b: 0.24, a: 1}
+    ambientEquatorColor: {r: 0.065, g: 0.085, b: 0.16, a: 1}
+    ambientGroundColor: {r: 0.025, g: 0.038, b: 0.075, a: 1}
+    ambientIntensity: 0.52
+    reflectionIntensity: 0.22
     sunColor: {r: 0.6, g: 0.68, b: 0.88, a: 1}
     sunIntensity: 0
+    moonColor: {r: 0.46, g: 0.56, b: 0.84, a: 1}
+    moonIntensity: 0.12
     shadowStrength: 0

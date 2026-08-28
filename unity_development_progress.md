@@ -1555,8 +1555,28 @@ Interactable (abstract base class)
 ## 55. 야외 아침·낮·밤 하늘광과 태양 그림자 `[ENVIRONMENT-01][SHELL-01][MAP-01]`
 
 - `[사용자 요청][2026-08-29]` 강수·구름·실내 조명 없이, 야외의 아침·낮·밤과 태양 그림자만 먼저 구현했다.
-- `[권위·데이터]` 영속 `PersistentGameplayShell`의 `SkyLightingCycleController` 하나가 gameplay session 시간을 소유한다. 색·환경광·태양 세기·그림자 강도는 `ClearSkyLightingProfile`의 시간순 keyframe에서 보간하므로, 날씨 종류를 하드코딩한 평행 Manager를 만들지 않았다. 현재 시험 주기는 실제 600초당 게임 24시간이고 조명은 게임 1분 단위로 갱신된다.
+- `[권위·데이터]` 영속 `PersistentGameplayShell`의 `SkyLightingCycleController` 하나가 gameplay session 시간을 소유한다. 색·환경광·태양 세기·그림자 강도는 `ClearSkyLightingProfile`의 시간순 keyframe에서 보간하므로, 날씨 종류를 하드코딩한 평행 Manager를 만들지 않았다. 현재 시험 주기는 실제 60초당 게임 24시간이고 조명은 게임 1분 단위로 갱신된다.
 - `[씬·렌더링 경계]` gameplay bootstrap이 있는 활성 씬에서 기존 Directional Light를 정확히 하나만 찾아 `RenderSettings.sun`으로 지정하고, 씬 전환 뒤 같은 시간 값을 다시 적용한다. 하늘광은 URP의 `Trilight` sky/equator/ground 색을 사용한다. 아침·낮에는 태양 회전·색·세기와 Hard Shadow를 적용하고 밤에는 직접 태양광과 그림자를 끈다. Main Menu와 기존 비활성 3D 픽셀 후처리는 건드리지 않는다.
 - `[그림자 근본 수정]` 절차 도심 primitive의 그림자 생성과 수신을 분리했다. 건물은 생성·수신하고 Ground·Road·Boundary는 생성하지 않되 수신하므로 건물 그림자가 바닥에서 사라지던 기존 결합을 제거했다.
 - `[Unity 컴파일·Play Mode 호출 확인]` Unity 6000.5.9f1 프로젝트 compilation과 profile/prefab 직렬화 참조를 확인했다. 한 `GameMap1` Play Session에서 아침 7.5시(태양 0.789, 그림자 0.748), 낮 12시(태양 1.064, 그림자 0.844), 밤 22시(태양 0, 그림자 없음)를 각각 한 번 강제하고, phase·Trilight 색·Directional Light 회전·Hard/None 전환과 동일 runtime controller 사용을 확인했다.
 - `[보존·미검증]` Player·Camera·씬 흐름·저장 schema와 기존 사용자 dirty scene/material/preview prefab은 수정하지 않았다. 최종 색·주기 밸런스, 실제 skybox 시각, 실내 Roof/SkyVisibility 감쇠, 비·눈·안개·구름, 시간 UI와 ordinary/Recovery 시간 저장은 이번 범위가 아니다. 물리 입력이 없는 Play Mode 호출 확인이며 Player build와 gameplay 씬 왕복 중 재바인딩은 별도 실행하지 않았다.
+
+---
+
+## 56. 지평선 그림자 제한과 황혼·달빛 보정 `[ENVIRONMENT-01][SHELL-01]`
+
+- `[사용자 피드백][2026-08-29]` 일몰 직전 그림자가 과도하게 길어지고, 해가 지평선을 넘는 순간 화면의 주광이 끊기는 현상을 수정했다.
+- `[확정 원인]` 기존 태양 각도는 실제 고도 0도까지 내려가 17.9시 고도 1.5도에서 높이당 그림자 길이가 약 38.2배까지 발산했다. 18.0시에는 Directional Light를 즉시 꺼 직접광이 0이 되고, 어두운 기존 Trilight만 남아 화면이 끊겨 보였다.
+- `[근본 수정]` 실제 천체 시간은 유지하되 그림자를 만드는 방향광 고도는 최소 12도로 제한해 보이는 그림자를 높이의 약 4.7배 이내로 묶었다. 실제 태양 고도 20→8도에서 그림자를 SmoothStep으로 먼저 감쇠하고 8도 이하는 끈다. 지평선 ±5도에서는 그림자 없는 같은 Directional Light를 태양 방향에서 달 방향으로 보간하며, 황혼 Trilight와 달빛 최소 세기를 겹쳐 정확한 일몰·일출 순간에도 광량이 0이 되지 않게 했다. Shadow Distance나 bias로 잘라 가리지 않았고 새 Light·Manager를 추가하지 않았다.
+- `[Unity 컴파일·Play Mode 호출 확인]` 프로젝트 compilation과 profile 직렬화를 확인했다. 한 `GameMap1` Play Session에서 17.0→22.0과 5.9→6.1을 강제했다. 17.0시는 그림자 길이 비율 3.732, 17.5시부터 지평선 그림자 없음, 18.0시는 방향광 0.040·ambient 0.544, 19.0시는 달빛 0.114, 22.0시는 0.132·달 그림자 없음이었다. 6.0시도 방향광 0.021을 유지했고, ±0.1시간 방향 전환과 모든 켜진 그림자 비율 4.8 이하가 통과했다.
+- `[보존·미검증]` 시간 권위·씬 재바인딩·저장과 기존 dirty scene/material/preview asset은 바꾸지 않았다. 실제 Game View 색감의 최종 아트 판단, 달 원반, 달 그림자, 실내 감쇠와 Player build는 후속이며 이번에는 수치·렌더 상태의 Play Mode 호출로 확인했다. 최종 조명 아트 단계에서는 Sun/Moon을 분리하고 기존 controller 하나가 URP의 그림자 owner 하나만 교대시키는 구조를 재검토한다.
+
+---
+
+## 57. Player 외형 접지와 60초 조명 시험 주기 `[SHELL-01][ENVIRONMENT-01]`
+
+- `[사용자 정정][2026-08-29]` Player 충돌체만 확인한 최초 판정은 부족했다. `GameMap1` 실측에서 바닥과 BoxCollider 하단은 모두 Y 0이었지만, 활성 `Female_Fig`의 실제 bake된 최저 버텍스는 Y 0.487이라 발과 그림자가 약 반 칸 떠 있었다.
+- `[확정 원인·수정]` 높이 1·center 0인 물리 Player root Y 0.5 아래에 발 원점 기반 FBX 외형이 local Y 0으로 붙어 충돌체 중심 높이를 그대로 상속했다. 전역 Player·충돌체·스폰·저장 좌표는 유지하고 `Player/uploads_files_4931206_TrialFreya_FBX` 외형 루트 전체만 local Y -0.5로 내렸다. 개별 mesh·발 본을 보정하지 않아 외형 10개, 뼈와 그림자가 함께 같은 기준으로 이동한다.
+- `[외부 사례 적용]` Unity 공식 휴머노이드 규약과 샘플처럼 물리 몸체 기준과 보이는 발 기준을 분리했다. contact offset은 물리 안정 여유이지 시각적 공중 간격이 아니며, 평지의 고정 반 칸 오류를 Foot IK로 덮지 않는다. 경사·단차나 특정 animation clip의 발 높이 편차는 별도 Root Transform Y/Feet 또는 Foot IK 범위다.
+- `[시험 속도]` `SkyLightingCycleController`의 기본값과 영속 prefab 값을 실제 60초당 게임 24시간으로 맞췄다.
+- `[Unity 컴파일·Play Mode 호출 확인]` 한 fresh `GameMap1` Play Session에서 root Y 0.5, collider 하단 Y 0, ground Y 0, visual local Y -0.5, 활성 skinned mesh 최저 Y -0.013을 확인해 허용오차 0.03 내 접지를 통과했다. 같은 session에서 60초 주기 직렬화 값과 §56의 일몰·일출 수치도 함께 재확인했다. 실제 물리 키보드 이동 중 animation별 발 접촉과 Player build는 미검증이다.

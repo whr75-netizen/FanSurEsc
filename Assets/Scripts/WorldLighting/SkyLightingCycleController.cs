@@ -18,7 +18,7 @@ namespace FantasySurvival.WorldLighting
     {
         private const float HoursPerDay = 24f;
         private const float MinutesPerHour = 60f;
-        private const float SunVisibleThreshold = 0.001f;
+        private const float DirectionalLightThreshold = 0.001f;
 
         [Header("Definition")]
         [SerializeField] private SkyLightingProfile profile;
@@ -26,14 +26,14 @@ namespace FantasySurvival.WorldLighting
         [Header("Runtime Clock")]
         [SerializeField, Range(0f, HoursPerDay)] private float initialHour = 8f;
         [SerializeField] private bool advanceAutomatically = true;
-        [SerializeField, Min(1f)] private float realSecondsPerDay = 600f;
+        [SerializeField, Min(1f)] private float realSecondsPerDay = 60f;
         [SerializeField, Min(0.1f)] private float lightingStepMinutes = 1f;
 
         [Header("Sun Path")]
         [SerializeField, Range(0f, 360f)] private float sunAzimuthDegrees = 290f;
 
         private readonly List<Light> sceneLights = new List<Light>();
-        private Light sceneSun;
+        private Light sceneDirectionalLight;
         private float currentHour;
         private float lastAppliedHour = float.NaN;
         private bool hasGameplaySceneBinding;
@@ -43,8 +43,10 @@ namespace FantasySurvival.WorldLighting
         public float CurrentHour => currentHour;
         public SkyTimePhase CurrentPhase => currentPhase;
         public bool IsAdvancingAutomatically => advanceAutomatically;
-        public bool HasGameplaySceneBinding => hasGameplaySceneBinding && sceneSun != null;
-        public Light SceneSun => sceneSun;
+        public bool HasGameplaySceneBinding =>
+            hasGameplaySceneBinding && sceneDirectionalLight != null;
+        public Light SceneDirectionalLight => sceneDirectionalLight;
+        public Light SceneSun => sceneDirectionalLight;
 
         private void Awake()
         {
@@ -61,7 +63,7 @@ namespace FantasySurvival.WorldLighting
         private void OnDisable()
         {
             SceneManager.sceneLoaded -= HandleSceneLoaded;
-            sceneSun = null;
+            sceneDirectionalLight = null;
             hasGameplaySceneBinding = false;
             lastAppliedHour = float.NaN;
         }
@@ -181,7 +183,7 @@ namespace FantasySurvival.WorldLighting
 
         private void BindScene(Scene scene)
         {
-            sceneSun = null;
+            sceneDirectionalLight = null;
             hasGameplaySceneBinding = false;
             lastAppliedHour = float.NaN;
 
@@ -196,9 +198,9 @@ namespace FantasySurvival.WorldLighting
                 return;
             }
 
-            sceneSun = directionalLight;
+            sceneDirectionalLight = directionalLight;
             hasGameplaySceneBinding = true;
-            RenderSettings.sun = sceneSun;
+            RenderSettings.sun = sceneDirectionalLight;
             ApplyCurrentLighting();
         }
 
@@ -320,27 +322,131 @@ namespace FantasySurvival.WorldLighting
             RenderSettings.ambientGroundColor = sample.AmbientGroundColor;
             RenderSettings.ambientIntensity = sample.AmbientIntensity;
             RenderSettings.reflectionIntensity = sample.ReflectionIntensity;
-            RenderSettings.sun = sceneSun;
+            RenderSettings.sun = sceneDirectionalLight;
 
-            float sunPitchDegrees = evaluatedHour / HoursPerDay * 360f - 90f;
-            sceneSun.transform.rotation = Quaternion.Euler(
-                sunPitchDegrees,
+            float sunPathPitchDegrees = evaluatedHour / HoursPerDay * 360f - 90f;
+            float sunElevationDegrees = EvaluateElevationDegrees(sunPathPitchDegrees);
+            bool useSun = sunElevationDegrees > DirectionalLightThreshold;
+
+            float moonPathPitchDegrees = sunPathPitchDegrees + 180f;
+            float moonElevationDegrees = Mathf.Max(
+                0f,
+                EvaluateElevationDegrees(moonPathPitchDegrees));
+            Quaternion sunRotation = Quaternion.Euler(
+                ClampAboveHorizonPitch(
+                    sunPathPitchDegrees,
+                    profile.MinimumDirectionalElevationDegrees),
                 sunAzimuthDegrees,
                 0f);
+            Quaternion moonRotation = Quaternion.Euler(
+                ClampAboveHorizonPitch(
+                    moonPathPitchDegrees,
+                    profile.MinimumDirectionalElevationDegrees),
+                sunAzimuthDegrees,
+                0f);
+            float moonDirectionWeight = EvaluateMoonDirectionWeight(
+                sunElevationDegrees,
+                profile.DirectionTransitionElevationDegrees);
+            Quaternion directionalRotation = Quaternion.Slerp(
+                sunRotation,
+                moonRotation,
+                moonDirectionWeight);
+            Color directionalColor = Color.Lerp(
+                sample.SunColor,
+                sample.MoonColor,
+                moonDirectionWeight);
+            float horizonDirectionalIntensity =
+                sample.MoonIntensity * profile.HorizonMoonlightWeight;
+            float directionalIntensity;
+            float visibleShadowStrength = 0f;
 
-            bool sunAboveHorizon = sceneSun.transform.forward.y < -SunVisibleThreshold;
-            float visibleSunIntensity = sunAboveHorizon ? sample.SunIntensity : 0f;
-            float visibleShadowStrength = sunAboveHorizon ? sample.ShadowStrength : 0f;
+            if (useSun)
+            {
+                float sunlightWeight = EvaluateElevationWeight(
+                    sunElevationDegrees,
+                    0f,
+                    profile.FullSunlightElevationDegrees);
+                float shadowWeight = EvaluateElevationWeight(
+                    sunElevationDegrees,
+                    profile.NoShadowElevationDegrees,
+                    profile.FullShadowElevationDegrees);
+                directionalIntensity = Mathf.Lerp(
+                    horizonDirectionalIntensity,
+                    sample.SunIntensity,
+                    sunlightWeight);
+                visibleShadowStrength = sample.ShadowStrength * shadowWeight;
+            }
+            else
+            {
+                float moonlightWeight = EvaluateElevationWeight(
+                    moonElevationDegrees,
+                    0f,
+                    profile.FullMoonlightElevationDegrees);
+                directionalIntensity = Mathf.Lerp(
+                    horizonDirectionalIntensity,
+                    sample.MoonIntensity,
+                    moonlightWeight);
+            }
 
-            sceneSun.color = sample.SunColor;
-            sceneSun.intensity = visibleSunIntensity;
-            sceneSun.shadowStrength = visibleShadowStrength;
-            sceneSun.shadows = visibleSunIntensity > SunVisibleThreshold &&
-                               visibleShadowStrength > SunVisibleThreshold
+            sceneDirectionalLight.transform.rotation = directionalRotation;
+            sceneDirectionalLight.color = directionalColor;
+            sceneDirectionalLight.intensity = directionalIntensity;
+            sceneDirectionalLight.shadowStrength = visibleShadowStrength;
+            sceneDirectionalLight.shadows = useSun &&
+                                            directionalIntensity > DirectionalLightThreshold &&
+                                            visibleShadowStrength > DirectionalLightThreshold
                 ? LightShadows.Hard
                 : LightShadows.None;
-            sceneSun.enabled = visibleSunIntensity > SunVisibleThreshold;
+            sceneDirectionalLight.enabled = directionalIntensity > DirectionalLightThreshold;
             return true;
+        }
+
+        private static float EvaluateElevationDegrees(float pathPitchDegrees)
+        {
+            float incomingVertical = Mathf.Sin(pathPitchDegrees * Mathf.Deg2Rad);
+            return Mathf.Asin(Mathf.Clamp(incomingVertical, -1f, 1f)) * Mathf.Rad2Deg;
+        }
+
+        private static float ClampAboveHorizonPitch(
+            float pathPitchDegrees,
+            float minimumElevationDegrees)
+        {
+            float normalizedPitch = Mathf.Repeat(pathPitchDegrees, 360f);
+            if (normalizedPitch <= 180f)
+            {
+                return Mathf.Clamp(
+                    normalizedPitch,
+                    minimumElevationDegrees,
+                    180f - minimumElevationDegrees);
+            }
+
+            bool nearestHorizonIsEast =
+                Mathf.Cos(pathPitchDegrees * Mathf.Deg2Rad) >= 0f;
+            return nearestHorizonIsEast
+                ? minimumElevationDegrees
+                : 180f - minimumElevationDegrees;
+        }
+
+        private static float EvaluateElevationWeight(
+            float elevationDegrees,
+            float zeroAtDegrees,
+            float fullAtDegrees)
+        {
+            float normalized = Mathf.InverseLerp(
+                zeroAtDegrees,
+                fullAtDegrees,
+                elevationDegrees);
+            return Mathf.SmoothStep(0f, 1f, normalized);
+        }
+
+        private static float EvaluateMoonDirectionWeight(
+            float sunElevationDegrees,
+            float transitionElevationDegrees)
+        {
+            float normalized = Mathf.Clamp01(
+                (transitionElevationDegrees - sunElevationDegrees) /
+                (transitionElevationDegrees * 2f));
+            return Mathf.SmoothStep(0f, 1f, normalized);
         }
     }
 }

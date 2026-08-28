@@ -22,6 +22,8 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Range(0f, 1f)] private float reflectionIntensity;
         [SerializeField] private Color sunColor;
         [SerializeField, Min(0f)] private float sunIntensity;
+        [SerializeField] private Color moonColor;
+        [SerializeField, Min(0f)] private float moonIntensity;
         [SerializeField, Range(0f, 1f)] private float shadowStrength;
 
         public float Hour => hour;
@@ -33,6 +35,8 @@ namespace FantasySurvival.WorldLighting
         public float ReflectionIntensity => reflectionIntensity;
         public Color SunColor => sunColor;
         public float SunIntensity => sunIntensity;
+        public Color MoonColor => moonColor;
+        public float MoonIntensity => moonIntensity;
         public float ShadowStrength => shadowStrength;
 
         public SkyLightingKeyframe(
@@ -45,6 +49,8 @@ namespace FantasySurvival.WorldLighting
             float reflectionIntensity,
             Color sunColor,
             float sunIntensity,
+            Color moonColor,
+            float moonIntensity,
             float shadowStrength)
         {
             this.hour = hour;
@@ -56,6 +62,8 @@ namespace FantasySurvival.WorldLighting
             this.reflectionIntensity = reflectionIntensity;
             this.sunColor = sunColor;
             this.sunIntensity = sunIntensity;
+            this.moonColor = moonColor;
+            this.moonIntensity = moonIntensity;
             this.shadowStrength = shadowStrength;
         }
     }
@@ -70,6 +78,8 @@ namespace FantasySurvival.WorldLighting
         public float ReflectionIntensity { get; }
         public Color SunColor { get; }
         public float SunIntensity { get; }
+        public Color MoonColor { get; }
+        public float MoonIntensity { get; }
         public float ShadowStrength { get; }
 
         private SkyLightingSample(
@@ -81,6 +91,8 @@ namespace FantasySurvival.WorldLighting
             float reflectionIntensity,
             Color sunColor,
             float sunIntensity,
+            Color moonColor,
+            float moonIntensity,
             float shadowStrength)
         {
             Phase = phase;
@@ -91,6 +103,8 @@ namespace FantasySurvival.WorldLighting
             ReflectionIntensity = reflectionIntensity;
             SunColor = sunColor;
             SunIntensity = sunIntensity;
+            MoonColor = moonColor;
+            MoonIntensity = moonIntensity;
             ShadowStrength = shadowStrength;
         }
 
@@ -110,6 +124,8 @@ namespace FantasySurvival.WorldLighting
                 Mathf.Lerp(from.ReflectionIntensity, to.ReflectionIntensity, easedT),
                 Color.Lerp(from.SunColor, to.SunColor, easedT),
                 Mathf.Lerp(from.SunIntensity, to.SunIntensity, easedT),
+                Color.Lerp(from.MoonColor, to.MoonColor, easedT),
+                Mathf.Lerp(from.MoonIntensity, to.MoonIntensity, easedT),
                 Mathf.Lerp(from.ShadowStrength, to.ShadowStrength, easedT));
         }
     }
@@ -122,7 +138,22 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Range(0f, 24f)] private float morningPreviewHour = 7.5f;
         [SerializeField, Range(0f, 24f)] private float dayPreviewHour = 12f;
         [SerializeField, Range(0f, 24f)] private float nightPreviewHour = 22f;
+        [SerializeField, Range(1f, 45f)] private float minimumDirectionalElevationDegrees = 12f;
+        [SerializeField, Range(1f, 45f)] private float fullSunlightElevationDegrees = 15f;
+        [SerializeField, Range(0f, 30f)] private float noShadowElevationDegrees = 8f;
+        [SerializeField, Range(1f, 45f)] private float fullShadowElevationDegrees = 20f;
+        [SerializeField, Range(1f, 45f)] private float fullMoonlightElevationDegrees = 15f;
+        [SerializeField, Range(0.1f, 15f)] private float directionTransitionElevationDegrees = 5f;
+        [SerializeField, Range(0.01f, 1f)] private float horizonMoonlightWeight = 0.5f;
         [SerializeField] private SkyLightingKeyframe[] keyframes = CreateClearSkyDefaults();
+
+        public float MinimumDirectionalElevationDegrees => minimumDirectionalElevationDegrees;
+        public float FullSunlightElevationDegrees => fullSunlightElevationDegrees;
+        public float NoShadowElevationDegrees => noShadowElevationDegrees;
+        public float FullShadowElevationDegrees => fullShadowElevationDegrees;
+        public float FullMoonlightElevationDegrees => fullMoonlightElevationDegrees;
+        public float DirectionTransitionElevationDegrees => directionTransitionElevationDegrees;
+        public float HorizonMoonlightWeight => horizonMoonlightWeight;
 
         public bool TryEvaluate(float hour, out SkyLightingSample sample)
         {
@@ -188,6 +219,35 @@ namespace FantasySurvival.WorldLighting
                 return false;
             }
 
+            if (minimumDirectionalElevationDegrees <= 0f ||
+                minimumDirectionalElevationDegrees >= 90f)
+            {
+                error = "Minimum directional elevation must be between 0 and 90 degrees.";
+                return false;
+            }
+
+            if (fullSunlightElevationDegrees <= 0f ||
+                fullMoonlightElevationDegrees <= 0f)
+            {
+                error = "Sunlight and moonlight fade elevations must be greater than zero.";
+                return false;
+            }
+
+            if (directionTransitionElevationDegrees <= 0f ||
+                horizonMoonlightWeight <= 0f ||
+                horizonMoonlightWeight > 1f)
+            {
+                error = "Twilight direction transition and moonlight floor must be positive.";
+                return false;
+            }
+
+            if (noShadowElevationDegrees < 0f ||
+                fullShadowElevationDegrees <= noShadowElevationDegrees)
+            {
+                error = "Full shadow elevation must be greater than the no-shadow elevation.";
+                return false;
+            }
+
             float previousHour = -1f;
             for (int index = 0; index < keyframes.Length; index++)
             {
@@ -224,13 +284,15 @@ namespace FantasySurvival.WorldLighting
                 new SkyLightingKeyframe(
                     0f,
                     SkyTimePhase.Night,
-                    new Color(0.035f, 0.05f, 0.11f),
-                    new Color(0.025f, 0.035f, 0.075f),
-                    new Color(0.01f, 0.015f, 0.03f),
-                    0.32f,
-                    0.12f,
+                    new Color(0.085f, 0.11f, 0.22f),
+                    new Color(0.055f, 0.075f, 0.15f),
+                    new Color(0.022f, 0.032f, 0.065f),
+                    0.50f,
+                    0.18f,
                     new Color(0.54f, 0.62f, 0.82f),
                     0f,
+                    new Color(0.46f, 0.56f, 0.82f),
+                    0.14f,
                     0f),
                 new SkyLightingKeyframe(
                     6.5f,
@@ -242,6 +304,8 @@ namespace FantasySurvival.WorldLighting
                     0.28f,
                     new Color(1f, 0.56f, 0.30f),
                     0.7f,
+                    new Color(0.45f, 0.55f, 0.82f),
+                    0.04f,
                     0.72f),
                 new SkyLightingKeyframe(
                     10f,
@@ -253,6 +317,8 @@ namespace FantasySurvival.WorldLighting
                     0.48f,
                     new Color(1f, 0.95f, 0.82f),
                     1.15f,
+                    new Color(0.45f, 0.55f, 0.82f),
+                    0f,
                     0.86f),
                 new SkyLightingKeyframe(
                     16f,
@@ -264,17 +330,21 @@ namespace FantasySurvival.WorldLighting
                     0.40f,
                     new Color(1f, 0.74f, 0.46f),
                     0.82f,
+                    new Color(0.45f, 0.55f, 0.82f),
+                    0.02f,
                     0.80f),
                 new SkyLightingKeyframe(
                     19.5f,
                     SkyTimePhase.Night,
-                    new Color(0.06f, 0.075f, 0.15f),
-                    new Color(0.045f, 0.05f, 0.10f),
-                    new Color(0.015f, 0.02f, 0.04f),
-                    0.36f,
-                    0.16f,
+                    new Color(0.10f, 0.13f, 0.24f),
+                    new Color(0.065f, 0.085f, 0.16f),
+                    new Color(0.025f, 0.038f, 0.075f),
+                    0.52f,
+                    0.22f,
                     new Color(0.60f, 0.68f, 0.88f),
                     0f,
+                    new Color(0.46f, 0.56f, 0.84f),
+                    0.12f,
                     0f)
             };
         }

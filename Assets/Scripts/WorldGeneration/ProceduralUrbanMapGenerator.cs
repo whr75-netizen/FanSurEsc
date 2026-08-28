@@ -441,7 +441,8 @@ namespace FantasySurvival.WorldGeneration
                 hasCollider: true,
                 blocksPlayer: false,
                 markNotWalkable: false,
-                castsShadows: false);
+                castsShadows: false,
+                receivesShadows: true);
         }
 
         private void CreateRoads(UrbanMapLayout layout)
@@ -463,7 +464,8 @@ namespace FantasySurvival.WorldGeneration
                     hasCollider: false,
                     blocksPlayer: false,
                     markNotWalkable: false,
-                    castsShadows: false);
+                    castsShadows: false,
+                    receivesShadows: true);
             }
         }
 
@@ -483,7 +485,8 @@ namespace FantasySurvival.WorldGeneration
                     hasCollider: true,
                     blocksPlayer: true,
                     markNotWalkable: true,
-                    castsShadows: true);
+                    castsShadows: true,
+                    receivesShadows: true);
             }
         }
 
@@ -511,7 +514,8 @@ namespace FantasySurvival.WorldGeneration
                 hasCollider: true,
                 blocksPlayer: true,
                 markNotWalkable: true,
-                castsShadows: false);
+                castsShadows: false,
+                receivesShadows: true);
         }
 
         private GameObject CreatePrimitive(
@@ -524,7 +528,8 @@ namespace FantasySurvival.WorldGeneration
             bool hasCollider,
             bool blocksPlayer,
             bool markNotWalkable,
-            bool castsShadows)
+            bool castsShadows,
+            bool receivesShadows)
         {
             GameObject instance = GameObject.CreatePrimitive(primitiveType);
             instance.name = objectName;
@@ -538,7 +543,7 @@ namespace FantasySurvival.WorldGeneration
             {
                 renderer.sharedMaterial = runtimeMaterial;
                 renderer.shadowCastingMode = castsShadows ? ShadowCastingMode.On : ShadowCastingMode.Off;
-                renderer.receiveShadows = castsShadows;
+                renderer.receiveShadows = receivesShadows;
                 var propertyBlock = new MaterialPropertyBlock();
                 propertyBlock.SetColor(BaseColorId, color);
                 propertyBlock.SetColor(ColorId, color);

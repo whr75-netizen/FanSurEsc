@@ -1,0 +1,282 @@
+using System;
+using UnityEngine;
+
+namespace FantasySurvival.WorldLighting
+{
+    public enum SkyTimePhase
+    {
+        Morning,
+        Day,
+        Night
+    }
+
+    [Serializable]
+    public struct SkyLightingKeyframe
+    {
+        [SerializeField, Range(0f, 24f)] private float hour;
+        [SerializeField] private SkyTimePhase phase;
+        [SerializeField] private Color ambientSkyColor;
+        [SerializeField] private Color ambientEquatorColor;
+        [SerializeField] private Color ambientGroundColor;
+        [SerializeField, Min(0f)] private float ambientIntensity;
+        [SerializeField, Range(0f, 1f)] private float reflectionIntensity;
+        [SerializeField] private Color sunColor;
+        [SerializeField, Min(0f)] private float sunIntensity;
+        [SerializeField, Range(0f, 1f)] private float shadowStrength;
+
+        public float Hour => hour;
+        public SkyTimePhase Phase => phase;
+        public Color AmbientSkyColor => ambientSkyColor;
+        public Color AmbientEquatorColor => ambientEquatorColor;
+        public Color AmbientGroundColor => ambientGroundColor;
+        public float AmbientIntensity => ambientIntensity;
+        public float ReflectionIntensity => reflectionIntensity;
+        public Color SunColor => sunColor;
+        public float SunIntensity => sunIntensity;
+        public float ShadowStrength => shadowStrength;
+
+        public SkyLightingKeyframe(
+            float hour,
+            SkyTimePhase phase,
+            Color ambientSkyColor,
+            Color ambientEquatorColor,
+            Color ambientGroundColor,
+            float ambientIntensity,
+            float reflectionIntensity,
+            Color sunColor,
+            float sunIntensity,
+            float shadowStrength)
+        {
+            this.hour = hour;
+            this.phase = phase;
+            this.ambientSkyColor = ambientSkyColor;
+            this.ambientEquatorColor = ambientEquatorColor;
+            this.ambientGroundColor = ambientGroundColor;
+            this.ambientIntensity = ambientIntensity;
+            this.reflectionIntensity = reflectionIntensity;
+            this.sunColor = sunColor;
+            this.sunIntensity = sunIntensity;
+            this.shadowStrength = shadowStrength;
+        }
+    }
+
+    public readonly struct SkyLightingSample
+    {
+        public SkyTimePhase Phase { get; }
+        public Color AmbientSkyColor { get; }
+        public Color AmbientEquatorColor { get; }
+        public Color AmbientGroundColor { get; }
+        public float AmbientIntensity { get; }
+        public float ReflectionIntensity { get; }
+        public Color SunColor { get; }
+        public float SunIntensity { get; }
+        public float ShadowStrength { get; }
+
+        private SkyLightingSample(
+            SkyTimePhase phase,
+            Color ambientSkyColor,
+            Color ambientEquatorColor,
+            Color ambientGroundColor,
+            float ambientIntensity,
+            float reflectionIntensity,
+            Color sunColor,
+            float sunIntensity,
+            float shadowStrength)
+        {
+            Phase = phase;
+            AmbientSkyColor = ambientSkyColor;
+            AmbientEquatorColor = ambientEquatorColor;
+            AmbientGroundColor = ambientGroundColor;
+            AmbientIntensity = ambientIntensity;
+            ReflectionIntensity = reflectionIntensity;
+            SunColor = sunColor;
+            SunIntensity = sunIntensity;
+            ShadowStrength = shadowStrength;
+        }
+
+        public static SkyLightingSample Interpolate(
+            SkyLightingKeyframe from,
+            SkyLightingKeyframe to,
+            float t)
+        {
+            float easedT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
+            SkyTimePhase phase = easedT < 0.5f ? from.Phase : to.Phase;
+            return new SkyLightingSample(
+                phase,
+                Color.Lerp(from.AmbientSkyColor, to.AmbientSkyColor, easedT),
+                Color.Lerp(from.AmbientEquatorColor, to.AmbientEquatorColor, easedT),
+                Color.Lerp(from.AmbientGroundColor, to.AmbientGroundColor, easedT),
+                Mathf.Lerp(from.AmbientIntensity, to.AmbientIntensity, easedT),
+                Mathf.Lerp(from.ReflectionIntensity, to.ReflectionIntensity, easedT),
+                Color.Lerp(from.SunColor, to.SunColor, easedT),
+                Mathf.Lerp(from.SunIntensity, to.SunIntensity, easedT),
+                Mathf.Lerp(from.ShadowStrength, to.ShadowStrength, easedT));
+        }
+    }
+
+    [CreateAssetMenu(
+        fileName = "SkyLightingProfile",
+        menuName = "Fantasy Survival/World Lighting/Sky Lighting Profile")]
+    public sealed class SkyLightingProfile : ScriptableObject
+    {
+        [SerializeField, Range(0f, 24f)] private float morningPreviewHour = 7.5f;
+        [SerializeField, Range(0f, 24f)] private float dayPreviewHour = 12f;
+        [SerializeField, Range(0f, 24f)] private float nightPreviewHour = 22f;
+        [SerializeField] private SkyLightingKeyframe[] keyframes = CreateClearSkyDefaults();
+
+        public bool TryEvaluate(float hour, out SkyLightingSample sample)
+        {
+            sample = default;
+            if (!TryValidate(out _))
+            {
+                return false;
+            }
+
+            float normalizedHour = NormalizeHour(hour);
+            int previousIndex = keyframes.Length - 1;
+            for (int index = 0; index < keyframes.Length; index++)
+            {
+                if (normalizedHour < keyframes[index].Hour)
+                {
+                    break;
+                }
+
+                previousIndex = index;
+            }
+
+            int nextIndex = (previousIndex + 1) % keyframes.Length;
+            float previousHour = keyframes[previousIndex].Hour;
+            float nextHour = keyframes[nextIndex].Hour;
+            float evaluationHour = normalizedHour;
+
+            if (nextIndex == 0)
+            {
+                nextHour += 24f;
+                if (evaluationHour < previousHour)
+                {
+                    evaluationHour += 24f;
+                }
+            }
+
+            float duration = nextHour - previousHour;
+            float t = duration > Mathf.Epsilon
+                ? (evaluationHour - previousHour) / duration
+                : 0f;
+            sample = SkyLightingSample.Interpolate(
+                keyframes[previousIndex],
+                keyframes[nextIndex],
+                t);
+            return true;
+        }
+
+        public float GetPreviewHour(SkyTimePhase phase)
+        {
+            return phase switch
+            {
+                SkyTimePhase.Morning => morningPreviewHour,
+                SkyTimePhase.Day => dayPreviewHour,
+                SkyTimePhase.Night => nightPreviewHour,
+                _ => dayPreviewHour
+            };
+        }
+
+        public bool TryValidate(out string error)
+        {
+            if (keyframes == null || keyframes.Length < 2)
+            {
+                error = "Sky lighting profile requires at least two keyframes.";
+                return false;
+            }
+
+            float previousHour = -1f;
+            for (int index = 0; index < keyframes.Length; index++)
+            {
+                float hour = keyframes[index].Hour;
+                if (hour < 0f || hour >= 24f)
+                {
+                    error = $"Sky lighting keyframe {index} must be in the range [0, 24).";
+                    return false;
+                }
+
+                if (hour <= previousHour)
+                {
+                    error = "Sky lighting keyframes must use unique hours in ascending order.";
+                    return false;
+                }
+
+                previousHour = hour;
+            }
+
+            error = null;
+            return true;
+        }
+
+        public static float NormalizeHour(float hour)
+        {
+            float normalized = hour % 24f;
+            return normalized < 0f ? normalized + 24f : normalized;
+        }
+
+        private static SkyLightingKeyframe[] CreateClearSkyDefaults()
+        {
+            return new[]
+            {
+                new SkyLightingKeyframe(
+                    0f,
+                    SkyTimePhase.Night,
+                    new Color(0.035f, 0.05f, 0.11f),
+                    new Color(0.025f, 0.035f, 0.075f),
+                    new Color(0.01f, 0.015f, 0.03f),
+                    0.32f,
+                    0.12f,
+                    new Color(0.54f, 0.62f, 0.82f),
+                    0f,
+                    0f),
+                new SkyLightingKeyframe(
+                    6.5f,
+                    SkyTimePhase.Morning,
+                    new Color(0.38f, 0.39f, 0.48f),
+                    new Color(0.43f, 0.31f, 0.26f),
+                    new Color(0.12f, 0.10f, 0.11f),
+                    0.52f,
+                    0.28f,
+                    new Color(1f, 0.56f, 0.30f),
+                    0.7f,
+                    0.72f),
+                new SkyLightingKeyframe(
+                    10f,
+                    SkyTimePhase.Day,
+                    new Color(0.50f, 0.58f, 0.72f),
+                    new Color(0.38f, 0.43f, 0.50f),
+                    new Color(0.14f, 0.16f, 0.19f),
+                    0.68f,
+                    0.48f,
+                    new Color(1f, 0.95f, 0.82f),
+                    1.15f,
+                    0.86f),
+                new SkyLightingKeyframe(
+                    16f,
+                    SkyTimePhase.Day,
+                    new Color(0.44f, 0.50f, 0.62f),
+                    new Color(0.40f, 0.36f, 0.34f),
+                    new Color(0.13f, 0.13f, 0.15f),
+                    0.58f,
+                    0.40f,
+                    new Color(1f, 0.74f, 0.46f),
+                    0.82f,
+                    0.80f),
+                new SkyLightingKeyframe(
+                    19.5f,
+                    SkyTimePhase.Night,
+                    new Color(0.06f, 0.075f, 0.15f),
+                    new Color(0.045f, 0.05f, 0.10f),
+                    new Color(0.015f, 0.02f, 0.04f),
+                    0.36f,
+                    0.16f,
+                    new Color(0.60f, 0.68f, 0.88f),
+                    0f,
+                    0f)
+            };
+        }
+    }
+}

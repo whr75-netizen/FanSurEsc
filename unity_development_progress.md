@@ -1549,3 +1549,14 @@ Interactable (abstract base class)
 - `[Unity 컴파일·Play Mode 호출 확인]` 프로젝트 compile, prefab의 직교 Camera·Follow·Zoom 각 1개와 shell camera 참조, missing script 0, action type/path를 확인했다. Play Mode 호출에서 0.4는 대기, 추가 0.6은 한 단계, -2는 두 단계로 처리되고 3.5/8에서 clamp됨을 확인했다. 실제 사용자의 물리 휠과 Player build는 미검증이다.
 - `[검증 도구 주의]` Edit Mode에서 비실행 `MonoBehaviour` lifecycle을 `SendMessage`로 호출한 첫 검증, 비활성 Game View의 frame 진행 시도와 한 runtime field 조회 실수는 Unity MCP 검증 방식 문제로 assertion·실패 로그를 남겼다. 최종 compile·prefab·Play 호출 결과와 구분했으며 기존 미해결 원정 보호 오류를 포함한 Console 기록을 지워서 덮지 않았다.
 - `[2D 픽셀아트 경계·미구현]` 현재 게임 규칙은 XZ·3D Physics·NavMesh이므로 완전 XY/Physics2D 전환은 이동·사격·AI·맵 생성 재작성이다. 기존 규칙을 보존하려면 우선 3D gameplay+2D sprite 표현을 검토한다. 정식 전환 전 PPU·기준 해상도·Point/무압축 import·pivot·sorting·건물 가림을 확정하고 Pixel Perfect Camera를 붙인 뒤에는 연속 보간 대신 `zoomSmoothTime=0`과 허용 배율 단계 정책을 정한다.
+
+---
+
+## 55. 야외 아침·낮·밤 하늘광과 태양 그림자 `[ENVIRONMENT-01][SHELL-01][MAP-01]`
+
+- `[사용자 요청][2026-08-29]` 강수·구름·실내 조명 없이, 야외의 아침·낮·밤과 태양 그림자만 먼저 구현했다.
+- `[권위·데이터]` 영속 `PersistentGameplayShell`의 `SkyLightingCycleController` 하나가 gameplay session 시간을 소유한다. 색·환경광·태양 세기·그림자 강도는 `ClearSkyLightingProfile`의 시간순 keyframe에서 보간하므로, 날씨 종류를 하드코딩한 평행 Manager를 만들지 않았다. 현재 시험 주기는 실제 600초당 게임 24시간이고 조명은 게임 1분 단위로 갱신된다.
+- `[씬·렌더링 경계]` gameplay bootstrap이 있는 활성 씬에서 기존 Directional Light를 정확히 하나만 찾아 `RenderSettings.sun`으로 지정하고, 씬 전환 뒤 같은 시간 값을 다시 적용한다. 하늘광은 URP의 `Trilight` sky/equator/ground 색을 사용한다. 아침·낮에는 태양 회전·색·세기와 Hard Shadow를 적용하고 밤에는 직접 태양광과 그림자를 끈다. Main Menu와 기존 비활성 3D 픽셀 후처리는 건드리지 않는다.
+- `[그림자 근본 수정]` 절차 도심 primitive의 그림자 생성과 수신을 분리했다. 건물은 생성·수신하고 Ground·Road·Boundary는 생성하지 않되 수신하므로 건물 그림자가 바닥에서 사라지던 기존 결합을 제거했다.
+- `[Unity 컴파일·Play Mode 호출 확인]` Unity 6000.5.9f1 프로젝트 compilation과 profile/prefab 직렬화 참조를 확인했다. 한 `GameMap1` Play Session에서 아침 7.5시(태양 0.789, 그림자 0.748), 낮 12시(태양 1.064, 그림자 0.844), 밤 22시(태양 0, 그림자 없음)를 각각 한 번 강제하고, phase·Trilight 색·Directional Light 회전·Hard/None 전환과 동일 runtime controller 사용을 확인했다.
+- `[보존·미검증]` Player·Camera·씬 흐름·저장 schema와 기존 사용자 dirty scene/material/preview prefab은 수정하지 않았다. 최종 색·주기 밸런스, 실제 skybox 시각, 실내 Roof/SkyVisibility 감쇠, 비·눈·안개·구름, 시간 UI와 ordinary/Recovery 시간 저장은 이번 범위가 아니다. 물리 입력이 없는 Play Mode 호출 확인이며 Player build와 gameplay 씬 왕복 중 재바인딩은 별도 실행하지 않았다.

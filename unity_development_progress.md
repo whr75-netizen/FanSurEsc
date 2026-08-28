@@ -1490,3 +1490,15 @@ Interactable (abstract base class)
 - `[입력 보존]` 새 Image·Text의 raycast를 모두 끄므로 마우스가 HUD 위에 있어도 기존 공격의 UI pointer 차단 판정을 새로 유발하지 않는다.
 - `[Prefab/Play Mode 호출 확인]` prefab에서 Countdown/Ammo View·필수 참조·우측 하단 anchor·missing script 0을 확인했다. 한 Play Session에서 Chest source `5.0초`가 Chest 투영 위치에 표시되고 취소 즉시 숨는 것, 재장전 `2.5초`가 Player 투영 위치에 표시되는 것, 완료 경계에서 `0/3→3/3` 및 1발 소비 뒤 `2/3` 갱신을 확인했다. Unity가 비활성 창에서 frame을 진행하지 않아 2.5초 자연 경과는 이번에 반복하지 않고 §48의 실제 완료 증거를 재사용했다.
 - `[후속 미정]` 원형 진행 아트와 예비 탄약 총량 표시는 후속이다. 현재 우측 하단은 선택 무기의 탄창만 표시하며 실제 물리 E·R·발사 키는 이번 변경에서 주입하지 않았다.
+
+---
+
+## 50. 치료제 우클릭 사용·2.5초 회복 `[ACTION-01][ITEM-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-28]` 기존 치료제를 인벤토리 우클릭 `사용`에 연결하고 약 2.5초 행동시간 뒤 회복하도록 했다.
+- `[데이터·권위]` ID 7 `Medicine` definition에 사용시간 2.5초와 시험 회복량 35를 두었다. 체력 원본은 기존 `PlayerStats`, 수량·소유권 원본은 기존 `PlayerInventoryState`이며 별도 체력·소비 캐시는 만들지 않았다. tooltip도 두 값을 definition에서 읽는다.
+- `[사용·원자 경계]` 체력이 부족하고 item이 Player root 또는 Player 소유 중첩 컨테이너에 있을 때만 우클릭 `사용`을 노출한다. 완료 직전에 같은 PlayerState·runtime item·owner·slot·수량을 다시 확인하고 1개를 owner API로 소비한 뒤 회복한다. 수량 1은 slot에서 제거하며 `0/최대` stack을 만들지 않는다. 외부 Chest·상인 stock은 거부한다.
+- `[행동·표시]` 기존 `PlayerActionController`의 `item.medicine` 행동을 사용하므로 이동·공격·W1~W3·사망·씬 전환에서 효과 없이 취소되고 U·I는 유지된다. source는 영속 Player여서 기존 남은 초 View가 Player 위치를 따르며 완료·취소 때 숨는다. 진행 중 item 이동·수량 변경·만피 도달도 소비 없이 취소한다.
+- `[Prefab/정적 확인]` `PersistentGameplayShell/Player`에 controller 1개, missing script 0, definition 2.5초·35, tooltip, 수량 `2→1`과 마지막 `1→slot 제거`, 중첩 Player 소유 허용과 외부 grid 거부를 확인했다. 저장 DTO는 기존 definition ID·양수 quantity와 Player health를 그대로 사용하므로 schema v6를 바꾸지 않았다.
+- `[Play Mode 호출 확인]` 실제 `GameMap1` Player를 HP 50·시작 치료제 5로 두고 사용을 시작했다. 시작 시 `item.medicine`, 남은 `2.5초`, Player anchor와 체력·수량 불변을 확인했고 자연 경과 뒤 HP 85·수량 4·행동 유휴·시간 UI 숨김을 확인했다. 같은 실행에서 다시 시작한 뒤 `MovementInput` 취소 시 HP 85·수량 4가 유지되고, 최대 체력에서는 시작 거부·무소비임을 확인했다.
+- `[보존·미검증]` ordinary/Recovery schema와 기존 인벤토리·재장전·Chest 사용 경로는 변경하지 않았다. 실제 물리적 우클릭·WASD 입력과 최종 회복량 밸런스, 음식 사용·애니메이션·효과음·원형 진행 아트는 이번 범위에서 검증·확정하지 않았다. Console에는 §49에서 이미 진단한 미해결 원정 보호 오류가 남아 있으며 치료제 경로 오류는 확인되지 않았다.

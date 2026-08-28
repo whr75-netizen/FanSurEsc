@@ -421,6 +421,129 @@ namespace FantasySurvival.Inventory
             Wallet = wallet ?? throw new ArgumentNullException(nameof(wallet));
         }
 
+        public bool TryGetOwnedStackItemPlacement(
+            InventoryItemData item,
+            out StandardStashViewData owner,
+            out int slotIndex,
+            out string error)
+        {
+            owner = null;
+            slotIndex = -1;
+            if (item?.Definition == null || item.Quantity <= 0)
+            {
+                error = "The requested stack item is invalid.";
+                return false;
+            }
+
+            if (!(item.InventoryOwner is StandardStashViewData itemOwner) ||
+                !OwnsInventory(itemOwner))
+            {
+                error = "The requested stack item is not owned by the Player inventory.";
+                return false;
+            }
+
+            int? itemSlot = itemOwner.GetId(item);
+            if (!itemSlot.HasValue)
+            {
+                error = "The stack item owner does not contain the requested item.";
+                return false;
+            }
+
+            owner = itemOwner;
+            slotIndex = itemSlot.Value;
+            error = null;
+            return true;
+        }
+
+        public bool OwnsInventory(IVariableInventoryViewData candidate)
+        {
+            if (candidate == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(candidate, Inventory) ||
+                ReferenceEquals(candidate, Equipment))
+            {
+                return true;
+            }
+
+            return IsNestedInventory(Inventory, candidate) ||
+                   IsNestedInventory(Equipment, candidate);
+        }
+
+        internal static bool IsNestedInventory(
+            IVariableInventoryViewData root,
+            IVariableInventoryViewData candidate)
+        {
+            if (root == null || candidate == null)
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(root, candidate))
+            {
+                return true;
+            }
+
+            var visited = new HashSet<IVariableInventoryViewData>(
+                InventoryReferenceComparer<IVariableInventoryViewData>.Instance);
+            return ContainsNestedInventory(root, candidate, visited);
+        }
+
+        public bool TryConsumeOneOwnedStackItem(
+            InventoryItemData item,
+            StandardStashViewData expectedOwner,
+            int expectedSlotIndex,
+            int expectedQuantity,
+            out string error)
+        {
+            if (expectedOwner == null || expectedQuantity <= 0)
+            {
+                error = "The expected stack item placement is invalid.";
+                return false;
+            }
+
+            if (!TryGetOwnedStackItemPlacement(
+                    item,
+                    out StandardStashViewData actualOwner,
+                    out int actualSlotIndex,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!ReferenceEquals(actualOwner, expectedOwner) ||
+                actualSlotIndex != expectedSlotIndex ||
+                item.Quantity != expectedQuantity)
+            {
+                error = "The stack item changed before it could be consumed.";
+                return false;
+            }
+
+            if (expectedQuantity > 1)
+            {
+                return item.TryChangeQuantity(
+                    expectedOwner,
+                    expectedQuantity,
+                    expectedQuantity - 1,
+                    out error);
+            }
+
+            try
+            {
+                expectedOwner.InsertInventoryItem(expectedSlotIndex, null);
+            }
+            catch (Exception exception)
+            {
+                error = $"Could not remove the consumed stack item: {exception.Message}";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
         public bool TryGetReloadableRoundCount(
             InventoryItemData weapon,
             out int reloadableRoundCount,
@@ -695,6 +818,46 @@ namespace FantasySurvival.Inventory
             return failures.Count == 0
                 ? string.Empty
                 : $" Inventory rollback also failed ({string.Join("; ", failures)}).";
+        }
+
+        private static bool ContainsNestedInventory(
+            IVariableInventoryViewData current,
+            IVariableInventoryViewData target,
+            HashSet<IVariableInventoryViewData> visited)
+        {
+            if (current == null || !visited.Add(current))
+            {
+                return false;
+            }
+
+            if (current is StandardStashViewData stash && stash.CellData != null)
+            {
+                foreach (IVariableInventoryCellData cell in stash.CellData)
+                {
+                    if (cell is IStandardCaseCellData container &&
+                        container.CaseData != null &&
+                        (ReferenceEquals(container.CaseData, target) ||
+                         ContainsNestedInventory(container.CaseData, target, visited)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            else if (current is EquipmentLoadoutData equipment)
+            {
+                foreach (EquipmentSlotId slot in EquipmentSlotCatalog.OrderedSlots)
+                {
+                    if (equipment.GetItem(slot) is IStandardCaseCellData container &&
+                        container.CaseData != null &&
+                        (ReferenceEquals(container.CaseData, target) ||
+                         ContainsNestedInventory(container.CaseData, target, visited)))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private bool TryValidateEquippedWeapon(

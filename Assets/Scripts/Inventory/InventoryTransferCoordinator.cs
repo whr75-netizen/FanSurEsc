@@ -1981,69 +1981,14 @@ namespace FantasySurvival.Inventory
 
         private bool IsPlayerOwned(IVariableInventoryViewData candidate)
         {
-            return ReferenceEquals(candidate, playerState.Inventory) ||
-                   ReferenceEquals(candidate, playerState.Equipment) ||
-                   IsNestedIn(playerState.Inventory, candidate) ||
-                   IsNestedIn(playerState.Equipment, candidate);
+            return playerState != null && playerState.OwnsInventory(candidate);
         }
 
         private static bool IsNestedIn(
             IVariableInventoryViewData root,
             IVariableInventoryViewData candidate)
         {
-            if (root == null || candidate == null)
-            {
-                return false;
-            }
-
-            if (ReferenceEquals(root, candidate))
-            {
-                return true;
-            }
-
-            var visited = new HashSet<IVariableInventoryViewData>();
-            return ContainsNestedGrid(root, candidate, visited);
-        }
-
-        private static bool ContainsNestedGrid(
-            IVariableInventoryViewData current,
-            IVariableInventoryViewData target,
-            HashSet<IVariableInventoryViewData> visited)
-        {
-            if (current == null || !visited.Add(current))
-            {
-                return false;
-            }
-
-            if (current is StandardStashViewData stash && stash.CellData != null)
-            {
-                foreach (IVariableInventoryCellData cell in stash.CellData)
-                {
-                    if (cell is IStandardCaseCellData container && container.CaseData != null)
-                    {
-                        if (ReferenceEquals(container.CaseData, target) ||
-                            ContainsNestedGrid(container.CaseData, target, visited))
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            else if (current is EquipmentLoadoutData equipment)
-            {
-                foreach (EquipmentSlotId slot in EquipmentSlotCatalog.OrderedSlots)
-                {
-                    if (equipment.GetItem(slot) is IStandardCaseCellData container &&
-                        container.CaseData != null &&
-                        (ReferenceEquals(container.CaseData, target) ||
-                         ContainsNestedGrid(container.CaseData, target, visited)))
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
+            return PlayerInventoryState.IsNestedInventory(root, candidate);
         }
 
         private static bool TryValidateTradeItem(InventoryItemData item, out string error)

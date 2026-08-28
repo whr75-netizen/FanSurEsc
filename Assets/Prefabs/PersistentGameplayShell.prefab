@@ -2299,6 +2299,7 @@ GameObject:
   - component: {fileID: 7031763297200606156}
   - component: {fileID: 6021516775467818055}
   - component: {fileID: 7847840547415635133}
+  - component: {fileID: 1330310195890507211}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2692,6 +2693,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 717b16c2db9aa574a8098b7e24ad1e92, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Actions.PlayerActionController
+--- !u!114 &1330310195890507211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059635282201458994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dd50972c92285045a839857654e8681, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Inventory.PlayerConsumableUseController
 --- !u!1 &1185748785266318166
 GameObject:
   m_ObjectHideFlags: 0

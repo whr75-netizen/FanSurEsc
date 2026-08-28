@@ -46,6 +46,10 @@ namespace FantasySurvival.Inventory
         [SerializeField, Min(0.1f)] private float weaponRange = 30f;
         [SerializeField, Min(0f)] private float weaponNoiseRadius = 18f;
 
+        [Header("Medicine Prototype")]
+        [SerializeField, Min(0.01f)] private float medicineUseDurationSeconds = 2.5f;
+        [SerializeField, Min(0.01f)] private float medicineHealthRestored = 35f;
+
         [Header("Item Type")]
         [SerializeField] private ItemDefinitionKind kind;
         [Header("Container")]
@@ -74,6 +78,8 @@ namespace FantasySurvival.Inventory
         public float WeaponDamage => weaponDamage;
         public float WeaponRange => weaponRange;
         public float WeaponNoiseRadius => weaponNoiseRadius;
+        public float MedicineUseDurationSeconds => medicineUseDurationSeconds;
+        public float MedicineHealthRestored => medicineHealthRestored;
         public ItemDefinitionKind Kind => kind;
         public bool IsContainer => kind == ItemDefinitionKind.Container;
         public bool IsMedicine => kind == ItemDefinitionKind.Medicine;
@@ -131,6 +137,18 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            if (IsMedicine &&
+                (float.IsNaN(medicineUseDurationSeconds) ||
+                 float.IsInfinity(medicineUseDurationSeconds) ||
+                 medicineUseDurationSeconds <= 0f ||
+                 float.IsNaN(medicineHealthRestored) ||
+                 float.IsInfinity(medicineHealthRestored) ||
+                 medicineHealthRestored <= 0f))
+            {
+                error = $"Medicine definition ID {id} has an invalid use duration or healing amount.";
+                return false;
+            }
+
             if (IsContainer && !InventoryGridConstraints.TryValidateDimensions(
                     containerWidth,
                     containerHeight,
@@ -159,6 +177,8 @@ namespace FantasySurvival.Inventory
             weaponDamage = Mathf.Max(0f, weaponDamage);
             weaponRange = Mathf.Max(0.1f, weaponRange);
             weaponNoiseRadius = Mathf.Max(0f, weaponNoiseRadius);
+            medicineUseDurationSeconds = Mathf.Max(0.01f, medicineUseDurationSeconds);
+            medicineHealthRestored = Mathf.Max(0.01f, medicineHealthRestored);
         }
     }
 }

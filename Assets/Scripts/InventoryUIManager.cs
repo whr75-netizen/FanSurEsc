@@ -38,6 +38,7 @@ public class InventoryUIManager : MonoBehaviour
     private Interactable currentExternalInteractable;
     private ExternalInventoryMode currentExternalMode;
     private PlayerInteractor playerInteractor;
+    private PlayerConsumableUseController consumableUseController;
     [Header("Merchant UI")]
     [SerializeField] private GameObject merchantControlsRoot;
     [SerializeField] private Button merchantAllTabButton;
@@ -92,9 +93,13 @@ public class InventoryUIManager : MonoBehaviour
     void Awake()
     {
         playerInteractor = GetComponent<PlayerInteractor>();
-        if (playerInteractor == null)
+        consumableUseController = GetComponent<PlayerConsumableUseController>();
+        if (playerInteractor == null || consumableUseController == null)
         {
-            Debug.LogError("InventoryUIManager requires PlayerInteractor on the same GameObject.", this);
+            Debug.LogError(
+                "InventoryUIManager requires PlayerInteractor and PlayerConsumableUseController " +
+                "on the same GameObject.",
+                this);
             enabled = false;
             return;
         }
@@ -874,6 +879,21 @@ public class InventoryUIManager : MonoBehaviour
                 if (!standardCore.TryOpenCase(sourceView, sourceCell))
                 {
                     Debug.LogWarning("Container use failed because its source cell changed.", this);
+                }
+            };
+        }
+        else if (sourceItem.Definition.IsMedicine &&
+                 consumableUseController != null &&
+                 consumableUseController.CanUseMedicine(sourceItem))
+        {
+            useAction = () =>
+            {
+                if (!consumableUseController.TryBeginUseMedicine(
+                        sourceItem,
+                        () => ReApplyViewIfAlive(sourceView),
+                        out string medicineError))
+                {
+                    Debug.LogWarning($"Medicine use failed: {medicineError}", this);
                 }
             };
         }

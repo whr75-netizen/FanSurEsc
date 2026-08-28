@@ -67,6 +67,15 @@ namespace FantasySurvival.Inventory
                 AppendStat(stats, "소음 반경", FormatNumber(definition.WeaponNoiseRadius));
             }
 
+            if (definition.IsMedicine)
+            {
+                AppendStat(stats, "회복량", FormatNumber(definition.MedicineHealthRestored));
+                AppendStat(
+                    stats,
+                    "사용 시간",
+                    $"{FormatNumber(definition.MedicineUseDurationSeconds)}초");
+            }
+
             if (definition.IsContainer)
             {
                 int cellCount = definition.ContainerWidth * definition.ContainerHeight;

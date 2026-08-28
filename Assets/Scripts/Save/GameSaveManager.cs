@@ -24,6 +24,9 @@ namespace FantasySurvival.SaveSystem
             SaveFolderName,
             SlotOneFileName);
 
+        public static bool HasSlotOneArtifacts =>
+            File.Exists(SlotOnePath) || File.Exists(SlotOneBackupPath);
+
         private static string SlotOneBackupPath => SlotOnePath + ".bak";
 
         private static string StorageRoot

@@ -35,7 +35,7 @@ MainMenuManager.Awake
 
 | 사용자 선택 | 실제 호출과 결과 |
 |---|---|
-| 새로 시작 | `StartNewGame → GameStartRequest.QueueNewGame → LoadScene("GameLoadingScene")` |
+| 새로 시작 | ordinary primary/backup이 있으면 `StartNewGame → 기존 ExitPanel 확인`; 확인 또는 저장 없음이면 `QueueNewGame → GameLoadingScene` |
 | 게임 로드 | `OpenLoadPanel → TrySelectLoadCandidate(primary 우선, backup 대체) → LoadSelectedGame → QueueLoad → GameLoadingScene` |
 | 설정 | `OpenSettingsPanel → KeyBindingSettingsPanel.Refresh`; Sound와 키 override는 `GameUserSettings`, `MainMenuScene` 유지 |
 | 나가기 | `OpenExitPanel → QuitGame → Application.Quit`; Editor에서는 종료 대신 로그 |
@@ -201,6 +201,8 @@ fade-in 완료                            ├─ 둘 다 참일 때만 TryFinali
 
 ## 8. 주 메뉴로 돌아가기
 
+기지의 `RequestMainMenu`는 현재 `BasePersistenceController.SaveSlotOne`이 성공한 뒤에만 아래 종료 경로를 시작한다. 저장 기능이 준비되지 않았거나 저장에 실패하면 사유를 표시하고 paused 기지에 남는다. 원정 중 주 메뉴 이동은 이 기지 저장 gate를 우회하되 기존 `Abandoned` 확정·Recovery 정산 계약을 그대로 따른다.
+
 ```text
 GameplaySessionExit.TryExitToMainMenu
   → PersistentGameplayShell.PrepareForTravel
@@ -223,3 +225,4 @@ GameplaySessionExit.TryExitToMainMenu
 4. 최초 로딩과 gameplay 직접 전환을 섞지 않으며 `GameMap1 ↔ GameMapTest`는 같은 shell·Player를 유지한다.
 5. 정상 생환의 `Resolved`부터 `SettlementCommitted`까지 주 메뉴 종료 경로를 노출하지 않는다.
 6. `PrepareForTravel`은 진행 행동을 취소하고 새 행동을 막으며, 도착·전환 취소에서 이전 허용 상태만 복원한다.
+7. Base→Main Menu는 ordinary 저장 성공 뒤에만 gameplay owner 종료를 시작한다.

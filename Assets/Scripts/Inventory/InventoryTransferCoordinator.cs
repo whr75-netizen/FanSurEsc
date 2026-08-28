@@ -196,6 +196,7 @@ namespace FantasySurvival.Inventory
     public sealed class InventoryTransferCoordinator : IVariableInventoryTransferController
     {
         private readonly Action refreshViews;
+        private readonly Action notifyInventoryContentsChanged;
         private readonly Action<string, bool> reportStatus;
 
         private PlayerInventoryState playerState;
@@ -796,10 +797,12 @@ namespace FantasySurvival.Inventory
         public InventoryTransferCoordinator(
             PlayerInventoryState playerState,
             Action refreshViews,
+            Action notifyInventoryContentsChanged,
             Action<string, bool> reportStatus)
         {
             this.playerState = playerState ?? throw new ArgumentNullException(nameof(playerState));
             this.refreshViews = refreshViews;
+            this.notifyInventoryContentsChanged = notifyInventoryContentsChanged;
             this.reportStatus = reportStatus;
         }
 
@@ -865,9 +868,8 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            EquipmentSlotId slot = EquipmentSlotCatalog.GetPrimarySlot(
-                item.Definition.EquipmentSlot);
-            return playerState.Equipment.GetItem(slot) == null;
+            return playerState.Equipment.GetFirstAvailableSlot(item.Definition) !=
+                   EquipmentSlotId.None;
         }
 
         public bool TryEquip(
@@ -885,11 +887,25 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            EquipmentSlotId slot = EquipmentSlotCatalog.GetPrimarySlot(
-                item.Definition.EquipmentSlot);
-            if (playerState.Equipment.GetItem(slot) != null)
+            EquipmentSlotId slot =
+                playerState.Equipment.GetFirstAvailableSlot(item.Definition);
+            if (slot == EquipmentSlotId.None)
             {
-                error = $"{EquipmentSlotCatalog.GetDisplayName(slot)} 칸이 이미 사용 중입니다.";
+                if (!item.Definition.IsEquippable)
+                {
+                    error = "장착 가능한 아이템이 아닙니다.";
+                }
+                else if (item.Definition.EquipmentSlot == EquipmentSlotType.Weapon)
+                {
+                    error = "사용 가능한 무기 칸이 없습니다.";
+                }
+                else
+                {
+                    EquipmentSlotId primarySlot = EquipmentSlotCatalog.GetPrimarySlot(
+                        item.Definition.EquipmentSlot);
+                    error = $"{EquipmentSlotCatalog.GetDisplayName(primarySlot)} 칸이 이미 사용 중입니다.";
+                }
+
                 Report($"장착 실패: {error}", true);
                 return false;
             }
@@ -1430,6 +1446,11 @@ namespace FantasySurvival.Inventory
                    carriedItem.MaxStackSize > 1 && carriedItem.Quantity > 0 &&
                    EvaluateDropHandling(sourceView, destinationView, carriedItem, false) ==
                    VariableInventoryDropHandling.Standard;
+        }
+
+        public void OnInventoryContentsChanged()
+        {
+            notifyInventoryContentsChanged?.Invoke();
         }
 
         private VariableInventoryDropHandling EvaluateDropHandling(

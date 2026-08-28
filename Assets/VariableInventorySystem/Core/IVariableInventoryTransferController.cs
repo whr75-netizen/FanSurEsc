@@ -73,6 +73,10 @@ namespace VariableInventorySystem
             IVariableInventoryView destinationView,
             IVariableInventoryCellData item);
 
+        // Lightweight read-only observer boundary for authoritative owner/quantity
+        // changes. Implementations must not start another transfer synchronously.
+        void OnInventoryContentsChanged();
+
         void OnDropCompleted(
             IVariableInventoryView sourceView,
             IVariableInventoryView destinationView,

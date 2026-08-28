@@ -183,6 +183,14 @@ namespace FantasySurvival.Controls
                 : string.Empty;
         }
 
+        public static bool HasBindingOverride(
+            GameInputActionId actionId,
+            GameInputBindingSlot slot)
+        {
+            return TryResolveBinding(actionId, slot, out InputAction action, out int index) &&
+                   action.bindings[index].hasOverrides;
+        }
+
         public static string GetBindingDisplayName(
             GameInputActionId actionId,
             GameInputBindingSlot slot)

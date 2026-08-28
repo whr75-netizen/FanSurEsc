@@ -295,12 +295,13 @@ namespace VariableInventorySystem
                     inventoryView?.OnDroped(true);
                 }
 
+                IVariableInventoryView completedSingleOriginView = originView;
+                ClearDragState();
                 transferController.OnDropCompleted(
-                    originView,
+                    completedSingleOriginView,
                     destinationView,
                     transferredItem,
                     VariableInventoryDropHandling.Standard);
-                ClearDragState();
                 return true;
             }
 
@@ -329,6 +330,7 @@ namespace VariableInventorySystem
             destinationView.ReApply();
             OnCarriedItemChanged();
             UpdateClickCarryPointer();
+            transferController.OnInventoryContentsChanged();
             return true;
         }
 
@@ -407,6 +409,7 @@ namespace VariableInventorySystem
             NotifyHoveredCellCleared();
             effectCell.RectTransform.gameObject.SetActive(true);
             effectCell.Apply(sourceData);
+            transferController?.OnInventoryContentsChanged();
             if (mode == VariableInventoryCarryMode.Click)
             {
                 UpdateClickCarryPointer();
@@ -518,6 +521,7 @@ namespace VariableInventorySystem
                         view.ReApply();
                         OnCarriedItemChanged();
                         UpdateClickCarryPointer();
+                        transferController.OnInventoryContentsChanged();
                         Debug.Log(
                             $"[Core] Stack merge moved {mergeReceipt.MovedQuantity}; " +
                             $"{mergeReceipt.RemainingQuantity} remains carried.",
@@ -583,16 +587,22 @@ namespace VariableInventorySystem
                 Debug.LogError("[Core.OnEndDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
                 return false;
             }
-            if (isRelease && transferController != null)
+
+            IVariableInventoryView completedOriginView = originView;
+            ClearDragState();
+            if (!isRelease)
+            {
+                transferController?.OnInventoryContentsChanged();
+            }
+            else if (transferController != null)
             {
                 transferController.OnDropCompleted(
-                    originView,
+                    completedOriginView,
                     destinationView,
                     transferredItem,
                     handling);
             }
 
-            ClearDragState();
             Debug.Log($"[Core.OnEndDrag] Drag ended. Drop Success: {isRelease}");
             return isRelease;
         }
@@ -648,6 +658,7 @@ namespace VariableInventorySystem
             }
             ClearDragState();
             NotifyHoveredCellCleared();
+            transferController?.OnInventoryContentsChanged();
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 완료.");
             return true;
         }

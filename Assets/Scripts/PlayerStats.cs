@@ -9,13 +9,16 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
     [SerializeField, Min(0f)] private float currentHealth = 100f;
 
     private bool damageBlocked;
+    private bool isDead;
+    private bool healthMutationInProgress;
 
     public event Action<float, float> HealthChanged;
+    public event Action<PlayerStats, DamageContext, DamageResult> DamageApplied;
     public event Action<PlayerStats, DamageContext> Died;
 
     public float MaxHealth => maxHealth;
     public float CurrentHealth => currentHealth;
-    public bool IsAlive => currentHealth > 0f;
+    public bool IsAlive => !isDead && currentHealth > 0f;
     public bool DamageBlocked => damageBlocked;
 
     private void Awake()
@@ -30,40 +33,78 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
 
     public DamageResult ApplyDamage(DamageContext context)
     {
-        if (damageBlocked || !IsAlive || context.Amount <= 0f || float.IsNaN(context.Amount))
+        if (healthMutationInProgress || damageBlocked || !IsAlive ||
+            context.Amount <= 0f || float.IsNaN(context.Amount))
         {
             return DamageResult.Ignored(currentHealth);
         }
 
         float previousHealth = currentHealth;
-        SetCurrentHealth(currentHealth - context.Amount);
-        bool causedDeath = previousHealth > 0f && currentHealth <= 0f;
-        var result = new DamageResult(
-            true,
-            previousHealth,
-            currentHealth,
-            causedDeath);
+        float nextHealth = Mathf.Clamp(previousHealth - context.Amount, 0f, maxHealth);
+        bool causedDeath = previousHealth > 0f && nextHealth <= 0f;
         if (causedDeath)
         {
-            Died?.Invoke(this, context);
+            isDead = true;
         }
 
-        return result;
+        healthMutationInProgress = true;
+        try
+        {
+            SetCurrentHealth(nextHealth);
+            var result = new DamageResult(
+                true,
+                previousHealth,
+                currentHealth,
+                causedDeath);
+            NotifyDamageApplied(context, result);
+            if (causedDeath)
+            {
+                NotifyDied(context);
+            }
+
+            return result;
+        }
+        finally
+        {
+            healthMutationInProgress = false;
+        }
     }
 
     public void RestoreHealth(float amount)
     {
-        if (amount <= 0f)
+        if (healthMutationInProgress || !IsAlive || amount <= 0f)
         {
             return;
         }
 
-        SetCurrentHealth(currentHealth + amount);
+        healthMutationInProgress = true;
+        try
+        {
+            SetCurrentHealth(currentHealth + amount);
+        }
+        finally
+        {
+            healthMutationInProgress = false;
+        }
     }
 
     public void ResetHealth()
     {
-        SetCurrentHealth(maxHealth);
+        if (healthMutationInProgress)
+        {
+            return;
+        }
+
+        healthMutationInProgress = true;
+        try
+        {
+            isDead = false;
+            SetCurrentHealth(maxHealth);
+        }
+        finally
+        {
+            healthMutationInProgress = false;
+        }
     }
 
     public void SetDamageBlocked(bool blocked)
@@ -76,6 +117,12 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
         float savedMaxHealth,
         out string error)
     {
+        if (healthMutationInProgress)
+        {
+            error = "Player health cannot be restored while a health mutation is being notified.";
+            return false;
+        }
+
         if (float.IsNaN(savedCurrentHealth) || float.IsInfinity(savedCurrentHealth) ||
             float.IsNaN(savedMaxHealth) || float.IsInfinity(savedMaxHealth) ||
             savedMaxHealth <= 0f ||
@@ -87,9 +134,18 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
             return false;
         }
 
-        SetCurrentHealth(savedCurrentHealth);
-        error = null;
-        return true;
+        healthMutationInProgress = true;
+        try
+        {
+            isDead = false;
+            SetCurrentHealth(savedCurrentHealth);
+            error = null;
+            return true;
+        }
+        finally
+        {
+            healthMutationInProgress = false;
+        }
     }
 
     private void SetCurrentHealth(float value)
@@ -101,13 +157,78 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
         }
 
         currentHealth = clamped;
-        HealthChanged?.Invoke(currentHealth, maxHealth);
+        NotifyHealthChanged();
+    }
+
+    private void NotifyHealthChanged()
+    {
+        Action<float, float> handlers = HealthChanged;
+        if (handlers == null)
+        {
+            return;
+        }
+
+        foreach (Action<float, float> handler in handlers.GetInvocationList())
+        {
+            try
+            {
+                handler(currentHealth, maxHealth);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+            }
+        }
+    }
+
+    private void NotifyDamageApplied(DamageContext context, DamageResult result)
+    {
+        Action<PlayerStats, DamageContext, DamageResult> handlers = DamageApplied;
+        if (handlers == null)
+        {
+            return;
+        }
+
+        foreach (Action<PlayerStats, DamageContext, DamageResult> handler in
+                 handlers.GetInvocationList())
+        {
+            try
+            {
+                handler(this, context, result);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+            }
+        }
+    }
+
+    private void NotifyDied(DamageContext context)
+    {
+        Action<PlayerStats, DamageContext> handlers = Died;
+        if (handlers == null)
+        {
+            return;
+        }
+
+        foreach (Action<PlayerStats, DamageContext> handler in handlers.GetInvocationList())
+        {
+            try
+            {
+                handler(this, context);
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+            }
+        }
     }
 
     private void NormalizeHealth()
     {
         maxHealth = Mathf.Max(1f, maxHealth);
         currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        isDead = currentHealth <= 0f;
     }
 
     private void OnValidate()

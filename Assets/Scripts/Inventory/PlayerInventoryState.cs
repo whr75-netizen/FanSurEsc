@@ -211,10 +211,28 @@ namespace FantasySurvival.Inventory
                 return null;
             }
 
-            EquipmentSlotId primarySlot = EquipmentSlotCatalog.GetPrimarySlot(
-                item.Definition.EquipmentSlot);
-            int index = EquipmentSlotCatalog.GetIndex(primarySlot);
+            EquipmentSlotId slot = GetFirstAvailableSlot(item.Definition);
+            int index = EquipmentSlotCatalog.GetIndex(slot);
             return index >= 0 && CheckInsert(index, cellData) ? index : (int?)null;
+        }
+
+        public EquipmentSlotId GetFirstAvailableSlot(ItemDefinition definition)
+        {
+            if (definition == null || !definition.IsEquippable)
+            {
+                return EquipmentSlotId.None;
+            }
+
+            foreach (EquipmentSlotId slot in EquipmentSlotCatalog.OrderedSlots)
+            {
+                int index = EquipmentSlotCatalog.GetIndex(slot);
+                if (items[index] == null && definition.CanEquipIn(slot))
+                {
+                    return slot;
+                }
+            }
+
+            return EquipmentSlotId.None;
         }
 
         public bool CheckInsert(int id, IVariableInventoryCellData cellData)
@@ -400,6 +418,10 @@ namespace FantasySurvival.Inventory
             public int RemainingQuantity => OriginalQuantity - ConsumedQuantity;
         }
 
+        private readonly HashSet<StandardStashViewData> ammunitionCountVisitedGrids =
+            new HashSet<StandardStashViewData>(
+                InventoryReferenceComparer<StandardStashViewData>.Instance);
+
         public StandardStashViewData Inventory { get; }
         public EquipmentLoadoutData Equipment { get; }
         public PlayerWallet Wallet { get; }
@@ -578,6 +600,59 @@ namespace FantasySurvival.Inventory
 
             error = null;
             return true;
+        }
+
+        public bool TryGetReserveAmmunitionCount(
+            InventoryItemData weapon,
+            out int reserveRoundCount,
+            out string error)
+        {
+            reserveRoundCount = 0;
+            if (!TryValidateEquippedWeapon(weapon, out error))
+            {
+                return false;
+            }
+
+            ammunitionCountVisitedGrids.Clear();
+            long total = 0;
+            try
+            {
+                if (!TryCountAmmunitionFromGrid(
+                        Inventory,
+                        weapon.Definition.AmmunitionDefinitionId,
+                        ammunitionCountVisitedGrids,
+                        ref total,
+                        out error))
+                {
+                    return false;
+                }
+
+                foreach (EquipmentSlotId slot in EquipmentSlotCatalog.OrderedSlots)
+                {
+                    if (!(Equipment.GetItem(slot) is InventoryContainerItemData container))
+                    {
+                        continue;
+                    }
+
+                    if (!TryCountAmmunitionFromGrid(
+                            container.CaseData,
+                            weapon.Definition.AmmunitionDefinitionId,
+                            ammunitionCountVisitedGrids,
+                            ref total,
+                            out error))
+                    {
+                        return false;
+                    }
+                }
+
+                reserveRoundCount = total >= int.MaxValue ? int.MaxValue : (int)total;
+                error = null;
+                return true;
+            }
+            finally
+            {
+                ammunitionCountVisitedGrids.Clear();
+            }
         }
 
         public bool TryConsumeLoadedRound(InventoryItemData weapon, out string error)
@@ -938,6 +1013,61 @@ namespace FantasySurvival.Inventory
                     {
                         break;
                     }
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool TryCountAmmunitionFromGrid(
+            StandardStashViewData grid,
+            int ammunitionDefinitionId,
+            HashSet<StandardStashViewData> visitedGrids,
+            ref long total,
+            out string error)
+        {
+            if (grid?.CellData == null || !visitedGrids.Add(grid))
+            {
+                error = grid == null || grid.CellData == null
+                    ? "A Player-owned inventory grid is missing."
+                    : "The Player inventory contains a shared or cyclic container grid.";
+                return false;
+            }
+
+            for (int slotIndex = 0; slotIndex < grid.CellData.Length; slotIndex++)
+            {
+                if (!(grid.CellData[slotIndex] is InventoryItemData item))
+                {
+                    if (grid.CellData[slotIndex] != null)
+                    {
+                        error = $"Player inventory slot {slotIndex} contains an unsupported runtime item type.";
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (!ReferenceEquals(item.InventoryOwner, grid))
+                {
+                    error = $"Player inventory item ID {item.Id} has inconsistent ownership.";
+                    return false;
+                }
+
+                if (item.Id == ammunitionDefinitionId && item.Definition.IsAmmunition)
+                {
+                    total = Math.Min(int.MaxValue, total + item.Quantity);
+                }
+
+                if (item is InventoryContainerItemData container &&
+                    !TryCountAmmunitionFromGrid(
+                        container.CaseData,
+                        ammunitionDefinitionId,
+                        visitedGrids,
+                        ref total,
+                        out error))
+                {
+                    return false;
                 }
             }
 

@@ -86,6 +86,11 @@ public class InventoryUIManager : MonoBehaviour
     public EquipmentLoadoutData PlayerEquipmentData => playerState?.Equipment;
     public PlayerWallet PlayerWallet => playerState?.Wallet;
     public event Action<PlayerInventoryState> PlayerStateChanged;
+    /// <summary>
+    /// Read-only invalidation signal. Observers query the current owner state and must
+    /// not start another inventory transfer synchronously.
+    /// </summary>
+    public event Action InventoryContentsChanged;
 
     #endregion
 
@@ -158,6 +163,7 @@ public class InventoryUIManager : MonoBehaviour
         transferCoordinator = new InventoryTransferCoordinator(
             playerState,
             RefreshOpenViews,
+            NotifyInventoryContentsChanged,
             SetExternalStatus);
         standardCore.SetTransferController(transferCoordinator);
         standardCore.HoveredCellChanged += HandleHoveredCellChanged;
@@ -753,6 +759,29 @@ public class InventoryUIManager : MonoBehaviour
                 RefreshMerchantPresentationLabels();
             }
         }
+
+        NotifyInventoryContentsChanged();
+    }
+
+    private void NotifyInventoryContentsChanged()
+    {
+        Action handlers = InventoryContentsChanged;
+        if (handlers == null)
+        {
+            return;
+        }
+
+        foreach (Action handler in handlers.GetInvocationList())
+        {
+            try
+            {
+                handler();
+            }
+            catch (Exception exception)
+            {
+                Debug.LogException(exception, this);
+            }
+        }
     }
 
     private void SetMerchantCategory(MerchantCategory category)
@@ -1062,7 +1091,6 @@ public class InventoryUIManager : MonoBehaviour
             }
 
             ReApplyViewIfAlive(sourceView);
-            RefreshOpenViews();
             return true;
         }
 
@@ -1153,7 +1181,7 @@ public class InventoryUIManager : MonoBehaviour
             return;
         }
 
-        itemTooltipView.Show(item.Definition);
+        itemTooltipView.Show(item);
     }
 
     private void SetExternalStatus(string message, bool isError)

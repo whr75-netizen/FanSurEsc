@@ -39,6 +39,8 @@ namespace FantasySurvival.SaveSystem
         private bool baseFurnitureBound;
         private bool ordinaryMirrorRepairPending;
 
+        public string CurrentStatusMessage => statusMessage;
+
         private void Start()
         {
             if (!TryGetInventory(out InventoryUIManager inventory, out string error))
@@ -88,6 +90,20 @@ namespace FantasySurvival.SaveSystem
             baseFurnitureBound = true;
             PersistentGameplayShell.Instance?.RaidCheckpoint?.NotifyBasePersistenceReady();
             CompleteStartActionAfterBaseBinding(pendingStartAction);
+
+            GameplayEscapeMenuController escapeMenu =
+                PersistentGameplayShell.Instance?.EscapeMenu;
+            if (escapeMenu != null && !escapeMenu.RegisterBasePersistence(this))
+            {
+                SetStatus(
+                    "Base initialization failed: another base persistence controller is already registered.",
+                    true);
+            }
+        }
+
+        private void OnDisable()
+        {
+            PersistentGameplayShell.Instance?.EscapeMenu?.UnregisterBasePersistence(this);
         }
 
         private void Update()

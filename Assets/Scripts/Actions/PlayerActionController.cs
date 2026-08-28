@@ -24,6 +24,77 @@ namespace FantasySurvival.Actions
         Self = 1
     }
 
+    public enum PlayerActionOutcome
+    {
+        None = 0,
+        Completed = 1,
+        Cancelled = 2
+    }
+
+    /// <summary>
+    /// Immutable, one-shot description of an action after the controller has resolved it.
+    /// This is an observation contract; the controller and the action owner's callbacks
+    /// remain authoritative for timing and gameplay effects.
+    /// </summary>
+    public readonly struct PlayerActionResult
+    {
+        private PlayerActionResult(
+            string actionId,
+            PlayerActionScope scope,
+            PlayerActionOutcome outcome,
+            PlayerActionCancelReason? cancelReason,
+            float durationSeconds,
+            float elapsedSeconds)
+        {
+            ActionId = actionId;
+            Scope = scope;
+            Outcome = outcome;
+            CancelReason = cancelReason;
+            DurationSeconds = durationSeconds;
+            ElapsedSeconds = elapsedSeconds;
+        }
+
+        public string ActionId { get; }
+        public PlayerActionScope Scope { get; }
+        public PlayerActionOutcome Outcome { get; }
+        public PlayerActionCancelReason? CancelReason { get; }
+        public float DurationSeconds { get; }
+        public float ElapsedSeconds { get; }
+        public bool WasCompleted => Outcome == PlayerActionOutcome.Completed;
+        public bool WasCancelled => Outcome == PlayerActionOutcome.Cancelled;
+
+        internal static PlayerActionResult Completed(
+            string actionId,
+            PlayerActionScope scope,
+            float durationSeconds,
+            float elapsedSeconds)
+        {
+            return new PlayerActionResult(
+                actionId,
+                scope,
+                PlayerActionOutcome.Completed,
+                null,
+                durationSeconds,
+                elapsedSeconds);
+        }
+
+        internal static PlayerActionResult Cancelled(
+            string actionId,
+            PlayerActionScope scope,
+            PlayerActionCancelReason cancelReason,
+            float durationSeconds,
+            float elapsedSeconds)
+        {
+            return new PlayerActionResult(
+                actionId,
+                scope,
+                PlayerActionOutcome.Cancelled,
+                cancelReason,
+                durationSeconds,
+                elapsedSeconds);
+        }
+    }
+
     /// <summary>
     /// Owns the Player's single in-progress timed action. Callers retain ownership of
     /// gameplay effects and apply them only from the completion callback.
@@ -46,6 +117,12 @@ namespace FantasySurvival.Actions
 
         public event Action ActionStarted;
         public event Action ActionEnded;
+
+        /// <summary>
+        /// Raised once after an accepted action resolves and its owner callback has run.
+        /// Results are not retained as a second authoritative action history.
+        /// </summary>
+        public event Action<PlayerActionResult> ActionResolved;
 
         public bool IsBusy => hasActiveAction;
         public bool ActionsBlocked => actionsBlocked;
@@ -185,7 +262,19 @@ namespace FantasySurvival.Actions
 
             if (actionDurationSeconds <= 0f)
             {
-                completion();
+                var result = PlayerActionResult.Completed(
+                    actionId,
+                    scope,
+                    0f,
+                    0f);
+                try
+                {
+                    completion();
+                }
+                finally
+                {
+                    NotifyActionResolved(result);
+                }
                 return true;
             }
 
@@ -241,6 +330,12 @@ namespace FantasySurvival.Actions
             }
 
             Action<PlayerActionCancelReason> cancellation = onCancelled;
+            PlayerActionResult result = PlayerActionResult.Cancelled(
+                activeActionId,
+                activeScope,
+                reason,
+                durationSeconds,
+                elapsedSeconds);
             ClearActive();
             try
             {
@@ -248,7 +343,14 @@ namespace FantasySurvival.Actions
             }
             finally
             {
-                cancellation?.Invoke(reason);
+                try
+                {
+                    cancellation?.Invoke(reason);
+                }
+                finally
+                {
+                    NotifyActionResolved(result);
+                }
             }
             return true;
         }
@@ -274,6 +376,11 @@ namespace FantasySurvival.Actions
         private void CompleteActive()
         {
             Action completion = onCompleted;
+            PlayerActionResult result = PlayerActionResult.Completed(
+                activeActionId,
+                activeScope,
+                durationSeconds,
+                elapsedSeconds);
             ClearActive();
             try
             {
@@ -281,7 +388,35 @@ namespace FantasySurvival.Actions
             }
             finally
             {
-                completion?.Invoke();
+                try
+                {
+                    completion?.Invoke();
+                }
+                finally
+                {
+                    NotifyActionResolved(result);
+                }
+            }
+        }
+
+        private void NotifyActionResolved(PlayerActionResult result)
+        {
+            Action<PlayerActionResult> handlers = ActionResolved;
+            if (handlers == null)
+            {
+                return;
+            }
+
+            foreach (Action<PlayerActionResult> handler in handlers.GetInvocationList())
+            {
+                try
+                {
+                    handler(result);
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception, this);
+                }
             }
         }
 

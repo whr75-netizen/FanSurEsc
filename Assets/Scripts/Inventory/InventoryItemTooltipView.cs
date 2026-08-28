@@ -42,6 +42,22 @@ namespace FantasySurvival.Inventory
                 return;
             }
 
+            ShowContent(InventoryItemTooltipFormatter.Create(definition));
+        }
+
+        public void Show(InventoryItemData item)
+        {
+            if (item == null)
+            {
+                Hide();
+                return;
+            }
+
+            ShowContent(InventoryItemTooltipFormatter.Create(item));
+        }
+
+        private void ShowContent(InventoryItemTooltipContent content)
+        {
             if (!TryValidateReferences(out string error))
             {
                 Hide();
@@ -49,8 +65,6 @@ namespace FantasySurvival.Inventory
                 return;
             }
 
-            InventoryItemTooltipContent content =
-                InventoryItemTooltipFormatter.Create(definition);
             nameText.text = content.Name;
             descriptionText.text = content.Description;
             statsText.text = content.Stats;

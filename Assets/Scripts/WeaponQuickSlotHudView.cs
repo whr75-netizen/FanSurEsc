@@ -46,8 +46,17 @@ public sealed class WeaponQuickSlotHudView : MonoBehaviour
 
         if (activeAmmoText != null)
         {
+            int reserveAmmunition = 0;
+            if (showActiveAmmunition)
+            {
+                weaponController.TryGetReserveAmmunitionCount(
+                    activeWeapon,
+                    out reserveAmmunition);
+            }
+
             activeAmmoText.text = showActiveAmmunition
-                ? $"탄창  {activeWeapon.LoadedAmmunition} / {activeWeapon.MagazineCapacity}"
+                ? $"탄창  {activeWeapon.LoadedAmmunition} / {activeWeapon.MagazineCapacity}   " +
+                  $"예비  {reserveAmmunition}"
                 : string.Empty;
         }
 

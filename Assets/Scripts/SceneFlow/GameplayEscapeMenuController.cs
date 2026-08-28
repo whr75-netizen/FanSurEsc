@@ -24,7 +24,8 @@ namespace FantasySurvival.SceneFlow
         {
             None,
             AbandonToBase,
-            AbandonToMainMenu
+            AbandonToMainMenu,
+            DismissBaseSaveFailure
         }
 
         [Header("Owners")]
@@ -79,6 +80,7 @@ namespace FantasySurvival.SceneFlow
         private bool extractionSettlementCommitted;
         private bool extractionSettlementFailed;
         private RaidOutcome extractionSettlementOutcome;
+        private BasePersistenceController activeBasePersistence;
 
         public bool IsConfigured =>
             shell != null && raidSession != null &&
@@ -106,6 +108,7 @@ namespace FantasySurvival.SceneFlow
             extractionSettlementFlow && extractionSettlementCommitted;
         public bool IsExtractionSettlementRetryVisible =>
             extractionSettlementFlow && extractionSettlementFailed;
+        public bool HasRegisteredBasePersistence => activeBasePersistence != null;
 
         private void Awake()
         {
@@ -294,6 +297,12 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
+            if (raidSession.CurrentSceneKind == GameplaySceneKind.Base &&
+                !TrySaveBaseBeforeMainMenuExit())
+            {
+                return;
+            }
+
             BeginMainMenuExit();
         }
 
@@ -307,6 +316,12 @@ namespace FantasySurvival.SceneFlow
 
             ConfirmationAction action = confirmationAction;
             confirmationAction = ConfirmationAction.None;
+
+            if (action == ConfirmationAction.DismissBaseSaveFailure)
+            {
+                ShowMainPanel();
+                return;
+            }
 
             if (!raidSession.IsRaidActive || !raidSession.TryResolveAbandonment())
             {
@@ -340,6 +355,26 @@ namespace FantasySurvival.SceneFlow
 
             confirmationAction = ConfirmationAction.None;
             ShowMainPanel();
+        }
+
+        public bool RegisterBasePersistence(BasePersistenceController controller)
+        {
+            if (controller == null ||
+                (activeBasePersistence != null && activeBasePersistence != controller))
+            {
+                return false;
+            }
+
+            activeBasePersistence = controller;
+            return true;
+        }
+
+        public void UnregisterBasePersistence(BasePersistenceController controller)
+        {
+            if (activeBasePersistence == controller)
+            {
+                activeBasePersistence = null;
+            }
         }
 
         public void ReturnToBaseFromResult()
@@ -767,6 +802,35 @@ namespace FantasySurvival.SceneFlow
             {
                 ShowResult(raidSession.Outcome);
             }
+        }
+
+        private bool TrySaveBaseBeforeMainMenuExit()
+        {
+            if (activeBasePersistence == null || !activeBasePersistence.isActiveAndEnabled)
+            {
+                ShowBaseSaveFailure(
+                    "기지 저장 기능이 준비되지 않아 주 메뉴로 이동할 수 없습니다.");
+                return false;
+            }
+
+            if (activeBasePersistence.SaveSlotOne())
+            {
+                return true;
+            }
+
+            ShowBaseSaveFailure(activeBasePersistence.CurrentStatusMessage);
+            return false;
+        }
+
+        private void ShowBaseSaveFailure(string detail)
+        {
+            confirmationAction = ConfirmationAction.DismissBaseSaveFailure;
+            string reason = string.IsNullOrWhiteSpace(detail)
+                ? "기지 상태를 저장하지 못했습니다."
+                : detail;
+            ShowConfirmation(
+                "저장에 실패하여 주 메뉴 이동을 취소했습니다.\n" + reason);
+            Debug.LogError("Main Menu exit was blocked because the base save failed.", this);
         }
 
         private void BeginMainMenuExit()

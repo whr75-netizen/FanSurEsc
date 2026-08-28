@@ -25,6 +25,7 @@ namespace FantasySurvival.SaveSystem
 
 #if UNITY_EDITOR
         private static string editorStorageRootOverride;
+        private static bool editorLegacyMigrationEnabled = true;
 #endif
 
         public static event Action InputBindingsChanged;
@@ -212,45 +213,83 @@ namespace FantasySurvival.SaveSystem
             }
 
             InputBinding previousBinding = action.bindings[bindingIndex];
-            bool wasEnabled = action.enabled;
-            if (wasEnabled)
-            {
-                action.Disable();
-            }
+            return TryCommitInputBindingChange(
+                action,
+                () => action.ApplyBindingOverride(bindingIndex, canonicalPath),
+                () => RestoreBindingOverride(action, bindingIndex, previousBinding),
+                "키 설정을 적용하지 못했습니다",
+                out error);
+        }
 
-            try
+        public static bool TryClearSecondaryInputBinding(
+            GameInputActionId actionId,
+            out string error)
+        {
+            EnsureSettingsLoaded();
+            if (!GameInputBindings.TryResolveBinding(
+                    actionId,
+                    GameInputBindingSlot.Secondary,
+                    out InputAction action,
+                    out int bindingIndex))
             {
-                action.ApplyBindingOverride(bindingIndex, canonicalPath);
-                if (!GameInputBindings.TryValidateCurrentBindings(out error))
-                {
-                    RestoreBindingOverride(action, bindingIndex, previousBinding);
-                    return false;
-                }
-
-                if (!TrySaveInputBindingOverrides(out error))
-                {
-                    RestoreBindingOverride(action, bindingIndex, previousBinding);
-                    return false;
-                }
-            }
-            catch (Exception exception)
-            {
-                RestoreBindingOverride(action, bindingIndex, previousBinding);
-                error = $"키 설정을 적용하지 못했습니다: {exception.Message}";
+                error = "해제할 보조 키 binding을 찾을 수 없습니다.";
                 return false;
             }
-            finally
+
+            InputBinding previousBinding = action.bindings[bindingIndex];
+            return TryCommitInputBindingChange(
+                action,
+                () => action.ApplyBindingOverride(
+                    bindingIndex,
+                    new InputBinding { overridePath = string.Empty }),
+                () => RestoreBindingOverride(action, bindingIndex, previousBinding),
+                "보조 키를 해제하지 못했습니다",
+                out error);
+        }
+
+        public static bool TryResetInputBindings(
+            GameInputActionId actionId,
+            out string error)
+        {
+            EnsureSettingsLoaded();
+            if (!GameInputBindings.TryResolveBinding(
+                    actionId,
+                    GameInputBindingSlot.Primary,
+                    out InputAction action,
+                    out int primaryBindingIndex) ||
+                !GameInputBindings.TryResolveBinding(
+                    actionId,
+                    GameInputBindingSlot.Secondary,
+                    out InputAction secondaryAction,
+                    out int secondaryBindingIndex) ||
+                action != secondaryAction)
             {
-                if (wasEnabled)
-                {
-                    action.Enable();
-                }
+                error = "기본값으로 복원할 입력 binding을 찾을 수 없습니다.";
+                return false;
             }
 
-            invalidInputSettingsWarningReported = false;
-            InputBindingsChanged?.Invoke();
-            error = null;
-            return true;
+            InputBinding previousPrimaryBinding = action.bindings[primaryBindingIndex];
+            InputBinding previousSecondaryBinding = action.bindings[secondaryBindingIndex];
+            return TryCommitInputBindingChange(
+                action,
+                () =>
+                {
+                    action.RemoveBindingOverride(primaryBindingIndex);
+                    action.RemoveBindingOverride(secondaryBindingIndex);
+                },
+                () =>
+                {
+                    RestoreBindingOverride(
+                        action,
+                        primaryBindingIndex,
+                        previousPrimaryBinding);
+                    RestoreBindingOverride(
+                        action,
+                        secondaryBindingIndex,
+                        previousSecondaryBinding);
+                },
+                "해당 키 설정을 기본값으로 복원하지 못했습니다",
+                out error);
         }
 
         public static bool TryResetInputBindings(out string error)
@@ -324,10 +363,11 @@ namespace FantasySurvival.SaveSystem
             }
 
             UserSettingsData previousSettings = currentSettings.Clone();
-            currentSettings.hasInputBindingOverrides = true;
+            currentSettings.hasInputBindingOverrides = !string.IsNullOrWhiteSpace(json);
             currentSettings.inputBindingFormatVersion =
                 UserSettingsData.CurrentInputBindingFormatVersion;
-            currentSettings.inputBindingOverrides = json;
+            currentSettings.inputBindingOverrides =
+                currentSettings.hasInputBindingOverrides ? json : string.Empty;
             if (TryPersistCurrentSettings(out error))
             {
                 return true;
@@ -336,6 +376,54 @@ namespace FantasySurvival.SaveSystem
             currentSettings = previousSettings;
             error = $"키 설정을 저장하지 못했습니다: {error}";
             return false;
+        }
+
+        private static bool TryCommitInputBindingChange(
+            InputAction action,
+            Action applyChange,
+            Action rollBackChange,
+            string exceptionPrefix,
+            out string error)
+        {
+            bool wasEnabled = action.enabled;
+            if (wasEnabled)
+            {
+                action.Disable();
+            }
+
+            try
+            {
+                applyChange();
+                if (!GameInputBindings.TryValidateCurrentBindings(out error))
+                {
+                    rollBackChange();
+                    return false;
+                }
+
+                if (!TrySaveInputBindingOverrides(out error))
+                {
+                    rollBackChange();
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                rollBackChange();
+                error = $"{exceptionPrefix}: {exception.Message}";
+                return false;
+            }
+            finally
+            {
+                if (wasEnabled)
+                {
+                    action.Enable();
+                }
+            }
+
+            invalidInputSettingsWarningReported = false;
+            InputBindingsChanged?.Invoke();
+            error = null;
+            return true;
         }
 
         private static void EnsureSettingsLoaded()
@@ -448,6 +536,14 @@ namespace FantasySurvival.SaveSystem
 
         private static UserSettingsData CaptureLegacySettings(out bool hasLegacySettings)
         {
+#if UNITY_EDITOR
+            if (!string.IsNullOrWhiteSpace(editorStorageRootOverride) &&
+                !editorLegacyMigrationEnabled)
+            {
+                hasLegacySettings = false;
+                return UserSettingsData.CreateDefault();
+            }
+#endif
             bool hasSound = PlayerPrefs.HasKey(LegacySoundEnabledKey);
             bool hasOverrides = PlayerPrefs.HasKey(LegacyInputBindingOverridesKey);
             bool hasBindingVersion = PlayerPrefs.HasKey(LegacyInputBindingFormatVersionKey);
@@ -492,6 +588,13 @@ namespace FantasySurvival.SaveSystem
 
         private static void TryClearLegacyPreferences()
         {
+#if UNITY_EDITOR
+            if (!string.IsNullOrWhiteSpace(editorStorageRootOverride) &&
+                !editorLegacyMigrationEnabled)
+            {
+                return;
+            }
+#endif
             if (!PlayerPrefs.HasKey(LegacySoundEnabledKey) &&
                 !PlayerPrefs.HasKey(LegacyInputBindingOverridesKey) &&
                 !PlayerPrefs.HasKey(LegacyInputBindingFormatVersionKey))
@@ -549,9 +652,9 @@ namespace FantasySurvival.SaveSystem
             int bindingIndex,
             InputBinding previousBinding)
         {
-            if (string.IsNullOrEmpty(previousBinding.overridePath) &&
-                string.IsNullOrEmpty(previousBinding.overrideInteractions) &&
-                string.IsNullOrEmpty(previousBinding.overrideProcessors))
+            if (previousBinding.overridePath == null &&
+                previousBinding.overrideInteractions == null &&
+                previousBinding.overrideProcessors == null)
             {
                 action.RemoveBindingOverride(bindingIndex);
                 return;
@@ -600,6 +703,14 @@ namespace FantasySurvival.SaveSystem
 #if UNITY_EDITOR
         public static bool SetEditorStorageRootForTests(string root, out string error)
         {
+            return SetEditorStorageRootForTests(root, true, out error);
+        }
+
+        public static bool SetEditorStorageRootForTests(
+            string root,
+            bool allowLegacyMigration,
+            out string error)
+        {
             if (string.IsNullOrWhiteSpace(root))
             {
                 error = "Editor settings-test storage root is empty.";
@@ -609,6 +720,7 @@ namespace FantasySurvival.SaveSystem
             try
             {
                 editorStorageRootOverride = Path.GetFullPath(root);
+                editorLegacyMigrationEnabled = allowLegacyMigration;
                 ResetLoadedSettingsState();
                 error = null;
                 return true;
@@ -628,6 +740,7 @@ namespace FantasySurvival.SaveSystem
         public static void ClearEditorStorageRootForTests()
         {
             editorStorageRootOverride = null;
+            editorLegacyMigrationEnabled = true;
             ResetLoadedSettingsState();
         }
 #endif

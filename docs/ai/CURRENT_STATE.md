@@ -58,15 +58,15 @@
 
 | ID | 기능 | 구현 | 검증 | 범위 | 상세 근거 | 현재 경계 | 다시 여는 조건 |
 |---|---|---|---|---|---|---|---|
-| `BOOT-01` | 최초 실행·메인 메뉴·공통 로딩 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12 | `InitialLoadingScene → MainMenuScene → GameLoadingScene → GameMap1`, New/Load/Settings/Exit | 시작 흐름이나 해당 씬·Manager 직접 변경 |
+| `BOOT-01` | 최초 실행·메인 메뉴·공통 로딩 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12·53 | `InitialLoadingScene → MainMenuScene → GameLoadingScene → GameMap1`; 기존 slot의 New는 확인 필요 | 시작 흐름이나 해당 씬·Manager 직접 변경 |
 | `SHELL-01` | 게임플레이 Player 셸 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §1·9·13 | Player·외형·Camera·HUD·Inventory UI·EventSystem이 같은 `PersistentGameplayShell` 인스턴스로 왕복 | 셸 계층·참조·생성/종료 경계 직접 변경 |
 | `TRAVEL-01` | `GameMap1 ↔ GameMapTest` 직접 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §1·14·20 | 시작 로딩 씬을 거치지 않고 기존 Player를 SpawnPoint로 이동 | `DirectSceneTravel`, Spawn, 도착 완료 경계 직접 변경 |
 | `TRANSITION-01` | 검은 전환과 입력·피해 잠금 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20·21 | fade 동안 이동·공격·무기·인벤토리·상호작용·저장·피해 차단 후 복원 | 전환 잠금 소유자나 복원 순서 직접 변경 |
-| `INPUT-01` | Escape·입력·키 설정 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·46~48 | Base pause/Raid non-pause; Main/ESC 리바인딩; R은 gameplay 재장전/인벤토리 회전 문맥 공유; 별도 설정 파일·legacy 이관 | 입력·scene 또는 설정 schema·migration·복구 변경 |
+| `INPUT-01` | Escape·입력·키 설정 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·46~48·53 | Base pause/Raid non-pause; Main/ESC 리바인딩·행별 보조키 해제/복원; 별도 설정 파일·legacy 이관 | 입력·scene 또는 설정 schema·migration·복구 변경 |
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
-| `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51 | 한 번에 1개; External 상자·시체는 이동취소·대상 위, Self 재장전·치료는 이동허용·Player 위; 공격·W1~W3 공통취소 | 원형 UI·음식 연결 |
+| `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
-| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50 | click·drag·stack·Shift; Ctrl 1개 집기·분배; 우클릭·Alt 장착; 치료제 완료 소비; runtime 장전탄·Save v6 | 소유권·수량·장전탄·grid·장비·저장 형식 변경 또는 W2·W3 노출 요청 |
+| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53 | click·drag·stack·Shift/Ctrl; 우클릭·Alt; W1→W3 첫 빈 호환칸; 부분 stack 변경 통지; runtime 장전탄·Save v7 | 소유권·수량·장전탄·grid·장비·저장 형식 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 이동장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19 | NavMesh 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
@@ -76,11 +76,11 @@
 | `LOOT-01` | seed 기반 시험 LootTable | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §34 | `Chest → LootTable → ItemDatabase`; Fresh 1회 원자 적용, Resume은 저장 grid 복원, table 미지정은 기존 초기값 유지 | 다중 roll·수량·희귀도·위험 예산·모드 ID 정책 추가 |
 | `BASE-01` | 기지 Chest·가구 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §18 | stable ID별 grid와 중첩 아이템, 왕복·backup 복원 | 배치 가능한 가구나 layout migration 추가 |
 | `RAID-01` | 기지/원정 Escape·생환·사망·포기 결과 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §21·35 | 생환은 즉시 확정·피해 차단 뒤 자동 기지 정산, commit 뒤 `확인`만 표시; 포기·사망 분기는 기존 정책 유지 | 메뉴나 결과 정책 직접 변경 |
-| `SAVE-01` | ordinary save·원정 Recovery·결과 정산 | `ACTIVE` | `PLAYER` | `PROTOTYPE` | 진행 §22~23·48·52 | ordinary marker 우선, 강제종료 Resume, 생환 전체 보존·세 실패 전체 휴대품 소실; v7이 runtime 총 장전탄·시험 의뢰·누적 기록을 운반하고 v2~v6를 이관 | schema·정산·Recovery 경계 직접 변경 |
+| `SAVE-01` | ordinary save·원정 Recovery·결과 정산 | `ACTIVE` | `PLAYER` | `PROTOTYPE` | 진행 §22~23·48·52~53 | marker 우선·Resume·정산; 기존 slot New 확인, Base→Main 저장 성공 gate; v7과 v2~v6 이관 | schema·정산·Recovery 경계 직접 변경 |
 | `MERCHANT-01` | Player Gold/Silver와 무지갑 시험 상인 | `ACTIVE` | `USER` | `PROTOTYPE` | 진행 §26 사용자 확인·순수 거래 11경로 | 상인 자금 없음, 판매 sink, 이전 성공 뒤 정산, 실패 rollback | 가격 정책·상인 자금·정식 재고 결정 |
 | `QUEST-01` | Cube NPC의 적 1킬·생환 시험 의뢰 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §30·52 | 공통 E로 수락, Player 귀속 처치, committed `Extracted` 뒤 보고 가능, NPC 보고로 완료; ordinary·Recovery exact 저장, 보상 없음 | 퀘스트 규칙·보상·다중 의뢰 schema 또는 관련 상호작용·사망·정산 경계 변경 |
 | `INFO-01` | U 정보창과 누적 기록 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §31·52 | 캐릭터·기록·사전·의뢰·업그레이드 5탭; 기존 원본 읽기, 누적 기록은 단일 권위 소유 후 ordinary·Recovery exact 저장; 업그레이드는 미구현 표시 | 정보 항목·기록 종류·도감 해금·업그레이드 규칙 변경 |
-| `ITEM-UI-01` | 아이템 tooltip·가격·수량·탄창 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38·40~45·48~50 | grid context·수량 조작·장착·drag·R; 치료제 사용·회복 정보; 하단 무기 슬롯·탄창 | 표시 필드나 UI 배치 직접 변경 |
+| `ITEM-UI-01` | 아이템 tooltip·가격·수량·탄창 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38·40~45·48~50·53 | context·수량·장착·drag·R; runtime 장전탄 tooltip; 하단 W1~W3·탄창+예비탄 즉시 갱신 | 표시 필드나 UI 배치 직접 변경 |
 | `PIXEL-01` | 3D 픽셀아트 시험 효과 | `DISABLED` | `PLAY` | `PROTOTYPE` | 진행 §15 | 사용자 요청으로 비활성 | 사용자가 재사용을 요청할 때만 |
 
 ## 확인된 실제 공백과 결정 대기

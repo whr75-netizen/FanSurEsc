@@ -25,6 +25,18 @@ namespace FantasySurvival.Inventory
     {
         public static InventoryItemTooltipContent Create(ItemDefinition definition)
         {
+            return Create(definition, null);
+        }
+
+        public static InventoryItemTooltipContent Create(InventoryItemData item)
+        {
+            return Create(item?.Definition, item);
+        }
+
+        private static InventoryItemTooltipContent Create(
+            ItemDefinition definition,
+            InventoryItemData runtimeItem)
+        {
             if (definition == null)
             {
                 return new InventoryItemTooltipContent(
@@ -55,13 +67,21 @@ namespace FantasySurvival.Inventory
 
             if (definition.IsWeapon)
             {
+                if (runtimeItem != null)
+                {
+                    AppendStat(
+                        stats,
+                        "현재 탄창",
+                        $"{runtimeItem.LoadedAmmunition} / {runtimeItem.MagazineCapacity}");
+                }
+
                 AppendStat(
                     stats,
                     "발사 방식",
                     definition.WeaponFireMode == WeaponFireMode.Automatic ? "자동" : "단발");
                 AppendStat(stats, "피해", FormatNumber(definition.WeaponDamage));
                 AppendStat(stats, "연사력", $"{FormatNumber(definition.RoundsPerMinute)} RPM");
-                AppendStat(stats, "탄창", $"{definition.MagazineCapacity}발");
+                AppendStat(stats, "탄창 용량", $"{definition.MagazineCapacity}발");
                 AppendStat(stats, "재장전", $"{FormatNumber(definition.ReloadDurationSeconds)}초");
                 AppendStat(stats, "사거리", FormatNumber(definition.WeaponRange));
                 AppendStat(stats, "소음 반경", FormatNumber(definition.WeaponNoiseRadius));

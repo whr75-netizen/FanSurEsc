@@ -126,9 +126,55 @@ namespace FantasySurvival.Controls
                 KeyBindingRowView row = Instantiate(rowTemplate, rowsRoot);
                 row.name = $"{definitions[index].ActionId}BindingRow";
                 row.gameObject.SetActive(true);
-                row.Configure(definitions[index], StartRebind);
+                row.Configure(
+                    definitions[index],
+                    StartRebind,
+                    ClearSecondaryBinding,
+                    ResetBindingToDefaults);
                 rows.Add(row);
             }
+        }
+
+        private void ClearSecondaryBinding(GameInputActionId actionId)
+        {
+            if (IsRebinding)
+            {
+                return;
+            }
+
+            GameInputBindingDefinition definition =
+                GameInputBindings.GetDefinition(actionId);
+            if (GameUserSettings.TryClearSecondaryInputBinding(actionId, out string error))
+            {
+                SetStatus($"'{definition.DisplayName}'의 보조 키를 해제했습니다.");
+            }
+            else
+            {
+                SetStatus(error);
+            }
+
+            Refresh();
+        }
+
+        private void ResetBindingToDefaults(GameInputActionId actionId)
+        {
+            if (IsRebinding)
+            {
+                return;
+            }
+
+            GameInputBindingDefinition definition =
+                GameInputBindings.GetDefinition(actionId);
+            if (GameUserSettings.TryResetInputBindings(actionId, out string error))
+            {
+                SetStatus($"'{definition.DisplayName}' 키만 기본값으로 복원했습니다.");
+            }
+            else
+            {
+                SetStatus(error);
+            }
+
+            Refresh();
         }
 
         private void StartRebind(
@@ -239,9 +285,9 @@ namespace FantasySurvival.Controls
                 return;
             }
 
-            if (string.IsNullOrEmpty(previousBinding.overridePath) &&
-                string.IsNullOrEmpty(previousBinding.overrideInteractions) &&
-                string.IsNullOrEmpty(previousBinding.overrideProcessors))
+            if (previousBinding.overridePath == null &&
+                previousBinding.overrideInteractions == null &&
+                previousBinding.overrideProcessors == null)
             {
                 rebindingAction.RemoveBindingOverride(rebindingIndex);
                 return;

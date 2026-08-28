@@ -12,6 +12,13 @@ using UnityEngine.UI;
 
 public class MainMenuManager : MonoBehaviour
 {
+    private enum ExitPanelAction
+    {
+        None,
+        QuitApplication,
+        ConfirmNewGame
+    }
+
     private enum RaidRecoveryDecision
     {
         None,
@@ -57,10 +64,18 @@ public class MainMenuManager : MonoBehaviour
     private bool recoveryDecisionRequired;
     private bool orphanedRaidSettlementBlocked;
     private bool recoverySettlementDurabilityBlocked;
+    private ExitPanelAction exitPanelAction;
+    private Text exitHeadingText;
+    private Text exitConfirmButtonText;
+
+    public bool IsNewGameConfirmationPending =>
+        exitPanelAction == ExitPanelAction.ConfirmNewGame;
 
     private void Awake()
     {
         GameUserSettings.Apply();
+        CacheExitPanelPresentation();
+        ResetExitPanelAction();
         InitializeRaidRecoveryView();
     }
 
@@ -83,6 +98,32 @@ public class MainMenuManager : MonoBehaviour
             return;
         }
 
+        if (GameSaveManager.HasSlotOneArtifacts)
+        {
+            ConfigureExitPanel(ExitPanelAction.ConfirmNewGame);
+            ShowOnly(exitPanel);
+            SetStatus(
+                "기존 저장 슬롯이 있습니다. 새 게임을 계속하면 다음 저장부터 " +
+                "기존 진행과 백업이 교체될 수 있습니다.");
+            return;
+        }
+
+        BeginNewGame();
+    }
+
+    public void ConfirmNewGame()
+    {
+        if (exitPanelAction != ExitPanelAction.ConfirmNewGame)
+        {
+            return;
+        }
+
+        BeginNewGame();
+    }
+
+    private void BeginNewGame()
+    {
+        exitPanelAction = ExitPanelAction.None;
         GameStartRequest.QueueNewGame();
         SceneManager.LoadScene("GameLoadingScene");
     }
@@ -421,6 +462,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void OpenExitPanel()
     {
+        ConfigureExitPanel(ExitPanelAction.QuitApplication);
         ShowOnly(exitPanel);
         SetStatus(string.Empty);
     }
@@ -441,16 +483,61 @@ public class MainMenuManager : MonoBehaviour
     {
         cachedSave = null;
         cachedFallbackSave = null;
+        ResetExitPanelAction();
         ShowOnly(mainPanel);
         SetStatus(string.Empty);
     }
 
     public void QuitGame()
     {
+        if (exitPanelAction == ExitPanelAction.ConfirmNewGame)
+        {
+            ConfirmNewGame();
+            return;
+        }
+
+        exitPanelAction = ExitPanelAction.None;
 #if UNITY_EDITOR
         Debug.Log("Quit requested. Application.Quit only closes a built player.", this);
 #endif
         Application.Quit();
+    }
+
+    private void CacheExitPanelPresentation()
+    {
+        if (exitPanel == null)
+        {
+            return;
+        }
+
+        Transform heading = exitPanel.transform.Find("Heading");
+        exitHeadingText = heading != null ? heading.GetComponent<Text>() : null;
+
+        Transform confirmButton = exitPanel.transform.Find("ConfirmExitButton");
+        exitConfirmButtonText = confirmButton != null
+            ? confirmButton.GetComponentInChildren<Text>(true)
+            : null;
+    }
+
+    private void ConfigureExitPanel(ExitPanelAction action)
+    {
+        exitPanelAction = action;
+        bool confirmsNewGame = action == ExitPanelAction.ConfirmNewGame;
+
+        if (exitHeadingText != null)
+        {
+            exitHeadingText.text = confirmsNewGame ? "START NEW GAME?" : "EXIT GAME?";
+        }
+
+        if (exitConfirmButtonText != null)
+        {
+            exitConfirmButtonText.text = confirmsNewGame ? "YES, NEW GAME" : "YES, EXIT";
+        }
+    }
+
+    private void ResetExitPanelAction()
+    {
+        ConfigureExitPanel(ExitPanelAction.None);
     }
 
     private void ShowOnly(GameObject panel)

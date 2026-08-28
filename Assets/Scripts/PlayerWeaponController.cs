@@ -16,6 +16,7 @@ public sealed class PlayerWeaponController : MonoBehaviour
     [SerializeField, Range(1, EquipmentSlotCatalog.WeaponSlotCount)]
     private int activeWeaponNumber = 1;
     private EquipmentLoadoutData observedLoadout;
+    private PlayerInventoryState observedPlayerState;
     private int upperBodyLayerIndex = -1;
     private PlayerActionController actionController;
 
@@ -44,6 +45,7 @@ public sealed class PlayerWeaponController : MonoBehaviour
         }
 
         inventoryManager.PlayerStateChanged += HandlePlayerStateChanged;
+        inventoryManager.InventoryContentsChanged += HandleInventoryContentsChanged;
         Bind(inventoryManager.PlayerState);
     }
 
@@ -52,6 +54,7 @@ public sealed class PlayerWeaponController : MonoBehaviour
         if (inventoryManager != null)
         {
             inventoryManager.PlayerStateChanged -= HandlePlayerStateChanged;
+            inventoryManager.InventoryContentsChanged -= HandleInventoryContentsChanged;
         }
 
         Bind(null, false);
@@ -117,9 +120,26 @@ public sealed class PlayerWeaponController : MonoBehaviour
             : observedLoadout?.GetItem(slot) as InventoryItemData;
     }
 
+    public bool TryGetReserveAmmunitionCount(
+        InventoryItemData weapon,
+        out int reserveRoundCount)
+    {
+        reserveRoundCount = 0;
+        return observedPlayerState != null &&
+               observedPlayerState.TryGetReserveAmmunitionCount(
+                   weapon,
+                   out reserveRoundCount,
+                   out _);
+    }
+
     private void HandlePlayerStateChanged(PlayerInventoryState state)
     {
         Bind(state);
+    }
+
+    private void HandleInventoryContentsChanged()
+    {
+        RefreshDerivedState();
     }
 
     private void Bind(PlayerInventoryState state, bool notify = true)
@@ -129,6 +149,7 @@ public sealed class PlayerWeaponController : MonoBehaviour
             observedLoadout.Changed -= HandleLoadoutChanged;
         }
 
+        observedPlayerState = state;
         observedLoadout = state?.Equipment;
         if (observedLoadout != null)
         {

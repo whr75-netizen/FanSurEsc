@@ -1525,3 +1525,16 @@ Interactable (abstract base class)
 - `[Unity 컴파일/순수 로직 확인]` Unity project compilation이 성공했다. 한 Editor matrix에서 v6→v7 migration, v7 JSON 왕복, 생환/복구 실패 투영, 원본 불변, 아이템+진행도 복합 정산과 잘못된 payload 거부를 확인했다.
 - `[Play Mode 호출 확인]` 실제 `GameMap1` persistent owner에 완료 의뢰와 여섯 누계 값을 exact replacement하고 값 일치·의뢰 완료 의미 이벤트 0회를 확인한 뒤 원래 runtime snapshot으로 복원했다.
 - `[보존·미검증]` 기존 인벤토리·장비·화폐·기지·상인·원정 marker/Resume/정산 흐름과 단일 시험 의뢰 규칙은 유지했다. 다중·반복 의뢰, 보상, 새 UI와 최종 저장 슬롯 정책은 이번 범위가 아니다. Console에는 §49에서 이미 진단한 미해결 원정 보호 오류만 남았으며 이번 변경의 신규 오류는 확인되지 않았다.
+
+---
+
+## 53. 핵심 시스템 마감과 인접 검증 계약 `[BOOT-01][INPUT-01][ACTION-01][ITEM-01][COMBAT-01][SAVE-01][ITEM-UI-01]`
+
+- `[사용자 정정][2026-08-29]` 단일 기능을 바꿀 때마다 전체 한 바퀴를 반복하지 않는다. 변경된 권위·입력·수명·직렬화 경계와 직접 맞물린 기능만 한 번 검증하고, 전체 한 바퀴는 실제 다단계 흐름 변경이나 릴리스 gate로 미룬다.
+- `[저장 UX]` ordinary primary/backup이 있으면 새 게임 진입 전에 기존 ExitPanel을 재사용한 확인을 요구한다. Base의 주 메뉴 요청은 등록된 `BasePersistenceController.SaveSlotOne` 성공 뒤에만 기존 `GameplaySessionExit`를 시작하며 실패하면 사유를 표시하고 기지에 남는다. unresolved Raid·포기·정산 분기는 선행 분기 그대로 유지한다.
+- `[장비·탄약 표시]` `EquipmentLoadoutData`가 호환되는 첫 빈 칸을 반환해 무기는 W1→W2→W3 순서로 자동 장착된다. 예약 프리팹 셀 W2·W3을 활성화하고 14칸을 기존 2열 frame 안에 맞췄다. 우측 하단은 선택 총의 탄창과 같은 탄약 ID의 Player 소유 예비탄 총량을 함께 표시하며 runtime 총 tooltip도 현재 장전탄을 읽는다.
+- `[키 설정]` 공용 행 prefab에 `해제`·`복원` 버튼을 추가했다. 빈 문자열 override를 “보조키 없음”으로 보존하며, 보조키 해제와 해당 행만 기본값 복원은 기존 중복 검증·즉시 파일 저장·실패 rollback 경계를 공유한다.
+- `[구조 계약]` 5번은 gameplay 로그나 결과 cache가 아니다. `PlayerActionController.ActionResolved`가 완료/취소 snapshot을 한 번 통지하고 `PlayerStats.DamageApplied`가 확정된 `DamageResult`를 한 번 통지한다. lethal 상태는 관찰자보다 먼저 확정하고 통지 중 체력 재진입을 막는다. 결과 관찰자는 구독자별로 예외를 격리해 한 모드·SFX·애니메이션 observer가 뒤 observer나 확정된 gameplay 결과를 막지 못한다. 기존 controller·owner callback·체력은 계속 유일한 쓰기 권위다.
+- `[부분 이동·표시 성능]` 최종 drop 전에 확정되는 한 개 배치·부분 stack 병합과 취소 복구는 owner 변경 경계에서 가벼운 read-only contents 통지만 보낸다. 최종 drop·취소는 core carry를 먼저 닫고 observer 예외를 구독자별로 격리하므로 상인 정산 재진입을 남기지 않는다. 전체 UI 재생성이나 HUD polling을 추가하지 않았다. 예비탄 조회는 쓰기용 reload mutation plan을 만들지 않고 재사용 visited set으로 Player 소유 grid를 읽기 전용 순회한다.
+- `[Unity 컴파일/인접 검증]` 프로젝트 compilation과 두 prefab 직렬화 참조를 확인했다. `CoreSystemsAdjacentValidation` 1회에서 W1~W3 첫 빈 칸/4번째 거부, definition 기반 예비탄·runtime 탄창, 즉시 완료·취소 결과, 실제 legacy 설정을 건드리지 않는 보조키 해제·행 복원, primary/backup 존재 판정과 prefab wiring을 임시 상태 원복과 함께 통과했다. 후속 리뷰로 바뀐 lethal 체력 경계만 별도 1회 확인해 `HealthChanged`·`DamageApplied` 재진입이 사망 확정과 `Died` 1회 통지를 바꾸지 못하고 통지 종료 뒤 명시적 reset은 동작함을 확인했다. 검증 메뉴는 Play Mode에서 실행할 수 없다.
+- `[보존·미검증]` 실제 사용자 save/settings와 기존 dirty scene·material·preview prefab은 수정하지 않았다. 물리 클릭·키 입력, Base 저장 실패 UI의 Play Mode 조작, 전체 게임 한 바퀴와 Player build는 이번 범위에서 실행하지 않았다.

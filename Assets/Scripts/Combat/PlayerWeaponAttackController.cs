@@ -12,6 +12,7 @@ namespace FantasySurvival.Combat
     [RequireComponent(typeof(PlayerActionController))]
     public sealed class PlayerWeaponAttackController : MonoBehaviour
     {
+        private const string ReloadActionId = "weapon.reload";
         private const int RaycastBufferSize = 32;
         private const float MinAimDirectionSqrMagnitude = 0.0001f;
 
@@ -56,11 +57,16 @@ namespace FantasySurvival.Combat
 
         private void OnDisable()
         {
+            actionController?.TryCancel(
+                this,
+                PlayerActionCancelReason.ControllerDisabled);
             weaponCadences.Clear();
         }
 
         private void Update()
         {
+            ProcessReloadInput(
+                GameInputBindings.WasPressedThisFrame(GameInputActionId.RotateItem));
             ProcessFireInput(
                 GameInputBindings.WasPressedThisFrame(GameInputActionId.Attack),
                 GameInputBindings.IsPressed(GameInputActionId.Attack),
@@ -104,6 +110,11 @@ namespace FantasySurvival.Combat
             }
 
             WeaponFireCadence cadence = GetOrCreateCadence(activeWeapon);
+            if (activeWeapon.LoadedAmmunition <= 0)
+            {
+                return false;
+            }
+
             if (!cadence.TryConsume(
                     definition.WeaponFireMode,
                     pressedThisFrame,
@@ -114,8 +125,83 @@ namespace FantasySurvival.Combat
                 return false;
             }
 
+            PlayerInventoryState playerState = inventoryManager.PlayerState;
+            if (playerState == null ||
+                !playerState.TryConsumeLoadedRound(activeWeapon, out _))
+            {
+                return false;
+            }
+
             EmitRaycastShot(definition, shotDirection);
             return true;
+        }
+
+        public bool ProcessReloadInput(bool pressedThisFrame)
+        {
+            if (!pressedThisFrame || !CanReceiveGameplayActionInput())
+            {
+                return false;
+            }
+
+            InventoryItemData activeWeapon = weaponController.ActiveWeapon;
+            PlayerInventoryState playerState = inventoryManager.PlayerState;
+            if (activeWeapon?.Definition == null || !activeWeapon.Definition.IsWeapon ||
+                playerState == null ||
+                !playerState.TryGetReloadableRoundCount(
+                    activeWeapon,
+                    out int reloadableRounds,
+                    out _) ||
+                reloadableRounds <= 0)
+            {
+                return false;
+            }
+
+            if (actionController.IsActionOwnedBy(this))
+            {
+                return false;
+            }
+
+            if (actionController.IsBusy)
+            {
+                actionController.CancelActive(PlayerActionCancelReason.Requested);
+            }
+
+            return actionController.TryBegin(
+                ReloadActionId,
+                this,
+                activeWeapon.Definition.ReloadDurationSeconds,
+                () => CanContinueReload(playerState, activeWeapon),
+                () => CompleteReload(playerState, activeWeapon));
+        }
+
+        private bool CanContinueReload(
+            PlayerInventoryState expectedPlayerState,
+            InventoryItemData expectedWeapon)
+        {
+            return expectedPlayerState != null && expectedWeapon != null &&
+                   ReferenceEquals(inventoryManager.PlayerState, expectedPlayerState) &&
+                   ReferenceEquals(weaponController.ActiveWeapon, expectedWeapon) &&
+                   ReferenceEquals(expectedWeapon.InventoryOwner, expectedPlayerState.Equipment);
+        }
+
+        private void CompleteReload(
+            PlayerInventoryState expectedPlayerState,
+            InventoryItemData expectedWeapon)
+        {
+            if (!CanContinueReload(expectedPlayerState, expectedWeapon))
+            {
+                return;
+            }
+
+            if (!expectedPlayerState.TryReloadWeapon(
+                    expectedWeapon,
+                    out _,
+                    out _))
+            {
+                return;
+            }
+
+            inventoryManager.RefreshPlayerItemPresentation(expectedPlayerState);
         }
 
         private WeaponFireCadence GetOrCreateCadence(InventoryItemData weapon)
@@ -132,12 +218,17 @@ namespace FantasySurvival.Combat
 
         private bool CanReceiveAttackInput()
         {
-            if (Time.timeScale <= 0f || inventoryManager.BlocksGameplayInput)
+            if (!CanReceiveGameplayActionInput())
             {
                 return false;
             }
 
             return pointerEventSystem == null || !pointerEventSystem.IsPointerOverGameObject();
+        }
+
+        private bool CanReceiveGameplayActionInput()
+        {
+            return Time.timeScale > 0f && !inventoryManager.BlocksGameplayInput;
         }
 
         private bool TryGetShotDirection(Vector2 screenPosition, out Vector3 shotDirection)

@@ -74,7 +74,10 @@ namespace FantasySurvival.Controls
             new GameInputBindingDefinition(GameInputActionId.Weapon3, "전투", "무기 3"),
             new GameInputBindingDefinition(GameInputActionId.Inventory, "화면", "인벤토리"),
             new GameInputBindingDefinition(GameInputActionId.Information, "화면", "정보창"),
-            new GameInputBindingDefinition(GameInputActionId.RotateItem, "인벤토리", "든 아이템 회전"),
+            new GameInputBindingDefinition(
+                GameInputActionId.RotateItem,
+                "게임플레이",
+                "재장전 / 든 아이템 회전"),
             new GameInputBindingDefinition(
                 GameInputActionId.QuickTransferModifier,
                 "인벤토리",
@@ -403,10 +406,10 @@ namespace FantasySurvival.Controls
             GameInputActionId first,
             GameInputActionId second)
         {
-            return first == GameInputActionId.Run &&
-                   second == GameInputActionId.QuickTransferModifier ||
-                   first == GameInputActionId.QuickTransferModifier &&
-                   second == GameInputActionId.Run;
+            return (first == GameInputActionId.Run &&
+                    second == GameInputActionId.QuickTransferModifier) ||
+                   (first == GameInputActionId.QuickTransferModifier &&
+                    second == GameInputActionId.Run);
         }
     }
 }

@@ -402,6 +402,14 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            if (item.LoadedAmmunition < 0 ||
+                item.LoadedAmmunition > (definition.IsWeapon ? definition.MagazineCapacity : 0))
+            {
+                error = $"Item ID {item.Id} has invalid loaded ammunition " +
+                        $"{item.LoadedAmmunition}.";
+                return false;
+            }
+
             int recordId = context.NextRecordId++;
             context.Output.Add(new InventoryItemSaveData
             {
@@ -411,7 +419,9 @@ namespace FantasySurvival.SaveSystem
                 slotIndex = slotIndex,
                 equipmentSlot = (int)equipmentSlot,
                 isRotated = item.IsRotate,
-                quantity = item.Quantity
+                quantity = item.Quantity,
+                hasLoadedAmmunition = definition.IsWeapon,
+                loadedAmmunition = item.LoadedAmmunition
             });
 
             if (definition.IsContainer)
@@ -493,7 +503,17 @@ namespace FantasySurvival.SaveSystem
             item = null;
             ItemDefinition definition = context.Definitions[record.definitionId];
             if (!TryResolveSavedQuantity(record, definition, out int quantity, out error) ||
-                !InventoryItemDataFactory.TryCreate(definition, quantity, out item, out error))
+                !TryResolveSavedLoadedAmmunition(
+                    record,
+                    definition,
+                    out int loadedAmmunition,
+                    out error) ||
+                !InventoryItemDataFactory.TryCreate(
+                    definition,
+                    quantity,
+                    loadedAmmunition,
+                    out item,
+                    out error))
             {
                 error = $"Could not create item definition ID {record.definitionId}: {error}";
                 return false;
@@ -563,6 +583,16 @@ namespace FantasySurvival.SaveSystem
                 if (!TryResolveSavedQuantity(record, definition, out _, out error))
                 {
                     error = $"Item record {record.recordId} has invalid quantity: {error}";
+                    return false;
+                }
+
+                if (!TryResolveSavedLoadedAmmunition(
+                        record,
+                        definition,
+                        out _,
+                        out error))
+                {
+                    error = $"Item record {record.recordId} has invalid loaded ammunition: {error}";
                     return false;
                 }
 
@@ -641,6 +671,49 @@ namespace FantasySurvival.SaveSystem
             return true;
         }
 
+        private static bool TryResolveSavedLoadedAmmunition(
+            InventoryItemSaveData record,
+            ItemDefinition definition,
+            out int loadedAmmunition,
+            out string error)
+        {
+            loadedAmmunition = 0;
+            if (!definition.IsWeapon)
+            {
+                if (record.hasLoadedAmmunition || record.loadedAmmunition != 0)
+                {
+                    error = "a non-weapon item cannot contain loaded ammunition.";
+                    return false;
+                }
+
+                error = null;
+                return true;
+            }
+
+            if (!record.hasLoadedAmmunition)
+            {
+                if (record.loadedAmmunition != 0)
+                {
+                    error = "a legacy weapon record cannot contain an unmarked magazine value.";
+                    return false;
+                }
+
+                error = null;
+                return true;
+            }
+
+            loadedAmmunition = record.loadedAmmunition;
+            if (loadedAmmunition < 0 || loadedAmmunition > definition.MagazineCapacity)
+            {
+                error = $"expected 0..{definition.MagazineCapacity}, found " +
+                        $"{record.loadedAmmunition}.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
         internal static bool TryBuildDefinitionIndex(
             ItemDatabase database,
             out Dictionary<int, ItemDefinition> definitions,
@@ -670,6 +743,24 @@ namespace FantasySurvival.SaveSystem
                 }
 
                 definitions.Add(definition.Id, definition);
+            }
+
+            foreach (ItemDefinition definition in definitions.Values)
+            {
+                if (!definition.IsWeapon)
+                {
+                    continue;
+                }
+
+                if (!definitions.TryGetValue(
+                        definition.AmmunitionDefinitionId,
+                        out ItemDefinition ammunition) ||
+                    !ammunition.IsAmmunition)
+                {
+                    error = $"Weapon item ID {definition.Id} references invalid ammunition " +
+                            $"item ID {definition.AmmunitionDefinitionId}.";
+                    return false;
+                }
             }
 
             error = null;

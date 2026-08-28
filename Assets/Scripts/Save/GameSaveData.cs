@@ -7,7 +7,7 @@ namespace FantasySurvival.SaveSystem
     public sealed class GameSaveData
     {
         public const string CurrentGameId = "fantasy-survival-escape";
-        public const int CurrentFormatVersion = 5;
+        public const int CurrentFormatVersion = 6;
 
         public string gameId;
         public int formatVersion;
@@ -124,5 +124,9 @@ namespace FantasySurvival.SaveSystem
         // Zero is reserved for additive compatibility with records written before
         // stack quantities existed. InventorySaveCodec restores that legacy value as 1.
         public int quantity;
+        // Version 6 stores the mutable magazine state on each runtime weapon record.
+        // Older records omit the flag and are restored as an empty magazine.
+        public bool hasLoadedAmmunition;
+        public int loadedAmmunition;
     }
 }

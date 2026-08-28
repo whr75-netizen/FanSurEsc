@@ -61,6 +61,8 @@ namespace FantasySurvival.Inventory
                     definition.WeaponFireMode == WeaponFireMode.Automatic ? "자동" : "단발");
                 AppendStat(stats, "피해", FormatNumber(definition.WeaponDamage));
                 AppendStat(stats, "연사력", $"{FormatNumber(definition.RoundsPerMinute)} RPM");
+                AppendStat(stats, "탄창", $"{definition.MagazineCapacity}발");
+                AppendStat(stats, "재장전", $"{FormatNumber(definition.ReloadDurationSeconds)}초");
                 AppendStat(stats, "사거리", FormatNumber(definition.WeaponRange));
                 AppendStat(stats, "소음 반경", FormatNumber(definition.WeaponNoiseRadius));
             }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -587,11 +588,8 @@ namespace FantasySurvival.SaveSystem
             if (saveData.formatVersion == 4)
             {
                 ApplyVersionFiveDefaults(saveData);
-                error = null;
-                return true;
             }
-
-            if (saveData.formatVersion == 2)
+            else if (saveData.formatVersion == 2)
             {
                 InventoryGridSaveData legacy = saveData.playerInventory;
                 if (legacy == null || legacy.layoutId != InventoryGridSaveData.FlatLayoutId ||
@@ -627,11 +625,8 @@ namespace FantasySurvival.SaveSystem
                 saveData.activeRaidInstanceId = null;
                 saveData.baseState = BaseFurnitureSaveCodec.CreateEmptySaveData(true);
                 ApplyVersionFiveDefaults(saveData);
-                error = null;
-                return true;
             }
-
-            if (saveData.formatVersion == 3)
+            else if (saveData.formatVersion == 3)
             {
                 if (saveData.baseState != null && saveData.baseState.formatVersion != 1)
                 {
@@ -643,8 +638,11 @@ namespace FantasySurvival.SaveSystem
                 saveData.raidInProgress = false;
                 saveData.activeRaidInstanceId = null;
                 ApplyVersionFiveDefaults(saveData);
-                error = null;
-                return true;
+            }
+
+            if (saveData.formatVersion == 5)
+            {
+                ApplyVersionSixDefaults(saveData);
             }
 
             if (saveData.formatVersion != GameSaveData.CurrentFormatVersion)
@@ -661,7 +659,51 @@ namespace FantasySurvival.SaveSystem
         {
             saveData.playerCurrency = PlayerCurrencySaveCodec.CreateStartingSaveData();
             saveData.baseMerchantState = BaseMerchantSaveCodec.CreateEmptySaveData(true);
+            saveData.formatVersion = 5;
+        }
+
+        private static void ApplyVersionSixDefaults(GameSaveData saveData)
+        {
+            ClearLegacyLoadedAmmunition(saveData.playerItems?.items);
+            ClearLegacyLoadedAmmunition(saveData.playerInventory?.items);
+
+            if (saveData.baseState?.furniture != null)
+            {
+                foreach (BaseFurnitureSaveData furniture in saveData.baseState.furniture)
+                {
+                    ClearLegacyLoadedAmmunition(furniture?.storage?.items);
+                }
+            }
+
+            if (saveData.baseMerchantState?.merchants != null)
+            {
+                foreach (BaseMerchantSaveData merchant in saveData.baseMerchantState.merchants)
+                {
+                    ClearLegacyLoadedAmmunition(merchant?.stock?.items);
+                }
+            }
+
             saveData.formatVersion = GameSaveData.CurrentFormatVersion;
+        }
+
+        private static void ClearLegacyLoadedAmmunition(
+            List<InventoryItemSaveData> records)
+        {
+            if (records == null)
+            {
+                return;
+            }
+
+            foreach (InventoryItemSaveData record in records)
+            {
+                if (record == null)
+                {
+                    continue;
+                }
+
+                record.hasLoadedAmmunition = false;
+                record.loadedAmmunition = 0;
+            }
         }
 
 #if UNITY_EDITOR

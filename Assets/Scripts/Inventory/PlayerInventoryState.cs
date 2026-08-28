@@ -300,6 +300,18 @@ namespace FantasySurvival.Inventory
             return true;
         }
 
+        internal void NotifyOwnedItemStateChanged(InventoryItemData item)
+        {
+            if (item == null || !ReferenceEquals(item.InventoryOwner, this) ||
+                !GetId(item).HasValue)
+            {
+                return;
+            }
+
+            IsDirty = true;
+            Changed?.Invoke();
+        }
+
         internal bool TryClearAll(out string error)
         {
             var occupied = new List<KeyValuePair<int, InventoryItemData>>();
@@ -377,6 +389,17 @@ namespace FantasySurvival.Inventory
 
     public sealed class PlayerInventoryState
     {
+        private sealed class AmmunitionMutation
+        {
+            public StandardStashViewData Owner;
+            public int SlotIndex;
+            public InventoryItemData Item;
+            public int OriginalQuantity;
+            public int ConsumedQuantity;
+
+            public int RemainingQuantity => OriginalQuantity - ConsumedQuantity;
+        }
+
         public StandardStashViewData Inventory { get; }
         public EquipmentLoadoutData Equipment { get; }
         public PlayerWallet Wallet { get; }
@@ -396,6 +419,155 @@ namespace FantasySurvival.Inventory
             Inventory = inventory ?? throw new ArgumentNullException(nameof(inventory));
             Equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
             Wallet = wallet ?? throw new ArgumentNullException(nameof(wallet));
+        }
+
+        public bool TryGetReloadableRoundCount(
+            InventoryItemData weapon,
+            out int reloadableRoundCount,
+            out string error)
+        {
+            reloadableRoundCount = 0;
+            if (!TryValidateEquippedWeapon(weapon, out error))
+            {
+                return false;
+            }
+
+            int missingRounds = weapon.MagazineCapacity - weapon.LoadedAmmunition;
+            if (missingRounds <= 0)
+            {
+                error = null;
+                return true;
+            }
+
+            if (!TryBuildAmmunitionPlan(
+                    weapon.Definition.AmmunitionDefinitionId,
+                    missingRounds,
+                    out List<AmmunitionMutation> plan,
+                    out error))
+            {
+                return false;
+            }
+
+            foreach (AmmunitionMutation mutation in plan)
+            {
+                reloadableRoundCount += mutation.ConsumedQuantity;
+            }
+
+            error = null;
+            return true;
+        }
+
+        public bool TryConsumeLoadedRound(InventoryItemData weapon, out string error)
+        {
+            if (!TryValidateEquippedWeapon(weapon, out error))
+            {
+                return false;
+            }
+
+            int loadedBefore = weapon.LoadedAmmunition;
+            if (loadedBefore <= 0)
+            {
+                error = "The active weapon has no loaded ammunition.";
+                return false;
+            }
+
+            if (!weapon.TryChangeLoadedAmmunition(
+                    Equipment,
+                    loadedBefore,
+                    loadedBefore - 1,
+                    out error))
+            {
+                return false;
+            }
+
+            Equipment.NotifyOwnedItemStateChanged(weapon);
+            error = null;
+            return true;
+        }
+
+        public bool TryReloadWeapon(
+            InventoryItemData weapon,
+            out int loadedRoundCount,
+            out string error)
+        {
+            loadedRoundCount = 0;
+            if (!TryValidateEquippedWeapon(weapon, out error))
+            {
+                return false;
+            }
+
+            int loadedBefore = weapon.LoadedAmmunition;
+            int missingRounds = weapon.MagazineCapacity - loadedBefore;
+            if (missingRounds <= 0)
+            {
+                error = "The active weapon magazine is already full.";
+                return false;
+            }
+
+            if (!TryBuildAmmunitionPlan(
+                    weapon.Definition.AmmunitionDefinitionId,
+                    missingRounds,
+                    out List<AmmunitionMutation> plan,
+                    out error))
+            {
+                return false;
+            }
+
+            foreach (AmmunitionMutation mutation in plan)
+            {
+                loadedRoundCount += mutation.ConsumedQuantity;
+            }
+
+            if (loadedRoundCount <= 0)
+            {
+                error = "The Player inventory contains no compatible ammunition.";
+                return false;
+            }
+
+            int appliedCount = 0;
+            try
+            {
+                for (; appliedCount < plan.Count; appliedCount++)
+                {
+                    AmmunitionMutation mutation = plan[appliedCount];
+                    if (mutation.RemainingQuantity > 0)
+                    {
+                        if (!mutation.Item.TryChangeQuantity(
+                                mutation.Owner,
+                                mutation.OriginalQuantity,
+                                mutation.RemainingQuantity,
+                                out string quantityError))
+                        {
+                            throw new InvalidOperationException(quantityError);
+                        }
+                    }
+                    else
+                    {
+                        mutation.Owner.InsertInventoryItem(mutation.SlotIndex, null);
+                    }
+                }
+
+                if (!weapon.TryChangeLoadedAmmunition(
+                        Equipment,
+                        loadedBefore,
+                        loadedBefore + loadedRoundCount,
+                        out string weaponError))
+                {
+                    throw new InvalidOperationException(weaponError);
+                }
+            }
+            catch (Exception exception)
+            {
+                string rollbackError = RollBackAmmunitionPlan(plan, appliedCount);
+                loadedRoundCount = 0;
+                error = "Could not complete the ammunition reload transaction: " +
+                        exception.Message + rollbackError;
+                return false;
+            }
+
+            Equipment.NotifyOwnedItemStateChanged(weapon);
+            error = null;
+            return true;
         }
 
         /// <summary>
@@ -523,6 +695,199 @@ namespace FantasySurvival.Inventory
             return failures.Count == 0
                 ? string.Empty
                 : $" Inventory rollback also failed ({string.Join("; ", failures)}).";
+        }
+
+        private bool TryValidateEquippedWeapon(
+            InventoryItemData weapon,
+            out string error)
+        {
+            if (weapon?.Definition == null || !weapon.Definition.IsWeapon)
+            {
+                error = "The requested item is not a weapon.";
+                return false;
+            }
+
+            if (!ReferenceEquals(weapon.InventoryOwner, Equipment))
+            {
+                error = "The requested weapon is not owned by the Player equipment loadout.";
+                return false;
+            }
+
+            for (int weaponNumber = 1;
+                 weaponNumber <= EquipmentSlotCatalog.WeaponSlotCount;
+                 weaponNumber++)
+            {
+                if (ReferenceEquals(
+                        Equipment.GetItem(EquipmentSlotCatalog.GetWeaponSlot(weaponNumber)),
+                        weapon))
+                {
+                    error = null;
+                    return true;
+                }
+            }
+
+            error = "The requested weapon is not present in a Player weapon slot.";
+            return false;
+        }
+
+        private bool TryBuildAmmunitionPlan(
+            int ammunitionDefinitionId,
+            int requestedQuantity,
+            out List<AmmunitionMutation> plan,
+            out string error)
+        {
+            plan = new List<AmmunitionMutation>();
+            int remaining = requestedQuantity;
+            var visitedGrids = new HashSet<StandardStashViewData>(
+                InventoryReferenceComparer<StandardStashViewData>.Instance);
+            if (!TryAppendAmmunitionFromGrid(
+                    Inventory,
+                    ammunitionDefinitionId,
+                    plan,
+                    visitedGrids,
+                    ref remaining,
+                    out error))
+            {
+                return false;
+            }
+
+            if (remaining > 0)
+            {
+                foreach (EquipmentSlotId slot in EquipmentSlotCatalog.OrderedSlots)
+                {
+                    if (!(Equipment.GetItem(slot) is InventoryContainerItemData container))
+                    {
+                        continue;
+                    }
+
+                    if (!TryAppendAmmunitionFromGrid(
+                            container.CaseData,
+                            ammunitionDefinitionId,
+                            plan,
+                            visitedGrids,
+                            ref remaining,
+                            out error))
+                    {
+                        return false;
+                    }
+
+                    if (remaining <= 0)
+                    {
+                        break;
+                    }
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool TryAppendAmmunitionFromGrid(
+            StandardStashViewData grid,
+            int ammunitionDefinitionId,
+            List<AmmunitionMutation> plan,
+            HashSet<StandardStashViewData> visitedGrids,
+            ref int remaining,
+            out string error)
+        {
+            if (grid?.CellData == null || !visitedGrids.Add(grid))
+            {
+                error = grid == null || grid.CellData == null
+                    ? "A Player-owned inventory grid is missing."
+                    : "The Player inventory contains a shared or cyclic container grid.";
+                return false;
+            }
+
+            for (int slotIndex = 0;
+                 slotIndex < grid.CellData.Length && remaining > 0;
+                 slotIndex++)
+            {
+                if (!(grid.CellData[slotIndex] is InventoryItemData item))
+                {
+                    if (grid.CellData[slotIndex] != null)
+                    {
+                        error = $"Player inventory slot {slotIndex} contains an unsupported runtime item type.";
+                        return false;
+                    }
+
+                    continue;
+                }
+
+                if (!ReferenceEquals(item.InventoryOwner, grid))
+                {
+                    error = $"Player inventory item ID {item.Id} has inconsistent ownership.";
+                    return false;
+                }
+
+                if (item.Id == ammunitionDefinitionId && item.Definition.IsAmmunition)
+                {
+                    int consumed = Math.Min(item.Quantity, remaining);
+                    plan.Add(new AmmunitionMutation
+                    {
+                        Owner = grid,
+                        SlotIndex = slotIndex,
+                        Item = item,
+                        OriginalQuantity = item.Quantity,
+                        ConsumedQuantity = consumed
+                    });
+                    remaining -= consumed;
+                }
+
+                if (remaining > 0 && item is InventoryContainerItemData container &&
+                    !TryAppendAmmunitionFromGrid(
+                        container.CaseData,
+                        ammunitionDefinitionId,
+                        plan,
+                        visitedGrids,
+                        ref remaining,
+                        out error))
+                {
+                    return false;
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static string RollBackAmmunitionPlan(
+            IReadOnlyList<AmmunitionMutation> plan,
+            int appliedCount)
+        {
+            var failures = new List<string>();
+            int lastAppliedIndex = Math.Min(appliedCount, plan.Count) - 1;
+            for (int index = lastAppliedIndex; index >= 0; index--)
+            {
+                AmmunitionMutation mutation = plan[index];
+                try
+                {
+                    if (mutation.RemainingQuantity > 0)
+                    {
+                        if (!mutation.Item.TryChangeQuantity(
+                                mutation.Owner,
+                                mutation.RemainingQuantity,
+                                mutation.OriginalQuantity,
+                                out string quantityError))
+                        {
+                            failures.Add($"slot {mutation.SlotIndex}: {quantityError}");
+                        }
+                    }
+                    else
+                    {
+                        mutation.Owner.InsertInventoryItem(
+                            mutation.SlotIndex,
+                            mutation.Item);
+                    }
+                }
+                catch (Exception exception)
+                {
+                    failures.Add($"slot {mutation.SlotIndex}: {exception.Message}");
+                }
+            }
+
+            return failures.Count == 0
+                ? string.Empty
+                : $" Ammunition rollback also failed ({string.Join("; ", failures)}).";
         }
     }
 

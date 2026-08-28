@@ -148,14 +148,14 @@
 ### 2.5 현재 아이템과 인벤토리 구조
 
 - **[현재]** ItemDefinition은 ScriptableObject다.
-- **[현재]** ItemDefinition에는 숫자 ID, 이름, 설명, 인벤토리 크기, 이미지, 장착 가능 장비 슬롯, 일반 또는 컨테이너 구분, 컨테이너 내부 크기가 있다.
-- **[현재]** 능력치, 수량, 내구도, 탄약, 월드 프리팹 정보는 아직 없다.
+- **[현재]** ItemDefinition에는 숫자 ID, 이름, 설명, 인벤토리 크기, 이미지, 최대 stack, 장착 가능 장비 슬롯, 일반·컨테이너·소비 자원 구분과 컨테이너 내부 크기가 있다. 시험 무기는 발사 방식·RPM·탄약 ID·탄창 용량·재장전 시간·피해·사거리·소음 반경도 가진다.
+- **[현재]** 내구도, 랜덤 능력치와 월드 프리팹 정보는 아직 없다.
 - **[현재]** ItemDatabase는 ItemDefinition 목록을 보유하고 숫자 ID로 조회한다.
-- **[현재]** DB에는 ID 1부터 6까지 6개 항목이 등록되어 있다.
-- **[현재]** ID 1~5의 시험 총기 정의는 하나의 Weapon 장착 슬롯에 호환되고, ID 6 시험 보관함은 장착 불가다. Weapon 슬롯은 공격·조준·발사 기능이나 월드 3D 표현을 아직 결정하지 않는다.
-- **[현재]** InventoryItemData는 ItemDefinition 참조, 회전 상태와 현재 grid/container/equipment 소유자를 가지는 런타임 객체다.
+- **[현재]** DB에는 ID 1부터 9까지 시험 총기 5종, 보관함, 치료제, 탄약과 음식이 등록되어 있다.
+- **[현재]** ID 1~5 시험 총기는 Weapon 슬롯의 실제 시험 공격과 연결된다. Player 총은 탄약 ID 8, 3발 탄창, 2.5초 재장전과 120 RPM 시험값을 사용하며 총기 3D 표현과 최종 조준·반동·탄퍼짐은 미정이다.
+- **[현재]** InventoryItemData는 ItemDefinition 참조, 회전, stack 현재 수량, 무기별 현재 장전탄과 현재 grid/container/equipment 소유자를 가지는 런타임 객체다.
 - **[현재]** 숫자 아이템 ID는 아이템 종류 ID다. 실제 소유한 개별 물건의 고유 ID는 아니다.
-- **[현재]** PersistentGameplayShell이 처음 생성될 때 InventoryUIManager.Awake가 8×9 인벤토리, Container를 제외한 시험 아이템 ID 1~5와 빈 12슬롯 EquipmentLoadoutData를 한 번 생성한다.
+- **[현재]** PersistentGameplayShell이 처음 생성될 때 InventoryUIManager.Awake가 8×9 인벤토리, 시험 아이템 ID 1~5와 치료제·탄약·음식 ID 7~9, 빈 EquipmentLoadoutData를 한 번 생성한다. stack 자원 시작 수량은 5다.
 - **[현재]** 씬 전환 때 InventoryUIManager와 PlayerInventoryState를 새로 만들거나 재바인딩하지 않는다. 같은 InventoryUIManager, StandardStashViewData, EquipmentLoadoutData, StandardCore와 UI View가 shell 안에서 계속 유지된다.
 - **[현재]** 따라서 칸 위치, 회전, 장비 슬롯, 동일 종류의 여러 런타임 객체와 컨테이너 내부 관계가 같은 객체 그래프로 유지되며, 각 아이템은 한 소유자에만 귀속된다.
 - **[현재]** Play Mode 종료 시 shell 인스턴스는 파괴된다. New Game은 초기 시험 인벤토리와 빈 장비로 시작하고, 단일 슬롯 세이브/로드 프로토타입은 플레이어 아이템 상태(인벤토리·장비)를 검증 후 새 실행에 복원한다. Player·Camera·UI 오브젝트 자체는 디스크에 저장하지 않는다.
@@ -594,7 +594,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 - **[현재 시험 / 최종 미정]** Camera screen ray는 Player 높이 평면의 마우스 조준점만 계산하고 실제 공격은 Player 원점에서 그 XZ 방향으로 나간다.
 - **[현재 시험 / 최종 미정]** 좌클릭 공격 입력을 사용한다.
 - **[현재 시험 / 최종 미정]** Hitscan을 사용한다.
-- **[현재]** 활성 Weapon 장비칸의 `ItemDefinition`이 발사 방식, RPM, 시험 피해와 사거리를 제공한다.
+- **[현재]** 활성 Weapon 장비칸의 `ItemDefinition`이 발사 방식, RPM, 호환 탄약 ID, 탄창 용량, 재장전 시간, 시험 피해와 사거리를 제공한다. 개별 runtime 총은 현재 장전탄을 소유한다.
 
 ### Unity 구현물
 
@@ -605,7 +605,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 - 공격 대상 레이어와 충돌 규칙
 - 필요할 때만 ItemDefinition과 무기 전용 데이터의 연결
 
-처음부터 탄약, 부품, 내구도, 방어구, 반동을 모두 만들지 않는다. 고정 시험 공격으로 전투 흐름을 먼저 검증한 뒤 아이템 데이터에 필요한 필드만 추가한다.
+현재 Player 시험 공격에는 예비 탄약 stack 소비, 3발 탄창과 공용 행동시간 기반 2.5초 재장전만 연결했다. 정식 탄약 종류·AI 탄약, 부품, 내구도, 방어구와 반동·탄퍼짐은 별도 결정 전 추가하지 않는다.
 
 현재 Weapon 장비칸과 `PlayerWeaponController.ActiveWeapon`은 실제 시험 공격의 무기 선택 권한으로 연결되어 있다. 총기 3D 모델, 완전한 장착·조준·사격 애니메이션과 최종 공격 방식은 별도 결정이다.
 

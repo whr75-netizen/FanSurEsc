@@ -29,6 +29,7 @@ namespace FantasySurvival.Inventory
     {
         private readonly IVariableInventoryAsset imageAsset;
         private int quantity;
+        private int loadedAmmunition;
 
         public ItemDefinition Definition { get; }
         public int Id => Definition.Id;
@@ -39,8 +40,18 @@ namespace FantasySurvival.Inventory
         public IVariableInventoryViewData InventoryOwner { get; private set; }
         public int Quantity => quantity;
         public int MaxStackSize => Definition.MaxStackSize;
+        public int LoadedAmmunition => loadedAmmunition;
+        public int MagazineCapacity => Definition.IsWeapon ? Definition.MagazineCapacity : 0;
 
         public InventoryItemData(ItemDefinition definition, int quantity = 1)
+            : this(definition, quantity, 0)
+        {
+        }
+
+        internal InventoryItemData(
+            ItemDefinition definition,
+            int quantity,
+            int initialLoadedAmmunition)
         {
             Definition = definition != null
                 ? definition
@@ -60,7 +71,21 @@ namespace FantasySurvival.Inventory
                     $"{definition.MaxStackSize}.");
             }
 
+            int maximumLoadedAmmunition = definition.IsWeapon
+                ? definition.MagazineCapacity
+                : 0;
+            if (initialLoadedAmmunition < 0 ||
+                initialLoadedAmmunition > maximumLoadedAmmunition)
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(initialLoadedAmmunition),
+                    initialLoadedAmmunition,
+                    $"Item definition {definition.Id} requires loaded ammunition from 0 to " +
+                    $"{maximumLoadedAmmunition}.");
+            }
+
             this.quantity = quantity;
+            loadedAmmunition = initialLoadedAmmunition;
             imageAsset = new StandardAsset(definition.Icon);
         }
 
@@ -103,6 +128,47 @@ namespace FantasySurvival.Inventory
             }
 
             quantity = newQuantity;
+            if (InventoryOwner != null)
+            {
+                InventoryOwner.IsDirty = true;
+            }
+
+            error = null;
+            return true;
+        }
+
+        public bool TryChangeLoadedAmmunition(
+            IVariableInventoryViewData expectedOwner,
+            int expectedLoadedAmmunition,
+            int newLoadedAmmunition,
+            out string error)
+        {
+            if (!Definition.IsWeapon)
+            {
+                error = $"Item definition {Definition.Id} is not a weapon.";
+                return false;
+            }
+
+            if (!ReferenceEquals(InventoryOwner, expectedOwner))
+            {
+                error = "The weapon owner changed before its loaded ammunition could be updated.";
+                return false;
+            }
+
+            if (loadedAmmunition != expectedLoadedAmmunition)
+            {
+                error = "The weapon's loaded ammunition changed before the requested update.";
+                return false;
+            }
+
+            if (newLoadedAmmunition < 0 || newLoadedAmmunition > MagazineCapacity)
+            {
+                error = $"Weapon definition {Definition.Id} requires loaded ammunition from 0 " +
+                        $"to {MagazineCapacity}.";
+                return false;
+            }
+
+            loadedAmmunition = newLoadedAmmunition;
             if (InventoryOwner != null)
             {
                 InventoryOwner.IsDirty = true;
@@ -169,6 +235,21 @@ namespace FantasySurvival.Inventory
             out IVariableInventoryCellData item,
             out string error)
         {
+            return TryCreate(
+                definition,
+                quantity,
+                0,
+                out item,
+                out error);
+        }
+
+        public static bool TryCreate(
+            ItemDefinition definition,
+            int quantity,
+            int loadedAmmunition,
+            out IVariableInventoryCellData item,
+            out string error)
+        {
             item = null;
             if (definition == null)
             {
@@ -181,11 +262,17 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            if (definition.IsContainer && loadedAmmunition != 0)
+            {
+                error = $"Container item definition {definition.Id} cannot carry loaded ammunition.";
+                return false;
+            }
+
             try
             {
                 item = definition.IsContainer
                     ? new InventoryContainerItemData(definition, quantity)
-                    : new InventoryItemData(definition, quantity);
+                    : new InventoryItemData(definition, quantity, loadedAmmunition);
             }
             catch (ArgumentException exception)
             {

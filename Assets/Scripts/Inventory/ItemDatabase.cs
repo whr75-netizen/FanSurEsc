@@ -68,6 +68,28 @@ namespace FantasySurvival.Inventory
 
                 itemsById.Add(definition.Id, definition);
             }
+
+            foreach (ItemDefinition definition in itemsById.Values)
+            {
+                if (!definition.IsWeapon)
+                {
+                    continue;
+                }
+
+                if (!itemsById.TryGetValue(
+                        definition.AmmunitionDefinitionId,
+                        out ItemDefinition ammunition) ||
+                    !ammunition.IsAmmunition)
+                {
+                    if (logErrors)
+                    {
+                        Debug.LogError(
+                            $"[{name}] Weapon item ID {definition.Id} references invalid " +
+                            $"ammunition item ID {definition.AmmunitionDefinitionId}.",
+                            definition);
+                    }
+                }
+            }
         }
     }
 }

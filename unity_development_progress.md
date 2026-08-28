@@ -1465,3 +1465,16 @@ Interactable (abstract base class)
 - `[Editor 저장 검증]` 프로젝트 내부 격리 루트에서 완전한 PlayerPrefs 이관, Sound·키 저장 후 reload와 backup, 키 초기화 시 Sound 보존, 손상 primary 격리·backup 복구, 버전 key가 빠진 부분 legacy의 원본 보존·기본키 fallback, 쓰기 실패 시 Sound·키 rollback, 실제 Settings·ordinary save·Recovery 지문 불변의 7-case matrix가 최종 7/7을 반환했다. 검증 뒤 PlayerPrefs·InputAction override·map enabled·AudioListener와 임시 파일을 원상복구했다.
 - `[검증 도구 반복 주의]` 쓰기 차단 case의 의도된 Error를 Unity MCP가 명령 실패로 분류해 같은 검증 함수를 67회 자동 재호출했다. 이는 수명·간헐성 검증을 위한 요청 반복이 아니며 추가 실행을 중단했다. 매 호출은 GUID 격리 root와 `finally` 원복을 사용했고, 종료 뒤 임시 폴더 부재와 실제 Settings·ordinary save·Recovery 지문 불변을 다시 확인했다.
 - `[보존·미검증]` 기존 Main/ESC 설정 UI와 Base pause/Raid non-pause는 구현을 바꾸지 않아 §21·46 Play 증거를 재사용한다. 한 matrix의 손상·부분 legacy·쓰기 차단 case에는 의도된 Warning 2건과 Error 1건이 있으며, 정리 뒤 최종 프로젝트 컴파일이 통과했다. 실제 전원 차단 순간의 원자성, 물리 키 입력과 Player build는 이번 변경 뒤 실행하지 않았다.
+
+---
+
+## 48. 시험 총기 탄약·3발 탄창·2.5초 재장전 `[ACTION-01][ITEM-01][COMBAT-01][SAVE-01][ITEM-UI-01]`
+
+- `[사용자 요구][2026-08-28]` Player 총과 탄약을 연결하고 시험값을 발사 간격 0.5초, 최대 장전 3발, 재장전 2~3초의 중간값 2.5초로 둔다.
+- `[상태 권위]` 탄창은 총 종류가 아니라 각 `InventoryItemData` 인스턴스의 `LoadedAmmunition`이 소유한다. `ItemDefinition`은 탄약 definition ID·탄창 용량·재장전 시간만 정의하며, 현재 다섯 시험 총은 탄약 ID 8·용량 3·2.5초·120 RPM을 공유한다. 새 총과 v5 이전 저장의 총은 빈 탄창으로 시작한다.
+- `[재장전 원자 경계]` 기존 `PlayerActionController`에 `weapon.reload` 행동을 시작하고 완료 시에만 Player 소유 root·중첩 컨테이너의 같은 탄약 stack을 slot 순서로 소비해 탄창을 채운다. stack 감소·제거와 탄창 증가는 한 동기 transaction이며 중간 실패는 역순 원복한다. 이동·공격 의도·W1~W3·사망·씬 전환·공격 컴포넌트 비활성화는 취소하고 U·I는 유지한다.
+- `[입력·발사·표시]` R은 gameplay에서 재장전, 인벤토리에서 item을 들고 있으면 기존 회전으로 문맥 공유한다. 발사는 장전탄 1개를 먼저 소비한 성공 건만 효과음·Raycast·자극·피해로 이어지고 빈 탄창은 발사하지 않는다. 하단 무기 HUD는 `현재탄/용량`, tooltip은 용량·재장전 시간을 표시한다.
+- `[저장]` `GameSaveData` v6가 runtime 총의 장전탄을 운반하며 Player 인벤토리·장비·기지·상인·원정 Chest·시체가 공용 codec을 쓴다. v5→v6는 명시적으로 빈 탄창으로 이관하고, 음수·용량 초과·비무기 장전탄 record는 거부한다. 진행 중 재장전 행동은 저장하지 않고 완료된 탄창 상태만 저장한다.
+- `[Editor/순수 로직 확인]` 탄약 `5→탄창3+stack2`, 세 발 소비와 네 번째 차단, 탄약 2발의 부분 장전과 빈 stack 제거, 장전탄 3·2의 save 왕복, 초과값 거부, v5 빈 탄창 이관, 0.49초 차단·0.5초 다음 발사를 한 matrix에서 확인했다.
+- `[Play Mode 호출 확인]` 실제 `GameMap1` persistent Player의 W1 Handgun과 시작 탄약 5개로 재장전을 호출했다. 시작 직후 `weapon.reload`가 활성이고 탄창0·탄약5였으며, 2.5초 완료 뒤 행동 유휴·탄창3/3·탄약2를 확인하고 Play Mode를 종료했다.
+- `[보존·미검증]` 기존 마우스 XZ Raycast·단발/자동 분기·장비·인벤토리 회전·ordinary/Recovery 저장을 유지했다. 실제 물리 R 키, 최종 탄종·무기군별 장전·AI 탄약·재장전 애니메이션·반동·탄퍼짐은 이번 범위에서 검증·확정하지 않았다.

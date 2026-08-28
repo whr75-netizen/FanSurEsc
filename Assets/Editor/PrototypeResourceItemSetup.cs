@@ -29,7 +29,7 @@ namespace FantasySurvival.EditorTools
                 8,
                 "Ammunition",
                 "총알",
-                "장전과 탄약 소비 연결 전의 시험용 탄약입니다.",
+                "무기 재장전에 소비되는 시험용 탄약입니다.",
                 ItemDefinitionKind.Ammunition,
                 new Color(1f, 0.76f, 0.08f, 1f)),
             new ResourceItemSpec(

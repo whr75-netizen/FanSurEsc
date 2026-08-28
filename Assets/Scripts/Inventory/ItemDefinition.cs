@@ -39,6 +39,9 @@ namespace FantasySurvival.Inventory
         [Header("Weapon Prototype")]
         [SerializeField] private WeaponFireMode weaponFireMode;
         [SerializeField, Min(1f)] private float roundsPerMinute = 300f;
+        [SerializeField, Min(1)] private int ammunitionDefinitionId = 8;
+        [SerializeField, Min(1)] private int magazineCapacity = 3;
+        [SerializeField, Min(0.01f)] private float reloadDurationSeconds = 2.5f;
         [SerializeField, Min(0f)] private float weaponDamage = 35f;
         [SerializeField, Min(0.1f)] private float weaponRange = 30f;
         [SerializeField, Min(0f)] private float weaponNoiseRadius = 18f;
@@ -65,6 +68,9 @@ namespace FantasySurvival.Inventory
         public int TradePrice => tradePrice;
         public WeaponFireMode WeaponFireMode => weaponFireMode;
         public float RoundsPerMinute => roundsPerMinute;
+        public int AmmunitionDefinitionId => ammunitionDefinitionId;
+        public int MagazineCapacity => magazineCapacity;
+        public float ReloadDurationSeconds => reloadDurationSeconds;
         public float WeaponDamage => weaponDamage;
         public float WeaponRange => weaponRange;
         public float WeaponNoiseRadius => weaponNoiseRadius;
@@ -108,6 +114,23 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            if (IsContainer && IsWeapon)
+            {
+                error = $"Item definition ID {id} cannot be both a weapon and a container.";
+                return false;
+            }
+
+            if (IsWeapon &&
+                (ammunitionDefinitionId <= 0 || magazineCapacity <= 0 ||
+                 float.IsNaN(reloadDurationSeconds) ||
+                 float.IsInfinity(reloadDurationSeconds) || reloadDurationSeconds <= 0f ||
+                 float.IsNaN(roundsPerMinute) ||
+                 float.IsInfinity(roundsPerMinute) || roundsPerMinute <= 0f))
+            {
+                error = $"Weapon definition ID {id} has invalid ammunition, magazine, reload, or fire-rate settings.";
+                return false;
+            }
+
             if (IsContainer && !InventoryGridConstraints.TryValidateDimensions(
                     containerWidth,
                     containerHeight,
@@ -130,6 +153,9 @@ namespace FantasySurvival.Inventory
             containerWidth = Mathf.Max(1, containerWidth);
             containerHeight = Mathf.Max(1, containerHeight);
             roundsPerMinute = Mathf.Max(1f, roundsPerMinute);
+            ammunitionDefinitionId = Mathf.Max(1, ammunitionDefinitionId);
+            magazineCapacity = Mathf.Max(1, magazineCapacity);
+            reloadDurationSeconds = Mathf.Max(0.01f, reloadDurationSeconds);
             weaponDamage = Mathf.Max(0f, weaponDamage);
             weaponRange = Mathf.Max(0.1f, weaponRange);
             weaponNoiseRadius = Mathf.Max(0f, weaponNoiseRadius);

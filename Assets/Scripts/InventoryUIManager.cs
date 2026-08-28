@@ -331,6 +331,14 @@ public class InventoryUIManager : MonoBehaviour
 
         return playerState.TryDiscardAllCarriedItems(out error);
     }
+
+    public void RefreshPlayerItemPresentation(PlayerInventoryState expectedState)
+    {
+        if (expectedState != null && ReferenceEquals(playerState, expectedState))
+        {
+            RefreshOpenViews();
+        }
+    }
     #endregion
 
     #region 업데이트 및 상호작용 감지

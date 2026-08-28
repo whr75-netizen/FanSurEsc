@@ -18,12 +18,16 @@ MonoBehaviour:
   width: 4
   height: 2
   icon: {fileID: 2800000, guid: 6126d1379b5b3d34eac13427e971f9de, type: 3}
+  maxStackSize: 1
   equipmentSlot: 12
   isTradable: 1
   tradeCurrency: 2
   tradePrice: 100
   weaponFireMode: 1
-  roundsPerMinute: 600
+  roundsPerMinute: 120
+  ammunitionDefinitionId: 8
+  magazineCapacity: 3
+  reloadDurationSeconds: 2.5
   weaponDamage: 35
   weaponRange: 30
   weaponNoiseRadius: 18

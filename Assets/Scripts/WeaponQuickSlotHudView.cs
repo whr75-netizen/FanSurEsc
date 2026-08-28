@@ -56,7 +56,9 @@ public sealed class WeaponQuickSlotHudView : MonoBehaviour
 
             if (weaponNames != null && index < weaponNames.Length && weaponNames[index] != null)
             {
-                weaponNames[index].text = item != null ? item.Definition.DisplayName : "EMPTY";
+                weaponNames[index].text = item != null
+                    ? $"{item.Definition.DisplayName}  {item.LoadedAmmunition}/{item.MagazineCapacity}"
+                    : "EMPTY";
             }
         }
     }

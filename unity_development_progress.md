@@ -1502,3 +1502,14 @@ Interactable (abstract base class)
 - `[Prefab/정적 확인]` `PersistentGameplayShell/Player`에 controller 1개, missing script 0, definition 2.5초·35, tooltip, 수량 `2→1`과 마지막 `1→slot 제거`, 중첩 Player 소유 허용과 외부 grid 거부를 확인했다. 저장 DTO는 기존 definition ID·양수 quantity와 Player health를 그대로 사용하므로 schema v6를 바꾸지 않았다.
 - `[Play Mode 호출 확인]` 실제 `GameMap1` Player를 HP 50·시작 치료제 5로 두고 사용을 시작했다. 시작 시 `item.medicine`, 남은 `2.5초`, Player anchor와 체력·수량 불변을 확인했고 자연 경과 뒤 HP 85·수량 4·행동 유휴·시간 UI 숨김을 확인했다. 같은 실행에서 다시 시작한 뒤 `MovementInput` 취소 시 HP 85·수량 4가 유지되고, 최대 체력에서는 시작 거부·무소비임을 확인했다.
 - `[보존·미검증]` ordinary/Recovery schema와 기존 인벤토리·재장전·Chest 사용 경로는 변경하지 않았다. 실제 물리적 우클릭·WASD 입력과 최종 회복량 밸런스, 음식 사용·애니메이션·효과음·원형 진행 아트는 이번 범위에서 검증·확정하지 않았다. Console에는 §49에서 이미 진단한 미해결 원정 보호 오류가 남아 있으며 치료제 경로 오류는 확인되지 않았다.
+
+---
+
+## 51. Self·External 행동 범위와 이동 중 재장전·치료 `[ACTION-01][COMBAT-01]`
+
+- `[사용자 정정][2026-08-28]` 자기 자신에게 쓰는 치료·음식·재장전은 이동 중 유지하고, 다른 상대 오브젝트를 조사하는 상자·시체 열기만 이동에서 취소한다. 시간 UI도 Self는 Player, External은 상대 대상에 둔다. 이 결정이 §37·38·48·50 당시의 보편 이동 취소 기록을 대체한다.
+- `[공용 경계]` `PlayerActionController`가 `PlayerActionScope.External/Self`를 active action 상태로 하나만 소유한다. 모든 `TryBegin` 호출자가 범위를 필수 지정하므로 아이템 kind·태그·이름·action ID·Transform 위치를 추론하지 않는다. source는 기존 행동 소유·수명 식별을 유지하고, scope는 이동 취소와 표시 anchor만 결정한다.
+- `[호출부]` 재장전과 치료제는 `Self`, `ChestInteractable`의 원정 Chest·시체 `TimedSearch`는 `External`을 명시한다. 기지 Immediate Chest는 행동시간을 시작하지 않는다. 향후 음식도 `Self` 계약을 사용한다.
+- `[취소]` `MovementInput`은 External만 취소하고 Self에서는 행동을 유지한다. 공격·W1~W3·Requested·사망·씬 전환·source 소실·continuation 실패·컴포넌트 비활성화는 양쪽 모두 기존 취소 경로를 유지한다. 외부 조사의 거리 이탈·대상 비활성화와 열린 UI 자동 닫기도 바꾸지 않았다.
+- `[코드/Play Mode 호출 확인]` 모든 `TryBegin` overload가 scope를 필수 인수로 요구하고 세 runtime 호출부가 명시된 것을 컴파일로 확인했다. 한 `GameMap1` Play Session에서 Self는 이동 취소 요청 뒤 계속 진행·Player anchor·시간 UI 표시를 유지했고 AttackInput에서 효과 없이 종료됐다. External은 실제 `ChestInteractable` source anchor를 사용하고 이동 요청 즉시 종료·시간 UI 숨김이 됐다. 잘못된 scope 값도 시작을 거부했다.
+- `[보존·미검증]` 실제 물리 WASD·R·우클릭 입력은 주입하지 않아 호출 확인으로 기록한다. 재장전·치료 완료 효과는 §48·50, Chest/시체 거리·UI 흐름은 §39·49의 기존 증거를 재사용한다. save/Recovery schema와 prefab·scene은 변경하지 않았고 Console에는 §49의 기존 미해결 원정 보호 오류만 남았다.

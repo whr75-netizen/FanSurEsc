@@ -87,6 +87,7 @@ namespace FantasySurvival.Interaction
             resolvedActionController.TryBegin(
                 OpenChestActionId,
                 this,
+                PlayerActionScope.External,
                 OpenActionDurationSeconds,
                 () => CanContinueOpening(interactor),
                 () => CompleteOpen(interactor));

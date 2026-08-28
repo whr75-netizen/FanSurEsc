@@ -169,6 +169,7 @@ namespace FantasySurvival.Combat
             return actionController.TryBegin(
                 ReloadActionId,
                 this,
+                PlayerActionScope.Self,
                 activeWeapon.Definition.ReloadDurationSeconds,
                 () => CanContinueReload(playerState, activeWeapon),
                 () => CompleteReload(playerState, activeWeapon));

@@ -16,6 +16,14 @@ namespace FantasySurvival.Actions
         ControllerDisabled
     }
 
+    public enum PlayerActionScope
+    {
+        // Acts on another world object: movement interrupts and the source is the UI anchor.
+        External = 0,
+        // Acts on the Player: movement is allowed and the Player is the UI anchor.
+        Self = 1
+    }
+
     /// <summary>
     /// Owns the Player's single in-progress timed action. Callers retain ownership of
     /// gameplay effects and apply them only from the completion callback.
@@ -27,6 +35,7 @@ namespace FantasySurvival.Actions
         private bool hasActiveAction;
         private bool actionsBlocked;
         private UnityEngine.Object activeSource;
+        private PlayerActionScope activeScope = PlayerActionScope.External;
         private string activeActionId;
         private float durationSeconds;
         private float elapsedSeconds;
@@ -41,6 +50,7 @@ namespace FantasySurvival.Actions
         public bool IsBusy => hasActiveAction;
         public bool ActionsBlocked => actionsBlocked;
         public string ActiveActionId => hasActiveAction ? activeActionId : string.Empty;
+        public PlayerActionScope ActiveScope => activeScope;
         public float DurationSeconds => hasActiveAction ? durationSeconds : 0f;
         public float ElapsedSeconds => hasActiveAction ? elapsedSeconds : 0f;
         public float RemainingSeconds => hasActiveAction
@@ -56,6 +66,11 @@ namespace FantasySurvival.Actions
                 if (!hasActiveAction || activeSource == null)
                 {
                     return null;
+                }
+
+                if (activeScope == PlayerActionScope.Self)
+                {
+                    return transform;
                 }
 
                 if (activeSource is Component component)
@@ -131,12 +146,14 @@ namespace FantasySurvival.Actions
         public bool TryBegin(
             string actionId,
             UnityEngine.Object source,
+            PlayerActionScope scope,
             float actionDurationSeconds,
             Action completion)
         {
             return TryBegin(
                 actionId,
                 source,
+                scope,
                 actionDurationSeconds,
                 null,
                 completion,
@@ -146,12 +163,14 @@ namespace FantasySurvival.Actions
         public bool TryBegin(
             string actionId,
             UnityEngine.Object source,
+            PlayerActionScope scope,
             float actionDurationSeconds,
             Func<bool> continuation,
             Action completion,
             Action<PlayerActionCancelReason> cancellation = null)
         {
             if (!isActiveAndEnabled || actionsBlocked || hasActiveAction || source == null ||
+                (scope != PlayerActionScope.External && scope != PlayerActionScope.Self) ||
                 string.IsNullOrWhiteSpace(actionId) || completion == null ||
                 float.IsNaN(actionDurationSeconds) || float.IsInfinity(actionDurationSeconds) ||
                 actionDurationSeconds < 0f || playerStats == null || !playerStats.IsAlive)
@@ -172,6 +191,7 @@ namespace FantasySurvival.Actions
 
             hasActiveAction = true;
             activeSource = source;
+            activeScope = scope;
             activeActionId = actionId;
             durationSeconds = actionDurationSeconds;
             elapsedSeconds = 0f;
@@ -210,6 +230,13 @@ namespace FantasySurvival.Actions
         {
             if (!hasActiveAction)
             {
+                return false;
+            }
+
+            if (reason == PlayerActionCancelReason.MovementInput &&
+                activeScope == PlayerActionScope.Self)
+            {
+                // Self-use actions keep running while the Player walks or runs.
                 return false;
             }
 
@@ -262,6 +289,7 @@ namespace FantasySurvival.Actions
         {
             hasActiveAction = false;
             activeSource = null;
+            activeScope = PlayerActionScope.External;
             activeActionId = null;
             durationSeconds = 0f;
             elapsedSeconds = 0f;

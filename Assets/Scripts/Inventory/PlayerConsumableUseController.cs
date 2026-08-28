@@ -93,6 +93,7 @@ namespace FantasySurvival.Inventory
             bool began = actionController.TryBegin(
                 MedicineActionId,
                 this,
+                PlayerActionScope.Self,
                 definition.MedicineUseDurationSeconds,
                 () => CanContinueMedicineUse(
                     expectedPlayerState,

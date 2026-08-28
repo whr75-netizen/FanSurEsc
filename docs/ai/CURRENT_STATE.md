@@ -34,7 +34,7 @@
 
 | 상태 ID | 관련 계약·기획 절 |
 |---|---|
-| `BOOT-01`, `SHELL-01`, `TRAVEL-01`, `TRANSITION-01`, `INPUT-01`, `MOVE-01` | `AGENTS.md` §4, `GAME_FLOW.md` §1~3·8, 개발계획 §2.2~3.2, GDD §2~3 |
+| `BOOT-01`, `SHELL-01`, `TRAVEL-01`, `TRANSITION-01`, `INPUT-01`, `MOVE-01`, `CAMERA-01` | `AGENTS.md` §4, `GAME_FLOW.md` §1~3·8, 개발계획 §2.2~3.2, GDD §2~3 |
 | `INTERACT-01`, `ACTION-01` | 게임플레이 계약 §4.4~4.5, GDD §3.3·4.6 |
 | `ITEM-01`, `BASE-01`, `MERCHANT-01`, `ITEM-UI-01` | 게임플레이 계약 §4.2·4.8·4.9, GDD §5·8~10 |
 | `COMBAT-01`, `CORPSE-01` | 게임플레이 계약 §4.5·4.7, GDD §4·6.11 |
@@ -66,6 +66,7 @@
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
+| `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53 | click·drag·stack·Shift/Ctrl; 우클릭·Alt; W1→W3 첫 빈 호환칸; 부분 stack 변경 통지; runtime 장전탄·Save v7 | 소유권·수량·장전탄·grid·장비·저장 형식 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 이동장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19 | NavMesh 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |

@@ -1538,3 +1538,14 @@ Interactable (abstract base class)
 - `[부분 이동·표시 성능]` 최종 drop 전에 확정되는 한 개 배치·부분 stack 병합과 취소 복구는 owner 변경 경계에서 가벼운 read-only contents 통지만 보낸다. 최종 drop·취소는 core carry를 먼저 닫고 observer 예외를 구독자별로 격리하므로 상인 정산 재진입을 남기지 않는다. 전체 UI 재생성이나 HUD polling을 추가하지 않았다. 예비탄 조회는 쓰기용 reload mutation plan을 만들지 않고 재사용 visited set으로 Player 소유 grid를 읽기 전용 순회한다.
 - `[Unity 컴파일/인접 검증]` 프로젝트 compilation과 두 prefab 직렬화 참조를 확인했다. `CoreSystemsAdjacentValidation` 1회에서 W1~W3 첫 빈 칸/4번째 거부, definition 기반 예비탄·runtime 탄창, 즉시 완료·취소 결과, 실제 legacy 설정을 건드리지 않는 보조키 해제·행 복원, primary/backup 존재 판정과 prefab wiring을 임시 상태 원복과 함께 통과했다. 후속 리뷰로 바뀐 lethal 체력 경계만 별도 1회 확인해 `HealthChanged`·`DamageApplied` 재진입이 사망 확정과 `Died` 1회 통지를 바꾸지 못하고 통지 종료 뒤 명시적 reset은 동작함을 확인했다. 검증 메뉴는 Play Mode에서 실행할 수 없다.
 - `[보존·미검증]` 실제 사용자 save/settings와 기존 dirty scene·material·preview prefab은 수정하지 않았다. 물리 클릭·키 입력, Base 저장 실패 UI의 Play Mode 조작, 전체 게임 한 바퀴와 Player build는 이번 범위에서 실행하지 않았다.
+
+---
+
+## 54. 영속 직교 카메라 제한 줌 `[CAMERA-01][SHELL-01][INPUT-01]`
+
+- `[사용자 요청][2026-08-29]` 림월드처럼 최소·최대 제한이 있는 카메라 줌을 추가하고, 최종 2D 픽셀아트 방향에서 미리 주의할 경계를 확인한다.
+- `[소유권·입력]` `PersistentGameplayShell`의 기존 동일 `Main Camera` 인스턴스를 유지했다. 같은 오브젝트의 `CameraFollow`는 위치, 새 `CameraZoomController`는 `orthographicSize`만 소유한다. 버튼 전용 리바인딩 catalog를 왜곡하지 않고 기존 `Gameplay` map에 고정 `CameraZoom` Vector2 `<Mouse>/scroll` action을 두어 `GameInputBindings`로만 읽는다.
+- `[동작]` 현재 시험값은 시작 size 5, 범위 3.5~8, 정규화 scroll delta 1당 0.5단계, 보간 0.08초다. 작은 고해상도 휠·터치패드 delta는 누적하고 한 frame의 여러 tick은 단계 수만큼 반영한다. 일반 인벤토리·ESC/settings·정보/의뢰 같은 gameplay 차단 UI와 scene travel 중에는 기존 owner 상태를 읽어 입력과 미완료 누적값을 차단한다. 저장 schema와 scene별 Camera를 추가하지 않았다.
+- `[Unity 컴파일·Play Mode 호출 확인]` 프로젝트 compile, prefab의 직교 Camera·Follow·Zoom 각 1개와 shell camera 참조, missing script 0, action type/path를 확인했다. Play Mode 호출에서 0.4는 대기, 추가 0.6은 한 단계, -2는 두 단계로 처리되고 3.5/8에서 clamp됨을 확인했다. 실제 사용자의 물리 휠과 Player build는 미검증이다.
+- `[검증 도구 주의]` Edit Mode에서 비실행 `MonoBehaviour` lifecycle을 `SendMessage`로 호출한 첫 검증, 비활성 Game View의 frame 진행 시도와 한 runtime field 조회 실수는 Unity MCP 검증 방식 문제로 assertion·실패 로그를 남겼다. 최종 compile·prefab·Play 호출 결과와 구분했으며 기존 미해결 원정 보호 오류를 포함한 Console 기록을 지워서 덮지 않았다.
+- `[2D 픽셀아트 경계·미구현]` 현재 게임 규칙은 XZ·3D Physics·NavMesh이므로 완전 XY/Physics2D 전환은 이동·사격·AI·맵 생성 재작성이다. 기존 규칙을 보존하려면 우선 3D gameplay+2D sprite 표현을 검토한다. 정식 전환 전 PPU·기준 해상도·Point/무압축 import·pivot·sorting·건물 가림을 확정하고 Pixel Perfect Camera를 붙인 뒤에는 연속 보간 대신 `zoomSmoothTime=0`과 허용 배율 단계 정책을 정한다.

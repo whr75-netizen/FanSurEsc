@@ -21,6 +21,7 @@ namespace FantasySurvival.Controls
         Weapon3,
         Attack,
         RotateItem,
+        CameraZoom,
         QuickTransferModifier,
         AlternateItemModifier,
         SingleItemModifier
@@ -122,6 +123,14 @@ namespace FantasySurvival.Controls
         {
             InputAction action = GetAction(actionId);
             return action != null && action.enabled && action.IsPressed();
+        }
+
+        public static float ReadCameraZoomDelta()
+        {
+            InputAction action = GetAction(GameInputActionId.CameraZoom);
+            return action != null && action.enabled
+                ? action.ReadValue<Vector2>().y
+                : 0f;
         }
 
         public static InputAction GetAction(GameInputActionId actionId)

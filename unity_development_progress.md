@@ -1478,3 +1478,15 @@ Interactable (abstract base class)
 - `[Editor/순수 로직 확인]` 탄약 `5→탄창3+stack2`, 세 발 소비와 네 번째 차단, 탄약 2발의 부분 장전과 빈 stack 제거, 장전탄 3·2의 save 왕복, 초과값 거부, v5 빈 탄창 이관, 0.49초 차단·0.5초 다음 발사를 한 matrix에서 확인했다.
 - `[Play Mode 호출 확인]` 실제 `GameMap1` persistent Player의 W1 Handgun과 시작 탄약 5개로 재장전을 호출했다. 시작 직후 `weapon.reload`가 활성이고 탄창0·탄약5였으며, 2.5초 완료 뒤 행동 유휴·탄창3/3·탄약2를 확인하고 Play Mode를 종료했다.
 - `[보존·미검증]` 기존 마우스 XZ Raycast·단발/자동 분기·장비·인벤토리 회전·ordinary/Recovery 저장을 유지했다. 실제 물리 R 키, 최종 탄종·무기군별 장전·AI 탄약·재장전 애니메이션·반동·탄퍼짐은 이번 범위에서 검증·확정하지 않았다.
+
+---
+
+## 49. 행동 source 남은 초·우측 하단 탄창 HUD와 중단 원정 오류 진단 `[ACTION-01][ITEM-UI-01][RAID-01][SAVE-01]`
+
+- `[오류 진단][2026-08-28]` Console의 `ordinary save already declares an unresolved raid`는 저장 손상이 아니라 새 원정이 기존 중단 원정을 덮지 못하게 하는 보호 오류다. ordinary primary·backup은 동일한 v6 원정 ID를 표시하고 같은 ID의 baseline과 유효한 Active checkpoint primary·backup이 존재했다. `GameMap1` 직접 Play는 표식 생성 원인이 아니라 MainMenu의 이어하기/실패 결정을 우회한 계기다.
+- `[복구 경계]` 저장·Recovery를 수정하거나 지우지 않았다. `InitialLoadingScene` 또는 `MainMenuScene`에서 이어하기를 선택하면 checkpoint를 복원하고, 버릴 때만 원정 실패 처리를 거쳐 기지 정산·cleanup을 완료해야 한다.
+- `[행동 UI]` `PlayerActionController`가 현재 source의 읽기 전용 Transform을 제공하고, 영속 `HUDCanvas`의 단일 `PlayerActionWorldCountdownView`가 기존 `RemainingSeconds`를 `0.0초`로 표시한다. Chest source는 Chest Transform, 재장전 source는 Player Transform이므로 호출부·Chest prefab·시간 원본을 추가하지 않았다. 완료·취소·화면 밖에서는 숨긴다.
+- `[탄창 UI]` 기존 하단 중앙 1~3 슬롯을 유지하고 우측 하단에 선택 중인 총의 현재 장전탄/용량을 큰 `탄창 n / n`으로 추가했다. 기존 `Equipment.Changed → PlayerWeaponController.WeaponStateChanged` 통지만 관찰하므로 발사·재장전 상태를 복제하지 않는다. 무기가 없으면 숨긴다.
+- `[입력 보존]` 새 Image·Text의 raycast를 모두 끄므로 마우스가 HUD 위에 있어도 기존 공격의 UI pointer 차단 판정을 새로 유발하지 않는다.
+- `[Prefab/Play Mode 호출 확인]` prefab에서 Countdown/Ammo View·필수 참조·우측 하단 anchor·missing script 0을 확인했다. 한 Play Session에서 Chest source `5.0초`가 Chest 투영 위치에 표시되고 취소 즉시 숨는 것, 재장전 `2.5초`가 Player 투영 위치에 표시되는 것, 완료 경계에서 `0/3→3/3` 및 1발 소비 뒤 `2/3` 갱신을 확인했다. Unity가 비활성 창에서 frame을 진행하지 않아 2.5초 자연 경과는 이번에 반복하지 않고 §48의 실제 완료 증거를 재사용했다.
+- `[후속 미정]` 원형 진행 아트와 예비 탄약 총량 표시는 후속이다. 현재 우측 하단은 선택 무기의 탄창만 표시하며 실제 물리 E·R·발사 키는 이번 변경에서 주입하지 않았다.

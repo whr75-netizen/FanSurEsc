@@ -9,6 +9,8 @@ public sealed class WeaponQuickSlotHudView : MonoBehaviour
     [SerializeField] private Image[] slotBackgrounds;
     [SerializeField] private RawImage[] weaponIcons;
     [SerializeField] private Text[] weaponNames;
+    [SerializeField] private GameObject activeAmmoRoot;
+    [SerializeField] private Text activeAmmoText;
     [SerializeField] private Color normalColor = new Color(0.08f, 0.1f, 0.13f, 0.9f);
     [SerializeField] private Color selectedColor = new Color(0.25f, 0.68f, 0.95f, 0.95f);
 
@@ -34,6 +36,21 @@ public sealed class WeaponQuickSlotHudView : MonoBehaviour
 
     private void Refresh()
     {
+        InventoryItemData activeWeapon = weaponController.ActiveWeapon;
+        bool showActiveAmmunition = activeWeapon?.Definition != null &&
+                                    activeWeapon.Definition.IsWeapon;
+        if (activeAmmoRoot != null)
+        {
+            activeAmmoRoot.SetActive(showActiveAmmunition);
+        }
+
+        if (activeAmmoText != null)
+        {
+            activeAmmoText.text = showActiveAmmunition
+                ? $"탄창  {activeWeapon.LoadedAmmunition} / {activeWeapon.MagazineCapacity}"
+                : string.Empty;
+        }
+
         for (int index = 0; index < EquipmentSlotCatalog.WeaponSlotCount; index++)
         {
             int weaponNumber = index + 1;

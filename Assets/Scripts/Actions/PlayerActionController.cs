@@ -49,6 +49,25 @@ namespace FantasySurvival.Actions
         public float Progress01 => hasActiveAction && durationSeconds > 0f
             ? Mathf.Clamp01(elapsedSeconds / durationSeconds)
             : 0f;
+        public Transform ActiveWorldAnchor
+        {
+            get
+            {
+                if (!hasActiveAction || activeSource == null)
+                {
+                    return null;
+                }
+
+                if (activeSource is Component component)
+                {
+                    return component.transform;
+                }
+
+                return activeSource is GameObject gameObject
+                    ? gameObject.transform
+                    : null;
+            }
+        }
 
         private void Awake()
         {

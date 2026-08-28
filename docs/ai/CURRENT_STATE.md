@@ -65,7 +65,7 @@
 | `TRANSITION-01` | 검은 전환과 입력·피해 잠금 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20·21 | fade 동안 이동·공격·무기·인벤토리·상호작용·저장·피해 차단 후 복원 | 전환 잠금 소유자나 복원 순서 직접 변경 |
 | `INPUT-01` | Escape·입력·키 설정 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·46~48 | Base pause/Raid non-pause; Main/ESC 리바인딩; R은 gameplay 재장전/인벤토리 회전 문맥 공유; 별도 설정 파일·legacy 이관 | 입력·scene 또는 설정 schema·migration·복구 변경 |
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
-| `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48 | 동시 1개; 개인 인벤토리·기지 Chest 즉시, 원정 Chest·시체 1초, Player 재장전 2.5초; 이동·공격·W1~W3 취소, U·I 유지 | 취소 정책·진행 UI 또는 회복·먹기 연결 |
+| `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~49 | 동시 1개; 원정 Chest·시체 1초, 재장전 2.5초; source 위 `0.0초`; 이동·공격·W1~W3 취소 | 원형 진행 UI 또는 회복·먹기 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·현재 장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~45·48 | click·drag·stack·Shift; Ctrl 1개 집기·빈칸 분배; 우클릭·Alt 장착; 총 runtime별 장전탄·Save v6 | 소유권·수량·장전탄·grid·장비·저장 형식 변경 또는 W2·W3 노출 요청 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
@@ -81,7 +81,7 @@
 | `MERCHANT-01` | Player Gold/Silver와 무지갑 시험 상인 | `ACTIVE` | `USER` | `PROTOTYPE` | 진행 §26 사용자 확인·순수 거래 11경로 | 상인 자금 없음, 판매 sink, 이전 성공 뒤 정산, 실패 rollback | 가격 정책·상인 자금·정식 재고 결정 |
 | `QUEST-01` | Cube NPC의 적 1킬·생환 시험 의뢰 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §30 | 공통 E로 수락, Player 귀속 처치, committed `Extracted` 뒤 보고 가능, NPC 보고로 완료; 보상 없음·Play Session 한정 | 퀘스트 규칙·보상·저장 schema 또는 관련 상호작용·사망·정산 경계 변경 |
 | `INFO-01` | U 정보창과 실행 기록 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §31 | 캐릭터·기록·사전·의뢰·업그레이드 5탭; 기존 원본 읽기, 실행 기록만 별도 권위 소유; 업그레이드는 미구현 표시 | 정보 항목·입력·기록 저장·도감 해금·업그레이드 규칙 변경 |
-| `ITEM-UI-01` | 아이템 tooltip·가격·수량·탄창 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38·40~45·48 | 용량 grid; 우클릭 닫기; Alt 분할·장착; Ctrl 빈칸 분배; drag·R; 무기 HUD 현재탄/용량 | 표시 필드나 UI 배치 직접 변경 |
+| `ITEM-UI-01` | 아이템 tooltip·가격·수량·탄창 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38·40~45·48~49 | grid·context·분할·장착·분배·drag·R; 하단 슬롯과 우측 하단 활성 무기 현재탄/용량 | 표시 필드나 UI 배치 직접 변경 |
 | `PIXEL-01` | 3D 픽셀아트 시험 효과 | `DISABLED` | `PLAY` | `PROTOTYPE` | 진행 §15 | 사용자 요청으로 비활성 | 사용자가 재사용을 요청할 때만 |
 
 ## 확인된 실제 공백과 결정 대기

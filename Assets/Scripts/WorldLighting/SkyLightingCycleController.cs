@@ -317,16 +317,25 @@ namespace FantasySurvival.WorldLighting
             currentPhase = sample.Phase;
 
             RenderSettings.ambientMode = AmbientMode.Trilight;
-            RenderSettings.ambientSkyColor = sample.AmbientSkyColor;
-            RenderSettings.ambientEquatorColor = sample.AmbientEquatorColor;
-            RenderSettings.ambientGroundColor = sample.AmbientGroundColor;
-            RenderSettings.ambientIntensity = sample.AmbientIntensity;
+            Color minimumLightColor = profile.MinimumLightColor;
+            RenderSettings.ambientSkyColor = MaxRgb(
+                sample.AmbientSkyColor,
+                ScaleRgb(minimumLightColor, 0.35f));
+            RenderSettings.ambientEquatorColor = MaxRgb(
+                sample.AmbientEquatorColor,
+                ScaleRgb(minimumLightColor, 0.22f));
+            RenderSettings.ambientGroundColor = MaxRgb(
+                sample.AmbientGroundColor,
+                ScaleRgb(minimumLightColor, 0.12f));
+            RenderSettings.ambientIntensity = Mathf.Max(
+                sample.AmbientIntensity,
+                profile.MinimumAmbientIntensity);
             RenderSettings.reflectionIntensity = sample.ReflectionIntensity;
             RenderSettings.sun = sceneDirectionalLight;
 
             float sunPathPitchDegrees = evaluatedHour / HoursPerDay * 360f - 90f;
-            float sunElevationDegrees = EvaluateElevationDegrees(sunPathPitchDegrees);
-            bool useSun = sunElevationDegrees > DirectionalLightThreshold;
+            float signedSunElevationDegrees = EvaluateElevationDegrees(sunPathPitchDegrees);
+            float sunElevationDegrees = Mathf.Max(0f, signedSunElevationDegrees);
 
             float moonPathPitchDegrees = sunPathPitchDegrees + 180f;
             float moonElevationDegrees = Mathf.Max(
@@ -345,56 +354,55 @@ namespace FantasySurvival.WorldLighting
                 sunAzimuthDegrees,
                 0f);
             float moonDirectionWeight = EvaluateMoonDirectionWeight(
-                sunElevationDegrees,
+                signedSunElevationDegrees,
                 profile.DirectionTransitionElevationDegrees);
             Quaternion directionalRotation = Quaternion.Slerp(
                 sunRotation,
                 moonRotation,
                 moonDirectionWeight);
-            Color directionalColor = Color.Lerp(
+            float sunContributionWeight = EvaluateSunContributionWeight(
+                signedSunElevationDegrees,
+                profile.FullMoonlightElevationDegrees,
+                profile.FullSunlightElevationDegrees);
+            float moonContributionWeight = 1f - sunContributionWeight;
+            float sunContribution = sample.SunIntensity * sunContributionWeight;
+            float moonContribution = sample.MoonIntensity * moonContributionWeight;
+            float configuredDirectionalFloor = Mathf.Max(
+                profile.MinimumDirectionalIntensity,
+                sample.MoonIntensity * profile.HorizonMoonlightWeight);
+            float floorContribution = Mathf.Max(
+                0f,
+                configuredDirectionalFloor - sunContribution - moonContribution);
+            float directionalIntensity =
+                sunContribution + moonContribution + floorContribution;
+            Color directionalColor = BlendWeightedColor(
                 sample.SunColor,
+                sunContribution,
                 sample.MoonColor,
-                moonDirectionWeight);
-            float horizonDirectionalIntensity =
-                sample.MoonIntensity * profile.HorizonMoonlightWeight;
-            float directionalIntensity;
-            float visibleShadowStrength = 0f;
+                moonContribution,
+                minimumLightColor,
+                floorContribution,
+                directionalIntensity);
 
-            if (useSun)
-            {
-                float sunlightWeight = EvaluateElevationWeight(
-                    sunElevationDegrees,
-                    0f,
-                    profile.FullSunlightElevationDegrees);
-                float shadowWeight = EvaluateElevationWeight(
-                    sunElevationDegrees,
-                    profile.NoShadowElevationDegrees,
-                    profile.FullShadowElevationDegrees);
-                directionalIntensity = Mathf.Lerp(
-                    horizonDirectionalIntensity,
-                    sample.SunIntensity,
-                    sunlightWeight);
-                visibleShadowStrength = sample.ShadowStrength * shadowWeight;
-            }
-            else
-            {
-                float moonlightWeight = EvaluateElevationWeight(
-                    moonElevationDegrees,
-                    0f,
-                    profile.FullMoonlightElevationDegrees);
-                directionalIntensity = Mathf.Lerp(
-                    horizonDirectionalIntensity,
-                    sample.MoonIntensity,
-                    moonlightWeight);
-            }
+            float sunShadowWeight = EvaluateElevationWeight(
+                sunElevationDegrees,
+                profile.NoShadowElevationDegrees,
+                profile.FullShadowElevationDegrees);
+            float moonShadowWeight = EvaluateElevationWeight(
+                moonElevationDegrees,
+                profile.NoShadowElevationDegrees,
+                profile.FullShadowElevationDegrees);
+            float visibleShadowStrength =
+                sample.ShadowStrength * sunShadowWeight * sunContributionWeight +
+                profile.MoonShadowStrength * moonShadowWeight * moonContributionWeight;
 
             sceneDirectionalLight.transform.rotation = directionalRotation;
             sceneDirectionalLight.color = directionalColor;
             sceneDirectionalLight.intensity = directionalIntensity;
-            sceneDirectionalLight.shadowStrength = visibleShadowStrength;
-            sceneDirectionalLight.shadows = useSun &&
-                                            directionalIntensity > DirectionalLightThreshold &&
-                                            visibleShadowStrength > DirectionalLightThreshold
+            sceneDirectionalLight.shadowStrength = Mathf.Clamp01(visibleShadowStrength);
+            sceneDirectionalLight.shadows =
+                directionalIntensity > DirectionalLightThreshold &&
+                visibleShadowStrength > DirectionalLightThreshold
                 ? LightShadows.Hard
                 : LightShadows.None;
             sceneDirectionalLight.enabled = directionalIntensity > DirectionalLightThreshold;
@@ -447,6 +455,59 @@ namespace FantasySurvival.WorldLighting
                 (transitionElevationDegrees - sunElevationDegrees) /
                 (transitionElevationDegrees * 2f));
             return Mathf.SmoothStep(0f, 1f, normalized);
+        }
+
+        private static float EvaluateSunContributionWeight(
+            float signedSunElevationDegrees,
+            float fullMoonlightElevationDegrees,
+            float fullSunlightElevationDegrees)
+        {
+            float normalized = Mathf.InverseLerp(
+                -fullMoonlightElevationDegrees,
+                fullSunlightElevationDegrees,
+                signedSunElevationDegrees);
+            return Mathf.SmoothStep(0f, 1f, normalized);
+        }
+
+        private static Color BlendWeightedColor(
+            Color sunColor,
+            float sunWeight,
+            Color moonColor,
+            float moonWeight,
+            Color minimumColor,
+            float minimumWeight,
+            float totalWeight)
+        {
+            if (totalWeight <= DirectionalLightThreshold)
+            {
+                minimumColor.a = 1f;
+                return minimumColor;
+            }
+
+            Color blended =
+                (sunColor * sunWeight +
+                 moonColor * moonWeight +
+                 minimumColor * minimumWeight) / totalWeight;
+            blended.a = 1f;
+            return blended;
+        }
+
+        private static Color ScaleRgb(Color color, float multiplier)
+        {
+            return new Color(
+                color.r * multiplier,
+                color.g * multiplier,
+                color.b * multiplier,
+                1f);
+        }
+
+        private static Color MaxRgb(Color value, Color minimum)
+        {
+            return new Color(
+                Mathf.Max(value.r, minimum.r),
+                Mathf.Max(value.g, minimum.g),
+                Mathf.Max(value.b, minimum.b),
+                1f);
         }
     }
 }

@@ -1580,3 +1580,14 @@ Interactable (abstract base class)
 - `[외부 사례 적용]` Unity 공식 휴머노이드 규약과 샘플처럼 물리 몸체 기준과 보이는 발 기준을 분리했다. contact offset은 물리 안정 여유이지 시각적 공중 간격이 아니며, 평지의 고정 반 칸 오류를 Foot IK로 덮지 않는다. 경사·단차나 특정 animation clip의 발 높이 편차는 별도 Root Transform Y/Feet 또는 Foot IK 범위다.
 - `[시험 속도]` `SkyLightingCycleController`의 기본값과 영속 prefab 값을 실제 60초당 게임 24시간으로 맞췄다.
 - `[Unity 컴파일·Play Mode 호출 확인]` 한 fresh `GameMap1` Play Session에서 root Y 0.5, collider 하단 Y 0, ground Y 0, visual local Y -0.5, 활성 skinned mesh 최저 Y -0.013을 확인해 허용오차 0.03 내 접지를 통과했다. 같은 session에서 60초 주기 직렬화 값과 §56의 일몰·일출 수치도 함께 재확인했다. 실제 물리 키보드 이동 중 animation별 발 접촉과 Player build는 미검증이다.
+
+---
+
+## 58. 청색 최소광·짧은 그림자·달 그림자 `[ENVIRONMENT-01][SHELL-01]`
+
+- `[사용자 피드백][2026-08-29]` §56 뒤에도 그림자가 길고, 태양→달 전환 중 주광이 사라져 보이며, 밤에는 달 그림자가 없다는 세 현상을 수정했다.
+- `[확정 원인]` 이전 최소 주광 고도 12도는 그림자 길이를 높이의 약 4.705배까지 허용했다. 황혼 하한도 절대값이 아니라 `MoonIntensity × 0.5`라 18시는 0.040까지 떨어졌고, 그림자는 `useSun` 분기에서만 켜 밤 표본이 0건이었다.
+- `[근본 수정]` 기존 씬 Directional Light 하나와 `RenderSettings.sun` 소유권을 유지하되 낮에는 태양, 밤에는 달의 방향·색·세기·그림자를 같은 Main Light에 적용한다. 지평선 ±15도에서 양쪽 기여를 SmoothStep으로 겹치고 합산 방향광 절대 하한 0.12와 청색 Trilight 하한 0.55를 별도로 보장한다. 태양·달 그림자는 각 실제 고도에서 독립 감쇠하며 지평선 구간에는 둘 다 끈다. 새 Light·Manager·씬 직렬화는 추가하지 않았다.
+- `[그림자 제한]` 그림자를 만드는 방향광의 최소 고도를 31도로 올려 활성 그림자의 이론상 최대 길이를 높이의 `cot(31°) ≈ 1.664배`로 제한했다. 달 그림자는 별도 강도 0.28을 사용하며 밤에는 같은 URP Main Directional Light가 그림자 owner가 된다.
+- `[Unity 컴파일·Play Mode 호출 확인]` 프로젝트와 프로필 직렬화가 컴파일됐다. 한 `GameMap1` Play Session에서 0~24시를 0.05시간 간격으로 한 번 순회해 실패 0건, 최소 방향광 0.120, 최소 ambient 0.550, 활성 그림자 최대 비율 1.664, 밤 그림자 표본 208건을 확인했다. 18시는 방향광 0.202·그림자 없음, 20시는 0.121·달 그림자 0.278, 22시는 0.132·달 그림자 0.280이었다. 자정 ambient sky 하한은 RGB `(0.147, 0.189, 0.315)`의 청색이었다. 프로필의 0/검정은 명시적 비활성 값으로 유지해 모드가 각 하한과 달 그림자를 끌 수 있다.
+- `[보존·미검증]` 60초 시험 주기, Player·Camera·씬 흐름·저장과 사용자 dirty scene/material/preview prefab은 바꾸지 않았다. 실제 Game View의 최종 색감과 체감 그림자 길이, 달 원반·별·구름·실내 감쇠·Player build는 미검증이다. 검증 중 남은 `ShouldRunBehaviour()` Console assertion은 게임 코드가 아니라 Unity AI Assistant의 동적 `RunCommand` 호출 stack에서 발생했으며 Console을 지워 덮지 않았다.

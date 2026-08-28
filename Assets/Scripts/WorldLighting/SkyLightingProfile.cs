@@ -135,16 +135,29 @@ namespace FantasySurvival.WorldLighting
         menuName = "Fantasy Survival/World Lighting/Sky Lighting Profile")]
     public sealed class SkyLightingProfile : ScriptableObject
     {
+        private const float DefaultMoonShadowStrength = 0.28f;
+        private const float DefaultMinimumAmbientIntensity = 0.55f;
+        private const float DefaultMinimumDirectionalIntensity = 0.12f;
+        private static readonly Color DefaultMinimumLightColor =
+            new Color(0.42f, 0.54f, 0.90f, 1f);
+
         [SerializeField, Range(0f, 24f)] private float morningPreviewHour = 7.5f;
         [SerializeField, Range(0f, 24f)] private float dayPreviewHour = 12f;
         [SerializeField, Range(0f, 24f)] private float nightPreviewHour = 22f;
-        [SerializeField, Range(1f, 45f)] private float minimumDirectionalElevationDegrees = 12f;
+        [SerializeField, Range(1f, 45f)] private float minimumDirectionalElevationDegrees = 31f;
         [SerializeField, Range(1f, 45f)] private float fullSunlightElevationDegrees = 15f;
-        [SerializeField, Range(0f, 30f)] private float noShadowElevationDegrees = 8f;
-        [SerializeField, Range(1f, 45f)] private float fullShadowElevationDegrees = 20f;
+        [SerializeField, Range(0f, 30f)] private float noShadowElevationDegrees = 12f;
+        [SerializeField, Range(1f, 45f)] private float fullShadowElevationDegrees = 31f;
         [SerializeField, Range(1f, 45f)] private float fullMoonlightElevationDegrees = 15f;
-        [SerializeField, Range(0.1f, 15f)] private float directionTransitionElevationDegrees = 5f;
+        [SerializeField, Range(0.1f, 15f)] private float directionTransitionElevationDegrees = 15f;
         [SerializeField, Range(0.01f, 1f)] private float horizonMoonlightWeight = 0.5f;
+        [SerializeField, Range(0f, 1f)] private float moonShadowStrength =
+            DefaultMoonShadowStrength;
+        [SerializeField] private Color minimumLightColor = DefaultMinimumLightColor;
+        [SerializeField, Min(0f)] private float minimumAmbientIntensity =
+            DefaultMinimumAmbientIntensity;
+        [SerializeField, Min(0f)] private float minimumDirectionalIntensity =
+            DefaultMinimumDirectionalIntensity;
         [SerializeField] private SkyLightingKeyframe[] keyframes = CreateClearSkyDefaults();
 
         public float MinimumDirectionalElevationDegrees => minimumDirectionalElevationDegrees;
@@ -154,6 +167,10 @@ namespace FantasySurvival.WorldLighting
         public float FullMoonlightElevationDegrees => fullMoonlightElevationDegrees;
         public float DirectionTransitionElevationDegrees => directionTransitionElevationDegrees;
         public float HorizonMoonlightWeight => horizonMoonlightWeight;
+        public float MoonShadowStrength => moonShadowStrength;
+        public Color MinimumLightColor => minimumLightColor;
+        public float MinimumAmbientIntensity => minimumAmbientIntensity;
+        public float MinimumDirectionalIntensity => minimumDirectionalIntensity;
 
         public bool TryEvaluate(float hour, out SkyLightingSample sample)
         {
@@ -248,6 +265,18 @@ namespace FantasySurvival.WorldLighting
                 return false;
             }
 
+            if (float.IsNaN(moonShadowStrength) ||
+                float.IsInfinity(moonShadowStrength) ||
+                moonShadowStrength < 0f ||
+                moonShadowStrength > 1f ||
+                !IsFiniteNonNegative(minimumAmbientIntensity) ||
+                !IsFiniteNonNegative(minimumDirectionalIntensity) ||
+                !IsFiniteNonNegative(minimumLightColor))
+            {
+                error = "Minimum blue light and moon shadow values are invalid.";
+                return false;
+            }
+
             float previousHour = -1f;
             for (int index = 0; index < keyframes.Length; index++)
             {
@@ -269,6 +298,21 @@ namespace FantasySurvival.WorldLighting
 
             error = null;
             return true;
+        }
+
+        private static bool IsFiniteNonNegative(float value)
+        {
+            return !float.IsNaN(value) &&
+                   !float.IsInfinity(value) &&
+                   value >= 0f;
+        }
+
+        private static bool IsFiniteNonNegative(Color value)
+        {
+            return IsFiniteNonNegative(value.r) &&
+                   IsFiniteNonNegative(value.g) &&
+                   IsFiniteNonNegative(value.b) &&
+                   IsFiniteNonNegative(value.a);
         }
 
         public static float NormalizeHour(float hour)

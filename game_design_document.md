@@ -2340,7 +2340,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - 외부 humanoid와 Kenney asset 사용
 - 시스템 검증은 Cube·primitive 회색상자 사용
 - 3D 픽셀아트 후처리는 시험 후 비활성화
-- 야외 아침·낮·밤 clear-sky 시험 조명, 황혼·약한 달빛과 제한된 태양 Hard Shadow가 데이터 프로필로 연결됨
+- 야외 아침·낮·밤 clear-sky 시험 조명, 끊기지 않는 청색 최소광과 제한된 태양·달 Hard Shadow가 데이터 프로필로 연결됨
 
 #### 14.1.2 미정
 

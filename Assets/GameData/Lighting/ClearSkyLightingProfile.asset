@@ -15,13 +15,17 @@ MonoBehaviour:
   morningPreviewHour: 7.5
   dayPreviewHour: 12
   nightPreviewHour: 22
-  minimumDirectionalElevationDegrees: 12
+  minimumDirectionalElevationDegrees: 31
   fullSunlightElevationDegrees: 15
-  noShadowElevationDegrees: 8
-  fullShadowElevationDegrees: 20
+  noShadowElevationDegrees: 12
+  fullShadowElevationDegrees: 31
   fullMoonlightElevationDegrees: 15
-  directionTransitionElevationDegrees: 5
+  directionTransitionElevationDegrees: 15
   horizonMoonlightWeight: 0.5
+  moonShadowStrength: 0.28
+  minimumLightColor: {r: 0.42, g: 0.54, b: 0.9, a: 1}
+  minimumAmbientIntensity: 0.55
+  minimumDirectionalIntensity: 0.12
   keyframes:
   - hour: 0
     phase: 2

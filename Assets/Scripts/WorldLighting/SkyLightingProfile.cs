@@ -166,6 +166,9 @@ namespace FantasySurvival.WorldLighting
             DefaultMinimumAmbientIntensity;
         [SerializeField, Min(0f)] private float minimumDirectionalIntensity =
             DefaultMinimumDirectionalIntensity;
+        [SerializeField] private Texture2D cloudShadowCookie;
+        [SerializeField] private Vector2 cloudShadowCookieSize = new Vector2(64f, 64f);
+        [SerializeField] private Vector2 cloudShadowVelocity = new Vector2(0.35f, 0.15f);
         [SerializeField] private SkyLightingKeyframe[] keyframes = CreateClearSkyDefaults();
 
         public float MinimumDirectionalElevationDegrees => minimumDirectionalElevationDegrees;
@@ -181,6 +184,9 @@ namespace FantasySurvival.WorldLighting
         public Color MinimumLightColor => minimumLightColor;
         public float MinimumAmbientIntensity => minimumAmbientIntensity;
         public float MinimumDirectionalIntensity => minimumDirectionalIntensity;
+        public Texture2D CloudShadowCookie => cloudShadowCookie;
+        public Vector2 CloudShadowCookieSize => cloudShadowCookieSize;
+        public Vector2 CloudShadowVelocity => cloudShadowVelocity;
 
         public bool TryEvaluate(float hour, out SkyLightingSample sample)
         {
@@ -275,6 +281,16 @@ namespace FantasySurvival.WorldLighting
                 return false;
             }
 
+            if (cloudShadowCookie != null &&
+                (!IsFinite(cloudShadowCookieSize) ||
+                 cloudShadowCookieSize.x <= 0f ||
+                 cloudShadowCookieSize.y <= 0f ||
+                 !IsFinite(cloudShadowVelocity)))
+            {
+                error = "Cloud shadow cookie size must be positive and its velocity must be finite.";
+                return false;
+            }
+
             if (float.IsNaN(moonShadowStrength) ||
                 float.IsInfinity(moonShadowStrength) ||
                 moonShadowStrength < 0f ||
@@ -316,9 +332,17 @@ namespace FantasySurvival.WorldLighting
 
         private static bool IsFiniteNonNegative(float value)
         {
-            return !float.IsNaN(value) &&
-                   !float.IsInfinity(value) &&
-                   value >= 0f;
+            return IsFinite(value) && value >= 0f;
+        }
+
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }
+
+        private static bool IsFinite(Vector2 value)
+        {
+            return IsFinite(value.x) && IsFinite(value.y);
         }
 
         private static bool IsFiniteNonNegative(Color value)

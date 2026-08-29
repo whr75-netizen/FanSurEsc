@@ -1632,3 +1632,14 @@ Interactable (abstract base class)
 - `[근본 수정]` 그림자용 태양·달 가중치는 유지하고, 광량·색 기여에만 프로필 값 `duskLightOverlapWeight=0.50`을 하강 중인 태양 반구에서 적용해 이중 감쇠 일부를 복원했다. 새벽 반구에서는 중첩값이 정확히 0이라 기존 일출 계산을 보존한다. Clear Sky와 새 기본 프로필의 자정 월광은 `0.24`로 두어 `19.5시 0.32 → 자정 0.24 → 6.5시 월광 0.26과 일출광`을 같은 SmoothStep 키프레임 곡선으로 연결했다.
 - `[Unity 컴파일·Play Mode 호출 확인]` 컴파일 후 한 `GameMap1` Play Session에서 16.0→다음 날 6.5시를 0.05시간 간격으로 한 번 순회했다. 일몰·밤의 재밝아짐 0건, 직접광 명도 재상승 0건, 자정 이후 재암전 0건, 직접광 명도 재하강 0건이며 최저는 자정 방향광 `0.240`·직접광 명도 `0.117`이었다. 표본은 18.30시 `0.352/0.166`, 19.50시 `0.320/0.156`, 22시 `0.273/0.133`, 자정 `0.240/0.117`, 4시 `0.253/0.123`, 6시 `0.474/0.194`, 6.5시 `0.631/0.260`이고 모든 표본이 Soft Shadow를 유지했다.
 - `[보존·미검증]` 그림자 방향 연속화·끝점 감속·31도 길이 제한·그림자 강도, 청색 월광색·ambient 하한, Player·Camera·씬 흐름·저장·60초 주기와 사용자 dirty asset을 바꾸지 않았다. 실제 Game View의 최종 체감 밝기와 Player build는 미검증이다. Console에는 본 변경 스택이 없는 기존 미정산 원정 오류와 Unity AI Assistant `ShouldRunBehaviour()` assertion이 남아 있으며 지워서 덮지 않았다.
+
+---
+
+## 63. 비가시 픽셀 구름 그림자 Cookie `[ENVIRONMENT-01][SHELL-01]`
+
+- `[사용자 정정][2026-08-29]` 탑뷰·쿼터뷰에서는 구름 본체가 화면에 보일 필요가 없다. 반투명 Plane·Quad·Sprite를 광원 앞에 두지 않고, 지면·캐릭터·건물 위를 지나가는 픽셀 구름 그림자만 구현했다.
+- `[권위·데이터]` 새 날씨 Manager를 만들지 않았다. 기존 영속 `SkyLightingCycleController`가 `ClearSkyLightingProfile`의 Cookie·월드 크기 `(64,64)`·초당 이동값 `(0.35,0.15)`을 읽어 현재 씬의 단일 Main Directional Light에 적용한다. 오프셋은 게임 시각에서 다시 계산하지 않고 실제 frame 시간으로 누적·Repeat 래핑하므로 자정이나 강제 시각 변경에 점프하지 않으며, 씬 전환 뒤에도 같은 runtime 값이 이어진다.
+- `[에셋·렌더링 경계]` `PixelCloudShadowCookie.png`는 64×64 RGB 회색조의 이어지는 픽셀 덩어리이며 흰색은 원광, 회색은 부분 감광이다. Import는 `Default/Linear(sRGB off)/Point/Repeat/Uncompressed/No Mipmaps/Read-Write off`로 고정했다. URP 추가 조명 데이터가 없는 Directional Light를 런타임에 몰래 보충하지 않고 해당 씬 경로와 함께 오류를 내며 바인딩을 거부한다.
+- `[Unity 컴파일·Play Mode 호출 확인]` Profile 유효성, PNG 64×64, Repeat·Point·무압축·밉맵 없음과 직렬화 참조를 확인했다. 한 `GameMap1` Play Session에서 Cookie `PixelCloudShadowCookie`, 크기 `(64,64)`, 바인딩을 확인했고 백그라운드 frame 경과 뒤 오프셋이 `(0.014,0.006)→(3.016,1.293)`으로 이동했다. 같은 camera state의 Cookie A/B 렌더는 802,152 pixel 중 22,257개(2.77%)가 달라졌고 변경 pixel의 RGB 차이는 평균 13.73·최대 41이었다.
+- `[씬 재연결 확인]` 같은 Play Session에서 `GameMap1→GameMapTest→GameMap1`을 한 번 호출했다. 같은 `SkyLightingCycleController` entity ID가 유지됐고 각 활성 씬 소유 Directional Light에 Cookie·크기와 연속 오프셋이 다시 적용됐다. 종료 뒤 Edit Mode `GameMap1`, pause off, `runInBackground=false`를 확인했다.
+- `[보존·미검증]` 기존 낮·밤 곡선, Soft Shadow 방향·강도, Player 셸, Camera, 저장 schema와 사용자 dirty scene/material/preview prefab은 수정하지 않았다. 이 방식은 URP Main Light 직접광을 받는 Lit 표면만 감광하며 Unlit sprite에는 적용되지 않는다. 방향광 투영면 기준이라 광원 각도에 따라 무늬가 늘어날 수 있고, 최종 구름 밀도·명암·속도·픽셀 퍼펙트 정합과 Player build는 미검증이다. Console에는 검증 중 구식 camera ID를 전달한 Unity AI Assistant Capture 도구 오류 1건만 남았으며 게임 코드·런타임 stack 오류는 확인되지 않았다.

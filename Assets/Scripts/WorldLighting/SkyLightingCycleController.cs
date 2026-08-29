@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using FantasySurvival.SceneFlow;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 namespace FantasySurvival.WorldLighting
@@ -34,6 +35,8 @@ namespace FantasySurvival.WorldLighting
 
         private readonly List<Light> sceneLights = new List<Light>();
         private Light sceneDirectionalLight;
+        private UniversalAdditionalLightData sceneDirectionalLightData;
+        private Vector2 cloudShadowOffset;
         private float currentHour;
         private float lastAppliedHour = float.NaN;
         private bool hasGameplaySceneBinding;
@@ -64,6 +67,7 @@ namespace FantasySurvival.WorldLighting
         {
             SceneManager.sceneLoaded -= HandleSceneLoaded;
             sceneDirectionalLight = null;
+            sceneDirectionalLightData = null;
             hasGameplaySceneBinding = false;
             lastAppliedHour = float.NaN;
         }
@@ -83,6 +87,7 @@ namespace FantasySurvival.WorldLighting
             }
 
             ApplyLightingIfStepChanged();
+            AdvanceCloudShadow(Time.deltaTime);
         }
 
         public bool SetTimeHours(float hour)
@@ -124,6 +129,7 @@ namespace FantasySurvival.WorldLighting
             profile = replacement;
             profileValid = true;
             lastAppliedHour = float.NaN;
+            ApplyCloudShadowConfiguration();
             return ApplyCurrentLighting();
         }
 
@@ -184,6 +190,7 @@ namespace FantasySurvival.WorldLighting
         private void BindScene(Scene scene)
         {
             sceneDirectionalLight = null;
+            sceneDirectionalLightData = null;
             hasGameplaySceneBinding = false;
             lastAppliedHour = float.NaN;
 
@@ -198,9 +205,19 @@ namespace FantasySurvival.WorldLighting
                 return;
             }
 
+            if (!directionalLight.TryGetComponent(out sceneDirectionalLightData))
+            {
+                Debug.LogError(
+                    $"Gameplay scene '{scene.path}' Directional Light requires " +
+                    "UniversalAdditionalLightData for cloud shadow cookies.",
+                    directionalLight);
+                return;
+            }
+
             sceneDirectionalLight = directionalLight;
             hasGameplaySceneBinding = true;
             RenderSettings.sun = sceneDirectionalLight;
+            ApplyCloudShadowConfiguration();
             ApplyCurrentLighting();
         }
 
@@ -304,6 +321,54 @@ namespace FantasySurvival.WorldLighting
             }
 
             return ApplyLighting(currentHour);
+        }
+
+        private void ApplyCloudShadowConfiguration()
+        {
+            if (!profileValid || !HasGameplaySceneBinding)
+            {
+                return;
+            }
+
+            Texture2D cookie = profile.CloudShadowCookie;
+            sceneDirectionalLight.cookie = cookie;
+            if (sceneDirectionalLightData == null)
+            {
+                return;
+            }
+
+            if (cookie == null)
+            {
+                sceneDirectionalLightData.lightCookieOffset = Vector2.zero;
+                return;
+            }
+
+            Vector2 cookieSize = profile.CloudShadowCookieSize;
+            cloudShadowOffset = WrapCloudShadowOffset(cloudShadowOffset, cookieSize);
+            sceneDirectionalLightData.lightCookieSize = cookieSize;
+            sceneDirectionalLightData.lightCookieOffset = cloudShadowOffset;
+        }
+
+        private void AdvanceCloudShadow(float deltaTime)
+        {
+            if (deltaTime <= 0f ||
+                profile.CloudShadowCookie == null ||
+                sceneDirectionalLightData == null)
+            {
+                return;
+            }
+
+            Vector2 cookieSize = profile.CloudShadowCookieSize;
+            cloudShadowOffset += profile.CloudShadowVelocity * deltaTime;
+            cloudShadowOffset = WrapCloudShadowOffset(cloudShadowOffset, cookieSize);
+            sceneDirectionalLightData.lightCookieOffset = cloudShadowOffset;
+        }
+
+        private static Vector2 WrapCloudShadowOffset(Vector2 offset, Vector2 cookieSize)
+        {
+            return new Vector2(
+                Mathf.Repeat(offset.x, cookieSize.x),
+                Mathf.Repeat(offset.y, cookieSize.y));
         }
 
         private bool ApplyLighting(float evaluatedHour)

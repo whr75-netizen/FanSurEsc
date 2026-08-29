@@ -141,6 +141,10 @@ namespace FantasySurvival.WorldLighting
         private const float DefaultMinimumAmbientIntensity = 0.62f;
         private const float DefaultMinimumDirectionalIntensity = 0.18f;
         private const float DefaultDuskLightOverlapWeight = 0.50f;
+        private const float DefaultLowElevationCloudShadowSoftnessMip = 1.25f;
+        private const float DefaultHighElevationCloudShadowSoftnessMip = 0.25f;
+        private const float DefaultLowElevationCloudShadowOpacity = 0.55f;
+        private const float DefaultHighElevationCloudShadowOpacity = 0.90f;
         private static readonly Color DefaultMinimumLightColor =
             new Color(0.42f, 0.54f, 0.90f, 1f);
 
@@ -166,12 +170,26 @@ namespace FantasySurvival.WorldLighting
             DefaultMinimumAmbientIntensity;
         [SerializeField, Min(0f)] private float minimumDirectionalIntensity =
             DefaultMinimumDirectionalIntensity;
+        [Tooltip("Linear repeating cookie with mipmaps and Trilinear filtering.")]
         [SerializeField] private Texture2D cloudShadowCookie;
+        [SerializeField] private Shader cloudShadowFilterShader;
         [Tooltip("Desired size of one cookie repeat on horizontal ground.")]
         [SerializeField] private Vector2 cloudShadowCookieSize = new Vector2(24f, 24f);
         [FormerlySerializedAs("cloudShadowVelocity")]
         [Tooltip("World X/Z units per real second. Positive X moves west to east.")]
         [SerializeField] private Vector2 cloudShadowWorldVelocity = new Vector2(0.75f, 0f);
+        [Tooltip("Cookie mip level used near the horizon. Higher values produce softer edges.")]
+        [SerializeField, Range(0f, 3f)] private float lowElevationCloudShadowSoftnessMip =
+            DefaultLowElevationCloudShadowSoftnessMip;
+        [Tooltip("Cookie mip level used when the active sun or moon is high.")]
+        [SerializeField, Range(0f, 3f)] private float highElevationCloudShadowSoftnessMip =
+            DefaultHighElevationCloudShadowSoftnessMip;
+        [Tooltip("Cloud shadow opacity near the horizon.")]
+        [SerializeField, Range(0f, 1f)] private float lowElevationCloudShadowOpacity =
+            DefaultLowElevationCloudShadowOpacity;
+        [Tooltip("Cloud shadow opacity when the active sun or moon is high.")]
+        [SerializeField, Range(0f, 1f)] private float highElevationCloudShadowOpacity =
+            DefaultHighElevationCloudShadowOpacity;
         [SerializeField] private SkyLightingKeyframe[] keyframes = CreateClearSkyDefaults();
 
         public float MinimumDirectionalElevationDegrees => minimumDirectionalElevationDegrees;
@@ -188,8 +206,15 @@ namespace FantasySurvival.WorldLighting
         public float MinimumAmbientIntensity => minimumAmbientIntensity;
         public float MinimumDirectionalIntensity => minimumDirectionalIntensity;
         public Texture2D CloudShadowCookie => cloudShadowCookie;
+        public Shader CloudShadowFilterShader => cloudShadowFilterShader;
         public Vector2 CloudShadowCookieSize => cloudShadowCookieSize;
         public Vector2 CloudShadowWorldVelocity => cloudShadowWorldVelocity;
+        public float LowElevationCloudShadowSoftnessMip =>
+            lowElevationCloudShadowSoftnessMip;
+        public float HighElevationCloudShadowSoftnessMip =>
+            highElevationCloudShadowSoftnessMip;
+        public float LowElevationCloudShadowOpacity => lowElevationCloudShadowOpacity;
+        public float HighElevationCloudShadowOpacity => highElevationCloudShadowOpacity;
 
         public bool TryEvaluate(float hour, out SkyLightingSample sample)
         {
@@ -291,6 +316,33 @@ namespace FantasySurvival.WorldLighting
                  !IsFinite(cloudShadowWorldVelocity)))
             {
                 error = "Cloud shadow cookie size must be positive and its world velocity must be finite.";
+                return false;
+            }
+
+            if (cloudShadowCookie != null && cloudShadowFilterShader == null)
+            {
+                error = "Cloud shadow cookie requires its prefilter shader.";
+                return false;
+            }
+
+            if (cloudShadowCookie != null &&
+                (cloudShadowCookie.mipmapCount <= 1 ||
+                 cloudShadowCookie.filterMode != FilterMode.Trilinear))
+            {
+                error = "Cloud shadow cookie requires mipmaps and Trilinear filtering.";
+                return false;
+            }
+
+            if (!IsFiniteNonNegative(lowElevationCloudShadowSoftnessMip) ||
+                !IsFiniteNonNegative(highElevationCloudShadowSoftnessMip) ||
+                lowElevationCloudShadowSoftnessMip > 3f ||
+                highElevationCloudShadowSoftnessMip > 3f ||
+                !IsFiniteNonNegative(lowElevationCloudShadowOpacity) ||
+                !IsFiniteNonNegative(highElevationCloudShadowOpacity) ||
+                lowElevationCloudShadowOpacity > 1f ||
+                highElevationCloudShadowOpacity > 1f)
+            {
+                error = "Cloud shadow softness and opacity values are invalid.";
                 return false;
             }
 

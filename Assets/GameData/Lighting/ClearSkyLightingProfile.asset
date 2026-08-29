@@ -29,8 +29,13 @@ MonoBehaviour:
   minimumAmbientIntensity: 0.62
   minimumDirectionalIntensity: 0.18
   cloudShadowCookie: {fileID: 2800000, guid: 4b174fff0c1f5fa4889c8e35841ec71f, type: 3}
+  cloudShadowFilterShader: {fileID: 4800000, guid: b063d449ce9e1254fa0df00da032ac2c, type: 3}
   cloudShadowCookieSize: {x: 24, y: 24}
   cloudShadowWorldVelocity: {x: 0.75, y: 0}
+  lowElevationCloudShadowSoftnessMip: 1.25
+  highElevationCloudShadowSoftnessMip: 0.25
+  lowElevationCloudShadowOpacity: 0.55
+  highElevationCloudShadowOpacity: 0.9
   keyframes:
   - hour: 0
     phase: 2

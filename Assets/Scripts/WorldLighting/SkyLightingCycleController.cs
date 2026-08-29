@@ -21,6 +21,11 @@ namespace FantasySurvival.WorldLighting
         private const float MinutesPerHour = 60f;
         private const float DirectionalLightThreshold = 0.001f;
         private const float MinimumCookieProjectionScale = 0.001f;
+        private const int CloudShadowFilterKeyMaximum = 255;
+        private static readonly int CloudShadowSoftnessMipId =
+            Shader.PropertyToID("_SoftnessMip");
+        private static readonly int CloudShadowOpacityId =
+            Shader.PropertyToID("_Opacity");
 
         [Header("Definition")]
         [SerializeField] private SkyLightingProfile profile;
@@ -37,9 +42,16 @@ namespace FantasySurvival.WorldLighting
         private readonly List<Light> sceneLights = new List<Light>();
         private Light sceneDirectionalLight;
         private UniversalAdditionalLightData sceneDirectionalLightData;
+        private Material cloudShadowFilterMaterial;
+        private RenderTexture filteredCloudShadowCookie;
+        private Texture2D cloudShadowFilterSource;
+        private Shader cloudShadowFilterShader;
         private Vector2 cloudShadowWorldOffset;
         private float currentHour;
         private float lastAppliedHour = float.NaN;
+        private int lastCloudShadowFilterKey = -1;
+        private float currentCloudShadowSoftnessMip;
+        private float currentCloudShadowOpacity;
         private bool hasGameplaySceneBinding;
         private bool profileValid;
         private SkyTimePhase currentPhase;
@@ -51,6 +63,8 @@ namespace FantasySurvival.WorldLighting
             hasGameplaySceneBinding && sceneDirectionalLight != null;
         public Light SceneDirectionalLight => sceneDirectionalLight;
         public Light SceneSun => sceneDirectionalLight;
+        public float CurrentCloudShadowSoftnessMip => currentCloudShadowSoftnessMip;
+        public float CurrentCloudShadowOpacity => currentCloudShadowOpacity;
 
         private void Awake()
         {
@@ -67,6 +81,8 @@ namespace FantasySurvival.WorldLighting
         private void OnDisable()
         {
             SceneManager.sceneLoaded -= HandleSceneLoaded;
+            DetachFilteredCloudShadowCookie();
+            ReleaseCloudShadowFilterResources();
             sceneDirectionalLight = null;
             sceneDirectionalLightData = null;
             hasGameplaySceneBinding = false;
@@ -127,6 +143,7 @@ namespace FantasySurvival.WorldLighting
                 return false;
             }
 
+            ReleaseCloudShadowFilterResources();
             profile = replacement;
             profileValid = true;
             lastAppliedHour = float.NaN;
@@ -190,6 +207,7 @@ namespace FantasySurvival.WorldLighting
 
         private void BindScene(Scene scene)
         {
+            DetachFilteredCloudShadowCookie();
             sceneDirectionalLight = null;
             sceneDirectionalLightData = null;
             hasGameplaySceneBinding = false;
@@ -332,7 +350,6 @@ namespace FantasySurvival.WorldLighting
             }
 
             Texture2D cookie = profile.CloudShadowCookie;
-            sceneDirectionalLight.cookie = cookie;
             if (sceneDirectionalLightData == null)
             {
                 return;
@@ -340,11 +357,169 @@ namespace FantasySurvival.WorldLighting
 
             if (cookie == null)
             {
+                sceneDirectionalLight.cookie = null;
                 sceneDirectionalLightData.lightCookieOffset = Vector2.zero;
+                ReleaseCloudShadowFilterResources();
                 return;
             }
 
+            if (!EnsureCloudShadowFilterResources(cookie))
+            {
+                sceneDirectionalLight.cookie = null;
+                return;
+            }
+
+            sceneDirectionalLight.cookie = filteredCloudShadowCookie;
+
             ApplyCloudShadowProjection();
+        }
+
+        private bool EnsureCloudShadowFilterResources(Texture2D source)
+        {
+            Shader filterShader = profile.CloudShadowFilterShader;
+            if (filterShader == null)
+            {
+                Debug.LogError("Cloud shadow prefilter shader is missing.", profile);
+                return false;
+            }
+
+            bool resourcesMatch =
+                cloudShadowFilterMaterial != null &&
+                filteredCloudShadowCookie != null &&
+                filteredCloudShadowCookie.IsCreated() &&
+                cloudShadowFilterSource == source &&
+                cloudShadowFilterShader == filterShader &&
+                filteredCloudShadowCookie.width == source.width &&
+                filteredCloudShadowCookie.height == source.height;
+            if (resourcesMatch)
+            {
+                return true;
+            }
+
+            ReleaseCloudShadowFilterResources();
+
+            cloudShadowFilterMaterial = new Material(filterShader)
+            {
+                name = "Runtime Cloud Shadow Prefilter",
+                hideFlags = HideFlags.HideAndDontSave
+            };
+            filteredCloudShadowCookie = new RenderTexture(
+                source.width,
+                source.height,
+                0,
+                RenderTextureFormat.ARGB32,
+                RenderTextureReadWrite.Linear)
+            {
+                name = "Runtime Filtered Cloud Shadow Cookie",
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Repeat,
+                useMipMap = false,
+                autoGenerateMips = false,
+                hideFlags = HideFlags.HideAndDontSave
+            };
+
+            if (!filteredCloudShadowCookie.Create())
+            {
+                Debug.LogError("Failed to create the cloud shadow prefilter texture.", this);
+                ReleaseCloudShadowFilterResources();
+                return false;
+            }
+
+            cloudShadowFilterSource = source;
+            cloudShadowFilterShader = filterShader;
+            lastCloudShadowFilterKey = -1;
+            return true;
+        }
+
+        private void UpdateCloudShadowFilter(float elevationWeight)
+        {
+            if (cloudShadowFilterMaterial == null ||
+                filteredCloudShadowCookie == null ||
+                cloudShadowFilterSource == null)
+            {
+                return;
+            }
+
+            int filterKey = Mathf.RoundToInt(
+                Mathf.Clamp01(elevationWeight) * CloudShadowFilterKeyMaximum);
+            if (filterKey == lastCloudShadowFilterKey)
+            {
+                return;
+            }
+
+            float filteredElevationWeight =
+                filterKey / (float)CloudShadowFilterKeyMaximum;
+            currentCloudShadowSoftnessMip = Mathf.Lerp(
+                profile.LowElevationCloudShadowSoftnessMip,
+                profile.HighElevationCloudShadowSoftnessMip,
+                filteredElevationWeight);
+            currentCloudShadowOpacity = Mathf.Lerp(
+                profile.LowElevationCloudShadowOpacity,
+                profile.HighElevationCloudShadowOpacity,
+                filteredElevationWeight);
+
+            cloudShadowFilterMaterial.SetFloat(
+                CloudShadowSoftnessMipId,
+                currentCloudShadowSoftnessMip);
+            cloudShadowFilterMaterial.SetFloat(
+                CloudShadowOpacityId,
+                currentCloudShadowOpacity);
+            Graphics.Blit(
+                cloudShadowFilterSource,
+                filteredCloudShadowCookie,
+                cloudShadowFilterMaterial,
+                0);
+            lastCloudShadowFilterKey = filterKey;
+        }
+
+        private void DetachFilteredCloudShadowCookie()
+        {
+            if (sceneDirectionalLight != null &&
+                sceneDirectionalLight.cookie == filteredCloudShadowCookie)
+            {
+                sceneDirectionalLight.cookie = null;
+            }
+        }
+
+        private void ReleaseCloudShadowFilterResources()
+        {
+            DetachFilteredCloudShadowCookie();
+
+            if (filteredCloudShadowCookie != null)
+            {
+                filteredCloudShadowCookie.Release();
+                DestroyRuntimeObject(filteredCloudShadowCookie);
+            }
+
+            if (cloudShadowFilterMaterial != null)
+            {
+                DestroyRuntimeObject(cloudShadowFilterMaterial);
+            }
+
+            filteredCloudShadowCookie = null;
+            cloudShadowFilterMaterial = null;
+            cloudShadowFilterSource = null;
+            cloudShadowFilterShader = null;
+            lastCloudShadowFilterKey = -1;
+            currentCloudShadowSoftnessMip = 0f;
+            currentCloudShadowOpacity = 0f;
+        }
+
+        private static void DestroyRuntimeObject(Object runtimeObject)
+        {
+            if (runtimeObject == null)
+            {
+                return;
+            }
+
+            if (Application.isPlaying)
+            {
+                Destroy(runtimeObject);
+            }
+            else
+            {
+                DestroyImmediate(runtimeObject);
+            }
         }
 
         private void AdvanceCloudShadow(float deltaTime)
@@ -535,6 +710,9 @@ namespace FantasySurvival.WorldLighting
             float visibleShadowStrength = Mathf.Max(
                 celestialShadowStrength,
                 profile.MinimumShadowStrength);
+            float cloudShadowElevationWeight = Mathf.Clamp01(
+                sunShadowWeight * sunContributionWeight +
+                moonShadowWeight * moonContributionWeight);
 
             sceneDirectionalLight.transform.rotation = directionalRotation;
             sceneDirectionalLight.color = directionalColor;
@@ -546,6 +724,7 @@ namespace FantasySurvival.WorldLighting
                 ? LightShadows.Soft
                 : LightShadows.None;
             sceneDirectionalLight.enabled = directionalIntensity > DirectionalLightThreshold;
+            UpdateCloudShadowFilter(cloudShadowElevationWeight);
             ApplyCloudShadowProjection();
             return true;
         }

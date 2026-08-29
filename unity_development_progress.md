@@ -1664,3 +1664,13 @@ Interactable (abstract base class)
 - `[근본 수정]` Profile의 Cookie Size를 광원 평면 크기가 아니라 수평 지면에서 원하는 한 주기 크기로 정의했다. 최종 주광 회전 뒤 동일한 `worldToLocalMatrix`로 각 light-local 축의 수평 투영 배율을 구해 Cookie size에 곱하고, world anchor도 같은 행렬로 변환한 뒤 보정된 size로 Repeat한다. 따라서 크기와 offset이 같은 투영 기준을 사용하며 새 Manager·구름 오브젝트·속도 보정값을 추가하지 않았다.
 - `[Unity 컴파일·Play Mode 호출 확인]` C# compilation과 Profile 유효성을 확인했다. 한 `GameMap1` Play Session에서 7.5/12/17/18/22시의 실제 Cookie light-plane size는 각각 Y `14.131/24.000/13.184/12.361/21.110`으로 역보정됐고, 지면 footprint는 전 표본 `(24.000,24.000)`, 최대 크기 오차 0, 고정 지점 phase 최대 오차 0이었다. 가장 낮은 18시에서 4.0504 게임초 동안 지면 이동 `(3.03783,0)`과 속도 `(0.75000,0)`을 확인했다. 같은 Camera로 7.5/12/18시 화면을 캡처해 늘어진 긴 띠 없이 같은 픽셀 덩어리 크기가 유지되는 것도 확인했다.
 - `[보존·미검증]` §64의 밀도·명암, 서→동 속도, 낮밤 밝기·Soft Shadow, Player 셸·Camera·씬·저장과 사용자 dirty asset을 변경하지 않았다. 현재 고정 azimuth·roll 0의 단일 주광 경로에서는 정확하며, 향후 방위각·roll까지 동적으로 바꾸면 Cookie size만으로 shear를 없앨 수 없어 world-XZ 직접 샘플 방식을 재검토한다. 실제 사용자 조작 체감과 Player build는 미검증이며 Console의 변경 전 `ASFolliage` keyword 중복 2건은 남겼다.
+
+---
+
+## 66. 구름 그림자 고도별 경계·농도 보정 `[ENVIRONMENT-01][SHELL-01]`
+
+- `[사용자 피드백][2026-08-29]` 구름 그림자가 시간대와 관계없이 항상 같은 선명도였고, 기존 기능을 다른 경로로 중복 계산해 부하를 늘리지 않으면서 오브젝트 그림자 전환과 어울리게 바꿔야 했다.
+- `[근본 수정]` 기존 `SkyLightingCycleController`의 시간 평가·월드 이동·24×24 역투영과 URP Main Light Cookie 수신 경로는 유지했다. 원본 64×64 Cookie에 mipmap·Trilinear를 켜고, 영속 controller가 소유하는 단일 64×64 선형 RenderTexture에 한 번의 LOD sample과 흰색 혼합만 적용한다. 낮은 주광 고도는 `mip 1.25 / opacity 0.55`, 높은 고도는 `mip 0.25 / opacity 0.90`으로 보간하며 8-bit 고도 key가 달라질 때만 갱신한다. 표준 URP·Toon·Grass의 최종 Cookie sample은 기존과 같은 수신 픽셀당 1회이고 새 Manager·구름 오브젝트·수신 shader pass는 추가하지 않았다.
+- `[비용 경계]` 전처리 대상은 화면 해상도나 수신 오브젝트 수와 무관한 4,096 texel이다. 현재 60초 하루·1게임분 조명 step의 최대 약 24회/초에서도 source sample은 약 98,304회/초이고 추가 RenderTexture는 RGBA32 약 16KiB 한 장이다. 이는 구조상 상한 계산이며 GPU Profiler 실측 전에는 성능 영향이 0이라고 단정하지 않는다.
+- `[Unity 컴파일·Play Mode 호출 확인]` C# compilation, Profile 유효성, 원본 7 mip·Trilinear, filter shader compiler error 0을 확인했다. 한 `GameMap1` Play Session에서 정오/18시/22시 모두 지면 footprint `(24.000,24.000)`을 유지했고 runtime Cookie는 RenderTexture, 전처리 RT·Material은 각각 1개였다. 출력 RT는 정오 `mip 0.25 / opacity 0.90 / 명도 112~255 / 4단계 / 이웃차 4.973`, 18시 `mip 1.25 / opacity 0.55 / 명도 168~255 / 28단계 / 이웃차 3.081`, 22시는 정오와 같은 값으로, 지평선 구간의 경계와 농도가 실제 출력 데이터에서 낮아졌다. Play Mode 종료 뒤 두 runtime resource가 모두 0개로 해제된 것도 확인했다.
+- `[보존·미검증]` §65의 24×24 지면 크기와 `+X 0.75` 이동 계산, 낮밤 광량·오브젝트 Soft Shadow, Player 셸·Camera·씬·저장과 사용자 dirty scene/material/preview prefab은 변경하지 않았다. Game Camera 지정 캡처에는 Unity AI Assistant가 Unity 6 legacy hash를 Instance ID로 찾지 못해 도구 오류 2건이 Console에 남았으며, 변경 코드·filter shader 오류는 확인되지 않았다. 사용자 체감 선명도·GPU Profiler·Player build는 미검증이다.

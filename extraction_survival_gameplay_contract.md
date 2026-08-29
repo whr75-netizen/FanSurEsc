@@ -185,13 +185,14 @@ Main Menu
 
 ### 4.3 절차 맵 생성과 접근 가능성
 
-도심 맵의 목표 생성 순서는 다음 방향을 유지한다. 현재 구현된 도로·Cube 건물·NavMesh·검증 결과와 후속 콘텐츠 배치까지의 전체 계약을 나타내며, 모든 실패 gate가 이미 구현됐다는 뜻은 아니다.
+도심 맵의 목표 생성 순서는 다음 방향을 유지한다. 현재 구현된 도로·Cube·공유 후보·의료 POI·NavMesh와 후속 콘텐츠 배치까지의 전체 계약을 나타낸다.
 
 ```text
 seed + generator version
 → 연결된 도로 구조
 → 건축 가능 구획
 → Cube 건물 점유 영역
+→ 재사용 공간 후보와 의미 POI
 → 보호 지점과 필수 경로 검사
 → NavMesh와 파생 공간 데이터
 → 후속 콘텐츠 배치
@@ -207,9 +208,9 @@ seed + generator version
 - AI는 생성 결과의 실제 NavMesh와 유효 관심 지점을 사용하며 고정 좌우 좌표를 반복하는 순찰에 의존하지 않는다.
 - 도심, 지하 던전과 오염 지역은 서로 다른 공간 문법이므로 하나의 생성기에 mode 값만 추가해 섞지 않는다.
 
-**[현재]** `GameMapTest`는 seed로 도로와 Cube 건물을 생성하고 같은 seed·stable ID의 manifest로 binding 목록의 기존 Chest·Enemy 초기 위치를 재배치한다. 현재 시험 fixture에서는 Chest가 Entry 3.5~8m, 근접 적이 7~16m에 놓이고 기존 원거리 적도 일반 안전 후보에 유지되며, ReturnPortal은 첫 인접 도로 교차점에 놓인다. 이 수량은 빠른 시험 구성이지 시스템의 종류별 1개 제한이 아니다. 각 개체는 Portal 보호·상호 간격과 NavMesh 접근을 만족해야 하며, layout+manifest world hash까지 유효해야 raid-ready다. 불완전 결과는 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh 원정은 출발 전 exact 상태로 되돌린 뒤 기지로, Resume 원정은 다른 seed로 바꾸지 않고 `RecoveryFailed`로 기지 정산한다. Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid 공개 대신 검은 전환·입력 잠금을 보류한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 Recovery seed를 유지한 채 기지 정산에서 재시도한다. 자동 재생성·후보 축소 정책은 아직 구현하지 않았다.
+**[현재]** `GameMapTest`는 seed로 도로·Cube와 도로/건물 접근 후보를 한 번 만들고, 가장 가까운 안전 건물 하나를 `Medical` POI로 정한다. 분류 권위는 POI 의미 데이터이며 청록색 Cube는 표현이다. 같은 seed·stable ID manifest가 binding 목록의 기존 Chest를 POI 외벽 앞에, 근접 적을 Entry 7~16m 도로 후보에, 기존 원거리 적을 일반 안전 후보에 재배치한다. 의료 Chest는 Fresh에서 치료제 ID 7 하나를 받고 Resume은 실제 저장 grid를 복원한다. ReturnPortal은 첫 인접 교차점에 놓이며, 수량은 시험 fixture이지 종류별 제한이 아니다. 각 접근점은 Portal 보호·상호 간격·NavMesh와 layout+manifest world hash를 만족해야 raid-ready다. 불완전 결과는 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh는 출발 전 exact 상태로 되돌린 뒤 기지로, Resume은 seed를 바꾸지 않고 `RecoveryFailed`로 정산한다. rollback·redirect가 불가능하면 검은 전환·입력 잠금을 유지한다. 자동 재생성·후보 축소는 아직 없다.
 
-**[후속 필수]** 랜드마크, 가로수, 폐차, 소형 지형지물, 내부, 가변 개수의 상자·적과 정식 전리품을 추가할 때 현재 준비 완료 gate를 유지하고 각 콘텐츠의 접근 가능성까지 확장해야 한다. 현재 구현은 기존 3개 시험 개체의 결정적 초기 배치일 뿐 동적 프리팹 spawn이나 위험·보상 예산 구현이 아니다.
+**[후속 필수]** 대형 랜드마크·다중 POI, 가로수, 폐차, 소형 지형지물, 내부, 가변 상자·적과 정식 전리품을 추가할 때 현재 준비 gate와 각 콘텐츠 접근 검증을 확장해야 한다. 현재 구현은 기존 3개 시험 개체의 결정적 초기 배치일 뿐 동적 프리팹 spawn이나 위험·보상 예산이 아니다.
 
 #### 후속 콘텐츠 배치가 필요로 하는 평가값 `[제안/미정]`
 

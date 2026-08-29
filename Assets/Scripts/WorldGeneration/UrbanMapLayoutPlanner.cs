@@ -5,10 +5,13 @@ namespace FantasySurvival.WorldGeneration
 {
     public static class UrbanMapLayoutPlanner
     {
-        public const int GeneratorVersion = 2;
-        public const int SpawnManifestVersion = 2;
+        public const int GeneratorVersion = 3;
+        public const int SpawnManifestVersion = 3;
 
         private static readonly float[] SpawnCandidateFractions = { 0.2f, 0.35f, 0.5f, 0.65f, 0.8f };
+        private const float PoiContentFacadeOffset = 0.75f;
+        private const float PoiApproachOffset = 0.9f;
+        private const string MedicalPoiStableId = "core:urban/medical_01";
 
         private struct EdgeDraft
         {
@@ -153,6 +156,15 @@ namespace FantasySurvival.WorldGeneration
                 parameters,
                 ref buildingRandom);
 
+            List<UrbanSpatialCandidate> candidates = BuildSpatialCandidates(roads, buildings);
+            List<UrbanPoiPlacement> pois = BuildPois(
+                candidates,
+                roads,
+                buildings,
+                localBounds,
+                entryLocalPosition,
+                portalLocalPosition);
+
             var layout = new UrbanMapLayout(
                 GeneratorVersion,
                 seed,
@@ -166,7 +178,9 @@ namespace FantasySurvival.WorldGeneration
                 nodes,
                 roads,
                 buildings,
-                protectedLocalPoints);
+                protectedLocalPoints,
+                candidates,
+                pois);
 
             if (!UrbanMapLayoutValidator.TryValidate(layout, parameters, out string layoutError))
             {
@@ -219,6 +233,13 @@ namespace FantasySurvival.WorldGeneration
 
             sortedRequests.Sort((left, right) =>
             {
+                int poiComparison = (right.RequiredPoiKind != UrbanPoiKind.None)
+                    .CompareTo(left.RequiredPoiKind != UrbanPoiKind.None);
+                if (poiComparison != 0)
+                {
+                    return poiComparison;
+                }
+
                 float leftMaximum = left.MaximumEntryDistance > 0f
                     ? left.MaximumEntryDistance
                     : float.PositiveInfinity;
@@ -231,12 +252,21 @@ namespace FantasySurvival.WorldGeneration
                     : System.StringComparer.Ordinal.Compare(left.StableId, right.StableId);
             });
 
-            List<SpawnCandidate> candidates = BuildSpawnCandidates(layout.Roads);
-            if (candidates.Count < sortedRequests.Count)
+            List<SpawnCandidate> candidates = BuildSpawnCandidates(layout.Candidates);
+            int roadRequestCount = 0;
+            for (int index = 0; index < sortedRequests.Count; index++)
+            {
+                if (sortedRequests[index].RequiredPoiKind == UrbanPoiKind.None)
+                {
+                    roadRequestCount++;
+                }
+            }
+
+            if (candidates.Count < roadRequestCount)
             {
                 error =
                     $"Urban map seed {layout.Seed} has only {candidates.Count} road spawn candidates " +
-                    $"for {sortedRequests.Count} bound entities.";
+                    $"for {roadRequestCount} road-bound entities.";
                 return false;
             }
 
@@ -245,6 +275,35 @@ namespace FantasySurvival.WorldGeneration
             for (int requestIndex = 0; requestIndex < sortedRequests.Count; requestIndex++)
             {
                 UrbanRaidSpawnRequest request = sortedRequests[requestIndex];
+                if (request.RequiredPoiKind != UrbanPoiKind.None)
+                {
+                    if (!layout.TryGetPoi(request.RequiredPoiKind, out UrbanPoiPlacement poi))
+                    {
+                        error =
+                            $"Urban map seed {layout.Seed} has no {request.RequiredPoiKind} POI " +
+                            $"for raid entity '{request.StableId}'.";
+                        return false;
+                    }
+
+                    if (!CanUseSpawnPosition(layout, request, poi.ContentLocalPosition, selected))
+                    {
+                        error =
+                            $"Urban map seed {layout.Seed} cannot safely bind raid entity " +
+                            $"'{request.StableId}' to POI '{poi.StableId}'.";
+                        return false;
+                    }
+
+                    var poiPlacement = new UrbanRaidSpawnPlacement(
+                        request.StableId,
+                        request.Kind,
+                        poi.ContentLocalPosition,
+                        poi.LocalYawDegrees,
+                        poi.ApproachLocalPosition);
+                    selected.Add(new SelectedSpawn(request, poiPlacement));
+                    placements.Add(poiPlacement);
+                    continue;
+                }
+
                 uint requestHash = StableStringHash(request.StableId);
                 uint selectionKey = DeriveSeed(
                     layout.Seed,
@@ -306,10 +365,37 @@ namespace FantasySurvival.WorldGeneration
             return true;
         }
 
-        private static List<SpawnCandidate> BuildSpawnCandidates(IReadOnlyList<UrbanRoadSegment> roads)
+        private static List<SpawnCandidate> BuildSpawnCandidates(
+            IReadOnlyList<UrbanSpatialCandidate> spatialCandidates)
         {
-            var candidates = new List<SpawnCandidate>(roads.Count * SpawnCandidateFractions.Length);
-            int candidateId = 0;
+            var candidates = new List<SpawnCandidate>();
+            for (int index = 0; index < spatialCandidates.Count; index++)
+            {
+                UrbanSpatialCandidate candidate = spatialCandidates[index];
+                if (candidate.Kind != UrbanSpatialCandidateKind.Roadside)
+                {
+                    continue;
+                }
+
+                candidates.Add(new SpawnCandidate(
+                    candidate.StableId,
+                    candidate.LocalPosition,
+                    candidate.LocalDirection));
+            }
+
+            return candidates;
+        }
+
+        private static List<UrbanSpatialCandidate> BuildSpatialCandidates(
+            IReadOnlyList<UrbanRoadSegment> roads,
+            IReadOnlyList<UrbanBuildingPlacement> buildings)
+        {
+            var candidates = new List<UrbanSpatialCandidate>(
+                roads.Count * SpawnCandidateFractions.Length + buildings.Count);
+            int stableId = 0;
+
+            // Preserve the original road-index/fraction-index order and numeric IDs.
+            // Existing non-POI spawn manifests depend on this exact sequence.
             for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
             {
                 UrbanRoadSegment road = roads[roadIndex];
@@ -323,14 +409,200 @@ namespace FantasySurvival.WorldGeneration
                 for (int fractionIndex = 0; fractionIndex < SpawnCandidateFractions.Length; fractionIndex++)
                 {
                     float fraction = SpawnCandidateFractions[fractionIndex];
-                    candidates.Add(new SpawnCandidate(
-                        candidateId++,
+                    candidates.Add(new UrbanSpatialCandidate(
+                        stableId++,
+                        UrbanSpatialCandidateKind.Roadside,
                         Vector2.Lerp(road.Start, road.End, fraction),
-                        direction));
+                        direction,
+                        sourceBuildingIndex: -1));
                 }
             }
 
+            for (int buildingIndex = 0; buildingIndex < buildings.Count; buildingIndex++)
+            {
+                UrbanBuildingPlacement building = buildings[buildingIndex];
+                Vector2 nearestRoadPoint = FindNearestRoadPoint(building.Center, roads);
+                Vector2 facadePoint = new Vector2(
+                    Mathf.Clamp(nearestRoadPoint.x, building.Footprint.xMin, building.Footprint.xMax),
+                    Mathf.Clamp(nearestRoadPoint.y, building.Footprint.yMin, building.Footprint.yMax));
+                Vector2 outward = nearestRoadPoint - facadePoint;
+                if (outward.sqrMagnitude <= 0.0001f)
+                {
+                    outward = nearestRoadPoint - building.Center;
+                }
+
+                if (outward.sqrMagnitude <= 0.0001f)
+                {
+                    outward = Vector2.down;
+                }
+
+                outward.Normalize();
+                Vector2 contentPosition = facadePoint + outward * PoiContentFacadeOffset;
+                Vector2 approachPosition = contentPosition + outward * PoiApproachOffset;
+                candidates.Add(new UrbanSpatialCandidate(
+                    stableId++,
+                    UrbanSpatialCandidateKind.BuildingApproach,
+                    approachPosition,
+                    outward,
+                    buildingIndex));
+            }
+
             return candidates;
+        }
+
+        private static List<UrbanPoiPlacement> BuildPois(
+            IReadOnlyList<UrbanSpatialCandidate> candidates,
+            IReadOnlyList<UrbanRoadSegment> roads,
+            IReadOnlyList<UrbanBuildingPlacement> buildings,
+            Rect localBounds,
+            Vector2 entryLocalPosition,
+            Vector2 portalLocalPosition)
+        {
+            UrbanSpatialCandidate selected = default;
+            Vector2 selectedContentPosition = default;
+            float selectedDistanceSquared = float.PositiveInfinity;
+            bool found = false;
+
+            for (int index = 0; index < candidates.Count; index++)
+            {
+                UrbanSpatialCandidate candidate = candidates[index];
+                if (candidate.Kind != UrbanSpatialCandidateKind.BuildingApproach ||
+                    candidate.SourceBuildingIndex < 0 ||
+                    candidate.SourceBuildingIndex >= buildings.Count)
+                {
+                    continue;
+                }
+
+                Vector2 contentPosition =
+                    candidate.LocalPosition - candidate.LocalDirection * PoiApproachOffset;
+                if (!ContainsPoint(localBounds, contentPosition) ||
+                    !ContainsPoint(localBounds, candidate.LocalPosition) ||
+                    ContainsPoint(buildings[candidate.SourceBuildingIndex].Footprint, contentPosition) ||
+                    ContainsPoint(buildings[candidate.SourceBuildingIndex].Footprint, candidate.LocalPosition) ||
+                    IsOnAnyRoad(contentPosition, roads) ||
+                    IsInsideAnyOtherBuilding(
+                        contentPosition,
+                        candidate.LocalPosition,
+                        candidate.SourceBuildingIndex,
+                        buildings) ||
+                    (contentPosition - entryLocalPosition).sqrMagnitude <
+                    UrbanRaidSpawnPrototypeRules.ChestEntryClearance *
+                    UrbanRaidSpawnPrototypeRules.ChestEntryClearance ||
+                    (contentPosition - portalLocalPosition).sqrMagnitude <
+                    UrbanRaidSpawnPrototypeRules.ChestPortalClearance *
+                    UrbanRaidSpawnPrototypeRules.ChestPortalClearance)
+                {
+                    continue;
+                }
+
+                float distanceSquared = (candidate.LocalPosition - entryLocalPosition).sqrMagnitude;
+                if (found && distanceSquared > selectedDistanceSquared + 0.0001f)
+                {
+                    continue;
+                }
+
+                if (found && Mathf.Abs(distanceSquared - selectedDistanceSquared) <= 0.0001f &&
+                    candidate.StableId >= selected.StableId)
+                {
+                    continue;
+                }
+
+                selected = candidate;
+                selectedContentPosition = contentPosition;
+                selectedDistanceSquared = distanceSquared;
+                found = true;
+            }
+
+            if (!found)
+            {
+                throw new System.InvalidOperationException(
+                    "Urban map generation produced no safe building approach for the Medical POI.");
+            }
+
+            float yaw = Mathf.Atan2(
+                selected.LocalDirection.x,
+                selected.LocalDirection.y) * Mathf.Rad2Deg;
+            return new List<UrbanPoiPlacement>
+            {
+                new UrbanPoiPlacement(
+                    MedicalPoiStableId,
+                    UrbanPoiKind.Medical,
+                    selected.SourceBuildingIndex,
+                    selectedContentPosition,
+                    selected.LocalPosition,
+                    yaw)
+            };
+        }
+
+        private static Vector2 FindNearestRoadPoint(
+            Vector2 localPosition,
+            IReadOnlyList<UrbanRoadSegment> roads)
+        {
+            Vector2 nearest = roads[0].Start;
+            float nearestDistanceSquared = float.PositiveInfinity;
+            for (int index = 0; index < roads.Count; index++)
+            {
+                UrbanRoadSegment road = roads[index];
+                Vector2 segment = road.End - road.Start;
+                float denominator = segment.sqrMagnitude;
+                float fraction = denominator <= 0.0001f
+                    ? 0f
+                    : Mathf.Clamp01(Vector2.Dot(localPosition - road.Start, segment) / denominator);
+                Vector2 point = Vector2.Lerp(road.Start, road.End, fraction);
+                float distanceSquared = (point - localPosition).sqrMagnitude;
+                if (distanceSquared < nearestDistanceSquared)
+                {
+                    nearest = point;
+                    nearestDistanceSquared = distanceSquared;
+                }
+            }
+
+            return nearest;
+        }
+
+        private static bool IsInsideAnyOtherBuilding(
+            Vector2 contentPosition,
+            Vector2 approachPosition,
+            int sourceBuildingIndex,
+            IReadOnlyList<UrbanBuildingPlacement> buildings)
+        {
+            for (int index = 0; index < buildings.Count; index++)
+            {
+                if (index == sourceBuildingIndex)
+                {
+                    continue;
+                }
+
+                Rect footprint = buildings[index].Footprint;
+                if (ContainsPoint(footprint, contentPosition) ||
+                    ContainsPoint(footprint, approachPosition))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsOnAnyRoad(
+            Vector2 localPosition,
+            IReadOnlyList<UrbanRoadSegment> roads)
+        {
+            for (int index = 0; index < roads.Count; index++)
+            {
+                if (UrbanMapLayoutValidator.RoadContainsPoint(roads[index], localPosition, 0.05f))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool ContainsPoint(Rect rect, Vector2 point)
+        {
+            return point.x >= rect.xMin && point.x <= rect.xMax &&
+                   point.y >= rect.yMin && point.y <= rect.yMax;
         }
 
         private static bool CanUseSpawnPosition(

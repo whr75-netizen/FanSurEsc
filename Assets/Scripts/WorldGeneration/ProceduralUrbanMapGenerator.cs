@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FantasySurvival.AI;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
@@ -10,7 +11,7 @@ namespace FantasySurvival.WorldGeneration
     [DefaultExecutionOrder(-10000)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(NavMeshSurface))]
-    public sealed class ProceduralUrbanMapGenerator : MonoBehaviour
+    public sealed class ProceduralUrbanMapGenerator : MonoBehaviour, IEnemyPatrolPointSource
     {
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
         private static readonly int ColorId = Shader.PropertyToID("_Color");
@@ -19,6 +20,7 @@ namespace FantasySurvival.WorldGeneration
         private static readonly Color SecondaryRoadColor = new Color(0.18f, 0.20f, 0.22f, 1f);
         private static readonly Color PrimaryRoadColor = new Color(0.25f, 0.27f, 0.29f, 1f);
         private static readonly Color BoundaryColor = new Color(0.24f, 0.12f, 0.11f, 1f);
+        private static readonly Color MedicalPoiBuildingColor = new Color(0.18f, 0.62f, 0.46f, 1f);
         private static readonly Color[] BuildingColors =
         {
             new Color(0.43f, 0.31f, 0.27f, 1f),
@@ -82,6 +84,12 @@ namespace FantasySurvival.WorldGeneration
         public bool NavigationBuildPending => pendingNavigationLayout != null;
         public Transform GeneratedContent => generatedContent;
         public UrbanMapGenerationParameters GenerationParameters => CreateParameters();
+        public bool IsPatrolPointSourceReady =>
+            CurrentLayout != null &&
+            generatedContent != null &&
+            !NavigationBuildPending &&
+            NavigationPathComplete;
+        public int PatrolPointCount => CurrentLayout?.Candidates?.Count ?? 0;
 
         /// <summary>
         /// Published after deterministic geometry and the portal pose exist, but before the
@@ -89,6 +97,22 @@ namespace FantasySurvival.WorldGeneration
         /// entities before their normal Awake methods capture home positions or initialize data.
         /// </summary>
         public event Action<UrbanMapLayout> LayoutGeometryGenerated;
+
+        public bool TryGetPatrolPoint(int index, out Vector3 worldPosition)
+        {
+            if (!IsPatrolPointSourceReady ||
+                index < 0 ||
+                index >= CurrentLayout.Candidates.Count)
+            {
+                worldPosition = default;
+                return false;
+            }
+
+            UrbanSpatialCandidate candidate = CurrentLayout.Candidates[index];
+            worldPosition = generatedContent.TransformPoint(
+                new Vector3(candidate.LocalPosition.x, 0f, candidate.LocalPosition.y));
+            return true;
+        }
 
         private void Awake()
         {
@@ -301,6 +325,7 @@ namespace FantasySurvival.WorldGeneration
                 $"Urban map generated. Version={layout.GeneratorVersion}, Seed={layout.Seed}, " +
                 $"Size={layout.LocalBounds.width:F1}x{layout.LocalBounds.height:F1}, " +
                 $"Roads={layout.Roads.Count}, Buildings={layout.Buildings.Count}, " +
+                $"Candidates={layout.Candidates.Count}, POIs={layout.Pois.Count}, " +
                 $"NavPathComplete={NavigationPathComplete}, Hash={layoutHash:X16}.",
                 this);
         }
@@ -471,12 +496,20 @@ namespace FantasySurvival.WorldGeneration
 
         private void CreateBuildings(UrbanMapLayout layout)
         {
+            bool hasMedicalPoi = layout.TryGetPoi(
+                UrbanPoiKind.Medical,
+                out UrbanPoiPlacement medicalPoi);
             for (int index = 0; index < layout.Buildings.Count; index++)
             {
                 UrbanBuildingPlacement building = layout.Buildings[index];
-                Color color = BuildingColors[Mathf.Abs(building.PaletteIndex) % BuildingColors.Length];
+                bool isMedicalPoi = hasMedicalPoi && medicalPoi.BuildingIndex == index;
+                Color color = isMedicalPoi
+                    ? MedicalPoiBuildingColor
+                    : BuildingColors[Mathf.Abs(building.PaletteIndex) % BuildingColors.Length];
                 CreatePrimitive(
-                    $"Building_{index:000}_Palette_{building.PaletteIndex}",
+                    isMedicalPoi
+                        ? $"Building_{index:000}_MedicalPoi"
+                        : $"Building_{index:000}_Palette_{building.PaletteIndex}",
                     PrimitiveType.Cube,
                     new Vector3(building.Center.x, building.Height * 0.5f, building.Center.y),
                     Quaternion.identity,

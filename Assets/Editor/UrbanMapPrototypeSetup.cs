@@ -25,7 +25,7 @@ namespace FantasySurvival.EditorTools
         private const string TestMeleeDefinitionPath =
             "Assets/GameData/Enemies/Definitions/PrototypeMeleeDamageOne.asset";
         private const string RaidChestLootPath =
-            "Assets/GameData/LootTables/PrototypeRaidChestLoot.asset";
+            "Assets/GameData/LootTables/PrototypeMedicalPoiLoot.asset";
         private const string MeleeCorpseLootPath =
             "Assets/GameData/LootTables/PrototypeMeleeCorpseLoot.asset";
         private const string RangedEnemyPrefabPath =
@@ -50,8 +50,7 @@ namespace FantasySurvival.EditorTools
                 ItemDatabase itemDatabase = LoadRequiredAsset<ItemDatabase>(ItemDatabasePath);
                 LootTableDefinition raidChestLoot = CreateOrUpdateLootTable(
                     RaidChestLootPath,
-                    new LootEntrySetup(1, 50f),
-                    new LootEntrySetup(2, 50f));
+                    new LootEntrySetup(7, 100f));
                 LootTableDefinition meleeCorpseLoot = CreateOrUpdateLootTable(
                     MeleeCorpseLootPath,
                     new LootEntrySetup(1, 100f));
@@ -250,6 +249,14 @@ namespace FantasySurvival.EditorTools
                     throw new BuildFailedException($"Urban layout seed {seed} generated no graybox buildings.");
                 }
 
+                if (!layout.TryGetPoi(UrbanPoiKind.Medical, out UrbanPoiPlacement medicalPoi) ||
+                    medicalPoi.BuildingIndex < 0 ||
+                    medicalPoi.BuildingIndex >= layout.Buildings.Count)
+                {
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} did not produce one valid Medical POI.");
+                }
+
                 hashes.Add(worldHash);
                 minimumWidth = Mathf.Min(minimumWidth, layout.LocalBounds.width);
                 maximumWidth = Mathf.Max(maximumWidth, layout.LocalBounds.width);
@@ -304,6 +311,18 @@ namespace FantasySurvival.EditorTools
                 {
                     throw new BuildFailedException(
                         $"Urban layout seed {seed} produced an invalid or duplicate spawn stable ID.");
+                }
+
+                if (request.RequiredPoiKind != UrbanPoiKind.None)
+                {
+                    if (!layout.TryGetPoi(request.RequiredPoiKind, out UrbanPoiPlacement poi) ||
+                        Vector2.Distance(placement.LocalPosition, poi.ContentLocalPosition) > 0.001f ||
+                        Vector2.Distance(placement.ApproachLocalPosition, poi.ApproachLocalPosition) > 0.001f)
+                    {
+                        throw new BuildFailedException(
+                            $"Urban layout seed {seed} did not bind '{placement.StableId}' to " +
+                            $"its required {request.RequiredPoiKind} POI.");
+                    }
                 }
 
                 if (Vector2.Distance(placement.LocalPosition, layout.EntryLocalPosition) + 0.001f <
@@ -456,7 +475,9 @@ namespace FantasySurvival.EditorTools
 
             return new[]
             {
-                UrbanRaidSpawnPrototypeRules.CreateChestRequest(RaidChestStableId),
+                UrbanRaidSpawnPrototypeRules.CreatePoiChestRequest(
+                    RaidChestStableId,
+                    UrbanPoiKind.Medical),
                 UrbanRaidSpawnPrototypeRules.CreateNearEntryMeleeRequest(MeleeEnemyStableId),
                 UrbanRaidSpawnPrototypeRules.CreateEnemyRequest(
                     RangedEnemyStableId,
@@ -674,6 +695,8 @@ namespace FantasySurvival.EditorTools
             SerializedProperty chest = FindOrAppendBinding(chests, RaidChestStableId);
             chest.FindPropertyRelative("stableId").stringValue = RaidChestStableId;
             chest.FindPropertyRelative("chest").objectReferenceValue = raidChest;
+            chest.FindPropertyRelative("requiredPoiKind").enumValueIndex =
+                (int)UrbanPoiKind.Medical;
 
             SerializedProperty enemies = serialized.FindProperty("enemies");
             SerializedProperty melee = FindOrAppendBinding(enemies, MeleeEnemyStableId);
@@ -777,8 +800,6 @@ namespace FantasySurvival.EditorTools
                     $"Prototype corpse LootTable validation failed: {corpseError}");
             }
 
-            bool sawFirstChestItem = false;
-            bool sawSecondChestItem = false;
             for (int seed = 0; seed < 256; seed++)
             {
                 if (!LootTableRoller.TryRollDefinitionIds(
@@ -803,15 +824,12 @@ namespace FantasySurvival.EditorTools
                         $"Repeated prototype Chest loot seed {seed} failed: {repeatedError}");
                 }
 
-                if (first.Count != 1 || repeated.Count != 1 || first[0] != repeated[0] ||
-                    (first[0] != 1 && first[0] != 2))
+                if (first.Count != 1 || repeated.Count != 1 ||
+                    first[0] != 7 || repeated[0] != 7)
                 {
                     throw new BuildFailedException(
-                        $"Prototype Chest loot seed {seed} was not deterministic or selected an invalid item.");
+                        $"Medical POI Chest loot seed {seed} did not deterministically select Medicine ID 7.");
                 }
-
-                sawFirstChestItem |= first[0] == 1;
-                sawSecondChestItem |= first[0] == 2;
 
                 if (!LootTableRoller.TryRollDefinitionIds(
                         meleeCorpseLoot,
@@ -824,12 +842,6 @@ namespace FantasySurvival.EditorTools
                     throw new BuildFailedException(
                         $"Prototype melee corpse loot seed {seed} failed: {corpseRollError}");
                 }
-            }
-
-            if (!sawFirstChestItem || !sawSecondChestItem)
-            {
-                throw new BuildFailedException(
-                    "Prototype Chest loot validation did not observe both configured 50% outcomes.");
             }
 
             var boundaryTable = ScriptableObject.CreateInstance<LootTableDefinition>();
@@ -973,7 +985,8 @@ namespace FantasySurvival.EditorTools
             if (!HasChestBinding(
                     serializedBinding.FindProperty("chests"),
                     RaidChestStableId,
-                    raidChest) ||
+                    raidChest,
+                    UrbanPoiKind.Medical) ||
                 !HasEnemyBinding(
                     serializedBinding.FindProperty("enemies"),
                     MeleeEnemyStableId,
@@ -1029,7 +1042,8 @@ namespace FantasySurvival.EditorTools
         private static bool HasChestBinding(
             SerializedProperty bindings,
             string stableId,
-            Chest expectedChest)
+            Chest expectedChest,
+            UrbanPoiKind expectedPoiKind)
         {
             int matchCount = 0;
             for (int index = 0; index < bindings.arraySize; index++)
@@ -1041,7 +1055,9 @@ namespace FantasySurvival.EditorTools
                 }
 
                 matchCount++;
-                if (binding.FindPropertyRelative("chest").objectReferenceValue != expectedChest)
+                if (binding.FindPropertyRelative("chest").objectReferenceValue != expectedChest ||
+                    binding.FindPropertyRelative("requiredPoiKind").enumValueIndex !=
+                    (int)expectedPoiKind)
                 {
                     return false;
                 }

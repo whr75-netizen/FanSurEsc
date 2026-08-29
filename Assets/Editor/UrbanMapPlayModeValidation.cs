@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using FantasySurvival.Inventory;
 using FantasySurvival.Interaction;
 using FantasySurvival.Raids;
 using FantasySurvival.SceneFlow;
@@ -28,6 +29,7 @@ namespace FantasySurvival.EditorTools
         private const string RaidChestStableId = "core:gamemaptest/test_loot_chest";
         private const string MeleeEnemyStableId = "core:gamemaptest/melee_enemy_01";
         private const string RangedEnemyStableId = "core:gamemaptest/ranged_enemy_01";
+        private const int MedicalPoiItemDefinitionId = 7;
         private const int RequiredRoundTrips = 1;
         private const int ReadyObservationCount = 2;
 
@@ -369,6 +371,9 @@ namespace FantasySurvival.EditorTools
             Require(layout != null, $"{context}: CurrentLayout is null.");
             Require(layout.Roads.Count > 0, $"{context}: no roads were generated.");
             Require(layout.Buildings.Count > 0, $"{context}: no graybox buildings were generated.");
+            Require(layout.Candidates.Count > 0, $"{context}: no shared spatial candidates were generated.");
+            Require(layout.TryGetPoi(UrbanPoiKind.Medical, out _),
+                $"{context}: Medical POI is missing from the authoritative layout.");
             Require(generator.GeneratedContent != null && generator.GeneratedContent.gameObject.activeInHierarchy,
                 $"{context}: generated content root is missing or inactive.");
             Require(generator.GeneratedContent.parent == generator.transform,
@@ -415,6 +420,10 @@ namespace FantasySurvival.EditorTools
             Require(manifest != null && manifest.Seed == generator.CurrentSeed,
                 $"{context}: raid spawn manifest is missing or belongs to another seed.");
             var stableIds = new System.Collections.Generic.HashSet<string>(StringComparer.Ordinal);
+            Require(generator.CurrentLayout.TryGetPoi(
+                    UrbanPoiKind.Medical,
+                    out UrbanPoiPlacement medicalPoi),
+                $"{context}: Medical POI placement is missing.");
             for (int index = 0; index < manifest.Count; index++)
             {
                 UrbanRaidSpawnPlacement placement = manifest.Placements[index];
@@ -424,6 +433,10 @@ namespace FantasySurvival.EditorTools
                 {
                     Require(placement.Kind == UrbanRaidSpawnKind.Chest,
                         $"{context}: required test Chest stable ID has the wrong spawn kind.");
+                    Require(
+                        Vector2.Distance(placement.LocalPosition, medicalPoi.ContentLocalPosition) <= 0.01f &&
+                        Vector2.Distance(placement.ApproachLocalPosition, medicalPoi.ApproachLocalPosition) <= 0.01f,
+                        $"{context}: test Chest is not bound to the Medical POI frontage.");
                 }
                 else if (placement.StableId == MeleeEnemyStableId ||
                          placement.StableId == RangedEnemyStableId)
@@ -432,17 +445,13 @@ namespace FantasySurvival.EditorTools
                         $"{context}: required test Enemy stable ID has the wrong spawn kind.");
                 }
 
-                if (placement.StableId == RaidChestStableId ||
-                    placement.StableId == MeleeEnemyStableId)
+                if (placement.StableId == MeleeEnemyStableId)
                 {
-                    float maximumEntryDistance = placement.StableId == RaidChestStableId
-                        ? UrbanRaidSpawnPrototypeRules.ChestMaximumEntryDistance
-                        : UrbanRaidSpawnPrototypeRules.NearMeleeMaximumEntryDistance;
                     Require(
                         Vector2.Distance(
                             placement.LocalPosition,
                             generator.CurrentLayout.EntryLocalPosition) <=
-                        maximumEntryDistance + 0.01f,
+                        UrbanRaidSpawnPrototypeRules.NearMeleeMaximumEntryDistance + 0.01f,
                         $"{context}: required nearby raid spawn '{placement.StableId}' is outside its test radius.");
                 }
 
@@ -467,6 +476,7 @@ namespace FantasySurvival.EditorTools
             int groundCount = 0;
             int roadCount = 0;
             int buildingCount = 0;
+            int medicalPoiBuildingCount = 0;
             int boundaryCount = 0;
 
             for (int childIndex = 0; childIndex < generated.childCount; childIndex++)
@@ -495,6 +505,10 @@ namespace FantasySurvival.EditorTools
                 if (child.name.StartsWith("Building_", StringComparison.Ordinal))
                 {
                     buildingCount++;
+                    if (child.name.EndsWith("_MedicalPoi", StringComparison.Ordinal))
+                    {
+                        medicalPoiBuildingCount++;
+                    }
                     Require(child.TryGetComponent(out Collider buildingCollider) && buildingCollider.enabled,
                         $"{context}: building '{child.name}' has no enabled collider.");
                     Require(child.CompareTag("Obstacle"), $"{context}: building '{child.name}' is not tagged Obstacle.");
@@ -519,6 +533,8 @@ namespace FantasySurvival.EditorTools
                 $"{context}: generated road object count {roadCount} does not match layout count {generator.CurrentLayout.Roads.Count}.");
             Require(buildingCount == generator.CurrentLayout.Buildings.Count,
                 $"{context}: generated building object count {buildingCount} does not match layout count {generator.CurrentLayout.Buildings.Count}.");
+            Require(medicalPoiBuildingCount == 1,
+                $"{context}: expected one Medical POI building, found {medicalPoiBuildingCount}.");
             Require(boundaryCount == 4, $"{context}: expected four map boundaries, found {boundaryCount}.");
         }
 
@@ -561,6 +577,8 @@ namespace FantasySurvival.EditorTools
             EnemyAIController ranged = FindEnemyByName(activeScene, RangedEnemyObjectName);
             Require(melee != null, $"{context}: required melee test Enemy is missing.");
             Require(ranged != null, $"{context}: preserved ranged test Enemy is missing.");
+            Require(melee.HasRequiredPatrolPointSourceBinding && ranged.HasRequiredPatrolPointSourceBinding,
+                $"{context}: procedural-map Enemies did not receive the shared patrol point source.");
             ValidateRequiredEnemy(melee, EnemyCombatArchetype.MeleeRush, context);
             ValidateRequiredEnemy(ranged, EnemyCombatArchetype.RangedPursuit, context);
 
@@ -574,7 +592,7 @@ namespace FantasySurvival.EditorTools
             Chest rangedCorpse = FindOnlyCorpseInventory(ranged, context);
             Require(raidChest != null,
                 $"{context}: required nearby test Chest is missing.");
-            ValidateRolledLootChest(raidChest, context);
+            ValidateRolledLootChest(raidChest, context, MedicalPoiItemDefinitionId);
             ValidateRolledLootChest(meleeCorpse, context);
             Require(rangedCorpse.chestInventoryData != null,
                 $"{context}: preserved ranged Enemy corpse inventory is not initialized.");
@@ -606,7 +624,10 @@ namespace FantasySurvival.EditorTools
             return chests[0];
         }
 
-        private static void ValidateRolledLootChest(Chest chest, string context)
+        private static void ValidateRolledLootChest(
+            Chest chest,
+            string context,
+            int expectedItemDefinitionId = 0)
         {
             Require(chest.LootTable != null,
                 $"{context}: required test Chest '{chest.name}' has no LootTableDefinition.");
@@ -614,17 +635,28 @@ namespace FantasySurvival.EditorTools
                 $"{context}: required test Chest '{chest.name}' has no runtime inventory.");
 
             int itemCount = 0;
+            int foundItemDefinitionId = 0;
             for (int index = 0; index < chest.chestInventoryData.CellData.Length; index++)
             {
                 if (chest.chestInventoryData.CellData[index] != null)
                 {
                     itemCount++;
+                    if (chest.chestInventoryData.CellData[index] is InventoryItemData item)
+                    {
+                        foundItemDefinitionId = item.Id;
+                    }
                 }
             }
 
             Require(itemCount == 1,
                 $"{context}: required test Chest '{chest.name}' expected one rolled item, " +
                 $"found {itemCount}.");
+            if (expectedItemDefinitionId > 0)
+            {
+                Require(foundItemDefinitionId == expectedItemDefinitionId,
+                    $"{context}: required test Chest '{chest.name}' expected item ID " +
+                    $"{expectedItemDefinitionId}, found {foundItemDefinitionId}.");
+            }
         }
 
         private static void ValidateShellAndSpawn(string expectedSpawnId, bool captureIdentity)

@@ -1,6 +1,6 @@
 # 현재 구현·검증 상태
 
-**마지막 갱신:** 2026-08-29
+**마지막 갱신:** 2026-08-30
 **역할:** 현재 구현·검증과 재개방 조건의 단일 인덱스
 
 ## 판정 규칙
@@ -46,7 +46,7 @@
 | `INFO-01` | 게임플레이 계약 §4.9·5, GDD §3.4·9.1·10.2·10.15 |
 | `PIXEL-01` | GDD §14; 현재는 재사용 요청 전까지 계약을 확장하지 않음 |
 | `SPAWN-01` | 게임플레이 계약 §4.3, `GAME_FLOW.md` §5, GDD §7.8~7.11, 개발계획 §14.1 |
-| `GAP-POI` | 게임플레이 계약 §4.3, GDD §7.5·7.7·7.10, 개발계획 §14.1 |
+| `POI-01` | 게임플레이 계약 §4.3, GDD §7.5·7.7·7.10, 개발계획 §14.1 |
 | `LOOT-01` | 게임플레이 계약 §4.2~4.3, `GAME_FLOW.md` §5, GDD §5.7·7.9 |
 | `GAP-COMBAT` | 게임플레이 계약 §4.5, GDD §4.5~4.7·18.1 |
 | `GAP-AI-TACTICS` | 게임플레이 계약 §4.6·4.10, GDD §6.6~6.12, `ai_generation_plan.md` §6~11 |
@@ -71,12 +71,13 @@
 | `ENVIRONMENT-01` | 야외 시간·하늘광 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~66 | 영속 시간·주광; 낮밤·제한 그림자; 고정크기·가변경계 구름 | 날씨·실내·UI·저장·풍향 변경 |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53 | click·drag·stack·Shift/Ctrl; 우클릭·Alt; W1→W3 첫 빈 호환칸; 부분 stack 변경 통지; runtime 장전탄·Save v7 | 소유권·수량·장전탄·grid·장비·저장 형식 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 이동장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
-| `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19 | NavMesh 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
+| `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67 | 고정 맵 임의/도심 공유후보 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
-| `MAP-01` | 도심 도로·Cube 건물·런타임 NavMesh | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §14 | seed 기반 연결 도로와 막힌 Cube 건물, Entry→Portal 경로 | 도로·건물 생성 규칙 직접 변경 |
+| `MAP-01` | 도심 도로·Cube 건물·런타임 NavMesh | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §14·67 | seed 도로·Cube·공유 공간후보와 Entry→Portal 경로 | 생성 규칙·후보 계약 변경 |
 | `MAP-ARRIVAL-01` | 원정 맵 도착 안전 gate | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §32·34 | Ready 뒤 공개; Invalid는 covered 기지 복귀, 불가 시 잠금 보류 | readiness·도착·rollback·redirect 변경 |
-| `SPAWN-01` | 도심 시험 적·상자 seed 배치 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §33~34 | 필수 시험 Chest·근접 적은 Entry 근처, 원거리 적은 보존; list binding·stable manifest·NavMesh·Resume hash 검증, 전역 개수 제한 없음 | 프리팹 카탈로그·배치 규칙·binding·Recovery hash 변경 |
-| `LOOT-01` | seed 기반 시험 LootTable | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §34 | `Chest → LootTable → ItemDatabase`; Fresh 1회 원자 적용, Resume은 저장 grid 복원, table 미지정은 기존 초기값 유지 | 다중 roll·수량·희귀도·위험 예산·모드 ID 정책 추가 |
+| `SPAWN-01` | 도심 시험 적·상자 seed 배치 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §33~34·67 | 기존 Chest/Enemy를 binding·stable manifest로 배치; 의료 Chest는 POI 앞, 적은 도로 후보; NavMesh·Resume hash 검증 | 프리팹 카탈로그·배치 규칙·binding·Recovery hash 변경 |
+| `POI-01` | 의료 POI | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §67 | seed당 청록 Cube 1·앞 Chest·치료제 ID 7·접근 경로 | 내부·다중 POI·위험/보상 예산 추가 |
+| `LOOT-01` | seed 기반 시험 LootTable | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §34·67 | Fresh 원자 roll, Resume grid 복원; 의료 POI는 ID 7, table 미지정은 초기값 유지 | 다중 roll·수량·희귀도·위험 예산 추가 |
 | `BASE-01` | 기지 Chest·가구 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §18 | stable ID별 grid와 중첩 아이템, 왕복·backup 복원 | 배치 가능한 가구나 layout migration 추가 |
 | `RAID-01` | 기지/원정 Escape·생환·사망·포기 결과 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §21·35 | 생환은 즉시 확정·피해 차단 뒤 자동 기지 정산, commit 뒤 `확인`만 표시; 포기·사망 분기는 기존 정책 유지 | 메뉴나 결과 정책 직접 변경 |
 | `SAVE-01` | ordinary save·원정 Recovery·결과 정산 | `ACTIVE` | `PLAYER` | `PROTOTYPE` | 진행 §22~23·48·52~53 | marker 우선·Resume·정산; 기존 slot New 확인, Base→Main 저장 성공 gate; v7과 v2~v6 이관 | schema·정산·Recovery 경계 직접 변경 |
@@ -92,7 +93,6 @@
 
 | ID | 상태 | 실제 공백 | 선행조건·금지선 |
 |---|---|---|---|
-| `GAP-POI` | `ABSENT` | 접근 가능한 POI·건물 내부·랜드마크 없음 | Spawn→Portal 경로와 별도 접근 가능성 검증 |
 | `GAP-COMBAT` | `DECISION` | Player 시험 탄약·3발 탄창·2.5초 장전은 연결됨; 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·방어 미정 | 현재 시험값을 최종 밸런스로 확대하지 않고 사용자 전투 규칙 결정 뒤 진행 |
 | `GAP-AI-TACTICS` | `DECISION` | 엄폐·도주·저격·분대 전술 미구현 | `AI-01`을 폐기하지 않고 다음 전술 단계로 확장 |
 | `GAP-LOSS` | `DECISION` | provenance 기반 선별 손실 미정 | 현재 전체 보존/전체 소실 정산을 임의 변경하지 않음 |

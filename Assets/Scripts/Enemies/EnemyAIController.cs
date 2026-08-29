@@ -51,6 +51,7 @@ public sealed class EnemyAIController : MonoBehaviour
     private IDamageable playerDamageable;
     private Transform currentTarget;
     private IDamageable currentTargetDamageable;
+    private IEnemyPatrolPointSource patrolPointSource;
     private EnemyAISettings settings;
     private Vector3 homePosition;
     private Vector3 lastKnownPosition;
@@ -72,6 +73,7 @@ public sealed class EnemyAIController : MonoBehaviour
     private bool navigationHomeInitialized;
     private bool movingPresentation;
     private bool configurationValid;
+    private bool patrolPointSourceRequired;
 
     public EnemyAwarenessState State { get; private set; } = EnemyAwarenessState.AwaitingNavigation;
     public EnemyAISettings Settings => settings;
@@ -81,6 +83,29 @@ public sealed class EnemyAIController : MonoBehaviour
     public bool IsNavigationReady => agent != null && agent.enabled && agent.isOnNavMesh;
     public int RangedShotsAttempted { get; private set; }
     public int RangedHitsApplied { get; private set; }
+    public bool HasRequiredPatrolPointSourceBinding =>
+        patrolPointSourceRequired &&
+        patrolPointSource != null &&
+        (!(patrolPointSource is UnityEngine.Object sourceObject) || sourceObject != null);
+
+    /// <summary>
+    /// Explicitly supplies map-derived patrol points. Procedural maps set
+    /// <paramref name="requireSource"/> so an unavailable derived layout cannot be hidden by
+    /// unrelated random NavMesh patrol. Fixed maps leave the source unbound and retain the
+    /// existing random patrol behavior.
+    /// </summary>
+    public void BindPatrolPointSource(IEnemyPatrolPointSource source, bool requireSource)
+    {
+        patrolPointSource = source;
+        patrolPointSourceRequired = requireSource;
+
+        if (Application.isPlaying && State == EnemyAwarenessState.Patrol)
+        {
+            hasPatrolDestination = false;
+            patrolWaitUntil = Time.time;
+            TryStopAgent();
+        }
+    }
 
     private void Awake()
     {
@@ -595,6 +620,71 @@ public sealed class EnemyAIController : MonoBehaviour
 
     private bool TryChoosePatrolDestination(out Vector3 destination)
     {
+        if (TryGetReadyPatrolPointSource(out IEnemyPatrolPointSource source))
+        {
+            if (TryChooseProvidedPatrolDestination(source, out destination))
+            {
+                return true;
+            }
+
+            if (patrolPointSourceRequired)
+            {
+                destination = default;
+                return false;
+            }
+        }
+        else if (patrolPointSourceRequired)
+        {
+            destination = default;
+            return false;
+        }
+
+        return TryChooseRandomPatrolDestination(out destination);
+    }
+
+    private bool TryChooseProvidedPatrolDestination(
+        IEnemyPatrolPointSource source,
+        out Vector3 destination)
+    {
+        int candidateCount = source.PatrolPointCount;
+        int startIndex = patrolRandom.Next(0, candidateCount);
+        int scanDirection = patrolRandom.Next(0, 2) == 0 ? 1 : -1;
+        int pathAttemptCount = 0;
+
+        // Cheap radius/recent-point filters may scan the shared immutable cache, but
+        // expensive NavMesh path calculations remain capped at the existing attempt budget.
+        for (int scanOffset = 0; scanOffset < candidateCount; scanOffset++)
+        {
+            int candidateIndex = PositiveModulo(
+                startIndex + scanOffset * scanDirection,
+                candidateCount);
+            if (!source.TryGetPatrolPoint(candidateIndex, out Vector3 candidate))
+            {
+                continue;
+            }
+
+            bool valid = TryValidatePatrolDestination(
+                candidate,
+                enforceHomeRadius: true,
+                out destination,
+                out bool pathChecked);
+            if (valid)
+            {
+                return true;
+            }
+
+            if (pathChecked && ++pathAttemptCount >= PatrolCandidateAttempts)
+            {
+                break;
+            }
+        }
+
+        destination = default;
+        return false;
+    }
+
+    private bool TryChooseRandomPatrolDestination(out Vector3 destination)
+    {
         for (int attempt = 0; attempt < PatrolCandidateAttempts; attempt++)
         {
             float angle = NextFloat(0f, Mathf.PI * 2f);
@@ -609,27 +699,81 @@ public sealed class EnemyAIController : MonoBehaviour
                 continue;
             }
 
-            Vector3 fromCurrent = hit.position - Position;
-            fromCurrent.y = 0f;
-            if (fromCurrent.sqrMagnitude <
-                settings.PatrolMinimumTravel * settings.PatrolMinimumTravel ||
-                IsRecentPatrolPoint(hit.position))
+            if (!TryValidatePatrolDestination(
+                    hit.position,
+                    enforceHomeRadius: false,
+                    out destination,
+                    out _))
             {
                 continue;
             }
 
-            if (!NavMesh.CalculatePath(Position, hit.position, agent.areaMask, patrolPath) ||
-                patrolPath.status != NavMeshPathStatus.PathComplete)
-            {
-                continue;
-            }
-
-            destination = hit.position;
             return true;
         }
 
         destination = default;
         return false;
+    }
+
+    private bool TryGetReadyPatrolPointSource(out IEnemyPatrolPointSource source)
+    {
+        source = patrolPointSource;
+        if (source == null ||
+            (source is UnityEngine.Object sourceObject && sourceObject == null) ||
+            !source.IsPatrolPointSourceReady ||
+            source.PatrolPointCount <= 0)
+        {
+            source = null;
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool TryValidatePatrolDestination(
+        Vector3 candidate,
+        bool enforceHomeRadius,
+        out Vector3 destination,
+        out bool pathChecked)
+    {
+        pathChecked = false;
+        if (enforceHomeRadius)
+        {
+            Vector3 fromHome = candidate - homePosition;
+            fromHome.y = 0f;
+            if (fromHome.sqrMagnitude > settings.PatrolRadius * settings.PatrolRadius)
+            {
+                destination = default;
+                return false;
+            }
+        }
+
+        Vector3 fromCurrent = candidate - Position;
+        fromCurrent.y = 0f;
+        if (fromCurrent.sqrMagnitude <
+            settings.PatrolMinimumTravel * settings.PatrolMinimumTravel ||
+            IsRecentPatrolPoint(candidate))
+        {
+            destination = default;
+            return false;
+        }
+
+        pathChecked = true;
+        if (!NavMesh.CalculatePath(Position, candidate, agent.areaMask, patrolPath) ||
+            patrolPath.status != NavMeshPathStatus.PathComplete)
+        {
+            destination = default;
+            return false;
+        }
+
+        destination = candidate;
+        return true;
+    }
+
+    private static int PositiveModulo(int value, int modulus)
+    {
+        int remainder = value % modulus;
+        return remainder < 0 ? remainder + modulus : remainder;
     }
 
     private bool IsRecentPatrolPoint(Vector3 candidate)

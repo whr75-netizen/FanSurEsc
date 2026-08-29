@@ -244,6 +244,7 @@ MonoBehaviour:
   chests:
   - stableId: core:gamemaptest/test_loot_chest
     chest: {fileID: 656353461}
+    requiredPoiKind: 1
   enemies:
   - stableId: core:gamemaptest/melee_enemy_01
     stats: {fileID: 1858696690}
@@ -520,7 +521,7 @@ MonoBehaviour:
   chestHeight: 5
   itemDatabase: {fileID: 11400000, guid: d38ab357628cdf24c9542351dd577b53, type: 2}
   startingItemIds: 
-  lootTable: {fileID: 11400000, guid: 1242a792261b13741bdd37cac3da87eb, type: 2}
+  lootTable: {fileID: 11400000, guid: e6f4a1dcf0b625947a5425deabb65533, type: 2}
 --- !u!23 &656353462
 MeshRenderer:
   m_ObjectHideFlags: 0

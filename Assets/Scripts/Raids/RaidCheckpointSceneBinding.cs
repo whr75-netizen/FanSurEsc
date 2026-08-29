@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FantasySurvival.AI;
 using FantasySurvival.Inventory;
 using FantasySurvival.SaveSystem;
 using FantasySurvival.SceneFlow;
@@ -26,9 +27,11 @@ namespace FantasySurvival.Raids
         {
             [SerializeField] private string stableId;
             [SerializeField] private Chest chest;
+            [SerializeField] private UrbanPoiKind requiredPoiKind;
 
             public string StableId => stableId;
             public Chest Chest => chest;
+            public UrbanPoiKind RequiredPoiKind => requiredPoiKind;
         }
 
         [Serializable]
@@ -265,6 +268,12 @@ namespace FantasySurvival.Raids
                     return;
                 }
 
+                if (!TryBindEnemyPatrolSources(out string patrolSourceError))
+                {
+                    spawnPreparationError = patrolSourceError;
+                    return;
+                }
+
                 if (!TryBuildSpawnRequests(out List<UrbanRaidSpawnRequest> requests, out string requestError))
                 {
                     spawnPreparationError = requestError;
@@ -303,7 +312,11 @@ namespace FantasySurvival.Raids
             requests = new List<UrbanRaidSpawnRequest>(chests.Length + enemies.Length);
             foreach (ChestBinding binding in chests)
             {
-                requests.Add(UrbanRaidSpawnPrototypeRules.CreateChestRequest(binding.StableId));
+                requests.Add(binding.RequiredPoiKind == UrbanPoiKind.None
+                    ? UrbanRaidSpawnPrototypeRules.CreateChestRequest(binding.StableId)
+                    : UrbanRaidSpawnPrototypeRules.CreatePoiChestRequest(
+                        binding.StableId,
+                        binding.RequiredPoiKind));
             }
 
             foreach (EnemyBinding binding in enemies)
@@ -322,6 +335,26 @@ namespace FantasySurvival.Raids
                         binding.StableId,
                         ai.VisionRange,
                         ai.PatrolRadius));
+            }
+
+            error = null;
+            return true;
+        }
+
+        private bool TryBindEnemyPatrolSources(out string error)
+        {
+            IEnemyPatrolPointSource source = mapGenerator;
+            foreach (EnemyBinding binding in enemies)
+            {
+                EnemyAIController ai = binding.Stats.GetComponent<EnemyAIController>();
+                if (ai == null)
+                {
+                    error =
+                        $"Raid Enemy '{binding.StableId}' has no EnemyAIController for map patrol binding.";
+                    return false;
+                }
+
+                ai.BindPatrolPointSource(source, requireSource: true);
             }
 
             error = null;
@@ -932,6 +965,8 @@ namespace FantasySurvival.Raids
                 if (binding == null ||
                     string.IsNullOrWhiteSpace(binding.StableId) ||
                     binding.Chest == null ||
+                    (binding.RequiredPoiKind != UrbanPoiKind.None &&
+                     binding.RequiredPoiKind != UrbanPoiKind.Medical) ||
                     !boundInventories.Add(binding.Chest) ||
                     !spawnTargets.Add(binding.Chest.transform) ||
                     !allIds.Add(binding.StableId))
@@ -949,6 +984,7 @@ namespace FantasySurvival.Raids
                 if (binding == null ||
                     string.IsNullOrWhiteSpace(binding.StableId) ||
                     binding.Stats == null ||
+                    binding.Stats.GetComponent<EnemyAIController>() == null ||
                     binding.CorpseInventory == null ||
                     binding.CorpseInventory.GetComponentInParent<EnemyStats>() != binding.Stats ||
                     !boundInventories.Add(binding.CorpseInventory) ||

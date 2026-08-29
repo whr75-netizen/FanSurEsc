@@ -1674,3 +1674,15 @@ Interactable (abstract base class)
 - `[비용 경계]` 전처리 대상은 화면 해상도나 수신 오브젝트 수와 무관한 4,096 texel이다. 현재 60초 하루·1게임분 조명 step의 최대 약 24회/초에서도 source sample은 약 98,304회/초이고 추가 RenderTexture는 RGBA32 약 16KiB 한 장이다. 이는 구조상 상한 계산이며 GPU Profiler 실측 전에는 성능 영향이 0이라고 단정하지 않는다.
 - `[Unity 컴파일·Play Mode 호출 확인]` C# compilation, Profile 유효성, 원본 7 mip·Trilinear, filter shader compiler error 0을 확인했다. 한 `GameMap1` Play Session에서 정오/18시/22시 모두 지면 footprint `(24.000,24.000)`을 유지했고 runtime Cookie는 RenderTexture, 전처리 RT·Material은 각각 1개였다. 출력 RT는 정오 `mip 0.25 / opacity 0.90 / 명도 112~255 / 4단계 / 이웃차 4.973`, 18시 `mip 1.25 / opacity 0.55 / 명도 168~255 / 28단계 / 이웃차 3.081`, 22시는 정오와 같은 값으로, 지평선 구간의 경계와 농도가 실제 출력 데이터에서 낮아졌다. Play Mode 종료 뒤 두 runtime resource가 모두 0개로 해제된 것도 확인했다.
 - `[보존·미검증]` §65의 24×24 지면 크기와 `+X 0.75` 이동 계산, 낮밤 광량·오브젝트 Soft Shadow, Player 셸·Camera·씬·저장과 사용자 dirty scene/material/preview prefab은 변경하지 않았다. Game Camera 지정 캡처에는 Unity AI Assistant가 Unity 6 legacy hash를 Instance ID로 찾지 못해 도구 오류 2건이 Console에 남았으며, 변경 코드·filter shader 오류는 확인되지 않았다. 사용자 체감 선명도·GPU Profiler·Player build는 미검증이다.
+
+---
+
+## 67. 도심 공유 공간 후보와 의료 POI `[MAP-01][SPAWN-01][POI-01][LOOT-01][AI-01]`
+
+- `[사용자 요청][2026-08-30]` 실제 건물·내부는 만들지 않고 특정 Cube를 다른 색의 건물로 취급하며, 그 앞 상자를 회복약/일반 같은 의미 분류로 연결하는 최소 절차 콘텐츠를 구현했다.
+- `[권위·배치]` `UrbanMapLayout`이 도로 후보와 모든 건물의 도로 방향 접근 후보, seed당 `Medical` POI 하나를 불변 read-only 데이터로 한 번 소유한다. 청록 건물 색·이름은 표현이며 분류 원본은 `UrbanPoiKind.Medical`이다. 기존 authored Chest 인스턴스는 stable binding과 manifest를 통해 POI 외벽 앞 content 위치로 이동하고 별도 접근점은 NavMesh로 검증한다.
+- `[AI 재사용]` `ProceduralUrbanMapGenerator`가 좁은 `IEnemyPatrolPointSource`를 구현하고 scene binding이 기존 두 Enemy에 명시 주입한다. AI는 시작 반경·최근점의 값싼 필터 뒤 완전 경로를 최대 8회 계산하며, 필수 도심 provider가 준비되지 않으면 임의 순찰 fallback으로 오류를 덮지 않는다. provider가 없는 고정 맵의 기존 임의 NavMesh 순찰은 유지한다.
+- `[Loot·저장]` 기존 시험 Chest에 별도 `PrototypeMedicalPoiLoot`를 연결해 Fresh에서 치료제 Item ID 7 하나를 지급한다. 기존 일반 `PrototypeRaidChestLoot` 에셋, Chest/UI/행동시간·ItemDatabase·Fresh 원자 적용·Resume grid 복원과 entity roster는 보존했다. POI 의미와 위치를 layout/world hash에 넣고 generator·spawn manifest를 v3으로 올려 이전 v2 진행 중 원정은 다른 맵으로 조용히 복원하지 않고 기존 Recovery 실패 경계를 따른다.
+- `[Unity 컴파일·순수 검증]` 전체 C# 컴파일에 성공했다. 기본 설정 seed 0~255 각각에서 같은 seed 결정성, 의료 POI 1개, 기존 순서의 Roadside와 건물 접근 후보, 일반/의료 manifest를 확인했다.
+- `[Play Mode 1회]` 사용자의 dirty `GameMap1`을 저장·닫지 않고 깨끗한 `GameMapTest`만 additive로 한 번 실행했다. seed `1999354186`에서 의료 건물 1개(index 0), 공유 후보 395개, Entry→Portal과 POI 접근 complete path, 기존 Chest의 POI 위치, 치료제 ID 7 한 칸, Enemy 2개의 provider 주입·NavMesh 준비와 Raid readiness `Ready`를 확인했다. 종료 뒤 `GameMap1`을 dirty 상태 그대로 활성 복원했다.
+- `[남은 범위]` 건물 내부·문·방, 대형 랜드마크·다중 POI, 일반/의료 상자의 동시 fixture, 가변 개수 동적 spawn, 위험·보상 예산과 엄폐·생태 전술은 구현하지 않았다. Console에는 변경 전 Unity AI Assistant camera ID 오류 2건과 외부 `ASFolliage` shadow keyword 중복 2건만 남아 있으며 이번 런타임 오류는 추가되지 않았다.

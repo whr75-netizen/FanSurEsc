@@ -1251,6 +1251,7 @@ seed + generator version
 → 가변 크기와 연결 도로
 → 필지 분할
 → 충돌하지 않는 Cube 건물
+→ 도로·건물 접근 공유 후보와 의미 POI
 → 보호 지점 유지
 → NavMesh 생성
 → RaidEntry에서 ReturnPortal까지 경로 결과
@@ -1279,6 +1280,7 @@ seed + generator version
 
 - 도로 확정 뒤 남은 필지에 Cube 건물을 배치한다.
 - 건물 높이와 색을 변화시킨다.
+- seed당 한 건물은 `Medical` 의미 POI로 선택해 청록색으로 구분한다.
 - 도로, 보호 지점과 다른 건물을 침범하지 않는다.
 - collider와 Not Walkable 영역을 가진다.
 
@@ -1292,16 +1294,23 @@ seed + generator version
 
 실제 프리팹 교체 시 footprint와 접근 지점 데이터가 Cube 점유 규칙과 일치해야 한다.
 
-### 7.5 랜드마크 `[후속]`
+### 7.5 POI·랜드마크 `[현재 시험/후속]`
 
-#### 7.5.1 역할
+#### 7.5.1 현재 의료 POI
+
+- layout의 `UrbanPoiKind.Medical`이 분류 원본이며 색·오브젝트 이름은 표현이다.
+- Entry에서 가장 가까운 안전한 건물 접근 후보 하나를 선택하고, Cube 외벽 앞에 기존 authored Chest를 이동한다.
+- 접근점의 complete NavMesh 경로를 도착 gate에서 확인하고, Fresh 상자는 치료제 Item ID 7 하나를 지급한다.
+- 건물 내부·문·방은 아직 없으며, 기존 일반 Chest 클래스와 인벤토리·Recovery 저장 경계를 재사용한다.
+
+#### 7.5.2 역할
 
 - 방향 인식
 - 고유 위험·보상
 - 맵별 기억과 재방문 동기
 - 환경 서사
 
-#### 7.5.2 후보 유형 `[설계 제안]`
+#### 7.5.3 후보 유형 `[설계 제안]`
 
 - 대형 상업 시설
 - 무너진 공공 시설
@@ -1376,9 +1385,9 @@ seed + generator version
 
 - binding 목록의 씬 직렬화 Chest·Enemy를 재사용하며 런타임 복제는 하지 않는다. 현재 fixture가 Chest 1개·Enemy 2개인 것은 시험 편의를 위한 구성이다.
 - 같은 seed와 stable ID는 같은 초기 위치·회전을 만들고, Resume은 Enemy의 저장된 현재 Transform을 그 뒤에 복원한다.
-- Enemy Entry 보호는 각 정의의 시야·순찰 반경을 반영하고, Chest는 도로 가장자리에 두되 도로 중심의 접근점을 검증한다.
+- Enemy Entry 보호는 각 정의의 시야·순찰 반경을 반영한다. 적은 도로 후보, 의료 Chest는 POI 건물 전면과 별도 접근점을 사용한다.
 - 후보 부족, Entry·Portal 보호 위반, 중첩 또는 개별 NavMesh 접근 실패는 맵 전체를 `Invalid`로 닫는다.
-- 현재 시험 Chest와 근접 적 시체는 `LootTableDefinition`을 사용하고, LootTable 미지정 컨테이너는 기존 authored 초기값을 유지한다. 위험 예산·가변 개수·프리팹 카탈로그는 아직 없다.
+- 현재 시험 Chest는 의료 전용 `LootTableDefinition`으로 치료제 ID 7, 근접 적 시체는 기존 시험 table을 사용한다. 미지정 컨테이너는 authored 초기값을 유지하며 위험 예산·가변 개수·프리팹 카탈로그는 아직 없다.
 
 #### 7.9.2 후속 후보 처리 순서
 
@@ -1406,8 +1415,8 @@ seed + generator version
 #### 7.10.1 현재
 
 - `NavigationPathComplete` 결과를 산출한다.
-- 256개 seed의 도로 연결·점유 충돌과 stable ID spawn manifest의 결정성·보호 거리·상호 간격을 코드 검증했다.
-- 실제 Play Mode 생성 layout의 Spawn→Portal 완전 경로를 확인했다.
+- 256개 seed의 도로 연결·점유 충돌, 공유 후보·의료 POI와 stable ID manifest의 결정성·보호 거리·상호 간격을 코드 검증했다.
+- 실제 Play Mode에서 Spawn→Portal과 의료 POI 접근 완전 경로, POI 건물·상자 위치·치료제 ID 7·AI 후보 주입을 확인했다.
 - 완전 경로가 없으면 Player 배치·Raid Active·checkpoint·화면 공개 전에 도착을 거부하고, 기존 검은 전환을 유지한 채 기지로 복귀시킨다.
 - Fresh 생성 실패는 원정 전 exact 상태로 되돌리고 게임플레이 실패로 세지 않으며, Resume 생성 실패는 seed를 바꾸지 않고 `RecoveryFailed`로 정산한다.
 - Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid를 공개하지 않고 검은 전환과 입력 잠금을 유지한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 seed를 유지한 채 기지 정산에서 재시도한다.
@@ -1416,7 +1425,7 @@ seed + generator version
 
 - 재생성, 후보 축소 또는 선택 콘텐츠 생략으로 유효 결과를 만든다.
 - 실패한 seed·version과 이유를 기록한다.
-- 후속 POI·가변 상자·적·장식 배치까지 현재 개별 접근 가능성 검증 범위를 확장한다.
+- 후속 다중 POI·가변 상자·적·장식 배치까지 현재 개별 접근 가능성 검증 범위를 확장한다.
 
 ### 7.11 seed와 복구
 

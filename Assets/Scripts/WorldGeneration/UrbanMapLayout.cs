@@ -179,6 +179,75 @@ namespace FantasySurvival.WorldGeneration
         public Rect Footprint => new Rect(Center - Size * 0.5f, Size);
     }
 
+    public enum UrbanSpatialCandidateKind
+    {
+        Roadside,
+        BuildingApproach
+    }
+
+    /// <summary>
+    /// Immutable, seed-derived spatial query result shared by placement and AI systems.
+    /// It is a cache of the authoritative layout, not a runtime state owner.
+    /// </summary>
+    public readonly struct UrbanSpatialCandidate
+    {
+        public UrbanSpatialCandidate(
+            int stableId,
+            UrbanSpatialCandidateKind kind,
+            Vector2 localPosition,
+            Vector2 localDirection,
+            int sourceBuildingIndex)
+        {
+            StableId = stableId;
+            Kind = kind;
+            LocalPosition = localPosition;
+            LocalDirection = localDirection;
+            SourceBuildingIndex = sourceBuildingIndex;
+        }
+
+        public int StableId { get; }
+        public UrbanSpatialCandidateKind Kind { get; }
+        public Vector2 LocalPosition { get; }
+        public Vector2 LocalDirection { get; }
+        public int SourceBuildingIndex { get; }
+    }
+
+    public enum UrbanPoiKind
+    {
+        None,
+        Medical
+    }
+
+    /// <summary>
+    /// Authoritative semantic placement for a point of interest. Rendering color and
+    /// bound runtime content are projections of this record.
+    /// </summary>
+    public readonly struct UrbanPoiPlacement
+    {
+        public UrbanPoiPlacement(
+            string stableId,
+            UrbanPoiKind kind,
+            int buildingIndex,
+            Vector2 contentLocalPosition,
+            Vector2 approachLocalPosition,
+            float localYawDegrees)
+        {
+            StableId = stableId;
+            Kind = kind;
+            BuildingIndex = buildingIndex;
+            ContentLocalPosition = contentLocalPosition;
+            ApproachLocalPosition = approachLocalPosition;
+            LocalYawDegrees = localYawDegrees;
+        }
+
+        public string StableId { get; }
+        public UrbanPoiKind Kind { get; }
+        public int BuildingIndex { get; }
+        public Vector2 ContentLocalPosition { get; }
+        public Vector2 ApproachLocalPosition { get; }
+        public float LocalYawDegrees { get; }
+    }
+
     public enum UrbanRaidSpawnKind
     {
         Chest,
@@ -198,7 +267,8 @@ namespace FantasySurvival.WorldGeneration
             float maximumEntryDistance,
             float portalClearance,
             float minimumSeparation,
-            float approachDistance)
+            float approachDistance,
+            UrbanPoiKind requiredPoiKind = UrbanPoiKind.None)
         {
             StableId = stableId;
             Kind = kind;
@@ -207,6 +277,7 @@ namespace FantasySurvival.WorldGeneration
             PortalClearance = portalClearance;
             MinimumSeparation = minimumSeparation;
             ApproachDistance = approachDistance;
+            RequiredPoiKind = requiredPoiKind;
         }
 
         public string StableId { get; }
@@ -216,6 +287,7 @@ namespace FantasySurvival.WorldGeneration
         public float PortalClearance { get; }
         public float MinimumSeparation { get; }
         public float ApproachDistance { get; }
+        public UrbanPoiKind RequiredPoiKind { get; }
 
         public bool TryValidate(out string error)
         {
@@ -228,6 +300,19 @@ namespace FantasySurvival.WorldGeneration
             if (Kind != UrbanRaidSpawnKind.Chest && Kind != UrbanRaidSpawnKind.Enemy)
             {
                 error = $"Raid spawn request '{StableId}' has an invalid kind.";
+                return false;
+            }
+
+            if (RequiredPoiKind != UrbanPoiKind.None &&
+                RequiredPoiKind != UrbanPoiKind.Medical)
+            {
+                error = $"Raid spawn request '{StableId}' has an invalid POI kind.";
+                return false;
+            }
+
+            if (RequiredPoiKind != UrbanPoiKind.None && Kind != UrbanRaidSpawnKind.Chest)
+            {
+                error = $"Raid spawn request '{StableId}' assigns a POI to a non-Chest entity.";
                 return false;
             }
 
@@ -352,6 +437,21 @@ namespace FantasySurvival.WorldGeneration
                 ChestApproachDistance);
         }
 
+        public static UrbanRaidSpawnRequest CreatePoiChestRequest(
+            string stableId,
+            UrbanPoiKind requiredPoiKind)
+        {
+            return new UrbanRaidSpawnRequest(
+                stableId,
+                UrbanRaidSpawnKind.Chest,
+                ChestEntryClearance,
+                maximumEntryDistance: 0f,
+                ChestPortalClearance,
+                ChestMinimumSeparation,
+                approachDistance: 0f,
+                requiredPoiKind);
+        }
+
         public static UrbanRaidSpawnRequest CreateNearEntryMeleeRequest(string stableId)
         {
             return new UrbanRaidSpawnRequest(
@@ -398,7 +498,9 @@ namespace FantasySurvival.WorldGeneration
             List<Vector2> nodes,
             List<UrbanRoadSegment> roads,
             List<UrbanBuildingPlacement> buildings,
-            List<Vector2> protectedLocalPoints)
+            List<Vector2> protectedLocalPoints,
+            List<UrbanSpatialCandidate> candidates,
+            List<UrbanPoiPlacement> pois)
         {
             GeneratorVersion = generatorVersion;
             Seed = seed;
@@ -413,6 +515,10 @@ namespace FantasySurvival.WorldGeneration
             Roads = roads;
             Buildings = buildings;
             ProtectedLocalPoints = protectedLocalPoints;
+            Candidates = new List<UrbanSpatialCandidate>(
+                candidates ?? new List<UrbanSpatialCandidate>()).AsReadOnly();
+            Pois = new List<UrbanPoiPlacement>(
+                pois ?? new List<UrbanPoiPlacement>()).AsReadOnly();
         }
 
         public int GeneratorVersion { get; }
@@ -428,6 +534,23 @@ namespace FantasySurvival.WorldGeneration
         public IReadOnlyList<UrbanRoadSegment> Roads { get; }
         public IReadOnlyList<UrbanBuildingPlacement> Buildings { get; }
         public IReadOnlyList<Vector2> ProtectedLocalPoints { get; }
+        public IReadOnlyList<UrbanSpatialCandidate> Candidates { get; }
+        public IReadOnlyList<UrbanPoiPlacement> Pois { get; }
+
+        public bool TryGetPoi(UrbanPoiKind kind, out UrbanPoiPlacement placement)
+        {
+            for (int index = 0; index < Pois.Count; index++)
+            {
+                if (Pois[index].Kind == kind)
+                {
+                    placement = Pois[index];
+                    return true;
+                }
+            }
+
+            placement = default;
+            return false;
+        }
     }
 
     public static class UrbanMapLayoutValidator
@@ -506,6 +629,136 @@ namespace FantasySurvival.WorldGeneration
                 }
             }
 
+            var candidateIds = new HashSet<int>();
+            for (int candidateIndex = 0; candidateIndex < layout.Candidates.Count; candidateIndex++)
+            {
+                UrbanSpatialCandidate candidate = layout.Candidates[candidateIndex];
+                if (candidate.StableId < 0 || !candidateIds.Add(candidate.StableId) ||
+                    !IsFinite(candidate.LocalPosition) ||
+                    !IsFinite(candidate.LocalDirection) ||
+                    candidate.LocalDirection.sqrMagnitude < 0.9f)
+                {
+                    error = $"Spatial candidate {candidateIndex} is invalid or has a duplicate ID.";
+                    return false;
+                }
+
+                if (!ContainsPoint(layout.LocalBounds, candidate.LocalPosition))
+                {
+                    error = $"Spatial candidate {candidate.StableId} exceeds the generated map bounds.";
+                    return false;
+                }
+
+                switch (candidate.Kind)
+                {
+                    case UrbanSpatialCandidateKind.Roadside:
+                        if (candidate.SourceBuildingIndex != -1)
+                        {
+                            error = $"Roadside candidate {candidate.StableId} references a building.";
+                            return false;
+                        }
+                        break;
+
+                    case UrbanSpatialCandidateKind.BuildingApproach:
+                        if (candidate.SourceBuildingIndex < 0 ||
+                            candidate.SourceBuildingIndex >= layout.Buildings.Count)
+                        {
+                            error = $"Building approach candidate {candidate.StableId} has an invalid building index.";
+                            return false;
+                        }
+
+                        if (ContainsPoint(
+                                layout.Buildings[candidate.SourceBuildingIndex].Footprint,
+                                candidate.LocalPosition))
+                        {
+                            error = $"Building approach candidate {candidate.StableId} is inside its building footprint.";
+                            return false;
+                        }
+                        break;
+
+                    default:
+                        error = $"Spatial candidate {candidate.StableId} has an invalid kind.";
+                        return false;
+                }
+            }
+
+            var poiIds = new HashSet<string>(StringComparer.Ordinal);
+            int medicalPoiCount = 0;
+            for (int poiIndex = 0; poiIndex < layout.Pois.Count; poiIndex++)
+            {
+                UrbanPoiPlacement poi = layout.Pois[poiIndex];
+                if (string.IsNullOrWhiteSpace(poi.StableId) || !poiIds.Add(poi.StableId) ||
+                    poi.Kind == UrbanPoiKind.None ||
+                    poi.BuildingIndex < 0 || poi.BuildingIndex >= layout.Buildings.Count ||
+                    !IsFinite(poi.ContentLocalPosition) ||
+                    !IsFinite(poi.ApproachLocalPosition) ||
+                    float.IsNaN(poi.LocalYawDegrees) || float.IsInfinity(poi.LocalYawDegrees))
+                {
+                    error = $"POI {poiIndex} is invalid or has a duplicate stable ID.";
+                    return false;
+                }
+
+                if (poi.Kind == UrbanPoiKind.Medical)
+                {
+                    medicalPoiCount++;
+                }
+                else
+                {
+                    error = $"POI '{poi.StableId}' has an unsupported kind.";
+                    return false;
+                }
+
+                Rect footprint = layout.Buildings[poi.BuildingIndex].Footprint;
+                if (!ContainsPoint(layout.LocalBounds, poi.ContentLocalPosition) ||
+                    !ContainsPoint(layout.LocalBounds, poi.ApproachLocalPosition) ||
+                    ContainsPoint(footprint, poi.ContentLocalPosition) ||
+                    ContainsPoint(footprint, poi.ApproachLocalPosition) ||
+                    (poi.ContentLocalPosition - layout.EntryLocalPosition).sqrMagnitude <
+                    UrbanRaidSpawnPrototypeRules.ChestEntryClearance *
+                    UrbanRaidSpawnPrototypeRules.ChestEntryClearance ||
+                    (poi.ContentLocalPosition - layout.PortalLocalPosition).sqrMagnitude <
+                    UrbanRaidSpawnPrototypeRules.ChestPortalClearance *
+                    UrbanRaidSpawnPrototypeRules.ChestPortalClearance)
+                {
+                    error = $"POI '{poi.StableId}' is not safely outside its building footprint.";
+                    return false;
+                }
+
+                for (int roadIndex = 0; roadIndex < layout.Roads.Count; roadIndex++)
+                {
+                    if (RoadContainsPoint(layout.Roads[roadIndex], poi.ContentLocalPosition, 0.05f))
+                    {
+                        error = $"POI '{poi.StableId}' places its content on road {roadIndex}.";
+                        return false;
+                    }
+                }
+
+                bool hasMatchingApproach = false;
+                for (int candidateIndex = 0; candidateIndex < layout.Candidates.Count; candidateIndex++)
+                {
+                    UrbanSpatialCandidate candidate = layout.Candidates[candidateIndex];
+                    if (candidate.Kind == UrbanSpatialCandidateKind.BuildingApproach &&
+                        candidate.SourceBuildingIndex == poi.BuildingIndex &&
+                        (candidate.LocalPosition - poi.ApproachLocalPosition).sqrMagnitude <=
+                        GeometryTolerance * GeometryTolerance)
+                    {
+                        hasMatchingApproach = true;
+                        break;
+                    }
+                }
+
+                if (!hasMatchingApproach)
+                {
+                    error = $"POI '{poi.StableId}' has no matching building approach candidate.";
+                    return false;
+                }
+            }
+
+            if (medicalPoiCount != 1)
+            {
+                error = $"Urban layout requires exactly one Medical POI, found {medicalPoiCount}.";
+                return false;
+            }
+
             error = null;
             return true;
         }
@@ -552,6 +805,20 @@ namespace FantasySurvival.WorldGeneration
                 AddInt(building.PaletteIndex);
             }
 
+            AddInt(layout.Pois.Count);
+            for (int index = 0; index < layout.Pois.Count; index++)
+            {
+                UrbanPoiPlacement poi = layout.Pois[index];
+                AddString(poi.StableId);
+                AddInt((int)poi.Kind);
+                AddInt(poi.BuildingIndex);
+                AddFloat(poi.ContentLocalPosition.x);
+                AddFloat(poi.ContentLocalPosition.y);
+                AddFloat(poi.ApproachLocalPosition.x);
+                AddFloat(poi.ApproachLocalPosition.y);
+                AddFloat(poi.LocalYawDegrees);
+            }
+
             return hash;
 
             void AddInt(int value)
@@ -566,6 +833,20 @@ namespace FantasySurvival.WorldGeneration
             void AddFloat(float value)
             {
                 AddInt(Mathf.RoundToInt(value * 1000f));
+            }
+
+            void AddString(string value)
+            {
+                AddInt(value?.Length ?? 0);
+                if (value == null)
+                {
+                    return;
+                }
+
+                for (int index = 0; index < value.Length; index++)
+                {
+                    AddInt(value[index]);
+                }
             }
         }
 
@@ -669,6 +950,21 @@ namespace FantasySurvival.WorldGeneration
             return (new Vector2(closestX, closestY) - center).sqrMagnitude <= radius * radius;
         }
 
+        internal static bool RoadContainsPoint(
+            UrbanRoadSegment road,
+            Vector2 point,
+            float extraClearance)
+        {
+            Vector2 segment = road.End - road.Start;
+            float denominator = segment.sqrMagnitude;
+            float fraction = denominator <= 0.0001f
+                ? 0f
+                : Mathf.Clamp01(Vector2.Dot(point - road.Start, segment) / denominator);
+            Vector2 closest = Vector2.Lerp(road.Start, road.End, fraction);
+            float radius = road.Width * 0.5f + Mathf.Max(0f, extraClearance);
+            return (point - closest).sqrMagnitude <= radius * radius;
+        }
+
         private static bool IsRoadGraphConnected(int nodeCount, IReadOnlyList<UrbanRoadSegment> roads)
         {
             var adjacency = new List<int>[nodeCount];
@@ -716,6 +1012,20 @@ namespace FantasySurvival.WorldGeneration
                    inner.xMax <= outer.xMax + GeometryTolerance &&
                    inner.yMin >= outer.yMin - GeometryTolerance &&
                    inner.yMax <= outer.yMax + GeometryTolerance;
+        }
+
+        private static bool ContainsPoint(Rect rect, Vector2 point)
+        {
+            return point.x >= rect.xMin - GeometryTolerance &&
+                   point.x <= rect.xMax + GeometryTolerance &&
+                   point.y >= rect.yMin - GeometryTolerance &&
+                   point.y <= rect.yMax + GeometryTolerance;
+        }
+
+        private static bool IsFinite(Vector2 value)
+        {
+            return !float.IsNaN(value.x) && !float.IsInfinity(value.x) &&
+                   !float.IsNaN(value.y) && !float.IsInfinity(value.y);
         }
 
         private static bool SegmentIntersectsRect(Vector2 start, Vector2 end, Rect rect)

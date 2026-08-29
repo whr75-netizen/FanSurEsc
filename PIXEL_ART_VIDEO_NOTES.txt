@@ -1,0 +1,14 @@
+Pixel Art Animation. Reinvented - aarthificial
+https://www.youtube.com/watch?v=HsOKwUwL1bE
+
+핵심: 애니메이션 프레임의 픽셀에 최종 색을 저장하지 않고,
+별도 skin/lookup 텍스처에서 읽을 좌표를 R=X, G=Y 형태로 저장한다.
+셰이더가 그 좌표의 색을 출력하므로 애니메이션 1세트를 여러 옷·장비·스킨에 재사용할 수 있다.
+
+이것은 뼈대·관절 회전·중간 프레임 생성 기술이 아니다.
+움직임과 실루엣은 여전히 수작업 프레임이며, 좌표 매핑도 최초 1회 만들어야 한다.
+기존 실루엣 밖으로 나오는 모자·긴 머리·무기 등은 별도 레이어/프레임이 필요하다.
+
+우리 용도: 동일 체형·동작을 공유하는 캐릭터/NPC의 외형 교체와 모딩에 매우 적합.
+제작자 상세 설명: https://www.youtube.com/watch?v=nYch_TIkq6w
+공개 Unity 코드: https://gist.github.com/aarthificial/a77bf477c6bfa51507ffc1e8f18c5635

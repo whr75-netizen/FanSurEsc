@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using FantasySurvival.AI;
 using FantasySurvival.Inventory;
 using FantasySurvival.SaveSystem;
 using FantasySurvival.SceneFlow;
@@ -22,28 +21,35 @@ namespace FantasySurvival.Raids
     [DisallowMultipleComponent]
     public sealed class RaidCheckpointSceneBinding : MonoBehaviour
     {
-        [Serializable]
-        private sealed class ChestBinding
+        private sealed class RuntimeChestBinding
         {
-            [SerializeField] private string stableId;
-            [SerializeField] private Chest chest;
-            [SerializeField] private UrbanPoiKind requiredPoiKind;
+            public RuntimeChestBinding(RaidSpawnCatalogEntry definition, Chest chest)
+            {
+                Definition = definition;
+                Chest = chest;
+            }
 
-            public string StableId => stableId;
-            public Chest Chest => chest;
-            public UrbanPoiKind RequiredPoiKind => requiredPoiKind;
+            public RaidSpawnCatalogEntry Definition { get; }
+            public string StableId => Definition.StableId;
+            public Chest Chest { get; }
         }
 
-        [Serializable]
-        private sealed class EnemyBinding
+        private sealed class RuntimeEnemyBinding
         {
-            [SerializeField] private string stableId;
-            [SerializeField] private EnemyStats stats;
-            [SerializeField] private Chest corpseInventory;
+            public RuntimeEnemyBinding(
+                RaidSpawnCatalogEntry definition,
+                EnemyStats stats,
+                Chest corpseInventory)
+            {
+                Definition = definition;
+                Stats = stats;
+                CorpseInventory = corpseInventory;
+            }
 
-            public string StableId => stableId;
-            public EnemyStats Stats => stats;
-            public Chest CorpseInventory => corpseInventory;
+            public RaidSpawnCatalogEntry Definition { get; }
+            public string StableId => Definition.StableId;
+            public EnemyStats Stats { get; }
+            public Chest CorpseInventory { get; }
         }
 
         public sealed class RestorePlan
@@ -73,23 +79,6 @@ namespace FantasySurvival.Raids
             public float MaxHealth;
         }
 
-        private readonly struct SpawnTransformApplication
-        {
-            public SpawnTransformApplication(
-                Transform target,
-                Vector3 position,
-                Quaternion rotation)
-            {
-                Target = target;
-                Position = position;
-                Rotation = rotation;
-            }
-
-            public Transform Target { get; }
-            public Vector3 Position { get; }
-            public Quaternion Rotation { get; }
-        }
-
         private readonly struct FreshLootApplication
         {
             public FreshLootApplication(
@@ -109,10 +98,14 @@ namespace FantasySurvival.Raids
 
         [SerializeField] private string sceneStateId = "core:gamemaptest:v1";
         [SerializeField] private ProceduralUrbanMapGenerator mapGenerator;
-        [SerializeField] private ChestBinding[] chests = Array.Empty<ChestBinding>();
-        [SerializeField] private EnemyBinding[] enemies = Array.Empty<EnemyBinding>();
+        [SerializeField] private RaidSpawnCatalogDefinition spawnCatalog;
 
         private RaidCheckpointController controller;
+        private GameObject runtimeSpawnRoot;
+        private readonly List<RuntimeChestBinding> runtimeChests =
+            new List<RuntimeChestBinding>();
+        private readonly List<RuntimeEnemyBinding> runtimeEnemies =
+            new List<RuntimeEnemyBinding>();
         private string seedPreparationError;
         private UrbanRaidSpawnManifest spawnManifest;
         private string spawnPreparationError;
@@ -124,9 +117,45 @@ namespace FantasySurvival.Raids
         public string SceneStateId => sceneStateId;
         public string SceneName => gameObject.scene.name;
         public ProceduralUrbanMapGenerator MapGenerator => mapGenerator;
-        public bool IsConfigured => TryBuildAuthoredIndexes(out _, out _, out _);
+        public RaidSpawnCatalogDefinition SpawnCatalog => spawnCatalog;
+        public int RuntimeChestCount => runtimeChests.Count;
+        public int RuntimeEnemyCount => runtimeEnemies.Count;
+        public bool RuntimeEntitiesInstantiated => runtimeSpawnRoot != null;
+        public bool IsConfigured => TryValidateCatalogConfiguration(out _);
         public string SeedPreparationError => seedPreparationError;
         public UrbanRaidSpawnManifest SpawnManifest => spawnManifest;
+
+        public bool TryGetRuntimeChest(string stableId, out Chest chest)
+        {
+            for (int index = 0; index < runtimeChests.Count; index++)
+            {
+                RuntimeChestBinding binding = runtimeChests[index];
+                if (string.Equals(binding.StableId, stableId, StringComparison.Ordinal))
+                {
+                    chest = binding.Chest;
+                    return chest != null;
+                }
+            }
+
+            chest = null;
+            return false;
+        }
+
+        public bool TryGetRuntimeEnemy(string stableId, out EnemyStats stats)
+        {
+            for (int index = 0; index < runtimeEnemies.Count; index++)
+            {
+                RuntimeEnemyBinding binding = runtimeEnemies[index];
+                if (string.Equals(binding.StableId, stableId, StringComparison.Ordinal))
+                {
+                    stats = binding.Stats;
+                    return stats != null;
+                }
+            }
+
+            stats = null;
+            return false;
+        }
 
         public RaidSceneArrivalReadiness GetArrivalReadiness(out string error)
         {
@@ -165,6 +194,11 @@ namespace FantasySurvival.Raids
                 spawnManifest.Seed != mapGenerator.CurrentLayout.Seed)
             {
                 error = "Raid scene spawn manifest was not prepared for the current map seed.";
+                return RaidSceneArrivalReadiness.Invalid;
+            }
+
+            if (!TryBuildRuntimeIndexes(out _, out _, out error))
+            {
                 return RaidSceneArrivalReadiness.Invalid;
             }
 
@@ -209,7 +243,7 @@ namespace FantasySurvival.Raids
                 return;
             }
 
-            if (!TryBuildAuthoredIndexes(out _, out _, out string configurationError))
+            if (!TryValidateCatalogConfiguration(out string configurationError))
             {
                 Debug.LogError($"Raid checkpoint scene binding is invalid: {configurationError}", this);
                 enabled = false;
@@ -250,6 +284,9 @@ namespace FantasySurvival.Raids
                 mapGenerator.LayoutGeometryGenerated -= HandleLayoutGeometryGenerated;
             }
             controller?.UnregisterScene(this);
+            runtimeChests.Clear();
+            runtimeEnemies.Clear();
+            runtimeSpawnRoot = null;
         }
 
         private void HandleLayoutGeometryGenerated(UrbanMapLayout layout)
@@ -261,16 +298,18 @@ namespace FantasySurvival.Raids
 
             try
             {
+                if (runtimeSpawnRoot != null || runtimeChests.Count != 0 ||
+                    runtimeEnemies.Count != 0)
+                {
+                    spawnPreparationError =
+                        "A live Raid entity registry already exists. Mid-raid map rerolls are not supported.";
+                    return;
+                }
+
                 if (layout == null || mapGenerator == null || mapGenerator.GeneratedContent == null)
                 {
                     spawnPreparationError =
                         "Raid spawn placement requires generated map geometry and its owning Transform.";
-                    return;
-                }
-
-                if (!TryBindEnemyPatrolSources(out string patrolSourceError))
-                {
-                    spawnPreparationError = patrolSourceError;
                     return;
                 }
 
@@ -290,7 +329,7 @@ namespace FantasySurvival.Raids
                     return;
                 }
 
-                if (!TryApplyInitialSpawnManifest(candidate, out string applicationError))
+                if (!TryInstantiateRuntimeEntities(candidate, out string applicationError))
                 {
                     spawnPreparationError = applicationError;
                     return;
@@ -309,30 +348,41 @@ namespace FantasySurvival.Raids
             out List<UrbanRaidSpawnRequest> requests,
             out string error)
         {
-            requests = new List<UrbanRaidSpawnRequest>(chests.Length + enemies.Length);
-            foreach (ChestBinding binding in chests)
+            if (!TryValidateCatalogConfiguration(out error))
             {
-                requests.Add(binding.RequiredPoiKind == UrbanPoiKind.None
-                    ? UrbanRaidSpawnPrototypeRules.CreateChestRequest(binding.StableId)
-                    : UrbanRaidSpawnPrototypeRules.CreatePoiChestRequest(
-                        binding.StableId,
-                        binding.RequiredPoiKind));
+                requests = null;
+                return false;
             }
 
-            foreach (EnemyBinding binding in enemies)
+            requests = new List<UrbanRaidSpawnRequest>(spawnCatalog.Entries.Count);
+            for (int index = 0; index < spawnCatalog.Entries.Count; index++)
             {
-                EnemyDefinition definition = binding.Stats.Definition;
-                EnemyAISettings ai = definition != null ? definition.AI : null;
+                RaidSpawnCatalogEntry entry = spawnCatalog.Entries[index];
+                if (entry.Kind == RaidSpawnContentKind.Chest)
+                {
+                    requests.Add(entry.RequiredPoiKind == UrbanPoiKind.None
+                        ? UrbanRaidSpawnPrototypeRules.CreateChestRequest(entry.StableId)
+                        : UrbanRaidSpawnPrototypeRules.CreatePoiChestRequest(
+                            entry.StableId,
+                            entry.RequiredPoiKind));
+                    continue;
+                }
+
+                EnemyStats stats = entry.Prefab.GetComponent<EnemyStats>();
+                EnemyAISettings ai = stats != null && stats.Definition != null
+                    ? stats.Definition.AI
+                    : null;
                 if (ai == null)
                 {
-                    error = $"Raid Enemy '{binding.StableId}' has no AI definition for spawn safety.";
+                    error = $"Raid Enemy '{entry.StableId}' has no AI definition for spawn safety.";
+                    requests = null;
                     return false;
                 }
 
                 requests.Add(ai.CombatArchetype == EnemyCombatArchetype.MeleeRush
-                    ? UrbanRaidSpawnPrototypeRules.CreateNearEntryMeleeRequest(binding.StableId)
+                    ? UrbanRaidSpawnPrototypeRules.CreateNearEntryMeleeRequest(entry.StableId)
                     : UrbanRaidSpawnPrototypeRules.CreateEnemyRequest(
-                        binding.StableId,
+                        entry.StableId,
                         ai.VisionRange,
                         ai.PatrolRadius));
             }
@@ -341,94 +391,114 @@ namespace FantasySurvival.Raids
             return true;
         }
 
-        private bool TryBindEnemyPatrolSources(out string error)
-        {
-            IEnemyPatrolPointSource source = mapGenerator;
-            foreach (EnemyBinding binding in enemies)
-            {
-                EnemyAIController ai = binding.Stats.GetComponent<EnemyAIController>();
-                if (ai == null)
-                {
-                    error =
-                        $"Raid Enemy '{binding.StableId}' has no EnemyAIController for map patrol binding.";
-                    return false;
-                }
-
-                ai.BindPatrolPointSource(source, requireSource: true);
-            }
-
-            error = null;
-            return true;
-        }
-
-        private bool TryApplyInitialSpawnManifest(
+        private bool TryInstantiateRuntimeEntities(
             UrbanRaidSpawnManifest candidate,
             out string error)
         {
-            if (candidate == null || candidate.Count != chests.Length + enemies.Length)
+            error = null;
+            if (candidate == null || spawnCatalog == null ||
+                candidate.Count != spawnCatalog.Entries.Count)
             {
-                error = "Raid spawn manifest entity count does not match the authored checkpoint bindings.";
+                error = "Raid spawn manifest entity count does not match the spawn catalog.";
                 return false;
             }
 
-            var applications = new List<SpawnTransformApplication>(candidate.Count);
-            foreach (ChestBinding binding in chests)
+            var candidateChests = new List<RuntimeChestBinding>();
+            var candidateEnemies = new List<RuntimeEnemyBinding>();
+            var root = new GameObject("RuntimeRaidEntities");
+            SceneManager.MoveGameObjectToScene(root, gameObject.scene);
+            bool succeeded = false;
+            try
             {
-                if (!TryCreateSpawnApplication(
-                        candidate,
-                        binding.StableId,
-                        UrbanRaidSpawnKind.Chest,
-                        binding.Chest.transform,
-                        out SpawnTransformApplication application,
-                        out error))
+                for (int index = 0; index < spawnCatalog.Entries.Count; index++)
                 {
-                    return false;
+                    RaidSpawnCatalogEntry entry = spawnCatalog.Entries[index];
+                    UrbanRaidSpawnKind expectedKind = entry.Kind == RaidSpawnContentKind.Chest
+                        ? UrbanRaidSpawnKind.Chest
+                        : UrbanRaidSpawnKind.Enemy;
+                    if (!candidate.TryGetPlacement(
+                            entry.StableId,
+                            out UrbanRaidSpawnPlacement placement) ||
+                        placement.Kind != expectedKind)
+                    {
+                        error =
+                            $"Raid spawn manifest is missing the expected {expectedKind} " +
+                            $"'{entry.StableId}'.";
+                        return false;
+                    }
+
+                    Vector3 worldPosition = mapGenerator.GeneratedContent.TransformPoint(
+                        new Vector3(placement.LocalPosition.x, 0f, placement.LocalPosition.y));
+                    worldPosition.y = entry.GroundYOffset;
+                    Quaternion worldRotation =
+                        mapGenerator.GeneratedContent.rotation *
+                        Quaternion.Euler(0f, placement.LocalYawDegrees, 0f);
+                    GameObject instance = Instantiate(
+                        entry.Prefab,
+                        worldPosition,
+                        worldRotation,
+                        root.transform);
+                    instance.name = entry.RuntimeName;
+
+                    if (entry.Kind == RaidSpawnContentKind.Chest)
+                    {
+                        Chest chest = instance.GetComponent<Chest>();
+                        if (chest == null || chest.chestInventoryData == null)
+                        {
+                            error =
+                                $"Instantiated Raid Chest '{entry.StableId}' did not initialize its inventory.";
+                            return false;
+                        }
+
+                        candidateChests.Add(new RuntimeChestBinding(entry, chest));
+                        continue;
+                    }
+
+                    EnemyStats stats = instance.GetComponent<EnemyStats>();
+                    EnemyAIController ai = instance.GetComponent<EnemyAIController>();
+                    Chest[] corpseInventories = instance.GetComponentsInChildren<Chest>(true);
+                    if (stats == null || ai == null || !stats.IsInitialized ||
+                        corpseInventories.Length != 1 ||
+                        corpseInventories[0].chestInventoryData == null)
+                    {
+                        error =
+                            $"Instantiated Raid Enemy '{entry.StableId}' did not initialize its " +
+                            "Stats, AI, or corpse inventory.";
+                        return false;
+                    }
+
+                    ai.BindPatrolPointSource(mapGenerator, requireSource: true);
+                    Rigidbody body = stats.GetComponent<Rigidbody>();
+                    if (body != null)
+                    {
+                        body.linearVelocity = Vector3.zero;
+                        body.angularVelocity = Vector3.zero;
+                    }
+
+                    candidateEnemies.Add(
+                        new RuntimeEnemyBinding(entry, stats, corpseInventories[0]));
                 }
 
-                applications.Add(application);
+                Physics.SyncTransforms();
+                runtimeSpawnRoot = root;
+                runtimeChests.AddRange(candidateChests);
+                runtimeEnemies.AddRange(candidateEnemies);
+                succeeded = true;
+                return true;
             }
-
-            foreach (EnemyBinding binding in enemies)
+            catch (Exception exception)
             {
-                // Layout generation must happen before the normal EnemyStats/AI Awake pass.
-                // A mid-raid reroll would invalidate AI home state and Recovery ownership.
-                if (binding.Stats.IsInitialized)
-                {
-                    error =
-                        $"Raid Enemy '{binding.StableId}' was already initialized before its " +
-                        "deterministic spawn position was assigned.";
-                    return false;
-                }
-
-                if (!TryCreateSpawnApplication(
-                        candidate,
-                        binding.StableId,
-                        UrbanRaidSpawnKind.Enemy,
-                        binding.Stats.transform,
-                        out SpawnTransformApplication application,
-                        out error))
-                {
-                    return false;
-                }
-
-                applications.Add(application);
+                error = $"Raid entity instantiation threw an exception: {exception.Message}";
+                return false;
             }
-
-            for (int index = 0; index < applications.Count; index++)
+            finally
             {
-                SpawnTransformApplication application = applications[index];
-                application.Target.SetPositionAndRotation(application.Position, application.Rotation);
-                Rigidbody body = application.Target.GetComponent<Rigidbody>();
-                if (body != null)
+                if (!succeeded)
                 {
-                    body.linearVelocity = Vector3.zero;
-                    body.angularVelocity = Vector3.zero;
+                    root.SetActive(false);
+                    Destroy(root);
                 }
             }
-
-            Physics.SyncTransforms();
-            error = null;
-            return true;
         }
 
         public bool TryInitializeFreshLoot(
@@ -448,6 +518,11 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            if (!TryBuildRuntimeIndexes(out _, out _, out error))
+            {
+                return false;
+            }
+
             if (freshLootInitialized)
             {
                 if (freshLootSeed != mapGenerator.CurrentSeed)
@@ -460,8 +535,9 @@ namespace FantasySurvival.Raids
                 return true;
             }
 
-            var applications = new List<FreshLootApplication>(chests.Length + enemies.Length);
-            foreach (ChestBinding binding in chests)
+            var applications = new List<FreshLootApplication>(
+                runtimeChests.Count + runtimeEnemies.Count);
+            foreach (RuntimeChestBinding binding in runtimeChests)
             {
                 // A LootTable is opt-in. Authored/legacy containers keep the inventory
                 // created by Chest.Awake and remain valid checkpoint participants.
@@ -484,7 +560,7 @@ namespace FantasySurvival.Raids
                 applications.Add(application);
             }
 
-            foreach (EnemyBinding binding in enemies)
+            foreach (RuntimeEnemyBinding binding in runtimeEnemies)
             {
                 if (binding.CorpseInventory.LootTable == null)
                 {
@@ -584,33 +660,6 @@ namespace FantasySurvival.Raids
             }
         }
 
-        private bool TryCreateSpawnApplication(
-            UrbanRaidSpawnManifest candidate,
-            string stableId,
-            UrbanRaidSpawnKind expectedKind,
-            Transform target,
-            out SpawnTransformApplication application,
-            out string error)
-        {
-            application = default;
-            if (target == null ||
-                !candidate.TryGetPlacement(stableId, out UrbanRaidSpawnPlacement placement) ||
-                placement.Kind != expectedKind)
-            {
-                error = $"Raid spawn manifest is missing the expected {expectedKind} '{stableId}'.";
-                return false;
-            }
-
-            Vector3 worldPosition = mapGenerator.GeneratedContent.TransformPoint(
-                new Vector3(placement.LocalPosition.x, 0f, placement.LocalPosition.y));
-            worldPosition.y = target.position.y;
-            Quaternion worldRotation =
-                mapGenerator.GeneratedContent.rotation * Quaternion.Euler(0f, placement.LocalYawDegrees, 0f);
-            application = new SpawnTransformApplication(target, worldPosition, worldRotation);
-            error = null;
-            return true;
-        }
-
         private bool TryValidateSpawnNavigation(out string error)
         {
             if (spawnManifest == null)
@@ -661,9 +710,9 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (!TryBuildAuthoredIndexes(
-                    out Dictionary<string, ChestBinding> chestIndex,
-                    out Dictionary<string, EnemyBinding> enemyIndex,
+            if (!TryBuildRuntimeIndexes(
+                    out Dictionary<string, RuntimeChestBinding> chestIndex,
+                    out Dictionary<string, RuntimeEnemyBinding> enemyIndex,
                     out error) ||
                 mapGenerator.CurrentLayout == null)
             {
@@ -675,7 +724,7 @@ namespace FantasySurvival.Raids
             }
 
             var capturedChests = new List<RaidChestSaveData>(chestIndex.Count);
-            foreach (ChestBinding binding in chests)
+            foreach (RuntimeChestBinding binding in runtimeChests)
             {
                 if (binding.Chest.chestInventoryData == null ||
                     !InventorySaveCodec.TryCaptureGrid(
@@ -696,7 +745,7 @@ namespace FantasySurvival.Raids
             }
 
             var capturedEnemies = new List<RaidEnemySaveData>(enemyIndex.Count);
-            foreach (EnemyBinding binding in enemies)
+            foreach (RuntimeEnemyBinding binding in runtimeEnemies)
             {
                 if (!binding.Stats.IsInitialized ||
                     binding.CorpseInventory.chestInventoryData == null ||
@@ -757,9 +806,9 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (!TryBuildAuthoredIndexes(
-                    out Dictionary<string, ChestBinding> authoredChests,
-                    out Dictionary<string, EnemyBinding> authoredEnemies,
+            if (!TryBuildRuntimeIndexes(
+                    out Dictionary<string, RuntimeChestBinding> authoredChests,
+                    out Dictionary<string, RuntimeEnemyBinding> authoredEnemies,
                     out error) ||
                 mapGenerator.CurrentLayout == null ||
                 mapGenerator.CurrentSeed != checkpoint.mapSeed ||
@@ -813,7 +862,7 @@ namespace FantasySurvival.Raids
             }
 
             var candidate = new RestorePlan();
-            foreach (ChestBinding authored in chests)
+            foreach (RuntimeChestBinding authored in runtimeChests)
             {
                 if (!savedChests.TryGetValue(authored.StableId, out RaidChestSaveData saved) ||
                     !InventorySaveCodec.TryRestoreGrid(
@@ -835,7 +884,7 @@ namespace FantasySurvival.Raids
                 });
             }
 
-            foreach (EnemyBinding authored in enemies)
+            foreach (RuntimeEnemyBinding authored in runtimeEnemies)
             {
                 if (!savedEnemies.TryGetValue(authored.StableId, out RaidEnemySaveData saved) ||
                     !authored.Stats.IsInitialized ||
@@ -941,63 +990,102 @@ namespace FantasySurvival.Raids
             }
         }
 
-        private bool TryBuildAuthoredIndexes(
-            out Dictionary<string, ChestBinding> chestIndex,
-            out Dictionary<string, EnemyBinding> enemyIndex,
+        private bool TryValidateCatalogConfiguration(out string error)
+        {
+            if (string.IsNullOrWhiteSpace(sceneStateId) || mapGenerator == null ||
+                spawnCatalog == null)
+            {
+                error = "Scene state ID, map generator, or Raid spawn catalog is missing.";
+                return false;
+            }
+
+            return spawnCatalog.TryValidate(out error);
+        }
+
+        private bool TryBuildRuntimeIndexes(
+            out Dictionary<string, RuntimeChestBinding> chestIndex,
+            out Dictionary<string, RuntimeEnemyBinding> enemyIndex,
             out string error)
         {
-            chestIndex = new Dictionary<string, ChestBinding>(StringComparer.Ordinal);
-            enemyIndex = new Dictionary<string, EnemyBinding>(StringComparer.Ordinal);
+            chestIndex = new Dictionary<string, RuntimeChestBinding>(StringComparer.Ordinal);
+            enemyIndex = new Dictionary<string, RuntimeEnemyBinding>(StringComparer.Ordinal);
             var allIds = new HashSet<string>(StringComparer.Ordinal);
             var boundInventories = new HashSet<Chest>();
             var boundEnemies = new HashSet<EnemyStats>();
             var spawnTargets = new HashSet<Transform>();
 
-            if (string.IsNullOrWhiteSpace(sceneStateId) || mapGenerator == null ||
-                chests == null || enemies == null)
+            if (!TryValidateCatalogConfiguration(out error))
             {
-                error = "Scene state ID, map generator, or entity bindings are missing.";
                 return false;
             }
 
-            foreach (ChestBinding binding in chests)
+            if (runtimeSpawnRoot == null || runtimeSpawnRoot.transform.parent != null ||
+                runtimeSpawnRoot.scene != gameObject.scene ||
+                runtimeChests.Count + runtimeEnemies.Count != spawnCatalog.Entries.Count)
+            {
+                error = "The Raid runtime entity root or registry is incomplete.";
+                return false;
+            }
+
+            foreach (RuntimeChestBinding binding in runtimeChests)
             {
                 if (binding == null ||
                     string.IsNullOrWhiteSpace(binding.StableId) ||
+                    binding.Definition == null ||
+                    binding.Definition.Kind != RaidSpawnContentKind.Chest ||
                     binding.Chest == null ||
-                    (binding.RequiredPoiKind != UrbanPoiKind.None &&
-                     binding.RequiredPoiKind != UrbanPoiKind.Medical) ||
+                    binding.Chest.chestInventoryData == null ||
+                    !binding.Chest.transform.IsChildOf(runtimeSpawnRoot.transform) ||
                     !boundInventories.Add(binding.Chest) ||
                     !spawnTargets.Add(binding.Chest.transform) ||
                     !allIds.Add(binding.StableId))
                 {
                     error =
-                        "Chest bindings contain a missing/duplicate component or spawn target, " +
+                        "Runtime Chest bindings contain a missing/duplicate owner or spawn target, " +
                         "or duplicate stable ID.";
                     return false;
                 }
                 chestIndex.Add(binding.StableId, binding);
             }
 
-            foreach (EnemyBinding binding in enemies)
+            foreach (RuntimeEnemyBinding binding in runtimeEnemies)
             {
                 if (binding == null ||
                     string.IsNullOrWhiteSpace(binding.StableId) ||
+                    binding.Definition == null ||
+                    binding.Definition.Kind != RaidSpawnContentKind.Enemy ||
                     binding.Stats == null ||
                     binding.Stats.GetComponent<EnemyAIController>() == null ||
+                    !binding.Stats.IsInitialized ||
                     binding.CorpseInventory == null ||
+                    binding.CorpseInventory.chestInventoryData == null ||
                     binding.CorpseInventory.GetComponentInParent<EnemyStats>() != binding.Stats ||
+                    !binding.Stats.transform.IsChildOf(runtimeSpawnRoot.transform) ||
                     !boundInventories.Add(binding.CorpseInventory) ||
                     !boundEnemies.Add(binding.Stats) ||
                     !spawnTargets.Add(binding.Stats.transform) ||
                     !allIds.Add(binding.StableId))
                 {
                     error =
-                        "Enemy bindings contain a missing/duplicate component or spawn target, " +
+                        "Runtime Enemy bindings contain a missing/duplicate component or spawn target, " +
                         "wrong/duplicate corpse container, or duplicate stable ID.";
                     return false;
                 }
                 enemyIndex.Add(binding.StableId, binding);
+            }
+
+            for (int index = 0; index < spawnCatalog.Entries.Count; index++)
+            {
+                RaidSpawnCatalogEntry entry = spawnCatalog.Entries[index];
+                bool exists = entry.Kind == RaidSpawnContentKind.Chest
+                    ? chestIndex.ContainsKey(entry.StableId)
+                    : enemyIndex.ContainsKey(entry.StableId);
+                if (!exists)
+                {
+                    error =
+                        $"Raid runtime registry is missing catalog entry '{entry.StableId}'.";
+                    return false;
+                }
             }
 
             error = null;

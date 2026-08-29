@@ -1686,3 +1686,16 @@ Interactable (abstract base class)
 - `[Unity 컴파일·순수 검증]` 전체 C# 컴파일에 성공했다. 기본 설정 seed 0~255 각각에서 같은 seed 결정성, 의료 POI 1개, 기존 순서의 Roadside와 건물 접근 후보, 일반/의료 manifest를 확인했다.
 - `[Play Mode 1회]` 사용자의 dirty `GameMap1`을 저장·닫지 않고 깨끗한 `GameMapTest`만 additive로 한 번 실행했다. seed `1999354186`에서 의료 건물 1개(index 0), 공유 후보 395개, Entry→Portal과 POI 접근 complete path, 기존 Chest의 POI 위치, 치료제 ID 7 한 칸, Enemy 2개의 provider 주입·NavMesh 준비와 Raid readiness `Ready`를 확인했다. 종료 뒤 `GameMap1`을 dirty 상태 그대로 활성 복원했다.
 - `[남은 범위]` 건물 내부·문·방, 대형 랜드마크·다중 POI, 일반/의료 상자의 동시 fixture, 가변 개수 동적 spawn, 위험·보상 예산과 엄폐·생태 전술은 구현하지 않았다. Console에는 변경 전 Unity AI Assistant camera ID 오류 2건과 외부 `ASFolliage` shadow keyword 중복 2건만 남아 있으며 이번 런타임 오류는 추가되지 않았다.
+
+---
+
+## 68. 도심 원정 개체 동적 Spawn Catalog `[SPAWN-01][POI-01][LOOT-01][AI-01][SAVE-01]`
+
+- `[사용자 요청][2026-08-30]` §67의 고정 시험 개체를 다음 절차 콘텐츠 확장에 재사용할 수 있도록, 현재 화면 결과와 수량은 유지하면서 catalog 기반 동적 생성 경계로 옮겼다.
+- `[권위·생성]` 새 `RaidSpawnCatalogDefinition`이 stable ID, 종류, 준비된 prefab, 지면 Y와 선택적 POI 의미를 소유한다. `RaidCheckpointSceneBinding`은 layout 완료 뒤 기존 planner로 manifest를 만들고 최종 world pose에 Chest 1·Enemy 2를 생성한다. 전부 초기화된 경우에만 scene-local `RuntimeRaidEntities` registry를 공개하며, 실패 후보는 비활성화 후 폐기한다.
+- `[수명·NavMesh]` Enemy는 최종 pose에서 `Awake`하므로 순찰 원점이 manifest 위치이며 즉시 기존 `IEnemyPatrolPointSource`를 주입받는다. runtime root는 `ProceduralUrbanMapGenerator`의 형제로 두어 `NavMeshSurface(CollectObjects.Children)`의 geometry 수집 경계와 섞이지 않는다. 움직이는 Enemy의 현재 좌표를 초기 좌표로 오판하던 검증은 `PatrolHomePosition`을 확인하도록 바로잡았다.
+- `[콘텐츠·호환]` `PrototypeMedicalPoiChest`, damage-1 근접 Enemy, 기존 동작을 보존한 원거리 Enemy 준비 prefab과 3-entry 시험 catalog를 추가했다. 씬의 고정 Chest·Enemy는 제거했지만 stable ID·요청 순서·generator/manifest version·layout 보호 입력과 combined world hash 계약은 유지해 현재 v3 Recovery 레코드 대응을 보존했다. ReturnPortal은 기존 scene object다.
+- `[Unity 정적·컴파일 확인]` `GameMapTest`에는 authored Chest/Enemy 0, catalog entry 3, 보호 anchor 2와 missing script 0임을 확인했고 256 seed layout·manifest 검증을 통과했다. 전체 프로젝트 C#은 `scriptCompilationFailed=False`다.
+- `[Play Mode 호출 확인]` dirty `GameMap1` 하나에서 Play를 시작해 런타임 `DirectSceneTravel`로 `GameMapTest`에 한 번 진입했다. seed `-135520631`, world hash `AEB6979AFF6755B0`에서 readiness `Ready`, sibling root, Chest 1·Enemy 2, 의료 loot·AI·NavMesh·stable-ID registry를 확인했다. 같은 세 runtime Entity ID를 유지한 채 `TryCaptureWorld → TryPrepareRestore → TryApplyRestore`를 통과했다.
+- `[중단 복구·Console]` 앞선 검증 세션 중단으로 clean `GameMapTest`가 additive로 남아 두 씬이 합쳐져 보였으나, 파일 병합이나 저장은 없었다. dirty `GameMap1`을 보존하고 검증 씬만 저장 없이 닫았다. 최종 검증은 성공·실패 모두 Play 종료를 요청하는 경계로 실행했고 종료 뒤 Play off, scene 1, active `GameMap1`, dirty 보존을 확인했다. Console Error는 검증 전후 5건으로 동일하며 새 런타임 오류는 없었다. 기존 5건은 과거 Camera Capture 2, 외부 `ASFolliage` 2, ordinary save 미해결 원정 방어 1이다.
+- `[남은 범위]` 가변 개수·spawn profile, 다중 POI·랜드마크, 위험·보상 예산, 정식 콘텐츠 prefab과 Player build는 이번 범위가 아니다.

@@ -208,9 +208,9 @@ seed + generator version
 - AI는 생성 결과의 실제 NavMesh와 유효 관심 지점을 사용하며 고정 좌우 좌표를 반복하는 순찰에 의존하지 않는다.
 - 도심, 지하 던전과 오염 지역은 서로 다른 공간 문법이므로 하나의 생성기에 mode 값만 추가해 섞지 않는다.
 
-**[현재]** `GameMapTest`는 seed로 도로·Cube와 도로/건물 접근 후보를 한 번 만들고, 가장 가까운 안전 건물 하나를 `Medical` POI로 정한다. 분류 권위는 POI 의미 데이터이며 청록색 Cube는 표현이다. 같은 seed·stable ID manifest가 binding 목록의 기존 Chest를 POI 외벽 앞에, 근접 적을 Entry 7~16m 도로 후보에, 기존 원거리 적을 일반 안전 후보에 재배치한다. 의료 Chest는 Fresh에서 치료제 ID 7 하나를 받고 Resume은 실제 저장 grid를 복원한다. ReturnPortal은 첫 인접 교차점에 놓이며, 수량은 시험 fixture이지 종류별 제한이 아니다. 각 접근점은 Portal 보호·상호 간격·NavMesh와 layout+manifest world hash를 만족해야 raid-ready다. 불완전 결과는 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh는 출발 전 exact 상태로 되돌린 뒤 기지로, Resume은 seed를 바꾸지 않고 `RecoveryFailed`로 정산한다. rollback·redirect가 불가능하면 검은 전환·입력 잠금을 유지한다. 자동 재생성·후보 축소는 아직 없다.
+**[현재]** `GameMapTest`는 seed로 도로·Cube와 도로/건물 접근 후보를 한 번 만들고, 가장 가까운 안전 건물 하나를 `Medical` POI로 정한다. 분류 권위는 POI 의미 데이터이며 청록색 Cube는 표현이다. 같은 seed·stable ID manifest에 따라 spawn catalog의 Chest prefab은 POI 외벽 앞, 근접 적 prefab은 Entry 7~16m 도로 후보, 원거리 적 prefab은 일반 안전 후보에 생성된다. 생성이 전부 성공한 뒤에만 scene-local runtime registry를 공개한다. 의료 Chest는 Fresh에서 치료제 ID 7 하나를 받고 Resume은 같은 stable ID 인스턴스를 만든 뒤 실제 저장 grid·Enemy Transform·체력을 복원한다. ReturnPortal은 첫 인접 교차점에 놓이며, 현재 catalog 수량은 시험 fixture이지 종류별 제한이 아니다. 각 접근점은 Portal 보호·상호 간격·NavMesh와 layout+manifest world hash를 만족해야 raid-ready다. 불완전 결과는 Player 배치·Raid Active·checkpoint·화면 공개 전에 차단한다. Fresh는 출발 전 exact 상태로 되돌린 뒤 기지로, Resume은 seed를 바꾸지 않고 `RecoveryFailed`로 정산한다. rollback·redirect가 불가능하면 검은 전환·입력 잠금을 유지한다. 자동 재생성·후보 축소는 아직 없다.
 
-**[후속 필수]** 대형 랜드마크·다중 POI, 가로수, 폐차, 소형 지형지물, 내부, 가변 상자·적과 정식 전리품을 추가할 때 현재 준비 gate와 각 콘텐츠 접근 검증을 확장해야 한다. 현재 구현은 기존 3개 시험 개체의 결정적 초기 배치일 뿐 동적 프리팹 spawn이나 위험·보상 예산이 아니다.
+**[후속 필수]** 대형 랜드마크·다중 POI, 가로수, 폐차, 소형 지형지물, 내부, 가변 상자·적과 정식 전리품을 추가할 때 현재 준비 gate와 각 콘텐츠 접근 검증을 확장해야 한다. 현재는 고정된 3개 catalog entry의 결정적 프리팹 생성이며, 가변 개수·spawn profile과 위험·보상 예산은 아직 없다.
 
 #### 후속 콘텐츠 배치가 필요로 하는 평가값 `[제안/미정]`
 

@@ -28,11 +28,20 @@ namespace FantasySurvival.EditorTools
             "Assets/GameData/LootTables/PrototypeMedicalPoiLoot.asset";
         private const string MeleeCorpseLootPath =
             "Assets/GameData/LootTables/PrototypeMeleeCorpseLoot.asset";
+        private const string RaidSpawnCatalogPath =
+            "Assets/GameData/Raids/PrototypeUrbanRaidSpawnCatalog.asset";
+        private const string RaidChestPrefabPath =
+            "Assets/Prefabs/Raids/PrototypeMedicalPoiChest.prefab";
+        private const string MeleeEnemyPrefabPath =
+            "Assets/Prefabs/Raids/PrototypeMeleeEnemyDamageOne.prefab";
         private const string RangedEnemyPrefabPath =
-            "Assets/Prefabs/Enemies/PrototypeRangedEnemy.prefab";
+            "Assets/Prefabs/Raids/PrototypeRangedEnemyTimed.prefab";
         private const string RaidChestObjectName = "Stage3_TestLootChest";
         private const string MeleeEnemyObjectName = "Test_KenneyZombiePatrol";
         private const string RangedEnemyObjectName = "Test_PrototypeRangedEnemy";
+        private const string LayoutProtectionRootName = "UrbanLayoutProtectionAnchors";
+        private const string MeleeProtectionAnchorName = "FormerMeleeFixture";
+        private const string RangedProtectionAnchorName = "FormerRangedFixture";
         private const string RaidChestStableId = "core:gamemaptest/test_loot_chest";
         private const string MeleeEnemyStableId = "core:gamemaptest/melee_enemy_01";
         private const string RangedEnemyStableId = "core:gamemaptest/ranged_enemy_01";
@@ -47,123 +56,7 @@ namespace FantasySurvival.EditorTools
             try
             {
                 Scene scene = EditorSceneManager.OpenScene(GameMapTestPath, OpenSceneMode.Single);
-                ItemDatabase itemDatabase = LoadRequiredAsset<ItemDatabase>(ItemDatabasePath);
-                LootTableDefinition raidChestLoot = CreateOrUpdateLootTable(
-                    RaidChestLootPath,
-                    new LootEntrySetup(7, 100f));
-                LootTableDefinition meleeCorpseLoot = CreateOrUpdateLootTable(
-                    MeleeCorpseLootPath,
-                    new LootEntrySetup(1, 100f));
-                EnemyDefinition testMeleeDefinition = CreateOrUpdateTestMeleeDefinition();
-                ValidateLootTables(itemDatabase, raidChestLoot, meleeCorpseLoot);
-
-                SceneSpawnPoint raidEntry = FindComponentInScene<SceneSpawnPoint>(scene, point => point.SpawnId == "RaidEntry");
-                ReturnPortalInteractable portal = FindComponentInScene<ReturnPortalInteractable>(scene, _ => true);
-                GameObject legacyGround = FindRootByName(scene, "Plane");
-
-                if (raidEntry == null || portal == null || legacyGround == null)
-                {
-                    throw new BuildFailedException(
-                        "GameMapTest is missing RaidEntry, ReturnPortal, or the legacy Plane required by the urban map prototype setup.");
-                }
-
-                EnemyAIController meleeEnemy = FindRequiredEnemyByName(
-                    scene,
-                    MeleeEnemyObjectName);
-                EnemyAIController rangedEnemy = EnsurePrototypeRangedEnemy(scene);
-                EnemyStats meleeStats = meleeEnemy.GetComponent<EnemyStats>();
-                Chest meleeCorpseInventory = FindOnlyCorpseInventory(meleeEnemy);
-                EnemyStats rangedStats = rangedEnemy.GetComponent<EnemyStats>();
-                Chest rangedCorpseInventory = FindOnlyCorpseInventory(rangedEnemy);
-                Chest raidChest = FindRequiredStandaloneChest(scene, RaidChestObjectName);
-                AssignEnemyDefinition(meleeStats, testMeleeDefinition);
-                ConfigureRaidLootChest(raidChest, raidChestLoot);
-                ConfigureRaidLootChest(meleeCorpseInventory, meleeCorpseLoot);
-                ConfigureTimedLootInteraction(raidChest);
-                ConfigureTimedLootInteraction(meleeCorpseInventory);
-                ConfigureTimedLootInteraction(rangedCorpseInventory);
-
-                GameObject generatorObject = FindRootByName(scene, GeneratorObjectName);
-                if (generatorObject == null)
-                {
-                    generatorObject = new GameObject(GeneratorObjectName);
-                    Undo.RegisterCreatedObjectUndo(generatorObject, "Create Procedural Urban Map");
-                    SceneManager.MoveGameObjectToScene(generatorObject, scene);
-                }
-
-                ProceduralUrbanMapGenerator generator = generatorObject.GetComponent<ProceduralUrbanMapGenerator>();
-                if (generator == null)
-                {
-                    generator = Undo.AddComponent<ProceduralUrbanMapGenerator>(generatorObject);
-                }
-
-                NavMeshSurface surface = generatorObject.GetComponent<NavMeshSurface>();
-                if (surface == null)
-                {
-                    surface = Undo.AddComponent<NavMeshSurface>(generatorObject);
-                }
-
-                Undo.RecordObject(surface, "Configure Procedural Urban NavMesh");
-                surface.collectObjects = CollectObjects.Children;
-                surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
-                surface.layerMask = ~0;
-                surface.ignoreNavMeshAgent = true;
-                surface.ignoreNavMeshObstacle = true;
-                surface.minRegionArea = 1f;
-                surface.buildHeightMesh = false;
-
-                Undo.RecordObject(generator, "Configure Procedural Urban Map");
-                var serializedGenerator = new SerializedObject(generator);
-                serializedGenerator.FindProperty("entryAnchor").objectReferenceValue = raidEntry.transform;
-                serializedGenerator.FindProperty("returnPortal").objectReferenceValue = portal.transform;
-                serializedGenerator.FindProperty("legacyGround").objectReferenceValue = legacyGround;
-                serializedGenerator.FindProperty("navMeshSurface").objectReferenceValue = surface;
-                serializedGenerator.FindProperty("randomizeSeedOnAwake").boolValue = true;
-
-                SerializedProperty protectedAnchors = serializedGenerator.FindProperty("additionalProtectedAnchors");
-                EnemyAIController[] sceneEnemies = FindComponentsInScene<EnemyAIController>(scene);
-                UpsertProtectedAnchors(protectedAnchors, sceneEnemies);
-
-                serializedGenerator.ApplyModifiedPropertiesWithoutUndo();
-
-                RaidCheckpointSceneBinding binding =
-                    FindComponentInScene<RaidCheckpointSceneBinding>(scene, _ => true);
-                if (binding == null)
-                {
-                    throw new BuildFailedException(
-                        "GameMapTest is missing its RaidCheckpointSceneBinding.");
-                }
-
-                ConfigureRaidSceneBinding(
-                    binding,
-                    generator,
-                    raidChest,
-                    meleeStats,
-                    meleeCorpseInventory,
-                    rangedStats,
-                    rangedCorpseInventory);
-                EditorUtility.SetDirty(generatorObject);
-                EditorSceneManager.MarkSceneDirty(scene);
-
-                ValidateConfiguredScene(
-                    scene,
-                    raidChestLoot,
-                    meleeCorpseLoot,
-                    testMeleeDefinition);
-                ValidateLayoutSeeds(
-                    generator.PlanLayout,
-                    generator.GenerationParameters,
-                    "GameMapTest serialized settings",
-                    CreatePrototypeSpawnRequests(rangedStats.Definition.AI));
-
-                if (!EditorSceneManager.SaveScene(scene))
-                {
-                    throw new BuildFailedException("Unity could not save the validated GameMapTest urban map setup.");
-                }
-
-                Debug.Log(
-                    "Configured the required nearby GameMapTest loot Chest, damage-1 melee Enemy, " +
-                    "ReturnPortal, and preserved ranged Enemy without imposing global scene counts.");
+                ConfigureLoadedGameMapTest(scene);
             }
             finally
             {
@@ -172,6 +65,133 @@ namespace FantasySurvival.EditorTools
                     EditorSceneManager.RestoreSceneManagerSetup(previousSetup);
                 }
             }
+        }
+
+        public static void ConfigureLoadedGameMapTest(Scene scene)
+        {
+            if (!scene.IsValid() || !scene.isLoaded ||
+                !string.Equals(scene.path, GameMapTestPath, StringComparison.Ordinal))
+            {
+                throw new BuildFailedException(
+                    $"Expected a loaded '{GameMapTestPath}' scene for configuration.");
+            }
+
+            ItemDatabase itemDatabase = LoadRequiredAsset<ItemDatabase>(ItemDatabasePath);
+            LootTableDefinition raidChestLoot = CreateOrUpdateLootTable(
+                RaidChestLootPath,
+                new LootEntrySetup(7, 100f));
+            LootTableDefinition meleeCorpseLoot = CreateOrUpdateLootTable(
+                MeleeCorpseLootPath,
+                new LootEntrySetup(1, 100f));
+            EnemyDefinition testMeleeDefinition = CreateOrUpdateTestMeleeDefinition();
+            ValidateLootTables(itemDatabase, raidChestLoot, meleeCorpseLoot);
+            ConfigurePreparedRaidPrefabs(
+                raidChestLoot,
+                meleeCorpseLoot,
+                testMeleeDefinition);
+            RaidSpawnCatalogDefinition spawnCatalog = CreateOrUpdateRaidSpawnCatalog();
+
+            SceneSpawnPoint raidEntry = FindComponentInScene<SceneSpawnPoint>(
+                scene,
+                point => point.SpawnId == "RaidEntry");
+            ReturnPortalInteractable portal = FindComponentInScene<ReturnPortalInteractable>(
+                scene,
+                _ => true);
+            GameObject legacyGround = FindRootByName(scene, "Plane");
+            if (raidEntry == null || portal == null || legacyGround == null)
+            {
+                throw new BuildFailedException(
+                    "GameMapTest is missing RaidEntry, ReturnPortal, or the legacy Plane " +
+                    "required by the urban map prototype setup.");
+            }
+
+            EnemyAIController legacyMelee = FindEnemyByName(scene, MeleeEnemyObjectName);
+            EnemyAIController legacyRanged = FindEnemyByName(scene, RangedEnemyObjectName);
+            Chest legacyChest = FindStandaloneChest(scene, RaidChestObjectName);
+            IReadOnlyList<Transform> layoutProtectionAnchors =
+                EnsureLayoutProtectionAnchors(scene, legacyMelee, legacyRanged);
+
+            GameObject generatorObject = FindRootByName(scene, GeneratorObjectName);
+            if (generatorObject == null)
+            {
+                generatorObject = new GameObject(GeneratorObjectName);
+                Undo.RegisterCreatedObjectUndo(generatorObject, "Create Procedural Urban Map");
+                SceneManager.MoveGameObjectToScene(generatorObject, scene);
+            }
+
+            ProceduralUrbanMapGenerator generator =
+                generatorObject.GetComponent<ProceduralUrbanMapGenerator>();
+            if (generator == null)
+            {
+                generator = Undo.AddComponent<ProceduralUrbanMapGenerator>(generatorObject);
+            }
+
+            NavMeshSurface surface = generatorObject.GetComponent<NavMeshSurface>();
+            if (surface == null)
+            {
+                surface = Undo.AddComponent<NavMeshSurface>(generatorObject);
+            }
+
+            Undo.RecordObject(surface, "Configure Procedural Urban NavMesh");
+            surface.collectObjects = CollectObjects.Children;
+            surface.useGeometry = NavMeshCollectGeometry.PhysicsColliders;
+            surface.layerMask = ~0;
+            surface.ignoreNavMeshAgent = true;
+            surface.ignoreNavMeshObstacle = true;
+            surface.minRegionArea = 1f;
+            surface.buildHeightMesh = false;
+
+            Undo.RecordObject(generator, "Configure Procedural Urban Map");
+            var serializedGenerator = new SerializedObject(generator);
+            serializedGenerator.FindProperty("entryAnchor").objectReferenceValue =
+                raidEntry.transform;
+            serializedGenerator.FindProperty("returnPortal").objectReferenceValue =
+                portal.transform;
+            serializedGenerator.FindProperty("legacyGround").objectReferenceValue =
+                legacyGround;
+            serializedGenerator.FindProperty("navMeshSurface").objectReferenceValue = surface;
+            serializedGenerator.FindProperty("randomizeSeedOnAwake").boolValue = true;
+            ReplacePrototypeProtectedAnchors(
+                serializedGenerator.FindProperty("additionalProtectedAnchors"),
+                legacyMelee,
+                legacyRanged,
+                layoutProtectionAnchors);
+            serializedGenerator.ApplyModifiedPropertiesWithoutUndo();
+
+            RaidCheckpointSceneBinding binding =
+                FindComponentInScene<RaidCheckpointSceneBinding>(scene, _ => true);
+            if (binding == null)
+            {
+                throw new BuildFailedException(
+                    "GameMapTest is missing its RaidCheckpointSceneBinding.");
+            }
+
+            ConfigureRaidSceneBinding(binding, generator, spawnCatalog);
+            RemoveLegacySpawnFixtures(legacyChest, legacyMelee, legacyRanged);
+            EditorUtility.SetDirty(generatorObject);
+            EditorSceneManager.MarkSceneDirty(scene);
+
+            ValidateConfiguredScene(
+                scene,
+                raidChestLoot,
+                meleeCorpseLoot,
+                testMeleeDefinition,
+                spawnCatalog);
+            ValidateLayoutSeeds(
+                generator.PlanLayout,
+                generator.GenerationParameters,
+                "GameMapTest serialized settings",
+                CreatePrototypeSpawnRequests(LoadRangedEnemySettings()));
+
+            if (!EditorSceneManager.SaveScene(scene))
+            {
+                throw new BuildFailedException(
+                    "Unity could not save the validated GameMapTest urban map setup.");
+            }
+
+            Debug.Log(
+                "Configured GameMapTest to instantiate its medical Chest and two prototype " +
+                "Enemies from the Raid spawn catalog while preserving stable IDs and layout inputs.");
         }
 
         [MenuItem("Tools/Fantasy Survival/Urban Map/Validate Layout Seeds")]
@@ -463,6 +483,161 @@ namespace FantasySurvival.EditorTools
             return LoadRequiredAsset<EnemyDefinition>(TestMeleeDefinitionPath);
         }
 
+        private static void ConfigurePreparedRaidPrefabs(
+            LootTableDefinition raidChestLoot,
+            LootTableDefinition meleeCorpseLoot,
+            EnemyDefinition testMeleeDefinition)
+        {
+            ConfigurePreparedRaidPrefab(
+                RaidChestPrefabPath,
+                root =>
+                {
+                    Chest chest = root.GetComponent<Chest>();
+                    if (chest == null)
+                    {
+                        throw new BuildFailedException(
+                            $"Prepared Raid Chest prefab has no root Chest: '{RaidChestPrefabPath}'.");
+                    }
+
+                    ConfigureRaidLootChest(chest, raidChestLoot);
+                    ConfigureTimedLootInteraction(chest);
+                });
+
+            ConfigurePreparedRaidPrefab(
+                MeleeEnemyPrefabPath,
+                root =>
+                {
+                    EnemyStats stats = root.GetComponent<EnemyStats>();
+                    EnemyAIController ai = root.GetComponent<EnemyAIController>();
+                    if (stats == null || ai == null)
+                    {
+                        throw new BuildFailedException(
+                            $"Prepared melee prefab is incomplete: '{MeleeEnemyPrefabPath}'.");
+                    }
+
+                    AssignEnemyDefinition(stats, testMeleeDefinition);
+                    Chest corpse = FindOnlyCorpseInventory(ai);
+                    ConfigureRaidLootChest(corpse, meleeCorpseLoot);
+                    ConfigureTimedLootInteraction(corpse);
+                });
+
+            ConfigurePreparedRaidPrefab(
+                RangedEnemyPrefabPath,
+                root =>
+                {
+                    EnemyAIController ai = root.GetComponent<EnemyAIController>();
+                    if (ai == null)
+                    {
+                        throw new BuildFailedException(
+                            $"Prepared ranged prefab is incomplete: '{RangedEnemyPrefabPath}'.");
+                    }
+
+                    ConfigureTimedLootInteraction(FindOnlyCorpseInventory(ai));
+                });
+        }
+
+        private static void ConfigurePreparedRaidPrefab(
+            string prefabPath,
+            Action<GameObject> configure)
+        {
+            LoadRequiredAsset<GameObject>(prefabPath);
+            GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
+            try
+            {
+                configure(root);
+                GameObject saved = PrefabUtility.SaveAsPrefabAsset(
+                    root,
+                    prefabPath,
+                    out bool success);
+                if (!success || saved == null)
+                {
+                    throw new BuildFailedException(
+                        $"Unity could not save prepared Raid prefab '{prefabPath}'.");
+                }
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+        }
+
+        private static RaidSpawnCatalogDefinition CreateOrUpdateRaidSpawnCatalog()
+        {
+            EnsureAssetFolder("Assets/GameData", "Raids");
+            RaidSpawnCatalogDefinition catalog =
+                AssetDatabase.LoadAssetAtPath<RaidSpawnCatalogDefinition>(
+                    RaidSpawnCatalogPath);
+            if (catalog == null)
+            {
+                catalog = ScriptableObject.CreateInstance<RaidSpawnCatalogDefinition>();
+                AssetDatabase.CreateAsset(catalog, RaidSpawnCatalogPath);
+            }
+
+            Undo.RecordObject(catalog, "Configure Prototype Raid Spawn Catalog");
+            var serialized = new SerializedObject(catalog);
+            SerializedProperty entries = serialized.FindProperty("entries");
+            if (entries == null)
+            {
+                throw new BuildFailedException(
+                    "RaidSpawnCatalogDefinition no longer exposes its serialized entries field.");
+            }
+
+            entries.arraySize = 3;
+            ConfigureSpawnCatalogEntry(
+                entries.GetArrayElementAtIndex(0),
+                RaidChestStableId,
+                RaidChestObjectName,
+                RaidSpawnContentKind.Chest,
+                LoadRequiredAsset<GameObject>(RaidChestPrefabPath),
+                0.5f,
+                UrbanPoiKind.Medical);
+            ConfigureSpawnCatalogEntry(
+                entries.GetArrayElementAtIndex(1),
+                MeleeEnemyStableId,
+                MeleeEnemyObjectName,
+                RaidSpawnContentKind.Enemy,
+                LoadRequiredAsset<GameObject>(MeleeEnemyPrefabPath),
+                0f,
+                UrbanPoiKind.None);
+            ConfigureSpawnCatalogEntry(
+                entries.GetArrayElementAtIndex(2),
+                RangedEnemyStableId,
+                RangedEnemyObjectName,
+                RaidSpawnContentKind.Enemy,
+                LoadRequiredAsset<GameObject>(RangedEnemyPrefabPath),
+                0f,
+                UrbanPoiKind.None);
+            serialized.ApplyModifiedPropertiesWithoutUndo();
+            EditorUtility.SetDirty(catalog);
+            AssetDatabase.SaveAssetIfDirty(catalog);
+
+            if (!catalog.TryValidate(out string error))
+            {
+                throw new BuildFailedException(
+                    $"Prototype Raid spawn catalog is invalid: {error}");
+            }
+
+            return LoadRequiredAsset<RaidSpawnCatalogDefinition>(RaidSpawnCatalogPath);
+        }
+
+        private static void ConfigureSpawnCatalogEntry(
+            SerializedProperty entry,
+            string stableId,
+            string runtimeName,
+            RaidSpawnContentKind kind,
+            GameObject prefab,
+            float groundYOffset,
+            UrbanPoiKind requiredPoiKind)
+        {
+            entry.FindPropertyRelative("stableId").stringValue = stableId;
+            entry.FindPropertyRelative("runtimeName").stringValue = runtimeName;
+            entry.FindPropertyRelative("kind").enumValueIndex = (int)kind;
+            entry.FindPropertyRelative("prefab").objectReferenceValue = prefab;
+            entry.FindPropertyRelative("groundYOffset").floatValue = groundYOffset;
+            entry.FindPropertyRelative("requiredPoiKind").enumValueIndex =
+                (int)requiredPoiKind;
+        }
+
         private static IReadOnlyList<UrbanRaidSpawnRequest> CreatePrototypeSpawnRequests(
             EnemyAISettings rangedSettings)
         {
@@ -497,53 +672,6 @@ namespace FantasySurvival.EditorTools
             }
 
             return stats.Definition.AI;
-        }
-
-        private static EnemyAIController EnsurePrototypeRangedEnemy(Scene scene)
-        {
-            EnemyAIController existing = FindEnemyByName(scene, RangedEnemyObjectName);
-            if (existing != null)
-            {
-                return existing;
-            }
-
-            GameObject prefab = LoadRequiredAsset<GameObject>(RangedEnemyPrefabPath);
-            GameObject instance = PrefabUtility.InstantiatePrefab(prefab, scene) as GameObject;
-            if (instance == null)
-            {
-                throw new BuildFailedException(
-                    $"Could not restore the prototype ranged Enemy from '{RangedEnemyPrefabPath}'.");
-            }
-
-            Undo.RegisterCreatedObjectUndo(instance, "Restore Prototype Ranged Enemy");
-            instance.name = RangedEnemyObjectName;
-            instance.transform.SetPositionAndRotation(
-                new Vector3(6f, 0f, 6f),
-                Quaternion.Euler(0f, 180f, 0f));
-            EditorUtility.SetDirty(instance);
-
-            EnemyAIController controller = instance.GetComponentInChildren<EnemyAIController>(true);
-            if (controller == null)
-            {
-                throw new BuildFailedException(
-                    "Restored prototype ranged Enemy prefab has no EnemyAIController.");
-            }
-
-            return controller;
-        }
-
-        private static EnemyAIController FindRequiredEnemyByName(
-            Scene scene,
-            string objectName)
-        {
-            EnemyAIController found = FindEnemyByName(scene, objectName);
-            if (found == null)
-            {
-                throw new BuildFailedException(
-                    $"GameMapTest is missing required test Enemy '{objectName}'.");
-            }
-
-            return found;
         }
 
         private static EnemyAIController FindEnemyByName(Scene scene, string objectName)
@@ -582,7 +710,7 @@ namespace FantasySurvival.EditorTools
             return inventories[0];
         }
 
-        private static Chest FindRequiredStandaloneChest(Scene scene, string objectName)
+        private static Chest FindStandaloneChest(Scene scene, string objectName)
         {
             Chest found = null;
             Chest[] chests = FindComponentsInScene<Chest>(scene);
@@ -605,12 +733,6 @@ namespace FantasySurvival.EditorTools
                 }
 
                 found = chests[index];
-            }
-
-            if (found == null)
-            {
-                throw new BuildFailedException(
-                    $"GameMapTest is missing required standalone Chest '{objectName}'.");
             }
 
             return found;
@@ -681,94 +803,93 @@ namespace FantasySurvival.EditorTools
         private static void ConfigureRaidSceneBinding(
             RaidCheckpointSceneBinding binding,
             ProceduralUrbanMapGenerator generator,
-            Chest raidChest,
-            EnemyStats meleeStats,
-            Chest meleeCorpseInventory,
-            EnemyStats rangedStats,
-            Chest rangedCorpseInventory)
+            RaidSpawnCatalogDefinition spawnCatalog)
         {
             Undo.RecordObject(binding, "Configure Prototype Raid Bindings");
             var serialized = new SerializedObject(binding);
             serialized.FindProperty("mapGenerator").objectReferenceValue = generator;
-
-            SerializedProperty chests = serialized.FindProperty("chests");
-            SerializedProperty chest = FindOrAppendBinding(chests, RaidChestStableId);
-            chest.FindPropertyRelative("stableId").stringValue = RaidChestStableId;
-            chest.FindPropertyRelative("chest").objectReferenceValue = raidChest;
-            chest.FindPropertyRelative("requiredPoiKind").enumValueIndex =
-                (int)UrbanPoiKind.Medical;
-
-            SerializedProperty enemies = serialized.FindProperty("enemies");
-            SerializedProperty melee = FindOrAppendBinding(enemies, MeleeEnemyStableId);
-            melee.FindPropertyRelative("stableId").stringValue = MeleeEnemyStableId;
-            melee.FindPropertyRelative("stats").objectReferenceValue = meleeStats;
-            melee.FindPropertyRelative("corpseInventory").objectReferenceValue =
-                meleeCorpseInventory;
-
-            SerializedProperty ranged = FindOrAppendBinding(enemies, RangedEnemyStableId);
-            ranged.FindPropertyRelative("stableId").stringValue = RangedEnemyStableId;
-            ranged.FindPropertyRelative("stats").objectReferenceValue = rangedStats;
-            ranged.FindPropertyRelative("corpseInventory").objectReferenceValue =
-                rangedCorpseInventory;
+            serialized.FindProperty("spawnCatalog").objectReferenceValue = spawnCatalog;
 
             serialized.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(binding);
         }
 
-        private static SerializedProperty FindOrAppendBinding(
-            SerializedProperty bindings,
-            string stableId)
+        private static IReadOnlyList<Transform> EnsureLayoutProtectionAnchors(
+            Scene scene,
+            EnemyAIController legacyMelee,
+            EnemyAIController legacyRanged)
         {
-            SerializedProperty found = null;
-            for (int index = 0; index < bindings.arraySize; index++)
+            GameObject root = FindRootByName(scene, LayoutProtectionRootName);
+            if (root == null)
             {
-                SerializedProperty candidate = bindings.GetArrayElementAtIndex(index);
-                SerializedProperty candidateId = candidate.FindPropertyRelative("stableId");
-                if (candidateId == null || candidateId.stringValue != stableId)
-                {
-                    continue;
-                }
-
-                if (found != null)
-                {
-                    throw new BuildFailedException(
-                        $"RaidCheckpointSceneBinding contains duplicate stable ID '{stableId}'.");
-                }
-
-                found = candidate;
+                root = new GameObject(LayoutProtectionRootName);
+                Undo.RegisterCreatedObjectUndo(root, "Create Urban Layout Protection Anchors");
+                SceneManager.MoveGameObjectToScene(root, scene);
             }
 
-            if (found != null)
-            {
-                return found;
-            }
-
-            int newIndex = bindings.arraySize;
-            bindings.arraySize = newIndex + 1;
-            return bindings.GetArrayElementAtIndex(newIndex);
+            Transform melee = EnsureProtectionAnchor(
+                root.transform,
+                MeleeProtectionAnchorName,
+                legacyMelee != null
+                    ? legacyMelee.transform.position
+                    : new Vector3(0f, 0f, 3f));
+            Transform ranged = EnsureProtectionAnchor(
+                root.transform,
+                RangedProtectionAnchorName,
+                legacyRanged != null
+                    ? legacyRanged.transform.position
+                    : new Vector3(6f, 0f, 6f));
+            return new[] { melee, ranged };
         }
 
-        private static void UpsertProtectedAnchors(
+        private static Transform EnsureProtectionAnchor(
+            Transform parent,
+            string name,
+            Vector3 initialWorldPosition)
+        {
+            Transform anchor = parent.Find(name);
+            if (anchor != null)
+            {
+                return anchor;
+            }
+
+            var anchorObject = new GameObject(name);
+            Undo.RegisterCreatedObjectUndo(anchorObject, "Create Urban Layout Protection Anchor");
+            anchorObject.transform.SetParent(parent, worldPositionStays: false);
+            anchorObject.transform.position = initialWorldPosition;
+            return anchorObject.transform;
+        }
+
+        private static void ReplacePrototypeProtectedAnchors(
             SerializedProperty protectedAnchors,
-            IReadOnlyList<EnemyAIController> requiredEnemies)
+            EnemyAIController legacyMelee,
+            EnemyAIController legacyRanged,
+            IReadOnlyList<Transform> requiredAnchors)
         {
             var preserved = new List<Transform>(
-                protectedAnchors.arraySize + requiredEnemies.Count);
+                protectedAnchors.arraySize + requiredAnchors.Count);
             var seen = new HashSet<Transform>();
+            Transform legacyMeleeTransform = legacyMelee != null
+                ? legacyMelee.transform
+                : null;
+            Transform legacyRangedTransform = legacyRanged != null
+                ? legacyRanged.transform
+                : null;
             for (int index = 0; index < protectedAnchors.arraySize; index++)
             {
                 Transform existing = protectedAnchors
                     .GetArrayElementAtIndex(index)
                     .objectReferenceValue as Transform;
-                if (existing != null && seen.Add(existing))
+                if (existing != null && existing != legacyMeleeTransform &&
+                    existing != legacyRangedTransform && seen.Add(existing))
                 {
                     preserved.Add(existing);
                 }
             }
 
-            for (int index = 0; index < requiredEnemies.Count; index++)
+            for (int index = 0; index < requiredAnchors.Count; index++)
             {
-                Transform required = requiredEnemies[index].transform;
+                Transform required = requiredAnchors[index];
                 if (seen.Add(required))
                 {
                     preserved.Add(required);
@@ -780,6 +901,31 @@ namespace FantasySurvival.EditorTools
             {
                 protectedAnchors.GetArrayElementAtIndex(index).objectReferenceValue =
                     preserved[index];
+            }
+        }
+
+        private static void RemoveLegacySpawnFixtures(
+            Chest legacyChest,
+            EnemyAIController legacyMelee,
+            EnemyAIController legacyRanged)
+        {
+            var roots = new HashSet<GameObject>();
+            if (legacyChest != null)
+            {
+                roots.Add(legacyChest.transform.root.gameObject);
+            }
+            if (legacyMelee != null)
+            {
+                roots.Add(legacyMelee.transform.root.gameObject);
+            }
+            if (legacyRanged != null)
+            {
+                roots.Add(legacyRanged.transform.root.gameObject);
+            }
+
+            foreach (GameObject root in roots)
+            {
+                Undo.DestroyObjectImmediate(root);
             }
         }
 
@@ -915,7 +1061,8 @@ namespace FantasySurvival.EditorTools
             Scene scene,
             LootTableDefinition raidChestLoot,
             LootTableDefinition meleeCorpseLoot,
-            EnemyDefinition testMeleeDefinition)
+            EnemyDefinition testMeleeDefinition,
+            RaidSpawnCatalogDefinition spawnCatalog)
         {
             ProceduralUrbanMapGenerator[] generators = FindComponentsInScene<ProceduralUrbanMapGenerator>(scene);
             if (generators.Length != 1)
@@ -929,14 +1076,31 @@ namespace FantasySurvival.EditorTools
                 throw new BuildFailedException("GameMapTest ProceduralUrbanMapGenerator has no NavMeshSurface.");
             }
 
-            EnemyAIController meleeEnemy = FindRequiredEnemyByName(
-                scene,
-                MeleeEnemyObjectName);
-            EnemyAIController rangedEnemy = FindRequiredEnemyByName(
-                scene,
-                RangedEnemyObjectName);
-            EnemyStats meleeStats = meleeEnemy.GetComponent<EnemyStats>();
-            EnemyStats rangedStats = rangedEnemy.GetComponent<EnemyStats>();
+            string catalogError = null;
+            if (spawnCatalog == null || !spawnCatalog.TryValidate(out catalogError))
+            {
+                throw new BuildFailedException(
+                    $"GameMapTest Raid spawn catalog is invalid: {catalogError}");
+            }
+
+            RaidSpawnCatalogEntry chestEntry = FindCatalogEntry(
+                spawnCatalog,
+                RaidChestStableId,
+                RaidSpawnContentKind.Chest);
+            RaidSpawnCatalogEntry meleeEntry = FindCatalogEntry(
+                spawnCatalog,
+                MeleeEnemyStableId,
+                RaidSpawnContentKind.Enemy);
+            RaidSpawnCatalogEntry rangedEntry = FindCatalogEntry(
+                spawnCatalog,
+                RangedEnemyStableId,
+                RaidSpawnContentKind.Enemy);
+
+            Chest raidChest = chestEntry.Prefab.GetComponent<Chest>();
+            EnemyAIController meleeEnemy = meleeEntry.Prefab.GetComponent<EnemyAIController>();
+            EnemyAIController rangedEnemy = rangedEntry.Prefab.GetComponent<EnemyAIController>();
+            EnemyStats meleeStats = meleeEntry.Prefab.GetComponent<EnemyStats>();
+            EnemyStats rangedStats = rangedEntry.Prefab.GetComponent<EnemyStats>();
             if (meleeStats == null || meleeStats.Definition != testMeleeDefinition ||
                 meleeStats.Definition.AI == null ||
                 meleeStats.Definition.AI.CombatArchetype != EnemyCombatArchetype.MeleeRush ||
@@ -954,7 +1118,6 @@ namespace FantasySurvival.EditorTools
                     "GameMapTest required ranged Enemy did not retain its ranged definition.");
             }
 
-            Chest raidChest = FindRequiredStandaloneChest(scene, RaidChestObjectName);
             Chest corpseChest = FindOnlyCorpseInventory(meleeEnemy);
             Chest rangedCorpseChest = FindOnlyCorpseInventory(rangedEnemy);
             if (raidChest.LootTable != raidChestLoot || corpseChest.LootTable != meleeCorpseLoot ||
@@ -973,33 +1136,21 @@ namespace FantasySurvival.EditorTools
                     "prototype timed-search policy.");
             }
 
+            if (FindComponentsInScene<Chest>(scene).Length != 0 ||
+                FindComponentsInScene<EnemyStats>(scene).Length != 0)
+            {
+                throw new BuildFailedException(
+                    "GameMapTest still contains authored Raid Chest or Enemy instances; " +
+                    "the spawn catalog must be the only runtime creation source.");
+            }
+
             RaidCheckpointSceneBinding[] raidBindings =
                 FindComponentsInScene<RaidCheckpointSceneBinding>(scene);
-            if (raidBindings.Length != 1 || !raidBindings[0].IsConfigured)
+            if (raidBindings.Length != 1 || !raidBindings[0].IsConfigured ||
+                raidBindings[0].SpawnCatalog != spawnCatalog)
             {
                 throw new BuildFailedException(
                     "GameMapTest must contain one valid RaidCheckpointSceneBinding.");
-            }
-
-            var serializedBinding = new SerializedObject(raidBindings[0]);
-            if (!HasChestBinding(
-                    serializedBinding.FindProperty("chests"),
-                    RaidChestStableId,
-                    raidChest,
-                    UrbanPoiKind.Medical) ||
-                !HasEnemyBinding(
-                    serializedBinding.FindProperty("enemies"),
-                    MeleeEnemyStableId,
-                    meleeStats,
-                    corpseChest) ||
-                !HasEnemyBinding(
-                    serializedBinding.FindProperty("enemies"),
-                    RangedEnemyStableId,
-                    rangedStats,
-                    rangedCorpseChest))
-            {
-                throw new BuildFailedException(
-                    "GameMapTest raid binding is missing a required test Chest or Enemy reference.");
             }
 
             int missingScriptCount = 0;
@@ -1039,58 +1190,36 @@ namespace FantasySurvival.EditorTools
                    interactable.TryValidateOpenConfiguration(out _);
         }
 
-        private static bool HasChestBinding(
-            SerializedProperty bindings,
+        private static RaidSpawnCatalogEntry FindCatalogEntry(
+            RaidSpawnCatalogDefinition catalog,
             string stableId,
-            Chest expectedChest,
-            UrbanPoiKind expectedPoiKind)
+            RaidSpawnContentKind expectedKind)
         {
-            int matchCount = 0;
-            for (int index = 0; index < bindings.arraySize; index++)
+            RaidSpawnCatalogEntry found = null;
+            for (int index = 0; index < catalog.Entries.Count; index++)
             {
-                SerializedProperty binding = bindings.GetArrayElementAtIndex(index);
-                if (binding.FindPropertyRelative("stableId").stringValue != stableId)
+                RaidSpawnCatalogEntry entry = catalog.Entries[index];
+                if (entry.StableId != stableId)
                 {
                     continue;
                 }
 
-                matchCount++;
-                if (binding.FindPropertyRelative("chest").objectReferenceValue != expectedChest ||
-                    binding.FindPropertyRelative("requiredPoiKind").enumValueIndex !=
-                    (int)expectedPoiKind)
+                if (found != null || entry.Kind != expectedKind)
                 {
-                    return false;
+                    throw new BuildFailedException(
+                        $"Raid spawn catalog entry '{stableId}' is duplicated or has the wrong kind.");
                 }
+
+                found = entry;
             }
 
-            return matchCount == 1;
-        }
-
-        private static bool HasEnemyBinding(
-            SerializedProperty bindings,
-            string stableId,
-            EnemyStats expectedStats,
-            Chest expectedCorpseInventory)
-        {
-            int matchCount = 0;
-            for (int index = 0; index < bindings.arraySize; index++)
+            if (found == null)
             {
-                SerializedProperty binding = bindings.GetArrayElementAtIndex(index);
-                if (binding.FindPropertyRelative("stableId").stringValue != stableId)
-                {
-                    continue;
-                }
-
-                matchCount++;
-                if (binding.FindPropertyRelative("stats").objectReferenceValue != expectedStats ||
-                    binding.FindPropertyRelative("corpseInventory").objectReferenceValue !=
-                    expectedCorpseInventory)
-                {
-                    return false;
-                }
+                throw new BuildFailedException(
+                    $"Raid spawn catalog is missing required entry '{stableId}'.");
             }
 
-            return matchCount == 1;
+            return found;
         }
 
         private static void EnsureOpenScenesAreClean()

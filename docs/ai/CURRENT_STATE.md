@@ -75,7 +75,7 @@
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
 | `MAP-01` | 도심 도로·Cube 건물·런타임 NavMesh | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §14·67 | seed 도로·Cube·공유 공간후보와 Entry→Portal 경로 | 생성 규칙·후보 계약 변경 |
 | `MAP-ARRIVAL-01` | 원정 맵 도착 안전 gate | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §32·34 | Ready 뒤 공개; Invalid는 covered 기지 복귀, 불가 시 잠금 보류 | readiness·도착·rollback·redirect 변경 |
-| `SPAWN-01` | 도심 시험 적·상자 seed 배치 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §33~34·67 | 기존 Chest/Enemy를 binding·stable manifest로 배치; 의료 Chest는 POI 앞, 적은 도로 후보; NavMesh·Resume hash 검증 | 프리팹 카탈로그·배치 규칙·binding·Recovery hash 변경 |
+| `SPAWN-01` | 도심 시험 적·상자 seed 배치 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §33~34·67~68 | spawn catalog가 Chest 1·Enemy 2 prefab을 stable manifest 위치에 생성·등록; POI·NavMesh·Recovery 복원 검증 | catalog·prefab·배치·registry·world hash 변경 |
 | `POI-01` | 의료 POI | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §67 | seed당 청록 Cube 1·앞 Chest·치료제 ID 7·접근 경로 | 내부·다중 POI·위험/보상 예산 추가 |
 | `LOOT-01` | seed 기반 시험 LootTable | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §34·67 | Fresh 원자 roll, Resume grid 복원; 의료 POI는 ID 7, table 미지정은 초기값 유지 | 다중 roll·수량·희귀도·위험 예산 추가 |
 | `BASE-01` | 기지 Chest·가구 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §18 | stable ID별 grid와 중첩 아이템, 왕복·backup 복원 | 배치 가능한 가구나 layout migration 추가 |

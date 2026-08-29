@@ -78,6 +78,7 @@ public sealed class EnemyAIController : MonoBehaviour
     public EnemyAwarenessState State { get; private set; } = EnemyAwarenessState.AwaitingNavigation;
     public EnemyAISettings Settings => settings;
     public Vector3 Position => transform.position;
+    public Vector3 PatrolHomePosition => homePosition;
     public Vector3 LastKnownPosition => lastKnownPosition;
     public Transform CurrentTarget => currentTarget;
     public bool IsNavigationReady => agent != null && agent.enabled && agent.isOnNavMesh;

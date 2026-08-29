@@ -105,14 +105,14 @@ E 입력
 ```text
 GameplayShellBootstrap.Awake              [-11000]
 RaidCheckpointSceneBinding.Awake          [-10500]
-  → authored Chest/Enemy stable binding 목록 검증·등록
+  → spawn catalog의 prefab·stable ID 계약 검증
   → generator의 layout-geometry 완료 통지 구독
   → Resume이면 저장된 seed를 generator에 먼저 적용
 ProceduralUrbanMapGenerator.Awake         [-10000]
   → layout·회색상자 geometry 생성
   → LayoutGeometryGenerated 동기 통지
       → seed + stable ID의 spawn manifest 생성
-      → binding에 등록된 기존 Chest/Enemy의 초기 Transform만 배정
+      → manifest 최종 pose에 prefab 생성 후 scene-local runtime registry 원자 등록
 ProceduralUrbanMapGenerator.Start         [-10000]
   → NavMesh build와 Entry→Portal 경로 판정
 SceneSpawnController.Start                [ -9000]
@@ -122,7 +122,7 @@ SceneSpawnController.Start                [ -9000]
 
 Raid의 `SceneManager.sceneLoaded` 호출은 아무것도 확정하지 않고 반환하며 위 순서의 `Start`만 `Ready/Invalid`를 판정한다. Generator `Start` 뒤에도 `Pending`이면 안전하지 않은 도착으로 보아 Invalid와 같은 복귀/보류 경계로 보낸다. 실행 순서 숫자보다 `RaidCheckpointSceneBinding.GetArrivalReadiness` 결과가 권위다.
 
-현재 `GameMapTest` fixture에는 필수 시험 Chest·근접 적·ReturnPortal을 Entry 근처에 두고 기존 원거리 적도 유지한다. 이는 빠른 시험용 현재 구성일 뿐, 시스템이 종류별 오브젝트를 정확히 하나로 제한한다는 규칙이 아니다.
+현재 `GameMapTest`의 고정 scene object는 ReturnPortal이며, spawn catalog가 시험 Chest 1·근접 적 1·원거리 적 1을 생성한다. 이 세 entry는 빠른 시험용 현재 구성일 뿐, 시스템이 종류별 오브젝트를 정확히 하나로 제한한다는 규칙이 아니다.
 
 ### 5.2 Ready 성공
 
@@ -160,7 +160,7 @@ GetArrivalReadiness == Ready
 
 Raid가 `Active`인 동안 `RaidCheckpointController.Update → TryCaptureAndWrite(Active)`가 저빈도 Recovery checkpoint를 갱신한다. 결과는 모두 `RaidSession.Resolve` 한 곳으로 수렴하고, `RaidCheckpointController.HandleRaidResolved`가 terminal checkpoint와 settlement journal을 확보한다.
 
-Recovery의 `layoutHash` 필드는 현재 도로·건물 layout과 spawn manifest를 합친 world hash다. Resume은 같은 seed로 binding 목록을 먼저 재배치한 뒤 Enemy의 저장 Transform·체력·시체 inventory와 Chest grid를 적용한다. LootTable은 Fresh에서만 실행하므로 재개방·Resume 재굴림 경로가 없다. 이전 layout-only hash는 legacy migration으로 한 번 허용하고, 복원 직후 첫 live checkpoint에서 combined world hash로 교체한다.
+Recovery의 `layoutHash` 필드는 현재 도로·건물 layout과 spawn manifest를 합친 world hash다. Resume은 같은 seed로 같은 stable ID prefab을 생성·registry 등록한 뒤 Enemy의 저장 Transform·체력·시체 inventory와 Chest grid를 적용한다. LootTable은 Fresh에서만 실행하므로 재개방·Resume 재굴림 경로가 없다. 이전 layout-only hash는 legacy migration으로 한 번 허용하고, 복원 직후 첫 live checkpoint에서 combined world hash로 교체한다.
 
 | 결과 | 진입 호출 | 다음 분기 |
 |---|---|---|

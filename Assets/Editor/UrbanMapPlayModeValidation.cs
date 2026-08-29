@@ -22,10 +22,7 @@ namespace FantasySurvival.EditorTools
         private const string GameMap1Name = "GameMap1";
         private const string RaidEntrySpawnId = "RaidEntry";
         private const string BaseReturnSpawnId = "BaseReturn";
-        private const string RaidChestObjectName = "Stage3_TestLootChest";
         private const string ReturnPortalObjectName = "Stage1_ReturnPortal";
-        private const string MeleeEnemyObjectName = "Test_KenneyZombiePatrol";
-        private const string RangedEnemyObjectName = "Test_PrototypeRangedEnemy";
         private const string RaidChestStableId = "core:gamemaptest/test_loot_chest";
         private const string MeleeEnemyStableId = "core:gamemaptest/melee_enemy_01";
         private const string RangedEnemyStableId = "core:gamemaptest/ranged_enemy_01";
@@ -344,8 +341,18 @@ namespace FantasySurvival.EditorTools
             if (string.Equals(expectedSceneName, GameMapTestName, StringComparison.Ordinal))
             {
                 Scene scene = SceneManager.GetActiveScene();
-                EnemyAIController melee = FindEnemyByName(scene, MeleeEnemyObjectName);
-                EnemyAIController ranged = FindEnemyByName(scene, RangedEnemyObjectName);
+                RaidCheckpointSceneBinding[] bindings =
+                    FindComponentsInScene<RaidCheckpointSceneBinding>(scene);
+                if (bindings.Length != 1 ||
+                    !bindings[0].TryGetRuntimeEnemy(MeleeEnemyStableId, out EnemyStats meleeStats) ||
+                    !bindings[0].TryGetRuntimeEnemy(RangedEnemyStableId, out EnemyStats rangedStats))
+                {
+                    SessionState.SetInt(ReadyFramesKey, 0);
+                    return false;
+                }
+
+                EnemyAIController melee = meleeStats.GetComponent<EnemyAIController>();
+                EnemyAIController ranged = rangedStats.GetComponent<EnemyAIController>();
                 if (melee == null || ranged == null ||
                     !melee.IsNavigationReady || !ranged.IsNavigationReady)
                 {
@@ -359,7 +366,7 @@ namespace FantasySurvival.EditorTools
             return readyFrames >= ReadyObservationCount;
         }
 
-        private static ProceduralUrbanMapGenerator ValidateUrbanScene(string context)
+        public static ProceduralUrbanMapGenerator ValidateUrbanScene(string context)
         {
             Scene activeScene = SceneManager.GetActiveScene();
             ProceduralUrbanMapGenerator[] generators = FindComponentsInScene<ProceduralUrbanMapGenerator>(activeScene);
@@ -573,29 +580,107 @@ namespace FantasySurvival.EditorTools
                 generator.GenerationParameters.IntersectionJitter * 2f + 0.1f,
                 $"{context}: ReturnPortal is not on the first nearby road junction.");
 
-            EnemyAIController melee = FindEnemyByName(activeScene, MeleeEnemyObjectName);
-            EnemyAIController ranged = FindEnemyByName(activeScene, RangedEnemyObjectName);
-            Require(melee != null, $"{context}: required melee test Enemy is missing.");
-            Require(ranged != null, $"{context}: preserved ranged test Enemy is missing.");
+            RaidCheckpointSceneBinding[] bindings =
+                FindComponentsInScene<RaidCheckpointSceneBinding>(activeScene);
+            Require(bindings.Length == 1,
+                $"{context}: expected one RaidCheckpointSceneBinding, found {bindings.Length}.");
+            RaidCheckpointSceneBinding binding = bindings[0];
+            Require(binding.RuntimeEntitiesInstantiated && binding.RuntimeChestCount == 1 &&
+                    binding.RuntimeEnemyCount == 2,
+                $"{context}: dynamic Raid registry does not contain one Chest and two Enemies.");
+            Require(binding.TryGetRuntimeEnemy(MeleeEnemyStableId, out EnemyStats meleeStats),
+                $"{context}: required melee test Enemy is missing from the stable-ID registry.");
+            Require(binding.TryGetRuntimeEnemy(RangedEnemyStableId, out EnemyStats rangedStats),
+                $"{context}: preserved ranged test Enemy is missing from the stable-ID registry.");
+            Require(binding.TryGetRuntimeChest(RaidChestStableId, out Chest raidChest),
+                $"{context}: required medical Chest is missing from the stable-ID registry.");
+
+            Transform runtimeRoot = raidChest.transform.parent;
+            Require(runtimeRoot != null && runtimeRoot.parent == null &&
+                    runtimeRoot.name == "RuntimeRaidEntities" &&
+                    runtimeRoot.gameObject.scene == activeScene,
+                $"{context}: dynamic Raid entities are not owned by one scene-local runtime root.");
+            Require(meleeStats.transform.parent == runtimeRoot &&
+                    rangedStats.transform.parent == runtimeRoot &&
+                    !runtimeRoot.IsChildOf(generator.transform),
+                $"{context}: dynamic Raid entities have inconsistent ownership or entered the NavMesh build subtree.");
+            EnemyAIController melee = meleeStats.GetComponent<EnemyAIController>();
+            EnemyAIController ranged = rangedStats.GetComponent<EnemyAIController>();
+            Require(melee != null, $"{context}: required melee test Enemy has no AI.");
+            Require(ranged != null, $"{context}: preserved ranged test Enemy has no AI.");
+            ValidateRuntimeSpawnPose(
+                generator,
+                binding.SpawnManifest,
+                RaidChestStableId,
+                raidChest.transform,
+                0.5f,
+                context);
+            ValidateEnemySpawnHome(
+                generator,
+                binding.SpawnManifest,
+                MeleeEnemyStableId,
+                melee.PatrolHomePosition,
+                context);
+            ValidateEnemySpawnHome(
+                generator,
+                binding.SpawnManifest,
+                RangedEnemyStableId,
+                ranged.PatrolHomePosition,
+                context);
             Require(melee.HasRequiredPatrolPointSourceBinding && ranged.HasRequiredPatrolPointSourceBinding,
                 $"{context}: procedural-map Enemies did not receive the shared patrol point source.");
             ValidateRequiredEnemy(melee, EnemyCombatArchetype.MeleeRush, context);
             ValidateRequiredEnemy(ranged, EnemyCombatArchetype.RangedPursuit, context);
 
-            EnemyStats meleeStats = melee.GetComponent<EnemyStats>();
             Require(Mathf.Approximately(meleeStats.Definition.AI.AttackDamage, 1f),
                 $"{context}: prototype melee Enemy attack damage is " +
                 $"{meleeStats.Definition.AI.AttackDamage}, not 1.");
 
-            Chest raidChest = FindComponentByName<Chest>(activeScene, RaidChestObjectName);
             Chest meleeCorpse = FindOnlyCorpseInventory(melee, context);
             Chest rangedCorpse = FindOnlyCorpseInventory(ranged, context);
-            Require(raidChest != null,
-                $"{context}: required nearby test Chest is missing.");
             ValidateRolledLootChest(raidChest, context, MedicalPoiItemDefinitionId);
             ValidateRolledLootChest(meleeCorpse, context);
             Require(rangedCorpse.chestInventoryData != null,
                 $"{context}: preserved ranged Enemy corpse inventory is not initialized.");
+        }
+
+        private static void ValidateRuntimeSpawnPose(
+            ProceduralUrbanMapGenerator generator,
+            UrbanRaidSpawnManifest manifest,
+            string stableId,
+            Transform target,
+            float expectedWorldY,
+            string context)
+        {
+            UrbanRaidSpawnPlacement placement = default;
+            Require(manifest != null && manifest.TryGetPlacement(stableId, out placement),
+                $"{context}: manifest placement '{stableId}' is missing for runtime pose validation.");
+            Vector3 expectedPosition = generator.GeneratedContent.TransformPoint(
+                new Vector3(placement.LocalPosition.x, 0f, placement.LocalPosition.y));
+            expectedPosition.y = expectedWorldY;
+            Quaternion expectedRotation =
+                generator.GeneratedContent.rotation *
+                Quaternion.Euler(0f, placement.LocalYawDegrees, 0f);
+            Require(Vector3.Distance(target.position, expectedPosition) <= 0.01f &&
+                    Quaternion.Angle(target.rotation, expectedRotation) <= 0.1f,
+                $"{context}: runtime entity '{stableId}' does not match its manifest pose.");
+        }
+
+        private static void ValidateEnemySpawnHome(
+            ProceduralUrbanMapGenerator generator,
+            UrbanRaidSpawnManifest manifest,
+            string stableId,
+            Vector3 patrolHomePosition,
+            string context)
+        {
+            UrbanRaidSpawnPlacement placement = default;
+            Require(manifest != null && manifest.TryGetPlacement(stableId, out placement),
+                $"{context}: manifest placement '{stableId}' is missing for Enemy home validation.");
+            Vector3 expectedPosition = generator.GeneratedContent.TransformPoint(
+                new Vector3(placement.LocalPosition.x, 0f, placement.LocalPosition.y));
+            expectedPosition.y = patrolHomePosition.y;
+            Require(Vector3.Distance(patrolHomePosition, expectedPosition) <= 0.05f,
+                $"{context}: Enemy '{stableId}' initialized its patrol home away from its manifest pose.");
         }
 
         private static void ValidateRequiredEnemy(
@@ -1054,11 +1139,6 @@ namespace FantasySurvival.EditorTools
             }
 
             return components.ToArray();
-        }
-
-        private static EnemyAIController FindEnemyByName(Scene scene, string objectName)
-        {
-            return FindComponentByName<EnemyAIController>(scene, objectName);
         }
 
         private static T FindComponentByName<T>(Scene scene, string objectName)

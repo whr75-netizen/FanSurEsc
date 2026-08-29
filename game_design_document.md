@@ -1299,7 +1299,7 @@ seed + generator version
 #### 7.5.1 현재 의료 POI
 
 - layout의 `UrbanPoiKind.Medical`이 분류 원본이며 색·오브젝트 이름은 표현이다.
-- Entry에서 가장 가까운 안전한 건물 접근 후보 하나를 선택하고, Cube 외벽 앞에 기존 authored Chest를 이동한다.
+- Entry에서 가장 가까운 안전한 건물 접근 후보 하나를 선택하고, Cube 외벽 앞에 catalog의 의료 Chest prefab을 생성한다.
 - 접근점의 complete NavMesh 경로를 도착 gate에서 확인하고, Fresh 상자는 치료제 Item ID 7 하나를 지급한다.
 - 건물 내부·문·방은 아직 없으며, 기존 일반 Chest 클래스와 인벤토리·Recovery 저장 경계를 재사용한다.
 
@@ -1367,7 +1367,7 @@ seed + generator version
 
 - `RaidEntry`에서 Player가 원정을 시작한다.
 - 기존 `ReturnPortal`을 생성 layout의 첫 인접 도로 교차점에 배치한다.
-- 현재 fixture의 필수 시험 Chest·근접 적은 Entry 근처에, 기존 원거리 적은 일반 안전 후보에 stable ID manifest로 초기 배치한다. 이는 종류별 개수 제한이 아니다.
+- 현재 catalog의 시험 Chest·근접 적은 Entry 근처에, 원거리 적은 일반 안전 후보에 stable ID manifest로 생성한다. 이는 종류별 개수 제한이 아니다.
 - 현재 포탈은 즉시 `Extracted`를 확정한다.
 
 #### 7.8.2 최종 탈출 규칙 `[미정]`
@@ -1383,11 +1383,11 @@ seed + generator version
 
 #### 7.9.1 현재 시험
 
-- binding 목록의 씬 직렬화 Chest·Enemy를 재사용하며 런타임 복제는 하지 않는다. 현재 fixture가 Chest 1개·Enemy 2개인 것은 시험 편의를 위한 구성이다.
+- `RaidSpawnCatalogDefinition`의 준비된 prefab을 manifest 최종 pose에 생성하고, Chest 1개·Enemy 2개를 stable ID runtime registry에 원자 등록한다. 현재 세 entry는 시험 편의를 위한 구성이다.
 - 같은 seed와 stable ID는 같은 초기 위치·회전을 만들고, Resume은 Enemy의 저장된 현재 Transform을 그 뒤에 복원한다.
 - Enemy Entry 보호는 각 정의의 시야·순찰 반경을 반영한다. 적은 도로 후보, 의료 Chest는 POI 건물 전면과 별도 접근점을 사용한다.
 - 후보 부족, Entry·Portal 보호 위반, 중첩 또는 개별 NavMesh 접근 실패는 맵 전체를 `Invalid`로 닫는다.
-- 현재 시험 Chest는 의료 전용 `LootTableDefinition`으로 치료제 ID 7, 근접 적 시체는 기존 시험 table을 사용한다. 미지정 컨테이너는 authored 초기값을 유지하며 위험 예산·가변 개수·프리팹 카탈로그는 아직 없다.
+- 현재 시험 Chest는 의료 전용 `LootTableDefinition`으로 치료제 ID 7, 근접 적 시체는 기존 시험 table을 사용한다. 미지정 컨테이너는 prefab 초기값을 유지하며 위험 예산·가변 개수·spawn profile은 아직 없다.
 
 #### 7.9.2 후속 후보 처리 순서
 
@@ -2464,6 +2464,7 @@ VFX는 실제 판정의 결과를 표시하며 별도 피해 원본이 되지 �
 - ItemDatabase와 `ItemDefinition`
 - `LootTableDefinition`과 seed+stable container ID 기반 시험 roll
 - `EnemyDefinition`
+- `RaidSpawnCatalogDefinition`과 준비된 원정 Chest·Enemy prefab
 - BaseFurnitureDatabase와 definition key
 - stable placed furniture ID
 - map seed·version·layout

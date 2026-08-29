@@ -59,7 +59,7 @@
 - **[확정]** 전체 루프를 한 번에 만들지 않고, 실제로 실행 가능한 작은 단위로 진행한다.
 - **[확정]** 첫 번째 기능은 맵 선택 오브젝트에서 빈 원정 맵으로 이동하고, 귀환 포탈로 원래 맵에 돌아오는 왕복 기능이다.
 - **[확정]** 기본 플레이어 아이템 영속성은 맵 왕복 안정화 뒤 단일 슬롯 프로토타입으로 구현했다. 이후 생환·사망·포기·복구 실패 결과의 전체 소지품 정산과 기지 가구 상태 저장까지 확장했다.
-- **[확정]** 첫 원정의 씬 경계는 `GameMapTest`로 고정한다. **[현재]** 런타임 seed로 도로·Cube·공유 공간 후보와 의료 POI 하나를 만들고, 기존 Chest는 POI 건물 앞, Enemy는 보호된 도로 후보에 stable manifest로 배치한다. Chest 1·Enemy 2는 시험 fixture이지 시스템 개수 제한이 아니다.
+- **[확정]** 첫 원정의 씬 경계는 `GameMapTest`로 고정한다. **[현재]** 런타임 seed로 도로·Cube·공유 공간 후보와 의료 POI 하나를 만들고, catalog의 Chest·Enemy prefab을 stable manifest의 보호된 후보에 생성한다. Chest 1·Enemy 2는 시험 fixture이지 시스템 개수 제한이 아니다.
 - **[확정]** 지하 던전과 오염 지역은 도심 생성기의 옵션으로 만들지 않고, 공간 규칙이 정해질 때 별도 생성 방식으로 설계한다.
 - **[확정]** 현재 아이템 종류는 숫자 ID 기반 ItemDatabase로 관리한다.
 
@@ -851,7 +851,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 #### 현재 구현: 도심형 회색상자
 
-- `GameMapTest` 씬 경계와 기존 `RaidEntry`, `ReturnPortal`, 적 시험 오브젝트는 유지한다.
+- `GameMapTest` 씬 경계와 기존 `RaidEntry`, `ReturnPortal`은 유지하고 시험 Chest·Enemy는 spawn catalog가 런타임 생성한다.
 - scene-local `ProceduralUrbanMapGenerator`가 한 번의 씬 수명 동안 seed와 불변 layout 원본을 소유한다. 생성된 Ground, 도로, 건물, 경계와 NavMesh는 이 layout에서 다시 만들 수 있는 파생 표현이다.
 - 먼저 가변 간격 교차점과 연결 도로 그래프를 만든다. 주 도로를 보존하고, 보조 도로는 전체 연결성이 유지될 때만 일부 제거한다.
 - 도로 배치 뒤 남은 필지에 충돌 가능한 큐브 건물을 놓는다. 도로, `RaidEntry`, 기존 귀환 포탈 위치와 보호 대상 주변은 건물로 막지 않는다.
@@ -860,7 +860,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 - 전체 도심 루트는 약 35~55도 회전하고, 블록 수·간격·교차점 흔들림·건물 밀도와 높이를 seed로 바꿔 정사각 청크 반복감을 줄인다.
 - 기존 귀환 포탈은 재생성하지 않고 같은 scene object를 첫 인접 도로 교차점으로 이동한다.
 - 런타임 NavMesh는 생성 geometry의 콜라이더만 수집하고 `RaidEntry → ReturnPortal 접근점`의 complete path를 생성 직후 검증한다.
-- binding 목록의 기존 Chest는 의료 POI 건물 앞, Enemy는 seed·stable ID 기반 도로 후보에 초기 배치한다. manifest는 파생 데이터다.
+- spawn catalog의 Chest·Enemy prefab은 seed·stable ID manifest의 최종 위치에 생성하고, 전부 검증된 뒤 runtime registry에 등록한다. manifest는 파생 데이터다.
 - 의료 Chest는 Fresh에서 치료제 ID 7 하나를 받고, Resume은 저장 grid를 복원한다. 근접 시체와 LootTable 미지정 컨테이너의 기존 정책은 유지한다.
 - 의료 POI 접근점과 각 Enemy 위치의 complete path를 준비 gate에서 확인하고, Recovery는 seed·generator version·layout+manifest world hash를 저장한다.
 
@@ -874,7 +874,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 - 대형 랜드마크·다중 POI, 가로수, 폐차, 쓰레기통, 자전거와 기타 지형지물
 - 건물 내부, 문, 층, 파괴와 실제 건축 프리팹 교체 규칙
-- 가변 개수 상자·적의 동적 프리팹 spawn, 정식 다중 roll·위험 예산 LootTable, 엄폐·전술 후보
+- 가변 개수 상자·적과 spawn profile, 정식 다중 roll·위험 예산 LootTable, 엄폐·전술 후보
 - 난이도·위험·보상 예산과 최종 생환 조건
 
 #### 다른 맵 유형
@@ -1017,7 +1017,7 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 8. **[완료]** GameMap1과 GameMapTest 왕복 3회 및 GameMapTest 직접 실행 후 귀환 검증
 9. **[완료]** Console 새 오류 0과 기존 Chest 열기/닫기 회귀 확인
 
-Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지, 플레이어 아이템 단일 슬롯 저장과 저장 없는 시험 루팅은 구현되었다. GameMap1의 고정 Chest 2개에도 namespaced definition/stable placed ID/persistent runtime store/v4 Save DTO를 연결했고, 2026-08-24 사용자 기준 1회 맵 왕복에서 두 grid 참조와 분리된 내용·중첩 소유권 보존을 확인했다. layout 불일치 primary에서 정상 backup으로의 적용 전 폴백도 실제 GameMap1 배치 경계로 확인했다. `GameMapTest`의 DB ID 1 시험 Chest는 기지 가구 store가 아니라 원정 Recovery snapshot에 포함되는 scene-local 컨테이너이며, 기존 Enemy 2개와 함께 seed·stable ID manifest로 초기 위치를 재현한다. 생환·사망·포기 결과, 컨텍스트별 Escape 메뉴, ordinary-marker 우선 강제종료 Resume과 생환 전체 보존·실패 전체 소실 정산을 구현했다. 선별 provenance, 배치 가능한 기지 layout migration, 도심 장식·내부·가변 개수 동적 프리팹 spawn과 다른 맵 유형은 아직 구현하지 않는다.
+Stage 2-A의 PersistentGameplayShell 동일 인스턴스 유지, 플레이어 아이템 단일 슬롯 저장과 저장 없는 시험 루팅은 구현되었다. GameMap1의 고정 Chest 2개에도 namespaced definition/stable placed ID/persistent runtime store/v4 Save DTO를 연결했고, 2026-08-24 사용자 기준 1회 맵 왕복에서 두 grid 참조와 분리된 내용·중첩 소유권 보존을 확인했다. layout 불일치 primary에서 정상 backup으로의 적용 전 폴백도 실제 GameMap1 배치 경계로 확인했다. `GameMapTest`의 시험 Chest 1·Enemy 2는 spawn catalog가 seed·stable ID manifest 위치에 생성하며 원정 Recovery snapshot에 포함된다. 생환·사망·포기 결과, 컨텍스트별 Escape 메뉴, ordinary-marker 우선 강제종료 Resume과 생환 전체 보존·실패 전체 소실 정산을 구현했다. 선별 provenance, 배치 가능한 기지 layout migration, 도심 장식·내부·가변 개수·spawn profile과 다른 맵 유형은 아직 구현하지 않는다.
 
 ---
 

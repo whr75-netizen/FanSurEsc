@@ -337,7 +337,10 @@ namespace FantasySurvival.WorldLighting
             float signedSunElevationDegrees = EvaluateElevationDegrees(sunPathPitchDegrees);
             float sunElevationDegrees = Mathf.Max(0f, signedSunElevationDegrees);
 
-            float moonPathPitchDegrees = sunPathPitchDegrees + 180f;
+            // This is the art-directed night shadow path, not a visible moon
+            // ephemeris. Mirroring the pitch joins sunset and sunrise without
+            // rotating the single shadow map through the opposite horizon.
+            float moonPathPitchDegrees = 360f - sunPathPitchDegrees;
             float moonElevationDegrees = Mathf.Max(
                 0f,
                 EvaluateElevationDegrees(moonPathPitchDegrees));

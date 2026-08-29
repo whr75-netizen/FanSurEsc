@@ -140,6 +140,7 @@ namespace FantasySurvival.WorldLighting
         private const float DefaultMinimumShadowStrength = 0.10f;
         private const float DefaultMinimumAmbientIntensity = 0.62f;
         private const float DefaultMinimumDirectionalIntensity = 0.18f;
+        private const float DefaultDuskLightOverlapWeight = 0.50f;
         private static readonly Color DefaultMinimumLightColor =
             new Color(0.42f, 0.54f, 0.90f, 1f);
 
@@ -153,6 +154,8 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Range(1f, 45f)] private float fullMoonlightElevationDegrees = 15f;
         [SerializeField, Range(0.1f, 15f)] private float directionTransitionElevationDegrees = 15f;
         [SerializeField, Range(0.01f, 1f)] private float horizonMoonlightWeight = 0.5f;
+        [SerializeField, Range(0f, 1f)] private float duskLightOverlapWeight =
+            DefaultDuskLightOverlapWeight;
         [SerializeField, Range(0f, 1f)] private float moonShadowStrength =
             DefaultMoonShadowStrength;
         [FormerlySerializedAs("minimumTransitionShadowStrength")]
@@ -172,6 +175,7 @@ namespace FantasySurvival.WorldLighting
         public float FullMoonlightElevationDegrees => fullMoonlightElevationDegrees;
         public float DirectionTransitionElevationDegrees => directionTransitionElevationDegrees;
         public float HorizonMoonlightWeight => horizonMoonlightWeight;
+        public float DuskLightOverlapWeight => duskLightOverlapWeight;
         public float MoonShadowStrength => moonShadowStrength;
         public float MinimumShadowStrength => minimumShadowStrength;
         public Color MinimumLightColor => minimumLightColor;
@@ -275,13 +279,15 @@ namespace FantasySurvival.WorldLighting
                 float.IsInfinity(moonShadowStrength) ||
                 moonShadowStrength < 0f ||
                 moonShadowStrength > 1f ||
+                !IsFiniteNonNegative(duskLightOverlapWeight) ||
+                duskLightOverlapWeight > 1f ||
                 !IsFiniteNonNegative(minimumShadowStrength) ||
                 minimumShadowStrength > 1f ||
                 !IsFiniteNonNegative(minimumAmbientIntensity) ||
                 !IsFiniteNonNegative(minimumDirectionalIntensity) ||
                 !IsFiniteNonNegative(minimumLightColor))
             {
-                error = "Minimum blue light and moon shadow values are invalid.";
+                error = "Dusk overlap, minimum blue light, and moon shadow values are invalid.";
                 return false;
             }
 
@@ -344,7 +350,7 @@ namespace FantasySurvival.WorldLighting
                     new Color(0.54f, 0.62f, 0.82f),
                     0f,
                     new Color(0.62f, 0.72f, 1f),
-                    0.40f,
+                    0.24f,
                     0f),
                 new SkyLightingKeyframe(
                     6.5f,

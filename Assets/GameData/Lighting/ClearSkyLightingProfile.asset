@@ -22,6 +22,7 @@ MonoBehaviour:
   fullMoonlightElevationDegrees: 15
   directionTransitionElevationDegrees: 15
   horizonMoonlightWeight: 0.5
+  duskLightOverlapWeight: 0.5
   moonShadowStrength: 0.5
   minimumShadowStrength: 0.1
   minimumLightColor: {r: 0.42, g: 0.54, b: 0.9, a: 1}
@@ -38,7 +39,7 @@ MonoBehaviour:
     sunColor: {r: 0.54, g: 0.62, b: 0.82, a: 1}
     sunIntensity: 0
     moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
-    moonIntensity: 0.4
+    moonIntensity: 0.24
     shadowStrength: 0
   - hour: 6.5
     phase: 0

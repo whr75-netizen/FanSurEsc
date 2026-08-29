@@ -368,8 +368,19 @@ namespace FantasySurvival.WorldLighting
                 profile.FullMoonlightElevationDegrees,
                 profile.FullSunlightElevationDegrees);
             float moonContributionWeight = 1f - sunContributionWeight;
-            float sunContribution = sample.SunIntensity * sunContributionWeight;
-            float moonContribution = sample.MoonIntensity * moonContributionWeight;
+            float duskLightOverlapWeight = EvaluateDuskLightOverlapWeight(
+                sunPathPitchDegrees,
+                profile.DuskLightOverlapWeight);
+            float sunLightContributionWeight = Mathf.Lerp(
+                sunContributionWeight,
+                1f,
+                duskLightOverlapWeight);
+            float moonLightContributionWeight = Mathf.Lerp(
+                moonContributionWeight,
+                1f,
+                duskLightOverlapWeight);
+            float sunContribution = sample.SunIntensity * sunLightContributionWeight;
+            float moonContribution = sample.MoonIntensity * moonLightContributionWeight;
             float configuredDirectionalFloor = Mathf.Max(
                 profile.MinimumDirectionalIntensity,
                 sample.MoonIntensity * profile.HorizonMoonlightWeight);
@@ -477,6 +488,19 @@ namespace FantasySurvival.WorldLighting
                 fullSunlightElevationDegrees,
                 signedSunElevationDegrees);
             return Mathf.SmoothStep(0f, 1f, normalized);
+        }
+
+        private static float EvaluateDuskLightOverlapWeight(
+            float sunPathPitchDegrees,
+            float maximumOverlapWeight)
+        {
+            // The profile already fades sunlight down while bringing moonlight
+            // up. Restore part of the otherwise double-faded light only while
+            // the sun is descending, so the existing dawn curve is untouched.
+            float descendingWeight = Mathf.Clamp01(
+                -Mathf.Cos(sunPathPitchDegrees * Mathf.Deg2Rad));
+            return maximumOverlapWeight *
+                   Mathf.SmoothStep(0f, 1f, descendingWeight);
         }
 
         private static Color BlendWeightedColor(

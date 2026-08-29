@@ -345,13 +345,13 @@ namespace FantasySurvival.WorldLighting
                 0f,
                 EvaluateElevationDegrees(moonPathPitchDegrees));
             Quaternion sunRotation = Quaternion.Euler(
-                ClampAboveHorizonPitch(
+                EvaluateAboveHorizonPitch(
                     sunPathPitchDegrees,
                     profile.MinimumDirectionalElevationDegrees),
                 sunAzimuthDegrees,
                 0f);
             Quaternion moonRotation = Quaternion.Euler(
-                ClampAboveHorizonPitch(
+                EvaluateAboveHorizonPitch(
                     moonPathPitchDegrees,
                     profile.MinimumDirectionalElevationDegrees),
                 sunAzimuthDegrees,
@@ -421,17 +421,21 @@ namespace FantasySurvival.WorldLighting
             return Mathf.Asin(Mathf.Clamp(incomingVertical, -1f, 1f)) * Mathf.Rad2Deg;
         }
 
-        private static float ClampAboveHorizonPitch(
+        private static float EvaluateAboveHorizonPitch(
             float pathPitchDegrees,
             float minimumElevationDegrees)
         {
             float normalizedPitch = Mathf.Repeat(pathPitchDegrees, 360f);
             if (normalizedPitch <= 180f)
             {
-                return Mathf.Clamp(
-                    normalizedPitch,
+                // Keep the configured length limit, but ease into each end so
+                // the shadow never sits on a hard-clamped rotation plateau.
+                float normalizedArc = normalizedPitch / 180f;
+                float easedArc = Mathf.SmoothStep(0f, 1f, normalizedArc);
+                return Mathf.Lerp(
                     minimumElevationDegrees,
-                    180f - minimumElevationDegrees);
+                    180f - minimumElevationDegrees,
+                    easedArc);
             }
 
             bool nearestHorizonIsEast =

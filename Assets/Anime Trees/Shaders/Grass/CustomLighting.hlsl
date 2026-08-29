@@ -8,6 +8,7 @@
 #pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
 #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
 #pragma multi_compile_fragment _ _SHADOWS_SOFT
+#pragma multi_compile_fragment _ _LIGHT_COOKIES
 #pragma multi_compile _ SHADOWS_SHADOWMASK
 #pragma multi_compile_fragment _ _SCREEN_SPACE_OCCLUSION
 #pragma multi_compile _ LIGHTMAP_ON
@@ -26,6 +27,9 @@ void MainLight_float(float3 WorldPos, out float3 Direction, out float3 Color, ou
     Light mainLight = GetMainLight(shadowCoord);
     Direction = mainLight.direction;
     Color = mainLight.color;
+	#if defined(_LIGHT_COOKIES)
+		Color *= SampleMainLightCookie(WorldPos);
+	#endif
 
 	#if !defined(_MAIN_LIGHT_SHADOWS) || defined(_RECEIVE_SHADOWS_OFF)
 		ShadowAtten = 1.0h;

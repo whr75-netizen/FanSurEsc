@@ -36,7 +36,7 @@ namespace FantasySurvival.WorldLighting
         private readonly List<Light> sceneLights = new List<Light>();
         private Light sceneDirectionalLight;
         private UniversalAdditionalLightData sceneDirectionalLightData;
-        private Vector2 cloudShadowOffset;
+        private Vector2 cloudShadowWorldOffset;
         private float currentHour;
         private float lastAppliedHour = float.NaN;
         private bool hasGameplaySceneBinding;
@@ -343,10 +343,8 @@ namespace FantasySurvival.WorldLighting
                 return;
             }
 
-            Vector2 cookieSize = profile.CloudShadowCookieSize;
-            cloudShadowOffset = WrapCloudShadowOffset(cloudShadowOffset, cookieSize);
-            sceneDirectionalLightData.lightCookieSize = cookieSize;
-            sceneDirectionalLightData.lightCookieOffset = cloudShadowOffset;
+            sceneDirectionalLightData.lightCookieSize = profile.CloudShadowCookieSize;
+            ApplyCloudShadowOffset();
         }
 
         private void AdvanceCloudShadow(float deltaTime)
@@ -358,10 +356,34 @@ namespace FantasySurvival.WorldLighting
                 return;
             }
 
-            Vector2 cookieSize = profile.CloudShadowCookieSize;
-            cloudShadowOffset += profile.CloudShadowVelocity * deltaTime;
-            cloudShadowOffset = WrapCloudShadowOffset(cloudShadowOffset, cookieSize);
-            sceneDirectionalLightData.lightCookieOffset = cloudShadowOffset;
+            cloudShadowWorldOffset += profile.CloudShadowWorldVelocity * deltaTime;
+            ApplyCloudShadowOffset();
+        }
+
+        private void ApplyCloudShadowOffset()
+        {
+            if (sceneDirectionalLight == null ||
+                sceneDirectionalLightData == null ||
+                profile.CloudShadowCookie == null)
+            {
+                return;
+            }
+
+            // Profile X/Z are map east/north. Convert the accumulated world wind
+            // displacement into the current light plane so the projected pattern
+            // keeps travelling west-to-east while the sun/moon key light rotates.
+            Vector3 worldAnchor = new Vector3(
+                cloudShadowWorldOffset.x,
+                0f,
+                cloudShadowWorldOffset.y);
+            Transform lightTransform = sceneDirectionalLight.transform;
+            Vector3 lightPlaneAnchor = lightTransform.InverseTransformPoint(worldAnchor);
+            Vector2 lightPlaneOffset = new Vector2(
+                lightPlaneAnchor.x,
+                lightPlaneAnchor.y);
+            sceneDirectionalLightData.lightCookieOffset = WrapCloudShadowOffset(
+                lightPlaneOffset,
+                profile.CloudShadowCookieSize);
         }
 
         private static Vector2 WrapCloudShadowOffset(Vector2 offset, Vector2 cookieSize)
@@ -488,6 +510,7 @@ namespace FantasySurvival.WorldLighting
                 ? LightShadows.Soft
                 : LightShadows.None;
             sceneDirectionalLight.enabled = directionalIntensity > DirectionalLightThreshold;
+            ApplyCloudShadowOffset();
             return true;
         }
 

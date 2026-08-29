@@ -181,6 +181,7 @@ Shader "AwaiiStudio/URP_ToonLit"
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS
 			#pragma multi_compile _ _MAIN_LIGHT_SHADOWS_CASCADE
 			#pragma multi_compile _ _SHADOWS_SOFT
+			#pragma multi_compile_fragment _ _LIGHT_COOKIES
 			#pragma multi_compile _ _ADDITIONAL_LIGHTS_VERTEX _ADDITIONAL_LIGHTS
 			#pragma multi_compile _ _ADDITIONAL_LIGHT_SHADOWS
 
@@ -410,6 +411,12 @@ Shader "AwaiiStudio/URP_ToonLit"
 				MixRealtimeAndBakedGI(ase_mainLight, ase_worldNormal, bakedGI20, half4(0,0,0,0));
 				float ase_lightAtten = 0;
 				ase_lightAtten = ase_mainLight.distanceAttenuation * ase_mainLight.shadowAttenuation;
+				#if defined(_LIGHT_COOKIES)
+					// This generated toon shader predates URP light cookies. Apply the
+					// cookie only to its direct-light term so ambient and local lights
+					// keep their existing appearance.
+					ase_lightAtten *= SampleMainLightCookie( WorldPosition ).r;
+				#endif
 				float3 worldPosValue44_g1 = WorldPosition;
 				float3 WorldPosition8_g1 = worldPosValue44_g1;
 				float3 localAdditionalLightsFlat8_g1 = AdditionalLightsFlat( WorldPosition8_g1 );

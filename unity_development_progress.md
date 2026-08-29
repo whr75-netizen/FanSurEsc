@@ -1643,3 +1643,14 @@ Interactable (abstract base class)
 - `[Unity 컴파일·Play Mode 호출 확인]` Profile 유효성, PNG 64×64, Repeat·Point·무압축·밉맵 없음과 직렬화 참조를 확인했다. 한 `GameMap1` Play Session에서 Cookie `PixelCloudShadowCookie`, 크기 `(64,64)`, 바인딩을 확인했고 백그라운드 frame 경과 뒤 오프셋이 `(0.014,0.006)→(3.016,1.293)`으로 이동했다. 같은 camera state의 Cookie A/B 렌더는 802,152 pixel 중 22,257개(2.77%)가 달라졌고 변경 pixel의 RGB 차이는 평균 13.73·최대 41이었다.
 - `[씬 재연결 확인]` 같은 Play Session에서 `GameMap1→GameMapTest→GameMap1`을 한 번 호출했다. 같은 `SkyLightingCycleController` entity ID가 유지됐고 각 활성 씬 소유 Directional Light에 Cookie·크기와 연속 오프셋이 다시 적용됐다. 종료 뒤 Edit Mode `GameMap1`, pause off, `runInBackground=false`를 확인했다.
 - `[보존·미검증]` 기존 낮·밤 곡선, Soft Shadow 방향·강도, Player 셸, Camera, 저장 schema와 사용자 dirty scene/material/preview prefab은 수정하지 않았다. 이 방식은 URP Main Light 직접광을 받는 Lit 표면만 감광하며 Unlit sprite에는 적용되지 않는다. 방향광 투영면 기준이라 광원 각도에 따라 무늬가 늘어날 수 있고, 최종 구름 밀도·명암·속도·픽셀 퍼펙트 정합과 Player build는 미검증이다. Console에는 검증 중 구식 camera ID를 전달한 Unity AI Assistant Capture 도구 오류 1건만 남았으며 게임 코드·런타임 stack 오류는 확인되지 않았다.
+
+---
+
+## 64. 상시 가시 서→동 픽셀 구름 그림자 `[ENVIRONMENT-01][SHELL-01]`
+
+- `[사용자 피드백][2026-08-29]` §63의 구름이 실제 Game View에서 거의 보이지 않았고, 언제 어느 방향으로 지나가는지도 분명하지 않았다. 시험 기본 풍향을 맵 서쪽에서 동쪽으로 고정하고 화면에서 명확하게 읽히도록 수정했다.
+- `[확정 원인]` 기존 Cookie는 68.07%가 흰색이고 직접광 평균 감쇠가 약 5.5%였으며 투영 크기도 64×64라 현재 카메라에 한 덩어리가 지나가는 시간이 길었다. 더 근본적으로 화면 대부분인 160×160 Ground의 외부 `AwaiiStudio/URP_ToonLit`과 풀의 custom lighting이 URP Main Light Cookie를 샘플하지 않아, 변경 pixel이 위상에 따라 화면 0~5.08%뿐이었다.
+- `[데이터·이동]` 같은 `SkyLightingCycleController`와 Directional Light 소유권을 유지했다. 64×64 Cookie는 2×2 pixel 단계의 `255/210/150/96` 네 명도로 재구성해 평균 직접광 감쇠를 29.24%로 올리고, 투영 크기는 24×24로 줄였다. Profile 이동값은 광원 로컬축이 아니라 맵 `X/Z` 초당 월드 이동이며 기본 `(0.75,0)`은 `+X=동`, `+Z=북` 기준 서→동이다. controller가 누적 월드 anchor를 현재 Light 투영면으로 변환해 시간 변경·씬 재바인딩 뒤에도 같은 위상을 사용하고, 이전 Vector2 field는 `FormerlySerializedAs`로 이관한다.
+- `[렌더링 근본 수정]` Toon Ground와 풀 custom lighting에 `_LIGHT_COOKIES` variant와 `SampleMainLightCookie(WorldPosition)`를 연결했다. Toon은 Cookie를 기존 direct-light scalar에만 곱하고, 풀은 main-light color에만 곱하므로 ambient·추가 조명·material 색은 기존 경로를 유지한다. 새 날씨 Manager, overlay Plane·Sprite와 별도 구름 오브젝트는 추가하지 않았다.
+- `[Unity 컴파일·Play Mode 호출 확인]` 변경한 Toon·Grass LOD0·Grass LOD1 shader는 compiler error 0이었다. 한 `GameMap1` Play Session에서 같은 controller entity를 9.2875초 추적해 월드 속도 `(0.75177,0,-0.00046)`을 확인했다. 낮의 실제 Camera Cookie A/B를 동쪽 위상 9개로 비교한 결과 0% 표본 없이 화면 변경 비율 최소 61.22%, 평균 68.51%, 최대 74.53%, 평균 RGB 차이 15.50이었다. 같은 session의 7.5/12/22시는 각각 66.47%/76.35%/65.62%가 바뀌어 아침·낮·밤 모두 비가시 구간이 없었다. 종료 뒤 Play Mode와 `runInBackground`를 껐다.
+- `[보존·미검증]` 기존 낮밤 밝기·Soft Shadow 곡선, Player 셸·Camera·씬 흐름·저장 schema와 사용자의 dirty scene/material/preview prefab은 변경하지 않았다. Cookie는 직접광만 감쇠하므로 정식 Unlit 표현에는 별도 수신 정책이 필요하고, 광원 pitch에 따른 투영 축척은 URP Cookie 특성상 변한다. 실제 사용자 조작 중 체감 속도·최종 아트 승인과 Player build는 미검증이다. 현재 Console에는 이번 변경 대상이 아닌 `AwaiiStudio/ASFolliage`의 기존 main-light shadow keyword 중복 메시지 2건이 남아 있으며 지워서 덮지 않았다.

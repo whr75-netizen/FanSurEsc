@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace FantasySurvival.WorldLighting
 {
@@ -135,9 +136,10 @@ namespace FantasySurvival.WorldLighting
         menuName = "Fantasy Survival/World Lighting/Sky Lighting Profile")]
     public sealed class SkyLightingProfile : ScriptableObject
     {
-        private const float DefaultMoonShadowStrength = 0.28f;
-        private const float DefaultMinimumAmbientIntensity = 0.55f;
-        private const float DefaultMinimumDirectionalIntensity = 0.12f;
+        private const float DefaultMoonShadowStrength = 0.50f;
+        private const float DefaultMinimumShadowStrength = 0.10f;
+        private const float DefaultMinimumAmbientIntensity = 0.62f;
+        private const float DefaultMinimumDirectionalIntensity = 0.18f;
         private static readonly Color DefaultMinimumLightColor =
             new Color(0.42f, 0.54f, 0.90f, 1f);
 
@@ -146,13 +148,16 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Range(0f, 24f)] private float nightPreviewHour = 22f;
         [SerializeField, Range(1f, 45f)] private float minimumDirectionalElevationDegrees = 31f;
         [SerializeField, Range(1f, 45f)] private float fullSunlightElevationDegrees = 15f;
-        [SerializeField, Range(0f, 30f)] private float noShadowElevationDegrees = 12f;
+        [SerializeField, Range(0f, 30f)] private float noShadowElevationDegrees = 0f;
         [SerializeField, Range(1f, 45f)] private float fullShadowElevationDegrees = 31f;
         [SerializeField, Range(1f, 45f)] private float fullMoonlightElevationDegrees = 15f;
         [SerializeField, Range(0.1f, 15f)] private float directionTransitionElevationDegrees = 15f;
         [SerializeField, Range(0.01f, 1f)] private float horizonMoonlightWeight = 0.5f;
         [SerializeField, Range(0f, 1f)] private float moonShadowStrength =
             DefaultMoonShadowStrength;
+        [FormerlySerializedAs("minimumTransitionShadowStrength")]
+        [SerializeField, Range(0f, 1f)] private float minimumShadowStrength =
+            DefaultMinimumShadowStrength;
         [SerializeField] private Color minimumLightColor = DefaultMinimumLightColor;
         [SerializeField, Min(0f)] private float minimumAmbientIntensity =
             DefaultMinimumAmbientIntensity;
@@ -168,6 +173,7 @@ namespace FantasySurvival.WorldLighting
         public float DirectionTransitionElevationDegrees => directionTransitionElevationDegrees;
         public float HorizonMoonlightWeight => horizonMoonlightWeight;
         public float MoonShadowStrength => moonShadowStrength;
+        public float MinimumShadowStrength => minimumShadowStrength;
         public Color MinimumLightColor => minimumLightColor;
         public float MinimumAmbientIntensity => minimumAmbientIntensity;
         public float MinimumDirectionalIntensity => minimumDirectionalIntensity;
@@ -269,6 +275,8 @@ namespace FantasySurvival.WorldLighting
                 float.IsInfinity(moonShadowStrength) ||
                 moonShadowStrength < 0f ||
                 moonShadowStrength > 1f ||
+                !IsFiniteNonNegative(minimumShadowStrength) ||
+                minimumShadowStrength > 1f ||
                 !IsFiniteNonNegative(minimumAmbientIntensity) ||
                 !IsFiniteNonNegative(minimumDirectionalIntensity) ||
                 !IsFiniteNonNegative(minimumLightColor))
@@ -335,8 +343,8 @@ namespace FantasySurvival.WorldLighting
                     0.18f,
                     new Color(0.54f, 0.62f, 0.82f),
                     0f,
-                    new Color(0.46f, 0.56f, 0.82f),
-                    0.14f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.40f,
                     0f),
                 new SkyLightingKeyframe(
                     6.5f,
@@ -348,8 +356,8 @@ namespace FantasySurvival.WorldLighting
                     0.28f,
                     new Color(1f, 0.56f, 0.30f),
                     0.7f,
-                    new Color(0.45f, 0.55f, 0.82f),
-                    0.04f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.26f,
                     0.72f),
                 new SkyLightingKeyframe(
                     10f,
@@ -361,7 +369,7 @@ namespace FantasySurvival.WorldLighting
                     0.48f,
                     new Color(1f, 0.95f, 0.82f),
                     1.15f,
-                    new Color(0.45f, 0.55f, 0.82f),
+                    new Color(0.62f, 0.72f, 1f),
                     0f,
                     0.86f),
                 new SkyLightingKeyframe(
@@ -374,8 +382,8 @@ namespace FantasySurvival.WorldLighting
                     0.40f,
                     new Color(1f, 0.74f, 0.46f),
                     0.82f,
-                    new Color(0.45f, 0.55f, 0.82f),
-                    0.02f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.04f,
                     0.80f),
                 new SkyLightingKeyframe(
                     19.5f,
@@ -387,8 +395,8 @@ namespace FantasySurvival.WorldLighting
                     0.22f,
                     new Color(0.60f, 0.68f, 0.88f),
                     0f,
-                    new Color(0.46f, 0.56f, 0.84f),
-                    0.12f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.32f,
                     0f)
             };
         }

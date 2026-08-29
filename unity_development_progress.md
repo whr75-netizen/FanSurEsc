@@ -1591,3 +1591,14 @@ Interactable (abstract base class)
 - `[그림자 제한]` 그림자를 만드는 방향광의 최소 고도를 31도로 올려 활성 그림자의 이론상 최대 길이를 높이의 `cot(31°) ≈ 1.664배`로 제한했다. 달 그림자는 별도 강도 0.28을 사용하며 밤에는 같은 URP Main Directional Light가 그림자 owner가 된다.
 - `[Unity 컴파일·Play Mode 호출 확인]` 프로젝트와 프로필 직렬화가 컴파일됐다. 한 `GameMap1` Play Session에서 0~24시를 0.05시간 간격으로 한 번 순회해 실패 0건, 최소 방향광 0.120, 최소 ambient 0.550, 활성 그림자 최대 비율 1.664, 밤 그림자 표본 208건을 확인했다. 18시는 방향광 0.202·그림자 없음, 20시는 0.121·달 그림자 0.278, 22시는 0.132·달 그림자 0.280이었다. 자정 ambient sky 하한은 RGB `(0.147, 0.189, 0.315)`의 청색이었다. 프로필의 0/검정은 명시적 비활성 값으로 유지해 모드가 각 하한과 달 그림자를 끌 수 있다.
 - `[보존·미검증]` 60초 시험 주기, Player·Camera·씬 흐름·저장과 사용자 dirty scene/material/preview prefab은 바꾸지 않았다. 실제 Game View의 최종 색감과 체감 그림자 길이, 달 원반·별·구름·실내 감쇠·Player build는 미검증이다. 검증 중 남은 `ShouldRunBehaviour()` Console assertion은 게임 코드가 아니라 Unity AI Assistant의 동적 `RunCommand` 호출 stack에서 발생했으며 Console을 지워 덮지 않았다.
+
+---
+
+## 59. 밝은 달과 끊기지 않는 Soft Shadow 전환 `[ENVIRONMENT-01][SHELL-01]`
+
+- `[사용자 피드백][2026-08-29]` 달은 밝아야 하며, 선명한 태양 그림자가 갑자기 사라진 뒤 달 그림자가 다시 나타나는 전환을 부드럽게 바꿔야 한다.
+- `[확정 원인·기준선]` authoring Directional Light는 원래 Soft였지만 controller가 매 갱신마다 `Hard/None`으로 덮어썼다. 태양·달 모두 고도 12도 이하에서 그림자 강도를 0으로 만들어 일몰 17.2~18.9시에 실제 무그림자 구간 1.7시간, 60초 시험 주기에서 4.25초가 생겼다. 밤 22시 방향광도 0.132였다.
+- `[근본 수정]` 기존 단일 URP Main Directional Light와 31도 방향 제한은 유지했다. 태양·달 그림자 고도 fade를 지평선 0도부터 31도까지 넓히고 프로필의 Soft 그림자 절대 하한 0.10을 적용해 그림자 map·mode가 끊기지 않게 했다. controller는 더 이상 Hard를 강제하지 않고 PC URP의 기존 High Soft Shadow를 사용한다. 모드는 이 하한만 0으로 끌 수 있으며, 그림자 전체 비활성에는 태양 keyframe과 달 그림자 강도도 0이어야 한다.
+- `[밝은 달]` 월광 keyframe을 19.5시 0.32, 자정 0.40, 6.5시 0.26과 청색 RGB `(0.62, 0.72, 1.0)`으로 올렸다. 달 그림자 0.50, 방향광 하한 0.18, ambient 하한 0.62를 프로필 값으로 명시했다.
+- `[Unity 컴파일·Play Mode 호출 확인]` 한 `GameMap1` Play Session에서 0~24시를 0.05시간 간격으로 한 번 순회했다. 실패 0건, `None` 0건, non-Soft 0건, 최소 방향광 0.238, 최소 ambient 0.620, 최소 그림자 0.100, 최대 그림자 길이 비율 1.664, 전환 인접 표본 최대 강도 차 0.032였다. 18시는 Soft/0.100/광량0.266, 22시는 Soft/0.500/광량0.367, 자정은 Soft/0.500/광량0.400이었다. PC pipeline의 Soft 지원과 High 품질값 3도 확인했다.
+- `[보존·미검증]` Player·Camera·씬·저장·60초 주기와 사용자 dirty asset은 바꾸지 않았다. 표준 URP 실시간 Directional Light에는 시간에 따라 penumbra 폭을 연속 확대하는 공개값이 없어, 이번에는 High PCF 경계와 연속 강도 곡선을 사용했다. 실제 Game View 색감은 사용자 판단이 남았고 Mobile profile은 Soft Shadow가 비활성이라 PC와 같은 경계를 보장하지 않는다. 달 원반·별·구름·실내 감쇠·Player build는 범위 밖이다.

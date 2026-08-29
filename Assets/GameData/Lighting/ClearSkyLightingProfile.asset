@@ -17,15 +17,16 @@ MonoBehaviour:
   nightPreviewHour: 22
   minimumDirectionalElevationDegrees: 31
   fullSunlightElevationDegrees: 15
-  noShadowElevationDegrees: 12
+  noShadowElevationDegrees: 0
   fullShadowElevationDegrees: 31
   fullMoonlightElevationDegrees: 15
   directionTransitionElevationDegrees: 15
   horizonMoonlightWeight: 0.5
-  moonShadowStrength: 0.28
+  moonShadowStrength: 0.5
+  minimumShadowStrength: 0.1
   minimumLightColor: {r: 0.42, g: 0.54, b: 0.9, a: 1}
-  minimumAmbientIntensity: 0.55
-  minimumDirectionalIntensity: 0.12
+  minimumAmbientIntensity: 0.62
+  minimumDirectionalIntensity: 0.18
   keyframes:
   - hour: 0
     phase: 2
@@ -36,8 +37,8 @@ MonoBehaviour:
     reflectionIntensity: 0.18
     sunColor: {r: 0.54, g: 0.62, b: 0.82, a: 1}
     sunIntensity: 0
-    moonColor: {r: 0.46, g: 0.56, b: 0.82, a: 1}
-    moonIntensity: 0.14
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.4
     shadowStrength: 0
   - hour: 6.5
     phase: 0
@@ -48,8 +49,8 @@ MonoBehaviour:
     reflectionIntensity: 0.28
     sunColor: {r: 1, g: 0.56, b: 0.3, a: 1}
     sunIntensity: 0.7
-    moonColor: {r: 0.45, g: 0.55, b: 0.82, a: 1}
-    moonIntensity: 0.04
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.26
     shadowStrength: 0.72
   - hour: 10
     phase: 1
@@ -60,7 +61,7 @@ MonoBehaviour:
     reflectionIntensity: 0.48
     sunColor: {r: 1, g: 0.95, b: 0.82, a: 1}
     sunIntensity: 1.15
-    moonColor: {r: 0.45, g: 0.55, b: 0.82, a: 1}
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
     moonIntensity: 0
     shadowStrength: 0.86
   - hour: 16
@@ -72,8 +73,8 @@ MonoBehaviour:
     reflectionIntensity: 0.4
     sunColor: {r: 1, g: 0.74, b: 0.46, a: 1}
     sunIntensity: 0.82
-    moonColor: {r: 0.45, g: 0.55, b: 0.82, a: 1}
-    moonIntensity: 0.02
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.04
     shadowStrength: 0.8
   - hour: 19.5
     phase: 2
@@ -84,6 +85,6 @@ MonoBehaviour:
     reflectionIntensity: 0.22
     sunColor: {r: 0.6, g: 0.68, b: 0.88, a: 1}
     sunIntensity: 0
-    moonColor: {r: 0.46, g: 0.56, b: 0.84, a: 1}
-    moonIntensity: 0.12
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.32
     shadowStrength: 0

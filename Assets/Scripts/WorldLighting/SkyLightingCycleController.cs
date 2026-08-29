@@ -392,9 +392,12 @@ namespace FantasySurvival.WorldLighting
                 moonElevationDegrees,
                 profile.NoShadowElevationDegrees,
                 profile.FullShadowElevationDegrees);
-            float visibleShadowStrength =
+            float celestialShadowStrength =
                 sample.ShadowStrength * sunShadowWeight * sunContributionWeight +
                 profile.MoonShadowStrength * moonShadowWeight * moonContributionWeight;
+            float visibleShadowStrength = Mathf.Max(
+                celestialShadowStrength,
+                profile.MinimumShadowStrength);
 
             sceneDirectionalLight.transform.rotation = directionalRotation;
             sceneDirectionalLight.color = directionalColor;
@@ -403,7 +406,7 @@ namespace FantasySurvival.WorldLighting
             sceneDirectionalLight.shadows =
                 directionalIntensity > DirectionalLightThreshold &&
                 visibleShadowStrength > DirectionalLightThreshold
-                ? LightShadows.Hard
+                ? LightShadows.Soft
                 : LightShadows.None;
             sceneDirectionalLight.enabled = directionalIntensity > DirectionalLightThreshold;
             return true;

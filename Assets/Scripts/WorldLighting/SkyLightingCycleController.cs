@@ -20,6 +20,7 @@ namespace FantasySurvival.WorldLighting
         private const float HoursPerDay = 24f;
         private const float MinutesPerHour = 60f;
         private const float DirectionalLightThreshold = 0.001f;
+        private const float MinimumCookieProjectionScale = 0.001f;
 
         [Header("Definition")]
         [SerializeField] private SkyLightingProfile profile;
@@ -343,8 +344,7 @@ namespace FantasySurvival.WorldLighting
                 return;
             }
 
-            sceneDirectionalLightData.lightCookieSize = profile.CloudShadowCookieSize;
-            ApplyCloudShadowOffset();
+            ApplyCloudShadowProjection();
         }
 
         private void AdvanceCloudShadow(float deltaTime)
@@ -376,14 +376,50 @@ namespace FantasySurvival.WorldLighting
                 cloudShadowWorldOffset.x,
                 0f,
                 cloudShadowWorldOffset.y);
-            Transform lightTransform = sceneDirectionalLight.transform;
-            Vector3 lightPlaneAnchor = lightTransform.InverseTransformPoint(worldAnchor);
+            Matrix4x4 worldToLight =
+                sceneDirectionalLight.transform.worldToLocalMatrix;
+            Vector3 lightPlaneAnchor = worldToLight.MultiplyPoint3x4(worldAnchor);
             Vector2 lightPlaneOffset = new Vector2(
                 lightPlaneAnchor.x,
                 lightPlaneAnchor.y);
             sceneDirectionalLightData.lightCookieOffset = WrapCloudShadowOffset(
                 lightPlaneOffset,
-                profile.CloudShadowCookieSize);
+                sceneDirectionalLightData.lightCookieSize);
+        }
+
+        private void ApplyCloudShadowProjection()
+        {
+            if (sceneDirectionalLight == null ||
+                sceneDirectionalLightData == null ||
+                profile.CloudShadowCookie == null)
+            {
+                return;
+            }
+
+            // A directional cookie is defined on the plane perpendicular to
+            // the light. A fixed light-plane size therefore stretches across
+            // horizontal ground as the key light approaches the horizon.
+            // Scale each cookie axis by its horizontal projection so one repeat
+            // keeps the profile's world footprint while the light pitch changes.
+            Matrix4x4 worldToLight =
+                sceneDirectionalLight.transform.worldToLocalMatrix;
+            Vector2 horizontalProjectionScale = new Vector2(
+                Mathf.Sqrt(
+                    worldToLight.m00 * worldToLight.m00 +
+                    worldToLight.m02 * worldToLight.m02),
+                Mathf.Sqrt(
+                    worldToLight.m10 * worldToLight.m10 +
+                    worldToLight.m12 * worldToLight.m12));
+            horizontalProjectionScale.x = Mathf.Max(
+                MinimumCookieProjectionScale,
+                horizontalProjectionScale.x);
+            horizontalProjectionScale.y = Mathf.Max(
+                MinimumCookieProjectionScale,
+                horizontalProjectionScale.y);
+            sceneDirectionalLightData.lightCookieSize = Vector2.Scale(
+                profile.CloudShadowCookieSize,
+                horizontalProjectionScale);
+            ApplyCloudShadowOffset();
         }
 
         private static Vector2 WrapCloudShadowOffset(Vector2 offset, Vector2 cookieSize)
@@ -510,7 +546,7 @@ namespace FantasySurvival.WorldLighting
                 ? LightShadows.Soft
                 : LightShadows.None;
             sceneDirectionalLight.enabled = directionalIntensity > DirectionalLightThreshold;
-            ApplyCloudShadowOffset();
+            ApplyCloudShadowProjection();
             return true;
         }
 

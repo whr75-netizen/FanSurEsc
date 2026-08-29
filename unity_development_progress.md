@@ -1654,3 +1654,13 @@ Interactable (abstract base class)
 - `[렌더링 근본 수정]` Toon Ground와 풀 custom lighting에 `_LIGHT_COOKIES` variant와 `SampleMainLightCookie(WorldPosition)`를 연결했다. Toon은 Cookie를 기존 direct-light scalar에만 곱하고, 풀은 main-light color에만 곱하므로 ambient·추가 조명·material 색은 기존 경로를 유지한다. 새 날씨 Manager, overlay Plane·Sprite와 별도 구름 오브젝트는 추가하지 않았다.
 - `[Unity 컴파일·Play Mode 호출 확인]` 변경한 Toon·Grass LOD0·Grass LOD1 shader는 compiler error 0이었다. 한 `GameMap1` Play Session에서 같은 controller entity를 9.2875초 추적해 월드 속도 `(0.75177,0,-0.00046)`을 확인했다. 낮의 실제 Camera Cookie A/B를 동쪽 위상 9개로 비교한 결과 0% 표본 없이 화면 변경 비율 최소 61.22%, 평균 68.51%, 최대 74.53%, 평균 RGB 차이 15.50이었다. 같은 session의 7.5/12/22시는 각각 66.47%/76.35%/65.62%가 바뀌어 아침·낮·밤 모두 비가시 구간이 없었다. 종료 뒤 Play Mode와 `runInBackground`를 껐다.
 - `[보존·미검증]` 기존 낮밤 밝기·Soft Shadow 곡선, Player 셸·Camera·씬 흐름·저장 schema와 사용자의 dirty scene/material/preview prefab은 변경하지 않았다. Cookie는 직접광만 감쇠하므로 정식 Unlit 표현에는 별도 수신 정책이 필요하고, 광원 pitch에 따른 투영 축척은 URP Cookie 특성상 변한다. 실제 사용자 조작 중 체감 속도·최종 아트 승인과 Player build는 미검증이다. 현재 Console에는 이번 변경 대상이 아닌 `AwaiiStudio/ASFolliage`의 기존 main-light shadow keyword 중복 메시지 2건이 남아 있으며 지워서 덮지 않았다.
+
+---
+
+## 65. 구름 지면 크기·이동속도 고정 `[ENVIRONMENT-01][SHELL-01]`
+
+- `[사용자 피드백][2026-08-29]` 태양 고도에 따라 구름 그림자가 길고 짧아졌고, 이 크기 변화가 이동과 겹쳐 늘어날 때는 멈춘 듯 보이고 줄어들 때는 빠르게 넘어갔다.
+- `[확정 원인]` URP Directional Light Cookie는 광원에 수직인 평면에서 `UV=(lightLocalXY-offset)/size`로 투영된다. 기존 fixed size 24는 지면에서 정오 24, 7.5시 40.762, 17시 43.689, 18시 46.599로 최대 1.942배 늘어났다. 이동을 멈춘 같은 명령 안에서도 고정 지점의 Y phase가 정오 `0.5012`에서 18시 `0.2581`로 바뀌어, world offset이 아니라 투영 scale이 가짜 속도의 원인임을 확인했다.
+- `[근본 수정]` Profile의 Cookie Size를 광원 평면 크기가 아니라 수평 지면에서 원하는 한 주기 크기로 정의했다. 최종 주광 회전 뒤 동일한 `worldToLocalMatrix`로 각 light-local 축의 수평 투영 배율을 구해 Cookie size에 곱하고, world anchor도 같은 행렬로 변환한 뒤 보정된 size로 Repeat한다. 따라서 크기와 offset이 같은 투영 기준을 사용하며 새 Manager·구름 오브젝트·속도 보정값을 추가하지 않았다.
+- `[Unity 컴파일·Play Mode 호출 확인]` C# compilation과 Profile 유효성을 확인했다. 한 `GameMap1` Play Session에서 7.5/12/17/18/22시의 실제 Cookie light-plane size는 각각 Y `14.131/24.000/13.184/12.361/21.110`으로 역보정됐고, 지면 footprint는 전 표본 `(24.000,24.000)`, 최대 크기 오차 0, 고정 지점 phase 최대 오차 0이었다. 가장 낮은 18시에서 4.0504 게임초 동안 지면 이동 `(3.03783,0)`과 속도 `(0.75000,0)`을 확인했다. 같은 Camera로 7.5/12/18시 화면을 캡처해 늘어진 긴 띠 없이 같은 픽셀 덩어리 크기가 유지되는 것도 확인했다.
+- `[보존·미검증]` §64의 밀도·명암, 서→동 속도, 낮밤 밝기·Soft Shadow, Player 셸·Camera·씬·저장과 사용자 dirty asset을 변경하지 않았다. 현재 고정 azimuth·roll 0의 단일 주광 경로에서는 정확하며, 향후 방위각·roll까지 동적으로 바꾸면 Cookie size만으로 shear를 없앨 수 없어 world-XZ 직접 샘플 방식을 재검토한다. 실제 사용자 조작 체감과 Player build는 미검증이며 Console의 변경 전 `ASFolliage` keyword 중복 2건은 남겼다.

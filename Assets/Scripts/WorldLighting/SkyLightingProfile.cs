@@ -167,6 +167,7 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Min(0f)] private float minimumDirectionalIntensity =
             DefaultMinimumDirectionalIntensity;
         [SerializeField] private Texture2D cloudShadowCookie;
+        [Tooltip("Desired size of one cookie repeat on horizontal ground.")]
         [SerializeField] private Vector2 cloudShadowCookieSize = new Vector2(24f, 24f);
         [FormerlySerializedAs("cloudShadowVelocity")]
         [Tooltip("World X/Z units per real second. Positive X moves west to east.")]

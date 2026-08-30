@@ -920,6 +920,10 @@ Shader "AwaiiStudio/URP_ToonLit"
 			ENDHLSL
 		}
 
+		// Keep this generated toon shader visible to URP depth-normal consumers
+		// such as SSAO and the stepped local-light composition pass.
+		UsePass "Universal Render Pipeline/Lit/DepthNormals"
+
 	
 	}
 	

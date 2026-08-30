@@ -1780,3 +1780,12 @@ Interactable (abstract base class)
 - `[사용자 조정]` 광원 반경 4.5m와 Surface/Halo 단계 수는 유지하고 prefab 원본과 새 컴포넌트 기본 `worldCellSize`를 `0.18 → 0.12m`로 줄였다. 기지와 `GameMapTest`의 두 prefab 인스턴스가 같은 원본을 상속해 광원 기여의 월드 고정 도트 블록만 약 33% 더 촘촘해진다.
 - `[Play Mode 확인]` 최종 조정 뒤 `GameMap1` 직접 Play 1회에서 scene의 활성 `SteppedLocalLight`가 정확히 1개이고 persistent gameplay Camera가 이를 renderer material에 `rendered=1`, `worldCellSize=0.12`로 전달함을 확인했다. Play 종료 뒤 `GameMap1`, Edit Mode, scene clean, compile failure 없음과 저장된 prefab 연결을 다시 확인했다.
 - `[Git 경계]` `GameMap1`에는 작업 전부터 Base Chest의 새 직렬화 필드 6줄이 별도 변경으로 존재했다. 해당 기존 변경은 보존하며 이 배치의 prefab instance·SceneRoots hunk만 분리해 기록한다.
+
+---
+
+## 77. 기지 바닥·Grass 조명 수신 계약 수정 `[ENVIRONMENT-01]`
+
+- `[사용자 피드백·확정 원인][2026-08-30]` 기지 단계형 로컬광은 기둥 등 일부 오브젝트에만 보이고 Ground에는 나타나지 않았다. `Small Ground`의 `AwaiiStudio/URP_ToonLit`은 Opaque·DepthOnly였지만 URP의 Depth/Normal prepass가 읽는 `DepthNormals` 패스가 없어 fullscreen 로컬광에서 배경으로 제외됐다. Grass LOD0/1은 depth-normal 패스는 있었지만 두 Shader Graph의 본체가 Unlit이었다. LOD1은 vertex 색 그라데이션만 출력했고, LOD0도 MainLight의 색·세기를 버린 채 shadow/self-shadow 값으로 색만 골라 빛이 없어도 선명하게 남았다.
+- `[근본 수정·보존]` Toon Ground 셰이더에 URP Lit의 `DepthNormals` pass를 명시적으로 재사용해 원래 Forward 외관은 유지했다. Grass LOD0/1은 같은 URP Lit 표면 계약으로 바꾸고, LOD0 BaseColor에서 중복 수동 조명 가지를 제거해 원래 Bottom↔Top vertex 색을 표면색으로 넘겼다. 양면 렌더, 두 LOD mesh·전환, LOD0 vertex wind 연결과 재질 색 값은 바꾸지 않았다. 기지 인스턴스의 앞선 셀 크기 조정 `0.04m`는 유지하고 공유 prefab·GameMapTest 기본값은 `0.12m`다.
+- `[Shader·Play Mode 확인]` Toon Ground, Grass LOD0, Grass LOD1은 모두 supported였고 관련 compiler error가 0이었다. 런타임의 Grass 재질 2개가 모두 `ForwardLit`과 `DepthNormals`를 제공하고 기지 Ground도 `DepthNormals`를 제공했다. 한 `GameMap1` Play Session의 같은 Camera에서 정오, 22시, 22시 로컬광 off와 환경광 0 제어 화면을 각각 비교했다. Grass는 정오에 밝고 그림자를 받았으며 22시에 어두워졌고, 환경광 0에서는 로컬광 범위 밖이 검게 사라졌다. 로컬광 on/off에서는 Ground의 단계형 원과 반경 안 Grass·오브젝트의 따뜻한 기여가 함께 나타났다.
+- `[보존·Console]` Player·Camera·HUD·씬 흐름·날씨 권위·표준 Unity Light 수는 변경하지 않았다. 기존 외부 `AwaiiStudio/ASFolliage`의 중복 keyword 오류와 검증용 동적 명령 컴파일 실패 기록은 Console에서 지워 덮지 않았다. Player build, Mobile, Transparent Sprite 수광, 벽 차폐와 최종 Grass 명암 아트 조정은 미검증이다.

@@ -28,7 +28,6 @@ namespace FantasySurvival.WorldLighting
             Shader.PropertyToID("_SoftnessMip");
         private static readonly int CloudShadowOpacityId =
             Shader.PropertyToID("_Opacity");
-
         [Header("Definition")]
         [SerializeField] private SkyLightingProfile profile;
         [SerializeField] private PixelRainPresentation rainPresentation;
@@ -45,6 +44,10 @@ namespace FantasySurvival.WorldLighting
 
         [Header("Sun Path")]
         [SerializeField, Range(0f, 360f)] private float sunAzimuthDegrees = 290f;
+
+        [Header("Night-Activated Lights")]
+        [SerializeField, Range(0f, 1f)] private float nightLightFadeStartWeight = 0.35f;
+        [SerializeField, Range(0f, 1f)] private float nightLightFullyOnWeight = 0.75f;
 
         private readonly List<Light> sceneLights = new List<Light>();
         private PersistentGameplayShell shell;
@@ -69,6 +72,7 @@ namespace FantasySurvival.WorldLighting
         private SkyWeatherSample currentWeatherSample;
         private float weatherTransitionElapsed;
         private bool weatherTransitionActive;
+        private float currentNightActivatedLightVisibility;
 
         public float CurrentHour => currentHour;
         public SkyTimePhase CurrentPhase => currentPhase;
@@ -82,6 +86,10 @@ namespace FantasySurvival.WorldLighting
         public SkyWeatherType CurrentWeatherType => currentWeatherType;
         public float CurrentRainIntensity => currentWeatherSample.PrecipitationIntensity;
         public bool IsWeatherTransitioning => weatherTransitionActive;
+        public float CurrentNightActivatedLightVisibility =>
+            currentNightActivatedLightVisibility;
+
+        public event System.Action<float> NightActivatedLightVisibilityChanged;
 
         private void Awake()
         {
@@ -121,6 +129,7 @@ namespace FantasySurvival.WorldLighting
             lastAppliedHour = float.NaN;
             rainPresentation?.UnbindGameplayScene();
             lightShaftPresentation?.UnbindGameplayScene();
+            ApplyNightActivatedLightVisibility(0f, true);
         }
 
         private void Update()
@@ -815,6 +824,8 @@ namespace FantasySurvival.WorldLighting
                 profile.FullMoonlightElevationDegrees,
                 profile.FullSunlightElevationDegrees);
             float moonContributionWeight = 1f - sunContributionWeight;
+            ApplyNightActivatedLightVisibility(
+                EvaluateNightActivatedLightVisibility(moonContributionWeight));
             float duskLightOverlapWeight = EvaluateDuskLightOverlapWeight(
                 sunPathPitchDegrees,
                 profile.DuskLightOverlapWeight);
@@ -894,6 +905,38 @@ namespace FantasySurvival.WorldLighting
                 currentWeatherSample.ShadowStrengthMultiplier,
                 currentWeatherSample.PrecipitationIntensity);
             return true;
+        }
+
+        private float EvaluateNightActivatedLightVisibility(float nightWeight)
+        {
+            float fadeStart = Mathf.Clamp01(Mathf.Min(
+                nightLightFadeStartWeight,
+                nightLightFullyOnWeight));
+            float fullyOn = Mathf.Clamp01(Mathf.Max(
+                nightLightFadeStartWeight,
+                nightLightFullyOnWeight));
+            if (fullyOn - fadeStart <= 0.0001f)
+            {
+                return nightWeight >= fullyOn ? 1f : 0f;
+            }
+
+            float normalized = Mathf.InverseLerp(fadeStart, fullyOn, nightWeight);
+            return normalized * normalized * (3f - 2f * normalized);
+        }
+
+        private void ApplyNightActivatedLightVisibility(
+            float visibility,
+            bool forceNotification = false)
+        {
+            float clampedVisibility = Mathf.Clamp01(visibility);
+            bool changed = Mathf.Abs(
+                currentNightActivatedLightVisibility - clampedVisibility) > 0.0001f;
+            currentNightActivatedLightVisibility = clampedVisibility;
+            if (changed || forceNotification)
+            {
+                NightActivatedLightVisibilityChanged?.Invoke(
+                    currentNightActivatedLightVisibility);
+            }
         }
 
         private bool InitializeWeather(SkyWeatherType weatherType)

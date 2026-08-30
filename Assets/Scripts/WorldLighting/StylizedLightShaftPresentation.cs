@@ -50,6 +50,7 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Range(1, MaximumLocalEmitterCount)]
         private int visibleLocalEmitterLimit = 8;
         [SerializeField, Min(0.01f)] private float localSurfaceFadeDistance = 0.2f;
+        [SerializeField, Range(1f, 2f)] private float localRainScatterMultiplier = 1.35f;
 
         private readonly StylizedLightShaftEmitter[] selectedLocalEmitters =
             new StylizedLightShaftEmitter[MaximumLocalEmitterCount];
@@ -113,6 +114,10 @@ namespace FantasySurvival.WorldLighting
                 1,
                 MaximumLocalEmitterCount);
             localSurfaceFadeDistance = Mathf.Max(0.01f, localSurfaceFadeDistance);
+            localRainScatterMultiplier = Mathf.Clamp(
+                localRainScatterMultiplier,
+                1f,
+                2f);
         }
 
         internal void ApplySunlight(
@@ -210,23 +215,22 @@ namespace FantasySurvival.WorldLighting
             for (int index = 0; index < emitterCount; index++)
             {
                 StylizedLightShaftEmitter emitter = selectedLocalEmitters[index];
-                SteppedLocalLight source = emitter.SourceLight;
-                Color linearColor = source.Color.linear;
+                Light source = emitter.SourceLight;
+                Color linearColor = source.color.linear;
                 float visibleIntensity =
-                    source.Intensity * Mathf.Clamp01(linearColor.a) *
-                    emitter.IntensityMultiplier;
+                    source.intensity * emitter.IntensityMultiplier *
+                    Mathf.Lerp(1f, localRainScatterMultiplier, rainIntensity);
                 if (visibleIntensity <= MinimumVisibleIntensity)
                 {
                     continue;
                 }
 
-                Quaternion rotation = Quaternion.FromToRotation(
-                    Vector3.down,
-                    emitter.DirectionWorld);
-                Matrix4x4 matrix = Matrix4x4.TRS(
-                    emitter.transform.position,
-                    rotation,
-                    new Vector3(emitter.EndRadius, emitter.Length, emitter.EndRadius));
+                Matrix4x4 matrix = BuildCameraFacingBeamMatrix(
+                    camera,
+                    emitter.OriginWorld,
+                    emitter.DirectionWorld,
+                    emitter.Length,
+                    emitter.EndRadius);
 
                 Material localMaterial = localMaterials[index];
                 ApplyMaterialProperties(
@@ -241,6 +245,41 @@ namespace FantasySurvival.WorldLighting
                     localSurfaceFadeDistance);
                 DrawMesh(localBeamMesh, matrix, localMaterial, camera);
             }
+        }
+
+        private static Matrix4x4 BuildCameraFacingBeamMatrix(
+            Camera camera,
+            Vector3 origin,
+            Vector3 direction,
+            float length,
+            float endRadius)
+        {
+            Vector3 across = Vector3.Cross(direction, camera.transform.forward);
+            if (across.sqrMagnitude <= 0.0001f)
+            {
+                across = Vector3.Cross(direction, camera.transform.up);
+            }
+            if (across.sqrMagnitude <= 0.0001f)
+            {
+                across = camera.transform.right;
+            }
+            across.Normalize();
+
+            Vector3 normal = Vector3.Cross(across, direction).normalized;
+            Matrix4x4 matrix = Matrix4x4.identity;
+            matrix.SetColumn(0, new Vector4(
+                across.x * endRadius,
+                across.y * endRadius,
+                across.z * endRadius,
+                0f));
+            matrix.SetColumn(1, new Vector4(
+                direction.x * length,
+                direction.y * length,
+                direction.z * length,
+                0f));
+            matrix.SetColumn(2, new Vector4(normal.x, normal.y, normal.z, 0f));
+            matrix.SetColumn(3, new Vector4(origin.x, origin.y, origin.z, 1f));
+            return matrix;
         }
 
         private bool UpdateSunSliceMesh(Camera camera, Vector3 rayDirection)
@@ -460,32 +499,22 @@ namespace FantasySurvival.WorldLighting
 
         private static Mesh CreateLocalBeamMesh()
         {
-            const int planeCount = 4;
             const float topRadiusRatio = 0.10f;
-            Vector3[] vertices = new Vector3[planeCount * 4];
-            Vector2[] uvs = new Vector2[vertices.Length];
-            int[] triangles = new int[planeCount * 6];
-            for (int plane = 0; plane < planeCount; plane++)
+            Vector3[] vertices =
             {
-                float angle = plane / (float)planeCount * Mathf.PI;
-                Vector3 across = new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle));
-                int vertexIndex = plane * 4;
-                vertices[vertexIndex] = -across * topRadiusRatio;
-                vertices[vertexIndex + 1] = across * topRadiusRatio;
-                vertices[vertexIndex + 2] = Vector3.down - across;
-                vertices[vertexIndex + 3] = Vector3.down + across;
-                uvs[vertexIndex] = new Vector2(0f, 0f);
-                uvs[vertexIndex + 1] = new Vector2(1f, 0f);
-                uvs[vertexIndex + 2] = new Vector2(0f, 1f);
-                uvs[vertexIndex + 3] = new Vector2(1f, 1f);
-                int triangleIndex = plane * 6;
-                triangles[triangleIndex] = vertexIndex;
-                triangles[triangleIndex + 1] = vertexIndex + 2;
-                triangles[triangleIndex + 2] = vertexIndex + 1;
-                triangles[triangleIndex + 3] = vertexIndex + 1;
-                triangles[triangleIndex + 4] = vertexIndex + 2;
-                triangles[triangleIndex + 5] = vertexIndex + 3;
-            }
+                new Vector3(-topRadiusRatio, 0f, 0f),
+                new Vector3(topRadiusRatio, 0f, 0f),
+                new Vector3(-1f, 1f, 0f),
+                new Vector3(1f, 1f, 0f)
+            };
+            Vector2[] uvs =
+            {
+                new Vector2(0f, 0f),
+                new Vector2(1f, 0f),
+                new Vector2(0f, 1f),
+                new Vector2(1f, 1f)
+            };
+            int[] triangles = { 0, 2, 1, 1, 2, 3 };
 
             Mesh mesh = new Mesh
             {
@@ -495,8 +524,8 @@ namespace FantasySurvival.WorldLighting
                 uv = uvs,
                 triangles = triangles,
                 bounds = new Bounds(
-                    new Vector3(0f, -0.5f, 0f),
-                    new Vector3(2f, 1f, 2f))
+                    new Vector3(0f, 0.5f, 0f),
+                    new Vector3(2f, 1f, 0.02f))
             };
             return mesh;
         }

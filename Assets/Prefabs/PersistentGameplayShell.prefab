@@ -10722,6 +10722,8 @@ MonoBehaviour:
   lightingStepMinutes: 1
   initialWeather: 0
   sunAzimuthDegrees: 290
+  nightLightFadeStartWeight: 0.35
+  nightLightFullyOnWeight: 0.75
 --- !u!114 &2028131702894597283
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10777,6 +10779,7 @@ MonoBehaviour:
   rainSuppression: 0.92
   visibleLocalEmitterLimit: 8
   localSurfaceFadeDistance: 0.2
+  localRainScatterMultiplier: 1.35
 --- !u!1 &4650524401803780695
 GameObject:
   m_ObjectHideFlags: 0

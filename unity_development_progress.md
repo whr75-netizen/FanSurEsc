@@ -1835,3 +1835,13 @@ Interactable (abstract base class)
 - `[배치·재사용][2026-08-31]` 새 차폐 코드나 prefab을 만들지 않고 기존 `PrototypeRainShelterTestArea`를 `GameMap1`의 빈 지면 `(6,0,-5)`에 root prefab instance로 한 개 배치했다. 4×4m footprint는 상자·NPC·포탈·로컬광·웅덩이를 포함한 기존 non-ground Collider와 XZ가 겹치지 않으며, 숨은 지붕 Collider와 Collider 없는 바닥 테두리 계약도 원정 시험 구역과 같다.
 - `[Play Mode 호출 확인]` `GameMap1` 직접 Play 1회에서 scene/등록 지붕 각각 1개, Rain cache ready, 내부 `(6,0.5,-5)` 최고높이 `3.100`, 외부 `(9,0.5,-5)` `-10000`, Rain 강도 `1`과 Clear 복원 `0`을 확인했다. Play 종료 뒤 `GameMap1` Edit Mode·clean 상태로 복원했다. 최종 Game View 안팎 체감은 사용자 확인 대상이다.
 - `[보존]` 기존 `GameMap1`의 Chest 직렬화 dirty 6줄과 사용자 dirty 재질·preview Camera prefab은 이번 배치와 분리해 유지했다. 웅덩이 최종 표현·추가 날씨 반응·실내 조명은 변경하지 않았다.
+
+---
+
+## 83. 쿼터뷰 지붕 투영부피 강수 차단 수정 `[ENVIRONMENT-01]`
+
+- `[사용자 재현·확인][2026-08-31]` 기존 전체화면 빗줄기는 scene depth에서 보이는 바닥 한 점만 지붕 높이와 비교해, 높이 3.1m 지붕의 화면 투영선이 아니라 바닥 4×4 footprint만 잘라냈다. 기지 기본 카메라에서 같은 XZ의 지붕과 바닥은 화면 Y가 약 188px 어긋나므로 단순 테두리 마스크처럼 보이는 원인을 확인했다. Collider를 바닥까지 늘리는 것은 셰이더 입력을 바꾸지 않고 Player·AI 물리만 막으므로 사용하지 않았다.
+- `[근본 수정]` 기존 512×512 RFloat 최고높이 캐시와 강수 소유자는 유지했다. 캐시 갱신 때 현재 최고 지붕 높이를 함께 게시하고, 실제 streak 픽셀만 보이는 표면에서 직교 카메라 방향으로 12단계 높이 필드를 검사해 지붕 윗면부터 아래 표면까지의 투영 건조 부피를 차단한다. 개별 빗방울 오브젝트·새 Manager·일반 Collider 차폐는 추가하지 않았다.
+- `[물 튐 수정]` 일반 splash mask를 모든 `Ignore Raycast` 오브젝트로 넓히지 않고, 등록된 `RainShelterOccluder` Collider만 별도로 직접 Raycast 후보에 포함했다. 따라서 gameplay 조준·상호작용 레이어 계약은 유지하면서 지붕 윗면에는 물 튐이 생기고 아래 바닥 물 튐은 기존 높이 캐시로 거절된다.
+- `[Play Mode 호출·렌더 확인]` `GameMap1` Rain 직접 Play 1회에서 캐시 최고높이 `3.1`, 지붕 화면점 뒤 바닥 `(5.46,0,-1.95)`은 구 방식 `False`·투영부피 `True`, 지붕 내부 바닥 `True`, 외부 `(10,0,-5)` `False`로 분리됐다. 실제 활성 물 튐 7개는 지붕 윗면 2·지붕 아래 바닥 0·야외 바닥 5였고, 전체화면 셰이더는 supported·compiler message 0이었다. Game View 캡처에서 지붕 상단 투영선부터 바닥까지 중앙 건조 영역과 외부 강수를 확인했으며, 종료 뒤 `GameMap1` Edit Mode·clean 상태를 확인했다.
+- `[보존·비용]` 비 패턴·20 FPS·랜덤 위치·월드 고정·줌 식과 pool 크기는 변경하지 않았다. 12회 높이 조회는 패턴상 실제 streak인 약 `0.00336` 비율 픽셀의 조기 분기 뒤에만 실행한다. 사용자 dirty 재질·preview Camera·`GameMap1` Chest 직렬화 변경은 그대로 분리 보존했다.

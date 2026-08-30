@@ -138,6 +138,46 @@ namespace FantasySurvival.WorldLighting
             }
         }
 
+        internal bool TryRaycast(
+            Ray ray,
+            float maxDistance,
+            out RaycastHit closestHit)
+        {
+            closestHit = default;
+            if (!isActiveAndEnabled || maxDistance <= 0f)
+            {
+                return false;
+            }
+
+            CacheCollidersIfNeeded();
+            if (shelterColliders == null)
+            {
+                return false;
+            }
+
+            bool foundHit = false;
+            float closestDistance = maxDistance;
+            for (int index = 0; index < shelterColliders.Length; index++)
+            {
+                Collider shelterCollider = shelterColliders[index];
+                if (shelterCollider == null ||
+                    !shelterCollider.enabled ||
+                    shelterCollider.isTrigger ||
+                    !shelterCollider.gameObject.activeInHierarchy ||
+                    !shelterCollider.Raycast(ray, out RaycastHit hit, maxDistance) ||
+                    hit.distance >= closestDistance)
+                {
+                    continue;
+                }
+
+                foundHit = true;
+                closestDistance = hit.distance;
+                closestHit = hit;
+            }
+
+            return foundHit;
+        }
+
         private void CacheCollidersIfNeeded()
         {
             if (shelterColliders != null && shelterColliders.Length > 0)

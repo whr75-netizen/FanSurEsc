@@ -55,6 +55,7 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
             float4 _FantasyRainShelterWorldRect;
             float _FantasyRainShelterReady;
             float _FantasyRainShelterClearance;
+            float _FantasyRainShelterMaximumHeight;
 
             struct RainSurface
             {
@@ -116,6 +117,48 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                     0).r;
                 return inside * _FantasyRainShelterReady *
                     step(positionWS.y + _FantasyRainShelterClearance, roofHeight);
+            }
+
+            float EvaluateShelterVolume(float3 surfacePositionWS)
+            {
+                if (_FantasyRainShelterReady <= 0.0)
+                {
+                    return 0.0;
+                }
+
+                float sheltered = EvaluateShelter(surfacePositionWS);
+                float maximumSampleHeight =
+                    _FantasyRainShelterMaximumHeight -
+                    _FantasyRainShelterClearance;
+                float verticalSpan = maximumSampleHeight - surfacePositionWS.y;
+                float3 viewDirectionWS =
+                    GetWorldSpaceNormalizeViewDir(surfacePositionWS);
+                if (sheltered > 0.0 ||
+                    verticalSpan <= 0.0 ||
+                    viewDirectionWS.y <= 0.0001)
+                {
+                    return sheltered;
+                }
+
+                // Fullscreen rain has no per-drop world depth. March the visible
+                // surface toward the orthographic camera through the cached roof
+                // height field. This projects the dry volume from the floor up to
+                // the roof instead of cutting only the roof's ground footprint.
+                const int sampleCount = 12;
+                float viewDistance = verticalSpan / viewDirectionWS.y;
+                [unroll]
+                for (int index = 1; index <= sampleCount; index++)
+                {
+                    float sampleRatio = (float)index / (float)sampleCount;
+                    float3 samplePositionWS = surfacePositionWS +
+                        viewDirectionWS * viewDistance * sampleRatio;
+                    if (EvaluateShelter(samplePositionWS) > 0.0)
+                    {
+                        return 1.0;
+                    }
+                }
+
+                return 0.0;
             }
 
             float SelectPatternFrame(half4 pattern, int frameIndex)
@@ -203,16 +246,20 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                 int streakFrame = (int)floor(
                     _FantasyRainVisualTime * max(_RainFramesPerSecond, 1.0));
 
-                RainSurface surface = SampleRainSurface(sampleUv);
-                float sheltered = surface.geometryMask > 0.0
-                    ? EvaluateShelter(surface.positionWS)
-                    : 0.0;
-                float exposed = 1.0 - sheltered;
                 float streak = EvaluateStreaks(
                     logicalPixel,
                     logicalScale,
-                    streakFrame) *
-                    lerp(1.0, exposed, surface.geometryMask);
+                    streakFrame);
+                if (streak <= 0.0)
+                {
+                    return half4(0.0, 0.0, 0.0, 0.0);
+                }
+
+                RainSurface surface = SampleRainSurface(sampleUv);
+                float sheltered = surface.geometryMask > 0.0
+                    ? EvaluateShelterVolume(surface.positionWS)
+                    : 0.0;
+                streak *= lerp(1.0, 1.0 - sheltered, surface.geometryMask);
                 float alpha = saturate(
                     streak * _StreakOpacity *
                     intensity * _FantasyRainColor.a);

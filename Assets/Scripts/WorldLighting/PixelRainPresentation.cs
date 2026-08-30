@@ -41,6 +41,8 @@ namespace FantasySurvival.WorldLighting
             Shader.PropertyToID("_FantasyRainShelterReady");
         private static readonly int ShelterClearanceId =
             Shader.PropertyToID("_FantasyRainShelterClearance");
+        private static readonly int ShelterMaximumHeightId =
+            Shader.PropertyToID("_FantasyRainShelterMaximumHeight");
         private static readonly int SplashFrameId =
             Shader.PropertyToID("_SplashFrame");
 
@@ -75,6 +77,7 @@ namespace FantasySurvival.WorldLighting
         private SplashImpact[] splashImpacts;
         private MaterialPropertyBlock splashPropertyBlock;
         private float shelterMaskWorldSpan;
+        private float shelterMaximumHeight = NoShelterHeight;
         private Scene boundScene;
         private Vector2 shelterMaskCenter;
         private Vector2 weatherWorldWind;
@@ -169,7 +172,9 @@ namespace FantasySurvival.WorldLighting
             DeactivateSplashImpacts();
             shelterMaskReady = false;
             shelterMaskDirty = true;
+            shelterMaximumHeight = NoShelterHeight;
             Shader.SetGlobalFloat(ShelterReadyId, 0f);
+            Shader.SetGlobalFloat(ShelterMaximumHeightId, NoShelterHeight);
             Shader.SetGlobalFloat(RainIntensityId, 0f);
         }
 
@@ -247,7 +252,9 @@ namespace FantasySurvival.WorldLighting
             {
                 shelterMaskDirty = false;
                 shelterMaskReady = false;
+                shelterMaximumHeight = NoShelterHeight;
                 Shader.SetGlobalFloat(ShelterReadyId, 0f);
+                Shader.SetGlobalFloat(ShelterMaximumHeightId, NoShelterHeight);
                 return;
             }
 
@@ -291,6 +298,14 @@ namespace FantasySurvival.WorldLighting
                     cellSize,
                     resolution,
                     shelterHeightBuffer);
+            }
+
+            shelterMaximumHeight = NoShelterHeight;
+            for (int index = 0; index < shelterHeightBuffer.Length; index++)
+            {
+                shelterMaximumHeight = Mathf.Max(
+                    shelterMaximumHeight,
+                    shelterHeightBuffer[index]);
             }
 
             shelterHeightTexture.SetPixelData(shelterHeightBuffer, 0);
@@ -338,6 +353,9 @@ namespace FantasySurvival.WorldLighting
             Shader.SetGlobalColor(RainColorId, rainColor);
             Shader.SetGlobalFloat(RainVisualTimeId, rainVisualTime);
             Shader.SetGlobalFloat(ShelterClearanceId, shelterClearance);
+            Shader.SetGlobalFloat(
+                ShelterMaximumHeightId,
+                shelterMaximumHeight);
         }
 
         private void HandleBeginCameraRendering(
@@ -480,7 +498,8 @@ namespace FantasySurvival.WorldLighting
                 splashCollisionMask,
                 QueryTriggerInteraction.Ignore);
 
-            int selectedHit = -1;
+            RaycastHit selected = default;
+            bool hasSelectedHit = false;
             float selectedDistance = float.PositiveInfinity;
             for (int index = 0; index < hitCount; index++)
             {
@@ -493,16 +512,39 @@ namespace FantasySurvival.WorldLighting
                     continue;
                 }
 
-                selectedHit = index;
+                selected = hit;
+                hasSelectedHit = true;
                 selectedDistance = hit.distance;
             }
 
-            if (selectedHit < 0)
+            // Shelter roofs may intentionally use Ignore Raycast so gameplay
+            // aiming and interaction do not hit an invisible authoring volume.
+            // Query only registered shelter colliders explicitly instead of
+            // widening the general splash mask to every Ignore Raycast object.
+            for (int index = 0; index < shelterOccluders.Count; index++)
+            {
+                RainShelterOccluder shelter = shelterOccluders[index];
+                if (shelter == null ||
+                    shelter.gameObject.scene != boundScene ||
+                    !shelter.TryRaycast(
+                        cameraRay,
+                        Mathf.Max(camera.farClipPlane, 1f),
+                        out RaycastHit shelterHit) ||
+                    shelterHit.distance >= selectedDistance)
+                {
+                    continue;
+                }
+
+                selected = shelterHit;
+                hasSelectedHit = true;
+                selectedDistance = shelterHit.distance;
+            }
+
+            if (!hasSelectedHit)
             {
                 return;
             }
 
-            RaycastHit selected = splashRaycastHits[selectedHit];
             if (selected.normal.y < Mathf.Clamp01(splashMinimumNormalY) ||
                 IsPointSheltered(selected.point))
             {
@@ -895,6 +937,7 @@ namespace FantasySurvival.WorldLighting
             shelterHeightTexture = null;
             shelterHeightBuffer = null;
             shelterMaskReady = false;
+            shelterMaximumHeight = NoShelterHeight;
         }
 
         private void ReleaseSplashImpactResources()
@@ -944,6 +987,7 @@ namespace FantasySurvival.WorldLighting
             Shader.SetGlobalFloat(RainIntensityId, 0f);
             Shader.SetGlobalFloat(RainWorldUnitsPerScreenPixelId, 1f);
             Shader.SetGlobalFloat(ShelterReadyId, 0f);
+            Shader.SetGlobalFloat(ShelterMaximumHeightId, NoShelterHeight);
         }
     }
 }

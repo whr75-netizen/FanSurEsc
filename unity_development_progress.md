@@ -1818,3 +1818,12 @@ Interactable (abstract base class)
 - `[근본 수정]` 기존 `PixelRainPuddle` 공유 셰이더와 날씨 전역값 소유권을 유지했다. cycle·channel·웅덩이 위치만으로 고정 seed를 만들고 파문별 시작 반경을 최대치의 `16~55%`, 끝 반경을 `58~100%`에서 고른다. 같은 seed가 수명 내내 유지되는 1~3개의 큰 각도 공백을 만들며, 공백 중심은 gap 수에 따라 서로 떨어진 범위에 배치해 한쪽에 우연히 겹치지 않는다. 초반 반폭은 후반의 `1.25~1.75배`에서 시작해 픽셀 최소 반폭으로 줄고, alpha는 수명 `42%` 지점부터 점진적으로 사라진다.
 - `[성능·보존]` 파문 중심의 월드 격자 양자화, 흰색, interval `3초`, duration `0.72초`, 네 채널 `max` 합성, `_FantasyRainIntensity`·`_FantasyRainVisualTime` 연동을 보존했다. 새 Texture·Manager·script·Update·Collider·개별 빗방울 물리와 scene/prefab 변경은 없다. 작은 웅덩이 fragment 안에서 고정 hash와 `atan2`만 추가했으며 비·Collider 물 튐의 renderer와 atlas는 변경하지 않았다.
 - `[Shader·Play Mode 호출 확인]` Unity 강제 import 뒤 `PixelRainPuddle`은 `supported=True`, `ShaderHasError=False`, compiler error/warning/message 모두 `0`이었다. `GameMap1` 직접 Play 1회에서 Rain 즉시 적용 성공과 활성 웅덩이 Renderer 1개를 확인하고 Play를 종료했으며 Edit Mode·활성 scene·scene clean 상태가 복원됐다. MCP Scene View capture가 gameplay Camera 구도를 반영하지 않아 최종 모양의 육안 검증은 사용자 확인 대상으로 남겼다. 기존 외부 `AwaiiStudio/ASFolliage` keyword 오류와 사용자 dirty `GameMap1`·재질 2개·preview Camera prefab은 수정·저장·stage하지 않았다.
+
+---
+
+## 81. 실제 지붕 아래 강수 차단 시험 배치 `[ENVIRONMENT-01]`
+
+- `[구현·권위][2026-08-31]` 기존 `RainShelterOccluder`와 영속 `PixelRainPresentation`의 512×512 최고높이 cache를 그대로 사용하고 새 Manager·빗방울별 충돌·평행 차폐 경로를 만들지 않았다. 재사용 `PrototypeRainShelterTestArea` prefab은 4×4m non-trigger 지붕 Collider 하나만 명시적으로 차폐 권위로 연결한다. 탑뷰에서 안팎을 비교할 수 있도록 지붕 Renderer는 숨기고, 물리 판정이 없는 네 개의 바닥 테두리만 표시한다.
+- `[씬 배치·보존]` `GameMapTest`의 기존 보호 앵커 `UrbanLayoutProtectionAnchors/FormerRangedFixture` `(6,0,6)` 아래에 prefab 한 개를 배치했다. 이 앵커는 절차 건물로부터 이미 3.5m 보호되고 runtime 생성 root 밖에 있어 seed 재생성 때 삭제되지 않는다. `GameMap1`과 기존 사용자 dirty 재질·preview Camera는 수정하지 않았다.
+- `[정적·Play Mode 호출 확인]` prefab의 명시 Collider 1개, 숨은 지붕 Renderer, Collider 없는 테두리 4개, scene instance 1개를 확인했다. `GameMapTest` 직접 Play 1회에서 Rain 적용 시 scene/등록 지붕 각각 1개, cache·shader ready, 내부 `(6,0.5,6)` 최고높이 `3.100`, 외부 `(9,0.5,6)` `-10000`으로 분리되어 지붕 아래 지면만 차단되고 지붕 위는 노출되는 조건을 확인했다. Clear 복귀 뒤 전역 비 강도는 `0`이었고 Play 종료 후 `GameMap1` clean authoring 상태로 복원했다. 실제 Game View 안팎의 최종 시각 체감은 사용자 확인 대상이다.
+- `[결정 대기]` 시험 웅덩이의 최종 표현 방식과 젖음·안개·번개·식생 흔들림·빗소리 등 추가 날씨 반응은 GDD §14.1.2에 미정으로만 기록했으며 이번에는 구현하지 않았다. 실내 하늘광·태양광 감쇠도 강수 차단과 별도 계약이다.

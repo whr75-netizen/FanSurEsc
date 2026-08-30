@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 6426019462008560891}
   - component: {fileID: 5156675802788383013}
   - component: {fileID: 8134186565587687158}
+  - component: {fileID: 6078897421006392246}
   m_Layer: 0
   m_Name: SteppedLightEmitter
   m_TagString: Untagged
@@ -234,4 +235,24 @@ MonoBehaviour:
   haloStrength: 0.18
   haloRadiusMultiplier: 1.25
   normalInfluence: 0.82
+  worldCellSize: 0.12
+--- !u!114 &6078897421006392246
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9206200034058895800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1308e671ebadd6f43a49cc291362b002, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldLighting.StylizedLightShaftEmitter
+  sourceLight: {fileID: 8134186565587687158}
+  localDirection: {x: 0, y: -1, z: 0}
+  length: 1.4
+  endRadius: 1.15
+  intensityMultiplier: 0.2
+  densityBands: 4
+  noiseStrength: 0.12
   worldCellSize: 0.12

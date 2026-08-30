@@ -16,6 +16,7 @@ namespace FantasySurvival.WorldLighting
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PersistentGameplayShell))]
     [RequireComponent(typeof(PixelRainPresentation))]
+    [RequireComponent(typeof(StylizedLightShaftPresentation))]
     public sealed class SkyLightingCycleController : MonoBehaviour
     {
         private const float HoursPerDay = 24f;
@@ -31,6 +32,7 @@ namespace FantasySurvival.WorldLighting
         [Header("Definition")]
         [SerializeField] private SkyLightingProfile profile;
         [SerializeField] private PixelRainPresentation rainPresentation;
+        [SerializeField] private StylizedLightShaftPresentation lightShaftPresentation;
 
         [Header("Runtime Clock")]
         [SerializeField, Range(0f, HoursPerDay)] private float initialHour = 8f;
@@ -89,6 +91,11 @@ namespace FantasySurvival.WorldLighting
                 rainPresentation = GetComponent<PixelRainPresentation>();
             }
 
+            if (lightShaftPresentation == null)
+            {
+                lightShaftPresentation = GetComponent<StylizedLightShaftPresentation>();
+            }
+
             currentHour = SkyLightingProfile.NormalizeHour(initialHour);
             profileValid = ValidateProfile();
             if (profileValid)
@@ -113,6 +120,7 @@ namespace FantasySurvival.WorldLighting
             hasGameplaySceneBinding = false;
             lastAppliedHour = float.NaN;
             rainPresentation?.UnbindGameplayScene();
+            lightShaftPresentation?.UnbindGameplayScene();
         }
 
         private void Update()
@@ -279,6 +287,14 @@ namespace FantasySurvival.WorldLighting
                 return false;
             }
 
+            if (lightShaftPresentation == null)
+            {
+                Debug.LogError(
+                    "SkyLightingCycleController requires StylizedLightShaftPresentation.",
+                    this);
+                return false;
+            }
+
             if (profile == null)
             {
                 Debug.LogError("SkyLightingCycleController requires a SkyLightingProfile.", this);
@@ -317,6 +333,7 @@ namespace FantasySurvival.WorldLighting
         {
             DetachFilteredCloudShadowCookie();
             rainPresentation?.UnbindGameplayScene();
+            lightShaftPresentation?.UnbindGameplayScene();
             sceneDirectionalLight = null;
             sceneDirectionalLightData = null;
             hasGameplaySceneBinding = false;
@@ -869,6 +886,13 @@ namespace FantasySurvival.WorldLighting
                 currentWeatherSample,
                 profile.CloudShadowWorldVelocity,
                 forceShelterRefresh);
+            lightShaftPresentation?.ApplySunlight(
+                sceneDirectionalLight,
+                MultiplyRgb(sample.SunColor, currentWeatherSample.DirectionalTint),
+                sunContribution *
+                currentWeatherSample.DirectionalIntensityMultiplier *
+                currentWeatherSample.ShadowStrengthMultiplier,
+                currentWeatherSample.PrecipitationIntensity);
             return true;
         }
 

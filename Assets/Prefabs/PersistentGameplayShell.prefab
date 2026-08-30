@@ -10487,6 +10487,7 @@ GameObject:
   - component: {fileID: 7318091027814175827}
   - component: {fileID: 6564602721637646132}
   - component: {fileID: 2028131702894597283}
+  - component: {fileID: 8004699042181076860}
   m_Layer: 0
   m_Name: PersistentGameplayShell
   m_TagString: Untagged
@@ -10714,6 +10715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldLighting.SkyLightingCycleController
   profile: {fileID: 11400000, guid: f223116ae50af5a4498ee2f2e6316c47, type: 2}
   rainPresentation: {fileID: 2028131702894597283}
+  lightShaftPresentation: {fileID: 8004699042181076860}
   initialHour: 8
   advanceAutomatically: 1
   realSecondsPerDay: 60
@@ -10748,6 +10750,33 @@ MonoBehaviour:
   splashCollisionMask:
     serializedVersion: 2
     m_Bits: 4294967291
+--- !u!114 &8004699042181076860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4600585664585496124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95e392ef7c460f441bfaead91c131917, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldLighting.StylizedLightShaftPresentation
+  shell: {fileID: 7231324139644495580}
+  shaftShader: {fileID: 4800000, guid: e677b27774163e44795f473f9b019e25, type: 3}
+  sunSliceCount: 10
+  sunVolumeHeight: 6
+  sunVolumeMargin: 2.5
+  sunVolumeBaseHeight: 0.02
+  sunIntensityMultiplier: 0.018
+  sunShadowThreshold: 0.52
+  sunDensityBands: 4
+  sunNoiseStrength: 0.16
+  sunWorldCellSize: 0.22
+  sunSurfaceFadeDistance: 0.45
+  rainSuppression: 0.92
+  visibleLocalEmitterLimit: 8
+  localSurfaceFadeDistance: 0.2
 --- !u!1 &4650524401803780695
 GameObject:
   m_ObjectHideFlags: 0

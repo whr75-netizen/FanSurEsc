@@ -8,13 +8,14 @@ using UnityEngine.SceneManagement;
 namespace FantasySurvival.WorldLighting
 {
     /// <summary>
-    /// Owns the clear-sky time of day for one gameplay session. The persistent
+    /// Owns time of day and weather for one gameplay session. The persistent
     /// gameplay shell carries this component between gameplay scenes, while each
     /// loaded scene keeps ownership of its own Directional Light.
     /// </summary>
     [DefaultExecutionOrder(-9990)]
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PersistentGameplayShell))]
+    [RequireComponent(typeof(PixelRainPresentation))]
     public sealed class SkyLightingCycleController : MonoBehaviour
     {
         private const float HoursPerDay = 24f;
@@ -29,6 +30,7 @@ namespace FantasySurvival.WorldLighting
 
         [Header("Definition")]
         [SerializeField] private SkyLightingProfile profile;
+        [SerializeField] private PixelRainPresentation rainPresentation;
 
         [Header("Runtime Clock")]
         [SerializeField, Range(0f, HoursPerDay)] private float initialHour = 8f;
@@ -36,10 +38,14 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Min(1f)] private float realSecondsPerDay = 60f;
         [SerializeField, Min(0.1f)] private float lightingStepMinutes = 1f;
 
+        [Header("Runtime Weather")]
+        [SerializeField] private SkyWeatherType initialWeather = SkyWeatherType.Clear;
+
         [Header("Sun Path")]
         [SerializeField, Range(0f, 360f)] private float sunAzimuthDegrees = 290f;
 
         private readonly List<Light> sceneLights = new List<Light>();
+        private PersistentGameplayShell shell;
         private Light sceneDirectionalLight;
         private UniversalAdditionalLightData sceneDirectionalLightData;
         private Material cloudShadowFilterMaterial;
@@ -55,6 +61,12 @@ namespace FantasySurvival.WorldLighting
         private bool hasGameplaySceneBinding;
         private bool profileValid;
         private SkyTimePhase currentPhase;
+        private SkyWeatherType currentWeatherType;
+        private SkyWeatherSample weatherFromSample;
+        private SkyWeatherSample weatherToSample;
+        private SkyWeatherSample currentWeatherSample;
+        private float weatherTransitionElapsed;
+        private bool weatherTransitionActive;
 
         public float CurrentHour => currentHour;
         public SkyTimePhase CurrentPhase => currentPhase;
@@ -65,11 +77,24 @@ namespace FantasySurvival.WorldLighting
         public Light SceneSun => sceneDirectionalLight;
         public float CurrentCloudShadowSoftnessMip => currentCloudShadowSoftnessMip;
         public float CurrentCloudShadowOpacity => currentCloudShadowOpacity;
+        public SkyWeatherType CurrentWeatherType => currentWeatherType;
+        public float CurrentRainIntensity => currentWeatherSample.PrecipitationIntensity;
+        public bool IsWeatherTransitioning => weatherTransitionActive;
 
         private void Awake()
         {
+            shell = GetComponent<PersistentGameplayShell>();
+            if (rainPresentation == null)
+            {
+                rainPresentation = GetComponent<PixelRainPresentation>();
+            }
+
             currentHour = SkyLightingProfile.NormalizeHour(initialHour);
             profileValid = ValidateProfile();
+            if (profileValid)
+            {
+                profileValid = InitializeWeather(initialWeather);
+            }
         }
 
         private void OnEnable()
@@ -87,12 +112,26 @@ namespace FantasySurvival.WorldLighting
             sceneDirectionalLightData = null;
             hasGameplaySceneBinding = false;
             lastAppliedHour = float.NaN;
+            rainPresentation?.UnbindGameplayScene();
         }
 
         private void Update()
         {
-            if (!profileValid || !HasGameplaySceneBinding)
+            if (!profileValid)
             {
+                return;
+            }
+
+            float environmentVisualDeltaTime =
+                IsEnvironmentTestPreviewActive()
+                    ? Time.unscaledDeltaTime
+                    : Time.deltaTime;
+            bool weatherChanged =
+                AdvanceWeatherTransition(environmentVisualDeltaTime);
+
+            if (!HasGameplaySceneBinding)
+            {
+                rainPresentation?.Tick(environmentVisualDeltaTime);
                 return;
             }
 
@@ -103,8 +142,21 @@ namespace FantasySurvival.WorldLighting
                     currentHour + Time.deltaTime * hoursPerSecond);
             }
 
+            if (weatherChanged)
+            {
+                lastAppliedHour = float.NaN;
+            }
+
             ApplyLightingIfStepChanged();
-            AdvanceCloudShadow(Time.deltaTime);
+            AdvanceCloudShadow(environmentVisualDeltaTime);
+            rainPresentation?.Tick(environmentVisualDeltaTime);
+        }
+
+        private bool IsEnvironmentTestPreviewActive()
+        {
+            return shell != null &&
+                   shell.EscapeMenu != null &&
+                   shell.EscapeMenu.IsEnvironmentTestOpen;
         }
 
         public bool SetTimeHours(float hour)
@@ -129,6 +181,40 @@ namespace FantasySurvival.WorldLighting
             advanceAutomatically = shouldAdvance;
         }
 
+        public bool SetWeather(SkyWeatherType weatherType, bool immediate = false)
+        {
+            if (!profileValid ||
+                !profile.TryGetWeatherPreset(weatherType, out SkyWeatherPreset preset))
+            {
+                return false;
+            }
+
+            weatherFromSample = currentWeatherSample;
+            weatherToSample = SkyWeatherSample.FromPreset(preset);
+            currentWeatherType = weatherType;
+            weatherTransitionElapsed = 0f;
+            weatherTransitionActive = !immediate;
+            if (immediate)
+            {
+                currentWeatherSample = weatherToSample;
+            }
+
+            lastAppliedHour = float.NaN;
+            lastCloudShadowFilterKey = -1;
+            if (HasGameplaySceneBinding)
+            {
+                ApplyCurrentLighting(immediate);
+            }
+            else
+            {
+                rainPresentation?.ApplyWeather(
+                    currentWeatherSample,
+                    profile.CloudShadowWorldVelocity,
+                    immediate);
+            }
+            return true;
+        }
+
         public bool SetProfile(SkyLightingProfile replacement)
         {
             if (replacement == null)
@@ -146,6 +232,10 @@ namespace FantasySurvival.WorldLighting
             ReleaseCloudShadowFilterResources();
             profile = replacement;
             profileValid = true;
+            if (!InitializeWeather(currentWeatherType))
+            {
+                return false;
+            }
             lastAppliedHour = float.NaN;
             ApplyCloudShadowConfiguration();
             return ApplyCurrentLighting();
@@ -169,8 +259,26 @@ namespace FantasySurvival.WorldLighting
             SetPhase(SkyTimePhase.Night);
         }
 
+        [ContextMenu("Preview Clear Weather")]
+        private void PreviewClearWeather()
+        {
+            SetWeather(SkyWeatherType.Clear, true);
+        }
+
+        [ContextMenu("Preview Rain Weather")]
+        private void PreviewRainWeather()
+        {
+            SetWeather(SkyWeatherType.Rain, true);
+        }
+
         private bool ValidateProfile()
         {
+            if (rainPresentation == null)
+            {
+                Debug.LogError("SkyLightingCycleController requires PixelRainPresentation.", this);
+                return false;
+            }
+
             if (profile == null)
             {
                 Debug.LogError("SkyLightingCycleController requires a SkyLightingProfile.", this);
@@ -208,6 +316,7 @@ namespace FantasySurvival.WorldLighting
         private void BindScene(Scene scene)
         {
             DetachFilteredCloudShadowCookie();
+            rainPresentation?.UnbindGameplayScene();
             sceneDirectionalLight = null;
             sceneDirectionalLightData = null;
             hasGameplaySceneBinding = false;
@@ -236,6 +345,7 @@ namespace FantasySurvival.WorldLighting
             sceneDirectionalLight = directionalLight;
             hasGameplaySceneBinding = true;
             RenderSettings.sun = sceneDirectionalLight;
+            rainPresentation?.BindGameplayScene(scene);
             ApplyCloudShadowConfiguration();
             ApplyCurrentLighting();
         }
@@ -332,14 +442,14 @@ namespace FantasySurvival.WorldLighting
             ApplyLighting(steppedHour);
         }
 
-        private bool ApplyCurrentLighting()
+        private bool ApplyCurrentLighting(bool forceShelterRefresh = false)
         {
             if (!profileValid || !HasGameplaySceneBinding)
             {
                 return false;
             }
 
-            return ApplyLighting(currentHour);
+            return ApplyLighting(currentHour, forceShelterRefresh);
         }
 
         private void ApplyCloudShadowConfiguration()
@@ -431,7 +541,9 @@ namespace FantasySurvival.WorldLighting
             return true;
         }
 
-        private void UpdateCloudShadowFilter(float elevationWeight)
+        private void UpdateCloudShadowFilter(
+            float elevationWeight,
+            SkyWeatherSample weather)
         {
             if (cloudShadowFilterMaterial == null ||
                 filteredCloudShadowCookie == null ||
@@ -440,23 +552,35 @@ namespace FantasySurvival.WorldLighting
                 return;
             }
 
-            int filterKey = Mathf.RoundToInt(
-                Mathf.Clamp01(elevationWeight) * CloudShadowFilterKeyMaximum);
+            float filteredElevationWeight = Mathf.Clamp01(elevationWeight);
+            float desiredSoftnessMip = Mathf.Clamp(
+                Mathf.Lerp(
+                    profile.LowElevationCloudShadowSoftnessMip,
+                    profile.HighElevationCloudShadowSoftnessMip,
+                    filteredElevationWeight) +
+                weather.CloudShadowSoftnessOffset,
+                0f,
+                3f);
+            float desiredOpacity = Mathf.Clamp01(
+                Mathf.Lerp(
+                    profile.LowElevationCloudShadowOpacity,
+                    profile.HighElevationCloudShadowOpacity,
+                    filteredElevationWeight) *
+                weather.CloudShadowOpacityMultiplier);
+            int softnessKey = Mathf.RoundToInt(
+                desiredSoftnessMip / 3f * CloudShadowFilterKeyMaximum);
+            int opacityKey = Mathf.RoundToInt(
+                desiredOpacity * CloudShadowFilterKeyMaximum);
+            int filterKey = (softnessKey << 8) | opacityKey;
             if (filterKey == lastCloudShadowFilterKey)
             {
                 return;
             }
 
-            float filteredElevationWeight =
-                filterKey / (float)CloudShadowFilterKeyMaximum;
-            currentCloudShadowSoftnessMip = Mathf.Lerp(
-                profile.LowElevationCloudShadowSoftnessMip,
-                profile.HighElevationCloudShadowSoftnessMip,
-                filteredElevationWeight);
-            currentCloudShadowOpacity = Mathf.Lerp(
-                profile.LowElevationCloudShadowOpacity,
-                profile.HighElevationCloudShadowOpacity,
-                filteredElevationWeight);
+            currentCloudShadowSoftnessMip =
+                softnessKey / (float)CloudShadowFilterKeyMaximum * 3f;
+            currentCloudShadowOpacity =
+                opacityKey / (float)CloudShadowFilterKeyMaximum;
 
             cloudShadowFilterMaterial.SetFloat(
                 CloudShadowSoftnessMipId,
@@ -604,7 +728,9 @@ namespace FantasySurvival.WorldLighting
                 Mathf.Repeat(offset.y, cookieSize.y));
         }
 
-        private bool ApplyLighting(float evaluatedHour)
+        private bool ApplyLighting(
+            float evaluatedHour,
+            bool forceShelterRefresh = false)
         {
             if (!profile.TryEvaluate(evaluatedHour, out SkyLightingSample sample))
             {
@@ -616,18 +742,24 @@ namespace FantasySurvival.WorldLighting
 
             RenderSettings.ambientMode = AmbientMode.Trilight;
             Color minimumLightColor = profile.MinimumLightColor;
-            RenderSettings.ambientSkyColor = MaxRgb(
-                sample.AmbientSkyColor,
-                ScaleRgb(minimumLightColor, 0.35f));
-            RenderSettings.ambientEquatorColor = MaxRgb(
-                sample.AmbientEquatorColor,
-                ScaleRgb(minimumLightColor, 0.22f));
-            RenderSettings.ambientGroundColor = MaxRgb(
-                sample.AmbientGroundColor,
-                ScaleRgb(minimumLightColor, 0.12f));
-            RenderSettings.ambientIntensity = Mathf.Max(
-                sample.AmbientIntensity,
-                profile.MinimumAmbientIntensity);
+            RenderSettings.ambientSkyColor = MultiplyRgb(
+                MaxRgb(
+                    sample.AmbientSkyColor,
+                    ScaleRgb(minimumLightColor, 0.35f)),
+                currentWeatherSample.AmbientTint);
+            RenderSettings.ambientEquatorColor = MultiplyRgb(
+                MaxRgb(
+                    sample.AmbientEquatorColor,
+                    ScaleRgb(minimumLightColor, 0.22f)),
+                currentWeatherSample.AmbientTint);
+            RenderSettings.ambientGroundColor = MultiplyRgb(
+                MaxRgb(
+                    sample.AmbientGroundColor,
+                    ScaleRgb(minimumLightColor, 0.12f)),
+                currentWeatherSample.AmbientTint);
+            RenderSettings.ambientIntensity =
+                Mathf.Max(sample.AmbientIntensity, profile.MinimumAmbientIntensity) *
+                currentWeatherSample.AmbientIntensityMultiplier;
             RenderSettings.reflectionIntensity = sample.ReflectionIntensity;
             RenderSettings.sun = sceneDirectionalLight;
 
@@ -695,6 +827,11 @@ namespace FantasySurvival.WorldLighting
                 minimumLightColor,
                 floorContribution,
                 directionalIntensity);
+            directionalIntensity *=
+                currentWeatherSample.DirectionalIntensityMultiplier;
+            directionalColor = MultiplyRgb(
+                directionalColor,
+                currentWeatherSample.DirectionalTint);
 
             float sunShadowWeight = EvaluateElevationWeight(
                 sunElevationDegrees,
@@ -707,9 +844,9 @@ namespace FantasySurvival.WorldLighting
             float celestialShadowStrength =
                 sample.ShadowStrength * sunShadowWeight * sunContributionWeight +
                 profile.MoonShadowStrength * moonShadowWeight * moonContributionWeight;
-            float visibleShadowStrength = Mathf.Max(
-                celestialShadowStrength,
-                profile.MinimumShadowStrength);
+            float visibleShadowStrength =
+                Mathf.Max(celestialShadowStrength, profile.MinimumShadowStrength) *
+                currentWeatherSample.ShadowStrengthMultiplier;
             float cloudShadowElevationWeight = Mathf.Clamp01(
                 sunShadowWeight * sunContributionWeight +
                 moonShadowWeight * moonContributionWeight);
@@ -724,8 +861,60 @@ namespace FantasySurvival.WorldLighting
                 ? LightShadows.Soft
                 : LightShadows.None;
             sceneDirectionalLight.enabled = directionalIntensity > DirectionalLightThreshold;
-            UpdateCloudShadowFilter(cloudShadowElevationWeight);
+            UpdateCloudShadowFilter(
+                cloudShadowElevationWeight,
+                currentWeatherSample);
             ApplyCloudShadowProjection();
+            rainPresentation?.ApplyWeather(
+                currentWeatherSample,
+                profile.CloudShadowWorldVelocity,
+                forceShelterRefresh);
+            return true;
+        }
+
+        private bool InitializeWeather(SkyWeatherType weatherType)
+        {
+            if (!profile.TryGetWeatherPreset(weatherType, out SkyWeatherPreset preset))
+            {
+                Debug.LogError(
+                    $"Sky lighting profile has no {weatherType} weather preset.",
+                    profile);
+                return false;
+            }
+
+            currentWeatherType = weatherType;
+            currentWeatherSample = SkyWeatherSample.FromPreset(preset);
+            weatherFromSample = currentWeatherSample;
+            weatherToSample = currentWeatherSample;
+            weatherTransitionElapsed = profile.WeatherTransitionSeconds;
+            weatherTransitionActive = false;
+            rainPresentation?.ApplyWeather(
+                currentWeatherSample,
+                profile.CloudShadowWorldVelocity,
+                true);
+            return true;
+        }
+
+        private bool AdvanceWeatherTransition(float deltaTime)
+        {
+            if (!weatherTransitionActive)
+            {
+                return false;
+            }
+
+            weatherTransitionElapsed += Mathf.Max(0f, deltaTime);
+            float transitionDuration = Mathf.Max(0.01f, profile.WeatherTransitionSeconds);
+            float progress = Mathf.Clamp01(weatherTransitionElapsed / transitionDuration);
+            currentWeatherSample = SkyWeatherSample.Interpolate(
+                weatherFromSample,
+                weatherToSample,
+                progress);
+            if (progress >= 1f)
+            {
+                currentWeatherSample = weatherToSample;
+                weatherTransitionActive = false;
+            }
+
             return true;
         }
 
@@ -844,6 +1033,15 @@ namespace FantasySurvival.WorldLighting
                 Mathf.Max(value.r, minimum.r),
                 Mathf.Max(value.g, minimum.g),
                 Mathf.Max(value.b, minimum.b),
+                1f);
+        }
+
+        private static Color MultiplyRgb(Color value, Color multiplier)
+        {
+            return new Color(
+                value.r * multiplier.r,
+                value.g * multiplier.g,
+                value.b * multiplier.b,
                 1f);
         }
     }

@@ -44,7 +44,7 @@ MainMenuManager.Awake
 
 원정 표식이 미정산 상태면 `BlockNormalStartForRaidRecovery`가 새로 시작과 일반 로드를 막는다. 세이브와 backup이 모두 검증 실패하면 주 메뉴에 남고, 손상 상태를 임의 초기화하지 않는다.
 
-메인 메뉴와 `GameplayEscapeMenuController.OpenSettings`는 같은 키 설정 prefab을 쓰되 각 화면 수명에 맞는 인스턴스를 가진다. 재바인딩 중 Escape는 키 변경 취소를 먼저 소비하고 설정 화면을 유지하며, Base pause/Raid non-pause 정책은 기존 Escape 소유자가 계속 적용한다.
+메인 메뉴와 `GameplayEscapeMenuController.OpenSettings`는 같은 키 설정 prefab을 쓰되 각 화면 수명에 맞는 인스턴스를 가진다. 재바인딩 중 Escape는 키 변경 취소를 먼저 소비하고 설정 화면을 유지하며, Base pause/Raid non-pause 정책은 기존 Escape 소유자가 계속 적용한다. 게임 내 개발용 환경 시험은 `OpenEnvironmentTest → SetPhase(Day/Night)` 또는 `SetWeather(Clear/Rain) → BackToMainMenuPanel`이며, 시간과 날씨는 독립 축이다. 낮/밤을 고르는 동안만 자동 시간을 멈추고 패널 이탈 때 이전 자동 진행 상태를 복원한다. Base에서는 세계 pause를 유지하되 환경 시험 화면에 보이는 날씨 전환·구름·비 표현만 unscaled preview time으로 진행한다.
 
 ## 3. 공통 로딩과 기지 진입
 

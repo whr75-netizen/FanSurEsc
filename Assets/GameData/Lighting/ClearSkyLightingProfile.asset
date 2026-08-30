@@ -36,6 +36,28 @@ MonoBehaviour:
   highElevationCloudShadowSoftnessMip: 0.25
   lowElevationCloudShadowOpacity: 0.55
   highElevationCloudShadowOpacity: 0.9
+  weatherTransitionSeconds: 0.75
+  weatherPresets:
+  - weatherType: 0
+    ambientTint: {r: 1, g: 1, b: 1, a: 1}
+    ambientIntensityMultiplier: 1
+    directionalTint: {r: 1, g: 1, b: 1, a: 1}
+    directionalIntensityMultiplier: 1
+    shadowStrengthMultiplier: 1
+    cloudShadowOpacityMultiplier: 1
+    cloudShadowSoftnessOffset: 0
+    precipitationIntensity: 0
+    precipitationColor: {r: 0.72, g: 0.82, b: 0.95, a: 1}
+  - weatherType: 1
+    ambientTint: {r: 0.72, g: 0.79, b: 0.88, a: 1}
+    ambientIntensityMultiplier: 0.78
+    directionalTint: {r: 0.68, g: 0.76, b: 0.88, a: 1}
+    directionalIntensityMultiplier: 0.52
+    shadowStrengthMultiplier: 0.42
+    cloudShadowOpacityMultiplier: 1.35
+    cloudShadowSoftnessOffset: 0.65
+    precipitationIntensity: 1
+    precipitationColor: {r: 0.36, g: 0.5, b: 0.68, a: 0.62}
   keyframes:
   - hour: 0
     phase: 2

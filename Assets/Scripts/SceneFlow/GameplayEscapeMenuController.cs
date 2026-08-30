@@ -1,6 +1,7 @@
 using FantasySurvival.Controls;
 using FantasySurvival.Raids;
 using FantasySurvival.SaveSystem;
+using FantasySurvival.WorldLighting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,6 +17,7 @@ namespace FantasySurvival.SceneFlow
             Closed,
             Main,
             Settings,
+            EnvironmentTest,
             Confirmation,
             Result
         }
@@ -31,12 +33,14 @@ namespace FantasySurvival.SceneFlow
         [Header("Owners")]
         [SerializeField] private PersistentGameplayShell shell;
         [SerializeField] private RaidSession raidSession;
+        [SerializeField] private SkyLightingCycleController skyLighting;
 
         [Header("View roots")]
         [SerializeField] private GameObject pauseCanvas;
         [SerializeField] private Image backdropImage;
         [SerializeField] private GameObject mainPanel;
         [SerializeField] private GameObject settingsPanel;
+        [SerializeField] private GameObject environmentTestPanel;
         [SerializeField] private GameObject confirmationPanel;
         [SerializeField] private GameObject resultPanel;
 
@@ -46,12 +50,21 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private Button raidResumeButton;
         [SerializeField] private Button abandonButton;
         [SerializeField] private Button settingsButton;
+        [SerializeField] private Button environmentTestButton;
         [SerializeField] private Button mainMenuButton;
 
         [Header("Settings")]
         [SerializeField] private Toggle soundToggle;
         [SerializeField] private KeyBindingSettingsPanel keyBindingPanel;
         [SerializeField] private Button settingsBackButton;
+
+        [Header("Environment test")]
+        [SerializeField] private Text environmentTestStatusText;
+        [SerializeField] private Button dayTestButton;
+        [SerializeField] private Button nightTestButton;
+        [SerializeField] private Button clearWeatherTestButton;
+        [SerializeField] private Button rainWeatherTestButton;
+        [SerializeField] private Button environmentTestBackButton;
 
         [Header("Confirmation")]
         [SerializeField] private Text confirmationText;
@@ -75,6 +88,8 @@ namespace FantasySurvival.SceneFlow
         private bool interactionWasBlocked;
         private bool ownsWorldPause;
         private float previousTimeScale = 1f;
+        private bool environmentTestAutomaticAdvanceAtOpen;
+        private bool environmentTestClockOverrideActive;
         private Color defaultBackdropColor;
         private bool extractionSettlementFlow;
         private bool extractionSettlementCommitted;
@@ -83,13 +98,17 @@ namespace FantasySurvival.SceneFlow
         private BasePersistenceController activeBasePersistence;
 
         public bool IsConfigured =>
-            shell != null && raidSession != null &&
+            shell != null && raidSession != null && skyLighting != null &&
             pauseCanvas != null && backdropImage != null &&
             mainPanel != null && settingsPanel != null &&
-            confirmationPanel != null && resultPanel != null &&
+            environmentTestPanel != null && confirmationPanel != null && resultPanel != null &&
             menuTitleText != null && baseResumeButton != null && raidResumeButton != null &&
-            abandonButton != null && settingsButton != null && mainMenuButton != null &&
+            abandonButton != null && settingsButton != null &&
+            environmentTestButton != null && mainMenuButton != null &&
             soundToggle != null && keyBindingPanel != null && settingsBackButton != null &&
+            environmentTestStatusText != null && dayTestButton != null &&
+            nightTestButton != null && clearWeatherTestButton != null &&
+            rainWeatherTestButton != null && environmentTestBackButton != null &&
             confirmationText != null && confirmationAcceptButton != null &&
             confirmationCancelButton != null && resultTitleText != null &&
             resultDetailText != null && resultReturnToBaseButton != null &&
@@ -99,6 +118,7 @@ namespace FantasySurvival.SceneFlow
         public bool IsMapSelectionVisible =>
             registeredMapSelection != null && registeredMapSelection.IsVisible;
         public bool IsWorldPaused => ownsWorldPause && Mathf.Approximately(Time.timeScale, 0f);
+        public bool IsEnvironmentTestOpen => currentView == MenuView.EnvironmentTest;
         public string CurrentViewName => currentView.ToString();
         public bool IsExtractionSettlementPending =>
             extractionSettlementFlow &&
@@ -240,6 +260,7 @@ namespace FantasySurvival.SceneFlow
             currentView = MenuView.Settings;
             mainPanel.SetActive(false);
             settingsPanel.SetActive(true);
+            environmentTestPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(false);
             soundToggle.SetIsOnWithoutNotify(GameUserSettings.SoundEnabled);
@@ -249,10 +270,95 @@ namespace FantasySurvival.SceneFlow
 
         public void BackToMainMenuPanel()
         {
-            if (currentView == MenuView.Settings || currentView == MenuView.Confirmation)
+            if (currentView == MenuView.Settings ||
+                currentView == MenuView.EnvironmentTest ||
+                currentView == MenuView.Confirmation)
             {
+                RestoreEnvironmentTestClock();
                 ShowMainPanel();
             }
+        }
+
+        public void OpenEnvironmentTest()
+        {
+            if (currentView != MenuView.Main)
+            {
+                return;
+            }
+
+            currentView = MenuView.EnvironmentTest;
+            environmentTestAutomaticAdvanceAtOpen =
+                skyLighting != null && skyLighting.IsAdvancingAutomatically;
+            environmentTestClockOverrideActive = false;
+            mainPanel.SetActive(false);
+            settingsPanel.SetActive(false);
+            environmentTestPanel.SetActive(true);
+            confirmationPanel.SetActive(false);
+            resultPanel.SetActive(false);
+            UpdateEnvironmentTestStatus();
+            Select(dayTestButton);
+        }
+
+        public void SetEnvironmentTestDay()
+        {
+            if (currentView != MenuView.EnvironmentTest)
+            {
+                return;
+            }
+
+            BeginEnvironmentTestClockOverride();
+            if (!skyLighting.SetPhase(SkyTimePhase.Day))
+            {
+                Debug.LogError("Failed to apply the Day environment test state.", this);
+            }
+
+            UpdateEnvironmentTestStatus();
+        }
+
+        public void SetEnvironmentTestNight()
+        {
+            if (currentView != MenuView.EnvironmentTest)
+            {
+                return;
+            }
+
+            BeginEnvironmentTestClockOverride();
+            if (!skyLighting.SetPhase(SkyTimePhase.Night))
+            {
+                Debug.LogError("Failed to apply the Night environment test state.", this);
+            }
+
+            UpdateEnvironmentTestStatus();
+        }
+
+        public void SetEnvironmentTestClearWeather()
+        {
+            if (currentView != MenuView.EnvironmentTest)
+            {
+                return;
+            }
+
+            if (!skyLighting.SetWeather(SkyWeatherType.Clear, true))
+            {
+                Debug.LogError("Failed to apply the Clear weather test state.", this);
+            }
+
+            UpdateEnvironmentTestStatus();
+        }
+
+        public void SetEnvironmentTestRainWeather()
+        {
+            if (currentView != MenuView.EnvironmentTest)
+            {
+                return;
+            }
+
+            if (!skyLighting.SetWeather(SkyWeatherType.Rain, true))
+            {
+                Debug.LogError("Failed to apply the Rain weather test state.", this);
+            }
+
+            UpdateEnvironmentTestStatus();
         }
 
         public void SetSoundEnabled(bool enabled)
@@ -460,6 +566,12 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
+            if (currentView == MenuView.EnvironmentTest)
+            {
+                BackToMainMenuPanel();
+                return;
+            }
+
             if (currentView == MenuView.Main)
             {
                 CloseMenu();
@@ -536,11 +648,13 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
+            RestoreEnvironmentTestClock();
             confirmationAction = ConfirmationAction.None;
             currentView = MenuView.Main;
             pauseCanvas.SetActive(true);
             mainPanel.SetActive(true);
             settingsPanel.SetActive(false);
+            environmentTestPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(false);
             SetExtractionBackdrop(false);
@@ -553,6 +667,7 @@ namespace FantasySurvival.SceneFlow
             raidResumeButton.gameObject.SetActive(isRaid);
             abandonButton.gameObject.SetActive(isRaid);
             settingsButton.gameObject.SetActive(isBase || isRaid);
+            environmentTestButton.gameObject.SetActive(isBase || isRaid);
             mainMenuButton.gameObject.SetActive(isBase || isRaid);
             Select(isBase ? baseResumeButton : raidResumeButton);
         }
@@ -562,6 +677,7 @@ namespace FantasySurvival.SceneFlow
             currentView = MenuView.Confirmation;
             mainPanel.SetActive(false);
             settingsPanel.SetActive(false);
+            environmentTestPanel.SetActive(false);
             confirmationPanel.SetActive(true);
             resultPanel.SetActive(false);
             SetExtractionBackdrop(false);
@@ -592,6 +708,7 @@ namespace FantasySurvival.SceneFlow
             pauseCanvas.SetActive(true);
             mainPanel.SetActive(false);
             settingsPanel.SetActive(false);
+            environmentTestPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(true);
             SetExtractionBackdrop(false);
@@ -638,6 +755,7 @@ namespace FantasySurvival.SceneFlow
             pauseCanvas.SetActive(true);
             mainPanel.SetActive(false);
             settingsPanel.SetActive(false);
+            environmentTestPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(true);
             SetExtractionBackdrop(true);
@@ -667,6 +785,7 @@ namespace FantasySurvival.SceneFlow
             pauseCanvas.SetActive(true);
             mainPanel.SetActive(false);
             settingsPanel.SetActive(false);
+            environmentTestPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(true);
             SetExtractionBackdrop(true);
@@ -691,6 +810,7 @@ namespace FantasySurvival.SceneFlow
             pauseCanvas.SetActive(true);
             mainPanel.SetActive(false);
             settingsPanel.SetActive(false);
+            environmentTestPanel.SetActive(false);
             confirmationPanel.SetActive(false);
             resultPanel.SetActive(true);
             SetExtractionBackdrop(true);
@@ -903,6 +1023,7 @@ namespace FantasySurvival.SceneFlow
 
         private void HideAllAndReleaseInput()
         {
+            RestoreEnvironmentTestClock();
             currentView = MenuView.Closed;
             confirmationAction = ConfirmationAction.None;
             SetAllPanelsInactive();
@@ -919,6 +1040,29 @@ namespace FantasySurvival.SceneFlow
             }
 
             ReleaseInputLock();
+        }
+
+        private void BeginEnvironmentTestClockOverride()
+        {
+            if (skyLighting == null)
+            {
+                return;
+            }
+
+            environmentTestClockOverrideActive = true;
+            skyLighting.SetAutomaticAdvance(false);
+        }
+
+        private void RestoreEnvironmentTestClock()
+        {
+            if (!environmentTestClockOverrideActive || skyLighting == null)
+            {
+                return;
+            }
+
+            skyLighting.SetAutomaticAdvance(
+                environmentTestAutomaticAdvanceAtOpen);
+            environmentTestClockOverrideActive = false;
         }
 
         private void SetExtractionBackdrop(bool opaque)
@@ -977,8 +1121,27 @@ namespace FantasySurvival.SceneFlow
         {
             if (mainPanel != null) mainPanel.SetActive(false);
             if (settingsPanel != null) settingsPanel.SetActive(false);
+            if (environmentTestPanel != null) environmentTestPanel.SetActive(false);
             if (confirmationPanel != null) confirmationPanel.SetActive(false);
             if (resultPanel != null) resultPanel.SetActive(false);
+        }
+
+        private void UpdateEnvironmentTestStatus()
+        {
+            if (environmentTestStatusText == null || skyLighting == null)
+            {
+                return;
+            }
+
+            string timeLabel = skyLighting.CurrentPhase == SkyTimePhase.Night
+                ? "밤"
+                : "낮";
+            string weatherLabel = skyLighting.CurrentWeatherType == SkyWeatherType.Rain
+                ? "비"
+                : "맑음";
+            environmentTestStatusText.text =
+                $"시간: {timeLabel} ({skyLighting.CurrentHour:0.0}시)\n" +
+                $"날씨: {weatherLabel}";
         }
 
         private void Select(Selectable selectable)

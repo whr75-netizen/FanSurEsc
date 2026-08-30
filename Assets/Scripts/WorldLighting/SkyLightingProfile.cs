@@ -11,6 +11,147 @@ namespace FantasySurvival.WorldLighting
         Night
     }
 
+    public enum SkyWeatherType
+    {
+        Clear,
+        Rain
+    }
+
+    [Serializable]
+    public struct SkyWeatherPreset
+    {
+        [SerializeField] private SkyWeatherType weatherType;
+        [SerializeField] private Color ambientTint;
+        [SerializeField, Min(0f)] private float ambientIntensityMultiplier;
+        [SerializeField] private Color directionalTint;
+        [SerializeField, Min(0f)] private float directionalIntensityMultiplier;
+        [SerializeField, Range(0f, 1f)] private float shadowStrengthMultiplier;
+        [SerializeField, Range(0f, 2f)] private float cloudShadowOpacityMultiplier;
+        [SerializeField, Range(-3f, 3f)] private float cloudShadowSoftnessOffset;
+        [SerializeField, Range(0f, 1f)] private float precipitationIntensity;
+        [SerializeField] private Color precipitationColor;
+
+        public SkyWeatherType WeatherType => weatherType;
+        public Color AmbientTint => ambientTint;
+        public float AmbientIntensityMultiplier => ambientIntensityMultiplier;
+        public Color DirectionalTint => directionalTint;
+        public float DirectionalIntensityMultiplier => directionalIntensityMultiplier;
+        public float ShadowStrengthMultiplier => shadowStrengthMultiplier;
+        public float CloudShadowOpacityMultiplier => cloudShadowOpacityMultiplier;
+        public float CloudShadowSoftnessOffset => cloudShadowSoftnessOffset;
+        public float PrecipitationIntensity => precipitationIntensity;
+        public Color PrecipitationColor => precipitationColor;
+
+        public SkyWeatherPreset(
+            SkyWeatherType weatherType,
+            Color ambientTint,
+            float ambientIntensityMultiplier,
+            Color directionalTint,
+            float directionalIntensityMultiplier,
+            float shadowStrengthMultiplier,
+            float cloudShadowOpacityMultiplier,
+            float cloudShadowSoftnessOffset,
+            float precipitationIntensity,
+            Color precipitationColor)
+        {
+            this.weatherType = weatherType;
+            this.ambientTint = ambientTint;
+            this.ambientIntensityMultiplier = ambientIntensityMultiplier;
+            this.directionalTint = directionalTint;
+            this.directionalIntensityMultiplier = directionalIntensityMultiplier;
+            this.shadowStrengthMultiplier = shadowStrengthMultiplier;
+            this.cloudShadowOpacityMultiplier = cloudShadowOpacityMultiplier;
+            this.cloudShadowSoftnessOffset = cloudShadowSoftnessOffset;
+            this.precipitationIntensity = precipitationIntensity;
+            this.precipitationColor = precipitationColor;
+        }
+    }
+
+    public readonly struct SkyWeatherSample
+    {
+        public Color AmbientTint { get; }
+        public float AmbientIntensityMultiplier { get; }
+        public Color DirectionalTint { get; }
+        public float DirectionalIntensityMultiplier { get; }
+        public float ShadowStrengthMultiplier { get; }
+        public float CloudShadowOpacityMultiplier { get; }
+        public float CloudShadowSoftnessOffset { get; }
+        public float PrecipitationIntensity { get; }
+        public Color PrecipitationColor { get; }
+
+        private SkyWeatherSample(
+            Color ambientTint,
+            float ambientIntensityMultiplier,
+            Color directionalTint,
+            float directionalIntensityMultiplier,
+            float shadowStrengthMultiplier,
+            float cloudShadowOpacityMultiplier,
+            float cloudShadowSoftnessOffset,
+            float precipitationIntensity,
+            Color precipitationColor)
+        {
+            AmbientTint = ambientTint;
+            AmbientIntensityMultiplier = ambientIntensityMultiplier;
+            DirectionalTint = directionalTint;
+            DirectionalIntensityMultiplier = directionalIntensityMultiplier;
+            ShadowStrengthMultiplier = shadowStrengthMultiplier;
+            CloudShadowOpacityMultiplier = cloudShadowOpacityMultiplier;
+            CloudShadowSoftnessOffset = cloudShadowSoftnessOffset;
+            PrecipitationIntensity = precipitationIntensity;
+            PrecipitationColor = precipitationColor;
+        }
+
+        public static SkyWeatherSample FromPreset(SkyWeatherPreset preset)
+        {
+            return new SkyWeatherSample(
+                preset.AmbientTint,
+                preset.AmbientIntensityMultiplier,
+                preset.DirectionalTint,
+                preset.DirectionalIntensityMultiplier,
+                preset.ShadowStrengthMultiplier,
+                preset.CloudShadowOpacityMultiplier,
+                preset.CloudShadowSoftnessOffset,
+                preset.PrecipitationIntensity,
+                preset.PrecipitationColor);
+        }
+
+        public static SkyWeatherSample Interpolate(
+            SkyWeatherSample from,
+            SkyWeatherSample to,
+            float t)
+        {
+            float easedT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
+            return new SkyWeatherSample(
+                Color.Lerp(from.AmbientTint, to.AmbientTint, easedT),
+                Mathf.Lerp(
+                    from.AmbientIntensityMultiplier,
+                    to.AmbientIntensityMultiplier,
+                    easedT),
+                Color.Lerp(from.DirectionalTint, to.DirectionalTint, easedT),
+                Mathf.Lerp(
+                    from.DirectionalIntensityMultiplier,
+                    to.DirectionalIntensityMultiplier,
+                    easedT),
+                Mathf.Lerp(
+                    from.ShadowStrengthMultiplier,
+                    to.ShadowStrengthMultiplier,
+                    easedT),
+                Mathf.Lerp(
+                    from.CloudShadowOpacityMultiplier,
+                    to.CloudShadowOpacityMultiplier,
+                    easedT),
+                Mathf.Lerp(
+                    from.CloudShadowSoftnessOffset,
+                    to.CloudShadowSoftnessOffset,
+                    easedT),
+                Mathf.Lerp(
+                    from.PrecipitationIntensity,
+                    to.PrecipitationIntensity,
+                    easedT),
+                Color.Lerp(from.PrecipitationColor, to.PrecipitationColor, easedT));
+        }
+    }
+
     [Serializable]
     public struct SkyLightingKeyframe
     {
@@ -190,6 +331,9 @@ namespace FantasySurvival.WorldLighting
         [Tooltip("Cloud shadow opacity when the active sun or moon is high.")]
         [SerializeField, Range(0f, 1f)] private float highElevationCloudShadowOpacity =
             DefaultHighElevationCloudShadowOpacity;
+        [Header("Weather Presets")]
+        [SerializeField, Min(0.01f)] private float weatherTransitionSeconds = 0.75f;
+        [SerializeField] private SkyWeatherPreset[] weatherPresets = CreateWeatherDefaults();
         [SerializeField] private SkyLightingKeyframe[] keyframes = CreateClearSkyDefaults();
 
         public float MinimumDirectionalElevationDegrees => minimumDirectionalElevationDegrees;
@@ -215,6 +359,7 @@ namespace FantasySurvival.WorldLighting
             highElevationCloudShadowSoftnessMip;
         public float LowElevationCloudShadowOpacity => lowElevationCloudShadowOpacity;
         public float HighElevationCloudShadowOpacity => highElevationCloudShadowOpacity;
+        public float WeatherTransitionSeconds => weatherTransitionSeconds;
 
         public bool TryEvaluate(float hour, out SkyLightingSample sample)
         {
@@ -272,11 +417,78 @@ namespace FantasySurvival.WorldLighting
             };
         }
 
+        public bool TryGetWeatherPreset(
+            SkyWeatherType weatherType,
+            out SkyWeatherPreset preset)
+        {
+            if (weatherPresets != null)
+            {
+                for (int index = 0; index < weatherPresets.Length; index++)
+                {
+                    if (weatherPresets[index].WeatherType == weatherType)
+                    {
+                        preset = weatherPresets[index];
+                        return true;
+                    }
+                }
+            }
+
+            preset = default;
+            return false;
+        }
+
         public bool TryValidate(out string error)
         {
             if (keyframes == null || keyframes.Length < 2)
             {
                 error = "Sky lighting profile requires at least two keyframes.";
+                return false;
+            }
+
+            if (weatherPresets == null || weatherPresets.Length < 2)
+            {
+                error = "Sky lighting profile requires Clear and Rain weather presets.";
+                return false;
+            }
+
+            bool hasClearWeather = false;
+            bool hasRainWeather = false;
+            for (int index = 0; index < weatherPresets.Length; index++)
+            {
+                SkyWeatherPreset preset = weatherPresets[index];
+                if (!IsValidWeatherPreset(preset))
+                {
+                    error = $"Weather preset {index} contains invalid lighting or precipitation values.";
+                    return false;
+                }
+
+                if (preset.WeatherType == SkyWeatherType.Clear)
+                {
+                    if (hasClearWeather)
+                    {
+                        error = "Sky lighting profile contains more than one Clear weather preset.";
+                        return false;
+                    }
+
+                    hasClearWeather = true;
+                }
+                else if (preset.WeatherType == SkyWeatherType.Rain)
+                {
+                    if (hasRainWeather)
+                    {
+                        error = "Sky lighting profile contains more than one Rain weather preset.";
+                        return false;
+                    }
+
+                    hasRainWeather = true;
+                }
+            }
+
+            if (!hasClearWeather || !hasRainWeather ||
+                !IsFinite(weatherTransitionSeconds) ||
+                weatherTransitionSeconds <= 0f)
+            {
+                error = "Sky lighting profile requires one valid Clear preset, one valid Rain preset, and a positive transition duration.";
                 return false;
             }
 
@@ -408,6 +620,24 @@ namespace FantasySurvival.WorldLighting
                    IsFiniteNonNegative(value.a);
         }
 
+        private static bool IsValidWeatherPreset(SkyWeatherPreset preset)
+        {
+            return IsFiniteNonNegative(preset.AmbientTint) &&
+                   IsFiniteNonNegative(preset.DirectionalTint) &&
+                   IsFiniteNonNegative(preset.PrecipitationColor) &&
+                   IsFiniteNonNegative(preset.AmbientIntensityMultiplier) &&
+                   IsFiniteNonNegative(preset.DirectionalIntensityMultiplier) &&
+                   IsFiniteNonNegative(preset.ShadowStrengthMultiplier) &&
+                   preset.ShadowStrengthMultiplier <= 1f &&
+                   IsFiniteNonNegative(preset.CloudShadowOpacityMultiplier) &&
+                   preset.CloudShadowOpacityMultiplier <= 2f &&
+                   IsFinite(preset.CloudShadowSoftnessOffset) &&
+                   preset.CloudShadowSoftnessOffset >= -3f &&
+                   preset.CloudShadowSoftnessOffset <= 3f &&
+                   IsFiniteNonNegative(preset.PrecipitationIntensity) &&
+                   preset.PrecipitationIntensity <= 1f;
+        }
+
         public static float NormalizeHour(float hour)
         {
             float normalized = hour % 24f;
@@ -483,6 +713,35 @@ namespace FantasySurvival.WorldLighting
                     new Color(0.62f, 0.72f, 1f),
                     0.32f,
                     0f)
+            };
+        }
+
+        private static SkyWeatherPreset[] CreateWeatherDefaults()
+        {
+            return new[]
+            {
+                new SkyWeatherPreset(
+                    SkyWeatherType.Clear,
+                    Color.white,
+                    1f,
+                    Color.white,
+                    1f,
+                    1f,
+                    1f,
+                    0f,
+                    0f,
+                    new Color(0.72f, 0.82f, 0.95f, 1f)),
+                new SkyWeatherPreset(
+                    SkyWeatherType.Rain,
+                    new Color(0.72f, 0.79f, 0.88f, 1f),
+                    0.78f,
+                    new Color(0.68f, 0.76f, 0.88f, 1f),
+                    0.52f,
+                    0.42f,
+                    1.35f,
+                    0.65f,
+                    1f,
+                    new Color(0.36f, 0.50f, 0.68f, 0.62f))
             };
         }
     }

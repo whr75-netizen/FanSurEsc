@@ -6,12 +6,12 @@ Shader "FantasySurvival/Weather/PixelRainPuddle"
         _EdgeColor("Pixel Edge Color", Color) = (0.22, 0.46, 0.58, 0.72)
         _RippleColor("Rain Ripple Color", Color) = (1.0, 1.0, 1.0, 1.0)
         _PixelGrid("Puddle Pixel Grid", Vector) = (48, 24, 0, 0)
-        _WorldPixelSize("Ripple World Pixel Size", Range(0.01, 0.12)) = 0.04
+        _WorldPixelSize("Ripple World Pixel Size", Range(0.005, 0.12)) = 0.01
         _LightingBands("Lighting Bands", Range(2, 12)) = 6
-        _RippleInterval("Ripple Interval", Range(0.6, 3.0)) = 1.6
+        _RippleInterval("Ripple Interval", Range(0.6, 3.0)) = 3.0
         _RippleDuration("Ripple Duration", Range(0.2, 1.5)) = 0.72
         _RippleMaxRadius("Ripple Maximum Radius", Range(0.08, 0.8)) = 0.38
-        _RippleThickness("Ripple Thickness", Range(0.01, 0.12)) = 0.01
+        _RippleThickness("Ripple Thickness", Range(0.001, 0.12)) = 0.005
     }
 
     SubShader

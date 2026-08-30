@@ -3,17 +3,10 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
     Properties
     {
         _PixelRainPattern("Rain Pattern", 2D) = "black" {}
-        _PixelRainSplashAtlas("Splash Atlas", 2D) = "black" {}
         _LogicalPixelSize("Logical Pixel Size", Range(1, 4)) = 1
         _RainFramesPerSecond("Rain Frames Per Second", Range(1, 30)) = 20
-        _SplashFramesPerSecond("Splash Frames Per Second", Range(1, 30)) = 8
         _RainPatternPixelsPerWorld("Rain Pattern Pixels Per World Unit", Range(8, 96)) = 48
         _StreakOpacity("Streak Opacity", Range(0, 1)) = 0.48
-        _SplashOpacity("Splash Opacity", Range(0, 1)) = 0.62
-        _SplashSpawnRate("Splash Spawn Rate", Range(0, 1)) = 0.62
-        _SplashCellWorldSize("Splash Cell World Size", Range(0.5, 4)) = 1.6
-        _SplashCycleFrames("Splash Cycle Frames", Range(8, 40)) = 12
-        _SplashMinimumNormalY("Splash Minimum Normal Y", Range(0, 1)) = 0.75
     }
 
     SubShader
@@ -42,23 +35,15 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareNormalsTexture.hlsl"
 
             TEXTURE2D(_PixelRainPattern);
-            TEXTURE2D(_PixelRainSplashAtlas);
             TEXTURE2D(_FantasyRainShelterHeight);
 
             CBUFFER_START(UnityPerMaterial)
                 float _LogicalPixelSize;
                 float _RainFramesPerSecond;
-                float _SplashFramesPerSecond;
                 float _RainPatternPixelsPerWorld;
                 float _StreakOpacity;
-                float _SplashOpacity;
-                float _SplashSpawnRate;
-                float _SplashCellWorldSize;
-                float _SplashCycleFrames;
-                float _SplashMinimumNormalY;
             CBUFFER_END
 
             float _FantasyRainIntensity;
@@ -74,7 +59,6 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
             struct RainSurface
             {
                 float3 positionWS;
-                float3 normalWS;
                 float geometryMask;
             };
 
@@ -114,9 +98,6 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                     uv,
                     deviceDepth,
                     UNITY_MATRIX_I_VP);
-                float3 sampledNormal = SampleSceneNormals(uv, sampler_PointClamp);
-                surface.normalWS = sampledNormal * rsqrt(
-                    max(dot(sampledNormal, sampledNormal), 0.000001));
                 return surface;
             }
 
@@ -200,68 +181,6 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                 return SelectPatternFrame(pattern, frameIndex);
             }
 
-            float EvaluateSplash(
-                int2 logicalPixel,
-                float2 logicalScreenSize,
-                int rainFrame,
-                RainSurface surface,
-                float exposed,
-                float intensity)
-            {
-                float upwardSurface = surface.geometryMask *
-                    step(_SplashMinimumNormalY, surface.normalWS.y) * exposed;
-                if (upwardSurface <= 0.0)
-                {
-                    return 0.0;
-                }
-
-                float cellSize = max(_SplashCellWorldSize, 0.1);
-                float2 worldCell = floor(surface.positionWS.xz / cellSize);
-                float priority = Hash21(worldCell + 7.31);
-                if (priority > intensity * _SplashSpawnRate)
-                {
-                    return 0.0;
-                }
-
-                int cycleFrames = max((int)round(_SplashCycleFrames), 8);
-                int phaseOffset = (int)floor(Hash21(worldCell + 31.7) * cycleFrames);
-                int splashFrame = (int)floor(fmod(
-                    (float)(rainFrame + phaseOffset),
-                    (float)cycleFrames));
-                if (splashFrame >= 4)
-                {
-                    return 0.0;
-                }
-
-                float2 centerRandom = lerp(
-                    float2(0.3, 0.3),
-                    float2(0.7, 0.7),
-                    Hash22(worldCell + 13.17));
-                float2 centerXZ = (worldCell + centerRandom) * cellSize;
-                float3 centerWS = float3(
-                    centerXZ.x,
-                    surface.positionWS.y + 0.02,
-                    centerXZ.y);
-                float4 centerHClip = TransformWorldToHClip(centerWS);
-                float4 centerScreen = ComputeScreenPos(centerHClip);
-                float2 centerUv = centerScreen.xy /
-                    max(abs(centerScreen.w), 0.000001);
-                int2 centerLogicalPixel = (int2)floor(centerUv * logicalScreenSize);
-                int2 localPixel = logicalPixel - centerLogicalPixel + int2(3, 1);
-                if (localPixel.x < 0 || localPixel.x >= 7 ||
-                    localPixel.y < 0 || localPixel.y >= 4)
-                {
-                    return 0.0;
-                }
-
-                int2 atlasCoordinate = int2(
-                    splashFrame * 7 + localPixel.x,
-                    localPixel.y);
-                return LOAD_TEXTURE2D(
-                    _PixelRainSplashAtlas,
-                    atlasCoordinate).r * upwardSurface;
-            }
-
             half4 Frag(Varyings input) : SV_Target0
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
@@ -283,8 +202,6 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                     ((float2)logicalPixel + 0.5) / logicalScreenSize;
                 int streakFrame = (int)floor(
                     _FantasyRainVisualTime * max(_RainFramesPerSecond, 1.0));
-                int splashFrameClock = (int)floor(
-                    _FantasyRainVisualTime * max(_SplashFramesPerSecond, 1.0));
 
                 RainSurface surface = SampleRainSurface(sampleUv);
                 float sheltered = surface.geometryMask > 0.0
@@ -296,16 +213,9 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                     logicalScale,
                     streakFrame) *
                     lerp(1.0, exposed, surface.geometryMask);
-                float splash = EvaluateSplash(
-                    logicalPixel,
-                    logicalScreenSize,
-                    splashFrameClock,
-                    surface,
-                    exposed,
-                    intensity);
-                float alpha = saturate(max(
-                    streak * _StreakOpacity,
-                    splash * _SplashOpacity) * intensity * _FantasyRainColor.a);
+                float alpha = saturate(
+                    streak * _StreakOpacity *
+                    intensity * _FantasyRainColor.a);
                 return half4(_FantasyRainColor.rgb, alpha);
             }
             ENDHLSL

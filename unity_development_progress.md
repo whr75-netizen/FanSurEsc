@@ -1865,3 +1865,10 @@ Interactable (abstract base class)
 - `[권위·표현]` 새 시계·날씨·조명 Manager를 만들지 않았다. 영속 `SkyLightingCycleController`가 달빛 기여에서 연속 야간값을 한 번 계산하고, 각 `NightActivatedStreetLamp`가 그 event를 받아 같은 값으로 하향 URP Spot Light, 발광 렌즈와 카메라 facing 단계형 후광을 함께 쓴다. Spot은 24 Candela, 62도, 단계형 Cookie, Soft shadow의 medium tier이고 렌즈·후광은 전역 Bloom을 켜지 않는 개별 `MaterialPropertyBlock` 표현이다. 짧은 단일 trapezoid 기둥만 전용 prefab에 opt-in하며 비에는 산란 강도만 소폭 올라간다.
 - `[컴파일·Play Mode 호출 확인]` C# 동적 컴파일과 lens·halo·shaft shader 지원을 확인했다. `GameMapTest` 한 Session에서 12시 `visibility/intensity=0/0`, 18시 `0.316/7.59`, 19·22시 `1/24`, 6시 `0.316/7.59`, 8시 `0/0`이었고 Spot·렌즈·후광 값이 각 sample에서 일치했다. Rain/22시에도 24 Candela와 점등이 유지됐으며 Spot·Cookie·Soft shadow·URP 추가광 데이터·medium shadow tier·하향 정렬을 확인했다. 종료 뒤 `GameMap1` Edit Mode·clean authoring 상태로 복귀했다.
 - `[현재 경계]` MCP Scene View 캡처가 변경한 gameplay 구도를 반영하지 않아 최종 화면 체감은 사용자 확인 대상이다. Spot 수광은 Lit 계열 바닥·건물용이며 외부 unlit 재질까지 보장하지 않는다. 대기 기둥은 opaque depth에는 가려지지만 Spot의 additional-light shadow atlas를 직접 샘플하지 않는다. 현재 시험 1개에는 허용하되, 도심 다수 배치 전 가까운 1~2개만 실시간 그림자를 쓰는 shadow LOD와 GPU Profiler 검증이 필요하다. 기존 외부 `ASFolliage` keyword 오류와 검증 도구 실패 기록은 Console에서 지우지 않았다.
+
+---
+
+## 86. 기지 전용 가로등 시험 배치 `[ENVIRONMENT-01]`
+
+- `[배치·보존][2026-08-31]` 기존 `PrototypeStreetLamp` prefab을 재사용해 `GameMap1` Ground 위 빈 위치 `(5,0,0)`에 `PrototypeStreetLamp_Base` 1개를 배치했다. Pole collider는 기존 NPC·상자·포탈·시험 지붕과 겹치지 않는다. 비교용 구형 로컬광과 사용자 dirty Chest 직렬화 6줄·재질 2개·preview Camera prefab은 그대로 보존했다.
+- `[Play Mode 호출 확인]` `GameMap1` 한 Session에서 가로등 instance 1개, Clear/22시 야간값 `1`, Spot `enabled`, 광량 `24 Candela`를 확인했다. 기존 구형 로컬광은 1개이고 shaft emitter는 0개였다. 종료 뒤 `GameMap1` Edit Mode·scene clean·컴파일 정지 상태로 복원했다.

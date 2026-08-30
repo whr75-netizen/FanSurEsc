@@ -8,9 +8,9 @@ Shader "FantasySurvival/Weather/PixelRainPuddle"
         _PixelGrid("Puddle Pixel Grid", Vector) = (48, 24, 0, 0)
         _WorldPixelSize("Ripple World Pixel Size", Range(0.005, 0.12)) = 0.01
         _LightingBands("Lighting Bands", Range(2, 12)) = 6
-        _RippleInterval("Ripple Interval", Range(0.6, 3.0)) = 3.0
-        _RippleDuration("Ripple Duration", Range(0.2, 1.5)) = 0.72
-        _RippleMaxRadius("Ripple Maximum Radius", Range(0.08, 0.8)) = 0.38
+        _RippleInterval("Ripple Interval", Range(0.6, 3.0)) = 1.0
+        _RippleDuration("Ripple Duration", Range(0.2, 1.5)) = 0.5143
+        _RippleMaxRadius("Ripple Maximum Radius", Range(0.08, 0.8)) = 0.228
         _RippleThickness("Ripple Thickness", Range(0.001, 0.12)) = 0.005
         _RippleRadiusRatios("Ripple Radius Ratios (Start Min/Max, End Min/Max)", Vector) = (0.16, 0.55, 0.58, 1.0)
         _RippleGapHalfWidthRange("Ripple Gap Half Width (Min/Max)", Vector) = (0.018, 0.035, 0.0, 0.0)

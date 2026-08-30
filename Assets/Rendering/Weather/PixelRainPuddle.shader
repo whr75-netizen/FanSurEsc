@@ -12,6 +12,9 @@ Shader "FantasySurvival/Weather/PixelRainPuddle"
         _RippleDuration("Ripple Duration", Range(0.2, 1.5)) = 0.72
         _RippleMaxRadius("Ripple Maximum Radius", Range(0.08, 0.8)) = 0.38
         _RippleThickness("Ripple Thickness", Range(0.001, 0.12)) = 0.005
+        _RippleRadiusRatios("Ripple Radius Ratios (Start Min/Max, End Min/Max)", Vector) = (0.16, 0.55, 0.58, 1.0)
+        _RippleGapHalfWidthRange("Ripple Gap Half Width (Min/Max)", Vector) = (0.018, 0.035, 0.0, 0.0)
+        _RippleInitialThicknessScale("Ripple Initial Thickness Scale (Min/Max)", Vector) = (1.25, 1.75, 0.0, 0.0)
     }
 
     SubShader
@@ -54,6 +57,9 @@ Shader "FantasySurvival/Weather/PixelRainPuddle"
                 float _RippleDuration;
                 float _RippleMaxRadius;
                 float _RippleThickness;
+                float4 _RippleRadiusRatios;
+                float4 _RippleGapHalfWidthRange;
+                float4 _RippleInitialThicknessScale;
             CBUFFER_END
 
             float _FantasyRainIntensity;
@@ -87,6 +93,69 @@ Shader "FantasySurvival/Weather/PixelRainPuddle"
             {
                 float first = Hash21(value);
                 return float2(first, Hash21(value + first + 19.19));
+            }
+
+            float CircularDistance01(float first, float second)
+            {
+                return abs(frac(first - second + 0.5) - 0.5);
+            }
+
+            float EvaluateRippleArcMask(
+                float angle01,
+                float2 centerRandom,
+                float2 radiusRandom,
+                float2 shapeRandom,
+                float2 detailRandom)
+            {
+                float gapCount =
+                    1.0 +
+                    step(0.45, shapeRandom.x) +
+                    step(0.82, shapeRandom.x);
+                float useSecondGap = step(1.5, gapCount);
+                float useThirdGap = step(2.5, gapCount);
+
+                float firstGapCenter = detailRandom.x;
+                float secondGapForTwo = frac(
+                    firstGapCenter + lerp(0.42, 0.58, radiusRandom.x));
+                float secondGapForThree = frac(
+                    firstGapCenter + lerp(0.28, 0.38, radiusRandom.x));
+                float secondGapCenter = lerp(
+                    secondGapForTwo,
+                    secondGapForThree,
+                    useThirdGap);
+                float thirdGapCenter = frac(
+                    firstGapCenter + lerp(0.62, 0.72, radiusRandom.y));
+
+                float2 gapWidthRange = max(
+                    min(_RippleGapHalfWidthRange.xy, 0.08),
+                    0.002);
+                float gapWidthMin = min(gapWidthRange.x, gapWidthRange.y);
+                float gapWidthMax = max(gapWidthRange.x, gapWidthRange.y);
+                float firstGapWidth = lerp(
+                    gapWidthMin,
+                    gapWidthMax,
+                    detailRandom.y);
+                float secondGapWidth = lerp(
+                    gapWidthMin,
+                    gapWidthMax,
+                    centerRandom.x);
+                float thirdGapWidth = lerp(
+                    gapWidthMin,
+                    gapWidthMax,
+                    centerRandom.y);
+
+                float arcMask = step(
+                    firstGapWidth,
+                    CircularDistance01(angle01, firstGapCenter));
+                float secondGapMask = step(
+                    secondGapWidth,
+                    CircularDistance01(angle01, secondGapCenter));
+                float thirdGapMask = step(
+                    thirdGapWidth,
+                    CircularDistance01(angle01, thirdGapCenter));
+                arcMask *= lerp(1.0, secondGapMask, useSecondGap);
+                arcMask *= lerp(1.0, thirdGapMask, useThirdGap);
+                return arcMask;
             }
 
             float2 QuantizePuddleUv(float2 uv)
@@ -128,10 +197,16 @@ Shader "FantasySurvival/Weather/PixelRainPuddle"
                 float active = 1.0 - step(duration, ageSeconds);
                 float age = saturate(ageSeconds / duration);
 
-                float2 random = Hash22(
-                    float2(cycle + channel * 17.31, dot(objectSeed, float2(0.37, 0.73))));
-                float angle = random.x * 6.28318530718;
-                float centerRadius = sqrt(random.y) * 0.25;
+                float2 seed = float2(
+                    cycle + channel * 17.31,
+                    dot(objectSeed, float2(0.37, 0.73)) + channel * 7.91);
+                float2 centerRandom = Hash22(seed);
+                float2 radiusRandom = Hash22(seed + 31.73);
+                float2 shapeRandom = Hash22(seed + 67.19);
+                float2 detailRandom = Hash22(seed + 97.41);
+
+                float angle = centerRandom.x * 6.28318530718;
+                float centerRadius = sqrt(centerRandom.y) * 0.25;
                 float2 centerUv = 0.5 + float2(cos(angle), sin(angle)) * centerRadius;
                 float3 centerWS = TransformObjectToWorld(
                     float3(centerUv.x - 0.5, 0.0, centerUv.y - 0.5));
@@ -139,12 +214,62 @@ Shader "FantasySurvival/Weather/PixelRainPuddle"
                 float pixelSize = max(_WorldPixelSize, 0.001);
                 float3 pixelPositionWS =
                     floor(positionWS / pixelSize + 0.5) * pixelSize;
-                float radius = age * max(_RippleMaxRadius, pixelSize);
-                float ringDistance = abs(distance(pixelPositionWS, centerWS) - radius);
-                float ring = 1.0 - step(max(_RippleThickness, pixelSize * 0.5), ringDistance);
+                float maximumRadius = max(_RippleMaxRadius, pixelSize * 4.0);
+
+                float2 startRatioRange = saturate(_RippleRadiusRatios.xy);
+                float2 endRatioRange = saturate(_RippleRadiusRatios.zw);
+                float startRatio = lerp(
+                    min(startRatioRange.x, startRatioRange.y),
+                    max(startRatioRange.x, startRatioRange.y),
+                    radiusRandom.x);
+                float endRatio = lerp(
+                    min(endRatioRange.x, endRatioRange.y),
+                    max(endRatioRange.x, endRatioRange.y),
+                    radiusRandom.y);
+                float startRadius = max(
+                    maximumRadius * startRatio,
+                    pixelSize * 2.5);
+                float endRadius = max(
+                    maximumRadius * endRatio,
+                    startRadius + pixelSize * 2.0);
+                endRadius = min(endRadius, maximumRadius);
+                startRadius = min(startRadius, endRadius - pixelSize);
+
+                float radius = lerp(startRadius, endRadius, age);
+                float2 radialDelta = pixelPositionWS.xz - centerWS.xz;
+                float radialDistance = length(radialDelta);
+                float ringDistance = abs(radialDistance - radius);
+
+                float2 thicknessScaleRange = clamp(
+                    _RippleInitialThicknessScale.xy,
+                    1.0,
+                    2.25);
+                float initialThicknessScale = lerp(
+                    min(thicknessScaleRange.x, thicknessScaleRange.y),
+                    max(thicknessScaleRange.x, thicknessScaleRange.y),
+                    detailRandom.y);
+                float thicknessTaper = smoothstep(0.10, 0.72, age);
+                float halfThickness = max(
+                    pixelSize * 0.5,
+                    _RippleThickness * lerp(
+                        initialThicknessScale,
+                        1.0,
+                        thicknessTaper));
+                float ring = 1.0 - step(halfThickness, ringDistance);
+
+                float angle01 = frac(
+                    atan2(radialDelta.y, radialDelta.x) /
+                    6.28318530718 + 1.0);
+                ring *= EvaluateRippleArcMask(
+                    angle01,
+                    centerRandom,
+                    radiusRandom,
+                    shapeRandom,
+                    detailRandom);
+
                 float lifetimeFade =
                     smoothstep(0.0, 0.08, age) *
-                    (1.0 - smoothstep(0.58, 1.0, age));
+                    (1.0 - smoothstep(0.42, 1.0, age));
                 return ring * lifetimeFade * active;
             }
 

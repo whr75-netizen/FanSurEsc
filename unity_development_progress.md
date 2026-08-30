@@ -1809,3 +1809,12 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인·시각 미확인]` `GameMap1` 한 Session에서 Clear/22시와 Rain/12시 적용, 로컬광 RGBA `(1, 0.62, 0.28, 0.35)`, 실효 강도 `0.4025`, 웅덩이 색 `(1,1,1,1)`, 두께 `0.01`, world pixel `0.04`, rain intensity `1`, shader supported를 확인했다. Unity 동적 C# 컴파일은 성공했다. 최종 체감 화면 캡처는 MCP Game View의 frame-boundary 제약으로 얻지 못했으며, 해당 캡처 시도에서 생긴 도구 오류 기록은 gameplay 오류로 오인하지 않도록 Console에서 지우지 않았다.
 - `[후속 사용자 조정]` 비의 가는 선보다 파문이 두껍고 동시에 많이 보여 강조되는 피드백에 따라 파문 world cell을 `0.04 → 0.01`, 실제 반폭을 `0.02 → 0.005`로 줄여 총 띠 폭을 `0.04 → 0.01 world`로 75% 축소했다. 최대 줌아웃에서 원호 일부가 픽셀 단위로 끊길 수 있는 표현은 사용자가 허용했다. 네 결정론적 채널과 수명 `0.72초`는 유지하고 interval만 `1.6 → 3초`로 늘려 평균 동시 활성 원을 `1.8 → 0.96개`로 낮췄다.
 - `[Play Mode 호출 확인]` `GameMap1` Rain/12시 한 Session에서 global rain `1`, 공유 material의 world pixel `0.01`·반폭 `0.005`·interval `3`, 활성 웅덩이 Renderer 1개, shader supported를 확인했다. 현재 Game View 높이 857·ortho 5에서 가로 투영 띠 폭은 `0.857px`이며 Play 종료 전 Clear로 복원했다. 새 Manager·script·loop·renderer pass·scene 변경은 없다.
+
+---
+
+## 80. 가변 반경·큰 공백의 픽셀 웅덩이 파문 `[ENVIRONMENT-01][PIXEL-01]`
+
+- `[사용자 피드백·제작 이력][2026-08-31]` 참고 효과는 모든 파문이 `0 → 동일 최대 크기`로 커지는 완전한 원이 아니라 파문마다 시작·끝 크기가 다르고, 원주에 3~5픽셀 규모의 의도적인 큰 공백과 수명별 굵기 차이가 있었다. 기존 비는 Bresenham으로 래스터화한 4채널 픽셀 텍스처, Collider 물 튐은 직접 저장된 7×4×4프레임 atlas이며 런타임 셰이더가 선을 새로 그리지 않는다. 반면 웅덩이 파문만 `거리 - 반경` 수식의 고정 `0 → 0.38`, 360도 완전한 원이었다.
+- `[근본 수정]` 기존 `PixelRainPuddle` 공유 셰이더와 날씨 전역값 소유권을 유지했다. cycle·channel·웅덩이 위치만으로 고정 seed를 만들고 파문별 시작 반경을 최대치의 `16~55%`, 끝 반경을 `58~100%`에서 고른다. 같은 seed가 수명 내내 유지되는 1~3개의 큰 각도 공백을 만들며, 공백 중심은 gap 수에 따라 서로 떨어진 범위에 배치해 한쪽에 우연히 겹치지 않는다. 초반 반폭은 후반의 `1.25~1.75배`에서 시작해 픽셀 최소 반폭으로 줄고, alpha는 수명 `42%` 지점부터 점진적으로 사라진다.
+- `[성능·보존]` 파문 중심의 월드 격자 양자화, 흰색, interval `3초`, duration `0.72초`, 네 채널 `max` 합성, `_FantasyRainIntensity`·`_FantasyRainVisualTime` 연동을 보존했다. 새 Texture·Manager·script·Update·Collider·개별 빗방울 물리와 scene/prefab 변경은 없다. 작은 웅덩이 fragment 안에서 고정 hash와 `atan2`만 추가했으며 비·Collider 물 튐의 renderer와 atlas는 변경하지 않았다.
+- `[Shader·Play Mode 호출 확인]` Unity 강제 import 뒤 `PixelRainPuddle`은 `supported=True`, `ShaderHasError=False`, compiler error/warning/message 모두 `0`이었다. `GameMap1` 직접 Play 1회에서 Rain 즉시 적용 성공과 활성 웅덩이 Renderer 1개를 확인하고 Play를 종료했으며 Edit Mode·활성 scene·scene clean 상태가 복원됐다. MCP Scene View capture가 gameplay Camera 구도를 반영하지 않아 최종 모양의 육안 검증은 사용자 확인 대상으로 남겼다. 기존 외부 `AwaiiStudio/ASFolliage` keyword 오류와 사용자 dirty `GameMap1`·재질 2개·preview Camera prefab은 수정·저장·stage하지 않았다.

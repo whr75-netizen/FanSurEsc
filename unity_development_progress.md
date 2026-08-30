@@ -1742,3 +1742,14 @@ Interactable (abstract base class)
 - `[사용자 확인·조정][2026-08-30]` §71의 물 튐 외관과 Collider 경계는 유지하고, 빗줄기 밀도에 비해 드문 물 튐만 소폭 늘렸다. 후보 충돌 빈도를 초당 `28 → 34`회로 약 21% 올렸으며 4프레임 atlas 모양·12FPS·2배 픽셀 크기·24개 pool·충돌/차폐/줌 계산은 바꾸지 않았다.
 - `[현재 표현 경계]` 위치와 시작 시점은 결정론적으로 달라지지만 물 튐 모양은 현재 서로 다른 여러 종류가 아니라 하나의 4프레임 splash animation이다. 별도 모양 variant는 이번 수치 조정에 포함하지 않았다.
 - `[정적 확인]` C# 기본값과 `PersistentGameplayShell` prefab 직렬화 값을 모두 34로 맞췄고 기존 사용자 dirty scene·재질·preview prefab은 변경하지 않았다. 최종 화면 밀도 체감은 사용자 확인 대상이다.
+
+---
+
+## 73. Editor 직접 Play 저장 격리와 물 튐 월드 줌 수정 `[SAVE-01][ENVIRONMENT-01][CAMERA-01]`
+
+- `[사용자 피드백][2026-08-30]` 빠른 맵 진입 시험이 이전 원정 캐시 오류 때문에 반복 지연됐고, 빗줄기는 줌 비율에 따라 변하지만 Collider 물 튐만 화면에 붙은 것처럼 항상 같은 크기였다.
+- `[캐시 원인·수정]` `GameMap1` 직접 Play는 `GameStartRequest` 없이 authored 상태로 시작하면서도 `GameSaveManager`와 `RaidCheckpointStore`는 실제 `Application.persistentDataPath`를 사용했다. 그래서 `TryPrepareNewRaid`가 실제 ordinary save의 `raidInProgress`를 발견해 메인메뉴 정산 오류를 3회 냈다. 이제 `GameplayShellBootstrap`이 Editor gameplay 씬 직접 시작을 판별해 두 저장소를 같은 고유 `temporaryCachePath` 하위 루트로 격리한다. 정상 메인메뉴 New/Load/Resume은 pending request가 있으므로 실제 저장·복구 경로와 fail-closed 판정을 그대로 사용한다.
+- `[렌더 차이·원인]` 빗줄기는 full-screen shader가 `48 pattern pixel/world unit` 월드 격자를 샘플링한다. 반면 물 튐은 실제 Collider에 붙은 world-space pooled MeshRenderer면서도 크기를 `atlas 크기 × 2 × (2×orthoSize/pixelHeight)`로 매 frame 역보정해 화면에서 항상 14×8px가 되었다. 두 효과는 충돌 필요 때문에 같은 renderer일 수는 없지만, 물 튐 크기까지 화면 고정일 이유는 없었다.
+- `[물 튐 수정]` Collider·pool·4프레임·34회/초·차폐·depth 판정은 유지하고 atlas pixel당 0.0111 world unit을 새 단일 배율로 사용해 billboard 월드 크기를 약 0.1554×0.0888로 고정했다. bottom-center anchor만 정수 화면 pixel에 맞추며, smooth zoom에서 투영 폭의 홀짝을 다시 보정해 0.5px 옆으로 튀는 처리는 제거했다. 이제 투영 크기는 `1 / orthographicSize` 비율로 변해 빗줄기와 같은 방향으로 줌에 반응한다.
+- `[Play Mode 호출 확인][2026-08-30]` dirty `GameMap1`을 직접 1회 실행했다. ordinary save와 Recovery가 동일한 `temporaryCachePath/FantasySurvivalDirectPlay/<session>` 루트에 생성됐고, `TryBeginRaid("GameMapTest", "RaidEntry")`는 `Entering → Active`로 끝나 baseline·checkpoint·ordinary marker를 모두 임시 루트에 남겼다. 기존 실제 ordinary marker 오류는 전후 모두 3건이라 새 오류가 추가되지 않았다.
+- `[Play Mode 호출 확인][2026-08-30]` Rain 상태의 활성 Collider 물 튐 표본은 ortho 3.5/5/8 모두 월드 크기 0.1554×0.0888을 유지했고, 현재 Game View에서 화면 높이는 10.87/7.61/4.76px로 변했다. Play 종료 뒤 `GameMap1` dirty 상태와 Edit Mode가 복원됐으며 C# 동적 컴파일 오류는 없었다. 사용자 dirty scene·재질·preview prefab과 실제 세이브/Recovery는 변경하지 않았다.

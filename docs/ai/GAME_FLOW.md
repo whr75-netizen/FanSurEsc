@@ -1,6 +1,6 @@
 # 게임 한 판 호출·분기 지도
 
-**마지막 갱신:** 2026-08-28
+**마지막 갱신:** 2026-08-30
 **역할:** 현재 코드에서 실제로 실행되는 씬 전환, 사용자 분기와 권위 상태 변경의 단일 순서표
 
 이 문서는 기획 백로그가 아니다. 시작·메뉴·씬 전환·원정·정산 코드를 바꾸기 전에 관련 구간을 읽고, 호출 순서가 달라졌으면 코드와 이 문서를 같은 작업에서 함께 고친다.
@@ -56,6 +56,8 @@ GameLoadingManager.Start
 
 [GameMap1]
 GameplayShellBootstrap.Awake [-11000]
+  → Editor gameplay 씬 직접 Play이고 GameStartRequest 없음
+      → ordinary save와 Recovery를 같은 고유 임시 저장 루트로 격리
   → 기존 PersistentGameplayShell 유지 또는 prefab 한 번 생성
 SceneSpawnController.Start [-9000]
   → TryPlacePlayer("BaseEntry")
@@ -73,6 +75,8 @@ BasePersistenceController.Start [+1000]
 ```
 
 `GameLoadingManager`는 로딩 화면과 `GameMap1` 로드만 소유한다. New/Load/Recovery 데이터는 `BasePersistenceController`가 소비하며, Player 오브젝트를 교체하지 않는다.
+
+Editor에서 `GameMap1`·`GameMapTest`를 직접 Play하면 메인메뉴 요청이 없으므로 실제 `persistentDataPath`를 읽거나 쓰지 않고 Play Session 전용 임시 루트를 사용한다. 이전 실제 원정 표식과 Recovery가 빠른 기능 시험을 막지 않으며, 메인메뉴·최초 로딩에서 시작한 정상 흐름은 실제 저장 경로와 기존 복구 판정을 그대로 사용한다.
 
 ## 4. 기지에서 원정 출발
 

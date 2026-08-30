@@ -59,6 +59,8 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Min(0f)] private float splashImpactsPerSecond = 34f;
         [SerializeField, Range(1f, 30f)] private float splashFramesPerSecond = 12f;
         [SerializeField, Range(1, 4)] private int splashPixelScale = 2;
+        [SerializeField, Min(0.0001f)] private float splashWorldUnitsPerAtlasPixel =
+            0.0111f;
         [SerializeField, Range(0f, 1f)] private float splashMinimumNormalY = 0.75f;
         [SerializeField, Min(0f)] private float splashSurfaceOffset = 0.015f;
         [SerializeField] private LayerMask splashCollisionMask =
@@ -390,7 +392,7 @@ namespace FantasySurvival.WorldLighting
                 RainWorldUnitsPerScreenPixelId,
                 worldUnitsPerScreenPixel);
             Shader.SetGlobalFloat(RainDirectionId, rainDirection);
-            UpdateSplashImpactTransforms(camera, worldUnitsPerScreenPixel);
+            UpdateSplashImpactTransforms(camera);
         }
 
         private void TickSplashImpacts(float deltaTime)
@@ -620,9 +622,7 @@ namespace FantasySurvival.WorldLighting
             return mesh;
         }
 
-        private void UpdateSplashImpactTransforms(
-            Camera camera,
-            float worldUnitsPerScreenPixel)
+        private void UpdateSplashImpactTransforms(Camera camera)
         {
             if (camera == null || splashImpacts == null)
             {
@@ -630,10 +630,13 @@ namespace FantasySurvival.WorldLighting
             }
 
             int pixelScale = Mathf.Clamp(splashPixelScale, 1, 4);
+            float worldUnitsPerAtlasPixel = Mathf.Max(
+                0.0001f,
+                splashWorldUnitsPerAtlasPixel);
             float width =
-                SplashFrameWidth * pixelScale * worldUnitsPerScreenPixel;
+                SplashFrameWidth * pixelScale * worldUnitsPerAtlasPixel;
             float height =
-                SplashFrameHeight * pixelScale * worldUnitsPerScreenPixel;
+                SplashFrameHeight * pixelScale * worldUnitsPerAtlasPixel;
             Quaternion rotation = camera.transform.rotation;
             Vector3 scale = new Vector3(width, height, 1f);
             for (int index = 0; index < splashImpacts.Length; index++)
@@ -663,12 +666,11 @@ namespace FantasySurvival.WorldLighting
                     continue;
                 }
 
-                int widthInPixels = SplashFrameWidth * pixelScale;
-                float horizontalGridOffset =
-                    (widthInPixels & 1) == 0 ? 0f : 0.5f;
-                screenAnchor.x =
-                    Mathf.Round(screenAnchor.x - horizontalGridOffset) +
-                    horizontalGridOffset;
+                // The impact has a fixed world size now, so its projected width
+                // is intentionally fractional at arbitrary smooth zoom levels.
+                // Snap only the bottom-center anchor; changing half-pixel parity
+                // during zoom would add a visible sideways jump.
+                screenAnchor.x = Mathf.Round(screenAnchor.x);
                 screenAnchor.y = Mathf.Round(screenAnchor.y);
 
                 impact.Transform.position = camera.ScreenToWorldPoint(screenAnchor);

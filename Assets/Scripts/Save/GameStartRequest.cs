@@ -29,6 +29,9 @@ namespace FantasySurvival.SaveSystem
 
         private static PendingRequest pendingRequest;
 
+        internal static bool HasPendingRequest =>
+            pendingRequest != null && pendingRequest.Mode != GameStartMode.None;
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetStaticState()
         {

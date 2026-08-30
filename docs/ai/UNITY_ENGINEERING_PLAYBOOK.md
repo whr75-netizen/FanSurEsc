@@ -104,6 +104,7 @@ UI·프리팹·캐시·생성 결과는 원인을 고친 뒤에만 재생성한�
 ## 7. Unity Editor 작업 경로
 
 - 씬 오브젝트, prefab, Material과 serialized reference는 Unity MCP/Editor API의 단일 writer가 변경한다.
+- `GameMap1`·`GameMapTest` 직접 Play는 `GameStartRequest`가 없는 Editor authoring session으로 판정되어 ordinary save와 Raid Recovery를 같은 고유 임시 루트에 격리한다. 빠른 기능 시험에서 실제 원정 캐시를 삭제·정산·우회하지 말고 이 경로를 사용한다. 실제 복구·세이브 검증은 `InitialLoadingScene` 또는 `MainMenuScene`부터 시작한다.
 - 다른 에이전트는 같은 시간에 Play Mode, AssetDatabase, scene/prefab 저장을 실행하지 않는다.
 - Unity MCP가 노출되지 않으면 연결·컴파일·domain reload·승인 상태와 다른 MCP 담당을 먼저 확인한다.
 - Computer Use는 사용자가 현재 턴에 명시적으로 허용한 경우에만 최소 동작에 사용하고, 끝나면 즉시 제어를 종료해 보고한다.

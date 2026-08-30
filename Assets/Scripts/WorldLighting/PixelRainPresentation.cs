@@ -56,7 +56,7 @@ namespace FantasySurvival.WorldLighting
         [Header("Collider impact splashes")]
         [SerializeField] private Material splashImpactMaterial;
         [SerializeField, Range(4, 64)] private int splashImpactPoolSize = 24;
-        [SerializeField, Min(0f)] private float splashImpactsPerSecond = 28f;
+        [SerializeField, Min(0f)] private float splashImpactsPerSecond = 34f;
         [SerializeField, Range(1f, 30f)] private float splashFramesPerSecond = 12f;
         [SerializeField, Range(1, 4)] private int splashPixelScale = 2;
         [SerializeField, Range(0f, 1f)] private float splashMinimumNormalY = 0.75f;

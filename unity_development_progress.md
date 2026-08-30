@@ -1734,3 +1734,11 @@ Interactable (abstract base class)
 - `[성능·실패 경계]` pool과 quad mesh는 런타임 한 번만 만들고 frame당 GC를 만들지 않는다. 긴 hitch가 와도 한 Tick 최대 4개만 생성하고 미처리 backlog를 다음 frame에 쏟지 않는다. Renderer Feature는 splash가 더는 Scene Normal을 읽지 않으므로 요구사항을 `Depth|Normal`에서 `Depth`로 줄였다. 현재 PC render scale 1과 단일 gameplay scene 계약에 맞춘 값이며, 전용 비 충돌 layer·급경사 splash·additive local-physics scene은 필요해질 때 별도 재개방한다.
 - `[Unity 컴파일·Play Mode 호출 확인]` C# 컴파일 성공, full-screen/impact shader 모두 supported·pass 1·compiler message 0을 확인했다. 한 `GameMap1` Play Session에서 1초 hitch 주입 뒤 활성 수가 4개이고 다음 0초 Tick에도 4개라 backlog가 없었다. 정상 표본은 활성 10개 전부가 바닥 또는 오브젝트 윗면의 Collider 위에 있었고 공중 표본 0개, 최대 표면 거리 0.01855m, 화면 픽셀 오차 0.00524px였다. Camera size 5→3.5에서 billboard world scale 비율은 0.70000으로 화면 픽셀 크기를 유지했다. 최종 capture는 `Temp/RainColliderSplashFinal.png`다.
 - `[보존·미검증]` 빗줄기 길이·20FPS·월드 위상·Clear/Rain 조명·Player·Camera·씬·Save와 사용자 dirty `GameMap1`·재질 2개·preview Camera prefab은 변경하지 않았다. 현재 씬에는 roof marker가 없어 splash의 shelter 판정은 기존 §69 cache 검증과 동일 계산을 코드로 재사용했으며 실제 건물 roof 체감은 미검증이다. 검증용 offscreen `Camera.Render()`가 URP UI overlay와 다른 attachment 크기를 사용해 도구 호출 stack의 RenderPass 오류를 Console에 남겼지만, 일반 gameplay 경로가 아니며 두 Rain shader compiler 오류는 0이다. Console을 지워 결과를 덮지 않았다.
+
+---
+
+## 72. 물 튐 밀도 소폭 상향 `[ENVIRONMENT-01]`
+
+- `[사용자 확인·조정][2026-08-30]` §71의 물 튐 외관과 Collider 경계는 유지하고, 빗줄기 밀도에 비해 드문 물 튐만 소폭 늘렸다. 후보 충돌 빈도를 초당 `28 → 34`회로 약 21% 올렸으며 4프레임 atlas 모양·12FPS·2배 픽셀 크기·24개 pool·충돌/차폐/줌 계산은 바꾸지 않았다.
+- `[현재 표현 경계]` 위치와 시작 시점은 결정론적으로 달라지지만 물 튐 모양은 현재 서로 다른 여러 종류가 아니라 하나의 4프레임 splash animation이다. 별도 모양 variant는 이번 수치 조정에 포함하지 않았다.
+- `[정적 확인]` C# 기본값과 `PersistentGameplayShell` prefab 직렬화 값을 모두 34로 맞췄고 기존 사용자 dirty scene·재질·preview prefab은 변경하지 않았다. 최종 화면 밀도 체감은 사용자 확인 대상이다.

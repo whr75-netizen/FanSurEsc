@@ -14,6 +14,7 @@ namespace FantasySurvival.WorldLighting
     {
         private static readonly List<SteppedLocalLight> ActiveLights = new();
 
+        [Tooltip("RGB controls the tint; alpha scales the additive light contribution.")]
         [SerializeField, ColorUsage(true, true)] private Color color =
             new Color(1f, 0.62f, 0.28f, 1f);
         [SerializeField, Min(0.01f)] private float radius = 4.5f;
@@ -109,6 +110,7 @@ namespace FantasySurvival.WorldLighting
                      light.transform.IsChildOf(persistentGameplayRoot));
                 if (!light.isActiveAndEnabled ||
                     light.intensity <= 0f ||
+                    light.color.a <= 0f ||
                     (light.gameObject.scene != activeScene &&
                      !belongsToPersistentGameplay))
                 {
@@ -165,7 +167,7 @@ namespace FantasySurvival.WorldLighting
                     linearColor.r,
                     linearColor.g,
                     linearColor.b,
-                    light.intensity);
+                    light.intensity * Mathf.Clamp01(linearColor.a));
                 quantizationSettings[insertIndex] = new Vector4(
                     light.surfaceBands,
                     light.haloBands,

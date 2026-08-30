@@ -1799,3 +1799,11 @@ Interactable (abstract base class)
 - `[웅덩이 구현]` Unity 공식 Production Ready Weather의 네 `RainRipple` 조합 원리를 참고하되 큰 Shader Graph 묶음을 가져오지 않았다. 프로젝트 소유 4정점 mesh·공유 transparent material·shader가 기존 `_FantasyRainIntensity`와 `_FantasyRainVisualTime`만 읽어 불규칙한 픽셀 웅덩이와 네 개의 결정론적 원형 파문을 만든다. 별도 script·Manager·Update·Collider·개별 빗방울 충돌은 추가하지 않았고 `GameMap1`에 시험 prefab 한 개만 배치했다.
 - `[씬 설정 원인]` disk에는 기지 로컬광 `worldCellSize=0.04` override가 있었지만 저장되지 않은 Editor scene 메모리는 prefab 기본값 `0.12`와 override 없음으로 어긋나 있었다. 웅덩이 배치 전에 기존 `0.04` override를 serialized prefab modification으로 복구해 함께 저장했다. 로컬광은 기존 Depth/Normal 단일 pass를 유지하며 Transparent 웅덩이 자체의 직접 수광·벽 차폐·그림자는 이번 범위가 아니다.
 - `[컴파일·Play Mode 호출/시각 확인]` 새 shader는 `supported=True`, compiler error 없음, prefab 연결·공유 material·4정점 mesh·씬 인스턴스 1개·Collider 0개·로컬광 override `0.04`를 확인했다. `GameMap1` Play Session 1회에서 정오 Rain 즉시 적용 시 weather/global rain이 `Rain/1`, 시각 시간이 `0→16.81`로 진행했고 Game View에서 비·표면 물 튐과 웅덩이 원형 파문을 함께 확인했다. 같은 Session에서 Clear 복귀 시 weather/global rain이 `Clear/0`으로 복원됐다. 기존 외부 `ASFolliage` keyword 오류와 과거 Console 기록은 지우지 않았으며 Player build·GPU Profiler·구름 아트 교체는 미검증이다.
+
+---
+
+## 79. 로컬광 알파 강도와 1픽셀 흰 웅덩이 파문 `[ENVIRONMENT-01][PIXEL-01]`
+
+- `[진단·보존][2026-08-30]` 전체 화면 `3D Pixel Art` Renderer Feature는 계속 비활성이며, 큐브 실루엣 계단은 PC MSAA 1x·gameplay Camera AA `None` 상태가 원인이다. 로컬광은 월드 셀과 밝기 band만 단계화해 강한 대비로 계단을 더 두드러지게 했지만 기하 외곽선을 픽셀화하지 않는다. 픽셀 비·웅덩이를 함께 흐릴 수 있는 전역 AA 정책은 이번 범위에서 바꾸지 않았다.
+- `[근본 수정]` `SteppedLocalLight`가 색 RGB만 전달하고 alpha를 버리던 계약을 `effective intensity = intensity × color alpha`로 수정하고, alpha 0 광원은 선택 대상에서도 제외했다. 공유 시험 광원 prefab alpha는 `1 → 0.35`로 낮아져 실제 기여가 `1.15 → 0.4025`가 되며, alpha 1인 기존·후속 광원은 이전 결과를 보존한다. 웅덩이 파문은 world pixel `0.04`에서 반폭 `0.035`였던 약 1.75픽셀 띠를 최소 반폭 `0.01`로 바꿔 총 1픽셀 폭으로 만들고 색을 흰색으로 변경했다.
+- `[Play Mode 호출 확인·시각 미확인]` `GameMap1` 한 Session에서 Clear/22시와 Rain/12시 적용, 로컬광 RGBA `(1, 0.62, 0.28, 0.35)`, 실효 강도 `0.4025`, 웅덩이 색 `(1,1,1,1)`, 두께 `0.01`, world pixel `0.04`, rain intensity `1`, shader supported를 확인했다. Unity 동적 C# 컴파일은 성공했다. 최종 체감 화면 캡처는 MCP Game View의 frame-boundary 제약으로 얻지 못했으며, 해당 캡처 시도에서 생긴 도구 오류 기록은 gameplay 오류로 오인하지 않도록 Console에서 지우지 않았다.

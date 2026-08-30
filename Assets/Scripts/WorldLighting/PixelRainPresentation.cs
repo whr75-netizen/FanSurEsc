@@ -25,6 +25,8 @@ namespace FantasySurvival.WorldLighting
             Shader.PropertyToID("_FantasyRainVisualTime");
         private static readonly int RainWorldGridOffsetId =
             Shader.PropertyToID("_FantasyRainWorldGridOffset");
+        private static readonly int RainWorldUnitsPerScreenPixelId =
+            Shader.PropertyToID("_FantasyRainWorldUnitsPerScreenPixel");
         private static readonly int RainDirectionId =
             Shader.PropertyToID("_FantasyRainDirection");
         private static readonly int ShelterHeightTextureId =
@@ -307,6 +309,7 @@ namespace FantasySurvival.WorldLighting
         private void PublishCameraShaderGlobals(Camera camera)
         {
             float rainDirection = 1f;
+            float worldUnitsPerScreenPixel = 1f;
             Vector2 worldGridOffset = Vector2.zero;
             if (camera != null && shell != null && shell.PlayerTransform != null)
             {
@@ -325,11 +328,21 @@ namespace FantasySurvival.WorldLighting
                 {
                     rainDirection = screenDeltaX > 0f ? 1f : -1f;
                 }
+
+                if (camera.orthographic)
+                {
+                    worldUnitsPerScreenPixel =
+                        2f * camera.orthographicSize /
+                        Mathf.Max(camera.pixelHeight, 1);
+                }
             }
 
             Shader.SetGlobalVector(
                 RainWorldGridOffsetId,
                 new Vector4(worldGridOffset.x, worldGridOffset.y, 0f, 0f));
+            Shader.SetGlobalFloat(
+                RainWorldUnitsPerScreenPixelId,
+                worldUnitsPerScreenPixel);
             Shader.SetGlobalFloat(RainDirectionId, rainDirection);
         }
 
@@ -453,6 +466,7 @@ namespace FantasySurvival.WorldLighting
         private static void ResetShaderGlobals()
         {
             Shader.SetGlobalFloat(RainIntensityId, 0f);
+            Shader.SetGlobalFloat(RainWorldUnitsPerScreenPixelId, 1f);
             Shader.SetGlobalFloat(ShelterReadyId, 0f);
         }
     }

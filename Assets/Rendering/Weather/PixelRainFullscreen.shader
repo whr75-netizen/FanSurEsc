@@ -5,8 +5,10 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
         _PixelRainPattern("Rain Pattern", 2D) = "black" {}
         _PixelRainSplashAtlas("Splash Atlas", 2D) = "black" {}
         _LogicalPixelSize("Logical Pixel Size", Range(1, 4)) = 1
-        _RainFramesPerSecond("Rain Frames Per Second", Range(1, 30)) = 8
-        _StreakOpacity("Streak Opacity", Range(0, 1)) = 0.55
+        _RainFramesPerSecond("Rain Frames Per Second", Range(1, 30)) = 20
+        _SplashFramesPerSecond("Splash Frames Per Second", Range(1, 30)) = 8
+        _RainPatternPixelsPerWorld("Rain Pattern Pixels Per World Unit", Range(8, 96)) = 48
+        _StreakOpacity("Streak Opacity", Range(0, 1)) = 0.48
         _SplashOpacity("Splash Opacity", Range(0, 1)) = 0.62
         _SplashSpawnRate("Splash Spawn Rate", Range(0, 1)) = 0.62
         _SplashCellWorldSize("Splash Cell World Size", Range(0.5, 4)) = 1.6
@@ -49,6 +51,8 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
             CBUFFER_START(UnityPerMaterial)
                 float _LogicalPixelSize;
                 float _RainFramesPerSecond;
+                float _SplashFramesPerSecond;
+                float _RainPatternPixelsPerWorld;
                 float _StreakOpacity;
                 float _SplashOpacity;
                 float _SplashSpawnRate;
@@ -61,6 +65,7 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
             float4 _FantasyRainColor;
             float _FantasyRainVisualTime;
             float4 _FantasyRainWorldGridOffset;
+            float _FantasyRainWorldUnitsPerScreenPixel;
             float _FantasyRainDirection;
             float4 _FantasyRainShelterWorldRect;
             float _FantasyRainShelterReady;
@@ -157,12 +162,16 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                 float logicalScale,
                 int rainFrame)
             {
-                // Subtracting the projected world origin cancels an orthographic
-                // camera's XZ translation. The same rain cell therefore moves
-                // across the screen with the world instead of sticking to the UI.
-                int2 worldGridOffset = (int2)round(
-                    _FantasyRainWorldGridOffset.xy / logicalScale);
-                int2 worldGridPixel = logicalPixel + worldGridOffset;
+                // The projected world-origin offset cancels camera translation.
+                // Converting screen pixels through 2*orthoSize/screenHeight then
+                // keeps the same rain cell at the same world phase while zooming.
+                float2 screenPixel =
+                    ((float2)logicalPixel + 0.5) * logicalScale;
+                float2 worldGridCoordinate =
+                    (screenPixel + _FantasyRainWorldGridOffset.xy) *
+                    max(_FantasyRainWorldUnitsPerScreenPixel, 0.000001) *
+                    max(_RainPatternPixelsPerWorld, 0.001);
+                int2 worldGridPixel = (int2)floor(worldGridCoordinate);
                 int2 tileLocal = WrapPatternCoordinate(worldGridPixel);
                 int2 tileCoordinate = (worldGridPixel - tileLocal) >> 8;
 
@@ -170,7 +179,16 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                     Hash21((float2)tileCoordinate + 41.37) * 4.0);
                 int frameIndex = (rainFrame + tileFrameOffset) & 3;
 
-                int2 patternCoordinate = tileLocal;
+                // RGBA stores four frames, but repeating them at 20 FPS would
+                // reveal the same four locations every 0.2 seconds. Advance a
+                // deterministic global spatial phase after each four-frame loop
+                // so rainfall appears non-repeating without CPU particle state.
+                int loopIndex = rainFrame >> 2;
+                float2 loopRandom = Hash22(
+                    float2((float)loopIndex + 73.19, 11.83));
+                int2 loopOffset = (int2)floor(loopRandom * 256.0);
+                int2 patternCoordinate = WrapPatternCoordinate(
+                    tileLocal + loopOffset);
                 if (_FantasyRainDirection < 0.0)
                 {
                     patternCoordinate.x = 255 - patternCoordinate.x;
@@ -263,8 +281,10 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                     saturate(input.texcoord) * logicalScreenSize);
                 float2 sampleUv =
                     ((float2)logicalPixel + 0.5) / logicalScreenSize;
-                int rainFrame = (int)floor(
+                int streakFrame = (int)floor(
                     _FantasyRainVisualTime * max(_RainFramesPerSecond, 1.0));
+                int splashFrameClock = (int)floor(
+                    _FantasyRainVisualTime * max(_SplashFramesPerSecond, 1.0));
 
                 RainSurface surface = SampleRainSurface(sampleUv);
                 float sheltered = surface.geometryMask > 0.0
@@ -274,12 +294,12 @@ Shader "Hidden/FantasySurvival/PixelRainFullscreen"
                 float streak = EvaluateStreaks(
                     logicalPixel,
                     logicalScale,
-                    rainFrame) *
+                    streakFrame) *
                     lerp(1.0, exposed, surface.geometryMask);
                 float splash = EvaluateSplash(
                     logicalPixel,
                     logicalScreenSize,
-                    rainFrame,
+                    splashFrameClock,
                     surface,
                     exposed,
                     intensity);

@@ -23,7 +23,7 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Range(0f, 1f)] private float haloStrength = 0.18f;
         [SerializeField, Range(1f, 2f)] private float haloRadiusMultiplier = 1.25f;
         [SerializeField, Range(0f, 1f)] private float normalInfluence = 0.82f;
-        [SerializeField, Min(0.01f)] private float worldCellSize = 0.18f;
+        [SerializeField, Min(0.01f)] private float worldCellSize = 0.12f;
 
         public Color Color => color;
         public float Radius => radius;

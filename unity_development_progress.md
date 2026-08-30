@@ -1771,3 +1771,12 @@ Interactable (abstract base class)
 - `[시험 배치·보존]` clean `GameMapTest`의 절차 건물 배제 앵커 `UrbanLayoutProtectionAnchors/FormerMeleeFixture` 아래에 Collider·표준 Light가 없는 prefab 1개를 배치했다. 반경 4.5, 셀 0.18의 따뜻한 emitter와 비충돌 receiver pillar만 있으며 raid spawn catalog·manifest·NavMesh·persistent shell에는 넣지 않았다. 사용자 dirty `GameMap1`, 재질 2개와 authoring preview Camera prefab은 저장·stage하지 않았다.
 - `[Unity 컴파일·Play Mode 확인]` shader supported/compiler error 0과 C# compile 성공을 확인했다. 한 Play Session에서 Clear→Rain→Clear의 Cookie 농도가 `양수→0→양수`, Rain 방향광이 Clear보다 낮음, 이후 복원을 확인했다. `GameMapTest` Night/Clear에서는 active scene 광원 1개·반경 4.50·셀 0.18, 표준 Light 없음, 전용 feature active와 전체화면 PixelArt feature inactive를 확인했고 실제 Game View에서 5/4단계 Surface/Halo 셀 밴드가 보였다. Day/Rain capture에서는 `opacity=0.000`이며 이동 구름 반점 없이 균일한 흐림과 비가 함께 표시됐다. 후속 집중 Play 확인에서는 scene fixture와 `DontDestroyOnLoad` 영속 셸 자식 probe가 동시에 선택되어 전달 수가 2였으며, probe 제거 뒤 Play Mode를 종료했다.
 - `[남은 경계·Console]` 이번 로컬광은 프로토타입 Surface/Halo 표현이며 광원별 full-screen pass 비용이 남는다. 벽 뒤 screen-space raymarch 그림자·Transparent Sprite 수광·실내 광원 배치·다수 광원 GPU profile 및 향후 volume/tiled 전환·Mobile·Player build는 미검증이다. 검증 중 Unity Camera Capture 도구가 새 Entity ID를 잘못 해석해 도구 오류 2건을 남겼지만, 수동 `Camera.Render()` 대신 정상 Game View `ScreenCapture`로 두 화면을 확인했고 gameplay/shader 오류는 추가되지 않았다. 기존 외부 `ASFolliage` keyword 오류와 과거 Console 기록은 지우지 않았다.
+
+---
+
+## 76. 기지 단계형 로컬광 시험 배치 `[ENVIRONMENT-01]`
+
+- `[사용자 요청·씬 배치][2026-08-30]` 기존 `PrototypeSteppedLocalLightFixture` prefab 인스턴스 1개를 기지 `GameMap1` scene root의 `(-2.5, 0, -2.5)`에 배치했다. BaseEntry와 BaseReturn 사이에서 보이되 NPC·Chest와 겹치지 않으며, prefab의 표준 Unity `Light`와 Collider 수는 모두 0이라 기존 이동·물리·조명 권위를 바꾸지 않는다.
+- `[사용자 조정]` 광원 반경 4.5m와 Surface/Halo 단계 수는 유지하고 prefab 원본과 새 컴포넌트 기본 `worldCellSize`를 `0.18 → 0.12m`로 줄였다. 기지와 `GameMapTest`의 두 prefab 인스턴스가 같은 원본을 상속해 광원 기여의 월드 고정 도트 블록만 약 33% 더 촘촘해진다.
+- `[Play Mode 확인]` 최종 조정 뒤 `GameMap1` 직접 Play 1회에서 scene의 활성 `SteppedLocalLight`가 정확히 1개이고 persistent gameplay Camera가 이를 renderer material에 `rendered=1`, `worldCellSize=0.12`로 전달함을 확인했다. Play 종료 뒤 `GameMap1`, Edit Mode, scene clean, compile failure 없음과 저장된 prefab 연결을 다시 확인했다.
+- `[Git 경계]` `GameMap1`에는 작업 전부터 Base Chest의 새 직렬화 필드 6줄이 별도 변경으로 존재했다. 해당 기존 변경은 보존하며 이 배치의 prefab instance·SceneRoots hunk만 분리해 기록한다.

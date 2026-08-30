@@ -1827,3 +1827,11 @@ Interactable (abstract base class)
 - `[씬 배치·보존]` `GameMapTest`의 기존 보호 앵커 `UrbanLayoutProtectionAnchors/FormerRangedFixture` `(6,0,6)` 아래에 prefab 한 개를 배치했다. 이 앵커는 절차 건물로부터 이미 3.5m 보호되고 runtime 생성 root 밖에 있어 seed 재생성 때 삭제되지 않는다. `GameMap1`과 기존 사용자 dirty 재질·preview Camera는 수정하지 않았다.
 - `[정적·Play Mode 호출 확인]` prefab의 명시 Collider 1개, 숨은 지붕 Renderer, Collider 없는 테두리 4개, scene instance 1개를 확인했다. `GameMapTest` 직접 Play 1회에서 Rain 적용 시 scene/등록 지붕 각각 1개, cache·shader ready, 내부 `(6,0.5,6)` 최고높이 `3.100`, 외부 `(9,0.5,6)` `-10000`으로 분리되어 지붕 아래 지면만 차단되고 지붕 위는 노출되는 조건을 확인했다. Clear 복귀 뒤 전역 비 강도는 `0`이었고 Play 종료 후 `GameMap1` clean authoring 상태로 복원했다. 실제 Game View 안팎의 최종 시각 체감은 사용자 확인 대상이다.
 - `[결정 대기]` 시험 웅덩이의 최종 표현 방식과 젖음·안개·번개·식생 흔들림·빗소리 등 추가 날씨 반응은 GDD §14.1.2에 미정으로만 기록했으며 이번에는 구현하지 않았다. 실내 하늘광·태양광 감쇠도 강수 차단과 별도 계약이다.
+
+---
+
+## 82. 기지 강수 차단 시험 구역 배치 `[ENVIRONMENT-01]`
+
+- `[배치·재사용][2026-08-31]` 새 차폐 코드나 prefab을 만들지 않고 기존 `PrototypeRainShelterTestArea`를 `GameMap1`의 빈 지면 `(6,0,-5)`에 root prefab instance로 한 개 배치했다. 4×4m footprint는 상자·NPC·포탈·로컬광·웅덩이를 포함한 기존 non-ground Collider와 XZ가 겹치지 않으며, 숨은 지붕 Collider와 Collider 없는 바닥 테두리 계약도 원정 시험 구역과 같다.
+- `[Play Mode 호출 확인]` `GameMap1` 직접 Play 1회에서 scene/등록 지붕 각각 1개, Rain cache ready, 내부 `(6,0.5,-5)` 최고높이 `3.100`, 외부 `(9,0.5,-5)` `-10000`, Rain 강도 `1`과 Clear 복원 `0`을 확인했다. Play 종료 뒤 `GameMap1` Edit Mode·clean 상태로 복원했다. 최종 Game View 안팎 체감은 사용자 확인 대상이다.
+- `[보존]` 기존 `GameMap1`의 Chest 직렬화 dirty 6줄과 사용자 dirty 재질·preview Camera prefab은 이번 배치와 분리해 유지했다. 웅덩이 최종 표현·추가 날씨 반응·실내 조명은 변경하지 않았다.

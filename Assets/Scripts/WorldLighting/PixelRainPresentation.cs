@@ -338,7 +338,6 @@ namespace FantasySurvival.WorldLighting
             Shader.SetGlobalColor(RainColorId, rainColor);
             Shader.SetGlobalFloat(RainVisualTimeId, rainVisualTime);
             Shader.SetGlobalFloat(ShelterClearanceId, shelterClearance);
-            PublishCameraShaderGlobals(shell != null ? shell.PlayerCamera : null);
         }
 
         private void HandleBeginCameraRendering(

@@ -1789,3 +1789,13 @@ Interactable (abstract base class)
 - `[근본 수정·보존]` Toon Ground 셰이더에 URP Lit의 `DepthNormals` pass를 명시적으로 재사용해 원래 Forward 외관은 유지했다. Grass LOD0/1은 같은 URP Lit 표면 계약으로 바꾸고, LOD0 BaseColor에서 중복 수동 조명 가지를 제거해 원래 Bottom↔Top vertex 색을 표면색으로 넘겼다. 양면 렌더, 두 LOD mesh·전환, LOD0 vertex wind 연결과 재질 색 값은 바꾸지 않았다. 기지 인스턴스의 앞선 셀 크기 조정 `0.04m`는 유지하고 공유 prefab·GameMapTest 기본값은 `0.12m`다.
 - `[Shader·Play Mode 확인]` Toon Ground, Grass LOD0, Grass LOD1은 모두 supported였고 관련 compiler error가 0이었다. 런타임의 Grass 재질 2개가 모두 `ForwardLit`과 `DepthNormals`를 제공하고 기지 Ground도 `DepthNormals`를 제공했다. 한 `GameMap1` Play Session의 같은 Camera에서 정오, 22시, 22시 로컬광 off와 환경광 0 제어 화면을 각각 비교했다. Grass는 정오에 밝고 그림자를 받았으며 22시에 어두워졌고, 환경광 0에서는 로컬광 범위 밖이 검게 사라졌다. 로컬광 on/off에서는 Ground의 단계형 원과 반경 안 Grass·오브젝트의 따뜻한 기여가 함께 나타났다.
 - `[보존·Console]` Player·Camera·HUD·씬 흐름·날씨 권위·표준 Unity Light 수는 변경하지 않았다. 기존 외부 `AwaiiStudio/ASFolliage`의 중복 keyword 오류와 검증용 동적 명령 컴파일 실패 기록은 Console에서 지워 덮지 않았다. Player build, Mobile, Transparent Sprite 수광, 벽 차폐와 최종 Grass 명암 아트 조정은 미검증이다.
+
+---
+
+## 78. 환경 구조 감사와 비 연동 픽셀 웅덩이 `[ENVIRONMENT-01]`
+
+- `[구조 감사][2026-08-30]` 시간·날씨는 `SkyLightingCycleController`, 비·물 튐은 `PixelRainPresentation`, 로컬광은 등록 목록과 Renderer Feature 하나가 각각 기존 권위를 유지한다. 평행 Manager·매 frame 씬 탐색·빗방울별 물리·중복 렌더 패스는 없었다. 다만 Rain의 카메라 좌표와 활성 물 튐 Transform을 `Tick`과 `beginCameraRendering`에서 같은 frame에 두 번 계산하던 경로는 최종 Camera가 확정되는 render 경계 한 곳으로 줄였다.
+- `[문서 원인 수정]` 개발계획의 오래된 `기능 최소 3회 반복` 문구가 현재의 대표 흐름 1회·위험 비례 검증과 충돌하던 것을 단일 검증 계약 링크로 교체했다. GDD의 환경 절에서는 texture 크기·FPS·pool 수 같은 코드 세부 복제를 걷어내고 시각·소유권 계약만 남겼으며, 문서 역할 자체는 합치지 않았다. `CURRENT_STATE.md`는 상태 범례를 줄여 12KiB 아래 여유를 확보했다.
+- `[웅덩이 구현]` Unity 공식 Production Ready Weather의 네 `RainRipple` 조합 원리를 참고하되 큰 Shader Graph 묶음을 가져오지 않았다. 프로젝트 소유 4정점 mesh·공유 transparent material·shader가 기존 `_FantasyRainIntensity`와 `_FantasyRainVisualTime`만 읽어 불규칙한 픽셀 웅덩이와 네 개의 결정론적 원형 파문을 만든다. 별도 script·Manager·Update·Collider·개별 빗방울 충돌은 추가하지 않았고 `GameMap1`에 시험 prefab 한 개만 배치했다.
+- `[씬 설정 원인]` disk에는 기지 로컬광 `worldCellSize=0.04` override가 있었지만 저장되지 않은 Editor scene 메모리는 prefab 기본값 `0.12`와 override 없음으로 어긋나 있었다. 웅덩이 배치 전에 기존 `0.04` override를 serialized prefab modification으로 복구해 함께 저장했다. 로컬광은 기존 Depth/Normal 단일 pass를 유지하며 Transparent 웅덩이 자체의 직접 수광·벽 차폐·그림자는 이번 범위가 아니다.
+- `[컴파일·Play Mode 호출/시각 확인]` 새 shader는 `supported=True`, compiler error 없음, prefab 연결·공유 material·4정점 mesh·씬 인스턴스 1개·Collider 0개·로컬광 override `0.04`를 확인했다. `GameMap1` Play Session 1회에서 정오 Rain 즉시 적용 시 weather/global rain이 `Rain/1`, 시각 시간이 `0→16.81`로 진행했고 Game View에서 비·표면 물 튐과 웅덩이 원형 파문을 함께 확인했다. 같은 Session에서 Clear 복귀 시 weather/global rain이 `Clear/0`으로 복원됐다. 기존 외부 `ASFolliage` keyword 오류와 과거 Console 기록은 지우지 않았으며 Player build·GPU Profiler·구름 아트 교체는 미검증이다.

@@ -964,42 +964,11 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 ## 17. 단계 공통 검증 기준
 
-모든 Stage는 다음 기준을 공통으로 만족해야 한다.
+Stage 번호와 무관하게 검증은 `AGENTS.md` §7과 `docs/ai/UNITY_ENGINEERING_PLAYBOOK.md` §8의 위험 비례 기준을 따른다. 이 절은 별도의 고정 체크리스트나 반복 횟수를 만들지 않는다.
 
-### 정적 검증
-
-- 새 스크립트의 모든 사용처 확인
-- public API와 serialized field 변경 확인
-- Missing Reference 확인
-- 새 ScriptableObject와 프리팹의 Meta 파일 확인
-- 기존 외부 에셋 코드와 프로젝트 코드의 책임 분리 확인
-
-### Unity 컴파일
-
-- Unity Editor 컴파일 성공
-- 새 Error, Exception, Assert 없음
-- 기존 Warning과 새 Warning 구분
-
-### Play Mode
-
-- 정상 경로
-- 취소 또는 거리 이탈
-- 빠른 반복 입력
-- 씬 재입장
-- 기능을 최소 3회 반복
-- Player, Camera, EventSystem, UI, 세션 중복 없음
-- 기존 인벤토리 드래그와 닫기 회귀 없음
-
-### 씬과 프리팹
-
-- 변경한 씬만 dirty 상태가 됨
-- 저장 후 Missing Reference 없음
-- 프리팹 Override가 의도한 것인지 확인
-- Build Settings에 필요한 씬이 포함됨
-
-### 빌드 검증
-
-각 Stage의 마지막에는 가능하면 Windows 타깃 빌드 또는 최소한 해당 씬의 Play Mode 왕복을 검증한다. Editor에서만 작동하는 API에 런타임 코드가 의존하지 않는지 확인한다.
+- 대표 사용자 흐름은 기본 1회이며, 서로 다른 실패 분기·seed·schema·해상도는 필요한 최소 case로만 나눈다.
+- 컴파일, 새 Console 오류, 변경한 참조·씬·프리팹·Meta와 기존 오류의 구분은 실제 변경 경계에 맞춰 확인한다.
+- Player 빌드는 Editor 전용 API·플랫폼·배포 경계를 바꾼 Stage에서 수행하고, 단순 수치 조정을 전체 왕복 검증으로 확대하지 않는다.
 
 ---
 

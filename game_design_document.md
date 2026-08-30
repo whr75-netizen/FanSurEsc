@@ -2353,12 +2353,11 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - 외부 humanoid와 Kenney asset 사용
 - 시스템 검증은 Cube·primitive 회색상자 사용
 - 3D 픽셀아트 후처리는 시험 후 비활성화
-- 야외 아침·낮·밤 시간과 맑음·비 날씨는 `SkyLightingCycleController` 하나가 독립 축으로 소유한다. 일몰에서 자정의 밤 최저점을 거쳐 새벽까지 연속하는 청색 월광과 끝점에서 감속하는 태양·달 Soft Shadow가 데이터 프로필과 단일 그림자 key light에 연결됨
-- 탑뷰·쿼터뷰에서는 구름 본체를 화면에 그리지 않고, 64×64 회색조 픽셀 무늬를 광원 고도와 무관한 24×24 월드 영역의 단일 방향광 Cookie로 투영해 지면·풀·캐릭터·건물의 직접광만 가림. 시험 단계에서는 주광이 지평선에 가까울수록 경계와 농도를 낮추고, 높을수록 선명하게 보정함
-- 맵 기상 좌표는 `+X=동`, `+Z=북`으로 해석하고 시험 구름은 초당 0.75 월드 단위로 서→동 이동함. 지역·고도별 풍향 변화는 정식 날씨 시스템 범위로 남김
-- 비는 게임 화면 자체를 픽셀화하지 않는다. PC Renderer의 단일 full-screen pass 안에서 256×256 RGBA 네 프레임을 사용하되, 각 frame은 세로 기준 약 6도인 32/38/44/50/56픽셀 선분 5개를 기하적으로 래스터화한다. 빗줄기는 20FPS로 교대하고 네 frame loop마다 결정론적 난수 월드 위상을 새로 골라 같은 위치의 짧은 반복을 숨긴다. 패턴 좌표는 `화면 상대좌표 × (2 × orthographicSize / 화면높이) × 월드당 패턴밀도`로 계산해 Camera 평행 이동·줌·해상도 변화에도 같은 월드 위상을 유지한다. 서로 반대인 사선 layer나 연속 texture scroll은 쓰지 않는다.
-- Rain 프리셋은 이동 구름 Cookie의 농도를 0으로 만들어 듬성듬성한 반점을 없애고, 낮아진 하늘광·직접광·그림자 강도로 화면 전체를 균일한 흐림 상태로 만든다. Clear 복귀는 같은 Cookie를 원래 시간 샘플과 누적 이동 위치에서 즉시 복원한다. 물 튐은 화면 Depth/Normal의 픽셀마다 합성하지 않고, 기존 `PixelRainPresentation`이 화면 후보를 초당 34회만 `RaycastNonAlloc`해 현재 gameplay scene에서 가장 가까운 실제 비-trigger Collider의 완만한 윗면에 배치한다. 24개 pool의 7×4 atlas를 atlas pixel당 0.0111 world unit·2배 art scale·4프레임·20FPS로 재생해 물 튐의 월드 크기를 약 0.1554×0.0888로 고정한다. 따라서 빗줄기의 월드 격자와 같은 방향으로 줌인하면 화면에서 커지고 줌아웃하면 작아지며, Collider local anchor의 화면 격자 정렬과 depth-tested billboard는 유지해 오브젝트 경계에서 앞뒤 표면이 섞이지 않는다. `RainShelterOccluder`가 붙은 roof Collider의 최고 Y보다 아래인 표면은 빗줄기와 물 튐을 함께 차단한다. full-screen 빗줄기와 Collider 물 튐은 같은 날씨 강도를 쓰는 저비용 표현 계층이며, 개별 빗줄기 하나와 충돌 하나를 1:1 물리 추적하지 않는다. 현재 회색상자 씬에는 정식 roof marker가 없으며 건물 제작 때 명시적으로 붙인다.
-- 로컬광 시험 구현은 일반 Unity `Light`를 만들지 않는다. gameplay Camera의 원본 색이나 Depth/Normal 표본 좌표는 픽셀화하지 않고, full-resolution 표면에서 복원한 world position만 월드 셀에 맞춘 뒤 거리·normal 기반 Surface와 넓은 Halo의 광량을 각각 단계화해 additive로 더한다. 그래서 오브젝트 윤곽·기본 텍스처 해상도와 Camera 줌은 그대로이며 광원 기여만 월드 고정 도트/밴드처럼 보인다. 현재 PC는 Camera 절두체와 교차하는 활성 scene 및 영속 Player 셸 자식 광원 중 가까운 8개를 선택하고(하드 한도 16개), 반경 4.5m의 비충돌 시험 fixture가 `GameMapTest`와 기지 `GameMap1`에 각각 1개 있다. 기본 셀은 0.12m이고 기지 시험 인스턴스만 시각 조정값 0.04m를 쓴다. opaque 수신 셰이더는 URP DepthNormals 계약을 제공해야 하며 기지 Toon Ground와 Grass LOD0/1이 이를 충족한다. Grass는 양면·위아래 색·LOD0 바람을 보존한 Lit 표면으로서 낮밤·그림자·단계형 로컬광을 함께 받는다. 화면공간 raymarch 로컬 그림자·벽 차폐와 Transparent Sprite의 수광 계약은 후속 기능이며, 비활성 전체화면 3D Pixel Art feature는 켜지 않는다.
+- 야외 시간과 맑음·비 날씨는 `SkyLightingCycleController` 하나가 독립 축으로 소유한다. 밤은 청색 월광의 최저점을 거쳐 새벽으로 연속하며 태양·달 그림자도 끊기지 않아야 한다.
+- 탑뷰에서는 구름 본체 대신 월드에 고정된 단일 방향광 Cookie로 그림자만 표현한다. Rain은 듬성듬성한 구름 반점이 아니라 균일한 흐림을 사용하며, 구름 무늬·반복 크기·풍향은 최종 아트 단계에서 조정한다.
+- 비는 화면 전체를 픽셀화하지 않는다. 하나의 GPU 패턴과 고정 pool의 표면 물 튐이 같은 날씨 강도·월드 좌표·지붕 차폐 계약을 공유하고, 개별 빗줄기를 물리 충돌과 1:1로 추적하지 않는다.
+- 시험 웅덩이는 공유 mesh/material이 기존 비 강도와 시각 시간만 읽어 네 개의 결정론적 픽셀 원형 파문을 만든다. 별도 Manager·Update·Collider·빗방울별 물리를 추가하지 않는다.
+- 로컬광은 Depth/Normal을 읽는 단일 전체화면 패스가 제한된 가까운 광원을 월드 고정 셀과 밝기 단계로 합성한다. opaque 수신 재질은 DepthNormals 계약을 제공하며, 화면공간 그림자·벽 차폐·Transparent 직접 수광은 후속 범위다.
 
 #### 14.1.2 미정
 

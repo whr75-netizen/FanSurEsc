@@ -1,8 +1,6 @@
 # 현재 구현·검증 상태
 
 **마지막 갱신:** 2026-08-30
-**역할:** 현재 구현·검증과 재개방 조건의 단일 인덱스
-
 ## 판정 규칙
 
 - 직접 확인 → 이 표 → 최신 증거 → 과거 이력 순으로 판정한다. 차이는 원인을 확인한 뒤 쓰기 허용 작업에서 갱신한다.
@@ -10,23 +8,9 @@
 
 ### 상태 표기
 
-| 축 | 값 | 의미 |
-|---|---|---|
-| 구현 | `ACTIVE` | 적힌 현재 범위가 구현되어 사용 중 |
-| 구현 | `PARTIAL` | 적힌 일부 범위만 구현 |
-| 구현 | `ABSENT` | 확인된 미구현 |
-| 구현 | `DISABLED` | 구현은 있으나 의도적으로 비활성 |
-| 검증 | `USER` | 사용자가 실제 조작 결과를 확인 |
-| 검증 | `PLAYER` | 빌드 Player에서 확인 |
-| 검증 | `PLAY` | Play Mode 실제 흐름 확인 |
-| 검증 | `CALL` | Play Mode 호출 확인(물리 입력 제외) |
-| 검증 | `CODE` | 코드·에셋·순수 로직 확인 |
-| 검증 | `UNVERIFIED` | 변경 뒤 미검증 |
-| 검증 | `BLOCKED` | 외부 조건으로 차단 |
-| 범위 | `PROTOTYPE` | 시험·그레이박스 범위 |
-| 범위 | `PRODUCTION` | 정식 범위·수치 확정 |
-
-`UNVERIFIED`·`BLOCKED`여도 이전 증거는 보존하되 현재 변경을 검증 완료로 보지 않는다.
+- 구현: `ACTIVE` 사용 중, `PARTIAL` 일부만 구현, `ABSENT` 미구현, `DISABLED` 의도적 비활성.
+- 검증: `USER` 사용자 확인, `PLAYER` 빌드, `PLAY` 실제 흐름, `CALL` Play 호출, `CODE` 정적 확인, `UNVERIFIED` 미검증, `BLOCKED` 차단.
+- 범위: `PROTOTYPE` 시험·그레이박스, `PRODUCTION` 정식 범위. 미검증·차단이어도 이전 증거는 보존한다.
 
 ## 상태 ID별 계약 경로
 
@@ -68,7 +52,7 @@
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
-| `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~77 | 낮밤·구름/Rain·비/물 튐·바닥/Grass 수광 로컬광 | 날씨 저장·풍향·실내/로컬 차폐·최종 아트 |
+| `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~78 | 낮밤·구름·비/물 튐·수광 Grass/로컬광·비 연동 픽셀 웅덩이 | 날씨 저장·풍향·실내 차폐·최종 아트 |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53 | click·drag·stack·Shift/Ctrl; 우클릭·Alt; W1→W3 첫 빈 호환칸; 부분 stack 변경 통지; runtime 장전탄·Save v7 | 소유권·수량·장전탄·grid·장비·저장 형식 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 이동장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67 | 고정 맵 임의/도심 공유후보 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |

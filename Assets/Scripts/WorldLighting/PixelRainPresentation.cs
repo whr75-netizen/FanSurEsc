@@ -57,7 +57,7 @@ namespace FantasySurvival.WorldLighting
         [SerializeField] private Material splashImpactMaterial;
         [SerializeField, Range(4, 64)] private int splashImpactPoolSize = 24;
         [SerializeField, Min(0f)] private float splashImpactsPerSecond = 34f;
-        [SerializeField, Range(1f, 30f)] private float splashFramesPerSecond = 12f;
+        [SerializeField, Range(1f, 30f)] private float splashFramesPerSecond = 20f;
         [SerializeField, Range(1, 4)] private int splashPixelScale = 2;
         [SerializeField, Min(0.0001f)] private float splashWorldUnitsPerAtlasPixel =
             0.0111f;

@@ -1753,3 +1753,10 @@ Interactable (abstract base class)
 - `[물 튐 수정]` Collider·pool·4프레임·34회/초·차폐·depth 판정은 유지하고 atlas pixel당 0.0111 world unit을 새 단일 배율로 사용해 billboard 월드 크기를 약 0.1554×0.0888로 고정했다. bottom-center anchor만 정수 화면 pixel에 맞추며, smooth zoom에서 투영 폭의 홀짝을 다시 보정해 0.5px 옆으로 튀는 처리는 제거했다. 이제 투영 크기는 `1 / orthographicSize` 비율로 변해 빗줄기와 같은 방향으로 줌에 반응한다.
 - `[Play Mode 호출 확인][2026-08-30]` dirty `GameMap1`을 직접 1회 실행했다. ordinary save와 Recovery가 동일한 `temporaryCachePath/FantasySurvivalDirectPlay/<session>` 루트에 생성됐고, `TryBeginRaid("GameMapTest", "RaidEntry")`는 `Entering → Active`로 끝나 baseline·checkpoint·ordinary marker를 모두 임시 루트에 남겼다. 기존 실제 ordinary marker 오류는 전후 모두 3건이라 새 오류가 추가되지 않았다.
 - `[Play Mode 호출 확인][2026-08-30]` Rain 상태의 활성 Collider 물 튐 표본은 ortho 3.5/5/8 모두 월드 크기 0.1554×0.0888을 유지했고, 현재 Game View에서 화면 높이는 10.87/7.61/4.76px로 변했다. Play 종료 뒤 `GameMap1` dirty 상태와 Edit Mode가 복원됐으며 C# 동적 컴파일 오류는 없었다. 사용자 dirty scene·재질·preview prefab과 실제 세이브/Recovery는 변경하지 않았다.
+
+---
+
+## 74. 물 튐 애니메이션 속도 상향 `[ENVIRONMENT-01]`
+
+- `[사용자 조정][2026-08-30]` 4프레임 Collider 물 튐 재생을 `12 → 20FPS`로 올려 한 동작 길이를 약 `0.33 → 0.20초`로 줄였다. 발생량·pool·충돌·차폐·줌 크기와 빗줄기 표현은 변경하지 않았다.
+- `[정적 확인]` `PixelRainPresentation` 기본값과 영속 prefab 직렬화 값을 20으로 맞췄고 동적 C# 컴파일이 성공했다. 사용자 dirty 씬·재질·preview prefab은 제외했다.

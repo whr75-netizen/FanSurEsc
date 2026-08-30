@@ -7,7 +7,7 @@ namespace FantasySurvival.WorldLighting
 {
     /// <summary>
     /// Draws atmosphere-only light shafts derived from the authoritative sky
-    /// and stepped local lights. It owns only temporary rendering resources.
+    /// and opted-in local Spot Lights. It owns only temporary rendering resources.
     /// </summary>
     [DefaultExecutionOrder(10000)]
     [DisallowMultipleComponent]
@@ -17,6 +17,7 @@ namespace FantasySurvival.WorldLighting
     {
         private const int MaximumSunSliceCount = 16;
         private const int MaximumLocalEmitterCount = 16;
+        private const int LocalVolumeSliceCount = 9;
         private const float MinimumVisibleIntensity = 0.0001f;
 
         private static readonly int SourceModeId = Shader.PropertyToID("_ShaftSourceMode");
@@ -225,7 +226,7 @@ namespace FantasySurvival.WorldLighting
                     continue;
                 }
 
-                Matrix4x4 matrix = BuildCameraFacingBeamMatrix(
+                Matrix4x4 matrix = BuildViewAlignedVolumeMatrix(
                     camera,
                     emitter.OriginWorld,
                     emitter.DirectionWorld,
@@ -237,7 +238,7 @@ namespace FantasySurvival.WorldLighting
                     localMaterial,
                     1f,
                     linearColor,
-                    visibleIntensity,
+                    visibleIntensity / LocalVolumeSliceCount,
                     0f,
                     emitter.DensityBands,
                     emitter.NoiseStrength,
@@ -247,7 +248,7 @@ namespace FantasySurvival.WorldLighting
             }
         }
 
-        private static Matrix4x4 BuildCameraFacingBeamMatrix(
+        private static Matrix4x4 BuildViewAlignedVolumeMatrix(
             Camera camera,
             Vector3 origin,
             Vector3 direction,
@@ -500,21 +501,50 @@ namespace FantasySurvival.WorldLighting
         private static Mesh CreateLocalBeamMesh()
         {
             const float topRadiusRatio = 0.10f;
-            Vector3[] vertices =
+            Vector3[] vertices = new Vector3[LocalVolumeSliceCount * 4];
+            Vector2[] uvs = new Vector2[vertices.Length];
+            int[] triangles = new int[LocalVolumeSliceCount * 6];
+            for (int slice = 0; slice < LocalVolumeSliceCount; slice++)
             {
-                new Vector3(-topRadiusRatio, 0f, 0f),
-                new Vector3(topRadiusRatio, 0f, 0f),
-                new Vector3(-1f, 1f, 0f),
-                new Vector3(1f, 1f, 0f)
-            };
-            Vector2[] uvs =
-            {
-                new Vector2(0f, 0f),
-                new Vector2(1f, 0f),
-                new Vector2(0f, 1f),
-                new Vector2(1f, 1f)
-            };
-            int[] triangles = { 0, 2, 1, 1, 2, 3 };
+                // The planes are view-aligned samples of one world-space cone,
+                // not independent billboards. Their circular cross-sections keep
+                // the visible envelope fixed while the camera rotates.
+                float sliceOffset =
+                    ((slice + 0.5f) / LocalVolumeSliceCount) * 2f - 1f;
+                float absoluteOffset = Mathf.Abs(sliceOffset);
+                float startY = absoluteOffset <= topRadiusRatio
+                    ? 0f
+                    : (absoluteOffset - topRadiusRatio) / (1f - topRadiusRatio);
+                float startRadius = Mathf.Lerp(topRadiusRatio, 1f, startY);
+                float startHalfWidth = Mathf.Sqrt(Mathf.Max(
+                    0f,
+                    startRadius * startRadius - sliceOffset * sliceOffset));
+                float endHalfWidth = Mathf.Sqrt(Mathf.Max(
+                    0f,
+                    1f - sliceOffset * sliceOffset));
+
+                int vertexIndex = slice * 4;
+                vertices[vertexIndex] =
+                    new Vector3(-startHalfWidth, startY, sliceOffset);
+                vertices[vertexIndex + 1] =
+                    new Vector3(startHalfWidth, startY, sliceOffset);
+                vertices[vertexIndex + 2] =
+                    new Vector3(-endHalfWidth, 1f, sliceOffset);
+                vertices[vertexIndex + 3] =
+                    new Vector3(endHalfWidth, 1f, sliceOffset);
+                uvs[vertexIndex] = new Vector2(0f, startY);
+                uvs[vertexIndex + 1] = new Vector2(1f, startY);
+                uvs[vertexIndex + 2] = new Vector2(0f, 1f);
+                uvs[vertexIndex + 3] = new Vector2(1f, 1f);
+
+                int triangleIndex = slice * 6;
+                triangles[triangleIndex] = vertexIndex;
+                triangles[triangleIndex + 1] = vertexIndex + 2;
+                triangles[triangleIndex + 2] = vertexIndex + 1;
+                triangles[triangleIndex + 3] = vertexIndex + 1;
+                triangles[triangleIndex + 4] = vertexIndex + 2;
+                triangles[triangleIndex + 5] = vertexIndex + 3;
+            }
 
             Mesh mesh = new Mesh
             {
@@ -525,7 +555,7 @@ namespace FantasySurvival.WorldLighting
                 triangles = triangles,
                 bounds = new Bounds(
                     new Vector3(0f, 0.5f, 0f),
-                    new Vector3(2f, 1f, 0.02f))
+                    new Vector3(2f, 1f, 2f))
             };
             return mesh;
         }

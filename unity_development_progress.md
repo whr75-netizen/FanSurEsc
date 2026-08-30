@@ -1872,3 +1872,11 @@ Interactable (abstract base class)
 
 - `[배치·보존][2026-08-31]` 기존 `PrototypeStreetLamp` prefab을 재사용해 `GameMap1` Ground 위 빈 위치 `(5,0,0)`에 `PrototypeStreetLamp_Base` 1개를 배치했다. Pole collider는 기존 NPC·상자·포탈·시험 지붕과 겹치지 않는다. 비교용 구형 로컬광과 사용자 dirty Chest 직렬화 6줄·재질 2개·preview Camera prefab은 그대로 보존했다.
 - `[Play Mode 호출 확인]` `GameMap1` 한 Session에서 가로등 instance 1개, Clear/22시 야간값 `1`, Spot `enabled`, 광량 `24 Candela`를 확인했다. 기존 구형 로컬광은 1개이고 shaft emitter는 0개였다. 종료 뒤 `GameMap1` Edit Mode·scene clean·컴파일 정지 상태로 복원했다.
+
+---
+
+## 87. 가로등 빛줄기 360도 체적 보정 `[ENVIRONMENT-01][CAMERA-01]`
+
+- `[원인][2026-08-31]` 로컬 가로등 줄기는 정점 4개의 사다리꼴 한 장을 매 frame Camera 방향으로 회전시키는 billboard였다. 실제 beam texture도 없고 UV 가장자리·월드셀 hash만 사용했으며, 공통 하단 fade가 길이의 마지막 18%를 바닥 전에 지워 원형 Spot 수광과 분리된 물체처럼 보였다. 태양의 다중 투영 slice 구조와 달리 로컬만 단일 평면으로 축약된 것이 직접 원인이었다.
+- `[수정]` Spot/Cookie 밝은 중심부와 맞던 기존 원뿔 반경은 보존했다. 로컬 mesh 하나 안에 원형 단면을 수학적으로 채우는 9개 view-aligned depth slice를 만들고 기여도를 slice 수로 정규화했다. Camera가 돌아도 slice 표본만 재정렬되고 원뿔 외피·광원 중심은 월드에 유지된다. 로컬 하단 UV fade는 제거하고 기존 scene depth fade가 실제 표면 접촉만 처리한다. 두 씬은 같은 `PrototypeStreetLamp` prefab과 영속 표현기를 사용하므로 씬·prefab 복제 변경은 없다.
+- `[Play Mode 시각 확인]` `GameMap1`, Clear/22시에서 runtime local mesh `36 vertices / 18 triangles`, Spot 점등과 shader support·compile message 0을 확인했다. gameplay Camera를 런타임에서만 0°·90°·180°·270°로 돌려 직접 RenderTexture 캡처한 결과 네 방향 모두 렌즈 아래 중심과 지면 수광 중심을 유지하고 edge-on 소실·평면 flip·공중 조기 단절이 없었다. 종료 뒤 `GameMap1` Edit Mode·scene clean·컴파일 정지 상태로 복원했다. 잘못된 Entity ID로 시도한 MCP Camera Capture 1회 오류는 기능 오류와 분리했고, 후속 직접 Camera render는 정상 완료했다. 기존 외부 `ASFolliage` shader 오류는 그대로 남아 있다.

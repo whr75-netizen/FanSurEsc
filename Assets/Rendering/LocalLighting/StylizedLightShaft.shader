@@ -136,9 +136,12 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                 float noisyDensity = lerp(1.0 - _NoiseStrength, 1.0, noise);
                 float density = Quantize01(noisyDensity, _DensityBands);
 
-                float endFade =
-                    smoothstep(0.0, 0.055, input.uv.y) *
-                    (1.0 - smoothstep(0.82, 1.0, input.uv.y));
+                float sourceStartFade = smoothstep(0.0, 0.055, input.uv.y);
+                float sunEndFade = 1.0 - smoothstep(0.82, 1.0, input.uv.y);
+                // Local volume slices must meet the lit surface. The sampled
+                // scene depth already supplies their contact fade, whereas the
+                // old UV end fade erased the final 18% and made the beam float.
+                float endFade = sourceStartFade * lerp(sunEndFade, 1.0, sourceMode);
                 float localLateralFade = pow(
                     saturate(1.0 - abs(input.uv.x * 2.0 - 1.0)),
                     0.65);

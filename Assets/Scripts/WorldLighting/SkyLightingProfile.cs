@@ -738,7 +738,7 @@ namespace FantasySurvival.WorldLighting
                     new Color(0.68f, 0.76f, 0.88f, 1f),
                     0.52f,
                     0.42f,
-                    1.35f,
+                    0f,
                     0.65f,
                     1f,
                     new Color(0.36f, 0.50f, 0.68f, 0.62f))

@@ -1760,3 +1760,14 @@ Interactable (abstract base class)
 
 - `[사용자 조정][2026-08-30]` 4프레임 Collider 물 튐 재생을 `12 → 20FPS`로 올려 한 동작 길이를 약 `0.33 → 0.20초`로 줄였다. 발생량·pool·충돌·차폐·줌 크기와 빗줄기 표현은 변경하지 않았다.
 - `[정적 확인]` `PixelRainPresentation` 기본값과 영속 prefab 직렬화 값을 20으로 맞췄고 동적 C# 컴파일이 성공했다. 사용자 dirty 씬·재질·preview prefab은 제외했다.
+
+---
+
+## 75. Rain 균일 흐림과 단계형 로컬광 프로토타입 `[ENVIRONMENT-01][CAMERA-01]`
+
+- `[사용자 피드백·원인][2026-08-30]` 환경 시험에서 Rain을 눌러도 이동 구름 무늬가 남았다. 버튼이나 전환 누락이 아니라 Rain profile이 기본 Cookie 농도 `0.55~0.90`에 배율 `1.35`를 적용해 반점을 약 `0.74~1.0`으로 오히려 강화한 것이 원인이었다.
+- `[날씨 근본 수정]` 기존 `SkyLightingCycleController`와 단일 Directional Light 소유권을 유지하고 Rain의 구름 농도 배율만 `0`으로 바꿨다. Rain은 기존 ambient `0.78`, directional `0.52`, shadow `0.42` 감쇠가 전체를 균일하게 흐리며, Clear는 배율 `1`의 이동 Cookie를 누적된 위치에서 다시 표시한다. 별도 Rain Cookie·날씨 Manager·Camera 픽셀화는 추가하지 않았다.
+- `[로컬광 구조]` 일반 Unity `Light` 대신 scene object가 색·반경·강도·Surface/Halo band·월드 셀 크기를 소유하는 `SteppedLocalLight`와 PC Renderer의 전용 full-screen pass를 추가했다. pass는 persistent gameplay Camera에 대해 `Depth|Normal`, `BeforeTransparents`, color fetch 없음, additive 합성을 사용한다. 원본 표본은 full resolution으로 유지하고 재구성된 world position만 셀 snap한 뒤 Surface와 1.25배 Halo를 각각 단계화하므로 Camera 전체나 기본 텍스처는 픽셀화하지 않는다. 활성 scene과 `DontDestroyOnLoad` 영속 Player 셸 자식 중 Camera 절두체와 교차하는 광원을 거리순으로 고르고 기본 8개·hard cap 16개만 전달하며 초과는 1회 경고한다.
+- `[시험 배치·보존]` clean `GameMapTest`의 절차 건물 배제 앵커 `UrbanLayoutProtectionAnchors/FormerMeleeFixture` 아래에 Collider·표준 Light가 없는 prefab 1개를 배치했다. 반경 4.5, 셀 0.18의 따뜻한 emitter와 비충돌 receiver pillar만 있으며 raid spawn catalog·manifest·NavMesh·persistent shell에는 넣지 않았다. 사용자 dirty `GameMap1`, 재질 2개와 authoring preview Camera prefab은 저장·stage하지 않았다.
+- `[Unity 컴파일·Play Mode 확인]` shader supported/compiler error 0과 C# compile 성공을 확인했다. 한 Play Session에서 Clear→Rain→Clear의 Cookie 농도가 `양수→0→양수`, Rain 방향광이 Clear보다 낮음, 이후 복원을 확인했다. `GameMapTest` Night/Clear에서는 active scene 광원 1개·반경 4.50·셀 0.18, 표준 Light 없음, 전용 feature active와 전체화면 PixelArt feature inactive를 확인했고 실제 Game View에서 5/4단계 Surface/Halo 셀 밴드가 보였다. Day/Rain capture에서는 `opacity=0.000`이며 이동 구름 반점 없이 균일한 흐림과 비가 함께 표시됐다. 후속 집중 Play 확인에서는 scene fixture와 `DontDestroyOnLoad` 영속 셸 자식 probe가 동시에 선택되어 전달 수가 2였으며, probe 제거 뒤 Play Mode를 종료했다.
+- `[남은 경계·Console]` 이번 로컬광은 프로토타입 Surface/Halo 표현이며 광원별 full-screen pass 비용이 남는다. 벽 뒤 screen-space raymarch 그림자·Transparent Sprite 수광·실내 광원 배치·다수 광원 GPU profile 및 향후 volume/tiled 전환·Mobile·Player build는 미검증이다. 검증 중 Unity Camera Capture 도구가 새 Entity ID를 잘못 해석해 도구 오류 2건을 남겼지만, 수동 `Camera.Render()` 대신 정상 Game View `ScreenCapture`로 두 화면을 확인했고 gameplay/shader 오류는 추가되지 않았다. 기존 외부 `ASFolliage` keyword 오류와 과거 Console 기록은 지우지 않았다.

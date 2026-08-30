@@ -68,6 +68,7 @@ MonoBehaviour:
   - {fileID: 7833122117494664109}
   - {fileID: -2275894070437092636}
   - {fileID: -5254281787483351343}
+  - {fileID: 4422216796511869236}
   m_RendererFeatureMap: ad6b866f10d7b46ce4e22db166666ae0
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
@@ -97,6 +98,27 @@ MonoBehaviour:
   m_AccurateGbufferNormals: 0
   m_IntermediateTextureMode: 0
   m_TileOnlyMode: 0
+--- !u!114 &4422216796511869236
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beff5b4f63da1504f9eed1a3fc8f201f, type: 3}
+  m_Name: Stepped Local Lights (Game Camera)
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Rendering.SteppedLocalLightRendererFeature
+  m_Active: 1
+  injectionPoint: 450
+  fetchColorBuffer: 0
+  requirements: 3
+  passMaterial: {fileID: 2100000, guid: 28cdf37a34e7ea149952821d69047022, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 0
+  m_Version: 1
+  visibleLightLimit: 8
 --- !u!114 &7833122117494664109
 MonoBehaviour:
   m_ObjectHideFlags: 1

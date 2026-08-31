@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using FantasySurvival.Inventory;
+using FantasySurvival.Trading;
 using VariableInventorySystem;
 
 namespace FantasySurvival.SaveSystem
@@ -29,6 +30,12 @@ namespace FantasySurvival.SaveSystem
             if (source?.Inventory == null || source.Equipment == null)
             {
                 error = "Player inventory state is missing.";
+                return false;
+            }
+
+            if (!source.TryValidateInventoryCapacity(out error))
+            {
+                error = $"Player inventory capacity is inconsistent: {error}";
                 return false;
             }
 
@@ -116,15 +123,23 @@ namespace FantasySurvival.SaveSystem
         public static bool TryRestore(
             PlayerItemStateSaveData saveData,
             ItemDatabase database,
-            int expectedWidth,
-            int expectedHeight,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
             out PlayerInventoryState restored,
             out string error)
         {
             restored = null;
             if (!TryBuildDefinitionIndex(database, out Dictionary<int, ItemDefinition> definitions, out error) ||
-                !HasExpectedRootDimensions(saveData, expectedWidth, expectedHeight, out error) ||
-                !TryBuildRestoreContext(saveData, definitions, out RestoreContext context, out error))
+                !HasValidPlayerSaveEnvelope(saveData, out error) ||
+                !TryBuildRestoreContext(saveData, definitions, out RestoreContext context, out error) ||
+                !TryResolveExpectedRootDimensions(
+                    saveData,
+                    baseInventoryWidth,
+                    baseInventoryHeight,
+                    context,
+                    out int expectedWidth,
+                    out int expectedHeight,
+                    out error))
             {
                 return false;
             }
@@ -172,7 +187,29 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            restored = new PlayerInventoryState(inventory, equipment);
+            PlayerInventoryState candidate;
+            try
+            {
+                candidate = new PlayerInventoryState(
+                    inventory,
+                    equipment,
+                    new PlayerWallet(),
+                    baseInventoryWidth,
+                    baseInventoryHeight);
+            }
+            catch (Exception exception)
+            {
+                error = $"Could not create the restored Player inventory state: {exception.Message}";
+                return false;
+            }
+
+            if (!candidate.TryValidateInventoryCapacity(out error))
+            {
+                error = $"Restored Player inventory capacity is inconsistent: {error}";
+                return false;
+            }
+
+            restored = candidate;
             error = null;
             return true;
         }
@@ -808,10 +845,8 @@ namespace FantasySurvival.SaveSystem
             return true;
         }
 
-        private static bool HasExpectedRootDimensions(
+        private static bool HasValidPlayerSaveEnvelope(
             PlayerItemStateSaveData saveData,
-            int expectedWidth,
-            int expectedHeight,
             out string error)
         {
             if (saveData == null || saveData.layoutId != PlayerItemStateSaveData.FlatLayoutId)
@@ -827,17 +862,72 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            error = null;
+            return true;
+        }
+
+        private static bool TryResolveExpectedRootDimensions(
+            PlayerItemStateSaveData saveData,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
+            RestoreContext context,
+            out int expectedWidth,
+            out int expectedHeight,
+            out string error)
+        {
+            expectedWidth = 0;
+            expectedHeight = 0;
+            if (context == null)
+            {
+                error = "Inventory restore context is missing.";
+                return false;
+            }
+
+            if (!InventoryGridConstraints.TryValidateDimensions(
+                    baseInventoryWidth,
+                    baseInventoryHeight,
+                    out error))
+            {
+                return false;
+            }
+
+            int bonusRows = 0;
+            if (context.EquipmentRoots.TryGetValue(
+                    EquipmentSlotId.Backpack,
+                    out InventoryItemSaveData backpackRecord))
+            {
+                ItemDefinition backpackDefinition = context.Definitions[backpackRecord.definitionId];
+                bonusRows = backpackDefinition.BackpackBonusRows;
+                if (bonusRows < 0)
+                {
+                    error = $"Backpack item ID {backpackDefinition.Id} has a negative row bonus.";
+                    return false;
+                }
+            }
+
+            long resolvedHeight = (long)baseInventoryHeight + bonusRows;
+            if (resolvedHeight > int.MaxValue)
+            {
+                error = "Backpack row bonus overflows the supported inventory height.";
+                return false;
+            }
+
+            expectedWidth = baseInventoryWidth;
+            expectedHeight = (int)resolvedHeight;
             if (!InventoryGridConstraints.TryValidateDimensions(
                     expectedWidth,
                     expectedHeight,
-                    out error) ||
-                saveData.inventoryWidth != expectedWidth || saveData.inventoryHeight != expectedHeight)
+                    out error))
             {
-                if (error == null)
-                {
-                    error = $"Inventory dimensions {saveData.inventoryWidth}x{saveData.inventoryHeight} " +
-                            $"do not match expected {expectedWidth}x{expectedHeight}.";
-                }
+                return false;
+            }
+
+            if (saveData.inventoryWidth != expectedWidth ||
+                saveData.inventoryHeight != expectedHeight)
+            {
+                error = $"Inventory dimensions {saveData.inventoryWidth}x{saveData.inventoryHeight} " +
+                        $"do not match the equipped Backpack capacity " +
+                        $"{expectedWidth}x{expectedHeight}.";
                 return false;
             }
 

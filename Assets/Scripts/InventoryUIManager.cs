@@ -27,6 +27,7 @@ public class InventoryUIManager : MonoBehaviour
     [SerializeField] private StandardStashView playerStashView;
     [SerializeField] private Text goldAmountText;
     [SerializeField] private Text silverAmountText;
+    [SerializeField] private Text playerInventoryStatusText;
     [Header("Player Equipment UI")] [SerializeField] private GameObject equipmentPanel;
     [SerializeField] private EquipmentPanelView equipmentView;
     private PlayerInventoryState playerState;
@@ -123,6 +124,7 @@ public class InventoryUIManager : MonoBehaviour
             equipmentPanel == null || equipmentView == null ||
             externalInventoryPanel == null || externalStashView == null ||
             goldAmountText == null || silverAmountText == null ||
+            playerInventoryStatusText == null ||
             merchantControlsRoot == null || merchantAllTabButton == null ||
             merchantEquipmentTabButton == null || merchantOtherTabButton == null ||
             merchantCatalogText == null || merchantStatusText == null ||
@@ -164,7 +166,7 @@ public class InventoryUIManager : MonoBehaviour
             playerState,
             RefreshOpenViews,
             NotifyInventoryContentsChanged,
-            SetExternalStatus);
+            ReportInventoryStatus);
         standardCore.SetTransferController(transferCoordinator);
         standardCore.HoveredCellChanged += HandleHoveredCellChanged;
         standardCore.ItemContextRequested += HandleItemContextRequested;
@@ -172,6 +174,8 @@ public class InventoryUIManager : MonoBehaviour
         standardCore.SingleItemPickupRequested += HandleSingleItemPickupRequested;
         itemTooltipView.Hide();
         stackSplitDialog.Close();
+        equipmentView.BindPlayerState(playerState, HandleEquipmentFailure);
+        BindCapacity(playerState);
         BindWallet(playerState.Wallet);
         PlayerStateChanged?.Invoke(playerState);
     }
@@ -285,7 +289,9 @@ public class InventoryUIManager : MonoBehaviour
             new PlayerInventoryState(
                 replacement,
                 playerState?.Equipment ?? new EquipmentLoadoutData(),
-                playerState?.Wallet ?? new PlayerWallet()),
+                playerState?.Wallet ?? new PlayerWallet(),
+                playerInventoryWidth,
+                playerInventoryHeight),
             out error);
     }
 
@@ -297,12 +303,17 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
-        if (replacement.Inventory.CapacityWidth != playerInventoryWidth ||
-            replacement.Inventory.CapacityHeight != playerInventoryHeight ||
-            replacement.Inventory.CellData == null ||
-            replacement.Inventory.CellData.Length != playerInventoryWidth * playerInventoryHeight)
+        if (replacement.BaseInventoryWidth != playerInventoryWidth ||
+            replacement.BaseInventoryHeight != playerInventoryHeight)
         {
-            error = $"Replacement inventory must be {playerInventoryWidth}x{playerInventoryHeight}.";
+            error = $"Replacement base inventory must be " +
+                    $"{playerInventoryWidth}x{playerInventoryHeight}.";
+            return false;
+        }
+
+        if (!replacement.TryValidateInventoryCapacity(out error))
+        {
+            error = $"Replacement player inventory capacity is inconsistent: {error}";
             return false;
         }
 
@@ -318,8 +329,11 @@ public class InventoryUIManager : MonoBehaviour
             return false;
         }
 
+        UnbindCapacity(playerState);
         UnbindWallet(playerState?.Wallet);
         playerState = replacement;
+        equipmentView.BindPlayerState(playerState, HandleEquipmentFailure);
+        BindCapacity(playerState);
         BindWallet(playerState.Wallet);
         PlayerStateChanged?.Invoke(playerState);
         error = null;
@@ -531,6 +545,7 @@ public class InventoryUIManager : MonoBehaviour
 
         playerInventoryPanel.SetActive(true);
         equipmentPanel.SetActive(true);
+        SetPlayerInventoryStatus(string.Empty, false);
         if (!isPlayerViewRegistered)
         {
             standardCore.AddInventoryView(playerStashView);
@@ -680,6 +695,7 @@ public class InventoryUIManager : MonoBehaviour
     // 컴포넌트 파괴 시 정리
     void OnDestroy()
     {
+        UnbindCapacity(playerState);
         UnbindWallet(playerState?.Wallet);
         if (standardCore == null)
         {
@@ -728,6 +744,33 @@ public class InventoryUIManager : MonoBehaviour
         {
             wallet.Changed -= RefreshWalletUI;
         }
+    }
+
+    private void BindCapacity(PlayerInventoryState state)
+    {
+        if (state != null)
+        {
+            state.CapacityChanged += HandlePlayerCapacityChanged;
+        }
+    }
+
+    private void UnbindCapacity(PlayerInventoryState state)
+    {
+        if (state != null)
+        {
+            state.CapacityChanged -= HandlePlayerCapacityChanged;
+        }
+    }
+
+    private void HandlePlayerCapacityChanged()
+    {
+        if (playerState != null && playerInventoryPanel != null &&
+            playerInventoryPanel.activeSelf)
+        {
+            playerStashView.Apply(playerState.Inventory);
+        }
+
+        NotifyInventoryContentsChanged();
     }
 
     private void RefreshWalletUI()
@@ -1195,6 +1238,34 @@ public class InventoryUIManager : MonoBehaviour
         merchantStatusText.color = isError
             ? new Color(1f, 0.45f, 0.4f, 1f)
             : new Color(0.9f, 0.9f, 0.9f, 1f);
+    }
+
+    private void ReportInventoryStatus(string message, bool isError)
+    {
+        SetPlayerInventoryStatus(message, isError);
+        SetExternalStatus(message, isError);
+        if (isError && !string.IsNullOrEmpty(message))
+        {
+            Debug.LogWarning(message, this);
+        }
+    }
+
+    private void SetPlayerInventoryStatus(string message, bool isError)
+    {
+        if (playerInventoryStatusText == null)
+        {
+            return;
+        }
+
+        playerInventoryStatusText.text = message ?? string.Empty;
+        playerInventoryStatusText.color = isError
+            ? new Color(1f, 0.45f, 0.4f, 1f)
+            : new Color(0.9f, 0.9f, 0.9f, 1f);
+    }
+
+    private void HandleEquipmentFailure(string error)
+    {
+        ReportInventoryStatus($"장비 변경 실패: {error}", true);
     }
 
     void CancelActiveDrag()

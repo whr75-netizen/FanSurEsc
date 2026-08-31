@@ -12,12 +12,24 @@ namespace FantasySurvival.Inventory
         [SerializeField] private EquipmentSlotCell[] slotCells;
 
         private EquipmentLoadoutData loadout;
+        private PlayerInventoryState playerState;
+        private Action<string> failureCallback;
         private EquipmentSlotId? originalSlot;
         private IVariableInventoryCellData originalItem;
+        private PlayerInventoryState.EquipmentTakeReceipt originalTakeReceipt;
         private VariableInventoryDropHandling? dropPreviewHandling;
 
         public IReadOnlyList<EquipmentSlotCell> SlotCells => slotCells;
         public IVariableInventoryViewData ViewData => loadout;
+
+        public void BindPlayerState(
+            PlayerInventoryState state,
+            Action<string> onFailure = null)
+        {
+            playerState = state ?? throw new ArgumentNullException(nameof(state));
+            failureCallback = onFailure;
+            Apply(state.Equipment);
+        }
 
         public void SetCellCallback(
             Action<IVariableInventoryCell> onCellClick,
@@ -38,11 +50,19 @@ namespace FantasySurvival.Inventory
 
         public void Apply(IVariableInventoryViewData data)
         {
-            loadout = data as EquipmentLoadoutData;
-            if (loadout == null)
+            EquipmentLoadoutData nextLoadout = data as EquipmentLoadoutData;
+            if (nextLoadout == null)
             {
                 throw new ArgumentException("EquipmentPanelView requires EquipmentLoadoutData.", nameof(data));
             }
+
+            if (playerState != null && !ReferenceEquals(playerState.Equipment, nextLoadout))
+            {
+                playerState = null;
+                failureCallback = null;
+            }
+
+            loadout = nextLoadout;
 
             if (!TryValidateCells(out string error))
             {
@@ -77,13 +97,25 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            if (!loadout.TryTake(cell.SlotId, out IVariableInventoryCellData item))
+            IVariableInventoryCellData item;
+            PlayerInventoryState.EquipmentTakeReceipt takeReceipt = null;
+            string error;
+            bool taken = playerState != null
+                ? playerState.TryTakeEquipment(
+                    cell.SlotId,
+                    out item,
+                    out takeReceipt,
+                    out error)
+                : TryTakeLegacy(cell.SlotId, out item, out error);
+            if (!taken)
             {
+                ReportFailure(error);
                 return false;
             }
 
             originalSlot = cell.SlotId;
             originalItem = item;
+            originalTakeReceipt = takeReceipt;
             cell.Apply(null);
             return true;
         }
@@ -104,8 +136,32 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            if (!loadout.TryPlace(cell.SlotId, effectCell.CellData))
+            if (playerState != null &&
+                originalTakeReceipt != null &&
+                originalSlot == cell.SlotId &&
+                ReferenceEquals(originalItem, effectCell.CellData))
             {
+                if (!playerState.TryRestoreTakenEquipment(originalTakeReceipt, out string restoreError))
+                {
+                    ReportFailure(restoreError);
+                    return false;
+                }
+
+                cell.Apply(effectCell.CellData);
+                ClearOriginal();
+                return true;
+            }
+
+            string error;
+            bool placed = playerState != null
+                ? TryPlaceOrUpgradeEquipment(
+                    cell.SlotId,
+                    effectCell.CellData,
+                    out error)
+                : TryPlaceLegacy(cell.SlotId, effectCell.CellData, out error);
+            if (!placed)
+            {
+                ReportFailure(error);
                 return false;
             }
 
@@ -120,9 +176,35 @@ namespace FantasySurvival.Inventory
             ClearHighlights();
             if (!isDroped && originalSlot.HasValue && originalItem != null)
             {
-                if (!loadout.TryPlace(originalSlot.Value, originalItem))
+                string error;
+                bool restored;
+                if (playerState != null)
                 {
-                    Debug.LogError($"Could not restore equipment item to {originalSlot.Value}.", this);
+                    if (originalTakeReceipt == null)
+                    {
+                        restored = false;
+                        error = "The equipment-take receipt is missing.";
+                    }
+                    else
+                    {
+                        restored = playerState.TryRestoreTakenEquipment(
+                            originalTakeReceipt,
+                            out error);
+                    }
+                }
+                else
+                {
+                    restored = TryPlaceLegacy(
+                        originalSlot.Value,
+                        originalItem,
+                        out error);
+                }
+                if (!restored)
+                {
+                    string message =
+                        $"Could not restore equipment item to {originalSlot.Value}: {error}";
+                    ReportFailure(message);
+                    Debug.LogError(message, this);
                     return;
                 }
 
@@ -182,7 +264,12 @@ namespace FantasySurvival.Inventory
             bool dragging = effectCell?.CellData != null;
             bool valid = dragging && dropPreviewHandling != VariableInventoryDropHandling.Reject &&
                          loadout != null &&
-                         loadout.CheckInsert(EquipmentSlotCatalog.GetIndex(cell.SlotId), effectCell.CellData);
+                         (loadout.CheckInsert(
+                              EquipmentSlotCatalog.GetIndex(cell.SlotId),
+                              effectCell.CellData) ||
+                          playerState != null &&
+                          cell.SlotId == EquipmentSlotId.Backpack &&
+                          playerState.CanUpgradeBackpack(effectCell.CellData, out _));
             cell.SetHighlight(dragging, valid);
         }
 
@@ -249,6 +336,111 @@ namespace FantasySurvival.Inventory
         {
             originalSlot = null;
             originalItem = null;
+            originalTakeReceipt = null;
+        }
+
+        private bool TryPlaceOrUpgradeEquipment(
+            EquipmentSlotId slot,
+            IVariableInventoryCellData item,
+            out string error)
+        {
+            if (loadout.GetItem(slot) == null)
+            {
+                return playerState.TryPlaceEquipment(slot, item, out error);
+            }
+
+            if (slot != EquipmentSlotId.Backpack)
+            {
+                error = $"Equipment slot {slot} is already occupied.";
+                return false;
+            }
+
+            if (!playerState.CanUpgradeBackpack(item, out error))
+            {
+                return false;
+            }
+
+            if (!playerState.TryUpgradeBackpack(
+                    item,
+                    out IVariableInventoryCellData removedBackpack,
+                    out PlayerInventoryState.BackpackUpgradeReceipt upgradeReceipt,
+                    out error))
+            {
+                return false;
+            }
+
+            int? storageIndex = playerState.Inventory.GetInsertableId(removedBackpack);
+            if (storageIndex.HasValue)
+            {
+                try
+                {
+                    playerState.Inventory.InsertInventoryItem(
+                        storageIndex.Value,
+                        removedBackpack);
+                    error = null;
+                    return true;
+                }
+                catch (Exception exception)
+                {
+                    error = $"The previous backpack could not be stored: {exception.Message}";
+                }
+            }
+            else
+            {
+                error = "The previous backpack cannot fit in the Player inventory.";
+            }
+
+            string storageError = error;
+            if (!playerState.TryRestoreBackpackUpgrade(
+                    upgradeReceipt,
+                    out IVariableInventoryCellData restoredReplacement,
+                    out string rollbackError) ||
+                !ReferenceEquals(restoredReplacement, item))
+            {
+                error = $"{storageError} Backpack upgrade rollback also failed: {rollbackError}";
+                return false;
+            }
+
+            error = storageError;
+            return false;
+        }
+
+        private bool TryTakeLegacy(
+            EquipmentSlotId slot,
+            out IVariableInventoryCellData item,
+            out string error)
+        {
+            if (loadout.TryTake(slot, out item))
+            {
+                error = null;
+                return true;
+            }
+
+            error = $"Could not remove the item from {slot}.";
+            return false;
+        }
+
+        private bool TryPlaceLegacy(
+            EquipmentSlotId slot,
+            IVariableInventoryCellData item,
+            out string error)
+        {
+            if (loadout.TryPlace(slot, item))
+            {
+                error = null;
+                return true;
+            }
+
+            error = $"Could not place the item in {slot}.";
+            return false;
+        }
+
+        private void ReportFailure(string error)
+        {
+            if (!string.IsNullOrEmpty(error))
+            {
+                failureCallback?.Invoke(error);
+            }
         }
     }
 }

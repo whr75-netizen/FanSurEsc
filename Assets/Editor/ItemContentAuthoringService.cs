@@ -1190,7 +1190,11 @@ namespace FantasySurvival.EditorTools
                     $"ItemDefinition field '{propertyName}' is missing.");
             }
 
-            property.enumValueIndex = value;
+            // enumValueIndex is the declaration-order index, not the enum's
+            // serialized integer value. TradeCurrency intentionally starts at 1,
+            // so assigning its underlying value as an index logs an out-of-range
+            // error even though the saved value is valid.
+            property.intValue = value;
         }
     }
 }

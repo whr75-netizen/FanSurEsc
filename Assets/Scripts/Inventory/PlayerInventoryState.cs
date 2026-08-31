@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using FantasySurvival.Trading;
+using UnityEngine;
 using VariableInventorySystem;
 
 namespace FantasySurvival.Inventory
@@ -289,32 +290,138 @@ namespace FantasySurvival.Inventory
 
             items[id] = cellData;
             IsDirty = true;
-            Changed?.Invoke();
+            NotifyChangedSafely();
         }
 
         public bool TryTake(EquipmentSlotId slot, out IVariableInventoryCellData item)
         {
-            item = null;
-            int index = EquipmentSlotCatalog.GetIndex(slot);
-            if (index < 0 || items[index] == null)
+            if (!TryTakeWithoutNotification(slot, out item, out _))
             {
                 return false;
             }
 
-            item = items[index];
-            InsertInventoryItem(index, null);
+            NotifyChangedSafely();
             return true;
         }
 
         public bool TryPlace(EquipmentSlotId slot, IVariableInventoryCellData item)
         {
-            int index = EquipmentSlotCatalog.GetIndex(slot);
-            if (!CheckInsert(index, item))
+            if (!TryPlaceWithoutNotification(slot, item, out _))
             {
                 return false;
             }
 
-            InsertInventoryItem(index, item);
+            NotifyChangedSafely();
+            return true;
+        }
+
+        internal bool TryTakeWithoutNotification(
+            EquipmentSlotId slot,
+            out IVariableInventoryCellData item,
+            out string error)
+        {
+            item = null;
+            int index = EquipmentSlotCatalog.GetIndex(slot);
+            if (index < 0 || items[index] == null)
+            {
+                error = $"Equipment slot {slot} is empty.";
+                return false;
+            }
+
+            IVariableInventoryCellData current = items[index];
+            if (current is IVariableInventoryOwnedCellData owned &&
+                !owned.TryChangeInventoryOwner(this, null))
+            {
+                error = $"The item ownership in equipment slot {slot} is inconsistent.";
+                return false;
+            }
+
+            items[index] = null;
+            IsDirty = true;
+            item = current;
+            error = null;
+            return true;
+        }
+
+        internal bool TryPlaceWithoutNotification(
+            EquipmentSlotId slot,
+            IVariableInventoryCellData item,
+            out string error)
+        {
+            int index = EquipmentSlotCatalog.GetIndex(slot);
+            if (!CheckInsert(index, item))
+            {
+                error = $"The item cannot be equipped in {slot}.";
+                return false;
+            }
+
+            if (item is IVariableInventoryOwnedCellData owned &&
+                !owned.TryChangeInventoryOwner(null, this))
+            {
+                error = $"Could not attach the item to equipment slot {slot}.";
+                return false;
+            }
+
+            items[index] = item;
+            IsDirty = true;
+            error = null;
+            return true;
+        }
+
+        internal bool TryReplaceWithoutNotification(
+            EquipmentSlotId slot,
+            IVariableInventoryCellData expectedCurrent,
+            IVariableInventoryCellData replacement,
+            out IVariableInventoryCellData removed,
+            out string error)
+        {
+            removed = null;
+            int index = EquipmentSlotCatalog.GetIndex(slot);
+            if (index < 0 || expectedCurrent == null || replacement == null ||
+                !ReferenceEquals(items[index], expectedCurrent))
+            {
+                error = $"Equipment slot {slot} changed before it could be replaced.";
+                return false;
+            }
+
+            if (!(replacement is InventoryItemData inventoryItem) ||
+                inventoryItem.Definition == null ||
+                !inventoryItem.Definition.CanEquipIn(slot))
+            {
+                error = $"The replacement item cannot be equipped in {slot}.";
+                return false;
+            }
+
+            if (replacement is IVariableInventoryOwnedCellData replacementOwned &&
+                replacementOwned.InventoryOwner != null)
+            {
+                error = "The replacement item already belongs to another inventory container.";
+                return false;
+            }
+
+            if (expectedCurrent is IVariableInventoryOwnedCellData currentOwned &&
+                !currentOwned.TryChangeInventoryOwner(this, null))
+            {
+                error = $"The current item ownership in equipment slot {slot} is inconsistent.";
+                return false;
+            }
+
+            if (replacement is IVariableInventoryOwnedCellData incoming &&
+                !incoming.TryChangeInventoryOwner(null, this))
+            {
+                bool rollbackSucceeded = !(expectedCurrent is IVariableInventoryOwnedCellData rollback) ||
+                                         rollback.TryChangeInventoryOwner(null, this);
+                error = $"Could not attach the replacement item to equipment slot {slot}." +
+                        (rollbackSucceeded
+                            ? string.Empty
+                            : " The previous item ownership rollback also failed.");
+                return false;
+            }
+
+            items[index] = replacement;
+            IsDirty = true;
+            removed = expectedCurrent;
+            error = null;
             return true;
         }
 
@@ -327,10 +434,20 @@ namespace FantasySurvival.Inventory
             }
 
             IsDirty = true;
-            Changed?.Invoke();
+            NotifyChangedSafely();
         }
 
         internal bool TryClearAll(out string error)
+        {
+            return TryClearAll(true, out error);
+        }
+
+        internal bool TryClearAllWithoutNotification(out string error)
+        {
+            return TryClearAll(false, out error);
+        }
+
+        private bool TryClearAll(bool notifyChanged, out string error)
         {
             var occupied = new List<KeyValuePair<int, InventoryItemData>>();
             var seen = new HashSet<InventoryItemData>(
@@ -399,14 +516,56 @@ namespace FantasySurvival.Inventory
             }
 
             IsDirty = true;
-            Changed?.Invoke();
+            if (notifyChanged)
+            {
+                NotifyChangedSafely();
+            }
             error = null;
             return true;
+        }
+
+        internal void NotifyChangedSafely()
+        {
+            Delegate[] subscribers = Changed?.GetInvocationList();
+            if (subscribers == null)
+            {
+                return;
+            }
+
+            foreach (Delegate subscriber in subscribers)
+            {
+                try
+                {
+                    ((Action)subscriber).Invoke();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
+            }
         }
     }
 
     public sealed class PlayerInventoryState
     {
+        public sealed class EquipmentTakeReceipt
+        {
+            internal PlayerInventoryState Owner;
+            internal EquipmentSlotId Slot;
+            internal IVariableInventoryCellData Item;
+            internal StandardStashViewData.HeightResizeReceipt InventoryResize;
+            internal bool IsConsumed;
+        }
+
+        public sealed class BackpackUpgradeReceipt
+        {
+            internal PlayerInventoryState Owner;
+            internal IVariableInventoryCellData PreviousBackpack;
+            internal IVariableInventoryCellData ReplacementBackpack;
+            internal StandardStashViewData.HeightResizeReceipt InventoryResize;
+            internal bool IsConsumed;
+        }
+
         private sealed class AmmunitionMutation
         {
             public StandardStashViewData Owner;
@@ -422,14 +581,38 @@ namespace FantasySurvival.Inventory
             new HashSet<StandardStashViewData>(
                 InventoryReferenceComparer<StandardStashViewData>.Instance);
 
+        public event Action CapacityChanged;
+
         public StandardStashViewData Inventory { get; }
         public EquipmentLoadoutData Equipment { get; }
         public PlayerWallet Wallet { get; }
+        public int BaseInventoryWidth { get; }
+        public int BaseInventoryHeight { get; }
+        public int ExpectedInventoryHeight
+        {
+            get
+            {
+                if (!TryCalculateExpectedInventoryHeight(
+                        Equipment.GetItem(EquipmentSlotId.Backpack),
+                        out int expectedHeight,
+                        out string error))
+                {
+                    throw new InvalidOperationException(error);
+                }
+
+                return expectedHeight;
+            }
+        }
 
         public PlayerInventoryState(
             StandardStashViewData inventory,
             EquipmentLoadoutData equipment)
-            : this(inventory, equipment, new PlayerWallet())
+            : this(
+                inventory,
+                equipment,
+                new PlayerWallet(),
+                GetInitialBaseWidth(inventory),
+                GetInitialBaseHeight(inventory, equipment))
         {
         }
 
@@ -437,10 +620,680 @@ namespace FantasySurvival.Inventory
             StandardStashViewData inventory,
             EquipmentLoadoutData equipment,
             PlayerWallet wallet)
+            : this(
+                inventory,
+                equipment,
+                wallet,
+                GetInitialBaseWidth(inventory),
+                GetInitialBaseHeight(inventory, equipment))
+        {
+        }
+
+        public PlayerInventoryState(
+            StandardStashViewData inventory,
+            EquipmentLoadoutData equipment,
+            PlayerWallet wallet,
+            int baseInventoryWidth,
+            int baseInventoryHeight)
         {
             Inventory = inventory ?? throw new ArgumentNullException(nameof(inventory));
             Equipment = equipment ?? throw new ArgumentNullException(nameof(equipment));
             Wallet = wallet ?? throw new ArgumentNullException(nameof(wallet));
+            BaseInventoryWidth = baseInventoryWidth;
+            BaseInventoryHeight = baseInventoryHeight;
+
+            if (!TryValidateInventoryCapacity(out string error))
+            {
+                throw new ArgumentException(error, nameof(inventory));
+            }
+        }
+
+        public bool TryValidateInventoryCapacity(out string error)
+        {
+            if (!InventoryGridConstraints.TryValidateDimensions(
+                    BaseInventoryWidth,
+                    BaseInventoryHeight,
+                    out error))
+            {
+                error = $"Player base inventory is invalid: {error}";
+                return false;
+            }
+
+            if (!TryCalculateExpectedInventoryHeight(
+                    Equipment.GetItem(EquipmentSlotId.Backpack),
+                    out int expectedHeight,
+                    out error))
+            {
+                return false;
+            }
+
+            if (Inventory.CapacityWidth != BaseInventoryWidth ||
+                Inventory.CapacityHeight != expectedHeight ||
+                Inventory.CellData == null ||
+                Inventory.CellData.Length != BaseInventoryWidth * expectedHeight)
+            {
+                error = $"Player inventory is {Inventory.CapacityWidth}x{Inventory.CapacityHeight}, " +
+                        $"but its equipment requires {BaseInventoryWidth}x{expectedHeight}.";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        public bool TryPlaceEquipment(
+            EquipmentSlotId slot,
+            IVariableInventoryCellData item,
+            out string error)
+        {
+            int slotIndex = EquipmentSlotCatalog.GetIndex(slot);
+            if (!TryValidateInventoryCapacity(out error) ||
+                slotIndex < 0 || !Equipment.CheckInsert(slotIndex, item))
+            {
+                if (error == null)
+                {
+                    error = $"The item cannot be equipped in {slot}.";
+                }
+                return false;
+            }
+
+            IVariableInventoryCellData targetBackpack = slot == EquipmentSlotId.Backpack
+                ? item
+                : Equipment.GetItem(EquipmentSlotId.Backpack);
+            if (!TryCalculateExpectedInventoryHeight(
+                    targetBackpack,
+                    out int targetHeight,
+                    out error))
+            {
+                return false;
+            }
+
+            int previousHeight = Inventory.CapacityHeight;
+            bool capacityChanged = targetHeight != previousHeight;
+            if (capacityChanged &&
+                !Inventory.TryResizeHeight(previousHeight, targetHeight, out error))
+            {
+                return false;
+            }
+
+            try
+            {
+                if (!Equipment.TryPlaceWithoutNotification(slot, item, out string placementError))
+                {
+                    if (capacityChanged &&
+                        !Inventory.TryResizeHeight(targetHeight, previousHeight, out string rollbackError))
+                    {
+                        error = $"The item could not be equipped, and inventory capacity rollback " +
+                                $"also failed: {rollbackError}";
+                        return false;
+                    }
+
+                    error = placementError;
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                string rollbackSuffix = string.Empty;
+                if (capacityChanged &&
+                    !Inventory.TryResizeHeight(targetHeight, previousHeight, out string rollbackError))
+                {
+                    rollbackSuffix = $" Inventory capacity rollback also failed: {rollbackError}";
+                }
+
+                error = $"Could not equip the item: {exception.Message}.{rollbackSuffix}";
+                return false;
+            }
+
+            if (!TryValidateInventoryCapacity(out string validationError))
+            {
+                bool equipmentRolledBack = Equipment.TryTakeWithoutNotification(
+                                               slot,
+                                               out IVariableInventoryCellData rollbackItem,
+                                               out _) &&
+                                           ReferenceEquals(rollbackItem, item);
+                string capacityRollbackError = null;
+                bool capacityRolledBack = !capacityChanged ||
+                                          Inventory.TryResizeHeight(
+                                              targetHeight,
+                                              previousHeight,
+                                              out capacityRollbackError);
+                error = $"Equipping produced an invalid Player inventory: {validationError}" +
+                        (equipmentRolledBack && capacityRolledBack
+                            ? string.Empty
+                            : $" Rollback was incomplete" +
+                              (capacityRolledBack ? "." : $": {capacityRollbackError}"));
+                return false;
+            }
+
+            Equipment.NotifyChangedSafely();
+            if (capacityChanged)
+            {
+                NotifyCapacityChangedSafely();
+            }
+
+            error = null;
+            return true;
+        }
+
+        public bool TryTakeEquipment(
+            EquipmentSlotId slot,
+            out IVariableInventoryCellData item,
+            out string error)
+        {
+            return TryTakeEquipment(slot, out item, out _, out error);
+        }
+
+        public bool TryTakeEquipment(
+            EquipmentSlotId slot,
+            out IVariableInventoryCellData item,
+            out EquipmentTakeReceipt receipt,
+            out string error)
+        {
+            item = null;
+            receipt = null;
+            if (!TryValidateInventoryCapacity(out error))
+            {
+                return false;
+            }
+
+            IVariableInventoryCellData equippedItem = Equipment.GetItem(slot);
+            if (equippedItem == null)
+            {
+                error = $"Equipment slot {slot} is empty.";
+                return false;
+            }
+
+            IVariableInventoryCellData targetBackpack = slot == EquipmentSlotId.Backpack
+                ? null
+                : Equipment.GetItem(EquipmentSlotId.Backpack);
+            if (!TryCalculateExpectedInventoryHeight(
+                    targetBackpack,
+                    out int targetHeight,
+                    out error))
+            {
+                return false;
+            }
+
+            int previousHeight = Inventory.CapacityHeight;
+            bool capacityChanged = targetHeight != previousHeight;
+            if (!Equipment.TryTakeWithoutNotification(slot, out item, out error) ||
+                !ReferenceEquals(item, equippedItem))
+            {
+                item = null;
+                return false;
+            }
+
+            StandardStashViewData.HeightResizeReceipt inventoryResize = null;
+            if (capacityChanged &&
+                !Inventory.TryResizeHeight(
+                    previousHeight,
+                    targetHeight,
+                    out inventoryResize,
+                    out string resizeError))
+            {
+                bool equipmentRolledBack = Equipment.TryPlaceWithoutNotification(
+                    slot,
+                    item,
+                    out string equipmentRollbackError);
+                error = $"The backpack cannot be removed because its items do not fit in the " +
+                        $"base inventory: {resizeError}" +
+                        (equipmentRolledBack
+                            ? string.Empty
+                            : $" Equipment rollback also failed: {equipmentRollbackError}");
+                item = null;
+                return false;
+            }
+
+            if (!TryValidateInventoryCapacity(out string validationError))
+            {
+                string capacityRollbackError = null;
+                bool capacityRolledBack = !capacityChanged ||
+                                          Inventory.TryRestoreHeightResize(
+                                              inventoryResize,
+                                              out capacityRollbackError);
+                bool equipmentRolledBack = capacityRolledBack &&
+                                           Equipment.TryPlaceWithoutNotification(
+                                               slot,
+                                               item,
+                                               out _);
+                error = $"Removing equipment produced an invalid Player inventory: {validationError}" +
+                        (equipmentRolledBack
+                            ? string.Empty
+                            : $" Rollback was incomplete" +
+                              (capacityRolledBack ? "." : $": {capacityRollbackError}"));
+                item = null;
+                return false;
+            }
+
+            receipt = new EquipmentTakeReceipt
+            {
+                Owner = this,
+                Slot = slot,
+                Item = item,
+                InventoryResize = inventoryResize
+            };
+            Equipment.NotifyChangedSafely();
+            if (capacityChanged)
+            {
+                NotifyCapacityChangedSafely();
+            }
+
+            error = null;
+            return true;
+        }
+
+        public bool TryRestoreTakenEquipment(EquipmentTakeReceipt receipt, out string error)
+        {
+            if (receipt == null || !ReferenceEquals(receipt.Owner, this) || receipt.IsConsumed)
+            {
+                error = "The equipment-take receipt is missing, foreign, or already consumed.";
+                return false;
+            }
+
+            if (!TryValidateInventoryCapacity(out error))
+            {
+                return false;
+            }
+
+            if (Equipment.GetItem(receipt.Slot) != null ||
+                (receipt.Item is IVariableInventoryOwnedCellData owned &&
+                 owned.InventoryOwner != null))
+            {
+                error = "The equipment slot or removed item changed before it could be restored.";
+                return false;
+            }
+
+            if (receipt.Slot == EquipmentSlotId.Backpack)
+            {
+                if (!TryCalculateExpectedInventoryHeight(
+                        receipt.Item,
+                        out int restoredHeight,
+                        out error))
+                {
+                    return false;
+                }
+
+                int receiptHeight = receipt.InventoryResize?.BeforeHeight ??
+                                    Inventory.CapacityHeight;
+                if (restoredHeight != receiptHeight)
+                {
+                    error = "The removed backpack capacity changed before it could be restored.";
+                    return false;
+                }
+            }
+
+            if (!Equipment.TryPlaceWithoutNotification(
+                    receipt.Slot,
+                    receipt.Item,
+                    out error))
+            {
+                return false;
+            }
+
+            bool capacityChanged = receipt.InventoryResize != null;
+            if (capacityChanged &&
+                !Inventory.TryRestoreHeightResize(receipt.InventoryResize, out string restoreError))
+            {
+                bool equipmentRolledBack = Equipment.TryTakeWithoutNotification(
+                    receipt.Slot,
+                    out IVariableInventoryCellData rollbackItem,
+                    out string rollbackError);
+                error = $"The original backpack inventory layout could not be restored: {restoreError}" +
+                        (equipmentRolledBack && ReferenceEquals(rollbackItem, receipt.Item)
+                            ? string.Empty
+                            : $" Equipment rollback also failed: {rollbackError}");
+                return false;
+            }
+
+            if (!TryValidateInventoryCapacity(out string validationError))
+            {
+                error = $"Restoring the removed equipment produced an invalid Player inventory: " +
+                        validationError;
+                return false;
+            }
+
+            receipt.IsConsumed = true;
+            Equipment.NotifyChangedSafely();
+            if (capacityChanged)
+            {
+                NotifyCapacityChangedSafely();
+            }
+
+            error = null;
+            return true;
+        }
+
+        public bool TryUpgradeBackpack(
+            IVariableInventoryCellData replacement,
+            out IVariableInventoryCellData removedBackpack,
+            out string error)
+        {
+            return TryUpgradeBackpack(
+                replacement,
+                out removedBackpack,
+                out _,
+                out error);
+        }
+
+        public bool CanUpgradeBackpack(
+            IVariableInventoryCellData replacement,
+            out string error)
+        {
+            if (!TryValidateInventoryCapacity(out error))
+            {
+                return false;
+            }
+
+            IVariableInventoryCellData currentBackpack =
+                Equipment.GetItem(EquipmentSlotId.Backpack);
+            if (currentBackpack == null)
+            {
+                error = "No backpack is currently equipped.";
+                return false;
+            }
+
+            if (!TryGetBackpackBonusRows(currentBackpack, out int currentRows, out error) ||
+                !TryGetBackpackBonusRows(replacement, out int replacementRows, out error))
+            {
+                return false;
+            }
+
+            if (replacementRows <= currentRows)
+            {
+                error = $"A backpack can only be directly replaced by a larger one " +
+                        $"({currentRows} bonus rows -> {replacementRows} bonus rows was requested).";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        public bool TryUpgradeBackpack(
+            IVariableInventoryCellData replacement,
+            out IVariableInventoryCellData removedBackpack,
+            out BackpackUpgradeReceipt receipt,
+            out string error)
+        {
+            removedBackpack = null;
+            receipt = null;
+            if (!TryValidateInventoryCapacity(out error))
+            {
+                return false;
+            }
+
+            if (!CanUpgradeBackpack(replacement, out error))
+            {
+                return false;
+            }
+
+            IVariableInventoryCellData currentBackpack =
+                Equipment.GetItem(EquipmentSlotId.Backpack);
+
+            if (replacement is IVariableInventoryOwnedCellData owned &&
+                owned.InventoryOwner != null)
+            {
+                error = "The replacement backpack must be detached before an upgrade.";
+                return false;
+            }
+
+            if (!TryCalculateExpectedInventoryHeight(
+                    replacement,
+                    out int targetHeight,
+                    out error))
+            {
+                return false;
+            }
+
+            int previousHeight = Inventory.CapacityHeight;
+            if (!Inventory.TryResizeHeight(
+                    previousHeight,
+                    targetHeight,
+                    out StandardStashViewData.HeightResizeReceipt inventoryResize,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!Equipment.TryReplaceWithoutNotification(
+                    EquipmentSlotId.Backpack,
+                    currentBackpack,
+                    replacement,
+                    out removedBackpack,
+                    out string replacementError))
+            {
+                bool capacityRolledBack = Inventory.TryRestoreHeightResize(
+                    inventoryResize,
+                    out string rollbackError);
+                error = replacementError +
+                        (capacityRolledBack
+                            ? string.Empty
+                            : $" Inventory capacity rollback also failed: {rollbackError}");
+                removedBackpack = null;
+                return false;
+            }
+
+            if (!TryValidateInventoryCapacity(out string validationError))
+            {
+                bool equipmentRolledBack = Equipment.TryReplaceWithoutNotification(
+                    EquipmentSlotId.Backpack,
+                    replacement,
+                    currentBackpack,
+                    out IVariableInventoryCellData rolledBackReplacement,
+                    out string equipmentRollbackError);
+                string capacityRollbackError = null;
+                bool capacityRolledBack = equipmentRolledBack &&
+                                          ReferenceEquals(rolledBackReplacement, replacement) &&
+                                          Inventory.TryRestoreHeightResize(
+                                              inventoryResize,
+                                              out capacityRollbackError);
+                error = $"Backpack upgrade produced an invalid Player inventory: {validationError}" +
+                        (equipmentRolledBack && capacityRolledBack
+                            ? string.Empty
+                            : $" Rollback was incomplete: {equipmentRollbackError}" +
+                              (capacityRolledBack ? string.Empty : $" {capacityRollbackError}"));
+                removedBackpack = null;
+                return false;
+            }
+
+            Equipment.NotifyChangedSafely();
+            NotifyCapacityChangedSafely();
+            receipt = new BackpackUpgradeReceipt
+            {
+                Owner = this,
+                PreviousBackpack = removedBackpack,
+                ReplacementBackpack = replacement,
+                InventoryResize = inventoryResize
+            };
+            error = null;
+            return true;
+        }
+
+        public bool TryRestoreBackpackUpgrade(
+            BackpackUpgradeReceipt receipt,
+            out IVariableInventoryCellData removedReplacement,
+            out string error)
+        {
+            removedReplacement = null;
+            if (receipt == null || !ReferenceEquals(receipt.Owner, this) || receipt.IsConsumed ||
+                receipt.InventoryResize == null)
+            {
+                error = "The backpack-upgrade receipt is missing, foreign, or already consumed.";
+                return false;
+            }
+
+            if (!TryValidateInventoryCapacity(out error))
+            {
+                return false;
+            }
+
+            if (!ReferenceEquals(
+                    Equipment.GetItem(EquipmentSlotId.Backpack),
+                    receipt.ReplacementBackpack) ||
+                (receipt.PreviousBackpack is IVariableInventoryOwnedCellData previousOwned &&
+                 previousOwned.InventoryOwner != null))
+            {
+                error = "The backpack slot or previous backpack changed before rollback.";
+                return false;
+            }
+
+            if (!TryCalculateExpectedInventoryHeight(
+                    receipt.PreviousBackpack,
+                    out int restoredHeight,
+                    out error) ||
+                restoredHeight != receipt.InventoryResize.BeforeHeight)
+            {
+                if (error == null)
+                {
+                    error = "The previous backpack capacity changed before rollback.";
+                }
+                return false;
+            }
+
+            if (!Equipment.TryReplaceWithoutNotification(
+                    EquipmentSlotId.Backpack,
+                    receipt.ReplacementBackpack,
+                    receipt.PreviousBackpack,
+                    out removedReplacement,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!Inventory.TryRestoreHeightResize(receipt.InventoryResize, out string resizeError))
+            {
+                bool equipmentRolledBack = Equipment.TryReplaceWithoutNotification(
+                    EquipmentSlotId.Backpack,
+                    receipt.PreviousBackpack,
+                    receipt.ReplacementBackpack,
+                    out IVariableInventoryCellData rolledBackPrevious,
+                    out string equipmentRollbackError);
+                error = $"The original backpack capacity/layout could not be restored: {resizeError}" +
+                        (equipmentRolledBack &&
+                         ReferenceEquals(rolledBackPrevious, receipt.PreviousBackpack)
+                            ? string.Empty
+                            : $" Equipment rollback also failed: {equipmentRollbackError}");
+                removedReplacement = null;
+                return false;
+            }
+
+            if (!TryValidateInventoryCapacity(out string validationError))
+            {
+                error = $"Backpack upgrade rollback produced an invalid Player inventory: " +
+                        validationError;
+                removedReplacement = null;
+                return false;
+            }
+
+            receipt.IsConsumed = true;
+            Equipment.NotifyChangedSafely();
+            NotifyCapacityChangedSafely();
+            error = null;
+            return true;
+        }
+
+        private bool TryCalculateExpectedInventoryHeight(
+            IVariableInventoryCellData backpackItem,
+            out int expectedHeight,
+            out string error)
+        {
+            expectedHeight = BaseInventoryHeight;
+            int bonusRows = 0;
+            if (backpackItem != null &&
+                !TryGetBackpackBonusRows(backpackItem, out bonusRows, out error))
+            {
+                return false;
+            }
+
+            long candidateHeight = (long)BaseInventoryHeight + bonusRows;
+            if (candidateHeight > int.MaxValue)
+            {
+                error = "The backpack inventory height exceeds the supported integer range.";
+                return false;
+            }
+
+            if (!InventoryGridConstraints.TryValidateDimensions(
+                    BaseInventoryWidth,
+                    (int)candidateHeight,
+                    out error))
+            {
+                error = $"The backpack inventory capacity is invalid: {error}";
+                return false;
+            }
+
+            expectedHeight = (int)candidateHeight;
+            error = null;
+            return true;
+        }
+
+        private static bool TryGetBackpackBonusRows(
+            IVariableInventoryCellData backpackItem,
+            out int bonusRows,
+            out string error)
+        {
+            bonusRows = 0;
+            if (!(backpackItem is InventoryItemData inventoryItem) ||
+                inventoryItem.Definition == null ||
+                !inventoryItem.Definition.CanEquipIn(EquipmentSlotId.Backpack))
+            {
+                error = "The backpack definition is invalid.";
+                return false;
+            }
+
+            if (!inventoryItem.Definition.TryValidateInventoryShape(out error))
+            {
+                return false;
+            }
+
+            bonusRows = inventoryItem.Definition.BackpackBonusRows;
+            error = null;
+            return true;
+        }
+
+        private void NotifyCapacityChangedSafely()
+        {
+            Delegate[] subscribers = CapacityChanged?.GetInvocationList();
+            if (subscribers == null)
+            {
+                return;
+            }
+
+            foreach (Delegate subscriber in subscribers)
+            {
+                try
+                {
+                    ((Action)subscriber).Invoke();
+                }
+                catch (Exception exception)
+                {
+                    Debug.LogException(exception);
+                }
+            }
+        }
+
+        private static int GetInitialBaseWidth(StandardStashViewData inventory)
+        {
+            return inventory?.CapacityWidth ?? 0;
+        }
+
+        private static int GetInitialBaseHeight(
+            StandardStashViewData inventory,
+            EquipmentLoadoutData equipment)
+        {
+            if (inventory == null)
+            {
+                return 0;
+            }
+
+            int bonusRows = 0;
+            if (equipment?.GetItem(EquipmentSlotId.Backpack) is InventoryItemData backpack &&
+                backpack.Definition != null)
+            {
+                bonusRows = backpack.Definition.BackpackBonusRows;
+            }
+
+            return inventory.CapacityHeight - bonusRows;
         }
 
         public bool TryGetOwnedStackItemPlacement(
@@ -783,6 +1636,7 @@ namespace FantasySurvival.Inventory
             }
 
             var inventoryRoots = new List<KeyValuePair<int, InventoryItemData>>();
+            var equipmentRoots = new List<KeyValuePair<EquipmentSlotId, InventoryItemData>>();
             var seen = new HashSet<InventoryItemData>(
                 InventoryReferenceComparer<InventoryItemData>.Instance);
             for (int index = 0; index < Inventory.CellData.Length; index++)
@@ -840,6 +1694,9 @@ namespace FantasySurvival.Inventory
                     error = $"Equipment slot {slot} has inconsistent item ownership.";
                     return false;
                 }
+
+                equipmentRoots.Add(
+                    new KeyValuePair<EquipmentSlotId, InventoryItemData>(slot, inventoryItem));
             }
 
             int removedInventoryRoots = 0;
@@ -859,7 +1716,7 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            if (!Equipment.TryClearAll(out string equipmentError))
+            if (!Equipment.TryClearAllWithoutNotification(out string equipmentError))
             {
                 string rollbackError = RestoreInventoryRoots(
                     inventoryRoots,
@@ -868,8 +1725,55 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            int previousHeight = Inventory.CapacityHeight;
+            bool capacityChanged = previousHeight != BaseInventoryHeight;
+            if (capacityChanged &&
+                !Inventory.TryResizeHeight(
+                    previousHeight,
+                    BaseInventoryHeight,
+                    out string resizeError))
+            {
+                string equipmentRollbackError = RestoreEquipmentRoots(equipmentRoots);
+                string inventoryRollbackError = RestoreInventoryRoots(
+                    inventoryRoots,
+                    removedInventoryRoots);
+                error = "Could not restore the base inventory capacity after discarding the " +
+                        $"equipped backpack: {resizeError}" +
+                        equipmentRollbackError +
+                        inventoryRollbackError;
+                return false;
+            }
+
+            if (equipmentRoots.Count > 0)
+            {
+                Equipment.NotifyChangedSafely();
+            }
+            if (capacityChanged)
+            {
+                NotifyCapacityChangedSafely();
+            }
             error = null;
             return true;
+        }
+
+        private string RestoreEquipmentRoots(
+            IReadOnlyList<KeyValuePair<EquipmentSlotId, InventoryItemData>> roots)
+        {
+            var failures = new List<string>();
+            foreach (KeyValuePair<EquipmentSlotId, InventoryItemData> placement in roots)
+            {
+                if (!Equipment.TryPlaceWithoutNotification(
+                        placement.Key,
+                        placement.Value,
+                        out string restoreError))
+                {
+                    failures.Add($"{placement.Key}: {restoreError}");
+                }
+            }
+
+            return failures.Count == 0
+                ? string.Empty
+                : " Equipment rollback failed for " + string.Join("; ", failures) + ".";
         }
 
         private string RestoreInventoryRoots(

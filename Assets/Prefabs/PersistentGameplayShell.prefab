@@ -2495,12 +2495,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   standardCore: {fileID: 6849777988300146275}
   itemDatabase: {fileID: 11400000, guid: d38ab357628cdf24c9542351dd577b53, type: 2}
-  startingItemIds: 0100000002000000030000000400000005000000070000000800000009000000
+  startingItemIds: 01000000020000000300000004000000050000000700000008000000090000000a0000000b0000000c000000
   startingStackQuantity: 5
   playerInventoryPanel: {fileID: 4739148661671075293}
   playerStashView: {fileID: 1686721783905817088}
   goldAmountText: {fileID: 433791422374460428}
   silverAmountText: {fileID: 7670069962513405944}
+  playerInventoryStatusText: {fileID: 6575646544654446600}
   equipmentPanel: {fileID: 485395643153939392}
   equipmentView: {fileID: 9210779468496241684}
   externalInventoryPanel: {fileID: 4498010589770182613}
@@ -3203,6 +3204,85 @@ MonoBehaviour:
   icon: {fileID: 6564779300343099374}
   highlight: {fileID: 8481709111217275608}
   slotLabel: {fileID: 7246898608038825514}
+--- !u!1 &1431953265668271238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3855601283440925530}
+  - component: {fileID: 1634830041717956878}
+  - component: {fileID: 6575646544654446600}
+  m_Layer: 0
+  m_Name: PlayerInventoryStatusText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3855601283440925530
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431953265668271238}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7052769532770923076}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0}
+  m_AnchorMax: {x: 0.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 16}
+  m_SizeDelta: {x: 700, y: 30}
+  m_Pivot: {x: 0.5, y: 0}
+--- !u!222 &1634830041717956878
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431953265668271238}
+  m_CullTransparentMesh: 1
+--- !u!114 &6575646544654446600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1431953265668271238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: PlayerInventoryStatusText
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Text
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.9, g: 0.9, b: 0.9, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 16
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 10
+    m_MaxSize: 40
+    m_Alignment: 4
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: "\u200B"
 --- !u!1 &1491130776768810190
 GameObject:
   m_ObjectHideFlags: 0
@@ -10778,7 +10858,6 @@ MonoBehaviour:
   sunSurfaceFadeDistance: 0.45
   rainSuppression: 0.92
   visibleLocalEmitterLimit: 8
-  localSurfaceFadeDistance: 0.2
   localRainScatterMultiplier: 1.35
 --- !u!1 &4650524401803780695
 GameObject:
@@ -11043,6 +11122,7 @@ RectTransform:
   - {fileID: 8380532149973306488}
   - {fileID: 4481557507373945636}
   - {fileID: 8078259633516202813}
+  - {fileID: 3855601283440925530}
   m_Father: {fileID: 9073447456630320706}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}

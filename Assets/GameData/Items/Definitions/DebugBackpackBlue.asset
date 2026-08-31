@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f43d88a5ca1f487408fb6163228ff32b, type: 3}
+  m_Name: DebugBackpackBlue
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Inventory.ItemDefinition
+  id: 12
+  displayName: "\uC2DC\uD5D8\uC6A9 \uD30C\uB791 \uAC00\uBC29 (+3\uD589)"
+  description: "\uAE30\uB2A5 \uAC80\uC99D\uC6A9 \uAC00\uBC29. \uAE30\uBCF8 \uC778\uBCA4\uD1A0\uB9AC
+    \uC544\uB798\uC5D0 3\uAC1C \uD589\uC744 \uCD94\uAC00\uD569\uB2C8\uB2E4."
+  width: 1
+  height: 1
+  icon: {fileID: 2800000, guid: c4090fcccc62fda49ad7cc0f7357c188, type: 3}
+  maxStackSize: 1
+  equipmentSlot: 4
+  backpackBonusRows: 3
+  isTradable: 1
+  tradeCurrency: 2
+  tradePrice: 1
+  weaponFireMode: 0
+  roundsPerMinute: 300
+  ammunitionDefinitionId: 8
+  magazineCapacity: 3
+  reloadDurationSeconds: 2.5
+  weaponDamage: 35
+  weaponRange: 30
+  weaponNoiseRadius: 18
+  medicineUseDurationSeconds: 2.5
+  medicineHealthRestored: 35
+  kind: 0
+  containerWidth: 1
+  containerHeight: 1

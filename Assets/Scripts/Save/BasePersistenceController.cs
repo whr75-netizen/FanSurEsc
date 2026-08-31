@@ -5,7 +5,6 @@ using FantasySurvival.Raids;
 using FantasySurvival.SceneFlow;
 using FantasySurvival.Trading;
 using UnityEngine;
-using VariableInventorySystem;
 
 namespace FantasySurvival.SaveSystem
 {
@@ -283,15 +282,15 @@ namespace FantasySurvival.SaveSystem
                     saveData,
                     inventory.ItemDatabase,
                     furnitureDatabase,
-                    inventory.PlayerInventoryData.CapacityWidth,
-                    inventory.PlayerInventoryData.CapacityHeight,
+                    inventory.PlayerState.BaseInventoryWidth,
+                    inventory.PlayerState.BaseInventoryHeight,
                     out error)
                 : GameSaveManager.TryWriteSlotOne(
                     saveData,
                     inventory.ItemDatabase,
                     furnitureDatabase,
-                    inventory.PlayerInventoryData.CapacityWidth,
-                    inventory.PlayerInventoryData.CapacityHeight,
+                    inventory.PlayerState.BaseInventoryWidth,
+                    inventory.PlayerState.BaseInventoryHeight,
                     out error);
             if (!written)
             {
@@ -761,8 +760,8 @@ namespace FantasySurvival.SaveSystem
 
             try
             {
-                StandardStashViewData current = inventory.PlayerInventoryData;
-                if (saveData == null || current == null)
+                PlayerInventoryState currentState = inventory.PlayerState;
+                if (saveData == null || currentState?.Inventory == null)
                 {
                     error = saveData == null
                         ? "save candidate is missing."
@@ -773,8 +772,8 @@ namespace FantasySurvival.SaveSystem
                 if (!InventorySaveCodec.TryRestore(
                         saveData.playerItems,
                         inventory.ItemDatabase,
-                        current.CapacityWidth,
-                        current.CapacityHeight,
+                        currentState.BaseInventoryWidth,
+                        currentState.BaseInventoryHeight,
                         out playerCandidate,
                         out error))
                 {
@@ -792,7 +791,9 @@ namespace FantasySurvival.SaveSystem
                 playerCandidate = new PlayerInventoryState(
                     playerCandidate.Inventory,
                     playerCandidate.Equipment,
-                    walletCandidate);
+                    walletCandidate,
+                    playerCandidate.BaseInventoryWidth,
+                    playerCandidate.BaseInventoryHeight);
 
                 if (!BaseFurnitureSaveCodec.TryRestore(
                         saveData.baseState,

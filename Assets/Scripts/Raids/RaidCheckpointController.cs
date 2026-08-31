@@ -252,8 +252,8 @@ namespace FantasySurvival.Raids
             markedSave.raidInProgress = true;
             markedSave.activeRaidInstanceId = candidateBaseline.raidInstanceId;
 
-            StandardStashViewData playerInventory = shell.InventoryUI.PlayerInventoryData;
-            if (playerInventory == null)
+            var playerState = shell.InventoryUI.PlayerState;
+            if (playerState?.Inventory == null)
             {
                 error = "Player inventory dimensions are unavailable for active-raid marker validation.";
                 return false;
@@ -263,8 +263,8 @@ namespace FantasySurvival.Raids
                 markedSave,
                 shell.InventoryUI.ItemDatabase,
                 furnitureDatabase,
-                playerInventory.CapacityWidth,
-                playerInventory.CapacityHeight,
+                playerState.BaseInventoryWidth,
+                playerState.BaseInventoryHeight,
                 out error);
         }
 
@@ -1294,8 +1294,8 @@ namespace FantasySurvival.Raids
             pendingExactSettlementState = saveData;
             pendingExactSettlementKind = journal.kind;
 
-            StandardStashViewData playerInventory = shell.InventoryUI.PlayerInventoryData;
-            if (playerInventory == null)
+            var playerState = shell.InventoryUI.PlayerState;
+            if (playerState?.Inventory == null)
             {
                 error = "Player inventory dimensions are unavailable for ordinary save validation.";
                 return false;
@@ -1305,8 +1305,8 @@ namespace FantasySurvival.Raids
                     saveData,
                     shell.InventoryUI.ItemDatabase,
                     furnitureDatabase,
-                    playerInventory.CapacityWidth,
-                    playerInventory.CapacityHeight,
+                    playerState.BaseInventoryWidth,
+                    playerState.BaseInventoryHeight,
                     out error))
             {
                 error = $"Ordinary save commit failed after the settlement journal was secured: {error}";
@@ -2384,8 +2384,8 @@ namespace FantasySurvival.Raids
             baseArrivalComplete = false;
             exactRollbackDurable = true;
 
-            StandardStashViewData playerInventory = shell.InventoryUI.PlayerInventoryData;
-            if (playerInventory == null)
+            var playerState = shell.InventoryUI.PlayerState;
+            if (playerState?.Inventory == null)
             {
                 error = "Player inventory dimensions are unavailable while cancelling raid departure.";
                 return false;
@@ -2395,8 +2395,8 @@ namespace FantasySurvival.Raids
                     baseline.startingState,
                     shell.InventoryUI.ItemDatabase,
                     furnitureDatabase,
-                    playerInventory.CapacityWidth,
-                    playerInventory.CapacityHeight,
+                    playerState.BaseInventoryWidth,
+                    playerState.BaseInventoryHeight,
                     out error))
             {
                 return false;

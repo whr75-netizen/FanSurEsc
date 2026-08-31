@@ -1899,3 +1899,13 @@ Interactable (abstract base class)
 - `[ID·트랜잭션]` DB가 다음 ID high-watermark를 영구 소유하고 생성 전에 전진·저장하므로 실패하거나 삭제된 ID도 재사용하지 않는다. 새 asset 생성·복제는 즉시 저장되고 Ctrl+Z 대상이 아니며, 실패 시 DB 목록·검증 index와 생성 파일을 각각 복원·삭제하고 cleanup 실패까지 원래 오류와 함께 보고한다. 기존 asset 편집과 DB 등록은 `SerializedObject`/Undo 경로를 유지한다.
 - `[Unity Editor 호출 확인]` C# compile, 실제 창 제목·최소 크기, production definition/등록 `9/9`, blocker `0`, presentation warning `6`, 다음 ID `10`을 확인했다. 격리 임시 DB 생성 1건은 ID `10`, DB 등록, `TryGet` 동일 참조와 allocator `11`을 확인했고 asset 삭제 뒤 DB가 비어 있어도 다음 ID가 `11`로 유지됨을 확인한 뒤 임시 folder와 `.meta`를 제거했다. 미등록 탄약 ID의 무기 요청은 DB·allocator 변경 전에 거부됨도 확인했다.
 - `[보존·경계]` 사용자 dirty `GameMap1`, Quest/상인 재질과 preview Camera prefab은 변경·stage하지 않았다. 현재 9개 규모에는 ScriptableObject+공용 service+IMGUI 창이 적합하며, 수백 개 평면 수치의 외부 협업 전에는 CSV/Sheets 이중 권위를, 원격 배포 전에는 Addressables를 추가하지 않는다. 기존 asset 편집·등록 Undo는 코드 확인이며 실제 Ctrl+Z/Redo는 미검증이다. 기존 외부 `ASFolliage` 오류와 과거 검증 도구 Console 오류는 이번 기능과 분리했다.
+
+---
+
+## 90. 가방 추가 행·자동 재배치와 픽셀 파츠 기술 기반 `[ITEM-01]`
+
+- `[구현·권위][2026-08-31]` `ItemDefinition.BackpackBonusRows`와 기존 Backpack 장비칸을 연결했다. Player root 인벤토리 인스턴스와 기본 `8×9` 권위는 유지하고 장착 가방의 행만 아래에 추가한다. 해제 시 기존 위치 유지→원회전 우선 결정적 재배치→필요할 때 회전→제한된 exact 탐색 순으로 기본 grid 수용 여부를 계산하며, 불가능하면 장비·높이·셀·회전·소유권을 전혀 확정하지 않는다.
+- `[교체·거래·복구]` 큰 가방으로 직접 교체하면 새 용량을 먼저 확정하고 기존 가방을 Player grid에 넣는다. 같거나 작은 가방은 직접 교체를 차단한다. 가방 pick 취소, 목적지 실패, 판매 대금 실패와 기존 가방 보관 실패는 receipt로 원래 셀·회전까지 CAS 복구한다. 상인↔장비칸 직접 drag는 결제 뒤 복구 경계가 없으므로 차단하고 빠른 판매/Player grid 구매만 쓴다. 바닥 아이템 시각화·월드 드롭은 이 작업에서 만들지 않았다.
+- `[저장·시험 콘텐츠]` 일반 save·primary backup·Raid checkpoint/rollback은 저장된 Backpack record에서 실제 높이를 `기본 높이 + 추가 행`으로 다시 계산해 payload 크기와 일치할 때만 복원한다. 빨강 ID 10 `+1`, 초록 ID 11 `+2`, 파랑 ID 12 `+3`의 1×1 시험 가방과 Point-filtered 색상 아이콘을 단일 DB에 등록하고 시작 인벤토리에 넣었다. 시험 판매가는 은화 1이며 정식 수치·가격이 아니다. 기존 production 가방 definition이 없었으므로 과거 save migration 대상은 없지만, 이후 같은 ID의 추가 행을 변경할 때는 migration이 필요하다.
+- `[픽셀 모딩 기술 기반]` 실제 아트 없이 `ModularSpriteRigDefinition`, `MotionDefinition`, `SkinDefinition`과 정수 pixel-snap FK solver를 분리했다. 8방향 hysteresis, 고정 FPS frame, 관절 덮개와 방향별 render order를 검증하지만 Renderer·Player/Enemy prefab·실제 파츠 이미지는 아직 연결하지 않았다.
+- `[Unity Editor 호출 확인]` C# compile 뒤 Backpack 계약 검증에서 추가 행, 동일 root 인스턴스, 자동 재배치, 73개 item의 해제·판매 차단 완전 불변, receipt 원복, 큰 가방 교체와 기존 가방 보관, 작은 가방 차단, 보관 불가 교체 rollback, discard 기본 높이 복귀와 base/expanded save 왕복을 확인했다. production DB `12/12`, 가방 ID·행·아이콘·시험 거래값, persistent prefab의 status Text와 시작 ID를 확인했고 Modular Sprite·Core adjacent validator도 예외 없이 통과했다. 실제 Play Mode UI drag·상인 조작과 Player build는 미검증이다.

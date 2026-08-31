@@ -27,6 +27,8 @@ namespace FantasySurvival.Inventory
 
         [Header("Equipment")]
         [SerializeField] private EquipmentSlotType equipmentSlot;
+        [SerializeField, Range(0, InventoryGridConstraints.MaxDimension)]
+        private int backpackBonusRows;
 
         [Header("Trading Prototype")]
         [SerializeField] private bool isTradable;
@@ -61,6 +63,7 @@ namespace FantasySurvival.Inventory
         public Texture2D Icon => icon;
         public int MaxStackSize => maxStackSize;
         public EquipmentSlotType EquipmentSlot => equipmentSlot;
+        public int BackpackBonusRows => backpackBonusRows;
         public bool IsEquippable => equipmentSlot != EquipmentSlotType.None;
         public bool IsWeapon => equipmentSlot == EquipmentSlotType.Weapon;
         public bool IsTradable => isTradable && !IsContainer && tradePrice > 0 &&
@@ -117,6 +120,25 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            if (backpackBonusRows < 0 ||
+                backpackBonusRows > InventoryGridConstraints.MaxDimension)
+            {
+                error = $"Item definition ID {id} has an invalid backpack row bonus.";
+                return false;
+            }
+
+            if (backpackBonusRows > 0 && equipmentSlot != EquipmentSlotType.Backpack)
+            {
+                error = $"Item definition ID {id} grants backpack rows but is not a backpack.";
+                return false;
+            }
+
+            if (backpackBonusRows > 0 && IsContainer)
+            {
+                error = $"Item definition ID {id} cannot be both a capacity backpack and a nested container.";
+                return false;
+            }
+
             if (IsContainer && IsWeapon)
             {
                 error = $"Item definition ID {id} cannot be both a weapon and a container.";
@@ -165,6 +187,10 @@ namespace FantasySurvival.Inventory
             width = Mathf.Max(1, width);
             height = Mathf.Max(1, height);
             maxStackSize = IsContainer || IsEquippable ? 1 : Mathf.Max(1, maxStackSize);
+            backpackBonusRows = Mathf.Clamp(
+                backpackBonusRows,
+                0,
+                InventoryGridConstraints.MaxDimension);
             containerWidth = Mathf.Max(1, containerWidth);
             containerHeight = Mathf.Max(1, containerHeight);
             roundsPerMinute = Mathf.Max(1f, roundsPerMinute);

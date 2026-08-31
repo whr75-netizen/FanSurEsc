@@ -16,8 +16,8 @@ namespace FantasySurvival.Raids
             RaidRecoveryBaselineData baseline,
             ItemDatabase itemDatabase,
             BaseFurnitureDatabase furnitureDatabase,
-            int expectedInventoryWidth,
-            int expectedInventoryHeight,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
             out string error)
         {
             if (baseline == null)
@@ -47,8 +47,8 @@ namespace FantasySurvival.Raids
                 baseline.startingState,
                 itemDatabase,
                 furnitureDatabase,
-                expectedInventoryWidth,
-                expectedInventoryHeight,
+                baseInventoryWidth,
+                baseInventoryHeight,
                 out error);
         }
 
@@ -57,16 +57,16 @@ namespace FantasySurvival.Raids
             RaidCheckpointData checkpoint,
             ItemDatabase itemDatabase,
             BaseFurnitureDatabase furnitureDatabase,
-            int expectedInventoryWidth,
-            int expectedInventoryHeight,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
             out string error)
         {
             if (!TryValidateBaseline(
                     baseline,
                     itemDatabase,
                     furnitureDatabase,
-                    expectedInventoryWidth,
-                    expectedInventoryHeight,
+                    baseInventoryWidth,
+                    baseInventoryHeight,
                     out error) ||
                 !TryValidateCheckpointStructure(baseline, checkpoint, out error))
             {
@@ -77,8 +77,8 @@ namespace FantasySurvival.Raids
                     checkpoint.persistentState,
                     itemDatabase,
                     furnitureDatabase,
-                    expectedInventoryWidth,
-                    expectedInventoryHeight,
+                    baseInventoryWidth,
+                    baseInventoryHeight,
                     out error))
             {
                 error = $"Raid checkpoint persistent state is invalid: {error}";
@@ -368,16 +368,16 @@ namespace FantasySurvival.Raids
             GameSaveData saveData,
             ItemDatabase itemDatabase,
             BaseFurnitureDatabase furnitureDatabase,
-            int expectedInventoryWidth,
-            int expectedInventoryHeight,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
             out string error)
         {
             return TryValidatePersistentState(
                 saveData,
                 itemDatabase,
                 furnitureDatabase,
-                expectedInventoryWidth,
-                expectedInventoryHeight,
+                baseInventoryWidth,
+                baseInventoryHeight,
                 out error);
         }
 
@@ -385,8 +385,8 @@ namespace FantasySurvival.Raids
             GameSaveData saveData,
             ItemDatabase itemDatabase,
             BaseFurnitureDatabase furnitureDatabase,
-            int expectedInventoryWidth,
-            int expectedInventoryHeight,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
             out string error)
         {
             if (saveData == null ||
@@ -416,8 +416,8 @@ namespace FantasySurvival.Raids
             if (!InventorySaveCodec.TryRestore(
                     saveData.playerItems,
                     itemDatabase,
-                    expectedInventoryWidth,
-                    expectedInventoryHeight,
+                    baseInventoryWidth,
+                    baseInventoryHeight,
                     out _,
                     out error))
             {

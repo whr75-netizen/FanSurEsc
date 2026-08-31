@@ -124,16 +124,16 @@ namespace FantasySurvival.SaveSystem
             GameSaveData saveData,
             ItemDatabase database,
             BaseFurnitureDatabase furnitureDatabase,
-            int expectedInventoryWidth,
-            int expectedInventoryHeight,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
             out string error)
         {
             if (!TryValidateCompletePayload(
                     saveData,
                     database,
                     furnitureDatabase,
-                    expectedInventoryWidth,
-                    expectedInventoryHeight,
+                    baseInventoryWidth,
+                    baseInventoryHeight,
                     out error))
             {
                 return false;
@@ -146,8 +146,8 @@ namespace FantasySurvival.SaveSystem
                     saveData,
                     database,
                     furnitureDatabase,
-                    expectedInventoryWidth,
-                    expectedInventoryHeight))
+                    baseInventoryWidth,
+                    baseInventoryHeight))
             {
                 rotatePrimaryToBackup = true;
             }
@@ -159,8 +159,8 @@ namespace FantasySurvival.SaveSystem
             GameSaveData saveData,
             ItemDatabase database,
             BaseFurnitureDatabase furnitureDatabase,
-            int expectedInventoryWidth,
-            int expectedInventoryHeight,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
             out string error)
         {
             for (int copy = 0; copy < 2; copy++)
@@ -169,8 +169,8 @@ namespace FantasySurvival.SaveSystem
                         saveData,
                         database,
                         furnitureDatabase,
-                        expectedInventoryWidth,
-                        expectedInventoryHeight,
+                        baseInventoryWidth,
+                        baseInventoryHeight,
                         out error))
                 {
                     return false;
@@ -185,8 +185,8 @@ namespace FantasySurvival.SaveSystem
             GameSaveData saveData,
             ItemDatabase database,
             BaseFurnitureDatabase furnitureDatabase,
-            int expectedInventoryWidth,
-            int expectedInventoryHeight,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
             out string error)
         {
             if (!TryValidateHeader(saveData, out error))
@@ -197,8 +197,8 @@ namespace FantasySurvival.SaveSystem
             if (!InventorySaveCodec.TryRestore(
                     saveData.playerItems,
                     database,
-                    expectedInventoryWidth,
-                    expectedInventoryHeight,
+                    baseInventoryWidth,
+                    baseInventoryHeight,
                     out _,
                     out error))
             {
@@ -253,17 +253,20 @@ namespace FantasySurvival.SaveSystem
             GameSaveData currentSave,
             ItemDatabase database,
             BaseFurnitureDatabase furnitureDatabase,
-            int expectedInventoryWidth,
-            int expectedInventoryHeight)
+            int baseInventoryWidth,
+            int baseInventoryHeight)
         {
             try
             {
+                // Backpack capacity is mutable Player state. Validate the previous
+                // primary against its own equipped Backpack record while sharing only
+                // the authored base dimensions with the current runtime state.
                 return TryValidateCompletePayload(
                            existingPrimary,
                            database,
                            furnitureDatabase,
-                           expectedInventoryWidth,
-                           expectedInventoryHeight,
+                           baseInventoryWidth,
+                           baseInventoryHeight,
                            out _) &&
                        HasCompatibleBaseLayoutForBackup(
                            existingPrimary.baseState,

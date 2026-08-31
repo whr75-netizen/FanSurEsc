@@ -210,6 +210,8 @@ namespace FantasySurvival.Inventory
             public IVariableInventoryViewData Destination;
             public IVariableInventoryCellData Item;
             public int SourceIndex;
+            public EquipmentSlotId SourceEquipmentSlot;
+            public PlayerInventoryState.EquipmentTakeReceipt SourceEquipmentTakeReceipt;
             public int DestinationIndex;
         }
 
@@ -869,7 +871,8 @@ namespace FantasySurvival.Inventory
             }
 
             return playerState.Equipment.GetFirstAvailableSlot(item.Definition) !=
-                   EquipmentSlotId.None;
+                   EquipmentSlotId.None ||
+                   playerState.CanUpgradeBackpack(item, out _);
         }
 
         public bool TryEquip(
@@ -891,6 +894,11 @@ namespace FantasySurvival.Inventory
                 playerState.Equipment.GetFirstAvailableSlot(item.Definition);
             if (slot == EquipmentSlotId.None)
             {
+                if (playerState.CanUpgradeBackpack(item, out _))
+                {
+                    return TryUpgradeBackpack(source, item, out error);
+                }
+
                 if (!item.Definition.IsEquippable)
                 {
                     error = "장착 가능한 아이템이 아닙니다.";
@@ -910,18 +918,132 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            if (!TryTransferFirstFit(
-                    source,
-                    playerState.Equipment,
-                    item,
-                    out _,
-                    out error))
+            int? sourceIndex = source.GetId(item);
+            if (!sourceIndex.HasValue)
             {
+                error = "장착할 아이템의 원본 슬롯을 찾을 수 없습니다.";
+                Report($"장착 실패: {error}", true);
+                return false;
+            }
+
+            try
+            {
+                source.InsertInventoryItem(sourceIndex.Value, null);
+            }
+            catch (Exception exception)
+            {
+                error = $"장착할 아이템을 원본에서 분리하지 못했습니다: {exception.Message}";
+                Report($"장착 실패: {error}", true);
+                return false;
+            }
+
+            if (!playerState.TryPlaceEquipment(slot, item, out error))
+            {
+                string equipFailure = error;
+                TryRestoreDetachedSource(
+                    source,
+                    sourceIndex.Value,
+                    EquipmentSlotId.None,
+                    null,
+                    item,
+                    equipFailure,
+                    out error);
                 Report($"장착 실패: {error}", true);
                 return false;
             }
 
             Report($"장착 완료: {item.Definition.DisplayName}", false);
+            refreshViews?.Invoke();
+            error = null;
+            return true;
+        }
+
+        private bool TryUpgradeBackpack(
+            IVariableInventoryViewData source,
+            InventoryItemData replacement,
+            out string error)
+        {
+            if (!TryDetachSourceForTransfer(
+                    source,
+                    replacement,
+                    out int sourceIndex,
+                    out EquipmentSlotId sourceEquipmentSlot,
+                    out PlayerInventoryState.EquipmentTakeReceipt sourceTakeReceipt,
+                    out error))
+            {
+                Report($"가방 교체 실패: {error}", true);
+                return false;
+            }
+
+            if (!playerState.TryUpgradeBackpack(
+                    replacement,
+                    out IVariableInventoryCellData previousBackpack,
+                    out PlayerInventoryState.BackpackUpgradeReceipt upgradeReceipt,
+                    out string upgradeError))
+            {
+                TryRestoreDetachedSource(
+                    source,
+                    sourceIndex,
+                    sourceEquipmentSlot,
+                    sourceTakeReceipt,
+                    replacement,
+                    upgradeError,
+                    out error);
+                refreshViews?.Invoke();
+                Report($"가방 교체 실패: {error}", true);
+                return false;
+            }
+
+            string storageFailure = null;
+            int? storageIndex = playerState.Inventory.GetInsertableId(previousBackpack);
+            if (storageIndex.HasValue)
+            {
+                try
+                {
+                    playerState.Inventory.InsertInventoryItem(
+                        storageIndex.Value,
+                        previousBackpack);
+                }
+                catch (Exception exception)
+                {
+                    storageFailure =
+                        $"기존 가방을 인벤토리에 보관하지 못했습니다: {exception.Message}";
+                }
+            }
+            else
+            {
+                storageFailure = "기존 가방을 보관할 인벤토리 공간이 없습니다.";
+            }
+
+            if (storageFailure != null)
+            {
+                if (!playerState.TryRestoreBackpackUpgrade(
+                        upgradeReceipt,
+                        out IVariableInventoryCellData restoredReplacement,
+                        out string upgradeRollbackError) ||
+                    !ReferenceEquals(restoredReplacement, replacement))
+                {
+                    error = $"{storageFailure} 가방 교체 복구도 실패했습니다: " +
+                            upgradeRollbackError;
+                    refreshViews?.Invoke();
+                    Report($"가방 교체 실패: {error}", true);
+                    return false;
+                }
+
+                TryRestoreDetachedSource(
+                    source,
+                    sourceIndex,
+                    sourceEquipmentSlot,
+                    sourceTakeReceipt,
+                    replacement,
+                    storageFailure,
+                    out error);
+                refreshViews?.Invoke();
+                Report($"가방 교체 실패: {error}", true);
+                return false;
+            }
+
+            Report($"가방 교체 완료: {replacement.Definition.DisplayName}", false);
             refreshViews?.Invoke();
             error = null;
             return true;
@@ -1477,6 +1599,22 @@ namespace FantasySurvival.Inventory
             bool sourceIsMerchant = IsNestedIn(externalInventory, source);
             bool destinationIsPlayer = IsPlayerOwned(destination);
             bool destinationIsMerchant = IsNestedIn(externalInventory, destination);
+            bool sourceIsEquipment = ReferenceEquals(source, playerState.Equipment);
+            bool destinationIsEquipment = ReferenceEquals(destination, playerState.Equipment);
+
+            if (sourceIsEquipment && destinationIsMerchant ||
+                sourceIsMerchant && destinationIsEquipment)
+            {
+                if (reportFailure)
+                {
+                    Report(
+                        "장비칸과 상인 사이의 직접 드래그 거래는 지원하지 않습니다. " +
+                        "빠른 판매를 사용하거나 먼저 인벤토리로 구매해 주세요.",
+                        true);
+                }
+
+                return VariableInventoryDropHandling.Reject;
+            }
 
             if (sourceIsMerchant && destinationIsMerchant)
             {
@@ -1667,32 +1805,30 @@ namespace FantasySurvival.Inventory
                 return;
             }
 
-            int? sourceIndex = source.GetId(item);
-            if (!sourceIndex.HasValue)
+            if (!TryDetachSourceForTransfer(
+                    source,
+                    item,
+                    out int sourceIndex,
+                    out EquipmentSlotId sourceEquipmentSlot,
+                    out PlayerInventoryState.EquipmentTakeReceipt sourceTakeReceipt,
+                    out error))
             {
-                Report("판매 원본 슬롯을 찾을 수 없습니다.", true);
-                return;
-            }
-
-            try
-            {
-                source.InsertInventoryItem(sourceIndex.Value, null);
-            }
-            catch (Exception exception)
-            {
-                Report($"판매 아이템을 분리하지 못했습니다: {exception.Message}", true);
+                Report($"판매 아이템을 분리하지 못했습니다: {error}", true);
                 return;
             }
 
             if (!playerState.Wallet.TryCredit(currency, price))
             {
-                try
+                if (!TryRestoreDetachedSource(
+                        source,
+                        sourceIndex,
+                        sourceEquipmentSlot,
+                        sourceTakeReceipt,
+                        item,
+                        "판매 대금을 확정하지 못했습니다.",
+                        out string rollbackError))
                 {
-                    source.InsertInventoryItem(sourceIndex.Value, item);
-                }
-                catch (Exception rollbackException)
-                {
-                    Debug.LogError($"Sale payment and source rollback both failed: {rollbackException.Message}");
+                    Debug.LogError($"Sale payment and source rollback both failed: {rollbackError}");
                 }
                 Report("판매 대금을 확정하지 못해 판매를 취소했습니다.", true);
                 refreshViews?.Invoke();
@@ -1885,7 +2021,7 @@ namespace FantasySurvival.Inventory
             return false;
         }
 
-        private static bool TryTransferFirstFit(
+        private bool TryTransferFirstFit(
             IVariableInventoryViewData source,
             IVariableInventoryViewData destination,
             IVariableInventoryCellData item,
@@ -1899,32 +2035,29 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            int? sourceIndex = source.GetId(item);
-            if (!sourceIndex.HasValue)
+            if (!TryDetachSourceForTransfer(
+                    source,
+                    item,
+                    out int sourceIndex,
+                    out EquipmentSlotId sourceEquipmentSlot,
+                    out PlayerInventoryState.EquipmentTakeReceipt sourceTakeReceipt,
+                    out error))
             {
-                error = "원본 슬롯을 찾을 수 없습니다.";
-                return false;
-            }
-
-            try
-            {
-                source.InsertInventoryItem(sourceIndex.Value, null);
-            }
-            catch (Exception exception)
-            {
-                error = $"원본 아이템을 분리하지 못했습니다: {exception.Message}";
                 return false;
             }
 
             int? destinationIndex = destination.GetInsertableId(item);
             if (!destinationIndex.HasValue)
             {
-                return TryRestoreSourceAfterFailedMove(
+                TryRestoreDetachedSource(
                     source,
-                    sourceIndex.Value,
+                    sourceIndex,
+                    sourceEquipmentSlot,
+                    sourceTakeReceipt,
                     item,
                     "대상 인벤토리에 들어갈 빈 공간이 없습니다.",
                     out error);
+                return false;
             }
 
             try
@@ -1933,12 +2066,15 @@ namespace FantasySurvival.Inventory
             }
             catch (Exception exception)
             {
-                return TryRestoreSourceAfterFailedMove(
+                TryRestoreDetachedSource(
                     source,
-                    sourceIndex.Value,
+                    sourceIndex,
+                    sourceEquipmentSlot,
+                    sourceTakeReceipt,
                     item,
                     $"대상 인벤토리 삽입에 실패했습니다: {exception.Message}",
                     out error);
+                return false;
             }
 
             receipt = new TransferReceipt
@@ -1946,39 +2082,159 @@ namespace FantasySurvival.Inventory
                 Source = source,
                 Destination = destination,
                 Item = item,
-                SourceIndex = sourceIndex.Value,
+                SourceIndex = sourceIndex,
+                SourceEquipmentSlot = sourceEquipmentSlot,
+                SourceEquipmentTakeReceipt = sourceTakeReceipt,
                 DestinationIndex = destinationIndex.Value
             };
             error = null;
             return true;
         }
 
-        private static bool TryRestoreSourceAfterFailedMove(
+        private bool TryDetachSourceForTransfer(
+            IVariableInventoryViewData source,
+            IVariableInventoryCellData item,
+            out int sourceIndex,
+            out EquipmentSlotId sourceEquipmentSlot,
+            out PlayerInventoryState.EquipmentTakeReceipt sourceTakeReceipt,
+            out string error)
+        {
+            sourceIndex = -1;
+            sourceEquipmentSlot = EquipmentSlotId.None;
+            sourceTakeReceipt = null;
+            error = null;
+            int? locatedIndex = source?.GetId(item);
+            if (!locatedIndex.HasValue)
+            {
+                error = "원본 슬롯을 찾을 수 없습니다.";
+                return false;
+            }
+
+            sourceIndex = locatedIndex.Value;
+            if (ReferenceEquals(source, playerState?.Equipment))
+            {
+                sourceEquipmentSlot = EquipmentSlotCatalog.GetSlotAtIndex(sourceIndex);
+                if (sourceEquipmentSlot == EquipmentSlotId.None)
+                {
+                    error = "장비 슬롯에서 원본 아이템을 찾지 못했습니다.";
+                    return false;
+                }
+
+                if (!playerState.TryTakeEquipment(
+                        sourceEquipmentSlot,
+                        out IVariableInventoryCellData detachedItem,
+                        out sourceTakeReceipt,
+                        out error))
+                {
+                    if (string.IsNullOrEmpty(error))
+                    {
+                        error = "장비 슬롯에서 원본 아이템을 분리하지 못했습니다.";
+                    }
+                    return false;
+                }
+
+                if (!ReferenceEquals(detachedItem, item))
+                {
+                    string mismatch = "장비 슬롯에서 다른 아이템이 분리되었습니다.";
+                    if (!playerState.TryRestoreTakenEquipment(
+                            sourceTakeReceipt,
+                            out string restoreError))
+                    {
+                        mismatch += $" 원본 장비 복구도 실패했습니다: {restoreError}";
+                    }
+
+                    sourceTakeReceipt = null;
+                    error = mismatch;
+                    return false;
+                }
+
+                return true;
+            }
+
+            try
+            {
+                source.InsertInventoryItem(sourceIndex, null);
+                error = null;
+                return true;
+            }
+            catch (Exception exception)
+            {
+                error = $"원본 아이템을 분리하지 못했습니다: {exception.Message}";
+                return false;
+            }
+        }
+
+        private bool TryRestoreDetachedSource(
             IVariableInventoryViewData source,
             int sourceIndex,
+            EquipmentSlotId sourceEquipmentSlot,
+            PlayerInventoryState.EquipmentTakeReceipt sourceTakeReceipt,
             IVariableInventoryCellData item,
             string failure,
             out string error)
         {
+            if (sourceEquipmentSlot != EquipmentSlotId.None)
+            {
+                string restoreError = "Player inventory state is missing.";
+                if (playerState != null &&
+                    sourceTakeReceipt != null &&
+                    playerState.TryRestoreTakenEquipment(sourceTakeReceipt, out restoreError))
+                {
+                    error = failure;
+                    return true;
+                }
+
+                error = $"{failure} 원본 장비 복구도 실패했습니다: {restoreError}";
+                Debug.LogError(error);
+                return false;
+            }
+
             try
             {
                 source.InsertInventoryItem(sourceIndex, item);
                 error = failure;
+                return true;
             }
             catch (Exception rollbackException)
             {
                 error = $"{failure} 원본 복구도 실패했습니다: {rollbackException.Message}";
                 Debug.LogError(error);
+                return false;
             }
-
-            return false;
         }
 
-        private static bool TryRollbackTransfer(TransferReceipt receipt, out string error)
+        private bool TryRollbackTransfer(TransferReceipt receipt, out string error)
         {
             try
             {
                 receipt.Destination.InsertInventoryItem(receipt.DestinationIndex, null);
+            }
+            catch (Exception exception)
+            {
+                error = $"Could not detach the rollback destination item: {exception.Message}";
+                return false;
+            }
+
+            if (receipt.SourceEquipmentSlot != EquipmentSlotId.None)
+            {
+                string restoreError = receipt.SourceEquipmentTakeReceipt == null
+                    ? "The equipment-take receipt is missing."
+                    : null;
+                if (receipt.SourceEquipmentTakeReceipt != null &&
+                    playerState.TryRestoreTakenEquipment(
+                        receipt.SourceEquipmentTakeReceipt,
+                        out restoreError))
+                {
+                    error = null;
+                    return true;
+                }
+
+                error = $"Could not restore the rollback equipment item: {restoreError}";
+                return false;
+            }
+
+            try
+            {
                 receipt.Source.InsertInventoryItem(receipt.SourceIndex, receipt.Item);
                 error = null;
                 return true;

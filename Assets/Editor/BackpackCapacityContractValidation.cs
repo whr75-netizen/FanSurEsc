@@ -11,7 +11,7 @@ namespace FantasySurvival.EditorTools
 {
     /// <summary>
     /// Art- and scene-independent checks for Backpack capacity, deterministic repack,
-    /// exact rollback, direct upgrades, and save/restore dimensions.
+    /// exact rollback, previewed direct replacements, and save/restore dimensions.
     /// </summary>
     public static class BackpackCapacityContractValidation
     {
@@ -40,6 +40,9 @@ namespace FantasySurvival.EditorTools
                 ItemDefinition wideSmallBackpack = AddDefinition(
                     definitions, 900004, "Validation Wide Small Backpack", 4, 4,
                     EquipmentSlotType.Backpack, 1);
+                ItemDefinition fragmentedBackpack = AddDefinition(
+                    definitions, 900007, "Validation Fragmented Backpack", 2, 2,
+                    EquipmentSlotType.Backpack, 3);
                 ItemDefinition marker = AddDefinition(
                     definitions, 900005, "Validation Marker", 1, 1,
                     EquipmentSlotType.None, 0);
@@ -51,8 +54,13 @@ namespace FantasySurvival.EditorTools
                 ValidateRemovalRepackReceiptAndSave(
                     largeBackpack, marker, rotatedMarker, database);
                 ValidateBlockedRemovalIsAtomic(smallBackpack, marker, database);
-                ValidateCoordinatorUpgradeAndSmallerBlock(
-                    smallBackpack, mediumBackpack, largeBackpack, database);
+                ValidateCoordinatorReplacementPreview(
+                    smallBackpack,
+                    mediumBackpack,
+                    largeBackpack,
+                    fragmentedBackpack,
+                    marker,
+                    database);
                 ValidateCoordinatorUpgradeRollback(
                     wideSmallBackpack, mediumBackpack, marker);
                 ValidateDiscardRestoresBaseHeight(smallBackpack, marker);
@@ -61,9 +69,11 @@ namespace FantasySurvival.EditorTools
                 Debug.Log(
                     "Backpack capacity validation passed: rows append below base 8x9; " +
                     "removal repacks when possible and remains unchanged when impossible; " +
-                    "drag rollback restores exact slots/rotation; larger direct replacement " +
-                    "stores the old backpack; smaller/equal replacement is blocked; failed " +
-                    "replacement rolls back; discard and save/restore preserve dimensions.");
+                    "drag rollback restores exact slots/rotation; larger, equal, and smaller " +
+                    "direct replacements preserve the current layout when possible and apply " +
+                    "a previewed repack only when required; the old backpack is included in " +
+                    "the fit plan; failed replacement remains exact; discard and save/restore " +
+                    "preserve dimensions.");
             }
             finally
             {
@@ -234,19 +244,24 @@ namespace FantasySurvival.EditorTools
                 "Overflowing Backpack sale changed inventory placement.");
         }
 
-        private static void ValidateCoordinatorUpgradeAndSmallerBlock(
+        private static void ValidateCoordinatorReplacementPreview(
             ItemDefinition smallBackpackDefinition,
             ItemDefinition mediumBackpackDefinition,
             ItemDefinition largeBackpackDefinition,
+            ItemDefinition fragmentedBackpackDefinition,
+            ItemDefinition markerDefinition,
             ItemDatabase database)
         {
             PlayerInventoryState state = CreateState();
             var smallBackpack = new InventoryItemData(smallBackpackDefinition);
             var largeBackpack = new InventoryItemData(largeBackpackDefinition);
+            var stableMarker = new InventoryItemData(markerDefinition);
             Require(
                 state.TryPlaceEquipment(EquipmentSlotId.Backpack, smallBackpack, out string error),
                 error);
             state.Inventory.InsertInventoryItem(0, largeBackpack);
+            state.Inventory.InsertInventoryItem(8, stableMarker);
+            int stableMarkerIndex = RequireIndex(state.Inventory, stableMarker);
 
             var sourceView = new BoundViewStub(state.Inventory);
             var coordinator = new InventoryTransferCoordinator(state, null, null, null);
@@ -258,35 +273,50 @@ namespace FantasySurvival.EditorTools
                 ReferenceEquals(state.Equipment.GetItem(EquipmentSlotId.Backpack), largeBackpack) &&
                 state.Inventory.CapacityHeight == BaseHeight + 3 &&
                 ReferenceEquals(smallBackpack.InventoryOwner, state.Inventory) &&
-                state.Inventory.GetId(smallBackpack).HasValue,
+                state.Inventory.GetId(smallBackpack).HasValue &&
+                RequireIndex(state.Inventory, stableMarker) == stableMarkerIndex,
                 "Larger replacement did not equip the new bag and store the old bag.");
 
             var mediumBackpack = new InventoryItemData(mediumBackpackDefinition);
             int mediumIndex = state.Inventory.GetInsertableId(mediumBackpack) ?? -1;
             Require(mediumIndex >= 0, "Could not prepare the smaller Backpack fixture.");
             state.Inventory.InsertInventoryItem(mediumIndex, mediumBackpack);
-            IVariableInventoryCellData[] before =
-                (IVariableInventoryCellData[])state.Inventory.CellData.Clone();
+            int storedSmallBackpackIndex = RequireIndex(state.Inventory, smallBackpack);
             Require(
-                !coordinator.CanEquip(sourceView, mediumBackpack),
-                "Smaller Backpack was offered as a direct replacement.");
+                coordinator.CanEquip(sourceView, mediumBackpack),
+                "A smaller Backpack with sufficient previewed space was not offered.");
             Require(
-                !coordinator.TryEquip(sourceView, mediumBackpack, out error),
-                "Smaller Backpack directly replaced the equipped larger Backpack.");
+                coordinator.TryEquip(sourceView, mediumBackpack, out error),
+                error);
             Require(
-                ReferenceEquals(state.Equipment.GetItem(EquipmentSlotId.Backpack), largeBackpack) &&
-                state.Inventory.CapacityHeight == BaseHeight + 3,
-                "Blocked smaller replacement changed equipment or capacity.");
-            RequireGridReferences(
-                state.Inventory, before,
-                "Blocked smaller replacement changed inventory placement.");
+                ReferenceEquals(state.Equipment.GetItem(EquipmentSlotId.Backpack), mediumBackpack) &&
+                state.Inventory.CapacityHeight == BaseHeight + 2 &&
+                ReferenceEquals(largeBackpack.InventoryOwner, state.Inventory) &&
+                state.Inventory.GetId(largeBackpack).HasValue &&
+                RequireIndex(state.Inventory, smallBackpack) == storedSmallBackpackIndex &&
+                RequireIndex(state.Inventory, stableMarker) == stableMarkerIndex,
+                "Smaller replacement did not preserve the already-fitting layout.");
+
+            var equalBackpack = new InventoryItemData(mediumBackpackDefinition);
+            int equalIndex = state.Inventory.GetInsertableId(equalBackpack) ?? -1;
+            Require(equalIndex >= 0, "Could not prepare the equal-capacity Backpack fixture.");
+            state.Inventory.InsertInventoryItem(equalIndex, equalBackpack);
+            Require(
+                coordinator.CanEquip(sourceView, equalBackpack) &&
+                coordinator.TryEquip(sourceView, equalBackpack, out error),
+                error ?? "Equal-capacity Backpack replacement was not allowed.");
+            Require(
+                ReferenceEquals(state.Equipment.GetItem(EquipmentSlotId.Backpack), equalBackpack) &&
+                state.Inventory.CapacityHeight == BaseHeight + 2 &&
+                ReferenceEquals(mediumBackpack.InventoryOwner, state.Inventory),
+                "Equal-capacity replacement lost a Backpack or changed capacity.");
 
             Require(
                 InventorySaveCodec.TryCapture(
                     state, database, out PlayerItemStateSaveData save, out error),
                 error);
             Require(
-                save.inventoryHeight == BaseHeight + 3,
+                save.inventoryHeight == BaseHeight + 2,
                 "Expanded Backpack saved incorrect dimensions.");
             Require(
                 InventorySaveCodec.TryRestore(
@@ -294,10 +324,70 @@ namespace FantasySurvival.EditorTools
                     out PlayerInventoryState restored, out error),
                 error);
             Require(
-                restored.Inventory.CapacityHeight == BaseHeight + 3 &&
+                restored.Inventory.CapacityHeight == BaseHeight + 2 &&
                 restored.Equipment.GetItem(EquipmentSlotId.Backpack) is InventoryItemData restoredBag &&
-                restoredBag.Definition.Id == largeBackpackDefinition.Id,
+                restoredBag.Definition.Id == mediumBackpackDefinition.Id,
                 "Expanded Backpack save round-trip lost capacity or equipment.");
+
+            ValidateFragmentedReplacementPreview(
+                smallBackpackDefinition,
+                fragmentedBackpackDefinition,
+                markerDefinition);
+        }
+
+        private static void ValidateFragmentedReplacementPreview(
+            ItemDefinition smallBackpackDefinition,
+            ItemDefinition fragmentedBackpackDefinition,
+            ItemDefinition markerDefinition)
+        {
+            PlayerInventoryState state = CreateState();
+            var equippedBackpack = new InventoryItemData(fragmentedBackpackDefinition);
+            var replacement = new InventoryItemData(smallBackpackDefinition);
+            Require(
+                state.TryPlaceEquipment(
+                    EquipmentSlotId.Backpack,
+                    equippedBackpack,
+                    out string error),
+                error);
+            state.Inventory.InsertInventoryItem(0, replacement);
+
+            InventoryItemData trackedMarker = null;
+            int targetHeight = BaseHeight + smallBackpackDefinition.BackpackBonusRows;
+            for (int y = 0; y < targetHeight; y++)
+            {
+                for (int x = 0; x < BaseWidth; x++)
+                {
+                    int index = x + y * BaseWidth;
+                    if (((x + y) & 1) != 0 || index == 0)
+                    {
+                        continue;
+                    }
+
+                    var marker = new InventoryItemData(markerDefinition);
+                    state.Inventory.InsertInventoryItem(index, marker);
+                    if (index == 4)
+                    {
+                        trackedMarker = marker;
+                    }
+                }
+            }
+
+            Require(trackedMarker != null, "Fragmented replacement fixture has no marker.");
+            int trackedBefore = RequireIndex(state.Inventory, trackedMarker);
+            var coordinator = new InventoryTransferCoordinator(state, null, null, null);
+            var sourceView = new BoundViewStub(state.Inventory);
+            Require(
+                coordinator.TryEquip(sourceView, replacement, out error),
+                error);
+            Require(
+                ReferenceEquals(state.Equipment.GetItem(EquipmentSlotId.Backpack), replacement) &&
+                state.Inventory.CapacityHeight == targetHeight &&
+                ReferenceEquals(equippedBackpack.InventoryOwner, state.Inventory) &&
+                state.Inventory.GetId(equippedBackpack).HasValue,
+                "Previewed repack did not store the old Backpack in the smaller grid.");
+            Require(
+                RequireIndex(state.Inventory, trackedMarker) != trackedBefore,
+                "The fragmented fixture unexpectedly succeeded without applying its previewed repack.");
         }
 
         private static void ValidateCoordinatorUpgradeRollback(

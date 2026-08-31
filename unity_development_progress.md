@@ -1918,3 +1918,11 @@ Interactable (abstract base class)
 - `[습득]` 바닥 구는 별도 입력 polling 없이 기존 `PlayerInteractor`의 최근접 E 후보가 된다. `InventoryTransferCoordinator`는 Storage Shift 이동의 stack 우선·첫 유효 빈칸 트랜잭션을 재사용해 부분 습득 잔량을 같은 바닥 owner에 남기며, 비중첩 item도 기존 first-fit을 사용한다. 드래그 중 E 습득은 임시 빈칸과 원복 충돌을 막기 위해 차단한다.
 - `[Unity Editor 호출 확인]` C# compile과 persistent prefab의 실제 Player/External Canvas·Stash 계층을 확인했다. 임시 runtime item으로 stage→rollback 동일 참조·owner 해제, `8/10 + 바닥 5`에서 기존 stack `10/10` 우선·바닥 잔량 3, 빈칸 해제 뒤 같은 잔량 item이 slot 1로 이동하는 계약을 한 번 검증했다. 실제 마우스 drag·물리 E 입력과 Game View 구 표현은 미검증이다.
 - `[현재 경계]` 작은 구는 텍스처 전 시험 표현이다. 바닥 entity는 ordinary save와 원정 Recovery에 아직 기록되지 않으므로 씬 전환·강제종료 영속성을 보장하지 않는다. 정식 sprite·드롭 위치 정책·저장 record는 후속이다.
+
+---
+
+## 92. 가방 교체 미리보기 재배치 정정 `[ITEM-01]`
+
+- `[사용자 정정·규칙][2026-08-31]` §90의 같거나 작은 가방 직접 교체 차단을 폐기했다. 교체로 잃는 행을 제외한 목표 grid에 현재 root 아이템과 벗는 가방까지 실제로 모두 배치되는지가 유일한 판정이다. 이는 `+2` 가방 제거 시 현재 확장 grid에 폭 전체의 가상 1행 두 개를 예약하는 계산과 동치다.
+- `[구현·원자성]` 먼저 현재 셀·회전을 유지한 채 벗는 가방 자리까지 찾는다. 그대로 들어가면 기존 item을 움직이지 않는다. 실패할 때만 기존 결정적 greedy→회전 포함 제한 exact 탐색으로 새 배치를 메모리에서 완성하고, 성공한 계획만 적용한다. 계획 실패·탐색 한도 도달·후속 장비 교체 실패에는 미리보기 결과를 버리고 높이·셀·회전·owner·장비와 교체 가방 source를 그대로 복구한다.
+- `[Unity Editor 호출 확인]` 강제 synchronous refresh와 C# compile 뒤 Backpack 계약 검증을 실행했다. 큰→작은 교체의 기존 배치 유지, 같은 용량 교체, 2×2 기존 가방 자리가 없는 checkerboard에서 미리보기 재배치 후 성공, 기존 가방까지 합산하면 면적 초과인 교체의 완전 불변, 작은 가방 상태 Save 왕복이 모두 통과했다. 실제 마우스 drag와 Player build는 미검증이다.

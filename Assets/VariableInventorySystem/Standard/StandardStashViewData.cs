@@ -229,6 +229,62 @@ namespace VariableInventorySystem
             out HeightResizeReceipt receipt,
             out string error)
         {
+            return TryResizeHeightInternal(
+                expectedCurrentHeight,
+                newHeight,
+                null,
+                out _,
+                out _,
+                out receipt,
+                out error);
+        }
+
+        /// <summary>
+        /// Previews the target layout with one external item included as reserved space.
+        /// Current placements are preserved when they and the reserved item already fit;
+        /// otherwise every item is deterministically repacked. The reserved item is not
+        /// inserted or mutated, so the caller can complete a cross-container transaction
+        /// only after the full layout has been proven possible.
+        /// </summary>
+        public bool TryResizeHeightReservingItem(
+            int expectedCurrentHeight,
+            int newHeight,
+            IVariableInventoryCellData reservedItem,
+            out int reservedCellIndex,
+            out bool reservedRotation,
+            out HeightResizeReceipt receipt,
+            out string error)
+        {
+            if (reservedItem == null)
+            {
+                reservedCellIndex = -1;
+                reservedRotation = false;
+                receipt = null;
+                error = "The item whose space must be reserved is missing.";
+                return false;
+            }
+
+            return TryResizeHeightInternal(
+                expectedCurrentHeight,
+                newHeight,
+                reservedItem,
+                out reservedCellIndex,
+                out reservedRotation,
+                out receipt,
+                out error);
+        }
+
+        private bool TryResizeHeightInternal(
+            int expectedCurrentHeight,
+            int newHeight,
+            IVariableInventoryCellData reservedItem,
+            out int reservedCellIndex,
+            out bool reservedRotation,
+            out HeightResizeReceipt receipt,
+            out string error)
+        {
+            reservedCellIndex = -1;
+            reservedRotation = false;
             receipt = null;
             if (CapacityHeight != expectedCurrentHeight)
             {
@@ -253,7 +309,7 @@ namespace VariableInventorySystem
                 return false;
             }
 
-            if (newHeight == CapacityHeight)
+            if (newHeight == CapacityHeight && reservedItem == null)
             {
                 error = null;
                 return true;
@@ -264,15 +320,76 @@ namespace VariableInventorySystem
                 return false;
             }
 
+            ResizeItem reservedResizeItem = null;
+            if (reservedItem != null)
+            {
+                if (GetId(reservedItem).HasValue)
+                {
+                    error = "The reserved item is already present in this inventory grid.";
+                    return false;
+                }
+
+                int reservedWidth = reservedItem.Width;
+                int reservedHeight = reservedItem.Height;
+                if (reservedWidth <= 0 || reservedHeight <= 0)
+                {
+                    error = $"The reserved item has an invalid " +
+                            $"{reservedWidth}x{reservedHeight} footprint.";
+                    return false;
+                }
+
+                long reservedArea = (long)reservedWidth * reservedHeight;
+                if (reservedArea > int.MaxValue)
+                {
+                    error = "The reserved item is too large to repack.";
+                    return false;
+                }
+
+                reservedResizeItem = new ResizeItem
+                {
+                    Item = reservedItem,
+                    SourceIndex = CellData.Length,
+                    OriginalRotation = reservedItem.IsRotate,
+                    Area = (int)reservedArea,
+                    LongestSide = Math.Max(reservedWidth, reservedHeight)
+                };
+            }
+
             var placements = new Dictionary<IVariableInventoryCellData, ResizePlacement>(
                 ReferenceCellComparer.Instance);
             var candidateMask = new bool[(int)newCellCount];
-            if (!TryKeepCurrentPlacements(items, newHeight, candidateMask, placements))
+            bool keptCurrentPlacements =
+                TryKeepCurrentPlacements(items, newHeight, candidateMask, placements);
+            if (keptCurrentPlacements && reservedResizeItem != null)
+            {
+                if (TryPlaceFirstAvailable(
+                        reservedResizeItem,
+                        newHeight,
+                        candidateMask,
+                        out ResizePlacement reservation))
+                {
+                    placements.Add(reservedItem, reservation);
+                }
+                else
+                {
+                    keptCurrentPlacements = false;
+                }
+            }
+
+            if (!keptCurrentPlacements)
             {
                 Array.Clear(candidateMask, 0, candidateMask.Length);
                 placements.Clear();
+                List<ResizeItem> plannedItems = items;
+                if (reservedResizeItem != null)
+                {
+                    plannedItems = new List<ResizeItem>(items.Count + 1);
+                    plannedItems.AddRange(items);
+                    plannedItems.Add(reservedResizeItem);
+                }
+
                 if (!TryBuildRepackedLayout(
-                        items,
+                        plannedItems,
                         newHeight,
                         candidateMask,
                         placements,
@@ -292,6 +409,13 @@ namespace VariableInventorySystem
             if (!TryApplyPlannedRotations(items, placements, out error))
             {
                 return false;
+            }
+
+            if (reservedResizeItem != null)
+            {
+                ResizePlacement reservation = placements[reservedItem];
+                reservedCellIndex = reservation.CellIndex;
+                reservedRotation = reservation.IsRotated;
             }
 
             var beforeRotations = new Dictionary<IVariableInventoryCellData, bool>(
@@ -318,7 +442,7 @@ namespace VariableInventorySystem
             };
             CellData = candidateCells;
             CapacityHeight = newHeight;
-            mask = candidateMask;
+            UpdateMask();
             IsDirty = true;
             error = null;
             return true;

@@ -563,6 +563,9 @@ namespace FantasySurvival.Inventory
             internal IVariableInventoryCellData PreviousBackpack;
             internal IVariableInventoryCellData ReplacementBackpack;
             internal StandardStashViewData.HeightResizeReceipt InventoryResize;
+            internal int ReservedInventoryIndex;
+            internal bool PreviousBackpackOriginalRotation;
+            internal bool PreviousBackpackReservedRotation;
             internal bool IsConsumed;
         }
 
@@ -993,16 +996,9 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            if (!TryGetBackpackBonusRows(currentBackpack, out int currentRows, out error) ||
-                !TryGetBackpackBonusRows(replacement, out int replacementRows, out error))
+            if (!TryGetBackpackBonusRows(currentBackpack, out _, out error) ||
+                !TryGetBackpackBonusRows(replacement, out _, out error))
             {
-                return false;
-            }
-
-            if (replacementRows <= currentRows)
-            {
-                error = $"A backpack can only be directly replaced by a larger one " +
-                        $"({currentRows} bonus rows -> {replacementRows} bonus rows was requested).";
                 return false;
             }
 
@@ -1047,9 +1043,13 @@ namespace FantasySurvival.Inventory
             }
 
             int previousHeight = Inventory.CapacityHeight;
-            if (!Inventory.TryResizeHeight(
+            bool previousBackpackOriginalRotation = currentBackpack.IsRotate;
+            if (!Inventory.TryResizeHeightReservingItem(
                     previousHeight,
                     targetHeight,
+                    currentBackpack,
+                    out int reservedInventoryIndex,
+                    out bool reservedBackpackRotation,
                     out StandardStashViewData.HeightResizeReceipt inventoryResize,
                     out error))
             {
@@ -1074,8 +1074,42 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            if (ReferenceEquals(removedBackpack, currentBackpack))
+            {
+                removedBackpack.IsRotate = reservedBackpackRotation;
+            }
+
+            if (!ReferenceEquals(removedBackpack, currentBackpack) ||
+                !Inventory.CheckInsert(reservedInventoryIndex, removedBackpack))
+            {
+                if (removedBackpack != null)
+                {
+                    removedBackpack.IsRotate = previousBackpackOriginalRotation;
+                }
+                bool equipmentRolledBack = Equipment.TryReplaceWithoutNotification(
+                    EquipmentSlotId.Backpack,
+                    replacement,
+                    currentBackpack,
+                    out IVariableInventoryCellData rolledBackReplacement,
+                    out string equipmentRollbackError);
+                string capacityRollbackError = null;
+                bool capacityRolledBack = equipmentRolledBack &&
+                                          ReferenceEquals(rolledBackReplacement, replacement) &&
+                                          Inventory.TryRestoreHeightResize(
+                                              inventoryResize,
+                                              out capacityRollbackError);
+                error = "The previewed slot for the previous backpack became invalid." +
+                        (equipmentRolledBack && capacityRolledBack
+                            ? string.Empty
+                            : $" Rollback was incomplete: {equipmentRollbackError}" +
+                              (capacityRolledBack ? string.Empty : $" {capacityRollbackError}"));
+                removedBackpack = null;
+                return false;
+            }
+
             if (!TryValidateInventoryCapacity(out string validationError))
             {
+                removedBackpack.IsRotate = previousBackpackOriginalRotation;
                 bool equipmentRolledBack = Equipment.TryReplaceWithoutNotification(
                     EquipmentSlotId.Backpack,
                     replacement,
@@ -1104,7 +1138,10 @@ namespace FantasySurvival.Inventory
                 Owner = this,
                 PreviousBackpack = removedBackpack,
                 ReplacementBackpack = replacement,
-                InventoryResize = inventoryResize
+                InventoryResize = inventoryResize,
+                ReservedInventoryIndex = reservedInventoryIndex,
+                PreviousBackpackOriginalRotation = previousBackpackOriginalRotation,
+                PreviousBackpackReservedRotation = reservedBackpackRotation
             };
             error = null;
             return true;
@@ -1132,9 +1169,15 @@ namespace FantasySurvival.Inventory
                     Equipment.GetItem(EquipmentSlotId.Backpack),
                     receipt.ReplacementBackpack) ||
                 (receipt.PreviousBackpack is IVariableInventoryOwnedCellData previousOwned &&
-                 previousOwned.InventoryOwner != null))
+                 previousOwned.InventoryOwner != null) ||
+                receipt.PreviousBackpack.IsRotate !=
+                receipt.PreviousBackpackReservedRotation ||
+                !Inventory.CheckInsert(
+                    receipt.ReservedInventoryIndex,
+                    receipt.PreviousBackpack))
             {
-                error = "The backpack slot or previous backpack changed before rollback.";
+                error = "The backpack slot, previewed storage space, or previous backpack " +
+                        "changed before rollback.";
                 return false;
             }
 
@@ -1161,6 +1204,9 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            receipt.PreviousBackpack.IsRotate =
+                receipt.PreviousBackpackOriginalRotation;
+
             if (!Inventory.TryRestoreHeightResize(receipt.InventoryResize, out string resizeError))
             {
                 bool equipmentRolledBack = Equipment.TryReplaceWithoutNotification(
@@ -1169,6 +1215,12 @@ namespace FantasySurvival.Inventory
                     receipt.ReplacementBackpack,
                     out IVariableInventoryCellData rolledBackPrevious,
                     out string equipmentRollbackError);
+                if (equipmentRolledBack &&
+                    ReferenceEquals(rolledBackPrevious, receipt.PreviousBackpack))
+                {
+                    receipt.PreviousBackpack.IsRotate =
+                        receipt.PreviousBackpackReservedRotation;
+                }
                 error = $"The original backpack capacity/layout could not be restored: {resizeError}" +
                         (equipmentRolledBack &&
                          ReferenceEquals(rolledBackPrevious, receipt.PreviousBackpack)

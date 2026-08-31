@@ -12,7 +12,7 @@ using FantasySurvival.Trading;
 using VariableInventorySystem;
 
 [RequireComponent(typeof(PlayerInteractor))]
-public class InventoryUIManager : MonoBehaviour
+public class InventoryUIManager : MonoBehaviour, IWorldItemPickupReceiver
 {
     public const int DefaultInventoryWidth = 8;
     public const int DefaultInventoryHeight = 9;
@@ -59,6 +59,7 @@ public class InventoryUIManager : MonoBehaviour
     private bool isExternalViewRegistered = false;
     private bool inputBlocked;
     private InventoryTransferCoordinator transferCoordinator;
+    private InventoryWorldDropZone worldDropZone;
 
     private enum MerchantCategory
     {
@@ -166,8 +167,13 @@ public class InventoryUIManager : MonoBehaviour
             playerState,
             RefreshOpenViews,
             NotifyInventoryContentsChanged,
-            ReportInventoryStatus);
+            ReportInventoryStatus,
+            new WorldItemDropService(transform));
         standardCore.SetTransferController(transferCoordinator);
+        if (!TryCreateWorldDropZone(out string worldDropZoneError))
+        {
+            Debug.LogError(worldDropZoneError, this);
+        }
         standardCore.HoveredCellChanged += HandleHoveredCellChanged;
         standardCore.ItemContextRequested += HandleItemContextRequested;
         standardCore.AlternateItemActionRequested += HandleAlternateItemActionRequested;
@@ -178,6 +184,104 @@ public class InventoryUIManager : MonoBehaviour
         BindCapacity(playerState);
         BindWallet(playerState.Wallet);
         PlayerStateChanged?.Invoke(playerState);
+    }
+
+    public bool TryPickupWorldItem(
+        WorldItemPickup pickup,
+        out string error)
+    {
+        if (!isActiveAndEnabled || inputBlocked)
+        {
+            error = "현재는 아이템을 습득할 수 없습니다.";
+            return false;
+        }
+
+        if (standardCore == null || standardCore.IsDragging() || IsAnyInventoryOpen)
+        {
+            error = "인벤토리 아이템을 조작하는 중에는 바닥 아이템을 습득할 수 없습니다.";
+            return false;
+        }
+
+        if (transferCoordinator == null)
+        {
+            error = "Player 인벤토리 이전 경계가 준비되지 않았습니다.";
+            return false;
+        }
+
+        return transferCoordinator.TryPickupWorldItem(pickup, out error);
+    }
+
+    private bool TryCreateWorldDropZone(out string error)
+    {
+        RectTransform playerRect = playerInventoryPanel?.transform as RectTransform;
+        RectTransform equipmentRect = equipmentPanel?.transform as RectTransform;
+        RectTransform playerStashRect = playerStashView?.transform as RectTransform;
+        RectTransform externalStashRect = externalStashView?.transform as RectTransform;
+        RectTransform merchantControlsRect =
+            merchantControlsRoot?.transform as RectTransform;
+        Canvas playerCanvas = playerInventoryPanel != null
+            ? playerInventoryPanel.GetComponent<Canvas>()
+            : null;
+        if (playerRect == null || playerCanvas == null ||
+            equipmentRect == null || playerStashRect == null ||
+            externalStashRect == null || merchantControlsRect == null)
+        {
+            error = "인벤토리 외곽 DropZone을 만들 Player Canvas 또는 실제 UI Rect가 없습니다.";
+            return false;
+        }
+
+        Transform existing = playerRect.Find("WorldItemDropZone");
+        GameObject zoneObject;
+        if (existing != null)
+        {
+            zoneObject = existing.gameObject;
+            worldDropZone = zoneObject.GetComponent<InventoryWorldDropZone>();
+            if (worldDropZone == null)
+            {
+                worldDropZone = zoneObject.AddComponent<InventoryWorldDropZone>();
+            }
+        }
+        else
+        {
+            zoneObject = new GameObject(
+                "WorldItemDropZone",
+                typeof(RectTransform),
+                typeof(CanvasRenderer),
+                typeof(Image),
+                typeof(InventoryWorldDropZone));
+            zoneObject.layer = playerInventoryPanel.layer;
+            zoneObject.transform.SetParent(playerRect, false);
+            worldDropZone = zoneObject.GetComponent<InventoryWorldDropZone>();
+        }
+
+        RectTransform zoneRect = zoneObject.transform as RectTransform;
+        if (zoneRect == null || worldDropZone == null)
+        {
+            error = "인벤토리 외곽 DropZone 구성요소를 만들지 못했습니다.";
+            return false;
+        }
+
+        zoneRect.anchorMin = Vector2.zero;
+        zoneRect.anchorMax = Vector2.one;
+        zoneRect.pivot = new Vector2(0.5f, 0.5f);
+        zoneRect.offsetMin = Vector2.zero;
+        zoneRect.offsetMax = Vector2.zero;
+        zoneRect.localScale = Vector3.one;
+        zoneRect.SetAsFirstSibling();
+        worldDropZone.Configure(
+            standardCore,
+            this,
+            playerStashRect,
+            equipmentRect,
+            externalStashRect,
+            merchantControlsRect,
+            goldAmountText?.transform.parent as RectTransform,
+            silverAmountText?.transform.parent as RectTransform,
+            playerInventoryStatusText?.rectTransform,
+            itemTooltipView?.transform as RectTransform,
+            stackSplitDialog?.transform as RectTransform);
+        error = null;
+        return true;
     }
 
     bool TryCreateStartingInventory(out StandardStashViewData inventoryData, out string error)

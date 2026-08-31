@@ -34,6 +34,7 @@ namespace VariableInventorySystem
         private Func<IVariableInventoryCellData, int, int, bool> carryPartialTransferRecorded;
         private IVariableInventoryStackMergeReceipt pendingStackMergeRecovery;
         private IVariableInventorySinglePlacementReceipt pendingSinglePlacementRecovery;
+        private IVariableInventoryExternalDropReceipt pendingExternalDropRecovery;
         private PointerEventData clickCarryPointerEvent;
         private EventSystem clickCarryEventSystem;
 
@@ -42,6 +43,8 @@ namespace VariableInventorySystem
         // --- 추가/기존 메소드 ---
         public bool IsDragging() => effectCell?.CellData != null;
         public bool IsClickCarryActive => carryMode == VariableInventoryCarryMode.Click && IsDragging();
+        public bool IsPointerDragCarryActive =>
+            carryMode == VariableInventoryCarryMode.Pointer && IsDragging();
         protected IVariableInventoryView CarryOriginView => originView;
         private bool HasCarryTransaction => carryRollback != null || carryCommit != null;
         public void SetTransferController(IVariableInventoryTransferController controller)
@@ -83,6 +86,31 @@ namespace VariableInventorySystem
             }
 
             InventoryViews.Remove(v);
+        }
+
+        public bool IsScreenPointOverRegisteredInventory(
+            Vector2 screenPoint,
+            Camera eventCamera)
+        {
+            foreach (IVariableInventoryView view in InventoryViews)
+            {
+                if (!(view is MonoBehaviour behaviour) ||
+                    !behaviour.isActiveAndEnabled ||
+                    !(behaviour.transform is RectTransform rectTransform))
+                {
+                    continue;
+                }
+
+                if (RectTransformUtility.RectangleContainsScreenPoint(
+                        rectTransform,
+                        screenPoint,
+                        eventCamera))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
         protected virtual void OnCellClick(IVariableInventoryCell cell) { }
         protected virtual void OnCellOptionClick(IVariableInventoryCell cell) { }
@@ -229,7 +257,9 @@ namespace VariableInventorySystem
                 return false;
             }
 
-            if (!TryRecoverPendingSinglePlacement() || !TryRecoverPendingStackMerge())
+            if (!TryRecoverPendingExternalDrop() ||
+                !TryRecoverPendingSinglePlacement() ||
+                !TryRecoverPendingStackMerge())
             {
                 return false;
             }
@@ -428,6 +458,106 @@ namespace VariableInventorySystem
             FinishCurrentDrag();
         }
 
+        /// <summary>
+        /// Resolves an ordinary pointer drag through an explicit receiver outside
+        /// all registered inventory views. A UI DropZone calls this before the
+        /// source EndDrag event; false leaves the carry untouched so EndDrag can
+        /// perform the existing source rollback.
+        /// </summary>
+        public bool TryDropPointerCarryToExternalReceiver()
+        {
+            if (!IsDragging() || carryMode != VariableInventoryCarryMode.Pointer ||
+                HasCarryTransaction || originView == null ||
+                !(transferController is IVariableInventoryExternalDropController controller))
+            {
+                return false;
+            }
+
+            if (!TryRecoverPendingExternalDrop() ||
+                !TryRecoverPendingSinglePlacement() ||
+                !TryRecoverPendingStackMerge())
+            {
+                return false;
+            }
+
+            IVariableInventoryCellData transferredItem = effectCell.CellData;
+            if (!controller.TryStageExternalDrop(
+                    originView,
+                    transferredItem,
+                    out IVariableInventoryExternalDropReceipt receipt,
+                    out string error))
+            {
+                if (receipt != null)
+                {
+                    pendingExternalDropRecovery = receipt;
+                    if (!TryRecoverPendingExternalDrop())
+                    {
+                        Debug.LogError(
+                            "[Core] External drop stage and rollback both failed. " +
+                            "Carry state was preserved for recovery.",
+                            this);
+                        return false;
+                    }
+                }
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    Debug.LogWarning($"[Core] External drop rejected: {error}", this);
+                }
+
+                return false;
+            }
+
+            if (receipt == null ||
+                transferredItem is IVariableInventoryOwnedCellData owned &&
+                owned.InventoryOwner == null)
+            {
+                if (receipt != null)
+                {
+                    pendingExternalDropRecovery = receipt;
+                    if (!TryRecoverPendingExternalDrop())
+                    {
+                        Debug.LogError(
+                            "[Core] Invalid external drop receipt could not be rolled back. " +
+                            "Carry state was preserved for recovery.",
+                            this);
+                    }
+                }
+
+                return false;
+            }
+
+            if (!receipt.TryCommit(out string commitError))
+            {
+                pendingExternalDropRecovery = receipt;
+                if (!TryRecoverPendingExternalDrop())
+                {
+                    Debug.LogError(
+                        $"[Core] External drop commit and rollback both failed: {commitError}. " +
+                        "Carry state was preserved for recovery.",
+                        this);
+                }
+                else
+                {
+                    Debug.LogError(
+                        $"[Core] External drop commit failed and was rolled back: {commitError}",
+                        this);
+                }
+
+                return false;
+            }
+
+            foreach (IVariableInventoryView inventoryView in InventoryViews)
+            {
+                inventoryView?.OnDroped(true);
+            }
+
+            ClearDragState();
+            transferController.OnInventoryContentsChanged();
+            Debug.Log("[Core] Pointer carry was committed to an external receiver.", this);
+            return true;
+        }
+
         private bool FinishCurrentDrag()
         {
             if (!IsDragging())
@@ -435,8 +565,19 @@ namespace VariableInventorySystem
                 return false;
             }
 
-            if (!TryRecoverPendingSinglePlacement() || !TryRecoverPendingStackMerge())
+            if (!TryRecoverPendingExternalDrop() ||
+                !TryRecoverPendingSinglePlacement() ||
+                !TryRecoverPendingStackMerge())
             {
+                return false;
+            }
+
+            if (HasUnexpectedCarriedOwner())
+            {
+                Debug.LogError(
+                    "[Core.OnEndDrag] The carried item has an unexpected owner. " +
+                    "Carry state was preserved instead of discarding the item reference.",
+                    this);
                 return false;
             }
 
@@ -582,7 +723,8 @@ namespace VariableInventorySystem
                 inventoryView?.OnDroped(isRelease); // ★ 일반 드래그의 원본 복구 소유자
             }
 
-            if (!isRelease && !HasCarryTransaction && IsDetachedOwnedItem())
+            if (!isRelease && !HasCarryTransaction &&
+                !IsCarriedItemRestoredToOrigin())
             {
                 Debug.LogError("[Core.OnEndDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
                 return false;
@@ -616,6 +758,14 @@ namespace VariableInventorySystem
         {
             if (!IsDragging()) return true;
             Debug.Log("[VariableInventoryCore.CancelDrag] 드래그 취소 시도...");
+            if (!TryRecoverPendingExternalDrop())
+            {
+                Debug.LogError(
+                    "[VariableInventoryCore.CancelDrag] Pending external drop recovery failed. " +
+                    "Carry state was kept.");
+                return false;
+            }
+
             if (!TryRecoverPendingSinglePlacement())
             {
                 Debug.LogError(
@@ -627,6 +777,15 @@ namespace VariableInventorySystem
             {
                 Debug.LogError(
                     "[VariableInventoryCore.CancelDrag] Pending stack merge recovery failed. Carry state was kept.");
+                return false;
+            }
+
+            if (HasUnexpectedCarriedOwner())
+            {
+                Debug.LogError(
+                    "[VariableInventoryCore.CancelDrag] The carried item has an unexpected owner. " +
+                    "Carry state was kept.",
+                    this);
                 return false;
             }
 
@@ -651,7 +810,7 @@ namespace VariableInventorySystem
                 inventoryView?.OnDroped(false);
             }
 
-            if (!HasCarryTransaction && IsDetachedOwnedItem())
+            if (!HasCarryTransaction && !IsCarriedItemRestoredToOrigin())
             {
                 Debug.LogError("[VariableInventoryCore.CancelDrag] Rollback failed. Drag state was kept instead of discarding the item reference.");
                 return false;
@@ -726,6 +885,27 @@ namespace VariableInventorySystem
                 inventoryView?.ReApply();
             }
 
+            OnCarriedItemChanged();
+            UpdateDropPreviewHandling();
+            return true;
+        }
+
+        private bool TryRecoverPendingExternalDrop()
+        {
+            if (pendingExternalDropRecovery == null)
+            {
+                return true;
+            }
+
+            if (!pendingExternalDropRecovery.TryRollback(out string error))
+            {
+                Debug.LogError(
+                    $"[VariableInventoryCore] Pending external drop rollback failed: {error}",
+                    this);
+                return false;
+            }
+
+            pendingExternalDropRecovery = null;
             OnCarriedItemChanged();
             UpdateDropPreviewHandling();
             return true;
@@ -861,10 +1041,27 @@ namespace VariableInventorySystem
             HoveredCellChanged?.Invoke(null, null);
         }
 
-        private bool IsDetachedOwnedItem()
+        private bool HasUnexpectedCarriedOwner()
         {
             return effectCell?.CellData is IVariableInventoryOwnedCellData owned &&
-                   owned.InventoryOwner == null;
+                   owned.InventoryOwner != null;
+        }
+
+        private bool IsCarriedItemRestoredToOrigin()
+        {
+            if (!(effectCell?.CellData is IVariableInventoryOwnedCellData owned))
+            {
+                return true;
+            }
+
+            if (!(originView is IVariableInventoryBoundView originBound) ||
+                originBound.ViewData == null)
+            {
+                return false;
+            }
+
+            return ReferenceEquals(owned.InventoryOwner, originBound.ViewData) &&
+                   originBound.ViewData.GetId(effectCell.CellData).HasValue;
         }
 
         protected virtual void OnCarriedItemChanged()

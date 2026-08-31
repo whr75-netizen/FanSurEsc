@@ -1909,3 +1909,12 @@ Interactable (abstract base class)
 - `[저장·시험 콘텐츠]` 일반 save·primary backup·Raid checkpoint/rollback은 저장된 Backpack record에서 실제 높이를 `기본 높이 + 추가 행`으로 다시 계산해 payload 크기와 일치할 때만 복원한다. 빨강 ID 10 `+1`, 초록 ID 11 `+2`, 파랑 ID 12 `+3`의 1×1 시험 가방과 Point-filtered 색상 아이콘을 단일 DB에 등록하고 시작 인벤토리에 넣었다. 시험 판매가는 은화 1이며 정식 수치·가격이 아니다. 기존 production 가방 definition이 없었으므로 과거 save migration 대상은 없지만, 이후 같은 ID의 추가 행을 변경할 때는 migration이 필요하다.
 - `[픽셀 모딩 기술 기반]` 실제 아트 없이 `ModularSpriteRigDefinition`, `MotionDefinition`, `SkinDefinition`과 정수 pixel-snap FK solver를 분리했다. 8방향 hysteresis, 고정 FPS frame, 관절 덮개와 방향별 render order를 검증하지만 Renderer·Player/Enemy prefab·실제 파츠 이미지는 아직 연결하지 않았다.
 - `[Unity Editor 호출 확인]` C# compile 뒤 Backpack 계약 검증에서 추가 행, 동일 root 인스턴스, 자동 재배치, 73개 item의 해제·판매 차단 완전 불변, receipt 원복, 큰 가방 교체와 기존 가방 보관, 작은 가방 차단, 보관 불가 교체 rollback, discard 기본 높이 복귀와 base/expanded save 왕복을 확인했다. production DB `12/12`, 가방 ID·행·아이콘·시험 거래값, persistent prefab의 status Text와 시작 ID를 확인했고 Modular Sprite·Core adjacent validator도 예외 없이 통과했다. 실제 Play Mode UI drag·상인 조작과 Player build는 미검증이다.
+
+---
+
+## 91. 바닥 아이템 드롭과 공용 E 습득 `[ITEM-01][INTERACT-01]`
+
+- `[구현·권위][2026-08-31]` Player 소유 일반 pointer drag만 전체화면 Player 인벤토리 Canvas 뒤의 투명 DropZone에서 받는다. 실제 grid·장비·상인 UI Rect는 좌표 하드코딩 없이 제외하며, 잘못된 셀·click-carry·분할 carry·외부 Chest/상인 item은 기존 원복 경로를 유지한다. 성공 시 같은 `InventoryItemData`가 footprint 크기의 scene-local owner로 원자 이전되고 작은 색상 Trigger 구가 활성화된다.
+- `[습득]` 바닥 구는 별도 입력 polling 없이 기존 `PlayerInteractor`의 최근접 E 후보가 된다. `InventoryTransferCoordinator`는 Storage Shift 이동의 stack 우선·첫 유효 빈칸 트랜잭션을 재사용해 부분 습득 잔량을 같은 바닥 owner에 남기며, 비중첩 item도 기존 first-fit을 사용한다. 드래그 중 E 습득은 임시 빈칸과 원복 충돌을 막기 위해 차단한다.
+- `[Unity Editor 호출 확인]` C# compile과 persistent prefab의 실제 Player/External Canvas·Stash 계층을 확인했다. 임시 runtime item으로 stage→rollback 동일 참조·owner 해제, `8/10 + 바닥 5`에서 기존 stack `10/10` 우선·바닥 잔량 3, 빈칸 해제 뒤 같은 잔량 item이 slot 1로 이동하는 계약을 한 번 검증했다. 실제 마우스 drag·물리 E 입력과 Game View 구 표현은 미검증이다.
+- `[현재 경계]` 작은 구는 텍스처 전 시험 표현이다. 바닥 entity는 ordinary save와 원정 Recovery에 아직 기록되지 않으므로 씬 전환·강제종료 영속성을 보장하지 않는다. 정식 sprite·드롭 위치 정책·저장 record는 후속이다.

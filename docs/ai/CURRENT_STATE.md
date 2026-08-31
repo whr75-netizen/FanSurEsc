@@ -48,12 +48,12 @@
 | `TRAVEL-01` | `GameMap1 ↔ GameMapTest` 직접 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §1·14·20 | 시작 로딩 씬을 거치지 않고 기존 Player를 SpawnPoint로 이동 | `DirectSceneTravel`, Spawn, 도착 완료 경계 직접 변경 |
 | `TRANSITION-01` | 검은 전환과 입력·피해 잠금 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20·21 | fade 동안 이동·공격·무기·인벤토리·상호작용·저장·피해 차단 후 복원 | 전환 잠금 소유자나 복원 순서 직접 변경 |
 | `INPUT-01` | Escape·입력·키 설정 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·46~48·53·69 | Base pause/Raid non-pause; Main/ESC 리바인딩·행별 보조키 해제/복원; 낮/밤·맑음/비 환경 시험; 별도 설정 파일·legacy 이관 | 입력·scene 또는 설정 schema·migration·복구 변경 |
-| `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
+| `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36·91 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 바닥 아이템도 같은 최근접 E 후보; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
 | `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88 | 낮밤·구름·비/물 튐·지붕 투영 강수 차단·수광 Grass·단계형 로컬광·태양 빛줄기·URP Spot/깊이/그림자를 공유하는 연속 체적 가로등·시험 웅덩이 파문 | 날씨 저장·풍향·웅덩이 최종 표현·추가 날씨 반응·도심 다수 가로등 GPU profile/최적화·Transparent 체적 합성·최종 환경 아트 |
-| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~90 | click·drag·stack·Shift/Ctrl; W1→W3; 가방은 기본 grid 아래 행 확장·해제 재배치/불가 차단·큰 가방만 직교체; runtime 장전탄·Save v7; 단일 DB 저작창·검증 | 소유권·수량·장전탄·grid·장비·저장·저작 ID 변경 |
+| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~91 | click·drag·stack·Shift/Ctrl; 명시적 외곽 pointer drag는 같은 runtime item을 scene-local 바닥 구로 이전, E는 stack 우선·첫 빈칸 습득; W1→W3; 가방 행 확장; runtime 장전탄·Save v7; 단일 DB 저작창·검증 | 바닥 아이템 영속 저장·정식 표현 또는 소유권·수량·장전탄·grid·장비·저장·저작 ID 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 이동장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67 | 고정 맵 임의/도심 공유후보 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |

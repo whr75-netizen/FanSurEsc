@@ -193,11 +193,14 @@ namespace FantasySurvival.Inventory
     /// Coordinates cross-container moves without becoming another inventory owner.
     /// Every mutation still goes through the authoritative source/destination data APIs.
     /// </summary>
-    public sealed class InventoryTransferCoordinator : IVariableInventoryTransferController
+    public sealed class InventoryTransferCoordinator :
+        IVariableInventoryTransferController,
+        IVariableInventoryExternalDropController
     {
         private readonly Action refreshViews;
         private readonly Action notifyInventoryContentsChanged;
         private readonly Action<string, bool> reportStatus;
+        private readonly IWorldItemDropService worldItemDropService;
 
         private PlayerInventoryState playerState;
         private ExternalInventoryMode externalMode;
@@ -800,12 +803,136 @@ namespace FantasySurvival.Inventory
             PlayerInventoryState playerState,
             Action refreshViews,
             Action notifyInventoryContentsChanged,
-            Action<string, bool> reportStatus)
+            Action<string, bool> reportStatus,
+            IWorldItemDropService worldItemDropService = null)
         {
             this.playerState = playerState ?? throw new ArgumentNullException(nameof(playerState));
             this.refreshViews = refreshViews;
             this.notifyInventoryContentsChanged = notifyInventoryContentsChanged;
             this.reportStatus = reportStatus;
+            this.worldItemDropService = worldItemDropService;
+        }
+
+        public bool TryStageExternalDrop(
+            IVariableInventoryView sourceView,
+            IVariableInventoryCellData item,
+            out IVariableInventoryExternalDropReceipt receipt,
+            out string error)
+        {
+            receipt = null;
+            if (!EnsurePendingStorageRecovery("바닥 드롭", out error))
+            {
+                return false;
+            }
+
+            if (worldItemDropService == null)
+            {
+                error = "바닥 아이템 생성 경계가 연결되지 않았습니다.";
+                return false;
+            }
+
+            if (!(sourceView is IVariableInventoryBoundView sourceBound) ||
+                !IsPlayerOwned(sourceBound.ViewData))
+            {
+                error = "Player가 소유한 아이템만 바닥에 놓을 수 있습니다.";
+                return false;
+            }
+
+            if (!(item is InventoryItemData inventoryItem) ||
+                inventoryItem.InventoryOwner != null)
+            {
+                error = "원본 인벤토리에서 정상 분리된 아이템만 바닥에 놓을 수 있습니다.";
+                return false;
+            }
+
+            if (!worldItemDropService.TryStage(
+                    inventoryItem,
+                    out IWorldItemDropReceipt worldReceipt,
+                    out error))
+            {
+                receipt = worldReceipt;
+                return false;
+            }
+
+            receipt = worldReceipt;
+            return true;
+        }
+
+        public bool TryPickupWorldItem(
+            WorldItemPickup pickup,
+            out string error)
+        {
+            if (!EnsurePendingStorageRecovery("바닥 아이템 습득", out error))
+            {
+                return false;
+            }
+
+            StandardStashViewData source = pickup?.Inventory;
+            InventoryItemData item = pickup?.Item;
+            StandardStashViewData destination = playerState?.Inventory;
+            if (source == null || item == null || destination == null ||
+                !ReferenceEquals(item.InventoryOwner, source) ||
+                !source.GetId(item).HasValue)
+            {
+                error = "바닥 아이템의 현재 소유권을 확인할 수 없습니다.";
+                return false;
+            }
+
+            if (item.MaxStackSize > 1)
+            {
+                if (!StorageQuickTransferTransaction.TryCreate(
+                        source,
+                        destination,
+                        item,
+                        out StorageQuickTransferTransaction transaction,
+                        out error))
+                {
+                    return false;
+                }
+
+                if (!transaction.TryExecute(
+                        out StorageQuickTransferResult result,
+                        out string transferError))
+                {
+                    if (!transaction.TryRollback(out string rollbackError))
+                    {
+                        pendingStorageRecovery = transaction;
+                        transferError =
+                            $"{transferError} 자동 복구도 완료되지 않았습니다: {rollbackError}";
+                    }
+
+                    error = transferError;
+                    Report($"습득 실패: {error}", true);
+                    refreshViews?.Invoke();
+                    return false;
+                }
+
+                error = null;
+                Report(
+                    result.SourceRemainingQuantity > 0
+                        ? $"습득 완료: {result.MovedQuantity}개, 바닥에 {result.SourceRemainingQuantity}개 남음"
+                        : $"습득 완료: {result.MovedQuantity}개",
+                    false);
+                refreshViews?.Invoke();
+                return true;
+            }
+
+            if (!TryTransferFirstFit(
+                    source,
+                    destination,
+                    item,
+                    out _,
+                    out error))
+            {
+                Report($"습득 실패: {error}", true);
+                refreshViews?.Invoke();
+                return false;
+            }
+
+            error = null;
+            Report("습득 완료", false);
+            refreshViews?.Invoke();
+            return true;
         }
 
         public bool TrySetPlayerState(PlayerInventoryState state, out string error)

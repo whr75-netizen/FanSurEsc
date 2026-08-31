@@ -24,6 +24,27 @@ namespace VariableInventorySystem
     }
 
     /// <summary>
+    /// A provisional receiver for a carried item outside registered inventory
+    /// views. The inventory core keeps the source rollback state until this
+    /// receipt commits; a failed commit restores the receiver before the ordinary
+    /// source rollback path continues.
+    /// </summary>
+    public interface IVariableInventoryExternalDropReceipt
+    {
+        bool TryCommit(out string error);
+        bool TryRollback(out string error);
+    }
+
+    public interface IVariableInventoryExternalDropController
+    {
+        bool TryStageExternalDrop(
+            IVariableInventoryView sourceView,
+            IVariableInventoryCellData item,
+            out IVariableInventoryExternalDropReceipt receipt,
+            out string error);
+    }
+
+    /// <summary>
     /// Optional game-rule boundary around the inventory asset's drag mechanics.
     /// The core still owns pick/drop/rollback; this controller only authorizes and
     /// observes transfers such as merchant purchase and sale.

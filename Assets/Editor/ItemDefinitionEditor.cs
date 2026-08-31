@@ -16,6 +16,7 @@ namespace FantasySurvival.EditorTools
         private SerializedProperty icon;
         private SerializedProperty maxStackSize;
         private SerializedProperty equipmentSlot;
+        private SerializedProperty backpackBonusRows;
         private SerializedProperty isTradable;
         private SerializedProperty tradeCurrency;
         private SerializedProperty tradePrice;
@@ -43,6 +44,7 @@ namespace FantasySurvival.EditorTools
             icon = Find(ItemDefinitionSerializedFields.Icon);
             maxStackSize = Find(ItemDefinitionSerializedFields.MaxStackSize);
             equipmentSlot = Find(ItemDefinitionSerializedFields.EquipmentSlot);
+            backpackBonusRows = Find(ItemDefinitionSerializedFields.BackpackBonusRows);
             isTradable = Find(ItemDefinitionSerializedFields.IsTradable);
             tradeCurrency = Find(ItemDefinitionSerializedFields.TradeCurrency);
             tradePrice = Find(ItemDefinitionSerializedFields.TradePrice);
@@ -79,7 +81,17 @@ namespace FantasySurvival.EditorTools
 
             DrawHeading("Classification");
             EditorGUILayout.PropertyField(kind, new GUIContent("Item Kind"));
+            EquipmentSlotType previousSlot =
+                (EquipmentSlotType)equipmentSlot.enumValueIndex;
+            EditorGUI.BeginChangeCheck();
             EditorGUILayout.PropertyField(equipmentSlot, new GUIContent("Equipment Slot"));
+            if (EditorGUI.EndChangeCheck() &&
+                previousSlot == EquipmentSlotType.Backpack &&
+                (EquipmentSlotType)equipmentSlot.enumValueIndex !=
+                EquipmentSlotType.Backpack)
+            {
+                backpackBonusRows.intValue = 0;
+            }
 
             ItemDefinitionKind currentKind =
                 (ItemDefinitionKind)kind.enumValueIndex;
@@ -87,7 +99,20 @@ namespace FantasySurvival.EditorTools
                 (EquipmentSlotType)equipmentSlot.enumValueIndex;
             bool isContainer = currentKind == ItemDefinitionKind.Container;
             bool isWeapon = currentSlot == EquipmentSlotType.Weapon;
+            bool isBackpack = currentSlot == EquipmentSlotType.Backpack;
             bool forcesSingleStack = isContainer || currentSlot != EquipmentSlotType.None;
+
+            if (isBackpack)
+            {
+                DrawHeading("Backpack Capacity");
+                EditorGUILayout.PropertyField(
+                    backpackBonusRows,
+                    new GUIContent("Bonus Inventory Rows"));
+                EditorGUILayout.HelpBox(
+                    "Equipping this item appends the configured rows below the " +
+                    "Player's base inventory. A container item cannot also grant rows.",
+                    isContainer ? MessageType.Warning : MessageType.Info);
+            }
 
             DrawHeading("Inventory Presentation");
             EditorGUILayout.PropertyField(width, new GUIContent("Grid Width"));

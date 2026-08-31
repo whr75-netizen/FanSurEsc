@@ -77,6 +77,7 @@ namespace FantasySurvival.EditorTools
             ItemContentAuthoringService.DefaultDefinitionsFolder;
         public ItemDefinitionKind Kind { get; set; } = ItemDefinitionKind.Standard;
         public EquipmentSlotType EquipmentSlot { get; set; } = EquipmentSlotType.None;
+        public int BackpackBonusRows { get; set; }
         public int Width { get; set; } = 1;
         public int Height { get; set; } = 1;
         public int MaxStackSize { get; set; } = 1;
@@ -109,6 +110,7 @@ namespace FantasySurvival.EditorTools
         public const string Icon = "icon";
         public const string MaxStackSize = "maxStackSize";
         public const string EquipmentSlot = "equipmentSlot";
+        public const string BackpackBonusRows = "backpackBonusRows";
         public const string IsTradable = "isTradable";
         public const string TradeCurrency = "tradeCurrency";
         public const string TradePrice = "tradePrice";
@@ -342,6 +344,10 @@ namespace FantasySurvival.EditorTools
                 serialized,
                 ItemDefinitionSerializedFields.EquipmentSlot,
                 (int)request.EquipmentSlot);
+            SetInteger(
+                serialized,
+                ItemDefinitionSerializedFields.BackpackBonusRows,
+                request.BackpackBonusRows);
             SetBoolean(
                 serialized,
                 ItemDefinitionSerializedFields.IsTradable,
@@ -676,6 +682,18 @@ namespace FantasySurvival.EditorTools
             {
                 throw new InvalidOperationException(
                     "An item cannot be both a container and a weapon.");
+            }
+
+            if (request.BackpackBonusRows < 0 ||
+                request.BackpackBonusRows > InventoryGridConstraints.MaxDimension ||
+                (request.BackpackBonusRows > 0 &&
+                 request.EquipmentSlot != EquipmentSlotType.Backpack) ||
+                (request.BackpackBonusRows > 0 &&
+                 request.Kind == ItemDefinitionKind.Container))
+            {
+                throw new InvalidOperationException(
+                    "Backpack bonus rows must be within the inventory dimension limit, " +
+                    "and only a non-container Backpack item may grant them.");
             }
 
             if (!InventoryGridConstraints.TryValidateDimensions(

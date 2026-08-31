@@ -43,6 +43,7 @@ namespace FantasySurvival.EditorTools
         [SerializeField] private string newDescription = string.Empty;
         [SerializeField] private ItemDefinitionKind newKind = ItemDefinitionKind.Standard;
         [SerializeField] private EquipmentSlotType newEquipmentSlot = EquipmentSlotType.None;
+        [SerializeField] private int newBackpackBonusRows;
         [SerializeField] private int newWidth = 1;
         [SerializeField] private int newHeight = 1;
         [SerializeField] private int newMaxStackSize = 1;
@@ -186,6 +187,16 @@ namespace FantasySurvival.EditorTools
                     newEquipmentSlot = (EquipmentSlotType)EditorGUILayout.EnumPopup(
                         "Equipment Slot",
                         newEquipmentSlot);
+                    if (newEquipmentSlot == EquipmentSlotType.Backpack)
+                    {
+                        newBackpackBonusRows = EditorGUILayout.IntField(
+                            "Bonus Inventory Rows",
+                            newBackpackBonusRows);
+                        EditorGUILayout.HelpBox(
+                            "These rows are appended below the Player's base inventory " +
+                            "while this Backpack is equipped.",
+                            MessageType.Info);
+                    }
                     newWidth = EditorGUILayout.IntField("Grid Width", newWidth);
                     newHeight = EditorGUILayout.IntField("Grid Height", newHeight);
                     newIcon = (Texture2D)EditorGUILayout.ObjectField(
@@ -431,6 +442,12 @@ namespace FantasySurvival.EditorTools
                     DefinitionsFolder = definitionsFolder,
                     Kind = newKind,
                     EquipmentSlot = newEquipmentSlot,
+                    BackpackBonusRows = newEquipmentSlot == EquipmentSlotType.Backpack
+                        ? Mathf.Clamp(
+                            newBackpackBonusRows,
+                            0,
+                            InventoryGridConstraints.MaxDimension)
+                        : 0,
                     Width = Mathf.Max(1, newWidth),
                     Height = Mathf.Max(1, newHeight),
                     MaxStackSize = Mathf.Max(1, newMaxStackSize),

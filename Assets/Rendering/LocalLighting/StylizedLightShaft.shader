@@ -2,7 +2,6 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
 {
     Properties
     {
-        [HideInInspector] _ShaftSourceMode("Source Mode", Float) = 0
         [HideInInspector][HDR] _ShaftColor("Shaft Color", Color) = (1, 1, 1, 1)
         [HideInInspector] _ShaftIntensity("Shaft Intensity", Float) = 0
         [HideInInspector] _ShadowThreshold("Shadow Threshold", Range(0, 1)) = 0.52
@@ -45,7 +44,6 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 
             CBUFFER_START(UnityPerMaterial)
-                float _ShaftSourceMode;
                 half4 _ShaftColor;
                 float _ShaftIntensity;
                 float _ShadowThreshold;
@@ -121,14 +119,8 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                     (sceneEyeDepth - fragmentEyeDepth) /
                     max(_SurfaceFadeDistance, 0.001));
 
-                float sourceMode = step(0.5, _ShaftSourceMode);
-                float lightVisibility = 1.0;
-                UNITY_BRANCH
-                if (_ShaftSourceMode < 0.5)
-                {
-                    float sunTransmission = SampleSunTransmission(input.positionWS);
-                    lightVisibility = step(_ShadowThreshold, sunTransmission);
-                }
+                float sunTransmission = SampleSunTransmission(input.positionWS);
+                float lightVisibility = step(_ShadowThreshold, sunTransmission);
 
                 float safeCellSize = max(_WorldCellSize, 0.001);
                 float3 snappedCell = floor(input.positionWS / safeCellSize + 0.5);
@@ -138,17 +130,10 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
 
                 float sourceStartFade = smoothstep(0.0, 0.055, input.uv.y);
                 float sunEndFade = 1.0 - smoothstep(0.82, 1.0, input.uv.y);
-                // Local volume slices must meet the lit surface. The sampled
-                // scene depth already supplies their contact fade, whereas the
-                // old UV end fade erased the final 18% and made the beam float.
-                float endFade = sourceStartFade * lerp(sunEndFade, 1.0, sourceMode);
-                float localLateralFade = pow(
-                    saturate(1.0 - abs(input.uv.x * 2.0 - 1.0)),
-                    0.65);
-                float lateralFade = lerp(1.0, localLateralFade, sourceMode);
+                float endFade = sourceStartFade * sunEndFade;
                 float contribution =
                     _ShaftIntensity * lightVisibility * density *
-                    endFade * lateralFade * surfaceFade;
+                    endFade * surfaceFade;
 
                 return half4(_ShaftColor.rgb * contribution, 0.0);
             }

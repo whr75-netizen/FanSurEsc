@@ -1,13 +1,13 @@
 using FantasySurvival.SceneFlow;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.SceneManagement;
 
 namespace FantasySurvival.WorldLighting
 {
     /// <summary>
-    /// Draws atmosphere-only light shafts derived from the authoritative sky
-    /// and opted-in local Spot Lights. It owns only temporary rendering resources.
+    /// Draws the atmosphere-only sun shafts and exposes the shared visibility
+    /// and weather settings consumed by the local-volumetric renderer feature.
+    /// It owns only temporary rendering resources and no light state.
     /// </summary>
     [DefaultExecutionOrder(10000)]
     [DisallowMultipleComponent]
@@ -17,10 +17,8 @@ namespace FantasySurvival.WorldLighting
     {
         private const int MaximumSunSliceCount = 16;
         private const int MaximumLocalEmitterCount = 16;
-        private const int LocalVolumeSliceCount = 9;
         private const float MinimumVisibleIntensity = 0.0001f;
 
-        private static readonly int SourceModeId = Shader.PropertyToID("_ShaftSourceMode");
         private static readonly int ColorId = Shader.PropertyToID("_ShaftColor");
         private static readonly int IntensityId = Shader.PropertyToID("_ShaftIntensity");
         private static readonly int ShadowThresholdId = Shader.PropertyToID("_ShadowThreshold");
@@ -47,30 +45,30 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Min(0.01f)] private float sunSurfaceFadeDistance = 0.45f;
         [SerializeField, Range(0f, 1f)] private float rainSuppression = 0.92f;
 
-        [Header("Local Shafts")]
+        [Header("Local Volumetric Lights")]
         [SerializeField, Range(1, MaximumLocalEmitterCount)]
         private int visibleLocalEmitterLimit = 8;
-        [SerializeField, Min(0.01f)] private float localSurfaceFadeDistance = 0.2f;
         [SerializeField, Range(1f, 2f)] private float localRainScatterMultiplier = 1.35f;
 
-        private readonly StylizedLightShaftEmitter[] selectedLocalEmitters =
-            new StylizedLightShaftEmitter[MaximumLocalEmitterCount];
-        private readonly float[] localSelectionDistances =
-            new float[MaximumLocalEmitterCount];
-        private readonly Plane[] frustumPlanes = new Plane[6];
-
         private Material sunMaterial;
-        private Material[] localMaterials;
         private Mesh sunSliceMesh;
-        private Mesh localBeamMesh;
         private Vector3[] sunVertices;
         private Light sunLight;
         private Color sunColor = Color.white;
         private float sunStrength;
         private float rainIntensity;
-        private bool localLimitWarningReported;
         private Camera cachedLayoutCamera;
         private CameraZoomController cachedZoomController;
+
+        internal int VisibleLocalEmitterLimit => Mathf.Clamp(
+            visibleLocalEmitterLimit,
+            1,
+            MaximumLocalEmitterCount);
+
+        internal float LocalWeatherScatterMultiplier => Mathf.Lerp(
+            1f,
+            localRainScatterMultiplier,
+            rainIntensity);
 
         private void Awake()
         {
@@ -114,7 +112,6 @@ namespace FantasySurvival.WorldLighting
                 visibleLocalEmitterLimit,
                 1,
                 MaximumLocalEmitterCount);
-            localSurfaceFadeDistance = Mathf.Max(0.01f, localSurfaceFadeDistance);
             localRainScatterMultiplier = Mathf.Clamp(
                 localRainScatterMultiplier,
                 1f,
@@ -153,7 +150,6 @@ namespace FantasySurvival.WorldLighting
             }
 
             DrawSunShafts(camera);
-            DrawLocalShafts(camera);
         }
 
         private void DrawSunShafts(Camera camera)
@@ -176,7 +172,6 @@ namespace FantasySurvival.WorldLighting
 
             ApplyMaterialProperties(
                 sunMaterial,
-                0f,
                 sunColor,
                 visibleIntensity,
                 sunShadowThreshold,
@@ -185,102 +180,6 @@ namespace FantasySurvival.WorldLighting
                 sunWorldCellSize,
                 sunSurfaceFadeDistance);
             DrawMesh(sunSliceMesh, Matrix4x4.identity, sunMaterial, camera);
-        }
-
-        private void DrawLocalShafts(Camera camera)
-        {
-            GeometryUtility.CalculateFrustumPlanes(camera, frustumPlanes);
-            int emitterCount = StylizedLightShaftEmitter.FillVisibleEmitters(
-                selectedLocalEmitters,
-                localSelectionDistances,
-                camera,
-                frustumPlanes,
-                SceneManager.GetActiveScene(),
-                shell != null ? shell.transform : null,
-                Mathf.Clamp(visibleLocalEmitterLimit, 1, MaximumLocalEmitterCount),
-                out bool truncated);
-
-            if (truncated && !localLimitWarningReported)
-            {
-                Debug.LogWarning(
-                    $"Stylized local light shafts exceed the visible limit of " +
-                    $"{visibleLocalEmitterLimit}. Only the nearest visible emitters are drawn.",
-                    this);
-                localLimitWarningReported = true;
-            }
-            else if (!truncated)
-            {
-                localLimitWarningReported = false;
-            }
-
-            for (int index = 0; index < emitterCount; index++)
-            {
-                StylizedLightShaftEmitter emitter = selectedLocalEmitters[index];
-                Light source = emitter.SourceLight;
-                Color linearColor = source.color.linear;
-                float visibleIntensity =
-                    source.intensity * emitter.IntensityMultiplier *
-                    Mathf.Lerp(1f, localRainScatterMultiplier, rainIntensity);
-                if (visibleIntensity <= MinimumVisibleIntensity)
-                {
-                    continue;
-                }
-
-                Matrix4x4 matrix = BuildViewAlignedVolumeMatrix(
-                    camera,
-                    emitter.OriginWorld,
-                    emitter.DirectionWorld,
-                    emitter.Length,
-                    emitter.EndRadius);
-
-                Material localMaterial = localMaterials[index];
-                ApplyMaterialProperties(
-                    localMaterial,
-                    1f,
-                    linearColor,
-                    visibleIntensity / LocalVolumeSliceCount,
-                    0f,
-                    emitter.DensityBands,
-                    emitter.NoiseStrength,
-                    emitter.WorldCellSize,
-                    localSurfaceFadeDistance);
-                DrawMesh(localBeamMesh, matrix, localMaterial, camera);
-            }
-        }
-
-        private static Matrix4x4 BuildViewAlignedVolumeMatrix(
-            Camera camera,
-            Vector3 origin,
-            Vector3 direction,
-            float length,
-            float endRadius)
-        {
-            Vector3 across = Vector3.Cross(direction, camera.transform.forward);
-            if (across.sqrMagnitude <= 0.0001f)
-            {
-                across = Vector3.Cross(direction, camera.transform.up);
-            }
-            if (across.sqrMagnitude <= 0.0001f)
-            {
-                across = camera.transform.right;
-            }
-            across.Normalize();
-
-            Vector3 normal = Vector3.Cross(across, direction).normalized;
-            Matrix4x4 matrix = Matrix4x4.identity;
-            matrix.SetColumn(0, new Vector4(
-                across.x * endRadius,
-                across.y * endRadius,
-                across.z * endRadius,
-                0f));
-            matrix.SetColumn(1, new Vector4(
-                direction.x * length,
-                direction.y * length,
-                direction.z * length,
-                0f));
-            matrix.SetColumn(2, new Vector4(normal.x, normal.y, normal.z, 0f));
-            matrix.SetColumn(3, new Vector4(origin.x, origin.y, origin.z, 1f));
-            return matrix;
         }
 
         private bool UpdateSunSliceMesh(Camera camera, Vector3 rayDirection)
@@ -380,7 +279,6 @@ namespace FantasySurvival.WorldLighting
 
         private static void ApplyMaterialProperties(
             Material material,
-            float sourceMode,
             Color color,
             float intensity,
             float shadowThreshold,
@@ -389,7 +287,6 @@ namespace FantasySurvival.WorldLighting
             float worldCellSize,
             float surfaceFadeDistance)
         {
-            material.SetFloat(SourceModeId, sourceMode);
             material.SetColor(ColorId, color);
             material.SetFloat(IntensityId, intensity);
             material.SetFloat(ShadowThresholdId, shadowThreshold);
@@ -421,16 +318,9 @@ namespace FantasySurvival.WorldLighting
 
         private bool EnsureResources()
         {
-            int requiredLocalMaterialCount = Mathf.Clamp(
-                visibleLocalEmitterLimit,
-                1,
-                MaximumLocalEmitterCount);
             if (sunMaterial != null &&
                 sunMaterial.shader == shaftShader &&
-                localMaterials != null &&
-                localMaterials.Length == requiredLocalMaterialCount &&
                 sunSliceMesh != null &&
-                localBeamMesh != null &&
                 sunVertices != null &&
                 sunVertices.Length == sunSliceCount * 4)
             {
@@ -444,14 +334,7 @@ namespace FantasySurvival.WorldLighting
             }
 
             sunMaterial = CreateRuntimeMaterial("Runtime Stylized Sun Shafts");
-            localMaterials = new Material[requiredLocalMaterialCount];
-            for (int index = 0; index < localMaterials.Length; index++)
-            {
-                localMaterials[index] = CreateRuntimeMaterial(
-                    $"Runtime Stylized Local Shaft {index + 1}");
-            }
             sunSliceMesh = CreateSunSliceMesh();
-            localBeamMesh = CreateLocalBeamMesh();
             return true;
         }
 
@@ -498,84 +381,12 @@ namespace FantasySurvival.WorldLighting
             return mesh;
         }
 
-        private static Mesh CreateLocalBeamMesh()
-        {
-            const float topRadiusRatio = 0.10f;
-            Vector3[] vertices = new Vector3[LocalVolumeSliceCount * 4];
-            Vector2[] uvs = new Vector2[vertices.Length];
-            int[] triangles = new int[LocalVolumeSliceCount * 6];
-            for (int slice = 0; slice < LocalVolumeSliceCount; slice++)
-            {
-                // The planes are view-aligned samples of one world-space cone,
-                // not independent billboards. Their circular cross-sections keep
-                // the visible envelope fixed while the camera rotates.
-                float sliceOffset =
-                    ((slice + 0.5f) / LocalVolumeSliceCount) * 2f - 1f;
-                float absoluteOffset = Mathf.Abs(sliceOffset);
-                float startY = absoluteOffset <= topRadiusRatio
-                    ? 0f
-                    : (absoluteOffset - topRadiusRatio) / (1f - topRadiusRatio);
-                float startRadius = Mathf.Lerp(topRadiusRatio, 1f, startY);
-                float startHalfWidth = Mathf.Sqrt(Mathf.Max(
-                    0f,
-                    startRadius * startRadius - sliceOffset * sliceOffset));
-                float endHalfWidth = Mathf.Sqrt(Mathf.Max(
-                    0f,
-                    1f - sliceOffset * sliceOffset));
-
-                int vertexIndex = slice * 4;
-                vertices[vertexIndex] =
-                    new Vector3(-startHalfWidth, startY, sliceOffset);
-                vertices[vertexIndex + 1] =
-                    new Vector3(startHalfWidth, startY, sliceOffset);
-                vertices[vertexIndex + 2] =
-                    new Vector3(-endHalfWidth, 1f, sliceOffset);
-                vertices[vertexIndex + 3] =
-                    new Vector3(endHalfWidth, 1f, sliceOffset);
-                uvs[vertexIndex] = new Vector2(0f, startY);
-                uvs[vertexIndex + 1] = new Vector2(1f, startY);
-                uvs[vertexIndex + 2] = new Vector2(0f, 1f);
-                uvs[vertexIndex + 3] = new Vector2(1f, 1f);
-
-                int triangleIndex = slice * 6;
-                triangles[triangleIndex] = vertexIndex;
-                triangles[triangleIndex + 1] = vertexIndex + 2;
-                triangles[triangleIndex + 2] = vertexIndex + 1;
-                triangles[triangleIndex + 3] = vertexIndex + 1;
-                triangles[triangleIndex + 4] = vertexIndex + 2;
-                triangles[triangleIndex + 5] = vertexIndex + 3;
-            }
-
-            Mesh mesh = new Mesh
-            {
-                name = "Runtime Local Light Shaft",
-                hideFlags = HideFlags.HideAndDontSave,
-                vertices = vertices,
-                uv = uvs,
-                triangles = triangles,
-                bounds = new Bounds(
-                    new Vector3(0f, 0.5f, 0f),
-                    new Vector3(2f, 1f, 2f))
-            };
-            return mesh;
-        }
-
         private void ReleaseResources()
         {
             DestroyRuntimeObject(sunMaterial);
-            if (localMaterials != null)
-            {
-                for (int index = 0; index < localMaterials.Length; index++)
-                {
-                    DestroyRuntimeObject(localMaterials[index]);
-                }
-            }
             DestroyRuntimeObject(sunSliceMesh);
-            DestroyRuntimeObject(localBeamMesh);
             sunMaterial = null;
-            localMaterials = null;
             sunSliceMesh = null;
-            localBeamMesh = null;
             sunVertices = null;
         }
 

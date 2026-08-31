@@ -130,12 +130,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldLighting.StylizedLightShaftEmitter
   sourceLight: {fileID: 995158434150270603}
-  length: 3.85
-  coneRadiusScale: 0.82
   intensityMultiplier: 0.012
-  densityBands: 4
-  noiseStrength: 0.1
-  worldCellSize: 0.12
+  extinctionCoefficient: 0.08
+  anisotropy: 0.12
 --- !u!114 &4164561313578301483
 MonoBehaviour:
   m_ObjectHideFlags: 0

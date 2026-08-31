@@ -5,9 +5,9 @@ using UnityEngine.SceneManagement;
 namespace FantasySurvival.WorldLighting
 {
     /// <summary>
-    /// Opts one Spot Light into the shared atmospheric shaft presentation.
-    /// This component owns no light state and only describes the downward
-    /// presentation volume used by dedicated lamps and similar fixtures.
+    /// Opts one Spot Light into the shared local-volumetric render pass.
+    /// This component owns no light state; it only describes the participating
+    /// medium used by dedicated lamps and similar fixtures.
     /// </summary>
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Light))]
@@ -17,17 +17,19 @@ namespace FantasySurvival.WorldLighting
         private static readonly List<StylizedLightShaftEmitter> ActiveEmitters = new();
 
         [SerializeField] private Light sourceLight;
-        [SerializeField, Min(0.05f)] private float length = 4.6f;
-        [SerializeField, Range(0.1f, 1.25f)] private float coneRadiusScale = 0.92f;
+        [Tooltip("Atmospheric single-scattering strength. This does not change the source Light intensity.")]
         [SerializeField, Min(0f)] private float intensityMultiplier = 0.075f;
-        [SerializeField, Range(2, 8)] private int densityBands = 4;
-        [SerializeField, Range(0f, 1f)] private float noiseStrength = 0.12f;
-        [SerializeField, Min(0.01f)] private float worldCellSize = 0.12f;
+        [Tooltip("How quickly the participating medium absorbs/out-scatters light along the camera ray.")]
+        [SerializeField, Min(0f)] private float extinctionCoefficient = 0.08f;
+        [Tooltip("Forward-scattering bias. Zero is isotropic; positive values favor looking toward the light.")]
+        [SerializeField, Range(-0.35f, 0.65f)] private float anisotropy = 0.12f;
 
         internal Light SourceLight => sourceLight;
         internal Vector3 OriginWorld =>
             sourceLight != null ? sourceLight.transform.position : transform.position;
-        internal float Length => length;
+        internal float Length => sourceLight != null
+            ? Mathf.Max(0.05f, sourceLight.range)
+            : 4.6f;
         internal float EndRadius
         {
             get
@@ -39,13 +41,12 @@ namespace FantasySurvival.WorldLighting
                                          Mathf.Deg2Rad;
                 return Mathf.Max(
                     0.02f,
-                    Mathf.Tan(halfAngleRadians) * length * coneRadiusScale);
+                    Mathf.Tan(halfAngleRadians) * Length);
             }
         }
         internal float IntensityMultiplier => intensityMultiplier;
-        internal int DensityBands => densityBands;
-        internal float NoiseStrength => noiseStrength;
-        internal float WorldCellSize => worldCellSize;
+        internal float ExtinctionCoefficient => extinctionCoefficient;
+        internal float Anisotropy => anisotropy;
         internal Vector3 DirectionWorld
         {
             get
@@ -92,12 +93,9 @@ namespace FantasySurvival.WorldLighting
                 sourceLight = GetComponent<Light>();
             }
 
-            length = Mathf.Max(0.05f, length);
-            coneRadiusScale = Mathf.Clamp(coneRadiusScale, 0.1f, 1.25f);
             intensityMultiplier = Mathf.Max(0f, intensityMultiplier);
-            densityBands = Mathf.Clamp(densityBands, 2, 8);
-            noiseStrength = Mathf.Clamp01(noiseStrength);
-            worldCellSize = Mathf.Max(0.01f, worldCellSize);
+            extinctionCoefficient = Mathf.Max(0f, extinctionCoefficient);
+            anisotropy = Mathf.Clamp(anisotropy, -0.35f, 0.65f);
         }
 
         internal static int FillVisibleEmitters(
@@ -154,7 +152,7 @@ namespace FantasySurvival.WorldLighting
                 }
 
                 Vector3 origin = emitter.OriginWorld;
-                Vector3 end = origin + emitter.DirectionWorld * emitter.length;
+                Vector3 end = origin + emitter.DirectionWorld * emitter.Length;
                 Vector3 radius = Vector3.one * emitter.EndRadius;
                 Bounds bounds = new Bounds();
                 bounds.SetMinMax(
@@ -199,7 +197,7 @@ namespace FantasySurvival.WorldLighting
         {
             Vector3 direction = DirectionWorld;
             Vector3 origin = OriginWorld;
-            Vector3 end = origin + direction * length;
+            Vector3 end = origin + direction * Length;
             Color sourceColor = sourceLight != null
                 ? sourceLight.color
                 : new Color(1f, 0.62f, 0.28f, 1f);

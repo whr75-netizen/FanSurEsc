@@ -26,8 +26,8 @@ namespace FantasySurvival.SceneFlow
         {
             None,
             AbandonToBase,
-            AbandonToMainMenu,
-            DismissBaseSaveFailure
+            SaveRaidToMainMenu,
+            DismissSaveFailure
         }
 
         [Header("Owners")]
@@ -392,8 +392,10 @@ namespace FantasySurvival.SceneFlow
 
             if (raidSession.IsRaidActive)
             {
-                confirmationAction = ConfirmationAction.AbandonToMainMenu;
-                ShowConfirmation("원정을 포기하시겠습니까?\n확인하면 주 메뉴로 이동합니다.");
+                confirmationAction = ConfirmationAction.SaveRaidToMainMenu;
+                ShowConfirmation(
+                    "현재 원정을 저장하고 주 메뉴로 이동하시겠습니까?\n" +
+                    "이 원정은 같은 저장 슬롯에서 이어할 수 있습니다.");
                 return;
             }
 
@@ -423,7 +425,40 @@ namespace FantasySurvival.SceneFlow
             ConfirmationAction action = confirmationAction;
             confirmationAction = ConfirmationAction.None;
 
-            if (action == ConfirmationAction.DismissBaseSaveFailure)
+            if (action == ConfirmationAction.DismissSaveFailure)
+            {
+                ShowMainPanel();
+                return;
+            }
+
+            if (action == ConfirmationAction.SaveRaidToMainMenu)
+            {
+                string saveError = null;
+                if (!raidSession.IsRaidActive)
+                {
+                    saveError = "저장할 활성 원정이 없습니다.";
+                }
+                else if (shell?.RaidCheckpoint == null)
+                {
+                    saveError = "원정 저장 기능이 준비되지 않았습니다.";
+                }
+                else if (shell.RaidCheckpoint.TrySaveActiveRaidForMainMenu(out saveError))
+                {
+                    BeginMainMenuExit();
+                    return;
+                }
+
+                if (!string.IsNullOrWhiteSpace(saveError))
+                {
+                    ShowRaidSaveFailure(saveError);
+                    return;
+                }
+
+                ShowRaidSaveFailure("현재 원정 상태를 저장하지 못했습니다.");
+                return;
+            }
+
+            if (action != ConfirmationAction.AbandonToBase)
             {
                 ShowMainPanel();
                 return;
@@ -442,14 +477,7 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
-            if (action == ConfirmationAction.AbandonToBase)
-            {
-                BeginReturnToBase();
-            }
-            else
-            {
-                BeginMainMenuExit();
-            }
+            BeginReturnToBase();
         }
 
         public void CancelConfirmation()
@@ -933,7 +961,7 @@ namespace FantasySurvival.SceneFlow
                 return false;
             }
 
-            if (activeBasePersistence.SaveSlotOne())
+            if (activeBasePersistence.SaveActiveSlot())
             {
                 return true;
             }
@@ -944,13 +972,24 @@ namespace FantasySurvival.SceneFlow
 
         private void ShowBaseSaveFailure(string detail)
         {
-            confirmationAction = ConfirmationAction.DismissBaseSaveFailure;
+            confirmationAction = ConfirmationAction.DismissSaveFailure;
             string reason = string.IsNullOrWhiteSpace(detail)
                 ? "기지 상태를 저장하지 못했습니다."
                 : detail;
             ShowConfirmation(
                 "저장에 실패하여 주 메뉴 이동을 취소했습니다.\n" + reason);
             Debug.LogError("Main Menu exit was blocked because the base save failed.", this);
+        }
+
+        private void ShowRaidSaveFailure(string detail)
+        {
+            confirmationAction = ConfirmationAction.DismissSaveFailure;
+            string reason = string.IsNullOrWhiteSpace(detail)
+                ? "현재 원정 상태를 저장하지 못했습니다."
+                : detail;
+            ShowConfirmation(
+                "저장에 실패하여 주 메뉴 이동을 취소했습니다.\n" + reason);
+            Debug.LogError("Main Menu exit was blocked because the active raid save failed.", this);
         }
 
         private void BeginMainMenuExit()

@@ -37,7 +37,8 @@ namespace FantasySurvival.Raids
     public sealed class RaidCheckpointData
     {
         public const int CurrentFormatVersion = 1;
-        public const int CurrentWorldStateVersion = 1;
+        public const int LegacyWorldStateVersion = 1;
+        public const int CurrentWorldStateVersion = 2;
 
         public string gameId;
         public int formatVersion;
@@ -63,6 +64,8 @@ namespace FantasySurvival.Raids
         public List<RaidChestSaveData> chests = new List<RaidChestSaveData>();
         public int enemyRecordCount;
         public List<RaidEnemySaveData> enemies = new List<RaidEnemySaveData>();
+        public int worldItemRecordCount;
+        public List<RaidWorldItemSaveData> worldItems = new List<RaidWorldItemSaveData>();
     }
 
     /// <summary>
@@ -101,6 +104,18 @@ namespace FantasySurvival.Raids
         public float currentHealth;
         public float maxHealth;
         public InventoryGridSaveData corpseInventory;
+    }
+
+    [Serializable]
+    public sealed class RaidWorldItemSaveData
+    {
+        // Stable world-entity ID for this dropped item. This is intentionally
+        // separate from ItemDefinition's numeric kind ID and save-local item records.
+        public string stableId;
+        public RaidTransformSaveData transform;
+        // Exact one-root-item owner grid, including stack count, rotation,
+        // magazine state, and any nested container contents.
+        public InventoryGridSaveData inventory;
     }
 
     [Serializable]

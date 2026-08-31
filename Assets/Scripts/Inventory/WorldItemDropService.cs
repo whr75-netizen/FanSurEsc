@@ -56,19 +56,18 @@ namespace FantasySurvival.Inventory
             }
 
             Vector3 position = ResolveDropPosition();
-            GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.SetActive(false);
-            sphere.transform.position = position;
-            sphere.transform.localScale = Vector3.one * DefaultSphereDiameter;
-
             Scene activeScene = SceneManager.GetActiveScene();
-            if (activeScene.IsValid() && activeScene.isLoaded &&
-                sphere.scene != activeScene)
+            if (!TryCreatePickupObject(
+                    activeScene,
+                    position,
+                    Quaternion.identity,
+                    out GameObject sphere,
+                    out WorldItemPickup pickup,
+                    out error))
             {
-                SceneManager.MoveGameObjectToScene(sphere, activeScene);
+                return false;
             }
 
-            WorldItemPickup pickup = sphere.AddComponent<WorldItemPickup>();
             if (!pickup.TryInitialize(detachedItem, out error))
             {
                 DestroyObject(sphere);
@@ -78,6 +77,88 @@ namespace FantasySurvival.Inventory
             receipt = new Receipt(pickup, detachedItem, pickup.Inventory);
             error = null;
             return true;
+        }
+
+        internal static bool TryCreateRestored(
+            Scene scene,
+            string stableId,
+            StandardStashViewData restoredInventory,
+            Vector3 position,
+            Quaternion rotation,
+            out WorldItemPickup pickup,
+            out string error)
+        {
+            pickup = null;
+            if (!TryCreatePickupObject(
+                    scene,
+                    position,
+                    rotation,
+                    out GameObject sphere,
+                    out WorldItemPickup candidate,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!candidate.TryInitializeRestored(stableId, restoredInventory, out error))
+            {
+                DestroyObject(sphere);
+                return false;
+            }
+
+            pickup = candidate;
+            error = null;
+            return true;
+        }
+
+        internal static void DestroyPickup(WorldItemPickup pickup)
+        {
+            if (pickup != null)
+            {
+                pickup.gameObject.SetActive(false);
+                DestroyObject(pickup.gameObject);
+            }
+        }
+
+        private static bool TryCreatePickupObject(
+            Scene scene,
+            Vector3 position,
+            Quaternion rotation,
+            out GameObject sphere,
+            out WorldItemPickup pickup,
+            out string error)
+        {
+            sphere = null;
+            pickup = null;
+            if (!scene.IsValid() || !scene.isLoaded)
+            {
+                error = "바닥 아이템을 소유할 active scene이 없습니다.";
+                return false;
+            }
+
+            try
+            {
+                sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                sphere.SetActive(false);
+                sphere.transform.SetPositionAndRotation(position, rotation);
+                sphere.transform.localScale = Vector3.one * DefaultSphereDiameter;
+                if (sphere.scene != scene)
+                {
+                    SceneManager.MoveGameObjectToScene(sphere, scene);
+                }
+
+                pickup = sphere.AddComponent<WorldItemPickup>();
+                error = null;
+                return true;
+            }
+            catch (System.Exception exception)
+            {
+                DestroyObject(sphere);
+                sphere = null;
+                pickup = null;
+                error = $"바닥 아이템 scene 오브젝트를 만들지 못했습니다: {exception.Message}";
+                return false;
+            }
         }
 
         private Vector3 ResolveDropPosition()
@@ -173,13 +254,8 @@ namespace FantasySurvival.Inventory
                     return false;
                 }
 
-                try
+                if (!Pickup.TryActivate(out error))
                 {
-                    Pickup.gameObject.SetActive(true);
-                }
-                catch (System.Exception exception)
-                {
-                    error = $"바닥 아이템 표시를 확정하지 못했습니다: {exception.Message}";
                     return false;
                 }
 
@@ -236,7 +312,7 @@ namespace FantasySurvival.Inventory
                 state = ReceiptState.RolledBack;
                 if (Pickup != null)
                 {
-                    DestroyObject(Pickup.gameObject);
+                    DestroyPickup(Pickup);
                 }
                 error = null;
                 return true;

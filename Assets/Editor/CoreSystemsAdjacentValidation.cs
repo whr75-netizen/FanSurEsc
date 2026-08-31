@@ -1,11 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using FantasySurvival.Actions;
+using FantasySurvival.BaseBuilding;
 using FantasySurvival.Combat;
 using FantasySurvival.Controls;
 using FantasySurvival.Inventory;
+using FantasySurvival.Raids;
 using FantasySurvival.SaveSystem;
 using UnityEditor;
 using UnityEngine;
@@ -43,11 +46,12 @@ namespace FantasySurvival.EditorTools
             ValidateActionAndDamageNotifications();
             ValidateInputBindingTransactions();
             ValidateSaveArtifactDetection();
+            ValidateRaidWorldItemRecoveryPayload();
             ValidatePrefabWiring();
             Debug.Log(
                 "Core adjacent contract validation passed: equipment W1-W3, ammunition, " +
                 "runtime tooltip, action/damage notifications, key-row transactions, " +
-                "save artifact detection, and prefab wiring.");
+                "3-slot save isolation, raid world-item Recovery, and prefab wiring.");
         }
 
         [MenuItem(MenuPath, true)]
@@ -303,22 +307,242 @@ namespace FantasySurvival.EditorTools
                         temporaryRoot,
                         out string error),
                     error);
+                Require(
+                    RaidCheckpointStore.SetEditorStorageRootForTests(
+                        temporaryRoot,
+                        out error),
+                    error);
                 Require(!GameSaveManager.HasSlotOneArtifacts, "Empty test root reports a save.");
 
-                string primaryPath = GameSaveManager.SlotOnePath;
+                string slotOnePath = GameSaveManager.GetSlotPath(1);
+                string slotTwoPath = GameSaveManager.GetSlotPath(2);
+                string slotThreePath = GameSaveManager.GetSlotPath(3);
+                Require(
+                    slotOnePath == GameSaveManager.SlotOnePath &&
+                    slotOnePath != slotTwoPath && slotTwoPath != slotThreePath,
+                    "Save-slot paths are not isolated or slot 1 lost its legacy path.");
+
+                string primaryPath = slotOnePath;
                 Directory.CreateDirectory(Path.GetDirectoryName(primaryPath));
                 File.WriteAllText(primaryPath, "validation");
                 Require(GameSaveManager.HasSlotOneArtifacts, "Primary save was not detected.");
+                Require(
+                    !GameSaveManager.HasSlotArtifacts(2) &&
+                    !GameSaveManager.HasSlotArtifacts(3),
+                    "A slot 1 artifact leaked into another ordinary slot.");
 
                 File.Delete(primaryPath);
                 File.WriteAllText(primaryPath + ".bak", "validation");
                 Require(GameSaveManager.HasSlotOneArtifacts, "Backup save was not detected.");
+
+                Directory.CreateDirectory(Path.GetDirectoryName(slotTwoPath));
+                File.WriteAllText(slotTwoPath, "validation");
+                Require(
+                    GameSaveManager.HasSlotArtifacts(2) &&
+                    !GameSaveManager.HasSlotArtifacts(3),
+                    "Slot 2 ordinary artifact detection is not isolated.");
+
+                string slotTwoRecovery = RaidCheckpointStore.GetBaselinePath(2);
+                Directory.CreateDirectory(Path.GetDirectoryName(slotTwoRecovery));
+                File.WriteAllText(slotTwoRecovery, "validation");
+                Require(
+                    RaidCheckpointStore.HasRecoveryArtifactsForSlot(2) &&
+                    !RaidCheckpointStore.HasRecoveryArtifactsForSlot(1) &&
+                    !RaidCheckpointStore.HasRecoveryArtifactsForSlot(3),
+                    "Raid Recovery artifacts leaked across save slots.");
+
+                File.Delete(slotOnePath + ".bak");
+                File.Delete(slotTwoPath);
+                ItemDatabase itemDatabase =
+                    AssetDatabase.LoadAssetAtPath<ItemDatabase>(ItemDatabasePath);
+                BaseFurnitureDatabase furnitureDatabase =
+                    AssetDatabase.LoadAssetAtPath<BaseFurnitureDatabase>(
+                        "Assets/GameData/BaseFurniture/BaseFurnitureDatabase.asset");
+                Require(itemDatabase != null && furnitureDatabase != null,
+                    "Save-slot validation databases are missing.");
+
+                for (int slotIndex = 1; slotIndex <= GameSaveManager.SlotCount; slotIndex++)
+                {
+                    GameSaveData save = GameSaveManager.CreateSave(
+                        new PlayerItemStateSaveData
+                        {
+                            layoutId = PlayerItemStateSaveData.FlatLayoutId,
+                            inventoryWidth = 8,
+                            inventoryHeight = 9,
+                            itemRecordCount = 0
+                        },
+                        new PlayerCurrencySaveData
+                        {
+                            formatVersion = PlayerCurrencySaveData.CurrentFormatVersion,
+                            gold = slotIndex,
+                            silver = slotIndex * 10
+                        },
+                        PlayerProgressSaveCodec.CreateEmptySaveData(true),
+                        BaseFurnitureSaveCodec.CreateEmptySaveData(true),
+                        BaseMerchantSaveCodec.CreateEmptySaveData(true));
+                    Require(
+                        GameSaveManager.TryWriteSlotMirrored(
+                            slotIndex,
+                            save,
+                            itemDatabase,
+                            furnitureDatabase,
+                            8,
+                            9,
+                            out error),
+                        error);
+                }
+
+                for (int slotIndex = 1; slotIndex <= GameSaveManager.SlotCount; slotIndex++)
+                {
+                    GameSaveManager.ReadSlotCandidates(
+                        slotIndex,
+                        out GameSaveData primary,
+                        out string primaryError,
+                        out GameSaveData backup,
+                        out string backupError);
+                    Require(primary != null && backup != null,
+                        $"Slot {slotIndex} did not produce primary+backup: " +
+                        $"{primaryError} {backupError}");
+                    Require(
+                        primary.playerCurrency.gold == slotIndex &&
+                        backup.playerCurrency.gold == slotIndex,
+                        $"Slot {slotIndex} read data from another slot.");
+                }
             }
             finally
             {
+                RaidCheckpointStore.ClearEditorStorageRootForTests();
                 GameSaveManager.ClearEditorStorageRootForTests();
                 DeleteTemporaryDirectory(temporaryRoot);
             }
+        }
+
+        private static void ValidateRaidWorldItemRecoveryPayload()
+        {
+            ItemDatabase itemDatabase =
+                AssetDatabase.LoadAssetAtPath<ItemDatabase>(ItemDatabasePath);
+            BaseFurnitureDatabase furnitureDatabase =
+                AssetDatabase.LoadAssetAtPath<BaseFurnitureDatabase>(
+                    "Assets/GameData/BaseFurniture/BaseFurnitureDatabase.asset");
+            Require(itemDatabase != null && furnitureDatabase != null,
+                "Raid world-item validation databases are missing.");
+
+            ItemDefinition definition = GetItem(itemDatabase, 8);
+            var item = (InventoryItemData)InventoryItemDataFactory.Create(definition, 5);
+            int width = item.IsRotate ? item.Height : item.Width;
+            int height = item.IsRotate ? item.Width : item.Height;
+            var worldOwner = new StandardStashViewData(width, height);
+            int? slot = worldOwner.GetInsertableId(item);
+            Require(slot.HasValue, "Validation world item has no insertable root slot.");
+            worldOwner.InsertInventoryItem(slot.Value, item);
+            Require(
+                InventorySaveCodec.TryCaptureGrid(
+                    worldOwner,
+                    itemDatabase,
+                    out InventoryGridSaveData itemGrid,
+                    out string error),
+                error);
+
+            GameSaveData persistentState = GameSaveManager.CreateSave(
+                new PlayerItemStateSaveData
+                {
+                    layoutId = PlayerItemStateSaveData.FlatLayoutId,
+                    inventoryWidth = 8,
+                    inventoryHeight = 9,
+                    itemRecordCount = 0
+                },
+                new PlayerCurrencySaveData
+                {
+                    formatVersion = PlayerCurrencySaveData.CurrentFormatVersion
+                },
+                PlayerProgressSaveCodec.CreateEmptySaveData(true),
+                BaseFurnitureSaveCodec.CreateEmptySaveData(true),
+                BaseMerchantSaveCodec.CreateEmptySaveData(true));
+            string raidId = Guid.NewGuid().ToString("D");
+            var baseline = new RaidRecoveryBaselineData
+            {
+                gameId = GameSaveData.CurrentGameId,
+                formatVersion = RaidRecoveryBaselineData.CurrentFormatVersion,
+                raidInstanceId = raidId,
+                createdAtUtc = DateTime.UtcNow.ToString("O"),
+                raidScene = "GameMapTest",
+                raidSpawnId = "RaidEntry",
+                sceneStateId = "core:gamemaptest:v1",
+                startingState = persistentState
+            };
+            var checkpoint = new RaidCheckpointData
+            {
+                gameId = GameSaveData.CurrentGameId,
+                formatVersion = RaidCheckpointData.CurrentFormatVersion,
+                worldStateVersion = RaidCheckpointData.CurrentWorldStateVersion,
+                raidInstanceId = raidId,
+                sequence = 1,
+                savedAtUtc = DateTime.UtcNow.ToString("O"),
+                phase = RaidCheckpointPhase.Active,
+                outcome = RaidOutcome.None,
+                raidScene = baseline.raidScene,
+                raidSpawnId = baseline.raidSpawnId,
+                sceneStateId = baseline.sceneStateId,
+                generatorVersion = 1,
+                mapSeed = 123,
+                layoutHash = "0000000000000001",
+                playerTransform = new RaidTransformSaveData { rotationW = 1f },
+                playerCurrentHealth = 100f,
+                playerMaxHealth = 100f,
+                persistentState = persistentState,
+                chestRecordCount = 0,
+                chests = new List<RaidChestSaveData>(),
+                enemyRecordCount = 0,
+                enemies = new List<RaidEnemySaveData>(),
+                worldItemRecordCount = 1,
+                worldItems = new List<RaidWorldItemSaveData>
+                {
+                    new RaidWorldItemSaveData
+                    {
+                        stableId = Guid.NewGuid().ToString("D"),
+                        transform = new RaidTransformSaveData
+                        {
+                            positionX = 2f,
+                            positionY = 0.16f,
+                            positionZ = -3f,
+                            rotationW = 1f
+                        },
+                        inventory = itemGrid
+                    }
+                }
+            };
+
+            Require(
+                RaidCheckpointValidator.TryValidateCheckpointForLoad(
+                    baseline,
+                    checkpoint,
+                    itemDatabase,
+                    furnitureDatabase,
+                    8,
+                    9,
+                    out error),
+                error);
+
+            checkpoint.worldItemRecordCount = 0;
+            Require(
+                !RaidCheckpointValidator.TryValidateCheckpointStructure(
+                    baseline,
+                    checkpoint,
+                    out _),
+                "A mismatched raid world-item count was accepted.");
+
+            checkpoint.worldStateVersion = RaidCheckpointData.LegacyWorldStateVersion;
+            checkpoint.worldItems = null;
+            Require(
+                RaidCheckpointValidator.TryValidateCheckpointForLoad(
+                    baseline,
+                    checkpoint,
+                    itemDatabase,
+                    furnitureDatabase,
+                    8,
+                    9,
+                    out error),
+                $"Legacy world-state v1 compatibility failed: {error}");
         }
 
         private static void ValidatePrefabWiring()

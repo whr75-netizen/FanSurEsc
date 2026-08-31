@@ -111,6 +111,26 @@ namespace FantasySurvival.Raids
                 }
             }
 
+            if (checkpoint.worldItems != null)
+            {
+                foreach (RaidWorldItemSaveData worldItem in checkpoint.worldItems)
+                {
+                    if (!InventorySaveCodec.TryRestoreGrid(
+                            worldItem.inventory,
+                            itemDatabase,
+                            out var restoredOwner,
+                            out error) ||
+                        !WorldItemPickup.TryGetSingleOwnedItem(
+                            restoredOwner,
+                            out _,
+                            out error))
+                    {
+                        error = $"Raid world item '{worldItem.stableId}' is invalid: {error}";
+                        return false;
+                    }
+                }
+            }
+
             error = null;
             return true;
         }
@@ -126,9 +146,12 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            bool legacyWorldState =
+                checkpoint.worldStateVersion == RaidCheckpointData.LegacyWorldStateVersion;
             if (checkpoint.gameId != GameSaveData.CurrentGameId ||
                 checkpoint.formatVersion != RaidCheckpointData.CurrentFormatVersion ||
-                checkpoint.worldStateVersion != RaidCheckpointData.CurrentWorldStateVersion)
+                (!legacyWorldState &&
+                 checkpoint.worldStateVersion != RaidCheckpointData.CurrentWorldStateVersion))
             {
                 error = "Raid checkpoint has an unsupported header.";
                 return false;
@@ -204,11 +227,17 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            bool hasValidWorldItemEnvelope = legacyWorldState
+                ? checkpoint.worldItemRecordCount == 0 &&
+                  (checkpoint.worldItems == null || checkpoint.worldItems.Count == 0)
+                : checkpoint.worldItems != null &&
+                  checkpoint.worldItemRecordCount == checkpoint.worldItems.Count;
             if (checkpoint.persistentState == null ||
                 checkpoint.chests == null ||
                 checkpoint.enemies == null ||
                 checkpoint.chestRecordCount != checkpoint.chests.Count ||
-                checkpoint.enemyRecordCount != checkpoint.enemies.Count)
+                checkpoint.enemyRecordCount != checkpoint.enemies.Count ||
+                !hasValidWorldItemEnvelope)
             {
                 error = "Raid checkpoint record counts are inconsistent.";
                 return false;
@@ -242,6 +271,23 @@ namespace FantasySurvival.Raids
                 {
                     error = "Raid checkpoint contains an invalid or duplicate Enemy record.";
                     return false;
+                }
+            }
+
+
+            if (checkpoint.worldItems != null)
+            {
+                foreach (RaidWorldItemSaveData worldItem in checkpoint.worldItems)
+                {
+                    if (worldItem == null ||
+                        !Guid.TryParse(worldItem.stableId, out _) ||
+                        !stableIds.Add($"world-item:{worldItem.stableId}") ||
+                        !HasValidTransform(worldItem.transform) ||
+                        worldItem.inventory == null)
+                    {
+                        error = "Raid checkpoint contains an invalid or duplicate world-item record.";
+                        return false;
+                    }
                 }
             }
 

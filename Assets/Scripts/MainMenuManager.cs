@@ -27,6 +27,13 @@ public class MainMenuManager : MonoBehaviour
         SettleOrphaned
     }
 
+    private enum SlotPanelMode
+    {
+        None,
+        NewGame,
+        LoadGame
+    }
+
     [Header("Panels")]
     [SerializeField] private GameObject mainPanel;
     [SerializeField] private GameObject loadPanel;
@@ -67,6 +74,11 @@ public class MainMenuManager : MonoBehaviour
     private ExitPanelAction exitPanelAction;
     private Text exitHeadingText;
     private Text exitConfirmButtonText;
+    private readonly List<Button> slotButtons = new List<Button>();
+    private readonly List<Text> slotButtonTexts = new List<Text>();
+    private Text slotPanelHeading;
+    private SlotPanelMode slotPanelMode;
+    private int selectedSlotIndex = GameSaveManager.DefaultSlotIndex;
 
     public bool IsNewGameConfirmationPending =>
         exitPanelAction == ExitPanelAction.ConfirmNewGame;
@@ -76,13 +88,14 @@ public class MainMenuManager : MonoBehaviour
         GameUserSettings.Apply();
         CacheExitPanelPresentation();
         ResetExitPanelAction();
-        InitializeRaidRecoveryView();
+        InitializeSlotRows();
+        ShowMainPanelCore();
     }
 
 #if UNITY_EDITOR
     public void ReinitializeRaidRecoveryForEditorTests()
     {
-        InitializeRaidRecoveryView();
+        InitializeRaidRecoveryView(selectedSlotIndex);
     }
 #endif
 
@@ -93,22 +106,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void StartNewGame()
     {
-        if (BlockNormalStartForRaidRecovery())
-        {
-            return;
-        }
-
-        if (GameSaveManager.HasSlotOneArtifacts)
-        {
-            ConfigureExitPanel(ExitPanelAction.ConfirmNewGame);
-            ShowOnly(exitPanel);
-            SetStatus(
-                "기존 저장 슬롯이 있습니다. 새 게임을 계속하면 다음 저장부터 " +
-                "기존 진행과 백업이 교체될 수 있습니다.");
-            return;
-        }
-
-        BeginNewGame();
+        OpenSlotPanel(SlotPanelMode.NewGame);
     }
 
     public void ConfirmNewGame()
@@ -124,60 +122,213 @@ public class MainMenuManager : MonoBehaviour
     private void BeginNewGame()
     {
         exitPanelAction = ExitPanelAction.None;
-        GameStartRequest.QueueNewGame();
+        GameStartRequest.QueueNewGame(selectedSlotIndex);
         SceneManager.LoadScene("GameLoadingScene");
     }
 
     public void OpenLoadPanel()
     {
-        if (BlockNormalStartForRaidRecovery())
-        {
-            return;
-        }
-
-        bool canLoad = TrySelectLoadCandidate(out bool loadedBackup, out string status);
-
-        if (canLoad)
-        {
-            loadSlotText.text = loadedBackup
-                ? $"Slot 1  {GameSaveManager.GetDisplayTimestamp(cachedSave)}  (backup recovered)"
-                : $"Slot 1  {GameSaveManager.GetDisplayTimestamp(cachedSave)}";
-            SetStatus(status);
-        }
-        else
-        {
-            loadSlotText.text = "Slot 1  Empty or unavailable";
-            SetStatus(status);
-        }
-
-        if (loadSlotButton != null)
-        {
-            loadSlotButton.interactable = canLoad;
-        }
-
-        ShowOnly(loadPanel);
+        OpenSlotPanel(SlotPanelMode.LoadGame);
     }
 
     public void LoadSelectedGame()
     {
-        if (BlockNormalStartForRaidRecovery())
+        HandleSlotSelection(selectedSlotIndex);
+    }
+
+    public void SelectSaveSlot(int slotIndex)
+    {
+        HandleSlotSelection(slotIndex);
+    }
+
+    private void HandleSlotSelection(int slotIndex)
+    {
+        if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+        {
+            SetStatus($"Save slot {slotIndex} is outside the supported range.");
+            return;
+        }
+
+        selectedSlotIndex = slotIndex;
+        if (slotPanelMode == SlotPanelMode.NewGame)
+        {
+            if (GameSaveManager.HasSlotArtifacts(slotIndex) ||
+                RaidCheckpointStore.HasRecoveryArtifactsForSlot(slotIndex))
+            {
+                ConfigureExitPanel(ExitPanelAction.ConfirmNewGame);
+                ShowOnly(exitPanel);
+                SetStatus(
+                    $"슬롯 {slotIndex}의 기존 진행을 새 게임으로 교체하시겠습니까? " +
+                    "다른 슬롯은 변경하지 않습니다.");
+                return;
+            }
+
+            BeginNewGame();
+            return;
+        }
+
+        if (slotPanelMode != SlotPanelMode.LoadGame)
         {
             return;
         }
 
-        if (cachedSave == null && !TrySelectLoadCandidate(out _, out string error))
+        bool hasRecoveryDecision = SlotRequiresRecoveryDecision(slotIndex);
+        if (hasRecoveryDecision)
+        {
+            InitializeRaidRecoveryView(slotIndex);
+            if (recoveryDecisionRequired)
+            {
+                return;
+            }
+        }
+
+        if (!TrySelectLoadCandidate(slotIndex, out _, out string error))
         {
             SetStatus(error);
             return;
         }
 
-        if (!GameStartRequest.QueueLoad(cachedSave, cachedFallbackSave))
+        if (!GameStartRequest.QueueLoad(
+                slotIndex,
+                cachedSave,
+                cachedFallbackSave))
         {
             SetStatus("Could not queue the selected save.");
             return;
         }
 
         SceneManager.LoadScene("GameLoadingScene");
+    }
+
+    private void InitializeSlotRows()
+    {
+        slotButtons.Clear();
+        slotButtonTexts.Clear();
+        if (loadSlotButton == null || loadPanel == null)
+        {
+            return;
+        }
+
+        Text[] panelTexts = loadPanel.GetComponentsInChildren<Text>(true);
+        for (int i = 0; i < panelTexts.Length; i++)
+        {
+            if (panelTexts[i] != null && panelTexts[i].gameObject.name == "Heading")
+            {
+                slotPanelHeading = panelTexts[i];
+                break;
+            }
+        }
+
+        RectTransform templateRect = loadSlotButton.transform as RectTransform;
+        Vector2 templatePosition = templateRect != null
+            ? templateRect.anchoredPosition
+            : Vector2.zero;
+        const float rowSpacing = 72f;
+
+        for (int index = 0; index < GameSaveManager.SlotCount; index++)
+        {
+            int capturedSlotIndex = index + 1;
+            Button button = index == 0
+                ? loadSlotButton
+                : Instantiate(loadSlotButton, loadSlotButton.transform.parent);
+            button.gameObject.name = $"SaveSlot{capturedSlotIndex}Button";
+            button.onClick = new Button.ButtonClickedEvent();
+            button.onClick.AddListener(() => SelectSaveSlot(capturedSlotIndex));
+
+            RectTransform rowRect = button.transform as RectTransform;
+            if (rowRect != null)
+            {
+                rowRect.anchoredPosition = templatePosition + Vector2.down * (rowSpacing * index);
+            }
+
+            Text rowText = index == 0
+                ? loadSlotText
+                : button.GetComponentInChildren<Text>(true);
+            slotButtons.Add(button);
+            slotButtonTexts.Add(rowText);
+        }
+    }
+
+    private void OpenSlotPanel(SlotPanelMode mode)
+    {
+        slotPanelMode = mode;
+        ClearCachedRaidRecovery();
+        cachedSave = null;
+        cachedFallbackSave = null;
+        ResetExitPanelAction();
+
+        if (slotPanelHeading != null)
+        {
+            slotPanelHeading.text = mode == SlotPanelMode.NewGame
+                ? "SELECT NEW GAME SLOT"
+                : "LOAD GAME";
+        }
+
+        RefreshSlotRows();
+        ShowOnly(loadPanel);
+        SetStatus(mode == SlotPanelMode.NewGame
+            ? "새 게임을 저장할 슬롯을 선택해 주세요."
+            : "불러오거나 이어할 슬롯을 선택해 주세요.");
+    }
+
+    private void RefreshSlotRows()
+    {
+        for (int index = 0; index < slotButtons.Count; index++)
+        {
+            int slotIndex = index + 1;
+            bool readable = TryReadSlotCandidate(
+                slotIndex,
+                true,
+                out GameSaveData candidate,
+                out _,
+                out bool loadedBackup,
+                out _);
+            bool hasRecoveryArtifacts =
+                RaidCheckpointStore.HasRecoveryArtifactsForSlot(slotIndex);
+            bool hasArtifacts = GameSaveManager.HasSlotArtifacts(slotIndex) ||
+                                hasRecoveryArtifacts;
+
+            if (index < slotButtonTexts.Count && slotButtonTexts[index] != null)
+            {
+                if (readable)
+                {
+                    string raidStatus = candidate.raidInProgress ? "  [원정 진행 중]" : string.Empty;
+                    string backupStatus = loadedBackup ? "  (backup recovered)" : string.Empty;
+                    slotButtonTexts[index].text =
+                        $"Slot {slotIndex}  {GameSaveManager.GetDisplayTimestamp(candidate)}" +
+                        raidStatus + backupStatus;
+                }
+                else
+                {
+                    slotButtonTexts[index].text = hasArtifacts
+                        ? $"Slot {slotIndex}  Unavailable"
+                        : $"Slot {slotIndex}  Empty";
+                }
+            }
+
+            // A markerless/corrupt ordinary save must not hide an orphaned Recovery
+            // namespace behind a disabled row. Selecting that row runs the existing
+            // marker-first quarantine/fail-closed path for this slot only.
+            slotButtons[index].interactable =
+                slotPanelMode == SlotPanelMode.NewGame || readable || hasRecoveryArtifacts;
+        }
+    }
+
+    private bool SlotRequiresRecoveryDecision(int slotIndex)
+    {
+        if (RaidCheckpointStore.HasRecoveryArtifactsForSlot(slotIndex))
+        {
+            return true;
+        }
+
+        return TryReadSlotCandidate(
+                   slotIndex,
+                   true,
+                   out GameSaveData candidate,
+                   out _,
+                   out _,
+                   out _) &&
+               candidate.raidInProgress;
     }
 
     public void ResumeInterruptedRaid()
@@ -202,6 +353,7 @@ public class MainMenuManager : MonoBehaviour
         }
 
         if (!GameStartRequest.QueueResumeRaid(
+                selectedSlotIndex,
                 cachedRecoveryBaseline,
                 cachedRecoveryCheckpoint))
         {
@@ -236,7 +388,9 @@ public class MainMenuManager : MonoBehaviour
 
         if (recoveryDecision == RaidRecoveryDecision.SettleOrphaned)
         {
-            if (!GameStartRequest.QueueOrphanedRaidFailure(cachedOrphanedRaidSave))
+            if (!GameStartRequest.QueueOrphanedRaidFailure(
+                    selectedSlotIndex,
+                    cachedOrphanedRaidSave))
             {
                 SetRecoveryStatus("캐시가 없는 원정 실패 정산 요청을 준비하지 못했습니다.");
                 return;
@@ -266,7 +420,10 @@ public class MainMenuManager : MonoBehaviour
                 return;
             }
 
-            if (!RaidCheckpointStore.TryWriteCheckpoint(settlementCheckpoint, out string writeError))
+            if (!RaidCheckpointStore.TryWriteCheckpoint(
+                    selectedSlotIndex,
+                    settlementCheckpoint,
+                    out string writeError))
             {
                 SetRecoveryStatus($"원정 실패 상태를 안전하게 저장하지 못했습니다: {writeError}");
                 return;
@@ -300,6 +457,7 @@ public class MainMenuManager : MonoBehaviour
         }
 
         if (!GameStartRequest.QueueRaidRecoverySettlement(
+                selectedSlotIndex,
                 cachedRecoveryBaseline,
                 settlementCheckpoint,
                 cachedRecoverySettlementState,
@@ -321,32 +479,60 @@ public class MainMenuManager : MonoBehaviour
         SceneManager.LoadScene("GameLoadingScene");
     }
 
-    private bool TrySelectLoadCandidate(out bool loadedBackup, out string status)
+    private bool TrySelectLoadCandidate(
+        int slotIndex,
+        out bool loadedBackup,
+        out string status)
     {
-        cachedSave = null;
-        cachedFallbackSave = null;
+        bool selected = TryReadSlotCandidate(
+            slotIndex,
+            false,
+            out cachedSave,
+            out cachedFallbackSave,
+            out loadedBackup,
+            out status);
+        return selected;
+    }
+
+    private bool TryReadSlotCandidate(
+        int slotIndex,
+        bool allowActiveRaidMarker,
+        out GameSaveData selectedSave,
+        out GameSaveData fallbackSave,
+        out bool loadedBackup,
+        out string status)
+    {
+        selectedSave = null;
+        fallbackSave = null;
         loadedBackup = false;
 
-        GameSaveManager.ReadSlotOneCandidates(
+        GameSaveManager.ReadSlotCandidates(
+            slotIndex,
             out GameSaveData primary,
             out string primaryReadError,
             out GameSaveData backup,
             out string backupReadError);
 
-        bool primaryValid = TryValidateLoadCandidate(primary, out string primaryValidationError);
-        bool backupValid = TryValidateLoadCandidate(backup, out string backupValidationError);
+        bool primaryValid = TryValidateLoadCandidate(
+            primary,
+            allowActiveRaidMarker,
+            out string primaryValidationError);
+        bool backupValid = TryValidateLoadCandidate(
+            backup,
+            allowActiveRaidMarker,
+            out string backupValidationError);
 
         if (primaryValid)
         {
-            cachedSave = primary;
-            cachedFallbackSave = backupValid ? backup : null;
+            selectedSave = primary;
+            fallbackSave = backupValid ? backup : null;
             status = string.Empty;
             return true;
         }
 
         if (backupValid)
         {
-            cachedSave = backup;
+            selectedSave = backup;
             loadedBackup = true;
             status = "Primary save was invalid; a validated backup will be loaded.";
             return true;
@@ -469,13 +655,7 @@ public class MainMenuManager : MonoBehaviour
 
     public void ShowMainPanel()
     {
-        if (recoveryDecisionRequired)
-        {
-            ShowCurrentRecoveryDecision();
-            SetStatus("먼저 중단된 원정의 이어하기 또는 실패·결과 정산을 선택해 주세요.");
-            return;
-        }
-
+        ClearCachedRaidRecovery();
         ShowMainPanelCore();
     }
 
@@ -483,6 +663,7 @@ public class MainMenuManager : MonoBehaviour
     {
         cachedSave = null;
         cachedFallbackSave = null;
+        slotPanelMode = SlotPanelMode.None;
         ResetExitPanelAction();
         ShowOnly(mainPanel);
         SetStatus(string.Empty);
@@ -557,10 +738,19 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    private void InitializeRaidRecoveryView()
+    private void InitializeRaidRecoveryView(int slotIndex)
     {
+        if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+        {
+            ShowMainPanelCore();
+            SetStatus($"Save slot {slotIndex} is outside the supported range.");
+            return;
+        }
+
+        selectedSlotIndex = slotIndex;
         ClearCachedRaidRecovery();
-        GameSaveManager.ReadSlotOneCandidates(
+        GameSaveManager.ReadSlotCandidates(
+            slotIndex,
             out GameSaveData ordinaryPrimary,
             out _,
             out GameSaveData ordinaryBackup,
@@ -582,7 +772,7 @@ public class MainMenuManager : MonoBehaviour
         {
             ShowUnrecoverableMarkedSave(
                 "원정 진행 또는 정산 표식이 있지만 검증용 데이터베이스가 연결되지 않았습니다. " +
-                "자료를 변경하지 않고 새 게임과 일반 로드를 차단했습니다.");
+                "자료를 변경하지 않고 이 슬롯의 불러오기와 복구를 차단했습니다.");
             Debug.LogError(
                 "MainMenuManager cannot reconcile the ordinary raid marker because its databases are missing.",
                 this);
@@ -598,18 +788,19 @@ public class MainMenuManager : MonoBehaviour
         {
             ShowUnrecoverableMarkedSave(
                 "일반 세이브에는 원정 진행 표식이 있지만 Player/기지 상태를 안전하게 복원할 수 없습니다. " +
-                "새 게임과 일반 로드를 차단했습니다.");
+                "이 슬롯의 불러오기와 복구를 차단했습니다.");
             return;
         }
 
         cachedOrphanedRaidSave = ordinarySave;
-        if (!RaidCheckpointStore.HasRecoveryArtifacts)
+        if (!RaidCheckpointStore.HasRecoveryArtifactsForSlot(selectedSlotIndex))
         {
             ShowOrphanedRaidDecision(ordinarySave);
             return;
         }
 
         bool baselineRead = RaidCheckpointStore.TryReadBaseline(
+            selectedSlotIndex,
             out RaidRecoveryBaselineData baseline,
             out string baselineReadError);
         string baselineValidationError = null;
@@ -634,6 +825,7 @@ public class MainMenuManager : MonoBehaviour
 
         cachedRecoveryBaseline = baseline;
         RaidCheckpointStore.ReadCheckpointCandidates(
+            selectedSlotIndex,
             out RaidCheckpointData primary,
             out string primaryReadError,
             out RaidCheckpointData backup,
@@ -655,7 +847,7 @@ public class MainMenuManager : MonoBehaviour
             out selectedBackup);
         recoveryDecisionRequired = true;
 
-        if (RaidCheckpointStore.HasSettlementJournalArtifacts)
+        if (RaidCheckpointStore.HasSettlementJournalArtifactsForSlot(selectedSlotIndex))
         {
             bool journalSelected = TrySelectSettlementJournal(
                 baseline,
@@ -749,13 +941,13 @@ public class MainMenuManager : MonoBehaviour
 
     private void InitializeMarkerlessRecoveryView(GameSaveData ordinarySave)
     {
-        if (!RaidCheckpointStore.HasRecoveryArtifacts)
+        if (!RaidCheckpointStore.HasRecoveryArtifactsForSlot(selectedSlotIndex))
         {
             ShowMainPanelCore();
             return;
         }
 
-        if (!RaidCheckpointStore.HasSettlementJournalArtifacts)
+        if (!RaidCheckpointStore.HasSettlementJournalArtifactsForSlot(selectedSlotIndex))
         {
             QuarantineUnreferencedRecovery(
                 "The ordinary save does not declare an active raid and no settlement journal exists.");
@@ -766,11 +958,12 @@ public class MainMenuManager : MonoBehaviour
         {
             ShowUnrecoverableMarkedSave(
                 "일반 세이브의 원정 표식은 정리됐지만 남은 정산 자료를 검증할 데이터베이스가 없습니다. " +
-                "자료를 변경하지 않고 시작을 차단했습니다.");
+                "자료를 변경하지 않고 이 슬롯의 불러오기와 복구를 차단했습니다.");
             return;
         }
 
         bool baselineRead = RaidCheckpointStore.TryReadBaseline(
+            selectedSlotIndex,
             out RaidRecoveryBaselineData baseline,
             out string baselineReadError);
         string baselineValidationError = null;
@@ -824,9 +1017,11 @@ public class MainMenuManager : MonoBehaviour
     private void HandleInvalidRecoveryBaseline(string reason)
     {
         bool quarantined = RaidCheckpointStore.TryQuarantineAll(
+            selectedSlotIndex,
             out string quarantineFolder,
             out string quarantineError);
-        recoveryDecisionRequired = !quarantined && RaidCheckpointStore.HasRecoveryArtifacts;
+        recoveryDecisionRequired = !quarantined &&
+                                   RaidCheckpointStore.HasRecoveryArtifactsForSlot(selectedSlotIndex);
         ShowMainPanelCore();
 
         if (quarantined)
@@ -854,82 +1049,11 @@ public class MainMenuManager : MonoBehaviour
 
         SetStatus(
             "원정 복구 기준점이 손상되었고 파일 격리에도 실패했습니다. " +
-            "데이터 보호를 위해 새 게임과 일반 로드를 차단했습니다.");
+            "데이터 보호를 위해 이 슬롯의 불러오기와 복구를 차단했습니다.");
         Debug.LogError(
             $"Raid recovery baseline was invalid and quarantine failed. " +
             $"Reason: {reason} Quarantine: {quarantineError}",
             this);
-    }
-
-    private bool BlockNormalStartForRaidRecovery()
-    {
-        if (!recoveryDecisionRequired)
-        {
-            return false;
-        }
-
-        ShowCurrentRecoveryDecision();
-        SetStatus("중단된 원정의 복구 결정을 완료하기 전에는 새 게임이나 일반 로드를 시작할 수 없습니다.");
-        return true;
-    }
-
-    private void ShowCurrentRecoveryDecision()
-    {
-        if (recoveryDecision == RaidRecoveryDecision.SettleOrphaned)
-        {
-            if (orphanedRaidSettlementBlocked)
-            {
-                ShowUnrecoverableMarkedSave(
-                    "원정 진행 표식은 확인됐지만 실패 정산 상태가 유효하지 않아 작업을 계속할 수 없습니다.");
-                return;
-            }
-
-            ShowRecoveryDecision(
-                "일반 세이브에는 원정 진행 표식이 있지만 유효한 복구 캐시가 없습니다. " +
-                "이어하기 없이 원정 실패로 정산해야 합니다.",
-                false,
-                true);
-            return;
-        }
-
-        if (cachedRecoveryBaseline == null)
-        {
-            return;
-        }
-
-        if (recoveryDecision == RaidRecoveryDecision.Settle &&
-            cachedRecoverySettlementState != null)
-        {
-            ShowRecoveryDecision(
-                "이미 기록된 정확한 원정 정산 상태로 미러 저장과 복구 캐시 정리를 계속합니다.",
-                false,
-                false);
-            return;
-        }
-
-        if (cachedRecoveryCheckpoint == null)
-        {
-            ShowRecoveryDecision(
-                "실시간 원정 체크포인트를 복구할 수 없습니다. " +
-                "출발 전 기준점으로 원정을 실패 처리하고 기지 상태를 정산할 수 있습니다.",
-                false,
-                true);
-            return;
-        }
-
-        if (recoveryDecision == RaidRecoveryDecision.ResumeOrFail)
-        {
-            ShowRecoveryDecision(
-                "비정상 종료된 원정이 있습니다. 이어하거나 원정 실패로 처리할 수 있습니다.",
-                true,
-                true);
-            return;
-        }
-
-        ShowRecoveryDecision(
-            GetResolvedRecoveryMessage(cachedRecoveryCheckpoint.outcome),
-            false,
-            false);
     }
 
     private bool ShowRecoveryDecision(
@@ -942,7 +1066,7 @@ public class MainMenuManager : MonoBehaviour
             ShowMainPanelCore();
             SetStatus(
                 "원정 복구 자료가 있지만 복구 확인 UI가 연결되지 않았습니다. " +
-                "데이터 보호를 위해 새 게임과 일반 로드를 차단했습니다.");
+                "데이터 보호를 위해 이 슬롯의 불러오기와 복구를 차단했습니다.");
             Debug.LogError("MainMenuManager raid recovery UI references are incomplete.", this);
             return false;
         }
@@ -1104,7 +1228,11 @@ public class MainMenuManager : MonoBehaviour
             enemyRecordCount = source.enemyRecordCount,
             enemies = source.enemies == null
                 ? null
-                : new List<RaidEnemySaveData>(source.enemies)
+                : new List<RaidEnemySaveData>(source.enemies),
+            worldItemRecordCount = source.worldItemRecordCount,
+            worldItems = source.worldItems == null
+                ? null
+                : new List<RaidWorldItemSaveData>(source.worldItems)
         };
 
         if (!RaidCheckpointValidator.TryValidateCheckpointStructure(baseline, terminal, out error))
@@ -1136,7 +1264,8 @@ public class MainMenuManager : MonoBehaviour
 
     private bool TryInitializeOrphanedRaidMarkerView()
     {
-        GameSaveManager.ReadSlotOneCandidates(
+        GameSaveManager.ReadSlotCandidates(
+            selectedSlotIndex,
             out GameSaveData primary,
             out _,
             out GameSaveData backup,
@@ -1196,7 +1325,7 @@ public class MainMenuManager : MonoBehaviour
         {
             failRaidButton.interactable = false;
         }
-        SetStatus("원정 실패 정산 데이터가 호환되지 않아 새 게임과 일반 로드를 차단했습니다.");
+        SetStatus("원정 실패 정산 데이터가 호환되지 않아 이 슬롯의 불러오기와 복구를 차단했습니다.");
     }
 
     private void ShowOrphanedRaidDecision(GameSaveData selected)
@@ -1216,9 +1345,11 @@ public class MainMenuManager : MonoBehaviour
     private void QuarantineUnreferencedRecovery(string reason)
     {
         bool quarantined = RaidCheckpointStore.TryQuarantineAll(
+            selectedSlotIndex,
             out string quarantineFolder,
             out string quarantineError);
-        recoveryDecisionRequired = !quarantined && RaidCheckpointStore.HasRecoveryArtifacts;
+        recoveryDecisionRequired = !quarantined &&
+                                   RaidCheckpointStore.HasRecoveryArtifactsForSlot(selectedSlotIndex);
         ShowMainPanelCore();
 
         if (quarantined)
@@ -1233,7 +1364,7 @@ public class MainMenuManager : MonoBehaviour
 
         SetStatus(
             "일반 세이브에 활성 원정 표식이 없지만 남은 복구 캐시를 격리하지 못했습니다. " +
-            "저장 데이터 보호를 위해 시작을 차단했습니다.");
+            "저장 데이터 보호를 위해 이 슬롯의 불러오기와 복구를 차단했습니다.");
         Debug.LogError(
             $"Unreferenced raid recovery quarantine failed. Reason: {reason} Error: {quarantineError}",
             this);
@@ -1248,6 +1379,7 @@ public class MainMenuManager : MonoBehaviour
         out string status)
     {
         RaidCheckpointStore.ReadSettlementJournalCandidates(
+            selectedSlotIndex,
             out RaidSettlementJournalData primary,
             out string primaryReadError,
             out RaidSettlementJournalData backup,
@@ -1395,7 +1527,7 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    private static bool TryWriteRecoveryFailureMarker(
+    private bool TryWriteRecoveryFailureMarker(
         RaidRecoveryBaselineData baseline,
         out string error)
     {
@@ -1418,7 +1550,10 @@ public class MainMenuManager : MonoBehaviour
             return false;
         }
 
-        return RaidCheckpointStore.TryWriteSettlementJournal(journal, out error);
+        return RaidCheckpointStore.TryWriteSettlementJournal(
+            selectedSlotIndex,
+            journal,
+            out error);
     }
 
     private bool TrySecureRecoveryFailureDecision(out string error)
@@ -1437,7 +1572,9 @@ public class MainMenuManager : MonoBehaviour
             return true;
         }
 
-        if (RaidCheckpointStore.TryDeleteCheckpointBackup(out string backupError))
+        if (RaidCheckpointStore.TryDeleteCheckpointBackup(
+                selectedSlotIndex,
+                out string backupError))
         {
             error = null;
             return true;

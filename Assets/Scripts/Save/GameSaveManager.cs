@@ -11,23 +11,52 @@ namespace FantasySurvival.SaveSystem
 {
     public static class GameSaveManager
     {
+        public const int DefaultSlotIndex = 1;
+        public const int SlotCount = 3;
+
         private const int MaxSaveBytes = 2 * 1024 * 1024;
         private const string SaveFolderName = "Saves";
-        private const string SlotOneFileName = "save_slot_1.json";
+        private const string SlotFileNameFormat = "save_slot_{0}.json";
 
 #if UNITY_EDITOR
         private static string editorStorageRootOverride;
 #endif
 
-        public static string SlotOnePath => Path.Combine(
-            StorageRoot,
-            SaveFolderName,
-            SlotOneFileName);
+        public static string SlotOnePath => GetSlotPath(DefaultSlotIndex);
 
-        public static bool HasSlotOneArtifacts =>
-            File.Exists(SlotOnePath) || File.Exists(SlotOneBackupPath);
+        public static bool HasSlotOneArtifacts => HasSlotArtifacts(DefaultSlotIndex);
 
-        private static string SlotOneBackupPath => SlotOnePath + ".bak";
+        public static bool IsValidSlotIndex(int slotIndex)
+        {
+            return slotIndex >= DefaultSlotIndex && slotIndex <= SlotCount;
+        }
+
+        public static string GetSlotPath(int slotIndex)
+        {
+            if (!IsValidSlotIndex(slotIndex))
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(slotIndex),
+                    slotIndex,
+                    $"Save slot index must be between {DefaultSlotIndex} and {SlotCount}.");
+            }
+
+            return Path.Combine(
+                StorageRoot,
+                SaveFolderName,
+                string.Format(CultureInfo.InvariantCulture, SlotFileNameFormat, slotIndex));
+        }
+
+        public static bool HasSlotArtifacts(int slotIndex)
+        {
+            if (!IsValidSlotIndex(slotIndex))
+            {
+                return false;
+            }
+
+            string primaryPath = GetSlotPath(slotIndex);
+            return File.Exists(primaryPath) || File.Exists(primaryPath + ".bak");
+        }
 
         private static string StorageRoot
         {
@@ -128,6 +157,32 @@ namespace FantasySurvival.SaveSystem
             int baseInventoryHeight,
             out string error)
         {
+            return TryWriteSlot(
+                DefaultSlotIndex,
+                saveData,
+                database,
+                furnitureDatabase,
+                baseInventoryWidth,
+                baseInventoryHeight,
+                out error);
+        }
+
+        public static bool TryWriteSlot(
+            int slotIndex,
+            GameSaveData saveData,
+            ItemDatabase database,
+            BaseFurnitureDatabase furnitureDatabase,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
+            out string error)
+        {
+            if (!IsValidSlotIndex(slotIndex))
+            {
+                error = $"Save slot index {slotIndex} is outside the supported range " +
+                        $"{DefaultSlotIndex}-{SlotCount}.";
+                return false;
+            }
+
             if (!TryValidateCompletePayload(
                     saveData,
                     database,
@@ -139,8 +194,9 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            string slotPath = GetSlotPath(slotIndex);
             bool rotatePrimaryToBackup = false;
-            if (TryReadFile(SlotOnePath, out GameSaveData existingPrimary, out _) &&
+            if (TryReadFile(slotPath, out GameSaveData existingPrimary, out _) &&
                 TryValidateExistingPrimaryForBackup(
                     existingPrimary,
                     saveData,
@@ -152,7 +208,7 @@ namespace FantasySurvival.SaveSystem
                 rotatePrimaryToBackup = true;
             }
 
-            return TryWriteFile(saveData, SlotOnePath, rotatePrimaryToBackup, out error);
+            return TryWriteFile(saveData, slotPath, rotatePrimaryToBackup, out error);
         }
 
         public static bool TryWriteSlotOneMirrored(
@@ -163,9 +219,29 @@ namespace FantasySurvival.SaveSystem
             int baseInventoryHeight,
             out string error)
         {
+            return TryWriteSlotMirrored(
+                DefaultSlotIndex,
+                saveData,
+                database,
+                furnitureDatabase,
+                baseInventoryWidth,
+                baseInventoryHeight,
+                out error);
+        }
+
+        public static bool TryWriteSlotMirrored(
+            int slotIndex,
+            GameSaveData saveData,
+            ItemDatabase database,
+            BaseFurnitureDatabase furnitureDatabase,
+            int baseInventoryWidth,
+            int baseInventoryHeight,
+            out string error)
+        {
             for (int copy = 0; copy < 2; copy++)
             {
-                if (!TryWriteSlotOne(
+                if (!TryWriteSlot(
+                        slotIndex,
                         saveData,
                         database,
                         furnitureDatabase,
@@ -476,7 +552,7 @@ namespace FantasySurvival.SaveSystem
             }
             catch (Exception exception)
             {
-                error = $"Could not write save slot 1: {exception.Message}";
+                error = $"Could not write save slot: {exception.Message}";
                 return false;
             }
             finally
@@ -501,8 +577,34 @@ namespace FantasySurvival.SaveSystem
             out GameSaveData backup,
             out string backupError)
         {
-            TryReadFile(SlotOnePath, out primary, out primaryError);
-            TryReadFile(SlotOneBackupPath, out backup, out backupError);
+            ReadSlotCandidates(
+                DefaultSlotIndex,
+                out primary,
+                out primaryError,
+                out backup,
+                out backupError);
+        }
+
+        public static void ReadSlotCandidates(
+            int slotIndex,
+            out GameSaveData primary,
+            out string primaryError,
+            out GameSaveData backup,
+            out string backupError)
+        {
+            if (!IsValidSlotIndex(slotIndex))
+            {
+                primary = null;
+                backup = null;
+                primaryError = $"Save slot index {slotIndex} is outside the supported range " +
+                               $"{DefaultSlotIndex}-{SlotCount}.";
+                backupError = primaryError;
+                return;
+            }
+
+            string primaryPath = GetSlotPath(slotIndex);
+            TryReadFile(primaryPath, out primary, out primaryError);
+            TryReadFile(primaryPath + ".bak", out backup, out backupError);
         }
 
         public static string GetDisplayTimestamp(GameSaveData saveData)

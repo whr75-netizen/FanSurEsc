@@ -56,6 +56,8 @@ namespace FantasySurvival.Raids
         {
             internal readonly List<ChestRestore> Chests = new List<ChestRestore>();
             internal readonly List<EnemyRestore> Enemies = new List<EnemyRestore>();
+            internal readonly List<WorldItemRestore> WorldItems =
+                new List<WorldItemRestore>();
         }
 
         internal sealed class ChestRestore
@@ -77,6 +79,14 @@ namespace FantasySurvival.Raids
             public Quaternion OriginalRotation;
             public float CurrentHealth;
             public float MaxHealth;
+        }
+
+        internal sealed class WorldItemRestore
+        {
+            public string StableId;
+            public StandardStashViewData Inventory;
+            public Vector3 Position;
+            public Quaternion Rotation;
         }
 
         private readonly struct FreshLootApplication
@@ -691,6 +701,7 @@ namespace FantasySurvival.Raids
             out string layoutHash,
             out List<RaidChestSaveData> chestRecords,
             out List<RaidEnemySaveData> enemyRecords,
+            out List<RaidWorldItemSaveData> worldItemRecords,
             out string error)
         {
             generatorVersion = 0;
@@ -698,6 +709,7 @@ namespace FantasySurvival.Raids
             layoutHash = null;
             chestRecords = null;
             enemyRecords = null;
+            worldItemRecords = null;
 
             RaidSceneArrivalReadiness readiness = GetArrivalReadiness(out error);
             if (readiness != RaidSceneArrivalReadiness.Ready)
@@ -769,6 +781,37 @@ namespace FantasySurvival.Raids
                 });
             }
 
+            var sceneWorldItems = new List<WorldItemPickup>();
+            if (!WorldItemPickup.TryGetActiveItems(
+                    gameObject.scene,
+                    sceneWorldItems,
+                    out error))
+            {
+                error = $"Could not enumerate raid world items: {error}";
+                return false;
+            }
+
+            var capturedWorldItems = new List<RaidWorldItemSaveData>(sceneWorldItems.Count);
+            foreach (WorldItemPickup pickup in sceneWorldItems)
+            {
+                if (!InventorySaveCodec.TryCaptureGrid(
+                        pickup.Inventory,
+                        itemDatabase,
+                        out InventoryGridSaveData inventory,
+                        out error))
+                {
+                    error = $"Could not capture raid world item '{pickup.StableId}': {error}";
+                    return false;
+                }
+
+                capturedWorldItems.Add(new RaidWorldItemSaveData
+                {
+                    stableId = pickup.StableId,
+                    transform = CaptureTransform(pickup.transform),
+                    inventory = inventory
+                });
+            }
+
             generatorVersion = mapGenerator.CurrentLayout.GeneratorVersion;
             mapSeed = mapGenerator.CurrentSeed;
             layoutHash = UrbanMapLayoutValidator
@@ -776,6 +819,7 @@ namespace FantasySurvival.Raids
                 .ToString("X16");
             chestRecords = capturedChests;
             enemyRecords = capturedEnemies;
+            worldItemRecords = capturedWorldItems;
             error = null;
             return true;
         }
@@ -861,6 +905,20 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            var existingWorldItems = new List<WorldItemPickup>();
+            if (!WorldItemPickup.TryGetActiveItems(
+                    gameObject.scene,
+                    existingWorldItems,
+                    out error) ||
+                existingWorldItems.Count != 0)
+            {
+                if (error == null)
+                {
+                    error = "Recovered raid scene already contains live world items.";
+                }
+                return false;
+            }
+
             var candidate = new RestorePlan();
             foreach (RuntimeChestBinding authored in runtimeChests)
             {
@@ -917,6 +975,37 @@ namespace FantasySurvival.Raids
                 });
             }
 
+
+            if (checkpoint.worldItems != null)
+            {
+                foreach (RaidWorldItemSaveData saved in checkpoint.worldItems)
+                {
+                    if (saved == null ||
+                        !RaidCheckpointValidator.HasValidTransform(saved.transform) ||
+                        !InventorySaveCodec.TryRestoreGrid(
+                            saved.inventory,
+                            itemDatabase,
+                            out StandardStashViewData restoredInventory,
+                            out error) ||
+                        !WorldItemPickup.TryGetSingleOwnedItem(
+                            restoredInventory,
+                            out _,
+                            out error))
+                    {
+                        error = $"Could not prepare raid world item '{saved?.stableId}': {error}";
+                        return false;
+                    }
+
+                    candidate.WorldItems.Add(new WorldItemRestore
+                    {
+                        StableId = saved.stableId,
+                        Inventory = restoredInventory,
+                        Position = RestorePosition(saved.transform),
+                        Rotation = RestoreRotation(saved.transform)
+                    });
+                }
+            }
+
             plan = candidate;
             error = null;
             return true;
@@ -932,13 +1021,32 @@ namespace FantasySurvival.Raids
 
             var appliedChests = new List<ChestRestore>();
             var appliedEnemies = new List<EnemyRestore>();
+            var stagedWorldItems = new List<WorldItemPickup>(plan.WorldItems.Count);
             try
             {
+                foreach (WorldItemRestore worldItem in plan.WorldItems)
+                {
+                    if (!WorldItemDropService.TryCreateRestored(
+                            gameObject.scene,
+                            worldItem.StableId,
+                            worldItem.Inventory,
+                            worldItem.Position,
+                            worldItem.Rotation,
+                            out WorldItemPickup pickup,
+                            out error))
+                    {
+                        DestroyWorldItems(stagedWorldItems);
+                        return false;
+                    }
+                    stagedWorldItems.Add(pickup);
+                }
+
                 foreach (ChestRestore chest in plan.Chests)
                 {
                     if (!chest.Chest.TryBindInventory(chest.Candidate, out error))
                     {
                         RollbackInventoryBindings(appliedChests, appliedEnemies);
+                        DestroyWorldItems(stagedWorldItems);
                         return false;
                     }
                     appliedChests.Add(chest);
@@ -949,6 +1057,7 @@ namespace FantasySurvival.Raids
                     if (!enemy.CorpseInventory.TryBindInventory(enemy.CorpseCandidate, out error))
                     {
                         RollbackInventoryBindings(appliedChests, appliedEnemies);
+                        DestroyWorldItems(stagedWorldItems);
                         return false;
                     }
                     appliedEnemies.Add(enemy);
@@ -976,15 +1085,30 @@ namespace FantasySurvival.Raids
                         // Health/death is applied only after every fallible inventory binding
                         // and transform operation has succeeded. A prevalidated health restore
                         // cannot fail without an external mutation during this black-screen boundary.
+                        RollbackInventoryBindings(appliedChests, appliedEnemies);
+                        DestroyWorldItems(stagedWorldItems);
                         return false;
                     }
                 }
+
+                foreach (WorldItemPickup pickup in stagedWorldItems)
+                {
+                    if (!pickup.TryActivate(out error))
+                    {
+                        RollbackInventoryBindings(appliedChests, appliedEnemies);
+                        DestroyWorldItems(stagedWorldItems);
+                        return false;
+                    }
+                }
+                Physics.SyncTransforms();
 
                 error = null;
                 return true;
             }
             catch (Exception exception)
             {
+                RollbackInventoryBindings(appliedChests, appliedEnemies);
+                DestroyWorldItems(stagedWorldItems);
                 error = $"Raid scene restore threw an exception: {exception.Message}";
                 return false;
             }
@@ -1171,6 +1295,15 @@ namespace FantasySurvival.Raids
                     enemy.OriginalRotation);
             }
             Physics.SyncTransforms();
+        }
+
+        private static void DestroyWorldItems(List<WorldItemPickup> pickups)
+        {
+            foreach (WorldItemPickup pickup in pickups)
+            {
+                WorldItemDropService.DestroyPickup(pickup);
+            }
+            pickups.Clear();
         }
 
         public static RaidTransformSaveData CaptureTransform(Transform source)

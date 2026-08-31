@@ -24,13 +24,38 @@ namespace FantasySurvival.Raids
         private static string editorStorageRootOverride;
 #endif
 
-        public static string RecoveryFolder => Path.Combine(StorageRoot, RecoveryFolderName);
-        public static string BaselinePath => Path.Combine(RecoveryFolder, BaselineFileName);
-        public static string ActiveCheckpointPath => Path.Combine(RecoveryFolder, CheckpointFileName);
+        public static string RecoveryFolder => GetRecoveryFolder(GameSaveManager.DefaultSlotIndex);
+        public static string BaselinePath => GetBaselinePath(GameSaveManager.DefaultSlotIndex);
+        public static string ActiveCheckpointPath =>
+            GetActiveCheckpointPath(GameSaveManager.DefaultSlotIndex);
         public static string ActiveCheckpointBackupPath => ActiveCheckpointPath + ".bak";
         public static string SettlementJournalPath =>
-            Path.Combine(RecoveryFolder, SettlementJournalFileName);
+            GetSettlementJournalPath(GameSaveManager.DefaultSlotIndex);
         public static string SettlementJournalBackupPath => SettlementJournalPath + ".bak";
+
+        public static string GetRecoveryFolder(int slotIndex)
+        {
+            ValidateSlotIndex(slotIndex);
+            string recoveryRoot = Path.Combine(StorageRoot, RecoveryFolderName);
+            return slotIndex == GameSaveManager.DefaultSlotIndex
+                ? recoveryRoot
+                : Path.Combine(recoveryRoot, $"slot_{slotIndex}");
+        }
+
+        public static string GetBaselinePath(int slotIndex)
+        {
+            return Path.Combine(GetRecoveryFolder(slotIndex), BaselineFileName);
+        }
+
+        public static string GetActiveCheckpointPath(int slotIndex)
+        {
+            return Path.Combine(GetRecoveryFolder(slotIndex), CheckpointFileName);
+        }
+
+        public static string GetSettlementJournalPath(int slotIndex)
+        {
+            return Path.Combine(GetRecoveryFolder(slotIndex), SettlementJournalFileName);
+        }
 
         private static string StorageRoot
         {
@@ -47,40 +72,97 @@ namespace FantasySurvival.Raids
         }
 
         public static bool HasRecoveryArtifacts =>
-            File.Exists(BaselinePath) ||
-            File.Exists(ActiveCheckpointPath) ||
-             File.Exists(ActiveCheckpointBackupPath) ||
-             File.Exists(SettlementJournalPath) ||
-             File.Exists(SettlementJournalBackupPath) ||
-             File.Exists(BaselinePath + ".tmp") ||
-             File.Exists(ActiveCheckpointPath + ".tmp") ||
-             File.Exists(SettlementJournalPath + ".tmp");
+            HasRecoveryArtifactsForSlot(GameSaveManager.DefaultSlotIndex);
 
         public static bool HasSettlementJournalArtifacts =>
-            File.Exists(SettlementJournalPath) ||
-            File.Exists(SettlementJournalBackupPath) ||
-            File.Exists(SettlementJournalPath + ".tmp");
+            HasSettlementJournalArtifactsForSlot(GameSaveManager.DefaultSlotIndex);
+
+        public static bool HasRecoveryArtifactsForSlot(int slotIndex)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+            {
+                return false;
+            }
+
+            string baselinePath = GetBaselinePath(slotIndex);
+            string checkpointPath = GetActiveCheckpointPath(slotIndex);
+            string journalPath = GetSettlementJournalPath(slotIndex);
+            return File.Exists(baselinePath) ||
+                   File.Exists(checkpointPath) ||
+                   File.Exists(checkpointPath + ".bak") ||
+                   File.Exists(journalPath) ||
+                   File.Exists(journalPath + ".bak") ||
+                   File.Exists(baselinePath + ".tmp") ||
+                   File.Exists(checkpointPath + ".tmp") ||
+                   File.Exists(journalPath + ".tmp");
+        }
+
+        public static bool HasSettlementJournalArtifactsForSlot(int slotIndex)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+            {
+                return false;
+            }
+
+            string journalPath = GetSettlementJournalPath(slotIndex);
+            return File.Exists(journalPath) ||
+                   File.Exists(journalPath + ".bak") ||
+                   File.Exists(journalPath + ".tmp");
+        }
 
         public static bool TryCreateBaseline(RaidRecoveryBaselineData baseline, out string error)
         {
+            return TryCreateBaseline(
+                GameSaveManager.DefaultSlotIndex,
+                baseline,
+                out error);
+        }
+
+        public static bool TryCreateBaseline(
+            int slotIndex,
+            RaidRecoveryBaselineData baseline,
+            out string error)
+        {
+            if (!TryValidateSlotIndex(slotIndex, out error))
+            {
+                return false;
+            }
+
             if (baseline == null)
             {
                 error = "Raid recovery baseline is missing.";
                 return false;
             }
 
-            if (HasRecoveryArtifacts)
+            if (HasRecoveryArtifactsForSlot(slotIndex))
             {
                 error = "An unsettled raid recovery already exists.";
                 return false;
             }
 
-            return TryWriteJson(baseline, BaselinePath, null, false, out error);
+            return TryWriteJson(
+                baseline,
+                GetBaselinePath(slotIndex),
+                null,
+                false,
+                out error);
         }
 
         public static bool TryWriteCheckpoint(RaidCheckpointData checkpoint, out string error)
         {
-            return TryWriteCheckpoint(checkpoint, null, out error);
+            return TryWriteCheckpoint(
+                GameSaveManager.DefaultSlotIndex,
+                checkpoint,
+                null,
+                out error);
+        }
+
+        public static bool TryWriteCheckpoint(
+            int slotIndex,
+            RaidCheckpointData checkpoint,
+            out string error)
+        {
+            return TryWriteCheckpoint(slotIndex, checkpoint, null, out error);
         }
 
         /// <summary>
@@ -94,23 +176,42 @@ namespace FantasySurvival.Raids
             RaidCheckpointData validatedCurrentPrimary,
             out string error)
         {
+            return TryWriteCheckpoint(
+                GameSaveManager.DefaultSlotIndex,
+                checkpoint,
+                validatedCurrentPrimary,
+                out error);
+        }
+
+        public static bool TryWriteCheckpoint(
+            int slotIndex,
+            RaidCheckpointData checkpoint,
+            RaidCheckpointData validatedCurrentPrimary,
+            out string error)
+        {
+            if (!TryValidateSlotIndex(slotIndex, out error))
+            {
+                return false;
+            }
+
             if (checkpoint == null || string.IsNullOrWhiteSpace(checkpoint.raidInstanceId))
             {
                 error = "Raid checkpoint is missing its raid instance ID.";
                 return false;
             }
 
+            string checkpointPath = GetActiveCheckpointPath(slotIndex);
             bool rotatePrimary = validatedCurrentPrimary != null &&
                 TryReadCheckpointFile(
-                     ActiveCheckpointPath,
+                     checkpointPath,
                      out RaidCheckpointData current,
                      out _) &&
                 AreCanonicalJsonEquivalent(current, validatedCurrentPrimary);
 
             return TryWriteJson(
                 checkpoint,
-                ActiveCheckpointPath,
-                ActiveCheckpointBackupPath,
+                checkpointPath,
+                checkpointPath + ".bak",
                 rotatePrimary,
                 out error);
         }
@@ -119,6 +220,22 @@ namespace FantasySurvival.Raids
             RaidSettlementJournalData journal,
             out string error)
         {
+            return TryWriteSettlementJournal(
+                GameSaveManager.DefaultSlotIndex,
+                journal,
+                out error);
+        }
+
+        public static bool TryWriteSettlementJournal(
+            int slotIndex,
+            RaidSettlementJournalData journal,
+            out string error)
+        {
+            if (!TryValidateSlotIndex(slotIndex, out error))
+            {
+                return false;
+            }
+
             if (journal == null || string.IsNullOrWhiteSpace(journal.raidInstanceId))
             {
                 error = "Raid settlement journal is missing its raid instance ID.";
@@ -128,10 +245,11 @@ namespace FantasySurvival.Raids
             // First install the new record while preserving any existing backup. Then
             // write the same record again so File.Replace mirrors it into .bak. A crash
             // after either atomic install still leaves at least one complete new record.
+            string journalPath = GetSettlementJournalPath(slotIndex);
             if (!TryWriteJson(
                     journal,
-                    SettlementJournalPath,
-                    SettlementJournalBackupPath,
+                    journalPath,
+                    journalPath + ".bak",
                     false,
                     out error))
             {
@@ -140,8 +258,8 @@ namespace FantasySurvival.Raids
 
             if (!TryWriteJson(
                     journal,
-                    SettlementJournalPath,
-                    SettlementJournalBackupPath,
+                    journalPath,
+                    journalPath + ".bak",
                     true,
                     out string mirrorError))
             {
@@ -157,7 +275,24 @@ namespace FantasySurvival.Raids
             out RaidRecoveryBaselineData baseline,
             out string error)
         {
-            return TryReadJsonFile(BaselinePath, out baseline, out error);
+            return TryReadBaseline(
+                GameSaveManager.DefaultSlotIndex,
+                out baseline,
+                out error);
+        }
+
+        public static bool TryReadBaseline(
+            int slotIndex,
+            out RaidRecoveryBaselineData baseline,
+            out string error)
+        {
+            if (!TryValidateSlotIndex(slotIndex, out error))
+            {
+                baseline = null;
+                return false;
+            }
+
+            return TryReadJsonFile(GetBaselinePath(slotIndex), out baseline, out error);
         }
 
         public static void ReadCheckpointCandidates(
@@ -166,8 +301,33 @@ namespace FantasySurvival.Raids
             out RaidCheckpointData backup,
             out string backupError)
         {
-            TryReadCheckpointFile(ActiveCheckpointPath, out primary, out primaryError);
-            TryReadCheckpointFile(ActiveCheckpointBackupPath, out backup, out backupError);
+            ReadCheckpointCandidates(
+                GameSaveManager.DefaultSlotIndex,
+                out primary,
+                out primaryError,
+                out backup,
+                out backupError);
+        }
+
+        public static void ReadCheckpointCandidates(
+            int slotIndex,
+            out RaidCheckpointData primary,
+            out string primaryError,
+            out RaidCheckpointData backup,
+            out string backupError)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+            {
+                primary = null;
+                backup = null;
+                primaryError = GetInvalidSlotError(slotIndex);
+                backupError = primaryError;
+                return;
+            }
+
+            string checkpointPath = GetActiveCheckpointPath(slotIndex);
+            TryReadCheckpointFile(checkpointPath, out primary, out primaryError);
+            TryReadCheckpointFile(checkpointPath + ".bak", out backup, out backupError);
         }
 
         public static void ReadSettlementJournalCandidates(
@@ -176,58 +336,142 @@ namespace FantasySurvival.Raids
             out RaidSettlementJournalData backup,
             out string backupError)
         {
-            TryReadJsonFile(SettlementJournalPath, out primary, out primaryError);
-            TryReadJsonFile(SettlementJournalBackupPath, out backup, out backupError);
+            ReadSettlementJournalCandidates(
+                GameSaveManager.DefaultSlotIndex,
+                out primary,
+                out primaryError,
+                out backup,
+                out backupError);
+        }
+
+        public static void ReadSettlementJournalCandidates(
+            int slotIndex,
+            out RaidSettlementJournalData primary,
+            out string primaryError,
+            out RaidSettlementJournalData backup,
+            out string backupError)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+            {
+                primary = null;
+                backup = null;
+                primaryError = GetInvalidSlotError(slotIndex);
+                backupError = primaryError;
+                return;
+            }
+
+            string journalPath = GetSettlementJournalPath(slotIndex);
+            TryReadJsonFile(journalPath, out primary, out primaryError);
+            TryReadJsonFile(journalPath + ".bak", out backup, out backupError);
         }
 
         public static bool TryDeleteActiveCheckpoints(out string error)
         {
+            return TryDeleteActiveCheckpoints(
+                GameSaveManager.DefaultSlotIndex,
+                out error);
+        }
+
+        public static bool TryDeleteActiveCheckpoints(int slotIndex, out string error)
+        {
+            if (!TryValidateSlotIndex(slotIndex, out error))
+            {
+                return false;
+            }
+
+            string checkpointPath = GetActiveCheckpointPath(slotIndex);
             return TryDeleteFiles(
                 new[]
                 {
-                    ActiveCheckpointPath,
-                    ActiveCheckpointBackupPath,
-                    ActiveCheckpointPath + ".tmp"
+                    checkpointPath,
+                    checkpointPath + ".bak",
+                    checkpointPath + ".tmp"
                 },
                 out error);
         }
 
         public static bool TryDeleteCheckpointBackup(out string error)
         {
-            return TryDeleteFiles(new[] { ActiveCheckpointBackupPath }, out error);
+            return TryDeleteCheckpointBackup(
+                GameSaveManager.DefaultSlotIndex,
+                out error);
+        }
+
+        public static bool TryDeleteCheckpointBackup(int slotIndex, out string error)
+        {
+            if (!TryValidateSlotIndex(slotIndex, out error))
+            {
+                return false;
+            }
+
+            return TryDeleteFiles(
+                new[] { GetActiveCheckpointPath(slotIndex) + ".bak" },
+                out error);
         }
 
         public static bool TryDeleteAll(out string error)
         {
+            return TryDeleteAll(GameSaveManager.DefaultSlotIndex, out error);
+        }
+
+        public static bool TryDeleteAll(int slotIndex, out string error)
+        {
+            if (!TryValidateSlotIndex(slotIndex, out error))
+            {
+                return false;
+            }
+
+            string baselinePath = GetBaselinePath(slotIndex);
+            string checkpointPath = GetActiveCheckpointPath(slotIndex);
+            string journalPath = GetSettlementJournalPath(slotIndex);
             return TryDeleteFiles(
                 new[]
                 {
-                    BaselinePath,
-                    BaselinePath + ".tmp",
-                    ActiveCheckpointPath,
-                    ActiveCheckpointBackupPath,
-                    ActiveCheckpointPath + ".tmp",
-                    SettlementJournalPath,
-                    SettlementJournalBackupPath,
-                    SettlementJournalPath + ".tmp"
+                    baselinePath,
+                    baselinePath + ".tmp",
+                    checkpointPath,
+                    checkpointPath + ".bak",
+                    checkpointPath + ".tmp",
+                    journalPath,
+                    journalPath + ".bak",
+                    journalPath + ".tmp"
                 },
                 out error);
         }
 
         public static bool TryQuarantineAll(out string quarantineFolder, out string error)
         {
+            return TryQuarantineAll(
+                GameSaveManager.DefaultSlotIndex,
+                out quarantineFolder,
+                out error);
+        }
+
+        public static bool TryQuarantineAll(
+            int slotIndex,
+            out string quarantineFolder,
+            out string error)
+        {
             quarantineFolder = null;
+            if (!TryValidateSlotIndex(slotIndex, out error))
+            {
+                return false;
+            }
+
             var existing = new List<string>();
+            string baselinePath = GetBaselinePath(slotIndex);
+            string checkpointPath = GetActiveCheckpointPath(slotIndex);
+            string journalPath = GetSettlementJournalPath(slotIndex);
             string[] paths =
             {
-                BaselinePath,
-                BaselinePath + ".tmp",
-                ActiveCheckpointPath,
-                ActiveCheckpointBackupPath,
-                ActiveCheckpointPath + ".tmp",
-                SettlementJournalPath,
-                SettlementJournalBackupPath,
-                SettlementJournalPath + ".tmp"
+                baselinePath,
+                baselinePath + ".tmp",
+                checkpointPath,
+                checkpointPath + ".bak",
+                checkpointPath + ".tmp",
+                journalPath,
+                journalPath + ".bak",
+                journalPath + ".tmp"
             };
 
             foreach (string path in paths)
@@ -249,7 +493,7 @@ namespace FantasySurvival.Raids
                 string timestamp = DateTime.UtcNow.ToString(
                     "yyyyMMdd_HHmmss_fff",
                     CultureInfo.InvariantCulture);
-                string corruptRoot = Path.Combine(RecoveryFolder, "Corrupt");
+                string corruptRoot = Path.Combine(GetRecoveryFolder(slotIndex), "Corrupt");
                 quarantineFolder = Path.Combine(corruptRoot, timestamp);
                 int suffix = 1;
                 while (Directory.Exists(quarantineFolder))
@@ -542,6 +786,35 @@ namespace FantasySurvival.Raids
                 error = $"Could not remove settled raid recovery files: {exception.Message}";
                 return false;
             }
+        }
+
+        private static void ValidateSlotIndex(int slotIndex)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+            {
+                throw new ArgumentOutOfRangeException(
+                    nameof(slotIndex),
+                    slotIndex,
+                    GetInvalidSlotError(slotIndex));
+            }
+        }
+
+        private static bool TryValidateSlotIndex(int slotIndex, out string error)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+            {
+                error = GetInvalidSlotError(slotIndex);
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static string GetInvalidSlotError(int slotIndex)
+        {
+            return $"Save slot index {slotIndex} is outside the supported range " +
+                   $"{GameSaveManager.DefaultSlotIndex}-{GameSaveManager.SlotCount}.";
         }
     }
 }

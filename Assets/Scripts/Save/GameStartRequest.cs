@@ -18,6 +18,7 @@ namespace FantasySurvival.SaveSystem
         private sealed class PendingRequest
         {
             public GameStartMode Mode;
+            public int SaveSlotIndex;
             public GameSaveData SaveData;
             public GameSaveData FallbackSaveData;
             public RaidRecoveryBaselineData RecoveryBaseline;
@@ -40,10 +41,22 @@ namespace FantasySurvival.SaveSystem
 
         public static void QueueNewGame()
         {
+            QueueNewGame(GameSaveManager.DefaultSlotIndex);
+        }
+
+        public static bool QueueNewGame(int saveSlotIndex)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(saveSlotIndex))
+            {
+                return false;
+            }
+
             pendingRequest = new PendingRequest
             {
-                Mode = GameStartMode.NewGame
+                Mode = GameStartMode.NewGame,
+                SaveSlotIndex = saveSlotIndex
             };
+            return true;
         }
 
         public static bool QueueLoad(GameSaveData saveData)
@@ -53,7 +66,23 @@ namespace FantasySurvival.SaveSystem
 
         public static bool QueueLoad(GameSaveData saveData, GameSaveData fallbackSave)
         {
-            if (saveData == null)
+            return QueueLoad(
+                GameSaveManager.DefaultSlotIndex,
+                saveData,
+                fallbackSave);
+        }
+
+        public static bool QueueLoad(int saveSlotIndex, GameSaveData saveData)
+        {
+            return QueueLoad(saveSlotIndex, saveData, null);
+        }
+
+        public static bool QueueLoad(
+            int saveSlotIndex,
+            GameSaveData saveData,
+            GameSaveData fallbackSave)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(saveSlotIndex) || saveData == null)
             {
                 return false;
             }
@@ -61,6 +90,7 @@ namespace FantasySurvival.SaveSystem
             pendingRequest = new PendingRequest
             {
                 Mode = GameStartMode.LoadGame,
+                SaveSlotIndex = saveSlotIndex,
                 SaveData = saveData,
                 FallbackSaveData = object.ReferenceEquals(saveData, fallbackSave)
                     ? null
@@ -73,8 +103,20 @@ namespace FantasySurvival.SaveSystem
             RaidRecoveryBaselineData baseline,
             RaidCheckpointData checkpoint)
         {
+            return QueueResumeRaid(
+                GameSaveManager.DefaultSlotIndex,
+                baseline,
+                checkpoint);
+        }
+
+        public static bool QueueResumeRaid(
+            int saveSlotIndex,
+            RaidRecoveryBaselineData baseline,
+            RaidCheckpointData checkpoint)
+        {
             return QueueRaidRecovery(
                 GameStartMode.ResumeRaid,
+                saveSlotIndex,
                 baseline,
                 checkpoint,
                 requireCheckpoint: true);
@@ -84,11 +126,23 @@ namespace FantasySurvival.SaveSystem
             RaidRecoveryBaselineData baseline,
             RaidCheckpointData checkpoint)
         {
+            return QueueRaidRecoverySettlement(
+                GameSaveManager.DefaultSlotIndex,
+                baseline,
+                checkpoint);
+        }
+
+        public static bool QueueRaidRecoverySettlement(
+            int saveSlotIndex,
+            RaidRecoveryBaselineData baseline,
+            RaidCheckpointData checkpoint)
+        {
             RaidOutcome outcome = checkpoint != null &&
                                   checkpoint.phase == RaidCheckpointPhase.Resolved
                 ? checkpoint.outcome
                 : RaidOutcome.RecoveryFailed;
             return QueueRaidRecoverySettlement(
+                saveSlotIndex,
                 baseline,
                 checkpoint,
                 null,
@@ -103,7 +157,25 @@ namespace FantasySurvival.SaveSystem
             RaidSettlementJournalKind settlementKind,
             RaidOutcome outcome)
         {
-            if (!RaidCheckpointValidator.IsTerminalOutcome(outcome) ||
+            return QueueRaidRecoverySettlement(
+                GameSaveManager.DefaultSlotIndex,
+                baseline,
+                checkpoint,
+                settlementState,
+                settlementKind,
+                outcome);
+        }
+
+        public static bool QueueRaidRecoverySettlement(
+            int saveSlotIndex,
+            RaidRecoveryBaselineData baseline,
+            RaidCheckpointData checkpoint,
+            GameSaveData settlementState,
+            RaidSettlementJournalKind settlementKind,
+            RaidOutcome outcome)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(saveSlotIndex) ||
+                !RaidCheckpointValidator.IsTerminalOutcome(outcome) ||
                 (settlementState == null &&
                  settlementKind != RaidSettlementJournalKind.None) ||
                 (settlementState != null &&
@@ -117,6 +189,7 @@ namespace FantasySurvival.SaveSystem
 
             bool queued = QueueRaidRecovery(
                 GameStartMode.SettleRaidRecovery,
+                saveSlotIndex,
                 baseline,
                 checkpoint,
                 requireCheckpoint: false);
@@ -132,7 +205,17 @@ namespace FantasySurvival.SaveSystem
 
         public static bool QueueOrphanedRaidFailure(GameSaveData markedSave)
         {
-            if (markedSave == null || !markedSave.raidInProgress ||
+            return QueueOrphanedRaidFailure(
+                GameSaveManager.DefaultSlotIndex,
+                markedSave);
+        }
+
+        public static bool QueueOrphanedRaidFailure(
+            int saveSlotIndex,
+            GameSaveData markedSave)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(saveSlotIndex) ||
+                markedSave == null || !markedSave.raidInProgress ||
                 !System.Guid.TryParse(markedSave.activeRaidInstanceId, out _))
             {
                 return false;
@@ -141,6 +224,7 @@ namespace FantasySurvival.SaveSystem
             pendingRequest = new PendingRequest
             {
                 Mode = GameStartMode.SettleOrphanedRaid,
+                SaveSlotIndex = saveSlotIndex,
                 SaveData = markedSave,
                 RecoveryOutcome = RaidOutcome.RecoveryFailed
             };
@@ -149,13 +233,22 @@ namespace FantasySurvival.SaveSystem
 
         public static bool TryConsume(out GameStartMode mode, out GameSaveData saveData)
         {
-            return TryConsume(out mode, out saveData, out _);
+            return TryConsume(out mode, out saveData, out _, out _);
         }
 
         public static bool TryConsume(
             out GameStartMode mode,
             out GameSaveData saveData,
             out GameSaveData fallbackSave)
+        {
+            return TryConsume(out mode, out saveData, out fallbackSave, out _);
+        }
+
+        public static bool TryConsume(
+            out GameStartMode mode,
+            out GameSaveData saveData,
+            out GameSaveData fallbackSave,
+            out int saveSlotIndex)
         {
             return TryConsume(
                 out mode,
@@ -165,7 +258,8 @@ namespace FantasySurvival.SaveSystem
                 out _,
                 out _,
                 out _,
-                out _);
+                out _,
+                out saveSlotIndex);
         }
 
         public static bool TryConsume(
@@ -178,8 +272,32 @@ namespace FantasySurvival.SaveSystem
             out RaidSettlementJournalKind recoverySettlementKind,
             out RaidOutcome recoveryOutcome)
         {
+            return TryConsume(
+                out mode,
+                out saveData,
+                out fallbackSave,
+                out recoveryBaseline,
+                out raidCheckpoint,
+                out recoverySettlementState,
+                out recoverySettlementKind,
+                out recoveryOutcome,
+                out _);
+        }
+
+        public static bool TryConsume(
+            out GameStartMode mode,
+            out GameSaveData saveData,
+            out GameSaveData fallbackSave,
+            out RaidRecoveryBaselineData recoveryBaseline,
+            out RaidCheckpointData raidCheckpoint,
+            out GameSaveData recoverySettlementState,
+            out RaidSettlementJournalKind recoverySettlementKind,
+            out RaidOutcome recoveryOutcome,
+            out int saveSlotIndex)
+        {
             PendingRequest request = pendingRequest;
             mode = request?.Mode ?? GameStartMode.None;
+            saveSlotIndex = request?.SaveSlotIndex ?? GameSaveManager.DefaultSlotIndex;
             saveData = request?.SaveData;
             fallbackSave = request?.FallbackSaveData;
             recoveryBaseline = request?.RecoveryBaseline;
@@ -196,12 +314,14 @@ namespace FantasySurvival.SaveSystem
 
         private static bool QueueRaidRecovery(
             GameStartMode mode,
+            int saveSlotIndex,
             RaidRecoveryBaselineData baseline,
             RaidCheckpointData checkpoint,
             bool requireCheckpoint)
         {
             if ((mode != GameStartMode.ResumeRaid &&
                  mode != GameStartMode.SettleRaidRecovery) ||
+                !GameSaveManager.IsValidSlotIndex(saveSlotIndex) ||
                 baseline == null ||
                 (requireCheckpoint && checkpoint == null))
             {
@@ -211,6 +331,7 @@ namespace FantasySurvival.SaveSystem
             pendingRequest = new PendingRequest
             {
                 Mode = mode,
+                SaveSlotIndex = saveSlotIndex,
                 RecoveryBaseline = baseline,
                 RaidCheckpoint = checkpoint
             };

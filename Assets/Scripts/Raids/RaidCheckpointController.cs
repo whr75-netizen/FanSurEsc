@@ -71,6 +71,9 @@ namespace FantasySurvival.Raids
         public bool IsSettlementInputLocked => settlementInputLockHeld;
         public bool HasPendingBaseSettlement =>
             HasTrackedRaid && basePersistenceReady && baseArrivalComplete;
+        private int ActiveSaveSlotIndex => shell != null
+            ? shell.ActiveSaveSlotIndex
+            : GameSaveManager.DefaultSlotIndex;
 
         private void Awake()
         {
@@ -158,7 +161,7 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (RaidCheckpointStore.HasRecoveryArtifacts)
+            if (RaidCheckpointStore.HasRecoveryArtifactsForSlot(ActiveSaveSlotIndex))
             {
                 error = "Unreferenced or unsettled raid recovery files already exist.";
                 return false;
@@ -204,7 +207,10 @@ namespace FantasySurvival.Raids
             // The ordinary marker is deliberately first. If baseline creation now
             // fails or the process stops in between, the next Main Menu sees
             // marker-without-cache and fails the attempted raid instead of guessing.
-            if (!RaidCheckpointStore.TryCreateBaseline(candidate, out error))
+            if (!RaidCheckpointStore.TryCreateBaseline(
+                    ActiveSaveSlotIndex,
+                    candidate,
+                    out error))
             {
                 error = $"Could not create a durable raid-start baseline: {error}";
                 return false;
@@ -259,7 +265,8 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            return GameSaveManager.TryWriteSlotOneMirrored(
+            return GameSaveManager.TryWriteSlotMirrored(
+                ActiveSaveSlotIndex,
                 markedSave,
                 shell.InventoryUI.ItemDatabase,
                 furnitureDatabase,
@@ -302,7 +309,7 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (RaidCheckpointStore.HasSettlementJournalArtifacts)
+            if (RaidCheckpointStore.HasSettlementJournalArtifactsForSlot(ActiveSaveSlotIndex))
             {
                 error = "This raid already has a fail/settlement decision and cannot be resumed.";
                 return false;
@@ -343,6 +350,7 @@ namespace FantasySurvival.Raids
             }
 
             if (!RaidCheckpointStore.TryReadBaseline(
+                    ActiveSaveSlotIndex,
                     out RaidRecoveryBaselineData storedBaseline,
                     out error) ||
                 !TryValidateBaseline(storedBaseline, out error) ||
@@ -353,6 +361,7 @@ namespace FantasySurvival.Raids
             }
 
             RaidCheckpointStore.ReadCheckpointCandidates(
+                ActiveSaveSlotIndex,
                 out RaidCheckpointData storedPrimary,
                 out _,
                 out RaidCheckpointData storedBackup,
@@ -689,6 +698,75 @@ namespace FantasySurvival.Raids
                    shell.RaidSession.Outcome == RaidOutcome.RecoveryFailed;
         }
 
+        public bool TrySaveActiveRaidForMainMenu(out string error)
+        {
+            if (!isActiveAndEnabled || !IsConfigured ||
+                !HasTrackedRaid || shell.RaidSession == null ||
+                !shell.RaidSession.IsRaidActive)
+            {
+                error = "No active raid is available for saving.";
+                return false;
+            }
+
+            // A deliberate exit first makes one exact world checkpoint durable. The
+            // ordinary slot is then mirrored from that same checkpoint state, so the
+            // two files never describe independently captured moments.
+            if (!TryCaptureAndWrite(
+                    RaidCheckpointPhase.Active,
+                    RaidOutcome.None,
+                    out error))
+            {
+                error = $"Could not save the active raid checkpoint: {error}";
+                return false;
+            }
+
+            if (lastCheckpoint?.persistentState == null ||
+                !string.Equals(
+                    lastCheckpoint.raidInstanceId,
+                    baseline.raidInstanceId,
+                    StringComparison.Ordinal))
+            {
+                error = "The saved raid checkpoint does not match the tracked raid.";
+                return false;
+            }
+
+            if (!GameSaveManager.TryClonePreservingMigrationContext(
+                    lastCheckpoint.persistentState,
+                    out GameSaveData markedSave,
+                    out error))
+            {
+                error = $"Could not clone the active raid state for the ordinary slot: {error}";
+                return false;
+            }
+
+            markedSave.savedAtUtc = lastCheckpoint.savedAtUtc;
+            markedSave.raidInProgress = true;
+            markedSave.activeRaidInstanceId = baseline.raidInstanceId;
+
+            var playerState = shell.InventoryUI.PlayerState;
+            if (playerState?.Inventory == null)
+            {
+                error = "Player inventory dimensions are unavailable for raid save validation.";
+                return false;
+            }
+
+            if (!GameSaveManager.TryWriteSlotMirrored(
+                    shell.ActiveSaveSlotIndex,
+                    markedSave,
+                    shell.InventoryUI.ItemDatabase,
+                    furnitureDatabase,
+                    playerState.BaseInventoryWidth,
+                    playerState.BaseInventoryHeight,
+                    out error))
+            {
+                error = $"Could not mirror the active raid into save slot {shell.ActiveSaveSlotIndex}: {error}";
+                return false;
+            }
+
+            error = null;
+            return true;
+        }
+
         public bool TryMakeRecoveryFailureDurable(string reason, out string error)
         {
             if (!HasTrackedRaid || handlingWriteFailure)
@@ -804,6 +882,7 @@ namespace FantasySurvival.Raids
             }
 
             if (!RaidCheckpointStore.TryReadBaseline(
+                    ActiveSaveSlotIndex,
                     out RaidRecoveryBaselineData storedBaseline,
                     out error) ||
                 !string.Equals(
@@ -896,6 +975,7 @@ namespace FantasySurvival.Raids
 
             if (!RaidCheckpointValidator.IsTerminalOutcome(settlementOutcome) ||
                 !RaidCheckpointStore.TryReadBaseline(
+                    ActiveSaveSlotIndex,
                     out RaidRecoveryBaselineData storedBaseline,
                     out error))
             {
@@ -1063,7 +1143,7 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (RaidCheckpointStore.HasRecoveryArtifacts)
+            if (RaidCheckpointStore.HasRecoveryArtifactsForSlot(ActiveSaveSlotIndex))
             {
                 error = "Recovery artifacts now exist; marker-only settlement was refused.";
                 return false;
@@ -1183,6 +1263,7 @@ namespace FantasySurvival.Raids
             }
 
             if (!RaidCheckpointStore.TryReadBaseline(
+                    ActiveSaveSlotIndex,
                     out RaidRecoveryBaselineData storedBaseline,
                     out error) ||
                 !TryValidateBaseline(storedBaseline, out error) ||
@@ -1282,7 +1363,10 @@ namespace FantasySurvival.Raids
                     InventoryUIManager.DefaultInventoryWidth,
                     InventoryUIManager.DefaultInventoryHeight,
                     out error) ||
-                !RaidCheckpointStore.TryWriteSettlementJournal(journal, out error))
+                !RaidCheckpointStore.TryWriteSettlementJournal(
+                    ActiveSaveSlotIndex,
+                    journal,
+                    out error))
             {
                 error = $"Could not make the base settlement journal durable: {error}";
                 return false;
@@ -1301,7 +1385,8 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (!GameSaveManager.TryWriteSlotOneMirrored(
+            if (!GameSaveManager.TryWriteSlotMirrored(
+                    ActiveSaveSlotIndex,
                     saveData,
                     shell.InventoryUI.ItemDatabase,
                     furnitureDatabase,
@@ -1336,7 +1421,7 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (!RaidCheckpointStore.TryDeleteAll(out error))
+            if (!RaidCheckpointStore.TryDeleteAll(ActiveSaveSlotIndex, out error))
             {
                 error = $"The raid was durably settled, but its recovery files could not be removed: {error}";
                 return false;
@@ -1596,6 +1681,7 @@ namespace FantasySurvival.Raids
                     out string layoutHash,
                     out var chestRecords,
                     out var enemyRecords,
+                    out var worldItemRecords,
                     out error))
             {
                 return false;
@@ -1640,7 +1726,9 @@ namespace FantasySurvival.Raids
                 chests = chestRecords,
                 chestRecordCount = chestRecords.Count,
                 enemies = enemyRecords,
-                enemyRecordCount = enemyRecords.Count
+                enemyRecordCount = enemyRecords.Count,
+                worldItems = worldItemRecords,
+                worldItemRecordCount = worldItemRecords.Count
             };
 
             if (!RaidCheckpointValidator.TryValidateCheckpointStructure(
@@ -1648,6 +1736,7 @@ namespace FantasySurvival.Raids
                     candidate,
                     out error) ||
                 !RaidCheckpointStore.TryWriteCheckpoint(
+                    ActiveSaveSlotIndex,
                     candidate,
                     lastCheckpoint,
                     out error))
@@ -1750,7 +1839,7 @@ namespace FantasySurvival.Raids
                 out error);
         }
 
-        private static bool HasMatchingOrdinaryRaidMarker(string raidInstanceId)
+        private bool HasMatchingOrdinaryRaidMarker(string raidInstanceId)
         {
             GameSaveData authoritative = GetAuthoritativeOrdinarySave();
             return authoritative != null && authoritative.raidInProgress &&
@@ -1760,9 +1849,10 @@ namespace FantasySurvival.Raids
                        StringComparison.Ordinal);
         }
 
-        private static GameSaveData GetAuthoritativeOrdinarySave()
+        private GameSaveData GetAuthoritativeOrdinarySave()
         {
-            GameSaveManager.ReadSlotOneCandidates(
+            GameSaveManager.ReadSlotCandidates(
+                ActiveSaveSlotIndex,
                 out GameSaveData primary,
                 out _,
                 out GameSaveData backup,
@@ -1794,6 +1884,7 @@ namespace FantasySurvival.Raids
             }
 
             RaidCheckpointStore.ReadSettlementJournalCandidates(
+                ActiveSaveSlotIndex,
                 out RaidSettlementJournalData primary,
                 out _,
                 out RaidSettlementJournalData backup,
@@ -1843,6 +1934,7 @@ namespace FantasySurvival.Raids
             out string error)
         {
             RaidCheckpointStore.ReadCheckpointCandidates(
+                ActiveSaveSlotIndex,
                 out RaidCheckpointData primary,
                 out _,
                 out RaidCheckpointData backup,
@@ -1905,11 +1997,12 @@ namespace FantasySurvival.Raids
             return true;
         }
 
-        private static bool TryValidateAuthoritativeMarkerOnlyRecoveryFailureJournal(
+        private bool TryValidateAuthoritativeMarkerOnlyRecoveryFailureJournal(
             RaidRecoveryBaselineData storedBaseline,
             out string error)
         {
             RaidCheckpointStore.ReadSettlementJournalCandidates(
+                ActiveSaveSlotIndex,
                 out RaidSettlementJournalData primary,
                 out _,
                 out RaidSettlementJournalData backup,
@@ -2048,6 +2141,7 @@ namespace FantasySurvival.Raids
                 source.phase != RaidCheckpointPhase.Active)
             {
                 RaidCheckpointStore.ReadCheckpointCandidates(
+                    ActiveSaveSlotIndex,
                     out RaidCheckpointData primary,
                     out _,
                     out RaidCheckpointData backup,
@@ -2121,6 +2215,7 @@ namespace FantasySurvival.Raids
                     candidate,
                     out error) ||
                 !RaidCheckpointStore.TryWriteCheckpoint(
+                    ActiveSaveSlotIndex,
                     candidate,
                     AreCanonicalJsonEquivalent(source, lastCheckpoint) ? lastCheckpoint : null,
                     out error))
@@ -2186,7 +2281,10 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (RaidCheckpointStore.TryWriteSettlementJournal(journal, out string journalError))
+            if (RaidCheckpointStore.TryWriteSettlementJournal(
+                    ActiveSaveSlotIndex,
+                    journal,
+                    out string journalError))
             {
                 error = null;
                 return true;
@@ -2197,7 +2295,9 @@ namespace FantasySurvival.Raids
             // terminal journal would make Main Menu offer Resume for a finished raid.
             // Removing only that backup preserves the terminal primary and fails closed
             // to baseline settlement if the primary also becomes unusable.
-            if (RaidCheckpointStore.TryDeleteCheckpointBackup(out string cleanupError))
+            if (RaidCheckpointStore.TryDeleteCheckpointBackup(
+                    ActiveSaveSlotIndex,
+                    out string cleanupError))
             {
                 Debug.LogWarning(
                     $"Terminal raid journal could not be written, so the resumable Active backup was removed: " +
@@ -2267,8 +2367,12 @@ namespace FantasySurvival.Raids
             if (!markerWritten)
             {
                 cleanupSucceeded = terminalWritten
-                    ? RaidCheckpointStore.TryDeleteCheckpointBackup(out cleanupError)
-                    : RaidCheckpointStore.TryDeleteActiveCheckpoints(out cleanupError);
+                    ? RaidCheckpointStore.TryDeleteCheckpointBackup(
+                        ActiveSaveSlotIndex,
+                        out cleanupError)
+                    : RaidCheckpointStore.TryDeleteActiveCheckpoints(
+                        ActiveSaveSlotIndex,
+                        out cleanupError);
             }
 
             bool failClosedIsDurable = terminalWritten || markerWritten || cleanupSucceeded;
@@ -2313,7 +2417,10 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            return RaidCheckpointStore.TryWriteSettlementJournal(journal, out error);
+            return RaidCheckpointStore.TryWriteSettlementJournal(
+                ActiveSaveSlotIndex,
+                journal,
+                out error);
         }
 
         private bool TryCancelFreshRaidDeparture(out string error)
@@ -2369,7 +2476,10 @@ namespace FantasySurvival.Raids
                     InventoryUIManager.DefaultInventoryWidth,
                     InventoryUIManager.DefaultInventoryHeight,
                     out error) ||
-                !RaidCheckpointStore.TryWriteSettlementJournal(journal, out error))
+                !RaidCheckpointStore.TryWriteSettlementJournal(
+                    ActiveSaveSlotIndex,
+                    journal,
+                    out error))
             {
                 return false;
             }
@@ -2391,7 +2501,8 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (!GameSaveManager.TryWriteSlotOneMirrored(
+            if (!GameSaveManager.TryWriteSlotMirrored(
+                    ActiveSaveSlotIndex,
                     baseline.startingState,
                     shell.InventoryUI.ItemDatabase,
                     furnitureDatabase,
@@ -2433,6 +2544,7 @@ namespace FantasySurvival.Raids
         private bool HasAnyValidDurableActiveCheckpoint()
         {
             RaidCheckpointStore.ReadCheckpointCandidates(
+                ActiveSaveSlotIndex,
                 out RaidCheckpointData primary,
                 out _,
                 out RaidCheckpointData backup,
@@ -2445,12 +2557,13 @@ namespace FantasySurvival.Raids
 
         private bool HasValidDurableRecoveryFailureDecision()
         {
-            if (RaidCheckpointStore.HasSettlementJournalArtifacts)
+            if (RaidCheckpointStore.HasSettlementJournalArtifactsForSlot(ActiveSaveSlotIndex))
             {
                 return true;
             }
 
             RaidCheckpointStore.ReadCheckpointCandidates(
+                ActiveSaveSlotIndex,
                 out RaidCheckpointData primary,
                 out _,
                 out RaidCheckpointData backup,

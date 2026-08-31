@@ -1944,3 +1944,13 @@ Interactable (abstract base class)
 - `[사용자 피드백·원인][2026-08-31]` 기존 64×64 Cookie는 회색 감광 영역이 타일 대부분에서 하나로 이어지고 흰 틈만 뚫린 구조여서, 지면에서는 구름 여러 개가 아니라 큰 산등성이 한 장처럼 읽혔다.
 - `[수정·보존]` 같은 `PixelCloudShadowCookie` GUID와 64×64·2픽셀 셀·4단계 투과도·Repeat/Trilinear/Mipmap 계약은 유지하고, 흰 여백으로 완전히 분리된 크기 차이의 군집 7개로 실루엣만 교체했다. `SkyLightingCycleController`, 하늘광·낮밤 곡선, Directional Light 투영·서→동 이동, Clear/Rain 결합과 수신 shader는 변경하지 않았다.
 - `[정적·Play Mode 시각 확인]` 원본 PNG는 그림자 1,052/4,096 pixel(25.7%), 4방향 연결요소 7개, 최소/최대 군집 64/264 pixel이고 타일 네 경계의 그림자 pixel은 0개였다. dirty `GameMap1`을 저장하지 않은 한 Play Session에서 Clear/정오를 적용해 영속 controller·runtime filtered Cookie 바인딩과 실제 게임 Camera를 확인했으며, 큰·중간·작은 음영 사이로 밝은 바닥이 분리되어 기존 연속 산등성이가 사라진 것을 렌더로 확인했다. 종료 뒤 Edit Mode와 기존 scene dirty 상태를 보존했다. PNG 재import 때 기존 외부 `AwaiiStudio/ASFolliage` keyword 중복 오류가 다시 출력됐지만 이번 Cookie·게임 코드 오류는 아니다.
+
+---
+
+## 95. 3개 저장 슬롯·Active Raid 주메뉴 저장과 바닥 아이템 Recovery `[BOOT-01][ITEM-01][RAID-01][SAVE-01]`
+
+- `[사용자 확정·슬롯 권위][2026-09-01]` New/Load는 3개 슬롯 중 하나를 고르며 `PersistentGameplayShell.ActiveSaveSlotIndex`가 현재 gameplay session의 ordinary와 Recovery namespace를 함께 선택한다. 슬롯 1은 기존 경로를 유지하고 슬롯 2·3은 독립 경로를 쓴다. New는 선택 슬롯만 확인 후 clean 상태로 교체하고, Base 저장·출발·정산·Resume·cleanup도 active slot 밖을 변경하지 않는다.
+- `[Active Raid 주메뉴]` 원정 Escape의 `주 메뉴`를 명시적 `원정 포기`와 분리했다. 먼저 world exact Active checkpoint를 기록하고 그 checkpoint의 persistent state를 같은 ordinary slot primary/backup에 mirror한 뒤에만 주 메뉴로 나간다. 실패하면 원정에 남고 성공해도 `Abandoned` 결과·정산을 만들지 않으므로 같은 슬롯에서 이어하기 또는 실패 처리를 선택한다.
+- `[바닥 item 수명·복원]` 바닥 item의 GameObject와 단일-item grid owner는 scene-local이며 일반 씬 전환에 따라 제거된다. 따라서 기지에 놓고 출발한 item은 사라진다. Active Raid Recovery v2만 GUID stable ID·Transform·정확한 회전 footprint grid를 저장하며 Resume에서 비활성 staging→전체 상태 적용→일괄 활성화 순으로 복원한다. ordinary save에는 바닥 entity를 넣지 않고 이전 v1 checkpoint는 빈 바닥 목록으로만 호환한다.
+- `[정적·Editor 검증]` C# compile 성공 뒤 core 인접 검증에서 3슬롯 primary/backup 값 격리, slot 1 legacy 경로, 슬롯별 Recovery 경로, world-item v2 왕복·개수 불일치 거부·v1 빈 목록 호환을 확인했다. Main Menu runtime 슬롯 버튼 3개의 비중첩 배치와 같은 runtime item의 바닥 stage/commit·stable ID·scene owner도 확인했다. 최종 감사에서 ordinary는 없고 Recovery만 남은 슬롯 행이 비활성인 경계를 찾아, 그 행만 선택 가능하게 해 기존 marker-first 격리 경로로 보내고 ordinary-only 손상 슬롯은 계속 차단하도록 고쳤다.
+- `[실제 Play Mode 흐름]` 사용자 dirty `GameMap1`을 저장하지 않고 슬롯 2로 실제 `GameMapTest` 원정을 시작해 바닥 item 하나를 확정한 뒤 `주 메뉴` 저장·종료와 Main Menu의 `Load → Slot 2 → 이어하기`를 실행했다. slot 2 ordinary marker와 Recovery에 같은 stable ID가 기록되고 slot 1·3에는 자료가 생기지 않았으며, 복귀한 `GameMapTest`에서 같은 stable ID의 바닥 item이 재구성됐다. 무인 대기 중 기존 적 AI가 Player를 사망시킨 것은 관찰됐으나 저장 시점의 Active checkpoint·메뉴 이동·바닥 item 복원과 `Abandonments=0`은 확인됐다. Play 종료 뒤 기존 `GameMap1` dirty 상태를 보존했고 기존 외부 shader Console 오류는 지우지 않았다.

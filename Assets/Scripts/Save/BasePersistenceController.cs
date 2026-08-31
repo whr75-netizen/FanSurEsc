@@ -17,6 +17,7 @@ namespace FantasySurvival.SaveSystem
         private struct PendingStartAction
         {
             public GameStartMode Mode;
+            public int SaveSlotIndex;
             public RaidRecoveryBaselineData RecoveryBaseline;
             public RaidCheckpointData RaidCheckpoint;
             public GameSaveData RecoverySettlementState;
@@ -33,7 +34,7 @@ namespace FantasySurvival.SaveSystem
         [Header("Scene-authored persistent merchants")]
         [SerializeField] private Merchant[] persistentMerchants = Array.Empty<Merchant>();
 
-        private string statusMessage = "F5 or Save Slot 1 to save player and base state.";
+        private string statusMessage = "F5 or Save to save player and base state.";
         private float statusUntil;
         private bool baseFurnitureBound;
         private bool ordinaryMirrorRepairPending;
@@ -110,7 +111,7 @@ namespace FantasySurvival.SaveSystem
             if (!DirectSceneTravel.IsLoading && !IsInformationWindowOpen() &&
                 Input.GetKeyDown(KeyCode.F5))
             {
-                SaveSlotOne();
+                SaveActiveSlot();
             }
         }
 
@@ -126,14 +127,18 @@ namespace FantasySurvival.SaveSystem
             Rect panel = new Rect(Screen.width - width - 16f, 16f, width, height);
             GUI.Box(panel, "Save Prototype");
 
-            if (GUI.Button(new Rect(panel.x + 12f, panel.y + 28f, width - 24f, 30f), "Save Slot 1  (F5)"))
+            int activeSlotIndex = PersistentGameplayShell.Instance?.ActiveSaveSlotIndex ??
+                                  GameSaveManager.DefaultSlotIndex;
+            if (GUI.Button(
+                    new Rect(panel.x + 12f, panel.y + 28f, width - 24f, 30f),
+                    $"Save Slot {activeSlotIndex}  (F5)"))
             {
-                SaveSlotOne();
+                SaveActiveSlot();
             }
 
             string visibleStatus = Time.unscaledTime <= statusUntil || statusUntil <= 0f
                 ? statusMessage
-                : "F5 or Save Slot 1 to save player and base state.";
+                : $"F5 or Save Slot {activeSlotIndex} to save player and base state.";
             GUI.Label(new Rect(panel.x + 12f, panel.y + 64f, width - 24f, 42f), visibleStatus);
         }
 
@@ -146,10 +151,21 @@ namespace FantasySurvival.SaveSystem
 
         public bool SaveSlotOne()
         {
-            return SaveSlotOne(ordinaryMirrorRepairPending);
+            return SaveActiveSlot();
         }
 
-        private bool SaveSlotOne(bool mirrorOrdinarySlot)
+        public bool SaveActiveSlot()
+        {
+            return SaveActiveSlot(
+                ordinaryMirrorRepairPending,
+                allowReplaceUnresolvedSlot: false,
+                setSuccessStatus: true);
+        }
+
+        private bool SaveActiveSlot(
+            bool mirrorOrdinarySlot,
+            bool allowReplaceUnresolvedSlot,
+            bool setSuccessStatus)
         {
             if (DirectSceneTravel.IsLoading)
             {
@@ -157,6 +173,15 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            if (shell == null ||
+                !GameSaveManager.IsValidSlotIndex(shell.ActiveSaveSlotIndex))
+            {
+                SetStatus("Save failed: active save-slot ownership is unavailable.", true);
+                return false;
+            }
+
+            int activeSlotIndex = shell.ActiveSaveSlotIndex;
             if (!TryGetInventory(out InventoryUIManager inventory, out string error) ||
                 !TryGetBaseOwner(out GameManager owner, out error))
             {
@@ -196,20 +221,24 @@ namespace FantasySurvival.SaveSystem
                 settledTrackedRaidThisSave = true;
             }
 
-            if (!ordinaryMirrorRepairPending &&
-                TryGetActiveOrdinaryRaidMarker(out string activeRaidInstanceId))
+            if (!allowReplaceUnresolvedSlot && !ordinaryMirrorRepairPending &&
+                TryGetActiveOrdinaryRaidMarker(
+                    activeSlotIndex,
+                    out string activeRaidInstanceId))
             {
                 SetStatus(
-                    $"Save is blocked because ordinary slot 1 still declares unresolved raid " +
+                    $"Save is blocked because ordinary slot {activeSlotIndex} still declares unresolved raid " +
                     $"'{activeRaidInstanceId}'. Resolve it from the Main Menu.",
                     true);
                 return false;
             }
 
-            if (RaidCheckpointStore.HasRecoveryArtifacts)
+            if (!allowReplaceUnresolvedSlot &&
+                RaidCheckpointStore.HasRecoveryArtifactsForSlot(activeSlotIndex))
             {
                 SetStatus(
-                    "Save is blocked because unresolved raid recovery files are present. Resolve them from the Main Menu.",
+                    $"Save is blocked because unresolved raid recovery files are present " +
+                    $"for slot {activeSlotIndex}. Resolve them from the Main Menu.",
                     true);
                 return false;
             }
@@ -260,7 +289,6 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
             if (!PlayerProgressSaveCodec.TryCapture(
                     shell?.QuestJournal,
                     shell?.PlayerSessionRecords,
@@ -278,14 +306,16 @@ namespace FantasySurvival.SaveSystem
                 baseSave,
                 merchantSave);
             bool written = mirrorOrdinarySlot
-                ? GameSaveManager.TryWriteSlotOneMirrored(
+                ? GameSaveManager.TryWriteSlotMirrored(
+                    activeSlotIndex,
                     saveData,
                     inventory.ItemDatabase,
                     furnitureDatabase,
                     inventory.PlayerState.BaseInventoryWidth,
                     inventory.PlayerState.BaseInventoryHeight,
                     out error)
-                : GameSaveManager.TryWriteSlotOne(
+                : GameSaveManager.TryWriteSlot(
+                    activeSlotIndex,
                     saveData,
                     inventory.ItemDatabase,
                     furnitureDatabase,
@@ -302,18 +332,26 @@ namespace FantasySurvival.SaveSystem
             {
                 ordinaryMirrorRepairPending = false;
             }
-            SetStatus(
-                settledTrackedRaidThisSave
-                    ? $"Raid settlement was committed and the current base state was saved at " +
-                      GameSaveManager.GetDisplayTimestamp(saveData)
-                    : $"Saved player and base to slot 1 at {GameSaveManager.GetDisplayTimestamp(saveData)}",
-                false);
+            if (setSuccessStatus)
+            {
+                SetStatus(
+                    settledTrackedRaidThisSave
+                        ? $"Raid settlement was committed and the current base state was saved " +
+                          $"to slot {activeSlotIndex} at " +
+                          GameSaveManager.GetDisplayTimestamp(saveData)
+                        : $"Saved player and base to slot {activeSlotIndex} at " +
+                          GameSaveManager.GetDisplayTimestamp(saveData),
+                    false);
+            }
             return true;
         }
 
-        private static bool TryGetActiveOrdinaryRaidMarker(out string raidInstanceId)
+        private static bool TryGetActiveOrdinaryRaidMarker(
+            int slotIndex,
+            out string raidInstanceId)
         {
-            GameSaveManager.ReadSlotOneCandidates(
+            GameSaveManager.ReadSlotCandidates(
+                slotIndex,
                 out GameSaveData primary,
                 out _,
                 out GameSaveData backup,
@@ -346,15 +384,28 @@ namespace FantasySurvival.SaveSystem
                     out RaidCheckpointData raidCheckpoint,
                     out GameSaveData recoverySettlementState,
                     out RaidSettlementJournalKind recoverySettlementKind,
-                    out RaidOutcome recoveryOutcome))
+                    out RaidOutcome recoveryOutcome,
+                    out int saveSlotIndex))
             {
                 allowAuthoredFurnitureInitialization = owner.BaseFurnitureState.StateCount == 0;
                 return true;
             }
 
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            string slotError = null;
+            if (shell == null || !shell.TrySelectSaveSlot(saveSlotIndex, out slotError))
+            {
+                SetStatus(
+                    $"Start request could not select save slot {saveSlotIndex}: " +
+                    (slotError ?? "persistent gameplay shell is unavailable."),
+                    true);
+                return false;
+            }
+
             pendingStartAction = new PendingStartAction
             {
                 Mode = mode,
+                SaveSlotIndex = saveSlotIndex,
                 RecoveryBaseline = recoveryBaseline,
                 RaidCheckpoint = raidCheckpoint,
                 RecoverySettlementState = recoverySettlementState,
@@ -536,6 +587,42 @@ namespace FantasySurvival.SaveSystem
         private void CompleteStartActionAfterBaseBinding(PendingStartAction pendingStartAction)
         {
             PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            if (pendingStartAction.Mode == GameStartMode.NewGame)
+            {
+                if (!SaveActiveSlot(
+                        mirrorOrdinarySlot: true,
+                        allowReplaceUnresolvedSlot: true,
+                        setSuccessStatus: false))
+                {
+                    SetStatus(
+                        $"New game was initialized, but save slot " +
+                        $"{pendingStartAction.SaveSlotIndex} could not be overwritten.",
+                        true);
+                    return;
+                }
+
+                // The clean ordinary state is durable before old interrupted-raid
+                // projections are removed. Failure leaves visible recovery artifacts
+                // for this slot only and never touches another profile.
+                if (!RaidCheckpointStore.TryDeleteAll(
+                        pendingStartAction.SaveSlotIndex,
+                        out string deleteError))
+                {
+                    SetStatus(
+                        $"New game was saved to slot {pendingStartAction.SaveSlotIndex}, " +
+                        $"but that slot's old raid recovery could not be removed: {deleteError}",
+                        true);
+                    return;
+                }
+
+                ordinaryMirrorRepairPending = false;
+                SetStatus(
+                    $"New game started and was saved to slot " +
+                    $"{pendingStartAction.SaveSlotIndex}.",
+                    false);
+                return;
+            }
+
             if (pendingStartAction.Mode == GameStartMode.ResumeRaid)
             {
                 string error = null;
@@ -592,7 +679,10 @@ namespace FantasySurvival.SaveSystem
 
                 shell.PlayerStats.ResetHealth();
                 ordinaryMirrorRepairPending = true;
-                if (!SaveSlotOne(true))
+                if (!SaveActiveSlot(
+                        mirrorOrdinarySlot: true,
+                        allowReplaceUnresolvedSlot: false,
+                        setSuccessStatus: false))
                 {
                     SetStatus(
                         "Orphaned raid was failed, but its clean ordinary save mirror could not be completed. Retry F5.",
@@ -647,7 +737,7 @@ namespace FantasySurvival.SaveSystem
                 return false;
             }
 
-            SetStatus("New game started at the base. Existing save slot was not overwritten.", false);
+            SetStatus("New game state prepared at the base.", false);
             return true;
         }
 
@@ -685,7 +775,9 @@ namespace FantasySurvival.SaveSystem
 
                 allowAuthoredFurnitureInitialization = primaryAllowsAuthoredInitialization;
                 SetStatus(
-                    $"Loaded player and base from slot 1 at {GameSaveManager.GetDisplayTimestamp(saveData)}",
+                    $"Loaded player and base from slot " +
+                    $"{PersistentGameplayShell.Instance?.ActiveSaveSlotIndex ?? GameSaveManager.DefaultSlotIndex} " +
+                    $"at {GameSaveManager.GetDisplayTimestamp(saveData)}",
                     false);
                 return true;
             }

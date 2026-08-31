@@ -381,9 +381,11 @@
 
 #### 2.6.3 원정 포기
 
-- 원정 Escape 메뉴에서 포기 또는 주 메뉴 이동을 확인한 경우 `Abandoned`다.
+- 원정 Escape 메뉴의 명시적 `원정 포기`를 확인한 경우에만 `Abandoned`다.
 - 휴대품 정산은 5.8.2를 따른다.
-- 포기 화면 이동을 정산보다 먼저 실행하지 않는다.
+- 현재 포기 버튼은 기지로 돌아가며 화면 이동을 정산보다 먼저 실행하지 않는다.
+
+Active 원정의 `주 메뉴`는 포기가 아니라 중단이다. 현재 원정을 같은 저장 슬롯의 Active Recovery와 ordinary marker에 저장한 뒤 주 메뉴로 가며, 다음 실행에서 이어하기 또는 실패 처리를 선택한다.
 
 #### 2.6.4 복구 실패
 
@@ -407,6 +409,7 @@
 - 기지 가구 상태
 - 원정 Chest
 - Enemy 생존·HP·Transform과 시체 인벤토리
+- scene-local 바닥 item의 stable ID·Transform·정확한 grid
 - 도심 seed와 핵심 layout
 
 #### 2.7.3 복원 뒤 재계산하는 것
@@ -895,7 +898,7 @@ Player 입력
 - Player 소유 item을 일반 drag로 인벤토리 UI 바깥의 명시적 영역에 놓으면 같은 runtime item이 작은 색상 구 형태의 scene-local 바닥 owner로 이동한다.
 - 잘못된 셀·패널 여백은 드롭 영역이 아니며 원위치로 복원한다. click-carry, 분할 carry와 Chest·상인 item의 직접 바닥 드롭은 현재 차단한다.
 - E 습득은 공용 최근접 상호작용을 사용한다. 같은 stack의 빈 수량을 먼저 채우고 남은 수량만 현재 회전 기준 첫 유효 빈칸에 둔다. 일부만 들어가면 나머지는 바닥에 남는다.
-- 바닥 구의 최종 sprite·표현과 ordinary save·원정 Recovery 영속화는 후속이다.
+- 바닥 구의 최종 sprite·표현은 후속이다. GameObject와 runtime owner는 scene-local이라 일반 씬 전환 때 제거된다. 기지 바닥 item은 출발 시 사라지고, Active Raid의 바닥 item만 원정 Recovery가 운반해 같은 슬롯 Resume에서 재구성한다. ordinary save에는 바닥 entity를 기록하지 않는다.
 
 ### 5.5 장비 시스템
 
@@ -927,7 +930,7 @@ Player 입력
 
 #### 5.6.2 후속 `[설계 제안]`
 
-- 바닥 아이템의 정식 sprite·씬 전환/Recovery 영속화
+- 바닥 아이템의 정식 sprite·드롭 위치 표현
 - 잠긴 상자
 - 건물 내부 보관함
 - 차량 트렁크
@@ -1910,8 +1913,8 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - Player 조작만 잠금
 - **[현재·개발용]** 환경 테스트는 기지와 같은 낮/밤·맑음/비 분기를 쓰되 원정의 non-pause 정책을 유지한다.
 - **[설계 제안]** “원정은 일시정지되지 않습니다” 경고 표시
-- 포기·주 메뉴에는 확인창 표시
-- **[설계 제안]** 현재 휴대품·장비 전체 소실을 확인창에 명시
+- 포기와 주 메뉴 이동은 각각 확인창을 표시하되 같은 행동으로 합치지 않는다.
+- 포기는 현재 휴대품·장비 전체 소실을 명시한다. 주 메뉴는 같은 슬롯에 Active 저장 후 이어하기/실패 처리가 필요함을 명시한다.
 
 ### 10.10 결과 UI
 
@@ -1923,7 +1926,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 |---|---|---|
 | `Extracted` | Raid 안의 선택 패널은 생략하고 완전 암전 뒤 기지 정산 진행·완료 화면 표시 | 자동 기지 로드 → `SettlementCommitted` 뒤 `확인` 하나 |
 | `PlayerDied` | 표시 | 기지 복귀 또는 주 메뉴 버튼 |
-| `Abandoned` | 정상 확인 경로에서는 생략 | 확인할 때 선택한 기지 또는 주 메뉴로 직접 이동; 이동 실패 시 결과 패널 |
+| `Abandoned` | 정상 확인 경로에서는 생략 | 기지로 직접 이동; 이동 실패 시 결과 패널 |
 | `RecoveryFailed` | 자동 생환 귀환 중이면 같은 정산 화면, 그 외 원정 런타임에서 확정되면 기존 결과 표시 | 자동 분기는 commit 뒤 `확인`; 그 외에는 기지 복귀 또는 주 메뉴, Main Menu 복구 판정은 10.11 사용 |
 
 #### 10.10.2 현재 표시
@@ -1931,7 +1934,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - 결과별 최소 제목과 상세 문구
 - `Extracted`: 정산 중 버튼 없음, commit 뒤 `확인` 하나, 실패 시 `정산 재시도` 하나
 - `PlayerDied`와 자동 생환 밖의 `RecoveryFailed`: 기지 복귀·주 메뉴 버튼
-- `Abandoned`: 확인창에서 선택한 목적지로 직접 이동
+- `Abandoned`: 확인창 뒤 기지로 직접 이동
 
 #### 10.10.3 후속 표시 `[설계 제안]`
 
@@ -2063,6 +2066,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 #### 11.2.1 현재 형식
 
 - 최상위 v7
+- 3개 독립 슬롯과 각 슬롯의 primary·backup
 - Player item payload
 - Player currency payload
 - base furniture payload v2
@@ -2087,6 +2091,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - Camera
 - Portal
 - 일반 Enemy와 원정 순간 상태
+- scene-local 바닥 item entity; Active Raid Resume용 record는 같은 슬롯 Recovery가 소유
 
 일반 Load는 기지에서 시작한다.
 
@@ -2094,12 +2099,14 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 
 #### 11.3.1 New Game
 
-- 현재 저장 파일을 자동 삭제·덮어쓰지 않는다.
-- ordinary primary 또는 backup이 있으면 새 게임 확인을 먼저 받으며, 새 세션의 다음 저장부터 기존 slot을 교체할 수 있음을 알린다.
+- 1~3 중 저장 슬롯을 먼저 고른다.
+- 선택 슬롯에 ordinary 또는 Recovery 자료가 있으면 교체 확인을 먼저 받고 다른 슬롯은 변경하지 않는다.
+- 기지 상태 적용과 binding이 끝난 뒤 선택 슬롯에 clean 시작 상태를 mirror하고, 성공한 뒤 그 슬롯의 과거 Recovery만 정리한다.
 - 시험 초기 Player 인벤토리로 새 Play Session을 시작한다.
 
 #### 11.3.2 Load
 
+- 1~3 중 선택한 슬롯만 판정하며 해당 슬롯이 gameplay session의 active slot이 된다.
 - primary를 전체 검증한 뒤 적용한다.
 - primary가 의미 검증에 실패하면 정상 backup을 별도로 검증한다.
 - live 상태를 바꾸기 전에 전체 후보를 검증한다.
@@ -2124,6 +2131,7 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - 맵 seed·version·layout hash
 - stable 원정 Chest
 - Enemy 생존·HP·Transform·시체 인벤토리
+- scene-local 바닥 item stable ID·Transform·정확한 단일-owner grid
 
 ### 11.5 Resume
 
@@ -2157,21 +2165,21 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 - 정산 중 부분 실패는 입력을 잠그고 immutable exact로 재시도한다.
 - 전면 I/O 거부까지 복원 가능하다고 주장하지 않는다.
 
-### 11.8 최종 저장 정책 `[미정]`
+### 11.8 현재 슬롯·자동 저장 정책과 후속
 
-- 슬롯 수
-- 자동 저장 시점
-- 사용자 수동 저장 범위
-- 손상 파일 안내와 복구 선택
-- 클라우드 세이브
-- 세이브 migration 지원 기간
+- **[확정/현재]** 저장 슬롯은 3개이며 ordinary와 Recovery가 같은 slot index를 공유한다. 슬롯 1은 기존 파일 경로를 유지한다.
+- **[확정/현재]** 기지의 주 메뉴 이동은 active ordinary slot 저장 성공 뒤에만 실행한다.
+- **[확정/현재]** Active Raid의 주 메뉴 이동은 world exact Recovery를 먼저 쓰고 같은 persistent snapshot을 active ordinary slot에 mirror한 뒤 실행한다. 결과는 Active로 남으며 `Abandoned` 정산을 만들지 않는다.
+- **[현재]** 진행 중 저빈도 world checkpoint는 Recovery이고 자유로운 과거 시점 load용 일반 세이브가 아니다.
+- **[미정]** 사용자 수동 저장 범위, 클라우드 저장, 손상 파일의 최종 안내 UX와 migration 지원 기간
 
 ### 11.9 저장 UX 검증
 
 - New Game이 기존 슬롯을 조용히 삭제하지 않는다.
+- 한 슬롯의 New/Load/Recovery/cleanup이 다른 슬롯 파일을 변경하지 않는다.
 - primary 손상 시 검증된 backup만 사용한다.
 - 유효하지 않은 원정을 Resume 버튼으로 표시하지 않는다.
-- 강제종료 후 같은 raid ID·맵·Player·Chest·Enemy 상태가 복원된다.
+- 강제종료 또는 Active Raid 주 메뉴 저장 후 같은 raid ID·맵·Player·Chest·Enemy·바닥 item 상태가 복원된다.
 - 정산 재시도가 아이템 복제·중복 손실을 만들지 않는다.
 
 ---

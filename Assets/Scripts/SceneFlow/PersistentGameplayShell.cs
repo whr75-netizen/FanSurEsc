@@ -4,6 +4,7 @@ using FantasySurvival.Information;
 using FantasySurvival.Interaction;
 using FantasySurvival.Quests;
 using FantasySurvival.Raids;
+using FantasySurvival.SaveSystem;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -36,6 +37,7 @@ namespace FantasySurvival.SceneFlow
         [SerializeField] private GameplayEscapeMenuController escapeMenu;
         [SerializeField] private GameplaySceneTransitionFader sceneTransitionFader;
 
+        private int activeSaveSlotIndex = GameSaveManager.DefaultSlotIndex;
         private bool travelPrepared;
         private bool movementWasEnabled;
         private bool inventoryInputWasBlocked;
@@ -59,6 +61,7 @@ namespace FantasySurvival.SceneFlow
         public InformationWindowController InformationWindow => informationWindow;
         public GameplayEscapeMenuController EscapeMenu => escapeMenu;
         public GameplaySceneTransitionFader SceneTransitionFader => sceneTransitionFader;
+        public int ActiveSaveSlotIndex => activeSaveSlotIndex;
         public bool IsTravelPrepared => travelPrepared;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -96,6 +99,20 @@ namespace FantasySurvival.SceneFlow
             {
                 Instance = null;
             }
+        }
+
+        public bool TrySelectSaveSlot(int slotIndex, out string error)
+        {
+            if (!GameSaveManager.IsValidSlotIndex(slotIndex))
+            {
+                error = $"Save slot index {slotIndex} is outside the supported range " +
+                        $"{GameSaveManager.DefaultSlotIndex}-{GameSaveManager.SlotCount}.";
+                return false;
+            }
+
+            activeSaveSlotIndex = slotIndex;
+            error = null;
+            return true;
         }
 
         public bool PrepareForTravel()

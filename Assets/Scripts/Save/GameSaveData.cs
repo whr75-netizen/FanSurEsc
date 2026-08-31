@@ -14,7 +14,8 @@ namespace FantasySurvival.SaveSystem
         public int formatVersion;
         public string savedAtUtc;
         // Durable cross-check for an expedition whose Recovery folder is missing.
-        // The ordinary save remains the raid-start/base payload, never live raid state.
+        // The ordinary slot may hold the raid-start state or the latest explicit
+        // raid autosave's persistent state. Live scene/world state stays in Recovery.
         public bool raidInProgress;
         public string activeRaidInstanceId;
         public PlayerItemStateSaveData playerItems;

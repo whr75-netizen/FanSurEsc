@@ -93,7 +93,7 @@
 - 원거리 적의 실수, 재조준, 시야 상실과 엄폐를 이용할 수 있어야 하며, 여러 PvE 적을 상대해도 모든 공격이 완벽히 직격해서는 안 된다.
 - 실패는 의미가 있어야 하지만 기지의 안전 자산까지 원정 정산 오류로 손상되어서는 안 된다.
 - 현재 기지 Escape 메뉴만 세계를 실제 일시정지한다. 활성 원정의 Escape 메뉴는 Player 입력만 잠그며 세계와 적 AI는 계속 진행된다.
-- 귀환 포탈의 정상 탈출은 `Extracted`다. 원정 Escape 메뉴에서 원정 포기 또는 주 메뉴 이동을 선택한 경우에만 확인을 거쳐 `Abandoned`로 정산하며, 이 메뉴 이동을 안전한 탈출·휴대품 보존 수단으로 사용하지 않는다.
+- 귀환 포탈의 정상 탈출은 `Extracted`다. 원정 Escape 메뉴의 명시적 `원정 포기`만 확인 뒤 `Abandoned`로 정산한다. Active 원정의 `주 메뉴`는 exact checkpoint와 같은 시점의 ordinary save를 활성 슬롯에 기록하는 중단이며 결과·정산을 만들지 않는다. 이후 같은 슬롯에서 이어하거나 실패 처리하므로 안전한 탈출·휴대품 확정 수단이 아니다.
 - **[현재 임시]** 귀환 포탈 E는 즉시 `Extracted`와 피해 차단을 확정하고 기존 검은 fade 뒤 자동으로 기지 정산으로 간다. ordinary save 반영과 Recovery 정리가 끝난 뒤에만 `확인`을 표시하며, 그 전에는 주 메뉴를 노출하지 않는다. 최종 탈출 대기·중단·암전 중 사망 규칙은 **[미정]**이다.
 - 예기치 않은 프로세스 종료는 탈출이나 포기가 아니라 중단이다. 다음 실행에서 ordinary marker와 일치하는 유효한 동일 원정의 **Active checkpoint**가 있을 때만 이어간다. Resolved checkpoint·settlement journal은 정산으로 가고, 유효 Active checkpoint가 없으면 실패 정산한다.
 
@@ -167,7 +167,7 @@ Main Menu
 - 결과 없는 기지 복귀, 중복 생환 보상, 중복 손실과 더 오래된 원정의 부활이 없어야 한다.
 - UI와 씬 이름은 결과의 원본이 아니다. 현재 런타임에서는 `RaidSession`, 프로세스 재시작에서는 검증된 ordinary marker·Recovery·settlement journal이 경계를 운반한다.
 - 출발, 진행, 종료, 정산과 정리 중 어느 단계에서 중단돼도 다음 실행이 같은 결정을 반복 가능하게 마무리해야 한다.
-- 귀환 포탈의 정상 탈출은 `Extracted`를 확정한다. 원정 Escape 메뉴에서 포기 또는 주 메뉴 이동을 확인한 경우에만 `Abandoned`를 먼저 확정하며, 화면 이동을 결과 정산보다 먼저 실행해 손실을 우회하지 않는다.
+- 귀환 포탈은 `Extracted`, 명시적 원정 포기는 `Abandoned`를 먼저 확정하며 화면 이동으로 정산을 우회하지 않는다. Active 원정의 주 메뉴 이동은 terminal 결과가 아니라 활성 슬롯에 durable Active 상태를 남기는 중단이다.
 
 ### 4.2 아이템 소유권과 루팅
 
@@ -181,7 +181,7 @@ Main Menu
 
 **[현재 시험]** 짧은 좌클릭은 item 또는 stack 전체를 커서로 들고, 이동 임계값을 넘긴 좌클릭은 기존 drag를 사용한다. 고정 시간 지연은 두지 않는다. 잘못된 칸을 누르면 계속 들고 있고 명시적 취소에서만 원위치로 복원한다. 우클릭은 실제 가능한 `사용`·`장착`·`나누기`만 표시하고 메뉴 밖을 누르면 행동 없이 닫는다. `장착`은 `ItemDefinition.EquipmentSlot`이 지정된 Player·Storage 소유 item과 비어 있는 현재 활성 슬롯에만 제공하며 상인 stock에는 제공하지 않는다. 장착 item을 Alt+좌클릭하면 같은 규칙으로 즉시 장착하고, 장비칸에서 Alt+좌클릭하면 Player root grid의 첫 유효 빈 위치로 즉시 해제한다. 점유·공간 부족 실패는 원래 owner·slot을 유지한다. 현재 `사용`은 컨테이너 열기와 체력이 부족할 때의 Player 소유 치료제에 연결된다. 비장비 stack 수량 2 이상은 기본값 1과 `1..현재-1`을 입력하거나 Alt+좌클릭/Alt+drag로 절반(`floor`)을 나눈다. 수량 2 이상 stack의 Ctrl+좌클릭은 1개만 새 runtime item으로 들어 올린다. 클릭으로 든 stack은 Ctrl+좌클릭 또는 Ctrl+drag로 유효한 빈칸마다 한 제스처에 한 번씩 1개를 놓고 나머지를 계속 들며, 점유칸에는 합치지 않는다. 마지막 1개는 같은 runtime item을 연결하고 원래 picked footprint는 보유 종료까지 예약한다. 기존 pointer drag는 이 분배를 사용하지 않고 Merchant 화면에서는 차단한다. 분할 원본은 같은 owner·slot에 남고 새 runtime item만 보유 권위에 들어간다. 같은 definition stack에 놓으면 최대치까지만 합치고 나머지를 계속 들며, 취소는 아직 들고 있는 나머지만 원본에 복원한다. Storage 화면의 Shift+좌클릭은 대상 grid의 같은 definition 비가득 stack을 slot 순서로 먼저 채우고, 남은 수량은 같은 runtime item을 첫 유효 빈 위치로 옮긴다. 빈 위치가 없으면 합쳐진 수량만 확정하고 나머지는 원본 owner·slot에 남긴다. 상인 화면에서는 분할, Player↔상인 거래 경계 합치기와 이 Storage 자동 합치기를 차단하되 같은 소유권 내부 정리는 허용한다.
 
-**[현재 시험]** Player 소유 item의 일반 pointer drag만 실제 인벤토리 UI 바깥의 명시적 DropZone에 놓으면 같은 runtime item을 scene-local 바닥 owner로 원자 이전한다. 잘못된 셀·패널 여백, click-carry, 분할 carry와 외부 Chest·상인 소유 item은 바닥 드롭으로 해석하지 않고 기존 원복을 유지한다. 바닥 item은 공용 최근접 E 상호작용으로 Player root grid에 들어오며, stack은 Storage Shift 이동과 같은 `기존 stack 우선 → 현재 회전 기준 첫 유효 빈칸` 규칙을 사용한다. 일부만 들어가면 잔량은 같은 바닥 owner에 남고 전혀 들어가지 않으면 원본을 유지한다. 현재 작은 색상 구는 시험 표현이며 ordinary save와 원정 Recovery의 바닥 entity record는 아직 없으므로 씬 전환·프로세스 재시작 영속성을 보장하지 않는다.
+**[현재 시험]** Player 소유 item의 일반 pointer drag만 실제 인벤토리 UI 바깥의 명시적 DropZone에 놓으면 같은 runtime item을 scene-local 바닥 owner로 원자 이전한다. 잘못된 셀·패널 여백, click-carry, 분할 carry와 외부 Chest·상인 소유 item은 바닥 드롭으로 해석하지 않고 기존 원복을 유지한다. 바닥 item은 공용 최근접 E 상호작용으로 Player root grid에 들어오며, stack은 Storage Shift 이동과 같은 `기존 stack 우선 → 현재 회전 기준 첫 유효 빈칸` 규칙을 사용한다. 일부만 들어가면 잔량은 같은 바닥 owner에 남고 전혀 들어가지 않으면 원본을 유지한다. 작은 색상 구는 시험 표현이며 일반 씬 전환에는 운반하지 않는다. 기지에서 떨어뜨린 item은 출발 시 삭제되고, Active Raid의 바닥 item만 Recovery v2가 stable ID·Transform·정확한 grid를 운반해 같은 슬롯 Resume에서 재구성한다. ordinary save에는 바닥 entity를 넣지 않는다.
 
 **[현재]** 시험 `LootTableDefinition`은 ItemDatabase의 숫자 definition ID와 누적 확률을 가진 공유 정의다. Fresh 원정 도착에서 `seed + stable container ID`로 최대 한 아이템을 한 번 결정하고, 모든 후보 grid가 유효할 때만 원자적으로 적용한다. Resume은 테이블을 다시 굴리지 않고 Recovery에 저장된 실제 grid를 복원한다. LootTable이 없는 기존 컨테이너는 authored 초기값을 유지한다. 기존 수량 필드가 없던 item record의 `0`은 복원 시 1개로 정규화하며, 현재 writer는 유효한 양수만 기록한다.
 
@@ -300,12 +300,14 @@ ordinary save에서 raidInProgress와 raid ID 확인
 → terminal 결과: exact journal로 반복 가능한 정산
 ```
 
-- 첫 검사 대상은 Recovery 파일이 아니라 ordinary save의 원정 표식이다.
+- 활성 저장 슬롯은 1~3 중 하나이며 ordinary primary/backup과 Recovery namespace를 함께 선택한다. 슬롯 1은 기존 경로와 호환한다.
+- 첫 검사 대상은 선택 슬롯의 Recovery 파일이 아니라 ordinary save의 원정 표식이다.
 - marker가 없는 Recovery만으로 원정을 되살리지 않는다.
-- snapshot은 Player·기지·맵·Chest·Enemy의 권위 상태를 운반한다.
+- snapshot은 Player·기지·맵·Chest·Enemy와 Active Raid의 scene-local 바닥 item 권위 상태를 운반한다.
 - AI 경로, 현재 행동, 감지 기억, 투사체, VFX, SFX, 열린 UI와 drag 같은 파생 상태는 복원 뒤 다시 계산한다.
 - 정산은 `journal → ordinary primary/backup → Recovery cleanup` 순서로 중단에 안전하게 진행한다.
 - 일부 파일 작업이 실패하면 더 오래된 상태를 임의로 살리지 않고 fail-closed로 처리한다.
+- 기지의 주 메뉴 이동은 활성 ordinary slot 저장 뒤, Active Raid의 주 메뉴 이동은 Active Recovery exact와 같은 persistent snapshot의 ordinary mirror 뒤에만 gameplay session을 종료한다.
 - 저장장치가 모든 기록 수단을 동시에 거부하는 물리적 전면 I/O 실패까지 복원 가능하다고 주장하지 않는다.
 - 현재 Cube NPC의 시험 의뢰 진행도와 누적 기록은 `GameSaveData` v7의 player-progress payload로 ordinary save와 Recovery에 함께 운반한다. 원정 결과는 terminal checkpoint에서 한 번 순수 투영한 exact 상태를 settlement journal·ordinary save·live owner까지 재사용하며, v2~v6 저장은 명시적으로 v7로 이관한다.
 
@@ -405,7 +407,7 @@ ordinary save에서 raidInProgress와 raid ID 확인
 - 도심 랜드마크·내부·지형지물의 최종 배치 규칙
 - 지하 던전과 오염 지역의 별도 공간 문법
 - 난이도 단계, 적 등급, 보스 전술과 최종 AI 기억 정책
-- 정식 세이브 슬롯, 자동 저장 시점과 손상 파일 UX
+- 수동 저장 범위, 클라우드 저장, migration 지원 기간과 손상 파일 UX
 
 ---
 

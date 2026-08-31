@@ -1936,3 +1936,11 @@ Interactable (abstract base class)
 - `[Unity Editor 호출 확인][2026-08-31]` C# compile과 Backpack 계약 검증을 실행했다. 성공/실패 미리보기의 높이·모든 셀·회전·owner·장비·dirty·layout version 무변경, 정확한 목적칸 commit, 73개 item의 실패 원자성, 장비 슬롯 UI ghost/취소 복원, 작은 가방 교체 시 기존 가방 공간 합산, staged rollback 무알림과 외부 목적지 완료 뒤 장비/용량 알림 각 1회를 확인했다. 이어 `CoreSystemsAdjacentValidation`도 1회 통과해 함께 닿는 기존 장비·저장·입력 계약의 회귀가 없음을 확인했다.
 - `[Play Mode 호출 확인][2026-08-31]` dirty `GameMap1`을 저장하지 않고 임시 Player state로 실제 `StandardCore` pointer drag callback을 호출했다. `+1` 가방과 root item 72개 상태에서 비어 있는 base slot 71은 drag가 시작되면서도 빨강이었고 drop 뒤 장비·10행·owner·layout version·슬롯 UI가 정확히 유지됐다. item 1개 상태의 base slot 0은 초록이었고 drop 순간 같은 가방 instance가 slot 0으로 이동하며 9행으로 축소됐다. 초기 결합 검증기의 두 번째 fixture 재개방 누락 오류는 기능과 분리해 수정한 뒤 두 case를 각각 성공 호출했으며 Console을 지우지 않았다. 종료 뒤 `GameMap1`의 기존 dirty 상태와 Edit Mode를 복원했다.
 - `[조건부 대안·현재 경계]` 미리계산 drag가 이후 실제 UI 복잡성이나 불안정성을 만들면 자동정렬을 폐기하고, 사라지는 추가 행에 footprint가 일부라도 걸친 item만 모두 바닥 drop하며 기본 8×9 item은 움직이지 않는 방식으로 전환한다. 현재는 전환하지 않았다. 시험 가방은 모두 1×1이며 장착 가방 drag 중 별도 ghost 회전은 이번 범위에서 추가하지 않았다. 실제 사람 손의 물리 마우스 조작과 Player build는 미검증이다.
+
+---
+
+## 94. 대소 분리형 구름 그림자 실루엣 `[ENVIRONMENT-01]`
+
+- `[사용자 피드백·원인][2026-08-31]` 기존 64×64 Cookie는 회색 감광 영역이 타일 대부분에서 하나로 이어지고 흰 틈만 뚫린 구조여서, 지면에서는 구름 여러 개가 아니라 큰 산등성이 한 장처럼 읽혔다.
+- `[수정·보존]` 같은 `PixelCloudShadowCookie` GUID와 64×64·2픽셀 셀·4단계 투과도·Repeat/Trilinear/Mipmap 계약은 유지하고, 흰 여백으로 완전히 분리된 크기 차이의 군집 7개로 실루엣만 교체했다. `SkyLightingCycleController`, 하늘광·낮밤 곡선, Directional Light 투영·서→동 이동, Clear/Rain 결합과 수신 shader는 변경하지 않았다.
+- `[정적·Play Mode 시각 확인]` 원본 PNG는 그림자 1,052/4,096 pixel(25.7%), 4방향 연결요소 7개, 최소/최대 군집 64/264 pixel이고 타일 네 경계의 그림자 pixel은 0개였다. dirty `GameMap1`을 저장하지 않은 한 Play Session에서 Clear/정오를 적용해 영속 controller·runtime filtered Cookie 바인딩과 실제 게임 Camera를 확인했으며, 큰·중간·작은 음영 사이로 밝은 바닥이 분리되어 기존 연속 산등성이가 사라진 것을 렌더로 확인했다. 종료 뒤 Edit Mode와 기존 scene dirty 상태를 보존했다. PNG 재import 때 기존 외부 `AwaiiStudio/ASFolliage` keyword 중복 오류가 다시 출력됐지만 이번 Cookie·게임 코드 오류는 아니다.

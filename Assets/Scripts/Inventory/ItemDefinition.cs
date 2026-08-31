@@ -13,9 +13,6 @@ namespace FantasySurvival.Inventory
         Food
     }
 
-    [CreateAssetMenu(
-        fileName = "ItemDefinition",
-        menuName = "Fantasy Survival/Inventory/Item Definition")]
     public sealed class ItemDefinition : ScriptableObject
     {
         [SerializeField, Min(1)] private int id = 1;

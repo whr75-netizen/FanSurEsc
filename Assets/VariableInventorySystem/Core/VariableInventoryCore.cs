@@ -430,6 +430,20 @@ namespace VariableInventorySystem
                 return false;
             }
 
+            bool deferredDrop = IsDeferredDropCarry(sourceData);
+            if (sourceData is IVariableInventoryOwnedCellData owned &&
+                owned.InventoryOwner != null && !deferredDrop)
+            {
+                foreach (IVariableInventoryView inventoryView in InventoryViews)
+                {
+                    inventoryView?.OnDroped(false);
+                }
+
+                originView = null;
+                error = "The picked item remained attached without a deferred-drop source.";
+                return false;
+            }
+
             stareCell = sourceCell;
             originEffectCellRotate = sourceData.IsRotate;
             carryMode = mode;
@@ -439,7 +453,10 @@ namespace VariableInventorySystem
             NotifyHoveredCellCleared();
             effectCell.RectTransform.gameObject.SetActive(true);
             effectCell.Apply(sourceData);
-            transferController?.OnInventoryContentsChanged();
+            if (!deferredDrop)
+            {
+                transferController?.OnInventoryContentsChanged();
+            }
             if (mode == VariableInventoryCarryMode.Click)
             {
                 UpdateClickCarryPointer();
@@ -481,6 +498,22 @@ namespace VariableInventorySystem
             }
 
             IVariableInventoryCellData transferredItem = effectCell.CellData;
+            if (IsDeferredDropCarry(transferredItem) &&
+                originView is IVariableInventoryDeferredDropSource deferredSource &&
+                !deferredSource.TryPrepareDeferredExternalDrop(
+                    transferredItem,
+                    out string deferredError))
+            {
+                if (!string.IsNullOrEmpty(deferredError))
+                {
+                    Debug.LogWarning(
+                        $"[Core] Deferred external drop rejected: {deferredError}",
+                        this);
+                }
+
+                return false;
+            }
+
             if (!controller.TryStageExternalDrop(
                     originView,
                     transferredItem,
@@ -599,6 +632,42 @@ namespace VariableInventorySystem
                     : VariableInventoryDropHandling.Standard;
                 if (handling == VariableInventoryDropHandling.Reject)
                 {
+                    break;
+                }
+
+                if (IsDeferredDropCarry(transferredItem) &&
+                    originView is IVariableInventoryDeferredDropSource deferredSource)
+                {
+                    VariableInventoryDropHandling deferredHandling =
+                        deferredSource.GetDeferredDropPreviewHandling(
+                            view,
+                            stareCell,
+                            transferredItem);
+                    if (handling != VariableInventoryDropHandling.Standard ||
+                        deferredHandling == VariableInventoryDropHandling.Reject)
+                    {
+                        break;
+                    }
+
+                    if (!deferredSource.TryCompleteDeferredDrop(
+                            view,
+                            stareCell,
+                            transferredItem,
+                            out string deferredError))
+                    {
+                        if (!string.IsNullOrEmpty(deferredError))
+                        {
+                            Debug.LogWarning(
+                                $"[Core] Deferred drop rejected: {deferredError}",
+                                this);
+                        }
+
+                        break;
+                    }
+
+                    handling = VariableInventoryDropHandling.AcceptWithoutInsert;
+                    isRelease = true;
+                    destinationView = view;
                     break;
                 }
 
@@ -750,7 +819,7 @@ namespace VariableInventorySystem
         }
 
         // --- SwitchRotate, GetRotateSize (원본 유지) ---
-        public virtual void SwitchRotate() { if (!IsDragging()) return; if (!originEffectCellRotate.HasValue) originEffectCellRotate = effectCell.CellData.IsRotate; effectCell.CellData.IsRotate = !effectCell.CellData.IsRotate; effectCell.Apply(effectCell.CellData); var (w, h) = GetRotateSize(effectCell.CellData); effectCell.RectTransform.localPosition = cursorPosition + new Vector2(-(w - 1) * effectCell.DefaultCellSize.x * 0.5f, (h - 1) * effectCell.DefaultCellSize.y * 0.5f); UpdateDropPreviewHandling(); foreach (var v in InventoryViews) v.OnSwitchRotate(stareCell, effectCell); }
+        public virtual void SwitchRotate() { if (!IsDragging() || IsDeferredDropCarry(effectCell.CellData)) return; if (!originEffectCellRotate.HasValue) originEffectCellRotate = effectCell.CellData.IsRotate; effectCell.CellData.IsRotate = !effectCell.CellData.IsRotate; effectCell.Apply(effectCell.CellData); var (w, h) = GetRotateSize(effectCell.CellData); effectCell.RectTransform.localPosition = cursorPosition + new Vector2(-(w - 1) * effectCell.DefaultCellSize.x * 0.5f, (h - 1) * effectCell.DefaultCellSize.y * 0.5f); UpdateDropPreviewHandling(); foreach (var v in InventoryViews) v.OnSwitchRotate(stareCell, effectCell); }
         (int, int) GetRotateSize(IVariableInventoryCellData cell) { if (cell == null) return (1, 1); return (cell.IsRotate ? cell.Height : cell.Width, cell.IsRotate ? cell.Width : cell.Height); }
 
         // --- CancelDrag (OnDroped(false) 호출) ---
@@ -989,6 +1058,15 @@ namespace VariableInventorySystem
                         view,
                         effectCell.CellData);
                     if (handling == VariableInventoryDropHandling.Standard &&
+                        IsDeferredDropCarry(effectCell.CellData) &&
+                        originView is IVariableInventoryDeferredDropSource deferredSource)
+                    {
+                        handling = deferredSource.GetDeferredDropPreviewHandling(
+                            view,
+                            stareCell,
+                            effectCell.CellData);
+                    }
+                    else if (handling == VariableInventoryDropHandling.Standard &&
                         TryGetDropPreviewHandlingOverride(
                             view,
                             stareCell,
@@ -1043,8 +1121,27 @@ namespace VariableInventorySystem
 
         private bool HasUnexpectedCarriedOwner()
         {
-            return effectCell?.CellData is IVariableInventoryOwnedCellData owned &&
-                   owned.InventoryOwner != null;
+            if (!(effectCell?.CellData is IVariableInventoryOwnedCellData owned) ||
+                owned.InventoryOwner == null)
+            {
+                return false;
+            }
+
+            if (!IsDeferredDropCarry(effectCell.CellData) ||
+                !(originView is IVariableInventoryBoundView originBound))
+            {
+                return true;
+            }
+
+            return !ReferenceEquals(owned.InventoryOwner, originBound.ViewData) ||
+                   !originBound.ViewData.GetId(effectCell.CellData).HasValue;
+        }
+
+        private bool IsDeferredDropCarry(IVariableInventoryCellData item)
+        {
+            return item != null &&
+                   originView is IVariableInventoryDeferredDropSource deferredSource &&
+                   deferredSource.IsDeferredDropActive(item);
         }
 
         private bool IsCarriedItemRestoredToOrigin()

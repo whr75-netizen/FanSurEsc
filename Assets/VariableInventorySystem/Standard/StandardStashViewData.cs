@@ -19,6 +19,8 @@ namespace VariableInventorySystem
             public IVariableInventoryCellData Item;
             public int SourceIndex;
             public bool OriginalRotation;
+            public int OriginalWidth;
+            public int OriginalHeight;
             public int Area;
             public int LongestSide;
         }
@@ -33,6 +35,23 @@ namespace VariableInventorySystem
                 CellIndex = cellIndex;
                 IsRotated = isRotated;
             }
+        }
+
+        private sealed class HeightResizePlan
+        {
+            public int BeforeHeight;
+            public int AfterHeight;
+            public IVariableInventoryCellData[] BeforeCells;
+            public IVariableInventoryCellData[] AfterCells;
+            public List<ResizeItem> Items;
+            public Dictionary<IVariableInventoryCellData, ResizePlacement> Placements;
+            public IVariableInventoryCellData ReservedItem;
+            public ResizePlacement ReservedPlacement;
+            public bool ReservedOriginalRotation;
+            public int ReservedOriginalWidth;
+            public int ReservedOriginalHeight;
+            public IVariableInventoryViewData ReservedOriginalOwner;
+            public bool IsNoOp;
         }
 
         private sealed class ReferenceCellComparer : IEqualityComparer<IVariableInventoryCellData>
@@ -66,6 +85,7 @@ namespace VariableInventorySystem
 
         public bool IsDirty { get; set; }
         public IVariableInventoryCellData[] CellData { get; private set; }
+        public long LayoutVersion { get; private set; }
 
         public int CapacityWidth { get; }
         public int CapacityHeight { get; private set; }
@@ -161,6 +181,10 @@ namespace VariableInventorySystem
 
             CellData[id] = cellData;
             IsDirty = true;
+            unchecked
+            {
+                LayoutVersion++;
+            }
 
             UpdateMask();
         }
@@ -177,6 +201,30 @@ namespace VariableInventorySystem
                 return false;
             }
 
+            return CheckInsertFootprint(id, cellData);
+        }
+
+        /// <summary>
+        /// Checks a deferred transfer without detaching the item from its current owner.
+        /// This is read-only: neither ownership nor rotation is changed.
+        /// </summary>
+        public bool CheckInsertFromOwner(
+            int id,
+            IVariableInventoryCellData cellData,
+            IVariableInventoryViewData expectedOwner)
+        {
+            if (id < 0 || id >= CellData.Length || cellData == null || expectedOwner == null ||
+                !(cellData is IVariableInventoryOwnedCellData owned) ||
+                !ReferenceEquals(owned.InventoryOwner, expectedOwner))
+            {
+                return false;
+            }
+
+            return CheckInsertFootprint(id, cellData);
+        }
+
+        private bool CheckInsertFootprint(int id, IVariableInventoryCellData cellData)
+        {
             var (width, height) = GetRotateSize(cellData);
 
             // check width
@@ -229,13 +277,36 @@ namespace VariableInventorySystem
             out HeightResizeReceipt receipt,
             out string error)
         {
-            return TryResizeHeightInternal(
+            receipt = null;
+            return TryCreateHeightResizePlan(
+                       expectedCurrentHeight,
+                       newHeight,
+                       null,
+                       false,
+                       -1,
+                       false,
+                       out HeightResizePlan plan,
+                       out error) &&
+                   TryApplyHeightResizePlan(plan, out receipt, out error);
+        }
+
+        /// <summary>
+        /// Runs the exact resize planner without changing cells, rotations, capacity,
+        /// ownership, dirty state, or receipts.
+        /// </summary>
+        public bool TryPreviewResizeHeight(
+            int expectedCurrentHeight,
+            int newHeight,
+            out string error)
+        {
+            return TryCreateHeightResizePlan(
                 expectedCurrentHeight,
                 newHeight,
                 null,
+                false,
+                -1,
+                false,
                 out _,
-                out _,
-                out receipt,
                 out error);
         }
 
@@ -255,37 +326,146 @@ namespace VariableInventorySystem
             out HeightResizeReceipt receipt,
             out string error)
         {
+            reservedCellIndex = -1;
+            reservedRotation = false;
+            receipt = null;
             if (reservedItem == null)
             {
-                reservedCellIndex = -1;
-                reservedRotation = false;
-                receipt = null;
                 error = "The item whose space must be reserved is missing.";
                 return false;
             }
 
-            return TryResizeHeightInternal(
-                expectedCurrentHeight,
-                newHeight,
-                reservedItem,
-                out reservedCellIndex,
-                out reservedRotation,
-                out receipt,
-                out error);
+            if (!TryCreateHeightResizePlan(
+                    expectedCurrentHeight,
+                    newHeight,
+                    reservedItem,
+                    false,
+                    -1,
+                    false,
+                    out HeightResizePlan plan,
+                    out error) ||
+                !TryApplyHeightResizePlan(plan, out receipt, out error))
+            {
+                return false;
+            }
+
+            reservedCellIndex = plan.ReservedPlacement.CellIndex;
+            reservedRotation = plan.ReservedPlacement.IsRotated;
+            return true;
         }
 
-        private bool TryResizeHeightInternal(
+        /// <summary>
+        /// Runs the same reservation planner used by the applying overload, but leaves
+        /// all inventory and item state untouched.
+        /// </summary>
+        public bool TryPreviewResizeHeightReservingItem(
             int expectedCurrentHeight,
             int newHeight,
             IVariableInventoryCellData reservedItem,
             out int reservedCellIndex,
             out bool reservedRotation,
-            out HeightResizeReceipt receipt,
             out string error)
         {
             reservedCellIndex = -1;
             reservedRotation = false;
+            if (reservedItem == null)
+            {
+                error = "The item whose space must be reserved is missing.";
+                return false;
+            }
+
+            if (!TryCreateHeightResizePlan(
+                    expectedCurrentHeight,
+                    newHeight,
+                    reservedItem,
+                    false,
+                    -1,
+                    false,
+                    out HeightResizePlan plan,
+                    out error))
+            {
+                return false;
+            }
+
+            reservedCellIndex = plan.ReservedPlacement.CellIndex;
+            reservedRotation = plan.ReservedPlacement.IsRotated;
+            return true;
+        }
+
+        /// <summary>
+        /// Previews a resize while forcing the external reserved item to the requested
+        /// target cell and rotation. This method is read-only and is intended for hover
+        /// validity feedback before a deferred equipment transfer is committed.
+        /// </summary>
+        public bool TryPreviewResizeHeightReservingItemAt(
+            int expectedCurrentHeight,
+            int newHeight,
+            IVariableInventoryCellData reservedItem,
+            int reservedCellIndex,
+            bool reservedRotation,
+            out string error)
+        {
+            if (reservedItem == null)
+            {
+                error = "The item whose space must be reserved is missing.";
+                return false;
+            }
+
+            return TryCreateHeightResizePlan(
+                expectedCurrentHeight,
+                newHeight,
+                reservedItem,
+                true,
+                reservedCellIndex,
+                reservedRotation,
+                out _,
+                out error);
+        }
+
+        /// <summary>
+        /// Applies a resize while forcing the external reserved item to the requested
+        /// target cell and rotation. The reservation itself stays external so its owner
+        /// can complete the cross-container transfer after the layout is committed.
+        /// </summary>
+        public bool TryResizeHeightReservingItemAt(
+            int expectedCurrentHeight,
+            int newHeight,
+            IVariableInventoryCellData reservedItem,
+            int reservedCellIndex,
+            bool reservedRotation,
+            out HeightResizeReceipt receipt,
+            out string error)
+        {
             receipt = null;
+            if (reservedItem == null)
+            {
+                error = "The item whose space must be reserved is missing.";
+                return false;
+            }
+
+            return TryCreateHeightResizePlan(
+                       expectedCurrentHeight,
+                       newHeight,
+                       reservedItem,
+                       true,
+                       reservedCellIndex,
+                       reservedRotation,
+                       out HeightResizePlan plan,
+                       out error) &&
+                   TryApplyHeightResizePlan(plan, out receipt, out error);
+        }
+
+        private bool TryCreateHeightResizePlan(
+            int expectedCurrentHeight,
+            int newHeight,
+            IVariableInventoryCellData reservedItem,
+            bool hasForcedReservation,
+            int forcedReservedCellIndex,
+            bool forcedReservedRotation,
+            out HeightResizePlan plan,
+            out string error)
+        {
+            plan = null;
             if (CapacityHeight != expectedCurrentHeight)
             {
                 error = $"Inventory height changed from the expected {expectedCurrentHeight} " +
@@ -311,6 +491,17 @@ namespace VariableInventorySystem
 
             if (newHeight == CapacityHeight && reservedItem == null)
             {
+                plan = new HeightResizePlan
+                {
+                    BeforeHeight = CapacityHeight,
+                    AfterHeight = newHeight,
+                    BeforeCells = (IVariableInventoryCellData[])CellData.Clone(),
+                    AfterCells = (IVariableInventoryCellData[])CellData.Clone(),
+                    Items = new List<ResizeItem>(),
+                    Placements = new Dictionary<IVariableInventoryCellData, ResizePlacement>(
+                        ReferenceCellComparer.Instance),
+                    IsNoOp = true
+                };
                 error = null;
                 return true;
             }
@@ -350,6 +541,8 @@ namespace VariableInventorySystem
                     Item = reservedItem,
                     SourceIndex = CellData.Length,
                     OriginalRotation = reservedItem.IsRotate,
+                    OriginalWidth = reservedWidth,
+                    OriginalHeight = reservedHeight,
                     Area = (int)reservedArea,
                     LongestSide = Math.Max(reservedWidth, reservedHeight)
                 };
@@ -358,9 +551,39 @@ namespace VariableInventorySystem
             var placements = new Dictionary<IVariableInventoryCellData, ResizePlacement>(
                 ReferenceCellComparer.Instance);
             var candidateMask = new bool[(int)newCellCount];
-            bool keptCurrentPlacements =
-                TryKeepCurrentPlacements(items, newHeight, candidateMask, placements);
-            if (keptCurrentPlacements && reservedResizeItem != null)
+            bool keptCurrentPlacements;
+            if (reservedResizeItem != null && hasForcedReservation)
+            {
+                GetFootprint(
+                    reservedItem,
+                    forcedReservedRotation,
+                    out int reservedWidth,
+                    out int reservedHeight);
+                if (!TryMarkPlacement(
+                        candidateMask,
+                        newHeight,
+                        forcedReservedCellIndex,
+                        reservedWidth,
+                        reservedHeight))
+                {
+                    error = $"The reserved item cannot occupy slot {forcedReservedCellIndex} " +
+                            $"in the resized {CapacityWidth}x{newHeight} inventory.";
+                    return false;
+                }
+
+                placements.Add(
+                    reservedItem,
+                    new ResizePlacement(forcedReservedCellIndex, forcedReservedRotation));
+                keptCurrentPlacements =
+                    TryKeepCurrentPlacements(items, newHeight, candidateMask, placements);
+            }
+            else
+            {
+                keptCurrentPlacements =
+                    TryKeepCurrentPlacements(items, newHeight, candidateMask, placements);
+            }
+
+            if (keptCurrentPlacements && reservedResizeItem != null && !hasForcedReservation)
             {
                 if (TryPlaceFirstAvailable(
                         reservedResizeItem,
@@ -383,9 +606,38 @@ namespace VariableInventorySystem
                 List<ResizeItem> plannedItems = items;
                 if (reservedResizeItem != null)
                 {
-                    plannedItems = new List<ResizeItem>(items.Count + 1);
-                    plannedItems.AddRange(items);
-                    plannedItems.Add(reservedResizeItem);
+                    if (hasForcedReservation)
+                    {
+                        GetFootprint(
+                            reservedItem,
+                            forcedReservedRotation,
+                            out int reservedWidth,
+                            out int reservedHeight);
+                        if (!TryMarkPlacement(
+                                candidateMask,
+                                newHeight,
+                                forcedReservedCellIndex,
+                                reservedWidth,
+                                reservedHeight))
+                        {
+                            error = $"The reserved item cannot occupy slot " +
+                                    $"{forcedReservedCellIndex} in the resized " +
+                                    $"{CapacityWidth}x{newHeight} inventory.";
+                            return false;
+                        }
+
+                        placements.Add(
+                            reservedItem,
+                            new ResizePlacement(
+                                forcedReservedCellIndex,
+                                forcedReservedRotation));
+                    }
+                    else
+                    {
+                        plannedItems = new List<ResizeItem>(items.Count + 1);
+                        plannedItems.AddRange(items);
+                        plannedItems.Add(reservedResizeItem);
+                    }
                 }
 
                 if (!TryBuildRepackedLayout(
@@ -406,44 +658,120 @@ namespace VariableInventorySystem
                 candidateCells[placement.CellIndex] = resizeItem.Item;
             }
 
-            if (!TryApplyPlannedRotations(items, placements, out error))
+            plan = new HeightResizePlan
             {
+                BeforeHeight = CapacityHeight,
+                AfterHeight = newHeight,
+                BeforeCells = (IVariableInventoryCellData[])CellData.Clone(),
+                AfterCells = candidateCells,
+                Items = items,
+                Placements = placements,
+                ReservedItem = reservedItem,
+                ReservedPlacement = reservedItem == null
+                    ? default
+                    : placements[reservedItem],
+                ReservedOriginalRotation = reservedItem != null && reservedItem.IsRotate,
+                ReservedOriginalWidth = reservedItem?.Width ?? 0,
+                ReservedOriginalHeight = reservedItem?.Height ?? 0,
+                ReservedOriginalOwner =
+                    (reservedItem as IVariableInventoryOwnedCellData)?.InventoryOwner
+            };
+            error = null;
+            return true;
+        }
+
+        private bool TryApplyHeightResizePlan(
+            HeightResizePlan plan,
+            out HeightResizeReceipt receipt,
+            out string error)
+        {
+            receipt = null;
+            if (plan == null || CapacityHeight != plan.BeforeHeight ||
+                CellData.Length != plan.BeforeCells.Length)
+            {
+                error = "Inventory capacity changed after the resize was planned.";
                 return false;
             }
 
-            if (reservedResizeItem != null)
+            for (int index = 0; index < CellData.Length; index++)
             {
-                ResizePlacement reservation = placements[reservedItem];
-                reservedCellIndex = reservation.CellIndex;
-                reservedRotation = reservation.IsRotated;
+                if (!ReferenceEquals(CellData[index], plan.BeforeCells[index]))
+                {
+                    error = "Inventory contents moved after the resize was planned.";
+                    return false;
+                }
+            }
+
+            foreach (ResizeItem resizeItem in plan.Items)
+            {
+                if (resizeItem.Item.IsRotate != resizeItem.OriginalRotation ||
+                    resizeItem.Item.Width != resizeItem.OriginalWidth ||
+                    resizeItem.Item.Height != resizeItem.OriginalHeight ||
+                    (resizeItem.Item is IVariableInventoryOwnedCellData owned &&
+                     !ReferenceEquals(owned.InventoryOwner, this)))
+                {
+                    error = "Inventory item rotation, footprint, or ownership changed after " +
+                            "the resize was planned.";
+                    return false;
+                }
+            }
+
+            if (plan.ReservedItem != null)
+            {
+                IVariableInventoryViewData currentReservedOwner =
+                    (plan.ReservedItem as IVariableInventoryOwnedCellData)?.InventoryOwner;
+                if (GetId(plan.ReservedItem).HasValue ||
+                    plan.ReservedItem.IsRotate != plan.ReservedOriginalRotation ||
+                    plan.ReservedItem.Width != plan.ReservedOriginalWidth ||
+                    plan.ReservedItem.Height != plan.ReservedOriginalHeight ||
+                    !ReferenceEquals(currentReservedOwner, plan.ReservedOriginalOwner))
+                {
+                    error = "The reserved item changed after the resize was planned.";
+                    return false;
+                }
+            }
+
+            if (plan.IsNoOp)
+            {
+                error = null;
+                return true;
+            }
+
+            if (!TryApplyPlannedRotations(plan.Items, plan.Placements, out error))
+            {
+                return false;
             }
 
             var beforeRotations = new Dictionary<IVariableInventoryCellData, bool>(
                 ReferenceCellComparer.Instance);
             var afterRotations = new Dictionary<IVariableInventoryCellData, bool>(
                 ReferenceCellComparer.Instance);
-            foreach (ResizeItem resizeItem in items)
+            foreach (ResizeItem resizeItem in plan.Items)
             {
                 beforeRotations.Add(resizeItem.Item, resizeItem.OriginalRotation);
                 afterRotations.Add(
                     resizeItem.Item,
-                    placements[resizeItem.Item].IsRotated);
+                    plan.Placements[resizeItem.Item].IsRotated);
             }
 
             receipt = new HeightResizeReceipt
             {
                 Owner = this,
-                BeforeHeight = CapacityHeight,
-                AfterHeight = newHeight,
-                BeforeCells = (IVariableInventoryCellData[])CellData.Clone(),
-                AfterCells = (IVariableInventoryCellData[])candidateCells.Clone(),
+                BeforeHeight = plan.BeforeHeight,
+                AfterHeight = plan.AfterHeight,
+                BeforeCells = (IVariableInventoryCellData[])plan.BeforeCells.Clone(),
+                AfterCells = (IVariableInventoryCellData[])plan.AfterCells.Clone(),
                 BeforeRotations = beforeRotations,
                 AfterRotations = afterRotations
             };
-            CellData = candidateCells;
-            CapacityHeight = newHeight;
+            CellData = (IVariableInventoryCellData[])plan.AfterCells.Clone();
+            CapacityHeight = plan.AfterHeight;
             UpdateMask();
             IsDirty = true;
+            unchecked
+            {
+                LayoutVersion++;
+            }
             error = null;
             return true;
         }
@@ -514,6 +842,10 @@ namespace VariableInventorySystem
             CapacityHeight = receipt.BeforeHeight;
             UpdateMask();
             IsDirty = true;
+            unchecked
+            {
+                LayoutVersion++;
+            }
             receipt.IsConsumed = true;
             error = null;
             return true;
@@ -589,6 +921,8 @@ namespace VariableInventorySystem
                     Item = item,
                     SourceIndex = sourceIndex,
                     OriginalRotation = item.IsRotate,
+                    OriginalWidth = unrotatedWidth,
+                    OriginalHeight = unrotatedHeight,
                     Area = (int)itemArea,
                     LongestSide = Math.Max(unrotatedWidth, unrotatedHeight)
                 });
@@ -636,11 +970,16 @@ namespace VariableInventorySystem
             IDictionary<IVariableInventoryCellData, ResizePlacement> placements,
             out string error)
         {
+            var baselineOccupied = (bool[])occupied.Clone();
+            var baselinePlacements = new Dictionary<IVariableInventoryCellData, ResizePlacement>(
+                placements,
+                ReferenceCellComparer.Instance);
             long totalArea = items.Sum(item => (long)item.Area);
-            if (totalArea > occupied.Length)
+            int availableCells = occupied.Length - occupied.Count(cell => cell);
+            if (totalArea > availableCells)
             {
                 error = $"The items require {totalArea} cells, but the resized inventory only " +
-                        $"contains {occupied.Length}.";
+                        $"contains {availableCells} unreserved cells.";
                 return false;
             }
 
@@ -656,8 +995,13 @@ namespace VariableInventorySystem
                 return true;
             }
 
-            Array.Clear(occupied, 0, occupied.Length);
+            Array.Copy(baselineOccupied, occupied, occupied.Length);
             placements.Clear();
+            foreach (KeyValuePair<IVariableInventoryCellData, ResizePlacement> placement in
+                     baselinePlacements)
+            {
+                placements.Add(placement.Key, placement.Value);
+            }
             int visitedNodes = 0;
             bool searchLimitReached = false;
             if (TryExactRepack(

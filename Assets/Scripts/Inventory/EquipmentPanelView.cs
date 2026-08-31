@@ -7,7 +7,8 @@ using VariableInventorySystem;
 namespace FantasySurvival.Inventory
 {
     [DisallowMultipleComponent]
-    public sealed class EquipmentPanelView : MonoBehaviour, IVariableInventoryBoundView
+    public sealed class EquipmentPanelView : MonoBehaviour, IVariableInventoryBoundView,
+        IVariableInventoryDeferredDropSource
     {
         [SerializeField] private EquipmentSlotCell[] slotCells;
 
@@ -17,7 +18,16 @@ namespace FantasySurvival.Inventory
         private EquipmentSlotId? originalSlot;
         private IVariableInventoryCellData originalItem;
         private PlayerInventoryState.EquipmentTakeReceipt originalTakeReceipt;
+        private bool originalPickDeferred;
         private VariableInventoryDropHandling? dropPreviewHandling;
+        private bool hasDeferredPreviewCache;
+        private IVariableInventoryView cachedDeferredDestinationView;
+        private IVariableInventoryViewData cachedDeferredDestinationOwner;
+        private int cachedDeferredDestinationIndex;
+        private bool cachedDeferredItemRotation;
+        private long cachedPlayerInventoryLayoutVersion;
+        private long cachedDestinationLayoutVersion;
+        private VariableInventoryDropHandling cachedDeferredHandling;
 
         public IReadOnlyList<EquipmentSlotCell> SlotCells => slotCells;
         public IVariableInventoryViewData ViewData => loadout;
@@ -97,6 +107,17 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            if (playerState != null && cell.SlotId == EquipmentSlotId.Backpack &&
+                ReferenceEquals(loadout.GetItem(cell.SlotId), cell.CellData))
+            {
+                originalSlot = cell.SlotId;
+                originalItem = cell.CellData;
+                originalTakeReceipt = null;
+                originalPickDeferred = true;
+                cell.Apply(null);
+                return true;
+            }
+
             IVariableInventoryCellData item;
             PlayerInventoryState.EquipmentTakeReceipt takeReceipt = null;
             string error;
@@ -174,6 +195,48 @@ namespace FantasySurvival.Inventory
         {
             dropPreviewHandling = null;
             ClearHighlights();
+            if (originalPickDeferred)
+            {
+                if (isDroped && originalTakeReceipt != null && playerState != null)
+                {
+                    if (!playerState.TryPublishStagedEquipmentTake(
+                            originalTakeReceipt,
+                            out string deferredPublishError))
+                    {
+                        string message =
+                            $"Could not publish the completed deferred equipment drop: " +
+                            deferredPublishError;
+                        ReportFailure(message);
+                        Debug.LogError(message, this);
+                        ClearOriginal();
+                        return;
+                    }
+
+                    originalTakeReceipt = null;
+                }
+                else if (!isDroped && originalTakeReceipt != null && playerState != null &&
+                         !playerState.TryRestoreTakenEquipment(
+                             originalTakeReceipt,
+                             out string deferredRestoreError))
+                {
+                    string message =
+                        $"Could not restore deferred equipment item to {originalSlot}: " +
+                        deferredRestoreError;
+                    ReportFailure(message);
+                    Debug.LogError(message, this);
+                    return;
+                }
+
+                if (originalSlot.HasValue)
+                {
+                    FindCell(originalSlot.Value)?.Apply(
+                        loadout.GetItem(originalSlot.Value));
+                }
+
+                ClearOriginal();
+                return;
+            }
+
             if (!isDroped && originalSlot.HasValue && originalItem != null)
             {
                 string error;
@@ -262,14 +325,18 @@ namespace FantasySurvival.Inventory
             }
 
             bool dragging = effectCell?.CellData != null;
-            bool valid = dragging && dropPreviewHandling != VariableInventoryDropHandling.Reject &&
-                         loadout != null &&
-                         (loadout.CheckInsert(
-                              EquipmentSlotCatalog.GetIndex(cell.SlotId),
-                              effectCell.CellData) ||
-                          playerState != null &&
-                          cell.SlotId == EquipmentSlotId.Backpack &&
-                          playerState.CanUpgradeBackpack(effectCell.CellData, out _));
+            bool valid = dragging &&
+                         (dropPreviewHandling == VariableInventoryDropHandling.AcceptWithoutInsert ||
+                          dropPreviewHandling != VariableInventoryDropHandling.Reject &&
+                          loadout != null &&
+                          (loadout.CheckInsert(
+                               EquipmentSlotCatalog.GetIndex(cell.SlotId),
+                               effectCell.CellData) ||
+                           playerState != null &&
+                           cell.SlotId == EquipmentSlotId.Backpack &&
+                           playerState.CanUpgradeBackpackWithDetachedReplacement(
+                               effectCell.CellData,
+                               out _)));
             cell.SetHighlight(dragging, valid);
         }
 
@@ -299,6 +366,285 @@ namespace FantasySurvival.Inventory
         public void SetDropPreviewHandling(VariableInventoryDropHandling? handling)
         {
             dropPreviewHandling = handling;
+        }
+
+        public bool IsDeferredDropActive(IVariableInventoryCellData item)
+        {
+            return originalPickDeferred && originalSlot == EquipmentSlotId.Backpack &&
+                   ReferenceEquals(originalItem, item) && playerState != null &&
+                   loadout != null &&
+                   ReferenceEquals(loadout.GetItem(EquipmentSlotId.Backpack), item);
+        }
+
+        public VariableInventoryDropHandling GetDeferredDropPreviewHandling(
+            IVariableInventoryView destinationView,
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData item)
+        {
+            if (!IsDeferredDropActive(item))
+            {
+                return VariableInventoryDropHandling.Reject;
+            }
+
+            if (ReferenceEquals(destinationView, this))
+            {
+                return destinationCell is EquipmentSlotCell equipmentCell &&
+                       equipmentCell.SlotId == originalSlot
+                    ? VariableInventoryDropHandling.AcceptWithoutInsert
+                    : VariableInventoryDropHandling.Reject;
+            }
+
+            if (!(destinationView is IVariableInventoryDeferredDropTarget target) ||
+                !target.TryResolveDeferredDropTarget(
+                    destinationCell,
+                    item,
+                    loadout,
+                    out IVariableInventoryViewData destinationOwner,
+                    out int destinationIndex,
+                    out _))
+            {
+                return VariableInventoryDropHandling.Reject;
+            }
+
+            StandardStashViewData destinationGrid =
+                destinationOwner as StandardStashViewData;
+            long playerInventoryLayoutVersion = playerState.Inventory.LayoutVersion;
+            long destinationLayoutVersion = destinationGrid?.LayoutVersion ?? -1L;
+
+            if (hasDeferredPreviewCache &&
+                ReferenceEquals(cachedDeferredDestinationView, destinationView) &&
+                ReferenceEquals(cachedDeferredDestinationOwner, destinationOwner) &&
+                cachedDeferredDestinationIndex == destinationIndex &&
+                cachedDeferredItemRotation == item.IsRotate &&
+                cachedPlayerInventoryLayoutVersion == playerInventoryLayoutVersion &&
+                cachedDestinationLayoutVersion == destinationLayoutVersion)
+            {
+                return cachedDeferredHandling;
+            }
+
+            bool valid = ReferenceEquals(destinationOwner, playerState.Inventory)
+                ? playerState.CanUnequipToPlayerInventoryAt(
+                    originalSlot.Value,
+                    destinationIndex,
+                    item.IsRotate,
+                    out _)
+                : playerState.CanTakeEquipment(originalSlot.Value, out _);
+            cachedDeferredHandling = valid
+                ? VariableInventoryDropHandling.AcceptWithoutInsert
+                : VariableInventoryDropHandling.Reject;
+            hasDeferredPreviewCache = destinationGrid != null;
+            cachedDeferredDestinationView = destinationView;
+            cachedDeferredDestinationOwner = destinationOwner;
+            cachedDeferredDestinationIndex = destinationIndex;
+            cachedDeferredItemRotation = item.IsRotate;
+            cachedPlayerInventoryLayoutVersion = playerInventoryLayoutVersion;
+            cachedDestinationLayoutVersion = destinationLayoutVersion;
+            return cachedDeferredHandling;
+        }
+
+        public bool TryCompleteDeferredDrop(
+            IVariableInventoryView destinationView,
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData item,
+            out string error)
+        {
+            error = null;
+            if (!IsDeferredDropActive(item))
+            {
+                error = "The deferred equipment drag is no longer active.";
+                return false;
+            }
+
+            if (ReferenceEquals(destinationView, this))
+            {
+                bool sameSlot = destinationCell is EquipmentSlotCell equipmentCell &&
+                                equipmentCell.SlotId == originalSlot &&
+                                ReferenceEquals(
+                                    loadout.GetItem(originalSlot.Value),
+                                    item);
+                error = sameSlot ? null : "The equipment item cannot be dropped in that slot.";
+                return sameSlot;
+            }
+
+            if (!(destinationView is IVariableInventoryDeferredDropTarget target) ||
+                !target.TryResolveDeferredDropTarget(
+                    destinationCell,
+                    item,
+                    loadout,
+                    out IVariableInventoryViewData destinationOwner,
+                    out int destinationIndex,
+                    out error))
+            {
+                return false;
+            }
+
+            if (ReferenceEquals(destinationOwner, playerState.Inventory))
+            {
+                return playerState.TryUnequipToPlayerInventoryAt(
+                    originalSlot.Value,
+                    destinationIndex,
+                    item.IsRotate,
+                    out error);
+            }
+
+            if (!playerState.TryStageTakeEquipment(
+                    originalSlot.Value,
+                    out IVariableInventoryCellData detachedItem,
+                    out PlayerInventoryState.EquipmentTakeReceipt takeReceipt,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!ReferenceEquals(detachedItem, item))
+            {
+                originalTakeReceipt = takeReceipt;
+                string mismatch = "A different equipment item was detached during the drop.";
+                if (!playerState.TryRestoreTakenEquipment(
+                        takeReceipt,
+                        out string mismatchRollbackError))
+                {
+                    error = $"{mismatch} Equipment rollback also failed: " +
+                            mismatchRollbackError;
+                    return false;
+                }
+
+                originalTakeReceipt = null;
+                error = mismatch;
+                return false;
+            }
+
+            try
+            {
+                if (!destinationOwner.CheckInsert(destinationIndex, item))
+                {
+                    error = "The selected destination changed before the equipment drop completed.";
+                }
+                else
+                {
+                    destinationOwner.InsertInventoryItem(destinationIndex, item);
+                    originalTakeReceipt = takeReceipt;
+                    if (playerState.TryPublishStagedEquipmentTake(
+                            takeReceipt,
+                            out string publishError))
+                    {
+                        originalTakeReceipt = null;
+                        error = null;
+                        return true;
+                    }
+
+                    error = $"The deferred equipment drop could not be published: " +
+                            publishError;
+                }
+            }
+            catch (Exception exception)
+            {
+                error = $"Could not place the equipment item: {exception.Message}";
+            }
+
+            originalTakeReceipt = takeReceipt;
+            if (item is IVariableInventoryOwnedCellData owned &&
+                ReferenceEquals(owned.InventoryOwner, destinationOwner))
+            {
+                int? insertedIndex = destinationOwner.GetId(item);
+                if (!insertedIndex.HasValue)
+                {
+                    error += " The destination owns the item without a matching slot.";
+                    return false;
+                }
+
+                try
+                {
+                    destinationOwner.InsertInventoryItem(insertedIndex.Value, null);
+                }
+                catch (Exception rollbackException)
+                {
+                    error += $" Destination rollback also failed: {rollbackException.Message}";
+                    return false;
+                }
+            }
+
+            if (!playerState.TryRestoreTakenEquipment(
+                    takeReceipt,
+                    out string rollbackError))
+            {
+                error += $" Equipment rollback also failed: {rollbackError}";
+                return false;
+            }
+
+            originalTakeReceipt = null;
+            return false;
+        }
+
+        public bool TryPrepareDeferredExternalDrop(
+            IVariableInventoryCellData item,
+            out string error)
+        {
+            if (!IsDeferredDropActive(item))
+            {
+                error = "The deferred equipment drag is no longer active.";
+                return false;
+            }
+
+            if (originalTakeReceipt != null)
+            {
+                error = null;
+                return item is IVariableInventoryOwnedCellData owned &&
+                       owned.InventoryOwner == null;
+            }
+
+            if (!playerState.TryStageTakeEquipment(
+                    originalSlot.Value,
+                    out IVariableInventoryCellData detachedItem,
+                    out originalTakeReceipt,
+                    out error))
+            {
+                originalTakeReceipt = null;
+                ReportFailure(error);
+                return false;
+            }
+
+            if (!ReferenceEquals(detachedItem, item))
+            {
+                string mismatch = "A different equipment item was detached for the external drop.";
+                if (!playerState.TryRestoreTakenEquipment(
+                        originalTakeReceipt,
+                        out string rollbackError))
+                {
+                    error = $"{mismatch} Equipment rollback also failed: {rollbackError}";
+                    ReportFailure(error);
+                    return false;
+                }
+
+                originalTakeReceipt = null;
+                error = mismatch;
+                ReportFailure(error);
+                return false;
+            }
+
+            if (!playerState.TryPrepareStagedEquipmentTakePublication(
+                    originalTakeReceipt,
+                    out string prepareError))
+            {
+                string preparationFailure =
+                    $"The external equipment drop could not be prepared: {prepareError}";
+                if (!playerState.TryRestoreTakenEquipment(
+                        originalTakeReceipt,
+                        out string preparationRollbackError))
+                {
+                    error = $"{preparationFailure} Equipment rollback also failed: " +
+                            preparationRollbackError;
+                    ReportFailure(error);
+                    return false;
+                }
+
+                originalTakeReceipt = null;
+                error = preparationFailure;
+                ReportFailure(error);
+                return false;
+            }
+
+            return true;
         }
 
         private EquipmentSlotCell FindCell(EquipmentSlotId slot)
@@ -337,6 +683,15 @@ namespace FantasySurvival.Inventory
             originalSlot = null;
             originalItem = null;
             originalTakeReceipt = null;
+            originalPickDeferred = false;
+            hasDeferredPreviewCache = false;
+            cachedDeferredDestinationView = null;
+            cachedDeferredDestinationOwner = null;
+            cachedDeferredDestinationIndex = -1;
+            cachedDeferredItemRotation = false;
+            cachedPlayerInventoryLayoutVersion = -1L;
+            cachedDestinationLayoutVersion = -1L;
+            cachedDeferredHandling = VariableInventoryDropHandling.Reject;
         }
 
         private bool TryPlaceOrUpgradeEquipment(
@@ -355,7 +710,7 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
-            if (!playerState.CanUpgradeBackpack(item, out error))
+            if (!playerState.CanUpgradeBackpackWithDetachedReplacement(item, out error))
             {
                 return false;
             }

@@ -6,7 +6,8 @@ using UnityEngine.UI;
 
 namespace VariableInventorySystem
 {
-    public class StandardStashView : MonoBehaviour, IVariableInventoryPartialDropView
+    public class StandardStashView : MonoBehaviour, IVariableInventoryPartialDropView,
+        IVariableInventoryDeferredDropTarget
     {
         [SerializeField] GameObject cellPrefab;
         //[SerializeField] ScrollRect scrollRect;
@@ -369,6 +370,60 @@ namespace VariableInventorySystem
             destinationOwner = StashData;
             destinationIndex = index.Value;
             return true;
+        }
+
+        public bool TryResolveDeferredDropTarget(
+            IVariableInventoryCell destinationCell,
+            IVariableInventoryCellData item,
+            IVariableInventoryViewData expectedSourceOwner,
+            out IVariableInventoryViewData destinationOwner,
+            out int destinationIndex,
+            out string error)
+        {
+            destinationOwner = null;
+            destinationIndex = -1;
+            if (!OwnsCell(destinationCell) || item == null || expectedSourceOwner == null)
+            {
+                error = "The deferred drop target is not part of this inventory view.";
+                return false;
+            }
+
+            int? index = GetIndex(destinationCell, item, cellCorner);
+            if (index.HasValue &&
+                StashData.CheckInsertFromOwner(
+                    index.Value,
+                    item,
+                    expectedSourceOwner))
+            {
+                destinationOwner = StashData;
+                destinationIndex = index.Value;
+                error = null;
+                return true;
+            }
+
+            if (destinationCell.CellData is IStandardCaseCellData caseData)
+            {
+                for (int candidate = 0;
+                     candidate < caseData.CaseData.CellData.Length;
+                     candidate++)
+                {
+                    if (!caseData.CaseData.CheckInsertFromOwner(
+                            candidate,
+                            item,
+                            expectedSourceOwner))
+                    {
+                        continue;
+                    }
+
+                    destinationOwner = caseData.CaseData;
+                    destinationIndex = candidate;
+                    error = null;
+                    return true;
+                }
+            }
+
+            error = "The item does not fit at the selected inventory position.";
+            return false;
         }
 
         public virtual void OnDroped(bool isDroped)

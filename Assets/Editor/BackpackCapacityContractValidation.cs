@@ -54,6 +54,23 @@ namespace FantasySurvival.EditorTools
                 ValidateRemovalRepackReceiptAndSave(
                     largeBackpack, marker, rotatedMarker, database);
                 ValidateBlockedRemovalIsAtomic(smallBackpack, marker, database);
+                ValidateEquipmentPanelDefersBackpackPick(
+                    smallBackpack,
+                    marker);
+                ValidateDeferredUnequipPreviewAndCommit(
+                    largeBackpack,
+                    marker,
+                    rotatedMarker);
+                ValidateDeferredUnequipFailureIsAtomic(
+                    smallBackpack,
+                    marker);
+                ValidateStagedTakeNotificationBoundary(
+                    smallBackpack,
+                    marker);
+                ValidateDetachedSmallerReplacementPreview(
+                    smallBackpack,
+                    largeBackpack,
+                    marker);
                 ValidateCoordinatorReplacementPreview(
                     smallBackpack,
                     mediumBackpack,
@@ -69,6 +86,12 @@ namespace FantasySurvival.EditorTools
                 Debug.Log(
                     "Backpack capacity validation passed: rows append below base 8x9; " +
                     "removal repacks when possible and remains unchanged when impossible; " +
+                    "equipment-panel Backpack pick hides only its presentation until drop; " +
+                    "deferred Backpack hover previews leave height, cells, rotation, ownership, " +
+                    "equipment, and dirty state untouched; exact root placement changes only " +
+                    "on commit and failed exact placement remains atomic; smaller replacement " +
+                    "preview includes the old Backpack in the target capacity; staged external " +
+                    "take publishes only after its destination is complete; " +
                     "drag rollback restores exact slots/rotation; larger, equal, and smaller " +
                     "direct replacements preserve the current layout when possible and apply " +
                     "a previewed repack only when required; the old backpack is included in " +
@@ -242,6 +265,353 @@ namespace FantasySurvival.EditorTools
                 root,
                 before,
                 "Overflowing Backpack sale changed inventory placement.");
+        }
+
+        private static void ValidateDeferredUnequipPreviewAndCommit(
+            ItemDefinition backpackDefinition,
+            ItemDefinition markerDefinition,
+            ItemDefinition rotatedMarkerDefinition)
+        {
+            PlayerInventoryState state = CreateState();
+            StandardStashViewData root = state.Inventory;
+            var backpack = new InventoryItemData(backpackDefinition);
+            var displacedMarker = new InventoryItemData(markerDefinition);
+            var rotatedMarker = new InventoryItemData(rotatedMarkerDefinition)
+            {
+                IsRotate = true
+            };
+            Require(
+                state.TryPlaceEquipment(
+                    EquipmentSlotId.Backpack,
+                    backpack,
+                    out string error),
+                error);
+            root.InsertInventoryItem(0, displacedMarker);
+            root.InsertInventoryItem(BaseWidth * BaseHeight, rotatedMarker);
+
+            root.IsDirty = false;
+            state.Equipment.IsDirty = false;
+            InventoryStateSnapshot beforePreview = CaptureState(
+                state,
+                backpack,
+                displacedMarker,
+                rotatedMarker);
+            Require(
+                state.CanUnequipToPlayerInventoryAt(
+                    EquipmentSlotId.Backpack,
+                    0,
+                    false,
+                    out error),
+                error);
+            RequireStateUnchanged(
+                state,
+                beforePreview,
+                "Successful exact Backpack preview changed authoritative state.");
+
+            Require(
+                state.TryUnequipToPlayerInventoryAt(
+                    EquipmentSlotId.Backpack,
+                    0,
+                    false,
+                    out error),
+                error);
+            Require(
+                state.Equipment.GetItem(EquipmentSlotId.Backpack) == null &&
+                root.CapacityHeight == BaseHeight,
+                "Deferred Backpack commit did not clear equipment and restore base height.");
+            Require(
+                ReferenceEquals(backpack.InventoryOwner, root) &&
+                RequireIndex(root, backpack) == 0 &&
+                !backpack.IsRotate,
+                "Deferred Backpack commit did not place the same instance at the exact target.");
+            Require(
+                ReferenceEquals(displacedMarker.InventoryOwner, root) &&
+                ReferenceEquals(rotatedMarker.InventoryOwner, root) &&
+                RequireIndex(root, displacedMarker) < BaseWidth * BaseHeight &&
+                RequireIndex(root, rotatedMarker) < BaseWidth * BaseHeight,
+                "Deferred Backpack commit did not preserve and repack existing root items.");
+        }
+
+        private static void ValidateEquipmentPanelDefersBackpackPick(
+            ItemDefinition backpackDefinition,
+            ItemDefinition markerDefinition)
+        {
+            PlayerInventoryState state = CreateState();
+            var backpack = new InventoryItemData(backpackDefinition);
+            var marker = new InventoryItemData(markerDefinition);
+            GameObject panelObject = null;
+            try
+            {
+                Require(
+                    state.TryPlaceEquipment(
+                        EquipmentSlotId.Backpack,
+                        backpack,
+                        out string error),
+                    error);
+                state.Inventory.InsertInventoryItem(BaseWidth * BaseHeight, marker);
+
+                panelObject = new GameObject(
+                    "Transient Deferred Backpack Panel Validation",
+                    typeof(RectTransform),
+                    typeof(EquipmentPanelView));
+                EquipmentPanelView panel = panelObject.GetComponent<EquipmentPanelView>();
+                var cells = new EquipmentSlotCell[EquipmentSlotCatalog.Count];
+                for (int index = 0; index < cells.Length; index++)
+                {
+                    var cellObject = new GameObject(
+                        $"Transient {EquipmentSlotCatalog.GetSlotAtIndex(index)} Cell",
+                        typeof(RectTransform),
+                        typeof(EquipmentSlotCell));
+                    cellObject.transform.SetParent(panelObject.transform, false);
+                    cells[index] = cellObject.GetComponent<EquipmentSlotCell>();
+                    cells[index].Configure(EquipmentSlotCatalog.GetSlotAtIndex(index));
+                }
+
+                var serialized = new SerializedObject(panel);
+                SerializedProperty slotCells = serialized.FindProperty("slotCells");
+                slotCells.arraySize = cells.Length;
+                for (int index = 0; index < cells.Length; index++)
+                {
+                    slotCells.GetArrayElementAtIndex(index).objectReferenceValue = cells[index];
+                }
+
+                serialized.ApplyModifiedPropertiesWithoutUndo();
+                panel.BindPlayerState(state);
+                state.Inventory.IsDirty = false;
+                state.Equipment.IsDirty = false;
+                InventoryStateSnapshot beforePick = CaptureState(state, backpack, marker);
+                EquipmentSlotCell backpackCell =
+                    cells[EquipmentSlotCatalog.GetIndex(EquipmentSlotId.Backpack)];
+
+                Require(panel.OnPick(backpackCell), "Equipment panel rejected Backpack drag start.");
+                Require(
+                    panel.IsDeferredDropActive(backpack) && backpackCell.CellData == null,
+                    "Equipment panel did not keep a deferred Backpack carry after drag start.");
+                RequireStateUnchanged(
+                    state,
+                    beforePick,
+                    "Backpack drag start changed equipment, capacity, placement, or ownership.");
+
+                panel.OnDroped(false);
+                Require(
+                    ReferenceEquals(backpackCell.CellData, backpack) &&
+                    !panel.IsDeferredDropActive(backpack),
+                    "Cancelled deferred Backpack drag did not restore its slot presentation.");
+                RequireStateUnchanged(
+                    state,
+                    beforePick,
+                    "Cancelled deferred Backpack drag changed authoritative state.");
+            }
+            finally
+            {
+                DestroyTransient(panelObject);
+            }
+        }
+
+        private static void ValidateDeferredUnequipFailureIsAtomic(
+            ItemDefinition backpackDefinition,
+            ItemDefinition markerDefinition)
+        {
+            PlayerInventoryState state = CreateState();
+            StandardStashViewData root = state.Inventory;
+            var backpack = new InventoryItemData(backpackDefinition);
+            Require(
+                state.TryPlaceEquipment(
+                    EquipmentSlotId.Backpack,
+                    backpack,
+                    out string error),
+                error);
+
+            var markers = new List<InventoryItemData>();
+            for (int index = 0; index <= BaseWidth * BaseHeight; index++)
+            {
+                var marker = new InventoryItemData(markerDefinition);
+                markers.Add(marker);
+                root.InsertInventoryItem(index, marker);
+            }
+
+            root.IsDirty = false;
+            state.Equipment.IsDirty = false;
+            var trackedItems = new List<IVariableInventoryCellData>(markers.Count + 1)
+            {
+                backpack
+            };
+            trackedItems.AddRange(markers);
+            InventoryStateSnapshot beforePreview = CaptureState(
+                state,
+                trackedItems.ToArray());
+            Require(
+                !state.CanUnequipToPlayerInventoryAt(
+                    EquipmentSlotId.Backpack,
+                    0,
+                    false,
+                    out error),
+                "Exact Backpack preview succeeded although the target base grid cannot fit " +
+                "the equipped Backpack and 73 existing items.");
+            RequireStateUnchanged(
+                state,
+                beforePreview,
+                "Failed exact Backpack preview changed authoritative state.");
+
+            Require(
+                !state.TryUnequipToPlayerInventoryAt(
+                    EquipmentSlotId.Backpack,
+                    0,
+                    false,
+                    out error),
+                "Deferred Backpack commit succeeded after the same exact preview was rejected.");
+            RequireStateUnchanged(
+                state,
+                beforePreview,
+                "Failed deferred Backpack commit was not atomic.");
+        }
+
+        private static void ValidateDetachedSmallerReplacementPreview(
+            ItemDefinition smallerBackpackDefinition,
+            ItemDefinition equippedBackpackDefinition,
+            ItemDefinition markerDefinition)
+        {
+            PlayerInventoryState state = CreateState();
+            StandardStashViewData root = state.Inventory;
+            var equippedBackpack = new InventoryItemData(equippedBackpackDefinition);
+            var detachedReplacement = new InventoryItemData(smallerBackpackDefinition);
+            Require(
+                state.TryPlaceEquipment(
+                    EquipmentSlotId.Backpack,
+                    equippedBackpack,
+                    out string error),
+                error);
+
+            int smallerCapacity =
+                BaseWidth * (BaseHeight + smallerBackpackDefinition.BackpackBonusRows);
+            var markers = new List<InventoryItemData>(smallerCapacity);
+            for (int index = 0; index < smallerCapacity; index++)
+            {
+                var marker = new InventoryItemData(markerDefinition);
+                markers.Add(marker);
+                root.InsertInventoryItem(index, marker);
+            }
+
+            root.IsDirty = false;
+            state.Equipment.IsDirty = false;
+            var trackedItems = new List<IVariableInventoryCellData>(markers.Count + 2)
+            {
+                equippedBackpack,
+                detachedReplacement
+            };
+            trackedItems.AddRange(markers);
+            InventoryStateSnapshot fullPreview = CaptureState(
+                state,
+                trackedItems.ToArray());
+            Require(
+                !state.CanUpgradeBackpackWithDetachedReplacement(
+                    detachedReplacement,
+                    out error),
+                "Smaller Backpack preview ignored the old equipped Backpack's storage cell.");
+            RequireStateUnchanged(
+                state,
+                fullPreview,
+                "Rejected smaller Backpack preview changed authoritative state.");
+
+            InventoryItemData removedMarker = markers[markers.Count - 1];
+            int removedIndex = RequireIndex(root, removedMarker);
+            root.InsertInventoryItem(removedIndex, null);
+            Require(
+                removedMarker.InventoryOwner == null,
+                "Could not detach the marker used to expose one target-capacity cell.");
+            root.IsDirty = false;
+            state.Equipment.IsDirty = false;
+            InventoryStateSnapshot oneCellFreePreview = CaptureState(
+                state,
+                equippedBackpack,
+                detachedReplacement,
+                removedMarker);
+            Require(
+                state.CanUpgradeBackpackWithDetachedReplacement(
+                    detachedReplacement,
+                    out error),
+                error);
+            RequireStateUnchanged(
+                state,
+                oneCellFreePreview,
+                "Accepted smaller Backpack preview changed authoritative state.");
+        }
+
+        private static void ValidateStagedTakeNotificationBoundary(
+            ItemDefinition backpackDefinition,
+            ItemDefinition markerDefinition)
+        {
+            PlayerInventoryState state = CreateState();
+            StandardStashViewData root = state.Inventory;
+            var backpack = new InventoryItemData(backpackDefinition);
+            var marker = new InventoryItemData(markerDefinition);
+            Require(
+                state.TryPlaceEquipment(
+                    EquipmentSlotId.Backpack,
+                    backpack,
+                    out string error),
+                error);
+            int markerOriginalIndex = BaseWidth * BaseHeight;
+            root.InsertInventoryItem(markerOriginalIndex, marker);
+
+            int equipmentNotifications = 0;
+            int capacityNotifications = 0;
+            state.Equipment.Changed += () => equipmentNotifications++;
+            state.CapacityChanged += () => capacityNotifications++;
+            IVariableInventoryCellData[] beforeCells =
+                (IVariableInventoryCellData[])root.CellData.Clone();
+            bool markerOriginalRotation = marker.IsRotate;
+
+            Require(
+                state.TryStageTakeEquipment(
+                    EquipmentSlotId.Backpack,
+                    out IVariableInventoryCellData stagedItem,
+                    out PlayerInventoryState.EquipmentTakeReceipt stagedReceipt,
+                    out error),
+                error);
+            Require(
+                ReferenceEquals(stagedItem, backpack) &&
+                equipmentNotifications == 0 && capacityNotifications == 0,
+                "Staged Backpack take notified observers before a destination was complete.");
+            Require(state.TryRestoreTakenEquipment(stagedReceipt, out error), error);
+            Require(
+                equipmentNotifications == 0 && capacityNotifications == 0 &&
+                ReferenceEquals(state.Equipment.GetItem(EquipmentSlotId.Backpack), backpack) &&
+                root.CapacityHeight == BaseHeight + backpackDefinition.BackpackBonusRows &&
+                marker.IsRotate == markerOriginalRotation,
+                "Unpublished staged-take rollback emitted notifications or lost state.");
+            RequireGridReferences(
+                root,
+                beforeCells,
+                "Unpublished staged-take rollback did not restore the exact layout.");
+
+            Require(
+                state.TryStageTakeEquipment(
+                    EquipmentSlotId.Backpack,
+                    out stagedItem,
+                    out stagedReceipt,
+                    out error),
+                error);
+            Require(
+                state.TryPrepareStagedEquipmentTakePublication(
+                    stagedReceipt,
+                    out error),
+                error);
+            var external = new StandardStashViewData(2, 2);
+            Require(external.CheckInsert(0, stagedItem), "External fixture rejected staged bag.");
+            external.InsertInventoryItem(0, stagedItem);
+            Require(
+                equipmentNotifications == 0 && capacityNotifications == 0,
+                "Destination insertion published the staged equipment change too early.");
+            Require(
+                state.TryPublishStagedEquipmentTake(stagedReceipt, out error),
+                error);
+            Require(
+                equipmentNotifications == 1 && capacityNotifications == 1 &&
+                ReferenceEquals(backpack.InventoryOwner, external) &&
+                state.Equipment.GetItem(EquipmentSlotId.Backpack) == null &&
+                root.CapacityHeight == BaseHeight,
+                "Completed staged transfer did not publish one consistent equipment/capacity change.");
         }
 
         private static void ValidateCoordinatorReplacementPreview(
@@ -559,6 +929,105 @@ namespace FantasySurvival.EditorTools
             }
         }
 
+        private static InventoryStateSnapshot CaptureState(
+            PlayerInventoryState state,
+            params IVariableInventoryCellData[] additionalItems)
+        {
+            var uniqueItems = new List<IVariableInventoryCellData>();
+            for (int index = 0; index < state.Inventory.CellData.Length; index++)
+            {
+                AddUniqueReference(uniqueItems, state.Inventory.CellData[index]);
+            }
+
+            var equipment = new IVariableInventoryCellData[EquipmentSlotCatalog.Count];
+            for (int index = 0; index < EquipmentSlotCatalog.Count; index++)
+            {
+                equipment[index] = state.Equipment.GetItem(
+                    EquipmentSlotCatalog.GetSlotAtIndex(index));
+                AddUniqueReference(uniqueItems, equipment[index]);
+            }
+
+            if (additionalItems != null)
+            {
+                foreach (IVariableInventoryCellData item in additionalItems)
+                {
+                    AddUniqueReference(uniqueItems, item);
+                }
+            }
+
+            var itemStates = new ItemStateSnapshot[uniqueItems.Count];
+            for (int index = 0; index < uniqueItems.Count; index++)
+            {
+                IVariableInventoryCellData item = uniqueItems[index];
+                itemStates[index] = new ItemStateSnapshot(
+                    item,
+                    item.IsRotate,
+                    item is IVariableInventoryOwnedCellData owned
+                        ? owned.InventoryOwner
+                        : null);
+            }
+
+            return new InventoryStateSnapshot(
+                state.Inventory.CapacityHeight,
+                state.Inventory.LayoutVersion,
+                (IVariableInventoryCellData[])state.Inventory.CellData.Clone(),
+                equipment,
+                itemStates,
+                state.Inventory.IsDirty,
+                state.Equipment.IsDirty);
+        }
+
+        private static void RequireStateUnchanged(
+            PlayerInventoryState state,
+            InventoryStateSnapshot expected,
+            string message)
+        {
+            Require(state.Inventory.CapacityHeight == expected.Height, message);
+            Require(state.Inventory.LayoutVersion == expected.LayoutVersion, message);
+            Require(state.Inventory.IsDirty == expected.InventoryIsDirty, message);
+            Require(state.Equipment.IsDirty == expected.EquipmentIsDirty, message);
+            RequireGridReferences(state.Inventory, expected.Cells, message);
+
+            for (int index = 0; index < expected.Equipment.Length; index++)
+            {
+                Require(
+                    ReferenceEquals(
+                        state.Equipment.GetItem(EquipmentSlotCatalog.GetSlotAtIndex(index)),
+                        expected.Equipment[index]),
+                    message);
+            }
+
+            foreach (ItemStateSnapshot itemState in expected.Items)
+            {
+                Require(itemState.Item.IsRotate == itemState.Rotation, message);
+                IVariableInventoryViewData owner =
+                    itemState.Item is IVariableInventoryOwnedCellData owned
+                        ? owned.InventoryOwner
+                        : null;
+                Require(ReferenceEquals(owner, itemState.Owner), message);
+            }
+        }
+
+        private static void AddUniqueReference(
+            ICollection<IVariableInventoryCellData> items,
+            IVariableInventoryCellData candidate)
+        {
+            if (candidate == null)
+            {
+                return;
+            }
+
+            foreach (IVariableInventoryCellData item in items)
+            {
+                if (ReferenceEquals(item, candidate))
+                {
+                    return;
+                }
+            }
+
+            items.Add(candidate);
+        }
+
         private static void DestroyTransient(UnityEngine.Object transient)
         {
             if (transient != null)
@@ -609,6 +1078,52 @@ namespace FantasySurvival.EditorTools
             public void OnSwitchRotate(
                 IVariableInventoryCell stareCell,
                 IVariableInventoryCell effectCell) { }
+        }
+
+        private sealed class InventoryStateSnapshot
+        {
+            public InventoryStateSnapshot(
+                int height,
+                long layoutVersion,
+                IVariableInventoryCellData[] cells,
+                IVariableInventoryCellData[] equipment,
+                ItemStateSnapshot[] items,
+                bool inventoryIsDirty,
+                bool equipmentIsDirty)
+            {
+                Height = height;
+                LayoutVersion = layoutVersion;
+                Cells = cells;
+                Equipment = equipment;
+                Items = items;
+                InventoryIsDirty = inventoryIsDirty;
+                EquipmentIsDirty = equipmentIsDirty;
+            }
+
+            public int Height { get; }
+            public long LayoutVersion { get; }
+            public IVariableInventoryCellData[] Cells { get; }
+            public IVariableInventoryCellData[] Equipment { get; }
+            public ItemStateSnapshot[] Items { get; }
+            public bool InventoryIsDirty { get; }
+            public bool EquipmentIsDirty { get; }
+        }
+
+        private sealed class ItemStateSnapshot
+        {
+            public ItemStateSnapshot(
+                IVariableInventoryCellData item,
+                bool rotation,
+                IVariableInventoryViewData owner)
+            {
+                Item = item;
+                Rotation = rotation;
+                Owner = owner;
+            }
+
+            public IVariableInventoryCellData Item { get; }
+            public bool Rotation { get; }
+            public IVariableInventoryViewData Owner { get; }
         }
     }
 }

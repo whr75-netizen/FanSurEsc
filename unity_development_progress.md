@@ -1926,3 +1926,13 @@ Interactable (abstract base class)
 - `[사용자 정정·규칙][2026-08-31]` §90의 같거나 작은 가방 직접 교체 차단을 폐기했다. 교체로 잃는 행을 제외한 목표 grid에 현재 root 아이템과 벗는 가방까지 실제로 모두 배치되는지가 유일한 판정이다. 이는 `+2` 가방 제거 시 현재 확장 grid에 폭 전체의 가상 1행 두 개를 예약하는 계산과 동치다.
 - `[구현·원자성]` 먼저 현재 셀·회전을 유지한 채 벗는 가방 자리까지 찾는다. 그대로 들어가면 기존 item을 움직이지 않는다. 실패할 때만 기존 결정적 greedy→회전 포함 제한 exact 탐색으로 새 배치를 메모리에서 완성하고, 성공한 계획만 적용한다. 계획 실패·탐색 한도 도달·후속 장비 교체 실패에는 미리보기 결과를 버리고 높이·셀·회전·owner·장비와 교체 가방 source를 그대로 복구한다.
 - `[Unity Editor 호출 확인]` 강제 synchronous refresh와 C# compile 뒤 Backpack 계약 검증을 실행했다. 큰→작은 교체의 기존 배치 유지, 같은 용량 교체, 2×2 기존 가방 자리가 없는 checkerboard에서 미리보기 재배치 후 성공, 기존 가방까지 합산하면 면적 초과인 교체의 완전 불변, 작은 가방 상태 Save 왕복이 모두 통과했다. 실제 마우스 drag와 Player build는 미검증이다.
+
+---
+
+## 93. 가방 drag 해제 지연과 목적칸 포함 미리계산 `[ITEM-01]`
+
+- `[사용자 확정·동작]` 가방은 drag 시작 순간 해제하지 않는다. 슬롯 그림만 ghost로 들고 장비·추가 행·root grid·owner를 유지한다. hover한 실제 목적칸에 가방 footprint를 먼저 예약한 가상 grid가 성공하면 초록, 실패하면 빈칸이어도 빨강이며, drop 순간 재검사를 통과할 때만 같은 runtime 가방을 옮긴다.
+- `[구현·원자성]` `StandardStashViewData`의 순수 height plan이 기존 셀 유지→결정적 greedy→회전 포함 제한 exact 탐색을 메모리에서 수행한다. 목적칸·회전을 고정한 예약 API, 현재 셀/회전/footprint/owner를 재검사하는 apply, rollback receipt와 `LayoutVersion`을 공유한다. 미리보기 cache는 Player root와 목적 grid의 version이 바뀌면 폐기한다. 다른 보관함·바닥 drop은 무알림 staged take→목적지 완료→한 번 publish 순서이며, 외부 receipt commit 전 publish invariant를 준비해 commit 뒤 알림 확정이 실패하지 않게 했다.
+- `[Unity Editor 호출 확인][2026-08-31]` C# compile과 Backpack 계약 검증을 실행했다. 성공/실패 미리보기의 높이·모든 셀·회전·owner·장비·dirty·layout version 무변경, 정확한 목적칸 commit, 73개 item의 실패 원자성, 장비 슬롯 UI ghost/취소 복원, 작은 가방 교체 시 기존 가방 공간 합산, staged rollback 무알림과 외부 목적지 완료 뒤 장비/용량 알림 각 1회를 확인했다. 이어 `CoreSystemsAdjacentValidation`도 1회 통과해 함께 닿는 기존 장비·저장·입력 계약의 회귀가 없음을 확인했다.
+- `[Play Mode 호출 확인][2026-08-31]` dirty `GameMap1`을 저장하지 않고 임시 Player state로 실제 `StandardCore` pointer drag callback을 호출했다. `+1` 가방과 root item 72개 상태에서 비어 있는 base slot 71은 drag가 시작되면서도 빨강이었고 drop 뒤 장비·10행·owner·layout version·슬롯 UI가 정확히 유지됐다. item 1개 상태의 base slot 0은 초록이었고 drop 순간 같은 가방 instance가 slot 0으로 이동하며 9행으로 축소됐다. 초기 결합 검증기의 두 번째 fixture 재개방 누락 오류는 기능과 분리해 수정한 뒤 두 case를 각각 성공 호출했으며 Console을 지우지 않았다. 종료 뒤 `GameMap1`의 기존 dirty 상태와 Edit Mode를 복원했다.
+- `[조건부 대안·현재 경계]` 미리계산 drag가 이후 실제 UI 복잡성이나 불안정성을 만들면 자동정렬을 폐기하고, 사라지는 추가 행에 footprint가 일부라도 걸친 item만 모두 바닥 drop하며 기본 8×9 item은 움직이지 않는 방식으로 전환한다. 현재는 전환하지 않았다. 시험 가방은 모두 1×1이며 장착 가방 drag 중 별도 ghost 회전은 이번 범위에서 추가하지 않았다. 실제 사람 손의 물리 마우스 조작과 Player build는 미검증이다.

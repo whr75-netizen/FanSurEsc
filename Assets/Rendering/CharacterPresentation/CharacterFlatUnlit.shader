@@ -31,6 +31,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             #pragma target 4.5
             #pragma vertex Vert
             #pragma fragment Frag
+            #pragma editor_sync_compilation
             #pragma multi_compile_instancing
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
             #pragma multi_compile _ _ADDITIONAL_LIGHTS

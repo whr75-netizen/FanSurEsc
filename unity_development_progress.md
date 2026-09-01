@@ -2027,3 +2027,11 @@ Interactable (abstract base class)
 - `[사용자 확인·원인][2026-09-02]` §102의 픽셀별 공간 경계는 부드러워졌지만 특정 야간·날씨에서 전신이 파랗게 변했다. 기본색은 이미 우윳빛 `(0.91,0.89,0.84)`이고, 밤 SH 하늘광·청색 달빛과 비의 청색 tint를 전신 공통 RGB로 그대로 곱한 합성이 원인이다. 순백·회색 기본색으로 바꿔도 같은 RGB 곱셈이면 청색화는 남는다.
 - `[근본 수정]` fragment별 shadow/cookie 감쇠까지 적용한 `SH ambient + main directional`을 먼저 합친 뒤 linear luminance 하나로 바꿔 기본색의 밝기만 조절한다. URP point/spot 추가광과 단계형 로컬광은 기존 RGB를 유지해 실제로 겹치는 부분만 가로등 등의 색을 받는다. 개념식은 `base × (Luminance(ambient + main) + colored local lights)`다.
 - `[보존·검증 경계]` 월드의 밤·비 색을 소유하는 `ClearSkyLightingProfile`, 기본색 material, 낮밤 곡선, 외곽선·snap·stencil은 변경하지 않았다. URP Core의 `Color.hlsl`에서 `Luminance`를 명시적으로 포함하고 shader diff를 정적 확인했다. 열린 Editor가 아직 파일을 reimport하지 않아 야간/비의 전신 중성 밝기와 가로등 아래 부분 색을 함께 보는 Game View 1회는 미검증이다.
+
+---
+
+## 104. 캐릭터 첫 프레임 청록색 대체 셰이더 제거 `[CHARACTER-RENDER-01]`
+
+- `[사용자 확인·근본 원인][2026-09-02]` Play 시작 직후 몇 프레임만 파랗고 이후 정상 회색이 되는 현상은 조명 초기화나 기본색 교체가 아니었다. 프로젝트의 `m_AsyncShaderCompilation=1`, 해당 캐릭터 셰이더의 다중 variant와 플레이 직전 import 기록을 대조했으며, Unity Editor가 variant 컴파일 중 표시하는 단색 cyan placeholder의 공식 동작과 증상이 일치했다. 씬에는 주황 단계광과 꺼진 주황 가로등 외에 캐릭터 전신을 파랗게 만들 시작 광원이 없고 Player 원본 MeshRenderer도 직렬화 상태부터 비활성이다.
+- `[근본 수정·범위]` `CharacterFlatUnlit`의 실제 색 pass에만 `#pragma editor_sync_compilation`을 지정했다. 이 캐릭터의 보이는 variant를 첫 렌더 전에 준비하므로 cyan 임시 결과를 화면에 내보내지 않으며, 프로젝트 전체의 비동기 셰이더 컴파일과 색을 출력하지 않는 depth pass는 유지한다. 정상 shader의 기본색·SH/주광 중성 밝기·색 있는 로컬광·외곽선·snap·낮밤 권위는 변경하지 않았다.
+- `[정적 검증·남은 확인]` Unity 6 현재 API와 공식 매뉴얼에서 해당 pragma가 개별 shader의 Editor 비동기 컴파일을 끄는 지시문임을 확인했고, 보이는 pass 한 곳에만 들어간 diff와 기존 사용자 dirty 분리를 확인했다. 열린 Editor가 수정 뒤 아직 asset refresh 로그를 쓰지 않아 실제 재import 오류 없음과 Play 첫 프레임 회색은 미검증이다. Player 빌드에는 Editor cyan placeholder 자체가 적용되지 않는다.

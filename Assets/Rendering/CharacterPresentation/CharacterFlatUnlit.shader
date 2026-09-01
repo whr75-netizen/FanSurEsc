@@ -40,6 +40,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             #pragma multi_compile_fragment _ _LIGHT_COOKIES
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Assets/Rendering/LocalLighting/SteppedLocalLightCommon.hlsl"
@@ -96,7 +97,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 float4 fragmentPositionCS)
             {
                 const half3 flatAmbientDirection = half3(0.0, 1.0, 0.0);
-                half3 lighting =
+                half3 environmentLighting =
                     max(SampleSH(flatAmbientDirection), 0.0) *
                     _AmbientLightStrength;
 
@@ -114,9 +115,17 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                     inputData.shadowCoord,
                     positionWS,
                     shadowMask);
-                lighting += EvaluateSurfaceNeutralRealtimeLight(
+                environmentLighting += EvaluateSurfaceNeutralRealtimeLight(
                     mainLight,
                     _MainLightStrength);
+
+                // Sky ambient and the single sun/moon key light cover the whole
+                // flat character. Preserve their luminance, not their full RGB
+                // chroma, so a blue night profile changes visibility without
+                // replacing the neutral base color. Spatial local lights below
+                // keep their authored color where they actually overlap.
+                half environmentBrightness = Luminance(environmentLighting);
+                half3 lighting = environmentBrightness.xxx;
 
                 #if defined(_ADDITIONAL_LIGHTS) || USE_CLUSTER_LIGHT_LOOP
                     #if USE_CLUSTER_LIGHT_LOOP

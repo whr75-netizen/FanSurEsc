@@ -2019,3 +2019,11 @@ Interactable (abstract base class)
 - `[근본 수정]` 보이는 각 fragment의 world position으로 주광 shadow/cookie, URP 추가광의 거리·spot/shadow/cookie와 단계광을 각각 계산한다. 실제 mesh normal·NdotL·BRDF·specular·SSAO는 계속 사용하지 않으므로 조명 영역은 실루엣을 공간적으로 가로지르되 구·원통의 곡면 명암은 만들지 않는다. Forward+ 광원 타일 조회도 재투영한 clip 좌표가 아니라 실제 fragment `SV_POSITION`을 사용하도록 바로잡았다.
 - `[픽셀 안정·중복 방지]` 렌더용 presentation snap은 유지하되 shader의 수광 위치에 `unsnappedRoot - snappedRoot`를 더해 Camera 이동이 shadow·cookie·단계광 경계를 끌고 다니지 않게 했다. 세계용 단계광 fullscreen pass의 보이는 캐릭터 stencil 제외는 유지해 노멀 기반 광원이 캐릭터에 중복 합성되지 않는다. 새 RenderTexture·pass·Manager와 밝기·감마 보정은 추가하지 않았다.
 - `[정적 검증·남은 확인]` Unity 6.5가 생성한 실제 `Assembly-CSharp.rsp`로 C#을 독립 컴파일해 신규 오류 0, 기존 외부 obsolete·unused 경고 2개만 확인했다. 격리 Unity shader 검증은 코드가 아니라 Licensing Client 초기화에서 장시간 정지해 해당 격리 프로세스만 종료했다. 따라서 실제 Editor shader reimport와 고정 시간에서 Spot/cookie/shadow 경계가 몸 일부를 통과하면서 노멀 그라데이션이 없는지 보는 Game View 1회는 미검증이다. 구형 `SteppedLocalLight` 자체의 wall 차폐·cookie 부재와 하루 60초 시험의 약 24Hz 하늘광 갱신은 이번 원인과 별도다.
+
+---
+
+## 103. 캐릭터 전역광 청색화 제거 `[CHARACTER-RENDER-01]`
+
+- `[사용자 확인·원인][2026-09-02]` §102의 픽셀별 공간 경계는 부드러워졌지만 특정 야간·날씨에서 전신이 파랗게 변했다. 기본색은 이미 우윳빛 `(0.91,0.89,0.84)`이고, 밤 SH 하늘광·청색 달빛과 비의 청색 tint를 전신 공통 RGB로 그대로 곱한 합성이 원인이다. 순백·회색 기본색으로 바꿔도 같은 RGB 곱셈이면 청색화는 남는다.
+- `[근본 수정]` fragment별 shadow/cookie 감쇠까지 적용한 `SH ambient + main directional`을 먼저 합친 뒤 linear luminance 하나로 바꿔 기본색의 밝기만 조절한다. URP point/spot 추가광과 단계형 로컬광은 기존 RGB를 유지해 실제로 겹치는 부분만 가로등 등의 색을 받는다. 개념식은 `base × (Luminance(ambient + main) + colored local lights)`다.
+- `[보존·검증 경계]` 월드의 밤·비 색을 소유하는 `ClearSkyLightingProfile`, 기본색 material, 낮밤 곡선, 외곽선·snap·stencil은 변경하지 않았다. URP Core의 `Color.hlsl`에서 `Luminance`를 명시적으로 포함하고 shader diff를 정적 확인했다. 열린 Editor가 아직 파일을 reimport하지 않아 야간/비의 전신 중성 밝기와 가로등 아래 부분 색을 함께 보는 Game View 1회는 미검증이다.

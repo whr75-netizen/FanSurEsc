@@ -17,11 +17,8 @@ namespace FantasySurvival.CharacterPresentation
 
         private static readonly int PixelGridAnchorId =
             Shader.PropertyToID("_CharacterPixelGridAnchorWS");
-        private static readonly int LightingAnchorId =
-            Shader.PropertyToID("_CharacterLightingAnchorWS");
-
-        [SerializeField] private Vector3 lightingSampleLocalOffset =
-            new Vector3(0f, 2f, 0f);
+        private static readonly int LightingPositionOffsetId =
+            Shader.PropertyToID("_CharacterLightingPositionOffsetWS");
 
         private static int activeSubjectCount;
 
@@ -190,19 +187,17 @@ namespace FantasySurvival.CharacterPresentation
                 anchorPosition.y,
                 anchorPosition.z,
                 1f);
-            // Pixel snapping moves only the presentation root. Lighting stays
-            // at the real world-space subject position so camera motion cannot
-            // move it across a shadow, cookie, or stepped-light boundary.
-            Vector3 lightingRootPosition = renderSnapApplied
-                ? unsnappedPosition
-                : anchorPosition;
-            Vector3 lightingAnchorPosition = lightingRootPosition +
-                transform.TransformVector(lightingSampleLocalOffset);
-            Vector4 lightingAnchor = new Vector4(
-                lightingAnchorPosition.x,
-                lightingAnchorPosition.y,
-                lightingAnchorPosition.z,
-                1f);
+            // Every fragment keeps its own spatial light position. Only undo
+            // the temporary presentation-root snap, so camera motion cannot
+            // shift the character through a shadow, cookie, or light band.
+            Vector3 lightingPositionOffset = renderSnapApplied
+                ? unsnappedPosition - anchorPosition
+                : Vector3.zero;
+            Vector4 lightingOffset = new Vector4(
+                lightingPositionOffset.x,
+                lightingPositionOffset.y,
+                lightingPositionOffset.z,
+                0f);
 
             foreach (Renderer ownedRenderer in ownedRenderers)
             {
@@ -213,7 +208,7 @@ namespace FantasySurvival.CharacterPresentation
 
                 ownedRenderer.GetPropertyBlock(propertyBlock);
                 propertyBlock.SetVector(PixelGridAnchorId, anchor);
-                propertyBlock.SetVector(LightingAnchorId, lightingAnchor);
+                propertyBlock.SetVector(LightingPositionOffsetId, lightingOffset);
                 ownedRenderer.SetPropertyBlock(propertyBlock);
                 propertyBlock.Clear();
             }

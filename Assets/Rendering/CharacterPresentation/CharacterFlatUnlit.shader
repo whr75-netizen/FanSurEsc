@@ -1,4 +1,4 @@
-Shader "FantasySurvival/Character/Uniform Flat Lit"
+Shader "FantasySurvival/Character/Spatial Flat Lit"
 {
     Properties
     {
@@ -20,7 +20,7 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
 
         Pass
         {
-            Name "CharacterUniformFlatLit"
+            Name "CharacterSpatialFlatLit"
             Tags { "LightMode" = "UniversalForward" }
 
             Cull Back
@@ -52,7 +52,10 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
                 half _SteppedLocalLightStrength;
             CBUFFER_END
 
-            float4 _CharacterLightingAnchorWS;
+            // Pixel snapping moves only the presentation hierarchy. This offset
+            // restores the unsnapped world position used by spatial lighting so
+            // camera movement cannot drag the character through light boundaries.
+            float4 _CharacterLightingPositionOffsetWS;
 
             struct Attributes
             {
@@ -63,6 +66,7 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
             struct Varyings
             {
                 float4 positionCS : SV_POSITION;
+                float3 positionWS : TEXCOORD0;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
@@ -71,11 +75,12 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
                 Varyings output;
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
-                output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
+                output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
+                output.positionCS = TransformWorldToHClip(output.positionWS);
                 return output;
             }
 
-            half3 EvaluateUniformRealtimeLight(Light light, half strength)
+            half3 EvaluateSurfaceNeutralRealtimeLight(Light light, half strength)
             {
                 if (!IsMatchingLightLayer(light.layerMask, GetMeshRenderingLayer()))
                 {
@@ -86,7 +91,9 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
                     (light.distanceAttenuation * light.shadowAttenuation * strength);
             }
 
-            half3 EvaluateUniformCharacterLighting(float3 anchorPositionWS)
+            half3 EvaluateSpatialFlatCharacterLighting(
+                float3 positionWS,
+                float4 fragmentPositionCS)
             {
                 const half3 flatAmbientDirection = half3(0.0, 1.0, 0.0);
                 half3 lighting =
@@ -94,21 +101,20 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
                     _AmbientLightStrength;
 
                 InputData inputData = (InputData)0;
-                float4 anchorPositionCS = TransformWorldToHClip(anchorPositionWS);
-                inputData.positionWS = anchorPositionWS;
+                inputData.positionWS = positionWS;
                 inputData.normalWS = flatAmbientDirection;
                 inputData.viewDirectionWS =
-                    GetWorldSpaceNormalizeViewDir(anchorPositionWS);
-                inputData.shadowCoord = TransformWorldToShadowCoord(anchorPositionWS);
+                    GetWorldSpaceNormalizeViewDir(positionWS);
+                inputData.shadowCoord = TransformWorldToShadowCoord(positionWS);
                 inputData.normalizedScreenSpaceUV =
-                    GetNormalizedScreenSpaceUV(anchorPositionCS);
+                    GetNormalizedScreenSpaceUV(fragmentPositionCS);
 
                 const half4 shadowMask = half4(1.0, 1.0, 1.0, 1.0);
                 Light mainLight = GetMainLight(
                     inputData.shadowCoord,
-                    anchorPositionWS,
+                    positionWS,
                     shadowMask);
-                lighting += EvaluateUniformRealtimeLight(
+                lighting += EvaluateSurfaceNeutralRealtimeLight(
                     mainLight,
                     _MainLightStrength);
 
@@ -123,9 +129,9 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
                         {
                             Light additionalLight = GetAdditionalLight(
                                 lightIndex,
-                                anchorPositionWS,
+                                positionWS,
                                 shadowMask);
-                            lighting += EvaluateUniformRealtimeLight(
+                            lighting += EvaluateSurfaceNeutralRealtimeLight(
                                 additionalLight,
                                 _AdditionalLightStrength);
                         }
@@ -135,19 +141,19 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
                     LIGHT_LOOP_BEGIN(pixelLightCount)
                         Light additionalLight = GetAdditionalLight(
                             lightIndex,
-                            anchorPositionWS,
+                            positionWS,
                             shadowMask);
-                        lighting += EvaluateUniformRealtimeLight(
+                        lighting += EvaluateSurfaceNeutralRealtimeLight(
                             additionalLight,
                             _AdditionalLightStrength);
                     LIGHT_LOOP_END
                 #endif
 
-                // This uses the exact same light definition as the world pass,
-                // but normal influence is zero and every fragment uses the
-                // subject anchor. Curved 3D surfaces therefore cannot appear.
+                // Spatial attenuation is evaluated per visible character pixel,
+                // while normal influence stays at zero. Light boundaries can
+                // cross the silhouette without revealing the mesh curvature.
                 lighting += EvaluateSteppedLocalLights(
-                    anchorPositionWS,
+                    positionWS,
                     flatAmbientDirection,
                     0.0) * _SteppedLocalLightStrength;
                 return lighting;
@@ -156,10 +162,11 @@ Shader "FantasySurvival/Character/Uniform Flat Lit"
             half4 Frag(Varyings input) : SV_Target
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
-                float3 anchorPositionWS = _CharacterLightingAnchorWS.w > 0.5
-                    ? _CharacterLightingAnchorWS.xyz
-                    : TransformObjectToWorld(float3(0.0, 2.0, 0.0));
-                half3 lighting = EvaluateUniformCharacterLighting(anchorPositionWS);
+                float3 lightingPositionWS = input.positionWS +
+                    _CharacterLightingPositionOffsetWS.xyz;
+                half3 lighting = EvaluateSpatialFlatCharacterLighting(
+                    lightingPositionWS,
+                    input.positionCS);
                 return half4(_BaseColor.rgb * lighting, _BaseColor.a);
             }
             ENDHLSL

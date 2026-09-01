@@ -2010,3 +2010,12 @@ Interactable (abstract base class)
 - `[중복광·가림 계약]` 별도 color-mask RenderTexture는 만들지 않았다. 최종 opaque depth 뒤 `ZTest Equal`로 실제 보이는 캐릭터 픽셀만 사용자 stencil bit 1에 표시한 다음 fullscreen 단계형 로컬광에서 제외해 캐릭터가 두 번 밝아지거나 전경 벽에 캐릭터 모양 구멍이 생기지 않게 했다. URP의 선택형 stencil LOD cross-fade bit와도 분리했다.
 - `[검증]` 마지막 C#은 Unity 6.5/URP 17.5가 생성한 실제 compiler response로 독립 컴파일해 신규 오류 0이었다. 균일 실제광 본체와 fullscreen shader는 앞선 Unity ShaderUtil 확인에서 supported·compiler error 0이었고, 최종 RenderGraph/stencil 변경은 같은 URP 17.5 API와 renderer 설정을 정적 재검토해 P1/P2를 제거했다. 다만 열린 Editor가 최종 파일을 아직 reimport하지 않은 상태에서 MCP bridge가 끊겨 정오·황혼·00시·비·가로등의 최종 Game View 비교는 미검증이다.
 - `[현재 경계]` 캐릭터 자체의 표면 명암과 자체 그림자는 의도적으로 없다. 현재는 주변 가림의 shadow/cookie를 한 anchor에서 받아 몸 전체가 균일하게 어두워지는 단계이며, 캐릭터 cast shadow는 추후 proxy/pixel shadow 정책이 정해질 때 추가한다.
+
+---
+
+## 102. 캐릭터 공간 수광 마스크 정정 `[CHARACTER-RENDER-01]`
+
+- `[사용자 확인·근본 원인][2026-09-02]` §101의 전신 공용 world anchor는 메시 노멀 명암만 제거한 것이 아니라 점·스포트 광원의 거리·원뿔, cookie, shadow와 단계광 경계까지 한 점으로 축약했다. 따라서 캐릭터 일부에 빛이 닿을 수 없고 anchor가 경계를 넘는 순간 전신 색이 한 프레임에 바뀌었다. 가로등의 반투명 빛줄기는 별도 체적 pass여서 원하는 부분 조명처럼 보였을 뿐 캐릭터 표면 수광 경로가 아니었다.
+- `[근본 수정]` 보이는 각 fragment의 world position으로 주광 shadow/cookie, URP 추가광의 거리·spot/shadow/cookie와 단계광을 각각 계산한다. 실제 mesh normal·NdotL·BRDF·specular·SSAO는 계속 사용하지 않으므로 조명 영역은 실루엣을 공간적으로 가로지르되 구·원통의 곡면 명암은 만들지 않는다. Forward+ 광원 타일 조회도 재투영한 clip 좌표가 아니라 실제 fragment `SV_POSITION`을 사용하도록 바로잡았다.
+- `[픽셀 안정·중복 방지]` 렌더용 presentation snap은 유지하되 shader의 수광 위치에 `unsnappedRoot - snappedRoot`를 더해 Camera 이동이 shadow·cookie·단계광 경계를 끌고 다니지 않게 했다. 세계용 단계광 fullscreen pass의 보이는 캐릭터 stencil 제외는 유지해 노멀 기반 광원이 캐릭터에 중복 합성되지 않는다. 새 RenderTexture·pass·Manager와 밝기·감마 보정은 추가하지 않았다.
+- `[정적 검증·남은 확인]` Unity 6.5가 생성한 실제 `Assembly-CSharp.rsp`로 C#을 독립 컴파일해 신규 오류 0, 기존 외부 obsolete·unused 경고 2개만 확인했다. 격리 Unity shader 검증은 코드가 아니라 Licensing Client 초기화에서 장시간 정지해 해당 격리 프로세스만 종료했다. 따라서 실제 Editor shader reimport와 고정 시간에서 Spot/cookie/shadow 경계가 몸 일부를 통과하면서 노멀 그라데이션이 없는지 보는 Game View 1회는 미검증이다. 구형 `SteppedLocalLight` 자체의 wall 차폐·cookie 부재와 하루 60초 시험의 약 24Hz 하늘광 갱신은 이번 원인과 별도다.

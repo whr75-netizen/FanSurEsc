@@ -171,7 +171,8 @@ namespace FantasySurvival.Rendering
 
             // The fullscreen world-light pass keeps its material-local values.
             // Character flat-light shaders consume the same derived list as
-            // globals so their whole hierarchy can sample one shared anchor.
+            // globals and evaluate it at each visible fragment without using
+            // the mesh normal.
             Shader.SetGlobalVectorArray(PositionsAndRadiiId, positionsAndRadii);
             Shader.SetGlobalVectorArray(ColorsAndIntensitiesId, colorsAndIntensities);
             Shader.SetGlobalVectorArray(

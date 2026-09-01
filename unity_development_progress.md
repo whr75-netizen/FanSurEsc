@@ -1980,3 +1980,12 @@ Interactable (abstract base class)
 - `[원인][2026-09-02]` 기존 합성은 아트 셀 중앙 한 점으로 점유를 정한 뒤 빈 이웃 셀만 외곽선으로 그렸다. 몸체가 점유 셀 중간에서 끝나면 같은 셀의 나머지 1~2 화면 픽셀이 배경으로 남아 몸체와 검은 선 사이에 미세 여백이 생겼다. R8 binary mask·MSAA 1이므로 threshold 조정 문제가 아니었다.
 - `[수정]` 기존 3×3 셀 dilation 외피는 유지하고, 그 외피 안에서 full-resolution mask를 상하좌우 1픽셀 침식한 내부만 제외해 외곽선을 합성한다. 따라서 경계 셀의 빈 부분을 메우고 몸체 안으로 정확히 1픽셀 겹치며, 대각선까지 침식해 선을 과도하게 굵게 만들지 않는다. 외피 밖 픽셀은 조기 반환하고 재질의 `_InnerOverlapPixels=1`로 명시했다.
 - `[Play Mode·픽셀 확인]` `GameMap1` 한 Play에서 shader `supported=True`·compiler message 0을 확인했다. 동일 1280×720 gameplay Camera 캡처에서 보이는 몸체 경계의 외곽선 거리 2픽셀 이상이 `344/1,228 → 0/1,224`, 거리 1 접촉률이 100%가 됐다. 전후 합성 bbox `x=93~354, y=12~239`와 모든 행·열 외피는 동일해 바깥 계단 형태의 변화는 0픽셀이었다. 종료 뒤 Edit Mode·scene clean을 확인했고 기존 외부 `ASFolliage` 오류는 분리했다.
+
+---
+
+## 99. 실루엣 평행이동 픽셀 크리프 제거 `[CHARACTER-RENDER-01]`
+
+- `[원인][2026-09-02]` full-resolution binary mask를 화면 원점 기준의 `floor(screen/3)` 격자 중앙에서만 표본화해, 연속 이동 중 셀 전체가 다시 분류되고 있었다. 1280픽셀 폭은 3으로 나누어떨어지지 않아 UV 재확장 셀도 불균일했다. 앞선 1픽셀 안쪽 겹침은 여백만 해결하며 이 시간축 위상 문제는 해결하지 못했다.
+- `[근본 수정]` gameplay Transform은 연속으로 유지하고 물리 없는 presentation root만 URP `beginCameraRendering`에서 실제 내부 render 1픽셀 중심에 맞춘 뒤 `endCameraRendering`에서 원위치로 복원한다. 자식 Renderer는 공통 MPB anchor를 공유한다. RG8 raw/seed 2패스와 R8 expansion으로 object anchor 기준 1픽셀 seed를 정확한 3×3 블록으로 확장하고, composite는 `SV_POSITION`·`LOAD_TEXTURE2D` 정수 좌표만 사용한다. 기존 1픽셀 inward overlap·3픽셀 외곽선과 단일 shared Renderer Feature는 유지했다.
+- `[Play Mode·정량 확인]` `GameMap1`, 1280×720에서 카메라 기준 0.25픽셀씩 13프레임·총 3픽셀을 이동했다. 몸체∪외곽선 픽셀 수는 17,667로 고정됐고 정수 이동 정렬 뒤 최악 XOR 0.000%, 역방향·형상 변화 0, render 뒤 root 복원 오차 0이었다. mask/composite shader compiler message 0, 종료 뒤 Edit Mode·scene clean과 최종 수정 이후 신규 관련 Console error 0을 확인했다. 기존 `ASFolliage` 오류와 수정 전 transient error는 분리했다.
+- `[경계]` 이번 결과는 평행이동 안정화다. Player 교체, Character ID, 파츠, 균일 조명, continuous rotation·skinned animation·smooth zoom 안정화는 아직 구현하지 않았다.

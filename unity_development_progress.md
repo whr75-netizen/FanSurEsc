@@ -1954,3 +1954,13 @@ Interactable (abstract base class)
 - `[바닥 item 수명·복원]` 바닥 item의 GameObject와 단일-item grid owner는 scene-local이며 일반 씬 전환에 따라 제거된다. 따라서 기지에 놓고 출발한 item은 사라진다. Active Raid Recovery v2만 GUID stable ID·Transform·정확한 회전 footprint grid를 저장하며 Resume에서 비활성 staging→전체 상태 적용→일괄 활성화 순으로 복원한다. ordinary save에는 바닥 entity를 넣지 않고 이전 v1 checkpoint는 빈 바닥 목록으로만 호환한다.
 - `[정적·Editor 검증]` C# compile 성공 뒤 core 인접 검증에서 3슬롯 primary/backup 값 격리, slot 1 legacy 경로, 슬롯별 Recovery 경로, world-item v2 왕복·개수 불일치 거부·v1 빈 목록 호환을 확인했다. Main Menu runtime 슬롯 버튼 3개의 비중첩 배치와 같은 runtime item의 바닥 stage/commit·stable ID·scene owner도 확인했다. 최종 감사에서 ordinary는 없고 Recovery만 남은 슬롯 행이 비활성인 경계를 찾아, 그 행만 선택 가능하게 해 기존 marker-first 격리 경로로 보내고 ordinary-only 손상 슬롯은 계속 차단하도록 고쳤다.
 - `[실제 Play Mode 흐름]` 사용자 dirty `GameMap1`을 저장하지 않고 슬롯 2로 실제 `GameMapTest` 원정을 시작해 바닥 item 하나를 확정한 뒤 `주 메뉴` 저장·종료와 Main Menu의 `Load → Slot 2 → 이어하기`를 실행했다. slot 2 ordinary marker와 Recovery에 같은 stable ID가 기록되고 slot 1·3에는 자료가 생기지 않았으며, 복귀한 `GameMapTest`에서 같은 stable ID의 바닥 item이 재구성됐다. 무인 대기 중 기존 적 AI가 Player를 사망시킨 것은 관찰됐으나 저장 시점의 Active checkpoint·메뉴 이동·바닥 item 복원과 `Abandonments=0`은 확인됐다. Play 종료 뒤 기존 `GameMap1` dirty 상태를 보존했고 기존 외부 shader Console 오류는 지우지 않았다.
+
+---
+
+## 96. 3D 마네킹 합성 실루엣 외곽선 시험 `[CHARACTER-RENDER-01]`
+
+- `[사용자 오류·근본 원인][2026-09-02]` 설치가 끝난 임시 `[InitializeOnLoad]` 제작기가 Play Mode domain reload에서도 다시 실행되어 `EditorSceneManager.NewScene()`을 호출한 것이 빨간 `InvalidOperationException`의 원인이었다. 제작기는 결과 에셋 생성 뒤 남아 있을 런타임 책임이 없으므로 제거했고, 재컴파일 뒤 같은 예외가 다시 발생하지 않았다.
+- `[구현·격리]` 프로젝트에 이미 포함된 CC0 Kenney `characterMedium.fbx`를 원본 수정 없이 재사용했다. 우윳빛 단색 Unlit 재질, 전용 rendering-layer bit만 기록하는 R8 mask, 원본 색을 저해상도로 내리지 않는 화면공간 계단 외곽선 합성, 재사용 prefab과 독립 `CharacterSilhouetteTest` scene을 추가했다. 게임플레이 물리 Layer·Player·Camera·씬에는 연결하지 않았다.
+- `[수명·비용 경계]` `CharacterSilhouetteSubject` 한 종류가 활성 대상 수와 전용 bit를 소유하며 비활성화·계층 이탈 시 자신이 붙인 bit를 해제한다. Renderer Feature는 Game Camera와 유효 재질을 확인하고, Play Mode에서는 활성 대상이 없으면 mask/composite pass를 제출하지 않는다. 최종 Player 파츠·Character ID·균일 조명 합성은 아직 연결하지 않았다.
+- `[Unity Editor 렌더·정적 확인]` Unity 6.5/URP 17.5에서 전체 생성물 import와 강제 동기 컴파일이 성공했고 shader compile 오류가 없었다. 격리 카메라 960×540 직접 렌더에서 검은 외곽선 4,482픽셀을 측정해 단색 내부와 계단형 총외곽선을 확인했다. 수명주기 정리 뒤 최종 C#도 Unity 강제 refresh와 같은 Unity/URP 어셈블리 독립 컴파일을 모두 통과했다. 실제 Player Play 연결과 Player build는 미검증이다.
+- `[보존]` 사용자 dirty `GameMap1`, 의뢰/상인 재질과 preview Camera prefab은 저장·stage하지 않았다. Blender·외부 다운로드·새 입력·Manager·조명 권위는 추가하지 않았다.

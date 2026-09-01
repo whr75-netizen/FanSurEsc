@@ -55,6 +55,23 @@ MonoBehaviour:
   m_Active: 1
   volumeMaterial: {fileID: 2100000, guid: aa1ec260b46d2ef4f896d289e8de7188, type: 2}
   sampleCount: 24
+--- !u!114 &-68089449413443465
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6905df12a56dfd14cb09a21cb1845b7f, type: 3}
+  m_Name: Character Silhouette Outline
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Rendering.CharacterSilhouetteRendererFeature
+  m_Active: 1
+  settings:
+    maskMaterial: {fileID: 2100000, guid: 6a4e81adf59d4f749bd291894bdd76bf, type: 2}
+    compositeMaterial: {fileID: 2100000, guid: 8dd089e5745a9cb43b3aef2644aea9bf, type: 2}
+    injectionPoint: 550
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,7 +102,8 @@ MonoBehaviour:
   - {fileID: -5254281787483351343}
   - {fileID: 4422216796511869236}
   - {fileID: -1158528794655284672}
-  m_RendererFeatureMap: ad6b866f10d7b46ce4e22db166666ae0d116407b8d0a15b73419db1bbfde5e3d40a2820c3314ecef
+  - {fileID: -68089449413443465}
+  m_RendererFeatureMap: ad6b866f10d7b46ce4e22db166666ae0d116407b8d0a15b73419db1bbfde5e3d40a2820c3314ecef7780c2aa01190eff
   xrSystemData: {fileID: 0}
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   m_AssetVersion: 3

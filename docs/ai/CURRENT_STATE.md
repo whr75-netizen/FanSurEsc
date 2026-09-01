@@ -1,6 +1,6 @@
 # 현재 구현·검증 상태
 
-**마지막 갱신:** 2026-09-01
+**마지막 갱신:** 2026-09-02
 ## 판정 규칙
 
 - 직접 확인 → 이 표 → 최신 증거 → 과거 이력 순으로 판정한다. 차이는 원인을 확인한 뒤 쓰기 허용 작업에서 갱신한다.
@@ -10,7 +10,7 @@
 
 - 구현: `ACTIVE` 사용 중, `PARTIAL` 일부만 구현, `ABSENT` 미구현, `DISABLED` 의도적 비활성.
 - 검증: `USER` 사용자 확인, `PLAYER` 빌드, `PLAY` 실제 흐름, `CALL` Play 호출, `CODE` 정적 확인, `UNVERIFIED` 미검증, `BLOCKED` 차단.
-- 범위: `PROTOTYPE` 시험·그레이박스, `PRODUCTION` 정식 범위. 미검증·차단이어도 이전 증거는 보존한다.
+- 범위: `PROTOTYPE` 시험·그레이박스, `PRODUCTION` 정식 범위.
 
 ## 상태 ID별 계약 경로
 
@@ -25,10 +25,11 @@
 | `AI-01` | 게임플레이 계약 §4.6·4.10, `ai_generation_plan.md` §1~11 |
 | `MAP-01`, `MAP-ARRIVAL-01` | 게임플레이 계약 §4.3, `GAME_FLOW.md` §4~5, GDD §7, 개발계획 §14 |
 | `ENVIRONMENT-01` | GDD §10.8~10.9·14.1; 실내 비차단 GDD §7.7 |
+| `CHARACTER-RENDER-01` | GDD §14.1.4 |
 | `RAID-01`, `SAVE-01` | 게임플레이 계약 §4.1·4.8·4.9, `GAME_FLOW.md` §6~8, GDD §2.6~2.7·11 |
 | `QUEST-01` | 게임플레이 계약 §4.4·4.7~4.9·5, GDD §2.3·3.3·8.5.4·9.5·10.5.4·12.2.5 |
 | `INFO-01` | 게임플레이 계약 §4.9·5, GDD §3.4·9.1·10.2·10.15 |
-| `PIXEL-01` | GDD §14; 현재는 재사용 요청 전까지 계약을 확장하지 않음 |
+| `PIXEL-01` | GDD §14; 재사용 요청 전까지 확장 금지 |
 | `SPAWN-01` | 게임플레이 계약 §4.3, `GAME_FLOW.md` §5, GDD §7.8~7.11, 개발계획 §14.1 |
 | `POI-01` | 게임플레이 계약 §4.3, GDD §7.5·7.7·7.10, 개발계획 §14.1 |
 | `LOOT-01` | 게임플레이 계약 §4.2~4.3, `GAME_FLOW.md` §5, GDD §5.7·7.9 |
@@ -52,8 +53,9 @@
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
-| `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88·94 | 낮밤·분리 구름·비/물 튐·지붕 차단·수광 Grass·로컬광·태양/가로등 체적광·시험 웅덩이 | 날씨 저장·풍향·웅덩이/환경 최종 아트·다수 광원 성능·Transparent 합성 |
-| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95 | click/drag/stack·Shift/Ctrl·W1~W3·가방 재배치·장전탄·Save v7·저작창; 외곽 drag는 같은 item을 scene-local 바닥 owner로 옮기고 E로 습득; 일반 전환 때 삭제, Active Raid Recovery만 stable ID·grid·Transform 복원 | 정식 바닥 표현 또는 소유권·수량·grid·장비·world-item/저장 schema 변경 |
+| `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88·94 | 낮밤·구름·비/물 튐·지붕 차단·Grass 수광·로컬광·태양/가로등 체적광·웅덩이 | 날씨 저장·풍향·최종 아트·다수 광원 성능·Transparent 합성 |
+| `CHARACTER-RENDER-01` | 3D 기반 픽셀 캐릭터 실루엣 시험 | `PARTIAL` | `CODE` | `PROTOTYPE` | 진행 §96 | CC0 마네킹·단색 Unlit·전용 rendering layer·R8 mask·화면공간 계단 외곽선; 격리 렌더 확인 | 실제 Player/파츠·Character ID·균일 조명 합성·Play 연결 |
+| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95 | click/drag/stack·가방·장전탄·Save v7·저작창; 외곽 drag→scene-local 바닥 owner→E 습득; 일반 전환 삭제, Active Raid만 복원 | 정식 바닥 표현 또는 item/grid/장비/world-item 저장 계약 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 이동장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67 | 고정 맵 임의/도심 공유후보 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
@@ -64,7 +66,7 @@
 | `LOOT-01` | seed 기반 시험 LootTable | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §34·67 | Fresh 원자 roll, Resume grid 복원; 의료 POI는 ID 7, table 미지정은 초기값 유지 | 다중 roll·수량·희귀도·위험 예산 추가 |
 | `BASE-01` | 기지 Chest·가구 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §18 | stable ID별 grid와 중첩 아이템, 왕복·backup 복원 | 배치 가능한 가구나 layout migration 추가 |
 | `RAID-01` | 기지/원정 Escape·생환·사망·포기 결과 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·35·95 | 생환은 자동 기지 정산; 명시적 포기만 `Abandoned`; Active Raid의 `주 메뉴`는 결과 없이 exact 저장 후 같은 슬롯 Resume | 메뉴·결과·중단 정책 변경 |
-| `SAVE-01` | 3슬롯 save·원정 Recovery·정산 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §22~23·48·52~53·73·95 | 활성 슬롯 1개가 ordinary/Recovery namespace를 함께 선택; slot 1 legacy 경로; marker 우선 Resume/정산; Base·Raid 주메뉴 저장 gate; Editor 직접 Play 격리 | 슬롯 수·schema·저장 시점·정산/복구 경계 변경 |
+| `SAVE-01` | 3슬롯 save·원정 Recovery·정산 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §22~23·48·52~53·73·95 | 활성 슬롯별 ordinary/Recovery; slot 1 legacy; marker 우선 Resume/정산; Base·Raid 주메뉴 저장 gate | 슬롯 수·schema·저장 시점·정산/복구 경계 변경 |
 | `MERCHANT-01` | Player Gold/Silver와 무지갑 시험 상인 | `ACTIVE` | `USER` | `PROTOTYPE` | 진행 §26 사용자 확인·순수 거래 11경로 | 상인 자금 없음, 판매 sink, 이전 성공 뒤 정산, 실패 rollback | 가격 정책·상인 자금·정식 재고 결정 |
 | `QUEST-01` | Cube NPC의 적 1킬·생환 시험 의뢰 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §30·52 | 공통 E로 수락, Player 귀속 처치, committed `Extracted` 뒤 보고 가능, NPC 보고로 완료; ordinary·Recovery exact 저장, 보상 없음 | 퀘스트 규칙·보상·다중 의뢰 schema 또는 관련 상호작용·사망·정산 경계 변경 |
 | `INFO-01` | U 정보창과 누적 기록 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §31·52 | 캐릭터·기록·사전·의뢰·업그레이드 5탭; 기존 원본 읽기, 누적 기록은 단일 권위 소유 후 ordinary·Recovery exact 저장; 업그레이드는 미구현 표시 | 정보 항목·기록 종류·도감 해금·업그레이드 규칙 변경 |

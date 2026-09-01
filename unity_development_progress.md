@@ -1964,3 +1964,11 @@ Interactable (abstract base class)
 - `[수명·비용 경계]` `CharacterSilhouetteSubject` 한 종류가 활성 대상 수와 전용 bit를 소유하며 비활성화·계층 이탈 시 자신이 붙인 bit를 해제한다. Renderer Feature는 Game Camera와 유효 재질을 확인하고, Play Mode에서는 활성 대상이 없으면 mask/composite pass를 제출하지 않는다. 최종 Player 파츠·Character ID·균일 조명 합성은 아직 연결하지 않았다.
 - `[Unity Editor 렌더·정적 확인]` Unity 6.5/URP 17.5에서 전체 생성물 import와 강제 동기 컴파일이 성공했고 shader compile 오류가 없었다. 격리 카메라 960×540 직접 렌더에서 검은 외곽선 4,482픽셀을 측정해 단색 내부와 계단형 총외곽선을 확인했다. 수명주기 정리 뒤 최종 C#도 Unity 강제 refresh와 같은 Unity/URP 어셈블리 독립 컴파일을 모두 통과했다. 실제 Player Play 연결과 Player build는 미검증이다.
 - `[보존]` 사용자 dirty `GameMap1`, 의뢰/상인 재질과 preview Camera prefab은 저장·stage하지 않았다. Blender·외부 다운로드·새 입력·Manager·조명 권위는 추가하지 않았다.
+
+---
+
+## 97. 기지 실루엣 마네킹 시험 배치 `[CHARACTER-RENDER-01]`
+
+- `[배치][2026-09-02]` 기존 `CharacterSilhouetteMannequin` prefab을 `GameMap1`의 `(-6,0,2)`에 `CharacterSilhouetteMannequin_BaseTest`로 1개 배치했다. Collider 없는 표현 전용 scene instance이며 Player 셸·외형·Animator·이동은 바꾸지 않았다.
+- `[Play Mode 시각 확인]` `GameMap1` 직접 Play 1회에서 활성 subject 1개, prefab 연결, Renderer 1개·Collider 0개와 전용 rendering layer를 확인했다. 실제 gameplay Camera 렌더에서 우윳빛 단색 몸체와 검은 계단형 총외곽선이 전부 화면 안에 표시됐고 종료 뒤 Edit Mode로 복귀했다.
+- `[보존·경계]` 기존 Chest 직렬화 6줄과 의뢰/상인 재질·preview Camera prefab 변경은 보존했다. 현재 마네킹은 비교용이며 실제 Player 교체·파츠·Character ID·균일 조명 합성은 후속이다. 기존 외부 `ASFolliage` 오류와 검증 Camera tool의 잘못된 ID 오류 기록은 지우지 않았다.

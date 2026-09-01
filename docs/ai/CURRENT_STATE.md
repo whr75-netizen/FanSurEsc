@@ -54,7 +54,7 @@
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9 | WASD 방향 회전, 걷기의 1.3배 달리기, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
 | `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88·94 | 낮밤·구름·비/물 튐·지붕 차단·Grass 수광·로컬광·태양/가로등 체적광·웅덩이 | 날씨 저장·풍향·최종 아트·다수 광원 성능·Transparent 합성 |
-| `CHARACTER-RENDER-01` | 3D 기반 픽셀 캐릭터 실루엣 시험 | `PARTIAL` | `CODE` | `PROTOTYPE` | 진행 §96 | CC0 마네킹·단색 Unlit·전용 rendering layer·R8 mask·화면공간 계단 외곽선; 격리 렌더 확인 | 실제 Player/파츠·Character ID·균일 조명 합성·Play 연결 |
+| `CHARACTER-RENDER-01` | 3D 기반 픽셀 캐릭터 실루엣 시험 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §96~97 | 단독 scene·기지 시험 mannequin 1개에서 단색·계단 외곽선 확인 | Player 교체·파츠·ID·균일 조명 합성 |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95 | click/drag/stack·가방·장전탄·Save v7·저작창; 외곽 drag→scene-local 바닥 owner→E 습득; 일반 전환 삭제, Active Raid만 복원 | 정식 바닥 표현 또는 item/grid/장비/world-item 저장 계약 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 이동장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67 | 고정 맵 임의/도심 공유후보 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |

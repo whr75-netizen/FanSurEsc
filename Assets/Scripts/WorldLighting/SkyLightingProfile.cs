@@ -279,15 +279,15 @@ namespace FantasySurvival.WorldLighting
     {
         private const float DefaultMoonShadowStrength = 0.50f;
         private const float DefaultMinimumShadowStrength = 0.10f;
-        private const float DefaultMinimumAmbientIntensity = 0.62f;
-        private const float DefaultMinimumDirectionalIntensity = 0.18f;
+        private const float DefaultMinimumAmbientIntensity = 0.38f;
+        private const float DefaultMinimumDirectionalIntensity = 0.12f;
         private const float DefaultDuskLightOverlapWeight = 0.50f;
         private const float DefaultLowElevationCloudShadowSoftnessMip = 1.25f;
         private const float DefaultHighElevationCloudShadowSoftnessMip = 0.25f;
         private const float DefaultLowElevationCloudShadowOpacity = 0.55f;
         private const float DefaultHighElevationCloudShadowOpacity = 0.90f;
         private static readonly Color DefaultMinimumLightColor =
-            new Color(0.42f, 0.54f, 0.90f, 1f);
+            new Color(0.15f, 0.20f, 0.40f, 1f);
 
         [SerializeField, Range(0f, 24f)] private float morningPreviewHour = 7.5f;
         [SerializeField, Range(0f, 24f)] private float dayPreviewHour = 12f;
@@ -651,15 +651,15 @@ namespace FantasySurvival.WorldLighting
                 new SkyLightingKeyframe(
                     0f,
                     SkyTimePhase.Night,
-                    new Color(0.085f, 0.11f, 0.22f),
-                    new Color(0.055f, 0.075f, 0.15f),
-                    new Color(0.022f, 0.032f, 0.065f),
-                    0.50f,
-                    0.18f,
+                    new Color(0.055f, 0.075f, 0.16f),
+                    new Color(0.035f, 0.05f, 0.105f),
+                    new Color(0.014f, 0.022f, 0.045f),
+                    0.40f,
+                    0.12f,
                     new Color(0.54f, 0.62f, 0.82f),
                     0f,
                     new Color(0.62f, 0.72f, 1f),
-                    0.24f,
+                    0.18f,
                     0f),
                 new SkyLightingKeyframe(
                     6.5f,

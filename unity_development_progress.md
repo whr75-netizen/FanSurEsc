@@ -1999,3 +1999,14 @@ Interactable (abstract base class)
 - `[보존·직렬화 확인]` Player local y=0.5, BoxCollider·상호작용 SphereCollider 2개, `WeaponRayOrigin (0,2,0)`, Camera·HUD·Inventory와 게임 규칙 코드는 바꾸지 않았다. prefab Missing Script 0, 기존 Freya 계층 0, 새 Player subject 1·SkinnedMeshRenderer 1이다. 사용자 변경이 섞인 `GameMap1`과 독립 시험 mannequin은 저장하지 않았다.
 - `[Play Mode 확인]` `GameMap1`에서 새 Animator initialized/human, 기존 controller·무기 layer를 확인했고 Run 값 1.3을 표본화했을 때 발 bone 자세가 25.56° 변해 Humanoid retarget을 확인했다. 격리 카메라 렌더는 몸체 4,392픽셀·검은 외곽 1,690픽셀, render 뒤 wrapper 복원 오차 0이었다. `GameMap1 → GameMapTest → GameMap1` 한 왕복에서 Shell·Player·Camera·Animator Entity ID가 모두 같았고 Shell·PlayerMovement·Player subject는 각각 1개였다. 종료 뒤 Edit Mode, `GameMap1` scene clean을 확인했다.
 - `[경계]` 실제 Player의 시험 외형 연결까지다. 방향별 픽셀 파츠, Character ID, 균일 조명, 연속 회전·스킨·줌의 최종 픽셀 안정화와 체형/크기 아트 확정은 후속이다.
+
+---
+
+## 101. 태양자정 야간 최저와 Player 균일 실제광 `[ENVIRONMENT-01][CHARACTER-RENDER-01]`
+
+- `[현실 기준·야간 곡선][2026-09-02]` 가장 어두운 시각을 임의의 새벽 2~3시가 아니라 태양 고도가 하루 중 가장 낮은 `local solar midnight`로 잡았다. 이 프로젝트의 06시 일출·12시 태양정오·18시 일몰 경로에서는 00시가 그 시점이다. 19.5시 밤 키→00시 최저 키→6.5시 아침 키의 기존 SmoothStep 보간을 유지해 23~01시가 갑자기 꺼지는 점이 아닌 완만한 최저 구간이 된다.
+- `[밝기 근본 수정]` 기존 00시 ambient `0.50`보다 전역 하한 `0.62`가 높고 최소 청색 RGB도 00시 키를 덮어 실제 최저값이 적용되지 않았다. 00시 ambient `0.40`, reflection `0.12`, moon `0.18`로 낮추고 하한을 ambient `0.38`, directional `0.12`, RGB `(0.15,0.20,0.40)`로 내려 키프레임이 권위를 갖게 했다. 낮·일몰 키, 달 그림자 전환, 날씨 배율과 구름·로컬광 소유자는 바꾸지 않았다.
+- `[캐릭터 실제광·평면 표현]` 기존 Player 재질은 BaseColor만 반환하는 순수 Unlit이라 하늘·시간·날씨·그림자·로컬광을 전혀 받지 않았다. 같은 재질 GUID에서 SH 환경광, 주광의 색/세기·cookie·shadow attenuation, URP 추가광과 기존 단계형 로컬광을 실제로 표본화한다. 단, 모든 body fragment가 픽셀 snap과 분리된 하나의 world anchor를 공유하고 normal·NdotL·BRDF·specular·SSAO를 사용하지 않아 3D 굴곡 명암 없이 캐릭터 전체 밝기와 색만 선형으로 변한다.
+- `[중복광·가림 계약]` 별도 color-mask RenderTexture는 만들지 않았다. 최종 opaque depth 뒤 `ZTest Equal`로 실제 보이는 캐릭터 픽셀만 사용자 stencil bit 1에 표시한 다음 fullscreen 단계형 로컬광에서 제외해 캐릭터가 두 번 밝아지거나 전경 벽에 캐릭터 모양 구멍이 생기지 않게 했다. URP의 선택형 stencil LOD cross-fade bit와도 분리했다.
+- `[검증]` 마지막 C#은 Unity 6.5/URP 17.5가 생성한 실제 compiler response로 독립 컴파일해 신규 오류 0이었다. 균일 실제광 본체와 fullscreen shader는 앞선 Unity ShaderUtil 확인에서 supported·compiler error 0이었고, 최종 RenderGraph/stencil 변경은 같은 URP 17.5 API와 renderer 설정을 정적 재검토해 P1/P2를 제거했다. 다만 열린 Editor가 최종 파일을 아직 reimport하지 않은 상태에서 MCP bridge가 끊겨 정오·황혼·00시·비·가로등의 최종 Game View 비교는 미검증이다.
+- `[현재 경계]` 캐릭터 자체의 표면 명암과 자체 그림자는 의도적으로 없다. 현재는 주변 가림의 shadow/cookie를 한 anchor에서 받아 몸 전체가 균일하게 어두워지는 단계이며, 캐릭터 cast shadow는 추후 proxy/pixel shadow 정책이 정해질 때 추가한다.

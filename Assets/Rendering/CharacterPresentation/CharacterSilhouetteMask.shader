@@ -98,6 +98,32 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
             #pragma multi_compile_instancing
             ENDHLSL
         }
+
+        Pass
+        {
+            Name "CharacterVisibleStencil"
+
+            Cull Back
+            ZWrite Off
+            ZTest Equal
+            ColorMask 0
+
+            // Keep bit 1 for this feature. URP may claim bits 2-3 when its
+            // optional stencil LOD cross-fade path is enabled.
+            Stencil
+            {
+                Ref 2
+                WriteMask 2
+                Comp Always
+                Pass Replace
+            }
+
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragRaw
+            #pragma multi_compile_instancing
+            ENDHLSL
+        }
     }
 
     FallBack Off

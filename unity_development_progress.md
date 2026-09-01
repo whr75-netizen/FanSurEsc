@@ -1989,3 +1989,13 @@ Interactable (abstract base class)
 - `[근본 수정]` gameplay Transform은 연속으로 유지하고 물리 없는 presentation root만 URP `beginCameraRendering`에서 실제 내부 render 1픽셀 중심에 맞춘 뒤 `endCameraRendering`에서 원위치로 복원한다. 자식 Renderer는 공통 MPB anchor를 공유한다. RG8 raw/seed 2패스와 R8 expansion으로 object anchor 기준 1픽셀 seed를 정확한 3×3 블록으로 확장하고, composite는 `SV_POSITION`·`LOAD_TEXTURE2D` 정수 좌표만 사용한다. 기존 1픽셀 inward overlap·3픽셀 외곽선과 단일 shared Renderer Feature는 유지했다.
 - `[Play Mode·정량 확인]` `GameMap1`, 1280×720에서 카메라 기준 0.25픽셀씩 13프레임·총 3픽셀을 이동했다. 몸체∪외곽선 픽셀 수는 17,667로 고정됐고 정수 이동 정렬 뒤 최악 XOR 0.000%, 역방향·형상 변화 0, render 뒤 root 복원 오차 0이었다. mask/composite shader compiler message 0, 종료 뒤 Edit Mode·scene clean과 최종 수정 이후 신규 관련 Console error 0을 확인했다. 기존 `ASFolliage` 오류와 수정 전 transient error는 분리했다.
 - `[경계]` 이번 결과는 평행이동 안정화다. Player 교체, Character ID, 파츠, 균일 조명, continuous rotation·skinned animation·smooth zoom 안정화는 아직 구현하지 않았다.
+
+---
+
+## 100. 영속 Player 실루엣 마네킹 외형 연결 `[SHELL-01][MOVE-01][CHARACTER-RENDER-01]`
+
+- `[구현][2026-09-02]` `PersistentGameplayShell/Player`와 그 fileID·Transform은 유지하고 기존 Freya nested 외형만 `CharacterSilhouetteMannequin` nested prefab으로 교체했다. 표현 wrapper `CharacterSilhouettePlayerVisual`은 Player local `(0,-0.5,0)`, Collider 없음이며 `CharacterSilhouetteSubject`의 render-time snap은 이 wrapper만 움직인다.
+- `[Animator 연결]` 유효한 Humanoid `characterMediumAvatar`에 기존 `PlayerLocomotion.controller`를 instance override로 연결하고 root motion을 껐다. `PlayerMovement`와 `PlayerWeaponController`의 `characterAnimator`는 같은 새 Animator를 가리킨다. 교체 도중 샘플링된 불필요한 descendant bone rotation override 4개는 제거했으며 최종 descendant Transform override는 0개다.
+- `[보존·직렬화 확인]` Player local y=0.5, BoxCollider·상호작용 SphereCollider 2개, `WeaponRayOrigin (0,2,0)`, Camera·HUD·Inventory와 게임 규칙 코드는 바꾸지 않았다. prefab Missing Script 0, 기존 Freya 계층 0, 새 Player subject 1·SkinnedMeshRenderer 1이다. 사용자 변경이 섞인 `GameMap1`과 독립 시험 mannequin은 저장하지 않았다.
+- `[Play Mode 확인]` `GameMap1`에서 새 Animator initialized/human, 기존 controller·무기 layer를 확인했고 Run 값 1.3을 표본화했을 때 발 bone 자세가 25.56° 변해 Humanoid retarget을 확인했다. 격리 카메라 렌더는 몸체 4,392픽셀·검은 외곽 1,690픽셀, render 뒤 wrapper 복원 오차 0이었다. `GameMap1 → GameMapTest → GameMap1` 한 왕복에서 Shell·Player·Camera·Animator Entity ID가 모두 같았고 Shell·PlayerMovement·Player subject는 각각 1개였다. 종료 뒤 Edit Mode, `GameMap1` scene clean을 확인했다.
+- `[경계]` 실제 Player의 시험 외형 연결까지다. 방향별 픽셀 파츠, Character ID, 균일 조명, 연속 회전·스킨·줌의 최종 픽셀 안정화와 체형/크기 아트 확정은 후속이다.

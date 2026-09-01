@@ -5,6 +5,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
         _OutlineColor("Outline Color", Color) = (0.025, 0.025, 0.03, 1)
         _ArtPixelSize("Screen Pixels Per Art Cell", Range(1, 8)) = 3
         _CoverageThreshold("Mask Threshold", Range(0.05, 0.95)) = 0.35
+        _InnerOverlapPixels("Inner Overlap (Screen Pixels)", Range(0, 3)) = 1
     }
 
     SubShader
@@ -38,6 +39,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                 half4 _OutlineColor;
                 float _ArtPixelSize;
                 float _CoverageThreshold;
+                float _InnerOverlapPixels;
             CBUFFER_END
 
             struct Attributes
@@ -66,6 +68,15 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                 return step(_CoverageThreshold, mask);
             }
 
+            half RawOccupancy(float2 uv)
+            {
+                half mask = SAMPLE_TEXTURE2D(
+                    _CharacterSilhouetteMask,
+                    sampler_PointClamp,
+                    saturate(uv)).r;
+                return step(_CoverageThreshold, mask);
+            }
+
             half4 Frag(Varyings input) : SV_Target
             {
                 float artPixelSize = max(1.0, round(_ArtPixelSize));
@@ -73,18 +84,45 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                 float2 cell = floor(saturate(input.uv) * gridSize);
 
                 half center = Occupancy(cell, gridSize);
-                half nearest = 0;
-                nearest = max(nearest, Occupancy(cell + float2(-1, -1), gridSize));
-                nearest = max(nearest, Occupancy(cell + float2( 0, -1), gridSize));
-                nearest = max(nearest, Occupancy(cell + float2( 1, -1), gridSize));
-                nearest = max(nearest, Occupancy(cell + float2(-1,  0), gridSize));
-                nearest = max(nearest, Occupancy(cell + float2( 1,  0), gridSize));
-                nearest = max(nearest, Occupancy(cell + float2(-1,  1), gridSize));
-                nearest = max(nearest, Occupancy(cell + float2( 0,  1), gridSize));
-                nearest = max(nearest, Occupancy(cell + float2( 1,  1), gridSize));
+                half neighbor00 = Occupancy(cell + float2(-1, -1), gridSize);
+                half neighbor10 = Occupancy(cell + float2( 0, -1), gridSize);
+                half neighbor20 = Occupancy(cell + float2( 1, -1), gridSize);
+                half neighbor01 = Occupancy(cell + float2(-1,  0), gridSize);
+                half neighbor21 = Occupancy(cell + float2( 1,  0), gridSize);
+                half neighbor02 = Occupancy(cell + float2(-1,  1), gridSize);
+                half neighbor12 = Occupancy(cell + float2( 0,  1), gridSize);
+                half neighbor22 = Occupancy(cell + float2( 1,  1), gridSize);
+
+                half nearest = max(
+                    max(max(neighbor00, neighbor10), max(neighbor20, neighbor01)),
+                    max(max(neighbor21, neighbor02), max(neighbor12, neighbor22)));
 
                 half outerSilhouette = nearest * (1.0h - center);
-                return half4(_OutlineColor.rgb, _OutlineColor.a * outerSilhouette);
+                half cellDilated = max(center, nearest);
+                if (cellDilated < 0.5h)
+                {
+                    return half4(_OutlineColor.rgb, 0);
+                }
+
+                // A center-sampled art cell can be classified as occupied even when
+                // the original mesh ends before the cell boundary. Fill that exposed
+                // part of the boundary cell, then cover one full-resolution pixel of
+                // the mesh itself so the stepped outline and body cannot separate.
+                float overlapPixels = max(0.0, round(_InnerOverlapPixels));
+                if (overlapPixels < 0.5)
+                {
+                    return half4(_OutlineColor.rgb, _OutlineColor.a * outerSilhouette);
+                }
+
+                float2 overlapUv = overlapPixels / max(_ScreenParams.xy, 1.0);
+                half rawInterior = RawOccupancy(input.uv);
+                rawInterior *= RawOccupancy(input.uv + float2(-overlapUv.x, 0));
+                rawInterior *= RawOccupancy(input.uv + float2( overlapUv.x, 0));
+                rawInterior *= RawOccupancy(input.uv + float2(0, -overlapUv.y));
+                rawInterior *= RawOccupancy(input.uv + float2(0,  overlapUv.y));
+
+                half silhouette = cellDilated * (1.0h - rawInterior);
+                return half4(_OutlineColor.rgb, _OutlineColor.a * silhouette);
             }
             ENDHLSL
         }

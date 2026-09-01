@@ -1972,3 +1972,11 @@ Interactable (abstract base class)
 - `[배치][2026-09-02]` 기존 `CharacterSilhouetteMannequin` prefab을 `GameMap1`의 `(-6,0,2)`에 `CharacterSilhouetteMannequin_BaseTest`로 1개 배치했다. Collider 없는 표현 전용 scene instance이며 Player 셸·외형·Animator·이동은 바꾸지 않았다.
 - `[Play Mode 시각 확인]` `GameMap1` 직접 Play 1회에서 활성 subject 1개, prefab 연결, Renderer 1개·Collider 0개와 전용 rendering layer를 확인했다. 실제 gameplay Camera 렌더에서 우윳빛 단색 몸체와 검은 계단형 총외곽선이 전부 화면 안에 표시됐고 종료 뒤 Edit Mode로 복귀했다.
 - `[보존·경계]` 기존 Chest 직렬화 6줄과 의뢰/상인 재질·preview Camera prefab 변경은 보존했다. 현재 마네킹은 비교용이며 실제 Player 교체·파츠·Character ID·균일 조명 합성은 후속이다. 기존 외부 `ASFolliage` 오류와 검증 Camera tool의 잘못된 ID 오류 기록은 지우지 않았다.
+
+---
+
+## 98. 실루엣 외곽선 안쪽 1픽셀 겹침 `[CHARACTER-RENDER-01]`
+
+- `[원인][2026-09-02]` 기존 합성은 아트 셀 중앙 한 점으로 점유를 정한 뒤 빈 이웃 셀만 외곽선으로 그렸다. 몸체가 점유 셀 중간에서 끝나면 같은 셀의 나머지 1~2 화면 픽셀이 배경으로 남아 몸체와 검은 선 사이에 미세 여백이 생겼다. R8 binary mask·MSAA 1이므로 threshold 조정 문제가 아니었다.
+- `[수정]` 기존 3×3 셀 dilation 외피는 유지하고, 그 외피 안에서 full-resolution mask를 상하좌우 1픽셀 침식한 내부만 제외해 외곽선을 합성한다. 따라서 경계 셀의 빈 부분을 메우고 몸체 안으로 정확히 1픽셀 겹치며, 대각선까지 침식해 선을 과도하게 굵게 만들지 않는다. 외피 밖 픽셀은 조기 반환하고 재질의 `_InnerOverlapPixels=1`로 명시했다.
+- `[Play Mode·픽셀 확인]` `GameMap1` 한 Play에서 shader `supported=True`·compiler message 0을 확인했다. 동일 1280×720 gameplay Camera 캡처에서 보이는 몸체 경계의 외곽선 거리 2픽셀 이상이 `344/1,228 → 0/1,224`, 거리 1 접촉률이 100%가 됐다. 전후 합성 bbox `x=93~354, y=12~239`와 모든 행·열 외피는 동일해 바깥 계단 형태의 변화는 0픽셀이었다. 종료 뒤 Edit Mode·scene clean을 확인했고 기존 외부 `ASFolliage` 오류는 분리했다.

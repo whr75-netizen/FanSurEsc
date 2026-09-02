@@ -2,7 +2,8 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
 {
     Properties
     {
-        [MainColor] _BaseColor("Base Color", Color) = (0.9843137, 0.9294118, 0.8784314, 1)
+        [MainColor] _BaseColor("Base Color", Color) = (0.9686275, 0.8431373, 0.7294118, 1)
+        _EnvironmentExposure("Environment Exposure (Clear Noon Reference)", Range(0.5, 3)) = 1.66
         _AmbientLightStrength("Ambient Light Strength", Range(0, 2)) = 1
         _MainLightStrength("Main Light Strength", Range(0, 2)) = 0.45
         _AdditionalLightStrength("Additional Light Strength", Range(0, 2)) = 0.18
@@ -48,6 +49,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _BaseColor;
+                half _EnvironmentExposure;
                 half _AmbientLightStrength;
                 half _MainLightStrength;
                 half _AdditionalLightStrength;
@@ -125,7 +127,12 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 // chroma, so a blue night profile changes visibility without
                 // replacing the neutral base color. Spatial local lights below
                 // keep their authored color where they actually overlap.
-                half environmentBrightness = Luminance(environmentLighting);
+                // The authored base color is the clear-noon reference color.
+                // The flat lighting estimator intentionally omits N.L and BRDF,
+                // so calibrate its neutral environment luminance once instead of
+                // replacing the authored color with a palette or an overlay.
+                half environmentBrightness =
+                    Luminance(environmentLighting) * _EnvironmentExposure;
                 half3 lighting = environmentBrightness.xxx;
 
                 #if defined(_ADDITIONAL_LIGHTS) || USE_CLUSTER_LIGHT_LOOP

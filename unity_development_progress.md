@@ -2061,3 +2061,12 @@ Interactable (abstract base class)
 - `[색 경로 확인]` 실제 Player는 Kenney `characterMedium.fbx`를 사용하지만 prefab에서 FBX 내장 회색 URP/Lit 재질을 `CharacterMannequinMilky.mat`으로 명시 교체한다. FBX 내장 재질에는 텍스처가 없고, 전용 셰이더는 `POSITION`만 읽으며 UV·normal·vertex color·texture sampling을 사용하지 않는다. 런타임 MPB도 pixel anchor와 조명 위치 보정만 기록하고 `_BaseColor`를 덮어쓰지 않는다. 따라서 외부 모델의 원본 재질·텍스처가 회색 출력의 원인은 아니다.
 - `[회귀 지점]` 순수 단색 원형은 `_BaseColor`를 그대로 출력했으나 실제광을 도입한 뒤부터 기준색에 조명값을 연속 곱한다. 또한 `#FBEDE0`는 §106 시도에서 처음 에셋에 직렬화되어, 그 전 정상 조명 상태에서는 이 정확한 입력색을 사용한 적이 없었다. 현재는 처음으로 `#FBEDE0`와 기존 연속 수광을 함께 둔 기준 상태다.
 - `[Unity 확인]` Play Mode의 기지 mannequin과 영속 Player가 모두 같은 `CharacterMannequinMilky`와 `Spatial Flat Lit`를 사용하고, base가 `RGBA(0.984314,0.929412,0.878431,1)`, MPB base override가 0임을 확인했다. shader는 supported, `ShaderHasError=false`, 속성은 base와 기존 조명 강도 네 개뿐이다. 야간·가로등 아래 최종 색감은 사용자 시각 확인 전이므로 통과로 기록하지 않는다.
+
+---
+
+## 108. 캐릭터 정오 기준색과 밝기 전용 낮 조명 `[CHARACTER-RENDER-01][ENVIRONMENT-01]`
+
+- `[확정 원인·최종 기준][2026-09-02]` 캐릭터는 FBX·texture 누락이 아니라 `base × lighting` 결과가 맑은 정오에도 linear `0.602`여서 기준색이 흐려졌고, `#FBEDE0` 자체도 최종 화면에서 너무 희게 보였다. 낮의 누런색은 물리 계산이나 후처리가 아니라 `ClearSkyLightingProfile`의 6.5/10/16시 `sunColor`와 ambient RGB에 직접 들어 있던 주황·황색 값이었다. Player 시작 8시와 낮 시험 12시도 이 키프레임을 보간해 각각 따뜻한 색을 실제 Directional Light와 바닥·Grass에 전달했다.
+- `[근본 수정·일관성]` 캐릭터 material과 shader 기본색을 사용자 선택 `#F7D7BA`로 함께 바꾸고, 측정한 정오 환경값의 역수 `1.66`을 SH+주광 luminance에만 적용해 맑은 정오를 기준 밝기로 정규화했다. 6.5/10/16시 주광은 흰색으로, ambient 삼색은 원래 **선형 휘도와 같은 무채색**으로 바꾸고 주광의 원래 선형 휘도는 intensity에 옮겼다. 실제 profile asset과 `CreateClearSkyDefaults()`를 동일하게 맞췄으며 고정 팔레트·강제 색·overlay·post process는 추가하지 않았다.
+- `[보존]` 0시와 19.5시 밤색, 비 weather tint, 달·가로등·URP 추가광·단계형 로컬광의 색과 픽셀별 경계, 외곽선·render snap·shadow/cookie·시간 권위·Player/씬은 유지했다.
+- `[Unity 정적·Play 확인]` profile validation, C# compile, shader `supported=True`·`ShaderHasError=False`를 통과했다. 6.5/8/10/12/16시의 sun·ambient RGB가 모두 중성이며 8시는 실제 흰 주광 `0.5808233`, 12시는 `0.8876334`다. `GameMap1` 1280×720에서 순수 Unlit `#F7D7BA`가 `246/214/185`, 현재 정오가 `248/216/187`로 최대 2 차이였고 자정은 `75/64/54`로 `R>G>B`와 밝기 하강을 유지했다. 앞선 같은 shader의 캐릭터 전용 로컬광 검증은 가까운 반쪽 변화 `18.44 > 10.23`으로 공간 경계를 확인했다. 종료 뒤 Edit Mode·scene clean을 확인했고 외부 `ASFolliage` 기존 오류는 분리했다.

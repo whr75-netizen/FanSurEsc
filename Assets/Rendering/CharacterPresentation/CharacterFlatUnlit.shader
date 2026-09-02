@@ -2,13 +2,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
 {
     Properties
     {
-        [MainColor] _BaseColor("Palette Light Color", Color) = (0.9843137, 0.9294118, 0.8784314, 1)
-        _PaletteMidColor("Palette Mid Color", Color) = (0.9019608, 0.7215686, 0.6235294, 1)
-        _PaletteShadowColor("Palette Shadow Color", Color) = (0.7254902, 0.4705882, 0.4078431, 1)
-        _PaletteDarkColor("Palette Dark Color", Color) = (0.4196078, 0.2745098, 0.3137255, 1)
-        _PaletteReferenceBrightness("Palette Reference Brightness", Range(0.05, 2)) = 0.65
-        _PaletteFeather("Palette Transition Feather", Range(0.001, 0.1)) = 0.025
-        _LocalLightTintInfluence("Local Light Tint Influence", Range(0, 1)) = 0.18
+        [MainColor] _BaseColor("Base Color", Color) = (0.9843137, 0.9294118, 0.8784314, 1)
         _AmbientLightStrength("Ambient Light Strength", Range(0, 2)) = 1
         _MainLightStrength("Main Light Strength", Range(0, 2)) = 0.45
         _AdditionalLightStrength("Additional Light Strength", Range(0, 2)) = 0.18
@@ -54,12 +48,6 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _BaseColor;
-                half4 _PaletteMidColor;
-                half4 _PaletteShadowColor;
-                half4 _PaletteDarkColor;
-                half _PaletteReferenceBrightness;
-                half _PaletteFeather;
-                half _LocalLightTintInfluence;
                 half _AmbientLightStrength;
                 half _MainLightStrength;
                 half _AdditionalLightStrength;
@@ -84,12 +72,6 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
-            struct CharacterLightingSample
-            {
-                half environmentBrightness;
-                half3 spatialLighting;
-            };
-
             Varyings Vert(Attributes input)
             {
                 Varyings output;
@@ -111,7 +93,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                     (light.distanceAttenuation * light.shadowAttenuation * strength);
             }
 
-            CharacterLightingSample EvaluateSpatialFlatCharacterLighting(
+            half3 EvaluateSpatialFlatCharacterLighting(
                 float3 positionWS,
                 float4 fragmentPositionCS)
             {
@@ -138,14 +120,13 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                     mainLight,
                     _MainLightStrength);
 
-                CharacterLightingSample sample;
-                // Sky ambient and the sun/moon choose a palette stage through
-                // luminance only. This keeps weather and time-of-day visibility
-                // without painting the whole flat character blue.
-                sample.environmentBrightness = max(
-                    Luminance(environmentLighting),
-                    0.0);
-                sample.spatialLighting = half3(0.0, 0.0, 0.0);
+                // Sky ambient and the single sun/moon key light cover the whole
+                // flat character. Preserve their luminance, not their full RGB
+                // chroma, so a blue night profile changes visibility without
+                // replacing the neutral base color. Spatial local lights below
+                // keep their authored color where they actually overlap.
+                half environmentBrightness = Luminance(environmentLighting);
+                half3 lighting = environmentBrightness.xxx;
 
                 #if defined(_ADDITIONAL_LIGHTS) || USE_CLUSTER_LIGHT_LOOP
                     #if USE_CLUSTER_LIGHT_LOOP
@@ -160,7 +141,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                                 lightIndex,
                                 positionWS,
                                 shadowMask);
-                            sample.spatialLighting += EvaluateSurfaceNeutralRealtimeLight(
+                            lighting += EvaluateSurfaceNeutralRealtimeLight(
                                 additionalLight,
                                 _AdditionalLightStrength);
                         }
@@ -172,7 +153,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                             lightIndex,
                             positionWS,
                             shadowMask);
-                        sample.spatialLighting += EvaluateSurfaceNeutralRealtimeLight(
+                        lighting += EvaluateSurfaceNeutralRealtimeLight(
                             additionalLight,
                             _AdditionalLightStrength);
                     LIGHT_LOOP_END
@@ -181,71 +162,11 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 // Spatial attenuation is evaluated per visible character pixel,
                 // while normal influence stays at zero. Light boundaries can
                 // cross the silhouette without revealing the mesh curvature.
-                sample.spatialLighting += EvaluateSteppedLocalLights(
+                lighting += EvaluateSteppedLocalLights(
                     positionWS,
                     flatAmbientDirection,
                     0.0) * _SteppedLocalLightStrength;
-                return sample;
-            }
-
-            half EvaluatePaletteTransition(
-                half normalizedBrightness,
-                half threshold)
-            {
-                half feather = max(_PaletteFeather, 0.001);
-                return smoothstep(
-                    threshold - feather,
-                    threshold + feather,
-                    normalizedBrightness);
-            }
-
-            half3 EvaluateCharacterPalette(half normalizedBrightness)
-            {
-                half3 paletteColor = _PaletteDarkColor.rgb;
-                paletteColor = lerp(
-                    paletteColor,
-                    _PaletteShadowColor.rgb,
-                    EvaluatePaletteTransition(normalizedBrightness, 0.28));
-                paletteColor = lerp(
-                    paletteColor,
-                    _PaletteMidColor.rgb,
-                    EvaluatePaletteTransition(normalizedBrightness, 0.52));
-                paletteColor = lerp(
-                    paletteColor,
-                    _BaseColor.rgb,
-                    EvaluatePaletteTransition(normalizedBrightness, 0.76));
-                return paletteColor;
-            }
-
-            half3 ApplyLimitedSpatialLightTint(
-                half3 paletteColor,
-                half3 spatialLighting,
-                half totalBrightness)
-            {
-                half spatialBrightness = max(Luminance(spatialLighting), 0.0);
-                if (spatialBrightness <= 0.0001 ||
-                    _LocalLightTintInfluence <= 0.0001)
-                {
-                    return paletteColor;
-                }
-
-                // Local light hue may identify a lamp, but it must not replace
-                // the authored palette or reveal the underlying 3D curvature.
-                half highestChannel = max(
-                    max(spatialLighting.r, spatialLighting.g),
-                    spatialLighting.b);
-                half3 localHue = spatialLighting / max(highestChannel, 0.0001);
-                half3 tintedPalette = paletteColor * localHue;
-                half paletteLuminance = max(Luminance(paletteColor), 0.0001);
-                half tintedLuminance = max(Luminance(tintedPalette), 0.0001);
-                tintedPalette *= paletteLuminance / tintedLuminance;
-
-                half spatialShare = saturate(
-                    spatialBrightness / max(totalBrightness, 0.0001));
-                return saturate(lerp(
-                    paletteColor,
-                    tintedPalette,
-                    _LocalLightTintInfluence * spatialShare));
+                return lighting;
             }
 
             half4 Frag(Varyings input) : SV_Target
@@ -253,25 +174,10 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
                 float3 lightingPositionWS = input.positionWS +
                     _CharacterLightingPositionOffsetWS.xyz;
-                CharacterLightingSample lighting =
-                    EvaluateSpatialFlatCharacterLighting(
+                half3 lighting = EvaluateSpatialFlatCharacterLighting(
                     lightingPositionWS,
                     input.positionCS);
-                half spatialBrightness = max(
-                    Luminance(lighting.spatialLighting),
-                    0.0);
-                half totalBrightness = max(
-                    lighting.environmentBrightness + spatialBrightness,
-                    0.0);
-                half normalizedBrightness = saturate(
-                    totalBrightness / max(_PaletteReferenceBrightness, 0.0001));
-                half3 paletteColor = EvaluateCharacterPalette(
-                    normalizedBrightness);
-                paletteColor = ApplyLimitedSpatialLightTint(
-                    paletteColor,
-                    lighting.spatialLighting,
-                    totalBrightness);
-                return half4(paletteColor, _BaseColor.a);
+                return half4(_BaseColor.rgb * lighting, _BaseColor.a);
             }
             ENDHLSL
         }

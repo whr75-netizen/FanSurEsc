@@ -2048,9 +2048,16 @@ Interactable (abstract base class)
 
 ---
 
-## 106. 캐릭터 기준색 웜 팔레트 수광 `[CHARACTER-RENDER-01]`
+## 106. 폐기된 캐릭터 웜 팔레트 시도 `[CHARACTER-RENDER-01]`
 
-- `[사용자 확인·근본 원인][2026-09-02]` 머티리얼에는 `#FBEDE0`가 정확히 저장되어 있었지만 채도가 낮은 밝은 기준색을 linear 조명 밝기와 직접 곱해 어두워질수록 웜그레이로 보였다. 색 입력·후처리·런타임 override 문제가 아니므로 기준색을 더 밝히거나 emission으로 덮지 않았다.
-- `[수정]` 기존 fragment별 world position, SH·주광 luminance, shadow/cookie, URP 추가광과 단계형 로컬광 판정은 유지했다. 조명 총밝기는 이제 RGB를 직접 곱하지 않고 `Light #FBEDE0 / Mid #E6B89F / Shadow #B97868 / Dark #6B4650` 팔레트 단계와 짧은 경계 보간을 선택한다. 로컬광 색은 실제 겹친 밝기 비중에 따라 최대 18%만 휘도 보존 방식으로 섞어 피부 팔레트를 대체하지 않는다. normal·NdotL·BRDF와 새 pass·RenderTexture·Manager는 추가하지 않았다.
-- `[Unity import·시각 확인]` Unity 강제 import 뒤 shader가 supported이고 `ShaderUtil.ShaderHasError=false`, 필요한 7개 속성과 머티리얼 기준색 `RGBA(0.984,0.929,0.878,1)`을 확인했다. 1920×1080 Scene View의 낮 조명에서 기지 mannequin이 회색이 아닌 옅은 살색으로 표시됐다. 야간·가로등 경계의 최종 Game View 색감과 Player build는 아직 미검증이다.
-- `[보존]` 사용자가 지정한 `#FBEDE0`를 유지한 채 같은 머티리얼에 나머지 팔레트 값만 명시 저장했다. 기존 외곽선·pixel snap·stencil·Player/scene 참조와 다른 dirty 에셋은 수정하거나 stage하지 않았다.
+- `[폐기된 시도][2026-09-02]` 낮은 조명에서 기준색이 회색처럼 보이는 현상을 해결한다며 `Light/Mid/Shadow/Dark` 네 색과 임계값을 셰이더에 직접 넣었다. 이는 원래 연속 조명 반응을 고정 팔레트 선택으로 바꾼 잘못된 변경이었다.
+- `[현재 아님]` 이 팔레트와 관련 머티리얼 속성은 §107에서 전부 제거했다. 이 절은 당시 시도의 이력만 남기며 현재 구현 근거로 사용하지 않는다.
+
+---
+
+## 107. 고정 팔레트 제거와 캐릭터 색 입력 경로 역추적 `[CHARACTER-RENDER-01]`
+
+- `[사용자 정정·근본 수정][2026-09-02]` §106의 고정 네 색·임계값·로컬광 색 제한을 모두 제거하고, 사용자가 정상이라고 확인했던 §103~104의 연속 수광식 `base × (환경광 luminance + 공간 로컬광)`을 복원했다. 기준색 입력만 요청값 `#FBEDE0`로 유지하며 외곽선·pixel snap·fragment별 shadow/cookie·조명 위치 계산은 바꾸지 않았다.
+- `[색 경로 확인]` 실제 Player는 Kenney `characterMedium.fbx`를 사용하지만 prefab에서 FBX 내장 회색 URP/Lit 재질을 `CharacterMannequinMilky.mat`으로 명시 교체한다. FBX 내장 재질에는 텍스처가 없고, 전용 셰이더는 `POSITION`만 읽으며 UV·normal·vertex color·texture sampling을 사용하지 않는다. 런타임 MPB도 pixel anchor와 조명 위치 보정만 기록하고 `_BaseColor`를 덮어쓰지 않는다. 따라서 외부 모델의 원본 재질·텍스처가 회색 출력의 원인은 아니다.
+- `[회귀 지점]` 순수 단색 원형은 `_BaseColor`를 그대로 출력했으나 실제광을 도입한 뒤부터 기준색에 조명값을 연속 곱한다. 또한 `#FBEDE0`는 §106 시도에서 처음 에셋에 직렬화되어, 그 전 정상 조명 상태에서는 이 정확한 입력색을 사용한 적이 없었다. 현재는 처음으로 `#FBEDE0`와 기존 연속 수광을 함께 둔 기준 상태다.
+- `[Unity 확인]` Play Mode의 기지 mannequin과 영속 Player가 모두 같은 `CharacterMannequinMilky`와 `Spatial Flat Lit`를 사용하고, base가 `RGBA(0.984314,0.929412,0.878431,1)`, MPB base override가 0임을 확인했다. shader는 supported, `ShaderHasError=false`, 속성은 base와 기존 조명 강도 네 개뿐이다. 야간·가로등 아래 최종 색감은 사용자 시각 확인 전이므로 통과로 기록하지 않는다.

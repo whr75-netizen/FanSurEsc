@@ -2045,3 +2045,12 @@ Interactable (abstract base class)
 - `[저장 호환]` 진행 중 원정의 구 100기준 Player·Enemy 체력은 정확히 10배 관계일 때만 1000기준으로 정규화한다. 그 밖의 max 체력 불일치는 기존 fail-closed 경계를 유지한다. 새 ordinary·Recovery 기록은 1000기준 정수 체력을 쓴다.
 - `[Unity 컴파일·Editor 호출 확인]` 강제 refresh 뒤 Unity C# 재컴파일과 Core 인접 계약 1회를 통과했다. 갑빠 BodyArmor 배치·tooltip 20%, `100 → 80` 피해, 장비 save capture/restore 뒤 같은 ID·20%, 구 checkpoint `75/100 → 750/1000`, lethal 1회와 prefab HP/시작 ID를 확인했다. 실제 사람 입력의 Alt/drag 장착과 Player build는 이번 변경에서 반복하지 않았다.
 - `[Loot 비변경 확인]` 현재 LootTable은 `map seed + stable owner ID`의 결정적 누적확률 1회로 최대 한 종류 1개만 만든다. 확률 합의 나머지는 빈 결과이고 Fresh 전체 후보가 유효할 때만 원자 적용하며 Resume은 실제 grid를 복원한다. 의료 Chest는 치료제 ID 7 100%, 근접 시체는 권총 ID 1 100%, 원거리 시체는 table 없이 prefab 초기값을 유지한다. 미사용 50/50 시험 table은 정의만 남아 있으며 이번 작업에서 Loot 규칙·연결은 바꾸지 않았다.
+
+---
+
+## 106. 캐릭터 기준색 웜 팔레트 수광 `[CHARACTER-RENDER-01]`
+
+- `[사용자 확인·근본 원인][2026-09-02]` 머티리얼에는 `#FBEDE0`가 정확히 저장되어 있었지만 채도가 낮은 밝은 기준색을 linear 조명 밝기와 직접 곱해 어두워질수록 웜그레이로 보였다. 색 입력·후처리·런타임 override 문제가 아니므로 기준색을 더 밝히거나 emission으로 덮지 않았다.
+- `[수정]` 기존 fragment별 world position, SH·주광 luminance, shadow/cookie, URP 추가광과 단계형 로컬광 판정은 유지했다. 조명 총밝기는 이제 RGB를 직접 곱하지 않고 `Light #FBEDE0 / Mid #E6B89F / Shadow #B97868 / Dark #6B4650` 팔레트 단계와 짧은 경계 보간을 선택한다. 로컬광 색은 실제 겹친 밝기 비중에 따라 최대 18%만 휘도 보존 방식으로 섞어 피부 팔레트를 대체하지 않는다. normal·NdotL·BRDF와 새 pass·RenderTexture·Manager는 추가하지 않았다.
+- `[Unity import·시각 확인]` Unity 강제 import 뒤 shader가 supported이고 `ShaderUtil.ShaderHasError=false`, 필요한 7개 속성과 머티리얼 기준색 `RGBA(0.984,0.929,0.878,1)`을 확인했다. 1920×1080 Scene View의 낮 조명에서 기지 mannequin이 회색이 아닌 옅은 살색으로 표시됐다. 야간·가로등 경계의 최종 Game View 색감과 Player build는 아직 미검증이다.
+- `[보존]` 사용자가 지정한 `#FBEDE0`를 유지한 채 같은 머티리얼에 나머지 팔레트 값만 명시 저장했다. 기존 외곽선·pixel snap·stencil·Player/scene 참조와 다른 dirty 에셋은 수정하거나 stage하지 않았다.

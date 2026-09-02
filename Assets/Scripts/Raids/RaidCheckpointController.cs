@@ -333,11 +333,10 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            if (!Mathf.Approximately(
+            if (!shell.PlayerStats.CanRestoreCheckpointHealth(
+                    recoveredCheckpoint.playerCurrentHealth,
                     recoveredCheckpoint.playerMaxHealth,
-                    shell.PlayerStats.MaxHealth) ||
-                recoveredCheckpoint.playerCurrentHealth <= 0f ||
-                recoveredCheckpoint.playerCurrentHealth > shell.PlayerStats.MaxHealth)
+                    out _))
             {
                 error = "Recovered Player health is incompatible with the current Player definition.";
                 return false;
@@ -1585,9 +1584,10 @@ namespace FantasySurvival.Raids
             }
 
             PlayerStats playerStats = shell.PlayerStats;
-            if (!Mathf.Approximately(checkpoint.playerMaxHealth, playerStats.MaxHealth) ||
-                checkpoint.playerCurrentHealth <= 0f ||
-                checkpoint.playerCurrentHealth > playerStats.MaxHealth)
+            if (!playerStats.CanRestoreCheckpointHealth(
+                    checkpoint.playerCurrentHealth,
+                    checkpoint.playerMaxHealth,
+                    out _))
             {
                 error = "Recovered Player health is incompatible with the current Player definition.";
                 return false;

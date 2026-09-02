@@ -948,7 +948,10 @@ namespace FantasySurvival.Raids
                     !authored.Stats.IsInitialized ||
                     !authored.Stats.IsAlive ||
                     !RaidCheckpointValidator.HasValidTransform(saved.transform) ||
-                    !Mathf.Approximately(saved.maxHealth, authored.Stats.MaxHealth) ||
+                    !authored.Stats.CanRestoreCheckpointHealth(
+                        saved.currentHealth,
+                        saved.maxHealth,
+                        out float normalizedCurrentHealth) ||
                     !InventorySaveCodec.TryRestoreGrid(
                         saved.corpseInventory,
                         itemDatabase,
@@ -970,8 +973,8 @@ namespace FantasySurvival.Raids
                     Rotation = RestoreRotation(saved.transform),
                     OriginalPosition = authored.Stats.transform.position,
                     OriginalRotation = authored.Stats.transform.rotation,
-                    CurrentHealth = saved.currentHealth,
-                    MaxHealth = saved.maxHealth
+                    CurrentHealth = normalizedCurrentHealth,
+                    MaxHealth = authored.Stats.MaxHealth
                 });
             }
 

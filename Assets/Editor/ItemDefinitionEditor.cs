@@ -17,6 +17,7 @@ namespace FantasySurvival.EditorTools
         private SerializedProperty maxStackSize;
         private SerializedProperty equipmentSlot;
         private SerializedProperty backpackBonusRows;
+        private SerializedProperty defensePercent;
         private SerializedProperty isTradable;
         private SerializedProperty tradeCurrency;
         private SerializedProperty tradePrice;
@@ -45,6 +46,7 @@ namespace FantasySurvival.EditorTools
             maxStackSize = Find(ItemDefinitionSerializedFields.MaxStackSize);
             equipmentSlot = Find(ItemDefinitionSerializedFields.EquipmentSlot);
             backpackBonusRows = Find(ItemDefinitionSerializedFields.BackpackBonusRows);
+            defensePercent = Find(ItemDefinitionSerializedFields.DefensePercent);
             isTradable = Find(ItemDefinitionSerializedFields.IsTradable);
             tradeCurrency = Find(ItemDefinitionSerializedFields.TradeCurrency);
             tradePrice = Find(ItemDefinitionSerializedFields.TradePrice);
@@ -100,6 +102,7 @@ namespace FantasySurvival.EditorTools
             bool isContainer = currentKind == ItemDefinitionKind.Container;
             bool isWeapon = currentSlot == EquipmentSlotType.Weapon;
             bool isBackpack = currentSlot == EquipmentSlotType.Backpack;
+            bool isBodyArmor = currentSlot == EquipmentSlotType.BodyArmor;
             bool forcesSingleStack = isContainer || currentSlot != EquipmentSlotType.None;
 
             if (isBackpack)
@@ -112,6 +115,18 @@ namespace FantasySurvival.EditorTools
                     "Equipping this item appends the configured rows below the " +
                     "Player's base inventory. A container item cannot also grant rows.",
                     isContainer ? MessageType.Warning : MessageType.Info);
+            }
+
+            if (isBodyArmor)
+            {
+                DrawHeading("Defense");
+                EditorGUILayout.PropertyField(
+                    defensePercent,
+                    new GUIContent("Damage Reduction (%)"));
+                EditorGUILayout.HelpBox(
+                    "Each defense point reduces final incoming damage by 1%. " +
+                    "The result uses positive half-up integer rounding.",
+                    MessageType.Info);
             }
 
             DrawHeading("Inventory Presentation");

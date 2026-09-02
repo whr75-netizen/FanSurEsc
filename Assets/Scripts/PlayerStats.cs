@@ -1,13 +1,15 @@
 using System;
 using FantasySurvival.Combat;
+using FantasySurvival.Inventory;
 using UnityEngine;
 
 [DisallowMultipleComponent]
 public sealed class PlayerStats : MonoBehaviour, IDamageable
 {
-    [SerializeField, Min(1f)] private float maxHealth = 100f;
-    [SerializeField, Min(0f)] private float currentHealth = 100f;
+    [SerializeField, Min(1f)] private float maxHealth = 1000f;
+    [SerializeField, Min(0f)] private float currentHealth = 1000f;
 
+    private EquipmentLoadoutData equipmentLoadout;
     private bool damageBlocked;
     private bool isDead;
     private bool healthMutationInProgress;
@@ -20,6 +22,7 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
     public float CurrentHealth => currentHealth;
     public bool IsAlive => !isDead && currentHealth > 0f;
     public bool DamageBlocked => damageBlocked;
+    public int DefensePercent => equipmentLoadout?.DefensePercent ?? 0;
 
     private void Awake()
     {
@@ -33,14 +36,16 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
 
     public DamageResult ApplyDamage(DamageContext context)
     {
-        if (healthMutationInProgress || damageBlocked || !IsAlive ||
-            context.Amount <= 0f || float.IsNaN(context.Amount))
+        int finalDamage = CombatValueRules.CalculateFinalDamage(
+            context.Amount,
+            DefensePercent);
+        if (healthMutationInProgress || damageBlocked || !IsAlive || finalDamage <= 0)
         {
             return DamageResult.Ignored(currentHealth);
         }
 
         float previousHealth = currentHealth;
-        float nextHealth = Mathf.Clamp(previousHealth - context.Amount, 0f, maxHealth);
+        float nextHealth = Mathf.Clamp(previousHealth - finalDamage, 0f, maxHealth);
         bool causedDeath = previousHealth > 0f && nextHealth <= 0f;
         if (causedDeath)
         {
@@ -80,7 +85,8 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
         healthMutationInProgress = true;
         try
         {
-            SetCurrentHealth(currentHealth + amount);
+            SetCurrentHealth(
+                currentHealth + CombatValueRules.RoundPositiveToInt(amount));
         }
         finally
         {
@@ -112,6 +118,26 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
         damageBlocked = blocked;
     }
 
+    public void BindEquipmentLoadout(EquipmentLoadoutData loadout)
+    {
+        equipmentLoadout = loadout;
+    }
+
+    public bool CanRestoreCheckpointHealth(
+        float savedCurrentHealth,
+        float savedMaxHealth,
+        out float normalizedCurrentHealth)
+    {
+        bool valid = CombatValueRules.TryNormalizeSavedHealth(
+            savedCurrentHealth,
+            savedMaxHealth,
+            maxHealth,
+            false,
+            out int normalized);
+        normalizedCurrentHealth = valid ? normalized : 0f;
+        return valid;
+    }
+
     public bool TryRestoreCheckpointHealth(
         float savedCurrentHealth,
         float savedMaxHealth,
@@ -123,12 +149,10 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
             return false;
         }
 
-        if (float.IsNaN(savedCurrentHealth) || float.IsInfinity(savedCurrentHealth) ||
-            float.IsNaN(savedMaxHealth) || float.IsInfinity(savedMaxHealth) ||
-            savedMaxHealth <= 0f ||
-            !Mathf.Approximately(savedMaxHealth, maxHealth) ||
-            savedCurrentHealth <= 0f ||
-            savedCurrentHealth > maxHealth)
+        if (!CanRestoreCheckpointHealth(
+                savedCurrentHealth,
+                savedMaxHealth,
+                out float normalizedCurrentHealth))
         {
             error = "Checkpoint Player health is incompatible with the current Player definition.";
             return false;
@@ -138,7 +162,7 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
         try
         {
             isDead = false;
-            SetCurrentHealth(savedCurrentHealth);
+            SetCurrentHealth(normalizedCurrentHealth);
             error = null;
             return true;
         }
@@ -150,7 +174,10 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
 
     private void SetCurrentHealth(float value)
     {
-        float clamped = Mathf.Clamp(value, 0f, maxHealth);
+        float clamped = Mathf.Clamp(
+            CombatValueRules.RoundPositiveToInt(value),
+            0f,
+            maxHealth);
         if (Mathf.Approximately(currentHealth, clamped))
         {
             return;
@@ -226,8 +253,11 @@ public sealed class PlayerStats : MonoBehaviour, IDamageable
 
     private void NormalizeHealth()
     {
-        maxHealth = Mathf.Max(1f, maxHealth);
-        currentHealth = Mathf.Clamp(currentHealth, 0f, maxHealth);
+        maxHealth = Mathf.Max(1, CombatValueRules.RoundPositiveToInt(maxHealth));
+        currentHealth = Mathf.Clamp(
+            CombatValueRules.RoundPositiveToInt(currentHealth),
+            0f,
+            maxHealth);
         isDead = currentHealth <= 0f;
     }
 

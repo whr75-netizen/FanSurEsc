@@ -49,8 +49,9 @@ namespace FantasySurvival.EditorTools
             ValidateRaidWorldItemRecoveryPayload();
             ValidatePrefabWiring();
             Debug.Log(
-                "Core adjacent contract validation passed: equipment W1-W3, ammunition, " +
-                "runtime tooltip, action/damage notifications, key-row transactions, " +
+                "Core adjacent contract validation passed: equipment W1-W3/body armor, " +
+                "ammunition, runtime tooltip, integer defense/damage, equipment save, " +
+                "action/damage notifications, key-row transactions, " +
                 "3-slot save isolation, raid world-item Recovery, and prefab wiring.");
         }
 
@@ -69,6 +70,7 @@ namespace FantasySurvival.EditorTools
             ItemDefinition[] weaponDefinitions = { GetItem(database, 1), GetItem(database, 2),
                 GetItem(database, 3), GetItem(database, 4) };
             ItemDefinition ammunitionDefinition = GetItem(database, 8);
+            ItemDefinition armorDefinition = GetItem(database, 13);
 
             var inventory = new StandardStashViewData(8, 9);
             var equipment = new EquipmentLoadoutData();
@@ -92,6 +94,18 @@ namespace FantasySurvival.EditorTools
                 equipment.GetInsertableId(weapons[3]) == null &&
                 equipment.GetFirstAvailableSlot(weapons[3].Definition) == EquipmentSlotId.None,
                 "A fourth weapon was accepted after W1-W3 were occupied.");
+
+            var armor = (InventoryItemData)InventoryItemDataFactory.Create(armorDefinition);
+            int? armorIndex = equipment.GetInsertableId(armor);
+            Require(
+                armorIndex.HasValue &&
+                EquipmentSlotCatalog.GetSlotAtIndex(armorIndex.Value) ==
+                EquipmentSlotId.BodyArmor,
+                "Prototype armor did not select the Body Armor equipment slot.");
+            equipment.InsertInventoryItem(armorIndex.Value, armor);
+            Require(
+                equipment.DefensePercent == 20,
+                $"Equipped armor exposed {equipment.DefensePercent}% defense, not 20%.");
 
             var ammunition = (InventoryItemData)InventoryItemDataFactory.Create(
                 ammunitionDefinition,
@@ -120,6 +134,34 @@ namespace FantasySurvival.EditorTools
                 tooltip.Stats.Contains(
                     $"현재 탄창: {loadedRounds} / {weapons[0].MagazineCapacity}"),
                 "Runtime weapon tooltip does not expose the loaded magazine state.");
+
+            InventoryItemTooltipContent armorTooltip =
+                InventoryItemTooltipFormatter.Create(armor);
+            Require(
+                armorTooltip.Stats.Contains("방어력: 20%"),
+                "Runtime armor tooltip does not expose its defense percentage.");
+            Require(
+                InventorySaveCodec.TryCapture(
+                    state,
+                    database,
+                    out PlayerItemStateSaveData saved,
+                    out string saveError),
+                saveError);
+            Require(
+                InventorySaveCodec.TryRestore(
+                    saved,
+                    database,
+                    8,
+                    9,
+                    out PlayerInventoryState restored,
+                    out saveError),
+                saveError);
+            Require(
+                restored.Equipment.GetItem(EquipmentSlotId.BodyArmor) is
+                    InventoryItemData restoredArmor &&
+                restoredArmor.Definition.Id == armorDefinition.Id &&
+                restored.Equipment.DefensePercent == 20,
+                "Body Armor equipment or defense was not preserved by the save codec.");
         }
 
         private static void ValidateActionAndDamageNotifications()
@@ -180,7 +222,7 @@ namespace FantasySurvival.EditorTools
                 };
                 float healthBeforeDamage = stats.CurrentHealth;
                 var damageContext = new DamageContext(
-                    1f,
+                    CombatValueRules.AttackPowerStep,
                     source,
                     player.transform.position);
                 DamageResult returnedDamage = stats.ApplyDamage(damageContext);
@@ -191,6 +233,39 @@ namespace FantasySurvival.EditorTools
                         observedDamage.CurrentHealth,
                         Mathf.Max(0f, healthBeforeDamage - damageContext.Amount)),
                     "Player damage did not publish the confirmed DamageResult once.");
+
+                stats.ResetHealth();
+                ItemDatabase database =
+                    AssetDatabase.LoadAssetAtPath<ItemDatabase>(ItemDatabasePath);
+                ItemDefinition armorDefinition = GetItem(database, 13);
+                var armorLoadout = new EquipmentLoadoutData();
+                var armor = new InventoryItemData(armorDefinition);
+                Require(
+                    armorLoadout.TryPlace(
+                        EquipmentSlotId.BodyArmor,
+                        armor),
+                    "Could not equip prototype armor for the damage contract check.");
+                stats.BindEquipmentLoadout(armorLoadout);
+                float armoredHealthBefore = stats.CurrentHealth;
+                DamageResult armoredDamage = stats.ApplyDamage(
+                    new DamageContext(100f, source, player.transform.position));
+                Require(
+                    stats.DefensePercent == 20 && armoredDamage.WasApplied &&
+                    Mathf.Approximately(
+                        armoredDamage.CurrentHealth,
+                        armoredHealthBefore - 80f),
+                    "20% armor did not reduce 100 incoming damage to integer damage 80.");
+                stats.BindEquipmentLoadout(null);
+                stats.ResetHealth();
+                Require(
+                    CombatValueRules.TryNormalizeSavedHealth(
+                        75f,
+                        100f,
+                        1000f,
+                        false,
+                        out int migratedHealth) &&
+                    migratedHealth == 750,
+                    "Legacy 100-based checkpoint health did not migrate to the 1000 scale.");
 
                 stats.DamageApplied += (_, __, result) =>
                 {
@@ -203,7 +278,7 @@ namespace FantasySurvival.EditorTools
                 int deathNotificationCount = 0;
                 stats.Died += (_, __) => deathNotificationCount++;
                 DamageResult lethalDamage = stats.ApplyDamage(
-                    new DamageContext(200f, source, player.transform.position));
+                    new DamageContext(stats.MaxHealth, source, player.transform.position));
                 Require(
                     lethalDamage.CausedDeath && deathNotificationCount == 1 && !stats.IsAlive &&
                     Mathf.Approximately(stats.CurrentHealth, 0f),
@@ -487,8 +562,8 @@ namespace FantasySurvival.EditorTools
                 mapSeed = 123,
                 layoutHash = "0000000000000001",
                 playerTransform = new RaidTransformSaveData { rotationW = 1f },
-                playerCurrentHealth = 100f,
-                playerMaxHealth = 100f,
+                playerCurrentHealth = 1000f,
+                playerMaxHealth = 1000f,
                 persistentState = persistentState,
                 chestRecordCount = 0,
                 chests = new List<RaidChestSaveData>(),

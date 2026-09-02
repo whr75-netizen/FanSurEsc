@@ -20,6 +20,8 @@ MonoBehaviour:
   icon: {fileID: 2800000, guid: c7400ea318f0e8241b03dfa5b2aa6234, type: 3}
   maxStackSize: 1
   equipmentSlot: 12
+  backpackBonusRows: 0
+  defensePercent: 0
   isTradable: 1
   tradeCurrency: 2
   tradePrice: 100
@@ -28,9 +30,11 @@ MonoBehaviour:
   ammunitionDefinitionId: 8
   magazineCapacity: 3
   reloadDurationSeconds: 2.5
-  weaponDamage: 35
+  weaponDamage: 350
   weaponRange: 30
   weaponNoiseRadius: 18
+  medicineUseDurationSeconds: 2.5
+  medicineHealthRestored: 350
   kind: 0
   containerWidth: 1
   containerHeight: 1

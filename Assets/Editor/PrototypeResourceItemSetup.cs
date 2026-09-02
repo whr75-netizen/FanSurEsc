@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using FantasySurvival.Combat;
 using FantasySurvival.Inventory;
 using UnityEditor;
 using UnityEditor.Build;
@@ -15,6 +16,7 @@ namespace FantasySurvival.EditorTools
         private const string ItemDatabasePath = "Assets/GameData/Items/ItemDatabase.asset";
         private const string ShellPrefabPath = "Assets/Prefabs/PersistentGameplayShell.prefab";
         private const int PrototypeMaxStackSize = 10;
+        private const int PrototypeMedicineHealing = 350;
 
         private static readonly ResourceItemSpec[] Specs =
         {
@@ -151,6 +153,11 @@ namespace FantasySurvival.EditorTools
             serialized.FindProperty("isTradable").boolValue = false;
             serialized.FindProperty("tradePrice").intValue = 0;
             serialized.FindProperty("kind").enumValueIndex = (int)spec.Kind;
+            if (spec.Kind == ItemDefinitionKind.Medicine)
+            {
+                serialized.FindProperty("medicineHealthRestored").floatValue =
+                    PrototypeMedicineHealing;
+            }
             serialized.FindProperty("containerWidth").intValue = 1;
             serialized.FindProperty("containerHeight").intValue = 1;
             serialized.ApplyModifiedPropertiesWithoutUndo();
@@ -159,7 +166,10 @@ namespace FantasySurvival.EditorTools
             if (!definition.TryValidateInventoryShape(out string error) ||
                 definition.Id != spec.Id || definition.Width != 1 || definition.Height != 1 ||
                 definition.Icon != icon || definition.Kind != spec.Kind ||
-                definition.MaxStackSize != PrototypeMaxStackSize)
+                definition.MaxStackSize != PrototypeMaxStackSize ||
+                (spec.Kind == ItemDefinitionKind.Medicine &&
+                 CombatValueRules.RoundPositiveToInt(definition.MedicineHealthRestored) !=
+                 PrototypeMedicineHealing))
             {
                 throw new BuildFailedException(
                     $"Prototype item definition '{spec.AssetName}' is invalid: {error}");

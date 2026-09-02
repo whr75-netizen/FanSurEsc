@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using FantasySurvival.Combat;
 using FantasySurvival.Inventory;
 using FantasySurvival.Interaction;
 using FantasySurvival.Raids;
@@ -632,9 +633,12 @@ namespace FantasySurvival.EditorTools
             ValidateRequiredEnemy(melee, EnemyCombatArchetype.MeleeRush, context);
             ValidateRequiredEnemy(ranged, EnemyCombatArchetype.RangedPursuit, context);
 
-            Require(Mathf.Approximately(meleeStats.Definition.AI.AttackDamage, 1f),
+            Require(Mathf.Approximately(
+                    meleeStats.Definition.AI.AttackDamage,
+                    CombatValueRules.AttackPowerStep),
                 $"{context}: prototype melee Enemy attack damage is " +
-                $"{meleeStats.Definition.AI.AttackDamage}, not 1.");
+                $"{meleeStats.Definition.AI.AttackDamage}, not " +
+                $"{CombatValueRules.AttackPowerStep}.");
 
             Chest meleeCorpse = FindOnlyCorpseInventory(melee, context);
             Chest rangedCorpse = FindOnlyCorpseInventory(ranged, context);

@@ -29,6 +29,8 @@ namespace FantasySurvival.Inventory
         [SerializeField] private EquipmentSlotType equipmentSlot;
         [SerializeField, Range(0, InventoryGridConstraints.MaxDimension)]
         private int backpackBonusRows;
+        [SerializeField, Range(0, CombatValueRules.MaximumDefensePercent)]
+        private int defensePercent;
 
         [Header("Trading Prototype")]
         [SerializeField] private bool isTradable;
@@ -41,13 +43,13 @@ namespace FantasySurvival.Inventory
         [SerializeField, Min(1)] private int ammunitionDefinitionId = 8;
         [SerializeField, Min(1)] private int magazineCapacity = 3;
         [SerializeField, Min(0.01f)] private float reloadDurationSeconds = 2.5f;
-        [SerializeField, Min(0f)] private float weaponDamage = 35f;
+        [SerializeField, Min(0f)] private float weaponDamage = 350f;
         [SerializeField, Min(0.1f)] private float weaponRange = 30f;
         [SerializeField, Min(0f)] private float weaponNoiseRadius = 18f;
 
         [Header("Medicine Prototype")]
         [SerializeField, Min(0.01f)] private float medicineUseDurationSeconds = 2.5f;
-        [SerializeField, Min(0.01f)] private float medicineHealthRestored = 35f;
+        [SerializeField, Min(0.01f)] private float medicineHealthRestored = 350f;
 
         [Header("Item Type")]
         [SerializeField] private ItemDefinitionKind kind;
@@ -64,6 +66,9 @@ namespace FantasySurvival.Inventory
         public int MaxStackSize => maxStackSize;
         public EquipmentSlotType EquipmentSlot => equipmentSlot;
         public int BackpackBonusRows => backpackBonusRows;
+        public int DefensePercent => equipmentSlot == EquipmentSlotType.BodyArmor
+            ? Mathf.Clamp(defensePercent, 0, CombatValueRules.MaximumDefensePercent)
+            : 0;
         public bool IsEquippable => equipmentSlot != EquipmentSlotType.None;
         public bool IsWeapon => equipmentSlot == EquipmentSlotType.Weapon;
         public bool IsTradable => isTradable && !IsContainer && tradePrice > 0 &&
@@ -139,6 +144,14 @@ namespace FantasySurvival.Inventory
                 return false;
             }
 
+            if (defensePercent < 0 ||
+                defensePercent > CombatValueRules.MaximumDefensePercent ||
+                (defensePercent > 0 && equipmentSlot != EquipmentSlotType.BodyArmor))
+            {
+                error = $"Item definition ID {id} has defense outside the Body Armor contract.";
+                return false;
+            }
+
             if (IsContainer && IsWeapon)
             {
                 error = $"Item definition ID {id} cannot be both a weapon and a container.";
@@ -150,9 +163,11 @@ namespace FantasySurvival.Inventory
                  float.IsNaN(reloadDurationSeconds) ||
                  float.IsInfinity(reloadDurationSeconds) || reloadDurationSeconds <= 0f ||
                  float.IsNaN(roundsPerMinute) ||
-                 float.IsInfinity(roundsPerMinute) || roundsPerMinute <= 0f))
+                 float.IsInfinity(roundsPerMinute) || roundsPerMinute <= 0f ||
+                 !CombatValueRules.IsAttackPowerValid(weaponDamage)))
             {
-                error = $"Weapon definition ID {id} has invalid ammunition, magazine, reload, or fire-rate settings.";
+                error = $"Weapon definition ID {id} has invalid ammunition, magazine, reload, " +
+                        $"fire-rate, or {CombatValueRules.AttackPowerStep}-unit damage settings.";
                 return false;
             }
 
@@ -191,17 +206,28 @@ namespace FantasySurvival.Inventory
                 backpackBonusRows,
                 0,
                 InventoryGridConstraints.MaxDimension);
+            defensePercent = equipmentSlot == EquipmentSlotType.BodyArmor
+                ? Mathf.Clamp(defensePercent, 0, CombatValueRules.MaximumDefensePercent)
+                : 0;
             containerWidth = Mathf.Max(1, containerWidth);
             containerHeight = Mathf.Max(1, containerHeight);
             roundsPerMinute = Mathf.Max(1f, roundsPerMinute);
             ammunitionDefinitionId = Mathf.Max(1, ammunitionDefinitionId);
             magazineCapacity = Mathf.Max(1, magazineCapacity);
             reloadDurationSeconds = Mathf.Max(0.01f, reloadDurationSeconds);
-            weaponDamage = Mathf.Max(0f, weaponDamage);
+            if (IsWeapon)
+            {
+                weaponDamage = CombatValueRules.NormalizeAttackPower(weaponDamage);
+            }
             weaponRange = Mathf.Max(0.1f, weaponRange);
             weaponNoiseRadius = Mathf.Max(0f, weaponNoiseRadius);
             medicineUseDurationSeconds = Mathf.Max(0.01f, medicineUseDurationSeconds);
-            medicineHealthRestored = Mathf.Max(0.01f, medicineHealthRestored);
+            if (IsMedicine)
+            {
+                medicineHealthRestored = Mathf.Max(
+                    1,
+                    CombatValueRules.RoundPositiveToInt(medicineHealthRestored));
+            }
         }
     }
 }

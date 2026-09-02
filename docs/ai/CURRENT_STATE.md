@@ -55,15 +55,15 @@
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
 | `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101 | 낮밤·구름·강수/차단·Grass 수광·로컬/체적광·웅덩이·0시 최저광 | 야간 최저 확인·날씨 저장·풍향·최종 아트·다수 광원 성능·Transparent 합성 |
 | `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 실루엣 시험 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §96~104 | Player·단독 scene·기지 mannequin: 단색·계단 외곽선·1px 겹침·평행이동 snap·픽셀별 실제광(코드) | 실제광 시각 확인·파츠·ID·회전/스킨/줌 안정화 |
-| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95 | click/drag/stack·가방·장전탄·Save v7·저작창; 외곽 drag→scene-local 바닥 owner→E 습득; 일반 전환 삭제, Active Raid만 복원 | 정식 바닥 표현 또는 item/grid/장비/world-item 저장 계약 변경 |
-| `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51 | Player 원점 마우스 XZ Raycast; 단발/자동; 시험 총 120 RPM·3발·탄약 ID 8·R 2.5초 이동장전; 피해 35 | 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·최종 조준 결정 |
+| `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95·105 | grid·stack·가방·장전탄·Save v7·저작창; ID 13 1×1 갑빠(방어 20%·육각); 바닥 drop/E, 일반 전환 삭제·Active Raid 복원 | item/grid/장비/world-item 저장 계약 변경 |
+| `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51·105 | 체력 1000·정수 계산·공격력 10단위·총 피해 350; 갑빠 방어 1당 최종 피해 1% 감소 | 탄종·AI 탄약·무기군 장전·반동·탄퍼짐·관통·피해 유형·조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67 | 고정 맵 임의/도심 공유후보 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
 | `MAP-01` | 도심 도로·Cube 건물·런타임 NavMesh | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §14·67 | seed 도로·Cube·공유 공간후보와 Entry→Portal 경로 | 생성 규칙·후보 계약 변경 |
 | `MAP-ARRIVAL-01` | 원정 맵 도착 안전 gate | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §32·34 | Ready 뒤 공개; Invalid는 covered 기지 복귀, 불가 시 잠금 보류 | readiness·도착·rollback·redirect 변경 |
 | `SPAWN-01` | 도심 시험 적·상자 seed 배치 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §33~34·67~68 | spawn catalog가 Chest 1·Enemy 2 prefab을 stable manifest 위치에 생성·등록; POI·NavMesh·Recovery 복원 검증 | catalog·prefab·배치·registry·world hash 변경 |
 | `POI-01` | 의료 POI | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §67 | seed당 청록 Cube 1·앞 Chest·치료제 ID 7·접근 경로 | 내부·다중 POI·위험/보상 예산 추가 |
-| `LOOT-01` | seed 기반 시험 LootTable | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §34·67 | Fresh 원자 roll, Resume grid 복원; 의료 POI는 ID 7, table 미지정은 초기값 유지 | 다중 roll·수량·희귀도·위험 예산 추가 |
+| `LOOT-01` | seed 기반 시험 LootTable | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §34·67 | Fresh 결정적 누적확률 1회·최대 1개·잔여 확률은 빈 결과; Resume grid, 미지정은 초기값 | 다중 roll·수량·희귀도·위험 예산 추가 |
 | `BASE-01` | 기지 Chest·가구 영속성 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §18 | stable ID별 grid와 중첩 아이템, 왕복·backup 복원 | 배치 가능한 가구나 layout migration 추가 |
 | `RAID-01` | 기지/원정 Escape·생환·사망·포기 결과 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·35·95 | 생환은 자동 기지 정산; 명시적 포기만 `Abandoned`; Active Raid의 `주 메뉴`는 결과 없이 exact 저장 후 같은 슬롯 Resume | 메뉴·결과·중단 정책 변경 |
 | `SAVE-01` | 3슬롯 save·원정 Recovery·정산 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §22~23·48·52~53·73·95 | 활성 슬롯별 ordinary/Recovery; slot 1 legacy; marker 우선 Resume/정산; Base·Raid 주메뉴 저장 gate | 슬롯 수·schema·저장 시점·정산/복구 경계 변경 |
@@ -79,7 +79,7 @@
 
 | ID | 상태 | 실제 공백 | 선행조건·금지선 |
 |---|---|---|---|
-| `GAP-COMBAT` | `DECISION` | Player 시험 탄약·3발 탄창·2.5초 장전은 연결됨; 정식 탄종·AI 탄약·무기군별 장전·반동·탄퍼짐·방어 미정 | 현재 시험값을 최종 밸런스로 확대하지 않고 사용자 전투 규칙 결정 뒤 진행 |
+| `GAP-COMBAT` | `DECISION` | 시험 탄약·3발·장전·기본 % 방어 연결; 탄종·AI 탄약·무기군 장전·반동·탄퍼짐·관통·피해 유형 미정 | 시험값을 최종 밸런스로 확대하지 않음 |
 | `GAP-AI-TACTICS` | `DECISION` | 엄폐·도주·저격·분대 전술 미구현 | `AI-01`을 폐기하지 않고 다음 전술 단계로 확장 |
 | `GAP-LOSS` | `DECISION` | provenance 기반 선별 손실 미정 | 현재 전체 보존/전체 소실 정산을 임의 변경하지 않음 |
 | `GAP-EXTRACTION` | `DECISION` | 최종 탈출 대기 시간·피격 중단·암전 중 사망 판정 미정 | 현재 시험 포탈의 즉시 생환·피해 차단·자동 기지 정산은 임시 유지 |

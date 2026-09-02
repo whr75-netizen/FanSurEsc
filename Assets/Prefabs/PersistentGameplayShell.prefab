@@ -2431,8 +2431,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 875ef258069189d47bd106dd3a3f8882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
-  currentHealth: 100
+  maxHealth: 1000
+  currentHealth: 1000
 --- !u!135 &695073978335954009
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2495,7 +2495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   standardCore: {fileID: 6849777988300146275}
   itemDatabase: {fileID: 11400000, guid: d38ab357628cdf24c9542351dd577b53, type: 2}
-  startingItemIds: 01000000020000000300000004000000050000000700000008000000090000000a0000000b0000000c000000
+  startingItemIds: 01000000020000000300000004000000050000000700000008000000090000000a0000000b0000000c0000000d000000
   startingStackQuantity: 5
   playerInventoryPanel: {fileID: 4739148661671075293}
   playerStashView: {fileID: 1686721783905817088}

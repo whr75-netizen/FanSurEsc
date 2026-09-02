@@ -1,4 +1,5 @@
 using System;
+using FantasySurvival.Combat;
 using UnityEngine;
 
 public enum EnemyCombatArchetype
@@ -103,7 +104,7 @@ public sealed class EnemyAISettings
         destinationRefreshDistance = Mathf.Max(0f, destinationRefreshDistance);
         attackRange = Mathf.Max(0.1f, attackRange);
         preferredRange = Mathf.Clamp(preferredRange, 0f, attackRange);
-        attackDamage = Mathf.Max(0f, attackDamage);
+        attackDamage = CombatValueRules.NormalizeAttackPower(attackDamage);
         attackCooldownSeconds = Mathf.Max(0.05f, attackCooldownSeconds);
         aimTrackingSpeed = Mathf.Max(0f, aimTrackingSpeed);
         aimSettleSeconds = Mathf.Max(0f, aimSettleSeconds);
@@ -119,15 +120,19 @@ public sealed class EnemyAISettings
     menuName = "Fantasy Survival/Enemies/Enemy Definition")]
 public sealed class EnemyDefinition : ScriptableObject
 {
-    [SerializeField, Min(1f)] private float maxHealth = 100f;
+    [SerializeField, Min(1f)] private float maxHealth = 1000f;
     [SerializeField] private EnemyAISettings ai = new EnemyAISettings();
 
-    public float MaxHealth => Mathf.Max(1f, maxHealth);
+    public float MaxHealth => Mathf.Max(
+        1,
+        CombatValueRules.RoundPositiveToInt(maxHealth));
     public EnemyAISettings AI => ai;
 
     private void OnValidate()
     {
-        maxHealth = Mathf.Max(1f, maxHealth);
+        maxHealth = Mathf.Max(
+            1,
+            CombatValueRules.RoundPositiveToInt(maxHealth));
         if (ai == null)
         {
             ai = new EnemyAISettings();

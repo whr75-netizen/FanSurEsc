@@ -59,13 +59,14 @@ public sealed class EnemyStats : MonoBehaviour, IDamageable
 
     public DamageResult ApplyDamage(DamageContext context)
     {
-        if (!IsAlive || context.Amount <= 0f || float.IsNaN(context.Amount))
+        int finalDamage = CombatValueRules.CalculateFinalDamage(context.Amount, 0);
+        if (!IsAlive || finalDamage <= 0)
         {
             return DamageResult.Ignored(currentHealth);
         }
 
         float previousHealth = currentHealth;
-        float nextHealth = Mathf.Clamp(currentHealth - context.Amount, 0f, MaxHealth);
+        float nextHealth = Mathf.Clamp(currentHealth - finalDamage, 0f, MaxHealth);
         bool causedDeath = previousHealth > 0f && nextHealth <= 0f;
 
         currentHealth = nextHealth;
@@ -92,7 +93,8 @@ public sealed class EnemyStats : MonoBehaviour, IDamageable
             return;
         }
 
-        SetCurrentHealth(currentHealth + amount);
+        SetCurrentHealth(
+            currentHealth + CombatValueRules.RoundPositiveToInt(amount));
     }
 
     public void ResetHealth()
@@ -116,18 +118,16 @@ public sealed class EnemyStats : MonoBehaviour, IDamageable
             return false;
         }
 
-        if (float.IsNaN(savedCurrentHealth) || float.IsInfinity(savedCurrentHealth) ||
-            float.IsNaN(savedMaxHealth) || float.IsInfinity(savedMaxHealth) ||
-            savedMaxHealth <= 0f ||
-            !Mathf.Approximately(savedMaxHealth, MaxHealth) ||
-            savedCurrentHealth < 0f ||
-            savedCurrentHealth > MaxHealth)
+        if (!CanRestoreCheckpointHealth(
+                savedCurrentHealth,
+                savedMaxHealth,
+                out float normalizedCurrentHealth))
         {
             error = "Checkpoint Enemy health is incompatible with the current Enemy definition.";
             return false;
         }
 
-        if (savedCurrentHealth <= 0f)
+        if (normalizedCurrentHealth <= 0f)
         {
             DamageResult result = ApplyDamage(
                 new DamageContext(MaxHealth, null, transform.position));
@@ -139,16 +139,34 @@ public sealed class EnemyStats : MonoBehaviour, IDamageable
         }
         else
         {
-            SetCurrentHealth(savedCurrentHealth, true);
+            SetCurrentHealth(normalizedCurrentHealth, true);
         }
 
         error = null;
         return true;
     }
 
+    public bool CanRestoreCheckpointHealth(
+        float savedCurrentHealth,
+        float savedMaxHealth,
+        out float normalizedCurrentHealth)
+    {
+        bool valid = CombatValueRules.TryNormalizeSavedHealth(
+            savedCurrentHealth,
+            savedMaxHealth,
+            MaxHealth,
+            true,
+            out int normalized);
+        normalizedCurrentHealth = valid ? normalized : 0f;
+        return valid;
+    }
+
     private void SetCurrentHealth(float value, bool forceNotification = false)
     {
-        float clamped = Mathf.Clamp(value, 0f, MaxHealth);
+        float clamped = Mathf.Clamp(
+            CombatValueRules.RoundPositiveToInt(value),
+            0f,
+            MaxHealth);
         if (!forceNotification && Mathf.Approximately(currentHealth, clamped))
         {
             return;

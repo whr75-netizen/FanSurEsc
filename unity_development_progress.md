@@ -2035,3 +2035,13 @@ Interactable (abstract base class)
 - `[사용자 확인·근본 원인][2026-09-02]` Play 시작 직후 몇 프레임만 파랗고 이후 정상 회색이 되는 현상은 조명 초기화나 기본색 교체가 아니었다. 프로젝트의 `m_AsyncShaderCompilation=1`, 해당 캐릭터 셰이더의 다중 variant와 플레이 직전 import 기록을 대조했으며, Unity Editor가 variant 컴파일 중 표시하는 단색 cyan placeholder의 공식 동작과 증상이 일치했다. 씬에는 주황 단계광과 꺼진 주황 가로등 외에 캐릭터 전신을 파랗게 만들 시작 광원이 없고 Player 원본 MeshRenderer도 직렬화 상태부터 비활성이다.
 - `[근본 수정·범위]` `CharacterFlatUnlit`의 실제 색 pass에만 `#pragma editor_sync_compilation`을 지정했다. 이 캐릭터의 보이는 variant를 첫 렌더 전에 준비하므로 cyan 임시 결과를 화면에 내보내지 않으며, 프로젝트 전체의 비동기 셰이더 컴파일과 색을 출력하지 않는 depth pass는 유지한다. 정상 shader의 기본색·SH/주광 중성 밝기·색 있는 로컬광·외곽선·snap·낮밤 권위는 변경하지 않았다.
 - `[정적 검증·남은 확인]` Unity 6 현재 API와 공식 매뉴얼에서 해당 pragma가 개별 shader의 Editor 비동기 컴파일을 끄는 지시문임을 확인했고, 보이는 pass 한 곳에만 들어간 diff와 기존 사용자 dirty 분리를 확인했다. 열린 Editor가 수정 뒤 아직 asset refresh 로그를 쓰지 않아 실제 재import 오류 없음과 Play 첫 프레임 회색은 미검증이다. Player 빌드에는 Editor cyan placeholder 자체가 적용되지 않는다.
+
+---
+
+## 105. 정수 전투 스케일과 시험 갑빠 방어 `[ITEM-01][COMBAT-01]`
+
+- `[사용자 확정·계산]` Player와 현재 시험 적의 최대 체력을 `100 → 1000`으로 전환하고 기존 체감 비율을 보존해 다섯 총 `35 → 350`, 치료제 `35 → 350`, 근접/원거리/기존 좀비 공격을 각각 `1/8/10 → 10/80/100`으로 옮겼다. authored 공격력은 10단위, 체력·회복·피해 결과는 양수 half-up 반올림 정수다.
+- `[방어 권위·콘텐츠]` 새 `ID 13` 1×1 시험 갑빠가 Point-filter 육각 아이콘과 시험 방어력 20%를 가진다. `ItemDefinition`이 종류별 방어 수치, 기존 `EquipmentLoadoutData`가 현재 장착 definition, `PlayerStats`가 피해 확정을 소유하며 `round(raw × (100-defense)/100)`을 적용한다. UI는 tooltip·정보창으로 읽고, 기존 장비 definition ID 저장을 재사용해 방어 수치를 DTO에 복제하지 않았다.
+- `[저장 호환]` 진행 중 원정의 구 100기준 Player·Enemy 체력은 정확히 10배 관계일 때만 1000기준으로 정규화한다. 그 밖의 max 체력 불일치는 기존 fail-closed 경계를 유지한다. 새 ordinary·Recovery 기록은 1000기준 정수 체력을 쓴다.
+- `[Unity 컴파일·Editor 호출 확인]` 강제 refresh 뒤 Unity C# 재컴파일과 Core 인접 계약 1회를 통과했다. 갑빠 BodyArmor 배치·tooltip 20%, `100 → 80` 피해, 장비 save capture/restore 뒤 같은 ID·20%, 구 checkpoint `75/100 → 750/1000`, lethal 1회와 prefab HP/시작 ID를 확인했다. 실제 사람 입력의 Alt/drag 장착과 Player build는 이번 변경에서 반복하지 않았다.
+- `[Loot 비변경 확인]` 현재 LootTable은 `map seed + stable owner ID`의 결정적 누적확률 1회로 최대 한 종류 1개만 만든다. 확률 합의 나머지는 빈 결과이고 Fresh 전체 후보가 유효할 때만 원자 적용하며 Resume은 실제 grid를 복원한다. 의료 Chest는 치료제 ID 7 100%, 근접 시체는 권총 ID 1 100%, 원거리 시체는 table 없이 prefab 초기값을 유지한다. 미사용 50/50 시험 table은 정의만 남아 있으며 이번 작업에서 Loot 규칙·연결은 바꾸지 않았다.

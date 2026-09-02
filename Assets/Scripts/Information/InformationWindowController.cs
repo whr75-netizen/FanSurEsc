@@ -453,6 +453,7 @@ namespace FantasySurvival.Information
             builder.AppendLine($"원정 상태: {GetRaidStateLabel(raid.State)}");
             builder.AppendLine();
             builder.AppendLine($"체력: {stats.CurrentHealth:0.#} / {stats.MaxHealth:0.#}");
+            builder.AppendLine($"방어력: {stats.DefensePercent}%");
             builder.AppendLine($"걷기 속도: {movement.speed:0.##}");
             builder.AppendLine($"달리기 속도: {movement.RunSpeed:0.##}");
             builder.AppendLine();

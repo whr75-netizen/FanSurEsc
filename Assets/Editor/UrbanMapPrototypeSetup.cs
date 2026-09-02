@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FantasySurvival.Combat;
 using FantasySurvival.Interaction;
 using FantasySurvival.Inventory;
 using FantasySurvival.Raids;
@@ -476,7 +477,8 @@ namespace FantasySurvival.EditorTools
 
             ai.FindPropertyRelative("combatArchetype").enumValueIndex =
                 (int)EnemyCombatArchetype.MeleeRush;
-            ai.FindPropertyRelative("attackDamage").floatValue = 1f;
+            ai.FindPropertyRelative("attackDamage").floatValue =
+                CombatValueRules.AttackPowerStep;
             serialized.ApplyModifiedPropertiesWithoutUndo();
             EditorUtility.SetDirty(target);
             AssetDatabase.SaveAssetIfDirty(target);
@@ -1104,10 +1106,12 @@ namespace FantasySurvival.EditorTools
             if (meleeStats == null || meleeStats.Definition != testMeleeDefinition ||
                 meleeStats.Definition.AI == null ||
                 meleeStats.Definition.AI.CombatArchetype != EnemyCombatArchetype.MeleeRush ||
-                !Mathf.Approximately(meleeStats.Definition.AI.AttackDamage, 1f))
+                !Mathf.Approximately(
+                    meleeStats.Definition.AI.AttackDamage,
+                    CombatValueRules.AttackPowerStep))
             {
                 throw new BuildFailedException(
-                    "GameMapTest required melee Enemy is not the damage-1 test definition.");
+                    "GameMapTest required melee Enemy is not the minimum 10-damage test definition.");
             }
 
             if (rangedStats == null || rangedStats.Definition == null ||

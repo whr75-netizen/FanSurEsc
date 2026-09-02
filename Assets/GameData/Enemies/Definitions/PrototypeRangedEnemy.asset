@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6badd5bbfb0417b41b36d30b813bd287, type: 3}
   m_Name: PrototypeRangedEnemy
   m_EditorClassIdentifier: Assembly-CSharp::EnemyDefinition
-  maxHealth: 100
+  maxHealth: 1000
   ai:
     combatArchetype: 1
     visionRange: 17
@@ -35,7 +35,7 @@ MonoBehaviour:
     destinationRefreshDistance: 0.5
     attackRange: 14
     preferredRange: 8
-    attackDamage: 8
+    attackDamage: 80
     attackCooldownSeconds: 1.1
     aimTrackingSpeed: 7
     aimSettleSeconds: 0.8

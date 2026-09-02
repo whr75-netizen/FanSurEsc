@@ -65,6 +65,11 @@ namespace FantasySurvival.Inventory
                 AppendStat(stats, "장착 부위", GetEquipmentTypeName(definition.EquipmentSlot));
             }
 
+            if (definition.DefensePercent > 0)
+            {
+                AppendStat(stats, "방어력", $"{definition.DefensePercent}%");
+            }
+
             if (definition.IsWeapon)
             {
                 if (runtimeItem != null)

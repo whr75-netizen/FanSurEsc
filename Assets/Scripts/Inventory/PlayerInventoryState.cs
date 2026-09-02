@@ -180,6 +180,16 @@ namespace FantasySurvival.Inventory
         public event Action Changed;
 
         public bool IsDirty { get; set; } = true;
+        public int DefensePercent
+        {
+            get
+            {
+                return GetItem(EquipmentSlotId.BodyArmor) is InventoryItemData armor &&
+                       armor.Definition != null
+                    ? armor.Definition.DefensePercent
+                    : 0;
+            }
+        }
 
         public IVariableInventoryCellData GetItem(EquipmentSlotId slot)
         {

@@ -31,6 +31,7 @@ public class InventoryUIManager : MonoBehaviour, IWorldItemPickupReceiver
     [Header("Player Equipment UI")] [SerializeField] private GameObject equipmentPanel;
     [SerializeField] private EquipmentPanelView equipmentView;
     private PlayerInventoryState playerState;
+    private PlayerStats playerStats;
     [Header("External Inventory UI")] [SerializeField] private GameObject externalInventoryPanel;
     [SerializeField] private StandardStashView externalStashView;
     private StandardStashViewData currentExternalData;
@@ -101,10 +102,11 @@ public class InventoryUIManager : MonoBehaviour, IWorldItemPickupReceiver
     {
         playerInteractor = GetComponent<PlayerInteractor>();
         consumableUseController = GetComponent<PlayerConsumableUseController>();
-        if (playerInteractor == null || consumableUseController == null)
+        playerStats = GetComponent<PlayerStats>();
+        if (playerInteractor == null || consumableUseController == null || playerStats == null)
         {
             Debug.LogError(
-                "InventoryUIManager requires PlayerInteractor and PlayerConsumableUseController " +
+                "InventoryUIManager requires PlayerInteractor, PlayerConsumableUseController, and PlayerStats " +
                 "on the same GameObject.",
                 this);
             enabled = false;
@@ -181,6 +183,7 @@ public class InventoryUIManager : MonoBehaviour, IWorldItemPickupReceiver
         itemTooltipView.Hide();
         stackSplitDialog.Close();
         equipmentView.BindPlayerState(playerState, HandleEquipmentFailure);
+        playerStats.BindEquipmentLoadout(playerState.Equipment);
         BindCapacity(playerState);
         BindWallet(playerState.Wallet);
         PlayerStateChanged?.Invoke(playerState);
@@ -437,6 +440,7 @@ public class InventoryUIManager : MonoBehaviour, IWorldItemPickupReceiver
         UnbindWallet(playerState?.Wallet);
         playerState = replacement;
         equipmentView.BindPlayerState(playerState, HandleEquipmentFailure);
+        playerStats.BindEquipmentLoadout(playerState.Equipment);
         BindCapacity(playerState);
         BindWallet(playerState.Wallet);
         PlayerStateChanged?.Invoke(playerState);

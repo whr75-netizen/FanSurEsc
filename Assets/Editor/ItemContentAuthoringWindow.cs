@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FantasySurvival.Combat;
 using FantasySurvival.Inventory;
 using UnityEditor;
 using UnityEngine;
@@ -44,6 +45,7 @@ namespace FantasySurvival.EditorTools
         [SerializeField] private ItemDefinitionKind newKind = ItemDefinitionKind.Standard;
         [SerializeField] private EquipmentSlotType newEquipmentSlot = EquipmentSlotType.None;
         [SerializeField] private int newBackpackBonusRows;
+        [SerializeField, Range(0, 100)] private int newDefensePercent;
         [SerializeField] private int newWidth = 1;
         [SerializeField] private int newHeight = 1;
         [SerializeField] private int newMaxStackSize = 1;
@@ -196,6 +198,14 @@ namespace FantasySurvival.EditorTools
                             "These rows are appended below the Player's base inventory " +
                             "while this Backpack is equipped.",
                             MessageType.Info);
+                    }
+                    else if (newEquipmentSlot == EquipmentSlotType.BodyArmor)
+                    {
+                        newDefensePercent = EditorGUILayout.IntSlider(
+                            "Damage Reduction (%)",
+                            newDefensePercent,
+                            0,
+                            CombatValueRules.MaximumDefensePercent);
                     }
                     newWidth = EditorGUILayout.IntField("Grid Width", newWidth);
                     newHeight = EditorGUILayout.IntField("Grid Height", newHeight);
@@ -447,6 +457,12 @@ namespace FantasySurvival.EditorTools
                             newBackpackBonusRows,
                             0,
                             InventoryGridConstraints.MaxDimension)
+                        : 0,
+                    DefensePercent = newEquipmentSlot == EquipmentSlotType.BodyArmor
+                        ? Mathf.Clamp(
+                            newDefensePercent,
+                            0,
+                            CombatValueRules.MaximumDefensePercent)
                         : 0,
                     Width = Mathf.Max(1, newWidth),
                     Height = Mathf.Max(1, newHeight),

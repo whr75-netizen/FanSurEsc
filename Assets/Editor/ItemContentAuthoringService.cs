@@ -78,6 +78,7 @@ namespace FantasySurvival.EditorTools
         public ItemDefinitionKind Kind { get; set; } = ItemDefinitionKind.Standard;
         public EquipmentSlotType EquipmentSlot { get; set; } = EquipmentSlotType.None;
         public int BackpackBonusRows { get; set; }
+        public int DefensePercent { get; set; }
         public int Width { get; set; } = 1;
         public int Height { get; set; } = 1;
         public int MaxStackSize { get; set; } = 1;
@@ -92,11 +93,11 @@ namespace FantasySurvival.EditorTools
         public int AmmunitionDefinitionId { get; set; }
         public int MagazineCapacity { get; set; } = 3;
         public float ReloadDurationSeconds { get; set; } = 2.5f;
-        public float WeaponDamage { get; set; } = 35f;
+        public float WeaponDamage { get; set; } = 350f;
         public float WeaponRange { get; set; } = 30f;
         public float WeaponNoiseRadius { get; set; } = 18f;
         public float MedicineUseDurationSeconds { get; set; } = 2.5f;
-        public float MedicineHealthRestored { get; set; } = 35f;
+        public float MedicineHealthRestored { get; set; } = 350f;
         public Texture2D Icon { get; set; }
     }
 
@@ -111,6 +112,7 @@ namespace FantasySurvival.EditorTools
         public const string MaxStackSize = "maxStackSize";
         public const string EquipmentSlot = "equipmentSlot";
         public const string BackpackBonusRows = "backpackBonusRows";
+        public const string DefensePercent = "defensePercent";
         public const string IsTradable = "isTradable";
         public const string TradeCurrency = "tradeCurrency";
         public const string TradePrice = "tradePrice";
@@ -348,6 +350,12 @@ namespace FantasySurvival.EditorTools
                 serialized,
                 ItemDefinitionSerializedFields.BackpackBonusRows,
                 request.BackpackBonusRows);
+            SetInteger(
+                serialized,
+                ItemDefinitionSerializedFields.DefensePercent,
+                request.EquipmentSlot == EquipmentSlotType.BodyArmor
+                    ? request.DefensePercent
+                    : 0);
             SetBoolean(
                 serialized,
                 ItemDefinitionSerializedFields.IsTradable,
@@ -696,6 +704,15 @@ namespace FantasySurvival.EditorTools
                     "and only a non-container Backpack item may grant them.");
             }
 
+            if (request.DefensePercent < 0 ||
+                request.DefensePercent > CombatValueRules.MaximumDefensePercent ||
+                (request.DefensePercent > 0 &&
+                 request.EquipmentSlot != EquipmentSlotType.BodyArmor))
+            {
+                throw new InvalidOperationException(
+                    "Defense must be between 0 and 100 and belongs only to Body Armor.");
+            }
+
             if (!InventoryGridConstraints.TryValidateDimensions(
                     request.Width,
                     request.Height,
@@ -748,7 +765,7 @@ namespace FantasySurvival.EditorTools
                  !IsFinitePositive(request.RoundsPerMinute) ||
                  request.MagazineCapacity <= 0 ||
                  !IsFinitePositive(request.ReloadDurationSeconds) ||
-                 !IsFiniteNonNegative(request.WeaponDamage) ||
+                 !CombatValueRules.IsAttackPowerValid(request.WeaponDamage) ||
                  !IsFinitePositive(request.WeaponRange) ||
                  !IsFiniteNonNegative(request.WeaponNoiseRadius)))
             {

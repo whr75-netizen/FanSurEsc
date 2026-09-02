@@ -5,7 +5,7 @@ using UnityEngine.Serialization;
 namespace FantasySurvival.WorldLighting
 {
     /// <summary>
-    /// Stores derived shadow-contrast presentation settings consumed by the shared
+    /// Stores directional participating-medium settings consumed by the shared
     /// volumetric renderer feature. Time, weather and light ownership remain in
     /// <see cref="SkyLightingCycleController"/>; this component owns no light
     /// state and allocates no rendering resources.
@@ -28,12 +28,9 @@ namespace FantasySurvival.WorldLighting
         [FormerlySerializedAs("sunSliceCount")]
         [SerializeField, Range(4, MaximumSunSampleCount)]
         private int sunSampleCount = 10;
-        [SerializeField, Min(1f)] private float sunVolumeHeight = 6f;
-        [SerializeField, Min(0.05f)] private float sunContrastProbeDistance = 0.75f;
+        [SerializeField, Min(1f)] private float sunVolumeHeight = 12f;
         [SerializeField] private float sunVolumeBaseHeight = 0.02f;
         [SerializeField, Min(0f)] private float sunIntensityMultiplier = 0.018f;
-        [Tooltip("Visibility difference that produces a fully visible shaft. Uniformly lit or uniformly shadowed air remains invisible.")]
-        [SerializeField, Range(0.01f, 0.5f)] private float sunContrastThreshold = 0.08f;
         [SerializeField, Range(0f, 1f)] private float sunExtinction = 0.16f;
         [SerializeField, Range(-0.85f, 0.85f)] private float sunAnisotropy = 0.22f;
         [SerializeField, Min(0.01f)] private float sunSurfaceFadeDistance = 0.45f;
@@ -71,9 +68,7 @@ namespace FantasySurvival.WorldLighting
         {
             sunSampleCount = Mathf.Clamp(sunSampleCount, 4, MaximumSunSampleCount);
             sunVolumeHeight = Mathf.Max(1f, sunVolumeHeight);
-            sunContrastProbeDistance = Mathf.Max(0.05f, sunContrastProbeDistance);
             sunIntensityMultiplier = Mathf.Max(0f, sunIntensityMultiplier);
-            sunContrastThreshold = Mathf.Clamp(sunContrastThreshold, 0.01f, 0.5f);
             sunExtinction = Mathf.Clamp01(sunExtinction);
             sunAnisotropy = Mathf.Clamp(sunAnisotropy, -0.85f, 0.85f);
             sunSurfaceFadeDistance = Mathf.Max(0.01f, sunSurfaceFadeDistance);
@@ -131,8 +126,6 @@ namespace FantasySurvival.WorldLighting
                 sunVolumeBaseHeight,
                 sunVolumeHeight,
                 sunSampleCount,
-                sunContrastProbeDistance,
-                sunContrastThreshold,
                 sunExtinction,
                 sunAnisotropy,
                 sunSurfaceFadeDistance);
@@ -150,8 +143,6 @@ namespace FantasySurvival.WorldLighting
             float baseHeight,
             float height,
             int sampleCount,
-            float contrastProbeDistance,
-            float contrastThreshold,
             float extinction,
             float anisotropy,
             float surfaceFadeDistance)
@@ -163,8 +154,6 @@ namespace FantasySurvival.WorldLighting
             BaseHeight = baseHeight;
             Height = height;
             SampleCount = sampleCount;
-            ContrastProbeDistance = contrastProbeDistance;
-            ContrastThreshold = contrastThreshold;
             Extinction = extinction;
             Anisotropy = anisotropy;
             SurfaceFadeDistance = surfaceFadeDistance;
@@ -177,8 +166,6 @@ namespace FantasySurvival.WorldLighting
         internal float BaseHeight { get; }
         internal float Height { get; }
         internal int SampleCount { get; }
-        internal float ContrastProbeDistance { get; }
-        internal float ContrastThreshold { get; }
         internal float Extinction { get; }
         internal float Anisotropy { get; }
         internal float SurfaceFadeDistance { get; }

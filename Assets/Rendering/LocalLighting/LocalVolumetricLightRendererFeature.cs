@@ -13,8 +13,8 @@ namespace FantasySurvival.Rendering
     /// <summary>
     /// Renders opted-in Spot Lights and shadow-defined directional sunlight as
     /// participating media. Local lights keep their full-resolution cone
-    /// integration; directional light is integrated at half resolution and is
-    /// visible only where the URP main-light shadow map contains real contrast.
+    /// integration; directional light is integrated at half resolution through
+    /// world-anchored virtual planes parallel to the main-light direction.
     /// </summary>
     [DisallowMultipleRendererFeature("Local Volumetric Lights (Game Camera)")]
     public sealed class LocalVolumetricLightRendererFeature : ScriptableRendererFeature
@@ -35,8 +35,6 @@ namespace FantasySurvival.Rendering
             Shader.PropertyToID("_ShaftColor");
         private static readonly int ShaftIntensityId =
             Shader.PropertyToID("_ShaftIntensity");
-        private static readonly int ShadowThresholdId =
-            Shader.PropertyToID("_ShadowThreshold");
         private static readonly int SurfaceFadeDistanceId =
             Shader.PropertyToID("_SurfaceFadeDistance");
         private static readonly int DirectionalVolumeBoundsId =
@@ -45,6 +43,8 @@ namespace FantasySurvival.Rendering
             Shader.PropertyToID("_DirectionalMediumSettings");
         private static readonly int DirectionalSampleCountId =
             Shader.PropertyToID("_DirectionalSampleCount");
+        private static readonly int DirectionalShellPlaneId =
+            Shader.PropertyToID("_DirectionalShellPlane");
 
         [SerializeField] private Material volumeMaterial;
         [Tooltip("Full-resolution integration samples per visible light cone. Higher values reduce banding at proportional GPU cost.")]
@@ -184,12 +184,6 @@ namespace FantasySurvival.Rendering
                 directionalMaterial.SetColor(ShaftColorId, directionalSettings.Color);
                 directionalMaterial.SetFloat(ShaftIntensityId, directionalSettings.Intensity);
                 directionalMaterial.SetFloat(
-                    ShadowThresholdId,
-                    Mathf.Clamp(
-                        directionalSettings.ContrastThreshold,
-                        0.01f,
-                        0.50f));
-                directionalMaterial.SetFloat(
                     SurfaceFadeDistanceId,
                     directionalSettings.SurfaceFadeDistance);
                 directionalMaterial.SetVector(
@@ -197,7 +191,7 @@ namespace FantasySurvival.Rendering
                     new Vector4(
                         directionalSettings.BaseHeight,
                         directionalSettings.Height,
-                        directionalSettings.ContrastProbeDistance,
+                        0f,
                         0f));
                 directionalMaterial.SetVector(
                     DirectionalMediumSettingsId,
@@ -209,6 +203,9 @@ namespace FantasySurvival.Rendering
                 directionalMaterial.SetFloat(
                     DirectionalSampleCountId,
                     Mathf.Clamp(directionalSettings.SampleCount, 4, 16));
+                directionalMaterial.SetVector(
+                    DirectionalShellPlaneId,
+                    BuildDirectionalShellPlane(camera, directionalSettings));
                 sunMaterial = directionalMaterial;
             }
 
@@ -260,6 +257,36 @@ namespace FantasySurvival.Rendering
                    mainLightIndex >= 0 &&
                    mainLightIndex < visibleLights.Length &&
                    visibleLights[mainLightIndex].light == sourceLight;
+        }
+
+        private static Vector4 BuildDirectionalShellPlane(
+            Camera camera,
+            DirectionalVolumetricLightSettings settings)
+        {
+            Vector3 viewDirection = camera.transform.forward.normalized;
+            Vector3 lightDirection = -settings.SourceLight.transform.forward.normalized;
+            Vector3 normal = viewDirection -
+                lightDirection * Vector3.Dot(viewDirection, lightDirection);
+            float perpendicularLength = normal.magnitude;
+            Vector3 lightParallelNormal = perpendicularLength > 0.0001f
+                ? normal / perpendicularLength
+                : viewDirection;
+            float exactPlaneWeight = Mathf.SmoothStep(
+                0f,
+                1f,
+                Mathf.InverseLerp(0.03f, 0.10f, perpendicularLength));
+            normal = Vector3.Lerp(
+                viewDirection,
+                lightParallelNormal,
+                exactPlaneWeight).normalized;
+            float cameraVertical = Mathf.Max(Mathf.Abs(viewDirection.y), 0.02f);
+            float fullVolumePath = settings.Height / cameraVertical;
+            float projectedPath = fullVolumePath *
+                Mathf.Abs(Vector3.Dot(viewDirection, normal));
+            float spacing = Mathf.Max(
+                projectedPath / Mathf.Max(settings.SampleCount, 1),
+                0.02f);
+            return new Vector4(normal.x, normal.y, normal.z, spacing);
         }
 
         private static int FindPackedAdditionalLightIndex(

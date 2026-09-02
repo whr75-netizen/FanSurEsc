@@ -4,11 +4,11 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
     {
         [HideInInspector][HDR] _ShaftColor("Shaft Color", Color) = (1, 1, 1, 1)
         [HideInInspector] _ShaftIntensity("Shaft Intensity", Float) = 0
-        [HideInInspector] _ShadowThreshold("Shadow Contrast Threshold", Range(0, 1)) = 0.08
         [HideInInspector] _SurfaceFadeDistance("Surface Fade Distance", Float) = 0.45
-        [HideInInspector] _DirectionalVolumeBounds("Volume Bounds", Vector) = (0.02, 6, 0.75, 0)
+        [HideInInspector] _DirectionalVolumeBounds("Volume Bounds", Vector) = (0.02, 12, 0, 0)
         [HideInInspector] _DirectionalMediumSettings("Medium Settings", Vector) = (0.16, 0.22, 0, 0)
         [HideInInspector] _DirectionalSampleCount("Sample Count", Float) = 8
+        [HideInInspector] _DirectionalShellPlane("Shell Plane", Vector) = (0, 0, 0, 0)
         [HideInInspector] _DirectionalVolumeTexture("Directional Volume", 2D) = "black" {}
     }
 
@@ -42,15 +42,16 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 
             #define DIRECTIONAL_VOLUME_MAXIMUM_SAMPLES 16
+            #define DIRECTIONAL_VOLUME_MAXIMUM_SEGMENTS 17
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _ShaftColor;
                 float _ShaftIntensity;
-                float _ShadowThreshold;
                 float _SurfaceFadeDistance;
                 float4 _DirectionalVolumeBounds;
                 float4 _DirectionalMediumSettings;
                 float _DirectionalSampleCount;
+                float4 _DirectionalShellPlane;
             CBUFFER_END
 
             struct Attributes
@@ -152,11 +153,14 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
             {
                 #if defined(MAIN_LIGHT_CALCULATE_SHADOWS)
                 float4 shadowCoord = TransformWorldToShadowCoord(positionWS);
+                if (BEYOND_SHADOW_FAR(shadowCoord))
+                {
+                    return 1.0;
+                }
+
                 half4 shadowParams = GetMainLightShadowParams();
-                // The atmosphere needs a visibility classification, not the full
-                // surface-shadow PCF kernel. One comparison keeps the cost bounded
-                // at sampleCount * five probes; half-resolution bilinear composite
-                // softens the presentation without multiplying shadow taps.
+                // One raw comparison per cell keeps the directional volume bounded;
+                // the half-resolution composite supplies presentation smoothing.
                 real attenuation = SAMPLE_TEXTURE2D_SHADOW(
                     _MainLightShadowmapTexture,
                     sampler_LinearClampCompare,
@@ -193,69 +197,88 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                     (int)round(_DirectionalSampleCount),
                     1,
                     DIRECTIONAL_VOLUME_MAXIMUM_SAMPLES);
-                float pathLength = exit - entry;
-                float stepLength = pathLength / max((float)sampleCount, 1.0);
                 float safeExtinction = max(_DirectionalMediumSettings.x, 0.0);
-                float integratedStep = safeExtinction > 0.00001
-                    ? (1.0 - exp(-safeExtinction * stepLength)) / safeExtinction
-                    : stepLength;
-                float stepTransmittance = exp(-safeExtinction * stepLength);
                 float transmittance = 1.0;
                 float accumulated = 0.0;
 
                 Light mainLight = GetMainLight();
                 float3 lightDirection = VolumeSafeNormalize(mainLight.direction);
-                float3 contrastAxisA = cross(float3(0.0, 1.0, 0.0), lightDirection);
-                if (dot(contrastAxisA, contrastAxisA) <= 0.0001)
-                {
-                    contrastAxisA = cross(float3(1.0, 0.0, 0.0), lightDirection);
-                }
-                contrastAxisA = VolumeSafeNormalize(contrastAxisA);
-                float3 contrastAxisB = VolumeSafeNormalize(
-                    cross(lightDirection, contrastAxisA));
-
-                float probeDistance = max(_DirectionalVolumeBounds.z, 0.01);
-                float contrastThreshold = clamp(_ShadowThreshold, 0.001, 1.0);
-                float contrastStart = contrastThreshold * 0.35;
                 float phase = PhaseFunction(
                     _DirectionalMediumSettings.y,
                     dot(rayDirectionWS, lightDirection));
                 float baseHeight = _DirectionalVolumeBounds.x;
                 float volumeHeight = max(_DirectionalVolumeBounds.y, 0.001);
+                float pathLength = exit - entry;
+                float3 planeNormal = _DirectionalShellPlane.xyz;
+                float planeRate = dot(rayDirectionWS, planeNormal);
+                float planeLengthSquared = dot(planeNormal, planeNormal);
+
+                float firstSegmentLength;
+                float regularSegmentLength;
+                bool useWorldCells =
+                    planeLengthSquared > 0.5 && abs(planeRate) > 0.0001;
+                if (useWorldCells)
+                {
+                    float spacing = max(_DirectionalShellPlane.w, 0.02);
+                    float entryCoordinate = dot(
+                        rayOriginWS + rayDirectionWS * entry,
+                        planeNormal);
+                    float phaseInCell = entryCoordinate -
+                        floor(entryCoordinate / spacing) * spacing;
+                    float projectedToBoundary = planeRate >= 0.0
+                        ? spacing - phaseInCell
+                        : phaseInCell;
+                    if (projectedToBoundary <= spacing * 0.0001)
+                    {
+                        projectedToBoundary = spacing;
+                    }
+
+                    firstSegmentLength = min(
+                        projectedToBoundary / abs(planeRate),
+                        pathLength);
+                    regularSegmentLength = spacing / abs(planeRate);
+                }
+                else
+                {
+                    // Defensive fallback for an invalid plane contract. The C# path
+                    // normally blends through the sun/view parallel singularity.
+                    firstSegmentLength = pathLength /
+                        max((float)sampleCount, 1.0);
+                    regularSegmentLength = firstSegmentLength;
+                }
+
+                float currentDistance = entry;
+                int segmentLimit = useWorldCells
+                    ? min(sampleCount + 1, DIRECTIONAL_VOLUME_MAXIMUM_SEGMENTS)
+                    : sampleCount;
 
                 [loop]
-                for (int sampleIndex = 0;
-                     sampleIndex < DIRECTIONAL_VOLUME_MAXIMUM_SAMPLES;
-                     sampleIndex++)
+                for (int segmentIndex = 0;
+                     segmentIndex < DIRECTIONAL_VOLUME_MAXIMUM_SEGMENTS;
+                     segmentIndex++)
                 {
-                    if (sampleIndex >= sampleCount)
+                    if (segmentIndex >= segmentLimit ||
+                        currentDistance >= exit - 0.0001)
                     {
                         break;
                     }
 
-                    float distanceAlongRay =
-                        entry + ((float)sampleIndex + 0.5) * stepLength;
+                    float remainingLength = exit - currentDistance;
+                    float segmentLength = min(
+                        segmentIndex == 0
+                            ? firstSegmentLength
+                            : regularSegmentLength,
+                        remainingLength);
+                    if (segmentLength <= 0.0001)
+                    {
+                        break;
+                    }
+
+                    float distanceAlongRay = currentDistance +
+                        segmentLength * 0.5;
                     float3 samplePositionWS =
                         rayOriginWS + rayDirectionWS * distanceAlongRay;
-                    float centerVisibility = SampleMainShadow(samplePositionWS);
-                    float negativeVisibilityA = SampleMainShadow(
-                        samplePositionWS - contrastAxisA * probeDistance);
-                    float positiveVisibilityA = SampleMainShadow(
-                        samplePositionWS + contrastAxisA * probeDistance);
-                    float negativeVisibilityB = SampleMainShadow(
-                        samplePositionWS - contrastAxisB * probeDistance);
-                    float positiveVisibilityB = SampleMainShadow(
-                        samplePositionWS + contrastAxisB * probeDistance);
-                    float surroundingVisibility =
-                        (negativeVisibilityA + positiveVisibilityA +
-                         negativeVisibilityB + positiveVisibilityB) * 0.25;
-                    float positiveContrast = max(
-                        centerVisibility - surroundingVisibility,
-                        0.0);
-                    float contrastVisibility = smoothstep(
-                        contrastStart,
-                        contrastThreshold,
-                        positiveContrast);
+                    float visibility = SampleMainShadow(samplePositionWS);
 
                     float normalizedHeight = saturate(
                         (samplePositionWS.y - baseHeight) / volumeHeight);
@@ -266,11 +289,16 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                         0.0,
                         max(_SurfaceFadeDistance, 0.001),
                         sceneDistance - distanceAlongRay);
+                    float segmentTransmittance = exp(
+                        -safeExtinction * segmentLength);
+                    float integratedSegment = safeExtinction > 0.00001
+                        ? (1.0 - segmentTransmittance) / safeExtinction
+                        : segmentLength;
 
-                    accumulated += transmittance * centerVisibility *
-                        contrastVisibility * phase * volumeEdgeFade *
-                        surfaceFade * integratedStep;
-                    transmittance *= stepTransmittance;
+                    accumulated += transmittance * visibility * phase *
+                        volumeEdgeFade * surfaceFade * integratedSegment;
+                    transmittance *= segmentTransmittance;
+                    currentDistance += segmentLength;
                     if (transmittance < 0.001)
                     {
                         break;

@@ -2076,7 +2076,18 @@ Interactable (abstract base class)
 ## 109. 태양 차폐 대비 체적광과 기지 시험 구역 `[ENVIRONMENT-01]`
 
 - `[확정 원인·교체][2026-09-02]` 기존 태양 빛줄기는 카메라 범위에 맞춘 10개 반투명 Quad를 매 프레임 직접 그려 실제 차폐 공간과 무관하게 빈 하늘에서도 선이 생기고 카메라 이동·줌에 따라 판처럼 읽혔다. 이 경로와 런타임 Mesh/Material 할당을 제거하고, 기존 공용 `LocalVolumetricLightRendererFeature`가 실제 URP main-light shadow atlas의 중심/주변 가시성 차이를 half-resolution screen-space 높이 구간에서 적분한 뒤 한 번 합성하도록 교체했다. 완전 조명·완전 그림자 구간은 모두 0이고 차폐 경계만 산란광이 된다. 산란 판정은 표면용 고품질 PCF를 중첩하지 않고 단계당 5개의 단일 atlas compare로 제한한다.
+
 - `[시험 장소]` 재사용 프리팹 `PrototypeSunShaftContrastTestArea`를 `GameMap1` 기지에 연결 배치했다. 같은 화면에서 비교할 수 있도록 콜라이더 없는 완전 개방 수광판, 기둥 4개와 회전한 지붕 슬랫 4개의 건축물, 줄기·수관 3개의 나무 군집으로 나눴다. 실제 차폐 geometry는 그림자를 만들고, 이동을 막아야 하는 기둥·줄기 7개만 기존 `Obstacle` collider를 사용한다.
 - `[보존]` `SkyLightingCycleController`의 낮밤·구름·비 권위와 기존 가로등/local emitter 단일산란 경로, Player shell·Camera·씬 흐름은 바꾸지 않았다. 비는 기존 강수량에서 태양 체적광만 92% 억제하고 local emitter의 우천 산란은 유지한다.
 - `[Unity 정적·Play 확인]` C# compile과 전용 shader `ShaderUtil` 메시지 0개를 확인했다. 프리팹은 renderer 17개·Obstacle collider 7개이고 scene instance 위치는 `(-15, 0, -11.25)`다. 한 Play Session의 맑은 정오 1280×720 실제 Player Camera에서 개방판은 균일하고 슬랫·수관 차폐부에서만 geometry에 맞는 체적 대비가 나타남을 확인했다. 같은 세션에서 Rain·Night 분기와 기존 local emitter 1개가 유효하고 Day·Clear 복원도 성공했다. 종료 뒤 Edit Mode·scene clean이며, 기존 `CharacterSilhouette` RenderGraph 및 외부 `ASFolliage` shader 오류는 이번 변경과 분리했다.
 - `[현재 경계]` 현재 `PC_Renderer`에는 Screen Space Shadows feature가 없어서 main-light shadow atlas 경로가 맞다. 이후 renderer를 Screen Space Shadows로 전환하면 전용 variant와 texture 입력을 함께 추가하는 조건으로 재개방한다.
+
+---
+
+## 110. 월드 고정 광원 평면 적분과 대형 검증장 `[ENVIRONMENT-01]`
+
+- `[근본 교체][2026-09-02]` §109의 중심/주변 4방향 `positive contrast`는 넓은 개구부 내부 가시도가 모두 같으면 광선 몸체가 사라지고 경계만 남는 구조였다. 이를 제거하고, 직교 gameplay Camera 방향을 태양축에 수직 투영해 태양 방향과 평행한 월드 평면군 `dot(P,N)=k·spacing`을 만든 뒤 카메라 광선이 통과한 각 고정 cell의 중점에서 실제 URP main-light shadow atlas 가시도·Beer-Lambert 소멸·위상함수·높이/표면 fade를 적분하도록 교체했다. 평면 원점은 월드 원점에 고정되어 이동·줌에 종속되지 않으며, 태양축과 시선이 거의 평행한 좁은 특이구간은 camera-facing normal로 연속 보간한다.
+- `[비용 경계]` 방향광은 half-resolution과 단일 합성을 유지한다. 기본 12 sample에서 이전 `sample × 중심/주변 5회` 대신 cell당 raw shadow compare 1회만 사용하고 shadow atlas 밖은 `BEYOND_SHADOW_FAR`로 조명 처리한다. 조회 수 감소는 구조상 확정이지만 실제 GPU ms는 아직 측정하지 않았다. Screen Space Shadows는 공중의 임의 표본을 검사할 수 없어 이 경로에 사용하지 않는다.
+- `[시험 자산]` 기존 `PrototypeSunShaftContrastTestArea` prefab GUID와 `GameMap1` 인스턴스 위치를 유지한 채 약 `100×64m`로 교체했다. 개방 대조군, 완전 지붕, `5×6m` 채광구, 반복 슬랫, 불규칙 수목, 단일 `9m` 벽, `8/24/48m` 거리 차폐물을 독립 구역으로 배치했고 방향광 높이 구간과 최대 표본 예산은 `12m/12`로 올렸다. 씬 파일은 수정하지 않았다.
+- `[검증·미검증]` Unity 동적 C# 컴파일 성공, 새 shader `supported=True`·compiler message `0`, 두 prefab 재임포트 성공과 `git diff --check`를 확인했다. 자산 저장 뒤 Unity MCP 연결이 자동 종료되어 새 검증장의 저·중·고 태양각, 줌/이동 world-lock, 개방/밀폐/개구부 시각 비교와 Rain/Night 비교는 이번 작업에서 실행하지 않았으며 통과로 기록하지 않는다.
+- `[보존·후속]` 기존 가로등 로컬 체적광, 낮밤·비·구름·웅덩이, Player/Camera/셸과 씬 흐름은 바꾸지 않았다. half-resolution opaque depth 경계의 얇은 foliage 절단, Transparent 차폐/수광, 실제 GPU Profile과 최종 아트 수치는 후속 재개방 조건이다. 사용자 dirty 재질 2개·preview Camera prefab·`GameMap1` Chest 직렬화 6줄은 변경·stage하지 않았다.

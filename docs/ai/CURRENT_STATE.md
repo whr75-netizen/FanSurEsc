@@ -53,7 +53,7 @@
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
 | `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9·100 | WASD 회전, 1.3배 달리기, mannequin Humanoid, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
-| `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101·108 | 낮밤·구름·비/차단·Grass·로컬/체적광·웅덩이·0시 최저광; 낮은 중성 밝기광 | 야간 최저 확인·날씨 저장·풍향·최종 아트·다수 광원 성능·Transparent 합성 |
+| `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101·108~109 | 낮밤·구름·비차단·Grass·로컬/태양 체적광·웅덩이·0시 최저; 중성 낮; 기지 개방/슬랫/나무 시험장 | 야간 최저 확인·날씨 저장·풍향·최종 아트·다수 광원 성능·ScreenSpace Shadows/Transparent 합성 |
 | `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 실루엣 시험 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §96~108 | Player·기지 mannequin: 계단 외곽선·snap·연속 실제광·정오 `#F7D7BA`; 팔레트 없음 | 최종 아트 색감·파츠·ID·회전/스킨/줌 확인 |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95·105 | grid·stack·가방·장전탄·Save v7·저작창; ID 13 1×1 갑빠(방어 20%·육각); 바닥 drop/E, 일반 전환 삭제·Active Raid 복원 | item/grid/장비/world-item 저장 계약 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51·105 | 체력 1000·정수 계산·공격력 10단위·총 피해 350; 갑빠 방어 1당 최종 피해 1% 감소 | 탄종·AI 탄약·무기군 장전·반동·탄퍼짐·관통·피해 유형·조준 결정 |

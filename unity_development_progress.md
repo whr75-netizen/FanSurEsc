@@ -2070,3 +2070,13 @@ Interactable (abstract base class)
 - `[근본 수정·일관성]` 캐릭터 material과 shader 기본색을 사용자 선택 `#F7D7BA`로 함께 바꾸고, 측정한 정오 환경값의 역수 `1.66`을 SH+주광 luminance에만 적용해 맑은 정오를 기준 밝기로 정규화했다. 6.5/10/16시 주광은 흰색으로, ambient 삼색은 원래 **선형 휘도와 같은 무채색**으로 바꾸고 주광의 원래 선형 휘도는 intensity에 옮겼다. 실제 profile asset과 `CreateClearSkyDefaults()`를 동일하게 맞췄으며 고정 팔레트·강제 색·overlay·post process는 추가하지 않았다.
 - `[보존]` 0시와 19.5시 밤색, 비 weather tint, 달·가로등·URP 추가광·단계형 로컬광의 색과 픽셀별 경계, 외곽선·render snap·shadow/cookie·시간 권위·Player/씬은 유지했다.
 - `[Unity 정적·Play 확인]` profile validation, C# compile, shader `supported=True`·`ShaderHasError=False`를 통과했다. 6.5/8/10/12/16시의 sun·ambient RGB가 모두 중성이며 8시는 실제 흰 주광 `0.5808233`, 12시는 `0.8876334`다. `GameMap1` 1280×720에서 순수 Unlit `#F7D7BA`가 `246/214/185`, 현재 정오가 `248/216/187`로 최대 2 차이였고 자정은 `75/64/54`로 `R>G>B`와 밝기 하강을 유지했다. 앞선 같은 shader의 캐릭터 전용 로컬광 검증은 가까운 반쪽 변화 `18.44 > 10.23`으로 공간 경계를 확인했다. 종료 뒤 Edit Mode·scene clean을 확인했고 외부 `ASFolliage` 기존 오류는 분리했다.
+
+---
+
+## 109. 태양 차폐 대비 체적광과 기지 시험 구역 `[ENVIRONMENT-01]`
+
+- `[확정 원인·교체][2026-09-02]` 기존 태양 빛줄기는 카메라 범위에 맞춘 10개 반투명 Quad를 매 프레임 직접 그려 실제 차폐 공간과 무관하게 빈 하늘에서도 선이 생기고 카메라 이동·줌에 따라 판처럼 읽혔다. 이 경로와 런타임 Mesh/Material 할당을 제거하고, 기존 공용 `LocalVolumetricLightRendererFeature`가 실제 URP main-light shadow atlas의 중심/주변 가시성 차이를 half-resolution screen-space 높이 구간에서 적분한 뒤 한 번 합성하도록 교체했다. 완전 조명·완전 그림자 구간은 모두 0이고 차폐 경계만 산란광이 된다. 산란 판정은 표면용 고품질 PCF를 중첩하지 않고 단계당 5개의 단일 atlas compare로 제한한다.
+- `[시험 장소]` 재사용 프리팹 `PrototypeSunShaftContrastTestArea`를 `GameMap1` 기지에 연결 배치했다. 같은 화면에서 비교할 수 있도록 콜라이더 없는 완전 개방 수광판, 기둥 4개와 회전한 지붕 슬랫 4개의 건축물, 줄기·수관 3개의 나무 군집으로 나눴다. 실제 차폐 geometry는 그림자를 만들고, 이동을 막아야 하는 기둥·줄기 7개만 기존 `Obstacle` collider를 사용한다.
+- `[보존]` `SkyLightingCycleController`의 낮밤·구름·비 권위와 기존 가로등/local emitter 단일산란 경로, Player shell·Camera·씬 흐름은 바꾸지 않았다. 비는 기존 강수량에서 태양 체적광만 92% 억제하고 local emitter의 우천 산란은 유지한다.
+- `[Unity 정적·Play 확인]` C# compile과 전용 shader `ShaderUtil` 메시지 0개를 확인했다. 프리팹은 renderer 17개·Obstacle collider 7개이고 scene instance 위치는 `(-15, 0, -11.25)`다. 한 Play Session의 맑은 정오 1280×720 실제 Player Camera에서 개방판은 균일하고 슬랫·수관 차폐부에서만 geometry에 맞는 체적 대비가 나타남을 확인했다. 같은 세션에서 Rain·Night 분기와 기존 local emitter 1개가 유효하고 Day·Clear 복원도 성공했다. 종료 뒤 Edit Mode·scene clean이며, 기존 `CharacterSilhouette` RenderGraph 및 외부 `ASFolliage` shader 오류는 이번 변경과 분리했다.
+- `[현재 경계]` 현재 `PC_Renderer`에는 Screen Space Shadows feature가 없어서 main-light shadow atlas 경로가 맞다. 이후 renderer를 Screen Space Shadows로 전환하면 전용 variant와 texture 입력을 함께 추가하는 조건으로 재개방한다.

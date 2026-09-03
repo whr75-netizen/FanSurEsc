@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FantasySurvival.AI;
+using FantasySurvival.WorldLighting;
 using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
@@ -69,6 +70,7 @@ namespace FantasySurvival.WorldGeneration
         [Header("Street Furniture Sockets")]
         [SerializeField] private bool instantiateStreetTrees = true;
         [SerializeField] private bool instantiateStreetLamps = true;
+        [SerializeField] private GameObject streetLampPrefab;
         [FormerlySerializedAs("instantiatePrototypeStreetFurniture")]
         [SerializeField] private bool instantiatePrototypeClutter;
         [SerializeField, Min(1)] private int junctionFurnitureClearanceTiles = 3;
@@ -100,6 +102,7 @@ namespace FantasySurvival.WorldGeneration
         public bool NavigationPathComplete { get; private set; }
         public bool NavigationBuildPending => pendingNavigationLayout != null;
         public Transform GeneratedContent => generatedContent;
+        public GameObject StreetLampPrefab => streetLampPrefab;
         public UrbanMapGenerationParameters GenerationParameters => CreateParameters();
         public bool IsPatrolPointSourceReady =>
             CurrentLayout != null &&
@@ -418,6 +421,44 @@ namespace FantasySurvival.WorldGeneration
                 }
             }
 
+            if (instantiateStreetLamps && !HasValidStreetLampPrefab())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool HasValidStreetLampPrefab()
+        {
+            if (streetLampPrefab == null)
+            {
+                Debug.LogError(
+                    "ProceduralUrbanMapGenerator requires the existing street-lamp prefab " +
+                    "when street lamps are enabled.",
+                    this);
+                return false;
+            }
+
+            BoxCollider footprint = streetLampPrefab.GetComponent<BoxCollider>();
+            NavMeshObstacle obstacle = streetLampPrefab.GetComponent<NavMeshObstacle>();
+            NightActivatedStreetLamp nightController =
+                streetLampPrefab.GetComponentInChildren<NightActivatedStreetLamp>(true);
+            StylizedLightShaftEmitter shaftEmitter =
+                streetLampPrefab.GetComponentInChildren<StylizedLightShaftEmitter>(true);
+            Light sourceLight = nightController != null ? nightController.SourceLight : null;
+            if (footprint == null || obstacle == null || nightController == null ||
+                shaftEmitter == null || sourceLight == null || sourceLight.type != LightType.Spot ||
+                shaftEmitter.GetComponent<Light>() != sourceLight)
+            {
+                Debug.LogError(
+                    "ProceduralUrbanMapGenerator street-lamp prefab must retain its root " +
+                    "BoxCollider/NavMeshObstacle and one connected night Spot Light with " +
+                    "a stylized shaft emitter.",
+                    this);
+                return false;
+            }
+
             return true;
         }
 
@@ -677,6 +718,12 @@ namespace FantasySurvival.WorldGeneration
                     continue;
                 }
 
+                if (placement.Kind == UrbanStreetFurnitureKind.StreetLamp)
+                {
+                    CreateStreetLamp(placement);
+                    continue;
+                }
+
                 var root = new GameObject(
                     $"StreetFurniture_{placement.StableId:000}_{placement.Kind}");
                 root.transform.SetParent(generatedContent, false);
@@ -709,27 +756,6 @@ namespace FantasySurvival.WorldGeneration
                             Quaternion.identity,
                             new Vector3(3.1f, 3.4f, 3.1f),
                             new Color(0.18f, 0.38f, 0.19f, 1f),
-                            false, false, false, true, true, root.transform);
-                        break;
-
-                    case UrbanStreetFurnitureKind.StreetLamp:
-                        colliderSize = new Vector3(0.65f, 8.5f, 0.65f);
-                        colliderCenter = new Vector3(0f, 4.25f, 0f);
-                        CreatePrimitive(
-                            "Pole",
-                            PrimitiveType.Cylinder,
-                            new Vector3(0f, 4.25f, 0f),
-                            Quaternion.identity,
-                            new Vector3(0.32f, 4.25f, 0.32f),
-                            new Color(0.16f, 0.17f, 0.18f, 1f),
-                            false, false, false, true, true, root.transform);
-                        CreatePrimitive(
-                            "LampHead",
-                            PrimitiveType.Cube,
-                            new Vector3(0f, 8.35f, 0.45f),
-                            Quaternion.identity,
-                            new Vector3(0.9f, 0.45f, 1.4f),
-                            new Color(0.76f, 0.68f, 0.38f, 1f),
                             false, false, false, true, true, root.transform);
                         break;
 
@@ -767,6 +793,21 @@ namespace FantasySurvival.WorldGeneration
                 modifier.overrideArea = true;
                 modifier.area = 1;
             }
+        }
+
+        private void CreateStreetLamp(UrbanStreetFurniturePlacement placement)
+        {
+            GameObject root = Instantiate(streetLampPrefab, generatedContent, false);
+            root.name = $"StreetFurniture_{placement.StableId:000}_{placement.Kind}";
+            root.transform.localPosition = new Vector3(
+                placement.LocalPosition.x,
+                SidewalkSurfaceHeight,
+                placement.LocalPosition.y);
+
+            // Layout yaw describes the road tangent. The authored lamp arm points along
+            // local -Z, so rotate each sidewalk side inward without changing layout/hash data.
+            float inwardYaw = placement.LocalYawDegrees + 90f * placement.Side;
+            root.transform.localRotation = Quaternion.Euler(0f, inwardYaw, 0f);
         }
 
         public bool ShouldInstantiateStreetFurniture(UrbanStreetFurnitureKind kind)

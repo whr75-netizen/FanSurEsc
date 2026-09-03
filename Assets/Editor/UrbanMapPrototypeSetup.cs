@@ -6,6 +6,7 @@ using FantasySurvival.Inventory;
 using FantasySurvival.Raids;
 using FantasySurvival.SceneFlow;
 using FantasySurvival.WorldGeneration;
+using FantasySurvival.WorldLighting;
 using Unity.AI.Navigation;
 using UnityEditor;
 using UnityEditor.Build;
@@ -37,6 +38,8 @@ namespace FantasySurvival.EditorTools
             "Assets/Prefabs/Raids/PrototypeMeleeEnemyDamageOne.prefab";
         private const string RangedEnemyPrefabPath =
             "Assets/Prefabs/Raids/PrototypeRangedEnemyTimed.prefab";
+        private const string StreetLampPrefabPath =
+            "Assets/Prefabs/Lighting/PrototypeStreetLamp.prefab";
         private const string BuildingWrapperFolder =
             "Assets/Prefabs/WorldGeneration/Buildings";
         private static readonly string[] BuildingSourcePrefabPaths =
@@ -167,6 +170,8 @@ namespace FantasySurvival.EditorTools
             ApplyPrototypeGenerationSettings(serializedGenerator);
             ReplaceBuildingVisualPrefabs(
                 serializedGenerator.FindProperty("buildingVisualPrefabs"));
+            serializedGenerator.FindProperty("streetLampPrefab").objectReferenceValue =
+                LoadRequiredAsset<GameObject>(StreetLampPrefabPath);
             RemoveObsoleteLayoutProtectionAnchors(
                 scene,
                 serializedGenerator.FindProperty("additionalProtectedAnchors"),
@@ -1250,6 +1255,15 @@ namespace FantasySurvival.EditorTools
                 throw new BuildFailedException("GameMapTest ProceduralUrbanMapGenerator has no NavMeshSurface.");
             }
 
+            GameObject requiredStreetLamp = LoadRequiredAsset<GameObject>(StreetLampPrefabPath);
+            if (generators[0].StreetLampPrefab != requiredStreetLamp)
+            {
+                throw new BuildFailedException(
+                    "GameMapTest urban generator is not connected to the shared PrototypeStreetLamp prefab.");
+            }
+
+            ValidateStreetLampPrefab(requiredStreetLamp);
+
             string catalogError = null;
             if (spawnCatalog == null || !spawnCatalog.TryValidate(out catalogError))
             {
@@ -1344,6 +1358,25 @@ namespace FantasySurvival.EditorTools
             if (missingScriptCount != 0)
             {
                 throw new BuildFailedException($"GameMapTest contains {missingScriptCount} missing scripts after setup.");
+            }
+        }
+
+        private static void ValidateStreetLampPrefab(GameObject prefab)
+        {
+            NightActivatedStreetLamp[] nightControllers =
+                prefab.GetComponentsInChildren<NightActivatedStreetLamp>(true);
+            StylizedLightShaftEmitter[] shaftEmitters =
+                prefab.GetComponentsInChildren<StylizedLightShaftEmitter>(true);
+            Light[] lights = prefab.GetComponentsInChildren<Light>(true);
+            if (!prefab.CompareTag("Obstacle") || prefab.GetComponent<BoxCollider>() == null ||
+                prefab.GetComponent<NavMeshObstacle>() == null || nightControllers.Length != 1 ||
+                shaftEmitters.Length != 1 || lights.Length != 1 ||
+                nightControllers[0].SourceLight != lights[0] || lights[0].type != LightType.Spot ||
+                shaftEmitters[0].GetComponent<Light>() != lights[0])
+            {
+                throw new BuildFailedException(
+                    "PrototypeStreetLamp must retain one authoritative obstacle footprint and " +
+                    "one connected night Spot Light/shaft presentation.");
             }
         }
 

@@ -6,10 +6,12 @@ using FantasySurvival.Interaction;
 using FantasySurvival.Raids;
 using FantasySurvival.SceneFlow;
 using FantasySurvival.WorldGeneration;
+using FantasySurvival.WorldLighting;
 using Unity.AI.Navigation;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
@@ -604,8 +606,16 @@ namespace FantasySurvival.EditorTools
                         $"{context}: street furniture '{child.name}' has no enabled footprint collider.");
                     Require(child.CompareTag("Obstacle"),
                         $"{context}: street furniture '{child.name}' is not tagged Obstacle.");
-                    Require(child.GetComponent<NavMeshModifier>() != null,
-                        $"{context}: street furniture '{child.name}' has no NavMeshModifier.");
+
+                    if (child.name.EndsWith("_StreetLamp", StringComparison.Ordinal))
+                    {
+                        ValidateGeneratedStreetLamp(generator, child, context);
+                    }
+                    else
+                    {
+                        Require(child.GetComponent<NavMeshModifier>() != null,
+                            $"{context}: street furniture '{child.name}' has no NavMeshModifier.");
+                    }
                     continue;
                 }
 
@@ -644,6 +654,112 @@ namespace FantasySurvival.EditorTools
             Require(medicalPoiBuildingCount == 1,
                 $"{context}: expected one Medical POI building, found {medicalPoiBuildingCount}.");
             Require(boundaryCount == 4, $"{context}: expected four map boundaries, found {boundaryCount}.");
+            ValidateGeneratedStreetLampNightActivation(generator, context);
+        }
+
+        private static void ValidateGeneratedStreetLamp(
+            ProceduralUrbanMapGenerator generator,
+            GameObject lampRoot,
+            string context)
+        {
+            NavMeshObstacle obstacle = lampRoot.GetComponent<NavMeshObstacle>();
+            Require(obstacle != null && obstacle.enabled && obstacle.carving,
+                $"{context}: generated street lamp '{lampRoot.name}' lost its carving obstacle.");
+
+            NightActivatedStreetLamp[] nightControllers =
+                lampRoot.GetComponentsInChildren<NightActivatedStreetLamp>(true);
+            StylizedLightShaftEmitter[] shaftEmitters =
+                lampRoot.GetComponentsInChildren<StylizedLightShaftEmitter>(true);
+            Light[] lights = lampRoot.GetComponentsInChildren<Light>(true);
+            Require(nightControllers.Length == 1 && shaftEmitters.Length == 1 && lights.Length == 1,
+                $"{context}: generated street lamp '{lampRoot.name}' is not one complete authored lamp instance.");
+            Require(nightControllers[0].SourceLight == lights[0] && lights[0].type == LightType.Spot &&
+                    nightControllers[0].MaximumIntensity > 0f &&
+                    shaftEmitters[0].GetComponent<Light>() == lights[0],
+                $"{context}: generated street lamp '{lampRoot.name}' has a disconnected night Spot Light or shaft.");
+
+            Require(TryFindStreetFurniturePlacement(
+                    generator.CurrentLayout,
+                    lampRoot.name,
+                    out UrbanStreetFurniturePlacement placement),
+                $"{context}: generated street lamp '{lampRoot.name}' has no matching layout placement.");
+            Require(placement.SourceRoadIndex >= 0 &&
+                    placement.SourceRoadIndex < generator.CurrentLayout.Roads.Count,
+                $"{context}: generated street lamp '{lampRoot.name}' refers to an invalid road.");
+
+            UrbanRoadSegment road = generator.CurrentLayout.Roads[placement.SourceRoadIndex];
+            Vector2 roadDirection = (road.End - road.Start).normalized;
+            Vector2 roadRight = new Vector2(roadDirection.y, -roadDirection.x);
+            Vector2 towardRoad = -placement.Side * roadRight;
+            Vector3 localLightOffset =
+                lampRoot.transform.InverseTransformPoint(lights[0].transform.position);
+            Vector3 presentedLightOffset = lampRoot.transform.localRotation * new Vector3(
+                localLightOffset.x,
+                0f,
+                localLightOffset.z);
+            Vector2 lampHeadDirection = new Vector2(
+                presentedLightOffset.x,
+                presentedLightOffset.z).normalized;
+            Require(Vector2.Dot(lampHeadDirection, towardRoad) >= 0.99f,
+                $"{context}: generated street lamp '{lampRoot.name}' does not face inward from its sidewalk side.");
+        }
+
+        private static bool TryFindStreetFurniturePlacement(
+            UrbanMapLayout layout,
+            string generatedName,
+            out UrbanStreetFurniturePlacement placement)
+        {
+            for (int index = 0; index < layout.StreetFurniture.Count; index++)
+            {
+                UrbanStreetFurniturePlacement candidate = layout.StreetFurniture[index];
+                string expectedName = $"StreetFurniture_{candidate.StableId:000}_{candidate.Kind}";
+                if (string.Equals(expectedName, generatedName, StringComparison.Ordinal))
+                {
+                    placement = candidate;
+                    return true;
+                }
+            }
+
+            placement = default;
+            return false;
+        }
+
+        private static void ValidateGeneratedStreetLampNightActivation(
+            ProceduralUrbanMapGenerator generator,
+            string context)
+        {
+            NightActivatedStreetLamp[] lamps =
+                generator.GeneratedContent.GetComponentsInChildren<NightActivatedStreetLamp>(true);
+            if (lamps.Length == 0)
+            {
+                return;
+            }
+
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            SkyLightingCycleController skyController = shell != null
+                ? shell.GetComponent<SkyLightingCycleController>()
+                : null;
+            Require(skyController != null,
+                $"{context}: generated street lamps have no authoritative sky controller.");
+
+            float originalHour = skyController.CurrentHour;
+            try
+            {
+                Require(skyController.SetTimeHours(22f),
+                    $"{context}: could not apply the representative night-lighting state.");
+                for (int index = 0; index < lamps.Length; index++)
+                {
+                    NightActivatedStreetLamp lamp = lamps[index];
+                    Light light = lamp.SourceLight;
+                    Require(lamp.Visibility >= 0.999f && light != null && light.enabled &&
+                            Mathf.Abs(light.intensity - lamp.MaximumIntensity) <= 0.01f,
+                        $"{context}: generated street lamp '{lamp.transform.root.name}' did not illuminate at 22:00.");
+                }
+            }
+            finally
+            {
+                skyController.SetTimeHours(originalHour);
+            }
         }
 
         private static int CalculateExpectedSurfaceVertexCount(UrbanSurfaceGrid grid)

@@ -2134,3 +2134,13 @@ Interactable (abstract base class)
 - `[표현·선택 권위]` 인도는 별도 겹침 plane이 아니라 기존 단일 surface mesh의 `Sidewalk` submesh를 0.12m 올리고 경계 curb 면과 밝은 재질로 구분했다. 기존 road-relative socket은 유지하면서 가로수와 가로등만 기본 표시하고 자전거·쓰레기통 시험 proxy는 계속 끈다. 가로등을 먼저 배정해 가로수와 같은 인도 셀을 다툴 때 조명 위치가 사라지지 않게 했다.
 - `[Unity 정적 검증]` 도로 정규화 뒤 seed 0~255가 모두 유효하고 hash 256개가 서로 달랐으며, 단일 셀 오목부 validator를 모두 통과했다. 도로 `69~88`, 건물 `125~183`, 인도 `2078~2214`였다. 가로등 우선 배치까지 반영한 최신 Unity assembly를 같은 256개 seed로 다시 실행해 가로등 `23~53`개(평균 `39.41`), 가로수 `60~94`개(평균 `78.69`)와 생성 실패 0건을 확인했다. Unity 6.5 실제 runtime/editor compiler response도 오류 없이 완료됐고 기존 외부 경고 2개만 남았다.
 - `[씬·미검증]` Unity Editor API로 `GameMapTest`의 가로수/가로등 표시를 켜고 clutter는 끈 채 저장했다. Play 검증의 surface 정점 계약도 논리 타일 상판과 노출된 curb 면을 각각 정확히 세도록 갱신했다. 새 v7 지형의 실제 화면상 curb 높이·가로 시설 분포·NavMesh와 사용자가 본 위치의 notch 제거는 대표 Play 1회가 아직 필요하다. 카메라 끝 건물 투명화처럼 보이는 별도 현상은 알파/LOD가 아니라 10m 카메라보다 10.5~18m 건물이 높아 near plane과 backface가 잘리는 것이 정적 근거상 유력하며 픽셀아트 교체만으로 해결되지 않는다.
+
+---
+
+## 115. 생성형 도심의 공유 가로등 복원 `[MAP-01][ENVIRONMENT-01]`
+
+- `[사용자 피드백·근본 원인][2026-09-04]` 가로등 socket 데이터는 있었지만 표현 생성기가 기존 `PrototypeStreetLamp`를 사용하지 않고 Cylinder 기둥과 Cube 머리를 새로 만들고 있었다. 이 대체물에는 `Light`, `NightActivatedStreetLamp`, cookie·shadow와 `StylizedLightShaftEmitter`가 전혀 없었다. 또한 road tangent인 `LocalYawDegrees`만 적용하고 좌우 `Side`를 무시해 램프 머리가 차도가 아니라 도로 진행 방향을 향했다.
+- `[수정]` `GameMapTest` 생성기에 기존 공유 `Assets/Prefabs/Lighting/PrototypeStreetLamp.prefab`을 명시 연결하고, 가로등 socket만 그 prefab 전체를 직접 인스턴스화한다. 원본 prefab의 root `BoxCollider`·carving `NavMeshObstacle`, 야간 Spot·발광부·체적광 설정은 그대로 사용한다. 원본 arm의 local `-Z`가 차도를 향하도록 표현 yaw만 `LocalYawDegrees + 90° × Side`로 바꿨으며, 결정적 layout·generator version·world hash 입력은 변경하지 않았다.
+- `[회귀 방지]` 생성 전 prefab의 필수 충돌·Spot·야간 제어·빛줄기 연결을 fail-closed로 검사한다. Play validator도 생성된 모든 가로등의 prefab 구성, carving obstacle, layout stable ID와 좌우 회전을 검사하고, 22시에 모든 lamp visibility와 실제 Light intensity가 maximum에 도달하는지 확인한 뒤 원래 시간을 복원한다.
+- `[Unity 컴파일·Play 1회]` Unity 동적 컴파일 성공 후 direct `GameMapTest` 시작과 `GameMap1` 왕복 1회를 통과했다. seed `-1198157842`, world hash `17B58E5B7AB85F9B`, runtime Error 0이며 생성 가로등의 22시 점등·방향, NavMesh·POI·spawn, Player·Camera·Inventory UI·EventSystem 동일성과 원래 `GameMap1` 복원을 함께 확인했다. 기존 사용자 dirty 파일은 저장하거나 stage하지 않았다.
+- `[현재 경계]` seed당 다수의 실제 Spot Light가 생기며 기존 체적광 표현기는 가까운 최대 8개를 선택한다. 기능 복원과 별개로 최종 도심 야간 성능은 GPU Profiler와 shadow LOD 근거가 생길 때 재개방한다.

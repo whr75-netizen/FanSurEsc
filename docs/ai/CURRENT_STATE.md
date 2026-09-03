@@ -1,6 +1,6 @@
 # 현재 구현·검증 상태
 
-**마지막 갱신:** 2026-09-03
+**마지막 갱신:** 2026-09-04
 ## 판정 규칙
 
 - 직접 확인 → 이 표 → 최신 증거 → 과거 이력 순으로 판정한다. 차이는 원인을 확인한 뒤 쓰기 허용 작업에서 갱신한다.
@@ -59,7 +59,7 @@
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51·105 | 체력 1000·정수 계산·공격력 10단위·총 피해 350; 갑빠 방어 1당 최종 피해 1% 감소 | 탄종·AI 탄약·무기군 장전·반동·탄퍼짐·관통·피해 유형·조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67 | 고정 맵 임의/도심 공유후보 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
-| `MAP-01` | 도심 타일·8방향 도로·건물 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §111~114 | `145²·2m`; 7/9 도로·v7 합류 정규화; 밀집 필지·인도·가로수/가로등·Nav | atlas·회전 footprint·실내 |
+| `MAP-01` | 도심 타일·8방향 도로·건물 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §111~115 | `145²·2m`; 7/9 도로·v7 합류 정규화; 밀집 필지·인도·가로수와 공유 야간 가로등·Nav | atlas·회전 footprint·실내·다수 가로등 GPU Profile |
 | `MAP-ARRIVAL-01` | 원정 맵 도착 안전 gate | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §32·34 | Ready 뒤 공개; Invalid는 covered 기지 복귀, 불가 시 잠금 보류 | readiness·도착·rollback·redirect 변경 |
 | `SPAWN-01` | 도심 시험 적·상자 seed 배치 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §33~34·67~68 | spawn catalog가 Chest 1·Enemy 2 prefab을 stable manifest 위치에 생성·등록; POI·NavMesh·Recovery 복원 검증 | catalog·prefab·배치·registry·world hash 변경 |
 | `POI-01` | 의료 POI | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §111 | 청록 건물 1·앞 Chest·치료제 ID 7·접근 경로 | 내부·다중 POI·예산 추가 |

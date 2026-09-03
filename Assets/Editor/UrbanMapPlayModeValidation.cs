@@ -30,6 +30,8 @@ namespace FantasySurvival.EditorTools
         private const int MedicalPoiItemDefinitionId = 7;
         private const int RequiredRoundTrips = 1;
         private const int ReadyObservationCount = 2;
+        private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
+        private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
 
         private const string KeyPrefix = "FantasySurvival.UrbanMapValidation.";
         private const string RunningKey = KeyPrefix + "Running";
@@ -378,7 +380,24 @@ namespace FantasySurvival.EditorTools
             Require(generator.enabled, $"{context}: generator is disabled.");
             Require(layout != null, $"{context}: CurrentLayout is null.");
             Require(layout.Roads.Count > 0, $"{context}: no roads were generated.");
+            Require(layout.Parcels.Count > 0, $"{context}: no road-front parcels were generated.");
             Require(layout.Buildings.Count > 0, $"{context}: no prototype buildings were generated.");
+            var buildingsPerFrontage = new System.Collections.Generic.Dictionary<int, int>();
+            int largestFrontageBuildingCount = 0;
+            for (int buildingIndex = 0; buildingIndex < layout.Buildings.Count; buildingIndex++)
+            {
+                UrbanParcelPlacement parcel = layout.Parcels[
+                    layout.Buildings[buildingIndex].SourceParcelIndex];
+                int frontageKey = parcel.SourceRoadIndex * 2 + (parcel.Side > 0 ? 1 : 0);
+                buildingsPerFrontage.TryGetValue(frontageKey, out int frontageCount);
+                frontageCount++;
+                buildingsPerFrontage[frontageKey] = frontageCount;
+                largestFrontageBuildingCount = Mathf.Max(
+                    largestFrontageBuildingCount,
+                    frontageCount);
+            }
+            Require(largestFrontageBuildingCount >= 2,
+                $"{context}: no road frontage contains multiple buildings.");
             Require(layout.Candidates.Count > 0, $"{context}: no shared spatial candidates were generated.");
             Require(layout.TryGetPoi(UrbanPoiKind.Medical, out _),
                 $"{context}: Medical POI is missing from the authoritative layout.");
@@ -545,9 +564,26 @@ namespace FantasySurvival.EditorTools
                             Vector3.Distance(buildingCollider.center, expectedColliderCenter) <= 0.01f,
                         $"{context}: building '{child.name}' collision no longer matches its layout footprint.");
 
-                    Renderer[] buildingRenderers = child.GetComponentsInChildren<Renderer>(true);
+                    Renderer[] buildingRenderers = child.GetComponentsInChildren<Renderer>(false);
                     Require(buildingRenderers.Length >= 1,
                         $"{context}: building '{child.name}' has no prefab presentation.");
+                    for (int rendererIndex = 0; rendererIndex < buildingRenderers.Length; rendererIndex++)
+                    {
+                        Material[] materials = buildingRenderers[rendererIndex].sharedMaterials;
+                        Require(materials.Length > 0,
+                            $"{context}: building '{child.name}' renderer has no material.");
+                        for (int materialIndex = 0; materialIndex < materials.Length; materialIndex++)
+                        {
+                            Material material = materials[materialIndex];
+                            bool hasPalette = material != null &&
+                                              (material.HasProperty(BaseMapId) &&
+                                               material.GetTexture(BaseMapId) != null ||
+                                               material.HasProperty(MainTexId) &&
+                                               material.GetTexture(MainTexId) != null);
+                            Require(hasPalette,
+                                $"{context}: building '{child.name}' lost its source palette texture.");
+                        }
+                    }
                     Collider[] buildingColliders = child.GetComponentsInChildren<Collider>(true);
                     for (int colliderIndex = 0; colliderIndex < buildingColliders.Length; colliderIndex++)
                     {
@@ -576,6 +612,8 @@ namespace FantasySurvival.EditorTools
                     Require(child.TryGetComponent(out Collider boundaryCollider) && boundaryCollider.enabled,
                         $"{context}: boundary '{child.name}' has no enabled collider.");
                     Require(child.CompareTag("Obstacle"), $"{context}: boundary '{child.name}' is not tagged Obstacle.");
+                    Require(child.GetComponentInChildren<Renderer>(true) == null,
+                        $"{context}: collision boundary '{child.name}' must remain invisible.");
                     continue;
                 }
 
@@ -586,8 +624,12 @@ namespace FantasySurvival.EditorTools
                 $"{context}: expected one non-overlapping tile surface mesh, found {surfaceTileMeshCount}.");
             Require(buildingCount == generator.CurrentLayout.Buildings.Count,
                 $"{context}: generated building object count {buildingCount} does not match layout count {generator.CurrentLayout.Buildings.Count}.");
-            Require(streetFurnitureCount == generator.CurrentLayout.StreetFurniture.Count,
-                $"{context}: street-furniture object count {streetFurnitureCount} does not match the layout.");
+            int expectedStreetFurnitureVisualCount = generator.PrototypeStreetFurnitureVisualsEnabled
+                ? generator.CurrentLayout.StreetFurniture.Count
+                : 0;
+            Require(streetFurnitureCount == expectedStreetFurnitureVisualCount,
+                $"{context}: street-furniture visual count {streetFurnitureCount} does not match " +
+                $"the configured presentation count {expectedStreetFurnitureVisualCount}.");
             Require(medicalPoiBuildingCount == 1,
                 $"{context}: expected one Medical POI building, found {medicalPoiBuildingCount}.");
             Require(boundaryCount == 4, $"{context}: expected four map boundaries, found {boundaryCount}.");

@@ -1274,8 +1274,9 @@ seed + generator version
 → 8방향 연결 도로 그래프
 → exact roadPorts + 47타일 surface mask
 → 도로·인도·바닥 단일 점유 raster
+→ 상하좌우 도로 양쪽의 비중첩 전면 필지
 → 충돌하지 않는 prefab 건물
-→ 도로 기준 가로 시설
+→ 도로 기준 가로 시설 socket 데이터
 → 도로·건물 접근 공유 후보와 의미 POI
 → 보호 지점 유지
 → NavMesh 생성
@@ -1305,11 +1306,14 @@ seed + generator version
 
 #### 7.4.1 현재
 
-- 도로·인도 확정 뒤 남은 필지에 프로젝트 adapter를 거친 건물 prefab을 배치한다.
-- footprint와 높이를 seed로 변화시키되 셀 크기에 맞춰 snap한다.
+- 도로·인도 확정 뒤 상하좌우 도로 양쪽 전면을 `10~12m × 6~8m` 필지로 나누고, 점유된 각 필지에 프로젝트 adapter를 거친 건물 prefab 하나를 배치한다.
+- 한 coarse block을 건물 하나로 사용하지 않으며 같은 도로 전면에 여러 건물을 둔다. 필지·footprint와 높이는 seed로 변화시키되 셀 크기에 맞춰 snap한다.
+- 현재 대각 도로는 경로망에 포함되지만 회전 footprint mask가 없어 그 전면에는 필지를 만들지 않는다.
 - seed당 한 건물은 `Medical` 의미 POI로 선택해 청록 tint로 구분한다.
 - 도로, 보호 지점과 다른 건물을 침범하지 않는다.
 - layout root의 단일 collider와 Not Walkable 영역을 가지며 vendor prefab 내부 collider는 점유 권위를 갖지 않는다.
+- 현재 BrokenVector 주택은 exterior 전용이다. 문·내부 바닥·방·계단이 없고 전체 footprint가 막혀 있으므로 진입 가능한 건물로 취급하지 않는다.
+- vendor 팔레트 texture는 프로젝트의 URP 호환 runtime 재질로 전달하며 일반 건물은 원색, 의료 POI만 tint한다.
 
 #### 7.4.2 후속 실제 건물 `[설계 제안]`
 
@@ -1326,7 +1330,7 @@ seed + generator version
 #### 7.5.1 현재 의료 POI
 
 - layout의 `UrbanPoiKind.Medical`이 분류 원본이며 색·오브젝트 이름은 표현이다.
-- Entry에서 가장 가까운 안전한 건물 접근 후보 하나를 선택하고, Cube 외벽 앞에 catalog의 의료 Chest prefab을 생성한다.
+- Entry에서 가장 가까운 안전한 건물 접근 후보 하나를 선택하고, 외관 건물 footprint 앞에 catalog의 의료 Chest prefab을 생성한다.
 - 접근점의 complete NavMesh 경로를 도착 gate에서 확인하고, Fresh 상자는 치료제 Item ID 7 하나를 지급한다.
 - 건물 내부·문·방은 아직 없으며, 기존 일반 Chest 클래스와 인벤토리·Recovery 저장 경계를 재사용한다.
 
@@ -1356,7 +1360,7 @@ seed + generator version
 - 도로 표지
 - 중앙 분리 구조
 
-현재 가로수·가로등은 source road, 진행 거리, 좌우와 측면 offset을 저장하고 인도 셀에만 놓는다. 도로 표지와 중앙 분리 구조는 후속이다.
+현재 가로수·가로등은 source road, 진행 거리, 좌우와 측면 offset을 결정적 socket 데이터로 저장하고 인도 셀만 사용한다. 최종 prefab이 정해지기 전에는 임시 원기둥·구·Cube를 렌더하지 않는다. 도로 표지와 중앙 분리 구조는 후속이다.
 
 #### 7.6.2 불규칙 요소 `[현재 시험/후속]`
 
@@ -1366,7 +1370,7 @@ seed + generator version
 - 잔해
 - 임시 방벽
 
-현재 자전거·쓰레기통만 seed 기반의 별도 stream으로 일부 인도 slot에 시험 배치한다. 폐차·잔해·임시 방벽은 후속이다.
+현재 자전거·쓰레기통은 seed 기반의 별도 stream으로 일부 인도 socket만 예약하며 임시 Cube는 렌더하지 않는다. 폐차·잔해·임시 방벽은 후속이다.
 
 #### 7.6.3 배치 원칙
 

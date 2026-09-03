@@ -15,22 +15,16 @@ namespace FantasySurvival.WorldGeneration
     {
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
         private static readonly int ColorId = Shader.PropertyToID("_Color");
+        private static readonly int BaseMapId = Shader.PropertyToID("_BaseMap");
+        private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+        private static readonly int GlossinessId = Shader.PropertyToID("_Glossiness");
+        private static readonly int SmoothnessId = Shader.PropertyToID("_Smoothness");
 
         private static readonly Color GroundColor = new Color(0.19f, 0.18f, 0.16f, 1f);
         private static readonly Color SecondaryRoadColor = new Color(0.18f, 0.20f, 0.22f, 1f);
         private static readonly Color PrimaryRoadColor = new Color(0.25f, 0.27f, 0.29f, 1f);
         private static readonly Color SidewalkColor = new Color(0.36f, 0.35f, 0.33f, 1f);
-        private static readonly Color BoundaryColor = new Color(0.24f, 0.12f, 0.11f, 1f);
         private static readonly Color MedicalPoiBuildingColor = new Color(0.18f, 0.62f, 0.46f, 1f);
-        private static readonly Color[] BuildingColors =
-        {
-            new Color(0.43f, 0.31f, 0.27f, 1f),
-            new Color(0.34f, 0.39f, 0.43f, 1f),
-            new Color(0.42f, 0.42f, 0.34f, 1f),
-            new Color(0.31f, 0.36f, 0.32f, 1f),
-            new Color(0.40f, 0.29f, 0.34f, 1f)
-        };
-
         [Header("Existing Scene Anchors")]
         [SerializeField] private Transform entryAnchor;
         [SerializeField] private Transform returnPortal;
@@ -55,10 +49,14 @@ namespace FantasySurvival.WorldGeneration
         [SerializeField, Range(0f, 1f)] private float diagonalRoadChance = 0.2f;
         [SerializeField, Min(1)] private int sidewalkWidthTiles = 1;
 
-        [Header("Prototype Buildings")]
+        [Header("Prototype Exterior Buildings")]
         [SerializeField] private GameObject[] buildingVisualPrefabs;
         [SerializeField, Min(0f)] private float buildingSetback = 2f;
         [SerializeField, Min(0f)] private float lotGap = 2f;
+        [SerializeField, Min(3)] private int minBuildingFrontageTiles = 5;
+        [SerializeField, Min(3)] private int maxBuildingFrontageTiles = 6;
+        [SerializeField, Min(3)] private int minBuildingDepthTiles = 3;
+        [SerializeField, Min(3)] private int maxBuildingDepthTiles = 4;
         [SerializeField, Range(0f, 1f)] private float buildingDensity = 0.8f;
         [SerializeField, Min(1f)] private float minBuildingHeight = 10.5f;
         [SerializeField, Min(1f)] private float maxBuildingHeight = 18f;
@@ -66,6 +64,7 @@ namespace FantasySurvival.WorldGeneration
         [SerializeField, Min(0f)] private float protectedAnchorClearance = 8f;
 
         [Header("Street Furniture Sockets")]
+        [SerializeField] private bool instantiatePrototypeStreetFurniture;
         [SerializeField, Min(1)] private int junctionFurnitureClearanceTiles = 3;
         [SerializeField, Min(2)] private int streetTreeSpacingTiles = 7;
         [SerializeField, Min(2)] private int streetLampSpacingTiles = 18;
@@ -78,6 +77,8 @@ namespace FantasySurvival.WorldGeneration
 
         private Transform generatedContent;
         private Material runtimeMaterial;
+        private readonly Dictionary<Material, Material> runtimeBuildingMaterials =
+            new Dictionary<Material, Material>();
         private Material[] runtimeSurfaceMaterials;
         private Mesh runtimeSurfaceMesh;
         private NavMeshData runtimeNavMeshData;
@@ -88,6 +89,7 @@ namespace FantasySurvival.WorldGeneration
 
         public UrbanMapLayout CurrentLayout { get; private set; }
         public int CurrentSeed { get; private set; }
+        public bool PrototypeStreetFurnitureVisualsEnabled => instantiatePrototypeStreetFurniture;
         public bool NavigationPathComplete { get; private set; }
         public bool NavigationBuildPending => pendingNavigationLayout != null;
         public Transform GeneratedContent => generatedContent;
@@ -161,6 +163,8 @@ namespace FantasySurvival.WorldGeneration
                 runtimeMaterial = null;
             }
 
+            ClearRuntimeBuildingMaterials();
+
             ClearRuntimeSurfaceResources();
 
             if (legacyGroundStateCaptured && legacyGround != null)
@@ -215,7 +219,10 @@ namespace FantasySurvival.WorldGeneration
 
             CreateSurfaceTiles(layout);
             CreateBuildings(layout);
-            CreateStreetFurniture(layout);
+            if (instantiatePrototypeStreetFurniture)
+            {
+                CreateStreetFurniture(layout);
+            }
             CreateBoundaries(layout);
             PlaceExistingPortal(layout);
 
@@ -340,9 +347,12 @@ namespace FantasySurvival.WorldGeneration
             Debug.Log(
                 $"Urban map generated. Version={layout.GeneratorVersion}, Seed={layout.Seed}, " +
                 $"Size={layout.LocalBounds.width:F1}x{layout.LocalBounds.height:F1}, " +
-                $"Roads={layout.Roads.Count}, Buildings={layout.Buildings.Count}, " +
+                $"Roads={layout.Roads.Count}, Parcels={layout.Parcels.Count}, " +
+                $"Buildings={layout.Buildings.Count}, " +
                 $"Tiles={layout.SurfaceGrid.Width}x{layout.SurfaceGrid.Height}, " +
-                $"Furniture={layout.StreetFurniture.Count}, Candidates={layout.Candidates.Count}, " +
+                $"FurnitureSockets={layout.StreetFurniture.Count}, " +
+                $"FurnitureVisuals={(instantiatePrototypeStreetFurniture ? layout.StreetFurniture.Count : 0)}, " +
+                $"Candidates={layout.Candidates.Count}, " +
                 $"POIs={layout.Pois.Count}, " +
                 $"NavPathComplete={NavigationPathComplete}, Hash={layoutHash:X16}.",
                 this);
@@ -418,6 +428,10 @@ namespace FantasySurvival.WorldGeneration
                 sidewalkWidthTiles,
                 buildingSetback,
                 lotGap,
+                minBuildingFrontageTiles,
+                maxBuildingFrontageTiles,
+                minBuildingDepthTiles,
+                maxBuildingDepthTiles,
                 buildingDensity,
                 minBuildingHeight,
                 maxBuildingHeight,
@@ -630,16 +644,14 @@ namespace FantasySurvival.WorldGeneration
             {
                 UrbanBuildingPlacement building = layout.Buildings[index];
                 bool isMedicalPoi = hasMedicalPoi && medicalPoi.BuildingIndex == index;
-                Color color = isMedicalPoi
-                    ? MedicalPoiBuildingColor
-                    : BuildingColors[Mathf.Abs(building.PaletteIndex) % BuildingColors.Length];
+                Color tint = isMedicalPoi ? MedicalPoiBuildingColor : Color.white;
                 CreateBuilding(
                     isMedicalPoi
                         ? $"Building_{index:000}_MedicalPoi"
                         : $"Building_{index:000}_Palette_{building.PaletteIndex}",
                     building,
-                    FindBuildingFacadeDirection(layout, index),
-                    color,
+                    layout.Parcels[building.SourceParcelIndex].FacadeDirection,
+                    tint,
                     building.PaletteIndex);
             }
         }
@@ -745,7 +757,7 @@ namespace FantasySurvival.WorldGeneration
             string objectName,
             UrbanBuildingPlacement building,
             Vector2 facadeDirection,
-            Color bodyColor,
+            Color tintColor,
             int paletteIndex)
         {
             var root = new GameObject(objectName);
@@ -794,14 +806,17 @@ namespace FantasySurvival.WorldGeneration
                 var replacementMaterials = new Material[Mathf.Max(1, sourceMaterials.Length)];
                 for (int materialIndex = 0; materialIndex < replacementMaterials.Length; materialIndex++)
                 {
-                    replacementMaterials[materialIndex] = runtimeMaterial;
+                    Material sourceMaterial = materialIndex < sourceMaterials.Length
+                        ? sourceMaterials[materialIndex]
+                        : null;
+                    replacementMaterials[materialIndex] = GetOrCreateBuildingMaterial(sourceMaterial);
                 }
                 renderer.sharedMaterials = replacementMaterials;
                 renderer.shadowCastingMode = ShadowCastingMode.On;
                 renderer.receiveShadows = true;
                 var propertyBlock = new MaterialPropertyBlock();
-                propertyBlock.SetColor(BaseColorId, bodyColor);
-                propertyBlock.SetColor(ColorId, bodyColor);
+                propertyBlock.SetColor(BaseColorId, tintColor);
+                propertyBlock.SetColor(ColorId, tintColor);
                 renderer.SetPropertyBlock(propertyBlock);
             }
 
@@ -855,19 +870,80 @@ namespace FantasySurvival.WorldGeneration
             return result;
         }
 
-        private static Vector2 FindBuildingFacadeDirection(UrbanMapLayout layout, int buildingIndex)
+        private Material GetOrCreateBuildingMaterial(Material sourceMaterial)
         {
-            for (int index = 0; index < layout.Candidates.Count; index++)
+            if (sourceMaterial == null)
             {
-                UrbanSpatialCandidate candidate = layout.Candidates[index];
-                if (candidate.Kind == UrbanSpatialCandidateKind.BuildingApproach &&
-                    candidate.SourceBuildingIndex == buildingIndex)
+                return runtimeMaterial;
+            }
+
+            if (runtimeBuildingMaterials.TryGetValue(sourceMaterial, out Material existing))
+            {
+                return existing;
+            }
+
+            var compatible = new Material(runtimeMaterial)
+            {
+                name = $"Runtime Urban Palette {sourceMaterial.name}",
+                hideFlags = HideFlags.DontSave
+            };
+            Texture palette = sourceMaterial.HasProperty(BaseMapId)
+                ? sourceMaterial.GetTexture(BaseMapId)
+                : sourceMaterial.HasProperty(MainTexId)
+                    ? sourceMaterial.GetTexture(MainTexId)
+                    : null;
+            if (palette != null)
+            {
+                Vector2 textureScale = sourceMaterial.HasProperty(BaseMapId)
+                    ? sourceMaterial.GetTextureScale(BaseMapId)
+                    : sourceMaterial.GetTextureScale(MainTexId);
+                Vector2 textureOffset = sourceMaterial.HasProperty(BaseMapId)
+                    ? sourceMaterial.GetTextureOffset(BaseMapId)
+                    : sourceMaterial.GetTextureOffset(MainTexId);
+                if (compatible.HasProperty(BaseMapId))
                 {
-                    return candidate.LocalDirection;
+                    compatible.SetTexture(BaseMapId, palette);
+                    compatible.SetTextureScale(BaseMapId, textureScale);
+                    compatible.SetTextureOffset(BaseMapId, textureOffset);
+                }
+                if (compatible.HasProperty(MainTexId))
+                {
+                    compatible.SetTexture(MainTexId, palette);
+                    compatible.SetTextureScale(MainTexId, textureScale);
+                    compatible.SetTextureOffset(MainTexId, textureOffset);
                 }
             }
 
-            return Vector2.down;
+            if (compatible.HasProperty(BaseColorId))
+            {
+                compatible.SetColor(BaseColorId, Color.white);
+            }
+            if (compatible.HasProperty(ColorId))
+            {
+                compatible.SetColor(ColorId, Color.white);
+            }
+            if (sourceMaterial.HasProperty(GlossinessId) &&
+                compatible.HasProperty(SmoothnessId))
+            {
+                compatible.SetFloat(
+                    SmoothnessId,
+                    sourceMaterial.GetFloat(GlossinessId));
+            }
+            runtimeBuildingMaterials.Add(sourceMaterial, compatible);
+            return compatible;
+        }
+
+        private void ClearRuntimeBuildingMaterials()
+        {
+            foreach (KeyValuePair<Material, Material> entry in runtimeBuildingMaterials)
+            {
+                if (entry.Value != null)
+                {
+                    Destroy(entry.Value);
+                }
+            }
+
+            runtimeBuildingMaterials.Clear();
         }
 
         private static int PositiveModulo(int value, int modulus)
@@ -890,18 +966,15 @@ namespace FantasySurvival.WorldGeneration
 
         private void CreateBoundary(string objectName, Vector3 localPosition, Vector3 localScale)
         {
-            CreatePrimitive(
-                objectName,
-                PrimitiveType.Cube,
-                localPosition,
-                Quaternion.identity,
-                localScale,
-                BoundaryColor,
-                hasCollider: true,
-                blocksPlayer: true,
-                markNotWalkable: true,
-                castsShadows: false,
-                receivesShadows: true);
+            var boundary = new GameObject(objectName);
+            boundary.transform.SetParent(generatedContent, false);
+            boundary.transform.localPosition = localPosition;
+            boundary.tag = "Obstacle";
+            var collider = boundary.AddComponent<BoxCollider>();
+            collider.size = localScale;
+            NavMeshModifier modifier = boundary.AddComponent<NavMeshModifier>();
+            modifier.overrideArea = true;
+            modifier.area = 1;
         }
 
         private GameObject CreatePrimitive(

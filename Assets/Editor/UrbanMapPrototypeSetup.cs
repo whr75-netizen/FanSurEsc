@@ -229,11 +229,16 @@ namespace FantasySurvival.EditorTools
             serializedGenerator.FindProperty("sidewalkWidthTiles").intValue = 1;
             serializedGenerator.FindProperty("buildingSetback").floatValue = 2f;
             serializedGenerator.FindProperty("lotGap").floatValue = 2f;
+            serializedGenerator.FindProperty("minBuildingFrontageTiles").intValue = 5;
+            serializedGenerator.FindProperty("maxBuildingFrontageTiles").intValue = 6;
+            serializedGenerator.FindProperty("minBuildingDepthTiles").intValue = 3;
+            serializedGenerator.FindProperty("maxBuildingDepthTiles").intValue = 4;
             serializedGenerator.FindProperty("buildingDensity").floatValue = 0.8f;
             serializedGenerator.FindProperty("minBuildingHeight").floatValue = 10.5f;
             serializedGenerator.FindProperty("maxBuildingHeight").floatValue = 18f;
             serializedGenerator.FindProperty("anchorClearance").floatValue = 10f;
             serializedGenerator.FindProperty("protectedAnchorClearance").floatValue = 8f;
+            serializedGenerator.FindProperty("instantiatePrototypeStreetFurniture").boolValue = false;
             serializedGenerator.FindProperty("junctionFurnitureClearanceTiles").intValue = 3;
             serializedGenerator.FindProperty("streetTreeSpacingTiles").intValue = 7;
             serializedGenerator.FindProperty("streetLampSpacingTiles").intValue = 18;
@@ -392,8 +397,12 @@ namespace FantasySurvival.EditorTools
             float maximumWidth = float.NegativeInfinity;
             float minimumDepth = float.PositiveInfinity;
             float maximumDepth = float.NegativeInfinity;
+            int minimumParcels = int.MaxValue;
+            int maximumParcels = int.MinValue;
             int minimumBuildings = int.MaxValue;
             int maximumBuildings = int.MinValue;
+            int minimumLargestFrontageBuildingCount = int.MaxValue;
+            int maximumLargestFrontageBuildingCount = int.MinValue;
             var hashes = new HashSet<ulong>();
             for (int seed = 0; seed < seedCount; seed++)
             {
@@ -439,9 +448,29 @@ namespace FantasySurvival.EditorTools
                         $"Urban layout seed {seed} raid spawn manifest is not deterministic.");
                 }
 
-                if (layout.Buildings.Count == 0)
+                if (layout.Parcels.Count == 0 || layout.Buildings.Count == 0)
                 {
-                    throw new BuildFailedException($"Urban layout seed {seed} generated no graybox buildings.");
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} generated no road-front parcel or exterior building.");
+                }
+
+                var buildingsPerFrontage = new Dictionary<int, int>();
+                int largestFrontageBuildingCount = 0;
+                for (int buildingIndex = 0; buildingIndex < layout.Buildings.Count; buildingIndex++)
+                {
+                    UrbanBuildingPlacement building = layout.Buildings[buildingIndex];
+                    UrbanParcelPlacement parcel = layout.Parcels[building.SourceParcelIndex];
+                    int frontageKey = parcel.SourceRoadIndex * 2 + (parcel.Side > 0 ? 1 : 0);
+                    buildingsPerFrontage.TryGetValue(frontageKey, out int count);
+                    count++;
+                    buildingsPerFrontage[frontageKey] = count;
+                    largestFrontageBuildingCount = Mathf.Max(largestFrontageBuildingCount, count);
+                }
+
+                if (largestFrontageBuildingCount < 2)
+                {
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} did not place multiple buildings along any road frontage.");
                 }
 
                 if (!layout.TryGetPoi(UrbanPoiKind.Medical, out UrbanPoiPlacement medicalPoi) ||
@@ -452,13 +481,21 @@ namespace FantasySurvival.EditorTools
                         $"Urban layout seed {seed} did not produce one valid Medical POI.");
                 }
 
-                hashes.Add(worldHash);
+                hashes.Add(firstHash);
                 minimumWidth = Mathf.Min(minimumWidth, layout.LocalBounds.width);
                 maximumWidth = Mathf.Max(maximumWidth, layout.LocalBounds.width);
                 minimumDepth = Mathf.Min(minimumDepth, layout.LocalBounds.height);
                 maximumDepth = Mathf.Max(maximumDepth, layout.LocalBounds.height);
+                minimumParcels = Mathf.Min(minimumParcels, layout.Parcels.Count);
+                maximumParcels = Mathf.Max(maximumParcels, layout.Parcels.Count);
                 minimumBuildings = Mathf.Min(minimumBuildings, layout.Buildings.Count);
                 maximumBuildings = Mathf.Max(maximumBuildings, layout.Buildings.Count);
+                minimumLargestFrontageBuildingCount = Mathf.Min(
+                    minimumLargestFrontageBuildingCount,
+                    largestFrontageBuildingCount);
+                maximumLargestFrontageBuildingCount = Mathf.Max(
+                    maximumLargestFrontageBuildingCount,
+                    largestFrontageBuildingCount);
             }
 
             if (hashes.Count < seedCount * 0.95f)
@@ -479,7 +516,9 @@ namespace FantasySurvival.EditorTools
             Debug.Log(
                 $"Urban layout validation ({validationLabel}) passed for {seedCount} seeds. Unique={hashes.Count}, " +
                 $"Width={minimumWidth:F1}-{maximumWidth:F1}, Depth={minimumDepth:F1}-{maximumDepth:F1}, " +
-                $"Buildings={minimumBuildings}-{maximumBuildings}.");
+                $"Parcels={minimumParcels}-{maximumParcels}, Buildings={minimumBuildings}-{maximumBuildings}, " +
+                $"LargestFrontageBuildings={minimumLargestFrontageBuildingCount}-" +
+                $"{maximumLargestFrontageBuildingCount}.");
         }
 
         private static void ValidateSpawnManifest(

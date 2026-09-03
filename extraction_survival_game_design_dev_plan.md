@@ -857,10 +857,11 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 - 먼저 상하좌우·대각의 8방향만 허용하는 도로 그래프를 만든다. 내부 주 도로 행·열, seed 순서의 spanning backbone, 선택적인 추가 loop 순서로 연결성을 보장하고 한 coarse block에는 대각선 하나만 허용해 숨은 X 교차를 막는다.
 - 그래프의 실제 연결은 각 중심선 셀의 8-bit `roadPorts`가 소유한다. 화면 경계용 47타일 마스크는 별도로 만들며, 대각 모서리는 양옆 cardinal 셀이 모두 이어졌을 때만 연결한다. 두 데이터를 서로 추론해 대체하지 않는다.
 - 도로 폭과 인도를 셀에 rasterize한 뒤 각 셀은 `Ground`, `Sidewalk`, `SecondaryRoad`, `PrimaryRoad` 중 정확히 하나만 가진다. 현재 표시는 이 배열을 한 XZ mesh의 네 submesh로 그리므로 바닥 위에 같은 높이의 Road 평면을 겹치지 않는다.
-- 도로·인도 확정 뒤 남은 필지에 프로젝트 소유 adapter를 거친 벽돌집 prefab을 배치한다. layout root의 단일 BoxCollider가 점유를 소유하고 vendor 자식 collider는 끈다. 도로, `RaidEntry`, 기존 귀환 포탈 위치와 보호 대상 주변은 건물로 막지 않는다.
+- 도로·인도 확정 뒤 상하좌우 도로 양쪽 전면을 `10~12m × 6~8m`의 비중첩 필지로 세분하고 점유된 각 필지에 프로젝트 소유 adapter를 거친 벽돌집 prefab 하나를 배치한다. 한 coarse block을 건물 하나로 사용하지 않는다. layout root의 단일 BoxCollider가 점유를 소유하고 vendor 자식 collider는 끈다. 도로, `RaidEntry`, 기존 귀환 포탈 위치와 보호 대상 주변은 건물로 막지 않는다.
+- 현재 BrokenVector 벽돌집은 원본 팔레트를 URP 호환 재질로 전달하는 exterior 전용 시험 표현이다. 내부·바닥·방·계단이 없고 전체 footprint가 막혀 있으므로 진입 가능한 건물로 취급하지 않는다. 대각 도로 전면 필지는 회전 footprint mask가 생길 때 확장한다.
 - 도로 후보와 모든 건물의 도로 방향 접근 후보를 layout 생성 때 한 번 계산해 Spawn과 AI가 같은 read-only 데이터를 사용한다.
 - Entry에서 가장 가까운 안전 건물 하나를 `Medical` POI로 정하고 청록 tint로 표시한다. 색은 표현이며 POI 의미 데이터가 분류 원본이다.
-- 가로수·가로등은 도로 edge의 거리·좌우·측면 offset으로 규칙 배치하고, 자전거·쓰레기통은 별도 결정적 stream으로 일부 slot에만 배치한다. 모두 인도 셀과 보호 거리 검증을 통과해야 한다.
+- 가로수·가로등은 도로 edge의 거리·좌우·측면 offset으로 규칙 배치하고, 자전거·쓰레기통은 별도 결정적 stream으로 일부 slot에만 배치한다. 모두 인도 셀과 보호 거리 검증을 통과하며, 최종 prefab 전에는 socket 데이터만 유지하고 임시 primitive는 렌더하지 않는다.
 - 기존 귀환 포탈은 재생성하지 않고 같은 scene object를 첫 인접 도로 교차점으로 이동한다.
 - 런타임 NavMesh는 생성 geometry의 콜라이더만 수집하고 `RaidEntry → ReturnPortal 접근점`의 complete path를 생성 직후 검증한다.
 - spawn catalog의 Chest·Enemy prefab은 seed·stable ID manifest의 최종 위치에 생성하고, 전부 검증된 뒤 runtime registry에 등록한다. manifest는 파생 데이터다.

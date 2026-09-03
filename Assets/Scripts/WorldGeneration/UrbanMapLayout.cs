@@ -18,6 +18,10 @@ namespace FantasySurvival.WorldGeneration
             int sidewalkWidthTiles,
             float buildingSetback,
             float lotGap,
+            int minBuildingFrontageTiles,
+            int maxBuildingFrontageTiles,
+            int minBuildingDepthTiles,
+            int maxBuildingDepthTiles,
             float buildingDensity,
             float minBuildingHeight,
             float maxBuildingHeight,
@@ -40,6 +44,10 @@ namespace FantasySurvival.WorldGeneration
             SidewalkWidthTiles = sidewalkWidthTiles;
             BuildingSetback = buildingSetback;
             LotGap = lotGap;
+            MinBuildingFrontageTiles = minBuildingFrontageTiles;
+            MaxBuildingFrontageTiles = maxBuildingFrontageTiles;
+            MinBuildingDepthTiles = minBuildingDepthTiles;
+            MaxBuildingDepthTiles = maxBuildingDepthTiles;
             BuildingDensity = buildingDensity;
             MinBuildingHeight = minBuildingHeight;
             MaxBuildingHeight = maxBuildingHeight;
@@ -63,6 +71,10 @@ namespace FantasySurvival.WorldGeneration
         public int SidewalkWidthTiles { get; }
         public float BuildingSetback { get; }
         public float LotGap { get; }
+        public int MinBuildingFrontageTiles { get; }
+        public int MaxBuildingFrontageTiles { get; }
+        public int MinBuildingDepthTiles { get; }
+        public int MaxBuildingDepthTiles { get; }
         public float BuildingDensity { get; }
         public float MinBuildingHeight { get; }
         public float MaxBuildingHeight { get; }
@@ -96,6 +108,10 @@ namespace FantasySurvival.WorldGeneration
                 sidewalkWidthTiles: 1,
                 buildingSetback: 2f,
                 lotGap: 2f,
+                minBuildingFrontageTiles: 5,
+                maxBuildingFrontageTiles: 6,
+                minBuildingDepthTiles: 3,
+                maxBuildingDepthTiles: 4,
                 buildingDensity: 0.8f,
                 minBuildingHeight: 10.5f,
                 maxBuildingHeight: 18f,
@@ -156,6 +172,17 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
+            if (MinBuildingFrontageTiles < 3 ||
+                MaxBuildingFrontageTiles < MinBuildingFrontageTiles ||
+                MinBuildingDepthTiles < 3 ||
+                MaxBuildingDepthTiles < MinBuildingDepthTiles ||
+                MaxBuildingFrontageTiles >= BlockSpanTiles ||
+                MaxBuildingDepthTiles >= BlockSpanTiles)
+            {
+                error = "Urban building parcel tile ranges are invalid for the configured block span.";
+                return false;
+            }
+
             if (!IsFinite(MinBuildingHeight) || !IsFinite(MaxBuildingHeight) ||
                 MaxBuildingHeight < MinBuildingHeight || MinBuildingHeight <= 0f)
             {
@@ -203,18 +230,60 @@ namespace FantasySurvival.WorldGeneration
 
     public readonly struct UrbanBuildingPlacement
     {
-        public UrbanBuildingPlacement(Vector2 center, Vector2 size, float height, int paletteIndex)
+        public UrbanBuildingPlacement(
+            int sourceParcelIndex,
+            Vector2 center,
+            Vector2 size,
+            float height,
+            int paletteIndex)
         {
+            SourceParcelIndex = sourceParcelIndex;
             Center = center;
             Size = size;
             Height = height;
             PaletteIndex = paletteIndex;
         }
 
+        public int SourceParcelIndex { get; }
         public Vector2 Center { get; }
         public Vector2 Size { get; }
         public float Height { get; }
         public int PaletteIndex { get; }
+        public Rect Footprint => new Rect(Center - Size * 0.5f, Size);
+    }
+
+    /// <summary>
+    /// One non-overlapping, road-fronting buildable lot. Roads own the frontage;
+    /// buildings may occupy a parcel but never redefine it. This keeps future
+    /// building catalogs and footprint variants separate from city subdivision.
+    /// </summary>
+    public readonly struct UrbanParcelPlacement
+    {
+        public UrbanParcelPlacement(
+            int stableId,
+            int sourceRoadIndex,
+            float distanceAlongRoad,
+            int side,
+            Vector2 center,
+            Vector2 size,
+            Vector2 facadeDirection)
+        {
+            StableId = stableId;
+            SourceRoadIndex = sourceRoadIndex;
+            DistanceAlongRoad = distanceAlongRoad;
+            Side = side;
+            Center = center;
+            Size = size;
+            FacadeDirection = facadeDirection;
+        }
+
+        public int StableId { get; }
+        public int SourceRoadIndex { get; }
+        public float DistanceAlongRoad { get; }
+        public int Side { get; }
+        public Vector2 Center { get; }
+        public Vector2 Size { get; }
+        public Vector2 FacadeDirection { get; }
         public Rect Footprint => new Rect(Center - Size * 0.5f, Size);
     }
 
@@ -582,6 +651,7 @@ namespace FantasySurvival.WorldGeneration
             List<Vector2> nodes,
             List<UrbanRoadSegment> roads,
             UrbanSurfaceGrid surfaceGrid,
+            List<UrbanParcelPlacement> parcels,
             List<UrbanBuildingPlacement> buildings,
             List<UrbanStreetFurniturePlacement> streetFurniture,
             List<Vector2> protectedLocalPoints,
@@ -600,6 +670,8 @@ namespace FantasySurvival.WorldGeneration
             Nodes = nodes;
             Roads = roads;
             SurfaceGrid = surfaceGrid ?? throw new ArgumentNullException(nameof(surfaceGrid));
+            Parcels = new List<UrbanParcelPlacement>(
+                parcels ?? new List<UrbanParcelPlacement>()).AsReadOnly();
             Buildings = buildings;
             StreetFurniture = new List<UrbanStreetFurniturePlacement>(
                 streetFurniture ?? new List<UrbanStreetFurniturePlacement>()).AsReadOnly();
@@ -622,6 +694,7 @@ namespace FantasySurvival.WorldGeneration
         public IReadOnlyList<Vector2> Nodes { get; }
         public IReadOnlyList<UrbanRoadSegment> Roads { get; }
         public UrbanSurfaceGrid SurfaceGrid { get; }
+        public IReadOnlyList<UrbanParcelPlacement> Parcels { get; }
         public IReadOnlyList<UrbanBuildingPlacement> Buildings { get; }
         public IReadOnlyList<UrbanStreetFurniturePlacement> StreetFurniture { get; }
         public IReadOnlyList<Vector2> ProtectedLocalPoints { get; }
@@ -754,10 +827,102 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
+            var parcelIds = new HashSet<int>();
+            for (int parcelIndex = 0; parcelIndex < layout.Parcels.Count; parcelIndex++)
+            {
+                UrbanParcelPlacement parcel = layout.Parcels[parcelIndex];
+                Rect footprint = parcel.Footprint;
+                if (parcel.StableId < 0 || !parcelIds.Add(parcel.StableId) ||
+                    parcel.SourceRoadIndex < 0 || parcel.SourceRoadIndex >= layout.Roads.Count ||
+                    (parcel.Side != -1 && parcel.Side != 1) ||
+                    !IsFinite(parcel.DistanceAlongRoad) || parcel.DistanceAlongRoad < 0f ||
+                    !IsFinite(parcel.Center) || !IsFinite(parcel.Size) ||
+                    parcel.Size.x <= 0f || parcel.Size.y <= 0f ||
+                    !IsFinite(parcel.FacadeDirection) ||
+                    Mathf.Abs(parcel.FacadeDirection.sqrMagnitude - 1f) > GeometryTolerance)
+                {
+                    error = $"Urban parcel {parcelIndex} has invalid identity, source, or geometry.";
+                    return false;
+                }
+
+                UrbanRoadSegment sourceRoad = layout.Roads[parcel.SourceRoadIndex];
+                Vector2 sourceDelta = sourceRoad.End - sourceRoad.Start;
+                bool sourceIsCardinal = Mathf.Abs(sourceDelta.x) <= GeometryTolerance ||
+                                        Mathf.Abs(sourceDelta.y) <= GeometryTolerance;
+                if (!sourceIsCardinal || parcel.DistanceAlongRoad > sourceRoad.Length + GeometryTolerance)
+                {
+                    error = $"Urban parcel {parcel.StableId} does not have a valid cardinal road frontage.";
+                    return false;
+                }
+
+                Vector2 roadPoint = sourceRoad.Start +
+                                    sourceDelta.normalized * parcel.DistanceAlongRoad;
+                Vector2 roadDirection = sourceDelta.normalized;
+                Vector2 roadNormal = new Vector2(-roadDirection.y, roadDirection.x);
+                Vector2 expectedAwayFromRoad = roadNormal * parcel.Side;
+                float parcelDepth = Mathf.Abs(roadDirection.x) > 0.5f
+                    ? parcel.Size.y
+                    : parcel.Size.x;
+                float expectedCenterOffset = sourceRoad.Width * 0.5f +
+                                             parameters.SidewalkWidth +
+                                             parameters.BuildingSetback +
+                                             parameters.TileWorldSize * 0.5f +
+                                             parcelDepth * 0.5f;
+                Vector2 expectedCenter = roadPoint + expectedAwayFromRoad * expectedCenterOffset;
+                Vector2 expectedFacade = -expectedAwayFromRoad;
+                if (Vector2.Distance(parcel.Center, expectedCenter) > GeometryTolerance ||
+                    Vector2.Distance(parcel.FacadeDirection, expectedFacade) > GeometryTolerance)
+                {
+                    error = $"Urban parcel {parcel.StableId} does not match its road side, offset, or facade contract.";
+                    return false;
+                }
+
+                if (!ContainsRect(layout.LocalBounds, footprint) ||
+                    !FootprintUsesOnlyGround(surfaceGrid, footprint))
+                {
+                    error = $"Urban parcel {parcel.StableId} is outside buildable ground.";
+                    return false;
+                }
+
+                for (int roadIndex = 0; roadIndex < layout.Roads.Count; roadIndex++)
+                {
+                    if (RoadIntersectsRect(
+                            layout.Roads[roadIndex],
+                            footprint,
+                            parameters.SidewalkWidth + parameters.BuildingSetback))
+                    {
+                        error = $"Urban parcel {parcel.StableId} intersects road {roadIndex}.";
+                        return false;
+                    }
+                }
+
+                for (int otherIndex = parcelIndex + 1; otherIndex < layout.Parcels.Count; otherIndex++)
+                {
+                    if (footprint.Overlaps(layout.Parcels[otherIndex].Footprint))
+                    {
+                        error = $"Urban parcels {parcel.StableId} and {layout.Parcels[otherIndex].StableId} overlap.";
+                        return false;
+                    }
+                }
+            }
+
+            var occupiedParcels = new HashSet<int>();
             for (int buildingIndex = 0; buildingIndex < layout.Buildings.Count; buildingIndex++)
             {
                 UrbanBuildingPlacement building = layout.Buildings[buildingIndex];
                 Rect footprint = building.Footprint;
+
+                if (building.SourceParcelIndex < 0 ||
+                    building.SourceParcelIndex >= layout.Parcels.Count ||
+                    !occupiedParcels.Add(building.SourceParcelIndex) ||
+                    !IsFinite(building.Center) || !IsFinite(building.Size) ||
+                    building.Size.x <= 0f || building.Size.y <= 0f ||
+                    !IsFinite(building.Height) || building.Height <= 0f ||
+                    !ContainsRect(layout.Parcels[building.SourceParcelIndex].Footprint, footprint))
+                {
+                    error = $"Building {buildingIndex} has invalid geometry or parcel ownership.";
+                    return false;
+                }
 
                 if (!ContainsRect(layout.LocalBounds, footprint))
                 {
@@ -1333,9 +1498,27 @@ namespace FantasySurvival.WorldGeneration
                 }
             }
 
+            AddInt(layout.Parcels.Count);
+            for (int index = 0; index < layout.Parcels.Count; index++)
+            {
+                UrbanParcelPlacement parcel = layout.Parcels[index];
+                AddInt(parcel.StableId);
+                AddInt(parcel.SourceRoadIndex);
+                AddFloat(parcel.DistanceAlongRoad);
+                AddInt(parcel.Side);
+                AddFloat(parcel.Center.x);
+                AddFloat(parcel.Center.y);
+                AddFloat(parcel.Size.x);
+                AddFloat(parcel.Size.y);
+                AddFloat(parcel.FacadeDirection.x);
+                AddFloat(parcel.FacadeDirection.y);
+            }
+
+            AddInt(layout.Buildings.Count);
             for (int index = 0; index < layout.Buildings.Count; index++)
             {
                 UrbanBuildingPlacement building = layout.Buildings[index];
+                AddInt(building.SourceParcelIndex);
                 AddFloat(building.Center.x);
                 AddFloat(building.Center.y);
                 AddFloat(building.Size.x);

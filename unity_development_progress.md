@@ -2103,3 +2103,15 @@ Interactable (abstract base class)
 - `[정적·변조 검증]` Unity 컴파일·Console 오류 0에서 기본 seed 0~255의 생성·결정성·D8·canonical mask·exact road-port가 모두 통과했다. 모든 port 제거, 같은 block의 X 대각, NaN tile size/road width/furniture distance를 각각 주입하면 validator가 원인별로 거부했다. 외부 foliage shader의 중복 URP keyword와 vendor `ModelCustomizer`의 고립된 attribute도 import 원인에서 제거했다.
 - `[Play Mode 1회]` 직접 `GameMapTest`와 `GameMap1` 왕복 1회를 실행했다. 첫 map은 seed `1458508496`, `145×145`셀=`290×290m`, 도로 70·건물 22·가로 시설 183·의료 POI 1이었고 surface 정점은 셀당 4개인 `84,100`개였다. 단일 surface와 비렌더 Ground, 건물 root collider, 가로 시설 수, Entry→Portal 및 POI/시험 spawn NavMesh, Player·Camera·Inventory UI·EventSystem 동일 인스턴스와 runtime Error 0을 확인했다. 종료 뒤 두 scene 파일 hash는 변하지 않았다.
 - `[현재 경계]` 현재 색은 알고리즘 확인용이며 최종 픽셀 atlas·variant catalog, 실제 graph-face 필지 분할, 회전별 건물 footprint mask, 내부·랜드마크·폐차는 아트/규칙이 정해질 때 같은 layout 데이터에 연결한다. 현재 시험 `145×145/2m`는 GameMapTest profile의 고정값이지 모든 미래 맵 크기를 코드 상수로 봉인한 값은 아니다.
+
+---
+
+## 112. 도로 전면 필지와 외관 건물 팔레트 복원 `[MAP-01][POI-01][SPAWN-01]`
+
+- `[사용자 피드백·근본 원인][2026-09-03]` 기존 40m coarse block은 도로·인도·후퇴선을 뺀 가용 폭이 21m인데 목표 lot을 14~20m로 나눠 행·열이 항상 `1×1`이었다. density와 보호 조건은 그 한 후보를 제거할 수만 있어 512개 seed 모두 block당 최대 건물 1개였으며 건물 면적도 block 내부의 약 12%뿐이었다.
+- `[구조 교체]` 생성 순서를 `도로·surface → 도로 전면 parcel → 건물 → 접근 후보·POI`로 명시했다. 상하좌우 도로 양쪽을 `10~12m × 6~8m`의 비중첩 필지로 나누고 각 건물은 `SourceParcelIndex` 하나만 점유한다. 필지가 source road·거리·side·전면 방향을 소유하므로 POI 접근점도 최근접 도로를 다시 추측하지 않는다. layout hash와 Recovery 호환 경계를 위해 generator version은 5로 올렸다.
+- `[에셋 판정·표현 수정]` BrokenVector Low Poly Brick Houses는 문·내부 바닥·방·계단이 없는 exterior asset임을 prefab 구조와 배포 설명으로 확인했다. 전체 footprint BoxCollider·NotWalkable과 비활성 vendor collider를 유지해 진입 가능한 건물로 가장하지 않는다. 텍스처 누락 원인은 생성기가 원본 `Houses_2` 팔레트를 texture 없는 graybox 재질로 교체하던 것이었으며, source `_MainTex`·scale·offset·glossiness를 캐시된 URP Lit 재질의 `_BaseMap`·smoothness로 전달하도록 고쳤다. 일반 건물은 원색, 의료 POI만 property-block tint를 쓴다.
+- `[불필요 표현 제거]` 가로수·가로등·자전거·쓰레기통의 결정적 road-relative socket 데이터는 미래 prefab 교체를 위해 보존하되 임시 Cylinder·Sphere·Cube는 기본 생성하지 않는다. 외곽 경계 4개는 collider·NotWalkable만 유지하고 renderer를 제거했다. vendor prefab의 비활성 선택 부품은 화면·충돌에 참여하지 않으며 wrapper 최적화는 실제 병목 증거가 생길 때만 재개방한다.
+- `[Unity 컴파일·순수 검증]` 최신 C# 동적 컴파일과 setup validator의 seed 0~255를 통과했다. 실패·결정성 불일치 0, unique layout hash 256, parcel `108~169`, 건물 `77~139`이며 모든 seed에서 한 도로 전면의 최대 건물 수가 최소 2였다. 잘못 뒤집은 parcel side도 validator가 거부했다. 원본 팔레트 texture reference 전달과 선택한 네 모델의 UV가 triangle 내부에서 palette texel을 가로지르지 않는 것도 실제 Unity 객체로 확인했다.
+- `[Play Mode 대표 1회]` direct `GameMapTest` 시작과 `GameMap1` 왕복 1회를 통과했다. seed `1519253678`, world hash `B21D2432AAFE23BB`, runtime Error 0, Player·Camera·Inventory UI·EventSystem 동일성, NavMesh·POI·spawn과 scene 복원을 확인했다. 사용자 기존 dirty 파일은 저장하거나 stage하지 않았다.
+- `[현재 경계]` 대각 도로는 D8 네트워크와 surface에 남지만 회전 footprint mask가 없어 대각 전면 parcel은 아직 만들지 않는다. 실제 진입 건물은 최종 건물 prefab/모듈, 내부 floor·wall·door/roof visibility, 통과 collider와 내부 NavMesh 계약을 함께 정하는 별도 기능이다.

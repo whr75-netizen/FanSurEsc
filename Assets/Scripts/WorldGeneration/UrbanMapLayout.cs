@@ -7,40 +7,37 @@ namespace FantasySurvival.WorldGeneration
     public readonly struct UrbanMapGenerationParameters
     {
         public UrbanMapGenerationParameters(
-            int minBlocksX,
-            int maxBlocksX,
-            int minBlocksZ,
-            int maxBlocksZ,
-            float minBlockSize,
-            float maxBlockSize,
-            float intersectionJitter,
-            float cityRotationMin,
-            float cityRotationMax,
-            float secondaryRoadWidth,
-            float primaryRoadWidth,
-            float minorRoadRemovalChance,
-            float outerMargin,
+            int mapTilesPerAxis,
+            int blocksPerAxis,
+            int borderTiles,
+            float tileWorldSize,
+            int secondaryRoadWidthTiles,
+            int primaryRoadWidthTiles,
+            float additionalRoadChance,
+            float diagonalRoadChance,
+            int sidewalkWidthTiles,
             float buildingSetback,
             float lotGap,
             float buildingDensity,
             float minBuildingHeight,
             float maxBuildingHeight,
             float anchorClearance,
-            float protectedAnchorClearance)
+            float protectedAnchorClearance,
+            int junctionFurnitureClearanceTiles,
+            int streetTreeSpacingTiles,
+            int streetLampSpacingTiles,
+            int clutterSpacingTiles,
+            float clutterChance)
         {
-            MinBlocksX = minBlocksX;
-            MaxBlocksX = maxBlocksX;
-            MinBlocksZ = minBlocksZ;
-            MaxBlocksZ = maxBlocksZ;
-            MinBlockSize = minBlockSize;
-            MaxBlockSize = maxBlockSize;
-            IntersectionJitter = intersectionJitter;
-            CityRotationMin = cityRotationMin;
-            CityRotationMax = cityRotationMax;
-            SecondaryRoadWidth = secondaryRoadWidth;
-            PrimaryRoadWidth = primaryRoadWidth;
-            MinorRoadRemovalChance = minorRoadRemovalChance;
-            OuterMargin = outerMargin;
+            MapTilesPerAxis = mapTilesPerAxis;
+            BlocksPerAxis = blocksPerAxis;
+            BorderTiles = borderTiles;
+            TileWorldSize = tileWorldSize;
+            SecondaryRoadWidthTiles = secondaryRoadWidthTiles;
+            PrimaryRoadWidthTiles = primaryRoadWidthTiles;
+            AdditionalRoadChance = additionalRoadChance;
+            DiagonalRoadChance = diagonalRoadChance;
+            SidewalkWidthTiles = sidewalkWidthTiles;
             BuildingSetback = buildingSetback;
             LotGap = lotGap;
             BuildingDensity = buildingDensity;
@@ -48,21 +45,22 @@ namespace FantasySurvival.WorldGeneration
             MaxBuildingHeight = maxBuildingHeight;
             AnchorClearance = anchorClearance;
             ProtectedAnchorClearance = protectedAnchorClearance;
+            JunctionFurnitureClearanceTiles = junctionFurnitureClearanceTiles;
+            StreetTreeSpacingTiles = streetTreeSpacingTiles;
+            StreetLampSpacingTiles = streetLampSpacingTiles;
+            ClutterSpacingTiles = clutterSpacingTiles;
+            ClutterChance = clutterChance;
         }
 
-        public int MinBlocksX { get; }
-        public int MaxBlocksX { get; }
-        public int MinBlocksZ { get; }
-        public int MaxBlocksZ { get; }
-        public float MinBlockSize { get; }
-        public float MaxBlockSize { get; }
-        public float IntersectionJitter { get; }
-        public float CityRotationMin { get; }
-        public float CityRotationMax { get; }
-        public float SecondaryRoadWidth { get; }
-        public float PrimaryRoadWidth { get; }
-        public float MinorRoadRemovalChance { get; }
-        public float OuterMargin { get; }
+        public int MapTilesPerAxis { get; }
+        public int BlocksPerAxis { get; }
+        public int BorderTiles { get; }
+        public float TileWorldSize { get; }
+        public int SecondaryRoadWidthTiles { get; }
+        public int PrimaryRoadWidthTiles { get; }
+        public float AdditionalRoadChance { get; }
+        public float DiagonalRoadChance { get; }
+        public int SidewalkWidthTiles { get; }
         public float BuildingSetback { get; }
         public float LotGap { get; }
         public float BuildingDensity { get; }
@@ -70,74 +68,115 @@ namespace FantasySurvival.WorldGeneration
         public float MaxBuildingHeight { get; }
         public float AnchorClearance { get; }
         public float ProtectedAnchorClearance { get; }
+        public int JunctionFurnitureClearanceTiles { get; }
+        public int StreetTreeSpacingTiles { get; }
+        public int StreetLampSpacingTiles { get; }
+        public int ClutterSpacingTiles { get; }
+        public float ClutterChance { get; }
+
+        public int BlockSpanTiles =>
+            (MapTilesPerAxis - 1 - BorderTiles * 2) / BlocksPerAxis;
+        public float MapWorldSize => MapTilesPerAxis * TileWorldSize;
+        public float BlockSpanWorld => BlockSpanTiles * TileWorldSize;
+        public float SecondaryRoadWidth => SecondaryRoadWidthTiles * TileWorldSize;
+        public float PrimaryRoadWidth => PrimaryRoadWidthTiles * TileWorldSize;
+        public float SidewalkWidth => SidewalkWidthTiles * TileWorldSize;
 
         public static UrbanMapGenerationParameters CreateDefault()
         {
             return new UrbanMapGenerationParameters(
-                minBlocksX: 4,
-                maxBlocksX: 6,
-                minBlocksZ: 4,
-                maxBlocksZ: 6,
-                minBlockSize: 14f,
-                maxBlockSize: 20f,
-                intersectionJitter: 1.35f,
-                cityRotationMin: 35f,
-                cityRotationMax: 55f,
-                secondaryRoadWidth: 3.2f,
-                primaryRoadWidth: 5.2f,
-                minorRoadRemovalChance: 0.18f,
-                outerMargin: 6f,
-                buildingSetback: 1.2f,
-                lotGap: 0.9f,
-                buildingDensity: 0.78f,
-                minBuildingHeight: 2.75f,
-                maxBuildingHeight: 8.5f,
-                anchorClearance: 4.5f,
-                protectedAnchorClearance: 3.5f);
+                mapTilesPerAxis: 145,
+                blocksPerAxis: 6,
+                borderTiles: 12,
+                tileWorldSize: 2f,
+                secondaryRoadWidthTiles: 3,
+                primaryRoadWidthTiles: 5,
+                additionalRoadChance: 0.35f,
+                diagonalRoadChance: 0.2f,
+                sidewalkWidthTiles: 1,
+                buildingSetback: 2f,
+                lotGap: 2f,
+                buildingDensity: 0.8f,
+                minBuildingHeight: 10.5f,
+                maxBuildingHeight: 18f,
+                anchorClearance: 10f,
+                protectedAnchorClearance: 8f,
+                junctionFurnitureClearanceTiles: 3,
+                streetTreeSpacingTiles: 7,
+                streetLampSpacingTiles: 18,
+                clutterSpacingTiles: 5,
+                clutterChance: 0.22f);
         }
 
         public bool TryValidate(out string error)
         {
-            if (MinBlocksX < 2 || MinBlocksZ < 2 || MaxBlocksX < MinBlocksX || MaxBlocksZ < MinBlocksZ)
+            if (MapTilesPerAxis < 17 || (MapTilesPerAxis & 1) == 0 ||
+                BlocksPerAxis < 2 || BorderTiles < 1 ||
+                MapTilesPerAxis - 1 - BorderTiles * 2 <= 0 ||
+                (MapTilesPerAxis - 1 - BorderTiles * 2) % BlocksPerAxis != 0)
             {
-                error = "Urban map block-count ranges are invalid.";
+                error =
+                    "Urban map tile dimensions must form one odd, fixed square whose " +
+                    "interior span divides evenly into the configured block count.";
                 return false;
             }
 
-            if (MinBlockSize <= 0f || MaxBlockSize < MinBlockSize)
+            if (!IsFinite(TileWorldSize) || TileWorldSize <= 0f)
             {
-                error = "Urban map block-size range is invalid.";
+                error = "Urban map tile world size must be positive.";
                 return false;
             }
 
-            if (SecondaryRoadWidth <= 0f || PrimaryRoadWidth < SecondaryRoadWidth)
+            if (SecondaryRoadWidthTiles <= 0 || PrimaryRoadWidthTiles < SecondaryRoadWidthTiles ||
+                (SecondaryRoadWidthTiles & 1) == 0 || (PrimaryRoadWidthTiles & 1) == 0 ||
+                SidewalkWidthTiles < 1 ||
+                PrimaryRoadWidthTiles + SidewalkWidthTiles * 2 >= BlockSpanTiles)
             {
-                error = "Urban map road widths are invalid.";
+                error =
+                    "Urban road widths must be odd tile counts, leave buildable space " +
+                    "inside each block, and have at least one sidewalk tile per side.";
                 return false;
             }
 
-            if (MinorRoadRemovalChance < 0f || MinorRoadRemovalChance > 1f ||
-                BuildingDensity < 0f || BuildingDensity > 1f)
+            if (!IsFinite(AdditionalRoadChance) || AdditionalRoadChance < 0f || AdditionalRoadChance > 1f ||
+                !IsFinite(DiagonalRoadChance) || DiagonalRoadChance < 0f || DiagonalRoadChance > 1f ||
+                !IsFinite(BuildingDensity) || BuildingDensity < 0f || BuildingDensity > 1f ||
+                !IsFinite(ClutterChance) || ClutterChance < 0f || ClutterChance > 1f)
             {
                 error = "Urban map probability values must be between zero and one.";
                 return false;
             }
 
-            if (OuterMargin <= 0f || BuildingSetback < 0f || LotGap < 0f ||
-                AnchorClearance < 0f || ProtectedAnchorClearance < 0f)
+            if (!IsFinite(BuildingSetback) || BuildingSetback < 0f ||
+                !IsFinite(LotGap) || LotGap < 0f ||
+                !IsFinite(AnchorClearance) || AnchorClearance < 0f ||
+                !IsFinite(ProtectedAnchorClearance) || ProtectedAnchorClearance < 0f)
             {
                 error = "Urban map clearance values are invalid.";
                 return false;
             }
 
-            if (MaxBuildingHeight < MinBuildingHeight || MinBuildingHeight <= 0f)
+            if (!IsFinite(MinBuildingHeight) || !IsFinite(MaxBuildingHeight) ||
+                MaxBuildingHeight < MinBuildingHeight || MinBuildingHeight <= 0f)
             {
                 error = "Urban map building-height range is invalid.";
                 return false;
             }
 
+            if (JunctionFurnitureClearanceTiles < 1 || StreetTreeSpacingTiles < 2 ||
+                StreetLampSpacingTiles < 2 || ClutterSpacingTiles < 2)
+            {
+                error = "Urban street-furniture tile spacing values are invalid.";
+                return false;
+            }
+
             error = null;
             return true;
+        }
+
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
         }
     }
 
@@ -177,6 +216,51 @@ namespace FantasySurvival.WorldGeneration
         public float Height { get; }
         public int PaletteIndex { get; }
         public Rect Footprint => new Rect(Center - Size * 0.5f, Size);
+    }
+
+    public enum UrbanStreetFurnitureKind : byte
+    {
+        StreetTree = 0,
+        StreetLamp = 1,
+        Bicycle = 2,
+        TrashBin = 3
+    }
+
+    /// <summary>
+    /// Immutable placement measured from one road edge. Keeping the source edge,
+    /// distance, side, and lateral offset makes presentation replaceable without
+    /// losing the deterministic rule that produced the placement.
+    /// </summary>
+    public readonly struct UrbanStreetFurniturePlacement
+    {
+        public UrbanStreetFurniturePlacement(
+            int stableId,
+            UrbanStreetFurnitureKind kind,
+            int sourceRoadIndex,
+            float distanceAlongRoad,
+            int side,
+            float lateralOffset,
+            Vector2 localPosition,
+            float localYawDegrees)
+        {
+            StableId = stableId;
+            Kind = kind;
+            SourceRoadIndex = sourceRoadIndex;
+            DistanceAlongRoad = distanceAlongRoad;
+            Side = side;
+            LateralOffset = lateralOffset;
+            LocalPosition = localPosition;
+            LocalYawDegrees = localYawDegrees;
+        }
+
+        public int StableId { get; }
+        public UrbanStreetFurnitureKind Kind { get; }
+        public int SourceRoadIndex { get; }
+        public float DistanceAlongRoad { get; }
+        public int Side { get; }
+        public float LateralOffset { get; }
+        public Vector2 LocalPosition { get; }
+        public float LocalYawDegrees { get; }
     }
 
     public enum UrbanSpatialCandidateKind
@@ -497,7 +581,9 @@ namespace FantasySurvival.WorldGeneration
             Vector2 portalApproachLocalPosition,
             List<Vector2> nodes,
             List<UrbanRoadSegment> roads,
+            UrbanSurfaceGrid surfaceGrid,
             List<UrbanBuildingPlacement> buildings,
+            List<UrbanStreetFurniturePlacement> streetFurniture,
             List<Vector2> protectedLocalPoints,
             List<UrbanSpatialCandidate> candidates,
             List<UrbanPoiPlacement> pois)
@@ -513,7 +599,10 @@ namespace FantasySurvival.WorldGeneration
             PortalApproachLocalPosition = portalApproachLocalPosition;
             Nodes = nodes;
             Roads = roads;
+            SurfaceGrid = surfaceGrid ?? throw new ArgumentNullException(nameof(surfaceGrid));
             Buildings = buildings;
+            StreetFurniture = new List<UrbanStreetFurniturePlacement>(
+                streetFurniture ?? new List<UrbanStreetFurniturePlacement>()).AsReadOnly();
             ProtectedLocalPoints = protectedLocalPoints;
             Candidates = new List<UrbanSpatialCandidate>(
                 candidates ?? new List<UrbanSpatialCandidate>()).AsReadOnly();
@@ -532,7 +621,9 @@ namespace FantasySurvival.WorldGeneration
         public Vector2 PortalApproachLocalPosition { get; }
         public IReadOnlyList<Vector2> Nodes { get; }
         public IReadOnlyList<UrbanRoadSegment> Roads { get; }
+        public UrbanSurfaceGrid SurfaceGrid { get; }
         public IReadOnlyList<UrbanBuildingPlacement> Buildings { get; }
+        public IReadOnlyList<UrbanStreetFurniturePlacement> StreetFurniture { get; }
         public IReadOnlyList<Vector2> ProtectedLocalPoints { get; }
         public IReadOnlyList<UrbanSpatialCandidate> Candidates { get; }
         public IReadOnlyList<UrbanPoiPlacement> Pois { get; }
@@ -574,9 +665,92 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
+            if (layout.BlocksX != parameters.BlocksPerAxis ||
+                layout.BlocksZ != parameters.BlocksPerAxis ||
+                !Mathf.Approximately(layout.CityRotationDegrees, 0f) ||
+                !Mathf.Approximately(layout.LocalBounds.width, parameters.MapWorldSize) ||
+                !Mathf.Approximately(layout.LocalBounds.height, parameters.MapWorldSize))
+            {
+                error = "Urban map no longer matches its fixed square, unrotated tile contract.";
+                return false;
+            }
+
+            UrbanSurfaceGrid surfaceGrid = layout.SurfaceGrid;
+            if (surfaceGrid == null ||
+                surfaceGrid.Width != parameters.MapTilesPerAxis ||
+                surfaceGrid.Height != parameters.MapTilesPerAxis ||
+                !Mathf.Approximately(surfaceGrid.TileSize, parameters.TileWorldSize) ||
+                Vector2.Distance(surfaceGrid.LocalOrigin, layout.LocalBounds.position) > GeometryTolerance)
+            {
+                error = "Urban map surface grid does not match its fixed map parameters.";
+                return false;
+            }
+
+            for (int nodeIndex = 0; nodeIndex < layout.Nodes.Count; nodeIndex++)
+            {
+                if (!IsFinite(layout.Nodes[nodeIndex]))
+                {
+                    error = $"Road node {nodeIndex} is not finite.";
+                    return false;
+                }
+
+                for (int otherNodeIndex = nodeIndex + 1;
+                     otherNodeIndex < layout.Nodes.Count;
+                     otherNodeIndex++)
+                {
+                    if ((layout.Nodes[nodeIndex] - layout.Nodes[otherNodeIndex]).sqrMagnitude <=
+                        GeometryTolerance * GeometryTolerance)
+                    {
+                        error = $"Road nodes {nodeIndex} and {otherNodeIndex} occupy the same point.";
+                        return false;
+                    }
+                }
+            }
+
+            for (int roadIndex = 0; roadIndex < layout.Roads.Count; roadIndex++)
+            {
+                UrbanRoadSegment road = layout.Roads[roadIndex];
+                Vector2 delta = road.End - road.Start;
+                bool isOctilinear = Mathf.Abs(delta.x) <= GeometryTolerance ||
+                                    Mathf.Abs(delta.y) <= GeometryTolerance ||
+                                    Mathf.Abs(Mathf.Abs(delta.x) - Mathf.Abs(delta.y)) <= GeometryTolerance;
+                if (road.FromNodeIndex < 0 || road.FromNodeIndex >= layout.Nodes.Count ||
+                    road.ToNodeIndex < 0 || road.ToNodeIndex >= layout.Nodes.Count ||
+                    road.FromNodeIndex == road.ToNodeIndex ||
+                    (road.Start - layout.Nodes[road.FromNodeIndex]).sqrMagnitude >
+                    GeometryTolerance * GeometryTolerance ||
+                    (road.End - layout.Nodes[road.ToNodeIndex]).sqrMagnitude >
+                    GeometryTolerance * GeometryTolerance ||
+                    !IsFinite(road.Width) || road.Width <= 0f ||
+                    !isOctilinear || delta.sqrMagnitude <= GeometryTolerance * GeometryTolerance)
+                {
+                    error = $"Road {roadIndex} has invalid node binding, width, or eight-direction geometry.";
+                    return false;
+                }
+            }
+
             if (!IsRoadGraphConnected(layout.Nodes.Count, layout.Roads))
             {
                 error = "Urban map road graph is disconnected.";
+                return false;
+            }
+
+            if (!TryValidateRoadIntersections(layout, out error))
+            {
+                return false;
+            }
+
+            if (!TryBuildExpectedRoadPorts(
+                    layout.Roads,
+                    surfaceGrid,
+                    out UrbanTileConnection[] expectedRoadPorts,
+                    out error))
+            {
+                return false;
+            }
+
+            if (!TryValidateSurfaceGrid(surfaceGrid, expectedRoadPorts, out error))
+            {
                 return false;
             }
 
@@ -593,11 +767,20 @@ namespace FantasySurvival.WorldGeneration
 
                 for (int roadIndex = 0; roadIndex < layout.Roads.Count; roadIndex++)
                 {
-                    if (RoadIntersectsRect(layout.Roads[roadIndex], footprint, parameters.BuildingSetback))
+                    if (RoadIntersectsRect(
+                            layout.Roads[roadIndex],
+                            footprint,
+                            parameters.SidewalkWidth + parameters.BuildingSetback))
                     {
                         error = $"Building {buildingIndex} intersects road {roadIndex}.";
                         return false;
                     }
+                }
+
+                if (!FootprintUsesOnlyGround(surfaceGrid, footprint))
+                {
+                    error = $"Building {buildingIndex} overlaps a generated road or sidewalk tile.";
+                    return false;
                 }
 
                 if (RectIntersectsCircle(footprint, layout.EntryLocalPosition, parameters.AnchorClearance) ||
@@ -624,6 +807,46 @@ namespace FantasySurvival.WorldGeneration
                     if (footprint.Overlaps(layout.Buildings[otherIndex].Footprint))
                     {
                         error = $"Buildings {buildingIndex} and {otherIndex} overlap.";
+                        return false;
+                    }
+                }
+            }
+
+            var furnitureIds = new HashSet<int>();
+            for (int furnitureIndex = 0; furnitureIndex < layout.StreetFurniture.Count; furnitureIndex++)
+            {
+                UrbanStreetFurniturePlacement furniture = layout.StreetFurniture[furnitureIndex];
+                bool supportedKind = furniture.Kind == UrbanStreetFurnitureKind.StreetTree ||
+                                     furniture.Kind == UrbanStreetFurnitureKind.StreetLamp ||
+                                     furniture.Kind == UrbanStreetFurnitureKind.Bicycle ||
+                                     furniture.Kind == UrbanStreetFurnitureKind.TrashBin;
+                if (!supportedKind ||
+                    furniture.StableId < 0 || !furnitureIds.Add(furniture.StableId) ||
+                    furniture.SourceRoadIndex < 0 || furniture.SourceRoadIndex >= layout.Roads.Count ||
+                    (furniture.Side != -1 && furniture.Side != 1) ||
+                    !IsFinite(furniture.DistanceAlongRoad) || furniture.DistanceAlongRoad < 0f ||
+                    !IsFinite(furniture.LateralOffset) || furniture.LateralOffset < 0f ||
+                    !IsFinite(furniture.LocalPosition) ||
+                    float.IsNaN(furniture.LocalYawDegrees) || float.IsInfinity(furniture.LocalYawDegrees) ||
+                    !surfaceGrid.TryLocalToCell(furniture.LocalPosition, out int furnitureX, out int furnitureZ) ||
+                    surfaceGrid.GetKind(furnitureX, furnitureZ) != UrbanSurfaceTileKind.Sidewalk)
+                {
+                    error = $"Street-furniture placement {furnitureIndex} is invalid or not on a sidewalk tile.";
+                    return false;
+                }
+
+                UrbanRoadSegment sourceRoad = layout.Roads[furniture.SourceRoadIndex];
+                if (furniture.DistanceAlongRoad > sourceRoad.Length + GeometryTolerance)
+                {
+                    error = $"Street-furniture placement {furniture.StableId} exceeds its source road.";
+                    return false;
+                }
+
+                for (int buildingIndex = 0; buildingIndex < layout.Buildings.Count; buildingIndex++)
+                {
+                    if (ContainsPoint(layout.Buildings[buildingIndex].Footprint, furniture.LocalPosition))
+                    {
+                        error = $"Street-furniture placement {furniture.StableId} overlaps building {buildingIndex}.";
                         return false;
                     }
                 }
@@ -763,6 +986,309 @@ namespace FantasySurvival.WorldGeneration
             return true;
         }
 
+        private static bool TryValidateSurfaceGrid(
+            UrbanSurfaceGrid grid,
+            UrbanTileConnection[] expectedRoadPorts,
+            out string error)
+        {
+            int[] offsetsX = { 0, 1, 1, 1, 0, -1, -1, -1 };
+            int[] offsetsZ = { 1, 1, 0, -1, -1, -1, 0, 1 };
+            UrbanTileConnection[] flags =
+            {
+                UrbanTileConnection.N,
+                UrbanTileConnection.NE,
+                UrbanTileConnection.E,
+                UrbanTileConnection.SE,
+                UrbanTileConnection.S,
+                UrbanTileConnection.SW,
+                UrbanTileConnection.W,
+                UrbanTileConnection.NW
+            };
+            UrbanTileConnection[] oppositeFlags =
+            {
+                UrbanTileConnection.S,
+                UrbanTileConnection.SW,
+                UrbanTileConnection.W,
+                UrbanTileConnection.NW,
+                UrbanTileConnection.N,
+                UrbanTileConnection.NE,
+                UrbanTileConnection.E,
+                UrbanTileConnection.SE
+            };
+
+            for (int z = 0; z < grid.Height; z++)
+            {
+                for (int x = 0; x < grid.Width; x++)
+                {
+                    UrbanSurfaceTileKind source = grid.GetKind(x, z);
+                    UrbanTileConnection expectedSurfaceMask =
+                        UrbanSurfaceGrid.ComposeCanonicalSurfaceMask(
+                            IsCompatibleSurface(grid, x, z + 1, source),
+                            IsCompatibleSurface(grid, x + 1, z + 1, source),
+                            IsCompatibleSurface(grid, x + 1, z, source),
+                            IsCompatibleSurface(grid, x + 1, z - 1, source),
+                            IsCompatibleSurface(grid, x, z - 1, source),
+                            IsCompatibleSurface(grid, x - 1, z - 1, source),
+                            IsCompatibleSurface(grid, x - 1, z, source),
+                            IsCompatibleSurface(grid, x - 1, z + 1, source));
+                    UrbanTileConnection roadPorts = grid.GetRoadPortMask(x, z);
+                    int cellIndex = z * grid.Width + x;
+                    if (roadPorts != expectedRoadPorts[cellIndex])
+                    {
+                        error = $"Surface cell ({x}, {z}) does not match the declared road graph ports.";
+                        return false;
+                    }
+
+                    if (roadPorts != UrbanTileConnection.None && !UrbanSurfaceGrid.IsRoad(source))
+                    {
+                        error = $"Surface cell ({x}, {z}) has road ports but is not a road tile.";
+                        return false;
+                    }
+
+                    for (int direction = 0; direction < offsetsX.Length; direction++)
+                    {
+                        int neighborX = x + offsetsX[direction];
+                        int neighborZ = z + offsetsZ[direction];
+                        bool containsNeighbor = grid.ContainsCell(neighborX, neighborZ);
+                        if ((roadPorts & flags[direction]) == 0)
+                        {
+                            continue;
+                        }
+
+                        if (!containsNeighbor ||
+                            !UrbanSurfaceGrid.IsRoad(grid.GetKind(neighborX, neighborZ)) ||
+                            (grid.GetRoadPortMask(neighborX, neighborZ) & oppositeFlags[direction]) == 0)
+                        {
+                            error = $"Surface cell ({x}, {z}) has a non-reciprocal road port {flags[direction]}.";
+                            return false;
+                        }
+                    }
+
+                    if (grid.GetSurfaceConnectionMask(x, z) != expectedSurfaceMask)
+                    {
+                        error = $"Surface cell ({x}, {z}) has a stale autotile connection mask.";
+                        return false;
+                    }
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool TryBuildExpectedRoadPorts(
+            IReadOnlyList<UrbanRoadSegment> roads,
+            UrbanSurfaceGrid grid,
+            out UrbanTileConnection[] expectedRoadPorts,
+            out string error)
+        {
+            expectedRoadPorts = new UrbanTileConnection[grid.CellCount];
+            for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
+            {
+                UrbanRoadSegment road = roads[roadIndex];
+                if (!grid.TryLocalToCell(road.Start, out int startX, out int startZ) ||
+                    !grid.TryLocalToCell(road.End, out int endX, out int endZ))
+                {
+                    error = $"Road {roadIndex} leaves the surface grid.";
+                    return false;
+                }
+
+                int deltaX = endX - startX;
+                int deltaZ = endZ - startZ;
+                int absoluteX = Mathf.Abs(deltaX);
+                int absoluteZ = Mathf.Abs(deltaZ);
+                if (absoluteX != 0 && absoluteZ != 0 && absoluteX != absoluteZ)
+                {
+                    error = $"Road {roadIndex} cannot be rasterized into eight-direction tile ports.";
+                    return false;
+                }
+
+                int steps = Mathf.Max(absoluteX, absoluteZ);
+                int stepX = Math.Sign(deltaX);
+                int stepZ = Math.Sign(deltaZ);
+                UrbanTileConnection forward =
+                    UrbanSurfaceGrid.ConnectionFromUnitStep(stepX, stepZ);
+                UrbanTileConnection backward =
+                    UrbanSurfaceGrid.ConnectionFromUnitStep(-stepX, -stepZ);
+                int previousX = startX;
+                int previousZ = startZ;
+                for (int step = 1; step <= steps; step++)
+                {
+                    int currentX = startX + stepX * step;
+                    int currentZ = startZ + stepZ * step;
+                    expectedRoadPorts[previousZ * grid.Width + previousX] |= forward;
+                    expectedRoadPorts[currentZ * grid.Width + currentX] |= backward;
+                    previousX = currentX;
+                    previousZ = currentZ;
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool TryValidateRoadIntersections(
+            UrbanMapLayout layout,
+            out string error)
+        {
+            for (int leftIndex = 0; leftIndex < layout.Roads.Count; leftIndex++)
+            {
+                UrbanRoadSegment left = layout.Roads[leftIndex];
+                for (int rightIndex = leftIndex + 1;
+                     rightIndex < layout.Roads.Count;
+                     rightIndex++)
+                {
+                    UrbanRoadSegment right = layout.Roads[rightIndex];
+                    if (!SegmentsIntersect(left.Start, left.End, right.Start, right.End))
+                    {
+                        continue;
+                    }
+
+                    int sharedNodeCount = 0;
+                    if (left.FromNodeIndex == right.FromNodeIndex ||
+                        left.FromNodeIndex == right.ToNodeIndex)
+                    {
+                        sharedNodeCount++;
+                    }
+                    if (left.ToNodeIndex == right.FromNodeIndex ||
+                        left.ToNodeIndex == right.ToNodeIndex)
+                    {
+                        sharedNodeCount++;
+                    }
+
+                    if (sharedNodeCount != 1 ||
+                        (AreCollinear(left.Start, left.End, right.Start) &&
+                         AreCollinear(left.Start, left.End, right.End) &&
+                         HasPositiveCollinearOverlap(left.Start, left.End, right.Start, right.End)))
+                    {
+                        error =
+                            $"Roads {leftIndex} ({left.FromNodeIndex}->{left.ToNodeIndex}, " +
+                            $"{left.Start}->{left.End}) and {rightIndex} " +
+                            $"({right.FromNodeIndex}->{right.ToNodeIndex}, {right.Start}->{right.End}) " +
+                            $"intersect anywhere other than one shared declared node " +
+                            $"(shared nodes={sharedNodeCount}).";
+                        return false;
+                    }
+                }
+            }
+
+            error = null;
+            return true;
+        }
+
+        private static bool SegmentsIntersect(
+            Vector2 leftStart,
+            Vector2 leftEnd,
+            Vector2 rightStart,
+            Vector2 rightEnd)
+        {
+            float leftToRightStart = Cross(leftStart, leftEnd, rightStart);
+            float leftToRightEnd = Cross(leftStart, leftEnd, rightEnd);
+            float rightToLeftStart = Cross(rightStart, rightEnd, leftStart);
+            float rightToLeftEnd = Cross(rightStart, rightEnd, leftEnd);
+
+            if (((leftToRightStart > GeometryTolerance && leftToRightEnd < -GeometryTolerance) ||
+                 (leftToRightStart < -GeometryTolerance && leftToRightEnd > GeometryTolerance)) &&
+                ((rightToLeftStart > GeometryTolerance && rightToLeftEnd < -GeometryTolerance) ||
+                 (rightToLeftStart < -GeometryTolerance && rightToLeftEnd > GeometryTolerance)))
+            {
+                return true;
+            }
+
+            return Mathf.Abs(leftToRightStart) <= GeometryTolerance &&
+                   PointOnSegment(leftStart, leftEnd, rightStart) ||
+                   Mathf.Abs(leftToRightEnd) <= GeometryTolerance &&
+                   PointOnSegment(leftStart, leftEnd, rightEnd) ||
+                   Mathf.Abs(rightToLeftStart) <= GeometryTolerance &&
+                   PointOnSegment(rightStart, rightEnd, leftStart) ||
+                   Mathf.Abs(rightToLeftEnd) <= GeometryTolerance &&
+                   PointOnSegment(rightStart, rightEnd, leftEnd);
+        }
+
+        private static bool PointOnSegment(Vector2 start, Vector2 end, Vector2 point)
+        {
+            return point.x >= Mathf.Min(start.x, end.x) - GeometryTolerance &&
+                   point.x <= Mathf.Max(start.x, end.x) + GeometryTolerance &&
+                   point.y >= Mathf.Min(start.y, end.y) - GeometryTolerance &&
+                   point.y <= Mathf.Max(start.y, end.y) + GeometryTolerance;
+        }
+
+        private static bool AreCollinear(Vector2 start, Vector2 end, Vector2 point)
+        {
+            return Mathf.Abs(Cross(start, end, point)) <= GeometryTolerance;
+        }
+
+        private static bool HasPositiveCollinearOverlap(
+            Vector2 leftStart,
+            Vector2 leftEnd,
+            Vector2 rightStart,
+            Vector2 rightEnd)
+        {
+            bool useX = Mathf.Abs(leftEnd.x - leftStart.x) >=
+                        Mathf.Abs(leftEnd.y - leftStart.y);
+            float leftMinimum = useX
+                ? Mathf.Min(leftStart.x, leftEnd.x)
+                : Mathf.Min(leftStart.y, leftEnd.y);
+            float leftMaximum = useX
+                ? Mathf.Max(leftStart.x, leftEnd.x)
+                : Mathf.Max(leftStart.y, leftEnd.y);
+            float rightMinimum = useX
+                ? Mathf.Min(rightStart.x, rightEnd.x)
+                : Mathf.Min(rightStart.y, rightEnd.y);
+            float rightMaximum = useX
+                ? Mathf.Max(rightStart.x, rightEnd.x)
+                : Mathf.Max(rightStart.y, rightEnd.y);
+            float overlap = Mathf.Min(leftMaximum, rightMaximum) -
+                            Mathf.Max(leftMinimum, rightMinimum);
+            return overlap > GeometryTolerance;
+        }
+
+        private static float Cross(Vector2 start, Vector2 end, Vector2 point)
+        {
+            Vector2 segment = end - start;
+            Vector2 offset = point - start;
+            return segment.x * offset.y - segment.y * offset.x;
+        }
+
+        private static bool IsCompatibleSurface(
+            UrbanSurfaceGrid grid,
+            int x,
+            int z,
+            UrbanSurfaceTileKind source)
+        {
+            return grid.ContainsCell(x, z) &&
+                   UrbanSurfaceGrid.AreAutotileCompatible(source, grid.GetKind(x, z));
+        }
+
+        private static bool FootprintUsesOnlyGround(UrbanSurfaceGrid grid, Rect footprint)
+        {
+            if (!grid.TryLocalToCell(new Vector2(footprint.xMin, footprint.yMin), out int minX, out int minZ) ||
+                !grid.TryLocalToCell(
+                    new Vector2(
+                        footprint.xMax - GeometryTolerance,
+                        footprint.yMax - GeometryTolerance),
+                    out int maxX,
+                    out int maxZ))
+            {
+                return false;
+            }
+
+            for (int z = minZ; z <= maxZ; z++)
+            {
+                for (int x = minX; x <= maxX; x++)
+                {
+                    Vector2 center = grid.GetCellCenter(x, z);
+                    if (ContainsPoint(footprint, center) &&
+                        grid.GetKind(x, z) != UrbanSurfaceTileKind.Ground)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public static ulong ComputeStableHash(UrbanMapLayout layout)
         {
             if (layout == null)
@@ -794,6 +1320,19 @@ namespace FantasySurvival.WorldGeneration
                 AddInt(road.IsPrimary ? 1 : 0);
             }
 
+            AddInt(layout.SurfaceGrid.Width);
+            AddInt(layout.SurfaceGrid.Height);
+            AddFloat(layout.SurfaceGrid.TileSize);
+            for (int z = 0; z < layout.SurfaceGrid.Height; z++)
+            {
+                for (int x = 0; x < layout.SurfaceGrid.Width; x++)
+                {
+                    AddInt((int)layout.SurfaceGrid.GetKind(x, z));
+                    AddInt((int)layout.SurfaceGrid.GetSurfaceConnectionMask(x, z));
+                    AddInt((int)layout.SurfaceGrid.GetRoadPortMask(x, z));
+                }
+            }
+
             for (int index = 0; index < layout.Buildings.Count; index++)
             {
                 UrbanBuildingPlacement building = layout.Buildings[index];
@@ -803,6 +1342,21 @@ namespace FantasySurvival.WorldGeneration
                 AddFloat(building.Size.y);
                 AddFloat(building.Height);
                 AddInt(building.PaletteIndex);
+            }
+
+            AddInt(layout.StreetFurniture.Count);
+            for (int index = 0; index < layout.StreetFurniture.Count; index++)
+            {
+                UrbanStreetFurniturePlacement furniture = layout.StreetFurniture[index];
+                AddInt(furniture.StableId);
+                AddInt((int)furniture.Kind);
+                AddInt(furniture.SourceRoadIndex);
+                AddFloat(furniture.DistanceAlongRoad);
+                AddInt(furniture.Side);
+                AddFloat(furniture.LateralOffset);
+                AddFloat(furniture.LocalPosition.x);
+                AddFloat(furniture.LocalPosition.y);
+                AddFloat(furniture.LocalYawDegrees);
             }
 
             AddInt(layout.Pois.Count);
@@ -1028,6 +1582,11 @@ namespace FantasySurvival.WorldGeneration
                    !float.IsNaN(value.y) && !float.IsInfinity(value.y);
         }
 
+        private static bool IsFinite(float value)
+        {
+            return !float.IsNaN(value) && !float.IsInfinity(value);
+        }
+
         private static bool SegmentIntersectsRect(Vector2 start, Vector2 end, Rect rect)
         {
             if (rect.Contains(start) || rect.Contains(end))
@@ -1046,27 +1605,5 @@ namespace FantasySurvival.WorldGeneration
                    SegmentsIntersect(start, end, topLeft, bottomLeft);
         }
 
-        private static bool SegmentsIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
-        {
-            if (Mathf.Max(a.x, b.x) + GeometryTolerance < Mathf.Min(c.x, d.x) ||
-                Mathf.Max(c.x, d.x) + GeometryTolerance < Mathf.Min(a.x, b.x) ||
-                Mathf.Max(a.y, b.y) + GeometryTolerance < Mathf.Min(c.y, d.y) ||
-                Mathf.Max(c.y, d.y) + GeometryTolerance < Mathf.Min(a.y, b.y))
-            {
-                return false;
-            }
-
-            float abC = Cross(b - a, c - a);
-            float abD = Cross(b - a, d - a);
-            float cdA = Cross(d - c, a - c);
-            float cdB = Cross(d - c, b - c);
-
-            return abC * abD <= GeometryTolerance && cdA * cdB <= GeometryTolerance;
-        }
-
-        private static float Cross(Vector2 a, Vector2 b)
-        {
-            return a.x * b.y - a.y * b.x;
-        }
     }
 }

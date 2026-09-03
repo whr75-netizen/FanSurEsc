@@ -37,6 +37,22 @@ namespace FantasySurvival.EditorTools
             "Assets/Prefabs/Raids/PrototypeMeleeEnemyDamageOne.prefab";
         private const string RangedEnemyPrefabPath =
             "Assets/Prefabs/Raids/PrototypeRangedEnemyTimed.prefab";
+        private const string BuildingWrapperFolder =
+            "Assets/Prefabs/WorldGeneration/Buildings";
+        private static readonly string[] BuildingSourcePrefabPaths =
+        {
+            "Assets/BrokenVector/LowPolyBrickHouses/Prefabs/House_5.prefab",
+            "Assets/BrokenVector/LowPolyBrickHouses/Prefabs/House_3.prefab",
+            "Assets/BrokenVector/LowPolyBrickHouses/Prefabs/House_1.prefab",
+            "Assets/BrokenVector/LowPolyBrickHouses/Prefabs/House_6.prefab"
+        };
+        private static readonly string[] BuildingVisualPrefabPaths =
+        {
+            BuildingWrapperFolder + "/PrototypeBrickHouse_5.prefab",
+            BuildingWrapperFolder + "/PrototypeBrickHouse_3.prefab",
+            BuildingWrapperFolder + "/PrototypeBrickHouse_1.prefab",
+            BuildingWrapperFolder + "/PrototypeBrickHouse_6.prefab"
+        };
         private const string RaidChestObjectName = "Stage3_TestLootChest";
         private const string MeleeEnemyObjectName = "Test_KenneyZombiePatrol";
         private const string RangedEnemyObjectName = "Test_PrototypeRangedEnemy";
@@ -91,6 +107,7 @@ namespace FantasySurvival.EditorTools
                 meleeCorpseLoot,
                 testMeleeDefinition);
             RaidSpawnCatalogDefinition spawnCatalog = CreateOrUpdateRaidSpawnCatalog();
+            CreateOrUpdateBuildingVisualWrappers();
 
             SceneSpawnPoint raidEntry = FindComponentInScene<SceneSpawnPoint>(
                 scene,
@@ -152,6 +169,9 @@ namespace FantasySurvival.EditorTools
                 legacyGround;
             serializedGenerator.FindProperty("navMeshSurface").objectReferenceValue = surface;
             serializedGenerator.FindProperty("randomizeSeedOnAwake").boolValue = true;
+            ApplyPrototypeGenerationSettings(serializedGenerator);
+            ReplaceBuildingVisualPrefabs(
+                serializedGenerator.FindProperty("buildingVisualPrefabs"));
             ReplacePrototypeProtectedAnchors(
                 serializedGenerator.FindProperty("additionalProtectedAnchors"),
                 legacyMelee,
@@ -182,7 +202,8 @@ namespace FantasySurvival.EditorTools
                 generator.PlanLayout,
                 generator.GenerationParameters,
                 "GameMapTest serialized settings",
-                CreatePrototypeSpawnRequests(LoadRangedEnemySettings()));
+                CreatePrototypeSpawnRequests(LoadRangedEnemySettings()),
+                seedCount: 1);
 
             if (!EditorSceneManager.SaveScene(scene))
             {
@@ -195,6 +216,154 @@ namespace FantasySurvival.EditorTools
                 "Enemies from the Raid spawn catalog while preserving stable IDs and layout inputs.");
         }
 
+        private static void ApplyPrototypeGenerationSettings(SerializedObject serializedGenerator)
+        {
+            serializedGenerator.FindProperty("mapTilesPerAxis").intValue = 145;
+            serializedGenerator.FindProperty("blocksPerAxis").intValue = 6;
+            serializedGenerator.FindProperty("borderTiles").intValue = 12;
+            serializedGenerator.FindProperty("tileWorldSize").floatValue = 2f;
+            serializedGenerator.FindProperty("secondaryRoadWidthTiles").intValue = 3;
+            serializedGenerator.FindProperty("primaryRoadWidthTiles").intValue = 5;
+            serializedGenerator.FindProperty("additionalRoadChance").floatValue = 0.35f;
+            serializedGenerator.FindProperty("diagonalRoadChance").floatValue = 0.2f;
+            serializedGenerator.FindProperty("sidewalkWidthTiles").intValue = 1;
+            serializedGenerator.FindProperty("buildingSetback").floatValue = 2f;
+            serializedGenerator.FindProperty("lotGap").floatValue = 2f;
+            serializedGenerator.FindProperty("buildingDensity").floatValue = 0.8f;
+            serializedGenerator.FindProperty("minBuildingHeight").floatValue = 10.5f;
+            serializedGenerator.FindProperty("maxBuildingHeight").floatValue = 18f;
+            serializedGenerator.FindProperty("anchorClearance").floatValue = 10f;
+            serializedGenerator.FindProperty("protectedAnchorClearance").floatValue = 8f;
+            serializedGenerator.FindProperty("junctionFurnitureClearanceTiles").intValue = 3;
+            serializedGenerator.FindProperty("streetTreeSpacingTiles").intValue = 7;
+            serializedGenerator.FindProperty("streetLampSpacingTiles").intValue = 18;
+            serializedGenerator.FindProperty("clutterSpacingTiles").intValue = 5;
+            serializedGenerator.FindProperty("clutterChance").floatValue = 0.22f;
+        }
+
+        private static void ReplaceBuildingVisualPrefabs(SerializedProperty prefabsProperty)
+        {
+            if (prefabsProperty == null || !prefabsProperty.isArray)
+            {
+                throw new BuildFailedException(
+                    "ProceduralUrbanMapGenerator has no serialized building prefab array.");
+            }
+
+            prefabsProperty.arraySize = BuildingVisualPrefabPaths.Length;
+            for (int index = 0; index < BuildingVisualPrefabPaths.Length; index++)
+            {
+                prefabsProperty.GetArrayElementAtIndex(index).objectReferenceValue =
+                    LoadRequiredAsset<GameObject>(BuildingVisualPrefabPaths[index]);
+            }
+        }
+
+        private static void CreateOrUpdateBuildingVisualWrappers()
+        {
+            EnsureAssetFolder("Assets/Prefabs", "WorldGeneration");
+            EnsureAssetFolder("Assets/Prefabs/WorldGeneration", "Buildings");
+
+            for (int index = 0; index < BuildingSourcePrefabPaths.Length; index++)
+            {
+                GameObject sourcePrefab = LoadRequiredAsset<GameObject>(
+                    BuildingSourcePrefabPaths[index]);
+                Scene previewScene = EditorSceneManager.NewPreviewScene();
+                try
+                {
+                    var wrapper = new GameObject(
+                        System.IO.Path.GetFileNameWithoutExtension(BuildingVisualPrefabPaths[index]));
+                    SceneManager.MoveGameObjectToScene(wrapper, previewScene);
+                    var orientation = new GameObject("SourceOrientation");
+                    orientation.transform.SetParent(wrapper.transform, false);
+                    // BrokenVector House prefabs face native -X. This project-owned
+                    // adapter exposes the shared contract: +Z is the entrance/front.
+                    orientation.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+
+                    GameObject sourceInstance = PrefabUtility.InstantiatePrefab(
+                        sourcePrefab,
+                        previewScene) as GameObject;
+                    if (sourceInstance == null)
+                    {
+                        throw new BuildFailedException(
+                            $"Could not instantiate building source '{BuildingSourcePrefabPaths[index]}'.");
+                    }
+
+                    sourceInstance.name = "SourceModel";
+                    sourceInstance.transform.SetParent(orientation.transform, false);
+                    Collider[] colliders = sourceInstance.GetComponentsInChildren<Collider>(true);
+                    for (int colliderIndex = 0; colliderIndex < colliders.Length; colliderIndex++)
+                    {
+                        colliders[colliderIndex].enabled = false;
+                    }
+
+                    Renderer[] renderers = sourceInstance.GetComponentsInChildren<Renderer>(false);
+                    if (renderers.Length == 0)
+                    {
+                        throw new BuildFailedException(
+                            $"Building source '{BuildingSourcePrefabPaths[index]}' has no active renderer.");
+                    }
+
+                    Bounds bounds = CalculateLocalRendererBounds(wrapper.transform, renderers);
+                    orientation.transform.localPosition = new Vector3(
+                        -bounds.center.x,
+                        -bounds.min.y,
+                        -bounds.center.z);
+                    Bounds centeredBounds = CalculateLocalRendererBounds(wrapper.transform, renderers);
+
+                    var doorSocket = new GameObject("DoorSocket");
+                    doorSocket.transform.SetParent(wrapper.transform, false);
+                    doorSocket.transform.localPosition = new Vector3(
+                        0f,
+                        0f,
+                        centeredBounds.max.z);
+
+                    GameObject saved = PrefabUtility.SaveAsPrefabAsset(
+                        wrapper,
+                        BuildingVisualPrefabPaths[index],
+                        out bool success);
+                    if (!success || saved == null)
+                    {
+                        throw new BuildFailedException(
+                            $"Could not save building adapter '{BuildingVisualPrefabPaths[index]}'.");
+                    }
+                }
+                finally
+                {
+                    EditorSceneManager.ClosePreviewScene(previewScene);
+                }
+            }
+        }
+
+        private static Bounds CalculateLocalRendererBounds(
+            Transform localSpace,
+            IReadOnlyList<Renderer> renderers)
+        {
+            bool initialized = false;
+            Bounds result = default;
+            for (int rendererIndex = 0; rendererIndex < renderers.Count; rendererIndex++)
+            {
+                Bounds worldBounds = renderers[rendererIndex].bounds;
+                for (int corner = 0; corner < 8; corner++)
+                {
+                    Vector3 point = new Vector3(
+                        (corner & 1) == 0 ? worldBounds.min.x : worldBounds.max.x,
+                        (corner & 2) == 0 ? worldBounds.min.y : worldBounds.max.y,
+                        (corner & 4) == 0 ? worldBounds.min.z : worldBounds.max.z);
+                    Vector3 localPoint = localSpace.InverseTransformPoint(point);
+                    if (!initialized)
+                    {
+                        result = new Bounds(localPoint, Vector3.zero);
+                        initialized = true;
+                    }
+                    else
+                    {
+                        result.Encapsulate(localPoint);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         [MenuItem("Tools/Fantasy Survival/Urban Map/Validate Layout Seeds")]
         public static void ValidateLayoutSeeds()
         {
@@ -204,16 +373,21 @@ namespace FantasySurvival.EditorTools
                 seed => UrbanMapLayoutPlanner.Generate(seed, Vector2.zero, emptyProtectedPoints, parameters),
                 parameters,
                 "default settings",
-                CreatePrototypeSpawnRequests(LoadRangedEnemySettings()));
+                CreatePrototypeSpawnRequests(LoadRangedEnemySettings()),
+                seedCount: 256);
         }
 
         private static void ValidateLayoutSeeds(
             Func<int, UrbanMapLayout> layoutFactory,
             UrbanMapGenerationParameters parameters,
             string validationLabel,
-            IReadOnlyList<UrbanRaidSpawnRequest> spawnRequests)
+            IReadOnlyList<UrbanRaidSpawnRequest> spawnRequests,
+            int seedCount)
         {
-            const int seedCount = 256;
+            if (seedCount <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(seedCount));
+            }
             float minimumWidth = float.PositiveInfinity;
             float maximumWidth = float.NegativeInfinity;
             float minimumDepth = float.PositiveInfinity;
@@ -293,9 +467,13 @@ namespace FantasySurvival.EditorTools
                     $"Only {hashes.Count} unique urban layouts were generated from {seedCount} tested seeds.");
             }
 
-            if (Mathf.Approximately(minimumWidth, maximumWidth) || Mathf.Approximately(minimumDepth, maximumDepth))
+            if (!Mathf.Approximately(minimumWidth, parameters.MapWorldSize) ||
+                !Mathf.Approximately(maximumWidth, parameters.MapWorldSize) ||
+                !Mathf.Approximately(minimumDepth, parameters.MapWorldSize) ||
+                !Mathf.Approximately(maximumDepth, parameters.MapWorldSize))
             {
-                throw new BuildFailedException("Urban map dimensions did not vary across tested seeds.");
+                throw new BuildFailedException(
+                    "Urban map dimensions no longer match the configured fixed square.");
             }
 
             Debug.Log(

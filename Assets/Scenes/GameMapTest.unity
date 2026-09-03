@@ -191,25 +191,32 @@ MonoBehaviour:
   navMeshSurface: {fileID: 415190456}
   randomizeSeedOnAwake: 1
   fixedSeed: 41721
-  minBlocksX: 4
-  maxBlocksX: 6
-  minBlocksZ: 4
-  maxBlocksZ: 6
-  minBlockSize: 14
-  maxBlockSize: 20
-  intersectionJitter: 1.35
-  cityRotationRange: {x: 35, y: 55}
-  outerMargin: 6
-  secondaryRoadWidth: 3.2
-  primaryRoadWidth: 5.2
-  minorRoadRemovalChance: 0.18
-  buildingSetback: 1.2
-  lotGap: 0.9
-  buildingDensity: 0.78
-  minBuildingHeight: 2.75
-  maxBuildingHeight: 8.5
-  anchorClearance: 4.5
-  protectedAnchorClearance: 3.5
+  mapTilesPerAxis: 145
+  blocksPerAxis: 6
+  borderTiles: 12
+  tileWorldSize: 2
+  secondaryRoadWidthTiles: 3
+  primaryRoadWidthTiles: 5
+  additionalRoadChance: 0.35
+  diagonalRoadChance: 0.2
+  sidewalkWidthTiles: 1
+  buildingVisualPrefabs:
+  - {fileID: 314323903304880240, guid: 7261c583ec3688e438daf7a6dd4285ca, type: 3}
+  - {fileID: 6060885903191642064, guid: 31ca8a31c0afa4b4eb66994e78401468, type: 3}
+  - {fileID: 5428088392291581382, guid: 01b14861dee466e45813b7756c263f0e, type: 3}
+  - {fileID: 5617868507057794277, guid: 15bad58ea323a5745bb75bfe73cb78f7, type: 3}
+  buildingSetback: 2
+  lotGap: 2
+  buildingDensity: 0.8
+  minBuildingHeight: 10.5
+  maxBuildingHeight: 18
+  anchorClearance: 10
+  protectedAnchorClearance: 8
+  junctionFurnitureClearanceTiles: 3
+  streetTreeSpacingTiles: 7
+  streetLampSpacingTiles: 18
+  clutterSpacingTiles: 5
+  clutterChance: 0.22
   buildRuntimeNavMesh: 1
   navMeshSampleRadius: 2.5
 --- !u!114 &415190456

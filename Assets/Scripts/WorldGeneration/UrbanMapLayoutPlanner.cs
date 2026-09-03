@@ -5,7 +5,7 @@ namespace FantasySurvival.WorldGeneration
 {
     public static class UrbanMapLayoutPlanner
     {
-        public const int GeneratorVersion = 3;
+        public const int GeneratorVersion = 4;
         public const int SpawnManifestVersion = 3;
 
         private static readonly float[] SpawnCandidateFractions = { 0.2f, 0.35f, 0.5f, 0.65f, 0.8f };
@@ -20,6 +20,66 @@ namespace FantasySurvival.WorldGeneration
             public bool IsPrimary;
             public bool IsActive;
             public float Width;
+        }
+
+        private sealed class DisjointSet
+        {
+            private readonly int[] parents;
+            private readonly byte[] ranks;
+
+            public DisjointSet(int count)
+            {
+                parents = new int[count];
+                ranks = new byte[count];
+                for (int index = 0; index < count; index++)
+                {
+                    parents[index] = index;
+                }
+            }
+
+            public bool Union(int left, int right)
+            {
+                int leftRoot = Find(left);
+                int rightRoot = Find(right);
+                if (leftRoot == rightRoot)
+                {
+                    return false;
+                }
+
+                if (ranks[leftRoot] < ranks[rightRoot])
+                {
+                    parents[leftRoot] = rightRoot;
+                }
+                else if (ranks[leftRoot] > ranks[rightRoot])
+                {
+                    parents[rightRoot] = leftRoot;
+                }
+                else
+                {
+                    parents[rightRoot] = leftRoot;
+                    ranks[leftRoot]++;
+                }
+
+                return true;
+            }
+
+            private int Find(int value)
+            {
+                int root = value;
+                while (parents[root] != root)
+                {
+                    root = parents[root];
+                }
+
+                while (parents[value] != value)
+                {
+                    int parent = parents[value];
+                    parents[value] = root;
+                    value = parent;
+                }
+
+                return root;
+            }
         }
 
         private struct StableRandom
@@ -100,30 +160,35 @@ namespace FantasySurvival.WorldGeneration
                 throw new System.ArgumentException(settingsError, nameof(parameters));
             }
 
-            var dimensionsRandom = new StableRandom(DeriveSeed(seed, 0xA511E9B3u));
             var roadRandom = new StableRandom(DeriveSeed(seed, 0x63D83595u));
             var buildingRandom = new StableRandom(DeriveSeed(seed, 0xC2B2AE35u));
 
-            int blocksX = dimensionsRandom.Range(parameters.MinBlocksX, parameters.MaxBlocksX + 1);
-            int blocksZ = dimensionsRandom.Range(parameters.MinBlocksZ, parameters.MaxBlocksZ + 1);
-            float cityRotation = dimensionsRandom.Range(parameters.CityRotationMin, parameters.CityRotationMax);
+            int blocksX = parameters.BlocksPerAxis;
+            int blocksZ = parameters.BlocksPerAxis;
+            const float cityRotation = 0f;
+            float halfMapSize = parameters.MapWorldSize * 0.5f;
+            Rect localBounds = new Rect(
+                -halfMapSize,
+                -halfMapSize,
+                parameters.MapWorldSize,
+                parameters.MapWorldSize);
 
-            float[] baseX = BuildAxisPositions(blocksX, parameters, ref dimensionsRandom);
-            float[] baseZ = BuildAxisPositions(blocksZ, parameters, ref dimensionsRandom);
+            float[] baseX = BuildAxisPositions(parameters, localBounds.xMin);
+            float[] baseZ = BuildAxisPositions(parameters, localBounds.yMin);
             int nodeColumns = blocksX + 1;
             int nodeRows = blocksZ + 1;
-            var nodes = BuildNodes(baseX, baseZ, parameters.IntersectionJitter, ref roadRandom);
+            var nodes = BuildNodes(baseX, baseZ);
 
             int primaryRow = roadRandom.Range(1, Mathf.Max(2, nodeRows - 1));
             int primaryColumn = roadRandom.Range(1, Mathf.Max(2, nodeColumns - 1));
-            List<EdgeDraft> edgeDrafts = BuildRoadDrafts(
+            List<EdgeDraft> edgeDrafts = BuildRoadNetwork(
                 nodeColumns,
                 nodeRows,
                 primaryColumn,
                 primaryRow,
-                parameters);
-
-            RemoveMinorRoadsWhileConnected(edgeDrafts, nodes.Count, parameters.MinorRoadRemovalChance, ref roadRandom);
+                nodes.Count,
+                parameters,
+                ref roadRandom);
             List<UrbanRoadSegment> roads = CreateRoadSegments(edgeDrafts, nodes);
 
             Vector2 entryLocalPosition = nodes[0];
@@ -134,17 +199,13 @@ namespace FantasySurvival.WorldGeneration
             Vector2 portalLocalPosition = nodes[portalNodeIndex];
             Vector2 portalApproach = FindPortalApproach(edgeDrafts, nodes, portalNodeIndex, parameters.AnchorClearance * 0.65f);
 
-            float outerMargin = parameters.OuterMargin;
-            Rect localBounds = new Rect(
-                -outerMargin,
-                -outerMargin,
-                baseX[baseX.Length - 1] + outerMargin * 2f,
-                baseZ[baseZ.Length - 1] + outerMargin * 2f);
-
             List<Vector2> protectedLocalPoints = ConvertProtectedPointsToLocal(
                 protectedWorldPositions,
                 entryWorldPosition,
+                entryLocalPosition,
                 cityRotation);
+
+            UrbanSurfaceGrid surfaceGrid = BuildSurfaceGrid(localBounds, roads, parameters);
 
             List<UrbanBuildingPlacement> buildings = BuildBuildings(
                 baseX,
@@ -164,6 +225,16 @@ namespace FantasySurvival.WorldGeneration
                 localBounds,
                 entryLocalPosition,
                 portalLocalPosition);
+            List<UrbanStreetFurniturePlacement> streetFurniture = BuildStreetFurniture(
+                roads,
+                surfaceGrid,
+                buildings,
+                candidates,
+                entryLocalPosition,
+                portalLocalPosition,
+                protectedLocalPoints,
+                parameters,
+                seed);
 
             var layout = new UrbanMapLayout(
                 GeneratorVersion,
@@ -177,7 +248,9 @@ namespace FantasySurvival.WorldGeneration
                 portalApproach,
                 nodes,
                 roads,
+                surfaceGrid,
                 buildings,
+                streetFurniture,
                 protectedLocalPoints,
                 candidates,
                 pois);
@@ -534,6 +607,313 @@ namespace FantasySurvival.WorldGeneration
             };
         }
 
+        private static List<UrbanStreetFurniturePlacement> BuildStreetFurniture(
+            IReadOnlyList<UrbanRoadSegment> roads,
+            UrbanSurfaceGrid surfaceGrid,
+            IReadOnlyList<UrbanBuildingPlacement> buildings,
+            IReadOnlyList<UrbanSpatialCandidate> spatialCandidates,
+            Vector2 entryLocalPosition,
+            Vector2 portalLocalPosition,
+            IReadOnlyList<Vector2> protectedLocalPoints,
+            UrbanMapGenerationParameters parameters,
+            int seed)
+        {
+            var placements = new List<UrbanStreetFurniturePlacement>();
+            int stableId = 0;
+
+            for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
+            {
+                UrbanRoadSegment road = roads[roadIndex];
+                Vector2 segment = road.End - road.Start;
+                if (segment.sqrMagnitude <= 0.0001f)
+                {
+                    continue;
+                }
+
+                float length = segment.magnitude;
+                Vector2 direction = segment / length;
+                Vector2 right = new Vector2(direction.y, -direction.x);
+                float lateralOffset = road.Width * 0.5f + parameters.SidewalkWidth * 0.55f;
+                float endpointClearance = parameters.JunctionFurnitureClearanceTiles *
+                                          parameters.TileWorldSize;
+
+                AddFurnitureSeries(
+                    UrbanStreetFurnitureKind.StreetTree,
+                    roadIndex,
+                    road,
+                    direction,
+                    right,
+                    length,
+                    parameters.StreetTreeSpacingTiles * parameters.TileWorldSize,
+                    endpointClearance,
+                    lateralOffset,
+                    chance: 1f,
+                    seed,
+                    0x2C1B3C6Du,
+                    surfaceGrid,
+                    buildings,
+                    spatialCandidates,
+                    entryLocalPosition,
+                    portalLocalPosition,
+                    protectedLocalPoints,
+                    parameters,
+                    placements,
+                    ref stableId);
+
+                AddFurnitureSeries(
+                    UrbanStreetFurnitureKind.StreetLamp,
+                    roadIndex,
+                    road,
+                    direction,
+                    right,
+                    length,
+                    parameters.StreetLampSpacingTiles * parameters.TileWorldSize,
+                    endpointClearance,
+                    lateralOffset,
+                    chance: 1f,
+                    seed,
+                    0x9E3779B9u,
+                    surfaceGrid,
+                    buildings,
+                    spatialCandidates,
+                    entryLocalPosition,
+                    portalLocalPosition,
+                    protectedLocalPoints,
+                    parameters,
+                    placements,
+                    ref stableId);
+
+                AddFurnitureSeries(
+                    UrbanStreetFurnitureKind.Bicycle,
+                    roadIndex,
+                    road,
+                    direction,
+                    right,
+                    length,
+                    parameters.ClutterSpacingTiles * parameters.TileWorldSize,
+                    endpointClearance,
+                    lateralOffset,
+                    parameters.ClutterChance,
+                    seed,
+                    0x85EBCA6Bu,
+                    surfaceGrid,
+                    buildings,
+                    spatialCandidates,
+                    entryLocalPosition,
+                    portalLocalPosition,
+                    protectedLocalPoints,
+                    parameters,
+                    placements,
+                    ref stableId);
+            }
+
+            return placements;
+        }
+
+        private static void AddFurnitureSeries(
+            UrbanStreetFurnitureKind requestedKind,
+            int roadIndex,
+            UrbanRoadSegment road,
+            Vector2 roadDirection,
+            Vector2 roadRight,
+            float roadLength,
+            float spacing,
+            float endpointClearance,
+            float requestedLateralOffset,
+            float chance,
+            int seed,
+            uint stream,
+            UrbanSurfaceGrid surfaceGrid,
+            IReadOnlyList<UrbanBuildingPlacement> buildings,
+            IReadOnlyList<UrbanSpatialCandidate> spatialCandidates,
+            Vector2 entryLocalPosition,
+            Vector2 portalLocalPosition,
+            IReadOnlyList<Vector2> protectedLocalPoints,
+            UrbanMapGenerationParameters parameters,
+            List<UrbanStreetFurniturePlacement> placements,
+            ref int stableId)
+        {
+            if (roadLength <= endpointClearance * 2f || spacing <= 0f)
+            {
+                return;
+            }
+
+            uint roadStream = unchecked(stream + (uint)roadIndex * 0x27D4EB2Du);
+            var random = new StableRandom(DeriveSeed(seed, roadStream));
+            float phase = requestedKind == UrbanStreetFurnitureKind.StreetTree
+                ? spacing * 0.25f
+                : requestedKind == UrbanStreetFurnitureKind.StreetLamp
+                    ? spacing * 0.55f
+                    : random.Range(0f, spacing);
+            int slotIndex = 0;
+            for (float distance = endpointClearance + phase;
+                 distance < roadLength - endpointClearance;
+                 distance += spacing, slotIndex++)
+            {
+                if (random.NextFloat() > chance)
+                {
+                    continue;
+                }
+
+                int side = ((roadIndex + slotIndex + (int)requestedKind) & 1) == 0 ? 1 : -1;
+                Vector2 roadPoint = road.Start + roadDirection * distance;
+                Vector2 desired = roadPoint + roadRight * (requestedLateralOffset * side);
+                if (!TryFindSidewalkCell(
+                        surfaceGrid,
+                        desired,
+                        roadPoint,
+                        roadRight,
+                        side,
+                        parameters.SidewalkWidthTiles + 1,
+                        out Vector2 localPosition) ||
+                    !CanPlaceStreetFurniture(
+                        localPosition,
+                        surfaceGrid,
+                        buildings,
+                        spatialCandidates,
+                        entryLocalPosition,
+                        portalLocalPosition,
+                        protectedLocalPoints,
+                        parameters,
+                        placements))
+                {
+                    continue;
+                }
+
+                UrbanStreetFurnitureKind kind = requestedKind;
+                if (requestedKind == UrbanStreetFurnitureKind.Bicycle && random.NextFloat() >= 0.5f)
+                {
+                    kind = UrbanStreetFurnitureKind.TrashBin;
+                }
+
+                float yaw = Mathf.Atan2(roadDirection.x, roadDirection.y) * Mathf.Rad2Deg;
+                float actualLateralOffset = Mathf.Abs(Vector2.Dot(localPosition - roadPoint, roadRight));
+                placements.Add(new UrbanStreetFurniturePlacement(
+                    stableId++,
+                    kind,
+                    roadIndex,
+                    distance,
+                    side,
+                    actualLateralOffset,
+                    localPosition,
+                    yaw));
+            }
+        }
+
+        private static bool TryFindSidewalkCell(
+            UrbanSurfaceGrid surfaceGrid,
+            Vector2 desired,
+            Vector2 roadPoint,
+            Vector2 roadRight,
+            int side,
+            int searchRadius,
+            out Vector2 localPosition)
+        {
+            localPosition = default;
+            if (!surfaceGrid.TryLocalToCell(desired, out int centerX, out int centerZ))
+            {
+                return false;
+            }
+
+            float bestDistanceSquared = float.PositiveInfinity;
+            bool found = false;
+            for (int offsetZ = -searchRadius; offsetZ <= searchRadius; offsetZ++)
+            {
+                for (int offsetX = -searchRadius; offsetX <= searchRadius; offsetX++)
+                {
+                    int x = centerX + offsetX;
+                    int z = centerZ + offsetZ;
+                    if (!surfaceGrid.ContainsCell(x, z) ||
+                        surfaceGrid.GetKind(x, z) != UrbanSurfaceTileKind.Sidewalk)
+                    {
+                        continue;
+                    }
+
+                    Vector2 candidate = surfaceGrid.GetCellCenter(x, z);
+                    if (Vector2.Dot(candidate - roadPoint, roadRight) * side <= 0f)
+                    {
+                        continue;
+                    }
+
+                    float distanceSquared = (candidate - desired).sqrMagnitude;
+                    if (distanceSquared >= bestDistanceSquared)
+                    {
+                        continue;
+                    }
+
+                    bestDistanceSquared = distanceSquared;
+                    localPosition = candidate;
+                    found = true;
+                }
+            }
+
+            return found;
+        }
+
+        private static bool CanPlaceStreetFurniture(
+            Vector2 localPosition,
+            UrbanSurfaceGrid surfaceGrid,
+            IReadOnlyList<UrbanBuildingPlacement> buildings,
+            IReadOnlyList<UrbanSpatialCandidate> spatialCandidates,
+            Vector2 entryLocalPosition,
+            Vector2 portalLocalPosition,
+            IReadOnlyList<Vector2> protectedLocalPoints,
+            UrbanMapGenerationParameters parameters,
+            IReadOnlyList<UrbanStreetFurniturePlacement> existing)
+        {
+            if (!surfaceGrid.TryLocalToCell(localPosition, out int x, out int z) ||
+                surfaceGrid.GetKind(x, z) != UrbanSurfaceTileKind.Sidewalk)
+            {
+                return false;
+            }
+
+            float anchorClearance = Mathf.Max(parameters.TileWorldSize * 2f, parameters.AnchorClearance * 0.65f);
+            if ((localPosition - entryLocalPosition).sqrMagnitude < anchorClearance * anchorClearance ||
+                (localPosition - portalLocalPosition).sqrMagnitude < anchorClearance * anchorClearance)
+            {
+                return false;
+            }
+
+            for (int index = 0; index < protectedLocalPoints.Count; index++)
+            {
+                float clearance = Mathf.Max(parameters.TileWorldSize, parameters.ProtectedAnchorClearance * 0.5f);
+                if ((localPosition - protectedLocalPoints[index]).sqrMagnitude < clearance * clearance)
+                {
+                    return false;
+                }
+            }
+
+            for (int index = 0; index < buildings.Count; index++)
+            {
+                if (ContainsPoint(buildings[index].Footprint, localPosition))
+                {
+                    return false;
+                }
+            }
+
+            float approachClearanceSquared = parameters.TileWorldSize * parameters.TileWorldSize * 2.25f;
+            for (int index = 0; index < spatialCandidates.Count; index++)
+            {
+                UrbanSpatialCandidate candidate = spatialCandidates[index];
+                if (candidate.Kind == UrbanSpatialCandidateKind.BuildingApproach &&
+                    (candidate.LocalPosition - localPosition).sqrMagnitude < approachClearanceSquared)
+                {
+                    return false;
+                }
+            }
+
+            float minimumSeparationSquared = parameters.TileWorldSize * parameters.TileWorldSize * 1.25f;
+            for (int index = 0; index < existing.Count; index++)
+            {
+                if ((existing[index].LocalPosition - localPosition).sqrMagnitude < minimumSeparationSquared)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private static Vector2 FindNearestRoadPoint(
             Vector2 localPosition,
             IReadOnlyList<UrbanRoadSegment> roads)
@@ -670,14 +1050,15 @@ namespace FantasySurvival.WorldGeneration
         }
 
         private static float[] BuildAxisPositions(
-            int blockCount,
             UrbanMapGenerationParameters parameters,
-            ref StableRandom random)
+            float boundsMinimum)
         {
-            var positions = new float[blockCount + 1];
-            for (int index = 1; index < positions.Length; index++)
+            var positions = new float[parameters.BlocksPerAxis + 1];
+            float firstNode = boundsMinimum +
+                              (parameters.BorderTiles + 0.5f) * parameters.TileWorldSize;
+            for (int index = 0; index < positions.Length; index++)
             {
-                positions[index] = positions[index - 1] + random.Range(parameters.MinBlockSize, parameters.MaxBlockSize);
+                positions[index] = firstNode + index * parameters.BlockSpanWorld;
             }
 
             return positions;
@@ -685,9 +1066,7 @@ namespace FantasySurvival.WorldGeneration
 
         private static List<Vector2> BuildNodes(
             float[] baseX,
-            float[] baseZ,
-            float jitter,
-            ref StableRandom random)
+            float[] baseZ)
         {
             int columns = baseX.Length;
             int rows = baseZ.Length;
@@ -697,26 +1076,27 @@ namespace FantasySurvival.WorldGeneration
             {
                 for (int column = 0; column < columns; column++)
                 {
-                    bool isEntry = row == 0 && column == 0;
-                    bool isPortal = row == rows - 1 && column == columns - 1;
-                    float edgeMultiplier = row == 0 || row == rows - 1 || column == 0 || column == columns - 1
-                        ? 0.45f
-                        : 1f;
-                    float offsetX = isEntry || isPortal ? 0f : random.Range(-jitter, jitter) * edgeMultiplier;
-                    float offsetZ = isEntry || isPortal ? 0f : random.Range(-jitter, jitter) * edgeMultiplier;
-                    nodes.Add(new Vector2(baseX[column] + offsetX, baseZ[row] + offsetZ));
+                    nodes.Add(new Vector2(baseX[column], baseZ[row]));
                 }
             }
 
             return nodes;
         }
 
-        private static List<EdgeDraft> BuildRoadDrafts(
+        /// <summary>
+        /// Builds an octilinear road graph in three explicit phases: mandatory major
+        /// spines, a seed-weighted Kruskal backbone, then optional loops and at most
+        /// one diagonal per coarse block. Connectivity is guaranteed by construction;
+        /// the one-diagonal rule prevents hidden X intersections inside a tile block.
+        /// </summary>
+        private static List<EdgeDraft> BuildRoadNetwork(
             int columns,
             int rows,
             int primaryColumn,
             int primaryRow,
-            UrbanMapGenerationParameters parameters)
+            int nodeCount,
+            UrbanMapGenerationParameters parameters,
+            ref StableRandom random)
         {
             var edges = new List<EdgeDraft>((columns - 1) * rows + (rows - 1) * columns);
 
@@ -734,7 +1114,7 @@ namespace FantasySurvival.WorldGeneration
                             From = current,
                             To = GetNodeIndex(column + 1, row, columns),
                             IsPrimary = primary,
-                            IsActive = true,
+                            IsActive = primary,
                             Width = primary ? parameters.PrimaryRoadWidth : parameters.SecondaryRoadWidth
                         });
                     }
@@ -747,101 +1127,92 @@ namespace FantasySurvival.WorldGeneration
                             From = current,
                             To = GetNodeIndex(column, row + 1, columns),
                             IsPrimary = primary,
-                            IsActive = true,
+                            IsActive = primary,
                             Width = primary ? parameters.PrimaryRoadWidth : parameters.SecondaryRoadWidth
                         });
                     }
                 }
             }
 
-            return edges;
-        }
-
-        private static void RemoveMinorRoadsWhileConnected(
-            List<EdgeDraft> edges,
-            int nodeCount,
-            float removalChance,
-            ref StableRandom random)
-        {
-            var candidates = new List<int>();
-            for (int index = 0; index < edges.Count; index++)
-            {
-                if (!edges[index].IsPrimary)
-                {
-                    candidates.Add(index);
-                }
-            }
-
-            for (int index = candidates.Count - 1; index > 0; index--)
-            {
-                int swapIndex = random.Range(0, index + 1);
-                (candidates[index], candidates[swapIndex]) = (candidates[swapIndex], candidates[index]);
-            }
-
-            for (int candidateIndex = 0; candidateIndex < candidates.Count; candidateIndex++)
-            {
-                if (random.NextFloat() > removalChance)
-                {
-                    continue;
-                }
-
-                int edgeIndex = candidates[candidateIndex];
-                EdgeDraft draft = edges[edgeIndex];
-                draft.IsActive = false;
-                edges[edgeIndex] = draft;
-
-                if (!IsGraphConnected(nodeCount, edges))
-                {
-                    draft.IsActive = true;
-                    edges[edgeIndex] = draft;
-                }
-            }
-        }
-
-        private static bool IsGraphConnected(int nodeCount, List<EdgeDraft> edges)
-        {
-            var adjacency = new List<int>[nodeCount];
-            for (int index = 0; index < nodeCount; index++)
-            {
-                adjacency[index] = new List<int>();
-            }
-
+            var connectivity = new DisjointSet(nodeCount);
+            var secondaryCandidates = new List<int>();
             for (int index = 0; index < edges.Count; index++)
             {
                 EdgeDraft edge = edges[index];
-                if (!edge.IsActive)
+                if (edge.IsPrimary)
+                {
+                    connectivity.Union(edge.From, edge.To);
+                }
+                else
+                {
+                    secondaryCandidates.Add(index);
+                }
+            }
+
+            Shuffle(secondaryCandidates, ref random);
+            for (int candidateIndex = 0; candidateIndex < secondaryCandidates.Count; candidateIndex++)
+            {
+                int edgeIndex = secondaryCandidates[candidateIndex];
+                EdgeDraft edge = edges[edgeIndex];
+                if (!connectivity.Union(edge.From, edge.To))
                 {
                     continue;
                 }
 
-                adjacency[edge.From].Add(edge.To);
-                adjacency[edge.To].Add(edge.From);
+                edge.IsActive = true;
+                edges[edgeIndex] = edge;
             }
 
-            var queue = new Queue<int>();
-            var visited = new bool[nodeCount];
-            queue.Enqueue(0);
-            visited[0] = true;
-            int visitedCount = 0;
-
-            while (queue.Count > 0)
+            for (int candidateIndex = 0; candidateIndex < secondaryCandidates.Count; candidateIndex++)
             {
-                int current = queue.Dequeue();
-                visitedCount++;
-                for (int index = 0; index < adjacency[current].Count; index++)
+                int edgeIndex = secondaryCandidates[candidateIndex];
+                EdgeDraft edge = edges[edgeIndex];
+                if (edge.IsActive || random.NextFloat() > parameters.AdditionalRoadChance)
                 {
-                    int next = adjacency[current][index];
-                    if (visited[next])
+                    continue;
+                }
+
+                edge.IsActive = true;
+                edges[edgeIndex] = edge;
+            }
+
+            for (int row = 0; row + 1 < rows; row++)
+            {
+                for (int column = 0; column + 1 < columns; column++)
+                {
+                    if (random.NextFloat() > parameters.DiagonalRoadChance)
                     {
                         continue;
                     }
 
-                    visited[next] = true;
-                    queue.Enqueue(next);
+                    bool slopesUp = random.NextFloat() < 0.5f;
+                    int from = slopesUp
+                        ? GetNodeIndex(column, row, columns)
+                        : GetNodeIndex(column + 1, row, columns);
+                    int to = slopesUp
+                        ? GetNodeIndex(column + 1, row + 1, columns)
+                        : GetNodeIndex(column, row + 1, columns);
+                    edges.Add(new EdgeDraft
+                    {
+                        From = from,
+                        To = to,
+                        IsPrimary = false,
+                        IsActive = true,
+                        Width = parameters.SecondaryRoadWidth
+                    });
                 }
             }
 
-            return visitedCount == nodeCount;
+            return edges;
+        }
+
+        private static void Shuffle(List<int> values, ref StableRandom random)
+        {
+            for (int index = values.Count - 1; index > 0; index--)
+            {
+                int swapIndex = random.Range(0, index + 1);
+                (values[index], values[swapIndex]) = (values[swapIndex], values[index]);
+            }
         }
 
         private static List<UrbanRoadSegment> CreateRoadSegments(List<EdgeDraft> drafts, List<Vector2> nodes)
@@ -892,6 +1263,7 @@ namespace FantasySurvival.WorldGeneration
         private static List<Vector2> ConvertProtectedPointsToLocal(
             IReadOnlyList<Vector2> protectedWorldPositions,
             Vector2 entryWorldPosition,
+            Vector2 entryLocalPosition,
             float cityRotationDegrees)
         {
             var result = new List<Vector2>();
@@ -907,12 +1279,225 @@ namespace FantasySurvival.WorldGeneration
             for (int index = 0; index < protectedWorldPositions.Count; index++)
             {
                 Vector2 offset = protectedWorldPositions[index] - entryWorldPosition;
-                result.Add(new Vector2(
+                result.Add(entryLocalPosition + new Vector2(
                     offset.x * cosine - offset.y * sine,
                     offset.x * sine + offset.y * cosine));
             }
 
             return result;
+        }
+
+        private static UrbanSurfaceGrid BuildSurfaceGrid(
+            Rect localBounds,
+            IReadOnlyList<UrbanRoadSegment> roads,
+            UrbanMapGenerationParameters parameters)
+        {
+            int size = parameters.MapTilesPerAxis;
+            var kinds = new UrbanSurfaceTileKind[size * size];
+            var roadPorts = new UrbanTileConnection[size * size];
+
+            for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
+            {
+                UrbanRoadSegment road = roads[roadIndex];
+                int roadWidthTiles = road.IsPrimary
+                    ? parameters.PrimaryRoadWidthTiles
+                    : parameters.SecondaryRoadWidthTiles;
+                int roadRadius = roadWidthTiles / 2;
+                int sidewalkRadius = roadRadius + parameters.SidewalkWidthTiles;
+                List<Vector2Int> centerline = RasterizeOctilinearRoad(
+                    road,
+                    localBounds.position,
+                    parameters.TileWorldSize,
+                    size);
+                AddRoadPorts(roadPorts, size, centerline);
+
+                for (int cellIndex = 0; cellIndex < centerline.Count; cellIndex++)
+                {
+                    StampSurfaceDisk(
+                        kinds,
+                        size,
+                        centerline[cellIndex],
+                        sidewalkRadius,
+                        UrbanSurfaceTileKind.Sidewalk,
+                        overwriteRoad: false);
+                }
+
+                UrbanSurfaceTileKind roadKind = road.IsPrimary
+                    ? UrbanSurfaceTileKind.PrimaryRoad
+                    : UrbanSurfaceTileKind.SecondaryRoad;
+                for (int cellIndex = 0; cellIndex < centerline.Count; cellIndex++)
+                {
+                    StampSurfaceDisk(
+                        kinds,
+                        size,
+                        centerline[cellIndex],
+                        roadRadius,
+                        roadKind,
+                        overwriteRoad: road.IsPrimary);
+                }
+            }
+
+            UrbanTileConnection[] masks = BuildAutotileConnectionMasks(kinds, size, size);
+            return new UrbanSurfaceGrid(
+                size,
+                size,
+                parameters.TileWorldSize,
+                localBounds.position,
+                kinds,
+                masks,
+                roadPorts);
+        }
+
+        private static void AddRoadPorts(
+            UrbanTileConnection[] roadPorts,
+            int gridSize,
+            IReadOnlyList<Vector2Int> centerline)
+        {
+            for (int index = 1; index < centerline.Count; index++)
+            {
+                Vector2Int previous = centerline[index - 1];
+                Vector2Int current = centerline[index];
+                int deltaX = current.x - previous.x;
+                int deltaZ = current.y - previous.y;
+                UrbanTileConnection forward =
+                    UrbanSurfaceGrid.ConnectionFromUnitStep(deltaX, deltaZ);
+                UrbanTileConnection backward =
+                    UrbanSurfaceGrid.ConnectionFromUnitStep(-deltaX, -deltaZ);
+                roadPorts[previous.y * gridSize + previous.x] |= forward;
+                roadPorts[current.y * gridSize + current.x] |= backward;
+            }
+        }
+
+        private static List<Vector2Int> RasterizeOctilinearRoad(
+            UrbanRoadSegment road,
+            Vector2 localOrigin,
+            float tileSize,
+            int gridSize)
+        {
+            Vector2Int start = LocalToCellUnchecked(road.Start, localOrigin, tileSize);
+            Vector2Int end = LocalToCellUnchecked(road.End, localOrigin, tileSize);
+            int deltaX = end.x - start.x;
+            int deltaZ = end.y - start.y;
+            int absoluteX = Mathf.Abs(deltaX);
+            int absoluteZ = Mathf.Abs(deltaZ);
+            if (absoluteX != 0 && absoluteZ != 0 && absoluteX != absoluteZ)
+            {
+                throw new System.InvalidOperationException(
+                    $"Road {road.FromNodeIndex}->{road.ToNodeIndex} is not aligned to one of the eight tile directions.");
+            }
+
+            int steps = Mathf.Max(absoluteX, absoluteZ);
+            int stepX = System.Math.Sign(deltaX);
+            int stepZ = System.Math.Sign(deltaZ);
+            var cells = new List<Vector2Int>(steps + 1);
+            for (int step = 0; step <= steps; step++)
+            {
+                var cell = new Vector2Int(start.x + stepX * step, start.y + stepZ * step);
+                if (cell.x < 0 || cell.x >= gridSize || cell.y < 0 || cell.y >= gridSize)
+                {
+                    throw new System.InvalidOperationException(
+                        $"Road {road.FromNodeIndex}->{road.ToNodeIndex} left the fixed surface grid.");
+                }
+
+                cells.Add(cell);
+            }
+
+            return cells;
+        }
+
+        private static Vector2Int LocalToCellUnchecked(
+            Vector2 localPosition,
+            Vector2 localOrigin,
+            float tileSize)
+        {
+            Vector2 relative = localPosition - localOrigin;
+            return new Vector2Int(
+                Mathf.FloorToInt(relative.x / tileSize),
+                Mathf.FloorToInt(relative.y / tileSize));
+        }
+
+        private static void StampSurfaceDisk(
+            UrbanSurfaceTileKind[] kinds,
+            int gridSize,
+            Vector2Int center,
+            int radius,
+            UrbanSurfaceTileKind kind,
+            bool overwriteRoad)
+        {
+            int radiusSquared = radius * radius;
+            for (int offsetZ = -radius; offsetZ <= radius; offsetZ++)
+            {
+                for (int offsetX = -radius; offsetX <= radius; offsetX++)
+                {
+                    if (offsetX * offsetX + offsetZ * offsetZ > radiusSquared)
+                    {
+                        continue;
+                    }
+
+                    int x = center.x + offsetX;
+                    int z = center.y + offsetZ;
+                    if (x < 0 || x >= gridSize || z < 0 || z >= gridSize)
+                    {
+                        continue;
+                    }
+
+                    int index = z * gridSize + x;
+                    UrbanSurfaceTileKind existing = kinds[index];
+                    if (kind == UrbanSurfaceTileKind.Sidewalk)
+                    {
+                        if (existing == UrbanSurfaceTileKind.Ground)
+                        {
+                            kinds[index] = kind;
+                        }
+                        continue;
+                    }
+
+                    if (!UrbanSurfaceGrid.IsRoad(existing) || overwriteRoad)
+                    {
+                        kinds[index] = kind;
+                    }
+                }
+            }
+        }
+
+        private static UrbanTileConnection[] BuildAutotileConnectionMasks(
+            UrbanSurfaceTileKind[] kinds,
+            int width,
+            int height)
+        {
+            var masks = new UrbanTileConnection[kinds.Length];
+
+            for (int z = 0; z < height; z++)
+            {
+                for (int x = 0; x < width; x++)
+                {
+                    int index = z * width + x;
+                    UrbanSurfaceTileKind source = kinds[index];
+                    masks[index] = UrbanSurfaceGrid.ComposeCanonicalSurfaceMask(
+                        IsCompatibleSurface(kinds, width, height, x, z + 1, source),
+                        IsCompatibleSurface(kinds, width, height, x + 1, z + 1, source),
+                        IsCompatibleSurface(kinds, width, height, x + 1, z, source),
+                        IsCompatibleSurface(kinds, width, height, x + 1, z - 1, source),
+                        IsCompatibleSurface(kinds, width, height, x, z - 1, source),
+                        IsCompatibleSurface(kinds, width, height, x - 1, z - 1, source),
+                        IsCompatibleSurface(kinds, width, height, x - 1, z, source),
+                        IsCompatibleSurface(kinds, width, height, x - 1, z + 1, source));
+                }
+            }
+
+            return masks;
+        }
+
+        private static bool IsCompatibleSurface(
+            UrbanSurfaceTileKind[] kinds,
+            int width,
+            int height,
+            int x,
+            int z,
+            UrbanSurfaceTileKind source)
+        {
+            return x >= 0 && x < width && z >= 0 && z < height &&
+                   UrbanSurfaceGrid.AreAutotileCompatible(source, kinds[z * width + x]);
         }
 
         private static List<UrbanBuildingPlacement> BuildBuildings(
@@ -926,11 +1511,12 @@ namespace FantasySurvival.WorldGeneration
             ref StableRandom random)
         {
             var buildings = new List<UrbanBuildingPlacement>();
-            const float geometrySafetyMargin = 0.15f;
+            float geometrySafetyMargin = parameters.TileWorldSize * 0.25f;
             float roadInset = parameters.PrimaryRoadWidth * 0.5f +
+                              parameters.SidewalkWidth +
                               parameters.BuildingSetback +
-                              parameters.IntersectionJitter +
                               geometrySafetyMargin;
+            float minimumFootprint = parameters.TileWorldSize * 5f;
 
             for (int blockZ = 0; blockZ < baseZ.Length - 1; blockZ++)
             {
@@ -942,13 +1528,17 @@ namespace FantasySurvival.WorldGeneration
                         baseX[blockX + 1] - roadInset,
                         baseZ[blockZ + 1] - roadInset);
 
-                    if (usable.width < 3.5f || usable.height < 3.5f)
+                    if (usable.width < minimumFootprint || usable.height < minimumFootprint)
                     {
                         continue;
                     }
 
-                    float targetLotWidth = random.Range(5.25f, 8.25f);
-                    float targetLotDepth = random.Range(5.25f, 8.25f);
+                    float targetLotWidth = random.Range(
+                        parameters.TileWorldSize * 7f,
+                        parameters.TileWorldSize * 10f);
+                    float targetLotDepth = random.Range(
+                        parameters.TileWorldSize * 7f,
+                        parameters.TileWorldSize * 10f);
                     int columns = Mathf.Max(1, Mathf.FloorToInt(usable.width / targetLotWidth));
                     int rows = Mathf.Max(1, Mathf.FloorToInt(usable.height / targetLotDepth));
                     float cellWidth = usable.width / columns;
@@ -963,14 +1553,32 @@ namespace FantasySurvival.WorldGeneration
                                 continue;
                             }
 
-                            float maximumJitterX = Mathf.Max(0f, (cellWidth - parameters.LotGap - 3f) * 0.12f);
-                            float maximumJitterZ = Mathf.Max(0f, (cellDepth - parameters.LotGap - 3f) * 0.12f);
+                            float maximumJitterX = Mathf.Max(
+                                0f,
+                                (cellWidth - parameters.LotGap - minimumFootprint) * 0.12f);
+                            float maximumJitterZ = Mathf.Max(
+                                0f,
+                                (cellDepth - parameters.LotGap - minimumFootprint) * 0.12f);
                             Vector2 center = new Vector2(
-                                usable.xMin + (column + 0.5f) * cellWidth + random.Range(-maximumJitterX, maximumJitterX),
-                                usable.yMin + (row + 0.5f) * cellDepth + random.Range(-maximumJitterZ, maximumJitterZ));
+                                SnapToTile(
+                                    usable.xMin + (column + 0.5f) * cellWidth +
+                                    random.Range(-maximumJitterX, maximumJitterX),
+                                    parameters.TileWorldSize),
+                                SnapToTile(
+                                    usable.yMin + (row + 0.5f) * cellDepth +
+                                    random.Range(-maximumJitterZ, maximumJitterZ),
+                                    parameters.TileWorldSize));
                             Vector2 size = new Vector2(
-                                Mathf.Max(3f, cellWidth - parameters.LotGap - random.Range(0f, 0.75f)),
-                                Mathf.Max(3f, cellDepth - parameters.LotGap - random.Range(0f, 0.75f)));
+                                Mathf.Max(
+                                    minimumFootprint,
+                                    SnapDownToTile(
+                                        cellWidth - parameters.LotGap - random.Range(0f, parameters.TileWorldSize),
+                                        parameters.TileWorldSize)),
+                                Mathf.Max(
+                                    minimumFootprint,
+                                    SnapDownToTile(
+                                        cellDepth - parameters.LotGap - random.Range(0f, parameters.TileWorldSize),
+                                        parameters.TileWorldSize)));
                             var placement = new UrbanBuildingPlacement(
                                 center,
                                 size,
@@ -1011,7 +1619,10 @@ namespace FantasySurvival.WorldGeneration
 
             for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
             {
-                if (UrbanMapLayoutValidator.RoadIntersectsRect(roads[roadIndex], footprint, parameters.BuildingSetback))
+                if (UrbanMapLayoutValidator.RoadIntersectsRect(
+                        roads[roadIndex],
+                        footprint,
+                        parameters.SidewalkWidth + parameters.BuildingSetback))
                 {
                     return false;
                 }
@@ -1043,6 +1654,16 @@ namespace FantasySurvival.WorldGeneration
             }
 
             return true;
+        }
+
+        private static float SnapToTile(float value, float tileSize)
+        {
+            return Mathf.Round(value / tileSize) * tileSize;
+        }
+
+        private static float SnapDownToTile(float value, float tileSize)
+        {
+            return Mathf.Floor(value / tileSize) * tileSize;
         }
 
         private static int GetNodeIndex(int column, int row, int columns)

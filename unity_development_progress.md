@@ -2091,3 +2091,15 @@ Interactable (abstract base class)
 - `[시험 자산]` 기존 `PrototypeSunShaftContrastTestArea` prefab GUID와 `GameMap1` 인스턴스 위치를 유지한 채 약 `100×64m`로 교체했다. 개방 대조군, 완전 지붕, `5×6m` 채광구, 반복 슬랫, 불규칙 수목, 단일 `9m` 벽, `8/24/48m` 거리 차폐물을 독립 구역으로 배치했고 방향광 높이 구간과 최대 표본 예산은 `12m/12`로 올렸다. 씬 파일은 수정하지 않았다.
 - `[검증·미검증]` Unity 동적 C# 컴파일 성공, 새 shader `supported=True`·compiler message `0`, 두 prefab 재임포트 성공과 `git diff --check`를 확인했다. 자산 저장 뒤 Unity MCP 연결이 자동 종료되어 새 검증장의 저·중·고 태양각, 줌/이동 world-lock, 개방/밀폐/개구부 시각 비교와 Rain/Night 비교는 이번 작업에서 실행하지 않았으며 통과로 기록하지 않는다.
 - `[보존·후속]` 기존 가로등 로컬 체적광, 낮밤·비·구름·웅덩이, Player/Camera/셸과 씬 흐름은 바꾸지 않았다. half-resolution opaque depth 경계의 얇은 foliage 절단, Transparent 차폐/수광, 실제 GPU Profile과 최종 아트 수치는 후속 재개방 조건이다. 사용자 dirty 재질 2개·preview Camera prefab·`GameMap1` Chest 직렬화 6줄은 변경·stage하지 않았다.
+
+---
+
+## 111. 고정 타일 도심과 8방향 도로 그래프 `[MAP-01][POI-01][SPAWN-01]`
+
+- `[사용자 정정·근본 교체][2026-09-03]` 기존 Ground 위에 별도 Road 평면을 얹던 표현은 같은 높이 표면의 깊이 경쟁과 이후 픽셀 타일 교체 불가능성이 원인이었다. 생성 원본을 profile 고정 정사각 격자로 바꾸고 각 셀이 `Ground/Sidewalk/SecondaryRoad/PrimaryRoad` 중 정확히 하나만 소유하게 했다. 현재 renderer는 셀당 quad 하나를 한 XZ mesh의 네 submesh로 묶으며 충돌용 Ground에는 renderer가 없어 coplanar 표면을 겹치지 않는다.
+- `[도로 계약]` 상하좌우·대각 8방향만 허용한다. 내부 주 도로, seed 순서의 spanning backbone, 선택 loop, coarse block당 대각 하나 순으로 만들며 선언된 공용 node 밖의 교차와 X 교차를 거부한다. 도로 그래프의 정확한 중심선 연결 `roadPorts`와 면 경계용 canonical 47타일 mask는 별도 데이터다. 대각 surface bit는 두 cardinal 이웃도 연결됐을 때만 켜므로 맞닿은 모서리가 가짜 연결을 만들지 않는다.
+- `[건물·가로 시설]` 도로·인도 raster 뒤 남은 셀에 프로젝트 adapter를 거친 BrokenVector 벽돌집 네 종을 배치한다. adapter는 입구 방향을 +Z로 통일하고 vendor collider를 끄며 layout root의 BoxCollider 하나가 점유·NavMesh 권위를 가진다. 가로수·가로등·자전거·쓰레기통은 source road, 진행 거리, 좌우와 측면 offset을 저장한 뒤 인도 셀·보호 거리에서만 생성한다. 공용 시험 가로등 prefab은 원형 비율을 유지한 채 3배 크기와 3배 range, 거리 제곱 광량으로 맞췄다.
+- `[알고리즘 근거]` Parish·Müller와 Chen 등의 `도로망 → 필지 → 건물` 분리, Tiled/Unity AutoTile의 47/blob surface 규칙, StreetGen의 road-relative 가로 시설 표현을 적용했다. Unity Tilemap/RuleTile은 도시 연결성을 생성하는 권위가 아니라 최종 sprite atlas를 그릴 수 있는 선택적 출력기로 취급한다. 현재 3D XZ·NavMesh·방향광 계약에는 논리 격자에서 만든 XZ mesh가 기본 출력이다.
+- `[정적·변조 검증]` Unity 컴파일·Console 오류 0에서 기본 seed 0~255의 생성·결정성·D8·canonical mask·exact road-port가 모두 통과했다. 모든 port 제거, 같은 block의 X 대각, NaN tile size/road width/furniture distance를 각각 주입하면 validator가 원인별로 거부했다. 외부 foliage shader의 중복 URP keyword와 vendor `ModelCustomizer`의 고립된 attribute도 import 원인에서 제거했다.
+- `[Play Mode 1회]` 직접 `GameMapTest`와 `GameMap1` 왕복 1회를 실행했다. 첫 map은 seed `1458508496`, `145×145`셀=`290×290m`, 도로 70·건물 22·가로 시설 183·의료 POI 1이었고 surface 정점은 셀당 4개인 `84,100`개였다. 단일 surface와 비렌더 Ground, 건물 root collider, 가로 시설 수, Entry→Portal 및 POI/시험 spawn NavMesh, Player·Camera·Inventory UI·EventSystem 동일 인스턴스와 runtime Error 0을 확인했다. 종료 뒤 두 scene 파일 hash는 변하지 않았다.
+- `[현재 경계]` 현재 색은 알고리즘 확인용이며 최종 픽셀 atlas·variant catalog, 실제 graph-face 필지 분할, 회전별 건물 footprint mask, 내부·랜드마크·폐차는 아트/규칙이 정해질 때 같은 layout 데이터에 연결한다. 현재 시험 `145×145/2m`는 GameMapTest profile의 고정값이지 모든 미래 맵 크기를 코드 상수로 봉인한 값은 아니다.

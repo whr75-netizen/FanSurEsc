@@ -1254,7 +1254,7 @@ Patrol
 - **[확정/현재]** 첫 원정 공간
 - 도로를 구조의 중심으로 사용
 - 폐건물과 현대 공간을 탐색하는 방향
-- 현재는 회색상자 도로와 Cube 건물
+- 현재는 고정 정사각 타일 표면과 저상세 벽돌집 prefab을 쓰는 프로토타입
 
 #### 7.1.2 지하 던전
 
@@ -1270,9 +1270,12 @@ Patrol
 
 ```text
 seed + generator version
-→ 가변 크기와 연결 도로
-→ 필지 분할
-→ 충돌하지 않는 Cube 건물
+→ profile에서 고정된 정사각 타일 격자
+→ 8방향 연결 도로 그래프
+→ exact roadPorts + 47타일 surface mask
+→ 도로·인도·바닥 단일 점유 raster
+→ 충돌하지 않는 prefab 건물
+→ 도로 기준 가로 시설
 → 도로·건물 접근 공유 후보와 의미 POI
 → 보호 지점 유지
 → NavMesh 생성
@@ -1284,10 +1287,12 @@ seed + generator version
 
 #### 7.3.1 현재 규칙
 
-- 주 도로 행·열로 전체 연결성을 유지한다.
-- 전체 연결성이 유지되는 경우 일부 보조 도로를 제거한다.
-- 블록 간격과 교차점을 seed로 변화시킨다.
-- 도로 표시는 collider가 없는 보행 가능 공간이다.
+- 상하좌우·대각 8방향만 허용한다.
+- 주 도로 행·열을 먼저 두고 seed 기반 spanning backbone으로 모든 교차점을 연결한 뒤 선택적인 loop를 추가한다.
+- 한 coarse block에는 대각선 하나만 허용하고, 도로끼리의 교차는 양쪽이 공유하는 선언된 node에서만 허용한다.
+- 실제 그래프 연결인 `roadPorts`와 surface 경계용 47타일 마스크를 분리한다. 맞닿은 픽셀만 보고 가짜 대각 도로 연결을 만들지 않는다.
+- 도로 표시는 collider가 없는 보행 가능 셀이며 각 셀은 한 surface만 소유한다. Ground 위에 별도 Road 평면을 겹치지 않는다.
+- 현재 `145×145`, 셀당 `2m`는 시험 profile 값이다. seed는 profile의 크기를 바꾸지 않으며 다른 맵 크기는 다른 profile의 명시 설정으로만 바꾼다.
 
 #### 7.3.2 플레이 목적
 
@@ -1300,11 +1305,11 @@ seed + generator version
 
 #### 7.4.1 현재
 
-- 도로 확정 뒤 남은 필지에 Cube 건물을 배치한다.
-- 건물 높이와 색을 변화시킨다.
-- seed당 한 건물은 `Medical` 의미 POI로 선택해 청록색으로 구분한다.
+- 도로·인도 확정 뒤 남은 필지에 프로젝트 adapter를 거친 건물 prefab을 배치한다.
+- footprint와 높이를 seed로 변화시키되 셀 크기에 맞춰 snap한다.
+- seed당 한 건물은 `Medical` 의미 POI로 선택해 청록 tint로 구분한다.
 - 도로, 보호 지점과 다른 건물을 침범하지 않는다.
-- collider와 Not Walkable 영역을 가진다.
+- layout root의 단일 collider와 Not Walkable 영역을 가지며 vendor prefab 내부 collider는 점유 권위를 갖지 않는다.
 
 #### 7.4.2 후속 실제 건물 `[설계 제안]`
 
@@ -1314,7 +1319,7 @@ seed + generator version
 - 엄폐·시야·전리품 후보
 - 파괴 가능 여부
 
-실제 프리팹 교체 시 footprint와 접근 지점 데이터가 Cube 점유 규칙과 일치해야 한다.
+최종 건물 자산·내부 모듈로 교체할 때도 footprint와 접근 지점 데이터가 현재 layout 점유 규칙과 일치해야 한다.
 
 ### 7.5 POI·랜드마크 `[현재 시험/후속]`
 
@@ -1344,20 +1349,24 @@ seed + generator version
 
 ### 7.6 지형지물
 
-#### 7.6.1 규칙적 요소 `[후속]`
+#### 7.6.1 규칙적 요소 `[현재 시험]`
 
 - 가로수
 - 가로등
 - 도로 표지
 - 중앙 분리 구조
 
-#### 7.6.2 불규칙 요소 `[후속]`
+현재 가로수·가로등은 source road, 진행 거리, 좌우와 측면 offset을 저장하고 인도 셀에만 놓는다. 도로 표지와 중앙 분리 구조는 후속이다.
+
+#### 7.6.2 불규칙 요소 `[현재 시험/후속]`
 
 - 폐차
 - 쓰레기통
 - 자전거
 - 잔해
 - 임시 방벽
+
+현재 자전거·쓰레기통만 seed 기반의 별도 stream으로 일부 인도 slot에 시험 배치한다. 폐차·잔해·임시 방벽은 후속이다.
 
 #### 7.6.3 배치 원칙
 
@@ -1438,8 +1447,8 @@ seed + generator version
 #### 7.10.1 현재
 
 - `NavigationPathComplete` 결과를 산출한다.
-- 256개 seed의 도로 연결·점유 충돌, 공유 후보·의료 POI와 stable ID manifest의 결정성·보호 거리·상호 간격을 코드 검증했다.
-- 실제 Play Mode에서 Spawn→Portal과 의료 POI 접근 완전 경로, POI 건물·상자 위치·치료제 ID 7·AI 후보 주입을 확인했다.
+- 최신 256개 seed의 도로 연결·D8 방향·canonical 47타일 mask·exact roadPorts·점유 충돌, 공유 후보·의료 POI와 stable ID manifest의 결정성·보호 거리·상호 간격을 코드 검증했다.
+- 실제 Play Mode 대표 1회에서 단일 surface mesh와 비렌더 Ground, Spawn→Portal과 의료 POI 접근 완전 경로, prefab 건물·상자 위치·치료제 ID 7·AI 후보 주입을 확인했다.
 - 완전 경로가 없으면 Player 배치·Raid Active·checkpoint·화면 공개 전에 도착을 거부하고, 기존 검은 전환을 유지한 채 기지로 복귀시킨다.
 - Fresh 생성 실패는 원정 전 exact 상태로 되돌리고 게임플레이 실패로 세지 않으며, Resume 생성 실패는 seed를 바꾸지 않고 `RecoveryFailed`로 정산한다.
 - Fresh exact rollback을 확보하지 못하거나 기지 redirect를 시작하지 못하면 잘못된 Raid를 공개하지 않고 검은 전환과 입력 잠금을 유지한다. Resume은 새 실패 기록 쓰기가 실패해도 기존 ordinary 원정 표식과 고정 seed를 유지한 채 기지 정산에서 재시도한다.
@@ -2725,7 +2734,7 @@ VFX는 실제 판정의 결과를 표시하며 별도 피해 원본이 되지 �
 - grid 인벤토리·장비·Chest·회전
 - 시험 공격·피해·사망·시체 전리품
 - 근접·원거리 AI 1단계
-- 도심 도로·Cube 건물 절차 생성
+- 고정 정사각 타일 도심·8방향 도로·prefab 건물 절차 생성
 - 기지 Chest 영속화
 - 원정 생환·사망·포기 결과
 - ordinary save와 강제종료 Recovery

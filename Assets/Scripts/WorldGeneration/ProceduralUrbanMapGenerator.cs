@@ -19,6 +19,7 @@ namespace FantasySurvival.WorldGeneration
         private static readonly Color GroundColor = new Color(0.19f, 0.18f, 0.16f, 1f);
         private static readonly Color SecondaryRoadColor = new Color(0.18f, 0.20f, 0.22f, 1f);
         private static readonly Color PrimaryRoadColor = new Color(0.25f, 0.27f, 0.29f, 1f);
+        private static readonly Color SidewalkColor = new Color(0.36f, 0.35f, 0.33f, 1f);
         private static readonly Color BoundaryColor = new Color(0.24f, 0.12f, 0.11f, 1f);
         private static readonly Color MedicalPoiBuildingColor = new Color(0.18f, 0.62f, 0.46f, 1f);
         private static readonly Color[] BuildingColors =
@@ -41,30 +42,35 @@ namespace FantasySurvival.WorldGeneration
         [SerializeField] private bool randomizeSeedOnAwake = true;
         [SerializeField] private int fixedSeed = 41721;
 
-        [Header("City Shape")]
-        [SerializeField, Min(2)] private int minBlocksX = 4;
-        [SerializeField, Min(2)] private int maxBlocksX = 6;
-        [SerializeField, Min(2)] private int minBlocksZ = 4;
-        [SerializeField, Min(2)] private int maxBlocksZ = 6;
-        [SerializeField, Min(4f)] private float minBlockSize = 14f;
-        [SerializeField, Min(4f)] private float maxBlockSize = 20f;
-        [SerializeField, Min(0f)] private float intersectionJitter = 1.35f;
-        [SerializeField] private Vector2 cityRotationRange = new Vector2(35f, 55f);
-        [SerializeField, Min(2f)] private float outerMargin = 6f;
+        [Header("Fixed Tile Map")]
+        [SerializeField, Min(17)] private int mapTilesPerAxis = 145;
+        [SerializeField, Min(2)] private int blocksPerAxis = 6;
+        [SerializeField, Min(1)] private int borderTiles = 12;
+        [SerializeField, Min(0.25f)] private float tileWorldSize = 2f;
 
-        [Header("Roads")]
-        [SerializeField, Min(1f)] private float secondaryRoadWidth = 3.2f;
-        [SerializeField, Min(1f)] private float primaryRoadWidth = 5.2f;
-        [SerializeField, Range(0f, 0.45f)] private float minorRoadRemovalChance = 0.18f;
+        [Header("Octilinear Road Graph")]
+        [SerializeField, Min(1)] private int secondaryRoadWidthTiles = 3;
+        [SerializeField, Min(1)] private int primaryRoadWidthTiles = 5;
+        [SerializeField, Range(0f, 1f)] private float additionalRoadChance = 0.35f;
+        [SerializeField, Range(0f, 1f)] private float diagonalRoadChance = 0.2f;
+        [SerializeField, Min(1)] private int sidewalkWidthTiles = 1;
 
-        [Header("Graybox Buildings")]
-        [SerializeField, Min(0f)] private float buildingSetback = 1.2f;
-        [SerializeField, Min(0f)] private float lotGap = 0.9f;
-        [SerializeField, Range(0f, 1f)] private float buildingDensity = 0.78f;
-        [SerializeField, Min(1f)] private float minBuildingHeight = 2.75f;
-        [SerializeField, Min(1f)] private float maxBuildingHeight = 8.5f;
-        [SerializeField, Min(0f)] private float anchorClearance = 4.5f;
-        [SerializeField, Min(0f)] private float protectedAnchorClearance = 3.5f;
+        [Header("Prototype Buildings")]
+        [SerializeField] private GameObject[] buildingVisualPrefabs;
+        [SerializeField, Min(0f)] private float buildingSetback = 2f;
+        [SerializeField, Min(0f)] private float lotGap = 2f;
+        [SerializeField, Range(0f, 1f)] private float buildingDensity = 0.8f;
+        [SerializeField, Min(1f)] private float minBuildingHeight = 10.5f;
+        [SerializeField, Min(1f)] private float maxBuildingHeight = 18f;
+        [SerializeField, Min(0f)] private float anchorClearance = 10f;
+        [SerializeField, Min(0f)] private float protectedAnchorClearance = 8f;
+
+        [Header("Street Furniture Sockets")]
+        [SerializeField, Min(1)] private int junctionFurnitureClearanceTiles = 3;
+        [SerializeField, Min(2)] private int streetTreeSpacingTiles = 7;
+        [SerializeField, Min(2)] private int streetLampSpacingTiles = 18;
+        [SerializeField, Min(2)] private int clutterSpacingTiles = 5;
+        [SerializeField, Range(0f, 1f)] private float clutterChance = 0.22f;
 
         [Header("Derived Navigation")]
         [SerializeField] private bool buildRuntimeNavMesh = true;
@@ -72,6 +78,8 @@ namespace FantasySurvival.WorldGeneration
 
         private Transform generatedContent;
         private Material runtimeMaterial;
+        private Material[] runtimeSurfaceMaterials;
+        private Mesh runtimeSurfaceMesh;
         private NavMeshData runtimeNavMeshData;
         private UrbanMapLayout pendingNavigationLayout;
         private bool hasStarted;
@@ -153,6 +161,8 @@ namespace FantasySurvival.WorldGeneration
                 runtimeMaterial = null;
             }
 
+            ClearRuntimeSurfaceResources();
+
             if (legacyGroundStateCaptured && legacyGround != null)
             {
                 legacyGround.SetActive(legacyGroundWasActive);
@@ -194,13 +204,18 @@ namespace FantasySurvival.WorldGeneration
             CurrentLayout = layout;
             generatedContent = new GameObject($"GeneratedUrbanMap_Seed_{seed}").transform;
             generatedContent.SetParent(transform, false);
+            Quaternion mapRotation = Quaternion.Euler(0f, layout.CityRotationDegrees, 0f);
+            Vector3 rotatedEntry = mapRotation * new Vector3(
+                layout.EntryLocalPosition.x,
+                0f,
+                layout.EntryLocalPosition.y);
             generatedContent.SetPositionAndRotation(
-                new Vector3(entryAnchor.position.x, 0f, entryAnchor.position.z),
-                Quaternion.Euler(0f, layout.CityRotationDegrees, 0f));
+                new Vector3(entryAnchor.position.x, 0f, entryAnchor.position.z) - rotatedEntry,
+                mapRotation);
 
-            CreateGround(layout);
-            CreateRoads(layout);
+            CreateSurfaceTiles(layout);
             CreateBuildings(layout);
+            CreateStreetFurniture(layout);
             CreateBoundaries(layout);
             PlaceExistingPortal(layout);
 
@@ -299,6 +314,7 @@ namespace FantasySurvival.WorldGeneration
             pendingNavigationLayout = null;
 
             ClearRuntimeNavMeshData();
+            ClearRuntimeSurfaceResources();
 
             if (generatedContent == null)
             {
@@ -325,7 +341,9 @@ namespace FantasySurvival.WorldGeneration
                 $"Urban map generated. Version={layout.GeneratorVersion}, Seed={layout.Seed}, " +
                 $"Size={layout.LocalBounds.width:F1}x{layout.LocalBounds.height:F1}, " +
                 $"Roads={layout.Roads.Count}, Buildings={layout.Buildings.Count}, " +
-                $"Candidates={layout.Candidates.Count}, POIs={layout.Pois.Count}, " +
+                $"Tiles={layout.SurfaceGrid.Width}x{layout.SurfaceGrid.Height}, " +
+                $"Furniture={layout.StreetFurniture.Count}, Candidates={layout.Candidates.Count}, " +
+                $"POIs={layout.Pois.Count}, " +
                 $"NavPathComplete={NavigationPathComplete}, Hash={layoutHash:X16}.",
                 this);
         }
@@ -364,32 +382,52 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
+            if (buildingVisualPrefabs == null || buildingVisualPrefabs.Length == 0)
+            {
+                Debug.LogError(
+                    "ProceduralUrbanMapGenerator requires at least one building visual prefab.",
+                    this);
+                return false;
+            }
+
+            for (int index = 0; index < buildingVisualPrefabs.Length; index++)
+            {
+                if (buildingVisualPrefabs[index] == null)
+                {
+                    Debug.LogError(
+                        $"ProceduralUrbanMapGenerator building visual prefab slot {index} is empty.",
+                        this);
+                    return false;
+                }
+            }
+
             return true;
         }
 
         private UrbanMapGenerationParameters CreateParameters()
         {
             return new UrbanMapGenerationParameters(
-                minBlocksX,
-                maxBlocksX,
-                minBlocksZ,
-                maxBlocksZ,
-                minBlockSize,
-                maxBlockSize,
-                intersectionJitter,
-                Mathf.Min(cityRotationRange.x, cityRotationRange.y),
-                Mathf.Max(cityRotationRange.x, cityRotationRange.y),
-                secondaryRoadWidth,
-                primaryRoadWidth,
-                minorRoadRemovalChance,
-                outerMargin,
+                mapTilesPerAxis,
+                blocksPerAxis,
+                borderTiles,
+                tileWorldSize,
+                secondaryRoadWidthTiles,
+                primaryRoadWidthTiles,
+                additionalRoadChance,
+                diagonalRoadChance,
+                sidewalkWidthTiles,
                 buildingSetback,
                 lotGap,
                 buildingDensity,
                 minBuildingHeight,
                 maxBuildingHeight,
                 anchorClearance,
-                protectedAnchorClearance);
+                protectedAnchorClearance,
+                junctionFurnitureClearanceTiles,
+                streetTreeSpacingTiles,
+                streetLampSpacingTiles,
+                clutterSpacingTiles,
+                clutterChance);
         }
 
         private List<Vector2> CollectProtectedWorldPositions()
@@ -453,45 +491,134 @@ namespace FantasySurvival.WorldGeneration
             };
         }
 
-        private void CreateGround(UrbanMapLayout layout)
+        private void CreateSurfaceTiles(UrbanMapLayout layout)
         {
+            EnsureRuntimeSurfaceMaterials();
+
             Rect bounds = layout.LocalBounds;
-            CreatePrimitive(
-                "GeneratedGround",
-                PrimitiveType.Cube,
-                new Vector3(bounds.center.x, -0.25f, bounds.center.y),
-                Quaternion.identity,
-                new Vector3(bounds.width, 0.5f, bounds.height),
-                GroundColor,
-                hasCollider: true,
-                blocksPlayer: false,
-                markNotWalkable: false,
-                castsShadows: false,
-                receivesShadows: true);
+            var ground = new GameObject("GeneratedGround");
+            ground.transform.SetParent(generatedContent, false);
+            ground.transform.localPosition = new Vector3(bounds.center.x, -0.25f, bounds.center.y);
+            var groundCollider = ground.AddComponent<BoxCollider>();
+            groundCollider.size = new Vector3(bounds.width, 0.5f, bounds.height);
+
+            UrbanSurfaceGrid grid = layout.SurfaceGrid;
+            var vertices = new List<Vector3>(grid.CellCount * 4);
+            var normals = new List<Vector3>(grid.CellCount * 4);
+            var uv = new List<Vector2>(grid.CellCount * 4);
+            var trianglesBySurface = new List<int>[runtimeSurfaceMaterials.Length];
+            for (int surfaceIndex = 0; surfaceIndex < trianglesBySurface.Length; surfaceIndex++)
+            {
+                trianglesBySurface[surfaceIndex] = new List<int>();
+            }
+
+            float halfTile = grid.TileSize * 0.5f;
+            for (int z = 0; z < grid.Height; z++)
+            {
+                for (int x = 0; x < grid.Width; x++)
+                {
+                    Vector2 center = grid.GetCellCenter(x, z);
+                    int vertexStart = vertices.Count;
+                    vertices.Add(new Vector3(center.x - halfTile, 0.005f, center.y - halfTile));
+                    vertices.Add(new Vector3(center.x - halfTile, 0.005f, center.y + halfTile));
+                    vertices.Add(new Vector3(center.x + halfTile, 0.005f, center.y + halfTile));
+                    vertices.Add(new Vector3(center.x + halfTile, 0.005f, center.y - halfTile));
+                    normals.Add(Vector3.up);
+                    normals.Add(Vector3.up);
+                    normals.Add(Vector3.up);
+                    normals.Add(Vector3.up);
+                    uv.Add(Vector2.zero);
+                    uv.Add(Vector2.up);
+                    uv.Add(Vector2.one);
+                    uv.Add(Vector2.right);
+
+                    List<int> triangles = trianglesBySurface[(int)grid.GetKind(x, z)];
+                    triangles.Add(vertexStart);
+                    triangles.Add(vertexStart + 1);
+                    triangles.Add(vertexStart + 2);
+                    triangles.Add(vertexStart);
+                    triangles.Add(vertexStart + 2);
+                    triangles.Add(vertexStart + 3);
+                }
+            }
+
+            runtimeSurfaceMesh = new Mesh
+            {
+                name = "Runtime Urban Surface Tile Mesh",
+                hideFlags = HideFlags.DontSave,
+                indexFormat = IndexFormat.UInt32,
+                subMeshCount = runtimeSurfaceMaterials.Length
+            };
+            runtimeSurfaceMesh.SetVertices(vertices);
+            runtimeSurfaceMesh.SetNormals(normals);
+            runtimeSurfaceMesh.SetUVs(0, uv);
+            for (int surfaceIndex = 0; surfaceIndex < trianglesBySurface.Length; surfaceIndex++)
+            {
+                runtimeSurfaceMesh.SetTriangles(trianglesBySurface[surfaceIndex], surfaceIndex, false);
+            }
+            runtimeSurfaceMesh.RecalculateBounds();
+
+            var surfaceObject = new GameObject("GeneratedSurfaceTiles");
+            surfaceObject.transform.SetParent(generatedContent, false);
+            var filter = surfaceObject.AddComponent<MeshFilter>();
+            filter.sharedMesh = runtimeSurfaceMesh;
+            var renderer = surfaceObject.AddComponent<MeshRenderer>();
+            renderer.sharedMaterials = runtimeSurfaceMaterials;
+            renderer.shadowCastingMode = ShadowCastingMode.Off;
+            renderer.receiveShadows = true;
         }
 
-        private void CreateRoads(UrbanMapLayout layout)
+        private void EnsureRuntimeSurfaceMaterials()
         {
-            for (int index = 0; index < layout.Roads.Count; index++)
+            if (runtimeSurfaceMaterials != null)
             {
-                UrbanRoadSegment road = layout.Roads[index];
-                Vector2 direction = road.End - road.Start;
-                float yaw = Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg;
-                Vector2 midpoint = (road.Start + road.End) * 0.5f;
-
-                CreatePrimitive(
-                    road.IsPrimary ? $"PrimaryRoad_{index:000}" : $"Road_{index:000}",
-                    PrimitiveType.Cube,
-                    new Vector3(midpoint.x, 0.035f, midpoint.y),
-                    Quaternion.Euler(0f, yaw, 0f),
-                    new Vector3(road.Width, 0.07f, road.Length + 0.15f),
-                    road.IsPrimary ? PrimaryRoadColor : SecondaryRoadColor,
-                    hasCollider: false,
-                    blocksPlayer: false,
-                    markNotWalkable: false,
-                    castsShadows: false,
-                    receivesShadows: true);
+                return;
             }
+
+            EnsureRuntimeMaterial();
+            Color[] colors = { GroundColor, SidewalkColor, SecondaryRoadColor, PrimaryRoadColor };
+            runtimeSurfaceMaterials = new Material[colors.Length];
+            for (int index = 0; index < colors.Length; index++)
+            {
+                var material = new Material(runtimeMaterial)
+                {
+                    name = $"Runtime Urban Surface {((UrbanSurfaceTileKind)index)}",
+                    hideFlags = HideFlags.DontSave
+                };
+                if (material.HasProperty(BaseColorId))
+                {
+                    material.SetColor(BaseColorId, colors[index]);
+                }
+                if (material.HasProperty(ColorId))
+                {
+                    material.SetColor(ColorId, colors[index]);
+                }
+                runtimeSurfaceMaterials[index] = material;
+            }
+        }
+
+        private void ClearRuntimeSurfaceResources()
+        {
+            if (runtimeSurfaceMesh != null)
+            {
+                Destroy(runtimeSurfaceMesh);
+                runtimeSurfaceMesh = null;
+            }
+
+            if (runtimeSurfaceMaterials == null)
+            {
+                return;
+            }
+
+            for (int index = 0; index < runtimeSurfaceMaterials.Length; index++)
+            {
+                if (runtimeSurfaceMaterials[index] != null)
+                {
+                    Destroy(runtimeSurfaceMaterials[index]);
+                }
+            }
+
+            runtimeSurfaceMaterials = null;
         }
 
         private void CreateBuildings(UrbanMapLayout layout)
@@ -506,21 +633,247 @@ namespace FantasySurvival.WorldGeneration
                 Color color = isMedicalPoi
                     ? MedicalPoiBuildingColor
                     : BuildingColors[Mathf.Abs(building.PaletteIndex) % BuildingColors.Length];
-                CreatePrimitive(
+                CreateBuilding(
                     isMedicalPoi
                         ? $"Building_{index:000}_MedicalPoi"
                         : $"Building_{index:000}_Palette_{building.PaletteIndex}",
-                    PrimitiveType.Cube,
-                    new Vector3(building.Center.x, building.Height * 0.5f, building.Center.y),
-                    Quaternion.identity,
-                    new Vector3(building.Size.x, building.Height, building.Size.y),
+                    building,
+                    FindBuildingFacadeDirection(layout, index),
                     color,
-                    hasCollider: true,
-                    blocksPlayer: true,
-                    markNotWalkable: true,
-                    castsShadows: true,
-                    receivesShadows: true);
+                    building.PaletteIndex);
             }
+        }
+
+        private void CreateStreetFurniture(UrbanMapLayout layout)
+        {
+            for (int index = 0; index < layout.StreetFurniture.Count; index++)
+            {
+                UrbanStreetFurniturePlacement placement = layout.StreetFurniture[index];
+                var root = new GameObject(
+                    $"StreetFurniture_{placement.StableId:000}_{placement.Kind}");
+                root.transform.SetParent(generatedContent, false);
+                root.transform.localPosition = new Vector3(
+                    placement.LocalPosition.x,
+                    0f,
+                    placement.LocalPosition.y);
+                root.transform.localRotation = Quaternion.Euler(0f, placement.LocalYawDegrees, 0f);
+                root.tag = "Obstacle";
+
+                Vector3 colliderSize;
+                Vector3 colliderCenter;
+                switch (placement.Kind)
+                {
+                    case UrbanStreetFurnitureKind.StreetTree:
+                        colliderSize = new Vector3(0.8f, 4.5f, 0.8f);
+                        colliderCenter = new Vector3(0f, 2.25f, 0f);
+                        CreatePrimitive(
+                            "Trunk",
+                            PrimitiveType.Cylinder,
+                            new Vector3(0f, 2f, 0f),
+                            Quaternion.identity,
+                            new Vector3(0.55f, 2f, 0.55f),
+                            new Color(0.25f, 0.16f, 0.09f, 1f),
+                            false, false, false, true, true, root.transform);
+                        CreatePrimitive(
+                            "Canopy",
+                            PrimitiveType.Sphere,
+                            new Vector3(0f, 5.1f, 0f),
+                            Quaternion.identity,
+                            new Vector3(3.1f, 3.4f, 3.1f),
+                            new Color(0.18f, 0.38f, 0.19f, 1f),
+                            false, false, false, true, true, root.transform);
+                        break;
+
+                    case UrbanStreetFurnitureKind.StreetLamp:
+                        colliderSize = new Vector3(0.65f, 8.5f, 0.65f);
+                        colliderCenter = new Vector3(0f, 4.25f, 0f);
+                        CreatePrimitive(
+                            "Pole",
+                            PrimitiveType.Cylinder,
+                            new Vector3(0f, 4.25f, 0f),
+                            Quaternion.identity,
+                            new Vector3(0.32f, 4.25f, 0.32f),
+                            new Color(0.16f, 0.17f, 0.18f, 1f),
+                            false, false, false, true, true, root.transform);
+                        CreatePrimitive(
+                            "LampHead",
+                            PrimitiveType.Cube,
+                            new Vector3(0f, 8.35f, 0.45f),
+                            Quaternion.identity,
+                            new Vector3(0.9f, 0.45f, 1.4f),
+                            new Color(0.76f, 0.68f, 0.38f, 1f),
+                            false, false, false, true, true, root.transform);
+                        break;
+
+                    case UrbanStreetFurnitureKind.Bicycle:
+                        colliderSize = new Vector3(1.7f, 1.1f, 0.7f);
+                        colliderCenter = new Vector3(0f, 0.55f, 0f);
+                        CreatePrimitive(
+                            "BicycleProxy",
+                            PrimitiveType.Cube,
+                            new Vector3(0f, 0.55f, 0f),
+                            Quaternion.identity,
+                            colliderSize,
+                            new Color(0.20f, 0.35f, 0.48f, 1f),
+                            false, false, false, true, true, root.transform);
+                        break;
+
+                    default:
+                        colliderSize = new Vector3(1f, 1.35f, 1f);
+                        colliderCenter = new Vector3(0f, 0.675f, 0f);
+                        CreatePrimitive(
+                            "TrashBinProxy",
+                            PrimitiveType.Cube,
+                            colliderCenter,
+                            Quaternion.identity,
+                            colliderSize,
+                            new Color(0.22f, 0.29f, 0.25f, 1f),
+                            false, false, false, true, true, root.transform);
+                        break;
+                }
+
+                var collider = root.AddComponent<BoxCollider>();
+                collider.center = colliderCenter;
+                collider.size = colliderSize;
+                NavMeshModifier modifier = root.AddComponent<NavMeshModifier>();
+                modifier.overrideArea = true;
+                modifier.area = 1;
+            }
+        }
+
+        private void CreateBuilding(
+            string objectName,
+            UrbanBuildingPlacement building,
+            Vector2 facadeDirection,
+            Color bodyColor,
+            int paletteIndex)
+        {
+            var root = new GameObject(objectName);
+            root.transform.SetParent(generatedContent, false);
+            root.transform.localPosition = new Vector3(building.Center.x, 0f, building.Center.y);
+            root.tag = "Obstacle";
+
+            var collider = root.AddComponent<BoxCollider>();
+            collider.center = new Vector3(0f, building.Height * 0.5f, 0f);
+            collider.size = new Vector3(building.Size.x, building.Height, building.Size.y);
+
+            NavMeshModifier modifier = root.AddComponent<NavMeshModifier>();
+            modifier.overrideArea = true;
+            modifier.area = 1;
+
+            GameObject prefab = buildingVisualPrefabs[PositiveModulo(
+                paletteIndex,
+                buildingVisualPrefabs.Length)];
+            var visualRoot = new GameObject("BuildingVisual");
+            visualRoot.transform.SetParent(root.transform, false);
+            float facadeYaw = Mathf.Atan2(facadeDirection.x, facadeDirection.y) * Mathf.Rad2Deg;
+            visualRoot.transform.localRotation = Quaternion.Euler(
+                0f,
+                facadeYaw,
+                0f);
+
+            GameObject visual = Instantiate(prefab, visualRoot.transform, false);
+            visual.name = $"Prefab_{prefab.name}";
+            Collider[] visualColliders = visual.GetComponentsInChildren<Collider>(true);
+            for (int index = 0; index < visualColliders.Length; index++)
+            {
+                visualColliders[index].enabled = false;
+            }
+
+            Renderer[] renderers = visual.GetComponentsInChildren<Renderer>(false);
+            if (renderers.Length == 0)
+            {
+                throw new InvalidOperationException(
+                    $"Building visual prefab '{prefab.name}' has no active Renderer.");
+            }
+
+            for (int rendererIndex = 0; rendererIndex < renderers.Length; rendererIndex++)
+            {
+                Renderer renderer = renderers[rendererIndex];
+                Material[] sourceMaterials = renderer.sharedMaterials;
+                var replacementMaterials = new Material[Mathf.Max(1, sourceMaterials.Length)];
+                for (int materialIndex = 0; materialIndex < replacementMaterials.Length; materialIndex++)
+                {
+                    replacementMaterials[materialIndex] = runtimeMaterial;
+                }
+                renderer.sharedMaterials = replacementMaterials;
+                renderer.shadowCastingMode = ShadowCastingMode.On;
+                renderer.receiveShadows = true;
+                var propertyBlock = new MaterialPropertyBlock();
+                propertyBlock.SetColor(BaseColorId, bodyColor);
+                propertyBlock.SetColor(ColorId, bodyColor);
+                renderer.SetPropertyBlock(propertyBlock);
+            }
+
+            Bounds sourceBounds = CalculateLocalRendererBounds(root.transform, renderers);
+            float horizontalScale = Mathf.Min(
+                building.Size.x / Mathf.Max(0.01f, sourceBounds.size.x),
+                building.Size.y / Mathf.Max(0.01f, sourceBounds.size.z)) * 0.94f;
+            float verticalScale = building.Height / Mathf.Max(0.01f, sourceBounds.size.y);
+            visualRoot.transform.localScale = new Vector3(
+                horizontalScale,
+                verticalScale,
+                horizontalScale);
+
+            Bounds fittedBounds = CalculateLocalRendererBounds(root.transform, renderers);
+            visualRoot.transform.localPosition = new Vector3(
+                -fittedBounds.center.x,
+                -fittedBounds.min.y,
+                -fittedBounds.center.z);
+        }
+
+        private static Bounds CalculateLocalRendererBounds(
+            Transform localSpace,
+            IReadOnlyList<Renderer> renderers)
+        {
+            bool initialized = false;
+            Bounds result = default;
+            for (int rendererIndex = 0; rendererIndex < renderers.Count; rendererIndex++)
+            {
+                Bounds worldBounds = renderers[rendererIndex].bounds;
+                Vector3 minimum = worldBounds.min;
+                Vector3 maximum = worldBounds.max;
+                for (int corner = 0; corner < 8; corner++)
+                {
+                    Vector3 worldCorner = new Vector3(
+                        (corner & 1) == 0 ? minimum.x : maximum.x,
+                        (corner & 2) == 0 ? minimum.y : maximum.y,
+                        (corner & 4) == 0 ? minimum.z : maximum.z);
+                    Vector3 localCorner = localSpace.InverseTransformPoint(worldCorner);
+                    if (!initialized)
+                    {
+                        result = new Bounds(localCorner, Vector3.zero);
+                        initialized = true;
+                    }
+                    else
+                    {
+                        result.Encapsulate(localCorner);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static Vector2 FindBuildingFacadeDirection(UrbanMapLayout layout, int buildingIndex)
+        {
+            for (int index = 0; index < layout.Candidates.Count; index++)
+            {
+                UrbanSpatialCandidate candidate = layout.Candidates[index];
+                if (candidate.Kind == UrbanSpatialCandidateKind.BuildingApproach &&
+                    candidate.SourceBuildingIndex == buildingIndex)
+                {
+                    return candidate.LocalDirection;
+                }
+            }
+
+            return Vector2.down;
+        }
+
+        private static int PositiveModulo(int value, int modulus)
+        {
+            int result = value % modulus;
+            return result < 0 ? result + modulus : result;
         }
 
         private void CreateBoundaries(UrbanMapLayout layout)
@@ -562,11 +915,12 @@ namespace FantasySurvival.WorldGeneration
             bool blocksPlayer,
             bool markNotWalkable,
             bool castsShadows,
-            bool receivesShadows)
+            bool receivesShadows,
+            Transform parent = null)
         {
             GameObject instance = GameObject.CreatePrimitive(primitiveType);
             instance.name = objectName;
-            instance.transform.SetParent(generatedContent, false);
+            instance.transform.SetParent(parent != null ? parent : generatedContent, false);
             instance.transform.localPosition = localPosition;
             instance.transform.localRotation = localRotation;
             instance.transform.localScale = localScale;

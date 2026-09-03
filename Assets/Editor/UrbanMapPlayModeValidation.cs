@@ -378,7 +378,7 @@ namespace FantasySurvival.EditorTools
             Require(generator.enabled, $"{context}: generator is disabled.");
             Require(layout != null, $"{context}: CurrentLayout is null.");
             Require(layout.Roads.Count > 0, $"{context}: no roads were generated.");
-            Require(layout.Buildings.Count > 0, $"{context}: no graybox buildings were generated.");
+            Require(layout.Buildings.Count > 0, $"{context}: no prototype buildings were generated.");
             Require(layout.Candidates.Count > 0, $"{context}: no shared spatial candidates were generated.");
             Require(layout.TryGetPoi(UrbanPoiKind.Medical, out _),
                 $"{context}: Medical POI is missing from the authoritative layout.");
@@ -396,9 +396,10 @@ namespace FantasySurvival.EditorTools
                 $"{context}: runtime NavMeshData is missing.");
 
             UrbanMapGenerationParameters parameters = generator.GenerationParameters;
-            Require(layout.CityRotationDegrees >= parameters.CityRotationMin - 0.01f &&
-                    layout.CityRotationDegrees <= parameters.CityRotationMax + 0.01f,
-                $"{context}: city rotation {layout.CityRotationDegrees:F2} is outside the configured range.");
+            Require(Mathf.Approximately(layout.CityRotationDegrees, 0f) &&
+                    Mathf.Approximately(layout.LocalBounds.width, parameters.MapWorldSize) &&
+                    Mathf.Approximately(layout.LocalBounds.height, parameters.MapWorldSize),
+                $"{context}: generated city is not using the fixed square tile contract.");
 
             if (!UrbanMapLayoutValidator.TryValidate(layout, parameters, out string layoutError))
             {
@@ -482,9 +483,10 @@ namespace FantasySurvival.EditorTools
         {
             Transform generated = generator.GeneratedContent;
             int groundCount = 0;
-            int roadCount = 0;
+            int surfaceTileMeshCount = 0;
             int buildingCount = 0;
             int medicalPoiBuildingCount = 0;
+            int streetFurnitureCount = 0;
             int boundaryCount = 0;
 
             for (int childIndex = 0; childIndex < generated.childCount; childIndex++)
@@ -496,32 +498,75 @@ namespace FantasySurvival.EditorTools
                     Require(child.TryGetComponent(out Collider groundCollider) && groundCollider.enabled,
                         $"{context}: generated ground collider is missing or disabled.");
                     Require(!child.CompareTag("Obstacle"), $"{context}: generated ground must not block PlayerMovement.");
+                    Require(child.GetComponent<Renderer>() == null,
+                        $"{context}: collision ground still renders beneath the surface tiles.");
                     continue;
                 }
 
-                if (child.name.StartsWith("Road_", StringComparison.Ordinal) ||
-                    child.name.StartsWith("PrimaryRoad_", StringComparison.Ordinal))
+                if (child.name == "GeneratedSurfaceTiles")
                 {
-                    roadCount++;
-                    Collider roadCollider = child.GetComponent<Collider>();
-                    Require(roadCollider == null || !roadCollider.enabled,
-                        $"{context}: road '{child.name}' has an enabled collider.");
-                    Require(!child.CompareTag("Obstacle"), $"{context}: road '{child.name}' is tagged as an obstacle.");
+                    surfaceTileMeshCount++;
+                    MeshFilter filter = child.GetComponent<MeshFilter>();
+                    MeshRenderer renderer = child.GetComponent<MeshRenderer>();
+                    Require(filter != null && filter.sharedMesh != null && renderer != null,
+                        $"{context}: generated tile surface mesh is incomplete.");
+                    Require(filter.sharedMesh.vertexCount == generator.CurrentLayout.SurfaceGrid.CellCount * 4,
+                        $"{context}: tile surface does not contain exactly one quad per logical cell.");
+                    Require(renderer.sharedMaterials.Length == 4,
+                        $"{context}: tile surface is missing a surface-kind material slot.");
+                    Require(child.GetComponent<Collider>() == null,
+                        $"{context}: visual tile mesh unexpectedly owns collision.");
                     continue;
                 }
 
                 if (child.name.StartsWith("Building_", StringComparison.Ordinal))
                 {
+                    int layoutBuildingIndex = buildingCount;
                     buildingCount++;
                     if (child.name.EndsWith("_MedicalPoi", StringComparison.Ordinal))
                     {
                         medicalPoiBuildingCount++;
                     }
-                    Require(child.TryGetComponent(out Collider buildingCollider) && buildingCollider.enabled,
+                    Require(child.TryGetComponent(out BoxCollider buildingCollider) && buildingCollider.enabled,
                         $"{context}: building '{child.name}' has no enabled collider.");
                     Require(child.CompareTag("Obstacle"), $"{context}: building '{child.name}' is not tagged Obstacle.");
                     Require(child.GetComponent<NavMeshModifier>() != null,
                         $"{context}: building '{child.name}' has no NavMeshModifier.");
+                    Require(layoutBuildingIndex < generator.CurrentLayout.Buildings.Count,
+                        $"{context}: building '{child.name}' has no matching layout placement.");
+
+                    UrbanBuildingPlacement placement =
+                        generator.CurrentLayout.Buildings[layoutBuildingIndex];
+                    Vector3 expectedColliderSize =
+                        new Vector3(placement.Size.x, placement.Height, placement.Size.y);
+                    Vector3 expectedColliderCenter =
+                        new Vector3(0f, placement.Height * 0.5f, 0f);
+                    Require(Vector3.Distance(buildingCollider.size, expectedColliderSize) <= 0.01f &&
+                            Vector3.Distance(buildingCollider.center, expectedColliderCenter) <= 0.01f,
+                        $"{context}: building '{child.name}' collision no longer matches its layout footprint.");
+
+                    Renderer[] buildingRenderers = child.GetComponentsInChildren<Renderer>(true);
+                    Require(buildingRenderers.Length >= 1,
+                        $"{context}: building '{child.name}' has no prefab presentation.");
+                    Collider[] buildingColliders = child.GetComponentsInChildren<Collider>(true);
+                    for (int colliderIndex = 0; colliderIndex < buildingColliders.Length; colliderIndex++)
+                    {
+                        Require(buildingColliders[colliderIndex] == buildingCollider ||
+                                !buildingColliders[colliderIndex].enabled,
+                            $"{context}: building '{child.name}' has a child collider outside the authoritative footprint proxy.");
+                    }
+                    continue;
+                }
+
+                if (child.name.StartsWith("StreetFurniture_", StringComparison.Ordinal))
+                {
+                    streetFurnitureCount++;
+                    Require(child.TryGetComponent(out BoxCollider furnitureCollider) && furnitureCollider.enabled,
+                        $"{context}: street furniture '{child.name}' has no enabled footprint collider.");
+                    Require(child.CompareTag("Obstacle"),
+                        $"{context}: street furniture '{child.name}' is not tagged Obstacle.");
+                    Require(child.GetComponent<NavMeshModifier>() != null,
+                        $"{context}: street furniture '{child.name}' has no NavMeshModifier.");
                     continue;
                 }
 
@@ -537,10 +582,12 @@ namespace FantasySurvival.EditorTools
             }
 
             Require(groundCount == 1, $"{context}: expected one generated ground, found {groundCount}.");
-            Require(roadCount == generator.CurrentLayout.Roads.Count,
-                $"{context}: generated road object count {roadCount} does not match layout count {generator.CurrentLayout.Roads.Count}.");
+            Require(surfaceTileMeshCount == 1,
+                $"{context}: expected one non-overlapping tile surface mesh, found {surfaceTileMeshCount}.");
             Require(buildingCount == generator.CurrentLayout.Buildings.Count,
                 $"{context}: generated building object count {buildingCount} does not match layout count {generator.CurrentLayout.Buildings.Count}.");
+            Require(streetFurnitureCount == generator.CurrentLayout.StreetFurniture.Count,
+                $"{context}: street-furniture object count {streetFurnitureCount} does not match the layout.");
             Require(medicalPoiBuildingCount == 1,
                 $"{context}: expected one Medical POI building, found {medicalPoiBuildingCount}.");
             Require(boundaryCount == 4, $"{context}: expected four map boundaries, found {boundaryCount}.");
@@ -577,8 +624,7 @@ namespace FantasySurvival.EditorTools
                 generator.CurrentLayout.EntryLocalPosition);
             Require(
                 portalEntryDistance <=
-                generator.GenerationParameters.MaxBlockSize +
-                generator.GenerationParameters.IntersectionJitter * 2f + 0.1f,
+                generator.GenerationParameters.BlockSpanWorld + 0.1f,
                 $"{context}: ReturnPortal is not on the first nearby road junction.");
 
             RaidCheckpointSceneBinding[] bindings =

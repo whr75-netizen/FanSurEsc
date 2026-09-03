@@ -849,15 +849,18 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 ### 14.1 맵 유형별 절차 생성
 
-#### 현재 구현: 도심형 회색상자
+#### 현재 구현: 고정 정사각 타일 기반 도심 프로토타입
 
 - `GameMapTest` 씬 경계와 기존 `RaidEntry`, `ReturnPortal`은 유지하고 시험 Chest·Enemy는 spawn catalog가 런타임 생성한다.
-- scene-local `ProceduralUrbanMapGenerator`가 한 번의 씬 수명 동안 seed와 불변 layout 원본을 소유한다. 생성된 Ground, 도로, 건물, 경계와 NavMesh는 이 layout에서 다시 만들 수 있는 파생 표현이다.
-- 먼저 가변 간격 교차점과 연결 도로 그래프를 만든다. 주 도로를 보존하고, 보조 도로는 전체 연결성이 유지될 때만 일부 제거한다.
-- 도로 배치 뒤 남은 필지에 충돌 가능한 큐브 건물을 놓는다. 도로, `RaidEntry`, 기존 귀환 포탈 위치와 보호 대상 주변은 건물로 막지 않는다.
+- scene-local `ProceduralUrbanMapGenerator`가 한 번의 씬 수명 동안 seed와 불변 layout 원본을 소유한다. 생성된 타일 표면, 건물, 가로 시설, 경계와 NavMesh는 이 layout에서 다시 만들 수 있는 파생 표현이다.
+- 맵 크기는 한 generator profile 안에서 고정된 정사각형이다. 현재 시험값은 `145×145`셀, 셀당 `2m`이며 seed가 크기·회전·타일 원점을 바꾸지 않는다.
+- 먼저 상하좌우·대각의 8방향만 허용하는 도로 그래프를 만든다. 내부 주 도로 행·열, seed 순서의 spanning backbone, 선택적인 추가 loop 순서로 연결성을 보장하고 한 coarse block에는 대각선 하나만 허용해 숨은 X 교차를 막는다.
+- 그래프의 실제 연결은 각 중심선 셀의 8-bit `roadPorts`가 소유한다. 화면 경계용 47타일 마스크는 별도로 만들며, 대각 모서리는 양옆 cardinal 셀이 모두 이어졌을 때만 연결한다. 두 데이터를 서로 추론해 대체하지 않는다.
+- 도로 폭과 인도를 셀에 rasterize한 뒤 각 셀은 `Ground`, `Sidewalk`, `SecondaryRoad`, `PrimaryRoad` 중 정확히 하나만 가진다. 현재 표시는 이 배열을 한 XZ mesh의 네 submesh로 그리므로 바닥 위에 같은 높이의 Road 평면을 겹치지 않는다.
+- 도로·인도 확정 뒤 남은 필지에 프로젝트 소유 adapter를 거친 벽돌집 prefab을 배치한다. layout root의 단일 BoxCollider가 점유를 소유하고 vendor 자식 collider는 끈다. 도로, `RaidEntry`, 기존 귀환 포탈 위치와 보호 대상 주변은 건물로 막지 않는다.
 - 도로 후보와 모든 건물의 도로 방향 접근 후보를 layout 생성 때 한 번 계산해 Spawn과 AI가 같은 read-only 데이터를 사용한다.
-- Entry에서 가장 가까운 안전 건물 하나를 `Medical` POI로 정하고 청록 Cube로 표시한다. 색은 표현이며 POI 의미 데이터가 분류 원본이다.
-- 전체 도심 루트는 약 35~55도 회전하고, 블록 수·간격·교차점 흔들림·건물 밀도와 높이를 seed로 바꿔 정사각 청크 반복감을 줄인다.
+- Entry에서 가장 가까운 안전 건물 하나를 `Medical` POI로 정하고 청록 tint로 표시한다. 색은 표현이며 POI 의미 데이터가 분류 원본이다.
+- 가로수·가로등은 도로 edge의 거리·좌우·측면 offset으로 규칙 배치하고, 자전거·쓰레기통은 별도 결정적 stream으로 일부 slot에만 배치한다. 모두 인도 셀과 보호 거리 검증을 통과해야 한다.
 - 기존 귀환 포탈은 재생성하지 않고 같은 scene object를 첫 인접 도로 교차점으로 이동한다.
 - 런타임 NavMesh는 생성 geometry의 콜라이더만 수집하고 `RaidEntry → ReturnPortal 접근점`의 complete path를 생성 직후 검증한다.
 - spawn catalog의 Chest·Enemy prefab은 seed·stable ID manifest의 최종 위치에 생성하고, 전부 검증된 뒤 runtime registry에 등록한다. manifest는 파생 데이터다.
@@ -866,14 +869,16 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 설계 참고:
 
-- [Parish·Müller, Procedural Modeling of Cities](https://cgl.ethz.ch/Downloads/Publications/Papers/2001/p_Par01.pdf)의 `road map → allotment → building` 단계 분리를 현재 프로토타입의 `도로 그래프 → 필지 → 큐브 건물` 순서에 적용했다.
-- [Chen et al., Interactive Procedural Street Modeling](https://www.peterwonka.net/Publications/pdfs/2008.SG.Chen.InteractiveProceduralStreetModeling.pdf)의 전역 방향과 국소 제약·noise를 함께 쓰는 관점을 주 도로, 교차점 흔들림과 연결성 제약으로 단순화했다.
+- [Parish·Müller, Procedural Modeling of Cities](https://cgl.ethz.ch/Downloads/Publications/Papers/2001/p_Par01.pdf)의 `road map → allotment → building` 단계 분리를 현재 프로토타입의 `도로 그래프 → surface/필지 → prefab 건물` 순서에 적용했다.
+- [Chen et al., Interactive Procedural Street Modeling](https://www.peterwonka.net/Publications/pdfs/2008.SG.Chen.InteractiveProceduralStreetModeling.pdf)의 전역 목표와 국소 제약 분리를 주 도로, 연결 backbone과 교차 금지 검증에 적용했다.
+- [Tiled Terrain Sets](https://doc.mapeditor.org/en/stable/manual/terrain/)와 [Unity AutoTile](https://docs.unity.cn/Packages/com.unity.2d.tilemap.extras@9.0/manual/AutoTile.html)의 47/blob 규칙을 surface 경계 마스크에 적용하되, 게임 규칙 원본인 도로 그래프 포트와 분리했다.
+- [StreetGen](https://arxiv.org/abs/1801.05741)의 선형 참조 관점을 가로 시설의 `road edge + distance + side + lateral offset` 데이터에 적용했다.
 - [Unity AI Navigation](https://docs.unity3d.com/Manual/com.unity.ai.navigation.html)의 런타임 NavMesh 지원을 사용하되, layout을 원본으로 두고 NavMesh는 다시 만들 수 있는 파생 데이터로만 취급한다.
 
 #### 현재 제외 범위
 
-- 대형 랜드마크·다중 POI, 가로수, 폐차, 쓰레기통, 자전거와 기타 지형지물
-- 건물 내부, 문, 층, 파괴와 실제 건축 프리팹 교체 규칙
+- 최종 픽셀 타일 atlas·variant catalog·타일별 장식, 대형 랜드마크·다중 POI와 폐차
+- 건물 내부, 문, 층, 파괴, 실제 필지 polygon/graph face 분할과 회전별 footprint mask
 - 가변 개수 상자·적과 spawn profile, 정식 다중 roll·위험 예산 LootTable, 엄폐·전술 후보
 - 난이도·위험·보상 예산과 최종 생환 조건
 
@@ -885,11 +890,11 @@ AI 없이 플레이어 공격, 피해, 체력, 사망 계약을 검증한다.
 
 #### 후속 검증 순서
 
-1. 도심 생성 수치와 seed 재현 정책 확정
-2. 실제 건축 프리팹 교체 경계
-3. LootSpawnPoint와 EnemySpawnPoint 후보 데이터
-4. ExtractionPoint와 RaidSession 연결
-5. 맵 유형별 별도 planner
+1. 최종 픽셀 타일 atlas·variant catalog와 profile별 셀 크기 확정
+2. 실제 graph face 필지·회전별 건물 footprint와 입구 socket 확장
+3. 다중 POI·가변 Loot/Enemy spawn profile과 위험·보상 예산
+4. 랜드마크·폐차·잔해 등 큰 점유물의 접근 가능성 검증
+5. 지하 던전·오염 지역의 별도 planner
 
 ### 14.2 난이도와 보상
 

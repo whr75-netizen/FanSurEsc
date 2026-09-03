@@ -529,8 +529,11 @@ namespace FantasySurvival.EditorTools
                     MeshRenderer renderer = child.GetComponent<MeshRenderer>();
                     Require(filter != null && filter.sharedMesh != null && renderer != null,
                         $"{context}: generated tile surface mesh is incomplete.");
-                    Require(filter.sharedMesh.vertexCount == generator.CurrentLayout.SurfaceGrid.CellCount * 4,
-                        $"{context}: tile surface does not contain exactly one quad per logical cell.");
+                    int expectedSurfaceVertexCount = CalculateExpectedSurfaceVertexCount(
+                        generator.CurrentLayout.SurfaceGrid);
+                    Require(filter.sharedMesh.vertexCount == expectedSurfaceVertexCount,
+                        $"{context}: tile surface vertex count {filter.sharedMesh.vertexCount} does not match " +
+                        $"logical tile tops plus exposed sidewalk curb faces {expectedSurfaceVertexCount}.");
                     Require(renderer.sharedMaterials.Length == 4,
                         $"{context}: tile surface is missing a surface-kind material slot.");
                     Require(child.GetComponent<Collider>() == null,
@@ -624,15 +627,51 @@ namespace FantasySurvival.EditorTools
                 $"{context}: expected one non-overlapping tile surface mesh, found {surfaceTileMeshCount}.");
             Require(buildingCount == generator.CurrentLayout.Buildings.Count,
                 $"{context}: generated building object count {buildingCount} does not match layout count {generator.CurrentLayout.Buildings.Count}.");
-            int expectedStreetFurnitureVisualCount = generator.PrototypeStreetFurnitureVisualsEnabled
-                ? generator.CurrentLayout.StreetFurniture.Count
-                : 0;
+            int expectedStreetFurnitureVisualCount = 0;
+            for (int furnitureIndex = 0;
+                 furnitureIndex < generator.CurrentLayout.StreetFurniture.Count;
+                 furnitureIndex++)
+            {
+                if (generator.ShouldInstantiateStreetFurniture(
+                        generator.CurrentLayout.StreetFurniture[furnitureIndex].Kind))
+                {
+                    expectedStreetFurnitureVisualCount++;
+                }
+            }
             Require(streetFurnitureCount == expectedStreetFurnitureVisualCount,
                 $"{context}: street-furniture visual count {streetFurnitureCount} does not match " +
                 $"the configured presentation count {expectedStreetFurnitureVisualCount}.");
             Require(medicalPoiBuildingCount == 1,
                 $"{context}: expected one Medical POI building, found {medicalPoiBuildingCount}.");
             Require(boundaryCount == 4, $"{context}: expected four map boundaries, found {boundaryCount}.");
+        }
+
+        private static int CalculateExpectedSurfaceVertexCount(UrbanSurfaceGrid grid)
+        {
+            int exposedSidewalkEdges = 0;
+            for (int z = 0; z < grid.Height; z++)
+            {
+                for (int x = 0; x < grid.Width; x++)
+                {
+                    if (grid.GetKind(x, z) != UrbanSurfaceTileKind.Sidewalk)
+                    {
+                        continue;
+                    }
+
+                    if (!IsSidewalkCell(grid, x, z + 1)) exposedSidewalkEdges++;
+                    if (!IsSidewalkCell(grid, x + 1, z)) exposedSidewalkEdges++;
+                    if (!IsSidewalkCell(grid, x, z - 1)) exposedSidewalkEdges++;
+                    if (!IsSidewalkCell(grid, x - 1, z)) exposedSidewalkEdges++;
+                }
+            }
+
+            return grid.CellCount * 4 + exposedSidewalkEdges * 4;
+        }
+
+        private static bool IsSidewalkCell(UrbanSurfaceGrid grid, int x, int z)
+        {
+            return grid.ContainsCell(x, z) &&
+                   grid.GetKind(x, z) == UrbanSurfaceTileKind.Sidewalk;
         }
 
         private static void ValidateExistingSceneObjects(ProceduralUrbanMapGenerator generator, string context)

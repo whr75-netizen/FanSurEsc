@@ -233,7 +233,9 @@ namespace FantasySurvival.EditorTools
             serializedGenerator.FindProperty("maxBuildingHeight").floatValue = 18f;
             serializedGenerator.FindProperty("anchorClearance").floatValue = 10f;
             serializedGenerator.FindProperty("protectedAnchorClearance").floatValue = 8f;
-            serializedGenerator.FindProperty("instantiatePrototypeStreetFurniture").boolValue = false;
+            serializedGenerator.FindProperty("instantiateStreetTrees").boolValue = true;
+            serializedGenerator.FindProperty("instantiateStreetLamps").boolValue = true;
+            serializedGenerator.FindProperty("instantiatePrototypeClutter").boolValue = false;
             serializedGenerator.FindProperty("junctionFurnitureClearanceTiles").intValue = 3;
             serializedGenerator.FindProperty("streetTreeSpacingTiles").intValue = 7;
             serializedGenerator.FindProperty("streetLampSpacingTiles").intValue = 18;

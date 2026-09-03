@@ -5,6 +5,7 @@ using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 
 namespace FantasySurvival.WorldGeneration
 {
@@ -23,8 +24,10 @@ namespace FantasySurvival.WorldGeneration
         private static readonly Color GroundColor = new Color(0.19f, 0.18f, 0.16f, 1f);
         private static readonly Color SecondaryRoadColor = new Color(0.18f, 0.20f, 0.22f, 1f);
         private static readonly Color PrimaryRoadColor = new Color(0.25f, 0.27f, 0.29f, 1f);
-        private static readonly Color SidewalkColor = new Color(0.36f, 0.35f, 0.33f, 1f);
+        private static readonly Color SidewalkColor = new Color(0.46f, 0.44f, 0.40f, 1f);
         private static readonly Color MedicalPoiBuildingColor = new Color(0.18f, 0.62f, 0.46f, 1f);
+        private const float SurfaceHeight = 0.005f;
+        private const float SidewalkSurfaceHeight = 0.12f;
         [Header("Existing Scene Anchors")]
         [SerializeField] private Transform entryAnchor;
         [SerializeField] private Transform returnPortal;
@@ -64,7 +67,10 @@ namespace FantasySurvival.WorldGeneration
         [SerializeField, Min(0f)] private float protectedAnchorClearance = 8f;
 
         [Header("Street Furniture Sockets")]
-        [SerializeField] private bool instantiatePrototypeStreetFurniture;
+        [SerializeField] private bool instantiateStreetTrees = true;
+        [SerializeField] private bool instantiateStreetLamps = true;
+        [FormerlySerializedAs("instantiatePrototypeStreetFurniture")]
+        [SerializeField] private bool instantiatePrototypeClutter;
         [SerializeField, Min(1)] private int junctionFurnitureClearanceTiles = 3;
         [SerializeField, Min(2)] private int streetTreeSpacingTiles = 7;
         [SerializeField, Min(2)] private int streetLampSpacingTiles = 18;
@@ -89,7 +95,8 @@ namespace FantasySurvival.WorldGeneration
 
         public UrbanMapLayout CurrentLayout { get; private set; }
         public int CurrentSeed { get; private set; }
-        public bool PrototypeStreetFurnitureVisualsEnabled => instantiatePrototypeStreetFurniture;
+        private bool HasStreetFurnitureVisualsEnabled =>
+            instantiateStreetTrees || instantiateStreetLamps || instantiatePrototypeClutter;
         public bool NavigationPathComplete { get; private set; }
         public bool NavigationBuildPending => pendingNavigationLayout != null;
         public Transform GeneratedContent => generatedContent;
@@ -219,7 +226,7 @@ namespace FantasySurvival.WorldGeneration
 
             CreateSurfaceTiles(layout);
             CreateBuildings(layout);
-            if (instantiatePrototypeStreetFurniture)
+            if (HasStreetFurnitureVisualsEnabled)
             {
                 CreateStreetFurniture(layout);
             }
@@ -351,7 +358,7 @@ namespace FantasySurvival.WorldGeneration
                 $"Buildings={layout.Buildings.Count}, " +
                 $"Tiles={layout.SurfaceGrid.Width}x{layout.SurfaceGrid.Height}, " +
                 $"FurnitureSockets={layout.StreetFurniture.Count}, " +
-                $"FurnitureVisuals={(instantiatePrototypeStreetFurniture ? layout.StreetFurniture.Count : 0)}, " +
+                $"FurnitureVisuals={CountEnabledStreetFurniture(layout)}, " +
                 $"Candidates={layout.Candidates.Count}, " +
                 $"POIs={layout.Pois.Count}, " +
                 $"NavPathComplete={NavigationPathComplete}, Hash={layoutHash:X16}.",
@@ -531,12 +538,14 @@ namespace FantasySurvival.WorldGeneration
             {
                 for (int x = 0; x < grid.Width; x++)
                 {
+                    UrbanSurfaceTileKind kind = grid.GetKind(x, z);
                     Vector2 center = grid.GetCellCenter(x, z);
+                    float surfaceHeight = GetSurfaceHeight(kind);
                     int vertexStart = vertices.Count;
-                    vertices.Add(new Vector3(center.x - halfTile, 0.005f, center.y - halfTile));
-                    vertices.Add(new Vector3(center.x - halfTile, 0.005f, center.y + halfTile));
-                    vertices.Add(new Vector3(center.x + halfTile, 0.005f, center.y + halfTile));
-                    vertices.Add(new Vector3(center.x + halfTile, 0.005f, center.y - halfTile));
+                    vertices.Add(new Vector3(center.x - halfTile, surfaceHeight, center.y - halfTile));
+                    vertices.Add(new Vector3(center.x - halfTile, surfaceHeight, center.y + halfTile));
+                    vertices.Add(new Vector3(center.x + halfTile, surfaceHeight, center.y + halfTile));
+                    vertices.Add(new Vector3(center.x + halfTile, surfaceHeight, center.y - halfTile));
                     normals.Add(Vector3.up);
                     normals.Add(Vector3.up);
                     normals.Add(Vector3.up);
@@ -546,7 +555,7 @@ namespace FantasySurvival.WorldGeneration
                     uv.Add(Vector2.one);
                     uv.Add(Vector2.right);
 
-                    List<int> triangles = trianglesBySurface[(int)grid.GetKind(x, z)];
+                    List<int> triangles = trianglesBySurface[(int)kind];
                     triangles.Add(vertexStart);
                     triangles.Add(vertexStart + 1);
                     triangles.Add(vertexStart + 2);
@@ -555,6 +564,8 @@ namespace FantasySurvival.WorldGeneration
                     triangles.Add(vertexStart + 3);
                 }
             }
+
+            AddSidewalkCurbFaces(grid, vertices, normals, uv, trianglesBySurface);
 
             runtimeSurfaceMesh = new Mesh
             {
@@ -661,12 +672,17 @@ namespace FantasySurvival.WorldGeneration
             for (int index = 0; index < layout.StreetFurniture.Count; index++)
             {
                 UrbanStreetFurniturePlacement placement = layout.StreetFurniture[index];
+                if (!ShouldInstantiateStreetFurniture(placement.Kind))
+                {
+                    continue;
+                }
+
                 var root = new GameObject(
                     $"StreetFurniture_{placement.StableId:000}_{placement.Kind}");
                 root.transform.SetParent(generatedContent, false);
                 root.transform.localPosition = new Vector3(
                     placement.LocalPosition.x,
-                    0f,
+                    SidewalkSurfaceHeight,
                     placement.LocalPosition.y);
                 root.transform.localRotation = Quaternion.Euler(0f, placement.LocalYawDegrees, 0f);
                 root.tag = "Obstacle";
@@ -751,6 +767,154 @@ namespace FantasySurvival.WorldGeneration
                 modifier.overrideArea = true;
                 modifier.area = 1;
             }
+        }
+
+        public bool ShouldInstantiateStreetFurniture(UrbanStreetFurnitureKind kind)
+        {
+            switch (kind)
+            {
+                case UrbanStreetFurnitureKind.StreetTree:
+                    return instantiateStreetTrees;
+                case UrbanStreetFurnitureKind.StreetLamp:
+                    return instantiateStreetLamps;
+                case UrbanStreetFurnitureKind.Bicycle:
+                case UrbanStreetFurnitureKind.TrashBin:
+                    return instantiatePrototypeClutter;
+                default:
+                    return false;
+            }
+        }
+
+        private int CountEnabledStreetFurniture(UrbanMapLayout layout)
+        {
+            int count = 0;
+            for (int index = 0; index < layout.StreetFurniture.Count; index++)
+            {
+                if (ShouldInstantiateStreetFurniture(layout.StreetFurniture[index].Kind))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        private static float GetSurfaceHeight(UrbanSurfaceTileKind kind)
+        {
+            return kind == UrbanSurfaceTileKind.Sidewalk
+                ? SidewalkSurfaceHeight
+                : SurfaceHeight;
+        }
+
+        private static void AddSidewalkCurbFaces(
+            UrbanSurfaceGrid grid,
+            List<Vector3> vertices,
+            List<Vector3> normals,
+            List<Vector2> uv,
+            IReadOnlyList<List<int>> trianglesBySurface)
+        {
+            float halfTile = grid.TileSize * 0.5f;
+            List<int> sidewalkTriangles = trianglesBySurface[(int)UrbanSurfaceTileKind.Sidewalk];
+            for (int z = 0; z < grid.Height; z++)
+            {
+                for (int x = 0; x < grid.Width; x++)
+                {
+                    if (grid.GetKind(x, z) != UrbanSurfaceTileKind.Sidewalk)
+                    {
+                        continue;
+                    }
+
+                    Vector2 center = grid.GetCellCenter(x, z);
+                    float bottom = SurfaceHeight;
+                    float top = SidewalkSurfaceHeight;
+                    float west = center.x - halfTile;
+                    float east = center.x + halfTile;
+                    float south = center.y - halfTile;
+                    float north = center.y + halfTile;
+
+                    if (!IsSidewalkCell(grid, x, z + 1))
+                    {
+                        AddVerticalSurfaceQuad(
+                            vertices, normals, uv, sidewalkTriangles,
+                            new Vector3(west, bottom, north),
+                            new Vector3(east, bottom, north),
+                            new Vector3(east, top, north),
+                            new Vector3(west, top, north),
+                            Vector3.forward);
+                    }
+
+                    if (!IsSidewalkCell(grid, x + 1, z))
+                    {
+                        AddVerticalSurfaceQuad(
+                            vertices, normals, uv, sidewalkTriangles,
+                            new Vector3(east, bottom, north),
+                            new Vector3(east, bottom, south),
+                            new Vector3(east, top, south),
+                            new Vector3(east, top, north),
+                            Vector3.right);
+                    }
+
+                    if (!IsSidewalkCell(grid, x, z - 1))
+                    {
+                        AddVerticalSurfaceQuad(
+                            vertices, normals, uv, sidewalkTriangles,
+                            new Vector3(east, bottom, south),
+                            new Vector3(west, bottom, south),
+                            new Vector3(west, top, south),
+                            new Vector3(east, top, south),
+                            Vector3.back);
+                    }
+
+                    if (!IsSidewalkCell(grid, x - 1, z))
+                    {
+                        AddVerticalSurfaceQuad(
+                            vertices, normals, uv, sidewalkTriangles,
+                            new Vector3(west, bottom, south),
+                            new Vector3(west, bottom, north),
+                            new Vector3(west, top, north),
+                            new Vector3(west, top, south),
+                            Vector3.left);
+                    }
+                }
+            }
+        }
+
+        private static bool IsSidewalkCell(UrbanSurfaceGrid grid, int x, int z)
+        {
+            return grid.ContainsCell(x, z) &&
+                   grid.GetKind(x, z) == UrbanSurfaceTileKind.Sidewalk;
+        }
+
+        private static void AddVerticalSurfaceQuad(
+            List<Vector3> vertices,
+            List<Vector3> normals,
+            List<Vector2> uv,
+            List<int> triangles,
+            Vector3 bottomStart,
+            Vector3 bottomEnd,
+            Vector3 topEnd,
+            Vector3 topStart,
+            Vector3 normal)
+        {
+            int vertexStart = vertices.Count;
+            vertices.Add(bottomStart);
+            vertices.Add(bottomEnd);
+            vertices.Add(topEnd);
+            vertices.Add(topStart);
+            normals.Add(normal);
+            normals.Add(normal);
+            normals.Add(normal);
+            normals.Add(normal);
+            uv.Add(Vector2.zero);
+            uv.Add(Vector2.right);
+            uv.Add(Vector2.one);
+            uv.Add(Vector2.up);
+            triangles.Add(vertexStart);
+            triangles.Add(vertexStart + 1);
+            triangles.Add(vertexStart + 2);
+            triangles.Add(vertexStart);
+            triangles.Add(vertexStart + 2);
+            triangles.Add(vertexStart + 3);
         }
 
         private void CreateBuilding(

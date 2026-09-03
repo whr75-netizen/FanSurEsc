@@ -5,7 +5,7 @@ namespace FantasySurvival.WorldGeneration
 {
     public static class UrbanMapLayoutPlanner
     {
-        public const int GeneratorVersion = 6;
+        public const int GeneratorVersion = 7;
         public const int SpawnManifestVersion = 3;
 
         private static readonly float[] SpawnCandidateFractions = { 0.2f, 0.35f, 0.5f, 0.65f, 0.8f };
@@ -666,29 +666,6 @@ namespace FantasySurvival.WorldGeneration
                                           parameters.TileWorldSize;
 
                 AddFurnitureSeries(
-                    UrbanStreetFurnitureKind.StreetTree,
-                    roadIndex,
-                    road,
-                    direction,
-                    right,
-                    length,
-                    parameters.StreetTreeSpacingTiles * parameters.TileWorldSize,
-                    endpointClearance,
-                    lateralOffset,
-                    chance: 1f,
-                    seed,
-                    0x2C1B3C6Du,
-                    surfaceGrid,
-                    buildings,
-                    spatialCandidates,
-                    entryLocalPosition,
-                    portalLocalPosition,
-                    protectedLocalPoints,
-                    parameters,
-                    placements,
-                    ref stableId);
-
-                AddFurnitureSeries(
                     UrbanStreetFurnitureKind.StreetLamp,
                     roadIndex,
                     road,
@@ -701,6 +678,29 @@ namespace FantasySurvival.WorldGeneration
                     chance: 1f,
                     seed,
                     0x9E3779B9u,
+                    surfaceGrid,
+                    buildings,
+                    spatialCandidates,
+                    entryLocalPosition,
+                    portalLocalPosition,
+                    protectedLocalPoints,
+                    parameters,
+                    placements,
+                    ref stableId);
+
+                AddFurnitureSeries(
+                    UrbanStreetFurnitureKind.StreetTree,
+                    roadIndex,
+                    road,
+                    direction,
+                    right,
+                    length,
+                    parameters.StreetTreeSpacingTiles * parameters.TileWorldSize,
+                    endpointClearance,
+                    lateralOffset,
+                    chance: 1f,
+                    seed,
+                    0x2C1B3C6Du,
                     surfaceGrid,
                     buildings,
                     spatialCandidates,
@@ -1305,7 +1305,6 @@ namespace FantasySurvival.WorldGeneration
                     ? parameters.PrimaryRoadWidthTiles
                     : parameters.SecondaryRoadWidthTiles;
                 int roadRadius = roadWidthTiles / 2;
-                int sidewalkRadius = roadRadius + parameters.SidewalkWidthTiles;
                 List<Vector2Int> centerline = RasterizeOctilinearRoad(
                     road,
                     localBounds.position,
@@ -1313,31 +1312,29 @@ namespace FantasySurvival.WorldGeneration
                     size);
                 AddRoadPorts(roadPorts, size, centerline);
 
-                for (int cellIndex = 0; cellIndex < centerline.Count; cellIndex++)
-                {
-                    StampSurfaceDisk(
-                        kinds,
-                        size,
-                        centerline[cellIndex],
-                        sidewalkRadius,
-                        UrbanSurfaceTileKind.Sidewalk,
-                        overwriteRoad: false);
-                }
-
                 UrbanSurfaceTileKind roadKind = road.IsPrimary
                     ? UrbanSurfaceTileKind.PrimaryRoad
                     : UrbanSurfaceTileKind.SecondaryRoad;
                 for (int cellIndex = 0; cellIndex < centerline.Count; cellIndex++)
                 {
-                    StampSurfaceDisk(
+                    StampRoadDisk(
                         kinds,
                         size,
                         centerline[cellIndex],
                         roadRadius,
-                        roadKind,
-                        overwriteRoad: road.IsPrimary);
+                        roadKind);
                 }
             }
+
+            // Build the complete road union before deriving sidewalks. Acute joins between
+            // a diagonal and cardinal segment can otherwise leave one isolated non-road cell
+            // surrounded on three sides. Fill only those original one-cell concavities in a
+            // single pass so this is a normalization step, not an unbounded road-growth rule.
+            NormalizeSingleCellRoadConcavities(kinds, size);
+            PaintSidewalksFromFinalRoadMask(
+                kinds,
+                size,
+                parameters.SidewalkWidthTiles);
 
             UrbanTileConnection[] masks = BuildAutotileConnectionMasks(kinds, size, size);
             return new UrbanSurfaceGrid(
@@ -1418,13 +1415,12 @@ namespace FantasySurvival.WorldGeneration
                 Mathf.FloorToInt(relative.y / tileSize));
         }
 
-        private static void StampSurfaceDisk(
+        private static void StampRoadDisk(
             UrbanSurfaceTileKind[] kinds,
             int gridSize,
             Vector2Int center,
             int radius,
-            UrbanSurfaceTileKind kind,
-            bool overwriteRoad)
+            UrbanSurfaceTileKind roadKind)
         {
             int radiusSquared = radius * radius;
             for (int offsetZ = -radius; offsetZ <= radius; offsetZ++)
@@ -1445,18 +1441,93 @@ namespace FantasySurvival.WorldGeneration
 
                     int index = z * gridSize + x;
                     UrbanSurfaceTileKind existing = kinds[index];
-                    if (kind == UrbanSurfaceTileKind.Sidewalk)
+                    if (!UrbanSurfaceGrid.IsRoad(existing) ||
+                        roadKind == UrbanSurfaceTileKind.PrimaryRoad)
                     {
-                        if (existing == UrbanSurfaceTileKind.Ground)
-                        {
-                            kinds[index] = kind;
-                        }
+                        kinds[index] = roadKind;
+                    }
+                }
+            }
+        }
+
+        private static void NormalizeSingleCellRoadConcavities(
+            UrbanSurfaceTileKind[] kinds,
+            int gridSize)
+        {
+            UrbanSurfaceTileKind[] source = (UrbanSurfaceTileKind[])kinds.Clone();
+            for (int z = 1; z < gridSize - 1; z++)
+            {
+                for (int x = 1; x < gridSize - 1; x++)
+                {
+                    int index = z * gridSize + x;
+                    if (UrbanSurfaceGrid.IsRoad(source[index]))
+                    {
                         continue;
                     }
 
-                    if (!UrbanSurfaceGrid.IsRoad(existing) || overwriteRoad)
+                    UrbanSurfaceTileKind north = source[(z + 1) * gridSize + x];
+                    UrbanSurfaceTileKind east = source[z * gridSize + x + 1];
+                    UrbanSurfaceTileKind south = source[(z - 1) * gridSize + x];
+                    UrbanSurfaceTileKind west = source[z * gridSize + x - 1];
+                    int roadNeighborCount =
+                        (UrbanSurfaceGrid.IsRoad(north) ? 1 : 0) +
+                        (UrbanSurfaceGrid.IsRoad(east) ? 1 : 0) +
+                        (UrbanSurfaceGrid.IsRoad(south) ? 1 : 0) +
+                        (UrbanSurfaceGrid.IsRoad(west) ? 1 : 0);
+                    if (roadNeighborCount < 3)
                     {
-                        kinds[index] = kind;
+                        continue;
+                    }
+
+                    bool touchesPrimary =
+                        north == UrbanSurfaceTileKind.PrimaryRoad ||
+                        east == UrbanSurfaceTileKind.PrimaryRoad ||
+                        south == UrbanSurfaceTileKind.PrimaryRoad ||
+                        west == UrbanSurfaceTileKind.PrimaryRoad;
+                    kinds[index] = touchesPrimary
+                        ? UrbanSurfaceTileKind.PrimaryRoad
+                        : UrbanSurfaceTileKind.SecondaryRoad;
+                }
+            }
+        }
+
+        private static void PaintSidewalksFromFinalRoadMask(
+            UrbanSurfaceTileKind[] kinds,
+            int gridSize,
+            int sidewalkWidthTiles)
+        {
+            UrbanSurfaceTileKind[] finalRoadMask = (UrbanSurfaceTileKind[])kinds.Clone();
+            for (int z = 0; z < gridSize; z++)
+            {
+                for (int x = 0; x < gridSize; x++)
+                {
+                    if (!UrbanSurfaceGrid.IsRoad(finalRoadMask[z * gridSize + x]))
+                    {
+                        continue;
+                    }
+
+                    for (int offsetZ = -sidewalkWidthTiles;
+                         offsetZ <= sidewalkWidthTiles;
+                         offsetZ++)
+                    {
+                        for (int offsetX = -sidewalkWidthTiles;
+                             offsetX <= sidewalkWidthTiles;
+                             offsetX++)
+                        {
+                            int sidewalkX = x + offsetX;
+                            int sidewalkZ = z + offsetZ;
+                            if (sidewalkX < 0 || sidewalkX >= gridSize ||
+                                sidewalkZ < 0 || sidewalkZ >= gridSize)
+                            {
+                                continue;
+                            }
+
+                            int sidewalkIndex = sidewalkZ * gridSize + sidewalkX;
+                            if (kinds[sidewalkIndex] == UrbanSurfaceTileKind.Ground)
+                            {
+                                kinds[sidewalkIndex] = UrbanSurfaceTileKind.Sidewalk;
+                            }
+                        }
                     }
                 }
             }

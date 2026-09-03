@@ -2125,3 +2125,12 @@ Interactable (abstract base class)
 - `[밀집 배치]` 선택 loop 확률을 `0.35→0.65`, setback과 lot gap을 `0`, 필지를 `8~10m × 8m`, density를 `1`로 바꾸고 도로 전면당 최대 3필지 제한을 제거했다. 유효 필지는 모두 건물이 점유하며 generator version은 6으로 올려 변경 전 Recovery layout을 같은 월드로 오인하지 않는다.
 - `[Unity 정적 검증]` 현재 runtime assembly 컴파일 뒤 기본 256개 seed가 모두 통과했다. unique hash 256, 도로 폭·D8·surface·충돌·접근 조건을 유지했고 parcel과 building은 각각 `125~183`으로 모든 seed에서 동일해 빈 유효 필지가 0개였다. 별도 64 seed 표본은 도로 `70~88`(평균 78.9), 건물 `135~182`(평균 153.7), Ground 셀 기준 건물 점유 `25.8~35.2%`(평균 31.0%)였다. 마지막 Editor validator 보강도 Unity의 동일 compiler response로 오류 없이 컴파일했다.
 - `[Play Mode 미검증]` 이 수치 변경 뒤 새 대표 Play는 Unity MCP 전용 연결이 종료되어 실행하지 못했다. 직전 §112의 Play 결과는 새 7/9타일·100% 필지 설정의 런타임 증거로 재사용하지 않는다. 다음 실제 실행에서는 `GameMapTest` 재진입 1회로 도로 체감 폭, 건물 밀도, Entry→Portal·POI·spawn NavMesh와 runtime Error를 확인한다.
+
+---
+
+## 114. 도로 합류부 정규화와 인도·가로 시설 복원 `[MAP-01]`
+
+- `[근본 원인·수정][2026-09-03]` 직선 도로 가장자리의 한 칸 오목부는 생성 순서나 7/9 홀수 폭 문제가 아니라 45도 도로와 직선 도로를 각각 원형 stamp로 합친 급각 접합부에 `Sidewalk` 한 셀이 남던 현상이었다. 전체 도로 합집합을 먼저 만든 뒤 원본 snapshot 기준으로 상하좌우 세 면 이상이 도로인 단일 셀만 한 번 정규화하고, 최종 도로 mask에서 인도를 파생하도록 순서를 고쳤다. 반복 팽창은 하지 않으며 인접 Primary가 있으면 해당 셀도 Primary가 된다. Recovery의 월드 동일성 경계를 위해 generator version은 7이다.
+- `[표현·선택 권위]` 인도는 별도 겹침 plane이 아니라 기존 단일 surface mesh의 `Sidewalk` submesh를 0.12m 올리고 경계 curb 면과 밝은 재질로 구분했다. 기존 road-relative socket은 유지하면서 가로수와 가로등만 기본 표시하고 자전거·쓰레기통 시험 proxy는 계속 끈다. 가로등을 먼저 배정해 가로수와 같은 인도 셀을 다툴 때 조명 위치가 사라지지 않게 했다.
+- `[Unity 정적 검증]` 도로 정규화 뒤 seed 0~255가 모두 유효하고 hash 256개가 서로 달랐으며, 단일 셀 오목부 validator를 모두 통과했다. 도로 `69~88`, 건물 `125~183`, 인도 `2078~2214`였다. 가로등 우선 배치까지 반영한 최신 Unity assembly를 같은 256개 seed로 다시 실행해 가로등 `23~53`개(평균 `39.41`), 가로수 `60~94`개(평균 `78.69`)와 생성 실패 0건을 확인했다. Unity 6.5 실제 runtime/editor compiler response도 오류 없이 완료됐고 기존 외부 경고 2개만 남았다.
+- `[씬·미검증]` Unity Editor API로 `GameMapTest`의 가로수/가로등 표시를 켜고 clutter는 끈 채 저장했다. Play 검증의 surface 정점 계약도 논리 타일 상판과 노출된 curb 면을 각각 정확히 세도록 갱신했다. 새 v7 지형의 실제 화면상 curb 높이·가로 시설 분포·NavMesh와 사용자가 본 위치의 notch 제거는 대표 Play 1회가 아직 필요하다. 카메라 끝 건물 투명화처럼 보이는 별도 현상은 알파/LOD가 아니라 10m 카메라보다 10.5~18m 건물이 높아 near plane과 backface가 잘리는 것이 정적 근거상 유력하며 픽셀아트 교체만으로 해결되지 않는다.

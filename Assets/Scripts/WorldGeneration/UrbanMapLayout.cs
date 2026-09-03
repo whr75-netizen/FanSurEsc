@@ -1191,6 +1191,14 @@ namespace FantasySurvival.WorldGeneration
                 for (int x = 0; x < grid.Width; x++)
                 {
                     UrbanSurfaceTileKind source = grid.GetKind(x, z);
+                    if (!UrbanSurfaceGrid.IsRoad(source) &&
+                        CountCardinalRoadNeighbors(grid, x, z) >= 3)
+                    {
+                        error =
+                            $"Surface cell ({x}, {z}) leaves a single-cell concavity inside the road boundary.";
+                        return false;
+                    }
+
                     UrbanTileConnection expectedSurfaceMask =
                         UrbanSurfaceGrid.ComposeCanonicalSurfaceMask(
                             IsCompatibleSurface(grid, x, z + 1, source),
@@ -1244,6 +1252,16 @@ namespace FantasySurvival.WorldGeneration
 
             error = null;
             return true;
+        }
+
+        private static int CountCardinalRoadNeighbors(UrbanSurfaceGrid grid, int x, int z)
+        {
+            int count = 0;
+            if (grid.ContainsCell(x, z + 1) && UrbanSurfaceGrid.IsRoad(grid.GetKind(x, z + 1))) count++;
+            if (grid.ContainsCell(x + 1, z) && UrbanSurfaceGrid.IsRoad(grid.GetKind(x + 1, z))) count++;
+            if (grid.ContainsCell(x, z - 1) && UrbanSurfaceGrid.IsRoad(grid.GetKind(x, z - 1))) count++;
+            if (grid.ContainsCell(x - 1, z) && UrbanSurfaceGrid.IsRoad(grid.GetKind(x - 1, z))) count++;
+            return count;
         }
 
         private static bool TryBuildExpectedRoadPorts(

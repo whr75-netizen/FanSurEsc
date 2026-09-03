@@ -2144,3 +2144,12 @@ Interactable (abstract base class)
 - `[회귀 방지]` 생성 전 prefab의 필수 충돌·Spot·야간 제어·빛줄기 연결을 fail-closed로 검사한다. Play validator도 생성된 모든 가로등의 prefab 구성, carving obstacle, layout stable ID와 좌우 회전을 검사하고, 22시에 모든 lamp visibility와 실제 Light intensity가 maximum에 도달하는지 확인한 뒤 원래 시간을 복원한다.
 - `[Unity 컴파일·Play 1회]` Unity 동적 컴파일 성공 후 direct `GameMapTest` 시작과 `GameMap1` 왕복 1회를 통과했다. seed `-1198157842`, world hash `17B58E5B7AB85F9B`, runtime Error 0이며 생성 가로등의 22시 점등·방향, NavMesh·POI·spawn, Player·Camera·Inventory UI·EventSystem 동일성과 원래 `GameMap1` 복원을 함께 확인했다. 기존 사용자 dirty 파일은 저장하거나 stage하지 않았다.
 - `[현재 경계]` seed당 다수의 실제 Spot Light가 생기며 기존 체적광 표현기는 가까운 최대 8개를 선택한다. 기능 복원과 별개로 최종 도심 야간 성능은 GPU Profiler와 shadow LOD 근거가 생길 때 재개방한다.
+
+---
+
+## 116. Meshy 치비 정적 렌더 시험체 `[CHARACTER-RENDER-01]`
+
+- `[격리 시험][2026-09-04]` 사용자 제공 Meshy FBX와 Base Color·Roughness·Metallic 맵을 원본 수정 없이 별도 ThirdParty 폴더에 가져오고, 실제 Player와 `PersistentGameplayShell`은 교체하지 않았다. FBX는 단일 MeshRenderer·35,252 Unity 정점·56,840 삼각형이며 Animator·bone·skin·animation과 Collider가 없는 정적 모델이다.
+- `[텍스처 경로]` 확장자만 PNG였던 Base Color WebP를 유효한 PNG로 변환하고, 기존 캐릭터 공간 평면광 셰이더에 기본 white인 `_BaseMap` 표본만 추가했다. 기존 단색 mannequin은 기본 white map으로 같은 결과를 유지하며, 표면 곡면 명암을 되살리는 PBR roughness·metallic 계산은 연결하지 않았다.
+- `[Editor 렌더·참조 확인]` 전용 `CharacterSilhouetteTest` 씬에서 발 높이·약 4m 시험 크기·layer 30·외곽선·Base Map 참조를 확인하고 정면 카메라 렌더를 만들었다. 모델은 화면에 정상 표시되지만 T 포즈이고 머리카락이 얼굴 한쪽을 크게 가리며 밝은 피부·의상 경계가 약해 최종 Player 후보로는 미확정이다.
+- `[보존·오류]` 임시 additive 씬은 저장 없이 닫았고 `GameMap1`은 저장하지 않았다. Unity Console 신규 Error는 0이며 기존 BrokenVector·raid direct-entry·local volumetric light·MCP 서명·외부 shader UI Warning만 남았다.

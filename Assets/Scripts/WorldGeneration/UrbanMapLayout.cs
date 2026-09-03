@@ -101,18 +101,18 @@ namespace FantasySurvival.WorldGeneration
                 blocksPerAxis: 6,
                 borderTiles: 12,
                 tileWorldSize: 2f,
-                secondaryRoadWidthTiles: 3,
-                primaryRoadWidthTiles: 5,
-                additionalRoadChance: 0.35f,
+                secondaryRoadWidthTiles: 7,
+                primaryRoadWidthTiles: 9,
+                additionalRoadChance: 0.65f,
                 diagonalRoadChance: 0.2f,
                 sidewalkWidthTiles: 1,
-                buildingSetback: 2f,
-                lotGap: 2f,
-                minBuildingFrontageTiles: 5,
-                maxBuildingFrontageTiles: 6,
-                minBuildingDepthTiles: 3,
+                buildingSetback: 0f,
+                lotGap: 0f,
+                minBuildingFrontageTiles: 4,
+                maxBuildingFrontageTiles: 5,
+                minBuildingDepthTiles: 4,
                 maxBuildingDepthTiles: 4,
-                buildingDensity: 0.8f,
+                buildingDensity: 1f,
                 minBuildingHeight: 10.5f,
                 maxBuildingHeight: 18f,
                 anchorClearance: 10f,
@@ -143,14 +143,15 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
-            if (SecondaryRoadWidthTiles <= 0 || PrimaryRoadWidthTiles < SecondaryRoadWidthTiles ||
+            if (SecondaryRoadWidthTiles < 7 || PrimaryRoadWidthTiles < SecondaryRoadWidthTiles ||
                 (SecondaryRoadWidthTiles & 1) == 0 || (PrimaryRoadWidthTiles & 1) == 0 ||
                 SidewalkWidthTiles < 1 ||
                 PrimaryRoadWidthTiles + SidewalkWidthTiles * 2 >= BlockSpanTiles)
             {
                 error =
-                    "Urban road widths must be odd tile counts, leave buildable space " +
-                    "inside each block, and have at least one sidewalk tile per side.";
+                    "Urban roads must reserve at least seven odd-width tiles (three per " +
+                    "direction plus a center tile), leave buildable block space, and have " +
+                    "at least one sidewalk tile per side.";
                 return false;
             }
 
@@ -787,6 +788,9 @@ namespace FantasySurvival.WorldGeneration
                 bool isOctilinear = Mathf.Abs(delta.x) <= GeometryTolerance ||
                                     Mathf.Abs(delta.y) <= GeometryTolerance ||
                                     Mathf.Abs(Mathf.Abs(delta.x) - Mathf.Abs(delta.y)) <= GeometryTolerance;
+                float expectedRoadWidth = road.IsPrimary
+                    ? parameters.PrimaryRoadWidth
+                    : parameters.SecondaryRoadWidth;
                 if (road.FromNodeIndex < 0 || road.FromNodeIndex >= layout.Nodes.Count ||
                     road.ToNodeIndex < 0 || road.ToNodeIndex >= layout.Nodes.Count ||
                     road.FromNodeIndex == road.ToNodeIndex ||
@@ -794,10 +798,11 @@ namespace FantasySurvival.WorldGeneration
                     GeometryTolerance * GeometryTolerance ||
                     (road.End - layout.Nodes[road.ToNodeIndex]).sqrMagnitude >
                     GeometryTolerance * GeometryTolerance ||
-                    !IsFinite(road.Width) || road.Width <= 0f ||
+                    !IsFinite(road.Width) ||
+                    Mathf.Abs(road.Width - expectedRoadWidth) > GeometryTolerance ||
                     !isOctilinear || delta.sqrMagnitude <= GeometryTolerance * GeometryTolerance)
                 {
-                    error = $"Road {roadIndex} has invalid node binding, width, or eight-direction geometry.";
+                    error = $"Road {roadIndex} has invalid node binding, configured width, or eight-direction geometry.";
                     return false;
                 }
             }

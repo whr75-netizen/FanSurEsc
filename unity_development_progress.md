@@ -2115,3 +2115,13 @@ Interactable (abstract base class)
 - `[Unity 컴파일·순수 검증]` 최신 C# 동적 컴파일과 setup validator의 seed 0~255를 통과했다. 실패·결정성 불일치 0, unique layout hash 256, parcel `108~169`, 건물 `77~139`이며 모든 seed에서 한 도로 전면의 최대 건물 수가 최소 2였다. 잘못 뒤집은 parcel side도 validator가 거부했다. 원본 팔레트 texture reference 전달과 선택한 네 모델의 UV가 triangle 내부에서 palette texel을 가로지르지 않는 것도 실제 Unity 객체로 확인했다.
 - `[Play Mode 대표 1회]` direct `GameMapTest` 시작과 `GameMap1` 왕복 1회를 통과했다. seed `1519253678`, world hash `B21D2432AAFE23BB`, runtime Error 0, Player·Camera·Inventory UI·EventSystem 동일성, NavMesh·POI·spawn과 scene 복원을 확인했다. 사용자 기존 dirty 파일은 저장하거나 stage하지 않았다.
 - `[현재 경계]` 대각 도로는 D8 네트워크와 surface에 남지만 회전 footprint mask가 없어 대각 전면 parcel은 아직 만들지 않는다. 실제 진입 건물은 최종 건물 prefab/모듈, 내부 floor·wall·door/roof visibility, 통과 collider와 내부 NavMesh 계약을 함께 정하는 별도 기능이다.
+
+---
+
+## 113. 양방향 도로 폭과 밀집 도심 필지 `[MAP-01][ENVIRONMENT-01]`
+
+- `[사용자 피드백·원인][2026-09-03]` 화면의 네모난 링은 도심 생성물이나 투명 지붕 면이 아니라 고정 배치된 `PrototypeRainShelterTestArea`의 가시 바닥 테두리 Cube 네 개였다. 실제 `RoofOccluder` renderer는 꺼져 있었다. `GameMap1`·`GameMapTest`의 시험 배치를 제거하고, Setup이 폐기된 `UrbanLayoutProtectionAnchors`를 다시 만들지 않도록 바꿔 주변 8m의 불필요한 건물 금지 영역도 없앴다. 비 차단 시스템과 재사용 prefab 자체는 보존했다.
+- `[도로 계약]` 일방통행 데이터가 없는 현재 도로를 모두 양방향으로 취급한다. 보조 도로는 한쪽 3타일+중심 1타일+반대쪽 3타일의 최소 7타일, 주 도로는 9타일이며 validator가 설정값과 실제 segment 폭의 일치를 확인한다. 중심 타일은 폭 계산 계약이고 최종 중앙선 그림은 atlas 표현 단계로 남겼다.
+- `[밀집 배치]` 선택 loop 확률을 `0.35→0.65`, setback과 lot gap을 `0`, 필지를 `8~10m × 8m`, density를 `1`로 바꾸고 도로 전면당 최대 3필지 제한을 제거했다. 유효 필지는 모두 건물이 점유하며 generator version은 6으로 올려 변경 전 Recovery layout을 같은 월드로 오인하지 않는다.
+- `[Unity 정적 검증]` 현재 runtime assembly 컴파일 뒤 기본 256개 seed가 모두 통과했다. unique hash 256, 도로 폭·D8·surface·충돌·접근 조건을 유지했고 parcel과 building은 각각 `125~183`으로 모든 seed에서 동일해 빈 유효 필지가 0개였다. 별도 64 seed 표본은 도로 `70~88`(평균 78.9), 건물 `135~182`(평균 153.7), Ground 셀 기준 건물 점유 `25.8~35.2%`(평균 31.0%)였다. 마지막 Editor validator 보강도 Unity의 동일 compiler response로 오류 없이 컴파일했다.
+- `[Play Mode 미검증]` 이 수치 변경 뒤 새 대표 Play는 Unity MCP 전용 연결이 종료되어 실행하지 못했다. 직전 §112의 Play 결과는 새 7/9타일·100% 필지 설정의 런타임 증거로 재사용하지 않는다. 다음 실제 실행에서는 `GameMapTest` 재진입 1회로 도로 체감 폭, 건물 밀도, Entry→Portal·POI·spawn NavMesh와 runtime Error를 확인한다.

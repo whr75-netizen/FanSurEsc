@@ -5,7 +5,7 @@ namespace FantasySurvival.WorldGeneration
 {
     public static class UrbanMapLayoutPlanner
     {
-        public const int GeneratorVersion = 5;
+        public const int GeneratorVersion = 6;
         public const int SpawnManifestVersion = 3;
 
         private static readonly float[] SpawnCandidateFractions = { 0.2f, 0.35f, 0.5f, 0.65f, 0.8f };
@@ -1538,9 +1538,8 @@ namespace FantasySurvival.WorldGeneration
                     roads,
                     parameters);
                 float frontageLength = road.Length - startClearance - endClearance;
-                int parcelCount = Mathf.Min(
-                    3,
-                    Mathf.FloorToInt((frontageLength + lotGap) / (minimumFrontage + lotGap)));
+                int parcelCount = Mathf.FloorToInt(
+                    (frontageLength + lotGap) / (minimumFrontage + lotGap));
 
                 while (parcelCount > 0)
                 {

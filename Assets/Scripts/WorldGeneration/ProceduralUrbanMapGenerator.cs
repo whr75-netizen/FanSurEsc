@@ -43,21 +43,21 @@ namespace FantasySurvival.WorldGeneration
         [SerializeField, Min(0.25f)] private float tileWorldSize = 2f;
 
         [Header("Octilinear Road Graph")]
-        [SerializeField, Min(1)] private int secondaryRoadWidthTiles = 3;
-        [SerializeField, Min(1)] private int primaryRoadWidthTiles = 5;
-        [SerializeField, Range(0f, 1f)] private float additionalRoadChance = 0.35f;
+        [SerializeField, Min(7)] private int secondaryRoadWidthTiles = 7;
+        [SerializeField, Min(7)] private int primaryRoadWidthTiles = 9;
+        [SerializeField, Range(0f, 1f)] private float additionalRoadChance = 0.65f;
         [SerializeField, Range(0f, 1f)] private float diagonalRoadChance = 0.2f;
         [SerializeField, Min(1)] private int sidewalkWidthTiles = 1;
 
         [Header("Prototype Exterior Buildings")]
         [SerializeField] private GameObject[] buildingVisualPrefabs;
-        [SerializeField, Min(0f)] private float buildingSetback = 2f;
-        [SerializeField, Min(0f)] private float lotGap = 2f;
-        [SerializeField, Min(3)] private int minBuildingFrontageTiles = 5;
-        [SerializeField, Min(3)] private int maxBuildingFrontageTiles = 6;
-        [SerializeField, Min(3)] private int minBuildingDepthTiles = 3;
+        [SerializeField, Min(0f)] private float buildingSetback;
+        [SerializeField, Min(0f)] private float lotGap;
+        [SerializeField, Min(3)] private int minBuildingFrontageTiles = 4;
+        [SerializeField, Min(3)] private int maxBuildingFrontageTiles = 5;
+        [SerializeField, Min(3)] private int minBuildingDepthTiles = 4;
         [SerializeField, Min(3)] private int maxBuildingDepthTiles = 4;
-        [SerializeField, Range(0f, 1f)] private float buildingDensity = 0.8f;
+        [SerializeField, Range(0f, 1f)] private float buildingDensity = 1f;
         [SerializeField, Min(1f)] private float minBuildingHeight = 10.5f;
         [SerializeField, Min(1f)] private float maxBuildingHeight = 18f;
         [SerializeField, Min(0f)] private float anchorClearance = 10f;

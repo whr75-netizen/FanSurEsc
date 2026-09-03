@@ -57,8 +57,6 @@ namespace FantasySurvival.EditorTools
         private const string MeleeEnemyObjectName = "Test_KenneyZombiePatrol";
         private const string RangedEnemyObjectName = "Test_PrototypeRangedEnemy";
         private const string LayoutProtectionRootName = "UrbanLayoutProtectionAnchors";
-        private const string MeleeProtectionAnchorName = "FormerMeleeFixture";
-        private const string RangedProtectionAnchorName = "FormerRangedFixture";
         private const string RaidChestStableId = "core:gamemaptest/test_loot_chest";
         private const string MeleeEnemyStableId = "core:gamemaptest/melee_enemy_01";
         private const string RangedEnemyStableId = "core:gamemaptest/ranged_enemy_01";
@@ -126,9 +124,6 @@ namespace FantasySurvival.EditorTools
             EnemyAIController legacyMelee = FindEnemyByName(scene, MeleeEnemyObjectName);
             EnemyAIController legacyRanged = FindEnemyByName(scene, RangedEnemyObjectName);
             Chest legacyChest = FindStandaloneChest(scene, RaidChestObjectName);
-            IReadOnlyList<Transform> layoutProtectionAnchors =
-                EnsureLayoutProtectionAnchors(scene, legacyMelee, legacyRanged);
-
             GameObject generatorObject = FindRootByName(scene, GeneratorObjectName);
             if (generatorObject == null)
             {
@@ -172,11 +167,11 @@ namespace FantasySurvival.EditorTools
             ApplyPrototypeGenerationSettings(serializedGenerator);
             ReplaceBuildingVisualPrefabs(
                 serializedGenerator.FindProperty("buildingVisualPrefabs"));
-            ReplacePrototypeProtectedAnchors(
+            RemoveObsoleteLayoutProtectionAnchors(
+                scene,
                 serializedGenerator.FindProperty("additionalProtectedAnchors"),
                 legacyMelee,
-                legacyRanged,
-                layoutProtectionAnchors);
+                legacyRanged);
             serializedGenerator.ApplyModifiedPropertiesWithoutUndo();
 
             RaidCheckpointSceneBinding binding =
@@ -222,18 +217,18 @@ namespace FantasySurvival.EditorTools
             serializedGenerator.FindProperty("blocksPerAxis").intValue = 6;
             serializedGenerator.FindProperty("borderTiles").intValue = 12;
             serializedGenerator.FindProperty("tileWorldSize").floatValue = 2f;
-            serializedGenerator.FindProperty("secondaryRoadWidthTiles").intValue = 3;
-            serializedGenerator.FindProperty("primaryRoadWidthTiles").intValue = 5;
-            serializedGenerator.FindProperty("additionalRoadChance").floatValue = 0.35f;
+            serializedGenerator.FindProperty("secondaryRoadWidthTiles").intValue = 7;
+            serializedGenerator.FindProperty("primaryRoadWidthTiles").intValue = 9;
+            serializedGenerator.FindProperty("additionalRoadChance").floatValue = 0.65f;
             serializedGenerator.FindProperty("diagonalRoadChance").floatValue = 0.2f;
             serializedGenerator.FindProperty("sidewalkWidthTiles").intValue = 1;
-            serializedGenerator.FindProperty("buildingSetback").floatValue = 2f;
-            serializedGenerator.FindProperty("lotGap").floatValue = 2f;
-            serializedGenerator.FindProperty("minBuildingFrontageTiles").intValue = 5;
-            serializedGenerator.FindProperty("maxBuildingFrontageTiles").intValue = 6;
-            serializedGenerator.FindProperty("minBuildingDepthTiles").intValue = 3;
+            serializedGenerator.FindProperty("buildingSetback").floatValue = 0f;
+            serializedGenerator.FindProperty("lotGap").floatValue = 0f;
+            serializedGenerator.FindProperty("minBuildingFrontageTiles").intValue = 4;
+            serializedGenerator.FindProperty("maxBuildingFrontageTiles").intValue = 5;
+            serializedGenerator.FindProperty("minBuildingDepthTiles").intValue = 4;
             serializedGenerator.FindProperty("maxBuildingDepthTiles").intValue = 4;
-            serializedGenerator.FindProperty("buildingDensity").floatValue = 0.8f;
+            serializedGenerator.FindProperty("buildingDensity").floatValue = 1f;
             serializedGenerator.FindProperty("minBuildingHeight").floatValue = 10.5f;
             serializedGenerator.FindProperty("maxBuildingHeight").floatValue = 18f;
             serializedGenerator.FindProperty("anchorClearance").floatValue = 10f;
@@ -452,6 +447,14 @@ namespace FantasySurvival.EditorTools
                 {
                     throw new BuildFailedException(
                         $"Urban layout seed {seed} generated no road-front parcel or exterior building.");
+                }
+
+                if (Mathf.Approximately(parameters.BuildingDensity, 1f) &&
+                    layout.Buildings.Count != layout.Parcels.Count)
+                {
+                    throw new BuildFailedException(
+                        $"Urban layout seed {seed} left " +
+                        $"{layout.Parcels.Count - layout.Buildings.Count} dense-city parcels empty.");
                 }
 
                 var buildingsPerFrontage = new Dictionary<int, int>();
@@ -1033,85 +1036,30 @@ namespace FantasySurvival.EditorTools
             EditorUtility.SetDirty(binding);
         }
 
-        private static IReadOnlyList<Transform> EnsureLayoutProtectionAnchors(
+        private static void RemoveObsoleteLayoutProtectionAnchors(
             Scene scene,
+            SerializedProperty protectedAnchors,
             EnemyAIController legacyMelee,
             EnemyAIController legacyRanged)
         {
             GameObject root = FindRootByName(scene, LayoutProtectionRootName);
-            if (root == null)
-            {
-                root = new GameObject(LayoutProtectionRootName);
-                Undo.RegisterCreatedObjectUndo(root, "Create Urban Layout Protection Anchors");
-                SceneManager.MoveGameObjectToScene(root, scene);
-            }
-
-            Transform melee = EnsureProtectionAnchor(
-                root.transform,
-                MeleeProtectionAnchorName,
-                legacyMelee != null
-                    ? legacyMelee.transform.position
-                    : new Vector3(0f, 0f, 3f));
-            Transform ranged = EnsureProtectionAnchor(
-                root.transform,
-                RangedProtectionAnchorName,
-                legacyRanged != null
-                    ? legacyRanged.transform.position
-                    : new Vector3(6f, 0f, 6f));
-            return new[] { melee, ranged };
-        }
-
-        private static Transform EnsureProtectionAnchor(
-            Transform parent,
-            string name,
-            Vector3 initialWorldPosition)
-        {
-            Transform anchor = parent.Find(name);
-            if (anchor != null)
-            {
-                return anchor;
-            }
-
-            var anchorObject = new GameObject(name);
-            Undo.RegisterCreatedObjectUndo(anchorObject, "Create Urban Layout Protection Anchor");
-            anchorObject.transform.SetParent(parent, worldPositionStays: false);
-            anchorObject.transform.position = initialWorldPosition;
-            return anchorObject.transform;
-        }
-
-        private static void ReplacePrototypeProtectedAnchors(
-            SerializedProperty protectedAnchors,
-            EnemyAIController legacyMelee,
-            EnemyAIController legacyRanged,
-            IReadOnlyList<Transform> requiredAnchors)
-        {
-            var preserved = new List<Transform>(
-                protectedAnchors.arraySize + requiredAnchors.Count);
+            Transform rootTransform = root != null ? root.transform : null;
+            Transform legacyMeleeTransform = legacyMelee != null ? legacyMelee.transform : null;
+            Transform legacyRangedTransform = legacyRanged != null ? legacyRanged.transform : null;
+            var preserved = new List<Transform>(protectedAnchors.arraySize);
             var seen = new HashSet<Transform>();
-            Transform legacyMeleeTransform = legacyMelee != null
-                ? legacyMelee.transform
-                : null;
-            Transform legacyRangedTransform = legacyRanged != null
-                ? legacyRanged.transform
-                : null;
             for (int index = 0; index < protectedAnchors.arraySize; index++)
             {
                 Transform existing = protectedAnchors
                     .GetArrayElementAtIndex(index)
                     .objectReferenceValue as Transform;
-                if (existing != null && existing != legacyMeleeTransform &&
-                    existing != legacyRangedTransform && seen.Add(existing))
+                bool isObsoleteFixture = existing == legacyMeleeTransform ||
+                                         existing == legacyRangedTransform ||
+                                         (rootTransform != null &&
+                                          (existing == rootTransform || existing.IsChildOf(rootTransform)));
+                if (existing != null && !isObsoleteFixture && seen.Add(existing))
                 {
                     preserved.Add(existing);
-                }
-            }
-
-            for (int index = 0; index < requiredAnchors.Count; index++)
-            {
-                Transform required = requiredAnchors[index];
-                if (seen.Add(required))
-                {
-                    preserved.Add(required);
                 }
             }
 
@@ -1120,6 +1068,11 @@ namespace FantasySurvival.EditorTools
             {
                 protectedAnchors.GetArrayElementAtIndex(index).objectReferenceValue =
                     preserved[index];
+            }
+
+            if (root != null)
+            {
+                Undo.DestroyObjectImmediate(root);
             }
         }
 

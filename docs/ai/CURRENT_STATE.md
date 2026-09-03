@@ -51,13 +51,13 @@
 | `INPUT-01` | Escape·입력·키 설정 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·46~48·53·69 | Base pause/Raid non-pause; Main/ESC 리바인딩·행별 보조키 해제/복원; 낮/밤·맑음/비 환경 시험; 별도 설정 파일·legacy 이관 | 입력·scene 또는 설정 schema·migration·복구 변경 |
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36·91 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 바닥 아이템도 같은 최근접 E 후보; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
-| `MOVE-01` | Player 이동·Shift 달리기·8방향 회전·Humanoid 이동 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9·100 | WASD 회전, 1.3배 달리기, mannequin Humanoid, root motion 없음 | 이동·Animator·외형 참조 직접 변경 |
+| `MOVE-01` | Player 이동·달리기·8방향 회전 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9·100·117 | 걷기10·달리기13, mannequin Humanoid, root motion 없음 | 이동·Animator·외형 참조 변경 |
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
 | `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101·108~110 | 낮밤·구름·비차단·Grass·웅덩이·0시 최저·중성 낮; 로컬 체적광; 월드 고정 태양 평면 적분; 기지 100×64 검증장 | 야간 최저 확인·날씨 저장·풍향·최종 아트·GPU Profile·얇은 foliage/depth upscale·Transparent 차폐/합성 |
-| `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 시험 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §96~108·116 | Player mannequin 유지; 외곽선·snap; Meshy 무리그 정적 시험 | 최종 파츠·스킨·회전·줌; 교체 시 rig |
+| `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 시험 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §96~108·116~117 | Player·좀비 외곽선/snap; 좀비 64px bake/UV 비교 씬 | 최종 파츠·스킨·회전·줌·rig |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95·105 | grid·stack·가방·장전탄·Save v7·저작창; ID 13 1×1 갑빠(방어 20%·육각); 바닥 drop/E, 일반 전환 삭제·Active Raid 복원 | item/grid/장비/world-item 저장 계약 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51·105 | 체력 1000·정수 계산·공격력 10단위·총 피해 350; 갑빠 방어 1당 최종 피해 1% 감소 | 탄종·AI 탄약·무기군 장전·반동·탄퍼짐·관통·피해 유형·조준 결정 |
-| `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67 | 고정 맵 임의/도심 공유후보 순찰·감지·추적·LOS 공격·총성 조사 | 엄폐·도주·저격 등 다음 전술 단계 요청 |
+| `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67·117 | 순찰·감지·추적·LOS 공격·총성 조사; 좀비 순찰3/전투6.8 | 엄폐·도주·저격 단계 요청 |
 | `CORPSE-01` | 적 사망과 공용 시체 전리품 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §20 | AI·공격·피격 정지, root·렌더 유지, 기존 Chest UI 사용 | despawn·정식 드롭·씬 재진입 저장 추가 |
 | `MAP-01` | 도심 타일·8방향 도로·건물 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §111~115 | `145²·2m`; 7/9 도로·v7 합류 정규화; 밀집 필지·인도·가로수와 공유 야간 가로등·Nav | atlas·회전 footprint·실내·다수 가로등 GPU Profile |
 | `MAP-ARRIVAL-01` | 원정 맵 도착 안전 gate | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §32·34 | Ready 뒤 공개; Invalid는 covered 기지 복귀, 불가 시 잠금 보류 | readiness·도착·rollback·redirect 변경 |

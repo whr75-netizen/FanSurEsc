@@ -4,6 +4,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
     {
         [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
         [MainColor] _BaseColor("Base Color", Color) = (0.9686275, 0.8431373, 0.7294118, 1)
+        _BaseMapPixelGrid("Base Map Pixel Grid (0 = Native)", Range(0, 256)) = 0
         _EnvironmentExposure("Environment Exposure (Clear Noon Reference)", Range(0.5, 3)) = 1.66
         _AmbientLightStrength("Ambient Light Strength", Range(0, 2)) = 1
         _MainLightStrength("Main Light Strength", Range(0, 2)) = 0.45
@@ -51,6 +52,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             CBUFFER_START(UnityPerMaterial)
                 float4 _BaseMap_ST;
                 half4 _BaseColor;
+                half _BaseMapPixelGrid;
                 half _EnvironmentExposure;
                 half _AmbientLightStrength;
                 half _MainLightStrength;
@@ -60,6 +62,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
 
             TEXTURE2D(_BaseMap);
             SAMPLER(sampler_BaseMap);
+            SamplerState sampler_point_repeat;
 
             // Pixel snapping moves only the presentation hierarchy. This offset
             // restores the unsnapped world position used by spatial lighting so
@@ -192,10 +195,25 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 half3 lighting = EvaluateSpatialFlatCharacterLighting(
                     lightingPositionWS,
                     input.positionCS);
-                half4 baseSample = SAMPLE_TEXTURE2D(
-                    _BaseMap,
-                    sampler_BaseMap,
-                    input.uv);
+                half4 baseSample;
+                if (_BaseMapPixelGrid >= 1.0h)
+                {
+                    float2 pixelUv =
+                        (floor(input.uv * _BaseMapPixelGrid) + 0.5) /
+                        _BaseMapPixelGrid;
+                    baseSample = SAMPLE_TEXTURE2D_LOD(
+                        _BaseMap,
+                        sampler_point_repeat,
+                        pixelUv,
+                        0.0);
+                }
+                else
+                {
+                    baseSample = SAMPLE_TEXTURE2D(
+                        _BaseMap,
+                        sampler_BaseMap,
+                        input.uv);
+                }
                 return half4(
                     baseSample.rgb * _BaseColor.rgb * lighting,
                     baseSample.a * _BaseColor.a);

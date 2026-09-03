@@ -2153,3 +2153,12 @@ Interactable (abstract base class)
 - `[텍스처 경로]` 확장자만 PNG였던 Base Color WebP를 유효한 PNG로 변환하고, 기존 캐릭터 공간 평면광 셰이더에 기본 white인 `_BaseMap` 표본만 추가했다. 기존 단색 mannequin은 기본 white map으로 같은 결과를 유지하며, 표면 곡면 명암을 되살리는 PBR roughness·metallic 계산은 연결하지 않았다.
 - `[Editor 렌더·참조 확인]` 전용 `CharacterSilhouetteTest` 씬에서 발 높이·약 4m 시험 크기·layer 30·외곽선·Base Map 참조를 확인하고 정면 카메라 렌더를 만들었다. 모델은 화면에 정상 표시되지만 T 포즈이고 머리카락이 얼굴 한쪽을 크게 가리며 밝은 피부·의상 경계가 약해 최종 Player 후보로는 미확정이다.
 - `[보존·오류]` 임시 additive 씬은 저장 없이 닫았고 `GameMap1`은 저장하지 않았다. Unity Console 신규 Error는 0이며 기존 BrokenVector·raid direct-entry·local volumetric light·MCP 서명·외부 shader UI Warning만 남았다.
+
+---
+
+## 117. 좀비 실루엣·픽셀 텍스처 A/B와 이동속도 배율 `[CHARACTER-RENDER-01][MOVE-01][AI-01]`
+
+- `[구조]` `KenneyZombiePatrol`의 gameplay root가 아니라 시각 자식 `ZombieAgent`에 기존 `CharacterSilhouetteSubject`를 붙였다. 렌더링 layer bit31과 render-time snap만 공유하므로 AI root·NavMesh·Collider·피격·시체 수명은 바뀌지 않는다. 현재 외곽선 mask는 개체 ID가 없는 공용 이진 mask라 서로 닿은 실루엣의 내부 경계는 합쳐지는 시험 한계가 있다.
+- `[A/B 시험]` 별도 `EnemyPixelComparisonTest` 씬의 왼쪽은 원본 256px을 nearest로 실제 64px PNG로 만든 Point/no-mipmap 머티리얼, 오른쪽은 원본을 유지하고 같은 캐릭터 셰이더에서 UV를 64칸으로 양자화해 LOD0 Point 표본하는 머티리얼이다. 전체 화면 RenderTexture·pixel camera는 추가하지 않았고 실제 gameplay 좀비 material도 아직 교체하지 않았다.
+- `[속도]` Player 권위값은 걷기 `5→10`, 기존 1.3배 규칙에 따른 달리기 `6.5→13`이다. `KenneyZombie`와 그 raid 근접 definition은 순찰 `1.5→3`, 전투 `3.4→6.8`이며 `EnemyAIController`가 이 definition 값을 기존 `NavMeshAgent`에 적용한다. 이동 Animator clip 속도는 별도 시각 튜닝이므로 변경하지 않았다.
+- `[검증]` Unity shader compiler error 0, 전용 씬 좀비 2개·각 Subject 1개·render mask `2147483649`·baked/runtime material 참조를 확인하고 1280×720 Editor camera 단독 렌더를 저장했다. raw PNG 팔레트 대조에서 baked 픽셀의 원본 외 색은 0개였다. 새 수치와 prefab/asset 참조는 정적으로 확인했으며, 변경된 실제 이동 거리와 animation foot sliding은 Play Mode에서 아직 확인하지 않았다. 기존 dirty `GameMap1`과 사용자 에셋은 저장·stage하지 않는다.

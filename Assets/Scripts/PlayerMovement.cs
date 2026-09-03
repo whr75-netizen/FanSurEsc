@@ -8,7 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     public const string LocomotionSpeedParameter = "LocomotionSpeed";
 
-    public float speed = 5f;
+    public float speed = 10f;
     public Vector3 checkSize = new Vector3(0.5f, 0.5f, 0.5f);
 
     [SerializeField, Min(1f)] private float runSpeedMultiplier = 1.3f;

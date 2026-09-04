@@ -28,6 +28,18 @@ namespace FantasySurvival.WorldLighting
             Shader.PropertyToID("_SoftnessMip");
         private static readonly int CloudShadowOpacityId =
             Shader.PropertyToID("_Opacity");
+        private static readonly int CloudShadowEvolutionPhaseId =
+            Shader.PropertyToID("_EvolutionPhase");
+        private static readonly int CloudShadowSeedId =
+            Shader.PropertyToID("_Seed");
+        private static readonly int CloudShadowCoverageId =
+            Shader.PropertyToID("_Coverage");
+        private static readonly int CloudShadowBillowStrengthId =
+            Shader.PropertyToID("_BillowStrength");
+        private static readonly int CloudShadowErosionStrengthId =
+            Shader.PropertyToID("_ErosionStrength");
+        private static readonly int CloudShadowMaximumAttenuationId =
+            Shader.PropertyToID("_MaximumAttenuation");
         [Header("Definition")]
         [SerializeField] private SkyLightingProfile profile;
         [SerializeField] private PixelRainPresentation rainPresentation;
@@ -53,14 +65,18 @@ namespace FantasySurvival.WorldLighting
         private PersistentGameplayShell shell;
         private Light sceneDirectionalLight;
         private UniversalAdditionalLightData sceneDirectionalLightData;
-        private Material cloudShadowFilterMaterial;
+        private Material cloudShadowGeneratorMaterial;
+        private RenderTexture cloudShadowDensityTexture;
         private RenderTexture filteredCloudShadowCookie;
-        private Texture2D cloudShadowFilterSource;
-        private Shader cloudShadowFilterShader;
+        private Shader cloudShadowGeneratorShader;
         private Vector2 cloudShadowWorldOffset;
+        private float cloudShadowEvolutionTime;
+        private float cloudShadowEvolutionAccumulator;
         private float currentHour;
         private float lastAppliedHour = float.NaN;
         private int lastCloudShadowFilterKey = -1;
+        private int cloudShadowDensityVersion;
+        private int composedCloudShadowDensityVersion = -1;
         private float currentCloudShadowSoftnessMip;
         private float currentCloudShadowOpacity;
         private bool hasGameplaySceneBinding;
@@ -485,13 +501,13 @@ namespace FantasySurvival.WorldLighting
                 return;
             }
 
-            Texture2D cookie = profile.CloudShadowCookie;
             if (sceneDirectionalLightData == null)
             {
                 return;
             }
 
-            if (cookie == null)
+            Shader generatorShader = profile.CloudShadowGeneratorShader;
+            if (generatorShader == null)
             {
                 sceneDirectionalLight.cookie = null;
                 sceneDirectionalLightData.lightCookieOffset = Vector2.zero;
@@ -499,34 +515,35 @@ namespace FantasySurvival.WorldLighting
                 return;
             }
 
-            if (!EnsureCloudShadowFilterResources(cookie))
+            if (!EnsureCloudShadowFilterResources(
+                    generatorShader,
+                    profile.CloudShadowResolution))
             {
                 sceneDirectionalLight.cookie = null;
                 return;
             }
 
+            GenerateCloudShadowDensity(true);
             sceneDirectionalLight.cookie = filteredCloudShadowCookie;
 
             ApplyCloudShadowProjection();
         }
 
-        private bool EnsureCloudShadowFilterResources(Texture2D source)
+        private bool EnsureCloudShadowFilterResources(
+            Shader generatorShader,
+            int resolution)
         {
-            Shader filterShader = profile.CloudShadowFilterShader;
-            if (filterShader == null)
-            {
-                Debug.LogError("Cloud shadow prefilter shader is missing.", profile);
-                return false;
-            }
-
             bool resourcesMatch =
-                cloudShadowFilterMaterial != null &&
+                cloudShadowGeneratorMaterial != null &&
+                cloudShadowDensityTexture != null &&
+                cloudShadowDensityTexture.IsCreated() &&
                 filteredCloudShadowCookie != null &&
                 filteredCloudShadowCookie.IsCreated() &&
-                cloudShadowFilterSource == source &&
-                cloudShadowFilterShader == filterShader &&
-                filteredCloudShadowCookie.width == source.width &&
-                filteredCloudShadowCookie.height == source.height;
+                cloudShadowGeneratorShader == generatorShader &&
+                cloudShadowDensityTexture.width == resolution &&
+                cloudShadowDensityTexture.height == resolution &&
+                filteredCloudShadowCookie.width == resolution &&
+                filteredCloudShadowCookie.height == resolution;
             if (resourcesMatch)
             {
                 return true;
@@ -534,14 +551,28 @@ namespace FantasySurvival.WorldLighting
 
             ReleaseCloudShadowFilterResources();
 
-            cloudShadowFilterMaterial = new Material(filterShader)
+            cloudShadowGeneratorMaterial = new Material(generatorShader)
             {
-                name = "Runtime Cloud Shadow Prefilter",
+                name = "Runtime Procedural Cloud Shadow Generator",
+                hideFlags = HideFlags.HideAndDontSave
+            };
+            cloudShadowDensityTexture = new RenderTexture(
+                resolution,
+                resolution,
+                0,
+                RenderTextureFormat.ARGB32,
+                RenderTextureReadWrite.Linear)
+            {
+                name = "Runtime Procedural Cloud Density",
+                filterMode = FilterMode.Trilinear,
+                wrapMode = TextureWrapMode.Repeat,
+                useMipMap = true,
+                autoGenerateMips = false,
                 hideFlags = HideFlags.HideAndDontSave
             };
             filteredCloudShadowCookie = new RenderTexture(
-                source.width,
-                source.height,
+                resolution,
+                resolution,
                 0,
                 RenderTextureFormat.ARGB32,
                 RenderTextureReadWrite.Linear)
@@ -554,26 +585,79 @@ namespace FantasySurvival.WorldLighting
                 hideFlags = HideFlags.HideAndDontSave
             };
 
-            if (!filteredCloudShadowCookie.Create())
+            bool densityCreated = cloudShadowDensityTexture.Create();
+            bool cookieCreated = filteredCloudShadowCookie.Create();
+            if (!densityCreated || !cookieCreated)
             {
-                Debug.LogError("Failed to create the cloud shadow prefilter texture.", this);
+                Debug.LogError("Failed to create the procedural cloud shadow textures.", this);
                 ReleaseCloudShadowFilterResources();
                 return false;
             }
 
-            cloudShadowFilterSource = source;
-            cloudShadowFilterShader = filterShader;
+            cloudShadowGeneratorShader = generatorShader;
+            cloudShadowEvolutionAccumulator = 0f;
+            cloudShadowDensityVersion = 0;
+            composedCloudShadowDensityVersion = -1;
             lastCloudShadowFilterKey = -1;
             return true;
+        }
+
+        private void GenerateCloudShadowDensity(bool force = false)
+        {
+            if (cloudShadowGeneratorMaterial == null ||
+                cloudShadowDensityTexture == null ||
+                (!force &&
+                 (currentCloudShadowOpacity <= DirectionalLightThreshold ||
+                  cloudShadowEvolutionAccumulator < profile.CloudShadowUpdateInterval)))
+            {
+                return;
+            }
+
+            if (!force)
+            {
+                cloudShadowEvolutionAccumulator = Mathf.Repeat(
+                    cloudShadowEvolutionAccumulator,
+                    profile.CloudShadowUpdateInterval);
+            }
+            else
+            {
+                cloudShadowEvolutionAccumulator = 0f;
+            }
+
+            cloudShadowGeneratorMaterial.SetFloat(
+                CloudShadowEvolutionPhaseId,
+                cloudShadowEvolutionTime);
+            cloudShadowGeneratorMaterial.SetFloat(
+                CloudShadowSeedId,
+                profile.CloudShadowSeed);
+            cloudShadowGeneratorMaterial.SetFloat(
+                CloudShadowCoverageId,
+                profile.CloudShadowCoverage);
+            cloudShadowGeneratorMaterial.SetFloat(
+                CloudShadowBillowStrengthId,
+                profile.CloudShadowBillowStrength);
+            cloudShadowGeneratorMaterial.SetFloat(
+                CloudShadowErosionStrengthId,
+                profile.CloudShadowErosionStrength);
+            Graphics.Blit(
+                Texture2D.whiteTexture,
+                cloudShadowDensityTexture,
+                cloudShadowGeneratorMaterial,
+                0);
+            cloudShadowDensityTexture.GenerateMips();
+            cloudShadowDensityVersion++;
+            ComposeCloudShadowCookie();
         }
 
         private void UpdateCloudShadowFilter(
             float elevationWeight,
             SkyWeatherSample weather)
         {
-            if (cloudShadowFilterMaterial == null ||
+            if (cloudShadowGeneratorMaterial == null ||
+                cloudShadowDensityTexture == null ||
                 filteredCloudShadowCookie == null ||
-                cloudShadowFilterSource == null)
+                !cloudShadowDensityTexture.IsCreated() ||
+                !filteredCloudShadowCookie.IsCreated())
             {
                 return;
             }
@@ -598,28 +682,50 @@ namespace FantasySurvival.WorldLighting
             int opacityKey = Mathf.RoundToInt(
                 desiredOpacity * CloudShadowFilterKeyMaximum);
             int filterKey = (softnessKey << 8) | opacityKey;
-            if (filterKey == lastCloudShadowFilterKey)
+            bool filterChanged = filterKey != lastCloudShadowFilterKey;
+            bool densityChanged =
+                composedCloudShadowDensityVersion != cloudShadowDensityVersion;
+            if (!filterChanged && !densityChanged)
             {
                 return;
             }
 
-            currentCloudShadowSoftnessMip =
-                softnessKey / (float)CloudShadowFilterKeyMaximum * 3f;
-            currentCloudShadowOpacity =
-                opacityKey / (float)CloudShadowFilterKeyMaximum;
+            if (filterChanged)
+            {
+                currentCloudShadowSoftnessMip =
+                    softnessKey / (float)CloudShadowFilterKeyMaximum * 3f;
+                currentCloudShadowOpacity =
+                    opacityKey / (float)CloudShadowFilterKeyMaximum;
+                lastCloudShadowFilterKey = filterKey;
+            }
 
-            cloudShadowFilterMaterial.SetFloat(
+            ComposeCloudShadowCookie();
+        }
+
+        private void ComposeCloudShadowCookie()
+        {
+            if (cloudShadowGeneratorMaterial == null ||
+                cloudShadowDensityTexture == null ||
+                filteredCloudShadowCookie == null)
+            {
+                return;
+            }
+
+            cloudShadowGeneratorMaterial.SetFloat(
                 CloudShadowSoftnessMipId,
                 currentCloudShadowSoftnessMip);
-            cloudShadowFilterMaterial.SetFloat(
+            cloudShadowGeneratorMaterial.SetFloat(
                 CloudShadowOpacityId,
                 currentCloudShadowOpacity);
+            cloudShadowGeneratorMaterial.SetFloat(
+                CloudShadowMaximumAttenuationId,
+                profile.CloudShadowMaximumAttenuation);
             Graphics.Blit(
-                cloudShadowFilterSource,
+                cloudShadowDensityTexture,
                 filteredCloudShadowCookie,
-                cloudShadowFilterMaterial,
-                0);
-            lastCloudShadowFilterKey = filterKey;
+                cloudShadowGeneratorMaterial,
+                1);
+            composedCloudShadowDensityVersion = cloudShadowDensityVersion;
         }
 
         private void DetachFilteredCloudShadowCookie()
@@ -641,15 +747,24 @@ namespace FantasySurvival.WorldLighting
                 DestroyRuntimeObject(filteredCloudShadowCookie);
             }
 
-            if (cloudShadowFilterMaterial != null)
+            if (cloudShadowDensityTexture != null)
             {
-                DestroyRuntimeObject(cloudShadowFilterMaterial);
+                cloudShadowDensityTexture.Release();
+                DestroyRuntimeObject(cloudShadowDensityTexture);
+            }
+
+            if (cloudShadowGeneratorMaterial != null)
+            {
+                DestroyRuntimeObject(cloudShadowGeneratorMaterial);
             }
 
             filteredCloudShadowCookie = null;
-            cloudShadowFilterMaterial = null;
-            cloudShadowFilterSource = null;
-            cloudShadowFilterShader = null;
+            cloudShadowDensityTexture = null;
+            cloudShadowGeneratorMaterial = null;
+            cloudShadowGeneratorShader = null;
+            cloudShadowEvolutionAccumulator = 0f;
+            cloudShadowDensityVersion = 0;
+            composedCloudShadowDensityVersion = -1;
             lastCloudShadowFilterKey = -1;
             currentCloudShadowSoftnessMip = 0f;
             currentCloudShadowOpacity = 0f;
@@ -675,13 +790,19 @@ namespace FantasySurvival.WorldLighting
         private void AdvanceCloudShadow(float deltaTime)
         {
             if (deltaTime <= 0f ||
-                profile.CloudShadowCookie == null ||
+                profile.CloudShadowGeneratorShader == null ||
                 sceneDirectionalLightData == null)
             {
                 return;
             }
 
             cloudShadowWorldOffset += profile.CloudShadowWorldVelocity * deltaTime;
+            cloudShadowEvolutionTime +=
+                profile.CloudShadowEvolutionSpeed * deltaTime;
+            cloudShadowEvolutionAccumulator = Mathf.Min(
+                cloudShadowEvolutionAccumulator + deltaTime,
+                profile.CloudShadowUpdateInterval);
+            GenerateCloudShadowDensity();
             ApplyCloudShadowOffset();
         }
 
@@ -689,7 +810,7 @@ namespace FantasySurvival.WorldLighting
         {
             if (sceneDirectionalLight == null ||
                 sceneDirectionalLightData == null ||
-                profile.CloudShadowCookie == null)
+                profile.CloudShadowGeneratorShader == null)
             {
                 return;
             }
@@ -716,7 +837,7 @@ namespace FantasySurvival.WorldLighting
         {
             if (sceneDirectionalLight == null ||
                 sceneDirectionalLightData == null ||
-                profile.CloudShadowCookie == null)
+                profile.CloudShadowGeneratorShader == null)
             {
                 return;
             }
@@ -742,7 +863,7 @@ namespace FantasySurvival.WorldLighting
                 MinimumCookieProjectionScale,
                 horizontalProjectionScale.y);
             sceneDirectionalLightData.lightCookieSize = Vector2.Scale(
-                profile.CloudShadowCookieSize,
+                profile.CloudShadowWorldSize,
                 horizontalProjectionScale);
             ApplyCloudShadowOffset();
         }

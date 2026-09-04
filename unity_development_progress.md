@@ -2199,3 +2199,13 @@ Interactable (abstract base class)
 - `[근본 수정]` 같은 `SkyLightingCycleController`와 단일 Cookie GUID를 유지했다. Clear 프로필을 0·4.75·5.75·6.5·7.5·10·16·17.5·18.25·19.5·22시의 11개 키로 세분화해 청색 새벽→짧은 주황 일출→중성 낮→짧은 주황 일몰→청색 황혼→0시 최저를 기존 SmoothStep 보간으로 잇는다. Cookie는 256×256에서 크기·방향이 다른 원·타원 밀도장을 결합하고 가장자리 홈을 감산한 6개 연기형 군집으로 교체했으며, 옅은 외곽부터 짙은 중심까지 네 그림자 농도를 한 소스에 저장했다. 새 구름 Manager·오브젝트·렌더 패스는 추가하지 않았다.
 - `[정적·Play Mode 검증]` 프로필 asset과 코드 기본값의 11키 일치를 확인하고 0~24시 1분 표본 1,440개에서 0시가 최저, 인접 최대 변화량 0.0088임을 확인했다. Cookie는 256×256·mipmap 9·Trilinear·Repeat·선형·무압축이며 그림자 점유 22.5%, 네 농도 모두 존재하고 12px 반복 경계 침범은 0이었다. `GameMap1` 한 Play Session의 직교 size 3.5·5·8 렌더에서 둥근 군집과 픽셀 경계가 유지됐고, 6.5·12·18.25·0시 대표 프레임을 확인했다. Clear→Rain→Clear는 강수 `0→1→0`, 구름 농도 `0.902→0→0.902`로 복원됐다.
 - `[보존·경계]` 비·물 튐·웅덩이·가로등·빛줄기·60초 시험 주기, Player·Camera·씬 흐름과 사용자 dirty asset은 변경하지 않았다. Unity 6의 새 Entity ID를 구식 Instance ID로 받는 MCP Camera Capture 1회가 검증 도구 오류를 남겼지만, 게임 Camera의 명시적 RenderTexture 렌더와 환경 호출에서는 신규 게임 코드 오류를 확인하지 않았다. 최종 색감·구름 농도는 사용자 아트 판단, 실제 장시간 반복 이음새와 Player build·GPU Profile은 미검증이다.
+
+---
+
+## 122. 고정 6군집을 동적 연속 구름 밀도장으로 교체 `[ENVIRONMENT-01]`
+
+- `[사용자 피드백·근본 원인][2026-09-04]` §121의 결과는 여섯 텍스처가 아니라 `256×256` PNG 하나 안의 고정 군집 6개였다. 네 단계의 동심 농도와 작은 `24×24m` 반복 주기가 형태 변화 없이 이동해서, 크고 작은 구름이 아니라 빽빽한 물감 얼룩·산등성이처럼 읽혔다. 해상도나 임계값만 더 조정하는 것으로는 이 고정 형상과 반복 원인을 없앨 수 없었다.
+- `[외부 구조 비교]` Horizon Zero Dawn/Nubis의 `큰 지배 형상 → Perlin-Worley 계열 둥근 덩어리 → 경계부 세부 침식`, Unity HDRP의 shaping/erosion 분리와 별도 cloud shadow map, Unreal의 저비용 Beer shadow map/Light Function, t3ssel8r 공개 설명과 후속 Unity 구현의 서로 다른 크기 노이즈 상대 이동을 비교했다. 현재 고정 쿼터뷰 URP에는 볼류메트릭 raymarch·풀스크린 후처리·투영 Quad보다 기존 Directional Light Cookie가 정확하고 가벼우므로 투영 경로는 유지했다.
+- `[근본 교체]` `SkyLightingCycleController` 단일 권위 안에서 `512×512` 동적 밀도 RT와 최종 투과율 Cookie RT를 분리했다. `128×128m` 주기의 타일 가능한 저주파 2/4/8 지배 형상에 Worley 둥근 굴곡을 한 번만 더하고, 16/29 세부 노이즈는 경계에서만 감산한다. 모든 결과는 연속 밀도 하나로 합친 뒤 `1 - density × weatherOpacity × 0.42`로 직사광만 감쇠한다. 밀도는 4Hz로만 갱신하고 서로 다른 스케일의 매우 느린 상대 이동으로 형태를 바꾸며, 기존 서→동 바람 Cookie offset은 매 프레임 이동한다. 사용하지 않게 된 고정 PNG는 프로젝트 전체 dependency 0건 확인 뒤 휴지통으로 옮겼다.
+- `[Unity 컴파일·Play Mode 호출 확인]` Unity 재컴파일·profile validation과 2-pass shader supported·compiler error/warning 0에서 `128m·512px·coverage 0.38·0.25초`를 확인했다. `GameMap1` 맑은 정오 한 Play Session에서 최종 Cookie `512×512`, 타일 경계 평균 채널차 `좌우 0.271/255·상하 0.613/255`였고, 8초 뒤 내부 형상은 평균 `2.894/255`, 3 이상 변화 픽셀 `14.2%`로 급격한 교체 없이 변화했다. Clear→Rain→Clear는 구름 농도 `0.902→0→0.902`, 강수 `0→1→0`으로 복원됐고 종료 뒤 `GameMap1`은 Edit Mode·scene clean이었다.
+- `[보존·경계]` 11키 낮밤·고도별 경계/농도·투영 보정·비/차폐·웅덩이·로컬광·Player/Camera/씬 흐름은 변경하지 않았다. Game View의 최종 구름 크기·농도는 사용자 아트 판단, 장시간 날씨와 GPU ms·Player build는 미검증이다. Console의 BrokenVector 구버전 직렬화 오류와 시드 비교용 동적 검증 명령의 RenderTexture release 경고는 이번 런타임 코드와 분리했으며 지워서 덮지 않았다.

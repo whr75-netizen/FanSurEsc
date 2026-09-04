@@ -28,9 +28,16 @@ MonoBehaviour:
   minimumLightColor: {r: 0.15, g: 0.2, b: 0.4, a: 1}
   minimumAmbientIntensity: 0.38
   minimumDirectionalIntensity: 0.12
-  cloudShadowCookie: {fileID: 2800000, guid: 4b174fff0c1f5fa4889c8e35841ec71f, type: 3}
-  cloudShadowFilterShader: {fileID: 4800000, guid: b063d449ce9e1254fa0df00da032ac2c, type: 3}
-  cloudShadowCookieSize: {x: 24, y: 24}
+  cloudShadowGeneratorShader: {fileID: 4800000, guid: b063d449ce9e1254fa0df00da032ac2c, type: 3}
+  cloudShadowWorldSize: {x: 128, y: 128}
+  cloudShadowResolution: 512
+  cloudShadowUpdateInterval: 0.25
+  cloudShadowEvolutionSpeed: 0.025
+  cloudShadowCoverage: 0.38
+  cloudShadowBillowStrength: 0.7
+  cloudShadowErosionStrength: 0.32
+  cloudShadowMaximumAttenuation: 0.42
+  cloudShadowSeed: 1979
   cloudShadowWorldVelocity: {x: 0.75, y: 0}
   lowElevationCloudShadowSoftnessMip: 1.25
   highElevationCloudShadowSoftnessMip: 0.25

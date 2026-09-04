@@ -286,6 +286,13 @@ namespace FantasySurvival.WorldLighting
         private const float DefaultHighElevationCloudShadowSoftnessMip = 0.25f;
         private const float DefaultLowElevationCloudShadowOpacity = 0.55f;
         private const float DefaultHighElevationCloudShadowOpacity = 0.90f;
+        private const int DefaultCloudShadowResolution = 512;
+        private const float DefaultCloudShadowUpdateInterval = 0.25f;
+        private const float DefaultCloudShadowEvolutionSpeed = 0.025f;
+        private const float DefaultCloudShadowCoverage = 0.38f;
+        private const float DefaultCloudShadowBillowStrength = 0.70f;
+        private const float DefaultCloudShadowErosionStrength = 0.32f;
+        private const float DefaultCloudShadowMaximumAttenuation = 0.42f;
         private static readonly Color DefaultMinimumLightColor =
             new Color(0.15f, 0.20f, 0.40f, 1f);
 
@@ -311,11 +318,32 @@ namespace FantasySurvival.WorldLighting
             DefaultMinimumAmbientIntensity;
         [SerializeField, Min(0f)] private float minimumDirectionalIntensity =
             DefaultMinimumDirectionalIntensity;
-        [Tooltip("Linear repeating cookie with mipmaps and Trilinear filtering.")]
-        [SerializeField] private Texture2D cloudShadowCookie;
-        [SerializeField] private Shader cloudShadowFilterShader;
-        [Tooltip("Desired size of one cookie repeat on horizontal ground.")]
-        [SerializeField] private Vector2 cloudShadowCookieSize = new Vector2(24f, 24f);
+        [FormerlySerializedAs("cloudShadowFilterShader")]
+        [SerializeField] private Shader cloudShadowGeneratorShader;
+        [FormerlySerializedAs("cloudShadowCookieSize")]
+        [Tooltip("Desired size of one procedural shadow field repeat on horizontal ground.")]
+        [SerializeField] private Vector2 cloudShadowWorldSize = new Vector2(128f, 128f);
+        [Tooltip("Power-of-two resolution of the generated cloud density and light cookie.")]
+        [SerializeField] private int cloudShadowResolution = DefaultCloudShadowResolution;
+        [Tooltip("Seconds between slow cloud-shape evolution updates. Wind translation remains per-frame.")]
+        [SerializeField, Min(0.05f)] private float cloudShadowUpdateInterval =
+            DefaultCloudShadowUpdateInterval;
+        [Tooltip("Rate at which the cloud density evolves independently of wind translation.")]
+        [SerializeField, Min(0f)] private float cloudShadowEvolutionSpeed =
+            DefaultCloudShadowEvolutionSpeed;
+        [Tooltip("Art-directed coverage threshold; it approximates, but does not equal, occupied area.")]
+        [SerializeField, Range(0f, 1f)] private float cloudShadowCoverage =
+            DefaultCloudShadowCoverage;
+        [Tooltip("Influence of rounded billows on the large connected cloud mass.")]
+        [SerializeField, Range(0f, 1f)] private float cloudShadowBillowStrength =
+            DefaultCloudShadowBillowStrength;
+        [Tooltip("Fine breakup applied only near cloud edges.")]
+        [SerializeField, Range(0f, 1f)] private float cloudShadowErosionStrength =
+            DefaultCloudShadowErosionStrength;
+        [Tooltip("Maximum fraction of direct sky light removed by a dense cloud.")]
+        [SerializeField, Range(0f, 1f)] private float cloudShadowMaximumAttenuation =
+            DefaultCloudShadowMaximumAttenuation;
+        [SerializeField] private int cloudShadowSeed = 1979;
         [FormerlySerializedAs("cloudShadowVelocity")]
         [Tooltip("World X/Z units per real second. Positive X moves west to east.")]
         [SerializeField] private Vector2 cloudShadowWorldVelocity = new Vector2(0.75f, 0f);
@@ -349,9 +377,16 @@ namespace FantasySurvival.WorldLighting
         public Color MinimumLightColor => minimumLightColor;
         public float MinimumAmbientIntensity => minimumAmbientIntensity;
         public float MinimumDirectionalIntensity => minimumDirectionalIntensity;
-        public Texture2D CloudShadowCookie => cloudShadowCookie;
-        public Shader CloudShadowFilterShader => cloudShadowFilterShader;
-        public Vector2 CloudShadowCookieSize => cloudShadowCookieSize;
+        public Shader CloudShadowGeneratorShader => cloudShadowGeneratorShader;
+        public Vector2 CloudShadowWorldSize => cloudShadowWorldSize;
+        public int CloudShadowResolution => cloudShadowResolution;
+        public float CloudShadowUpdateInterval => cloudShadowUpdateInterval;
+        public float CloudShadowEvolutionSpeed => cloudShadowEvolutionSpeed;
+        public float CloudShadowCoverage => cloudShadowCoverage;
+        public float CloudShadowBillowStrength => cloudShadowBillowStrength;
+        public float CloudShadowErosionStrength => cloudShadowErosionStrength;
+        public float CloudShadowMaximumAttenuation => cloudShadowMaximumAttenuation;
+        public int CloudShadowSeed => cloudShadowSeed;
         public Vector2 CloudShadowWorldVelocity => cloudShadowWorldVelocity;
         public float LowElevationCloudShadowSoftnessMip =>
             lowElevationCloudShadowSoftnessMip;
@@ -521,27 +556,27 @@ namespace FantasySurvival.WorldLighting
                 return false;
             }
 
-            if (cloudShadowCookie != null &&
-                (!IsFinite(cloudShadowCookieSize) ||
-                 cloudShadowCookieSize.x <= 0f ||
-                 cloudShadowCookieSize.y <= 0f ||
+            if (cloudShadowGeneratorShader != null &&
+                (!IsFinite(cloudShadowWorldSize) ||
+                 cloudShadowWorldSize.x <= 0f ||
+                 cloudShadowWorldSize.y <= 0f ||
+                 cloudShadowResolution < 128 ||
+                 cloudShadowResolution > 1024 ||
+                 !Mathf.IsPowerOfTwo(cloudShadowResolution) ||
+                 !IsFinite(cloudShadowUpdateInterval) ||
+                 cloudShadowUpdateInterval < 0.05f ||
+                 !IsFiniteNonNegative(cloudShadowEvolutionSpeed) ||
+                 !IsFiniteNonNegative(cloudShadowCoverage) ||
+                 cloudShadowCoverage > 1f ||
+                 !IsFiniteNonNegative(cloudShadowBillowStrength) ||
+                 cloudShadowBillowStrength > 1f ||
+                 !IsFiniteNonNegative(cloudShadowErosionStrength) ||
+                 cloudShadowErosionStrength > 1f ||
+                 !IsFiniteNonNegative(cloudShadowMaximumAttenuation) ||
+                 cloudShadowMaximumAttenuation > 1f ||
                  !IsFinite(cloudShadowWorldVelocity)))
             {
-                error = "Cloud shadow cookie size must be positive and its world velocity must be finite.";
-                return false;
-            }
-
-            if (cloudShadowCookie != null && cloudShadowFilterShader == null)
-            {
-                error = "Cloud shadow cookie requires its prefilter shader.";
-                return false;
-            }
-
-            if (cloudShadowCookie != null &&
-                (cloudShadowCookie.mipmapCount <= 1 ||
-                 cloudShadowCookie.filterMode != FilterMode.Trilinear))
-            {
-                error = "Cloud shadow cookie requires mipmaps and Trilinear filtering.";
+                error = "Procedural cloud shadow settings require a power-of-two 128-1024 resolution, positive world size/update interval, and finite normalized shaping values.";
                 return false;
             }
 

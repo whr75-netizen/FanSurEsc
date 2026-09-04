@@ -4,6 +4,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
     {
         _OutlineColor("Outline Color", Color) = (0.025, 0.025, 0.03, 1)
         _ArtPixelSize("Screen Pixels Per Art Cell", Range(1, 8)) = 3
+        _ScreenPixelSize("Screen-Pixel Body Cell Size", Range(1, 12)) = 5
         _CoverageThreshold("Mask Threshold", Range(0.05, 0.95)) = 0.35
         _InnerOverlapPixels("Inner Overlap (Screen Pixels)", Range(0, 3)) = 1
     }
@@ -28,11 +29,13 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
         TEXTURE2D(_CharacterSourceColor);
         TEXTURE2D(_CharacterScreenPixelMask);
         TEXTURE2D(_CharacterScreenPixelResolved);
+        TEXTURE2D(_CharacterScreenPixelOutlineDepth);
         TEXTURE2D(_CharacterSceneDepth);
 
         CBUFFER_START(UnityPerMaterial)
             half4 _OutlineColor;
             float _ArtPixelSize;
+            float _ScreenPixelSize;
             float _CoverageThreshold;
             float _InnerOverlapPixels;
         CBUFFER_END
@@ -188,8 +191,8 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
         half4 FragResolveScreenPixel(Varyings input) : SV_Target
         {
             int2 cellIndex = int2(floor(input.positionCS.xy));
-            int artPixelSize = clamp((int)round(_ArtPixelSize), 1, 8);
-            int2 cellOrigin = cellIndex * artPixelSize;
+            int screenPixelSize = clamp((int)round(_ScreenPixelSize), 1, 12);
+            int2 cellOrigin = cellIndex * screenPixelSize;
 
             uint sourceWidth;
             uint sourceHeight;
@@ -204,17 +207,17 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             bool foundVisibleCharacter = false;
 
             [loop]
-            for (int y = 0; y < 8; y++)
+            for (int y = 0; y < 12; y++)
             {
-                if (y >= artPixelSize)
+                if (y >= screenPixelSize)
                 {
                     break;
                 }
 
                 [loop]
-                for (int x = 0; x < 8; x++)
+                for (int x = 0; x < 12; x++)
                 {
-                    if (x >= artPixelSize)
+                    if (x >= screenPixelSize)
                     {
                         break;
                     }
@@ -259,11 +262,68 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                 (half)nearestEyeDepth);
         }
 
+        bool ScreenCellInBounds(int2 cell)
+        {
+            uint width;
+            uint height;
+            _CharacterScreenPixelResolved.GetDimensions(width, height);
+            return all(cell >= int2(0, 0)) &&
+                all(cell < int2(width, height));
+        }
+
+        half4 LoadScreenPixelCell(int2 cell)
+        {
+            if (!ScreenCellInBounds(cell))
+            {
+                return 0.0h;
+            }
+
+            return LOAD_TEXTURE2D(_CharacterScreenPixelResolved, cell);
+        }
+
+        half4 FragResolveScreenPixelOutline(Varyings input) : SV_Target
+        {
+            int2 cell = int2(floor(input.positionCS.xy));
+            if (LoadScreenPixelCell(cell).a > 0.0001h)
+            {
+                return 0.0h;
+            }
+
+            float nearestEyeDepth = 65504.0;
+            bool foundNeighbor = false;
+
+            [unroll]
+            for (int y = -1; y <= 1; y++)
+            {
+                [unroll]
+                for (int x = -1; x <= 1; x++)
+                {
+                    if (x == 0 && y == 0)
+                    {
+                        continue;
+                    }
+
+                    float neighborDepth =
+                        (float)LoadScreenPixelCell(cell + int2(x, y)).a;
+                    if (neighborDepth > 0.0001 &&
+                        (!foundNeighbor || neighborDepth < nearestEyeDepth))
+                    {
+                        nearestEyeDepth = neighborDepth;
+                        foundNeighbor = true;
+                    }
+                }
+            }
+
+            return foundNeighbor
+                ? half4((half)nearestEyeDepth, 0.0h, 0.0h, 1.0h)
+                : 0.0h;
+        }
+
         half4 FragCompositeScreenPixel(Varyings input) : SV_Target
         {
             int2 pixel = int2(floor(input.positionCS.xy));
-            int artPixelSize = clamp((int)round(_ArtPixelSize), 1, 8);
-            int2 cellIndex = pixel / artPixelSize;
+            int screenPixelSize = clamp((int)round(_ScreenPixelSize), 1, 12);
+            int2 cellIndex = pixel / screenPixelSize;
 
             uint resolvedWidth;
             uint resolvedHeight;
@@ -278,7 +338,14 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             half4 resolved = LOAD_TEXTURE2D(
                 _CharacterScreenPixelResolved,
                 cellIndex);
-            float characterEyeDepth = (float)resolved.a;
+            float bodyEyeDepth = (float)resolved.a;
+            float outlineEyeDepth = (float)LOAD_TEXTURE2D(
+                _CharacterScreenPixelOutlineDepth,
+                cellIndex).r;
+            bool isBody = bodyEyeDepth > 0.0001;
+            float characterEyeDepth = isBody
+                ? bodyEyeDepth
+                : outlineEyeDepth;
             clip(characterEyeDepth - 0.0001);
 
             float sceneRawDepth = LOAD_TEXTURE2D(
@@ -292,7 +359,9 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             // A coarse cell may extend beyond the original triangle edge, but
             // it must never paint across geometry that is actually nearer.
             clip(sceneEyeDepth + depthTolerance - characterEyeDepth);
-            return half4(resolved.rgb, 1.0h);
+            return isBody
+                ? half4(resolved.rgb, 1.0h)
+                : half4(_OutlineColor.rgb, 1.0h);
         }
         ENDHLSL
 
@@ -354,6 +423,22 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             HLSLPROGRAM
             #pragma vertex Vert
             #pragma fragment FragResolveScreenPixel
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "CharacterScreenPixelSingleOutline"
+
+            Blend One Zero
+            ColorMask R
+            Cull Off
+            ZWrite Off
+            ZTest Always
+
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragResolveScreenPixelOutline
             ENDHLSL
         }
 

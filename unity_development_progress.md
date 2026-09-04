@@ -2172,3 +2172,12 @@ Interactable (abstract base class)
 - `[격리·보존]` bit31 외곽선, 표시 root의 render-time snap, Player·일반 좀비 material과 AI/NavMesh/Collider/피격/시체 수명은 유지했다. `EnemyPixelComparisonTest`의 왼쪽은 기존 64px texture bake 대조군, 오른쪽만 원본 texture·UV grid 0과 screen-space opt-in을 사용한다. 별도 Camera·Manager·전체 화면 픽셀 필터는 추가하지 않았다.
 - `[Unity shader·Play 검증]` Unity 6.5/URP 17.5에서 C# compile, mask `4/4` pass와 composite `5/5` pass, 두 shader supported·compiler error 0을 확인했다. 전용 씬 Play 1회에서 왼쪽 opt-in false, 오른쪽 true, 활성 screen target 및 bit30·bit31을 확인했고 1024×640 camera render에서 밝은 내부 `3×3` 셀의 완전 단색 비율이 왼쪽 `1899/3555`, 오른쪽 `3643/3670`이었다. 임시 전면 Cube를 둔 별도 렌더에서 오른쪽 합성이 Cube 앞을 침범하지 않았고, 검증 Cube 제거·Edit Mode·scene clean을 확인했다.
 - `[현재 경계]` 서로 다른 screen-pixel 대상 둘이 같은 화면 셀을 공유하면 아직 개체 ID가 없어 가장 가까운 eye-depth 표본 하나가 그 셀을 대표한다. 실제 gameplay 좀비 body 적용, 접촉 개체별 ID buffer, 최종 셀 크기·해상도/줌 정책은 시험 결과를 보고 재개방한다. Console에는 기능 오류가 아니라 잘못된 MCP Camera Capture instance ID를 사용한 검증 도구 오류 2건이 남아 있으며 실제 렌더는 Editor camera의 명시적 RenderTexture로 대체 확인했다.
+
+---
+
+## 119. 화면공간 5px 셀과 단일 외곽선 `[CHARACTER-RENDER-01]`
+
+- `[원인][2026-09-04]` 화면공간 대상이 기존 bit31 외곽선과 bit30 화면 셀 경로에 동시에 포함되어 서로 다른 격자의 테두리가 겹쳤다. 모델 크기나 결과 위에 선을 덧씌우지 않고 두 외곽선 경로의 소유권을 분리했다.
+- `[구조]` bit31은 기존 로컬 조명용 전체 캐릭터 표식으로 보존하고 bit29를 일반 외곽선 전용으로 추가했다. 일반 대상은 기존 3px 외곽선, screen opt-in은 전용 5px 몸체 셀과 같은 저해상도 점유 mask의 `8방향 1셀 팽창 - 본체`만 사용한다. 새 R16 buffer에는 한 겹 외곽선의 eye depth만 기록하며 최종 합성은 본체·외곽선 모두 camera depth를 통과한다.
+- `[Play Mode 확인]` 비교 씬에서 왼쪽 일반 renderer는 bit31+bit29, 오른쪽 screen renderer는 bit31+bit30으로 상호배타임을 확인했다. Unity C# compile, composite shader `6/6` pass·compiler error 0 뒤 1024×640 렌더에서 오른쪽 몸체가 5px 셀로 커지고 외곽선이 같은 격자의 외부 한 셀 ring으로만 출력됨을 확인했다. Play 종료 후 scene은 clean이다.
+- `[보존·경계]` Player·일반 좀비의 기존 3px 외곽선과 로컬 조명 stencil은 유지했다. 실제 gameplay screen 적용, 이동·줌 위상, 접촉한 여러 screen 대상의 ID 분리는 아직 후속이다.

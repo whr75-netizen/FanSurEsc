@@ -12,7 +12,13 @@ namespace FantasySurvival.Rendering
     public sealed class CharacterSilhouetteRendererFeature : ScriptableRendererFeature
     {
         private const int RequiredMaskPassCount = 4;
-        private const int RequiredCompositePassCount = 5;
+        private const int RequiredCompositePassCount = 6;
+        private const int ExpandPassIndex = 0;
+        private const int ClassicOutlinePassIndex = 1;
+        private const int ScreenSourceCopyPassIndex = 2;
+        private const int ScreenResolvePassIndex = 3;
+        private const int ScreenOutlinePassIndex = 4;
+        private const int ScreenCompositePassIndex = 5;
 
         [System.Serializable]
         public sealed class Settings
@@ -83,10 +89,14 @@ namespace FantasySurvival.Rendering
                 Shader.PropertyToID("_CharacterScreenPixelMask");
             private static readonly int ScreenPixelResolvedTextureId =
                 Shader.PropertyToID("_CharacterScreenPixelResolved");
+            private static readonly int ScreenPixelOutlineDepthTextureId =
+                Shader.PropertyToID("_CharacterScreenPixelOutlineDepth");
             private static readonly int SceneDepthTextureId =
                 Shader.PropertyToID("_CharacterSceneDepth");
             private static readonly int ArtPixelSizeId =
                 Shader.PropertyToID("_ArtPixelSize");
+            private static readonly int ScreenPixelSizeId =
+                Shader.PropertyToID("_ScreenPixelSize");
             private static readonly int CharacterArtPixelSizeId =
                 Shader.PropertyToID("_CharacterArtPixelSize");
 
@@ -147,7 +157,7 @@ namespace FantasySurvival.Rendering
                     resources.cameraColor.IsValid() &&
                     resources.cameraDepthTexture.IsValid())
                 {
-                    int artPixelSize = GetArtPixelSize();
+                    int screenPixelSize = GetScreenPixelSize();
 
                     RenderTextureDescriptor sourceDescriptor =
                         cameraData.cameraTargetDescriptor;
@@ -175,12 +185,12 @@ namespace FantasySurvival.Rendering
                     RenderTextureDescriptor resolvedDescriptor = sourceDescriptor;
                     resolvedDescriptor.width = Mathf.Max(
                         1,
-                        (resolvedDescriptor.width + artPixelSize - 1) /
-                            artPixelSize);
+                        (resolvedDescriptor.width + screenPixelSize - 1) /
+                            screenPixelSize);
                     resolvedDescriptor.height = Mathf.Max(
                         1,
-                        (resolvedDescriptor.height + artPixelSize - 1) /
-                            artPixelSize);
+                        (resolvedDescriptor.height + screenPixelSize - 1) /
+                            screenPixelSize);
                     resolvedDescriptor.graphicsFormat =
                         GraphicsFormat.R16G16B16A16_SFloat;
                     TextureHandle screenPixelResolved =
@@ -188,6 +198,17 @@ namespace FantasySurvival.Rendering
                             renderGraph,
                             resolvedDescriptor,
                             "_CharacterScreenPixelResolved",
+                            true,
+                            FilterMode.Point);
+
+                    RenderTextureDescriptor outlineDescriptor =
+                        resolvedDescriptor;
+                    outlineDescriptor.graphicsFormat = GraphicsFormat.R16_SFloat;
+                    TextureHandle screenPixelOutlineDepth =
+                        UniversalRenderer.CreateRenderGraphTexture(
+                            renderGraph,
+                            outlineDescriptor,
+                            "_CharacterScreenPixelOutlineDepth",
                             true,
                             FilterMode.Point);
 
@@ -205,10 +226,15 @@ namespace FantasySurvival.Rendering
                         sourceColor,
                         screenPixelMask,
                         screenPixelResolved);
+                    RecordScreenPixelOutlinePass(
+                        renderGraph,
+                        screenPixelResolved,
+                        screenPixelOutlineDepth);
                     RecordScreenPixelCompositePass(
                         renderGraph,
                         resources,
-                        screenPixelResolved);
+                        screenPixelResolved,
+                        screenPixelOutlineDepth);
                 }
 
                 RecordCompositePass(renderGraph, resources, mask, quantizedMask);
@@ -220,6 +246,15 @@ namespace FantasySurvival.Rendering
                     Mathf.RoundToInt(compositeMaterial.GetFloat(ArtPixelSizeId)),
                     1,
                     8);
+            }
+
+            private int GetScreenPixelSize()
+            {
+                return Mathf.Clamp(
+                    Mathf.RoundToInt(
+                        compositeMaterial.GetFloat(ScreenPixelSizeId)),
+                    1,
+                    12);
             }
 
             private void RecordMaskPass(
@@ -263,7 +298,7 @@ namespace FantasySurvival.Rendering
                 FilteringSettings filteringSettings = new FilteringSettings(
                     RenderQueueRange.opaque,
                     -1,
-                    CharacterSilhouetteSubject.RenderingLayerMask);
+                    CharacterSilhouetteSubject.ClassicOutlineRenderingLayerMask);
 
                 RendererListParams rawRendererListParams = new RendererListParams(
                     renderingData.cullResults,
@@ -322,7 +357,7 @@ namespace FantasySurvival.Rendering
                     context.cmd.DrawProcedural(
                         Matrix4x4.identity,
                         data.material,
-                        2,
+                        ScreenSourceCopyPassIndex,
                         MeshTopology.Triangles,
                         3,
                         1);
@@ -434,7 +469,47 @@ namespace FantasySurvival.Rendering
                     context.cmd.DrawProcedural(
                         Matrix4x4.identity,
                         data.material,
+                        ScreenResolvePassIndex,
+                        MeshTopology.Triangles,
                         3,
+                        1);
+                });
+            }
+
+            private void RecordScreenPixelOutlinePass(
+                RenderGraph renderGraph,
+                TextureHandle screenPixelResolved,
+                TextureHandle screenPixelOutlineDepth)
+            {
+                using IRasterRenderGraphBuilder builder =
+                    renderGraph.AddRasterRenderPass<ScreenPixelOutlinePassData>(
+                        "Character Screen Pixel Single Outline",
+                        out ScreenPixelOutlinePassData passData);
+
+                passData.screenPixelResolved = screenPixelResolved;
+                passData.material = compositeMaterial;
+
+                builder.UseTexture(screenPixelResolved, AccessFlags.Read);
+                builder.SetRenderAttachment(
+                    screenPixelOutlineDepth,
+                    0,
+                    AccessFlags.Write);
+                builder.SetRenderFunc(static (
+                    ScreenPixelOutlinePassData data,
+                    RasterGraphContext context) =>
+                {
+                    data.material.SetTexture(
+                        ScreenPixelResolvedTextureId,
+                        data.screenPixelResolved);
+                    context.cmd.ClearRenderTarget(
+                        RTClearFlags.Color,
+                        Color.clear,
+                        1,
+                        0);
+                    context.cmd.DrawProcedural(
+                        Matrix4x4.identity,
+                        data.material,
+                        ScreenOutlinePassIndex,
                         MeshTopology.Triangles,
                         3,
                         1);
@@ -444,7 +519,8 @@ namespace FantasySurvival.Rendering
             private void RecordScreenPixelCompositePass(
                 RenderGraph renderGraph,
                 UniversalResourceData resources,
-                TextureHandle screenPixelResolved)
+                TextureHandle screenPixelResolved,
+                TextureHandle screenPixelOutlineDepth)
             {
                 using IRasterRenderGraphBuilder builder =
                     renderGraph.AddRasterRenderPass<ScreenPixelCompositePassData>(
@@ -452,6 +528,7 @@ namespace FantasySurvival.Rendering
                         out ScreenPixelCompositePassData passData);
 
                 passData.screenPixelResolved = screenPixelResolved;
+                passData.screenPixelOutlineDepth = screenPixelOutlineDepth;
                 // Sample URP's resolved camera-depth texture. activeDepthTexture
                 // remains the attachment used while drawing the visibility mask,
                 // but is not guaranteed to be safely sampleable on every backend.
@@ -459,6 +536,7 @@ namespace FantasySurvival.Rendering
                 passData.material = compositeMaterial;
 
                 builder.UseTexture(screenPixelResolved, AccessFlags.Read);
+                builder.UseTexture(screenPixelOutlineDepth, AccessFlags.Read);
                 builder.UseTexture(resources.cameraDepthTexture, AccessFlags.Read);
                 builder.SetRenderAttachment(
                     resources.activeColorTexture,
@@ -472,12 +550,15 @@ namespace FantasySurvival.Rendering
                         ScreenPixelResolvedTextureId,
                         data.screenPixelResolved);
                     data.material.SetTexture(
+                        ScreenPixelOutlineDepthTextureId,
+                        data.screenPixelOutlineDepth);
+                    data.material.SetTexture(
                         SceneDepthTextureId,
                         data.sceneDepth);
                     context.cmd.DrawProcedural(
                         Matrix4x4.identity,
                         data.material,
-                        RequiredCompositePassCount - 1,
+                        ScreenCompositePassIndex,
                         MeshTopology.Triangles,
                         3,
                         1);
@@ -506,7 +587,7 @@ namespace FantasySurvival.Rendering
                     context.cmd.DrawProcedural(
                         Matrix4x4.identity,
                         data.material,
-                        0,
+                        ExpandPassIndex,
                         MeshTopology.Triangles,
                         3,
                         1);
@@ -543,7 +624,7 @@ namespace FantasySurvival.Rendering
                     context.cmd.DrawProcedural(
                         Matrix4x4.identity,
                         data.material,
-                        1,
+                        ClassicOutlinePassIndex,
                         MeshTopology.Triangles,
                         3,
                         1);
@@ -587,9 +668,16 @@ namespace FantasySurvival.Rendering
                 public Material material;
             }
 
+            private sealed class ScreenPixelOutlinePassData
+            {
+                public TextureHandle screenPixelResolved;
+                public Material material;
+            }
+
             private sealed class ScreenPixelCompositePassData
             {
                 public TextureHandle screenPixelResolved;
+                public TextureHandle screenPixelOutlineDepth;
                 public TextureHandle sceneDepth;
                 public Material material;
             }

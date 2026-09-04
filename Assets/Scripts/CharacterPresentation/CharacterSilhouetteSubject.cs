@@ -15,10 +15,11 @@ namespace FantasySurvival.CharacterPresentation
     {
         public const uint RenderingLayerMask = 1u << 31;
         public const uint ScreenPixelRenderingLayerMask = 1u << 30;
+        public const uint ClassicOutlineRenderingLayerMask = 1u << 29;
 
         [SerializeField]
         [Tooltip("Quantize the already-lit visible character color in screen space. " +
-            "This is an opt-in comparison mode; the silhouette outline remains active either way.")]
+            "The screen path supplies its own matching one-cell silhouette outline.")]
         private bool screenSpacePixelColor;
 
         private static readonly int PixelGridAnchorId =
@@ -130,21 +131,30 @@ namespace FantasySurvival.CharacterPresentation
                 if (ownedRenderer != null && !currentRenderers.Contains(ownedRenderer))
                 {
                     ownedRenderer.renderingLayerMask &=
-                        ~(RenderingLayerMask | ScreenPixelRenderingLayerMask);
+                        ~(RenderingLayerMask |
+                            ScreenPixelRenderingLayerMask |
+                            ClassicOutlineRenderingLayerMask);
                 }
             }
 
             ownedRenderers.Clear();
             foreach (Renderer childRenderer in renderers)
             {
+                // Bit 31 remains the shared character marker used by local
+                // lighting. The two outline presentation paths are exclusive,
+                // so a screen-pixel subject cannot receive both outlines.
                 childRenderer.renderingLayerMask |= RenderingLayerMask;
                 if (screenSpacePixelColor)
                 {
                     childRenderer.renderingLayerMask |= ScreenPixelRenderingLayerMask;
+                    childRenderer.renderingLayerMask &=
+                        ~ClassicOutlineRenderingLayerMask;
                 }
                 else
                 {
                     childRenderer.renderingLayerMask &= ~ScreenPixelRenderingLayerMask;
+                    childRenderer.renderingLayerMask |=
+                        ClassicOutlineRenderingLayerMask;
                 }
 
                 ownedRenderers.Add(childRenderer);
@@ -280,7 +290,9 @@ namespace FantasySurvival.CharacterPresentation
                 if (ownedRenderer != null)
                 {
                     ownedRenderer.renderingLayerMask &=
-                        ~(RenderingLayerMask | ScreenPixelRenderingLayerMask);
+                        ~(RenderingLayerMask |
+                            ScreenPixelRenderingLayerMask |
+                            ClassicOutlineRenderingLayerMask);
                 }
             }
 

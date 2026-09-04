@@ -646,6 +646,10 @@ namespace FantasySurvival.WorldLighting
 
         private static SkyLightingKeyframe[] CreateClearSkyDefaults()
         {
+            // Keep neutral daylight isolated from the short, art-directed
+            // sunrise and sunset palettes. Wide warm keyframe spans make the
+            // entire morning or afternoon look yellow instead of producing a
+            // readable golden-hour transition.
             return new[]
             {
                 new SkyLightingKeyframe(
@@ -662,18 +666,57 @@ namespace FantasySurvival.WorldLighting
                     0.18f,
                     0f),
                 new SkyLightingKeyframe(
-                    6.5f,
+                    4.75f,
+                    SkyTimePhase.Night,
+                    new Color(0.075f, 0.105f, 0.22f),
+                    new Color(0.045f, 0.07f, 0.15f),
+                    new Color(0.018f, 0.03f, 0.065f),
+                    0.43f,
+                    0.15f,
+                    new Color(1f, 0.72f, 0.50f),
+                    0f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.24f,
+                    0f),
+                new SkyLightingKeyframe(
+                    5.75f,
                     SkyTimePhase.Morning,
-                    new Color(0.39530500f, 0.39530500f, 0.39530500f),
-                    new Color(0.33695210f, 0.33695210f, 0.33695210f),
-                    new Color(0.10527133f, 0.10527133f, 0.10527133f),
-                    0.52f,
-                    0.28f,
-                    Color.white,
-                    0.28961600f,
+                    new Color(0.205f, 0.16f, 0.17f),
+                    new Color(0.285f, 0.145f, 0.085f),
+                    new Color(0.065f, 0.042f, 0.038f),
+                    0.46f,
+                    0.19f,
+                    new Color(1f, 0.70f, 0.46f),
+                    0.08f,
                     new Color(0.62f, 0.72f, 1f),
                     0.26f,
-                    0.72f),
+                    0.30f),
+                new SkyLightingKeyframe(
+                    6.5f,
+                    SkyTimePhase.Morning,
+                    new Color(0.325f, 0.265f, 0.235f),
+                    new Color(0.39f, 0.225f, 0.125f),
+                    new Color(0.105f, 0.068f, 0.050f),
+                    0.51f,
+                    0.25f,
+                    new Color(1f, 0.78f, 0.58f),
+                    0.30f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.22f,
+                    0.66f),
+                new SkyLightingKeyframe(
+                    7.5f,
+                    SkyTimePhase.Morning,
+                    new Color(0.430f, 0.420f, 0.405f),
+                    new Color(0.355f, 0.345f, 0.330f),
+                    new Color(0.112f, 0.108f, 0.102f),
+                    0.57f,
+                    0.32f,
+                    new Color(1f, 0.95f, 0.90f),
+                    0.58f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.08f,
+                    0.78f),
                 new SkyLightingKeyframe(
                     10f,
                     SkyTimePhase.Day,
@@ -701,6 +744,32 @@ namespace FantasySurvival.WorldLighting
                     0.04f,
                     0.80f),
                 new SkyLightingKeyframe(
+                    17.5f,
+                    SkyTimePhase.Day,
+                    new Color(0.440f, 0.410f, 0.370f),
+                    new Color(0.355f, 0.300f, 0.235f),
+                    new Color(0.112f, 0.095f, 0.075f),
+                    0.56f,
+                    0.35f,
+                    new Color(1f, 0.92f, 0.82f),
+                    0.38f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.10f,
+                    0.76f),
+                new SkyLightingKeyframe(
+                    18.25f,
+                    SkyTimePhase.Night,
+                    new Color(0.245f, 0.175f, 0.185f),
+                    new Color(0.335f, 0.165f, 0.095f),
+                    new Color(0.078f, 0.048f, 0.045f),
+                    0.50f,
+                    0.26f,
+                    new Color(1f, 0.68f, 0.44f),
+                    0.13f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.26f,
+                    0.42f),
+                new SkyLightingKeyframe(
                     19.5f,
                     SkyTimePhase.Night,
                     new Color(0.10f, 0.13f, 0.24f),
@@ -712,6 +781,19 @@ namespace FantasySurvival.WorldLighting
                     0f,
                     new Color(0.62f, 0.72f, 1f),
                     0.32f,
+                    0f),
+                new SkyLightingKeyframe(
+                    22f,
+                    SkyTimePhase.Night,
+                    new Color(0.075f, 0.10f, 0.20f),
+                    new Color(0.048f, 0.065f, 0.13f),
+                    new Color(0.018f, 0.029f, 0.058f),
+                    0.46f,
+                    0.16f,
+                    new Color(0.56f, 0.64f, 0.84f),
+                    0f,
+                    new Color(0.62f, 0.72f, 1f),
+                    0.24f,
                     0f)
             };
         }

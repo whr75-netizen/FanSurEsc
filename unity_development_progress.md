@@ -2190,3 +2190,12 @@ Interactable (abstract base class)
 - `[근본 수정]` 기존 `_CharacterPixelGridAnchorWS`를 화면색 경로에도 사용한다. 각 screen opt-in renderer가 자기 presentation root를 기준으로 한 칸당 가시 seed 한 점만 기록하고, full-resolution transient buffer에서 그 seed의 이미 계산된 재질·조명색과 eye depth를 `5×5`로 확장한다. 따라서 서로 다른 캐릭터의 격자 위상을 하나의 viewport 저해상도 격자에 강제로 맞추지 않으며 RGB history·시간 보간·전체 화면 저해상도화는 없다.
 - `[Play Mode 수치·시각 확인]` `EnemyPixelComparisonTest`의 오른쪽 대상만 남기고 Animator pose를 고정한 뒤 Camera right 방향으로 정확히 1 screen pixel 이동시켰다. 이동 전 결과와 이동 후 결과를 1px 맞춰 비교한 캐릭터 영역 `58,475`픽셀 중 채널 차이 `2/255` 초과는 `0`, 최대 차이는 `1/255`였다. 1280×720 렌더에서 5px 본체와 같은 격자의 단일 외곽선도 유지됐다. 두 shader는 supported이며 compiler error 0, scene dirty false였다.
 - `[보존·경계]` 원래 Animator 속도·clip·AI·NavMesh·Collider·조명·왼쪽 64px 대조군은 변경하지 않았다. 뼈가 실제로 변형한 표면은 해당 root-local seed에서만 정상 갱신되며, 10~12fps 표현용 pose stepping은 별도 시각 결정 전 강제하지 않는다. 접촉한 여러 개체의 정확한 내부 경계에는 stable Character ID가, full-resolution seed 확장의 최종 비용에는 GPU Profile이 필요하다. 첫 검증에서 RenderGraph pass 안의 전역값 변경 오류를 확인했으며 픽셀 크기 소유를 mask material로 옮겨 제거했다. 해당 과거 오류 기록은 Console에서 지우지 않았다.
+
+---
+
+## 121. 좁은 골든아워 팔레트와 연기형 구름 그림자 `[ENVIRONMENT-01]`
+
+- `[사용자 피드백·원인][2026-09-04]` 기존 Clear 프로필은 0·6.5·10·16·19.5시 다섯 키뿐이라 새벽·일출·일몰·황혼을 각각 조형하기 어려웠다. 구름 Cookie는 64×64 안의 32×32 도안을 정확히 2배 확대한 구조여서 24m 투영 기준 한 매크로 셀이 0.75m였고, 줌에 따라 화면에서 거대한 사각 덩어리처럼 보였다. Controller의 시간 보간·구름 이동·투영은 원인이 아니었다.
+- `[근본 수정]` 같은 `SkyLightingCycleController`와 단일 Cookie GUID를 유지했다. Clear 프로필을 0·4.75·5.75·6.5·7.5·10·16·17.5·18.25·19.5·22시의 11개 키로 세분화해 청색 새벽→짧은 주황 일출→중성 낮→짧은 주황 일몰→청색 황혼→0시 최저를 기존 SmoothStep 보간으로 잇는다. Cookie는 256×256에서 크기·방향이 다른 원·타원 밀도장을 결합하고 가장자리 홈을 감산한 6개 연기형 군집으로 교체했으며, 옅은 외곽부터 짙은 중심까지 네 그림자 농도를 한 소스에 저장했다. 새 구름 Manager·오브젝트·렌더 패스는 추가하지 않았다.
+- `[정적·Play Mode 검증]` 프로필 asset과 코드 기본값의 11키 일치를 확인하고 0~24시 1분 표본 1,440개에서 0시가 최저, 인접 최대 변화량 0.0088임을 확인했다. Cookie는 256×256·mipmap 9·Trilinear·Repeat·선형·무압축이며 그림자 점유 22.5%, 네 농도 모두 존재하고 12px 반복 경계 침범은 0이었다. `GameMap1` 한 Play Session의 직교 size 3.5·5·8 렌더에서 둥근 군집과 픽셀 경계가 유지됐고, 6.5·12·18.25·0시 대표 프레임을 확인했다. Clear→Rain→Clear는 강수 `0→1→0`, 구름 농도 `0.902→0→0.902`로 복원됐다.
+- `[보존·경계]` 비·물 튐·웅덩이·가로등·빛줄기·60초 시험 주기, Player·Camera·씬 흐름과 사용자 dirty asset은 변경하지 않았다. Unity 6의 새 Entity ID를 구식 Instance ID로 받는 MCP Camera Capture 1회가 검증 도구 오류를 남겼지만, 게임 Camera의 명시적 RenderTexture 렌더와 환경 호출에서는 신규 게임 코드 오류를 확인하지 않았다. 최종 색감·구름 농도는 사용자 아트 판단, 실제 장시간 반복 이음새와 Player build·GPU Profile은 미검증이다.

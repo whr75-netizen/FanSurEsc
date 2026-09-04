@@ -71,18 +71,54 @@ MonoBehaviour:
     moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
     moonIntensity: 0.18
     shadowStrength: 0
-  - hour: 6.5
+  - hour: 4.75
+    phase: 2
+    ambientSkyColor: {r: 0.075, g: 0.105, b: 0.22, a: 1}
+    ambientEquatorColor: {r: 0.045, g: 0.07, b: 0.15, a: 1}
+    ambientGroundColor: {r: 0.018, g: 0.03, b: 0.065, a: 1}
+    ambientIntensity: 0.43
+    reflectionIntensity: 0.15
+    sunColor: {r: 1, g: 0.72, b: 0.5, a: 1}
+    sunIntensity: 0
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.24
+    shadowStrength: 0
+  - hour: 5.75
     phase: 0
-    ambientSkyColor: {r: 0.395305, g: 0.395305, b: 0.395305, a: 1}
-    ambientEquatorColor: {r: 0.3369521, g: 0.3369521, b: 0.3369521, a: 1}
-    ambientGroundColor: {r: 0.10527133, g: 0.10527133, b: 0.10527133, a: 1}
-    ambientIntensity: 0.52
-    reflectionIntensity: 0.28
-    sunColor: {r: 1, g: 1, b: 1, a: 1}
-    sunIntensity: 0.289616
+    ambientSkyColor: {r: 0.205, g: 0.16, b: 0.17, a: 1}
+    ambientEquatorColor: {r: 0.285, g: 0.145, b: 0.085, a: 1}
+    ambientGroundColor: {r: 0.065, g: 0.042, b: 0.038, a: 1}
+    ambientIntensity: 0.46
+    reflectionIntensity: 0.19
+    sunColor: {r: 1, g: 0.7, b: 0.46, a: 1}
+    sunIntensity: 0.08
     moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
     moonIntensity: 0.26
-    shadowStrength: 0.72
+    shadowStrength: 0.3
+  - hour: 6.5
+    phase: 0
+    ambientSkyColor: {r: 0.325, g: 0.265, b: 0.235, a: 1}
+    ambientEquatorColor: {r: 0.39, g: 0.225, b: 0.125, a: 1}
+    ambientGroundColor: {r: 0.105, g: 0.068, b: 0.05, a: 1}
+    ambientIntensity: 0.51
+    reflectionIntensity: 0.25
+    sunColor: {r: 1, g: 0.78, b: 0.58, a: 1}
+    sunIntensity: 0.3
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.22
+    shadowStrength: 0.66
+  - hour: 7.5
+    phase: 0
+    ambientSkyColor: {r: 0.43, g: 0.42, b: 0.405, a: 1}
+    ambientEquatorColor: {r: 0.355, g: 0.345, b: 0.33, a: 1}
+    ambientGroundColor: {r: 0.112, g: 0.108, b: 0.102, a: 1}
+    ambientIntensity: 0.57
+    reflectionIntensity: 0.32
+    sunColor: {r: 1, g: 0.95, b: 0.9, a: 1}
+    sunIntensity: 0.58
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.08
+    shadowStrength: 0.78
   - hour: 10
     phase: 1
     ambientSkyColor: {r: 0.57616234, g: 0.57616234, b: 0.57616234, a: 1}
@@ -107,6 +143,30 @@ MonoBehaviour:
     moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
     moonIntensity: 0.04
     shadowStrength: 0.8
+  - hour: 17.5
+    phase: 1
+    ambientSkyColor: {r: 0.44, g: 0.41, b: 0.37, a: 1}
+    ambientEquatorColor: {r: 0.355, g: 0.3, b: 0.235, a: 1}
+    ambientGroundColor: {r: 0.112, g: 0.095, b: 0.075, a: 1}
+    ambientIntensity: 0.56
+    reflectionIntensity: 0.35
+    sunColor: {r: 1, g: 0.92, b: 0.82, a: 1}
+    sunIntensity: 0.38
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.1
+    shadowStrength: 0.76
+  - hour: 18.25
+    phase: 2
+    ambientSkyColor: {r: 0.245, g: 0.175, b: 0.185, a: 1}
+    ambientEquatorColor: {r: 0.335, g: 0.165, b: 0.095, a: 1}
+    ambientGroundColor: {r: 0.078, g: 0.048, b: 0.045, a: 1}
+    ambientIntensity: 0.5
+    reflectionIntensity: 0.26
+    sunColor: {r: 1, g: 0.68, b: 0.44, a: 1}
+    sunIntensity: 0.13
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.26
+    shadowStrength: 0.42
   - hour: 19.5
     phase: 2
     ambientSkyColor: {r: 0.1, g: 0.13, b: 0.24, a: 1}
@@ -118,4 +178,16 @@ MonoBehaviour:
     sunIntensity: 0
     moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
     moonIntensity: 0.32
+    shadowStrength: 0
+  - hour: 22
+    phase: 2
+    ambientSkyColor: {r: 0.075, g: 0.1, b: 0.2, a: 1}
+    ambientEquatorColor: {r: 0.048, g: 0.065, b: 0.13, a: 1}
+    ambientGroundColor: {r: 0.018, g: 0.029, b: 0.058, a: 1}
+    ambientIntensity: 0.46
+    reflectionIntensity: 0.16
+    sunColor: {r: 0.56, g: 0.64, b: 0.84, a: 1}
+    sunIntensity: 0
+    moonColor: {r: 0.62, g: 0.72, b: 1, a: 1}
+    moonIntensity: 0.24
     shadowStrength: 0

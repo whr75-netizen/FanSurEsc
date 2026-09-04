@@ -2181,3 +2181,12 @@ Interactable (abstract base class)
 - `[구조]` bit31은 기존 로컬 조명용 전체 캐릭터 표식으로 보존하고 bit29를 일반 외곽선 전용으로 추가했다. 일반 대상은 기존 3px 외곽선, screen opt-in은 전용 5px 몸체 셀과 같은 저해상도 점유 mask의 `8방향 1셀 팽창 - 본체`만 사용한다. 새 R16 buffer에는 한 겹 외곽선의 eye depth만 기록하며 최종 합성은 본체·외곽선 모두 camera depth를 통과한다.
 - `[Play Mode 확인]` 비교 씬에서 왼쪽 일반 renderer는 bit31+bit29, 오른쪽 screen renderer는 bit31+bit30으로 상호배타임을 확인했다. Unity C# compile, composite shader `6/6` pass·compiler error 0 뒤 1024×640 렌더에서 오른쪽 몸체가 5px 셀로 커지고 외곽선이 같은 격자의 외부 한 셀 ring으로만 출력됨을 확인했다. Play 종료 후 scene은 clean이다.
 - `[보존·경계]` Player·일반 좀비의 기존 3px 외곽선과 로컬 조명 stencil은 유지했다. 실제 gameplay screen 적용, 이동·줌 위상, 접촉한 여러 screen 대상의 ID 분리는 아직 후속이다.
+
+---
+
+## 120. 캐릭터 루트 부착형 화면 픽셀 `[CHARACTER-RENDER-01]`
+
+- `[사용자 피드백·원인][2026-09-04]` §118~119는 화면 원점에서 `5×5` 칸을 다시 나눠, 캐릭터가 한 화면 픽셀만 움직여도 각 칸의 표면 대표색을 새로 선택했다. 이는 애니메이션의 실제 변형과 무관한 이동 위상 변화까지 색 떨림으로 증폭했다. 셀 RGB 평균은 위상을 고치지 못하고 피부·옷·머리의 중간색을 만들므로 적용하지 않았다.
+- `[근본 수정]` 기존 `_CharacterPixelGridAnchorWS`를 화면색 경로에도 사용한다. 각 screen opt-in renderer가 자기 presentation root를 기준으로 한 칸당 가시 seed 한 점만 기록하고, full-resolution transient buffer에서 그 seed의 이미 계산된 재질·조명색과 eye depth를 `5×5`로 확장한다. 따라서 서로 다른 캐릭터의 격자 위상을 하나의 viewport 저해상도 격자에 강제로 맞추지 않으며 RGB history·시간 보간·전체 화면 저해상도화는 없다.
+- `[Play Mode 수치·시각 확인]` `EnemyPixelComparisonTest`의 오른쪽 대상만 남기고 Animator pose를 고정한 뒤 Camera right 방향으로 정확히 1 screen pixel 이동시켰다. 이동 전 결과와 이동 후 결과를 1px 맞춰 비교한 캐릭터 영역 `58,475`픽셀 중 채널 차이 `2/255` 초과는 `0`, 최대 차이는 `1/255`였다. 1280×720 렌더에서 5px 본체와 같은 격자의 단일 외곽선도 유지됐다. 두 shader는 supported이며 compiler error 0, scene dirty false였다.
+- `[보존·경계]` 원래 Animator 속도·clip·AI·NavMesh·Collider·조명·왼쪽 64px 대조군은 변경하지 않았다. 뼈가 실제로 변형한 표면은 해당 root-local seed에서만 정상 갱신되며, 10~12fps 표현용 pose stepping은 별도 시각 결정 전 강제하지 않는다. 접촉한 여러 개체의 정확한 내부 경계에는 stable Character ID가, full-resolution seed 확장의 최종 비용에는 GPU Profile이 필요하다. 첫 검증에서 RenderGraph pass 안의 전역값 변경 오류를 확인했으며 픽셀 크기 소유를 mask material로 옮겨 제거했다. 해당 과거 오류 기록은 Console에서 지우지 않았다.

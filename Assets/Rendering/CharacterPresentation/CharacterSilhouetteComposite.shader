@@ -190,21 +190,23 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
 
         half4 FragResolveScreenPixel(Varyings input) : SV_Target
         {
-            int2 cellIndex = int2(floor(input.positionCS.xy));
+            int2 pixel = int2(floor(input.positionCS.xy));
             int screenPixelSize = clamp((int)round(_ScreenPixelSize), 1, 12);
-            int2 cellOrigin = cellIndex * screenPixelSize;
+            int firstOffset = -(screenPixelSize >> 1);
 
             uint sourceWidth;
             uint sourceHeight;
             _CharacterSourceColor.GetDimensions(sourceWidth, sourceHeight);
             int2 sourceDimensions = int2(sourceWidth, sourceHeight);
 
-            // Choose only a visible character fragment. This is deliberately
-            // different from snapping UVs: the sample has already passed the
-            // material, lighting, shadow, and camera visibility pipeline.
+            // ScreenPixelMask contains one source point per cell, aligned to
+            // each subject's presentation root. Expand that point here instead
+            // of repartitioning the visible body with a viewport-fixed grid.
+            // Rigid character motion therefore translates a stable color cell;
+            // only actual surface deformation can change its source sample.
             half3 representativeColor = 0.0h;
             float nearestEyeDepth = 65504.0;
-            bool foundVisibleCharacter = false;
+            bool foundVisibleSeed = false;
 
             [loop]
             for (int y = 0; y < 12; y++)
@@ -222,7 +224,10 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                         break;
                     }
 
-                    int2 sourcePixel = cellOrigin + int2(x, y);
+                    int2 expansionOffset = int2(
+                        firstOffset + x,
+                        firstOffset + y);
+                    int2 sourcePixel = pixel - expansionOffset;
                     if (any(sourcePixel < int2(0, 0)) ||
                         any(sourcePixel >= sourceDimensions))
                     {
@@ -239,18 +244,18 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                     }
 
                     float eyeDepth = (float)maskSample.g;
-                    if (!foundVisibleCharacter || eyeDepth < nearestEyeDepth)
+                    if (!foundVisibleSeed || eyeDepth < nearestEyeDepth)
                     {
                         nearestEyeDepth = eyeDepth;
                         representativeColor = LOAD_TEXTURE2D(
                             _CharacterSourceColor,
                             sourcePixel).rgb;
-                        foundVisibleCharacter = true;
+                        foundVisibleSeed = true;
                     }
                 }
             }
 
-            if (!foundVisibleCharacter)
+            if (!foundVisibleSeed)
             {
                 return 0.0h;
             }
@@ -283,8 +288,9 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
 
         half4 FragResolveScreenPixelOutline(Varyings input) : SV_Target
         {
-            int2 cell = int2(floor(input.positionCS.xy));
-            if (LoadScreenPixelCell(cell).a > 0.0001h)
+            int2 pixel = int2(floor(input.positionCS.xy));
+            int screenPixelSize = clamp((int)round(_ScreenPixelSize), 1, 12);
+            if (LoadScreenPixelCell(pixel).a > 0.0001h)
             {
                 return 0.0h;
             }
@@ -304,7 +310,8 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                     }
 
                     float neighborDepth =
-                        (float)LoadScreenPixelCell(cell + int2(x, y)).a;
+                        (float)LoadScreenPixelCell(
+                            pixel + int2(x, y) * screenPixelSize).a;
                     if (neighborDepth > 0.0001 &&
                         (!foundNeighbor || neighborDepth < nearestEyeDepth))
                     {
@@ -322,26 +329,13 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
         half4 FragCompositeScreenPixel(Varyings input) : SV_Target
         {
             int2 pixel = int2(floor(input.positionCS.xy));
-            int screenPixelSize = clamp((int)round(_ScreenPixelSize), 1, 12);
-            int2 cellIndex = pixel / screenPixelSize;
-
-            uint resolvedWidth;
-            uint resolvedHeight;
-            _CharacterScreenPixelResolved.GetDimensions(
-                resolvedWidth,
-                resolvedHeight);
-            cellIndex = clamp(
-                cellIndex,
-                int2(0, 0),
-                int2(resolvedWidth, resolvedHeight) - 1);
-
             half4 resolved = LOAD_TEXTURE2D(
                 _CharacterScreenPixelResolved,
-                cellIndex);
+                pixel);
             float bodyEyeDepth = (float)resolved.a;
             float outlineEyeDepth = (float)LOAD_TEXTURE2D(
                 _CharacterScreenPixelOutlineDepth,
-                cellIndex).r;
+                pixel).r;
             bool isBody = bodyEyeDepth > 0.0001;
             float characterEyeDepth = isBody
                 ? bodyEyeDepth

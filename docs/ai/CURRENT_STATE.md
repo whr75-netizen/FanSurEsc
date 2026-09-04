@@ -54,7 +54,7 @@
 | `MOVE-01` | Player 이동·달리기·8방향 회전 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9·100·117 | 걷기10·달리기13, mannequin Humanoid, root motion 없음 | 이동·Animator·외형 참조 변경 |
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
 | `ENVIRONMENT-01` | 시간·날씨 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101·108~110 | 낮밤·구름·비차단·Grass·웅덩이·0시 최저·중성 낮; 로컬 체적광; 월드 고정 태양 평면 적분; 기지 100×64 검증장 | 야간 최저 확인·날씨 저장·풍향·최종 아트·GPU Profile·얇은 foliage/depth upscale·Transparent 차폐/합성 |
-| `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 시험 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §96~108·116~119 | 외곽선/snap; A/B=64px bake/5px셀·1중 외곽 | 적용·ID·art/rig |
+| `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 시험 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §96~108·116~120 | 외곽선/snap; A/B=64px bake/루트부착 5px seed·1중 외곽 | 적용·ID·art/rig·GPU profile |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95·105 | grid·stack·가방·장전탄·Save v7·저작창; ID 13 1×1 갑빠(방어 20%·육각); 바닥 drop/E, 일반 전환 삭제·Active Raid 복원 | item/grid/장비/world-item 저장 계약 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51·105 | 체력 1000·정수 계산·공격력 10단위·총 피해 350; 갑빠 방어 1당 최종 피해 1% 감소 | 탄종·AI 탄약·무기군 장전·반동·탄퍼짐·관통·피해 유형·조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67·117 | 순찰·감지·추적·LOS 공격·총성 조사; 좀비 순찰3/전투6.8 | 엄폐·도주·저격 단계 요청 |

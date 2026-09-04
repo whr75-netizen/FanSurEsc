@@ -3,6 +3,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
     Properties
     {
         [HideInInspector] _CharacterArtPixelSize("Character Art Pixel Size", Float) = 3
+        [HideInInspector] _CharacterScreenPixelSize("Character Screen Pixel Size", Float) = 5
     }
 
     SubShader
@@ -21,6 +22,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
 
         float4 _CharacterPixelGridAnchorWS;
         float _CharacterArtPixelSize;
+        float _CharacterScreenPixelSize;
 
         struct Attributes
         {
@@ -48,29 +50,45 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
             return half4(1, 0, 0, 1);
         }
 
-        half4 FragSeed(Varyings input) : SV_Target
+        void ClipToCharacterPixelSeed(
+            float4 positionCS,
+            float pixelSize)
         {
-            float artPixelSize = max(1.0, round(_CharacterArtPixelSize));
-            float2 fragmentUv = GetNormalizedScreenSpaceUV(input.positionCS.xy);
+            pixelSize = max(1.0, round(pixelSize));
+            float2 fragmentUv = GetNormalizedScreenSpaceUV(positionCS.xy);
             float2 anchorUv = ComputeNormalizedDeviceCoordinates(
                 _CharacterPixelGridAnchorWS.xyz,
                 UNITY_MATRIX_VP);
             float2 pixelIndex = floor(fragmentUv * _ScaledScreenParams.xy);
             float2 anchorPixelIndex = floor(anchorUv * _ScaledScreenParams.xy);
             float2 offset = pixelIndex - anchorPixelIndex;
-            float2 remainder = offset - floor(offset / artPixelSize) * artPixelSize;
+            float2 remainder = offset - floor(offset / pixelSize) * pixelSize;
             half seed =
                 (1.0h - step(0.5h, (half)remainder.x)) *
                 (1.0h - step(0.5h, (half)remainder.y));
             clip(seed - 0.5h);
+        }
+
+        half4 FragSeed(Varyings input) : SV_Target
+        {
+            ClipToCharacterPixelSeed(
+                input.positionCS,
+                _CharacterArtPixelSize);
             return half4(0, 1, 0, 1);
         }
 
-        half4 FragScreenPixelRaw(Varyings input) : SV_Target
+        half4 FragScreenPixelSeed(Varyings input) : SV_Target
         {
+            // Emit one visible source point per character-local screen cell.
+            // The grid phase comes from the presentation root, so rigid motion
+            // moves the pixels with the character instead of resampling it
+            // against a viewport-fixed grid on every screen-pixel crossing.
+            ClipToCharacterPixelSeed(
+                input.positionCS,
+                _CharacterScreenPixelSize);
+
             // Store linear eye depth beside occupancy. The later full-screen
-            // resolve can expand a character cell without drawing it over a
-            // nearer wall or prop that already owns the camera depth pixel.
+            // expansion still depth-tests the enlarged cell against the scene.
             float eyeDepth = LinearEyeDepth(input.positionCS.z, _ZBufferParams);
             return half4(1.0h, (half)max(eyeDepth, 0.0001), 0.0h, 1.0h);
         }
@@ -137,7 +155,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
 
         Pass
         {
-            Name "CharacterScreenPixelRawMask"
+            Name "CharacterScreenPixelSeedMask"
 
             Cull Back
             ZWrite Off
@@ -146,7 +164,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
 
             HLSLPROGRAM
             #pragma vertex Vert
-            #pragma fragment FragScreenPixelRaw
+            #pragma fragment FragScreenPixelSeed
             #pragma multi_compile_instancing
             ENDHLSL
         }

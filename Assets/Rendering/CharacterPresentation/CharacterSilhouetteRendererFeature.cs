@@ -99,6 +99,8 @@ namespace FantasySurvival.Rendering
                 Shader.PropertyToID("_ScreenPixelSize");
             private static readonly int CharacterArtPixelSizeId =
                 Shader.PropertyToID("_CharacterArtPixelSize");
+            private static readonly int CharacterScreenPixelSizeId =
+                Shader.PropertyToID("_CharacterScreenPixelSize");
 
             private static readonly List<ShaderTagId> ShaderTags = new List<ShaderTagId>
             {
@@ -157,8 +159,6 @@ namespace FantasySurvival.Rendering
                     resources.cameraColor.IsValid() &&
                     resources.cameraDepthTexture.IsValid())
                 {
-                    int screenPixelSize = GetScreenPixelSize();
-
                     RenderTextureDescriptor sourceDescriptor =
                         cameraData.cameraTargetDescriptor;
                     sourceDescriptor.depthBufferBits = 0;
@@ -182,15 +182,11 @@ namespace FantasySurvival.Rendering
                             true,
                             FilterMode.Point);
 
+                    // Character-local seed cells can have a different screen
+                    // phase for every subject. Keep this intermediate at native
+                    // resolution so each expanded cell remains attached to its
+                    // owner instead of being forced into one viewport grid.
                     RenderTextureDescriptor resolvedDescriptor = sourceDescriptor;
-                    resolvedDescriptor.width = Mathf.Max(
-                        1,
-                        (resolvedDescriptor.width + screenPixelSize - 1) /
-                            screenPixelSize);
-                    resolvedDescriptor.height = Mathf.Max(
-                        1,
-                        (resolvedDescriptor.height + screenPixelSize - 1) /
-                            screenPixelSize);
                     resolvedDescriptor.graphicsFormat =
                         GraphicsFormat.R16G16B16A16_SFloat;
                     TextureHandle screenPixelResolved =
@@ -404,6 +400,9 @@ namespace FantasySurvival.Rendering
                     filteringSettings);
                 passData.rendererList = renderGraph.CreateRendererList(
                     rendererListParams);
+                maskMaterial.SetFloat(
+                    CharacterScreenPixelSizeId,
+                    GetScreenPixelSize());
                 if (!passData.rendererList.IsValid())
                 {
                     return;

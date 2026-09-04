@@ -1303,6 +1303,15 @@ seed + generator version
 - 적과 Player의 주요 이동 축 제공
 - 랜드마크와 탈출 방향을 연결
 
+#### 7.3.3 대각 도로 raster 계약 `[설계 제안]`
+
+- 8방향 그래프의 대각선은 상하좌우 셀을 번갈아 잇는 지그재그 길이 아니라 **45도 중심선 한 개**다. 그래프 연결은 기존 `roadPorts`, 화면 표현과 점유는 별도 raster가 맡는다.
+- 직선과 대각선의 폭은 X·Z축 셀 개수가 아니라 중심선에 수직인 **월드 거리**로 동일하게 잰다. 각 셀 사각형과 `차도 polygon → 인도 outer band`가 겹치는지를 계산해 대각선만 `sqrt(2)`배 비대해지는 팽창을 막는다.
+- 대각 경계 셀은 `전부 차도/전부 빈칸`으로 반올림하지 않고 2×2 이상 sub-cell bit mask 또는 방향별 half-tile atlas를 가진다. 차도는 경계 셀의 삼각 절반까지 표현하고, 인도는 그 바깥쪽에 최소 한 줄의 연속 band를 만든다.
+- half-tile은 시각·표면 분류용이다. 차량 중심 경로, 보행 경로와 건축 금지 점유는 끊기지 않아야 하며 대각선 사이에 한 칸짜리 구멍을 남기지 않는다. 부분 차도 셀에는 건물 footprint를 겹치지 않는다.
+- 대각 교차로는 두 굵은 선을 독립적으로 덧그리지 않고 segment polygon의 합집합과 방향별 intersection mask로 한 번만 rasterize한다. 교차로의 실제 연결은 여전히 선언된 node와 port로만 인정한다.
+- 건물 전면과 진입로는 대각선의 계단형 셀 경계가 아니라 도로 tangent와 frontage span을 기준으로 잡는다. 대각 전면 필지는 회전 footprint mask와 보행·차량 접속 검증이 준비된 뒤에만 활성화한다.
+
 ### 7.4 건물
 
 #### 7.4.1 현재
@@ -1318,13 +1327,70 @@ seed + generator version
 
 #### 7.4.2 후속 실제 건물 `[설계 제안]`
 
-- 건물 footprint와 입구
-- 외벽·문·창문
-- 내부 room graph
-- 엄폐·시야·전리품 후보
-- 파괴 가능 여부
+- 건물은 본체 prefab 하나가 아니라 **필지(parcel)를 점유하는 compound program**으로 정의한다. 한 compound가 건물 본체, 출입구, 마당, 차량 진입로, 주차장, 하역장과 부속 시설의 배치·점유·접근성을 함께 소유한다.
+- 예를 들어 경찰서는 `청사 + 도로와 직접 이어진 차량 진입로 + 소형 주차장 + 후면 보안 마당/차고`가 한 `CompoundId`에 종속된다. 마트는 `판매동 + 정면 보행 입구 + 주차 면 + 측후면 하역 접속`을 함께 배치해야 하며 건물만 먼저 둔 뒤 남은 곳에 주차장을 임의로 끼우지 않는다.
+- compound 자식 표현은 여러 prefab일 수 있지만 배치 승인·stable ID·저장과 제거 단위는 compound 하나다. 자식 하나의 배치 실패를 숨긴 불완전 POI는 허용하지 않는다.
+- 내부 room graph, 외벽·문·창문, 엄폐·시야·전리품 후보와 파괴 여부는 footprint·외부 접근 계약 위에 추가한다. 최종 자산으로 교체할 때도 동일한 점유 mask와 socket을 지켜야 한다.
 
-최종 건물 자산·내부 모듈로 교체할 때도 footprint와 접근 지점 데이터가 현재 layout 점유 규칙과 일치해야 한다.
+#### 7.4.3 건물·필지 다양성 목록 `[설계 제안/수치 미정]`
+
+현재 시험 profile의 `1타일 = 2m`를 기준으로 한 **초기 상대 크기 범위**다. 아래 수치는 생성기 튜닝 출발점이며 최종 아트 크기를 강제하지 않는다. `본체`는 외벽 점유, `전체 필지`는 진입로·주차·마당까지 포함한다.
+
+| 유형 | 본체 footprint | 전체 필지/compound | 도로 관계와 종속 요소 |
+|---|---:|---:|---|
+| 협소 주택·연립 한 세대 | 3~4 × 4~6 | 3~5 × 5~7 | 보조도로 전면, 작은 현관·후면 통로. 2~5채 연속 배치 가능 |
+| 단독 주택 | 4~6 × 4~7 | 5~8 × 6~9 | 현관 보행 접속, 선택적 좁은 마당·차고/주차 1면 |
+| 다가구·저층 공동주택 | 5~8 × 6~9 | 6~10 × 7~11 | 공용 입구, 측면 통로 또는 작은 공동 마당 |
+| 소형 상가·상가주택 | 3~6 × 4~7 | 3~7 × 5~8 | 상업가로에 정면 출입구, 후면 서비스 골목 선택 |
+| 식당·약국·편의점 | 4~7 × 4~7 | 5~8 × 5~9 | 보행 전면, 폐기물/소형 하역 socket |
+| 정비소·소형 창고 | 5~9 × 5~8 | 7~11 × 6~10 | 넓은 차량 입구, 작업 마당 또는 하역 공간 |
+| 경찰서 | 6~10 × 6~9 | 10~15 × 9~13 | 간선/보조도로 인접, 차량 진입로·4~10면 주차·보안 마당/차고 |
+| 동네 마트 | 8~12 × 6~9 | 12~18 × 9~14 | 간선도로 가시성, 정면 주차·보행 입구·측후면 하역 접속 |
+| 의원·소형 진료소 | 5~8 × 5~8 | 7~10 × 7~10 | 보행 접근 우선, 선택적 구급차 정차면·의료 폐기물 구역 |
+| 소방서·구급 거점 | 7~11 × 6~9 | 10~15 × 8~12 | 도로로 곧게 연결되는 차고 apron, 후면 훈련/서비스 공간 |
+| 소형 사무소·공공청사 | 6~10 × 6~10 | 7~12 × 7~12 | 정면 광장 또는 소형 주차 중 하나, 별도 서비스 입구 선택 |
+| 빈집·공사장·공터 | 2~9 × 3~10 | 3~11 × 4~12 | 같은 필지 체계를 쓰되 잔해·울타리·임시 통로로 밀도와 시야 변화 |
+
+- 후속 definition 후보는 주거(`협소 주택`, `연립`, `단독`, `저층 공동주택`), 생활 상업(`편의점`, `식당`, `약국`, `세탁소`, `철물점`), 차량 상업(`주유소`, `정비소`), 대형 생활 상업(`동네 마트`), 공공(`경찰서`, `소방서`, `진료소`, `학교`, `주민센터`, `우체국`), 업무·산업(`소형 사무소`, `창고`, `작업장`, `변전 시설`), 폐허 변형(`빈집`, `공사장`, `주차장`, `붕괴 필지`)으로 묶는다. 목록은 prefab 이름이 아니라 배치 요구가 다른 program 후보이며, 실제 콘텐츠 채택 전까지는 `[제안]`이다.
+- 주택은 한 크기 prefab을 반복하지 않고 최소 3종의 footprint mask, 좌우 반전, 앞/뒤 service strip과 높이 변형을 조합한다. 단, 외형 변형이 같은 점유 mask의 별도 건물로 과장 집계되지 않게 한다.
+- 경찰서·마트 같은 지역 시설도 백화점급 한 블록 건물이 아니다. 기본 compound의 짧은 변이형을 우선하며 한 시설이 블록 짧은 변의 약 65%를 넘으면 더 작은 variant를 고르거나 다른 블록으로 보낸다.
+- 모든 seed에 모든 특수 시설을 강제하지 않는다. profile의 POI budget과 최소/최대 개수가 실제 등장 여부를 결정한다.
+
+#### 7.4.4 계층 배치와 잔여 공간 packing `[설계 제안]`
+
+```text
+road graph
+→ 도로 polygon/raster
+→ 닫힌 block face 추출
+→ 보행 frontage와 차량 curb socket 생성
+→ 경찰서·마트 등 제약이 큰 필수 compound 후보를 우선 배치
+→ 남은 block face를 도로 전면 parcel strip으로 분할
+→ 가변 footprint 건물을 제약형 mask packing
+→ 남은 틈을 골목·마당·공터·소형 주차·서비스 공간으로 의미 있게 확정
+→ 모든 접근 경로와 점유를 검증
+```
+
+- 중요 시설은 단순히 큰 면적 순서가 아니라 `필수 여부 → 가능한 후보 수가 적은 것(MRV) → compound 면적/접근 제약` 순서로 둔다. 경찰서 차량 진입로나 마트 하역로처럼 대체하기 어려운 접속을 먼저 확보한다.
+- 블록은 coarse grid 사각형 하나가 아니라 도로망이 만든 **닫힌 face polygon**이다. 각 face의 도로 전면을 따라 필지 후보를 만들고, 건물·마당·진입로 전체 mask가 face 안에 들어오는 후보만 남긴다.
+- 일반 건물은 인벤토리 테트리스와 비슷한 rectangle/polyomino packing을 쓰되 첫 빈칸 greedy 하나로 끝내지 않는다. 후보별 `전면 사용률, 남은 공간의 연결성, 반복 footprint 벌점, 골목 폭, 접근 거리`를 점수화하고 seed 기반 weighted choice와 제한된 backtracking으로 고른다.
+- 잔여 셀 100%를 건물로 메우는 것을 성공으로 보지 않는다. 초기 밀도 목표는 블록마다 건축 점유 60~78%, 골목·서비스 통로 10~20%, 마당·공터·소형 주차 8~22% 범위에서 profile로 고르되 선택된 세 비율의 합은 100%가 되게 한다. 최종 범위는 플레이 테스트로 확정한다.
+- 막다른 1타일 틈이나 사람이 통과할 수 없는 장식 공백은 실패 공간이다. 반대로 폭이 명시된 골목, 연결된 후면 서비스로, 포켓 공터는 의도된 공간으로 stable semantic tag를 가진다.
+- 필수 compound가 배치되지 않으면 일반 건물을 지우고 결과를 덮지 않는다. 같은 block의 다른 후보, 더 작은 variant, 다른 block 순서로 제한된 재탐색을 수행하고 그래도 불가능하면 해당 seed를 준비 gate에서 거부한다.
+
+#### 7.4.5 미래 구현용 데이터 계약 `[설계 제안]`
+
+| 데이터 | 최소 필드 |
+|---|---|
+| `UrbanBuildingDefinition` | `DefinitionId`, 의미 `Category`, `PriorityTier`, 허용 zone/road class, footprint mask variants, 허용 회전·반전, 층수 범위, frontage·setback 범위, entrance/service socket 정의, interior profile ID |
+| `UrbanCompoundProgram` | 본체·주차·진입로·마당·하역·부속동 zone 목록, zone별 최소/최대 크기와 개수, 필수/선택 여부, zone 간 adjacency·separation 규칙, 전체 크기 상한 |
+| `UrbanRoadSectionDefinition` | 차로 수·월드 폭, 중앙부, 인도 폭, 방향, intersection profile, partial-cell mask 해상도, 차량·보행 port 규칙 |
+| `UrbanParcelCandidate` | block face ID, parcel polygon/mask, road edge ID, frontage span, curb/보행 socket, 허용 density와 용도, 기존 점유·보호 거리 |
+| `UrbanBuildingPlacement` | stable `CompoundId`, definition/variant ID, anchor·orientation·mirror, 선택된 zone masks, 입구·서비스·차량 socket, seed·generator version |
+| 검증 결과 | 도로→차량 진입로, 인도→주 출입구, Spawn/Portal/NavMesh 경로, zone 완전성, 겹침, 골목 폭, layout hash와 실패 사유 |
+
+배치 알고리즘은 definition과 program을 읽어야 하며 `경찰서면 좌표 +N에 주차장` 같은 유형별 좌표 하드코딩을 두지 않는다. 반대로 아트 prefab은 점유·접근 권위를 갖지 않고 선택된 placement를 표현한다.
+
+외부 알고리즘 근거는 `도로망 → block → parcel → 건물`을 분리한 [Parish·Müller의 도시 생성 연구](https://cgl.ethz.ch/Downloads/Publications/Papers/2001/p_Par01.pdf), 방향장을 도로망 편집의 제약으로 쓰는 [Chen 등의 tensor-field 도로 연구](https://peterwonka.net/Publications/pdfs/2008.SG.Chen.InteractiveProceduralStreetModeling.pdf), 도로 loop 내부를 현실적인 필지로 나누고 편집 후에도 대응 관계를 유지하는 [Vanegas 등의 parcel 생성 연구](https://www.cs.purdue.edu/cgvlab/www/resources/papers/Vanegas-Eurographics-2012-Procedural_Generation_of_Parcels_in_Urban_Modeling.pdf)를 기준으로 삼는다. 이 프로젝트는 그 수학을 그대로 복제하지 않고 8방향·고정 seed·게임플레이 접근성 계약에 맞춰 제한한다.
 
 ### 7.5 POI·랜드마크 `[현재 시험/후속]`
 

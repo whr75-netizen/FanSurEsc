@@ -14,6 +14,12 @@ namespace FantasySurvival.CharacterPresentation
     public sealed class CharacterSilhouetteSubject : MonoBehaviour
     {
         public const uint RenderingLayerMask = 1u << 31;
+        public const uint ScreenPixelRenderingLayerMask = 1u << 30;
+
+        [SerializeField]
+        [Tooltip("Quantize the already-lit visible character color in screen space. " +
+            "This is an opt-in comparison mode; the silhouette outline remains active either way.")]
+        private bool screenSpacePixelColor;
 
         private static readonly int PixelGridAnchorId =
             Shader.PropertyToID("_CharacterPixelGridAnchorWS");
@@ -21,8 +27,10 @@ namespace FantasySurvival.CharacterPresentation
             Shader.PropertyToID("_CharacterLightingPositionOffsetWS");
 
         private static int activeSubjectCount;
+        private static int activeScreenPixelSubjectCount;
 
         private bool registered;
+        private bool screenPixelRegistered;
         private bool renderSnapApplied;
         private Camera snappedCamera;
         private Vector3 unsnappedPosition;
@@ -30,6 +38,10 @@ namespace FantasySurvival.CharacterPresentation
         private MaterialPropertyBlock propertyBlock;
 
         public static bool HasActiveSubject => activeSubjectCount > 0;
+        public static bool HasActiveScreenPixelSubject =>
+            activeScreenPixelSubjectCount > 0;
+
+        public bool ScreenSpacePixelColor => screenSpacePixelColor;
 
         private void OnEnable()
         {
@@ -44,6 +56,7 @@ namespace FantasySurvival.CharacterPresentation
                 registered = true;
             }
 
+            SynchronizeScreenPixelRegistration();
             ApplyToChildRenderers();
             RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
             RenderPipelineManager.endCameraRendering += EndCameraRendering;
@@ -55,6 +68,14 @@ namespace FantasySurvival.CharacterPresentation
             RenderPipelineManager.endCameraRendering -= EndCameraRendering;
             RestoreRenderPosition();
             ReleaseChildRenderers();
+
+            if (screenPixelRegistered)
+            {
+                activeScreenPixelSubjectCount = Mathf.Max(
+                    0,
+                    activeScreenPixelSubjectCount - 1);
+                screenPixelRegistered = false;
+            }
 
             if (!registered)
             {
@@ -70,6 +91,34 @@ namespace FantasySurvival.CharacterPresentation
             ApplyToChildRenderers();
         }
 
+        private void OnValidate()
+        {
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
+
+            SynchronizeScreenPixelRegistration();
+            ApplyToChildRenderers();
+        }
+
+        public void SetScreenSpacePixelColor(bool enabled)
+        {
+            if (screenSpacePixelColor == enabled)
+            {
+                return;
+            }
+
+            screenSpacePixelColor = enabled;
+            if (!isActiveAndEnabled)
+            {
+                return;
+            }
+
+            SynchronizeScreenPixelRegistration();
+            ApplyToChildRenderers();
+        }
+
         [ContextMenu("Refresh Silhouette Renderers")]
         public void ApplyToChildRenderers()
         {
@@ -80,7 +129,8 @@ namespace FantasySurvival.CharacterPresentation
             {
                 if (ownedRenderer != null && !currentRenderers.Contains(ownedRenderer))
                 {
-                    ownedRenderer.renderingLayerMask &= ~RenderingLayerMask;
+                    ownedRenderer.renderingLayerMask &=
+                        ~(RenderingLayerMask | ScreenPixelRenderingLayerMask);
                 }
             }
 
@@ -88,6 +138,15 @@ namespace FantasySurvival.CharacterPresentation
             foreach (Renderer childRenderer in renderers)
             {
                 childRenderer.renderingLayerMask |= RenderingLayerMask;
+                if (screenSpacePixelColor)
+                {
+                    childRenderer.renderingLayerMask |= ScreenPixelRenderingLayerMask;
+                }
+                else
+                {
+                    childRenderer.renderingLayerMask &= ~ScreenPixelRenderingLayerMask;
+                }
+
                 ownedRenderers.Add(childRenderer);
             }
 
@@ -220,11 +279,27 @@ namespace FantasySurvival.CharacterPresentation
             {
                 if (ownedRenderer != null)
                 {
-                    ownedRenderer.renderingLayerMask &= ~RenderingLayerMask;
+                    ownedRenderer.renderingLayerMask &=
+                        ~(RenderingLayerMask | ScreenPixelRenderingLayerMask);
                 }
             }
 
             ownedRenderers.Clear();
+        }
+
+        private void SynchronizeScreenPixelRegistration()
+        {
+            bool shouldRegister = screenSpacePixelColor && isActiveAndEnabled;
+            if (shouldRegister == screenPixelRegistered)
+            {
+                return;
+            }
+
+            activeScreenPixelSubjectCount += shouldRegister ? 1 : -1;
+            activeScreenPixelSubjectCount = Mathf.Max(
+                0,
+                activeScreenPixelSubjectCount);
+            screenPixelRegistered = shouldRegister;
         }
     }
 }

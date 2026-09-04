@@ -564,6 +564,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 597819257509311118, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+      propertyPath: m_RenderingLayerMask
+      value: 3221225473
+      objectReference: {fileID: 0}
+    - target: {fileID: 597819257509311118, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 618f0257e69285a4999d2bcc441442f2, type: 2}
@@ -611,13 +615,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6706005730748506735, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
+      propertyPath: screenSpacePixelColor
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6888693271440616795, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7783077477261944068, guid: 31c8ca036ffbb184a939a4e6d87476c8, type: 3}
       propertyPath: m_Name
-      value: B_Zombie_RuntimeUVGrid64
+      value: B_Zombie_ScreenSpacePixel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

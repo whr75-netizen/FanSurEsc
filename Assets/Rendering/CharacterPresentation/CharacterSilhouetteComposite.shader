@@ -24,6 +24,11 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
 
         TEXTURE2D(_CharacterSilhouetteMask);
         TEXTURE2D(_CharacterSilhouetteQuantizedMask);
+        TEXTURE2D(_CharacterSourceColorInput);
+        TEXTURE2D(_CharacterSourceColor);
+        TEXTURE2D(_CharacterScreenPixelMask);
+        TEXTURE2D(_CharacterScreenPixelResolved);
+        TEXTURE2D(_CharacterSceneDepth);
 
         CBUFFER_START(UnityPerMaterial)
             half4 _OutlineColor;
@@ -173,6 +178,122 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             half silhouette = cellDilated * (1.0h - rawInterior);
             return half4(_OutlineColor.rgb, _OutlineColor.a * silhouette);
         }
+
+        half4 FragCopySource(Varyings input) : SV_Target
+        {
+            int2 pixel = int2(floor(input.positionCS.xy));
+            return LOAD_TEXTURE2D(_CharacterSourceColorInput, pixel);
+        }
+
+        half4 FragResolveScreenPixel(Varyings input) : SV_Target
+        {
+            int2 cellIndex = int2(floor(input.positionCS.xy));
+            int artPixelSize = clamp((int)round(_ArtPixelSize), 1, 8);
+            int2 cellOrigin = cellIndex * artPixelSize;
+
+            uint sourceWidth;
+            uint sourceHeight;
+            _CharacterSourceColor.GetDimensions(sourceWidth, sourceHeight);
+            int2 sourceDimensions = int2(sourceWidth, sourceHeight);
+
+            // Choose only a visible character fragment. This is deliberately
+            // different from snapping UVs: the sample has already passed the
+            // material, lighting, shadow, and camera visibility pipeline.
+            half3 representativeColor = 0.0h;
+            float nearestEyeDepth = 65504.0;
+            bool foundVisibleCharacter = false;
+
+            [loop]
+            for (int y = 0; y < 8; y++)
+            {
+                if (y >= artPixelSize)
+                {
+                    break;
+                }
+
+                [loop]
+                for (int x = 0; x < 8; x++)
+                {
+                    if (x >= artPixelSize)
+                    {
+                        break;
+                    }
+
+                    int2 sourcePixel = cellOrigin + int2(x, y);
+                    if (any(sourcePixel < int2(0, 0)) ||
+                        any(sourcePixel >= sourceDimensions))
+                    {
+                        continue;
+                    }
+
+                    half2 maskSample = LOAD_TEXTURE2D(
+                        _CharacterScreenPixelMask,
+                        sourcePixel).rg;
+                    if (maskSample.r < _CoverageThreshold ||
+                        maskSample.g <= 0.0h)
+                    {
+                        continue;
+                    }
+
+                    float eyeDepth = (float)maskSample.g;
+                    if (!foundVisibleCharacter || eyeDepth < nearestEyeDepth)
+                    {
+                        nearestEyeDepth = eyeDepth;
+                        representativeColor = LOAD_TEXTURE2D(
+                            _CharacterSourceColor,
+                            sourcePixel).rgb;
+                        foundVisibleCharacter = true;
+                    }
+                }
+            }
+
+            if (!foundVisibleCharacter)
+            {
+                return 0.0h;
+            }
+
+            // Alpha carries linear eye depth, not transparency. Zero remains
+            // the unoccupied-cell sentinel because visible eye depth is > 0.
+            return half4(
+                representativeColor,
+                (half)nearestEyeDepth);
+        }
+
+        half4 FragCompositeScreenPixel(Varyings input) : SV_Target
+        {
+            int2 pixel = int2(floor(input.positionCS.xy));
+            int artPixelSize = clamp((int)round(_ArtPixelSize), 1, 8);
+            int2 cellIndex = pixel / artPixelSize;
+
+            uint resolvedWidth;
+            uint resolvedHeight;
+            _CharacterScreenPixelResolved.GetDimensions(
+                resolvedWidth,
+                resolvedHeight);
+            cellIndex = clamp(
+                cellIndex,
+                int2(0, 0),
+                int2(resolvedWidth, resolvedHeight) - 1);
+
+            half4 resolved = LOAD_TEXTURE2D(
+                _CharacterScreenPixelResolved,
+                cellIndex);
+            float characterEyeDepth = (float)resolved.a;
+            clip(characterEyeDepth - 0.0001);
+
+            float sceneRawDepth = LOAD_TEXTURE2D(
+                _CharacterSceneDepth,
+                pixel).r;
+            float sceneEyeDepth = LinearEyeDepth(
+                sceneRawDepth,
+                _ZBufferParams);
+            float depthTolerance = max(0.002, characterEyeDepth * 0.0005);
+
+            // A coarse cell may extend beyond the original triangle edge, but
+            // it must never paint across geometry that is actually nearer.
+            clip(sceneEyeDepth + depthTolerance - characterEyeDepth);
+            return half4(resolved.rgb, 1.0h);
+        }
         ENDHLSL
 
         Pass
@@ -202,6 +323,53 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             HLSLPROGRAM
             #pragma vertex Vert
             #pragma fragment FragComposite
+            ENDHLSL
+        }
+
+
+        Pass
+        {
+            Name "CharacterScreenPixelSourceCopy"
+
+            Blend One Zero
+            Cull Off
+            ZWrite Off
+            ZTest Always
+
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragCopySource
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "CharacterScreenPixelResolve"
+
+            Blend One Zero
+            Cull Off
+            ZWrite Off
+            ZTest Always
+
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragResolveScreenPixel
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "CharacterScreenPixelComposite"
+
+            Blend One Zero
+            ColorMask RGB
+            Cull Off
+            ZWrite Off
+            ZTest Always
+
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragCompositeScreenPixel
             ENDHLSL
         }
     }

@@ -11,6 +11,9 @@ namespace FantasySurvival.Rendering
     [DisallowMultipleRendererFeature("Character Silhouette Outline")]
     public sealed class CharacterSilhouetteRendererFeature : ScriptableRendererFeature
     {
+        private const int RequiredMaskPassCount = 4;
+        private const int RequiredCompositePassCount = 5;
+
         [System.Serializable]
         public sealed class Settings
         {
@@ -43,12 +46,26 @@ namespace FantasySurvival.Rendering
             if (renderingData.cameraData.cameraType != CameraType.Game ||
                 (Application.isPlaying && !CharacterSilhouetteSubject.HasActiveSubject) ||
                 settings.maskMaterial == null ||
-                settings.compositeMaterial == null)
+                settings.compositeMaterial == null ||
+                settings.maskMaterial.passCount < RequiredMaskPassCount ||
+                settings.compositeMaterial.passCount < RequiredCompositePassCount)
             {
                 return;
             }
 
+            bool needsScreenPixelColor =
+                CharacterSilhouetteSubject.HasActiveScreenPixelSubject;
+
             pass.Setup(settings.maskMaterial, settings.compositeMaterial);
+            pass.ConfigureInput(
+                needsScreenPixelColor
+                    ? ScriptableRenderPassInput.Depth
+                    : ScriptableRenderPassInput.None);
+            // The screen-pixel path samples the already lit camera color. Force
+            // URP to render through cameraColor instead of a platform backbuffer;
+            // this is the same contract used by URP's Full Screen Pass when it
+            // fetches color.
+            pass.requiresIntermediateTexture = needsScreenPixelColor;
             renderer.EnqueuePass(pass);
         }
 
@@ -58,6 +75,16 @@ namespace FantasySurvival.Rendering
                 Shader.PropertyToID("_CharacterSilhouetteMask");
             private static readonly int QuantizedMaskTextureId =
                 Shader.PropertyToID("_CharacterSilhouetteQuantizedMask");
+            private static readonly int SourceColorInputTextureId =
+                Shader.PropertyToID("_CharacterSourceColorInput");
+            private static readonly int SourceColorTextureId =
+                Shader.PropertyToID("_CharacterSourceColor");
+            private static readonly int ScreenPixelMaskTextureId =
+                Shader.PropertyToID("_CharacterScreenPixelMask");
+            private static readonly int ScreenPixelResolvedTextureId =
+                Shader.PropertyToID("_CharacterScreenPixelResolved");
+            private static readonly int SceneDepthTextureId =
+                Shader.PropertyToID("_CharacterSceneDepth");
             private static readonly int ArtPixelSizeId =
                 Shader.PropertyToID("_ArtPixelSize");
             private static readonly int CharacterArtPixelSizeId =
@@ -115,7 +142,84 @@ namespace FantasySurvival.Rendering
 
                 RecordMaskPass(renderGraph, frameData, resources, mask);
                 RecordExpansionPass(renderGraph, mask, quantizedMask);
+
+                if (CharacterSilhouetteSubject.HasActiveScreenPixelSubject &&
+                    resources.cameraColor.IsValid() &&
+                    resources.cameraDepthTexture.IsValid())
+                {
+                    int artPixelSize = GetArtPixelSize();
+
+                    RenderTextureDescriptor sourceDescriptor =
+                        cameraData.cameraTargetDescriptor;
+                    sourceDescriptor.depthBufferBits = 0;
+                    sourceDescriptor.msaaSamples = 1;
+                    TextureHandle sourceColor =
+                        UniversalRenderer.CreateRenderGraphTexture(
+                            renderGraph,
+                            sourceDescriptor,
+                            "_CharacterSourceColor",
+                            true,
+                            FilterMode.Point);
+
+                    RenderTextureDescriptor screenMaskDescriptor = descriptor;
+                    screenMaskDescriptor.graphicsFormat =
+                        GraphicsFormat.R16G16_SFloat;
+                    TextureHandle screenPixelMask =
+                        UniversalRenderer.CreateRenderGraphTexture(
+                            renderGraph,
+                            screenMaskDescriptor,
+                            "_CharacterScreenPixelMask",
+                            true,
+                            FilterMode.Point);
+
+                    RenderTextureDescriptor resolvedDescriptor = sourceDescriptor;
+                    resolvedDescriptor.width = Mathf.Max(
+                        1,
+                        (resolvedDescriptor.width + artPixelSize - 1) /
+                            artPixelSize);
+                    resolvedDescriptor.height = Mathf.Max(
+                        1,
+                        (resolvedDescriptor.height + artPixelSize - 1) /
+                            artPixelSize);
+                    resolvedDescriptor.graphicsFormat =
+                        GraphicsFormat.R16G16B16A16_SFloat;
+                    TextureHandle screenPixelResolved =
+                        UniversalRenderer.CreateRenderGraphTexture(
+                            renderGraph,
+                            resolvedDescriptor,
+                            "_CharacterScreenPixelResolved",
+                            true,
+                            FilterMode.Point);
+
+                    RecordSourceCopyPass(
+                        renderGraph,
+                        resources.cameraColor,
+                        sourceColor);
+                    RecordScreenPixelMaskPass(
+                        renderGraph,
+                        frameData,
+                        resources,
+                        screenPixelMask);
+                    RecordScreenPixelResolvePass(
+                        renderGraph,
+                        sourceColor,
+                        screenPixelMask,
+                        screenPixelResolved);
+                    RecordScreenPixelCompositePass(
+                        renderGraph,
+                        resources,
+                        screenPixelResolved);
+                }
+
                 RecordCompositePass(renderGraph, resources, mask, quantizedMask);
+            }
+
+            private int GetArtPixelSize()
+            {
+                return Mathf.Clamp(
+                    Mathf.RoundToInt(compositeMaterial.GetFloat(ArtPixelSizeId)),
+                    1,
+                    8);
             }
 
             private void RecordMaskPass(
@@ -134,10 +238,7 @@ namespace FantasySurvival.Rendering
                 UniversalLightData lightData = frameData.Get<UniversalLightData>();
                 maskMaterial.SetFloat(
                     CharacterArtPixelSizeId,
-                    Mathf.Clamp(
-                        Mathf.Round(compositeMaterial.GetFloat(ArtPixelSizeId)),
-                        1f,
-                        8f));
+                    GetArtPixelSize());
 
                 DrawingSettings rawDrawingSettings = RenderingUtils.CreateDrawingSettings(
                     ShaderTags,
@@ -193,6 +294,193 @@ namespace FantasySurvival.Rendering
                     context.cmd.ClearRenderTarget(RTClearFlags.Color, Color.clear, 1, 0);
                     context.cmd.DrawRendererList(data.rawRendererList);
                     context.cmd.DrawRendererList(data.seedRendererList);
+                });
+            }
+
+            private void RecordSourceCopyPass(
+                RenderGraph renderGraph,
+                TextureHandle sourceInput,
+                TextureHandle sourceColor)
+            {
+                using IRasterRenderGraphBuilder builder =
+                    renderGraph.AddRasterRenderPass<SourceCopyPassData>(
+                        "Character Screen Pixel Source Copy",
+                        out SourceCopyPassData passData);
+
+                passData.sourceInput = sourceInput;
+                passData.material = compositeMaterial;
+
+                builder.UseTexture(sourceInput, AccessFlags.Read);
+                builder.SetRenderAttachment(sourceColor, 0, AccessFlags.Write);
+                builder.SetRenderFunc(static (
+                    SourceCopyPassData data,
+                    RasterGraphContext context) =>
+                {
+                    data.material.SetTexture(
+                        SourceColorInputTextureId,
+                        data.sourceInput);
+                    context.cmd.DrawProcedural(
+                        Matrix4x4.identity,
+                        data.material,
+                        2,
+                        MeshTopology.Triangles,
+                        3,
+                        1);
+                });
+            }
+
+            private void RecordScreenPixelMaskPass(
+                RenderGraph renderGraph,
+                ContextContainer frameData,
+                UniversalResourceData resources,
+                TextureHandle screenPixelMask)
+            {
+                using IRasterRenderGraphBuilder builder =
+                    renderGraph.AddRasterRenderPass<ScreenPixelMaskPassData>(
+                        "Character Screen Pixel Visible Mask",
+                        out ScreenPixelMaskPassData passData);
+
+                UniversalRenderingData renderingData =
+                    frameData.Get<UniversalRenderingData>();
+                UniversalCameraData cameraData =
+                    frameData.Get<UniversalCameraData>();
+                UniversalLightData lightData =
+                    frameData.Get<UniversalLightData>();
+
+                DrawingSettings drawingSettings =
+                    RenderingUtils.CreateDrawingSettings(
+                        ShaderTags,
+                        renderingData,
+                        cameraData,
+                        lightData,
+                        cameraData.defaultOpaqueSortFlags);
+                drawingSettings.overrideMaterial = maskMaterial;
+                drawingSettings.overrideMaterialPassIndex =
+                    RequiredMaskPassCount - 1;
+                drawingSettings.perObjectData = PerObjectData.None;
+
+                FilteringSettings filteringSettings = new FilteringSettings(
+                    RenderQueueRange.opaque,
+                    -1,
+                    CharacterSilhouetteSubject.ScreenPixelRenderingLayerMask);
+                RendererListParams rendererListParams = new RendererListParams(
+                    renderingData.cullResults,
+                    drawingSettings,
+                    filteringSettings);
+                passData.rendererList = renderGraph.CreateRendererList(
+                    rendererListParams);
+                if (!passData.rendererList.IsValid())
+                {
+                    return;
+                }
+
+                builder.UseRendererList(passData.rendererList);
+                builder.SetRenderAttachment(
+                    screenPixelMask,
+                    0,
+                    AccessFlags.Write);
+                builder.SetRenderAttachmentDepth(
+                    resources.activeDepthTexture,
+                    AccessFlags.Read);
+                builder.SetRenderFunc(static (
+                    ScreenPixelMaskPassData data,
+                    RasterGraphContext context) =>
+                {
+                    context.cmd.ClearRenderTarget(
+                        RTClearFlags.Color,
+                        Color.clear,
+                        1,
+                        0);
+                    context.cmd.DrawRendererList(data.rendererList);
+                });
+            }
+
+            private void RecordScreenPixelResolvePass(
+                RenderGraph renderGraph,
+                TextureHandle sourceColor,
+                TextureHandle screenPixelMask,
+                TextureHandle screenPixelResolved)
+            {
+                using IRasterRenderGraphBuilder builder =
+                    renderGraph.AddRasterRenderPass<ScreenPixelResolvePassData>(
+                        "Character Screen Pixel Resolve",
+                        out ScreenPixelResolvePassData passData);
+
+                passData.sourceColor = sourceColor;
+                passData.screenPixelMask = screenPixelMask;
+                passData.material = compositeMaterial;
+
+                builder.UseTexture(sourceColor, AccessFlags.Read);
+                builder.UseTexture(screenPixelMask, AccessFlags.Read);
+                builder.SetRenderAttachment(
+                    screenPixelResolved,
+                    0,
+                    AccessFlags.Write);
+                builder.SetRenderFunc(static (
+                    ScreenPixelResolvePassData data,
+                    RasterGraphContext context) =>
+                {
+                    data.material.SetTexture(
+                        SourceColorTextureId,
+                        data.sourceColor);
+                    data.material.SetTexture(
+                        ScreenPixelMaskTextureId,
+                        data.screenPixelMask);
+                    context.cmd.ClearRenderTarget(
+                        RTClearFlags.Color,
+                        Color.clear,
+                        1,
+                        0);
+                    context.cmd.DrawProcedural(
+                        Matrix4x4.identity,
+                        data.material,
+                        3,
+                        MeshTopology.Triangles,
+                        3,
+                        1);
+                });
+            }
+
+            private void RecordScreenPixelCompositePass(
+                RenderGraph renderGraph,
+                UniversalResourceData resources,
+                TextureHandle screenPixelResolved)
+            {
+                using IRasterRenderGraphBuilder builder =
+                    renderGraph.AddRasterRenderPass<ScreenPixelCompositePassData>(
+                        "Character Screen Pixel Composite",
+                        out ScreenPixelCompositePassData passData);
+
+                passData.screenPixelResolved = screenPixelResolved;
+                // Sample URP's resolved camera-depth texture. activeDepthTexture
+                // remains the attachment used while drawing the visibility mask,
+                // but is not guaranteed to be safely sampleable on every backend.
+                passData.sceneDepth = resources.cameraDepthTexture;
+                passData.material = compositeMaterial;
+
+                builder.UseTexture(screenPixelResolved, AccessFlags.Read);
+                builder.UseTexture(resources.cameraDepthTexture, AccessFlags.Read);
+                builder.SetRenderAttachment(
+                    resources.activeColorTexture,
+                    0,
+                    AccessFlags.ReadWrite);
+                builder.SetRenderFunc(static (
+                    ScreenPixelCompositePassData data,
+                    RasterGraphContext context) =>
+                {
+                    data.material.SetTexture(
+                        ScreenPixelResolvedTextureId,
+                        data.screenPixelResolved);
+                    data.material.SetTexture(
+                        SceneDepthTextureId,
+                        data.sceneDepth);
+                    context.cmd.DrawProcedural(
+                        Matrix4x4.identity,
+                        data.material,
+                        RequiredCompositePassCount - 1,
+                        MeshTopology.Triangles,
+                        3,
+                        1);
                 });
             }
 
@@ -278,6 +566,31 @@ namespace FantasySurvival.Rendering
             {
                 public TextureHandle mask;
                 public TextureHandle quantizedMask;
+                public Material material;
+            }
+
+            private sealed class SourceCopyPassData
+            {
+                public TextureHandle sourceInput;
+                public Material material;
+            }
+
+            private sealed class ScreenPixelMaskPassData
+            {
+                public RendererListHandle rendererList;
+            }
+
+            private sealed class ScreenPixelResolvePassData
+            {
+                public TextureHandle sourceColor;
+                public TextureHandle screenPixelMask;
+                public Material material;
+            }
+
+            private sealed class ScreenPixelCompositePassData
+            {
+                public TextureHandle screenPixelResolved;
+                public TextureHandle sceneDepth;
                 public Material material;
             }
         }

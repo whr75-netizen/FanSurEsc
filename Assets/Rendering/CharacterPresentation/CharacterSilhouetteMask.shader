@@ -65,6 +65,15 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
             clip(seed - 0.5h);
             return half4(0, 1, 0, 1);
         }
+
+        half4 FragScreenPixelRaw(Varyings input) : SV_Target
+        {
+            // Store linear eye depth beside occupancy. The later full-screen
+            // resolve can expand a character cell without drawing it over a
+            // nearer wall or prop that already owns the camera depth pixel.
+            float eyeDepth = LinearEyeDepth(input.positionCS.z, _ZBufferParams);
+            return half4(1.0h, (half)max(eyeDepth, 0.0001), 0.0h, 1.0h);
+        }
         ENDHLSL
 
         Pass
@@ -121,6 +130,23 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
             HLSLPROGRAM
             #pragma vertex Vert
             #pragma fragment FragRaw
+            #pragma multi_compile_instancing
+            ENDHLSL
+        }
+
+
+        Pass
+        {
+            Name "CharacterScreenPixelRawMask"
+
+            Cull Back
+            ZWrite Off
+            ZTest LEqual
+            ColorMask RG
+
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragScreenPixelRaw
             #pragma multi_compile_instancing
             ENDHLSL
         }

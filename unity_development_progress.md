@@ -2162,3 +2162,13 @@ Interactable (abstract base class)
 - `[A/B 시험]` 별도 `EnemyPixelComparisonTest` 씬의 왼쪽은 원본 256px을 nearest로 실제 64px PNG로 만든 Point/no-mipmap 머티리얼, 오른쪽은 원본을 유지하고 같은 캐릭터 셰이더에서 UV를 64칸으로 양자화해 LOD0 Point 표본하는 머티리얼이다. 전체 화면 RenderTexture·pixel camera는 추가하지 않았고 실제 gameplay 좀비 material도 아직 교체하지 않았다.
 - `[속도]` Player 권위값은 걷기 `5→10`, 기존 1.3배 규칙에 따른 달리기 `6.5→13`이다. `KenneyZombie`와 그 raid 근접 definition은 순찰 `1.5→3`, 전투 `3.4→6.8`이며 `EnemyAIController`가 이 definition 값을 기존 `NavMeshAgent`에 적용한다. 이동 Animator clip 속도는 별도 시각 튜닝이므로 변경하지 않았다.
 - `[검증]` Unity shader compiler error 0, 전용 씬 좀비 2개·각 Subject 1개·render mask `2147483649`·baked/runtime material 참조를 확인하고 1280×720 Editor camera 단독 렌더를 저장했다. raw PNG 팔레트 대조에서 baked 픽셀의 원본 외 색은 0개였다. 새 수치와 prefab/asset 참조는 정적으로 확인했으며, 변경된 실제 이동 거리와 animation foot sliding은 Play Mode에서 아직 확인하지 않았다. 기존 dirty `GameMap1`과 사용자 에셋은 저장·stage하지 않는다.
+
+---
+
+## 118. 선택적 화면공간 좀비 픽셀 합성 `[CHARACTER-RENDER-01]`
+
+- `[사용자 피드백·확정 원인][2026-09-04]` §117의 texture bake와 UV grid 양자화는 둘 다 표면 UV의 표본 해상도만 낮춰 실루엣·조명·화면상 픽셀 크기를 바꾸지 않으므로 거의 같아 보이는 것이 정상이다. 이를 같은 수치의 다른 패치로 반복하지 않고, 비교 오른쪽 개체만 실제 렌더 완료 색을 화면 셀 단위로 다시 구성하는 경로로 교체했다.
+- `[구조]` 기존 `CharacterSilhouetteSubject`와 `CharacterSilhouetteRendererFeature`를 확장했다. Subject의 opt-in rendering-layer bit30만 별도 가시 mask에 기록하고, 원래 opaque 렌더와 조명·그림자가 끝난 camera color를 한 번 복사한 뒤 각 `3×3` 화면 셀에서 실제로 보이는 가장 가까운 좀비 색·eye depth 하나를 선택해 저해상도 buffer에 저장하고 Point 방식으로 합성한다. 색 표본이 필요한 frame만 URP intermediate camera color를 요구해 backbuffer 직접 표본을 피한다. raw mask가 한 픽셀이라도 있는 셀은 전부 채우므로 원래 고해상도 몸체 가장자리가 새지 않으며, resolved camera depth보다 가까운 벽·소품 위에는 합성하지 않는다.
+- `[격리·보존]` bit31 외곽선, 표시 root의 render-time snap, Player·일반 좀비 material과 AI/NavMesh/Collider/피격/시체 수명은 유지했다. `EnemyPixelComparisonTest`의 왼쪽은 기존 64px texture bake 대조군, 오른쪽만 원본 texture·UV grid 0과 screen-space opt-in을 사용한다. 별도 Camera·Manager·전체 화면 픽셀 필터는 추가하지 않았다.
+- `[Unity shader·Play 검증]` Unity 6.5/URP 17.5에서 C# compile, mask `4/4` pass와 composite `5/5` pass, 두 shader supported·compiler error 0을 확인했다. 전용 씬 Play 1회에서 왼쪽 opt-in false, 오른쪽 true, 활성 screen target 및 bit30·bit31을 확인했고 1024×640 camera render에서 밝은 내부 `3×3` 셀의 완전 단색 비율이 왼쪽 `1899/3555`, 오른쪽 `3643/3670`이었다. 임시 전면 Cube를 둔 별도 렌더에서 오른쪽 합성이 Cube 앞을 침범하지 않았고, 검증 Cube 제거·Edit Mode·scene clean을 확인했다.
+- `[현재 경계]` 서로 다른 screen-pixel 대상 둘이 같은 화면 셀을 공유하면 아직 개체 ID가 없어 가장 가까운 eye-depth 표본 하나가 그 셀을 대표한다. 실제 gameplay 좀비 body 적용, 접촉 개체별 ID buffer, 최종 셀 크기·해상도/줌 정책은 시험 결과를 보고 재개방한다. Console에는 기능 오류가 아니라 잘못된 MCP Camera Capture instance ID를 사용한 검증 도구 오류 2건이 남아 있으며 실제 렌더는 Editor camera의 명시적 RenderTexture로 대체 확인했다.

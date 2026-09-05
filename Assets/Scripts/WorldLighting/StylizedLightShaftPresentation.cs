@@ -34,9 +34,11 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Range(0f, 1f)] private float sunExtinction = 0.16f;
         [SerializeField, Range(-0.85f, 0.85f)] private float sunAnisotropy = 0.22f;
         [SerializeField, Min(0.01f)] private float sunSurfaceFadeDistance = 0.45f;
+        [Tooltip("Maximum sun-volume suppression at full overcast; follows cloud gathering before precipitation starts.")]
         [SerializeField, Range(0f, 1f)] private float rainSuppression = 0.92f;
 
         [Header("Rain Mist")]
+        [Tooltip("Mist density at full overcast; follows cloud gathering rather than the delayed precipitation intensity.")]
         [SerializeField, Min(0f)] private float rainMistDensity = 0.025f;
         [SerializeField] private Color rainMistColor = new Color(0.68f, 0.68f, 0.68f, 1f);
         [SerializeField, Min(0.01f)] private float rainMistHeight = 8f;
@@ -51,6 +53,8 @@ namespace FantasySurvival.WorldLighting
         private Color sunColor = Color.white;
         private float sunStrength;
         private float rainIntensity;
+        // Derived presentation input. SkyLightingCycleController owns its progression.
+        private float overcastCoverage;
 
         internal int VisibleLocalEmitterLimit => Mathf.Clamp(
             visibleLocalEmitterLimit,
@@ -96,12 +100,14 @@ namespace FantasySurvival.WorldLighting
             Light directionalLight,
             Color color,
             float strength,
-            float precipitationIntensity)
+            float precipitationIntensity,
+            float stormCoverage)
         {
             sunLight = directionalLight;
             sunColor = color.linear;
             sunStrength = Mathf.Max(0f, strength);
             rainIntensity = Mathf.Clamp01(precipitationIntensity);
+            overcastCoverage = Mathf.Clamp01(stormCoverage);
         }
 
         internal void UnbindGameplayScene()
@@ -109,6 +115,7 @@ namespace FantasySurvival.WorldLighting
             sunLight = null;
             sunStrength = 0f;
             rainIntensity = 0f;
+            overcastCoverage = 0f;
         }
 
         internal bool TryGetRainMist(out Shader shader, out Color color, out Vector4 medium)
@@ -116,7 +123,7 @@ namespace FantasySurvival.WorldLighting
             shader = shaftShader;
             color = Color.clear;
             medium = Vector4.zero;
-            float density = Mathf.Max(0f, rainMistDensity) * rainIntensity;
+            float density = Mathf.Max(0f, rainMistDensity) * overcastCoverage;
             if (density <= 0f || shader == null || !shader.isSupported)
                 return false;
 
@@ -135,7 +142,7 @@ namespace FantasySurvival.WorldLighting
         internal bool TryGetDirectionalVolume(
             out DirectionalVolumetricLightSettings settings)
         {
-            float weatherVisibility = 1f - rainIntensity * rainSuppression;
+            float weatherVisibility = 1f - overcastCoverage * rainSuppression;
             float visibleIntensity =
                 sunStrength * sunIntensityMultiplier * Mathf.Clamp01(weatherVisibility);
             if (shaftShader == null ||

@@ -1096,7 +1096,8 @@ namespace FantasySurvival.WorldLighting
                 sunContribution *
                 directionalWeatherMultiplier *
                 currentWeatherSample.ShadowStrengthMultiplier,
-                currentWeatherSample.PrecipitationIntensity);
+                currentWeatherSample.PrecipitationIntensity,
+                currentOvercastCoverage);
             return true;
         }
 

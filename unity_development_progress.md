@@ -2252,3 +2252,14 @@ Interactable (abstract base class)
 - `[격자 검증]` 1/3/5/8px와 세 root phase의 순수 CPU12case에서 raw coverage 누락0·expected cell 불일치0·한 셀 내 ring 두께혼용0. 실제 Unity에서는 같은 frame의3px/5px 정면과 기본3px 쿼터뷰를 렌더해 제시했다. 기본값은3px로 복구했다. 새 mask/composite shader supported·compiler message0, Console error0이다. 서브픽셀 구멍·머리카락의 미세 오목부까지 컬러를 채우는 기능은 아니며 원본색 렌더를 그대로 둔다.
 - `[검증]` 관련 셰이더3개 supported·compiler message0, Console Error/Exception/Assert0. 실제 Play에서 9개 renderer의 그룹값·58bones·valid Human Avatar·2 animation layers·두 소비자 참조를 확인했다. Animator 0/1/1.3과 상체 layer1을 호출하고 서로 다른 실제 프레임에서 대기/걷기/달리기/권총 자세를 렌더했다(`[CALL]`). 임시 가상 키보드 S/Shift 시험은 이동값0이라 입력 성공으로 기록하지 않는다. 포커스를 강제하거나 입력 구조를 바꾸지 않고 Animator 호출로 검사 범위를 제한했으며 임시 장치0·이동 스크립트 enabled·Player 위치 복구를 확인했다. GetInstanceID 구형 API를 쓴 첫 진단 명령은 Unity6.5에서 컴파일되지 않아 GetEntityId로 고쳤으며 게임 코드 오류는 아니었다.
 - `[미검증·보존]` 수정된 균일 격자 정면과 날씨 GIF를 사용자에게 제시하고 아트 승인 대기다. 앞머리에 가린 눈썹은 드러나지 않으며, 먼 줌의 작은 부위는 한 셀로 합쳐질 수 있다. 원본 본/웨이트·머리카락 관통을 다시 저작하지 않았다. 실제 키보드 이동/전투 조작, 빌드·GPU 성능·왕복 세이브는 재검증하지 않았다. Player 생성/보존·씬 이동·저장 경계를 바꾸지 않았으므로 전체 게임 한 바퀴는 생략했다. Play를 종료하고 background=false로 복구했으며 기존 dirty GameMap1 및 다른 에셋을 저장/되돌리지 않았다.
+
+---
+
+## 127. Classic 잉크와 경계 색 재구성 분리 `[CHARACTER-RENDER-01]`
+
+- `[사용자 정정·원인][2026-09-05]` §126의 한 셀 ring은 격자가 일정하다는 뜻일 뿐 한 줄처럼 읽힌다는 보장이 아니었다. 셀 전체 검은 띠와 8-neighbor erosion은 좁은 부위를 검게 만들고, 낮은 부위 ID 우선은 소수의 눈/눈썹 표본이 셀 전체를 차지하게 했다. 이전 CPU 격자 검사는 이 시각 실패를 검증하지 못했다.
+- `[수정]` 같은 RendererFeature와 루트 snap을 유지한다. 보수적 셀 coverage의 빈 공간은 면적→중심 거리로 선택한 동일 visible 부위의 실제 lit color로 채우고, 이미 보이는 눈·눈썹·헤어·피부 픽셀은 보존한다. 외곽은 4-neighbor native1px, 내부 그룹 경계도 한쪽1px로 한 번만 합성한다. 전체 몸체 색 저해상도화·하드코딩 피부색·새 카메라는 없다. RGBA8 quantized mask에 source offset을 저장하고, native lit source copy1회를 Classic/ScreenPixel이 공유한다. Classic도 intermediate color/depth를 요청한다. GPU 비용은 미측정이다.
+- `[가림 순서]` 첫 시각 확인에서 선을 추출한 뒤 depth clip하면 낮은 정면 각도에서 선이 끊겼다. 직교/원근에 맞게 깊이를 환산하고 가림을 quantized mask 단계에서 먼저 확정한 뒤 잉크를 추출하도록 순서를 바꿨다. 실제 가려진 공간을 채우거나 벽 위에 테두리를 강제로 덧씌우지 않는다.
+- `[검증]` Unity shader compile 오류0, 기지 실제 Camera의 정면/쿼터와3/5px 대표 렌더를 수행했다(`[CALL]`). CPU 수동 대응 회귀18개는 면적/동점·source group/cell1,800위치·원본 내부49위치·좁은3px띠·한쪽 선·metadata·직교 depth를 확인한 것이며 GPU/시각 합격을 대신하지 않는다. 이후 가림 선행 변경은 실제 재촬영으로 확인했다. 임시 진단에서 asset Material에 실행 중 RT를 GetTexture로 조회해 texture-property 오류를 냈으며 게임 셰이더 오류와 구분한다. Console을 지우지 않았다.
+- `[경계·승인]` 정면과 대각선 PNG를 제시했다. 두꺼운 셀 ring은 제거됐지만 정면의 미세 오목 경계에는 거친 구간이 남아 있어 완전 해결/아트 승인으로 기록하지 않는다. 기본 계단3px·잉크1px, 보수적 확장 자체의 최대 축당2px 오차는 유지한다. 원본 파츠·텍스처·조명·Animator·이동·Player 수명·씬·세이브는 변경하지 않았다. GPU Profile·Player build·캐릭터 접촉/Transparent 차폐는 미검증이며 전체 게임 한 바퀴는 생략했다.
+- `[정리]` 촬영 후 Player 위치(0,0.5,0)·movement enabled·기본 grid3 복구를 확인했다. Play 종료·background=false·GameMap1 dirty 유지이며, 기존 사용자 씬/재질/preview prefab 변경은 저장하거나 되돌리지 않았다.

@@ -61,10 +61,15 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             return all(pixel >= int2(0, 0)) && all(pixel < dimensions);
         }
 
-        int LoadQuantizedGroup(int2 pixel)
+        int LoadVisibleGroup(int2 pixel)
         {
             if (!PixelInBounds(pixel))
                 return 0;
+            // A sub-cell eye or eyebrow is real artwork, not an error to erase
+            // with the cell's majority color. Use its actual visible boundary.
+            half4 raw = LOAD_TEXTURE2D(_CharacterSilhouetteMask, pixel);
+            if (raw.r >= _CoverageThreshold)
+                return (int)round(raw.g * 255.0h);
             return (int)round(LOAD_TEXTURE2D(_CharacterSilhouetteQuantizedMask, pixel).g * 255.0h);
         }
 
@@ -79,14 +84,33 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             return step(_CoverageThreshold, mask);
         }
 
+        bool IsSourceOccluded(int2 sourcePixel, int2 destinationPixel)
+        {
+            float sourceRawDepth = LOAD_TEXTURE2D(_CharacterSceneDepth, sourcePixel).r;
+            float sceneRawDepth = LOAD_TEXTURE2D(_CharacterSceneDepth, destinationPixel).r;
+            float sourceDepth = unity_OrthoParams.w > 0.5 ?
+                LinearDepthToEyeDepth(sourceRawDepth) : LinearEyeDepth(sourceRawDepth, _ZBufferParams);
+            float sceneDepth = unity_OrthoParams.w > 0.5 ?
+                LinearDepthToEyeDepth(sceneRawDepth) : LinearEyeDepth(sceneRawDepth, _ZBufferParams);
+            float depthTolerance = max(0.002, sourceDepth * 0.0005);
+            return sceneDepth + depthTolerance < sourceDepth;
+        }
+
         half4 FragExpand(Varyings input) : SV_Target
         {
             int2 pixel = int2(floor(input.positionCS.xy));
             int artPixelSize = clamp((int)round(_ArtPixelSize), 1, 8);
             int searchRadius = artPixelSize - 1;
             int searchSize = searchRadius * 2 + 1;
-            half occupied = 0;
-            half encodedGroup = 0;
+            // Each group votes by actual visible area, not by its numeric ID.
+            // Retain a source coordinate, not an averaged color: correction
+            // pixels must inherit this part's real texture and spatial lighting.
+            int counts[5] = { 0, 0, 0, 0, 0 };
+            float distances[5] = { 1e9, 1e9, 1e9, 1e9, 1e9 };
+            int2 sources[5];
+            [unroll]
+            for (int group = 0; group < 5; group++)
+                sources[group] = pixel;
 
             [loop]
             for (int y = 0; y < 15; y++)
@@ -115,38 +139,68 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                     if (any(pixel < cellMinimum) || any(pixel >= cellMinimum + artPixelSize))
                         continue;
 
-                    // Any visible source pixel fills its whole root-aligned
-                    // cell. Lower nonzero IDs protect eyes/eyebrows when several
-                    // visible parts share a cell; original color is never sampled.
-                    occupied = 1;
-                    if (raw.g > 0.0h && (encodedGroup <= 0.0h || raw.g < encodedGroup))
-                        encodedGroup = raw.g;
+                    int group = clamp((int)round(raw.g * 255.0h), 0, 4);
+                    counts[group]++;
+                    float2 fromCenter = sourcePixel -
+                        (cellMinimum + (artPixelSize - 1) * 0.5);
+                    float distanceSquared = dot(fromCenter, fromCenter);
+                    if (distanceSquared < distances[group])
+                    {
+                        distances[group] = distanceSquared;
+                        sources[group] = sourcePixel;
+                    }
                 }
             }
 
-            return half4(occupied, encodedGroup, 0, 1);
-        }
+            int winner = 0;
+            [unroll]
+            for (int candidate = 1; candidate < 5; candidate++)
+            {
+                if (counts[candidate] > counts[winner] ||
+                    (counts[candidate] == counts[winner] &&
+                        distances[candidate] < distances[winner]))
+                    winner = candidate;
+            }
 
-        half GroupBoundary(int2 pixel, int artPixelSize)
-        {
-            int centerGroup = LoadQuantizedGroup(pixel);
-            if (centerGroup == 0)
+            if (counts[winner] == 0)
                 return 0;
 
+            // Visibility is part of the resolved mask, BEFORE extracting ink.
+            // Clipping only the final line punches holes into an already built
+            // ring at walls and grazing floor views instead of tracing its edge.
+            half rawCoverage = LOAD_TEXTURE2D(_CharacterSilhouetteMask, pixel).r;
+            if (rawCoverage < _CoverageThreshold && IsSourceOccluded(sources[winner], pixel))
+                return 0;
+
+            // Coverage remains conservative: no already-rendered rounded body
+            // may protrude past the final stepped edge. Its extra area is COLOR,
+            // not a full-cell black band. Offset encoding is exact in RGBA8.
+            int2 sourceOffset = sources[winner] - pixel + searchRadius;
+            return half4(1, winner / 255.0h, sourceOffset / 255.0h);
+        }
+
+        bool HasInkBoundary(int2 pixel, int centerGroup)
+        {
+            // Four-connected, ONE native texel. Art-cell size controls the
+            // staircase cadence, never the width of the ink. Diagonal erosion
+            // and whole-cell group bands blackened narrow eyes, wrists and hair.
+            const int2 offsets[4] = {
+                int2(-1, 0), int2(1, 0), int2(0, -1), int2(0, 1)
+            };
             [unroll]
-            for (int y = -1; y <= 1; y++)
+            for (int index = 0; index < 4; index++)
             {
-                [unroll]
-                for (int x = -1; x <= 1; x++)
-                {
-                    int neighborGroup = LoadQuantizedGroup(pixel + int2(x, y) * artPixelSize);
-                    // A shared border belongs only to the higher ID side. This
-                    // produces one outline, never a separate band on both parts.
-                    if (neighborGroup > 0 && neighborGroup < centerGroup)
-                        return 1;
-                }
+                int2 neighbor = pixel + offsets[index];
+                if (LoadQuantizedOccupancy(neighbor) < 0.5h)
+                    return true;
+
+                int neighborGroup = LoadVisibleGroup(neighbor);
+                // Group ID owns a shared stroke on ONE side only. It does not
+                // choose which surface occupies the cell (area voting does).
+                if (neighborGroup > 0 && neighborGroup < centerGroup)
+                    return true;
             }
-            return 0;
+            return false;
         }
 
         half4 FragComposite(Varyings input) : SV_Target
@@ -154,36 +208,22 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             int2 pixel = int2(floor(input.positionCS.xy));
             int artPixelSize = clamp((int)round(_ArtPixelSize), 1, 8);
 
-            half center = LoadQuantizedOccupancy(pixel);
-            if (center < 0.5h)
-                return half4(_OutlineColor.rgb, 0);
+            half4 cell = LOAD_TEXTURE2D(_CharacterSilhouetteQuantizedMask, pixel);
+            if (cell.r < _CoverageThreshold)
+                return 0;
 
-            half neighbor00 = LoadQuantizedOccupancy(
-                pixel + int2(-artPixelSize, -artPixelSize));
-            half neighbor10 = LoadQuantizedOccupancy(
-                pixel + int2(0, -artPixelSize));
-            half neighbor20 = LoadQuantizedOccupancy(
-                pixel + int2(artPixelSize, -artPixelSize));
-            half neighbor01 = LoadQuantizedOccupancy(
-                pixel + int2(-artPixelSize, 0));
-            half neighbor21 = LoadQuantizedOccupancy(
-                pixel + int2(artPixelSize, 0));
-            half neighbor02 = LoadQuantizedOccupancy(
-                pixel + int2(-artPixelSize, artPixelSize));
-            half neighbor12 = LoadQuantizedOccupancy(
-                pixel + int2(0, artPixelSize));
-            half neighbor22 = LoadQuantizedOccupancy(
-                pixel + int2(artPixelSize, artPixelSize));
+            int2 sourcePixel = pixel + int2(round(cell.ba * 255.0h)) - (artPixelSize - 1);
+            half4 raw = LOAD_TEXTURE2D(_CharacterSilhouetteMask, pixel);
+            bool hasOriginalSurface = raw.r >= _CoverageThreshold;
+            int group = (int)round((hasOriginalSurface ? raw.g : cell.g) * 255.0h);
 
-            // One art-cell inward ring on the same conservative coverage grid.
-            // Do not mix native-pixel erosion with art-cell width or let raw
-            // rounded geometry cancel pixels from this final stepped contour.
-            half eroded = min(
-                min(min(neighbor00, neighbor10), min(neighbor20, neighbor01)),
-                min(min(neighbor21, neighbor02), min(neighbor12, neighbor22)));
-            half silhouette = center * (1.0h - eroded);
-            half groupBoundary = GroupBoundary(pixel, artPixelSize);
-            return half4(_OutlineColor.rgb, _OutlineColor.a * max(silhouette, groupBoundary));
+            if (HasInkBoundary(pixel, group))
+                return half4(_OutlineColor.rgb, _OutlineColor.a);
+
+            // Preserve all native interior pixels. Only the boundary correction
+            // band uses the winning part's visible, already-lit source color.
+            return hasOriginalSurface ? half4(0, 0, 0, 0) :
+                half4(LOAD_TEXTURE2D(_CharacterSourceColor, sourcePixel).rgb, 1);
         }
 
         half4 FragCopySource(Varyings input) : SV_Target

@@ -59,19 +59,11 @@ namespace FantasySurvival.Rendering
                 return;
             }
 
-            bool needsScreenPixelColor =
-                CharacterSilhouetteSubject.HasActiveScreenPixelSubject;
-
             pass.Setup(settings.maskMaterial, settings.compositeMaterial);
-            pass.ConfigureInput(
-                needsScreenPixelColor
-                    ? ScriptableRenderPassInput.Depth
-                    : ScriptableRenderPassInput.None);
-            // The screen-pixel path samples the already lit camera color. Force
-            // URP to render through cameraColor instead of a platform backbuffer;
-            // this is the same contract used by URP's Full Screen Pass when it
-            // fetches color.
-            pass.requiresIntermediateTexture = needsScreenPixelColor;
+            pass.ConfigureInput(ScriptableRenderPassInput.Depth);
+            // Both outline paths sample the already lit camera color and resolved
+            // depth. Keep cameraColor sampleable instead of using the backbuffer.
+            pass.requiresIntermediateTexture = true;
             renderer.EnqueuePass(pass);
         }
 
@@ -126,7 +118,9 @@ namespace FantasySurvival.Rendering
                 UniversalResourceData resources = frameData.Get<UniversalResourceData>();
                 UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
                 if (!resources.activeColorTexture.IsValid() ||
-                    !resources.activeDepthTexture.IsValid())
+                    !resources.activeDepthTexture.IsValid() ||
+                    !resources.cameraColor.IsValid() ||
+                    !resources.cameraDepthTexture.IsValid())
                 {
                     return;
                 }
@@ -146,7 +140,9 @@ namespace FantasySurvival.Rendering
                     FilterMode.Point);
 
                 RenderTextureDescriptor quantizedDescriptor = descriptor;
-                quantizedDescriptor.graphicsFormat = GraphicsFormat.R8G8_UNorm;
+                // R/G retain coverage/group; B/A carry integer source-pixel
+                // offsets biased by the search radius for edge reconstruction.
+                quantizedDescriptor.graphicsFormat = GraphicsFormat.R8G8B8A8_UNorm;
                 TextureHandle quantizedMask = UniversalRenderer.CreateRenderGraphTexture(
                     renderGraph,
                     quantizedDescriptor,
@@ -155,24 +151,29 @@ namespace FantasySurvival.Rendering
                     FilterMode.Point);
 
                 RecordMaskPass(renderGraph, frameData, resources, mask);
-                RecordExpansionPass(renderGraph, mask, quantizedMask);
+                RecordExpansionPass(renderGraph, mask, quantizedMask, resources.cameraDepthTexture);
 
-                if (CharacterSilhouetteSubject.HasActiveScreenPixelSubject &&
-                    resources.cameraColor.IsValid() &&
-                    resources.cameraDepthTexture.IsValid())
+                RenderTextureDescriptor sourceDescriptor =
+                    cameraData.cameraTargetDescriptor;
+                sourceDescriptor.depthBufferBits = 0;
+                sourceDescriptor.msaaSamples = 1;
+                TextureHandle sourceColor =
+                    UniversalRenderer.CreateRenderGraphTexture(
+                        renderGraph,
+                        sourceDescriptor,
+                        "_CharacterSourceColor",
+                        true,
+                        FilterMode.Point);
+
+                // Preserve one native-resolution lit source before either path
+                // composites into camera color.
+                RecordSourceCopyPass(
+                    renderGraph,
+                    resources.cameraColor,
+                    sourceColor);
+
+                if (CharacterSilhouetteSubject.HasActiveScreenPixelSubject)
                 {
-                    RenderTextureDescriptor sourceDescriptor =
-                        cameraData.cameraTargetDescriptor;
-                    sourceDescriptor.depthBufferBits = 0;
-                    sourceDescriptor.msaaSamples = 1;
-                    TextureHandle sourceColor =
-                        UniversalRenderer.CreateRenderGraphTexture(
-                            renderGraph,
-                            sourceDescriptor,
-                            "_CharacterSourceColor",
-                            true,
-                            FilterMode.Point);
-
                     RenderTextureDescriptor screenMaskDescriptor = descriptor;
                     screenMaskDescriptor.graphicsFormat =
                         GraphicsFormat.R16G16_SFloat;
@@ -210,10 +211,6 @@ namespace FantasySurvival.Rendering
                             true,
                             FilterMode.Point);
 
-                    RecordSourceCopyPass(
-                        renderGraph,
-                        resources.cameraColor,
-                        sourceColor);
                     RecordScreenPixelMaskPass(
                         renderGraph,
                         frameData,
@@ -235,7 +232,12 @@ namespace FantasySurvival.Rendering
                         screenPixelOutlineDepth);
                 }
 
-                RecordCompositePass(renderGraph, resources, mask, quantizedMask);
+                RecordCompositePass(
+                    renderGraph,
+                    resources,
+                    mask,
+                    quantizedMask,
+                    sourceColor);
             }
 
             private int GetArtPixelSize()
@@ -317,7 +319,7 @@ namespace FantasySurvival.Rendering
             {
                 using IRasterRenderGraphBuilder builder =
                     renderGraph.AddRasterRenderPass<SourceCopyPassData>(
-                        "Character Screen Pixel Source Copy",
+                        "Character Lit Source Copy",
                         out SourceCopyPassData passData);
 
                 passData.sourceInput = sourceInput;
@@ -549,7 +551,8 @@ namespace FantasySurvival.Rendering
             private void RecordExpansionPass(
                 RenderGraph renderGraph,
                 TextureHandle mask,
-                TextureHandle quantizedMask)
+                TextureHandle quantizedMask,
+                TextureHandle sceneDepth)
             {
                 using IRasterRenderGraphBuilder builder =
                     renderGraph.AddRasterRenderPass<ExpansionPassData>(
@@ -557,14 +560,17 @@ namespace FantasySurvival.Rendering
                         out ExpansionPassData passData);
 
                 passData.mask = mask;
+                passData.sceneDepth = sceneDepth;
                 passData.material = compositeMaterial;
 
                 builder.UseTexture(mask, AccessFlags.Read);
+                builder.UseTexture(sceneDepth, AccessFlags.Read);
                 builder.SetRenderAttachment(quantizedMask, 0, AccessFlags.Write);
                 builder.SetRenderFunc((ExpansionPassData data, RasterGraphContext context) =>
                 {
                     context.cmd.ClearRenderTarget(RTClearFlags.Color, Color.clear, 1, 0);
                     data.material.SetTexture(MaskTextureId, data.mask);
+                    data.material.SetTexture(SceneDepthTextureId, data.sceneDepth);
                     context.cmd.DrawProcedural(
                         Matrix4x4.identity,
                         data.material,
@@ -579,7 +585,8 @@ namespace FantasySurvival.Rendering
                 RenderGraph renderGraph,
                 UniversalResourceData resources,
                 TextureHandle mask,
-                TextureHandle quantizedMask)
+                TextureHandle quantizedMask,
+                TextureHandle sourceColor)
             {
                 using IRasterRenderGraphBuilder builder =
                     renderGraph.AddRasterRenderPass<CompositePassData>(
@@ -588,10 +595,12 @@ namespace FantasySurvival.Rendering
 
                 passData.mask = mask;
                 passData.quantizedMask = quantizedMask;
+                passData.sourceColor = sourceColor;
                 passData.material = compositeMaterial;
 
                 builder.UseTexture(mask, AccessFlags.Read);
                 builder.UseTexture(quantizedMask, AccessFlags.Read);
+                builder.UseTexture(sourceColor, AccessFlags.Read);
                 builder.SetRenderAttachment(
                     resources.activeColorTexture,
                     0,
@@ -602,6 +611,7 @@ namespace FantasySurvival.Rendering
                     data.material.SetTexture(
                         QuantizedMaskTextureId,
                         data.quantizedMask);
+                    data.material.SetTexture(SourceColorTextureId, data.sourceColor);
                     context.cmd.DrawProcedural(
                         Matrix4x4.identity,
                         data.material,
@@ -620,6 +630,7 @@ namespace FantasySurvival.Rendering
             private sealed class ExpansionPassData
             {
                 public TextureHandle mask;
+                public TextureHandle sceneDepth;
                 public Material material;
             }
 
@@ -627,6 +638,7 @@ namespace FantasySurvival.Rendering
             {
                 public TextureHandle mask;
                 public TextureHandle quantizedMask;
+                public TextureHandle sourceColor;
                 public Material material;
             }
 

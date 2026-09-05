@@ -10846,14 +10846,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldLighting.StylizedLightShaftPresentation
   shell: {fileID: 7231324139644495580}
   shaftShader: {fileID: 4800000, guid: e677b27774163e44795f473f9b019e25, type: 3}
-  sunSampleCount: 12
-  sunVolumeHeight: 12
+  sunSampleCount: 24
+  sunVolumeHeight: 16
   sunVolumeBaseHeight: 0.02
   sunIntensityMultiplier: 0.018
   sunExtinction: 0.16
   sunAnisotropy: 0.22
   sunSurfaceFadeDistance: 0.45
   rainSuppression: 0.92
+  rainMistDensity: 0.025
+  rainMistColor: {r: 0.68, g: 0.68, b: 0.68, a: 1}
+  rainMistHeight: 8
+  rainMistStartDistance: 2
   visibleLocalEmitterLimit: 8
   localRainScatterMultiplier: 1.35
 --- !u!1 &4650524401803780695

@@ -7,9 +7,11 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
         [HideInInspector] _SurfaceFadeDistance("Surface Fade Distance", Float) = 0.45
         [HideInInspector] _DirectionalVolumeBounds("Volume Bounds", Vector) = (0.02, 12, 0, 0)
         [HideInInspector] _DirectionalMediumSettings("Medium Settings", Vector) = (0.16, 0.22, 0, 0)
-        [HideInInspector] _DirectionalSampleCount("Sample Count", Float) = 8
+        [HideInInspector] _DirectionalSampleCount("Sample Count", Float) = 24
         [HideInInspector] _DirectionalShellPlane("Shell Plane", Vector) = (0, 0, 0, 0)
         [HideInInspector] _DirectionalVolumeTexture("Directional Volume", 2D) = "black" {}
+        [HideInInspector] _RainMistColor("Rain Mist Color", Color) = (0, 0, 0, 1)
+        [HideInInspector] _RainMistSettings("Rain Mist Density Height Start", Vector) = (0, 8, 2, 0)
     }
 
     SubShader
@@ -30,19 +32,21 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
         {
             Name "DirectionalVolumeIntegration"
             Blend One Zero
+            ColorMask RGBA
 
             HLSLPROGRAM
             #pragma target 4.5
             #pragma vertex Vert
             #pragma fragment Frag
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE
+            #pragma multi_compile_fragment _ _LIGHT_COOKIES
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 
-            #define DIRECTIONAL_VOLUME_MAXIMUM_SAMPLES 16
-            #define DIRECTIONAL_VOLUME_MAXIMUM_SEGMENTS 17
+            #define DIRECTIONAL_VOLUME_MAXIMUM_SAMPLES 32
+            #define DIRECTIONAL_VOLUME_MAXIMUM_SEGMENTS 33
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _ShaftColor;
@@ -95,7 +99,8 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                 float2 uv,
                 out float3 rayOriginWS,
                 out float3 rayDirectionWS,
-                out float sceneDistance)
+                out float sceneDistance,
+                out float sceneViewDepth)
             {
                 #if UNITY_REVERSED_Z
                     const float nearDeviceDepth = 1.0;
@@ -116,7 +121,14 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                 rayOriginWS = nearWS;
                 rayDirectionWS = VolumeSafeNormalize(farWS - nearWS);
 
-                float rawSceneDepth = SampleSceneDepth(uv, sampler_PointClamp);
+                // Half-res centers can land exactly between full-res texels.
+                // Choose the same floor-indexed source texel as the compositor,
+                // then sample its center so GPU point-sampler ties cannot choose
+                // a different depth row than the upsample plane prediction.
+                float2 depthPixel = clamp(floor(uv * _CameraDepthTexture_TexelSize.zw),
+                    0.0, _CameraDepthTexture_TexelSize.zw - 1.0);
+                float2 depthUV = (depthPixel + 0.5) * _CameraDepthTexture_TexelSize.xy;
+                float rawSceneDepth = SampleSceneDepth(depthUV, sampler_PointClamp);
                 float3 sceneWS = ComputeWorldSpacePosition(
                     uv,
                     ToDeviceDepth(rawSceneDepth),
@@ -124,6 +136,9 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                 sceneDistance = max(
                     dot(sceneWS - rayOriginWS, rayDirectionWS),
                     0.0);
+                // Store axial view depth, not distance along a perspective ray,
+                // so adjacent rays use the same metric during depth upsampling.
+                sceneViewDepth = max(-TransformWorldToView(sceneWS).z, 0.0);
             }
 
             bool IntersectHeightVolume(
@@ -159,8 +174,8 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                 }
 
                 half4 shadowParams = GetMainLightShadowParams();
-                // One raw comparison per cell keeps the directional volume bounded;
-                // the half-resolution composite supplies presentation smoothing.
+                // One comparison per world cell. Depth-aware reconstruction
+                // smooths matching surfaces without mixing foreground/background.
                 real attenuation = SAMPLE_TEXTURE2D_SHADOW(
                     _MainLightShadowmapTexture,
                     sampler_LinearClampCompare,
@@ -186,7 +201,7 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                     max(pow(denominator, 1.5), 0.0001);
             }
 
-            float IntegrateDirectionalVolume(
+            float3 IntegrateDirectionalVolume(
                 float3 rayOriginWS,
                 float3 rayDirectionWS,
                 float sceneDistance,
@@ -199,7 +214,7 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                     DIRECTIONAL_VOLUME_MAXIMUM_SAMPLES);
                 float safeExtinction = max(_DirectionalMediumSettings.x, 0.0);
                 float transmittance = 1.0;
-                float accumulated = 0.0;
+                float3 accumulated = 0.0;
 
                 Light mainLight = GetMainLight();
                 float3 lightDirection = VolumeSafeNormalize(mainLight.direction);
@@ -278,7 +293,12 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                         segmentLength * 0.5;
                     float3 samplePositionWS =
                         rayOriginWS + rayDirectionWS * distanceAlongRay;
-                    float visibility = SampleMainShadow(samplePositionWS);
+                    float3 visibility = SampleMainShadow(samplePositionWS).xxx;
+                    #if defined(_LIGHT_COOKIES)
+                        // The same world-projected cookie that shades opaque
+                        // surfaces attenuates incident sunlight exactly once.
+                        visibility *= SampleMainLightCookie(samplePositionWS);
+                    #endif
 
                     float normalizedHeight = saturate(
                         (samplePositionWS.y - baseHeight) / volumeHeight);
@@ -316,11 +336,13 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                 float3 rayOriginWS;
                 float3 rayDirectionWS;
                 float sceneDistance;
+                float sceneViewDepth;
                 ReconstructCameraRay(
                     uv,
                     rayOriginWS,
                     rayDirectionWS,
-                    sceneDistance);
+                    sceneDistance,
+                    sceneViewDepth);
 
                 float entry;
                 float exit;
@@ -332,10 +354,10 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                         entry,
                         exit))
                 {
-                    return half4(0.0, 0.0, 0.0, 0.0);
+                    return half4(0.0, 0.0, 0.0, sceneViewDepth);
                 }
 
-                float scattering = IntegrateDirectionalVolume(
+                float3 scattering = IntegrateDirectionalVolume(
                     rayOriginWS,
                     rayDirectionWS,
                     sceneDistance,
@@ -343,7 +365,7 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                     exit);
                 return half4(
                     _ShaftColor.rgb * (_ShaftIntensity * scattering),
-                    0.0);
+                    sceneViewDepth);
             }
             ENDHLSL
         }
@@ -359,8 +381,10 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
             #pragma fragment Frag
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 
             TEXTURE2D_X(_DirectionalVolumeTexture);
+            float4 _DirectionalVolumeTexture_TexelSize;
 
             struct Attributes
             {
@@ -385,14 +409,136 @@ Shader "Hidden/FantasySurvival/StylizedLightShaft"
                 return output;
             }
 
+            float SceneViewDepth(float2 uv)
+            {
+                float rawDepth = SampleSceneDepth(uv, sampler_PointClamp);
+                #if UNITY_REVERSED_Z
+                    float deviceDepth = rawDepth;
+                #else
+                    float deviceDepth = lerp(UNITY_NEAR_CLIP_VALUE, 1.0, rawDepth);
+                #endif
+                float3 sceneWS = ComputeWorldSpacePosition(uv, deviceDepth, UNITY_MATRIX_I_VP);
+                return max(-TransformWorldToView(sceneWS).z, 0.0);
+            }
+
             half4 Frag(Varyings input) : SV_Target0
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
-                half3 volume = SAMPLE_TEXTURE2D_X(
-                    _DirectionalVolumeTexture,
-                    sampler_LinearClamp,
-                    saturate(input.uv)).rgb;
-                return half4(volume, 0.0);
+                float2 uv = saturate(input.uv);
+                float targetDepth = SceneViewDepth(uv);
+                float2 samplePosition = uv * _DirectionalVolumeTexture_TexelSize.zw - 0.5;
+                float2 firstPixel = floor(samplePosition);
+                float2 blend = frac(samplePosition);
+                float depthTolerance = max(0.05, targetDepth * 0.002);
+                float2 depthPixelSize = _CameraDepthTexture_TexelSize.xy;
+                float2 before = targetDepth - float2(
+                    SceneViewDepth(saturate(uv - float2(depthPixelSize.x, 0.0))),
+                    SceneViewDepth(saturate(uv - float2(0.0, depthPixelSize.y))));
+                float2 after = float2(
+                    SceneViewDepth(saturate(uv + float2(depthPixelSize.x, 0.0))),
+                    SceneViewDepth(saturate(uv + float2(0.0, depthPixelSize.y)))) - targetDepth;
+                // A continuous plane has matching one-sided depth slopes. A
+                // silhouette does not: keep its original narrow rejection range.
+                float2 planar = step(abs(after - before), depthTolerance.xx);
+                float2 depthSlope = (before + after) * 0.5 * planar;
+                float2 targetPixel = uv * _CameraDepthTexture_TexelSize.zw - 0.5;
+                float3 weightedVolume = 0.0;
+                float totalWeight = 0.0;
+                [unroll]
+                for (int y = 0; y < 2; y++)
+                {
+                    [unroll]
+                    for (int x = 0; x < 2; x++)
+                    {
+                        float2 tapUV = (firstPixel + float2(x, y) + 0.5) *
+                            _DirectionalVolumeTexture_TexelSize.xy;
+                        half4 tap = SAMPLE_TEXTURE2D_X(
+                            _DirectionalVolumeTexture, sampler_PointClamp, tapUV);
+                        float bilinearWeight = (x == 0 ? 1.0 - blend.x : blend.x) *
+                            (y == 0 ? 1.0 - blend.y : blend.y);
+                        // Integration point-samples full-res depth. Predict the
+                        // plane at that exact source texel, not the low-res center.
+                        float2 sourcePixel = clamp(floor(tapUV * _CameraDepthTexture_TexelSize.zw),
+                            0.0, _CameraDepthTexture_TexelSize.zw - 1.0);
+                        float expectedDepth = targetDepth + dot(depthSlope, sourcePixel - targetPixel);
+                        float depthWeight = saturate(1.0 - abs((float)tap.a - expectedDepth) /
+                            depthTolerance);
+                        float weight = bilinearWeight * depthWeight;
+                        weightedVolume += tap.rgb * weight;
+                        totalWeight += weight;
+                    }
+                }
+                // A subpixel foreground object may have no half-res match.
+                // Reject unrelated air behind it instead of leaking that light.
+                return half4(weightedVolume / max(totalWeight, 0.00001), 0.0);
+            }
+            ENDHLSL
+        }
+        Pass
+        {
+            Name "RainMistComposite"
+            Blend SrcAlpha OneMinusSrcAlpha
+
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma vertex MistVert
+            #pragma fragment MistFrag
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
+
+            half4 _RainMistColor;
+            float4 _RainMistSettings; // extinction per metre, height, clear near distance
+
+            struct MistVaryings
+            {
+                float4 positionCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
+                UNITY_VERTEX_OUTPUT_STEREO
+            };
+
+            MistVaryings MistVert(uint vertexID : SV_VertexID)
+            {
+                MistVaryings output;
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
+                output.positionCS = GetFullScreenTriangleVertexPosition(vertexID);
+                output.uv = GetFullScreenTriangleTexCoord(vertexID);
+                return output;
+            }
+
+            half4 MistFrag(MistVaryings input) : SV_Target0
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                float2 uv = saturate(input.uv);
+                float rawDepth = SampleSceneDepth(uv, sampler_PointClamp);
+                #if UNITY_REVERSED_Z
+                    const float nearDepth = 1.0;
+                    float deviceDepth = rawDepth;
+                #else
+                    const float nearDepth = UNITY_NEAR_CLIP_VALUE;
+                    float deviceDepth = lerp(UNITY_NEAR_CLIP_VALUE, 1.0, rawDepth);
+                #endif
+                // Near-plane origins support the game's orthographic camera as
+                // well as perspective; depth clips mist against real surfaces.
+                float3 originWS = ComputeWorldSpacePosition(uv, nearDepth, UNITY_MATRIX_I_VP);
+                float3 sceneWS = ComputeWorldSpacePosition(uv, deviceDepth, UNITY_MATRIX_I_VP);
+                float3 toSurface = sceneWS - originWS;
+                float sceneDistance = length(toSurface);
+                float3 rayDirection = toSurface / max(sceneDistance, 0.00001);
+                float entry = max(_RainMistSettings.z, 0.0);
+                float exit = sceneDistance;
+                if (abs(rayDirection.y) > 0.00001)
+                {
+                    float baseHit = -originWS.y / rayDirection.y;
+                    float topHit = (_RainMistSettings.y - originWS.y) / rayDirection.y;
+                    entry = max(entry, min(baseHit, topHit));
+                    exit = min(exit, max(baseHit, topHit));
+                }
+                else if (originWS.y < 0.0 || originWS.y > _RainMistSettings.y)
+                    return 0;
+
+                float pathLength = max(exit - entry, 0.0);
+                half opacity = 1.0 - exp(-max(_RainMistSettings.x, 0.0) * pathLength);
+                return half4(_RainMistColor.rgb, opacity);
             }
             ENDHLSL
         }

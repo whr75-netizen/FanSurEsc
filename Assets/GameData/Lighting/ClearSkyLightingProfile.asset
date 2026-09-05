@@ -30,13 +30,14 @@ MonoBehaviour:
   minimumDirectionalIntensity: 0.12
   cloudShadowGeneratorShader: {fileID: 4800000, guid: b063d449ce9e1254fa0df00da032ac2c, type: 3}
   cloudShadowWorldSize: {x: 128, y: 128}
+  cloudShadowFormationSize: 18.3
   cloudShadowResolution: 512
   cloudShadowUpdateInterval: 0.25
   cloudShadowEvolutionSpeed: 0.025
-  cloudShadowCoverage: 0.38
+  cloudShadowCoverage: 0.55
   cloudShadowBillowStrength: 0.7
   cloudShadowErosionStrength: 0.32
-  cloudShadowMaximumAttenuation: 0.42
+  cloudShadowMaximumAttenuation: 0.72
   cloudShadowSeed: 1979
   cloudShadowWorldVelocity: {x: 0.75, y: 0}
   lowElevationCloudShadowSoftnessMip: 1.25
@@ -44,6 +45,7 @@ MonoBehaviour:
   lowElevationCloudShadowOpacity: 0.55
   highElevationCloudShadowOpacity: 0.9
   weatherTransitionSeconds: 0.75
+  stormGatherSeconds: 8
   weatherPresets:
   - weatherType: 0
     ambientTint: {r: 1, g: 1, b: 1, a: 1}

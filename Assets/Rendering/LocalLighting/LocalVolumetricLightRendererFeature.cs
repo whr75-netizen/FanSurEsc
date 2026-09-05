@@ -45,6 +45,8 @@ namespace FantasySurvival.Rendering
             Shader.PropertyToID("_DirectionalSampleCount");
         private static readonly int DirectionalShellPlaneId =
             Shader.PropertyToID("_DirectionalShellPlane");
+        private static readonly int RainMistColorId = Shader.PropertyToID("_RainMistColor");
+        private static readonly int RainMistSettingsId = Shader.PropertyToID("_RainMistSettings");
 
         [SerializeField] private Material volumeMaterial;
         [Tooltip("Full-resolution integration samples per visible light cone. Higher values reduce banding at proportional GPU cost.")]
@@ -156,7 +158,11 @@ namespace FantasySurvival.Rendering
                     directionalSettings.SourceLight) &&
                 EnsureDirectionalMaterial(directionalSettings.Shader);
 
-            if (lightCount <= 0 && !hasDirectionalVolume)
+            bool hasRainMist = presentation.TryGetRainMist(
+                out Shader mistShader, out Color mistColor, out Vector4 mistSettings) &&
+                EnsureDirectionalMaterial(mistShader);
+
+            if (lightCount <= 0 && !hasDirectionalVolume && !hasRainMist)
             {
                 return;
             }
@@ -202,14 +208,22 @@ namespace FantasySurvival.Rendering
                         0f));
                 directionalMaterial.SetFloat(
                     DirectionalSampleCountId,
-                    Mathf.Clamp(directionalSettings.SampleCount, 4, 16));
+                    Mathf.Clamp(directionalSettings.SampleCount, 4, 32));
                 directionalMaterial.SetVector(
                     DirectionalShellPlaneId,
                     BuildDirectionalShellPlane(camera, directionalSettings));
                 sunMaterial = directionalMaterial;
             }
 
-            volumePass.Setup(localMaterial, sunMaterial);
+            Material mistMaterial = null;
+            if (hasRainMist)
+            {
+                directionalMaterial.SetColor(RainMistColorId, mistColor);
+                directionalMaterial.SetVector(RainMistSettingsId, mistSettings);
+                mistMaterial = directionalMaterial;
+            }
+
+            volumePass.Setup(localMaterial, sunMaterial, mistMaterial);
             renderer.EnqueuePass(volumePass);
         }
 
@@ -334,9 +348,11 @@ namespace FantasySurvival.Rendering
                 new("Directional Volumetric Light Integration");
             private static readonly ProfilingSampler DirectionalCompositeProfilingSampler =
                 new("Directional Volumetric Light Composite");
+            private static readonly ProfilingSampler RainMistProfilingSampler = new("Rain Mist");
 
             private Material localMaterial;
             private Material directionalMaterial;
+            private Material rainMistMaterial;
 
             internal LocalVolumetricLightPass()
             {
@@ -345,17 +361,18 @@ namespace FantasySurvival.Rendering
                 ConfigureInput(ScriptableRenderPassInput.Depth);
             }
 
-            internal void Setup(Material newLocalMaterial, Material newDirectionalMaterial)
+            internal void Setup(Material newLocalMaterial, Material newDirectionalMaterial, Material newRainMistMaterial)
             {
                 localMaterial = newLocalMaterial;
                 directionalMaterial = newDirectionalMaterial;
+                rainMistMaterial = newRainMistMaterial;
             }
 
             public override void RecordRenderGraph(
                 RenderGraph renderGraph,
                 ContextContainer frameData)
             {
-                if (localMaterial == null && directionalMaterial == null)
+                if (localMaterial == null && directionalMaterial == null && rainMistMaterial == null)
                 {
                     return;
                 }
@@ -366,6 +383,11 @@ namespace FantasySurvival.Rendering
                 {
                     return;
                 }
+
+                // Attenuate opaque surfaces first; light scattering and the
+                // existing transparent precipitation are drawn afterwards.
+                if (rainMistMaterial != null)
+                    RecordRainMist(renderGraph, resources);
 
                 if (directionalMaterial != null)
                 {
@@ -398,6 +420,21 @@ namespace FantasySurvival.Rendering
                 {
                     RecordLocalVolumes(renderGraph, resources);
                 }
+            }
+
+            private void RecordRainMist(RenderGraph renderGraph, UniversalResourceData resources)
+            {
+                using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<LocalPassData>(
+                    "Rain Mist", out LocalPassData passData, RainMistProfilingSampler);
+                passData.material = rainMistMaterial;
+                builder.UseAllGlobalTextures(true);
+                builder.UseTexture(resources.cameraDepthTexture, AccessFlags.Read);
+                builder.SetRenderAttachment(resources.activeColorTexture, 0, AccessFlags.ReadWrite);
+                builder.SetRenderFunc(static (LocalPassData data, RasterGraphContext context) =>
+                {
+                    context.cmd.DrawProcedural(Matrix4x4.identity, data.material, 2,
+                        MeshTopology.Triangles, 3, 1);
+                });
             }
 
             private void RecordDirectionalIntegration(
@@ -452,7 +489,9 @@ namespace FantasySurvival.Rendering
                 passData.material = directionalMaterial;
                 passData.directionalVolume = directionalVolume;
 
+                builder.UseAllGlobalTextures(true);
                 builder.UseTexture(directionalVolume, AccessFlags.Read);
+                builder.UseTexture(resources.cameraDepthTexture, AccessFlags.Read);
                 builder.SetRenderAttachment(
                     resources.activeColorTexture,
                     0,

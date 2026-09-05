@@ -120,7 +120,17 @@ namespace FantasySurvival.WorldLighting
             SkyWeatherSample to,
             float t)
         {
+            return Interpolate(from, to, t, t);
+        }
+
+        public static SkyWeatherSample Interpolate(
+            SkyWeatherSample from,
+            SkyWeatherSample to,
+            float t,
+            float precipitationT)
+        {
             float easedT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(t));
+            float easedPrecipitationT = Mathf.SmoothStep(0f, 1f, Mathf.Clamp01(precipitationT));
             return new SkyWeatherSample(
                 Color.Lerp(from.AmbientTint, to.AmbientTint, easedT),
                 Mathf.Lerp(
@@ -147,7 +157,7 @@ namespace FantasySurvival.WorldLighting
                 Mathf.Lerp(
                     from.PrecipitationIntensity,
                     to.PrecipitationIntensity,
-                    easedT),
+                    easedPrecipitationT),
                 Color.Lerp(from.PrecipitationColor, to.PrecipitationColor, easedT));
         }
     }
@@ -289,10 +299,11 @@ namespace FantasySurvival.WorldLighting
         private const int DefaultCloudShadowResolution = 512;
         private const float DefaultCloudShadowUpdateInterval = 0.25f;
         private const float DefaultCloudShadowEvolutionSpeed = 0.025f;
-        private const float DefaultCloudShadowCoverage = 0.38f;
+        private const float DefaultCloudShadowCoverage = 0.55f;
+        private const float DefaultCloudShadowFormationSize = 18.3f;
         private const float DefaultCloudShadowBillowStrength = 0.70f;
         private const float DefaultCloudShadowErosionStrength = 0.32f;
-        private const float DefaultCloudShadowMaximumAttenuation = 0.42f;
+        private const float DefaultCloudShadowMaximumAttenuation = 0.72f;
         private static readonly Color DefaultMinimumLightColor =
             new Color(0.15f, 0.20f, 0.40f, 1f);
 
@@ -323,6 +334,9 @@ namespace FantasySurvival.WorldLighting
         [FormerlySerializedAs("cloudShadowCookieSize")]
         [Tooltip("Desired size of one procedural shadow field repeat on horizontal ground.")]
         [SerializeField] private Vector2 cloudShadowWorldSize = new Vector2(128f, 128f);
+        [Tooltip("Approximate spacing of large cloud formations in world metres, independent of the repeating field size. Rounded to whole cells so the field remains seamless.")]
+        [SerializeField, Min(1f)] private float cloudShadowFormationSize =
+            DefaultCloudShadowFormationSize;
         [Tooltip("Power-of-two resolution of the generated cloud density and light cookie.")]
         [SerializeField] private int cloudShadowResolution = DefaultCloudShadowResolution;
         [Tooltip("Seconds between slow cloud-shape evolution updates. Wind translation remains per-frame.")]
@@ -361,6 +375,8 @@ namespace FantasySurvival.WorldLighting
             DefaultHighElevationCloudShadowOpacity;
         [Header("Weather Presets")]
         [SerializeField, Min(0.01f)] private float weatherTransitionSeconds = 0.75f;
+        [Tooltip("Seconds for existing cloud formations to fill the sky before precipitation starts.")]
+        [SerializeField, Min(0.01f)] private float stormGatherSeconds = 8f;
         [SerializeField] private SkyWeatherPreset[] weatherPresets = CreateWeatherDefaults();
         [SerializeField] private SkyLightingKeyframe[] keyframes = CreateClearSkyDefaults();
 
@@ -379,6 +395,7 @@ namespace FantasySurvival.WorldLighting
         public float MinimumDirectionalIntensity => minimumDirectionalIntensity;
         public Shader CloudShadowGeneratorShader => cloudShadowGeneratorShader;
         public Vector2 CloudShadowWorldSize => cloudShadowWorldSize;
+        public float CloudShadowFormationSize => cloudShadowFormationSize;
         public int CloudShadowResolution => cloudShadowResolution;
         public float CloudShadowUpdateInterval => cloudShadowUpdateInterval;
         public float CloudShadowEvolutionSpeed => cloudShadowEvolutionSpeed;
@@ -395,6 +412,7 @@ namespace FantasySurvival.WorldLighting
         public float LowElevationCloudShadowOpacity => lowElevationCloudShadowOpacity;
         public float HighElevationCloudShadowOpacity => highElevationCloudShadowOpacity;
         public float WeatherTransitionSeconds => weatherTransitionSeconds;
+        public float StormGatherSeconds => stormGatherSeconds;
 
         public bool TryEvaluate(float hour, out SkyLightingSample sample)
         {
@@ -521,9 +539,10 @@ namespace FantasySurvival.WorldLighting
 
             if (!hasClearWeather || !hasRainWeather ||
                 !IsFinite(weatherTransitionSeconds) ||
-                weatherTransitionSeconds <= 0f)
+                weatherTransitionSeconds <= 0f ||
+                !IsFinite(stormGatherSeconds) || stormGatherSeconds <= 0f)
             {
-                error = "Sky lighting profile requires one valid Clear preset, one valid Rain preset, and a positive transition duration.";
+                error = "Sky lighting profile requires valid Clear/Rain presets and positive weather transition/storm gathering durations.";
                 return false;
             }
 
@@ -560,6 +579,8 @@ namespace FantasySurvival.WorldLighting
                 (!IsFinite(cloudShadowWorldSize) ||
                  cloudShadowWorldSize.x <= 0f ||
                  cloudShadowWorldSize.y <= 0f ||
+                 !IsFinite(cloudShadowFormationSize) ||
+                 cloudShadowFormationSize < 1f ||
                  cloudShadowResolution < 128 ||
                  cloudShadowResolution > 1024 ||
                  !Mathf.IsPowerOfTwo(cloudShadowResolution) ||

@@ -338,7 +338,7 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
-            if (!skyLighting.SetWeather(SkyWeatherType.Clear, true))
+            if (!skyLighting.SetWeather(SkyWeatherType.Clear, false))
             {
                 Debug.LogError("Failed to apply the Clear weather test state.", this);
             }
@@ -353,7 +353,7 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
-            if (!skyLighting.SetWeather(SkyWeatherType.Rain, true))
+            if (!skyLighting.SetWeather(SkyWeatherType.Rain, false))
             {
                 Debug.LogError("Failed to apply the Rain weather test state.", this);
             }

@@ -34,12 +34,19 @@ namespace FantasySurvival.WorldLighting
             Shader.PropertyToID("_Seed");
         private static readonly int CloudShadowCoverageId =
             Shader.PropertyToID("_Coverage");
+        private static readonly int CloudShadowFormationPeriodId =
+            Shader.PropertyToID("_FormationPeriod");
+        private static readonly int CloudShadowDensityResolutionId =
+            Shader.PropertyToID("_DensityResolution");
         private static readonly int CloudShadowBillowStrengthId =
             Shader.PropertyToID("_BillowStrength");
         private static readonly int CloudShadowErosionStrengthId =
             Shader.PropertyToID("_ErosionStrength");
         private static readonly int CloudShadowMaximumAttenuationId =
             Shader.PropertyToID("_MaximumAttenuation");
+        private static readonly int OvercastCoverageId = Shader.PropertyToID("_OvercastCoverage");
+        private static readonly int ClearTransmissionScaleId = Shader.PropertyToID("_ClearTransmissionScale");
+        private static readonly int OvercastTransmissionId = Shader.PropertyToID("_OvercastTransmission");
         [Header("Definition")]
         [SerializeField] private SkyLightingProfile profile;
         [SerializeField] private PixelRainPresentation rainPresentation;
@@ -86,8 +93,18 @@ namespace FantasySurvival.WorldLighting
         private SkyWeatherSample weatherFromSample;
         private SkyWeatherSample weatherToSample;
         private SkyWeatherSample currentWeatherSample;
+        private SkyWeatherSample clearWeatherSample;
+        private SkyWeatherSample rainWeatherSample;
         private float weatherTransitionElapsed;
         private bool weatherTransitionActive;
+        private float currentOvercastCoverage;
+        private float weatherFromOvercastCoverage;
+        private float stormGatherDuration;
+        private float currentClearTransmissionScale = 1f;
+        private float currentOvercastTransmission = 1f;
+        private float composedOvercastCoverage = -1f;
+        private float composedClearTransmissionScale = -1f;
+        private float composedOvercastTransmission = -1f;
         private float currentNightActivatedLightVisibility;
 
         public float CurrentHour => currentHour;
@@ -102,6 +119,7 @@ namespace FantasySurvival.WorldLighting
         public SkyWeatherType CurrentWeatherType => currentWeatherType;
         public float CurrentRainIntensity => currentWeatherSample.PrecipitationIntensity;
         public bool IsWeatherTransitioning => weatherTransitionActive;
+        public float CurrentOvercastCoverage => currentOvercastCoverage;
         public float CurrentNightActivatedLightVisibility =>
             currentNightActivatedLightVisibility;
 
@@ -222,14 +240,26 @@ namespace FantasySurvival.WorldLighting
                 return false;
             }
 
+            // Repeated UI requests must not restart gathering or hold off rain.
+            // An explicit immediate request may still finish an active transition.
+            if (weatherType == currentWeatherType && (!immediate || !weatherTransitionActive))
+            {
+                return true;
+            }
+
             weatherFromSample = currentWeatherSample;
             weatherToSample = SkyWeatherSample.FromPreset(preset);
+            weatherFromOvercastCoverage = currentOvercastCoverage;
+            stormGatherDuration = weatherType == SkyWeatherType.Rain
+                ? profile.StormGatherSeconds * (1f - currentOvercastCoverage)
+                : 0f;
             currentWeatherType = weatherType;
             weatherTransitionElapsed = 0f;
             weatherTransitionActive = !immediate;
             if (immediate)
             {
                 currentWeatherSample = weatherToSample;
+                currentOvercastCoverage = weatherType == SkyWeatherType.Rain ? 1f : 0f;
             }
 
             lastAppliedHour = float.NaN;
@@ -633,6 +663,21 @@ namespace FantasySurvival.WorldLighting
             cloudShadowGeneratorMaterial.SetFloat(
                 CloudShadowCoverageId,
                 profile.CloudShadowCoverage);
+            // Repetition distance and formation spacing are separate. Increasing
+            // the field must not enlarge its empty regions across the whole view.
+            float maximumPeriod = Mathf.Max(2f, profile.CloudShadowResolution / 16f);
+            cloudShadowGeneratorMaterial.SetVector(
+                CloudShadowFormationPeriodId,
+                new Vector4(
+                    Mathf.Clamp(Mathf.Round(profile.CloudShadowWorldSize.x /
+                        profile.CloudShadowFormationSize), 2f, maximumPeriod),
+                    Mathf.Clamp(Mathf.Round(profile.CloudShadowWorldSize.y /
+                        profile.CloudShadowFormationSize), 2f, maximumPeriod),
+                    0f,
+                    0f));
+            cloudShadowGeneratorMaterial.SetFloat(
+                CloudShadowDensityResolutionId,
+                profile.CloudShadowResolution);
             cloudShadowGeneratorMaterial.SetFloat(
                 CloudShadowBillowStrengthId,
                 profile.CloudShadowBillowStrength);
@@ -676,7 +721,7 @@ namespace FantasySurvival.WorldLighting
                     profile.LowElevationCloudShadowOpacity,
                     profile.HighElevationCloudShadowOpacity,
                     filteredElevationWeight) *
-                weather.CloudShadowOpacityMultiplier);
+                clearWeatherSample.CloudShadowOpacityMultiplier);
             int softnessKey = Mathf.RoundToInt(
                 desiredSoftnessMip / 3f * CloudShadowFilterKeyMaximum);
             int opacityKey = Mathf.RoundToInt(
@@ -685,7 +730,10 @@ namespace FantasySurvival.WorldLighting
             bool filterChanged = filterKey != lastCloudShadowFilterKey;
             bool densityChanged =
                 composedCloudShadowDensityVersion != cloudShadowDensityVersion;
-            if (!filterChanged && !densityChanged)
+            bool weatherCookieChanged = composedOvercastCoverage != currentOvercastCoverage ||
+                composedClearTransmissionScale != currentClearTransmissionScale ||
+                composedOvercastTransmission != currentOvercastTransmission;
+            if (!filterChanged && !densityChanged && !weatherCookieChanged)
             {
                 return;
             }
@@ -720,12 +768,18 @@ namespace FantasySurvival.WorldLighting
             cloudShadowGeneratorMaterial.SetFloat(
                 CloudShadowMaximumAttenuationId,
                 profile.CloudShadowMaximumAttenuation);
+            cloudShadowGeneratorMaterial.SetFloat(OvercastCoverageId, currentOvercastCoverage);
+            cloudShadowGeneratorMaterial.SetFloat(ClearTransmissionScaleId, currentClearTransmissionScale);
+            cloudShadowGeneratorMaterial.SetFloat(OvercastTransmissionId, currentOvercastTransmission);
             Graphics.Blit(
                 cloudShadowDensityTexture,
                 filteredCloudShadowCookie,
                 cloudShadowGeneratorMaterial,
                 1);
             composedCloudShadowDensityVersion = cloudShadowDensityVersion;
+            composedOvercastCoverage = currentOvercastCoverage;
+            composedClearTransmissionScale = currentClearTransmissionScale;
+            composedOvercastTransmission = currentOvercastTransmission;
         }
 
         private void DetachFilteredCloudShadowCookie()
@@ -765,6 +819,9 @@ namespace FantasySurvival.WorldLighting
             cloudShadowEvolutionAccumulator = 0f;
             cloudShadowDensityVersion = 0;
             composedCloudShadowDensityVersion = -1;
+            composedOvercastCoverage = -1f;
+            composedClearTransmissionScale = -1f;
+            composedOvercastTransmission = -1f;
             lastCloudShadowFilterKey = -1;
             currentCloudShadowSoftnessMip = 0f;
             currentCloudShadowOpacity = 0f;
@@ -976,8 +1033,23 @@ namespace FantasySurvival.WorldLighting
                 minimumLightColor,
                 floorContribution,
                 directionalIntensity);
-            directionalIntensity *=
-                currentWeatherSample.DirectionalIntensityMultiplier;
+            // A single light multiplier supplies both cookie endpoints. The
+            // cookie assigns weather attenuation spatially instead of multiplying
+            // the Rain preset once here and a second time in its shadow.
+            float directionalWeatherMultiplier = currentWeatherSample.DirectionalIntensityMultiplier;
+            bool weatherUsesCookie = filteredCloudShadowCookie != null &&
+                filteredCloudShadowCookie.IsCreated();
+            if (weatherUsesCookie)
+            {
+                directionalWeatherMultiplier = Mathf.Max(
+                    clearWeatherSample.DirectionalIntensityMultiplier,
+                    rainWeatherSample.DirectionalIntensityMultiplier);
+                currentClearTransmissionScale = directionalWeatherMultiplier > 0f
+                    ? clearWeatherSample.DirectionalIntensityMultiplier / directionalWeatherMultiplier : 0f;
+                currentOvercastTransmission = directionalWeatherMultiplier > 0f
+                    ? rainWeatherSample.DirectionalIntensityMultiplier / directionalWeatherMultiplier : 0f;
+            }
+            directionalIntensity *= directionalWeatherMultiplier;
             directionalColor = MultiplyRgb(
                 directionalColor,
                 currentWeatherSample.DirectionalTint);
@@ -1022,7 +1094,7 @@ namespace FantasySurvival.WorldLighting
                 sceneDirectionalLight,
                 MultiplyRgb(sample.SunColor, currentWeatherSample.DirectionalTint),
                 sunContribution *
-                currentWeatherSample.DirectionalIntensityMultiplier *
+                directionalWeatherMultiplier *
                 currentWeatherSample.ShadowStrengthMultiplier,
                 currentWeatherSample.PrecipitationIntensity);
             return true;
@@ -1070,10 +1142,20 @@ namespace FantasySurvival.WorldLighting
                 return false;
             }
 
+            if (!profile.TryGetWeatherPreset(SkyWeatherType.Clear, out SkyWeatherPreset clearPreset) ||
+                !profile.TryGetWeatherPreset(SkyWeatherType.Rain, out SkyWeatherPreset rainPreset))
+            {
+                return false;
+            }
+            clearWeatherSample = SkyWeatherSample.FromPreset(clearPreset);
+            rainWeatherSample = SkyWeatherSample.FromPreset(rainPreset);
             currentWeatherType = weatherType;
             currentWeatherSample = SkyWeatherSample.FromPreset(preset);
             weatherFromSample = currentWeatherSample;
             weatherToSample = currentWeatherSample;
+            currentOvercastCoverage = weatherType == SkyWeatherType.Rain ? 1f : 0f;
+            weatherFromOvercastCoverage = currentOvercastCoverage;
+            stormGatherDuration = 0f;
             weatherTransitionElapsed = profile.WeatherTransitionSeconds;
             weatherTransitionActive = false;
             rainPresentation?.ApplyWeather(
@@ -1092,14 +1174,22 @@ namespace FantasySurvival.WorldLighting
 
             weatherTransitionElapsed += Mathf.Max(0f, deltaTime);
             float transitionDuration = Mathf.Max(0.01f, profile.WeatherTransitionSeconds);
-            float progress = Mathf.Clamp01(weatherTransitionElapsed / transitionDuration);
+            bool gatheringRain = currentWeatherType == SkyWeatherType.Rain;
+            float progress = Mathf.Clamp01((weatherTransitionElapsed - stormGatherDuration) / transitionDuration);
+            float lightingProgress = gatheringRain && stormGatherDuration > 0f
+                ? Mathf.Clamp01(weatherTransitionElapsed / stormGatherDuration) : progress;
+            float coverageProgress = gatheringRain ? lightingProgress : progress;
+            currentOvercastCoverage = Mathf.Lerp(weatherFromOvercastCoverage, gatheringRain ? 1f : 0f,
+                Mathf.SmoothStep(0f, 1f, coverageProgress));
             currentWeatherSample = SkyWeatherSample.Interpolate(
                 weatherFromSample,
                 weatherToSample,
+                lightingProgress,
                 progress);
             if (progress >= 1f)
             {
                 currentWeatherSample = weatherToSample;
+                currentOvercastCoverage = gatheringRain ? 1f : 0f;
                 weatherTransitionActive = false;
             }
 

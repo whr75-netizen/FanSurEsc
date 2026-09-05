@@ -2209,3 +2209,33 @@ Interactable (abstract base class)
 - `[근본 교체]` `SkyLightingCycleController` 단일 권위 안에서 `512×512` 동적 밀도 RT와 최종 투과율 Cookie RT를 분리했다. `128×128m` 주기의 타일 가능한 저주파 2/4/8 지배 형상에 Worley 둥근 굴곡을 한 번만 더하고, 16/29 세부 노이즈는 경계에서만 감산한다. 모든 결과는 연속 밀도 하나로 합친 뒤 `1 - density × weatherOpacity × 0.42`로 직사광만 감쇠한다. 밀도는 4Hz로만 갱신하고 서로 다른 스케일의 매우 느린 상대 이동으로 형태를 바꾸며, 기존 서→동 바람 Cookie offset은 매 프레임 이동한다. 사용하지 않게 된 고정 PNG는 프로젝트 전체 dependency 0건 확인 뒤 휴지통으로 옮겼다.
 - `[Unity 컴파일·Play Mode 호출 확인]` Unity 재컴파일·profile validation과 2-pass shader supported·compiler error/warning 0에서 `128m·512px·coverage 0.38·0.25초`를 확인했다. `GameMap1` 맑은 정오 한 Play Session에서 최종 Cookie `512×512`, 타일 경계 평균 채널차 `좌우 0.271/255·상하 0.613/255`였고, 8초 뒤 내부 형상은 평균 `2.894/255`, 3 이상 변화 픽셀 `14.2%`로 급격한 교체 없이 변화했다. Clear→Rain→Clear는 구름 농도 `0.902→0→0.902`, 강수 `0→1→0`으로 복원됐고 종료 뒤 `GameMap1`은 Edit Mode·scene clean이었다.
 - `[보존·경계]` 11키 낮밤·고도별 경계/농도·투영 보정·비/차폐·웅덩이·로컬광·Player/Camera/씬 흐름은 변경하지 않았다. Game View의 최종 구름 크기·농도는 사용자 아트 판단, 장시간 날씨와 GPU ms·Player build는 미검증이다. Console의 BrokenVector 구버전 직렬화 오류와 시드 비교용 동적 검증 명령의 RenderTexture release 경고는 이번 런타임 코드와 분리했으며 지워서 덮지 않았다.
+
+---
+
+## 123. 구름 비가시 재검토와 반복 영역/형성 크기 분리 `[ENVIRONMENT-01]`
+
+- `[사용자 회귀 신고][2026-09-05]` §122 이후 구름이 보이지 않는다는 피드백으로 재개방했다. 기존 쿠키 전체의 통계·생성 성공은 실제 카메라 영역의 구름 가독성을 검증하지 못했다. 맑은 정오 기지 Camera에서 원래 결과와 임시 흰색/검정 Cookie를 비교하여 Ground·Player가 Cookie에 반응함을 확인했다. URP17.5 주 방향광은 RT를 매 렌더 직접 바인딩하므로 atlas 갱신 누락이 아니며, 128m 반복 영역과 고정 저주파 2가 구름 형성 크기까지 함께 키워 긴 빈 구간·완만한 명암만 보일 수 있는 설정이었다.
+- `[현재 시험 변경]` Profile의 `CloudShadowFormationSize=16m`를 반복 영역 128m와 분리했다. 정수 주기 `(8,8)`에서 큰 형상·둥근 굴곡·침식을 같은 비율로 계산하며, 비정사각형 각 축의 주기도 보존한다. 세부 노이즈는 RT 해상도에 맞춰 제한한다. coverage `0.55`, 직사광 최대 감쇠 `0.72`는 구름 가독성 확인용 시험값이며 최종 아트 확정값이 아니다.
+- `[실제 확인·미완료 경계]` 2-pass shader supported·compiler message 0, profile validation 통과. 맑음→비→맑음에서 구름 농도 `0.902→0→0.902`와 동일 Cookie 복원을 확인했다. 기지의 실제 게임 시간 15.57초를 32프레임으로 촬영한 미리보기를 사용자에게 제시했으며, 구름의 형태·크기·농도 합격은 사용자 응답 대기다. 첫 캡처는 GameView 비활성·runInBackground false로 게임 시간이 진행되지 않아 폐기했고, 재촬영 때만 런타임 background 실행을 허용한 뒤 false로 복구했다. 게임 설정과 씬 저장 데이터는 변경하지 않았다. 최종 가시성 해결 완료·GPU 성능·Player build를 통과로 기록하지 않는다.
+- `[후속 시각 피드백][2026-09-05]` 사용자가 다층 느낌 축소·선명한 경계·소폭 확대를 요청했다. 내부 `0.72→1` 농도 그라데이션을 제거하고 경계 smoothstep 폭만 `±0.055→±0.025`로 줄였다. 형성 간격 `18.3m`는 정수 주기 7, 실효 간격 약18.29m로 이전보다 약14% 크다. 생성·바람·날씨 경로는 유지했다. shader 2-pass supported·compiler message 0, 실제 기지 13.37초/26프레임 미리보기를 제시했다. 형태 합격은 사용자 확인 대기이며 반복 보정·완료 커밋은 보류한다.
+
+---
+
+## 124. 풀·잎 오브젝트 개별 픽셀 재질 시험과 재개 경계 `[ENVIRONMENT-01]`
+
+- `[구현][2026-09-05]` `PrototypePixelFoliage.prefab`을 `GameMap1 (-5.5,0,-5)`에 하나 배치했다. `PixelFoliagePatch`의 Inspector 설정을 Editor mesh builder가 grass 360장·leaf 420장의 두 combined mesh로 bake한다. 자체 생성한 4×2 atlas는 alpha 형태만 사용하며 Point/Clamp·128×64로 import했다. grass는 위쪽 source normal, leaves는 수관 ellipsoid normal로 실제 URP 조명을 받는다. 별도 저폴리곤 crown은 ShadowsOnly, 줄기는 static collider다. 전체 화면 픽셀 기능·기존 풀·Camera·Player·날씨 권위는 추가/교체하지 않았다. 자세한 사용법·자료·이미지 생성 prompt는 `Assets/Rendering/Foliage/README.md`에 둔다.
+- `[기존 대표 시각 확인]` 초기 8fps/3단계 결과의 실제 기지 정오·밤·비 렌더를 확인했고 사용자에게 정오 결과를 보여드렸다. shader supported 3-pass·compiler message 0, Console Error/Exception/Assert 0이었다. 전체 한 바퀴·Player build·대규모 숲 GPU 성능은 검증하지 않았다.
+- `[재개·시험 설정]` 끊김 후 파일/프리팹이 유지됨을 재확인했다. 카드별 ±7% 밝기 편차를 재질의 `Per-Tuft Brightness Variation=0`으로 제거하고, 풀·잎·reference ground의 direct-light shade steps를 2로, sprite fps를 0.4로 시험했다. 각 카드는 2.5초마다 형태를 바꾸지만 개별 phase로 시점이 흩어진다. 원본의 정확한 색 개수·2.5초 간격은 확인된 제작 공식이 아니다. 이전 모습은 fps8/variation1/steps3으로 복원할 수 있고 mesh/atlas는 보존했다. domain reload 시 명령 어셈블리 조회가 한 번 실패해 실제 재질이 fps8인 것을 읽은 뒤 준비된 Editor에서만 저장했으며 shader compiler/Console error 0을 확인했다.
+- `[시각 미검증]` 후속 12.002초/48프레임 촬영은 게임 시간은 진행됐으나 플레이어를 따라간 카메라의 상대 위치에 오프셋을 더해 다른 구역이 잡혔다. 식생 시각 검증/합격 증거로 사용하지 않는다. 재촬영이 필요하면 player 상대 오프셋이 아니라 실제 prefab bounds에 framing해야 한다. Play는 종료했고 runtime background=false로 복구했다. 마지막 Edit Mode에서 GameMap1 dirty=true가 관찰되어 자동 저장/되돌림하지 않았다. 기존 scene 사용자 변경 14줄과 새 식생 instance 58줄은 분리해야 한다.
+- `[최신 사용자 정정]` 나뭇잎 shader는 만족하므로 더 변경하지 않는다. 풀만 문제이며 원본이 흔들림·명암으로 두 색처럼 보였는지 확인을 요청했다. 현재 풀은 단색 albedo와 모두 위쪽인 normal로 균일 수광하며, wind는 alpha 형태만 바꾼다. 따라서 shade steps2만으로 풀 자체의 두 톤 변화가 생기지는 않는다. 원본의 정확한 두 톤 원인과 수정 방식은 미정이며 leaf에 함께 적용하지 않는다. 이번 상태는 시험/검토 중이고 최종 아트 완료 커밋은 보류한다.
+
+---
+
+## 125. 식생 환경 시험장·주광 합성·먹구름과 비 안개 `[ENVIRONMENT-01]`
+
+- `[요청·자료][2026-09-05]` 승인된 잎을 보존하고 풀/명암·빛줄기를 환경 속에서 비교하도록 요청받았다. t3ssel8r Grass V2의 source terrain position/normal 조명, Godrays의 light-space shadow-map 샘플, David Holland 재현의 grass-depth 경계와 반복 depth blur 비용, Frostbite unified participating media를 비교했다. 전체 카메라 픽셀화는 계속 비활성이다. 원본 영상 타임스탬프를 직접 시청하지 못했으므로 정확한 색 개수·프레임 간격·미공개 셰이더와의 동일성은 주장하지 않는다. 구현/자료 경로는 `Assets/Rendering/Foliage/README.md`에 모았다.
+- `[시험장]` 기존 `PrototypeSunShaftContrastTestArea` 하나를 재사용했다. 100×64m 안에 열린 바닥/막힌 지붕/5×6m 천창/슬랫 골목/큰 숲을 비교하며, 수관 약13m인 나무9개와 ground와 수광 기준·팔레트를 공유하는 풀을 배치했다. 공유 combined mesh를 Editor에서만 생성하고 기존 잎 material은 변경하지 않았다. 기존 Ground와 slab top이 y=0에서 겹쳤던 대량 줄무늬는 slab renderer만 숨기는 분리시험으로 확인한 뒤 top을0.01m로 분리했다.
+- `[빛줄기 근본 수정]` 기존 적분에 실제 주광 Cookie를 샘플 위치별 한 번 반영했다. 24표본/16m 시험 높이, half-res RGB+view-depth와 full-res 깊이 대응 합성을 사용한다. 추가로 sun on/off 동일 프레임에서 확인한 가는 수평선은 point-depth 경계의 표본 행 불일치/고정 허용폭 문제였다. 적분과 합성이 같은 full-res texel 중심을 읽도록 맞추고, 양방향 깊이 기울기가 일치하는 평면에만 예상 깊이를 보정했다. 마지막 같은 카메라 렌더에서 해당 선이 사라졌다. 실루엣 허용폭을 무조건 늘리거나 전체 화면을 흐리지 않았다.
+- `[날씨 단일 소유자]` `SkyLightingCycleController`의 기존 밀도장 G채널로 구름이 빈틈을 채운 뒤 비를 시작한다. Profile의 gather8초/강우fade0.75초, ESC 날씨 버튼은 즉시전환 대신 이 흐름을 호출한다. Cookie와 방향광의 Rain 감쇠 중복을 피하고 기존 Clear/Rain 광량을 하나의 예산으로 분리한다. 같은 비 강도를 기존 light renderer가 읽어 0~8m 공기층의 회색 extinction을 opaque depth까지 계산한다. 새 Manager·구름 레이어·카메라 픽셀 기능은 없다.
+- `[Unity·Play Mode 호출 확인]` 관련 shader supported/컴파일 message0, profile validation 통과. 12.001초/25프레임 기록에서 4.002초 전환계수0.500/비0, 8.003초 계수1/비0, 8.502초 비0.745, 9.002초 비1/전환종료였다. 4초에 Rain을 반복해도 재시작하지 않았다. 별도 Clear 중단은 계수0.02328723을 즉시 유지한 뒤0·비0·전환종료로 돌아갔다. 맑음·비 안개 on/off와 열린 바닥/막힌 지붕/천창/숲을 실제 Camera.Render로 확인했다. 저각 천창 촬영은 차폐 진단용일 뿐 저장된 게임 카메라 각도는 바꾸지 않았다.
+- `[검증 경계·보존]` 첫 촬영 명령은 Play 중 Editor 코드 수정으로 domain reload된 직후 static shell 조회가 null이라 시작하지 못했다. 게임 오류로 취급하지 않고 Edit Mode에서 저작 완료 뒤 새 Play로 한 번 재진입했다. 후속 촬영의 shader 수정은 C# reload 없이 해당 파일만 import했다. 반복 게임 한 바퀴·Player build·GPU ms·실내별 안개 배제·Transparent 차폐는 미검증이다. 기존 가로등/잎·Player/Camera 인스턴스 설계·세이브·씬 흐름은 유지했다. 미리보기 촬영만 runtime background 실행을 켠 뒤 복구하며, 기존 dirty scene/타 에셋은 자동 저장·되돌림하지 않는다. 기능 시험 체크포인트와 최종 아트 승인은 구분한다.

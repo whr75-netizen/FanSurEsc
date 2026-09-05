@@ -6,7 +6,6 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
         _ArtPixelSize("Screen Pixels Per Art Cell", Range(1, 8)) = 3
         _ScreenPixelSize("Screen-Pixel Body Cell Size", Range(1, 12)) = 5
         _CoverageThreshold("Mask Threshold", Range(0.05, 0.95)) = 0.35
-        _InnerOverlapPixels("Inner Overlap (Screen Pixels)", Range(0, 3)) = 1
     }
 
     SubShader
@@ -37,7 +36,6 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             float _ArtPixelSize;
             float _ScreenPixelSize;
             float _CoverageThreshold;
-            float _InnerOverlapPixels;
         CBUFFER_END
 
         struct Attributes
@@ -63,25 +61,11 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             return all(pixel >= int2(0, 0)) && all(pixel < dimensions);
         }
 
-        half LoadRawOccupancy(int2 pixel)
+        int LoadQuantizedGroup(int2 pixel)
         {
             if (!PixelInBounds(pixel))
-            {
                 return 0;
-            }
-
-            half mask = LOAD_TEXTURE2D(_CharacterSilhouetteMask, pixel).r;
-            return step(_CoverageThreshold, mask);
-        }
-
-        half LoadSeed(int2 pixel)
-        {
-            if (!PixelInBounds(pixel))
-            {
-                return 0;
-            }
-
-            return LOAD_TEXTURE2D(_CharacterSilhouetteMask, pixel).g;
+            return (int)round(LOAD_TEXTURE2D(_CharacterSilhouetteQuantizedMask, pixel).g * 255.0h);
         }
 
         half LoadQuantizedOccupancy(int2 pixel)
@@ -99,35 +83,70 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
         {
             int2 pixel = int2(floor(input.positionCS.xy));
             int artPixelSize = clamp((int)round(_ArtPixelSize), 1, 8);
-            int firstOffset = -(artPixelSize >> 1);
+            int searchRadius = artPixelSize - 1;
+            int searchSize = searchRadius * 2 + 1;
             half occupied = 0;
+            half encodedGroup = 0;
 
             [loop]
-            for (int y = 0; y < 8; y++)
+            for (int y = 0; y < 15; y++)
             {
-                if (y >= artPixelSize)
+                if (y >= searchSize)
                 {
                     break;
                 }
 
                 [loop]
-                for (int x = 0; x < 8; x++)
+                for (int x = 0; x < 15; x++)
                 {
-                    if (x >= artPixelSize)
+                    if (x >= searchSize)
                     {
                         break;
                     }
 
-                    int2 expansionOffset = int2(
-                        firstOffset + x,
-                        firstOffset + y);
-                    occupied = max(
-                        occupied,
-                        LoadSeed(pixel - expansionOffset));
+                    int2 sourcePixel = pixel + int2(x - searchRadius, y - searchRadius);
+                    if (!PixelInBounds(sourcePixel))
+                        continue;
+                    half4 raw = LOAD_TEXTURE2D(_CharacterSilhouetteMask, sourcePixel);
+                    if (raw.r < _CoverageThreshold)
+                        continue;
+
+                    int2 cellMinimum = sourcePixel - int2(round(raw.ba * 255.0h));
+                    if (any(pixel < cellMinimum) || any(pixel >= cellMinimum + artPixelSize))
+                        continue;
+
+                    // Any visible source pixel fills its whole root-aligned
+                    // cell. Lower nonzero IDs protect eyes/eyebrows when several
+                    // visible parts share a cell; original color is never sampled.
+                    occupied = 1;
+                    if (raw.g > 0.0h && (encodedGroup <= 0.0h || raw.g < encodedGroup))
+                        encodedGroup = raw.g;
                 }
             }
 
-            return half4(occupied, 0, 0, 1);
+            return half4(occupied, encodedGroup, 0, 1);
+        }
+
+        half GroupBoundary(int2 pixel, int artPixelSize)
+        {
+            int centerGroup = LoadQuantizedGroup(pixel);
+            if (centerGroup == 0)
+                return 0;
+
+            [unroll]
+            for (int y = -1; y <= 1; y++)
+            {
+                [unroll]
+                for (int x = -1; x <= 1; x++)
+                {
+                    int neighborGroup = LoadQuantizedGroup(pixel + int2(x, y) * artPixelSize);
+                    // A shared border belongs only to the higher ID side. This
+                    // produces one outline, never a separate band on both parts.
+                    if (neighborGroup > 0 && neighborGroup < centerGroup)
+                        return 1;
+                }
+            }
+            return 0;
         }
 
         half4 FragComposite(Varyings input) : SV_Target
@@ -136,6 +155,9 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             int artPixelSize = clamp((int)round(_ArtPixelSize), 1, 8);
 
             half center = LoadQuantizedOccupancy(pixel);
+            if (center < 0.5h)
+                return half4(_OutlineColor.rgb, 0);
+
             half neighbor00 = LoadQuantizedOccupancy(
                 pixel + int2(-artPixelSize, -artPixelSize));
             half neighbor10 = LoadQuantizedOccupancy(
@@ -153,33 +175,15 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             half neighbor22 = LoadQuantizedOccupancy(
                 pixel + int2(artPixelSize, artPixelSize));
 
-            half nearest = max(
-                max(max(neighbor00, neighbor10), max(neighbor20, neighbor01)),
-                max(max(neighbor21, neighbor02), max(neighbor12, neighbor22)));
-
-            half outerSilhouette = nearest * (1.0h - center);
-            half cellDilated = max(center, nearest);
-            if (cellDilated < 0.5h)
-            {
-                return half4(_OutlineColor.rgb, 0);
-            }
-
-            // Keep the existing one-native-pixel inward overlap so a stepped cell
-            // cannot expose a gap between the full-resolution body and its outline.
-            int overlapPixels = max(0, (int)round(_InnerOverlapPixels));
-            if (overlapPixels < 1)
-            {
-                return half4(_OutlineColor.rgb, _OutlineColor.a * outerSilhouette);
-            }
-
-            half rawInterior = LoadRawOccupancy(pixel);
-            rawInterior *= LoadRawOccupancy(pixel + int2(-overlapPixels, 0));
-            rawInterior *= LoadRawOccupancy(pixel + int2(overlapPixels, 0));
-            rawInterior *= LoadRawOccupancy(pixel + int2(0, -overlapPixels));
-            rawInterior *= LoadRawOccupancy(pixel + int2(0, overlapPixels));
-
-            half silhouette = cellDilated * (1.0h - rawInterior);
-            return half4(_OutlineColor.rgb, _OutlineColor.a * silhouette);
+            // One art-cell inward ring on the same conservative coverage grid.
+            // Do not mix native-pixel erosion with art-cell width or let raw
+            // rounded geometry cancel pixels from this final stepped contour.
+            half eroded = min(
+                min(min(neighbor00, neighbor10), min(neighbor20, neighbor01)),
+                min(min(neighbor21, neighbor02), min(neighbor12, neighbor22)));
+            half silhouette = center * (1.0h - eroded);
+            half groupBoundary = GroupBoundary(pixel, artPixelSize);
+            return half4(_OutlineColor.rgb, _OutlineColor.a * max(silhouette, groupBoundary));
         }
 
         half4 FragCopySource(Varyings input) : SV_Target

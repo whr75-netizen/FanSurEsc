@@ -51,10 +51,10 @@
 | `INPUT-01` | Escape·입력·키 설정 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §21·46~48·53·69 | Base pause/Raid non-pause; Main/ESC 리바인딩·행별 보조키 해제/복원; 낮/밤·맑음/비 환경 시험; 별도 설정 파일·legacy 이관 | 입력·scene 또는 설정 schema·migration·복구 변경 |
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36·91 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 바닥 아이템도 같은 최근접 E 후보; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
-| `MOVE-01` | Player 이동·달리기·8방향 회전 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §9·100·117 | 걷기10·달리기13, mannequin Humanoid, root motion 없음 | 이동·Animator·외형 참조 변경 |
+| `MOVE-01` | Player 이동·달리기·8방향 회전 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §9·100·117·126 | 걷기10·달리기13, Chibi Humanoid·기존 Controller, root motion 없음 | 이동·Animator·외형 참조 변경 |
 | `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
-| `ENVIRONMENT-01` | 시간·날씨 | `PARTIAL` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101·108~110·121~125 | 11키 낮밤·구름→비·높이 안개·비차단·웅덩이; 잎 유지·큰 숲/풀 시험장; 주광 shadow/cookie 적분·깊이 합성; 로컬광 유지 | 시각 승인·실내 안개·날씨 저장·풍향·GPU Profile·Transparent 차폐/합성 |
-| `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 시험 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §96~108·116~120 | 외곽선/snap; A/B=64px bake/루트부착 5px seed·1중 외곽 | 적용·ID·art/rig·GPU profile |
+| `ENVIRONMENT-01` | 시간·날씨 | `PARTIAL` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101·108~110·121~126 | 11키 낮밤·8초 구름/주광/안개→0.75초 비; 비차단·웅덩이·큰 식생 시험장·shadow/cookie·로컬광 | 시각 승인·실내 안개·날씨 저장·풍향·GPU Profile·Transparent 차폐/합성 |
+| `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 시험 | `PARTIAL` | `CALL` | `PROTOTYPE` | 진행 §96~108·116~120·126 | Player Chibi 4부위·한 칸 외곽/snap; 좀비 A/B=64px bake/루트부착 5px seed | 적용·ID·art/rig·GPU profile |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95·105 | grid·stack·가방·장전탄·Save v7·저작창; ID 13 1×1 갑빠(방어 20%·육각); 바닥 drop/E, 일반 전환 삭제·Active Raid 복원 | item/grid/장비/world-item 저장 계약 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51·105 | 체력 1000·정수 계산·공격력 10단위·총 피해 350; 갑빠 방어 1당 최종 피해 1% 감소 | 탄종·AI 탄약·무기군 장전·반동·탄퍼짐·관통·피해 유형·조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67·117 | 순찰·감지·추적·LOS 공격·총성 조사; 좀비 순찰3/전투6.8 | 엄폐·도주·저격 단계 요청 |

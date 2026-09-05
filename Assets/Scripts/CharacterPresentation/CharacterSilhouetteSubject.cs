@@ -17,15 +17,39 @@ namespace FantasySurvival.CharacterPresentation
         public const uint ScreenPixelRenderingLayerMask = 1u << 30;
         public const uint ClassicOutlineRenderingLayerMask = 1u << 29;
 
+        public enum OutlineGroup
+        {
+            Combined = 0,
+            Eyes = 1,
+            Eyebrows = 2,
+            Hair = 3,
+            Skin = 4
+        }
+
+        [System.Serializable]
+        public struct RendererOutlineGroup
+        {
+            public Renderer renderer;
+            public OutlineGroup outlineGroup;
+        }
+
         [SerializeField]
         [Tooltip("Quantize the already-lit visible character color in screen space. " +
             "The screen path supplies its own matching one-cell silhouette outline.")]
         private bool screenSpacePixelColor;
 
+        [SerializeField]
+        [Tooltip("Optional explicit groups on this presentation root. Unmapped renderers keep " +
+            "the combined outline. At a group boundary only the higher ID side receives ink: " +
+            "Eyes 1, Eyebrows 2, Hair 3, Skin 4. Screen-pixel color subjects ignore this mapping.")]
+        private RendererOutlineGroup[] outlineGroups = System.Array.Empty<RendererOutlineGroup>();
+
         private static readonly int PixelGridAnchorId =
             Shader.PropertyToID("_CharacterPixelGridAnchorWS");
         private static readonly int LightingPositionOffsetId =
             Shader.PropertyToID("_CharacterLightingPositionOffsetWS");
+        private static readonly int OutlineGroupId =
+            Shader.PropertyToID("_CharacterOutlineGroup");
 
         private static int activeSubjectCount;
         private static int activeScreenPixelSubjectCount;
@@ -36,6 +60,7 @@ namespace FantasySurvival.CharacterPresentation
         private Camera snappedCamera;
         private Vector3 unsnappedPosition;
         private readonly HashSet<Renderer> ownedRenderers = new HashSet<Renderer>();
+        private readonly Dictionary<Renderer, int> rendererOutlineGroups = new Dictionary<Renderer, int>();
         private MaterialPropertyBlock propertyBlock;
 
         public static bool HasActiveSubject => activeSubjectCount > 0;
@@ -130,10 +155,21 @@ namespace FantasySurvival.CharacterPresentation
             {
                 if (ownedRenderer != null && !currentRenderers.Contains(ownedRenderer))
                 {
+                    ClearOutlineGroup(ownedRenderer);
                     ownedRenderer.renderingLayerMask &=
                         ~(RenderingLayerMask |
                             ScreenPixelRenderingLayerMask |
                             ClassicOutlineRenderingLayerMask);
+                }
+            }
+
+            rendererOutlineGroups.Clear();
+            if (outlineGroups != null)
+            {
+                foreach (RendererOutlineGroup mapping in outlineGroups)
+                {
+                    if (mapping.renderer != null && currentRenderers.Contains(mapping.renderer))
+                        rendererOutlineGroups[mapping.renderer] = Mathf.Clamp((int)mapping.outlineGroup, 0, 4);
                 }
             }
 
@@ -278,9 +314,23 @@ namespace FantasySurvival.CharacterPresentation
                 ownedRenderer.GetPropertyBlock(propertyBlock);
                 propertyBlock.SetVector(PixelGridAnchorId, anchor);
                 propertyBlock.SetVector(LightingPositionOffsetId, lightingOffset);
+                int outlineGroup = 0;
+                if (!screenSpacePixelColor)
+                    rendererOutlineGroups.TryGetValue(ownedRenderer, out outlineGroup);
+                propertyBlock.SetFloat(OutlineGroupId, outlineGroup);
                 ownedRenderer.SetPropertyBlock(propertyBlock);
                 propertyBlock.Clear();
             }
+        }
+
+        private void ClearOutlineGroup(Renderer childRenderer)
+        {
+            if (propertyBlock == null)
+                propertyBlock = new MaterialPropertyBlock();
+            childRenderer.GetPropertyBlock(propertyBlock);
+            propertyBlock.SetFloat(OutlineGroupId, 0f);
+            childRenderer.SetPropertyBlock(propertyBlock);
+            propertyBlock.Clear();
         }
 
         private void ReleaseChildRenderers()
@@ -289,6 +339,7 @@ namespace FantasySurvival.CharacterPresentation
             {
                 if (ownedRenderer != null)
                 {
+                    ClearOutlineGroup(ownedRenderer);
                     ownedRenderer.renderingLayerMask &=
                         ~(RenderingLayerMask |
                             ScreenPixelRenderingLayerMask |
@@ -297,6 +348,7 @@ namespace FantasySurvival.CharacterPresentation
             }
 
             ownedRenderers.Clear();
+            rendererOutlineGroups.Clear();
         }
 
         private void SynchronizeScreenPixelRegistration()

@@ -134,7 +134,9 @@ namespace FantasySurvival.Rendering
                 RenderTextureDescriptor descriptor = cameraData.cameraTargetDescriptor;
                 descriptor.depthBufferBits = 0;
                 descriptor.msaaSamples = 1;
-                descriptor.graphicsFormat = GraphicsFormat.R8G8_UNorm;
+                // R is visible coverage, G the group ID, and B/A the covered
+                // fragment's integer remainder inside its presentation-root cell.
+                descriptor.graphicsFormat = GraphicsFormat.R8G8B8A8_UNorm;
 
                 TextureHandle mask = UniversalRenderer.CreateRenderGraphTexture(
                     renderGraph,
@@ -144,7 +146,7 @@ namespace FantasySurvival.Rendering
                     FilterMode.Point);
 
                 RenderTextureDescriptor quantizedDescriptor = descriptor;
-                quantizedDescriptor.graphicsFormat = GraphicsFormat.R8_UNorm;
+                quantizedDescriptor.graphicsFormat = GraphicsFormat.R8G8_UNorm;
                 TextureHandle quantizedMask = UniversalRenderer.CreateRenderGraphTexture(
                     renderGraph,
                     quantizedDescriptor,
@@ -281,16 +283,6 @@ namespace FantasySurvival.Rendering
                 rawDrawingSettings.overrideMaterialPassIndex = 0;
                 rawDrawingSettings.perObjectData = PerObjectData.None;
 
-                DrawingSettings seedDrawingSettings = RenderingUtils.CreateDrawingSettings(
-                    ShaderTags,
-                    renderingData,
-                    cameraData,
-                    lightData,
-                    cameraData.defaultOpaqueSortFlags);
-                seedDrawingSettings.overrideMaterial = maskMaterial;
-                seedDrawingSettings.overrideMaterialPassIndex = 1;
-                seedDrawingSettings.perObjectData = PerObjectData.None;
-
                 FilteringSettings filteringSettings = new FilteringSettings(
                     RenderQueueRange.opaque,
                     -1,
@@ -303,28 +295,18 @@ namespace FantasySurvival.Rendering
                 passData.rawRendererList = renderGraph.CreateRendererList(
                     rawRendererListParams);
 
-                RendererListParams seedRendererListParams = new RendererListParams(
-                    renderingData.cullResults,
-                    seedDrawingSettings,
-                    filteringSettings);
-                passData.seedRendererList = renderGraph.CreateRendererList(
-                    seedRendererListParams);
-
-                if (!passData.rawRendererList.IsValid() ||
-                    !passData.seedRendererList.IsValid())
+                if (!passData.rawRendererList.IsValid())
                 {
                     return;
                 }
 
                 builder.UseRendererList(passData.rawRendererList);
-                builder.UseRendererList(passData.seedRendererList);
                 builder.SetRenderAttachment(mask, 0, AccessFlags.Write);
                 builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.Read);
                 builder.SetRenderFunc((MaskPassData data, RasterGraphContext context) =>
                 {
                     context.cmd.ClearRenderTarget(RTClearFlags.Color, Color.clear, 1, 0);
                     context.cmd.DrawRendererList(data.rawRendererList);
-                    context.cmd.DrawRendererList(data.seedRendererList);
                 });
             }
 
@@ -633,7 +615,6 @@ namespace FantasySurvival.Rendering
             private sealed class MaskPassData
             {
                 public RendererListHandle rawRendererList;
-                public RendererListHandle seedRendererList;
             }
 
             private sealed class ExpansionPassData

@@ -4,6 +4,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
     {
         [MainTexture] _BaseMap("Base Map", 2D) = "white" {}
         [MainColor] _BaseColor("Base Color", Color) = (0.9686275, 0.8431373, 0.7294118, 1)
+        [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull Mode", Float) = 2
         _BaseMapPixelGrid("Base Map Pixel Grid (0 = Native)", Range(0, 256)) = 0
         _EnvironmentExposure("Environment Exposure (Clear Noon Reference)", Range(0.5, 3)) = 1.66
         _AmbientLightStrength("Ambient Light Strength", Range(0, 2)) = 1
@@ -26,7 +27,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             Name "CharacterSpatialFlatLit"
             Tags { "LightMode" = "UniversalForward" }
 
-            Cull Back
+            Cull [_Cull]
             ZWrite On
             ZTest LEqual
 
@@ -227,7 +228,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             Tags { "LightMode" = "DepthOnly" }
 
             ColorMask 0
-            Cull Back
+            Cull [_Cull]
             ZWrite On
             ZTest LEqual
 

@@ -4,6 +4,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
     {
         [HideInInspector] _CharacterArtPixelSize("Character Art Pixel Size", Float) = 3
         [HideInInspector] _CharacterScreenPixelSize("Character Screen Pixel Size", Float) = 5
+        [HideInInspector][PerRendererData] _CharacterOutlineGroup("Outline Group", Float) = 0
     }
 
     SubShader
@@ -23,6 +24,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
         float4 _CharacterPixelGridAnchorWS;
         float _CharacterArtPixelSize;
         float _CharacterScreenPixelSize;
+        float _CharacterOutlineGroup;
 
         struct Attributes
         {
@@ -45,9 +47,24 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
             return output;
         }
 
+        float2 PixelOffsetFromRoot(float4 positionCS)
+        {
+            float2 fragmentUv = GetNormalizedScreenSpaceUV(positionCS.xy);
+            float2 anchorUv = ComputeNormalizedDeviceCoordinates(
+                _CharacterPixelGridAnchorWS.xyz,
+                UNITY_MATRIX_VP);
+            return floor(fragmentUv * _ScaledScreenParams.xy) -
+                floor(anchorUv * _ScaledScreenParams.xy);
+        }
+
         half4 FragRaw(Varyings input) : SV_Target
         {
-            return half4(1, 0, 0, 1);
+            float pixelSize = clamp(round(_CharacterArtPixelSize), 1.0, 8.0);
+            // Preserve the previous centered root-cell phase, while retaining
+            // every covered fragment instead of only its cell's center seed.
+            float2 offset = PixelOffsetFromRoot(input.positionCS) + floor(pixelSize * 0.5);
+            float2 remainder = offset - floor(offset / pixelSize) * pixelSize;
+            return half4(1, round(_CharacterOutlineGroup) / 255.0, remainder / 255.0);
         }
 
         void ClipToCharacterPixelSeed(
@@ -55,13 +72,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
             float pixelSize)
         {
             pixelSize = max(1.0, round(pixelSize));
-            float2 fragmentUv = GetNormalizedScreenSpaceUV(positionCS.xy);
-            float2 anchorUv = ComputeNormalizedDeviceCoordinates(
-                _CharacterPixelGridAnchorWS.xyz,
-                UNITY_MATRIX_VP);
-            float2 pixelIndex = floor(fragmentUv * _ScaledScreenParams.xy);
-            float2 anchorPixelIndex = floor(anchorUv * _ScaledScreenParams.xy);
-            float2 offset = pixelIndex - anchorPixelIndex;
+            float2 offset = PixelOffsetFromRoot(positionCS);
             float2 remainder = offset - floor(offset / pixelSize) * pixelSize;
             half seed =
                 (1.0h - step(0.5h, (half)remainder.x)) *
@@ -74,7 +85,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
             ClipToCharacterPixelSeed(
                 input.positionCS,
                 _CharacterArtPixelSize);
-            return half4(0, 1, 0, 1);
+            return half4(0, 1, 0, round(_CharacterOutlineGroup) / 255.0);
         }
 
         half4 FragScreenPixelSeed(Varyings input) : SV_Target
@@ -98,10 +109,12 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
         {
             Name "CharacterSilhouetteRawMask"
 
-            Cull Back
+            // Follow the surfaces actually present in opaque camera depth,
+            // including two-sided source materials, without seeing hidden parts.
+            Cull Off
             ZWrite Off
-            ZTest LEqual
-            ColorMask R
+            ZTest Equal
+            ColorMask RGBA
 
             HLSLPROGRAM
             #pragma vertex Vert
@@ -112,12 +125,14 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
 
         Pass
         {
+            // Reserved pass index: classic coverage no longer schedules seeds.
+            // Keep stencil index 2 and screen-pixel seed index 3 unchanged.
             Name "CharacterSilhouettePixelSeeds"
 
-            Cull Back
+            Cull Off
             ZWrite Off
-            ZTest LEqual
-            ColorMask G
+            ZTest Equal
+            ColorMask GA
 
             HLSLPROGRAM
             #pragma vertex Vert
@@ -130,7 +145,7 @@ Shader "Hidden/FantasySurvival/Character Silhouette Mask"
         {
             Name "CharacterVisibleStencil"
 
-            Cull Back
+            Cull Off
             ZWrite Off
             ZTest Equal
             ColorMask 0

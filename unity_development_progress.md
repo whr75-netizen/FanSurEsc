@@ -2263,3 +2263,38 @@ Interactable (abstract base class)
 - `[검증]` Unity shader compile 오류0, 기지 실제 Camera의 정면/쿼터와3/5px 대표 렌더를 수행했다(`[CALL]`). CPU 수동 대응 회귀18개는 면적/동점·source group/cell1,800위치·원본 내부49위치·좁은3px띠·한쪽 선·metadata·직교 depth를 확인한 것이며 GPU/시각 합격을 대신하지 않는다. 이후 가림 선행 변경은 실제 재촬영으로 확인했다. 임시 진단에서 asset Material에 실행 중 RT를 GetTexture로 조회해 texture-property 오류를 냈으며 게임 셰이더 오류와 구분한다. Console을 지우지 않았다.
 - `[경계·승인]` 정면과 대각선 PNG를 제시했다. 두꺼운 셀 ring은 제거됐지만 정면의 미세 오목 경계에는 거친 구간이 남아 있어 완전 해결/아트 승인으로 기록하지 않는다. 기본 계단3px·잉크1px, 보수적 확장 자체의 최대 축당2px 오차는 유지한다. 원본 파츠·텍스처·조명·Animator·이동·Player 수명·씬·세이브는 변경하지 않았다. GPU Profile·Player build·캐릭터 접촉/Transparent 차폐는 미검증이며 전체 게임 한 바퀴는 생략했다.
 - `[정리]` 촬영 후 Player 위치(0,0.5,0)·movement enabled·기본 grid3 복구를 확인했다. Play 종료·background=false·GameMap1 dirty 유지이며, 기존 사용자 씬/재질/preview prefab 변경은 저장하거나 되돌리지 않았다.
+
+---
+
+## 128. Chibi 눈·헤어 선택 팔레트/명암 단계와 픽셀 색 시험 `[CHARACTER-RENDER-01]`
+
+- `[요청·2026-09-06]` Canva 예시처럼 연속 그라데이션을 소수 색으로 정리하고 현재 캐릭터 눈·헤어부터 실제 셀 색과 경계선을 시험한다. 전체 카메라 효과·원본 atlas/FBX·본·Animator·피부 내부·눈썹 크기·게임플레이/저장은 변경하지 않는다. 눈썹/피부도 선택 부위와 공유하는 경계 셀에는 영향을 받을 수 있다.
+- `[조사]` [Canva](https://www.canva.com/ko_kr/create/pixel-art/)는 Pixelify와 AI 생성/편집을 함께 소개하지만 내부 공식을 공개하지 않는다. [Unity Posterize](https://docs.unity3d.com/Packages/com.unity.shadergraph@17.3/manual/Posterize-Node.html)의 단계화와 [Palette Limiter](https://godotshaders.com/shader/palette-limiter-shader/)의 최근접 팔레트 선택은 공간 격자와 별개다. [pixelism](https://github.com/longod/pixelism#discussion)의 프레임별 팔레트 변화 문제를 참고해 이번 팔레트는 원본에서 한 번 추출/고정한다. 외부 코드/패키지를 복사·설치하거나 Canva와 동일한 알고리즘이라고 주장하지 않는다.
+- `[색 책임]` `CharacterFlatUnlit`에서 tint 적용 albedo를 sRGB 거리로 팔레트 하나에 대응시킨 뒤 기존 공간 조명을 적용한다. 눈 메시의 실제 UV 삼각형을12등분 표본화한 원본 색5,478개에서 darkest→farthest RGB 방식으로8개 실제 texel을 선택했다. 평균색은 생성하지 않았다. 저장 팔레트는 `150400/604134/79665D/B57E55/AA988B/D1BBAC/F1DDCB/FFFEF6`. 헤어는 원래 단색 재질이며 텍스처나 가짜 머리카락 음영을 만들지 않았다.
+- `[명암 책임]` 두 재질의 `Lighting Bands=5`, `Lighting Band Range=1.2`: 기존 합산 조명의 luminance를0/.3/.6/.9/1.2로 반올림하고 동일 비율을 RGB에 적용한다. 0은0, 1.2 이상은 원래 HDR 광량을 유지한다. 로컬광 색 유지 때문에 최종 RGB 전체가8×5색으로 한정되지는 않는다. 밴드 경계의 시간 변화는 여전히 이산적이며 별도 temporal history/dithering은 없다. 각 재질의 Palette Count/Lighting Bands=0은 기본 off다.
+- `[공간 책임]` 기존 Subject의 `outlineGroups.pixelColor`로 눈2/헤어4 renderer만 선택한다. Player의 `classicPixelSizeOverride=5`, 나머지 Subject0(공유3px)이며 루트 snap을 유지한다. raw/quantized RGBA8의 G에 group/선택/크기를 pack하고 BA에 remainder/고정 bias7 source offset을 전달한다. 선택 셀은 실제 면적 우승 부위의 중심에 가장 가까운 lit sample 하나로 채운다. 셀 색과 경계선이 같은 최종 group을 읽고 선은 마지막 한쪽1px이다. 다른 격자 후보를 covered 셀로 끌어오지 않게 검사한다. 추가 RT·카메라·Manager는 없다. covered 셀은g², 빈 경계는최대(2g−1)² 후보 검색이며 GPU 시간은 측정하지 않았다.
+- `[검증]` Unity C# 사용 명령 컴파일 성공, 실제 대표 렌더 이후 shader3개 message/error0, Console Error/Exception/Assert0. metadata80개·source offset2,040개 CPU 왕복 검사는 byte 계약 확인이며 시각 합격을 대신하지 않는다. GameMap1 직접 Play에서 전후 정면, 대각선, 실제 게임 거리, 밤과 Animator `LocomotionSpeed=1`의 서로 다른12프레임을 캡처했다(`[CALL]`). 처음 대각선 촬영은 원래 카메라 뒤쪽 각도여서 얼굴 비교에 부적합했으며, 다른 격자 후보 검사 추가 후 정면쪽 대각선으로 최종 촬영했다. 첫 import 명령은 C# reload 중 MCP 동적 타입을 찾지 못했고, 컴파일 종료 확인 후 정상 수행했다. 게임 오류로 기록하지 않는다.
+- `[승인·한계]` 실제 PNG/걷기 프리뷰를 제시하고 질문 도구로 의견을 요청했다. 큰 셀에서 작은 눈 디테일이 줄고 기존 실루엣 미세 톱니가 더 드러난다. 앞머리의 물리적 가림 때문에 높은 각도에서 눈/눈썹이 가려질 수 있다. 이를 완벽한 픽셀화나 아트 승인으로 기록하지 않는다. 다른 Subject가 동일 셀을 공유하는 경우의 식별, Transparent 차폐, 확대/축소 전 범위, GPU profile·Player build는 미검증이다.
+- `[보존·정리]` 촬영 종료 후 동일 Player entity와 위치(0,.5,0), movement enabled, background=false를 확인하고 Play를 종료했다. GameMap1 Editor dirty=false이며 기존 디스크의 사용자 변경은 보존한다. 원본 UV/texture/filter/import 설정과 source prefab은 보존하고 gameplay eyes/hair 재질 및 Player wrapper override만 저장했다. 전체 한 판 테스트는 하지 않았다.
+- `[사용자 불합격·최신 정정]` 사용자에게서 몸체 도트가 과대하고 선과 셀 크기가 다르며 곡면 경계가 상어 이빨처럼 들쭉날쭉하다는 피드백을 받았다. 5px 색/실루엣 격자와 native1px 잉크의 단위 혼용, 선택 부위뿐 아니라 Player 공유 실루엣까지 키운 설정을 잘못으로 인정했다. 아트 승인/완료가 아니며 추가 렌더 수정·커밋을 중단했다. 톱니의 정확한 GPU 원인은 미확정이다. 같은 셀 안에서 native 보존/확장/깊이 판정이 분기되는 현재 구조와 공통 최종 셀 표현을 구분해 재설계해야 한다. perfectPixel은 기본 center 샘플이며 majority는 RGB K-means2 군집 중 다수 군집의 평균색, median은 채널별 중앙값이다. 전역8색 팔레트나 의미론적 눈 인식 알고리즘이 아니다.
+
+---
+
+## 129. Chibi 빈칸 판정과2px 공통 셀 표면 `[CHARACTER-RENDER-01]`
+
+- `[요청·원인][2026-09-06]` 사용자는 작은 굴곡에 걸친 칸을 무조건 채우지 말고 빈칸 결정을 넣어2×2부터 빠르게 비교하도록 정정했다. 기존 경로는 native 둥근 몸체가 먼저 그려져 EMPTY 결정으로 지울 수 없었고 보수적 확장·1px 잉크·fragment별 깊이를 섞었다. 단순 크기 변경으로 이 계약을 해결하지 못한다.
+- `[수정]` 기존 Subject/RendererFeature 안에 opt-in `pixelCellSurface`를 추가했다. source pass가 루트 기준 칸 중앙에서만 원래 공간 조명 색을 평가하고 RGBA16F(RGB/eye depth), RGBA8(16bit Subject ID/부위/칸 크기), private D32 self-depth를 기록한다. native Forward/DepthOnly는 이 대상만 제외한다. 중심 표본 없음=EMPTY, 있음=같은 색의 정사각 셀이며4-neighbor 외곽/한쪽 부위 경계는 같은 격자의 한 셀 잉크다. 몸체 아래 native 컬러를 남기거나 외부로 무조건 팽창하지 않는다. 눈8색·눈/헤어5명암 시험과 원래 조명 수식은 유지한다.
+- `[깊이·소유권]` cell은bit28, 기존 Classic29/Screen30과 배타이며 공통31은 보존한다. transient16bit ID는 활성 Subject만 소유/반환한다. source/self-depth→기존 resolved depth의R32 복사→cell MRT 색/깊이→기존 camera-depth handle로 format별 copy-back 순서다. 동일 Feature의 cell 패스301은 legacy550와 분리해450의 로컬 체적광/투명 효과보다 먼저 색·깊이를 제공한다. 별도 Camera·Manager·저장 상태는 없다. 중앙 기준 월드 차폐는 셀 내부를 다시 native 조각으로 자르지 않으며 연속 물체 경계와 최대 반 칸 정도 오차는 남는다.
+- `[정리]` 실패한 `classicPixelSizeOverride`, `outlineGroups.pixelColor`와7개 prefab override를 제거했다. Player wrapper에cell opt-in을 저장했고 default2px를 쓴다.9개 SkinnedRenderer·4부위·원본 모델/재질 참조·Animator controller·이동/달리기/Player 수명은 보존했다. Classic/좀비A/B 알고리즘은 변경하지 않았다.
+- `[검증·CALL]` GameMap1 직접 Play1회, 같은 프레임/동일 자세의2px·3px 정면과2px 쿼터/실제 게임 거리, 실제 Animator 걷기8프레임을 촬영했다. 전후 Player entity `568105589213733838` 동일, 위치(0,.5,0),movement enabled,2px 복구를 확인했다. 두 shader supported/messages0, Console Error/Exception/Assert0. Play 종료·compiling=false·Editor GameMap1 dirty=false·background=false. CPU 격자/ID/깊이 수식 검토는 GPU·외형 합격과 구분한다. 전체 게임 한 바퀴나 씬 전환 반복은 하지 않았다.
+- `[사용자 선택]`2px/3px 실제 PNG 제시 후 사용자가 “2x2가더나아”라고 답해2px를 유지했다. 이후 외형을 임의 보정하지 않았다. 최종 아트 전체 승인이나 모든 상황의 톱니/깜빡임 해결을 의미하지 않는다. 다중 대상 겹침·전체 줌/회전·날씨 조합·Editor preview·GPU profile·Player build는 미검증이며 별도 후속 승인 없이 확대하지 않는다.
+
+---
+
+## 130. 몸체를 보존하는 바깥 한 셀 외곽선 `[CHARACTER-RENDER-01]`
+
+- `[사용자 정정·확정]` §129의3px 손이 살색 없이 두 줄의 선으로 보인다는 피드백으로 커밋을 보류했다. 원인은 색 셀을 먼저 만들고도 빈 이웃을 가진 body 셀 자체를 잉크로 치환한 inward erosion이었다. 사용자는 바깥으로 한 셀을 추가하도록 명시했다.
+- `[원인 수정]` Chibi `FragPixelCell`은 실제 body를 먼저 확정한다. body가 없을 때만 `ResolveOuterPixelCell`이 실제 source의8이웃 한 셀을 검색해 `Dilate8(Body)-Body`를 그린다. 새 링 중앙에서도 공급 body의 깊이를 월드와 비교하므로 공급 셀만 보인다고 벽 위로 선을 그리지 않는다. body 셀은 총외곽선으로 치환하지 않고 기존 내부 부위 선만 별개로 유지한다. 외부 링 출력은 다음 링의 source가 아니므로 재팽창하지 않는다. 기본2px/공통격자/기존 MRT/깊이 copy-back/원본 모델/애니메이션/조명은 보존했다.
+- `[좁은 검증·CALL]` GameMap1 Play1회에서 같은 프레임2px·3px 정면,2px 쿼터/게임 거리4장을 촬영했다.3px에서도 손의 살색 셀이 남는 결과를 제시했다. 걷기 반복·전체 한 판·씬 전환은 수행하지 않았다. shader supported/messages0, Console Error/Exception/Assert0. 전후 Player entity `568105589213729886` 동일, 위치(0,.5,0)/movement enabled/기본2px 복구 후 Play 종료. CPU 단일/가로2/세로2셀은 body와 외부 링의 교집합0을 확인한 최소 논리 검사이며 디자인 합격을 대신하지 않는다.
+- `[승인·경계]` 실제2px/3px 미리보기와 질문을 제시했다. 이번 바깥 선의 외형 승인 대기이며 임의 추가 보정하지 않는다. 다중 캐릭터 접촉·줌/회전 전범위·GPU profile·빌드는 미검증이다. 빈 화면의 외부 검색은 최대(3g)² seed 조회이며 다수/큰g의 비용을 측정했다고 주장하지 않는다.
+- `[커밋 경계]` 최종 관련 diff에서 헤어 재질의 명암 단계가0(off)인 현재 값을 확인했다. 외곽선 작업에서 이 재질을 수정하지 않았고 기존5단계 설명으로 덮어쓰지 않는다. 헤어 재질의 미커밋 변경은 보존·stage 제외하고 현재 GDD에만 실제 값을 반영한다. 현재 셰이더의 기본 단계 값도0이므로 이 파일은 새 렌더 경로의 필수 변경이 아니다.

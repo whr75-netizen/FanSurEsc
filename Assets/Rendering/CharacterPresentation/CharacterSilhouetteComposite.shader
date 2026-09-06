@@ -30,12 +30,15 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
         TEXTURE2D(_CharacterScreenPixelResolved);
         TEXTURE2D(_CharacterScreenPixelOutlineDepth);
         TEXTURE2D(_CharacterSceneDepth);
+        TEXTURE2D(_CharacterCellSourceColor);
+        TEXTURE2D(_CharacterCellSourceMeta);
 
         CBUFFER_START(UnityPerMaterial)
             half4 _OutlineColor;
             float _ArtPixelSize;
             float _ScreenPixelSize;
             float _CoverageThreshold;
+            float _CharacterCellSearchSize;
         CBUFFER_END
 
         struct Attributes
@@ -401,6 +404,168 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
                 ? half4(resolved.rgb, 1.0h)
                 : half4(_OutlineColor.rgb, 1.0h);
         }
+        struct PixelCellSample
+        {
+            float4 colorDepth;
+            int2 seed;
+            int subject;
+            int group;
+            int size;
+        };
+
+        bool IsPixelCellVisibleAt(PixelCellSample cell, int2 center)
+        {
+            if (!PixelInBounds(center))
+                return false;
+            float rawDepth = LOAD_TEXTURE2D(_CharacterSceneDepth, center).r;
+            float worldDepth = unity_OrthoParams.w > 0.5 ?
+                LinearDepthToEyeDepth(rawDepth) : LinearEyeDepth(rawDepth, _ZBufferParams);
+            float tolerance = max(0.002, cell.colorDepth.a * 0.0005);
+            return cell.colorDepth.a > 0.0 && worldDepth + tolerance >= cell.colorDepth.a;
+        }
+
+        PixelCellSample ReadCellSeed(int2 seed)
+        {
+            PixelCellSample cell = (PixelCellSample)0;
+            cell.seed = seed;
+            if (!PixelInBounds(seed))
+                return cell;
+            float4 meta = LOAD_TEXTURE2D(_CharacterCellSourceMeta, seed);
+            cell.subject = (int)round(meta.r * 255.0) + (int)round(meta.a * 255.0) * 256;
+            if (cell.subject == 0)
+                return cell;
+            cell.group = (int)round(meta.g * 255.0);
+            cell.size = clamp((int)round(meta.b * 255.0), 1, 8);
+            cell.colorDepth = LOAD_TEXTURE2D(_CharacterCellSourceColor, seed);
+
+            // The WHOLE cell takes its visibility from the same center sample.
+            // Native per-fragment depth cuts would split it back into teeth.
+            if (!IsPixelCellVisibleAt(cell, seed))
+                cell.subject = 0;
+            return cell;
+        }
+
+        PixelCellSample ResolvePixelCell(int2 pixel)
+        {
+            PixelCellSample best = (PixelCellSample)0;
+            int searchSize = clamp((int)round(_CharacterCellSearchSize), 1, 8);
+            int first = -(searchSize - 1 - (searchSize >> 1));
+            [loop]
+            for (int y = 0; y < searchSize; y++)
+            {
+                [loop]
+                for (int x = 0; x < searchSize; x++)
+                {
+                    PixelCellSample candidate = ReadCellSeed(pixel + int2(first + x, first + y));
+                    if (candidate.subject == 0)
+                        continue;
+                    int2 minimum = candidate.seed - (candidate.size >> 1);
+                    if (any(pixel < minimum) || any(pixel >= minimum + candidate.size))
+                        continue;
+                    if (best.subject == 0 || candidate.colorDepth.a < best.colorDepth.a ||
+                        (candidate.colorDepth.a == best.colorDepth.a && candidate.subject < best.subject))
+                        best = candidate;
+                }
+            }
+            // No center hit means EMPTY. No occupancy dilation or native body
+            // survives underneath this result: its normal pass is excluded.
+            return best;
+        }
+
+        PixelCellSample ResolveOuterPixelCell(int2 pixel)
+        {
+            PixelCellSample best = (PixelCellSample)0;
+            int searchSize = clamp((int)round(_CharacterCellSearchSize), 1, 8);
+            int first = -(searchSize - 1 - (searchSize >> 1)) - searchSize;
+            // One logical cell in each of the eight directions. Search source
+            // seeds, not the outline output, so a ring can never grow recursively.
+            [loop]
+            for (int y = 0; y < searchSize * 3; y++)
+            {
+                [loop]
+                for (int x = 0; x < searchSize * 3; x++)
+                {
+                    PixelCellSample candidate = ReadCellSeed(pixel + int2(first + x, first + y));
+                    if (candidate.subject == 0)
+                        continue;
+                    int2 cellOffset = int2(floor(
+                        (float2(pixel - candidate.seed) + (candidate.size >> 1)) / candidate.size));
+                    if (max(abs(cellOffset.x), abs(cellOffset.y)) != 1)
+                        continue;
+                    int2 outlineCenter = candidate.seed + cellOffset * candidate.size;
+                    // Visibility of the supplying body is not enough: the NEW
+                    // outer cell must also stay behind nearer world geometry.
+                    if (!IsPixelCellVisibleAt(candidate, outlineCenter))
+                        continue;
+                    if (best.subject == 0 || candidate.colorDepth.a < best.colorDepth.a ||
+                        (candidate.colorDepth.a == best.colorDepth.a && candidate.subject < best.subject))
+                        best = candidate;
+                }
+            }
+            return best;
+        }
+
+        bool IsPixelCellInternalInk(PixelCellSample center)
+        {
+            const int2 neighbors[4] = {int2(-1, 0), int2(1, 0), int2(0, -1), int2(0, 1)};
+            [unroll]
+            for (int i = 0; i < 4; i++)
+            {
+                PixelCellSample neighbor = ReadCellSeed(center.seed + neighbors[i] * center.size);
+                // Part boundaries are separate from the exterior silhouette.
+                // An EMPTY neighbor must never turn a hand/body cell into ink.
+                if (neighbor.subject == center.subject && neighbor.size == center.size &&
+                    neighbor.group > 0 && neighbor.group < center.group)
+                    return true;
+            }
+            return false;
+        }
+
+        struct PixelCellOutput
+        {
+            half4 color : SV_Target;
+            float resolvedDepth : SV_Target1;
+            float depth : SV_Depth;
+        };
+
+        PixelCellOutput FragPixelCell(Varyings input)
+        {
+            int2 pixel = int2(floor(input.positionCS.xy));
+            PixelCellSample cell = ResolvePixelCell(pixel);
+            bool isBody = cell.subject != 0;
+            if (!isBody)
+                cell = ResolveOuterPixelCell(pixel);
+            clip(cell.subject - 0.5);
+            PixelCellOutput output;
+            bool isInk = !isBody || IsPixelCellInternalInk(cell);
+            output.color = half4(isInk ? _OutlineColor.rgb : cell.colorDepth.rgb, 1);
+            if (unity_OrthoParams.w > 0.5)
+            {
+                output.depth = (cell.colorDepth.a - _ProjectionParams.y) /
+                    (_ProjectionParams.z - _ProjectionParams.y);
+                #if UNITY_REVERSED_Z
+                    output.depth = 1.0 - output.depth;
+                #endif
+            }
+            else
+                output.depth = (rcp(cell.colorDepth.a) - _ZBufferParams.w) / _ZBufferParams.z;
+            output.resolvedDepth = output.depth;
+            return output;
+        }
+
+        struct CellDepthOutput
+        {
+            float color : SV_Target;
+            float depth : SV_Depth;
+        };
+
+        CellDepthOutput FragCopyCellDepth(Varyings input)
+        {
+            CellDepthOutput output;
+            output.color = LOAD_TEXTURE2D(_CharacterSceneDepth, int2(floor(input.positionCS.xy))).r;
+            output.depth = output.color;
+            return output;
+        }
         ENDHLSL
 
         Pass
@@ -493,6 +658,34 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             HLSLPROGRAM
             #pragma vertex Vert
             #pragma fragment FragCompositeScreenPixel
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "CharacterPixelCellComposite"
+            Blend One Zero
+            Cull Off
+            ZWrite On
+            // Visibility was resolved ONCE at the cell center above.
+            ZTest Always
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragPixelCell
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "CharacterPixelCellDepthCopy"
+            Blend One Zero
+            Cull Off
+            ZWrite On
+            ZTest Always
+
+            HLSLPROGRAM
+            #pragma vertex Vert
+            #pragma fragment FragCopyCellDepth
             ENDHLSL
         }
     }

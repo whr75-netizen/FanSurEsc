@@ -11,6 +11,17 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
         _MainLightStrength("Main Light Strength", Range(0, 2)) = 0.45
         _AdditionalLightStrength("Additional Light Strength", Range(0, 2)) = 0.18
         _SteppedLocalLightStrength("Stepped Local Light Strength", Range(0, 2)) = 0.55
+        [IntRange] _PaletteCount("Albedo Palette Colors (0 = Disabled)", Range(0, 8)) = 0
+        _Palette0("Albedo Palette 0", Color) = (0, 0, 0, 1)
+        _Palette1("Albedo Palette 1", Color) = (1, 1, 1, 1)
+        _Palette2("Albedo Palette 2", Color) = (1, 1, 1, 1)
+        _Palette3("Albedo Palette 3", Color) = (1, 1, 1, 1)
+        _Palette4("Albedo Palette 4", Color) = (1, 1, 1, 1)
+        _Palette5("Albedo Palette 5", Color) = (1, 1, 1, 1)
+        _Palette6("Albedo Palette 6", Color) = (1, 1, 1, 1)
+        _Palette7("Albedo Palette 7", Color) = (1, 1, 1, 1)
+        [IntRange] _LightingBandCount("Lighting Bands (0 = Disabled, 2-16)", Range(0, 16)) = 0
+        _LightingBandMaximum("Lighting Band Range (Above = Unchanged)", Float) = 1
     }
 
     SubShader
@@ -22,28 +33,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             "Queue" = "Geometry"
         }
 
-        Pass
-        {
-            Name "CharacterSpatialFlatLit"
-            Tags { "LightMode" = "UniversalForward" }
-
-            Cull [_Cull]
-            ZWrite On
-            ZTest LEqual
-
-            HLSLPROGRAM
-            #pragma target 4.5
-            #pragma vertex Vert
-            #pragma fragment Frag
-            #pragma editor_sync_compilation
-            #pragma multi_compile_instancing
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-            #pragma multi_compile _ _ADDITIONAL_LIGHTS
-            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
-            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
-            #pragma multi_compile_fragment _ _LIGHT_COOKIES
-
+        HLSLINCLUDE
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/Color.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/CommonMaterial.hlsl"
@@ -59,6 +49,17 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 half _MainLightStrength;
                 half _AdditionalLightStrength;
                 half _SteppedLocalLightStrength;
+                half _PaletteCount;
+                half4 _Palette0;
+                half4 _Palette1;
+                half4 _Palette2;
+                half4 _Palette3;
+                half4 _Palette4;
+                half4 _Palette5;
+                half4 _Palette6;
+                half4 _Palette7;
+                half _LightingBandCount;
+                float _LightingBandMaximum;
             CBUFFER_END
 
             TEXTURE2D(_BaseMap);
@@ -69,6 +70,14 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             // restores the unsnapped world position used by spatial lighting so
             // camera movement cannot drag the character through light boundaries.
             float4 _CharacterLightingPositionOffsetWS;
+
+            // One presentation subject supplies these values through its MPB.
+            // Unassigned renderers default to the original native surface path.
+            float _CharacterCellSurface;
+            float _CharacterCellSize;
+            float4 _CharacterPixelGridAnchorWS;
+            float _CharacterOutlineGroup;
+            float _CharacterCellSubjectId;
 
             struct Attributes
             {
@@ -188,7 +197,72 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 return lighting;
             }
 
-            half4 Frag(Varyings input) : SV_Target
+            float3 PaletteComparisonColor(half3 color)
+            {
+                // Material Color properties and sampled albedo share the active
+                // working space. Compare both in sRGB so dark iris colors do
+                // not collapse merely because their linear values are close.
+                #if defined(UNITY_COLORSPACE_GAMMA)
+                    return color;
+                #else
+                    return LinearToSRGB(color);
+                #endif
+            }
+
+            half3 SelectAlbedoPalette(half3 albedo)
+            {
+                int paletteCount = clamp((int)round(_PaletteCount), 0, 8);
+                if (paletteCount == 0)
+                    return albedo;
+
+                half3 palette[8] = {
+                    _Palette0.rgb, _Palette1.rgb, _Palette2.rgb, _Palette3.rgb,
+                    _Palette4.rgb, _Palette5.rgb, _Palette6.rgb, _Palette7.rgb
+                };
+                float3 comparisonColor = PaletteComparisonColor(albedo);
+                float nearestDistance = 1e30;
+                half3 selected = albedo;
+                [unroll]
+                for (int index = 0; index < 8; index++)
+                {
+                    if (index < paletteCount)
+                    {
+                        float3 difference = comparisonColor -
+                            PaletteComparisonColor(palette[index]);
+                        float distanceSquared = dot(difference, difference);
+                        if (distanceSquared < nearestDistance)
+                        {
+                            nearestDistance = distanceSquared;
+                            selected = palette[index];
+                        }
+                    }
+                }
+                // Select one authored source color; never average the palette.
+                // Its alpha is not a replacement for source texture coverage.
+                return selected;
+            }
+
+            half3 ApplyLightingBands(half3 lighting)
+            {
+                int bandCount = clamp((int)round(_LightingBandCount), 0, 16);
+                if (bandCount < 2 || _LightingBandMaximum <= 0.0)
+                    return lighting;
+
+                float brightness = Luminance(lighting);
+                if (brightness <= 0.0 || brightness >= _LightingBandMaximum)
+                    return lighting;
+
+                // N equally spaced levels include zero and the range endpoint.
+                // Beyond that endpoint retain the original HDR light, rather
+                // than cap it. A shared scalar preserves colored local lights.
+                float intervals = bandCount - 1;
+                float bandBrightness = round(
+                    brightness / _LightingBandMaximum * intervals) *
+                    (_LightingBandMaximum / intervals);
+                return lighting * (bandBrightness / brightness);
+            }
+
+            half4 EvaluateCharacterColor(Varyings input)
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
                 float3 lightingPositionWS = input.positionWS +
@@ -215,10 +289,80 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                         sampler_BaseMap,
                         input.uv);
                 }
+                half3 albedo = SelectAlbedoPalette(baseSample.rgb * _BaseColor.rgb);
                 return half4(
-                    baseSample.rgb * _BaseColor.rgb * lighting,
+                    albedo * ApplyLightingBands(lighting),
                     baseSample.a * _BaseColor.a);
             }
+
+            half4 Frag(Varyings input) : SV_Target
+            {
+                // A cell-surface subject must not leave rounded native color or
+                // depth behind; empty cells are supplied by the actual scene.
+                clip(0.5 - _CharacterCellSurface);
+                return EvaluateCharacterColor(input);
+            }
+
+            struct CellSourceOutput
+            {
+                half4 colorDepth : SV_Target0;
+                half4 subjectGroupSize : SV_Target1;
+            };
+
+            CellSourceOutput FragCellSource(Varyings input)
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                clip(_CharacterCellSurface - 0.5);
+                clip(_CharacterCellSubjectId - 0.5);
+
+                float cellSize = clamp(round(_CharacterCellSize), 1.0, 8.0);
+                float2 fragmentUv = GetNormalizedScreenSpaceUV(input.positionCS.xy);
+                float2 anchorUv = ComputeNormalizedDeviceCoordinates(
+                    _CharacterPixelGridAnchorWS.xyz, UNITY_MATRIX_VP);
+                float2 pixelOffset = floor(fragmentUv * _ScaledScreenParams.xy) -
+                    floor(anchorUv * _ScaledScreenParams.xy);
+                float2 remainder = pixelOffset - floor(pixelOffset / cellSize) * cellSize;
+                clip(0.5 - max(remainder.x, remainder.y));
+
+                // Only covered cell centers participate in the isolated native
+                // self-depth test. The source is opaque, just like Forward.
+                half4 color = EvaluateCharacterColor(input);
+                float eyeDepth = unity_OrthoParams.w > 0.5 ?
+                    LinearDepthToEyeDepth(input.positionCS.z) :
+                    LinearEyeDepth(input.positionCS.z, _ZBufferParams);
+                uint subjectId = (uint)clamp(round(_CharacterCellSubjectId), 1.0, 65535.0);
+                float group = clamp(round(_CharacterOutlineGroup), 0.0, 255.0);
+
+                CellSourceOutput output;
+                output.colorDepth = half4(color.rgb, max(eyeDepth, 0.0001));
+                output.subjectGroupSize = half4(
+                    (subjectId & 255u) / 255.0, group / 255.0,
+                    cellSize / 255.0, (subjectId >> 8) / 255.0);
+                return output;
+            }
+        ENDHLSL
+
+        Pass
+        {
+            Name "CharacterSpatialFlatLit"
+            Tags { "LightMode" = "UniversalForward" }
+
+            Cull [_Cull]
+            ZWrite On
+            ZTest LEqual
+
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma vertex Vert
+            #pragma fragment Frag
+            #pragma editor_sync_compilation
+            #pragma multi_compile_instancing
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _LIGHT_COOKIES
             ENDHLSL
         }
 
@@ -238,33 +382,56 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             #pragma fragment DepthFrag
             #pragma multi_compile_instancing
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-
-            struct Attributes
+            struct DepthAttributes
             {
                 float4 positionOS : POSITION;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
-            struct Varyings
+            struct DepthVaryings
             {
                 float4 positionCS : SV_POSITION;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
-            Varyings DepthVert(Attributes input)
+            DepthVaryings DepthVert(DepthAttributes input)
             {
-                Varyings output;
+                DepthVaryings output;
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
                 output.positionCS = TransformObjectToHClip(input.positionOS.xyz);
                 return output;
             }
 
-            half4 DepthFrag(Varyings input) : SV_Target
+            half4 DepthFrag(DepthVaryings input) : SV_Target
             {
+                clip(0.5 - _CharacterCellSurface);
                 return 0;
             }
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "CharacterPixelCellSource"
+            Tags { "LightMode" = "CharacterPixelCellSource" }
+
+            Cull [_Cull]
+            ZWrite On
+            ZTest LEqual
+
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma vertex Vert
+            #pragma fragment FragCellSource
+            #pragma editor_sync_compilation
+            #pragma multi_compile_instancing
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _LIGHT_COOKIES
             ENDHLSL
         }
     }

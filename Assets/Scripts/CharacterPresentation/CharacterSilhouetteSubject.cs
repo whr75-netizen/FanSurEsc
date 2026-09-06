@@ -16,6 +16,7 @@ namespace FantasySurvival.CharacterPresentation
         public const uint RenderingLayerMask = 1u << 31;
         public const uint ScreenPixelRenderingLayerMask = 1u << 30;
         public const uint ClassicOutlineRenderingLayerMask = 1u << 29;
+        public const uint PixelCellRenderingLayerMask = 1u << 28;
 
         public enum OutlineGroup
         {
@@ -39,6 +40,13 @@ namespace FantasySurvival.CharacterPresentation
         private bool screenSpacePixelColor;
 
         [SerializeField]
+        [Tooltip("Render this subject only through the isolated pixel-cell surface path.")]
+        private bool pixelCellSurface;
+
+        [SerializeField, Range(1, 8)]
+        private int pixelCellSize = 2;
+
+        [SerializeField]
         [Tooltip("Optional explicit groups on this presentation root. Unmapped renderers keep " +
             "the combined outline. At a group boundary only the higher ID side receives ink: " +
             "Eyes 1, Eyebrows 2, Hair 3, Skin 4. Screen-pixel color subjects ignore this mapping.")]
@@ -50,11 +58,18 @@ namespace FantasySurvival.CharacterPresentation
             Shader.PropertyToID("_CharacterLightingPositionOffsetWS");
         private static readonly int OutlineGroupId =
             Shader.PropertyToID("_CharacterOutlineGroup");
+        private static readonly int CellSurfaceId = Shader.PropertyToID("_CharacterCellSurface");
+        private static readonly int CellSizeId = Shader.PropertyToID("_CharacterCellSize");
+        private static readonly int CellSubjectId = Shader.PropertyToID("_CharacterCellSubjectId");
 
         private static int activeSubjectCount;
         private static int activeScreenPixelSubjectCount;
+        private static readonly HashSet<CharacterSilhouetteSubject> activeSubjects =
+            new HashSet<CharacterSilhouetteSubject>();
+        private static int nextCellSubjectId = 1;
 
         private bool registered;
+        private int pixelCellSubjectId;
         private bool screenPixelRegistered;
         private bool renderSnapApplied;
         private Camera snappedCamera;
@@ -66,8 +81,23 @@ namespace FantasySurvival.CharacterPresentation
         public static bool HasActiveSubject => activeSubjectCount > 0;
         public static bool HasActiveScreenPixelSubject =>
             activeScreenPixelSubjectCount > 0;
-
         public bool ScreenSpacePixelColor => screenSpacePixelColor;
+        public bool PixelCellSurface => pixelCellSurface;
+        public int PixelCellSize => pixelCellSize;
+        public static bool HasActivePixelCellSubject => MaximumPixelCellSize > 0;
+        public static int MaximumPixelCellSize
+        {
+            get
+            {
+                int maximum = 0;
+                foreach (CharacterSilhouetteSubject subject in activeSubjects)
+                {
+                    if (subject != null && subject.isActiveAndEnabled && subject.pixelCellSurface)
+                        maximum = Mathf.Max(maximum, Mathf.Clamp(subject.pixelCellSize, 1, 8));
+                }
+                return maximum;
+            }
+        }
 
         private void OnEnable()
         {
@@ -76,12 +106,14 @@ namespace FantasySurvival.CharacterPresentation
                 propertyBlock = new MaterialPropertyBlock();
             }
 
+            pixelCellSubjectId = AllocateCellSubjectId();
             if (!registered)
             {
                 activeSubjectCount++;
                 registered = true;
             }
 
+            activeSubjects.Add(this);
             SynchronizeScreenPixelRegistration();
             ApplyToChildRenderers();
             RenderPipelineManager.beginCameraRendering += BeginCameraRendering;
@@ -94,6 +126,8 @@ namespace FantasySurvival.CharacterPresentation
             RenderPipelineManager.endCameraRendering -= EndCameraRendering;
             RestoreRenderPosition();
             ReleaseChildRenderers();
+            activeSubjects.Remove(this);
+            pixelCellSubjectId = 0;
 
             if (screenPixelRegistered)
             {
@@ -119,6 +153,7 @@ namespace FantasySurvival.CharacterPresentation
 
         private void OnValidate()
         {
+            pixelCellSize = Mathf.Clamp(pixelCellSize, 1, 8);
             if (!isActiveAndEnabled)
             {
                 return;
@@ -145,6 +180,39 @@ namespace FantasySurvival.CharacterPresentation
             ApplyToChildRenderers();
         }
 
+        public void SetPixelCellSize(int pixelSize)
+        {
+            int clampedSize = Mathf.Clamp(pixelSize, 1, 8);
+            if (pixelCellSize == clampedSize)
+                return;
+
+            pixelCellSize = clampedSize;
+            if (isActiveAndEnabled)
+                ApplyPixelGridAnchor(transform.position);
+        }
+
+        private static int AllocateCellSubjectId()
+        {
+            // Transient render identity only; released on disable and never saved.
+            for (int attempt = 0; attempt < ushort.MaxValue; attempt++)
+            {
+                int candidate = nextCellSubjectId;
+                nextCellSubjectId = candidate == ushort.MaxValue ? 1 : candidate + 1;
+                bool inUse = false;
+                foreach (CharacterSilhouetteSubject subject in activeSubjects)
+                {
+                    if (subject != null && subject.pixelCellSubjectId == candidate)
+                    {
+                        inUse = true;
+                        break;
+                    }
+                }
+                if (!inUse)
+                    return candidate;
+            }
+            throw new System.InvalidOperationException("All 65535 character cell subject IDs are in use.");
+        }
+
         [ContextMenu("Refresh Silhouette Renderers")]
         public void ApplyToChildRenderers()
         {
@@ -159,7 +227,8 @@ namespace FantasySurvival.CharacterPresentation
                     ownedRenderer.renderingLayerMask &=
                         ~(RenderingLayerMask |
                             ScreenPixelRenderingLayerMask |
-                            ClassicOutlineRenderingLayerMask);
+                            ClassicOutlineRenderingLayerMask |
+                            PixelCellRenderingLayerMask);
                 }
             }
 
@@ -169,7 +238,9 @@ namespace FantasySurvival.CharacterPresentation
                 foreach (RendererOutlineGroup mapping in outlineGroups)
                 {
                     if (mapping.renderer != null && currentRenderers.Contains(mapping.renderer))
+                    {
                         rendererOutlineGroups[mapping.renderer] = Mathf.Clamp((int)mapping.outlineGroup, 0, 4);
+                    }
                 }
             }
 
@@ -177,18 +248,20 @@ namespace FantasySurvival.CharacterPresentation
             foreach (Renderer childRenderer in renderers)
             {
                 // Bit 31 remains the shared character marker used by local
-                // lighting. The two outline presentation paths are exclusive,
-                // so a screen-pixel subject cannot receive both outlines.
+                // lighting. Each subject uses exactly one presentation path.
                 childRenderer.renderingLayerMask |= RenderingLayerMask;
-                if (screenSpacePixelColor)
+                childRenderer.renderingLayerMask &= ~(ScreenPixelRenderingLayerMask |
+                    ClassicOutlineRenderingLayerMask | PixelCellRenderingLayerMask);
+                if (pixelCellSurface)
+                {
+                    childRenderer.renderingLayerMask |= PixelCellRenderingLayerMask;
+                }
+                else if (screenSpacePixelColor)
                 {
                     childRenderer.renderingLayerMask |= ScreenPixelRenderingLayerMask;
-                    childRenderer.renderingLayerMask &=
-                        ~ClassicOutlineRenderingLayerMask;
                 }
                 else
                 {
-                    childRenderer.renderingLayerMask &= ~ScreenPixelRenderingLayerMask;
                     childRenderer.renderingLayerMask |=
                         ClassicOutlineRenderingLayerMask;
                 }
@@ -315,9 +388,12 @@ namespace FantasySurvival.CharacterPresentation
                 propertyBlock.SetVector(PixelGridAnchorId, anchor);
                 propertyBlock.SetVector(LightingPositionOffsetId, lightingOffset);
                 int outlineGroup = 0;
-                if (!screenSpacePixelColor)
+                if (!screenSpacePixelColor || pixelCellSurface)
                     rendererOutlineGroups.TryGetValue(ownedRenderer, out outlineGroup);
                 propertyBlock.SetFloat(OutlineGroupId, outlineGroup);
+                propertyBlock.SetFloat(CellSurfaceId, pixelCellSurface ? 1f : 0f);
+                propertyBlock.SetFloat(CellSizeId, Mathf.Clamp(pixelCellSize, 1, 8));
+                propertyBlock.SetFloat(CellSubjectId, pixelCellSubjectId);
                 ownedRenderer.SetPropertyBlock(propertyBlock);
                 propertyBlock.Clear();
             }
@@ -329,6 +405,9 @@ namespace FantasySurvival.CharacterPresentation
                 propertyBlock = new MaterialPropertyBlock();
             childRenderer.GetPropertyBlock(propertyBlock);
             propertyBlock.SetFloat(OutlineGroupId, 0f);
+            propertyBlock.SetFloat(CellSurfaceId, 0f);
+            propertyBlock.SetFloat(CellSizeId, 0f);
+            propertyBlock.SetFloat(CellSubjectId, 0f);
             childRenderer.SetPropertyBlock(propertyBlock);
             propertyBlock.Clear();
         }
@@ -343,7 +422,8 @@ namespace FantasySurvival.CharacterPresentation
                     ownedRenderer.renderingLayerMask &=
                         ~(RenderingLayerMask |
                             ScreenPixelRenderingLayerMask |
-                            ClassicOutlineRenderingLayerMask);
+                            ClassicOutlineRenderingLayerMask |
+                            PixelCellRenderingLayerMask);
                 }
             }
 
@@ -353,7 +433,7 @@ namespace FantasySurvival.CharacterPresentation
 
         private void SynchronizeScreenPixelRegistration()
         {
-            bool shouldRegister = screenSpacePixelColor && isActiveAndEnabled;
+            bool shouldRegister = screenSpacePixelColor && !pixelCellSurface && isActiveAndEnabled;
             if (shouldRegister == screenPixelRegistered)
             {
                 return;

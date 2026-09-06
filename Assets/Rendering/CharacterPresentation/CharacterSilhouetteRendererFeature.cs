@@ -12,13 +12,15 @@ namespace FantasySurvival.Rendering
     public sealed class CharacterSilhouetteRendererFeature : ScriptableRendererFeature
     {
         private const int RequiredMaskPassCount = 4;
-        private const int RequiredCompositePassCount = 6;
+        private const int RequiredCompositePassCount = 8;
         private const int ExpandPassIndex = 0;
         private const int ClassicOutlinePassIndex = 1;
         private const int ScreenSourceCopyPassIndex = 2;
         private const int ScreenResolvePassIndex = 3;
         private const int ScreenOutlinePassIndex = 4;
         private const int ScreenCompositePassIndex = 5;
+        private const int PixelCellCompositePassIndex = 6;
+        private const int PixelCellDepthCopyPassIndex = 7;
 
         [System.Serializable]
         public sealed class Settings
@@ -31,11 +33,14 @@ namespace FantasySurvival.Rendering
         [SerializeField] private Settings settings = new Settings();
 
         private CharacterSilhouettePass pass;
+        private CharacterSilhouettePass pixelCellPass;
 
         public override void Create()
         {
-            pass = new CharacterSilhouettePass();
+            pass = new CharacterSilhouettePass(false);
             pass.renderPassEvent = settings.injectionPoint;
+            pixelCellPass = new CharacterSilhouettePass(true);
+            pixelCellPass.renderPassEvent = (RenderPassEvent)((int)RenderPassEvent.AfterRenderingOpaques + 1);
         }
 
         public void Configure(Material maskMaterial, Material compositeMaterial)
@@ -57,6 +62,14 @@ namespace FantasySurvival.Rendering
                 settings.compositeMaterial.passCount < RequiredCompositePassCount)
             {
                 return;
+            }
+
+            if (CharacterSilhouetteSubject.HasActivePixelCellSubject)
+            {
+                pixelCellPass.Setup(settings.maskMaterial, settings.compositeMaterial);
+                pixelCellPass.ConfigureInput(ScriptableRenderPassInput.Depth);
+                pixelCellPass.requiresIntermediateTexture = true;
+                renderer.EnqueuePass(pixelCellPass);
             }
 
             pass.Setup(settings.maskMaterial, settings.compositeMaterial);
@@ -85,8 +98,16 @@ namespace FantasySurvival.Rendering
                 Shader.PropertyToID("_CharacterScreenPixelOutlineDepth");
             private static readonly int SceneDepthTextureId =
                 Shader.PropertyToID("_CharacterSceneDepth");
+            private static readonly int CameraDepthTextureId =
+                Shader.PropertyToID("_CameraDepthTexture");
             private static readonly int ArtPixelSizeId =
                 Shader.PropertyToID("_ArtPixelSize");
+            private static readonly int CellSourceColorTextureId =
+                Shader.PropertyToID("_CharacterCellSourceColor");
+            private static readonly int CellSourceMetaTextureId =
+                Shader.PropertyToID("_CharacterCellSourceMeta");
+            private static readonly int CellSearchSizeId =
+                Shader.PropertyToID("_CharacterCellSearchSize");
             private static readonly int ScreenPixelSizeId =
                 Shader.PropertyToID("_ScreenPixelSize");
             private static readonly int CharacterArtPixelSizeId =
@@ -101,9 +122,19 @@ namespace FantasySurvival.Rendering
                 new ShaderTagId("SRPDefaultUnlit"),
                 new ShaderTagId("LightweightForward")
             };
+            private static readonly List<ShaderTagId> PixelCellShaderTags = new List<ShaderTagId>
+            {
+                new ShaderTagId("CharacterPixelCellSource")
+            };
 
             private Material maskMaterial;
             private Material compositeMaterial;
+            private readonly bool cellOnly;
+
+            public CharacterSilhouettePass(bool cellOnly)
+            {
+                this.cellOnly = cellOnly;
+            }
 
             public void Setup(Material newMaskMaterial, Material newCompositeMaterial)
             {
@@ -122,6 +153,13 @@ namespace FantasySurvival.Rendering
                     !resources.cameraColor.IsValid() ||
                     !resources.cameraDepthTexture.IsValid())
                 {
+                    return;
+                }
+
+                if (cellOnly)
+                {
+                    if (CharacterSilhouetteSubject.HasActivePixelCellSubject)
+                        RecordPixelCellSurface(renderGraph, frameData, resources, cameraData);
                     return;
                 }
 
@@ -238,6 +276,158 @@ namespace FantasySurvival.Rendering
                     mask,
                     quantizedMask,
                     sourceColor);
+
+            }
+
+            private void RecordPixelCellSurface(
+                RenderGraph renderGraph,
+                ContextContainer frameData,
+                UniversalResourceData resources,
+                UniversalCameraData cameraData)
+            {
+                RenderTextureDescriptor descriptor = cameraData.cameraTargetDescriptor;
+                descriptor.depthBufferBits = 0;
+                descriptor.depthStencilFormat = GraphicsFormat.None;
+                descriptor.msaaSamples = 1;
+                descriptor.bindMS = false;
+                descriptor.graphicsFormat = GraphicsFormat.R32_SFloat;
+                TextureHandle resolvedCellDepth = UniversalRenderer.CreateRenderGraphTexture(
+                    renderGraph, descriptor, "_CharacterCellResolvedDepth", true, FilterMode.Point);
+                TextureHandle sceneDepth = resources.cameraDepthTexture;
+                RecordPixelCellDepthCopyPass(renderGraph, sceneDepth, resolvedCellDepth);
+
+                // Lit RGB and positive eye depth; no native camera-color copy.
+                descriptor.graphicsFormat = GraphicsFormat.R16G16B16A16_SFloat;
+                TextureHandle cellColor = UniversalRenderer.CreateRenderGraphTexture(
+                    renderGraph, descriptor, "_CharacterCellSourceColor", true, FilterMode.Point);
+
+                // R/A split the 16-bit subject ID; G is group, B is cell size.
+                descriptor.graphicsFormat = GraphicsFormat.R8G8B8A8_UNorm;
+                TextureHandle cellMeta = UniversalRenderer.CreateRenderGraphTexture(
+                    renderGraph, descriptor, "_CharacterCellSourceMeta", true, FilterMode.Point);
+
+                descriptor.graphicsFormat = GraphicsFormat.None;
+                descriptor.depthStencilFormat = GraphicsFormat.D32_SFloat;
+                TextureHandle cellDepth = UniversalRenderer.CreateRenderGraphTexture(
+                    renderGraph, descriptor, "_CharacterCellSourceDepth", true, FilterMode.Point);
+
+                RecordPixelCellSourcePass(renderGraph, frameData, resources, cellColor, cellMeta, cellDepth);
+                RecordPixelCellCompositePass(renderGraph, resources, cellColor, cellMeta,
+                    sceneDepth, resolvedCellDepth);
+                // Keep URP's original handle: both explicit resource readers and
+                // global depth consumers must see cells before lighting/weather.
+                RecordPixelCellDepthCopyPass(renderGraph, resolvedCellDepth, sceneDepth, true);
+            }
+
+            private void RecordPixelCellDepthCopyPass(
+                RenderGraph renderGraph,
+                TextureHandle sceneDepth,
+                TextureHandle targetDepth,
+                bool publishDepth = false)
+            {
+                using IRasterRenderGraphBuilder builder =
+                    renderGraph.AddRasterRenderPass<PixelCellDepthCopyPassData>(
+                        publishDepth ? "Character Pixel Cell Depth Publish" : "Character Pixel Cell World Depth Copy",
+                        out PixelCellDepthCopyPassData passData);
+                passData.sceneDepth = sceneDepth;
+                passData.material = compositeMaterial;
+                builder.UseTexture(sceneDepth, AccessFlags.Read);
+                if (GraphicsFormatUtility.IsDepthFormat(renderGraph.GetTextureDesc(targetDepth).format))
+                    builder.SetRenderAttachmentDepth(targetDepth, AccessFlags.Write);
+                else
+                    builder.SetRenderAttachment(targetDepth, 0, AccessFlags.Write);
+                if (publishDepth)
+                {
+                    builder.AllowGlobalStateModification(true);
+                    builder.SetGlobalTextureAfterPass(targetDepth, CameraDepthTextureId);
+                }
+                builder.SetRenderFunc(static (PixelCellDepthCopyPassData data, RasterGraphContext context) =>
+                {
+                    data.material.SetTexture(SceneDepthTextureId, data.sceneDepth);
+                    context.cmd.DrawProcedural(Matrix4x4.identity, data.material,
+                        PixelCellDepthCopyPassIndex, MeshTopology.Triangles, 3, 1);
+                });
+            }
+
+            private void RecordPixelCellSourcePass(
+                RenderGraph renderGraph,
+                ContextContainer frameData,
+                UniversalResourceData resources,
+                TextureHandle cellColor,
+                TextureHandle cellMeta,
+                TextureHandle cellDepth)
+            {
+                using IRasterRenderGraphBuilder builder =
+                    renderGraph.AddRasterRenderPass<PixelCellSourcePassData>(
+                        "Character Pixel Cell Source", out PixelCellSourcePassData passData);
+
+                UniversalRenderingData renderingData = frameData.Get<UniversalRenderingData>();
+                UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+                UniversalLightData lightData = frameData.Get<UniversalLightData>();
+                DrawingSettings drawingSettings = RenderingUtils.CreateDrawingSettings(
+                    PixelCellShaderTags, renderingData, cameraData, lightData,
+                    cameraData.defaultOpaqueSortFlags);
+                // Keep URP's per-object lighting/probe data and each material's
+                // own lit pass. This is not an override-material mask draw.
+                drawingSettings.perObjectData = renderingData.perObjectData;
+                FilteringSettings filteringSettings = new FilteringSettings(
+                    RenderQueueRange.opaque, -1, CharacterSilhouetteSubject.PixelCellRenderingLayerMask);
+                passData.rendererList = renderGraph.CreateRendererList(new RendererListParams(
+                    renderingData.cullResults, drawingSettings, filteringSettings));
+
+                if (!passData.rendererList.IsValid())
+                    return;
+
+                builder.UseRendererList(passData.rendererList);
+                builder.UseAllGlobalTextures(true);
+                if (resources.mainShadowsTexture.IsValid())
+                    builder.UseTexture(resources.mainShadowsTexture, AccessFlags.Read);
+                if (resources.additionalShadowsTexture.IsValid())
+                    builder.UseTexture(resources.additionalShadowsTexture, AccessFlags.Read);
+                builder.SetRenderAttachment(cellColor, 0, AccessFlags.Write);
+                builder.SetRenderAttachment(cellMeta, 1, AccessFlags.Write);
+                // Self-occlusion only; world visibility is resolved against the
+                // untouched camera depth by the cell-surface composite.
+                builder.SetRenderAttachmentDepth(cellDepth, AccessFlags.ReadWrite);
+                builder.SetRenderFunc(static (PixelCellSourcePassData data, RasterGraphContext context) =>
+                {
+                    context.cmd.ClearRenderTarget(RTClearFlags.All, Color.clear, 1f, 0);
+                    context.cmd.DrawRendererList(data.rendererList);
+                });
+            }
+
+            private void RecordPixelCellCompositePass(
+                RenderGraph renderGraph,
+                UniversalResourceData resources,
+                TextureHandle cellColor,
+                TextureHandle cellMeta,
+                TextureHandle sceneDepth,
+                TextureHandle resolvedCellDepth)
+            {
+                using IRasterRenderGraphBuilder builder =
+                    renderGraph.AddRasterRenderPass<PixelCellCompositePassData>(
+                        "Character Pixel Cell Surface", out PixelCellCompositePassData passData);
+
+                passData.cellColor = cellColor;
+                passData.cellMeta = cellMeta;
+                passData.sceneDepth = sceneDepth;
+                passData.searchSize = CharacterSilhouetteSubject.MaximumPixelCellSize;
+                passData.material = compositeMaterial;
+                builder.UseTexture(cellColor, AccessFlags.Read);
+                builder.UseTexture(cellMeta, AccessFlags.Read);
+                builder.UseTexture(sceneDepth, AccessFlags.Read);
+                builder.SetRenderAttachment(resources.activeColorTexture, 0, AccessFlags.ReadWrite);
+                builder.SetRenderAttachment(resolvedCellDepth, 1, AccessFlags.ReadWrite);
+                builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
+                builder.SetRenderFunc(static (PixelCellCompositePassData data, RasterGraphContext context) =>
+                {
+                    data.material.SetTexture(CellSourceColorTextureId, data.cellColor);
+                    data.material.SetTexture(CellSourceMetaTextureId, data.cellMeta);
+                    data.material.SetTexture(SceneDepthTextureId, data.sceneDepth);
+                    data.material.SetFloat(CellSearchSizeId, data.searchSize);
+                    context.cmd.DrawProcedural(Matrix4x4.identity, data.material,
+                        PixelCellCompositePassIndex, MeshTopology.Triangles, 3, 1);
+                });
             }
 
             private int GetArtPixelSize()
@@ -625,6 +815,26 @@ namespace FantasySurvival.Rendering
             private sealed class MaskPassData
             {
                 public RendererListHandle rawRendererList;
+            }
+
+            private sealed class PixelCellSourcePassData
+            {
+                public RendererListHandle rendererList;
+            }
+
+            private sealed class PixelCellDepthCopyPassData
+            {
+                public TextureHandle sceneDepth;
+                public Material material;
+            }
+
+            private sealed class PixelCellCompositePassData
+            {
+                public TextureHandle cellColor;
+                public TextureHandle cellMeta;
+                public TextureHandle sceneDepth;
+                public int searchSize;
+                public Material material;
             }
 
             private sealed class ExpansionPassData

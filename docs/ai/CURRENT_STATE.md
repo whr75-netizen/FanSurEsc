@@ -52,7 +52,7 @@
 | `INTERACT-01` | 공통 E 상호작용 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §3~5·36·91 | 최근접 하나, 열린 Chest 유지, 닫은 뒤 재선택, 거리 이탈 공통 닫기; 바닥 아이템도 같은 최근접 E 후보; 고정 기지 NPC는 solid `Obstacle`로 안정 정지 | `PlayerInteractor`, 거리·취소 계약 또는 고정 NPC Collider·태그 직접 변경 |
 | `ACTION-01` | Player 공용 행동시간 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §37~39·48~51·53 | 한 번에 1개; External은 이동취소, Self는 이동허용; 완료·취소 불변 결과 1회 통지 | 원형 UI·음식 연결 |
 | `MOVE-01` | Player 이동·달리기·8방향 회전 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §9·100·117·126 | 걷기10·달리기13, Chibi Humanoid·기존 Controller, root motion 없음 | 이동·Animator·외형 참조 변경 |
-| `CAMERA-01` | 영속 직교 Camera 제한 줌 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54 | 휠 0.5단계, size 3.5~8; UI·ESC·전환 중 차단 | 투영·범위·입력·픽셀 퍼펙트 정책 변경 |
+| `CAMERA-01` | 영속 Camera 줌·자유 회전 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §54·131 | 줌3.5~8; RMB 회전·놓기 유지10~80°; UI/전환 차단 | 투영·입력·픽셀 정책 변경 |
 | `ENVIRONMENT-01` | 시간·날씨 | `PARTIAL` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101·108~110·121~126 | 11키 낮밤·8초 구름/주광/안개→0.75초 비; 비차단·웅덩이·큰 식생 시험장·shadow/cookie·로컬광 | 시각 승인·실내 안개·날씨 저장·풍향·GPU Profile·Transparent 차폐/합성 |
 | `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 시험 | `PARTIAL` | `CALL` | `PROTOTYPE` | 진행 §96~108·116~120·126~130 | Chibi2px·빈칸/몸체보존·외부1셀선; 좀비A/B 보존 | 외형승인·art/rig·겹침·줌·GPU |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95·105 | grid·stack·가방·장전탄·Save v7·저작창; ID 13 1×1 갑빠(방어 20%·육각); 바닥 drop/E, 일반 전환 삭제·Active Raid 복원 | item/grid/장비/world-item 저장 계약 변경 |

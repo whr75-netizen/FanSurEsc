@@ -2300,3 +2300,14 @@ Interactable (abstract base class)
 - `[커밋 경계]` 최종 관련 diff에서 헤어 재질의 명암 단계가0(off)인 현재 값을 확인했다. 외곽선 작업에서 이 재질을 수정하지 않았고 기존5단계 설명으로 덮어쓰지 않는다. 헤어 재질의 미커밋 변경은 보존·stage 제외하고 현재 GDD에만 실제 값을 반영한다. 현재 셰이더의 기본 단계 값도0이므로 이 파일은 새 렌더 경로의 필수 변경이 아니다.
 - `[후속 사용자 확인]` 사용자가 바깥 한 셀 방식에 “딱좋아”라고 답했다. 현재2px 외형은 유지하되 발밑 일부 외곽선이 사라지는 현상을 별도로 지적했다.
 - `[참고 메모·미수정]` 발밑 선 소실의 유력 원인은 바닥 가림 판정이다. `Assets/Rendering/CharacterPresentation/CharacterSilhouetteComposite.shader`의 `ResolveOuterPixelCell → IsPixelCellVisibleAt`은 외부 셀에 가까운 몸체 셀의 깊이를 전달한 뒤 새 셀 중앙의 월드 깊이와 비교한다. 발 아래로 확장된 셀에서는 바닥이 더 앞에 있다고 판정되어 선이 제거될 수 있다. 원인 분리 GPU 검증은 아직 하지 않았으며, 격자/색 셀 생성 실패로 확정한 것이 아니다. 향후 검토 후보는 접지면에서의 외곽선 깊이 처리와 벽 차폐의 구분이다. 모든 외곽선을 무조건 맨앞에 그리는 변경은 벽 투시를 만들 수 있다. 사용자 요청으로 기록만 남겼으며 코드 수정·추가 테스트·자동 후속 작업은 하지 않는다. 이 메모는 개발 지침이나 확정된 해결 방법이 아니다.
+
+---
+
+## 131. 우클릭 드래그 자유 시점 `[CAMERA-01]`
+
+- `[요청·2026-09-06]` 캐릭터 얼굴/픽셀 렌더를 여러 각도에서 확인할 카메라 조작. 사용자는 우클릭을 놓아도 바꾼 시점을 유지하도록 확정했다. 모델·크기·애니메이션·회전 기준·세이브는 바꾸지 않는다.
+- `[구현]` 기존 `CameraFollow`가 최초 offset을 camera space에 저장하고 yaw/pitch 회전을 적용해 동일 Player 프레이밍을 보존한다. 감도0.2°/pixel, pitch10~80°, 마우스 변위에 deltaTime을 곱하지 않는다. 최초 구도를 자동 변경하지 않으며 `Reset View`는 현재 Play의 최초 시점을 복원한다. 기존 Gameplay map에 `CameraOrbit`(RMB)·`CameraLook`(mouse delta)만 추가하고 기존 action/binding ID·줌을 보존했다. 사용자 설정의 현재 RMB 지정은 CameraOrbit 하나임을 확인한 뒤 RMB를 일반 재지정에서 제외했다.
+- `[입력·수명]` UI 포인터 위 시작, Inventory input block, Escape, travel prepared와 pause 중 차단. 놓기·비활성·포커스 상실 시 커서 lock/visible을 이전 상태로 복원하되 선택한 시점은 유지한다. CameraFollow/기존 InputActions만 사용하고 새 Camera·Manager·UI·저장 상태를 만들지 않는다. 기존 CameraFollow의 CP949 주석 인코딩은 UTF-8로 변환했다.
+- `[좁은 검증·CALL]` 최종 코드 대표 Play에서 가상 Mouse state→InputSystem.Update→동일 CameraFollow.Update/LateUpdate 호출로18개 결과를 확인했다: RMB 시작/회전/놓기 유지, pitch10/80, Player 화면 좌표 보존, UI/ESC 차단, 포커스/disable 커서 해제, 최초 시점 복원, 동일 Player entity/transform, 기존 사용자 key 검증과 휠 binding 보존. 실패0. 재바인딩 후보 RMB는 저장 전 검증에서 거부한다. 실제 하드웨어 드래그·휠 연속 조작이나 Player build를 통과했다고 기록하지 않는다.
+- `[미리보기·정리]` 실제 GameMap1 카메라의 기본 시점과 낮은 정면을 PNG로 촬영해 제시하고 사용자 감도/각도 의견을 요청했다. 앞의 좀비가 몸체를 가리는 정상 깊이 판정은 유지한다. offset(2,10,-10), Euler(45,350,0), cursor None/visible=true, background=false 복원 후 Play 종료했다. 입력 binding 확인용 초기 Play 진입1회는 코드 검토 후 종료했고 대표 검증은 최종 코드에서1회 수행했다. 씬 전환 전체 한 판·렌더 전방위/GPU 검증은 반복하지 않았다. 사용자 dirty 씬·재질·preview prefab은 수정·stage 대상이 아니다.
+- `[사용자 승인·마감]` 사용자가 현재 값을 그대로 커밋하도록 승인했다. 이후 외형·감도 추가 조정은 하지 않았다. 최종 Console Error/Exception/Assert0, 관련 경로 diff whitespace 오류0을 확인했다.

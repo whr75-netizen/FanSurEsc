@@ -24,7 +24,9 @@ namespace FantasySurvival.Controls
         CameraZoom,
         QuickTransferModifier,
         AlternateItemModifier,
-        SingleItemModifier
+        SingleItemModifier,
+        CameraOrbit,
+        CameraLook
     }
 
     public enum GameInputBindingSlot
@@ -131,6 +133,14 @@ namespace FantasySurvival.Controls
             return action != null && action.enabled
                 ? action.ReadValue<Vector2>().y
                 : 0f;
+        }
+
+        public static Vector2 ReadCameraLookDelta()
+        {
+            InputAction action = GetAction(GameInputActionId.CameraLook);
+            return action != null && action.enabled
+                ? action.ReadValue<Vector2>()
+                : Vector2.zero;
         }
 
         public static InputAction GetAction(GameInputActionId actionId)
@@ -276,6 +286,13 @@ namespace FantasySurvival.Controls
                 if (control.device is Keyboard &&
                     (string.Equals(control.name, "escape", StringComparison.OrdinalIgnoreCase) ||
                      string.Equals(control.name, "f5", StringComparison.OrdinalIgnoreCase)))
+                {
+                    return false;
+                }
+
+                // RMB belongs to gameplay orbit and UI context menus.
+                if (control.device is Mouse &&
+                    string.Equals(control.name, "rightButton", StringComparison.OrdinalIgnoreCase))
                 {
                     return false;
                 }

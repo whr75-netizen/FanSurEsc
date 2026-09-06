@@ -188,7 +188,7 @@ namespace FantasySurvival.SaveSystem
                     controlPath,
                     out string canonicalPath))
             {
-                error = "키보드 또는 마우스 버튼만 지정할 수 있으며 Esc와 개발용 F5는 고정키입니다.";
+                error = "키보드 또는 마우스 버튼만 지정할 수 있으며 Esc, 카메라 회전용 우클릭과 개발용 F5는 고정키입니다.";
                 return false;
             }
 

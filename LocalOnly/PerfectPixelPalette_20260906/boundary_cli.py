@@ -17,6 +17,7 @@ from perfect_pixel.palette import scaled_grid, detect_base_grid
 SNAPSHOT_FILES = ['boundary_cli.py', 'boundary_review_config.json', 'requirements-boundary.txt',
                   'src/perfect_pixel/__init__.py', 'src/perfect_pixel/boundary_pipeline.py',
                   'src/perfect_pixel/boundary_regions.py', 'src/perfect_pixel/region_palette.py',
+                  'src/perfect_pixel/gradient_tones.py',
                   'src/perfect_pixel/palette.py', 'src/perfect_pixel/perfect_pixel_noCV2.py',
                   'src/perfect_pixel/perfect_pixel.py', 'src/perfect_pixel/reference_colors.py']
 

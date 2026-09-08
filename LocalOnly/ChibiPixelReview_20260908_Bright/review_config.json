@@ -1,7 +1,7 @@
 {
   "source": "source_bright_rgba.png",
   "reference": "source_bright_rgba.png",
-  "comparison_previous": "result_smaller_128_96/pixel_96x192.png",
+  "comparison_previous": "result_region_tones_96/pixel_native.png",
   "base_grid": [
     96,
     192
@@ -10,7 +10,7 @@
   "preview_zoom": 4,
   "notes": [
     "User-confirmed test grid 96x192. Same brighter native PBR capture; no Unity changes.",
-    "Shared region-tone algorithm used by hedgehog; source is explicitly also the palette reference, so no Canva color/style transfer.",
+    "Continuous source-gradient domains are independent of output grid; adaptive observed-color covering, no fixed three-tone limit.",
     "Region capacity failures propagate. Do not substitute source_palette or region_colors.",
     "Raw-source region sampling fixes placement independently of shading. No new outline or copied anime line/erase scopes."
   ],
@@ -21,8 +21,10 @@
         "kind": "all"
       },
       "options": {
-        "tones": 3,
-        "min_retained_tone_delta_l": 0.06
+        "mode": "continuous",
+        "color_error": 0.06,
+        "gradient_edge_threshold": 0.06,
+        "gradient_chroma_span": 0.12
       }
     },
     "cell_sampling": {

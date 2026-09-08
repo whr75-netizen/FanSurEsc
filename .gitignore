@@ -37,5 +37,6 @@
 /ProjectSettings/AI.Assistant/
 /ProjectSettings/Packages/com.unity.ai.assistant/Settings.json
 
-# Local-only design inputs and tool pipeline files; never commit this directory.
+# Local design inputs, rendered images and downloaded tool dependencies stay ignored.
+# Pixel-algorithm source/config/tests explicitly tracked by user request remain versioned.
 /LocalOnly/

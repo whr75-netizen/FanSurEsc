@@ -1,0 +1,207 @@
+"""Run a reproducible opt-in/scoped normalization experiment, without UI questions."""
+import argparse
+from datetime import datetime
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(ROOT / '.deps'))
+sys.path.insert(0, str(ROOT / 'src'))
+import numpy as np
+from PIL import Image, ImageDraw, ImageFont
+CODE_FILES = ['trigger_cli.py', 'requirements-boundary.txt',
+              'src/perfect_pixel/trigger_pipeline.py', 'src/perfect_pixel/line_triggers.py',
+              'src/perfect_pixel/line_first.py',
+              'src/perfect_pixel/source_sampling.py',
+              'src/perfect_pixel/feature_scopes.py', 'src/perfect_pixel/palette.py',
+              'src/perfect_pixel/__init__.py', 'src/perfect_pixel/perfect_pixel_noCV2.py',
+              'src/perfect_pixel/perfect_pixel.py']
+# Capture BEFORE importing implementation, then reject any in-flight changes.
+BOOT_CODE = {rel:(ROOT/rel).read_bytes() for rel in CODE_FILES}
+from perfect_pixel.trigger_pipeline import normalize_triggered, FEATURES
+from perfect_pixel.palette import scaled_grid
+
+
+def sha(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def comparison_size(source_shape, grid, zoom, panels):
+    w = max(source_shape[1],grid[0]*zoom)
+    h = max(source_shape[0],grid[1]*zoom)
+    size = (panels*(w+20)+20,h+100)
+    if size[0]*size[1] > 32_000_000:
+        raise ValueError('Full comparison exceeds 32MP. Lower preview_zoom; no files created.')
+    return size
+
+
+def compare_sheet(source, baseline, result, zoom, target, *, fixed_lines=None, previous=None):
+    def enlarge(a):
+        im = Image.fromarray(a)
+        return im.resize((im.width * zoom, im.height * zoom), Image.Resampling.NEAREST)
+    images = [Image.fromarray(source), enlarge(baseline), enlarge(result)]
+    names = ['GROK INPUT / NONUNIFORM PIXEL STYLE', 'CENTER SAMPLE / FEATURES OFF', 'SCOPED NORMALIZATION / FEATURES ON']
+    if fixed_lines is not None:
+        images = [Image.fromarray(source), enlarge(fixed_lines),
+                  enlarge(previous if previous is not None else baseline), enlarge(result)]
+        names = ['GROK INPUT', 'LINES FIXED BEFORE COLOR FILL',
+                 'PREVIOUS / SAVED RESULT' if previous is not None else 'CENTER SAMPLE',
+                 'NEW / SCOPED NORMALIZATION']
+    w, h = max(im.width for im in images), max(im.height for im in images)
+    size = comparison_size(source.shape[:2],(result.shape[1],result.shape[0]),zoom,len(images))
+    sheet = Image.new('RGB', size, (239,241,247))
+    draw = ImageDraw.Draw(sheet)
+    font = ImageFont.truetype('C:/Windows/Fonts/segoeui.ttf', 14)
+    for index, (im, name) in enumerate(zip(images, names)):
+        x, y = 20+index*(w+20), 48
+        draw.text((x,12), name, font=font, fill=(32,40,58))
+        for cy in range(y,y+h,12):
+            for cx in range(x,x+w,12):
+                c = (226,230,240) if ((cx-x)//12+(cy-y)//12)%2 else (247,248,251)
+                draw.rectangle((cx,cy,min(cx+11,x+w-1),min(cy+11,y+h-1)), fill=c)
+        sheet.paste(im, (x+(w-im.width)//2, y+(h-im.height)//2), im)
+    draw.text((20,h+66), f'Native {result.shape[1]} x {result.shape[0]} | nearest preview {zoom}x | original RGB representatives | no generative redraw', font=font, fill=(32,40,58))
+    sheet.save(target)
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--config', type=Path, required=True)
+    parser.add_argument('--output', type=Path)
+    parser.add_argument('--scale')
+    parser.add_argument('--disable', action='append', choices=list(FEATURES), default=[])
+    args = parser.parse_args(argv)
+    config_bytes = args.config.read_bytes()
+    config = json.loads(config_bytes.decode('utf8'))
+    if not isinstance(config, dict) or set(config)-{'source','reference','comparison_previous','base_grid','scale','preview_zoom','features','notes'}:
+        parser.error('Unknown configuration keys.')
+    for key in ['source','base_grid','features']:
+        if key not in config:
+            parser.error(f'Missing {key}.')
+    base_dir = args.config.resolve().parent
+    source_path = (base_dir / config['source']).resolve()
+    source_bytes = source_path.read_bytes()
+    with Image.open(source_path) as im:
+        if im.mode != 'RGBA':
+            parser.error('Input must already be RGBA; no hidden background removal/conversion.')
+        source = np.array(im)
+    config['scale'] = str(args.scale if args.scale is not None else config.get('scale','1.0'))
+    zoom = config.get('preview_zoom',2)
+    if isinstance(zoom,bool) or not isinstance(zoom,int) or not 1 <= zoom <= 8:
+        parser.error('preview_zoom must be 1..8.')
+    for feature in args.disable:
+        config['features'].setdefault(feature,{})['enabled'] = False
+    if source.shape[0]*source.shape[1]*zoom*zoom > 24_000_000:
+        parser.error('Preview size exceeds the 24MP input-based safety bound.')
+    f = config['features'].get('line_normalization',{})
+    panels = 4 if f.get('enabled',False) and f.get('options',{}).get('mode')=='line_first' else 3
+    grid = scaled_grid(config['base_grid'],config['scale'])
+    comparison_size(source.shape[:2],grid,zoom,panels)
+    output = (args.output if args.output is not None else ROOT/'trigger_runs'/datetime.now().strftime('%Y%m%d_%H%M%S_%f')).resolve()
+    if output.exists() and (not output.is_dir() or any(output.iterdir())):
+        parser.error('Output must be new/empty. Previous results are never overwritten.')
+    code = dict(BOOT_CODE)
+    if any((ROOT/rel).read_bytes() != data for rel,data in code.items()):
+        raise RuntimeError('Code changed since import; launch a fresh run before saving.')
+    mask_sources = {}
+    for name, feature in config['features'].items():
+        spec = feature.get('scope') if feature.get('enabled',False) else None
+        if isinstance(spec,dict) and spec.get('kind')=='mask':
+            path = (base_dir/spec['path']).resolve()
+            mask_sources[name] = (path,path.read_bytes())
+    source_before = sha(source.tobytes())
+    result = normalize_triggered(source, config['base_grid'], config['scale'], config['features'], base_dir=base_dir)
+    if sha(source.tobytes()) != source_before or source_path.read_bytes() != source_bytes:
+        raise RuntimeError('Original input changed during processing.')
+    if any((ROOT/rel).read_bytes() != data for rel,data in code.items()):
+        raise RuntimeError('Code changed during processing; no mismatched run is saved.')
+    if any(path.read_bytes() != data for path,data in mask_sources.values()):
+        raise RuntimeError('A scope mask changed during processing; no mismatched run is saved.')
+    # Mandatory technical checks only, not an aesthetic approval score.
+    native = result['image']
+    if not np.isin(native[...,3], [0,255]).all():
+        raise RuntimeError('Nonbinary alpha in final output.')
+    allowed = set(map(tuple, source[...,:3][source[...,3]==255]))
+    observed = set(map(tuple, native[...,:3][native[...,3]==255]))
+    if not observed <= allowed:
+        raise RuntimeError('Final RGB contains a color absent from the opaque source.')
+    previous, previous_bytes, previous_path = None, None, None
+    if config.get('comparison_previous'):
+        previous_path = (base_dir/config['comparison_previous']).resolve()
+        previous_bytes = previous_path.read_bytes()
+        with Image.open(previous_path) as im:
+            previous = np.array(im.convert('RGBA'))
+        if previous.shape != native.shape:
+            # Compare only like-for-like grids. A scale override remains usable.
+            previous = None
+    output.mkdir(parents=True, exist_ok=True)
+    for filename, array in [('source_input.png',source), ('center_baseline_native.png',result['baseline']),
+                            ('cleaned_source.png',result['cleaned_source']), ('colors_source.png',result['colors_source']),
+                            ('before_lines_native.png',result['before_lines']), ('pixel_native.png',native)]:
+        Image.fromarray(array).save(output/filename)
+    Image.fromarray(native).resize((native.shape[1]*zoom,native.shape[0]*zoom), Image.Resampling.NEAREST).save(output/'pixel_preview.png')
+    fixed_lines = None
+    if result['line_geometry'] is not None:
+        fixed_lines = np.zeros_like(native)
+        locked = result['line_geometry']['fixed_line_mask']
+        fixed_lines[locked] = native[locked]
+        Image.fromarray(fixed_lines).save(output/'locked_lines_native.png')
+    compare_sheet(source,result['baseline'],native,zoom,output/'comparison.png',fixed_lines=fixed_lines,previous=previous)
+    diagnostics = {'sampling_source_xy':result['sampling_source_xy'], 'erase_mask':result['erase_mask']}
+    for name,mask in result['scopes'].items():
+        Image.fromarray(mask.astype(np.uint8)*255).save(output/f'scope_{name}.png')
+        diagnostics['scope_'+name] = mask
+    Image.fromarray(result['erase_mask'].astype(np.uint8)*255).save(output/'erased_source_mask.png')
+    if result['line_result'] is not None:
+        for name,array in result['line_result'].items():
+            if isinstance(array,np.ndarray):
+                diagnostics['line_'+name] = array
+                if array.ndim==2:
+                    Image.fromarray(array.astype(np.uint8)*255).save(output/f'line_{name}.png')
+        Image.fromarray(result['line_result']['target_rgba']).save(output/'line_source_rgb_overlay_native.png')
+    if result['line_geometry'] is not None:
+        for name,array in result['line_geometry'].items():
+            if isinstance(array,np.ndarray):
+                diagnostics['geometry_'+name] = array
+        for name,array in result['line_render'].items():
+            if isinstance(array,np.ndarray):
+                diagnostics['render_'+name] = array
+    np.savez_compressed(output/'processing_maps.npz', **diagnostics)
+    for rel,data in code.items():
+        path = output/'code'/rel
+        path.parent.mkdir(parents=True,exist_ok=True)
+        path.write_bytes(data)
+    input_masks = []
+    for name,(path,data) in mask_sources.items():
+        dest = output/'config_masks'/f'{name}.png'
+        dest.parent.mkdir(parents=True,exist_ok=True)
+        dest.write_bytes(data)
+        input_masks.append({'feature':name,'path':str(path),'sha256':sha(data)})
+    record = {'configuration':config, 'configuration_path':str(args.config.resolve()),
+              'input_file_sha256':sha(source_bytes), 'input_array_sha256':source_before,
+              'configuration_file_sha256':sha(config_bytes), 'input_masks':input_masks,
+              'comparison_previous_sha256':None if previous_bytes is None else sha(previous_bytes),
+              'code_sha256':{rel:sha(data) for rel,data in code.items()},
+              'result':result['metadata'], 'technical_checks':{
+                  'source_unchanged':True, 'binary_alpha':True,
+                  'native_grid':list(native.shape[1::-1]),'unique_opaque_rgb':len(observed),
+                  'opaque_rgb_from_original':True, 'design_approval':'user review pending'}}
+    (output/'settings_and_result.json').write_text(json.dumps(record,ensure_ascii=False,indent=2),encoding='utf8')
+    # The portable rerun config uses input/scope copies saved alongside it.
+    rerun = json.loads(json.dumps(config))
+    rerun['source'] = 'source_input.png'
+    if previous_bytes is not None:
+        (output/'comparison_previous.png').write_bytes(previous_bytes)
+        rerun['comparison_previous'] = 'comparison_previous.png'
+    for mask in input_masks:
+        rerun['features'][mask['feature']]['scope']['path'] = 'config_masks/'+mask['feature']+'.png'
+    (output/'rerun_config.json').write_text(json.dumps(rerun,ensure_ascii=False,indent=2),encoding='utf8')
+    with Image.open(output/'pixel_native.png') as check:
+        np.testing.assert_array_equal(np.array(check),native)
+    print(json.dumps({'output':str(output), 'technical_checks':record['technical_checks'],
+                      'features':result['metadata']['features']}, ensure_ascii=False))
+
+
+if __name__=='__main__': main()

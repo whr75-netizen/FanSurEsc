@@ -1,0 +1,28 @@
+{
+  "source": "C:/Users/JG/Desktop/GPT/3/layer-anime-girl (1).png",
+  "reference": "C:/Users/JG/Desktop/GPT/3/layer-anime-girl.png",
+  "comparison_previous": "review12_anime_line_first/pixel_native.png",
+  "base_grid": [192, 433],
+  "scale": "1.0",
+  "preview_zoom": 2,
+  "notes": [
+    "Review13: same source, resolution, palette and explicit line scopes as review12.",
+    "Cell ownership uses raw local color regions before palette changes; no body-part rules.",
+    "Line fill propagation requires raw destination-color support; no unsupported eyelid-color expansion.",
+    "This does not recover missing lines or guarantee ideal pixel staircases."
+  ],
+  "features": {
+    "mask_cleanup": {
+      "enabled": true,
+      "scope": {"kind": "rectangles", "rectangles": [[296,218,345,295],[322,380,330,388]]},
+      "options": {"mode": "color_connected", "seeds": [[318,263],[318,282],[325,383]], "max_distance": 0.18, "max_chroma_distance": 0.025}
+    },
+    "region_colors": {"enabled": true, "scope": {"kind": "all"}, "options": {"colors": 64, "iterations": 3}},
+    "cell_sampling": {"enabled": true, "scope": {"kind": "all"}, "options": {"coverage": 0.5, "method": "source_regions", "color_edge_threshold": 0.08}},
+    "line_normalization": {
+      "enabled": true,
+      "scope": {"kind": "rectangles", "rectangles": [[129,21,242,80],[22,142,151,226],[25,155,307,400],[38,441,330,505],[75,701,385,866]]},
+      "options": {"mode": "line_first", "color_edge_threshold": 0.08, "max_width_source_px": 5, "min_contrast": 0.055, "min_response": 0.006, "min_component_pixels": 4, "fill_source_guard": true}
+    }
+  }
+}

@@ -75,4 +75,51 @@ class ContinuousIntegrationTests(unittest.TestCase):
             prepare_region_tones(image, reference, (16, 3), mode='continuous')
 
 
+def weighted_features():
+    cfg = features()
+    cfg['region_tones']['options'] = {'mode': 'continuous', 'tone_policy': 'weighted_steps',
+                                      'tone_error': .06, 'chroma_error': .06}
+    return cfg
+
+
+class WeightedStepsIntegrationTests(unittest.TestCase):
+    def test_new_policy_preserves_regions_sampling_and_alpha(self):
+        image = source()
+        previous = normalize_triggered(image, (16, 3), features=features(), reference=image)
+        current = normalize_triggered(image, (16, 3), features=weighted_features(), reference=image)
+        np.testing.assert_array_equal(previous['sampling_source_xy'], current['sampling_source_xy'])
+        np.testing.assert_array_equal(previous['image'][..., 3], current['image'][..., 3])
+        np.testing.assert_array_equal(previous['region_tones_result']['region_labels'],
+                                      current['region_tones_result']['region_labels'])
+        meta = current['metadata']['features']['region_tones']['region_colors']
+        self.assertIsNone(meta['color_error_limit_oklab'])
+        self.assertEqual(meta['tone_policy'], 'weighted_steps')
+        for region in meta['regions']:
+            self.assertLessEqual(region['weighted_rmse_l'], .06 + 1e-8)
+            self.assertLessEqual(region['max_chroma_error'], .06 + 1e-8)
+
+    def test_grid_and_stretched_source_cannot_invent_more_steps(self):
+        image = source()
+        a = normalize_triggered(image, (8, 2), features=weighted_features(), reference=image)
+        b = normalize_triggered(image, (32, 6), features=weighted_features(), reference=image)
+        np.testing.assert_array_equal(a['colors_source'], b['colors_source'])
+        stretched = np.repeat(image, 8, axis=1)
+        c = normalize_triggered(stretched, (8, 2), features=weighted_features(), reference=stretched)
+        np.testing.assert_array_equal(np.repeat(a['colors_source'], 8, axis=1), c['colors_source'])
+
+    def test_tiny_sharp_dark_feature_is_not_removed_by_weighted_shading(self):
+        image = np.full((16, 16, 4), [220, 180, 150, 255], np.uint8)
+        image[5, 8, :3] = [15, 8, 5]
+        current = normalize_triggered(image, (16, 16), features=weighted_features(), reference=image)
+        np.testing.assert_array_equal(current['image'], image)
+
+    def test_invalid_step_options_fail_even_for_empty_scope(self):
+        image = source(); image[..., 3] = 0
+        for name in ('tone_error', 'chroma_error'):
+            for invalid in (True, np.bool_(True), float('nan'), -1):
+                cfg = weighted_features(); cfg['region_tones']['options'][name] = invalid
+                with self.assertRaises(ValueError):
+                    normalize_triggered(image, (16, 3), features=cfg, reference=image)
+
+
 if __name__ == '__main__': unittest.main()

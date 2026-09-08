@@ -1,7 +1,7 @@
 {
   "source": "source_bright_rgba.png",
   "reference": "source_bright_rgba.png",
-  "comparison_previous": "result_region_tones_96/pixel_native.png",
+  "comparison_previous": "result_continuous_96/pixel_native.png",
   "base_grid": [
     96,
     192
@@ -10,7 +10,7 @@
   "preview_zoom": 4,
   "notes": [
     "User-confirmed test grid 96x192. Same brighter native PBR capture; no Unity changes.",
-    "Continuous source-gradient domains are independent of output grid; adaptive observed-color covering, no fixed three-tone limit.",
+    "Same continuous source-gradient domains. Chromaticity preserves hue differences; weighted lightness DP chooses adaptive shared steps instead of covering every shading outlier.",
     "Region capacity failures propagate. Do not substitute source_palette or region_colors.",
     "Raw-source region sampling fixes placement independently of shading. No new outline or copied anime line/erase scopes."
   ],
@@ -22,7 +22,9 @@
       },
       "options": {
         "mode": "continuous",
-        "color_error": 0.06,
+        "tone_policy": "weighted_steps",
+        "tone_error": 0.06,
+        "chroma_error": 0.06,
         "gradient_edge_threshold": 0.06,
         "gradient_chroma_span": 0.12
       }

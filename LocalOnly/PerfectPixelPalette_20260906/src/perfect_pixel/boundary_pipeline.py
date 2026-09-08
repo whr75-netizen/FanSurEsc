@@ -21,6 +21,9 @@ class BoundaryOptions:
     color_error: float = .06
     gradient_edge_threshold: float = .06
     gradient_chroma_span: float = .12
+    tone_policy: str = 'max_error'
+    tone_error: float = .06
+    chroma_error: float = .06
 
     def validate(self):
         if self.shading_mode not in ('legacy_regions', 'continuous'):
@@ -28,6 +31,8 @@ class BoundaryOptions:
         if self.shading_mode == 'continuous':
             from .gradient_tones import validate_options
             validate_options(self.color_error, self.gradient_edge_threshold, self.gradient_chroma_span)
+            if self.tone_policy not in ('max_error', 'weighted_steps'):
+                raise ValueError('tone_policy must be max_error or weighted_steps.')
         if isinstance(self.tones, bool) or not isinstance(self.tones, (int, np.integer)) or not 1 <= self.tones <= 3:
             raise ValueError('tones must be an integer in [1,3].')
         for name, limit in (('feature_strength', 3), ('refine_intensity', .45),
@@ -151,7 +156,8 @@ def sample_region_grid(image, labels, tones, palette, edges, base_grid, feature_
 
 def prepare_region_tones(image, reference, base_grid, *, tones=3,
                          min_retained_tone_delta_l=.025, mode='legacy_regions',
-                         color_error=.06, gradient_edge_threshold=.06, gradient_chroma_span=.12):
+                         color_error=.06, gradient_edge_threshold=.06, gradient_chroma_span=.12,
+                         tone_policy='max_error', tone_error=.06, chroma_error=.06):
     """Source-resolution shading stage shared by both public pipelines.
 
     This function never chooses output pixels or adds lines. Its failures must
@@ -162,7 +168,8 @@ def prepare_region_tones(image, reference, base_grid, *, tones=3,
     BoundaryOptions(tones=tones, min_retained_tone_delta_l=min_retained_tone_delta_l,
                     shading_mode=mode, color_error=color_error,
                     gradient_edge_threshold=gradient_edge_threshold,
-                    gradient_chroma_span=gradient_chroma_span).validate()
+                    gradient_chroma_span=gradient_chroma_span, tone_policy=tone_policy,
+                    tone_error=tone_error, chroma_error=chroma_error).validate()
     base = tuple(scaled_grid(base_grid, '1.0'))
     if mode == 'continuous':
         # This mode is source-tone abstraction, not external style transfer.
@@ -174,8 +181,10 @@ def prepare_region_tones(image, reference, base_grid, *, tones=3,
             raise ValueError('continuous mode requires the unmodified source as reference; external palette transfer is available in legacy_regions only.')
         from .gradient_tones import prepare_gradient_tones
         result = prepare_gradient_tones(image, color_error=color_error,
-            edge_threshold=gradient_edge_threshold, chroma_span=gradient_chroma_span)
-        result['metadata'].update(mode=mode, color_error=color_error,
+            edge_threshold=gradient_edge_threshold, chroma_span=gradient_chroma_span,
+            tone_policy=tone_policy, tone_error=tone_error, chroma_error=chroma_error)
+        result['metadata'].update(mode=mode,
+            color_error=color_error if tone_policy == 'max_error' else None,
             source_pixel_sha256=hashlib.sha256(image.tobytes()).hexdigest(),
             reference_pixel_sha256=hashlib.sha256(reference.tobytes()).hexdigest())
         return result
@@ -213,7 +222,8 @@ def get_boundary_pixel(image, reference, base_grid=None, resolution_scale='1.0',
         min_retained_tone_delta_l=options.min_retained_tone_delta_l,
         mode=options.shading_mode, color_error=options.color_error,
         gradient_edge_threshold=options.gradient_edge_threshold,
-        gradient_chroma_span=options.gradient_chroma_span)
+        gradient_chroma_span=options.gradient_chroma_span, tone_policy=options.tone_policy,
+        tone_error=options.tone_error, chroma_error=options.chroma_error)
     labels, edge_strength = shading['region_labels'], shading['edge_strength']
     flat, tone_map, palette = shading['flat_image'], shading['tone_map'], shading['palette']
     segmentation, colors = shading['metadata']['segmentation'], shading['metadata']['region_colors']

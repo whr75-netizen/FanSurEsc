@@ -155,11 +155,17 @@ def _cover(colors, counts, error):
     }
 
 
-def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma_span=.12):
+def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma_span=.12,
+                           tone_policy='max_error', tone_error=.06, chroma_error=.06):
     image = _image(image)
     if image.shape[0] * image.shape[1] > MAX_PIXELS:
         raise ValueError('Gradient processing exceeds the explicit 4MP resource bound; no hidden resize.')
     validate_options(color_error, edge_threshold, chroma_span)
+    if tone_policy not in ('max_error', 'weighted_steps'):
+        raise ValueError('tone_policy must be max_error or weighted_steps.')
+    if tone_policy == 'weighted_steps':
+        from .gradient_steps import select_step_palette, _option
+        _option(tone_error, 'tone_error'); _option(chroma_error, 'chroma_error')
     visible = np.ones(image.shape[:2], bool) if image.shape[2] == 3 else image[..., 3] > 0
     rgb = image[..., :3]
     lab = rgb_to_oklab(rgb.astype(np.float32) / 255)
@@ -174,7 +180,11 @@ def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma
         indices = sorted_indices[begin:begin + count]; begin += count
         colors, inverse, weights = np.unique(rgb.reshape(-1, 3)[indices], axis=0,
                                              return_inverse=True, return_counts=True)
-        ramp, choice, meta = _cover(colors, weights, color_error)
+        if tone_policy == 'weighted_steps':
+            ramp, choice, meta = select_step_palette(colors, weights,
+                tone_error=tone_error, chroma_error=chroma_error)
+        else:
+            ramp, choice, meta = _cover(colors, weights, color_error)
         output.reshape(-1, image.shape[2])[indices, :3] = ramp[choice[inverse]]
         regions.append({'region_id': int(identifier), 'pixel_count': int(count),
                         'source_color_count': len(colors), 'target_ramp': ramp.tolist(), **meta})
@@ -182,23 +192,31 @@ def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma
     palette, inverse = np.unique(output[..., :3][visible], axis=0, return_inverse=True)
     tone_map[visible] = inverse
     colors_metadata = {
-        'method': 'shared-domain-error-bounded-observed-color-cover/1',
+        'method': ('shared-domain-weighted-lightness-steps/1' if tone_policy == 'weighted_steps'
+                   else 'shared-domain-error-bounded-observed-color-cover/1'),
+        'tone_policy': tone_policy,
         'region_count': len(regions), 'regions': regions,
-        'color_error_limit_oklab': float(color_error),
+        'color_error_limit_oklab': float(color_error) if tone_policy == 'max_error' else None,
+        'weighted_lightness_error_limit': float(tone_error) if tone_policy == 'weighted_steps' else None,
+        'chromaticity_error_limit': float(chroma_error) if tone_policy == 'weighted_steps' else None,
         'fixed_tone_count': None, 'max_observed_color_error': max(
             (r['max_color_error'] for r in regions), default=0.),
         'palette_size': len(palette), 'reference_palette_transfer': False,
         'rgb_provenance': 'actual source colors from the same connected gradient domain',
         'lightness_rescaled': False, 'rgb_averaging': False,
         'limits': {'max_pixels': MAX_PIXELS, 'max_domains': MAX_DOMAINS,
-                   'max_colors_per_domain': MAX_COLORS_PER_DOMAIN},
+                   'max_colors_per_domain': MAX_COLORS_PER_DOMAIN if tone_policy == 'max_error' else None},
         'limitations': ['Not intrinsic material recognition; smoothly blended materials can be ambiguous.',
                        'Error bound is not artistic approval or globally minimal palette size.',
                        'Source enlargement invariance is not guaranteed for arbitrary resampling, noise or compression.',
-                       'Disconnected gradient domains do not yet share a cross-domain style palette.'],
+                       'Disconnected gradient domains do not yet share a cross-domain style palette.',
+                       'weighted_steps limits weighted lightness error, NOT worst per-pixel RGB error.'],
     }
     return {'flat_image': output, 'region_labels': labels, 'edge_strength': edge,
             'tone_map': tone_map, 'palette': palette,
-            'metadata': {'method': 'continuous-gradient-tones/1', 'segmentation': segmentation,
+            'metadata': {'method': 'continuous-gradient-tones/2', 'tone_policy': tone_policy,
+                         'tone_error': tone_error if tone_policy == 'weighted_steps' else None,
+                         'chroma_error': chroma_error if tone_policy == 'weighted_steps' else None,
+                         'segmentation': segmentation,
                          'region_colors': colors_metadata, 'output_sampling_performed': False,
                          'fallback_algorithm': None}}

@@ -18,6 +18,7 @@ CODE_FILES = ['trigger_cli.py', 'requirements-boundary.txt',
               'src/perfect_pixel/boundary_pipeline.py',
               'src/perfect_pixel/boundary_regions.py', 'src/perfect_pixel/region_palette.py',
               'src/perfect_pixel/gradient_tones.py',
+              'src/perfect_pixel/gradient_steps.py',
               'src/perfect_pixel/feature_scopes.py', 'src/perfect_pixel/palette.py',
               'src/perfect_pixel/__init__.py', 'src/perfect_pixel/perfect_pixel_noCV2.py',
               'src/perfect_pixel/perfect_pixel.py']
@@ -246,7 +247,7 @@ def main(argv=None):
         np.testing.assert_array_equal(np.array(check),native)
     # Region/graph diagnostics can be megabytes: keep them in the saved record,
     # not duplicated into the agent's stdout/context on every successful run.
-    summary_keys = ('enabled','method','mode','color_error','tones','min_retained_tone_delta_l','scope_pixels')
+    summary_keys = ('enabled','method','mode','tone_policy','tone_error','chroma_error','color_error','tones','min_retained_tone_delta_l','scope_pixels')
     feature_summary = {name:{key:meta[key] for key in summary_keys if key in meta}
                        for name,meta in result['metadata']['features'].items()}
     print(json.dumps({'output':str(output), 'technical_checks':record['technical_checks'],

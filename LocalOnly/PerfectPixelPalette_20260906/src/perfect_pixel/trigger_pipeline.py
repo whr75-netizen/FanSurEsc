@@ -13,7 +13,7 @@ FEATURES = {
     'mask_cleanup': ('mode', 'seeds', 'max_distance', 'max_chroma_distance'),
     'region_colors': ('colors', 'iterations'),
     'region_tones': ('tones', 'min_retained_tone_delta_l', 'mode', 'color_error',
-                     'gradient_edge_threshold', 'gradient_chroma_span'),
+                     'gradient_edge_threshold', 'gradient_chroma_span', 'tone_policy', 'tone_error', 'chroma_error'),
     'cell_sampling': ('coverage', 'method', 'color_edge_threshold'),
     'line_normalization': ('max_width_source_px', 'min_contrast',
                            'min_response', 'min_component_pixels', 'mode', 'color_edge_threshold', 'silhouette_coverage', 'fill_source_guard'),

@@ -12,7 +12,9 @@ import numpy as np
 MAX_PIXELS = 4_194_304
 MAX_SLIC_REGIONS = 4_096
 MAX_INITIAL_REGIONS = 65_536
-MAX_REGIONS = 4_096
+# Splitting can separate a SLIC seed into several connected source regions.
+# The already accepted partition keeps its capacity after conservative merging.
+MAX_REGIONS = MAX_INITIAL_REGIONS
 _SPLIT_DELTA_E = 6.0
 _MERGE_DELTA_E = 3.0
 _MERGE_EDGE = .22
@@ -144,8 +146,9 @@ def segment_regions(image, base_grid=(70, 73)):
     Labels/edges keep the exact input H,W. Alpha==0 is label -1 and edge 0;
     nonzero-alpha pixels are segmented without changing any input byte.
     SLIC uses one seed per four output cells, capped at 4096. Structure and
-    microfeature splitting permit 65536 intermediate regions; the final maximum is 4096,
-    matching the downstream palette API. Limits fail explicitly, not resized.
+    microfeature splitting permit 65536 connected regions. Conservative merging
+    does not impose the SLIC seed count as a second, smaller capacity limit.
+    Limits fail explicitly, not resized.
     Working storage is O(input pixels + adjacency edges), including a sparse
     four-neighbor graph; the largest accepted images can require hundreds of MB.
     """
@@ -237,8 +240,5 @@ def segment_regions(image, base_grid=(70, 73)):
     labels, initial_count = _split_connected(slic_labels, smooth, visible, micro_labels,
                                             csr_matrix, connected_components)
     labels, final_count, merges = _merge(labels, smooth, edge, initial_count)
-    if final_count > MAX_REGIONS:
-        raise ValueError(f'final region count {final_count} exceeds the downstream 4096-region bound; '
-                         'no small-region pruning or hidden resize is performed')
     metadata.update(initial_region_count=initial_count, region_count=final_count, merge_count=merges)
     return labels, edge, metadata

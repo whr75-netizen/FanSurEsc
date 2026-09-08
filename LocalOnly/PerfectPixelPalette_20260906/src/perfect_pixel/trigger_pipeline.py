@@ -12,6 +12,7 @@ from .feature_scopes import build_scope, validate_feature
 FEATURES = {
     'mask_cleanup': ('mode', 'seeds', 'max_distance', 'max_chroma_distance'),
     'region_colors': ('colors', 'iterations'),
+    'region_tones': ('tones', 'min_retained_tone_delta_l'),
     'cell_sampling': ('coverage', 'method', 'color_edge_threshold'),
     'line_normalization': ('max_width_source_px', 'min_contrast',
                            'min_response', 'min_component_pixels', 'mode', 'color_edge_threshold', 'silhouette_coverage', 'fill_source_guard'),
@@ -243,7 +244,8 @@ def compose_lines(base, source, line_result, scope, grid, base_source_xy=None):
                  'skipped_collision_cells': int(collision.sum())}
 
 
-def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_dir=None):
+def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_dir=None,
+                        reference=None):
     """Return native RGBA plus explicit masks/stage snapshots for reproducibility."""
     image = _image(image)
     if image.shape[2] != 4:
@@ -265,6 +267,15 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
             masks[name] = build_scope(image.shape[:2], specification, base_dir=base_dir)
             config[name] = options
         metadata[name] = {'enabled': enabled, 'scope_pixels': int(masks[name].sum()) if enabled else 0}
+    if 'region_tones' in config:
+        if 'region_colors' in config:
+            raise ValueError('region_tones and region_colors are alternative color contracts; enable only one.')
+        if reference is None:
+            raise ValueError('region_tones requires an explicit reference image; pass the source itself for a source palette.')
+        if config.get('cell_sampling', {}).get('method') != 'source_regions':
+            raise ValueError('region_tones requires cell_sampling.method=source_regions to preserve raw-source ownership.')
+        if 'line_normalization' in config:
+            raise ValueError('region_tones with line_normalization is not validated; no implicit line/fill substitution is allowed.')
     baseline = center_sample(image, grid)
     work = image.copy()
     if 'mask_cleanup' in config:
@@ -296,6 +307,16 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
     if 'region_colors' in config:
         work, meta = source_palette(work, masks['region_colors'], **config['region_colors'])
         metadata['region_colors'].update(meta)
+    tonal_result = None
+    if 'region_tones' in config:
+        from .boundary_pipeline import prepare_region_tones
+        selected = cleaned.copy()
+        selected[~masks['region_tones']] = 0
+        # Only colors change. Ownership always continues to read cleaned raw RGB.
+        tonal_result = prepare_region_tones(selected, reference, base_grid,
+                                             **config['region_tones'])
+        work[masks['region_tones']] = tonal_result['flat_image'][masks['region_tones']]
+        metadata['region_tones'].update(tonal_result['metadata'])
     colors_source = work.copy()
     if 'cell_sampling' in config:
         out, sampling_xy = sample_scoped(work, grid, masks['cell_sampling'],
@@ -344,6 +365,7 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
         raise RuntimeError('Feature changes escaped their selected target scopes.')
     return {'image': out, 'baseline': baseline, 'cleaned_source': cleaned,
             'colors_source': colors_source, 'before_lines': before_lines,
+            'region_tones_result': tonal_result,
             'scopes': masks, 'line_result': line_result,
             'line_geometry': line_geometry, 'line_render': line_render,
             'sampling_source_xy': sampling_xy,

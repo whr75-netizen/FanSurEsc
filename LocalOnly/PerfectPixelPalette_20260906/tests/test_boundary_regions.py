@@ -101,10 +101,25 @@ class BoundaryRegionTests(unittest.TestCase):
         source[::2, ::2] = (120, 120, 120, 255)
         with self.assertRaisesRegex(ValueError, 'no small-region pruning'):
             segment_regions(source, (1, 1))
+
+    def test_more_connected_regions_than_slic_seeds_are_preserved(self):
         source = np.zeros((129, 129, 4), np.uint8)
         source[::2, ::2] = (120, 120, 120, 255)
-        with self.assertRaisesRegex(ValueError, 'downstream 4096-region bound'):
-            segment_regions(source, (1, 1))
+        before = source.copy()
+        labels, _, meta = segment_regions(source, (1, 1))
+        visible = source[..., 3] > 0
+        self.assertEqual(meta['region_count'], 4225)
+        self.assertEqual(meta['initial_region_count'], 4225)
+        self.assertEqual(meta['merge_count'], 0)
+        self.assertEqual(meta['maximum_slic_regions'], 4096)
+        self.assertEqual(meta['maximum_regions'], meta['maximum_initial_regions'])
+        self.assertTrue(np.all(labels[~visible] == -1))
+        _, counts = np.unique(labels[visible], return_counts=True)
+        self.assertEqual(len(counts), 4225)
+        self.assertTrue(np.all(counts == 1))
+        self.assertFalse(meta['minimum_area_pruning'])
+        self.assertFalse(meta['hidden_resize'])
+        np.testing.assert_array_equal(source, before)
 
     def test_dense_high_frequency_texture_is_not_permanent_regions(self):
         stripes = np.tile((np.arange(48) % 2 * 255).astype(np.uint8), (48, 1))

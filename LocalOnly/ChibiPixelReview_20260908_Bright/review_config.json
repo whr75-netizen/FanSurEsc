@@ -1,36 +1,40 @@
 {
-  "profile": "chibi_front_bright_shading_on_pixel_off_source_palette",
   "source": "source_bright_rgba.png",
-  "source_size": [384, 768],
-  "source_mode": "RGBA",
-  "input_alpha": "binary_0_255_required_no_implicit_conversion",
-  "engine": "../PerfectPixelPalette_20260906",
-  "output": "result",
-  "base_grid": [192, 384],
-  "resolution_scale": "1.0",
-  "preview_zoom": 2,
-  "reference": "same_unmodified_source",
-  "region_colors": {
-    "colors": 64,
-    "iterations": 3
-  },
-  "cell_sampling": {
-    "scope": {"kind": "all"},
-    "coverage": 0.5,
-    "method": "source_regions",
-    "color_edge_threshold": 0.08
-  },
-  "line_normalization": {
-    "enabled": false,
-    "reason": "Capture has PBR shading with no added outline. No explicit source stroke scope is established; shaded boundaries alone do not authorize line_first."
-  },
-  "mask_cleanup": {"enabled": false},
-  "capture_contract": {
-    "view": "front",
-    "lighting": "brighter_actual_Unity_lighting",
-    "shading": "on_PBR_matte",
-    "pixel_effect": "off",
-    "added_outline": false,
-    "background": "transparent_model_only"
+  "reference": "source_bright_rgba.png",
+  "comparison_previous": "result_smaller_128_96/pixel_96x192.png",
+  "base_grid": [
+    96,
+    192
+  ],
+  "scale": "1.0",
+  "preview_zoom": 4,
+  "notes": [
+    "User-confirmed test grid 96x192. Same brighter native PBR capture; no Unity changes.",
+    "Shared region-tone algorithm used by hedgehog; source is explicitly also the palette reference, so no Canva color/style transfer.",
+    "Region capacity failures propagate. Do not substitute source_palette or region_colors.",
+    "Raw-source region sampling fixes placement independently of shading. No new outline or copied anime line/erase scopes."
+  ],
+  "features": {
+    "region_tones": {
+      "enabled": true,
+      "scope": {
+        "kind": "all"
+      },
+      "options": {
+        "tones": 3,
+        "min_retained_tone_delta_l": 0.06
+      }
+    },
+    "cell_sampling": {
+      "enabled": true,
+      "scope": {
+        "kind": "all"
+      },
+      "options": {
+        "method": "source_regions",
+        "coverage": 0.5,
+        "color_edge_threshold": 0.08
+      }
+    }
   }
 }

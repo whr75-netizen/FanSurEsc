@@ -140,6 +140,37 @@ def sample_region_grid(image, labels, tones, palette, edges, base_grid, feature_
     return out, chosen_regions, chosen_tones, info
 
 
+def prepare_region_tones(image, reference, base_grid, *, tones=3,
+                         min_retained_tone_delta_l=.025):
+    """Source-resolution shading stage shared by both public pipelines.
+
+    This function never chooses output pixels or adds lines. Its failures must
+    propagate: global palette clustering is not a substitute for region tones.
+    Source/reference are explicit data, not object-name presets.
+    """
+    image, reference = _image(image), _image(reference)
+    BoundaryOptions(tones=tones, min_retained_tone_delta_l=min_retained_tone_delta_l).validate()
+    base = tuple(scaled_grid(base_grid, '1.0'))
+    from .boundary_regions import segment_regions
+    from .region_palette import color_regions
+    labels, edge_strength, segmentation = segment_regions(image, base_grid=base)
+    flat, tone_map, palette, colors = color_regions(
+        image, labels, reference, tones=tones,
+        min_retained_tone_delta_l=min_retained_tone_delta_l)
+    if flat.shape != image.shape:
+        raise ValueError('Region color stage changed the source dimensions.')
+    if image.shape[2] == 4 and not np.array_equal(flat[..., 3], image[..., 3]):
+        raise ValueError('Region color stage changed alpha.')
+    return {'flat_image': flat, 'region_labels': labels, 'edge_strength': edge_strength,
+            'tone_map': tone_map, 'palette': palette,
+            'metadata': {'method': 'source-region-tones/1', 'tones': tones,
+                         'min_retained_tone_delta_l': min_retained_tone_delta_l,
+                         'segmentation': segmentation, 'region_colors': colors,
+                         'source_pixel_sha256': hashlib.sha256(image.tobytes()).hexdigest(),
+                         'reference_pixel_sha256': hashlib.sha256(reference.tobytes()).hexdigest(),
+                         'output_sampling_performed': False, 'fallback_algorithm': None}}
+
+
 def get_boundary_pixel(image, reference, base_grid=None, resolution_scale='1.0', options=None):
     image = _image(image)
     reference = _image(reference)
@@ -149,17 +180,12 @@ def get_boundary_pixel(image, reference, base_grid=None, resolution_scale='1.0',
         base_grid = detect_base_grid(image)
     grid = scaled_grid(base_grid, resolution_scale)
     base = tuple(int(x) for x in base_grid)
-    # Imported lazily: the original Perfect Pixel API remains independent of skimage.
-    from .boundary_regions import segment_regions
-    from .region_palette import color_regions
-    labels, edge_strength, segmentation = segment_regions(image, base_grid=base)
-    flat, tone_map, palette, colors = color_regions(
-        image, labels, reference, tones=options.tones,
+    shading = prepare_region_tones(image, reference, base,
+        tones=options.tones,
         min_retained_tone_delta_l=options.min_retained_tone_delta_l)
-    if flat.shape != image.shape:
-        raise ValueError('Region color stage changed the source dimensions.')
-    if image.shape[2] == 4 and not np.array_equal(flat[..., 3], image[..., 3]):
-        raise ValueError('Region color stage changed alpha.')
+    labels, edge_strength = shading['region_labels'], shading['edge_strength']
+    flat, tone_map, palette = shading['flat_image'], shading['tone_map'], shading['palette']
+    segmentation, colors = shading['metadata']['segmentation'], shading['metadata']['region_colors']
     rgb = image[..., :3].copy()
     if image.shape[2] == 4:
         rgb[image[..., 3] < 128] = 0

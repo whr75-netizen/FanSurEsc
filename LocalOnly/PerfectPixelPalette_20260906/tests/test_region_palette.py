@@ -2,6 +2,7 @@ import json
 from pathlib import Path
 import sys
 import unittest
+from unittest import mock
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / 'src'))
@@ -177,6 +178,45 @@ class RegionPaletteTests(unittest.TestCase):
         self.assertFalse(meta['region_original_color_restoration'])
         self.assertTrue(all(len(f['ramp']) <= 3 for f in meta['source_families']))
         self.assertEqual(len(palette), len(np.unique(out.reshape(-1, 3), axis=0)))
+
+    def test_more_than_4096_single_pixel_regions_keep_their_labels(self):
+        source = np.full((65, 65, 3), [163, 126, 95], np.uint8)
+        labels = np.arange(4225, dtype=np.int32).reshape(65, 65)
+        before = source.copy(), labels.copy()
+        reference = source[:1, :1].copy()
+        out, tone_labels, palette, meta = color_regions(source, labels, reference)
+        np.testing.assert_array_equal(source, before[0])
+        np.testing.assert_array_equal(labels, before[1])
+        np.testing.assert_array_equal(out, source)
+        np.testing.assert_array_equal(palette[tone_labels], out)
+        self.assertEqual(meta['region_count'], 4225)
+        self.assertEqual([r['region_id'] for r in meta['regions']], list(range(4225)))
+        self.assertTrue(all(r['source_tone_count'] == 1 for r in meta['regions']))
+        self.assertEqual(meta['maximum_regions'], 65536)
+        self.assertEqual(meta['tone_node_upper_bound'], 4225)
+        self.assertEqual(meta['tone_node_count'], 4225)
+        self.assertEqual(meta['cost_array_upper_bound_bytes'], 4225 * 12)
+        self.assertEqual(meta['cost_array_peak_storage_bytes'], 4225 * 12)
+        self.assertEqual(meta['cost_array_budget_bytes'], 64 * 1024 * 1024)
+        self.assertIn('not total working memory', meta['cost_array_budget_scope'])
+
+    def test_cost_budget_fails_before_allocating_region_costs(self):
+        source = np.full((1, 2, 3), [163, 126, 95], np.uint8)
+        labels = np.array([[0, 1]], np.int32)
+        before = source.copy(), labels.copy()
+        with mock.patch('perfect_pixel.region_palette._MAX_COST_ARRAY_BYTES', 23):
+            with mock.patch('perfect_pixel.region_palette._family_score') as scoring:
+                with self.assertRaisesRegex(ValueError, '24 bytes exceeds the 23-byte cost-array budget'):
+                    color_regions(source, labels, source)
+                scoring.assert_not_called()
+        np.testing.assert_array_equal(source, before[0])
+        np.testing.assert_array_equal(labels, before[1])
+
+    def test_palette_region_capacity_matches_the_connected_partition(self):
+        source = np.full((1, 65537, 3), 120, np.uint8)
+        labels = np.arange(65537, dtype=np.int32).reshape(1, 65537)
+        with self.assertRaisesRegex(ValueError, '65536 regions exceeds the connected-partition bound'):
+            color_regions(source, labels, source[:1, :1])
 
     def test_incidental_reference_rgb_does_not_anchor_every_pixel(self):
         rng = np.random.default_rng(8)

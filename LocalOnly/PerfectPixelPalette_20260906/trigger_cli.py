@@ -15,6 +15,8 @@ CODE_FILES = ['trigger_cli.py', 'requirements-boundary.txt',
               'src/perfect_pixel/trigger_pipeline.py', 'src/perfect_pixel/line_triggers.py',
               'src/perfect_pixel/line_first.py',
               'src/perfect_pixel/source_sampling.py',
+              'src/perfect_pixel/boundary_pipeline.py',
+              'src/perfect_pixel/boundary_regions.py', 'src/perfect_pixel/region_palette.py',
               'src/perfect_pixel/feature_scopes.py', 'src/perfect_pixel/palette.py',
               'src/perfect_pixel/__init__.py', 'src/perfect_pixel/perfect_pixel_noCV2.py',
               'src/perfect_pixel/perfect_pixel.py']
@@ -37,16 +39,20 @@ def comparison_size(source_shape, grid, zoom, panels):
     return size
 
 
-def compare_sheet(source, baseline, result, zoom, target, *, fixed_lines=None, previous=None):
+def compare_sheet(source, baseline, result, zoom, target, *, fixed_lines=None, previous=None,
+                  reference_used=False):
     def enlarge(a):
         im = Image.fromarray(a)
         return im.resize((im.width * zoom, im.height * zoom), Image.Resampling.NEAREST)
     images = [Image.fromarray(source), enlarge(baseline), enlarge(result)]
-    names = ['GROK INPUT / NONUNIFORM PIXEL STYLE', 'CENTER SAMPLE / FEATURES OFF', 'SCOPED NORMALIZATION / FEATURES ON']
+    names = ['SOURCE', 'CENTER SAMPLE / FEATURES OFF', 'SCOPED NORMALIZATION / FEATURES ON']
+    if previous is not None:
+        images[1] = enlarge(previous)
+        names[1] = 'PREVIOUS / SAVED RESULT'
     if fixed_lines is not None:
         images = [Image.fromarray(source), enlarge(fixed_lines),
                   enlarge(previous if previous is not None else baseline), enlarge(result)]
-        names = ['GROK INPUT', 'LINES FIXED BEFORE COLOR FILL',
+        names = ['SOURCE', 'LINES FIXED BEFORE COLOR FILL',
                  'PREVIOUS / SAVED RESULT' if previous is not None else 'CENTER SAMPLE',
                  'NEW / SCOPED NORMALIZATION']
     w, h = max(im.width for im in images), max(im.height for im in images)
@@ -62,7 +68,8 @@ def compare_sheet(source, baseline, result, zoom, target, *, fixed_lines=None, p
                 c = (226,230,240) if ((cx-x)//12+(cy-y)//12)%2 else (247,248,251)
                 draw.rectangle((cx,cy,min(cx+11,x+w-1),min(cy+11,y+h-1)), fill=c)
         sheet.paste(im, (x+(w-im.width)//2, y+(h-im.height)//2), im)
-    draw.text((20,h+66), f'Native {result.shape[1]} x {result.shape[0]} | nearest preview {zoom}x | original RGB representatives | no generative redraw', font=font, fill=(32,40,58))
+    colors = 'source + reference RGB representatives' if reference_used else 'original RGB representatives'
+    draw.text((20,h+66), f'Native {result.shape[1]} x {result.shape[0]} | nearest preview {zoom}x | {colors} | no generative redraw', font=font, fill=(32,40,58))
     sheet.save(target)
 
 
@@ -93,6 +100,17 @@ def main(argv=None):
         parser.error('preview_zoom must be 1..8.')
     for feature in args.disable:
         config['features'].setdefault(feature,{})['enabled'] = False
+    reference, reference_bytes, reference_path, reference_before = None, None, None, None
+    if config['features'].get('region_tones',{}).get('enabled',False):
+        if not isinstance(config.get('reference'),str) or not config['reference'].strip():
+            parser.error('Enabled region_tones requires an explicit reference image path.')
+        reference_path = (base_dir/config['reference']).resolve()
+        reference_bytes = reference_path.read_bytes()
+        with Image.open(reference_path) as im:
+            if im.mode not in ('RGB','RGBA'):
+                parser.error('Reference must already be RGB or RGBA; no implicit conversion.')
+            reference = np.array(im)
+        reference_before = sha(reference.tobytes())
     if source.shape[0]*source.shape[1]*zoom*zoom > 24_000_000:
         parser.error('Preview size exceeds the 24MP input-based safety bound.')
     f = config['features'].get('line_normalization',{})
@@ -112,9 +130,15 @@ def main(argv=None):
             path = (base_dir/spec['path']).resolve()
             mask_sources[name] = (path,path.read_bytes())
     source_before = sha(source.tobytes())
-    result = normalize_triggered(source, config['base_grid'], config['scale'], config['features'], base_dir=base_dir)
+    pipeline_options = {'base_dir':base_dir}
+    if reference is not None:
+        pipeline_options['reference'] = reference
+    result = normalize_triggered(source, config['base_grid'], config['scale'], config['features'], **pipeline_options)
     if sha(source.tobytes()) != source_before or source_path.read_bytes() != source_bytes:
         raise RuntimeError('Original input changed during processing.')
+    if reference is not None and (sha(reference.tobytes()) != reference_before or
+                                  reference_path.read_bytes() != reference_bytes):
+        raise RuntimeError('Reference input changed during processing; no mismatched run is saved.')
     if any((ROOT/rel).read_bytes() != data for rel,data in code.items()):
         raise RuntimeError('Code changed during processing; no mismatched run is saved.')
     if any(path.read_bytes() != data for path,data in mask_sources.values()):
@@ -123,10 +147,16 @@ def main(argv=None):
     native = result['image']
     if not np.isin(native[...,3], [0,255]).all():
         raise RuntimeError('Nonbinary alpha in final output.')
-    allowed = set(map(tuple, source[...,:3][source[...,3]==255]))
+    source_allowed = set(map(tuple, source[...,:3][source[...,3]==255]))
+    allowed = source_allowed.copy()
+    if reference is not None:
+        visible_reference = (reference[...,:3][reference[...,3]>0] if reference.shape[2]==4
+                             else reference.reshape(-1,3))
+        allowed.update(map(tuple,visible_reference))
     observed = set(map(tuple, native[...,:3][native[...,3]==255]))
     if not observed <= allowed:
-        raise RuntimeError('Final RGB contains a color absent from the opaque source.')
+        origin = 'opaque source and visible reference' if reference is not None else 'opaque source'
+        raise RuntimeError(f'Final RGB contains a color absent from the {origin}.')
     previous, previous_bytes, previous_path = None, None, None
     if config.get('comparison_previous'):
         previous_path = (base_dir/config['comparison_previous']).resolve()
@@ -148,8 +178,12 @@ def main(argv=None):
         locked = result['line_geometry']['fixed_line_mask']
         fixed_lines[locked] = native[locked]
         Image.fromarray(fixed_lines).save(output/'locked_lines_native.png')
-    compare_sheet(source,result['baseline'],native,zoom,output/'comparison.png',fixed_lines=fixed_lines,previous=previous)
+    compare_sheet(source,result['baseline'],native,zoom,output/'comparison.png',fixed_lines=fixed_lines,
+                  previous=previous,reference_used=reference is not None)
     diagnostics = {'sampling_source_xy':result['sampling_source_xy'], 'erase_mask':result['erase_mask']}
+    if result.get('region_tones_result') is not None:
+        for name in ('region_labels','edge_strength','tone_map'):
+            diagnostics['region_tones_'+name] = result['region_tones_result'][name]
     for name,mask in result['scopes'].items():
         Image.fromarray(mask.astype(np.uint8)*255).save(output/f'scope_{name}.png')
         diagnostics['scope_'+name] = mask
@@ -187,11 +221,20 @@ def main(argv=None):
               'result':result['metadata'], 'technical_checks':{
                   'source_unchanged':True, 'binary_alpha':True,
                   'native_grid':list(native.shape[1::-1]),'unique_opaque_rgb':len(observed),
-                  'opaque_rgb_from_original':True, 'design_approval':'user review pending'}}
+                  'opaque_rgb_from_original':observed <= source_allowed, 'design_approval':'user review pending'}}
+    if reference is not None:
+        record.update(reference_path=str(reference_path), reference_file_sha256=sha(reference_bytes),
+                      reference_array_sha256=reference_before)
+        record['technical_checks'].update(reference_unchanged=True,
+                                          opaque_rgb_from_source_or_reference=True)
     (output/'settings_and_result.json').write_text(json.dumps(record,ensure_ascii=False,indent=2),encoding='utf8')
     # The portable rerun config uses input/scope copies saved alongside it.
     rerun = json.loads(json.dumps(config))
     rerun['source'] = 'source_input.png'
+    if reference is not None:
+        reference_name = 'reference_input' + (reference_path.suffix.lower() or '.image')
+        (output/reference_name).write_bytes(reference_bytes)
+        rerun['reference'] = reference_name
     if previous_bytes is not None:
         (output/'comparison_previous.png').write_bytes(previous_bytes)
         rerun['comparison_previous'] = 'comparison_previous.png'
@@ -200,8 +243,14 @@ def main(argv=None):
     (output/'rerun_config.json').write_text(json.dumps(rerun,ensure_ascii=False,indent=2),encoding='utf8')
     with Image.open(output/'pixel_native.png') as check:
         np.testing.assert_array_equal(np.array(check),native)
+    # Region/graph diagnostics can be megabytes: keep them in the saved record,
+    # not duplicated into the agent's stdout/context on every successful run.
+    summary_keys = ('enabled','method','tones','min_retained_tone_delta_l','scope_pixels')
+    feature_summary = {name:{key:meta[key] for key in summary_keys if key in meta}
+                       for name,meta in result['metadata']['features'].items()}
     print(json.dumps({'output':str(output), 'technical_checks':record['technical_checks'],
-                      'features':result['metadata']['features']}, ensure_ascii=False))
+                      'features':feature_summary,
+                      'details':'settings_and_result.json'}, ensure_ascii=False))
 
 
 if __name__=='__main__': main()

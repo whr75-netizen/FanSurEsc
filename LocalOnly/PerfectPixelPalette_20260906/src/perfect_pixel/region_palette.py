@@ -8,10 +8,12 @@ Feature averages are used for matching only, never as output colors.
 import numpy as np
 
 from .palette import rgb_to_oklab
+from .boundary_regions import MAX_INITIAL_REGIONS
 
 
 _MAX_PIXELS = 16_000_000
-_MAX_REGIONS = 4096
+_MAX_REGIONS = MAX_INITIAL_REGIONS
+_MAX_COST_ARRAY_BYTES = 64 * 1024 * 1024
 
 
 def _validate(image, name):
@@ -126,6 +128,9 @@ def color_regions(image, labels, reference, tones=3, *, min_retained_tone_delta_
     source representatives per GLOBAL source family. It never grows to restore
     an individual region. Infeasible protected edges are reported, not concealed
     with thousands of photograph colors. Labels -1/alpha-zero remain unchanged.
+    Region capacity matches the accepted connected partition. Before allocating
+    node costs, a 64 MiB budget bounds the float32 rows plus float64 matrix copy;
+    this is not a bound on total working memory or on optimization runtime.
     """
     _validate(image, 'image')
     _validate(reference, 'reference')
@@ -146,11 +151,10 @@ def color_regions(image, labels, reference, tones=3, *, min_retained_tone_delta_
         valid = valid & (image[..., 3] > 0)
     ids = np.unique(labels[valid])
     if len(ids) > _MAX_REGIONS:
-        raise ValueError('more than 4096 regions exceeds the processing bound')
+        raise ValueError(f'more than {_MAX_REGIONS} regions exceeds the connected-partition bound; '
+                         'no region pruning or hidden resize is performed')
     families, _ = _reference_families(reference, tones)
-    output = image.copy()
     source_rgb = image[..., :3]
-    source_lab = rgb_to_oklab(source_rgb.astype(np.float32) / 255)
     valid_indices = np.flatnonzero(valid)
     source_families = (_reference_families(source_rgb[valid].reshape(1, -1, 3), tones)[0]
                        if len(valid_indices) else [])
@@ -158,6 +162,19 @@ def color_regions(image, labels, reference, tones=3, *, min_retained_tone_delta_
     source_bank = (np.concatenate([f['ramp'] for f in source_families])
                    if source_families else np.empty((0, 3), np.uint8))
     bank = np.unique(np.concatenate([reference_bank, source_bank]), axis=0)
+    # At most one tone node per visible pixel and at most ``tones`` per region.
+    # The bank is already fixed, so reserve the actual candidate count rather
+    # than treating SLIC's seed count as a downstream computational limit.
+    tone_node_upper_bound = min(len(valid_indices), len(ids) * tones)
+    cost_bytes_per_node = len(bank) * (np.dtype(np.float32).itemsize + np.dtype(np.float64).itemsize)
+    cost_array_upper_bound_bytes = tone_node_upper_bound * cost_bytes_per_node
+    if cost_array_upper_bound_bytes > _MAX_COST_ARRAY_BYTES:
+        raise ValueError(f'cost-array upper bound {cost_array_upper_bound_bytes} bytes exceeds '
+                         f'the {_MAX_COST_ARRAY_BYTES}-byte cost-array budget '
+                         f'({tone_node_upper_bound} tone nodes x {len(bank)} candidates x 12 bytes); '
+                         'this budget is not total working memory; no region pruning or hidden resize is performed')
+    output = image.copy()
+    source_lab = rgb_to_oklab(source_rgb.astype(np.float32) / 255)
     reference_set = set(map(tuple, reference_bank))
     is_reference = np.array([tuple(rgb) in reference_set for rgb in bank])
     blab, bc, bh = _features(bank)
@@ -296,7 +313,8 @@ def color_regions(image, labels, reference, tones=3, *, min_retained_tone_delta_
                 edge_indices[(a, b)] = len(edges)
                 edges.append(relation)
             within_region_constraints += 1
-    costs = np.array(node_costs, dtype=float).reshape(len(node_rgb), len(bank))
+    costs = np.array(node_costs, dtype=np.float64).reshape(len(node_rgb), len(bank))
+    del node_costs
     choice = np.argmin(costs, axis=1) if len(node_rgb) else np.empty(0, np.int32)
     initial_choice = choice.copy()
     neighbours = [[] for _ in node_rgb]
@@ -365,6 +383,12 @@ def color_regions(image, labels, reference, tones=3, *, min_retained_tone_delta_
         'pixel_positions_changed': False, 'alpha_unchanged': True,
         'global_same_rgb_lookup': False, 'tones_per_region': tones,
         'reference_family_tone_limit': tones, 'region_count': len(regions),
+        'maximum_regions': _MAX_REGIONS, 'maximum_tone_nodes': _MAX_REGIONS * tones,
+        'tone_node_upper_bound': tone_node_upper_bound, 'tone_node_count': len(node_rgb),
+        'cost_array_budget_bytes': _MAX_COST_ARRAY_BYTES,
+        'cost_array_upper_bound_bytes': cost_array_upper_bound_bytes,
+        'cost_array_peak_storage_bytes': len(node_rgb) * cost_bytes_per_node,
+        'cost_array_budget_scope': 'float32 node-cost rows plus float64 matrix copy only; excludes other arrays, graph, metadata and Python overhead; not total working memory',
         'tone_budget_lightness_spans': {'one_tone_below': .065, 'two_tones_below': .16},
         'absolute_family_lightness_shifts': {str(k): v for k, v in shifts.items()},
         'protected_boundary_minimum_oklab_distance': .05,

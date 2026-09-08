@@ -16,7 +16,7 @@ ENGINE = ROOT.parent / 'PerfectPixelPalette_20260906'
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--config', type=Path, default=ROOT / 'review_config.json')
-    parser.add_argument('--output', type=Path, default=ROOT / 'result_spatial_steps_96')
+    parser.add_argument('--output', type=Path, default=ROOT / 'result_highlight_layers_96')
     args = parser.parse_args()
     cli = runpy.run_path(str(ENGINE / 'trigger_cli.py'))
     cli['main'](['--config', str(args.config), '--output', str(args.output)])

@@ -7,6 +7,7 @@ import numpy as np
 from PIL import Image
 import trigger_cli
 from trigger_cli import comparison_size
+from perfect_pixel.color_layers import rebuild_color_layers
 
 
 class TriggerCliTests(unittest.TestCase):
@@ -40,6 +41,8 @@ class TriggerCliTests(unittest.TestCase):
         yy,xx = np.indices(source.shape[:2])
         return {'image':native,'baseline':source.copy(),'cleaned_source':source.copy(),
                 'colors_source':native.copy(),'before_lines':native.copy(),
+                'base_colors_source':native.copy(),'layer_base':native.copy(),
+                'highlight_result':None,'highlight_overlay':np.zeros_like(native),
                 'scopes':{},'line_result':None,'line_geometry':None,'line_render':None,
                 'sampling_source_xy':np.stack((xx,yy),axis=2),
                 'erase_mask':np.zeros(source.shape[:2],bool),'metadata':{'features':{}}}
@@ -131,6 +134,64 @@ class TriggerCliTests(unittest.TestCase):
             self.assertNotIn('region_colors',brief['features']['region_tones'])
             record = json.loads((directory/'result'/'settings_and_result.json').read_text(encoding='utf8'))
             self.assertEqual(len(record['result']['features']['region_tones']['region_colors']['regions']),500)
+
+    def test_color_layer_export_saves_masks_aseprite_and_reproducible_code(self):
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            config_path,source,reference = self.write_inputs(directory)
+            config = json.loads(config_path.read_text(encoding='utf8'))
+            config['export_color_layers'] = True
+            config_path.write_text(json.dumps(config),encoding='utf8')
+            result = self.pipeline_result(source,reference[0,0,:3])
+            result['highlight_overlay'][0,1] = source[0,1]
+            result['image'][0,1] = source[0,1]
+            result['highlight_result'] = {'overlay':result['highlight_overlay'].copy()}
+            output = directory/'result'
+            with patch.object(trigger_cli,'normalize_triggered',return_value=result), \
+                 patch.object(trigger_cli,'compare_sheet'), patch('builtins.print'):
+                trigger_cli.main(['--config',str(config_path),'--output',str(output)])
+            layers_dir = output/'color_layers'
+            manifest = json.loads((layers_dir/'manifest.json').read_text(encoding='utf8'))
+            record = json.loads((output/'settings_and_result.json').read_text(encoding='utf8'))
+            self.assertEqual(record['color_layers'],manifest)
+            self.assertTrue(record['technical_checks']['layer_recomposition_matches_native'])
+            self.assertEqual([group['id'] for group in manifest['groups']],['base','highlight'])
+            self.assertEqual(len(manifest['layers']),2)
+            self.assertTrue((layers_dir/manifest['colors_json']).is_file())
+            for layer in manifest['layers']:
+                with Image.open(layers_dir/layer['mask_png']) as mask:
+                    self.assertEqual(mask.mode,'L')
+                    self.assertTrue(np.isin(np.array(mask),[0,255]).all())
+            aseprite = (layers_dir/manifest['aseprite_file']).read_bytes()
+            self.assertGreater(len(aseprite),144)
+            self.assertEqual(aseprite[4:6],b'\xe0\xa5')
+            np.testing.assert_array_equal(rebuild_color_layers(layers_dir),result['image'])
+            np.testing.assert_array_equal(rebuild_color_layers(layers_dir,False),result['layer_base'])
+            with Image.open(output/'pixel_native.png') as native:
+                np.testing.assert_array_equal(np.array(native),result['image'])
+            for module in ('highlight_accents.py','color_layers.py'):
+                relative = 'src/perfect_pixel/'+module
+                self.assertIn(relative,record['code_sha256'])
+                self.assertEqual((output/'code'/relative).read_bytes(),trigger_cli.BOOT_CODE[relative])
+                self.assertEqual(trigger_cli.sha((output/'code'/relative).read_bytes()),
+                                 record['code_sha256'][relative])
+            rerun = json.loads((output/'rerun_config.json').read_text(encoding='utf8'))
+            self.assertIs(rerun['export_color_layers'],True)
+
+    def test_color_layer_export_requires_boolean_before_processing_or_output(self):
+        for invalid in (0,1,'true',None,[]):
+            with self.subTest(invalid=invalid), tempfile.TemporaryDirectory() as temp:
+                directory = Path(temp)
+                config_path,_,_ = self.write_inputs(directory)
+                config = json.loads(config_path.read_text(encoding='utf8'))
+                config['export_color_layers'] = invalid
+                config_path.write_text(json.dumps(config),encoding='utf8')
+                output = directory/'result'
+                with patch.object(trigger_cli,'normalize_triggered') as pipeline, \
+                     patch('sys.stderr'), self.assertRaises(SystemExit):
+                    trigger_cli.main(['--config',str(config_path),'--output',str(output)])
+                pipeline.assert_not_called()
+                self.assertFalse(output.exists())
 
 
 if __name__=='__main__': unittest.main()

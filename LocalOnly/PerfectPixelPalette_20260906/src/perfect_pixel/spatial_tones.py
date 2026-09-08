@@ -65,14 +65,19 @@ def _inputs(lightness, color_indices, positions, color_count):
 
 
 def build_spatial_constraints(lightness, color_indices, positions, color_count, *,
-                              contrast_retention=.65, minimum_contrast=.025):
+                              contrast_retention=.65, minimum_contrast=.025,
+                              return_supports=False):
     """Return at most one contrast constraint and compact JSON-safe diagnostics.
 
     For each constraint, dot(coefficients, candidate_L_per_input_color) must be
     at least minimum_contrast. The supports remain fixed to the source pixels.
     Coordinates outside the input mask never contribute lightness or support.
     A single broad persistent contrast is protected, not every local gradient.
+    When requested, a third return value contains the selected input-pixel masks
+    (or None). These arrays are kept separate from the JSON-safe metadata.
     """
+    if not isinstance(return_supports, (bool, np.bool_)):
+        raise ValueError('return_supports must be boolean')
     contrast_retention = _fraction(contrast_retention, 'contrast_retention')
     minimum_contrast = _fraction(minimum_contrast, 'minimum_contrast')
     lightness, color_indices, flat, shape = _inputs(
@@ -98,9 +103,13 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
             'Thin structures and sparse masks can lack reliable multiscale support.',
             'Source enlargement invariance is not guaranteed at the sampling floor.'],
     }
+    def result(constraints, supports=None):
+        return ((constraints, metadata, supports) if return_supports
+                else (constraints, metadata))
+
     if raw_variance <= 1e-14 or float(np.ptp(lightness)) < minimum_contrast:
         metadata['bypass_reason'] = 'insufficient_source_lightness_contrast'
-        return [], metadata
+        return result([])
 
     scale_specs, filter_pixel_taps = [], 0
     previous_sigma = None
@@ -120,7 +129,7 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
     metadata['estimated_filter_pixel_taps'] = filter_pixel_taps
     if len(scale_specs) < 2:
         metadata['bypass_reason'] = 'fewer_than_two_distinct_source_scales'
-        return [], metadata
+        return result([])
 
     from scipy.ndimage import gaussian_filter
 
@@ -170,7 +179,7 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
 
     if selected is None:
         metadata['bypass_reason'] = 'no_coherent_contrast_persistent_across_two_scales'
-        return [], metadata
+        return result([])
     low, high, source_contrast, report = selected
     coefficients = np.bincount(color_indices[high], minlength=color_count).astype(np.float64) / high.sum()
     coefficients -= np.bincount(color_indices[low], minlength=color_count) / low.sum()
@@ -179,4 +188,5 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
                     selected_source_contrast_l=source_contrast,
                     required_output_contrast_l=required,
                     selected_support_count=report['support_count'])
-    return [{'coefficients': coefficients, 'minimum_contrast': required}], metadata
+    return result([{'coefficients': coefficients, 'minimum_contrast': required}],
+                  {'low': low.copy(), 'high': high.copy()} if return_supports else None)

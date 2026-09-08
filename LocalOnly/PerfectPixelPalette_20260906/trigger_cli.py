@@ -21,6 +21,8 @@ CODE_FILES = ['trigger_cli.py', 'requirements-boundary.txt',
               'src/perfect_pixel/gradient_tones.py',
               'src/perfect_pixel/gradient_steps.py',
               'src/perfect_pixel/spatial_tones.py',
+              'src/perfect_pixel/highlight_accents.py',
+              'src/perfect_pixel/color_layers.py',
               'src/perfect_pixel/feature_scopes.py', 'src/perfect_pixel/palette.py',
               'src/perfect_pixel/__init__.py', 'src/perfect_pixel/perfect_pixel_noCV2.py',
               'src/perfect_pixel/perfect_pixel.py']
@@ -91,8 +93,10 @@ def main(argv=None):
     args = parser.parse_args(argv)
     config_bytes = args.config.read_bytes()
     config = json.loads(config_bytes.decode('utf8'))
-    if not isinstance(config, dict) or set(config)-{'source','reference','comparison_previous','comparison_history','base_grid','scale','preview_zoom','features','notes'}:
+    if not isinstance(config, dict) or set(config)-{'source','reference','comparison_previous','comparison_history','base_grid','scale','preview_zoom','features','notes','export_color_layers'}:
         parser.error('Unknown configuration keys.')
+    if not isinstance(config.get('export_color_layers', False), bool):
+        parser.error('export_color_layers must be a boolean.')
     for key in ['source','base_grid','features']:
         if key not in config:
             parser.error(f'Missing {key}.')
@@ -214,6 +218,21 @@ def main(argv=None):
                             ('before_lines_native.png',result['before_lines']), ('pixel_native.png',native)]:
         Image.fromarray(array).save(output/filename)
     Image.fromarray(native).resize((native.shape[1]*zoom,native.shape[0]*zoom), Image.Resampling.NEAREST).save(output/'pixel_preview.png')
+    if result['highlight_result'] is not None:
+        for filename, array in [('base_native.png', result['layer_base']),
+                                ('highlight_native.png', result['highlight_overlay']),
+                                ('base_colors_source.png', result['base_colors_source']),
+                                ('highlight_source.png', result['highlight_result']['overlay'])]:
+            Image.fromarray(array).save(output/filename)
+    layer_export = None
+    if config.get('export_color_layers', False):
+        from perfect_pixel.color_layers import export_color_layers
+        recomposed = result['layer_base'].copy()
+        active = result['highlight_overlay'][..., 3] == 255
+        recomposed[active] = result['highlight_overlay'][active]
+        np.testing.assert_array_equal(recomposed, native)
+        layer_export = export_color_layers(result['layer_base'], result['highlight_overlay'],
+                                           output/'color_layers')
     fixed_lines = None
     if result['line_geometry'] is not None:
         fixed_lines = np.zeros_like(native)
@@ -265,6 +284,9 @@ def main(argv=None):
                   'source_unchanged':True, 'binary_alpha':True,
                   'native_grid':list(native.shape[1::-1]),'unique_opaque_rgb':len(observed),
                   'opaque_rgb_from_original':observed <= source_allowed, 'design_approval':'user review pending'}}
+    if layer_export is not None:
+        record['color_layers'] = layer_export
+        record['technical_checks']['layer_recomposition_matches_native'] = True
     if reference is not None:
         record.update(reference_path=str(reference_path), reference_file_sha256=sha(reference_bytes),
                       reference_array_sha256=reference_before)

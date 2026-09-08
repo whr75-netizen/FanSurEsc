@@ -32,6 +32,8 @@ class ComparisonHistoryTests(unittest.TestCase):
         yy,xx = np.indices(source.shape[:2])
         return {'image':source.copy(),'baseline':source.copy(),'cleaned_source':source.copy(),
                 'colors_source':source.copy(),'before_lines':source.copy(),
+                'base_colors_source':source.copy(),'layer_base':source.copy(),
+                'highlight_result':None,'highlight_overlay':np.zeros_like(source),
                 'scopes':{},'line_result':None,'line_geometry':None,'line_render':None,
                 'sampling_source_xy':np.stack((xx,yy),axis=2),
                 'erase_mask':np.zeros(source.shape[:2],bool),'metadata':{'features':{}}}

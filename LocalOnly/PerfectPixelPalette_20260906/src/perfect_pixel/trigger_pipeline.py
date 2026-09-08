@@ -15,6 +15,7 @@ FEATURES = {
     'region_tones': ('tones', 'min_retained_tone_delta_l', 'mode', 'color_error',
                      'gradient_edge_threshold', 'gradient_chroma_span', 'tone_policy', 'tone_error', 'chroma_error',
                      'contrast_retention', 'minimum_contrast'),
+    'highlight_accents': ('chroma_error', 'minimum_contrast'),
     'cell_sampling': ('coverage', 'method', 'color_edge_threshold'),
     'line_normalization': ('max_width_source_px', 'min_contrast',
                            'min_response', 'min_component_pixels', 'mode', 'color_edge_threshold', 'silhouette_coverage', 'fill_source_guard'),
@@ -278,6 +279,15 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
             raise ValueError('region_tones requires cell_sampling.method=source_regions to preserve raw-source ownership.')
         if 'line_normalization' in config:
             raise ValueError('region_tones with line_normalization is not validated; no implicit line/fill substitution is allowed.')
+    if 'highlight_accents' in config:
+        if (config.get('region_tones', {}).get('mode') != 'continuous' or
+                config.get('region_tones', {}).get('tone_policy') != 'spatial_steps'):
+            raise ValueError('highlight_accents requires continuous spatial_steps as its frozen base.')
+        if np.any(masks['highlight_accents'] & ~masks['region_tones']):
+            raise ValueError('highlight_accents scope must be within region_tones scope.')
+        expected_chroma = config['region_tones'].get('chroma_error', .06)
+        if config['highlight_accents'].get('chroma_error', expected_chroma) != expected_chroma:
+            raise ValueError('highlight_accents chroma_error must match the frozen region_tones groups.')
     baseline = center_sample(image, grid)
     work = image.copy()
     if 'mask_cleanup' in config:
@@ -319,7 +329,16 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
                                              **config['region_tones'])
         work[masks['region_tones']] = tonal_result['flat_image'][masks['region_tones']]
         metadata['region_tones'].update(tonal_result['metadata'])
-    colors_source = work.copy()
+    base_colors_source = work.copy()
+    highlight_result = None
+    if 'highlight_accents' in config:
+        from .highlight_accents import add_highlight_accents
+        highlight_options = dict(config['highlight_accents'])
+        highlight_options.setdefault('chroma_error', config['region_tones'].get('chroma_error', .06))
+        highlight_result = add_highlight_accents(cleaned, work,
+            tonal_result['region_labels'], masks['highlight_accents'], **highlight_options)
+        metadata['highlight_accents'].update(highlight_result['metadata'])
+    colors_source = work.copy() if highlight_result is None else highlight_result['image'].copy()
     if 'cell_sampling' in config:
         out, sampling_xy = sample_scoped(work, grid, masks['cell_sampling'],
                                          return_source_xy=True, source_guide=cleaned, **config['cell_sampling'])
@@ -330,6 +349,20 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
         cy, cx = center_indices(work.shape[:2], grid)
         xx, yy = np.meshgrid(cx, cy)
         sampling_xy = np.stack([xx, yy], axis=2)
+    frozen_native = out.copy()
+    highlight_native = np.zeros_like(out)
+    if highlight_result is not None:
+        # Sample the frozen image only once. The optional overlay reuses its
+        # established source coordinate; neither geometry nor alpha gets refit.
+        sx, sy = sampling_xy[..., 0], sampling_xy[..., 1]
+        valid = ((sx >= 0) & (sx < image.shape[1]) & (sy >= 0) & (sy < image.shape[0]))
+        projected = np.zeros_like(out)
+        projected[valid] = highlight_result['overlay'][sy[valid], sx[valid]]
+        eligible = ((out[..., 3] == 255) & (projected[..., 3] == 255)
+                    & center_sample(masks['highlight_accents'], grid))
+        highlight_native[eligible] = projected[eligible]
+        out[eligible] = projected[eligible]
+        metadata['highlight_accents']['changed_target_pixels'] = int(eligible.sum())
     before_lines = out.copy()
     if 'line_normalization' in config:
         if line_geometry is None:
@@ -354,6 +387,8 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
         # Source-to-target mask projection uses the same cell-center convention.
         blocked = center_sample(erase, grid)
         out[blocked] = 0
+        frozen_native[blocked] = 0
+        highlight_native[blocked] = 0
         metadata['mask_cleanup']['blocked_target_cells'] = int(blocked.sum())
     # OFF means byte identity at the same grid, including hidden RGB.
     # With processing enabled, transparent RGB is intentionally cleared inside
@@ -363,10 +398,15 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
         touched |= mask
     target_touched = center_sample(touched, grid)
     out[(out[..., 3] == 0) & target_touched] = 0
+    frozen_native[(frozen_native[..., 3] == 0) & target_touched] = 0
     if not np.array_equal(out[~target_touched], baseline[~target_touched]):
         raise RuntimeError('Feature changes escaped their selected target scopes.')
     return {'image': out, 'baseline': baseline, 'cleaned_source': cleaned,
             'colors_source': colors_source, 'before_lines': before_lines,
+            'base_colors_source': base_colors_source,
+            'layer_base': frozen_native if highlight_result is not None else out.copy(),
+            'highlight_overlay': highlight_native,
+            'highlight_result': highlight_result,
             'region_tones_result': tonal_result,
             'scopes': masks, 'line_result': line_result,
             'line_geometry': line_geometry, 'line_render': line_render,

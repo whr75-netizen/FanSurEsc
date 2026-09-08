@@ -2,9 +2,9 @@
   "source": "source_bright_rgba.png",
   "reference": "source_bright_rgba.png",
   "comparison_history": [
-    {"path": "result_continuous_96/pixel_native.png", "label": "PREVIOUS / MAX COLOR ERROR"},
-    {"path": "result_weighted_steps_96/pixel_native.png", "label": "PREVIOUS / WEIGHTED STEPS"}
+    {"path": "result_spatial_steps_96/pixel_native.png", "label": "APPROVED BASE / UNCHANGED BELOW OVERLAY"}
   ],
+  "export_color_layers": true,
   "base_grid": [
     96,
     192
@@ -13,9 +13,10 @@
   "preview_zoom": 4,
   "notes": [
     "User-confirmed test grid 96x192. Same brighter native PBR capture; no Unity changes.",
-    "Same source domains, chromaticity groups and observed RGB. Source-fixed multiscale support contrast rejects over-flattened weighted-DP candidates; no semantic or coordinate-specific rule.",
+    "Freeze the approved spatial_steps base. Add only a source-supported highlight overlay without refitting old colors, shadow bins or sample coordinates.",
     "Region capacity failures propagate. Do not substitute source_palette or region_colors.",
-    "Raw-source region sampling fixes placement independently of shading. No new outline or copied anime line/erase scopes."
+    "Raw-source region sampling fixes placement independently of shading. No new outline or copied anime line/erase scopes.",
+    "Export separate color masks, editable color data and Aseprite base/highlight groups. Hiding highlights reconstructs the preceding approved base."
   ],
   "features": {
     "region_tones": {
@@ -33,6 +34,11 @@
         "gradient_edge_threshold": 0.06,
         "gradient_chroma_span": 0.12
       }
+    },
+    "highlight_accents": {
+      "enabled": true,
+      "scope": {"kind": "all"},
+      "options": {"minimum_contrast": 0.025}
     },
     "cell_sampling": {
       "enabled": true,

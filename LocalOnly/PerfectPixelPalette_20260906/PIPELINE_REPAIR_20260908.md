@@ -4,7 +4,7 @@
 
 ## 최신 후속 수정 — continuous 모드
 
-가장 최신 설정은 `continuous + spatial_steps`입니다. 색 성분 보호와 빈도 가중 밝기 단계에 source 공간 대비 guard를 추가했습니다. 현재 결과·한계·225개 검사와 4칸 비교본: `SPATIAL_STEPS_REVIEW_20260908.txt`. 이전 weighted 기록은 `WEIGHTED_STEPS_REVIEW_20260908.txt`, 비공개 소스 이력 백업은 `PRIVATE_BACKUP.txt`입니다.
+가장 최신 설정은 `continuous + spatial_steps` 동결 base에 `highlight_accents` overlay를 추가한 것입니다. 단색별 마스크/RGB JSON과 Base·Highlight 그룹의 `.aseprite`도 저장합니다. 최신 결과·사용법·실제 Aseprite 검증: `HIGHLIGHT_LAYERS_REVIEW_20260908.txt`. 하이라이트를 끄면 직전 승인본이 완전히 복원됩니다. 이전 공간 명암 기록은 `SPATIAL_STEPS_REVIEW_20260908.txt`, weighted 기록은 `WEIGHTED_STEPS_REVIEW_20260908.txt`, 비공개 소스 이력 백업은 `PRIVATE_BACKUP.txt`입니다.
 
 아래는 이전 `2d2dae7`의 연결 복구 이력입니다. 그 수정만으로 넓은 그라데이션의 공통 단계가 해결된 것은 아닙니다. 현재 Chibi 실행 설정은 `region_tones.mode=continuous`로 전환했습니다. 출력 격자/SLIC 조각 수와 무관한 색 연속 영역 + 원본 대표색 오차 기반 가변 단계입니다. 기존 결과/legacy 참조 팔레트 모드는 보존했습니다. 현재 결과·수학·재실행·한계는 `CONTINUOUS_GRADIENT_REVIEW_20260908.txt`를 보십시오. Unity 실시간 렌더러 이식은 하지 않았습니다.
 

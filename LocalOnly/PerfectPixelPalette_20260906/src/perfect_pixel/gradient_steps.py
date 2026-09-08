@@ -148,7 +148,8 @@ def _lightness_steps(lightness, weights, error, *, constraints=()):
 
 
 def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04,
-                        spatial_context=None, contrast_retention=.65, minimum_contrast=.025):
+                        spatial_context=None, contrast_retention=.65, minimum_contrast=.025,
+                        spatial_options=None):
     """Return actual input representatives, input-row assignments, diagnostics.
 
     A rare lightness extreme may exceed tone_error at that pixel: tone_error
@@ -156,6 +157,8 @@ def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04,
     Chromaticity is grouped independently so a rare distinct hue is retained.
     """
     tone_error, chroma_error = _option(tone_error, 'tone_error'), _option(chroma_error, 'chroma_error')
+    if spatial_options is not None and spatial_context is None:
+        raise ValueError('spatial_options requires spatial_context.')
     if (not isinstance(colors, np.ndarray) or colors.dtype != np.uint8
             or colors.ndim != 2 or colors.shape[1] != 3 or not 1 <= len(colors) <= MAX_INPUT_COLORS):
         raise ValueError('colors must be nonempty uint8 Nx3 within the input-color resource bound')
@@ -164,6 +167,8 @@ def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04,
             or not np.all(np.isfinite(counts)) or np.any(counts <= 0)):
         raise ValueError('counts must be finite positive numeric values, one per input color')
     if spatial_context is not None:
+        from .spatial_tones import build_spatial_constraints, validate_spatial_options
+        validate_spatial_options(spatial_options)
         contrast_retention = _option(contrast_retention, 'contrast_retention')
         minimum_contrast = _option(minimum_contrast, 'minimum_contrast')
         if not isinstance(spatial_context, dict) or set(spatial_context) != {'positions', 'color_indices'}:
@@ -195,7 +200,6 @@ def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04,
     chroma = lab[:, 1:] / np.maximum(lab[:, :1], .05)
     groups, chroma_evaluations = _chroma_groups(chroma, weights, chroma_error)
     if spatial_context is not None:
-        from .spatial_tones import build_spatial_constraints
         pixel_unique = original_to_unique[pixel_colors]
         pixel_groups = groups[pixel_unique]
     assignment = np.empty(len(unique), np.int32)
@@ -210,7 +214,8 @@ def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04,
             pixel_local = local_lookup[pixel_unique[included]]
             constraints, spatial_metadata = build_spatial_constraints(
                 lab[members, 0][pixel_local], pixel_local, positions[included], len(members),
-                contrast_retention=contrast_retention, minimum_contrast=minimum_contrast)
+                contrast_retention=contrast_retention, minimum_contrast=minimum_contrast,
+                spatial_options=spatial_options)
         selected, local, info = _lightness_steps(lab[members, 0], weights[members], tone_error,
                                                 constraints=constraints)
         assignment[members] = local + len(ramp)

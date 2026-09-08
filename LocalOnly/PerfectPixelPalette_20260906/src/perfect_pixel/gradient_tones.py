@@ -157,17 +157,21 @@ def _cover(colors, counts, error):
 
 def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma_span=.12,
                            tone_policy='max_error', tone_error=.06, chroma_error=.06,
-                           contrast_retention=.65, minimum_contrast=.025):
+                           contrast_retention=.65, minimum_contrast=.025, spatial_options=None):
     image = _image(image)
     if image.shape[0] * image.shape[1] > MAX_PIXELS:
         raise ValueError('Gradient processing exceeds the explicit 4MP resource bound; no hidden resize.')
     validate_options(color_error, edge_threshold, chroma_span)
     if tone_policy not in ('max_error', 'weighted_steps', 'spatial_steps'):
         raise ValueError('tone_policy must be max_error, weighted_steps or spatial_steps.')
+    if spatial_options is not None and tone_policy != 'spatial_steps':
+        raise ValueError('spatial_options requires tone_policy=spatial_steps.')
     if tone_policy != 'max_error':
         from .gradient_steps import select_step_palette, _option
         _option(tone_error, 'tone_error'); _option(chroma_error, 'chroma_error')
         if tone_policy == 'spatial_steps':
+            from .spatial_tones import validate_spatial_options
+            validate_spatial_options(spatial_options)
             _option(contrast_retention, 'contrast_retention'); _option(minimum_contrast, 'minimum_contrast')
     visible = np.ones(image.shape[:2], bool) if image.shape[2] == 3 else image[..., 3] > 0
     rgb = image[..., :3]
@@ -190,7 +194,8 @@ def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma
                            'color_indices': inverse}
             ramp, choice, meta = select_step_palette(colors, weights,
                 tone_error=tone_error, chroma_error=chroma_error, spatial_context=context,
-                contrast_retention=contrast_retention, minimum_contrast=minimum_contrast)
+                contrast_retention=contrast_retention, minimum_contrast=minimum_contrast,
+                spatial_options=spatial_options)
         else:
             ramp, choice, meta = _cover(colors, weights, color_error)
         output.reshape(-1, image.shape[2])[indices, :3] = ramp[choice[inverse]]

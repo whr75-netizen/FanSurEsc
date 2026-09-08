@@ -8,7 +8,7 @@ import numpy as np
 
 from .gradient_steps import MAX_INPUT_COLORS, _chroma_groups, _option
 from .palette import rgb_to_oklab
-from .spatial_tones import MAX_SOURCE_PIXELS, build_spatial_constraints
+from .spatial_tones import MAX_SOURCE_PIXELS, build_spatial_constraints, validate_spatial_options
 
 
 MAX_DOMAINS = 65_536
@@ -69,7 +69,7 @@ def _best_tail(lightness, base_l, observed_l, observed_rgb, observed_counts, min
 
 
 def add_highlight_accents(source_rgba, frozen_base_rgba, region_labels, scope, *,
-                          chroma_error=.06, minimum_contrast=.025):
+                          chroma_error=.06, minimum_contrast=.025, spatial_options=None):
     """Return corrected source-sized image, transparent overlay and JSON metadata.
 
     Analyze all visible source pixels within each supplied domain, so restricting
@@ -84,6 +84,7 @@ def add_highlight_accents(source_rgba, frozen_base_rgba, region_labels, scope, *
         raise ValueError('source_rgba and frozen_base_rgba must have the same shape')
     chroma_error = _option(chroma_error, 'chroma_error')
     minimum_contrast = _option(minimum_contrast, 'minimum_contrast')
+    validate_spatial_options(spatial_options)
     if (not isinstance(region_labels, np.ndarray) or region_labels.shape != source.shape[:2]
             or region_labels.dtype.kind not in 'iu' or np.any(region_labels < -1)):
         raise ValueError('region_labels must be an integer HxW array with domain IDs or -1')
@@ -141,7 +142,8 @@ def add_highlight_accents(source_rgba, frozen_base_rgba, region_labels, scope, *
             positions = np.column_stack(np.unravel_index(group_pixels, source.shape[:2]))
             _, support_meta, supports = build_spatial_constraints(
                 source_l, pixel_local, positions, len(members),
-                minimum_contrast=minimum_contrast, return_supports=True)
+                minimum_contrast=minimum_contrast, return_supports=True,
+                spatial_options=spatial_options)
             report = {'domain_id': int(domain), 'group_id': group,
                       'source_pixel_count': len(group_pixels), 'changed_source_pixels': 0,
                       'spatial_support': support_meta, 'bypass_reason': None}

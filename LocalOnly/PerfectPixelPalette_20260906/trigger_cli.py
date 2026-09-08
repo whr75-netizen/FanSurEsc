@@ -23,6 +23,7 @@ CODE_FILES = ['trigger_cli.py', 'requirements-boundary.txt',
               'src/perfect_pixel/spatial_tones.py',
               'src/perfect_pixel/highlight_accents.py',
               'src/perfect_pixel/color_layers.py',
+              'src/perfect_pixel/tone_controls.py',
               'src/perfect_pixel/feature_scopes.py', 'src/perfect_pixel/palette.py',
               'src/perfect_pixel/__init__.py', 'src/perfect_pixel/perfect_pixel_noCV2.py',
               'src/perfect_pixel/perfect_pixel.py']
@@ -30,6 +31,7 @@ CODE_FILES = ['trigger_cli.py', 'requirements-boundary.txt',
 BOOT_CODE = {rel:(ROOT/rel).read_bytes() for rel in CODE_FILES}
 from perfect_pixel.trigger_pipeline import normalize_triggered, FEATURES
 from perfect_pixel.palette import scaled_grid
+from perfect_pixel.tone_controls import resolve_tone_controls
 
 
 def sha(data):
@@ -93,13 +95,18 @@ def main(argv=None):
     args = parser.parse_args(argv)
     config_bytes = args.config.read_bytes()
     config = json.loads(config_bytes.decode('utf8'))
-    if not isinstance(config, dict) or set(config)-{'source','reference','comparison_previous','comparison_history','base_grid','scale','preview_zoom','features','notes','export_color_layers'}:
+    if not isinstance(config, dict) or set(config)-{'source','reference','comparison_previous','comparison_history','base_grid','scale','preview_zoom','features','notes','export_color_layers','tone_controls'}:
         parser.error('Unknown configuration keys.')
     if not isinstance(config.get('export_color_layers', False), bool):
         parser.error('export_color_layers must be a boolean.')
     for key in ['source','base_grid','features']:
         if key not in config:
             parser.error(f'Missing {key}.')
+    try:
+        effective_features = (resolve_tone_controls(config['features'], config['tone_controls'])
+                              if 'tone_controls' in config else json.loads(json.dumps(config['features'])))
+    except ValueError as exc:
+        parser.error(str(exc))
     base_dir = args.config.resolve().parent
     source_path = (base_dir / config['source']).resolve()
     source_bytes = source_path.read_bytes()
@@ -113,6 +120,7 @@ def main(argv=None):
         parser.error('preview_zoom must be 1..8.')
     for feature in args.disable:
         config['features'].setdefault(feature,{})['enabled'] = False
+        effective_features.setdefault(feature,{})['enabled'] = False
     reference, reference_bytes, reference_path, reference_before = None, None, None, None
     if config['features'].get('region_tones',{}).get('enabled',False):
         if not isinstance(config.get('reference'),str) or not config['reference'].strip():
@@ -174,7 +182,7 @@ def main(argv=None):
     pipeline_options = {'base_dir':base_dir}
     if reference is not None:
         pipeline_options['reference'] = reference
-    result = normalize_triggered(source, config['base_grid'], config['scale'], config['features'], **pipeline_options)
+    result = normalize_triggered(source, config['base_grid'], config['scale'], effective_features, **pipeline_options)
     if sha(source.tobytes()) != source_before or source_path.read_bytes() != source_bytes:
         raise RuntimeError('Original input changed during processing.')
     if reference is not None and (sha(reference.tobytes()) != reference_before or
@@ -287,6 +295,8 @@ def main(argv=None):
     if layer_export is not None:
         record['color_layers'] = layer_export
         record['technical_checks']['layer_recomposition_matches_native'] = True
+    if 'tone_controls' in config:
+        record['effective_features'] = effective_features
     if reference is not None:
         record.update(reference_path=str(reference_path), reference_file_sha256=sha(reference_bytes),
                       reference_array_sha256=reference_before)

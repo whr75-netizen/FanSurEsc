@@ -11,7 +11,25 @@
   ],
   "scale": "1.0",
   "preview_zoom": 4,
+  "tone_controls": {
+    "tone_error": 0.06,
+    "chroma_error": 0.06,
+    "contrast_retention": 0.65,
+    "minimum_contrast": 0.025,
+    "highlight_minimum_contrast": 0.025,
+    "gradient_edge_threshold": 0.06,
+    "gradient_chroma_span": 0.12,
+    "spatial_options": {
+      "scale_fractions": [0.02, 0.04, 0.08],
+      "minimum_coherence": 0.35,
+      "minimum_support_overlap": 0.65,
+      "support_quantiles": [0.2, 0.8]
+    }
+  },
   "notes": [
+    "명암 조절은 위 tone_controls만 수정합니다. 상세한 항목별 효과는 ../PerfectPixelPalette_20260906/TONE_CONTROLS_GUIDE.txt 참고.",
+    "tone_error: 클수록 밝기 차이를 더 합침. contrast_retention: 클수록 원본 밝음/어두움 대비를 더 보존.",
+    "minimum_contrast: 작을수록 약한 명암도 구조 후보. highlight_minimum_contrast: 작을수록 약한 밝음 강조도 허용.",
     "User-confirmed test grid 96x192. Same brighter native PBR capture; no Unity changes.",
     "Freeze the approved spatial_steps base. Add only a source-supported highlight overlay without refitting old colors, shadow bins or sample coordinates.",
     "Region capacity failures propagate. Do not substitute source_palette or region_colors.",
@@ -26,19 +44,13 @@
       },
       "options": {
         "mode": "continuous",
-        "tone_policy": "spatial_steps",
-        "tone_error": 0.06,
-        "chroma_error": 0.06,
-        "contrast_retention": 0.65,
-        "minimum_contrast": 0.025,
-        "gradient_edge_threshold": 0.06,
-        "gradient_chroma_span": 0.12
+        "tone_policy": "spatial_steps"
       }
     },
     "highlight_accents": {
       "enabled": true,
       "scope": {"kind": "all"},
-      "options": {"minimum_contrast": 0.025}
+      "options": {}
     },
     "cell_sampling": {
       "enabled": true,

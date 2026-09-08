@@ -14,7 +14,7 @@ FEATURES = {
     'region_colors': ('colors', 'iterations'),
     'region_tones': ('tones', 'min_retained_tone_delta_l', 'mode', 'color_error',
                      'gradient_edge_threshold', 'gradient_chroma_span', 'tone_policy', 'tone_error', 'chroma_error',
-                     'contrast_retention', 'minimum_contrast'),
+                     'contrast_retention', 'minimum_contrast', 'spatial_options'),
     'highlight_accents': ('chroma_error', 'minimum_contrast'),
     'cell_sampling': ('coverage', 'method', 'color_edge_threshold'),
     'line_normalization': ('max_width_source_px', 'min_contrast',
@@ -335,6 +335,7 @@ def normalize_triggered(image, base_grid, scale='1.0', features=None, *, base_di
         from .highlight_accents import add_highlight_accents
         highlight_options = dict(config['highlight_accents'])
         highlight_options.setdefault('chroma_error', config['region_tones'].get('chroma_error', .06))
+        highlight_options['spatial_options'] = config['region_tones'].get('spatial_options')
         highlight_result = add_highlight_accents(cleaned, work,
             tonal_result['region_labels'], masks['highlight_accents'], **highlight_options)
         metadata['highlight_accents'].update(highlight_result['metadata'])

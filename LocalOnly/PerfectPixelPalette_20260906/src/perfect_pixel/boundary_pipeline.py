@@ -26,10 +26,16 @@ class BoundaryOptions:
     chroma_error: float = .06
     contrast_retention: float = .65
     minimum_contrast: float = .025
+    spatial_options: dict = None
 
     def validate(self):
         if self.shading_mode not in ('legacy_regions', 'continuous'):
             raise ValueError('shading_mode must be legacy_regions or continuous.')
+        if self.spatial_options is not None:
+            if self.shading_mode != 'continuous' or self.tone_policy != 'spatial_steps':
+                raise ValueError('spatial_options requires continuous spatial_steps.')
+            from .spatial_tones import validate_spatial_options
+            validate_spatial_options(self.spatial_options)
         if self.shading_mode == 'continuous':
             from .gradient_tones import validate_options
             validate_options(self.color_error, self.gradient_edge_threshold, self.gradient_chroma_span)
@@ -160,7 +166,7 @@ def prepare_region_tones(image, reference, base_grid, *, tones=3,
                          min_retained_tone_delta_l=.025, mode='legacy_regions',
                          color_error=.06, gradient_edge_threshold=.06, gradient_chroma_span=.12,
                          tone_policy='max_error', tone_error=.06, chroma_error=.06,
-                         contrast_retention=.65, minimum_contrast=.025):
+                         contrast_retention=.65, minimum_contrast=.025, spatial_options=None):
     """Source-resolution shading stage shared by both public pipelines.
 
     This function never chooses output pixels or adds lines. Its failures must
@@ -173,7 +179,8 @@ def prepare_region_tones(image, reference, base_grid, *, tones=3,
                     gradient_edge_threshold=gradient_edge_threshold,
                     gradient_chroma_span=gradient_chroma_span, tone_policy=tone_policy,
                     tone_error=tone_error, chroma_error=chroma_error,
-                    contrast_retention=contrast_retention, minimum_contrast=minimum_contrast).validate()
+                    contrast_retention=contrast_retention, minimum_contrast=minimum_contrast,
+                    spatial_options=spatial_options).validate()
     base = tuple(scaled_grid(base_grid, '1.0'))
     if mode == 'continuous':
         # This mode is source-tone abstraction, not external style transfer.
@@ -187,7 +194,8 @@ def prepare_region_tones(image, reference, base_grid, *, tones=3,
         result = prepare_gradient_tones(image, color_error=color_error,
             edge_threshold=gradient_edge_threshold, chroma_span=gradient_chroma_span,
             tone_policy=tone_policy, tone_error=tone_error, chroma_error=chroma_error,
-            contrast_retention=contrast_retention, minimum_contrast=minimum_contrast)
+            contrast_retention=contrast_retention, minimum_contrast=minimum_contrast,
+            spatial_options=spatial_options)
         result['metadata'].update(mode=mode,
             color_error=color_error if tone_policy == 'max_error' else None,
             source_pixel_sha256=hashlib.sha256(image.tobytes()).hexdigest(),
@@ -229,7 +237,8 @@ def get_boundary_pixel(image, reference, base_grid=None, resolution_scale='1.0',
         gradient_edge_threshold=options.gradient_edge_threshold,
         gradient_chroma_span=options.gradient_chroma_span, tone_policy=options.tone_policy,
         tone_error=options.tone_error, chroma_error=options.chroma_error,
-        contrast_retention=options.contrast_retention, minimum_contrast=options.minimum_contrast)
+        contrast_retention=options.contrast_retention, minimum_contrast=options.minimum_contrast,
+        spatial_options=options.spatial_options)
     labels, edge_strength = shading['region_labels'], shading['edge_strength']
     flat, tone_map, palette = shading['flat_image'], shading['tone_map'], shading['palette']
     segmentation, colors = shading['metadata']['segmentation'], shading['metadata']['region_colors']

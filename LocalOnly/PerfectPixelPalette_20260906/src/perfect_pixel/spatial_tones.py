@@ -4,7 +4,7 @@ This is a spatial guard for an existing color quantizer, not a segmentation or
 material detector. Only pixels of one fixed chromaticity group enter the API.
 The returned histograms permit checking a candidate palette without blurring it.
 
-The dimensionless scales (2%, 4%, 8% of each bounding-box axis) look for broad
+The default scales (2%, 4%, 8% of each bounding-box axis) look for broad
 structure independently of the output grid. A half-source-pixel sigma is only a
 sampling floor. Repeated floor-limited scales do not count as separate evidence.
 The 35% variance gate rejects substantially averaged-away noise; 65% support
@@ -33,6 +33,48 @@ def _fraction(value, name):
             or not np.isfinite(value) or not 0 < value <= 1):
         raise ValueError(name + ' must be finite in (0,1].')
     return float(value)
+
+
+def validate_spatial_options(options=None):
+    """Return a fresh, complete JSON-safe set of source-support options.
+
+    Input dictionaries and sequences are never mutated. Sampling floors and
+    resource bounds are deliberately not configurable through these options.
+    """
+    if options is None:
+        options = {}
+    if not isinstance(options, dict):
+        raise ValueError('spatial_options must be a dictionary or None')
+    allowed = {'scale_fractions', 'minimum_coherence', 'minimum_support_overlap',
+               'support_quantiles'}
+    unknown = set(options) - allowed
+    if unknown:
+        raise ValueError('Unknown spatial_options: ' + ', '.join(sorted(map(str, unknown))))
+
+    def sequence(name, default, minimum_size, maximum_size):
+        values = options.get(name, default)
+        if (not isinstance(values, (list, tuple, np.ndarray))
+                or (isinstance(values, np.ndarray) and values.ndim != 1)
+                or not minimum_size <= len(values) <= maximum_size):
+            raise ValueError(name + ' must be a one-dimensional sequence of '
+                             + str(minimum_size) + ' to ' + str(maximum_size) + ' numbers')
+        return [_fraction(value, name) for value in values]
+
+    scales = sequence('scale_fractions', SCALE_FRACTIONS, 2, 6)
+    if scales[-1] > .5 or any(left >= right for left, right in zip(scales, scales[1:])):
+        raise ValueError('scale_fractions must be strictly increasing values in (0,.5]')
+    quantiles = sequence('support_quantiles', SUPPORT_QUANTILES, 2, 2)
+    if not 0 < quantiles[0] < .5 < quantiles[1] < 1:
+        raise ValueError('support_quantiles must satisfy 0 < low < .5 < high < 1')
+    return {
+        'scale_fractions': scales,
+        'minimum_coherence': _fraction(options.get('minimum_coherence', MINIMUM_COHERENCE),
+                                       'minimum_coherence'),
+        'minimum_support_overlap': _fraction(
+            options.get('minimum_support_overlap', MINIMUM_SUPPORT_OVERLAP),
+            'minimum_support_overlap'),
+        'support_quantiles': quantiles,
+    }
 
 
 def _inputs(lightness, color_indices, positions, color_count):
@@ -66,7 +108,7 @@ def _inputs(lightness, color_indices, positions, color_count):
 
 def build_spatial_constraints(lightness, color_indices, positions, color_count, *,
                               contrast_retention=.65, minimum_contrast=.025,
-                              return_supports=False):
+                              return_supports=False, spatial_options=None):
     """Return at most one contrast constraint and compact JSON-safe diagnostics.
 
     For each constraint, dot(coefficients, candidate_L_per_input_color) must be
@@ -75,11 +117,14 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
     A single broad persistent contrast is protected, not every local gradient.
     When requested, a third return value contains the selected input-pixel masks
     (or None). These arrays are kept separate from the JSON-safe metadata.
+    spatial_options only changes the explicitly supplied source-support gates
+    and scales; omitting it preserves the original defaults.
     """
     if not isinstance(return_supports, (bool, np.bool_)):
         raise ValueError('return_supports must be boolean')
     contrast_retention = _fraction(contrast_retention, 'contrast_retention')
     minimum_contrast = _fraction(minimum_contrast, 'minimum_contrast')
+    options = validate_spatial_options(spatial_options)
     lightness, color_indices, flat, shape = _inputs(
         lightness, color_indices, positions, color_count)
     raw_variance = float(np.var(lightness))
@@ -87,10 +132,10 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
         'method': 'masked-source-multiscale-support-contrast/1',
         'source_pixel_count': len(lightness), 'bounding_box_size': list(shape),
         'scale_units': 'fraction of each source group bounding-box axis; output grid unused',
-        'scale_fractions': list(SCALE_FRACTIONS), 'sampling_sigma_floor': MINIMUM_SIGMA,
-        'support_quantiles': list(SUPPORT_QUANTILES),
-        'minimum_coherence_ratio': MINIMUM_COHERENCE,
-        'minimum_support_overlap': MINIMUM_SUPPORT_OVERLAP,
+        'scale_fractions': options['scale_fractions'], 'sampling_sigma_floor': MINIMUM_SIGMA,
+        'support_quantiles': options['support_quantiles'],
+        'minimum_coherence_ratio': options['minimum_coherence'],
+        'minimum_support_overlap': options['minimum_support_overlap'],
         'required_persistent_scales': 2, 'minimum_source_contrast': minimum_contrast,
         'contrast_retention': contrast_retention, 'source_variance_l': raw_variance,
         'source_mean_l': float(np.mean(lightness)), 'scales': [],
@@ -113,7 +158,7 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
 
     scale_specs, filter_pixel_taps = [], 0
     previous_sigma = None
-    for fraction in SCALE_FRACTIONS:
+    for fraction in options['scale_fractions']:
         sigma = tuple(max(MINIMUM_SIGMA, size * fraction) for size in shape)
         if sigma == previous_sigma:
             metadata['scales'].append({'fraction': fraction, 'sigma': list(sigma),
@@ -146,7 +191,7 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
         # Every queried location contributes its own positive Gaussian center.
         smooth = numerator.ravel()[flat] / normalization.ravel()[flat]
         coherence = float(np.var(smooth) / raw_variance)
-        low_level, high_level = np.quantile(smooth, SUPPORT_QUANTILES)
+        low_level, high_level = np.quantile(smooth, options['support_quantiles'])
         low, high = smooth <= low_level, smooth >= high_level
         source_contrast = float(np.mean(lightness[high]) - np.mean(lightness[low]))
         report = {
@@ -156,7 +201,7 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
             'bypass_reason': None,
         }
         metadata['scales'].append(report)
-        if coherence < MINIMUM_COHERENCE:
+        if coherence < options['minimum_coherence']:
             report['bypass_reason'] = 'lightness_variance_does_not_survive_smoothing'
             previous_support = None
             continue
@@ -170,7 +215,7 @@ def build_spatial_constraints(lightness, color_indices, positions, color_count, 
             low_overlap = float(np.count_nonzero(low & prev_low) / min(low.sum(), prev_low.sum()))
             high_overlap = float(np.count_nonzero(high & prev_high) / min(high.sum(), prev_high.sum()))
             report['previous_scale_support_overlap'] = {'low': low_overlap, 'high': high_overlap}
-            if min(low_overlap, high_overlap) >= MINIMUM_SUPPORT_OVERLAP:
+            if min(low_overlap, high_overlap) >= options['minimum_support_overlap']:
                 # Keep one coarsest persistent support pair, avoiding a separate
                 # constraint for every scale or each small source gradient.
                 selected = current

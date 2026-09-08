@@ -1,0 +1,882 @@
+{
+  "stage": "gpu_readback_with_independent_stage_dp_oracle",
+  "status": "failed",
+  "case_count": 7,
+  "cases": [
+    {
+      "case": "broad_gradient",
+      "status": "passed",
+      "global_status": 0,
+      "checks": [
+        {
+          "stage": "artifact_integrity",
+          "check": "result_buffer_shapes",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "eye_depth_and_empty_seed_values_preserved",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "source_and_seed_metadata_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "other_subjects_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "global_status",
+          "passed": true,
+          "details": 0
+        },
+        {
+          "stage": "stage_dp",
+          "check": "active_owner_group_count",
+          "passed": true,
+          "details": 1
+        },
+        {
+          "stage": "stage_dp",
+          "check": "all_active_groups_have_ready_solution",
+          "passed": true,
+          "details": {
+            "active": 1,
+            "ready": 1
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "broad_gradient_uses_multiple_tones",
+          "passed": true,
+          "details": [
+            4
+          ]
+        },
+        {
+          "stage": "stage_dp",
+          "check": "broad_source_guard_present",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "stage_dp",
+          "check": "independent_dp_minimum_candidate_count",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "gpu_tones": 4,
+            "oracle_tones": 4,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.03782494366168976,
+            "oracle_rmse_l": 0.03782498893575153
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_error_matches_reported_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "measured_rmse_l": 0.03782499141458067,
+            "reported_rmse_l": 0.03782494366168976
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "ready_palette_meets_requested_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "rmse_l": 0.03782499141458067
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_rgb_is_actual_group_candidate",
+          "passed": true,
+          "details": {
+            "group": 96
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "original_support_contrast_preserved",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "required": 0.16774430871009827,
+            "actual": 0.27419357001781464
+          }
+        },
+        {
+          "stage": "highlight",
+          "check": "supported_highlight_positive_and_observed",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "base_l": 0.7016128897666931,
+            "accent_l": 0.7338709831237793
+          }
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "resolve_matches_frozen_palette_and_supported_accent",
+          "passed": true,
+          "details": []
+        }
+      ],
+      "stage_dp": {
+        "status": "passed",
+        "groups": [
+          {
+            "group": 96,
+            "gpu_tones": 4,
+            "oracle_tones": 4,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.03782494366168976,
+            "oracle_rmse_l": 0.03782498893575153
+          }
+        ]
+      },
+      "evidence": "Actual GPU readback plus independent CPU interval-DP oracle; no art evaluation.",
+      "float_error_tolerance_l": 3e-05
+    },
+    {
+      "case": "equal_l_chroma_part_subject",
+      "status": "passed",
+      "global_status": 0,
+      "checks": [
+        {
+          "stage": "artifact_integrity",
+          "check": "result_buffer_shapes",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "eye_depth_and_empty_seed_values_preserved",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "source_and_seed_metadata_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "other_subjects_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "global_status",
+          "passed": true,
+          "details": 0
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "exact_original_seed_color_depth",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "stage_dp",
+          "check": "active_owner_group_count",
+          "passed": true,
+          "details": 3
+        },
+        {
+          "stage": "stage_dp",
+          "check": "all_active_groups_have_ready_solution",
+          "passed": true,
+          "details": {
+            "active": 3,
+            "ready": 3
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "expected_variable_tone_counts",
+          "passed": true,
+          "details": [
+            1,
+            1,
+            1
+          ]
+        },
+        {
+          "stage": "stage_dp",
+          "check": "independent_dp_minimum_candidate_count",
+          "passed": true,
+          "details": {
+            "group": 17,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0,
+            "oracle_rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_error_matches_reported_rmse",
+          "passed": true,
+          "details": {
+            "group": 17,
+            "measured_rmse_l": 0.0,
+            "reported_rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "ready_palette_meets_requested_rmse",
+          "passed": true,
+          "details": {
+            "group": 17,
+            "rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_rgb_is_actual_group_candidate",
+          "passed": true,
+          "details": {
+            "group": 17
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "independent_dp_minimum_candidate_count",
+          "passed": true,
+          "details": {
+            "group": 145,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0,
+            "oracle_rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_error_matches_reported_rmse",
+          "passed": true,
+          "details": {
+            "group": 145,
+            "measured_rmse_l": 0.0,
+            "reported_rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "ready_palette_meets_requested_rmse",
+          "passed": true,
+          "details": {
+            "group": 145,
+            "rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_rgb_is_actual_group_candidate",
+          "passed": true,
+          "details": {
+            "group": 145
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "independent_dp_minimum_candidate_count",
+          "passed": true,
+          "details": {
+            "group": 146,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0,
+            "oracle_rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_error_matches_reported_rmse",
+          "passed": true,
+          "details": {
+            "group": 146,
+            "measured_rmse_l": 0.0,
+            "reported_rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "ready_palette_meets_requested_rmse",
+          "passed": true,
+          "details": {
+            "group": 146,
+            "rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_rgb_is_actual_group_candidate",
+          "passed": true,
+          "details": {
+            "group": 146
+          }
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "resolve_matches_frozen_palette_and_supported_accent",
+          "passed": true,
+          "details": []
+        }
+      ],
+      "stage_dp": {
+        "status": "passed",
+        "groups": [
+          {
+            "group": 17,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0,
+            "oracle_rmse_l": 0.0
+          },
+          {
+            "group": 145,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0,
+            "oracle_rmse_l": 0.0
+          },
+          {
+            "group": 146,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0,
+            "oracle_rmse_l": 0.0
+          }
+        ]
+      },
+      "evidence": "Actual GPU readback plus independent CPU interval-DP oracle; no art evaluation.",
+      "float_error_tolerance_l": 3e-05
+    },
+    {
+      "case": "flat_constant",
+      "status": "passed",
+      "global_status": 0,
+      "checks": [
+        {
+          "stage": "artifact_integrity",
+          "check": "result_buffer_shapes",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "eye_depth_and_empty_seed_values_preserved",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "source_and_seed_metadata_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "other_subjects_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "global_status",
+          "passed": true,
+          "details": 0
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "exact_original_seed_color_depth",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "stage_dp",
+          "check": "active_owner_group_count",
+          "passed": true,
+          "details": 1
+        },
+        {
+          "stage": "stage_dp",
+          "check": "all_active_groups_have_ready_solution",
+          "passed": true,
+          "details": {
+            "active": 1,
+            "ready": 1
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "expected_variable_tone_counts",
+          "passed": true,
+          "details": [
+            1
+          ]
+        },
+        {
+          "stage": "stage_dp",
+          "check": "independent_dp_minimum_candidate_count",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0,
+            "oracle_rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_error_matches_reported_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "measured_rmse_l": 0.0,
+            "reported_rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "ready_palette_meets_requested_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "rmse_l": 0.0
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_rgb_is_actual_group_candidate",
+          "passed": true,
+          "details": {
+            "group": 96
+          }
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "resolve_matches_frozen_palette_and_supported_accent",
+          "passed": true,
+          "details": []
+        }
+      ],
+      "stage_dp": {
+        "status": "passed",
+        "groups": [
+          {
+            "group": 96,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0,
+            "oracle_rmse_l": 0.0
+          }
+        ]
+      },
+      "evidence": "Actual GPU readback plus independent CPU interval-DP oracle; no art evaluation.",
+      "float_error_tolerance_l": 3e-05
+    },
+    {
+      "case": "four_observed_levels",
+      "status": "failed",
+      "global_status": 0,
+      "checks": [
+        {
+          "stage": "artifact_integrity",
+          "check": "result_buffer_shapes",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "eye_depth_and_empty_seed_values_preserved",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "source_and_seed_metadata_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "other_subjects_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "global_status",
+          "passed": true,
+          "details": 0
+        },
+        {
+          "stage": "stage_dp",
+          "check": "active_owner_group_count",
+          "passed": true,
+          "details": 1
+        },
+        {
+          "stage": "stage_dp",
+          "check": "all_active_groups_have_ready_solution",
+          "passed": true,
+          "details": {
+            "active": 1,
+            "ready": 1
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "expected_variable_tone_counts",
+          "passed": true,
+          "details": [
+            4
+          ]
+        },
+        {
+          "stage": "stage_dp",
+          "check": "independent_dp_minimum_candidate_count",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "gpu_tones": 4,
+            "oracle_tones": 4,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 9.155274165095761e-05,
+            "oracle_rmse_l": 4.377711717943896e-08
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_error_matches_reported_rmse",
+          "passed": false,
+          "details": {
+            "group": 96,
+            "measured_rmse_l": 6.003781285439868e-08,
+            "reported_rmse_l": 9.155274165095761e-05
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "ready_palette_meets_requested_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "rmse_l": 6.003781285439868e-08
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_rgb_is_actual_group_candidate",
+          "passed": true,
+          "details": {
+            "group": 96
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "original_support_contrast_preserved",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "required": 0.32499998807907104,
+            "actual": 0.5000000074505806
+          }
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "resolve_matches_frozen_palette_and_supported_accent",
+          "passed": true,
+          "details": []
+        }
+      ],
+      "stage_dp": {
+        "status": "failed",
+        "groups": [
+          {
+            "group": 96,
+            "gpu_tones": 4,
+            "oracle_tones": 4,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 9.155274165095761e-05,
+            "oracle_rmse_l": 4.377711717943896e-08
+          }
+        ]
+      },
+      "evidence": "Actual GPU readback plus independent CPU interval-DP oracle; no art evaluation.",
+      "float_error_tolerance_l": 3e-05
+    },
+    {
+      "case": "hash_capacity",
+      "status": "passed",
+      "global_status": 1,
+      "checks": [
+        {
+          "stage": "artifact_integrity",
+          "check": "result_buffer_shapes",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "eye_depth_and_empty_seed_values_preserved",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "source_and_seed_metadata_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "other_subjects_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "required_failure_status_bits",
+          "passed": true,
+          "details": 1
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "exact_original_seed_color_depth",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "global_failure_preserves_original",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "stage_dp",
+          "check": "global_failure_is_not_marked_ready",
+          "passed": true,
+          "details": []
+        }
+      ],
+      "stage_dp": {
+        "status": "not_run_expected_global_failure",
+        "groups": []
+      },
+      "evidence": "Actual GPU readback plus independent CPU interval-DP oracle; no art evaluation.",
+      "float_error_tolerance_l": 3e-05
+    },
+    {
+      "case": "narrow_gradient_one_tone",
+      "status": "passed",
+      "global_status": 0,
+      "checks": [
+        {
+          "stage": "artifact_integrity",
+          "check": "result_buffer_shapes",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "eye_depth_and_empty_seed_values_preserved",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "source_and_seed_metadata_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "other_subjects_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "global_status",
+          "passed": true,
+          "details": 0
+        },
+        {
+          "stage": "stage_dp",
+          "check": "active_owner_group_count",
+          "passed": true,
+          "details": 1
+        },
+        {
+          "stage": "stage_dp",
+          "check": "all_active_groups_have_ready_solution",
+          "passed": true,
+          "details": {
+            "active": 1,
+            "ready": 1
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "expected_variable_tone_counts",
+          "passed": true,
+          "details": [
+            1
+          ]
+        },
+        {
+          "stage": "stage_dp",
+          "check": "independent_dp_minimum_candidate_count",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0029828015249222517,
+            "oracle_rmse_l": 0.0029828019504104493
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_error_matches_reported_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "measured_rmse_l": 0.0029828017178517787,
+            "reported_rmse_l": 0.0029828015249222517
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "ready_palette_meets_requested_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "rmse_l": 0.0029828017178517787
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_rgb_is_actual_group_candidate",
+          "passed": true,
+          "details": {
+            "group": 96
+          }
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "resolve_matches_frozen_palette_and_supported_accent",
+          "passed": true,
+          "details": []
+        }
+      ],
+      "stage_dp": {
+        "status": "passed",
+        "groups": [
+          {
+            "group": 96,
+            "gpu_tones": 1,
+            "oracle_tones": 1,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.0029828015249222517,
+            "oracle_rmse_l": 0.0029828019504104493
+          }
+        ]
+      },
+      "evidence": "Actual GPU readback plus independent CPU interval-DP oracle; no art evaluation.",
+      "float_error_tolerance_l": 3e-05
+    },
+    {
+      "case": "unsupported_part",
+      "status": "passed",
+      "global_status": 8,
+      "checks": [
+        {
+          "stage": "artifact_integrity",
+          "check": "result_buffer_shapes",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "eye_depth_and_empty_seed_values_preserved",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "source_and_seed_metadata_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "other_subjects_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "required_failure_status_bits",
+          "passed": true,
+          "details": 8
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "exact_original_seed_color_depth",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "global_failure_preserves_original",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "stage_dp",
+          "check": "global_failure_is_not_marked_ready",
+          "passed": true,
+          "details": []
+        }
+      ],
+      "stage_dp": {
+        "status": "not_run_expected_global_failure",
+        "groups": []
+      },
+      "evidence": "Actual GPU readback plus independent CPU interval-DP oracle; no art evaluation.",
+      "float_error_tolerance_l": 3e-05
+    }
+  ],
+  "visual_design_validation": "not_performed",
+  "runtime_performance_validation": "not_performed"
+}

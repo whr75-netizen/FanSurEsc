@@ -2311,3 +2311,15 @@ Interactable (abstract base class)
 - `[좁은 검증·CALL]` 최종 코드 대표 Play에서 가상 Mouse state→InputSystem.Update→동일 CameraFollow.Update/LateUpdate 호출로18개 결과를 확인했다: RMB 시작/회전/놓기 유지, pitch10/80, Player 화면 좌표 보존, UI/ESC 차단, 포커스/disable 커서 해제, 최초 시점 복원, 동일 Player entity/transform, 기존 사용자 key 검증과 휠 binding 보존. 실패0. 재바인딩 후보 RMB는 저장 전 검증에서 거부한다. 실제 하드웨어 드래그·휠 연속 조작이나 Player build를 통과했다고 기록하지 않는다.
 - `[미리보기·정리]` 실제 GameMap1 카메라의 기본 시점과 낮은 정면을 PNG로 촬영해 제시하고 사용자 감도/각도 의견을 요청했다. 앞의 좀비가 몸체를 가리는 정상 깊이 판정은 유지한다. offset(2,10,-10), Euler(45,350,0), cursor None/visible=true, background=false 복원 후 Play 종료했다. 입력 binding 확인용 초기 Play 진입1회는 코드 검토 후 종료했고 대표 검증은 최종 코드에서1회 수행했다. 씬 전환 전체 한 판·렌더 전방위/GPU 검증은 반복하지 않았다. 사용자 dirty 씬·재질·preview prefab은 수정·stage 대상이 아니다.
 - `[사용자 승인·마감]` 사용자가 현재 값을 그대로 커밋하도록 승인했다. 이후 외형·감도 추가 조정은 하지 않았다. 최종 Console Error/Exception/Assert0, 관련 경로 diff whitespace 오류0을 확인했다.
+
+---
+
+## 132. 웹 픽셀 수학 기반 실시간 적응형 명암 시험 `[CHARACTER-RENDER-01]`
+
+- `[요청·2026-09-08]` 수정된 웹/Python 알고리즘의 수학으로 Unity 픽셀 렌더를 다시 구성해 개선 가능성을 시험한다. 오프라인 PNG 처리의 반복이나 생성형 아트 교체가 아니다. 이전의 고정 팔레트/균등 명암 단계가 같은 알고리즘이었다고 주장하지 않는다.
+- `[구현]` 기존 캐릭터 RendererFeature의 셀 source→composite 사이에 opt-in GPU 분석을 추가했다. 원본 해상도 무광 source의 Subject/부위 ID + 정규화 Oklab 색 계열, 적응형32-bin 관측색 histogram, uint64-pair moments, 단계 수 가변1D DP, 4×4→2×2 공간 대비 guard와 근거 있는 밝음 후보를 사용한다. 원본 RGB 후보만 선택하며 source 셀 위치·ID·깊이·몸체·외곽선은 바꾸지 않는다. 정상 렌더는 CPU readback 없이7 compute pass와 transient 자원을 쓴다. Chibi prefab의 시험 bool과 PC_Renderer의 compute 참조/수치만 추가했다. 다른 모델·재질·본·Animator·게임플레이 및 기존 전체화면 효과는 보존했다.
+- `[한계·명시]` 연결 성분/관측 중심 covering/다중 Gaussian을 그대로 옮긴 것이 아니라 부위 경계·색상 격자/32bin/공간 타일로 제한한 이식이다. disconnected 같은 계열은 통계를 공유할 수 있다. 한 캐릭터/160그룹/4MP 자원 상한과 실패 상태를 명시한다. 현재 머리카락의 약한 밝음이 사라지는 차이는 남아 있으며 임의 재보정하지 않았다. 시간 누적·팔레트 안정화·다중 캐릭터·빌드는 미검증이다.
+- `[GPU 검증]` Unity6000.5.9f1/URP17.5/D3D11/RTX2080Ti. 독립 CPU·fixture·검증기 검사22개 통과. 실제 GPU7case중6개 전체 통과, four_observed_levels는K4·RGB·깊이·ID 보존 통과지만 보고 RMS가9.16e-5로 엄격3e-5 비교를 실패했다. 실제 palette 오차는약6e-8이며 float moment 상쇄의 연산 오차 범위 안이다. 실패summary를 그대로 보존했고 허용치를 임의 상향하지 않았다. 현행.06/시험.001 판정은 동일하나 극소 오차 제어는 제한이다. 실제RGBAHalf/RGBA32 broad-gradient 추가1case도 통과했다.
+- `[Play·CALL]` GameMap1 Play1회, 같은frame2의 실제Player/Camera로 정면·45도×기존/연속입력/적응형6장을 촬영했다. 동일Player entity568105589213736218·Camera568105589213735872·위치·프레임·재질 참조·2px와 임시 조명/카메라/Time 복원을 확인했다. 이후 배경 실행을 임시 허용해 실제frame5869의936×857 렌더에서 READY6그룹(global0, 공간guard1)을 확인했다. 추가7compute의 단일측정 GPU .354304ms / CPU .0555ms / inlineCPU .0103ms이며 추가source raster·합성·전체프레임 비용은 제외한다. 이동 입력·씬 전환·장시간 깜빡임 검증으로 확대 해석하지 않는다.
+- `[컴파일·복구]` 첫 FXC 컴파일의 과도한 루프 확장으로 메모리가 급증해 이 프로젝트 소속 컴파일 worker만 확인 후 중단했다. [fastopt][loop]로 연산/동기화는 유지한 채 컴파일러 확장을 제한하여 최종shader와7커널의 오류/경고0을 확인했다. 해결 전 worker중단 Console오류4건은 삭제하지 않았다. Play 종료·background false·profiler off·GameMap1 복원. 원래 조명 feature의 Create()가 메모리에서 변경한 depth bind 직렬화는 이번 diff에 섞지 않고 작업 전 저장값을 Editor API로 보존했다.
+- `[저장·미리보기]` 시험 기능을 다시 사용할 수 있도록 Chibi/PC_Renderer의 두 opt-in을ON으로 저장했다. 두 옵션OFF가 기존 방식이며 다른 기능으로 대체하지 않는다. 최종 외형은 사용자 판단 대기. 간단 설명/제한/재현은 `docs/ai/CHARACTER_ADAPTIVE_TONES.txt`, 원본6PNG·비교PNG·GPU원본/summary·수치감사·실행명령은 `LocalOnly/AdaptiveToneUnityReview_20260908/`에 보존했다.

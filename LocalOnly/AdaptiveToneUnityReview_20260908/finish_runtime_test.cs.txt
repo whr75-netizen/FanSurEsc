@@ -1,0 +1,24 @@
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering.Universal;
+using FantasySurvival.Rendering;
+using FantasySurvival.CharacterPresentation;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        var data = AssetDatabase.LoadAssetAtPath<ScriptableRendererData>("Assets/Settings/PC_Renderer.asset");
+        foreach (var item in data.rendererFeatures) if (item is CharacterSilhouetteRendererFeature feature)
+        {
+            result.RegisterObjectModification(feature);
+            feature.SetAdaptiveToneProfilingEnabled(false);
+            feature.ConfigureAdaptiveToneExperiment(null, false);
+        }
+        foreach (var subject in Object.FindObjectsByType<CharacterSilhouetteSubject>(FindObjectsSortMode.None))
+            if (subject.AdaptiveToneExperiment) { result.RegisterObjectModification(subject); subject.SetAdaptiveToneExperiment(false); }
+        Application.runInBackground = SessionState.GetBool("AdaptiveToneReview.PreviousRunInBackground", false);
+        SessionState.EraseBool("AdaptiveToneReview.PreviousRunInBackground");
+        result.Log("Restored background={0}; profiling off; runtime experiment off; frame={1}. Exiting Play without scene save.", Application.runInBackground, Time.frameCount);
+        if (EditorApplication.isPlaying) EditorApplication.ExitPlaymode();
+    }
+}

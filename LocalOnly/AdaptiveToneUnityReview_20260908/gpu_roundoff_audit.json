@@ -1,0 +1,104 @@
+{
+  "case": "four_observed_levels",
+  "stage": "binary32_prefix_sse_roundoff_audit",
+  "binary32_unit_roundoff": 5.960464477539063e-08,
+  "gamma_6": 3.5762799655008193e-07,
+  "groups": [
+    {
+      "group": 96,
+      "gpu_tone_count": 4.0,
+      "fixture_tone_error": 0.001,
+      "gpu_reported_rmse_l": 9.155274165095761e-05,
+      "exact_moments_rmse_using_gpu_float_representatives_l": 6.664002404232342e-08,
+      "reported_normalized_sse": 7.62939453125e-06,
+      "binary32_operation_error_envelope_rmse_l": [
+        0.0,
+        0.0005694005481834681
+      ],
+      "reported_error_is_inside_operation_envelope": true,
+      "fixture_rmse_acceptance_unchanged": true,
+      "reported_error_below_inspector_minimum_1e_4": true,
+      "intervals": [
+        {
+          "occupied_bins": [
+            0
+          ],
+          "population": 128,
+          "representative_u_float32": 0.0,
+          "exact_source_sum_u": 0.0,
+          "gpu_prefix_interval_sum_u": 0.0,
+          "exact_source_sum_u2": 0.0,
+          "gpu_prefix_interval_sum_u2": 0.0,
+          "exact_moment_sse": 0.0,
+          "sse_before_final_float_operations": 0.0,
+          "moment_prefix_sse_error": 0.0,
+          "six_operation_roundoff_bound": 0.0,
+          "expanded_sse_interval": [
+            0.0,
+            0.0
+          ]
+        },
+        {
+          "occupied_bins": [
+            10
+          ],
+          "population": 128,
+          "representative_u_float32": 0.33333325386047363,
+          "exact_source_sum_u": 42.666666666666664,
+          "gpu_prefix_interval_sum_u": 42.66666793823242,
+          "exact_source_sum_u2": 14.222222222222221,
+          "gpu_prefix_interval_sum_u2": 14.222222328186035,
+          "exact_moment_sse": 8.084397349092695e-13,
+          "sse_before_final_float_operations": -7.417456799885258e-07,
+          "moment_prefix_sse_error": -7.417464884282607e-07,
+          "six_operation_roundoff_bound": 2.0345054849714257e-05,
+          "expanded_sse_interval": [
+            0.0,
+            1.960330916972573e-05
+          ]
+        },
+        {
+          "occupied_bins": [
+            21
+          ],
+          "population": 128,
+          "representative_u_float32": 0.6666665077209473,
+          "exact_source_sum_u": 85.33333333333333,
+          "gpu_prefix_interval_sum_u": 85.33332824707031,
+          "exact_source_sum_u2": 56.888888888888886,
+          "gpu_prefix_interval_sum_u2": 56.888893127441406,
+          "exact_moment_sse": 3.233758939637078e-12,
+          "sse_before_final_float_operations": 1.1020238162018359e-05,
+          "moment_prefix_sse_error": 1.1020234928259419e-05,
+          "six_operation_roundoff_bound": 8.138021712512033e-05,
+          "expanded_sse_interval": [
+            0.0,
+            9.240045528713869e-05
+          ]
+        },
+        {
+          "occupied_bins": [
+            31
+          ],
+          "population": 128,
+          "representative_u_float32": 1.0,
+          "exact_source_sum_u": 128.0,
+          "gpu_prefix_interval_sum_u": 128.0,
+          "exact_source_sum_u2": 128.0,
+          "gpu_prefix_interval_sum_u2": 128.0,
+          "exact_moment_sse": 0.0,
+          "sse_before_final_float_operations": 0.0,
+          "moment_prefix_sse_error": 0.0,
+          "six_operation_roundoff_bound": 0.00018310553423364195,
+          "expanded_sse_interval": [
+            0.0,
+            0.00018310553423364195
+          ]
+        }
+      ]
+    }
+  ],
+  "changes_to_gpu_or_validator": "none; original failing strict-tolerance summary preserved",
+  "interpretation": "An operation-derived enclosure explains the residual; it does not prove exact RMSE reporting at arbitrarily small tolerances.",
+  "low_tolerance_limit": "If a requested tolerance is below the reported numerical residual, a visually exact observed palette can be rejected. Current fixture acceptance is checked separately."
+}

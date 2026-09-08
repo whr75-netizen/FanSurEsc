@@ -1,0 +1,653 @@
+// Experimental source-observed quantization; this is not a fixed-tone shader.
+//
+// Dispatch order (separate dispatches provide the global synchronization):
+// Clear(1280,1,1), GatherGroups(ceil(W/8),ceil(H/8),1), GatherHistogram(same),
+// SolveTones(160,1,1), GatherHighlights(same image grid), SolveHighlights(160,1,1),
+// Resolve(same image grid). All buffers are scratch data owned by the caller.
+//
+// uint buffers / element counts (stride 4):
+// Groups 160*8; Histogram 160*32*6; Tiles 160*16*3;
+// TileHistogram 160*16*32; Supports 160*2; HighlightHistogram 160*32*5;
+// Status 161. float4 buffers (stride 16): Palette 160*32; Solutions 160*3.
+//
+// Deliberate differences from the Python reference:
+// * A subject/part fence plus zero-centered chromaticity grid replaces connected
+//   source domains / actual-center covering. Disconnected parts can share tones.
+// * 32 adaptive histogram bins restrict partitions and representative candidates.
+//   Each candidate is an ACTUAL dense-source RGB, never a bin-center/average RGB.
+// * Moments use normalized-L uint16 samples and exact uint64-pair atomic sums.
+//   Representative choice uses a quantized bin-center distance, then pixel index.
+// * Masked 4x4 -> 2x2 spatial tile means replace Gaussian scale-space supports.
+//   Both scales need variance coherence >= .35 and support overlap >= .65.
+//   This protects one broad contrast; it is not material or fine-edge recognition.
+// * As in Python, only the SSE-optimal candidate at each K is checked against
+//   support contrast. First passing K is NOT a global constrained minimum.
+// No frame history, temporal stabilization, silent resource clamp, or RGB mixing.
+//
+// Supported input: one selected 16-bit subject, part IDs 0..4, <= 4,194,304 pixels,
+// finite linear RGB in [0,16], positive finite eye depth. HDR is not clipped;
+// adaptive L range preserves absolute Oklab-L error units. Source and sparse
+// seed textures must share dimensions, color encoding and original shading.
+// _ToneOutput copies sparse source alpha (eye depth) and all other subjects.
+// Meta is read-only. There is no alpha/color reconstruction at empty seeds.
+//
+// Status[0..159]: 1 READY, 2 broad guard present, 4 RMS failed, 8 contrast failed.
+// Status[160]: 1 hash capacity, 2 dimensions, 4 RGB/depth, 8 part/chroma range,
+// 16 settings, 32 sparse seed key missing. Any failure preserves original RGB;
+// a retained original is explicitly NOT a successful tone result.
+// Solutions[group*3+0] = (K, weighted RMSE L, required contrast, actual contrast).
+// Solutions[group*3+1] = (brightest base L, accent L, accent cutoff L, enabled).
+// Solutions[group*3+2].rgb = actual observed accent RGB.
+
+#pragma kernel Clear
+#pragma kernel GatherGroups
+#pragma kernel GatherHistogram
+#pragma kernel SolveTones
+#pragma kernel GatherHighlights
+#pragma kernel SolveHighlights
+#pragma kernel Resolve
+#pragma target 5.0
+
+#define TONE_GROUPS 160u
+#define TONE_BINS 32u
+#define TONE_TILES 16u
+#define TONE_PIXEL_MASK 4194303u
+#define TONE_Q 65535.0
+#define TONE_INF 3.402823466e+38
+
+Texture2D<float4> _ToneSourceColor;
+Texture2D<float4> _ToneSourceMeta;
+Texture2D<float4> _ToneCellColor;
+Texture2D<float4> _ToneCellMeta;
+RWTexture2D<float4> _ToneOutput;
+RWStructuredBuffer<uint> _ToneGroups;
+RWStructuredBuffer<uint> _ToneHistogram;
+RWStructuredBuffer<uint> _ToneTiles;
+RWStructuredBuffer<uint> _ToneTileHistogram;
+RWStructuredBuffer<uint> _ToneSupports;
+RWStructuredBuffer<uint> _ToneHighlightHistogram;
+RWStructuredBuffer<uint> _ToneStatus;
+RWStructuredBuffer<float4> _TonePalette;
+RWStructuredBuffer<float4> _ToneSolutions;
+
+int _ToneWidth;
+int _ToneHeight;
+int _ToneSubjectId;
+float _ToneError;
+float _ToneChromaError;
+float _ToneContrastRetention;
+float _ToneMinimumContrast;
+float _ToneHighlightMinimumContrast;
+
+// Only integer atomics touch shared histograms. Carry increments commute even
+// when another invocation adds to the low word before this carry is recorded.
+#define TONE_ADD_PAIR(BUFFER, OFFSET, VALUE) { \
+    uint toneOldWord; \
+    InterlockedAdd(BUFFER[OFFSET], VALUE, toneOldWord); \
+    if (toneOldWord > 0xffffffffu - (VALUE)) InterlockedAdd(BUFFER[(OFFSET) + 1u], 1u); \
+}
+
+float PairValue(uint lowWord, uint highWord)
+{
+    return (float)highWord * 4294967296.0 + (float)lowWord;
+}
+
+float3 LinearToOklab(float3 rgb)
+{
+    float3 lms = float3(
+        dot(rgb, float3(.4122214708, .5363325363, .0514459929)),
+        dot(rgb, float3(.2119034982, .6806995451, .1073969566)),
+        dot(rgb, float3(.0883024619, .2817188376, .6299787005)));
+    lms = pow(max(lms, 0.0), 1.0 / 3.0);
+    return float3(
+        dot(lms, float3(.2104542553, .7936177850, -.0040720468)),
+        dot(lms, float3(1.9779984951, -2.4285922050, .4505937099)),
+        dot(lms, float3(.0259040371, .7827717662, -.8086757660)));
+}
+
+uint Subject(float4 meta)
+{
+    return (uint)round(meta.r * 255.0) + ((uint)round(meta.a * 255.0) << 8u);
+}
+
+bool InBounds(uint2 pixel)
+{
+    return pixel.x < (uint)_ToneWidth && pixel.y < (uint)_ToneHeight;
+}
+
+bool ValidColorDepth(float4 value)
+{
+    return all(isfinite(value)) && all(value.rgb >= 0.0) &&
+        all(value.rgb <= 16.0) && value.a > 0.0;
+}
+
+uint ColorKey(float3 lab, float4 meta)
+{
+    uint part = (uint)round(meta.g * 255.0);
+    float2 chroma = lab.yz / max(lab.x, .05);
+    // Zero chroma sits at a cell center, not at a floating-point sign boundary.
+    int2 cell = (int2)floor(chroma / (_ToneChromaError * .7071067811865475) + .5);
+    if (part > 4u || any(cell < -128) || any(cell > 127)) return 0u;
+    return ((part + 1u) << 16u) | ((uint)(cell.x + 128) << 8u) | (uint)(cell.y + 128);
+}
+
+uint FindGroup(uint key)
+{
+    uint slot = (key * 2654435761u) % TONE_GROUPS;
+    [loop] for (uint probe = 0u; probe < TONE_GROUPS; ++probe)
+    {
+        uint stored = _ToneGroups[slot * 8u];
+        if (stored == key) return slot;
+        if (stored == 0u) return TONE_GROUPS;
+        slot = (slot + 1u) % TONE_GROUPS;
+    }
+    return TONE_GROUPS;
+}
+
+float2 LightnessRange(uint group)
+{
+    float minimum = asfloat(_ToneGroups[group * 8u + 6u]);
+    float maximum = asfloat(_ToneGroups[group * 8u + 7u]);
+    return float2(minimum, max(maximum - minimum, 0.0));
+}
+
+float NormalizeL(float lightness, float2 range)
+{
+    return range.y > 1e-8 ? saturate((lightness - range.x) / range.y) : 0.0;
+}
+
+uint LightnessBin(float normalizedL)
+{
+    return min((uint)(normalizedL * TONE_BINS), TONE_BINS - 1u);
+}
+
+uint SpatialTile(uint2 pixel, uint group)
+{
+    uint2 origin = uint2(_ToneGroups[group * 8u + 2u], _ToneGroups[group * 8u + 3u]);
+    uint2 maximum = uint2(_ToneGroups[group * 8u + 4u], _ToneGroups[group * 8u + 5u]);
+    uint2 tile = min((pixel - origin) * 4u / (maximum - origin + 1u), 3u);
+    return tile.y * 4u + tile.x;
+}
+
+float4 Candidate(uint group, uint bin)
+{
+    uint packed = _ToneHistogram[(group * TONE_BINS + bin) * 6u + 5u];
+    uint index = packed & TONE_PIXEL_MASK;
+    float3 rgb = _ToneSourceColor.Load(int3(index % (uint)_ToneWidth, index / (uint)_ToneWidth, 0)).rgb;
+    return float4(rgb, LinearToOklab(rgb).x);
+}
+
+[numthreads(64, 1, 1)]
+void Clear(uint3 id : SV_DispatchThreadID)
+{
+    uint index = id.x;
+    if (index < TONE_GROUPS * 8u)
+    {
+        uint field = index % 8u;
+        _ToneGroups[index] = field == 2u || field == 3u || field == 6u ? 0xffffffffu : 0u;
+    }
+    if (index < TONE_GROUPS * TONE_BINS * 6u)
+        _ToneHistogram[index] = index % 6u == 5u ? 0xffffffffu : 0u;
+    if (index < TONE_GROUPS * TONE_TILES * 3u) _ToneTiles[index] = 0u;
+    if (index < TONE_GROUPS * TONE_TILES * TONE_BINS) _ToneTileHistogram[index] = 0u;
+    if (index < TONE_GROUPS * 2u) _ToneSupports[index] = 0u;
+    if (index < TONE_GROUPS * TONE_BINS * 5u) _ToneHighlightHistogram[index] = 0u;
+    // Palette/Solutions initialize in SolveTones: keeping Clear to seven UAVs
+    // avoids exceeding the D3D11 eight-UAV binding limit.
+    if (index < TONE_GROUPS) _ToneStatus[index] = 0u;
+    if (index == TONE_GROUPS)
+    {
+        uint status = 0u;
+        if (_ToneWidth <= 0 || _ToneHeight <= 0 || _ToneWidth > 4194304 ||
+            _ToneHeight > 4194304 || (uint)_ToneWidth > 4194304u / max((uint)_ToneHeight, 1u)) status |= 2u;
+        if (_ToneSubjectId <= 0 || _ToneSubjectId > 65535 ||
+            !isfinite(_ToneError) || _ToneError <= 0.0 || _ToneError > 1.0 ||
+            !isfinite(_ToneChromaError) || _ToneChromaError < .005 || _ToneChromaError > 1.0 ||
+            !isfinite(_ToneContrastRetention) || _ToneContrastRetention <= 0.0 || _ToneContrastRetention > 1.0 ||
+            !isfinite(_ToneMinimumContrast) || _ToneMinimumContrast <= 0.0 || _ToneMinimumContrast > 1.0 ||
+            !isfinite(_ToneHighlightMinimumContrast) || _ToneHighlightMinimumContrast <= 0.0 || _ToneHighlightMinimumContrast > 1.0)
+            status |= 16u;
+        _ToneStatus[TONE_GROUPS] = status;
+    }
+}
+
+[numthreads(8, 8, 1)]
+void GatherGroups(uint3 id : SV_DispatchThreadID)
+{
+    if (!InBounds(id.xy) || (_ToneStatus[TONE_GROUPS] & 18u) != 0u) return;
+    float4 meta = _ToneSourceMeta.Load(int3(id.xy, 0));
+    if (Subject(meta) != (uint)_ToneSubjectId) return;
+    float4 source = _ToneSourceColor.Load(int3(id.xy, 0));
+    if (!ValidColorDepth(source)) { InterlockedOr(_ToneStatus[TONE_GROUPS], 4u); return; }
+    float3 lab = LinearToOklab(source.rgb);
+    uint key = ColorKey(lab, meta);
+    if (key == 0u) { InterlockedOr(_ToneStatus[TONE_GROUPS], 8u); return; }
+    uint slot = (key * 2654435761u) % TONE_GROUPS;
+    [loop] for (uint probe = 0u; probe < TONE_GROUPS; ++probe)
+    {
+        uint previous;
+        InterlockedCompareExchange(_ToneGroups[slot * 8u], 0u, key, previous);
+        if (previous == 0u || previous == key)
+        {
+            InterlockedAdd(_ToneGroups[slot * 8u + 1u], 1u);
+            InterlockedMin(_ToneGroups[slot * 8u + 2u], id.x);
+            InterlockedMin(_ToneGroups[slot * 8u + 3u], id.y);
+            InterlockedMax(_ToneGroups[slot * 8u + 4u], id.x);
+            InterlockedMax(_ToneGroups[slot * 8u + 5u], id.y);
+            InterlockedMin(_ToneGroups[slot * 8u + 6u], asuint(max(lab.x, 0.0)));
+            InterlockedMax(_ToneGroups[slot * 8u + 7u], asuint(max(lab.x, 0.0)));
+            return;
+        }
+        slot = (slot + 1u) % TONE_GROUPS;
+    }
+    InterlockedOr(_ToneStatus[TONE_GROUPS], 1u);
+}
+
+[numthreads(8, 8, 1)]
+void GatherHistogram(uint3 id : SV_DispatchThreadID)
+{
+    if (!InBounds(id.xy) || _ToneStatus[TONE_GROUPS] != 0u) return;
+    float4 meta = _ToneSourceMeta.Load(int3(id.xy, 0));
+    if (Subject(meta) != (uint)_ToneSubjectId) return;
+    float3 lab = LinearToOklab(_ToneSourceColor.Load(int3(id.xy, 0)).rgb);
+    uint group = FindGroup(ColorKey(lab, meta));
+    if (group >= TONE_GROUPS) return;
+    float u = NormalizeL(lab.x, LightnessRange(group));
+    uint bin = LightnessBin(u);
+    uint q = (uint)round(u * TONE_Q);
+    uint base = (group * TONE_BINS + bin) * 6u;
+    InterlockedAdd(_ToneHistogram[base], 1u);
+    TONE_ADD_PAIR(_ToneHistogram, base + 1u, q);
+    TONE_ADD_PAIR(_ToneHistogram, base + 3u, q * q);
+    uint distance = min((uint)round(abs(u * TONE_BINS - ((float)bin + .5)) * 1023.0), 1023u);
+    uint candidate = (distance << 22u) | (id.y * (uint)_ToneWidth + id.x);
+    InterlockedMin(_ToneHistogram[base + 5u], candidate);
+    uint tile = SpatialTile(id.xy, group);
+    uint tileBase = (group * TONE_TILES + tile) * 3u;
+    InterlockedAdd(_ToneTiles[tileBase], 1u);
+    TONE_ADD_PAIR(_ToneTiles, tileBase + 1u, q);
+    InterlockedAdd(_ToneTileHistogram[(group * TONE_TILES + tile) * TONE_BINS + bin], 1u);
+}
+
+groupshared uint sCount[32];
+groupshared float sSum[32];
+groupshared float sSquare[32];
+groupshared float4 sCandidate[32];
+groupshared uint sActive[32];
+groupshared uint sActiveCount;
+groupshared float sWeightPrefix[33];
+groupshared float sSumPrefix[33];
+groupshared float sSquarePrefix[33];
+groupshared float sCost[1024];
+groupshared uint sCostRepresentative[1024];
+groupshared uint sBack[1089];
+groupshared float sPrevious[33];
+groupshared float sCurrent[33];
+groupshared uint sMap[32];
+groupshared float sCoefficient[32];
+groupshared uint sLowMask;
+groupshared uint sHighMask;
+groupshared float sRequired;
+groupshared float sRetained;
+groupshared float sRmse;
+groupshared uint sReady;
+groupshared uint sSelectedK;
+
+// Means use occupied tiles only; moments/coherence still weight actual pixels.
+// These tile quantiles are an explicit approximation to source-pixel quantiles.
+void TileMasks(float means[16], uint counts[16], uint size,
+    out uint lowMask, out uint highMask)
+{
+    float sorted[16];
+    uint used = 0u;
+    [fastopt] [loop] for (uint i = 0u; i < 16u; ++i)
+    {
+        bool occupied = i < size && counts[i] > 0u;
+        sorted[i] = occupied ? means[i] : TONE_INF;
+        if (occupied) ++used;
+    }
+    // Fixed bounds avoid an FXC diagnostic on a data-dependent insertion loop.
+    [fastopt] [loop] for (uint sortPass = 0u; sortPass < 15u; ++sortPass)
+    {
+        [fastopt] [loop] for (uint j = 0u; j < 15u; ++j)
+        {
+            float left = sorted[j];
+            float right = sorted[j + 1u];
+            sorted[j] = min(left, right);
+            sorted[j + 1u] = max(left, right);
+        }
+    }
+    lowMask = highMask = 0u;
+    if (used < 2u) return;
+    float lowPosition = (used - 1u) * .2;
+    float highPosition = (used - 1u) * .8;
+    float low = lerp(sorted[(uint)floor(lowPosition)], sorted[(uint)ceil(lowPosition)], frac(lowPosition));
+    float high = lerp(sorted[(uint)floor(highPosition)], sorted[(uint)ceil(highPosition)], frac(highPosition));
+    if (high - low <= 1e-8) return;
+    [fastopt] [loop] for (uint j = 0u; j < size; ++j)
+    {
+        if (counts[j] == 0u) continue;
+        if (means[j] <= low) lowMask |= 1u << j;
+        if (means[j] >= high) highMask |= 1u << j;
+    }
+}
+
+void BuildBroadSupport(uint group, float2 range)
+{
+    sLowMask = sHighMask = 0u;
+    sRequired = 0.0;
+    float count = sWeightPrefix[sActiveCount];
+    float mean = sSumPrefix[sActiveCount] / count;
+    float variance = max(sSquarePrefix[sActiveCount] / count - mean * mean, 0.0);
+    if (variance <= 1e-12 || range.y < _ToneMinimumContrast) return;
+    uint counts[16];
+    float sums[16];
+    float means[16];
+    uint coarseCounts[16];
+    float coarseSums[16];
+    float coarseMeans[16];
+    [fastopt] [loop] for (uint reset = 0u; reset < 16u; ++reset)
+    {
+        coarseCounts[reset] = 0u;
+        coarseSums[reset] = coarseMeans[reset] = 0.0;
+    }
+    float fineVariance = 0.0;
+    [fastopt] [loop] for (uint tile = 0u; tile < 16u; ++tile)
+    {
+        uint base = (group * TONE_TILES + tile) * 3u;
+        counts[tile] = _ToneTiles[base];
+        sums[tile] = PairValue(_ToneTiles[base + 1u], _ToneTiles[base + 2u]) / TONE_Q;
+        means[tile] = counts[tile] > 0u ? sums[tile] / counts[tile] : 0.0;
+        fineVariance += counts[tile] * (means[tile] - mean) * (means[tile] - mean);
+        uint coarse = (tile / 8u) * 2u + (tile % 4u) / 2u;
+        coarseCounts[coarse] += counts[tile];
+        coarseSums[coarse] += sums[tile];
+    }
+    float coarseVariance = 0.0;
+    [unroll] for (uint cell = 0u; cell < 4u; ++cell)
+    {
+        coarseMeans[cell] = coarseCounts[cell] > 0u ? coarseSums[cell] / coarseCounts[cell] : 0.0;
+        coarseVariance += coarseCounts[cell] * (coarseMeans[cell] - mean) * (coarseMeans[cell] - mean);
+    }
+    if (fineVariance / (count * variance) < .35 || coarseVariance / (count * variance) < .35) return;
+    uint fineLow, fineHigh, coarseLow, coarseHigh;
+    TileMasks(means, counts, 16u, fineLow, fineHigh);
+    TileMasks(coarseMeans, coarseCounts, 4u, coarseLow, coarseHigh);
+    if (fineLow == 0u || fineHigh == 0u || coarseLow == 0u || coarseHigh == 0u) return;
+    float fineLowCount = 0.0, fineHighCount = 0.0, lowCount = 0.0, highCount = 0.0;
+    float lowOverlap = 0.0, highOverlap = 0.0, lowSum = 0.0, highSum = 0.0;
+    uint lowMask = 0u, highMask = 0u;
+    [fastopt] [loop] for (uint t = 0u; t < 16u; ++t)
+    {
+        uint bit = 1u << t;
+        uint coarseBit = 1u << ((t / 8u) * 2u + (t % 4u) / 2u);
+        if ((fineLow & bit) != 0u) fineLowCount += counts[t];
+        if ((fineHigh & bit) != 0u) fineHighCount += counts[t];
+        if ((coarseLow & coarseBit) != 0u)
+        {
+            lowMask |= bit; lowCount += counts[t]; lowSum += sums[t];
+            if ((fineLow & bit) != 0u) lowOverlap += counts[t];
+        }
+        if ((coarseHigh & coarseBit) != 0u)
+        {
+            highMask |= bit; highCount += counts[t]; highSum += sums[t];
+            if ((fineHigh & bit) != 0u) highOverlap += counts[t];
+        }
+    }
+    if (min(lowCount, highCount) <= 0.0 || min(fineLowCount, fineHighCount) <= 0.0 ||
+        lowOverlap / min(fineLowCount, lowCount) < .65 ||
+        highOverlap / min(fineHighCount, highCount) < .65) return;
+    float contrast = range.y * (highSum / highCount - lowSum / lowCount);
+    if (contrast < _ToneMinimumContrast) return;
+    sLowMask = lowMask;
+    sHighMask = highMask;
+    sRequired = contrast * _ToneContrastRetention;
+}
+
+[numthreads(32, 1, 1)]
+void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
+{
+    uint group = workgroup.x;
+    if (group >= TONE_GROUPS) return;
+    // Each address has one initialization writer and the same eventual writer.
+    // Negative L is an empty-bin marker; L=0 is a valid observed black color.
+    _TonePalette[group * TONE_BINS + lane] = float4(0.0, 0.0, 0.0, -1.0);
+    if (lane == 0u)
+    {
+        _ToneSolutions[group * 3u] = 0.0;
+        _ToneSolutions[group * 3u + 1u] = 0.0;
+        _ToneSolutions[group * 3u + 2u] = 0.0;
+    }
+    bool enabled = _ToneStatus[TONE_GROUPS] == 0u && _ToneGroups[group * 8u] != 0u;
+    uint base = (group * TONE_BINS + lane) * 6u;
+    sCount[lane] = enabled ? _ToneHistogram[base] : 0u;
+    sSum[lane] = enabled ? PairValue(_ToneHistogram[base + 1u], _ToneHistogram[base + 2u]) / TONE_Q : 0.0;
+    sSquare[lane] = enabled ? PairValue(_ToneHistogram[base + 3u], _ToneHistogram[base + 4u]) / (TONE_Q * TONE_Q) : 0.0;
+    sCandidate[lane] = 0.0;
+    if (sCount[lane] > 0u) sCandidate[lane] = Candidate(group, lane);
+    sMap[lane] = 0u;
+    sPrevious[lane] = TONE_INF;
+    float2 range = 0.0;
+    if (enabled) range = LightnessRange(group);
+    GroupMemoryBarrierWithGroupSync();
+    if (lane == 0u)
+    {
+        sActiveCount = 0u;
+        sWeightPrefix[0] = sSumPrefix[0] = sSquarePrefix[0] = 0.0;
+        [fastopt] [loop] for (uint b = 0u; b < TONE_BINS; ++b)
+        {
+            if (sCount[b] == 0u) continue;
+            uint end = ++sActiveCount;
+            sActive[end - 1u] = b;
+            sWeightPrefix[end] = sWeightPrefix[end - 1u] + sCount[b];
+            sSumPrefix[end] = sSumPrefix[end - 1u] + sSum[b];
+            sSquarePrefix[end] = sSquarePrefix[end - 1u] + sSquare[b];
+        }
+        sPrevious[0] = 0.0;
+        sPrevious[32] = TONE_INF;
+        sReady = sSelectedK = 0u;
+        sRmse = sRetained = 0.0;
+        sLowMask = sHighMask = 0u;
+        sRequired = 0.0;
+        if (sActiveCount > 0u) BuildBroadSupport(group, range);
+        _ToneSupports[group * 2u] = sLowMask;
+        _ToneSupports[group * 2u + 1u] = sHighMask;
+    }
+    GroupMemoryBarrierWithGroupSync();
+    // Fixed support histograms evaluate any palette without refitting supports.
+    float lowCount = 0.0, highCount = 0.0, lowBin = 0.0, highBin = 0.0;
+    [fastopt] [loop] for (uint tile = 0u; tile < TONE_TILES; ++tile)
+    {
+        uint count = _ToneTiles[(group * TONE_TILES + tile) * 3u];
+        uint binCount = _ToneTileHistogram[(group * TONE_TILES + tile) * TONE_BINS + lane];
+        if ((sLowMask & (1u << tile)) != 0u) { lowCount += count; lowBin += binCount; }
+        if ((sHighMask & (1u << tile)) != 0u) { highCount += count; highBin += binCount; }
+    }
+    sCoefficient[lane] = sRequired > 0.0 ? highBin / highCount - lowBin / lowCount : 0.0;
+    if (lane < sActiveCount)
+    {
+        [fastopt] [loop] for (uint end = lane; end < sActiveCount; ++end)
+        {
+            float weight = sWeightPrefix[end + 1u] - sWeightPrefix[lane];
+            float sum = sSumPrefix[end + 1u] - sSumPrefix[lane];
+            float square = sSquarePrefix[end + 1u] - sSquarePrefix[lane];
+            float mean = sum / weight;
+            uint representative = sActive[lane];
+            float bestDistance = TONE_INF;
+            [fastopt] [loop] for (uint candidate = lane; candidate <= end; ++candidate)
+            {
+                uint b = sActive[candidate];
+                float distance = abs(NormalizeL(sCandidate[b].a, range) - mean);
+                if (distance < bestDistance) { bestDistance = distance; representative = b; }
+            }
+            float r = NormalizeL(sCandidate[representative].a, range);
+            // A one-bin interval still contains source variation; never force
+            // its error to zero merely because the histogram has one bin.
+            sCost[lane * TONE_BINS + end] = max(square - 2.0 * r * sum + r * r * weight, 0.0);
+            sCostRepresentative[lane * TONE_BINS + end] = representative;
+        }
+    }
+    GroupMemoryBarrierWithGroupSync();
+    // Every lane reaches the same 32 barrier rounds, including inactive groups
+    // and already accepted candidates. UAV/shared-memory predicates must not
+    // control a barrier loop or an early return on D3D11/FXC.
+    [fastopt] [loop] for (uint k = 1u; k <= TONE_BINS; ++k)
+    {
+        uint end = lane + 1u;
+        float best = TONE_INF;
+        uint bestStart = 0u;
+        if (sReady == 0u && end >= k && end <= sActiveCount)
+        {
+            [fastopt] [loop] for (uint start = k - 1u; start < end; ++start)
+            {
+                float candidate = sPrevious[start] + sCost[start * TONE_BINS + end - 1u];
+                if (candidate < best) { best = candidate; bestStart = start; }
+            }
+        }
+        sCurrent[end] = best;
+        sBack[k * 33u + end] = bestStart;
+        GroupMemoryBarrierWithGroupSync();
+        if (lane == 0u)
+        {
+            sCurrent[0] = TONE_INF;
+            if (sReady == 0u && k <= sActiveCount)
+            {
+                sRmse = range.y * sqrt(max(sCurrent[sActiveCount], 0.0) / sWeightPrefix[sActiveCount]);
+                if (sRmse <= _ToneError + 1e-6)
+                {
+                    uint cursor = sActiveCount;
+                    [fastopt] [loop] for (uint level = k; level > 0u; --level)
+                    {
+                        uint start = sBack[level * 33u + cursor];
+                        uint representative = sCostRepresentative[start * TONE_BINS + cursor - 1u];
+                        [fastopt] [loop] for (uint n = start; n < cursor; ++n) sMap[sActive[n]] = representative;
+                        cursor = start;
+                    }
+                    sRetained = 0.0;
+                    [fastopt] [loop] for (uint b = 0u; b < TONE_BINS; ++b)
+                        if (sCount[b] > 0u) sRetained += sCoefficient[b] * sCandidate[sMap[b]].a;
+                    if (sRetained + 1e-6 >= sRequired) { sReady = 1u; sSelectedK = k; }
+                }
+            }
+        }
+        GroupMemoryBarrierWithGroupSync();
+        sPrevious[lane + 1u] = sCurrent[lane + 1u];
+        if (lane == 0u) sPrevious[0] = TONE_INF;
+        GroupMemoryBarrierWithGroupSync();
+    }
+    if (sReady != 0u && sCount[lane] > 0u) _TonePalette[group * TONE_BINS + lane] = sCandidate[sMap[lane]];
+    if (lane == 0u && enabled)
+    {
+        uint status = sRequired > 0.0 ? 2u : 0u;
+        status |= sReady != 0u ? 1u : (sRmse > _ToneError + 1e-6 ? 4u : 8u);
+        _ToneStatus[group] = status;
+        _ToneSolutions[group * 3u] = float4(sSelectedK, sRmse, sRequired, sRetained);
+        float brightest = 0.0;
+        if (sReady != 0u)
+        {
+            [fastopt] [loop] for (uint b = 0u; b < TONE_BINS; ++b)
+                if (sCount[b] > 0u) brightest = max(brightest, sCandidate[sMap[b]].a);
+        }
+        _ToneSolutions[group * 3u + 1u] = float4(brightest, 0.0, 0.0, 0.0);
+    }
+}
+
+[numthreads(8, 8, 1)]
+void GatherHighlights(uint3 id : SV_DispatchThreadID)
+{
+    if (!InBounds(id.xy) || _ToneStatus[TONE_GROUPS] != 0u) return;
+    float4 meta = _ToneSourceMeta.Load(int3(id.xy, 0));
+    if (Subject(meta) != (uint)_ToneSubjectId) return;
+    float3 lab = LinearToOklab(_ToneSourceColor.Load(int3(id.xy, 0)).rgb);
+    float lightness = lab.x;
+    uint group = FindGroup(ColorKey(lab, meta));
+    if (group >= TONE_GROUPS || (_ToneStatus[group] & 3u) != 3u) return;
+    uint tile = SpatialTile(id.xy, group);
+    if ((_ToneSupports[group * 2u + 1u] & (1u << tile)) == 0u) return;
+    float u = NormalizeL(lightness, LightnessRange(group));
+    uint bin = LightnessBin(u);
+    if (_TonePalette[group * TONE_BINS + bin].a != _ToneSolutions[group * 3u + 1u].x) return;
+    uint q = (uint)round(u * TONE_Q);
+    uint base = (group * TONE_BINS + bin) * 5u;
+    InterlockedAdd(_ToneHighlightHistogram[base], 1u);
+    TONE_ADD_PAIR(_ToneHighlightHistogram, base + 1u, q);
+    TONE_ADD_PAIR(_ToneHighlightHistogram, base + 3u, q * q);
+}
+
+[numthreads(32, 1, 1)]
+void SolveHighlights(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
+{
+    uint group = workgroup.x;
+    if (group >= TONE_GROUPS) return;
+    bool enabled = _ToneStatus[TONE_GROUPS] == 0u && (_ToneStatus[group] & 3u) == 3u;
+    sCount[lane] = enabled ? _ToneHistogram[(group * TONE_BINS + lane) * 6u] : 0u;
+    sCandidate[lane] = 0.0;
+    if (sCount[lane] > 0u) sCandidate[lane] = Candidate(group, lane);
+    GroupMemoryBarrierWithGroupSync();
+    if (lane != 0u || !enabled) return;
+    float2 range = LightnessRange(group);
+    if (range.y <= 1e-8) return;
+    float baseL = _ToneSolutions[group * 3u + 1u].x;
+    float baseU = NormalizeL(baseL, range);
+    float bestGain = 1e-9;
+    float4 accent = 0.0;
+    float cutoff = 0.0;
+    float tailCount = 0.0, tailSum = 0.0;
+    // Tail boundaries are histogram boundaries: a conservative subset of the
+    // Python observed-L tails. The final resolve also checks each actual pixel.
+    [fastopt] [loop] for (int start = 31; start >= 0; --start)
+    {
+        uint address = (group * TONE_BINS + (uint)start) * 5u;
+        tailCount += _ToneHighlightHistogram[address];
+        tailSum += PairValue(_ToneHighlightHistogram[address + 1u], _ToneHighlightHistogram[address + 2u]) / TONE_Q;
+        if (tailCount == 0.0) continue;
+        float lower = (float)start / TONE_BINS;
+        [fastopt] [loop] for (uint candidate = 0u; candidate < TONE_BINS; ++candidate)
+        {
+            if (sCount[candidate] == 0u) continue;
+            float4 value = sCandidate[candidate];
+            if (value.a < baseL + _ToneHighlightMinimumContrast) continue;
+            float u = NormalizeL(value.a, range);
+            if (u > 2.0 * lower - baseU + 1e-7) continue;
+            float gain = range.y * range.y *
+                (2.0 * (u - baseU) * tailSum + (baseU * baseU - u * u) * tailCount);
+            if (gain > bestGain) { bestGain = gain; accent = value; cutoff = range.x + lower * range.y; }
+        }
+    }
+    if (accent.a > baseL)
+    {
+        _ToneSolutions[group * 3u + 1u] = float4(baseL, accent.a, cutoff, 1.0);
+        _ToneSolutions[group * 3u + 2u] = float4(accent.rgb, bestGain);
+    }
+}
+
+[numthreads(8, 8, 1)]
+void Resolve(uint3 id : SV_DispatchThreadID)
+{
+    if (!InBounds(id.xy)) return;
+    float4 original = _ToneCellColor.Load(int3(id.xy, 0));
+    _ToneOutput[id.xy] = original;
+    // Resolve-only key-miss bit does not alter another invocation's decision.
+    if ((_ToneStatus[TONE_GROUPS] & 31u) != 0u) return;
+    float4 meta = _ToneCellMeta.Load(int3(id.xy, 0));
+    if (Subject(meta) != (uint)_ToneSubjectId || original.a <= 0.0) return;
+    if (!ValidColorDepth(original)) { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
+    float3 lab = LinearToOklab(original.rgb);
+    uint key = ColorKey(lab, meta);
+    uint group = key == 0u ? TONE_GROUPS : FindGroup(key);
+    if (group >= TONE_GROUPS) { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
+    if ((_ToneStatus[group] & 1u) == 0u) return;
+    uint bin = LightnessBin(NormalizeL(lab.x, LightnessRange(group)));
+    float4 base = _TonePalette[group * TONE_BINS + bin];
+    // A missing dense-source bin is a source/seed contract mismatch. Zero RGB
+    // cannot serve as an invented substitute, including when the source is black.
+    if (base.a < 0.0)
+    { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
+    float4 highlight = _ToneSolutions[group * 3u + 1u];
+    uint tile = SpatialTile(id.xy, group);
+    bool supported = (_ToneSupports[group * 2u + 1u] & (1u << tile)) != 0u;
+    if (highlight.w > .5 && supported && base.a == highlight.x && lab.x >= highlight.z &&
+        lab.x >= .5 * (highlight.x + highlight.y))
+        base.rgb = _ToneSolutions[group * 3u + 2u].rgb;
+    _ToneOutput[id.xy] = float4(base.rgb, original.a);
+}

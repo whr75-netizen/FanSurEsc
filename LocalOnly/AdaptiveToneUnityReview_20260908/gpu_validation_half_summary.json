@@ -1,0 +1,156 @@
+{
+  "stage": "gpu_readback_with_independent_stage_dp_oracle",
+  "status": "passed",
+  "case_count": 1,
+  "cases": [
+    {
+      "case": "broad_gradient",
+      "status": "passed",
+      "global_status": 0,
+      "checks": [
+        {
+          "stage": "artifact_integrity",
+          "check": "result_buffer_shapes",
+          "passed": true,
+          "details": {}
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "eye_depth_and_empty_seed_values_preserved",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "source_and_seed_metadata_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "other_subjects_unchanged",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "global_status",
+          "passed": true,
+          "details": 0
+        },
+        {
+          "stage": "stage_dp",
+          "check": "active_owner_group_count",
+          "passed": true,
+          "details": 1
+        },
+        {
+          "stage": "stage_dp",
+          "check": "all_active_groups_have_ready_solution",
+          "passed": true,
+          "details": {
+            "active": 1,
+            "ready": 1
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "broad_gradient_uses_multiple_tones",
+          "passed": true,
+          "details": [
+            4
+          ]
+        },
+        {
+          "stage": "stage_dp",
+          "check": "broad_source_guard_present",
+          "passed": true,
+          "details": null
+        },
+        {
+          "stage": "stage_dp",
+          "check": "independent_dp_minimum_candidate_count",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "gpu_tones": 4,
+            "oracle_tones": 4,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.037817392498254776,
+            "oracle_rmse_l": 0.03781735128779003
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_error_matches_reported_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "measured_rmse_l": 0.03781735581036465,
+            "reported_rmse_l": 0.037817392498254776
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "ready_palette_meets_requested_rmse",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "rmse_l": 0.03781735581036465
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "palette_rgb_is_actual_group_candidate",
+          "passed": true,
+          "details": {
+            "group": 96
+          }
+        },
+        {
+          "stage": "stage_dp",
+          "check": "original_support_contrast_preserved",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "required": 0.1677371710538864,
+            "actual": 0.2580495309084654
+          }
+        },
+        {
+          "stage": "highlight",
+          "check": "supported_highlight_positive_and_observed",
+          "passed": true,
+          "details": {
+            "group": 96,
+            "base_l": 0.7016687989234924,
+            "accent_l": 0.7338865995407104
+          }
+        },
+        {
+          "stage": "resolve_and_preservation",
+          "check": "resolve_matches_frozen_palette_and_supported_accent",
+          "passed": true,
+          "details": []
+        }
+      ],
+      "stage_dp": {
+        "status": "passed",
+        "groups": [
+          {
+            "group": 96,
+            "gpu_tones": 4,
+            "oracle_tones": 4,
+            "oracle_status": "ok",
+            "gpu_rmse_l": 0.037817392498254776,
+            "oracle_rmse_l": 0.03781735128779003
+          }
+        ]
+      },
+      "evidence": "Actual GPU readback plus independent CPU interval-DP oracle; no art evaluation.",
+      "float_error_tolerance_l": 3e-05
+    }
+  ],
+  "visual_design_validation": "not_performed",
+  "runtime_performance_validation": "not_performed"
+}

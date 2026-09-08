@@ -72,6 +72,14 @@ MonoBehaviour:
     maskMaterial: {fileID: 2100000, guid: 6a4e81adf59d4f749bd291894bdd76bf, type: 2}
     compositeMaterial: {fileID: 2100000, guid: 8dd089e5745a9cb43b3aef2644aea9bf, type: 2}
     injectionPoint: 550
+    adaptiveToneCompute: {fileID: 7200000, guid: ac42a62c9cb10aa4a93cad83f7edea5c, type: 3}
+    adaptiveTones:
+      enabled: 1
+      toneError: 0.06
+      chromaError: 0.06
+      contrastRetention: 0.65
+      minimumContrast: 0.025
+      highlightMinimumContrast: 0.025
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

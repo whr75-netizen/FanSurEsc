@@ -47,6 +47,11 @@ namespace FantasySurvival.CharacterPresentation
         private int pixelCellSize = 2;
 
         [SerializeField]
+        [Tooltip("Experimental native-source adaptive tone analysis. Opt in exactly one cell subject; " +
+            "other subjects and the classic renderer remain unchanged.")]
+        private bool adaptiveToneExperiment;
+
+        [SerializeField]
         [Tooltip("Optional explicit groups on this presentation root. Unmapped renderers keep " +
             "the combined outline. At a group boundary only the higher ID side receives ink: " +
             "Eyes 1, Eyebrows 2, Hair 3, Skin 4. Screen-pixel color subjects ignore this mapping.")]
@@ -61,6 +66,7 @@ namespace FantasySurvival.CharacterPresentation
         private static readonly int CellSurfaceId = Shader.PropertyToID("_CharacterCellSurface");
         private static readonly int CellSizeId = Shader.PropertyToID("_CharacterCellSize");
         private static readonly int CellSubjectId = Shader.PropertyToID("_CharacterCellSubjectId");
+        private static readonly int AdaptiveToneSourceId = Shader.PropertyToID("_CharacterAdaptiveToneSource");
 
         private static int activeSubjectCount;
         private static int activeScreenPixelSubjectCount;
@@ -84,6 +90,30 @@ namespace FantasySurvival.CharacterPresentation
         public bool ScreenSpacePixelColor => screenSpacePixelColor;
         public bool PixelCellSurface => pixelCellSurface;
         public int PixelCellSize => pixelCellSize;
+        public bool AdaptiveToneExperiment => adaptiveToneExperiment;
+
+        public static bool TryGetAdaptiveToneSubject(out int subjectId)
+        {
+            subjectId = 0;
+            foreach (CharacterSilhouetteSubject subject in activeSubjects)
+            {
+                if (subject == null || !subject.isActiveAndEnabled ||
+                    !subject.pixelCellSurface || !subject.adaptiveToneExperiment)
+                    continue;
+                if (subjectId != 0)
+                    throw new System.InvalidOperationException(
+                        "Adaptive tone experiment supports exactly one opted-in pixel-cell subject.");
+                subjectId = subject.pixelCellSubjectId;
+            }
+            return subjectId != 0;
+        }
+
+        public void SetAdaptiveToneExperiment(bool enabled)
+        {
+            adaptiveToneExperiment = enabled;
+            if (isActiveAndEnabled)
+                ApplyPixelGridAnchor(transform.position);
+        }
         public static bool HasActivePixelCellSubject => MaximumPixelCellSize > 0;
         public static int MaximumPixelCellSize
         {
@@ -394,6 +424,7 @@ namespace FantasySurvival.CharacterPresentation
                 propertyBlock.SetFloat(CellSurfaceId, pixelCellSurface ? 1f : 0f);
                 propertyBlock.SetFloat(CellSizeId, Mathf.Clamp(pixelCellSize, 1, 8));
                 propertyBlock.SetFloat(CellSubjectId, pixelCellSubjectId);
+                propertyBlock.SetFloat(AdaptiveToneSourceId, adaptiveToneExperiment && pixelCellSurface ? 1f : 0f);
                 ownedRenderer.SetPropertyBlock(propertyBlock);
                 propertyBlock.Clear();
             }
@@ -408,6 +439,7 @@ namespace FantasySurvival.CharacterPresentation
             propertyBlock.SetFloat(CellSurfaceId, 0f);
             propertyBlock.SetFloat(CellSizeId, 0f);
             propertyBlock.SetFloat(CellSubjectId, 0f);
+            propertyBlock.SetFloat(AdaptiveToneSourceId, 0f);
             childRenderer.SetPropertyBlock(propertyBlock);
             propertyBlock.Clear();
         }

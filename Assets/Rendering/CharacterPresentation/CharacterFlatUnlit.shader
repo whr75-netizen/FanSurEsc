@@ -78,10 +78,12 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             float4 _CharacterPixelGridAnchorWS;
             float _CharacterOutlineGroup;
             float _CharacterCellSubjectId;
+            float _CharacterAdaptiveToneSource;
 
             struct Attributes
             {
                 float4 positionOS : POSITION;
+                float3 normalOS : NORMAL;
                 float2 uv : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -91,17 +93,19 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 float4 positionCS : SV_POSITION;
                 float3 positionWS : TEXCOORD0;
                 float2 uv : TEXCOORD1;
+                half3 normalWS : TEXCOORD2;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
             Varyings Vert(Attributes input)
             {
-                Varyings output;
+                Varyings output = (Varyings)0;
                 UNITY_SETUP_INSTANCE_ID(input);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
                 output.positionWS = TransformObjectToWorld(input.positionOS.xyz);
                 output.positionCS = TransformWorldToHClip(output.positionWS);
                 output.uv = TRANSFORM_TEX(input.uv, _BaseMap);
+                output.normalWS = TransformObjectToWorldNormal(input.normalOS);
                 return output;
             }
 
@@ -267,10 +271,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
                 float3 lightingPositionWS = input.positionWS +
                     _CharacterLightingPositionOffsetWS.xyz;
-                half3 lighting = EvaluateSpatialFlatCharacterLighting(
-                    lightingPositionWS,
-                    input.positionCS);
-                half4 baseSample;
+                half4 baseSample = half4(1, 1, 1, 1);
                 if (_BaseMapPixelGrid >= 1.0h)
                 {
                     float2 pixelUv =
@@ -289,10 +290,40 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                         sampler_BaseMap,
                         input.uv);
                 }
-                half3 albedo = SelectAlbedoPalette(baseSample.rgb * _BaseColor.rgb);
-                return half4(
-                    albedo * ApplyLightingBands(lighting),
-                    baseSample.a * _BaseColor.a);
+                half4 evaluatedColor = baseSample * _BaseColor;
+                if (_CharacterAdaptiveToneSource > 0.5)
+                {
+                    // Analysis needs the continuous matte source that was used
+                    // in the offline experiment. This opt-in does not change
+                    // classic subjects or their authored palettes/light bands.
+                    InputData d = (InputData)0;
+                    d.positionWS = lightingPositionWS;
+                    d.positionCS = input.positionCS;
+                    d.normalWS = NormalizeNormalPerPixel(input.normalWS);
+                    d.viewDirectionWS = GetWorldSpaceNormalizeViewDir(lightingPositionWS);
+                    d.shadowCoord = TransformWorldToShadowCoord(lightingPositionWS);
+                    d.bakedGI = SampleSH(d.normalWS);
+                    d.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
+                    d.shadowMask = half4(1, 1, 1, 1);
+                    SurfaceData s = (SurfaceData)0;
+                    s.albedo = baseSample.rgb * _BaseColor.rgb;
+                    s.alpha = baseSample.a * _BaseColor.a;
+                    s.normalTS = half3(0, 0, 1);
+                    s.occlusion = 1;
+                    s.metallic = 0;
+                    s.smoothness = 0;
+                    evaluatedColor = UniversalFragmentPBR(d, s);
+                    evaluatedColor.rgb += s.albedo * EvaluateSteppedLocalLights(
+                        lightingPositionWS, d.normalWS, 0.0) * _SteppedLocalLightStrength;
+                }
+                else
+                {
+                    half3 lighting = EvaluateSpatialFlatCharacterLighting(
+                        lightingPositionWS, input.positionCS);
+                    half3 albedo = SelectAlbedoPalette(baseSample.rgb * _BaseColor.rgb);
+                    evaluatedColor = half4(albedo * ApplyLightingBands(lighting), baseSample.a * _BaseColor.a);
+                }
+                return evaluatedColor;
             }
 
             half4 Frag(Varyings input) : SV_Target
@@ -308,6 +339,25 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 half4 colorDepth : SV_Target0;
                 half4 subjectGroupSize : SV_Target1;
             };
+
+            CellSourceOutput FragToneNativeSource(Varyings input)
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                clip(_CharacterAdaptiveToneSource - 0.5);
+                clip(_CharacterCellSurface - 0.5);
+                half4 color = EvaluateCharacterColor(input);
+                float eyeDepth = unity_OrthoParams.w > 0.5 ?
+                    LinearDepthToEyeDepth(input.positionCS.z) :
+                    LinearEyeDepth(input.positionCS.z, _ZBufferParams);
+                uint subjectId = (uint)clamp(round(_CharacterCellSubjectId), 1.0, 65535.0);
+                CellSourceOutput output;
+                output.colorDepth = half4(color.rgb, max(eyeDepth, 0.0001));
+                output.subjectGroupSize = half4((subjectId & 255u) / 255.0,
+                    clamp(round(_CharacterOutlineGroup), 0.0, 255.0) / 255.0,
+                    clamp(round(_CharacterCellSize), 1.0, 8.0) / 255.0,
+                    (subjectId >> 8) / 255.0);
+                return output;
+            }
 
             CellSourceOutput FragCellSource(Varyings input)
             {
@@ -355,6 +405,28 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             #pragma target 4.5
             #pragma vertex Vert
             #pragma fragment Frag
+            #pragma editor_sync_compilation
+            #pragma multi_compile_instancing
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _LIGHT_COOKIES
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "CharacterToneNativeSource"
+            Tags { "LightMode" = "CharacterToneNativeSource" }
+            Cull [_Cull]
+            ZWrite On
+            ZTest LEqual
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma vertex Vert
+            #pragma fragment FragToneNativeSource
             #pragma editor_sync_compilation
             #pragma multi_compile_instancing
             #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN

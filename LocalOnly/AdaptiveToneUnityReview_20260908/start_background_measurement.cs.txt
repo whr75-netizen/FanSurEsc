@@ -1,0 +1,12 @@
+using UnityEngine;
+using UnityEditor;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        if (!EditorApplication.isPlaying || EditorApplication.isPaused) throw new System.InvalidOperationException("Expected unpaused Play Mode");
+        SessionState.SetBool("AdaptiveToneReview.PreviousRunInBackground", Application.runInBackground);
+        Application.runInBackground = true;
+        result.Log("Temporary background frame execution enabled for measurement; frame={0}. Previous value saved for restoration.", Time.frameCount);
+    }
+}

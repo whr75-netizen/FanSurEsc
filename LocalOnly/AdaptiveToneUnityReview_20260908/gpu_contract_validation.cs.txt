@@ -1,0 +1,315 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+
+// Read-only scene/asset validation. Main task invokes this after compilation.
+// Optional gpu_validation_request.json in this review directory:
+// {"cases":["flat_constant"],"outputSubdirectory":"gpu_validation_half",
+//  "useHalfInputs":true,"metadataFormat":"RGBA32"}
+internal class CommandScript : IRunCommand
+{
+    [Serializable]
+    public sealed class ValidationRequest
+    {
+        public string[] cases;
+        public string outputSubdirectory;
+        public bool useHalfInputs;
+        public string metadataFormat;
+    }
+
+    [Serializable]
+    public sealed class FixtureSettings
+    {
+        public int subject_id;
+        public float tone_error, chroma_error, contrast_retention, minimum_contrast;
+        public float highlight_minimum_contrast;
+    }
+
+    [Serializable]
+    public sealed class FixtureData
+    {
+        public string name;
+        public int width, height;
+        public FixtureSettings settings;
+        public float[] source_color_depth, source_meta, seed_color_depth, seed_meta;
+    }
+
+    [Serializable]
+    public sealed class EvidenceData
+    {
+        public string arrayLayout = "flat_float4_v1";
+        public string @case;
+        public int width, height;
+        public string inputColorFormat, metadataFormat, graphicsDevice, graphicsApi;
+        public float[] outputColor, sourceColors, seedColors;
+        public float[] sourceMetaBefore, seedMetaBefore, sourceMeta, seedMeta;
+        public uint[] status, groups, histogram, tiles, tileHistogram, supports, highlightHistogram;
+        public float[] palette, solutions;
+        public double elapsedMilliseconds;
+    }
+
+    static readonly string[] AllCases = { "flat_constant", "narrow_gradient_one_tone",
+        "four_observed_levels", "broad_gradient", "equal_l_chroma_part_subject",
+        "unsupported_part", "hash_capacity" };
+    static readonly string[] KernelNames = { "Clear", "GatherGroups", "GatherHistogram",
+        "SolveTones", "GatherHighlights", "SolveHighlights", "Resolve" };
+    static readonly string[][] KernelBuffers = {
+        new [] { "Groups", "Histogram", "Tiles", "TileHistogram", "Supports", "HighlightHistogram", "Status" },
+        new [] { "Groups", "Status" },
+        new [] { "Groups", "Histogram", "Tiles", "TileHistogram", "Status" },
+        new [] { "Groups", "Histogram", "Tiles", "TileHistogram", "Supports", "Palette", "Solutions", "Status" },
+        new [] { "Groups", "Palette", "Supports", "Solutions", "HighlightHistogram", "Status" },
+        new [] { "Groups", "Histogram", "HighlightHistogram", "Solutions", "Status" },
+        new [] { "Groups", "Palette", "Supports", "Solutions", "Status" }
+    };
+
+    public void Execute(ExecutionResult result)
+    {
+        string root = Path.GetFullPath(Path.Combine(Application.dataPath,
+            "../LocalOnly/AdaptiveToneUnityReview_20260908"));
+        string requestPath = Path.Combine(root, "gpu_validation_request.json");
+        ValidationRequest request = new ValidationRequest {
+            cases = AllCases, outputSubdirectory = "gpu_validation",
+            useHalfInputs = false, metadataFormat = "RGBAFloat"
+        };
+        if (File.Exists(requestPath)) JsonUtility.FromJsonOverwrite(File.ReadAllText(requestPath), request);
+        string[] cases = request.cases ?? AllCases;
+        if (cases.Length == 0 || cases.Distinct().Count() != cases.Length || cases.Any(c => !AllCases.Contains(c)))
+            throw new InvalidOperationException("Unknown, empty, or duplicate fixture case selection.");
+        bool halfInputs = request.useHalfInputs;
+        string metaName = request.metadataFormat ?? "RGBAFloat";
+        if (metaName != "RGBAFloat" && metaName != "RGBA32")
+            throw new InvalidOperationException("metadataFormat must be RGBAFloat or RGBA32.");
+        TextureFormat metaFormat = metaName == "RGBA32" ? TextureFormat.RGBA32 : TextureFormat.RGBAFloat;
+        string outputRoot = Path.GetFullPath(Path.Combine(root,
+            request.outputSubdirectory ?? "gpu_validation"));
+        if (!outputRoot.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+            throw new InvalidOperationException("GPU artifacts must stay inside this review directory.");
+        foreach (string name in cases)
+        {
+            if (!File.Exists(Path.Combine(root, "fixtures_unity", name + ".json")))
+                throw new FileNotFoundException("Missing fixture " + name);
+            if (File.Exists(Path.Combine(outputRoot, name + ".json")))
+                throw new IOException("Refusing to overwrite existing GPU evidence for " + name);
+        }
+        ComputeShader original = AssetDatabase.LoadAssetAtPath<ComputeShader>(
+            "Assets/Rendering/CharacterPresentation/CharacterAdaptiveTones.compute");
+        if (original == null) throw new InvalidOperationException("Adaptive tone ComputeShader asset is missing.");
+        if (!SystemInfo.supportsComputeShaders) throw new NotSupportedException("Compute shaders are unavailable.");
+        Directory.CreateDirectory(outputRoot);
+        ComputeShader shader = UnityEngine.Object.Instantiate(original);
+        shader.hideFlags = HideFlags.HideAndDontSave;
+        result.RegisterObjectCreation(shader);
+        double totalStarted = EditorApplication.timeSinceStartup;
+        try
+        {
+            foreach (string name in cases)
+            {
+                string fixtureJson = File.ReadAllText(Path.Combine(root, "fixtures_unity", name + ".json"));
+                FixtureData fixture = JsonUtility.FromJson<FixtureData>(fixtureJson);
+                // Dynamic RunCommand assemblies deserialize primitive arrays but
+                // do not register nested DTO fields. This fixture's settings is
+                // a flat, number-only object: deserialize that DTO explicitly.
+                int settingsKey = fixtureJson.IndexOf("\"settings\"", StringComparison.Ordinal);
+                int settingsOpen = fixtureJson.IndexOf('{', settingsKey);
+                int settingsClose = fixtureJson.IndexOf('}', settingsOpen);
+                fixture.settings = JsonUtility.FromJson<FixtureSettings>(fixtureJson.Substring(settingsOpen, settingsClose - settingsOpen + 1));
+                if (fixture == null || fixture.settings == null || fixture.name != name)
+                    throw new InvalidOperationException("Invalid JsonUtility fixture " + name + "; dto=" + (fixture != null) + "; name=" + fixture?.name + "; settings=" + (fixture?.settings != null) + "; width=" + fixture?.width);
+                RunCase(result, shader, fixture, outputRoot, halfInputs, metaFormat);
+            }
+        }
+        finally
+        {
+            result.DestroyObject(shader);
+        }
+        result.Log("GPU synthetic dispatch artifacts: cases={0}, elapsedMs={1:F2}, directory={2}",
+            cases.Length, (EditorApplication.timeSinceStartup - totalStarted) * 1000.0, outputRoot);
+    }
+
+    static Color[] ReadColors(float[] value)
+    {
+        if (value == null || value.Length % 4 != 0)
+            throw new InvalidOperationException("Expected a flat float4 fixture array.");
+        Color[] colors = new Color[value.Length / 4];
+        for (int index = 0; index < colors.Length; index++)
+            colors[index] = new Color(value[index * 4], value[index * 4 + 1], value[index * 4 + 2], value[index * 4 + 3]);
+        return colors;
+    }
+
+    static float[] ColorRows(Color[] values)
+    {
+        float[] flat = new float[values.Length * 4];
+        for (int index = 0; index < values.Length; index++)
+        {
+            flat[index * 4] = values[index].r;
+            flat[index * 4 + 1] = values[index].g;
+            flat[index * 4 + 2] = values[index].b;
+            flat[index * 4 + 3] = values[index].a;
+        }
+        return flat;
+    }
+
+    static float[] VectorRows(Vector4[] values)
+    {
+        float[] flat = new float[values.Length * 4];
+        for (int index = 0; index < values.Length; index++)
+        {
+            flat[index * 4] = values[index].x;
+            flat[index * 4 + 1] = values[index].y;
+            flat[index * 4 + 2] = values[index].z;
+            flat[index * 4 + 3] = values[index].w;
+        }
+        return flat;
+    }
+
+    static Texture2D NewInput(ExecutionResult result, List<UnityEngine.Object> objects,
+        int width, int height, TextureFormat format, Color[] data, string name)
+    {
+        if (data.Length != width * height) throw new InvalidOperationException("Fixture texture dimensions do not match its pixels.");
+        Texture2D texture = new Texture2D(width, height, format, false, true);
+        texture.name = name;
+        texture.hideFlags = HideFlags.HideAndDontSave;
+        texture.filterMode = FilterMode.Point;
+        texture.wrapMode = TextureWrapMode.Clamp;
+        objects.Add(texture);
+        result.RegisterObjectCreation(texture);
+        texture.SetPixels(data);
+        texture.Apply(false, false);
+        return texture;
+    }
+
+    static void AddBuffer(Dictionary<string, GraphicsBuffer> buffers, string name, int count, int stride = 4)
+    {
+        buffers.Add(name, new GraphicsBuffer(GraphicsBuffer.Target.Structured, count, stride));
+    }
+
+    static uint[] ReadUInt(Dictionary<string, GraphicsBuffer> buffers, string name)
+    {
+        uint[] values = new uint[buffers[name].count];
+        buffers[name].GetData(values);
+        return values;
+    }
+
+    static Vector4[] ReadVector(Dictionary<string, GraphicsBuffer> buffers, string name)
+    {
+        Vector4[] values = new Vector4[buffers[name].count];
+        buffers[name].GetData(values);
+        return values;
+    }
+
+    static void RunCase(ExecutionResult result, ComputeShader shader, FixtureData fixture,
+        string outputRoot, bool halfInputs, TextureFormat metaFormat)
+    {
+        double caseStarted = EditorApplication.timeSinceStartup;
+        string name = fixture.name;
+        int width = fixture.width, height = fixture.height;
+        List<UnityEngine.Object> objects = new List<UnityEngine.Object>();
+        Dictionary<string, GraphicsBuffer> buffers = new Dictionary<string, GraphicsBuffer>();
+        RenderTexture previousActive = RenderTexture.active;
+        RenderTexture output = null;
+        try
+        {
+            TextureFormat colorFormat = halfInputs ? TextureFormat.RGBAHalf : TextureFormat.RGBAFloat;
+            Texture2D source = NewInput(result, objects, width, height, colorFormat,
+                ReadColors(fixture.source_color_depth), name + " source");
+            Texture2D sourceMeta = NewInput(result, objects, width, height, metaFormat,
+                ReadColors(fixture.source_meta), name + " source meta");
+            Texture2D seed = NewInput(result, objects, width, height, colorFormat,
+                ReadColors(fixture.seed_color_depth), name + " sparse seeds");
+            Texture2D seedMeta = NewInput(result, objects, width, height, metaFormat,
+                ReadColors(fixture.seed_meta), name + " seed meta");
+            Color[] sourceBefore = source.GetPixels(), seedBefore = seed.GetPixels();
+            Color[] sourceMetaBefore = sourceMeta.GetPixels(), seedMetaBefore = seedMeta.GetPixels();
+            output = new RenderTexture(width, height, 0, RenderTextureFormat.ARGBFloat, RenderTextureReadWrite.Linear);
+            output.name = name + " synthetic result";
+            output.hideFlags = HideFlags.HideAndDontSave;
+            output.enableRandomWrite = true;
+            output.filterMode = FilterMode.Point;
+            output.wrapMode = TextureWrapMode.Clamp;
+            objects.Add(output);
+            result.RegisterObjectCreation(output);
+            if (!output.Create()) throw new InvalidOperationException("Failed to create synthetic ARGBFloat output.");
+            AddBuffer(buffers, "Groups", 160 * 8);
+            AddBuffer(buffers, "Histogram", 160 * 32 * 6);
+            AddBuffer(buffers, "Tiles", 160 * 16 * 3);
+            AddBuffer(buffers, "TileHistogram", 160 * 16 * 32);
+            AddBuffer(buffers, "Supports", 160 * 2);
+            AddBuffer(buffers, "HighlightHistogram", 160 * 32 * 5);
+            AddBuffer(buffers, "Status", 161);
+            AddBuffer(buffers, "Palette", 160 * 32, 16);
+            AddBuffer(buffers, "Solutions", 160 * 3, 16);
+            FixtureSettings settings = fixture.settings;
+            shader.SetInt("_ToneWidth", width);
+            shader.SetInt("_ToneHeight", height);
+            shader.SetInt("_ToneSubjectId", settings.subject_id);
+            shader.SetFloat("_ToneError", settings.tone_error);
+            shader.SetFloat("_ToneChromaError", settings.chroma_error);
+            shader.SetFloat("_ToneContrastRetention", settings.contrast_retention);
+            shader.SetFloat("_ToneMinimumContrast", settings.minimum_contrast);
+            shader.SetFloat("_ToneHighlightMinimumContrast", settings.highlight_minimum_contrast);
+            for (int index = 0; index < KernelNames.Length; index++)
+            {
+                int kernel = shader.FindKernel(KernelNames[index]);
+                foreach (string buffer in KernelBuffers[index]) shader.SetBuffer(kernel, "_Tone" + buffer, buffers[buffer]);
+                if (index >= 1 && index <= 5)
+                    shader.SetTexture(kernel, "_ToneSourceColor", source);
+                if (index == 1 || index == 2 || index == 4)
+                    shader.SetTexture(kernel, "_ToneSourceMeta", sourceMeta);
+                if (index == 6)
+                {
+                    shader.SetTexture(kernel, "_ToneCellColor", seed);
+                    shader.SetTexture(kernel, "_ToneCellMeta", seedMeta);
+                    shader.SetTexture(kernel, "_ToneOutput", output);
+                }
+                int x = index == 0 ? 1280 : (index == 3 || index == 5 ? 160 : (width + 7) / 8);
+                int y = index == 0 || index == 3 || index == 5 ? 1 : (height + 7) / 8;
+                shader.Dispatch(kernel, x, y, 1);
+            }
+            Texture2D readback = new Texture2D(width, height, TextureFormat.RGBAFloat, false, true);
+            readback.name = name + " numeric readback";
+            readback.hideFlags = HideFlags.HideAndDontSave;
+            objects.Add(readback);
+            result.RegisterObjectCreation(readback);
+            RenderTexture.active = output;
+            readback.ReadPixels(new Rect(0, 0, width, height), 0, 0, false);
+            readback.Apply(false, false);
+            RenderTexture.active = previousActive;
+            EvidenceData evidence = new EvidenceData {
+                @case = name, width = width, height = height,
+                inputColorFormat = colorFormat.ToString(), metadataFormat = metaFormat.ToString(),
+                graphicsDevice = SystemInfo.graphicsDeviceName,
+                graphicsApi = SystemInfo.graphicsDeviceType.ToString(),
+                outputColor = ColorRows(readback.GetPixels()),
+                sourceColors = ColorRows(sourceBefore), seedColors = ColorRows(seedBefore),
+                sourceMetaBefore = ColorRows(sourceMetaBefore), seedMetaBefore = ColorRows(seedMetaBefore),
+                sourceMeta = ColorRows(sourceMeta.GetPixels()), seedMeta = ColorRows(seedMeta.GetPixels()),
+                status = ReadUInt(buffers, "Status"), groups = ReadUInt(buffers, "Groups"),
+                histogram = ReadUInt(buffers, "Histogram"), tiles = ReadUInt(buffers, "Tiles"),
+                tileHistogram = ReadUInt(buffers, "TileHistogram"), supports = ReadUInt(buffers, "Supports"),
+                highlightHistogram = ReadUInt(buffers, "HighlightHistogram"),
+                palette = VectorRows(ReadVector(buffers, "Palette")),
+                solutions = VectorRows(ReadVector(buffers, "Solutions"))
+            };
+            evidence.elapsedMilliseconds = (EditorApplication.timeSinceStartup - caseStarted) * 1000.0;
+            string path = Path.Combine(outputRoot, name + ".json");
+            using (FileStream file = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            using (StreamWriter writer = new StreamWriter(file, new UTF8Encoding(false)))
+                writer.Write(JsonUtility.ToJson(evidence));
+            uint global = evidence.status[160];
+            result.Log("GPU case={0}, globalStatus={1}, elapsedMs={2:F2}, artifact={3}",
+                name, global, (EditorApplication.timeSinceStartup - caseStarted) * 1000.0, path);
+        }
+        finally
+        {
+            RenderTexture.active = previousActive;
+            foreach (GraphicsBuffer buffer in buffers.Values) buffer.Dispose();
+            if (output != null) output.Release();
+            for (int index = objects.Count - 1; index >= 0; index--) result.DestroyObject(objects[index]);
+        }
+    }
+}

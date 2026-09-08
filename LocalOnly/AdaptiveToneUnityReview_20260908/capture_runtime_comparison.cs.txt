@@ -1,0 +1,395 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using FantasySurvival.SceneFlow;
+using FantasySurvival.CharacterPresentation;
+using FantasySurvival.Rendering;
+using FantasySurvival.WorldLighting;
+using UObject = UnityEngine.Object;
+
+// RunCommand source only. Execute once in an already prepared Play Mode session.
+// No shader rewriting, material replacement, asset saving, or frame advancement.
+internal class CommandScript : IRunCommand
+{
+    private const int Width = 384;
+    private const int Height = 768;
+    private const string OutputRoot = "LocalOnly/AdaptiveToneUnityReview_20260908";
+    private const string RendererPath = "Assets/Settings/PC_Renderer.asset";
+    private const string ComputePath = "Assets/Rendering/CharacterPresentation/CharacterAdaptiveTones.compute";
+
+    [Serializable]
+    public sealed class CaptureInfo
+    {
+        public string file, view, mode;
+        public int width, height, frame, emptyAlpha, solidAlpha, partialAlpha;
+        public float worldYaw;
+        public bool nativeSourceEnabled, adaptiveToneEnabled;
+    }
+
+    [Serializable]
+    public sealed class ComparisonInfo
+    {
+        public string playerEntityId, cameraEntityId, rendererAsset, computeAsset;
+        public int frameStart, frameEnd, pixelCellSize;
+        public bool samePlayer, sameCamera, sameFrame, restored;
+        public bool previousNativeSourceEnabled, previousAdaptiveToneEnabled;
+        public Vector3 posedBoundsCenter, posedBoundsSize;
+        public float orthographicSize, keyIntensity, fillIntensity, ambientIntensity;
+        public float toneError, chromaError, contrastRetention, minimumContrast, highlightMinimumContrast;
+        public string validation = "Capture only; no GPU convergence, timing, or art-approval claim.";
+        public CaptureInfo[] captures;
+    }
+
+    public sealed class RendererState
+    {
+        public Renderer renderer;
+        public bool forceRenderingOff;
+        public Material[] materials;
+        public MaterialPropertyBlock propertyBlock;
+    }
+
+    public void Execute(ExecutionResult result)
+    {
+        PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+        if (!EditorApplication.isPlaying || shell == null || shell.PlayerTransform == null || shell.PlayerCamera == null)
+            throw new InvalidOperationException("The existing gameplay shell, Player and PlayerCamera must be ready in Play Mode.");
+
+        Camera camera = shell.PlayerCamera;
+        CharacterSilhouetteSubject[] candidates = shell.PlayerTransform.GetComponentsInChildren<CharacterSilhouetteSubject>();
+        if (candidates.Length != 1 || !candidates[0].isActiveAndEnabled || !candidates[0].PixelCellSurface)
+            throw new InvalidOperationException("Exactly one active player pixel-cell subject is required; this script does not rebuild or enable one.");
+        CharacterSilhouetteSubject subject = candidates[0];
+        foreach (CharacterSilhouetteSubject other in UObject.FindObjectsByType<CharacterSilhouetteSubject>(FindObjectsSortMode.None))
+            if (other != subject && other.isActiveAndEnabled && other.PixelCellSurface && other.AdaptiveToneExperiment)
+                throw new InvalidOperationException("Another subject is opted in. Preserve it and resolve the experiment selection before capture.");
+
+        CameraFollow follow = camera.GetComponent<CameraFollow>();
+        UniversalAdditionalCameraData cameraData = camera.GetComponent<UniversalAdditionalCameraData>();
+        if (follow == null || cameraData == null || !camera.orthographic || camera.cameraType != CameraType.Game)
+            throw new InvalidOperationException("The existing orthographic gameplay camera, CameraFollow and URP camera data are required.");
+        if (cameraData.renderType != CameraRenderType.Base ||
+            (cameraData.cameraStack != null && cameraData.cameraStack.Count != 0))
+            throw new InvalidOperationException("Capture expects the existing unstacked Base camera; camera stacks are not changed.");
+
+        UniversalRendererData rendererData = AssetDatabase.LoadAssetAtPath<UniversalRendererData>(RendererPath);
+        ValidateCurrentRenderer(cameraData, rendererData);
+        CharacterSilhouetteRendererFeature feature = null;
+        foreach (ScriptableRendererFeature item in rendererData.rendererFeatures)
+            if (item is CharacterSilhouetteRendererFeature found)
+            {
+                if (feature != null) throw new InvalidOperationException("PC_Renderer has multiple character silhouette features.");
+                feature = found;
+            }
+        if (feature == null || !feature.isActive || feature.AdaptiveTones == null)
+            throw new InvalidOperationException("PC_Renderer must already have its active character silhouette feature.");
+
+        ComputeShader compute = AssetDatabase.LoadAssetAtPath<ComputeShader>(ComputePath);
+        if (compute == null || !SystemInfo.supportsComputeShaders)
+            throw new InvalidOperationException("The imported adaptive compute shader and compute support are required.");
+        ComputeShader previousCompute;
+        using (var serialized = new SerializedObject(feature))
+        {
+            SerializedProperty reference = serialized.FindProperty("settings.adaptiveToneCompute");
+            if (reference == null) throw new InvalidOperationException("Cannot read the existing compute reference for exact restoration.");
+            previousCompute = reference.objectReferenceValue as ComputeShader;
+        }
+
+        string path = Path.GetFullPath(OutputRoot);
+        string[] views = { "front", "angle45" };
+        float[] worldYaws = { 180f, 225f }; // Same front orientation as the existing bright-source capture.
+        string[] modes = { "legacy", "continuous", "adaptive" };
+        foreach (string view in views)
+            foreach (string mode in modes)
+                RefuseExisting(Path.Combine(path, view + "_" + mode + ".png"));
+        string manifestPath = Path.Combine(path, "comparison_manifest.json");
+        RefuseExisting(manifestPath);
+
+        Renderer[] playerRenderers = subject.GetComponentsInChildren<Renderer>();
+        var playerRendererSet = new HashSet<Renderer>(playerRenderers);
+        Bounds bounds = CalculatePosedBounds(playerRenderers);
+        if (bounds.size.y < 3f || bounds.size.y > 5f)
+            throw new InvalidOperationException("Unexpected posed bounds for this prepared character review; no framing is guessed.");
+
+        var rendererStates = new List<RendererState>();
+        foreach (Renderer renderer in UObject.FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+        {
+            var block = new MaterialPropertyBlock();
+            renderer.GetPropertyBlock(block);
+            rendererStates.Add(new RendererState { renderer = renderer, forceRenderingOff = renderer.forceRenderingOff,
+                materials = renderer.sharedMaterials, propertyBlock = block });
+        }
+        var lightStates = new Dictionary<Light, bool>();
+        foreach (Light light in UObject.FindObjectsByType<Light>(FindObjectsSortMode.None)) lightStates.Add(light, light.enabled);
+        var steppedStates = new Dictionary<SteppedLocalLight, bool>();
+        foreach (SteppedLocalLight light in UObject.FindObjectsByType<SteppedLocalLight>(FindObjectsSortMode.None)) steppedStates.Add(light, light.enabled);
+
+        Vector3 previousCameraPosition = camera.transform.position;
+        Quaternion previousCameraRotation = camera.transform.rotation;
+        Vector3 previousSubjectPosition = subject.transform.position;
+        Quaternion previousSubjectRotation = subject.transform.rotation;
+        float previousSize = camera.orthographicSize, previousAspect = camera.aspect;
+        Rect previousRect = camera.rect;
+        Color previousBackground = camera.backgroundColor;
+        CameraClearFlags previousClear = camera.clearFlags;
+        bool previousFollow = follow.enabled, previousMSAA = camera.allowMSAA, previousHDR = camera.allowHDR;
+        bool previousPost = cameraData.renderPostProcessing;
+        AntialiasingMode previousAA = cameraData.antialiasing;
+        float previousTime = Time.timeScale;
+        bool previousSource = subject.AdaptiveToneExperiment, previousAdaptive = feature.AdaptiveTones.enabled;
+        Light previousSun = RenderSettings.sun;
+        SphericalHarmonicsL2 previousProbe = RenderSettings.ambientProbe;
+        int steppedCountId = Shader.PropertyToID("_SteppedLocalLightCount");
+        int previousSteppedCount = Shader.GetGlobalInteger(steppedCountId);
+        var playerId = shell.PlayerTransform.GetEntityId();
+        var cameraId = camera.GetEntityId();
+        Vector3 playerPosition = shell.PlayerTransform.position;
+        Quaternion playerRotation = shell.PlayerTransform.rotation;
+        GameObject keyObject = null, fillObject = null;
+        var captures = new List<CaptureInfo>();
+        var report = new ComparisonInfo
+        {
+            playerEntityId = playerId.ToString(), cameraEntityId = cameraId.ToString(),
+            rendererAsset = RendererPath, computeAsset = ComputePath, frameStart = Time.frameCount,
+            pixelCellSize = subject.PixelCellSize, previousNativeSourceEnabled = previousSource,
+            previousAdaptiveToneEnabled = previousAdaptive, posedBoundsCenter = bounds.center, posedBoundsSize = bounds.size,
+            orthographicSize = bounds.extents.y * 1.15f, keyIntensity = 2f, fillIntensity = .55f, ambientIntensity = .3f,
+            toneError = feature.AdaptiveTones.toneError, chromaError = feature.AdaptiveTones.chromaError,
+            contrastRetention = feature.AdaptiveTones.contrastRetention, minimumContrast = feature.AdaptiveTones.minimumContrast,
+            highlightMinimumContrast = feature.AdaptiveTones.highlightMinimumContrast
+        };
+
+        // No SaveAssets/scene save is performed. Only existing object state is
+        // temporarily changed; materials and feature activation remain intact.
+        result.RegisterObjectModification(camera);
+        result.RegisterObjectModification(camera.transform);
+        result.RegisterObjectModification(follow);
+        result.RegisterObjectModification(cameraData);
+        result.RegisterObjectModification(subject);
+        result.RegisterObjectModification(subject.transform);
+        result.RegisterObjectModification(feature);
+        Directory.CreateDirectory(path);
+        try
+        {
+            Time.timeScale = 0f;
+            follow.enabled = false;
+            foreach (var pair in lightStates) { result.RegisterObjectModification(pair.Key); pair.Key.enabled = false; }
+            foreach (var pair in steppedStates) { result.RegisterObjectModification(pair.Key); pair.Key.enabled = false; }
+            Shader.SetGlobalInteger(steppedCountId, 0);
+            keyObject = CreateCaptureLight("Temporary adaptive comparison key", 2f, new Vector3(30f, 205f, 0f), result);
+            fillObject = CreateCaptureLight("Temporary adaptive comparison fill", .55f, new Vector3(5f, 140f, 0f), result);
+            RenderSettings.sun = keyObject.GetComponent<Light>();
+            var probe = new SphericalHarmonicsL2();
+            probe.AddAmbientLight(new Color(.3f, .3f, .3f));
+            RenderSettings.ambientProbe = probe;
+            cameraData.renderPostProcessing = false;
+            cameraData.antialiasing = AntialiasingMode.None;
+            camera.allowMSAA = false;
+            camera.allowHDR = false;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.clear;
+            camera.rect = new Rect(0f, 0f, 1f, 1f);
+            camera.orthographicSize = report.orthographicSize;
+            foreach (RendererState state in rendererStates)
+            {
+                result.RegisterObjectModification(state.renderer);
+                if (!playerRendererSet.Contains(state.renderer)) state.renderer.forceRenderingOff = true;
+            }
+
+            for (int view = 0; view < views.Length; view++)
+            {
+                camera.transform.rotation = Quaternion.Euler(0f, worldYaws[view], 0f);
+                camera.transform.position = bounds.center - camera.transform.forward * 14f;
+                for (int mode = 0; mode < modes.Length; mode++)
+                {
+                    bool nativeSource = mode != 0, adaptive = mode == 2;
+                    feature.ConfigureAdaptiveToneExperiment(compute, false);
+                    subject.SetAdaptiveToneExperiment(nativeSource);
+                    feature.ConfigureAdaptiveToneExperiment(compute, adaptive);
+                    CaptureInfo capture = Capture(camera, Path.Combine(path, views[view] + "_" + modes[mode] + ".png"), result);
+                    capture.view = views[view]; capture.mode = modes[mode]; capture.worldYaw = worldYaws[view];
+                    capture.nativeSourceEnabled = nativeSource; capture.adaptiveToneEnabled = adaptive;
+                    captures.Add(capture);
+                }
+            }
+        }
+        finally
+        {
+            // Restore the original feature reference/enable state, not a guessed
+            // disabled baseline. Keep the same subject component and cell ID.
+            feature.ConfigureAdaptiveToneExperiment(previousCompute, previousAdaptive);
+            camera.transform.SetPositionAndRotation(previousCameraPosition, previousCameraRotation);
+            camera.orthographicSize = previousSize; camera.aspect = previousAspect; camera.rect = previousRect;
+            camera.clearFlags = previousClear; camera.backgroundColor = previousBackground;
+            camera.allowMSAA = previousMSAA; camera.allowHDR = previousHDR;
+            cameraData.renderPostProcessing = previousPost; cameraData.antialiasing = previousAA;
+            subject.transform.SetPositionAndRotation(previousSubjectPosition, previousSubjectRotation);
+            subject.SetAdaptiveToneExperiment(previousSource);
+            foreach (RendererState state in rendererStates)
+                if (state.renderer != null)
+                {
+                    state.renderer.forceRenderingOff = state.forceRenderingOff;
+                    state.renderer.SetPropertyBlock(state.propertyBlock.isEmpty ? null : state.propertyBlock);
+                }
+            foreach (var pair in lightStates) if (pair.Key != null) pair.Key.enabled = pair.Value;
+            foreach (var pair in steppedStates) if (pair.Key != null) pair.Key.enabled = pair.Value;
+            Shader.SetGlobalInteger(steppedCountId, previousSteppedCount);
+            RenderSettings.sun = previousSun; RenderSettings.ambientProbe = previousProbe;
+            follow.enabled = previousFollow;
+            Time.timeScale = previousTime;
+            if (keyObject != null) result.DestroyObject(keyObject);
+            if (fillObject != null) result.DestroyObject(fillObject);
+        }
+
+        report.frameEnd = Time.frameCount;
+        report.sameFrame = report.frameStart == report.frameEnd;
+        report.samePlayer = shell.PlayerTransform.GetEntityId().Equals(playerId) &&
+            shell.PlayerTransform.position == playerPosition && shell.PlayerTransform.rotation == playerRotation;
+        report.sameCamera = shell.PlayerCamera == camera && camera.GetEntityId().Equals(cameraId);
+        bool materialsPreserved = true;
+        foreach (RendererState state in rendererStates)
+        {
+            if (state.renderer == null) { materialsPreserved = false; continue; }
+            Material[] current = state.renderer.sharedMaterials;
+            if (current.Length != state.materials.Length) { materialsPreserved = false; continue; }
+            for (int index = 0; index < current.Length; index++)
+                if (current[index] != state.materials[index]) materialsPreserved = false;
+        }
+        report.restored = materialsPreserved && subject.PixelCellSize == report.pixelCellSize &&
+            subject.AdaptiveToneExperiment == previousSource && feature.AdaptiveTones.enabled == previousAdaptive &&
+            camera.transform.position == previousCameraPosition && camera.transform.rotation == previousCameraRotation &&
+            Time.timeScale == previousTime && follow.enabled == previousFollow;
+        report.captures = captures.ToArray();
+        if (!report.sameFrame || !report.samePlayer || !report.sameCamera || !report.restored)
+            throw new InvalidOperationException("Capture identity/frame/restoration check failed. Existing PNGs are retained for diagnosis.");
+        WriteNew(manifestPath, new UTF8Encoding(false).GetBytes(JsonUtility.ToJson(report, true)));
+        result.Log("{0}", JsonUtility.ToJson(report));
+        result.Log("Six same-frame captures written without replacing materials. Prior experiment settings restored. Output: {0}", path);
+    }
+
+    private static void ValidateCurrentRenderer(UniversalAdditionalCameraData cameraData, UniversalRendererData expected)
+    {
+        UniversalRenderPipelineAsset pipeline = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+        if (pipeline == null || expected == null) throw new InvalidOperationException("URP and the existing PC_Renderer asset are required.");
+        using (var serializedCamera = new SerializedObject(cameraData))
+        using (var serializedPipeline = new SerializedObject(pipeline))
+        {
+            SerializedProperty rendererIndex = serializedCamera.FindProperty("m_RendererIndex");
+            SerializedProperty defaultIndex = serializedPipeline.FindProperty("m_DefaultRendererIndex");
+            SerializedProperty rendererList = serializedPipeline.FindProperty("m_RendererDataList");
+            if (rendererIndex == null || defaultIndex == null || rendererList == null)
+                throw new InvalidOperationException("Cannot verify the active camera renderer without changing it.");
+            int index = rendererIndex.intValue < 0 ? defaultIndex.intValue : rendererIndex.intValue;
+            if (index < 0 || index >= rendererList.arraySize || rendererList.GetArrayElementAtIndex(index).objectReferenceValue != expected)
+                throw new InvalidOperationException("PlayerCamera is not currently using PC_Renderer. Renderer selection is not changed by this script.");
+        }
+    }
+
+    private static Bounds CalculatePosedBounds(Renderer[] renderers)
+    {
+        bool hasPoint = false;
+        Bounds bounds = default;
+        foreach (Renderer renderer in renderers)
+        {
+            SkinnedMeshRenderer skin = renderer as SkinnedMeshRenderer;
+            if (skin == null || skin.sharedMesh == null) continue;
+            UnityEngine.Mesh mesh = skin.sharedMesh;
+            Vector3[] vertices = mesh.vertices;
+            BoneWeight[] weights = mesh.boneWeights;
+            Matrix4x4[] binds = mesh.bindposes;
+            Transform[] bones = skin.bones;
+            if (weights.Length != vertices.Length || binds.Length != bones.Length)
+                throw new InvalidOperationException("Posed-bounds capture expects the existing four-weight skinned mesh contract.");
+            var matrices = new Matrix4x4[bones.Length];
+            for (int index = 0; index < bones.Length; index++)
+            {
+                if (bones[index] == null) throw new InvalidOperationException("Skinned mesh has a missing bone.");
+                matrices[index] = bones[index].localToWorldMatrix * binds[index];
+            }
+            for (int index = 0; index < vertices.Length; index++)
+            {
+                BoneWeight weight = weights[index];
+                Vector3 vertex = vertices[index];
+                Vector3 point = matrices[weight.boneIndex0].MultiplyPoint3x4(vertex) * weight.weight0 +
+                    matrices[weight.boneIndex1].MultiplyPoint3x4(vertex) * weight.weight1 +
+                    matrices[weight.boneIndex2].MultiplyPoint3x4(vertex) * weight.weight2 +
+                    matrices[weight.boneIndex3].MultiplyPoint3x4(vertex) * weight.weight3;
+                if (!hasPoint) { bounds = new Bounds(point, Vector3.zero); hasPoint = true; }
+                else bounds.Encapsulate(point);
+            }
+        }
+        if (!hasPoint) throw new InvalidOperationException("No posed skinned vertices found.");
+        return bounds;
+    }
+
+    private static GameObject CreateCaptureLight(string name, float intensity, Vector3 euler, ExecutionResult result)
+    {
+        var lightObject = new GameObject(name);
+        try
+        {
+            lightObject.hideFlags = HideFlags.HideAndDontSave;
+            result.RegisterObjectCreation(lightObject);
+            Light light = lightObject.AddComponent<Light>();
+            light.type = LightType.Directional; light.color = Color.white;
+            light.intensity = intensity; light.shadows = LightShadows.None;
+            lightObject.transform.rotation = Quaternion.Euler(euler);
+            return lightObject;
+        }
+        catch
+        {
+            result.DestroyObject(lightObject);
+            throw;
+        }
+    }
+
+    private static CaptureInfo Capture(Camera camera, string path, ExecutionResult result)
+    {
+        RefuseExisting(path);
+        RenderTexture previousTarget = camera.targetTexture, previousActive = RenderTexture.active;
+        float previousAspect = camera.aspect;
+        RenderTexture target = RenderTexture.GetTemporary(Width, Height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default, 1);
+        Texture2D texture = null;
+        try
+        {
+            texture = new Texture2D(Width, Height, TextureFormat.RGBA32, false);
+            result.RegisterObjectCreation(texture);
+            camera.targetTexture = target; camera.aspect = (float)Width / Height;
+            camera.Render();
+            RenderTexture.active = target;
+            texture.ReadPixels(new Rect(0, 0, Width, Height), 0, 0);
+            texture.Apply();
+            var info = new CaptureInfo { file = Path.GetFileName(path), width = Width, height = Height, frame = Time.frameCount };
+            foreach (Color32 pixel in texture.GetPixels32())
+                if (pixel.a == 0) info.emptyAlpha++;
+                else if (pixel.a == 255) info.solidAlpha++;
+                else info.partialAlpha++;
+            if (info.emptyAlpha == 0 || info.solidAlpha == 0)
+                throw new InvalidOperationException("Capture has no transparent background or no opaque subject; no substitute image is written.");
+            WriteNew(path, texture.EncodeToPNG());
+            return info;
+        }
+        finally
+        {
+            camera.targetTexture = previousTarget; camera.aspect = previousAspect;
+            RenderTexture.active = previousActive;
+            RenderTexture.ReleaseTemporary(target);
+            if (texture != null) result.DestroyObject(texture);
+        }
+    }
+
+    private static void RefuseExisting(string path)
+    {
+        if (File.Exists(path) || Directory.Exists(path))
+            throw new IOException("Preserving existing output: " + path);
+    }
+
+    private static void WriteNew(string path, byte[] bytes)
+    {
+        using (var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            stream.Write(bytes, 0, bytes.Length);
+    }
+}

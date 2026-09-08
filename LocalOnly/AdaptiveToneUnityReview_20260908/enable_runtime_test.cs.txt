@@ -1,0 +1,27 @@
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering.Universal;
+using FantasySurvival.SceneFlow;
+using FantasySurvival.CharacterPresentation;
+using FantasySurvival.Rendering;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        var shell = PersistentGameplayShell.Instance;
+        if (!EditorApplication.isPlaying || shell == null) throw new System.InvalidOperationException("Gameplay not ready");
+        var subject = shell.PlayerTransform.GetComponentInChildren<CharacterSilhouetteSubject>();
+        var data = AssetDatabase.LoadAssetAtPath<ScriptableRendererData>("Assets/Settings/PC_Renderer.asset");
+        CharacterSilhouetteRendererFeature feature = null;
+        foreach (var item in data.rendererFeatures) if (item is CharacterSilhouetteRendererFeature found) feature = found;
+        var compute = AssetDatabase.LoadAssetAtPath<ComputeShader>("Assets/Rendering/CharacterPresentation/CharacterAdaptiveTones.compute");
+        if (subject == null || feature == null || compute == null) throw new System.InvalidOperationException("Existing renderer not found");
+        result.RegisterObjectModification(subject);
+        result.RegisterObjectModification(feature);
+        subject.SetAdaptiveToneExperiment(true);
+        feature.ConfigureAdaptiveToneExperiment(compute, true);
+        feature.SetAdaptiveToneProfilingEnabled(true);
+        feature.RequestAdaptiveToneDiagnostics();
+        result.Log("Runtime test enabled only; no asset save. Player={0}; subject={1}; cell={2}; frame={3}", shell.PlayerTransform.name, subject.name, subject.PixelCellSize, Time.frameCount);
+    }
+}

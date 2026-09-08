@@ -1,0 +1,44 @@
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering.Universal;
+using FantasySurvival.SceneFlow;
+using FantasySurvival.CharacterPresentation;
+using FantasySurvival.Rendering;
+using System;
+using System.IO;
+internal class CommandScript : IRunCommand
+{
+    [Serializable] public sealed class Evidence
+    {
+        public bool playing, subjectOptIn, featureEnabled;
+        public int frame, subjectId, cellSize, cameraWidth, cameraHeight;
+        public string cpuMilliseconds, gpuMilliseconds, inlineCpuMilliseconds;
+        public uint[] status;
+    }
+    public void Execute(ExecutionResult result)
+    {
+        var shell = PersistentGameplayShell.Instance;
+        if (!EditorApplication.isPlaying || shell == null) throw new InvalidOperationException("Gameplay not ready");
+        var subject = shell.PlayerTransform.GetComponentInChildren<CharacterSilhouetteSubject>();
+        var data = AssetDatabase.LoadAssetAtPath<ScriptableRendererData>("Assets/Settings/PC_Renderer.asset");
+        CharacterSilhouetteRendererFeature feature = null;
+        foreach (var item in data.rendererFeatures) if (item is CharacterSilhouetteRendererFeature found) feature = found;
+        if (feature == null || subject == null) throw new InvalidOperationException("Existing character renderer missing");
+        CharacterSilhouetteSubject.TryGetAdaptiveToneSubject(out int subjectId);
+        var cost = feature.AdaptiveToneCost;
+        var evidence = new Evidence {
+            playing = EditorApplication.isPlaying, subjectOptIn = subject.AdaptiveToneExperiment,
+            featureEnabled = feature.AdaptiveTones.enabled, frame = Time.frameCount,
+            subjectId = subjectId, cellSize = subject.PixelCellSize,
+            cameraWidth = shell.PlayerCamera.pixelWidth, cameraHeight = shell.PlayerCamera.pixelHeight,
+            cpuMilliseconds = cost.CpuMilliseconds.HasValue ? cost.CpuMilliseconds.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture) : "unavailable",
+            gpuMilliseconds = cost.GpuMilliseconds.HasValue ? cost.GpuMilliseconds.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture) : "unavailable",
+            inlineCpuMilliseconds = cost.InlineCpuMilliseconds.HasValue ? cost.InlineCpuMilliseconds.Value.ToString("R", System.Globalization.CultureInfo.InvariantCulture) : "unavailable",
+            status = feature.LastAdaptiveToneDiagnostics
+        };
+        string json = JsonUtility.ToJson(evidence, true);
+        string path = Path.GetFullPath("LocalOnly/AdaptiveToneUnityReview_20260908/runtime_status_" + Time.frameCount + ".json");
+        using (var stream = new FileStream(path, FileMode.CreateNew)) using (var writer = new StreamWriter(stream)) writer.Write(json);
+        result.Log(json);
+    }
+}

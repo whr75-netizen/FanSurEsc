@@ -28,6 +28,8 @@ namespace FantasySurvival.Rendering
             public Material maskMaterial;
             public Material compositeMaterial;
             public RenderPassEvent injectionPoint = RenderPassEvent.BeforeRenderingPostProcessing;
+            public ComputeShader adaptiveToneCompute;
+            public CharacterAdaptiveTonePass.Settings adaptiveTones = new CharacterAdaptiveTonePass.Settings();
         }
 
         [SerializeField] private Settings settings = new Settings();
@@ -35,12 +37,44 @@ namespace FantasySurvival.Rendering
         private CharacterSilhouettePass pass;
         private CharacterSilhouettePass pixelCellPass;
 
+        public CharacterAdaptiveTonePass.Settings AdaptiveTones => settings.adaptiveTones;
+        public uint[] LastAdaptiveToneDiagnostics => pixelCellPass?.lastToneDiagnostics;
+        public CharacterAdaptiveTonePass.ProfilingCost AdaptiveToneCost =>
+            pixelCellPass != null ? pixelCellPass.ToneCost : default;
+
+        public void SetAdaptiveToneProfilingEnabled(bool enabled)
+        {
+            if (pixelCellPass == null)
+                throw new System.InvalidOperationException("Character render passes have not been created.");
+            pixelCellPass.SetToneProfilingEnabled(enabled);
+        }
+
+        public void ConfigureAdaptiveToneExperiment(ComputeShader compute, bool enabled)
+        {
+            settings.adaptiveToneCompute = compute;
+            settings.adaptiveTones.enabled = enabled;
+        }
+
+        public void RequestAdaptiveToneDiagnostics()
+        {
+            if (pixelCellPass == null)
+                throw new System.InvalidOperationException("Character render passes have not been created.");
+            pixelCellPass.captureToneDiagnostics = true;
+        }
+
         public override void Create()
         {
+            pixelCellPass?.SetToneProfilingEnabled(false);
             pass = new CharacterSilhouettePass(false);
             pass.renderPassEvent = settings.injectionPoint;
             pixelCellPass = new CharacterSilhouettePass(true);
             pixelCellPass.renderPassEvent = (RenderPassEvent)((int)RenderPassEvent.AfterRenderingOpaques + 1);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            pixelCellPass?.SetToneProfilingEnabled(false);
+            base.Dispose(disposing);
         }
 
         public void Configure(Material maskMaterial, Material compositeMaterial)
@@ -66,13 +100,15 @@ namespace FantasySurvival.Rendering
 
             if (CharacterSilhouetteSubject.HasActivePixelCellSubject)
             {
-                pixelCellPass.Setup(settings.maskMaterial, settings.compositeMaterial);
+                pixelCellPass.Setup(settings.maskMaterial, settings.compositeMaterial,
+                    settings.adaptiveToneCompute, settings.adaptiveTones);
                 pixelCellPass.ConfigureInput(ScriptableRenderPassInput.Depth);
                 pixelCellPass.requiresIntermediateTexture = true;
                 renderer.EnqueuePass(pixelCellPass);
             }
 
-            pass.Setup(settings.maskMaterial, settings.compositeMaterial);
+            pass.Setup(settings.maskMaterial, settings.compositeMaterial,
+                settings.adaptiveToneCompute, settings.adaptiveTones);
             pass.ConfigureInput(ScriptableRenderPassInput.Depth);
             // Both outline paths sample the already lit camera color and resolved
             // depth. Keep cameraColor sampleable instead of using the backbuffer.
@@ -126,20 +162,34 @@ namespace FantasySurvival.Rendering
             {
                 new ShaderTagId("CharacterPixelCellSource")
             };
+            private static readonly List<ShaderTagId> ToneNativeShaderTags = new List<ShaderTagId>
+            {
+                new ShaderTagId("CharacterToneNativeSource")
+            };
 
             private Material maskMaterial;
             private Material compositeMaterial;
             private readonly bool cellOnly;
+            private ComputeShader adaptiveToneCompute;
+            private CharacterAdaptiveTonePass.Settings adaptiveToneSettings;
+            private readonly CharacterAdaptiveTonePass adaptiveTonePass = new CharacterAdaptiveTonePass();
+            public bool captureToneDiagnostics;
+            public uint[] lastToneDiagnostics;
+            public CharacterAdaptiveTonePass.ProfilingCost ToneCost => adaptiveTonePass.LastCost;
+            public void SetToneProfilingEnabled(bool enabled) => adaptiveTonePass.SetProfilingEnabled(enabled);
 
             public CharacterSilhouettePass(bool cellOnly)
             {
                 this.cellOnly = cellOnly;
             }
 
-            public void Setup(Material newMaskMaterial, Material newCompositeMaterial)
+            public void Setup(Material newMaskMaterial, Material newCompositeMaterial,
+                ComputeShader toneCompute, CharacterAdaptiveTonePass.Settings toneSettings)
             {
                 maskMaterial = newMaskMaterial;
                 compositeMaterial = newCompositeMaterial;
+                adaptiveToneCompute = toneCompute;
+                adaptiveToneSettings = toneSettings;
             }
 
             public override void RecordRenderGraph(
@@ -312,6 +362,39 @@ namespace FantasySurvival.Rendering
                     renderGraph, descriptor, "_CharacterCellSourceDepth", true, FilterMode.Point);
 
                 RecordPixelCellSourcePass(renderGraph, frameData, resources, cellColor, cellMeta, cellDepth);
+
+                // Only this opt-in color branch changes. The original sparse
+                // seeds, metadata, coverage, outline and scene depth still own
+                // all geometry decisions made by the existing cell composite.
+                if (adaptiveToneSettings != null && adaptiveToneSettings.enabled &&
+                    CharacterSilhouetteSubject.TryGetAdaptiveToneSubject(out int toneSubjectId))
+                {
+                    int width = cameraData.cameraTargetDescriptor.width;
+                    int height = cameraData.cameraTargetDescriptor.height;
+                    adaptiveTonePass.ValidateConfiguration(adaptiveToneCompute, toneSubjectId,
+                        width, height, adaptiveToneSettings);
+                    descriptor.graphicsFormat = GraphicsFormat.R16G16B16A16_SFloat;
+                    descriptor.depthStencilFormat = GraphicsFormat.None;
+                    TextureHandle nativeColor = UniversalRenderer.CreateRenderGraphTexture(
+                        renderGraph, descriptor, "_CharacterToneNativeColor", true, FilterMode.Point);
+                    descriptor.graphicsFormat = GraphicsFormat.R8G8B8A8_UNorm;
+                    TextureHandle nativeMeta = UniversalRenderer.CreateRenderGraphTexture(
+                        renderGraph, descriptor, "_CharacterToneNativeMeta", true, FilterMode.Point);
+                    descriptor.graphicsFormat = GraphicsFormat.None;
+                    descriptor.depthStencilFormat = GraphicsFormat.D32_SFloat;
+                    TextureHandle nativeDepth = UniversalRenderer.CreateRenderGraphTexture(
+                        renderGraph, descriptor, "_CharacterToneNativeDepth", true, FilterMode.Point);
+                    RecordPixelCellSourcePass(renderGraph, frameData, resources,
+                        nativeColor, nativeMeta, nativeDepth, true);
+                    cellColor = adaptiveTonePass.Record(renderGraph, nativeColor, nativeMeta,
+                        cellColor, cellMeta, adaptiveToneCompute, toneSubjectId, width, height,
+                        adaptiveToneSettings, out BufferHandle toneStatus);
+                    if (captureToneDiagnostics)
+                    {
+                        captureToneDiagnostics = false;
+                        RecordToneDiagnosticReadback(renderGraph, toneStatus);
+                    }
+                }
                 RecordPixelCellCompositePass(renderGraph, resources, cellColor, cellMeta,
                     sceneDepth, resolvedCellDepth);
                 // Keep URP's original handle: both explicit resource readers and
@@ -355,17 +438,20 @@ namespace FantasySurvival.Rendering
                 UniversalResourceData resources,
                 TextureHandle cellColor,
                 TextureHandle cellMeta,
-                TextureHandle cellDepth)
+                TextureHandle cellDepth,
+                bool nativeToneSource = false)
             {
                 using IRasterRenderGraphBuilder builder =
                     renderGraph.AddRasterRenderPass<PixelCellSourcePassData>(
-                        "Character Pixel Cell Source", out PixelCellSourcePassData passData);
+                        nativeToneSource ? "Character Adaptive Tone Native Source" : "Character Pixel Cell Source",
+                        out PixelCellSourcePassData passData);
 
                 UniversalRenderingData renderingData = frameData.Get<UniversalRenderingData>();
                 UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
                 UniversalLightData lightData = frameData.Get<UniversalLightData>();
                 DrawingSettings drawingSettings = RenderingUtils.CreateDrawingSettings(
-                    PixelCellShaderTags, renderingData, cameraData, lightData,
+                    nativeToneSource ? ToneNativeShaderTags : PixelCellShaderTags,
+                    renderingData, cameraData, lightData,
                     cameraData.defaultOpaqueSortFlags);
                 // Keep URP's per-object lighting/probe data and each material's
                 // own lit pass. This is not an override-material mask draw.
@@ -393,6 +479,37 @@ namespace FantasySurvival.Rendering
                 {
                     context.cmd.ClearRenderTarget(RTClearFlags.All, Color.clear, 1f, 0);
                     context.cmd.DrawRendererList(data.rendererList);
+                });
+            }
+
+            private sealed class ToneDiagnosticReadbackData
+            {
+                public BufferHandle status;
+                public CharacterSilhouettePass owner;
+            }
+
+            private void RecordToneDiagnosticReadback(RenderGraph renderGraph, BufferHandle status)
+            {
+                // Explicit one-shot diagnostics only: normal rendering never
+                // reads pixels or GPU analysis buffers back to the CPU.
+                using var builder = renderGraph.AddUnsafePass<ToneDiagnosticReadbackData>(
+                    "Character Adaptive Tone Diagnostic Readback", out var data);
+                data.status = status;
+                data.owner = this;
+                builder.UseBuffer(status, AccessFlags.Read);
+                builder.AllowPassCulling(false);
+                builder.SetRenderFunc(static (ToneDiagnosticReadbackData passData, UnsafeGraphContext context) =>
+                {
+                    CharacterSilhouettePass owner = passData.owner;
+                    context.cmd.RequestAsyncReadback((GraphicsBuffer)passData.status, request =>
+                    {
+                        if (request.hasError)
+                        {
+                            Debug.LogError("Adaptive tone diagnostic GPU readback failed.");
+                            return;
+                        }
+                        owner.lastToneDiagnostics = request.GetData<uint>().ToArray();
+                    });
                 });
             }
 

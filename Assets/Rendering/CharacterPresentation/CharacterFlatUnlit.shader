@@ -80,6 +80,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             float _CharacterCellSubjectId;
             float _CharacterAdaptiveToneSource;
             float _CharacterHairLightingAnalysis;
+            float _CharacterToneCaptureLighting;
 
             struct Attributes
             {
@@ -350,7 +351,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                     saturate(dot(normalWS, light.direction));
             }
 
-            float HairIncidentLuminance(Varyings input)
+            float IncidentLuminance(Varyings input)
             {
                 InputData inputData = (InputData)0;
                 inputData.positionWS = input.positionWS + _CharacterLightingPositionOffsetWS.xyz;
@@ -423,8 +424,9 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                     clamp(round(_CharacterCellSize), 1.0, 8.0) / 255.0,
                     (subjectId >> 8) / 255.0);
                 output.incidentLighting = 0;
-                if (_CharacterHairLightingAnalysis > 0.5 && round(_CharacterOutlineGroup) == 3.0)
-                    output.incidentLighting = half4(HairIncidentLuminance(input), 0, 0, 1);
+                if (_CharacterToneCaptureLighting > 0.5 ||
+                    (_CharacterHairLightingAnalysis > 0.5 && round(_CharacterOutlineGroup) == 3.0))
+                    output.incidentLighting = half4(IncidentLuminance(input), 0, 0, 1);
                 return output;
             }
 

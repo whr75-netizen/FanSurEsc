@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
@@ -6,6 +7,33 @@ using UnityEngine.Rendering.RenderGraphModule;
 
 namespace FantasySurvival.Rendering
 {
+    /// <summary>
+    /// One explicitly requested rendered frame. Byte arrays own copies of GPU
+    /// readback memory; no RenderGraph handles survive in the delivered packet.
+    /// Color/lighting/output textures are RGBA16F, metadata is RGBA8, uint
+    /// buffers have stride 4, and palette/solutions contain float4 values.
+    /// </summary>
+    [Serializable]
+    public sealed class AdaptiveToneCapture
+    {
+        public string captureId, cameraId, settingsJson;
+        public int frame, width, height, subjectId;
+        public string error;
+        public readonly Dictionary<string, byte[]> data = new Dictionary<string, byte[]>();
+
+        internal AdaptiveToneCapture(string captureId, int frame, int width, int height,
+            int subjectId, string cameraId, string settingsJson)
+        {
+            this.captureId = captureId;
+            this.frame = frame;
+            this.width = width;
+            this.height = height;
+            this.subjectId = subjectId;
+            this.cameraId = cameraId;
+            this.settingsJson = settingsJson;
+        }
+    }
+
     /// <summary>
     /// Records the opt-in, single-subject GPU tone experiment between the existing
     /// cell source and composite. All GPU resources belong to this RenderGraph;
@@ -294,7 +322,24 @@ namespace FantasySurvival.Rendering
             int subjectId, int width, int height, Settings settings, out BufferHandle validationStatus,
             TextureHandle sourceNativeLighting = default)
         {
+            return Record(renderGraph, sourceNativeColor, sourceNativeMeta, cellColor, cellMeta,
+                computeShader, subjectId, width, height, settings, out validationStatus,
+                out _, sourceNativeLighting);
+        }
+
+        /// <summary>
+        /// captureBuffers contains borrowed handles to this invocation's actual
+        /// dispatch buffers. A caller may read them in a dependent diagnostic
+        /// pass in the same graph; they must never be cached across frames.
+        /// </summary>
+        public TextureHandle Record(RenderGraph renderGraph,
+            TextureHandle sourceNativeColor, TextureHandle sourceNativeMeta,
+            TextureHandle cellColor, TextureHandle cellMeta, ComputeShader computeShader,
+            int subjectId, int width, int height, Settings settings, out BufferHandle validationStatus,
+            out BufferSet captureBuffers, TextureHandle sourceNativeLighting = default)
+        {
             validationStatus = BufferHandle.nullHandle;
+            captureBuffers = default;
             if (renderGraph == null)
                 throw new ArgumentNullException(nameof(renderGraph));
             ValidateConfiguration(computeShader, subjectId, width, height, settings);
@@ -320,6 +365,7 @@ namespace FantasySurvival.Rendering
             outputDescriptor.wrapMode = TextureWrapMode.Clamp;
             TextureHandle output = renderGraph.CreateTexture(outputDescriptor);
             BufferSet buffers = CreateBuffers(renderGraph);
+            captureBuffers = buffers;
             validationStatus = buffers.status;
             ToneValues values = new ToneValues(settings);
 
@@ -456,7 +502,8 @@ namespace FantasySurvival.Rendering
             cmd.DispatchCompute(shader, kernel, data.groupsX, data.groupsY, 1);
         }
 
-        private struct BufferSet
+        /// <summary>Borrowed current-graph buffers, not persistent GPU state.</summary>
+        public struct BufferSet
         {
             public BufferHandle groups, histogram, tiles, tileHistogram, supports;
             public BufferHandle highlightHistogram, status, palette, solutions;

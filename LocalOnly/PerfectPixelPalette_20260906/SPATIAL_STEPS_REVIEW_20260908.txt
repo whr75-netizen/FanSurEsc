@@ -1,0 +1,64 @@
+현재 재개 지점 — 2026-09-08 / 공간 대비를 보존하는 명암 단계화
+작업 기록이며 전역 AI 지침이 아닙니다. 외형 합격은 사용자 검토 대기입니다.
+
+사용자 요청
+이전 결과의 형태 구분과 직전 결과의 단순한 색면을 함께 유지하도록 알고리즘 수정, 비교본 제공.
+실제 아트 비교본은 한 번 생성했고 결과를 본 뒤 추가 보정하지 않았습니다.
+
+원인과 변경
+직전 weighted_steps는 colors/counts만 받고 공간 정보를 버렸습니다.
+큰 머리카락 영역의 99.55%인 색 그룹이 RMSE .0588 < .06으로 단색 처리됐습니다.
+새 spatial_steps는 같은 source domain/chroma group의 pixel 좌표와 color index도 받습니다.
+spatial_tones.py: group mask 안에서만 source L을 Gaussian 정규화 필터링합니다.
+각 group bbox 축의 2%,4%,8% scale(샘플링 floor sigma .5)로 명암의 공간적 지속성을 봅니다.
+원본 대비 smooth 분산비 >= .35, 두 이웃 scale의 밝음/어두움 support 겹침 >= .65인 경우,
+coarsest persistent scale의 하위/상위 20% support 한 쌍을 고정합니다.
+이 구조 판정은 명시적인 휴리스틱입니다. 물체/재질의 정답을 인식하는 수학적 보장은 아닙니다.
+
+톤 선택
+각 K의 SSE 최적 후보를 만들되, 가중 L-RMSE <= .06 조건 외에
+mean(Lout[bright]) - mean(Lout[dark]) >= .65 * 원본 같은 support의 명암 대비
+도 만족해야 통과합니다. K 증가 순 후보 중 첫 통과를 택합니다.
+최소 source contrast .025는 미세 명암을 구조로 보호하지 않는 노출된 스타일 기준이며
+이미지별 최적값이나 물리적 상수가 아닙니다. 정규화 pixel 수와는 무관합니다.
+지원 색/좌표는 원본에서 한 번만 정합니다. 후보별로 유리한 support를 다시 고르지 않습니다.
+대표 RGB는 여전히 해당 source group의 실제 색입니다. 밝기/채도 rescale나 RGB 혼합은 없습니다.
+기존 max_error, weighted_steps, 선 처리와 source sample 위치는 보존했습니다.
+공간 guard가 추가된 문제의 전역 최소 K 보장은 없습니다. K별 SSE 최적 후보만 검사합니다.
+아주 작은 오차 설정에서 singleton SSE 소거오차가 정확한 팔레트를 거절하던 회귀도 고쳤습니다.
+
+현재 실행
+../ChibiPixelReview_20260908_Bright/review_config.json
+tone_policy=spatial_steps, contrast_retention=.65, minimum_contrast=.025
+기본 output: result_spatial_steps_96 (기존 폴더 덮어쓰기 거절)
+재실행: Run_Bright_Review.cmd --output 새폴더
+comparison_history 옵션으로 원본 / max_error / weighted_steps / spatial_steps 4칸을 표시합니다.
+실행 코드, 설정, 입력/과거 결과 사본, hash, domain/좌표 NPZ, 상세 진단은 output에 함께 저장됩니다.
+
+실제 결과와 검사
+225개 회귀 테스트 전체 통과. 동일 histogram의 연결 명암/흩어진 잡음 구별,
+scope/alpha/입력 불변, 두 진입점 동일 source shading, 출력 grid 무관,
+합성 입력의 2배 확대 tone 수, 명시적 resource 실패, history 재실행 등을 포함합니다.
+실제 96x192: 원본 hash, source sample 좌표, source domain labels, final alpha가 직전과 동일합니다.
+35개 색 그룹에 공간 guard 적용, 지나치게 평탄한 K 후보 39개 거절, 모든 accepted guard 통과.
+주요 머리카락 그룹: 1 -> 2톤, 보호 대비 .130844 -> .086458 (요구 >= .085049).
+얼굴 domain192: max_error 11 / weighted 5 / spatial 6대표색.
+몸통 domain217: 직전과 동일 4대표색. 전체 최종 RGB는 76색.
+이 숫자는 기술적 사실이지 디자인 합격 판정이 아닙니다.
+
+남은 한계
+현재 한 색 그룹의 대표적인 큰 대비 한 쌍만 보호합니다. 모든 국소 머리결/경계 보장은 아닙니다.
+이미 분리된 소형 domain/chroma group의 색은 남으며 점 형태 잔색을 자동 제거하지 않습니다.
+그룹 밖의 흰색은 필터에 섞이지 않지만, 원본의 강한 흰 반사광을 기본 피부색으로 복원하지는 않습니다.
+단일 PNG의 조명/재질 분리는 별도 문제입니다. 이번에 임의 피부 팔레트/명암 교체는 하지 않았습니다.
+bbox-relative scales와 sampling floor 때문에 임의 확대/잡음/압축의 완전 불변은 보장하지 않습니다.
+source/bbox 4MP와 DP/filter resource 한도에서 명시 실패합니다. 숨은 resize/fallback 없음.
+Unity 파일 변경/Play Mode 검증은 하지 않았습니다. 과거 승인 결과는 덮어쓰지 않았습니다.
+
+참고 방향 (논문 재현 구현은 아님)
+https://people.csail.mit.edu/sparis/publi/2011/siggraph/ — scale별 경계/세부 구별
+https://gfx.cs.princeton.edu/pubs/Gerstner_2012_PIA/ — 특징 배치와 팔레트를 함께 고려
+
+보관: 구현·검증·이 기록을 기능 단위 로컬 커밋 후 publish_private_backup.py --push로
+https://github.com/whr75-netizen/pixel-normalization-lab 비공개 저장소에 업로드합니다.
+원본 이미지·Unity 에셋·.deps는 업로드 대상에서 제외합니다.

@@ -19,6 +19,7 @@ SNAPSHOT_FILES = ['boundary_cli.py', 'boundary_review_config.json', 'requirement
                   'src/perfect_pixel/boundary_regions.py', 'src/perfect_pixel/region_palette.py',
                   'src/perfect_pixel/gradient_tones.py',
                   'src/perfect_pixel/gradient_steps.py',
+                  'src/perfect_pixel/spatial_tones.py',
                   'src/perfect_pixel/palette.py', 'src/perfect_pixel/perfect_pixel_noCV2.py',
                   'src/perfect_pixel/perfect_pixel.py', 'src/perfect_pixel/reference_colors.py']
 

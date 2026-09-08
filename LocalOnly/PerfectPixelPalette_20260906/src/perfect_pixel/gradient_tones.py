@@ -156,16 +156,19 @@ def _cover(colors, counts, error):
 
 
 def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma_span=.12,
-                           tone_policy='max_error', tone_error=.06, chroma_error=.06):
+                           tone_policy='max_error', tone_error=.06, chroma_error=.06,
+                           contrast_retention=.65, minimum_contrast=.025):
     image = _image(image)
     if image.shape[0] * image.shape[1] > MAX_PIXELS:
         raise ValueError('Gradient processing exceeds the explicit 4MP resource bound; no hidden resize.')
     validate_options(color_error, edge_threshold, chroma_span)
-    if tone_policy not in ('max_error', 'weighted_steps'):
-        raise ValueError('tone_policy must be max_error or weighted_steps.')
-    if tone_policy == 'weighted_steps':
+    if tone_policy not in ('max_error', 'weighted_steps', 'spatial_steps'):
+        raise ValueError('tone_policy must be max_error, weighted_steps or spatial_steps.')
+    if tone_policy != 'max_error':
         from .gradient_steps import select_step_palette, _option
         _option(tone_error, 'tone_error'); _option(chroma_error, 'chroma_error')
+        if tone_policy == 'spatial_steps':
+            _option(contrast_retention, 'contrast_retention'); _option(minimum_contrast, 'minimum_contrast')
     visible = np.ones(image.shape[:2], bool) if image.shape[2] == 3 else image[..., 3] > 0
     rgb = image[..., :3]
     lab = rgb_to_oklab(rgb.astype(np.float32) / 255)
@@ -180,9 +183,14 @@ def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma
         indices = sorted_indices[begin:begin + count]; begin += count
         colors, inverse, weights = np.unique(rgb.reshape(-1, 3)[indices], axis=0,
                                              return_inverse=True, return_counts=True)
-        if tone_policy == 'weighted_steps':
+        if tone_policy != 'max_error':
+            context = None
+            if tone_policy == 'spatial_steps':
+                context = {'positions': np.column_stack(np.unravel_index(indices, visible.shape)),
+                           'color_indices': inverse}
             ramp, choice, meta = select_step_palette(colors, weights,
-                tone_error=tone_error, chroma_error=chroma_error)
+                tone_error=tone_error, chroma_error=chroma_error, spatial_context=context,
+                contrast_retention=contrast_retention, minimum_contrast=minimum_contrast)
         else:
             ramp, choice, meta = _cover(colors, weights, color_error)
         output.reshape(-1, image.shape[2])[indices, :3] = ramp[choice[inverse]]
@@ -192,13 +200,16 @@ def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma
     palette, inverse = np.unique(output[..., :3][visible], axis=0, return_inverse=True)
     tone_map[visible] = inverse
     colors_metadata = {
-        'method': ('shared-domain-weighted-lightness-steps/1' if tone_policy == 'weighted_steps'
-                   else 'shared-domain-error-bounded-observed-color-cover/1'),
+        'method': {'max_error': 'shared-domain-error-bounded-observed-color-cover/1',
+                   'weighted_steps': 'shared-domain-weighted-lightness-steps/1',
+                   'spatial_steps': 'shared-domain-spatial-contrast-steps/1'}[tone_policy],
         'tone_policy': tone_policy,
         'region_count': len(regions), 'regions': regions,
         'color_error_limit_oklab': float(color_error) if tone_policy == 'max_error' else None,
-        'weighted_lightness_error_limit': float(tone_error) if tone_policy == 'weighted_steps' else None,
-        'chromaticity_error_limit': float(chroma_error) if tone_policy == 'weighted_steps' else None,
+        'weighted_lightness_error_limit': float(tone_error) if tone_policy != 'max_error' else None,
+        'chromaticity_error_limit': float(chroma_error) if tone_policy != 'max_error' else None,
+        'contrast_retention': float(contrast_retention) if tone_policy == 'spatial_steps' else None,
+        'minimum_structure_contrast': float(minimum_contrast) if tone_policy == 'spatial_steps' else None,
         'fixed_tone_count': None, 'max_observed_color_error': max(
             (r['max_color_error'] for r in regions), default=0.),
         'palette_size': len(palette), 'reference_palette_transfer': False,
@@ -210,13 +221,17 @@ def prepare_gradient_tones(image, *, color_error=.06, edge_threshold=.06, chroma
                        'Error bound is not artistic approval or globally minimal palette size.',
                        'Source enlargement invariance is not guaranteed for arbitrary resampling, noise or compression.',
                        'Disconnected gradient domains do not yet share a cross-domain style palette.',
-                       'weighted_steps limits weighted lightness error, NOT worst per-pixel RGB error.'],
+                       'Step policies limit weighted lightness error, NOT worst per-pixel RGB error.',
+                       'spatial_steps preserves accepted source-support contrast, not every gradient or semantic shape.',
+                       'Spatially guarded SSE candidates do not guarantee global minimum palette size.'],
     }
     return {'flat_image': output, 'region_labels': labels, 'edge_strength': edge,
             'tone_map': tone_map, 'palette': palette,
-            'metadata': {'method': 'continuous-gradient-tones/2', 'tone_policy': tone_policy,
-                         'tone_error': tone_error if tone_policy == 'weighted_steps' else None,
-                         'chroma_error': chroma_error if tone_policy == 'weighted_steps' else None,
+            'metadata': {'method': 'continuous-gradient-tones/3', 'tone_policy': tone_policy,
+                         'tone_error': tone_error if tone_policy != 'max_error' else None,
+                         'chroma_error': chroma_error if tone_policy != 'max_error' else None,
+                         'contrast_retention': contrast_retention if tone_policy == 'spatial_steps' else None,
+                         'minimum_contrast': minimum_contrast if tone_policy == 'spatial_steps' else None,
                          'segmentation': segmentation,
                          'region_colors': colors_metadata, 'output_sampling_performed': False,
                          'fallback_algorithm': None}}

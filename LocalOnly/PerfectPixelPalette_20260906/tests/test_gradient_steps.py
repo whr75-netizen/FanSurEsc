@@ -121,6 +121,13 @@ class GradientStepTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'transition budget'):
                 select_step_palette(colors, np.ones(4))
 
+    def test_exact_observed_palette_succeeds_at_tiny_tolerance(self):
+        colors = gray([35, 80, 117, 157, 201, 239])
+        counts = np.array([1, 4, 9, 5, 3, 1])
+        result = select_step_palette(colors, counts, tone_error=1e-12)
+        np.testing.assert_array_equal(result[0][result[1]], colors)
+        self.assertEqual(result[2]['weighted_rmse_l'], 0.)
+
     def test_invalid_options_and_counts_are_rejected(self):
         colors = gray([100, 130])
         for option in ('tone_error', 'chroma_error'):

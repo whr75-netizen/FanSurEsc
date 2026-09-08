@@ -1,8 +1,9 @@
 """Observed-color steps with bounded chromaticity and weighted lightness error.
 
-The minimum-K claim applies only to the fixed chromaticity groups and their
-ordered one-dimensional observed-lightness quantization problem. It is not a
-global minimum palette, material recognition, or a per-pixel RGB error bound.
+The minimum-K claim for the unguarded weighted policy applies only to fixed
+chromaticity groups and ordered one-dimensional observed-lightness quantization.
+Spatial guards test one SSE-optimal candidate per K, NOT all feasible partitions.
+Neither policy is material recognition or a per-pixel RGB error guarantee.
 """
 from numbers import Real
 
@@ -47,8 +48,12 @@ def _chroma_groups(chroma, weights, error):
     return assigned, evaluations
 
 
-def _lightness_steps(lightness, weights, error):
-    """Exact contiguous weighted 1-D DP with actual observed-L representatives."""
+def _lightness_steps(lightness, weights, error, *, constraints=()):
+    """Try the SSE-optimal partition at each K, with optional spatial guards.
+
+    With guards this is NOT the globally minimum feasible K: a different,
+    non-SSE-optimal partition at the same K could satisfy the spatial guards.
+    """
     values, inverse = np.unique(lightness, return_inverse=True)
     n = len(values)
     cost_bytes = (n + 1) ** 2 * (np.dtype(np.float64).itemsize + np.dtype(np.int32).itemsize)
@@ -77,11 +82,33 @@ def _lightness_steps(lightness, weights, error):
         total -= 2 * representative * (px[ends] - px[start])
         total += representative ** 2 * (pw[ends] - pw[start])
         costs[start, ends] = np.maximum(total, 0.)
+        # A single observed L has mathematically zero error. Prefix subtraction
+        # can otherwise invent ~1e-16 SSE and reject an exact palette at tiny tolerances.
+        costs[start, start + 1] = 0.
     back = np.full((n + 1, n + 1), -1, np.int32)
     previous = np.full(n + 1, np.inf)
     previous[0] = 0.
     transitions = 0
     previous_rmse = None
+    spatial_rejections = 0
+
+    def reconstruct(k):
+        intervals = []
+        end = n
+        for level in range(k, 0, -1):
+            start = int(back[level, end])
+            representative = int(representatives(start, np.array([end]))[0])
+            intervals.append((start, end, representative))
+            end = start
+        intervals.reverse()
+        assigned_values = np.empty(n, np.int32)
+        selected = []
+        for tone, (start, end, representative) in enumerate(intervals):
+            assigned_values[start:end] = tone
+            candidates = np.flatnonzero(inverse == representative)
+            selected.append(int(candidates[np.argmax(weights[candidates])]))
+        return np.asarray(selected, np.int32), assigned_values[inverse]
+
     for k in range(1, n + 1):
         width = n - k + 1
         required = width * (width + 1) // 2
@@ -96,33 +123,32 @@ def _lightness_steps(lightness, weights, error):
             back[k, end] = start
         rmse = float(np.sqrt(max(current[n], 0.)))
         if rmse <= error + 1e-12:
-            break
+            selected, assigned = reconstruct(k)
+            target = lightness[selected][assigned]
+            contrasts = [float(np.dot(c['coefficients'], target)) for c in constraints]
+            if all(actual + 1e-10 >= c['minimum_contrast']
+                   for actual, c in zip(contrasts, constraints)):
+                break
+            spatial_rejections += 1
         previous_rmse = rmse
         previous = current
-    intervals = []
-    end = n
-    for level in range(k, 0, -1):
-        start = int(back[level, end])
-        representative = int(representatives(start, np.array([end]))[0])
-        intervals.append((start, end, representative))
-        end = start
-    intervals.reverse()
-    assigned_values = np.empty(n, np.int32)
-    representatives_out = []
-    for tone, (start, end, representative) in enumerate(intervals):
-        assigned_values[start:end] = tone
-        candidates = np.flatnonzero(inverse == representative)
-        # All candidates have exactly the selected observed L. Frequency only
-        # chooses an actual RGB among ties; it cannot introduce an average RGB.
-        representatives_out.append(int(candidates[np.argmax(weights[candidates])]))
-    return np.asarray(representatives_out, np.int32), assigned_values[inverse], {
+    else:
+        raise ValueError('No candidate satisfied the spatial contrast guards; no fallback palette returned')
+    return selected, assigned, {
         'unique_lightness_count': n, 'target_tone_count': k,
         'weighted_rmse_l': rmse, 'previous_k_weighted_rmse_l': previous_rmse,
         'dp_transitions': transitions, 'quadratic_array_bytes': cost_bytes,
-        'minimum_k_scope': 'fixed chromaticity group; contiguous observed-L representatives; weighted squared error'}
+        'spatially_rejected_candidates': spatial_rejections,
+        'retained_support_contrasts': contrasts,
+        'required_support_contrasts': [float(c['minimum_contrast']) for c in constraints],
+        'signed_mean_lightness_error': float(np.dot(weights, target - lightness)),
+        'minimum_k_scope': ('first passing SSE-optimal candidate in increasing K; NOT global constrained minimum'
+                            if constraints else
+                            'fixed chromaticity group; contiguous observed-L representatives; weighted squared error')}
 
 
-def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04):
+def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04,
+                        spatial_context=None, contrast_retention=.65, minimum_contrast=.025):
     """Return actual input representatives, input-row assignments, diagnostics.
 
     A rare lightness extreme may exceed tone_error at that pixel: tone_error
@@ -137,6 +163,24 @@ def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04):
     if (counts.shape != (len(colors),) or counts.dtype.kind not in 'iuf'
             or not np.all(np.isfinite(counts)) or np.any(counts <= 0)):
         raise ValueError('counts must be finite positive numeric values, one per input color')
+    if spatial_context is not None:
+        contrast_retention = _option(contrast_retention, 'contrast_retention')
+        minimum_contrast = _option(minimum_contrast, 'minimum_contrast')
+        if not isinstance(spatial_context, dict) or set(spatial_context) != {'positions', 'color_indices'}:
+            raise ValueError('spatial_context must contain positions and color_indices')
+        positions = np.asarray(spatial_context['positions'])
+        pixel_colors = np.asarray(spatial_context['color_indices'])
+        if (positions.ndim != 2 or positions.shape[1] != 2 or positions.dtype.kind not in 'iu'
+                or pixel_colors.shape != (len(positions),) or pixel_colors.dtype.kind not in 'iu'
+                or len(pixel_colors) == 0 or np.any(positions < 0)
+                or np.any(pixel_colors < 0) or np.any(pixel_colors >= len(colors))):
+            raise ValueError('invalid spatial pixel positions or color indices')
+        if len(positions) > 4_194_304:
+            raise ValueError('spatial context exceeds the 4MP source-pixel resource bound')
+        if len(np.unique(positions, axis=0)) != len(positions):
+            raise ValueError('spatial context must not contain duplicate positions')
+        if not np.array_equal(np.bincount(pixel_colors.astype(np.int64), minlength=len(colors)), counts):
+            raise ValueError('spatial pixel histogram must match source counts')
     unique, original_to_unique = np.unique(colors, axis=0, return_inverse=True)
     # Normalize before summing to avoid overflow and make uniform frequency
     # scaling immaterial. Aggregate duplicate RGB rows without changing inputs.
@@ -150,23 +194,40 @@ def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04):
     lab = rgb_to_oklab(unique.astype(np.float32) / 255).astype(np.float64)
     chroma = lab[:, 1:] / np.maximum(lab[:, :1], .05)
     groups, chroma_evaluations = _chroma_groups(chroma, weights, chroma_error)
+    if spatial_context is not None:
+        from .spatial_tones import build_spatial_constraints
+        pixel_unique = original_to_unique[pixel_colors]
+        pixel_groups = groups[pixel_unique]
     assignment = np.empty(len(unique), np.int32)
     ramp, group_metadata = [], []
     for identifier in range(int(groups.max()) + 1):
         members = np.flatnonzero(groups == identifier)
-        selected, local, info = _lightness_steps(lab[members, 0], weights[members], tone_error)
+        constraints, spatial_metadata = [], None
+        if spatial_context is not None:
+            included = pixel_groups == identifier
+            local_lookup = np.full(len(unique), -1, np.int32)
+            local_lookup[members] = np.arange(len(members))
+            pixel_local = local_lookup[pixel_unique[included]]
+            constraints, spatial_metadata = build_spatial_constraints(
+                lab[members, 0][pixel_local], pixel_local, positions[included], len(members),
+                contrast_retention=contrast_retention, minimum_contrast=minimum_contrast)
+        selected, local, info = _lightness_steps(lab[members, 0], weights[members], tone_error,
+                                                constraints=constraints)
         assignment[members] = local + len(ramp)
         representatives = members[selected]
         ramp.extend(unique[representatives].tolist())
         info.update(group_id=identifier, source_color_count=len(members),
                     pixel_weight=float(weights[members].sum()))
+        if spatial_metadata is not None:
+            info['spatial_support'] = spatial_metadata
         group_metadata.append(info)
     ramp = np.asarray(ramp, np.uint8)
     target_lab = rgb_to_oklab(ramp.astype(np.float32) / 255).astype(np.float64)[assignment]
     target_chroma = target_lab[:, 1:] / np.maximum(target_lab[:, :1], .05)
     delta_l = lab[:, 0] - target_lab[:, 0]
     metadata = {
-        'method': 'fixed-chromaticity-groups-weighted-observed-lightness-dp/1',
+        'method': ('spatial-contrast-guarded-observed-lightness-dp/1' if spatial_context is not None
+                   else 'fixed-chromaticity-groups-weighted-observed-lightness-dp/1'),
         'tone_error': tone_error, 'chroma_error': chroma_error,
         'source_color_count': len(unique), 'target_tone_count': len(ramp),
         'color_group_count': len(group_metadata), 'color_groups': group_metadata,
@@ -176,7 +237,10 @@ def select_step_palette(colors, counts, *, tone_error=.06, chroma_error=.04):
         'max_color_error': float(np.linalg.norm(lab - target_lab, axis=1).max()),
         'chromaticity_distance_evaluations': chroma_evaluations,
         'rgb_provenance': 'actual source RGB from the same fixed chromaticity group',
-        'minimum_k_scope': 'each fixed chromaticity group, observed-L representatives and weighted squared error only',
+        'minimum_k_scope': ('first passing SSE-optimal candidate per group; NOT global constrained minimum'
+                            if spatial_context is not None else
+                            'each fixed chromaticity group, observed-L representatives and weighted squared error only'),
+        'spatial_contrast_used': spatial_context is not None,
         'maximum_error_per_pixel_guaranteed': False,
         'resource_limits': {'unique_lightness_per_group': MAX_UNIQUE_LIGHTNESS,
                             'quadratic_array_bytes_per_group': MAX_COST_ARRAY_BYTES,

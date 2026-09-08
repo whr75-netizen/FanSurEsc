@@ -1,7 +1,10 @@
 {
   "source": "source_bright_rgba.png",
   "reference": "source_bright_rgba.png",
-  "comparison_previous": "result_continuous_96/pixel_native.png",
+  "comparison_history": [
+    {"path": "result_continuous_96/pixel_native.png", "label": "PREVIOUS / MAX COLOR ERROR"},
+    {"path": "result_weighted_steps_96/pixel_native.png", "label": "PREVIOUS / WEIGHTED STEPS"}
+  ],
   "base_grid": [
     96,
     192
@@ -10,7 +13,7 @@
   "preview_zoom": 4,
   "notes": [
     "User-confirmed test grid 96x192. Same brighter native PBR capture; no Unity changes.",
-    "Same continuous source-gradient domains. Chromaticity preserves hue differences; weighted lightness DP chooses adaptive shared steps instead of covering every shading outlier.",
+    "Same source domains, chromaticity groups and observed RGB. Source-fixed multiscale support contrast rejects over-flattened weighted-DP candidates; no semantic or coordinate-specific rule.",
     "Region capacity failures propagate. Do not substitute source_palette or region_colors.",
     "Raw-source region sampling fixes placement independently of shading. No new outline or copied anime line/erase scopes."
   ],
@@ -22,9 +25,11 @@
       },
       "options": {
         "mode": "continuous",
-        "tone_policy": "weighted_steps",
+        "tone_policy": "spatial_steps",
         "tone_error": 0.06,
         "chroma_error": 0.06,
+        "contrast_retention": 0.65,
+        "minimum_contrast": 0.025,
         "gradient_edge_threshold": 0.06,
         "gradient_chroma_span": 0.12
       }

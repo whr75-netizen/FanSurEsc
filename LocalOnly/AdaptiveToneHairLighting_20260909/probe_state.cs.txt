@@ -1,0 +1,82 @@
+using System;
+using System.Text;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+using FantasySurvival.CharacterPresentation;
+using FantasySurvival.Rendering;
+using FantasySurvival.SceneFlow;
+
+// Read-only probe. Does not compile, reimport, clear Console, render, or save.
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        var report = new StringBuilder();
+        Scene scene = SceneManager.GetActiveScene();
+        report.AppendLine("Play=" + EditorApplication.isPlaying + "; compiling=" + EditorApplication.isCompiling +
+            "; updating=" + EditorApplication.isUpdating + "; frame=" + Time.frameCount + "; timeScale=" + Time.timeScale +
+            "; scene=" + scene.name + "; dirty=" + scene.isDirty + "; runInBackground=" + Application.runInBackground);
+        report.AppendLine("Pipeline=" + GraphicsSettings.currentRenderPipeline + "; graphics=" + SystemInfo.graphicsDeviceType +
+            "; computeSupported=" + SystemInfo.supportsComputeShaders);
+        string[] shaderPaths = {
+            "Assets/Rendering/CharacterPresentation/CharacterFlatUnlit.shader",
+            "Assets/Rendering/CharacterPresentation/CharacterSilhouetteMask.shader",
+            "Assets/Rendering/CharacterPresentation/CharacterSilhouetteComposite.shader"
+        };
+        foreach (string path in shaderPaths)
+        {
+            Shader shader = AssetDatabase.LoadAssetAtPath<Shader>(path);
+            if (shader == null) { report.AppendLine("Shader missing at " + path); continue; }
+            var messages = ShaderUtil.GetShaderMessages(shader);
+            report.AppendLine("Shader=" + path + "; error=" + ShaderUtil.ShaderHasError(shader) +
+                "; supported=" + shader.isSupported + "; messages=" + messages.Length);
+            foreach (var item in messages) report.AppendLine(item.severity + ": " + item.message);
+        }
+        var compute = AssetDatabase.LoadAssetAtPath<ComputeShader>("Assets/Rendering/CharacterPresentation/CharacterAdaptiveTones.compute");
+        if (compute == null) report.AppendLine("Adaptive compute is missing");
+        else
+        {
+            var messages = ShaderUtil.GetComputeShaderMessages(compute);
+            report.AppendLine("Compute messages=" + messages.Length);
+            foreach (var item in messages) report.AppendLine(item.severity + ": " + item.message);
+            foreach (string kernel in new[] { "Clear", "GatherGroups", "GatherHistogram", "SolveTones", "GatherHighlights", "SolveHighlights", "Resolve" })
+                report.AppendLine("Kernel " + kernel + " exists=" + compute.HasKernel(kernel));
+        }
+        var renderer = AssetDatabase.LoadAssetAtPath<UniversalRendererData>("Assets/Settings/PC_Renderer.asset");
+        if (renderer != null)
+            foreach (ScriptableRendererFeature item in renderer.rendererFeatures)
+                if (item is CharacterSilhouetteRendererFeature feature)
+                {
+                    report.AppendLine("Character feature=" + feature.GetEntityId() + "; active=" + feature.isActive +
+                        "; settings=" + JsonUtility.ToJson(feature.AdaptiveTones));
+                    using (var serialized = new SerializedObject(feature))
+                    {
+                        var reference = serialized.FindProperty("settings.adaptiveToneCompute");
+                        report.AppendLine("Compute reference=" + (reference == null ? "<missing field>" : AssetDatabase.GetAssetPath(reference.objectReferenceValue)));
+                    }
+                }
+        PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+        if (shell == null || shell.PlayerTransform == null || shell.PlayerCamera == null)
+            report.AppendLine("Gameplay shell/Player/PlayerCamera not ready");
+        else
+        {
+            report.AppendLine("Player=" + shell.PlayerTransform.GetEntityId() + "; camera=" + shell.PlayerCamera.GetEntityId());
+            var cameraData = shell.PlayerCamera.GetComponent<UniversalAdditionalCameraData>();
+            if (cameraData != null)
+                using (var serialized = new SerializedObject(cameraData))
+                    report.AppendLine("Camera renderer index=" + serialized.FindProperty("m_RendererIndex").intValue);
+            foreach (var subject in shell.PlayerTransform.GetComponentsInChildren<CharacterSilhouetteSubject>(true))
+                report.AppendLine("Subject=" + subject.GetEntityId() + "; active=" + subject.isActiveAndEnabled +
+                    "; pixelCell=" + subject.PixelCellSurface + "; cell=" + subject.PixelCellSize + "; nativeSource=" + subject.AdaptiveToneExperiment);
+            foreach (var ownedRenderer in shell.PlayerTransform.GetComponentsInChildren<Renderer>(true))
+                foreach (Material material in ownedRenderer.sharedMaterials)
+                    if (material != null && material.name.IndexOf("Hair", StringComparison.OrdinalIgnoreCase) >= 0)
+                        report.AppendLine("Hair renderer=" + ownedRenderer.name + "; material=" + AssetDatabase.GetAssetPath(material) +
+                            "; shader=" + material.shader.name + "; color=" + (material.HasProperty("_BaseColor") ? material.GetColor("_BaseColor").ToString() : "n/a"));
+        }
+        result.Log("{0}", report.ToString());
+    }
+}

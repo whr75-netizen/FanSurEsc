@@ -1,0 +1,58 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+using FantasySurvival.CharacterPresentation;
+using FantasySurvival.Rendering;
+using FantasySurvival.SceneFlow;
+
+internal class CommandScript : IRunCommand
+{
+    [Serializable]
+    public sealed class CaptureState
+    {
+        public string activeScene, playerEntityId, cameraEntityId, previousComputeAsset;
+        public int pixelCellSize;
+        public bool sameFrame, samePlayer, sameCamera, samePose, restored;
+        public bool previousNativeSourceEnabled, previousAdaptiveToneEnabled, previousHairLighting;
+        public float previousHairRelativeError, previousHairIlluminationFloor;
+    }
+
+    public void Execute(ExecutionResult result)
+    {
+        var shell = PersistentGameplayShell.Instance;
+        if (!EditorApplication.isPlaying || shell == null || shell.PlayerTransform == null || shell.PlayerCamera == null)
+            throw new InvalidOperationException("Expected the existing capture Play session");
+        var state = JsonUtility.FromJson<CaptureState>(File.ReadAllText("LocalOnly/AdaptiveToneHairLighting_20260909/comparison_manifest.json"));
+        if (state == null || !state.sameFrame || !state.samePlayer || !state.sameCamera || !state.samePose || !state.restored)
+            throw new InvalidOperationException("Capture did not confirm same-frame identity and restoration");
+        var subject = shell.PlayerTransform.GetComponentInChildren<CharacterSilhouetteSubject>();
+        if (subject == null || subject.PixelCellSize != state.pixelCellSize || subject.AdaptiveToneExperiment != state.previousNativeSourceEnabled ||
+            shell.PlayerTransform.GetEntityId().ToString() != state.playerEntityId || shell.PlayerCamera.GetEntityId().ToString() != state.cameraEntityId ||
+            SceneManager.GetActiveScene().name != state.activeScene)
+            throw new InvalidOperationException("Player/camera/source/scene no longer matches the restored capture state");
+        var renderer = AssetDatabase.LoadAssetAtPath<UniversalRendererData>("Assets/Settings/PC_Renderer.asset");
+        CharacterSilhouetteRendererFeature feature = null;
+        if (renderer != null)
+            foreach (var item in renderer.rendererFeatures)
+                if (item is CharacterSilhouetteRendererFeature found)
+                {
+                    if (feature != null) throw new InvalidOperationException("Multiple character features");
+                    feature = found;
+                }
+        if (feature == null || feature.AdaptiveTones.enabled != state.previousAdaptiveToneEnabled ||
+            feature.AdaptiveTones.hairLighting != state.previousHairLighting ||
+            feature.AdaptiveTones.hairRelativeError != state.previousHairRelativeError ||
+            feature.AdaptiveTones.hairIlluminationFloor != state.previousHairIlluminationFloor)
+            throw new InvalidOperationException("Adaptive/hair settings were not restored to their previous values");
+        using (var serialized = new SerializedObject(feature))
+            if (AssetDatabase.GetAssetPath(serialized.FindProperty("settings.adaptiveToneCompute").objectReferenceValue) != state.previousComputeAsset)
+                throw new InvalidOperationException("Compute reference was not restored");
+        result.Log("Six-capture comparison restored: cell={0}, nativeSource={1}, adaptive={2}, hairLighting={3}, scene={4}. Exiting Play without asset/scene save.",
+            subject.PixelCellSize, subject.AdaptiveToneExperiment, feature.AdaptiveTones.enabled,
+            feature.AdaptiveTones.hairLighting, SceneManager.GetActiveScene().name);
+        EditorApplication.ExitPlaymode();
+    }
+}

@@ -35,6 +35,10 @@ namespace FantasySurvival.Rendering
             [Range(0.0001f, 1f)] public float contrastRetention = 0.65f;
             [Range(0.0001f, 1f)] public float minimumContrast = 0.025f;
             [Range(0.0001f, 1f)] public float highlightMinimumContrast = 0.025f;
+            [Tooltip("Hair only: partition actual incident diffuse light, retaining observed source RGB. Off preserves the previous algorithm.")]
+            public bool hairLighting;
+            [Range(0.0001f, 1f)] public float hairRelativeError = 0.10f;
+            [Range(0.0001f, 1f)] public float hairIlluminationFloor = 0.02f;
         }
 
         /// <summary>
@@ -83,7 +87,8 @@ namespace FantasySurvival.Rendering
             SourceMeta = 1 << 1,
             CellColor = 1 << 2,
             CellMeta = 1 << 3,
-            Output = 1 << 4
+            Output = 1 << 4,
+            SourceLighting = 1 << 5
         }
 
         private readonly struct KernelDefinition
@@ -134,6 +139,10 @@ namespace FantasySurvival.Rendering
 
         private static readonly int SourceColorId = Shader.PropertyToID("_ToneSourceColor");
         private static readonly int SourceMetaId = Shader.PropertyToID("_ToneSourceMeta");
+        private static readonly int SourceLightingId = Shader.PropertyToID("_ToneSourceLighting");
+        private static readonly int HairLightingEnabledId = Shader.PropertyToID("_ToneHairLightingEnabled");
+        private static readonly int HairRelativeErrorId = Shader.PropertyToID("_ToneHairRelativeError");
+        private static readonly int HairIlluminationFloorId = Shader.PropertyToID("_ToneHairIlluminationFloor");
         private static readonly int CellColorId = Shader.PropertyToID("_ToneCellColor");
         private static readonly int CellMetaId = Shader.PropertyToID("_ToneCellMeta");
         private static readonly int OutputId = Shader.PropertyToID("_ToneOutput");
@@ -237,6 +246,13 @@ namespace FantasySurvival.Rendering
             ValidateUnitSetting(settings.contrastRetention, nameof(settings.contrastRetention));
             ValidateUnitSetting(settings.minimumContrast, nameof(settings.minimumContrast));
             ValidateUnitSetting(settings.highlightMinimumContrast, nameof(settings.highlightMinimumContrast));
+            if (settings.hairLighting)
+            {
+                if (SystemInfo.supportedRenderTargetCount < 3)
+                    throw new NotSupportedException("Hair illumination analysis requires three simultaneous render targets.");
+                ValidateUnitSetting(settings.hairRelativeError, nameof(settings.hairRelativeError));
+                ValidateUnitSetting(settings.hairIlluminationFloor, nameof(settings.hairIlluminationFloor));
+            }
 
             if (cachedShader == computeShader)
                 return;
@@ -275,7 +291,8 @@ namespace FantasySurvival.Rendering
         public TextureHandle Record(RenderGraph renderGraph,
             TextureHandle sourceNativeColor, TextureHandle sourceNativeMeta,
             TextureHandle cellColor, TextureHandle cellMeta, ComputeShader computeShader,
-            int subjectId, int width, int height, Settings settings, out BufferHandle validationStatus)
+            int subjectId, int width, int height, Settings settings, out BufferHandle validationStatus,
+            TextureHandle sourceNativeLighting = default)
         {
             validationStatus = BufferHandle.nullHandle;
             if (renderGraph == null)
@@ -286,6 +303,10 @@ namespace FantasySurvival.Rendering
 
             ValidateTexture(renderGraph, sourceNativeColor, width, height, ColorFormat, nameof(sourceNativeColor));
             ValidateTexture(renderGraph, sourceNativeMeta, width, height, MetaFormat, nameof(sourceNativeMeta));
+            if (settings.hairLighting)
+            {
+                ValidateTexture(renderGraph, sourceNativeLighting, width, height, ColorFormat, nameof(sourceNativeLighting));
+            }
             TextureDesc outputDescriptor = ValidateTexture(
                 renderGraph, cellColor, width, height, ColorFormat, nameof(cellColor));
             ValidateTexture(renderGraph, cellMeta, width, height, MetaFormat, nameof(cellMeta));
@@ -311,9 +332,15 @@ namespace FantasySurvival.Rendering
                 data.kernel = kernels[index];
                 data.bufferMask = definition.buffers;
                 data.textureMask = definition.textures;
+                // All analysis/resolve kernels reference this resource. With the
+                // switch off the shader branch is inert, but D3D11 still needs a
+                // declared/bound SRV. Reuse the existing source for old callers.
+                if (index != 0) data.textureMask |= Textures.SourceLighting;
+                if (definition.name == "Resolve") data.textureMask |= Textures.SourceMeta;
                 data.buffers = buffers;
                 data.sourceColor = sourceNativeColor;
                 data.sourceMeta = sourceNativeMeta;
+                data.sourceLighting = settings.hairLighting ? sourceNativeLighting : sourceNativeColor;
                 data.cellColor = cellColor;
                 data.cellMeta = cellMeta;
                 data.output = output;
@@ -390,6 +417,7 @@ namespace FantasySurvival.Rendering
             if ((data.bufferMask & Buffers.Solutions) != 0) builder.UseBuffer(data.buffers.solutions, paletteAccess);
             if ((data.textureMask & Textures.SourceColor) != 0) builder.UseTexture(data.sourceColor, AccessFlags.Read);
             if ((data.textureMask & Textures.SourceMeta) != 0) builder.UseTexture(data.sourceMeta, AccessFlags.Read);
+            if ((data.textureMask & Textures.SourceLighting) != 0) builder.UseTexture(data.sourceLighting, AccessFlags.Read);
             if ((data.textureMask & Textures.CellColor) != 0) builder.UseTexture(data.cellColor, AccessFlags.Read);
             if ((data.textureMask & Textures.CellMeta) != 0) builder.UseTexture(data.cellMeta, AccessFlags.Read);
             if ((data.textureMask & Textures.Output) != 0) builder.UseTexture(data.output, AccessFlags.WriteAll);
@@ -407,6 +435,9 @@ namespace FantasySurvival.Rendering
             cmd.SetComputeFloatParam(shader, ContrastRetentionId, data.values.contrastRetention);
             cmd.SetComputeFloatParam(shader, MinimumContrastId, data.values.minimumContrast);
             cmd.SetComputeFloatParam(shader, HighlightMinimumContrastId, data.values.highlightMinimumContrast);
+            cmd.SetComputeIntParam(shader, HairLightingEnabledId, data.values.hairLighting ? 1 : 0);
+            cmd.SetComputeFloatParam(shader, HairRelativeErrorId, data.values.hairRelativeError);
+            cmd.SetComputeFloatParam(shader, HairIlluminationFloorId, data.values.hairIlluminationFloor);
             if ((data.bufferMask & Buffers.Groups) != 0) cmd.SetComputeBufferParam(shader, kernel, GroupsId, data.buffers.groups);
             if ((data.bufferMask & Buffers.Histogram) != 0) cmd.SetComputeBufferParam(shader, kernel, HistogramId, data.buffers.histogram);
             if ((data.bufferMask & Buffers.Tiles) != 0) cmd.SetComputeBufferParam(shader, kernel, TilesId, data.buffers.tiles);
@@ -418,6 +449,7 @@ namespace FantasySurvival.Rendering
             if ((data.bufferMask & Buffers.Solutions) != 0) cmd.SetComputeBufferParam(shader, kernel, SolutionsId, data.buffers.solutions);
             if ((data.textureMask & Textures.SourceColor) != 0) cmd.SetComputeTextureParam(shader, kernel, SourceColorId, data.sourceColor);
             if ((data.textureMask & Textures.SourceMeta) != 0) cmd.SetComputeTextureParam(shader, kernel, SourceMetaId, data.sourceMeta);
+            if ((data.textureMask & Textures.SourceLighting) != 0) cmd.SetComputeTextureParam(shader, kernel, SourceLightingId, data.sourceLighting);
             if ((data.textureMask & Textures.CellColor) != 0) cmd.SetComputeTextureParam(shader, kernel, CellColorId, data.cellColor);
             if ((data.textureMask & Textures.CellMeta) != 0) cmd.SetComputeTextureParam(shader, kernel, CellMetaId, data.cellMeta);
             if ((data.textureMask & Textures.Output) != 0) cmd.SetComputeTextureParam(shader, kernel, OutputId, data.output);
@@ -433,6 +465,8 @@ namespace FantasySurvival.Rendering
         private readonly struct ToneValues
         {
             public readonly float error, chromaError, contrastRetention, minimumContrast, highlightMinimumContrast;
+            public readonly bool hairLighting;
+            public readonly float hairRelativeError, hairIlluminationFloor;
 
             public ToneValues(Settings settings)
             {
@@ -441,6 +475,9 @@ namespace FantasySurvival.Rendering
                 contrastRetention = settings.contrastRetention;
                 minimumContrast = settings.minimumContrast;
                 highlightMinimumContrast = settings.highlightMinimumContrast;
+                hairLighting = settings.hairLighting;
+                hairRelativeError = settings.hairRelativeError;
+                hairIlluminationFloor = settings.hairIlluminationFloor;
             }
         }
 
@@ -452,7 +489,7 @@ namespace FantasySurvival.Rendering
             public Textures textureMask;
             public BufferSet buffers;
             public ToneValues values;
-            public TextureHandle sourceColor, sourceMeta, cellColor, cellMeta, output;
+            public TextureHandle sourceColor, sourceMeta, sourceLighting, cellColor, cellMeta, output;
         }
     }
 }

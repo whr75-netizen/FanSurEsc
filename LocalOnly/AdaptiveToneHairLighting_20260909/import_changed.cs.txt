@@ -1,0 +1,17 @@
+using UnityEngine;
+using UnityEditor;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        if (EditorApplication.isPlaying || EditorApplication.isCompiling)
+            throw new System.InvalidOperationException("Import requires idle Edit Mode.");
+        foreach (string file in new[] {
+            "Assets/Rendering/CharacterPresentation/CharacterFlatUnlit.shader",
+            "Assets/Rendering/CharacterPresentation/CharacterAdaptiveTones.compute",
+            "Assets/Rendering/CharacterPresentation/CharacterAdaptiveTonePass.cs",
+            "Assets/Rendering/CharacterPresentation/CharacterSilhouetteRendererFeature.cs" })
+            AssetDatabase.ImportAsset(file);
+        result.Log("Requested import of four changed rendering source files only. No asset or scene save.");
+    }
+}

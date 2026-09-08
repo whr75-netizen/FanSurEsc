@@ -2323,3 +2323,13 @@ Interactable (abstract base class)
 - `[Play·CALL]` GameMap1 Play1회, 같은frame2의 실제Player/Camera로 정면·45도×기존/연속입력/적응형6장을 촬영했다. 동일Player entity568105589213736218·Camera568105589213735872·위치·프레임·재질 참조·2px와 임시 조명/카메라/Time 복원을 확인했다. 이후 배경 실행을 임시 허용해 실제frame5869의936×857 렌더에서 READY6그룹(global0, 공간guard1)을 확인했다. 추가7compute의 단일측정 GPU .354304ms / CPU .0555ms / inlineCPU .0103ms이며 추가source raster·합성·전체프레임 비용은 제외한다. 이동 입력·씬 전환·장시간 깜빡임 검증으로 확대 해석하지 않는다.
 - `[컴파일·복구]` 첫 FXC 컴파일의 과도한 루프 확장으로 메모리가 급증해 이 프로젝트 소속 컴파일 worker만 확인 후 중단했다. [fastopt][loop]로 연산/동기화는 유지한 채 컴파일러 확장을 제한하여 최종shader와7커널의 오류/경고0을 확인했다. 해결 전 worker중단 Console오류4건은 삭제하지 않았다. Play 종료·background false·profiler off·GameMap1 복원. 원래 조명 feature의 Create()가 메모리에서 변경한 depth bind 직렬화는 이번 diff에 섞지 않고 작업 전 저장값을 Editor API로 보존했다.
 - `[저장·미리보기]` 시험 기능을 다시 사용할 수 있도록 Chibi/PC_Renderer의 두 opt-in을ON으로 저장했다. 두 옵션OFF가 기존 방식이며 다른 기능으로 대체하지 않는다. 최종 외형은 사용자 판단 대기. 간단 설명/제한/재현은 `docs/ai/CHARACTER_ADAPTIVE_TONES.txt`, 원본6PNG·비교PNG·GPU원본/summary·수치감사·실행명령은 `LocalOnly/AdaptiveToneUnityReview_20260908/`에 보존했다.
+
+## 133. 헤어 수광량 기반 명암 단계 비교 `[CHARACTER-RENDER-01]`
+
+- `[요청·2026-09-09]` 몸의 현재 낮밤/조명 반응은 보존하고, 헤어 명암의 간헐 단색화를 실제 조명 범위로 판정하도록 수정해 비교 사진 제공.
+- `[구현]` 기존 native source의 Hair(part3)에만 albedo/specular 합성 전 diffuse 수광 Y를 별도 MRT로 기록. 기존 URP SH·주광·추가광·거리·그림자·cookie 및 프로젝트 local light 사용. 새 hairLighting 스위치로 기존 경로와 비교하며, OFF 시 추가 MRT 할당 없음. 원래 PBR색·재질·메시·눈·몸·2px·시드·외곽선·깊이 계약은 보존.
+- `[수학]` 헤어 histogram/후보/DP/공간 보호/밝음/resolve를 같은 수광 단위로 계산. 허용 RMS=max(meanE, .02)×.10, 대비 하한도 같은 광량 scale로 환산. 최종 RGB는 관측 원본 후보이며 강제3색/야간 증광은 없음. 다른 부위는 기존 Oklab L 판정. invalid native illumination은 status64, sparse mismatch는 기존 resolve-only32.
+- `[GPU 호출 확인]` 독립 수학9검사 통과. D3D11 실제 합성6case 모두 통과: day K2→3, night K1→3, albedo×4 K3 동일, flat E K1. 몸 RGB 전후 최대차0·depth/empty/meta/source/lighting 보존 및 관측RGB 소속 확인. 야간/주간 출력평균 .11999052(입력 .12배). 이는 아트 합격이나 실제 움직임 검증이 아님.
+- `[실제 렌더]` 동일 Player568105589213712708/Camera568105589213712362·Play frame2·정면yaw180·2px·384×768, dim/bright×source/old/new6장. 자세·재질·카메라·조명·Time·compute 참조 전후 동일 및 복원 확인. captureRecords nested DTO만 JsonUtility가 누락하여 최초 manifest와PNG는 보존, 재현 스크립트의 레코드 형식을 string[]로 교정. 재촬영/이미지 색 보정 없음.
+- `[종료]` Play off·GameMap1 dirty=false·background=false. adaptive는 기존ON, 새 hairLighting은 승인 전OFF로 복원. 최종 관련3shader/compute 메시지0, Console오류4개는 이전FXC기록. 릴레이 연결 경고1이 추가됐으나 후속MCP 상태조회는 정상 응답. 기존 dirty6파일/미추적에셋·씬/재질/prefab/renderer 저장값 보존.
+- `[제한·증거]` 정지 정면 비교까지이며 temporal history/hysteresis·동작 중 명암 안정성·성능·빌드·유색광 그룹변화는 미검증. 사용자 시각 승인 대기. 전체 비교와 재현/GPU원본/summary는 `LocalOnly/AdaptiveToneHairLighting_20260909/`, 옵션 설명은 `docs/ai/CHARACTER_ADAPTIVE_TONES.txt`. GitHub 읽기 조회에서149개 로컬커밋 미업로드를 확인했으며 push는 하지 않음.

@@ -136,6 +136,8 @@ namespace FantasySurvival.Rendering
                 Shader.PropertyToID("_CharacterSceneDepth");
             private static readonly int CameraDepthTextureId =
                 Shader.PropertyToID("_CameraDepthTexture");
+            private static readonly int HairLightingAnalysisId =
+                Shader.PropertyToID("_CharacterHairLightingAnalysis");
             private static readonly int ArtPixelSizeId =
                 Shader.PropertyToID("_ArtPixelSize");
             private static readonly int CellSourceColorTextureId =
@@ -377,6 +379,9 @@ namespace FantasySurvival.Rendering
                     descriptor.depthStencilFormat = GraphicsFormat.None;
                     TextureHandle nativeColor = UniversalRenderer.CreateRenderGraphTexture(
                         renderGraph, descriptor, "_CharacterToneNativeColor", true, FilterMode.Point);
+                    TextureHandle nativeLighting = adaptiveToneSettings.hairLighting ?
+                        UniversalRenderer.CreateRenderGraphTexture(renderGraph, descriptor,
+                            "_CharacterToneNativeLighting", true, FilterMode.Point) : TextureHandle.nullHandle;
                     descriptor.graphicsFormat = GraphicsFormat.R8G8B8A8_UNorm;
                     TextureHandle nativeMeta = UniversalRenderer.CreateRenderGraphTexture(
                         renderGraph, descriptor, "_CharacterToneNativeMeta", true, FilterMode.Point);
@@ -385,10 +390,10 @@ namespace FantasySurvival.Rendering
                     TextureHandle nativeDepth = UniversalRenderer.CreateRenderGraphTexture(
                         renderGraph, descriptor, "_CharacterToneNativeDepth", true, FilterMode.Point);
                     RecordPixelCellSourcePass(renderGraph, frameData, resources,
-                        nativeColor, nativeMeta, nativeDepth, true);
+                        nativeColor, nativeMeta, nativeDepth, true, nativeLighting);
                     cellColor = adaptiveTonePass.Record(renderGraph, nativeColor, nativeMeta,
                         cellColor, cellMeta, adaptiveToneCompute, toneSubjectId, width, height,
-                        adaptiveToneSettings, out BufferHandle toneStatus);
+                        adaptiveToneSettings, out BufferHandle toneStatus, nativeLighting);
                     if (captureToneDiagnostics)
                     {
                         captureToneDiagnostics = false;
@@ -439,7 +444,7 @@ namespace FantasySurvival.Rendering
                 TextureHandle cellColor,
                 TextureHandle cellMeta,
                 TextureHandle cellDepth,
-                bool nativeToneSource = false)
+                bool nativeToneSource = false, TextureHandle nativeLighting = default)
             {
                 using IRasterRenderGraphBuilder builder =
                     renderGraph.AddRasterRenderPass<PixelCellSourcePassData>(
@@ -472,13 +477,18 @@ namespace FantasySurvival.Rendering
                     builder.UseTexture(resources.additionalShadowsTexture, AccessFlags.Read);
                 builder.SetRenderAttachment(cellColor, 0, AccessFlags.Write);
                 builder.SetRenderAttachment(cellMeta, 1, AccessFlags.Write);
+                if (nativeLighting.IsValid()) builder.SetRenderAttachment(nativeLighting, 2, AccessFlags.Write);
+                passData.hairLighting = nativeToneSource && adaptiveToneSettings != null && adaptiveToneSettings.hairLighting;
+                builder.AllowGlobalStateModification(true);
                 // Self-occlusion only; world visibility is resolved against the
                 // untouched camera depth by the cell-surface composite.
                 builder.SetRenderAttachmentDepth(cellDepth, AccessFlags.ReadWrite);
                 builder.SetRenderFunc(static (PixelCellSourcePassData data, RasterGraphContext context) =>
                 {
                     context.cmd.ClearRenderTarget(RTClearFlags.All, Color.clear, 1f, 0);
+                    context.cmd.SetGlobalFloat(HairLightingAnalysisId, data.hairLighting ? 1f : 0f);
                     context.cmd.DrawRendererList(data.rendererList);
+                    context.cmd.SetGlobalFloat(HairLightingAnalysisId, 0f);
                 });
             }
 
@@ -936,6 +946,7 @@ namespace FantasySurvival.Rendering
 
             private sealed class PixelCellSourcePassData
             {
+                public bool hairLighting;
                 public RendererListHandle rendererList;
             }
 

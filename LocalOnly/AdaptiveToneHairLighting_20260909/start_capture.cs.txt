@@ -1,0 +1,15 @@
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling)
+            throw new System.InvalidOperationException("Capture requires idle Edit Mode.");
+        if (SceneManager.GetActiveScene().name != "GameMap1")
+            throw new System.InvalidOperationException("Preserve active scene; expected GameMap1.");
+        result.Log("Entering GameMap1 Play Mode for same-frame character capture. No scene save or gameplay input.");
+        EditorApplication.EnterPlaymode();
+    }
+}

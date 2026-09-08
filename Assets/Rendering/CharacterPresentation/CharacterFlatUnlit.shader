@@ -79,6 +79,7 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
             float _CharacterOutlineGroup;
             float _CharacterCellSubjectId;
             float _CharacterAdaptiveToneSource;
+            float _CharacterHairLightingAnalysis;
 
             struct Attributes
             {
@@ -340,7 +341,72 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 half4 subjectGroupSize : SV_Target1;
             };
 
-            CellSourceOutput FragToneNativeSource(Varyings input)
+            // Analysis-only diffuse irradiance, before albedo and specular.
+            // Follow the installed URP light loops (including Forward+, cookies,
+            // shadow attenuation and SH). The visible PBR source is unchanged.
+            half3 DiffuseIncidentLight(Light light, half3 normalWS)
+            {
+                return light.color * (light.distanceAttenuation * light.shadowAttenuation) *
+                    saturate(dot(normalWS, light.direction));
+            }
+
+            float HairIncidentLuminance(Varyings input)
+            {
+                InputData inputData = (InputData)0;
+                inputData.positionWS = input.positionWS + _CharacterLightingPositionOffsetWS.xyz;
+                inputData.positionCS = input.positionCS;
+                inputData.normalWS = NormalizeNormalPerPixel(input.normalWS);
+                inputData.viewDirectionWS = GetWorldSpaceNormalizeViewDir(inputData.positionWS);
+                inputData.shadowCoord = TransformWorldToShadowCoord(inputData.positionWS);
+                inputData.bakedGI = SampleSH(inputData.normalWS);
+                inputData.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
+                inputData.shadowMask = half4(1, 1, 1, 1);
+                SurfaceData surface = (SurfaceData)0;
+                surface.occlusion = 1;
+                half4 shadowMask = CalculateShadowMask(inputData);
+                AmbientOcclusionFactor ao = CreateAmbientOcclusionFactor(inputData, surface);
+                uint meshLayers = GetMeshRenderingLayer();
+                Light mainLight = GetMainLight(inputData, shadowMask, ao);
+                MixRealtimeAndBakedGI(mainLight, inputData.normalWS, inputData.bakedGI);
+                half3 irradiance = inputData.bakedGI * ao.indirectAmbientOcclusion;
+                #ifdef _LIGHT_LAYERS
+                if (IsMatchingLightLayer(mainLight.layerMask, meshLayers))
+                #endif
+                    irradiance += DiffuseIncidentLight(mainLight, inputData.normalWS);
+                #if defined(_ADDITIONAL_LIGHTS)
+                uint pixelLightCount = GetAdditionalLightsCount();
+                #if USE_CLUSTER_LIGHT_LOOP
+                [loop] for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); lightIndex++)
+                {
+                    CLUSTER_LIGHT_LOOP_SUBTRACTIVE_LIGHT_CHECK
+                    Light light = GetAdditionalLight(lightIndex, inputData, shadowMask, ao);
+                    #ifdef _LIGHT_LAYERS
+                    if (IsMatchingLightLayer(light.layerMask, meshLayers))
+                    #endif
+                        irradiance += DiffuseIncidentLight(light, inputData.normalWS);
+                }
+                #endif
+                LIGHT_LOOP_BEGIN(pixelLightCount)
+                    Light light = GetAdditionalLight(lightIndex, inputData, shadowMask, ao);
+                    #ifdef _LIGHT_LAYERS
+                    if (IsMatchingLightLayer(light.layerMask, meshLayers))
+                    #endif
+                        irradiance += DiffuseIncidentLight(light, inputData.normalWS);
+                LIGHT_LOOP_END
+                #endif
+                irradiance += EvaluateSteppedLocalLights(inputData.positionWS,
+                    inputData.normalWS, 0.0) * _SteppedLocalLightStrength;
+                return max(Luminance(irradiance), 0.0);
+            }
+
+            struct ToneNativeOutput
+            {
+                half4 colorDepth : SV_Target0;
+                half4 subjectGroupSize : SV_Target1;
+                half4 incidentLighting : SV_Target2;
+            };
+
+            ToneNativeOutput FragToneNativeSource(Varyings input)
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
                 clip(_CharacterAdaptiveToneSource - 0.5);
@@ -350,12 +416,15 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                     LinearDepthToEyeDepth(input.positionCS.z) :
                     LinearEyeDepth(input.positionCS.z, _ZBufferParams);
                 uint subjectId = (uint)clamp(round(_CharacterCellSubjectId), 1.0, 65535.0);
-                CellSourceOutput output;
+                ToneNativeOutput output;
                 output.colorDepth = half4(color.rgb, max(eyeDepth, 0.0001));
                 output.subjectGroupSize = half4((subjectId & 255u) / 255.0,
                     clamp(round(_CharacterOutlineGroup), 0.0, 255.0) / 255.0,
                     clamp(round(_CharacterCellSize), 1.0, 8.0) / 255.0,
                     (subjectId >> 8) / 255.0);
+                output.incidentLighting = 0;
+                if (_CharacterHairLightingAnalysis > 0.5 && round(_CharacterOutlineGroup) == 3.0)
+                    output.incidentLighting = half4(HairIncidentLuminance(input), 0, 0, 1);
                 return output;
             }
 

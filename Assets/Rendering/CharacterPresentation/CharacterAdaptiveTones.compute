@@ -26,17 +26,22 @@
 //
 // Supported input: one selected 16-bit subject, part IDs 0..4, <= 4,194,304 pixels,
 // finite linear RGB in [0,16], positive finite eye depth. HDR is not clipped;
-// adaptive L range preserves absolute Oklab-L error units. Source and sparse
+// adaptive L range preserves absolute Oklab-L error units. Opt-in Hair uses
+// native diffuse illumination Y instead, with error relative to mean received
+// illumination (and a darkness floor). Candidate RGB remains source-observed.
+// Source and sparse
 // seed textures must share dimensions, color encoding and original shading.
 // _ToneOutput copies sparse source alpha (eye depth) and all other subjects.
 // Meta is read-only. There is no alpha/color reconstruction at empty seeds.
 //
 // Status[0..159]: 1 READY, 2 broad guard present, 4 RMS failed, 8 contrast failed.
 // Status[160]: 1 hash capacity, 2 dimensions, 4 RGB/depth, 8 part/chroma range,
-// 16 settings, 32 sparse seed key missing. Any failure preserves original RGB;
+// 16 settings, 32 sparse/native seed mismatch, 64 invalid native illumination.
+// Any failure preserves original RGB;
 // a retained original is explicitly NOT a successful tone result.
-// Solutions[group*3+0] = (K, weighted RMSE L, required contrast, actual contrast).
-// Solutions[group*3+1] = (brightest base L, accent L, accent cutoff L, enabled).
+// Solutions[group*3+0] = (K, weighted metric RMSE, required contrast, actual contrast).
+// Solutions[group*3+1] = (brightest base metric, accent metric, cutoff metric, enabled).
+// The metric is Oklab L except for opt-in Hair, where it is illumination Y.
 // Solutions[group*3+2].rgb = actual observed accent RGB.
 
 #pragma kernel Clear
@@ -57,6 +62,7 @@
 
 Texture2D<float4> _ToneSourceColor;
 Texture2D<float4> _ToneSourceMeta;
+Texture2D<float4> _ToneSourceLighting;
 Texture2D<float4> _ToneCellColor;
 Texture2D<float4> _ToneCellMeta;
 RWTexture2D<float4> _ToneOutput;
@@ -78,6 +84,9 @@ float _ToneChromaError;
 float _ToneContrastRetention;
 float _ToneMinimumContrast;
 float _ToneHighlightMinimumContrast;
+int _ToneHairLightingEnabled;
+float _ToneHairRelativeError;
+float _ToneHairIlluminationFloor;
 
 // Only integer atomics touch shared histograms. Carry increments commute even
 // when another invocation adds to the low word before this carry is recorded.
@@ -119,6 +128,38 @@ bool ValidColorDepth(float4 value)
 {
     return all(isfinite(value)) && all(value.rgb >= 0.0) &&
         all(value.rgb <= 16.0) && value.a > 0.0;
+}
+
+bool HairLightingPart(float4 meta)
+{
+    return _ToneHairLightingEnabled != 0 && (uint)round(meta.g * 255.0) == 3u;
+}
+
+bool HairLightingGroup(uint group)
+{
+    return _ToneHairLightingEnabled != 0 && (_ToneGroups[group * 8u] >> 16u) == 4u;
+}
+
+// Native lighting and native RGB must describe the same visible Hair surface.
+// Resolve also calls this for sparse seeds; it reports a seed mismatch using
+// bit 32 so one resolving pixel cannot change another pixel's decision.
+bool TryAnalysisMetric(uint2 pixel, float3 lab, float4 meta, out float metric)
+{
+    metric = lab.x;
+    if (!HairLightingPart(meta)) return true;
+    float4 lighting = _ToneSourceLighting.Load(int3(pixel, 0));
+    float4 nativeMeta = _ToneSourceMeta.Load(int3(pixel, 0));
+    if (!all(isfinite(lighting)) || lighting.r < 0.0 || lighting.a != 1.0 ||
+        Subject(nativeMeta) != Subject(meta) || (uint)round(nativeMeta.g * 255.0) != 3u)
+        return false;
+    metric = lighting.r;
+    return true;
+}
+
+float MetricScale(uint group, float2 range, float normalizedMean)
+{
+    return HairLightingGroup(group) ?
+        max(range.x + range.y * normalizedMean, _ToneHairIlluminationFloor) : 1.0;
 }
 
 uint ColorKey(float3 lab, float4 meta)
@@ -173,8 +214,10 @@ float4 Candidate(uint group, uint bin)
 {
     uint packed = _ToneHistogram[(group * TONE_BINS + bin) * 6u + 5u];
     uint index = packed & TONE_PIXEL_MASK;
-    float3 rgb = _ToneSourceColor.Load(int3(index % (uint)_ToneWidth, index / (uint)_ToneWidth, 0)).rgb;
-    return float4(rgb, LinearToOklab(rgb).x);
+    int3 pixel = int3(index % (uint)_ToneWidth, index / (uint)_ToneWidth, 0);
+    float3 rgb = _ToneSourceColor.Load(pixel).rgb;
+    float metric = HairLightingGroup(group) ? _ToneSourceLighting.Load(pixel).r : LinearToOklab(rgb).x;
+    return float4(rgb, metric);
 }
 
 [numthreads(64, 1, 1)]
@@ -207,6 +250,10 @@ void Clear(uint3 id : SV_DispatchThreadID)
             !isfinite(_ToneMinimumContrast) || _ToneMinimumContrast <= 0.0 || _ToneMinimumContrast > 1.0 ||
             !isfinite(_ToneHighlightMinimumContrast) || _ToneHighlightMinimumContrast <= 0.0 || _ToneHighlightMinimumContrast > 1.0)
             status |= 16u;
+        if (_ToneHairLightingEnabled != 0 &&
+            (!isfinite(_ToneHairRelativeError) || _ToneHairRelativeError <= 0.0 || _ToneHairRelativeError > 1.0 ||
+             !isfinite(_ToneHairIlluminationFloor) || _ToneHairIlluminationFloor <= 0.0))
+            status |= 16u;
         _ToneStatus[TONE_GROUPS] = status;
     }
 }
@@ -220,6 +267,9 @@ void GatherGroups(uint3 id : SV_DispatchThreadID)
     float4 source = _ToneSourceColor.Load(int3(id.xy, 0));
     if (!ValidColorDepth(source)) { InterlockedOr(_ToneStatus[TONE_GROUPS], 4u); return; }
     float3 lab = LinearToOklab(source.rgb);
+    float metric;
+    if (!TryAnalysisMetric(id.xy, lab, meta, metric))
+    { InterlockedOr(_ToneStatus[TONE_GROUPS], 64u); return; }
     uint key = ColorKey(lab, meta);
     if (key == 0u) { InterlockedOr(_ToneStatus[TONE_GROUPS], 8u); return; }
     uint slot = (key * 2654435761u) % TONE_GROUPS;
@@ -234,8 +284,8 @@ void GatherGroups(uint3 id : SV_DispatchThreadID)
             InterlockedMin(_ToneGroups[slot * 8u + 3u], id.y);
             InterlockedMax(_ToneGroups[slot * 8u + 4u], id.x);
             InterlockedMax(_ToneGroups[slot * 8u + 5u], id.y);
-            InterlockedMin(_ToneGroups[slot * 8u + 6u], asuint(max(lab.x, 0.0)));
-            InterlockedMax(_ToneGroups[slot * 8u + 7u], asuint(max(lab.x, 0.0)));
+            InterlockedMin(_ToneGroups[slot * 8u + 6u], asuint(max(metric, 0.0)));
+            InterlockedMax(_ToneGroups[slot * 8u + 7u], asuint(max(metric, 0.0)));
             return;
         }
         slot = (slot + 1u) % TONE_GROUPS;
@@ -250,9 +300,11 @@ void GatherHistogram(uint3 id : SV_DispatchThreadID)
     float4 meta = _ToneSourceMeta.Load(int3(id.xy, 0));
     if (Subject(meta) != (uint)_ToneSubjectId) return;
     float3 lab = LinearToOklab(_ToneSourceColor.Load(int3(id.xy, 0)).rgb);
+    float metric;
+    if (!TryAnalysisMetric(id.xy, lab, meta, metric)) return;
     uint group = FindGroup(ColorKey(lab, meta));
     if (group >= TONE_GROUPS) return;
-    float u = NormalizeL(lab.x, LightnessRange(group));
+    float u = NormalizeL(metric, LightnessRange(group));
     uint bin = LightnessBin(u);
     uint q = (uint)round(u * TONE_Q);
     uint base = (group * TONE_BINS + bin) * 6u;
@@ -292,6 +344,7 @@ groupshared float sRetained;
 groupshared float sRmse;
 groupshared uint sReady;
 groupshared uint sSelectedK;
+groupshared float sErrorLimit;
 
 // Means use occupied tiles only; moments/coherence still weight actual pixels.
 // These tile quantiles are an explicit approximation to source-pixel quantiles.
@@ -332,14 +385,14 @@ void TileMasks(float means[16], uint counts[16], uint size,
     }
 }
 
-void BuildBroadSupport(uint group, float2 range)
+void BuildBroadSupport(uint group, float2 range, float minimumContrast)
 {
     sLowMask = sHighMask = 0u;
     sRequired = 0.0;
     float count = sWeightPrefix[sActiveCount];
     float mean = sSumPrefix[sActiveCount] / count;
     float variance = max(sSquarePrefix[sActiveCount] / count - mean * mean, 0.0);
-    if (variance <= 1e-12 || range.y < _ToneMinimumContrast) return;
+    if (variance <= 1e-12 || range.y < minimumContrast) return;
     uint counts[16];
     float sums[16];
     float means[16];
@@ -398,7 +451,7 @@ void BuildBroadSupport(uint group, float2 range)
         lowOverlap / min(fineLowCount, lowCount) < .65 ||
         highOverlap / min(fineHighCount, highCount) < .65) return;
     float contrast = range.y * (highSum / highCount - lowSum / lowCount);
-    if (contrast < _ToneMinimumContrast) return;
+    if (contrast < minimumContrast) return;
     sLowMask = lowMask;
     sHighMask = highMask;
     sRequired = contrast * _ToneContrastRetention;
@@ -449,7 +502,14 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
         sRmse = sRetained = 0.0;
         sLowMask = sHighMask = 0u;
         sRequired = 0.0;
-        if (sActiveCount > 0u) BuildBroadSupport(group, range);
+        sErrorLimit = _ToneError;
+        if (sActiveCount > 0u)
+        {
+            float scale = MetricScale(group, range,
+                sSumPrefix[sActiveCount] / sWeightPrefix[sActiveCount]);
+            if (HairLightingGroup(group)) sErrorLimit = scale * _ToneHairRelativeError;
+            BuildBroadSupport(group, range, _ToneMinimumContrast * scale);
+        }
         _ToneSupports[group * 2u] = sLowMask;
         _ToneSupports[group * 2u + 1u] = sHighMask;
     }
@@ -513,7 +573,7 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
             if (sReady == 0u && k <= sActiveCount)
             {
                 sRmse = range.y * sqrt(max(sCurrent[sActiveCount], 0.0) / sWeightPrefix[sActiveCount]);
-                if (sRmse <= _ToneError + 1e-6)
+                if (sRmse <= sErrorLimit + 1e-6)
                 {
                     uint cursor = sActiveCount;
                     [fastopt] [loop] for (uint level = k; level > 0u; --level)
@@ -539,7 +599,7 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
     if (lane == 0u && enabled)
     {
         uint status = sRequired > 0.0 ? 2u : 0u;
-        status |= sReady != 0u ? 1u : (sRmse > _ToneError + 1e-6 ? 4u : 8u);
+        status |= sReady != 0u ? 1u : (sRmse > sErrorLimit + 1e-6 ? 4u : 8u);
         _ToneStatus[group] = status;
         _ToneSolutions[group * 3u] = float4(sSelectedK, sRmse, sRequired, sRetained);
         float brightest = 0.0;
@@ -559,7 +619,8 @@ void GatherHighlights(uint3 id : SV_DispatchThreadID)
     float4 meta = _ToneSourceMeta.Load(int3(id.xy, 0));
     if (Subject(meta) != (uint)_ToneSubjectId) return;
     float3 lab = LinearToOklab(_ToneSourceColor.Load(int3(id.xy, 0)).rgb);
-    float lightness = lab.x;
+    float lightness;
+    if (!TryAnalysisMetric(id.xy, lab, meta, lightness)) return;
     uint group = FindGroup(ColorKey(lab, meta));
     if (group >= TONE_GROUPS || (_ToneStatus[group] & 3u) != 3u) return;
     uint tile = SpatialTile(id.xy, group);
@@ -581,12 +642,23 @@ void SolveHighlights(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
     if (group >= TONE_GROUPS) return;
     bool enabled = _ToneStatus[TONE_GROUPS] == 0u && (_ToneStatus[group] & 3u) == 3u;
     sCount[lane] = enabled ? _ToneHistogram[(group * TONE_BINS + lane) * 6u] : 0u;
+    sSum[lane] = enabled && HairLightingGroup(group) ?
+        PairValue(_ToneHistogram[(group * TONE_BINS + lane) * 6u + 1u],
+            _ToneHistogram[(group * TONE_BINS + lane) * 6u + 2u]) / TONE_Q : 0.0;
     sCandidate[lane] = 0.0;
     if (sCount[lane] > 0u) sCandidate[lane] = Candidate(group, lane);
     GroupMemoryBarrierWithGroupSync();
     if (lane != 0u || !enabled) return;
     float2 range = LightnessRange(group);
     if (range.y <= 1e-8) return;
+    float minimumContrast = _ToneHighlightMinimumContrast;
+    if (HairLightingGroup(group))
+    {
+        float count = 0.0, sum = 0.0;
+        [fastopt] [loop] for (uint b = 0u; b < TONE_BINS; ++b)
+        { count += sCount[b]; sum += sSum[b]; }
+        minimumContrast *= MetricScale(group, range, sum / count);
+    }
     float baseL = _ToneSolutions[group * 3u + 1u].x;
     float baseU = NormalizeL(baseL, range);
     float bestGain = 1e-9;
@@ -606,7 +678,7 @@ void SolveHighlights(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
         {
             if (sCount[candidate] == 0u) continue;
             float4 value = sCandidate[candidate];
-            if (value.a < baseL + _ToneHighlightMinimumContrast) continue;
+            if (value.a < baseL + minimumContrast) continue;
             float u = NormalizeL(value.a, range);
             if (u > 2.0 * lower - baseU + 1e-7) continue;
             float gain = range.y * range.y *
@@ -628,16 +700,19 @@ void Resolve(uint3 id : SV_DispatchThreadID)
     float4 original = _ToneCellColor.Load(int3(id.xy, 0));
     _ToneOutput[id.xy] = original;
     // Resolve-only key-miss bit does not alter another invocation's decision.
-    if ((_ToneStatus[TONE_GROUPS] & 31u) != 0u) return;
+    if ((_ToneStatus[TONE_GROUPS] & 95u) != 0u) return;
     float4 meta = _ToneCellMeta.Load(int3(id.xy, 0));
     if (Subject(meta) != (uint)_ToneSubjectId || original.a <= 0.0) return;
     if (!ValidColorDepth(original)) { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
     float3 lab = LinearToOklab(original.rgb);
+    float metric;
+    if (!TryAnalysisMetric(id.xy, lab, meta, metric))
+    { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
     uint key = ColorKey(lab, meta);
     uint group = key == 0u ? TONE_GROUPS : FindGroup(key);
     if (group >= TONE_GROUPS) { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
     if ((_ToneStatus[group] & 1u) == 0u) return;
-    uint bin = LightnessBin(NormalizeL(lab.x, LightnessRange(group)));
+    uint bin = LightnessBin(NormalizeL(metric, LightnessRange(group)));
     float4 base = _TonePalette[group * TONE_BINS + bin];
     // A missing dense-source bin is a source/seed contract mismatch. Zero RGB
     // cannot serve as an invented substitute, including when the source is black.
@@ -646,8 +721,8 @@ void Resolve(uint3 id : SV_DispatchThreadID)
     float4 highlight = _ToneSolutions[group * 3u + 1u];
     uint tile = SpatialTile(id.xy, group);
     bool supported = (_ToneSupports[group * 2u + 1u] & (1u << tile)) != 0u;
-    if (highlight.w > .5 && supported && base.a == highlight.x && lab.x >= highlight.z &&
-        lab.x >= .5 * (highlight.x + highlight.y))
+    if (highlight.w > .5 && supported && base.a == highlight.x && metric >= highlight.z &&
+        metric >= .5 * (highlight.x + highlight.y))
         base.rgb = _ToneSolutions[group * 3u + 2u].rgb;
     _ToneOutput[id.xy] = float4(base.rgb, original.a);
 }

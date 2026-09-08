@@ -1,0 +1,25 @@
+비공개 소스 백업 — pixel-normalization-lab
+
+GitHub: https://github.com/whr75-netizen/pixel-normalization-lab
+원래 FanSurEsc 공개 저장소는 변경하지 않습니다.
+
+publish_private_backup.py는 게임 저장소의 커밋 중 아래 두 경로만 필터링해
+별도 bare 저장소 LocalOnly/PixelNormalizationGitBackup에 이력을 보존합니다.
+LocalOnly/PerfectPixelPalette_20260906
+LocalOnly/ChibiPixelReview_20260908_Bright
+따라서 필터 저장소의 커밋 해시는 게임 저장소의 해시와 다릅니다.
+
+python publish_private_backup.py       : 커밋된 두 경로를 로컬 백업
+python publish_private_backup.py --push: GitHub가 private인지 확인하고 업로드
+미커밋 변경을 자동 stage/commit하지 않습니다. force push도 하지 않습니다.
+
+원본 캡처/생성 PNG, .deps, ZIP, NPZ, Unity 에셋과 다른 게임 커밋은 제외합니다.
+캡처 실행 설정은 남지만 입력 이미지는 각 작업자가 별도로 제공해야 합니다.
+기존 cmd의 Python 절대경로는 이 PC 전용입니다. 다른 환경은 Python으로
+trigger_cli.py --config 본인설정.json --output 새폴더를 실행하십시오.
+
+필수 설치: 이 폴더에서 pip install --target .deps -r requirements-boundary.txt
+합성/회귀 검사: python run_boundary_tests.py
+기존 GUI는 tkinter가 설치된 Python이 필요합니다(창을 열지 않는 테스트 포함).
+신규 명암 알고리즘 자체는 NumPy, 이미지 입출력/CLI는 Pillow를 사용하며,
+기존 경계/선 실험 검사에는 scipy와 scikit-image도 필요합니다.

@@ -1,0 +1,18 @@
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using FantasySurvival.CharacterPresentation;
+using FantasySurvival.SceneFlow;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        if (!EditorApplication.isPlaying || PersistentGameplayShell.Instance == null)
+            throw new System.InvalidOperationException("Expected the capture Play session");
+        var subject = PersistentGameplayShell.Instance.PlayerTransform.GetComponentInChildren<CharacterSilhouetteSubject>();
+        if (subject.PixelCellSize != 2 || !subject.AdaptiveToneExperiment)
+            throw new System.InvalidOperationException("Capture did not restore the existing 2px experiment");
+        result.Log("Capture restored: cell={0}, adaptive={1}, background={2}, scene={3}. Exiting Play without asset/scene save.", subject.PixelCellSize, subject.AdaptiveToneExperiment, Application.runInBackground, SceneManager.GetActiveScene().name);
+        EditorApplication.ExitPlaymode();
+    }
+}

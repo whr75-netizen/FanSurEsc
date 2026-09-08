@@ -67,6 +67,10 @@ namespace FantasySurvival.Rendering
             public bool hairLighting;
             [Range(0.0001f, 1f)] public float hairRelativeError = 0.10f;
             [Range(0.0001f, 1f)] public float hairIlluminationFloor = 0.02f;
+            [Tooltip("Skin only: partition actual incident diffuse light, retaining observed source RGB. Off preserves the previous algorithm.")]
+            public bool skinLighting;
+            [Range(0.0001f, 1f)] public float skinRelativeError = 0.10f;
+            [Range(0.0001f, 1f)] public float skinIlluminationFloor = 0.02f;
         }
 
         /// <summary>
@@ -171,6 +175,9 @@ namespace FantasySurvival.Rendering
         private static readonly int HairLightingEnabledId = Shader.PropertyToID("_ToneHairLightingEnabled");
         private static readonly int HairRelativeErrorId = Shader.PropertyToID("_ToneHairRelativeError");
         private static readonly int HairIlluminationFloorId = Shader.PropertyToID("_ToneHairIlluminationFloor");
+        private static readonly int SkinLightingEnabledId = Shader.PropertyToID("_ToneSkinLightingEnabled");
+        private static readonly int SkinRelativeErrorId = Shader.PropertyToID("_ToneSkinRelativeError");
+        private static readonly int SkinIlluminationFloorId = Shader.PropertyToID("_ToneSkinIlluminationFloor");
         private static readonly int CellColorId = Shader.PropertyToID("_ToneCellColor");
         private static readonly int CellMetaId = Shader.PropertyToID("_ToneCellMeta");
         private static readonly int OutputId = Shader.PropertyToID("_ToneOutput");
@@ -274,12 +281,17 @@ namespace FantasySurvival.Rendering
             ValidateUnitSetting(settings.contrastRetention, nameof(settings.contrastRetention));
             ValidateUnitSetting(settings.minimumContrast, nameof(settings.minimumContrast));
             ValidateUnitSetting(settings.highlightMinimumContrast, nameof(settings.highlightMinimumContrast));
+            if ((settings.hairLighting || settings.skinLighting) && SystemInfo.supportedRenderTargetCount < 3)
+                throw new NotSupportedException("Incident illumination analysis requires three simultaneous render targets.");
             if (settings.hairLighting)
             {
-                if (SystemInfo.supportedRenderTargetCount < 3)
-                    throw new NotSupportedException("Hair illumination analysis requires three simultaneous render targets.");
                 ValidateUnitSetting(settings.hairRelativeError, nameof(settings.hairRelativeError));
                 ValidateUnitSetting(settings.hairIlluminationFloor, nameof(settings.hairIlluminationFloor));
+            }
+            if (settings.skinLighting)
+            {
+                ValidateUnitSetting(settings.skinRelativeError, nameof(settings.skinRelativeError));
+                ValidateUnitSetting(settings.skinIlluminationFloor, nameof(settings.skinIlluminationFloor));
             }
 
             if (cachedShader == computeShader)
@@ -348,7 +360,7 @@ namespace FantasySurvival.Rendering
 
             ValidateTexture(renderGraph, sourceNativeColor, width, height, ColorFormat, nameof(sourceNativeColor));
             ValidateTexture(renderGraph, sourceNativeMeta, width, height, MetaFormat, nameof(sourceNativeMeta));
-            if (settings.hairLighting)
+            if (settings.hairLighting || settings.skinLighting)
             {
                 ValidateTexture(renderGraph, sourceNativeLighting, width, height, ColorFormat, nameof(sourceNativeLighting));
             }
@@ -386,7 +398,7 @@ namespace FantasySurvival.Rendering
                 data.buffers = buffers;
                 data.sourceColor = sourceNativeColor;
                 data.sourceMeta = sourceNativeMeta;
-                data.sourceLighting = settings.hairLighting ? sourceNativeLighting : sourceNativeColor;
+                data.sourceLighting = settings.hairLighting || settings.skinLighting ? sourceNativeLighting : sourceNativeColor;
                 data.cellColor = cellColor;
                 data.cellMeta = cellMeta;
                 data.output = output;
@@ -484,6 +496,9 @@ namespace FantasySurvival.Rendering
             cmd.SetComputeIntParam(shader, HairLightingEnabledId, data.values.hairLighting ? 1 : 0);
             cmd.SetComputeFloatParam(shader, HairRelativeErrorId, data.values.hairRelativeError);
             cmd.SetComputeFloatParam(shader, HairIlluminationFloorId, data.values.hairIlluminationFloor);
+            cmd.SetComputeIntParam(shader, SkinLightingEnabledId, data.values.skinLighting ? 1 : 0);
+            cmd.SetComputeFloatParam(shader, SkinRelativeErrorId, data.values.skinRelativeError);
+            cmd.SetComputeFloatParam(shader, SkinIlluminationFloorId, data.values.skinIlluminationFloor);
             if ((data.bufferMask & Buffers.Groups) != 0) cmd.SetComputeBufferParam(shader, kernel, GroupsId, data.buffers.groups);
             if ((data.bufferMask & Buffers.Histogram) != 0) cmd.SetComputeBufferParam(shader, kernel, HistogramId, data.buffers.histogram);
             if ((data.bufferMask & Buffers.Tiles) != 0) cmd.SetComputeBufferParam(shader, kernel, TilesId, data.buffers.tiles);
@@ -514,6 +529,8 @@ namespace FantasySurvival.Rendering
             public readonly float error, chromaError, contrastRetention, minimumContrast, highlightMinimumContrast;
             public readonly bool hairLighting;
             public readonly float hairRelativeError, hairIlluminationFloor;
+            public readonly bool skinLighting;
+            public readonly float skinRelativeError, skinIlluminationFloor;
 
             public ToneValues(Settings settings)
             {
@@ -525,6 +542,9 @@ namespace FantasySurvival.Rendering
                 hairLighting = settings.hairLighting;
                 hairRelativeError = settings.hairRelativeError;
                 hairIlluminationFloor = settings.hairIlluminationFloor;
+                skinLighting = settings.skinLighting;
+                skinRelativeError = settings.skinRelativeError;
+                skinIlluminationFloor = settings.skinIlluminationFloor;
             }
         }
 

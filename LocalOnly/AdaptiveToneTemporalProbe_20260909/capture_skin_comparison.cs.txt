@@ -1,0 +1,663 @@
+using System;
+using System.IO;
+using System.Text;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
+using UnityEngine.Rendering.Universal;
+using FantasySurvival.SceneFlow;
+using FantasySurvival.CharacterPresentation;
+using FantasySurvival.Rendering;
+using FantasySurvival.WorldLighting;
+using UObject = UnityEngine.Object;
+
+// RunCommand source only: same-pose before/after Skin illumination metric comparison.
+// No solver changes, material replacement or asset saving. Controlled pose/lighting samples, not real-time frame cadence.
+internal class CommandScript : IRunCommand
+{
+    private const int Width = 384;
+    private const int Height = 768;
+    private const string OutputRoot = "LocalOnly/AdaptiveToneTemporalProbe_20260909";
+    private const string RendererPath = "Assets/Settings/PC_Renderer.asset";
+    private const string ComputePath = "Assets/Rendering/CharacterPresentation/CharacterAdaptiveTones.compute";
+
+    [Serializable]
+    public sealed class SequenceRequest
+    {
+        public string batch, mode;
+        public int first, count, total;
+        public float scale = 1f, locomotionSpeed = 1f;
+        public bool hairLighting = true;
+    }
+
+    [Serializable]
+    public sealed class SampleInfo
+    {
+        public string captureId, mode, animatorState, clips, poseFingerprint;
+        public float actualNormalizedTime;
+        public int index, total, unityFrame, width = 384, height = 768;
+        public float phase, scale, keyIntensity, fillIntensity, ambientIntensity;
+        public bool diagnosticRgbIdentical, hairLighting, skinLighting;
+    }
+
+    [Serializable]
+    public sealed class CaptureMetadata
+    {
+        public string captureId, cameraId, settingsJson, error;
+        public int frame, width, height, subjectId;
+        public string layout = "little endian; buffers uint32 or float32; color RT RGBAHalf, meta RT RGBA8; raw GPU orientation";
+        public string[] keys;
+    }
+
+    [Serializable]
+    public sealed class CaptureInfo
+    {
+        public string file, view, mode, lighting, hairMode;
+        public int width, height, frame, emptyAlpha, solidAlpha, partialAlpha, cellSize;
+        public float worldYaw, lightScale, keyIntensity, fillIntensity, ambientIntensity, hairRelativeError, hairIlluminationFloor;
+        public bool nativeSourceEnabled, adaptiveToneEnabled, hairLighting;
+    }
+
+    [Serializable]
+    public sealed class ComparisonInfo
+    {
+        public string playerEntityId, cameraEntityId, rendererAsset, computeAsset, activeScene, previousComputeAsset;
+        public int frameStart, frameEnd, pixelCellSize;
+        public bool samePlayer, sameCamera, sameFrame, samePose, restored, previousSceneDirty, sceneDirtyAfter;
+        public bool poseBitwiseEqual;
+        public bool previousNativeSourceEnabled, previousAdaptiveToneEnabled, previousHairLighting;
+        public float previousHairRelativeError, previousHairIlluminationFloor, hairRelativeError, hairIlluminationFloor;
+        public Vector3 posedBoundsCenter, posedBoundsSize;
+        public float orthographicSize, keyIntensity, fillIntensity, ambientIntensity;
+        public float toneError, chromaError, contrastRetention, minimumContrast, highlightMinimumContrast;
+        public string validation = "Capture only; no GPU convergence, timing, or art-approval claim.";
+        // Dynamic RunCommand DTO arrays are omitted by JsonUtility. Serialize
+        // individual records first, as in the earlier working capture tool.
+        public string[] captureRecords;
+    }
+
+    public sealed class RendererState
+    {
+        public Renderer renderer;
+        public bool forceRenderingOff;
+        public Material[] materials;
+        public bool forceMatrixRecalculationPerRender;
+        public MaterialPropertyBlock propertyBlock;
+    }
+
+    public sealed class PoseState
+    {
+        public Transform transform, parent;
+        public Vector3 position, scale;
+        public Quaternion rotation;
+        public bool activeSelf;
+    }
+
+    public void Execute(ExecutionResult result)
+    {
+        PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+        if (!EditorApplication.isPlaying || shell == null || shell.PlayerTransform == null || shell.PlayerCamera == null)
+            throw new InvalidOperationException("The existing gameplay shell, Player and PlayerCamera must be ready in Play Mode.");
+
+        Camera camera = shell.PlayerCamera;
+        CharacterSilhouetteSubject[] candidates = shell.PlayerTransform.GetComponentsInChildren<CharacterSilhouetteSubject>();
+        if (candidates.Length != 1 || !candidates[0].isActiveAndEnabled || !candidates[0].PixelCellSurface)
+            throw new InvalidOperationException("Exactly one active player pixel-cell subject is required; this script does not rebuild or enable one.");
+        CharacterSilhouetteSubject subject = candidates[0];
+        foreach (CharacterSilhouetteSubject other in UObject.FindObjectsByType<CharacterSilhouetteSubject>(FindObjectsSortMode.None))
+            if (other != subject && other.isActiveAndEnabled && other.PixelCellSurface && other.AdaptiveToneExperiment)
+                throw new InvalidOperationException("Another subject is opted in. Preserve it and resolve the experiment selection before capture.");
+
+        CameraFollow follow = camera.GetComponent<CameraFollow>();
+        UniversalAdditionalCameraData cameraData = camera.GetComponent<UniversalAdditionalCameraData>();
+        if (follow == null || cameraData == null || !camera.orthographic || camera.cameraType != CameraType.Game)
+            throw new InvalidOperationException("The existing orthographic gameplay camera, CameraFollow and URP camera data are required.");
+        if (cameraData.renderType != CameraRenderType.Base ||
+            (cameraData.cameraStack != null && cameraData.cameraStack.Count != 0))
+            throw new InvalidOperationException("Capture expects the existing unstacked Base camera; camera stacks are not changed.");
+
+        UniversalRendererData rendererData = AssetDatabase.LoadAssetAtPath<UniversalRendererData>(RendererPath);
+        ValidateCurrentRenderer(cameraData, rendererData);
+        CharacterSilhouetteRendererFeature feature = null;
+        foreach (ScriptableRendererFeature item in rendererData.rendererFeatures)
+            if (item is CharacterSilhouetteRendererFeature found)
+            {
+                if (feature != null) throw new InvalidOperationException("PC_Renderer has multiple character silhouette features.");
+                feature = found;
+            }
+        if (feature == null || !feature.isActive || feature.AdaptiveTones == null)
+            throw new InvalidOperationException("PC_Renderer must already have its active character silhouette feature.");
+
+        ComputeShader compute = AssetDatabase.LoadAssetAtPath<ComputeShader>(ComputePath);
+        if (compute == null || !SystemInfo.supportsComputeShaders)
+            throw new InvalidOperationException("The imported adaptive compute shader and compute support are required.");
+        ComputeShader previousCompute;
+        using (var serialized = new SerializedObject(feature))
+        {
+            SerializedProperty reference = serialized.FindProperty("settings.adaptiveToneCompute");
+            if (reference == null) throw new InvalidOperationException("Cannot read the existing compute reference for exact restoration.");
+            previousCompute = reference.objectReferenceValue as ComputeShader;
+        }
+
+        var request = JsonUtility.FromJson<SequenceRequest>(File.ReadAllText(Path.Combine(OutputRoot, "request.json")));
+        if (request == null || request.count < 1 || request.count > 8 || request.total < request.first + request.count ||
+            request.first < 0 || (request.mode != "sweep" && request.mode != "walk") ||
+            string.IsNullOrEmpty(request.batch) || Path.GetFileName(request.batch) != request.batch)
+            throw new InvalidOperationException("Invalid bounded capture request.");
+        string path = Path.GetFullPath(Path.Combine(OutputRoot, request.batch));
+        if (Directory.Exists(path)) throw new IOException("Preserving existing batch: " + path);
+        string manifestPath = Path.Combine(path, "comparison_manifest.json");
+        Animator animator = subject.GetComponentInChildren<Animator>();
+        if (animator == null) animator = subject.GetComponentInParent<Animator>();
+        if (animator == null || animator.runtimeAnimatorController == null || animator.applyRootMotion)
+            throw new InvalidOperationException("Existing non-root-motion Animator is required.");
+        if (animator.IsInTransition(0)) throw new InvalidOperationException("Preserve active transition; capture later.");
+        int locomotionHash = Animator.StringToHash("Base Layer.Locomotion");
+        if (!animator.HasState(0, locomotionHash)) throw new InvalidOperationException("Existing Locomotion state missing.");
+        AnimatorStateInfo[] oldAnimatorStates = new AnimatorStateInfo[animator.layerCount];
+        float[] oldLayerWeights = new float[animator.layerCount];
+        for (int layer = 0; layer < animator.layerCount; layer++)
+        {
+            if (animator.IsInTransition(layer)) throw new InvalidOperationException("Preserve Animator transition.");
+            oldAnimatorStates[layer] = animator.GetCurrentAnimatorStateInfo(layer);
+            oldLayerWeights[layer] = animator.GetLayerWeight(layer);
+        }
+        bool oldAnimatorEnabled = animator.enabled;
+        float oldAnimatorSpeed = animator.speed, oldLocomotionSpeed = animator.GetFloat("LocomotionSpeed");
+        AnimatorCullingMode oldCullingMode = animator.cullingMode;
+
+        PlayerMovement movement = shell.PlayerTransform.GetComponent<PlayerMovement>();
+        if (movement == null) throw new InvalidOperationException("PlayerMovement missing.");
+        using (var serializedMovement = new SerializedObject(movement))
+            if (serializedMovement.FindProperty("characterAnimator").objectReferenceValue != animator)
+                throw new InvalidOperationException("Selected Animator does not match PlayerMovement Animator.");
+        Renderer[] playerRenderers = subject.GetComponentsInChildren<Renderer>();
+        var playerRendererSet = new HashSet<Renderer>(playerRenderers);
+        Bounds bounds = CalculatePosedBounds(playerRenderers);
+        if (bounds.size.y < 3f || bounds.size.y > 5f)
+            throw new InvalidOperationException("Unexpected posed bounds for this prepared character review; no framing is guessed.");
+
+        var poseStates = new List<PoseState>();
+        foreach (Transform item in shell.PlayerTransform.GetComponentsInChildren<Transform>(true))
+            poseStates.Add(new PoseState { transform = item, parent = item.parent, position = item.localPosition,
+                rotation = item.localRotation, scale = item.localScale, activeSelf = item.gameObject.activeSelf });
+        var rendererStates = new List<RendererState>();
+        foreach (Renderer renderer in UObject.FindObjectsByType<Renderer>(FindObjectsSortMode.None))
+        {
+            var block = new MaterialPropertyBlock();
+            renderer.GetPropertyBlock(block);
+            rendererStates.Add(new RendererState { renderer = renderer, forceRenderingOff = renderer.forceRenderingOff,
+                materials = renderer.sharedMaterials, propertyBlock = block,
+                forceMatrixRecalculationPerRender = renderer is SkinnedMeshRenderer skin && skin.forceMatrixRecalculationPerRender });
+        }
+        var lightStates = new Dictionary<Light, bool>();
+        foreach (Light light in UObject.FindObjectsByType<Light>(FindObjectsSortMode.None)) lightStates.Add(light, light.enabled);
+        var steppedStates = new Dictionary<SteppedLocalLight, bool>();
+        foreach (SteppedLocalLight light in UObject.FindObjectsByType<SteppedLocalLight>(FindObjectsSortMode.None)) steppedStates.Add(light, light.enabled);
+
+        Vector3 previousCameraPosition = camera.transform.position;
+        Quaternion previousCameraRotation = camera.transform.rotation;
+        Vector3 previousCameraLocalPosition = camera.transform.localPosition;
+        Quaternion previousCameraLocalRotation = camera.transform.localRotation;
+        Vector3 previousSubjectLocalPosition = subject.transform.localPosition;
+        Quaternion previousSubjectLocalRotation = subject.transform.localRotation;
+        float previousSize = camera.orthographicSize, previousAspect = camera.aspect;
+        Rect previousRect = camera.rect;
+        Color previousBackground = camera.backgroundColor;
+        CameraClearFlags previousClear = camera.clearFlags;
+        bool previousFollow = follow.enabled, previousMSAA = camera.allowMSAA, previousHDR = camera.allowHDR;
+        bool previousPost = cameraData.renderPostProcessing;
+        AntialiasingMode previousAA = cameraData.antialiasing;
+        float previousTime = Time.timeScale;
+        bool previousSource = subject.AdaptiveToneExperiment, previousAdaptive = feature.AdaptiveTones.enabled;
+        bool previousHairLighting = feature.AdaptiveTones.hairLighting;
+        bool previousSkinLighting = feature.AdaptiveTones.skinLighting;
+        float previousSkinRelativeError = feature.AdaptiveTones.skinRelativeError;
+        float previousSkinFloor = feature.AdaptiveTones.skinIlluminationFloor;
+        float previousHairRelativeError = feature.AdaptiveTones.hairRelativeError;
+        float previousHairIlluminationFloor = feature.AdaptiveTones.hairIlluminationFloor;
+        string previousToneSettings = JsonUtility.ToJson(feature.AdaptiveTones);
+        int hairAnalysisId = Shader.PropertyToID("_CharacterHairLightingAnalysis");
+        float previousHairAnalysis = Shader.GetGlobalFloat(hairAnalysisId);
+        RenderTexture previousTargetTexture = camera.targetTexture, previousActiveTexture = RenderTexture.active;
+        Scene previousScene = SceneManager.GetActiveScene();
+        Light previousSun = RenderSettings.sun;
+        SphericalHarmonicsL2 previousProbe = RenderSettings.ambientProbe;
+        int steppedCountId = Shader.PropertyToID("_SteppedLocalLightCount");
+        int previousSteppedCount = Shader.GetGlobalInteger(steppedCountId);
+        var playerId = shell.PlayerTransform.GetEntityId();
+        var cameraId = camera.GetEntityId();
+        Vector3 playerPosition = shell.PlayerTransform.position;
+        Quaternion playerRotation = shell.PlayerTransform.rotation;
+        GameObject keyObject = null, fillObject = null;
+        var captures = new List<CaptureInfo>();
+        var report = new ComparisonInfo
+        {
+            playerEntityId = playerId.ToString(), cameraEntityId = cameraId.ToString(),
+            rendererAsset = RendererPath, computeAsset = ComputePath, frameStart = Time.frameCount,
+            activeScene = previousScene.name, previousSceneDirty = previousScene.isDirty,
+            previousComputeAsset = AssetDatabase.GetAssetPath(previousCompute),
+            previousHairLighting = previousHairLighting, previousHairRelativeError = previousHairRelativeError,
+            previousHairIlluminationFloor = previousHairIlluminationFloor, hairRelativeError = .10f, hairIlluminationFloor = .02f,
+            pixelCellSize = subject.PixelCellSize, previousNativeSourceEnabled = previousSource,
+            previousAdaptiveToneEnabled = previousAdaptive, posedBoundsCenter = bounds.center, posedBoundsSize = bounds.size,
+            orthographicSize = bounds.extents.y * 1.15f, keyIntensity = 2f, fillIntensity = .55f, ambientIntensity = .3f,
+            toneError = feature.AdaptiveTones.toneError, chromaError = feature.AdaptiveTones.chromaError,
+            contrastRetention = feature.AdaptiveTones.contrastRetention, minimumContrast = feature.AdaptiveTones.minimumContrast,
+            highlightMinimumContrast = feature.AdaptiveTones.highlightMinimumContrast
+        };
+
+        // No SaveAssets/scene save is performed. Only existing object state is
+        // temporarily changed; materials and feature activation remain intact.
+        result.RegisterObjectModification(camera);
+        result.RegisterObjectModification(camera.transform);
+        result.RegisterObjectModification(follow);
+        result.RegisterObjectModification(cameraData);
+        result.RegisterObjectModification(subject);
+        result.RegisterObjectModification(subject.transform);
+        result.RegisterObjectModification(feature);
+        Directory.CreateDirectory(path);
+        try
+        {
+            Time.timeScale = 0f;
+            feature.AdaptiveTones.skinRelativeError = .10f;
+            feature.AdaptiveTones.skinIlluminationFloor = .02f;
+            feature.AdaptiveTones.hairRelativeError = report.hairRelativeError;
+            feature.AdaptiveTones.hairIlluminationFloor = report.hairIlluminationFloor;
+            follow.enabled = false;
+            result.RegisterObjectModification(animator);
+            animator.enabled = true;
+            animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
+            // Identical authored pose/framing across bounded batches; do not use
+            // whichever idle-animation time the editor happened to reach.
+            animator.SetFloat("LocomotionSpeed", request.mode == "walk" ? request.locomotionSpeed : 0f);
+            animator.Play(locomotionHash, 0, 0f);
+            animator.Update(0f);
+            bounds = CalculatePosedBounds(playerRenderers);
+            report.posedBoundsCenter = bounds.center;
+            report.posedBoundsSize = bounds.size;
+            report.orthographicSize = bounds.extents.y * 1.15f;
+            foreach (var pair in lightStates) { result.RegisterObjectModification(pair.Key); pair.Key.enabled = false; }
+            foreach (var pair in steppedStates) { result.RegisterObjectModification(pair.Key); pair.Key.enabled = false; }
+            Shader.SetGlobalInteger(steppedCountId, 0);
+            keyObject = CreateCaptureLight("Temporary adaptive comparison key", 2f, new Vector3(30f, 205f, 0f), result);
+            fillObject = CreateCaptureLight("Temporary adaptive comparison fill", .55f, new Vector3(5f, 140f, 0f), result);
+            RenderSettings.sun = keyObject.GetComponent<Light>();
+            cameraData.renderPostProcessing = false;
+            cameraData.antialiasing = AntialiasingMode.None;
+            camera.allowMSAA = false;
+            camera.allowHDR = false;
+            camera.clearFlags = CameraClearFlags.SolidColor;
+            camera.backgroundColor = Color.clear;
+            camera.rect = new Rect(0f, 0f, 1f, 1f);
+            camera.orthographicSize = report.orthographicSize;
+            foreach (RendererState state in rendererStates)
+            {
+                result.RegisterObjectModification(state.renderer);
+                if (!playerRendererSet.Contains(state.renderer)) state.renderer.forceRenderingOff = true;
+                else if (state.renderer is SkinnedMeshRenderer skin) skin.forceMatrixRecalculationPerRender = true;
+            }
+
+            camera.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+            camera.transform.position = bounds.center - camera.transform.forward * 14f;
+            subject.SetPixelCellSize(2);
+            feature.AdaptiveTones.hairLighting = request.hairLighting;
+            subject.SetAdaptiveToneExperiment(true);
+            feature.ConfigureAdaptiveToneExperiment(compute, true);
+            for (int sample = request.first; sample < request.first + request.count; sample++)
+            {
+                float phase = request.total > 1 ? (float)sample / request.total : 0f;
+                float scale = request.mode == "sweep" ?
+                    Mathf.Exp(Mathf.Lerp(Mathf.Log(1.2f), Mathf.Log(.025f), (float)sample / Mathf.Max(1, request.total - 1))) :
+                    request.scale;
+                keyObject.GetComponent<Light>().intensity = 2f * scale;
+                fillObject.GetComponent<Light>().intensity = .55f * scale;
+                var probe = new SphericalHarmonicsL2();
+                probe.AddAmbientLight(new Color(.3f * scale, .3f * scale, .3f * scale));
+                RenderSettings.ambientProbe = probe;
+                if (request.mode == "walk")
+                {
+                    animator.SetFloat("LocomotionSpeed", request.locomotionSpeed);
+                    animator.Play(locomotionHash, 0, phase);
+                    animator.Update(0f);
+                }
+                foreach (bool skinLighting in new[] { false, true })
+                {
+                feature.AdaptiveTones.skinLighting = skinLighting;
+                string variant = skinLighting ? "after" : "before";
+                string captureId = request.batch + "_" + sample.ToString("D3") + "_" + variant;
+                string samplePath = Path.Combine(path, sample.ToString("D3"), variant);
+                Directory.CreateDirectory(samplePath);
+                byte[] plain = null;
+                // Identical pose, lights, camera and solver. Only readback/MRT is toggled.
+                if (sample == request.first)
+                {
+                    Capture(camera, Path.Combine(samplePath, "without_diagnostic.png"), result);
+                    plain = File.ReadAllBytes(Path.Combine(samplePath, "without_diagnostic.png"));
+                }
+                AdaptiveToneCapture packet = null;
+                feature.RequestAdaptiveToneCapture(camera, captureId, captured => packet = captured);
+                CaptureInfo capture = Capture(camera, Path.Combine(samplePath, "final.png"), result);
+                AsyncGPUReadback.WaitAllRequests();
+                if (packet == null) throw new InvalidOperationException("GPU capture callback missing; preserve artifacts and do not guess completion.");
+                if (!string.IsNullOrEmpty(packet.error)) throw new InvalidOperationException("GPU capture: " + packet.error);
+                if (packet.frame != capture.frame || packet.captureId != captureId ||
+                    packet.width != Width || packet.height != Height)
+                    throw new InvalidOperationException("GPU capture and final image do not match the same render.");
+                foreach (var pair in packet.data) WriteNew(Path.Combine(samplePath, pair.Key + ".bin"), pair.Value);
+                var metadata = new CaptureMetadata { captureId = packet.captureId, cameraId = packet.cameraId,
+                    settingsJson = packet.settingsJson, error = packet.error, frame = packet.frame,
+                    width = packet.width, height = packet.height, subjectId = packet.subjectId,
+                    keys = new List<string>(packet.data.Keys).ToArray() };
+                WriteNew(Path.Combine(samplePath, "capture.json"), Encoding.UTF8.GetBytes(JsonUtility.ToJson(metadata, true)));
+                bool identical = plain == null || BytesEqual(plain, File.ReadAllBytes(Path.Combine(samplePath, "final.png")));
+                var clipNames = new List<string>();
+                foreach (AnimatorClipInfo clip in animator.GetCurrentAnimatorClipInfo(0))
+                    clipNames.Add(clip.clip.name + ":" + clip.weight.ToString("R", System.Globalization.CultureInfo.InvariantCulture));
+                var sampleInfo = new SampleInfo { captureId = captureId, mode = request.mode, index = sample,
+                    total = request.total, phase = phase, scale = scale, unityFrame = capture.frame,
+                    keyIntensity = 2f * scale, fillIntensity = .55f * scale, ambientIntensity = .3f * scale,
+                    hairLighting = request.hairLighting, skinLighting = skinLighting, diagnosticRgbIdentical = identical,
+                    animatorState = animator.GetCurrentAnimatorStateInfo(0).fullPathHash.ToString(),
+                    clips = string.Join(";", clipNames), poseFingerprint = PoseFingerprint(animator),
+                    actualNormalizedTime = animator.GetCurrentAnimatorStateInfo(0).normalizedTime };
+                WriteNew(Path.Combine(samplePath, "sample.json"), Encoding.UTF8.GetBytes(JsonUtility.ToJson(sampleInfo, true)));
+                capture.view = "front"; capture.mode = request.mode; capture.worldYaw = 180;
+                capture.lightScale = scale; capture.hairLighting = request.hairLighting; capture.cellSize = 2;
+                capture.lighting = request.mode == "sweep" ? "scaled_white" : "fixed_white";
+                capture.hairMode = request.hairLighting ? "incident_diffuse_light" : "existing_source_rgb";
+                capture.keyIntensity = 2f * scale; capture.fillIntensity = .55f * scale;
+                capture.ambientIntensity = .3f * scale;
+                capture.nativeSourceEnabled = true; capture.adaptiveToneEnabled = true;
+                capture.hairRelativeError = feature.AdaptiveTones.hairRelativeError;
+                capture.hairIlluminationFloor = feature.AdaptiveTones.hairIlluminationFloor;
+                captures.Add(capture);
+                if (!identical) throw new InvalidOperationException("Diagnostic changes final PNG bytes; stop before using trace as evidence.");
+                }
+            }
+        }
+        finally
+        {
+            animator.SetFloat("LocomotionSpeed", oldLocomotionSpeed);
+            for (int layer = 0; layer < oldAnimatorStates.Length; layer++)
+            {
+                animator.SetLayerWeight(layer, oldLayerWeights[layer]);
+                if (oldAnimatorStates[layer].fullPathHash != 0)
+                    animator.Play(oldAnimatorStates[layer].fullPathHash, layer, oldAnimatorStates[layer].normalizedTime);
+            }
+            animator.Update(0f);
+            animator.speed = oldAnimatorSpeed;
+            animator.cullingMode = oldCullingMode;
+            animator.enabled = oldAnimatorEnabled;
+            foreach (PoseState pose in poseStates)
+            {
+                pose.transform.localPosition = pose.position;
+                pose.transform.localRotation = pose.rotation;
+                pose.transform.localScale = pose.scale;
+            }
+            // Restore the original feature reference/enable state, not a guessed
+            // disabled baseline. Keep the same subject component and cell ID.
+            feature.AdaptiveTones.hairLighting = previousHairLighting;
+            feature.AdaptiveTones.skinLighting = previousSkinLighting;
+            feature.AdaptiveTones.skinRelativeError = previousSkinRelativeError;
+            feature.AdaptiveTones.skinIlluminationFloor = previousSkinFloor;
+            feature.AdaptiveTones.hairRelativeError = previousHairRelativeError;
+            feature.AdaptiveTones.hairIlluminationFloor = previousHairIlluminationFloor;
+            feature.ConfigureAdaptiveToneExperiment(previousCompute, previousAdaptive);
+            camera.transform.localPosition = previousCameraLocalPosition;
+            camera.transform.localRotation = previousCameraLocalRotation;
+            camera.orthographicSize = previousSize; camera.aspect = previousAspect; camera.rect = previousRect;
+            camera.clearFlags = previousClear; camera.backgroundColor = previousBackground;
+            camera.allowMSAA = previousMSAA; camera.allowHDR = previousHDR;
+            cameraData.renderPostProcessing = previousPost; cameraData.antialiasing = previousAA;
+            subject.transform.localPosition = previousSubjectLocalPosition;
+            subject.transform.localRotation = previousSubjectLocalRotation;
+            subject.SetPixelCellSize(report.pixelCellSize);
+            subject.SetAdaptiveToneExperiment(previousSource);
+            foreach (RendererState state in rendererStates)
+                if (state.renderer != null)
+                {
+                    state.renderer.forceRenderingOff = state.forceRenderingOff;
+                    if (state.renderer is SkinnedMeshRenderer skin)
+                        skin.forceMatrixRecalculationPerRender = state.forceMatrixRecalculationPerRender;
+                    state.renderer.SetPropertyBlock(state.propertyBlock.isEmpty ? null : state.propertyBlock);
+                }
+            foreach (var pair in lightStates) if (pair.Key != null) pair.Key.enabled = pair.Value;
+            foreach (var pair in steppedStates) if (pair.Key != null) pair.Key.enabled = pair.Value;
+            Shader.SetGlobalInteger(steppedCountId, previousSteppedCount);
+            Shader.SetGlobalFloat(hairAnalysisId, previousHairAnalysis);
+            RenderSettings.sun = previousSun; RenderSettings.ambientProbe = previousProbe;
+            follow.enabled = previousFollow;
+            Time.timeScale = previousTime;
+            if (keyObject != null) result.DestroyObject(keyObject);
+            if (fillObject != null) result.DestroyObject(fillObject);
+        }
+
+        report.frameEnd = Time.frameCount;
+        report.sameFrame = report.frameStart == report.frameEnd;
+        report.samePlayer = shell.PlayerTransform.GetEntityId().Equals(playerId) &&
+            shell.PlayerTransform.position == playerPosition && shell.PlayerTransform.rotation == playerRotation;
+        report.sameCamera = shell.PlayerCamera == camera && camera.GetEntityId().Equals(cameraId);
+        report.samePose = shell.PlayerTransform.GetComponentsInChildren<Transform>(true).Length == poseStates.Count;
+        report.poseBitwiseEqual = report.samePose;
+        foreach (PoseState state in poseStates)
+            if (state.transform == null || state.transform.parent != state.parent ||
+                !state.transform.localPosition.Equals(state.position) || !state.transform.localRotation.Equals(state.rotation) ||
+                !state.transform.localScale.Equals(state.scale) || state.transform.gameObject.activeSelf != state.activeSelf)
+            {
+                report.poseBitwiseEqual = false;
+                // Transform may renormalize an assigned quaternion at float precision.
+                // Keep bitwise differences recorded; only accept equivalent rotation
+                // within 1e-6 quaternion distance, with exact position/scale/ownership.
+                if (state.transform == null || state.transform.parent != state.parent ||
+                    !state.transform.localPosition.Equals(state.position) || !state.transform.localScale.Equals(state.scale) ||
+                    state.transform.gameObject.activeSelf != state.activeSelf || !RotationNear(state.transform.localRotation, state.rotation))
+                    report.samePose = false;
+                result.Log("POSE_DIFFERENCE node={0} positionBefore={1} positionAfter={2} rotationBefore={3} rotationAfter={4} scaleBefore={5} scaleAfter={6}",
+                    state.transform == null ? "<missing>" : state.transform.name,
+                    state.position.ToString("R"), state.transform == null ? "missing" : state.transform.localPosition.ToString("R"),
+                    state.rotation.ToString("R"), state.transform == null ? "missing" : state.transform.localRotation.ToString("R"),
+                    state.scale.ToString("R"), state.transform == null ? "missing" : state.transform.localScale.ToString("R"));
+            }
+        report.sceneDirtyAfter = previousScene.isDirty;
+        bool materialsPreserved = true;
+        foreach (RendererState state in rendererStates)
+        {
+            if (state.renderer == null) { materialsPreserved = false; continue; }
+            Material[] current = state.renderer.sharedMaterials;
+            if (current.Length != state.materials.Length) { materialsPreserved = false; continue; }
+            for (int index = 0; index < current.Length; index++)
+                if (current[index] != state.materials[index]) materialsPreserved = false;
+        }
+        bool rendererFlagsRestored = true, lightsRestored = true;
+        foreach (RendererState state in rendererStates)
+            if (state.renderer == null || state.renderer.forceRenderingOff != state.forceRenderingOff ||
+                (state.renderer is SkinnedMeshRenderer skin && skin.forceMatrixRecalculationPerRender != state.forceMatrixRecalculationPerRender))
+                rendererFlagsRestored = false;
+        foreach (var pair in lightStates) if (pair.Key == null || pair.Key.enabled != pair.Value) lightsRestored = false;
+        foreach (var pair in steppedStates) if (pair.Key == null || pair.Key.enabled != pair.Value) lightsRestored = false;
+        ComputeShader restoredCompute;
+        using (var serialized = new SerializedObject(feature))
+            restoredCompute = serialized.FindProperty("settings.adaptiveToneCompute").objectReferenceValue as ComputeShader;
+        report.restored = materialsPreserved && rendererFlagsRestored && lightsRestored && report.samePose &&
+            restoredCompute == previousCompute && JsonUtility.ToJson(feature.AdaptiveTones) == previousToneSettings &&
+            SceneManager.GetActiveScene() == previousScene &&
+            subject.PixelCellSize == report.pixelCellSize &&
+            subject.AdaptiveToneExperiment == previousSource && feature.AdaptiveTones.enabled == previousAdaptive &&
+            camera.transform.position == previousCameraPosition && camera.transform.rotation == previousCameraRotation &&
+            camera.orthographicSize == previousSize && camera.aspect == previousAspect && camera.rect == previousRect &&
+            camera.backgroundColor == previousBackground && camera.clearFlags == previousClear &&
+            camera.allowMSAA == previousMSAA && camera.allowHDR == previousHDR &&
+            cameraData.renderPostProcessing == previousPost && cameraData.antialiasing == previousAA &&
+            camera.targetTexture == previousTargetTexture && RenderTexture.active == previousActiveTexture &&
+            RenderSettings.sun == previousSun && RenderSettings.ambientProbe.Equals(previousProbe) &&
+            Shader.GetGlobalInteger(steppedCountId) == previousSteppedCount &&
+            Shader.GetGlobalFloat(hairAnalysisId) == previousHairAnalysis &&
+            Time.timeScale == previousTime && follow.enabled == previousFollow;
+        report.captureRecords = captures.ConvertAll(c => JsonUtility.ToJson(c)).ToArray();
+        bool captureFramesMatch = captures.Count == request.count * 2;
+        foreach (CaptureInfo item in captures)
+            captureFramesMatch &= item.frame == report.frameStart && item.cellSize == 2 && item.worldYaw == 180f;
+        WriteNew(Path.Combine(path, "restoration_attempt.json"), Encoding.UTF8.GetBytes(JsonUtility.ToJson(report, true)));
+        result.Log("Capture count={0}; samePlayer={1}; sameCamera={2}; sameFrame={3}; samePose={4}; restored={5}; path={6}",
+            captures.Count, report.samePlayer, report.sameCamera, report.sameFrame, report.samePose, report.restored, path);
+        if (!report.sameFrame || !captureFramesMatch || !report.samePlayer || !report.sameCamera || !report.restored)
+            throw new InvalidOperationException("Capture identity/frame/restoration check failed. Existing PNGs are retained for diagnosis.");
+        WriteNew(manifestPath, new UTF8Encoding(false).GetBytes(JsonUtility.ToJson(report, true)));
+        result.Log("Bounded actual GPU render samples recorded; not realtime input/performance validation. All original pose/camera/lighting/settings restored. Output: {0}", path);
+    }
+
+    private static void ValidateCurrentRenderer(UniversalAdditionalCameraData cameraData, UniversalRendererData expected)
+    {
+        UniversalRenderPipelineAsset pipeline = GraphicsSettings.currentRenderPipeline as UniversalRenderPipelineAsset;
+        if (pipeline == null || expected == null) throw new InvalidOperationException("URP and the existing PC_Renderer asset are required.");
+        using (var serializedCamera = new SerializedObject(cameraData))
+        using (var serializedPipeline = new SerializedObject(pipeline))
+        {
+            SerializedProperty rendererIndex = serializedCamera.FindProperty("m_RendererIndex");
+            SerializedProperty defaultIndex = serializedPipeline.FindProperty("m_DefaultRendererIndex");
+            SerializedProperty rendererList = serializedPipeline.FindProperty("m_RendererDataList");
+            if (rendererIndex == null || defaultIndex == null || rendererList == null)
+                throw new InvalidOperationException("Cannot verify the active camera renderer without changing it.");
+            int index = rendererIndex.intValue < 0 ? defaultIndex.intValue : rendererIndex.intValue;
+            if (index < 0 || index >= rendererList.arraySize || rendererList.GetArrayElementAtIndex(index).objectReferenceValue != expected)
+                throw new InvalidOperationException("PlayerCamera is not currently using PC_Renderer. Renderer selection is not changed by this script.");
+        }
+    }
+
+    private static Bounds CalculatePosedBounds(Renderer[] renderers)
+    {
+        bool hasPoint = false;
+        Bounds bounds = default;
+        foreach (Renderer renderer in renderers)
+        {
+            SkinnedMeshRenderer skin = renderer as SkinnedMeshRenderer;
+            if (skin == null || skin.sharedMesh == null) continue;
+            UnityEngine.Mesh mesh = skin.sharedMesh;
+            if (!mesh.isReadable)
+                throw new InvalidOperationException("Existing mesh is not CPU-readable; capture precondition failed. Do not change import settings for this test.");
+            Vector3[] vertices = mesh.vertices;
+            BoneWeight[] weights = mesh.boneWeights;
+            Matrix4x4[] binds = mesh.bindposes;
+            Transform[] bones = skin.bones;
+            if (weights.Length != vertices.Length || binds.Length != bones.Length)
+                throw new InvalidOperationException("Posed-bounds capture expects the existing four-weight skinned mesh contract.");
+            var matrices = new Matrix4x4[bones.Length];
+            for (int index = 0; index < bones.Length; index++)
+            {
+                if (bones[index] == null) throw new InvalidOperationException("Skinned mesh has a missing bone.");
+                matrices[index] = bones[index].localToWorldMatrix * binds[index];
+            }
+            for (int index = 0; index < vertices.Length; index++)
+            {
+                BoneWeight weight = weights[index];
+                Vector3 vertex = vertices[index];
+                Vector3 point = matrices[weight.boneIndex0].MultiplyPoint3x4(vertex) * weight.weight0 +
+                    matrices[weight.boneIndex1].MultiplyPoint3x4(vertex) * weight.weight1 +
+                    matrices[weight.boneIndex2].MultiplyPoint3x4(vertex) * weight.weight2 +
+                    matrices[weight.boneIndex3].MultiplyPoint3x4(vertex) * weight.weight3;
+                if (!hasPoint) { bounds = new Bounds(point, Vector3.zero); hasPoint = true; }
+                else bounds.Encapsulate(point);
+            }
+        }
+        if (!hasPoint) throw new InvalidOperationException("No posed skinned vertices found.");
+        return bounds;
+    }
+
+    private static GameObject CreateCaptureLight(string name, float intensity, Vector3 euler, ExecutionResult result)
+    {
+        var lightObject = new GameObject(name);
+        try
+        {
+            lightObject.hideFlags = HideFlags.HideAndDontSave;
+            result.RegisterObjectCreation(lightObject);
+            Light light = lightObject.AddComponent<Light>();
+            light.type = LightType.Directional; light.color = Color.white;
+            light.intensity = intensity; light.shadows = LightShadows.None;
+            lightObject.transform.rotation = Quaternion.Euler(euler);
+            return lightObject;
+        }
+        catch
+        {
+            result.DestroyObject(lightObject);
+            throw;
+        }
+    }
+
+    private static CaptureInfo Capture(Camera camera, string path, ExecutionResult result)
+    {
+        RefuseExisting(path);
+        RenderTexture previousTarget = camera.targetTexture, previousActive = RenderTexture.active;
+        float previousAspect = camera.aspect;
+        RenderTexture target = RenderTexture.GetTemporary(Width, Height, 24, RenderTextureFormat.ARGB32, RenderTextureReadWrite.Default, 1);
+        Texture2D texture = null;
+        try
+        {
+            texture = new Texture2D(Width, Height, TextureFormat.RGBA32, false);
+            result.RegisterObjectCreation(texture);
+            camera.targetTexture = target; camera.aspect = (float)Width / Height;
+            camera.Render();
+            RenderTexture.active = target;
+            texture.ReadPixels(new Rect(0, 0, Width, Height), 0, 0);
+            texture.Apply();
+            var info = new CaptureInfo { file = Path.GetFileName(path), width = Width, height = Height, frame = Time.frameCount };
+            foreach (Color32 pixel in texture.GetPixels32())
+                if (pixel.a == 0) info.emptyAlpha++;
+                else if (pixel.a == 255) info.solidAlpha++;
+                else info.partialAlpha++;
+            if (info.emptyAlpha == 0 || info.solidAlpha == 0)
+                throw new InvalidOperationException("Capture has no transparent background or no opaque subject; no substitute image is written.");
+            WriteNew(path, texture.EncodeToPNG());
+            return info;
+        }
+        finally
+        {
+            camera.targetTexture = previousTarget; camera.aspect = previousAspect;
+            RenderTexture.active = previousActive;
+            RenderTexture.ReleaseTemporary(target);
+            if (texture != null) result.DestroyObject(texture);
+        }
+    }
+
+    private static bool RotationNear(Quaternion a, Quaternion b)
+    {
+        Vector4 delta = new Vector4(a.x-b.x, a.y-b.y, a.z-b.z, a.w-b.w);
+        Vector4 negative = new Vector4(a.x+b.x, a.y+b.y, a.z+b.z, a.w+b.w);
+        return Mathf.Min(delta.sqrMagnitude, negative.sqrMagnitude) <= 1e-12f;
+    }
+
+    private static string PoseFingerprint(Animator animator)
+    {
+        var values = new List<string>();
+        foreach (HumanBodyBones bone in new[] { HumanBodyBones.Hips, HumanBodyBones.LeftUpperLeg,
+            HumanBodyBones.LeftLowerLeg, HumanBodyBones.LeftFoot, HumanBodyBones.RightUpperLeg,
+            HumanBodyBones.RightLowerLeg, HumanBodyBones.RightFoot, HumanBodyBones.LeftUpperArm,
+            HumanBodyBones.RightUpperArm, HumanBodyBones.Head })
+        {
+            Transform transform = animator.GetBoneTransform(bone);
+            if (transform != null) values.Add(bone + ":" + transform.position.ToString("R") + "/" + transform.rotation.ToString("R"));
+        }
+        return string.Join(";", values);
+    }
+
+    private static bool BytesEqual(byte[] left, byte[] right)
+    {
+        if (left.Length != right.Length) return false;
+        for (int i = 0; i < left.Length; i++) if (left[i] != right[i]) return false;
+        return true;
+    }
+
+    private static void RefuseExisting(string path)
+    {
+        if (File.Exists(path) || Directory.Exists(path))
+            throw new IOException("Preserving existing output: " + path);
+    }
+
+    private static void WriteNew(string path, byte[] bytes)
+    {
+        using (var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None))
+            stream.Write(bytes, 0, bytes.Length);
+    }
+}

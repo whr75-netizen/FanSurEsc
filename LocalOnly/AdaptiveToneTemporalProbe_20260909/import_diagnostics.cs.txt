@@ -1,0 +1,16 @@
+using UnityEngine;
+using UnityEditor;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling)
+            throw new System.InvalidOperationException("Import requires idle Edit Mode.");
+        foreach (string path in new[] {
+            "Assets/Rendering/CharacterPresentation/CharacterAdaptiveTonePass.cs",
+            "Assets/Rendering/CharacterPresentation/CharacterSilhouetteRendererFeature.cs",
+            "Assets/Rendering/CharacterPresentation/CharacterFlatUnlit.shader" })
+            AssetDatabase.ImportAsset(path);
+        result.Log("Import of diagnostics only. Compute solver and serialized assets unchanged.");
+    }
+}

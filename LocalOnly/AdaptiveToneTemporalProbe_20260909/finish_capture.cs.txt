@@ -1,0 +1,45 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+using FantasySurvival.SceneFlow;
+using FantasySurvival.CharacterPresentation;
+using FantasySurvival.Rendering;
+internal class CommandScript : IRunCommand
+{
+    [Serializable] public sealed class EndState
+    {
+        public bool playingBeforeExit, sceneDirty, hairLighting, restored;
+        public string scene, playerId, cameraId, settings;
+        public float timeScale, captureLightingGlobal;
+        public int frame, cellSize, temporaryLightCount, completedCaptures;
+    }
+    public void Execute(ExecutionResult result)
+    {
+        var shell = PersistentGameplayShell.Instance;
+        if (!EditorApplication.isPlaying || shell == null) throw new InvalidOperationException("Expected capture Play session.");
+        var renderer = AssetDatabase.LoadAssetAtPath<UniversalRendererData>("Assets/Settings/PC_Renderer.asset");
+        CharacterSilhouetteRendererFeature feature = null;
+        foreach(var item in renderer.rendererFeatures) if(item is CharacterSilhouetteRendererFeature match) feature=match;
+        var subject = shell.PlayerTransform.GetComponentInChildren<CharacterSilhouetteSubject>();
+        var state = new EndState { playingBeforeExit=EditorApplication.isPlaying, scene=SceneManager.GetActiveScene().name,
+            sceneDirty=SceneManager.GetActiveScene().isDirty, hairLighting=feature.AdaptiveTones.hairLighting,
+            playerId=shell.PlayerTransform.GetEntityId().ToString(), cameraId=shell.PlayerCamera.GetEntityId().ToString(),
+            settings=JsonUtility.ToJson(feature.AdaptiveTones),timeScale=Time.timeScale,
+            captureLightingGlobal=Shader.GetGlobalFloat("_CharacterToneCaptureLighting"),frame=Time.frameCount,cellSize=subject.PixelCellSize };
+        foreach(var light in UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None))
+            if(light.name.StartsWith("Temporary adaptive comparison")) state.temporaryLightCount++;
+        // capture.json is written only after all 15 GPU readbacks complete.
+        foreach(string captured in Directory.EnumerateFiles("LocalOnly/AdaptiveToneTemporalProbe_20260909", "capture.json", SearchOption.AllDirectories)) state.completedCaptures++;
+        state.restored=!state.sceneDirty && !state.hairLighting && state.completedCaptures==64 && state.cellSize==2 &&
+            state.captureLightingGlobal==0 && state.timeScale==1 && state.temporaryLightCount==0;
+        string path=Path.GetFullPath("LocalOnly/AdaptiveToneTemporalProbe_20260909/end_state.json");
+        using(var writer=new StreamWriter(new FileStream(path,FileMode.CreateNew))) writer.Write(JsonUtility.ToJson(state,true));
+        result.Log("{0}",JsonUtility.ToJson(state));
+        if(!state.restored) throw new InvalidOperationException("Capture state not restored; inspect before exit.");
+        EditorApplication.ExitPlaymode();
+        result.Log("Requested Play exit without saving scene or assets.");
+    }
+}

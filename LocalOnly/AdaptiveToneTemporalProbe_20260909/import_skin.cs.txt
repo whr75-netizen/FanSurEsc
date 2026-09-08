@@ -1,0 +1,17 @@
+using UnityEngine;
+using UnityEditor;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling)
+            throw new System.InvalidOperationException("Import requires idle Edit Mode.");
+        foreach (string path in new[] {
+            "Assets/Rendering/CharacterPresentation/CharacterAdaptiveTonePass.cs",
+            "Assets/Rendering/CharacterPresentation/CharacterSilhouetteRendererFeature.cs",
+            "Assets/Rendering/CharacterPresentation/CharacterFlatUnlit.shader",
+            "Assets/Rendering/CharacterPresentation/CharacterAdaptiveTones.compute" })
+            AssetDatabase.ImportAsset(path);
+        result.Log("Imported Skin E option in four runtime files; no scene or asset Save.");
+    }
+}

@@ -1,0 +1,19 @@
+using System;
+using System.IO;
+using UnityEngine;
+using UnityEditor;
+using FantasySurvival.Rendering;
+internal class CommandScript : IRunCommand
+{
+    public void Execute(ExecutionResult result)
+    {
+        Type type = typeof(CharacterSilhouetteRendererFeature);
+        result.Log("Project={0}; Play={1}; compiling={2}; updating={3}; assembly={4}; API={5}; packet={6}",
+            Application.dataPath, EditorApplication.isPlaying, EditorApplication.isCompiling,
+            EditorApplication.isUpdating, type.Assembly.Location,
+            type.GetMethod("RequestAdaptiveToneCapture") != null,
+            type.Assembly.GetType("FantasySurvival.Rendering.AdaptiveToneCapture") != null);
+        result.Log("Disk source API={0}", File.ReadAllText(Path.Combine(Application.dataPath,
+            "Rendering/CharacterPresentation/CharacterSilhouetteRendererFeature.cs")).Contains("RequestAdaptiveToneCapture"));
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "message": "Command executed successfully.",
+  "data": {
+    "isCompilationSuccessful": true,
+    "isExecutionSuccessful": true,
+    "executionId": 1,
+    "compilationLogs": "",
+    "executionLogs": "[Log] [Play=False; compiling=False; updating=False; frame=1; timeScale=1; scene=GameMap1; dirty=False; runInBackground=False\r\nPipeline=PC_RPAsset (UnityEngine.Rendering.Universal.UniversalRenderPipelineAsset); graphics=Direct3D11; computeSupported=True\r\nShader=Assets/Rendering/CharacterPresentation/CharacterFlatUnlit.shader; error=False; supported=True; messages=0\r\nShader=Assets/Rendering/CharacterPresentation/CharacterSilhouetteMask.shader; error=False; supported=True; messages=0\r\nShader=Assets/Rendering/CharacterPresentation/CharacterSilhouetteComposite.shader; error=False; supported=True; messages=0\r\nCompute messages=0\r\nKernel Clear exists=True\r\nKernel GatherGroups exists=True\r\nKernel GatherHistogram exists=True\r\nKernel SolveTones exists=True\r\nKernel GatherHighlights exists=True\r\nKernel SolveHighlights exists=True\r\nKernel Resolve exists=True\r\nCharacter feature=568105584918854044; active=True; settings={\"enabled\":true,\"toneError\":0.05999999865889549,\"chromaError\":0.05999999865889549,\"contrastRetention\":0.6499999761581421,\"minimumContrast\":0.02500000037252903,\"highlightMinimumContrast\":0.02500000037252903,\"hairLighting\":false,\"hairRelativeError\":0.10000000149011612,\"hairIlluminationFloor\":0.019999999552965165,\"skinLighting\":false,\"skinRelativeError\":0.10000000149011612,\"skinIlluminationFloor\":0.019999999552965165}\r\nCompute reference=Assets/Rendering/CharacterPresentation/CharacterAdaptiveTones.compute\r\nGameplay shell/Player/PlayerCamera not ready\r\n]",
+    "result": "Command executed successfully."
+  }
+}

@@ -294,6 +294,8 @@ namespace FantasySurvival.Rendering
                 Shader.PropertyToID("_CameraDepthTexture");
             private static readonly int HairLightingAnalysisId =
                 Shader.PropertyToID("_CharacterHairLightingAnalysis");
+            private static readonly int SkinLightingAnalysisId =
+                Shader.PropertyToID("_CharacterSkinLightingAnalysis");
             private static readonly int CaptureLightingId =
                 Shader.PropertyToID("_CharacterToneCaptureLighting");
             private static readonly int ArtPixelSizeId =
@@ -542,7 +544,7 @@ namespace FantasySurvival.Rendering
                     descriptor.depthStencilFormat = GraphicsFormat.None;
                     TextureHandle nativeColor = UniversalRenderer.CreateRenderGraphTexture(
                         renderGraph, descriptor, "_CharacterToneNativeColor", true, FilterMode.Point);
-                    TextureHandle nativeLighting = adaptiveToneSettings.hairLighting || capture != null ?
+                    TextureHandle nativeLighting = adaptiveToneSettings.hairLighting || adaptiveToneSettings.skinLighting || capture != null ?
                         UniversalRenderer.CreateRenderGraphTexture(renderGraph, descriptor,
                             "_CharacterToneNativeLighting", true, FilterMode.Point) : TextureHandle.nullHandle;
                     descriptor.graphicsFormat = GraphicsFormat.R8G8B8A8_UNorm;
@@ -655,6 +657,7 @@ namespace FantasySurvival.Rendering
                 builder.SetRenderAttachment(cellMeta, 1, AccessFlags.Write);
                 if (nativeLighting.IsValid()) builder.SetRenderAttachment(nativeLighting, 2, AccessFlags.Write);
                 passData.hairLighting = nativeToneSource && adaptiveToneSettings != null && adaptiveToneSettings.hairLighting;
+                passData.skinLighting = nativeToneSource && adaptiveToneSettings != null && adaptiveToneSettings.skinLighting;
                 passData.captureLighting = nativeToneSource && captureLighting;
                 builder.AllowGlobalStateModification(true);
                 // Self-occlusion only; world visibility is resolved against the
@@ -664,10 +667,12 @@ namespace FantasySurvival.Rendering
                 {
                     context.cmd.ClearRenderTarget(RTClearFlags.All, Color.clear, 1f, 0);
                     context.cmd.SetGlobalFloat(HairLightingAnalysisId, data.hairLighting ? 1f : 0f);
+                    context.cmd.SetGlobalFloat(SkinLightingAnalysisId, data.skinLighting ? 1f : 0f);
                     if (data.captureLighting) context.cmd.SetGlobalFloat(CaptureLightingId, 1f);
                     context.cmd.DrawRendererList(data.rendererList);
                     if (data.captureLighting) context.cmd.SetGlobalFloat(CaptureLightingId, 0f);
                     context.cmd.SetGlobalFloat(HairLightingAnalysisId, 0f);
+                    context.cmd.SetGlobalFloat(SkinLightingAnalysisId, 0f);
                 });
             }
 
@@ -1204,6 +1209,7 @@ namespace FantasySurvival.Rendering
             private sealed class PixelCellSourcePassData
             {
                 public bool hairLighting;
+                public bool skinLighting;
                 public bool captureLighting;
                 public RendererListHandle rendererList;
             }

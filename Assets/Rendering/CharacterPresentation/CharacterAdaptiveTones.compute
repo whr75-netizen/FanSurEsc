@@ -15,7 +15,7 @@
 //   source domains / actual-center covering. Disconnected parts can share tones.
 // * 32 adaptive histogram bins restrict partitions and representative candidates.
 //   Each candidate is an ACTUAL dense-source RGB, never a bin-center/average RGB.
-// * Moments use normalized-L uint16 samples and exact uint64-pair atomic sums.
+// * Moments use normalized-metric uint16 samples and exact uint64-pair atomic sums.
 //   Representative choice uses a quantized bin-center distance, then pixel index.
 // * Masked 4x4 -> 2x2 spatial tile means replace Gaussian scale-space supports.
 //   Both scales need variance coherence >= .35 and support overlap >= .65.
@@ -26,7 +26,7 @@
 //
 // Supported input: one selected 16-bit subject, part IDs 0..4, <= 4,194,304 pixels,
 // finite linear RGB in [0,16], positive finite eye depth. HDR is not clipped;
-// adaptive L range preserves absolute Oklab-L error units. Opt-in Hair uses
+// adaptive L range preserves absolute Oklab-L error units. Opt-in Hair/Skin use
 // native diffuse illumination Y instead, with error relative to mean received
 // illumination (and a darkness floor). Candidate RGB remains source-observed.
 // Source and sparse
@@ -41,7 +41,7 @@
 // a retained original is explicitly NOT a successful tone result.
 // Solutions[group*3+0] = (K, weighted metric RMSE, required contrast, actual contrast).
 // Solutions[group*3+1] = (brightest base metric, accent metric, cutoff metric, enabled).
-// The metric is Oklab L except for opt-in Hair, where it is illumination Y.
+// The metric is Oklab L except for independently opted-in Hair/Skin illumination Y.
 // Solutions[group*3+2].rgb = actual observed accent RGB.
 
 #pragma kernel Clear
@@ -87,6 +87,9 @@ float _ToneHighlightMinimumContrast;
 int _ToneHairLightingEnabled;
 float _ToneHairRelativeError;
 float _ToneHairIlluminationFloor;
+int _ToneSkinLightingEnabled;
+float _ToneSkinRelativeError;
+float _ToneSkinIlluminationFloor;
 
 // Only integer atomics touch shared histograms. Carry increments commute even
 // when another invocation adds to the low word before this carry is recorded.
@@ -140,17 +143,33 @@ bool HairLightingGroup(uint group)
     return _ToneHairLightingEnabled != 0 && (_ToneGroups[group * 8u] >> 16u) == 4u;
 }
 
-// Native lighting and native RGB must describe the same visible Hair surface.
+bool SkinLightingPart(float4 meta)
+{
+    return _ToneSkinLightingEnabled != 0 && (uint)round(meta.g * 255.0) == 4u;
+}
+
+bool SkinLightingGroup(uint group)
+{
+    return _ToneSkinLightingEnabled != 0 && (_ToneGroups[group * 8u] >> 16u) == 5u;
+}
+
+bool IlluminationGroup(uint group)
+{
+    return HairLightingGroup(group) || SkinLightingGroup(group);
+}
+
+// Native lighting and native RGB must describe the same visible opted-in surface.
 // Resolve also calls this for sparse seeds; it reports a seed mismatch using
 // bit 32 so one resolving pixel cannot change another pixel's decision.
 bool TryAnalysisMetric(uint2 pixel, float3 lab, float4 meta, out float metric)
 {
     metric = lab.x;
-    if (!HairLightingPart(meta)) return true;
+    if (!HairLightingPart(meta) && !SkinLightingPart(meta)) return true;
     float4 lighting = _ToneSourceLighting.Load(int3(pixel, 0));
     float4 nativeMeta = _ToneSourceMeta.Load(int3(pixel, 0));
     if (!all(isfinite(lighting)) || lighting.r < 0.0 || lighting.a != 1.0 ||
-        Subject(nativeMeta) != Subject(meta) || (uint)round(nativeMeta.g * 255.0) != 3u)
+        Subject(nativeMeta) != Subject(meta) ||
+        (uint)round(nativeMeta.g * 255.0) != (uint)round(meta.g * 255.0))
         return false;
     metric = lighting.r;
     return true;
@@ -158,8 +177,11 @@ bool TryAnalysisMetric(uint2 pixel, float3 lab, float4 meta, out float metric)
 
 float MetricScale(uint group, float2 range, float normalizedMean)
 {
-    return HairLightingGroup(group) ?
-        max(range.x + range.y * normalizedMean, _ToneHairIlluminationFloor) : 1.0;
+    if (HairLightingGroup(group))
+        return max(range.x + range.y * normalizedMean, _ToneHairIlluminationFloor);
+    if (SkinLightingGroup(group))
+        return max(range.x + range.y * normalizedMean, _ToneSkinIlluminationFloor);
+    return 1.0;
 }
 
 uint ColorKey(float3 lab, float4 meta)
@@ -216,7 +238,7 @@ float4 Candidate(uint group, uint bin)
     uint index = packed & TONE_PIXEL_MASK;
     int3 pixel = int3(index % (uint)_ToneWidth, index / (uint)_ToneWidth, 0);
     float3 rgb = _ToneSourceColor.Load(pixel).rgb;
-    float metric = HairLightingGroup(group) ? _ToneSourceLighting.Load(pixel).r : LinearToOklab(rgb).x;
+    float metric = IlluminationGroup(group) ? _ToneSourceLighting.Load(pixel).r : LinearToOklab(rgb).x;
     return float4(rgb, metric);
 }
 
@@ -253,6 +275,10 @@ void Clear(uint3 id : SV_DispatchThreadID)
         if (_ToneHairLightingEnabled != 0 &&
             (!isfinite(_ToneHairRelativeError) || _ToneHairRelativeError <= 0.0 || _ToneHairRelativeError > 1.0 ||
              !isfinite(_ToneHairIlluminationFloor) || _ToneHairIlluminationFloor <= 0.0))
+            status |= 16u;
+        if (_ToneSkinLightingEnabled != 0 &&
+            (!isfinite(_ToneSkinRelativeError) || _ToneSkinRelativeError <= 0.0 || _ToneSkinRelativeError > 1.0 ||
+             !isfinite(_ToneSkinIlluminationFloor) || _ToneSkinIlluminationFloor <= 0.0))
             status |= 16u;
         _ToneStatus[TONE_GROUPS] = status;
     }
@@ -508,6 +534,7 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
             float scale = MetricScale(group, range,
                 sSumPrefix[sActiveCount] / sWeightPrefix[sActiveCount]);
             if (HairLightingGroup(group)) sErrorLimit = scale * _ToneHairRelativeError;
+            else if (SkinLightingGroup(group)) sErrorLimit = scale * _ToneSkinRelativeError;
             BuildBroadSupport(group, range, _ToneMinimumContrast * scale);
         }
         _ToneSupports[group * 2u] = sLowMask;
@@ -642,7 +669,7 @@ void SolveHighlights(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
     if (group >= TONE_GROUPS) return;
     bool enabled = _ToneStatus[TONE_GROUPS] == 0u && (_ToneStatus[group] & 3u) == 3u;
     sCount[lane] = enabled ? _ToneHistogram[(group * TONE_BINS + lane) * 6u] : 0u;
-    sSum[lane] = enabled && HairLightingGroup(group) ?
+    sSum[lane] = enabled && IlluminationGroup(group) ?
         PairValue(_ToneHistogram[(group * TONE_BINS + lane) * 6u + 1u],
             _ToneHistogram[(group * TONE_BINS + lane) * 6u + 2u]) / TONE_Q : 0.0;
     sCandidate[lane] = 0.0;
@@ -652,7 +679,7 @@ void SolveHighlights(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
     float2 range = LightnessRange(group);
     if (range.y <= 1e-8) return;
     float minimumContrast = _ToneHighlightMinimumContrast;
-    if (HairLightingGroup(group))
+    if (IlluminationGroup(group))
     {
         float count = 0.0, sum = 0.0;
         [fastopt] [loop] for (uint b = 0u; b < TONE_BINS; ++b)

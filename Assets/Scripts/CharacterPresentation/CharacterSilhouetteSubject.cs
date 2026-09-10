@@ -93,8 +93,12 @@ namespace FantasySurvival.CharacterPresentation
         public bool AdaptiveToneExperiment => adaptiveToneExperiment;
 
         public static bool TryGetAdaptiveToneSubject(out int subjectId)
+            => TryGetAdaptiveToneSubject(out subjectId, out _);
+
+        public static bool TryGetAdaptiveToneSubject(out int subjectId, out CharacterSilhouetteSubject selected)
         {
             subjectId = 0;
+            selected = null;
             foreach (CharacterSilhouetteSubject subject in activeSubjects)
             {
                 if (subject == null || !subject.isActiveAndEnabled ||
@@ -104,6 +108,7 @@ namespace FantasySurvival.CharacterPresentation
                     throw new System.InvalidOperationException(
                         "Adaptive tone experiment supports exactly one opted-in pixel-cell subject.");
                 subjectId = subject.pixelCellSubjectId;
+                selected = subject;
             }
             return subjectId != 0;
         }

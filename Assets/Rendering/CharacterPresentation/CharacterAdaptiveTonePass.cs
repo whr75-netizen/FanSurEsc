@@ -36,10 +36,10 @@ namespace FantasySurvival.Rendering
 
     /// <summary>
     /// Records the opt-in, single-subject GPU tone experiment between the existing
-    /// cell source and composite. All GPU resources belong to this RenderGraph;
-    /// this object caches only kernel indices and never reads back a frame.
+    /// cell source and composite. Analysis belongs to RenderGraph; this owner
+    /// retains only partition history per camera, never a previous color image.
     /// </summary>
-    public sealed class CharacterAdaptiveTonePass
+    public sealed class CharacterAdaptiveTonePass : IDisposable
     {
         public const int MaximumSourcePixels = 4_194_304;
         public const int MaximumGroups = 160;
@@ -47,6 +47,7 @@ namespace FantasySurvival.Rendering
         public const int StatusCount = MaximumGroups + 1;
 
         private const int HistogramBins = 32;
+        public const int HistoryRowsPerGroup = HistogramBins + 2;
         private const int SpatialTiles = 16;
         private const int ClearElements = MaximumGroups * SpatialTiles * HistogramBins;
         private const GraphicsFormat ColorFormat = GraphicsFormat.R16G16B16A16_SFloat;
@@ -71,6 +72,10 @@ namespace FantasySurvival.Rendering
             public bool skinLighting;
             [Range(0.0001f, 1f)] public float skinRelativeError = 0.10f;
             [Range(0.0001f, 1f)] public float skinIlluminationFloor = 0.02f;
+            [Tooltip("Retain partitions only within CURRENT error/contrast bounds. Colors always come from the current frame.")]
+            public bool temporalStability = true;
+            [Range(0f, 0.5f), Tooltip("Relative error headroom required to reduce tone count. Increasing detail uses the original limit.")]
+            public float shrinkMargin = 0.10f;
         }
 
         /// <summary>
@@ -166,7 +171,10 @@ namespace FantasySurvival.Rendering
                 Textures.SourceColor, 32, 1),
             new KernelDefinition("Resolve", Buffers.Groups | Buffers.Palette | Buffers.Supports |
                 Buffers.Solutions | Buffers.Status,
-                Textures.CellColor | Textures.CellMeta | Textures.Output, 8, 8)
+                Textures.CellColor | Textures.CellMeta | Textures.Output, 8, 8),
+            // Separate store keeps SolveTones within D3D11's eight UAV limit.
+            new KernelDefinition("StoreHistory", Buffers.Groups | Buffers.Histogram |
+                Buffers.Status | Buffers.Palette | Buffers.Solutions, Textures.None, 32, 1)
         };
 
         private static readonly int SourceColorId = Shader.PropertyToID("_ToneSourceColor");
@@ -181,6 +189,11 @@ namespace FantasySurvival.Rendering
         private static readonly int CellColorId = Shader.PropertyToID("_ToneCellColor");
         private static readonly int CellMetaId = Shader.PropertyToID("_ToneCellMeta");
         private static readonly int OutputId = Shader.PropertyToID("_ToneOutput");
+        private static readonly int PreviousHistoryId = Shader.PropertyToID("_TonePreviousHistory");
+        private static readonly int NextHistoryId = Shader.PropertyToID("_ToneNextHistory");
+        private static readonly int HistoryValidId = Shader.PropertyToID("_ToneHistoryValid");
+        private static readonly int TemporalStabilityId = Shader.PropertyToID("_ToneTemporalStability");
+        private static readonly int ShrinkMarginId = Shader.PropertyToID("_ToneShrinkMargin");
         private static readonly int GroupsId = Shader.PropertyToID("_ToneGroups");
         private static readonly int HistogramId = Shader.PropertyToID("_ToneHistogram");
         private static readonly int TilesId = Shader.PropertyToID("_ToneTiles");
@@ -205,6 +218,28 @@ namespace FantasySurvival.Rendering
         private readonly ProfilingSampler[] samplers = new ProfilingSampler[KernelDefinitions.Length];
         private static int nextProfilingInstance;
         private bool profilingEnabled;
+        private readonly Dictionary<Camera, HistoryState> histories = new Dictionary<Camera, HistoryState>();
+        private readonly List<Camera> expiredCameras = new List<Camera>();
+        private GraphicsBuffer emptyHistory;
+
+        public void Dispose()
+        {
+            SetProfilingEnabled(false);
+            foreach (HistoryState history in histories.Values) history.Dispose();
+            histories.Clear();
+            emptyHistory?.Dispose();
+            emptyHistory = null;
+        }
+
+        public void ResetHistory(Camera camera = null)
+        {
+            if (camera != null)
+            {
+                if (histories.TryGetValue(camera, out HistoryState state)) state.Invalidate();
+                return;
+            }
+            foreach (HistoryState state in histories.Values) state.Invalidate();
+        }
 
         public CharacterAdaptiveTonePass()
         {
@@ -281,6 +316,8 @@ namespace FantasySurvival.Rendering
             ValidateUnitSetting(settings.contrastRetention, nameof(settings.contrastRetention));
             ValidateUnitSetting(settings.minimumContrast, nameof(settings.minimumContrast));
             ValidateUnitSetting(settings.highlightMinimumContrast, nameof(settings.highlightMinimumContrast));
+            if (float.IsNaN(settings.shrinkMargin) || settings.shrinkMargin < 0f || settings.shrinkMargin > 0.5f)
+                throw new ArgumentOutOfRangeException(nameof(settings.shrinkMargin));
             if ((settings.hairLighting || settings.skinLighting) && SystemInfo.supportedRenderTargetCount < 3)
                 throw new NotSupportedException("Incident illumination analysis requires three simultaneous render targets.");
             if (settings.hairLighting)
@@ -348,7 +385,8 @@ namespace FantasySurvival.Rendering
             TextureHandle sourceNativeColor, TextureHandle sourceNativeMeta,
             TextureHandle cellColor, TextureHandle cellMeta, ComputeShader computeShader,
             int subjectId, int width, int height, Settings settings, out BufferHandle validationStatus,
-            out BufferSet captureBuffers, TextureHandle sourceNativeLighting = default)
+            out BufferSet captureBuffers, TextureHandle sourceNativeLighting = default,
+            Camera historyCamera = null, UnityEngine.Object historySubject = null, int cellSize = 0)
         {
             validationStatus = BufferHandle.nullHandle;
             captureBuffers = default;
@@ -380,6 +418,17 @@ namespace FantasySurvival.Rendering
             captureBuffers = buffers;
             validationStatus = buffers.status;
             ToneValues values = new ToneValues(settings);
+            HistoryState history = PrepareHistory(historyCamera, historySubject, subjectId,
+                cellSize, width, height, computeShader, values);
+            // Stateless fixture callers cannot consume or overwrite gameplay history.
+            if (emptyHistory == null)
+            {
+                emptyHistory = NewHistoryBuffer("Character Tone Empty History");
+                emptyHistory.SetData(new Vector4[MaximumGroups * HistoryRowsPerGroup]);
+            }
+            BufferHandle previousHistory = renderGraph.ImportBuffer(history != null ? history.Previous : emptyHistory);
+            BufferHandle nextHistory = history != null ? renderGraph.ImportBuffer(history.Next) :
+                CreateBuffer(renderGraph, "Character Tone Stateless History", MaximumGroups * HistoryRowsPerGroup, 16);
 
             for (int index = 0; index < KernelDefinitions.Length; index++)
             {
@@ -393,7 +442,7 @@ namespace FantasySurvival.Rendering
                 // All analysis/resolve kernels reference this resource. With the
                 // switch off the shader branch is inert, but D3D11 still needs a
                 // declared/bound SRV. Reuse the existing source for old callers.
-                if (index != 0) data.textureMask |= Textures.SourceLighting;
+                if (index != 0 && definition.name != "StoreHistory") data.textureMask |= Textures.SourceLighting;
                 if (definition.name == "Resolve") data.textureMask |= Textures.SourceMeta;
                 data.buffers = buffers;
                 data.sourceColor = sourceNativeColor;
@@ -406,10 +455,24 @@ namespace FantasySurvival.Rendering
                 data.height = height;
                 data.subjectId = subjectId;
                 data.values = values;
+                data.solveHistory = definition.name == "SolveTones";
+                data.storeHistory = definition.name == "StoreHistory";
+                data.previousHistory = previousHistory;
+                data.nextHistory = nextHistory;
+                data.historyValid = history != null && history.readValid;
+                data.history = history;
+                data.frame = Time.frameCount;
+                data.historyWriteIndex = history != null ? history.writeIndex : 0;
                 data.groupsX = index == 0 ? (ClearElements + 63) / 64 :
                     definition.threadsX == 32 ? MaximumGroups : (width + 7) / 8;
                 data.groupsY = definition.threadsY == 8 ? (height + 7) / 8 : 1;
                 DeclareResources(builder, data, index == 0, definition.name == "SolveTones");
+                if (data.solveHistory) builder.UseBuffer(previousHistory, AccessFlags.Read);
+                if (data.storeHistory)
+                {
+                    builder.UseBuffer(nextHistory, AccessFlags.WriteAll);
+                    if (history != null) builder.AllowPassCulling(false);
+                }
                 builder.SetRenderFunc(static (PassData passData, ComputeGraphContext context) =>
                     Execute(passData, context.cmd));
             }
@@ -499,6 +562,11 @@ namespace FantasySurvival.Rendering
             cmd.SetComputeIntParam(shader, SkinLightingEnabledId, data.values.skinLighting ? 1 : 0);
             cmd.SetComputeFloatParam(shader, SkinRelativeErrorId, data.values.skinRelativeError);
             cmd.SetComputeFloatParam(shader, SkinIlluminationFloorId, data.values.skinIlluminationFloor);
+            cmd.SetComputeIntParam(shader, TemporalStabilityId, data.values.temporalStability ? 1 : 0);
+            cmd.SetComputeIntParam(shader, HistoryValidId, data.historyValid ? 1 : 0);
+            cmd.SetComputeFloatParam(shader, ShrinkMarginId, data.values.shrinkMargin);
+            if (data.solveHistory) cmd.SetComputeBufferParam(shader, kernel, PreviousHistoryId, data.previousHistory);
+            if (data.storeHistory) cmd.SetComputeBufferParam(shader, kernel, NextHistoryId, data.nextHistory);
             if ((data.bufferMask & Buffers.Groups) != 0) cmd.SetComputeBufferParam(shader, kernel, GroupsId, data.buffers.groups);
             if ((data.bufferMask & Buffers.Histogram) != 0) cmd.SetComputeBufferParam(shader, kernel, HistogramId, data.buffers.histogram);
             if ((data.bufferMask & Buffers.Tiles) != 0) cmd.SetComputeBufferParam(shader, kernel, TilesId, data.buffers.tiles);
@@ -515,6 +583,11 @@ namespace FantasySurvival.Rendering
             if ((data.textureMask & Textures.CellMeta) != 0) cmd.SetComputeTextureParam(shader, kernel, CellMetaId, data.cellMeta);
             if ((data.textureMask & Textures.Output) != 0) cmd.SetComputeTextureParam(shader, kernel, OutputId, data.output);
             cmd.DispatchCompute(shader, kernel, data.groupsX, data.groupsY, 1);
+            if (data.storeHistory && data.history != null)
+            {
+                data.history.lastWrittenFrame = data.frame;
+                data.history.lastWrittenIndex = data.historyWriteIndex;
+            }
         }
 
         /// <summary>Borrowed current-graph buffers, not persistent GPU state.</summary>
@@ -531,6 +604,8 @@ namespace FantasySurvival.Rendering
             public readonly float hairRelativeError, hairIlluminationFloor;
             public readonly bool skinLighting;
             public readonly float skinRelativeError, skinIlluminationFloor;
+            public readonly bool temporalStability;
+            public readonly float shrinkMargin;
 
             public ToneValues(Settings settings)
             {
@@ -545,7 +620,94 @@ namespace FantasySurvival.Rendering
                 skinLighting = settings.skinLighting;
                 skinRelativeError = settings.skinRelativeError;
                 skinIlluminationFloor = settings.skinIlluminationFloor;
+                temporalStability = settings.temporalStability;
+                shrinkMargin = settings.shrinkMargin;
             }
+
+            public bool SameConfiguration(ToneValues other) =>
+                error == other.error && chromaError == other.chromaError &&
+                contrastRetention == other.contrastRetention && minimumContrast == other.minimumContrast &&
+                highlightMinimumContrast == other.highlightMinimumContrast &&
+                hairLighting == other.hairLighting && hairRelativeError == other.hairRelativeError &&
+                hairIlluminationFloor == other.hairIlluminationFloor && skinLighting == other.skinLighting &&
+                skinRelativeError == other.skinRelativeError && skinIlluminationFloor == other.skinIlluminationFloor &&
+                temporalStability == other.temporalStability && shrinkMargin == other.shrinkMargin;
+        }
+
+        private static GraphicsBuffer NewHistoryBuffer(string name) => new GraphicsBuffer(
+            GraphicsBuffer.Target.Structured, MaximumGroups * HistoryRowsPerGroup, 16) { name = name };
+
+        private HistoryState PrepareHistory(Camera camera, UnityEngine.Object subject, int subjectId,
+            int cellSize, int width, int height, ComputeShader shader, ToneValues values)
+        {
+            if (camera == null || subject == null || !values.temporalStability)
+            {
+                if (camera != null) ResetHistory(camera);
+                return null;
+            }
+            expiredCameras.Clear();
+            foreach (var entry in histories)
+                if (entry.Key == null) expiredCameras.Add(entry.Key);
+            foreach (Camera expired in expiredCameras)
+            {
+                histories[expired].Dispose();
+                histories.Remove(expired);
+            }
+            if (!histories.TryGetValue(camera, out HistoryState state))
+            {
+                state = new HistoryState();
+                histories.Add(camera, state);
+            }
+            Matrix4x4 projection = camera.nonJitteredProjectionMatrix;
+            Vector3 position = camera.transform.position;
+            Quaternion rotation = camera.transform.rotation;
+            // Continuous movement is allowed. Large cuts, zoom, reactivation,
+            // changed settings and different subjects must start fresh.
+            float cutDistance = camera.orthographic ? Mathf.Max(1f, camera.orthographicSize) * 2f : 10f;
+            bool changed = state.subject != subject || state.subjectId != subjectId ||
+                state.width != width || state.height != height || state.cellSize != cellSize ||
+                state.shader != shader || state.playing != Application.isPlaying ||
+                !state.values.SameConfiguration(values) || state.projection != projection ||
+                Vector3.SqrMagnitude(state.position - position) > cutDistance * cutDistance ||
+                Quaternion.Angle(state.rotation, rotation) > 60f;
+            if (changed) state.Invalidate();
+            state.subject = subject;
+            state.subjectId = subjectId;
+            state.width = width;
+            state.height = height;
+            state.cellSize = cellSize;
+            state.shader = shader;
+            state.playing = Application.isPlaying;
+            state.values = values;
+            state.projection = projection;
+            state.position = position;
+            state.rotation = rotation;
+            if (state.preparedFrame != Time.frameCount)
+            {
+                state.preparedFrame = Time.frameCount;
+                state.readValid = state.lastWrittenFrame == Time.frameCount - 1;
+                state.writeIndex = 1 - state.lastWrittenIndex;
+            }
+            return state;
+        }
+
+        private sealed class HistoryState : IDisposable
+        {
+            private readonly GraphicsBuffer[] buffers = {
+                NewHistoryBuffer("Character Tone History A"), NewHistoryBuffer("Character Tone History B") };
+            public int subjectId, width, height, cellSize;
+            public int preparedFrame = -1, lastWrittenFrame = -2, lastWrittenIndex, writeIndex;
+            public bool readValid, playing;
+            public UnityEngine.Object subject;
+            public ComputeShader shader;
+            public ToneValues values;
+            public Matrix4x4 projection;
+            public Vector3 position;
+            public Quaternion rotation;
+            public GraphicsBuffer Previous => buffers[1 - writeIndex];
+            public GraphicsBuffer Next => buffers[writeIndex];
+            public void Invalidate() { preparedFrame = -1; lastWrittenFrame = -2; readValid = false; }
+            public void Dispose() { foreach (GraphicsBuffer buffer in buffers) buffer.Dispose(); }
         }
 
         private sealed class PassData
@@ -557,6 +719,10 @@ namespace FantasySurvival.Rendering
             public BufferSet buffers;
             public ToneValues values;
             public TextureHandle sourceColor, sourceMeta, sourceLighting, cellColor, cellMeta, output;
+            public BufferHandle previousHistory, nextHistory;
+            public bool solveHistory, storeHistory, historyValid;
+            public HistoryState history;
+            public int frame, historyWriteIndex;
         }
     }
 }

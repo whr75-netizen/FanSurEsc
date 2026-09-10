@@ -3,12 +3,17 @@
 // Dispatch order (separate dispatches provide the global synchronization):
 // Clear(1280,1,1), GatherGroups(ceil(W/8),ceil(H/8),1), GatherHistogram(same),
 // SolveTones(160,1,1), GatherHighlights(same image grid), SolveHighlights(160,1,1),
-// Resolve(same image grid). All buffers are scratch data owned by the caller.
+// Resolve(same image grid), StoreHistory(160,1,1). The caller owns all resources.
 //
 // uint buffers / element counts (stride 4):
 // Groups 160*8; Histogram 160*32*6; Tiles 160*16*3;
 // TileHistogram 160*16*32; Supports 160*2; HighlightHistogram 160*32*5;
 // Status 161. float4 buffers (stride 16): Palette 160*32; Solutions 160*3.
+// PreviousHistory (read-only) / NextHistory: 160*34 float4 values each.
+// History header 0: (asfloat(ColorKey), interval count, metric mode, valid).
+// Header 1: (current mean scale, physical minimum, physical maximum, 0).
+// Entries 2..33: (upper boundary / mean scale, representative metric / scale, 0, 0).
+// History never contains output RGB. The final upper boundary is unbounded.
 //
 // Deliberate differences from the Python reference:
 // * A subject/part fence plus zero-centered chromaticity grid replaces connected
@@ -20,9 +25,14 @@
 // * Masked 4x4 -> 2x2 spatial tile means replace Gaussian scale-space supports.
 //   Both scales need variance coherence >= .35 and support overlap >= .65.
 //   This protects one broad contrast; it is not material or fine-edge recognition.
-// * As in Python, only the SSE-optimal candidate at each K is checked against
-//   support contrast. First passing K is NOT a global constrained minimum.
-// No frame history, temporal stabilization, silent resource clamp, or RGB mixing.
+// * Fresh DP checks only the SSE-optimal candidate at each K against support
+//   contrast. First passing K is NOT a global constrained minimum.
+// Opt-in temporal selection retains a currently feasible partition, reselecting
+// actual CURRENT observed candidates. Only reducing K uses a stricter error
+// limit; history never relaxes the current RMS/contrast conditions. Boundaries
+// are projected onto the current occupied histogram bins, so the 32-bin spatial
+// approximation and changing lit-chroma groups remain explicit limitations.
+// No silent resource clamp, retained historical RGB, or RGB mixing.
 //
 // Supported input: one selected 16-bit subject, part IDs 0..4, <= 4,194,304 pixels,
 // finite linear RGB in [0,16], positive finite eye depth. HDR is not clipped;
@@ -51,11 +61,13 @@
 #pragma kernel GatherHighlights
 #pragma kernel SolveHighlights
 #pragma kernel Resolve
+#pragma kernel StoreHistory
 #pragma target 5.0
 
 #define TONE_GROUPS 160u
 #define TONE_BINS 32u
 #define TONE_TILES 16u
+#define TONE_HISTORY_STRIDE 34u
 #define TONE_PIXEL_MASK 4194303u
 #define TONE_Q 65535.0
 #define TONE_INF 3.402823466e+38
@@ -75,6 +87,8 @@ RWStructuredBuffer<uint> _ToneHighlightHistogram;
 RWStructuredBuffer<uint> _ToneStatus;
 RWStructuredBuffer<float4> _TonePalette;
 RWStructuredBuffer<float4> _ToneSolutions;
+StructuredBuffer<float4> _TonePreviousHistory;
+RWStructuredBuffer<float4> _ToneNextHistory;
 
 int _ToneWidth;
 int _ToneHeight;
@@ -90,6 +104,9 @@ float _ToneHairIlluminationFloor;
 int _ToneSkinLightingEnabled;
 float _ToneSkinRelativeError;
 float _ToneSkinIlluminationFloor;
+int _ToneHistoryValid;
+int _ToneTemporalStability;
+float _ToneShrinkMargin;
 
 // Only integer atomics touch shared histograms. Carry increments commute even
 // when another invocation adds to the low word before this carry is recorded.
@@ -182,6 +199,19 @@ float MetricScale(uint group, float2 range, float normalizedMean)
     if (SkinLightingGroup(group))
         return max(range.x + range.y * normalizedMean, _ToneSkinIlluminationFloor);
     return 1.0;
+}
+
+uint HistoryMetricMode(uint group)
+{
+    if (HairLightingGroup(group)) return 1u;
+    if (SkinLightingGroup(group)) return 2u;
+    return 0u;
+}
+
+float HistoryMetricScale(uint group, float2 range, float normalizedMean)
+{
+    if (IlluminationGroup(group)) return MetricScale(group, range, normalizedMean);
+    return max(range.x + range.y * normalizedMean, 1e-5);
 }
 
 uint ColorKey(float3 lab, float4 meta)
@@ -280,6 +310,9 @@ void Clear(uint3 id : SV_DispatchThreadID)
             (!isfinite(_ToneSkinRelativeError) || _ToneSkinRelativeError <= 0.0 || _ToneSkinRelativeError > 1.0 ||
              !isfinite(_ToneSkinIlluminationFloor) || _ToneSkinIlluminationFloor <= 0.0))
             status |= 16u;
+        if (_ToneTemporalStability != 0 &&
+            (!isfinite(_ToneShrinkMargin) || _ToneShrinkMargin < 0.0 || _ToneShrinkMargin >= 1.0))
+            status |= 16u;
         _ToneStatus[TONE_GROUPS] = status;
     }
 }
@@ -371,6 +404,13 @@ groupshared float sRmse;
 groupshared uint sReady;
 groupshared uint sSelectedK;
 groupshared float sErrorLimit;
+groupshared uint sHistoryMap[32];
+groupshared uint sHistoryAddress;
+groupshared uint sHistoryCount;
+groupshared uint sHistoryReady;
+groupshared float sHistoryScale;
+groupshared float sHistoryRmse;
+groupshared float sHistoryRetained;
 
 // Means use occupied tiles only; moments/coherence still weight actual pixels.
 // These tile quantiles are an explicit approximation to source-pixel quantiles.
@@ -483,6 +523,91 @@ void BuildBroadSupport(uint group, float2 range, float minimumContrast)
     sRequired = contrast * _ToneContrastRetention;
 }
 
+uint FindHistory(uint group)
+{
+    if (_ToneTemporalStability == 0 || _ToneHistoryValid == 0) return TONE_GROUPS;
+    uint key = _ToneGroups[group * 8u];
+    uint mode = HistoryMetricMode(group);
+    // Concurrent hash insertion can move a ColorKey to another slot each frame.
+    [fastopt] [loop] for (uint slot = 0u; slot < TONE_GROUPS; ++slot)
+    {
+        uint address = slot * TONE_HISTORY_STRIDE;
+        float4 header = _TonePreviousHistory[address];
+        if (header.w != 1.0 || asuint(header.x) != key || header.z != (float)mode) continue;
+        if (!isfinite(header.y) || header.y < 1.0 || header.y > (float)TONE_BINS || floor(header.y) != header.y)
+            return TONE_GROUPS;
+        float4 domain = _TonePreviousHistory[address + 1u];
+        if (!all(isfinite(domain)) || domain.x <= 0.0) return TONE_GROUPS;
+        float previousUpper = -1.0;
+        [fastopt] [loop] for (uint entry = 0u; entry < (uint)header.y; ++entry)
+        {
+            float4 interval = _TonePreviousHistory[address + 2u + entry];
+            if (!all(isfinite(interval.xy)) || interval.x < previousUpper || interval.y < 0.0)
+                return TONE_GROUPS;
+            previousUpper = interval.x;
+        }
+        return slot;
+    }
+    return TONE_GROUPS;
+}
+
+// Called by lane zero after interval costs and support coefficients are ready.
+// Historical boundaries are in metric / current mean scale, not old bin IDs.
+// The existing solver assigns whole histogram bins, so each current bin's true
+// normalized mean determines its interval; its full moments still count in RMS.
+// Empty intervals vanish. No minimum K or historical RGB is introduced.
+bool FitHistoryPartition(float2 range, bool preserveRepresentativeRole)
+{
+    uint previousCount = (uint)_TonePreviousHistory[sHistoryAddress].y;
+    uint cursor = 0u;
+    uint occupiedIntervals = 0u;
+    float totalCost = 0.0;
+    float retained = 0.0;
+    [fastopt] [loop] for (uint interval = 0u; interval < previousCount; ++interval)
+    {
+        float2 role = _TonePreviousHistory[sHistoryAddress + 2u + interval].xy;
+        uint start = cursor;
+        [fastopt] [loop] while (cursor < sActiveCount)
+        {
+            uint bin = sActive[cursor];
+            float binMetric = range.x + range.y * (sSum[bin] / sCount[bin]);
+            if (interval + 1u < previousCount && binMetric / sHistoryScale > role.x) break;
+            ++cursor;
+        }
+        if (cursor == start) continue;
+        uint representative = sCostRepresentative[start * TONE_BINS + cursor - 1u];
+        if (preserveRepresentativeRole)
+        {
+            float closest = TONE_INF;
+            [fastopt] [loop] for (uint candidate = start; candidate < cursor; ++candidate)
+            {
+                uint bin = sActive[candidate];
+                float distance = abs(sCandidate[bin].a / sHistoryScale - role.y);
+                if (distance < closest) { closest = distance; representative = bin; }
+            }
+        }
+        float weight = sWeightPrefix[cursor] - sWeightPrefix[start];
+        float sum = sSumPrefix[cursor] - sSumPrefix[start];
+        float square = sSquarePrefix[cursor] - sSquarePrefix[start];
+        float r = NormalizeL(sCandidate[representative].a, range);
+        totalCost += max(square - 2.0 * r * sum + r * r * weight, 0.0);
+        [fastopt] [loop] for (uint n = start; n < cursor; ++n)
+        {
+            uint bin = sActive[n];
+            sHistoryMap[bin] = representative;
+            retained += sCoefficient[bin] * sCandidate[representative].a;
+        }
+        ++occupiedIntervals;
+    }
+    sHistoryCount = occupiedIntervals;
+    sHistoryRmse = range.y * sqrt(totalCost / sWeightPrefix[sActiveCount]);
+    sHistoryRetained = retained;
+    // History is held to the actual error limit. The legacy DP's 1e-6 arithmetic
+    // tolerance is not expanded into a temporal permission to exceed the limit.
+    return cursor == sActiveCount && occupiedIntervals > 0u &&
+        sHistoryRmse <= sErrorLimit && retained + 1e-6 >= sRequired;
+}
+
 [numthreads(32, 1, 1)]
 void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
 {
@@ -529,8 +654,14 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
         sLowMask = sHighMask = 0u;
         sRequired = 0.0;
         sErrorLimit = _ToneError;
+        sHistoryReady = sHistoryCount = 0u;
+        sHistoryAddress = 0u;
+        sHistoryScale = 1.0;
+        sHistoryRmse = sHistoryRetained = 0.0;
         if (sActiveCount > 0u)
         {
+            sHistoryScale = HistoryMetricScale(group, range,
+                sSumPrefix[sActiveCount] / sWeightPrefix[sActiveCount]);
             float scale = MetricScale(group, range,
                 sSumPrefix[sActiveCount] / sWeightPrefix[sActiveCount]);
             if (HairLightingGroup(group)) sErrorLimit = scale * _ToneHairRelativeError;
@@ -575,6 +706,21 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
         }
     }
     GroupMemoryBarrierWithGroupSync();
+    if (lane == 0u && sActiveCount > 0u)
+    {
+        uint previousSlot = FindHistory(group);
+        if (previousSlot < TONE_GROUPS)
+        {
+            sHistoryAddress = previousSlot * TONE_HISTORY_STRIDE;
+            // First keep the previous tone's relative role using a CURRENT
+            // observed candidate. If it no longer fits, refit the same partition
+            // to current SSE-optimal candidates before abandoning its boundaries.
+            bool fits = FitHistoryPartition(range, true);
+            if (!fits) fits = FitHistoryPartition(range, false);
+            sHistoryReady = fits ? 1u : 0u;
+        }
+    }
+    GroupMemoryBarrierWithGroupSync();
     // Every lane reaches the same 32 barrier rounds, including inactive groups
     // and already accepted candidates. UAV/shared-memory predicates must not
     // control a barrier loop or an early return on D3D11/FXC.
@@ -583,7 +729,8 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
         uint end = lane + 1u;
         float best = TONE_INF;
         uint bestStart = 0u;
-        if (sReady == 0u && end >= k && end <= sActiveCount)
+        if (sReady == 0u && (sHistoryReady == 0u || k < sHistoryCount) &&
+            end >= k && end <= sActiveCount)
         {
             [fastopt] [loop] for (uint start = k - 1u; start < end; ++start)
             {
@@ -597,10 +744,22 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
         if (lane == 0u)
         {
             sCurrent[0] = TONE_INF;
-            if (sReady == 0u && k <= sActiveCount)
+            if (sReady == 0u && sHistoryReady != 0u && k >= sHistoryCount)
+            {
+                [fastopt] [loop] for (uint b = 0u; b < TONE_BINS; ++b)
+                    if (sCount[b] > 0u) sMap[b] = sHistoryMap[b];
+                sRmse = sHistoryRmse;
+                sRetained = sHistoryRetained;
+                sSelectedK = sHistoryCount;
+                sReady = 1u;
+            }
+            else if (sReady == 0u && k <= sActiveCount)
             {
                 sRmse = range.y * sqrt(max(sCurrent[sActiveCount], 0.0) / sWeightPrefix[sActiveCount]);
-                if (sRmse <= sErrorLimit + 1e-6)
+                float selectionLimit = sHistoryReady != 0u ?
+                    sErrorLimit * (1.0 - _ToneShrinkMargin) : sErrorLimit;
+                float roundoff = sHistoryReady != 0u ? 0.0 : 1e-6;
+                if (sRmse <= selectionLimit + roundoff)
                 {
                     uint cursor = sActiveCount;
                     [fastopt] [loop] for (uint level = k; level > 0u; --level)
@@ -752,4 +911,57 @@ void Resolve(uint3 id : SV_DispatchThreadID)
         metric >= .5 * (highlight.x + highlight.y))
         base.rgb = _ToneSolutions[group * 3u + 2u].rgb;
     _ToneOutput[id.xy] = float4(base.rgb, original.a);
+}
+
+[numthreads(32, 1, 1)]
+void StoreHistory(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
+{
+    uint group = workgroup.x;
+    if (group >= TONE_GROUPS || lane != 0u) return;
+    uint address = group * TONE_HISTORY_STRIDE;
+    // One lane clears and publishes each group's entire record. Shared-memory
+    // barriers do not synchronize UAV clears performed by different lanes.
+    [fastopt] [loop] for (uint entry = 0u; entry < TONE_HISTORY_STRIDE; ++entry)
+        _ToneNextHistory[address + entry] = 0.0;
+    if (_ToneTemporalStability == 0 || _ToneStatus[TONE_GROUPS] != 0u ||
+        (_ToneStatus[group] & 1u) == 0u || _ToneGroups[group * 8u] == 0u ||
+        _ToneSolutions[group * 3u].x < 1.0) return;
+
+    float count = 0.0, sum = 0.0;
+    [fastopt] [loop] for (uint historyBin = 0u; historyBin < TONE_BINS; ++historyBin)
+    {
+        uint histogram = (group * TONE_BINS + historyBin) * 6u;
+        count += _ToneHistogram[histogram];
+        sum += PairValue(_ToneHistogram[histogram + 1u], _ToneHistogram[histogram + 2u]) / TONE_Q;
+    }
+    if (count <= 0.0) return;
+    float2 range = LightnessRange(group);
+    float scale = HistoryMetricScale(group, range, sum / count);
+    uint intervals = 0u;
+    uint lastBin = 0u;
+    float4 previous = float4(0.0, 0.0, 0.0, -1.0);
+    [fastopt] [loop] for (uint b = 0u; b < TONE_BINS; ++b)
+    {
+        if (_ToneHistogram[(group * TONE_BINS + b) * 6u] == 0u) continue;
+        float4 value = _TonePalette[group * TONE_BINS + b];
+        if (value.a < 0.0 || !all(isfinite(value))) return;
+        if (previous.a >= 0.0 && any(value != previous))
+        {
+            // Put a boundary between occupied bins, including an empty-bin gap.
+            // It is stored in physical metric / mean scale, never as a bin ID.
+            float boundary = range.x + ((float)(lastBin + 1u + b) * .5 / TONE_BINS) * range.y;
+            _ToneNextHistory[address + 2u + intervals] = float4(boundary / scale, previous.a / scale, 0.0, 0.0);
+            ++intervals;
+        }
+        previous = value;
+        lastBin = b;
+    }
+    if (previous.a < 0.0) return;
+    _ToneNextHistory[address + 2u + intervals] = float4(TONE_INF, previous.a / scale, 0.0, 0.0);
+    ++intervals;
+    _ToneNextHistory[address + 1u] = float4(scale, range.x, range.x + range.y, 0.0);
+    // Publish validity last. Resolve-only source/seed failures invalidate the
+    // entire frame's history because this kernel executes after Resolve.
+    _ToneNextHistory[address] = float4(asfloat(_ToneGroups[group * 8u]),
+        (float)intervals, (float)HistoryMetricMode(group), 1.0);
 }

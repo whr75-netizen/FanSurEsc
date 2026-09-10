@@ -1,6 +1,28 @@
-Unity 캐릭터 적응형 명암 시험 — 2026-09-09
+Unity 캐릭터 적응형 명암 시험 — 2026-09-10
 
-계측 기반 피부 수광 수정 (09-09, 진행 §134)
+현재: 시간 분할 안정화 (09-10)
+- temporalStability=true, shrinkMargin=.10. 기존 색/2px/EMPTY/외곽선/깊이는 그대로입니다.
+- 카메라와 실제 subject 수명에 귀속된 GPU ping-pong에 ColorKey·metric 모드·정규화 경계·대표 명암 역할만 보관합니다.
+  이전 RGB/이미지 보관이나 RGB 시간보간은 없으며 최종색은 항상 현재 관측 RGB입니다.
+- 이전 분할을 현재 후보·RMS·공간대비로 재검사합니다. 통과할 때만 유지하고, 불합격이면 현재 DP로 다시 풉니다.
+  K 증가에는 기존 허용오차, K 감소에는 ε×(1−shrinkMargin)을 적용합니다. 실제 단색/빈 구간은 K1이 가능합니다.
+- SolveTones의 이력은 readonly SRV; Resolve 뒤 별도 StoreHistory가 기록하므로 D3D11 8UAV 한도를 넘지 않습니다.
+- subject 객체/ID, 설정, 해상도/격자, 투영, Play 상태, 프레임 공백과 큰 camera cut은 이력을 무효화합니다.
+  같은 프레임 재렌더는 이전 프레임 read를 고정합니다. 임시 자세/조명의 제어 캡처를 복원한 뒤에는
+  feature.ResetAdaptiveToneHistory(camera)를 호출합니다. 자연스러운 게임 프레임 캡처에는 reset하지 않습니다.
+- Feature Create/Dispose가 GPU 이력을 해제합니다. 평소 CPU readback은 추가하지 않았습니다.
+- 전체 깜빡임 해결이 아닙니다. lit-chroma 그룹 경계, 32-bin 근사, 공간보호/밝음의 threshold,
+  작은 Hair의 셀 중앙 표본 누락은 별도 남는 원인입니다. 근거 없는 밝은 셀 추가·색 혼합으로 덮지 않습니다.
+- 실제 재생 근거: LocalOnly/AdaptiveToneStability_20260910/GPU_REPLAY.md 및 gpu_20260910_045024_041.
+  D3D11/RTX2080Ti 실제17case 기술 불변조건 통과; 피부 3→4→3이 3→4→4, 실제 단색 K1.
+  이 숫자만으로 연속 이동의 시각적 합격을 주장하지 않습니다.
+- 작은 Hair key295810도 관측 출력2→1→2가2→2→2로 바뀌었습니다. 중간14seed 중3개가 현재 밝은 대표색으로
+  재분류됐을 뿐, 밝은 native 위치의 seed 누락 자체를 복원한 것은 아닙니다.
+- 최종 실제 Camera.Render 1회 global=0, game_preview.png. 자연 렌더6표본은0개/30초 timeout으로 실패했습니다.
+  관찰 이벤트는 해제했고 pending은 마지막 정지 렌더로 완료했습니다. Play 종료·카메라 원복·명시 이력 reset.
+  따라서 연속 프레임 수명/모든 이동 깜빡임은 미검증입니다. 외형 추가 조정은 사용자 답변 대기입니다.
+
+이전 단계: 계측 기반 피부 수광 수정 (09-09, 진행 §134)
 - skinLighting=true이면 Skin(part4)도 실제 수광량 E로 단계/공간대비/밝음/출력을 판정합니다.
   RMS 허용치=max(meanE, skinIlluminationFloor=.02)×skinRelativeError=.10.
   원본 관측 RGB만 선택하며 강제3색, 밤 자동증광, RGB 시간보간은 없습니다.
@@ -8,9 +30,9 @@ Unity 캐릭터 적응형 명암 시험 — 2026-09-09
   옵션은 PC_Renderer → Character Silhouette Outline → Adaptive Tones에 있습니다.
 - 수정 전 원인: 피부 절대 L 오차 .06 때문에 저광량 K2→1, 걷기 경계에서 K3→4→3.
   paired 실제7조건에서는 저광량1→3색, 해당 걷기3자세 모두4색. 다른 부위·입력·깊이는 exact 보존.
-- 작은 Hair의 희소 셀 표본 누락(2→1→2색)과 시간 이력 없는 K/팔레트 재분할은 여전히 남습니다.
+- 당시 작은 Hair의 희소 셀 표본 누락(2→1→2색)과 시간 이력 없는 K/팔레트 재분할이 남았습니다.
   전체 걷기/구름/유색광 깜빡임 해결로 확대 해석하지 않습니다.
-- RequestAdaptiveToneCapture(camera,id,callback)는 실제7compute의9buffer+6RT를 일회성 복사합니다.
+- RequestAdaptiveToneCapture(camera,id,callback)는 실제 분석의9buffer+6RT를 일회성 복사합니다(이력 버퍼는 제외).
   평소 readback 없음. 카메라가 렌더되어야 완료되며, callback 후 raw를 저장해야 합니다.
   카메라가 렌더되지 않으면 pending 요청은 feature 재생성/Dispose 전까지 남을 수 있습니다.
 - 근거·실패 이력·실행 명령·미리보기: LocalOnly/AdaptiveToneTemporalProbe_20260909/README.txt.
@@ -25,7 +47,7 @@ Unity 캐릭터 적응형 명암 시험 — 2026-09-09
 - 헤어 histogram/공간보호/밝음/resolve는 모두 같은 수광 단위입니다. 다른 부위는 기존 Oklab L 계산.
 - 비교: LocalOnly/AdaptiveToneHairLighting_20260909/front_hair_lighting_comparison.png.
   동일frame2·2px·정면384×768, 약광/강광×연속/기존/새 경로6장. 몸 보존 등 합성GPU6case 통과.
-- 사용자가 헤어 비교의 개선을 확인했습니다. 시간 이력/hysteresis는 아직 없으며 간헐 깜빡임 해결은 미확정입니다.
+- 사용자가 헤어 비교의 개선을 확인했습니다. 당시 시간 이력/hysteresis는 없었으며 최신 경계는 위 09-10 항목입니다.
 
 결과
 - 웹/Python 픽셀 알고리즘의 수학을 이용한 실시간 GPU 시험 경로를 기존 Chibi에 연결했습니다.
@@ -38,7 +60,7 @@ Unity 캐릭터 적응형 명암 시험 — 2026-09-09
   기존 표면 색/텍스처 + 무광 연속 명암을 원본 화면 해상도로 별도 렌더
   → 캐릭터 ID / 기존 눈·눈썹·헤어·피부 ID + Oklab 색상 계열로 구분
   → 각 구분의 실제 밝기 범위·분포·공간 대비 분석
-  → 관측된 원본 색 후보로 1차원 DP, 허용 오차와 대비를 만족하는 단계 수 탐색
+  → 현재 오차/대비를 만족하는 이전 분할 유지 또는 관측 원본 후보의 1차원 DP로 재분할
   → 근거가 있는 밝은 영역에만 밝음 후보를 추가
   → 기존 셀 중앙 RGB만 교체 → 기존 외곽선·가림·깊이 합성
 
@@ -68,7 +90,7 @@ Python판과 동일하지 않은 부분 (숨기지 말 것)
 - 실제 전체 색 대신 범위 적응형 32-bin histogram과 각 bin의 관측색 후보를 사용합니다.
 - Gaussian 다중 스케일 지원 대신 4×4 → 2×2 공간 타일의 평균·분산·겹침을 사용합니다.
 - 09-08 기존 경로 사진은 헤어의 약한 밝음이 제거됩니다. 09-09 수광 비교 확장은 위 별도 스위치입니다.
-- 프레임 사이 팔레트 고정/시간 누적/깜빡임 방지 처리는 없습니다. 움직임 안정성·다중 캐릭터·빌드는 미검증입니다.
+- 프레임 사이 RGB 팔레트를 고정/혼합하지 않습니다. 09-10 분할 이력만 추가했으며 전체 움직임 안정성·다중 캐릭터·빌드는 미검증입니다.
 - 1 subject, 160 색 그룹, 입력 4,194,304 pixel의 GPU 자원 상한입니다. 분할 크기를 이 수치로 강제하는 것이 아닙니다.
   상한 초과 등에는 상태 비트를 남기고 원본 셀 색을 유지합니다. 성공으로 숨기지 않습니다.
 
@@ -96,14 +118,14 @@ Python판과 동일하지 않은 부분 (숨기지 말 것)
 
 구현 주의 / 근거
 - 원본 native raster와 희소 셀 source는 별개입니다. 비어 있는 셀에서 분석하면 안 됩니다.
-- 그룹 통계와 출력은 GPU RenderGraph transient 자원입니다. 정상 프레임의 CPU readback은 없습니다.
+- 그룹 통계와 출력은 GPU RenderGraph transient, 분할 이력만 기존 pass 소유의 persistent GPU 자원입니다. 정상 CPU readback은 없습니다.
 - FXC가 큰 루프를 펼쳐 컴파일 메모리가 급증했으므로 [fastopt][loop]로 유지합니다.
   이전 요청이 타임아웃돼도 Editor 내부 컴파일은 계속될 수 있으므로 import 전에 반복 요청하지 않습니다.
 - HLSL loop: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-for
 - Oklab: https://bottosson.github.io/posts/oklab/
 - URP compute: https://docs.unity3d.com/6000.0/Documentation/Manual/urp/render-graph-compute-shader-run.html
 
-실시간 단색화·깜빡임 수정 설계 조사 — 2026-09-10
+아래는 구현 전 조사 기록: 실시간 단색화·깜빡임 수정 설계 조사 — 2026-09-10
 
 범위와 결론
 - [확정] 비용 절감을 위해 단계형 조명으로 대체하는 작업은 실제 성능 문제가 측정될 때까지 보류합니다.

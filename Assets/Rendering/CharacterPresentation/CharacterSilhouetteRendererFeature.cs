@@ -56,6 +56,9 @@ namespace FantasySurvival.Rendering
             settings.adaptiveTones.enabled = enabled;
         }
 
+        /// <summary>Call after a scripted camera cut or restoring a controlled pose/light capture.</summary>
+        public void ResetAdaptiveToneHistory(Camera camera = null) => pixelCellPass?.ResetToneHistory(camera);
+
         public void RequestAdaptiveToneDiagnostics()
         {
             if (pixelCellPass == null)
@@ -108,7 +111,8 @@ namespace FantasySurvival.Rendering
         public override void Create()
         {
             pendingToneCapture?.Cancel("Renderer feature was recreated before the capture completed.");
-            pixelCellPass?.SetToneProfilingEnabled(false);
+            pass?.DisposeToneResources();
+            pixelCellPass?.DisposeToneResources();
             pass = new CharacterSilhouettePass(false, this);
             pass.renderPassEvent = settings.injectionPoint;
             pixelCellPass = new CharacterSilhouettePass(true, this);
@@ -118,7 +122,8 @@ namespace FantasySurvival.Rendering
         protected override void Dispose(bool disposing)
         {
             pendingToneCapture?.Cancel("Renderer feature was disposed before the capture completed.");
-            pixelCellPass?.SetToneProfilingEnabled(false);
+            pass?.DisposeToneResources();
+            pixelCellPass?.DisposeToneResources();
             base.Dispose(disposing);
         }
 
@@ -340,6 +345,8 @@ namespace FantasySurvival.Rendering
             public uint[] lastToneDiagnostics;
             public CharacterAdaptiveTonePass.ProfilingCost ToneCost => adaptiveTonePass.LastCost;
             public void SetToneProfilingEnabled(bool enabled) => adaptiveTonePass.SetProfilingEnabled(enabled);
+            public void DisposeToneResources() => adaptiveTonePass.Dispose();
+            public void ResetToneHistory(Camera camera) => adaptiveTonePass.ResetHistory(camera);
 
             public CharacterSilhouettePass(bool cellOnly, CharacterSilhouetteRendererFeature owner)
             {
@@ -534,7 +541,7 @@ namespace FantasySurvival.Rendering
                 // seeds, metadata, coverage, outline and scene depth still own
                 // all geometry decisions made by the existing cell composite.
                 if (adaptiveToneSettings != null && adaptiveToneSettings.enabled &&
-                    CharacterSilhouetteSubject.TryGetAdaptiveToneSubject(out int toneSubjectId))
+                    CharacterSilhouetteSubject.TryGetAdaptiveToneSubject(out int toneSubjectId, out var toneSubject))
                 {
                     int width = cameraData.cameraTargetDescriptor.width;
                     int height = cameraData.cameraTargetDescriptor.height;
@@ -560,7 +567,8 @@ namespace FantasySurvival.Rendering
                     cellColor = adaptiveTonePass.Record(renderGraph, nativeColor, nativeMeta,
                         cellColor, cellMeta, adaptiveToneCompute, toneSubjectId, width, height,
                         adaptiveToneSettings, out BufferHandle toneStatus,
-                        out CharacterAdaptiveTonePass.BufferSet toneBuffers, nativeLighting);
+                        out CharacterAdaptiveTonePass.BufferSet toneBuffers, nativeLighting,
+                        cameraData.camera, toneSubject, toneSubject.PixelCellSize);
                     if (capture != null)
                     {
                         capture.RecordFrame(width, height, toneSubjectId, JsonUtility.ToJson(adaptiveToneSettings));

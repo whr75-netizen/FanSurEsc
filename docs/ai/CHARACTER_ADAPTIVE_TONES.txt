@@ -102,3 +102,215 @@ Python판과 동일하지 않은 부분 (숨기지 말 것)
 - HLSL loop: https://learn.microsoft.com/en-us/windows/win32/direct3dhlsl/dx-graphics-hlsl-for
 - Oklab: https://bottosson.github.io/posts/oklab/
 - URP compute: https://docs.unity3d.com/6000.0/Documentation/Manual/urp/render-graph-compute-shader-run.html
+
+실시간 단색화·깜빡임 수정 설계 조사 — 2026-09-10
+
+범위와 결론
+- [확정] 비용 절감을 위해 단계형 조명으로 대체하는 작업은 실제 성능 문제가 측정될 때까지 보류합니다.
+- [현재] 아래 내용은 코드·기존 GPU 원시 자료·외부 연구를 대조한 진단/설계입니다.
+  이번 조사에서 렌더링 코드, 재질, 씬, 옵션은 변경하지 않았고 새 Play/연속 이동 검증도 하지 않았습니다.
+- [권장] 우선 수정 대상은 광원/물리 엔진이 아니라 CharacterAdaptiveTones.compute의
+  분류·시간 대응·셀 표본 선택입니다. 실제 조명 입력의 오류까지 모두 배제했다는 뜻은 아닙니다.
+- [보존] 현재 관측 RGB에서 색 선택, 셀마다 한 단색, 2px body/outer-outline/EMPTY/깊이,
+  실제 낮밤·조명 변화 반영. RGB 시간 평균, 고정 최소 2/3색, 강제 하이라이트, 전체화면 필터는 제외합니다.
+
+1. 증거로 분리된 세 현상
+
+1-1. 어두워질 때 K=1로 축약
+원래 절대 Oklab L 오차 .06에서는 전체 밝기가 내려가면 명암 차이도 작아져 K1이 허용됩니다.
+sweep 18의 GPU RMSE .0592396222와 K1은 기존 원시 기록입니다. Skin E 상대오차 구현은
+이 조건을 3색으로 개선했고 지정 7조건의 paired 검사가 존재합니다. 두 수광 옵션은 저장 상태 OFF입니다.
+이 비교를 다시 만드는 것이 다음 작업은 아닙니다. 비교 결과의 미술 승인/활성화와 잔여 버그를 구분합니다.
+
+1-2. K/분할 전환
+walk_skin 17/18/19는 K3/4/3입니다. K3 CPU 재구성 오차 .05969096/.06004171/.05726619는
+같은 .06 문턱을 넘나듭니다. compute SolveTones는 각 호출마다 가장 먼저 통과한 K를 선택하며
+전 프레임 결정이 없습니다. 작은 경계 차이가 그룹 전체 팔레트 재분할로 증폭될 수 있습니다.
+E 비교의 해당 3자세 K4/4/4는 부분 개선 증거이지 전체 주기의 무깜빡임 증거가 아닙니다.
+
+1-3. K는 그대로인데 출력에 한 색만 남음 — 이번 원시 재분석
+같은 subject=1, ColorKey=295810, walk_skin_10의 011/012/013을 조사했습니다.
+GPU histogram과 palette를 직접 대응하고 cellMeta/output을 세었습니다.
+CPU 색 그룹 재구성 개수는 이 세 경우 GPU group count와 각각 일치했습니다.
+
+  자세        GPU K    원본 어두움/밝음 표본    최종 셀 어두움/밝음
+  011         2        37 / 12                 12 / 3
+  012         2        62 /  6                 14 / 0
+  013         2        36 / 23                  5 / 9
+
+012의 밝음에 배정된 실제 원본 표본 6개가 중앙 표본에서는 모두 빠집니다.
+CPU 좌표 대응상 이들은 같은 subject/헤어 부위가 점유한 2x2 셀 안에 있습니다.
+각 셀의 같은 부위 원본 2~4개 중 밝음은 1개입니다. 현재 해석에선 단순 다수결도 밝음을
+계속 버릴 수 있습니다. 반대로 소수 밝음을 무조건 채택하면 가는 빛을 과장할 수 있습니다.
+원본과 중심의 depth 차이도 있으므로 같은 부위라는 이유만으로 모두 같은 표면으로 취급하면 안 됩니다.
+이 수치는 기존 통제 포즈의 원시 배열 재분석이며, 새 연속 이동 실행이나 외관 합격 판정이 아닙니다.
+
+재분석 경로: LocalOnly/AdaptiveToneTemporalProbe_20260909/walk_skin_10/{011,012,013}/
+사용 배열: groups, histogram, palette, solutions, nativeColor/nativeMeta/nativeLighting,
+cellColor/cellMeta/output. 기존 analyze_trace.py의 load_capture/color_keys를 재사용했습니다.
+group identity는 subject+key로 맞추고 팔레트별 histogram count와 실제 half RGB 출력 수를 비교했습니다.
+원본 파일/기존 보고서를 덮어쓰지 않았습니다.
+
+2. 외부 기법 비교와 채택 범위
+
+- Oskarsson의 1D DP tone mapping은 영상에서 이웃 프레임 분포, keyframe 함수 보간을 씁니다.
+  원문 실험은 K256·3프레임 분포·20프레임 keyframe 간격·21프레임 지연입니다.
+  참고할 점은 프레임별 독립 최적화의 불안정과 분포 변화 측정이지, 출력 보간/지연의 직접 이식이 아닙니다.
+  근거: [Temporally Consistent Tone Mapping, §5](https://link.springer.com/article/10.1007/s10851-016-0677-1#Sec5), 2016/2017.
+- Evolutionary Clustering은 현재 데이터 적합도와 이전 분할에서 벗어나는 비용을 함께 다룹니다.
+  거의 동등한 분할이 시점마다 뒤집히는 예가 현재 문제와 가깝습니다. 원문 centroid 평균은 가져오지 않고,
+  분할의 시간 대응 원리만 적용하는 것이 제안입니다. 픽셀 렌더링에서 검증된 완제품이라는 뜻이 아닙니다.
+  근거: [Chakrabarti·Kumar·Tomkins, KDD 2006](https://faculty.mccombs.utexas.edu/deepayan.chakrabarti/mywww/papers/kdd06-evolutionary.pdf).
+- Dynamic Means는 cluster 생성·소멸·재활성·drift에 비용을 둡니다. 과거/현재 중심 평균과
+  국소 최적화가 포함되어 기존 1D DP를 대체할 근거는 약합니다. 대응과 수명 개념만 참고합니다.
+  근거: [Campbell 외, NIPS 2013](https://people.bu.edu/bkulis/pubs/nips_dynmeans.pdf).
+- Pixelated Image Abstraction은 형태 축소와 제한 팔레트를 함께 최적화합니다. 단순 중앙/최근접
+  축소 뒤 색만 줄여서는 작은 특징 보존이 부족하다는 근거입니다. superpixel/형상 변형을 그대로
+  적용하면 승인된 고정 격자/실루엣 계약과 충돌하므로 현재 교체 대상으로 선택하지 않습니다.
+  근거: [Gerstner 외, NPAR 2012](https://gfx.cs.princeton.edu/pubs/Gerstner_2012_PIA/).
+- Content-adaptive Downscaling은 공간/색 커널을 특징에 정렬하고 EM으로 최적화합니다.
+  대표색의 평균과 샘플 위치 이동을 포함합니다. 고정 셀 내부의 표본을 검토한다는 원리만 참고하며,
+  이 반복 최적화를 실시간 경로 전체에 추가하지 않습니다.
+  근거: [Kopf·Shamir·Peers, 2013](https://www.cs.wm.edu/~ppeers/showPublication.php?id=Kopf%3A2013%3ACID),
+  [저자 의사코드](https://johanneskopf.de/publications/downscaling/paper/pseudocode.pdf).
+- Perceptually Based Downscaling은 지각 오차 기반 닫힌 형태 해를 제시하고 영상 일관성을 평가합니다.
+  원문은 content-adaptive 커널이 작은 입력 변화를 확대해 깜빡일 수 있음도 지적합니다.
+  따라서 '여러 점에서 평균/최빈색만 뽑으면 해결'로 단정할 수 없습니다. 연속 색 필터 자체는 현 계약과 다릅니다.
+  근거: [Öztireli·Gross, SIGGRAPH 2015](https://cgl.ethz.ch/publications/papers/paperOzt15b.php),
+  [논문](https://www.cl.cam.ac.uk/~aco41/Files/Sig15PerceptualDownscaling.pdf).
+- Feature-Aware Pixel Art Animation은 2D keyframe 변형 뒤 특징선을 공간·시간 기준으로 최적화합니다.
+  명암 계산과 구조/특징 보존이 별개임을 참고할 수 있으나, 실시간 3D 조명 교체 해법은 아닙니다.
+  근거: [Kuo 외, Pacific Graphics 2016](https://cgv.cs.nthu.edu.tw/projects/Recreational_Graphics/PixelLineAnim).
+- NPR 시간 일관성 연구는 평면적 스타일·움직임 대응·시간 연속성의 충돌을 명시합니다.
+  어떤 해상도와 움직임에서도 원본 특징 전부+완전 무변화가 동시에 보장된다고 말하지 않습니다.
+  근거: [Bénard·Bousseau·Thollot, 2011](https://www-sop.inria.fr/reves/Basilic/2011/BBT11/).
+
+3. 권장 수식 A — 상대 광량 판정은 기존 것을 우선 사용
+
+현재 E 비교 경로의 오차 계약과 제안 이력 좌표:
+  s_t = max(mean(E_t), E_floor)
+  q_i,t = E_i,t / s_t  (제안하는 프레임 간 대응 좌표, 현재 저장된 이력은 없음)
+  e_t(P) = sqrt(sum_i w_i * (E_i,t - r_P(i),t)^2 / sum_i w_i)
+  허용 오차 epsilon_t = rho * s_t
+
+E가 모두 a배, s도 a배인 범위에서는 e/epsilon이 같아 단순 낮밤 광량 배수로
+단계 구성이 변할 이유를 줄입니다. 실제 출력 RGB는 q에서 합성하지 않고 현재 원본에서 선택합니다.
+고정 E_floor 아래, 조명 방향/국소 그림자 변화, 유색광, 표본 가림은 이 동일성의 보장 밖입니다.
+분산으로 무조건 나누면 거의 단색의 미세 잡음을 명암처럼 증폭할 수 있어 권장하지 않습니다.
+log(E/scale)는 대안이지만 검정 근처 바닥과 암부 잡음 문제가 있습니다. 기존 E 방식에
+개선 증거가 있으므로 이유 없이 새로운 log 방식까지 같이 이식하지 않습니다.
+
+4. 권장 수식 B — 오차 상한을 보존하는 비대칭 분할 이력
+
+현재 전환 방식은 매번 min K s.t. e_t(P_K)<=epsilon_t, 현재 대비 조건 통과입니다.
+제안은 과거 RGB를 보간하는 것이 아니라, 이전 분할을 현재 데이터에 다시 맞춰 평가하는 것입니다.
+
+  현재 자료로 다시 평가한 이전 분할 P_prev가 오차/대비를 통과: 우선 유지
+  e_t(P_prev)>epsilon_t 또는 현재 유효한 대비 실패: 즉시 재분할
+  K를 줄이기: 새 낮은-K 분할이 e_t<=epsilon_t-h_t 이고 현재 대비도 통과할 때만
+  해당 구간의 관측이 없어짐/실제 명암 소실: 빈 구간 제거, 적합한 K1 허용
+
+epsilon+h까지 이전 결과를 유지하는 대칭 deadband는 기존 품질 오차 상한을 몰래 늘립니다.
+이를 피하려면 증가/재분할 경계는 원래 epsilon, 감소 경계만 epsilon-h로 둡니다.
+h_t의 실제 값은 아직 미정입니다. .06 같은 기존 수치를 임의로 올리는 작업과 구분합니다.
+순수 산술 예: epsilon=.06, h=.006이라면 .06004에서 재분할한 뒤 .05727만으로
+즉시 다시 줄이지 않고 .054 이하에서 줄입니다. 이는 설명용 숫자이며 제안 설정값/검증값이 아닙니다.
+
+K만 고정해도 같은 K의 경계·대표색·highlight가 바뀔 수 있습니다.
+분할 경계와 톤의 밝기 순서/역할을 보관하고, 현재 관측 후보로 대표색을 다시 골라야 합니다.
+현재 범위의 0~31 bin 번호는 매 프레임 뜻이 달라지므로 이력 좌표로 저장하면 안 됩니다.
+q 같은 의미 있는 metric 좌표로 대응하되, 현재 E 및 실제 현재 RGB 조건으로 다시 검사합니다.
+이전 경계를 새 bin에 반올림하는 것만으로 정확한 독립 분할 재평가가 되지는 않습니다.
+
+동일 K에서 거의 같은 해가 여럿이면, 현재 허용 오차를 통과하는 해 중
+이전 경계/톤 역할과 가까운 해를 선택할 수 있습니다. 이는 현재 적합도+시간 비용 원리를
+현재 계약에 맞춘 제안이며, 원문 알고리즘 그대로이거나 이미 구현됐다는 의미가 아닙니다.
+정적 프레임의 최소 K/최적 SSE와 비트 단위 같은 결과를 고집하면서 전환만 제거할 수는 없습니다.
+허용 품질 안에서 더 많은 단계를 잠시 유지하는 결정 관성은 남지만 미래 프레임 지연은 필요 없습니다.
+
+5. 권장 수식 C — 고정 셀의 표본 정보 보존
+
+FragCellSource가 만든 점유/subject/part/depth는 그대로 둡니다. 바꿀 후보는
+Resolve가 점유된 셀의 색을 정할 때 참고하는 자료입니다. 셀 내부 native 자료를
+같은 subject/part와 가림/표면 조건으로 제한한 집합 F_c로 모읍니다.
+
+  H_c(k) = sum_{i in F_c} w_i * [현재 palette 분류(i)==k]
+  A_c = 현재 셀에서 실제로 지지되는 현재 대표색 후보 집합
+  p_c in A_c — 중간 RGB 생성 없음
+
+이렇게 하면 가운데 한 점 외에 밝은 표본이 있다는 사실도 선택 단계까지 전달됩니다.
+단, argmax H_c인 최빈색만 선택하면 012의 소수 밝음은 계속 사라질 수 있습니다.
+반대로 '밝음이 조금이라도 있으면 무조건 밝음'은 면적 과장과 점멸을 만들 수 있습니다.
+후속 후보는 현재 재구성 오차 + 실제로 지지되는 특징 대비 손실 + 유효한 시간 대응 비용을
+함께 비교하는 것입니다. 예를 들어 현재 셀 후보 p의 적합도 항은
+  D_c(p) = sum_{i in F_c} w_i * ||Oklab(color_i) - Oklab(p)||^2
+로 정의할 수 있으나, 이 항 단독으로 작은 대비를 보존한다고 보장하지 않습니다.
+대비/시간 항과의 정규화·가중치는 아직 확정하지 않았으며, 이 식은 완성된 검증 알고리즘이 아닙니다.
+
+실제 대비 보존 항은 고립 잡음과 의미 있는 특징을 구분해야 합니다. 기존 넓은 공간 대비
+조건은 그룹 전체 bbox의 4x4이므로 작은 머리카락 셀의 특징을 반드시 보호하지 않습니다.
+해당 여섯 표본을 무조건 살리거나 6/4만큼 밝은 셀 수를 강제하는 정책은 채택하지 않았습니다.
+빈 셀을 점유시키거나 outline을 넓히지 않으며, 피부에서 머리카락 색을 가져오지 않습니다.
+native depth의 작은 차이는 정상 굴곡일 수도, 다른 표면일 수도 있으므로 임의의 큰 depth 허용치로
+다 합치지 않습니다. 필요하면 표면 대응 정보가 추가로 필요한지 먼저 비교합니다.
+한 셀보다 작은 모든 특징을 면적 변화 없이 보존하는 보장은 불가능하므로 이 부분은 시각 승인이 필요합니다.
+
+6. 추가로 확인된 코드상 경계 — 실제 주원인 확정과는 구분
+
+- ColorKey는 조명 전 albedo가 아니라 조명 받은 RGB의 Oklab chroma입니다.
+  유색광으로 같은 표면이 다른 key로 이동할 수 있습니다. subject+key 이력만으로 이것까지 해결되지는 않습니다.
+  백색 배율에서도 L<.05에서는 chroma 분모 바닥 때문에 동일성이 깨질 수 있습니다.
+  key 이동이 원인으로 측정되면 intrinsic/albedo 부위 구분을 대응 기준으로 검토하되,
+  현재 유색광 차이를 표현할 RGB/chroma 조건을 함께 둬야 합니다. 부위 전체 한 그룹 통합은 부적합합니다.
+- bin min/max는 매번 바뀝니다. 극값 출현/소실로 모든 bin 경계가 움직일 수 있습니다.
+- 후보색은 bin 중심 거리와 화면 index로 결정됩니다. 현재 호출 내 결정적 선택이지,
+  애니메이션/가림에서 동일 표면을 추적하는 선택은 아닙니다.
+- 공간 support/guard와 highlight에도 별도 문턱이 있어 K만 안정화해도 다른 깜빡임이 남을 수 있습니다.
+- DP는 K마다 SSE 최적인 한 해를 구한 뒤 대비를 검사합니다. 그 해가 실패해도 같은 K의
+  다른 분할이 대비를 만족할 수 있습니다. 현재는 '대비 제약하 전역 최소 K'를 보장하지 않습니다.
+  이 차이 때문에 과도한 K 전환이 남는 것으로 입증될 때만 제약 포함 DP/후보 탐색을 확장합니다.
+- E 분석은 diffuse 수광량이고 실제 RGB는 UniversalFragmentPBR입니다.
+  metallic0/smoothness0만으로 specular가 완전히 없다는 뜻은 아닙니다. E 오차 통과만으로
+  반사/유색광의 RGB 디테일 보존을 보증하지 않습니다. 흰색 통제 광원 밖의 확인이 필요합니다.
+
+7. 수정 지점과 소유권
+
+  CharacterFlatUnlit.shader
+    EvaluateCharacterColor / IncidentLuminance / FragToneNativeSource:
+      현재 연속 RGB와 분석 E를 비교. 입력 자체가 튀는 경우에만 이쪽의 광원/그림자 경로 조사.
+    FragCellSource:
+      승인된 중앙 점유 유지. 샘플 수를 늘린다고 점유/깊이 의미까지 바꾸지 않음.
+  CharacterAdaptiveTones.compute
+    ColorKey/GatherGroups: 그룹 이력 identity와 색 경계가 실제 이동하는지 확인.
+    GatherHistogram/Candidate: 현재 관측 후보와 분할 좌표 대응.
+    SolveTones: 비대칭 K 전환과 현재 조건으로 이전 분할 재평가 — 우선 수정 지점.
+    BuildBroadSupport/SolveHighlights: 별도 guard/highlight 전환이 남을 때만 좁혀 수정.
+    Resolve: 같은 점유 셀 내부 자료의 대표색 선택 — 표본 누락 수정 지점.
+  CharacterAdaptiveTonePass.cs / CharacterSilhouetteRendererFeature.cs
+    기존 pass 안에서 camera/subject별 GPU history 수명을 소유. 새 Manager/Singleton 불필요.
+    기존 transient BufferHandle을 다음 프레임까지 보관하지 않고 persistent buffer를 import.
+    hash slot은 원자 삽입순서로 바뀔 수 있어 identity로 사용 금지.
+    renderer 재생성/Dispose, subject 수명·ID 재사용, camera cut, 해상도/격자/metric 변경,
+    무효 입력에서 이력 무효화. 일반 낮밤/광량 변화는 무조건 reset하지 않고 현재 조건으로 평가.
+    진단 렌더·같은 frame의 복수 Camera.Render·새 Play는 게임 history와 분리.
+
+8. 최소 검증 순서 — 제안·미실행
+
+1) 기존 paired7조건과 합성 결과 재사용. E 개선 검증을 전체 다시 반복하지 않습니다.
+2) 기존 raw에서 K 경계 17/18/19와 표본 누락 11/12/13을 각각 비교합니다.
+   수정 후보가 현재 오차/대비, 관측 RGB 소속, 셀 depth/ID/EMPTY를 보존하는지 검사합니다.
+   이전 프레임 오차/과거 RGB를 그대로 가져와 성공으로 판단하지 않습니다.
+3) 같은 K인데 출력이 달라지면 key/분할/후보/support/highlight 중 최초 변화 지점부터 구분합니다.
+   희소 seed에 배정되지 않은 팔레트 색과 실제 K1을 같은 실패로 세지 않습니다.
+4) 실제 연속 걷기+카메라 이동은 대표 구간 한 번. 정지 자세 batch를 연속 이동 검증으로 보고하지 않습니다.
+   native 입력이 먼저 튀면 실제 광원/그림자, native는 안정적인데 팔레트가 튀면 solver,
+   팔레트는 유지되는데 셀만 튀면 표본 선택 문제로 나눕니다.
+5) 유색 로컬광/그림자 경계의 짧은 별도 조건, 진짜 평평한 입력 K1, 소멸·재등장/카메라 cut의
+   이력 reset을 필요한 최소 case로 확인합니다. 전체 게임 한 바퀴는 필요하지 않습니다.
+6) 대표 미리보기를 보여 주고 사용자 확인 전 외형을 추가로 재조정하거나 기본값으로 확정하지 않습니다.
+
+최종 판단
+조명을 계단색으로 바꾸거나 tolerance 숫자 하나를 낮추는 것으로 위 세 현상을 모두 해결할 수 없습니다.
+기존 상대 E 판단을 기반으로 solver의 시간 선택을 안정화하고, 별도로 고정 셀의 색 표본 누락을
+보완하는 것이 최소 수정 방향입니다. 전면 광원 교체, 물리 엔진 변경, TAA/색 평균 덧씌우기는
+현재 증거에서 필요성이 없으며 선택하지 않았습니다. 전체 깜빡임 해결은 여전히 미검증입니다.

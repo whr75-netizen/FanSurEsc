@@ -37,7 +37,7 @@ namespace FantasySurvival.Rendering
     /// <summary>
     /// Records the opt-in, single-subject GPU tone experiment between the existing
     /// cell source and composite. Analysis belongs to RenderGraph; this owner
-    /// retains only partition history per camera, never a previous color image.
+    /// retains partition/contour state per camera, never a previous color image.
     /// </summary>
     public sealed class CharacterAdaptiveTonePass : IDisposable
     {
@@ -48,6 +48,8 @@ namespace FantasySurvival.Rendering
 
         private const int HistogramBins = 32;
         public const int HistoryRowsPerGroup = HistogramBins + 2;
+        public const int RegionRowsPerGroup = 8 + 63 * 3;
+        private const double MaximumRegionRenderGapSeconds = 0.5;
         private const int SpatialTiles = 16;
         private const int ClearElements = MaximumGroups * SpatialTiles * HistogramBins;
         private const GraphicsFormat ColorFormat = GraphicsFormat.R16G16B16A16_SFloat;
@@ -60,6 +62,11 @@ namespace FantasySurvival.Rendering
             public bool enabled;
 
             [Range(0.0001f, 1f)] public float toneError = 0.06f;
+            [Tooltip("Oklab L groups only: scale error and contrast limits by mean lightness. Does not normalize output RGB or stabilize spatial regions. Hair/Skin illumination modes take precedence.")]
+            public bool relativeLightness;
+            [Range(0.0001f, 1f)] public float lightnessRelativeError = 0.10f;
+            [Range(0.0001f, 1f), Tooltip("Oklab L floor for relative error/contrast limits; not an illumination Y floor.")]
+            public float lightnessBlackFloor = 0.02f;
             [Range(0.005f, 1f)] public float chromaError = 0.06f;
             [Range(0.0001f, 1f)] public float contrastRetention = 0.65f;
             [Range(0.0001f, 1f)] public float minimumContrast = 0.025f;
@@ -72,10 +79,14 @@ namespace FantasySurvival.Rendering
             public bool skinLighting;
             [Range(0.0001f, 1f)] public float skinRelativeError = 0.10f;
             [Range(0.0001f, 1f)] public float skinIlluminationFloor = 0.02f;
-            [Tooltip("Retain partitions only within CURRENT error/contrast bounds. Colors always come from the current frame.")]
+            [Tooltip("Legacy path, used when Region Transitions is off: retain partitions only within CURRENT error/contrast bounds and select current observed colors.")]
             public bool temporalStability = true;
             [Range(0f, 0.5f), Tooltip("Relative error headroom required to reduce tone count. Increasing detail uses the original limit.")]
             public float shrinkMargin = 0.10f;
+            [Tooltip("Move persistent illumination contours and their representative region colors over time. Does not accumulate screen pixels.")]
+            public bool regionTransitions;
+            [Range(0.02f, 2f), Tooltip("Game-time response duration for contour and representative-region changes.")]
+            public float regionTransitionSeconds = 0.25f;
         }
 
         /// <summary>
@@ -169,6 +180,8 @@ namespace FantasySurvival.Rendering
             new KernelDefinition("SolveHighlights", Buffers.Groups | Buffers.Histogram |
                 Buffers.HighlightHistogram | Buffers.Solutions | Buffers.Status,
                 Textures.SourceColor, 32, 1),
+            new KernelDefinition("UpdateRegions", Buffers.Groups | Buffers.Histogram |
+                Buffers.Palette | Buffers.Solutions | Buffers.Status | Buffers.Supports, Textures.None, 32, 1),
             new KernelDefinition("Resolve", Buffers.Groups | Buffers.Palette | Buffers.Supports |
                 Buffers.Solutions | Buffers.Status,
                 Textures.CellColor | Textures.CellMeta | Textures.Output, 8, 8),
@@ -180,6 +193,9 @@ namespace FantasySurvival.Rendering
         private static readonly int SourceColorId = Shader.PropertyToID("_ToneSourceColor");
         private static readonly int SourceMetaId = Shader.PropertyToID("_ToneSourceMeta");
         private static readonly int SourceLightingId = Shader.PropertyToID("_ToneSourceLighting");
+        private static readonly int RelativeLightnessId = Shader.PropertyToID("_ToneRelativeLightness");
+        private static readonly int LightnessRelativeErrorId = Shader.PropertyToID("_ToneLightnessRelativeError");
+        private static readonly int LightnessBlackFloorId = Shader.PropertyToID("_ToneLightnessBlackFloor");
         private static readonly int HairLightingEnabledId = Shader.PropertyToID("_ToneHairLightingEnabled");
         private static readonly int HairRelativeErrorId = Shader.PropertyToID("_ToneHairRelativeError");
         private static readonly int HairIlluminationFloorId = Shader.PropertyToID("_ToneHairIlluminationFloor");
@@ -194,6 +210,13 @@ namespace FantasySurvival.Rendering
         private static readonly int HistoryValidId = Shader.PropertyToID("_ToneHistoryValid");
         private static readonly int TemporalStabilityId = Shader.PropertyToID("_ToneTemporalStability");
         private static readonly int ShrinkMarginId = Shader.PropertyToID("_ToneShrinkMargin");
+        private static readonly int PreviousRegionsId = Shader.PropertyToID("_TonePreviousRegions");
+        private static readonly int NextRegionsId = Shader.PropertyToID("_ToneNextRegions");
+        private static readonly int DisplayRegionsId = Shader.PropertyToID("_ToneDisplayRegions");
+        private static readonly int RegionTransitionsId = Shader.PropertyToID("_ToneRegionTransitions");
+        private static readonly int RegionHistoryValidId = Shader.PropertyToID("_ToneRegionHistoryValid");
+        private static readonly int RegionDeltaTimeId = Shader.PropertyToID("_ToneRegionDeltaTime");
+        private static readonly int RegionSecondsId = Shader.PropertyToID("_ToneRegionSeconds");
         private static readonly int GroupsId = Shader.PropertyToID("_ToneGroups");
         private static readonly int HistogramId = Shader.PropertyToID("_ToneHistogram");
         private static readonly int TilesId = Shader.PropertyToID("_ToneTiles");
@@ -221,6 +244,7 @@ namespace FantasySurvival.Rendering
         private readonly Dictionary<Camera, HistoryState> histories = new Dictionary<Camera, HistoryState>();
         private readonly List<Camera> expiredCameras = new List<Camera>();
         private GraphicsBuffer emptyHistory;
+        private GraphicsBuffer emptyRegions;
 
         public void Dispose()
         {
@@ -229,6 +253,8 @@ namespace FantasySurvival.Rendering
             histories.Clear();
             emptyHistory?.Dispose();
             emptyHistory = null;
+            emptyRegions?.Dispose();
+            emptyRegions = null;
         }
 
         public void ResetHistory(Camera camera = null)
@@ -309,6 +335,11 @@ namespace FantasySurvival.Rendering
                 throw new ArgumentOutOfRangeException(nameof(width),
                     "Adaptive tone source must fit the 4,194,304-pixel representative-index bound.");
             ValidateUnitSetting(settings.toneError, nameof(settings.toneError));
+            if (settings.relativeLightness)
+            {
+                ValidateUnitSetting(settings.lightnessRelativeError, nameof(settings.lightnessRelativeError));
+                ValidateUnitSetting(settings.lightnessBlackFloor, nameof(settings.lightnessBlackFloor));
+            }
             ValidateUnitSetting(settings.chromaError, nameof(settings.chromaError));
             if (settings.chromaError < 0.005f)
                 throw new ArgumentOutOfRangeException(nameof(settings.chromaError),
@@ -318,7 +349,11 @@ namespace FantasySurvival.Rendering
             ValidateUnitSetting(settings.highlightMinimumContrast, nameof(settings.highlightMinimumContrast));
             if (float.IsNaN(settings.shrinkMargin) || settings.shrinkMargin < 0f || settings.shrinkMargin > 0.5f)
                 throw new ArgumentOutOfRangeException(nameof(settings.shrinkMargin));
-            if ((settings.hairLighting || settings.skinLighting) && SystemInfo.supportedRenderTargetCount < 3)
+            if (settings.regionTransitions && (float.IsNaN(settings.regionTransitionSeconds) ||
+                settings.regionTransitionSeconds < 0.02f || settings.regionTransitionSeconds > 2f))
+                throw new ArgumentOutOfRangeException(nameof(settings.regionTransitionSeconds));
+            if ((settings.hairLighting || settings.skinLighting || settings.regionTransitions) &&
+                SystemInfo.supportedRenderTargetCount < 3)
                 throw new NotSupportedException("Incident illumination analysis requires three simultaneous render targets.");
             if (settings.hairLighting)
             {
@@ -378,8 +413,10 @@ namespace FantasySurvival.Rendering
 
         /// <summary>
         /// captureBuffers contains borrowed handles to this invocation's actual
-        /// dispatch buffers. A caller may read them in a dependent diagnostic
-        /// pass in the same graph; they must never be cached across frames.
+        /// dispatch buffers, including imported region state. A caller may read
+        /// them in a dependent diagnostic pass in the same graph; the handles
+        /// must never be cached across frames. Legacy stateless fixtures must
+        /// explicitly disable settings.regionTransitions.
         /// </summary>
         public TextureHandle Record(RenderGraph renderGraph,
             TextureHandle sourceNativeColor, TextureHandle sourceNativeMeta,
@@ -398,7 +435,7 @@ namespace FantasySurvival.Rendering
 
             ValidateTexture(renderGraph, sourceNativeColor, width, height, ColorFormat, nameof(sourceNativeColor));
             ValidateTexture(renderGraph, sourceNativeMeta, width, height, MetaFormat, nameof(sourceNativeMeta));
-            if (settings.hairLighting || settings.skinLighting)
+            if (settings.hairLighting || settings.skinLighting || settings.regionTransitions)
             {
                 ValidateTexture(renderGraph, sourceNativeLighting, width, height, ColorFormat, nameof(sourceNativeLighting));
             }
@@ -429,6 +466,19 @@ namespace FantasySurvival.Rendering
             BufferHandle previousHistory = renderGraph.ImportBuffer(history != null ? history.Previous : emptyHistory);
             BufferHandle nextHistory = history != null ? renderGraph.ImportBuffer(history.Next) :
                 CreateBuffer(renderGraph, "Character Tone Stateless History", MaximumGroups * HistoryRowsPerGroup, 16);
+            if (emptyRegions == null)
+            {
+                emptyRegions = NewRegionBuffer("Character Tone Empty Regions");
+                emptyRegions.SetData(new Vector4[MaximumGroups * RegionRowsPerGroup]);
+            }
+            bool persistentRegions = history != null && values.regionTransitions;
+            BufferHandle previousRegions = renderGraph.ImportBuffer(
+                persistentRegions ? history.PreviousRegions : emptyRegions);
+            BufferHandle nextRegions = persistentRegions ? renderGraph.ImportBuffer(history.NextRegions) :
+                CreateBuffer(renderGraph, "Character Tone Stateless Regions", MaximumGroups * RegionRowsPerGroup, 16);
+            buffers.previousRegions = previousRegions;
+            buffers.nextRegions = nextRegions;
+            captureBuffers = buffers;
 
             for (int index = 0; index < KernelDefinitions.Length; index++)
             {
@@ -442,12 +492,14 @@ namespace FantasySurvival.Rendering
                 // All analysis/resolve kernels reference this resource. With the
                 // switch off the shader branch is inert, but D3D11 still needs a
                 // declared/bound SRV. Reuse the existing source for old callers.
-                if (index != 0 && definition.name != "StoreHistory") data.textureMask |= Textures.SourceLighting;
+                if (index != 0 && definition.name != "StoreHistory" && definition.name != "UpdateRegions")
+                    data.textureMask |= Textures.SourceLighting;
                 if (definition.name == "Resolve") data.textureMask |= Textures.SourceMeta;
                 data.buffers = buffers;
                 data.sourceColor = sourceNativeColor;
                 data.sourceMeta = sourceNativeMeta;
-                data.sourceLighting = settings.hairLighting || settings.skinLighting ? sourceNativeLighting : sourceNativeColor;
+                data.sourceLighting = settings.hairLighting || settings.skinLighting || settings.regionTransitions ?
+                    sourceNativeLighting : sourceNativeColor;
                 data.cellColor = cellColor;
                 data.cellMeta = cellMeta;
                 data.output = output;
@@ -463,6 +515,15 @@ namespace FantasySurvival.Rendering
                 data.history = history;
                 data.frame = Time.frameCount;
                 data.historyWriteIndex = history != null ? history.writeIndex : 0;
+                data.updateRegions = definition.name == "UpdateRegions";
+                data.displayRegions = definition.name == "Resolve";
+                data.previousRegions = previousRegions;
+                data.nextRegions = nextRegions;
+                data.regionHistoryValid = persistentRegions && history.regionReadValid;
+                data.regionDeltaTime = persistentRegions ? history.regionDeltaTime : 0f;
+                data.regionWriteIndex = persistentRegions ? history.regionWriteIndex : 0;
+                data.regionTime = persistentRegions ? history.regionPreparedTime : 0.0;
+                data.regionUnscaledTime = persistentRegions ? history.regionPreparedUnscaledTime : 0.0;
                 data.groupsX = index == 0 ? (ClearElements + 63) / 64 :
                     definition.threadsX == 32 ? MaximumGroups : (width + 7) / 8;
                 data.groupsY = definition.threadsY == 8 ? (height + 7) / 8 : 1;
@@ -473,6 +534,13 @@ namespace FantasySurvival.Rendering
                     builder.UseBuffer(nextHistory, AccessFlags.WriteAll);
                     if (history != null) builder.AllowPassCulling(false);
                 }
+                if (data.updateRegions)
+                {
+                    builder.UseBuffer(previousRegions, AccessFlags.Read);
+                    builder.UseBuffer(nextRegions, AccessFlags.WriteAll);
+                    if (persistentRegions) builder.AllowPassCulling(false);
+                }
+                if (data.displayRegions) builder.UseBuffer(nextRegions, AccessFlags.Read);
                 builder.SetRenderFunc(static (PassData passData, ComputeGraphContext context) =>
                     Execute(passData, context.cmd));
             }
@@ -552,6 +620,9 @@ namespace FantasySurvival.Rendering
             cmd.SetComputeIntParam(shader, HeightId, data.height);
             cmd.SetComputeIntParam(shader, SubjectId, data.subjectId);
             cmd.SetComputeFloatParam(shader, ErrorId, data.values.error);
+            cmd.SetComputeIntParam(shader, RelativeLightnessId, data.values.relativeLightness ? 1 : 0);
+            cmd.SetComputeFloatParam(shader, LightnessRelativeErrorId, data.values.lightnessRelativeError);
+            cmd.SetComputeFloatParam(shader, LightnessBlackFloorId, data.values.lightnessBlackFloor);
             cmd.SetComputeFloatParam(shader, ChromaErrorId, data.values.chromaError);
             cmd.SetComputeFloatParam(shader, ContrastRetentionId, data.values.contrastRetention);
             cmd.SetComputeFloatParam(shader, MinimumContrastId, data.values.minimumContrast);
@@ -562,11 +633,24 @@ namespace FantasySurvival.Rendering
             cmd.SetComputeIntParam(shader, SkinLightingEnabledId, data.values.skinLighting ? 1 : 0);
             cmd.SetComputeFloatParam(shader, SkinRelativeErrorId, data.values.skinRelativeError);
             cmd.SetComputeFloatParam(shader, SkinIlluminationFloorId, data.values.skinIlluminationFloor);
-            cmd.SetComputeIntParam(shader, TemporalStabilityId, data.values.temporalStability ? 1 : 0);
+            // Contour transitions own display continuity. The existing solver
+            // supplies today's target partition without a second history policy.
+            cmd.SetComputeIntParam(shader, TemporalStabilityId,
+                data.values.temporalStability && !data.values.regionTransitions ? 1 : 0);
             cmd.SetComputeIntParam(shader, HistoryValidId, data.historyValid ? 1 : 0);
             cmd.SetComputeFloatParam(shader, ShrinkMarginId, data.values.shrinkMargin);
+            cmd.SetComputeIntParam(shader, RegionTransitionsId, data.values.regionTransitions ? 1 : 0);
+            cmd.SetComputeIntParam(shader, RegionHistoryValidId, data.regionHistoryValid ? 1 : 0);
+            cmd.SetComputeFloatParam(shader, RegionDeltaTimeId, data.regionDeltaTime);
+            cmd.SetComputeFloatParam(shader, RegionSecondsId, data.values.regionTransitionSeconds);
             if (data.solveHistory) cmd.SetComputeBufferParam(shader, kernel, PreviousHistoryId, data.previousHistory);
             if (data.storeHistory) cmd.SetComputeBufferParam(shader, kernel, NextHistoryId, data.nextHistory);
+            if (data.updateRegions)
+            {
+                cmd.SetComputeBufferParam(shader, kernel, PreviousRegionsId, data.previousRegions);
+                cmd.SetComputeBufferParam(shader, kernel, NextRegionsId, data.nextRegions);
+            }
+            if (data.displayRegions) cmd.SetComputeBufferParam(shader, kernel, DisplayRegionsId, data.nextRegions);
             if ((data.bufferMask & Buffers.Groups) != 0) cmd.SetComputeBufferParam(shader, kernel, GroupsId, data.buffers.groups);
             if ((data.bufferMask & Buffers.Histogram) != 0) cmd.SetComputeBufferParam(shader, kernel, HistogramId, data.buffers.histogram);
             if ((data.bufferMask & Buffers.Tiles) != 0) cmd.SetComputeBufferParam(shader, kernel, TilesId, data.buffers.tiles);
@@ -588,6 +672,13 @@ namespace FantasySurvival.Rendering
                 data.history.lastWrittenFrame = data.frame;
                 data.history.lastWrittenIndex = data.historyWriteIndex;
             }
+            if (data.updateRegions && data.history != null && data.values.regionTransitions)
+            {
+                data.history.regionLastWrittenFrame = data.frame;
+                data.history.regionLastWrittenIndex = data.regionWriteIndex;
+                data.history.regionLastWrittenTime = data.regionTime;
+                data.history.regionLastWrittenUnscaledTime = data.regionUnscaledTime;
+            }
         }
 
         /// <summary>Borrowed current-graph buffers, not persistent GPU state.</summary>
@@ -595,21 +686,29 @@ namespace FantasySurvival.Rendering
         {
             public BufferHandle groups, histogram, tiles, tileHistogram, supports;
             public BufferHandle highlightHistogram, status, palette, solutions;
+            public BufferHandle previousRegions, nextRegions;
         }
 
         private readonly struct ToneValues
         {
             public readonly float error, chromaError, contrastRetention, minimumContrast, highlightMinimumContrast;
+            public readonly bool relativeLightness;
+            public readonly float lightnessRelativeError, lightnessBlackFloor;
             public readonly bool hairLighting;
             public readonly float hairRelativeError, hairIlluminationFloor;
             public readonly bool skinLighting;
             public readonly float skinRelativeError, skinIlluminationFloor;
             public readonly bool temporalStability;
             public readonly float shrinkMargin;
+            public readonly bool regionTransitions;
+            public readonly float regionTransitionSeconds;
 
             public ToneValues(Settings settings)
             {
                 error = settings.toneError;
+                relativeLightness = settings.relativeLightness;
+                lightnessRelativeError = settings.lightnessRelativeError;
+                lightnessBlackFloor = settings.lightnessBlackFloor;
                 chromaError = settings.chromaError;
                 contrastRetention = settings.contrastRetention;
                 minimumContrast = settings.minimumContrast;
@@ -622,25 +721,33 @@ namespace FantasySurvival.Rendering
                 skinIlluminationFloor = settings.skinIlluminationFloor;
                 temporalStability = settings.temporalStability;
                 shrinkMargin = settings.shrinkMargin;
+                regionTransitions = settings.regionTransitions;
+                regionTransitionSeconds = settings.regionTransitionSeconds;
             }
 
             public bool SameConfiguration(ToneValues other) =>
                 error == other.error && chromaError == other.chromaError &&
+                relativeLightness == other.relativeLightness &&
+                lightnessRelativeError == other.lightnessRelativeError && lightnessBlackFloor == other.lightnessBlackFloor &&
                 contrastRetention == other.contrastRetention && minimumContrast == other.minimumContrast &&
                 highlightMinimumContrast == other.highlightMinimumContrast &&
                 hairLighting == other.hairLighting && hairRelativeError == other.hairRelativeError &&
                 hairIlluminationFloor == other.hairIlluminationFloor && skinLighting == other.skinLighting &&
                 skinRelativeError == other.skinRelativeError && skinIlluminationFloor == other.skinIlluminationFloor &&
-                temporalStability == other.temporalStability && shrinkMargin == other.shrinkMargin;
+                temporalStability == other.temporalStability && shrinkMargin == other.shrinkMargin &&
+                regionTransitions == other.regionTransitions && regionTransitionSeconds == other.regionTransitionSeconds;
         }
 
         private static GraphicsBuffer NewHistoryBuffer(string name) => new GraphicsBuffer(
             GraphicsBuffer.Target.Structured, MaximumGroups * HistoryRowsPerGroup, 16) { name = name };
 
+        private static GraphicsBuffer NewRegionBuffer(string name) => new GraphicsBuffer(
+            GraphicsBuffer.Target.Structured, MaximumGroups * RegionRowsPerGroup, 16) { name = name };
+
         private HistoryState PrepareHistory(Camera camera, UnityEngine.Object subject, int subjectId,
             int cellSize, int width, int height, ComputeShader shader, ToneValues values)
         {
-            if (camera == null || subject == null || !values.temporalStability)
+            if (camera == null || subject == null || (!values.temporalStability && !values.regionTransitions))
             {
                 if (camera != null) ResetHistory(camera);
                 return null;
@@ -661,16 +768,17 @@ namespace FantasySurvival.Rendering
             Matrix4x4 projection = camera.nonJitteredProjectionMatrix;
             Vector3 position = camera.transform.position;
             Quaternion rotation = camera.transform.rotation;
-            // Continuous movement is allowed. Large cuts, zoom, reactivation,
-            // changed settings and different subjects must start fresh.
+            // Contours are not stored in screen pixels. A zoom/resolution change
+            // resets the legacy partition cache only, not the region lifetime.
             float cutDistance = camera.orthographic ? Mathf.Max(1f, camera.orthographicSize) * 2f : 10f;
             bool changed = state.subject != subject || state.subjectId != subjectId ||
-                state.width != width || state.height != height || state.cellSize != cellSize ||
                 state.shader != shader || state.playing != Application.isPlaying ||
-                !state.values.SameConfiguration(values) || state.projection != projection ||
+                !state.values.SameConfiguration(values) ||
                 Vector3.SqrMagnitude(state.position - position) > cutDistance * cutDistance ||
                 Quaternion.Angle(state.rotation, rotation) > 60f;
             if (changed) state.Invalidate();
+            else if (state.width != width || state.height != height || state.cellSize != cellSize ||
+                state.projection != projection) state.InvalidateHistory();
             state.subject = subject;
             state.subjectId = subjectId;
             state.width = width;
@@ -688,6 +796,29 @@ namespace FantasySurvival.Rendering
                 state.readValid = state.lastWrittenFrame == Time.frameCount - 1;
                 state.writeIndex = 1 - state.lastWrittenIndex;
             }
+            if (values.regionTransitions)
+            {
+                state.EnsureRegions();
+                if (state.regionPreparedFrame != Time.frameCount)
+                {
+                    state.regionPreparedFrame = Time.frameCount;
+                    // Game time stops during pause. Unscaled time is used only
+                    // to distinguish a short render gap from a stale camera.
+                    double unscaledTime = Application.isPlaying ?
+                        Time.unscaledTimeAsDouble : Time.realtimeSinceStartupAsDouble;
+                    double gameTime = Application.isPlaying ? Time.timeAsDouble : unscaledTime;
+                    double renderGap = unscaledTime - state.regionLastWrittenUnscaledTime;
+                    state.regionReadValid = state.regionLastWrittenFrame >= 0 && renderGap >= 0.0 &&
+                        renderGap <= MaximumRegionRenderGapSeconds && gameTime >= state.regionLastWrittenTime;
+                    state.regionDeltaTime = state.regionReadValid ?
+                        (float)(gameTime - state.regionLastWrittenTime) : 0f;
+                    state.regionPreparedTime = gameTime;
+                    state.regionPreparedUnscaledTime = unscaledTime;
+                    state.regionWriteIndex = 1 - state.regionLastWrittenIndex;
+                }
+                // Further renders in the same frame reuse these exact reads,
+                // writes and elapsed time; they cannot advance a transition twice.
+            }
             return state;
         }
 
@@ -695,8 +826,15 @@ namespace FantasySurvival.Rendering
         {
             private readonly GraphicsBuffer[] buffers = {
                 NewHistoryBuffer("Character Tone History A"), NewHistoryBuffer("Character Tone History B") };
+            private GraphicsBuffer[] regionBuffers;
             public int subjectId, width, height, cellSize;
             public int preparedFrame = -1, lastWrittenFrame = -2, lastWrittenIndex, writeIndex;
+            public int regionPreparedFrame = -1, regionLastWrittenFrame = -2;
+            public int regionLastWrittenIndex, regionWriteIndex;
+            public double regionLastWrittenTime, regionLastWrittenUnscaledTime;
+            public double regionPreparedTime, regionPreparedUnscaledTime;
+            public float regionDeltaTime;
+            public bool regionReadValid;
             public bool readValid, playing;
             public UnityEngine.Object subject;
             public ComputeShader shader;
@@ -706,8 +844,32 @@ namespace FantasySurvival.Rendering
             public Quaternion rotation;
             public GraphicsBuffer Previous => buffers[1 - writeIndex];
             public GraphicsBuffer Next => buffers[writeIndex];
-            public void Invalidate() { preparedFrame = -1; lastWrittenFrame = -2; readValid = false; }
-            public void Dispose() { foreach (GraphicsBuffer buffer in buffers) buffer.Dispose(); }
+            public GraphicsBuffer PreviousRegions => regionBuffers[1 - regionWriteIndex];
+            public GraphicsBuffer NextRegions => regionBuffers[regionWriteIndex];
+            public void EnsureRegions()
+            {
+                if (regionBuffers == null)
+                    regionBuffers = new[] { NewRegionBuffer("Character Tone Regions A"),
+                        NewRegionBuffer("Character Tone Regions B") };
+            }
+            public void InvalidateHistory() { preparedFrame = -1; lastWrittenFrame = -2; readValid = false; }
+            public void Invalidate()
+            {
+                InvalidateHistory();
+                regionPreparedFrame = -1;
+                regionLastWrittenFrame = -2;
+                regionReadValid = false;
+                regionDeltaTime = 0f;
+            }
+            public void Dispose()
+            {
+                foreach (GraphicsBuffer buffer in buffers) buffer.Dispose();
+                if (regionBuffers != null)
+                {
+                    foreach (GraphicsBuffer buffer in regionBuffers) buffer.Dispose();
+                    regionBuffers = null;
+                }
+            }
         }
 
         private sealed class PassData
@@ -721,8 +883,13 @@ namespace FantasySurvival.Rendering
             public TextureHandle sourceColor, sourceMeta, sourceLighting, cellColor, cellMeta, output;
             public BufferHandle previousHistory, nextHistory;
             public bool solveHistory, storeHistory, historyValid;
+            public BufferHandle previousRegions, nextRegions;
+            public bool updateRegions, displayRegions, regionHistoryValid;
+            public float regionDeltaTime;
+            public double regionTime, regionUnscaledTime;
             public HistoryState history;
             public int frame, historyWriteIndex;
+            public int regionWriteIndex;
         }
     }
 }

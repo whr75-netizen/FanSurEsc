@@ -1,9 +1,11 @@
-// Experimental source-observed quantization; this is not a fixed-tone shader.
+// Experimental source-observed targets with optional persistent tone regions.
+// This is not a fixed-tone shader or a temporal screen-image filter.
 //
 // Dispatch order (separate dispatches provide the global synchronization):
 // Clear(1280,1,1), GatherGroups(ceil(W/8),ceil(H/8),1), GatherHistogram(same),
 // SolveTones(160,1,1), GatherHighlights(same image grid), SolveHighlights(160,1,1),
-// Resolve(same image grid), StoreHistory(160,1,1). The caller owns all resources.
+// UpdateRegions(160,1,1), Resolve(same image grid), StoreHistory(160,1,1).
+// The caller owns all resources.
 //
 // uint buffers / element counts (stride 4):
 // Groups 160*8; Histogram 160*32*6; Tiles 160*16*3;
@@ -13,7 +15,12 @@
 // History header 0: (asfloat(ColorKey), interval count, metric mode, valid).
 // Header 1: (current mean scale, physical minimum, physical maximum, 0).
 // Entries 2..33: (upper boundary / mean scale, representative metric / scale, 0, 0).
-// History never contains output RGB. The final upper boundary is unbounded.
+// This legacy partition history never contains RGB. The final boundary is unbounded.
+// Region history is separate: 160*197 float4 values per ping-pong buffer.
+// It holds ordered current/goal boundaries, region RGB, scale and accent support.
+// Region mode may interpolate representative RGB over time; each region remains
+// spatially flat. Current surface metrics select regions: no UV/motion-reprojected
+// per-surface history is stored, so abrupt input-field changes can still pop.
 //
 // Deliberate differences from the Python reference:
 // * A subject/part fence plus zero-centered chromaticity grid replaces connected
@@ -27,18 +34,24 @@
 //   This protects one broad contrast; it is not material or fine-edge recognition.
 // * Fresh DP checks only the SSE-optimal candidate at each K against support
 //   contrast. First passing K is NOT a global constrained minimum.
-// Opt-in temporal selection retains a currently feasible partition, reselecting
+// Legacy temporal selection (region mode OFF) retains a feasible partition, reselecting
 // actual CURRENT observed candidates. Only reducing K uses a stricter error
 // limit; history never relaxes the current RMS/contrast conditions. Boundaries
 // are projected onto the current occupied histogram bins, so the 32-bin spatial
 // approximation and changing lit-chroma groups remain explicit limitations.
-// No silent resource clamp, retained historical RGB, or RGB mixing.
+// Legacy selection has no retained RGB or RGB mixing. Region mode instead uses
+// unlit albedo chromaticity for identity and transitions toward fresh solver targets.
+// Neither mode silently clamps resource capacity.
 //
 // Supported input: one selected 16-bit subject, part IDs 0..4, <= 4,194,304 pixels,
 // finite linear RGB in [0,16], positive finite eye depth. HDR is not clipped;
-// adaptive L range preserves absolute Oklab-L error units. Opt-in Hair/Skin use
+// adaptive L range preserves physical Oklab-L error units. Optional relative-L
+// acceptance scales RMS/contrast limits by mean L with an independent black floor;
+// it does not change the metric, observed RGB candidates or display coordinates.
+// Opt-in Hair/Skin illumination modes take precedence and use
 // native diffuse illumination Y instead, with error relative to mean received
-// illumination (and a darkness floor). Candidate RGB remains source-observed.
+// illumination (and a darkness floor). Target candidate RGB remains source-observed;
+// a displayed region may be between its previous and target representative colors.
 // Source and sparse
 // seed textures must share dimensions, color encoding and original shading.
 // _ToneOutput copies sparse source alpha (eye depth) and all other subjects.
@@ -60,6 +73,7 @@
 #pragma kernel SolveTones
 #pragma kernel GatherHighlights
 #pragma kernel SolveHighlights
+#pragma kernel UpdateRegions
 #pragma kernel Resolve
 #pragma kernel StoreHistory
 #pragma target 5.0
@@ -68,6 +82,9 @@
 #define TONE_BINS 32u
 #define TONE_TILES 16u
 #define TONE_HISTORY_STRIDE 34u
+#define TONE_REGION_STRIDE 197u
+#define TONE_REGION_HEADER 8u
+#define TONE_REGION_MAX 63u
 #define TONE_PIXEL_MASK 4194303u
 #define TONE_Q 65535.0
 #define TONE_INF 3.402823466e+38
@@ -89,11 +106,17 @@ RWStructuredBuffer<float4> _TonePalette;
 RWStructuredBuffer<float4> _ToneSolutions;
 StructuredBuffer<float4> _TonePreviousHistory;
 RWStructuredBuffer<float4> _ToneNextHistory;
+StructuredBuffer<float4> _TonePreviousRegions;
+RWStructuredBuffer<float4> _ToneNextRegions;
+StructuredBuffer<float4> _ToneDisplayRegions;
 
 int _ToneWidth;
 int _ToneHeight;
 int _ToneSubjectId;
 float _ToneError;
+int _ToneRelativeLightness;
+float _ToneLightnessRelativeError;
+float _ToneLightnessBlackFloor;
 float _ToneChromaError;
 float _ToneContrastRetention;
 float _ToneMinimumContrast;
@@ -107,6 +130,10 @@ float _ToneSkinIlluminationFloor;
 int _ToneHistoryValid;
 int _ToneTemporalStability;
 float _ToneShrinkMargin;
+int _ToneRegionTransitions;
+int _ToneRegionHistoryValid;
+float _ToneRegionDeltaTime;
+float _ToneRegionSeconds;
 
 // Only integer atomics touch shared histograms. Carry increments commute even
 // when another invocation adds to the low word before this carry is recorded.
@@ -175,6 +202,11 @@ bool IlluminationGroup(uint group)
     return HairLightingGroup(group) || SkinLightingGroup(group);
 }
 
+bool RelativeLightnessGroup(uint group)
+{
+    return _ToneRelativeLightness != 0 && !IlluminationGroup(group);
+}
+
 // Native lighting and native RGB must describe the same visible opted-in surface.
 // Resolve also calls this for sparse seeds; it reports a seed mismatch using
 // bit 32 so one resolving pixel cannot change another pixel's decision.
@@ -198,6 +230,8 @@ float MetricScale(uint group, float2 range, float normalizedMean)
         return max(range.x + range.y * normalizedMean, _ToneHairIlluminationFloor);
     if (SkinLightingGroup(group))
         return max(range.x + range.y * normalizedMean, _ToneSkinIlluminationFloor);
+    if (RelativeLightnessGroup(group))
+        return max(range.x + range.y * normalizedMean, _ToneLightnessBlackFloor);
     return 1.0;
 }
 
@@ -205,23 +239,40 @@ uint HistoryMetricMode(uint group)
 {
     if (HairLightingGroup(group)) return 1u;
     if (SkinLightingGroup(group)) return 2u;
+    if (RelativeLightnessGroup(group)) return 3u;
     return 0u;
 }
 
 float HistoryMetricScale(uint group, float2 range, float normalizedMean)
 {
-    if (IlluminationGroup(group)) return MetricScale(group, range, normalizedMean);
-    return max(range.x + range.y * normalizedMean, 1e-5);
+    // Relative-L changes acceptance limits only. Preserve the existing history
+    // coordinate units. Their shared current mean can still move unaffected
+    // pixels across Resolve thresholds under partial lighting; this is not a
+    // spatial/per-surface transition fix.
+    // Keep the history floor independent from the acceptance-mode branches.
+    float historyFloor = 1e-5;
+    if (HairLightingGroup(group)) historyFloor = _ToneHairIlluminationFloor;
+    else if (SkinLightingGroup(group)) historyFloor = _ToneSkinIlluminationFloor;
+    return max(range.x + range.y * normalizedMean, historyFloor);
 }
 
-uint ColorKey(float3 lab, float4 meta)
+uint ColorKey(float3 lab, float4 meta, uint2 pixel)
 {
     uint part = (uint)round(meta.g * 255.0);
     float2 chroma = lab.yz / max(lab.x, .05);
+    bool valid = true;
+    if (_ToneRegionTransitions != 0)
+    {
+        float4 identity = _ToneSourceLighting.Load(int3(pixel, 0));
+        valid = all(isfinite(identity)) && identity.a == 1.0;
+        chroma = valid ? identity.gb : float2(0, 0);
+    }
     // Zero chroma sits at a cell center, not at a floating-point sign boundary.
     int2 cell = (int2)floor(chroma / (_ToneChromaError * .7071067811865475) + .5);
-    if (part > 4u || any(cell < -128) || any(cell > 127)) return 0u;
-    return ((part + 1u) << 16u) | ((uint)(cell.x + 128) << 8u) | (uint)(cell.y + 128);
+    uint key = 0u;
+    if (valid && part <= 4u && all(cell >= -128) && all(cell <= 127))
+        key = ((part + 1u) << 16u) | ((uint)(cell.x + 128) << 8u) | (uint)(cell.y + 128);
+    return key;
 }
 
 uint FindGroup(uint key)
@@ -302,6 +353,10 @@ void Clear(uint3 id : SV_DispatchThreadID)
             !isfinite(_ToneMinimumContrast) || _ToneMinimumContrast <= 0.0 || _ToneMinimumContrast > 1.0 ||
             !isfinite(_ToneHighlightMinimumContrast) || _ToneHighlightMinimumContrast <= 0.0 || _ToneHighlightMinimumContrast > 1.0)
             status |= 16u;
+        if (_ToneRelativeLightness != 0 &&
+            (!isfinite(_ToneLightnessRelativeError) || _ToneLightnessRelativeError <= 0.0 || _ToneLightnessRelativeError > 1.0 ||
+             !isfinite(_ToneLightnessBlackFloor) || _ToneLightnessBlackFloor <= 0.0 || _ToneLightnessBlackFloor > 1.0))
+            status |= 16u;
         if (_ToneHairLightingEnabled != 0 &&
             (!isfinite(_ToneHairRelativeError) || _ToneHairRelativeError <= 0.0 || _ToneHairRelativeError > 1.0 ||
              !isfinite(_ToneHairIlluminationFloor) || _ToneHairIlluminationFloor <= 0.0))
@@ -329,7 +384,7 @@ void GatherGroups(uint3 id : SV_DispatchThreadID)
     float metric;
     if (!TryAnalysisMetric(id.xy, lab, meta, metric))
     { InterlockedOr(_ToneStatus[TONE_GROUPS], 64u); return; }
-    uint key = ColorKey(lab, meta);
+    uint key = ColorKey(lab, meta, id.xy);
     if (key == 0u) { InterlockedOr(_ToneStatus[TONE_GROUPS], 8u); return; }
     uint slot = (key * 2654435761u) % TONE_GROUPS;
     [loop] for (uint probe = 0u; probe < TONE_GROUPS; ++probe)
@@ -361,7 +416,7 @@ void GatherHistogram(uint3 id : SV_DispatchThreadID)
     float3 lab = LinearToOklab(_ToneSourceColor.Load(int3(id.xy, 0)).rgb);
     float metric;
     if (!TryAnalysisMetric(id.xy, lab, meta, metric)) return;
-    uint group = FindGroup(ColorKey(lab, meta));
+    uint group = FindGroup(ColorKey(lab, meta, id.xy));
     if (group >= TONE_GROUPS) return;
     float u = NormalizeL(metric, LightnessRange(group));
     uint bin = LightnessBin(u);
@@ -666,6 +721,7 @@ void SolveTones(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
                 sSumPrefix[sActiveCount] / sWeightPrefix[sActiveCount]);
             if (HairLightingGroup(group)) sErrorLimit = scale * _ToneHairRelativeError;
             else if (SkinLightingGroup(group)) sErrorLimit = scale * _ToneSkinRelativeError;
+            else if (RelativeLightnessGroup(group)) sErrorLimit = scale * _ToneLightnessRelativeError;
             BuildBroadSupport(group, range, _ToneMinimumContrast * scale);
         }
         _ToneSupports[group * 2u] = sLowMask;
@@ -807,7 +863,7 @@ void GatherHighlights(uint3 id : SV_DispatchThreadID)
     float3 lab = LinearToOklab(_ToneSourceColor.Load(int3(id.xy, 0)).rgb);
     float lightness;
     if (!TryAnalysisMetric(id.xy, lab, meta, lightness)) return;
-    uint group = FindGroup(ColorKey(lab, meta));
+    uint group = FindGroup(ColorKey(lab, meta, id.xy));
     if (group >= TONE_GROUPS || (_ToneStatus[group] & 3u) != 3u) return;
     uint tile = SpatialTile(id.xy, group);
     if ((_ToneSupports[group * 2u + 1u] & (1u << tile)) == 0u) return;
@@ -828,7 +884,7 @@ void SolveHighlights(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
     if (group >= TONE_GROUPS) return;
     bool enabled = _ToneStatus[TONE_GROUPS] == 0u && (_ToneStatus[group] & 3u) == 3u;
     sCount[lane] = enabled ? _ToneHistogram[(group * TONE_BINS + lane) * 6u] : 0u;
-    sSum[lane] = enabled && IlluminationGroup(group) ?
+    sSum[lane] = enabled && (IlluminationGroup(group) || RelativeLightnessGroup(group)) ?
         PairValue(_ToneHistogram[(group * TONE_BINS + lane) * 6u + 1u],
             _ToneHistogram[(group * TONE_BINS + lane) * 6u + 2u]) / TONE_Q : 0.0;
     sCandidate[lane] = 0.0;
@@ -838,7 +894,7 @@ void SolveHighlights(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
     float2 range = LightnessRange(group);
     if (range.y <= 1e-8) return;
     float minimumContrast = _ToneHighlightMinimumContrast;
-    if (IlluminationGroup(group))
+    if (IlluminationGroup(group) || RelativeLightnessGroup(group))
     {
         float count = 0.0, sum = 0.0;
         [fastopt] [loop] for (uint b = 0u; b < TONE_BINS; ++b)
@@ -879,6 +935,233 @@ void SolveHighlights(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
     }
 }
 
+// Persistent ordered iso-regions, NOT a previous screen image. The current
+// solver proposes colors/thresholds; only this stage advances displayed state.
+// An interval is a level set of current surface illumination (or Oklab L), so
+// it follows the rendered surface instead of being glued to camera pixels.
+// This does not temporally filter the per-surface light field itself: sharp
+// input/disocclusion changes remain a separate, explicitly unclaimed problem.
+groupshared float rTargetUpper[32];
+groupshared float4 rTargetColor[32];
+groupshared float rUpper[63];
+groupshared float rGoalUpper[63];
+groupshared float4 rColor[63];
+groupshared float4 rGoalColor[63];
+groupshared uint rGoalIndex[63];
+
+uint FindRegionHistory(uint key, uint mode)
+{
+    if (_ToneRegionHistoryValid == 0) return TONE_GROUPS;
+    [loop] for (uint slot = 0u; slot < TONE_GROUPS; ++slot)
+    {
+        uint address = slot * TONE_REGION_STRIDE;
+        float4 h = _TonePreviousRegions[address];
+        float4 info = _TonePreviousRegions[address + 1u];
+        if (asuint(h.x) == key && info.x == 1.0 && (uint)info.y == mode &&
+            h.y >= 1.0 && h.y <= (float)TONE_REGION_MAX && h.z >= 1.0 && h.z <= (float)TONE_BINS)
+            return slot;
+    }
+    return TONE_GROUPS;
+}
+
+[numthreads(32, 1, 1)]
+void UpdateRegions(uint3 workgroup : SV_GroupID, uint lane : SV_GroupIndex)
+{
+    uint group = workgroup.x;
+    if (group >= TONE_GROUPS || lane != 0u) return;
+    uint address = group * TONE_REGION_STRIDE;
+    [loop] for (uint z = 0u; z < TONE_REGION_STRIDE; ++z) _ToneNextRegions[address + z] = 0.0;
+    if (_ToneRegionTransitions == 0 || _ToneStatus[TONE_GROUPS] != 0u ||
+        (_ToneStatus[group] & 1u) == 0u) return;
+    if (!isfinite(_ToneRegionDeltaTime) || _ToneRegionDeltaTime < 0.0 ||
+        !isfinite(_ToneRegionSeconds) || _ToneRegionSeconds <= 0.0)
+    { InterlockedOr(_ToneStatus[TONE_GROUPS], 16u); return; }
+
+    float2 range = LightnessRange(group);
+    float count = 0.0, sum = 0.0;
+    [loop] for (uint momentBin = 0u; momentBin < TONE_BINS; ++momentBin)
+    {
+        uint h = (group * TONE_BINS + momentBin) * 6u;
+        count += _ToneHistogram[h];
+        sum += PairValue(_ToneHistogram[h + 1u], _ToneHistogram[h + 2u]) / TONE_Q;
+    }
+    if (count <= 0.0) return;
+    float scale = HistoryMetricScale(group, range, sum / count);
+    float maximum = (range.x + range.y) / scale;
+    uint targetCount = 0u, lastBin = 0u;
+    float4 previous = float4(0, 0, 0, -1);
+    [loop] for (uint targetBin = 0u; targetBin < TONE_BINS; ++targetBin)
+    {
+        if (_ToneHistogram[(group * TONE_BINS + targetBin) * 6u] == 0u) continue;
+        float4 value = _TonePalette[group * TONE_BINS + targetBin];
+        if (value.a < 0.0 || !all(isfinite(value))) return;
+        if (previous.a >= 0.0 && any(value != previous))
+        {
+            rTargetUpper[targetCount] = (range.x +
+                (float)(lastBin + 1u + targetBin) * .5 / TONE_BINS * range.y) / scale;
+            rTargetColor[targetCount++] = previous;
+        }
+        previous = value;
+        lastBin = targetBin;
+    }
+    if (previous.a < 0.0) return;
+    rTargetUpper[targetCount] = TONE_INF;
+    rTargetColor[targetCount++] = previous;
+
+    uint oldSlot = FindRegionHistory(_ToneGroups[group * 8u], HistoryMetricMode(group));
+    bool hasHistory = oldSlot < TONE_GROUPS;
+    uint oldAddress = hasHistory ? oldSlot * TONE_REGION_STRIDE : 0u;
+    float4 oldHeader = hasHistory ? _TonePreviousRegions[oldAddress] : 0.0;
+    float4 oldInfo = hasHistory ? _TonePreviousRegions[oldAddress + 1u] : 0.0;
+    float dt = _ToneRegionDeltaTime;
+    float response = 1.0 - exp(-dt / _ToneRegionSeconds);
+    uint regions = targetCount, goalCount = targetCount;
+    float remaining = 0.0;
+    // Both target thresholds and CURRENT surface metrics use CURRENT mean
+    // units. Delaying only this denominator shifts every pixel together and
+    // can erase all visible bands during uniform dimming. Boundaries/colors,
+    // not the conversion between coordinate units, own temporal continuity.
+    float displayScale = scale;
+    float finiteEnd = max(maximum, hasHistory ? oldInfo.w : maximum) + 1.0;
+
+    if (!hasHistory)
+    {
+        [loop] for (uint i = 0u; i < targetCount; ++i)
+        {
+            rUpper[i] = rGoalUpper[i] = rTargetUpper[i];
+            rColor[i] = rGoalColor[i] = rTargetColor[i];
+            rGoalIndex[i] = i;
+        }
+    }
+    else
+    {
+        regions = (uint)oldHeader.y;
+        goalCount = (uint)oldHeader.z;
+        remaining = max(oldHeader.w, 0.0);
+        [loop] for (uint i = 0u; i < regions; ++i)
+        {
+            uint entry = oldAddress + TONE_REGION_HEADER + i * 3u;
+            float4 bounds = _TonePreviousRegions[entry];
+            rUpper[i] = bounds.x;
+            rGoalUpper[i] = bounds.y;
+            rGoalIndex[i] = (uint)bounds.z;
+            rColor[i] = _TonePreviousRegions[entry + 1u];
+            rGoalColor[i] = _TonePreviousRegions[entry + 2u];
+        }
+
+        if (remaining <= 0.0 && regions != targetCount)
+        {
+            // Monotone common refinement of interval ranks. Duplicate an old
+            // interval to split it (same initial color, initially zero width).
+            // Duplicate a target interval to merge (same final color/boundary).
+            // At most oldK+newK-1 <= 63 intervals; no accumulating ghost bands.
+            uint oldCount = regions;
+            uint oldIndex = 0u, targetIndex = 0u;
+            regions = 0u;
+            [loop] while (oldIndex < oldCount && targetIndex < targetCount)
+            {
+                uint entry = oldAddress + TONE_REGION_HEADER + oldIndex * 3u;
+                float startUpper = _TonePreviousRegions[entry].x;
+                float endUpper = rTargetUpper[targetIndex];
+                bool finalPair = oldIndex + 1u == oldCount && targetIndex + 1u == targetCount;
+                rUpper[regions] = finalPair ? TONE_INF : min(startUpper, finiteEnd);
+                rGoalUpper[regions] = finalPair ? TONE_INF : min(endUpper, finiteEnd);
+                rColor[regions] = _TonePreviousRegions[entry + 1u];
+                rGoalColor[regions] = rTargetColor[targetIndex];
+                rGoalIndex[regions] = targetIndex;
+                ++regions;
+                // Integer cross multiplication avoids nearly equal float ranks
+                // choosing inconsistent paths between GPUs.
+                uint oldRank = (oldIndex + 1u) * targetCount;
+                uint newRank = (targetIndex + 1u) * oldCount;
+                if (oldRank <= newRank) ++oldIndex;
+                if (newRank <= oldRank) ++targetIndex;
+            }
+            goalCount = targetCount;
+            remaining = _ToneRegionSeconds;
+        }
+        else if (remaining <= 0.0)
+        {
+            // No topology event: track live colors and contours in seconds.
+            // This is per-region palette state, not per-pixel RGB history.
+            [loop] for (uint i = 0u; i < regions; ++i)
+            {
+                rGoalUpper[i] = rTargetUpper[i];
+                rGoalColor[i] = rTargetColor[i];
+                rUpper[i] = i + 1u == regions ? TONE_INF : lerp(rUpper[i], rGoalUpper[i], response);
+                rColor[i].rgb = lerp(rColor[i].rgb, rGoalColor[i].rgb, response);
+                rGoalIndex[i] = i;
+            }
+        }
+
+        if (remaining > 0.0)
+        {
+            // Complete a finite transition before accepting another topology.
+            // Replacing the goal every frame recreates the original popping.
+            float step = saturate(dt / remaining);
+            [loop] for (uint i = 0u; i < regions; ++i)
+            {
+                rUpper[i] = i + 1u == regions ? TONE_INF : lerp(rUpper[i], rGoalUpper[i], step);
+                rColor[i].rgb = lerp(rColor[i].rgb, rGoalColor[i].rgb, step);
+            }
+            remaining = max(0.0, remaining - dt);
+            if (remaining <= 1e-6)
+            {
+                // Compact only after colors agree and duplicate widths reach
+                // zero. No hand/coverage/outline cell is ever removed here.
+                uint compactCount = 0u, lastGoal = 0xffffffffu;
+                [loop] for (uint i = 0u; i < regions; ++i)
+                {
+                    uint goal = rGoalIndex[i];
+                    if (goal == lastGoal) continue;
+                    rUpper[compactCount] = rGoalUpper[compactCount] = rGoalUpper[i];
+                    rColor[compactCount] = rGoalColor[compactCount] = rGoalColor[i];
+                    rGoalIndex[compactCount] = goal;
+                    lastGoal = goal;
+                    ++compactCount;
+                }
+                regions = compactCount;
+                rUpper[regions - 1u] = rGoalUpper[regions - 1u] = TONE_INF;
+                remaining = 0.0;
+            }
+        }
+    }
+
+    // A highlight has an independent existence gate in the old solver. It
+    // must use the same temporal policy instead of bypassing the region stage.
+    float4 highlight = _ToneSolutions[group * 3u + 1u];
+    float targetWeight = highlight.w > .5 ? 1.0 : 0.0;
+    float4 oldAccent = hasHistory ? _TonePreviousRegions[oldAddress + 2u] : 0.0;
+    float3 accentColor = _ToneSolutions[group * 3u + 2u].rgb;
+    if (targetWeight == 0.0) accentColor = oldAccent.rgb;
+    float weight = hasHistory ? lerp(oldAccent.a, targetWeight, response) : targetWeight;
+    if (abs(weight - targetWeight) < 1e-4) weight = targetWeight;
+    float3 displayedAccent = hasHistory && oldAccent.a > 0.0 ? lerp(oldAccent.rgb, accentColor, response) : accentColor;
+    float cutoff = max(highlight.z, .5 * (highlight.x + highlight.y)) / scale;
+    if (targetWeight == 0.0 && hasHistory) cutoff = _TonePreviousRegions[oldAddress + 3u].x;
+    float displayedCutoff = hasHistory && oldAccent.a > 0.0 ?
+        lerp(_TonePreviousRegions[oldAddress + 3u].x, cutoff, response) : cutoff;
+    _ToneNextRegions[address + 2u] = float4(displayedAccent, weight);
+    _ToneNextRegions[address + 3u] = float4(displayedCutoff, 0, 0, 0);
+    [unroll] for (uint block = 0u; block < 4u; ++block)
+    {
+        float4 supports = 0.0;
+        [unroll] for (uint j = 0u; j < 4u; ++j)
+            supports[j] = (_ToneSupports[group * 2u + 1u] & (1u << (block * 4u + j))) != 0u ? 1.0 : 0.0;
+        _ToneNextRegions[address + 4u + block] = hasHistory ?
+            lerp(_TonePreviousRegions[oldAddress + 4u + block], supports, response) : supports;
+    }
+    [loop] for (uint i = 0u; i < regions; ++i)
+    {
+        uint entry = address + TONE_REGION_HEADER + i * 3u;
+        _ToneNextRegions[entry] = float4(rUpper[i], rGoalUpper[i], rGoalIndex[i], 0);
+        _ToneNextRegions[entry + 1u] = float4(rColor[i].rgb, 0);
+        _ToneNextRegions[entry + 2u] = float4(rGoalColor[i].rgb, 0);
+    }
+    _ToneNextRegions[address + 1u] = float4(1, HistoryMetricMode(group), displayScale, maximum);
+    _ToneNextRegions[address] = float4(asfloat(_ToneGroups[group * 8u]), regions, goalCount, remaining);
+}
+
 [numthreads(8, 8, 1)]
 void Resolve(uint3 id : SV_DispatchThreadID)
 {
@@ -894,10 +1177,39 @@ void Resolve(uint3 id : SV_DispatchThreadID)
     float metric;
     if (!TryAnalysisMetric(id.xy, lab, meta, metric))
     { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
-    uint key = ColorKey(lab, meta);
+    uint key = ColorKey(lab, meta, id.xy);
     uint group = key == 0u ? TONE_GROUPS : FindGroup(key);
     if (group >= TONE_GROUPS) { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
     if ((_ToneStatus[group] & 1u) == 0u) return;
+    if (_ToneRegionTransitions != 0)
+    {
+        uint address = group * TONE_REGION_STRIDE;
+        float4 header = _ToneDisplayRegions[address];
+        float4 info = _ToneDisplayRegions[address + 1u];
+        if (info.x != 1.0 || asuint(header.x) != key || info.z <= 0.0)
+        { InterlockedOr(_ToneStatus[TONE_GROUPS], 32u); return; }
+        float coordinate = metric / info.z;
+        uint region = (uint)header.y - 1u;
+        [loop] for (uint i = 0u; i < (uint)header.y; ++i)
+            if (coordinate <= _ToneDisplayRegions[address + TONE_REGION_HEADER + i * 3u].x)
+            { region = i; break; }
+        float3 color = _ToneDisplayRegions[address + TONE_REGION_HEADER + region * 3u + 1u].rgb;
+        float4 accent = _ToneDisplayRegions[address + 2u];
+        uint tile = SpatialTile(id.xy, group);
+        float support = _ToneDisplayRegions[address + 4u + tile / 4u][tile % 4u];
+        // Support controls the spatial contour, not an on/off .5 gate. Start
+        // beyond the current field's maximum and progressively reveal the
+        // highlight range, retaining the same flat accent color throughout.
+        float accentCutoff = _ToneDisplayRegions[address + 3u].x;
+        float2 actualRange = LightnessRange(group);
+        float closedCutoff = max(accentCutoff,
+            (actualRange.x + actualRange.y + _ToneHighlightMinimumContrast) / info.z);
+        float supportedCutoff = lerp(closedCutoff, accentCutoff, saturate(support));
+        if (accent.a > 0.0 && coordinate >= supportedCutoff)
+            color = lerp(color, accent.rgb, accent.a);
+        _ToneOutput[id.xy] = float4(color, original.a);
+        return;
+    }
     uint bin = LightnessBin(NormalizeL(metric, LightnessRange(group)));
     float4 base = _TonePalette[group * TONE_BINS + bin];
     // A missing dense-source bin is a source/seed contract mismatch. Zero RGB

@@ -76,10 +76,23 @@ MonoBehaviour:
     adaptiveTones:
       enabled: 1
       toneError: 0.06
+      relativeLightness: 1
+      lightnessRelativeError: 0.1
+      lightnessBlackFloor: 0.02
       chromaError: 0.06
       contrastRetention: 0.65
       minimumContrast: 0.025
       highlightMinimumContrast: 0.025
+      hairLighting: 0
+      hairRelativeError: 0.1
+      hairIlluminationFloor: 0.02
+      skinLighting: 0
+      skinRelativeError: 0.1
+      skinIlluminationFloor: 0.02
+      temporalStability: 1
+      shrinkMargin: 0.1
+      regionTransitions: 1
+      regionTransitionSeconds: 0.25
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -158,7 +171,7 @@ MonoBehaviour:
   requirements: 3
   passMaterial: {fileID: 2100000, guid: 28cdf37a34e7ea149952821d69047022, type: 2}
   passIndex: 0
-  bindDepthStencilAttachment: 0
+  bindDepthStencilAttachment: 1
   m_Version: 1
   visibleLightLimit: 8
 --- !u!114 &7833122117494664109

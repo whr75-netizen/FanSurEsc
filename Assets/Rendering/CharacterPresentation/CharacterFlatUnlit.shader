@@ -269,11 +269,8 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 return lighting * (bandBrightness / brightness);
             }
 
-            half4 EvaluateCharacterColor(Varyings input)
+            half4 SampleCharacterBase(Varyings input)
             {
-                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
-                float3 lightingPositionWS = input.positionWS +
-                    _CharacterLightingPositionOffsetWS.xyz;
                 half4 baseSample = half4(1, 1, 1, 1);
                 if (_BaseMapPixelGrid >= 1.0h)
                 {
@@ -293,7 +290,16 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                         sampler_BaseMap,
                         input.uv);
                 }
-                half4 evaluatedColor = baseSample * _BaseColor;
+                return baseSample * _BaseColor;
+            }
+
+            half4 EvaluateCharacterColor(Varyings input)
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                float3 lightingPositionWS = input.positionWS +
+                    _CharacterLightingPositionOffsetWS.xyz;
+                half4 baseSample = SampleCharacterBase(input);
+                half4 evaluatedColor = baseSample;
                 if (_CharacterAdaptiveToneSource > 0.5)
                 {
                     // Analysis needs the continuous matte source that was used
@@ -309,8 +315,8 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                     d.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
                     d.shadowMask = half4(1, 1, 1, 1);
                     SurfaceData s = (SurfaceData)0;
-                    s.albedo = baseSample.rgb * _BaseColor.rgb;
-                    s.alpha = baseSample.a * _BaseColor.a;
+                    s.albedo = baseSample.rgb;
+                    s.alpha = baseSample.a;
                     s.normalTS = half3(0, 0, 1);
                     s.occlusion = 1;
                     s.metallic = 0;
@@ -323,8 +329,8 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                 {
                     half3 lighting = EvaluateSpatialFlatCharacterLighting(
                         lightingPositionWS, input.positionCS);
-                    half3 albedo = SelectAlbedoPalette(baseSample.rgb * _BaseColor.rgb);
-                    evaluatedColor = half4(albedo * ApplyLightingBands(lighting), baseSample.a * _BaseColor.a);
+                    half3 albedo = SelectAlbedoPalette(baseSample.rgb);
+                    evaluatedColor = half4(albedo * ApplyLightingBands(lighting), baseSample.a);
                 }
                 return evaluatedColor;
             }
@@ -424,11 +430,23 @@ Shader "FantasySurvival/Character/Spatial Flat Lit"
                     clamp(round(_CharacterOutlineGroup), 0.0, 255.0) / 255.0,
                     clamp(round(_CharacterCellSize), 1.0, 8.0) / 255.0,
                     (subjectId >> 8) / 255.0);
-                output.incidentLighting = 0;
+                // Unlit chromaticity identifies a material color family even
+                // when colored lights/darkness change its observed RGB. This
+                // is identity data, not a replacement for the actual lighting.
+                float3 albedo = SampleCharacterBase(input).rgb;
+                float3 lms = pow(max(float3(
+                    dot(albedo, float3(.4122214708, .5363325363, .0514459929)),
+                    dot(albedo, float3(.2119034982, .6806995451, .1073969566)),
+                    dot(albedo, float3(.0883024619, .2817188376, .6299787005))), 0.0), 1.0 / 3.0);
+                float albedoL = dot(lms, float3(.2104542553, .7936177850, -.0040720468));
+                float2 albedoChroma = float2(
+                    dot(lms, float3(1.9779984951, -2.4285922050, .4505937099)),
+                    dot(lms, float3(.0259040371, .7827717662, -.8086757660))) / max(albedoL, .05);
+                output.incidentLighting = half4(0, albedoChroma, 1);
                 if (_CharacterToneCaptureLighting > 0.5 ||
                     (_CharacterHairLightingAnalysis > 0.5 && round(_CharacterOutlineGroup) == 3.0) ||
                     (_CharacterSkinLightingAnalysis > 0.5 && round(_CharacterOutlineGroup) == 4.0))
-                    output.incidentLighting = half4(IncidentLuminance(input), 0, 0, 1);
+                    output.incidentLighting.r = IncidentLuminance(input);
                 return output;
             }
 

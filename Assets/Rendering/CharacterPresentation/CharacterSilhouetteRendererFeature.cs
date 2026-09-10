@@ -68,7 +68,7 @@ namespace FantasySurvival.Rendering
 
         /// <summary>
         /// Capture one actual render of targetCamera. The callback receives
-        /// owned raw bytes after all 15 readbacks complete. A queued/in-flight
+        /// owned raw bytes after all 17 readbacks complete. A queued/in-flight
         /// request cannot be replaced. No diagnostic resources exist otherwise.
         /// </summary>
         public void RequestAdaptiveToneCapture(Camera targetCamera, string captureId,
@@ -174,7 +174,7 @@ namespace FantasySurvival.Rendering
 
         private sealed class ToneCaptureRequest
         {
-            private const int ReadbackCount = 15;
+            private const int ReadbackCount = 17;
             public readonly Camera targetCamera;
             public readonly System.Action<AdaptiveToneCapture> callback;
             public AdaptiveToneCapture packet;
@@ -551,7 +551,8 @@ namespace FantasySurvival.Rendering
                     descriptor.depthStencilFormat = GraphicsFormat.None;
                     TextureHandle nativeColor = UniversalRenderer.CreateRenderGraphTexture(
                         renderGraph, descriptor, "_CharacterToneNativeColor", true, FilterMode.Point);
-                    TextureHandle nativeLighting = adaptiveToneSettings.hairLighting || adaptiveToneSettings.skinLighting || capture != null ?
+                    TextureHandle nativeLighting = adaptiveToneSettings.hairLighting || adaptiveToneSettings.skinLighting ||
+                        adaptiveToneSettings.regionTransitions || capture != null ?
                         UniversalRenderer.CreateRenderGraphTexture(renderGraph, descriptor,
                             "_CharacterToneNativeLighting", true, FilterMode.Point) : TextureHandle.nullHandle;
                     descriptor.graphicsFormat = GraphicsFormat.R8G8B8A8_UNorm;
@@ -722,6 +723,8 @@ namespace FantasySurvival.Rendering
                 builder.UseBuffer(buffers.palette, AccessFlags.Read);
                 builder.UseBuffer(buffers.solutions, AccessFlags.Read);
                 builder.UseTexture(nativeColor, AccessFlags.Read);
+                builder.UseBuffer(buffers.previousRegions, AccessFlags.Read);
+                builder.UseBuffer(buffers.nextRegions, AccessFlags.Read);
                 builder.UseTexture(nativeMeta, AccessFlags.Read);
                 builder.UseTexture(nativeLighting, AccessFlags.Read);
                 builder.UseTexture(cellColor, AccessFlags.Read);
@@ -743,6 +746,8 @@ namespace FantasySurvival.Rendering
                     QueueCaptureBuffer(context.cmd, capture, "status", passData.buffers.status);
                     QueueCaptureBuffer(context.cmd, capture, "palette", passData.buffers.palette);
                     QueueCaptureBuffer(context.cmd, capture, "solutions", passData.buffers.solutions);
+                    QueueCaptureBuffer(context.cmd, capture, "previousRegions", passData.buffers.previousRegions);
+                    QueueCaptureBuffer(context.cmd, capture, "nextRegions", passData.buffers.nextRegions);
                     QueueCaptureTexture(context.cmd, capture, "nativeColor", passData.nativeColor);
                     QueueCaptureTexture(context.cmd, capture, "nativeMeta", passData.nativeMeta);
                     QueueCaptureTexture(context.cmd, capture, "nativeLighting", passData.nativeLighting);

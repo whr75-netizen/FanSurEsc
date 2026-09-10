@@ -2377,3 +2377,11 @@ Interactable (abstract base class)
 - `[사용자 질문·실측]` 피부3→2는 조명입력 차이가 아니다. index46 meanL=.970079→새허용오차 .097008, K2오차 .078500이 기존 .06은 넘지만 새기준은 통과. 실제색분포3색752/250/1965→2색916/2051. Hair meanL=.428981→허용오차 .042898로 K1오차 .057905를 거부한다. 밝은피부가더관대해지는차이이며 '무손실특징보존'으로 표현하지 않는다. 사용자 승인 수치는 추가 변경하지 않았다.
 - `[승인 설정·복원]` PC_Renderer의 relativeLightness=true와 regionTransitions=true/.25 저장, 두Y옵션OFF. 같은asset 저장 때 이미기존 SteppedLocalLightRendererFeature.Create()가 true로강제하는 bindDepthStencilAttachment도직렬화되어diff에포함되나 코드/실제조명동작변경없음. 임시조명0·카메라/Animator/시간/배경복원·PlayOFF·GameMap1 dirty=false·Console Error/Exception/Assert0. 사용자 기존씬/재질/외부에셋 보존.
 - `[남음]` 표면별시작/현재/목표 경계와가림상태는미구현. Body와Hair00~03 UV0없음 직접확인, 현재밝기등치구간/공유mean 재분류의한계는남아있다. 부분구름·자연WASD·전체깜빡임·GPU비용·빌드/다중GPU 미검증. 우선순위1의관찰된목표K1문제만수정했으며 전체해결아님. 증거와재현코드는 LocalOnly/AdaptiveToneRepair_20260910/ 및 docs/ai/CHARACTER_ADAPTIVE_TONES.txt.
+
+## 138. 중단된 캐릭터 제작 방식 비교 재개 `[CHARACTER-RENDER-01]`
+
+- `[요청·2026-09-10]` 연결 실패 전 선정한 실시간3D / 자동sprite bake / 2D본 비교를 이전 대화에서 복구했다. 당시 실제 샘플 생성은 시작되지 않았음도 확인. 기존 Player/게임씬/승인된 명암 코드·설정은 교체하지 않고 별도 `Assets/Tests/CharacterPipelines/Review01/CharacterPipelineComparison.unity`에 표시 전용 샘플을 생성했다. 게임 build 씬 목록에 추가하지 않았다.
+- `[구현]` A=기존 Chibi/Controller/2px renderer. B=A의 같은 걷기4/3초를16장 PNG/12fps로 자동촬영한 sprite 재생(새 픽셀화 알고리즘 아님). C=같은 mesh를모든boneweight의nearest ancestor14그룹으로분리한고정정면그림+기존ModularSpriteRig/Skin/Motion/PoseSolver와새Actor. 전체triangle분할합계보존. 그림에3D본을남겨투명하게한방식이나Smack Studio깊이복원은아님. C는원래3D본의위치/각도를사전에2Dpose로변환해서기록한다.
+- `[검증 CALL]` 소스16+파츠14촬영완료, 동작16+약한key1=17실제프레임비교완료. B/C4번프레임동기,14파츠표시,disable/enable시외부child보존,미지정방향숨김확인. Console Error0. 재생종료. 첫capture는background=false로1프레임timeout, 임시true후완료하고false복원. 원본model CPU Read/Write는보존하고Edit Mode에서베이크전용mesh를준비했다. 본/PNG의같은정수pixel pivot을사용한다.
+- `[사용자 피드백·불합격]` A/B시각동일. B의다른점은새렌더가아니라생산시촬영→실행시이미지재생이며조명/새클립/방향/장비조합의베이크비용이있다. C는머리로몸가림·발분리로거부됨. Head가앞/뒤머리를한그림으로가지고단일bone-depth순서로배치되며, rigid그림position/rotation뿐이고joint skinning/foreshortening없음. 실제LeftFoot로컬각0→68.6→86.2→91.2→97.6도; generic bone up축의평면투영을foot그림회전으로삼은변환은재설계필요. 이문제는Unity오류나2D본불가능증거가아니며미수정으로명시. 시각승인없이자동보정반복하지않음.
+- `[자료·경계]` 샘플README와 LocalOnly/CharacterPipelineComparison_20260910/에원본PNG/manifest/17frames/APNG/실패take보존. 모든방향·모딩import·GPU비용·게임통합·최종아트미검증. B는별도조명반응을추가하지않았고C는기능proof만존재하여완료표현금지. 베이크전용메시는씬의존성이없으면정리하며builder로재생성가능.

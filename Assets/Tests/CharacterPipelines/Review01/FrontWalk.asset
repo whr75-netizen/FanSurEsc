@@ -1,0 +1,483 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e967f02de0644554b73754d07bbaa8fd, type: 3}
+  m_Name: FrontWalk
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.CharacterPresentation.ModularSprites.ModularSpriteMotionDefinition
+  data:
+    id: walk_projected_front
+    framesPerSecond: 12
+    loop: 1
+    frames:
+    - bonePoses:
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0
+    - bonePoses:
+      - localOffsetPixels: {x: 0, y: -1}
+        localRotationDegrees: 0.21698761
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -0.19142151
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: -0.25443268
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: 0.3991623
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -0.040748596
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: -0.6550369
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0.586998
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -0.44179535
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -1.5556107
+      - localOffsetPixels: {x: 0, y: 3}
+        localRotationDegrees: 1.9082031
+      - localOffsetPixels: {x: 1, y: -2}
+        localRotationDegrees: 68.649414
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: 0.003929138
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: -0.6961365
+      - localOffsetPixels: {x: 0, y: -1}
+        localRotationDegrees: -2.5343018
+    - bonePoses:
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 0.60180664
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -0.862854
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: 0.63658905
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: 0.13526154
+      - localOffsetPixels: {x: -1, y: 0}
+        localRotationDegrees: -0.075279236
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 0.5006027
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: 0.9096832
+      - localOffsetPixels: {x: 0, y: -2}
+        localRotationDegrees: -0.07537079
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: -1.9100037
+      - localOffsetPixels: {x: -1, y: 0}
+        localRotationDegrees: 1.5562744
+      - localOffsetPixels: {x: 1, y: -2}
+        localRotationDegrees: 86.19235
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: -3.469696
+      - localOffsetPixels: {x: 0, y: -3}
+        localRotationDegrees: 2.253601
+      - localOffsetPixels: {x: -1, y: 5}
+        localRotationDegrees: -0.9701233
+    - bonePoses:
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 1.1147156
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -1.9859009
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: 2.1752625
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -0.54930115
+      - localOffsetPixels: {x: -1, y: 1}
+        localRotationDegrees: -0.06581879
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: 2.8582306
+      - localOffsetPixels: {x: 0, y: 2}
+        localRotationDegrees: 0.37500763
+      - localOffsetPixels: {x: 0, y: -5}
+        localRotationDegrees: 0.36849213
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: -2.2790527
+      - localOffsetPixels: {x: -1, y: -4}
+        localRotationDegrees: 0.3963318
+      - localOffsetPixels: {x: 1, y: -2}
+        localRotationDegrees: 91.160034
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -6.8681335
+      - localOffsetPixels: {x: 0, y: -2}
+        localRotationDegrees: 1.7883606
+      - localOffsetPixels: {x: -1, y: 11}
+        localRotationDegrees: 4.934471
+    - bonePoses:
+      - localOffsetPixels: {x: 2, y: -1}
+        localRotationDegrees: 1.7055054
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -3.3370361
+      - localOffsetPixels: {x: 0, y: 2}
+        localRotationDegrees: 3.8826141
+      - localOffsetPixels: {x: 0, y: -2}
+        localRotationDegrees: -1.4523697
+      - localOffsetPixels: {x: 0, y: 2}
+        localRotationDegrees: -0.023628235
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: 5.1021423
+      - localOffsetPixels: {x: 1, y: 3}
+        localRotationDegrees: -1.0831909
+      - localOffsetPixels: {x: -1, y: -6}
+        localRotationDegrees: 0.22885895
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -3.2216797
+      - localOffsetPixels: {x: -1, y: -5}
+        localRotationDegrees: -0.51852417
+      - localOffsetPixels: {x: 1, y: -1}
+        localRotationDegrees: 97.62857
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: -8.876099
+      - localOffsetPixels: {x: 0, y: 5}
+        localRotationDegrees: -2.019928
+      - localOffsetPixels: {x: -2, y: 8}
+        localRotationDegrees: 9.956429
+    - bonePoses:
+      - localOffsetPixels: {x: 2, y: -1}
+        localRotationDegrees: 2.3003082
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -4.663101
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: 5.6481476
+      - localOffsetPixels: {x: 0, y: -3}
+        localRotationDegrees: -2.3777466
+      - localOffsetPixels: {x: 0, y: 3}
+        localRotationDegrees: 0.079704285
+      - localOffsetPixels: {x: 1, y: -1}
+        localRotationDegrees: 7.1903534
+      - localOffsetPixels: {x: 1, y: 4}
+        localRotationDegrees: -3.1225204
+      - localOffsetPixels: {x: -1, y: -7}
+        localRotationDegrees: -0.0045394897
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: -4.450302
+      - localOffsetPixels: {x: -1, y: -6}
+        localRotationDegrees: -1.0957642
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 102.16171
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -9.346207
+      - localOffsetPixels: {x: 0, y: 13}
+        localRotationDegrees: -4.1678467
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 11.719643
+    - bonePoses:
+      - localOffsetPixels: {x: 2, y: -1}
+        localRotationDegrees: 2.8149261
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -5.7442474
+      - localOffsetPixels: {x: 1, y: 2}
+        localRotationDegrees: 7.5445023
+      - localOffsetPixels: {x: 0, y: -4}
+        localRotationDegrees: -3.4018478
+      - localOffsetPixels: {x: 0, y: 4}
+        localRotationDegrees: 0.38949585
+      - localOffsetPixels: {x: 2, y: -1}
+        localRotationDegrees: 8.930481
+      - localOffsetPixels: {x: 1, y: 5}
+        localRotationDegrees: -5.0757294
+      - localOffsetPixels: {x: -1, y: -7}
+        localRotationDegrees: -0.039253235
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: -5.089157
+      - localOffsetPixels: {x: -1, y: -5}
+        localRotationDegrees: -2.4162598
+      - localOffsetPixels: {x: 1, y: 2}
+        localRotationDegrees: 104.156555
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: -8.24852
+      - localOffsetPixels: {x: 0, y: 14}
+        localRotationDegrees: -4.9506836
+      - localOffsetPixels: {x: -1, y: -7}
+        localRotationDegrees: 15.196526
+    - bonePoses:
+      - localOffsetPixels: {x: 2, y: -1}
+        localRotationDegrees: 3.1608505
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: -6.4213486
+      - localOffsetPixels: {x: 0, y: 3}
+        localRotationDegrees: 9.422745
+      - localOffsetPixels: {x: 0, y: -5}
+        localRotationDegrees: -4.3094864
+      - localOffsetPixels: {x: 0, y: 6}
+        localRotationDegrees: 0.9262924
+      - localOffsetPixels: {x: 1, y: -1}
+        localRotationDegrees: 10.182327
+      - localOffsetPixels: {x: 2, y: 5}
+        localRotationDegrees: -6.6175003
+      - localOffsetPixels: {x: -1, y: -7}
+        localRotationDegrees: 0.10266113
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: -5.345726
+      - localOffsetPixels: {x: 0, y: -6}
+        localRotationDegrees: -4.0729675
+      - localOffsetPixels: {x: 1, y: 6}
+        localRotationDegrees: 105.03992
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: -7.296135
+      - localOffsetPixels: {x: -1, y: 7}
+        localRotationDegrees: -4.082733
+      - localOffsetPixels: {x: 1, y: -8}
+        localRotationDegrees: 39.962666
+    - bonePoses:
+      - localOffsetPixels: {x: 3, y: 0}
+        localRotationDegrees: 3.2539215
+      - localOffsetPixels: {x: -2, y: 0}
+        localRotationDegrees: -6.6504974
+      - localOffsetPixels: {x: 0, y: 2}
+        localRotationDegrees: 10.78743
+      - localOffsetPixels: {x: 0, y: -4}
+        localRotationDegrees: -5.1564407
+      - localOffsetPixels: {x: 0, y: 8}
+        localRotationDegrees: 1.5864029
+      - localOffsetPixels: {x: 1, y: -1}
+        localRotationDegrees: 10.892235
+      - localOffsetPixels: {x: 1, y: 5}
+        localRotationDegrees: -7.578972
+      - localOffsetPixels: {x: -1, y: -8}
+        localRotationDegrees: 0.3502655
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -5.9027863
+      - localOffsetPixels: {x: -1, y: -4}
+        localRotationDegrees: -4.56015
+      - localOffsetPixels: {x: 1, y: 7}
+        localRotationDegrees: 105.93112
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -6.6896515
+      - localOffsetPixels: {x: 0, y: 2}
+        localRotationDegrees: -2.4954224
+      - localOffsetPixels: {x: 0, y: -6}
+        localRotationDegrees: 110.48317
+    - bonePoses:
+      - localOffsetPixels: {x: 2, y: -1}
+        localRotationDegrees: 3.0666504
+      - localOffsetPixels: {x: -1, y: 0}
+        localRotationDegrees: -6.3795776
+      - localOffsetPixels: {x: 0, y: 3}
+        localRotationDegrees: 11.14109
+      - localOffsetPixels: {x: 0, y: -4}
+        localRotationDegrees: -5.9072647
+      - localOffsetPixels: {x: -1, y: 8}
+        localRotationDegrees: 1.9442139
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 10.955429
+      - localOffsetPixels: {x: 1, y: 5}
+        localRotationDegrees: -7.8068695
+      - localOffsetPixels: {x: -1, y: -8}
+        localRotationDegrees: 0.6104126
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: -5.908844
+      - localOffsetPixels: {x: 0, y: -4}
+        localRotationDegrees: -4.2201843
+      - localOffsetPixels: {x: 1, y: 7}
+        localRotationDegrees: 107.62268
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: -5.095764
+      - localOffsetPixels: {x: 0, y: 4}
+        localRotationDegrees: -4.8055115
+      - localOffsetPixels: {x: 0, y: -8}
+        localRotationDegrees: 39.429356
+    - bonePoses:
+      - localOffsetPixels: {x: 2, y: 0}
+        localRotationDegrees: 2.6593704
+      - localOffsetPixels: {x: -1, y: 0}
+        localRotationDegrees: -5.7077713
+      - localOffsetPixels: {x: 0, y: 2}
+        localRotationDegrees: 9.93956
+      - localOffsetPixels: {x: 1, y: -4}
+        localRotationDegrees: -6.682419
+      - localOffsetPixels: {x: -1, y: 7}
+        localRotationDegrees: 1.1697083
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 10.120407
+      - localOffsetPixels: {x: 2, y: 5}
+        localRotationDegrees: -7.347824
+      - localOffsetPixels: {x: -1, y: -7}
+        localRotationDegrees: 0.78176117
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -3.795021
+      - localOffsetPixels: {x: 0, y: -5}
+        localRotationDegrees: -6.4298096
+      - localOffsetPixels: {x: 1, y: 13}
+        localRotationDegrees: 106.09122
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -4.6388016
+      - localOffsetPixels: {x: 1, y: 2}
+        localRotationDegrees: -4.6712036
+      - localOffsetPixels: {x: 0, y: -8}
+        localRotationDegrees: 21.054245
+    - bonePoses:
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 2.1207962
+      - localOffsetPixels: {x: -2, y: 0}
+        localRotationDegrees: -4.801399
+      - localOffsetPixels: {x: 1, y: 3}
+        localRotationDegrees: 7.699539
+      - localOffsetPixels: {x: 0, y: -3}
+        localRotationDegrees: -6.87912
+      - localOffsetPixels: {x: -1, y: 4}
+        localRotationDegrees: 0.076286316
+      - localOffsetPixels: {x: 1, y: -1}
+        localRotationDegrees: 8.647354
+      - localOffsetPixels: {x: 2, y: 6}
+        localRotationDegrees: -6.444603
+      - localOffsetPixels: {x: -1, y: -9}
+        localRotationDegrees: 0.84030914
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: -0.046035767
+      - localOffsetPixels: {x: -1, y: -4}
+        localRotationDegrees: -7.2215195
+      - localOffsetPixels: {x: 1, y: 17}
+        localRotationDegrees: 101.48651
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: -4.346901
+      - localOffsetPixels: {x: 1, y: -2}
+        localRotationDegrees: -3.4926453
+      - localOffsetPixels: {x: 0, y: -8}
+        localRotationDegrees: 16.803421
+    - bonePoses:
+      - localOffsetPixels: {x: 0, y: -1}
+        localRotationDegrees: 1.5104294
+      - localOffsetPixels: {x: -1, y: 0}
+        localRotationDegrees: -3.6686935
+      - localOffsetPixels: {x: 1, y: 3}
+        localRotationDegrees: 5.566536
+      - localOffsetPixels: {x: 0, y: -2}
+        localRotationDegrees: -5.987404
+      - localOffsetPixels: {x: -1, y: 2}
+        localRotationDegrees: -0.082595825
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 6.9781036
+      - localOffsetPixels: {x: 2, y: 4}
+        localRotationDegrees: -5.2737274
+      - localOffsetPixels: {x: -1, y: -8}
+        localRotationDegrees: 0.8557968
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 2.855278
+      - localOffsetPixels: {x: -1, y: 3}
+        localRotationDegrees: -3.6824875
+      - localOffsetPixels: {x: 1, y: 15}
+        localRotationDegrees: 96.279945
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: -3.6130295
+      - localOffsetPixels: {x: 0, y: -3}
+        localRotationDegrees: -2.3607178
+      - localOffsetPixels: {x: 0, y: -7}
+        localRotationDegrees: 10.272522
+    - bonePoses:
+      - localOffsetPixels: {x: 0, y: -1}
+        localRotationDegrees: 0.9101715
+      - localOffsetPixels: {x: -1, y: 0}
+        localRotationDegrees: -2.1637115
+      - localOffsetPixels: {x: 1, y: 1}
+        localRotationDegrees: 3.7194595
+      - localOffsetPixels: {x: 0, y: -1}
+        localRotationDegrees: -4.416481
+      - localOffsetPixels: {x: -1, y: 2}
+        localRotationDegrees: -0.052597046
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 5.279167
+      - localOffsetPixels: {x: 1, y: 2}
+        localRotationDegrees: -3.960846
+      - localOffsetPixels: {x: -1, y: -7}
+        localRotationDegrees: 0.8271866
+      - localOffsetPixels: {x: 1, y: 0}
+        localRotationDegrees: 3.9953995
+      - localOffsetPixels: {x: -1, y: 11}
+        localRotationDegrees: -1.2130966
+      - localOffsetPixels: {x: 1, y: 6}
+        localRotationDegrees: 94.57626
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -2.374771
+      - localOffsetPixels: {x: 0, y: -4}
+        localRotationDegrees: -1.9884338
+      - localOffsetPixels: {x: 0, y: -6}
+        localRotationDegrees: 4.8738556
+    - bonePoses:
+      - localOffsetPixels: {x: 0, y: -1}
+        localRotationDegrees: 0.39849854
+      - localOffsetPixels: {x: -1, y: 0}
+        localRotationDegrees: -0.96850586
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: 2.1673965
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -2.6523514
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -0.020874023
+      - localOffsetPixels: {x: 0, y: -1}
+        localRotationDegrees: 3.5663834
+      - localOffsetPixels: {x: 0, y: 2}
+        localRotationDegrees: -2.5304108
+      - localOffsetPixels: {x: 0, y: -5}
+        localRotationDegrees: 0.7475281
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 2.8205185
+      - localOffsetPixels: {x: 0, y: 12}
+        localRotationDegrees: 0.4157791
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 91.54187
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -1.4814148
+      - localOffsetPixels: {x: 0, y: -3}
+        localRotationDegrees: -1.1269226
+      - localOffsetPixels: {x: -1, y: -4}
+        localRotationDegrees: 2.4094162
+    - bonePoses:
+      - localOffsetPixels: {x: 0, y: -1}
+        localRotationDegrees: 0.0663681
+      - localOffsetPixels: {x: -1, y: 1}
+        localRotationDegrees: -0.23006439
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: 0.9495926
+      - localOffsetPixels: {x: -1, y: 0}
+        localRotationDegrees: -1.1289062
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: -0.022247314
+      - localOffsetPixels: {x: 0, y: 0}
+        localRotationDegrees: 1.7805862
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: -1.0214005
+      - localOffsetPixels: {x: 1, y: -3}
+        localRotationDegrees: 0.50535583
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: 1.1893616
+      - localOffsetPixels: {x: 0, y: 5}
+        localRotationDegrees: 0.74594116
+      - localOffsetPixels: {x: 1, y: -2}
+        localRotationDegrees: 68.367714
+      - localOffsetPixels: {x: 0, y: 1}
+        localRotationDegrees: -0.9859848
+      - localOffsetPixels: {x: 0, y: -3}
+        localRotationDegrees: 0.16351318
+      - localOffsetPixels: {x: -1, y: -1}
+        localRotationDegrees: 0.9438858

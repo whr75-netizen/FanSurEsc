@@ -2385,3 +2385,22 @@ Interactable (abstract base class)
 - `[검증 CALL]` 소스16+파츠14촬영완료, 동작16+약한key1=17실제프레임비교완료. B/C4번프레임동기,14파츠표시,disable/enable시외부child보존,미지정방향숨김확인. Console Error0. 재생종료. 첫capture는background=false로1프레임timeout, 임시true후완료하고false복원. 원본model CPU Read/Write는보존하고Edit Mode에서베이크전용mesh를준비했다. 본/PNG의같은정수pixel pivot을사용한다.
 - `[사용자 피드백·불합격]` A/B시각동일. B의다른점은새렌더가아니라생산시촬영→실행시이미지재생이며조명/새클립/방향/장비조합의베이크비용이있다. C는머리로몸가림·발분리로거부됨. Head가앞/뒤머리를한그림으로가지고단일bone-depth순서로배치되며, rigid그림position/rotation뿐이고joint skinning/foreshortening없음. 실제LeftFoot로컬각0→68.6→86.2→91.2→97.6도; generic bone up축의평면투영을foot그림회전으로삼은변환은재설계필요. 이문제는Unity오류나2D본불가능증거가아니며미수정으로명시. 시각승인없이자동보정반복하지않음.
 - `[자료·경계]` 샘플README와 LocalOnly/CharacterPipelineComparison_20260910/에원본PNG/manifest/17frames/APNG/실패take보존. 모든방향·모딩import·GPU비용·게임통합·최종아트미검증. B는별도조명반응을추가하지않았고C는기능proof만존재하여완료표현금지. 베이크전용메시는씬의존성이없으면정리하며builder로재생성가능.
+
+## 139. 생성한 정면 2D 파츠와 기존 3D 스켈레톤 연결 `[CHARACTER-RENDER-01]`
+
+- `[요청·2026-09-10]` 기존 골격만 남겨 생성형 정면 그림·파츠를 비율/각도로 연결하고 외부 실제 구현을 조사. Project Terra·Sean Unity·Meta Animated Drawings·Smack Studio와 Unity/Spine/Godot의 1차 자료 11개를 `docs/references/2d_parts_3d_skeleton_research.md`에 구분했다. 인터넷 전수 조사나 비공개 구현 복제는 아니다.
+- `[구현]` `GeneratedFront01/GeneratedFrontReview.unity` 별도 시험. 신규 clone의 Renderer만 제거하고 기존 Avatar·Controller·본을 보존, 16개 생성 그림을 같은 관절로 실시간 변형. 팔/다리는 원화 anchor 두 점→투영 관절 두 점 affine, 머리/발은 bind 역행렬에 저장한 기준면의 전체 변환. 초기화 때 bind를 새로 잡지 않는다. 앞머리/얼굴/뒷머리 분리, B처럼 애니메이션 PNG를 재생하는 방식 아님. A/B/C·실제 Player/게임씬·승인 명암 코드는 무변경.
+- `[아트]` built-in 생성 원본1254² RGBA+프롬프트 보존, Sprite rect/anchor를 명시. 생성된 하퇴에 중복 부츠가 있어 하퇴 rect는 그 앞에서 끝내고 별도 Boot 하나만 사용. 원본 픽셀 수정·재생성 없음. TextureImporter의 기본 NPOT 자동축소를 None으로 설정해 좌표 일치. 원화 anchor·폭은 저작값이며 생성기가 해부학적으로 자동 보증한 값이 아니다.
+- `[검증 CALL]` Unity 컴파일/씬 생성 및 Play에서 실제 걷기16frame+idle1frame 단1회 촬영. 16파츠 초기화, clone 원본 SkinnedMeshRenderer0. 기존 문제가 컸던 walk phase.25의 anchor 오차 최대1.1920929e-7 world units. 실제 캡처/APNG는 LocalOnly/GeneratedFrontReview_20260910/. 첫callback delegate 컴파일 오류와NPOT guard는 원인수정 후 실행. Unity AI 계정서비스의 generators.ai.unity.com 오류 로그는 별개이며 이번 코드로 해결했다고 주장하지 않음.
+- `[미검증/보존]` 실제정면미리보기와피드백질문제공; 시각승인대기. 관절그림이음새·다방향·교차가림·멀티weight·극단적축소·실제조명·mod import·GPU비용·게임통합미검증. 고정정면순서와affine plane 시험이며Smack깊이복원아님. 사용자승인전 추가외형조정없이보존.
+- `[최신 사용자 정정·불합격]` 애니메이션·위치·파츠·레이어 불일치, 양쪽 어깨 위치/그림 뒤바뀜 지적. 완성 정면 원화 없이 atlas부터 생성한 제작 순서 오류이며 anchor 수치 일치가 아트 정합성을 보증하지 않는다. 새 제작 요구는 정상 정면 원화 먼저→그 원화의 공통 좌표에서 파츠 분리→색이 맞는 원형 관절 보충. 원형은 이미지 생성이 아니라 Unity 절차적 메시/마스크로 표현. 현 샘플은 실패 근거로 보존하고 추가 생성·외형 보정 및 완료 커밋 중단. 정정된 새 방식은 아직 구현하지 않았다.
+
+## 140. 승인된 완성 원화의 파츠 분리와 기존 본 연결 `[CHARACTER-RENDER-01]`
+
+- `[요청·2026-09-10]` §139의 제작 순서를 수정한 별도 E 시험. 사용자 승인 정면 원화 한 장을 기준으로 파츠·관절을 연결하고, 기법·수학·외부 자료·실패·결과를 연구 문서 M03의 E/E-foot에 기록했다. 당시 사용자 판단은 팔다리 정상, 발만 문제로 보임이며 추가 외형 수정은 멈췄다.
+- `[구현]` `SourceFirst01/SourceFirstReview.unity`에서 원화 공통 좌표/PPU380을 사용하는 독립 메시17개가 같은 texture를 참조한다. 원화 관절15개에 기존 Avatar/Controller의 기준 idle 대비 투영 방향·길이 변화를 전달하고, 절차적 단색 원형 관절10개와 공유 경계12개를 사용한다. 통그림 한 장을 휘는 방식이나 파츠별 독립 생성이 아니다. 실제 Player·게임씬·기존 A/B/C/D·명암 렌더러는 보존했다.
+- `[원인 수정]` 편집 시 Sprite.OverrideGeometry 제한은 직접 Mesh 저장으로, 참조 패널의 Play 흰색은 비직렬화 MaterialPropertyBlock 대신 재질 BaseMap 참조 저장으로 해결했다. 골반 등 절단 경계는 원으로 큰 틈을 덮지 않고 같은 원화 점에 같은 변환 가중치를 적용했다. 초기 실패 Sprite 중간 에셋은 현재 메시에서 사용하지 않으며, MCP 정리 호출이 거부되어 삭제하지 않은 상태다.
+- `[검증 CALL]` Unity Play에서 기준1·걷기16위상·idle1을 촬영했다. 경계 수정 후 최종 비교를 한 번 추가했고 기준 정점 world 오차0, 걷기0.25위상의 공유 경계340쌍 최대 틈0을 확인했다. 이는 모든 애니메이션/시각 합격을 보증하지 않는다. 실제 비교 APNG·정지 화면·기술 값은 `docs/references/evidence/source-first-20260910/`에 보존했다. Play 종료 후 기존 Review01 씬으로 복귀했다. Unity AI 계정서비스 오류는 별개로 남아 있다.
+- `[발 미해결·연구]` 종아리는 무릎→발목 투영 벡터, 부츠는 Foot quaternion의 화면 법선 twist를 쓰며 발목 band가 두 변환을 혼합한다. 단순 부호 오류는 확인되지 않았다. 후속은 문제 프레임 하나에서 부츠 회전과 연결부 혼합을 분리하는 비교이며, 필요할 때만 발 표시 축 또는 방향별 발 그림을 검토한다. 정상 팔다리를 다시 바꾸지 않는다.
+- `[범위·미검증]` 원화 마스크·anchor는 저작 데이터이며 임의 그림 자동 rig 완성이 아니다. 다방향·숨은 면·임의 clip·모드 로더·게임 통합·환경 조명·성능 Profile·빌드는 미검증이다. 발 미해결의 연구용 부분 구현으로 보존하며 완료 커밋은 하지 않았다.
+- `[최신 정정·구조 미충족]` 사용자는 이미지별 2D 자세 보정이 아니라 투명 3D 몸체/스켈레톤에 부착되어 같은 변형을 따르는 이미지를 요구했다. E는 clone의 3D Renderer와 MeshFilter를 제거한 뒤 별도 2D 관절/평면 mesh를 변형하므로 이 구조를 구현하지 않았다. 이전 팔다리 피드백은 기술 구조 승인 아님. 발의 깊이 회전을 버린 Roll, 짧은 발끝 투영으로 옆으로 꺾이는 Segment를 구분했고 두 부츠만 기존 Plane으로 시험해 세로 축소를 확인했지만 최종 해결로 채택하지 않는다. 원화/mesh 무변경, 재생 중단, 미완료 유지. 3D 바인딩의 후속 F 실패와 현재 보류 결정은 연구 M04/F·D01에 정리했다. 이 과거 후속 제안은 새 구현 권한이 아니다.

@@ -31,6 +31,7 @@ AGENTS.md
 | `GAME_FLOW.md` | 게임 실행부터 한 판 정산까지 실제 씬·함수·분기 순서 | 시작, 메뉴, 씬 전환, 원정, 정산 순서 변경 |
 | 게임·기술 계약 | 사용자 확정 규칙과 안정된 불변조건 | 현재 작업과 관련될 때만 |
 | `UNITY_ENGINEERING_PLAYBOOK.md` | Unity 편집, 구조 변경, 검증 절차 | 필요한 절만 |
+| 관련 `docs/references/` 연구 문서 | 기법별 원리·출처·결정·실험·증거·미해결과 현재 재개점 | 새 제작 방식/구조적 실패는 playbook §1.4, 그래픽 변환은 §1.5와 해당 주제 절만 |
 | `unity_development_progress.md` | 상세 증거와 과거 이력 | 원인이나 증거를 추적할 때만 |
 
 하위 `AGENTS.md`는 대상 파일 위치가 아니라 Codex를 시작한 현재 작업 디렉터리까지의 경로에서만 자동 발견된다. 현재 작업 디렉터리가 저장소 루트이므로 `Assets/Scripts` 아래에 지침을 나누는 방식은 사용하지 않는다.
@@ -44,6 +45,7 @@ AGENTS.md
 - Unity 선행조건과 Stage 의존성: `extraction_survival_game_design_dev_plan.md`
 - 상세 검증·변경 이력: `unity_development_progress.md`
 - Unity 작업 방법: `UNITY_ENGINEERING_PLAYBOOK.md`
+- 연구·설계의 공통 통과 조건: `UNITY_ENGINEERING_PLAYBOOK.md` §1.4. 그래픽 좌표/변환의 필수 명세: §1.5. 개별 기법의 선택 이유·실패와 재개점: 해당 연구 문서. 현재 구현 상태는 계속 `CURRENT_STATE.md`가 담당한다.
 
 과거 이력이나 Stage 문구는 현재 작업 지시가 아니다. `[제안]`과 `[미정]`도 구현 권한이 아니다.
 
@@ -66,6 +68,8 @@ AGENTS.md
 - 현재 사실은 `CURRENT_STATE.md` 한 곳만 갱신하며 다른 지침에 복사하지 않는다.
 - 상세 절차는 playbook에 두고 루트에는 조건과 링크만 둔다.
 - 진행 이력은 누적할 수 있지만 기본 읽기 대상이 아니다.
+- 연구 요청마다 새 지침/계획/일지를 만들지 않는다. 기법별 기존 문서에 현재 결정 카드와 실험을 연결하며, 상세 원문·이미지·로그는 증거로 링크한다. 공통 규칙을 연구 문서마다 복제하지 않는다.
+- 지침의 정적 검사 통과는 AI의 실제 준수나 연구 타당성의 증명이 아니다. 변경 후에는 보고된 실패 사례가 새 절차의 어느 단계에서 걸리는지도 확인하고, 후속 실제 작업의 준수 여부는 별도로 남긴다.
 - 지침을 바꾼 뒤 `powershell -NoProfile -ExecutionPolicy Bypass -File docs/ai/validate_ai_docs.ps1`로 크기, 필수 경로, 모든 기능·공백 ID의 행 형식·계약 경로와 공백 오류를 확인한다.
 
 ## 참고한 1차 자료

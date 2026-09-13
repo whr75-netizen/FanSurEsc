@@ -1,14 +1,101 @@
 {
-  "goal": "정지 이미지에서 새 동영상을 생성하고 16프레임 결과를 만든다.",
-  "max_starts": 12,
+  "goal": "합성 예시: 수 목록을 합산하고 고정된 기준과 비교한다. 실제 게임 수치를 변경하지 않는다.",
+  "entry": "sum",
+  "max_steps": 6,
   "requirements": [
-    {"id": "R1", "text": "새 생성 요청의 결과를 사용한다. 기존 GIF 재포장은 충족하지 않는다.", "evidence_kind": "generated"},
-    {"id": "R2", "text": "요청한 16프레임 파일과 연속 재생 결과를 제공한다.", "evidence_kind": "execution"}
+    {
+      "id": "R1",
+      "text": "12+18+20의 합은 50이다.",
+      "source": "이 예시의 명시적 산술 계약",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "check.value"
+          },
+          {
+            "literal": true
+          }
+        ]
+      }
+    }
   ],
-  "tasks": [
-    {"id": "generate", "requirement": "R1", "question": "승인된 정지 입력에서 새 영상이 생성됐는가?", "contribution": "새 영상과 생성 요청 ID를 확보한다.", "phase": "work"},
-    {"id": "process", "requirement": "R2", "question": "기존 처리기로 이 영상의 16프레임 결과를 만들 수 있는가?", "contribution": "프레임 선택·배경 제거·픽셀 처리를 한 번 실행한다.", "phase": "work", "depends_on": ["generate"]},
-    {"id": "check_source", "requirement": "R1", "question": "최종 결과가 이번 생성의 출력에서 왔는가?", "contribution": "실제 요청 기록과 결과 계보로 원본 혼동 여부를 판정한다.", "phase": "validation", "depends_on": ["process"]},
-    {"id": "check_output", "requirement": "R2", "question": "요청한 프레임 수와 연속 재생 결과가 제공됐는가?", "contribution": "필수 파일 사항만 확인하고 실제 재생 결과를 제시한다.", "phase": "validation", "depends_on": ["process"]}
+  "nodes": [
+    {
+      "id": "sum",
+      "algorithm": "math.reduce",
+      "phase": "work",
+      "inputs": {
+        "values": {
+          "literal": [
+            12,
+            18,
+            20
+          ]
+        }
+      },
+      "parameters": {
+        "op": "sum"
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "sum.value"
+              }
+            ]
+          },
+          "to": "check"
+        }
+      ]
+    },
+    {
+      "id": "check",
+      "algorithm": "value.compare",
+      "phase": "validation",
+      "inputs": {
+        "left": {
+          "ref": "sum.value"
+        },
+        "right": {
+          "literal": 50
+        }
+      },
+      "parameters": {
+        "op": "eq"
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "check.value"
+              },
+              {
+                "literal": true
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "check.value"
+              },
+              {
+                "literal": false
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
   ]
 }

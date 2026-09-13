@@ -217,6 +217,48 @@ class GraphContracts(unittest.TestCase):
         self.call("init", spec)
         self.assertIn("unmet_requirements", self.call("run")["reason"])
 
+    def work_graph(self):
+        target, reference = self.root / "target.txt", self.root / "reference.txt"
+        target.write_text("old", encoding="utf-8")
+        reference.write_text("fixed", encoding="utf-8")
+        spec = graph(True)
+        spec["nodes"][0] = node("sum", "file.inspect", {"path": literal(str(target))}, [edge("worker")])
+        worker = spec["nodes"][1]
+        worker.update(algorithm="ai.work", inputs={"before": ref("sum")},
+                      parameters={"scope": "Update only target.txt using reference.txt; choose the file tool yourself."},
+                      reads=["file:" + str(target), "file:" + str(reference)], writes=["file:" + str(target)],
+                      output_schema={"artifact": {"type": "string"}})
+        spec["nodes"][2] = node("check", "file.inspect", {"path": ref("worker.artifact")},
+                                [edge("@complete", check("eq", ref("check.size"), literal(5))),
+                                 edge("@blocked", check("ne", ref("check.size"), literal(5)))], phase="validation")
+        spec["requirements"][0]["predicate"] = check("eq", ref("check.size"), literal(5))
+        return spec, target, reference
+
+    def test_scoped_work_can_choose_file_tool_and_change_its_input(self):
+        spec, target, reference = self.work_graph()
+        self.call("init", spec)
+        prompt = self.call("run")
+        self.assertEqual(prompt["action"], "work_unit")
+        self.assertIn("도구", prompt["instruction"])
+        self.call("stop")
+        resumed = self.call("resume")
+        self.assertEqual(resumed["ticket"], prompt["ticket"])
+        # The host worker performs its own file operation, outside the engine's command registry.
+        target.write_text(reference.read_text(encoding="utf-8"), encoding="utf-8")
+        result = self.call("submit", dict(ticket=prompt["ticket"], output={"artifact": str(target)}))
+        self.assertEqual(result["action"], "graph_complete")
+        state = json.loads(self.state.read_text())
+        self.assertEqual(state["results"]["worker"]["dependencies"], {})
+        self.assertEqual(state["results"]["check"]["output"]["size"], 5)
+
+    def test_scoped_work_detects_changes_outside_its_write_scope(self):
+        spec, target, reference = self.work_graph()
+        self.call("init", spec)
+        prompt = self.call("run")
+        target.write_text("fixed", encoding="utf-8")
+        reference.write_text("changed externally", encoding="utf-8")
+        self.call("submit", dict(ticket=prompt["ticket"], output={"artifact": str(target)}), ok=False)
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

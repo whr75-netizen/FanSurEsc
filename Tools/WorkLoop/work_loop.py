@@ -14,7 +14,7 @@ from pathlib import Path
 MISSING = object()
 OPS = {"eq", "ne", "lt", "le", "gt", "ge"}
 ALGORITHMS = {"value.identity", "math.reduce", "value.compare", "json.select",
-              "file.inspect", "command.run", "ai.map"}
+              "file.inspect", "command.run", "ai.map", "ai.work"}
 PURE = {"value.identity", "math.reduce", "value.compare", "json.select"}
 
 
@@ -60,9 +60,9 @@ def resource(key):
     return "file:" + os.path.normcase(str(Path(key[5:]).resolve())) if key.startswith("file:") else key
 
 
-def unit_signature(state, node, inputs):
+def resource_values(state, keys):
     observed = {}
-    for key in node["reads"]:
+    for key in keys:
         if key.startswith("file:"):
             try:
                 hasher = hashlib.sha256()
@@ -74,7 +74,23 @@ def unit_signature(state, node, inputs):
                 observed[key] = "unavailable"
         else:
             observed[key] = state["resources"].get(key, 0)
-    return digest({"node": node["id"], "inputs": inputs, "parameters": node["parameters"], "reads": observed})
+    return observed
+
+
+def unit_signature(state, node, inputs):
+    return digest({"node": node["id"], "inputs": inputs, "parameters": node["parameters"],
+                   "reads": resource_values(state, node["reads"])})
+
+
+def footprint(state, key, seen=None):
+    seen = set() if seen is None else seen
+    if key in seen or key not in state["results"]:
+        return set()
+    result = state["results"][key]
+    used = set(result.get("resources", {}))
+    for dep in result["dependencies"]:
+        used |= footprint(state, dep, seen | {key})
+    return used
 
 
 def references(value):
@@ -150,18 +166,18 @@ def compile_graph(spec):
         node.setdefault("parameters", {})
         node.setdefault("on_error", "@blocked")
         node.setdefault("max_visits", 3)
-        if node["algorithm"] == "command.run":
-            need("reads" in node and "writes" in node, "외부 명령은 reads/writes 자원 목록을 명시해야 합니다.")
+        if node["algorithm"] in {"command.run", "ai.work"}:
+            need("reads" in node and "writes" in node, "작업 실행 단위는 reads/writes 자원 목록을 명시해야 합니다.")
         for access in ("reads", "writes"):
             need(isinstance(node.get(access, []), list), "자원은 목록입니다.")
             node[access] = [resource(item) for item in node.get(access, [])]
-        need(node["algorithm"] == "command.run" or not node["writes"], "자원 변경은 등록된 외부 실행 단위만 가능합니다.")
+        need(node["algorithm"] in {"command.run", "ai.work"} or not node["writes"], "자원 변경은 실행/작업 인계 단위만 가능합니다.")
         need(type(node["max_visits"]) is int and 0 < node["max_visits"] <= 100, "max_visits는 1~100입니다.")
         need(isinstance(node["parameters"], dict), "parameters는 객체입니다.")
         need(isinstance(node["inputs"], dict), "inputs는 객체입니다.")
         for binding in node["inputs"].values():
             operand_spec(binding, feedback=node["phase"] == "work")
-        if node["algorithm"] == "ai.map":
+        if node["algorithm"] in {"ai.map", "ai.work"}:
             need(node["phase"] == "work", "AI는 validation 판정 알고리즘이 될 수 없습니다.")
             need(isinstance(node.get("question"), str) and node["question"].strip(), "AI 단위의 질문이 필요합니다.")
             schema = node.get("output_schema")
@@ -169,6 +185,9 @@ def compile_graph(spec):
             for rule in schema.values():
                 need(isinstance(rule, dict) and rule.get("type") in
                      {"number", "integer", "string", "boolean", "object", "array"}, "지원하지 않는 schema입니다.")
+            if node["algorithm"] == "ai.work":
+                need(isinstance(node["parameters"].get("scope"), str) and node["parameters"]["scope"].strip(),
+                     "ai.work에는 담당 작업 범위 parameters.scope가 필요합니다.")
         need(isinstance(node["edges"], list) and node["edges"], "명시적 전이 간선이 필요합니다.")
         for edge in node["edges"]:
             need(set(edge) <= {"when", "to", "feedback"}, "없는 간선 필드입니다.")
@@ -209,6 +228,9 @@ def fresh(state, key, seen=None):
     if result is None:
         return False
     if any(state["resources"].get(key, 0) != revision for key, revision in result.get("resources", {}).items()):
+        return False
+    snapshot = result.get("read_only_snapshot")
+    if snapshot is not None and resource_values(state, snapshot) != snapshot:
         return False
     if "file_observation" in result:
         path, size, modified = result["file_observation"]
@@ -331,15 +353,21 @@ def halt(state, reason):
     state["halt"] = reason
 
 
-def finish_node(state, node, inputs, output, signature):
+def finish_node(state, node, inputs, output, signature, read_only_snapshot=None):
     packed(output)
     dependencies = {binding["ref"].split(".")[0]: state["results"][binding["ref"].split(".")[0]]["revision"]
                     for binding in node["inputs"].values() if "ref" in binding}
+    if node["algorithm"] == "ai.work":
+        # Inputs consumed from the worker's own write area are a before-work snapshot.
+        dependencies = {key: revision for key, revision in dependencies.items()
+                        if not footprint(state, key).intersection(node["writes"])}
     state["steps"] += 1
     state["visits"][node["id"]] = state["visits"].get(node["id"], 0) + 1
     state["results"][node["id"]] = {"output": output, "dependencies": dependencies,
                                    "revision": state["steps"], "signature": signature,
                                    "resources": {key: state["resources"].get(key, 0) for key in node["reads"] + node["writes"]}}
+    if read_only_snapshot is not None:
+        state["results"][node["id"]]["read_only_snapshot"] = read_only_snapshot
     if node["algorithm"] == "file.inspect":
         state["results"][node["id"]]["file_observation"] = [output["path"], output["size"], output["mtime_ns"]]
         key = resource("file:" + output["path"])
@@ -383,10 +411,16 @@ def describe(state):
                 "message": "이미 시작한 외부 실행의 결과를 먼저 확인하세요. 자동 재실행하지 않습니다."}
     if state["pending"]:
         node = nodes(state["graph"])[state["cursor"]]
+        if node["algorithm"] == "ai.work":
+            return {**base, "action": "work_unit", "node": node["id"], "algorithm": "ai.work",
+                    "ticket": state["pending"]["ticket"], "assignment": node["question"],
+                    "scope": node["parameters"]["scope"], "inputs": state["pending"]["inputs"],
+                    "reads": node["reads"], "writes": node["writes"], "output_schema": node["output_schema"],
+                    "instruction": "담당 작업을 수행하세요. 기존 사용자 권한 안에서 필요한 코드 검색·편집·Unity MCP·CLI 등 도구와 수행 방법을 직접 선택하고 사용하세요. 도구마다 실행기로 돌아오거나 새 어댑터를 등록할 필요는 없습니다. 중단 후에는 이 ticket의 실제 작업 상태를 확인하고 이어가세요. 산출물·실제 관측을 지정 형식으로 반환하되 전체 목표·완료 조건·다음 분기를 임의 변경하지 마세요."}
         return {**base, "action": "compute_unit", "node": node["id"], "algorithm": "ai.map",
                 "ticket": state["pending"]["ticket"], "question": node["question"],
                 "inputs": state["pending"]["inputs"], "output_schema": node["output_schema"],
-                "instruction": "주어진 입력의 지정된 출력 후보만 JSON으로 계산하세요. 도구 실행·작업 선택·상태·합격·분기 변경 권한은 이 요청에 없습니다."}
+                "instruction": "주어진 입력의 지정된 출력 후보를 JSON으로 계산하세요. 필요한 읽기·계산 도구를 사용할 수 있습니다. 전체 목표·상태·합격·분기는 변경하지 마세요."}
     return {**base, "action": "ready", "node": state["cursor"], "message": "run으로 일반 알고리즘 구간을 연속 실행하세요."}
 
 
@@ -402,11 +436,16 @@ def execute(state, path):
             break
         signature = unit_signature(state, node, inputs)
         repeated = any(event["node"] == node["id"] and event["signature"] == signature for event in state["events"])
-        if repeated and node["algorithm"] in {"ai.map", "command.run"}:
+        if repeated and node["algorithm"] in {"ai.map", "ai.work", "command.run"}:
             halt(state, "unchanged_input: " + node["id"])
             break
-        if node["algorithm"] == "ai.map":
+        if node["algorithm"] in {"ai.map", "ai.work"}:
             state["pending"] = {"ticket": uuid.uuid4().hex, "inputs": inputs, "signature": signature}
+            if node["algorithm"] == "ai.work":
+                readonly = set(node["reads"]) - set(node["writes"])
+                state["pending"]["read_only_snapshot"] = resource_values(state, readonly)
+                for key in node["writes"]:
+                    state["resources"][key] = state["resources"].get(key, 0) + 1
             break
         state["active"] = {"node": node["id"], "signature": signature}
         for key in node["writes"]:
@@ -490,12 +529,17 @@ def main():
                 schema_check(update["output"], node["output_schema"])
                 inputs = state["pending"]["inputs"]
                 signature = state["pending"]["signature"]
-                current_inputs = {key: resolve(state, binding) for key, binding in node["inputs"].items()}
-                need(not any(value is MISSING for value in current_inputs.values()) and
-                     unit_signature(state, node, current_inputs) == signature,
-                     "AI 계산 중 입력이 바뀌었습니다. 낡은 출력 후보를 승인하지 않습니다.")
+                readonly = state["pending"].get("read_only_snapshot")
+                if node["algorithm"] == "ai.work":
+                    need(resource_values(state, readonly) == readonly,
+                         "작업의 쓰기 범위 밖 입력이 바뀌었습니다. 적용 가능성을 다시 확인하세요.")
+                else:
+                    current_inputs = {key: resolve(state, binding) for key, binding in node["inputs"].items()}
+                    need(not any(value is MISSING for value in current_inputs.values()) and
+                         unit_signature(state, node, current_inputs) == signature,
+                         "AI 계산 중 입력이 바뀌었습니다. 낡은 출력 후보를 승인하지 않습니다.")
                 state["pending"] = None
-                finish_node(state, node, inputs, update["output"], signature)
+                finish_node(state, node, inputs, update["output"], signature, readonly)
                 save(path, state)
                 return execute(state, path)
             state["paused"] = args.command == "stop"

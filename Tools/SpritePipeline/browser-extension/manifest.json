@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Sprite Pipeline — ChatGPT Image Bridge",
+  "version": "0.1.0",
+  "description": "명시적으로 시작한 로컬 Sprite Pipeline 작업 한 건을 로그인된 ChatGPT 이미지 페이지에 연결합니다.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://chatgpt.com/*", "http://127.0.0.1/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["https://chatgpt.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}

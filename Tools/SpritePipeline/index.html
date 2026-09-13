@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sprite Pipeline</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,'Malgun Gothic',sans-serif;background:#101319;color:#e9eef7;font-synthesis:none}*{box-sizing:border-box}body{margin:0;padding:22px}main{max-width:1100px;margin:auto}header{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:18px}h1{font-size:25px;letter-spacing:-.7px;margin:0}header p{color:#9daabf;font-size:13px;margin:6px 0 0}.pill{font-size:12px;border:1px solid #303b4f;border-radius:99px;padding:7px 12px;color:#a9bedb}.layout{display:grid;grid-template-columns:minmax(340px,1.12fr) minmax(280px,.88fr);gap:16px}.card{border:1px solid #293141;background:#171d27;border-radius:14px;padding:20px}label{display:block;font-size:13px;font-weight:650;margin:0 0 7px}textarea,input{background:#10151e;color:#e9eef7;border:1px solid #344056;border-radius:7px;padding:9px;font:inherit;outline:none}textarea:focus,input:focus{border-color:#82afff}textarea{width:100%;height:76px;resize:vertical;font-size:13px;line-height:1.6}textarea::placeholder{color:#718198}.field{margin-bottom:13px}input[type=number]{width:80px;text-align:center}small,.hint{color:#a5b1c4;font-size:12px;line-height:1.65}.inline{display:flex;align-items:center;gap:10px}button{font:inherit;font-size:13px;font-weight:650;border:1px solid transparent;border-radius:7px;padding:10px 13px;cursor:pointer;background:#87b0ff;color:#101722}button:hover{background:#a5c4ff}button:disabled{opacity:.45;cursor:default}.secondary{background:#202b3c;color:#b9c8df;border-color:#40516b}.secondary:hover{background:#2c3a50}.danger{background:#54292e;color:#ffc5bf;border-color:#7c4148}.danger:hover{background:#71343c}.actions{display:flex;gap:8px;flex-wrap:wrap}.actions .primary{flex:1}.section-line{border:0;border-top:1px solid #303949;margin:16px 0}.section-title{font-size:13px;font-weight:650;margin:0 0 8px}.file-row{display:grid;grid-template-columns:88px minmax(0,1fr) auto;align-items:center;gap:8px;margin:8px 0}.file-row label{margin:0;font-size:12px}.file-row input{width:100%;min-width:0;padding:5px;font-size:11px}.file-row input::file-selector-button{font:inherit;color:#c4d4ec;background:#28354b;border:0;border-radius:4px;padding:5px;margin-right:7px}.clear{padding:6px 8px;font-size:11px}.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:12px}.steps button{padding:10px 4px;font-size:12px}.available{font-size:11px;color:#92a7c5;margin-top:8px}.watch{margin-top:15px;padding:12px;background:#101821;border:1px solid #304255;border-radius:8px}.watch-head{display:flex;align-items:center;gap:9px}.watch-head button{white-space:nowrap}.watch-head button[aria-pressed=true]{background:#8bcabb;color:#10271e;border-color:#8bcabb}.watch-info{font-size:12px;color:#bdc9dc}.watch-root{font-size:11px;color:#8b9db8;overflow-wrap:anywhere;margin-top:7px}.preview{min-height:280px;display:flex;align-items:center;justify-content:center;border-radius:9px;background-color:#202939;background-image:linear-gradient(45deg,#293448 25%,transparent 25%),linear-gradient(-45deg,#293448 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#293448 75%),linear-gradient(-45deg,transparent 75%,#293448 75%);background-size:24px 24px;background-position:0 0,0 12px,12px -12px,-12px 0;overflow:hidden}.preview img,.preview video{display:none;max-width:100%;max-height:390px}.preview img{image-rendering:pixelated}.empty{background:#171d27d9;color:#a2b0c6;padding:14px;border-radius:8px;font-size:13px}.stage{margin:17px 0 8px;font-size:15px;font-weight:650}.time{font-size:12px;color:#8fa4c4;line-height:1.6}.detail{font-size:13px;color:#aab7cb;line-height:1.7;white-space:pre-wrap;overflow-wrap:anywhere;margin:12px 0}.error{color:#ffb3ac}.downloads{display:flex;flex-wrap:wrap;gap:7px;margin-top:13px}.downloads a{color:#a9c8ff;font-size:12px;padding:7px 9px;border:1px solid #344865;border-radius:6px;text-decoration:none}.footer{font-size:12px;color:#71849f;margin:15px 0;line-height:1.7}.footer a{color:#a9c8ff}.progress{height:3px;background:#293348;border-radius:5px;margin-top:14px;overflow:hidden}.progress i{display:block;width:0;height:100%;background:#86b0ff;transition:width .3s}.hidden{display:none!important}@media(max-width:750px){body{padding:16px 12px}.layout{grid-template-columns:1fr}.card{padding:16px}header{align-items:flex-start}.pill{max-width:150px;line-height:1.5}.steps{grid-template-columns:repeat(2,1fr)}}
+</style>
+<main>
+<header><div><h1>Sprite Pipeline</h1><p>원하는 구간만 실행하거나, 새 입력부터 끝까지 자동으로 처리합니다.</p></div><span class="pill" id="connection">연결 확인 중</span></header>
+<div class="layout">
+<section class="card">
+<form id="form">
+<div class="field"><label for="gpt">GPT 이미지 프롬프트</label><textarea id="gpt" maxlength="12000" placeholder="캐릭터의 외형, 의상, 그림체"></textarea></div>
+<div class="field"><label for="grok">Grok 동작 프롬프트</label><textarea id="grok" maxlength="12000" placeholder="예: 제자리 대기. 가볍게 호흡하고 머리카락은 조금만 움직입니다."></textarea></div>
+<div class="field inline"><label for="frames" style="margin:0">최종 프레임 수</label><input id="frames" type="number" min="1" max="16" value="16" step="1" required><small>1–16장</small></div>
+<div class="actions"><button type="submit" id="run" class="primary">전체 실행 · 새 GPT부터</button><button type="button" id="stop" class="danger" disabled>중단</button></div>
+<small>이미지·영상 생성 시 해당 서비스 사용량이 차감됩니다.</small>
+<hr class="section-line">
+<p class="section-title">파일에서 시작하기</p>
+<div class="file-row"><label for="image-file">이미지 1개</label><input id="image-file" type="file" accept="image/png,image/jpeg,image/webp"><button type="button" class="secondary clear" data-clear="image">해제</button></div>
+<div class="file-row"><label for="video-file">영상 1개</label><input id="video-file" type="file" accept="video/*"><button type="button" class="secondary clear" data-clear="video">해제</button></div>
+<div class="file-row"><label for="frames-file">투명 PNG들</label><input id="frames-file" type="file" accept="image/png" multiple><button type="button" class="secondary clear" data-clear="frames">해제</button></div>
+<div class="hint">파일을 고르지 않으면 최근 해당 중간결과를 사용합니다.</div>
+<div class="steps"><button type="button" class="secondary step" data-mode="image">GPT 이미지만</button><button type="button" class="secondary step" data-mode="video">Grok 영상</button><button type="button" class="secondary step" data-mode="frames">프레임 준비</button><button type="button" class="secondary step" data-mode="pixel">PerfectPixel</button></div>
+<div class="available" id="available">최근 중간결과 확인 중</div>
+<div class="watch">
+<div class="watch-head"><button type="button" id="watch" class="secondary" aria-pressed="false">전체 루틴 OFF</button><span class="watch-info" id="watch-detail">폴더 감시 꺼짐</span></div>
+<div class="hint" style="margin-top:8px">ON으로 켤 때 현재 입력을 감시 설정으로 저장합니다. ON이면 구간 실행도 후속 단계까지 이어집니다. Inbox의 images / videos / frames에 새 파일이 들어오면 이후 구간을 처리합니다. 생성 요청을 자동 반복하지 않습니다.</div>
+<div class="watch-root" id="watch-root"></div>
+</div>
+<div class="actions"><button type="button" id="resume" class="secondary hidden">저장된 단계부터 재개</button></div>
+</form>
+</section>
+<section class="card">
+<div class="preview"><span class="empty" id="empty">중간결과와 최종 애니메이션이 여기에 표시됩니다.</span><img id="preview" alt="최근 이미지 또는 픽셀 애니메이션"><video id="video-preview" controls autoplay muted loop playsinline aria-label="최근 생성 영상"></video></div>
+<div class="stage" id="stage">준비</div><div class="time" id="time">중간 AI 판단 없이 파일 완료 순서대로 처리합니다.</div>
+<div class="progress"><i id="bar"></i></div><div class="detail" id="detail" role="status"></div><div class="downloads" id="downloads"></div>
+</section>
+</div>
+<p class="footer">처음 한 번은 Chrome에 전용 확장을 설치해야 합니다. <a href="/setup" target="_blank" rel="noopener">설치 안내</a> · 중단하면 감시를 끄고 현재 구간이 끝난 뒤 멈춥니다. 기존 파일은 실행별 폴더에 보존합니다.</p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let job=null,busy=false,pending=false,watchEnabled=false,watchPending=false,uploadController=null,lastFiles='',lastPreview='';
+let localError='',localErrorFailure=null,lastFailure=null,cancelRequested=false;
+const uploads={image:null,video:null,frames:null};
+const inputFor={video:'image',frames:'video',pixel:'frames'};
+const names={idle:'준비',queued:'시작 준비',image:'GPT 이미지 생성',canvas:'영상 입력 준비',video:'Grok 영상 생성',frames:'프레임 준비',postprocess:'프레임·픽셀 처리',probe:'영상 정보 확인',extract:'프레임 선택',key:'배경 제거',pixel:'PerfectPixel 픽셀화',palette:'공통 팔레트',export:'결과 저장',paused:'중단됨',done:'완료',failed:'처리 중단'};
+function spec(){return{gpt_prompt:$('gpt').value,grok_prompt:$('grok').value,frame_count:Number($('frames').value)};}
+function controls(){
+  $('run').disabled=busy||pending;
+  for(const element of document.querySelectorAll('.step,.clear,input[type=file],#gpt,#grok,#frames'))element.disabled=busy||pending;
+  $('resume').disabled=busy||pending;
+  $('stop').disabled=!busy&&!pending&&!watchEnabled;
+  $('watch').disabled=watchPending;
+  $('watch').setAttribute('aria-pressed',String(watchEnabled));
+  $('watch').textContent='전체 루틴 '+(watchEnabled?'ON':'OFF');
+}
+function clearError(){localError='';localErrorFailure=null;$('detail').textContent='';$('detail').classList.remove('error');}
+function error(message){localError=message;localErrorFailure=lastFailure;$('detail').textContent=message;$('detail').classList.add('error');}
+function showFiles(files){
+  const encoded=JSON.stringify(files);
+  if(encoded===lastFiles)return;
+  lastFiles=encoded;$('downloads').replaceChildren();
+  for(const [label,url] of Object.entries(files)){
+    const a=document.createElement('a');a.textContent=label;a.href=url;a.target='_blank';a.rel='noopener';$('downloads').append(a);
+  }
+  const values=Object.values(files).filter(value=>typeof value==='string');
+  const candidate=files.WebP||values.find(url=>/\.webp(?:[?#]|$)/i.test(url))||values.find(url=>/\.(mp4|webm|mov)(?:[?#]|$)/i.test(url))||values.find(url=>/\.(png|jpe?g|gif)(?:[?#]|$)/i.test(url));
+  if(!candidate||candidate===lastPreview)return;
+  lastPreview=candidate;
+  const video=/\.(mp4|webm|mov)(?:[?#]|$)/i.test(candidate);
+  $('preview').style.display=video?'none':'block';$('video-preview').style.display=video?'block':'none';$('empty').style.display='none';
+  if(video){$('video-preview').src=candidate;}else{$('video-preview').pause();$('preview').src=candidate;}
+}
+function show(s){
+  const failure=s.status==='failed'?String(s.id||'')+':'+String(s.error||s.detail||''):null;
+  if(localError&&failure&&failure!==localErrorFailure)clearError();
+  lastFailure=failure;
+  if(s.id)job=s.id;
+  busy=s.status==='running';
+  if(s.connection)$('connection').textContent=s.connection;
+  if(s.watch){
+    watchEnabled=!!s.watch.enabled;
+    $('watch-detail').textContent=s.watch.detail||(watchEnabled?'새 파일을 기다립니다.':'폴더 감시 꺼짐');
+    $('watch-root').textContent=s.watch.root?'감시 폴더: '+s.watch.root:'';
+  }
+  const available=s.available||{};
+  $('available').textContent='최근 결과: '+[['image','이미지'],['video','영상'],['frames','프레임']].map(([key,label])=>label+' '+(available[key]?'있음':'없음')).join(' · ');
+  $('stage').textContent=s.status==='paused'?'중단됨':names[s.stage]||names[s.status]||s.stage||'준비';
+  if(localError){$('detail').textContent=localError;$('detail').classList.add('error');}
+  else if(!pending||failure){$('detail').textContent=s.error||s.detail||'';$('detail').classList.toggle('error',s.status==='failed');}
+  $('resume').classList.toggle('hidden',!(['failed','paused'].includes(s.status)&&s.resumable));
+  $('bar').style.width=(s.status==='done'?100:({image:12,canvas:25,video:38,frames:55,postprocess:60,probe:61,extract:63,key:70,pixel:79,palette:88,export:95}[s.stage]||0))+'%';
+  let text=s.status==='idle'?'실행할 구간을 선택하세요.':'전체 '+Math.round(s.elapsed_seconds||0)+'초';
+  if(s.timings_seconds){const parts=Object.entries(s.timings_seconds).filter(([,value])=>typeof value==='number').map(([key,value])=>(names[key]||key)+' '+value.toFixed(1)+'초');if(parts.length)text+=' · '+parts.join(' / ');}
+  $('time').textContent=text;
+  if(s.files)showFiles(s.files);
+  controls();
+}
+async function send(path,body){
+  const response=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const data=await response.json();if(!response.ok)throw Error(data.error||response.statusText);return data;
+}
+async function upload(kind){
+  if(!kind)return null;
+  const files=[...$(kind+'-file').files];if(!files.length)return null;
+  if(uploads[kind])return uploads[kind];
+  $('detail').classList.remove('error');$('detail').textContent='선택한 파일을 준비하고 있습니다.';
+  const body=new FormData();body.append('kind',kind);for(const file of files)body.append('files',file,file.name);
+  uploadController=new AbortController();
+  try{
+    const response=await fetch('/api/upload',{method:'POST',body,signal:uploadController.signal});
+    const data=await response.json();if(!response.ok)throw Error(data.error||response.statusText);
+    if(typeof data.input!=='string'||!data.input)throw Error('업로드 결과를 받지 못했습니다.');
+    uploads[kind]=data.input;return data.input;
+  }finally{uploadController=null;}
+}
+async function run(mode){
+  if(busy||pending)return;
+  if(!$('frames').reportValidity())return;
+  cancelRequested=false;clearError();pending=true;controls();
+  try{
+    const input=await upload(inputFor[mode]);
+    if(cancelRequested){$('detail').textContent='실행 전에 중단했습니다.';return;}
+    const s=await send('/api/run',{...spec(),mode,input});
+    if(cancelRequested){const stopped=await send('/api/stop',{});show(stopped.status?stopped:s);}
+    else show(s);
+  }catch(e){error(e.name==='AbortError'?'파일 준비를 중단했습니다.':e.message);}
+  finally{pending=false;controls();}
+}
+$('form').addEventListener('submit',e=>{e.preventDefault();void run('all');});
+for(const button of document.querySelectorAll('.step'))button.addEventListener('click',()=>{void run(button.dataset.mode);});
+for(const kind of ['image','video','frames'])$(kind+'-file').addEventListener('change',()=>{uploads[kind]=null;});
+for(const button of document.querySelectorAll('[data-clear]'))button.addEventListener('click',()=>{const kind=button.dataset.clear;$(kind+'-file').value='';uploads[kind]=null;});
+async function setWatch(enabled){
+  if(watchPending)return;
+  if(enabled&&!$('frames').reportValidity())return;
+  clearError();watchPending=true;controls();
+  try{const s=await send('/api/watch',{enabled,spec:spec()});if(s.status)show(s);else{watchEnabled=s.watch?!!s.watch.enabled:enabled;}}
+  catch(e){error(e.message);}finally{watchPending=false;controls();}
+}
+$('watch').addEventListener('click',()=>{void setWatch(!watchEnabled);});
+$('stop').addEventListener('click',async()=>{
+  cancelRequested=true;
+  uploadController?.abort();
+  try{const s=await send('/api/stop',{});watchEnabled=false;if(s.status)show(s);else{$('detail').textContent='감시를 끄고 현재 구간 완료 후 중단합니다.';controls();}}
+  catch(e){error(e.message);}
+});
+$('resume').addEventListener('click',async()=>{
+  if(busy||pending)return;clearError();pending=true;controls();
+  try{show(await send('/api/resume',{id:job}));}catch(e){error(e.message);}finally{pending=false;controls();}
+});
+async function poll(){
+  try{const response=await fetch('/api/state');const s=await response.json();if(!response.ok)throw Error(s.error||response.statusText);show(s);}
+  catch(e){$('connection').textContent='프로그램 연결 끊김';}
+  setTimeout(poll,1000);
+}
+void poll();
+</script>
+</html>

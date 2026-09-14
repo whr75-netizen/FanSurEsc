@@ -27,6 +27,7 @@ public class CameraFollow : MonoBehaviour
 
     public bool IsOrbiting => orbiting;
     public float Pitch => pitch;
+    public float MinimumPitch => minPitch;
 
     private void Awake()
     {

@@ -1,6 +1,29 @@
 # GPT/2 등각 타일과 진입형 건물
 
-## 현재 결정 D06 — 승인된 포장 유지, 0.2m 단차·기본 계단 이동·2층 외관
+## 현재 결정 D07 — 이동 경계와 외곽 도로 표시 범위 분리
+
+[요청·구현 범위] D06 결과는 사용자 유지 승인이다. 도로 끝만 재개한다. 현재 planner는 중심선 셀마다 원판 `dx²+dz²≤r²`를 합치며 외곽 node가 물리 LocalBounds보다25m 안쪽이라 원형 끝이 보인다. 기존 네 Boundary Collider와 이동 범위는 유지한다.
+
+후보: 전체 stamp를 사각형으로 바꾸면 종료 위치는 그대로다. node를 경계로 옮기면 endpoint=node/anchor/road-fraction 배치까지 바뀐다. 기존 포장 위에 그림만 덮으면0.2m 지지면과 어긋난다. 채택은 기존 graph에서 외향 continuation을 파생하여 필지 생성 전 road mask에 합치고, 경계 밖은 표시 전용으로 확장하는 방식이다. 패키지 교체나 이미지 생성은 필요 없다.
+
+입출력: `seed/기존 road graph(local XZ,m) → 외곽 node의 외향 tangent t/normal n → 직선 띠 → cell center 판정/road union → SurfaceGrid → 기존 높이 H/mesh/collider/필지/배치/NavMesh`. 방향은 `t=(p−q)/|p−q|`, `n=(−t.y,t.x)`. 노드 집합의 AABB 면에 놓인 p에서 해당 면의 바깥을 향하는 도로만 연장한다. 띠는 `s=(x−p)·t≥0`, `|u=(x−p)·n|≤W/2`이고 끝 길이는 대상 사각형과 ray의 양의 출구거리로 제한한다. 새 난수를 소비하거나 기존 graph/node/entry/portal을 이동하지 않는다. 타일 격자 양자화 오차는 최대 반 셀 대각선이며 source 이미지나 월드 축의 회전 보정으로 숨기지 않는다.
+
+`PlayableBounds=기존 LocalBounds`, `DisplayBounds=PlayableBounds를 정수 타일만큼 확장`. 내부는 단일 SurfaceGrid가 권위이고 외부 종류는 같은 continuation의 파생값이다. 외부는 표시mesh만 만들고 Collider/NavMesh/spawn/POI를 만들지 않는다. 내부/외부 셀 좌표는 같은 origin/TileSize 기준 정수 좌표를 써서 재료 hash와UV 위상을 이어간다. 원본UV→D05 atlas→D06 월드/view 변환은 그대로다. 노란/흰 차선도 기존 부호정규화 tangent와 `dot(p,t)` 반복 위상을 이어가고 외곽 경계에는 횡단보도를 추가하지 않는다.
+
+표시 여백은 직교 카메라의 허용 최대 size S/최소 하향각 φ/현재 화면비 a/카메라공간 framing offset c에서 계산한다. target 지면 높이 보수적 상한 h에서 `R=√[(|cx|+aS)²+((|cy|+S)/sinφ+h·cotφ)²]`; 타일단위로 올림하고 한타일 여유를 둔다. pitch>0 및 직교투영이 전제다. 이 공식은 yaw에 독립적인 지면 투영 반경 상한이며 무한 배경이 아니다. 화면비/카메라 지원범위를 바꾸면 표시영역을 다시 계산해야 한다. [Unity 직교 크기](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Camera-orthographicSize.html), [카메라 ray](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Camera.ViewportPointToRay.html), [Physics Colliders NavMesh 입력](https://docs.unity3d.com/Packages/com.unity.ai.navigation@2.0/manual/NavMeshSurface.html)을 사용한다. continuation/버퍼 연결 자체는 이 프로젝트의 명시적 파생 구현이다.
+
+최소 실험/실패 판정: graph·anchor 불변, 기존 validator/필지 비중첩, 안팎 도로 폭/높이/UV 연결, 실제 4면 경계 CharacterController 차단, 외부Collider/NavMesh 없음, 허용카메라 지면ray가 DisplayBounds 안에 있음. 대표 seed와 방향 반례용 seed의 순수layout 검사, 실제 맵1회의 변경 경계 관찰만 모아 실행한다. 내부 막다른길·교차로 디자인/카메라제어/건물디테일/새 텍스처/전체 이동 재검증은 제외한다. 결과를 내고 사용자에게 대표 화면을 보여 준다.
+
+### D07 실행 증거·사용자 유지 승인
+
+- [코드/기술] planner8/등각 geometry1005. 기존 graph에서 외향 half-strip을 파생해 내부 SurfaceGrid에 합쳤다. 외부4면은 같은 격자/높이/재료좌표로 만든 표시 전용mesh이며 내부와 외부가 만나는 곳에 불필요한 연석을 만들지 않는다. 기존 네 Boundary Collider는 그대로다. Ground/Sidewalk의 승인된 같은재료 조건을 외부에도 적용하고, 외부 표시grid는 placement/graph의 원본으로 사용하지 않는다.
+- [이전 구현 비교] commit2d36911의 실제 이전planner와 새planner를 같은 입력으로 실행했다. seed41721/−1243259102에서 node·road endpoint/width/type·모든 graph port·LocalBounds·entry/portal/approach 동일. continuation29/26개, 중심선1463sample 연결. 기존layout validator 통과, 필지153→145/160→154로 연장도로와 겹치는 후보를 제외했다. 이로 인해 필지/건물 배치가 이전seed와 완전히 같다는 보장은 하지 않는다.
+- [Play Mode 호출 확인] 실제seed−1038015743에서 네 면의 같은Player CharacterController 이동이 경계 안1.049m 부근에서 차단됐다(벽반두께.5+반경.5+skin). 외부수직ray 충돌0/외부NavMesh sample0, 표시mesh4개Collider0, 실제surface 높이 일치, 중심선2905sample 연결, 노란/흰 차선11992정점의절대UV위상과전체SAT포함 검사 통과. 이 호출은 실제물리키보드 조작을 뜻하지 않는다.
+- [카메라] 현재aspect1.299883/최대size8/최소pitch10°에서 표시여백62m. 경계4꼭짓점×yaw8×viewport4=128ray 중64개는 ray시작점 뒤쪽 교차로 실제보이는지면이 아니다. 유효64개중영역밖0, 최대지면거리50.9061m. 최초검사에서 음의ray매개변수도 실패로센검사도구오류를 카메라관찰만 수정하여 확인했다. 실제geometry나여백을보정하지 않았다. 현재실행중 화면비/지원카메라범위변경은 자동재생성하지 않으며 맵재진입때계산된다. 최소pitch의시야일부가지면을보지않는현상은 기존카메라범위의경계이고 이번도로표시기법의완성보장으로확대하지않는다.
+- [근거/종료] `LocalOnly/IsometricMapTrial06/{layout.json,technical-initial.json,camera.json,technical.json,boundary.png,former-end.png}`. WorkLoop v9 최종필요gate 통과. baseline 비교용Unity코드는삭제했고원본commit은보존했다. 임시RunCommand의namespace/internal접근제한은별도임시컴파일로해결했으며production코드를그에맞춰수정하지않았다. Play종료/background설정복원. 대표화면을 보고 사용자가 현재 방식 유지, 디테일은 나중에 조절한다고 승인했다. 추가시각보정없음.
+- [남은범위] 외부표시는배경이며새교차로/필지/진입영역이아니다. 외부연장끼리만나는곳에새교차로규칙을만들지않았다. 내부막다른길cap/교차로모양, 카메라시야조정, 모든seed/화면비/저장복구/GPU/빌드는 별도미검증이다. D06의재료/단차/문통과/동일Player씬왕복은변경되지않아재실행하지않았다.
+
+## 승인된 결정 D06 — 승인된 포장 유지, 0.2m 단차·기본 계단 이동·2층 외관
 
 [사용자 확정] D05 포장 통일은 유지한다. 인도/차도 차이는0.2m, 건물은2층, 횡단보도 줄 방향을 반대로 수정한다. D05의 평탄화는 재개방됐다. 정규화 이미지와 가중 타일 후보는 다시 생성하지 않는다.
 

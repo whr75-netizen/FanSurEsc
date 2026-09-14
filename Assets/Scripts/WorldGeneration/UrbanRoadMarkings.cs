@@ -37,11 +37,11 @@ namespace FantasySurvival.WorldGeneration
             Patch(atlas, 902, 716, 746, 621, 901, 526, 1059, 621);
 
         public static void Create(Transform parent, UrbanMapLayout layout, IsometricUrbanStyle style,
-            float surfaceHeight)
+            float surfaceHeight, UrbanSurfaceGrid displayGrid = null)
         {
             var owner = new GameObject("GeneratedRoadMarkings");
             owner.transform.SetParent(parent, false);
-            owner.AddComponent<UrbanRoadMarkings>().Build(layout, style, surfaceHeight);
+            owner.AddComponent<UrbanRoadMarkings>().Build(layout, style, surfaceHeight, displayGrid);
         }
 
         /// <summary>Rechecks the actual accepted geometry, not just construction counters.</summary>
@@ -63,9 +63,10 @@ namespace FantasySurvival.WorldGeneration
             return true;
         }
 
-        private void Build(UrbanMapLayout layout, IsometricUrbanStyle style, float surfaceHeight)
+        private void Build(UrbanMapLayout layout, IsometricUrbanStyle style, float surfaceHeight,
+            UrbanSurfaceGrid displayGrid)
         {
-            grid = layout.SurfaceGrid;
+            grid = displayGrid ?? layout.SurfaceGrid;
             Texture2D atlas = style.road.texture;
             markingPatches = new[]
             {
@@ -111,21 +112,8 @@ namespace FantasySurvival.WorldGeneration
                     road.Width * 0.5f, out bool endJunction);
                 float lineStart = startJunction ? startClearance + tile : 0f;
                 float lineEnd = length - (endJunction ? endClearance + tile : 0f);
-                float phase = Vector2.Dot(start, tangent);
-                float first = Mathf.Floor((phase + lineStart) / tile) * tile - phase;
-                for (float distance = first; distance < lineEnd - 0.0001f; distance += tile)
-                {
-                    float from = Mathf.Max(distance, lineStart), to = Mathf.Min(distance + tile, lineEnd);
-                    float uvFrom = (from - distance) / tile, uvTo = (to - distance) / tile;
-                    AddCandidate(batches, MarkKind.Yellow, start, tangent, normal,
-                        from, to, -tile * 0.5f, tile * 0.5f, height, 1f, uvFrom, uvTo);
-                    // Each half of the existing 14/18 m road is divided into two equal lanes.
-                    float laneDivider = road.Width * 0.25f;
-                    AddCandidate(batches, MarkKind.White, start, tangent, normal, from,
-                        to, laneDivider - tile * 0.5f, laneDivider + tile * 0.5f, height, 1f, uvFrom, uvTo);
-                    AddCandidate(batches, MarkKind.White, start, tangent, normal, from,
-                        to, -laneDivider - tile * 0.5f, -laneDivider + tile * 0.5f, height, 1f, uvFrom, uvTo);
-                }
+                AddLaneLines(batches, start, tangent, normal, lineStart, lineEnd,
+                    road.Width, tile, height);
 
                 if (startJunction && startClearance + tile < length - endClearance)
                     AddCrosswalk(batches, start, tangent, normal, startClearance,
@@ -133,6 +121,34 @@ namespace FantasySurvival.WorldGeneration
                 if (endJunction && endClearance + tile < length - startClearance)
                     AddCrosswalk(batches, end, -tangent, -normal, endClearance,
                         road.Width, tile, height);
+            }
+
+            var displayBounds = new Rect(grid.LocalOrigin,
+                new Vector2(grid.Width * tile, grid.Height * tile));
+            List<UrbanRoadContinuation> continuations = UrbanRoadContinuation.Create(layout.Nodes, layout.Roads);
+            for (int index = 0; index < continuations.Count; index++)
+            {
+                UrbanRoadContinuation continuation = continuations[index];
+                float length = continuation.ExitDistance(displayBounds);
+                if (length <= 0f) continue;
+                Vector2 start = continuation.Start;
+                Vector2 tangent = continuation.Tangent;
+                float clearance = JunctionClearance(continuation.NodeIndex, layout, incident, tangent,
+                    continuation.Width * 0.5f, out bool junction);
+                float lineStart = junction ? clearance + tile : 0f;
+                float lineEnd = length;
+                if (tangent.x < -0.0001f || (Mathf.Abs(tangent.x) < 0.0001f && tangent.y < 0f))
+                {
+                    start += tangent * length;
+                    tangent = -tangent;
+                    lineEnd = length - lineStart;
+                    lineStart = 0f;
+                }
+                Vector2 normal = new Vector2(-tangent.y, tangent.x);
+                AddLaneLines(batches, start, tangent, normal, lineStart, lineEnd,
+                    continuation.Width, tile, height);
+                // Display boundaries are not graph intersections or pedestrian crossings.
+                // Only the existing graph loop above creates crosswalks.
             }
 
             for (int kind = 0; kind < batches.Length; kind++)
@@ -161,6 +177,27 @@ namespace FantasySurvival.WorldGeneration
                 renderer.sharedMaterial = material;
                 renderer.shadowCastingMode = ShadowCastingMode.Off;
                 renderer.receiveShadows = true;
+            }
+        }
+
+        private void AddLaneLines(GeometryBatch[] batches, Vector2 origin, Vector2 tangent,
+            Vector2 normal, float lineStart, float lineEnd, float roadWidth, float tile, float height)
+        {
+            if (lineEnd <= lineStart + 0.0001f) return;
+            float phase = Vector2.Dot(origin, tangent);
+            float first = Mathf.Floor((phase + lineStart) / tile) * tile - phase;
+            for (float distance = first; distance < lineEnd - 0.0001f; distance += tile)
+            {
+                float from = Mathf.Max(distance, lineStart), to = Mathf.Min(distance + tile, lineEnd);
+                float uvFrom = (from - distance) / tile, uvTo = (to - distance) / tile;
+                AddCandidate(batches, MarkKind.Yellow, origin, tangent, normal,
+                    from, to, -tile * 0.5f, tile * 0.5f, height, 1f, uvFrom, uvTo);
+                // Each half of the existing 14/18 m road is divided into two equal lanes.
+                float laneDivider = roadWidth * 0.25f;
+                AddCandidate(batches, MarkKind.White, origin, tangent, normal, from,
+                    to, laneDivider - tile * 0.5f, laneDivider + tile * 0.5f, height, 1f, uvFrom, uvTo);
+                AddCandidate(batches, MarkKind.White, origin, tangent, normal, from,
+                    to, -laneDivider - tile * 0.5f, -laneDivider + tile * 0.5f, height, 1f, uvFrom, uvTo);
             }
         }
 

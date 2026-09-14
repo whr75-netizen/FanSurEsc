@@ -5,7 +5,7 @@ namespace FantasySurvival.WorldGeneration
 {
     public static class UrbanMapLayoutPlanner
     {
-        public const int GeneratorVersion = 7;
+        public const int GeneratorVersion = 8;
         public const int SpawnManifestVersion = 3;
 
         private static readonly float[] SpawnCandidateFractions = { 0.2f, 0.35f, 0.5f, 0.65f, 0.8f };
@@ -232,7 +232,7 @@ namespace FantasySurvival.WorldGeneration
                 entryLocalPosition,
                 cityRotation);
 
-            UrbanSurfaceGrid surfaceGrid = BuildSurfaceGrid(localBounds, roads, parameters);
+            UrbanSurfaceGrid surfaceGrid = BuildSurfaceGrid(localBounds, nodes, roads, parameters);
 
             List<UrbanParcelPlacement> parcels = BuildRoadFrontageParcels(
                 localBounds,
@@ -1291,6 +1291,7 @@ namespace FantasySurvival.WorldGeneration
 
         private static UrbanSurfaceGrid BuildSurfaceGrid(
             Rect localBounds,
+            IReadOnlyList<Vector2> nodes,
             IReadOnlyList<UrbanRoadSegment> roads,
             UrbanMapGenerationParameters parameters)
         {
@@ -1323,6 +1324,41 @@ namespace FantasySurvival.WorldGeneration
                         centerline[cellIndex],
                         roadRadius,
                         roadKind);
+                }
+            }
+
+            // Outward continuations alter the same authoritative surface mask before
+            // sidewalks, lots, and height/collision geometry are derived. They do not
+            // add graph ports or spawn candidates beyond the original road graph.
+            List<UrbanRoadContinuation> continuations = UrbanRoadContinuation.Create(nodes, roads);
+            for (int z = 0; z < size; z++)
+            {
+                for (int x = 0; x < size; x++)
+                {
+                    int cellIndex = z * size + x;
+                    if (kinds[cellIndex] == UrbanSurfaceTileKind.PrimaryRoad)
+                    {
+                        continue;
+                    }
+
+                    Vector2 center = localBounds.position +
+                                     new Vector2(x + 0.5f, z + 0.5f) * parameters.TileWorldSize;
+                    for (int index = 0; index < continuations.Count; index++)
+                    {
+                        UrbanRoadContinuation continuation = continuations[index];
+                        if (!continuation.Contains(center))
+                        {
+                            continue;
+                        }
+
+                        kinds[cellIndex] = continuation.IsPrimary
+                            ? UrbanSurfaceTileKind.PrimaryRoad
+                            : UrbanSurfaceTileKind.SecondaryRoad;
+                        if (continuation.IsPrimary)
+                        {
+                            break;
+                        }
+                    }
                 }
             }
 

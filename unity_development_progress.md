@@ -2430,3 +2430,10 @@ Interactable (abstract base class)
 - `[높이 원본]` SurfaceGrid 역할에서 도로Y=.005/포장Y=.205를 파생해 메시·MeshCollider·건물root·배치물/spawn 지지높이·NavMesh가 공유한다. 실제 지상층 바닥Collider를 사용하고 외관높이는 계획부터2×3.4=6.8m다. checkpoint geometry1004이며 원본/정규화 atlas는 재처리하지 않았다.
 - `[Play Mode 호출 확인]` seed475456319에서 실제 StepMove→CharacterController.Move의 연석 상승/하강, 벽차단, 문통과, 도로↔포장 NavMesh 경로, 2층6.8m, 실제 횡단보도 UV축을 확인했다. 상승rootY=.7549998/하강Y=.5549999, 발과표면오차≤.06m다. 실제 GameMapTest→GameMap1→GameMapTest 왕복 후 Player/Camera/InventoryUI 동일 EntityId와 Controller/이동 활성·잠금해제를 확인했다. Editor 임시저장 profile을 사용했다.
 - `[근거·경계]` `LocalOnly/IsometricMapTrial05/{technical.json,travel.json,overview.png,step.webp}`. 연속동작은 실제 새 캡처23장, 관찰용80ms/frame이다. WorkLoop v8 최종기술gate 통과, 사용자 유지 승인. Play 종료/GameMapTest dirty 없음, 시험용 background실행도 원래false로 복원했다. 기존 Console오류3건은 보존했고 새 게임오류는 관측하지 않았다. 실제 키보드·대각벽모서리·큰낙차/다른경사·전체Recovery·모든seed·GPU/빌드는 미검증이며 층전환/긴계단은 미구현이다.
+
+## 144. 외곽 도로 연장과 고정 이동 경계 `[MAP-01]`
+
+- `[확정]` D06 외관/단차는 유지하고 원형으로 끊기는 도로 끝을 수정 요청했다. 구현 후 경계부 화면을 보고 현재 방식 유지, 디테일은 나중에 조절한다고 승인했다.
+- `[원인·구현]` 원래 road mask는 중심선 원판 합집합이며 외곽node가 이동경계25m 안쪽이다. graph/node/entry/portal은 유지하고 외향 half-strip을 기존 SurfaceGrid에 합친 뒤 보도/필지/높이/충돌을 파생한다. 경계밖은 같은 좌표와 높이의4개표시mesh, Collider/NavMesh/spawn은 없다. 노란/흰 차선은 기존절대UV위상으로 이어간다. planner8/등각geometry1005로 복구판본을구분한다. 수학/후보/실패조건은 맵연구D07에 기록했다.
+- `[실행]` 실제이전commit2d36911 planner와 두seed를 비교하여 모든node/road/port/anchor/범위 동일을확인했다. 연장도로와겹치는필지는 제외되고 기존validator를통과했다. Play seed−1038015743에서 같은Player를4면으로이동시켜각경계안약1.05m에서차단, 외부충돌/NavMesh없음, 도로/높이연속, 차선SAT/위상을확인했다. 현재카메라조건에서62m표시여백과유효지면64ray 모두범위안을확인했다.
+- `[근거·한계]` `LocalOnly/IsometricMapTrial06/`의 실제JSON/화면, WorkLoop v9 gate통과. 최초카메라검사에ray뒤쪽교차점이섞인오류는해당관찰만수정하고초기보고도보존했다. baseline용임시코드는정리했다. Play종료/backgroundfalse복원, D06검사는반복하지않았다. 물리키·모든seed/실행중화면비변경·전체Recovery·GPU/빌드는미검증이며 내부막다른길과외부교차로의세부규칙은범위밖이다.

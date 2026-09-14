@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using FantasySurvival.AI;
+using FantasySurvival.SceneFlow;
 using FantasySurvival.WorldLighting;
 using Unity.AI.Navigation;
 using UnityEngine;
@@ -50,7 +51,7 @@ namespace FantasySurvival.WorldGeneration
         [Header("Optional Isometric Atlas Prototype")]
         [SerializeField] private IsometricUrbanStyle isometricStyle;
         public IsometricUrbanStyle IsometricStyle => isometricStyle;
-        public int CheckpointGeneratorVersion => isometricStyle != null ? 1004 : CurrentLayout.GeneratorVersion;
+        public int CheckpointGeneratorVersion => isometricStyle != null ? 1005 : CurrentLayout.GeneratorVersion;
         private UrbanOcclusionFader occlusionFader;
 
         [Header("Octilinear Road Graph")]
@@ -98,6 +99,7 @@ namespace FantasySurvival.WorldGeneration
         private IsometricUrbanStyle.SurfaceVariantSampler[] runtimeSurfaceSamplers;
         private int[][] runtimeSurfaceVariantMaterials;
         private Mesh runtimeSurfaceMesh;
+        private readonly List<Mesh> runtimeExteriorMeshes = new List<Mesh>();
         private NavMeshData runtimeNavMeshData;
         private UrbanMapLayout pendingNavigationLayout;
         private bool hasStarted;
@@ -105,6 +107,11 @@ namespace FantasySurvival.WorldGeneration
         private bool legacyGroundStateCaptured;
 
         public UrbanMapLayout CurrentLayout { get; private set; }
+        public UrbanSurfaceGrid DisplayGrid { get; private set; }
+        public Rect DisplayBounds => DisplayGrid == null ? default : new Rect(DisplayGrid.LocalOrigin,
+            new Vector2(DisplayGrid.Width, DisplayGrid.Height) * DisplayGrid.TileSize);
+        public float DisplayPadding { get; private set; }
+        public float DisplayAspect { get; private set; }
         public int CurrentSeed { get; private set; }
         private bool HasStreetFurnitureVisualsEnabled =>
             instantiateStreetTrees || instantiateStreetLamps || instantiatePrototypeClutter;
@@ -603,9 +610,95 @@ namespace FantasySurvival.WorldGeneration
             groundCollider.size = new Vector3(bounds.width, 0.5f, bounds.height);
 
             UrbanSurfaceGrid grid = layout.SurfaceGrid;
-            var vertices = new List<Vector3>(grid.CellCount * 4);
-            var normals = new List<Vector3>(grid.CellCount * 4);
-            var uv = new List<Vector2>(grid.CellCount * 4);
+            int margin = isometricStyle != null ? CalculateDisplayMargin(grid.TileSize) : 0;
+            DisplayGrid = margin > 0 ? CreateDisplayGrid(layout, margin) : grid;
+            DisplayPadding = margin * grid.TileSize;
+            var interior = new RectInt(margin, margin, grid.Width, grid.Height);
+            runtimeSurfaceMesh = BuildSurfaceTileMesh(DisplayGrid, interior, margin, "Runtime Urban Surface Tile Mesh");
+            AttachSurfaceMesh("GeneratedSurfaceTiles", runtimeSurfaceMesh, isometricStyle != null);
+            if (margin > 0)
+            {
+                // Four non-overlapping strips keep the backdrop outside the physical domain
+                // and allow the renderer to cull sides independently.
+                RectInt[] strips =
+                {
+                    new RectInt(0, 0, DisplayGrid.Width, margin),
+                    new RectInt(0, interior.yMax, DisplayGrid.Width, margin),
+                    new RectInt(0, margin, margin, grid.Height),
+                    new RectInt(interior.xMax, margin, margin, grid.Height)
+                };
+                for (int index = 0; index < strips.Length; index++)
+                {
+                    Mesh mesh = BuildSurfaceTileMesh(DisplayGrid, strips[index], margin, "Urban Exterior " + index);
+                    runtimeExteriorMeshes.Add(mesh);
+                    AttachSurfaceMesh("GeneratedExterior_" + index, mesh, false);
+                }
+            }
+            if (isometricStyle != null)
+                UrbanRoadMarkings.Create(generatedContent, layout, isometricStyle, SurfaceHeight, DisplayGrid);
+        }
+
+        private int CalculateDisplayMargin(float tileSize)
+        {
+            PersistentGameplayShell shell = PersistentGameplayShell.Instance;
+            Camera camera = shell != null ? shell.PlayerCamera : null;
+            CameraFollow follow = camera != null ? camera.GetComponent<CameraFollow>() : null;
+            CameraZoomController zoom = camera != null ? camera.GetComponent<CameraZoomController>() : null;
+            CharacterController controller = shell != null && shell.PlayerMovement != null
+                ? shell.PlayerMovement.GetComponent<CharacterController>() : null;
+            if (camera == null || !camera.orthographic || follow == null || zoom == null ||
+                controller == null || follow.MinimumPitch <= 0f)
+                throw new InvalidOperationException("Urban exterior requires the existing orthographic gameplay camera, downward orbit range and player controller.");
+
+            Vector3 framing = Quaternion.Inverse(camera.transform.rotation) * follow.offset;
+            float pitch = follow.MinimumPitch * Mathf.Deg2Rad;
+            // The entire controller height is a conservative bound on root-to-ground height.
+            float targetHeight = controller.height + controller.skinWidth + PavementElevation + EnterableSpriteBuilding.FloorLift;
+            DisplayAspect = camera.aspect;
+            float across = Mathf.Abs(framing.x) + DisplayAspect * zoom.MaxOrthographicSize;
+            float along = (Mathf.Abs(framing.y) + zoom.MaxOrthographicSize) / Mathf.Sin(pitch)
+                          + targetHeight / Mathf.Tan(pitch);
+            return Mathf.CeilToInt(Mathf.Sqrt(across * across + along * along) / tileSize) + 1;
+        }
+
+        private static UrbanSurfaceGrid CreateDisplayGrid(UrbanMapLayout layout, int margin)
+        {
+            UrbanSurfaceGrid source = layout.SurfaceGrid;
+            int width = source.Width + margin * 2, height = source.Height + margin * 2;
+            var kinds = new UrbanSurfaceTileKind[width * height];
+            var masks = new UrbanTileConnection[kinds.Length];
+            var ports = new UrbanTileConnection[kinds.Length];
+            Vector2 origin = source.LocalOrigin - Vector2.one * (margin * source.TileSize);
+            List<UrbanRoadContinuation> continuations = UrbanRoadContinuation.Create(layout.Nodes, layout.Roads);
+            for (int z = 0; z < height; z++)
+                for (int x = 0; x < width; x++)
+                {
+                    int index = z * width + x, sx = x - margin, sz = z - margin;
+                    if (source.ContainsCell(sx, sz))
+                    {
+                        kinds[index] = source.GetKind(sx, sz);
+                        ports[index] = source.GetRoadPortMask(sx, sz);
+                        continue;
+                    }
+                    Vector2 center = origin + new Vector2(x + 0.5f, z + 0.5f) * source.TileSize;
+                    for (int road = 0; road < continuations.Count; road++)
+                    {
+                        UrbanRoadContinuation continuation = continuations[road];
+                        if (!continuation.Contains(center)) continue;
+                        if (continuation.IsPrimary || !UrbanSurfaceGrid.IsRoad(kinds[index]))
+                            kinds[index] = continuation.IsPrimary ? UrbanSurfaceTileKind.PrimaryRoad : UrbanSurfaceTileKind.SecondaryRoad;
+                    }
+                }
+            // This is a read-only presentation grid. No graph queries or placement use its masks.
+            return new UrbanSurfaceGrid(width, height, source.TileSize, origin, kinds, masks, ports);
+        }
+
+        private Mesh BuildSurfaceTileMesh(UrbanSurfaceGrid grid, RectInt cells, int canonicalOffset, string meshName)
+        {
+            int vertexCapacity = cells.width * cells.height * 4;
+            var vertices = new List<Vector3>(vertexCapacity);
+            var normals = new List<Vector3>(vertexCapacity);
+            var uv = new List<Vector2>(vertexCapacity);
             var trianglesBySurface = new List<int>[runtimeSurfaceMaterials.Length];
             for (int surfaceIndex = 0; surfaceIndex < trianglesBySurface.Length; surfaceIndex++)
             {
@@ -613,9 +706,9 @@ namespace FantasySurvival.WorldGeneration
             }
 
             float halfTile = grid.TileSize * 0.5f;
-            for (int z = 0; z < grid.Height; z++)
+            for (int z = cells.yMin; z < cells.yMax; z++)
             {
-                for (int x = 0; x < grid.Width; x++)
+                for (int x = cells.xMin; x < cells.xMax; x++)
                 {
                     UrbanSurfaceTileKind kind = grid.GetKind(x, z);
                     Vector2 center = grid.GetCellCenter(x, z);
@@ -639,7 +732,7 @@ namespace FantasySurvival.WorldGeneration
                     {
                         // The family catalog chooses decoration only. Road-port masks and
                         // the separate directional marking geometry remain authoritative.
-                        int variant = runtimeSurfaceSamplers[materialIndex].SelectVariant(CurrentSeed, x, z);
+                        int variant = runtimeSurfaceSamplers[materialIndex].SelectVariant(CurrentSeed, x - canonicalOffset, z - canonicalOffset);
                         if (variant > 0)
                             materialIndex = runtimeSurfaceVariantMaterials[materialIndex][variant - 1];
                     }
@@ -653,36 +746,38 @@ namespace FantasySurvival.WorldGeneration
                 }
             }
 
-            AddSidewalkCurbFaces(grid, vertices, normals, uv, trianglesBySurface);
+            AddSidewalkCurbFaces(grid, cells, vertices, normals, uv, trianglesBySurface);
 
-            runtimeSurfaceMesh = new Mesh
+            var mesh = new Mesh
             {
-                name = "Runtime Urban Surface Tile Mesh",
+                name = meshName,
                 hideFlags = HideFlags.DontSave,
                 indexFormat = IndexFormat.UInt32,
                 subMeshCount = runtimeSurfaceMaterials.Length
             };
-            runtimeSurfaceMesh.SetVertices(vertices);
-            runtimeSurfaceMesh.SetNormals(normals);
-            runtimeSurfaceMesh.SetUVs(0, uv);
+            mesh.SetVertices(vertices);
+            mesh.SetNormals(normals);
+            mesh.SetUVs(0, uv);
             for (int surfaceIndex = 0; surfaceIndex < trianglesBySurface.Length; surfaceIndex++)
             {
-                runtimeSurfaceMesh.SetTriangles(trianglesBySurface[surfaceIndex], surfaceIndex, false);
+                mesh.SetTriangles(trianglesBySurface[surfaceIndex], surfaceIndex, false);
             }
-            runtimeSurfaceMesh.RecalculateBounds();
+            mesh.RecalculateBounds();
+            return mesh;
+        }
 
-            var surfaceObject = new GameObject("GeneratedSurfaceTiles");
+        private void AttachSurfaceMesh(string objectName, Mesh mesh, bool withCollider)
+        {
+            var surfaceObject = new GameObject(objectName);
             surfaceObject.transform.SetParent(generatedContent, false);
             var filter = surfaceObject.AddComponent<MeshFilter>();
-            filter.sharedMesh = runtimeSurfaceMesh;
-            if (isometricStyle != null)
-                surfaceObject.AddComponent<MeshCollider>().sharedMesh = runtimeSurfaceMesh;
+            filter.sharedMesh = mesh;
+            if (withCollider)
+                surfaceObject.AddComponent<MeshCollider>().sharedMesh = mesh;
             var renderer = surfaceObject.AddComponent<MeshRenderer>();
             renderer.sharedMaterials = runtimeSurfaceMaterials;
             renderer.shadowCastingMode = ShadowCastingMode.Off;
             renderer.receiveShadows = true;
-            if (isometricStyle != null)
-                UrbanRoadMarkings.Create(generatedContent, layout, isometricStyle, SurfaceHeight);
         }
 
         private void EnsureRuntimeSurfaceMaterials()
@@ -757,6 +852,10 @@ namespace FantasySurvival.WorldGeneration
 
         private void ClearRuntimeSurfaceResources()
         {
+            foreach (Mesh mesh in runtimeExteriorMeshes)
+                if (mesh != null) Destroy(mesh);
+            runtimeExteriorMeshes.Clear();
+            DisplayGrid = null;
             runtimeSurfaceSamplers = null;
             runtimeSurfaceVariantMaterials = null;
             if (runtimeSurfaceMesh != null)
@@ -962,6 +1061,7 @@ namespace FantasySurvival.WorldGeneration
 
         private void AddSidewalkCurbFaces(
             UrbanSurfaceGrid grid,
+            RectInt cells,
             List<Vector3> vertices,
             List<Vector3> normals,
             List<Vector2> uv,
@@ -969,9 +1069,9 @@ namespace FantasySurvival.WorldGeneration
         {
             float halfTile = grid.TileSize * 0.5f;
             List<int> sidewalkTriangles = trianglesBySurface[(int)UrbanSurfaceTileKind.Sidewalk];
-            for (int z = 0; z < grid.Height; z++)
+            for (int z = cells.yMin; z < cells.yMax; z++)
             {
-                for (int x = 0; x < grid.Width; x++)
+                for (int x = cells.xMin; x < cells.xMax; x++)
                 {
                     if (!IsRaisedPavementCell(grid, x, z))
                     {

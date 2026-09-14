@@ -10,6 +10,133 @@ namespace FantasySurvival.WorldGeneration
         public const string ShaderName = "FantasySurvival/World/Isometric Atlas Surface";
 
         [Serializable]
+        public sealed class WeightedSurfaceVariant
+        {
+            public string name = "Surface variant";
+            [Tooltip("A planar, edge-compatible surface only. An unassigned texture explicitly inherits the family base atlas; coordinates and mask belong to this entry.")]
+            public AtlasPatch patch = new AtlasPatch();
+            [Min(0f)] public float weight = 1f;
+
+            public AtlasPatch ResolvePatch(AtlasPatch familyBase)
+            {
+                if (patch == null) throw new InvalidOperationException("A surface variant patch is missing.");
+                if (patch.texture != null) return patch;
+                return new AtlasPatch(patch.p00, patch.p01, patch.p11, patch.p10)
+                {
+                    texture = familyBase != null ? familyBase.texture : null,
+                    mask = patch.mask
+                };
+            }
+        }
+
+        [Serializable]
+        public sealed class SurfaceVariantCatalog
+        {
+            [Tooltip("Weight of the existing family base patch. Zero disables its random selection; it remains available for structural surfaces such as curbs.")]
+            [Min(0f)] public float baseWeight = 1f;
+            [Tooltip("Only interchangeable surface decoration belongs here. Road lines, corners and intersections remain controlled by road connectivity.")]
+            public WeightedSurfaceVariant[] variants = Array.Empty<WeightedSurfaceVariant>();
+
+            public bool TryValidate(AtlasPatch familyBase, out string error)
+            {
+                if (!TryWeights(out _, out error)) return false;
+                for (int index = 0; index < variants.Length; index++)
+                {
+                    WeightedSurfaceVariant variant = variants[index];
+                    if (variant.weight == 0f) continue;
+                    if (variant.patch == null)
+                    {
+                        error = $"Variant {index}: patch is missing.";
+                        return false;
+                    }
+                    if (!variant.ResolvePatch(familyBase).TryValidate(out error))
+                    {
+                        error = $"Variant {index} ({variant.name}): {error}";
+                        return false;
+                    }
+                }
+                error = null;
+                return true;
+            }
+
+            public SurfaceVariantSampler CreateSampler()
+            {
+                if (!TryWeights(out double[] cumulative, out string error))
+                    throw new InvalidOperationException(error);
+                return new SurfaceVariantSampler(cumulative);
+            }
+
+            private bool TryWeights(out double[] cumulative, out string error)
+            {
+                cumulative = null;
+                if (!IsFinite(baseWeight) || baseWeight < 0f || variants == null)
+                {
+                    error = "Base weight must be finite and nonnegative, and the variant array must exist.";
+                    return false;
+                }
+                cumulative = new double[variants.Length + 1];
+                double sum = baseWeight;
+                cumulative[0] = sum;
+                for (int index = 0; index < variants.Length; index++)
+                {
+                    WeightedSurfaceVariant variant = variants[index];
+                    if (variant == null || !IsFinite(variant.weight) || variant.weight < 0f)
+                    {
+                        error = $"Variant {index}: entry and finite nonnegative weight are required.";
+                        return false;
+                    }
+                    sum += variant.weight;
+                    cumulative[index + 1] = sum;
+                }
+                if (!(sum > 0d) || double.IsInfinity(sum))
+                {
+                    error = "At least one family surface must have positive weight.";
+                    return false;
+                }
+                error = null;
+                return true;
+            }
+        }
+
+        /// <summary>Immutable generation-time CDF. Selection never changes grid topology or global random state.</summary>
+        public sealed class SurfaceVariantSampler
+        {
+            private readonly double[] cumulative;
+            private readonly double totalWeight;
+
+            internal SurfaceVariantSampler(double[] cumulative)
+            {
+                this.cumulative = cumulative;
+                totalWeight = cumulative[cumulative.Length - 1];
+            }
+
+            /// <returns>Zero for the family base patch; i + 1 for variants[i]. Zero-weight entries are never selected.</returns>
+            public int SelectVariant(int seed, int x, int z)
+            {
+                if (cumulative.Length == 1) return 0;
+                uint hash;
+                unchecked
+                {
+                    hash = (uint)seed ^ ((uint)x * 73856093u) ^ ((uint)z * 19349663u);
+                    hash ^= hash >> 16;
+                    hash *= 0x7feb352du;
+                    hash ^= hash >> 15;
+                    hash *= 0x846ca68bu;
+                    hash ^= hash >> 16;
+                }
+                double sample = (hash / 4294967296d) * totalWeight;
+                int first = 0, last = cumulative.Length - 1;
+                while (first < last)
+                {
+                    int middle = first + (last - first) / 2;
+                    if (sample < cumulative[middle]) last = middle;
+                    else first = middle + 1;
+                }
+                return first;
+            }
+        }
+
+        [Serializable]
         public sealed class AtlasPatch
         {
             public Texture2D texture;
@@ -238,6 +365,31 @@ namespace FantasySurvival.WorldGeneration
         public AtlasPatch sidewalk = new AtlasPatch(new Vector2(542, 466), new Vector2(390, 374),
             new Vector2(548, 277), new Vector2(701, 375));
         public AtlasPatch road = RoadPatch();
+        [Tooltip("Optional normalized line patches. Empty uses the original Roads atlas annotations.")]
+        public AtlasPatch yellowLine, whiteLine, crosswalk;
+        [Header("Weighted, edge-compatible surface variants")]
+        public SurfaceVariantCatalog groundVariants = new SurfaceVariantCatalog();
+        public SurfaceVariantCatalog sidewalkVariants = new SurfaceVariantCatalog
+        {
+            baseWeight = 6f,
+            variants = new[]
+            {
+                new WeightedSurfaceVariant { name = "Cracked Sidewalk", weight = 1f,
+                    patch = UrbanRoadMarkings.CrackedSidewalkPatch(null) }
+            }
+        };
+        // Equivalent marginal weights to the prior 1/97 manhole, then 1/11 cracked-road choice.
+        public SurfaceVariantCatalog roadVariants = new SurfaceVariantCatalog
+        {
+            baseWeight = 960f,
+            variants = new[]
+            {
+                new WeightedSurfaceVariant { name = "Cracked Road", weight = 96f,
+                    patch = UrbanRoadMarkings.CrackedRoadPatch(null) },
+                new WeightedSurfaceVariant { name = "Manhole", weight = 11f,
+                    patch = UrbanRoadMarkings.ManholePatch(null) }
+            }
+        };
         public AtlasPatch interior = new AtlasPatch(new Vector2(198, 734), new Vector2(55, 655),
             new Vector2(197, 573), new Vector2(339, 655));
         public AtlasPatch wall = new AtlasPatch(new Vector2(145, 160), new Vector2(145, 53),
@@ -267,10 +419,34 @@ namespace FantasySurvival.WorldGeneration
         };
 
         [Header("World dimensions")]
+        public AtlasPatch concrete = new AtlasPatch(new Vector2(120,67), new Vector2(120,63),
+            new Vector2(124,65), new Vector2(124,69));
+        public AtlasPatch glass = new AtlasPatch(new Vector2(855,144), new Vector2(855,99),
+            new Vector2(870,106), new Vector2(870,151));
+        public AtlasPatch roof = RoadPatch();
+        // Explicit metric tile domains. Last fragments are cropped, never stretched to a whole face.
+        public Vector2 brickRepeatMetres = new Vector2(1.4f, 1.13f);
+        public Vector2 concreteRepeatMetres = Vector2.one;
         [Min(0.1f)] public float wallHeight = 3.4f;
         [Min(0.1f)] public float wallModuleWidth = 3.4f;
         [Min(0.1f)] public float doorWidth = 2.4f;
         [Min(0.01f)] public float wallThickness = 0.2f;
+
+        public Material CreateAtlasMaterial(Texture2D texture, bool transparent, string materialName, Color tint)
+        {
+            var material = new Material(surfaceShader) { name = materialName, hideFlags = HideFlags.DontSave };
+            material.SetTexture("_BaseMap", texture);
+            material.SetTexture("_MaskMap", Texture2D.whiteTexture);
+            material.SetColor("_BaseColor", tint);
+            material.SetFloat("_VertexAtlasUv", 1f);
+            material.SetFloat("_MetricLighting", 1f);
+            material.SetFloat("_ZWrite", transparent ? 0f : 1f);
+            material.SetFloat("_SrcBlend", (float)(transparent ? BlendMode.SrcAlpha : BlendMode.One));
+            material.SetFloat("_DstBlend", (float)(transparent ? BlendMode.OneMinusSrcAlpha : BlendMode.Zero));
+            material.SetOverrideTag("RenderType", transparent ? "Transparent" : "Opaque");
+            material.renderQueue = (int)(transparent ? RenderQueue.Transparent : RenderQueue.Geometry);
+            return material;
+        }
 
         /// <summary>Returns a new material. Its caller owns and destroys it; this asset holds no mutable material state.</summary>
         public Material CreateMaterial(AtlasPatch patch, bool transparent, string materialName, Color tint)
@@ -284,6 +460,7 @@ namespace FantasySurvival.WorldGeneration
             material.SetTexture("_MaskMap", patch.mask != null ? patch.mask : Texture2D.whiteTexture);
             material.SetColor("_BaseColor", tint);
             material.SetVector("_Homography0", row0);
+            material.SetFloat("_MetricLighting", 1f);
             material.SetVector("_Homography1", row1);
             material.SetVector("_Homography2", row2);
             material.SetFloat("_ZWrite", transparent ? 0f : 1f);
@@ -296,12 +473,24 @@ namespace FantasySurvival.WorldGeneration
 
         public bool TryValidate(out string error)
         {
-            AtlasPatch[] patches = { ground, sidewalk, road, interior, wall };
-            string[] names = { nameof(ground), nameof(sidewalk), nameof(road), nameof(interior), nameof(wall) };
+            AtlasPatch[] patches = { ground, sidewalk, road, interior, wall, concrete, glass, roof };
+            string[] names = { nameof(ground), nameof(sidewalk), nameof(road), nameof(interior), nameof(wall), nameof(concrete), nameof(glass), nameof(roof) };
             for (int i = 0; i < patches.Length; i++)
             {
                 if (patches[i] == null) { error = names[i] + ": patch is missing."; return false; }
                 if (!patches[i].TryValidate(out error)) { error = names[i] + ": " + error; return false; }
+            }
+            SurfaceVariantCatalog[] catalogs = { groundVariants, sidewalkVariants, roadVariants };
+            AtlasPatch[] familyBases = { ground, sidewalk, road };
+            string[] catalogNames = { nameof(groundVariants), nameof(sidewalkVariants), nameof(roadVariants) };
+            for (int i = 0; i < catalogs.Length; i++)
+            {
+                if (catalogs[i] == null) { error = catalogNames[i] + ": catalog is missing."; return false; }
+                if (!catalogs[i].TryValidate(familyBases[i], out error))
+                {
+                    error = catalogNames[i] + ": " + error;
+                    return false;
+                }
             }
             WallModule[] modules = { plainModule, windowModule, entranceModule };
             string[] moduleNames = { nameof(plainModule), nameof(windowModule), nameof(entranceModule) };

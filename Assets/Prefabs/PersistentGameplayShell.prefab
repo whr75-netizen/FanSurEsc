@@ -2300,6 +2300,7 @@ GameObject:
   - component: {fileID: 6021516775467818055}
   - component: {fileID: 7847840547415635133}
   - component: {fileID: 1330310195890507211}
+  - component: {fileID: 7202591587805014013}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2398,7 +2399,7 @@ BoxCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -2415,7 +2416,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 10
-  checkSize: {x: 0.5, y: 0.5, z: 0.5}
   runSpeedMultiplier: 1.3
   characterAnimator: {fileID: 7573089650262698620}
   turnSpeedDegreesPerSecond: 1080
@@ -2477,7 +2477,7 @@ Rigidbody:
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
-  m_IsKinematic: 0
+  m_IsKinematic: 1
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 1
@@ -2706,6 +2706,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dd50972c92285045a839857654e8681, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Inventory.PlayerConsumableUseController
+--- !u!143 &7202591587805014013
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1059635282201458994}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.8
+  m_Radius: 0.5
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.05
+  m_MinMoveDistance: 0
+  m_Center: {x: 0, y: 0.4, z: 0}
 --- !u!1 &1185748785266318166
 GameObject:
   m_ObjectHideFlags: 0
@@ -21728,15 +21753,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6669808268812985628, guid: 3f045db2e2d45464e886c7db7d112dcd, type: 3}
       propertyPath: m_LocalScale.x
-      value: 3.7646856
+      value: 1.8132174
       objectReference: {fileID: 0}
     - target: {fileID: 6669808268812985628, guid: 3f045db2e2d45464e886c7db7d112dcd, type: 3}
       propertyPath: m_LocalScale.y
-      value: 3.7646856
+      value: 1.8132174
       objectReference: {fileID: 0}
     - target: {fileID: 6669808268812985628, guid: 3f045db2e2d45464e886c7db7d112dcd, type: 3}
       propertyPath: m_LocalScale.z
-      value: 3.7646856
+      value: 1.8132174
       objectReference: {fileID: 0}
     - target: {fileID: 6669808268812985628, guid: 3f045db2e2d45464e886c7db7d112dcd, type: 3}
       propertyPath: m_LocalPosition.x

@@ -1,0 +1,1540 @@
+{
+  "schema": "normalized-planar-tiles/2",
+  "atlas": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+  "atlas_size": [
+    512,
+    512
+  ],
+  "padding_pixels": 2,
+  "texels_per_metre": 32,
+  "dimension_rule": "max(1, floor(metres * 32 + 0.5))",
+  "repeat_metres_rule": "actualMetres = native pixel dimensions / 32; requested metres remain separate",
+  "points_convention": "00,01,11,10; top-left source pixel-center coordinates; UV=(point+.5)/atlasSize with inverted Y",
+  "sheet_grid_pixels": 4,
+  "sheet_coordinate_rule": "normalized=(source+.5)/4-.5; padding on right/bottom only",
+  "pipeline": "full sheet PerfectPixel once -> optional plane inset -> nearest homography -> metric atlas",
+  "sheets": [
+    {
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Interior.png",
+      "source_sha256": "5c7f8040c88576337ea16255c6ed5aaf3e8ac1165bf2e53b0489273e205a7d07",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "padded_size": [
+        1448,
+        1088
+      ],
+      "padding_right_bottom": [
+        0,
+        2
+      ],
+      "native_size": [
+        362,
+        272
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Interior.png",
+      "alpha_binarized_count": 784611,
+      "engine_call_count": 1,
+      "sample_seconds": 4.96982349999962,
+      "total_seconds": 5.0165152000008675,
+      "normalized_sheet_sha256": "97e70c3095c0b502bbbcd628240757e66852907b65e0e4c67f145d774a298390"
+    },
+    {
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "source_sha256": "535de805fc9fdeb073d623c569161cf03e36efff5b7c4a05cf3342e0792311b8",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "padded_size": [
+        1448,
+        1088
+      ],
+      "padding_right_bottom": [
+        0,
+        2
+      ],
+      "native_size": [
+        362,
+        272
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "alpha_binarized_count": 822622,
+      "engine_call_count": 1,
+      "sample_seconds": 5.035047000001214,
+      "total_seconds": 5.075857800000449,
+      "normalized_sheet_sha256": "3ab429f477f626f5d8de5ece2b6a37e73096c2a74569226e1c907a0869e47248"
+    },
+    {
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Walls.png",
+      "source_sha256": "6c1b7bd3a0d073fb1458afafaca8da814e01b25335a6f091aedb6b093fee5da4",
+      "source_size": [
+        1448,
+        1086
+      ],
+      "padded_size": [
+        1448,
+        1088
+      ],
+      "padding_right_bottom": [
+        0,
+        2
+      ],
+      "native_size": [
+        362,
+        272
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Walls.png",
+      "alpha_binarized_count": 775537,
+      "engine_call_count": 1,
+      "sample_seconds": 5.051917200000389,
+      "total_seconds": 5.094119500001398,
+      "normalized_sheet_sha256": "7d72d0ec9bef8d2b3181742aa316292405cd39e05c81f3e87133d6ccf5d07468"
+    }
+  ],
+  "entries": [
+    {
+      "name": "ground",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          1.5,
+          65.5
+        ],
+        [
+          1.5,
+          1.5
+        ],
+        [
+          65.5,
+          1.5
+        ],
+        [
+          65.5,
+          65.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        2,
+        2,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        0,
+        0,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          542.0,
+          466.0
+        ],
+        [
+          390.0,
+          374.0
+        ],
+        [
+          548.0,
+          277.0
+        ],
+        [
+          701.0,
+          375.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          135.125,
+          116.125
+        ],
+        [
+          97.125,
+          93.125
+        ],
+        [
+          136.625,
+          68.875
+        ],
+        [
+          174.875,
+          93.375
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          135.15337969554162,
+          113.80436325630015
+        ],
+        [
+          100.96743197114411,
+          93.11286858100695
+        ],
+        [
+          136.602467814107,
+          71.2356630318462
+        ],
+        [
+          171.01674053010447,
+          93.2787919610472
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "road",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          69.5,
+          65.5
+        ],
+        [
+          69.5,
+          1.5
+        ],
+        [
+          133.5,
+          1.5
+        ],
+        [
+          133.5,
+          65.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        70,
+        2,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        68,
+        0,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          186.0,
+          215.0
+        ],
+        [
+          35.0,
+          127.0
+        ],
+        [
+          195.0,
+          31.0
+        ],
+        [
+          347.0,
+          122.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          46.125,
+          53.375
+        ],
+        [
+          8.375,
+          31.375
+        ],
+        [
+          48.375,
+          7.375
+        ],
+        [
+          86.375,
+          30.125
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          46.12944732075892,
+          51.06274043719717
+        ],
+        [
+          12.304070843553566,
+          31.349938251805977
+        ],
+        [
+          48.37612860747686,
+          9.706703593452005
+        ],
+        [
+          82.42989756468278,
+          30.094157377042393
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "sidewalk",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          137.5,
+          65.5
+        ],
+        [
+          137.5,
+          1.5
+        ],
+        [
+          201.5,
+          1.5
+        ],
+        [
+          201.5,
+          65.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        138,
+        2,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        136,
+        0,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          542.0,
+          466.0
+        ],
+        [
+          390.0,
+          374.0
+        ],
+        [
+          548.0,
+          277.0
+        ],
+        [
+          701.0,
+          375.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          135.125,
+          116.125
+        ],
+        [
+          97.125,
+          93.125
+        ],
+        [
+          136.625,
+          68.875
+        ],
+        [
+          174.875,
+          93.375
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          135.15337969554162,
+          113.80436325630015
+        ],
+        [
+          100.96743197114411,
+          93.11286858100695
+        ],
+        [
+          136.602467814107,
+          71.2356630318462
+        ],
+        [
+          171.01674053010447,
+          93.2787919610472
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "interior",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          205.5,
+          65.5
+        ],
+        [
+          205.5,
+          1.5
+        ],
+        [
+          269.5,
+          1.5
+        ],
+        [
+          269.5,
+          65.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        206,
+        2,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        204,
+        0,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Interior.png",
+      "input_points": [
+        [
+          198.0,
+          734.0
+        ],
+        [
+          55.0,
+          655.0
+        ],
+        [
+          197.0,
+          573.0
+        ],
+        [
+          339.0,
+          655.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Interior.png",
+      "normalized_sheet_points": [
+        [
+          49.125,
+          183.125
+        ],
+        [
+          13.375,
+          163.375
+        ],
+        [
+          48.875,
+          142.875
+        ],
+        [
+          84.375,
+          163.375
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          49.125,
+          183.125
+        ],
+        [
+          13.375,
+          163.375
+        ],
+        [
+          48.875,
+          142.875
+        ],
+        [
+          84.375,
+          163.375
+        ]
+      ],
+      "inset_native_pixels": 0.0
+    },
+    {
+      "name": "brick",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          273.5,
+          37.5
+        ],
+        [
+          273.5,
+          1.5
+        ],
+        [
+          318.5,
+          1.5
+        ],
+        [
+          318.5,
+          37.5
+        ]
+      ],
+      "metres": [
+        1.4,
+        1.13
+      ],
+      "actualMetres": [
+        1.40625,
+        1.125
+      ],
+      "size_pixels": [
+        45,
+        36
+      ],
+      "pixel_rect_xywh": [
+        274,
+        2,
+        45,
+        36
+      ],
+      "padded_rect_xywh": [
+        272,
+        0,
+        49,
+        40
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Walls.png",
+      "input_points": [
+        [
+          145.0,
+          160.0
+        ],
+        [
+          145.0,
+          53.0
+        ],
+        [
+          253.0,
+          102.0
+        ],
+        [
+          253.0,
+          208.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Walls.png",
+      "normalized_sheet_points": [
+        [
+          35.875,
+          39.625
+        ],
+        [
+          35.875,
+          12.875
+        ],
+        [
+          62.875,
+          25.125
+        ],
+        [
+          62.875,
+          51.625
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          35.875,
+          39.625
+        ],
+        [
+          35.875,
+          12.875
+        ],
+        [
+          62.875,
+          25.125
+        ],
+        [
+          62.875,
+          51.625
+        ]
+      ],
+      "inset_native_pixels": 0.0
+    },
+    {
+      "name": "concrete",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          322.5,
+          33.5
+        ],
+        [
+          322.5,
+          1.5
+        ],
+        [
+          354.5,
+          1.5
+        ],
+        [
+          354.5,
+          33.5
+        ]
+      ],
+      "metres": [
+        1.0,
+        1.0
+      ],
+      "actualMetres": [
+        1.0,
+        1.0
+      ],
+      "size_pixels": [
+        32,
+        32
+      ],
+      "pixel_rect_xywh": [
+        323,
+        2,
+        32,
+        32
+      ],
+      "padded_rect_xywh": [
+        321,
+        0,
+        36,
+        36
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Walls.png",
+      "input_points": [
+        [
+          120.0,
+          67.0
+        ],
+        [
+          120.0,
+          63.0
+        ],
+        [
+          124.0,
+          65.0
+        ],
+        [
+          124.0,
+          69.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Walls.png",
+      "normalized_sheet_points": [
+        [
+          29.625,
+          16.375
+        ],
+        [
+          29.625,
+          15.375
+        ],
+        [
+          30.625,
+          15.875
+        ],
+        [
+          30.625,
+          16.875
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          29.625,
+          16.375
+        ],
+        [
+          29.625,
+          15.375
+        ],
+        [
+          30.625,
+          15.875
+        ],
+        [
+          30.625,
+          16.875
+        ]
+      ],
+      "inset_native_pixels": 0.0
+    },
+    {
+      "name": "glass",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          358.5,
+          41.5
+        ],
+        [
+          358.5,
+          1.5
+        ],
+        [
+          390.5,
+          1.5
+        ],
+        [
+          390.5,
+          41.5
+        ]
+      ],
+      "metres": [
+        1.0,
+        1.25
+      ],
+      "actualMetres": [
+        1.0,
+        1.25
+      ],
+      "size_pixels": [
+        32,
+        40
+      ],
+      "pixel_rect_xywh": [
+        359,
+        2,
+        32,
+        40
+      ],
+      "padded_rect_xywh": [
+        357,
+        0,
+        36,
+        44
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Walls.png",
+      "input_points": [
+        [
+          855.0,
+          144.0
+        ],
+        [
+          855.0,
+          99.0
+        ],
+        [
+          870.0,
+          106.0
+        ],
+        [
+          870.0,
+          151.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Walls.png",
+      "normalized_sheet_points": [
+        [
+          213.375,
+          35.625
+        ],
+        [
+          213.375,
+          24.375
+        ],
+        [
+          217.125,
+          26.125
+        ],
+        [
+          217.125,
+          37.375
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          213.375,
+          35.625
+        ],
+        [
+          213.375,
+          24.375
+        ],
+        [
+          217.125,
+          26.125
+        ],
+        [
+          217.125,
+          37.375
+        ]
+      ],
+      "inset_native_pixels": 0.0
+    },
+    {
+      "name": "roof",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          394.5,
+          65.5
+        ],
+        [
+          394.5,
+          1.5
+        ],
+        [
+          458.5,
+          1.5
+        ],
+        [
+          458.5,
+          65.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        395,
+        2,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        393,
+        0,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          186.0,
+          215.0
+        ],
+        [
+          35.0,
+          127.0
+        ],
+        [
+          195.0,
+          31.0
+        ],
+        [
+          347.0,
+          122.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          46.125,
+          53.375
+        ],
+        [
+          8.375,
+          31.375
+        ],
+        [
+          48.375,
+          7.375
+        ],
+        [
+          86.375,
+          30.125
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          46.12944732075892,
+          51.06274043719717
+        ],
+        [
+          12.304070843553566,
+          31.349938251805977
+        ],
+        [
+          48.37612860747686,
+          9.706703593452005
+        ],
+        [
+          82.42989756468278,
+          30.094157377042393
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "crackedRoad",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          1.5,
+          133.5
+        ],
+        [
+          1.5,
+          69.5
+        ],
+        [
+          65.5,
+          69.5
+        ],
+        [
+          65.5,
+          133.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        2,
+        70,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        0,
+        68,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          547.0,
+          217.0
+        ],
+        [
+          392.0,
+          124.0
+        ],
+        [
+          546.0,
+          31.0
+        ],
+        [
+          701.0,
+          124.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          136.375,
+          53.875
+        ],
+        [
+          97.625,
+          30.625
+        ],
+        [
+          136.125,
+          7.375
+        ],
+        [
+          174.875,
+          30.625
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          136.37166199410626,
+          51.54061643852563
+        ],
+        [
+          101.50305900613613,
+          30.61945464574357
+        ],
+        [
+          136.1283380058937,
+          9.709383561474374
+        ],
+        [
+          170.99694099386386,
+          30.630545354256434
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "crackedSidewalk",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          69.5,
+          133.5
+        ],
+        [
+          69.5,
+          69.5
+        ],
+        [
+          133.5,
+          69.5
+        ],
+        [
+          133.5,
+          133.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        70,
+        70,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        68,
+        68,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          901.0,
+          470.0
+        ],
+        [
+          744.0,
+          376.0
+        ],
+        [
+          897.0,
+          281.0
+        ],
+        [
+          1057.0,
+          374.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          224.875,
+          117.125
+        ],
+        [
+          185.625,
+          93.625
+        ],
+        [
+          223.875,
+          69.875
+        ],
+        [
+          263.875,
+          93.125
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          224.86076023262808,
+          114.78540331492523
+        ],
+        [
+          189.46649583293396,
+          93.59393291001282
+        ],
+        [
+          223.908992630654,
+          72.20806888528467
+        ],
+        [
+          259.97934945836766,
+          93.1739637913932
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "manhole",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          137.5,
+          133.5
+        ],
+        [
+          137.5,
+          69.5
+        ],
+        [
+          201.5,
+          69.5
+        ],
+        [
+          201.5,
+          133.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        138,
+        70,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        136,
+        68,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          902.0,
+          716.0
+        ],
+        [
+          746.0,
+          621.0
+        ],
+        [
+          901.0,
+          526.0
+        ],
+        [
+          1059.0,
+          621.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          225.125,
+          178.625
+        ],
+        [
+          186.125,
+          154.875
+        ],
+        [
+          224.875,
+          131.125
+        ],
+        [
+          264.375,
+          154.875
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          225.12831572021653,
+          176.28535331158344
+        ],
+        [
+          189.96125035944218,
+          154.86951222649645
+        ],
+        [
+          224.88494767431268,
+          133.46466548512421
+        ],
+        [
+          260.5027567500741,
+          154.8804367648543
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "yellow",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          205.5,
+          133.5
+        ],
+        [
+          205.5,
+          69.5
+        ],
+        [
+          269.5,
+          69.5
+        ],
+        [
+          269.5,
+          133.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        206,
+        70,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        204,
+        68,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          1257.0,
+          222.0
+        ],
+        [
+          1096.0,
+          126.0
+        ],
+        [
+          1253.0,
+          31.0
+        ],
+        [
+          1417.0,
+          127.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          313.875,
+          55.125
+        ],
+        [
+          273.625,
+          31.125
+        ],
+        [
+          312.875,
+          7.375
+        ],
+        [
+          353.875,
+          31.375
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          313.8771684616473,
+          52.797738217655805
+        ],
+        [
+          277.50906541734963,
+          31.112409694347868
+        ],
+        [
+          312.8919531856581,
+          9.702382063842737
+        ],
+        [
+          349.9369370084108,
+          31.38725064301503
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "white",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          273.5,
+          133.5
+        ],
+        [
+          273.5,
+          69.5
+        ],
+        [
+          337.5,
+          69.5
+        ],
+        [
+          337.5,
+          133.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        274,
+        70,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        272,
+        68,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          902.0,
+          218.0
+        ],
+        [
+          743.0,
+          124.0
+        ],
+        [
+          899.0,
+          31.0
+        ],
+        [
+          1058.0,
+          125.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          225.125,
+          54.125
+        ],
+        [
+          185.375,
+          30.625
+        ],
+        [
+          224.375,
+          7.375
+        ],
+        [
+          264.125,
+          30.875
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          225.1207359512436,
+          51.79910958788704
+        ],
+        [
+          189.2928057126107,
+          30.61781749712292
+        ],
+        [
+          224.37926404875643,
+          9.700890412112951
+        ],
+        [
+          260.2071942873893,
+          30.882182502877072
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    },
+    {
+      "name": "crosswalk",
+      "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\PlanarTiles.png",
+      "points": [
+        [
+          341.5,
+          133.5
+        ],
+        [
+          341.5,
+          69.5
+        ],
+        [
+          405.5,
+          69.5
+        ],
+        [
+          405.5,
+          133.5
+        ]
+      ],
+      "metres": [
+        2.0,
+        2.0
+      ],
+      "actualMetres": [
+        2.0,
+        2.0
+      ],
+      "size_pixels": [
+        64,
+        64
+      ],
+      "pixel_rect_xywh": [
+        342,
+        70,
+        64,
+        64
+      ],
+      "padded_rect_xywh": [
+        340,
+        68,
+        68,
+        68
+      ],
+      "input_source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\Roads.png",
+      "input_points": [
+        [
+          191.0,
+          471.0
+        ],
+        [
+          30.0,
+          376.0
+        ],
+        [
+          192.0,
+          282.0
+        ],
+        [
+          349.0,
+          376.0
+        ]
+      ],
+      "normalized_sheet": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Art\\IsometricUrban\\Gpt2\\WholeSheetNormalized\\Sheets\\Roads.png",
+      "normalized_sheet_points": [
+        [
+          47.375,
+          117.375
+        ],
+        [
+          7.125,
+          93.625
+        ],
+        [
+          47.625,
+          70.125
+        ],
+        [
+          86.875,
+          93.625
+        ]
+      ],
+      "normalized_plane_points": [
+        [
+          47.365374615293526,
+          115.0471031263113
+        ],
+        [
+          11.085082646964189,
+          93.63947743071326
+        ],
+        [
+          47.60908123010761,
+          72.44653998123498
+        ],
+        [
+          82.98767783765328,
+          93.62862966982917
+        ]
+      ],
+      "inset_native_pixels": 2.0
+    }
+  ]
+}

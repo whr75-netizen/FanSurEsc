@@ -150,16 +150,19 @@ namespace FantasySurvival.SceneFlow
                 return;
             }
 
-            player.SetPositionAndRotation(destination.transform.position, destination.transform.rotation);
-
-            Rigidbody playerRigidbody = player.GetComponent<Rigidbody>();
-            if (playerRigidbody != null)
+            string teleportError = null;
+            if (shell.PlayerMovement == null ||
+                !shell.PlayerMovement.TryTeleport(
+                    destination.transform.position,
+                    destination.transform.rotation,
+                    out teleportError))
             {
-                playerRigidbody.linearVelocity = Vector3.zero;
-                playerRigidbody.angularVelocity = Vector3.zero;
+                DirectSceneTravel.FailArrival(
+                    activeSceneName,
+                    $"Scene '{activeSceneName}' cannot place the Player: " +
+                    $"{teleportError ?? "The persistent PlayerMovement is missing."}");
+                return;
             }
-
-            Physics.SyncTransforms();
 
             if (shell.RaidSession == null)
             {

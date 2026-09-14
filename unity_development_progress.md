@@ -2413,3 +2413,20 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` Unity6000.5.9f1, 최종seed−743543409, 건물150개, readiness·문→실내 NavMesh·Player 크기 통과 공간·벽 차단·동일Player·UV 조건 확인. 실내roof0.04, 뒤 가림0.18, 시야복귀1.0. 키 입력 보행 녹화는 아니다. Console의 초기오류3건은 보존했고 수정 뒤 새 오류는 관측하지 않았다.
 - `[결과]` `LocalOnly/IsometricMapTrial01/technical.json`, `v2b-{outside,inside,behind}.png`, `isometric-map-comparison.webp`. WebP는 실제 새 Unity 화면3개의 상태 비교다. WorkLoop v2 후보의 art→observe→필요한 기술 gate 완료이며 미술 합격은 아니다.
 - `[보존·경계]` Player·이동·기존 3D 표현 경로·원본과 사용자 dirty 파일은 보존했다. 등각 geometry1002/치수 hash는 기존 원정 복구와 구분한다. 원래 원정 hash는 style 미사용 시 유지한다. 현재 원화 명암을 사용하는 단층 시험이며 임시 지붕 표면·다층·자유각 원화·실시간 환경광·모든seed·복구/카메라 왕복·GPU Profile·빌드는 미검증이다. Play 종료, GameMapTest dirty 없음. 시각 승인 전 추가 미적 수정은 보류한다.
+
+## 142. 맵 치수·카메라 이동·전체시트 픽셀 정규화와 가중 타일 `[MAP-01][MOVE-01][CAMERA-01][CHARACTER-RENDER-01]`
+
+- `[사용자 정정]` 전체 등각 벽 그림의 재투영, 작은 건물/큰 캐릭터, 월드축 WASD, 단일 도로 타일을 지적했다. 이후 수정 PerfectPixel은 조각 추출 전 전체 시트에 적용하도록 정정했고, Ground까지 아스팔트인 점과 도로의 반복 흰 테두리도 수정 요청했다. 기법/후보/좌표계/실패/결정은 `docs/references/isometric_urban_map_pipeline.md` D03~D05에 기록했다.
+- `[구현]` 실제 metric box벽/창틀/두께와 동차UV, 기존 layout높이를 층고3.4m로 반영한3~5층 외관/지상층 실내를 사용한다. 공통 외형root만 균일scale하여 약1.8m, 문2.65m다. 같은 PlayerMovement.Update가 현재 셸Camera의 XZ직교기저를 사용하며 변환한 방향으로 충돌/회전을 처리한다. 차선은 기존 road graph에서 도출하고 ground/sidewalk/road의 역할별 가중 후보는 seed/x/z로 선택한다. RuleTile 패키지를 설치하지 않았다.
+- `[원인과 수정]` 도로용 원본사각 영역에 독립슬랩의 밝은 외곽선이 섞여 반복 격자를 만들었고, Ground와Road가 같은 이미지라 인도가 띠처럼 보였다. 도로·보도 상면에서 공통8source-px 경계를 제외하고 Ground/Sidewalk에 동일한 밝은 후보를 지정했다. 두 영역은 표시Y=.005의 연속 평면으로 하고, 이 스타일에서만 내부 보도단차를 제거했다. 물리 바닥·NavMesh·격자 의미는 유지했다.
+- `[실행]` 기존 수정 엔진으로 원본3장 전체를 각1회362×272로 정규화한 뒤14개 면을 nearest homography로 추출했다. 전체15.304초, 원본/엔진SHA불변, 조각별추가정규화0회. 현재 결과 `Assets/Art/IsometricUrban/Gpt2/WholeSheetNormalized/`, 재사용입력/실행기 `Tools/WorldArt/`. 이전출력과 원본은 보존했다. 색/명암/이미지 생성은 하지 않았다.
+- `[Play Mode 호출 확인]` 직전seed−1483496983에서 StepMove40카메라/입력case, 실제외형1.795856m, 문/벽/NavMesh/안·뒤fade/동일Player/UV/도로표시영역을 확인했다. 최종seed−412374159에서 새atlas 실제재질참조, Ground=Sidewalk, 평탄지면, 황/백/횡단보도 사용, 도로밖quad0을 확인했다. 바뀌지 않은 입력·문·크기 검사는 재실행하지 않았다. 증거 `LocalOnly/IsometricMapTrial03/technical.json`, `LocalOnly/IsometricMapTrial04/{technical.json,street.png,inside.png,bake/bake-report.json}`. WorkLoop v7은 필요한기술gate까지만 완료했다.
+- `[경계·판정대기]` 실제 물리키보드, 시각 승인, 모든seed/저장복구/카메라왕복/GPU Profile/빌드는 미검증이다. 계단·경사이동·층전환은 설계만 있다. 주광Lambert+SH 외 조명 통합, 투명벽 중첩과 전경 near-plane잘림, 완전무봉제는 해결했다고 주장하지 않는다. Console의 과거오류3건을 보존했고 최종게임실행의 새오류는 관측하지않았다. 임시MCP metadata parser오류는 확정좌표의Editor API적용으로 해결했으며 정규화 엔진 재실행은 없었다. 최종 실제 화면으로 사용자 피드백을 요청한 뒤 추가 시각 보정을 멈췄다.
+
+## 143. 0.2m 연석·기본 계단 이동·2층 외관 `[MAP-01][MOVE-01][TRAVEL-01]`
+
+- `[확정]` 밝은 포장 재료는 유지하고 단차0.2m, 건물2층, 횡단보도 줄의 축 교환을 적용했다. 사용자는 현재 결과가 괜찮고 디테일은 나중에 조절한다고 유지 승인했다. 이후 재개 요청은 도로 끝의 생성 알고리즘이다.
+- `[구현]` 같은 Player에 Unity CharacterController(height1.8/radius.5/stepOffset.3/skin.05)를 사용하며 같은 Rigidbody는 kinematic, 기존 BoxCollider는 비활성, 상호작용 trigger는 유지한다. 기존 PlayerMovement만 Move/중력을 계산한다. 씬 도착과 checkpoint 복구는 동일 Player의 TryTeleport를 사용해 controller 상태/수직속도를 처리한다.
+- `[높이 원본]` SurfaceGrid 역할에서 도로Y=.005/포장Y=.205를 파생해 메시·MeshCollider·건물root·배치물/spawn 지지높이·NavMesh가 공유한다. 실제 지상층 바닥Collider를 사용하고 외관높이는 계획부터2×3.4=6.8m다. checkpoint geometry1004이며 원본/정규화 atlas는 재처리하지 않았다.
+- `[Play Mode 호출 확인]` seed475456319에서 실제 StepMove→CharacterController.Move의 연석 상승/하강, 벽차단, 문통과, 도로↔포장 NavMesh 경로, 2층6.8m, 실제 횡단보도 UV축을 확인했다. 상승rootY=.7549998/하강Y=.5549999, 발과표면오차≤.06m다. 실제 GameMapTest→GameMap1→GameMapTest 왕복 후 Player/Camera/InventoryUI 동일 EntityId와 Controller/이동 활성·잠금해제를 확인했다. Editor 임시저장 profile을 사용했다.
+- `[근거·경계]` `LocalOnly/IsometricMapTrial05/{technical.json,travel.json,overview.png,step.webp}`. 연속동작은 실제 새 캡처23장, 관찰용80ms/frame이다. WorkLoop v8 최종기술gate 통과, 사용자 유지 승인. Play 종료/GameMapTest dirty 없음, 시험용 background실행도 원래false로 복원했다. 기존 Console오류3건은 보존했고 새 게임오류는 관측하지 않았다. 실제 키보드·대각벽모서리·큰낙차/다른경사·전체Recovery·모든seed·GPU/빌드는 미검증이며 층전환/긴계단은 미구현이다.

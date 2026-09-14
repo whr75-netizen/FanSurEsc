@@ -438,8 +438,9 @@ namespace FantasySurvival.Raids
                     }
 
                     Vector3 worldPosition = mapGenerator.GeneratedContent.TransformPoint(
-                        new Vector3(placement.LocalPosition.x, 0f, placement.LocalPosition.y));
-                    worldPosition.y = entry.GroundYOffset;
+                        new Vector3(placement.LocalPosition.x,
+                            mapGenerator.GetLocalSupportHeight(placement.LocalPosition), placement.LocalPosition.y));
+                    worldPosition.y += entry.GroundYOffset;
                     Quaternion worldRotation =
                         mapGenerator.GeneratedContent.rotation *
                         Quaternion.Euler(0f, placement.LocalYawDegrees, 0f);

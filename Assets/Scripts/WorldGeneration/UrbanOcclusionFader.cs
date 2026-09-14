@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using FantasySurvival.SceneFlow;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 namespace FantasySurvival.WorldGeneration
 {
@@ -21,6 +22,8 @@ namespace FantasySurvival.WorldGeneration
             public Collider Collider;
             public Color BaseColor;
             public float Opacity = 1f;
+            public Material OpaqueMaterial;
+            public Material FadedMaterial;
         }
 
         private sealed class Building
@@ -33,6 +36,7 @@ namespace FantasySurvival.WorldGeneration
         }
 
         private readonly List<Building> buildings = new List<Building>();
+        private readonly Dictionary<Material, Material> fadeMaterials = new Dictionary<Material, Material>();
         private MaterialPropertyBlock properties;
 
         private void Awake()
@@ -88,8 +92,9 @@ namespace FantasySurvival.WorldGeneration
             if (camera == null)
                 return;
 
-            Ray torsoRay = CreateSightRay(camera, playerFeet + Vector3.up * 0.8f, out float torsoDistance);
-            Ray headRay = CreateSightRay(camera, playerFeet + Vector3.up * 1.5f, out float headDistance);
+            // Root is .5m above the ground; the normalized presentation is about 1.8m high.
+            Ray torsoRay = CreateSightRay(camera, playerFeet + Vector3.up * 0.4f, out float torsoDistance);
+            Ray headRay = CreateSightRay(camera, playerFeet + Vector3.up * 1.15f, out float headDistance);
             float fadeStep = Mathf.Max(0f, deltaTime) / FadeSeconds;
             for (int index = 0; index < buildings.Count; index++)
             {
@@ -143,7 +148,22 @@ namespace FantasySurvival.WorldGeneration
             renderer.GetPropertyBlock(properties);
             if (properties.HasColor(BaseColorId))
                 color = properties.GetColor(BaseColorId);
-            return new Surface { Renderer = renderer, Collider = collider, BaseColor = color };
+            Material faded = material;
+            if (material != null && material.renderQueue < (int)RenderQueue.Transparent)
+            {
+                if (!fadeMaterials.TryGetValue(material, out faded))
+                {
+                    faded = new Material(material) { name = material.name + " (occlusion fade)", hideFlags = HideFlags.DontSave };
+                    faded.SetFloat("_ZWrite", 0f);
+                    faded.SetFloat("_SrcBlend", (float)BlendMode.SrcAlpha);
+                    faded.SetFloat("_DstBlend", (float)BlendMode.OneMinusSrcAlpha);
+                    faded.SetOverrideTag("RenderType", "Transparent");
+                    faded.renderQueue = (int)RenderQueue.Transparent;
+                    fadeMaterials.Add(material, faded);
+                }
+            }
+            return new Surface { Renderer = renderer, Collider = collider, BaseColor = color,
+                OpaqueMaterial = material, FadedMaterial = faded };
         }
 
         private void SetOpacity(Surface surface, float opacity)
@@ -152,6 +172,10 @@ namespace FantasySurvival.WorldGeneration
                 return;
 
             surface.Renderer.GetPropertyBlock(properties);
+            // Fully visible boxes use normal depth writes. Only occluding surfaces enter the blend pass.
+            Material targetMaterial = opacity < 0.999f ? surface.FadedMaterial : surface.OpaqueMaterial;
+            if (surface.Renderer.sharedMaterial != targetMaterial)
+                surface.Renderer.sharedMaterial = targetMaterial;
             Color color = properties.HasColor(BaseColorId)
                 ? properties.GetColor(BaseColorId) : surface.BaseColor;
             color.a = surface.BaseColor.a * opacity;
@@ -210,6 +234,13 @@ namespace FantasySurvival.WorldGeneration
             }
             InsideBuildingCount = 0;
             FadedRendererCount = 0;
+        }
+
+        private void OnDestroy()
+        {
+            foreach (Material material in fadeMaterials.Values)
+                if (material != null) Destroy(material);
+            fadeMaterials.Clear();
         }
     }
 }

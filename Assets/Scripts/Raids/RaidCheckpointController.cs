@@ -1578,6 +1578,13 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
+            PlayerMovement playerMovement = shell.PlayerMovement;
+            if (playerMovement == null)
+            {
+                error = "The persistent PlayerMovement is missing during checkpoint restore.";
+                return false;
+            }
+
             if (!TryValidateCheckpoint(baseline, checkpoint, out error))
             {
                 return false;
@@ -1607,17 +1614,13 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            Transform player = shell.PlayerTransform;
-            player.SetPositionAndRotation(
-                RaidCheckpointSceneBinding.RestorePosition(checkpoint.playerTransform),
-                RaidCheckpointSceneBinding.RestoreRotation(checkpoint.playerTransform));
-            Rigidbody body = player.GetComponent<Rigidbody>();
-            if (body != null)
+            if (!playerMovement.TryTeleport(
+                    RaidCheckpointSceneBinding.RestorePosition(checkpoint.playerTransform),
+                    RaidCheckpointSceneBinding.RestoreRotation(checkpoint.playerTransform),
+                    out error))
             {
-                body.linearVelocity = Vector3.zero;
-                body.angularVelocity = Vector3.zero;
+                return false;
             }
-            Physics.SyncTransforms();
 
             if (!playerStats.TryRestoreCheckpointHealth(
                     checkpoint.playerCurrentHealth,

@@ -14,40 +14,106 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldGeneration.IsometricUrbanStyle
   surfaceShader: {fileID: 4800000, guid: 6adaff21e80322a49a8aeb22d161f667, type: 3}
   ground:
-    texture: {fileID: 2800000, guid: dad7a6c4d41fa8a49aa72b3a1b268af6, type: 3}
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
     mask: {fileID: 0}
-    p00: {x: 186, y: 215}
-    p01: {x: 35, y: 127}
-    p11: {x: 195, y: 31}
-    p10: {x: 347, y: 122}
+    p00: {x: 137.5, y: 65.5}
+    p01: {x: 137.5, y: 1.5}
+    p11: {x: 201.5, y: 1.5}
+    p10: {x: 201.5, y: 65.5}
   sidewalk:
-    texture: {fileID: 2800000, guid: dad7a6c4d41fa8a49aa72b3a1b268af6, type: 3}
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
     mask: {fileID: 0}
-    p00: {x: 542, y: 466}
-    p01: {x: 390, y: 374}
-    p11: {x: 548, y: 277}
-    p10: {x: 701, y: 375}
+    p00: {x: 137.5, y: 65.5}
+    p01: {x: 137.5, y: 1.5}
+    p11: {x: 201.5, y: 1.5}
+    p10: {x: 201.5, y: 65.5}
   road:
-    texture: {fileID: 2800000, guid: dad7a6c4d41fa8a49aa72b3a1b268af6, type: 3}
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
     mask: {fileID: 0}
-    p00: {x: 186, y: 215}
-    p01: {x: 35, y: 127}
-    p11: {x: 195, y: 31}
-    p10: {x: 347, y: 122}
+    p00: {x: 69.5, y: 65.5}
+    p01: {x: 69.5, y: 1.5}
+    p11: {x: 133.5, y: 1.5}
+    p10: {x: 133.5, y: 65.5}
+  yellowLine:
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 205.5, y: 133.5}
+    p01: {x: 205.5, y: 69.5}
+    p11: {x: 269.5, y: 69.5}
+    p10: {x: 269.5, y: 133.5}
+  whiteLine:
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 273.5, y: 133.5}
+    p01: {x: 273.5, y: 69.5}
+    p11: {x: 337.5, y: 69.5}
+    p10: {x: 337.5, y: 133.5}
+  crosswalk:
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 341.5, y: 133.5}
+    p01: {x: 341.5, y: 69.5}
+    p11: {x: 405.5, y: 69.5}
+    p10: {x: 405.5, y: 133.5}
+  groundVariants:
+    baseWeight: 6
+    variants:
+    - name: Cracked pavement
+      patch:
+        texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+        mask: {fileID: 0}
+        p00: {x: 69.5, y: 133.5}
+        p01: {x: 69.5, y: 69.5}
+        p11: {x: 133.5, y: 69.5}
+        p10: {x: 133.5, y: 133.5}
+      weight: 1
+  sidewalkVariants:
+    baseWeight: 6
+    variants:
+    - name: Cracked Sidewalk
+      patch:
+        texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+        mask: {fileID: 0}
+        p00: {x: 69.5, y: 133.5}
+        p01: {x: 69.5, y: 69.5}
+        p11: {x: 133.5, y: 69.5}
+        p10: {x: 133.5, y: 133.5}
+      weight: 1
+  roadVariants:
+    baseWeight: 960
+    variants:
+    - name: Cracked Road
+      patch:
+        texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+        mask: {fileID: 0}
+        p00: {x: 1.5, y: 133.5}
+        p01: {x: 1.5, y: 69.5}
+        p11: {x: 65.5, y: 69.5}
+        p10: {x: 65.5, y: 133.5}
+      weight: 96
+    - name: Manhole
+      patch:
+        texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+        mask: {fileID: 0}
+        p00: {x: 137.5, y: 133.5}
+        p01: {x: 137.5, y: 69.5}
+        p11: {x: 201.5, y: 69.5}
+        p10: {x: 201.5, y: 133.5}
+      weight: 11
   interior:
-    texture: {fileID: 2800000, guid: e2b5cbcf7054f074cb912f07c365620b, type: 3}
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
     mask: {fileID: 0}
-    p00: {x: 198, y: 734}
-    p01: {x: 55, y: 655}
-    p11: {x: 197, y: 573}
-    p10: {x: 339, y: 655}
+    p00: {x: 205.5, y: 65.5}
+    p01: {x: 205.5, y: 1.5}
+    p11: {x: 269.5, y: 1.5}
+    p10: {x: 269.5, y: 65.5}
   wall:
-    texture: {fileID: 2800000, guid: caee850978918784580390fed1827928, type: 3}
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
     mask: {fileID: 0}
-    p00: {x: 145, y: 160}
-    p01: {x: 145, y: 53}
-    p11: {x: 253, y: 102}
-    p10: {x: 253, y: 208}
+    p00: {x: 273.5, y: 37.5}
+    p01: {x: 273.5, y: 1.5}
+    p11: {x: 318.5, y: 1.5}
+    p10: {x: 318.5, y: 37.5}
   propAtlas: {fileID: 2800000, guid: 8155697fad0fced4b905933030557df8, type: 3}
   propPixelRect:
     serializedVersion: 2
@@ -88,6 +154,29 @@ MonoBehaviour:
     baseLeft: {x: 1138, y: 492}
     baseRight: {x: 1325, y: 568}
     topLeft: {x: 1138, y: 284}
+  concrete:
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 322.5, y: 33.5}
+    p01: {x: 322.5, y: 1.5}
+    p11: {x: 354.5, y: 1.5}
+    p10: {x: 354.5, y: 33.5}
+  glass:
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 358.5, y: 41.5}
+    p01: {x: 358.5, y: 1.5}
+    p11: {x: 390.5, y: 1.5}
+    p10: {x: 390.5, y: 41.5}
+  roof:
+    texture: {fileID: 2800000, guid: 0f71b6b2c382e5746bf09b73b113fc86, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 394.5, y: 65.5}
+    p01: {x: 394.5, y: 1.5}
+    p11: {x: 458.5, y: 1.5}
+    p10: {x: 458.5, y: 65.5}
+  brickRepeatMetres: {x: 1.40625, y: 1.125}
+  concreteRepeatMetres: {x: 1, y: 1}
   wallHeight: 3.4
   wallModuleWidth: 4.297599
   doorWidth: 2.4

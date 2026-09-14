@@ -1,6 +1,8 @@
 # Unity Rule Tile — 규칙 기반 지형 배치와 프로젝트 적용 범위
 
-조사일: 2026-09-14. **[현재] 공식 문헌·프로젝트 코드 조사만 완료했습니다. 패키지 설치, 씬 변경, 실행 실험은 하지 않았습니다.** 사용자가 요청한 기능 정리이며, 아래 적용안은 채택 결정이 아닙니다.
+조사일: 2026-09-14. **[현재] RuleTile 패키지는 설치하지 않았습니다.** 후속 맵 작업에서 기존 3D 격자에 역할별 가중 랜덤 표현을 연결했습니다. 아래 공식 RuleTile 조사와 현재 프로젝트의 구현 범위를 구분합니다.
+
+현재 구현은 `IsometricUrbanStyle`의 Ground/Sidewalk/Road 후보·weight → `hash(seed,x,z)` → 누적확률 선택입니다. 같은 seed와 설정은 같은 타일을 고르고, 도로망·교차부·차선 방향은 기존 road graph가 정합니다. 밝은 Ground/Sidewalk는 기본6:금간타일1, Road는 기본960:금간도로96:맨홀11입니다. 후보 배열에 같은 용도의 정규화된 면을 추가할 수 있습니다. 전체 원본시트 정규화와 실제 실행 근거는 [맵 파이프라인 D05](isometric_urban_map_pipeline.md)에 있습니다. 이는 Unity RuleTile/WeightedRandomTile 클래스를 설치·연결한 결과가 아닙니다.
 
 ## 1. 기능과 현재 결정
 
@@ -13,7 +15,7 @@
 | 현재 설치 근거 | [manifest](../../Packages/manifest.json)·[lock](../../Packages/packages-lock.json)에 Extras가 없습니다. `com.unity.modules.tilemap`만으로 Rule Tile이 설치되었다고 판단하지 않습니다. `Assets`·`Packages`의 RuleTile 이름 파일 검색도 일치 항목이 없었습니다. |
 | 맡길 수 있는 부분 | 지면 경계, 벽·울타리·물가 연결, 장식 변형과 애니메이션 타일, 동일 규칙을 쓰는 다른 타일셋. |
 | 별도 단계 | 도로망·방·탈출 경로 생성, 접근성·게임 규칙 판정, 캐릭터 리깅, 2D→3D 복원, 픽셀화, 외부 모드 로딩. |
-| 결정 | **[제안] 지형 표현 자동화 후보로 보관합니다. 현재 3D 맵 생성기 교체는 보류합니다.** 실제 채택 여부는 입력 타일셋과 렌더 경로 선택 후 결정합니다. |
+| 결정 | RuleTile 패키지 이관은 보류합니다. 현재 3D 생성기에 역할별 후보와 가중 랜덤 선택을 연결했으며, 연결 관계는 기존 격자/도로망이 소유합니다. |
 
 버전 근거: [Unity 6000.5 — 2D Tilemap Extras](https://docs.unity3d.com/6000.5/Documentation/Manual/com.unity.2d.tilemap.extras.html). 버전 표는 설치 가능성의 근거이며 이 프로젝트에서 실행해 호환성을 확인했다는 뜻은 아닙니다.
 

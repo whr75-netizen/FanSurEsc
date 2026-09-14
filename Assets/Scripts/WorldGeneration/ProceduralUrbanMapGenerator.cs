@@ -29,6 +29,7 @@ namespace FantasySurvival.WorldGeneration
         private static readonly Color MedicalPoiBuildingColor = new Color(0.18f, 0.62f, 0.46f, 1f);
         private const float SurfaceHeight = 0.005f;
         private const float SidewalkSurfaceHeight = 0.12f;
+        public const float PavementElevation = 0.2f;
         [Header("Existing Scene Anchors")]
         [SerializeField] private Transform entryAnchor;
         [SerializeField] private Transform returnPortal;
@@ -49,7 +50,7 @@ namespace FantasySurvival.WorldGeneration
         [Header("Optional Isometric Atlas Prototype")]
         [SerializeField] private IsometricUrbanStyle isometricStyle;
         public IsometricUrbanStyle IsometricStyle => isometricStyle;
-        public int CheckpointGeneratorVersion => isometricStyle != null ? 1002 : CurrentLayout.GeneratorVersion;
+        public int CheckpointGeneratorVersion => isometricStyle != null ? 1004 : CurrentLayout.GeneratorVersion;
         private UrbanOcclusionFader occlusionFader;
 
         [Header("Octilinear Road Graph")]
@@ -94,6 +95,8 @@ namespace FantasySurvival.WorldGeneration
         private readonly Dictionary<Material, Material> runtimeBuildingMaterials =
             new Dictionary<Material, Material>();
         private Material[] runtimeSurfaceMaterials;
+        private IsometricUrbanStyle.SurfaceVariantSampler[] runtimeSurfaceSamplers;
+        private int[][] runtimeSurfaceVariantMaterials;
         private Mesh runtimeSurfaceMesh;
         private NavMeshData runtimeNavMeshData;
         private UrbanMapLayout pendingNavigationLayout;
@@ -296,6 +299,7 @@ namespace FantasySurvival.WorldGeneration
                 Add(BitConverter.SingleToInt32Bits(isometricStyle.wallHeight));
                 Add(BitConverter.SingleToInt32Bits(isometricStyle.wallThickness));
                 Add(BitConverter.SingleToInt32Bits(isometricStyle.doorWidth));
+                Add(BitConverter.SingleToInt32Bits(PavementElevation));
             }
             return hash;
             void Add(int value) { unchecked { hash = (hash ^ (uint)value) * 1099511628211UL; } }
@@ -515,8 +519,8 @@ namespace FantasySurvival.WorldGeneration
                 minBuildingDepthTiles,
                 maxBuildingDepthTiles,
                 buildingDensity,
-                minBuildingHeight,
-                maxBuildingHeight,
+                isometricStyle != null ? isometricStyle.wallHeight * 2f : minBuildingHeight,
+                isometricStyle != null ? isometricStyle.wallHeight * 2f : maxBuildingHeight,
                 anchorClearance,
                 protectedAnchorClearance,
                 junctionFurnitureClearanceTiles,
@@ -630,7 +634,16 @@ namespace FantasySurvival.WorldGeneration
                     uv.Add(Vector2.one);
                     uv.Add(Vector2.right);
 
-                    List<int> triangles = trianglesBySurface[(int)kind];
+                    int materialIndex = (int)kind;
+                    if (isometricStyle != null)
+                    {
+                        // The family catalog chooses decoration only. Road-port masks and
+                        // the separate directional marking geometry remain authoritative.
+                        int variant = runtimeSurfaceSamplers[materialIndex].SelectVariant(CurrentSeed, x, z);
+                        if (variant > 0)
+                            materialIndex = runtimeSurfaceVariantMaterials[materialIndex][variant - 1];
+                    }
+                    List<int> triangles = trianglesBySurface[materialIndex];
                     triangles.Add(vertexStart);
                     triangles.Add(vertexStart + 1);
                     triangles.Add(vertexStart + 2);
@@ -662,10 +675,14 @@ namespace FantasySurvival.WorldGeneration
             surfaceObject.transform.SetParent(generatedContent, false);
             var filter = surfaceObject.AddComponent<MeshFilter>();
             filter.sharedMesh = runtimeSurfaceMesh;
+            if (isometricStyle != null)
+                surfaceObject.AddComponent<MeshCollider>().sharedMesh = runtimeSurfaceMesh;
             var renderer = surfaceObject.AddComponent<MeshRenderer>();
             renderer.sharedMaterials = runtimeSurfaceMaterials;
             renderer.shadowCastingMode = ShadowCastingMode.Off;
             renderer.receiveShadows = true;
+            if (isometricStyle != null)
+                UrbanRoadMarkings.Create(generatedContent, layout, isometricStyle, SurfaceHeight);
         }
 
         private void EnsureRuntimeSurfaceMaterials()
@@ -677,14 +694,43 @@ namespace FantasySurvival.WorldGeneration
 
             if (isometricStyle != null)
             {
-                runtimeSurfaceMaterials = new[]
+                // Keep the first four slots aligned with UrbanSurfaceTileKind. Structural
+                // curb geometry still uses the base sidewalk material, even if its weight is zero.
+                var materials = new List<Material>
                 {
                     isometricStyle.CreateMaterial(isometricStyle.ground, false, "Atlas Ground", Color.white),
                     isometricStyle.CreateMaterial(isometricStyle.sidewalk, false, "Atlas Sidewalk", Color.white),
                     isometricStyle.CreateMaterial(isometricStyle.road, false, "Atlas Secondary Road", Color.white),
-                    isometricStyle.CreateMaterial(isometricStyle.road, false, "Atlas Primary Road", new Color(0.88f, 0.90f, 0.93f))
+                    isometricStyle.CreateMaterial(isometricStyle.road, false, "Atlas Primary Road", Color.white)
                 };
+                runtimeSurfaceSamplers = new IsometricUrbanStyle.SurfaceVariantSampler[4];
+                runtimeSurfaceVariantMaterials = new int[4][];
+                AddFamily(0, isometricStyle.groundVariants, isometricStyle.ground, "Ground");
+                AddFamily(1, isometricStyle.sidewalkVariants, isometricStyle.sidewalk, "Sidewalk");
+                AddFamily(2, isometricStyle.roadVariants, isometricStyle.road, "Road");
+                // Primary and secondary roads are one compatible family. They share the
+                // compiled CDF and variant materials, retaining distinct base slots and grid kinds.
+                runtimeSurfaceSamplers[3] = runtimeSurfaceSamplers[2];
+                runtimeSurfaceVariantMaterials[3] = runtimeSurfaceVariantMaterials[2];
+                runtimeSurfaceMaterials = materials.ToArray();
                 return;
+
+                void AddFamily(int kind, IsometricUrbanStyle.SurfaceVariantCatalog catalog,
+                    IsometricUrbanStyle.AtlasPatch familyBase, string familyName)
+                {
+                    runtimeSurfaceSamplers[kind] = catalog.CreateSampler();
+                    int[] indices = new int[catalog.variants.Length];
+                    for (int index = 0; index < indices.Length; index++)
+                    {
+                        IsometricUrbanStyle.WeightedSurfaceVariant variant = catalog.variants[index];
+                        indices[index] = -1;
+                        if (variant.weight == 0f) continue;
+                        indices[index] = materials.Count;
+                        materials.Add(isometricStyle.CreateMaterial(variant.ResolvePatch(familyBase), false,
+                            $"Atlas {familyName} Variant {index}: {variant.name}", Color.white));
+                    }
+                    runtimeSurfaceVariantMaterials[kind] = indices;
+                }
             }
 
             EnsureRuntimeMaterial();
@@ -711,6 +757,8 @@ namespace FantasySurvival.WorldGeneration
 
         private void ClearRuntimeSurfaceResources()
         {
+            runtimeSurfaceSamplers = null;
+            runtimeSurfaceVariantMaterials = null;
             if (runtimeSurfaceMesh != null)
             {
                 Destroy(runtimeSurfaceMesh);
@@ -776,7 +824,7 @@ namespace FantasySurvival.WorldGeneration
                 root.transform.SetParent(generatedContent, false);
                 root.transform.localPosition = new Vector3(
                     placement.LocalPosition.x,
-                    SidewalkSurfaceHeight,
+                    isometricStyle != null ? GetLocalSupportHeight(placement.LocalPosition) : SidewalkSurfaceHeight,
                     placement.LocalPosition.y);
                 root.transform.localRotation = Quaternion.Euler(0f, placement.LocalYawDegrees, 0f);
                 root.tag = "Obstacle";
@@ -848,7 +896,7 @@ namespace FantasySurvival.WorldGeneration
             root.name = $"StreetFurniture_{placement.StableId:000}_{placement.Kind}";
             root.transform.localPosition = new Vector3(
                 placement.LocalPosition.x,
-                SidewalkSurfaceHeight,
+                isometricStyle != null ? GetLocalSupportHeight(placement.LocalPosition) : SidewalkSurfaceHeight,
                 placement.LocalPosition.y);
 
             // Layout yaw describes the road tangent. The authored lamp arm points along
@@ -887,14 +935,32 @@ namespace FantasySurvival.WorldGeneration
             return count;
         }
 
-        private static float GetSurfaceHeight(UrbanSurfaceTileKind kind)
+        public float GetLocalSupportHeight(Vector2 localPosition)
         {
+            if (isometricStyle == null) return 0f;
+            UrbanSurfaceGrid grid = CurrentLayout.SurfaceGrid;
+            if (!grid.TryLocalToCell(localPosition, out int x, out int z))
+                throw new ArgumentOutOfRangeException(nameof(localPosition), "Support position is outside the map grid.");
+            float height = GetSurfaceHeight(grid.GetKind(x, z));
+            foreach (UrbanBuildingPlacement building in CurrentLayout.Buildings)
+            {
+                Vector2 d = localPosition - building.Center;
+                if (Mathf.Abs(d.x) < building.Size.x * .5f && Mathf.Abs(d.y) < building.Size.y * .5f)
+                    return SurfaceHeight + PavementElevation + EnterableSpriteBuilding.FloorLift;
+            }
+            return height;
+        }
+
+        private float GetSurfaceHeight(UrbanSurfaceTileKind kind)
+        {
+            if (isometricStyle != null)
+                return SurfaceHeight + (kind == UrbanSurfaceTileKind.Ground || kind == UrbanSurfaceTileKind.Sidewalk ? PavementElevation : 0f);
             return kind == UrbanSurfaceTileKind.Sidewalk
                 ? SidewalkSurfaceHeight
                 : SurfaceHeight;
         }
 
-        private static void AddSidewalkCurbFaces(
+        private void AddSidewalkCurbFaces(
             UrbanSurfaceGrid grid,
             List<Vector3> vertices,
             List<Vector3> normals,
@@ -907,20 +973,21 @@ namespace FantasySurvival.WorldGeneration
             {
                 for (int x = 0; x < grid.Width; x++)
                 {
-                    if (grid.GetKind(x, z) != UrbanSurfaceTileKind.Sidewalk)
+                    if (!IsRaisedPavementCell(grid, x, z))
                     {
                         continue;
                     }
 
                     Vector2 center = grid.GetCellCenter(x, z);
                     float bottom = SurfaceHeight;
-                    float top = SidewalkSurfaceHeight;
+                    float top = GetSurfaceHeight(grid.GetKind(x, z));
+                    float uvHeight = isometricStyle != null ? (top - bottom) / grid.TileSize : 1f;
                     float west = center.x - halfTile;
                     float east = center.x + halfTile;
                     float south = center.y - halfTile;
                     float north = center.y + halfTile;
 
-                    if (!IsSidewalkCell(grid, x, z + 1))
+                    if (!IsRaisedPavementCell(grid, x, z + 1))
                     {
                         AddVerticalSurfaceQuad(
                             vertices, normals, uv, sidewalkTriangles,
@@ -928,10 +995,10 @@ namespace FantasySurvival.WorldGeneration
                             new Vector3(east, bottom, north),
                             new Vector3(east, top, north),
                             new Vector3(west, top, north),
-                            Vector3.forward);
+                            Vector3.forward, uvHeight);
                     }
 
-                    if (!IsSidewalkCell(grid, x + 1, z))
+                    if (!IsRaisedPavementCell(grid, x + 1, z))
                     {
                         AddVerticalSurfaceQuad(
                             vertices, normals, uv, sidewalkTriangles,
@@ -939,10 +1006,10 @@ namespace FantasySurvival.WorldGeneration
                             new Vector3(east, bottom, south),
                             new Vector3(east, top, south),
                             new Vector3(east, top, north),
-                            Vector3.right);
+                            Vector3.right, uvHeight);
                     }
 
-                    if (!IsSidewalkCell(grid, x, z - 1))
+                    if (!IsRaisedPavementCell(grid, x, z - 1))
                     {
                         AddVerticalSurfaceQuad(
                             vertices, normals, uv, sidewalkTriangles,
@@ -950,10 +1017,10 @@ namespace FantasySurvival.WorldGeneration
                             new Vector3(west, bottom, south),
                             new Vector3(west, top, south),
                             new Vector3(east, top, south),
-                            Vector3.back);
+                            Vector3.back, uvHeight);
                     }
 
-                    if (!IsSidewalkCell(grid, x - 1, z))
+                    if (!IsRaisedPavementCell(grid, x - 1, z))
                     {
                         AddVerticalSurfaceQuad(
                             vertices, normals, uv, sidewalkTriangles,
@@ -961,16 +1028,17 @@ namespace FantasySurvival.WorldGeneration
                             new Vector3(west, bottom, north),
                             new Vector3(west, top, north),
                             new Vector3(west, top, south),
-                            Vector3.left);
+                            Vector3.left, uvHeight);
                     }
                 }
             }
         }
 
-        private static bool IsSidewalkCell(UrbanSurfaceGrid grid, int x, int z)
+        private bool IsRaisedPavementCell(UrbanSurfaceGrid grid, int x, int z)
         {
             return grid.ContainsCell(x, z) &&
-                   grid.GetKind(x, z) == UrbanSurfaceTileKind.Sidewalk;
+                   (grid.GetKind(x, z) == UrbanSurfaceTileKind.Sidewalk ||
+                    isometricStyle != null && grid.GetKind(x, z) == UrbanSurfaceTileKind.Ground);
         }
 
         private static void AddVerticalSurfaceQuad(
@@ -982,7 +1050,7 @@ namespace FantasySurvival.WorldGeneration
             Vector3 bottomEnd,
             Vector3 topEnd,
             Vector3 topStart,
-            Vector3 normal)
+            Vector3 normal, float uvHeight = 1f)
         {
             int vertexStart = vertices.Count;
             vertices.Add(bottomStart);
@@ -995,8 +1063,8 @@ namespace FantasySurvival.WorldGeneration
             normals.Add(normal);
             uv.Add(Vector2.zero);
             uv.Add(Vector2.right);
-            uv.Add(Vector2.one);
-            uv.Add(Vector2.up);
+            uv.Add(new Vector2(1f, uvHeight));
+            uv.Add(new Vector2(0f, uvHeight));
             triangles.Add(vertexStart);
             triangles.Add(vertexStart + 1);
             triangles.Add(vertexStart + 2);
@@ -1015,11 +1083,12 @@ namespace FantasySurvival.WorldGeneration
         {
             var root = new GameObject(objectName);
             root.transform.SetParent(generatedContent, false);
-            root.transform.localPosition = new Vector3(building.Center.x, 0f, building.Center.y);
+            root.transform.localPosition = new Vector3(building.Center.x,
+                isometricStyle != null ? SurfaceHeight + PavementElevation : 0f, building.Center.y);
             if (isometricStyle != null)
             {
                 var room = root.AddComponent<EnterableSpriteBuilding>();
-                room.Build(isometricStyle, building.Size, facadeDirection, tileWorldSize, tintColor, occlusionFader, reserveFacadeCenter);
+                room.Build(isometricStyle, building.Size, facadeDirection, tileWorldSize, tintColor, occlusionFader, reserveFacadeCenter, building.Height);
                 return;
             }
             root.tag = "Obstacle";

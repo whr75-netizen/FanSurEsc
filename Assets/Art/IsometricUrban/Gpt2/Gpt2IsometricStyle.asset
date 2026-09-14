@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a728d97c84219da438e1dfff1d9ffd9d, type: 3}
+  m_Name: Gpt2IsometricStyle
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldGeneration.IsometricUrbanStyle
+  surfaceShader: {fileID: 4800000, guid: 6adaff21e80322a49a8aeb22d161f667, type: 3}
+  ground:
+    texture: {fileID: 2800000, guid: dad7a6c4d41fa8a49aa72b3a1b268af6, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 186, y: 215}
+    p01: {x: 35, y: 127}
+    p11: {x: 195, y: 31}
+    p10: {x: 347, y: 122}
+  sidewalk:
+    texture: {fileID: 2800000, guid: dad7a6c4d41fa8a49aa72b3a1b268af6, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 542, y: 466}
+    p01: {x: 390, y: 374}
+    p11: {x: 548, y: 277}
+    p10: {x: 701, y: 375}
+  road:
+    texture: {fileID: 2800000, guid: dad7a6c4d41fa8a49aa72b3a1b268af6, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 186, y: 215}
+    p01: {x: 35, y: 127}
+    p11: {x: 195, y: 31}
+    p10: {x: 347, y: 122}
+  interior:
+    texture: {fileID: 2800000, guid: e2b5cbcf7054f074cb912f07c365620b, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 198, y: 734}
+    p01: {x: 55, y: 655}
+    p11: {x: 197, y: 573}
+    p10: {x: 339, y: 655}
+  wall:
+    texture: {fileID: 2800000, guid: caee850978918784580390fed1827928, type: 3}
+    mask: {fileID: 0}
+    p00: {x: 145, y: 160}
+    p01: {x: 145, y: 53}
+    p11: {x: 253, y: 102}
+    p10: {x: 253, y: 208}
+  propAtlas: {fileID: 2800000, guid: 8155697fad0fced4b905933030557df8, type: 3}
+  propPixelRect:
+    serializedVersion: 2
+    x: 1150
+    y: 35
+    width: 135
+    height: 217
+  plainModule:
+    image:
+      texture: {fileID: 2800000, guid: caee850978918784580390fed1827928, type: 3}
+      mask: {fileID: 2800000, guid: d5eea6234162f6345ba44728084acf4e, type: 3}
+      p00: {x: 103, y: 260}
+      p01: {x: 103, y: 1}
+      p11: {x: 295, y: 1}
+      p10: {x: 295, y: 260}
+    baseLeft: {x: 110, y: 178}
+    baseRight: {x: 271, y: 253}
+    topLeft: {x: 110, y: 22}
+  windowModule:
+    image:
+      texture: {fileID: 2800000, guid: caee850978918784580390fed1827928, type: 3}
+      mask: {fileID: 2800000, guid: d5eea6234162f6345ba44728084acf4e, type: 3}
+      p00: {x: 795, y: 272}
+      p01: {x: 795, y: 2}
+      p11: {x: 981, y: 2}
+      p10: {x: 981, y: 272}
+    baseLeft: {x: 804, y: 198}
+    baseRight: {x: 949, y: 265}
+    topLeft: {x: 804, y: 26}
+  entranceModule:
+    image:
+      texture: {fileID: 2800000, guid: caee850978918784580390fed1827928, type: 3}
+      mask: {fileID: 2800000, guid: d5eea6234162f6345ba44728084acf4e, type: 3}
+      p00: {x: 1128, y: 574}
+      p01: {x: 1128, y: 265}
+      p11: {x: 1349, y: 265}
+      p10: {x: 1349, y: 574}
+    baseLeft: {x: 1138, y: 492}
+    baseRight: {x: 1325, y: 568}
+    topLeft: {x: 1138, y: 284}
+  wallHeight: 3.4
+  wallModuleWidth: 4.297599
+  doorWidth: 2.4
+  wallThickness: 0.2

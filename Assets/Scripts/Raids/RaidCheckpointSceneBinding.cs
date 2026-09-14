@@ -812,10 +812,10 @@ namespace FantasySurvival.Raids
                 });
             }
 
-            generatorVersion = mapGenerator.CurrentLayout.GeneratorVersion;
+            generatorVersion = mapGenerator.CheckpointGeneratorVersion;
             mapSeed = mapGenerator.CurrentSeed;
-            layoutHash = UrbanMapLayoutValidator
-                .ComputeStableWorldHash(mapGenerator.CurrentLayout, spawnManifest)
+            layoutHash = mapGenerator
+                .ComputeCheckpointWorldHash(spawnManifest)
                 .ToString("X16");
             chestRecords = capturedChests;
             enemyRecords = capturedEnemies;
@@ -856,7 +856,7 @@ namespace FantasySurvival.Raids
                     out error) ||
                 mapGenerator.CurrentLayout == null ||
                 mapGenerator.CurrentSeed != checkpoint.mapSeed ||
-                mapGenerator.CurrentLayout.GeneratorVersion != checkpoint.generatorVersion)
+                mapGenerator.CheckpointGeneratorVersion != checkpoint.generatorVersion)
             {
                 if (error == null)
                 {
@@ -865,8 +865,8 @@ namespace FantasySurvival.Raids
                 return false;
             }
 
-            string currentHash = UrbanMapLayoutValidator
-                .ComputeStableWorldHash(mapGenerator.CurrentLayout, spawnManifest)
+            string currentHash = mapGenerator
+                .ComputeCheckpointWorldHash(spawnManifest)
                 .ToString("X16");
             string legacyLayoutHash = UrbanMapLayoutValidator
                 .ComputeStableHash(mapGenerator.CurrentLayout)
@@ -875,7 +875,7 @@ namespace FantasySurvival.Raids
                 currentHash,
                 checkpoint.layoutHash,
                 StringComparison.OrdinalIgnoreCase);
-            bool matchesLegacyLayout = string.Equals(
+            bool matchesLegacyLayout = mapGenerator.IsometricStyle == null && string.Equals(
                 legacyLayoutHash,
                 checkpoint.layoutHash,
                 StringComparison.OrdinalIgnoreCase);

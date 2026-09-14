@@ -95,6 +95,29 @@ public class CameraFollow : MonoBehaviour
         transform.rotation = rotation;
     }
 
+    public void SetViewOrientation(Quaternion rotation)
+    {
+        InitializeOrbit();
+        EndOrbit();
+        transform.rotation = rotation;
+        offset = rotation * cameraSpaceOffset;
+        ReadAnglesFromTransform();
+        if (target != null)
+            transform.position = target.position + offset;
+    }
+
+    public void RestoreViewOrientation(Quaternion rotation, Vector3 restoredOffset)
+    {
+        InitializeOrbit();
+        EndOrbit();
+        transform.rotation = rotation;
+        offset = restoredOffset;
+        cameraSpaceOffset = Quaternion.Inverse(rotation) * restoredOffset;
+        ReadAnglesFromTransform();
+        if (target != null)
+            transform.position = target.position + offset;
+    }
+
     private bool CanAcceptOrbitInput()
     {
         if (!enableOrbit || target == null || Time.timeScale <= 0f)

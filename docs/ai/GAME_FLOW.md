@@ -117,7 +117,7 @@ RaidCheckpointSceneBinding.Awake          [-10500]
   → generator의 layout-geometry 완료 통지 구독
   → Resume이면 저장된 seed를 generator에 먼저 적용
 ProceduralUrbanMapGenerator.Awake         [-10000]
-  → layout·회색상자 geometry 생성
+  → layout·선택한 표현의 geometry 생성(기본 외관/등각 단층 실내)
   → LayoutGeometryGenerated 동기 통지
       → seed + stable ID의 spawn manifest 생성
       → manifest 최종 pose에 prefab 생성 후 scene-local runtime registry 원자 등록

@@ -2404,3 +2404,12 @@ Interactable (abstract base class)
 - `[발 미해결·연구]` 종아리는 무릎→발목 투영 벡터, 부츠는 Foot quaternion의 화면 법선 twist를 쓰며 발목 band가 두 변환을 혼합한다. 단순 부호 오류는 확인되지 않았다. 후속은 문제 프레임 하나에서 부츠 회전과 연결부 혼합을 분리하는 비교이며, 필요할 때만 발 표시 축 또는 방향별 발 그림을 검토한다. 정상 팔다리를 다시 바꾸지 않는다.
 - `[범위·미검증]` 원화 마스크·anchor는 저작 데이터이며 임의 그림 자동 rig 완성이 아니다. 다방향·숨은 면·임의 clip·모드 로더·게임 통합·환경 조명·성능 Profile·빌드는 미검증이다. 발 미해결의 연구용 부분 구현으로 보존하며 완료 커밋은 하지 않았다.
 - `[최신 정정·구조 미충족]` 사용자는 이미지별 2D 자세 보정이 아니라 투명 3D 몸체/스켈레톤에 부착되어 같은 변형을 따르는 이미지를 요구했다. E는 clone의 3D Renderer와 MeshFilter를 제거한 뒤 별도 2D 관절/평면 mesh를 변형하므로 이 구조를 구현하지 않았다. 이전 팔다리 피드백은 기술 구조 승인 아님. 발의 깊이 회전을 버린 Roll, 짧은 발끝 투영으로 옆으로 꺾이는 Segment를 구분했고 두 부츠만 기존 Plane으로 시험해 세로 축소를 확인했지만 최종 해결로 채택하지 않는다. 원화/mesh 무변경, 재생 중단, 미완료 유지. 3D 바인딩의 후속 F 실패와 현재 보류 결정은 연구 M04/F·D01에 정리했다. 이 과거 후속 제안은 새 구현 권한이 아니다.
+
+## 141. GPT/2 등각 맵 타일과 단층 진입·가림 시험 `[MAP-01][CAMERA-01]`
+
+- `[요청·2026-09-14]` 캐릭터 제작을 중단하고 GPT/2 원본 타일로 맵 교체, 실제 건물 진입, 실내/뒤 가림벽 반투명 시험을 요청했다. 캐릭터 최상위 레이어 처리는 사용하지 않는다.
+- `[현재 후보]` GameMapTest의 기존 생성기/격자/필지/NavMesh에 IsometricUrbanStyle을 연결했다. 바닥은 원본 상면 homography, 벽·창·열린 출입구는 전체 모듈과 수직면 기준점의 역변환을 사용한다. 단층 실내·벽/문 Collider·독립 지붕·기존 비차단·쓰레기통을 조립한다. 기법과 원본 대응은 `docs/references/isometric_urban_map_pipeline.md` D02가 원본이다.
+- `[사용자 정정]` 첫 벽돌 면 반복 결과의 원본 디테일 누락 지적을 반영해 전체 모듈로 전환했다. 원본 RGB는 보존하고 alpha 연결성분 mask로 이웃 모듈만 제외했다. 최초 native MPB 초기화 오류는 Awake로, 기존 의료 Chest의 문앞 차단은 Chest 보존 및 문 위치 분리로 수정했다.
+- `[Play Mode 호출 확인]` Unity6000.5.9f1, 최종seed−743543409, 건물150개, readiness·문→실내 NavMesh·Player 크기 통과 공간·벽 차단·동일Player·UV 조건 확인. 실내roof0.04, 뒤 가림0.18, 시야복귀1.0. 키 입력 보행 녹화는 아니다. Console의 초기오류3건은 보존했고 수정 뒤 새 오류는 관측하지 않았다.
+- `[결과]` `LocalOnly/IsometricMapTrial01/technical.json`, `v2b-{outside,inside,behind}.png`, `isometric-map-comparison.webp`. WebP는 실제 새 Unity 화면3개의 상태 비교다. WorkLoop v2 후보의 art→observe→필요한 기술 gate 완료이며 미술 합격은 아니다.
+- `[보존·경계]` Player·이동·기존 3D 표현 경로·원본과 사용자 dirty 파일은 보존했다. 등각 geometry1002/치수 hash는 기존 원정 복구와 구분한다. 원래 원정 hash는 style 미사용 시 유지한다. 현재 원화 명암을 사용하는 단층 시험이며 임시 지붕 표면·다층·자유각 원화·실시간 환경광·모든seed·복구/카메라 왕복·GPU Profile·빌드는 미검증이다. Play 종료, GameMapTest dirty 없음. 시각 승인 전 추가 미적 수정은 보류한다.

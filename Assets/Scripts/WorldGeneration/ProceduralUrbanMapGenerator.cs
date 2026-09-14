@@ -46,6 +46,12 @@ namespace FantasySurvival.WorldGeneration
         [SerializeField, Min(1)] private int borderTiles = 12;
         [SerializeField, Min(0.25f)] private float tileWorldSize = 2f;
 
+        [Header("Optional Isometric Atlas Prototype")]
+        [SerializeField] private IsometricUrbanStyle isometricStyle;
+        public IsometricUrbanStyle IsometricStyle => isometricStyle;
+        public int CheckpointGeneratorVersion => isometricStyle != null ? 1002 : CurrentLayout.GeneratorVersion;
+        private UrbanOcclusionFader occlusionFader;
+
         [Header("Octilinear Road Graph")]
         [SerializeField, Min(7)] private int secondaryRoadWidthTiles = 7;
         [SerializeField, Min(7)] private int primaryRoadWidthTiles = 9;
@@ -227,6 +233,13 @@ namespace FantasySurvival.WorldGeneration
                 new Vector3(entryAnchor.position.x, 0f, entryAnchor.position.z) - rotatedEntry,
                 mapRotation);
 
+            if (isometricStyle != null)
+            {
+                occlusionFader = generatedContent.gameObject.AddComponent<UrbanOcclusionFader>();
+                var view = generatedContent.gameObject.AddComponent<IsometricUrbanView>();
+                view.cityYaw = generatedContent.eulerAngles.y;
+            }
+
             CreateSurfaceTiles(layout);
             CreateBuildings(layout);
             if (HasStreetFurnitureVisualsEnabled)
@@ -270,6 +283,22 @@ namespace FantasySurvival.WorldGeneration
                 ToPlanar(entryAnchor.position),
                 CollectProtectedWorldPositions(),
                 parameters);
+        }
+
+        public ulong ComputeCheckpointWorldHash(UrbanRaidSpawnManifest manifest)
+        {
+            ulong hash = UrbanMapLayoutValidator.ComputeStableWorldHash(CurrentLayout, manifest);
+            if (isometricStyle == null) return hash;
+            // Physical mode and dimensions must invalidate incompatible old recovery worlds.
+            unchecked
+            {
+                Add(CheckpointGeneratorVersion);
+                Add(BitConverter.SingleToInt32Bits(isometricStyle.wallHeight));
+                Add(BitConverter.SingleToInt32Bits(isometricStyle.wallThickness));
+                Add(BitConverter.SingleToInt32Bits(isometricStyle.doorWidth));
+            }
+            return hash;
+            void Add(int value) { unchecked { hash = (hash ^ (uint)value) * 1099511628211UL; } }
         }
 
         public bool TryValidateReachableLocalPoint(
@@ -370,6 +399,11 @@ namespace FantasySurvival.WorldGeneration
 
         private bool HasValidConfiguration()
         {
+            if (isometricStyle != null && !isometricStyle.TryValidate(out string artworkError))
+            {
+                Debug.LogError("Invalid isometric map artwork: " + artworkError, this);
+                return false;
+            }
             if (entryAnchor == null)
             {
                 Debug.LogError("ProceduralUrbanMapGenerator requires the existing RaidEntry Transform.", this);
@@ -402,7 +436,7 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
-            if (buildingVisualPrefabs == null || buildingVisualPrefabs.Length == 0)
+            if (isometricStyle == null && (buildingVisualPrefabs == null || buildingVisualPrefabs.Length == 0))
             {
                 Debug.LogError(
                     "ProceduralUrbanMapGenerator requires at least one building visual prefab.",
@@ -410,7 +444,7 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
-            for (int index = 0; index < buildingVisualPrefabs.Length; index++)
+            for (int index = 0; isometricStyle == null && index < buildingVisualPrefabs.Length; index++)
             {
                 if (buildingVisualPrefabs[index] == null)
                 {
@@ -641,6 +675,18 @@ namespace FantasySurvival.WorldGeneration
                 return;
             }
 
+            if (isometricStyle != null)
+            {
+                runtimeSurfaceMaterials = new[]
+                {
+                    isometricStyle.CreateMaterial(isometricStyle.ground, false, "Atlas Ground", Color.white),
+                    isometricStyle.CreateMaterial(isometricStyle.sidewalk, false, "Atlas Sidewalk", Color.white),
+                    isometricStyle.CreateMaterial(isometricStyle.road, false, "Atlas Secondary Road", Color.white),
+                    isometricStyle.CreateMaterial(isometricStyle.road, false, "Atlas Primary Road", new Color(0.88f, 0.90f, 0.93f))
+                };
+                return;
+            }
+
             EnsureRuntimeMaterial();
             Color[] colors = { GroundColor, SidewalkColor, SecondaryRoadColor, PrimaryRoadColor };
             runtimeSurfaceMaterials = new Material[colors.Length];
@@ -704,7 +750,8 @@ namespace FantasySurvival.WorldGeneration
                     building,
                     layout.Parcels[building.SourceParcelIndex].FacadeDirection,
                     tint,
-                    building.PaletteIndex);
+                    building.PaletteIndex,
+                    isMedicalPoi);
             }
         }
 
@@ -963,11 +1010,18 @@ namespace FantasySurvival.WorldGeneration
             UrbanBuildingPlacement building,
             Vector2 facadeDirection,
             Color tintColor,
-            int paletteIndex)
+            int paletteIndex,
+            bool reserveFacadeCenter = false)
         {
             var root = new GameObject(objectName);
             root.transform.SetParent(generatedContent, false);
             root.transform.localPosition = new Vector3(building.Center.x, 0f, building.Center.y);
+            if (isometricStyle != null)
+            {
+                var room = root.AddComponent<EnterableSpriteBuilding>();
+                room.Build(isometricStyle, building.Size, facadeDirection, tileWorldSize, tintColor, occlusionFader, reserveFacadeCenter);
+                return;
+            }
             root.tag = "Obstacle";
 
             var collider = root.AddComponent<BoxCollider>();

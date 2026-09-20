@@ -31,7 +31,8 @@ namespace FantasySurvival.WorldGeneration
             int streetTreeSpacingTiles,
             int streetLampSpacingTiles,
             int clutterSpacingTiles,
-            float clutterChance)
+            float clutterChance,
+            UrbanBuildingLayoutProfile buildingProfile = null)
         {
             MapTilesPerAxis = mapTilesPerAxis;
             BlocksPerAxis = blocksPerAxis;
@@ -58,6 +59,7 @@ namespace FantasySurvival.WorldGeneration
             StreetLampSpacingTiles = streetLampSpacingTiles;
             ClutterSpacingTiles = clutterSpacingTiles;
             ClutterChance = clutterChance;
+            BuildingProfile = buildingProfile;
         }
 
         public int MapTilesPerAxis { get; }
@@ -85,6 +87,7 @@ namespace FantasySurvival.WorldGeneration
         public int StreetLampSpacingTiles { get; }
         public int ClutterSpacingTiles { get; }
         public float ClutterChance { get; }
+        public UrbanBuildingLayoutProfile BuildingProfile { get; }
 
         public int BlockSpanTiles =>
             (MapTilesPerAxis - 1 - BorderTiles * 2) / BlocksPerAxis;
@@ -98,23 +101,23 @@ namespace FantasySurvival.WorldGeneration
         {
             return new UrbanMapGenerationParameters(
                 mapTilesPerAxis: 145,
-                blocksPerAxis: 6,
+                blocksPerAxis: 5,
                 borderTiles: 12,
                 tileWorldSize: 2f,
-                secondaryRoadWidthTiles: 7,
-                primaryRoadWidthTiles: 9,
+                secondaryRoadWidthTiles: 3,
+                primaryRoadWidthTiles: 5,
                 additionalRoadChance: 0.65f,
                 diagonalRoadChance: 0.2f,
                 sidewalkWidthTiles: 1,
                 buildingSetback: 0f,
                 lotGap: 0f,
-                minBuildingFrontageTiles: 4,
-                maxBuildingFrontageTiles: 5,
-                minBuildingDepthTiles: 4,
-                maxBuildingDepthTiles: 4,
+                minBuildingFrontageTiles: 6,
+                maxBuildingFrontageTiles: 9,
+                minBuildingDepthTiles: 5,
+                maxBuildingDepthTiles: 7,
                 buildingDensity: 1f,
-                minBuildingHeight: 10.5f,
-                maxBuildingHeight: 18f,
+                minBuildingHeight: 6.8f,
+                maxBuildingHeight: 6.8f,
                 anchorClearance: 10f,
                 protectedAnchorClearance: 8f,
                 junctionFurnitureClearanceTiles: 3,
@@ -126,6 +129,7 @@ namespace FantasySurvival.WorldGeneration
 
         public bool TryValidate(out string error)
         {
+            if (BuildingProfile != null && !BuildingProfile.TryValidate(out error)) return false;
             if (MapTilesPerAxis < 17 || (MapTilesPerAxis & 1) == 0 ||
                 BlocksPerAxis < 2 || BorderTiles < 1 ||
                 MapTilesPerAxis - 1 - BorderTiles * 2 <= 0 ||
@@ -143,14 +147,14 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
-            if (SecondaryRoadWidthTiles < 7 || PrimaryRoadWidthTiles < SecondaryRoadWidthTiles ||
+            if (SecondaryRoadWidthTiles < 3 || PrimaryRoadWidthTiles < SecondaryRoadWidthTiles ||
                 (SecondaryRoadWidthTiles & 1) == 0 || (PrimaryRoadWidthTiles & 1) == 0 ||
                 SidewalkWidthTiles < 1 ||
                 PrimaryRoadWidthTiles + SidewalkWidthTiles * 2 >= BlockSpanTiles)
             {
                 error =
-                    "Urban roads must reserve at least seven odd-width tiles (three per " +
-                    "direction plus a center tile), leave buildable block space, and have " +
+                    "Urban roads must reserve at least three odd-width surface tiles, " +
+                    "leave buildable block space, and have " +
                     "at least one sidewalk tile per side.";
                 return false;
             }
@@ -182,6 +186,14 @@ namespace FantasySurvival.WorldGeneration
             {
                 error = "Urban building parcel tile ranges are invalid for the configured block span.";
                 return false;
+            }
+
+            if (BuildingProfile != null)
+            {
+                float minimumSide = Mathf.Min(MinBuildingFrontageTiles, MinBuildingDepthTiles) * TileWorldSize;
+                if (BuildingProfile.DoorWidth < BuildingProfile.AisleWidth ||
+                    minimumSide - BuildingProfile.WallThickness * 4f < BuildingProfile.AisleWidth)
+                { error = "The minimum building size cannot contain the prefab doorway and access aisle."; return false; }
             }
 
             if (!IsFinite(MinBuildingHeight) || !IsFinite(MaxBuildingHeight) ||
@@ -236,13 +248,19 @@ namespace FantasySurvival.WorldGeneration
             Vector2 center,
             Vector2 size,
             float height,
-            int paletteIndex)
+            int paletteIndex,
+            Vector2 facadeDirection = default,
+            int sourceBlockId = -1,
+            UrbanPoiKind kind = UrbanPoiKind.None)
         {
             SourceParcelIndex = sourceParcelIndex;
             Center = center;
             Size = size;
             Height = height;
             PaletteIndex = paletteIndex;
+            FacadeDirection = facadeDirection.sqrMagnitude > .5f ? facadeDirection.normalized : Vector2.up;
+            SourceBlockId = sourceBlockId;
+            Kind = kind;
         }
 
         public int SourceParcelIndex { get; }
@@ -250,7 +268,16 @@ namespace FantasySurvival.WorldGeneration
         public Vector2 Size { get; }
         public float Height { get; }
         public int PaletteIndex { get; }
-        public Rect Footprint => new Rect(Center - Size * 0.5f, Size);
+        public Vector2 FacadeDirection { get; }
+        public int SourceBlockId { get; }
+        public UrbanPoiKind Kind { get; }
+        public UrbanOrientedRect Bounds => new UrbanOrientedRect(Center, Size, FacadeDirection);
+        public float LocalYawDegrees => Bounds.LocalYawDegrees;
+        public Vector2 ToMap(Vector2 point) => Bounds.ToMap(point);
+        public Vector2 ToLocal(Vector2 point) => Bounds.ToLocal(point);
+        public Rect Footprint => Bounds.Aabb;
+        public UrbanBuildingPlacement WithKind(UrbanPoiKind kind) => new UrbanBuildingPlacement(
+            SourceParcelIndex, Center, Size, Height, PaletteIndex, FacadeDirection, SourceBlockId, kind);
     }
 
     /// <summary>
@@ -267,7 +294,8 @@ namespace FantasySurvival.WorldGeneration
             int side,
             Vector2 center,
             Vector2 size,
-            Vector2 facadeDirection)
+            Vector2 facadeDirection,
+            int sourceBlockId = -1)
         {
             StableId = stableId;
             SourceRoadIndex = sourceRoadIndex;
@@ -276,6 +304,7 @@ namespace FantasySurvival.WorldGeneration
             Center = center;
             Size = size;
             FacadeDirection = facadeDirection;
+            SourceBlockId = sourceBlockId;
         }
 
         public int StableId { get; }
@@ -285,7 +314,12 @@ namespace FantasySurvival.WorldGeneration
         public Vector2 Center { get; }
         public Vector2 Size { get; }
         public Vector2 FacadeDirection { get; }
-        public Rect Footprint => new Rect(Center - Size * 0.5f, Size);
+        public int SourceBlockId { get; }
+        public UrbanOrientedRect Bounds => new UrbanOrientedRect(Center, Size, FacadeDirection);
+        public float LocalYawDegrees => Bounds.LocalYawDegrees;
+        public Vector2 ToMap(Vector2 point) => Bounds.ToMap(point);
+        public Vector2 ToLocal(Vector2 point) => Bounds.ToLocal(point);
+        public Rect Footprint => Bounds.Aabb;
     }
 
     public enum UrbanStreetFurnitureKind : byte
@@ -368,8 +402,12 @@ namespace FantasySurvival.WorldGeneration
 
     public enum UrbanPoiKind
     {
-        None,
-        Medical
+        None = 0,
+        Medical = 1,
+        Residential = 2,
+        Retail = 3,
+        Workshop = 4,
+        Office = 5
     }
 
     /// <summary>
@@ -657,7 +695,11 @@ namespace FantasySurvival.WorldGeneration
             List<UrbanStreetFurniturePlacement> streetFurniture,
             List<Vector2> protectedLocalPoints,
             List<UrbanSpatialCandidate> candidates,
-            List<UrbanPoiPlacement> pois)
+            List<UrbanPoiPlacement> pois,
+            UrbanBuildingLayoutProfile buildingProfile = null,
+            List<UrbanBuildingDecorationPlacement> buildingDecorations = null,
+            UrbanBlockMap blockMap = null,
+            UrbanArchitecturePlan architecture = null)
         {
             GeneratorVersion = generatorVersion;
             Seed = seed;
@@ -671,6 +713,7 @@ namespace FantasySurvival.WorldGeneration
             Nodes = nodes;
             Roads = roads;
             SurfaceGrid = surfaceGrid ?? throw new ArgumentNullException(nameof(surfaceGrid));
+            BlockMap = blockMap ?? UrbanBlockMap.Build(surfaceGrid);
             Parcels = new List<UrbanParcelPlacement>(
                 parcels ?? new List<UrbanParcelPlacement>()).AsReadOnly();
             Buildings = buildings;
@@ -681,6 +724,10 @@ namespace FantasySurvival.WorldGeneration
                 candidates ?? new List<UrbanSpatialCandidate>()).AsReadOnly();
             Pois = new List<UrbanPoiPlacement>(
                 pois ?? new List<UrbanPoiPlacement>()).AsReadOnly();
+            BuildingProfile = buildingProfile;
+            BuildingDecorations = new List<UrbanBuildingDecorationPlacement>(
+                buildingDecorations ?? new List<UrbanBuildingDecorationPlacement>()).AsReadOnly();
+            Architecture = architecture ?? UrbanArchitecturePlan.Empty;
         }
 
         public int GeneratorVersion { get; }
@@ -695,12 +742,17 @@ namespace FantasySurvival.WorldGeneration
         public IReadOnlyList<Vector2> Nodes { get; }
         public IReadOnlyList<UrbanRoadSegment> Roads { get; }
         public UrbanSurfaceGrid SurfaceGrid { get; }
+        public UrbanBlockMap BlockMap { get; }
+        public IReadOnlyList<UrbanBlockRegion> Blocks => BlockMap.Regions;
         public IReadOnlyList<UrbanParcelPlacement> Parcels { get; }
         public IReadOnlyList<UrbanBuildingPlacement> Buildings { get; }
         public IReadOnlyList<UrbanStreetFurniturePlacement> StreetFurniture { get; }
         public IReadOnlyList<Vector2> ProtectedLocalPoints { get; }
         public IReadOnlyList<UrbanSpatialCandidate> Candidates { get; }
         public IReadOnlyList<UrbanPoiPlacement> Pois { get; }
+        public UrbanBuildingLayoutProfile BuildingProfile { get; }
+        public IReadOnlyList<UrbanBuildingDecorationPlacement> BuildingDecorations { get; }
+        public UrbanArchitecturePlan Architecture { get; }
 
         public bool TryGetPoi(UrbanPoiKind kind, out UrbanPoiPlacement placement)
         {
@@ -832,155 +884,77 @@ namespace FantasySurvival.WorldGeneration
                 return false;
             }
 
+            UrbanBlockMap expectedBlocks = UrbanBlockMap.Build(surfaceGrid);
+            if (layout.Blocks.Count != expectedBlocks.Regions.Count)
+            { error = "Urban block components do not match the authoritative surface."; return false; }
+            for (int z = 0; z < surfaceGrid.Height; z++)
+                for (int x = 0; x < surfaceGrid.Width; x++)
+                    if (layout.BlockMap.GetBlockId(x, z) != expectedBlocks.GetBlockId(x, z))
+                    { error = $"Urban block membership differs at cell {x},{z}."; return false; }
+
             var parcelIds = new HashSet<int>();
-            for (int parcelIndex = 0; parcelIndex < layout.Parcels.Count; parcelIndex++)
+            for (int i = 0; i < layout.Parcels.Count; i++)
             {
-                UrbanParcelPlacement parcel = layout.Parcels[parcelIndex];
-                Rect footprint = parcel.Footprint;
+                UrbanParcelPlacement parcel = layout.Parcels[i];
                 if (parcel.StableId < 0 || !parcelIds.Add(parcel.StableId) ||
                     parcel.SourceRoadIndex < 0 || parcel.SourceRoadIndex >= layout.Roads.Count ||
-                    (parcel.Side != -1 && parcel.Side != 1) ||
-                    !IsFinite(parcel.DistanceAlongRoad) || parcel.DistanceAlongRoad < 0f ||
-                    !IsFinite(parcel.Center) || !IsFinite(parcel.Size) ||
-                    parcel.Size.x <= 0f || parcel.Size.y <= 0f ||
-                    !IsFinite(parcel.FacadeDirection) ||
-                    Mathf.Abs(parcel.FacadeDirection.sqrMagnitude - 1f) > GeometryTolerance)
-                {
-                    error = $"Urban parcel {parcelIndex} has invalid identity, source, or geometry.";
-                    return false;
-                }
-
-                UrbanRoadSegment sourceRoad = layout.Roads[parcel.SourceRoadIndex];
-                Vector2 sourceDelta = sourceRoad.End - sourceRoad.Start;
-                bool sourceIsCardinal = Mathf.Abs(sourceDelta.x) <= GeometryTolerance ||
-                                        Mathf.Abs(sourceDelta.y) <= GeometryTolerance;
-                if (!sourceIsCardinal || parcel.DistanceAlongRoad > sourceRoad.Length + GeometryTolerance)
-                {
-                    error = $"Urban parcel {parcel.StableId} does not have a valid cardinal road frontage.";
-                    return false;
-                }
-
-                Vector2 roadPoint = sourceRoad.Start +
-                                    sourceDelta.normalized * parcel.DistanceAlongRoad;
-                Vector2 roadDirection = sourceDelta.normalized;
-                Vector2 roadNormal = new Vector2(-roadDirection.y, roadDirection.x);
-                Vector2 expectedAwayFromRoad = roadNormal * parcel.Side;
-                float parcelDepth = Mathf.Abs(roadDirection.x) > 0.5f
-                    ? parcel.Size.y
-                    : parcel.Size.x;
-                float expectedCenterOffset = sourceRoad.Width * 0.5f +
-                                             parameters.SidewalkWidth +
-                                             parameters.BuildingSetback +
-                                             parameters.TileWorldSize * 0.5f +
-                                             parcelDepth * 0.5f;
-                Vector2 expectedCenter = roadPoint + expectedAwayFromRoad * expectedCenterOffset;
-                Vector2 expectedFacade = -expectedAwayFromRoad;
-                if (Vector2.Distance(parcel.Center, expectedCenter) > GeometryTolerance ||
-                    Vector2.Distance(parcel.FacadeDirection, expectedFacade) > GeometryTolerance)
-                {
-                    error = $"Urban parcel {parcel.StableId} does not match its road side, offset, or facade contract.";
-                    return false;
-                }
-
-                if (!ContainsRect(layout.LocalBounds, footprint) ||
-                    !FootprintUsesOnlyGround(surfaceGrid, footprint))
-                {
-                    error = $"Urban parcel {parcel.StableId} is outside buildable ground.";
-                    return false;
-                }
-
-                for (int roadIndex = 0; roadIndex < layout.Roads.Count; roadIndex++)
-                {
-                    if (RoadIntersectsRect(
-                            layout.Roads[roadIndex],
-                            footprint,
-                            parameters.SidewalkWidth + parameters.BuildingSetback))
-                    {
-                        error = $"Urban parcel {parcel.StableId} intersects road {roadIndex}.";
-                        return false;
-                    }
-                }
-
-                for (int otherIndex = parcelIndex + 1; otherIndex < layout.Parcels.Count; otherIndex++)
-                {
-                    if (footprint.Overlaps(layout.Parcels[otherIndex].Footprint))
-                    {
-                        error = $"Urban parcels {parcel.StableId} and {layout.Parcels[otherIndex].StableId} overlap.";
-                        return false;
-                    }
-                }
+                    (parcel.Side != -1 && parcel.Side != 1) || !IsFinite(parcel.DistanceAlongRoad) ||
+                    !IsFinite(parcel.Center) || !IsFinite(parcel.Size) || parcel.Size.x <= 0 || parcel.Size.y <= 0 ||
+                    !IsFinite(parcel.FacadeDirection) || Mathf.Abs(parcel.FacadeDirection.sqrMagnitude - 1f) > GeometryTolerance)
+                { error = $"Urban parcel {i} has invalid identity or oriented geometry."; return false; }
+                UrbanRoadSegment road = layout.Roads[parcel.SourceRoadIndex];
+                Vector2 direction = (road.End - road.Start).normalized;
+                Vector2 away = new Vector2(-direction.y, direction.x) * parcel.Side;
+                float offset = UrbanMapLayoutPlanner.GetRoadGroundBoundaryDistance(road, parameters) +
+                    parameters.BuildingSetback + parcel.Size.y * .5f;
+                Vector2 expectedCenter = road.Start + direction * parcel.DistanceAlongRoad + away * offset;
+                if (parcel.DistanceAlongRoad < parcel.Size.x * .5f - GeometryTolerance ||
+                    parcel.DistanceAlongRoad > road.Length - parcel.Size.x * .5f + GeometryTolerance ||
+                    Vector2.Distance(parcel.Center, expectedCenter) > GeometryTolerance ||
+                    Vector2.Distance(parcel.FacadeDirection, -away) > GeometryTolerance)
+                { error = $"Urban parcel {parcel.StableId} does not match its road-local frontage frame."; return false; }
+                if (!layout.BlockMap.TryGetContainingBlock(parcel.Bounds, out int blockId) || blockId != parcel.SourceBlockId)
+                { error = $"Urban parcel {parcel.StableId} crosses a road, sidewalk, boundary or block."; return false; }
+                for (int j = i + 1; j < layout.Parcels.Count; j++)
+                    if (parcel.Bounds.Expanded(parameters.LotGap * .5f).Overlaps(
+                        layout.Parcels[j].Bounds.Expanded(parameters.LotGap * .5f)))
+                    { error = $"Urban parcels {parcel.StableId} and {layout.Parcels[j].StableId} overlap."; return false; }
             }
 
             var occupiedParcels = new HashSet<int>();
-            for (int buildingIndex = 0; buildingIndex < layout.Buildings.Count; buildingIndex++)
+            for (int i = 0; i < layout.Buildings.Count; i++)
             {
-                UrbanBuildingPlacement building = layout.Buildings[buildingIndex];
-                Rect footprint = building.Footprint;
-
-                if (building.SourceParcelIndex < 0 ||
-                    building.SourceParcelIndex >= layout.Parcels.Count ||
+                UrbanBuildingPlacement building = layout.Buildings[i];
+                if (building.SourceParcelIndex < 0 || building.SourceParcelIndex >= layout.Parcels.Count ||
                     !occupiedParcels.Add(building.SourceParcelIndex) ||
-                    !IsFinite(building.Center) || !IsFinite(building.Size) ||
-                    building.Size.x <= 0f || building.Size.y <= 0f ||
-                    !IsFinite(building.Height) || building.Height <= 0f ||
-                    !ContainsRect(layout.Parcels[building.SourceParcelIndex].Footprint, footprint))
-                {
-                    error = $"Building {buildingIndex} has invalid geometry or parcel ownership.";
-                    return false;
-                }
-
-                if (!ContainsRect(layout.LocalBounds, footprint))
-                {
-                    error = $"Building {buildingIndex} exceeds the generated map bounds.";
-                    return false;
-                }
-
-                for (int roadIndex = 0; roadIndex < layout.Roads.Count; roadIndex++)
-                {
-                    if (RoadIntersectsRect(
-                            layout.Roads[roadIndex],
-                            footprint,
-                            parameters.SidewalkWidth + parameters.BuildingSetback))
-                    {
-                        error = $"Building {buildingIndex} intersects road {roadIndex}.";
-                        return false;
-                    }
-                }
-
-                if (!FootprintUsesOnlyGround(surfaceGrid, footprint))
-                {
-                    error = $"Building {buildingIndex} overlaps a generated road or sidewalk tile.";
-                    return false;
-                }
-
-                if (RectIntersectsCircle(footprint, layout.EntryLocalPosition, parameters.AnchorClearance) ||
-                    RectIntersectsCircle(footprint, layout.PortalLocalPosition, parameters.AnchorClearance))
-                {
-                    error = $"Building {buildingIndex} blocks a critical map anchor.";
-                    return false;
-                }
-
-                for (int pointIndex = 0; pointIndex < layout.ProtectedLocalPoints.Count; pointIndex++)
-                {
-                    if (RectIntersectsCircle(
-                            footprint,
-                            layout.ProtectedLocalPoints[pointIndex],
-                            parameters.ProtectedAnchorClearance))
-                    {
-                        error = $"Building {buildingIndex} blocks protected point {pointIndex}.";
-                        return false;
-                    }
-                }
-
-                for (int otherIndex = buildingIndex + 1; otherIndex < layout.Buildings.Count; otherIndex++)
-                {
-                    if (footprint.Overlaps(layout.Buildings[otherIndex].Footprint))
-                    {
-                        error = $"Buildings {buildingIndex} and {otherIndex} overlap.";
-                        return false;
-                    }
-                }
+                    !IsFinite(building.Center) || !IsFinite(building.Size) || building.Size.x <= 0 || building.Size.y <= 0 ||
+                    !IsFinite(building.Height) || building.Height <= 0 ||
+                    !IsFinite(building.FacadeDirection) || Mathf.Abs(building.FacadeDirection.sqrMagnitude - 1f) > GeometryTolerance ||
+                    building.Kind < UrbanPoiKind.Medical || building.Kind > UrbanPoiKind.Office)
+                { error = $"Building {i} has invalid geometry, purpose or parcel ownership."; return false; }
+                UrbanParcelPlacement parcel = layout.Parcels[building.SourceParcelIndex];
+                float margin = parameters.BuildingProfile?.ReservedMargin ?? 0f;
+                Vector2 expectedSize = parcel.Size - Vector2.one * (margin * 2f);
+                if (Vector2.Distance(building.Center, parcel.Center) > GeometryTolerance ||
+                    Vector2.Distance(building.Size, expectedSize) > GeometryTolerance ||
+                    Vector2.Distance(building.FacadeDirection, parcel.FacadeDirection) > GeometryTolerance ||
+                    building.SourceBlockId != parcel.SourceBlockId || !parcel.Bounds.Contains(building.Bounds))
+                { error = $"Building {i} does not preserve its parcel frame and reservation."; return false; }
+                UrbanOrientedRect reserved = parcel.Bounds;
+                if (reserved.DistanceSquared(layout.EntryLocalPosition) < parameters.AnchorClearance * parameters.AnchorClearance ||
+                    reserved.DistanceSquared(layout.PortalLocalPosition) < parameters.AnchorClearance * parameters.AnchorClearance)
+                { error = $"Building {i} blocks a critical map anchor."; return false; }
+                foreach (Vector2 point in layout.ProtectedLocalPoints)
+                    if (reserved.DistanceSquared(point) < parameters.ProtectedAnchorClearance * parameters.ProtectedAnchorClearance)
+                    { error = $"Building {i} blocks a protected map point."; return false; }
+                for (int j = i + 1; j < layout.Buildings.Count; j++)
+                    if (building.Bounds.Overlaps(layout.Buildings[j].Bounds))
+                    { error = $"Buildings {i} and {j} overlap."; return false; }
             }
+
+            if ((layout.BuildingProfile?.StableHash ?? 0UL) != (parameters.BuildingProfile?.StableHash ?? 0UL))
+            { error = "Building layout and validation use different prefab profile snapshots."; return false; }
+            if (!UrbanBuildingDecorationPlanner.TryValidate(layout, out error)) return false;
 
             var furnitureIds = new HashSet<int>();
             for (int furnitureIndex = 0; furnitureIndex < layout.StreetFurniture.Count; furnitureIndex++)
@@ -1014,7 +988,14 @@ namespace FantasySurvival.WorldGeneration
 
                 for (int buildingIndex = 0; buildingIndex < layout.Buildings.Count; buildingIndex++)
                 {
-                    if (ContainsPoint(layout.Buildings[buildingIndex].Footprint, furniture.LocalPosition))
+                    if (layout.BuildingProfile != null && layout.Parcels[layout.Buildings[buildingIndex].SourceParcelIndex].Bounds
+                        .DistanceSquared(furniture.LocalPosition) < 1f)
+                    { error = $"Street furniture '{furniture.StableId}' invades a building reservation."; return false; }
+                    if (layout.BuildingProfile != null && UrbanBuildingDecorationPlanner
+                        .GetDoorAccessBounds(layout.Buildings[buildingIndex], layout.BuildingProfile)
+                        .DistanceSquared(furniture.LocalPosition) < 1f)
+                    { error = $"Street furniture '{furniture.StableId}' blocks building {buildingIndex}'s door corridor."; return false; }
+                    if (layout.Buildings[buildingIndex].Bounds.Contains(furniture.LocalPosition))
                     {
                         error = $"Street-furniture placement {furniture.StableId} overlaps building {buildingIndex}.";
                         return false;
@@ -1059,9 +1040,7 @@ namespace FantasySurvival.WorldGeneration
                             return false;
                         }
 
-                        if (ContainsPoint(
-                                layout.Buildings[candidate.SourceBuildingIndex].Footprint,
-                                candidate.LocalPosition))
+                        if (layout.Buildings[candidate.SourceBuildingIndex].Bounds.Contains(candidate.LocalPosition))
                         {
                             error = $"Building approach candidate {candidate.StableId} is inside its building footprint.";
                             return false;
@@ -1076,12 +1055,13 @@ namespace FantasySurvival.WorldGeneration
 
             var poiIds = new HashSet<string>(StringComparer.Ordinal);
             int medicalPoiCount = 0;
+            var poiBuildings = new HashSet<int>();
             for (int poiIndex = 0; poiIndex < layout.Pois.Count; poiIndex++)
             {
                 UrbanPoiPlacement poi = layout.Pois[poiIndex];
                 if (string.IsNullOrWhiteSpace(poi.StableId) || !poiIds.Add(poi.StableId) ||
-                    poi.Kind == UrbanPoiKind.None ||
-                    poi.BuildingIndex < 0 || poi.BuildingIndex >= layout.Buildings.Count ||
+                    poi.Kind < UrbanPoiKind.Medical || poi.Kind > UrbanPoiKind.Office ||
+                    poi.BuildingIndex < 0 || poi.BuildingIndex >= layout.Buildings.Count || !poiBuildings.Add(poi.BuildingIndex) ||
                     !IsFinite(poi.ContentLocalPosition) ||
                     !IsFinite(poi.ApproachLocalPosition) ||
                     float.IsNaN(poi.LocalYawDegrees) || float.IsInfinity(poi.LocalYawDegrees))
@@ -1094,23 +1074,22 @@ namespace FantasySurvival.WorldGeneration
                 {
                     medicalPoiCount++;
                 }
-                else
-                {
-                    error = $"POI '{poi.StableId}' has an unsupported kind.";
-                    return false;
-                }
 
-                Rect footprint = layout.Buildings[poi.BuildingIndex].Footprint;
+                if (layout.Buildings[poi.BuildingIndex].Kind != poi.Kind ||
+                    (poi.Kind == UrbanPoiKind.Medical && poi.StableId != "core:urban/medical_01"))
+                { error = $"POI '{poi.StableId}' does not match its building purpose."; return false; }
+
+                UrbanOrientedRect footprint = layout.Buildings[poi.BuildingIndex].Bounds;
                 if (!ContainsPoint(layout.LocalBounds, poi.ContentLocalPosition) ||
                     !ContainsPoint(layout.LocalBounds, poi.ApproachLocalPosition) ||
-                    ContainsPoint(footprint, poi.ContentLocalPosition) ||
-                    ContainsPoint(footprint, poi.ApproachLocalPosition) ||
+                    footprint.Contains(poi.ContentLocalPosition) || footprint.Contains(poi.ApproachLocalPosition) ||
+                    (poi.Kind == UrbanPoiKind.Medical && (
                     (poi.ContentLocalPosition - layout.EntryLocalPosition).sqrMagnitude <
                     UrbanRaidSpawnPrototypeRules.ChestEntryClearance *
                     UrbanRaidSpawnPrototypeRules.ChestEntryClearance ||
                     (poi.ContentLocalPosition - layout.PortalLocalPosition).sqrMagnitude <
                     UrbanRaidSpawnPrototypeRules.ChestPortalClearance *
-                    UrbanRaidSpawnPrototypeRules.ChestPortalClearance)
+                    UrbanRaidSpawnPrototypeRules.ChestPortalClearance)))
                 {
                     error = $"POI '{poi.StableId}' is not safely outside its building footprint.";
                     return false;
@@ -1146,10 +1125,25 @@ namespace FantasySurvival.WorldGeneration
                 }
             }
 
-            if (medicalPoiCount != 1)
+            if (medicalPoiCount != 1 || poiBuildings.Count != layout.Buildings.Count)
             {
-                error = $"Urban layout requires exactly one Medical POI, found {medicalPoiCount}.";
+                error = $"Urban layout requires one purpose per building and exactly one Medical POI; found {poiBuildings.Count}/{layout.Buildings.Count} and {medicalPoiCount} medical.";
                 return false;
+            }
+
+            if (layout.Architecture.Buildings.Count > 0)
+            {
+                int parkingIndex = layout.Architecture.ParkingParcelIndex;
+                if (parkingIndex < 0 || parkingIndex >= layout.Parcels.Count || occupiedParcels.Contains(parkingIndex))
+                { error = "Architecture parking parcel is missing or occupied by a building."; return false; }
+                var plannedBuildings = new HashSet<int>();
+                foreach (UrbanFloorPlan plan in layout.Architecture.Buildings)
+                {
+                    if (plan.BuildingIndex < 0 || plan.BuildingIndex >= layout.Buildings.Count ||
+                        !plannedBuildings.Add(plan.BuildingIndex) || plan.Size != layout.Buildings[plan.BuildingIndex].Size)
+                    { error = "Architecture program does not match one unique existing building footprint."; return false; }
+                    if (!plan.TryValidate(out error)) return false;
+                }
             }
 
             error = null;
@@ -1448,35 +1442,6 @@ namespace FantasySurvival.WorldGeneration
                    UrbanSurfaceGrid.AreAutotileCompatible(source, grid.GetKind(x, z));
         }
 
-        private static bool FootprintUsesOnlyGround(UrbanSurfaceGrid grid, Rect footprint)
-        {
-            if (!grid.TryLocalToCell(new Vector2(footprint.xMin, footprint.yMin), out int minX, out int minZ) ||
-                !grid.TryLocalToCell(
-                    new Vector2(
-                        footprint.xMax - GeometryTolerance,
-                        footprint.yMax - GeometryTolerance),
-                    out int maxX,
-                    out int maxZ))
-            {
-                return false;
-            }
-
-            for (int z = minZ; z <= maxZ; z++)
-            {
-                for (int x = minX; x <= maxX; x++)
-                {
-                    Vector2 center = grid.GetCellCenter(x, z);
-                    if (ContainsPoint(footprint, center) &&
-                        grid.GetKind(x, z) != UrbanSurfaceTileKind.Ground)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
         public static ulong ComputeStableHash(UrbanMapLayout layout)
         {
             if (layout == null)
@@ -1494,6 +1459,9 @@ namespace FantasySurvival.WorldGeneration
             AddFloat(layout.CityRotationDegrees);
             AddFloat(layout.LocalBounds.width);
             AddFloat(layout.LocalBounds.height);
+            ulong architectureHash = layout.Architecture.StableHash;
+            AddInt(unchecked((int)architectureHash));
+            AddInt(unchecked((int)(architectureHash >> 32)));
 
             for (int index = 0; index < layout.Roads.Count; index++)
             {
@@ -1521,12 +1489,19 @@ namespace FantasySurvival.WorldGeneration
                 }
             }
 
+            AddInt(layout.Blocks.Count);
+            foreach (UrbanBlockRegion block in layout.Blocks)
+            {
+                AddInt(block.StableId); AddInt(block.CellIndices.Count);
+                foreach (int cell in block.CellIndices) AddInt(cell);
+            }
             AddInt(layout.Parcels.Count);
             for (int index = 0; index < layout.Parcels.Count; index++)
             {
                 UrbanParcelPlacement parcel = layout.Parcels[index];
                 AddInt(parcel.StableId);
                 AddInt(parcel.SourceRoadIndex);
+                AddInt(parcel.SourceBlockId);
                 AddFloat(parcel.DistanceAlongRoad);
                 AddInt(parcel.Side);
                 AddFloat(parcel.Center.x);
@@ -1548,6 +1523,33 @@ namespace FantasySurvival.WorldGeneration
                 AddFloat(building.Size.y);
                 AddFloat(building.Height);
                 AddInt(building.PaletteIndex);
+                AddInt(building.SourceBlockId);
+                AddInt((int)building.Kind);
+                AddFloat(building.FacadeDirection.x);
+                AddFloat(building.FacadeDirection.y);
+            }
+
+            ulong profileHash = layout.BuildingProfile?.StableHash ?? 0UL;
+            AddInt(unchecked((int)profileHash));
+            AddInt(unchecked((int)(profileHash >> 32)));
+            AddInt(layout.BuildingDecorations.Count);
+            foreach (UrbanBuildingDecorationPlacement decoration in layout.BuildingDecorations)
+            {
+                AddString(decoration.StableId);
+                AddString(decoration.RuleId);
+                AddInt(decoration.SlotIndex);
+                AddInt(decoration.SourceBuildingIndex);
+                AddInt(decoration.PropIndex);
+                AddString(decoration.CatalogId);
+                AddInt((int)decoration.RequiredPoiKind);
+                AddInt((int)decoration.Zone);
+                AddInt(decoration.Interior ? 1 : 0);
+                AddFloat(decoration.LocalPosition.x);
+                AddFloat(decoration.LocalPosition.y);
+                AddFloat(decoration.LocalYawDegrees);
+                AddFloat(decoration.PhysicalSize.x);
+                AddFloat(decoration.PhysicalSize.y);
+                AddFloat(decoration.PhysicalSize.z);
             }
 
             AddInt(layout.StreetFurniture.Count);
@@ -1764,14 +1766,6 @@ namespace FantasySurvival.WorldGeneration
             }
 
             return visitedCount == nodeCount;
-        }
-
-        private static bool ContainsRect(Rect outer, Rect inner)
-        {
-            return inner.xMin >= outer.xMin - GeometryTolerance &&
-                   inner.xMax <= outer.xMax + GeometryTolerance &&
-                   inner.yMin >= outer.yMin - GeometryTolerance &&
-                   inner.yMax <= outer.yMax + GeometryTolerance;
         }
 
         private static bool ContainsPoint(Rect rect, Vector2 point)

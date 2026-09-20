@@ -38,6 +38,13 @@ namespace FantasySurvival.WorldGeneration
             originalOffset = boundFollow.offset;
             originalOrthographic = boundCamera.orthographic;
             boundCamera.orthographic = true;
+            Renderer[] surfaces = GetComponentsInChildren<Renderer>();
+            if (surfaces.Length > 0)
+            {
+                Bounds bounds = surfaces[0].bounds;
+                for (int i = 1; i < surfaces.Length; i++) bounds.Encapsulate(surfaces[i].bounds);
+                boundFollow.SetOrthographicClippingBounds(transform, bounds);
+            }
             boundFollow.SetViewOrientation(Quaternion.Euler(30f, cityYaw + 45f, 0f));
             applied = true;
         }
@@ -47,6 +54,7 @@ namespace FantasySurvival.WorldGeneration
             if (applied && boundCamera != null && boundFollow != null &&
                 boundFollow.gameObject == boundCamera.gameObject)
             {
+                boundFollow.ClearOrthographicClippingBounds(transform);
                 boundFollow.RestoreViewOrientation(originalRotation, originalOffset);
                 boundCamera.orthographic = originalOrthographic;
             }

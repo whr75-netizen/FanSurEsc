@@ -19,6 +19,7 @@ namespace FantasySurvival.WorldGeneration
         private sealed class Surface
         {
             public Renderer Renderer;
+            public bool OriginalEnabled;
             public Collider Collider;
             public Color BaseColor;
             public float Opacity = 1f;
@@ -35,7 +36,28 @@ namespace FantasySurvival.WorldGeneration
             public Surface[] Walls;
         }
 
+        private sealed class ContentVisibility
+        {
+            public Renderer Renderer;
+            public bool OriginalEnabled;
+        }
+
+        private sealed class Storey
+        {
+            public Transform Root;
+            public Bounds WholeInterior;
+            public Bounds OcclusionBounds;
+            public int FloorIndex;
+            public float StoreyHeight;
+            public bool IsRoof;
+            public Surface[] Floors;
+            public Surface[] Walls;
+            public ContentVisibility[] Contents;
+        }
+
         private readonly List<Building> buildings = new List<Building>();
+        private readonly List<Storey> storeys = new List<Storey>();
+        private readonly HashSet<Transform> insideStoreyRoots = new HashSet<Transform>();
         private readonly Dictionary<Material, Material> fadeMaterials = new Dictionary<Material, Material>();
         private MaterialPropertyBlock properties;
 
@@ -46,6 +68,7 @@ namespace FantasySurvival.WorldGeneration
 
         public int InsideBuildingCount { get; private set; }
         public int FadedRendererCount { get; private set; }
+        public int HiddenUpperStoreyRendererCount { get; private set; }
 
         public void RegisterBuilding(
             Transform root,
@@ -78,6 +101,69 @@ namespace FantasySurvival.WorldGeneration
             buildings.Add(building);
         }
 
+        /// <summary>
+        /// Registers a floor against the same building-local interior volume. Visibility never
+        /// changes its colliders: upper floors remain walkable while their rendering is cut away.
+        /// </summary>
+        public void RegisterStorey(Transform root, Bounds wholeInterior, int floorIndex,
+            float storeyHeight, Renderer[] floors, Collider[] floorColliders,
+            Renderer[] walls, Collider[] wallColliders, Renderer[] contents, bool roof = false)
+        {
+            if (root == null)
+                throw new ArgumentNullException(nameof(root));
+            if (floorIndex < 0 || !float.IsFinite(storeyHeight) || storeyHeight <= 0f)
+                throw new ArgumentOutOfRangeException(nameof(storeyHeight),
+                    "Floor index must be nonnegative and storey height must be finite and positive.");
+            ValidateSurfaceArrays(floors, floorColliders, nameof(floors));
+            ValidateSurfaceArrays(walls, wallColliders, nameof(walls));
+            if (contents == null)
+                throw new ArgumentNullException(nameof(contents));
+            if (properties == null) properties = new MaterialPropertyBlock();
+
+            var storey = new Storey
+            {
+                Root = root,
+                WholeInterior = wholeInterior,
+                OcclusionBounds = wholeInterior,
+                FloorIndex = floorIndex,
+                StoreyHeight = storeyHeight,
+                IsRoof = roof,
+                Floors = new Surface[floors.Length],
+                Walls = new Surface[walls.Length],
+                Contents = new ContentVisibility[contents.Length]
+            };
+            for (int index = 0; index < floors.Length; index++)
+            {
+                storey.Floors[index] = CreateSurface(floors[index], floorColliders[index]);
+                IncludeColliderBounds(storey, floorColliders[index]);
+            }
+            for (int index = 0; index < walls.Length; index++)
+            {
+                storey.Walls[index] = CreateSurface(walls[index], wallColliders[index]);
+                IncludeColliderBounds(storey, wallColliders[index]);
+            }
+            for (int index = 0; index < contents.Length; index++)
+                storey.Contents[index] = new ContentVisibility
+                {
+                    Renderer = contents[index],
+                    OriginalEnabled = contents[index] != null && contents[index].enabled
+                };
+            storeys.Add(storey);
+        }
+
+        private static void ValidateSurfaceArrays(Renderer[] renderers, Collider[] colliders, string name)
+        {
+            if (renderers == null || colliders == null || renderers.Length != colliders.Length)
+                throw new ArgumentException("Renderers and colliders must have matching arrays.", name);
+        }
+
+        public static int CalculateActiveFloor(float localPlayerRootY, float storeyHeight)
+        {
+            // Player root is 0.5 m above its feet. The 0.08 m boundary tolerance accommodates
+            // the floor surface and CharacterController contact offset, not a visual offset.
+            return Mathf.Max(0, Mathf.FloorToInt((localPlayerRootY - 0.5f + 0.08f) / storeyHeight));
+        }
+
         private void LateUpdate()
         {
             PersistentGameplayShell shell = PersistentGameplayShell.Instance;
@@ -89,6 +175,8 @@ namespace FantasySurvival.WorldGeneration
         {
             InsideBuildingCount = 0;
             FadedRendererCount = 0;
+            HiddenUpperStoreyRendererCount = 0;
+            insideStoreyRoots.Clear();
             if (camera == null)
                 return;
 
@@ -120,6 +208,74 @@ namespace FantasySurvival.WorldGeneration
                         inside, mayOcclude, torsoRay, torsoDistance, headRay, headDistance, fadeStep);
                 }
             }
+
+            for (int index = 0; index < storeys.Count; index++)
+            {
+                Storey storey = storeys[index];
+                if (storey.Root == null)
+                    continue;
+                if (!storey.Root.gameObject.activeInHierarchy)
+                {
+                    RestoreStorey(storey);
+                    continue;
+                }
+
+                Vector3 localPlayer = storey.Root.InverseTransformPoint(playerFeet);
+                bool inside = storey.WholeInterior.Contains(localPlayer);
+                if (inside && insideStoreyRoots.Add(storey.Root))
+                    InsideBuildingCount++;
+                int activeFloor = CalculateActiveFloor(localPlayer.y, storey.StoreyHeight);
+                bool hide = inside && (storey.IsRoof || storey.FloorIndex > activeFloor);
+                SetStoreyVisibility(storey, hide);
+                if (hide)
+                    continue;
+
+                Bounds worldBounds = TransformBounds(storey.Root.localToWorldMatrix, storey.OcclusionBounds);
+                bool mayOcclude = inside ||
+                    IntersectsSegment(worldBounds, torsoRay, torsoDistance) ||
+                    IntersectsSegment(worldBounds, headRay, headDistance);
+                // The occupied floor stays opaque. Exterior floors/roofs can still fade when
+                // their real collider obstructs the view; current-storey walls retain the old fade.
+                for (int floor = 0; floor < storey.Floors.Length; floor++)
+                {
+                    Surface surface = storey.Floors[floor];
+                    if (inside)
+                        SetOpacity(surface, Mathf.MoveTowards(surface != null ? surface.Opacity : 1f, 1f, fadeStep));
+                    else
+                        UpdateSurface(surface, WallOpacity, false, mayOcclude,
+                            torsoRay, torsoDistance, headRay, headDistance, fadeStep);
+                }
+                for (int wall = 0; wall < storey.Walls.Length; wall++)
+                    UpdateSurface(storey.Walls[wall], WallOpacity,
+                        inside && storey.FloorIndex == activeFloor, mayOcclude,
+                        torsoRay, torsoDistance, headRay, headDistance, fadeStep);
+            }
+        }
+
+        private void SetStoreyVisibility(Storey storey, bool hide)
+        {
+            for (int index = 0; index < storey.Floors.Length; index++)
+                SetSurfaceVisibility(storey.Floors[index], hide);
+            for (int index = 0; index < storey.Walls.Length; index++)
+                SetSurfaceVisibility(storey.Walls[index], hide);
+            for (int index = 0; index < storey.Contents.Length; index++)
+            {
+                ContentVisibility content = storey.Contents[index];
+                if (content.Renderer == null)
+                    continue;
+                content.Renderer.enabled = content.OriginalEnabled && !hide;
+                if (hide && content.OriginalEnabled)
+                    HiddenUpperStoreyRendererCount++;
+            }
+        }
+
+        private void SetSurfaceVisibility(Surface surface, bool hide)
+        {
+            if (surface == null || surface.Renderer == null)
+                return;
+            surface.Renderer.enabled = surface.OriginalEnabled && !hide;
+            if (hide && surface.OriginalEnabled)
+                HiddenUpperStoreyRendererCount++;
         }
 
         private void UpdateSurface(Surface surface, float fadedOpacity, bool inside, bool mayOcclude,
@@ -163,6 +319,7 @@ namespace FantasySurvival.WorldGeneration
                 }
             }
             return new Surface { Renderer = renderer, Collider = collider, BaseColor = color,
+                OriginalEnabled = renderer.enabled,
                 OpaqueMaterial = material, FadedMaterial = faded };
         }
 
@@ -212,6 +369,13 @@ namespace FantasySurvival.WorldGeneration
                     TransformBounds(building.Root.worldToLocalMatrix, collider.bounds));
         }
 
+        private static void IncludeColliderBounds(Storey storey, Collider collider)
+        {
+            if (collider != null)
+                storey.OcclusionBounds.Encapsulate(
+                    TransformBounds(storey.Root.worldToLocalMatrix, collider.bounds));
+        }
+
         private static Bounds TransformBounds(Matrix4x4 matrix, Bounds bounds)
         {
             Vector3 x = matrix.MultiplyVector(new Vector3(bounds.extents.x, 0f, 0f));
@@ -232,8 +396,21 @@ namespace FantasySurvival.WorldGeneration
                 for (int wallIndex = 0; wallIndex < buildings[index].Walls.Length; wallIndex++)
                     SetOpacity(buildings[index].Walls[wallIndex], 1f);
             }
+            for (int index = 0; index < storeys.Count; index++)
+                RestoreStorey(storeys[index]);
             InsideBuildingCount = 0;
             FadedRendererCount = 0;
+            HiddenUpperStoreyRendererCount = 0;
+            insideStoreyRoots.Clear();
+        }
+
+        private void RestoreStorey(Storey storey)
+        {
+            SetStoreyVisibility(storey, false);
+            for (int index = 0; index < storey.Floors.Length; index++)
+                SetOpacity(storey.Floors[index], 1f);
+            for (int index = 0; index < storey.Walls.Length; index++)
+                SetOpacity(storey.Walls[index], 1f);
         }
 
         private void OnDestroy()

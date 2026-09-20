@@ -1,0 +1,243 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5957383385354298092
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4375284513650721117}
+  - component: {fileID: 5690024834239217728}
+  - component: {fileID: 8264091161420838273}
+  m_Layer: 0
+  m_Name: CoherentUrbanBuilding
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4375284513650721117
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5957383385354298092}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5690024834239217728
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5957383385354298092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94c6d660719c76740b820c494e943754, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldGeneration.EnterableSpriteBuilding
+--- !u!114 &8264091161420838273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5957383385354298092}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 675618826663a5746830dfa8f1cc1b33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.WorldGeneration.UrbanBuildingPrefab
+  reservedMargin: 1.5
+  catalogRevision: 3
+  aisleWidth: 1.4
+  propPrefabs:
+  - {fileID: 5496759167340176375, guid: 0937faf702c571f4eb5c75ba4633a562, type: 3}
+  - {fileID: 8478226699952873974, guid: 26d253887cdab9045ad0717354f671d2, type: 3}
+  - {fileID: 6418472902945523156, guid: 2a82f63289ca4f848917c982a9eb2e95, type: 3}
+  - {fileID: 8533268911273561610, guid: a4c08c39712adb34a82ae5da2ac16487, type: 3}
+  - {fileID: 8598099245774638076, guid: 9a9caaecb511b2548a2e9f5125e1f11b, type: 3}
+  - {fileID: 150993150208814306, guid: c0399efb84f13b44686f9bb17a96fa3c, type: 3}
+  - {fileID: 1308045720419007440, guid: e6d93a6726e6fcc4c81e5f373b97cb9c, type: 3}
+  - {fileID: 2209782773397941655, guid: 4f744e32f63d2394691fffba3b518175, type: 3}
+  - {fileID: 9171188727348095985, guid: fc6a3ab76bf0fed48841cae095cb2179, type: 3}
+  - {fileID: 7410156108740144132, guid: 0013d03ed7c609d4ca39fafaf4c3c965, type: 3}
+  - {fileID: 404196370325597923, guid: eef1df1d12df35d4cad5326a7814a043, type: 3}
+  rules:
+  - stableId: medical/administration
+    requiredPoiKind: 1
+    zone: 4
+    chance: 1
+    maxCount: 1
+    choices:
+    - propIndex: 0
+      weight: 1
+  - stableId: medical/storage
+    requiredPoiKind: 1
+    zone: 2
+    chance: 1
+    maxCount: 2
+    choices:
+    - propIndex: 1
+      weight: 1
+  - stableId: medical/waste
+    requiredPoiKind: 1
+    zone: 8
+    chance: 0.8
+    maxCount: 1
+    choices:
+    - propIndex: 8
+      weight: 1
+  - stableId: residential/living
+    requiredPoiKind: 2
+    zone: 4
+    chance: 1
+    maxCount: 1
+    choices:
+    - propIndex: 5
+      weight: 1
+  - stableId: residential/sleeping
+    requiredPoiKind: 2
+    zone: 4
+    chance: 1
+    maxCount: 1
+    choices:
+    - propIndex: 6
+      weight: 1
+  - stableId: residential/wardrobe
+    requiredPoiKind: 2
+    zone: 2
+    chance: 0.9
+    maxCount: 1
+    choices:
+    - propIndex: 4
+      weight: 1
+  - stableId: residential/garden
+    requiredPoiKind: 2
+    zone: 8
+    chance: 0.65
+    maxCount: 1
+    choices:
+    - propIndex: 10
+      weight: 1
+  - stableId: retail/display
+    requiredPoiKind: 3
+    zone: 4
+    chance: 1
+    maxCount: 3
+    choices:
+    - propIndex: 2
+      weight: 1
+  - stableId: retail/stock
+    requiredPoiKind: 3
+    zone: 2
+    chance: 1
+    maxCount: 2
+    choices:
+    - propIndex: 1
+      weight: 1
+  - stableId: retail/service
+    requiredPoiKind: 3
+    zone: 8
+    chance: 0.85
+    maxCount: 1
+    choices:
+    - propIndex: 8
+      weight: 1
+  - stableId: workshop/work
+    requiredPoiKind: 4
+    zone: 4
+    chance: 1
+    maxCount: 2
+    choices:
+    - propIndex: 3
+      weight: 1
+  - stableId: workshop/stock
+    requiredPoiKind: 4
+    zone: 2
+    chance: 1
+    maxCount: 2
+    choices:
+    - propIndex: 1
+      weight: 1
+  - stableId: workshop/service
+    requiredPoiKind: 4
+    zone: 8
+    chance: 0.9
+    maxCount: 1
+    choices:
+    - propIndex: 8
+      weight: 1
+  - stableId: office/desks
+    requiredPoiKind: 5
+    zone: 4
+    chance: 1
+    maxCount: 3
+    choices:
+    - propIndex: 0
+      weight: 1
+  - stableId: office/filing
+    requiredPoiKind: 5
+    zone: 2
+    chance: 1
+    maxCount: 2
+    choices:
+    - propIndex: 1
+      weight: 1
+  - stableId: office/outside_seat
+    requiredPoiKind: 5
+    zone: 8
+    chance: 0.5
+    maxCount: 1
+    choices:
+    - propIndex: 9
+      weight: 1
+  - stableId: medical/entrance_bin
+    requiredPoiKind: 1
+    zone: 1
+    chance: 0.4
+    maxCount: 1
+    choices:
+    - propIndex: 7
+      weight: 1
+  - stableId: residential/entrance_bin
+    requiredPoiKind: 2
+    zone: 1
+    chance: 0.4
+    maxCount: 1
+    choices:
+    - propIndex: 7
+      weight: 1
+  - stableId: retail/entrance_bin
+    requiredPoiKind: 3
+    zone: 1
+    chance: 0.4
+    maxCount: 1
+    choices:
+    - propIndex: 7
+      weight: 1
+  - stableId: workshop/entrance_bin
+    requiredPoiKind: 4
+    zone: 1
+    chance: 0.4
+    maxCount: 1
+    choices:
+    - propIndex: 7
+      weight: 1
+  - stableId: office/entrance_bin
+    requiredPoiKind: 5
+    zone: 1
+    chance: 0.4
+    maxCount: 1
+    choices:
+    - propIndex: 7
+      weight: 1

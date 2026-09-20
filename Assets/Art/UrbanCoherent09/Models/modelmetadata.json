@@ -1,0 +1,4891 @@
+{
+  "schema": "urban-coherent-model-kit/1",
+  "recipe_revision": "D09-initial",
+  "blender_version": "5.2.0 LTS",
+  "source_recipe": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\WorldArt\\create_urban_models.py",
+  "source_recipe_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+  "canonical": {
+    "units": "metres",
+    "origin": "floor centre",
+    "right": "+X",
+    "up": "+Y",
+    "front": "+Z",
+    "recipe_to_blender": "(x,y,z) -> (x,-z,y)"
+  },
+  "fbx_export": {
+    "use_selection": true,
+    "object_types": [
+      "MESH"
+    ],
+    "global_scale": 1.0,
+    "apply_unit_scale": true,
+    "apply_scale_options": "FBX_SCALE_UNITS",
+    "axis_forward": "-Z",
+    "axis_up": "Y",
+    "use_space_transform": true,
+    "bake_space_transform": true,
+    "use_mesh_modifiers": true,
+    "mesh_smooth_type": "FACE",
+    "use_triangles": true,
+    "add_leaf_bones": false,
+    "bake_anim": false,
+    "use_custom_props": true,
+    "path_mode": "AUTO",
+    "embed_textures": false
+  },
+  "uv": {
+    "metres_per_uv": 2.0,
+    "texels_per_metre_for_64px_repeat": 32,
+    "method": "orthonormal tangent dot mesh position / 2 on each planar polygon; no fit-to-face stretch",
+    "origin": "model local origin; tangent axes fixed from polygon normal and Blender world up",
+    "max_edge_error_tolerance_metres": 1e-05
+  },
+  "materials": {
+    "Urban_Wood": {
+      "display_rgba": [
+        0.43,
+        0.31,
+        0.19,
+        1
+      ],
+      "usage": "semantic shared material; root assigns D09 surface textures"
+    },
+    "Urban_MetalDark": {
+      "display_rgba": [
+        0.095,
+        0.12,
+        0.125,
+        1
+      ],
+      "usage": "semantic shared material; root assigns D09 surface textures"
+    },
+    "Urban_MetalLight": {
+      "display_rgba": [
+        0.42,
+        0.46,
+        0.46,
+        1
+      ],
+      "usage": "semantic shared material; root assigns D09 surface textures"
+    },
+    "Urban_Glass": {
+      "display_rgba": [
+        0.075,
+        0.2,
+        0.22,
+        1
+      ],
+      "usage": "semantic shared material; root assigns D09 surface textures"
+    },
+    "Urban_Olive": {
+      "display_rgba": [
+        0.29,
+        0.34,
+        0.17,
+        1
+      ],
+      "usage": "semantic shared material; root assigns D09 surface textures"
+    },
+    "Urban_Fabric": {
+      "display_rgba": [
+        0.24,
+        0.37,
+        0.35,
+        1
+      ],
+      "usage": "semantic shared material; root assigns D09 surface textures"
+    },
+    "Urban_Ceramic": {
+      "display_rgba": [
+        0.7,
+        0.69,
+        0.61,
+        1
+      ],
+      "usage": "semantic shared material; root assigns D09 surface textures"
+    },
+    "Urban_Brick": {
+      "display_rgba": [
+        0.47,
+        0.25,
+        0.18,
+        1
+      ],
+      "usage": "semantic shared material; root assigns D09 surface textures"
+    }
+  },
+  "models": [
+    {
+      "canonical_bounds_min": [
+        -0.75,
+        0.0,
+        -0.375
+      ],
+      "canonical_bounds_max": [
+        0.75,
+        1.25,
+        0.375
+      ],
+      "canonical_size": [
+        1.5,
+        1.25,
+        0.75
+      ],
+      "declared_size": [
+        1.5,
+        1.25,
+        0.75
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 1166,
+      "triangle_count": 2144,
+      "polygon_count": 1268,
+      "max_metric_uv_edge_error_metres": 8.50667449068393e-08,
+      "materials": [
+        "Urban_Ceramic",
+        "Urban_Glass",
+        "Urban_MetalDark",
+        "Urban_Wood"
+      ],
+      "id": "office_desk",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 47,
+      "components": [
+        {
+          "name": "desktop",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.72,
+            0
+          ],
+          "size_unity": [
+            1.5,
+            0.06,
+            0.75
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_-0.685_-0.31",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.685,
+            0.345,
+            -0.31
+          ],
+          "size_unity": [
+            0.065,
+            0.69,
+            0.065
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_-0.685_0.31",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.685,
+            0.345,
+            0.31
+          ],
+          "size_unity": [
+            0.065,
+            0.69,
+            0.065
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_0.685_-0.31",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.685,
+            0.345,
+            -0.31
+          ],
+          "size_unity": [
+            0.065,
+            0.69,
+            0.065
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_0.685_0.31",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.685,
+            0.345,
+            0.31
+          ],
+          "size_unity": [
+            0.065,
+            0.69,
+            0.065
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "rear_stretcher",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.55,
+            -0.31
+          ],
+          "size_unity": [
+            1.37,
+            0.065,
+            0.055
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "drawer_cabinet",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.47,
+            0.505,
+            -0.015
+          ],
+          "size_unity": [
+            0.33,
+            0.34,
+            0.54
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "drawer_front_0.43",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            -0.47,
+            0.43,
+            0.266
+          ],
+          "size_unity": [
+            0.3,
+            0.14,
+            0.025
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "drawer_handle_0.43",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.47,
+            0.43,
+            0.287
+          ],
+          "size_unity": [
+            0.12,
+            0.018,
+            0.02
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "drawer_front_0.585",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            -0.47,
+            0.585,
+            0.266
+          ],
+          "size_unity": [
+            0.3,
+            0.14,
+            0.025
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "drawer_handle_0.585",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.47,
+            0.585,
+            0.287
+          ],
+          "size_unity": [
+            0.12,
+            0.018,
+            0.02
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "monitor_base",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.765,
+            -0.21
+          ],
+          "size_unity": [
+            0.31,
+            0.03,
+            0.2
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "monitor_stand",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.87,
+            -0.23
+          ],
+          "size_unity": [
+            0.045,
+            0.21,
+            0.045
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "monitor_frame",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            1.08,
+            -0.23
+          ],
+          "size_unity": [
+            0.56,
+            0.34,
+            0.055
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "monitor_screen",
+          "primitive": "beveled_box",
+          "material": "Urban_Glass",
+          "center_unity": [
+            0,
+            1.08,
+            -0.2005
+          ],
+          "size_unity": [
+            0.5,
+            0.28,
+            0.006
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "keyboard",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.7675,
+            0.13
+          ],
+          "size_unity": [
+            0.43,
+            0.035,
+            0.15
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.18,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.13999999999999999,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.09999999999999999,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.06,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.01999999999999999,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_5",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.020000000000000018,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_6",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.06,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_7",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.10000000000000003,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_8",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.14,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_0_9",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.18,
+            0.787,
+            0.087
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.18,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.13999999999999999,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.09999999999999999,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.06,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.01999999999999999,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_5",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.020000000000000018,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_6",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.06,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_7",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.10000000000000003,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_8",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.14,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_1_9",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.18,
+            0.787,
+            0.131
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.18,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.13999999999999999,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.09999999999999999,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.06,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.01999999999999999,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_5",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.020000000000000018,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_6",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.06,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_7",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.10000000000000003,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_8",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.14,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "key_2_9",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.18,
+            0.787,
+            0.175
+          ],
+          "size_unity": [
+            0.031,
+            0.006,
+            0.03
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "mouse",
+          "primitive": "faceted_foliage",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.4,
+            0.774,
+            0.12
+          ],
+          "size_unity": [
+            0.06,
+            0.048,
+            0.1
+          ]
+        }
+      ],
+      "build_seconds": 0.23391740000079153,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/office_desk.fbx",
+      "fbx_sha256": "a01d36b1cd66a8148e32d7db851590c018c765a8d587e56553d19018ca636fa6",
+      "export_seconds": 1.1866408999994746
+    },
+    {
+      "canonical_bounds_min": [
+        -0.22499999403953552,
+        0.0,
+        -0.22499999403953552
+      ],
+      "canonical_bounds_max": [
+        0.22499999403953552,
+        0.75,
+        0.22499999403953552
+      ],
+      "canonical_size": [
+        0.44999998807907104,
+        0.75,
+        0.44999998807907104
+      ],
+      "declared_size": [
+        0.45,
+        0.75,
+        0.45
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 320,
+      "triangle_count": 600,
+      "polygon_count": 260,
+      "max_metric_uv_edge_error_metres": 7.605166585378242e-08,
+      "materials": [
+        "Urban_MetalDark",
+        "Urban_Wood"
+      ],
+      "id": "public_round_bin",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 12,
+      "components": [
+        {
+          "name": "weighted_base",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            0,
+            0,
+            0
+          ],
+          "end_unity": [
+            0,
+            0.075,
+            0
+          ],
+          "radius": 0.205,
+          "sides": 16
+        },
+        {
+          "name": "hollow_wood_body",
+          "primitive": "hollow_tapered_shell",
+          "material": "Urban_Wood",
+          "bottom_y": 0.06,
+          "top_y": 0.72,
+          "bottom_shape": [
+            0.198
+          ],
+          "top_shape": [
+            0.208
+          ],
+          "wall_thickness": 0.019,
+          "sides": 16
+        },
+        {
+          "name": "upper_open_rim",
+          "primitive": "open_ring",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.735,
+            0
+          ],
+          "major_radius": 0.21,
+          "tube_radius": 0.015
+        },
+        {
+          "name": "bottom_binding",
+          "primitive": "open_ring",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.08,
+            0
+          ],
+          "major_radius": 0.2,
+          "tube_radius": 0.011
+        },
+        {
+          "name": "vertical_binding_0",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            0.21,
+            0.09,
+            0.0
+          ],
+          "end_unity": [
+            0.21,
+            0.71,
+            0.0
+          ],
+          "radius": 0.006,
+          "sides": 6
+        },
+        {
+          "name": "vertical_binding_1",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            0.14849242404917498,
+            0.09,
+            0.14849242404917498
+          ],
+          "end_unity": [
+            0.14849242404917498,
+            0.71,
+            0.14849242404917498
+          ],
+          "radius": 0.006,
+          "sides": 6
+        },
+        {
+          "name": "vertical_binding_2",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            1.2858791391047208e-17,
+            0.09,
+            0.21
+          ],
+          "end_unity": [
+            1.2858791391047208e-17,
+            0.71,
+            0.21
+          ],
+          "radius": 0.006,
+          "sides": 6
+        },
+        {
+          "name": "vertical_binding_3",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -0.14849242404917495,
+            0.09,
+            0.14849242404917498
+          ],
+          "end_unity": [
+            -0.14849242404917495,
+            0.71,
+            0.14849242404917498
+          ],
+          "radius": 0.006,
+          "sides": 6
+        },
+        {
+          "name": "vertical_binding_4",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -0.21,
+            0.09,
+            2.5717582782094416e-17
+          ],
+          "end_unity": [
+            -0.21,
+            0.71,
+            2.5717582782094416e-17
+          ],
+          "radius": 0.006,
+          "sides": 6
+        },
+        {
+          "name": "vertical_binding_5",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -0.148492424049175,
+            0.09,
+            -0.14849242404917495
+          ],
+          "end_unity": [
+            -0.148492424049175,
+            0.71,
+            -0.14849242404917495
+          ],
+          "radius": 0.006,
+          "sides": 6
+        },
+        {
+          "name": "vertical_binding_6",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -3.857637417314162e-17,
+            0.09,
+            -0.21
+          ],
+          "end_unity": [
+            -3.857637417314162e-17,
+            0.71,
+            -0.21
+          ],
+          "radius": 0.006,
+          "sides": 6
+        },
+        {
+          "name": "vertical_binding_7",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            0.14849242404917493,
+            0.09,
+            -0.148492424049175
+          ],
+          "end_unity": [
+            0.14849242404917493,
+            0.71,
+            -0.148492424049175
+          ],
+          "radius": 0.006,
+          "sides": 6
+        }
+      ],
+      "build_seconds": 0.028054300000803778,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/public_round_bin.fbx",
+      "fbx_sha256": "ea13d542f20d174f909897832601083638bc0b527a8ca75a5d097bf5d9e244df",
+      "export_seconds": 0.011125500001071487
+    },
+    {
+      "canonical_bounds_min": [
+        -0.75,
+        0.0,
+        -0.44999998807907104
+      ],
+      "canonical_bounds_max": [
+        0.75,
+        1.2000000476837158,
+        0.44999998807907104
+      ],
+      "canonical_size": [
+        1.5,
+        1.2000000476837158,
+        0.8999999761581421
+      ],
+      "declared_size": [
+        1.5,
+        1.2,
+        0.9
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 564,
+      "triangle_count": 1024,
+      "polygon_count": 494,
+      "max_metric_uv_edge_error_metres": 1.0090245407962106e-07,
+      "materials": [
+        "Urban_MetalDark",
+        "Urban_MetalLight",
+        "Urban_Olive"
+      ],
+      "id": "wheeled_dumpster",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 26,
+      "components": [
+        {
+          "name": "tapered_container",
+          "primitive": "hollow_tapered_shell",
+          "material": "Urban_Olive",
+          "bottom_y": 0.23,
+          "top_y": 1.06,
+          "bottom_shape": [
+            1.26,
+            0.64
+          ],
+          "top_shape": [
+            1.43,
+            0.78
+          ],
+          "wall_thickness": 0.04,
+          "sides": 4
+        },
+        {
+          "name": "closed_lid",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            1.1,
+            0
+          ],
+          "size_unity": [
+            1.5,
+            0.08,
+            0.9
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "lid_stiffener_0",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.57,
+            1.1575,
+            0.015
+          ],
+          "size_unity": [
+            0.038,
+            0.035,
+            0.8
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "lid_stiffener_1",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.285,
+            1.1575,
+            0.015
+          ],
+          "size_unity": [
+            0.038,
+            0.035,
+            0.8
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "lid_stiffener_2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.0,
+            1.1575,
+            0.015
+          ],
+          "size_unity": [
+            0.038,
+            0.035,
+            0.8
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "lid_stiffener_3",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.28500000000000003,
+            1.1575,
+            0.015
+          ],
+          "size_unity": [
+            0.038,
+            0.035,
+            0.8
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "lid_stiffener_4",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.57,
+            1.1575,
+            0.015
+          ],
+          "size_unity": [
+            0.038,
+            0.035,
+            0.8
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "rear_lid_hinge",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -0.655,
+            1.13,
+            -0.375
+          ],
+          "end_unity": [
+            0.655,
+            1.13,
+            -0.375
+          ],
+          "radius": 0.07,
+          "sides": 12
+        },
+        {
+          "name": "caster_mount_-0.59_-0.28",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.59,
+            0.235,
+            -0.28
+          ],
+          "size_unity": [
+            0.11,
+            0.13,
+            0.1
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wheel_-0.59_-0.28",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -0.6275,
+            0.11,
+            -0.28
+          ],
+          "end_unity": [
+            -0.5525,
+            0.11,
+            -0.28
+          ],
+          "radius": 0.11,
+          "sides": 12
+        },
+        {
+          "name": "wheel_hub_-0.59_-0.28",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            -0.631,
+            0.11,
+            -0.28
+          ],
+          "end_unity": [
+            -0.5489999999999999,
+            0.11,
+            -0.28
+          ],
+          "radius": 0.045,
+          "sides": 8
+        },
+        {
+          "name": "caster_mount_-0.59_0.28",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.59,
+            0.235,
+            0.28
+          ],
+          "size_unity": [
+            0.11,
+            0.13,
+            0.1
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wheel_-0.59_0.28",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -0.6275,
+            0.11,
+            0.28
+          ],
+          "end_unity": [
+            -0.5525,
+            0.11,
+            0.28
+          ],
+          "radius": 0.11,
+          "sides": 12
+        },
+        {
+          "name": "wheel_hub_-0.59_0.28",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            -0.631,
+            0.11,
+            0.28
+          ],
+          "end_unity": [
+            -0.5489999999999999,
+            0.11,
+            0.28
+          ],
+          "radius": 0.045,
+          "sides": 8
+        },
+        {
+          "name": "caster_mount_0.59_-0.28",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.59,
+            0.235,
+            -0.28
+          ],
+          "size_unity": [
+            0.11,
+            0.13,
+            0.1
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wheel_0.59_-0.28",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            0.5525,
+            0.11,
+            -0.28
+          ],
+          "end_unity": [
+            0.6275,
+            0.11,
+            -0.28
+          ],
+          "radius": 0.11,
+          "sides": 12
+        },
+        {
+          "name": "wheel_hub_0.59_-0.28",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            0.5489999999999999,
+            0.11,
+            -0.28
+          ],
+          "end_unity": [
+            0.631,
+            0.11,
+            -0.28
+          ],
+          "radius": 0.045,
+          "sides": 8
+        },
+        {
+          "name": "caster_mount_0.59_0.28",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.59,
+            0.235,
+            0.28
+          ],
+          "size_unity": [
+            0.11,
+            0.13,
+            0.1
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wheel_0.59_0.28",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            0.5525,
+            0.11,
+            0.28
+          ],
+          "end_unity": [
+            0.6275,
+            0.11,
+            0.28
+          ],
+          "radius": 0.11,
+          "sides": 12
+        },
+        {
+          "name": "wheel_hub_0.59_0.28",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            0.5489999999999999,
+            0.11,
+            0.28
+          ],
+          "end_unity": [
+            0.631,
+            0.11,
+            0.28
+          ],
+          "radius": 0.045,
+          "sides": 8
+        },
+        {
+          "name": "handle_mount_-0.44",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -0.44,
+            0.86,
+            0.355
+          ],
+          "end_unity": [
+            -0.44,
+            0.86,
+            0.431
+          ],
+          "radius": 0.013,
+          "sides": 8
+        },
+        {
+          "name": "handle_mount_0.44",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            0.44,
+            0.86,
+            0.355
+          ],
+          "end_unity": [
+            0.44,
+            0.86,
+            0.431
+          ],
+          "radius": 0.013,
+          "sides": 8
+        },
+        {
+          "name": "front_handle",
+          "primitive": "cylinder",
+          "material": "Urban_MetalDark",
+          "start_unity": [
+            -0.44,
+            0.86,
+            0.431
+          ],
+          "end_unity": [
+            0.44,
+            0.86,
+            0.431
+          ],
+          "radius": 0.015,
+          "sides": 10
+        },
+        {
+          "name": "front_reinforcement_-0.49",
+          "primitive": "beveled_box",
+          "material": "Urban_Olive",
+          "center_unity": [
+            -0.49,
+            0.63,
+            0.362
+          ],
+          "size_unity": [
+            0.035,
+            0.56,
+            0.032
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "front_reinforcement_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0,
+            0.63,
+            0.362
+          ],
+          "size_unity": [
+            0.035,
+            0.56,
+            0.032
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "front_reinforcement_0.49",
+          "primitive": "beveled_box",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0.49,
+            0.63,
+            0.362
+          ],
+          "size_unity": [
+            0.035,
+            0.56,
+            0.032
+          ],
+          "yaw_degrees": 0
+        }
+      ],
+      "build_seconds": 0.07462569999916013,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/wheeled_dumpster.fbx",
+      "fbx_sha256": "043b88deab83d0bbbd26fb93e8bee844948a4efc080a4c28416a6e7be39155f7",
+      "export_seconds": 0.013196899999456946
+    },
+    {
+      "canonical_bounds_min": [
+        -0.5999999642372131,
+        0.0,
+        -0.22499999403953552
+      ],
+      "canonical_bounds_max": [
+        0.6000000238418579,
+        1.7999999523162842,
+        0.22500000894069672
+      ],
+      "canonical_size": [
+        1.199999988079071,
+        1.7999999523162842,
+        0.45000000298023224
+      ],
+      "declared_size": [
+        1.2,
+        1.8,
+        0.45
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 360,
+      "triangle_count": 656,
+      "polygon_count": 380,
+      "max_metric_uv_edge_error_metres": 2.422111220479195e-07,
+      "materials": [
+        "Urban_MetalDark",
+        "Urban_MetalLight"
+      ],
+      "id": "storage_shelf",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 16,
+      "components": [
+        {
+          "name": "upright_-0.5825_-0.20750000000000002",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.5825,
+            0.9,
+            -0.20750000000000002
+          ],
+          "size_unity": [
+            0.035,
+            1.8,
+            0.035
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "upright_-0.5825_0.20750000000000002",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.5825,
+            0.9,
+            0.20750000000000002
+          ],
+          "size_unity": [
+            0.035,
+            1.8,
+            0.035
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "upright_0.5825_-0.20750000000000002",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.5825,
+            0.9,
+            -0.20750000000000002
+          ],
+          "size_unity": [
+            0.035,
+            1.8,
+            0.035
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "upright_0.5825_0.20750000000000002",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.5825,
+            0.9,
+            0.20750000000000002
+          ],
+          "size_unity": [
+            0.035,
+            1.8,
+            0.035
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_0",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            0.06,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.41500000000000004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_0",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.073,
+            0.2
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_1",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            0.48,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.41500000000000004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_1",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.493,
+            0.2
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            0.9,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.41500000000000004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.913,
+            0.2
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_3",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            1.32,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.41500000000000004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_3",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            1.3330000000000002,
+            0.2
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_4",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            1.74,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.41500000000000004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_4",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            1.7530000000000001,
+            0.2
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "rear_brace_-1",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            -0.552,
+            1.73,
+            -0.199
+          ],
+          "end_unity": [
+            0.552,
+            0.1,
+            -0.199
+          ],
+          "radius": 0.009,
+          "sides": 6
+        },
+        {
+          "name": "rear_brace_1",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            -0.552,
+            0.1,
+            -0.199
+          ],
+          "end_unity": [
+            0.552,
+            1.73,
+            -0.199
+          ],
+          "radius": 0.009,
+          "sides": 6
+        }
+      ],
+      "build_seconds": 0.10276239999802783,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/storage_shelf.fbx",
+      "fbx_sha256": "d7f073aceda00aea073d3ae2001140ca78951ce85a375d628a5508ad30a06187",
+      "export_seconds": 0.011673799999698531
+    },
+    {
+      "canonical_bounds_min": [
+        -0.5999999642372131,
+        0.0,
+        -0.2750000059604645
+      ],
+      "canonical_bounds_max": [
+        0.6000000238418579,
+        1.600000023841858,
+        0.2749999761581421
+      ],
+      "canonical_size": [
+        1.199999988079071,
+        1.600000023841858,
+        0.5499999821186066
+      ],
+      "declared_size": [
+        1.2,
+        1.6,
+        0.55
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 1272,
+      "triangle_count": 2328,
+      "polygon_count": 1368,
+      "max_metric_uv_edge_error_metres": 1.7321410217263633e-07,
+      "materials": [
+        "Urban_Brick",
+        "Urban_Ceramic",
+        "Urban_Fabric",
+        "Urban_MetalDark",
+        "Urban_MetalLight",
+        "Urban_Olive"
+      ],
+      "id": "retail_shelf",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 54,
+      "components": [
+        {
+          "name": "upright_-0.5825_-0.2575",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.5825,
+            0.8,
+            -0.2575
+          ],
+          "size_unity": [
+            0.035,
+            1.6,
+            0.035
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "upright_-0.5825_0.2575",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.5825,
+            0.8,
+            0.2575
+          ],
+          "size_unity": [
+            0.035,
+            1.6,
+            0.035
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "upright_0.5825_-0.2575",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.5825,
+            0.8,
+            -0.2575
+          ],
+          "size_unity": [
+            0.035,
+            1.6,
+            0.035
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "upright_0.5825_0.2575",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.5825,
+            0.8,
+            0.2575
+          ],
+          "size_unity": [
+            0.035,
+            1.6,
+            0.035
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_0",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            0.08,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.515
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_0",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.093,
+            0.25
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_1",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            0.52,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.515
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_1",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.533,
+            0.25
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            0.96,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.515
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            0.973,
+            0.25
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_3",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            1.4,
+            0
+          ],
+          "size_unity": [
+            1.16,
+            0.04,
+            0.515
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "shelf_front_lip_3",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0,
+            1.413,
+            0.25
+          ],
+          "size_unity": [
+            1.15,
+            0.026,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "rear_brace_-1",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            -0.552,
+            1.53,
+            -0.24900000000000003
+          ],
+          "end_unity": [
+            0.552,
+            0.1,
+            -0.24900000000000003
+          ],
+          "radius": 0.009,
+          "sides": 6
+        },
+        {
+          "name": "rear_brace_1",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            -0.552,
+            0.1,
+            -0.24900000000000003
+          ],
+          "end_unity": [
+            0.552,
+            1.53,
+            -0.24900000000000003
+          ],
+          "radius": 0.009,
+          "sides": 6
+        },
+        {
+          "name": "product_0_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Brick",
+          "center_unity": [
+            -0.45,
+            0.21500000000000002,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_0_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.45,
+            0.23800000000000002,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_0_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.225,
+            0.245,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.29,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_0_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.225,
+            0.274,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.09860000000000001,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_0_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0.0,
+            0.21500000000000002,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_0_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.0,
+            0.23800000000000002,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_0_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0.22500000000000003,
+            0.245,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.29,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_0_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.22500000000000003,
+            0.274,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.09860000000000001,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_0_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Brick",
+          "center_unity": [
+            0.45,
+            0.21500000000000002,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_0_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.45,
+            0.23800000000000002,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_1_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.45,
+            0.655,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_1_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.45,
+            0.678,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_1_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Olive",
+          "center_unity": [
+            -0.225,
+            0.685,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.29,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_1_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.225,
+            0.714,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.09860000000000001,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_1_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0.0,
+            0.655,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_1_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.0,
+            0.678,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_1_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Brick",
+          "center_unity": [
+            0.22500000000000003,
+            0.685,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.29,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_1_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.22500000000000003,
+            0.714,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.09860000000000001,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_1_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.45,
+            0.655,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_1_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.45,
+            0.678,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_2_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Olive",
+          "center_unity": [
+            -0.45,
+            1.095,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_2_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.45,
+            1.1179999999999999,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_2_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            -0.225,
+            1.125,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.29,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_2_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.225,
+            1.154,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.09860000000000001,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_2_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Brick",
+          "center_unity": [
+            0.0,
+            1.095,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_2_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.0,
+            1.1179999999999999,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_2_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.22500000000000003,
+            1.125,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.29,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_2_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.22500000000000003,
+            1.154,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.09860000000000001,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_2_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0.45,
+            1.095,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.23,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_2_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.45,
+            1.1179999999999999,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.0782,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_3_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            -0.45,
+            1.51,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.18,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_3_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.45,
+            1.528,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.061200000000000004,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_3_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Brick",
+          "center_unity": [
+            -0.225,
+            1.51,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.18,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_3_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.225,
+            1.528,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.061200000000000004,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_3_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.0,
+            1.51,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.18,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_3_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.0,
+            1.528,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.061200000000000004,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_3_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0.22500000000000003,
+            1.51,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.18,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_3_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.22500000000000003,
+            1.528,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.061200000000000004,
+            0.004
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_3_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0.45,
+            1.51,
+            -0.055
+          ],
+          "size_unity": [
+            0.18,
+            0.18,
+            0.27
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "product_label_3_4",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.45,
+            1.528,
+            0.081
+          ],
+          "size_unity": [
+            0.105,
+            0.061200000000000004,
+            0.004
+          ],
+          "yaw_degrees": 0
+        }
+      ],
+      "build_seconds": 0.34233340000355383,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/retail_shelf.fbx",
+      "fbx_sha256": "6801a3ac73e70ad0786a1f465dbf93e43264821bfead1d90acf3251a380e0db3",
+      "export_seconds": 0.01693650000015623
+    },
+    {
+      "canonical_bounds_min": [
+        -0.800000011920929,
+        0.0,
+        -0.3499999940395355
+      ],
+      "canonical_bounds_max": [
+        0.800000011920929,
+        1.2000000476837158,
+        0.3499999940395355
+      ],
+      "canonical_size": [
+        1.600000023841858,
+        1.2000000476837158,
+        0.699999988079071
+      ],
+      "declared_size": [
+        1.6,
+        1.2,
+        0.7
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 760,
+      "triangle_count": 1392,
+      "polygon_count": 816,
+      "max_metric_uv_edge_error_metres": 1.2694963730242037e-07,
+      "materials": [
+        "Urban_Brick",
+        "Urban_MetalDark",
+        "Urban_MetalLight",
+        "Urban_Wood"
+      ],
+      "id": "workbench",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 32,
+      "components": [
+        {
+          "name": "worktop",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.76,
+            0
+          ],
+          "size_unity": [
+            1.6,
+            0.08,
+            0.7
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_-0.715_-0.265",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.715,
+            0.36,
+            -0.265
+          ],
+          "size_unity": [
+            0.075,
+            0.72,
+            0.075
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_-0.715_0.265",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.715,
+            0.36,
+            0.265
+          ],
+          "size_unity": [
+            0.075,
+            0.72,
+            0.075
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_0.715_-0.265",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.715,
+            0.36,
+            -0.265
+          ],
+          "size_unity": [
+            0.075,
+            0.72,
+            0.075
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_0.715_0.265",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.715,
+            0.36,
+            0.265
+          ],
+          "size_unity": [
+            0.075,
+            0.72,
+            0.075
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "lower_shelf",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0,
+            0.2,
+            0
+          ],
+          "size_unity": [
+            1.46,
+            0.035,
+            0.55
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "tool_backboard",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            1.0,
+            -0.32
+          ],
+          "size_unity": [
+            1.44,
+            0.4,
+            0.036
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "drawer_case",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.49,
+            0.59,
+            0
+          ],
+          "size_unity": [
+            0.42,
+            0.26,
+            0.56
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "drawer_0.52",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.49,
+            0.52,
+            0.287
+          ],
+          "size_unity": [
+            0.38,
+            0.11,
+            0.024
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "handle_0.52",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.49,
+            0.52,
+            0.305
+          ],
+          "size_unity": [
+            0.18,
+            0.015,
+            0.026
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "drawer_0.655",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.49,
+            0.655,
+            0.287
+          ],
+          "size_unity": [
+            0.38,
+            0.11,
+            0.024
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "handle_0.655",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.49,
+            0.655,
+            0.305
+          ],
+          "size_unity": [
+            0.18,
+            0.015,
+            0.026
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "tool_shaft_0",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.52,
+            0.982,
+            -0.29
+          ],
+          "size_unity": [
+            0.022,
+            0.25,
+            0.019
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_head_0",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.52,
+            1.105,
+            -0.287
+          ],
+          "size_unity": [
+            0.07,
+            0.035,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_jaw_0_-0.029",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.549,
+            1.135,
+            -0.287
+          ],
+          "size_unity": [
+            0.016,
+            0.043,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_jaw_0_0.029",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.491,
+            1.135,
+            -0.287
+          ],
+          "size_unity": [
+            0.016,
+            0.043,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "tool_shaft_1",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.275,
+            0.982,
+            -0.29
+          ],
+          "size_unity": [
+            0.022,
+            0.25,
+            0.019
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "screwdriver_grip_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Brick",
+          "center_unity": [
+            -0.275,
+            0.9,
+            -0.288
+          ],
+          "size_unity": [
+            0.05,
+            0.11,
+            0.04
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "tool_shaft_2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.030000000000000027,
+            0.982,
+            -0.29
+          ],
+          "size_unity": [
+            0.022,
+            0.25,
+            0.019
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_head_2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.030000000000000027,
+            1.105,
+            -0.287
+          ],
+          "size_unity": [
+            0.07,
+            0.035,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_jaw_2_-0.029",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.059000000000000025,
+            1.135,
+            -0.287
+          ],
+          "size_unity": [
+            0.016,
+            0.043,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_jaw_2_0.029",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.0010000000000000252,
+            1.135,
+            -0.287
+          ],
+          "size_unity": [
+            0.016,
+            0.043,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "tool_shaft_3",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.21499999999999997,
+            0.982,
+            -0.29
+          ],
+          "size_unity": [
+            0.022,
+            0.25,
+            0.019
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "screwdriver_grip_3",
+          "primitive": "beveled_box",
+          "material": "Urban_Brick",
+          "center_unity": [
+            0.21499999999999997,
+            0.9,
+            -0.288
+          ],
+          "size_unity": [
+            0.05,
+            0.11,
+            0.04
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "tool_shaft_4",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.45999999999999996,
+            0.982,
+            -0.29
+          ],
+          "size_unity": [
+            0.022,
+            0.25,
+            0.019
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_head_4",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.45999999999999996,
+            1.105,
+            -0.287
+          ],
+          "size_unity": [
+            0.07,
+            0.035,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_jaw_4_-0.029",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.43099999999999994,
+            1.135,
+            -0.287
+          ],
+          "size_unity": [
+            0.016,
+            0.043,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "wrench_jaw_4_0.029",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            0.489,
+            1.135,
+            -0.287
+          ],
+          "size_unity": [
+            0.016,
+            0.043,
+            0.027
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "vise_base",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.51,
+            0.829,
+            0.12
+          ],
+          "size_unity": [
+            0.22,
+            0.058,
+            0.19
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "vise_jaw_0.06",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.51,
+            0.91,
+            0.06
+          ],
+          "size_unity": [
+            0.19,
+            0.105,
+            0.048
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "vise_jaw_0.17",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalLight",
+          "center_unity": [
+            -0.51,
+            0.91,
+            0.17
+          ],
+          "size_unity": [
+            0.19,
+            0.105,
+            0.048
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "vise_screw",
+          "primitive": "cylinder",
+          "material": "Urban_MetalLight",
+          "start_unity": [
+            -0.51,
+            0.86,
+            -0.01
+          ],
+          "end_unity": [
+            -0.51,
+            0.86,
+            0.28
+          ],
+          "radius": 0.013,
+          "sides": 8
+        }
+      ],
+      "build_seconds": 0.14356369999950402,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/workbench.fbx",
+      "fbx_sha256": "22eed0fea9ebca2e16e94c0c9539560c6f1456fcbab5cbf1a7a8f22137ad6371",
+      "export_seconds": 0.015056000000186032
+    },
+    {
+      "canonical_bounds_min": [
+        -0.6000000238418579,
+        0.0,
+        -0.2750000059604645
+      ],
+      "canonical_bounds_max": [
+        0.6000000238418579,
+        2.0,
+        0.27500003576278687
+      ],
+      "canonical_size": [
+        1.2000000476837158,
+        2.0,
+        0.5500000417232513
+      ],
+      "declared_size": [
+        1.2,
+        2.0,
+        0.55
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 312,
+      "triangle_count": 572,
+      "polygon_count": 338,
+      "max_metric_uv_edge_error_metres": 1.798550162759871e-07,
+      "materials": [
+        "Urban_Ceramic",
+        "Urban_MetalDark",
+        "Urban_Wood"
+      ],
+      "id": "wardrobe",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 13,
+      "components": [
+        {
+          "name": "foot_-0.5_-0.2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.5,
+            0.06,
+            -0.2
+          ],
+          "size_unity": [
+            0.09,
+            0.12,
+            0.09
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_-0.5_0.2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.5,
+            0.06,
+            0.2
+          ],
+          "size_unity": [
+            0.09,
+            0.12,
+            0.09
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_0.5_-0.2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.5,
+            0.06,
+            -0.2
+          ],
+          "size_unity": [
+            0.09,
+            0.12,
+            0.09
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_0.5_0.2",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.5,
+            0.06,
+            0.2
+          ],
+          "size_unity": [
+            0.09,
+            0.12,
+            0.09
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "side_-0.5725",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            -0.5725,
+            1.055,
+            0
+          ],
+          "size_unity": [
+            0.055,
+            1.89,
+            0.55
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "side_0.5725",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0.5725,
+            1.055,
+            0
+          ],
+          "size_unity": [
+            0.055,
+            1.89,
+            0.55
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "top",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            1.9725,
+            0
+          ],
+          "size_unity": [
+            1.2,
+            0.055,
+            0.55
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "bottom",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.1375,
+            0
+          ],
+          "size_unity": [
+            1.2,
+            0.055,
+            0.55
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "back",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            1.05,
+            -0.255
+          ],
+          "size_unity": [
+            1.09,
+            1.81,
+            0.04
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "door_-0.278",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            -0.278,
+            1.05,
+            0.229
+          ],
+          "size_unity": [
+            0.542,
+            1.79,
+            0.04
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "handle_-0.278",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.055,
+            1.06,
+            0.264
+          ],
+          "size_unity": [
+            0.018,
+            0.16,
+            0.022
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "door_0.278",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0.278,
+            1.05,
+            0.229
+          ],
+          "size_unity": [
+            0.542,
+            1.79,
+            0.04
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "handle_0.278",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.055,
+            1.06,
+            0.264
+          ],
+          "size_unity": [
+            0.018,
+            0.16,
+            0.022
+          ],
+          "yaw_degrees": 0
+        }
+      ],
+      "build_seconds": 0.04857429999901797,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/wardrobe.fbx",
+      "fbx_sha256": "fec477a811dd8d2ddc2775fda5f16ba53e16db271943676d1dce8c253325e689",
+      "export_seconds": 0.0117683999997098
+    },
+    {
+      "canonical_bounds_min": [
+        -0.8500000238418579,
+        0.0,
+        -0.42500001192092896
+      ],
+      "canonical_bounds_max": [
+        0.8500000238418579,
+        0.9000000357627869,
+        0.42500001192092896
+      ],
+      "canonical_size": [
+        1.7000000476837158,
+        0.9000000357627869,
+        0.8500000238418579
+      ],
+      "declared_size": [
+        1.7,
+        0.9,
+        0.85
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 288,
+      "triangle_count": 528,
+      "polygon_count": 312,
+      "max_metric_uv_edge_error_metres": 1.3747139963188326e-07,
+      "materials": [
+        "Urban_Fabric",
+        "Urban_Wood"
+      ],
+      "id": "sofa",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 12,
+      "components": [
+        {
+          "name": "foot_-0.72_-0.31",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            -0.72,
+            0.065,
+            -0.31
+          ],
+          "size_unity": [
+            0.065,
+            0.13,
+            0.065
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_-0.72_0.31",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            -0.72,
+            0.065,
+            0.31
+          ],
+          "size_unity": [
+            0.065,
+            0.13,
+            0.065
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_0.72_-0.31",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0.72,
+            0.065,
+            -0.31
+          ],
+          "size_unity": [
+            0.065,
+            0.13,
+            0.065
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_0.72_0.31",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0.72,
+            0.065,
+            0.31
+          ],
+          "size_unity": [
+            0.065,
+            0.13,
+            0.065
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "lower_body",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0,
+            0.245,
+            0
+          ],
+          "size_unity": [
+            1.62,
+            0.25,
+            0.82
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "backrest",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0,
+            0.605,
+            -0.335
+          ],
+          "size_unity": [
+            1.7,
+            0.59,
+            0.18
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "arm_-0.78",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            -0.78,
+            0.535,
+            0.01
+          ],
+          "size_unity": [
+            0.14,
+            0.43,
+            0.83
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "arm_0.78",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0.78,
+            0.535,
+            0.01
+          ],
+          "size_unity": [
+            0.14,
+            0.43,
+            0.83
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "seat_cushion_-0.36",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            -0.36,
+            0.44,
+            0.08
+          ],
+          "size_unity": [
+            0.68,
+            0.145,
+            0.55
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "back_cushion_-0.36",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            -0.36,
+            0.7,
+            -0.215
+          ],
+          "size_unity": [
+            0.67,
+            0.34,
+            0.105
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "seat_cushion_0.36",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0.36,
+            0.44,
+            0.08
+          ],
+          "size_unity": [
+            0.68,
+            0.145,
+            0.55
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "back_cushion_0.36",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0.36,
+            0.7,
+            -0.215
+          ],
+          "size_unity": [
+            0.67,
+            0.34,
+            0.105
+          ],
+          "yaw_degrees": 0
+        }
+      ],
+      "build_seconds": 0.04483329999857233,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/sofa.fbx",
+      "fbx_sha256": "fee8ffaba9fe212a6c40839be09803bc598b8bd77e517292806b5b189b54d0bc",
+      "export_seconds": 0.011772099998779595
+    },
+    {
+      "canonical_bounds_min": [
+        -0.550000011920929,
+        0.0,
+        -1.0
+      ],
+      "canonical_bounds_max": [
+        0.5499999523162842,
+        0.8499999642372131,
+        0.9999999403953552
+      ],
+      "canonical_size": [
+        1.0999999642372131,
+        0.8499999642372131,
+        1.9999999403953552
+      ],
+      "declared_size": [
+        1.1,
+        0.85,
+        2.0
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 216,
+      "triangle_count": 396,
+      "polygon_count": 234,
+      "max_metric_uv_edge_error_metres": 7.974604770283333e-08,
+      "materials": [
+        "Urban_Ceramic",
+        "Urban_Fabric",
+        "Urban_Wood"
+      ],
+      "id": "bed",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 9,
+      "components": [
+        {
+          "name": "foot_-0.465_-0.84",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            -0.465,
+            0.085,
+            -0.84
+          ],
+          "size_unity": [
+            0.08,
+            0.17,
+            0.08
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_-0.465_0.84",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            -0.465,
+            0.085,
+            0.84
+          ],
+          "size_unity": [
+            0.08,
+            0.17,
+            0.08
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_0.465_-0.84",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0.465,
+            0.085,
+            -0.84
+          ],
+          "size_unity": [
+            0.08,
+            0.17,
+            0.08
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "foot_0.465_0.84",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0.465,
+            0.085,
+            0.84
+          ],
+          "size_unity": [
+            0.08,
+            0.17,
+            0.08
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "bed_frame",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.255,
+            0
+          ],
+          "size_unity": [
+            1.1,
+            0.18,
+            2.0
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "mattress",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0,
+            0.415,
+            0
+          ],
+          "size_unity": [
+            1.04,
+            0.15,
+            1.91
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "blanket",
+          "primitive": "beveled_box",
+          "material": "Urban_Fabric",
+          "center_unity": [
+            0,
+            0.503,
+            0.34
+          ],
+          "size_unity": [
+            1.045,
+            0.026,
+            1.17
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "headboard",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.5,
+            -0.955
+          ],
+          "size_unity": [
+            1.1,
+            0.7,
+            0.09
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "pillow",
+          "primitive": "beveled_box",
+          "material": "Urban_Ceramic",
+          "center_unity": [
+            0,
+            0.545,
+            -0.625
+          ],
+          "size_unity": [
+            0.76,
+            0.11,
+            0.36
+          ],
+          "yaw_degrees": 0
+        }
+      ],
+      "build_seconds": 0.04378609999912442,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/bed.fbx",
+      "fbx_sha256": "d1b5466d6f9b64ad2cfaed1c14f48e06b8b6b8aa870370bfb55c56ccba7eba34",
+      "export_seconds": 0.010560300001088763
+    },
+    {
+      "canonical_bounds_min": [
+        -0.800000011920929,
+        0.0,
+        -0.32499998807907104
+      ],
+      "canonical_bounds_max": [
+        0.800000011920929,
+        0.8999999761581421,
+        0.3250000476837158
+      ],
+      "canonical_size": [
+        1.600000023841858,
+        0.8999999761581421,
+        0.6500000357627869
+      ],
+      "declared_size": [
+        1.6,
+        0.9,
+        0.65
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 408,
+      "triangle_count": 748,
+      "polygon_count": 442,
+      "max_metric_uv_edge_error_metres": 8.210392544311107e-08,
+      "materials": [
+        "Urban_MetalDark",
+        "Urban_Wood"
+      ],
+      "id": "bench",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 17,
+      "components": [
+        {
+          "name": "leg_-0.66_-0.25",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.66,
+            0.225,
+            -0.25
+          ],
+          "size_unity": [
+            0.075,
+            0.45,
+            0.075
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_-0.66_0.25",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.66,
+            0.225,
+            0.25
+          ],
+          "size_unity": [
+            0.075,
+            0.45,
+            0.075
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "seat_support_-0.66",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.66,
+            0.43,
+            0.025
+          ],
+          "size_unity": [
+            0.075,
+            0.065,
+            0.58
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "back_post_-0.66",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.66,
+            0.65,
+            -0.29
+          ],
+          "size_unity": [
+            0.065,
+            0.5,
+            0.07
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_0.66_-0.25",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.66,
+            0.225,
+            -0.25
+          ],
+          "size_unity": [
+            0.075,
+            0.45,
+            0.075
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "leg_0.66_0.25",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.66,
+            0.225,
+            0.25
+          ],
+          "size_unity": [
+            0.075,
+            0.45,
+            0.075
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "seat_support_0.66",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.66,
+            0.43,
+            0.025
+          ],
+          "size_unity": [
+            0.075,
+            0.065,
+            0.58
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "back_post_0.66",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.66,
+            0.65,
+            -0.29
+          ],
+          "size_unity": [
+            0.065,
+            0.5,
+            0.07
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "seat_slat_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.4725,
+            -0.14
+          ],
+          "size_unity": [
+            1.6,
+            0.045,
+            0.135
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "seat_slat_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.4725,
+            0.015
+          ],
+          "size_unity": [
+            1.6,
+            0.045,
+            0.135
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "seat_slat_2",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.4725,
+            0.17
+          ],
+          "size_unity": [
+            1.6,
+            0.045,
+            0.135
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "back_slat_0",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.645,
+            -0.2675
+          ],
+          "size_unity": [
+            1.6,
+            0.15,
+            0.07
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "back_slat_1",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.805,
+            -0.2675
+          ],
+          "size_unity": [
+            1.6,
+            0.15,
+            0.07
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "armrest_-0.76",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.76,
+            0.635,
+            0.025
+          ],
+          "size_unity": [
+            0.075,
+            0.05,
+            0.6
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "arm_front_support_-0.76",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            -0.76,
+            0.535,
+            0.255
+          ],
+          "size_unity": [
+            0.055,
+            0.175,
+            0.055
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "armrest_0.76",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.76,
+            0.635,
+            0.025
+          ],
+          "size_unity": [
+            0.075,
+            0.05,
+            0.6
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "arm_front_support_0.76",
+          "primitive": "beveled_box",
+          "material": "Urban_MetalDark",
+          "center_unity": [
+            0.76,
+            0.535,
+            0.255
+          ],
+          "size_unity": [
+            0.055,
+            0.175,
+            0.055
+          ],
+          "yaw_degrees": 0
+        }
+      ],
+      "build_seconds": 0.07982610000181012,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/bench.fbx",
+      "fbx_sha256": "38a5fd1a1afa188d0db8d1d1192b72aa28a9c2d8e7b3c7ef2a796f55b8451d47",
+      "export_seconds": 0.012599800000316463
+    },
+    {
+      "canonical_bounds_min": [
+        -0.4000000059604645,
+        0.0,
+        -0.4000000059604645
+      ],
+      "canonical_bounds_max": [
+        0.4000000059604645,
+        1.2000000476837158,
+        0.4000000059604645
+      ],
+      "canonical_size": [
+        0.800000011920929,
+        1.2000000476837158,
+        0.800000011920929
+      ],
+      "declared_size": [
+        0.8,
+        1.2,
+        0.8
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 330,
+      "triangle_count": 620,
+      "polygon_count": 345,
+      "max_metric_uv_edge_error_metres": 7.448542005406011e-08,
+      "materials": [
+        "Urban_Ceramic",
+        "Urban_Olive",
+        "Urban_Wood"
+      ],
+      "id": "planter",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 10,
+      "components": [
+        {
+          "name": "tapered_planter",
+          "primitive": "hollow_tapered_shell",
+          "material": "Urban_Ceramic",
+          "bottom_y": 0,
+          "top_y": 0.5,
+          "bottom_shape": [
+            0.64,
+            0.64
+          ],
+          "top_shape": [
+            0.8,
+            0.8
+          ],
+          "wall_thickness": 0.045,
+          "sides": 4
+        },
+        {
+          "name": "soil",
+          "primitive": "beveled_box",
+          "material": "Urban_Wood",
+          "center_unity": [
+            0,
+            0.4325,
+            0
+          ],
+          "size_unity": [
+            0.7,
+            0.035,
+            0.7
+          ],
+          "yaw_degrees": 0
+        },
+        {
+          "name": "trunk",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            0.445,
+            0
+          ],
+          "end_unity": [
+            0,
+            0.99,
+            0
+          ],
+          "radius": 0.04,
+          "sides": 8
+        },
+        {
+          "name": "branch_0",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            0.62,
+            0
+          ],
+          "end_unity": [
+            -0.17,
+            0.97,
+            -0.1
+          ],
+          "radius": 0.016,
+          "sides": 7
+        },
+        {
+          "name": "foliage_0",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            -0.17,
+            0.88,
+            -0.1
+          ],
+          "size_unity": [
+            0.41,
+            0.46,
+            0.41
+          ]
+        },
+        {
+          "name": "branch_1",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            0.62,
+            0
+          ],
+          "end_unity": [
+            0.17,
+            0.97,
+            -0.1
+          ],
+          "radius": 0.016,
+          "sides": 7
+        },
+        {
+          "name": "foliage_1",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0.17,
+            0.88,
+            -0.1
+          ],
+          "size_unity": [
+            0.41,
+            0.46,
+            0.41
+          ]
+        },
+        {
+          "name": "branch_2",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            0.62,
+            0
+          ],
+          "end_unity": [
+            0,
+            0.97,
+            0.17
+          ],
+          "radius": 0.016,
+          "sides": 7
+        },
+        {
+          "name": "foliage_2",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0,
+            0.88,
+            0.17
+          ],
+          "size_unity": [
+            0.41,
+            0.46,
+            0.41
+          ]
+        },
+        {
+          "name": "top_foliage",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0,
+            1.005,
+            -0.015
+          ],
+          "size_unity": [
+            0.48,
+            0.39,
+            0.48
+          ]
+        }
+      ],
+      "build_seconds": 0.0360556000014185,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/planter.fbx",
+      "fbx_sha256": "85eaca910e95e4b6980411d282941a1f72fe29b3ffabba70d6bd0d8704a884c5",
+      "export_seconds": 0.014821200002188561
+    },
+    {
+      "canonical_bounds_min": [
+        -1.5499999523162842,
+        0.0,
+        -1.5550000667572021
+      ],
+      "canonical_bounds_max": [
+        1.5199999809265137,
+        4.0,
+        1.534999966621399
+      ],
+      "canonical_size": [
+        3.069999933242798,
+        4.0,
+        3.090000033378601
+      ],
+      "declared_size": [
+        3.4,
+        4.0,
+        3.4
+      ],
+      "root_scale": [
+        1,
+        1,
+        1
+      ],
+      "root_position": [
+        0,
+        0,
+        0
+      ],
+      "front_axis": "+Z",
+      "up_axis": "+Y",
+      "vertex_count": 386,
+      "triangle_count": 732,
+      "polygon_count": 408,
+      "max_metric_uv_edge_error_metres": 3.550500783378041e-07,
+      "materials": [
+        "Urban_Olive",
+        "Urban_Wood"
+      ],
+      "id": "street_tree",
+      "source_sha256": "811b456dcf971a1657d9e5c76563c0f7da25386202ef62a3aca6393adca9823d",
+      "component_count": 10,
+      "components": [
+        {
+          "name": "trunk_lower",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            0,
+            0
+          ],
+          "end_unity": [
+            0,
+            1.8,
+            0
+          ],
+          "radius": 0.19,
+          "sides": 9
+        },
+        {
+          "name": "trunk_upper",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            1.6,
+            0
+          ],
+          "end_unity": [
+            0.08,
+            3.15,
+            -0.06
+          ],
+          "radius": 0.12,
+          "sides": 8
+        },
+        {
+          "name": "branch_0",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            1.72,
+            0
+          ],
+          "end_unity": [
+            -0.82,
+            2.85,
+            0.12
+          ],
+          "radius": 0.078,
+          "sides": 7
+        },
+        {
+          "name": "branch_1",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            1.93,
+            0
+          ],
+          "end_unity": [
+            0.84,
+            2.99,
+            0.25
+          ],
+          "radius": 0.078,
+          "sides": 7
+        },
+        {
+          "name": "branch_2",
+          "primitive": "cylinder",
+          "material": "Urban_Wood",
+          "start_unity": [
+            0,
+            2.08,
+            0
+          ],
+          "end_unity": [
+            0.06,
+            3.1,
+            -0.84
+          ],
+          "radius": 0.078,
+          "sides": 7
+        },
+        {
+          "name": "branch_foliage_cluster_0",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            -0.74,
+            2.98,
+            0.14
+          ],
+          "size_unity": [
+            1.62,
+            1.33,
+            1.5
+          ]
+        },
+        {
+          "name": "branch_foliage_cluster_1",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0.72,
+            3.11,
+            0.22
+          ],
+          "size_unity": [
+            1.6,
+            1.37,
+            1.54
+          ]
+        },
+        {
+          "name": "branch_foliage_cluster_2",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            0.03,
+            3.18,
+            -0.74
+          ],
+          "size_unity": [
+            1.65,
+            1.36,
+            1.63
+          ]
+        },
+        {
+          "name": "branch_foliage_cluster_3",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            -0.06,
+            3.42,
+            -0.06
+          ],
+          "size_unity": [
+            1.6,
+            1.16,
+            1.62
+          ]
+        },
+        {
+          "name": "branch_foliage_cluster_4",
+          "primitive": "faceted_foliage",
+          "material": "Urban_Olive",
+          "center_unity": [
+            -0.05,
+            2.98,
+            0.76
+          ],
+          "size_unity": [
+            1.43,
+            1.25,
+            1.55
+          ]
+        }
+      ],
+      "build_seconds": 0.04410240000288468,
+      "model_path": "Assets/Art/UrbanCoherent09/Models/street_tree.fbx",
+      "fbx_sha256": "ba0faa85a46a103f0f667fee1fbeda76335010e6a5ccce0384c55c25fc01aaf0",
+      "export_seconds": 0.014556099999026628
+    }
+  ],
+  "unity_import_axes_and_bounds": "pending root final Unity validation",
+  "visual_approval": "pending"
+}

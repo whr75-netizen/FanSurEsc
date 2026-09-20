@@ -13,7 +13,7 @@ namespace FantasySurvival.WorldGeneration
         private readonly Dictionary<IsometricUrbanStyle.AtlasPatch, Matrix4x4> transforms = new Dictionary<IsometricUrbanStyle.AtlasPatch, Matrix4x4>();
 
         public void Face(Vector3 origin, Vector3 right, Vector3 up, float width, float height,
-            IsometricUrbanStyle.AtlasPatch patch, Vector2 repeat)
+            IsometricUrbanStyle.AtlasPatch patch, Vector2 repeat, Vector2 phase = default)
         {
             if (width <= 0f || height <= 0f) return;
             if (repeat.x <= 0f || repeat.y <= 0f) throw new System.ArgumentOutOfRangeException(nameof(repeat));
@@ -23,16 +23,20 @@ namespace FantasySurvival.WorldGeneration
                 h = Matrix4x4.zero; h.SetRow(0,a); h.SetRow(1,b); h.SetRow(2,c);
                 transforms.Add(patch,h);
             }
-            int nx = Mathf.CeilToInt(width/repeat.x), ny = Mathf.CeilToInt(height/repeat.y);
-            for (int y=0;y<ny;y++)
-            for (int x=0;x<nx;x++)
+            int xFirst=Mathf.FloorToInt(phase.x/repeat.x),yFirst=Mathf.FloorToInt(phase.y/repeat.y);
+            int xLast=Mathf.CeilToInt((phase.x+width)/repeat.x),yLast=Mathf.CeilToInt((phase.y+height)/repeat.y);
+            for (int y=yFirst;y<yLast;y++)
+            for (int x=xFirst;x<xLast;x++)
             {
-                float x0=x*repeat.x, y0=y*repeat.y;
-                float dx=Mathf.Min(repeat.x,width-x0), dy=Mathf.Min(repeat.y,height-y0);
+                float x0=Mathf.Max(0,x*repeat.x-phase.x),y0=Mathf.Max(0,y*repeat.y-phase.y);
+                float x1=Mathf.Min(width,(x+1)*repeat.x-phase.x),y1=Mathf.Min(height,(y+1)*repeat.y-phase.y);
+                float dx=x1-x0,dy=y1-y0;
+                if(dx<=0 || dy<=0)continue;
+                float u0=(phase.x+x0-x*repeat.x)/repeat.x,v0=(phase.y+y0-y*repeat.y)/repeat.y;
                 Vector3 o=origin+right*x0+up*y0;
                 int start=vertices.Count;
-                Add(o,0,0); Add(o+up*dy,0,dy/repeat.y);
-                Add(o+up*dy+right*dx,dx/repeat.x,dy/repeat.y); Add(o+right*dx,dx/repeat.x,0);
+                Add(o,u0,v0); Add(o+up*dy,u0,v0+dy/repeat.y);
+                Add(o+up*dy+right*dx,u0+dx/repeat.x,v0+dy/repeat.y); Add(o+right*dx,u0+dx/repeat.x,v0);
                 triangles.Add(start);triangles.Add(start+1);triangles.Add(start+2);
                 triangles.Add(start);triangles.Add(start+2);triangles.Add(start+3);
             }
@@ -47,12 +51,15 @@ namespace FantasySurvival.WorldGeneration
         public void Box(Vector3 center,Vector3 size,IsometricUrbanStyle.AtlasPatch patch,Vector2 repeat)
         {
             Vector3 h=size*.5f;
-            Face(center+new Vector3(-h.x,-h.y,-h.z),Vector3.right,Vector3.up,size.x,size.y,patch,repeat);
-            Face(center+new Vector3(h.x,-h.y,h.z),Vector3.left,Vector3.up,size.x,size.y,patch,repeat);
-            Face(center+new Vector3(-h.x,-h.y,h.z),Vector3.back,Vector3.up,size.z,size.y,patch,repeat);
-            Face(center+new Vector3(h.x,-h.y,-h.z),Vector3.forward,Vector3.up,size.z,size.y,patch,repeat);
-            Face(center+new Vector3(-h.x,h.y,-h.z),Vector3.right,Vector3.forward,size.x,size.z,patch,repeat);
-            Face(center+new Vector3(-h.x,-h.y,h.z),Vector3.right,Vector3.back,size.x,size.z,patch,repeat);
+            Add(center+new Vector3(-h.x,-h.y,-h.z),Vector3.right,Vector3.up,size.x,size.y);
+            Add(center+new Vector3(h.x,-h.y,h.z),Vector3.left,Vector3.up,size.x,size.y);
+            Add(center+new Vector3(-h.x,-h.y,h.z),Vector3.back,Vector3.up,size.z,size.y);
+            Add(center+new Vector3(h.x,-h.y,-h.z),Vector3.forward,Vector3.up,size.z,size.y);
+            Add(center+new Vector3(-h.x,h.y,-h.z),Vector3.right,Vector3.forward,size.x,size.z);
+            Add(center+new Vector3(-h.x,-h.y,h.z),Vector3.right,Vector3.back,size.x,size.z);
+            // A common building-local origin keeps brick/paint phase continuous across wall pieces.
+            void Add(Vector3 o,Vector3 r,Vector3 u,float w,float ht) =>
+                Face(o,r,u,w,ht,patch,repeat,new Vector2(Vector3.Dot(o,r),Vector3.Dot(o,u)));
         }
 
         public Mesh Create(string name)

@@ -7,7 +7,7 @@ using UnityEngine.Rendering;
 namespace FantasySurvival.WorldGeneration
 {
     /// <summary>Real metric walls and exterior upper storeys; ground floor is enterable.</summary>
-    public sealed class EnterableSpriteBuilding : MonoBehaviour
+    public sealed partial class EnterableSpriteBuilding : MonoBehaviour
     {
         private readonly List<Mesh> ownedMeshes=new List<Mesh>();
         private readonly List<Material> ownedMaterials=new List<Material>();
@@ -24,10 +24,17 @@ namespace FantasySurvival.WorldGeneration
         public float TotalHeight{get;private set;}
         public const float DoorHeight=2.65f;
         public const float FloorLift=.016f;
+        public const float WindowFrameDepth=.13f;
 
         public void Build(IsometricUrbanStyle style,Vector2 size,Vector2 facade,
-            float tileSize,Color tint,UrbanOcclusionFader fader,bool reserveFacadeCenter=false,float plannedHeight=0f)
+            float tileSize,Color tint,UrbanOcclusionFader fader,bool reserveFacadeCenter=false,float plannedHeight=0f,
+            UrbanPoiKind kind=UrbanPoiKind.None, UrbanFloorPlan floorPlan=null, UrbanBuildingPrefab catalog=null)
         {
+            if (floorPlan != null)
+            {
+                BuildFloorPlan(style, floorPlan, kind, fader, catalog);
+                return;
+            }
             float width=size.x,depth=size.y,storey=style.wallHeight,t=style.wallThickness;
             Storeys=Mathf.Max(1,Mathf.RoundToInt(plannedHeight/storey));
             TotalHeight=Storeys*storey;
@@ -35,15 +42,16 @@ namespace FantasySurvival.WorldGeneration
             Material wallMaterial=Own(style.CreateAtlasMaterial(style.wall.texture,false,"Metric wall atlas",tint));
             Material floorMaterial=Own(style.CreateAtlasMaterial(style.interior.texture,false,"Metric interior atlas",Color.white));
             Material roofMaterial=Own(style.CreateAtlasMaterial(style.roof.texture,false,"Metric roof atlas",Color.white));
+            IsometricUrbanStyle.AtlasPatch wallPatch=style.WallFor(kind);
             var floorMesh=new MetricAtlasMesh();
             floorMesh.Face(new Vector3(-width*.5f,FloorLift,-depth*.5f),Vector3.right,Vector3.forward,
                 width,depth,style.interior,new Vector2(tileSize,tileSize));
             var floorObject=CreateMeshObject("Interior Floor",floorMesh,floorMaterial);
             floorObject.AddComponent<MeshCollider>().sharedMesh=floorObject.GetComponent<MeshFilter>().sharedMesh;
             var walls=new List<Renderer>();var colliders=new List<Collider>();
-            bool doorOnZ=Mathf.Abs(facade.y)>=Mathf.Abs(facade.x);
-            float sign=doorOnZ?Mathf.Sign(facade.y):Mathf.Sign(facade.x);
-            if(sign==0)sign=1;
+            UrbanBuildingDoorGeometry opening=UrbanBuildingDoorGeometry.Calculate(size,facade,t,style.doorWidth,reserveFacadeCenter);
+            bool doorOnZ=opening.OnZ;
+            float sign=doorOnZ?opening.Outward.y:opening.Outward.x;
             for(int side=0;side<4;side++)
             {
                 bool onZ=side<2;
@@ -52,8 +60,8 @@ namespace FantasySurvival.WorldGeneration
                 bool doorway=onZ==doorOnZ&&sideSign==sign;
                 if(doorway)
                 {
-                    float door=Mathf.Min(style.doorWidth,length-t*4);
-                    float center=reserveFacadeCenter?Mathf.Min(length*.25f,(length-door)*.5f-t):0f;
+                    float door=opening.Width;
+                    float center=opening.CenterAlong;
                     float left=center-door*.5f,right=center+door*.5f;
                     AddWall(onZ,coordinate,-length*.5f,left+length*.5f,0,TotalHeight);
                     AddWall(onZ,coordinate,right,length*.5f-right,0,TotalHeight);
@@ -88,7 +96,7 @@ namespace FantasySurvival.WorldGeneration
                     :new Vector3(coordinate+Mathf.Sign(coordinate)*outward,y,along);
                 Vector3 Size(float along,float y,float thick)=>onZ?new Vector3(along,y,thick):new Vector3(thick,y,along);
                 Vector3 center=At(start+length*.5f,bottom+height*.5f),dimensions=Size(length,height,t);
-                mesh.Box(center,dimensions,style.wall,style.brickRepeatMetres);
+                mesh.Box(center,dimensions,wallPatch,style.brickRepeatMetres);
                 for(int level=0;level<=Storeys;level++)
                 {
                     float y=level*storey;
@@ -102,18 +110,22 @@ namespace FantasySurvival.WorldGeneration
                 for(int bay=0;bay<bays;bay++)
                 for(int floor=0;floor<Storeys;floor++)
                 {
-                    float y=floor*storey+1,wh=1.25f,ww=1;
+                    bool shopFront=kind==UrbanPoiKind.Retail && floor==0 && onZ==doorOnZ && Mathf.Sign(coordinate)==sign;
+                    float y=floor*storey+(shopFront?.55f:1),wh=shopFront?1.8f:1.25f,ww=shopFront?1.6f:1;
                     if(y<bottom+.2f||y+wh>bottom+height-.2f)continue;
                     float x=start+(bay+.5f)*length/bays;
                     mesh.Box(At(x,y+wh*.5f,t*.5f+.035f),Size(ww,wh,.045f),style.glass,new Vector2(ww,wh));
                     foreach(float edge in new[]{-1f,1f})
                     {
-                        mesh.Box(At(x+edge*(ww*.5f+.055f),y+wh*.5f,t*.5f+.065f),Size(.11f,wh+.22f,.13f),style.concrete,Vector2.one);
-                        mesh.Box(At(x,y+wh*.5f+edge*(wh*.5f+.055f),t*.5f+.065f),Size(ww,.11f,.13f),style.concrete,Vector2.one);
+                        mesh.Box(At(x+edge*(ww*.5f+.055f),y+wh*.5f,t*.5f+WindowFrameDepth*.5f),Size(.11f,wh+.22f,WindowFrameDepth),style.concrete,Vector2.one);
+                        mesh.Box(At(x,y+wh*.5f+edge*(wh*.5f+.055f),t*.5f+WindowFrameDepth*.5f),Size(ww,.11f,WindowFrameDepth),style.concrete,Vector2.one);
                     }
                 }
                 GameObject wall=CreateMeshObject("Metric Wall "+walls.Count,mesh,wallMaterial);
-                var box=wall.AddComponent<BoxCollider>();box.center=center;box.size=dimensions;
+                var box=wall.AddComponent<BoxCollider>();
+                Vector3 outward=onZ?Vector3.forward*Mathf.Sign(coordinate):Vector3.right*Mathf.Sign(coordinate);
+                box.center=center+outward*WindowFrameDepth*.5f;
+                box.size=dimensions+Size(0,0,WindowFrameDepth);
                 wall.tag="Obstacle";MarkNotWalkable(wall);walls.Add(wall.GetComponent<Renderer>());colliders.Add(box);
             }
         }

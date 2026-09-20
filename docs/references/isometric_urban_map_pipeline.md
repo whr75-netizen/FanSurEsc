@@ -1,5 +1,111 @@
 # GPT/2 등각 타일과 진입형 건물
 
+## 이전 결정 D09 — 정사각 표면·실제 입체 소품·블록과 POI 문법
+
+[사용자 요청/최신 정정] 도심 일관성·정사각 픽셀 재료·POI/사물 연결을 요청했고 PixelLab 사용을 허용했다. 그러나 담당AI가 픽셀 목표의 충족 없이 실제3D형상 제작을 채택했고 사용자는 이를 지적했다. D09는 기술관측이 있는 **요구에서 벗어난 시험 구현**으로 중단한다. 아래 선택/수치는 담당AI의 당시 설계이며 사용자확정이나미술완료가아니다. 다음 작업은 [인수인계](urban_pipeline_handoff.md) N01의 픽셀 제작 계약 복구부터다.
+
+### 입력 적합성과 선택
+
+| 완전한 경로 후보 | 판정·근거·실패조건 |
+|---|---|
+| 정사각 surface → 실제 높이 mesh/미터 UV → 3D object prefab → 기존 3D camera | 채택. .2m 단차, 출입, 자유 yaw/pitch와 같은 기하학을 공유한다. 물체 전체 그림을 cube 면에 붙이지 않고 물체의 실제 부분 형상과 재질을 저작한다. |
+| 고정뷰 sprite/Isometric Tilemap → sprite 객체 → 고정 카메라 | 보류. source 투영과 카메라가 일치해야 한다. 현재 자유 카메라를 제한하는 별도 결정이 필요하다. |
+| 다방향 sprite → yaw/elevation 선택 → billboard depth | 보류. 현재 yaw만 다른 그림으로는 pitch10–80°를 처리하지 못한다. 시점별 일치·깊이·가림과 저작량이 추가된다. |
+
+Unity [Grid](https://docs.unity3d.com/6000.5/Documentation/Manual/tilemaps/grid-reference.html), [Tilemap](https://docs.unity3d.com/6000.5/Documentation/Manual/tilemaps/work-with-tilemaps/tilemap-reference.html)은 셀·표시 방향을 제공한다. [RuleTile](https://docs.unity3d.com/Packages/com.unity.2d.tilemap.extras@8.0/manual/RuleTile.html)과 [AutoTile](https://docs.unity3d.com/Packages/com.unity.2d.tilemap.extras@8.0/manual/AutoTile.html)은 이웃 mask에서 타일 출력을 고른다. 이웃 선택은 재사용 가능한 개념이지만 실제 .2m 측면/Collider/NavMesh가 자동 생성된다는 뜻은 아니다. 기존 SurfaceGrid 권위를 유지하며 별도 Tilemap Manager를 만들지 않는다. 새 패키지는 설치하지 않는다.
+
+PixelLab [Tiles Pro](https://www.pixellab.ai/docs/tools/create-tiles-pro)는 square top-down·재료 변형·style reference를 지원한다. [공식 MCP](https://www.pixellab.ai/docs/ways-to-use-pixellab)의 실제 tools/list에서 create_tiles_pro/get_tiles_pro를 확인했다. 생성 request/receipt와 원본을 보존한다. 생성은 재료 단계이며 도로/건물 설계나 런타임에 AI를 호출하지 않는다.
+
+### 도시 알고리즘과 실제 부족 단계
+
+직접 코드 확인: 기존 고정 road graph + Kruskal + loop/diagonal 다음에 작은 동일 필지를 나열하며, 실제 block 자료형은 없고 diagonal frontage는 continue로 제외한다. 차도14/18m, node간40m, 본체8–10×8m이므로 양측 여유를 가진 건물 두 줄이 기본 블록에 들어갈 수 없다. 그림 크기 조절로 해결할 문제가 아니다.
+
+[Parish/Müller](https://cgl.ethz.ch/Downloads/Publications/Papers/2001/p_Par01.pdf), [Chen et al.](https://www.peterwonka.net/Publications/pdfs/2008.SG.Chen.InteractiveProceduralStreetModeling.pdf), [ProbableTrain/MapGenerator](https://github.com/ProbableTrain/MapGenerator)의 도로→블록→필지→건물 분리를 참고한다. 이번 구현은 이들의 연속 polygon 코드를 복사한 것이 아니라, 현재 2m 지형 권위에 맞춘 **raster connected-component block + oriented parcel** 경로다. 도로 성장 전체 교체는 현재의 빠진 블록/필지 단계를 해결하는 선행조건이 아니다.
+
+1. 차선 의미와 grid 해상도를 분리한다. 시험 차도는 보조6m/주요10m, 보도2m, node간48m다. 40m에서는 최소15×13m 예약필지가 대각 삼각영역에 들어가지 않는 반례를 확인해 전체290m를 유지하고 node분할6→5로 바꿨다. 도로 연결/진입/탈출 anchor는 기존 소유자가 유지한다.
+2. 실제 Ground 셀의 4-neighbor connected component가 BlockId를 소유한다. 도로·보도·경계가 컴포넌트를 나눈다. 막다른 길 주변은 한 연결 블록이다.
+3. 도로 방향에서 정규직교 frontage frame을 만든다. cardinal/diagonal을 같은 식으로 처리하고, local width/depth를 가진 reserved OBB를 배치한다. 교차하는 셀이 모두 같은 Ground BlockId이며 다른 필지와 겹치지 않아야 한다.
+4. 건물 본체·출입구·서비스 여유는 필지 frame을 공유한다. 본체 치수는 프로그램별 frontage/depth와 필지 수용 공간에서 결정하며 개별 이미지 scale로 보정하지 않는다.
+5. 모든 건물에 명시적 용도/POI를 배정하고, 그 용도의 구역별 허용 소품·가중치·개수·접근 여유를 적용한다. 기존 Medical loot 소유권은 유지하고 새 POI의 전리품·보상은 추가하지 않는다.
+6. 출입구→중앙 통로→업무/보관 구역 접근을 보존한다. 소품이 안 들어가면 그 후보를 제외하며 벽/문에 밀어 넣지 않는다.
+
+### 좌표·변환·시각 규격
+
+`PixelLab native square PNG → atlas texel centre → metric planar UV → local surface/object mesh → parcel rigid frame → world → existing view/projection → screen`
+
+| 공간 | 원점·축·단위·상위 |
+|---|---|
+| 원본 이미지 | 좌상단 pixel centre, +X오른쪽/+Y아래, px, 상위 없음 |
+| 표면 UV | local 평면의 원점, 단위 접선 e1/e2, uv/texel, 표면 local |
+| 물체 canonical | 지면 바닥 중심, Unity +X오른쪽/+Y위/+Z물체정면, m, 필지/건물 local |
+| 필지 | 중심, road tangent와 건물정면 법선, m, map local XZ |
+| world/view | Unity 좌표·Quaternion Y회전(도), localToWorldMatrix→camera view/projection, m→clip→px |
+
+밀도 ρ=32texel/m, N=64px이면 반복길이 L=N/ρ=2m다. 표면 좌표는 s=(p−O)·e1, t=(p−O)·e2이고 UV는 (s/L,t/L). PNG Y반전은 atlas 변환에서 1회만 한다. 0.2m 측면은 6.4texel 범위를 crop하며 64px 전체를 높이에 압축하지 않는다. 축에 정렬된 square patch는 기존 homography의 affine 특수형이며 추가 diamond 변형은 없다. [Unity mesh UV](https://docs.unity3d.com/6000.5/Documentation/Manual/mesh-vertex-data.html).
+
+필지 local점 q는 p=c+r*q.x+f*q.y로 변환한다. r/f는 길이1·내적0이고 determinant 부호를 고정한다. 렌더·Collider·문·소품 모두 같은 transform을 쓴다. AABB는 broad phase에만 사용하며 실제 회전 겹침은 SAT/OBB로 판정한다. 단일 billboard의 source 투영이나 숨겨진 면은 복원하지 않는다.
+
+디자인 규격은 저채도 현대 도시, 어두운 아스팔트/밝은 보도/벽돌·회벽/청록 또는 올리브 소품의 공통 재료군이다. 형태는 실제 물체 부품(책상판/다리, 선반판/기둥, 수거함 몸체/뚜껑/바퀴 등)으로 저작한다. 색·표면은 하나의 kit를 공유하고 baked cast shadow는 넣지 않는다. 2층·실제 치수·정면·floor pivot은 필수 기술 규격이며 미적 적합성은 사용자 판단이다.
+
+### 실패·최소 실험·실행 그래프
+
+- source에 투영/테두리/물체가 포함되거나 생성 연결이 불명확하면 해당 재료를 통합하지 않는다. 요청 원본과 실제 receipt를 검사한다.
+- diagonal parcel의 cell/OBB 판정 누락, reserved 교차, 문/실내 물체에 서로 다른 frame 적용, 월드 scale 비균일, 범위를 벗어난 model vertex는 실패다. 근거 없는 offset을 추가하지 않는다.
+- 대표 seed의 실제 block/diagonal 접도·POI 배정·반복 hash, 실내외 Collider·문 이동/NavMesh, .2m 높이를 마지막에 함께 확인한다. 입체 소품과 바닥은 yaw4방향·pitch10/기준/80에서 같은 기하를 투영하는지 본다. 카메라를 source에 맞추어 제한하지 않는다.
+- WorkLoop: 설계→신규 재료 요청→도시 layout→재료/모델 수집→POI와 렌더 통합→최종 관측→기술 판정→사용자 시각 피드백. 현재 `LocalOnly/UrbanDesign09/state-v4.json`은 사용자 요청으로paused이며 시각accepted를제출하지않았다. v2의 repair→observe입력누락과 v3이후near잘림 추가반례는 인수인계에기록했다.
+- 실제 seed1462661998에서116건물/470입체소품/대각접도필지1, frame/volume오류0·벽/지붕침투0·실제문이동/경로 통과. 45Block은작은Ground연결성분포함이며45개디자인블록이아니다. 카메라6case의 near/far실패0, 화면XY차1.03e-6. 이것은픽셀외형·실내역할·도시디자인의완성이아니다. 원본/거절결과보존, 추가생성중단.
+
+### D09 추가 반례 — 직교 카메라 near clipping
+
+실제 생성/문/소품 검사는 통과했지만 기존 약11m 카메라 거리에서 pitch10°, zoom8의 하단 지면과 넓은 관측 뷰의 지붕이 near plane에 잘렸다. 이는 미술 취향이 아닌 투영 부피 누락이다. [Unity nearClipPlane](https://docs.unity3d.com/6000.5/Documentation/ScriptReference/Camera-nearClipPlane.html)은 해당 평면보다 가까운 기하를 표시하지 않는다.
+
+직교 화면 좌표는 시선축 평행 이동에 불변이다. 기존 CameraFollow의 논리 offset·회전·줌을 보존하고 최종 위치만 `C'=C-d*f`로 계산한다. 생성된 Renderer bounds의 실제 world 높이 구간 `[Ymin,Ymax]`, 화면 반높이h/반폭w, camera right/up/forward r/u/f에 대해 `E=w*abs(r.y)+h*abs(u.y)`, `Nmin=C.y+near*f.y-E`, `d=max(0,(Ymax+0.01-Nmin)/(-f.y))`. 그러면 near 사각형 전체가 모든 건물보다 위에 있으므로 아래로 향한 시야의 지면/건물이 near에 잘리지 않는다. far는 `(C'.y+E-Ymin+0.01)/(-f.y)` 이상으로만 확장한다. 경계 소유 Transform이 사라지면 파생 보정과 far 확장을 해제한다. 전제는 기존 직교·pitch10~80°이며 수평/상향이나 perspective에는 이 공식을 적용하지 않는다.
+
+관측은 화면XY 불변, 4개 near 꼭짓점의Y가Ymax 이상, far 꼭짓점Y가Ymin 이하를 zoom3.5/8×pitch10/35/80에서 확인하고 마지막 화면만 다시 캡처한다. 이미 통과한 문·물리·seed 검사를 반복하지 않는다. 이전 잘림 이미지와 WorkLoop 상태는 보존한다.
+
+## 이전 구현 D08 — 사물 목록·POI 구역·예약 필지를 가진 건물 프리팹
+
+[최종 사용자 판정] 수정된 POI 용도는 맞지만 **도심 디자인·이미지 크기·방향이 전체적으로 잘못됐다**고 거절했다. 전체 시각 설계가 필요한지 질문한 상태이며 추가 생산 코드/미술 보정은 중단한다. D08은 구현·제한된 기술 관측만 존재하며 미술 완료가 아니다. 원본의 투영/방향과 mesh/camera 좌표, 물리 미터와 이미지 texel 밀도, 도시의 도로/블록/건물 용도 문법을 공통 시각 규격으로 재설계해야 한다. Y축 billboard의 포함 증명은 원본의 다방향 표현·도시 디자인의 적합성을 증명하지 않는다. 현재 그림은 object yaw와 별개로 camera를 향하므로 소품의 물리 배치 방향과 그림 속 정면이 같다는 보장도 없다. 예컨대 Desk208px/1.5m와 Dumpster58px/1.2m, 지면32texel/m는 서로 다른 영상 밀도다. 이 차이는 공통 미술 규격 없이 개별 높이를 정한 한계다. 사용자 재설계 판단 전 새 그래픽 대안을 통합하지 않는다.
+
+[최신 의미 배치 계약] 사용자는 원통형 휴지통의 외벽 반복을 거절하고 **사물 외형 확인 → 적합/부적합 장소 목록 → POI별 허용 목록과 가중치 → 배치**를 요구했다. 최초의 모든 건물 공통 bin/shelf 규칙은 폐기한다. 현재 실제 POI는 Medical 하나이므로 그 건물의 행정 업무 구역/출입구/외부 서비스 구역에만 적합한 목록을 연결하고, 미분류 건물에는 fallback 소품을 넣지 않는다. 게임플레이 POI 종류·전리품·보상은 추가하지 않는다. 금속선반은 녹색 군용 상자·연료·물·통조림·의료상자 등이 결합된 생존 보급품이며 일반 의료 진열대로 사용하지 않는다. 상세 사물 분류 목록을 별도 연결하고 그 안에서 실제 처리 가능한 재료만 사용한다.
+
+소품 prefab catalog는 stable CatalogId, 외형에 맞는 AllowedZones, 실제 크기를 소유한다. 건물 prefab rule은 RequiredPoiKind, Zone, 발생 확률(건물/규칙당1회), 최대 수와 가중 prop 목록을 소유한다. 기존 POI 의미 데이터만 분류 권위이며 평행한 POI Manager/용도 자동추측은 만들지 않는다. planner는 실제 POI→zone→허용 catalog→공간·통로에 들어가는 후보→정규화 가중 선택 순서로 처리한다. 행정 책상은 실내 업무벽, 큰 바퀴 수거함은 출입구 반대의 서비스 외벽, 원통형 휴지통은 실내 입구에 최대1개다. 보행로의 간헐 배치는 별도 공공 구역 자료가 연결되기 전에는 만들지 않는다. 편집기 프리셋 수치는 조절 가능한 초기값이며 사용자 확정 디자인 수치가 아니다.
+
+[최신 시각 피드백·수정 설계] 최초 camera-facing card는 사용자가 크기는 괜찮지만 벽과 겹쳐 잘린다고 재개했다. `B=foot+right*x+up*y`에서 cameraUp의 XZ 성분이 소품의 물리 footprint를 벗어난 것이 원인이다. 선반 width=2×210/288=1.45833m, pitch30°/yaw45°에서 벽법선 돌출은 width/2×cos45°+2×sin30°×cos45°=1.2227m다. 기존 반깊이.5m와 다르다. 단순 SV_Depth box clamp는 일부 불투명 pixel ray가 box를 빗나가므로 전제부터 불충족이다.
+
+수정은 [표준 constrained billboard](https://learn.microsoft.com/en-us/dotnet/api/system.numerics.matrix4x4.createconstrainedbillboard)의 Y축 고정을 사용한다. `right_h=normalize(cameraRight.x,0,cameraRight.z)`, `B=foot+right_h*x+worldUp*y`. 원래 높이.9/2m와 PNG는 유지하며 카메라 고도에 따른 정상적인 수직 투영 길이 cos(pitch)를 적용한다. 화면 크기를 역보정하면 pitch80°에서 실제 card 높이가11.5m가 되므로 그 대안은 제외한다. 렌더 card의 회전 점유반경R=width/2를 모두 포함하도록 planner snapshot의 실효 footprint는 `(max(authoredWidth,2R),max(authoredDepth,2R))`다. 선반의 실효 깊이는1→1.45833m, 쓰레기통은불변이며 같은 치수로 배치/Collider/NavMesh/hash를 파생한다. 이는 소품별 임의 offset이 아니라 하나의 포함 조건이다. world Y 범위도0~실물높이 안이므로 외벽/천장과 교차하지 않는지 마지막에 전체card 정점의 실제벽 OBB 검사와 화면으로 확인한다. 최초 결과/증거는 보존하고 재개된 렌더·점유범위만 검사한다.
+
+### D08 현재 연결·실행 증거
+
+- [사물 목록] [urban_object_catalog.md](urban_object_catalog.md)에 원본36장 중 사물/환경13장과 그 안의 물건별 적합 POI·구역·지지면·금지 장소·추출 한계를 기록했다. 구조재6장/캐릭터17장은 별도다. 목록의 후속 후보가 모두 runtime asset이 됐다는 뜻은 아니다.
+- [실제 asset] `Assets/Prefabs/World/UrbanBuildings/FurnishedMetricBuilding.prefab`이 catalog와 규칙을 소유하고 GameMapTest 생성기의 serialized reference로 연결됐다. Bin/Shelf/Desk/Dumpster도 실제 prefab이며 공통 생성기는 같은 metric 건물과 그 자식으로 인스턴스화한다. 현재 규칙은 Medical 행정책상1(발생1), 뒤편수거함1(발생1), 실내입구휴지통최대1(발생.35)이다. source별허용Zone와Catalog별개수상한을 검증하며 생존선반은 미연결이다. 미분류 건물의 소품은0이다.
+- [현재 좌표] 주변 예약margin1.5m, 본체8~10×8m/2층6.8m 유지. 책상높이1.5m/실효footprint2×1.65865m, 수거함높이1.2m/1.4×1.13793m, 원통휴지통높이.9m/.7×.7m. 실제card vertices에서 폭을 구하고 `max(저작치수,회전card폭)`으로 동일placement/Collider/해시를 만든다. culling용확대mesh.bounds를크기로사용하지않는다. Y고정card의세로압축은실제카메라투영이며부위별보정은없다.
+- [정규화] 최초Bin31×52/Shelf210×288은전체시트각1회총9.371초. 새Desk230×208/Dumpster55×58은두새시트각1회총8.043초다. 원본/이전결과SHA불변. Dumpster는원본독립alpha성분의4×4coverage를사용해정규화된2096pixel의source좌표귀속을확인했고이웃혼합셀/귀속오류0이다. `Tools/WorldArt/bake_building_props.py --profile poi_reviewed`가재현입구이며출력은`BuildingProps/PoiReviewed/`다.
+- [초기 결과와 재개] 최초seed726891912에서모든건물공통bin82/shelf125배치와문/경로검사를수행했으나사용자가벽잘림과용도없는배치를거절했다. `technical.json`, `outside.png`, `inside.png`는그당시결과로보존하며최종합격증거로사용하지않는다. WorkLoop v10은당시기술조건만완료, v11은추가의미계약으로중단하고v12로통합했다.
+- [최종 Play Mode 호출 확인] seed1462661998: 건물49, 실제Medical에책상1/뒤편수거함1/원통휴지통0. 전체layout/POI/Zone/Catalog상한/미분류건물빈목록검사, 같은seed재현, 확률0에서빈배치및해시변화통과. fit불가능한100×100m후보에가중치1000을줘도유효책상만선택했다. 실제card64정점case(8yaw×4vertex×2prop)가자기Collider안에있고실제모든벽/지붕과의penetration0, 같은Player의실제문통과와NavMesh입구→중앙경로를확인했다. 높이에따른XZ침투를없애므로pitch와독립적으로수평포함조건이성립한다.
+- [증거/판정] `LocalOnly/IsometricMapTrial07/{semantic.json,semantic-inside.png,semantic-outside.png,poi-bake-report.json}`. 사용자에게용도는맞지만도시디자인/이미지크기/방향이잘못됐다는최종피드백을받았다. 기술gate는해당좁은조건만판정했고미술합격으로사용하지않는다. 모든방향에서원본의새면을복원한3D물체가아니라수직2.5Dcard다. 다른POI/층전환/책상위소품·벽부착/실제키보드/전체Recovery/GPU/빌드는범위밖또는미검증이다.
+
+### 이전 도심 생성 자료의 추적 결과
+
+사용자가9/4의 `유니티 Codex 연결 설정 찾기`에서 직접 연결한 [도심맵 생성 자료 ಹುಡುಗ](https://chatgpt.com/c/6a9a03b2-201c-83e8-a3d1-9e9b63c03acc?messageId=finalAgentTurnStart)를 찾았다. 이 작업에는 [Szuszi/CityGenerator-Unity](https://github.com/Szuszi/CityGenerator-Unity), [pboechat/roadgen](https://github.com/pboechat/roadgen), [symbios-tensor](https://github.com/TheJanusStream/symbios-tensor), [ProbableTrain/MapGenerator](https://github.com/ProbableTrain/MapGenerator)가 정리돼 있다. 각 원문은 도로/블록/필지 분리, 성장도로의교차·스냅·선분분할, 방향장추적, 지도출력 등의기법을제공한다. symbios-tensor는Rust이며퇴화블록/타일연결한계가공개되어있다.
+
+해당두작업의사용자원문에서 **도심생성트윗URL 자체는확인하지못했다**. Astra사용량트윗과혼동하지않는다. 현재코드는이프로젝트들의통합본이아니라고정node+seed가중Kruskal+추가loop+제한대각선이며, cardinal전면Rect필지만지원한다. 방향장/닫힌face필지/대각전면필지는추가구현되지않았다. 이번변경은POI소품/프리팹예약이며도시도로생성기교체는하지않았다.
+
+### 최초안 기록 — 사용자 피드백으로 아래 공통 소품 규칙·카메라 평면을 교체함
+
+[최초 요청] 건물 프리팹 안에 확률과 주변 여유 범위를 넣고, 외벽에는 쓰레기통·실내에는 진열대를 배치한다. 본체 크기·2층·기존 문·도로·0.2m 단차는 유지한다. 이번 소품은 고정 장식/충돌이며 새 루팅·상태 소유자를 만들지 않는다. 아래는 최초 설계의 보존 기록이고 현재 결정은 위의 사용자 정정/실행 절이다.
+
+후보: (1) prefab Awake의 자체 난수 배치는 필지·NavMesh·Recovery 해시 밖에서 충돌을 바꾸므로 제외, (2) 전역 거리 가구에 실내 물건을 섞으면 Sidewalk 계약을 깨므로 제외, (3) **prefab 저작 규칙 → immutable profile → 기존 planner의 예약 필지/본체/POI/소품 → 기존 generator의 실제 prefab 인스턴스**를 채택한다. Unity prefab은 재사용 가능한 저작 단위이며 확률 배치는 프로젝트의 순수 planner 책임이다. [Unity Prefab 설명](https://docs.unity3d.com/6000.0/Documentation/Manual/Prefabs.html), [NavMeshSurface](https://docs.unity3d.com/Packages/com.unity.ai.navigation@2.0/manual/NavMeshSurface.html)의 PhysicsColliders 경로를 사용한다.
+
+- Canonical 표현은 맵 local XZ의 미터 단위 axis-aligned Rect와 immutable placement다. `R_reserved=R_body⊕[-m,m]²`, 초기 m=1.25m. 기존 8~10×8m 본체는 유지하고 도로 변 필지 간격을 예약 크기로 계산한다. 충돌 시 후보를 제외하므로 건물 수는 줄 수 있다. 예약 영역과 실내 바닥의 Footprint는 구분한다.
+- 프리팹은 margin, 벽 두께/문 폭과 일치하는 profile, 통로 폭, stable rule ID, 출현확률, 최대 수, 가중 prop 후보/실물 크기를 소유한다. Map 생성 시작에 배열을 복사한다. 동일 seed/parcel ID/rule ID의 정수 해시로 독립 난수열을 만들고, road/building RNG를 소비하지 않는다. `p<=u`이면 빈 슬롯, 나머지는 누적 가중치로 선택한다.
+- 후보는 벽에 정렬한 로컬 슬롯이며 전체 footprint로 예약 영역 포함/벽 비침범/다른 소품 비중첩을 계산한다. 실내 중앙 십자 통로와 실제 문→중앙 경로를 비운다. 의료 POI의 이동된 문 공식은 메시와 planner가 공유하고 외부 Chest 접근 구역도 제외한다. 부족한 공간을 임의 scale이나 offset 보정으로 덮지 않는다.
+- 실내 root 높이=건물 root+기존 FloorLift(.016), 실외=root. 쓰레기통 초기 footprint .7×.7m/높이.9m, 진열대2.4×1m/높이2m, 통로 폭≥1.4m. 실제 solid BoxCollider와 NotWalkable NavMeshModifier를 최종 NavMesh 전에 생성한다. sprite 회전은 Collider와 분리한다.
+- 이미지 입력은 기존 StreetObjects 전체 시트와 GPT/2의 단일 금속 선반이다. 각각 전체 RGBA를 D05의 수정 PerfectPixel 4px 격자로 1회 정규화한 뒤 완전한 소품의 alpha 영역을 추출한다. 원본/정규화 시트/좌표/해시를 보존한다. 완성된 여러 면의 그림에 평면 homography를 적용하지 않는다. 발끝 pivot의 camera-facing billboard를 사용하고 높이 하나로 균일 배율을 정한다. 이는 2.5D sprite 표현이며 숨은 면이나 camera orbit에 대응하는 실제 3D 복원이 아니다. 필요한 경우 후속에 방향별 sprite/실제 mesh를 저작한다.
+- profile과 예약 Rect, 모든 prop ID/종류/미터 좌표/크기를 stable hash에 넣는다. planner9/geometry1006으로 기존 Recovery mismatch 차단을 재사용한다. 새 루팅 registry나 save schema는 만들지 않는다.
+
+최종 최소 실험: 두 seed의 유효 배치, 동일 seed 재현, profile 변경 시 hash 변화, 실제 prefab 연결/문과 POI 통로의 footprint 침범0, 실내외 Collider/높이, 실제 의료 건물 문 통과와 NavMesh 경로를 확인한다. 마지막 대표 실내/외 화면의 미술 판정은 사용자에게 받는다. 기존 단차/도로/씬 왕복을 중복 테스트하지 않는다. 실패 시 해당 입력/배치/렌더 경계만 재개한다.
+
 ## 현재 결정 D07 — 이동 경계와 외곽 도로 표시 범위 분리
 
 [요청·구현 범위] D06 결과는 사용자 유지 승인이다. 도로 끝만 재개한다. 현재 planner는 중심선 셀마다 원판 `dx²+dz²≤r²`를 합치며 외곽 node가 물리 LocalBounds보다25m 안쪽이라 원형 끝이 보인다. 기존 네 Boundary Collider와 이동 범위는 유지한다.

@@ -155,15 +155,16 @@ MonoBehaviour:
   legacyGround: {fileID: 835374984}
   additionalProtectedAnchors: []
   navMeshSurface: {fileID: 415190456}
-  randomizeSeedOnAwake: 1
-  fixedSeed: 41721
+  randomizeSeedOnAwake: 0
+  fixedSeed: 1462661998
   mapTilesPerAxis: 145
-  blocksPerAxis: 6
+  blocksPerAxis: 5
   borderTiles: 12
   tileWorldSize: 2
-  isometricStyle: {fileID: 11400000, guid: a0cc726843e04374687ce1430f8a7370, type: 2}
-  secondaryRoadWidthTiles: 7
-  primaryRoadWidthTiles: 9
+  isometricStyle: {fileID: 11400000, guid: a32b5335b0c44a142960c9f88105a006, type: 2}
+  enterableBuildingPrefab: {fileID: 8264091161420838273, guid: 671b9b04bad330c40909e0c244f3731b, type: 3}
+  secondaryRoadWidthTiles: 3
+  primaryRoadWidthTiles: 5
   additionalRoadChance: 0.65
   diagonalRoadChance: 0.2
   sidewalkWidthTiles: 1
@@ -174,18 +175,19 @@ MonoBehaviour:
   - {fileID: 5617868507057794277, guid: 15bad58ea323a5745bb75bfe73cb78f7, type: 3}
   buildingSetback: 0
   lotGap: 0
-  minBuildingFrontageTiles: 4
-  maxBuildingFrontageTiles: 5
-  minBuildingDepthTiles: 4
-  maxBuildingDepthTiles: 4
+  minBuildingFrontageTiles: 6
+  maxBuildingFrontageTiles: 9
+  minBuildingDepthTiles: 5
+  maxBuildingDepthTiles: 7
   buildingDensity: 1
-  minBuildingHeight: 10.5
-  maxBuildingHeight: 18
+  minBuildingHeight: 6.8
+  maxBuildingHeight: 6.8
   anchorClearance: 10
   protectedAnchorClearance: 8
   instantiateStreetTrees: 1
   instantiateStreetLamps: 1
   streetLampPrefab: {fileID: 4314911298301624869, guid: 5b3fcb7ae5e66344f8e3b9ab8988cbfb, type: 3}
+  streetTreeVisualPrefab: {fileID: 7604710951984259332, guid: f77ab14f0733d6a42994e2c036507f73, type: 3}
   instantiatePrototypeClutter: 0
   junctionFurnitureClearanceTiles: 3
   streetTreeSpacingTiles: 7

@@ -5,7 +5,7 @@ namespace FantasySurvival.WorldGeneration
 {
     public static class UrbanMapLayoutPlanner
     {
-        public const int GeneratorVersion = 8;
+        public const int GeneratorVersion = 13;
         public const int SpawnManifestVersion = 3;
 
         private static readonly float[] SpawnCandidateFractions = { 0.2f, 0.35f, 0.5f, 0.65f, 0.8f };
@@ -20,33 +20,6 @@ namespace FantasySurvival.WorldGeneration
             public bool IsPrimary;
             public bool IsActive;
             public float Width;
-        }
-
-        private readonly struct ParcelDraft
-        {
-            public ParcelDraft(
-                int sourceRoadIndex,
-                float distanceAlongRoad,
-                int side,
-                Vector2 center,
-                Vector2 size,
-                Vector2 facadeDirection)
-            {
-                SourceRoadIndex = sourceRoadIndex;
-                DistanceAlongRoad = distanceAlongRoad;
-                Side = side;
-                Center = center;
-                Size = size;
-                FacadeDirection = facadeDirection;
-            }
-
-            public int SourceRoadIndex { get; }
-            public float DistanceAlongRoad { get; }
-            public int Side { get; }
-            public Vector2 Center { get; }
-            public Vector2 Size { get; }
-            public Vector2 FacadeDirection { get; }
-            public Rect Footprint => new Rect(Center - Size * 0.5f, Size);
         }
 
         private sealed class DisjointSet
@@ -233,14 +206,21 @@ namespace FantasySurvival.WorldGeneration
                 cityRotation);
 
             UrbanSurfaceGrid surfaceGrid = BuildSurfaceGrid(localBounds, nodes, roads, parameters);
+            UrbanBlockMap blockMap = UrbanBlockMap.Build(surfaceGrid);
 
             List<UrbanParcelPlacement> parcels = BuildRoadFrontageParcels(
                 localBounds,
                 roads,
                 surfaceGrid,
+                blockMap,
+                entryLocalPosition,
+                portalLocalPosition,
+                protectedLocalPoints,
                 parameters,
                 ref buildingRandom);
 
+            int parkingParcelIndex = parameters.BuildingProfile == null ? -1 :
+                UrbanArchitecturePlan.SelectParkingParcel(parcels, entryLocalPosition);
             List<UrbanBuildingPlacement> buildings = BuildBuildings(
                 parcels,
                 roads,
@@ -249,7 +229,8 @@ namespace FantasySurvival.WorldGeneration
                 portalLocalPosition,
                 protectedLocalPoints,
                 parameters,
-                ref buildingRandom);
+                ref buildingRandom,
+                parkingParcelIndex);
 
             List<UrbanSpatialCandidate> candidates = BuildSpatialCandidates(
                 roads,
@@ -262,6 +243,14 @@ namespace FantasySurvival.WorldGeneration
                 localBounds,
                 entryLocalPosition,
                 portalLocalPosition);
+            foreach (UrbanPoiPlacement poi in pois)
+                buildings[poi.BuildingIndex] = buildings[poi.BuildingIndex].WithKind(poi.Kind);
+            UrbanArchitecturePlan architecture = parameters.BuildingProfile == null ? UrbanArchitecturePlan.Empty :
+                UrbanArchitecturePlan.Create(buildings, pois, entryLocalPosition, parkingParcelIndex);
+            List<UrbanBuildingDecorationPlacement> buildingDecorations = UrbanBuildingDecorationPlanner.Generate(
+                seed, parcels, buildings, pois, parameters.BuildingProfile);
+            // Room-aware programs own their prop placement; do not advertise unused legacy sockets.
+            buildingDecorations.RemoveAll(p => architecture.FindForBuilding(p.SourceBuildingIndex) != null);
             List<UrbanStreetFurniturePlacement> streetFurniture = BuildStreetFurniture(
                 roads,
                 surfaceGrid,
@@ -291,7 +280,11 @@ namespace FantasySurvival.WorldGeneration
                 streetFurniture,
                 protectedLocalPoints,
                 candidates,
-                pois);
+                pois,
+                parameters.BuildingProfile,
+                buildingDecorations,
+                blockMap,
+                architecture);
 
             if (!UrbanMapLayoutValidator.TryValidate(layout, parameters, out string layoutError))
             {
@@ -535,8 +528,7 @@ namespace FantasySurvival.WorldGeneration
                 UrbanBuildingPlacement building = buildings[buildingIndex];
                 UrbanParcelPlacement parcel = parcels[building.SourceParcelIndex];
                 Vector2 outward = parcel.FacadeDirection;
-                float facadeExtent = Mathf.Abs(outward.x) * building.Size.x * 0.5f +
-                                     Mathf.Abs(outward.y) * building.Size.y * 0.5f;
+                float facadeExtent = building.Size.y * 0.5f;
                 Vector2 facadePoint = building.Center + outward * facadeExtent;
                 Vector2 contentPosition = facadePoint + outward * PoiContentFacadeOffset;
                 Vector2 approachPosition = contentPosition + outward * PoiApproachOffset;
@@ -578,8 +570,8 @@ namespace FantasySurvival.WorldGeneration
                     candidate.LocalPosition - candidate.LocalDirection * PoiApproachOffset;
                 if (!ContainsPoint(localBounds, contentPosition) ||
                     !ContainsPoint(localBounds, candidate.LocalPosition) ||
-                    ContainsPoint(buildings[candidate.SourceBuildingIndex].Footprint, contentPosition) ||
-                    ContainsPoint(buildings[candidate.SourceBuildingIndex].Footprint, candidate.LocalPosition) ||
+                    buildings[candidate.SourceBuildingIndex].Bounds.Contains(contentPosition) ||
+                    buildings[candidate.SourceBuildingIndex].Bounds.Contains(candidate.LocalPosition) ||
                     IsOnAnyRoad(contentPosition, roads) ||
                     IsInsideAnyOtherBuilding(
                         contentPosition,
@@ -623,7 +615,7 @@ namespace FantasySurvival.WorldGeneration
             float yaw = Mathf.Atan2(
                 selected.LocalDirection.x,
                 selected.LocalDirection.y) * Mathf.Rad2Deg;
-            return new List<UrbanPoiPlacement>
+            var result = new List<UrbanPoiPlacement>
             {
                 new UrbanPoiPlacement(
                     MedicalPoiStableId,
@@ -633,6 +625,18 @@ namespace FantasySurvival.WorldGeneration
                     selected.LocalPosition,
                     yaw)
             };
+            foreach (UrbanSpatialCandidate candidate in candidates)
+            {
+                if (candidate.Kind != UrbanSpatialCandidateKind.BuildingApproach ||
+                    candidate.SourceBuildingIndex == selected.SourceBuildingIndex) continue;
+                UrbanBuildingPlacement building = buildings[candidate.SourceBuildingIndex];
+                result.Add(new UrbanPoiPlacement(
+                    $"core:urban/{building.Kind.ToString().ToLowerInvariant()}/parcel_{building.SourceParcelIndex}",
+                    building.Kind, candidate.SourceBuildingIndex,
+                    candidate.LocalPosition - candidate.LocalDirection * PoiApproachOffset,
+                    candidate.LocalPosition, building.LocalYawDegrees));
+            }
+            return result;
         }
 
         private static List<UrbanStreetFurniturePlacement> BuildStreetFurniture(
@@ -913,7 +917,20 @@ namespace FantasySurvival.WorldGeneration
 
             for (int index = 0; index < buildings.Count; index++)
             {
-                if (ContainsPoint(buildings[index].Footprint, localPosition))
+                if (parameters.BuildingProfile != null && buildings[index].Bounds.Expanded(parameters.BuildingProfile.ReservedMargin)
+                    .DistanceSquared(localPosition) < 1f)
+                {
+                    // A one-metre envelope contains current tree/bin/bicycle/lamp collision footprints.
+                    // The street system cannot claim a building's reserved furnishing space.
+                    return false;
+                }
+                if (parameters.BuildingProfile != null && UrbanBuildingDecorationPlanner
+                    .GetDoorAccessBounds(buildings[index], parameters.BuildingProfile).DistanceSquared(localPosition) < 1f)
+                {
+                    // Keep the whole street-object collision envelope clear of the actual door.
+                    return false;
+                }
+                if (buildings[index].Bounds.Contains(localPosition))
                 {
                     return false;
                 }
@@ -955,9 +972,8 @@ namespace FantasySurvival.WorldGeneration
                     continue;
                 }
 
-                Rect footprint = buildings[index].Footprint;
-                if (ContainsPoint(footprint, contentPosition) ||
-                    ContainsPoint(footprint, approachPosition))
+                UrbanOrientedRect footprint = buildings[index].Bounds;
+                if (footprint.Contains(contentPosition) || footprint.Contains(approachPosition))
                 {
                     return true;
                 }
@@ -1609,172 +1625,117 @@ namespace FantasySurvival.WorldGeneration
                    UrbanSurfaceGrid.AreAutotileCompatible(source, kinds[z * width + x]);
         }
 
-        private static List<UrbanParcelPlacement> BuildRoadFrontageParcels(
-            Rect localBounds,
-            IReadOnlyList<UrbanRoadSegment> roads,
-            UrbanSurfaceGrid surfaceGrid,
-            UrbanMapGenerationParameters parameters,
-            ref StableRandom random)
+        // Raster support of the exact disk brush, square sidewalk dilation and cell extent.
+        // This replaces hand-adjusted offsets and is shared with the final validator.
+        public static float GetRoadGroundBoundaryDistance(UrbanRoadSegment road, UrbanMapGenerationParameters parameters)
         {
-            var drafts = new List<ParcelDraft>();
-            float tileSize = parameters.TileWorldSize;
-            float lotGap = Mathf.Ceil(parameters.LotGap / tileSize) * tileSize;
-            float minimumFrontage = parameters.MinBuildingFrontageTiles * tileSize;
-            float maximumFrontage = parameters.MaxBuildingFrontageTiles * tileSize;
+            Vector2 direction = (road.End - road.Start).normalized;
+            Vector2 normal = new Vector2(-direction.y, direction.x);
+            int radius = (road.IsPrimary ? parameters.PrimaryRoadWidthTiles : parameters.SecondaryRoadWidthTiles) / 2;
+            float diskSupport = 0f;
+            for (int z = -radius; z <= radius; z++)
+                for (int x = -radius; x <= radius; x++)
+                    if (x * x + z * z <= radius * radius)
+                        diskSupport = Mathf.Max(diskSupport, Mathf.Abs(x * normal.x + z * normal.y));
+            return parameters.TileWorldSize * (diskSupport +
+                (parameters.SidewalkWidthTiles + .5f) * (Mathf.Abs(normal.x) + Mathf.Abs(normal.y))) + .001f; // conservative floating-point contact clearance
+        }
 
+        private static List<UrbanParcelPlacement> BuildRoadFrontageParcels(
+            Rect localBounds, IReadOnlyList<UrbanRoadSegment> roads, UrbanSurfaceGrid surfaceGrid,
+            UrbanBlockMap blockMap, Vector2 entry, Vector2 portal, IReadOnlyList<Vector2> protectedPoints,
+            UrbanMapGenerationParameters parameters, ref StableRandom random)
+        {
+            var groups = new List<List<UrbanParcelPlacement>>();
+            float tile = parameters.TileWorldSize;
+            float margin = parameters.BuildingProfile?.ReservedMargin ?? 0f;
             for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
             {
                 UrbanRoadSegment road = roads[roadIndex];
-                Vector2 delta = road.End - road.Start;
-                bool isCardinal = Mathf.Abs(delta.x) <= 0.01f || Mathf.Abs(delta.y) <= 0.01f;
-                if (!isCardinal || delta.sqrMagnitude <= 0.0001f)
+                Vector2 direction = (road.End - road.Start).normalized;
+                Vector2 normal = new Vector2(-direction.y, direction.x);
+                float edge = GetRoadGroundBoundaryDistance(road, parameters) + parameters.BuildingSetback;
+                for (int side = -1; side <= 1; side += 2)
                 {
-                    // Diagonal frontage needs rotated footprint masks. Until that data exists,
-                    // diagonals remain roads rather than silently accepting axis-aligned lots.
-                    continue;
-                }
-
-                Vector2 roadDirection = delta.normalized;
-                Vector2 roadNormal = new Vector2(-roadDirection.y, roadDirection.x);
-                float startClearance = GetJunctionParcelClearance(
-                    road.FromNodeIndex,
-                    roads,
-                    parameters);
-                float endClearance = GetJunctionParcelClearance(
-                    road.ToNodeIndex,
-                    roads,
-                    parameters);
-                float frontageLength = road.Length - startClearance - endClearance;
-                int parcelCount = Mathf.FloorToInt(
-                    (frontageLength + lotGap) / (minimumFrontage + lotGap));
-
-                while (parcelCount > 0)
-                {
-                    float availablePerParcel =
-                        (frontageLength - lotGap * (parcelCount - 1)) / parcelCount;
-                    if (availablePerParcel + 0.001f >= minimumFrontage)
+                    var candidates = new List<UrbanParcelPlacement>();
+                    // Choose a module preference once; trying a smaller authored module is not rescaling.
+                    int preferredWidth = random.Range(parameters.MinBuildingFrontageTiles, parameters.MaxBuildingFrontageTiles + 1);
+                    int preferredDepth = random.Range(parameters.MinBuildingDepthTiles, parameters.MaxBuildingDepthTiles + 1);
+                    int widthCount = parameters.MaxBuildingFrontageTiles - parameters.MinBuildingFrontageTiles + 1;
+                    int depthCount = parameters.MaxBuildingDepthTiles - parameters.MinBuildingDepthTiles + 1;
+                    for (int w = 0; w < widthCount; w++)
+                    for (int d = 0; d < depthCount; d++)
                     {
-                        break;
-                    }
-
-                    parcelCount--;
-                }
-
-                if (parcelCount <= 0)
-                {
-                    continue;
-                }
-
-                float frontage = Mathf.Clamp(
-                    SnapDownToTile(
-                        (frontageLength - lotGap * (parcelCount - 1)) / parcelCount,
-                        tileSize),
-                    minimumFrontage,
-                    maximumFrontage);
-                float usedLength = frontage * parcelCount + lotGap * (parcelCount - 1);
-                float firstDistance = startClearance +
-                                      Mathf.Max(0f, frontageLength - usedLength) * 0.5f +
-                                      frontage * 0.5f;
-
-                for (int parcelAlongRoad = 0; parcelAlongRoad < parcelCount; parcelAlongRoad++)
-                {
-                    float distanceAlongRoad = firstDistance +
-                                              parcelAlongRoad * (frontage + lotGap);
-                    Vector2 roadPoint = road.Start + roadDirection * distanceAlongRoad;
-
-                    for (int side = -1; side <= 1; side += 2)
-                    {
-                        int depthTiles = random.Range(
-                            parameters.MinBuildingDepthTiles,
-                            parameters.MaxBuildingDepthTiles + 1);
-                        float depth = depthTiles * tileSize;
-                        Vector2 awayFromRoad = roadNormal * side;
-                        float centerOffset = road.Width * 0.5f +
-                                             parameters.SidewalkWidth +
-                                             parameters.BuildingSetback +
-                                             tileSize * 0.5f +
-                                             depth * 0.5f;
-                        Vector2 center = roadPoint + awayFromRoad * centerOffset;
-                        Vector2 size = Mathf.Abs(roadDirection.x) > 0.5f
-                            ? new Vector2(frontage, depth)
-                            : new Vector2(depth, frontage);
-                        var draft = new ParcelDraft(
-                            roadIndex,
-                            distanceAlongRoad,
-                            side,
-                            center,
-                            size,
-                            -awayFromRoad);
-
-                        if (IsBuildableFootprint(
-                                draft.Footprint,
-                                localBounds,
-                                roads,
-                                surfaceGrid,
-                                parameters))
+                        int widthTiles = parameters.MinBuildingFrontageTiles +
+                            PositiveModulo(preferredWidth - parameters.MinBuildingFrontageTiles - w, widthCount);
+                        int depthTiles = parameters.MinBuildingDepthTiles +
+                            PositiveModulo(preferredDepth - parameters.MinBuildingDepthTiles - d, depthCount);
+                        Vector2 size = new Vector2(widthTiles * tile + 2 * margin, depthTiles * tile + 2 * margin);
+                        int steps = Mathf.FloorToInt((road.Length - size.x) / tile);
+                        for (int step = 0; step <= steps; step++)
                         {
-                            drafts.Add(draft);
+                            // Symmetric frontage slots are measured along the source road, including diagonals.
+                            float distance = (road.Length - steps * tile) * .5f + step * tile;
+                            Vector2 center = road.Start + direction * distance + normal * side * (edge + size.y * .5f);
+                            var bounds = new UrbanOrientedRect(center, size, -normal * side);
+                            if (!blockMap.TryGetContainingBlock(bounds, out int blockId) ||
+                                bounds.DistanceSquared(entry) < parameters.AnchorClearance * parameters.AnchorClearance ||
+                                bounds.DistanceSquared(portal) < parameters.AnchorClearance * parameters.AnchorClearance) continue;
+                            bool blocked = false;
+                            foreach (Vector2 point in protectedPoints)
+                                if (bounds.DistanceSquared(point) < parameters.ProtectedAnchorClearance * parameters.ProtectedAnchorClearance)
+                                { blocked = true; break; }
+                            if (blocked) continue;
+                            candidates.Add(new UrbanParcelPlacement(0, roadIndex, distance, side,
+                                center, size, -normal * side, blockId));
                         }
                     }
+                    if (candidates.Count > 0) groups.Add(candidates);
                 }
             }
-
-            var shuffledIndices = new List<int>(drafts.Count);
-            for (int index = 0; index < drafts.Count; index++)
+            // Allocate the most constrained frontage first, then one lot per frontage per pass.
+            // A long easy cardinal frontage cannot consume every valid diagonal candidate first.
+            groups.Sort((a, b) => {
+                int count = a.Count.CompareTo(b.Count);
+                if (count != 0) return count;
+                int road = a[0].SourceRoadIndex.CompareTo(b[0].SourceRoadIndex);
+                return road != 0 ? road : a[0].Side.CompareTo(b[0].Side);
+            });
+            var selected = new List<UrbanParcelPlacement>();
+            bool added;
+            do
             {
-                shuffledIndices.Add(index);
-            }
-            Shuffle(shuffledIndices, ref random);
-
-            var selected = new List<ParcelDraft>();
-            for (int shuffledIndex = 0; shuffledIndex < shuffledIndices.Count; shuffledIndex++)
-            {
-                ParcelDraft candidate = drafts[shuffledIndices[shuffledIndex]];
-                bool overlaps = false;
-                for (int selectedIndex = 0; selectedIndex < selected.Count; selectedIndex++)
+                added = false;
+                foreach (List<UrbanParcelPlacement> group in groups)
                 {
-                    if (candidate.Footprint.Overlaps(selected[selectedIndex].Footprint))
+                    while (group.Count > 0)
                     {
-                        overlaps = true;
-                        break;
+                        UrbanParcelPlacement candidate = group[0];
+                        group.RemoveAt(0);
+                        bool overlap = false;
+                        foreach (UrbanParcelPlacement previous in selected)
+                            if (candidate.Bounds.Expanded(parameters.LotGap * .5f).Overlaps(
+                                previous.Bounds.Expanded(parameters.LotGap * .5f)))
+                            { overlap = true; break; }
+                        if (overlap) continue;
+                        selected.Add(candidate); added = true; break;
                     }
                 }
-
-                if (!overlaps)
-                {
-                    selected.Add(candidate);
-                }
-            }
-
-            selected.Sort((left, right) =>
-            {
-                int roadComparison = left.SourceRoadIndex.CompareTo(right.SourceRoadIndex);
-                if (roadComparison != 0)
-                {
-                    return roadComparison;
-                }
-
-                int distanceComparison = left.DistanceAlongRoad.CompareTo(right.DistanceAlongRoad);
-                return distanceComparison != 0
-                    ? distanceComparison
-                    : left.Side.CompareTo(right.Side);
+            } while (added);
+            selected.Sort((a, b) => {
+                int road = a.SourceRoadIndex.CompareTo(b.SourceRoadIndex);
+                if (road != 0) return road;
+                int side = a.Side.CompareTo(b.Side);
+                return side != 0 ? side : a.DistanceAlongRoad.CompareTo(b.DistanceAlongRoad);
             });
-
-            var parcels = new List<UrbanParcelPlacement>(selected.Count);
-            for (int index = 0; index < selected.Count; index++)
+            var result = new List<UrbanParcelPlacement>(selected.Count);
+            for (int i = 0; i < selected.Count; i++)
             {
-                ParcelDraft draft = selected[index];
-                parcels.Add(new UrbanParcelPlacement(
-                    index,
-                    draft.SourceRoadIndex,
-                    draft.DistanceAlongRoad,
-                    draft.Side,
-                    draft.Center,
-                    draft.Size,
-                    draft.FacadeDirection));
+                UrbanParcelPlacement p = selected[i];
+                result.Add(new UrbanParcelPlacement(i, p.SourceRoadIndex, p.DistanceAlongRoad, p.Side,
+                    p.Center, p.Size, p.FacadeDirection, p.SourceBlockId));
             }
-
-            return parcels;
+            return result;
         }
 
         private static List<UrbanBuildingPlacement> BuildBuildings(
@@ -1785,7 +1746,8 @@ namespace FantasySurvival.WorldGeneration
             Vector2 portalLocalPosition,
             IReadOnlyList<Vector2> protectedLocalPoints,
             UrbanMapGenerationParameters parameters,
-            ref StableRandom random)
+            ref StableRandom random,
+            int parkingParcelIndex = -1)
         {
             var buildings = new List<UrbanBuildingPlacement>();
             for (int parcelIndex = 0; parcelIndex < parcels.Count; parcelIndex++)
@@ -1796,12 +1758,19 @@ namespace FantasySurvival.WorldGeneration
                 }
 
                 UrbanParcelPlacement parcel = parcels[parcelIndex];
+                float margin = parameters.BuildingProfile?.ReservedMargin ?? 0f;
                 var placement = new UrbanBuildingPlacement(
                     parcelIndex,
                     parcel.Center,
-                    parcel.Size,
+                    parcel.Size - Vector2.one * (margin * 2f),
                     random.Range(parameters.MinBuildingHeight, parameters.MaxBuildingHeight),
-                    random.Range(0, 5));
+                    random.Range(0, 5),
+                    parcel.FacadeDirection,
+                    parcel.SourceBlockId,
+                    (UrbanPoiKind)((int)UrbanPoiKind.Residential + random.Range(0, 4)));
+
+                // Consume the existing random draws before reserving this one open lot, preserving other buildings.
+                if (parcelIndex == parkingParcelIndex) continue;
 
                 if (!CanPlaceBuilding(
                         placement,
@@ -1832,140 +1801,14 @@ namespace FantasySurvival.WorldGeneration
             IReadOnlyList<Vector2> protectedLocalPoints,
             UrbanMapGenerationParameters parameters)
         {
-            Rect footprint = candidate.Footprint;
-
-            if (!FootprintUsesOnlyGround(surfaceGrid, footprint))
-            {
-                return false;
-            }
-
-            for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
-            {
-                if (UrbanMapLayoutValidator.RoadIntersectsRect(
-                        roads[roadIndex],
-                        footprint,
-                        parameters.SidewalkWidth + parameters.BuildingSetback))
-                {
-                    return false;
-                }
-            }
-
-            if (UrbanMapLayoutValidator.RectIntersectsCircle(footprint, entryLocalPosition, parameters.AnchorClearance) ||
-                UrbanMapLayoutValidator.RectIntersectsCircle(footprint, portalLocalPosition, parameters.AnchorClearance))
-            {
-                return false;
-            }
-
-            for (int index = 0; index < protectedLocalPoints.Count; index++)
-            {
-                if (UrbanMapLayoutValidator.RectIntersectsCircle(
-                        footprint,
-                        protectedLocalPoints[index],
-                        parameters.ProtectedAnchorClearance))
-                {
-                    return false;
-                }
-            }
-
-            for (int index = 0; index < existingBuildings.Count; index++)
-            {
-                if (footprint.Overlaps(existingBuildings[index].Footprint))
-                {
-                    return false;
-                }
-            }
-
+            UrbanOrientedRect footprint = candidate.Bounds.Expanded(parameters.BuildingProfile?.ReservedMargin ?? 0f);
+            if (footprint.DistanceSquared(entryLocalPosition) < parameters.AnchorClearance * parameters.AnchorClearance ||
+                footprint.DistanceSquared(portalLocalPosition) < parameters.AnchorClearance * parameters.AnchorClearance) return false;
+            foreach (Vector2 point in protectedLocalPoints)
+                if (footprint.DistanceSquared(point) < parameters.ProtectedAnchorClearance * parameters.ProtectedAnchorClearance) return false;
+            foreach (UrbanBuildingPlacement existing in existingBuildings)
+                if (footprint.Overlaps(existing.Bounds.Expanded(parameters.BuildingProfile?.ReservedMargin ?? 0f))) return false;
             return true;
-        }
-
-        private static float GetJunctionParcelClearance(
-            int nodeIndex,
-            IReadOnlyList<UrbanRoadSegment> roads,
-            UrbanMapGenerationParameters parameters)
-        {
-            float widestConnectedHalfRoad = 0f;
-            for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
-            {
-                UrbanRoadSegment road = roads[roadIndex];
-                if (road.FromNodeIndex == nodeIndex || road.ToNodeIndex == nodeIndex)
-                {
-                    widestConnectedHalfRoad = Mathf.Max(widestConnectedHalfRoad, road.Width * 0.5f);
-                }
-            }
-
-            return widestConnectedHalfRoad +
-                   parameters.SidewalkWidth +
-                   parameters.BuildingSetback +
-                   parameters.TileWorldSize * 0.5f;
-        }
-
-        private static bool IsBuildableFootprint(
-            Rect footprint,
-            Rect localBounds,
-            IReadOnlyList<UrbanRoadSegment> roads,
-            UrbanSurfaceGrid surfaceGrid,
-            UrbanMapGenerationParameters parameters)
-        {
-            if (!ContainsRect(localBounds, footprint) ||
-                !FootprintUsesOnlyGround(surfaceGrid, footprint))
-            {
-                return false;
-            }
-
-            for (int roadIndex = 0; roadIndex < roads.Count; roadIndex++)
-            {
-                if (UrbanMapLayoutValidator.RoadIntersectsRect(
-                        roads[roadIndex],
-                        footprint,
-                        parameters.SidewalkWidth + parameters.BuildingSetback))
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private static bool FootprintUsesOnlyGround(UrbanSurfaceGrid grid, Rect footprint)
-        {
-            const float tolerance = 0.01f;
-            if (!grid.TryLocalToCell(new Vector2(footprint.xMin, footprint.yMin), out int minX, out int minZ) ||
-                !grid.TryLocalToCell(
-                    new Vector2(footprint.xMax - tolerance, footprint.yMax - tolerance),
-                    out int maxX,
-                    out int maxZ))
-            {
-                return false;
-            }
-
-            for (int z = minZ; z <= maxZ; z++)
-            {
-                for (int x = minX; x <= maxX; x++)
-                {
-                    Vector2 cellCenter = grid.GetCellCenter(x, z);
-                    if (ContainsPoint(footprint, cellCenter) &&
-                        grid.GetKind(x, z) != UrbanSurfaceTileKind.Ground)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
-        private static bool ContainsRect(Rect outer, Rect inner)
-        {
-            const float tolerance = 0.01f;
-            return inner.xMin >= outer.xMin - tolerance &&
-                   inner.xMax <= outer.xMax + tolerance &&
-                   inner.yMin >= outer.yMin - tolerance &&
-                   inner.yMax <= outer.yMax + tolerance;
-        }
-
-        private static float SnapDownToTile(float value, float tileSize)
-        {
-            return Mathf.Floor(value / tileSize) * tileSize;
         }
 
         private static int GetNodeIndex(int column, int row, int columns)

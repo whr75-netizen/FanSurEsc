@@ -2438,6 +2438,24 @@ Interactable (abstract base class)
 - `[실행]` 실제이전commit2d36911 planner와 두seed를 비교하여 모든node/road/port/anchor/범위 동일을확인했다. 연장도로와겹치는필지는 제외되고 기존validator를통과했다. Play seed−1038015743에서 같은Player를4면으로이동시켜각경계안약1.05m에서차단, 외부충돌/NavMesh없음, 도로/높이연속, 차선SAT/위상을확인했다. 현재카메라조건에서62m표시여백과유효지면64ray 모두범위안을확인했다.
 - `[근거·한계]` `LocalOnly/IsometricMapTrial06/`의 실제JSON/화면, WorkLoop v9 gate통과. 최초카메라검사에ray뒤쪽교차점이섞인오류는해당관찰만수정하고초기보고도보존했다. baseline용임시코드는정리했다. Play종료/backgroundfalse복원, D06검사는반복하지않았다. 물리키·모든seed/실행중화면비변경·전체Recovery·GPU/빌드는미검증이며 내부막다른길과외부교차로의세부규칙은범위밖이다.
 
+## 145. 건물 프리팹 예약·사물 분류와 POI 구역별 가중 소품 `[MAP-01]`
+
+- `[요청·정정]` 건물 프리팹에 확률/주변여유를 소유하도록 요청했다. 최초 공통 원통휴지통/생존선반 배치에서 사용자는 크기는 괜찮지만 벽 잘림과 용도 없는 외벽 반복을 지적했다. 사물 외형→적합장소목록→POI 가중목록→배치 순서로 교체했다. 최초결과는 보존하고 현재합격으로 재사용하지 않는다.
+- `[구현]` 실제 FurnishedMetricBuilding prefab의 immutable snapshot→예약필지/본체/POI→구역과물리조건을만족한catalog별후보풀→가중선택→같은generator의실제prop prefab/Collider→NavMesh 순서다. 규칙확률은건물당1회, 개수는규칙및catalog별상한을모두적용한다. planner10/geometry1006과profile/소품hash가변경된world를구분한다. margin1.5m, 본체8~10×8m/2층6.8m, 기존Player/도로/포장/출입구/루팅권위는유지한다.
+- `[재료·의미]` GPT/2 PNG36장의사물/환경13장및개별물건목록을 `docs/references/urban_object_catalog.md`에기록했다. 실제Medical에행정용desk1,뒤편wheeled dumpster1,입구round bin≤1(발생.35)만연결한다. 생존보급선반은Medical선택0, 미분류건물장식0. 최초두시트정규화9.371초와새두시트8.043초는각원본별1회이며이전출력/원본해시보존. 새수거함2096pixel모두선택alpha성분의source좌표에속해bbox이웃혼입0이다.
+- `[벽잘림 근본수정]` fullcamera-up card가XZ로1.2227m돌출해.5m물리반깊이를넘었다. 실제Y수직card로바꾸고sprite실제vertex폭의회전반경을snapshot/Collider점유범위에포함한다. 화면최상위/부위별offset/크기clamp를사용하지않는다. 카메라고도에따른정상cos투영은유지하며깊이맵이나숨은면복원으로설명하지않는다.
+- `[최종 Play Mode 호출 확인]` seed1462661998의49건물중실제Medical에desk1/dumpster1/bin0. seed재현/확률0의빈배치와hash변화/POI·zone·상한·미분류배치0/불가능한100×100m가중치1000후보제외를확인했다. 두card의8yaw×4정점=64case가실제Collider안, 전체실제벽/지붕penetration0, 같은Player문통과와입구→실내중앙NavMesh경로를확인했다. 원본/초기증거와 `LocalOnly/IsometricMapTrial07/semantic.json`, `semantic-inside.png`, `semantic-outside.png`를구분한다. WorkLoop v10은초기기술gate만완료, v11은최신정정으로중단, v12는최종의미/렌더기술gate다.
+- `[이전자료추적]` 사용자가9/4연결한ChatGPT작업 `6a9a03b2-201c-83e8-a3d1-9e9b63c03acc`의도심생성후보조사를찾고GitHub원문을대조했다. 도심트윗URL자체는특정하지못했다. 현재제한형도로graph와외부방향장/성장형도로프로젝트통합여부는맵연구D08에분리했다.
+- `[최종 사용자 판정]` 용도는맞지만도심디자인/이미지크기/방향이전체적으로잘못됐다고거절했다. 따라서D08은미술완료가아니며추가개별보정을멈추고공통투영·치수·방향·texel밀도·도시문법재설계가재개조건이다. 기술gate합격을사용자디자인합격으로바꾸지않는다. 결과/원본은보존하고완료커밋은하지않았다. Play종료/backgroundfalse를복원했다. 콘솔의기존15:12오류3건은보존하며다른POI/부착물/층전환/전체Recovery/실제키보드/GPU/빌드는미검증이다.
+
+## 146. D09 도시·POI·입체 재료 시험과 픽셀 요구 이탈로 중단 `[MAP-01][POI-01][CAMERA-01]`
+
+- `[최신 사용자 정정]` 사용자는 픽셀 목표를 무시하고 AI가 범용성을 이유로3D로만든것인지 지적했다. 담당AI는 요구를구현편의판단으로대체한잘못을인정했다. PixelLab완성사물스프라이트나3D→pixel완성단계는없다. 추가생성/구현중단, 디자인합격/완료커밋없음. 자세한현재상태·다음분기는 `docs/references/urban_pipeline_handoff.md`에집중한다.
+- `[실제 제작]` PixelLab MCP TilesPro job f9eb76e3-4443-4a61-a070-7db94bcee95e의64px정사각재질16장→무손실atlas, 밀도32texel/m/2m반복. Blender5.2스크립트로11소품+나무의실제3D형상저작. PixelLab이미지에서3D를복원한것이아니다. Unity기존절차건물/새CoherentUrbanBuilding prefab, 기존primitivePrototypeStreetLamp와기존게임playasset유지.
+- `[도시/의미 구현]` Ground4연결BlockMap→같은block의OBB필지→같은정면frame의건물/문/소품. 40m대각부지수용실패반례후전체290m유지/node48m. Medical1/Office24/Residential28/Retail28/Workshop35. 실제방벽/실내역할연결그래프/2층바닥/계단은없다. generator11/checkpoint1007로기존복구버전거부, None0/Medical1과spawn/loot권위유지는코드검토.
+- `[Play Mode 호출 확인]` seed1462661998, hash14583068C88F2EB4 repeat동일, 116건물/470실제3D소품/대각접도필지1. 좌표frame/vertexvolume오류0·실제벽/지붕침투0, .2m단차, 동일PlayerMovement→CharacterController문통과, 문밖→중앙NavMesh경로통과. 45Block은작은Ground섬포함연결성분수다.
+- `[기술 반례 수정]` Texture2D.whiteTexture가style직렬화후null인문제는영구PaintWhite.asset와metric검사로수정. 카메라near평면의지붕/지면잘림은실제renderer높이bounds→직교시선축후퇴로수정했다. 같은Camera/offset/rotation/zoom을보존하고Zoom뒤Follow[50]적용. 6case(zoom3.5/8×pitch10/35/80) near/far실패0, 화면XY최대차1.02894e-6, 깊이제약해제복원통과. 문/물리검사는변경되지않아반복하지않았다.
+- `[증거/중단]` `LocalOnly/UrbanDesign09/technical.json`, `camera-technical.json`, `Final/`실제화면. state-v4는user_review ticket db3a23e154064d4bb90917cb6c98fb86에서사용자요청으로paused; accepted미제출. v2 repair입력누락과v3렌더추가반례를보존하고무의미재생성은하지않았다. Play종료/backgroundfalse복원. 원본/D08/사용자dirty보존. 물리키/전체Recovery/모든seed/GPU/build/실내역할/최종픽셀출력미검증또는미구현이다.
 ## 156. D22 기지의 고정 PNG와 실제 3D 조명 비교 `[PIXEL-01]`
 
 - `[요청/구현]` 기지 기존 램프 옆에 A 고정 명암 PNG / B 실제12메시를 저장했다. 원재료4색 grain과 동적 normal·shadow·local 조명을 분리한 URP 셰이더, 고정96PPU 투영과 실제 게임 카메라 촬영을 `Tools/PixelUnityProbe` 그래프로 연결했다. 최종 PNG를 B의 재질로 사용하지 않는다.
@@ -2466,3 +2484,28 @@ Interactable (abstract base class)
 - `[구현]` 기존 URPToonLit에 기본값0인 `_ShadowScreenCellSize`를 추가했다. 화면 셀 중심을 inverseVP near/far 광선으로 복원한 뒤 실제 평면과 교차시켜 주광 shadow lookup 위치만 고정한다. GameMap1 Ground에만 원래 재료를 복사한 GroundPixelShadow(size2)를 연결했으며 원본 Small Ground/texture/Tint/LightPower는 보존했다. 몸체/무늬/배치/카메라/광원/그림자세기/PCF 변경은 없다.
 - `[실행]` Unity shader compile 및 최종 Console Error/Exception/Assert0. 실제 Play camera(45,350,0)/size5, body8개 size2, shadow2/원본0와 재료 속성 동일을 반환했다. `LocalOnly/WorkLoop/desk-shadow26/preview.png`에 실제 Game View 1회. 사용자 피드백 대기이며 그림자 품질 자동 합격은 아니다.
 - `[범위]` 같은 Ground의 모든 주광 그림자에 적용된다. 곡면·추가광·SSAO·모든 플랫폼은 미검증/비대상이다. 근평행 ray는 원샘플 유지. 연구 D26과 Tools/PixelUnityProbe에 입력·식·실패조건을 기록했다.
+
+## 160. A27 도심 용도별 평면도·실제 2층 프로토타입 `[MAP-01][POI-01]`
+
+- `[요구/연구]` 사용자 요청은 미완성 도심의 설계도·방 분리·넓은 내부·실제 2층·마트/경찰서/주차장 프로토타입이다. 기존 road graph/OBB 필지를 유지하고 architectural program→직교 평면도→동일 원본의 Mesh/Collider→기존 NavMesh를 채택했다. CGA 외관 문법과 WFC 국소 패턴만으로 전체 동선을 보장할 수 없어 주 구조에 채택하지 않았다. 자료·수학·50종 카탈로그 확장안은 `docs/references/urban_architecture_prototype.md`.
+- `[구현]` `UrbanArchitecturePlan`은 마트 1층(판매/창고/직원), 경찰·주거 2층(각6개 기능 방과6개 홀/복도) 및 별도 주차 필지를 기존 layout에 연결한다. 생성 버전12, atlas checkpoint 버전1008, plan stable hash 포함. 대표 건물은 14×12m 이상 필지만 선택하며 강제 축소하지 않는다. 기본 문1.6m/복도2.4m/계단2.2m/층고3.4m. 실제 상층 slab는 계단 영역을 제외하고 시각 단과 이동 ramp Collider는 같은 시작·끝을 쓴다. 기존 Player/입력/카메라/재료·Medical 보상 owner를 유지한다.
+- `[사용자 정정/실패 보존]` 사용자가 계단 접근·임의 설계를 지적했다. v1은 계단 왕복 자체는 통과했지만 경찰 상층 방 PathPartial와 주거 침실 중심 목표 실패가 남았다. `readback-v1.json` 보존. SF Planning Trocadero 보고서 p23의 현관→계단홀→직선계단→상층복도 유형을 참고해 낮은 계단 끝을 앞 로비로 연결했다. 하층 벽을 상층 slab 아래까지로 제한하여 벽 top의 coplanar NotWalkable 경계를 제거했고 방 도착점은 가구가 놓일 수 있는 중심 대신 문 안쪽 WalkAnchor로 정의했다. 각 개별 가설의 분리실험 없이 복합 수정 후 대표 동작을 확인한 것이므로 단일 원인을 독립 입증했다고 확대하지 않는다.
+- `[실행]` `LocalOnly/WorkLoop/urban-architecture27/readback.json`: seed1462661998 대표 마트3/경찰12/주거12 공간 도달, 두 계단 상승·하강/NavMesh 연결, 주차 보행 진입, prop/wall 침투0, 층별 floor/roof 숨김·복원과 Collider 유지. 기존 Player/Camera 참조 및 정상 도심 카메라(30°,45°,0°)/size5 유지. **Play Mode 호출 확인**이며 물리키 조작과 전 seed/Recovery 복구 테스트는 미실행. Console Error/Exception/Assert0 확인. 기존 최종 관측 후 legacy 장식 metadata에서 새 평면도 소유 건물의 미사용 slot을 제외했으며 장면 기하는 동일하다.
+- `[출력/재개]` `floorplans.json/png`는 실제 plan 데이터에서 작성했다. `supermarket/police/residential/parking.png`는 정상 Game View, 기존 게임 조명 그대로다. Unity 메뉴 `Tools/Urban Architecture/Inspect ...`로 같은 Player를 해당 관찰점에 이동한다. 기존 도심 아트를 재사용한 구조 시제품이며 완성 픽셀 아트나 용도50종 완료가 아니다. 주방/욕실/경찰 특수설비·창호·하역/차량진입 세부·더 다양한 평면도는 남았다. `state-v2.json` 기술 관측 뒤 사용자 외형/동선 판단으로 인계하며 자동 시각 합격하지 않는다. 기존 미커밋 도심 코드·미추적 에셋 의존성이 있어 이번 파일만 독립 로컬 커밋하지 않는다.
+- `[사용자 확정]` 후속 답변 “구조 유지, 세부 설비·디자인은 다음 작업”을 수신해 현재 계단·방·복도 구조를 프로토타입 기준으로 확정했다. 실제 답변을 WorkLoop review에 기록했고 새 시각 보정·설비 구현·Unity 재검증은 하지 않았다. 완성 아트 승인과 구분한다.
+
+## 161. A28 크기별 상가 평면·기본 설비·서비스 출입 `[MAP-01][POI-01]`
+
+- `[요구/설계]` 건물별 크기/설계도를 현실 건축 참고로 구성하고 상가를 먼저 하라는 요청. 공식 상가 도면/설계설명 4건의 판매·접객·지원·WC·납품 역할을 참조했다. 도면 이미지가 아닌 PDF 추출 텍스트 확인이며 좌우 배치를 그대로 복제하거나 건축 법규 인증을 주장하지 않는다. 근거/계산식/계약은 `docs/references/urban_architecture_prototype.md` A28.
+- `[구현]` `UrbanCommercialFloorPlans`의 마트(후방 횡복도), 카페(접객/주문/주방), 소매점(후방 종복도) 3유형, 기존 OBB의 실제12~18×10~14m 적용. 방·partition·납품문은 한 plan에서 mesh/collider를 만든다. 일반실최소2.4m/복도1.8m/문1.6m/납품문1.8m, 고객 WC가 주방·창고·직원실을 필수 경유하지 않는 BFS. generator13/checkpoint1009. 의료 POI·기존 경찰/주거·도로·Player/Camera 경로 유지.
+- `[설비]` 기존 선반/책상 unit scale 재사용. 변기·세면대·조리싱크/작업대·주문/계산대·테이블/의자는 별도 고정치수 기하 프로토타입이다. 카운터가 공개구역 뒤 문을 막거나 주방 기구가 납품문 양쪽을 침범하는 반례를 수정: 모든 partition 문폭×양쪽1.4m, 납품문 전체폭×내측1.9m를 배치 제외 영역으로 예약. 완성 픽셀 가구라는 주장은 하지 않는다.
+- `[검증]` 3유형×4폭×3깊이=36 평면조합 통과. seed1462661998 상가30개/8크기, 전체plan 유효/배치누락0. 대표마트16×14m 5공간·카페12×10m 7공간·소매12×12m 5공간의 정문→모든방→납품문→외부→정문 복귀를 실제 기존 StepMove/CharacterController로 관측. 대표 prop-wall/prop-prop 침투0, 가림/Collider 보존, 같은Player/Camera 및 30°/45°/size5 유지. A27 저장 경찰/주거 plan을 같은크기로 재계산해 방/벽/계단 동일 확인. Console Error/Exception/Assert0. 물리키·전seed·30곳모두의실제이동·Recovery/빌드는 미실행.
+- `[관측/실패보존]` `LocalOnly/WorkLoop/urban-commercial28/readback.json` SHA256 `CFC8FC7A33B514E42A80CC819B3C9CC74C06917056C2C2AC348437036DDDA299`. 초기 씬 도착 전 frame2 NavMesh미준비 실패는 `readback-before-arrival.json` 보존; 실제20프레임으로 기존 초기화 완료와 NavReady 확인 후 최종관측. ScreenCapture 지연으로 마트는 GameView, 카페/소매는 실제동일카메라 URP SingleCameraRequest(overlayUI 제외)로 저장. 각도/줌/targetTexture설정/조명을 변경하지 않았다.
+- `[그래프/전달]` 원 그래프에서 읽기입력 design.md를 결과 기록으로 갱신해 의존성이 무효화되었다. 원 state 정지 보존; 고정 checker/실제 관측을 그대로 소비하는 검증 인계 graph를 실행해 exit0/errors[] 확인. `validation-state.json`의 review ticket `0eb7337347ac442eaf669f0a4b9787bc`는 사용자 외형/배치 답변 대기. PNG3개·동일축척floorplans.png 및 `Tools/Urban Architecture/Inspect Cafe / Retail Shop / Supermarket` 제공. 이후 주거 세부·다층상가·창호·최종픽셀설비·차량하역은 후속. 기존 미커밋/미추적 도심 의존성을 임의 stage하지 않아 로컬 커밋은 보류했다.
+
+## 162. Unity 네이티브 종료 후 작업 보존·재진입 확인 `[MAP-01][POI-01]`
+
+- `[사실]` 2026-09-20 16:26 네이티브 크래시. 마지막 managed stack Event.get_keyCode→GUIView.ProcessEvent이며, 직전 dt assertion/PlayerMovement 인자예외와 직접 인과관계는 미확정이다. 근거 없이 이동 코드를 변경하지 않았다.
+- `[복구]` 최신 `_Recovery/0 (2).unity`와 저장 GameMap1 SHA256 동일, 상가 소스/에셋/참조 유지. 손실 확인 없이 덮어쓰지 않았다. `LocalOnly/Recovery/20260920-editor-recovery/`에 원본·복구본·dump·변경 ZIP215파일·해시 목록을 보존했다. 기지씬 큰diff는533개동일fileID의블록순서가대부분이며 실제값7블록만변경되어 기존광원/렌더레이어값을 보존한다.
+- `[Play Mode 호출 확인]` 정상 기지→도심 진입1회, seed1462661998/115동/상가30/3유형/NavMesh준비, 같은Player/Camera와30°/45°카메라유지. 누락스크립트0·깨진직렬화참조0·Console오류0. 기존상가전체방동선검증은 재실행하지 않고 §160~161을 재사용했다. 확인 후 Play종료, 저장된기지편집상태복귀.
+- `[기록/미완료]` 사용자의명시요청으로 미커밋도심코드·에셋의존성과현재기지상태를 로컬커밋대상으로 정리했다. 공유문서의무관한변경과캐릭터/책상실험은 분리한다. 크래시원인수정·가구밀도/체감비율·최종아트는 미완료다. 상세근거는 `docs/references/unity_editor_recovery_20260920.md`.

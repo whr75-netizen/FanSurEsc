@@ -19,6 +19,7 @@ namespace FantasySurvival.WorldGeneration
         private readonly List<Vector2[]> acceptedQuads = new List<Vector2[]>();
         private UrbanSurfaceGrid grid;
         private IsometricUrbanStyle.AtlasPatch[] markingPatches;
+        private bool metricPaint;
 
         public int YellowQuadCount { get; private set; }
         public int WhiteQuadCount { get; private set; }
@@ -67,6 +68,9 @@ namespace FantasySurvival.WorldGeneration
             UrbanSurfaceGrid displayGrid)
         {
             grid = displayGrid ?? layout.SurfaceGrid;
+            metricPaint = style.useMetricRoadPaint;
+            if (metricPaint && (style.yellowLine?.texture == null || style.whiteLine?.texture == null || style.crosswalk?.texture == null))
+                throw new InvalidOperationException("Metric road paint requires persistent marking textures; legacy atlas coordinates do not apply.");
             Texture2D atlas = style.road.texture;
             markingPatches = new[]
             {
@@ -168,7 +172,8 @@ namespace FantasySurvival.WorldGeneration
                 mesh.RecalculateBounds();
                 meshes.Add(mesh);
                 Material material = style.CreateMaterial(markingPatches[kind], false,
-                    "Road " + (MarkKind)kind + " Source Atlas", Color.white);
+                    "Road " + (MarkKind)kind + " Source Atlas", metricPaint
+                    ? (kind==0 ? new Color(.83f,.67f,.32f) : new Color(.82f,.81f,.75f)) : Color.white);
                 materials.Add(material);
                 var surface = new GameObject("Road " + (MarkKind)kind);
                 surface.transform.SetParent(transform, false);
@@ -184,6 +189,32 @@ namespace FantasySurvival.WorldGeneration
             Vector2 normal, float lineStart, float lineEnd, float roadWidth, float tile, float height)
         {
             if (lineEnd <= lineStart + 0.0001f) return;
+            if(metricPaint)
+            {
+                // Physical paint widths are independent of the two-metre terrain cells.
+                const float stroke=.125f;
+                if(roadWidth>=9f)
+                {
+                    AddCandidate(batches,MarkKind.Yellow,origin,tangent,normal,lineStart,lineEnd,-.1875f,-.0625f,height);
+                    AddCandidate(batches,MarkKind.Yellow,origin,tangent,normal,lineStart,lineEnd,.0625f,.1875f,height);
+                    float parkingBoundary=roadWidth*.5f-2f;
+                    foreach(float side in new[]{-1f,1f})
+                        Dashes(MarkKind.White,side*parkingBoundary,3f,6f);
+                }
+                else Dashes(MarkKind.Yellow,0f,3f,6f);
+                return;
+
+                void Dashes(MarkKind kind,float lateral,float length,float period)
+                {
+                    float phase=Vector2.Dot(origin,tangent);
+                    float first=Mathf.Floor((phase+lineStart)/period)*period-phase;
+                    for(float d=first;d<lineEnd;d+=period)
+                    {
+                        float a=Mathf.Max(lineStart,d),b=Mathf.Min(lineEnd,d+length);
+                        if(b>a)AddCandidate(batches,kind,origin,tangent,normal,a,b,lateral-stroke*.5f,lateral+stroke*.5f,height);
+                    }
+                }
+            }
             float phase = Vector2.Dot(origin, tangent);
             float first = Mathf.Floor((phase + lineStart) / tile) * tile - phase;
             for (float distance = first; distance < lineEnd - 0.0001f; distance += tile)
@@ -204,6 +235,14 @@ namespace FantasySurvival.WorldGeneration
         private void AddCrosswalk(GeometryBatch[] batches, Vector2 origin, Vector2 tangent,
             Vector2 normal, float distance, float roadWidth, float tile, float height)
         {
+            if(metricPaint)
+            {
+                float half=roadWidth*.5f-.5f;
+                for(float across=-half;across<half;across+=1f)
+                    AddCandidate(batches,MarkKind.Crosswalk,origin,tangent,normal,distance,distance+2f,
+                        across,Mathf.Min(across+.5f,half),height);
+                return;
+            }
             // Crosswalk sampling swaps the two source axes below; the stripe axis
             // follows road travel while repetition spans the road width.
             // Repeat full-size patches laterally and crop the last patch instead of stretching it.

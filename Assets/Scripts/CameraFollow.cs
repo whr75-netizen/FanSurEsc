@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 [DisallowMultipleComponent]
+[DefaultExecutionOrder(50)] // CameraZoomController applies the current size before clipping/position.
 public class CameraFollow : MonoBehaviour
 {
     public Transform target;
@@ -24,6 +25,11 @@ public class CameraFollow : MonoBehaviour
     private float pitch;
     private CursorLockMode previousCursorLock;
     private bool previousCursorVisible;
+    private Camera viewCamera;
+    private Transform clippingScope;
+    private bool hasClippingBounds;
+    private Bounds clippingBounds;
+    private float originalFarClip;
 
     public bool IsOrbiting => orbiting;
     public float Pitch => pitch;
@@ -103,8 +109,7 @@ public class CameraFollow : MonoBehaviour
         transform.rotation = rotation;
         offset = rotation * cameraSpaceOffset;
         ReadAnglesFromTransform();
-        if (target != null)
-            transform.position = target.position + offset;
+        ApplyPosition();
     }
 
     public void RestoreViewOrientation(Quaternion rotation, Vector3 restoredOffset)
@@ -115,8 +120,46 @@ public class CameraFollow : MonoBehaviour
         offset = restoredOffset;
         cameraSpaceOffset = Quaternion.Inverse(rotation) * restoredOffset;
         ReadAnglesFromTransform();
-        if (target != null)
-            transform.position = target.position + offset;
+        ApplyPosition();
+    }
+
+    public void SetOrthographicClippingBounds(Transform scope, Bounds worldBounds)
+    {
+        if (viewCamera == null) viewCamera = GetComponent<Camera>();
+        if (!hasClippingBounds) originalFarClip = viewCamera.farClipPlane;
+        clippingScope = scope;
+        clippingBounds = worldBounds;
+        hasClippingBounds = true;
+        ApplyPosition();
+    }
+
+    public void ClearOrthographicClippingBounds(Transform scope)
+    {
+        if (!hasClippingBounds || clippingScope != scope) return;
+        hasClippingBounds = false;
+        clippingScope = null;
+        if (viewCamera != null) viewCamera.farClipPlane = originalFarClip;
+        ApplyPosition();
+    }
+
+    private void ApplyPosition()
+    {
+        if (target == null) return;
+        Vector3 position = target.position + offset;
+        if (hasClippingBounds && clippingScope == null) ClearOrthographicClippingBounds(clippingScope);
+        if (hasClippingBounds && viewCamera != null && viewCamera.orthographic && transform.forward.y < -0.001f)
+        {
+            // Parallel translation preserves orthographic screen XY, zoom and the authored offset.
+            float downward = -transform.forward.y;
+            float verticalExtent = viewCamera.orthographicSize *
+                (Mathf.Abs(transform.up.y) + viewCamera.aspect * Mathf.Abs(transform.right.y));
+            float nearBottom = position.y - viewCamera.nearClipPlane * downward - verticalExtent;
+            float retreat = Mathf.Max(0f, (clippingBounds.max.y + 0.01f - nearBottom) / downward);
+            position -= transform.forward * retreat;
+            float requiredFar = (position.y + verticalExtent - clippingBounds.min.y + 0.01f) / downward;
+            viewCamera.farClipPlane = Mathf.Max(originalFarClip, requiredFar);
+        }
+        transform.position = position;
     }
 
     private bool CanAcceptOrbitInput()
@@ -132,8 +175,7 @@ public class CameraFollow : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (target != null)
-            transform.position = target.position + offset;
+        ApplyPosition();
     }
 
     [ContextMenu("Reset View")]
@@ -146,8 +188,7 @@ public class CameraFollow : MonoBehaviour
         offset = initialOffset;
         transform.rotation = initialRotation;
         ReadAnglesFromTransform();
-        if (target != null)
-            transform.position = target.position + offset;
+        ApplyPosition();
     }
 
     private void ReadAnglesFromTransform()

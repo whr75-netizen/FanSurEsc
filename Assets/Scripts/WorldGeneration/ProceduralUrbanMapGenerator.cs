@@ -44,19 +44,21 @@ namespace FantasySurvival.WorldGeneration
 
         [Header("Fixed Tile Map")]
         [SerializeField, Min(17)] private int mapTilesPerAxis = 145;
-        [SerializeField, Min(2)] private int blocksPerAxis = 6;
+        [SerializeField, Min(2)] private int blocksPerAxis = 5;
         [SerializeField, Min(1)] private int borderTiles = 12;
         [SerializeField, Min(0.25f)] private float tileWorldSize = 2f;
 
         [Header("Optional Isometric Atlas Prototype")]
         [SerializeField] private IsometricUrbanStyle isometricStyle;
+        [SerializeField] private UrbanBuildingPrefab enterableBuildingPrefab;
         public IsometricUrbanStyle IsometricStyle => isometricStyle;
-        public int CheckpointGeneratorVersion => isometricStyle != null ? 1005 : CurrentLayout.GeneratorVersion;
+        public UrbanBuildingPrefab EnterableBuildingPrefab => enterableBuildingPrefab;
+        public int CheckpointGeneratorVersion => isometricStyle != null ? 1009 : CurrentLayout.GeneratorVersion;
         private UrbanOcclusionFader occlusionFader;
 
         [Header("Octilinear Road Graph")]
-        [SerializeField, Min(7)] private int secondaryRoadWidthTiles = 7;
-        [SerializeField, Min(7)] private int primaryRoadWidthTiles = 9;
+        [SerializeField, Min(3)] private int secondaryRoadWidthTiles = 3;
+        [SerializeField, Min(3)] private int primaryRoadWidthTiles = 5;
         [SerializeField, Range(0f, 1f)] private float additionalRoadChance = 0.65f;
         [SerializeField, Range(0f, 1f)] private float diagonalRoadChance = 0.2f;
         [SerializeField, Min(1)] private int sidewalkWidthTiles = 1;
@@ -65,10 +67,10 @@ namespace FantasySurvival.WorldGeneration
         [SerializeField] private GameObject[] buildingVisualPrefabs;
         [SerializeField, Min(0f)] private float buildingSetback;
         [SerializeField, Min(0f)] private float lotGap;
-        [SerializeField, Min(3)] private int minBuildingFrontageTiles = 4;
-        [SerializeField, Min(3)] private int maxBuildingFrontageTiles = 5;
-        [SerializeField, Min(3)] private int minBuildingDepthTiles = 4;
-        [SerializeField, Min(3)] private int maxBuildingDepthTiles = 4;
+        [SerializeField, Min(3)] private int minBuildingFrontageTiles = 6;
+        [SerializeField, Min(3)] private int maxBuildingFrontageTiles = 9;
+        [SerializeField, Min(3)] private int minBuildingDepthTiles = 5;
+        [SerializeField, Min(3)] private int maxBuildingDepthTiles = 7;
         [SerializeField, Range(0f, 1f)] private float buildingDensity = 1f;
         [SerializeField, Min(1f)] private float minBuildingHeight = 10.5f;
         [SerializeField, Min(1f)] private float maxBuildingHeight = 18f;
@@ -79,6 +81,7 @@ namespace FantasySurvival.WorldGeneration
         [SerializeField] private bool instantiateStreetTrees = true;
         [SerializeField] private bool instantiateStreetLamps = true;
         [SerializeField] private GameObject streetLampPrefab;
+        [SerializeField] private GameObject streetTreeVisualPrefab;
         [FormerlySerializedAs("instantiatePrototypeStreetFurniture")]
         [SerializeField] private bool instantiatePrototypeClutter;
         [SerializeField, Min(1)] private int junctionFurnitureClearanceTiles = 3;
@@ -534,7 +537,9 @@ namespace FantasySurvival.WorldGeneration
                 streetTreeSpacingTiles,
                 streetLampSpacingTiles,
                 clutterSpacingTiles,
-                clutterChance);
+                clutterChance,
+                isometricStyle != null && enterableBuildingPrefab != null
+                    ? enterableBuildingPrefab.Snapshot(isometricStyle) : null);
         }
 
         private List<Vector2> CollectProtectedWorldPositions()
@@ -882,6 +887,16 @@ namespace FantasySurvival.WorldGeneration
 
         private void CreateBuildings(UrbanMapLayout layout)
         {
+            if (isometricStyle != null && layout.Architecture != null && layout.Architecture.ParkingParcelIndex >= 0)
+            {
+                int parcelIndex = layout.Architecture.ParkingParcelIndex;
+                UrbanParcelPlacement parcel = layout.Parcels[parcelIndex];
+                var parking = new GameObject("Prototype_Parking");
+                parking.transform.SetParent(generatedContent, false);
+                parking.transform.localPosition = new Vector3(parcel.Center.x, SurfaceHeight + PavementElevation, parcel.Center.y);
+                parking.transform.localRotation = Quaternion.Euler(0, parcel.Bounds.LocalYawDegrees, 0);
+                parking.AddComponent<UrbanParkingLot>().Build(parcel, parcelIndex, isometricStyle);
+            }
             bool hasMedicalPoi = layout.TryGetPoi(
                 UrbanPoiKind.Medical,
                 out UrbanPoiPlacement medicalPoi);
@@ -893,12 +908,14 @@ namespace FantasySurvival.WorldGeneration
                 CreateBuilding(
                     isMedicalPoi
                         ? $"Building_{index:000}_MedicalPoi"
-                        : $"Building_{index:000}_Palette_{building.PaletteIndex}",
+                        : $"Building_{index:000}_{building.Kind}",
                     building,
                     layout.Parcels[building.SourceParcelIndex].FacadeDirection,
                     tint,
                     building.PaletteIndex,
-                    isMedicalPoi);
+                    isMedicalPoi,
+                    layout,
+                    index);
             }
         }
 
@@ -935,6 +952,11 @@ namespace FantasySurvival.WorldGeneration
                     case UrbanStreetFurnitureKind.StreetTree:
                         colliderSize = new Vector3(0.8f, 4.5f, 0.8f);
                         colliderCenter = new Vector3(0f, 2.25f, 0f);
+                        if (streetTreeVisualPrefab != null)
+                        {
+                            Instantiate(streetTreeVisualPrefab,root.transform,false);
+                            break;
+                        }
                         CreatePrimitive(
                             "Trunk",
                             PrimitiveType.Cylinder,
@@ -1043,7 +1065,7 @@ namespace FantasySurvival.WorldGeneration
             float height = GetSurfaceHeight(grid.GetKind(x, z));
             foreach (UrbanBuildingPlacement building in CurrentLayout.Buildings)
             {
-                Vector2 d = localPosition - building.Center;
+                Vector2 d = building.ToLocal(localPosition);
                 if (Mathf.Abs(d.x) < building.Size.x * .5f && Mathf.Abs(d.y) < building.Size.y * .5f)
                     return SurfaceHeight + PavementElevation + EnterableSpriteBuilding.FloorLift;
             }
@@ -1179,16 +1201,26 @@ namespace FantasySurvival.WorldGeneration
             Vector2 facadeDirection,
             Color tintColor,
             int paletteIndex,
-            bool reserveFacadeCenter = false)
+            bool reserveFacadeCenter = false,
+            UrbanMapLayout layout = null,
+            int buildingIndex = -1)
         {
-            var root = new GameObject(objectName);
+            var root = isometricStyle != null && enterableBuildingPrefab != null
+                ? Instantiate(enterableBuildingPrefab.gameObject) : new GameObject(objectName);
+            root.name = objectName;
             root.transform.SetParent(generatedContent, false);
             root.transform.localPosition = new Vector3(building.Center.x,
                 isometricStyle != null ? SurfaceHeight + PavementElevation : 0f, building.Center.y);
+            root.transform.localRotation = Quaternion.Euler(0f, building.LocalYawDegrees, 0f);
             if (isometricStyle != null)
             {
-                var room = root.AddComponent<EnterableSpriteBuilding>();
-                room.Build(isometricStyle, building.Size, facadeDirection, tileWorldSize, tintColor, occlusionFader, reserveFacadeCenter, building.Height);
+                var room = root.GetComponent<EnterableSpriteBuilding>();
+                if (room == null) room = root.AddComponent<EnterableSpriteBuilding>();
+                UrbanFloorPlan plan = layout?.Architecture?.FindForBuilding(buildingIndex);
+                if (plan != null) root.name = "Prototype_" + plan.Program + "_" + buildingIndex;
+                room.Build(isometricStyle, building.Size, Vector2.up, tileWorldSize, Color.white, occlusionFader,
+                    reserveFacadeCenter, building.Height, building.Kind, plan, enterableBuildingPrefab);
+                if (plan == null && enterableBuildingPrefab != null) root.GetComponent<UrbanBuildingPrefab>().Populate(layout, buildingIndex);
                 return;
             }
             root.tag = "Obstacle";
@@ -1206,11 +1238,7 @@ namespace FantasySurvival.WorldGeneration
                 buildingVisualPrefabs.Length)];
             var visualRoot = new GameObject("BuildingVisual");
             visualRoot.transform.SetParent(root.transform, false);
-            float facadeYaw = Mathf.Atan2(facadeDirection.x, facadeDirection.y) * Mathf.Rad2Deg;
-            visualRoot.transform.localRotation = Quaternion.Euler(
-                0f,
-                facadeYaw,
-                0f);
+            visualRoot.transform.localRotation = Quaternion.identity;
 
             GameObject visual = Instantiate(prefab, visualRoot.transform, false);
             visual.name = $"Prefab_{prefab.name}";

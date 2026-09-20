@@ -117,7 +117,10 @@ RaidCheckpointSceneBinding.Awake          [-10500]
   → generator의 layout-geometry 완료 통지 구독
   → Resume이면 저장된 seed를 generator에 먼저 적용
 ProceduralUrbanMapGenerator.Awake         [-10000]
-  → layout 생성(외곽도로 mask → 필지), geometry(등각: .2m포장/Collider·2층외관·지상층실내·경계밖 표시mesh)
+  → building prefab의 POI/구역/사물 규칙 snapshot
+  → layout(도로 mask → Ground BlockMap → 회전 예약필지/본체 → 용도POI → 허용 소품의 가중 배치)
+  → architectural program/상가별 평면 → 같은 plan의 방·벽·문·슬래브·계단·기본설비 Mesh/Collider
+  → geometry(.2m포장·A27 경찰/주거 실제2층·A28 상가3형·경계밖 표시mesh)
   → LayoutGeometryGenerated 동기 통지
       → seed + stable ID의 spawn manifest 생성
       → manifest 최종 pose에 prefab 생성 후 scene-local runtime registry 원자 등록
@@ -127,6 +130,8 @@ SceneSpawnController.Start                [ -9000]
   → manifest의 Chest 접근점·Enemy 위치까지 개별 NavMesh 경로 확인
   → 최종 Raid 도착 gate
 ```
+
+표시 초기화는 기존 `IsometricUrbanView.LateUpdate[100]`가 실제 Renderer 높이 bounds를 같은 `CameraFollow`에 연결한다. Zoom의 LateUpdate 뒤 Follow[50]가 직교 화면XY를 유지하며 near/far 범위에 맞춰 깊이 위치만 계산한다. 맵 표시 해제 시 해당 bounds/far와 기존뷰를 복원한다. D09의 최종 픽셀 표현은 미승인이다. 이후 사용자 요청으로 A27 실제2층·A28 상가3형을 구현했다. 현재 구조와 비율/아트 후속은 `docs/references/urban_architecture_prototype.md`가 담당한다.
 
 Raid의 `SceneManager.sceneLoaded` 호출은 아무것도 확정하지 않고 반환하며 위 순서의 `Start`만 `Ready/Invalid`를 판정한다. Generator `Start` 뒤에도 `Pending`이면 안전하지 않은 도착으로 보아 Invalid와 같은 복귀/보류 경계로 보낸다. 실행 순서 숫자보다 `RaidCheckpointSceneBinding.GetArrivalReadiness` 결과가 권위다.
 

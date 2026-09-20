@@ -359,6 +359,14 @@ namespace FantasySurvival.WorldGeneration
 
         [Header("Source atlases and authored planar landmarks")]
         public Shader surfaceShader;
+        [Header("Canonical square material kit")]
+        public bool useMetricRoadPaint;
+        [Min(1f)] public float texelsPerMetre = 32f;
+        public AtlasPatch plasterWall;
+
+        public AtlasPatch WallFor(UrbanPoiKind kind) => plasterWall != null && plasterWall.texture != null &&
+            (kind == UrbanPoiKind.Medical || kind == UrbanPoiKind.Retail || kind == UrbanPoiKind.Office)
+            ? plasterWall : wall;
         // XZ quad order is SW, NW, NE, SE. At yaw 45 this maps to image bottom, left, top, right.
         // These are source surface annotations; the painted tile thickness is deliberately excluded.
         public AtlasPatch ground = RoadPatch();
@@ -479,6 +487,15 @@ namespace FantasySurvival.WorldGeneration
             {
                 if (patches[i] == null) { error = names[i] + ": patch is missing."; return false; }
                 if (!patches[i].TryValidate(out error)) { error = names[i] + ": " + error; return false; }
+            }
+            if (useMetricRoadPaint)
+            {
+                AtlasPatch[] paint = { yellowLine, whiteLine, crosswalk };
+                for (int i = 0; i < paint.Length; i++)
+                {
+                    if (paint[i]?.texture == null) { error = "Metric road paint requires a persistent texture for every marking patch."; return false; }
+                    if (!paint[i].TryValidate(out error)) { error = "Metric road paint: " + error; return false; }
+                }
             }
             SurfaceVariantCatalog[] catalogs = { groundVariants, sidewalkVariants, roadVariants };
             AtlasPatch[] familyBases = { ground, sidewalk, road };

@@ -22,7 +22,7 @@ public static partial class PixelDeskLightingProbe
     static string captureOutput;
     static bool oldRunInBackground;
     static CameraClearFlags oldClear;static AntialiasingMode oldAntialias;
-    static readonly string[] Cases={"baseline","local_on","opposite","albedo","shadow","incident","incident_local","context"};
+    static string[] Cases={"baseline","local_on","opposite","albedo","context"};
     [Serializable] public class CaptureEvidence
     {
         public string status,error,camera,scene;
@@ -43,7 +43,7 @@ public static partial class PixelDeskLightingProbe
     public static void BeginCapture()
         => BeginCaptureTrial("trial-"+DateTime.UtcNow.ToString("yyyyMMdd-HHmmss"));
 
-    public static void BeginCaptureTrial(string trial)
+    public static void BeginCaptureTrial(string trial, bool previewOnly=false)
     {
         if(string.IsNullOrEmpty(trial)||trial.Any(c=>!char.IsLetterOrDigit(c)&&c!='-'))throw new ArgumentException("Use a simple trial name.");
         captureOutput=OutputPath+"/"+trial;
@@ -52,6 +52,7 @@ public static partial class PixelDeskLightingProbe
         if(testCamera!=null) throw new InvalidOperationException("A comparison is already running.");
         var root=GameObject.Find(RootName);if(root==null) throw new InvalidOperationException("D22 comparison not present in base.");
         if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name!="GameMap1") throw new InvalidOperationException("Base scene required.");
+        Cases=previewOnly?new[]{"context"}:new[]{"baseline","local_on","opposite","albedo","context"};
         testCamera=PersistentGameplayShell.Instance.PlayerCamera;
         oldRunInBackground=Application.runInBackground;Application.runInBackground=true;
         var extra=testCamera.GetUniversalAdditionalCameraData();
@@ -99,9 +100,9 @@ public static partial class PixelDeskLightingProbe
     }
     static void ConfigureCase()
     {
-        string name=Cases[phase];local.enabled=name=="local_on"||name=="context"||name=="incident_local";
+        string name=Cases[phase];local.enabled=name=="local_on"||name=="context";
         sun.transform.rotation=name=="opposite"?Quaternion.AngleAxis(180,Vector3.up)*sunRotation:sunRotation;
-        foreach(var m in modelMaterials)m.SetFloat("_DiagnosticMode",name=="albedo"?1:name=="shadow"?2:name.StartsWith("incident")?3:0);
+        foreach(var m in modelMaterials)m.SetFloat("_DiagnosticMode",name=="albedo"?1:0);
         testCamera.cullingMask=name=="context"?oldMask:1<<ProbeLayer;
         nextFrame=Time.frameCount+4;
     }

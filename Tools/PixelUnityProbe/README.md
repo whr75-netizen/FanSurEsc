@@ -1,5 +1,29 @@
 # D22 기지 씬의 이미지 / 실제 기하 조명 비교
 
+## D25 현재 — 원래 Play 카메라의 8방향
+
+기존 D22/D23 캡처는 PlayerCamera 객체를 사용했지만 회전·위치·직교 크기·출력을 바꾼 통제 실험이었다. 사용자 Play 화면과 같다는 판정은 잘못됐다. 현재는 `ScreenCapture.CaptureScreenshot`으로 원래 Game View/UI를 그대로 저장한다. 기본 회전 `(45,350,0)`, orthographicSize `5`, offset `(2,10,-10)`이다.
+
+`GameMap1/PixelDeskEightDirections_D24`의 8개 실제 책상은 Y 회전 0~315도/45도 간격이다. 이전 2개 비교는 보존/비활성화했다. 처음 두 배치는 기존 기둥과 큰 시험 구조물에 가려 실패했고 캡처를 보존했다. 최종 공통 루트 `(15,0,0)`은 동쪽 빈 바닥이며 8개는 X 약11.3~20.2, Z 약-5.1~-0.9에 있다. 기존 플레이어의 `TryTeleport`와 `CameraFollow`로 살펴봤으며 시작 spawn/카메라 설정은 바꾸지 않았다. 다시 살펴보려면 Play 후 **Tools → Pixel Desk → Inspect Eight Directions with Normal Player Camera**를 실행한다.
+
+셀 모드에서 고정 시점 1px 경계 mask를 제외하고 실제 box part/face ID(1..72)를 기존 단일 소유자 cell 경계에 연결했다. 합성한 전체 셀에 stencil bit2를 기록해 후속 로컬광의 부분 재적용을 막는다. 목재/형상/조명식/2px 크기/기존 외곽선 색은 유지한다. 셀보다 가는 형상의 소실과 임의 곡면 지원까지 해결한 것은 아니다.
+
+실제 결과는 `LocalOnly/WorkLoop/desk-cell-edges25-final/preview.png`, 카메라와 8개 방향·크기 및 12개 part ID 반환은 같은 폴더의 `readback.json`, 실행은 `state-v2.json`이다. 최종 캡처는 게임의 시간 흐름에 따른 어두운 조명 상태이며 밝기를 보정하지 않았다. 셰이더 컴파일과 실제 화면 제출을 확인했으며 외형은 사용자 피드백 대기다. 추가 카메라 조작·반복 보정·미술 자동 합격은 수행하지 않는다.
+
+## D23 수정 계약 — 기존 엔진 조명 재사용
+
+최신 정정: 추가 픽셀 통계/접촉 명암 검사를 중단하고 실제 화면의 픽셀 크기를 우선한다. 기존 `CharacterSilhouetteSubject`와 `CharacterSilhouetteRendererFeature`를 그대로 사용해 책상만 2×2 화면 셀로 표현한다. 캐릭터 전역 설정이나 전체 화면 해상도는 바꾸지 않는다. 실행 진입점은 `Tools/WorkLoop/pipeline.py`의 고정 `pixel_object` 제작 프로필이며, 변경 원인이 없는 상태는 유지한다. 실제 Unity readback → 최종 미리보기 한 장 → 사용자 외형 피드백 대기로 끝난다. AI가 통계로 미술 합격을 선언하지 않는다.
+
+실제 적용: `LocalOnly/WorkLoop/desk-pixel-size-23-v2/state.json`은 apply→present→관측 파일 확인 후 `awaiting_user_visual_feedback`에 도달했다. Unity 런타임에서 `pixelCellSurface=true`, `pixelCellSize=2`를 읽었고 `LocalOnly/PixelUnityProbe22/pixel23/captures/context.png` 한 장을 최종 제출했다. Play 종료/임시 카메라 복원, Console Error/Exception 0. 실제 목재 파일·12개 치수는 보존했다. 사용자 외형 승인은 아직 없다.
+
+픽셀 크기 변경 전 trial23의 RGB 조명 비교에서 주광 방향9,274픽셀/기존로컬광3,710픽셀 변화가 있었다. 이 수치를 픽셀 크기 변경 후 별도 측정으로 확대하지 않는다. 당시 전체 기지 PNG 비교114픽셀 차이는 원본Unlit에 URP SSAO가 적용된 접지부 최대5RGB 차이였다(설치URP `UnlitForwardPass.hlsl:130~133`). 다리의 지면 아래 좌표는 제거됐다. 이후 사용자가 추가검사를 중단시켜 SSAO 대조 촬영은 실행하지 않았으며 이전 false 판정 파일도 보존했다.
+
+사용자 정정으로 D22의 고정 3단계 조명과 바닥을 제외한 합격 판정을 폐기한다. 새 광원 계산을 설계하지 않는다. 기존 캐릭터 adaptive source가 호출하는 `UniversalFragmentPBR`와 RGB `EvaluateSteppedLocalLights(...,0)*.55`를 책상의 기존 재료 입력에 연결한다. URP 주광·추가광·환경광·그림자를 엔진이 계산하고, 목재 UV와 실제 12개 형상 및 기존 shadow/depth pass를 보존한다. 내부선은 조명 후 고정색 덮기가 아닌 조명 전 albedo에 적용한다. 캐릭터의 별도 적응형 화면 후처리는 이번에 복제하지 않는다.
+
+이미지 평면은 수직으로 세운다. 고정 직교뷰의 screen-up `u`, view `d`에서 기존 투영을 보존하는 수직 basis는 `Y/u.y`다. PNG의 가장 아래 불투명 픽셀 경계가 y=0에 오도록 평면 중심을 `d*t`만큼 옮긴다. `t=(원하는 중심 높이-기존 중심 높이)/d.y`이므로 화면 투영은 변하지 않는다. 임의 부위별 offset이나 depth-test 우회는 사용하지 않는다.
+
+작업 그래프: `기존 코드·실패 증거 → 조명 연결/수직 카드 수정 → 실제 기지 전체와 조명 ON/OFF/방향 변경 촬영 → 최종 수치와 실제 이미지 제출`. 목재/형상/픽셀 격자는 유지하고 램프 세기를 올리지 않는다. 마지막 검사는 지면을 포함한 이미지 픽셀 보존, 면별 주광 반응, 로컬광 RGB 반응, 원재료·치수·캐릭터 설정 보존이다. 이전 D22 결과는 실패 이력으로 보존한다.
+
 최신 요청: 최종 명암이 텍스처에 고정됐는지 확인하고, 기지 조명 옆에서 이미지와 실제3D를 비교한다. D21 최종PNG는 baked RGB이고 .blend는 재질 없는12상자다. 승인 목재 자체의 순수albedo는 증명되지 않았다. 원재료4색grain과 조명band는 분리돼 있다.
 
 ## 구현 전 계약
@@ -17,7 +41,7 @@
 
 표준근거: [Unity URP shadows](https://docs.unity.cn/6000.0/Documentation/Manual/urp/use-built-in-shader-methods-shadows.html), 프로젝트URP17.5 `Lighting.hlsl`, 기존 `SteppedLocalLightCommon.hlsl`의등록광원계산. 이비교는현물체/시점의최소실험이며 임의메시용픽셀렌더러의완료가아니다.
 
-## 실제 Unity 결과 — D22 trial03
+## 과거 Unity 결과 — D22 trial03 (사용자 지적으로 재개됨)
 
 `GameMap1/PixelDeskLightingComparison_D22`에 왼쪽 A PNG, 오른쪽 B 12개 실제 메시를 저장했다. 카메라에서 보이는 면이 기존 램프를 향하도록 비교쌍의 중심을 램프에서 카메라 수평축 반대 방향 1.25m에 놓았다. 부품별 위치/치수는 바꾸지 않았다. 테스트 뒤 Play Mode를 종료하고 원래 열린 GameMapTest로 복원했다.
 

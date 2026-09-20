@@ -7,18 +7,17 @@ Shader "FantasySurvival/PixelArt/Desk Live Pixel Probe"
         _TexelMeters("Canonical wood texel size (m)", Float) = 0.024
         _PartCenter("Canonical Blender part center", Vector) = (0, 0, 0, 0)
         _PartDimensions("Canonical Blender part dimensions", Vector) = (1, 1, 1, 0)
+        [IntRange] _CellPartId("Canonical box part ID", Range(0, 11)) = 0
         _IsLeg("Vertical leg grain", Float) = 0
         _ScreenOrigin("D21 top-down pixel origin", Vector) = (-87, -109, 0, 0)
         _RasterSize("D21 native raster size", Vector) = (174, 155, 0, 0)
         _PixelsPerMeter("Canonical pixels per meter", Float) = 96
         _EdgeColor("Geometry boundary color", Color) = (0.2705882353, 0.1490196078, 0.0862745098, 1)
-        _MainLightStrength("Linear irradiance multiplier (1 = unchanged Unity units)", Float) = 1
-        _AmbientLightStrength("Six-direction SH average strength", Float) = 0
-        _SteppedLocalLightStrength("Existing stepped local irradiance scale", Float) = 1
-        [Enum(Live,0,AlbedoOnly,1,MainShadow,2,Incident,3)] _DiagnosticMode("Diagnostic output", Float) = 0
+        _SteppedLocalLightStrength("Existing character local light strength", Float) = 0.55
+        [Enum(Live,0,AlbedoOnly,1,MainShadow,2)] _DiagnosticMode("Diagnostic output", Float) = 0
 
         // The standard opaque URP/Lit auxiliary passes use these properties.
-        // The visible pass has no specular, smoothness, normal-map or emission term.
+        // The visible pass uses the character's existing matte URP PBR source.
         [HideInInspector] _BaseColor("Base Color", Color) = (1, 1, 1, 1)
         [HideInInspector] _Cutoff("Alpha cutoff", Float) = 0.5
         [HideInInspector] _Cull("Cull", Float) = 2
@@ -34,40 +33,11 @@ Shader "FantasySurvival/PixelArt/Desk Live Pixel Probe"
     {
         Tags { "RenderPipeline" = "UniversalPipeline" "RenderType" = "Opaque" "Queue" = "Geometry" }
 
-        Pass
-        {
-            Name "DeskLiveForward"
-            Tags { "LightMode" = "UniversalForwardOnly" }
-            Cull Back
-            ZWrite On
-            ZTest LEqual
-            Blend One Zero
-
-            // The visible fragment already evaluates the existing stepped local
-            // lights. Their fullscreen pass excludes bit 2, avoiding double light.
-            Stencil
-            {
-                Ref 2
-                ReadMask 2
-                WriteMask 2
-                Comp Always
-                Pass Replace
-            }
-
-            HLSLPROGRAM
-            #pragma target 4.5
-            #pragma vertex Vert
-            #pragma fragment Frag
-            #pragma multi_compile_instancing
-            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
-            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
-            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
-            #pragma multi_compile_fragment _ _LIGHT_COOKIES
-
+        HLSLINCLUDE
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/GlobalSamplers.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
-            // Keep UnityPerMaterial identical to the three reused URP/Lit passes.
+            // Keep UnityPerMaterial identical to the reused URP/Lit shadow pass.
             #include "Packages/com.unity.render-pipelines.universal/Shaders/LitInput.hlsl"
             #include "Assets/Rendering/LocalLighting/SteppedLocalLightCommon.hlsl"
 
@@ -75,15 +45,21 @@ Shader "FantasySurvival/PixelArt/Desk Live Pixel Probe"
             float _TexelMeters;
             float4 _PartCenter;
             float4 _PartDimensions;
+            float _CellPartId;
             float _IsLeg;
             float4 _ScreenOrigin;
             float4 _RasterSize;
             float _PixelsPerMeter;
             float4 _EdgeColor;
-            float _MainLightStrength;
-            float _AmbientLightStrength;
             float _SteppedLocalLightStrength;
             float _DiagnosticMode;
+            // Supplied by the existing CharacterSilhouetteSubject MPB. Its
+            // renderer feature owns cell expansion, depth and grid anchoring.
+            float _CharacterCellSurface;
+            float _CharacterCellSize;
+            float4 _CharacterPixelGridAnchorWS;
+            float _CharacterOutlineGroup;
+            float _CharacterCellSubjectId;
 
             struct Attributes
             {
@@ -115,11 +91,6 @@ Shader "FantasySurvival/PixelArt/Desk Live Pixel Probe"
                 output.positionCD = _PartCenter.xyz + input.positionOS.xzy * _PartDimensions.xyz;
                 output.normalCD = input.normalOS.xzy;
                 return output;
-            }
-
-            float LuminanceLinear(float3 color)
-            {
-                return dot(max(color, 0.0), float3(0.2126, 0.7152, 0.0722));
             }
 
             float3 SampleGrain(float3 positionCD, float3 normalCD)
@@ -162,71 +133,202 @@ Shader "FantasySurvival/PixelArt/Desk Live Pixel Probe"
                 return step(0.5, SAMPLE_TEXTURE2D_LOD(_EdgeMask, sampler_PointClamp, uv, 0).r);
             }
 
-            float AverageAmbientLuminance()
-            {
-                // A declared, direction-independent SH mean. It is disabled by
-                // default: the minimum D21 gain 0.42 supplies the NPR shadow floor.
-                float3 averageSH = (
-                    SampleSH(float3(1, 0, 0)) + SampleSH(float3(-1, 0, 0)) +
-                    SampleSH(float3(0, 1, 0)) + SampleSH(float3(0, -1, 0)) +
-                    SampleSH(float3(0, 0, 1)) + SampleSH(float3(0, 0, -1))) / 6.0;
-                return LuminanceLinear(averageSH) * _AmbientLightStrength;
-            }
-
-            float4 Frag(Varyings input) : SV_Target
+            float4 EvaluateDeskColor(Varyings input, bool includeFixedViewEdges)
             {
                 UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
                 float3 albedo = SampleGrain(input.positionCD, input.normalCD);
                 if (_DiagnosticMode > 0.5 && _DiagnosticMode < 1.5)
                     return float4(albedo, 1.0);
 
-                float3 normalWS = normalize(input.normalWS);
-                float4 shadowCoord = TransformWorldToShadowCoord(input.positionWS);
+                // Retain the old fixed-view mask only for non-cell comparisons.
+                // Cell outlines use the visible box-face group at the same seed
+                // as color/depth, so rotations never reuse a baked camera edge.
+                if (includeFixedViewEdges)
+                    albedo = lerp(albedo, _EdgeColor.rgb, GeometryEdge(input.positionCD));
+                InputData d = (InputData)0;
+                d.positionWS = input.positionWS;
+                d.positionCS = input.positionCS;
+                d.normalWS = NormalizeNormalPerPixel(input.normalWS);
+                d.viewDirectionWS = GetWorldSpaceNormalizeViewDir(input.positionWS);
+                d.shadowCoord = TransformWorldToShadowCoord(input.positionWS);
                 #if defined(_MAIN_LIGHT_SHADOWS_SCREEN)
-                    shadowCoord = ComputeScreenPos(TransformWorldToHClip(input.positionWS));
+                    d.shadowCoord = ComputeScreenPos(TransformWorldToHClip(input.positionWS));
                 #endif
-                Light mainLight = GetMainLight(shadowCoord, input.positionWS, half4(1, 1, 1, 1));
+                d.bakedGI = SampleSH(d.normalWS);
+                d.normalizedScreenSpaceUV = GetNormalizedScreenSpaceUV(input.positionCS);
+                d.shadowMask = half4(1, 1, 1, 1);
                 if (_DiagnosticMode >= 1.5 && _DiagnosticMode < 2.5)
-                    return float4(mainLight.shadowAttenuation.xxx, 1.0);
-
-                float lambert = saturate(dot(normalWS, mainLight.direction));
-                // Unity's light color already contains its actual intensity.
-                // The first probe's 0.5 reference multiplier unnecessarily halved
-                // the base scene's irradiance into the lowest-band dead zone.
-                // One preserves Unity input units; a failed response must be
-                // diagnosed from that input, never fitted by increasing this value.
-                float incident = LuminanceLinear(mainLight.color) *
-                    mainLight.distanceAttenuation * mainLight.shadowAttenuation *
-                    lambert * _MainLightStrength;
-                incident += AverageAmbientLuminance();
-                // These are the existing scene's stepped presentation lights,
-                // not Unity shadow-casting Lights. Their evaluator has NO occlusion.
-                // Both colored sources select the NPR band by luminance; they do
-                // not tint the four wood colors or add unrestricted output shades.
-                incident += LuminanceLinear(EvaluateSteppedLocalLights(
-                    input.positionWS, normalWS, 1.0)) * _SteppedLocalLightStrength;
-
-                if (_DiagnosticMode >= 2.5 && _DiagnosticMode < 3.5)
                 {
-                    float visibleIncident = saturate(incident);
-                    return float4(visibleIncident.xxx, 1.0);
+                    Light mainLight = GetMainLight(d.shadowCoord, input.positionWS, d.shadowMask);
+                    return float4(mainLight.shadowAttenuation.xxx, 1.0);
                 }
 
-                float gain = incident < 0.32 ? 0.42 : (incident < 0.72 ? 0.72 : 1.0);
-                float3 color = albedo * gain;
-                color = lerp(color, _EdgeColor.rgb, GeometryEdge(input.positionCD));
-                // The edge mask contains geometry decisions only. All live
-                // illumination is evaluated above, independently of the material.
-                return float4(color, 1.0);
+                // Same continuous matte source as Spatial Flat Lit's adaptive
+                // character path: URP owns the normal, RGB, SH, sun, additional
+                // lights, cookies and shadows. No desk-specific light equation,
+                // scalar color conversion, fixed bands or minimum brightness.
+                SurfaceData s = (SurfaceData)0;
+                s.albedo = albedo;
+                s.alpha = 1;
+                s.normalTS = half3(0, 0, 1);
+                s.occlusion = 1;
+                s.metallic = 0;
+                s.smoothness = 0;
+                half4 color = UniversalFragmentPBR(d, s);
+                color.rgb += s.albedo * EvaluateSteppedLocalLights(
+                    input.positionWS, d.normalWS, 0.0) * _SteppedLocalLightStrength;
+                return color;
             }
+
+            float4 Frag(Varyings input) : SV_Target
+            {
+                clip(0.5 - _CharacterCellSurface);
+                return EvaluateDeskColor(input, true);
+            }
+
+            struct CellSourceOutput
+            {
+                half4 colorDepth : SV_Target0;
+                half4 subjectGroupSize : SV_Target1;
+            };
+
+            // Exact source contract used by CharacterFlatUnlit.shader. The
+            // existing CharacterSilhouetteRendererFeature resolves these cells.
+            CellSourceOutput FragCellSource(Varyings input)
+            {
+                UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
+                clip(_CharacterCellSurface - 0.5);
+                clip(_CharacterCellSubjectId - 0.5);
+                float cellSize = clamp(round(_CharacterCellSize), 1.0, 8.0);
+                float2 fragmentUv = GetNormalizedScreenSpaceUV(input.positionCS.xy);
+                float2 anchorUv = ComputeNormalizedDeviceCoordinates(
+                    _CharacterPixelGridAnchorWS.xyz, UNITY_MATRIX_VP);
+                float2 pixelOffset = floor(fragmentUv * _ScaledScreenParams.xy) -
+                    floor(anchorUv * _ScaledScreenParams.xy);
+                float2 remainder = pixelOffset - floor(pixelOffset / cellSize) * cellSize;
+                clip(0.5 - max(remainder.x, remainder.y));
+                half4 color = EvaluateDeskColor(input, false);
+                float eyeDepth = unity_OrthoParams.w > 0.5 ?
+                    LinearDepthToEyeDepth(input.positionCS.z) :
+                    LinearEyeDepth(input.positionCS.z, _ZBufferParams);
+                uint subjectId = (uint)clamp(round(_CharacterCellSubjectId), 1.0, 65535.0);
+                // Current geometry is twelve flat-normal boxes. IDs 1..72
+                // identify (part, canonical face); 0 remains the empty group.
+                // The existing composite gives each boundary one owner through
+                // neighbor.group < center.group, without adding a second grid.
+                float3 a = abs(input.normalCD);
+                int axis = a.x >= a.y && a.x >= a.z ? 0 : (a.y >= a.z ? 1 : 2);
+                int faceId = axis * 2 + (input.normalCD[axis] < 0.0 ? 1 : 0);
+                float group = 1.0 + clamp(round(_CellPartId), 0.0, 11.0) * 6.0 + faceId;
+                CellSourceOutput output;
+                output.colorDepth = half4(color.rgb, max(eyeDepth, 0.0001));
+                output.subjectGroupSize = half4(
+                    (subjectId & 255u) / 255.0, group / 255.0,
+                    cellSize / 255.0, (subjectId >> 8) / 255.0);
+                return output;
+            }
+
+            half4 DepthFrag(Varyings input) : SV_Target
+            {
+                clip(0.5 - _CharacterCellSurface);
+                return 0;
+            }
+
+            half4 DepthNormalsFrag(Varyings input) : SV_Target
+            {
+                clip(0.5 - _CharacterCellSurface);
+                float3 normalWS = NormalizeNormalPerPixel(input.normalWS);
+                #if defined(_GBUFFER_NORMALS_OCT)
+                    float2 octNormalWS = PackNormalOctQuadEncode(normalWS);
+                    float2 remappedOctNormalWS = saturate(octNormalWS * 0.5 + 0.5);
+                    return half4(PackFloat2To888(remappedOctNormalWS), 0.0);
+                #else
+                    return half4(normalWS, 0.0);
+                #endif
+            }
+        ENDHLSL
+
+        Pass
+        {
+            Name "DeskLiveForward"
+            Tags { "LightMode" = "UniversalForwardOnly" }
+            Cull Back
+            ZWrite On
+            ZTest LEqual
+            Blend One Zero
+            // Local light is already included by the material. The existing
+            // fullscreen light pass excludes stencil bit 2.
+            Stencil { Ref 2 ReadMask 2 WriteMask 2 Comp Always Pass Replace }
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma vertex Vert
+            #pragma fragment Frag
+            #pragma multi_compile_instancing
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _LIGHT_COOKIES
             ENDHLSL
         }
 
-        // Geometry stays genuinely 3D for URP light shadows, depth and normals.
-        // This opaque probe never enables alpha clipping or normal-map keywords.
+        Pass
+        {
+            Name "CharacterPixelCellSource"
+            Tags { "LightMode" = "CharacterPixelCellSource" }
+            Cull Back
+            ZWrite On
+            ZTest LEqual
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma vertex Vert
+            #pragma fragment FragCellSource
+            #pragma multi_compile_instancing
+            #pragma multi_compile _ _CLUSTER_LIGHT_LOOP
+            #pragma multi_compile _ _MAIN_LIGHT_SHADOWS _MAIN_LIGHT_SHADOWS_CASCADE _MAIN_LIGHT_SHADOWS_SCREEN
+            #pragma multi_compile _ _ADDITIONAL_LIGHTS
+            #pragma multi_compile_fragment _ _ADDITIONAL_LIGHT_SHADOWS
+            #pragma multi_compile_fragment _ _SHADOWS_SOFT _SHADOWS_SOFT_LOW _SHADOWS_SOFT_MEDIUM _SHADOWS_SOFT_HIGH
+            #pragma multi_compile_fragment _ _LIGHT_COOKIES
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "DepthOnly"
+            Tags { "LightMode" = "DepthOnly" }
+            ColorMask 0
+            Cull Back
+            ZWrite On
+            ZTest LEqual
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma vertex Vert
+            #pragma fragment DepthFrag
+            #pragma multi_compile_instancing
+            ENDHLSL
+        }
+
+        Pass
+        {
+            Name "DepthNormals"
+            Tags { "LightMode" = "DepthNormals" }
+            Cull Back
+            ZWrite On
+            ZTest LEqual
+            HLSLPROGRAM
+            #pragma target 4.5
+            #pragma vertex Vert
+            #pragma fragment DepthNormalsFrag
+            #pragma multi_compile_instancing
+            #pragma multi_compile_fragment _ _GBUFFER_NORMALS_OCT
+            ENDHLSL
+        }
+
+        // Cast shadows from the actual mesh even when its visible presentation
+        // uses the existing cell renderer. No hidden native color/depth remains.
         UsePass "Universal Render Pipeline/Lit/ShadowCaster"
-        UsePass "Universal Render Pipeline/Lit/DepthOnly"
-        UsePass "Universal Render Pipeline/Lit/DepthNormals"
     }
     FallBack Off
 }

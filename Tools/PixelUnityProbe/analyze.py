@@ -28,6 +28,11 @@ def main():
     albedo=crop('albedo','model');samples=albedo[bmask].astype(int)
     distances=abs(samples[:,None,:]-palette[None,:,:]).max(2).min(1)
     iou=float((mask&bmask).sum()/max(1,(mask|bmask).sum()))
+    contextA=crop('context','image')
+    contextError=np.max(abs(contextA.astype(int)-source[...,:3].astype(int)),axis=2)
+    localDifference=crop('local_on','model').astype(int)-b.astype(int)
+    localChanged=np.any(abs(localDifference)>1,axis=2)&bmask
+    repair=read(ROOT/'LocalOnly/PixelUnityProbe23/repair.json')
     checks={'geometry_12_meshes':build['actualMeshCount']==12 and build['maxDimensionError']<1e-5,
         'original_png_bytes':sha(ROOT/'Assets/Tests/PixelDeskLighting22/desk.png')==sha(base/'input/desk.png'),
         'point_uncompressed_no_mips':all(build[k] for k in ('point','uncompressed','noMipmaps')),
@@ -38,14 +43,17 @@ def main():
         'unshaded_model_only_four_grain_colors':bool(np.all(distances<=1)),
         'image_fixed_shadows_under_changed_sun':delta('baseline','opposite','image')==0,
         'model_responds_to_sun_direction':delta('baseline','opposite','model')>0,
-        'model_receives_local_light_input':delta('incident','incident_local','model')>0}
+        'model_receives_visible_local_light':int(localChanged.sum())>=int(bmask.sum()*.1),
+        'image_pixels_preserved_in_full_base':bool(np.all(contextError[mask]<=1)),
+        'no_underground_card_or_model':abs(repair['imageOpaqueBottom'])<.00001 and repair['modelMinimumY']>=-.00001,
+        'native_pbr_material_preserved':repair['materialPreserved']}
     report={'accepted':bool(all(checks.values())),'checks':checks,'actual_size':[w,h],'ppu':cap['ppu'],
         'image_max_rgb_error':int(diffA[mask].max()),'model_silhouette_iou':iou,
         'model_albedo_nonpalette_pixels':int((distances>1).sum()),
         'sun_direction_changed_pixels':{k:delta('baseline','opposite',k) for k in ('image','model')},
         'local_light_changed_pixels':{k:delta('baseline','local_on',k) for k in ('image','model')},
-        'local_prequant_input_changed_pixels':delta('incident','incident_local','model'),
-        'main_shadow_readback_range':[int(crop('shadow','model')[bmask].min()),int(crop('shadow','model')[bmask].max())],
+        'full_base_image_different_pixels':int((mask&(contextError>1)).sum()),
+        'local_light_mean_rgb_change':localDifference[bmask].mean(axis=0).tolist(),
         'evidence_sha256':{str(p.relative_to(ROOT)):sha(p) for p in [out/'build.json',out/'capture.json',*files.values()]},
         'limits':['fixed view and integer native96PPU only','original wood is not proven pure albedo',
                   'SteppedLocalLight has no shadow occlusion','art satisfaction not automatically approved']}

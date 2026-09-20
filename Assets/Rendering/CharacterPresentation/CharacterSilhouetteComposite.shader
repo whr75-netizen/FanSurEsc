@@ -669,6 +669,10 @@ Shader "Hidden/FantasySurvival/Character Silhouette Composite"
             ZWrite On
             // Visibility was resolved ONCE at the cell center above.
             ZTest Always
+            // Source RGB already contains local lighting. Mark every emitted
+            // cell, including expanded edges, so the later fullscreen light
+            // pass cannot re-light only native-triangle fragments of a cell.
+            Stencil { Ref 2 WriteMask 2 Comp Always Pass Replace }
             HLSLPROGRAM
             #pragma vertex Vert
             #pragma fragment FragPixelCell

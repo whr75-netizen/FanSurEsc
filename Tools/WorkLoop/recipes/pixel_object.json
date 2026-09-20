@@ -1,0 +1,32 @@
+{
+  "id": "pixel_object_existing_renderer",
+  "version": 3,
+  "mechanism": {
+    "stateRule": "변화의 명시적 원인이 없으면 기존 상태를 유지합니다. task 설명은 변경 허용 필드를 늘리지 않습니다.",
+    "allowedChanges": [
+      {"field": "CharacterSilhouetteSubject.pixelCellSize", "cause": "user_requested_pixel_size", "valueSource": "requestedScreenPixelSize"},
+      {"field": "CharacterSilhouetteSubject attachment/enabled and pixel-cell connection", "cause": "requested_pixel_size_requires_missing_existing_component_connection", "onlyWhen": "기존 호환 셰이더/CharacterSilhouetteRendererFeature는 있고 대상의 Subject만 없거나 픽셀 셀에 연결되지 않았을 때", "values": {"pixelCellSurface": true, "adaptiveToneExperiment": false, "screenSpacePixelColor": false}}
+    ],
+    "unlistedChanges": "금지. 새 요구 원인이 있으면 기존 실행을 보존하고 새 계약으로 시작합니다.",
+    "rendererFeature": "CharacterSilhouetteRendererFeature",
+    "lighting": "기존 Unity URP 조명 및 캐릭터 렌더 경로를 사용하고 RGB 광색을 보존합니다.",
+    "pixelSize": "CharacterSilhouetteSubject.pixelCellSize에 요청한 정수 화면 픽셀 크기를 적용합니다.",
+    "preserve": ["기존 메시와 치수", "사용자가 지정한 목재 원본", "실제 면 법선과 Unity 조명 입력", "이전 결과와 관계없는 씬 오브젝트"],
+    "forbidden": ["별도 책상 조명 공식", "AI 임의 재료 재생성", "완성 이미지 축소 후 확대를 제작 단계로 대체", "새 전체 화면 픽셀 후처리", "픽셀 통계로 외형 합격 선언", "중간 다중 촬영 검증 루프"],
+    "previewCount": 1,
+    "minimumPixelSize": 1,
+    "maximumPixelSize": 8
+  },
+  "apply": {
+    "scope": "지목된 오브젝트의 CharacterSilhouetteSubject.pixelCellSize를 요청값으로 변경합니다. 기존 호환 셰이더와 CharacterSilhouetteRendererFeature가 있고 Subject만 없거나 연결되지 않은 경우에만 기존 Subject를 추가/활성화하고 pixelCellSurface=true, adaptiveToneExperiment=false, screenSpacePixelColor=false로 연결할 수 있습니다. 이미 연결됐다면 크기만 변경합니다. 이 선행조건 외에 메시·원본 재료·조명·관계없는 설정은 유지합니다. 새 렌더러·Manager·셰이더를 설계하지 않습니다.",
+    "assignment": "입력 task와 고정 mechanism을 따라 기존 렌더 경로에 requestedScreenPixelSize를 적용하세요. 필요한 코드 검색·편집·Unity MCP는 직접 선택하세요. 실제 Unity에서 scene, target, pixelCellSize, rendererFeature, lightingPath, shaderNames를 읽어 JSON 파일에 저장하고 readback 경로를 반환하세요. lightingPath는 실제 구현 경로, shaderNames는 실제 적용된 shader.name 목록입니다. AI 성공 판정을 반환하지 마세요. 제작 방법이 계약과 맞지 않으면 임의로 바꾸지 말고 상태를 보존하세요."
+  },
+  "present": {
+    "scope": "동일 오브젝트를 실제 기지 Play Game View에서 최종 미리보기 한 번으로 제시합니다. 카메라 회전·위치·줌·투영·렌더 타깃·후처리·조명을 촬영용으로 변경하지 않습니다. 결과 재생성·자체 미술 평가·추가 수정은 하지 않습니다.",
+    "assignment": "사용자가 Play로 보는 실제 Game View를 ScreenCapture 등 설정을 바꾸지 않는 경로로 PNG에 저장하세요. 같은 카메라 객체를 썼어도 설정을 바꾼 촬영은 대체가 아닙니다. 원본 장면과 현재 조명을 유지하며 격리된 검사 화면을 제출하지 마세요. 사용자에게 실제 PNG를 표시하고 유지/수정 의견을 기다리세요. 최종 이미지 파일 경로만 preview로 반환하세요. 화면 밖이거나 가려진 기술 실패라면 외형 승인으로 넘기지 마세요."
+  },
+  "review": {
+    "scope": "사용자의 실제 시각 피드백 대기만 합니다. 사용자가 답변하기 전 추가 편집·생성·촬영·외형 합격 선언을 하지 않습니다.",
+    "assignment": "최종 PNG와 기술 관측을 사용자에게 제시한 뒤 실제 답변을 기다리세요. 그래프가 이 지점에 도달한 것은 외형 완료가 아닙니다. AI가 대신 답하거나 이 노드에 submit하지 마세요. 다음 사용자 정정은 새 task와 새 run-dir 계약으로 연결하며 이전 실행을 보존합니다."
+  }
+}

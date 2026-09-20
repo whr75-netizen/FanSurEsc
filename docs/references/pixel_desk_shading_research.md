@@ -1,6 +1,26 @@
 # 픽셀 책상 명암 — 공식 제작 자료와 적용 후보
 
-## D22 현재 결정 — Unity 기지의 고정 PNG / 실제 메시 조명 비교
+## D24–25 결정 — 실제 Play 카메라와 같은 격자의 경계
+
+사용자 정정: D23 촬영은 카메라 객체만 실제 PlayerCamera였고 회전·위치·직교 크기·렌더 타깃을 바꿨다. 원래 Play 화면의 증거로 취급하지 않는다. 원래 카메라는 Euler(45,350,0), ortho size5, offset(2,10,-10)이다. 8개 기존 책상을 world Y=45*i도로 배치해 해당 카메라에서 비교한다. 최초 시작점 배치는 기존 기둥에 가렸고 남쪽 이동은 기존 큰 시험 구조물에 가렸다. 두 실패 화면을 보존하며 다른 오브젝트를 지우지 않고 실제 renderer bounds와 겹치지 않는 동쪽 바닥을 선택한다. 기존 PlayerMovement.TryTeleport와 CameraFollow로 관찰 위치만 이동하며 시작 spawn과 카메라 설정은 보존한다.
+
+경계 수정 입력은 기존 12개 box의 part ID(0..11), 평면 법선, 2×2 cell이다. `Unity object meter → model/local canonical X/right,Y/back,Z/up(normalOS.xzy) → TransformObjectToWorld → 기존 UNITY_MATRIX_VP → 화면 pixel center → 기존 subject anchor 기준 2px seed → visibility/depth → 같은 cell 격자에서 면 ID 경계 → 원래 Game View`를 따른다. 물체의 yaw만 바뀌며 카메라·형상·무늬·원래 조명 계산은 변하지 않는다. meter→screen 배율은 실제 camera projection이 정하며 고정96PPU 이미지는 셀 경계 입력에서 제외한다.
+
+고정 경계 이미지를 굵게 만드는 후보는 시점 불일치를 남기므로 제외한다. 기존 cell 그룹 알고리즘을 재사용한다: `face=2*argmax(abs(nCanonical))+(nAxis<0)`, `group=1+6*part+face`(1..72). 같은 subject의 인접 cell 그룹이 다르면 기존 `<` 규칙으로 한쪽 cell만 선을 소유한다. 그룹별 가림은 기존 source depth가 먼저 결정하므로 part 번호가 물체 깊이 우선순위를 대신하지 않는다. 외곽선 색은 기존 composite 설정을 유지한다. 기존 pixel-cell 합성 전체에 stencil bit2를 기록해 이후 per-pixel 로컬광이 셀 일부에 재적용되는 경로를 차단한다. 근거는 실제 프로젝트 cell/group 구현과 [Unity ShaderLab Stencil](https://docs.unity3d.com/6000.0/Documentation/Manual/SL-Stencil.html)의 WriteMask/Replace 규약이다.
+
+기술 판정은 셰이더 컴파일, 12개 실제 part ID와 8개 yaw/size 반환, 원래 camera rotation/size 확인 및 실제 Game View 1회다. 상자 평면의 축별 normal은 정확한 주축을 선택하므로 임계값 조율을 하지 않는다. G01/G03/G04 변환은 기존 Unity TRS, G08/G09 형상·텍스처 크기는 미변경; 골격 관련 항목은 비해당이다. 그룹당 최대72와 같은 cell source/depth를 보존한다. 셀보다 얇은 형상 소실·곡면 일반화·외형 만족은 별도 미해결이며 이 수선이 모든 입력에서 완벽하다는 판정은 하지 않는다.
+
+## D23 현재 결정 — 기존 상태 보존과 기존 렌더 경로 재사용
+
+D22의 자체 3단계 명암은 사용자 요구와 달랐다. 실제 조명 입력을 좁혀 색·면 차이를 없앴으며, 이미지 평면을 기울여 다리 일부를 지면 아래에 배치했다. 고정 PNG/실루엣 통과는 바닥을 제외한 촬영의 결과였으므로 실제 기지의 완성 판정이 아니었다.
+
+현재는 캐릭터에서 사용하는 `UniversalFragmentPBR`와 RGB 로컬광 호출을 재사용하고, 기존 `CharacterSilhouetteRendererFeature`의 오브젝트별2×2셀에 책상을 연결했다. 재료·12개 형상·실제 그림자를 유지하고 캐릭터 전역 설정/전체화면 해상도는 변경하지 않았다. 이미지 평면은 투영을 보존하는 수직 basis와 불투명 하단 접지식으로 수정했다. 계약/실제미리보기/실패 이력은 [D23 기록](../../Tools/PixelUnityProbe/README.md).
+
+Higgsfield 공식 [Canvas](https://higgsfield.ai/creator-hub/help-center/tools/how-do-i-use-canvas)는 생성 모델의 노드 연결·재사용을 제공하며, [Supercomputer](https://higgsfield.ai/creator-hub/help-center/tools/how-do-i-use-supercomputer)는 agent가 계획과 실행을 맡는다. Unity 제작의 수학적 완전성이나 자의적 목표 변경 방지를 보장한다는 자료는 아니다. 프로젝트에는 이미 WorkLoop가 있으므로 새 엔진 대신 `Tools/WorkLoop/pipeline.py`와 고정 `pixel_object` 프로필을 추가했다. 기본은 상태 보존이고 요청된 픽셀 크기 및 필요한 기존 Subject 연결만 원인 있는 변경으로 허용한다. 실제파일/수치 반환 후 사용자 외형 피드백을 기다리며 AI submit으로 외형 완료 처리하지 않는다. 실행기 밖 도구 사용을 차단하는 보안 격리는 아니다.
+
+실제실행 `LocalOnly/WorkLoop/desk-pixel-size-23-v2`에서 기지 적용/미리보기까지 수행했다. 재개는 사용자의 픽셀크기·외형 피드백에 한하며, 등록되지 않은 게임 제작 종류는 별도 고정 프로필이 필요하다. 모든 게임 개발을 이 프로그램 하나로 자동 완성한다고 주장하지 않는다.
+
+## D22 — Unity 기지의 고정 PNG / 실제 메시 조명 비교
 
 사용자는 명암을 이미 명암이 들어간 텍스처로 대체했는지 확인하고, 기지 조명 옆에서 이미지와 3D를 함께 시험하도록 요청했다. D21 최종 PNG에는 계산된 명암이 고정돼 있지만 원재료는 별도 4색 목재 무늬이며, 저장된 Blender 모델은 재질 없는 12개 상자였다. Unity에는 실제 메시와 원재료를 연결하고 주광 normal·shadow 및 기존 로컬광을 3단계 명암에 입력하는 비교 셰이더를 새로 적용했다. 최종 PNG를 3D 재질로 쓰지 않았다.
 

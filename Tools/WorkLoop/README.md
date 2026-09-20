@@ -103,3 +103,23 @@ ai.work 추가 확인(2026-09-14): 최종 대표 계약 15개가 7.056초에 통
 [PAL](https://arxiv.org/abs/2211.10435)은 계산을 실행기에 맡기는 근거, [Least-to-Most](https://arxiv.org/abs/2205.10625)는 순차적인 작은 문제 분해의 근거, [Agentless](https://arxiv.org/html/2407.01489v2)는 정해진 코드 수정 절차도 경쟁력을 가질 수 있다는 근거다. [Lost in the Middle](https://arxiv.org/html/2307.03172v3)와 [τ-bench](https://arxiv.org/html/2406.12045v1)는 각각 문맥 활용과 복합 도구 작업의 신뢰성 한계를 보여 준다. 사용자의 설계 주장은 부족한 신뢰성 관리 기반을 절차로 제공하자는 것이다. 이를 '자아의 증가를 증명하라'는 주장으로 바꾸지 않으며, 기반이 저절로 충분해진다고 가정하지 않는다. 구체적 개선율은 실제 작업에서 측정한다.
 
 원문별 결과·가정·비용·현재 구현과의 대응은 기존 [파이프라인 연구 §8](<C:/Users/JG/.codex/visualizations/2026/09/10/01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3/pipeline-session-control.md>)에 통합했다. 해당 실험 수치를 현재 Codex/Unity의 성능으로 옮겨 쓰지 않는다.
+
+## 고정 픽셀 크기 작업 프리셋
+
+`pipeline.py`는 기존 실행기를 그대로 사용하며 매번 AI가 새 제작 그래프를 설계하지 않게 합니다. `recipes/pixel_object.json` v3의 주 변경은 **기존 `CharacterSilhouetteSubject.pixelCellSize`**입니다. 기존 호환 셰이더·렌더 기능은 있고 Subject만 없거나 연결되지 않았다면, 요청한 픽셀 크기를 실제 적용하는 데 필요한 기존 Subject 추가/활성화와 픽셀 셀 연결만 선행조건으로 허용합니다. 이미 연결됐다면 크기만 바꿉니다. 변경 원인이 없는 메시·원본 재료·조명은 유지하며 새 렌더러·Manager·셰이더는 만들지 않습니다. 자유로운 작업 설명을 입력해도 허용 필드는 늘어나지 않습니다. v3는 같은 카메라 객체라도 촬영용으로 각도·줌·렌더 타깃 등을 바꾼 화면을 실제 Play 결과로 제출하지 못하도록 범위를 명시합니다.
+
+```powershell
+python -B Tools/WorkLoop/pipeline.py start --task "기지 책상 픽셀 크기 조정" --pixel-size 2 --run-dir LocalOnly/WorkLoop/desk-pixel-size-01
+python -B Tools/WorkLoop/pipeline.py status LocalOnly/WorkLoop/desk-pixel-size-01/state.json
+python -B Tools/WorkLoop/pipeline.py submit LocalOnly/WorkLoop/desk-pixel-size-01/state.json LocalOnly/WorkLoop/apply-output.json
+python -B Tools/WorkLoop/pipeline.py stop LocalOnly/WorkLoop/desk-pixel-size-01/state.json
+python -B Tools/WorkLoop/pipeline.py resume LocalOnly/WorkLoop/desk-pixel-size-01/state.json
+```
+
+Codex가 명령을 실행하고 `apply → present → 실제 파일/수치 관측 1회 → 사용자 시각 피드백 대기`로 진행합니다. 중간 검증 반복이나 새 이미지 생성은 없습니다. `apply-output.json`은 `{"readback":"실제 Unity에서 저장한 JSON 절대경로"}`, 다음 `present`의 출력은 `{"preview":"실제 씬 PNG 절대경로"}`입니다. ticket은 실행기가 연결합니다. Unity readback에는 `scene`, `target`, 정수 `pixelCellSize`, `rendererFeature: "CharacterSilhouetteRendererFeature"`, 실제 `lightingPath`, 실제 `shaderNames` 배열을 저장합니다. 적용값·경로는 Unity에서 읽어야 하며 AI의 성공 설명으로 대신하지 않습니다.
+
+마지막 관측은 PNG 파일·해시·크기와 Unity 반환값의 요청 일치만 확인합니다. 기존 조명의 물리적 정확성이나 미술 품질을 판정하지 않습니다. `awaiting_user_visual_feedback`에서는 이 래퍼가 AI `submit`을 거절하며 외형 완료를 선언하지 않습니다. 다음 사용자 정정은 새 `run-dir`로 연결해 이전 계약과 결과를 보존합니다. 현재 프리셋은 승인 답변의 자동 수집·종료까지 구현하지 않았습니다.
+
+Higgsfield의 [Canvas](https://higgsfield.ai/creator-hub/help-center/tools/how-do-i-use-canvas)는 모델 노드 연결·순차/병렬·템플릿을, [Supercomputer](https://higgsfield.ai/creator-hub/help-center/tools/how-do-i-use-supercomputer)는 에이전트의 계획·모델 선택·실행을 공개합니다. 이 프리셋은 그 연결 개념을 로컬의 좁은 작업 계약에 적용한 것으로, Higgsfield의 내부 구현이나 판단 능력을 복제한 것이 아닙니다. 실행기 밖에서 Codex가 다른 도구를 사용하는 것까지 막는 보안 샌드박스도 아닙니다. 실제 도구 선택은 AI가 하며, 실행기는 고정 입력·반환 형식·단계 전이를 관리합니다.
+
+CLI smoke는 새 계약 생성과 `apply` 인계까지 확인했습니다. 실제 Unity 작업 결과는 해당 작업 실행의 readback·PNG로 별도 확인합니다.

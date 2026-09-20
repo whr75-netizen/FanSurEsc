@@ -2444,3 +2444,18 @@ Interactable (abstract base class)
 - `[실제 Play Mode]` trial03:960×576 출력에서 A 원본RGB오차0, B 실루엣IoU1.0, 무조명원재료4색 외 픽셀0. 주광반전 A0/B1,015픽셀변화. 기존로컬광 입사량9,133픽셀변화/최종색1픽셀변화로, 빛입력과 양자화 결과를 구분했다. Console Error/Exception 0과 shader compile을 별도로 확인했다.
 - `[실패/수정]` 첫 조명무반응은 Forward+ `_CLUSTER_LIGHT_LOOP` 변형 누락을 수정했고 근거없는 주광0.5계수는1로 복원했다. trial02는 촬영완료 전Play종료로 차단됐고 성공증거에서 제외했다. trial03은 background촬영/완료기록 확인을 사용했다. 원래 실패파일은 덮어쓰지 않았다.
 - `[보존/한계]` 비교대상 외 기존 씬/램프/플레이어를 유지했고 테스트 임시 카메라·시간·조명 상태를 복원한 뒤 Play를 종료했다. GameMap1 비교배치를 저장하고 원래 활성GameMapTest를 다시 열었다. 전체 게임의 자유줌/회전, 로컬광 시각반응의 충분함, 추가Unity Point/Spot, 임의모딩과 미술승인은 미완료다. 상세 계약/실행은 `Tools/PixelUnityProbe/README.md`, 실제캡처는 `LocalOnly/PixelUnityProbe22/trial03`.
+
+## 157. D23 기본 조명 복원과 기존 오브젝트 픽셀 셀 연결 `[PIXEL-01]`
+
+- `[요구/원인]` 사용자는 잘린 다리·독립적인 책상 조명·너무 작은 픽셀을 지적하고 추가 검사보다 픽셀 크기 수정을 우선했다. 최종 기본 원칙은 원인 없는 상태/동작 변경 금지다. 기존 형상과 목재 원본을 유지했다.
+- `[구현]` 책상의 자체 최소 광량·고정 임계값을 제거하고 캐릭터와 같은 `UniversalFragmentPBR` 및 RGB 로컬광 경로를 사용했다. PNG 평면은 고정 시점 투영을 유지하면서 수직화/불투명 하단 접지했고 비교 쌍을 빈 바닥으로 함께 이동했다. 실제 3D는 기존 `CharacterSilhouetteSubject`/renderer feature에 연결하여 화면 2×2 픽셀 셀로 표시한다. 캐릭터 설정이나 전역 화면 해상도는 변경하지 않았다.
+- `[실행]` 조명 수정 당시 trial23에서 주광 반전 9,274픽셀, 로컬광 3,710픽셀 변화와 RGB 반응을 관측했다. 전체 기지의 고정 PNG 114픽셀 차이로 기존 분석은 accepted=false를 보존했다. URP Unlit의 SSAO 적용 코드를 확인했지만 사용자의 검사 중단 정정 이후 원인 대조 촬영은 수행하지 않았다. 이 수치는 후속 2px 변경의 검증으로 재사용하지 않는다.
+- `[최종 관측]` `LocalOnly/WorkLoop/desk-pixel-size-23-v2`를 실제 실행하여 Unity 반환값 size=2, 실제 게임 카메라의 960×576 미리보기 `LocalOnly/PixelUnityProbe22/pixel23/captures/context.png` 1회를 기록했다. 셰이더 컴파일 성공, 최종 Console Error/Exception/Assert 0. 임시 촬영 상태 복원 후 Play 종료, 활성 GameMap1 저장. 미술 합격/자유 시점/임의 모딩은 미검증이다.
+- `[실행기/재개]` Higgsfield 공식 Canvas·Supercomputer·MCP 자료와 비교하여 기존 WorkLoop에 `pipeline.py`/고정 `pixel_object` 프로필을 추가했다. 변경 허용 필드와 원인, 실제 반환 파일, 최종 사용자 피드백 대기를 관리한다. 도구 호출 진위나 실행기 밖 AI 행동을 보안적으로 강제하지 않는다. 현재 `awaiting_user_visual_feedback`; 새 사용자 원인이 생기기 전 추가 수정·재촬영은 하지 않는다. 상세는 `Tools/WorkLoop/README.md`, `Tools/PixelUnityProbe/README.md`, 연구 문서 D23.
+
+## 158. D24–25 실제 Play 8방향과 셀 경계 수정 `[PIXEL-01]`
+
+- `[정정]` D23은 실제 PlayerCamera 객체의 설정을 촬영용으로 바꿨으므로 원래 Play 화면과 같지 않았다. 사용자 요청대로 기존 3D 책상 8개를 45도 간격으로 배치했다. 시작점과 남쪽 배치는 각각 기둥/큰 시험 구조물에 가려 실패했으며 두 화면을 보존했다. 실제 Renderer bounds 중첩 0인 동쪽 후보를 확인해 공통 루트만 (15,0,0)으로 옮겼다. 기존 비교는 삭제하지 않고 비활성화했다.
+- `[수정]` 고정 시점/96PPU의1px 경계 캐시를 셀 모드에서 제외했다. 12개 box part ID와 실제 가시 face ID를 기존 `neighbor.group < center.group` 단일 소유자 경계로 연결했다. 셀 합성 전체가 stencil bit2를 기록하여 후속 fullscreen 로컬광의 셀 부분 적용을 막는다. 공유 composite 수정은 기존 local-light 포함 cell source의 계약 복원이며 새 명암식은 아니다.
+- `[실행/범위]` 기존 PlayerMovement.TryTeleport로 Player를 동쪽 관찰 위치로 옮긴 뒤 CameraFollow가 따라가게 했다. 실제 Play 카메라 Euler(45,350,0)/size5, display target, part0..11, desk yaw45*i/size2를 반환했다. 셰이더 컴파일 성공. `LocalOnly/WorkLoop/desk-cell-edges25-final/preview.png`는 ScreenCapture로 저장한 실제1114×857 Game View이며 해당 게임 시간의 어두운 조명도 그대로다. 카메라·시간·조명 제어를 촬영용으로 바꾸지 않았다.
+- `[현재]` graph `state-v2.json`은 사용자 피드백 대기다. 물체/재료/기존 게임 설정은 보존했고 현재 Play에서 동쪽 구역을 볼 수 있다. 재진입은 `Tools/Pixel Desk/Inspect Eight Directions with Normal Player Camera`; 시작 spawn은 그대로다. 외형 만족·셀보다 얇은 형상·임의 곡면·모든 표시 배율은 미검증이다. 픽셀 통계로 미술 합격을 선언하지 않았다.

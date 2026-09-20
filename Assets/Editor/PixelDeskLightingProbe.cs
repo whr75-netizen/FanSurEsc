@@ -100,7 +100,7 @@ public static partial class PixelDeskLightingProbe
             mat.SetTexture("_EdgeMask",AssetDatabase.LoadAssetAtPath<Texture2D>(AssetsPath+"/edge-mask.png"));
             mat.SetVector("_PartCenter",V(part.center));mat.SetVector("_PartDimensions",V(part.dimensions));
             mat.SetFloat("_IsLeg",part.role=="leg"?1:0);mat.SetFloat("_TexelMeters",.024f);
-            mat.SetFloat("_MainLightStrength",1f);
+            mat.SetFloat("_SteppedLocalLightStrength",.55f);
             mat.SetVector("_ScreenOrigin",new Vector4(spec.camera.screen_origin[0],spec.camera.screen_origin[1],0,0));
             mat.SetVector("_RasterSize",new Vector4(spec.camera.width,spec.camera.height,0,0));mat.SetFloat("_PixelsPerMeter",spec.camera.ppu);
             AssetDatabase.CreateAsset(mat,AssetsPath+"/Part_"+part.id+".mat");g.GetComponent<MeshRenderer>().sharedMaterial=mat;

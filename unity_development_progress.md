@@ -2437,3 +2437,10 @@ Interactable (abstract base class)
 - `[원인·구현]` 원래 road mask는 중심선 원판 합집합이며 외곽node가 이동경계25m 안쪽이다. graph/node/entry/portal은 유지하고 외향 half-strip을 기존 SurfaceGrid에 합친 뒤 보도/필지/높이/충돌을 파생한다. 경계밖은 같은 좌표와 높이의4개표시mesh, Collider/NavMesh/spawn은 없다. 노란/흰 차선은 기존절대UV위상으로 이어간다. planner8/등각geometry1005로 복구판본을구분한다. 수학/후보/실패조건은 맵연구D07에 기록했다.
 - `[실행]` 실제이전commit2d36911 planner와 두seed를 비교하여 모든node/road/port/anchor/범위 동일을확인했다. 연장도로와겹치는필지는 제외되고 기존validator를통과했다. Play seed−1038015743에서 같은Player를4면으로이동시켜각경계안약1.05m에서차단, 외부충돌/NavMesh없음, 도로/높이연속, 차선SAT/위상을확인했다. 현재카메라조건에서62m표시여백과유효지면64ray 모두범위안을확인했다.
 - `[근거·한계]` `LocalOnly/IsometricMapTrial06/`의 실제JSON/화면, WorkLoop v9 gate통과. 최초카메라검사에ray뒤쪽교차점이섞인오류는해당관찰만수정하고초기보고도보존했다. baseline용임시코드는정리했다. Play종료/backgroundfalse복원, D06검사는반복하지않았다. 물리키·모든seed/실행중화면비변경·전체Recovery·GPU/빌드는미검증이며 내부막다른길과외부교차로의세부규칙은범위밖이다.
+
+## 156. D22 기지의 고정 PNG와 실제 3D 조명 비교 `[PIXEL-01]`
+
+- `[요청/구현]` 기지 기존 램프 옆에 A 고정 명암 PNG / B 실제12메시를 저장했다. 원재료4색 grain과 동적 normal·shadow·local 조명을 분리한 URP 셰이더, 고정96PPU 투영과 실제 게임 카메라 촬영을 `Tools/PixelUnityProbe` 그래프로 연결했다. 최종 PNG를 B의 재질로 사용하지 않는다.
+- `[실제 Play Mode]` trial03:960×576 출력에서 A 원본RGB오차0, B 실루엣IoU1.0, 무조명원재료4색 외 픽셀0. 주광반전 A0/B1,015픽셀변화. 기존로컬광 입사량9,133픽셀변화/최종색1픽셀변화로, 빛입력과 양자화 결과를 구분했다. Console Error/Exception 0과 shader compile을 별도로 확인했다.
+- `[실패/수정]` 첫 조명무반응은 Forward+ `_CLUSTER_LIGHT_LOOP` 변형 누락을 수정했고 근거없는 주광0.5계수는1로 복원했다. trial02는 촬영완료 전Play종료로 차단됐고 성공증거에서 제외했다. trial03은 background촬영/완료기록 확인을 사용했다. 원래 실패파일은 덮어쓰지 않았다.
+- `[보존/한계]` 비교대상 외 기존 씬/램프/플레이어를 유지했고 테스트 임시 카메라·시간·조명 상태를 복원한 뒤 Play를 종료했다. GameMap1 비교배치를 저장하고 원래 활성GameMapTest를 다시 열었다. 전체 게임의 자유줌/회전, 로컬광 시각반응의 충분함, 추가Unity Point/Spot, 임의모딩과 미술승인은 미완료다. 상세 계약/실행은 `Tools/PixelUnityProbe/README.md`, 실제캡처는 `LocalOnly/PixelUnityProbe22/trial03`.

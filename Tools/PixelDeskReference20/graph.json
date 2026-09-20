@@ -1,0 +1,34 @@
+{
+  "goal": "고정한 생성 기준을 실제 3D 책상으로 한 번 재현하고 99% 조건의 성패와 실물을 제출한다. 실험 완료와 외형 성공을 구분한다.",
+  "entry": "reconstruct",
+  "max_steps": 3,
+  "requirements": [
+    {"id":"R1","text":"실제 모델·렌더·비교·형상 조건·고정 평가 결과가 갖춰진다. 99% 실패도 숨기지 않고 종료한다.","source":"사용자의 최신 재현 요청과 README 사전 실험 계약","predicate":{"op":"eq","args":[{"ref":"evidence.exit_code"},{"literal":0}]}}
+  ],
+  "nodes": [
+    {
+      "id":"reconstruct","algorithm":"ai.work","phase":"work",
+      "inputs":{"reference":{"literal":"C:/Users/JG/.codex/generated_images/01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3/exec-4cbe1c16-82f7-44be-8f3a-cdcf8378f8cd.png"}},
+      "parameters":{"scope":"새 Tools/PixelDeskReference20 실행 스크립트와 LocalOnly/DeskReference20 출력에 한정. 실제 3D 모델과 고정 비교 계약. Unity/D19 변경 금지."},
+      "reads":["file:C:/Users/JG/.codex/generated_images/01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3/exec-4cbe1c16-82f7-44be-8f3a-cdcf8378f8cd.png"],
+      "writes":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/DeskReference20"],
+      "question":"고정 계약대로 한 번의 실제 3D 재현과 비교를 수행하고 metrics.json 경로를 반환한다.",
+      "output_schema":{"artifact":{"type":"string"}},
+      "edges":[{"when":{"op":"known","args":[{"ref":"reconstruct.artifact"}]},"to":"evidence"}]
+    },
+    {
+      "id":"evidence","algorithm":"command.run","phase":"validation",
+      "inputs":{"stdin":{"ref":"reconstruct.artifact"}},
+      "parameters":{
+        "argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-B","Tools/PixelDeskReference20/verify_result.py"],
+        "cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "code_files":["C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PixelDeskReference20/verify_result.py"]
+      },
+      "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/DeskReference20"],"writes":[],
+      "edges":[
+        {"when":{"op":"eq","args":[{"ref":"evidence.exit_code"},{"literal":0}]},"to":"@complete"},
+        {"when":{"op":"ne","args":[{"ref":"evidence.exit_code"},{"literal":0}]},"to":"@blocked"}
+      ]
+    }
+  ]
+}

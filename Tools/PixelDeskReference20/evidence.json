@@ -1,0 +1,18 @@
+{
+  "goal":"D20의 이미 생성된 산출물만 최종 확인한다. 초기 그래프 입력 키 오류를 복구하며 제작/렌더는 반복하지 않는다.",
+  "entry":"evidence","max_steps":1,
+  "requirements":[{"id":"R1","text":"고정 비교 결과와 실제 3D 산출물이 갖춰졌다. 99% 성공 여부는 파일의 false/true를 그대로 보고한다.","source":"README 최종 검사 계약; 초기 graph command.run에 잘못된 artifact 입력 키를 사용해 프로세스 호출 전 중단됨","predicate":{"op":"eq","args":[{"ref":"evidence.exit_code"},{"literal":0}]}}],
+  "nodes":[{
+    "id":"evidence","algorithm":"command.run","phase":"validation","inputs":{},
+    "parameters":{
+      "argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-B","Tools/PixelDeskReference20/verify_result.py"],
+      "cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+      "code_files":["C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PixelDeskReference20/verify_result.py"]
+    },
+    "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/DeskReference20"],"writes":[],
+    "edges":[
+      {"when":{"op":"eq","args":[{"ref":"evidence.exit_code"},{"literal":0}]},"to":"@complete"},
+      {"when":{"op":"ne","args":[{"ref":"evidence.exit_code"},{"literal":0}]},"to":"@blocked"}
+    ]
+  }]
+}

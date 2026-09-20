@@ -1,5 +1,13 @@
 # D22 기지 씬의 이미지 / 실제 기하 조명 비교
 
+## D26 현재 — 바닥 그림자도 2픽셀
+
+GameMap1의 평면 `Ground`에만 전용 재료 `GroundPixelShadow.mat`를 연결했다. 원래 `Small Ground.mat`의 텍스처·Tint·LightPower를 그대로 복사하고 `_ShadowScreenCellSize=2`만 켰다. 기존 URPToonLit의 기본값0은 다른 재료의 동작을 유지한다.
+
+바닥 fragment의 주광 그림자 조회 위치를 실제 화면 2×2 셀의 중심에서 복원한 광선과 바닥 평면의 교점으로 고정한다. 기존 ShadowCaster·shadow map·PCF·그림자 세기·GI·Cookie는 유지하며 바닥 전체 이미지를 픽셀화하지 않는다. 해당 바닥의 모든 주광 투사 그림자가 적용 대상이다. Point/Spot 그림자, SSAO, 곡면 수광은 이번 범위가 아니다.
+
+현재 플레이어는 실제 visible renderer의 cast가 Off이며 표면 수광색만 픽셀화된다. 캐릭터 전용 바닥 그림자 기능을 복사했다는 설명은 하지 않는다. `LocalOnly/WorkLoop/desk-shadow26`에 실제 카메라 (45,350,0)/size5, 책상8개 size2, 바닥shadow size2 및 원본 재료 보존 관측과 Game View PNG 1회를 저장했다. 컴파일/Console 오류0, 외형은 사용자 피드백 대기다.
+
 ## D25 현재 — 원래 Play 카메라의 8방향
 
 기존 D22/D23 캡처는 PlayerCamera 객체를 사용했지만 회전·위치·직교 크기·출력을 바꾼 통제 실험이었다. 사용자 Play 화면과 같다는 판정은 잘못됐다. 현재는 `ScreenCapture.CaptureScreenshot`으로 원래 Game View/UI를 그대로 저장한다. 기본 회전 `(45,350,0)`, orthographicSize `5`, offset `(2,10,-10)`이다.

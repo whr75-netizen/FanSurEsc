@@ -71,7 +71,7 @@
 | `QUEST-01` | Cube NPC의 적 1킬·생환 시험 의뢰 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §30·52 | 공통 E로 수락, Player 귀속 처치, committed `Extracted` 뒤 보고 가능, NPC 보고로 완료; ordinary·Recovery exact 저장, 보상 없음 | 퀘스트 규칙·보상·다중 의뢰 schema 또는 관련 상호작용·사망·정산 경계 변경 |
 | `INFO-01` | U 정보창과 누적 기록 | `ACTIVE` | `CODE` | `PROTOTYPE` | 진행 §31·52 | 캐릭터·기록·사전·의뢰·업그레이드 5탭; 기존 원본 읽기, 누적 기록은 단일 권위 소유 후 ordinary·Recovery exact 저장; 업그레이드는 미구현 표시 | 정보 항목·기록 종류·도감 해금·업그레이드 규칙 변경 |
 | `ITEM-UI-01` | 아이템 tooltip·가격·수량·탄창 배지 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §27·38·40~45·48~50·53 | context·수량·장착·drag·R; runtime 장전탄 tooltip; 하단 W1~W3·탄창+예비탄 즉시 갱신 | 표시 필드나 UI 배치 직접 변경 |
-| `PIXEL-01` | 3D→픽셀·Unity 조명 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §158; Tools/PixelUnityProbe | D25원래Play뷰8방향·셀경계수정;외형대기 | 사용자 외형·픽셀크기·시점 변경 |
+| `PIXEL-01` | 3D→픽셀·Unity 조명 | `PARTIAL` | `PLAY` | `PROTOTYPE` | 진행 §159; Tools/PixelUnityProbe | D26바닥주광그림자2px;8방향외형대기 | 사용자 외형·픽셀크기·시점 변경 |
 
 ## 확인된 실제 공백과 결정 대기
 

@@ -2459,3 +2459,10 @@ Interactable (abstract base class)
 - `[수정]` 고정 시점/96PPU의1px 경계 캐시를 셀 모드에서 제외했다. 12개 box part ID와 실제 가시 face ID를 기존 `neighbor.group < center.group` 단일 소유자 경계로 연결했다. 셀 합성 전체가 stencil bit2를 기록하여 후속 fullscreen 로컬광의 셀 부분 적용을 막는다. 공유 composite 수정은 기존 local-light 포함 cell source의 계약 복원이며 새 명암식은 아니다.
 - `[실행/범위]` 기존 PlayerMovement.TryTeleport로 Player를 동쪽 관찰 위치로 옮긴 뒤 CameraFollow가 따라가게 했다. 실제 Play 카메라 Euler(45,350,0)/size5, display target, part0..11, desk yaw45*i/size2를 반환했다. 셰이더 컴파일 성공. `LocalOnly/WorkLoop/desk-cell-edges25-final/preview.png`는 ScreenCapture로 저장한 실제1114×857 Game View이며 해당 게임 시간의 어두운 조명도 그대로다. 카메라·시간·조명 제어를 촬영용으로 바꾸지 않았다.
 - `[현재]` graph `state-v2.json`은 사용자 피드백 대기다. 물체/재료/기존 게임 설정은 보존했고 현재 Play에서 동쪽 구역을 볼 수 있다. 재진입은 `Tools/Pixel Desk/Inspect Eight Directions with Normal Player Camera`; 시작 spawn은 그대로다. 외형 만족·셀보다 얇은 형상·임의 곡면·모든 표시 배율은 미검증이다. 픽셀 통계로 미술 합격을 선언하지 않았다.
+
+## 159. D26 평면 바닥의 2px 주광 그림자 수광 `[PIXEL-01]`
+
+- `[요구/확인]` 책상 그림자도 픽셀 단위로 표시하라는 요청. 실제 플레이어 visible9 renderer는 cast Off이며 shader에 ShadowCaster가 없어 기존 캐릭터 바닥 그림자 기능을 복사하는 경로는 없었다. 캐릭터 표면 수광 셀과 바닥 투사 그림자를 구분했다.
+- `[구현]` 기존 URPToonLit에 기본값0인 `_ShadowScreenCellSize`를 추가했다. 화면 셀 중심을 inverseVP near/far 광선으로 복원한 뒤 실제 평면과 교차시켜 주광 shadow lookup 위치만 고정한다. GameMap1 Ground에만 원래 재료를 복사한 GroundPixelShadow(size2)를 연결했으며 원본 Small Ground/texture/Tint/LightPower는 보존했다. 몸체/무늬/배치/카메라/광원/그림자세기/PCF 변경은 없다.
+- `[실행]` Unity shader compile 및 최종 Console Error/Exception/Assert0. 실제 Play camera(45,350,0)/size5, body8개 size2, shadow2/원본0와 재료 속성 동일을 반환했다. `LocalOnly/WorkLoop/desk-shadow26/preview.png`에 실제 Game View 1회. 사용자 피드백 대기이며 그림자 품질 자동 합격은 아니다.
+- `[범위]` 같은 Ground의 모든 주광 그림자에 적용된다. 곡면·추가광·SSAO·모든 플랫폼은 미검증/비대상이다. 근평행 ray는 원샘플 유지. 연구 D26과 Tools/PixelUnityProbe에 입력·식·실패조건을 기록했다.

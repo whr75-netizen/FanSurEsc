@@ -1,5 +1,19 @@
 # 픽셀 책상 명암 — 공식 제작 자료와 적용 후보
 
+## D26 결정 — 바닥 투사 그림자의 화면 셀
+
+사용자는 책상 바닥 그림자도 플레이어처럼 픽셀 단위로 만들도록 요청했다. 직접 확인한 현재 플레이어의 보이는 9개 renderer는 cast Off이고 CharacterFlatUnlit에는 ShadowCaster pass가 없다. 캐릭터의 수광 표면 RGB 셀화와 바닥 투사 그림자를 혼동하지 않는다. 책상은 URP/Lit ShadowCaster, 바닥은 URPToonLit의 연속 shadow lookup을 사용한다.
+
+선택: 그림자를 받는 평면 Ground의 주광 shadow lookup만 화면 2px 셀에서 고정한다. 원본 Small Ground 공유 재료를 보존하고 Ground에만 연결한 복사 재료에서 `_ShadowScreenCellSize=2`를 설정한다. 셰이더 기본값0은 기존 동작이다. shadow atlas 축소/캐스터 정점 스냅은 카메라 격자와 일치하지 않으므로 제외하고, 새 renderer나 가짜 그림자 평면은 만들지 않는다. 이 바닥에 떨어지는 모든 주광 그림자가 대상이며 물체별 선택 효과는 아니다.
+
+경로는 `receiver world meter → 실제 camera clip/SV_POSITION → render pixel → cell center UV → inverse VP의 near/far world → receiver plane 교점 → Unity shadow coord → 기존 shadow sampling/PCF → 기존 바닥 색 합성`이다. 화면 원점과 Y 방향은 URP `GetNormalizedScreenSpaceUV`/`_ScaledScreenParams` 규약, world는 Unity Y-up meter, camera/부모 TRS는 기존 상태를 사용한다. `q=(floor(pixel/s)+0.5)*s`, `uv=q/renderSize`, `s=round(clamp(size,1,8))`. `a=invVP(uv,near)`, `d=normalize(invVP(uv,far)-a)`, `p*=a+d*dot(n,p-a)/dot(n,d)`다. reversed-Z near/far는1/0, 다른 API는 UNITY_NEAR_CLIP_VALUE/1이다. 셀 원점은 viewport0이며 여러 캐스터가 겹치므로 캐릭터별 anchor와는 별개다. 같은2px 크기이지 모든 subject의 위상까지 일치한다는 뜻은 아니다.
+
+실제 평면과 일정 normal에서 동일 셀의 교점과 shadow attenuation이 동일해야 한다. abs(dot(n,d))<1e-6은 평행에 가까운 비지원 조건으로 원래 샘플을 유지한다. 곡면/보간 normal·추가광·SSAO의 셀화는 이번 범위가 아니다. PCF의 명암 단계·그림자 세기·GI·바닥 텍스처·Cookie·책상 형상/외곽선/배치·카메라는 그대로다. 기존 interpolated shadow coord 분기도 활성 상태에서는 p*로 덮어쓴다. 근거는 프로젝트 LocalVolumetricLightFullscreen의 ray 복원과 [Unity world position reconstruction](https://docs.unity3d.com/6000.0/Documentation/Manual/urp/writing-shaders-urp-reconstruct-world-position.html)이다.
+
+최소 확인: Unity 컴파일, Ground 전용 재료의 값과 원본재료 보존, 원래 카메라 실제 Game View 1회. 평면 변환의 원점/법선/TRS는 기존 상태이며 바디 픽셀·형상 검사 반복은 하지 않는다. 최종 외형은 사용자 피드백 대상이다. 실행 `LocalOnly/WorkLoop/desk-shadow26/state.json`.
+
+실행: Unity shader errors0, Console Error/Exception/Assert0. 새 Ground 전용 재료 size2/원본size0, texture/Tint/LightPower 동일, 실제 camera(45,350,0)/size5와 8개 body size2를 반환했다. `preview.png`는 실제 Game View 1회이며 그림자 밝기나 카메라를 촬영용으로 바꾸지 않았다. 현재 graph는 review 대기이며 추가 셀보다 가는 형상/곡면/추가광/SSAO 검증으로 확대하지 않는다.
+
 ## D24–25 결정 — 실제 Play 카메라와 같은 격자의 경계
 
 사용자 정정: D23 촬영은 카메라 객체만 실제 PlayerCamera였고 회전·위치·직교 크기·렌더 타깃을 바꿨다. 원래 Play 화면의 증거로 취급하지 않는다. 원래 카메라는 Euler(45,350,0), ortho size5, offset(2,10,-10)이다. 8개 기존 책상을 world Y=45*i도로 배치해 해당 카메라에서 비교한다. 최초 시작점 배치는 기존 기둥에 가렸고 남쪽 이동은 기존 큰 시험 구조물에 가렸다. 두 실패 화면을 보존하며 다른 오브젝트를 지우지 않고 실제 renderer bounds와 겹치지 않는 동쪽 바닥을 선택한다. 기존 PlayerMovement.TryTeleport와 CameraFollow로 관찰 위치만 이동하며 시작 spawn과 카메라 설정은 보존한다.

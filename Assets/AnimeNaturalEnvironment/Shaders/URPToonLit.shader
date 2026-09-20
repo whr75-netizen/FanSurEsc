@@ -9,6 +9,7 @@ Shader "AwaiiStudio/URP_ToonLit"
 		[ASEBegin]_TextureSample0("Texture Sample 0", 2D) = "white" {}
 		_Tint("Tint", Color) = (0.8679245,0.8679245,0.8679245,0)
 		[ASEEnd]_LightPower("Light Power", Range( 0 , 2)) = 2
+		[IntRange] _ShadowScreenCellSize("Planar Receiver Shadow Cell Size (0 = Off)", Range(0,8)) = 0
 		[HideInInspector] _texcoord( "", 2D ) = "white" {}
 
 		//_TessPhongStrength( "Tess Phong Strength", Range( 0, 1 ) ) = 0.5
@@ -218,6 +219,7 @@ Shader "AwaiiStudio/URP_ToonLit"
 			float4 _Tint;
 			float4 _TextureSample0_ST;
 			float _LightPower;
+			float _ShadowScreenCellSize;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -387,6 +389,28 @@ Shader "AwaiiStudio/URP_ToonLit"
 			}
 			#endif
 
+			// Opt-in flat receivers only. Keep texture/GI/cookie samples at their
+			// original locations; only the main shadow lookup uses this cell ray.
+			float3 PlanarShadowCellPosition(float2 positionSS, float3 positionWS, float3 normalWS)
+			{
+				float size = clamp(round(_ShadowScreenCellSize), 1.0, 8.0);
+				float2 pixel = GetNormalizedScreenSpaceUV(positionSS) * _ScaledScreenParams.xy;
+				float2 uv = (floor(pixel / size) + 0.5) * size / _ScaledScreenParams.xy;
+				#if UNITY_REVERSED_Z
+					const float nearDepth = 1.0, farDepth = 0.0;
+				#else
+					const float nearDepth = UNITY_NEAR_CLIP_VALUE, farDepth = 1.0;
+				#endif
+				float3 origin = ComputeWorldSpacePosition(uv, nearDepth, UNITY_MATRIX_I_VP);
+				float3 farPoint = ComputeWorldSpacePosition(uv, farDepth, UNITY_MATRIX_I_VP);
+				float3 direction = normalize(farPoint - origin);
+				float3 normal = normalize(normalWS);
+				float denominator = dot(normal, direction);
+				if (abs(denominator) < 0.000001)
+					return positionWS;
+				return origin + direction * (dot(normal, positionWS - origin) / denominator);
+			}
+
 			half4 frag ( VertexOutput IN  ) : SV_Target
 			{
 				UNITY_SETUP_INSTANCE_ID( IN );
@@ -406,6 +430,11 @@ Shader "AwaiiStudio/URP_ToonLit"
 				#endif
 				float2 uv_TextureSample0 = IN.ase_texcoord3.xy * _TextureSample0_ST.xy + _TextureSample0_ST.zw;
 				float3 ase_worldNormal = IN.ase_texcoord5.xyz;
+				#if defined(MAIN_LIGHT_CALCULATE_SHADOWS)
+					if (_ShadowScreenCellSize >= 1.0)
+						ShadowCoords = TransformWorldToShadowCoord(PlanarShadowCellPosition(
+							IN.clipPos.xy, WorldPosition, ase_worldNormal));
+				#endif
 				float3 bakedGI20 = ASEIndirectDiffuse( IN.lightmapUVOrVertexSH.xy, ase_worldNormal);
 				Light ase_mainLight = GetMainLight( ShadowCoords );
 				MixRealtimeAndBakedGI(ase_mainLight, ase_worldNormal, bakedGI20, half4(0,0,0,0));
@@ -507,6 +536,7 @@ Shader "AwaiiStudio/URP_ToonLit"
 			float4 _Tint;
 			float4 _TextureSample0_ST;
 			float _LightPower;
+			float _ShadowScreenCellSize;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;
@@ -757,6 +787,7 @@ Shader "AwaiiStudio/URP_ToonLit"
 			float4 _Tint;
 			float4 _TextureSample0_ST;
 			float _LightPower;
+			float _ShadowScreenCellSize;
 			#ifdef TESSELLATION_ON
 				float _TessPhongStrength;
 				float _TessValue;

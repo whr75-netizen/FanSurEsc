@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "source_blend": "LocalOnly/DeskReference20/desk.blend",
+  "source_wood": "Tools/PixelDesk/materials/oak-user15-source.png",
+  "source_wood_sha256": "399f8b1eecfa0bc8d1e4eb3e92b295e389d39eb118aa2c17e4237f6fed2e344a",
+  "camera": {"azimuth_degrees":45,"elevation_degrees":30,"pixels_per_meter":96,"margin_pixels":8,"max_width":192,"max_height":160},
+  "material": {"grid":[64,64],"levels":4,"texel_meters":0.024},
+  "lighting": {"to_light":[-3,-4,7],"thresholds":[0.32,0.72],"linear_gains":[0.42,0.72,1.0],"source":"geometry_normal_and_shadow_ray"},
+  "pixel": {"outline_srgb8":[69,38,22],"minimum_gap_pixels":2.0,"preview_scale":6},
+  "repair": {"allowed":["common_drawer_gap"],"max_gap_fraction_of_span":0.05,"max_passes":2},
+  "acceptance": {"technical_only":true,"visual_approval":"pending","reference_99_percent":"not_achieved"}
+}

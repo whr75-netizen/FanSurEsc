@@ -1,0 +1,30 @@
+{
+  "schema": "building33-production-contract/1",
+  "scope": "Local production-input gates after user rejection; not an AI-host sandbox or an art approval",
+  "user_constraints": [
+    "물체마다 실제 크기는 다르며 픽셀 크기만 공통이어야 한다.",
+    "원본 픽셀 격자를 추정하는 정규화를 슬롯 기반 강제 축소로 대체하지 않는다.",
+    "전체 맵 아트를 기준으로 개별 오브젝트를 제작하고 템플릿으로 배치한다.",
+    "형식적인 질문과 하위 검사 완료를 전체 작업 완료로 취급하지 않는다."
+  ],
+  "reference_art": null,
+  "source_generation_method": "master_reference_per_asset",
+  "upstream_selector": {
+    "path": "C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/__init__.py",
+    "sha256": "29a47d45cb6c4f09d8aed4bdcc70dfae87f0a79b6b00ce936f378c83deddf268"
+  },
+  "upstream_backend": {
+    "path": "C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/perfect_pixel_noCV2.py",
+    "sha256": "99cbd4e0a9febae704a9637aeba79c68d3e0731e494db17424533c4ef1642522"
+  },
+  "layout_template": {
+    "path": "docs/artifacts/building32/layout-plan.json",
+    "sha256": "f76d77651761f26ac14f546d68bf3aba7ed3ad1d3e69815bb1f85363b8bd98ac"
+  },
+  "registered_source_manifest": {
+    "path": "docs/artifacts/building33/art-manifest.json",
+    "sha256": "01c34b33b5294a51e8857e7f359cec8b396de6d390c3105abca146770e248ec2"
+  },
+  "projection_calibration": null,
+  "state": "source-normalization-only; rejected building preserved; no new art or placement approval"
+}

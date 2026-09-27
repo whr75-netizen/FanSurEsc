@@ -1,0 +1,26 @@
+{
+  "goal": "최신 우선 요청인 운영 교정의 실패 경계를 확인한다. 원본 자동 격자 증거/강제 축소 거절/미완성 제작 차단을 확인하며 건물 완성이나 모델 완치를 판정하지 않는다.",
+  "entry": "failure_boundaries",
+  "max_steps": 2,
+  "requirements": [{"id":"operating_remediation","text":"실제 원본 산출물과 거절 경계의 한정된 확인","source":"사용자: 논리 없는 연산으로 버그를 숨기지 말고 원인을 고쳐라","predicate":{"op":"eq","args":[{"ref":"verified.value"},{"literal":true}]}}],
+  "nodes": [
+    {
+      "id":"failure_boundaries", "algorithm":"command.run", "phase":"work",
+      "inputs":{},
+      "parameters":{
+        "argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-X","utf8","-B","Tools/Building33/validate_remediation.py"],
+        "cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game", "timeout":60,
+        "code_files":["Tools/Building33/validate_remediation.py","Tools/Building33/production_gate.py","Tools/Building33/native_normalize.py","Tools/Building33/normalize_art.py","Tools/Building33/normalize_uniform.py","C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/__init__.py","C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/perfect_pixel_noCV2.py"]
+      },
+      "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building33/production-contract.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building33-native-probe/receipt.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building33-native-probe/native.png","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/ProductionAudit27/unity-retired-check.json"],
+      "writes":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building33-native-probe/remediation-checks.json"],
+      "edges":[{"when":{"op":"known","args":[{"ref":"failure_boundaries.exit_code"}]},"to":"verified"}]
+    },
+    {
+      "id":"verified", "algorithm":"value.compare", "phase":"validation",
+      "inputs":{"left":{"ref":"failure_boundaries.exit_code"},"right":{"literal":0}},
+      "parameters":{"op":"eq"},
+      "edges":[{"when":{"op":"eq","args":[{"ref":"verified.value"},{"literal":true}]},"to":"@complete"},{"when":{"op":"eq","args":[{"ref":"verified.value"},{"literal":false}]},"to":"@blocked"}]
+    }
+  ]
+}

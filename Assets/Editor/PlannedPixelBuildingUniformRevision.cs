@@ -39,6 +39,12 @@ public static class PlannedPixelBuildingUniformRevision
     [MenuItem("Tools/World Art/Apply B33 Uniform Source Revision")]
     public static void Apply()
     {
+        throw new NotSupportedException("B33_SLOT_FIT_RETIRED: matching a forced grid does not preserve source features. Existing prefab is preserved.");
+    }
+
+    // Historical implementation retained for diagnosis, not an import entry point.
+    private static void ApplyRetiredForReference()
+    {
         if (EditorApplication.isPlaying) throw new InvalidOperationException("Edit Mode required.");
         var manifest = JsonUtility.FromJson<Manifest>(File.ReadAllText(ManifestPath));
         var plan = JsonUtility.FromJson<Plan>(File.ReadAllText(PlannedPixelBuildingAuthoring.PlanPath));

@@ -45,6 +45,12 @@ public static class PlannedPixelBuildingAuthoring
     [MenuItem("Tools/World Art/Build Planned Pixel Shop 33")]
     public static void Build()
     {
+        throw new NotSupportedException("B33_FORCED_GRID_RETIRED: this builder consumes rejected forced-size art. Existing scene and Inspect remain available.");
+    }
+
+    // Historical implementation retained for diagnosis, not an authoring entry point.
+    private static void BuildRetiredForReference()
+    {
         if (EditorApplication.isPlaying) throw new InvalidOperationException("Build only in Edit Mode.");
         var scene = SceneManager.GetActiveScene();
         if (scene.name != "GameMap1") throw new InvalidOperationException("Open GameMap1 first.");

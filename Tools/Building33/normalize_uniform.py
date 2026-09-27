@@ -95,6 +95,10 @@ def complete_surface_boundary(arr, desired, name):
 
 
 def main():
+    raise RuntimeError("B33_SLOT_FIT_RETIRED: layout dimensions must not choose normalization resolution. Use native_normalize.py.")
+
+
+def _retired_main_for_reference():
     parser = argparse.ArgumentParser()
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()

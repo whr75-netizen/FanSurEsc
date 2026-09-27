@@ -1,0 +1,93 @@
+{
+  "scope": "Operating-contract and source-normalization failure boundaries only",
+  "remediation_checks_passed": true,
+  "cases": [
+    {
+      "case": "normalize_art.py",
+      "exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "normalize_uniform.py",
+      "exit_code": 1,
+      "passed": true
+    },
+    {
+      "case": "upstream_actual_source",
+      "exit_code": 0,
+      "passed": true,
+      "observation": {
+        "stage": "normalization",
+        "allowed": true,
+        "contract_sha256": "341e4d81f36513023cb5c1edef75d52319513dba972aff465ead6aed0531b3e6",
+        "layout_sha256": "f76d77651761f26ac14f546d68bf3aba7ed3ad1d3e69815bb1f85363b8bd98ac",
+        "evidence": {
+          "asset_id": "counter",
+          "source_sha256": "be8af789808b3655f6528c262e64fcfc0d14db5f51c7bcca64f0a3e35fc9cb16",
+          "output_sha256": "95f226b6a8300ed205aac0b29d7aafe7b311eae5de5ba6fa4b94df8899505737",
+          "dimensions": [
+            274,
+            228
+          ]
+        },
+        "artistic_approval": "not evaluated",
+        "scope": "Registered inputs and automatic-sampling integrity only; no artistic quality, feature preservation or Unity placement approval."
+      }
+    },
+    {
+      "case": "old_forced_grid_rejected",
+      "exit_code": 2,
+      "passed": true,
+      "observation": {
+        "stage": "normalization",
+        "allowed": false,
+        "code": "UNREGISTERED_RECEIPT_SCHEMA",
+        "detail": "Only native automatic-grid receipts are accepted; target sizes/PPU/scales are forbidden.",
+        "artistic_approval": "not evaluated"
+      }
+    },
+    {
+      "case": "no_master_art_rejected",
+      "exit_code": 2,
+      "passed": true,
+      "observation": {
+        "stage": "generation",
+        "allowed": false,
+        "code": "REFERENCE_ART_NOT_REGISTERED",
+        "detail": "Create and register the common reference artwork before object generation.",
+        "artistic_approval": "not evaluated"
+      }
+    },
+    {
+      "case": "no_registered_placement_solver",
+      "exit_code": 2,
+      "passed": true,
+      "observation": {
+        "stage": "placement",
+        "allowed": false,
+        "code": "PLACEMENT_SOLVER_NOT_REGISTERED",
+        "detail": "Projection calibration and per-asset template correspondence have no registered placement solver; normalization cannot authorize placement.",
+        "artistic_approval": "not evaluated"
+      }
+    },
+    {
+      "case": "actual_unity_authoring_blocked",
+      "observation": {
+        "blockedEntryPoints": 2,
+        "isPlaying": false,
+        "scene": "GameMap1",
+        "dirtyBefore": false,
+        "dirtyAfter": false
+      },
+      "passed": true,
+      "evidence_sha256": "8673f00bd2707fb96c7352516e09e60681cd5b82018a03154d764d8cf0198cff"
+    }
+  ],
+  "building_art_complete": false,
+  "model_or_server_fixed": false,
+  "remaining": [
+    "Full-scene reference art and asset correspondence",
+    "Shared projection calibration and placement solver",
+    "Actual new Unity art integration and visual result"
+  ]
+}

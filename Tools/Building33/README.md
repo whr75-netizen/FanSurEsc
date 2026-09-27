@@ -1,4 +1,14 @@
-# B33 — 조사 결과에서 실제 건물 납품까지
+# B33 — 거절된 제작 경로와 원본 자동 격자 교정
+
+**현재:** B33의 고정/가변 강제 축소 둘 다 사용자 거절입니다. 아래의 uniform 완료/실행 설명은 과거 기록이며 새 제작에 사용하지 않습니다. `normalize_art.py`, `normalize_uniform.py`, Unity `Build()`/`Apply()`는 부작용 전에 오류로 거절합니다. 기존 씬・원본・Inspect 기능은 보존합니다.
+
+현재 실행 가능한 정규화는 `native_normalize.py`입니다. `--source`, 새 `--output-dir`, 원본 checkout `--engine`, 기존 `--deps`만 받고 수동 grid/target/PPU/scale은 받지 않습니다. 실제 원본 public API의 자동 검출 → 경계 정렬 → center sampling을 수행하며 RGBA를 같은 좌표에서 취합니다. 크기 맞춤・crop・경계/색/명암 수정은 하지 않습니다. 실패는 receipt에 보존하고 임의 해상도로 대신하지 않습니다. [실행 기록](../../docs/artifacts/building33-native-probe/receipt.json)은 계산대1374×1145 →274×228이며, 최종 배치나 디자인 승인 증거가 아닙니다.
+
+생성・정규화・배치의 입력 경계는 `production_gate.py`와 `production-contract.json`에서 확인합니다. 기준 전체 아트/배치 calibration이 아직 없으므로 새 생성/배치가 준비됐다고 판정하지 않습니다. 이 게이트는 제작 경로의 계약 검사이며 Codex 도구 전체를 막는 샌드박스가 아닙니다. 현재 연구와 남은 제작은 [통합 연구](../../docs/references/grave_seasons_map_art.md), 운영 교정은 [Astra 리뷰](../../docs/references/codex_interruption_research.md)를 봅니다.
+
+고정된 `remediation-graph.json`은 7개 실패 경계의 [실제 확인 결과](../../docs/artifacts/building33-native-probe/remediation-checks.json)를 만들었습니다. 최종 상태는 `LocalOnly/ProductionAudit27/exact-cause-state.json`에 보존합니다. 거절 결과는 임의 오류가 아니라 각 사례의 원인 코드까지 비교합니다. 이 그래프 완료는 운영 교정의 검사 범위이며 새 건물 제작 완료가 아닙니다. 이후 자산을 만들 때는 생성 전에 `production_gate.py --stage generation`, 원본 변환 후 `--stage normalization --receipt <실제 receipt>`, 배치 전에 `--stage placement --receipt <실제 receipt>`를 사용합니다. placement solver는 아직 미등록이며 성공을 가정하지 않습니다. 기준 맵 컨셉 생성 자체와 그 기준에서 개별 자산을 생산하는 generation gate는 별개입니다.
+
+## 아래는 종전 B33 기록 — 재실행 지침 아님
 
 부모 목표는 **개별 픽셀 오브젝트로 구성한 기지 테스트 건물 한 채의 디자인·배치·표시·명암을 실제 GameMap1에 통합하여 보여 주는 것**입니다. B32 도면/coverage 실험은 선행 입력으로 재사용합니다. 연구·자산 생성·컴파일 완료에서 부모 요청을 종료하지 않습니다. 기존 B31/32 실행 기록·원본은 보존합니다.
 

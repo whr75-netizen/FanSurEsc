@@ -154,6 +154,10 @@ def complete_boundary(arr, desired, name):
 
 
 def main():
+    raise RuntimeError("B33_FORCED_GRID_RETIRED: source pixel detection was bypassed. Use native_normalize.py; preserved outputs are rejected history.")
+
+
+def _retired_main_for_reference():
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-root", type=Path, default=DEFAULT_INPUT)
     parser.add_argument("--replace", action="store_true", help="Explicitly replace this script's prior outputs; original copies must match hashes")

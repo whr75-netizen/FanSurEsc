@@ -2535,3 +2535,12 @@ Interactable (abstract base class)
 - `[조명 근본 원인/수정]` 광원component2개가 있어도 최초 ON/OFF 차이0. 상수 fullscreen probe는 실행되나 Sample/Load depth는0이었다. 기존 CharacterSilhouetteRendererFeature만 잠시 끄면200,487화면pixel이 변했다. 해당 owner의 초기 world-depth copy와 최종 publish가 공유 material의 입력을 서로 덮어썼다. 두 draw에 MaterialPropertyBlock으로 각 입력을 고정했다. 캐릭터 픽셀 기능을 다시 켠 최종 ON/OFF 차이195,848pixel로 실제 기여 확인. 광원강도 증폭이나 새필터로 우회하지 않았다. 기존 radial광원은 실내벽차폐/세련된 lightmask를 보장하지 않는다.
 - `[Play Mode 호출 확인]` 기존 StepMove/CharacterController로6개사용점6/6,벽정지,실내지붕숨김/앞벽fade; 같은Player/Camera entityID. 실제camera30°/350°/ortho4.734301/viewport높이857. 가구5개 각각 source texel X/Y 화면길이2.0(최대오차0.00008pixel),각Transformscale1,서로다른mesh·texture크기. 예약공간초과0,MissingScript0,신규Console오류0. 기존09:50UnityAI relay오류1은보존했다. 키보드 직접입력·다른회전·빌드·저장로드는 이번범위에서 미실행.
 - `[납품/한계]` `docs/artifacts/building33-uniform/`의실제GameView·readback·unity-display·technical-result와`Tools/Building33/uniform-graph.json` 기술조건통과. 이전B33실행은사용자정정으로정지보존했으며실행중합격기준을바꾸지않았다. source내부투영·높이추정·원작동등미술품질은미승인. Play종료/runInBackground원복,GameMap1저장clean,SceneView30°실내개발보기. `Tools > World Art > Inspect Planned Pixel Shop 33`으로같은건물관찰.
+
+## 166. B33 원본 격자 우회 원인・Astra 운영 계약 재구성 `[MAP-01][PIXEL-01]`
+
+- `[사용자 정정]` 가변 크기 수정도 강제 축소라 특징이 손실됐고 질문 직후 종료가 반복됨. 개별 외형 패치보다 Astra Ultra 리뷰와 생성・배치・정규화 운영 방식 교정을 우선 요청. §165의 기술 조건은 원본 보존/디자인 완성 증거가 아니며 두 B33 외형은 거절 상태다.
+- `[직접 원인]` 원본 PerfectPixel 자동 격자 API 대신 슬롯/PPU 기반 target을 수정판 source_regions에 넘겼다. 계산대 crop1179×992→102×85. 출력 RGB 표본/정수 texel 검사로 특징 보존을 주장할 수 없다. 공식 Astra 안내와 공개 Unity Ultra/목표 이탈/조기 종료/압축 사례는 `codex_interruption_research.md`에 출처・한계를 구분했다. 특정 모델/서버 원인 확정은 하지 않았다.
+- `[구현]` 기존 운영 문장 중복과 형식적 최종 질문 의무를 제거하고 playbook §1.6에 요구・원본・템플릿・첫 불일치・허용 변경・원래 증상 판정을 연결했다. 게임 불변조건/기존 사용자 변경은 보존. B33 두 Python 제작 main과 Unity Build/Apply는 명시적 retired 오류로 실행 전 차단한다. Inspect/현재 씬은 유지한다.
+- `[원본 실행 1회]` native_normalize.py는 원본 public selector→NumPy backend의 자동검출을 사용한다. 입력1374×1145 RGBA에서275×229 추정, 경계 정렬 후274×228. 수동목표/crop/resize/알파 threshold/경계보정 없음. 같은 upstream 셀 중심에서 RGBA 샘플링. 원본파일・엔진・출력 해시/좌표 receipt와 native.png 보존. 기존5개강제크기옵션 거절, 원본단색입력실패를 실패receipt로 보존하며 임의fallback없음, 기존출력 덮어쓰기 거절.
+- `[실제 확인]` Unity Edit Mode에서두퇴역진입점2/2거절, GameMap1 dirty false→false. remediation-graph의 고정7case(legacy CLI2,원본실제산출,옛manifest거절,기준아트없는생성거절,배치solver미등록거절,Unity관측)통과. source-center별RGBA는실제원본과전부비교; 이는원본자동경로/출처범위이지미술합격아님. 일반계산만연속실행하며원본이미지정규화는재실행하지않았다.
+- `[남은 범위]` 전체상가기준아트・개별자산대응・공통투영calibration・새Unity통합은 미완료. 최신 운영교정 우선요청에 따라 새 생성/씬교체는 수행하지 않았다. 로컬gate는 Codex전체도구/모델/서버/턴종료를 통제하는 sandbox가 아니다. 기존게임기능Play/빌드/저장로드검증은 변경원인이없어 반복하지 않았다.

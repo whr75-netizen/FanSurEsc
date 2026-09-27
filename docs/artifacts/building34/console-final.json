@@ -1,0 +1,53 @@
+{
+  "provider": "Unity_GetConsoleLogs",
+  "observedTotal": 11,
+  "entries": [
+    {
+      "time": "[09:50:40]",
+      "firstLine": "connection.state_change"
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "Render Graph Execution error"
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "ArgumentOutOfRangeException: Adaptive tone source must fit the 4,194,304-pixel representative-index bound.\r"
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "Render Graph Execution error"
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "InvalidOperationException: The previously scheduled job ZBinningJob writes to the Unity.Collections.NativeArray`1[System.UInt32] ZBinningJob.bins. You must call JobHandle.Complete() on the job ZBinningJob, before you can write to the Unity.Collections.NativeArray`1[System.UInt32] safely."
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "Render Graph Execution error"
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "InvalidOperationException: The previously scheduled job ZBinningJob writes to the Unity.Collections.NativeArray`1[System.UInt32] ZBinningJob.bins. You must call JobHandle.Complete() on the job ZBinningJob, before you can write to the Unity.Collections.NativeArray`1[System.UInt32] safely."
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "Render Graph Execution error"
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "InvalidOperationException: The previously scheduled job ZBinningJob writes to the Unity.Collections.NativeArray`1[System.UInt32] ZBinningJob.bins. You must call JobHandle.Complete() on the job ZBinningJob, before you can write to the Unity.Collections.NativeArray`1[System.UInt32] safely."
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "Render Graph Execution error"
+    },
+    {
+      "time": "[15:33:36]",
+      "firstLine": "InvalidOperationException: The previously scheduled job ZBinningJob writes to the Unity.Collections.NativeArray`1[System.UInt32] ZBinningJob.bins. You must call JobHandle.Complete() on the job ZBinningJob, before you can write to the Unity.Collections.NativeArray`1[System.UInt32] safely."
+    }
+  ],
+  "status": "superseded_assessment_not_accepted_use_console_window_snapshots",
+  "newUnresolvedErrors": null,
+  "classification": "09:50:40 existing relay failure; 15:33:36 initial oversized 2560x1800 capture exceeded existing character adaptive tone bound and caused URP follow-on errors. Capture dimensions corrected to2560x1600; final complete Play lifecycle and four captures added no errors. Console was not cleared."
+}

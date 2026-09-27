@@ -25,6 +25,9 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Range(1f, 2f)] private float haloRadiusMultiplier = 1.25f;
         [SerializeField, Range(0f, 1f)] private float normalInfluence = 0.82f;
         [SerializeField, Min(0.01f)] private float worldCellSize = 0.12f;
+        [Tooltip("Optional room volume. Two assigned boxes form a union; no boxes preserves unrestricted lighting. This is a room boundary, not a wall or furniture shadow solver.")]
+        [SerializeField] private BoxCollider illuminationVolume;
+        [SerializeField] private BoxCollider illuminationVolume2;
 
         public Color Color => color;
         public float Radius => radius;
@@ -35,6 +38,8 @@ namespace FantasySurvival.WorldLighting
         public float HaloRadiusMultiplier => haloRadiusMultiplier;
         public float NormalInfluence => normalInfluence;
         public float WorldCellSize => worldCellSize;
+        public BoxCollider IlluminationVolume => illuminationVolume;
+        public BoxCollider IlluminationVolume2 => illuminationVolume2;
 
         private void OnEnable()
         {
@@ -68,6 +73,12 @@ namespace FantasySurvival.WorldLighting
             float[] worldCellSizes,
             float[] haloRadiusMultipliers,
             float[] selectionDistances,
+            Matrix4x4[] volumeWorldToLocal,
+            Vector4[] volumeCenters,
+            Vector4[] volumeExtents,
+            Matrix4x4[] volume2WorldToLocal,
+            Vector4[] volume2Centers,
+            Vector4[] volume2Extents,
             Camera camera,
             Plane[] frustumPlanes,
             Scene activeScene,
@@ -90,6 +101,12 @@ namespace FantasySurvival.WorldLighting
             clampedLimit = Mathf.Min(clampedLimit, worldCellSizes.Length);
             clampedLimit = Mathf.Min(clampedLimit, haloRadiusMultipliers.Length);
             clampedLimit = Mathf.Min(clampedLimit, selectionDistances.Length);
+            clampedLimit = Mathf.Min(clampedLimit, volumeWorldToLocal.Length);
+            clampedLimit = Mathf.Min(clampedLimit, volumeCenters.Length);
+            clampedLimit = Mathf.Min(clampedLimit, volumeExtents.Length);
+            clampedLimit = Mathf.Min(clampedLimit, volume2WorldToLocal.Length);
+            clampedLimit = Mathf.Min(clampedLimit, volume2Centers.Length);
+            clampedLimit = Mathf.Min(clampedLimit, volume2Extents.Length);
             if (clampedLimit <= 0 ||
                 camera == null ||
                 frustumPlanes == null ||
@@ -154,6 +171,12 @@ namespace FantasySurvival.WorldLighting
                         haloRadiusMultipliers[insertIndex - 1];
                     selectionDistances[insertIndex] =
                         selectionDistances[insertIndex - 1];
+                    volumeWorldToLocal[insertIndex] = volumeWorldToLocal[insertIndex - 1];
+                    volumeCenters[insertIndex] = volumeCenters[insertIndex - 1];
+                    volumeExtents[insertIndex] = volumeExtents[insertIndex - 1];
+                    volume2WorldToLocal[insertIndex] = volume2WorldToLocal[insertIndex - 1];
+                    volume2Centers[insertIndex] = volume2Centers[insertIndex - 1];
+                    volume2Extents[insertIndex] = volume2Extents[insertIndex - 1];
                     insertIndex--;
                 }
 
@@ -176,10 +199,34 @@ namespace FantasySurvival.WorldLighting
                 worldCellSizes[insertIndex] = light.worldCellSize;
                 haloRadiusMultipliers[insertIndex] = light.haloRadiusMultiplier;
                 selectionDistances[insertIndex] = distanceSquared;
+                WriteVolumeData(light.illuminationVolume, insertIndex,
+                    volumeWorldToLocal, volumeCenters, volumeExtents);
+                WriteVolumeData(light.illuminationVolume2, insertIndex,
+                    volume2WorldToLocal, volume2Centers, volume2Extents);
             }
 
             truncated = eligibleCount > clampedLimit;
             return count;
+        }
+
+        private static void WriteVolumeData(BoxCollider volume, int index,
+            Matrix4x4[] worldToLocal, Vector4[] centers, Vector4[] extents)
+        {
+            if (volume == null)
+            {
+                worldToLocal[index] = Matrix4x4.identity;
+                centers[index] = Vector4.zero;
+                extents[index] = Vector4.zero;
+                return;
+            }
+
+            // Use collider-local bounds, not its world AABB: building rotation
+            // and inherited scale must not enlarge the permitted room region.
+            Vector3 center = volume.center;
+            Vector3 halfSize = volume.size * 0.5f;
+            worldToLocal[index] = volume.transform.worldToLocalMatrix;
+            centers[index] = new Vector4(center.x, center.y, center.z, 1f);
+            extents[index] = new Vector4(halfSize.x, halfSize.y, halfSize.z, 0f);
         }
 
         private void OnDrawGizmosSelected()

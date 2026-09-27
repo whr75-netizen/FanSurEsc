@@ -1,0 +1,539 @@
+{
+  "schema": "building34-common-pixel-proxy-calibration/1",
+  "status": "geometry_calibrated",
+  "scope": "Common native texel metre size and conservative depth proxy only; not original 3D recovery or art approval",
+  "normalization_is_separate": "Native PNG data is preserved byte-for-byte; this is a world mapping, not image pixel-grid detection",
+  "plan_path": "docs/artifacts/building32/layout-plan.json",
+  "plan_sha256": "f76d77651761f26ac14f546d68bf3aba7ed3ad1d3e69815bb1f85363b8bd98ac",
+  "input_summary_path": "docs/artifacts/building34/native-summary.json",
+  "input_summary_sha256": "3c5f541e2f89b31833b3e928695dcbe86e2dc34305d730ceeca9ef452f1ca997",
+  "solver_path": "Tools/Building34/calibrate.py",
+  "solver_sha256": "5985e1095735e222493c2fe86c011cb085b91eada5c6a0e9f58d898773297292",
+  "alpha_coverage_rule": "alpha > 0.1; all four texel corners inside projected proxy hull",
+  "camera_local_pitch_degrees": 30,
+  "camera_local_yaw_degrees": 45,
+  "basis": {
+    "right": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "up": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "forward": [
+      0.6123724356957945,
+      -0.5,
+      0.6123724356957945
+    ]
+  },
+  "basis_consistency": "Unity Quaternion.Euler(30,45,0); orthonormal basis checked before projection",
+  "mapping": "screen_m = (native_x + 0.5, -native_y - 0.5) / ppu + origin_screen_m",
+  "fit_algorithm": "Convex hull halfplanes; support of all opaque texel squares; polygon-clipped feasible translations; monotone binary search; ceil common PPU",
+  "minimum_common_ppu": 180.7766775137516,
+  "ppu": 181,
+  "metres_per_native_texel": 0.0055248618784530384,
+  "height_override": {
+    "checkout": {
+      "height_m": 1.55,
+      "reason": "Includes the cash register silhouette above the 1m counter"
+    }
+  },
+  "assets": [
+    {
+      "id": "counter",
+      "fixture_id": "checkout",
+      "native_path": "docs/artifacts/building34/native/counter/native.png",
+      "native_sha256": "95f226b6a8300ed205aac0b29d7aafe7b311eae5de5ba6fa4b94df8899505737",
+      "native_dimensions": [
+        274,
+        228
+      ],
+      "origin_screen_m": [
+        -1.2418680874675367,
+        0.8890409233496259
+      ],
+      "ppu": 181,
+      "width_m": 2.4000000000000004,
+      "depth_m": 0.8,
+      "height_m": 1.55,
+      "center_xz": [
+        -2.95,
+        -1.35
+      ],
+      "opaque_ray_misses": 0,
+      "bbox_width_depth_height_m": [
+        2.4000000000000004,
+        0.8,
+        1.55
+      ],
+      "bbox_min_xyz_m": [
+        -1.2000000000000002,
+        0.0,
+        -0.4
+      ],
+      "bbox_max_xyz_m": [
+        1.2000000000000002,
+        1.55,
+        0.4
+      ],
+      "planned_center_xz_m": [
+        -2.95,
+        -1.35
+      ],
+      "projected_proxy_hull_m": [
+        [
+          -1.131370849898476,
+          -0.28284271247461906
+        ],
+        [
+          -0.5656854249492381,
+          -0.565685424949238
+        ],
+        [
+          1.131370849898476,
+          0.28284271247461906
+        ],
+        [
+          1.131370849898476,
+          1.625182088340499
+        ],
+        [
+          0.5656854249492381,
+          1.908024800815118
+        ],
+        [
+          -1.131370849898476,
+          1.0594966633912608
+        ]
+      ],
+      "opaque_bbox_xyxy_exclusive": [
+        20,
+        26,
+        263,
+        223
+      ],
+      "minimum_individual_ppu": 143.07990119802227,
+      "grounding": {
+        "selection": "minimum translation Y in feasible polygon",
+        "exact_ground_anchor_feasible": false,
+        "desired_translation_y_m": 0.6663587739457897,
+        "projected_front_ground_min_y_m": -0.565685424949238,
+        "opaque_bottom_gap_screen_m": 0.22268214940383624,
+        "opaque_bottom_gap_native_pixels": 40.30546904209436,
+        "note": "Finite texel lower edges can require a positive gap above the single lowest hull vertex."
+      },
+      "ray_observation": {
+        "opaque_pixel_count": 27346,
+        "sample_count": 136730,
+        "sample_rule": "Each alpha > 0.1 pixel centre and all four full-cell corners",
+        "hit_count": 136730,
+        "hit_miss_count": 0,
+        "entry_height_min_m": 2.7478019859472624e-15,
+        "entry_height_max_m": 1.3085177383054454,
+        "slab_near_min_m": -1.59391586718857,
+        "slab_near_max_m": -0.3516757829574009,
+        "maximum_halfplane_violation_m": 0.0,
+        "ray": "line = right * screenX + up * screenY + lambda * cameraForward; entry uses minimum lambda"
+      }
+    },
+    {
+      "id": "left_shelf",
+      "fixture_id": "left_shelf",
+      "native_path": "docs/artifacts/building34/native/left_shelf/native.png",
+      "native_sha256": "dfc8ae47e0d4919d56c877255fc6b97af412cb91367bdb9e00282bda88c14cca",
+      "native_dimensions": [
+        206,
+        277
+      ],
+      "origin_screen_m": [
+        0.07170989553672769,
+        1.0448306974336816
+      ],
+      "ppu": 181,
+      "width_m": 0.5999999999999996,
+      "depth_m": 2.4,
+      "height_m": 1.8,
+      "center_xz": [
+        -4.55,
+        1.8499999999999999
+      ],
+      "opaque_ray_misses": 0,
+      "bbox_width_depth_height_m": [
+        0.5999999999999996,
+        2.4,
+        1.8
+      ],
+      "bbox_min_xyz_m": [
+        -0.2999999999999998,
+        0.0,
+        -1.2
+      ],
+      "bbox_max_xyz_m": [
+        0.2999999999999998,
+        1.8,
+        1.2
+      ],
+      "planned_center_xz_m": [
+        -4.55,
+        1.8499999999999999
+      ],
+      "projected_proxy_hull_m": [
+        [
+          -1.060660171779821,
+          0.3181980515339464
+        ],
+        [
+          0.6363961030678928,
+          -0.5303300858899105
+        ],
+        [
+          1.060660171779821,
+          -0.3181980515339464
+        ],
+        [
+          1.060660171779821,
+          1.240647675278043
+        ],
+        [
+          -0.6363961030678928,
+          2.0891758127019
+        ],
+        [
+          -1.060660171779821,
+          1.877043778345936
+        ]
+      ],
+      "opaque_bbox_xyxy_exclusive": [
+        33,
+        15,
+        179,
+        263
+      ],
+      "minimum_individual_ppu": 149.76477886076458,
+      "grounding": {
+        "selection": "minimum translation Y in feasible polygon",
+        "exact_ground_anchor_feasible": false,
+        "desired_translation_y_m": 0.9227085881432386,
+        "projected_front_ground_min_y_m": -0.5303300858899105,
+        "opaque_bottom_gap_screen_m": 0.12212210929044298,
+        "opaque_bottom_gap_native_pixels": 22.10410178157018,
+        "note": "Finite texel lower edges can require a positive gap above the single lowest hull vertex."
+      },
+      "ray_observation": {
+        "opaque_pixel_count": 26736,
+        "sample_count": 133680,
+        "sample_rule": "Each alpha > 0.1 pixel centre and all four full-cell corners",
+        "hit_count": 133680,
+        "hit_miss_count": 0,
+        "entry_height_min_m": -1.8318679906315083e-15,
+        "entry_height_max_m": 1.561130908288276,
+        "slab_near_min_m": -1.6639711033532707,
+        "slab_near_max_m": -0.6017741992640697,
+        "maximum_halfplane_violation_m": 1.1102230246251565e-15,
+        "ray": "line = right * screenX + up * screenY + lambda * cameraForward; entry uses minimum lambda"
+      }
+    },
+    {
+      "id": "rear_shelf",
+      "fixture_id": "rear_shelf",
+      "native_path": "docs/artifacts/building34/native/rear_shelf/native.png",
+      "native_sha256": "94b89773092c0a68ee2c29469220d147d69f22d9c155825e9f7f8b0c67ba5c9d",
+      "native_dimensions": [
+        289,
+        279
+      ],
+      "origin_screen_m": [
+        -1.3368843808886126,
+        1.2906964934317777
+      ],
+      "ppu": 181,
+      "width_m": 2.9,
+      "depth_m": 0.5999999999999996,
+      "height_m": 1.8,
+      "center_xz": [
+        -1.05,
+        3.625
+      ],
+      "opaque_ray_misses": 0,
+      "bbox_width_depth_height_m": [
+        2.9,
+        0.5999999999999996,
+        1.8
+      ],
+      "bbox_min_xyz_m": [
+        -1.45,
+        0.0,
+        -0.2999999999999998
+      ],
+      "bbox_max_xyz_m": [
+        1.45,
+        1.8,
+        0.2999999999999998
+      ],
+      "planned_center_xz_m": [
+        -1.05,
+        3.625
+      ],
+      "projected_proxy_hull_m": [
+        [
+          -1.237436867076458,
+          -0.4065863991822649
+        ],
+        [
+          -0.8131727983645298,
+          -0.618718433538229
+        ],
+        [
+          1.237436867076458,
+          0.4065863991822649
+        ],
+        [
+          1.237436867076458,
+          1.9654321259942542
+        ],
+        [
+          0.8131727983645298,
+          2.1775641603502183
+        ],
+        [
+          -1.237436867076458,
+          1.1522593276297248
+        ]
+      ],
+      "opaque_bbox_xyxy_exclusive": [
+        18,
+        13,
+        273,
+        273
+      ],
+      "minimum_individual_ppu": 180.7766775137516,
+      "grounding": {
+        "selection": "minimum translation Y in feasible polygon",
+        "exact_ground_anchor_feasible": false,
+        "desired_translation_y_m": 0.8895688592794506,
+        "projected_front_ground_min_y_m": -0.618718433538229,
+        "opaque_bottom_gap_screen_m": 0.4011276341523271,
+        "opaque_bottom_gap_native_pixels": 72.6041017815712,
+        "note": "Finite texel lower edges can require a positive gap above the single lowest hull vertex."
+      },
+      "ray_observation": {
+        "opaque_pixel_count": 48175,
+        "sample_count": 240875,
+        "sample_rule": "Each alpha > 0.1 pixel centre and all four full-cell corners",
+        "hit_count": 240875,
+        "hit_miss_count": 0,
+        "entry_height_min_m": 4.718447854656915e-15,
+        "entry_height_max_m": 1.8,
+        "slab_near_min_m": -1.9696403900938808,
+        "slab_near_max_m": -0.2237688561434205,
+        "maximum_halfplane_violation_m": 0.0,
+        "ray": "line = right * screenX + up * screenY + lambda * cameraForward; entry uses minimum lambda"
+      }
+    },
+    {
+      "id": "island",
+      "fixture_id": "display_island",
+      "native_path": "docs/artifacts/building34/native/island/native.png",
+      "native_sha256": "03d4bf66a48ff4dde17f5aca09ad3095da167ad52860cadb79e02a162f0294da",
+      "native_dimensions": [
+        176,
+        138
+      ],
+      "origin_screen_m": [
+        -0.5557859971212871,
+        0.30060536366665414
+      ],
+      "ppu": 181,
+      "width_m": 1.6,
+      "depth_m": 1.1999999999999997,
+      "height_m": 0.85,
+      "center_xz": [
+        2.8499999999999996,
+        -1.95
+      ],
+      "opaque_ray_misses": 0,
+      "bbox_width_depth_height_m": [
+        1.6,
+        1.1999999999999997,
+        0.85
+      ],
+      "bbox_min_xyz_m": [
+        -0.8,
+        0.0,
+        -0.5999999999999999
+      ],
+      "bbox_max_xyz_m": [
+        0.8,
+        0.85,
+        0.5999999999999999
+      ],
+      "planned_center_xz_m": [
+        2.8499999999999996,
+        -1.95
+      ],
+      "projected_proxy_hull_m": [
+        [
+          -0.9899494936611664,
+          -0.07071067811865482
+        ],
+        [
+          -0.14142135623730964,
+          -0.4949747468305832
+        ],
+        [
+          0.9899494936611664,
+          0.07071067811865482
+        ],
+        [
+          0.9899494936611664,
+          0.8068322713354276
+        ],
+        [
+          0.14142135623730964,
+          1.231096340047356
+        ],
+        [
+          -0.9899494936611664,
+          0.665410915098118
+        ]
+      ],
+      "opaque_bbox_xyxy_exclusive": [
+        8,
+        12,
+        173,
+        133
+      ],
+      "minimum_individual_ppu": 86.4796002713274,
+      "grounding": {
+        "selection": "minimum translation Y in feasible polygon",
+        "exact_ground_anchor_feasible": false,
+        "desired_translation_y_m": 0.23983188300367098,
+        "projected_front_ground_min_y_m": -0.4949747468305832,
+        "opaque_bottom_gap_screen_m": 0.06077348066298316,
+        "opaque_bottom_gap_native_pixels": 10.999999999999952,
+        "note": "Finite texel lower edges can require a positive gap above the single lowest hull vertex."
+      },
+      "ray_observation": {
+        "opaque_pixel_count": 13278,
+        "sample_count": 66390,
+        "sample_rule": "Each alpha > 0.1 pixel centre and all four full-cell corners",
+        "hit_count": 66390,
+        "hit_miss_count": 0,
+        "entry_height_min_m": -3.608224830031759e-16,
+        "entry_height_max_m": 0.7910655622045697,
+        "slab_near_min_m": -1.2528541910763968,
+        "slab_near_max_m": -0.41394192148042125,
+        "maximum_halfplane_violation_m": 3.3306690738754696e-16,
+        "ray": "line = right * screenX + up * screenY + lambda * cameraForward; entry uses minimum lambda"
+      }
+    },
+    {
+      "id": "stock_shelf",
+      "fixture_id": "stock_shelf",
+      "native_path": "docs/artifacts/building34/native/stock_shelf/native.png",
+      "native_sha256": "f0df0a231dbb670af2985e79fd455b07606715c29cbefa69b5fca309629f7ab4",
+      "native_dimensions": [
+        185,
+        228
+      ],
+      "origin_screen_m": [
+        -1.1280615982155622,
+        0.8674835753760334
+      ],
+      "ppu": 181,
+      "width_m": 2.4499999999999997,
+      "depth_m": 0.6000000000000001,
+      "height_m": 1.8,
+      "center_xz": [
+        3.325,
+        3.575
+      ],
+      "opaque_ray_misses": 0,
+      "bbox_width_depth_height_m": [
+        2.4499999999999997,
+        0.6000000000000001,
+        1.8
+      ],
+      "bbox_min_xyz_m": [
+        -1.2249999999999999,
+        0.0,
+        -0.30000000000000004
+      ],
+      "bbox_max_xyz_m": [
+        1.2249999999999999,
+        1.8,
+        0.30000000000000004
+      ],
+      "planned_center_xz_m": [
+        3.325,
+        3.575
+      ],
+      "projected_proxy_hull_m": [
+        [
+          -1.0783378413094848,
+          -0.32703688629877814
+        ],
+        [
+          -0.6540737725975563,
+          -0.5391689206547424
+        ],
+        [
+          1.0783378413094848,
+          0.32703688629877814
+        ],
+        [
+          1.0783378413094848,
+          1.8858826131107675
+        ],
+        [
+          0.6540737725975563,
+          2.098014647466732
+        ],
+        [
+          -1.0783378413094848,
+          1.2318088405132115
+        ]
+      ],
+      "opaque_bbox_xyxy_exclusive": [
+        9,
+        8,
+        178,
+        221
+      ],
+      "minimum_individual_ppu": 136.40192822167285,
+      "grounding": {
+        "selection": "minimum translation Y in feasible polygon",
+        "exact_ground_anchor_feasible": false,
+        "desired_translation_y_m": 0.6818255544833792,
+        "projected_front_ground_min_y_m": -0.5391689206547424,
+        "opaque_bottom_gap_screen_m": 0.18565802089265415,
+        "opaque_bottom_gap_native_pixels": 33.6041017815704,
+        "note": "Finite texel lower edges can require a positive gap above the single lowest hull vertex."
+      },
+      "ray_observation": {
+        "opaque_pixel_count": 22659,
+        "sample_count": 113295,
+        "sample_rule": "Each alpha > 0.1 pixel centre and all four full-cell corners",
+        "hit_count": 113295,
+        "hit_miss_count": 0,
+        "entry_height_min_m": -3.3306690738754696e-16,
+        "entry_height_max_m": 1.4303499080851028,
+        "slab_near_min_m": -1.613889914144079,
+        "slab_near_max_m": -0.5134156441417533,
+        "maximum_halfplane_violation_m": 0.0,
+        "ray": "line = right * screenX + up * screenY + lambda * cameraForward; entry uses minimum lambda"
+      }
+    }
+  ],
+  "total_hit_miss_count": 0,
+  "limits": [
+    "A cuboid is only an explicit physical/depth proxy, not recovered detailed furniture geometry.",
+    "Projected containment does not prove source camera angle, internal perspective or stylistic correctness.",
+    "Exact opaque-bottom contact may be infeasible because the projected ground minimum is a single vertex.",
+    "This calibration supports the fixed local 30 degree pitch and 45 degree yaw only.",
+    "World integration, actual gameplay and visual quality have not been tested by this script."
+  ]
+}

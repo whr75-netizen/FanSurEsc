@@ -29,6 +29,18 @@ namespace FantasySurvival.Rendering
             Shader.PropertyToID("_SteppedLocalLightWorldCellSizes");
         private static readonly int HaloRadiusMultipliersId =
             Shader.PropertyToID("_SteppedLocalLightHaloRadiusMultipliers");
+        private static readonly int VolumeWorldToLocalId =
+            Shader.PropertyToID("_SteppedLocalLightVolumeWorldToLocal");
+        private static readonly int VolumeCentersId =
+            Shader.PropertyToID("_SteppedLocalLightVolumeCenters");
+        private static readonly int VolumeExtentsId =
+            Shader.PropertyToID("_SteppedLocalLightVolumeExtents");
+        private static readonly int Volume2WorldToLocalId =
+            Shader.PropertyToID("_SteppedLocalLightVolume2WorldToLocal");
+        private static readonly int Volume2CentersId =
+            Shader.PropertyToID("_SteppedLocalLightVolume2Centers");
+        private static readonly int Volume2ExtentsId =
+            Shader.PropertyToID("_SteppedLocalLightVolume2Extents");
 
         [Tooltip("Render only this many nearest visible lights from the gameplay scene and persistent gameplay shell.")]
         [SerializeField, Range(1, MaximumLightCount)] private int visibleLightLimit = 8;
@@ -39,6 +51,12 @@ namespace FantasySurvival.Rendering
         private readonly float[] worldCellSizes = new float[MaximumLightCount];
         private readonly float[] haloRadiusMultipliers = new float[MaximumLightCount];
         private readonly float[] selectionDistances = new float[MaximumLightCount];
+        private readonly Matrix4x4[] volumeWorldToLocal = new Matrix4x4[MaximumLightCount];
+        private readonly Vector4[] volumeCenters = new Vector4[MaximumLightCount];
+        private readonly Vector4[] volumeExtents = new Vector4[MaximumLightCount];
+        private readonly Matrix4x4[] volume2WorldToLocal = new Matrix4x4[MaximumLightCount];
+        private readonly Vector4[] volume2Centers = new Vector4[MaximumLightCount];
+        private readonly Vector4[] volume2Extents = new Vector4[MaximumLightCount];
         private readonly Plane[] frustumPlanes = new Plane[6];
         private CharacterVisibleStencilPass characterStencilPass;
         private Material characterStencilMaterial;
@@ -84,6 +102,12 @@ namespace FantasySurvival.Rendering
                 worldCellSizes,
                 haloRadiusMultipliers,
                 selectionDistances,
+                volumeWorldToLocal,
+                volumeCenters,
+                volumeExtents,
+                volume2WorldToLocal,
+                volume2Centers,
+                volume2Extents,
                 camera,
                 frustumPlanes,
                 SceneManager.GetActiveScene(),
@@ -124,6 +148,12 @@ namespace FantasySurvival.Rendering
             passMaterial.SetVectorArray(QuantizationSettingsId, quantizationSettings);
             passMaterial.SetFloatArray(WorldCellSizesId, worldCellSizes);
             passMaterial.SetFloatArray(HaloRadiusMultipliersId, haloRadiusMultipliers);
+            passMaterial.SetMatrixArray(VolumeWorldToLocalId, volumeWorldToLocal);
+            passMaterial.SetVectorArray(VolumeCentersId, volumeCenters);
+            passMaterial.SetVectorArray(VolumeExtentsId, volumeExtents);
+            passMaterial.SetMatrixArray(Volume2WorldToLocalId, volume2WorldToLocal);
+            passMaterial.SetVectorArray(Volume2CentersId, volume2Centers);
+            passMaterial.SetVectorArray(Volume2ExtentsId, volume2Extents);
             base.AddRenderPasses(renderer, ref renderingData);
         }
 
@@ -182,6 +212,12 @@ namespace FantasySurvival.Rendering
             Shader.SetGlobalFloatArray(
                 HaloRadiusMultipliersId,
                 haloRadiusMultipliers);
+            Shader.SetGlobalMatrixArray(VolumeWorldToLocalId, volumeWorldToLocal);
+            Shader.SetGlobalVectorArray(VolumeCentersId, volumeCenters);
+            Shader.SetGlobalVectorArray(VolumeExtentsId, volumeExtents);
+            Shader.SetGlobalMatrixArray(Volume2WorldToLocalId, volume2WorldToLocal);
+            Shader.SetGlobalVectorArray(Volume2CentersId, volume2Centers);
+            Shader.SetGlobalVectorArray(Volume2ExtentsId, volume2Extents);
         }
 
         private sealed class CharacterVisibleStencilPass : ScriptableRenderPass

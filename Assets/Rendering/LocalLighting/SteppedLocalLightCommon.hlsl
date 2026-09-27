@@ -9,6 +9,36 @@ float4 _SteppedLocalLightColorsAndIntensities[STEPPED_LOCAL_LIGHT_MAXIMUM];
 float4 _SteppedLocalLightQuantizationSettings[STEPPED_LOCAL_LIGHT_MAXIMUM];
 float _SteppedLocalLightWorldCellSizes[STEPPED_LOCAL_LIGHT_MAXIMUM];
 float _SteppedLocalLightHaloRadiusMultipliers[STEPPED_LOCAL_LIGHT_MAXIMUM];
+float4x4 _SteppedLocalLightVolumeWorldToLocal[STEPPED_LOCAL_LIGHT_MAXIMUM];
+float4 _SteppedLocalLightVolumeCenters[STEPPED_LOCAL_LIGHT_MAXIMUM];
+float4 _SteppedLocalLightVolumeExtents[STEPPED_LOCAL_LIGHT_MAXIMUM];
+float4x4 _SteppedLocalLightVolume2WorldToLocal[STEPPED_LOCAL_LIGHT_MAXIMUM];
+float4 _SteppedLocalLightVolume2Centers[STEPPED_LOCAL_LIGHT_MAXIMUM];
+float4 _SteppedLocalLightVolume2Extents[STEPPED_LOCAL_LIGHT_MAXIMUM];
+
+bool IsInsideSteppedLightRoom(int index, float3 positionWS)
+{
+    float4 center = _SteppedLocalLightVolumeCenters[index];
+    float4 center2 = _SteppedLocalLightVolume2Centers[index];
+    if (center.w < 0.5 && center2.w < 0.5)
+        return true;
+
+    // The union describes an authored room, including L-shaped sales rooms.
+    // It does not trace dynamic shadows through walls or furniture.
+    if (center.w > 0.5)
+    {
+        float3 local = mul(_SteppedLocalLightVolumeWorldToLocal[index], float4(positionWS, 1.0)).xyz;
+        if (all(abs(local - center.xyz) <= _SteppedLocalLightVolumeExtents[index].xyz))
+            return true;
+    }
+    if (center2.w > 0.5)
+    {
+        float3 local = mul(_SteppedLocalLightVolume2WorldToLocal[index], float4(positionWS, 1.0)).xyz;
+        if (all(abs(local - center2.xyz) <= _SteppedLocalLightVolume2Extents[index].xyz))
+            return true;
+    }
+    return false;
+}
 
 float3 SteppedSafeNormalize(float3 value)
 {
@@ -41,6 +71,11 @@ half3 EvaluateSteppedLocalLights(
         {
             break;
         }
+
+        // Test the actual surface before light-grid rounding; rounding must
+        // never move an outside surface into an illuminated room.
+        if (!IsInsideSteppedLightRoom(index, positionWS))
+            continue;
 
         float4 positionAndRadius = _SteppedLocalLightPositionsAndRadii[index];
         float4 colorAndIntensity =

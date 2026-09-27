@@ -2544,3 +2544,14 @@ Interactable (abstract base class)
 - `[원본 실행 1회]` native_normalize.py는 원본 public selector→NumPy backend의 자동검출을 사용한다. 입력1374×1145 RGBA에서275×229 추정, 경계 정렬 후274×228. 수동목표/crop/resize/알파 threshold/경계보정 없음. 같은 upstream 셀 중심에서 RGBA 샘플링. 원본파일・엔진・출력 해시/좌표 receipt와 native.png 보존. 기존5개강제크기옵션 거절, 원본단색입력실패를 실패receipt로 보존하며 임의fallback없음, 기존출력 덮어쓰기 거절.
 - `[실제 확인]` Unity Edit Mode에서두퇴역진입점2/2거절, GameMap1 dirty false→false. remediation-graph의 고정7case(legacy CLI2,원본실제산출,옛manifest거절,기준아트없는생성거절,배치solver미등록거절,Unity관측)통과. source-center별RGBA는실제원본과전부비교; 이는원본자동경로/출처범위이지미술합격아님. 일반계산만연속실행하며원본이미지정규화는재실행하지않았다.
 - `[남은 범위]` 전체상가기준아트・개별자산대응・공통투영calibration・새Unity통합은 미완료. 최신 운영교정 우선요청에 따라 새 생성/씬교체는 수행하지 않았다. 로컬gate는 Codex전체도구/모델/서버/턴종료를 통제하는 sandbox가 아니다. 기존게임기능Play/빌드/저장로드검증은 변경원인이없어 반복하지 않았다.
+
+## 167. B34 기지 상가 내부·원본 자동 격자·깊이/지붕 교정 `[MAP-01][CAMERA-01]`
+
+- `[요구/구현]` 사용자 요청은 문제점을 고치고 건물 내부 한 채를 실제로 완성하는 것. GameMap1(-16,0,9)의 같은 PlannedPixelShop33 prefab에 개별 계산대·판매선반2개·진열섬·재고선반, 별도 재고실/목재바닥/벽/지붕/램프2개를 조립했다. 원본 Player/Camera·입력·B32평면·사용점 보존. 이전B33/최초B34는 비활성 보존했다. 미술 합격은 자기 선언하지 않는다.
+- `[원본]` 원본PerfectPixel 자동검출9종, 수동target/resize/crop 없음. 각nativePNG 해시 보존. 생성한 master-reference는 참고용이며 게임 배경으로 쓰지 않는다. 새목재 재료1254×1254→자동125×132, 원본과receipt를 보존하고 표면 재료로만 샘플한다.
+- `[깊이 원인]` 기존 세로quad는 그림의바닥깊이까지월드높이로읽어 선반3.23m/지붕2.46m가되었다. 고정뷰ray/cuboid교점XYZ를texel별저장,Forward/Depth/Normal모두동일SV_Depth. 원본opaque센터/네corner miss0. 닫힌roof는독립opaquecoverage로바닥alpha재사용없음.
+- `[실패/교정]` 처음가구장축불일치를포함제약만으로처리해PPU181로너무작게보였다. 시설사용면에맞춰원본4종mirrorU를UV/깊이에같이적용,공통127px/m. near벽도XMIN/ZMIN으로교정. 원본내부각도/밀도차이까지수정한것은아니다. 실내앞벽/칸막이는하단.55m를남기고상부fade,물리벽/출입구보존.
+- `[조명]` 기존SteppedLocalLight에선택적인2boxunion범위를추가,이번판매공간2구역연결. 미지정기존광원은기존동작. 새램프기여.12/6bands,큰원판의.12밝기점프를축소. 이는영역제한이지동적가구그림자/전체실내광차폐아님.
+- `[Play Mode 호출 확인]` 기존StepMove6/6접근점·벽정지·실내지붕숨김/외부복원,동일Player/Camera EntityID. 카메라30°/350°,1114×857에서source1texel=screen1pixel. native surface25,source/depth불일치0/frame누출0/roof누출0. 화면4장과JSON은docs/artifacts/building34. overview2560×1600은같은카메라재프레이밍으로실제걷기화면과구분한다.
+- `[검증 실패를 보존]` 최초2560×1800촬영이기존캐릭터대표인덱스상한초과/URP후속오류발생. 촬영해상도만2560×1600으로교정. 오류0수동기록은자동승인검토거부;기존Console지우거나수정하지않음. 이후실제내외부렌더전후MCP전체응답11→11,추가오류0을Counter로계산했다. 기존relay1/최초촬영관련10기록보존. volumetricSpotLight가시성/개수경고별도보존.
+- `[납품/한계]` 기존graph/방향교정graph미완료상태보존,최종관측전후증거용graph-final-validation은고정조건통과. delivery-final-result.json은기술범위이며원작동등미술합격은아니다. 자유회전·키보드입력·빌드·저장로드·GPU성능미검증. 작은viewport의기존줌범위와native1배보존불일치노출. 메뉴Tools/World Art/Inspect Completed Shop Interior 34로편집SceneView/Play기존Player접근가능.

@@ -1,0 +1,603 @@
+{
+  "schema": "building34-native-input-summary/1",
+  "scope": "Production input collection only; not art approval or Unity integration",
+  "normalization": "Unmodified original upstream automatic grid; no target, resize, crop or palette conversion",
+  "bbox_semantics": "Analysis only; alpha > 0.1; bounding boxes never crop or alter saved image",
+  "common_grid_assumption": "Not established. Separate original generations can produce different detected cells; statistics are observations, not a shared world PPU.",
+  "assets": [
+    {
+      "id": "counter",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/counter.png",
+      "source_sha256": "be8af789808b3655f6528c262e64fcfc0d14db5f51c7bcca64f0a3e35fc9cb16",
+      "source_dimensions": [
+        1374,
+        1145
+      ],
+      "receipt_path": "docs/artifacts/building34/native/counter/receipt.json",
+      "reused_prior_counter_result": true,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            372.0,
+            238.0
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            275.0,
+            229.0
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            275.0,
+            229.0
+          ]
+        ]
+      },
+      "receipt_preserved_from": "docs/artifacts/building33-native-probe/receipt.json",
+      "native_path": "docs/artifacts/building34/native/counter/native.png",
+      "native_sha256": "95f226b6a8300ed205aac0b29d7aafe7b311eae5de5ba6fa4b94df8899505737",
+      "native_dimensions": [
+        274,
+        228
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        20,
+        26,
+        263,
+        223
+      ],
+      "alpha_gt_0_1_pixel_count": 27346,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 5.0,
+          "mean": 5.021897810218978,
+          "min": 4,
+          "max": 6
+        },
+        "y": {
+          "median": 5.0,
+          "mean": 5.026315789473684,
+          "min": 4,
+          "max": 6
+        }
+      }
+    },
+    {
+      "id": "floor",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/floor.png",
+      "source_sha256": "370ab0301b77e10a0943be7dce4473494112de4dc3e82c53e11cb7eb944b407e",
+      "source_dimensions": [
+        1774,
+        887
+      ],
+      "receipt_path": "docs/artifacts/building34/native/floor/receipt.json",
+      "reused_prior_counter_result": false,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            144.0,
+            135.0
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            253.0,
+            127.0
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            253.0,
+            127.0
+          ]
+        ]
+      },
+      "native_path": "docs/artifacts/building34/native/floor/native.png",
+      "native_sha256": "1d7e3363b379336c5d172ca8a618bde34712ee387c8de9ced9b6b013e291e4f8",
+      "native_dimensions": [
+        255,
+        127
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        10,
+        4,
+        244,
+        123
+      ],
+      "alpha_gt_0_1_pixel_count": 13801,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 7,
+          "mean": 6.952941176470588,
+          "min": 5,
+          "max": 9
+        },
+        "y": {
+          "median": 7,
+          "mean": 6.9763779527559056,
+          "min": 6,
+          "max": 8
+        }
+      }
+    },
+    {
+      "id": "island",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/island.png",
+      "source_sha256": "902e052eedd5a2edd12b994d1813febc916c39b86b6e786f08e72c00933302a3",
+      "source_dimensions": [
+        1426,
+        1103
+      ],
+      "receipt_path": "docs/artifacts/building34/native/island/receipt.json",
+      "reused_prior_counter_result": false,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            186.0,
+            330.0
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            178.0,
+            138.0
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            178.0,
+            138.0
+          ]
+        ]
+      },
+      "native_path": "docs/artifacts/building34/native/island/native.png",
+      "native_sha256": "03d4bf66a48ff4dde17f5aca09ad3095da167ad52860cadb79e02a162f0294da",
+      "native_dimensions": [
+        176,
+        138
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        8,
+        12,
+        173,
+        133
+      ],
+      "alpha_gt_0_1_pixel_count": 13278,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 8.0,
+          "mean": 8.068181818181818,
+          "min": 6,
+          "max": 10
+        },
+        "y": {
+          "median": 8.0,
+          "mean": 7.992753623188406,
+          "min": 6,
+          "max": 10
+        }
+      }
+    },
+    {
+      "id": "lamp",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/lamp.png",
+      "source_sha256": "bc10b5d75ba7f1f87edd18860995c78f699bac4417a65b92d8f799018795caf6",
+      "source_dimensions": [
+        1024,
+        1536
+      ],
+      "receipt_path": "docs/artifacts/building34/native/lamp/receipt.json",
+      "reused_prior_counter_result": false,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            57.0,
+            84.0
+          ]
+        ],
+        "estimate_grid_gradient": [],
+        "detect_grid_scale": [
+          [
+            56.0,
+            85.0
+          ]
+        ]
+      },
+      "native_path": "docs/artifacts/building34/native/lamp/native.png",
+      "native_sha256": "c741eed66f24e98e6903262d2a0fe1eccf02e6e1294866ec2987d8d987e33ed4",
+      "native_dimensions": [
+        56,
+        85
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        9,
+        5,
+        53,
+        80
+      ],
+      "alpha_gt_0_1_pixel_count": 1635,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 19.0,
+          "mean": 18.285714285714285,
+          "min": 13,
+          "max": 23
+        },
+        "y": {
+          "median": 18,
+          "mean": 18.105882352941176,
+          "min": 13,
+          "max": 23
+        }
+      }
+    },
+    {
+      "id": "left_shelf",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/left_shelf.png",
+      "source_sha256": "cb51e8b099367333c303ced3e36c7b5c3a330e4e2eb28a8d29cee5db4c08058f",
+      "source_dimensions": [
+        1122,
+        1402
+      ],
+      "receipt_path": "docs/artifacts/building34/native/left_shelf/receipt.json",
+      "reused_prior_counter_result": false,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            369.0,
+            207.0
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            224.0,
+            234.0
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            204.0,
+            255.0
+          ]
+        ]
+      },
+      "native_path": "docs/artifacts/building34/native/left_shelf/native.png",
+      "native_sha256": "dfc8ae47e0d4919d56c877255fc6b97af412cb91367bdb9e00282bda88c14cca",
+      "native_dimensions": [
+        206,
+        277
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        33,
+        15,
+        179,
+        263
+      ],
+      "alpha_gt_0_1_pixel_count": 26736,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 6.0,
+          "mean": 5.436893203883495,
+          "min": 4,
+          "max": 6
+        },
+        "y": {
+          "median": 5,
+          "mean": 5.0577617328519855,
+          "min": 4,
+          "max": 6
+        }
+      }
+    },
+    {
+      "id": "rear_shelf",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/rear_shelf.png",
+      "source_sha256": "9b931618de4d972b7d97d2cb938947c56146962682d6baebcddfdc59864e059e",
+      "source_dimensions": [
+        1196,
+        1315
+      ],
+      "receipt_path": "docs/artifacts/building34/native/rear_shelf/receipt.json",
+      "reused_prior_counter_result": false,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            309.0,
+            127.0
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            239.0,
+            329.0
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            266.0,
+            292.0
+          ]
+        ]
+      },
+      "native_path": "docs/artifacts/building34/native/rear_shelf/native.png",
+      "native_sha256": "94b89773092c0a68ee2c29469220d147d69f22d9c155825e9f7f8b0c67ba5c9d",
+      "native_dimensions": [
+        289,
+        279
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        18,
+        13,
+        273,
+        273
+      ],
+      "alpha_gt_0_1_pixel_count": 48175,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 4,
+          "mean": 4.124567474048443,
+          "min": 3,
+          "max": 5
+        },
+        "y": {
+          "median": 5,
+          "mean": 4.702508960573477,
+          "min": 4,
+          "max": 6
+        }
+      }
+    },
+    {
+      "id": "stock_shelf",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/stock_shelf.png",
+      "source_sha256": "5c5f588b45a505bf53286ccb0aeb8175989529a82792fe46fec66790e9237e53",
+      "source_dimensions": [
+        1133,
+        1388
+      ],
+      "receipt_path": "docs/artifacts/building34/native/stock_shelf/receipt.json",
+      "reused_prior_counter_result": false,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            193.0,
+            205.0
+          ]
+        ],
+        "estimate_grid_gradient": [],
+        "detect_grid_scale": [
+          [
+            179.0,
+            220.0
+          ]
+        ]
+      },
+      "native_path": "docs/artifacts/building34/native/stock_shelf/native.png",
+      "native_sha256": "f0df0a231dbb670af2985e79fd455b07606715c29cbefa69b5fca309629f7ab4",
+      "native_dimensions": [
+        185,
+        228
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        9,
+        8,
+        178,
+        221
+      ],
+      "alpha_gt_0_1_pixel_count": 22659,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 6,
+          "mean": 6.108108108108108,
+          "min": 4,
+          "max": 8
+        },
+        "y": {
+          "median": 6.0,
+          "mean": 6.087719298245614,
+          "min": 4,
+          "max": 8
+        }
+      }
+    },
+    {
+      "id": "wall_left",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/wall_left.png",
+      "source_sha256": "ecec718bf295529803df2a88fe930e4eb45fbd88da8e35b373cae1fcf2d1be4c",
+      "source_dimensions": [
+        1122,
+        1402
+      ],
+      "receipt_path": "docs/artifacts/building34/native/wall_left/receipt.json",
+      "reused_prior_counter_result": false,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            160.0,
+            76.0
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            51.0,
+            234.0
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            187.0,
+            234.0
+          ]
+        ]
+      },
+      "native_path": "docs/artifacts/building34/native/wall_left/native.png",
+      "native_sha256": "ce7b7f92bc7ae09fb6d55eadb4c3c0ef3ff41668aa9954f7d78357c4959b97eb",
+      "native_dimensions": [
+        186,
+        238
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        39,
+        9,
+        147,
+        232
+      ],
+      "alpha_gt_0_1_pixel_count": 17789,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 6.0,
+          "mean": 6.026881720430108,
+          "min": 4,
+          "max": 8
+        },
+        "y": {
+          "median": 6.0,
+          "mean": 5.894957983193278,
+          "min": 5,
+          "max": 7
+        }
+      }
+    },
+    {
+      "id": "wall_right",
+      "status": "normalized",
+      "exit_code": 0,
+      "source_path": "Tools/Building33/Source/wall_right.png",
+      "source_sha256": "f61bb9bc2085944f5667bdcb1208e7c6f8203f1a175e1d423d9e13f534e160ef",
+      "source_dimensions": [
+        1086,
+        1448
+      ],
+      "receipt_path": "docs/artifacts/building34/native/wall_right/receipt.json",
+      "reused_prior_counter_result": false,
+      "normalization_settings": {
+        "grid_size": null,
+        "sample_method": "center",
+        "refine_intensity": 0.25,
+        "fix_square": false,
+        "debug": false
+      },
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            252.0,
+            35.0
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            84.0,
+            207.0
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            155.0,
+            207.0
+          ]
+        ]
+      },
+      "native_path": "docs/artifacts/building34/native/wall_right/native.png",
+      "native_sha256": "77b2eaa8b41d6c3fc1badde5b674a89246f90200536d992b142d44ce403d361c",
+      "native_dimensions": [
+        143,
+        201
+      ],
+      "alpha_gt_0_1_bbox_xyxy_exclusive": [
+        34,
+        6,
+        109,
+        194
+      ],
+      "alpha_gt_0_1_pixel_count": 10456,
+      "source_pixels_per_cell": {
+        "x": {
+          "median": 7,
+          "mean": 7.559440559440559,
+          "min": 5,
+          "max": 9
+        },
+        "y": {
+          "median": 7,
+          "mean": 7.208955223880597,
+          "min": 5,
+          "max": 9
+        }
+      }
+    }
+  ]
+}

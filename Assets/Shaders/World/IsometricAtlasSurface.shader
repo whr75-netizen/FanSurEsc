@@ -4,6 +4,7 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
     {
         [MainTexture] _BaseMap("Source Atlas", 2D) = "white" {}
         _MaskMap("Source Component Mask", 2D) = "white" {}
+        [HideInInspector] _NativeDepthMap("Native Texel Surface XYZ and Validity", 2D) = "black" {}
         [MainColor] _BaseColor("Tint and Opacity", Color) = (1,1,1,1)
         _Homography0("Homography Row 0", Vector) = (1,0,0,0)
         _Homography1("Homography Row 1", Vector) = (0,1,0,0)
@@ -11,6 +12,7 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
         [HideInInspector] _VertexAtlasUv("Homogeneous Atlas UV in Vertex", Float) = 0
         [HideInInspector] _MetricLighting("Real Surface Lighting", Float) = 0
         [HideInInspector] _NativeGridEnabled("Native Sprite Grid", Float) = 0
+        [HideInInspector] _NativeDepthEnabled("Native Texel Surface Depth", Float) = 0
         [HideInInspector] _NativeGridOriginOS("Source UV Zero in Object Space", Vector) = (0,0,0,0)
         [HideInInspector] _NativeGridTexelUOS("One Source Texel U in Object Space", Vector) = (0,0,0,0)
         [HideInInspector] _NativeGridTexelVOS("One Source Texel V in Object Space", Vector) = (0,0,0,0)
@@ -27,6 +29,7 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
 
         TEXTURE2D(_BaseMap);
         TEXTURE2D(_MaskMap);
+        TEXTURE2D(_NativeDepthMap);
         CBUFFER_START(UnityPerMaterial)
             float4 _BaseColor;
             float4 _Homography0;
@@ -36,6 +39,7 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
             float _MetricLighting;
             float _ZWrite;
             float _NativeGridEnabled;
+            float _NativeDepthEnabled;
             float4 _NativeGridOriginOS;
             float4 _NativeGridTexelUOS;
             float4 _NativeGridTexelVOS;
@@ -118,7 +122,7 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
             return output;
         }
 
-        half4 SampleClippedSource(float3 sourceUv)
+        half4 SampleClippedSource(float3 sourceUv, out float2 atlasUv)
         {
             // Each physical tile or wall module supplies a unit-square UV domain.
             float3 projected;
@@ -132,7 +136,11 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
                     dot(_Homography1.xyz, canonical), dot(_Homography2.xyz, canonical));
             }
             clip(projected.z - 1e-6);
-            float2 atlasUv = projected.xy / projected.z;
+            atlasUv = projected.xy / projected.z;
+            // A native depth map has the same texel domain as its source image.
+            // Do not extend edge colors or surface positions by clamp sampling.
+            if (_NativeDepthEnabled > 0.5)
+                clip(min(min(atlasUv.x, atlasUv.y), min(1.0 - atlasUv.x, 1.0 - atlasUv.y)));
             half component = SAMPLE_TEXTURE2D(_MaskMap, sampler_PointClamp, atlasUv).r;
             clip(component - 0.5h);
             half4 source = SAMPLE_TEXTURE2D(_BaseMap, sampler_PointClamp, atlasUv);
@@ -141,30 +149,71 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
             return source;
         }
 
-        half4 Frag(Varyings input) : SV_Target
+        float ResolveSurfaceDepth(Varyings input, float2 atlasUv)
         {
-            half4 source = SampleClippedSource(input.uv);
-            source.rgb *= lerp(half3(1,1,1), input.light, _MetricLighting);
-            return source * _BaseColor;
+            // Fragment SV_POSITION.z is already device depth. Preserve the
+            // existing geometry path for every material that has not opted in.
+            if (_NativeDepthEnabled < 0.5)
+                return input.positionCS.z;
+
+            // CPU authoring must reject any opaque source texel without an
+            // intersection. This guard does not authorize a fallback depth.
+            // RGB stores object-local metres in a linear RGBAFloat texture.
+            float4 surface = SAMPLE_TEXTURE2D(_NativeDepthMap, sampler_PointClamp, atlasUv);
+            clip(surface.a - 0.5);
+            float4 surfaceCS = TransformWorldToHClip(TransformObjectToWorld(surface.xyz));
+            float depth = surfaceCS.z / surfaceCS.w;
+            // Unity's GPU projection already includes reversed Z. Only the
+            // OpenGL NDC range needs remapping to the depth-buffer range.
+        #if defined(SHADER_API_GLCORE) || defined(SHADER_API_GLES) || defined(SHADER_API_GLES3)
+            depth = depth * 0.5 + 0.5;
+        #endif
+            // Native-grid snapping translates coverage by at most one source
+            // texel; the baked surface point and its metric depth stay fixed.
+            return depth;
         }
 
-        half DepthFrag(Varyings input) : SV_Target
+        struct SurfaceOutput
+        {
+            half4 color : SV_Target;
+            float depth : SV_Depth;
+        };
+
+        SurfaceOutput Frag(Varyings input)
+        {
+            float2 atlasUv;
+            half4 source = SampleClippedSource(input.uv, atlasUv);
+            source.rgb *= lerp(half3(1,1,1), input.light, _MetricLighting);
+            SurfaceOutput output;
+            output.color = source * _BaseColor;
+            output.depth = ResolveSurfaceDepth(input, atlasUv);
+            return output;
+        }
+
+        SurfaceOutput DepthFrag(Varyings input)
         {
             // The fader and contact masks opt out of depth ownership. Do not inject
             // their geometry into depth/normal buffers while forward ZWrite is off.
             clip(_ZWrite - 0.5);
-            SampleClippedSource(input.uv);
-            return input.positionCS.z;
+            float2 atlasUv;
+            SampleClippedSource(input.uv, atlasUv);
+            SurfaceOutput output;
+            output.depth = ResolveSurfaceDepth(input, atlasUv);
+            output.color = output.depth;
+            return output;
         }
 
-        void DepthNormalsFrag(Varyings input, out half4 outNormalWS : SV_Target0
+        void DepthNormalsFrag(Varyings input, out half4 outNormalWS : SV_Target0,
+            out float outDepth : SV_Depth
         #ifdef _WRITE_RENDERING_LAYERS
             , out uint outRenderingLayers : SV_Target1
         #endif
         )
         {
             clip(_ZWrite - 0.5);
-            SampleClippedSource(input.uv);
+            float2 atlasUv;
+            SampleClippedSource(input.uv, atlasUv);
+            outDepth = ResolveSurfaceDepth(input, atlasUv);
             // Preserve the mesh surface normal; no fictitious sprite material normal.
         #if defined(_GBUFFER_NORMALS_OCT)
             float3 normalWS = normalize(input.normalWS);
@@ -190,6 +239,7 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
             ZWrite [_ZWrite]
             Blend [_SrcBlend] [_DstBlend]
             HLSLPROGRAM
+            #pragma target 3.0
             #pragma vertex Vert
             #pragma fragment Frag
             ENDHLSL
@@ -204,6 +254,7 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
             ZWrite [_ZWrite]
             ColorMask R
             HLSLPROGRAM
+            #pragma target 3.0
             #pragma vertex Vert
             #pragma fragment DepthFrag
             ENDHLSL
@@ -217,6 +268,7 @@ Shader "FantasySurvival/World/Isometric Atlas Surface"
             ZTest LEqual
             ZWrite [_ZWrite]
             HLSLPROGRAM
+            #pragma target 3.0
             #pragma vertex Vert
             #pragma fragment DepthNormalsFrag
             #pragma multi_compile_fragment _ _GBUFFER_NORMALS_OCT

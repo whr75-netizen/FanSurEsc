@@ -1,0 +1,25 @@
+{
+  "goal":"기지 시험 건물 내부 한 채를 개별 원본 픽셀 오브젝트와 역할 도면으로 완성하고 실제 지붕/프레임 누출 및 출입을 확인하여 납품한다.",
+  "entry":"inputs","max_steps":10,
+  "requirements":[{"id":"interior_delivery","source":"사용자: 문제점 싹다 작업하고 건물내부 하나 완성판, 지붕/이미지프레임 뚫는 문제 수정","text":"원본보존·물체깊이·닫힌지붕과 실제 Player 출입/가림/화면 관측","predicate":{"op":"eq","args":[{"ref":"validate.exit_code"},{"literal":0}]}}],
+  "nodes":[
+    {"id":"inputs","algorithm":"command.run","phase":"work","inputs":{"stdin":{"literal":{}}},
+     "parameters":{"argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-X","utf8","-B","-c","import json,hashlib,pathlib; p=pathlib.Path('.'); c=json.loads((p/'docs/artifacts/building34/calibration.json').read_text()); assert len(c['assets'])==5 and c['ppu']>0; assert all(a['opaque_ray_misses']==0 and hashlib.sha256((p/a['native_path']).read_bytes()).hexdigest()==a['native_sha256'] for a in c['assets']); print(json.dumps({'calibration':'docs/artifacts/building34/calibration.json','ppu':c['ppu']}))"],"cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game","timeout":30,"code_files":["Tools/Building34/calibrate.py"]},
+     "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building34/calibration.json"],"writes":[],
+     "edges":[{"when":{"op":"eq","args":[{"ref":"inputs.exit_code"},{"literal":0}]},"to":"integrate"},{"when":{"op":"ne","args":[{"ref":"inputs.exit_code"},{"literal":0}]},"to":"@blocked"}]},
+    {"id":"integrate","algorithm":"ai.work","phase":"work","max_visits":3,"inputs":{"calibration":{"ref":"inputs"},"design":{"literal":"Tools/Building34/README.md"}},
+     "parameters":{"scope":"既존 PlannedPixelShop33 prefab 내부를 원본native 5시설·B32도면·닫힌바닥벽지붕·일치하는깊이로완성. PixelShopInteriorCompletion과기존shader/가림owner사용. 원본재축소/플레이어카메라재생성없음. 실제실패시해당원인만수정."},
+     "reads":["assets:B34-native","design:B32-plan"],"writes":["unity:B34-interior","assets:B34-rendering"],
+     "question":"담당 제작·통합을 수행하고 실제 prefab과 build report를 반환한다. 사용자 질문으로 바꾸지 않는다.","output_schema":{"prefab":{"type":"string"},"report":{"type":"string"}},
+     "edges":[{"when":{"op":"known","args":[{"ref":"integrate.report"}]},"to":"observe"}]},
+    {"id":"observe","algorithm":"ai.work","phase":"work","max_visits":3,"inputs":{"integration":{"ref":"integrate"}},
+     "parameters":{"scope":"실제 Play Mode Player/Camera 그대로 출입·사용점6·벽정지·내부지붕숨김/외부복원·native화면배율·닫힌roof·source alpha/depth 누출을 관측. 화면2장과Editor API readback을실제기록. 기술오류를질문으로넘기지않음."},
+     "reads":["unity:B34-interior","assets:B34-rendering"],"writes":["unity:B34-observation","artifacts:B34-observation"],
+     "question":"실제관측을수행하고 파일반환. 질문전송/정지화면검사만으로부모목표완료하지않음.","output_schema":{"readback":{"type":"string"}},
+     "edges":[{"when":{"op":"known","args":[{"ref":"observe.readback"}]},"to":"validate"}]},
+    {"id":"validate","algorithm":"command.run","phase":"validation","max_visits":3,"inputs":{"stdin":{"ref":"observe"}},
+     "parameters":{"argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-X","utf8","-B","Tools/Building34/validate_delivery.py"],"cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game","timeout":30,"code_files":["Tools/Building34/validate_delivery.py"]},
+     "reads":["artifacts:B34-observation"],"writes":["artifacts:B34-delivery"],
+     "edges":[{"when":{"op":"eq","args":[{"ref":"validate.exit_code"},{"literal":0}]},"to":"@complete"},{"when":{"op":"ne","args":[{"ref":"validate.exit_code"},{"literal":0}]},"to":"integrate","feedback":true}]}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "building34-material-generation/1",
+  "provider": "built-in image_gen",
+  "generation_calls": 1,
+  "scope": "New floor material matching the warm timber direction of the master reference; not an extracted master texture",
+  "reference_path": "Tools/Building34/Source/master-reference.png",
+  "reference_sha256": "d7943116a6d4a8ae562b5f83caff96bc6751a20bbec31babd3a4a1c8333273f9",
+  "reference_usage": "Viewed locally, then described in the text prompt; not supplied as an image generation input",
+  "prompt_path": "Tools/Building34/Source/floor-warm-prompt.txt",
+  "prompt": "Use case: stylized-concept. Asset type: one seamless square wooden floor texture material for a pixel-art shop game. Generate a flat, straight top-down orthographic material swatch that completely fills the square canvas. Horizontal long medium-width wooden planks, about 8 rows of planks over the entire square, staggered end joints, dark thin brown seams, readable broad wood-grain clusters and occasional restrained knots. Warm muted medium oak-brown and tan palette matching an old welcoming provision shop with dark blue cabinets and warm lanterns. Deliberate chunky hand-authored pixel-art appearance, crisp uniform square pixel lattice of roughly 4 to 6 source-image pixels per logical art pixel, limited material colors, large clear clusters rather than grain noise. The square should tile seamlessly on both axes. Color is only wood material variation, with completely even diffuse illumination: no directional lighting, no shadows, no gradients across the canvas, no glossy highlights, no bevels or extrusion, no ambient occlusion. No perspective, no isometric diamond, no room or furniture, no borders, no gaps outside the tile, no text, no labels. This is a new material swatch, not a rendered room.\n",
+  "external_output_path": "C:\\Users\\JG\\.codex\\generated_images\\01a0e177-8c1b-7270-add1-7dd87c389730\\exec-5d8576e2-dda2-4087-aa23-b28f6d0478d8.png",
+  "preserved_source_path": "Tools/Building34/Source/floor-warm-source.png",
+  "source_sha256": "3923729573cf8f797a6f4c3cd9bb8a93b6a097be8c0ce4cc6d64c8e2955b8ea3",
+  "source_dimensions": [
+    1254,
+    1254
+  ],
+  "source_mode": "RGB",
+  "source_edits": "none; exact file copy",
+  "normalization_output": "docs/artifacts/building34/warm-floor",
+  "limits": [
+    "Seamlessness and art quality are generation requests, not guaranteed by provenance.",
+    "Native output size is chosen only by the original automatic grid detector."
+  ]
+}

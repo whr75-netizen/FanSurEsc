@@ -1,0 +1,87 @@
+{
+  "goal": "B34 최종 실제 산출물 검증: 콘솔 이력을 보존한 전후 실제 관측 차이와 원본/깊이/출입 증거",
+  "entry": "validate",
+  "max_steps": 2,
+  "requirements": [
+    {
+      "id": "technical_delivery",
+      "source": "사용자 건물내부/지붕/이미지프레임 수정; 실제 Console이력삭제나 수동0기록 금지",
+      "text": "실제 산출물과 완전한 전후 Console 응답에 근거한 기술 납품",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "Tools/Building34/validate_final_delivery.py"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/Building34/validate_final_delivery.py"
+        ]
+      },
+      "reads": [
+        "artifacts:B34-observation",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building34/console-window-before.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building34/console-window-after.json"
+      ],
+      "writes": [
+        "artifacts:B34-delivery"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

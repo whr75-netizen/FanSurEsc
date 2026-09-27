@@ -1,0 +1,169 @@
+{
+    "producer": "UnityEditor.Building33Observation",
+    "scene": "GameMap1",
+    "isPlayMode": true,
+    "artManifest": "docs/artifacts/building33/art-manifest.json",
+    "layoutPlan": "docs/artifacts/building32/layout-plan.json",
+    "prefab": "Assets/Prefabs/World/PlannedPixelShop33.prefab",
+    "identities": {
+        "playerBefore": 568105589213701030,
+        "cameraBefore": 568105589213700684,
+        "playerAfter": 568105589213701030,
+        "cameraAfter": 568105589213700684
+    },
+    "fixtures": [
+        {
+            "id": "checkout",
+            "rectXZ": [
+                -4.15000057220459,
+                -1.750000238418579,
+                -1.7500007152557374,
+                -0.9500002861022949
+            ]
+        },
+        {
+            "id": "left_shelf",
+            "rectXZ": [
+                -4.850000381469727,
+                0.6500000953674316,
+                -4.25,
+                3.0500001907348635
+            ]
+        },
+        {
+            "id": "rear_shelf",
+            "rectXZ": [
+                -2.500000238418579,
+                3.325000524520874,
+                0.39999985694885256,
+                3.9250004291534426
+            ]
+        },
+        {
+            "id": "display_island",
+            "rectXZ": [
+                2.049999713897705,
+                -2.5500004291534426,
+                3.6500000953674318,
+                -1.3500006198883057
+            ]
+        },
+        {
+            "id": "stock_shelf",
+            "rectXZ": [
+                2.099999189376831,
+                3.27500057220459,
+                4.549999237060547,
+                3.875000476837158
+            ]
+        }
+    ],
+    "fixtureCount": 5,
+    "layoutMatches": true,
+    "accessRoutes": [
+        {
+            "id": "checkout_customer",
+            "errorMetres": 7.539457556049456e-7,
+            "reached": true,
+            "actualLocal": [
+                -2.950000286102295,
+                0.5649999380111694,
+                -2.450000762939453
+            ]
+        },
+        {
+            "id": "checkout_staff",
+            "errorMetres": 5.331201577973843e-7,
+            "reached": true,
+            "actualLocal": [
+                -2.950000286102295,
+                0.5649998784065247,
+                -0.2499995231628418
+            ]
+        },
+        {
+            "id": "left_shelf_use",
+            "errorMetres": 6.419616624953051e-7,
+            "reached": true,
+            "actualLocal": [
+                -3.450000286102295,
+                0.5649999976158142,
+                1.8500006198883057
+            ]
+        },
+        {
+            "id": "rear_shelf_use",
+            "errorMetres": 7.152557373046875e-7,
+            "reached": true,
+            "actualLocal": [
+                -1.0499999523162842,
+                0.5649999380111694,
+                2.5500006675720217
+            ]
+        },
+        {
+            "id": "island_use",
+            "errorMetres": 7.539457556049456e-7,
+            "reached": true,
+            "actualLocal": [
+                1.250000238418579,
+                0.5649999976158142,
+                -1.9500007629394532
+            ]
+        },
+        {
+            "id": "stock_shelf_use",
+            "errorMetres": 5.331201577973843e-7,
+            "reached": true,
+            "actualLocal": [
+                3.3500003814697267,
+                0.5649999380111694,
+                2.4499998092651369
+            ]
+        }
+    ],
+    "entryReached": true,
+    "wallStopLocal": [
+        3.0000009536743166,
+        0.5649999380111694,
+        -3.374999761581421
+    ],
+    "wallBlocked": true,
+    "occlusionObserved": true,
+    "occlusionCounts": {
+        "InsideBuildingCount": 3,
+        "HiddenUpperStoreyRendererCount": 20,
+        "FadedRendererCount": 15
+    },
+    "actualCameraPitch": 30.000003814697267,
+    "actualCameraYaw": 349.9999694824219,
+    "orthographic": true,
+    "sceneViewPitch": 30.000003814697267,
+    "sceneViewOrthographic": true,
+    "nativePixelsPerUnit": 22.627416610717775,
+    "screenPixelsPerSourcePixel": 4.0,
+    "viewport": {
+        "pixelWidth": 1114,
+        "pixelHeight": 857,
+        "orthographicSize": 4.7343010902404789,
+        "NativeIntegerScale": 4,
+        "NativeGridFitsZoomLimits": true
+    },
+    "nativeSpriteCount": 15,
+    "fullRectCoverage": true,
+    "doublePixelation": false,
+    "lightingPath": "Existing SteppedLocalLightRendererFeature + source face colors + footprint contact masks",
+    "lightingRegionCount": 2,
+    "lightingObserved": false,
+    "missingScripts": 0,
+    "newErrors": 0,
+    "lightingChangedPixels": 0,
+    "lightingBufferCount": 0,
+    "samePlayer": true,
+    "sameCamera": true,
+    "screenshots": [
+        "docs/artifacts/building33/play-exterior.png",
+        "docs/artifacts/building33/play-interior-final.png"
+    ],
+    "artisticApproval": "pending"
+}

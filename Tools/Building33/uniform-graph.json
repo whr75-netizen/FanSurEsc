@@ -1,0 +1,170 @@
+{
+  "goal": "최신 사용자 정정: 물체마다 다른 크기·원본 비율과 공통 픽셀 크기를 지키도록 기존 기지 건물을 수정하고, 실제 표시/출입/가림/조명을 확인해 납품한다. B33 거절본과 원본을 보존하고 미술 승인은 사용자에게 남긴다.",
+  "entry": "apply",
+  "max_steps": 6,
+  "requirements": [
+    {
+      "id": "uniform_building_delivery",
+      "text": "단일 축척 정규화와 실제 공통 셀 표시, 기지 기능 및 조명 기여를 관측한다.",
+      "source": "사용자: 실제배치크기가 다른데 전부다 같은크기면안되지. 픽셀만같은크기여야지",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "apply",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 2,
+      "inputs": {
+        "manifest": {
+          "literal": "docs/artifacts/building33/uniform-art-manifest.json"
+        },
+        "repair": {
+          "feedback_ref": "validate",
+          "default": null
+        }
+      },
+      "parameters": {
+        "scope": "normalize_uniform.py가 계산한 단일 q·가변 native canvas를 기존 prefab에 적용한다. 새 건물/카메라/Player를 재생성하지 않는다. 기존 건물 identity/배치 예약공간을 보존하고 actual footprint는 예약공간 안이다. 기존 renderer owner의 확인된 표시/깊이/조명 의존성 오류만 수정한다. 추가 픽셀필터나 비균일 scale로 source를 보정하지 않는다."
+      },
+      "reads": [
+        "assets:B33-uniform-source",
+        "design:B32-slots"
+      ],
+      "writes": [
+        "unity:B33-revised-display"
+      ],
+      "question": "담당 작업을 수행하여 산출물을 반환한다. 사용자 질문이나 종료 요청이 아니다.",
+      "output_schema": {
+        "prefab": {
+          "type": "string"
+        }
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "apply.prefab"
+              }
+            ]
+          },
+          "to": "observe"
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 2,
+      "inputs": {
+        "prefab": {
+          "ref": "apply.prefab"
+        }
+      },
+      "parameters": {
+        "scope": "실제 동일 game camera의 화면에서 정수픽셀/각 오브젝트 native크기/mesh texel 투영폭을 기록한다. 실제 Player API로 접근·가림·동일entity와 lighting ON/OFF기여를 기록한다. 시각합격은 판정하지 않는다."
+      },
+      "reads": [
+        "assets:B33-uniform-source",
+        "design:B32-slots"
+      ],
+      "writes": [
+        "artifacts:B33-uniform-observation"
+      ],
+      "question": "담당 작업을 수행하여 산출물을 반환한다. 사용자 질문이나 종료 요청이 아니다.",
+      "output_schema": {
+        "readback": {
+          "type": "string"
+        }
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "observe.readback"
+              }
+            ]
+          },
+          "to": "validate"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "max_visits": 2,
+      "inputs": {
+        "stdin": {
+          "ref": "observe"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "-c",
+          "import json,sys,math\nfrom pathlib import Path\nr=json.load(sys.stdin)\nd=json.loads(Path(r['readback']).read_text(encoding='utf-8-sig'))\np=json.loads(Path('docs/artifacts/building33-uniform/unity-display.json').read_text(encoding='utf-8-sig'))\nerrors=[]\ndef need(ok,why):\n if not ok: errors.append(why)\nfor k in ['isPlayMode','layoutWithinSlots','entryReached','wallBlocked','occlusionObserved','lightingObserved','samePlayer','sameCamera']:\n need(d.get(k) is True,k)\nneed(d.get('newErrors')==0 and d.get('missingScripts')==0,'console/missing scripts')\nneed(d.get('doublePixelation') is False,'no second pixel renderer')\nneed(d.get('artManifest')=='docs/artifacts/building33/uniform-art-manifest.json','uniform source')\nneed(abs(d.get('nativePixelsPerUnit',0)-32*math.sqrt(2))<.001,'shared PPU')\nneed(abs(d.get('screenPixelsPerSourcePixel',0)-2)<.001,'2 screen pixels per source pixel')\nrows=p.get('fixtures',[])\nneed(len(rows)==5,'five different fixtures')\nneed(len({(v['textureWidth'],v['textureHeight']) for v in rows})==5,'per-object dimensions')\nfor row in rows:\n for k in ['sourceCellPixelsX','sourceCellPixelsY']:\n  need(abs(row[k]-2)<.003,row['id']+' '+k)\n for axis in ['x','y','z']:\n  need(abs(row['localScale'][axis]-1)<.00001,row['id']+' no transform scaling')\nresult={'technicalReady':not errors,'artisticApproval':'pending','errors':errors,'readback':r['readback'],'display':'docs/artifacts/building33-uniform/unity-display.json','scope':'User correction: separate object sizes with common native pixels; building integration and actual local-light contribution'}\nPath('docs/artifacts/building33-uniform').mkdir(parents=True,exist_ok=True)\nPath('docs/artifacts/building33-uniform/technical-result.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')\nprint(json.dumps(result,ensure_ascii=False))\nsys.exit(2 if errors else 0)"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": []
+      },
+      "reads": [
+        "artifacts:B33-uniform-observation"
+      ],
+      "writes": [
+        "artifacts:B33-uniform-technical-result"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "apply",
+          "feedback": true
+        }
+      ]
+    }
+  ]
+}

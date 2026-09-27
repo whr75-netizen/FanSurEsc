@@ -1,3 +1,5 @@
+using System.Collections;
+using FantasySurvival.SceneFlow;
 using UnityEngine;
 
 namespace FantasySurvival.WorldGeneration
@@ -14,6 +16,35 @@ namespace FantasySurvival.WorldGeneration
         public Collider[] backColliders;
         public Renderer[] roof;
         public Collider[] roofColliders;
+        [Tooltip("Opt in only for a scene containing native sprites at this common density.")]
+        public bool useNativePixelGrid;
+        public float nativePixelsPerUnit = 22.627417f;
+        private CameraZoomController nativeZoom;
+        private Coroutine gridBinding;
+
+        private void OnEnable()
+        {
+            if (useNativePixelGrid) gridBinding = StartCoroutine(BindNativeGrid());
+        }
+
+        private IEnumerator BindNativeGrid()
+        {
+            // Direct scene bootstrap may create the persistent shell after this building.
+            while (PersistentGameplayShell.Instance == null ||
+                   PersistentGameplayShell.Instance.PlayerCamera == null)
+                yield return null;
+            nativeZoom = PersistentGameplayShell.Instance.PlayerCamera.GetComponent<CameraZoomController>();
+            if (nativeZoom != null) nativeZoom.SetNativePixelGrid(nativePixelsPerUnit);
+            gridBinding = null;
+        }
+
+        private void OnDisable()
+        {
+            if (gridBinding != null) StopCoroutine(gridBinding);
+            gridBinding = null;
+            if (nativeZoom != null) nativeZoom.ClearNativePixelGrid();
+            nativeZoom = null;
+        }
 
         private void Start()
         {

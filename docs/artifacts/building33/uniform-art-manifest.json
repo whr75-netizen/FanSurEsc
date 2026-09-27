@@ -1,0 +1,992 @@
+{
+  "schema": "building33-uniform-art/1",
+  "supersedes_contract_not_files": "docs/artifacts/building33/art-manifest.json",
+  "original_manifest_sha256": "01c34b33b5294a51e8857e7f359cec8b396de6d390c3105abca146770e248ec2",
+  "engine": "LocalOnly/PerfectPixelPalette_20260906",
+  "features": {
+    "cell_sampling": {
+      "enabled": true,
+      "scope": {
+        "kind": "all"
+      },
+      "options": {
+        "method": "source_regions",
+        "coverage": 0.5,
+        "color_edge_threshold": 0.08
+      }
+    }
+  },
+  "algorithm": "existing PerfectPixel modified source_regions; no palette, tone, line or redraw passes",
+  "native_pixels_per_unit": 45.254833995939045,
+  "vertical_pixels_per_metre": 39.19183588453085,
+  "contract": {
+    "shared_ppu": 45.254833995939045,
+    "width_max": "floor(P*cos(45deg)*(slotWidth+slotDepth))",
+    "height_max": "floor(P*sin(30deg)/sqrt(2)*(slotWidth+slotDepth)+P*cos(30deg)*priorVisualHeight)",
+    "uniform_scale": "q=min(widthMax/croppedSourceWidth,heightMax/croppedSourceHeight)",
+    "fixture_size": "[max(1,floor(croppedSourceWidth*q)),max(1,floor(croppedSourceHeight*q))]",
+    "integer_quantization": "each axis loses <1 native pixel; same q before quantization, not perfect continuous aspect equality",
+    "canvas": "per-object native dimensions; no common 64x64 box",
+    "display_requirement": "screenHeight / (2*orthographicSize*P) >= 2 and integer display quantization",
+    "density_rationale": "doubles the existing 2:1 tile density to 128x64 per 2m tile; more source samples per object",
+    "viewport_limit": "At prior 857px height and ortho5, raw scale is 1.89372, not >=2. Camera owner must establish the requested actual integer scale.",
+    "source_limit": "generated internal slopes/heights are preserved, not certified exact CAD or exact source pixel clusters",
+    "specifications": {
+      "counter": {
+        "grid": [
+          102,
+          85
+        ],
+        "canvas": [
+          102,
+          85
+        ],
+        "fixture_id": "checkout",
+        "footprint_m": [
+          2.4000000000000004,
+          0.8
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          102.40000000000003,
+          113.90693741524936
+        ],
+        "fit_bbox_max_pixels": [
+          102,
+          113
+        ],
+        "uniform_source_scale": 0.08651399491094147,
+        "source_quantization_error_xy_pixels": [
+          0.0,
+          -0.8218829516539472
+        ],
+        "actual_footprint_factor": 0.9960937499999997,
+        "inferred_actual_footprint_m": [
+          2.3906249999999996,
+          0.7968749999999998
+        ],
+        "collider_height_m": 1.0,
+        "inferred_visual_height_m": 0.8675276172357094,
+        "inferred_minus_collider_height_m": -0.13247238276429063,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "rear_shelf": {
+        "grid": [
+          109,
+          126
+        ],
+        "canvas": [
+          109,
+          126
+        ],
+        "fixture_id": "rear_shelf",
+        "footprint_m": [
+          2.9,
+          0.5999999999999996
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          112.00000000000001,
+          126.54530459215552
+        ],
+        "fit_bbox_max_pixels": [
+          112,
+          126
+        ],
+        "uniform_source_scale": 0.10353327855382087,
+        "source_quantization_error_xy_pixels": [
+          -0.020542317173379843,
+          0.0
+        ],
+        "actual_footprint_factor": 0.9732142857142856,
+        "inferred_actual_footprint_m": [
+          2.822321428571428,
+          0.583928571428571
+        ],
+        "collider_height_m": 1.8,
+        "inferred_visual_height_m": 1.8243595480103885,
+        "inferred_minus_collider_height_m": 0.02435954801038842,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "left_shelf": {
+        "grid": [
+          71,
+          118
+        ],
+        "canvas": [
+          71,
+          118
+        ],
+        "fixture_id": "left_shelf",
+        "footprint_m": [
+          0.5999999999999996,
+          2.4
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          96.0,
+          118.54530459215552
+        ],
+        "fit_bbox_max_pixels": [
+          96,
+          118
+        ],
+        "uniform_source_scale": 0.09387430389817025,
+        "source_quantization_error_xy_pixels": [
+          -0.6260938743039048,
+          -1.4210854715202004e-14
+        ],
+        "actual_footprint_factor": 0.7395833333333334,
+        "inferred_actual_footprint_m": [
+          0.44374999999999976,
+          1.7750000000000001
+        ],
+        "collider_height_m": 1.8,
+        "inferred_visual_height_m": 2.1050302477042937,
+        "inferred_minus_collider_height_m": 0.30503024770429366,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "island": {
+        "grid": [
+          89,
+          64
+        ],
+        "canvas": [
+          89,
+          64
+        ],
+        "fixture_id": "display_island",
+        "footprint_m": [
+          1.6,
+          1.1999999999999997
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          89.60000000000001,
+          93.78979485566356
+        ],
+        "fit_bbox_max_pixels": [
+          89,
+          93
+        ],
+        "uniform_source_scale": 0.06691729323308271,
+        "source_quantization_error_xy_pixels": [
+          0.0,
+          -0.7090225563909769
+        ],
+        "actual_footprint_factor": 0.9933035714285713,
+        "inferred_actual_footprint_m": [
+          1.5892857142857142,
+          1.1919642857142854
+        ],
+        "collider_height_m": 0.85,
+        "inferred_visual_height_m": 0.49755260400283335,
+        "inferred_minus_collider_height_m": -0.3524473959971666,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "stock_shelf": {
+        "grid": [
+          94,
+          119
+        ],
+        "canvas": [
+          94,
+          119
+        ],
+        "fixture_id": "stock_shelf",
+        "footprint_m": [
+          2.4499999999999997,
+          0.6000000000000001
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          97.60000000000002,
+          119.34530459215551
+        ],
+        "fit_bbox_max_pixels": [
+          97,
+          119
+        ],
+        "uniform_source_scale": 0.09167950693374423,
+        "source_quantization_error_xy_pixels": [
+          -0.42989214175655377,
+          -1.4210854715202004e-14
+        ],
+        "actual_footprint_factor": 0.9631147540983604,
+        "inferred_actual_footprint_m": [
+          2.359631147540983,
+          0.5778688524590163
+        ],
+        "collider_height_m": 1.8,
+        "inferred_visual_height_m": 1.837117307087384,
+        "inferred_minus_collider_height_m": 0.03711730708738403,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "floor": {
+        "grid": [
+          128,
+          64
+        ],
+        "canvas": [
+          128,
+          64
+        ],
+        "bottom_margin": 0,
+        "fit": "fixed canonical surface grid; generated source boundary is conformed explicitly"
+      },
+      "wall_left": {
+        "grid": [
+          64,
+          128
+        ],
+        "canvas": [
+          64,
+          128
+        ],
+        "bottom_margin": 0,
+        "fit": "fixed canonical surface grid; generated source boundary is conformed explicitly"
+      },
+      "wall_right": {
+        "grid": [
+          64,
+          128
+        ],
+        "canvas": [
+          64,
+          128
+        ],
+        "bottom_margin": 0,
+        "fit": "fixed canonical surface grid; generated source boundary is conformed explicitly"
+      },
+      "lamp": {
+        "grid": [
+          32,
+          54
+        ],
+        "canvas": [
+          32,
+          54
+        ],
+        "bottom_margin": 0,
+        "uniform_source_scale": 0.039603960396039604,
+        "source_quantization_error_xy_pixels": [
+          0,
+          -0.1782178217821766
+        ],
+        "fit": "one width scale, source-aspect height floored to an integer row",
+        "physical_size_status": "no collider/footprint; width retains prior projected width in metres"
+      }
+    }
+  },
+  "layout_source": "docs/artifacts/building32/layout-plan.json",
+  "layout_sha256": "f76d77651761f26ac14f546d68bf3aba7ed3ad1d3e69815bb1f85363b8bd98ac",
+  "assets": [
+    {
+      "id": "counter",
+      "preserved_source_path": "Tools/Building33/Source/counter.png",
+      "original_sha256": "be8af789808b3655f6528c262e64fcfc0d14db5f51c7bcca64f0a3e35fc9cb16",
+      "original_dimensions": [
+        1374,
+        1145
+      ],
+      "crop_xyxy": [
+        98,
+        131,
+        1277,
+        1123
+      ],
+      "pre_normalization_crop_dimensions": [
+        1179,
+        992
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 705481,
+      "removed_remote_component_pixels": 46,
+      "target": {
+        "grid": [
+          102,
+          85
+        ],
+        "canvas": [
+          102,
+          85
+        ],
+        "fixture_id": "checkout",
+        "footprint_m": [
+          2.4000000000000004,
+          0.8
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          102.40000000000003,
+          113.90693741524936
+        ],
+        "fit_bbox_max_pixels": [
+          102,
+          113
+        ],
+        "uniform_source_scale": 0.08651399491094147,
+        "source_quantization_error_xy_pixels": [
+          0.0,
+          -0.8218829516539472
+        ],
+        "actual_footprint_factor": 0.9960937499999997,
+        "inferred_actual_footprint_m": [
+          2.3906249999999996,
+          0.7968749999999998
+        ],
+        "collider_height_m": 1.0,
+        "inferred_visual_height_m": 0.8675276172357094,
+        "inferred_minus_collider_height_m": -0.13247238276429063,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/counter.png",
+      "normalized_dimensions": [
+        102,
+        85
+      ],
+      "visible_bbox_xyxy": [
+        0,
+        0,
+        102,
+        85
+      ],
+      "normalized_sha256": "3f7a0ebcaa860bcbae2bf778ca3fd9ffa1a395918f34161edf2c51fb3cb51c6a",
+      "uniform_source_scale": 0.08651399491094147,
+      "quantization_error_xy_pixels": [
+        0.0,
+        -0.8218829516539472
+      ],
+      "target_aspect_over_source_aspect": 1.0096692111959287,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": null,
+      "seconds": 3.407
+    },
+    {
+      "id": "rear_shelf",
+      "preserved_source_path": "Tools/Building33/Source/rear_shelf.png",
+      "original_sha256": "9b931618de4d972b7d97d2cb938947c56146962682d6baebcddfdc59864e059e",
+      "original_dimensions": [
+        1196,
+        1315
+      ],
+      "crop_xyxy": [
+        76,
+        67,
+        1129,
+        1284
+      ],
+      "pre_normalization_crop_dimensions": [
+        1053,
+        1217
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 953676,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          109,
+          126
+        ],
+        "canvas": [
+          109,
+          126
+        ],
+        "fixture_id": "rear_shelf",
+        "footprint_m": [
+          2.9,
+          0.5999999999999996
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          112.00000000000001,
+          126.54530459215552
+        ],
+        "fit_bbox_max_pixels": [
+          112,
+          126
+        ],
+        "uniform_source_scale": 0.10353327855382087,
+        "source_quantization_error_xy_pixels": [
+          -0.020542317173379843,
+          0.0
+        ],
+        "actual_footprint_factor": 0.9732142857142856,
+        "inferred_actual_footprint_m": [
+          2.822321428571428,
+          0.583928571428571
+        ],
+        "collider_height_m": 1.8,
+        "inferred_visual_height_m": 1.8243595480103885,
+        "inferred_minus_collider_height_m": 0.02435954801038842,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/rear_shelf.png",
+      "normalized_dimensions": [
+        109,
+        126
+      ],
+      "visible_bbox_xyxy": [
+        0,
+        0,
+        109,
+        126
+      ],
+      "normalized_sha256": "f794ce62b29d4c778fe4817c5e14cebeeff0c8043db0ecc9f6cb990d42dfca47",
+      "uniform_source_scale": 0.10353327855382087,
+      "quantization_error_xy_pixels": [
+        -0.020542317173379843,
+        0.0
+      ],
+      "target_aspect_over_source_aspect": 0.999811573885648,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": null,
+      "seconds": 4.453
+    },
+    {
+      "id": "left_shelf",
+      "preserved_source_path": "Tools/Building33/Source/left_shelf.png",
+      "original_sha256": "cb51e8b099367333c303ced3e36c7b5c3a330e4e2eb28a8d29cee5db4c08058f",
+      "original_dimensions": [
+        1122,
+        1402
+      ],
+      "crop_xyxy": [
+        199,
+        77,
+        962,
+        1334
+      ],
+      "pre_normalization_crop_dimensions": [
+        763,
+        1257
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 725221,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          71,
+          118
+        ],
+        "canvas": [
+          71,
+          118
+        ],
+        "fixture_id": "left_shelf",
+        "footprint_m": [
+          0.5999999999999996,
+          2.4
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          96.0,
+          118.54530459215552
+        ],
+        "fit_bbox_max_pixels": [
+          96,
+          118
+        ],
+        "uniform_source_scale": 0.09387430389817025,
+        "source_quantization_error_xy_pixels": [
+          -0.6260938743039048,
+          -1.4210854715202004e-14
+        ],
+        "actual_footprint_factor": 0.7395833333333334,
+        "inferred_actual_footprint_m": [
+          0.44374999999999976,
+          1.7750000000000001
+        ],
+        "collider_height_m": 1.8,
+        "inferred_visual_height_m": 2.1050302477042937,
+        "inferred_minus_collider_height_m": 0.30503024770429366,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/left_shelf.png",
+      "normalized_dimensions": [
+        71,
+        118
+      ],
+      "visible_bbox_xyxy": [
+        0,
+        0,
+        71,
+        118
+      ],
+      "normalized_sha256": "d8d1deaf4044802cafd7e38b931b69b10b7694ae929208b0db1e11544e334699",
+      "uniform_source_scale": 0.09387430389817025,
+      "quantization_error_xy_pixels": [
+        -0.6260938743039048,
+        -1.4210854715202004e-14
+      ],
+      "target_aspect_over_source_aspect": 0.9912588577648443,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": null,
+      "seconds": 3.359
+    },
+    {
+      "id": "island",
+      "preserved_source_path": "Tools/Building33/Source/island.png",
+      "original_sha256": "902e052eedd5a2edd12b994d1813febc916c39b86b6e786f08e72c00933302a3",
+      "original_dimensions": [
+        1426,
+        1103
+      ],
+      "crop_xyxy": [
+        68,
+        98,
+        1398,
+        1065
+      ],
+      "pre_normalization_crop_dimensions": [
+        1330,
+        967
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 865117,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          89,
+          64
+        ],
+        "canvas": [
+          89,
+          64
+        ],
+        "fixture_id": "display_island",
+        "footprint_m": [
+          1.6,
+          1.1999999999999997
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          89.60000000000001,
+          93.78979485566356
+        ],
+        "fit_bbox_max_pixels": [
+          89,
+          93
+        ],
+        "uniform_source_scale": 0.06691729323308271,
+        "source_quantization_error_xy_pixels": [
+          0.0,
+          -0.7090225563909769
+        ],
+        "actual_footprint_factor": 0.9933035714285713,
+        "inferred_actual_footprint_m": [
+          1.5892857142857142,
+          1.1919642857142854
+        ],
+        "collider_height_m": 0.85,
+        "inferred_visual_height_m": 0.49755260400283335,
+        "inferred_minus_collider_height_m": -0.3524473959971666,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/island.png",
+      "normalized_dimensions": [
+        89,
+        64
+      ],
+      "visible_bbox_xyxy": [
+        0,
+        0,
+        89,
+        64
+      ],
+      "normalized_sha256": "da6198b7b3aff27c364ba8517ba8ac5d8c6bc13996974806a432cd2bfb31c747",
+      "uniform_source_scale": 0.06691729323308271,
+      "quantization_error_xy_pixels": [
+        0.0,
+        -0.7090225563909769
+      ],
+      "target_aspect_over_source_aspect": 1.011078477443609,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": null,
+      "seconds": 3.953
+    },
+    {
+      "id": "stock_shelf",
+      "preserved_source_path": "Tools/Building33/Source/stock_shelf.png",
+      "original_sha256": "5c5f588b45a505bf53286ccb0aeb8175989529a82792fe46fec66790e9237e53",
+      "original_dimensions": [
+        1133,
+        1388
+      ],
+      "crop_xyxy": [
+        59,
+        52,
+        1089,
+        1350
+      ],
+      "pre_normalization_crop_dimensions": [
+        1030,
+        1298
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 889936,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          94,
+          119
+        ],
+        "canvas": [
+          94,
+          119
+        ],
+        "fixture_id": "stock_shelf",
+        "footprint_m": [
+          2.4499999999999997,
+          0.6000000000000001
+        ],
+        "footprint_role": "reserved layout slot; not the inferred actual object footprint",
+        "projected_envelope_exact_pixels": [
+          97.60000000000002,
+          119.34530459215551
+        ],
+        "fit_bbox_max_pixels": [
+          97,
+          119
+        ],
+        "uniform_source_scale": 0.09167950693374423,
+        "source_quantization_error_xy_pixels": [
+          -0.42989214175655377,
+          -1.4210854715202004e-14
+        ],
+        "actual_footprint_factor": 0.9631147540983604,
+        "inferred_actual_footprint_m": [
+          2.359631147540983,
+          0.5778688524590163
+        ],
+        "collider_height_m": 1.8,
+        "inferred_visual_height_m": 1.837117307087384,
+        "inferred_minus_collider_height_m": 0.03711730708738403,
+        "height_status": "LIMITATION: bounding-box inference; not a corrected or verified physical height",
+        "fit": "one minimum scale fits projected slot envelope; both axes floored to whole pixels",
+        "bottom_margin": 0
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/stock_shelf.png",
+      "normalized_dimensions": [
+        94,
+        119
+      ],
+      "visible_bbox_xyxy": [
+        0,
+        0,
+        94,
+        119
+      ],
+      "normalized_sha256": "f9700de293893b0abc75800594b297ea1eb2ddc306608d1365051c393c19a453",
+      "uniform_source_scale": 0.09167950693374423,
+      "quantization_error_xy_pixels": [
+        -0.42989214175655377,
+        -1.4210854715202004e-14
+      ],
+      "target_aspect_over_source_aspect": 0.9954474993881047,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": null,
+      "seconds": 4.047
+    },
+    {
+      "id": "floor",
+      "preserved_source_path": "Tools/Building33/Source/floor.png",
+      "original_sha256": "370ab0301b77e10a0943be7dce4473494112de4dc3e82c53e11cb7eb944b407e",
+      "original_dimensions": [
+        1774,
+        887
+      ],
+      "crop_xyxy": [
+        74,
+        31,
+        1699,
+        858
+      ],
+      "pre_normalization_crop_dimensions": [
+        1625,
+        827
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 690768,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          128,
+          64
+        ],
+        "canvas": [
+          128,
+          64
+        ],
+        "bottom_margin": 0,
+        "fit": "fixed canonical surface grid; generated source boundary is conformed explicitly"
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/floor.png",
+      "normalized_dimensions": [
+        128,
+        64
+      ],
+      "visible_bbox_xyxy": [
+        1,
+        0,
+        127,
+        64
+      ],
+      "normalized_sha256": "d51ba0ef789510c587be8aa0ff6fc85b59e50866d41152973db8d396ef290804",
+      "uniform_source_scale": 0.07876923076923077,
+      "quantization_error_xy_pixels": [
+        0.0,
+        -1.142153846153846
+      ],
+      "target_aspect_over_source_aspect": 1.0178461538461538,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": {
+        "filled_boundary_cells": 0,
+        "removed_outside_cells": 22,
+        "max_source_boundary_distance_pixels": 0.0,
+        "max_distance_world_metres": 0.0,
+        "method": "existing sampled source RGB copied at canonical surface boundary only",
+        "limit": "same 3 old-pixel border allowance at doubled native density; no new colors"
+      },
+      "seconds": 3.156
+    },
+    {
+      "id": "wall_left",
+      "preserved_source_path": "Tools/Building33/Source/wall_left.png",
+      "original_sha256": "ecec718bf295529803df2a88fe930e4eb45fbd88da8e35b373cae1fcf2d1be4c",
+      "original_dimensions": [
+        1122,
+        1402
+      ],
+      "crop_xyxy": [
+        235,
+        55,
+        888,
+        1362
+      ],
+      "pre_normalization_crop_dimensions": [
+        653,
+        1307
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 642686,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          64,
+          128
+        ],
+        "canvas": [
+          64,
+          128
+        ],
+        "bottom_margin": 0,
+        "fit": "fixed canonical surface grid; generated source boundary is conformed explicitly"
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/wall_left.png",
+      "normalized_dimensions": [
+        64,
+        128
+      ],
+      "visible_bbox_xyxy": [
+        0,
+        0,
+        64,
+        128
+      ],
+      "normalized_sha256": "d56d2d7815c0d0f88cca62718f4a3e512a07cba9f1e3ccaf8262a43c2e6e7d9f",
+      "uniform_source_scale": 0.09800918836140889,
+      "quantization_error_xy_pixels": [
+        0.0,
+        -0.09800918836140227
+      ],
+      "target_aspect_over_source_aspect": 1.0007656967840735,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": {
+        "filled_boundary_cells": 50,
+        "removed_outside_cells": 11,
+        "max_source_boundary_distance_pixels": 1.0,
+        "max_distance_world_metres": 0.022097086912079608,
+        "method": "existing sampled source RGB copied at canonical surface boundary only",
+        "limit": "same 3 old-pixel border allowance at doubled native density; no new colors"
+      },
+      "seconds": 3.0
+    },
+    {
+      "id": "wall_right",
+      "preserved_source_path": "Tools/Building33/Source/wall_right.png",
+      "original_sha256": "f61bb9bc2085944f5667bdcb1208e7c6f8203f1a175e1d423d9e13f534e160ef",
+      "original_dimensions": [
+        1086,
+        1448
+      ],
+      "crop_xyxy": [
+        241,
+        47,
+        846,
+        1400
+      ],
+      "pre_normalization_crop_dimensions": [
+        605,
+        1353
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 616296,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          64,
+          128
+        ],
+        "canvas": [
+          64,
+          128
+        ],
+        "bottom_margin": 0,
+        "fit": "fixed canonical surface grid; generated source boundary is conformed explicitly"
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/wall_right.png",
+      "normalized_dimensions": [
+        64,
+        128
+      ],
+      "visible_bbox_xyxy": [
+        0,
+        0,
+        64,
+        128
+      ],
+      "normalized_sha256": "ba2f1906ba60705f098349b92c001d5692a686f411838047a714a8f889c2280d",
+      "uniform_source_scale": 0.10578512396694215,
+      "quantization_error_xy_pixels": [
+        0.0,
+        -15.127272727272725
+      ],
+      "target_aspect_over_source_aspect": 1.1181818181818182,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": {
+        "filled_boundary_cells": 156,
+        "removed_outside_cells": 77,
+        "max_source_boundary_distance_pixels": 5.385164807134504,
+        "max_distance_world_metres": 0.11899645477912356,
+        "method": "existing sampled source RGB copied at canonical surface boundary only",
+        "limit": "same 3 old-pixel border allowance at doubled native density; no new colors"
+      },
+      "seconds": 2.891
+    },
+    {
+      "id": "lamp",
+      "preserved_source_path": "Tools/Building33/Source/lamp.png",
+      "original_sha256": "bc10b5d75ba7f1f87edd18860995c78f699bac4417a65b92d8f799018795caf6",
+      "original_dimensions": [
+        1024,
+        1536
+      ],
+      "crop_xyxy": [
+        161,
+        82,
+        969,
+        1450
+      ],
+      "pre_normalization_crop_dimensions": [
+        808,
+        1368
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 551788,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          32,
+          54
+        ],
+        "canvas": [
+          32,
+          54
+        ],
+        "bottom_margin": 0,
+        "uniform_source_scale": 0.039603960396039604,
+        "source_quantization_error_xy_pixels": [
+          0,
+          -0.1782178217821766
+        ],
+        "fit": "one width scale, source-aspect height floored to an integer row",
+        "physical_size_status": "no collider/footprint; width retains prior projected width in metres"
+      },
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33Uniform/lamp.png",
+      "normalized_dimensions": [
+        32,
+        54
+      ],
+      "visible_bbox_xyxy": [
+        0,
+        0,
+        32,
+        54
+      ],
+      "normalized_sha256": "4d4f04d9589ca7bf7a3fb25333da435fa665c3d6460221e8ad16381ccf8c44d6",
+      "uniform_source_scale": 0.039603960396039604,
+      "quantization_error_xy_pixels": [
+        0.0,
+        -0.1782178217821766
+      ],
+      "target_aspect_over_source_aspect": 1.0033003300330032,
+      "sampling": "PerfectPixel.source_regions; original sampled RGB equality checked before declared boundary completion",
+      "boundary_correction": null,
+      "seconds": 2.469
+    }
+  ],
+  "artistic_approval": "pending",
+  "limitations": [
+    "Uniform source fitting does not correct source perspective or object design.",
+    "Reserved layout slots and inferred actual object footprints are separate; only the latter may derive collider width/depth.",
+    "Inferred visual heights can differ from prior colliders; these differences are not passed as validated geometry.",
+    "Source-region sampling can still remove details smaller than a native cell.",
+    "Surface wall/floor masks remain an explicit canonical boundary constraint.",
+    "Shared PPU does not by itself ensure integer screen pixels; the camera display path must do that separately."
+  ],
+  "wall_atlas": {
+    "path": "Assets/Art/PlannedPixelBuilding33Uniform/wall.png",
+    "dimensions": [
+      128,
+      128
+    ],
+    "sha256": "66f7f6c528aabb6c7d29ea0607a56ce01dcf9368c459b3b4d8fda97430e8b80a",
+    "halves": [
+      {
+        "x": 0,
+        "source_id": "wall_right",
+        "axis": "+X"
+      },
+      {
+        "x": 64,
+        "source_id": "wall_left",
+        "axis": "+Z"
+      }
+    ]
+  },
+  "technical_preview": {
+    "path": "docs/artifacts/building33/uniform-art-contact-sheet-3x.png",
+    "scale": 3,
+    "filter": "nearest preview only"
+  },
+  "total_engine_and_save_seconds": 30.735
+}

@@ -1,6 +1,93 @@
 # Grave Seasons 기준 2D 맵 아트 — 첫 상가
 
-## 현재 결정 B32 — 배치·미술·표시 계약 재설계
+## 현재 결정 B33 수정 — 물체 크기는 다르게, 픽셀 밀도만 공통
+
+**최신 사용자 계약:** 실제 물체의 크기는 서로 달라야 하며 같아야 하는 것은 픽셀의 크기다. 기존 B33의 강제64×64·비균등 맞춤 결과는 거절 상태로 보존한다. **단일 축척·가변 크기 수정본의 실제 Unity 통합과 제한된 기술 검증은 완료했다.** 새 uniform graph는3단계에서 `graph_complete`, [기술 결과](../artifacts/building33-uniform/technical-result.json)는 `technicalReady:true`/오류0이다. 이는 원본 내부 각도·팔레트·미술 품질의 승인이 아니며 새 수정본의 사용자 미술 판단은 아직 남아 있다. 아래의 이전 거절본·조명 실패는 당시 증거다.
+
+### 입력·치수·변환의 새 계약
+
+[uniform-art-manifest.json](../artifacts/building33/uniform-art-manifest.json)과 `Tools/Building33/normalize_uniform.py`가 새 변환의 원본이다. 원본 생성 이미지9종과 거절된 이전 PNG/manifest를 보존하고 새 자산은 `Assets/Art/PlannedPixelBuilding33Uniform/`에 쓴다. 수정 PerfectPixel의 `source_regions`를 사용하며 팔레트·톤·선 재작성은 없다. 바닥·벽의 canonical 경계 마스크와 원본 내부 형태는 다른 계약이다.
+
+원본 crop 크기 `(Ws,Hs)`와 B32 예약공간을 투영한 상한 `(Wmax,Hmax)`에서 **`q=min(Wmax/Ws,Hmax/Hs)` 한 개만** 계산한다. native 크기는 `(floor(Ws·q),floor(Hs·q))`이며 공통64×64 상자나 x/y별 비균등 scale은 사용하지 않는다. 정수화 때문에 각 축에1 native pixel 미만의 오차가 남으며 연속적인 aspect가 수학적으로100% 같다고 주장하지 않는다.
+
+| 개별 자산 | 새 native 크기 | 배치 의미 |
+|---|---|---|
+| 계산대 | 102×85 | 계산대 역할의 예약공간 안에서 원본 비율로 표시 |
+| 뒤쪽 선반 | 109×126 | 뒤벽 진열 역할 |
+| 왼쪽 선반 | 71×118 | 좌벽 진열 역할 |
+| 낮은 진열섬 | 89×64 | 낮은 상품 진열 역할 |
+| 재고 선반 | 94×119 | 재고/직원 공간 역할 |
+
+**B32 사각형은 예약공간이며 실제 물체 전체를 그 사각형으로 늘이라는 명령이 아니다.** 새 물리 proxy의 폭/깊이는 그 공간 안에서 축소하고 사용면·통로·벽/지지 관계는 보존한다. 이 proxy는 배치/충돌용 추정치이며 이미지 bbox로 정확한 CAD 체적을 복원했다고 하지 않는다. manifest에는 bbox에서 추정한 시각 높이와 기존 collider 높이의 차이를 한계로 기록한다. 단일 q는 원본 내부 각도·비례를 변형하지 않으려는 변환이지 생성 원본에 있던 원근·방향 오류를 고치는 알고리즘이 아니다.
+
+### 공통 픽셀과 기존 건물 연결
+
+새 PPU는 **`P=32√2=45.254834`**로 이전의2배다. 2m 바닥 타일은128×64 native pixels이며 물체마다 필요한 texel 수가 다르다. 실제 화면높이857px/ortho4.734301에서 `s=857/(2×4.734301×45.254834)≈2`이며 **한 source pixel당 화면2칸**을 확인했다. 5개 물체 각각 x/y source cell의 측정 오차는0.00008 screen pixel 미만이고 transform scale은 모두1이다. 이전의 화면4칸 픽셀보다 source 정보 밀도를2배로 한 선택이며 건물/물체를 모두 같은 화면 크기로 만든다는 뜻이 아니다. 기존 CameraZoomController 안에서 정수 배율을 적용했다.
+
+`PlannedPixelBuildingUniformRevision.Apply()`는 기존 prefab의 자산/mesh/material 참조와 해당 표시·proxy 데이터만 수정한다. 새 건물·Player·Camera를 만들지 않고 기존 씬 인스턴스와 소유권을 유지한다. 메뉴는 `Tools > World Art > Apply B33 Uniform Source Revision`; `Capture B33 Uniform Display Readback`으로 각 물체의 실제 texture 크기·source cell 화면폭·transform scale을 기록한다.
+
+### 실제 기술 검증과 조명 원인 수정
+
+사용자 정정으로 이전 계약 실행을 보존·정지하고 **새 `Tools/Building33/uniform-graph.json`**을 연결했다. 기존 실행의 판정 기준을 바꾸어 실패를 성공으로 만든 것이 아니다. 새 흐름은 `기존 prefab에 apply → 실제 building/display 관측 → 기술 판정`이며 최종 미술 판단은 사용자에게 남긴다. 상세 실행은 [B33 README](../../Tools/Building33/README.md)에 있다.
+
+[최종 readback](../artifacts/building33-uniform/readback.json)과 [물체별 표시 관측](../artifacts/building33-uniform/unity-display.json)은 다음을 기록한다.
+
+- 실제 GameMap1, 카메라30.000004°/349.999969° 직교·ortho4.734301·PPU45.254833·화면2px/source cell. 시설5개는 서로 다른 texture 크기·물리 collider 크기이며 모두 예약 slot 내부에 있다.
+- `[Play Mode 호출 확인]` 사용점6/6 도달·벽 차단·실내 가림 통과. 전후 실제 Player/Camera entity ID가 같고 Missing Script0이다. 물리 키 입력을 보냈다는 뜻은 아니다.
+- 새 Console 오류0. 기존09:50의 relay 오류1개는 변경 없이 보존했다. 마지막은 Edit Mode의 GameMap1 저장·clean 상태이며 SceneView도30°다.
+- 실제 결과는 [실내](../artifacts/building33-uniform/play-interior.png)·[실외](../artifacts/building33-uniform/play-exterior.png)로 보존했다. 관측값만 제출하고 실제 건물 화면을 생략하지 않는다.
+
+**조명차이0의 확인된 원인:** 기존 `CharacterSilhouetteRendererFeature`의 반대 방향 depth copy 두 draw가 같은 material을 공유하면서 마지막 입력 바인딩이 앞선 copy에 영향을 주었다. 같은 feature 안에서 각 draw에 `MaterialPropertyBlock`으로 별도 source depth를 전달하도록 수정했다. DepthOnly/DepthNormals의 alpha·격자 정렬 보완과 이 바인딩 수정은 서로 다른 책임이다. 새 Lighting Manager를 추가하거나 캐릭터 feature를 끈 상태를 최종 해결로 삼지 않았다.
+
+수정 후 **캐릭터 feature가 켜진 실제 경로에서 광원 ON/OFF195,848픽셀 차이**를 확인했다(수정 전0). feature를 끈 진단 case의200,487픽셀 차이는 해당 의존성을 분리한 반례이며 최종 플레이 설정이 아니다. 따라서 local light의 실제 기여를 확인했지만 그 크기 자체로 명암의 미술 품질을 합격시키지 않는다.
+
+### 남은 미술·표현 한계
+
+가변 크기·단일 q는 생성 원본의 내부 투영/각도 오류를 고치지 않으며, bbox에서 유도한 시각/물리 높이도 정확한 CAD 복원이 아니다. 원본의 픽셀 클러스터·팔레트·명암·상품 디테일과 Grave Seasons 수준의 디자인 동등성은 사용자 미승인이다. 기존 local light는 방사형 영향 함수이므로 실제 벽/가구 occluder를 따라 빛을 막는 기능은 없고 경계를 넘는 빛이 남을 수 있다. 실제 occlusion-aware 조명이 구현됐다고 주장하지 않는다.
+
+이제 피드백은 이 **통합 건물 전체라는 최종 관찰 단위에서 한 번** 받는다. 중간 PNG·기술 통계마다 질문하여 작업을 종료하지 않으며, 추가 수정이 오면 지목된 자산/표시/조명 책임 단계에 연결한다.
+
+---
+
+## B33 거절본 보존 이력 — 강제64×64 정규화와 첫 통합
+
+**2026-09-27 최신 사용자 판정: B33 외형 거절.** 사용자는 더 뭉개진 표현·잘못된 각도·이중 픽셀처럼 보이는 결과를 지적했다. 단순 미응답/승인 대기로 기록하지 않는다. B33은 GameMap1 기존 위치의 10×8m(80m²) 단층 점포에 B32 시설5개·벽등2개·총79 renderer를 통합한 상태다. **실제 이동·가림·동일 Player/Camera와4배 픽셀 표시는 확인했으나, 이것은 거절된 아트의 품질을 정당화하지 않는다. 동적 광원 차이도0이어서 기술 완료 역시 미완료다.** 강제64px canvas 및 nonuniform 정규화가 이번 시각 실패의 원인 후보이며, 원본·변환 manifest로 먼저 분리한다. 아래 B32/B31/A30은 당시 결과를 보존한 이력이다.
+
+### 제작 원본과 정규화의 실제 범위
+
+[art-manifest.json](../artifacts/building33/art-manifest.json)이 원본 경로·해시·crop·native 크기·원본/목표 비율·실행 시간을 보존한다. 원본 9종은 새 생성 이미지인 `counter`, `rear_shelf`, `left_shelf`, `island`, `stock_shelf`, `floor`, `wall_left`, `wall_right`, `lamp`다. 벽등 2개는 같은 lamp 자산을 사용한다. 원본은 `Tools/Building33/Source/`, 개별 정규화 PNG는 `Assets/Art/PlannedPixelBuilding33/`에 둔다. 전체 방 한 장을 맵으로 쓰거나 기존 B31 무료 시트를 새 생성물로 설명하지 않는다.
+
+수정 PerfectPixel의 `normalize_triggered`에서 **`cell_sampling.source_regions`만 사용**했다. 셀은 원본 대표 RGB를 선택하며 전역 팔레트·톤 재작성은 하지 않는다. 기록된 9종 정규화 소요 합은 **30.547초**다. 이는 생성·Unity import·통합·관측을 포함한 전체 작업 시간이 아니다. 가구 5종은64×64, 바닥64×32, 벽 각32×64, 램프16×24 native canvas다. 4배 contact sheet는 nearest 표시 미리보기이며 게임 입력이 아니다.
+
+**실제 확인된 비례 손실과 재개 원인:** 각 generated bbox를 역할별 canonical grid에 맞추는 과정은 uniform fit이 아닌 `nonuniform bounding rectangle grid`다. 목표aspect/원본aspect는 계산대0.752824, 왼쪽 선반1.340294, 진열섬0.696129다. 따라서 출력 texel 격자가 정규여도 생성 원본의 내부 비례·투영을 정확하게 보존하지 못했다. B32의 원본aspect 보존 목표를 충족했다는 증거로 이 정규화를 제시하지 않는다. 사용자가 현재 표현을 거절했으므로 해당 자산의 형태/투영·정규화 단계가 재개 대상이다. 강제 가구64×64와 비균등 맞춤이 뭉개짐/각도 오류에 기여했을 가능성은 있지만, 모든 증상의 단일 원인으로 아직 확정하지 않는다. 실제 화면4배 또는 전역 재픽셀화 pass OFF라는 기술 수치로 이 거절을 반박하지 않는다.
+
+### B32 도면을 소비하는 배치와 표시
+
+- **도면:** [B32 layout-plan.json](../artifacts/building32/layout-plan.json)의 시설5개·사용점6개·벽·칸막이·문을 실제 로컬 XZ 미터 좌표로 소비한다. prefab은 `Assets/Prefabs/World/PlannedPixelShop33.prefab`; 기존 Player/Camera 소유자와 기지 흐름을 유지한다.
+- **픽셀:** native PPU=`16√2=22.627417`; FullRect가 원본 alpha를 담는다. 현재 카메라 방향30°/350°와 건물yaw305°를 기준으로 공통 표시 격자를 연결한다. `CameraZoomController`의 기존 소유권 안에서 정수 배율을 결정하며 새로운 Camera Manager를 만들지 않는다. 화면높이857px, ortho4.734301에서 `857/(2×4.734301×22.627417)≈4`이며, 새 Play readback도 source 한 칸당 화면4칸·pitch30.000004°/yaw349.999969°를 기록했다. 이 확인을 미술·광원 전체 합격으로 확대하지 않는다.
+- **바닥 alpha 이음새:** 원본 타일의 투명 영역 아래에 실제 바닥+벽 footprint에서 계산한 foundation mask를 둔다. 색은 바닥 원본 불투명색의 대표값이며 임의 테두리 덧칠이 아니다. 같은 높이에서 foundation queue1999/ZWrite0 → 원본 바닥 queue2000으로 그려 coplanar 깊이 덮임을 막는다. 이 파생 마스크는 생성 원본과 별도 `Derived/foundation.png`로 보존한다.
+- **접촉 그림자:** 시설의 실제 footprint를 투영한 별도 mask로 만든다. sprite bbox를 물리 점유로 간주하지 않는다. 그림자 표시와 collision 원본을 구분한다.
+- **개발 시점:** 기존 SceneView 정렬 메뉴와 B33 Inspect/실내 표시 메뉴가 같은30° 직교 개발 시점을 제공한다. editor의 지붕·앞벽 숨김은 SceneVisibility 상태이며 게임의 fader 규칙을 대신하지 않는다.
+
+### 명암 층과 기존 조명 재사용
+
+기본 면 구분·상품 디테일은 원본 아트에 있고, 접촉 그림자는 footprint mask이며, 공간 광원은 기존 **SteppedLocalLight / SteppedLocalLightRendererFeature**를 재사용한다. 두 벽등 각각 radius4.5m, intensity0.24, surface/halo3단계, normalInfluence0, worldCell0.125m다. 새 Lighting Manager나 물체 전체를 다시 픽셀화하는 pass는 추가하지 않는다.
+
+normalInfluence0은 이미 저작한 면 명암 위에 3D normal Lambert 음영을 중복시키지 않기 위한 현재 설정이다. 광원 ON/OFF 실제 화면 차이는 관측 코드가 같은 카메라·pose·시간에서 분리 측정한다. 연결된 조명 수나 셰이더 이름만으로 명암 품질·사용자 만족을 통과시키지 않는다. 고정된 아트 자체 명암과 동적 광원 반응을 같은 것으로 설명하지 않는다.
+
+기존 `IsometricAtlasSurface`에는 depth prepass용 pass가 없어 같은 셰이더에 `DepthOnly`와 `DepthNormalsOnly`를 추가했다. forward와 같은 픽셀 정렬·source alpha clip을 사용하고, foundation처럼 ZWrite0인 표면은 depth/normal에도 쓰지 않아 투명 픽셀이나 바탕면이 가림을 만들지 않도록 했다. **이 보완만으로 조명이 해결되지는 않았다.** 임시 상수색 probe에서는 해당 fullscreen pass 실행이 확인되지만 depth를 직접 Load하거나 Sample한 결과는 여전히0/검정이고 조명 차이도0이다. 현시점에는 depth 생성·전달·바인딩 중 근본 원인을 확정하지 않았으며, 임시 probe 실행을 정상 광원 기여로 기록하지 않는다.
+
+### 확보된 관측과 남은 조명 실패
+
+첫 `[Play Mode 호출 확인]`에서 실제 `PlayerMovement.StepMove`/CharacterController로 사용점6/6에 도달했고, 정해진 시설 footprint와 실제 collider 좌표 오차는0.000001m 미만이었다. 전면 벽 접근은 local z≈−3.375에서 멈췄다. 이는 호출 관측이며 실제 WASD 키 입력 검증이라고 하지 않는다.
+
+Editor hot reload로 중단됐던 관측은 정상 새 Play에서 이어서 확인했다. 현재 readback은 시설5개, 사용점6/6, 가림, 동일 Player/Camera를 통과하고 `lightingObserved:false`, `lightingChangedPixels:0`을 명시한다. 따라서 기술 완료나 정상 동적 조명으로 보고하지 않는다. 최종 결과의 근거는 B33의 Unity readback, 실제 GameView와 `technical-result.json`이며, 조명 원인 수정과 실제 차이 관측 후에만 이 미완료 상태를 갱신한다. readback의 `artisticApproval:pending`은 관측 당시 값이며 **후속 사용자 정정으로 현재 B33 외형은 거절 상태**다. 새로운 자산/표시 수정의 미술 합격은 아직 없다.
+
+작업 흐름과 실제 진입점은 [B33 README](../../Tools/Building33/README.md)에 연결한다. 기술 납품과 사용자 미술 판정은 분리하며, 질문 발신이나 연구 문서 작성으로 건물 완성을 대체하지 않는다.
+
+---
+
+## B32 보존 이력 — 배치·미술·표시 계약 재설계
 
 **2026-09-27 최신 사용자 판정:** B31의 디자인·명암·디테일·배치는 거절됐다. 화면상 크기는 대략 유지할 수 있지만 원본 픽셀이 불규칙하게 표시되는 문제는 고쳐야 한다. Grave Seasons 첨부 화면이 우선 참고이며, 단순 축소·전체 맵 한 장·임의 가구 좌표 나열은 제작 방식으로 채택하지 않는다. **이번 변경은 Scene 뷰 정렬, 표시 결함의 최소 실험, 제작 전 배치 도면과 기술 설계다. 새 건물 미술 완성/승인을 의미하지 않는다.** 기존 B31과 기지 동작은 보존한다.
 

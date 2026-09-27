@@ -1,0 +1,590 @@
+{
+  "schema": "building33-art/1",
+  "source_kind": "generated individual object images",
+  "engine": "LocalOnly/PerfectPixelPalette_20260906",
+  "engine_source_sha256": "80230267713cd68097cf6d63a74af4a48267464faa2cbdcd1809a3f49e79f5a2",
+  "sampling_source_sha256": "2da74307eeca67b2e8e21197baaec8d54813aa1430668d6bdba07cb5015310ba",
+  "engine_selection": "Tools/PerfectPixelWeb/app.py existing fallback; Desktop PerfectPixel-Web/engine absent",
+  "algorithm": "PerfectPixel modified normalize_triggered: cell_sampling.source_regions only",
+  "features": {
+    "cell_sampling": {
+      "enabled": true,
+      "scope": {
+        "kind": "all"
+      },
+      "options": {
+        "method": "source_regions",
+        "coverage": 0.5,
+        "color_edge_threshold": 0.08
+      }
+    }
+  },
+  "native_pixels_per_unit": 22.627416997969522,
+  "vertical_pixels_per_metre": 19.595917942265427,
+  "layout_source": "docs/artifacts/building32/layout-plan.json",
+  "layout_sha256": "f76d77651761f26ac14f546d68bf3aba7ed3ad1d3e69815bb1f85363b8bd98ac",
+  "assets": [
+    {
+      "id": "counter",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-0abc651c-0240-4565-8d78-49bcb8a19d97.png",
+      "preserved_source_path": "Tools/Building33/Source/counter.png",
+      "original_sha256": "be8af789808b3655f6528c262e64fcfc0d14db5f51c7bcca64f0a3e35fc9cb16",
+      "original_dimensions": [
+        1374,
+        1145
+      ],
+      "crop_xyxy": [
+        98,
+        131,
+        1277,
+        1123
+      ],
+      "pre_normalization_crop_dimensions": [
+        1179,
+        992
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 705481,
+      "removed_remote_component_pixels": 46,
+      "target": {
+        "grid": [
+          51,
+          57
+        ],
+        "canvas": [
+          64,
+          64
+        ],
+        "bottom_margin": 0,
+        "fixture_id": "checkout",
+        "footprint_m": [
+          2.4000000000000004,
+          0.8
+        ],
+        "collider_height_m": 1.0,
+        "visual_height_m": 1.6
+      },
+      "canvas_placement_xy": [
+        6,
+        7
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/counter.png",
+      "normalized_dimensions": [
+        64,
+        64
+      ],
+      "normalized_sha256": "3834f8183b0ce39e33027befd33303608036438222c9d81987ba7d2d40a4f6a1",
+      "source_to_grid_scale_xy": [
+        0.043256997455470736,
+        0.057459677419354836
+      ],
+      "target_aspect_over_source_aspect": 0.7528235346636312,
+      "fit": "nonuniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": null,
+      "seconds": 3.312
+    },
+    {
+      "id": "rear_shelf",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-31a7091f-a3fa-4079-8254-6d29f8f48041.png",
+      "preserved_source_path": "Tools/Building33/Source/rear_shelf.png",
+      "original_sha256": "9b931618de4d972b7d97d2cb938947c56146962682d6baebcddfdc59864e059e",
+      "original_dimensions": [
+        1196,
+        1315
+      ],
+      "crop_xyxy": [
+        76,
+        67,
+        1129,
+        1284
+      ],
+      "pre_normalization_crop_dimensions": [
+        1053,
+        1217
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 953676,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          56,
+          63
+        ],
+        "canvas": [
+          64,
+          64
+        ],
+        "bottom_margin": 0,
+        "fixture_id": "rear_shelf",
+        "footprint_m": [
+          2.9,
+          0.5999999999999996
+        ],
+        "collider_height_m": 1.8,
+        "visual_height_m": 1.8
+      },
+      "canvas_placement_xy": [
+        4,
+        1
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/rear_shelf.png",
+      "normalized_dimensions": [
+        64,
+        64
+      ],
+      "normalized_sha256": "9306c56a25883b9d3b2db2952b6af0ef1239dcb5933300e688652c1d3ae42eec",
+      "source_to_grid_scale_xy": [
+        0.05318138651471985,
+        0.051766639276910435
+      ],
+      "target_aspect_over_source_aspect": 1.02732932362562,
+      "fit": "nonuniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": null,
+      "seconds": 4.391
+    },
+    {
+      "id": "left_shelf",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-ec6cc212-f2f6-4fee-923c-5c7b8856e36b.png",
+      "preserved_source_path": "Tools/Building33/Source/left_shelf.png",
+      "original_sha256": "cb51e8b099367333c303ced3e36c7b5c3a330e4e2eb28a8d29cee5db4c08058f",
+      "original_dimensions": [
+        1122,
+        1402
+      ],
+      "crop_xyxy": [
+        199,
+        77,
+        962,
+        1334
+      ],
+      "pre_normalization_crop_dimensions": [
+        763,
+        1257
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 725221,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          48,
+          59
+        ],
+        "canvas": [
+          64,
+          64
+        ],
+        "bottom_margin": 0,
+        "fixture_id": "left_shelf",
+        "footprint_m": [
+          0.5999999999999996,
+          2.4
+        ],
+        "collider_height_m": 1.8,
+        "visual_height_m": 1.8
+      },
+      "canvas_placement_xy": [
+        8,
+        5
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/left_shelf.png",
+      "normalized_dimensions": [
+        64,
+        64
+      ],
+      "normalized_sha256": "a3d187cc5c6442cacb8328a966525da7ce3b0c8bb70f75e23d129ef28e70f7f9",
+      "source_to_grid_scale_xy": [
+        0.06290956749672345,
+        0.046937151949085126
+      ],
+      "target_aspect_over_source_aspect": 1.340293666836973,
+      "fit": "nonuniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": null,
+      "seconds": 3.406
+    },
+    {
+      "id": "island",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-505e0ee1-e019-42dc-a70f-dc688143d5e7.png",
+      "preserved_source_path": "Tools/Building33/Source/island.png",
+      "original_sha256": "902e052eedd5a2edd12b994d1813febc916c39b86b6e786f08e72c00933302a3",
+      "original_dimensions": [
+        1426,
+        1103
+      ],
+      "crop_xyxy": [
+        68,
+        98,
+        1398,
+        1065
+      ],
+      "pre_normalization_crop_dimensions": [
+        1330,
+        967
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 865117,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          45,
+          47
+        ],
+        "canvas": [
+          64,
+          64
+        ],
+        "bottom_margin": 0,
+        "fixture_id": "display_island",
+        "footprint_m": [
+          1.6,
+          1.1999999999999997
+        ],
+        "collider_height_m": 0.85,
+        "visual_height_m": 1.25
+      },
+      "canvas_placement_xy": [
+        9,
+        17
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/island.png",
+      "normalized_dimensions": [
+        64,
+        64
+      ],
+      "normalized_sha256": "5f23d7e605c1bf4e614e551804f8e08bce6b716eaed240e08e14f088bd2e4c18",
+      "source_to_grid_scale_xy": [
+        0.03383458646616541,
+        0.04860392967942089
+      ],
+      "target_aspect_over_source_aspect": 0.6961286194208927,
+      "fit": "nonuniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": null,
+      "seconds": 4.078
+    },
+    {
+      "id": "stock_shelf",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-923639a4-6a17-4a2b-b714-e4b81b88edae.png",
+      "preserved_source_path": "Tools/Building33/Source/stock_shelf.png",
+      "original_sha256": "5c5f588b45a505bf53286ccb0aeb8175989529a82792fe46fec66790e9237e53",
+      "original_dimensions": [
+        1133,
+        1388
+      ],
+      "crop_xyxy": [
+        59,
+        52,
+        1089,
+        1350
+      ],
+      "pre_normalization_crop_dimensions": [
+        1030,
+        1298
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 889936,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          49,
+          60
+        ],
+        "canvas": [
+          64,
+          64
+        ],
+        "bottom_margin": 0,
+        "fixture_id": "stock_shelf",
+        "footprint_m": [
+          2.4499999999999997,
+          0.6000000000000001
+        ],
+        "collider_height_m": 1.8,
+        "visual_height_m": 1.8
+      },
+      "canvas_placement_xy": [
+        7,
+        4
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/stock_shelf.png",
+      "normalized_dimensions": [
+        64,
+        64
+      ],
+      "normalized_sha256": "c73056945ef1de460f62a02ba215254445040e93cea22a34a6ccfcd1c52b1ac2",
+      "source_to_grid_scale_xy": [
+        0.04757281553398058,
+        0.046224961479198766
+      ],
+      "target_aspect_over_source_aspect": 1.0291585760517798,
+      "fit": "nonuniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": null,
+      "seconds": 4.0
+    },
+    {
+      "id": "floor",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-3796f5cf-08c6-4bdb-856d-fbea42bcc8b2.png",
+      "preserved_source_path": "Tools/Building33/Source/floor.png",
+      "original_sha256": "370ab0301b77e10a0943be7dce4473494112de4dc3e82c53e11cb7eb944b407e",
+      "original_dimensions": [
+        1774,
+        887
+      ],
+      "crop_xyxy": [
+        74,
+        31,
+        1699,
+        858
+      ],
+      "pre_normalization_crop_dimensions": [
+        1625,
+        827
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 690768,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          64,
+          32
+        ],
+        "canvas": [
+          64,
+          32
+        ],
+        "bottom_margin": 0
+      },
+      "canvas_placement_xy": [
+        0,
+        0
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/floor.png",
+      "normalized_dimensions": [
+        64,
+        32
+      ],
+      "normalized_sha256": "471974fd750731b8286ad7e01a6f92fe3d66e676c1a315cbadecad57fcf2dfe4",
+      "source_to_grid_scale_xy": [
+        0.039384615384615386,
+        0.03869407496977025
+      ],
+      "target_aspect_over_source_aspect": 1.0178461538461538,
+      "fit": "nonuniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": {
+        "filled_boundary_cells": 0,
+        "removed_outside_cells": 0,
+        "max_source_boundary_distance_pixels": 0.0,
+        "method": "nearest existing sampled RGB, no color blend"
+      },
+      "seconds": 3.094
+    },
+    {
+      "id": "wall_left",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-a0da5352-7dbf-476a-bbf1-0f2df68c0dfb.png",
+      "preserved_source_path": "Tools/Building33/Source/wall_left.png",
+      "original_sha256": "ecec718bf295529803df2a88fe930e4eb45fbd88da8e35b373cae1fcf2d1be4c",
+      "original_dimensions": [
+        1122,
+        1402
+      ],
+      "crop_xyxy": [
+        235,
+        55,
+        888,
+        1362
+      ],
+      "pre_normalization_crop_dimensions": [
+        653,
+        1307
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 642686,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          32,
+          64
+        ],
+        "canvas": [
+          32,
+          64
+        ],
+        "bottom_margin": 0
+      },
+      "canvas_placement_xy": [
+        0,
+        0
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/wall_left.png",
+      "normalized_dimensions": [
+        32,
+        64
+      ],
+      "normalized_sha256": "a7773ff60ee543ed17eb861a2acb7b31e0db6b420e62ad3bbe90930a5b79a48d",
+      "source_to_grid_scale_xy": [
+        0.04900459418070444,
+        0.04896710022953328
+      ],
+      "target_aspect_over_source_aspect": 1.0007656967840735,
+      "fit": "approximately uniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": {
+        "filled_boundary_cells": 12,
+        "removed_outside_cells": 2,
+        "max_source_boundary_distance_pixels": 1.0,
+        "method": "nearest existing sampled RGB, no color blend"
+      },
+      "seconds": 2.938
+    },
+    {
+      "id": "wall_right",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-08022e00-1fa7-463e-ab35-4130641ae3b3.png",
+      "preserved_source_path": "Tools/Building33/Source/wall_right.png",
+      "original_sha256": "f61bb9bc2085944f5667bdcb1208e7c6f8203f1a175e1d423d9e13f534e160ef",
+      "original_dimensions": [
+        1086,
+        1448
+      ],
+      "crop_xyxy": [
+        241,
+        47,
+        846,
+        1400
+      ],
+      "pre_normalization_crop_dimensions": [
+        605,
+        1353
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 616296,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          32,
+          64
+        ],
+        "canvas": [
+          32,
+          64
+        ],
+        "bottom_margin": 0
+      },
+      "canvas_placement_xy": [
+        0,
+        0
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/wall_right.png",
+      "normalized_dimensions": [
+        32,
+        64
+      ],
+      "normalized_sha256": "0a6795aca096c90d55d1ee15ae19124031862397cb6df59958c1d10d92e70271",
+      "source_to_grid_scale_xy": [
+        0.05289256198347107,
+        0.04730229120473023
+      ],
+      "target_aspect_over_source_aspect": 1.1181818181818182,
+      "fit": "nonuniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": {
+        "filled_boundary_cells": 41,
+        "removed_outside_cells": 19,
+        "max_source_boundary_distance_pixels": 2.8284271247461903,
+        "method": "nearest existing sampled RGB, no color blend"
+      },
+      "seconds": 2.843
+    },
+    {
+      "id": "lamp",
+      "original_external_path": "C:\\Users\\JG\\.codex\\generated_images\\01a08c0e-bbf2-7d10-b1e8-607c2c27f6d3\\exec-de422893-21a3-4a5f-95df-ea0a0cf20171.png",
+      "preserved_source_path": "Tools/Building33/Source/lamp.png",
+      "original_sha256": "bc10b5d75ba7f1f87edd18860995c78f699bac4417a65b92d8f799018795caf6",
+      "original_dimensions": [
+        1024,
+        1536
+      ],
+      "crop_xyxy": [
+        161,
+        82,
+        969,
+        1450
+      ],
+      "pre_normalization_crop_dimensions": [
+        808,
+        1368
+      ],
+      "alpha_threshold": 128,
+      "partial_alpha_source_pixels": 551788,
+      "removed_remote_component_pixels": 0,
+      "target": {
+        "grid": [
+          16,
+          24
+        ],
+        "canvas": [
+          16,
+          24
+        ],
+        "bottom_margin": 0
+      },
+      "canvas_placement_xy": [
+        0,
+        0
+      ],
+      "normalized_path": "Assets/Art/PlannedPixelBuilding33/lamp.png",
+      "normalized_dimensions": [
+        16,
+        24
+      ],
+      "normalized_sha256": "92a487956e5bd876dcd588aeda4fe256645ee9f84a16189a42a9f8364cb5db25",
+      "source_to_grid_scale_xy": [
+        0.019801980198019802,
+        0.017543859649122806
+      ],
+      "target_aspect_over_source_aspect": 1.1287128712871286,
+      "fit": "nonuniform bounding rectangle grid",
+      "rgb_contract": "all visible RGB values select existing source samples; no palette/tone/repaint pass",
+      "boundary_correction": null,
+      "seconds": 2.485
+    }
+  ],
+  "limitations": [
+    "Source art has generated baked material shading; no normal/depth map is inferred.",
+    "Metric bounding-box fitting does not make generated internal edges exact CAD or identical projection.",
+    "Nonuniform source-to-grid fitting is disclosed per asset.",
+    "Source-region selection preserves chosen source RGB, not every fine source feature.",
+    "No art/style approval is inferred from dimensions or technical checks."
+  ],
+  "wall_atlas": {
+    "path": "Assets/Art/PlannedPixelBuilding33/wall.png",
+    "dimensions": [
+      64,
+      64
+    ],
+    "sha256": "f3f518a70a4a9c86374c746fa11c0f137638bd324b81b342ec4e5ad20471b843",
+    "halves": [
+      {
+        "x": 0,
+        "source_id": "wall_right",
+        "axis": "+X",
+        "uv_mask": ".25*u <= v <= .75+.25*u"
+      },
+      {
+        "x": 32,
+        "source_id": "wall_left",
+        "axis": "+Z",
+        "uv_mask": ".25*(1-u) <= v <= 1-.25*u"
+      }
+    ],
+    "explanation": "Source names follow generated visual orientation; atlas maps matching slopes without flipping pixels."
+  },
+  "technical_preview": {
+    "path": "docs/artifacts/building33/art-contact-sheet-4x.png",
+    "scale": 4,
+    "filter": "nearest, preview only; this file is not a game asset"
+  }
+}

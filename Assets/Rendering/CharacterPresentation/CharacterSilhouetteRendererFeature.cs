@@ -617,9 +617,13 @@ namespace FantasySurvival.Rendering
                 }
                 builder.SetRenderFunc(static (PixelCellDepthCopyPassData data, RasterGraphContext context) =>
                 {
-                    data.material.SetTexture(SceneDepthTextureId, data.sceneDepth);
+                    // These two draws copy in opposite directions using one material.
+                    // Capture each source in the draw command; changing the shared
+                    // material lets the final publish replace the initial copy's input.
+                    data.properties.Clear();
+                    data.properties.SetTexture(SceneDepthTextureId, data.sceneDepth);
                     context.cmd.DrawProcedural(Matrix4x4.identity, data.material,
-                        PixelCellDepthCopyPassIndex, MeshTopology.Triangles, 3, 1);
+                        PixelCellDepthCopyPassIndex, MeshTopology.Triangles, 3, 1, data.properties);
                 });
             }
 
@@ -1231,6 +1235,7 @@ namespace FantasySurvival.Rendering
             {
                 public TextureHandle sceneDepth;
                 public Material material;
+                public readonly MaterialPropertyBlock properties = new MaterialPropertyBlock();
             }
 
             private sealed class PixelCellCompositePassData

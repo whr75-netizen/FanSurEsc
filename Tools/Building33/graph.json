@@ -1,0 +1,228 @@
+{
+  "goal": "기지 GameMap1 테스트 건물 한 채의 개별 native 픽셀 자산·B32 역할 도면·FullRect 픽셀 보존 표시·명암을 실제 통합하고 실제 플레이 결과까지 납품한다. 기술 납품 완료와 사용자의 미술 승인 대기는 구분하며, 조사·중간 자산에서 전체 요청을 종료하지 않는다.",
+  "entry": "art",
+  "max_steps": 7,
+  "requirements": [
+    {
+      "id": "building33_integrated_technical_delivery",
+      "text": "개별 자산과 B32 도면을 통합한 실제 GameMap1 건물, 정수 픽셀 표시, Scene/Game 30도 시점, 출입/가림/동일 객체/명암의 Unity 관측 수치가 충족되어야 한다. 미술 승인을 대신하지 않는다.",
+      "source": "2026-09-27 사용자: 질문 직후 종료 원인 조사와 미완료 건물 작업 마무리",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "art",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {
+        "design": {
+          "literal": "docs/references/grave_seasons_map_art.md"
+        },
+        "layout": {
+          "literal": "docs/artifacts/building32/layout-plan.json"
+        }
+      },
+      "parameters": {
+        "scope": "사용자 Grave Seasons 참고·B32 미술 명세와 역할 도면으로 개별 오브젝트/벽/바닥용 픽셀 자산을 제작한다. 전체 건물 한 장 생성이나 기존 거절 CC0 아트 재포장으로 대체하지 않는다. 원본·변환본·native 크기·피벗·PPU·처리 출처를 manifest로 연결하며 필요한 정규화만 수행한다. 레퍼런스의 물체 특징·명암 단계·재질·큰 색 덩어리 명세를 지킨다. 배치/렌더/미술 자기승인을 이 단계의 성공으로 선언하지 않는다."
+      },
+      "reads": [
+        "design:B32-reference-and-layout"
+      ],
+      "writes": [
+        "assets:B33-independent-art"
+      ],
+      "question": "art 작업을 같은 요청 안에서 수행하고 실제 산출물을 반환한다. 사용자 질문으로 바꾸지 않는다.",
+      "output_schema": {
+        "manifest": {
+          "type": "string"
+        }
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "art.manifest"
+              }
+            ]
+          },
+          "to": "integrate"
+        }
+      ]
+    },
+    {
+      "id": "integrate",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 2,
+      "inputs": {
+        "art": {
+          "ref": "art"
+        },
+        "repairEvidence": {
+          "feedback_ref": "validate",
+          "default": null
+        },
+        "layout": {
+          "literal": "docs/artifacts/building32/layout-plan.json"
+        }
+      },
+      "parameters": {
+        "scope": "art manifest와 B32 JSON의 미터 단위 footprint·사용공간·역할로 기존 기지 위치에 테스트 건물 한 채를 통합한다. 개별 물체를 교체 가능하게 유지하고 거절 B31 원본을 보존한다. FullRect가 원본 alpha를 보존하도록 깊이/연결을 처리하고 공통 native 격자와 실제 정수 화면 배율을 연결한다. 원본 픽셀을 다시 저해상도화하지 않는다. 표면 명암·접촉 그림자·국소 광원을 구분하고 실제 Play/Game와 SceneView 30도 계약을 유지한다. 기존 CameraFollow/Zoom 소유자를 재사용하고 동일 Player/Camera·기지 흐름 보존. serialized writer는 root만 담당한다. 새 재료 자체를 미술 승인받느라 통합을 중단하지 않는다."
+      },
+      "reads": [
+        "assets:B33-independent-art",
+        "design:B32-reference-and-layout",
+        "unity:GameMap1-preservation-baseline"
+      ],
+      "writes": [
+        "unity:B33-integrated-building",
+        "assets:B33-integrated-rendering",
+        "unity:B33-editor-view"
+      ],
+      "question": "integrate 작업을 같은 요청 안에서 수행하고 실제 산출물을 반환한다. 사용자 질문으로 바꾸지 않는다.",
+      "output_schema": {
+        "prefab": {
+          "type": "string"
+        }
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "integrate.prefab"
+              }
+            ]
+          },
+          "to": "observe"
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 2,
+      "inputs": {
+        "building": {
+          "ref": "integrate"
+        },
+        "art": {
+          "ref": "art"
+        }
+      },
+      "parameters": {
+        "scope": "실제 GameMap1 Play Mode의 기존 Player/Camera에서 B33 README의 관측 계약을 Unity Editor API로 기록한다. 새로운 배치/표시/광원을 대상으로 대표 출입·벽 충돌·가림과 화면을 한 번 관측한다. Unity가 readback JSON을 직접 쓰며 Codex가 성공 boolean을 수기 작성하지 않는다. 실제 측정 인스턴스 ID, 도면 fixture 로컬 collider rect, 카메라 pitch/yaw/직교/PPU/정수화면배율, FullRect/두번째 픽셀패스 유무, 명암경로/국소광원수를 남긴다. 실제 interior/exterior GameView PNG를 보여줄 준비까지 완료한다. 명백한 기술 오류는 사용자 미술질문으로 넘기지 않고 실제 실패 관측을 반환하여 통합 수정 분기에 연결한다. 재관측에서는 수정의 영향을 받는 항목만 새로 측정하고 보존 항목은 기존 증거 출처를 명시한다. 최종 미술 승인은 pending이다."
+      },
+      "reads": [
+        "unity:B33-integrated-building",
+        "assets:B33-integrated-rendering",
+        "assets:B33-independent-art",
+        "unity:B33-editor-view",
+        "unity:GameMap1-preservation-baseline"
+      ],
+      "writes": [
+        "unity:B33-temporary-play-observation",
+        "artifacts:B33-final-play-observation",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/Building33/readback.json"
+      ],
+      "question": "observe 작업을 같은 요청 안에서 수행하고 실제 산출물을 반환한다. 사용자 질문으로 바꾸지 않는다.",
+      "output_schema": {
+        "readback": {
+          "type": "string"
+        }
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "observe.readback"
+              }
+            ]
+          },
+          "to": "validate"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "max_visits": 2,
+      "inputs": {
+        "stdin": {
+          "ref": "observe"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "-c",
+          "import json,sys,math,hashlib\nfrom pathlib import Path\nroot=Path.cwd()\nrequest=json.load(sys.stdin)\np=Path(request['readback'])\nd=json.loads(p.read_text(encoding='utf-8-sig'))\nerrors=[]\ndef require(condition,message):\n    if not condition: errors.append(message)\ndef number(value): return isinstance(value,(int,float)) and not isinstance(value,bool) and math.isfinite(value)\nrequire(d.get('producer')=='UnityEditor.Building33Observation','readback must be emitted by Unity observation')\nrequire(d.get('scene')=='GameMap1' and d.get('isPlayMode') is True,'actual GameMap1 Play Mode required')\nrequire(d.get('artisticApproval')=='pending','art approval must remain pending')\nfor key in ['layoutMatches','orthographic','sceneViewOrthographic','fullRectCoverage','entryReached','wallBlocked','occlusionObserved','lightingObserved']:\n    require(d.get(key) is True,key)\nrequire(d.get('doublePixelation') is False,'second pixelation pass must not affect native art')\nfor key in ['missingScripts','newErrors']:\n    require(type(d.get(key)) is int and d[key]==0,key)\nfor key,minimum in [('fixtureCount',5),('nativeSpriteCount',8)]:\n    require(type(d.get(key)) is int and d[key]>=minimum,key)\nfor key,expected in [('actualCameraPitch',30),('actualCameraYaw',350),('sceneViewPitch',30)]:\n    value=d.get(key)\n    require(number(value) and abs((value-expected+180)%360-180)<0.05,key)\nppu=d.get('nativePixelsPerUnit')\nscale=d.get('screenPixelsPerSourcePixel')\nrequire(number(ppu) and ppu>0,'nativePixelsPerUnit')\nrequire(number(scale) and scale>=1 and abs(scale-round(scale))<0.001,'uniform integer screen pixel scale')\nidentities=d.get('identities',{})\nfor kind in ['player','camera']:\n    before=identities.get(kind+'Before')\n    after=identities.get(kind+'After')\n    require(type(before) is int and before!=0 and before==after,'same '+kind+' instance')\nrequire(isinstance(d.get('lightingPath'),str) and bool(d['lightingPath'].strip()),'observed lighting path')\nrequire(d.get('lightingRegionCount',0)>=1,'local lighting region required')\nfor key in ['prefab','artManifest','layoutPlan']:\n    value=d.get(key)\n    require(isinstance(value,str) and Path(value).is_file(),key)\nplan=json.loads((root/'docs/artifacts/building32/layout-plan.json').read_text(encoding='utf-8-sig'))\nactual={row.get('id'):row for row in d.get('fixtures',[]) if isinstance(row,dict)}\nfor fixture in plan['fixtures']:\n    row=actual.get(fixture['id'],{})\n    rect=row.get('rectXZ',[])\n    wanted=fixture['rect_xz']\n    require(len(rect)==4 and all(number(v) and abs(v-w)<0.01 for v,w in zip(rect,wanted)),'fixture footprint '+fixture['id'])\nscreens=d.get('screenshots',[])\nrequire(isinstance(screens,list) and len(screens)>=2,'actual interior and exterior views')\nhashes=[]\nfor source in screens:\n    image=Path(source)\n    if not image.is_file(): errors.append('missing actual view '+str(image)); continue\n    data=image.read_bytes()\n    require(data[:8]==b'\\x89PNG\\r\\n\\x1a\\n','PNG format '+str(image))\n    hashes.append({'path':str(image),'sha256':hashlib.sha256(data).hexdigest()})\nresult={'scope':'B33 integrated building technical delivery; art judgment remains pending','technicalReady':not errors,'artisticApproval':'pending','readback':str(p),'readbackSha256':hashlib.sha256(p.read_bytes()).hexdigest(),'screenshots':hashes,'errors':errors}\ndestination=root/'docs/artifacts/building33/technical-result.json'\ndestination.parent.mkdir(parents=True,exist_ok=True)\ndestination.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\\n',encoding='utf-8')\nprint(json.dumps(result,ensure_ascii=False))\nsys.exit(2 if errors else 0)"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": []
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/Building33/readback.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building32/layout-plan.json",
+        "artifacts:B33-final-play-observation"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building33/technical-result.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "integrate",
+          "feedback": true
+        }
+      ]
+    }
+  ]
+}

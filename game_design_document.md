@@ -2462,6 +2462,8 @@ Escape 입력은 `GameplayEscapeMenuController` 하나가 다음 순서로 처�
 
 ### 14.1 아트 방향
 
+- `[사용자 확정][2026-09-27]` 대부분의 맵/환경은 2D 픽셀아트 이미지를 주재료로 제작한다. [Grave Seasons](https://store.steampowered.com/app/3255110/Grave_Seasons/)와 사용자 첨부 실내 화면의 시점·캐릭터 대비 사물 크기·공간 밀도를 우선 기준으로 삼는다. 맵 아트 → 건물 평면 → 사물 배치 → 생성 → 공통 픽셀 격자 정규화 순서다. 원작의 내부 해상도나 정확한 카메라 수치를 확인한 것으로 확대하지 않는다. PerfectPixel/Aseprite 처리가 방향·비율 오류를 자동 해결한다는 뜻도 아니다. 기존 3D 결과와 Unity 동작은 보존하며, 첫 실험과 원본/변환 구분은 [2D 맵 아트 계약](docs/references/grave_seasons_map_art.md)을 따른다. 기존 3D 활용은 선택 가능한 기존 입력이며 새 주 제작 방식을 대체하지 않는다.
+
 #### 14.1.1 현재
 
 - 3D 탑다운 프로젝트

@@ -1,0 +1,109 @@
+{
+  "configuration": {
+    "source": "normalizer-input-rgba.png",
+    "base_grid": [
+      384,
+      384
+    ],
+    "scale": "1.0",
+    "preview_zoom": 1,
+    "export_color_layers": false,
+    "features": {
+      "cell_sampling": {
+        "enabled": true,
+        "scope": {
+          "kind": "all"
+        },
+        "options": {
+          "method": "source_regions",
+          "coverage": 0.5,
+          "color_edge_threshold": 0.08
+        }
+      }
+    }
+  },
+  "configuration_path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\MapArt30\\run01\\normalizer-config.json",
+  "input_file_sha256": "5f945768a89d084dd0353bb5da637423a9708821067677a428d2524f6227cf57",
+  "input_array_sha256": "c07b403679831ac5d02dbe4695ee6827b55c40ab168fcd9fd3b6f0c8184c9f67",
+  "configuration_file_sha256": "e9e47a970b00acb666bcb2d49e29b322bdff1f18a7dcdde4336bf564f0d7afcd",
+  "input_masks": [],
+  "comparison_previous_sha256": null,
+  "code_sha256": {
+    "trigger_cli.py": "ecfa91445f0ccd9fa36c6bd4d3afbd14ad829e17a11b195903f60ee995476d32",
+    "requirements-boundary.txt": "28d131c246e5fc47913841d3b0ed607a1dc7992a26a71b1324dfc1823a070c29",
+    "src/perfect_pixel/trigger_pipeline.py": "80230267713cd68097cf6d63a74af4a48267464faa2cbdcd1809a3f49e79f5a2",
+    "src/perfect_pixel/line_triggers.py": "88806f325cca52ef8ae842c2762f07c04c1753d1715621f79cb6470d2aa20f39",
+    "src/perfect_pixel/line_first.py": "ef1329082b1216c6bbd745a1e15701f1306a11a5941009ddb7dbeb05f2cee66c",
+    "src/perfect_pixel/source_sampling.py": "2da74307eeca67b2e8e21197baaec8d54813aa1430668d6bdba07cb5015310ba",
+    "src/perfect_pixel/boundary_pipeline.py": "7a7b7d3b22366102984b6bca94969dc8c2cd495eee6be3c53a4bea6da013eb58",
+    "src/perfect_pixel/boundary_regions.py": "341a0754a78dfd7119268ad442bed69f3128b4e3f42a0a8cb7d45bf6d1002193",
+    "src/perfect_pixel/region_palette.py": "11adb4eb2d4fa19787935dce4e9240f214509a27026bd2208ee4c28e6640a053",
+    "src/perfect_pixel/gradient_tones.py": "604c9a991e7adf272315069ae574857360458d96465a4dc8f4474fe87d8cd043",
+    "src/perfect_pixel/gradient_steps.py": "491ae94619edef67a2d2cbd398eabdd13a96966e97d11b61871fc8768e65ac77",
+    "src/perfect_pixel/spatial_tones.py": "7e9e1fa51b955f3cea0d9051ba6d0f3c2fa20a30d73895237613e19da1fe04df",
+    "src/perfect_pixel/highlight_accents.py": "619b0a08b75f3577df08769dad2ce828d073b79456a814dfe27e92544530bb79",
+    "src/perfect_pixel/color_layers.py": "ece317febd922e6f4d3292952329aa792cf0f3dcf43deee918cff475918ca912",
+    "src/perfect_pixel/tone_controls.py": "356a5b1f7ae43217832304f8a50feec3934f838b0b3bed8dd5eef2354696023d",
+    "src/perfect_pixel/feature_scopes.py": "dc530e3cc354c9ed9fcc1f9368698230e54f68fa35eb6f7c963c6d64428a1b61",
+    "src/perfect_pixel/palette.py": "2f5c955931c9e601a9e6998a5b3af39c3820b423c40a31b73c008c7f83c8f1bb",
+    "src/perfect_pixel/__init__.py": "25cc9981152ab3fbf6963c0d0df63e49f13a6afc9c02357261cfd75d26a55a26",
+    "src/perfect_pixel/perfect_pixel_noCV2.py": "99cbd4e0a9febae704a9637aeba79c68d3e0731e494db17424533c4ef1642522",
+    "src/perfect_pixel/perfect_pixel.py": "c5ca7012825573250132b9dd169aa58cb5bc70b732541881bfb11765e3abb338"
+  },
+  "result": {
+    "grid": [
+      384,
+      384
+    ],
+    "base_grid": [
+      384,
+      384
+    ],
+    "scale": "1.0",
+    "features": {
+      "mask_cleanup": {
+        "enabled": false,
+        "scope_pixels": 0
+      },
+      "region_colors": {
+        "enabled": false,
+        "scope_pixels": 0
+      },
+      "region_tones": {
+        "enabled": false,
+        "scope_pixels": 0
+      },
+      "highlight_accents": {
+        "enabled": false,
+        "scope_pixels": 0
+      },
+      "cell_sampling": {
+        "enabled": true,
+        "scope_pixels": 1572516,
+        "method": "source_regions",
+        "palette_independent_coordinates": true
+      },
+      "line_normalization": {
+        "enabled": false,
+        "scope_pixels": 0
+      }
+    },
+    "changed_target_cells": 1380,
+    "limitations": [
+      "Color regions are not semantic parts.",
+      "Full-support line cells are not guessed or inpainted.",
+      "Downscaling cannot guarantee topology or lost detail recovery."
+    ]
+  },
+  "technical_checks": {
+    "source_unchanged": true,
+    "binary_alpha": true,
+    "native_grid": [
+      384,
+      384
+    ],
+    "unique_opaque_rgb": 36395,
+    "opaque_rgb_from_original": true,
+    "design_approval": "user review pending"
+  }
+}

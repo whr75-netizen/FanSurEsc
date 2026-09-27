@@ -1,0 +1,47 @@
+{
+  "id": "corner-general-store-01",
+  "native_size": [384, 384], "guide_zoom": 4, "preview_zoom": 3,
+  "building": [8, 10], "site": [12, 16], "site_building_origin": [2, 3],
+  "projection": {"origin": [210, 135], "x_basis": [20, 10], "z_basis": [-20, 10], "height_ppm": 24.49489742783178},
+  "rooms": [
+    {"id":"STAIR HALL", "floor":0, "rect":[0,0,2.4,10], "color":"#667482"},
+    {"id":"STOCK", "floor":0, "rect":[2.4,0,3.2,2.8], "color":"#8d795d"},
+    {"id":"WC", "floor":0, "rect":[5.6,0,2.4,2.8], "color":"#6b8990"},
+    {"id":"SERVICE", "floor":0, "rect":[2.4,2.8,5.6,1.2], "color":"#8a8a79"},
+    {"id":"SALES", "floor":0, "rect":[2.4,4,5.6,6], "color":"#b4a084"},
+    {"id":"STAIR / ENTRY", "floor":1, "rect":[0,0,2.4,5.2], "color":"#667482"},
+    {"id":"BEDROOM", "floor":1, "rect":[2.4,0,3.2,4], "color":"#a08d83"},
+    {"id":"BATH", "floor":1, "rect":[5.6,0,2.4,2.8], "color":"#6b8990"},
+    {"id":"HALL", "floor":1, "rect":[2.4,4,3.2,1.2], "color":"#8a8a79"},
+    {"id":"KITCHEN", "floor":1, "rect":[5.6,2.8,2.4,2.4], "color":"#b4a084"},
+    {"id":"LIVING", "floor":1, "rect":[0,5.2,8,4.8], "color":"#a59b8c"}
+  ],
+  "openings": [
+    {"floor":0,"p":[1.2,10],"axis":"x","width":1.2,"role":"residential entry"},
+    {"floor":0,"p":[4.7,10],"axis":"x","width":1.6,"role":"shop entry"},
+    {"floor":0,"p":[4.2,4],"axis":"x","width":1.6,"role":"service access"},
+    {"floor":0,"p":[4.2,2.8],"axis":"x","width":1.2,"role":"stock door"},
+    {"floor":0,"p":[6.8,2.8],"axis":"x","width":1.2,"role":"WC door"},
+    {"floor":0,"p":[4.2,0],"axis":"x","width":1.2,"role":"delivery door"},
+    {"floor":1,"p":[2.4,4.6],"axis":"z","width":1.2,"role":"unit entry"},
+    {"floor":1,"p":[4.2,4],"axis":"x","width":1.2,"role":"bedroom door"},
+    {"floor":1,"p":[6.8,2.8],"axis":"x","width":1.2,"role":"bath door"},
+    {"floor":1,"p":[5.6,4.6],"axis":"z","width":1.2,"role":"kitchen access"},
+    {"floor":1,"p":[4.2,5.2],"axis":"x","width":1.6,"role":"living access"}
+  ],
+  "fixtures": [
+    {"id":"S1", "name":"wood wall display", "rect":[2.65,4.5,0.6,2.4], "height":1.7, "color":"#79624d"},
+    {"id":"S2", "name":"wood wall display", "rect":[7.2,4.3,0.6,2.0], "height":1.7, "color":"#79624d"},
+    {"id":"F1", "name":"glass drinks refrigerator", "rect":[7.0,6.8,0.8,1.0], "height":2.2, "color":"#547d86"},
+    {"id":"I1", "name":"low household goods island", "rect":[5.3,5.4,0.8,1.8], "height":0.9, "color":"#9b7558"},
+    {"id":"C1", "name":"wood checkout and register", "rect":[6.0,8.8,1.8,0.65], "height":1.1, "color":"#805944"},
+    {"id":"CH", "name":"cashier stool", "rect":[6.9,7.95,0.45,0.45], "height":0.65, "color":"#785b68"},
+    {"id":"R1", "name":"stock shelving with cartons", "rect":[2.7,0.4,0.65,1.8], "height":1.8, "color":"#796d58"},
+    {"id":"R2", "name":"stock shelving with cartons", "rect":[4.9,0.4,0.45,1.8], "height":1.6, "color":"#796d58"},
+    {"id":"WC1", "name":"toilet", "rect":[6.8,0.35,0.65,0.8], "height":0.85, "color":"#bec6b8"},
+    {"id":"WC2", "name":"wash basin", "rect":[5.8,0.4,0.55,0.5], "height":0.85, "color":"#bec6b8"}
+  ],
+  "stairs": {"rect":[0.15,0.2,2.1,3.8], "type":"U-return schematic", "storey_height":3.2},
+  "scale_person": {"foot":[4.2,7.3], "height":1.8},
+  "reserved_route": [[4.2,9.6],[4.2,7.3],[4.2,4.6],[4.2,3.4],[6.8,3.4]]
+}

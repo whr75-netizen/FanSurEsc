@@ -1,0 +1,23 @@
+{
+  "source": "normalizer-input-rgba.png",
+  "base_grid": [
+    384,
+    384
+  ],
+  "scale": "1.0",
+  "preview_zoom": 1,
+  "export_color_layers": false,
+  "features": {
+    "cell_sampling": {
+      "enabled": true,
+      "scope": {
+        "kind": "all"
+      },
+      "options": {
+        "method": "source_regions",
+        "coverage": 0.5,
+        "color_edge_threshold": 0.08
+      }
+    }
+  }
+}

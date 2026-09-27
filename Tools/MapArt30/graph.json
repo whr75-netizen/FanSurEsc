@@ -1,0 +1,298 @@
+{
+  "goal": "Grave Seasons 참고 첫 상가: 설계도→생성→공통픽셀 정규화→기술관측→사용자 미술피드백. Unity 변경 없음.",
+  "entry": "prepare",
+  "max_steps": 8,
+  "requirements": [
+    {
+      "id": "native",
+      "text": "설계/원본/384x384 정규화 결과와 실제 처리 관측 보존",
+      "source": "2026-09-27 사용자 요청 및 grave_seasons_map_art.md",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "prepare",
+      "algorithm": "command.run",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/run.py",
+          "prepare",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/MapArt30/run01"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/run.py",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/design.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/design.json"
+      ],
+      "writes": [
+        "plan:map30"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "prepare.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "generate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "prepare.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "generate",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {
+        "prepared": {
+          "ref": "prepare"
+        }
+      },
+      "parameters": {
+        "scope": "03-projection-guide.png와 사용자 Grave Seasons 이미지를 참고해 prompt.txt의 첫 상가 이미지를 내장 imagegen으로 1회 생성. 실제 반환 파일 경로만 제출. 외형 자기승인/Unity변경/자동재생성 금지."
+      },
+      "reads": [
+        "plan:map30",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/prompt.txt"
+      ],
+      "writes": [
+        "generated:map30"
+      ],
+      "question": "실제 생성 이미지의 로컬 경로 source를 반환한다.",
+      "output_schema": {
+        "source": {
+          "type": "string"
+        }
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "generate.source"
+              }
+            ]
+          },
+          "to": "normalize"
+        }
+      ]
+    },
+    {
+      "id": "normalize",
+      "algorithm": "command.run",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {
+        "stdin": {
+          "ref": "generate"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/run.py",
+          "normalize",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/MapArt30/run01"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/run.py",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/design.json"
+        ]
+      },
+      "reads": [
+        "generated:map30"
+      ],
+      "writes": [
+        "normalized:map30"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "normalize.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "normalize.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "max_visits": 1,
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/run.py",
+          "validate",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/MapArt30/run01"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/run.py",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/MapArt30/design.json"
+        ]
+      },
+      "reads": [
+        "plan:map30",
+        "normalized:map30"
+      ],
+      "writes": [
+        "evidence:map30"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "review",
+          "feedback": true
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "review",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {
+        "validation": {
+          "ref": "validate"
+        }
+      },
+      "parameters": {
+        "scope": "정규화 결과와 설계도/처리 이력을 보여주고 실제 사용자의 유지·수정 답변을 기다림. 답변 전 재생성 금지."
+      },
+      "reads": [
+        "plan:map30",
+        "normalized:map30",
+        "evidence:map30"
+      ],
+      "writes": [],
+      "question": "실제 사용자 답변을 받은 뒤 userFeedback 반환. 응답 없음을 승인으로 삼지 않는다.",
+      "output_schema": {
+        "userFeedback": {
+          "type": "string"
+        }
+      },
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "review.userFeedback"
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

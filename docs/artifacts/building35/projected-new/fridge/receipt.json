@@ -1,0 +1,50 @@
+{
+  "id": "fridge",
+  "source": "docs/artifacts/building35/native/fridge/native.png",
+  "source_sha256": "77dd58e1fbc6a0ac939d94a56ef1778d8797933a597d4f42b89cc051ee96ede5",
+  "width": 206,
+  "height": 313,
+  "ppu": 127,
+  "left": -0.8110236220472441,
+  "top": 2.078740157480315,
+  "opaque_pixels": 50580,
+  "faces": [
+    {
+      "id": "top",
+      "reprojection_residual": 1.4210854715202004e-14,
+      "written_pixels": 8358,
+      "holdout": []
+    },
+    {
+      "id": "x_min",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 29673,
+      "holdout": []
+    },
+    {
+      "id": "z_min",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 12566,
+      "holdout": []
+    }
+  ],
+  "source_outline_pixels_outside_landmark_quads": 336,
+  "outline_policy": "nearest-plane extrapolation",
+  "ground_shift_from_measured_outline_m": 0.031651114979663005,
+  "support_height": 1.931651114979663,
+  "surface_xyz_min": [
+    -0.7928847670555115,
+    0.013054775074124336,
+    -0.3363276422023773
+  ],
+  "surface_xyz_max": [
+    0.7994974255561829,
+    1.9405863285064697,
+    0.3652113676071167
+  ],
+  "declared_limitations": [
+    "Painted fixed-view planes; source corner annotation uncertainty 1-2 texels.",
+    "Symmetric side-panel appearance reused for the required visible end."
+  ],
+  "spec": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building35\\projected-new\\fridge\\spec.json"
+}

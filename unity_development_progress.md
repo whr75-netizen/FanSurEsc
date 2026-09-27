@@ -2555,3 +2555,11 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` 기존StepMove6/6접근점·벽정지·실내지붕숨김/외부복원,동일Player/Camera EntityID. 카메라30°/350°,1114×857에서source1texel=screen1pixel. native surface25,source/depth불일치0/frame누출0/roof누출0. 화면4장과JSON은docs/artifacts/building34. overview2560×1600은같은카메라재프레이밍으로실제걷기화면과구분한다.
 - `[검증 실패를 보존]` 최초2560×1800촬영이기존캐릭터대표인덱스상한초과/URP후속오류발생. 촬영해상도만2560×1600으로교정. 오류0수동기록은자동승인검토거부;기존Console지우거나수정하지않음. 이후실제내외부렌더전후MCP전체응답11→11,추가오류0을Counter로계산했다. 기존relay1/최초촬영관련10기록보존. volumetricSpotLight가시성/개수경고별도보존.
 - `[납품/한계]` 기존graph/방향교정graph미완료상태보존,최종관측전후증거용graph-final-validation은고정조건통과. delivery-final-result.json은기술범위이며원작동등미술합격은아니다. 자유회전·키보드입력·빌드·저장로드·GPU성능미검증. 작은viewport의기존줌범위와native1배보존불일치노출. 메뉴Tools/World Art/Inspect Completed Shop Interior 34로편집SceneView/Play기존Player접근가능.
+
+## 168. B35 원본 면 투영과 실제 상점 역할 배치 `[MAP-01]`
+
+- `[원인]` B34 bbox 적합/좌우반전은 그려진 모서리 기울기를 바꾸지 못했다. 왼쪽 벽+X 앞면도 현재 카메라와 반대였다. PZ/Grave Seasons 공식 실내15장을 실제 관찰해 사물·지지면·용도를 분리하고, 판재3면 homography 최소실험 후 같은 prefab에 적용했다.
+- `[구현]` 선반3개 재투영, 가려진상판대신 신규 빈계산대/진열섬템플릿, 냉장장·세척대·청소수납장과 개별소품. 실제20개(가구8/상판3/화분2/물류통2/상자5), painted 선반물품은 추가로계수하지않음. 사용면을맞춰판매선반은오른쪽벽,냉장장은뒤벽좌측,진열섬x1.8/z-2.1. 외곽/출입구/재고실/셸/카메라보존.
+- `[변환]` 원본자동PP와면투영리샘플링을구분. 공통127px/m,공유3D꼭짓점·source주석·역homography·동일면RGBA/XYZ. 사각면밖작은발/테두리는가까운면외삽으로보존,접지는셀모서리하한계산. 부착소품은실제수평면높이사용. 작은4종은세로2D층근사이며정확3D복원아님. rear 내부선잔차2.56/3.56px기록.
+- `[Play Mode 호출 확인]` StepMove12/12·벽정지·지붕숨김/복원·동일Player/Camera,40native surfaces,source/depth불일치0/frame0/height범위roof0. 실제1114×857 native1배/카메라30°350°. Console11→11추가0/기존이력유지. Tools/Building35/graph.json고정최종조건통과. 기록·화면 docs/artifacts/building35. 빌드/물리키/GPU깊이동등성/저장로드미검증.
+- `[사용자 확인]` 실제화면에“지금은훨씬더정상이야각도랑배치같은거자연스러워졌어그런식으로쭉이어가”라고답함. 현재큰가구각도·배치유지. 모든디테일·완전3D·자유회전승인으로확대하지않음. 다음은현재20개를보존한작은상판/벽/직원용품보강.

@@ -1,0 +1,50 @@
+{
+  "schema": "building35-generated-source/1",
+  "id": "utility",
+  "created": "2026-09-27",
+  "tool": "builtin image_gen.imagegen",
+  "tool_model": "not_exposed",
+  "generation_count": 1,
+  "mode": "guide_surface_edit_with_style_reference",
+  "prompt_file": "Tools/Building35/Source/utility-prompt.txt",
+  "inputs": [
+    {
+      "role": "geometric_edit_target",
+      "path": "Tools/Building35/Guides/utility.png",
+      "sha256": "31917cb9f73a9eb02bada37c51446eb6f4cd73b4025d172684344accb9809701"
+    },
+    {
+      "role": "style_reference_only",
+      "path": "Tools/Building34/Source/master-reference.png",
+      "sha256": "d7943116a6d4a8ae562b5f83caff96bc6751a20bbec31babd3a4a1c8333273f9"
+    }
+  ],
+  "transparent_background_requested": true,
+  "generated_path": "C:/Users/JG/.codex/generated_images/01a0e177-8c1b-7270-add1-7dd87c389730/exec-3c55ea16-c018-442c-a858-3633723d6bf1.png",
+  "saved_path": "Tools/Building35/Source/utility.png",
+  "sha256": "7a285e07fa5acfc4fe1c9555d4f36753e90a5af1b3112ba5b9691c47a324a608",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "mode_rgba": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "bbox_alpha_nonzero": [
+    0,
+    21,
+    1218,
+    1228
+  ],
+  "preservation": "copied original bytes; no crop, resize, normalization, repaint or alpha cleanup",
+  "inspection": {
+    "visual_note": "백색 싱크볼과 빈 상판, 손잡이 없는 뒤판을 육안 확인. 수전/다른 물품 없음. 정량 기하 판정은 미실행.",
+    "geometry_validation": "not_run",
+    "pixel_grid_validation": "not_run",
+    "art_approval": "not_claimed",
+    "alpha_note": "nonzero-alpha bbox is not a solid-silhouette fit; generated faint alpha may extend outside the apparent object"
+  },
+  "unity_changes": false
+}

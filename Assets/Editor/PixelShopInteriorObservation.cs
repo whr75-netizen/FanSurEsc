@@ -13,8 +13,8 @@ using UnityEngine.SceneManagement;
 /// <summary>Actual movement and imported surface observations; no artistic approval is inferred.</summary>
 public static class PixelShopInteriorObservation
 {
-    private const string DirectoryPath = "docs/artifacts/building34";
-    private const string ReportPath = DirectoryPath + "/play-observation.json";
+    private static string DirectoryPath = "docs/artifacts/building34";
+    private static string ReportPath => DirectoryPath + "/play-observation.json";
     [Serializable] public sealed class Access
     {
         public string id; public bool reached; public float errorMetres; public float[] actualLocal;
@@ -42,8 +42,9 @@ public static class PixelShopInteriorObservation
         public string limitations = "Movement is StepMove API execution, not keyboard input. Captures use the same live gameplay camera; screen-space overlay HUD is excluded. Overview is explicitly reframed and restored. Pass inspection is structural evidence, not a GPU depth-buffer equality test. Artistic approval is not claimed.";
     }
 
-    public static void Execute(string phase)
+    public static void Execute(string phase, string outputDirectory = "docs/artifacts/building34", string observationInput = "Tools/Building33/observation-input.json")
     {
+        DirectoryPath = outputDirectory;
         if (!EditorApplication.isPlaying) throw new InvalidOperationException("Actual Play Mode required.");
         var root = GameObject.Find("PlannedPixelShop33");
         var shell = PersistentGameplayShell.Instance;
@@ -93,7 +94,7 @@ public static class PixelShopInteriorObservation
             data.scene = SceneManager.GetActiveScene().name; data.isPlayMode = true;
             data.playerBefore = Identity(shell.PlayerTransform.gameObject);
             data.cameraBefore = Identity(camera.gameObject);
-            var input = JsonUtility.FromJson<B33ObservationInput>(File.ReadAllText("Tools/Building33/observation-input.json"));
+            var input = JsonUtility.FromJson<B33ObservationInput>(File.ReadAllText(observationInput));
             var access = new List<Access>();
             foreach (var route in input.routes)
             {
@@ -111,7 +112,7 @@ public static class PixelShopInteriorObservation
                 access.Add(new Access { id = route.id, reached = error < .15f, errorMetres = error, actualLocal = Values(local) });
             }
             data.accessRoutes = access.ToArray(); data.accessReached = access.Count(x => x.reached);
-            data.entryReached = access.Count == 6 && access.All(x => x.reached);
+            data.entryReached = access.Count == input.routes.Length && access.All(x => x.reached);
             Teleport(new Vector3(3, .56f, -3.2f));
             var beyond = root.transform.TransformPoint(new Vector3(3, .56f, -6));
             for (int i = 0; i < 25; i++) MoveToward(beyond, .1f);
@@ -217,7 +218,7 @@ public static class PixelShopInteriorObservation
             var colors = source.GetPixels(); var samples = depth.GetPixels();
             bool isRoof = roofSet.Contains(renderer);
             bool isFixture = renderer.transform.parent.parent != null &&
-                (renderer.transform.parent.parent.name == "Fixtures - role plan" || renderer.transform.parent.parent.name == "Wall lamps - source anchors");
+                (renderer.transform.parent.parent.name == "Fixtures - role plan" || renderer.transform.parent.parent.name == PixelShopProjection35.GroupName || renderer.transform.parent.parent.name == "Wall lamps - source anchors");
             for (int i = 0; i < samples.Length; i++)
             {
                 bool opaque = colors[i].a > .1f, valid = samples[i].a > .5f;

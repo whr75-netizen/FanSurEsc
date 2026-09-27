@@ -1,0 +1,1230 @@
+{
+  "schema": "building35-reference-object-plan/1",
+  "id": "B35-one-shop-proposal",
+  "status": "proposal_unapplied_not_art_approved",
+  "date": "2026-09-27",
+  "purpose": "사용자가 거부한 B34 각도와 빈약한 물품 구성을 분리하여, 참조 화면에서 관찰한 역할/지지 관계에 근거한 10x8m 상가 단일 배치 후보를 제시",
+  "baseline": {
+    "path": "docs/artifacts/building32/layout-plan.json",
+    "sha256": "f76d77651761f26ac14f546d68bf3aba7ed3ad1d3e69815bb1f85363b8bd98ac",
+    "current_unity_state_reverified": false,
+    "preserve": [
+      "floor extent",
+      "front and stock openings",
+      "five fixture footprints and body heights",
+      "six existing access points",
+      "main route",
+      "Player/Camera owners"
+    ],
+    "art_status": "B34 is rejected by user; no asset is designated as one of the two correct objects"
+  },
+  "coordinate_system": {
+    "plane": "building-local XZ",
+    "units": "metres",
+    "x": "right",
+    "z": "rear",
+    "y": "up",
+    "size_xzy_m": "[width along X, depth along Z, height along Y]",
+    "base_y_m": "bottom of the object, not its centre",
+    "facing": "normal of usable front face; not bitmap rotation"
+  },
+  "archetype": {
+    "status": "proposal",
+    "name": "생활식품 소형 상가",
+    "reason": "기존 계산대/벽 판매대/낮은 섬/창고를 유지하며 냉장 판매·준비·청소 기능을 보강",
+    "not_a_copy_of": "Grave Seasons 낚시점의 상품을 그대로 이식하지 않고 지지 관계와 역할 밀도를 참고",
+    "bathroom_status": "not_in_baseline_requires_partition_and_route_revision"
+  },
+  "floor": {
+    "rect_xz": [
+      -5,
+      -4,
+      5,
+      4
+    ],
+    "wall_thickness_m": 0.15
+  },
+  "player": {
+    "radius_m": 0.5,
+    "radius_status": "prefab_verified_not_runtime_scaled",
+    "source": "Assets/Prefabs/PersistentGameplayShell.prefab:2728",
+    "component_file_id": "7202591587805014013",
+    "height_m": 1.8,
+    "skin_width_m": 0.05,
+    "design_margin_m": 0.1,
+    "margin_status": "proposal_not_building_code"
+  },
+  "walls": [
+    {
+      "id": "wall_back",
+      "rect_xz": [
+        -5.075,
+        3.925,
+        5.075,
+        4.075
+      ]
+    },
+    {
+      "id": "wall_left",
+      "rect_xz": [
+        -5.075,
+        -4.075,
+        -4.925,
+        4.075
+      ]
+    },
+    {
+      "id": "wall_right",
+      "rect_xz": [
+        4.925,
+        -4.075,
+        5.075,
+        4.075
+      ]
+    },
+    {
+      "id": "wall_front_left",
+      "rect_xz": [
+        -5.075,
+        -4.075,
+        -1,
+        -3.925
+      ]
+    },
+    {
+      "id": "wall_front_right",
+      "rect_xz": [
+        1,
+        -4.075,
+        5.075,
+        -3.925
+      ]
+    }
+  ],
+  "partitions": [
+    {
+      "id": "stock_south",
+      "rect_xz": [
+        1.025,
+        0.825,
+        4.925,
+        0.975
+      ]
+    },
+    {
+      "id": "stock_west_lower",
+      "rect_xz": [
+        1.025,
+        0.975,
+        1.175,
+        1.25
+      ]
+    },
+    {
+      "id": "stock_west_upper",
+      "rect_xz": [
+        1.025,
+        2.75,
+        1.175,
+        3.925
+      ]
+    }
+  ],
+  "doors": [
+    {
+      "id": "front_entry",
+      "role": "customer entry",
+      "segment_xz": [
+        [
+          -1,
+          -4
+        ],
+        [
+          1,
+          -4
+        ]
+      ],
+      "opening_m": 2,
+      "kind": "open_passage_no_leaf"
+    },
+    {
+      "id": "stock_entry",
+      "role": "staff stock access",
+      "segment_xz": [
+        [
+          1.1,
+          1.25
+        ],
+        [
+          1.1,
+          2.75
+        ]
+      ],
+      "opening_m": 1.5,
+      "kind": "open_passage_no_leaf"
+    }
+  ],
+  "reserved_routes": [
+    {
+      "id": "main_route",
+      "label": "주통로 1.5m",
+      "rect_xz": [
+        -0.75,
+        -3.925,
+        0.75,
+        2.7
+      ],
+      "color": "#ccebe8"
+    }
+  ],
+  "preserved_use_areas": [
+    {
+      "id": "checkout_customer",
+      "label": "고객 접근",
+      "rect_xz": [
+        -4.15,
+        -3.05,
+        -1.75,
+        -1.75
+      ],
+      "access_xz": [
+        -2.95,
+        -2.5
+      ]
+    },
+    {
+      "id": "checkout_staff",
+      "label": "직원 접근",
+      "rect_xz": [
+        -4.15,
+        -0.95,
+        -1.75,
+        0.35
+      ],
+      "access_xz": [
+        -2.95,
+        -0.2
+      ]
+    },
+    {
+      "id": "left_shelf_use",
+      "label": "상품 접근",
+      "rect_xz": [
+        -4.25,
+        0.65,
+        -2.95,
+        3.05
+      ],
+      "access_xz": [
+        -3.45,
+        1.85
+      ]
+    },
+    {
+      "id": "rear_shelf_use",
+      "label": "상품 접근",
+      "rect_xz": [
+        -2.5,
+        2.025,
+        0.4,
+        3.325
+      ],
+      "access_xz": [
+        -1.05,
+        2.5
+      ]
+    },
+    {
+      "id": "island_use",
+      "label": "상품 접근",
+      "rect_xz": [
+        0.75,
+        -2.55,
+        2.05,
+        -1.35
+      ],
+      "access_xz": [
+        1.25,
+        -1.95
+      ]
+    },
+    {
+      "id": "stock_shelf_use",
+      "label": "반출 · 적재",
+      "rect_xz": [
+        2.1,
+        1.975,
+        4.55,
+        3.275
+      ],
+      "access_xz": [
+        3.325,
+        2.45
+      ]
+    }
+  ],
+  "projection_contract": {
+    "reference": "docs/artifacts/building35/projection-contract-proposal.md",
+    "pitch_deg": 30,
+    "local_yaw_deg": 45,
+    "orthographic": true,
+    "ground_axis_slopes_image_y_down": [
+      -0.5,
+      0.5
+    ],
+    "common_world_ppu": null,
+    "status": "not_implemented_not_art_approved",
+    "requirements": [
+      "All visible structural edges use the same projected axes",
+      "Furniture facing is semantic; a mirrored silhouette alone does not prove face angles",
+      "Source automatic pixel-grid normalization and target physical pixel density are separate contracts",
+      "Do not force all object images to the same dimensions",
+      "Do not infer approved PPU from fitting mismatched alpha silhouettes inside cuboids",
+      "Do not use new props to hide failed angle or depth geometry"
+    ]
+  },
+  "composition_rules": [
+    "큰 시설 8개, 독립 바닥 보조품 2개, 표면/벽/수납 내부 소품 15개: 총25개 배치 노드. 상품 묶음은 한 저작 자산이며 병 하나하나를 수량으로 부풀리지 않음",
+    "기존 source에 등록기/상품이 이미 그려져 있으면 해당 소품을 덧씌우지 않음. 빈 지지체+독립 소품으로 정식 분리하거나 기존 통합 자산을 한 노드로 유지",
+    "선반 단 높이는 여기서 제안한 support_surface_id의 실제 템플릿이 있어야 함; 빈 공간에 소품을 떠 있게 놓지 않음",
+    "상품 분류를 존별로 고정; 랜덤은 승인된 동일 역할의 변형 선택에만 적용하고 위치/각도/스케일을 임의화하지 않음",
+    "동선/시설 접근 영역은 비우며, 서쪽 면만 사용하는 진열섬에 전방위 통행 가능을 주장하지 않음",
+    "배경, 바닥, 벽, 시설, 받침 위 소품은 별도 게임 객체/계층으로 유지; 전체 실내 단일 이미지 생성으로 대체하지 않음",
+    "선반 위·벽 부착 소품은 바닥 면적을 차지하지 않아도 시야/깊이 충돌을 별도 확인; 충돌체가 없다는 이유로 다른 면을 뚫어도 되는 것은 아님"
+  ],
+  "sources": [
+    {
+      "id": "GS_SHOP",
+      "title": "Grave Seasons official shop interior screenshot",
+      "page": "https://store.steampowered.com/app/3255110/Grave_Seasons/",
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3255110/fbd846cf1b3f18fd17390c112626daa284aa2266/ss_fbd846cf1b3f18fd17390c112626daa284aa2266.1920x1080.jpg?t=1788267271",
+      "cache": "LocalOnly/Building35References/grave_3.jpg",
+      "evidence": "image_visually_inspected",
+      "observed": [
+        "L-shaped high wall shelves holding buckets, boxes and containers",
+        "Wall rail with hanging shop goods",
+        "Long fish display/counter separating clerk from customer space",
+        "Small staff-side table with papers and lamp-like small object",
+        "Stock crates and wall fishing rods"
+      ],
+      "not_established": [
+        "Exact dimensions or engine camera angle",
+        "Employee restroom",
+        "Identity of every partly obscured item"
+      ]
+    },
+    {
+      "id": "GS_HOME",
+      "title": "Grave Seasons official kitchen/living interior screenshot",
+      "page": "https://store.steampowered.com/app/3255110/Grave_Seasons/",
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/3255110/ff33dbecc64c9da627720b686b5220383303d0e7/ss_ff33dbecc64c9da627720b686b5220383303d0e7.1920x1080.jpg?t=1788267271",
+      "cache": "LocalOnly/Building35References/grave_1.jpg",
+      "evidence": "image_visually_inspected",
+      "observed": [
+        "L-shaped kitchen with lower and overhead cabinets, sink, stove, upright fridge",
+        "Wall utensils and small countertop goods",
+        "Long narrow counter with two stools and papers/books",
+        "Bookshelf, sofa, side table, television, lamp, plant and rug"
+      ],
+      "not_established": [
+        "This is a shop",
+        "Exact camera pitch or world metres"
+      ]
+    },
+    {
+      "id": "PZ_SERVICE",
+      "title": "Project Zomboid official mechanic interior screenshot",
+      "page": "https://store.steampowered.com/app/108600/",
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/108600/ss_eb1862af5109e4658e2538d897cbd16b87ad1818.1920x1080.jpg?t=1787740093",
+      "cache": "LocalOnly/Building35References/pz_3.jpg",
+      "evidence": "image_visually_inspected",
+      "observed": [
+        "Vehicle lifts and adjacent worktables",
+        "Wall shelving with tyres, boxes and containers",
+        "Tools/parts on worktables",
+        "Open vehicle/work circulation between stations",
+        "Roller shutters and pedestrian doorway"
+      ],
+      "not_established": [
+        "Grocery shop layout",
+        "Measured clearances"
+      ]
+    },
+    {
+      "id": "PZ_BIN",
+      "title": "Project Zomboid official vending frontage screenshot",
+      "page": "https://store.steampowered.com/app/108600/",
+      "url": "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/108600/ss_eca8be032b3f5508bf5bea74cfbc823a4df047ce.1920x1080.jpg?t=1787740093",
+      "cache": "LocalOnly/Building35References/pz_5.jpg",
+      "evidence": "image_visually_inspected",
+      "observed": [
+        "Two vending machines against a wall",
+        "One small round bin nearby",
+        "Clear passage in front"
+      ],
+      "not_established": [
+        "Indoor bin arrangement"
+      ]
+    },
+    {
+      "id": "PZ_TEMPLATE",
+      "title": "The Indie Stone — Survival Impact, January 2016",
+      "url": "https://projectzomboid.com/blog/news/2016/01/survival-impact/",
+      "evidence": "developer_text_read",
+      "observed": [
+        "Historical development description of commercial templates with shelving, checkout and store rooms"
+      ],
+      "not_established": [
+        "Current shipped generator implementation",
+        "A reusable downloaded layout template"
+      ]
+    },
+    {
+      "id": "PZ_CONVENIENCE_UNSEEN",
+      "title": "The Indie Stone — The Secret Mission, March 2016",
+      "url": "https://projectzomboid.com/blog/news/2016/03/the-secret-mission/",
+      "evidence": "text_read_image_not_available",
+      "observed": [
+        "Article labels kitchen, convenience store and mall comparison images"
+      ],
+      "not_established": [
+        "The convenience-store image was not visually inspected; exclude from visual inventory proof"
+      ]
+    }
+  ],
+  "instances": [
+    {
+      "id": "checkout",
+      "label": "계산대 몸체",
+      "role": "checkout",
+      "center_xz": [
+        -2.95,
+        -1.35
+      ],
+      "size_xzy_m": [
+        2.4,
+        0.8,
+        1
+      ],
+      "base_y_m": 0,
+      "support": "floor",
+      "collision": "preserve_fixture",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP",
+        "PZ_TEMPLATE"
+      ],
+      "preserve_from_b32": "checkout"
+    },
+    {
+      "id": "left_shelf",
+      "label": "서쪽 벽 판매 선반",
+      "role": "retail_dry_goods",
+      "center_xz": [
+        -4.55,
+        1.85
+      ],
+      "size_xzy_m": [
+        0.6,
+        2.4,
+        1.8
+      ],
+      "base_y_m": 0,
+      "support": "wall_left",
+      "collision": "preserve_fixture",
+      "facing": "+X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "preserve_from_b32": "left_shelf"
+    },
+    {
+      "id": "rear_shelf",
+      "label": "북쪽 벽 판매 선반",
+      "role": "retail_pantry",
+      "center_xz": [
+        -1.05,
+        3.625
+      ],
+      "size_xzy_m": [
+        2.9,
+        0.6,
+        1.8
+      ],
+      "base_y_m": 0,
+      "support": "wall_back",
+      "collision": "preserve_fixture",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "preserve_from_b32": "rear_shelf"
+    },
+    {
+      "id": "display_island",
+      "label": "낮은 제철 상품 진열대",
+      "role": "featured_sales",
+      "center_xz": [
+        2.85,
+        -1.95
+      ],
+      "size_xzy_m": [
+        1.6,
+        1.2,
+        0.85
+      ],
+      "base_y_m": 0,
+      "support": "floor",
+      "collision": "preserve_fixture",
+      "facing": "-X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "preserve_from_b32": "display_island"
+    },
+    {
+      "id": "stock_shelf",
+      "label": "직원 재고 선반",
+      "role": "sealed_supply",
+      "center_xz": [
+        3.325,
+        3.575
+      ],
+      "size_xzy_m": [
+        2.45,
+        0.6,
+        1.8
+      ],
+      "base_y_m": 0,
+      "support": "wall_back",
+      "collision": "preserve_fixture",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "PZ_SERVICE",
+        "PZ_TEMPLATE"
+      ],
+      "preserve_from_b32": "stock_shelf"
+    },
+    {
+      "id": "retail_fridge",
+      "label": "냉장 음료 진열장",
+      "role": "cold_sales",
+      "center_xz": [
+        4.55,
+        -0.2
+      ],
+      "size_xzy_m": [
+        0.65,
+        1.55,
+        1.9
+      ],
+      "base_y_m": 0,
+      "support": "wall_right",
+      "collision": "new_floor_solid",
+      "facing": "-X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_HOME"
+      ],
+      "use_access_xz": [
+        3.5,
+        -0.1
+      ],
+      "interpretation": "GS_HOME의 냉장고를 편의점 역할에 맞게 재설계하는 제안; 참고 이미지에 동일 상업용 냉장고가 있다는 주장은 아님"
+    },
+    {
+      "id": "utility_bench",
+      "label": "직원 세척·준비대",
+      "role": "staff_utility",
+      "center_xz": [
+        2.75,
+        1.3
+      ],
+      "size_xzy_m": [
+        1.3,
+        0.55,
+        0.9
+      ],
+      "base_y_m": 0,
+      "support": "stock_south",
+      "collision": "new_floor_solid",
+      "facing": "+Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_HOME",
+        "PZ_SERVICE"
+      ],
+      "use_access_xz": [
+        2.75,
+        2.25
+      ],
+      "features": [
+        "small basin",
+        "clear work surface",
+        "under-counter open bin bay"
+      ]
+    },
+    {
+      "id": "cleaning_cabinet",
+      "label": "청소용품 수납장",
+      "role": "cleaning_storage",
+      "center_xz": [
+        3.95,
+        1.325
+      ],
+      "size_xzy_m": [
+        0.6,
+        0.6,
+        1.65
+      ],
+      "base_y_m": 0,
+      "support": "stock_south",
+      "collision": "new_floor_solid",
+      "facing": "+Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "PZ_SERVICE"
+      ],
+      "use_access_xz": [
+        3.95,
+        2.3
+      ]
+    },
+    {
+      "id": "basket_stack",
+      "label": "입구 장바구니 한 묶음",
+      "role": "entry_shopping",
+      "center_xz": [
+        -4.6,
+        -3.45
+      ],
+      "size_xzy_m": [
+        0.45,
+        0.55,
+        0.55
+      ],
+      "base_y_m": 0,
+      "support": "floor",
+      "collision": "new_floor_solid",
+      "facing": "+X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "use_access_xz": [
+        -3.65,
+        -3.25
+      ],
+      "interpretation": "용도 기반 신규 제안; 참고 화면의 정확한 장바구니를 복제하지 않음"
+    },
+    {
+      "id": "entry_mat",
+      "label": "입구 발판",
+      "role": "entry_threshold",
+      "center_xz": [
+        0,
+        -3.45
+      ],
+      "size_xzy_m": [
+        1.6,
+        0.7,
+        0.015
+      ],
+      "base_y_m": 0,
+      "support": "floor",
+      "collision": "nonblocking_flat",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_HOME"
+      ]
+    },
+    {
+      "id": "register",
+      "label": "금전등록기",
+      "role": "transaction",
+      "center_xz": [
+        -3.3,
+        -1.35
+      ],
+      "size_xzy_m": [
+        0.55,
+        0.4,
+        0.42
+      ],
+      "base_y_m": 1,
+      "support": "checkout",
+      "collision": "inherited_support",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "PZ_TEMPLATE"
+      ],
+      "requires_clean_support_art": true
+    },
+    {
+      "id": "checkout_ledger",
+      "label": "직원 장부·종이",
+      "role": "transaction_records",
+      "center_xz": [
+        -3.8,
+        -1.2
+      ],
+      "size_xzy_m": [
+        0.4,
+        0.25,
+        0.035
+      ],
+      "base_y_m": 1,
+      "support": "checkout",
+      "collision": "inherited_support",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "requires_clean_support_art": true
+    },
+    {
+      "id": "impulse_basket",
+      "label": "계산대 소형 상품 바구니",
+      "role": "impulse_sales",
+      "center_xz": [
+        -2.25,
+        -1.35
+      ],
+      "size_xzy_m": [
+        0.6,
+        0.4,
+        0.22
+      ],
+      "base_y_m": 1,
+      "support": "checkout",
+      "collision": "inherited_support",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "requires_clean_support_art": true
+    },
+    {
+      "id": "left_drinks_cluster",
+      "label": "서쪽 하단 음료 묶음",
+      "role": "retail_drinks",
+      "center_xz": [
+        -4.55,
+        1.25
+      ],
+      "size_xzy_m": [
+        0.45,
+        1.05,
+        0.35
+      ],
+      "base_y_m": 0.38,
+      "support": "left_shelf",
+      "collision": "inherited_support",
+      "facing": "+X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "requires_clean_support_art": true,
+      "support_surface_id": "shelf_tier_y_0.38",
+      "group_is_one_authored_asset": true
+    },
+    {
+      "id": "left_pantry_cluster",
+      "label": "서쪽 상단 포장 식품 묶음",
+      "role": "retail_dry_goods",
+      "center_xz": [
+        -4.55,
+        2.45
+      ],
+      "size_xzy_m": [
+        0.45,
+        0.95,
+        0.32
+      ],
+      "base_y_m": 1.05,
+      "support": "left_shelf",
+      "collision": "inherited_support",
+      "facing": "+X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "requires_clean_support_art": true,
+      "support_surface_id": "shelf_tier_y_1.05",
+      "group_is_one_authored_asset": true
+    },
+    {
+      "id": "rear_packets_cluster",
+      "label": "후면 포장 상품 묶음",
+      "role": "retail_dry_goods",
+      "center_xz": [
+        -1.65,
+        3.625
+      ],
+      "size_xzy_m": [
+        1.15,
+        0.45,
+        0.35
+      ],
+      "base_y_m": 0.45,
+      "support": "rear_shelf",
+      "collision": "inherited_support",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "requires_clean_support_art": true,
+      "support_surface_id": "shelf_tier_y_0.45",
+      "group_is_one_authored_asset": true
+    },
+    {
+      "id": "rear_jars_cluster",
+      "label": "후면 병·용기 묶음",
+      "role": "retail_preserves",
+      "center_xz": [
+        -0.2,
+        3.625
+      ],
+      "size_xzy_m": [
+        0.8,
+        0.4,
+        0.38
+      ],
+      "base_y_m": 1.03,
+      "support": "rear_shelf",
+      "collision": "inherited_support",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "requires_clean_support_art": true,
+      "support_surface_id": "shelf_tier_y_1.03",
+      "group_is_one_authored_asset": true
+    },
+    {
+      "id": "island_produce_crate",
+      "label": "제철 농산물 상자",
+      "role": "featured_produce",
+      "center_xz": [
+        2.5,
+        -1.95
+      ],
+      "size_xzy_m": [
+        0.65,
+        0.9,
+        0.25
+      ],
+      "base_y_m": 0.85,
+      "support": "display_island",
+      "collision": "inherited_support",
+      "facing": "-X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "requires_clean_support_art": true,
+      "group_is_one_authored_asset": true,
+      "interpretation": "GS_SHOP의 판매 품목별 진열 원칙을 식품 상점에 적용한 신규 품목"
+    },
+    {
+      "id": "island_preserves_crate",
+      "label": "같은 산지의 보존 식품 상자",
+      "role": "featured_preserves",
+      "center_xz": [
+        3.2,
+        -1.95
+      ],
+      "size_xzy_m": [
+        0.55,
+        0.85,
+        0.25
+      ],
+      "base_y_m": 0.85,
+      "support": "display_island",
+      "collision": "inherited_support",
+      "facing": "-X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "requires_clean_support_art": true,
+      "group_is_one_authored_asset": true
+    },
+    {
+      "id": "stock_cartons_cluster",
+      "label": "미개봉 재고 상자 묶음",
+      "role": "replenishment_stock",
+      "center_xz": [
+        2.8,
+        3.575
+      ],
+      "size_xzy_m": [
+        1.1,
+        0.45,
+        0.35
+      ],
+      "base_y_m": 0.3,
+      "support": "stock_shelf",
+      "collision": "inherited_support",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP",
+        "PZ_SERVICE"
+      ],
+      "requires_clean_support_art": true,
+      "support_surface_id": "shelf_tier_y_0.30",
+      "group_is_one_authored_asset": true
+    },
+    {
+      "id": "stock_refill_cluster",
+      "label": "재고 보충 용기 묶음",
+      "role": "replenishment_stock",
+      "center_xz": [
+        3.95,
+        3.575
+      ],
+      "size_xzy_m": [
+        0.8,
+        0.45,
+        0.45
+      ],
+      "base_y_m": 1.1,
+      "support": "stock_shelf",
+      "collision": "inherited_support",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "PZ_SERVICE"
+      ],
+      "requires_clean_support_art": true,
+      "support_surface_id": "shelf_tier_y_1.10",
+      "group_is_one_authored_asset": true
+    },
+    {
+      "id": "wall_clock",
+      "label": "직원 쪽 벽시계",
+      "role": "staff_time",
+      "center_xz": [
+        -4.87,
+        -0.5
+      ],
+      "size_xzy_m": [
+        0.08,
+        0.3,
+        0.3
+      ],
+      "base_y_m": 1.95,
+      "support": "wall_left",
+      "collision": "wall_attached_no_extra_floor_solid",
+      "facing": "+X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [],
+      "interpretation": "직원 영역의 신규 기능성 제안. 직접 관찰한 참고 물품으로 분류하지 않음"
+    },
+    {
+      "id": "utility_bin",
+      "label": "준비대 아래 단일 쓰레기통",
+      "role": "staff_waste",
+      "center_xz": [
+        3.02,
+        1.3
+      ],
+      "size_xzy_m": [
+        0.3,
+        0.35,
+        0.48
+      ],
+      "base_y_m": 0,
+      "support": "utility_bench",
+      "collision": "inside_support_volume",
+      "facing": "+Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "PZ_BIN"
+      ],
+      "interpretation": "PZ 외부 단일 쓰레기통 배치의 역할 분리를 직원 작업대에 적용; 실내 배치 자체는 제안",
+      "requires_open_support_bay": true
+    },
+    {
+      "id": "wall_broom",
+      "label": "창고 벽 걸이 빗자루",
+      "role": "cleaning_tool",
+      "center_xz": [
+        1.24,
+        3.3
+      ],
+      "size_xzy_m": [
+        0.1,
+        0.28,
+        1.25
+      ],
+      "base_y_m": 0.2,
+      "support": "stock_west_upper",
+      "collision": "wall_attached_no_extra_floor_solid",
+      "facing": "+X",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_SHOP"
+      ],
+      "interpretation": "GS_SHOP의 벽 걸이 구조를 청소 구역 기능에 적용; 참고 화면에서 빗자루를 확인했다는 주장은 아님"
+    },
+    {
+      "id": "wall_lamp",
+      "label": "후면 상품 구역 벽등",
+      "role": "display_light",
+      "center_xz": [
+        0.7,
+        3.78
+      ],
+      "size_xzy_m": [
+        0.25,
+        0.25,
+        0.4
+      ],
+      "base_y_m": 2,
+      "support": "wall_back",
+      "collision": "wall_attached_no_extra_floor_solid",
+      "facing": "-Z",
+      "evidence_basis": "design_proposal_adapting_observed_role",
+      "source_ids": [
+        "GS_HOME"
+      ],
+      "emissive_and_light_parameters": "not_decided_no_unity_change"
+    }
+  ],
+  "instance_count": 25,
+  "deferred_requirements": [
+    {
+      "id": "staff_restroom",
+      "status": "not_designed_not_claimed_complete",
+      "reason": "참고 화면에서 확인하지 못했으며 B32 창고의 기존 선반/접근 영역을 보존한 채 화장실 구획을 끼워 넣을 수 있다고 입증하지 않음",
+      "needed": [
+        "독립 벽과 출입문이 있는 방",
+        "변기·세면대·문 사용 공간",
+        "창고 기능의 재배치 또는 명시적 면적 확장",
+        "문/가구/Player 여유폭을 포함한 동선 재계산"
+      ],
+      "forbidden_shortcut": "창고 한 구석에 변기 스프라이트만 두고 직원 화장실을 완성했다고 표시"
+    },
+    {
+      "id": "new_looting_and_service_gameplay",
+      "status": "out_of_this_plan",
+      "reason": "오브젝트 역할·표시를 정한 계획이며 인벤토리/상호작용 규칙을 신규 확정하지 않음"
+    }
+  ],
+  "validation": {
+    "status": "static_proposal_checks_only",
+    "performed": "2026-09-27",
+    "added_floor_solid_count": 4,
+    "preserved_fixture_count": 5,
+    "reserved_area_or_solid_overlaps": [],
+    "grid_cell_m": 0.1,
+    "conservative_radius_m": 0.6707106781186547,
+    "algorithm": "4-connected BFS of cell centres; obstacle distance > radius + design margin + cell half diagonal",
+    "source_cell_free": true,
+    "reachable_cells": 2898,
+    "free_cells": 2898,
+    "access_points": [
+      {
+        "id": "checkout_customer",
+        "point_xz": [
+          -2.95,
+          -2.5
+        ],
+        "kind": "preserved",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.75
+      },
+      {
+        "id": "checkout_staff",
+        "point_xz": [
+          -2.95,
+          -0.2
+        ],
+        "kind": "preserved",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.75
+      },
+      {
+        "id": "left_shelf_use",
+        "point_xz": [
+          -3.45,
+          1.85
+        ],
+        "kind": "preserved",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.7999999999999998
+      },
+      {
+        "id": "rear_shelf_use",
+        "point_xz": [
+          -1.05,
+          2.5
+        ],
+        "kind": "preserved",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.8250000000000002
+      },
+      {
+        "id": "island_use",
+        "point_xz": [
+          1.25,
+          -1.95
+        ],
+        "kind": "preserved",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.7999999999999998
+      },
+      {
+        "id": "stock_shelf_use",
+        "point_xz": [
+          3.325,
+          2.45
+        ],
+        "kind": "preserved",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.8249999999999997
+      },
+      {
+        "id": "retail_fridge",
+        "point_xz": [
+          3.5,
+          -0.1
+        ],
+        "kind": "new",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.7249999999999996
+      },
+      {
+        "id": "utility_bench",
+        "point_xz": [
+          2.75,
+          2.25
+        ],
+        "kind": "new",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.6749999999999998
+      },
+      {
+        "id": "cleaning_cabinet",
+        "point_xz": [
+          3.95,
+          2.3
+        ],
+        "kind": "new",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.6749999999999998
+      },
+      {
+        "id": "basket_stack",
+        "point_xz": [
+          -3.65,
+          -3.25
+        ],
+        "kind": "new",
+        "cell_free": true,
+        "reachable": true,
+        "min_obstacle_distance_m": 0.6749999999999998
+      }
+    ],
+    "support_footprints": [
+      {
+        "id": "register",
+        "parent": "checkout",
+        "footprint_contained": true
+      },
+      {
+        "id": "checkout_ledger",
+        "parent": "checkout",
+        "footprint_contained": true
+      },
+      {
+        "id": "impulse_basket",
+        "parent": "checkout",
+        "footprint_contained": true
+      },
+      {
+        "id": "left_drinks_cluster",
+        "parent": "left_shelf",
+        "footprint_contained": true
+      },
+      {
+        "id": "left_pantry_cluster",
+        "parent": "left_shelf",
+        "footprint_contained": true
+      },
+      {
+        "id": "rear_packets_cluster",
+        "parent": "rear_shelf",
+        "footprint_contained": true
+      },
+      {
+        "id": "rear_jars_cluster",
+        "parent": "rear_shelf",
+        "footprint_contained": true
+      },
+      {
+        "id": "island_produce_crate",
+        "parent": "display_island",
+        "footprint_contained": true
+      },
+      {
+        "id": "island_preserves_crate",
+        "parent": "display_island",
+        "footprint_contained": true
+      },
+      {
+        "id": "stock_cartons_cluster",
+        "parent": "stock_shelf",
+        "footprint_contained": true
+      },
+      {
+        "id": "stock_refill_cluster",
+        "parent": "stock_shelf",
+        "footprint_contained": true
+      },
+      {
+        "id": "utility_bin",
+        "parent": "utility_bench",
+        "footprint_contained": true
+      }
+    ],
+    "not_tested": [
+      "Unity collisions or actual art masks",
+      "Gameplay interaction",
+      "Door leaves and opening animations",
+      "Visual density or aesthetic approval",
+      "Support surfaces inside current generated sprites"
+    ]
+  },
+  "implementation_gates": [
+    "25개 계획이 곧 25개 신규 이미지 생성 명령은 아님; 각 원본에 이미 포함된 소품과 분리 가능 여부를 먼저 매핑",
+    "서로 반대 facing인 계산대/벽 선반 두 방향에서 실제 색 그림의 구조 모서리와 템플릿 투영을 확인",
+    "보여야 하는 면/가려진 재료가 없으면 소품으로 가리지 않고 입력 부적합으로 반환",
+    "공통 픽셀 밀도와 물리 크기 동시 충족 여부가 정해진 뒤 에셋별 작업 명세 고정",
+    "Unity 적용 후 실제 Player로 기존6+추가4 접근을 관찰; 현재 문서의 BFS를 Play Mode 통과로 바꾸지 않음",
+    "전체 실내 관찰과 물건 가림/프레임/지붕 문제의 실제 화면 증거 후 완료 판단"
+  ]
+}

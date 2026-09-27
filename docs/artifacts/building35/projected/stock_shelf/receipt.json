@@ -1,0 +1,50 @@
+{
+  "id": "stock_shelf",
+  "source": "docs/artifacts/building34/native/stock_shelf/native.png",
+  "source_sha256": "f0df0a231dbb670af2985e79fd455b07606715c29cbefa69b5fca309629f7ab4",
+  "width": 299,
+  "height": 348,
+  "ppu": 127,
+  "left": -1.1811023622047243,
+  "top": 2.1653543307086616,
+  "opaque_pixels": 63638,
+  "faces": [
+    {
+      "id": "virtual_top_envelope",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 8889,
+      "holdout": []
+    },
+    {
+      "id": "front_z_min",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 42856,
+      "holdout": []
+    },
+    {
+      "id": "end_x_min",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 11935,
+      "holdout": []
+    }
+  ],
+  "source_outline_pixels_outside_landmark_quads": 1469,
+  "outline_policy": "nearest-plane extrapolation",
+  "surface_xyz_min": [
+    -1.2830748558044434,
+    -0.07948215305805206,
+    -0.3421217203140259
+  ],
+  "surface_xyz_max": [
+    1.3313566446304321,
+    1.8071348667144775,
+    0.4286276698112488
+  ],
+  "declared_limitations": [
+    "Open-frame rack has no continuous top. Top corners are post cap centers; the top polygon contains crate tops and empty space. It is a virtual image layer, not actual plywood or a physical roof.",
+    "Side braces and shelf goods are at multiple depths. End polygon preserves their painted fixed-view appearance but not correct per-part surface depth or lighting normals.",
+    "Alpha holes must remain transparent with invalid depth. Rendering an opaque top/end quad would introduce a regression.",
+    "Post cap diamonds and feet extend 3-6 native pixels outside centerline corner polygons. Quantify omitted texels; do not fix by source UV clamp or arbitrary expansion of each face."
+  ],
+  "spec": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building35\\projected\\stock_shelf\\spec.json"
+}

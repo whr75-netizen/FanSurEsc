@@ -1,0 +1,259 @@
+{
+  "schema": "building35-native-prop-landmarks/1",
+  "scope": "Integer landmark estimates in native.png input coordinates for a later explicit geometric resampling step. Neither original 3D recovery nor an artistic/projection acceptance.",
+  "coordinate_convention": {
+    "origin": "native image top-left",
+    "x": "right",
+    "y": "down",
+    "points": "integer texel-center indices; (0,0) is first texel center",
+    "bbox": "[left,top,right,bottom), right/bottom exclusive",
+    "source": "docs/artifacts/building35/native/{id}/native.png, NOT 1254x1254 generated PNG",
+    "upstream_mapping": "Original generated source correspondence remains in each receipt refined_grid.x_source_centers/y_source_centers."
+  },
+  "method": "Images visually inspected at native size, with alpha-support convex hull and local color-edge samples as aids. Corner coordinates are estimates of drawn outline center, not guaranteed metric vertices. Inferred/occluded points explicitly identified.",
+  "render_alpha_threshold": 0.1,
+  "landmark_support_alpha_threshold": 0.5,
+  "limits": [
+    "Native grids are nonuniformly refined upstream; a square original may yield unequal native width/height.",
+    "The later common-PPU 127 mapping changes sample placement and is geometric resampling, separate from PerfectPixel normalization.",
+    "Low-alpha fringe samples are not removed from the original; measuring strong-alpha support does not authorize clipping them.",
+    "Circular base projected-center and lowest visible contact pixel are different anchors."
+  ],
+  "assets": [
+    {
+      "id": "crate",
+      "native_path": "docs/artifacts/building35/native/crate/native.png",
+      "native_dimensions": [
+        241,
+        238
+      ],
+      "native_sha256": "440ec9b80343911d2681bd9cc37505ba2fce238f5b6896f4132df565355f2e9b",
+      "points": {
+        "top_back": [
+          131,
+          23
+        ],
+        "top_left": [
+          21,
+          79
+        ],
+        "top_front": [
+          109,
+          123
+        ],
+        "top_right": [
+          220,
+          68
+        ],
+        "bottom_left": [
+          21,
+          166
+        ],
+        "bottom_front": [
+          109,
+          217
+        ],
+        "bottom_right": [
+          220,
+          160
+        ]
+      },
+      "faces": {
+        "top": [
+          "top_back",
+          "top_right",
+          "top_front",
+          "top_left"
+        ],
+        "left": [
+          "top_left",
+          "top_front",
+          "bottom_front",
+          "bottom_left"
+        ],
+        "right": [
+          "top_front",
+          "top_right",
+          "bottom_right",
+          "bottom_front"
+        ]
+      },
+      "observation": "Seven visible box corners; no missing back-lower corner manufactured.",
+      "estimated_corner_uncertainty_native_px": 2,
+      "geometry_warning": "Measured top-back differs about 1px from the other three-corner parallelogram. Do not report exact original isometry."
+    },
+    {
+      "id": "barrel",
+      "native_path": "docs/artifacts/building35/native/barrel/native.png",
+      "native_dimensions": [
+        207,
+        213
+      ],
+      "native_sha256": "5a186f6bac55f0962fbb6da4e4d51e6822bf87f5f95f2ac6db664763c80fa7f4",
+      "points": {
+        "lid_center": [
+          103,
+          45
+        ],
+        "lid_left": [
+          54,
+          45
+        ],
+        "lid_right": [
+          152,
+          45
+        ],
+        "lid_back": [
+          103,
+          18
+        ],
+        "lid_front": [
+          103,
+          72
+        ],
+        "bottom_visible_contact_center": [
+          103,
+          195
+        ],
+        "bottom_projected_circle_center_estimate": [
+          103,
+          169
+        ]
+      },
+      "estimated_points": [
+        "lid_center",
+        "bottom_projected_circle_center_estimate"
+      ],
+      "observation": "Lid ellipse rim is approximately x54..152, y18..72; frontmost bottom rim is y195. Inferred circle center uses same approximate 27px ellipse semi-height and is hidden by front staves.",
+      "estimated_corner_uncertainty_native_px": 2,
+      "geometry_warning": "Small raised bung is above the lid plane; exclude it from strict lid-plane assumptions or preserve as a separate detail domain."
+    },
+    {
+      "id": "plant",
+      "native_path": "docs/artifacts/building35/native/plant/native.png",
+      "native_dimensions": [
+        179,
+        187
+      ],
+      "native_sha256": "a7f996ad60e41bbd4c9f413ee78f78a4067bd09bbe5d04cc2580531b14cb2825",
+      "points": {
+        "pot_bottom_visible_contact_center": [
+          90,
+          174
+        ],
+        "pot_bottom_projected_circle_center_estimate": [
+          90,
+          169
+        ],
+        "pot_rim_center_estimate": [
+          90,
+          119
+        ]
+      },
+      "foliage_bbox": [
+        37,
+        12,
+        142,
+        128
+      ],
+      "pot_bbox": [
+        65,
+        109,
+        115,
+        175
+      ],
+      "estimated_points": [
+        "pot_bottom_projected_circle_center_estimate",
+        "pot_rim_center_estimate"
+      ],
+      "observation": "Visible leaves overlap the pot rim; foliage box encloses visually identified leaf pixels/outline and is not a segmentation mask. Last strong-alpha pot row y174 spans x84..95.",
+      "estimated_corner_uncertainty_native_px": 2,
+      "geometry_warning": "Irregular foliage has no reliable planar homography or cuboid corners. A leaf bounding box is only an extent."
+    },
+    {
+      "id": "register",
+      "native_path": "docs/artifacts/building35/native/register/native.png",
+      "native_dimensions": [
+        246,
+        247
+      ],
+      "native_sha256": "23a7e56aec3f816288bb747b45c7b786c5d85a7a6e27556d62807caa11f67b65",
+      "points": {
+        "base_top_back": [
+          132,
+          80
+        ],
+        "base_top_left": [
+          24,
+          130
+        ],
+        "base_top_front": [
+          119,
+          181
+        ],
+        "base_top_right": [
+          227,
+          131
+        ],
+        "base_bottom_left": [
+          24,
+          179
+        ],
+        "base_bottom_front": [
+          121,
+          236
+        ],
+        "base_bottom_right": [
+          227,
+          183
+        ]
+      },
+      "faces": {
+        "base_top": [
+          "base_top_back",
+          "base_top_right",
+          "base_top_front",
+          "base_top_left"
+        ],
+        "base_left": [
+          "base_top_left",
+          "base_top_front",
+          "base_bottom_front",
+          "base_bottom_left"
+        ],
+        "base_right": [
+          "base_top_front",
+          "base_top_right",
+          "base_bottom_right",
+          "base_bottom_front"
+        ]
+      },
+      "inferred_points": {
+        "base_top_back": {
+          "method": "top_left + top_right - top_front in image coordinates; hidden by register mechanism",
+          "visible": false
+        }
+      },
+      "upper_mechanism_bbox": [
+        43,
+        19,
+        223,
+        181
+      ],
+      "includes_upper_protrusion": true,
+      "observation": "Drawer body occupies the lower volume; sloped keypad, rear cylinder and receipt rise beyond it. Seven body corners cannot all be directly measured because the back-top point is occluded.",
+      "estimated_corner_uncertainty_native_px": 3,
+      "geometry_warning": "Do not treat the complete register as only the cash-drawer box or distort the upper mechanism into its top plane. Preserve full upper silhouette with an explicit separate domain/physical height."
+    }
+  ],
+  "produce": {
+    "native_path": "docs/artifacts/building35/native/produce/native.png",
+    "receipt_path": "docs/artifacts/building35/native/produce/receipt.json",
+    "native_dimensions": [
+      198,
+      164
+    ],
+    "native_sha256": "d52d4c454a946d9f706ec15b6cd5d068ed5b274df19bceda01af0bf1aa252e7e",
+    "status": "normalized once with original automatic upstream grid; output viewed; no manual grid or rerun"
+  }
+}

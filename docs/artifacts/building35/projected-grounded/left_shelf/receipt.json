@@ -1,0 +1,51 @@
+{
+  "id": "left_shelf",
+  "source": "docs/artifacts/building34/native/left_shelf/native.png",
+  "source_sha256": "dfc8ae47e0d4919d56c877255fc6b97af412cb91367bdb9e00282bda88c14cca",
+  "width": 296,
+  "height": 356,
+  "ppu": 127,
+  "left": -1.1574803149606299,
+  "top": 2.2755905511811023,
+  "opaque_pixels": 68247,
+  "faces": [
+    {
+      "id": "top",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 12427,
+      "holdout": []
+    },
+    {
+      "id": "fixed_view_facade_x_min",
+      "reprojection_residual": 5.684341886080802e-14,
+      "written_pixels": 43970,
+      "holdout": []
+    },
+    {
+      "id": "end_z_min",
+      "reprojection_residual": 1.4210854715202004e-14,
+      "written_pixels": 11893,
+      "holdout": []
+    }
+  ],
+  "source_outline_pixels_outside_landmark_quads": 1393,
+  "outline_policy": "nearest-plane extrapolation",
+  "ground_shift_from_measured_outline_m": 0.04700446104108647,
+  "support_height": 1.8470044610410865,
+  "surface_xyz_min": [
+    -0.3607158064842224,
+    0.01082662120461464,
+    -1.2404234409332275
+  ],
+  "surface_xyz_max": [
+    0.5301274061203003,
+    1.8519829511642456,
+    1.3652929067611694
+  ],
+  "declared_limitations": [
+    "Post caps rise above the main top slab around native (154,18), (175,30), (39,81). These are not covered by the top-board polygon and must not silently disappear.",
+    "Hanging leaves on the end panel are flattened painted details; shelf goods have different depths.",
+    "The left body post bottom extends slightly beyond the annotated end polygon; quantify actual omitted opaque cells before accepting."
+  ],
+  "spec": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building35\\projected-grounded\\left_shelf\\spec.json"
+}

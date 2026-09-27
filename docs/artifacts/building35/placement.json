@@ -1,0 +1,58 @@
+{
+  "schema": "building35-physical-placement/1",
+  "status": "planned_static_geometry_pending_validation",
+  "nativePpu": 127,
+  "coordinate_system": "building-local X right, Y up, Z rear; metres",
+  "position_semantics": "position is footprint center at bottom/support Y; collider_size is [X width,Y height,Z depth]; collider center must add half height to position Y",
+  "source_shell_plan": "docs/artifacts/building32/layout-plan.json",
+  "source_shell_sha256": "f76d77651761f26ac14f546d68bf3aba7ed3ad1d3e69815bb1f85363b8bd98ac",
+  "instance_transform_contract": "No per-instance arbitrary rotation or scale. Asset template owns physical dimensions and canonical projection. Render bounds may differ from physical collider and must be reported separately.",
+  "instances": [
+    {"id":"checkout","asset":"empty_counter","position":[-2.95,0,-1.35],"collider_size":[2.4,1.0,0.8],"role":"customer checkout body","support":"floor","facing":"-Z"},
+    {"id":"right_sales_shelf","asset":"left_shelf","position":[4.55,0,-0.5],"collider_size":[0.6,1.8,2.4],"role":"wall pantry merchandise; existing painted goods are part of this one instance","support":"floor","facing":"-X","wall":"wall_right"},
+    {"id":"rear_shelf","asset":"rear_shelf","position":[-1.05,0,3.625],"collider_size":[2.9,1.8,0.6],"role":"rear pantry merchandise; painted goods not additional instances","support":"floor","facing":"-Z","wall":"wall_back"},
+    {"id":"display_island","asset":"empty_counter","position":[1.8,0,-2.1],"collider_size":[1.6,0.65,1.2],"role":"low produce display body","support":"floor","facing":"-X","asset_variant":"island_body_template"},
+    {"id":"stock_shelf","asset":"stock_shelf","position":[3.325,0,3.575],"collider_size":[2.45,1.8,0.6],"role":"staff backstock; painted cartons not additional instances","support":"floor","facing":"-Z","wall":"wall_back"},
+    {"id":"retail_fridge","asset":"fridge","position":[-3.8,0,3.6],"collider_size":[1.55,1.9,0.65],"role":"rear-left chilled retail drinks","support":"floor","facing":"-Z","wall":"wall_back"},
+    {"id":"utility_bench","asset":"utility_bench","position":[2.75,0,1.3],"collider_size":[1.3,0.9,0.55],"role":"staff preparation and cleaning work surface","support":"floor","facing":"+Z","wall":"stock_south"},
+    {"id":"cleaning_cabinet","asset":"cleaning_cabinet","position":[3.95,0,1.325],"collider_size":[0.6,1.65,0.6],"role":"staff cleaning supplies storage","support":"floor","facing":"+Z","wall":"stock_south"},
+    {"id":"checkout_register","asset":"register","position":[-3.3,1.0,-1.35],"collider_size":[0.55,0.42,0.4],"role":"checkout payment device","support":"checkout","facing":"-Z"},
+    {"id":"island_apple_tray_left","asset":"appletray","position":[1.4,0.65,-2.1],"collider_size":[0.6,0.25,0.45],"role":"produce offer left tray","support":"display_island","facing":"-X"},
+    {"id":"island_apple_tray_right","asset":"appletray","position":[2.2,0.65,-2.1],"collider_size":[0.6,0.25,0.45],"role":"produce offer right tray","support":"display_island","facing":"-X"},
+    {"id":"entry_plant","asset":"plant","position":[-4.55,0,-3.4],"collider_size":[0.6,1.0,0.6],"role":"single entrance-side potted plant outside entry circulation","support":"floor"},
+    {"id":"staff_corner_plant","asset":"plant","position":[-4.55,0,-0.3],"collider_size":[0.6,1.0,0.6],"role":"left wall plant beyond staff counter end","support":"floor"},
+    {"id":"bulk_barrel_a","asset":"barrel","position":[-4.55,0,0.6],"collider_size":[0.46,0.65,0.46],"role":"sealed bulk-food container along left display wall; not waste bin","support":"floor"},
+    {"id":"bulk_barrel_b","asset":"barrel","position":[-4.55,0,1.2],"collider_size":[0.46,0.65,0.46],"role":"second sealed bulk-food container in same product group","support":"floor"},
+    {"id":"left_crate_base","asset":"crate","position":[-4.55,0,1.9],"collider_size":[0.5,0.35,0.4],"role":"packaged pantry stock at left-rear wall","support":"floor"},
+    {"id":"left_crate_top","asset":"crate","position":[-4.55,0.35,1.9],"collider_size":[0.5,0.35,0.4],"role":"second pantry stock crate stacked on matching base","support":"left_crate_base"},
+    {"id":"left_crate_single","asset":"crate","position":[-4.55,0,2.45],"collider_size":[0.5,0.35,0.4],"role":"low refill crate before rear-left refrigeration bay","support":"floor"},
+    {"id":"stock_crate_base","asset":"crate","position":[1.6,0,3.5],"collider_size":[0.5,0.35,0.4],"role":"staff reserve crate in stockroom back-left corner","support":"floor"},
+    {"id":"stock_crate_top","asset":"crate","position":[1.6,0.35,3.5],"collider_size":[0.5,0.35,0.4],"role":"second reserve crate stacked on stock corner base","support":"stock_crate_base"}
+  ],
+  "use_points": [
+    {"id":"checkout_customer","instance":"checkout","point_xz":[-2.95,-2.5],"role":"customer-facing payment point"},
+    {"id":"checkout_staff","instance":"checkout","point_xz":[-2.95,-0.2],"role":"staff access to counter and register"},
+    {"id":"right_shelf_use","instance":"right_sales_shelf","point_xz":[3.4,-0.5],"role":"browse visible west-facing shelf"},
+    {"id":"rear_shelf_use","instance":"rear_shelf","point_xz":[-1.05,2.5],"role":"browse rear pantry shelf"},
+    {"id":"island_use","instance":"display_island","point_xz":[0.25,-2.1],"role":"western side of produce display"},
+    {"id":"stock_shelf_use","instance":"stock_shelf","point_xz":[3.325,2.45],"role":"retrieve stock after passing staff doorway"},
+    {"id":"fridge_use","instance":"retail_fridge","point_xz":[-3.45,2.45],"role":"chilled drinks front; kept right of left-wall crates"},
+    {"id":"utility_use","instance":"utility_bench","point_xz":[2.75,2.3],"role":"north side of staff preparation bench"},
+    {"id":"cleaning_use","instance":"cleaning_cabinet","point_xz":[3.95,2.35],"role":"north side of cleaning storage"},
+    {"id":"bulk_goods_use","instance":"bulk_barrel_a","point_xz":[-3.5,0.6],"role":"bulk-food container group access"},
+    {"id":"left_crate_use","instance":"left_crate_base","point_xz":[-3.5,1.9],"role":"left-wall refill group access"},
+    {"id":"stock_crate_use","instance":"stock_crate_base","point_xz":[1.85,2.45],"role":"staff reserve stack access clear of upper doorway jamb"}
+  ],
+  "decisions": [
+    "Right-wall shelf and rear-left fridge replace previous conflicting facings; changed positions have a source/view/layout cause, not decorative nudging.",
+    "Island moves to x1.8,z-2.1 and body height.65; two separate apple trays sit at y.65 and reach y.9.",
+    "20 actual instances: 8 fixture bodies, 3 supported countertop/display objects, 2 plants, 2 bulk containers, 5 crates. Existing painted shelf contents count zero additional instances.",
+    "Additional floor objects stay at left peripheral wall or stock back corner, preserving central entry and sales circulation. Repeated crates are physical stacks with exact support heights.",
+    "Utility and cleaning preserve the separate interior proposal positions and sizes; this calculation does not certify their eventual source-image view direction."
+  ],
+  "limitations": [
+    "Static footprint and support planning only; Unity Player movement, actual Collider shape, rendered silhouette and lighting remain untested here.",
+    "A source image must be mapped to its declared physical template; per-instance arbitrary scale/rotation is forbidden.",
+    "Some assets are still pending production. Placement records are not evidence those assets exist or are integrated."
+  ]
+}

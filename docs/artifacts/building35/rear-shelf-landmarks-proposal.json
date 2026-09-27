@@ -1,0 +1,85 @@
+{
+  "schema": "building35-manual-plane-landmarks/1",
+  "status": "proposed_minimal_experiment_not_validated_geometry",
+  "asset_id": "rear_shelf",
+  "source": {
+    "native_path": "docs/artifacts/building34/native/rear_shelf/native.png",
+    "native_dimensions": [289, 279],
+    "native_sha256": "94b89773092c0a68ee2c29469220d147d69f22d9c155825e9f7f8b0c67ba5c9d",
+    "original_path": "Tools/Building33/Source/rear_shelf.png",
+    "original_dimensions": [1196, 1315],
+    "original_sha256": "9b931618de4d972b7d97d2cb938947c56146962682d6baebcddfdc59864e059e",
+    "receipt_path": "docs/artifacts/building34/native/rear_shelf/receipt.json",
+    "original_correspondence": "Use receipt.refined_grid.x_source_centers and y_source_centers for sampled native texels; do not multiply native coordinates by a uniform scale. No new normalization.",
+    "coordinate_convention": "Native pixel-boundary coordinates: (0,0) is top-left outer corner; pixel (i,j) center is (i+.5,j+.5); y increases down. Landmark values identify visible boundary locations, not new source samples.",
+    "annotation_method": "Manual visible-corner annotation after viewing native PNG and reading its alpha/RGB boundaries. Not automatic geometric recovery.",
+    "landmark_uncertainty_native_px": 2.0
+  },
+  "target": {
+    "source_contract": "docs/artifacts/building32/layout-plan.json: fixture rear_shelf",
+    "width_x_m": 2.9,
+    "depth_z_m": 0.6,
+    "height_y_m": 1.8,
+    "ppu": 127,
+    "camera_pitch_deg": 30,
+    "camera_yaw_deg": 45,
+    "local_origin": "footprint center at ground y=0",
+    "right": [0.7071067811865476, 0.0, -0.7071067811865476],
+    "up": [0.3535533905932738, 0.8660254037844386, 0.3535533905932738],
+    "forward": [0.6123724356957945, -0.5, 0.6123724356957945],
+    "projection": "screen=(ppu*dot(right,X)+originX, -ppu*dot(up,X)+originY); allocate from projected bounds, never fit to prior image dimensions",
+    "visible_faces": ["front_z_min", "end_x_min", "top_y_max"],
+    "source_to_target_axis_note": "Source image shows its right end. Target camera sees local Xmin. Source left-to-right long direction therefore maps +X to -X. This is an explicit left/right appearance reflection, not a claim that an unseen opposite end was recovered. Symmetric frame/end-panel reuse is only an experimental assumption."
+  },
+  "shared_vertices": {
+    "A_front_x_plus_top": {"source": [19.0, 28.0], "target_xyz": [1.45, 1.8, -0.3]},
+    "B_front_x_minus_top": {"source": [244.0, 98.0], "target_xyz": [-1.45, 1.8, -0.3]},
+    "C_back_x_minus_top": {"source": [270.0, 85.0], "target_xyz": [-1.45, 1.8, 0.3]},
+    "D_back_x_plus_top": {"source": [50.0, 14.0], "target_xyz": [1.45, 1.8, 0.3]},
+    "E_front_x_plus_ground": {"source": [24.0, 207.0], "target_xyz": [1.45, 0.0, -0.3]},
+    "F_front_x_minus_ground": {"source": [237.0, 271.0], "target_xyz": [-1.45, 0.0, -0.3]},
+    "G_back_x_minus_ground": {"source": [269.0, 255.0], "target_xyz": [-1.45, 0.0, 0.3]}
+  },
+  "faces": [
+    {"id": "top_y_max", "vertices": ["A_front_x_plus_top", "D_back_x_plus_top", "C_back_x_minus_top", "B_front_x_minus_top"], "support": "Visible wooden cap top. Boundary is an approximate manual corner annotation."},
+    {"id": "front_z_min", "vertices": ["A_front_x_plus_top", "B_front_x_minus_top", "F_front_x_minus_ground", "E_front_x_plus_ground"], "support": "Facade projection experiment only: products, shelf lips and cap overhang are flattened onto this face. NOT a planar reconstruction of these details."},
+    {"id": "end_x_min", "vertices": ["B_front_x_minus_top", "C_back_x_minus_top", "G_back_x_minus_ground", "F_front_x_minus_ground"], "support": "End-panel envelope with top overhang and bottom feet merged. NOT exact board geometry."}
+  ],
+  "actual_frame_two_face_alternative": {
+    "purpose": "If whole-envelope holdouts fail, do not integrate it. Restrict experiment to the main frame below the separately protruding wooden cap. No source top face is invented for this alternative.",
+    "shared_source_vertices": {
+      "a": [26.0, 38.0], "b": [240.0, 103.0], "c": [269.0, 92.0],
+      "e": [26.0, 202.0], "f": [238.0, 266.0], "g": [269.0, 253.0]
+    },
+    "front": ["a", "b", "f", "e"],
+    "end": ["b", "c", "g", "f"],
+    "top": null,
+    "cap": "Separate component needs its own thickness/overhang specification; its outer top A/B/C/D are not main-frame top corners."
+  },
+  "source_holdout_segments": [
+    {"id": "upper_shelf_front_lip", "source_endpoints": [[30.0, 116.0], [235.0, 181.0]], "confidence": "provisional visual endpoints; recheck actual lip pixels before evaluating residual", "expected_target_axis": "X"},
+    {"id": "lower_cabinet_top_edge", "source_endpoints": [[29.0, 157.0], [233.0, 222.0]], "confidence": "provisional visual endpoints; recheck actual lip pixels before evaluating residual", "expected_target_axis": "X"}
+  ],
+  "raster_contract": {
+    "matrix": "One getPerspectiveTransform per source face using the shared vertex IDs. Target points only from target projection formula.",
+    "sampling": "Inverse target texel-center mapping; source RGBA nearest texel; transparent outside source and face polygon. No palette changes, downscale/upscale pass or second PerfectPixel pass.",
+    "depth": "The same selected target face owns color, alpha and surface XYZ. No unrelated enclosing ray-box fallback.",
+    "edge_ownership": "Single top-left/half-open rule and shared target edge; do not repair seams by dilation.",
+    "source_outside_polygons": "Report all omitted opaque source texels. They must not silently disappear or be clamped onto a border. This outline annotation does not yet guarantee zero omissions."
+  },
+  "acceptance": {
+    "shared_vertex_projection_residual_native_px_max": 0.0001,
+    "target_horizontal_world_axis_abs_slope": 0.5,
+    "target_vertical_axis_dx": 0.0,
+    "required_reports": ["source corner overlay", "per-face H and inverse", "Jacobian singular values", "opaque source texels outside faces", "source-to-output sample provenance", "holdout segment residual", "same-face color/depth ownership", "source and output full-size comparison"],
+    "failure_is_not_repaired_by": ["changing camera", "independent per-face scale or offset", "forcing old image dimensions", "morphological dilation", "claiming homography success proves source planarity"]
+  },
+  "limits": [
+    "This is an urgent bounded three-face envelope experiment, not certified plane reconstruction or a production-ready asset.",
+    "The shelf has overhanging cap, feet, multiple shelf depths and rounded products. A single cuboid cannot give all their edges the physically correct angle.",
+    "Target edge orientation is determined exactly by the camera/template; original interior edges are only correct if the source region actually obeys one projective plane. Test holdouts, not the four fitted corners alone.",
+    "Nearest sampling preserves selected source colors, not every source texel or all small features. Track provenance and compression.",
+    "No hidden surfaces are available. No target view rotation is supported by this single-view experiment.",
+    "Counter register, bags and other raised props are explicitly outside this whole-three-face method."
+  ]
+}

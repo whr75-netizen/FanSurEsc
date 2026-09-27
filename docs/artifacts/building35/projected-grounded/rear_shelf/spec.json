@@ -1,0 +1,176 @@
+{
+  "id": "rear_shelf",
+  "source": "docs/artifacts/building34/native/rear_shelf/native.png",
+  "ppu": 127,
+  "preserve_outline": true,
+  "ground_from_source_outline": true,
+  "faces": [
+    {
+      "id": "top_y_max",
+      "source_xy": [
+        [
+          18.5,
+          27.5
+        ],
+        [
+          49.5,
+          13.5
+        ],
+        [
+          269.5,
+          84.5
+        ],
+        [
+          243.5,
+          97.5
+        ]
+      ],
+      "xyz": [
+        [
+          1.45,
+          1.8,
+          -0.3
+        ],
+        [
+          1.45,
+          1.8,
+          0.3
+        ],
+        [
+          -1.45,
+          1.8,
+          0.3
+        ],
+        [
+          -1.45,
+          1.8,
+          -0.3
+        ]
+      ]
+    },
+    {
+      "id": "front_z_min",
+      "source_xy": [
+        [
+          18.5,
+          27.5
+        ],
+        [
+          243.5,
+          97.5
+        ],
+        [
+          236.5,
+          270.5
+        ],
+        [
+          23.5,
+          206.5
+        ]
+      ],
+      "xyz": [
+        [
+          1.45,
+          1.8,
+          -0.3
+        ],
+        [
+          -1.45,
+          1.8,
+          -0.3
+        ],
+        [
+          -1.45,
+          0.0,
+          -0.3
+        ],
+        [
+          1.45,
+          0.0,
+          -0.3
+        ]
+      ],
+      "holdout": [
+        {
+          "id": "upper_shelf_front_lip",
+          "points": [
+            [
+              30.0,
+              116.0
+            ],
+            [
+              235.0,
+              181.0
+            ]
+          ],
+          "target_slope": -0.5
+        },
+        {
+          "id": "lower_cabinet_top_edge",
+          "points": [
+            [
+              29.0,
+              157.0
+            ],
+            [
+              233.0,
+              222.0
+            ]
+          ],
+          "target_slope": -0.5
+        }
+      ]
+    },
+    {
+      "id": "end_x_min",
+      "source_xy": [
+        [
+          243.5,
+          97.5
+        ],
+        [
+          269.5,
+          84.5
+        ],
+        [
+          268.5,
+          254.5
+        ],
+        [
+          236.5,
+          270.5
+        ]
+      ],
+      "xyz": [
+        [
+          -1.45,
+          1.8,
+          -0.3
+        ],
+        [
+          -1.45,
+          1.8,
+          0.3
+        ],
+        [
+          -1.45,
+          0.0,
+          0.3
+        ],
+        [
+          -1.45,
+          0.0,
+          -0.3
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "This is an urgent bounded three-face envelope experiment, not certified plane reconstruction or a production-ready asset.",
+    "The shelf has overhanging cap, feet, multiple shelf depths and rounded products. A single cuboid cannot give all their edges the physically correct angle.",
+    "Target edge orientation is determined exactly by the camera/template; original interior edges are only correct if the source region actually obeys one projective plane. Test holdouts, not the four fitted corners alone.",
+    "Nearest sampling preserves selected source colors, not every source texel or all small features. Track provenance and compression.",
+    "No hidden surfaces are available. No target view rotation is supported by this single-view experiment.",
+    "Counter register, bags and other raised props are explicitly outside this whole-three-face method."
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "id": "rear_shelf",
+  "source": "docs/artifacts/building34/native/rear_shelf/native.png",
+  "source_sha256": "94b89773092c0a68ee2c29469220d147d69f22d9c155825e9f7f8b0c67ba5c9d",
+  "width": 327,
+  "height": 363,
+  "ppu": 127,
+  "left": -1.3070866141732282,
+  "top": 2.204724409448819,
+  "opaque_pixels": 76114,
+  "faces": [
+    {
+      "id": "top_y_max",
+      "reprojection_residual": 3.552713678800501e-14,
+      "written_pixels": 15137,
+      "holdout": []
+    },
+    {
+      "id": "front_z_min",
+      "reprojection_residual": 5.684341886080802e-14,
+      "written_pixels": 50144,
+      "holdout": [
+        {
+          "id": "upper_shelf_front_lip",
+          "slope": -0.5104874045252324,
+          "target": -0.5,
+          "residual_px": 2.555329043242182
+        },
+        {
+          "id": "lower_cabinet_top_edge",
+          "slope": -0.5144996559606414,
+          "target": -0.5,
+          "residual_px": 3.5611028193553977
+        }
+      ]
+    },
+    {
+      "id": "end_x_min",
+      "reprojection_residual": 5.684341886080802e-14,
+      "written_pixels": 10878,
+      "holdout": []
+    }
+  ],
+  "source_outline_pixels_outside_landmark_quads": 668,
+  "outline_policy": "nearest-plane extrapolation",
+  "surface_xyz_min": [
+    -1.463663935661316,
+    -0.03463403135538101,
+    -0.3142828643321991
+  ],
+  "surface_xyz_max": [
+    1.4841067790985107,
+    1.8044579029083252,
+    0.4039594531059265
+  ],
+  "declared_limitations": [
+    "This is an urgent bounded three-face envelope experiment, not certified plane reconstruction or a production-ready asset.",
+    "The shelf has overhanging cap, feet, multiple shelf depths and rounded products. A single cuboid cannot give all their edges the physically correct angle.",
+    "Target edge orientation is determined exactly by the camera/template; original interior edges are only correct if the source region actually obeys one projective plane. Test holdouts, not the four fitted corners alone.",
+    "Nearest sampling preserves selected source colors, not every source texel or all small features. Track provenance and compression.",
+    "No hidden surfaces are available. No target view rotation is supported by this single-view experiment.",
+    "Counter register, bags and other raised props are explicitly outside this whole-three-face method."
+  ],
+  "spec": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building35\\projected\\rear_shelf\\spec.json"
+}

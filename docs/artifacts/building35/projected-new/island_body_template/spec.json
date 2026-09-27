@@ -1,0 +1,142 @@
+{
+  "id": "island_body_template",
+  "source": "docs/artifacts/building35/native/counter/native.png",
+  "ppu": 127,
+  "preserve_outline": true,
+  "ground_from_source_outline": true,
+  "faces": [
+    {
+      "id": "top",
+      "source_xy": [
+        [
+          16,
+          79
+        ],
+        [
+          124,
+          24
+        ],
+        [
+          159,
+          41
+        ],
+        [
+          53,
+          97
+        ]
+      ],
+      "xyz": [
+        [
+          -0.8,
+          0.65,
+          0.6
+        ],
+        [
+          0.8,
+          0.65,
+          0.6
+        ],
+        [
+          0.8,
+          0.65,
+          -0.6
+        ],
+        [
+          -0.8,
+          0.65,
+          -0.6
+        ]
+      ]
+    },
+    {
+      "id": "x_min",
+      "source_xy": [
+        [
+          16,
+          79
+        ],
+        [
+          53,
+          97
+        ],
+        [
+          54,
+          153
+        ],
+        [
+          16,
+          135
+        ]
+      ],
+      "xyz": [
+        [
+          -0.8,
+          0.65,
+          0.6
+        ],
+        [
+          -0.8,
+          0.65,
+          -0.6
+        ],
+        [
+          -0.8,
+          0,
+          -0.6
+        ],
+        [
+          -0.8,
+          0,
+          0.6
+        ]
+      ]
+    },
+    {
+      "id": "z_min",
+      "source_xy": [
+        [
+          53,
+          97
+        ],
+        [
+          159,
+          41
+        ],
+        [
+          159,
+          97
+        ],
+        [
+          54,
+          153
+        ]
+      ],
+      "xyz": [
+        [
+          -0.8,
+          0.65,
+          -0.6
+        ],
+        [
+          0.8,
+          0.65,
+          -0.6
+        ],
+        [
+          0.8,
+          0,
+          -0.6
+        ],
+        [
+          -0.8,
+          0,
+          -0.6
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Painted fixed-view planes; source corner annotation uncertainty 1-2 texels.",
+    "Source visible face correspondence retained."
+  ]
+}

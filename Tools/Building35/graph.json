@@ -1,0 +1,22 @@
+{
+  "goal":"B35 같은 상가의 가구 투영과 부족한 역할별 사물을 보강하고 실제 실내를 납품한다",
+  "entry":"canonical_inputs","max_steps":8,
+  "requirements":[{"id":"delivery","source":"사용자: 두개빼곤 각도가 안맞고 사물이 적음, PZ와GraveSeasons 하나하나참고","text":"공통투영 개별사물·역할도면·실제화면 및 필요한기술관찰","predicate":{"op":"eq","args":[{"ref":"validate.exit_code"},{"literal":0}]}}],
+  "nodes":[
+    {"id":"canonical_inputs","algorithm":"ai.work","phase":"work","inputs":{"design":{"literal":"Tools/Building35/README.md"},"reference":{"literal":"docs/artifacts/building35/reference-object-plan.md"}},
+     "parameters":{"scope":"실제참조의역할도면과 원본별 공유평면/별도소품 입력명세를 작성. 선반최소실험과내부holdout오차를검토. 없는면은새가이드기반입력으로제작. 정규화는원본자동검출. 생성모델이각도보장한다고주장금지."},
+     "reads":["art:B34-sources","design:B32-plan"],"writes":["art:B35-sources","design:B35-canonical"],
+     "question":"canonical 데이터와 생성·정규화·투영 입력을 준비하고 manifest 경로를 반환한다.","output_schema":{"manifest":{"type":"string"}},"edges":[{"when":{"op":"known","args":[{"ref":"canonical_inputs.manifest"}]},"to":"integrate"}]},
+    {"id":"integrate","algorithm":"ai.work","phase":"work","inputs":{"manifest":{"ref":"canonical_inputs.manifest"}},
+     "parameters":{"scope":"명시면 homography 역매핑과 XYZ공통소유로 개별raster출력, 기존prefab동일인스턴스에 역할도면배치. 캐릭터/카메라/기존지붕프레임계약보존. 변환은정규화와구분. 기존출력보존."},
+     "reads":["design:B35-canonical","art:B35-sources"],"writes":["art:B35-derived","unity:B35-building"],
+     "question":"고정계산과UnityEditor API로통합하고 실제build report 반환.","output_schema":{"report":{"type":"string"}},"edges":[{"when":{"op":"known","args":[{"ref":"integrate.report"}]},"to":"observe"}]},
+    {"id":"observe","algorithm":"ai.work","phase":"work","inputs":{"report":{"ref":"integrate.report"}},
+     "parameters":{"scope":"실제기존Player/Camera로출입·필요통로·가림·픽셀표시와실내스크린샷관찰. 실제Console전후응답보존. 미술적승인은자체판정금지."},
+     "reads":["unity:B35-building","art:B35-derived"],"writes":["artifacts:B35-observation"],
+     "question":"실제화면과API관측을저장하고경로반환.","output_schema":{"readback":{"type":"string"}},"edges":[{"when":{"op":"known","args":[{"ref":"observe.readback"}]},"to":"validate"}]},
+    {"id":"validate","algorithm":"command.run","phase":"validation","inputs":{"stdin":{"ref":"observe"}},
+     "parameters":{"argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-B","Tools/Building35/validate_delivery.py"],"cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game","timeout":30,"code_files":["Tools/Building35/validate_delivery.py"]},"reads":["artifacts:B35-observation","art:B35-derived"],"writes":["artifacts:B35-delivery"],
+     "edges":[{"when":{"op":"eq","args":[{"ref":"validate.exit_code"},{"literal":0}]},"to":"@complete"},{"when":{"op":"ne","args":[{"ref":"validate.exit_code"},{"literal":0}]},"to":"@blocked"}]}
+  ]
+}

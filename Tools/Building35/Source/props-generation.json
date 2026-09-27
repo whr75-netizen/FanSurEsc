@@ -1,0 +1,75 @@
+{
+  "schema": "building35-guided-props-generation/1",
+  "provider": "builtin-image_gen",
+  "mode": "edit",
+  "transparent_background": true,
+  "reference": "Tools/Building34/Source/master-reference.png",
+  "reference_roles": "First input: mathematical projection guide. Second input: style/material reference only.",
+  "status": "generated-unnormalized-source; not user-approved or exact-projection-certified",
+  "requested_canvas": [
+    1024,
+    1024
+  ],
+  "returned_canvas": [
+    1254,
+    1254
+  ],
+  "postprocess": "None. Original tool outputs copied byte-for-byte; source images were not resized, cropped or painted.",
+  "observation": "Each output visually inspected. Crate and barrel broadly follow guide projection; plant replaces the guide box with foliage and a round ceramic pot. No floor background. Prompt adherence does not prove identical guide coordinates, exact axes or a regular native pixel grid. Alpha channel spans 0..255.",
+  "assets": [
+    {
+      "id": "crate",
+      "original": "C:/Users/JG/.codex/generated_images/01a0e17b-7208-7683-aaf7-40ca095eaeef/exec-e5cd1fc9-d0ea-40a5-b288-efdd3bbc9835.png",
+      "sha256": "2f4bc2ac03eb706fcdcf480f828e14ad78872cf0b12ec4fd6b6c0922faf905f5",
+      "source_path": "Tools/Building35/Source/crate.png",
+      "guide_path": "Tools/Building35/Guides/crate.png",
+      "prompt_path": "Tools/Building35/Source/crate-prompt.txt",
+      "generation_count": 1,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "barrel",
+      "original": "C:/Users/JG/.codex/generated_images/01a0e17b-7208-7683-aaf7-40ca095eaeef/exec-991c89b5-5fd8-40e0-a1ca-1b2b738532df.png",
+      "sha256": "7be7ae6a545f1138260a1fda06a9160afd815a2b67e38d8aaae85e5947ca6e7c",
+      "source_path": "Tools/Building35/Source/barrel.png",
+      "guide_path": "Tools/Building35/Guides/barrel.png",
+      "prompt_path": "Tools/Building35/Source/barrel-prompt.txt",
+      "generation_count": 1,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "plant",
+      "original": "C:/Users/JG/.codex/generated_images/01a0e17b-7208-7683-aaf7-40ca095eaeef/exec-b6be7f6a-2aff-4ecb-9e5a-baf17c606a33.png",
+      "sha256": "7b1aa881c68c3edb9ef475ca85c4f3cf608ff4383212b3d4394a14207ffdc563",
+      "source_path": "Tools/Building35/Source/plant.png",
+      "guide_path": "Tools/Building35/Guides/plant.png",
+      "prompt_path": "Tools/Building35/Source/plant-prompt.txt",
+      "generation_count": 1,
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    }
+  ]
+}

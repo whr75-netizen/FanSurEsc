@@ -1,0 +1,52 @@
+{
+  "schema": "building35-generated-source/1",
+  "id": "cleaning",
+  "created": "2026-09-27",
+  "tool": "builtin image_gen.imagegen",
+  "tool_model": "not_exposed",
+  "generation_count": 1,
+  "pre_generation_input_error_count": 1,
+  "pre_generation_input_error": "An invalid duplicated directory in style-reference path was rejected before generation; corrected to the existing viewed file.",
+  "mode": "guide_surface_edit_with_style_reference",
+  "prompt_file": "Tools/Building35/Source/cleaning-prompt.txt",
+  "inputs": [
+    {
+      "role": "geometric_edit_target",
+      "path": "Tools/Building35/Guides/cleaning.png",
+      "sha256": "df9a9c5d3da52d397dc0613a9cfc75bd857f72099de9b437373f0395a3897978"
+    },
+    {
+      "role": "style_reference_only",
+      "path": "Tools/Building34/Source/master-reference.png",
+      "sha256": "d7943116a6d4a8ae562b5f83caff96bc6751a20bbec31babd3a4a1c8333273f9"
+    }
+  ],
+  "transparent_background_requested": true,
+  "generated_path": "C:/Users/JG/.codex/generated_images/01a0e177-8c1b-7270-add1-7dd87c389730/exec-16537acf-b939-43c2-ac98-6e9f38d46251.png",
+  "saved_path": "Tools/Building35/Source/cleaning.png",
+  "sha256": "c72a8e7b5f2cba9501262a11a90af09f6d43cd7d644f1a8a7ba0e4bb46a9e4c7",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "mode_rgba": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "bbox_alpha_nonzero": [
+    97,
+    21,
+    1134,
+    1198
+  ],
+  "preservation": "copied original bytes; no crop, resize, repaint or alpha cleanup",
+  "inspection": {
+    "visual_note": "청록 프레임/크림 패널, +Z 사용면이 숨는 뒤·옆판, 불필요한 물품 없음. source가 실제 문을 가지는 3D 모델이라는 뜻은 아님.",
+    "geometry_validation": "not_run",
+    "pixel_grid_validation": "separate upstream automatic receipt; artistic preservation not certified",
+    "art_approval": "not_claimed",
+    "alpha_note": "nonzero-alpha bbox includes faint alpha outside apparent object"
+  },
+  "unity_changes": false
+}

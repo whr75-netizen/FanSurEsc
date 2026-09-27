@@ -1,0 +1,53 @@
+{
+  "id": "rear_shelf",
+  "source": "docs/artifacts/building34/native/rear_shelf/native.png",
+  "source_sha256": "94b89773092c0a68ee2c29469220d147d69f22d9c155825e9f7f8b0c67ba5c9d",
+  "width": 320,
+  "height": 360,
+  "ppu": 127,
+  "left": -1.2598425196850394,
+  "top": 2.1968503937007875,
+  "opaque_pixels": 74682,
+  "faces": [
+    {
+      "id": "top_y_max",
+      "reprojection_residual": 5.684341886080802e-14,
+      "written_pixels": 14037,
+      "holdout": []
+    },
+    {
+      "id": "front_z_min",
+      "reprojection_residual": 1.1368683772161603e-13,
+      "written_pixels": 50042,
+      "holdout": [
+        {
+          "id": "upper_shelf_front_lip",
+          "slope": -0.5104874045252323,
+          "target": -0.5,
+          "residual_px": 2.5553290432421534
+        },
+        {
+          "id": "lower_cabinet_top_edge",
+          "slope": -0.5144996559606416,
+          "target": -0.5,
+          "residual_px": 3.5611028193554546
+        }
+      ]
+    },
+    {
+      "id": "end_x_min",
+      "reprojection_residual": 5.684341886080802e-14,
+      "written_pixels": 10603,
+      "holdout": []
+    }
+  ],
+  "declared_limitations": [
+    "This is an urgent bounded three-face envelope experiment, not certified plane reconstruction or a production-ready asset.",
+    "The shelf has overhanging cap, feet, multiple shelf depths and rounded products. A single cuboid cannot give all their edges the physically correct angle.",
+    "Target edge orientation is determined exactly by the camera/template; original interior edges are only correct if the source region actually obeys one projective plane. Test holdouts, not the four fitted corners alone.",
+    "Nearest sampling preserves selected source colors, not every source texel or all small features. Track provenance and compression.",
+    "No hidden surfaces are available. No target view rotation is supported by this single-view experiment.",
+    "Counter register, bags and other raised props are explicitly outside this whole-three-face method."
+  ],
+  "spec": "docs\\artifacts\\building35\\rear-experiment\\spec.json"
+}

@@ -1,0 +1,50 @@
+{
+  "schema": "building35-generated-source/1",
+  "id": "counter",
+  "created": "2026-09-27",
+  "tool": "builtin image_gen.imagegen",
+  "tool_model": "not_exposed",
+  "generation_count": 1,
+  "mode": "guide_surface_edit_with_style_reference",
+  "prompt_file": "Tools/Building35/Source/counter-prompt.txt",
+  "inputs": [
+    {
+      "role": "geometric_edit_target",
+      "path": "Tools/Building35/Guides/counter.png",
+      "sha256": "432618c95e0d93c06199af60cc4b670ce10d0dc66495f3688163462f03bd3665"
+    },
+    {
+      "role": "style_reference_only",
+      "path": "Tools/Building34/Source/master-reference.png",
+      "sha256": "d7943116a6d4a8ae562b5f83caff96bc6751a20bbec31babd3a4a1c8333273f9"
+    }
+  ],
+  "transparent_background_requested": true,
+  "generated_path": "C:/Users/JG/.codex/generated_images/01a0e177-8c1b-7270-add1-7dd87c389730/exec-961f1030-5cab-482e-82a8-d5225badffc8.png",
+  "saved_path": "Tools/Building35/Source/counter.png",
+  "sha256": "627c8960ff2a90af7f4ce5dfb5b5fb45482cb6a446b6a0c8abdf98137b917712",
+  "dimensions": [
+    1254,
+    1254
+  ],
+  "mode_rgba": "RGBA",
+  "alpha_extrema": [
+    0,
+    255
+  ],
+  "bbox_alpha_nonzero": [
+    0,
+    9,
+    1220,
+    1216
+  ],
+  "preservation": "copied original bytes; no crop, resize, normalization, repaint or alpha cleanup",
+  "inspection": {
+    "visual_note": "한 개의 청록 계산대와 빈 목재 상판, 가이드와 같은 긴 면의 방향을 육안 확인; 정량 면 각도/실루엣 판정은 미실행.",
+    "geometry_validation": "not_run",
+    "pixel_grid_validation": "not_run",
+    "art_approval": "not_claimed",
+    "alpha_note": "nonzero-alpha bbox is not a solid-silhouette fit; generated faint alpha may extend outside the apparent object"
+  },
+  "unity_changes": false
+}

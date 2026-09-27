@@ -1,0 +1,143 @@
+{
+  "id": "stock_shelf",
+  "source": "docs/artifacts/building34/native/stock_shelf/native.png",
+  "ppu": 127,
+  "preserve_outline": true,
+  "faces": [
+    {
+      "id": "virtual_top_envelope",
+      "source_xy": [
+        [
+          15.5,
+          31.5
+        ],
+        [
+          39.5,
+          12.5
+        ],
+        [
+          171.5,
+          75.5
+        ],
+        [
+          148.5,
+          89.5
+        ]
+      ],
+      "xyz": [
+        [
+          1.225,
+          1.8,
+          -0.3
+        ],
+        [
+          1.225,
+          1.8,
+          0.3
+        ],
+        [
+          -1.225,
+          1.8,
+          0.3
+        ],
+        [
+          -1.225,
+          1.8,
+          -0.3
+        ]
+      ]
+    },
+    {
+      "id": "front_z_min",
+      "source_xy": [
+        [
+          15.5,
+          31.5
+        ],
+        [
+          148.5,
+          89.5
+        ],
+        [
+          148.5,
+          218.5
+        ],
+        [
+          14.5,
+          154.5
+        ]
+      ],
+      "xyz": [
+        [
+          1.225,
+          1.8,
+          -0.3
+        ],
+        [
+          -1.225,
+          1.8,
+          -0.3
+        ],
+        [
+          -1.225,
+          0.0,
+          -0.3
+        ],
+        [
+          1.225,
+          0.0,
+          -0.3
+        ]
+      ]
+    },
+    {
+      "id": "end_x_min",
+      "source_xy": [
+        [
+          148.5,
+          89.5
+        ],
+        [
+          171.5,
+          75.5
+        ],
+        [
+          172.5,
+          200.5
+        ],
+        [
+          148.5,
+          218.5
+        ]
+      ],
+      "xyz": [
+        [
+          -1.225,
+          1.8,
+          -0.3
+        ],
+        [
+          -1.225,
+          1.8,
+          0.3
+        ],
+        [
+          -1.225,
+          0.0,
+          0.3
+        ],
+        [
+          -1.225,
+          0.0,
+          -0.3
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Open-frame rack has no continuous top. Top corners are post cap centers; the top polygon contains crate tops and empty space. It is a virtual image layer, not actual plywood or a physical roof.",
+    "Side braces and shelf goods are at multiple depths. End polygon preserves their painted fixed-view appearance but not correct per-part surface depth or lighting normals.",
+    "Alpha holes must remain transparent with invalid depth. Rendering an opaque top/end quad would introduce a regression.",
+    "Post cap diamonds and feet extend 3-6 native pixels outside centerline corner polygons. Quantify omitted texels; do not fix by source UV clamp or arbitrary expansion of each face."
+  ]
+}

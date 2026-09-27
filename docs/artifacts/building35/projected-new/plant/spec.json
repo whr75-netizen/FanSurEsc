@@ -1,0 +1,56 @@
+{
+  "id": "plant",
+  "source": "docs/artifacts/building35/native/plant/native.png",
+  "ppu": 127,
+  "preserve_outline": false,
+  "faces": [
+    {
+      "id": "upright_2d_sprite",
+      "source_xy": [
+        [
+          36.5,
+          11.5
+        ],
+        [
+          141.5,
+          11.5
+        ],
+        [
+          141.5,
+          174.5
+        ],
+        [
+          36.5,
+          174.5
+        ]
+      ],
+      "xyz": [
+        [
+          -0.19723652069956568,
+          1.0,
+          0.19723652069956568
+        ],
+        [
+          0.19723652069956568,
+          1.0,
+          -0.19723652069956568
+        ],
+        [
+          0.19723652069956568,
+          0.0,
+          -0.19723652069956568
+        ],
+        [
+          -0.19723652069956568,
+          -0.0,
+          0.19723652069956568
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Explicit upright 2D sprite with a shared foot anchor, not reconstructed 3D planes.",
+    "Generated guide establishes the painted view. Organic/detail shapes retain their source aspect; no mathematical internal-angle guarantee.",
+    "Height is the declared 2D presentation extent. Collider footprint is a conservative role-plan proxy."
+  ]
+}

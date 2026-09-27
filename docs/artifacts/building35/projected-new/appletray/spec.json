@@ -1,0 +1,56 @@
+{
+  "id": "appletray",
+  "source": "docs/artifacts/building35/native/produce/native.png",
+  "ppu": 127,
+  "preserve_outline": false,
+  "faces": [
+    {
+      "id": "upright_2d_sprite",
+      "source_xy": [
+        [
+          14.5,
+          34.5
+        ],
+        [
+          186.5,
+          34.5
+        ],
+        [
+          186.5,
+          147.5
+        ],
+        [
+          14.5,
+          147.5
+        ]
+      ],
+      "xyz": [
+        [
+          -0.11651333953504052,
+          0.25,
+          0.11651333953504052
+        ],
+        [
+          0.11651333953504052,
+          0.25,
+          -0.11651333953504052
+        ],
+        [
+          0.11651333953504052,
+          0.0,
+          -0.11651333953504052
+        ],
+        [
+          -0.11651333953504052,
+          -0.0,
+          0.11651333953504052
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Explicit upright 2D sprite with a shared foot anchor, not reconstructed 3D planes.",
+    "Generated guide establishes the painted view. Organic/detail shapes retain their source aspect; no mathematical internal-angle guarantee.",
+    "Height is the declared 2D presentation extent. Collider footprint is a conservative role-plan proxy."
+  ]
+}

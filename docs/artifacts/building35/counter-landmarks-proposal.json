@@ -1,0 +1,90 @@
+{
+  "schema": "building35-manual-plane-landmarks/1",
+  "status": "proposed_body_and_attachment_experiment_not_validated_geometry",
+  "asset_id": "counter",
+  "source": {
+    "native_path": "docs/artifacts/building34/native/counter/native.png",
+    "native_dimensions": [274, 228],
+    "native_sha256": "95f226b6a8300ed205aac0b29d7aafe7b311eae5de5ba6fa4b94df8899505737",
+    "original_path": "Tools/Building33/Source/counter.png",
+    "original_dimensions": [1374, 1145],
+    "original_sha256": "be8af789808b3655f6528c262e64fcfc0d14db5f51c7bcca64f0a3e35fc9cb16",
+    "receipt_path": "docs/artifacts/building34/native/counter/receipt.json",
+    "original_correspondence": "Use receipt.refined_grid source center arrays; do not infer a uniform scale from image dimensions.",
+    "coordinate_convention": "Native pixel-boundary coordinates, (0,0) top-left outer corner, pixel center at (i+.5,j+.5), y down.",
+    "annotation_method": "Manual visible-corner and prop-region annotation. Masks are provisional polygons, not certified segmentation. Native PNG and alpha/RGB boundary scans were inspected.",
+    "visible_corner_uncertainty_native_px": 2.0
+  },
+  "target": {
+    "source_contract": "docs/artifacts/building32/layout-plan.json: fixture checkout",
+    "width_x_m": 2.4,
+    "depth_z_m": 0.8,
+    "body_height_y_m": 1.0,
+    "ppu": 127,
+    "camera_pitch_deg": 30,
+    "camera_yaw_deg": 45,
+    "right": [0.7071067811865476, 0.0, -0.7071067811865476],
+    "up": [0.3535533905932738, 0.8660254037844386, 0.3535533905932738],
+    "forward": [0.6123724356957945, -0.5, 0.6123724356957945],
+    "projection": "screen=(ppu*dot(right,X)+originX,-ppu*dot(up,X)+originY)",
+    "source_axis_binding": "Source long left-to-right direction maps +X to -X, as in rear-shelf proposal. Source right end maps target Xmin. Appearance is reflected using the declared symmetric-end approximation; unseen end texture is not recovered."
+  },
+  "shared_vertices": {
+    "A_front_x_plus_top": {"source": [21.0, 77.0], "target_xyz": [1.2, 1.0, -0.4], "observation": "visible countertop front-left edge"},
+    "B_front_x_minus_top": {"source": [198.0, 150.0], "target_xyz": [-1.2, 1.0, -0.4], "observation": "visible countertop front-right junction"},
+    "C_back_x_minus_top": {"source": [254.0, 124.0], "target_xyz": [-1.2, 1.0, 0.4], "observation": "visible countertop back-right outer corner"},
+    "D_back_x_plus_top": {"source": [77.0, 51.0], "target_xyz": [1.2, 1.0, 0.4], "observation": "OCCLUDED by register: inferred A+C-B under affine/parallelogram assumption, NOT measured source corner", "uncertainty_native_px": null},
+    "E_front_x_plus_ground": {"source": [24.0, 146.0], "target_xyz": [1.2, 0.0, -0.4], "observation": "visible front-left bottom trim"},
+    "F_front_x_minus_ground": {"source": [196.0, 222.0], "target_xyz": [-1.2, 0.0, -0.4], "observation": "visible nearest bottom corner"},
+    "G_back_x_minus_ground": {"source": [253.0, 196.0], "target_xyz": [-1.2, 0.0, 0.4], "observation": "visible right end bottom corner"}
+  },
+  "faces": [
+    {"id": "top_y_max", "vertices": ["A_front_x_plus_top", "D_back_x_plus_top", "C_back_x_minus_top", "B_front_x_minus_top"], "subtract_source_regions": ["register_group", "paper_bag_group"], "support": "Partial tabletop only. D is occluded and inferred; under-prop pixels are missing, not wood samples."},
+    {"id": "front_z_min", "vertices": ["A_front_x_plus_top", "B_front_x_minus_top", "F_front_x_minus_ground", "E_front_x_plus_ground"], "support": "Cabinet facade envelope; countertop thickness, trim and feet remain planar painted details."},
+    {"id": "end_x_min", "vertices": ["B_front_x_minus_top", "C_back_x_minus_top", "G_back_x_minus_ground", "F_front_x_minus_ground"], "support": "End-panel envelope, not exact protruding trim geometry."}
+  ],
+  "attachment_regions": [
+    {
+      "id": "register_group",
+      "bbox_xyxy_exclusive": [28, 25, 114, 98],
+      "candidate_source_polygon": [[29,50],[43,46],[47,28],[69,31],[71,43],[77,42],[89,49],[92,55],[108,62],[112,80],[111,87],[83,96],[30,75]],
+      "source_ground_anchor": [82.0, 94.0],
+      "anchor_surface": "top_y_max",
+      "semantic_contents": "Register plus the adjacent small cylindrical till accessory; fixed-view painted group.",
+      "segmentation_status": "MANUAL_CANDIDATE_REQUIRES_BOUNDARY_OVERLAY; polygon may include tabletop or omit 1-2px detail. Do not call bbox a cutout mask."
+    },
+    {
+      "id": "paper_bag_group",
+      "bbox_xyxy_exclusive": [173, 79, 240, 139],
+      "candidate_source_polygon": [[175,115],[187,109],[198,111],[204,91],[208,84],[216,81],[233,90],[237,122],[221,128],[213,129],[211,135],[200,137],[193,130],[182,125],[175,120]],
+      "source_ground_anchor": [212.0, 130.0],
+      "anchor_surface": "top_y_max",
+      "semantic_contents": "Paper bags, folded paper/parcel and service bell stay one fixed-view layer to preserve their mutual source occlusion.",
+      "segmentation_status": "MANUAL_CANDIDATE_REQUIRES_BOUNDARY_OVERLAY; splitting bell separately requires another actual mask, not rectangle subtraction."
+    }
+  ],
+  "attachment_projection": {
+    "representation": "Camera-facing 2D planes with explicit surface attachment and depth; not a recovered 3D register or bag.",
+    "anchor": "Map source_ground_anchor through top_y_max homography to target screen, then intersect that screen ray with y=1.0 to obtain attachment world point.",
+    "offsets": "Keep attachment native texel spacing at common PPU127. World(p)=anchor+right*(source_x-anchor_x)/127-up*(source_y-anchor_y)/127. If horizontal source reflection is required by source_axis_binding, negate the horizontal term consistently with the body, using one declared flag.",
+    "depth_owner": "The same billboard plane owns its color/alpha/XYZ. The body face owns the body. Depth test decides overlap without unconditional overlay order.",
+    "coverage": "Compare missing warped tabletop region with projected attachment masks. Uncovered opaque tabletop holes are MISSING_SOURCE_SURFACE; do not fill by clamp, inpaint, duplicate props or border dilation.",
+    "limits": "The source props already carry their own drawn view and shading. This approximation only changes attachment position and physical pixel density. It cannot correct their detailed view angle, reveal hidden sides, or provide full volumetric relighting."
+  },
+  "raster_contract": {
+    "matrix": "Per-face getPerspectiveTransform with shared target vertices; all target geometry determined by one physical template and fixed camera.",
+    "sampling": "Inverse texel-center mapping, native nearest RGBA, no resize-to-old-slot and no second pixel normalization.",
+    "body_and_prop_source_ownership": "Every source opaque texel used by a prop is excluded from body face sampling. Record every omitted and multiply owned source texel.",
+    "edge_ownership": "One half-open/top-left coverage convention; shared target corner IDs.",
+    "allocate": "Compute output bounds from actual projected body and attachment vertices, not body bounding box alone."
+  },
+  "required_before_acceptance": [
+    "Review source corner and candidate prop-mask overlays against the native source.",
+    "Check a cabinet panel horizontal edge and at least two upright edges that did not define the homography. Fitted corner residual alone is insufficient.",
+    "Report inferred-corner D sensitivity and missing-source tabletop area.",
+    "Report Jacobian compression and actual source sample/critical feature survival.",
+    "Verify same-face color/alpha/depth ownership, including prop contact regions.",
+    "Show original native and projected output at honest 1x/common integer display scale."
+  ],
+  "excluded_claims": ["accurate complete 3D recovery", "automatic corner recovery", "every source pixel preserved", "all-angle compatibility", "correct prop-specific relighting", "finished counter asset"]
+}

@@ -1,0 +1,142 @@
+{
+  "id": "fridge",
+  "source": "docs/artifacts/building35/native/fridge/native.png",
+  "ppu": 127,
+  "preserve_outline": true,
+  "ground_from_source_outline": true,
+  "faces": [
+    {
+      "id": "top",
+      "source_xy": [
+        [
+          49,
+          31
+        ],
+        [
+          82,
+          14
+        ],
+        [
+          170,
+          56
+        ],
+        [
+          136,
+          70
+        ]
+      ],
+      "xyz": [
+        [
+          0.775,
+          1.9,
+          -0.325
+        ],
+        [
+          0.775,
+          1.9,
+          0.325
+        ],
+        [
+          -0.775,
+          1.9,
+          0.325
+        ],
+        [
+          -0.775,
+          1.9,
+          -0.325
+        ]
+      ]
+    },
+    {
+      "id": "x_min",
+      "source_xy": [
+        [
+          49,
+          31
+        ],
+        [
+          136,
+          70
+        ],
+        [
+          136,
+          188
+        ],
+        [
+          49,
+          141
+        ]
+      ],
+      "xyz": [
+        [
+          0.775,
+          1.9,
+          -0.325
+        ],
+        [
+          -0.775,
+          1.9,
+          -0.325
+        ],
+        [
+          -0.775,
+          0,
+          -0.325
+        ],
+        [
+          0.775,
+          0,
+          -0.325
+        ]
+      ]
+    },
+    {
+      "id": "z_min",
+      "source_xy": [
+        [
+          136,
+          70
+        ],
+        [
+          170,
+          56
+        ],
+        [
+          170,
+          170
+        ],
+        [
+          136,
+          188
+        ]
+      ],
+      "xyz": [
+        [
+          -0.775,
+          1.9,
+          -0.325
+        ],
+        [
+          -0.775,
+          1.9,
+          0.325
+        ],
+        [
+          -0.775,
+          0,
+          0.325
+        ],
+        [
+          -0.775,
+          0,
+          -0.325
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Painted fixed-view planes; source corner annotation uncertainty 1-2 texels.",
+    "Symmetric side-panel appearance reused for the required visible end."
+  ]
+}

@@ -1,0 +1,128 @@
+{
+  "schema": "building35-manual-plane-landmarks-collection/1",
+  "status": "manual_candidates_not_rendered_or_validated",
+  "common": {
+    "coordinate_convention": "Native pixel-boundary coordinates: origin upper-left, y down, texel centers (i+.5,j+.5). Approximate visible boundary landmarks; not recovered geometry.",
+    "annotation_uncertainty_native_px": 2.0,
+    "ppu": 127,
+    "camera_pitch_deg": 30,
+    "camera_yaw_deg": 45,
+    "right": [0.7071067811865476,0.0,-0.7071067811865476],
+    "up": [0.3535533905932738,0.8660254037844386,0.3535533905932738],
+    "forward": [0.6123724356957945,-0.5,0.6123724356957945],
+    "source_correspondence": "Each native folder receipt.json contains original-source center arrays; do not use a uniform dimension ratio.",
+    "raster_contract": "Per-face inverse homography, original native nearest RGBA, source alpha and polygon jointly mask coverage, shared target edge ownership, color/alpha/depth from same face. Record omitted source texels and target missing surfaces. No forced resize to previous sprite slot.",
+    "evidence_scope": "Source images and alpha/RGB boundaries inspected; JSON/hash/nondegenerate polygons checked. No generated outputs or Unity integration by this annotation task."
+  },
+  "assets": [
+    {
+      "asset_id": "left_shelf",
+      "source": {
+        "native_path": "docs/artifacts/building34/native/left_shelf/native.png",
+        "native_dimensions": [206,277],
+        "native_sha256": "dfc8ae47e0d4919d56c877255fc6b97af412cb91367bdb9e00282bda88c14cca",
+        "original_path": "Tools/Building33/Source/left_shelf.png",
+        "original_dimensions": [1122,1402],
+        "original_sha256": "cb51e8b099367333c303ced3e36c7b5c3a330e4e2eb28a8d29cee5db4c08058f",
+        "original_sha256_note": "Use receipt source_sha256 as authority; native hash is the frozen experiment input."
+      },
+      "target": {
+        "source_contract": "B32 shelf dimensions; parent B35 placement correction: right_sales_shelf",
+        "width_x_m": 0.6,
+        "depth_z_m": 2.4,
+        "height_y_m": 1.8,
+        "center_xz": [4.55,-0.5],
+        "semantic_interaction_facing": "-X",
+        "rendered_facade_candidate": "Xmin",
+        "binding_status": "PARENT_SELECTED_VISIBLE_FRONT_WITH_PLACEMENT_CORRECTION",
+        "facing_resolution": "Original B32 left-wall +X front faced away from camera. Parent moved shelf to right wall, center(4.55,-.5), with gameplay front -X. Xmin painted front now agrees with visible geometric face. Old collider/use area must be moved consistently by the sole Unity writer."
+      },
+      "shared_vertices": {
+        "A": {"source": [60.0,95.0], "target_xyz": [-0.3,1.8,-1.2]},
+        "B": {"source": [174.0,34.0], "target_xyz": [-0.3,1.8,1.2]},
+        "C": {"source": [154.0,23.0], "target_xyz": [0.3,1.8,1.2]},
+        "D": {"source": [39.0,84.0], "target_xyz": [0.3,1.8,-1.2]},
+        "E": {"source": [59.0,260.0], "target_xyz": [-0.3,0.0,-1.2]},
+        "F": {"source": [174.0,204.0], "target_xyz": [-0.3,0.0,1.2]},
+        "G": {"source": [34.0,246.0], "target_xyz": [0.3,0.0,-1.2]}
+      },
+      "faces": [
+        {"id": "top", "vertices": ["A","D","C","B"]},
+        {"id": "fixed_view_facade_x_min", "vertices": ["A","B","F","E"]},
+        {"id": "end_z_min", "vertices": ["D","A","E","G"]}
+      ],
+      "source_regions_not_on_three_planes": [
+        "Post caps rise above the main top slab around native (154,18), (175,30), (39,81). These are not covered by the top-board polygon and must not silently disappear.",
+        "Hanging leaves on the end panel are flattened painted details; shelf goods have different depths.",
+        "The left body post bottom extends slightly beyond the annotated end polygon; quantify actual omitted opaque cells before accepting."
+      ],
+      "acceptance_requirements": ["Verify corrected right-wall placement/collider/use area share -X front", "Overlay corners and omission mask on source", "Check shelf lips and two uprights as independent holdouts"]
+    },
+    {
+      "asset_id": "stock_shelf",
+      "source": {
+        "native_path": "docs/artifacts/building34/native/stock_shelf/native.png",
+        "native_dimensions": [185,228],
+        "native_sha256": "f0df0a231dbb670af2985e79fd455b07606715c29cbefa69b5fca309629f7ab4",
+        "original_path": "Tools/Building33/Source/stock_shelf.png",
+        "original_dimensions": [1133,1388],
+        "original_sha256": "5c5f588b45a505bf53286ccb0aeb8175989529a82792fe46fec66790e9237e53"
+      },
+      "target": {"source_contract": "B32 fixture stock_shelf", "width_x_m": 2.45, "depth_z_m": 0.6, "height_y_m": 1.8, "semantic_interaction_facing": "-Z", "source_axis_binding": "Source left-to-right long direction maps +X to -X; source right end maps Xmin. One declared appearance reflection."},
+      "shared_vertices": {
+        "A": {"source": [16.0,32.0], "target_xyz": [1.225,1.8,-0.3]},
+        "B": {"source": [149.0,90.0], "target_xyz": [-1.225,1.8,-0.3]},
+        "C": {"source": [172.0,76.0], "target_xyz": [-1.225,1.8,0.3]},
+        "D": {"source": [40.0,13.0], "target_xyz": [1.225,1.8,0.3]},
+        "E": {"source": [15.0,155.0], "target_xyz": [1.225,0.0,-0.3]},
+        "F": {"source": [149.0,219.0], "target_xyz": [-1.225,0.0,-0.3]},
+        "G": {"source": [173.0,201.0], "target_xyz": [-1.225,0.0,0.3]}
+      },
+      "faces": [
+        {"id": "virtual_top_envelope", "vertices": ["A","D","C","B"]},
+        {"id": "front_z_min", "vertices": ["A","B","F","E"]},
+        {"id": "end_x_min", "vertices": ["B","C","G","F"]}
+      ],
+      "source_regions_not_on_three_planes": [
+        "Open-frame rack has no continuous top. Top corners are post cap centers; the top polygon contains crate tops and empty space. It is a virtual image layer, not actual plywood or a physical roof.",
+        "Side braces and shelf goods are at multiple depths. End polygon preserves their painted fixed-view appearance but not correct per-part surface depth or lighting normals.",
+        "Alpha holes must remain transparent with invalid depth. Rendering an opaque top/end quad would introduce a regression.",
+        "Post cap diamonds and feet extend 3-6 native pixels outside centerline corner polygons. Quantify omitted texels; do not fix by source UV clamp or arbitrary expansion of each face."
+      ],
+      "acceptance_requirements": ["Preserve source alpha holes", "Report discarded post-cap/foot pixels", "Check shelf edge and upright holdouts", "Reject if material-depth behavior requires true shelves rather than fixed-view image layers"]
+    },
+    {
+      "asset_id": "island",
+      "source": {
+        "native_path": "docs/artifacts/building34/native/island/native.png",
+        "native_dimensions": [176,138],
+        "native_sha256": "03d4bf66a48ff4dde17f5aca09ad3095da167ad52860cadb79e02a162f0294da",
+        "original_path": "Tools/Building33/Source/island.png",
+        "original_dimensions": [1426,1103],
+        "original_sha256": "902e052eedd5a2edd12b994d1813febc916c39b86b6e786f08e72c00933302a3"
+      },
+      "target": {"source_contract": "B32 fixture display_island", "width_x_m": 1.6, "depth_z_m": 1.2, "height_y_m": 0.85, "semantic_interaction_facing": "-X", "source_axis_binding": "Drawer facade maps Xmin, with long source direction mapping +Z to -Z. This matches declared facing but gives facade physical width1.2m and end width1.6m; source artwork visually suggests the reverse proportion. Record anisotropic distortion instead of changing B32 dimensions implicitly."},
+      "shared_vertices": {
+        "A": {"source": [51.0,85.0], "target_xyz": [-0.8,0.85,0.6]},
+        "B": {"source": [172.0,51.0], "target_xyz": [-0.8,0.85,-0.6]},
+        "C": {"source": [130.0,27.0], "target_xyz": [0.8,0.85,-0.6], "observation": "OCCLUDED by goods, inferred A/C/B/D parallelogram from visible outer table edges; not observed material"},
+        "D": {"source": [9.0,61.0], "target_xyz": [0.8,0.85,0.6]},
+        "E": {"source": [52.0,130.0], "target_xyz": [-0.8,0.0,0.6]},
+        "F": {"source": [166.0,100.0], "target_xyz": [-0.8,0.0,-0.6]},
+        "G": {"source": [12.0,105.0], "target_xyz": [0.8,0.0,0.6]}
+      },
+      "faces": [
+        {"id": "partially_occluded_top", "vertices": ["A","D","C","B"]},
+        {"id": "drawer_facade_x_min", "vertices": ["A","B","F","E"]},
+        {"id": "end_z_plus", "vertices": ["D","A","E","G"], "limitation": "This selected visible-source end maps a far Zplus face under the declared camera. A face-facing/visibility conflict exists; do not integrate as convex three-face depth without rebinding source appearance or explicitly changing facade convention."}
+      ],
+      "source_regions_not_on_three_planes": [
+        "Fruit basket, vegetables, flowers and folded linens rise above tabletop. Applying tabletop H to the full image will flatten or truncate them.",
+        "Most tabletop rear edge and surface behind goods is hidden; there is no complete empty-table source.",
+        "Current B32 facing/dimensions cannot simultaneously preserve the source long drawer facade and its shown side without a declared reflection/facing convention."
+      ],
+      "recommendation": "RETIRED: parent selected new empty-counter body reused at W1.6,D1.2,H.65, center(1.8,-2.1), plus separate product layers. The existing island source annotation below is diagnostic reference only and must not be consumed by the new pipeline.",
+      "status": "RETIRED_NOT_FOR_PROJECTION_OR_INTEGRATION"
+    }
+  ]
+}

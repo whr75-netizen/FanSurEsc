@@ -1,0 +1,39 @@
+{
+  "id": "plant",
+  "source": "docs/artifacts/building35/native/plant/native.png",
+  "source_sha256": "a7f996ad60e41bbd4c9f413ee78f78a4067bd09bbe5d04cc2580531b14cb2825",
+  "width": 76,
+  "height": 115,
+  "ppu": 127,
+  "left": -0.2992125984251969,
+  "top": 0.8818897637795275,
+  "opaque_pixels": 4261,
+  "faces": [
+    {
+      "id": "upright_2d_sprite",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 4261,
+      "holdout": []
+    }
+  ],
+  "source_outline_pixels_outside_landmark_quads": 0,
+  "outline_policy": "quad only; experimental crop",
+  "ground_shift_from_measured_outline_m": 0.0,
+  "support_height": 0.0,
+  "surface_xyz_min": [
+    -0.1920880675315857,
+    0.004546064883470535,
+    -0.1920880675315857
+  ],
+  "surface_xyz_max": [
+    0.1920880675315857,
+    0.9955882430076599,
+    0.1920880675315857
+  ],
+  "declared_limitations": [
+    "Explicit upright 2D sprite with a shared foot anchor, not reconstructed 3D planes.",
+    "Generated guide establishes the painted view. Organic/detail shapes retain their source aspect; no mathematical internal-angle guarantee.",
+    "Height is the declared 2D presentation extent. Collider footprint is a conservative role-plan proxy."
+  ],
+  "spec": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building35\\projected-new\\plant\\spec.json"
+}

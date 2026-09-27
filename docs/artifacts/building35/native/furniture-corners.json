@@ -1,0 +1,387 @@
+{
+  "schema": "building35-source-face-corner-candidates/1",
+  "status": "authored_landmark_candidates_not_projection_validation",
+  "date": "2026-09-27",
+  "coordinate_contract": {
+    "space": "native.png image pixel-centre indices",
+    "origin": "top-left sample centre = (0,0)",
+    "x": "right",
+    "y": "down",
+    "sample_centres": "integers; not i+0.5",
+    "not_coordinates_of": "PNG image frame; input guide frame; world-space target vertices",
+    "uncertainty": "Visual structural edge localization approximately 1-2 native pixels, larger at thick/bevelled borders; no subpixel precision claim"
+  },
+  "world_vertex_signs": {
+    "top_back": [
+      "+X",
+      "maxY",
+      "+Z"
+    ],
+    "top_left": [
+      "-X",
+      "maxY",
+      "+Z"
+    ],
+    "top_right": [
+      "+X",
+      "maxY",
+      "-Z"
+    ],
+    "top_near": [
+      "-X",
+      "maxY",
+      "-Z"
+    ],
+    "bottom_left": [
+      "-X",
+      "0",
+      "+Z"
+    ],
+    "bottom_right": [
+      "+X",
+      "0",
+      "-Z"
+    ],
+    "bottom_near": [
+      "-X",
+      "0",
+      "-Z"
+    ]
+  },
+  "face_shared_vertices": {
+    "top": [
+      "top_left",
+      "top_back",
+      "top_right",
+      "top_near"
+    ],
+    "x_min": [
+      "top_left",
+      "top_near",
+      "bottom_near",
+      "bottom_left"
+    ],
+    "z_min": [
+      "top_near",
+      "top_right",
+      "bottom_right",
+      "bottom_near"
+    ]
+  },
+  "measurement_procedure": [
+    "Opened each generated source and each native image; interpreted the actually drawn planes.",
+    "Read alpha>25/255 convex hull as silhouette location aid without modifying image alpha.",
+    "Used image colour profiles at shared visible top corner to distinguish top material plane from lower apron/brass strip.",
+    "Selected integer pixel-centre structural corners from the drawing. Outer alpha bbox, canvas corners and guide corners are recorded separately and never substituted for these landmarks."
+  ],
+  "normalization": {
+    "script": "Tools/Building33/native_normalize.py",
+    "runs_per_asset": 1,
+    "settings": "upstream auto grid, source RGB/RGBA unchanged, same detected sample centres for alpha",
+    "no_manual_grid_or_crop_or_resize": true,
+    "engine_selector": "C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/__init__.py",
+    "dependencies": "LocalOnly/PerfectPixelPalette_20260906/.deps"
+  },
+  "assets": [
+    {
+      "id": "counter",
+      "source_path": "Tools/Building35/Source/counter.png",
+      "native_path": "docs/artifacts/building35/native/counter/native.png",
+      "receipt_path": "docs/artifacts/building35/native/counter/receipt.json",
+      "native_dimensions": [
+        175,
+        178
+      ],
+      "native_sha256": "565cd40c73ae817bc929e94c18698c960dd10d8dd3a5138d458a1f2ebbb71a8c",
+      "canvas_frame_centres": [
+        [
+          0,
+          0
+        ],
+        [
+          174,
+          0
+        ],
+        [
+          174,
+          177
+        ],
+        [
+          0,
+          177
+        ]
+      ],
+      "opaque_bbox_alpha_gt_0p1_xyxy_exclusive": [
+        15,
+        24,
+        161,
+        154
+      ],
+      "corners": {
+        "top_back": [
+          124,
+          24
+        ],
+        "top_left": [
+          16,
+          79
+        ],
+        "top_right": [
+          159,
+          41
+        ],
+        "top_near": [
+          53,
+          97
+        ],
+        "bottom_left": [
+          16,
+          135
+        ],
+        "bottom_right": [
+          159,
+          97
+        ],
+        "bottom_near": [
+          54,
+          153
+        ]
+      },
+      "top_parallelogram_closure_delta_px": [
+        -2,
+        -1
+      ],
+      "notes": [
+        "Wood slab has visible thickness: top_near marks top-surface edge around y97, not lower apron edge y102 or brass fitting y104-109.",
+        "The teal front panels are represented inside the z_min face; no countertop prop needs separation."
+      ]
+    },
+    {
+      "id": "fridge",
+      "source_path": "Tools/Building35/Source/fridge.png",
+      "native_path": "docs/artifacts/building35/native/fridge/native.png",
+      "receipt_path": "docs/artifacts/building35/native/fridge/receipt.json",
+      "native_dimensions": [
+        220,
+        205
+      ],
+      "native_sha256": "77dd58e1fbc6a0ac939d94a56ef1778d8797933a597d4f42b89cc051ee96ede5",
+      "canvas_frame_centres": [
+        [
+          0,
+          0
+        ],
+        [
+          219,
+          0
+        ],
+        [
+          219,
+          204
+        ],
+        [
+          0,
+          204
+        ]
+      ],
+      "opaque_bbox_alpha_gt_0p1_xyxy_exclusive": [
+        48,
+        14,
+        172,
+        189
+      ],
+      "corners": {
+        "top_back": [
+          82,
+          14
+        ],
+        "top_left": [
+          49,
+          31
+        ],
+        "top_right": [
+          170,
+          56
+        ],
+        "top_near": [
+          136,
+          70
+        ],
+        "bottom_left": [
+          49,
+          141
+        ],
+        "bottom_right": [
+          170,
+          170
+        ],
+        "bottom_near": [
+          136,
+          188
+        ]
+      },
+      "top_parallelogram_closure_delta_px": [
+        1,
+        3
+      ],
+      "notes": [
+        "Two glass doors and contents are drawn on x_min (left wide visible face); narrow right z_min face is a side panel.",
+        "Top border is a few pixels thick; top_near is the roof/front/side junction, not a door-frame inner corner."
+      ]
+    },
+    {
+      "id": "utility",
+      "source_path": "Tools/Building35/Source/utility.png",
+      "native_path": "docs/artifacts/building35/native/utility/native.png",
+      "receipt_path": "docs/artifacts/building35/native/utility/receipt.json",
+      "native_dimensions": [
+        202,
+        201
+      ],
+      "native_sha256": "758495823ea0998104c8919362fa83d5d3ae49f06758f1745c49ef97a6657f69",
+      "canvas_frame_centres": [
+        [
+          0,
+          0
+        ],
+        [
+          201,
+          0
+        ],
+        [
+          201,
+          200
+        ],
+        [
+          0,
+          200
+        ]
+      ],
+      "opaque_bbox_alpha_gt_0p1_xyxy_exclusive": [
+        26,
+        18,
+        178,
+        186
+      ],
+      "corners": {
+        "top_back": [
+          131,
+          19
+        ],
+        "top_left": [
+          27,
+          72
+        ],
+        "top_right": [
+          176,
+          41
+        ],
+        "top_near": [
+          69,
+          98
+        ],
+        "bottom_left": [
+          27,
+          159
+        ],
+        "bottom_right": [
+          175,
+          127
+        ],
+        "bottom_near": [
+          69,
+          185
+        ]
+      },
+      "top_parallelogram_closure_delta_px": [
+        3,
+        -4
+      ],
+      "notes": [
+        "Visible long z_min face is the rear panel with no handles, preserving +Z use direction.",
+        "top_near uses the top wood surface ending at y98; dark wood apron y99-103 is below that point.",
+        "Inset basin is integrated painted depth, not recovered 3D geometry; its internal edges are not among the seven outer landmarks."
+      ]
+    },
+    {
+      "id": "cleaning",
+      "source_path": "Tools/Building35/Source/cleaning.png",
+      "native_path": "docs/artifacts/building35/native/cleaning/native.png",
+      "receipt_path": "docs/artifacts/building35/native/cleaning/receipt.json",
+      "native_dimensions": [
+        248,
+        250
+      ],
+      "native_sha256": "9fbb39e8da5070eea3ade3e61647d478dc02ccf7a36f13201f02a77d46cec319",
+      "canvas_frame_centres": [
+        [
+          0,
+          0
+        ],
+        [
+          247,
+          0
+        ],
+        [
+          247,
+          249
+        ],
+        [
+          0,
+          249
+        ]
+      ],
+      "opaque_bbox_alpha_gt_0p1_xyxy_exclusive": [
+        77,
+        21,
+        170,
+        228
+      ],
+      "corners": {
+        "top_back": [
+          123,
+          21
+        ],
+        "top_left": [
+          78,
+          44
+        ],
+        "top_right": [
+          169,
+          44
+        ],
+        "top_near": [
+          123,
+          66
+        ],
+        "bottom_left": [
+          78,
+          201
+        ],
+        "bottom_right": [
+          169,
+          202
+        ],
+        "bottom_near": [
+          123,
+          227
+        ]
+      },
+      "top_parallelogram_closure_delta_px": [
+        1,
+        1
+      ],
+      "notes": [
+        "Use direction is +Z, so the door face is hidden; visible x_min and z_min planes have plain cream panels in teal frames.",
+        "top_near is roof boundary around y66; the brass fitting below it is not a separate structural corner."
+      ]
+    }
+  ],
+  "limits": [
+    "Candidates need source face masks/shared-edge ownership and held-out internal edge checks before production use.",
+    "The top closure deltas show these are observed drawings, not exact copied mathematical guide corners.",
+    "One homography cannot restore hidden surfaces or reconstruct protruding geometry.",
+    "Source preservation, successful automatic normalization and reported RGB identity do not prove artwork/projection/feature acceptance.",
+    "No Unity writes or calls performed by this subtask."
+  ]
+}

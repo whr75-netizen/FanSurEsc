@@ -1,0 +1,196 @@
+{
+  "goal": "B32 제작 전 도면의 기하 계산과 격리된 원본 픽셀 coverage 실험만 수행한다. 건물 미술 완성/Unity 통합/사용자 승인은 목표에 포함하지 않는다.",
+  "entry": "layout",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "bounded_evidence",
+      "text": "미적용 도면의 정해진 기하 조건과 원본 alpha 보존 가설을 실제 계산한다.",
+      "source": "2026-09-27 사용자: 배치설계 기술기획과 불규칙 픽셀 원인 먼저 확인",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "layout",
+      "algorithm": "command.run",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building32/compile_layout.py",
+          "--plan",
+          "docs/artifacts/building32/layout-plan.json",
+          "--svg",
+          "docs/artifacts/building32/layout-plan.svg",
+          "--report",
+          "docs/artifacts/building32/layout-report.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building32/compile_layout.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building32/layout-plan.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building32/layout-plan.svg",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building32/layout-report.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "layout.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "probe"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "layout.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "probe",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {
+        "layout": {
+          "ref": "layout"
+        }
+      },
+      "parameters": {
+        "scope": "Unity_RunCommand로 Tools/Building32/native-surface-probe.cs를 실행한다. 기존 PNG/재질을 수정하지 않는다. 임시 preview scene의 단일 tile, 고정30/45도·정수4배, mesh coverage만 diamond/FullRect 비교한다. 저장된 기지씬·실제 게임카메라·미술은 변경하지 않는다. compile 실패만 원인을 수정하여 재호출; 반복 시각 보정 금지. 실제 report 경로를 반환한다."
+      },
+      "question": "Unity가 쓴 coverage-report.txt 경로를 반환한다. 결과를 미술 합격으로 해석하지 않는다.",
+      "output_schema": {
+        "report": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building32/native-surface-probe.cs",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Art/NativePixelBuilding31/floor_wood.png",
+        "unity:B31-preserved-scene"
+      ],
+      "writes": [
+        "artifacts:B32-isolated-coverage"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "probe.report"
+              }
+            ]
+          },
+          "to": "validate"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "max_visits": 1,
+      "inputs": {
+        "stdin": {
+          "ref": "probe"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-X",
+          "utf8",
+          "-B",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building32/validate_evidence.py"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building32/validate_evidence.py"
+        ]
+      },
+      "reads": [
+        "artifacts:B32-isolated-coverage",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building32/layout-report.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building32/experiment-result.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

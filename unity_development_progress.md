@@ -2517,3 +2517,12 @@ Interactable (abstract base class)
 - `[수학/보존]` 원본64×32tile=2m, PPU16√2, wall48px=2.44949m, camera30°/350°·건물305°. 기존PersistentGameplayShell카메라/Follow offset만30°로 갱신했다. 실제 셸·입력소유자·카메라줌·기지오브젝트/도심은 보존. UrbanOcclusionFader의 뒤벽실내유지 옵션은 기존호출 기본true를 보존한다. 표면위소품의depth tie는 시선방향투영으로 화면좌표를 보존하며해결했다.
 - `[Play Mode 호출 확인]` PlayerMovement.StepMove/CharacterController: 입구통과local(0,.565,-.3), 벽충돌정지(3.95,.565,-.625), 같은Player/Camera. 실내벽fade10/지붕숨김20, 외부지붕숨김0. 실제camera30°/350°/size5, GameView1114×857 캡처. 신규Console오류0, 기존UnityAI relay종료오류1은보존. 물리키/전체회전/빌드/저장로드는 미실행.
 - `[전달/제약]` `docs/artifacts/building31/` 관측/PNG, `docs/references/grave_seasons_map_art.md` B31, `Tools/Building31/graph.json` 기술조건exit0·review대기. native픽셀보존과화면정수배율은별개: 실제확대3.78744배. 자유오빗다른각도·동적표면조명·문짝/루팅·2층은미구현. Play종료후저장편집상태복귀. `Tools/World Art/Inspect Native Pixel Shop 31`로기존Player를점포내부로옮겨볼수있다. 사용자외형합격은대기다.
+
+## 164. B32 SceneView 정렬·배치 설계·원본 픽셀 coverage 원인 `[CAMERA-01][MAP-01]`
+
+- `[사용자 정정]` B31 미술·디테일·명암·배치를 거절, 크기는 대략 유지 가능. 임의 배치 대신 기술/기획/배치설계부터, SceneView도 기본 시점 정렬 요청. B31 사용자 피드백을 기존 WorkLoop에 반환해 거절 상태로 남겼다.
+- `[구현/Editor 관측]` NativePixelBuildingAuthoring의 기존 Inspect(Edit Mode)와 Align Scene View 메뉴가 실제 PersistentGameplayShell PlayerCamera 방향/직교 설정을 읽는다. SceneView21.45°/310.12°→30°/350°,orthographic 확인. 게임 카메라/Player/씬 오브젝트 변경 없음. SceneView 캡처1회. 게임 전용 조명 pass까지 SceneView와 같다는 검증은 아니다.
+- `[연구/설계]` Grave Seasons 공식 평면2D·sprite분할·수작업 조명/LUT, 작가3명·픽셀추상화 논문·Merrell 배치연구·Unity FullRect/PPC를 통합 연구 B32에 연결했다. 시설5개/사용점6개 후보 JSON→SVG, 점유·사용공간·벽 부착·문폭 위반0, 보수적 팽창/4방향 BFS6/6연결. 실제 Unity 배치/Player 이동/미술 합격은 미실행이다.
+- `[원인/격리GPU]` 전역픽셀효과OFF/캐릭터효과비대상, 기본재질조명0이나 fullscreen로컬광ON. 현재비정수배율3.78744와 geometry경계clip을 구분했다. 고정30°/45°·정수4배·같은floor PNG/재질로 기존diamond는 expected18,368 화면칸 중1,984누락,FullRect누락0/추가0. 원본을 편집하거나 재픽셀화하지 않았다. 각2case1회이며 전체건물수정이 아니다.
+- `[보존/검증]` preview생성의 transientdirty는 save-as-copy와 기존GameMap1 byte-identical 확인 후 동일내용저장으로 clean복귀. GameMap1 diff0. 신규Console오류0, 기존09:50UnityAIrelay오류1보존. 실제기지출입/가림은 §163증거재사용. source코드의Mesh명확화·청소처리는 실제실행한조각을최종파일에반영했고기하재시험하지않았다.
+- `[범위/인계]` Tools/Building32 그래프는 도면기하+격리coverage 실험만완료. docs/artifacts/building32에SVG/JSON/원본렌더PNG/실측TXT 보존. 새개별아트·tile연결/깊이·정수줌/phase·조명합성·실제게임통합/미술승인은미완료. 다음부위는 통합연구의대표자산명세와표시계약이다.

@@ -1,6 +1,108 @@
 # Grave Seasons 기준 2D 맵 아트 — 첫 상가
 
-## 현재 결정 B31 — 개별 스프라이트 건물, Unity 통합
+## 현재 결정 B32 — 배치·미술·표시 계약 재설계
+
+**2026-09-27 최신 사용자 판정:** B31의 디자인·명암·디테일·배치는 거절됐다. 화면상 크기는 대략 유지할 수 있지만 원본 픽셀이 불규칙하게 표시되는 문제는 고쳐야 한다. Grave Seasons 첨부 화면이 우선 참고이며, 단순 축소·전체 맵 한 장·임의 가구 좌표 나열은 제작 방식으로 채택하지 않는다. **이번 변경은 Scene 뷰 정렬, 표시 결함의 최소 실험, 제작 전 배치 도면과 기술 설계다. 새 건물 미술 완성/승인을 의미하지 않는다.** 기존 B31과 기지 동작은 보존한다.
+
+### 1. 직접 확인한 실패와 책임 단계
+
+| 관측 | 원인/판정 | 수정 책임 |
+|---|---|---|
+| Scene 뷰21.45°/310.12°, 게임 기본30°/350° | Editor Preview Camera와 실제 SceneView를 혼동했다. | 기존 카메라 소유자에서 회전을 읽어 SceneView.LookAt 적용. 카메라 복제/런타임 변경 없음 |
+| 15개 Prop 호출에 좌표·collider 치수 직접 입력 | 기능 구역·사용면·동선 설계도를 소비하지 않았다. 테이블-의자 틈0.5m는 반경0.5m 캐릭터가 통과할 수 없다. | 배치 명세와 configuration-space 경로 계산 |
+| pixel pivot은 최하단 불투명행 중점, 물리는 footprint 가까운 꼭짓점으로 취급 | 두 landmark가 같다는 근거 없이 `(-width/2,-depth/2)`를 더했다. | 자산별 접점/바닥면 대응. 이미지 bbox에서 물리 깊이 추정 금지 |
+| 원본 PNG는 정수 crop 그대로이나 경계 픽셀이 잘림 | 바닥/벽의 연속적인 메시 사선이 작가가 그린 계단형 alpha를 자른다. | 원본 alpha 전체를 담는 Full Rect 시각 표면; 물리 점유와 구별 |
+| GameView857px 높이, ortho5, P=22.627417 | 확대율3.7874408이어서 원본 한 칸이 화면3/4칸으로 섞인다. | 정수 화면 배율·공통 격자 위상. 재생성/축소로 해결하지 않음 |
+| 전역 PixelArtRendererFeature OFF, 캐릭터 효과 대상 아님 | B31을 전역 필터로 다시 픽셀화했다는 가설은 현재 증거와 불일치. Point, 압축없음, mipmap없음, renderScale1, AA/MSAA/post OFF | 필터를 추가하지 말고 실제 변환/coverage 수정 |
+| B31 재질 MetricLighting0, shadow pass 없음 | 원본 자체 명암만 보존했을 뿐 공간별 조명을 설계하지 않았다. 별도 fullscreen 로컬 조명은 ON이므로 모든 빛이 꺼졌다는 뜻은 아니다. | 기본 아트 명암 / 접촉 / 공간 조명 / 환경색을 분리 |
+
+마지막 Play 결과는 B31의 [실내](../artifacts/building31/play-interior.png), [관측](../artifacts/building31/readback.json)을 재사용한다. 새 Play 이동/가림 검사를 반복하지 않는다. 조명 fullscreen pass의 실제 기여량·normal buffer는 아직 GPU 분리 관측하지 않았다.
+
+### 2. 참고작·픽셀아트 기술에서 채택할 것
+
+- **Grave Seasons 직접 근거:** [공식 개발일지](https://steamcommunity.com/app/3255110/allnews/)의 *Farming Systems & Grids*는 평면 2D, 분할 sprite 정렬, 배치 격자와 상호작용 격자의 분리를 설명한다. *Day & Night Cycle*은 shader lights/normal maps/dynamic shadows 실험 후 직접 그린 빛과 LUT·색조 처리를 선택했다고 밝힌다. 정확한 내부 카메라·PPU·코드는 공개되지 않았다. 30°는 우리 투영 계약이며 원작 내부 수치라고 주장하지 않는다.
+- **Cure:** [pixel clusters·banding·AA](https://pixeljoint.com/forum/forum_posts.asp?TID=11299). 같은 의미를 전달하는 픽셀 덩어리를 먼저 설계하고 불필요한 고립점/평행 띠를 줄인다. 픽셀 통계를 미술 판정으로 쓰지 않는다.
+- **Derek Yu:** [실루엣→형태→명암→마감](https://derekyu.com/makegames/pixelart.html). 실제 사용 크기에서 사물의 특징이 먼저 읽혀야 한다. 특정 팔레트 수나 선 굵기를 모든 사물의 정답으로 강제하지 않는다.
+- **Niklas Jansson:** [제한된 픽셀의 강조·생략·재질](https://androidarts.com/pixtut/pixelart.htm). 정보 밀도를 전면 노이즈와 혼동하지 않는다. 필요한 특징에 픽셀과 대비를 배정한다.
+- **Gerstner et al., NPAR2012:** [Pixelated Image Abstraction](https://pixl.cs.princeton.edu/gfx/pubs/Gerstner_2012_PIA/index.php)는 단순 축소/팔레트 양자화가 작은 핵심 특징을 잃는 문제를 다루며 공간 대응과 팔레트를 함께 최적화한다. PerfectPixel을 거치는 것만으로 방향·특징·디자인이 해결된다는 근거가 아니다.
+- **Merrell et al., SIGGRAPH2011:** [Interactive Furniture Layout](https://paulmerrell.org/furnitureLayout2.pdf)의 여유공간·순환·상대관계·강조점 구분을 채택한다. 원 논문의 확률적 제안/가중 목적함수를 게임 미술 자동 합격기로 이식하지 않는다.
+
+참고 화면에서 바닥은 낮은 대비의 큰 면, 생활·주방 소품은 기능별 군집, 밝은 부분은 등/모니터/빛받는 상판이다. B31은 바닥과 벽의 반복선이 가장 강하고 물건은 기능을 설명하는 작은 부품이 부족했다. **해상도를 늘리는 대신 정보의 위치를 바꾼다.** 이것은 참고 관찰과 제작 기준이며 새 아트의 합격 판정은 아니다.
+
+### 3. 첫 상가 아트 명세 — 제작 후보
+
+기존 생활잡화점 역할과10×8m 외곽을 유지한 후보다. 원작 주거 주방을 상점에 그대로 복사하거나 보물상자/항아리를 빈 곳에 채우지 않는다.
+
+| 구성 | 역할과 필수 특징 | 명암·디테일 배분 | 별도 데이터 |
+|---|---|---|---|
+| 바닥/벽 | 이동 가능한 면, 출입구, 벽 하단/코너 | 바닥 전체의 고대비 줄무늬 억제, 코너·접촉에서만 구분 강화 | 타일 경계/alpha 여유·배치 lattice |
+| 계산대 | 고객 면·직원 면·상판·계산기 | 전면/측면/상판의 큰 색 덩어리, 서랍 틈/계산기 키 등 식별부 대비 | 양쪽 사용면, 계산기 지지면 |
+| 벽 진열 | 선반 단·상품 묶음·가격표 | 선반 내부 음영, 상품 종류별 실루엣; 모든 병/상자를 동일 노이즈로 채우지 않음 | 벽 부착·앞 사용면·상품 소켓 |
+| 낮은 진열 섬 | 모서리·상판·묶음 상품 | 통로 뒤 물건을 가리지 않는 높이, 상품에 집중된 대비 | 실제 footprint·지지면·가시성 높이 |
+| 재고 | 선반·상자·라벨·작업 여유 | 판매장의 화려함과 구별되는 반복, 구조/재질은 공통 | 입구와 선반 access point |
+| 빛 | 광원 위치·영향 영역·접촉 그림자 | 자체 면 구분/국소 빛/환경 색조를 다른 층으로 관리 | light role, mask pivot, receiver, layer/order |
+
+규격에는 `assetId, role, sourcePNG, nativeSize, pixelPivot, groundLandmarks, footprintM, front, useArea, supportSurface, allowedView, requiredFeatures, shadingRole`을 둔다. 의미/방향이 틀린 생성물은 정규화 단계로 보내지 않는다. native 픽셀 입력에는 다시 정규화하지 않는다. 생성 입력은 **원본 보존→격자 정규화 한 번→원본 크기의 특징 확인**이며 PerfectPixel/Aseprite는 특징의 발명이나 임의 축소를 담당하지 않는다. 비교 미리보기의 정수 확대는 표시 도구일 뿐 제작 알고리즘이 아니다.
+
+### 4. 배치 설계 원본과 계산
+
+[배치 JSON](../artifacts/building32/layout-plan.json)이 후보 좌표·영역의 단일 원본이며 [평면도](../artifacts/building32/layout-plan.svg)는 그 파생물이다. 그림을 보고 Unity에서 하나씩 위치를 맞추지 않는다. `compile_layout.py`가 점유·사용공간·접근점·경로와 SVG를 함께 계산한다. 제안값과 확인값을 JSON에서 구분한다.
+
+- local +X 오른쪽/+Y 위/+Z 건물 뒤, Unity 좌수계, m. 평면도는 (x,z), 원점 건물 중심, 부모는 기존 root(-16,0,9), yaw305°, scale1.
+- Player prefab radius0.5m/height1.8m 확인값. 추가 여유0.1m는 후보 설계값이며 건축법 수치가 아니다. 장애물을 반경r+여유로 팽창시키고 외곽을 수축한 자유공간에서 입구→필수 사용점의 연결을 계산한다.
+- `C_free=(B⊖D_r) \ (O⊕D_r)`. 격자 계산은 cell 전체를 보수적으로 자유 판정하고 4방향 BFS로 모서리 관통을 막는다. 미충족 시 객체 ID·막힌 사용점·관련 점유를 반환한다. 같은 결과를 AI의 “괜찮음”으로 통과시키지 않는다.
+- 물리 비겹침, 사용면 비점유, 벽/지지면 부착, 방향 후보와 접근 연결은 hard constraint. 상품 군집·시선·밀도는 명시적인 미술 목표이며 점수 하나로 합격시키지 않는다.
+- [Tiled Object Layers](https://doc.mapeditor.org/en/latest/manual/layers/)는 영역/경로/템플릿 편집에 적합하다. [CP-SAT](https://developers.google.com/optimization/cp/cp_solver)는 후보가 많아질 때 정수 배치 제약을 풀 수 있다. 지금 한 채는 고정 도면과 작은 결정적 계산으로 충분하며 새 프로그램/패키지 설치는 하지 않는다.
+
+### 5. 픽셀 표시의 수학 계약과 후보
+
+`개별 PNG texel → asset landmark → 건물 local m → root world → 고정 직교 view → 화면 raster`
+
+canonical은 **오브젝트별 정규 PNG+landmark/footprint manifest**다. 전체방 PNG나 렌더 캡처는 원본이 아니다. 이미지(u,v)는 좌상단 원점, 오른쪽/아래, 픽셀 경계 정수·중심(i+.5,j+.5); UV는 좌하단 원점, 정규화0~1; world는 위의 Unity 좌수계다. `UV=((u+.5)/W,1-(v+.5)/H)`는 texel index→center를 나타낸다. root quaternion은 Unity Quaternion.Euler(0,305,0), camera는Euler(30,350,0). column-vector world=Mroot·local을 사용한다.
+
+상대yaw45°,pitch30°에서 `qx=(x-z)/sqrt2`, `qy=(x+z)/(2sqrt2)+sqrt3*y/2`(위가 양수). `P=16sqrt2`, `X=P*qx`, `Y=P*qy`. 바닥 축의 화면 기울기는1/2, 즉26.565°이며 **카메라 기울기30°와 구별**한다. 이전 B31 절의 ground v 음수 표기는 화면 위 양수 정의와 모순되어 여기서 바로잡는다. 실제 코드의 UV 미분은 바닥·벽·가구 모두 `(1/P)I`지만 메시 범위 밖 texel까지 보존하는 것은 아니다.
+
+| 후보 | 적용/선택 | 실패 조건 |
+|---|---|---|
+| A. 원본 alpha를 모두 담는 Full Rect + 공통 정수 배율/표시 anchor | **우선 최소 실험.** 기존 입력과3D 물리를 보존한다. SpriteRenderer의 Full Rect 원리이며 현 MeshRenderer는 sprite importer 변경만으로 고쳐지지 않는다. 바닥/벽 plane의 UV 역변환으로 전체 직사각 UV를 담을 수 있다. | tile overhang의 중복·정렬,3D 캐릭터 깊이와 가림을 따로 해결하지 못하면 통합 금지 |
+| B. 전체 게임을 순수2D SpriteRenderer/2D Renderer로 전환 | 원작 방식에 가까우나 실제 Player/물리/조명과 통합 범위가 크므로 이번 변경에서 보류 | 엔진 전환을 단순 이미지 표시 수정으로 포장할 때 |
+| C. 분리된 sprite layer를 저작 해상도에 그린 뒤 정수 합성 | 고정 시점에서 가능하나 현재3D depth/캐릭터와 합성 비용이 추가되어 보류 | 임의 저해상도 재픽셀화,3D 배경/가림 순서 깨짐 |
+
+[Unity Full Rect](https://docs.unity3d.com/6000.0/Documentation/Manual/texture-type-sprite.html), [Pixel Perfect Camera](https://docs.unity3d.com/kr/6000.0/Manual/urp/2d-pixelperfect-ref.html)는 일부 단계의 공식 근거다. PPC의 SpriteRenderer snapping이 현재 임의 MeshRenderer에도 자동 적용된다고 가정하지 않는다.
+
+화면높이H,orthoSizeS일 때 `s=H/(2SP)`. 정수n 표시에는 `S=H/(2Pn)` 또는 정수 확대+crop/여백 정책이 필요하다. **임의 창 크기·연속 줌·현재 시야·동일한 정수 픽셀 폭을 모두 동시에 보장할 수는 없다.** 원본을 줄이지 않고 기존 CameraZoomController 소유권 안에서 표시 배율을 해결해야 한다. 공통 source lattice의 phase는 `project(anchor)-pivot`; 물리 transform을 반올림하지 않고 표시만 최대0.5 source pixel로 양자화하는 후보다. 자유 회전은 같은 sprite의 숨은 면을 만들어내지 않으므로 별도 방향 원본 없이 지원을 주장하지 않는다.
+
+**R3 최소 실험 계약:** 기존 floor PNG·동일 shader·카메라30°/45°·정수4배·투명 RT를 고정하고 메시 UV coverage만 마름모/Full Rect로 비교한다. 임시 preview scene만 사용하고 기지에 통합하지 않는다. 불투명 원본 texel별 화면16칸 보존, alpha 누락/추가0을 기준으로 한다. 실패하면 UV/coverage 경계로 반환하며 아트 외곽선을 덧칠하지 않는다. 성공은 단일 바닥 coverage 수정 근거일 뿐 타일 연결/전체 건물/조명/미술 합격이 아니다.
+
+최종 통합에 필요한 invariant: 부모변환/정규기저(G01/03/04), 원본aspect·uniformscale(G08/09), landmark 재투영(G10, float허용오차0.01sourcepx), UV와 alpha coverage(G11, 누락texel0), 공통격자(G12, 정수칸·경계0.01px). 골격(G05~07)은 정적환경에 해당없음. 깊이/가림은 collider만으로 입증되지 않으며 같은game camera 관측을 별도로 요구한다. 투영으로 숨은 면이 손실되고 양자화로 subpixel 위치가 손실되는 것은 명시한 정보 손실이다.
+
+### 6. 조명과 작업 그래프의 경계
+
+미술의 면 구분을 지우고 전역밝기만 낮추는 방식은 채택하지 않는다. 후보는 `기본sprite의 면/재질 → 물체별 contact mask → 광원 역할별 별도 light mask → 환경 palette/LUT`다. 원작 기법을 참고하지만 조명 RGB를 모든 사물 원본에 고정해 게임의 움직이는 광원 반응을 대신하지 않는다. 움직이는 빛/물체는 기존 조명 owner와 receiver·normal/depth 계약을 명시한 별도 최소 실험이 필요하다. 현재 world XYZ 광원격자는 원본pixel격자와 다르며 동일 pixelcell로 합성할지 아직 미구현이다.
+
+`요구/참고 → 공간 프로그램·특징 명세 → 배치 계산 → 도면 → 개별 자산 → 정규화(필요할 때만) → 공통 표시 → 조명 합성 → 실제 건물 관찰`
+
+| 실패 | 재개할 단계 | 보존할 결과 |
+|---|---|---|
+| 사용점에 도달 불가/역할 누락 | 배치 계약과 계산 | 원본 아트·완료된 표시 실험 |
+| 용도/방향/핵심 특징 불일치 | 해당 개별 자산 명세/제작 | 평면도·다른 승인 자산 |
+| 원본에 없는 잘린 픽셀/불균일칸 | 표시 coverage/scale/phase | 자산 RGB·공간 프로그램 |
+| 명암 부족/광원 위치 불일치 | 자체 명암/접촉/공간 빛 중 해당 층 | 비관련 기하·배치 |
+| 예전결과 재포장만 함 | source/operation 계약 위반으로 중단 | 원본/이전결과; 생성완료 주장 금지 |
+
+AI는 역할·특징·자산 후보를 작성하고 좌표·접근·정규화·변환은 고정 계산이 소비한다. 기존 WorkLoop를 사용하며 새 AI Manager를 추가하지 않는다. [LLM-Modulo](https://arxiv.org/abs/2402.01817)와 같은 후보생성/외부판정 분리의 근거는 있으나 자연어 계약의 완전성이나 미술 만족도를 자동 증명하지는 않는다. 실제 후속 제작 노드는 미구현이며 이번 도면 계산을 전체 게임 제작 자동화 완료로 보고하지 않는다.
+
+### 7. 실행 결과·재개점
+
+- SceneView는 현재30°/350° 직교로 적용했다. `Tools > World Art > Align Scene View to Gameplay Camera` 및 기존 Inspect 메뉴(Edit Mode)로 재적용한다. 기존 Camera/씬 오브젝트는 변경하지 않았다.
+- [실제 계산] 시설5개·사용점6/6 연결, 점유/사용공간/벽 부착/문폭 위반0. 도면 후보이며 Unity 적용/실제 이동 검증은 아니다.
+- [격리 GPU 실험] 원본 floor의 정수4배 expected18,368칸 중 기존diamond는1,984칸 누락, FullRect는 누락0/추가0. 같은shader/원본/카메라에서 geometry coverage만 변경했다. 전체 건물 수리가 아니다. [관측](../artifacts/building32/experiment-result.json)과 [실행 설명](../../Tools/Building32/README.md)에 범위/미해결을 기록했다.
+- [보존] preview가 dirty flag를 세웠으나 씬 사본과 원본이 byte-identical함을 확인하고 동일 내용을 저장했다. 최종sceneDirty=false, GameMap1 git diff0. 신규Console오류0(기존relay오류1 보존). 새 건물 미술/조명은 미완료다.
+- 다음 제작 단위는 **명세에 맞는 계산대·벽 진열·바닥 대표 자산과 그 접점/alpha/방향 계약**이다. 전체 건물 재생성에 앞서 대표 조립의 기능·표시를 연결한다. PixelLab 잔액은 B31에서0으로 확인했으며 새 생성이나 결제는 이번에 하지 않았다.
+
+---
+
+## B31 보존 이력 — 기능 통합됨, 미술·배치는 사용자 거절
 
 **2026-09-27 최신 정정:** 아래 A30의 전체 공간 생성·384px 축소는 사용자가 거절했다. 게임 오브젝트 제작을 전체 이미지로 대체한 범위 오류다. A30 파일은 이력으로만 보존하며 채택하지 않는다. 이번 결과는 GameMap1에 배치하는 독립적인 테스트 점포 프리팹 한 채다. 바닥·벽·카운터·진열 가구·소품은 각각 선택/이동/교체 가능한 자식 오브젝트이며 충돌·출입·가림을 연결한다. 기존 기지, 실제 Player/Camera, 인벤토리와 도시 씬은 보존한다.
 

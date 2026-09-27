@@ -30,7 +30,7 @@ public static class NativePixelBuildingAuthoring
         Selection.activeGameObject = building.gameObject;
         if (!EditorApplication.isPlaying)
         {
-            SceneView.lastActiveSceneView?.FrameSelected();
+            AlignSceneView(building);
             return;
         }
         var shell = FantasySurvival.SceneFlow.PersistentGameplayShell.Instance;
@@ -38,6 +38,39 @@ public static class NativePixelBuildingAuthoring
         var movement = shell.PlayerTransform.GetComponent<PlayerMovement>();
         if (!movement.TryTeleport(building.transform.TransformPoint(new Vector3(0,.55f,-.4f)),
             shell.PlayerTransform.rotation, out var error)) Debug.LogError(error);
+    }
+
+    [MenuItem("Tools/World Art/Align Scene View to Gameplay Camera")]
+    public static void AlignSceneViewToGameplayCamera()
+    {
+        var building = UnityEngine.Object.FindFirstObjectByType<NativePixelBuilding>();
+        if (building == null) { Debug.LogWarning("Open GameMap1 first."); return; }
+        AlignSceneView(building);
+    }
+
+    private static void AlignSceneView(NativePixelBuilding building)
+    {
+        // Read the existing camera owner; do not create a scene camera or override gameplay.
+        var shell = FantasySurvival.SceneFlow.PersistentGameplayShell.Instance;
+        if (shell == null)
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/PersistentGameplayShell.prefab");
+            if (prefab != null) shell = prefab.GetComponent<FantasySurvival.SceneFlow.PersistentGameplayShell>();
+        }
+        if (shell == null || shell.PlayerCamera == null)
+        {
+            Debug.LogWarning("Persistent gameplay camera reference is missing.");
+            return;
+        }
+        var view = SceneView.lastActiveSceneView;
+        if (view == null) view = EditorWindow.GetWindow<SceneView>();
+        var bounds = new Bounds(building.transform.position, Vector3.zero);
+        foreach (var renderer in building.GetComponentsInChildren<Renderer>()) bounds.Encapsulate(renderer.bounds);
+        view.in2DMode = false;
+        view.LookAt(bounds.center, shell.PlayerCamera.transform.rotation,
+            shell.PlayerCamera.orthographicSize, shell.PlayerCamera.orthographic, true);
+        view.Focus();
+        view.Repaint();
     }
 
     [MenuItem("Tools/World Art/Build Native Pixel Shop 31")]

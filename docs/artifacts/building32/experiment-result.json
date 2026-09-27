@@ -1,0 +1,31 @@
+{
+  "scope": "unapplied plan and isolated single-floor alpha experiment",
+  "layoutReachable": 6,
+  "coverage": {
+    "diamond": {
+      "expected": 18368,
+      "actual": 16384,
+      "missing": 1984,
+      "extra": 0
+    },
+    "full-rect": {
+      "expected": 18368,
+      "actual": 18368,
+      "missing": 0,
+      "extra": 0
+    }
+  },
+  "errors": [],
+  "supported": true,
+  "artApproved": false,
+  "buildingRenderingFixed": false,
+  "unityLayoutApplied": false,
+  "probeSha256": "4c084891082b2b3e449fa204c1461ecc9729b05bfb81ed6a907d0a17ee90f93b",
+  "layoutPlanSha256": "f76d77651761f26ac14f546d68bf3aba7ed3ad1d3e69815bb1f85363b8bd98ac",
+  "remaining": [
+    "tile joining/depth order",
+    "integer zoom and common lattice integration",
+    "new individual art",
+    "lighting design and actual play comparison"
+  ]
+}

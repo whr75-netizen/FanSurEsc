@@ -1,0 +1,103 @@
+{
+  "schema": "building-layout-proposal/1",
+  "id": "B32-shop-layout-proposal-01",
+  "status": "proposal_unapplied",
+  "title": "기지 상가 10×8m · 역할 기반 배치설계 후보",
+  "scope": "Layout prototype; not Unity gameplay validation or art approval",
+  "coordinate_system": {"plane": "building-local XZ", "units": "metres", "x": "right", "z": "rear", "y": "up"},
+  "preserve": ["10x8m exterior", "front central 2m entry", "existing base placement", "existing Player/Camera owners"],
+  "floor": {"rect_xz": [-5.0, -4.0, 5.0, 4.0], "wall_thickness_m": 0.15},
+  "player": {
+    "radius_m": 0.5,
+    "radius_status": "prefab_verified_not_runtime_scaled",
+    "source": "Assets/Prefabs/PersistentGameplayShell.prefab:2728",
+    "component_file_id": "7202591587805014013",
+    "height_m": 1.8,
+    "skin_width_m": 0.05,
+    "design_margin_m": 0.1,
+    "margin_status": "proposal_not_building_code"
+  },
+  "computation": {
+    "grid_cell_m": 0.1,
+    "connectivity": 4,
+    "conservative_rule": "disk radius = player radius + design margin + grid half diagonal; reject touching obstacles",
+    "domain_xz": [-5.0, -5.0, 5.0, 4.0],
+    "outside_entry_strip_xz": [-1.0, -5.0, 1.0, -3.9],
+    "source_point_xz": [0.0, -4.5]
+  },
+  "walls": [
+    {"id": "wall_back", "rect_xz": [-5.075, 3.925, 5.075, 4.075]},
+    {"id": "wall_left", "rect_xz": [-5.075, -4.075, -4.925, 4.075]},
+    {"id": "wall_right", "rect_xz": [4.925, -4.075, 5.075, 4.075]},
+    {"id": "wall_front_left", "rect_xz": [-5.075, -4.075, -1.0, -3.925]},
+    {"id": "wall_front_right", "rect_xz": [1.0, -4.075, 5.075, -3.925]}
+  ],
+  "partitions": [
+    {"id": "stock_south", "rect_xz": [1.025, 0.825, 4.925, 0.975]},
+    {"id": "stock_west_lower", "rect_xz": [1.025, 0.975, 1.175, 1.25]},
+    {"id": "stock_west_upper", "rect_xz": [1.025, 2.75, 1.175, 3.925]}
+  ],
+  "doors": [
+    {"id": "front_entry", "role": "customer entry", "segment_xz": [[-1.0, -4.0], [1.0, -4.0]], "opening_m": 2.0, "kind": "open_passage_no_leaf"},
+    {"id": "stock_entry", "role": "staff stock access", "segment_xz": [[1.1, 1.25], [1.1, 2.75]], "opening_m": 1.5, "kind": "open_passage_no_leaf"}
+  ],
+  "zones": [
+    {"id": "sales", "label": "판매 · 고객 공간", "rect_xz": [-4.925, -3.925, 4.925, 0.8], "color": "#deedf0"},
+    {"id": "display", "label": "벽면 상품 진열", "rect_xz": [-4.925, 0.8, 0.9, 3.925], "color": "#e9ecd5"},
+    {"id": "stock", "label": "재고 · 직원 공간", "rect_xz": [1.175, 0.975, 4.925, 3.925], "color": "#e7e1f1"}
+  ],
+  "reserved_routes": [
+    {"id": "main_route", "label": "주통로 1.5m", "rect_xz": [-0.75, -3.925, 0.75, 2.7], "color": "#ccebe8"}
+  ],
+  "fixtures": [
+    {
+      "id": "checkout", "label": "계산대", "role": "checkout", "rect_xz": [-4.15, -1.75, -1.75, -0.95], "height_m": 1.0, "facing": "-Z",
+      "attachment": {"kind": "floor"}, "color": "#b6804f",
+      "use_areas": [
+        {"id": "checkout_customer", "label": "고객 접근", "rect_xz": [-4.15, -3.05, -1.75, -1.75], "access_xz": [-2.95, -2.5]},
+        {"id": "checkout_staff", "label": "직원 접근", "rect_xz": [-4.15, -0.95, -1.75, 0.35], "access_xz": [-2.95, -0.2]}
+      ],
+      "required_features": ["countertop", "register", "customer front", "staff back"]
+    },
+    {
+      "id": "left_shelf", "label": "벽 진열", "role": "sales shelving", "rect_xz": [-4.85, 0.65, -4.25, 3.05], "height_m": 1.8, "facing": "+X",
+      "attachment": {"kind": "wall", "wall_id": "wall_left", "gap_m": 0.075}, "color": "#729b68",
+      "use_areas": [{"id": "left_shelf_use", "label": "상품 접근", "rect_xz": [-4.25, 0.65, -2.95, 3.05], "access_xz": [-3.45, 1.85]}],
+      "required_features": ["shelf levels", "product groups", "continuous wall back"]
+    },
+    {
+      "id": "rear_shelf", "label": "후면 진열", "role": "sales shelving", "rect_xz": [-2.5, 3.325, 0.4, 3.925], "height_m": 1.8, "facing": "-Z",
+      "attachment": {"kind": "wall", "wall_id": "wall_back", "gap_m": 0.0}, "color": "#729b68",
+      "use_areas": [{"id": "rear_shelf_use", "label": "상품 접근", "rect_xz": [-2.5, 2.025, 0.4, 3.325], "access_xz": [-1.05, 2.5]}],
+      "required_features": ["shelf levels", "product groups", "back-wall contact"]
+    },
+    {
+      "id": "display_island", "label": "낮은 진열섬", "role": "featured sales display", "rect_xz": [2.05, -2.55, 3.65, -1.35], "height_m": 0.85, "facing": "-X",
+      "attachment": {"kind": "floor"}, "color": "#ce995a",
+      "use_areas": [{"id": "island_use", "label": "상품 접근", "rect_xz": [0.75, -2.55, 2.05, -1.35], "access_xz": [1.25, -1.95]}],
+      "required_features": ["low height", "one coherent product family", "legible top surface"]
+    },
+    {
+      "id": "stock_shelf", "label": "재고 선반", "role": "stock", "rect_xz": [2.1, 3.275, 4.55, 3.875], "height_m": 1.8, "facing": "-Z",
+      "attachment": {"kind": "wall", "wall_id": "wall_back", "gap_m": 0.05}, "color": "#9b81ba",
+      "use_areas": [{"id": "stock_shelf_use", "label": "반출 · 적재", "rect_xz": [2.1, 1.975, 4.55, 3.275], "access_xz": [3.325, 2.45]}],
+      "required_features": ["storage containers", "front access", "back-wall contact"]
+    }
+  ],
+  "soft_goals": {
+    "status": "proposal_no_art_score",
+    "priority_order": ["customer entry to sales to checkout to exit", "related products grouped", "one primary display focus", "rhythm and readable empty space"],
+    "weights": null
+  },
+  "prior_candidate_adjustments": [
+    {"reason": "Turn room bounds into actual partition solids and door opening", "change": "Explicit 0.15m partition footprint; unchanged 1.5m west stock opening"},
+    {"reason": "Access points must leave player radius and design margin from physical furniture", "change": "Explicit accessible customer/staff/stock points; no fixture coordinates changed"},
+    {"reason": "Narrow front gap at display island is unnecessary for intended one-sided browsing", "change": "Declare island west use face rather than silently requiring all-around circulation"}
+  ],
+  "sources": [
+    {"title": "Merrell et al. 2011, functional and visual layout criteria", "url": "https://paulmerrell.org/furnitureLayout2.pdf"},
+    {"title": "Google OR-Tools CP-SAT", "url": "https://developers.google.com/optimization/cp/cp_solver"},
+    {"title": "Tiled Object Layers", "url": "https://doc.mapeditor.org/en/latest/manual/layers/"}
+  ],
+  "limitations": ["No generated or accepted art", "No Unity integration", "No real player movement test", "No camera occlusion test", "Dimensions and functional program are proposals", "Sprite front/footprint/view compatibility must be checked before assembly"]
+}

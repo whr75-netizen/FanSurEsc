@@ -1,0 +1,7 @@
+Isolated native floor coverage probe
+diamond: expected=18368, actual=16384, missing=1984, extra=0
+full-rect: expected=18368, actual=18368, missing=0, extra=0
+sceneDirtyBefore=False, sceneDirtyAfter=True
+Input PNG unchanged. Fixed 30/45 degree camera; 4 screen pixels per source texel; only mesh coverage differs.
+Preservation: saved scene copy byte-identical; temporary object creation dirtied editor flag only; restored clean=True
+After preview cleanup: sceneDirtyBefore=False, sceneDirtyAfter=False

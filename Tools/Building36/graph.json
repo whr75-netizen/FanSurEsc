@@ -89,7 +89,7 @@
           "--source",
           "Tools/Building36/Source/sheet.png",
           "--output-dir",
-          "docs/artifacts/building36/native-opencv",
+          "docs/artifacts/building36/native-final",
           "--engine",
           "C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main",
           "--deps",
@@ -106,8 +106,8 @@
       ],
       "writes": [
         "art:B36-normalized-sheet",
-        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/native.png",
-        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/receipt.json"
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/receipt.json"
       ],
       "edges": [
         {
@@ -157,9 +157,9 @@
           "--deps",
           "LocalOnly/PerfectPixelOpenCV",
           "--native",
-          "docs/artifacts/building36/native-opencv/native.png",
+          "docs/artifacts/building36/native-final/native.png",
           "--receipt",
-          "docs/artifacts/building36/native-opencv/receipt.json"
+          "docs/artifacts/building36/native-final/receipt.json"
         ],
         "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
         "timeout": 30,
@@ -168,8 +168,8 @@
         ]
       },
       "reads": [
-        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/native.png",
-        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/receipt.json",
         "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building36/Source/sheet.png"
       ],
       "writes": [
@@ -225,9 +225,9 @@
           "LocalOnly/PerfectPixelOpenCV",
           "--verify-only",
           "--native",
-          "docs/artifacts/building36/native-opencv/native.png",
+          "docs/artifacts/building36/native-final/native.png",
           "--receipt",
-          "docs/artifacts/building36/native-opencv/receipt.json"
+          "docs/artifacts/building36/native-final/receipt.json"
         ],
         "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
         "timeout": 30,
@@ -237,8 +237,8 @@
       },
       "reads": [
         "art:B36-integer-crops",
-        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/native.png",
-        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/receipt.json",
         "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building36/Source/sheet.png"
       ],
       "writes": [

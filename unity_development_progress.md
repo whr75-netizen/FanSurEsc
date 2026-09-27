@@ -2579,3 +2579,11 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` 최종 snapshot1회, 실제1114×857와별도조망2560×1600. 같은Player/Camera EntityID,46surface의alpha/depth불일치0·frame0·height범위roof0,공통127/native1배. Console11→11추가0. Collider가줄고위치/통로불변이므로§169의영향3경로를재사용했고, 이번에는이동/벽/외부지붕복원을다시시험하지않았다. graph4단계의고정기술범위완료,EditMode/background false/SceneView복원.
 - `[재사용 문서]` Tools/Building35/PIPELINE.md에좌표식·치수권위·자동PP/재표본화구분·부착면·가림·변경원인별재실행구간·실패분기·실행명령과증거경로를정리했다. scene한장재생성이나모든PNG동일크기를제작알고리즘으로대체하지않는다.
 - `[한계]` 사과는잎/꼭지포함32px프레임을11.43px로표본화해세부손실이가능하며과육9cm실측완료가아니다. 기존그림의내부선잔차2.56/3.56px·비평면소품고정시점근사·작은viewport줌충돌·기존volumetric경고유지. 미술완성/자유회전/빌드/저장로드/물리키/GPU깊이동등성미검증. PixelLab재작화는자동승인검토가해당파일의외부전송승인을요구하여실행되지않았다. 전송승인질문에사용자가마감을요청했으므로재시도안함.
+
+## 171. 공통 시트 원본 정규화·무변형 import와 재개 인계 `[MAP-01]`
+
+- `[요청/원인]` 전체 시트1회 정규화→정수 crop 사용, 개별 재투영·resize 제거 요청이다. 영상 의도는 같은 사물을 길쭉하게 변형한 문제로 정정됐다. B35 project_faces/details-prepare/tray-composite의 원본 이후 재표본화를 확인했다.
+- `[실행]` 기존 Source/sheet.png1122×1402를 공식과 파일해시가 같은 원본 PerfectPixel OpenCV backend로 자동 처리했다. 격자 크기 강제 지정 없음. 원본 refine 결과204×277, 오브젝트18+잔여2의 정수 분리20/20 RGBA 일치. normalize→slice→validate 완료; 해당 연속 처리 약1.29초(설치/Unity/추론 제외). 원본 검출에 따른 약8% 종횡비 차이는 무손실로 보고하지 않는다.
+- `[Editor 실행]` NativeSheetImport36으로18종 Sprite import. PNG SHA·RGBA·해상도 동일, Point/NoMips/Uncompressed/FullRect. 기존 계산대294px/새49texel로 공통q6, 모든Sprite PPU127/6. PNG 확대나 개별 변형 없음. unity-import.json은 실제 readback이다.
+- `[미완료/정정]` GameMap1/PlannedPixelShop33 프리팹은 미교체. collider-box 후보18종 실패는 해당 proxy의 실패이며 기존 visual depth와 동일하지 않다. 새색/가림 연결 생산자 미구현으로 input_gate 중단. corrected report 이후 importer 갱신으로 마지막 입력 대조는 handoff-gate.json에 분리했다(유일실패 NATIVE_DEPTH_MAPPING_NOT_AUTHORED). 실제 화면/Play/가림/이동/미술 확인은 이번 미실행. RenderGraph/ZBinningJob Console 오류 인과 미확정.
+- `[사용자 중단/재개]` 사용량 소진 임박으로 인계 요청을 받아 추가 구현 중단. Tools/Building36/README.md 첫 절에 최신 요구·완료/미적용·실패 한계·미실행 수직 sprite plane 후보·전체 연구 경로·최소 다음 작업을 기록했다. 다음은 정규화 반복이 아니라 색무변형 표시/가림 방식 설계와 대표 장면 실험이다. 후보를 구현된 기능으로 바꾸거나 기존 depth hash 보존을 사용자 요구로 오해하지 않는다.

@@ -1,0 +1,1433 @@
+{
+  "schema": "building36-source-fit-probe/1",
+  "scope": "Read-only input suitability; necessary conditions and one unconfirmed anchor hypothesis only",
+  "source_image_operations": "Read existing RGBA only. No resize, warp, pixel mutation, depth generation, collider change, or Unity write.",
+  "camera_basis_local": {
+    "pitch_degrees": 30,
+    "yaw_degrees": 45,
+    "right": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "up": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "forward": [
+      0.6123724356957945,
+      -0.4999999999999999,
+      0.6123724356957945
+    ]
+  },
+  "uniform_display_scale": {
+    "reference_old_png": "Assets/Art/PixelShopInterior35/Color/empty_counter.png",
+    "reference_old_visible_bbox_xyxy": [
+      1,
+      2,
+      295,
+      257
+    ],
+    "reference_new_asset": "empty_counter",
+    "reference_new_visible_bbox_xyxy": [
+      5,
+      23,
+      54,
+      68
+    ],
+    "ratio_old_width_divided_by_new_width": 6.0,
+    "selection": "q=max(1,floor(reference_ratio+0.5)); one common q for every crop",
+    "q": 6,
+    "existing_camera_ppu": 127.0,
+    "unchanged_crop_mesh_ppu": 21.166666666666668,
+    "screen_scale_relation": "camera k integer => new crop texel screen side=q*k integer; source PNG stays unchanged"
+  },
+  "anchor_hypothesis": "Visible source bbox bottom centre aligned to existing geometry projected bbox bottom centre; not footprint centre. No semantic contact point can be inferred from bbox alone.",
+  "limitations": [
+    "Passing bbox/ray containment is not a correct semantic pivot, recovered object geometry, design approval, or scene-integration evidence.",
+    "Existing collider boxes and authored flat planes are tested as provided, not expanded to fit the new art.",
+    "An existing collider is not necessarily identical to the old B35 per-texel visual-depth surface; the result specifically tests the requested preserved box/plane contract.",
+    "No alternative pivot search or per-object scale is attempted. A hypothetical-anchor miss alone does not prove every other translation fails.",
+    "Apple-tray metric catalog overrides the older placement dimensions, matching ApplyMetricTray's current collision-size owner."
+  ],
+  "assets": [
+    {
+      "id": "empty_counter",
+      "source_png": "docs/artifacts/building36/slices/empty_counter.png",
+      "source_sha256": "d3764c71bdce480925478b3be71d92a56aa89f8ae52a46454923670f5c6790f2",
+      "source_canvas_px": [
+        55,
+        72
+      ],
+      "source_visible_bbox_xyxy": [
+        5,
+        23,
+        54,
+        68
+      ],
+      "source_visible_extent_native_px": [
+        49,
+        45
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        294,
+        270
+      ],
+      "source_visible_extent_m": [
+        2.3149606299212597,
+        2.1259842519685037
+      ],
+      "instances": [
+        "checkout"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -1.2,
+        0.0,
+        -0.4
+      ],
+      "geometry_max_xyz_m": [
+        1.2,
+        1.0,
+        0.4
+      ],
+      "geometry_size_xyz_m": [
+        2.4,
+        1.0,
+        0.8
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        287.36819587421286,
+        253.66932421773012
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        1.023077724748253,
+        1.0643778108867938
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 1438,
+        "center_ray_hits": 1256,
+        "center_ray_misses": 182,
+        "texels_with_any_corner_ray_miss": 215,
+        "corner_ray_miss_samples_of_four_per_texel": 605,
+        "center_coverage_fraction": 0.8734353268428373,
+        "all_four_corners_coverage_fraction": 0.8504867872044506,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "left_shelf",
+      "source_png": "docs/artifacts/building36/slices/left_shelf.png",
+      "source_sha256": "9b0caa02ef3296aadb5c4c5680803138d504941819e80a7ebbe2dc0a7cc840d4",
+      "source_canvas_px": [
+        46,
+        72
+      ],
+      "source_visible_bbox_xyxy": [
+        2,
+        5,
+        45,
+        68
+      ],
+      "source_visible_extent_native_px": [
+        43,
+        63
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        258,
+        378
+      ],
+      "source_visible_extent_m": [
+        2.031496062992126,
+        2.9763779527559056
+      ],
+      "instances": [
+        "right_sales_shelf"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.3,
+        0.0,
+        -1.2
+      ],
+      "geometry_max_xyz_m": [
+        0.3,
+        1.8,
+        1.2
+      ],
+      "geometry_size_xyz_m": [
+        0.6,
+        1.8,
+        2.4
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        269.40768363207457,
+        332.67724912115995
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        0.9576564280636707,
+        1.1362364002905823
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": true,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 2139,
+        "center_ray_hits": 1542,
+        "center_ray_misses": 597,
+        "texels_with_any_corner_ray_miss": 649,
+        "corner_ray_miss_samples_of_four_per_texel": 2409,
+        "center_coverage_fraction": 0.7208976157082749,
+        "all_four_corners_coverage_fraction": 0.6965871902758298,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "rear_shelf",
+      "source_png": "docs/artifacts/building36/slices/rear_shelf.png",
+      "source_sha256": "ebf4923fd4ef50621c9f665f0937343cb0448eb130b104af7e7b5402eb677ade",
+      "source_canvas_px": [
+        53,
+        72
+      ],
+      "source_visible_bbox_xyxy": [
+        2,
+        9,
+        52,
+        71
+      ],
+      "source_visible_extent_native_px": [
+        50,
+        62
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        300,
+        372
+      ],
+      "source_visible_extent_m": [
+        2.3622047244094486,
+        2.929133858267716
+      ],
+      "instances": [
+        "rear_shelf"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -1.45,
+        0.0,
+        -0.3
+      ],
+      "geometry_max_xyz_m": [
+        1.45,
+        1.8,
+        0.3
+      ],
+      "geometry_size_xyz_m": [
+        2.9,
+        1.8,
+        0.6
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        314.30896423742035,
+        355.1278894238328
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        0.9544748452461833,
+        1.0475099564935348
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": true,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 2300,
+        "center_ray_hits": 1703,
+        "center_ray_misses": 597,
+        "texels_with_any_corner_ray_miss": 638,
+        "corner_ray_miss_samples_of_four_per_texel": 2390,
+        "center_coverage_fraction": 0.7404347826086957,
+        "all_four_corners_coverage_fraction": 0.7226086956521739,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "island_body_template",
+      "source_png": "docs/artifacts/building36/slices/island_body_template.png",
+      "source_sha256": "947fcad3f31b643f67820b6ee21c91906141f141f173c07bce581f04475f0ef4",
+      "source_canvas_px": [
+        50,
+        72
+      ],
+      "source_visible_bbox_xyxy": [
+        1,
+        32,
+        46,
+        69
+      ],
+      "source_visible_extent_native_px": [
+        45,
+        37
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        270,
+        222
+      ],
+      "source_visible_extent_m": [
+        2.1259842519685037,
+        1.7480314960629921
+      ],
+      "instances": [
+        "display_island"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.8,
+        0.0,
+        -0.6
+      ],
+      "geometry_max_xyz_m": [
+        0.8,
+        0.65,
+        0.6
+      ],
+      "geometry_size_xyz_m": [
+        1.6,
+        0.65,
+        1.2
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        251.44717138993627,
+        197.21398277737353
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        1.0737842009019563,
+        1.1256808309104853
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 1140,
+        "center_ray_hits": 890,
+        "center_ray_misses": 250,
+        "texels_with_any_corner_ray_miss": 278,
+        "corner_ray_miss_samples_of_four_per_texel": 892,
+        "center_coverage_fraction": 0.7807017543859649,
+        "all_four_corners_coverage_fraction": 0.756140350877193,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "stock_shelf",
+      "source_png": "docs/artifacts/building36/slices/stock_shelf.png",
+      "source_sha256": "231dff06d32581ad6b5d11a43740e40d5e92aaaca13682d32a795ac132e78a56",
+      "source_canvas_px": [
+        56,
+        62
+      ],
+      "source_visible_bbox_xyxy": [
+        10,
+        1,
+        51,
+        62
+      ],
+      "source_visible_extent_native_px": [
+        41,
+        61
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        246,
+        366
+      ],
+      "source_visible_extent_m": [
+        1.937007874015748,
+        2.8818897637795273
+      ],
+      "instances": [
+        "stock_shelf"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -1.225,
+        0.0,
+        -0.3
+      ],
+      "geometry_max_xyz_m": [
+        1.225,
+        1.8,
+        0.3
+      ],
+      "geometry_size_xyz_m": [
+        2.45,
+        1.8,
+        0.6
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        273.89781169260914,
+        334.9223131514272
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        0.8981451822480481,
+        1.0927907327408244
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": true,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 1852,
+        "center_ray_hits": 1624,
+        "center_ray_misses": 228,
+        "texels_with_any_corner_ray_miss": 281,
+        "corner_ray_miss_samples_of_four_per_texel": 920,
+        "center_coverage_fraction": 0.8768898488120951,
+        "all_four_corners_coverage_fraction": 0.8482721382289417,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "fridge",
+      "source_png": "docs/artifacts/building36/slices/fridge.png",
+      "source_sha256": "11382d25eebccd7d505ffb26cc37c7c3eb7f8f79a193ed6b9d7b248b51ea41ec",
+      "source_canvas_px": [
+        48,
+        62
+      ],
+      "source_visible_bbox_xyxy": [
+        5,
+        2,
+        44,
+        60
+      ],
+      "source_visible_extent_native_px": [
+        39,
+        58
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        234,
+        348
+      ],
+      "source_visible_extent_m": [
+        1.84251968503937,
+        2.7401574803149606
+      ],
+      "instances": [
+        "retail_fridge"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.775,
+        0.0,
+        -0.325
+      ],
+      "geometry_max_xyz_m": [
+        0.775,
+        1.9,
+        0.325
+      ],
+      "geometry_size_xyz_m": [
+        1.55,
+        1.9,
+        0.65
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        197.56563466352137,
+        307.7547472649457
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        1.1844165125100368,
+        1.1307705343060304
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 1935,
+        "center_ray_hits": 1306,
+        "center_ray_misses": 629,
+        "texels_with_any_corner_ray_miss": 732,
+        "corner_ray_miss_samples_of_four_per_texel": 2653,
+        "center_coverage_fraction": 0.6749354005167959,
+        "all_four_corners_coverage_fraction": 0.6217054263565891,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "utility_bench",
+      "source_png": "docs/artifacts/building36/slices/utility_bench.png",
+      "source_sha256": "31c4bb0992be8572c5cff88c3ca9a46f3bbd96681aa979baef379bead7b7b172",
+      "source_canvas_px": [
+        56,
+        62
+      ],
+      "source_visible_bbox_xyxy": [
+        5,
+        16,
+        49,
+        59
+      ],
+      "source_visible_extent_native_px": [
+        44,
+        43
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        264,
+        258
+      ],
+      "source_visible_extent_m": [
+        2.078740157480315,
+        2.031496062992126
+      ],
+      "instances": [
+        "utility_bench"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.65,
+        0.0,
+        -0.275
+      ],
+      "geometry_max_xyz_m": [
+        0.65,
+        0.9,
+        0.275
+      ],
+      "geometry_size_xyz_m": [
+        1.3,
+        0.9,
+        0.55
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        166.13473823977932,
+        182.054072772451
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        1.5890716342477,
+        1.4171613744806117
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 1361,
+        "center_ray_hits": 595,
+        "center_ray_misses": 766,
+        "texels_with_any_corner_ray_miss": 818,
+        "corner_ray_miss_samples_of_four_per_texel": 3108,
+        "center_coverage_fraction": 0.4371785451873622,
+        "all_four_corners_coverage_fraction": 0.39897134459955913,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "cleaning_cabinet",
+      "source_png": "docs/artifacts/building36/slices/cleaning_cabinet.png",
+      "source_sha256": "6218d5fece9299e2ffd74aba23f6df4b55470612f322fc8668d9ab93f16ad787",
+      "source_canvas_px": [
+        44,
+        62
+      ],
+      "source_visible_bbox_xyxy": [
+        7,
+        4,
+        29,
+        57
+      ],
+      "source_visible_extent_native_px": [
+        22,
+        53
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        132,
+        318
+      ],
+      "source_visible_extent_m": [
+        1.0393700787401574,
+        2.5039370078740157
+      ],
+      "instances": [
+        "cleaning_cabinet"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.3,
+        0.0,
+        -0.3
+      ],
+      "geometry_max_xyz_m": [
+        0.3,
+        1.65,
+        0.3
+      ],
+      "geometry_size_xyz_m": [
+        0.6,
+        1.65,
+        0.6
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        107.76307345282983,
+        235.35716008944402
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        1.224909384732602,
+        1.3511379890849669
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 1016,
+        "center_ray_hits": 621,
+        "center_ray_misses": 395,
+        "texels_with_any_corner_ray_miss": 472,
+        "corner_ray_miss_samples_of_four_per_texel": 1690,
+        "center_coverage_fraction": 0.6112204724409449,
+        "all_four_corners_coverage_fraction": 0.5354330708661418,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "register",
+      "source_png": "docs/artifacts/building36/slices/register.png",
+      "source_sha256": "88cb9b148c4079fc2a4de01271fbe5db24400c3ce61b81292457327cf7482b17",
+      "source_canvas_px": [
+        56,
+        48
+      ],
+      "source_visible_bbox_xyxy": [
+        11,
+        7,
+        47,
+        45
+      ],
+      "source_visible_extent_native_px": [
+        36,
+        38
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        216,
+        228
+      ],
+      "source_visible_extent_m": [
+        1.700787401574803,
+        1.795275590551181
+      ],
+      "instances": [
+        "checkout_register"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.275,
+        0.0,
+        -0.2
+      ],
+      "geometry_max_xyz_m": [
+        0.275,
+        0.42,
+        0.2
+      ],
+      "geometry_size_xyz_m": [
+        0.55,
+        0.42,
+        0.4
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        85.31243315015696,
+        88.85001161294043
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        2.5318701158109285,
+        2.56612234327264
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 844,
+        "center_ray_hits": 140,
+        "center_ray_misses": 704,
+        "texels_with_any_corner_ray_miss": 721,
+        "corner_ray_miss_samples_of_four_per_texel": 2798,
+        "center_coverage_fraction": 0.16587677725118483,
+        "all_four_corners_coverage_fraction": 0.1457345971563981,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "appletray",
+      "source_png": "docs/artifacts/building36/slices/appletray.png",
+      "source_sha256": "06646d37c448db9b22920d360ae30affc868347098374f9ace3f1de98b389818",
+      "source_canvas_px": [
+        49,
+        48
+      ],
+      "source_visible_bbox_xyxy": [
+        9,
+        15,
+        39,
+        43
+      ],
+      "source_visible_extent_native_px": [
+        30,
+        28
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        180,
+        168
+      ],
+      "source_visible_extent_m": [
+        1.4173228346456692,
+        1.3228346456692912
+      ],
+      "instances": [
+        "island_apple_tray_left",
+        "island_apple_tray_right",
+        "checkout_produce"
+      ],
+      "geometry_kind": "current_metric_tray_collision_box",
+      "geometry_source": "Tools/Building35/metric-catalog.json",
+      "geometry_min_xyz_m": [
+        -0.2,
+        0.0,
+        -0.15
+      ],
+      "geometry_max_xyz_m": [
+        0.2,
+        0.2,
+        0.15
+      ],
+      "geometry_size_xyz_m": [
+        0.4,
+        0.2,
+        0.3
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        62.86179284748407,
+        53.42794167986678
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        2.86342453573855,
+        3.1444220892250345
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 612,
+        "center_ray_hits": 59,
+        "center_ray_misses": 553,
+        "texels_with_any_corner_ray_miss": 562,
+        "corner_ray_miss_samples_of_four_per_texel": 2191,
+        "center_coverage_fraction": 0.09640522875816994,
+        "all_four_corners_coverage_fraction": 0.08169934640522876,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "plant",
+      "source_png": "docs/artifacts/building36/slices/plant.png",
+      "source_sha256": "82e4f1af96b3e5beb5539d908fa5df030415740809972ceb3f2cb3aae8011d2b",
+      "source_canvas_px": [
+        53,
+        48
+      ],
+      "source_visible_bbox_xyxy": [
+        10,
+        1,
+        42,
+        46
+      ],
+      "source_visible_extent_native_px": [
+        32,
+        45
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        192,
+        270
+      ],
+      "source_visible_extent_m": [
+        1.5118110236220472,
+        2.1259842519685037
+      ],
+      "instances": [
+        "entry_plant",
+        "staff_corner_plant"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.3,
+        0.0,
+        -0.3
+      ],
+      "geometry_max_xyz_m": [
+        0.3,
+        1.0,
+        0.3
+      ],
+      "geometry_size_xyz_m": [
+        0.6,
+        1.0,
+        0.6
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        107.76307345282983,
+        163.86676300703863
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        1.781686377792876,
+        1.647680072794277
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 898,
+        "center_ray_hits": 399,
+        "center_ray_misses": 499,
+        "texels_with_any_corner_ray_miss": 548,
+        "corner_ray_miss_samples_of_four_per_texel": 2049,
+        "center_coverage_fraction": 0.4443207126948775,
+        "all_four_corners_coverage_fraction": 0.3897550111358575,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "barrel",
+      "source_png": "docs/artifacts/building36/slices/barrel.png",
+      "source_sha256": "858442cdf269790dc0edd390f58f04a8745800056a8347de6197b271c6a2e73f",
+      "source_canvas_px": [
+        46,
+        48
+      ],
+      "source_visible_bbox_xyxy": [
+        11,
+        9,
+        34,
+        45
+      ],
+      "source_visible_extent_native_px": [
+        23,
+        36
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        138,
+        216
+      ],
+      "source_visible_extent_m": [
+        1.0866141732283463,
+        1.700787401574803
+      ],
+      "instances": [
+        "bulk_barrel_a",
+        "bulk_barrel_b"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.23,
+        0.0,
+        -0.23
+      ],
+      "geometry_max_xyz_m": [
+        0.23,
+        0.65,
+        0.23
+      ],
+      "geometry_size_xyz_m": [
+        0.46,
+        0.65,
+        0.46
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        82.6183563138362,
+        112.7995752393235
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        1.670330979180821,
+        1.9149008277887503
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 733,
+        "center_ray_hits": 205,
+        "center_ray_misses": 528,
+        "texels_with_any_corner_ray_miss": 548,
+        "corner_ray_miss_samples_of_four_per_texel": 2068,
+        "center_coverage_fraction": 0.27967257844474763,
+        "all_four_corners_coverage_fraction": 0.252387448840382,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "crate",
+      "source_png": "docs/artifacts/building36/slices/crate.png",
+      "source_sha256": "e299e47e8e10383349335d8031533f51259eadaefe81699a4b069663a609674d",
+      "source_canvas_px": [
+        52,
+        43
+      ],
+      "source_visible_bbox_xyxy": [
+        11,
+        8,
+        44,
+        38
+      ],
+      "source_visible_extent_native_px": [
+        33,
+        30
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        198,
+        180
+      ],
+      "source_visible_extent_m": [
+        1.5590551181102361,
+        1.4173228346456692
+      ],
+      "instances": [
+        "left_crate_base",
+        "left_crate_top",
+        "left_crate_single",
+        "stock_crate_base",
+        "stock_crate_top"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/placement.json",
+      "geometry_min_xyz_m": [
+        -0.25,
+        0.0,
+        -0.2
+      ],
+      "geometry_max_xyz_m": [
+        0.25,
+        0.35,
+        0.2
+      ],
+      "geometry_size_xyz_m": [
+        0.5,
+        0.35,
+        0.4
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        80.82230508962238,
+        78.90598174302949
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        2.449818769465204,
+        2.2811958741759284
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 687,
+        "center_ray_hits": 122,
+        "center_ray_misses": 565,
+        "texels_with_any_corner_ray_miss": 582,
+        "corner_ray_miss_samples_of_four_per_texel": 2247,
+        "center_coverage_fraction": 0.17758369723435224,
+        "all_four_corners_coverage_fraction": 0.15283842794759825,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "detail_ledger",
+      "source_png": "docs/artifacts/building36/slices/detail_ledger.png",
+      "source_sha256": "b452a7a53ad36aae5655d10a44c48018cfa79514b414c35f12594cc4345d5f4e",
+      "source_canvas_px": [
+        56,
+        43
+      ],
+      "source_visible_bbox_xyxy": [
+        9,
+        16,
+        44,
+        36
+      ],
+      "source_visible_extent_native_px": [
+        35,
+        20
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        210,
+        120
+      ],
+      "source_visible_extent_m": [
+        1.6535433070866141,
+        0.9448818897637795
+      ],
+      "instances": [
+        "checkout_ledger"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/details/placement.json",
+      "geometry_min_xyz_m": [
+        -0.19,
+        0.0,
+        -0.110496455
+      ],
+      "geometry_max_xyz_m": [
+        0.19,
+        0.02,
+        0.110496455
+      ],
+      "geometry_size_xyz_m": [
+        0.38,
+        0.02,
+        0.22099291
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        53.970702587466626,
+        29.185055819345788
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        3.8909999301874447,
+        4.111693352337399
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 390,
+        "center_ray_hits": 12,
+        "center_ray_misses": 378,
+        "texels_with_any_corner_ray_miss": 381,
+        "corner_ray_miss_samples_of_four_per_texel": 1508,
+        "center_coverage_fraction": 0.03076923076923077,
+        "all_four_corners_coverage_fraction": 0.023076923076923078,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "detail_clock",
+      "source_png": "docs/artifacts/building36/slices/detail_clock.png",
+      "source_sha256": "a887210ef5c3eabc090df87354067fc7a1f5042f00703cbee198fa0c05e7f227",
+      "source_canvas_px": [
+        47,
+        43
+      ],
+      "source_visible_bbox_xyxy": [
+        13,
+        10,
+        32,
+        38
+      ],
+      "source_visible_extent_native_px": [
+        19,
+        28
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        114,
+        168
+      ],
+      "source_visible_extent_m": [
+        0.8976377952755905,
+        1.3228346456692912
+      ],
+      "instances": [
+        "wall_clock"
+      ],
+      "geometry_kind": "existing_authored_flat_detail_plane",
+      "geometry_source": "docs/artifacts/building35/details/detail_clock/spec.json",
+      "geometry_min_xyz_m": [
+        -0.17,
+        0.0,
+        0.0
+      ],
+      "geometry_max_xyz_m": [
+        0.17,
+        0.3316393442622951,
+        0.0
+      ],
+      "geometry_size_xyz_m": [
+        0.34,
+        0.3316393442622951,
+        0.0
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        30.532870811635124,
+        51.74186372806375
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        3.7336810122865405,
+        3.246887295806474
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 419,
+        "center_ray_hits": 30,
+        "center_ray_misses": 389,
+        "texels_with_any_corner_ray_miss": 396,
+        "corner_ray_miss_samples_of_four_per_texel": 1533,
+        "center_coverage_fraction": 0.07159904534606205,
+        "all_four_corners_coverage_fraction": 0.05489260143198091,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "detail_poster",
+      "source_png": "docs/artifacts/building36/slices/detail_poster.png",
+      "source_sha256": "e8a0605660f13ecd30de59d99e6c60588f5f939a6529489513515158b746deba",
+      "source_canvas_px": [
+        49,
+        43
+      ],
+      "source_visible_bbox_xyxy": [
+        15,
+        3,
+        35,
+        43
+      ],
+      "source_visible_extent_native_px": [
+        20,
+        40
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        120,
+        240
+      ],
+      "source_visible_extent_m": [
+        0.9448818897637795,
+        1.889763779527559
+      ],
+      "instances": [
+        "botanical_poster"
+      ],
+      "geometry_kind": "existing_authored_flat_detail_plane",
+      "geometry_source": "docs/artifacts/building35/details/detail_poster/spec.json",
+      "geometry_min_xyz_m": [
+        0.0,
+        0.0,
+        -0.18
+      ],
+      "geometry_max_xyz_m": [
+        0.0,
+        0.48,
+        0.18
+      ],
+      "geometry_size_xyz_m": [
+        0.0,
+        0.48,
+        0.36
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        32.328922035848954,
+        68.95736963262384
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        3.7118466204018246,
+        3.480411176914376
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 648,
+        "center_ray_hits": 39,
+        "center_ray_misses": 609,
+        "texels_with_any_corner_ray_miss": 624,
+        "corner_ray_miss_samples_of_four_per_texel": 2454,
+        "center_coverage_fraction": 0.06018518518518518,
+        "all_four_corners_coverage_fraction": 0.037037037037037035,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "detail_broom",
+      "source_png": "docs/artifacts/building36/slices/detail_broom.png",
+      "source_sha256": "b5fe95a73d609465404968fc60f0147bc9a9d14713c502424eaebee985bc4806",
+      "source_canvas_px": [
+        52,
+        52
+      ],
+      "source_visible_bbox_xyxy": [
+        17,
+        1,
+        34,
+        48
+      ],
+      "source_visible_extent_native_px": [
+        17,
+        47
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        102,
+        282
+      ],
+      "source_visible_extent_m": [
+        0.8031496062992125,
+        2.220472440944882
+      ],
+      "instances": [
+        "staff_broom"
+      ],
+      "geometry_kind": "existing_authored_flat_detail_plane",
+      "geometry_source": "docs/artifacts/building35/details/detail_broom/spec.json",
+      "geometry_min_xyz_m": [
+        0.0,
+        0.0,
+        -0.13
+      ],
+      "geometry_max_xyz_m": [
+        0.0,
+        1.2,
+        0.13
+      ],
+      "geometry_size_xyz_m": [
+        0.0,
+        1.2,
+        0.26
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        23.348665914779797,
+        143.65660449413835
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        4.368557945549839,
+        1.9630145164088608
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 285,
+        "center_ray_hits": 66,
+        "center_ray_misses": 219,
+        "texels_with_any_corner_ray_miss": 223,
+        "corner_ray_miss_samples_of_four_per_texel": 798,
+        "center_coverage_fraction": 0.23157894736842105,
+        "all_four_corners_coverage_fraction": 0.21754385964912282,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    },
+    {
+      "id": "detail_bin",
+      "source_png": "docs/artifacts/building36/slices/detail_bin.png",
+      "source_sha256": "bc5368ec49489165da3e21f35f2412ddda9a4f56770b7b4a08d53a7e9db49a52",
+      "source_canvas_px": [
+        50,
+        52
+      ],
+      "source_visible_bbox_xyxy": [
+        18,
+        14,
+        35,
+        43
+      ],
+      "source_visible_extent_native_px": [
+        17,
+        29
+      ],
+      "source_visible_extent_at_camera_k1_px": [
+        102,
+        174
+      ],
+      "source_visible_extent_m": [
+        0.8031496062992125,
+        1.3700787401574803
+      ],
+      "instances": [
+        "staff_bin"
+      ],
+      "geometry_kind": "existing_collision_box",
+      "geometry_source": "docs/artifacts/building35/details/placement.json",
+      "geometry_min_xyz_m": [
+        -0.15,
+        0.0,
+        -0.15
+      ],
+      "geometry_max_xyz_m": [
+        0.15,
+        0.45,
+        0.15
+      ],
+      "geometry_size_xyz_m": [
+        0.3,
+        0.45,
+        0.3
+      ],
+      "geometry_projected_extent_at_camera_k1_px": [
+        53.881536726414915,
+        76.43412018948813
+      ],
+      "source_to_geometry_projected_extent_ratio_xy": [
+        1.8930417764049303,
+        2.2764702408902715
+      ],
+      "translation_independent_bbox_necessary_condition": {
+        "width_fits": false,
+        "height_fits": false,
+        "status": "fail",
+        "meaning": "An axis failure cannot be fixed by a different pivot/translation. An axis pass does not establish fit inside the projected convex hull."
+      },
+      "hypothetical_bottom_center_ray_probe": {
+        "semantic_pivot_confirmed": false,
+        "visible_texels": 453,
+        "center_ray_hits": 97,
+        "center_ray_misses": 356,
+        "texels_with_any_corner_ray_miss": 388,
+        "corner_ray_miss_samples_of_four_per_texel": 1476,
+        "center_coverage_fraction": 0.2141280353200883,
+        "all_four_corners_coverage_fraction": 0.1434878587196468,
+        "hypothesis_status": "fail_under_unconfirmed_anchor"
+      },
+      "production_integration_authorized_by_probe": false
+    }
+  ],
+  "summary": {
+    "asset_count": 18,
+    "bbox_necessary_pass_ids": [],
+    "bbox_necessary_fail_ids": [
+      "empty_counter",
+      "left_shelf",
+      "rear_shelf",
+      "island_body_template",
+      "stock_shelf",
+      "fridge",
+      "utility_bench",
+      "cleaning_cabinet",
+      "register",
+      "appletray",
+      "plant",
+      "barrel",
+      "crate",
+      "detail_ledger",
+      "detail_clock",
+      "detail_poster",
+      "detail_broom",
+      "detail_bin"
+    ],
+    "hypothetical_all_corner_fit_ids": [],
+    "production_pass_claimed": false
+  },
+  "inputs_unchanged_after_probe": true,
+  "input_sha256": {
+    "docs/artifacts/building36/slices/manifest.json": "20998ffc34b973db35e9aef44c2c778d2037b5be9161f80ea261ee00751570ed",
+    "docs/artifacts/building35/placement.json": "e399122f0fb847ff9447ceb85b8aaa2774bfe7b9423411f7265fdc4c928cadd4",
+    "docs/artifacts/building35/details/placement.json": "95a48cbcff229247caac02ddf36ea15ce14204df239f45b9e03017cbef290129",
+    "Tools/Building35/metric-catalog.json": "ceda8140f9c06bf6b0b74d03ab3e4d09018a697a5dea82c7a114a91ca39a6611",
+    "docs/artifacts/building36/slices/empty_counter.png": "d3764c71bdce480925478b3be71d92a56aa89f8ae52a46454923670f5c6790f2",
+    "docs/artifacts/building36/slices/left_shelf.png": "9b0caa02ef3296aadb5c4c5680803138d504941819e80a7ebbe2dc0a7cc840d4",
+    "docs/artifacts/building36/slices/rear_shelf.png": "ebf4923fd4ef50621c9f665f0937343cb0448eb130b104af7e7b5402eb677ade",
+    "docs/artifacts/building36/slices/island_body_template.png": "947fcad3f31b643f67820b6ee21c91906141f141f173c07bce581f04475f0ef4",
+    "docs/artifacts/building36/slices/stock_shelf.png": "231dff06d32581ad6b5d11a43740e40d5e92aaaca13682d32a795ac132e78a56",
+    "docs/artifacts/building36/slices/fridge.png": "11382d25eebccd7d505ffb26cc37c7c3eb7f8f79a193ed6b9d7b248b51ea41ec",
+    "docs/artifacts/building36/slices/utility_bench.png": "31c4bb0992be8572c5cff88c3ca9a46f3bbd96681aa979baef379bead7b7b172",
+    "docs/artifacts/building36/slices/cleaning_cabinet.png": "6218d5fece9299e2ffd74aba23f6df4b55470612f322fc8668d9ab93f16ad787",
+    "docs/artifacts/building36/slices/register.png": "88cb9b148c4079fc2a4de01271fbe5db24400c3ce61b81292457327cf7482b17",
+    "docs/artifacts/building36/slices/appletray.png": "06646d37c448db9b22920d360ae30affc868347098374f9ace3f1de98b389818",
+    "docs/artifacts/building36/slices/plant.png": "82e4f1af96b3e5beb5539d908fa5df030415740809972ceb3f2cb3aae8011d2b",
+    "docs/artifacts/building36/slices/barrel.png": "858442cdf269790dc0edd390f58f04a8745800056a8347de6197b271c6a2e73f",
+    "docs/artifacts/building36/slices/crate.png": "e299e47e8e10383349335d8031533f51259eadaefe81699a4b069663a609674d",
+    "docs/artifacts/building36/slices/detail_ledger.png": "b452a7a53ad36aae5655d10a44c48018cfa79514b414c35f12594cc4345d5f4e",
+    "docs/artifacts/building36/slices/detail_clock.png": "a887210ef5c3eabc090df87354067fc7a1f5042f00703cbee198fa0c05e7f227",
+    "docs/artifacts/building36/slices/detail_poster.png": "e8a0605660f13ecd30de59d99e6c60588f5f939a6529489513515158b746deba",
+    "docs/artifacts/building36/slices/detail_broom.png": "b5fe95a73d609465404968fc60f0147bc9a9d14713c502424eaebee985bc4806",
+    "docs/artifacts/building36/slices/detail_bin.png": "bc5368ec49489165da3e21f35f2412ddda9a4f56770b7b4a08d53a7e9db49a52",
+    "Assets/Art/PixelShopInterior35/Color/empty_counter.png": "e92f214bf8d440fb9fef93f98ec81967dd829e53ec6837a3b0a0cfbb145596c5",
+    "docs/artifacts/building35/details/detail_clock/spec.json": "c2b55ab0350fe9b4237c46b244f45dc44a94bd94ba9ba68627ffd20f6fbad098",
+    "docs/artifacts/building35/details/detail_poster/spec.json": "399a3be664430c81fb728794016f836e45b289d45d39ed543690d586c7ec13c2",
+    "docs/artifacts/building35/details/detail_broom/spec.json": "a1acdb0f45bcec97ca27197c1d82637bf33c1718bc62bae46e870ae66b274946"
+  }
+}

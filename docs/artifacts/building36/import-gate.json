@@ -1,0 +1,67 @@
+{
+  "schema": "building36-import-gate/1",
+  "mode": "input",
+  "evidence": {
+    "input_sha256": {
+      "docs\\artifacts\\building36\\unity-import.json": "50aecdaddd5d146fbe7d1d5f5e1bb39c44750d482ed4e7a19d32a8d0e95164f7",
+      "docs\\artifacts\\building36\\technical-validation.json": "4295829b406b14bffbefd51dda8b801f7daaeeee1d065b504ed1532930f6899d",
+      "docs\\artifacts\\building36\\source-fit.json": "c53c3cd22feb524bd827828016b8a1ccc4803e78ea438bc7dde9d004b91eca8b",
+      "docs\\artifacts\\building36\\slices\\manifest.json": "20998ffc34b973db35e9aef44c2c778d2037b5be9161f80ea261ee00751570ed"
+    },
+    "imported_count": 18,
+    "geometry_necessary_fail_ids": [
+      "empty_counter",
+      "left_shelf",
+      "rear_shelf",
+      "island_body_template",
+      "stock_shelf",
+      "fridge",
+      "utility_bench",
+      "cleaning_cabinet",
+      "register",
+      "appletray",
+      "plant",
+      "barrel",
+      "crate",
+      "detail_ledger",
+      "detail_clock",
+      "detail_poster",
+      "detail_broom",
+      "detail_bin"
+    ],
+    "material_import_is_scene_integration": false
+  },
+  "failures": [
+    {
+      "code": "PRESERVED_GEOMETRY_NECESSARY_CONDITION_FAILED",
+      "stage": "source_fit",
+      "detail": [
+        "empty_counter",
+        "left_shelf",
+        "rear_shelf",
+        "island_body_template",
+        "stock_shelf",
+        "fridge",
+        "utility_bench",
+        "cleaning_cabinet",
+        "register",
+        "appletray",
+        "plant",
+        "barrel",
+        "crate",
+        "detail_ledger",
+        "detail_clock",
+        "detail_poster",
+        "detail_broom",
+        "detail_bin"
+      ]
+    }
+  ],
+  "exit_code": 2,
+  "production_complete": false,
+  "limits": [
+    "Necessary bbox fit is not semantic geometry or art approval",
+    "Unity readback is produced by Editor observation, not AI approval flags",
+    "Input gate success permits only the scoped integration attempt; it is not completion"
+  ]
+}

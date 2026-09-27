@@ -1,0 +1,40 @@
+{
+  "goal": "기지 실내의 기존 인스턴스에 공통 시트 정수 crop 원본을 연결하고 실제 Unity 화면까지 확인한다. 재료 import 성공만으로 목표 완료를 선언하지 않는다.",
+  "entry": "import",
+  "max_steps": 4,
+  "requirements": [{"id":"scene_native_replacement","source":"사용자: 시트 전체 정규화 후 잘라서 쓰며 이중 삼중 크기 변형을 고쳐라","text":"원본 texel을 보존한 전체 기존 실내 연결과 실제 관측","predicate":{"op":"eq","args":[{"ref":"verify.exit_code"},{"literal":0}]}}],
+  "nodes": [
+    {
+      "id":"import","algorithm":"ai.work","phase":"work","inputs":{},
+      "parameters":{"scope":"NativeSheetImport36.Import로 이미 정규화/분리된 PNG 18종을 Unity에 무변형 Sprite import한다. 이번 실행의 실제 unity-import.json이 이미 있으면 재실행하지 않고 그 readback을 반환한다. 씬/프리팹/기존 원본은 수정하지 않는다."},
+      "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/slices/manifest.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Editor/NativeSheetImport36.cs"],
+      "writes":["asset:B36-native-sprites","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-import.json"],
+      "question":"이번 작업에서 실제 실행된 Unity import readback 경로를 반환한다. 성공 주장을 대신 제출하지 않는다.",
+      "output_schema":{"readback_path":{"type":"string"}},
+      "edges":[{"when":{"op":"known","args":[{"ref":"import.readback_path"}]},"to":"input_gate"}]
+    },
+    {
+      "id":"input_gate","algorithm":"command.run","phase":"work","inputs":{"stdin":{"ref":"import"}},
+      "parameters":{"argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-B","Tools/Building36/import_gate.py","input","--output","docs/artifacts/building36/import-gate-corrected.json"],"cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game","timeout":30,"code_files":["Tools/Building36/import_gate.py"]},
+      "reads":["asset:B36-native-sprites","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-import.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/technical-validation.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/source-fit.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/slices/manifest.json"],
+      "writes":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/import-gate-corrected.json"],
+      "edges":[{"when":{"op":"eq","args":[{"ref":"input_gate.exit_code"},{"literal":0}]},"to":"integrate"},{"when":{"op":"ne","args":[{"ref":"input_gate.exit_code"},{"literal":0}]},"to":"@blocked"}]
+    },
+    {
+      "id":"integrate","algorithm":"ai.work","phase":"work","inputs":{"gate":{"ref":"input_gate"}},
+      "parameters":{"scope":"입력 조건 통과 후에만 기존 GameMap1 PlannedPixelShop33 인스턴스의 자산 binding을 연결한다. 기존 인스턴스 ID/mesh depth/collider 계약 보존, 같은 asset은 같은 Sprite 참조 재사용, localScale=1. 기존 소스색 warp·개별 size 조절·겉보기용 depth 복제·새 오브젝트 대체 금지. 이 범위에서 연결 불가능하면 씬 변경을 중지하고 readback에 실패 원인을 기록한다. actual unity-integration.json에는 scenePath/sceneIntegrated/bindings와 실제 gameViewCapture/SHA를 기록한다. bindings 각 행은 id/instance/before{instanceId,meshDepthHash,colliderHash}/after{instanceId,meshDepthHash,colliderHash,localScale,spriteAsset,spriteGuid}의 실제 Editor 관측이며 AI 승인 boolean이 아니다."},
+      "reads":["asset:B36-native-sprites","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/import-gate-corrected.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/source-fit.json"],
+      "writes":["scene:GameMap1-native-sheet-bindings","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-integration.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/game-view.png"],
+      "question":"실제 Editor binding 전후 관측과 최종 카메라 이미지가 있는 readback 경로를 반환한다. 미실행이면 완료로 쓰지 않는다.",
+      "output_schema":{"readback_path":{"type":"string"}},
+      "edges":[{"when":{"op":"known","args":[{"ref":"integrate.readback_path"}]},"to":"verify"}]
+    },
+    {
+      "id":"verify","algorithm":"command.run","phase":"validation","inputs":{"stdin":{"ref":"integrate"}},
+      "parameters":{"argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-B","Tools/Building36/import_gate.py","integration","--output","docs/artifacts/building36/integration-gate.json"],"cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game","timeout":30,"code_files":["Tools/Building36/import_gate.py"]},
+      "reads":["scene:GameMap1-native-sheet-bindings","asset:B36-native-sprites","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-import.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-integration.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/technical-validation.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/source-fit.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/slices/manifest.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/game-view.png"],
+      "writes":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/integration-gate.json"],
+      "edges":[{"when":{"op":"eq","args":[{"ref":"verify.exit_code"},{"literal":0}]},"to":"@complete"},{"when":{"op":"ne","args":[{"ref":"verify.exit_code"},{"literal":0}]},"to":"@blocked"}]
+    }
+  ]
+}

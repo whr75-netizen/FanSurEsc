@@ -1,0 +1,59 @@
+{
+  "schema": "building36-import-gate/1",
+  "mode": "input",
+  "evidence": {
+    "input_sha256": {
+      "docs\\artifacts\\building36\\unity-import.json": "5418146404c417cf37616adbcbaf22c5d31b44090583ab30e34a085d09b1fb1f",
+      "docs\\artifacts\\building36\\technical-validation.json": "4295829b406b14bffbefd51dda8b801f7daaeeee1d065b504ed1532930f6899d",
+      "docs\\artifacts\\building36\\source-fit.json": "c53c3cd22feb524bd827828016b8a1ccc4803e78ea438bc7dde9d004b91eca8b",
+      "docs\\artifacts\\building36\\slices\\manifest.json": "20998ffc34b973db35e9aef44c2c778d2037b5be9161f80ea261ee00751570ed"
+    },
+    "imported_count": 18,
+    "collider_as_visual_proxy_candidate": {
+      "status": "rejected",
+      "bbox_fail_ids": [
+        "empty_counter",
+        "left_shelf",
+        "rear_shelf",
+        "island_body_template",
+        "stock_shelf",
+        "fridge",
+        "utility_bench",
+        "cleaning_cabinet",
+        "register",
+        "appletray",
+        "plant",
+        "barrel",
+        "crate",
+        "detail_ledger",
+        "detail_clock",
+        "detail_poster",
+        "detail_broom",
+        "detail_bin"
+      ],
+      "scope": "The proposed collider-box proxy only; this is not the existing B35 visual-depth surface",
+      "does_not_prove_all_unity_integration_impossible": true
+    },
+    "native_depth_mapping": {
+      "status": "not_authored",
+      "current_implementation": "No B36 canonical-colour-to-preserved-visual-depth producer or validator",
+      "preserved_contract": "Existing roof and character occlusion, independently of collider proxy shape"
+    },
+    "material_import_is_scene_integration": false
+  },
+  "failures": [
+    {
+      "code": "NATIVE_DEPTH_MAPPING_NOT_AUTHORED",
+      "stage": "depth_mapping",
+      "detail": "New canonical texels need an authored mapping preserving existing visual-depth occlusion; no such producer/validator is implemented"
+    }
+  ],
+  "exit_code": 2,
+  "production_complete": false,
+  "limits": [
+    "Collider-box proxy failure is not failure of every Unity integration or actual B35 visual geometry",
+    "The native-depth producer and validator are unimplemented; the integration branch cannot pass yet",
+    "Unity readback is produced by Editor observation, not AI approval flags",
+    "Input gate success permits only the scoped integration attempt; it is not completion"
+  ]
+}

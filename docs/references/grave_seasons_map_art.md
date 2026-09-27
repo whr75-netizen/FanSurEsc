@@ -1,5 +1,48 @@
 # Grave Seasons 기준 2D 맵 아트 — 첫 상가
 
+## 현재 결정 B31 — 개별 스프라이트 건물, Unity 통합
+
+**2026-09-27 최신 정정:** 아래 A30의 전체 공간 생성·384px 축소는 사용자가 거절했다. 게임 오브젝트 제작을 전체 이미지로 대체한 범위 오류다. A30 파일은 이력으로만 보존하며 채택하지 않는다. 이번 결과는 GameMap1에 배치하는 독립적인 테스트 점포 프리팹 한 채다. 바닥·벽·카운터·진열 가구·소품은 각각 선택/이동/교체 가능한 자식 오브젝트이며 충돌·출입·가림을 연결한다. 기존 기지, 실제 Player/Camera, 인벤토리와 도시 씬은 보존한다.
+
+### 선택과 외부 근거
+
+- PixelLab 네이티브 건축 키트/개별 가구 생성이 우선 후보였으나 실제 get_balance 응답은 구독 만료(2026-09-20), 사용가능 0회, 잔액 $0다. 생성 호출/결제는 하지 않았다.
+- 이번 최소 실험은 [hawkbirdtree의 Isometric Furniture and Walls](https://opengameart.org/content/isometric-furniture-and-walls), CC0, 320×960 원본의 개별 네이티브 픽셀 타일을 사용한다. 새 AI 생성물로 설명하지 않는다. 바닥·벽·가구를 같은 제작자의 한 세트에서 취해 방향/픽셀 밀도를 공유한다. 원본 정수 crop만 허용하며 임의 축소와 PerfectPixel 재샘플링은 하지 않는다.
+- 기존 GroundedPropSprite는 세로 투영 압축과 기존 fader 재질 속성 부재 때문에 그대로 재사용하지 않는다. 기존 IsometricAtlasSurface의 Point 샘플링·알파 clip·무추가조명 경로와 UrbanOcclusionFader의 실제 collider ray 판정을 재사용한다. 새 도시/카메라 Manager를 만들지 않는다.
+- 변경 전 실제 기지 Play 카메라는 45° pitch / 350° yaw / ortho 5다. **최신 사용자 승인으로 기본 pitch를30°로 변경한다.** yaw350°와 같은 CameraFollow/Camera 인스턴스는 유지한다. follow offset은 기존 camera-space offset을 보존하는 quaternion 변환으로 회전한다. 지역별 전환 제안은 취소했다. 촬영 전용 카메라를 최종 Play 결과로 대신하지 않는다.
+
+### 좌표 계약과 실패 귀속
+
+`원본 PNG 정수 crop → sprite pixel coordinates → 건물 local metres → world → 기존 gameplay camera → screen`
+
+- 이미지 원점 좌상단, u 오른쪽/v 아래, 단위 px. 원본 crop은 RGBA/색을 보존한다. 원본 바닥 모듈 64×32px. 이미지 피벗은 ground contact landmark로 기록하며 그림 높이에서 물리 높이를 역산하지 않는다.
+- 건물 local은 Unity 좌수계 +X 오른쪽/+Y 위/+Z 뒤, 단위 m, root scale 1. 타일 한 변 L=2m, 공통 화면 밀도 P=64/(sqrt(2)*L)=22.627417px/m. 원본 벽 수직 높이48px를 그대로 쓰므로 실제 높이는48/(P*cos30)=2.44949m다. 직교 투영 pitch30°, yaw45°(건물 local 기준). 전역 yaw는 건물 root305°를 한 번 합성해350°다. 건물은5×4타일=10×8m이며 캐릭터1.8m의 수직 투영은약35.27px다.
+- camera-right r, horizontal camera-away g에 대해 ground `(x,z)`는 screen `u=P(x-z)/sqrt(2)`, `v=-P(x+z)/(2sqrt(2))`(screen up 양수), 높이 h는 `+P*cos(30°)*h`다. 같은 바닥 모듈의 투영은 64×32px다.
+- 바닥은 실제 XZ quad와 diamond UV, 벽은 실제 수직 quad와 해당 벽의 저작 crop UV를 연결한다. 가구는 원본 aspect를 유지하는 camera-right/vertical 평면, `world = anchor + r*(u-pivotU)/P + up*(pivotV-v)/(P*cos30°)`로 수직 압축을 정확히 상쇄한다. 물리 footprint는 별도 BoxCollider이며 시각 전체 bbox를 collider로 쓰지 않는다.
+- 가구는 단일 시점 2D 카드다. 숨겨진 면/연속 자유 회전/동적 3D 표면 조명은 이 입력에 존재하지 않는다. 기본 시점을 맞추는 이유이며 3D 모델을 복원했다고 하지 않는다. RGB에 기본 조명을 다시 곱하지 않는다.
+- 원본 격자·crop 범위/공통 P/바닥 연결은 조립 계산의 invariant. 부위별 임의 scale은 금지. 벽 교차·픽셀 찌그러짐은 투영/UV 단계, 통로 차단은 footprint/배치 단계, 가림 실패는 renderer/collider 등록 단계로 귀속한다.
+
+### 범위와 판별 실험
+
+한 층 점포: 판매·진열 구역, 계산대, 후방 보관 공간, 입구와 통로. 도시 생성/2층/새 루팅 정책/새 캐릭터는 이번 범위 밖이다. 네이티브 에셋에 맞는 원본 정보량을 그대로 보여주며 Grave Seasons와 디자인 품질이 동등하다고 자체 판정하지 않는다.
+
+가설: 개별 native 자산 + 공통 투영/밀도 + 실제 물리 footprint면 한 장의 배경 없이 들어가고 가구를 돌아다닐 수 있다. 참이면 실제 Player가 입구를 통과하고 벽에서는 멈추며 앞벽은 가려질 때 희미해진다. 틀리면 배치/깊이 계약을 수정하고 기술 실패를 미술 질문으로 넘기지 않는다. 마지막 1회에 실제 Play 호출 이동·벽 충돌·가림·기본30°·동일 인스턴스와 정상 게임 카메라 PNG를 묶어 기록한다. WorkLoop는 `Tools/Building31/graph.json`, 증거는 `LocalOnly/Building31/`다. 사용자 외형 판정은 실제 결과를 제시한 뒤 받는다.
+
+---
+
+### B31 실행 결과와 남은 범위
+
+- `NativePixelShop31.prefab`을 GameMap1 `(-16,0,9)`에 저장했다. 원본16종에서 개별 바닥/벽/가구/평지붕을 조립했으며 Renderer78, Collider55, Missing Script0. 네이티브 자산은 Point/압축없음/mipmap없음으로 임포트했다. 새 생성·축소·색 재작성은 없다. 원본은 `Tools/Building31/Source/furnitureandwalls.png`, 출처와 crop/pivot은 `Assets/Art/NativePixelBuilding31/`에 보존했다.
+- 실제 기본 카메라30°/349.99997°/ortho5를 확인했다. 기존 Follow offset은 기존 camera-space 좌표를 보존하는 quaternion 변환으로 갱신했다. Editor preview도 같은30°다. 같은 런타임 Player/Camera를 사용한다.
+- `[Play Mode 호출 확인]` 실제 PlayerMovement.StepMove/CharacterController로 외부 z=-5.3에서 입구를 통과해 건물 local `(0,.565,-.3)` 도달, partition 벽에는 `(3.95,.565,-.625)`에서 정지했다. 검증 전후 같은 Player/Camera. 물리 키 입력을 보낸 것은 아니다.
+- 실내 앞벽10개 fade, 지붕20조각 숨김; 외부 복귀 시 숨긴 지붕0. 뒷벽은 새 `fadeWallsWhenInside=false` 옵션으로 실내에서도 유지하고 실제 ray로 가릴 때만 희미해진다. 기존 도시 호출의 기본값true는 보존했다. 표면 위 항아리는 지지면과 같은 깊이 평면으로 시선 방향을 따라 투영하여 화면 좌표를 바꾸지 않고 테이블 뒤에 잘리는 현상을 수정했다. 1mm 깊이 차이는 coplanar tie만 해결한다.
+- 신규 Console Error/Exception 없음. 기존09:50:40 Unity AI relay 종료 오류1개는 보존했다. 의도한 저장 뒤 Play Mode 종료. 촬영은 실제 GameView1114×857이며 사진용 카메라/줌 변경 없음.
+- 증거: `docs/artifacts/building31/play-interior.png`, `play-exterior.png`, `readback.json`, `asset-observation.json`. WorkLoop 최종 기술조건 exit0, review ticket `9abe3b6b117b465cb0e039fee809b39b`에서 사용자 미술 피드백 대기. 참조 원작과 외형 동등성은 승인하지 않았다.
+- 한계: native 픽셀은 보존하지만 실제 화면 확대율3.78744여서 열 너비3/4px가 섞인다. 정수 화면 배율/자유 오빗의 새 뷰/문짝 애니메이션/루팅 연결/밤 조명/2층은 구현 범위에 포함하지 않았다. 문은 실제 열린2m 진입구다. 기존 카메라 오빗은 남아 있으며 현재 아트는 기본 고정 시점용이다.
+- 접근: Play 후 `Tools > World Art > Inspect Native Pixel Shop 31`. 기존 실제 Player를 점포로 옮기며 Camera의 각도/줌을 바꾸지 않는다. Edit Mode에서는 선택/SceneView framing만 한다.
+
+아래는 **거절된 A30 실험의 보존 기록**이다. 현재 제작 지시가 아니다.
+
 ## 확정 요구와 이번 범위
 
 2026-09-27 사용자 정정: 대부분의 환경을 2D 픽셀아트 이미지로 제작한다. 첨부 Grave Seasons 실내 화면의 시점, 캐릭터 대비 가구/문 크기, 실내 완성도를 우선 참고한다. 맵 아트 설계 → 건물 설계도 → 사물 배치 설계 → 생성 → 공통 픽셀 격자 정규화 순서다. 기존 3D 도시의 철거나 Unity 렌더러 교체 요청으로 확대하지 않는다.

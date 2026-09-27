@@ -30,6 +30,7 @@ namespace FantasySurvival.WorldGeneration
         private sealed class Building
         {
             public Transform Root;
+            public bool FadeWallsWhenInside;
             public Bounds Interior;
             public Bounds OcclusionBounds;
             public Surface Roof;
@@ -76,7 +77,8 @@ namespace FantasySurvival.WorldGeneration
             Renderer roof,
             Collider roofCollider,
             Renderer[] walls,
-            Collider[] wallColliders)
+            Collider[] wallColliders,
+            bool fadeWallsWhenInside = true)
         {
             if (properties == null) properties = new MaterialPropertyBlock();
             if (root == null)
@@ -87,6 +89,7 @@ namespace FantasySurvival.WorldGeneration
             var building = new Building
             {
                 Root = root,
+                FadeWallsWhenInside = fadeWallsWhenInside,
                 Interior = localInterior,
                 OcclusionBounds = localInterior,
                 Roof = CreateSurface(roof, roofCollider),
@@ -205,7 +208,7 @@ namespace FantasySurvival.WorldGeneration
                 for (int wallIndex = 0; wallIndex < building.Walls.Length; wallIndex++)
                 {
                     UpdateSurface(building.Walls[wallIndex], WallOpacity,
-                        inside, mayOcclude, torsoRay, torsoDistance, headRay, headDistance, fadeStep);
+                        inside && building.FadeWallsWhenInside, mayOcclude, torsoRay, torsoDistance, headRay, headDistance, fadeStep);
                 }
             }
 

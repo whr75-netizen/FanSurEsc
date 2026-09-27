@@ -2509,3 +2509,11 @@ Interactable (abstract base class)
 - `[복구]` 최신 `_Recovery/0 (2).unity`와 저장 GameMap1 SHA256 동일, 상가 소스/에셋/참조 유지. 손실 확인 없이 덮어쓰지 않았다. `LocalOnly/Recovery/20260920-editor-recovery/`에 원본·복구본·dump·변경 ZIP215파일·해시 목록을 보존했다. 기지씬 큰diff는533개동일fileID의블록순서가대부분이며 실제값7블록만변경되어 기존광원/렌더레이어값을 보존한다.
 - `[Play Mode 호출 확인]` 정상 기지→도심 진입1회, seed1462661998/115동/상가30/3유형/NavMesh준비, 같은Player/Camera와30°/45°카메라유지. 누락스크립트0·깨진직렬화참조0·Console오류0. 기존상가전체방동선검증은 재실행하지 않고 §160~161을 재사용했다. 확인 후 Play종료, 저장된기지편집상태복귀.
 - `[기록/미완료]` 사용자의명시요청으로 미커밋도심코드·에셋의존성과현재기지상태를 로컬커밋대상으로 정리했다. 공유문서의무관한변경과캐릭터/책상실험은 분리한다. 크래시원인수정·가구밀도/체감비율·최종아트는 미완료다. 상세근거는 `docs/references/unity_editor_recovery_20260920.md`.
+
+## 163. B31 개별 네이티브 픽셀 점포·기본30° 카메라 `[MAP-01][CAMERA-01]`
+
+- `[요구/교체]` 사용자가 전체 맵 생성·축소 A30을 거절하고 개별 오브젝트로 조립한 기지 테스트 건물1채를 요청했다. 이후 기본 카메라30°를 명시 승인했다. A30은 보존만 하며 이번 원본으로 사용하지 않는다.
+- `[구현]` CC0 hawkbirdtree 320×960 원본의 정수crop16종, 리샘플링0회. PixelLab get_balance는 만료/가용0을 반환하여 생성 호출/결제는 하지 않았다. `Assets/Art/NativePixelBuilding31/`, `NativePixelBuildingAuthoring`, `NativePixelBuilding`과 `NativePixelShop31.prefab`을 추가하고 GameMap1(-16,0,9)에 배치했다. 바닥10×8m, 점포/계산대/재고 구역, 열린2m출입구, 개별가구와지붕. Renderer78/Collider55/MissingScript0.
+- `[수학/보존]` 원본64×32tile=2m, PPU16√2, wall48px=2.44949m, camera30°/350°·건물305°. 기존PersistentGameplayShell카메라/Follow offset만30°로 갱신했다. 실제 셸·입력소유자·카메라줌·기지오브젝트/도심은 보존. UrbanOcclusionFader의 뒤벽실내유지 옵션은 기존호출 기본true를 보존한다. 표면위소품의depth tie는 시선방향투영으로 화면좌표를 보존하며해결했다.
+- `[Play Mode 호출 확인]` PlayerMovement.StepMove/CharacterController: 입구통과local(0,.565,-.3), 벽충돌정지(3.95,.565,-.625), 같은Player/Camera. 실내벽fade10/지붕숨김20, 외부지붕숨김0. 실제camera30°/350°/size5, GameView1114×857 캡처. 신규Console오류0, 기존UnityAI relay종료오류1은보존. 물리키/전체회전/빌드/저장로드는 미실행.
+- `[전달/제약]` `docs/artifacts/building31/` 관측/PNG, `docs/references/grave_seasons_map_art.md` B31, `Tools/Building31/graph.json` 기술조건exit0·review대기. native픽셀보존과화면정수배율은별개: 실제확대3.78744배. 자유오빗다른각도·동적표면조명·문짝/루팅·2층은미구현. Play종료후저장편집상태복귀. `Tools/World Art/Inspect Native Pixel Shop 31`로기존Player를점포내부로옮겨볼수있다. 사용자외형합격은대기다.

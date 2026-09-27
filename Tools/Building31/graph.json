@@ -1,0 +1,88 @@
+{
+  "goal": "GameMap1 기지에 개별 native 픽셀 오브젝트로 조립한 출입 가능한 테스트 건물 한 채를 배치하고 실제 플레이 관측 후 사용자 미술 피드백을 기다린다.",
+  "entry": "acquire",
+  "max_steps": 5,
+  "requirements": [
+    {
+      "id": "building31_play_observation",
+      "text": "GameMap1의 실제 prefab, 개별 sprite·renderer·collider, 출입·벽 충돌·가림, 같은 Player/Camera 보존 및 사용자가 승인한 실제 카메라 기본 pitch 30도·yaw 350도와 실제 PNG 관측이 계약을 만족한다. 미술 합격은 별도 사용자 판단이다.",
+      "source": "2026-09-27 사용자: 맵 전체 이미지 대신 오브젝트별로 만든 뒤 배치하고 기지씬에 테스트 건물 한 개 완성",
+      "predicate": {"op": "eq", "args": [{"ref": "validate.exit_code"}, {"literal": 0}]}
+    }
+  ],
+  "nodes": [
+    {
+      "id": "acquire",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {
+        "contract": {"literal": {"source": "Hawkbirdtree CC0 furnitureandwalls.png", "sourceSize": [320, 960], "method": "native 1:1 integer crop; no resize", "minimumNativeSprites": 12, "previousWholeRoomArt": "rejected", "pixellab": "expired request failed; no charge"}}
+      },
+      "parameters": {"scope": "기존에 확보한 CC0 원본을 보존하고 오브젝트/바닥/벽을 native 정수 좌표 1:1 crop으로 추출한다. 원본 출처·크기·해시·각 crop rect·피벗·의도한 종류를 manifest에 남긴다. 전체 맵 생성/축소, 리샘플링, AI 외형 자기승인 및 실패한 PixelLab 유료 재시도는 하지 않는다. 반환은 실제 원본과 manifest 경로다."},
+      "reads": ["reference:building31-source-contract"],
+      "writes": ["assets:building31-native-source-and-crops"],
+      "question": "실제 native 원본 source와 개별 자산 추출 manifest 경로를 반환한다.",
+      "output_schema": {"source": {"type": "string"}, "manifest": {"type": "string"}},
+      "edges": [{"when": {"op": "all", "args": [{"op": "known", "args": [{"ref": "acquire.source"}]}, {"op": "known", "args": [{"ref": "acquire.manifest"}]}]}, "to": "assemble"}]
+    },
+    {
+      "id": "assemble",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {"assets": {"ref": "acquire"}},
+      "parameters": {"scope": "반환 manifest와 기존 설계 계약에 따라 개별 native 픽셀 자산을 동일 PPU·피벗·좌표 변환으로 Unity Editor에서 한 테스트 건물 prefab으로 조립하고 GameMap1에 배치/저장한다. collider는 명시한 미터 단위 footprint로 배치하며 출입구·보행 통로·가림을 연결한다. 사용자 최신 승인에 따라 같은 실제 플레이 카메라의 전역 기본 pitch를 30도로 변경하며 yaw 350도를 유지하고, 건물 root yaw 305도로 상대 방위 45도를 맞춘다. 지역 진입에 따른 카메라 전환은 도입하지 않는다. Unity serialized writer는 root 하나만 담당한다. 기존 기지 오브젝트·Player·Camera 인스턴스·씬 흐름을 보존한다. 새 전체맵 이미지나 3D 모델 렌더로 대체하지 않는다. 반환은 실제 저장 prefab 경로다."},
+      "reads": ["assets:building31-native-source-and-crops", "unity:GameMap1-preservation-baseline"],
+      "writes": ["assets:building31-prefab-and-renderer", "unity:GameMap1-building31-edit-state", "unity:approved-camera-default-pitch30"],
+      "question": "실제 저장한 테스트 건물 prefab 경로를 반환한다.",
+      "output_schema": {"prefab": {"type": "string"}},
+      "edges": [{"when": {"op": "known", "args": [{"ref": "assemble.prefab"}]}, "to": "observe"}]
+    },
+    {
+      "id": "observe",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {"building": {"ref": "assemble"}, "assets": {"ref": "acquire"}},
+      "parameters": {"scope": "실제 GameMap1 Play Mode에서 기존 Player와 Camera를 사용해 대표 출입·벽 충돌·가림을 관찰하고 같은 인스턴스인지 기록한다. 촬영을 위해 별도 카메라/복제 플레이어를 만들지 않는다. 승인된 실제 카메라 기본 pitch 30도와 기존 yaw 350도 계약을 확인하며, 별도 촬영 각도나 지역 카메라 전환 없이 실제 플레이 카메라 PNG를 저장한다. 줌·타깃 등 변경 사유 없는 상태는 보존한다. Unity C# readback으로 scene,prefabExists,nativeSprites,rendererCount,colliderCount,entryReached,wallBlocked,occlusionObserved,cameraContractMatched,samePlayer,sameCamera,screenshot을 LocalOnly/Building31/readback.json에 쓴다. 실제 호출 확인이면 그렇게 기록하고 키 입력 검증으로 과장하지 않는다. 사용자 데이터/기존 기지 상태는 보존한다. 반환은 해당 readback 절대경로다."},
+      "reads": ["assets:building31-native-source-and-crops", "assets:building31-prefab-and-renderer", "unity:GameMap1-building31-edit-state", "unity:GameMap1-preservation-baseline", "unity:approved-camera-default-pitch30"],
+      "writes": ["unity:Building31-temporary-play-observation", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/Building31/readback.json", "artifacts:building31-play-capture"],
+      "question": "Unity에서 직접 기록한 LocalOnly/Building31/readback.json의 절대경로 readback을 반환한다.",
+      "output_schema": {"readback": {"type": "string"}},
+      "edges": [{"when": {"op": "known", "args": [{"ref": "observe.readback"}]}, "to": "validate"}]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "max_visits": 1,
+      "inputs": {"stdin": {"ref": "observe"}},
+      "parameters": {
+        "argv": ["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe", "-X", "utf8", "-B", "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building31/validate.py"],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": ["C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building31/validate.py"]
+      },
+      "reads": ["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/Building31/readback.json", "artifacts:building31-play-capture"],
+      "writes": [],
+      "edges": [
+        {"when": {"op": "eq", "args": [{"ref": "validate.exit_code"}, {"literal": 0}]}, "to": "review", "feedback": true},
+        {"when": {"op": "ne", "args": [{"ref": "validate.exit_code"}, {"literal": 0}]}, "to": "@blocked"}
+      ]
+    },
+      {
+      "id": "review",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "max_visits": 1,
+      "inputs": {"validation": {"ref": "validate"}, "observation": {"ref": "observe"}},
+      "parameters": {"scope": "실제 플레이 PNG와 배치된 건물 위치·개별 자산 방식·기술 검증 범위를 사용자에게 보여준다. 사용자 외형 피드백을 기다리며 답변 전 추가 생성/보정/후속확장을 하지 않는다. 출력은 실제 사용자의 답변만 허용하고 무응답·AI평가를 승인으로 바꾸지 않는다. 이 그래프에는 미술 합격 자동완료 경로가 없다."},
+      "reads": ["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/Building31/readback.json", "artifacts:building31-play-capture"],
+      "writes": [],
+      "question": "사용자에게 실제 건물 화면을 보여준 뒤 유지·수정할 부분에 대한 답변을 기다린다. 실제 답변이 왔을 때만 userFeedback을 반환한다.",
+      "output_schema": {"userFeedback": {"type": "string"}},
+      "edges": [{"when": {"op": "known", "args": [{"ref": "review.userFeedback"}]}, "to": "@blocked"}]
+    }
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "goal": "공통 시트 1회 자동 정규화와 정수 영역 분리 재료 파이프라인. 건물 통합 및 미술 완료는 이 그래프의 목표가 아니다.",
+  "entry": "normalize",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "common_sheet_materials",
+      "source": "사용자: 한번에 시트를 뽑으면 되잖아. Tools/Building36/README.md 제작 계약",
+      "text": "한 시트의 공통 자동 격자를 사용하고 18개 정수 crop과 빈 2칸을 실제 검사한다. 개별 resize/warp 금지; 정수배 표시는 허용한다.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "normalize",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "source_path": "Tools/Building36/Source/sheet.png",
+            "generation_record": "Tools/Building36/Source/generation.json",
+            "recovery_reason": "NumPy backend original failure preserved. Official OpenCV backend already returns (None,None), selected by unmodified upstream __init__.py after local dependency install. Same source image; no wrapper patch or grid override."
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building33/native_normalize.py",
+          "--source",
+          "Tools/Building36/Source/sheet.png",
+          "--output-dir",
+          "docs/artifacts/building36/native-opencv",
+          "--engine",
+          "C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main",
+          "--deps",
+          "LocalOnly/PerfectPixelOpenCV"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/Building33/native_normalize.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building36/Source/sheet.png"
+      ],
+      "writes": [
+        "art:B36-normalized-sheet",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "normalize.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "slice"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "normalize.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "slice",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "ref": "normalize"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building36/slice_sheet.py",
+          "--deps",
+          "LocalOnly/PerfectPixelOpenCV",
+          "--native",
+          "docs/artifacts/building36/native-opencv/native.png",
+          "--receipt",
+          "docs/artifacts/building36/native-opencv/receipt.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/Building36/slice_sheet.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building36/Source/sheet.png"
+      ],
+      "writes": [
+        "art:B36-integer-crops",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/slices/manifest.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "slice.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "slice.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "ref": "slice"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building36/slice_sheet.py",
+          "--deps",
+          "LocalOnly/PerfectPixelOpenCV",
+          "--verify-only",
+          "--native",
+          "docs/artifacts/building36/native-opencv/native.png",
+          "--receipt",
+          "docs/artifacts/building36/native-opencv/receipt.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/Building36/slice_sheet.py"
+        ]
+      },
+      "reads": [
+        "art:B36-integer-crops",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-opencv/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building36/Source/sheet.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/technical-validation.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

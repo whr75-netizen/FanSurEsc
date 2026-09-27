@@ -1,0 +1,22 @@
+{
+  "schema": "building36-common-sheet/1",
+  "tool": "builtin image_gen.imagegen",
+  "generation_count": 1,
+  "source": "Tools\\Building36\\Source\\sheet.png",
+  "sha256": "345bd9d1fbd4066781381142eccdf62be41dabcded362249884597f6e9a59b50",
+  "dimensions": [
+    1122,
+    1402
+  ],
+  "mode": "RGBA",
+  "prompt": "Tools/Building36/Source/prompt.txt",
+  "references": [
+    "Tools/Building34/Source/master-reference.png",
+    "Tools/Building35/Source/counter.png"
+  ],
+  "operations_after_generation": [
+    "byte_for_byte_copy"
+  ],
+  "unity_integrated": false,
+  "art_approval": "pending"
+}

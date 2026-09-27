@@ -1,0 +1,58 @@
+{
+  "schema": "building33-upstream-auto-grid/1",
+  "status": "failed",
+  "source_path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building36\\Source\\sheet.png",
+  "source_sha256": "345bd9d1fbd4066781381142eccdf62be41dabcded362249884597f6e9a59b50",
+  "settings": {
+    "grid_size": null,
+    "sample_method": "center",
+    "refine_intensity": 0.25,
+    "fix_square": false,
+    "debug": false
+  },
+  "preprocessing": "none: no crop, resize, palette conversion, alpha threshold, or boundary repair",
+  "contract": {
+    "output_size_owner": "Upstream automatic detector and its refined grid only",
+    "manual_size_fallback": false,
+    "evidence_scope": "One source normalization; no Unity integration or layout acceptance",
+    "artistic_approval": "not evaluated",
+    "limits": [
+      "Auto-detection can choose an incorrect grid when the source has no consistent lattice.",
+      "A single source sample per detected cell cannot preserve every source feature.",
+      "Identical selected RGB is not evidence of feature or artistic preservation.",
+      "Upstream RGB input convention and implementation are used unchanged.",
+      "RGBA hidden RGB participates in upstream detection; no background is silently changed."
+    ]
+  },
+  "engine": {
+    "path": "C:\\Users\\JG\\Desktop\\GPT\\3\\perfectPixel-main\\perfectPixel-main\\src\\perfect_pixel\\perfect_pixel_noCV2.py",
+    "sha256": "99cbd4e0a9febae704a9637aeba79c68d3e0731e494db17424533c4ef1642522",
+    "entry_point": "perfect_pixel.get_perfect_pixel",
+    "module": "building33_upstream_perfectpixel.perfect_pixel_noCV2",
+    "selector_path": "C:\\Users\\JG\\Desktop\\GPT\\3\\perfectPixel-main\\perfectPixel-main\\src\\perfect_pixel\\__init__.py",
+    "selector_sha256": "29a47d45cb6c4f09d8aed4bdcc70dfae87f0a79b6b00ce936f378c83deddf268",
+    "backend": "NumPy"
+  },
+  "dependencies": {
+    "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\.deps",
+    "numpy": "2.3.5",
+    "pillow": "12.3.0"
+  },
+  "source_mode": "RGBA",
+  "source_dimensions": [
+    1122,
+    1402
+  ],
+  "upstream_stdout": "",
+  "automatic_detection": {
+    "estimate_grid_fft": [
+      null
+    ],
+    "estimate_grid_gradient": [],
+    "detect_grid_scale": []
+  },
+  "error": {
+    "type": "TypeError",
+    "message": "cannot unpack non-iterable NoneType object"
+  }
+}

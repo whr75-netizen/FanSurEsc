@@ -1,10 +1,14 @@
 # Grave Seasons 기준 2D 맵 아트 — 첫 상가
 
-## 현재 결정 — B35 면별 투영·역할별 20개 배치
+## 현재 결정 — B35 승인 배치 유지·소품 포함 26개
+
+**재사용 진입점:** [각도·크기·정규화·부착·가림 파이프라인](../../Tools/Building35/PIPELINE.md). 사용자 최종 요청에 따라 추가 생성을 종료하고26개를 보존했다. 실물 크기 오류가 있던 사과 바구니3개는40×30×10cm 열린 상자와9cm 구 기반 내용물로 교정했으며, 출력68×47/공통127px/m와 기존 배치 좌표를 사용한다. 사과 원본32px 프레임을11.43px로 재표본화한 한계가 있으므로 무손실 정규화나 미술 합격을 주장하지 않는다. [최종 실제 Play 화면](../artifacts/building35/tray-composite/play-interior.png), [전체 조망](../artifacts/building35/tray-composite/overview-interior.png), [기술 결과](../artifacts/building35/tray-composite/delivery-result.json)를 보존했다. 이후 설명은 앞선 단계의 근거이며 최종 치수·재개점은 파이프라인을 따른다.
 
 사용자가 B34의 대부분 각도와 사물 부족을 거절했다. bbox 깊이 적합과 원본 그림의 내부 방향은 다른 조건이었다. [B35 제작 계약](../../Tools/Building35/README.md)과 [실제 공식 화면의 사물별 분석](../artifacts/building35/reference-object-plan.md)에 후보·OpenCV 평면변환 근거·좌표/원본 주석·최소 실험·한계·실제 결과를 연결한다. 원본 PerfectPixel 자동 격자 뒤 면별 homography로 구조축을 맞추고, 실제 앞면이 안 보이던 왼쪽 선반의 배치 방향을 수정했다. 생성된 빈 가구와 독립 소품을 같은 기준으로 배치했다.
 
 B35 기지 상가20개, 실제12접근점/기존Player·Camera/지붕전환을 확인했다. 사용자는 실제 Unity 화면의 각도·배치가 자연스러워졌다고 확인하고 같은 방식의 계속 작업을 요청했다. 현재 큰 가구와 배치를 보존한다. 내부 원본 선의2.56~3.56px 잔차와 작은 소품4종의2D층 근사는 남으며, 완전3D복원·무손실 재투영을 주장하지 않는다.
+
+그 뒤 승인된20개를 그대로 두고 장부·계산대 상품·벽시계·식물 포스터·빗자루·실내 쓰레기통6개를 추가했다. [부착면 계약](../../Tools/Building35/details-contract.md)에 원본 비율/벽면/상판 두께와 단일평면 표본화를 명시했다. 실제 영향 동선3/3·지붕 전환·동일Player/Camera·추가Console오류0을 확인했고, [실내 전체](../artifacts/building35/details/overview-interior.png)와 [실제 플레이 크기](../artifacts/building35/details/play-interior.png)를 제출했다. 새 소품의 미술 확인은 대기 중이다. 직원용 빗자루/쓰레기통은 실제 수납장 뒤라 현 시점에서 일부 가려지며, 이를 보이게 하려고 깊이를 우회하지 않았다.
 
 ## 이전 결정 — B34 개별 원본·실제 깊이로 기지 상가 통합
 

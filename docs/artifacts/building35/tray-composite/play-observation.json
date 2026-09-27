@@ -1,0 +1,101 @@
+{
+    "producer": "UnityEditor.PixelShopInteriorObservation",
+    "scene": "GameMap1",
+    "phase": "finish",
+    "playerBefore": 568105589213625398,
+    "playerAfter": 568105589213625398,
+    "cameraBefore": 568105589213625052,
+    "cameraAfter": 568105589213625052,
+    "isPlayMode": true,
+    "entryReached": false,
+    "wallBlocked": false,
+    "roofHiddenInside": true,
+    "roofRestoredOutside": false,
+    "closedRoof": true,
+    "depthPassConsistent": true,
+    "noDoublePixelation": true,
+    "accessReached": 0,
+    "frameLeakPixels": 0,
+    "roofLeakPixels": 0,
+    "sourceDepthMismatches": 0,
+    "newErrors": -1,
+    "nativeSurfaceCount": 46,
+    "roofOpaqueTexels": 693888,
+    "roofColliderCount": 1,
+    "pixelScale": 1.0,
+    "ppu": 127.0,
+    "cameraPitch": 30.000003814697267,
+    "cameraYaw": 349.9999694824219,
+    "roofHeight": 2.6500000953674318,
+    "orthographic": true,
+    "nativeGridFitsZoomLimits": false,
+    "wallStopLocal": [],
+    "roofSurfaceMin": [
+        -5.075004577636719,
+        2.6522376537323,
+        -4.075006008148193
+    ],
+    "roofSurfaceMax": [
+        5.072846412658691,
+        2.799999952316284,
+        4.072849750518799
+    ],
+    "roofColliderMin": [
+        -5.074999809265137,
+        2.6500000953674318,
+        -4.075000762939453
+    ],
+    "roofColliderMax": [
+        5.074999809265137,
+        2.8000001907348635,
+        4.074999809265137
+    ],
+    "accessRoutes": [],
+    "screenshots": [
+        "docs/artifacts/building35/tray-composite/play-interior.png",
+        "docs/artifacts/building35/tray-composite/overview-interior.png"
+    ],
+    "captures": [
+        {
+            "path": "docs/artifacts/building35/tray-composite/play-interior.png",
+            "kind": "Actual current gameplay camera pose and viewport; overlay HUD excluded",
+            "method": "RenderPipeline.SubmitRenderRequest: same existing gameplay Camera, synchronous ReadPixels",
+            "width": 1114,
+            "height": 857,
+            "orthographicSize": 3.3740158081054689,
+            "position": [
+                -13.856632232666016,
+                7.580501556396484,
+                -3.034674644470215
+            ],
+            "rotation": [
+                30.000003814697267,
+                349.9999694824219,
+                2.464632018472912e-7
+            ]
+        },
+        {
+            "path": "docs/artifacts/building35/tray-composite/overview-interior.png",
+            "kind": "Actual scene overview, temporarily reframed existing camera; not walking view; overlay HUD excluded",
+            "method": "RenderPipeline.SubmitRenderRequest: same existing gameplay Camera, synchronous ReadPixels",
+            "width": 2560,
+            "height": 1600,
+            "orthographicSize": 6.299212455749512,
+            "position": [
+                -12.992321014404297,
+                10.80000114440918,
+                -8.057369232177735
+            ],
+            "rotation": [
+                30.000003814697267,
+                349.9999694824219,
+                2.464632018472912e-7
+            ]
+        }
+    ],
+    "depthPassEvidence": "Imported native materials: DepthOnly and DepthNormalsOnly found and enabled; Forward/Depth/Normals source share ResolveSurfaceDepth; alpha/depth domain matched. Structural/readback check only; no GPU depth-buffer equality claim.",
+    "closedRoofEvidence": "Actual imported opaque roof surface XYZ envelope plus enabled non-trigger BoxCollider coverage at interior roof height. Source-alpha/depth validity checked; opaque area count and measured bounds included. Not an artistic or full raster-occlusion judgement.",
+    "rendererConfiguration": "Assets/Settings/PC_Renderer.asset; active PixelArtRendererFeature inspected on actual camera renderer",
+    "consoleEvidence": "",
+    "limitations": "Visual snapshot only. No route or wall movement repeated; unchanged/reduced colliders reuse previous route evidence. Same existing camera, overview explicitly reframed. No artistic approval or GPU depth-buffer equality claim."
+}

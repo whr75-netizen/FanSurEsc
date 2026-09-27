@@ -1,0 +1,53 @@
+{
+  "schema": "building35-frontal-details-generation/1",
+  "provider": "builtin-image_gen",
+  "mode": "generate",
+  "transparent_background": true,
+  "style_reference": "Tools/Building34/Source/master-reference.png; already inspected; palette/material described in prompt, no edit-target arguments for new generation",
+  "generation_postprocess": "None. Generated files copied byte-for-byte; automatic PerfectPixel outputs stored separately.",
+  "normalization": "Unmodified upstream selector and NumPy implementation through Tools/Building33/native_normalize.py, grid_size null, center, refine_intensity 0.25, fix_square false. No target, manual grid or retry.",
+  "status": "Frontal source generation and automatic normalization executed; later standard wall-plane projection remains separate; no artistic approval or guaranteed exact pixel lattice claimed.",
+  "observation": "Both original generated images and native outputs inspected. Clock has frontal face and no visible side surface; poster has horizontal/vertical frame edges and no perspective. Native clock outline is approximately circular, not an exact mathematical circle.",
+  "assets": [
+    {
+      "id": "front_clock",
+      "original": "C:/Users/JG/.codex/generated_images/01a0e17b-7208-7683-aaf7-40ca095eaeef/exec-1a51c793-1c39-4949-9bf8-ebac5214aa79.png",
+      "source_dimensions": [
+        1282,
+        1227
+      ],
+      "source_sha256": "dfdacf08ae4a77bb449f088849a8d5be1227673698b626556706e4537d585f63",
+      "native_dimensions": [
+        146,
+        136
+      ],
+      "native_sha256": "231d43cb39c54c69d321c28cfa1862bd898da07836164faf2912f32d03263e49",
+      "source_path": "Tools/Building35/Source/front_clock.png",
+      "prompt_path": "Tools/Building35/Source/front_clock-prompt.txt",
+      "native_path": "docs/artifacts/building35/details-native/front_clock/native.png",
+      "receipt_path": "docs/artifacts/building35/details-native/front_clock/receipt.json",
+      "generation_count": 1,
+      "normalization_count": 1
+    },
+    {
+      "id": "front_poster",
+      "original": "C:/Users/JG/.codex/generated_images/01a0e17b-7208-7683-aaf7-40ca095eaeef/exec-03d0f540-7749-4105-b114-d3f6bd749127.png",
+      "source_dimensions": [
+        1122,
+        1402
+      ],
+      "source_sha256": "1f5ea259c1bd8794cd7be5e28bcdd585b361fe3c64b7ce0fdd8b1a2162f304e7",
+      "native_dimensions": [
+        124,
+        157
+      ],
+      "native_sha256": "c5ae1c822b54cc391e8ee53cd06cafce6c30f6f4d2f4117f5c9ca0f9f3e8fc89",
+      "source_path": "Tools/Building35/Source/front_poster.png",
+      "prompt_path": "Tools/Building35/Source/front_poster-prompt.txt",
+      "native_path": "docs/artifacts/building35/details-native/front_poster/native.png",
+      "receipt_path": "docs/artifacts/building35/details-native/front_poster/receipt.json",
+      "generation_count": 1,
+      "normalization_count": 1
+    }
+  ]
+}

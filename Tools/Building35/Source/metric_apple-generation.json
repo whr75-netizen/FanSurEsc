@@ -1,0 +1,50 @@
+{
+  "schema": "building35-metric-apple-generation/1",
+  "tool": "builtin image_gen.imagegen",
+  "generation_calls": 1,
+  "transparent_background": true,
+  "input_reference": {
+    "path": "Tools/Building35/Source/produce.png",
+    "role": "visually inspected style reference; not edit target",
+    "included_as_referenced_image_path": false
+  },
+  "prompt_path": "Tools/Building35/Source/metric_apple-prompt.txt",
+  "original_tool_output": "C:/Users/JG/.codex/generated_images/01a0e17b-7208-7683-aaf7-40ca095eaeef/exec-392cf0fa-7024-42e7-b97c-023eabd68cb4.png",
+  "preserved_source": "Tools/Building35/Source/metric_apple.png",
+  "source_dimensions": [
+    1312,
+    1199
+  ],
+  "source_sha256": "348b58d98b44d265ff9db58f69be23d8fc0c913e6f731b901ec282815f98980d",
+  "source_processing": "Byte-preserving copy only.",
+  "normalization": {
+    "runner": "Tools/Building33/native_normalize.py",
+    "calls": 1,
+    "manual_grid": null,
+    "output_path": "docs/artifacts/building35/tray-composite/native/apple/native.png",
+    "receipt_path": "docs/artifacts/building35/tray-composite/native/apple/receipt.json",
+    "dimensions": [
+      65,
+      60
+    ],
+    "output_sha256": "b8c4f4fab9267a635902053031387247e1d455cb1db1dbcb30e5c36f0c450e77",
+    "opaque_bbox_inclusive": [
+      17,
+      14,
+      46,
+      45
+    ],
+    "visible_body_width_px": 30
+  },
+  "target": {
+    "physical_body_diameter_m": 0.09,
+    "ppu": 127,
+    "diameter_px": 11.43,
+    "requested_logical_body_width": [
+      11,
+      13
+    ]
+  },
+  "visual_observation": "One centered frontal red apple with a small leaf and stem, preserved transparent background. Source visibly uses coarse clusters but is not a perfectly uniform pixel lattice. Automatic PP detected 19.88px via gradient fallback, producing a 30px body width instead of requested 11-13. Opaque native RGB has 337 distinct colors, not the requested 4-6 red-step palette; this is not a count of perceptual red shade groups.",
+  "result": "Generated and automatically normalized once; target logical resolution and palette constraints not met. No resize, palette repair, extra generation, Unity integration or mathematical-perfectness claim."
+}

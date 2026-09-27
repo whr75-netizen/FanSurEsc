@@ -1,0 +1,56 @@
+{
+  "id": "appletray_metric",
+  "source": "docs/artifacts/building35/native/produce/native.png",
+  "source_sha256": "d52d4c454a946d9f706ec15b6cd5d068ed5b274df19bceda01af0bf1aa252e7e",
+  "width": 72,
+  "height": 48,
+  "ppu": 127,
+  "left": -0.28346456692913385,
+  "top": 0.2440944881889764,
+  "opaque_pixels": 1842,
+  "faces": [
+    {
+      "id": "top_painted_contents",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 1111,
+      "holdout": []
+    },
+    {
+      "id": "x_min_wood",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 327,
+      "holdout": []
+    },
+    {
+      "id": "z_min_wood",
+      "reprojection_residual": 5.684341886080802e-14,
+      "written_pixels": 406,
+      "holdout": []
+    }
+  ],
+  "source_outline_pixels_outside_landmark_quads": 1388,
+  "outline_policy": "nearest-plane extrapolation",
+  "ground_shift_from_measured_outline_m": 0.013730822307005432,
+  "support_height": 0.11373082230700543,
+  "surface_xyz_min": [
+    -0.20888836681842804,
+    0.006460069678723812,
+    -0.15000000596046448
+  ],
+  "surface_xyz_max": [
+    0.2532365322113037,
+    0.11565539240837097,
+    0.21982991695404053
+  ],
+  "declared_limitations": [
+    "Approximately seven distinct apple bodies are visible, despite source prompt requesting eight; no completed count is inferred from the prompt.",
+    "Fruit is painted content on the top plane in the minimal experiment. It is not recovered sphere geometry, height or individual fruit scaling.",
+    "Rim/post artwork has thickness and irregularity; chosen shared corners are visual annotations, not exact source geometry.",
+    "Hidden top_back is a model assumption. A successful homography does not validate that hidden corner.",
+    "Nearest-plane outline extrapolation can carry top fruit/leaves beyond the nominal footprint; inspect resulting surface bounds before integration.",
+    "Do not claim correcting the wooden plane axes also corrects internal fruit projection or real fruit size.",
+    "Existing project_faces alpha>=128/binary-alpha policy is reused unchanged.",
+    "Three-plane experimental output requires actual first-view and fruit-size review before integration."
+  ],
+  "spec": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building35\\tray-size-correction\\appletray_metric\\spec.json"
+}

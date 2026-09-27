@@ -1,0 +1,299 @@
+{
+  "schema": "building35-tray-prefab-preservation/1",
+  "status": "PASS",
+  "prefab_path": "Assets/Prefabs/World/PlannedPixelShop33.prefab",
+  "baseline_commit": "ed10f1c0fa643ef6bc1555271367a32a51bb2954",
+  "baseline_file_sha256": "d9261258c10d9580938774632f5b1e506ed939b39fcb528b9a4310f087bd8200",
+  "current_file_sha256": "7adce51bd61ca4cd18683a0a8ee3829fc6649d5faaa719936b138af35688a780",
+  "baseline_blocks": 904,
+  "current_blocks": 945,
+  "unchanged_existing_blocks": 897,
+  "deleted_fileIDs": [],
+  "changed_existing_blocks": [
+    {
+      "fileID": "1166826331517610944",
+      "unity_type": 33,
+      "removed_lines": [
+        "  m_Mesh: {fileID: 4300000, guid: 4318b683631992c4e9b788114a630837, type: 2}"
+      ],
+      "added_lines": [
+        "  m_Mesh: {fileID: 4300000, guid: 0df81d2e190f02d4e8b8096097514ba6, type: 2}"
+      ]
+    },
+    {
+      "fileID": "2249492460130276337",
+      "unity_type": 65,
+      "removed_lines": [
+        "  m_Size: {x: 0.6, y: 0.25, z: 0.45}",
+        "  m_Center: {x: 0, y: 0.125, z: 0}"
+      ],
+      "added_lines": [
+        "  m_Size: {x: 0.4, y: 0.2, z: 0.3}",
+        "  m_Center: {x: 0, y: 0.1, z: 0}"
+      ]
+    },
+    {
+      "fileID": "2481964591522901879",
+      "unity_type": 23,
+      "removed_lines": [
+        "  - {fileID: 2100000, guid: 8c347daf5c98c4048a21362f0135d102, type: 2}"
+      ],
+      "added_lines": [
+        "  - {fileID: 2100000, guid: 638babf9bb7fc9543b4f17e6e1feb75e, type: 2}"
+      ]
+    },
+    {
+      "fileID": "4829434648056747294",
+      "unity_type": 23,
+      "removed_lines": [
+        "  - {fileID: 2100000, guid: 8c347daf5c98c4048a21362f0135d102, type: 2}"
+      ],
+      "added_lines": [
+        "  - {fileID: 2100000, guid: 638babf9bb7fc9543b4f17e6e1feb75e, type: 2}"
+      ]
+    },
+    {
+      "fileID": "6515886771973148230",
+      "unity_type": 65,
+      "removed_lines": [
+        "  m_Size: {x: 0.6, y: 0.25, z: 0.45}",
+        "  m_Center: {x: 0, y: 0.125, z: 0}"
+      ],
+      "added_lines": [
+        "  m_Size: {x: 0.4, y: 0.2, z: 0.3}",
+        "  m_Center: {x: 0, y: 0.1, z: 0}"
+      ]
+    },
+    {
+      "fileID": "6520912275864921351",
+      "unity_type": 4,
+      "removed_lines": [],
+      "added_lines": [
+        "  - {fileID: 5574288844605619925}"
+      ]
+    },
+    {
+      "fileID": "7615805187841809801",
+      "unity_type": 33,
+      "removed_lines": [
+        "  m_Mesh: {fileID: 4300000, guid: 4318b683631992c4e9b788114a630837, type: 2}"
+      ],
+      "added_lines": [
+        "  m_Mesh: {fileID: 4300000, guid: 0df81d2e190f02d4e8b8096097514ba6, type: 2}"
+      ]
+    }
+  ],
+  "new_blocks": 41,
+  "new_type_counts": {
+    "4": 13,
+    "1": 13,
+    "23": 6,
+    "33": 6,
+    "65": 3
+  },
+  "expected_existing_change_set_only": true,
+  "parent_child_append_only": true,
+  "unexpected_existing_object_transform_changes": [],
+  "new_details_group": {
+    "gameObject_fileID": "2885643119276330058",
+    "transform_fileID": "5574288844605619925",
+    "name": "Details35 - wall and support attachments",
+    "detail_child_count": 6
+  },
+  "tray_instances": [
+    {
+      "id": "checkout_produce",
+      "gameObject_fileID": "1019319710017713459",
+      "transform_fileID": "4929651826608662996",
+      "position": {
+        "x": -2.15,
+        "y": 1.0566365,
+        "z": -1.4
+      },
+      "collider_size": {
+        "x": 0.4,
+        "y": 0.2,
+        "z": 0.3
+      },
+      "collider_center": {
+        "x": 0.0,
+        "y": 0.1,
+        "z": 0.0
+      },
+      "mesh_guid": "0df81d2e190f02d4e8b8096097514ba6",
+      "material_guid": "638babf9bb7fc9543b4f17e6e1feb75e",
+      "existing_transform_unchanged": null
+    },
+    {
+      "id": "island_apple_tray_left",
+      "gameObject_fileID": "5873475705823174330",
+      "transform_fileID": "3762730018544820827",
+      "position": {
+        "x": 1.4,
+        "y": 0.6934416,
+        "z": -2.1
+      },
+      "collider_size": {
+        "x": 0.4,
+        "y": 0.2,
+        "z": 0.3
+      },
+      "collider_center": {
+        "x": 0.0,
+        "y": 0.1,
+        "z": 0.0
+      },
+      "mesh_guid": "0df81d2e190f02d4e8b8096097514ba6",
+      "material_guid": "638babf9bb7fc9543b4f17e6e1feb75e",
+      "existing_transform_unchanged": true
+    },
+    {
+      "id": "island_apple_tray_right",
+      "gameObject_fileID": "935141381174350741",
+      "transform_fileID": "4614460121718860850",
+      "position": {
+        "x": 2.2,
+        "y": 0.6934416,
+        "z": -2.1
+      },
+      "collider_size": {
+        "x": 0.4,
+        "y": 0.2,
+        "z": 0.3
+      },
+      "collider_center": {
+        "x": 0.0,
+        "y": 0.1,
+        "z": 0.0
+      },
+      "mesh_guid": "0df81d2e190f02d4e8b8096097514ba6",
+      "material_guid": "638babf9bb7fc9543b4f17e6e1feb75e",
+      "existing_transform_unchanged": true
+    }
+  ],
+  "three_trays_share_composite_mesh_material": true,
+  "three_tray_colliders_match_metric": true,
+  "non_tray_preservation": {
+    "existing_eighteen_fixture_transforms": "byte-equivalent normalized fileID blocks against ed10f1c",
+    "five_added_details": "current position/identity transform matches preserved details placement and support plane; no pre-tray YAML snapshot was stored",
+    "other_existing_blocks": "All except parent append and six expected island tray components unchanged"
+  },
+  "detail_transform_checks": [
+    {
+      "id": "wall_clock",
+      "position": {
+        "x": -2.75,
+        "y": 2.03418,
+        "z": 3.905
+      },
+      "expected_support_resolved_position": [
+        -2.75,
+        2.03418,
+        3.905
+      ],
+      "position_matches_creation_plan": true,
+      "identity_rotation_and_scale": true,
+      "comparison_scope": "Creation plan and current state, not binary comparison to a pre-tray prefab snapshot"
+    },
+    {
+      "id": "botanical_poster",
+      "position": {
+        "x": 4.91,
+        "y": 1.9,
+        "z": -2.8
+      },
+      "expected_support_resolved_position": [
+        4.91,
+        1.9,
+        -2.8
+      ],
+      "position_matches_creation_plan": true,
+      "identity_rotation_and_scale": true,
+      "comparison_scope": "Creation plan and current state, not binary comparison to a pre-tray prefab snapshot"
+    },
+    {
+      "id": "staff_broom",
+      "position": {
+        "x": 4.885,
+        "y": 0.2,
+        "z": 2.3
+      },
+      "expected_support_resolved_position": [
+        4.885,
+        0.2,
+        2.3
+      ],
+      "position_matches_creation_plan": true,
+      "identity_rotation_and_scale": true,
+      "comparison_scope": "Creation plan and current state, not binary comparison to a pre-tray prefab snapshot"
+    },
+    {
+      "id": "checkout_ledger",
+      "position": {
+        "x": -2.75,
+        "y": 1.0566365,
+        "z": -1.3
+      },
+      "expected_support_resolved_position": [
+        -2.75,
+        1.056636452532842,
+        -1.3
+      ],
+      "position_matches_creation_plan": true,
+      "identity_rotation_and_scale": true,
+      "comparison_scope": "Creation plan and current state, not binary comparison to a pre-tray prefab snapshot"
+    },
+    {
+      "id": "checkout_produce",
+      "position": {
+        "x": -2.15,
+        "y": 1.0566365,
+        "z": -1.4
+      },
+      "expected_support_resolved_position": [
+        -2.15,
+        1.056636452532842,
+        -1.4
+      ],
+      "position_matches_creation_plan": true,
+      "identity_rotation_and_scale": true,
+      "comparison_scope": "Creation plan and current state, not binary comparison to a pre-tray prefab snapshot"
+    },
+    {
+      "id": "staff_bin",
+      "position": {
+        "x": 4.58,
+        "y": 0.015,
+        "z": 1.3
+      },
+      "expected_support_resolved_position": [
+        4.58,
+        0.015,
+        1.3
+      ],
+      "position_matches_creation_plan": true,
+      "identity_rotation_and_scale": true,
+      "comparison_scope": "Creation plan and current state, not binary comparison to a pre-tray prefab snapshot"
+    }
+  ],
+  "preserved_prior_evidence": {
+    "path": "docs/artifacts/building35/details/prefab-preservation.json",
+    "sha256": "50d83eab77dd916fad0d100c26c8b4991933e75f10d19f51e5d2a0ecd80a640c",
+    "modified_by_this_review": false,
+    "prior_prefab_sha256": "8296730a15a2341a027e3a2c061482dc87a4742c187cc39e77bb304088a297a2"
+  },
+  "source_review": {
+    "path": "Tools/Building35/tray-composite.py",
+    "scope": "read-only semantic review",
+    "findings": [],
+    "notes": [
+      "Catalog changes only named shell coordinates; nx/nz packing remains centred and verifies sphere separation/inner bounds.",
+      "Common R/U/D, source point sampling, minimum ray-depth color/XYZ ownership, extension policy and Unity raw row flip remain intact.",
+      "No new composite execution, Unity validation or image acceptance performed by this review."
+    ]
+  },
+  "evidence_limitations": [
+    "Existing Transform preservation against HEAD is exact except child-list append. Five new non-tray detail transforms are checked against creation input, not an unavailable prior YAML snapshot.",
+    "No repeated routes, physics, rendering or full asset tests performed."
+  ]
+}

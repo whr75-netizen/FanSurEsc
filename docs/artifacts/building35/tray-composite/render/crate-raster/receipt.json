@@ -1,0 +1,91 @@
+{
+  "id": "metric_empty_crate",
+  "source": "docs/artifacts/building35/tray-composite/native/crate/native.png",
+  "source_sha256": "f2650005ff318dbce8533cd99c930477a811e6ed7e13f21670266d7b87cb5f1d",
+  "width": 68,
+  "height": 47,
+  "ppu": 127,
+  "left": -0.2677165354330709,
+  "top": 0.2283464566929134,
+  "opaque_pixels": 1654,
+  "faces": [
+    {
+      "id": "outer_xmin",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 297,
+      "holdout": []
+    },
+    {
+      "id": "outer_zmin",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 385,
+      "holdout": []
+    },
+    {
+      "id": "inner_zmax",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 281,
+      "holdout": []
+    },
+    {
+      "id": "inner_xmax",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 206,
+      "holdout": []
+    },
+    {
+      "id": "interior_floor_material_patch",
+      "reprojection_residual": 2.842170943040401e-14,
+      "written_pixels": 421,
+      "holdout": []
+    },
+    {
+      "id": "rim_zmax",
+      "reprojection_residual": 1.4210854715202004e-14,
+      "written_pixels": 36,
+      "holdout": []
+    },
+    {
+      "id": "rim_xmax",
+      "reprojection_residual": 5.684341886080802e-14,
+      "written_pixels": 26,
+      "holdout": []
+    },
+    {
+      "id": "rim_zmin",
+      "reprojection_residual": 2.2737367544323206e-13,
+      "written_pixels": 35,
+      "holdout": []
+    },
+    {
+      "id": "rim_xmin",
+      "reprojection_residual": 1.4210854715202004e-13,
+      "written_pixels": 25,
+      "holdout": []
+    }
+  ],
+  "source_outline_pixels_outside_landmark_quads": 4393,
+  "outline_policy": "quad only; experimental crop",
+  "ground_shift_from_measured_outline_m": 0.0,
+  "support_height": 0.1,
+  "surface_xyz_min": [
+    -0.20000000298023224,
+    0.001914004678837955,
+    -0.15000000596046448
+  ],
+  "surface_xyz_max": [
+    0.1976722776889801,
+    0.10000000149011612,
+    0.14756235480308533
+  ],
+  "declared_limitations": [
+    "Generated source is a material drawing, not a metrically accurate reconstruction. Source corner measurements have approximately 2-pixel visual uncertainty.",
+    "The empty crate is an open shell: outer width .40m, depth .30m, top .10m, floor top .015m, wood .012m. There is no full opaque plane at Y=.10.",
+    "Only two exterior near faces and two interior far faces are rendered for the fixed 30/45 view. Hidden reverse faces are not recovered.",
+    "Floor uses a wholly visible interior wood patch as UV material over the physical floor. This is material reuse, not reconstruction of occluded original floor pixels.",
+    "Far-wall lower side endpoints are inferred from the observed back vertical drop. The near exterior walls occlude these portions by the common depth test; no source assurance is claimed for occluded pixels.",
+    "Rim rectangular strips use observed border quads as wood material and overlap at physical corners. They are not an assertion that the drawn caps have exactly .012m thickness.",
+    "No per-part origin shift, silhouette ground shift, resized source PNG, or additional generation. Existing project_faces nearest sampling and alpha>=128 policy applies."
+  ],
+  "spec": "docs\\artifacts\\building35\\tray-composite\\render\\crate-raster\\spec.json"
+}

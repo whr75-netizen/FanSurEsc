@@ -1,0 +1,78 @@
+{
+  "schema": "building35-generated-detail-source/1",
+  "id": "top_ledger",
+  "date": "2026-09-27",
+  "tool": "builtin image_gen.imagegen",
+  "tool_model": "not_exposed",
+  "generation_count": 1,
+  "prompt_file": "Tools/Building35/Source/top_ledger-prompt.txt",
+  "input_images": [],
+  "transparent_background_requested": true,
+  "requested_view": "top_down_orthographic",
+  "requested_physical_dimensions_m": {
+    "width_m": 0.38,
+    "depth_m": 0.28
+  },
+  "requested_logical_pixel_design_budget": {
+    "width": 64,
+    "height": 48
+  },
+  "generated_path": "C:/Users/JG/.codex/generated_images/01a0e177-8c1b-7270-add1-7dd87c389730/exec-bf1131a0-ad28-4d90-8571-759d6c081162.png",
+  "source": {
+    "path": "Tools/Building35/Source/top_ledger.png",
+    "dimensions": [
+      1463,
+      1075
+    ],
+    "sha256": "f5f2e94264f2c85b0845fb2c72eed83235055f087d4384da8008b7e64a82ad20",
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "bbox_alpha_gt_0p1_xyxy_exclusive": [
+      93,
+      148,
+      1370,
+      912
+    ]
+  },
+  "preservation": "byte-for-byte copy; no crop, resize, repaint, palette conversion or alpha cleanup",
+  "normalization": {
+    "script": "Tools/Building33/native_normalize.py",
+    "runs": 1,
+    "grid_size": null,
+    "receipt_path": "docs/artifacts/building35/details-native/top_ledger/receipt.json",
+    "result": {
+      "path": "docs/artifacts/building35/details-native/top_ledger/native.png",
+      "dimensions": [
+        161,
+        116
+      ],
+      "sha256": "c0ca34dc0e1b640b53f56ffb9aaaf75861a7015b53c279c9a159b08bf29bf477",
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bbox_alpha_gt_0p1_xyxy_exclusive": [
+        10,
+        16,
+        151,
+        98
+      ]
+    }
+  },
+  "inspection": {
+    "native_image_opened": true,
+    "visual_note": "수직 탑다운 펼친 장부, 청록 커버·크림 종이·펜 1개. 읽을 수 있는 문자 대신 선/막대. 실물 비율은 요청보다 넓음.",
+    "opaque_bbox_dimensions": [
+      141,
+      82
+    ],
+    "requested_logical_budget_is_not_measured_grid": true,
+    "geometry_validation": "not_run",
+    "art_approval": "not_claimed",
+    "no_unity_changes": true
+  }
+}

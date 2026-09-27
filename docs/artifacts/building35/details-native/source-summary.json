@@ -1,0 +1,204 @@
+{
+  "schema": "building35-detail-production-summary/1",
+  "status": "generated_and_auto_normalized_not_integrated",
+  "date": "2026-09-27",
+  "assets": [
+    {
+      "id": "top_ledger",
+      "source": {
+        "path": "Tools/Building35/Source/top_ledger.png",
+        "dimensions": [
+          1463,
+          1075
+        ],
+        "sha256": "f5f2e94264f2c85b0845fb2c72eed83235055f087d4384da8008b7e64a82ad20",
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "bbox_alpha_gt_0p1_xyxy_exclusive": [
+          93,
+          148,
+          1370,
+          912
+        ]
+      },
+      "native": {
+        "path": "docs/artifacts/building35/details-native/top_ledger/native.png",
+        "dimensions": [
+          161,
+          116
+        ],
+        "sha256": "c0ca34dc0e1b640b53f56ffb9aaaf75861a7015b53c279c9a159b08bf29bf477",
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "bbox_alpha_gt_0p1_xyxy_exclusive": [
+          10,
+          16,
+          151,
+          98
+        ]
+      },
+      "receipt_path": "docs/artifacts/building35/details-native/top_ledger/receipt.json",
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            156,
+            124
+          ]
+        ],
+        "estimate_grid_gradient": [],
+        "detect_grid_scale": [
+          [
+            162,
+            119
+          ]
+        ]
+      }
+    },
+    {
+      "id": "front_broom",
+      "source": {
+        "path": "Tools/Building35/Source/front_broom.png",
+        "dimensions": [
+          1244,
+          1265
+        ],
+        "sha256": "b22898e171d252014143b05c0136df187b18f9c4a7ee8b5e5afed972803395fe",
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "bbox_alpha_gt_0p1_xyxy_exclusive": [
+          510,
+          30,
+          734,
+          1243
+        ]
+      },
+      "native": {
+        "path": "docs/artifacts/building35/details-native/front_broom/native.png",
+        "dimensions": [
+          139,
+          125
+        ],
+        "sha256": "db706a55845ed8c0350223fc996caebfe189c31796eaaaf4d13c55fee5130544",
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "bbox_alpha_gt_0p1_xyxy_exclusive": [
+          57,
+          3,
+          83,
+          123
+        ]
+      },
+      "receipt_path": "docs/artifacts/building35/details-native/front_broom/receipt.json",
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            26,
+            96
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            138,
+            126
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            131,
+            133
+          ]
+        ]
+      }
+    },
+    {
+      "id": "bin",
+      "source": {
+        "path": "Tools/Building35/Source/bin.png",
+        "dimensions": [
+          1254,
+          1254
+        ],
+        "sha256": "ccdad646187301212d90b67fafcaa38f43118201dda083d7a17c7954118a6dcd",
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "bbox_alpha_gt_0p1_xyxy_exclusive": [
+          361,
+          142,
+          894,
+          1123
+        ]
+      },
+      "native": {
+        "path": "docs/artifacts/building35/details-native/bin/native.png",
+        "dimensions": [
+          213,
+          215
+        ],
+        "sha256": "7223593de48e83fe1f0c3e316b3fc312dcddcc3a668590c8e59b928a13959a79",
+        "mode": "RGBA",
+        "alpha_extrema": [
+          0,
+          255
+        ],
+        "bbox_alpha_gt_0p1_xyxy_exclusive": [
+          60,
+          23,
+          153,
+          193
+        ]
+      },
+      "receipt_path": "docs/artifacts/building35/details-native/bin/receipt.json",
+      "automatic_detection": {
+        "estimate_grid_fft": [
+          [
+            413,
+            146
+          ]
+        ],
+        "estimate_grid_gradient": [
+          [
+            125,
+            209
+          ]
+        ],
+        "detect_grid_scale": [
+          [
+            209,
+            209
+          ]
+        ]
+      }
+    }
+  ],
+  "source_preserved": true,
+  "normalization_runs_per_asset": 1,
+  "manual_crop_resize_or_grid": false,
+  "observed_views": {
+    "top_ledger": "vertical top down, unrotated image axes",
+    "front_broom": "flat front elevation",
+    "bin": "quarter-view cylinder with integrated lid and pedal"
+  },
+  "limitations": [
+    "Prompted logical design budget is not the measured automatic grid.",
+    "top_ledger native opaque bbox is 141x82 (ratio 1.7195), versus proposed physical 0.38x0.28 (ratio 1.3571); a later UV mapping must not silently claim original aspect preservation.",
+    "front_broom native opaque bbox is 26x120; the prompted height96 was not enforced by resizing.",
+    "No quantitative bin ellipse/projection pass or Unity integration is claimed.",
+    "Source alpha, including faint stray alpha, remains unchanged."
+  ],
+  "next_stage": "Existing production owner determines canonical planes and support transforms; this subtask does not apply isometric tilt to ledger/broom sources."
+}

@@ -1,0 +1,23 @@
+{
+  "schema":"building35-reference-metric-catalog/1",
+  "units":"metres",
+  "nativePpu":127,
+  "camera":{"pitch":30,"local_yaw":45},
+  "assets":{
+    "appletray":{
+      "width_x":0.40,"depth_z":0.30,"crate_height_y":0.10,
+      "fruit_diameter_reference_range":[0.07,0.095],
+      "fruit_diameter_screen_pixels_at_native_scale":[8.89,12.065],
+      "display_content_collision_height":0.20,
+      "composite_fruit_diameter":0.09,
+      "crate_floor_height":0.015,
+      "crate_wall_thickness":0.012,
+      "composition":"Metric90mm fruit centers in4x3bottom and3x2upper layers; upper center displacement(.045,sqrt(.09^2-2*.045^2),.045) from contacts. Container and fruit are separate inputs.",
+      "source":"docs/artifacts/building35/native/produce/native.png",
+      "dimension_source":{"url":"https://www.gadsby.co.uk/products/acacia-wooden-crate-40-x-30-x-10","observed_dimensions_cm":[40,30,10]},
+      "fruit_source":{"url":"https://historicsites.nc.gov/all-sites/horne-creek-farm/southern-heritage-apple-orchard/learn-more/apple-variety-information/glossary-terms","observed":"Above Medium70-80mm, Large80-95mm. Reference range, not all apples universal size."},
+      "rule":"Source face corners correspond to this physical crate, then sample once at shared127px/m. World Transform scale stays1. Same physical width/depth drives collider. Source canvas height is not the size owner.",
+      "limits":"Painted apples are fixed-view contents; face reprojection is not individual apple 3D reconstruction. Input features or camera projection can still require new source art."
+    }
+  }
+}

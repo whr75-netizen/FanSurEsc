@@ -1,0 +1,151 @@
+{
+  "id": "appletray_metric",
+  "source": "docs/artifacts/building35/native/produce/native.png",
+  "ppu": 127,
+  "preserve_outline": true,
+  "ground_from_source_outline": true,
+  "faces": [
+    {
+      "id": "top_painted_contents",
+      "source_xy": [
+        [
+          20,
+          82
+        ],
+        [
+          106.5,
+          35.75
+        ],
+        [
+          181,
+          79
+        ],
+        [
+          82,
+          121
+        ]
+      ],
+      "xyz": [
+        [
+          -0.2,
+          0.1,
+          0.15
+        ],
+        [
+          0.2,
+          0.1,
+          0.15
+        ],
+        [
+          0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          -0.2,
+          0.1,
+          -0.15
+        ]
+      ]
+    },
+    {
+      "id": "x_min_wood",
+      "source_xy": [
+        [
+          20,
+          82
+        ],
+        [
+          82,
+          121
+        ],
+        [
+          82,
+          147
+        ],
+        [
+          20,
+          108
+        ]
+      ],
+      "xyz": [
+        [
+          -0.2,
+          0.1,
+          0.15
+        ],
+        [
+          -0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          -0.2,
+          0,
+          -0.15
+        ],
+        [
+          -0.2,
+          0,
+          0.15
+        ]
+      ]
+    },
+    {
+      "id": "z_min_wood",
+      "source_xy": [
+        [
+          82,
+          121
+        ],
+        [
+          181,
+          79
+        ],
+        [
+          181,
+          107
+        ],
+        [
+          82,
+          147
+        ]
+      ],
+      "xyz": [
+        [
+          -0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          0.2,
+          0,
+          -0.15
+        ],
+        [
+          -0.2,
+          0,
+          -0.15
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Approximately seven distinct apple bodies are visible, despite source prompt requesting eight; no completed count is inferred from the prompt.",
+    "Fruit is painted content on the top plane in the minimal experiment. It is not recovered sphere geometry, height or individual fruit scaling.",
+    "Rim/post artwork has thickness and irregularity; chosen shared corners are visual annotations, not exact source geometry.",
+    "Hidden top_back is a model assumption. A successful homography does not validate that hidden corner.",
+    "Nearest-plane outline extrapolation can carry top fruit/leaves beyond the nominal footprint; inspect resulting surface bounds before integration.",
+    "Do not claim correcting the wooden plane axes also corrects internal fruit projection or real fruit size.",
+    "Existing project_faces alpha>=128/binary-alpha policy is reused unchanged.",
+    "Three-plane experimental output requires actual first-view and fruit-size review before integration."
+  ],
+  "metric_catalog": "Tools/Building35/metric-catalog.json",
+  "metric_catalog_sha256": "fe7920f9823403efd694cab107cf085f6cb2ca97fbaad060c99427f62de726e8",
+  "source_annotation": "docs/artifacts/building35/tray-size-correction/source-corners-proposal.json"
+}

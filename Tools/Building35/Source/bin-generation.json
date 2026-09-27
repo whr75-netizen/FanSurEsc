@@ -1,0 +1,86 @@
+{
+  "schema": "building35-generated-detail-source/1",
+  "id": "bin",
+  "date": "2026-09-27",
+  "tool": "builtin image_gen.imagegen",
+  "tool_model": "not_exposed",
+  "generation_count": 1,
+  "prompt_file": "Tools/Building35/Source/bin-prompt.txt",
+  "input_images": [
+    {
+      "role": "cylinder_camera_reference_not_identical_dimensions",
+      "path": "Tools/Building35/Guides/barrel.png",
+      "sha256": "21324e3e185429757e4beab81d7d180beb83bd39545ecec73de594b5f9320ffd"
+    },
+    {
+      "role": "palette_and_pixel_cluster_style_reference_only",
+      "path": "Tools/Building34/Source/master-reference.png",
+      "sha256": "d7943116a6d4a8ae562b5f83caff96bc6751a20bbec31babd3a4a1c8333273f9"
+    }
+  ],
+  "transparent_background_requested": true,
+  "requested_view": "orthographic_quarter_view_pitch30_yaw45_requested",
+  "requested_physical_dimensions_m": {
+    "diameter_m": 0.3,
+    "height_m": 0.45
+  },
+  "requested_logical_pixel_design_budget": null,
+  "generated_path": "C:/Users/JG/.codex/generated_images/01a0e177-8c1b-7270-add1-7dd87c389730/exec-60c780bf-462d-4931-9202-67d919531e05.png",
+  "source": {
+    "path": "Tools/Building35/Source/bin.png",
+    "dimensions": [
+      1254,
+      1254
+    ],
+    "sha256": "ccdad646187301212d90b67fafcaa38f43118201dda083d7a17c7954118a6dcd",
+    "mode": "RGBA",
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "bbox_alpha_gt_0p1_xyxy_exclusive": [
+      361,
+      142,
+      894,
+      1123
+    ]
+  },
+  "preservation": "byte-for-byte copy; no crop, resize, repaint, palette conversion or alpha cleanup",
+  "normalization": {
+    "script": "Tools/Building33/native_normalize.py",
+    "runs": 1,
+    "grid_size": null,
+    "receipt_path": "docs/artifacts/building35/details-native/bin/receipt.json",
+    "result": {
+      "path": "docs/artifacts/building35/details-native/bin/native.png",
+      "dimensions": [
+        213,
+        215
+      ],
+      "sha256": "7223593de48e83fe1f0c3e316b3fc312dcddcc3a668590c8e59b928a13959a79",
+      "mode": "RGBA",
+      "alpha_extrema": [
+        0,
+        255
+      ],
+      "bbox_alpha_gt_0p1_xyxy_exclusive": [
+        60,
+        23,
+        153,
+        193
+      ]
+    }
+  },
+  "inspection": {
+    "native_image_opened": true,
+    "visual_note": "크림 원통 몸체·청록 트림·분리되는 뚜껑/손잡이·발페달 1개. 바닥/주변 소품 없음. 타원 기하의 정량 투영 합격은 검사하지 않음.",
+    "opaque_bbox_dimensions": [
+      93,
+      170
+    ],
+    "requested_logical_budget_is_not_measured_grid": true,
+    "geometry_validation": "not_run",
+    "art_approval": "not_claimed",
+    "no_unity_changes": true
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "status":"rejected_before_unity_integration",
+  "reason":"At real40x30cm crate dimensions, front and rear apple annotated projected horizontal extents become18.40 and16.07px, equivalent to144.9 and126.6mm, exceeding the selected70-95mm reference. Source whole-tray proportions cannot satisfy both container and fruit size.",
+  "evidence":"fruit-size-estimate.json",
+  "uncertainty":"Fruit bboxes visually authored +/-2..3native texels; perspective plane mapping is not sphere reconstruction. Magnitude is sufficient to reject this source as a shared metric owner.",
+  "unity_changed":false,
+  "next":"Separate empty-crate and independent apple materials; instantiate90mm fruit centers with non-overlap and container containment, render once to common127px/m with shared color/depth selection. Preserve experiment and previous scene."
+}

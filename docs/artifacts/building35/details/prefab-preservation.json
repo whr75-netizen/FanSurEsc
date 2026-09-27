@@ -1,0 +1,182 @@
+{
+  "schema": "building35-prefab-semantic-preservation/1",
+  "status": "PASS",
+  "evidence_scope": "Read-only serialized fileID comparison; ignores YAML block ordering and CRLF/LF differences. No Unity execution, art acceptance or gameplay claim.",
+  "prefab_path": "Assets/Prefabs/World/PlannedPixelShop33.prefab",
+  "baseline_commit": "ed10f1c0fa643ef6bc1555271367a32a51bb2954",
+  "baseline_file_sha256": "d9261258c10d9580938774632f5b1e506ed939b39fcb528b9a4310f087bd8200",
+  "current_file_sha256": "8296730a15a2341a027e3a2c061482dc87a4742c187cc39e77bb304088a297a2",
+  "baseline_block_count": 904,
+  "current_block_count": 945,
+  "unchanged_existing_block_count": 903,
+  "deleted_existing_fileIDs": [],
+  "changed_existing_fileIDs": [
+    "6520912275864921351"
+  ],
+  "expected_parent_child_append_only": true,
+  "allowed_change": {
+    "fileID": "6520912275864921351",
+    "type": "Transform",
+    "owner": "Interior34 - aligned native surfaces",
+    "operation": "Append one m_Children reference",
+    "added_child_fileID": "5574288844605619925",
+    "all_other_fields_preserved": true
+  },
+  "new_block_count": 41,
+  "new_unity_type_counts": {
+    "1": 13,
+    "23": 6,
+    "33": 6,
+    "4": 13,
+    "65": 3
+  },
+  "unity_type_names": {
+    "1": "GameObject",
+    "4": "Transform",
+    "23": "MeshRenderer",
+    "33": "MeshFilter",
+    "65": "BoxCollider"
+  },
+  "new_group": {
+    "gameObject_fileID": "2885643119276330058",
+    "transform_fileID": "5574288844605619925",
+    "name": "Details35 - wall and support attachments",
+    "parent": "{fileID: 6520912275864921351}",
+    "child_count": 6
+  },
+  "new_detail_objects": [
+    {
+      "gameObject_fileID": "7833961438621267436",
+      "transform_fileID": "1061159431890894005",
+      "name": "wall_clock",
+      "component_types": [
+        4
+      ],
+      "new_block": true,
+      "visual_children": [
+        {
+          "gameObject_fileID": "6458156465852709468",
+          "name": "Native surface",
+          "component_types": [
+            4,
+            33,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "gameObject_fileID": "8572457417202694304",
+      "transform_fileID": "4377705305776383730",
+      "name": "botanical_poster",
+      "component_types": [
+        4
+      ],
+      "new_block": true,
+      "visual_children": [
+        {
+          "gameObject_fileID": "6915940786326960807",
+          "name": "Native surface",
+          "component_types": [
+            4,
+            33,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "gameObject_fileID": "1232305544288322968",
+      "transform_fileID": "7010173863727672947",
+      "name": "staff_broom",
+      "component_types": [
+        4
+      ],
+      "new_block": true,
+      "visual_children": [
+        {
+          "gameObject_fileID": "1177405326322748528",
+          "name": "Native surface",
+          "component_types": [
+            4,
+            33,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "gameObject_fileID": "1586214867344705469",
+      "transform_fileID": "4856227347254256318",
+      "name": "checkout_ledger",
+      "component_types": [
+        4,
+        65
+      ],
+      "new_block": true,
+      "visual_children": [
+        {
+          "gameObject_fileID": "3393047330211718303",
+          "name": "Native surface",
+          "component_types": [
+            4,
+            33,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "gameObject_fileID": "1019319710017713459",
+      "transform_fileID": "4929651826608662996",
+      "name": "checkout_produce",
+      "component_types": [
+        4,
+        65
+      ],
+      "new_block": true,
+      "visual_children": [
+        {
+          "gameObject_fileID": "87951647405751732",
+          "name": "Native surface",
+          "component_types": [
+            4,
+            33,
+            23
+          ]
+        }
+      ]
+    },
+    {
+      "gameObject_fileID": "862780470001744057",
+      "transform_fileID": "8338352086465655057",
+      "name": "staff_bin",
+      "component_types": [
+        4,
+        65
+      ],
+      "new_block": true,
+      "visual_children": [
+        {
+          "gameObject_fileID": "2493803648204868815",
+          "name": "Native surface",
+          "component_types": [
+            4,
+            33,
+            23
+          ]
+        }
+      ]
+    }
+  ],
+  "new_internal_references_unresolved": [],
+  "expected_six_detail_structure": true,
+  "preserved_scope": "Every pre-existing serialized block remains byte-equivalent after line-ending normalization, except the one declared parent children append. Existing20 fixtures, structure, roof, lamps and serialized references are included in those preserved blocks.",
+  "not_performed": [
+    "Unity state change",
+    "Play Mode tests",
+    "scene reload",
+    "existing route validation",
+    "render comparison"
+  ]
+}

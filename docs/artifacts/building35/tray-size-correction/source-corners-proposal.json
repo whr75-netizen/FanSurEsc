@@ -1,0 +1,152 @@
+{
+  "schema": "building35-tray-face-landmarks-proposal/1",
+  "status": "observed_and_inferred_source_annotations_not_geometry_approval",
+  "source": "docs/artifacts/building35/native/produce/native.png",
+  "source_sha256": "d52d4c454a946d9f706ec15b6cd5d068ed5b274df19bceda01af0bf1aa252e7e",
+  "native_dimensions": [
+    198,
+    164
+  ],
+  "coordinate_convention": "top-left native texel centre is (0,0); X right, Y down; bbox right/bottom exclusive",
+  "vertices": {
+    "top_left": {
+      "xy": [
+        20,
+        82
+      ],
+      "evidence": "observed visible left post/rim cap",
+      "uncertainty_native_px": 2
+    },
+    "top_near": {
+      "xy": [
+        82,
+        121
+      ],
+      "evidence": "observed near post cap, cream wood spans approximately y118..123",
+      "uncertainty_native_px": 2
+    },
+    "top_right": {
+      "xy": [
+        181,
+        79
+      ],
+      "evidence": "observed right post/rim cap",
+      "uncertainty_native_px": 2
+    },
+    "bottom_left": {
+      "xy": [
+        20,
+        108
+      ],
+      "evidence": "observed post base including dark outline",
+      "uncertainty_native_px": 2
+    },
+    "bottom_near": {
+      "xy": [
+        82,
+        147
+      ],
+      "evidence": "observed near post base dark outline",
+      "uncertainty_native_px": 1
+    },
+    "bottom_right": {
+      "xy": [
+        181,
+        107
+      ],
+      "evidence": "observed right post base including dark outline",
+      "uncertainty_native_px": 2
+    },
+    "top_back": {
+      "xy": [
+        106.5,
+        35.75
+      ],
+      "evidence": "INFERRED intersection of two visible rear-rim line extensions; actual corner hidden by apples/leaves",
+      "uncertainty_native_px": 5,
+      "inference": {
+        "left_rear_edge_points": [
+          [
+            30,
+            74
+          ],
+          [
+            62,
+            58
+          ]
+        ],
+        "right_rear_edge_points": [
+          [
+            143,
+            54
+          ],
+          [
+            167,
+            66
+          ]
+        ],
+        "left_line": "y=-0.5*x+89",
+        "right_line": "y=0.5*x-17.5",
+        "not_used": "parallelogram completion from three front corners"
+      }
+    }
+  },
+  "faces": {
+    "top_painted_contents": [
+      "top_left",
+      "top_back",
+      "top_right",
+      "top_near"
+    ],
+    "x_min_wood": [
+      "top_left",
+      "top_near",
+      "bottom_near",
+      "bottom_left"
+    ],
+    "z_min_wood": [
+      "top_near",
+      "top_right",
+      "bottom_right",
+      "bottom_near"
+    ]
+  },
+  "fruit_landmarks": [
+    {
+      "id": "front_apple",
+      "body_bbox_xyxy": [
+        61,
+        88,
+        105,
+        120
+      ],
+      "nominal_width_native_px": 44,
+      "nominal_height_native_px": 32,
+      "evidence": "visually authored bbox of near-front red apple body; excludes long stem and separate leaf, partial overlap remains",
+      "uncertainty_native_px": 2
+    },
+    {
+      "id": "back_apple",
+      "body_bbox_xyxy": [
+        84,
+        38,
+        126,
+        68
+      ],
+      "nominal_width_native_px": 42,
+      "nominal_height_native_px": 30,
+      "evidence": "visually authored bbox of high/back red apple body; excludes top stem and separate leaves; lower boundary overlaps adjacent apples",
+      "uncertainty_native_px": 3
+    }
+  ],
+  "limits": [
+    "Approximately seven distinct apple bodies are visible, despite source prompt requesting eight; no completed count is inferred from the prompt.",
+    "Fruit is painted content on the top plane in the minimal experiment. It is not recovered sphere geometry, height or individual fruit scaling.",
+    "Rim/post artwork has thickness and irregularity; chosen shared corners are visual annotations, not exact source geometry.",
+    "Hidden top_back is a model assumption. A successful homography does not validate that hidden corner.",
+    "Nearest-plane outline extrapolation can carry top fruit/leaves beyond the nominal footprint; inspect resulting surface bounds before integration.",
+    "Do not claim correcting the wooden plane axes also corrects internal fruit projection or real fruit size."
+  ],
+  "metric_catalog": "Tools/Building35/metric-catalog.json",
+  "source_product": "https://www.gadsby.co.uk/products/acacia-wooden-crate-40-x-30-x-10"
+}

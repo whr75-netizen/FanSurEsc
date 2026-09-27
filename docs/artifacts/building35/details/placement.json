@@ -1,0 +1,16 @@
+{
+  "nativePpu":127,
+  "preserved_plan":"docs/artifacts/building35/placement.json",
+  "coordinate_system":"Building local XYZ metres; base centre; identity rotation and unit scale",
+  "support_contract":"checkout base Y plus its canonical horizontal support height. Wall front plane = actual inner wall plane minus declared object thickness. Ledger plane adds its .02m book thickness in the asset.",
+  "instances":[
+    {"id":"wall_clock","asset":"detail_clock","support":"wall_back","position":[-2.75,2.03418,3.905],"collider_size":null,"role":"shop clock above gap between fridge and shelf; .02m frame"},
+    {"id":"botanical_poster","asset":"detail_poster","support":"wall_right","position":[4.91,1.9,-2.8],"collider_size":null,"role":"sales-wall botanical print; .015m frame"},
+    {"id":"staff_broom","asset":"detail_broom","support":"wall_right","position":[4.885,0.2,2.3],"collider_size":null,"role":"wall-stored staff broom; .04m mount/shaft stand-off"},
+    {"id":"checkout_ledger","asset":"detail_ledger","support":"checkout","position":[-2.75,0,-1.3],"collider_size":[0.38,0.02,0.22099291],"role":"staff open ledger and pen on actual counter support"},
+    {"id":"checkout_produce","asset":"appletray","support":"checkout","position":[-2.15,0,-1.4],"collider_size":[0.6,0.25,0.45],"role":"small produce tray reusing the approved display asset"},
+    {"id":"staff_bin","asset":"detail_bin","support":"floor","position":[4.58,0.015,1.3],"collider_size":[0.3,0.45,0.3],"role":"single small indoor pedal bin beside staff cleaning cabinet"}
+  ],
+  "layout_evidence":"Existing20 unchanged. New bin is at least1.02m from saved12 route polylines. Ledger and tray footprints contained on checkout and disjoint from register. Wall planes based on actual interior z3.925/x4.925. Clock height derives from .34*119/122, base=2.2-height/2.",
+  "limits":"Decorative wall objects have no collider. Only new bin affects floor navigation. Existing props and bin remain upright 2D visual approximations. Not new functional inventory interactions."
+}

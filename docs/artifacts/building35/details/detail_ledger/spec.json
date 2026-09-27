@@ -1,0 +1,102 @@
+{
+  "id": "detail_ledger",
+  "source_id": "top_ledger",
+  "source": "docs/artifacts/building35/details-native/top_ledger/native.png",
+  "ppu": 127,
+  "source_bbox_alpha_gt_0p1": [
+    10,
+    16,
+    151,
+    98
+  ],
+  "physical_width_m": 0.38,
+  "physical_height_or_depth_m": 0.22099290780141845,
+  "plane": "XZ",
+  "faces": [
+    {
+      "id": "XZ",
+      "source_xy": [
+        [
+          9.5,
+          15.5
+        ],
+        [
+          150.5,
+          15.5
+        ],
+        [
+          150.5,
+          97.5
+        ],
+        [
+          9.5,
+          97.5
+        ]
+      ],
+      "xyz": [
+        [
+          -0.19,
+          0.02,
+          0.11049645390070922
+        ],
+        [
+          0.19,
+          0.02,
+          0.11049645390070922
+        ],
+        [
+          0.19,
+          0.02,
+          -0.11049645390070922
+        ],
+        [
+          -0.19,
+          0.02,
+          -0.11049645390070922
+        ]
+      ]
+    }
+  ],
+  "full_canvas_source_xy": [
+    [
+      -0.5,
+      -0.5
+    ],
+    [
+      160.5,
+      -0.5
+    ],
+    [
+      160.5,
+      115.5
+    ],
+    [
+      -0.5,
+      115.5
+    ]
+  ],
+  "full_canvas_xyz": [
+    [
+      -0.2169503546099291,
+      0.02,
+      0.15361702127659577
+    ],
+    [
+      0.21695035460992912,
+      0.02,
+      0.15361702127659577
+    ],
+    [
+      0.21695035460992912,
+      0.02,
+      -0.1590070921985816
+    ],
+    [
+      -0.2169503546099291,
+      0.02,
+      -0.1590070921985816
+    ]
+  ],
+  "alpha_policy": "Sample source RGBA unchanged; depth.valid only when sampled alpha/255 > 0.1",
+  "sampling": "One nearest source sample per canonical output texel; no image crop, palette change or alpha cleanup"
+}

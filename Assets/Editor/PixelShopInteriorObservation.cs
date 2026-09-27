@@ -57,7 +57,7 @@ public static class PixelShopInteriorObservation
         var zoom = camera.GetComponent<CameraZoomController>();
         var movement = shell.PlayerMovement;
         Directory.CreateDirectory(DirectoryPath);
-        var data = phase == "begin" ? new Observation() : JsonUtility.FromJson<Observation>(File.ReadAllText(ReportPath));
+        var data = phase == "begin" || phase == "snapshot" ? new Observation() : JsonUtility.FromJson<Observation>(File.ReadAllText(ReportPath));
         data.phase = phase;
 
         void Teleport(Vector3 local)
@@ -89,7 +89,15 @@ public static class PixelShopInteriorObservation
             data.screenshots = data.captures.Select(x => x.path).ToArray();
         }
 
-        if (phase == "begin")
+        if (phase == "snapshot")
+        {
+            data.scene = SceneManager.GetActiveScene().name; data.isPlayMode = true;
+            data.playerBefore = Identity(shell.PlayerTransform.gameObject);
+            data.cameraBefore = Identity(camera.gameObject);
+            data.limitations = "Visual snapshot only. No route or wall movement repeated; unchanged/reduced colliders reuse previous route evidence. Same existing camera, overview explicitly reframed. No artistic approval or GPU depth-buffer equality claim.";
+            Teleport(new Vector3(0, .56f, -5.5f)); UpdateView();
+        }
+        else if (phase == "begin")
         {
             data.scene = SceneManager.GetActiveScene().name; data.isPlayMode = true;
             data.playerBefore = Identity(shell.PlayerTransform.gameObject);
@@ -145,7 +153,7 @@ public static class PixelShopInteriorObservation
             InspectImportedSurfaces(root, building, data);
             InspectRenderer(camera, data);
         }
-        else throw new ArgumentException("Expected begin, inside, outside or finish.", nameof(phase));
+        else throw new ArgumentException("Expected begin, snapshot, inside, outside or finish.", nameof(phase));
         File.WriteAllText(ReportPath, JsonUtility.ToJson(data, true));
         Debug.Log("B34 " + phase + " actual observation saved: " + ReportPath);
     }
@@ -218,7 +226,7 @@ public static class PixelShopInteriorObservation
             var colors = source.GetPixels(); var samples = depth.GetPixels();
             bool isRoof = roofSet.Contains(renderer);
             bool isFixture = renderer.transform.parent.parent != null &&
-                (renderer.transform.parent.parent.name == "Fixtures - role plan" || renderer.transform.parent.parent.name == PixelShopProjection35.GroupName || renderer.transform.parent.parent.name == "Wall lamps - source anchors");
+                (renderer.transform.parent.parent.name == "Fixtures - role plan" || renderer.transform.parent.parent.name == PixelShopProjection35.GroupName || renderer.transform.parent.parent.name == PixelShopProjection35.DetailsGroupName || renderer.transform.parent.parent.name == "Wall lamps - source anchors");
             for (int i = 0; i < samples.Length; i++)
             {
                 bool opaque = colors[i].a > .1f, valid = samples[i].a > .5f;

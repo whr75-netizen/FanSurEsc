@@ -1,0 +1,80 @@
+{
+  "schema": "building35-frontal-detail-landmarks/1",
+  "coordinate_convention": {
+    "origin": "native image top-left",
+    "axes": "x right,y down",
+    "points": "integer texel-center indices",
+    "bbox": "[left,top,right,bottom), right/bottom exclusive",
+    "alpha_threshold": 0.1
+  },
+  "assets": [
+    {
+      "id": "front_clock",
+      "native_path": "docs/artifacts/building35/details-native/front_clock/native.png",
+      "native_sha256": "231d43cb39c54c69d321c28cfa1862bd898da07836164faf2912f32d03263e49",
+      "native_dimensions": [
+        146,
+        136
+      ],
+      "outer_bbox": [
+        12,
+        8,
+        134,
+        127
+      ],
+      "center": [
+        73,
+        67
+      ],
+      "outer_radius": 63,
+      "center_method": "Strong/render alpha bounding-box midpoint (72.5,67), rounded to integer center (73,67).",
+      "outer_radius_method": "Ceiling of maximum Euclidean distance from integer center over actual alpha>0.1 pixels; measured max62.1691241695 at(12,79). This is an enclosing radius, not a fitted perfect-circle radius.",
+      "axis_half_spans": [
+        60.5,
+        59
+      ],
+      "limitation": "Approximate circle drawn with large pixel steps; integer enclosing circle includes some transparent margins. Do not treat source as an exact circular mask."
+    },
+    {
+      "id": "front_poster",
+      "native_path": "docs/artifacts/building35/details-native/front_poster/native.png",
+      "native_sha256": "c5ae1c822b54cc391e8ee53cd06cafce6c30f6f4d2f4117f5c9ca0f9f3e8fc89",
+      "native_dimensions": [
+        124,
+        157
+      ],
+      "outer_bbox": [
+        17,
+        18,
+        107,
+        138
+      ],
+      "outer_rectangle_corners": {
+        "top_left": [
+          17,
+          18
+        ],
+        "top_right": [
+          106,
+          18
+        ],
+        "bottom_right": [
+          106,
+          137
+        ],
+        "bottom_left": [
+          17,
+          137
+        ]
+      },
+      "corner_alpha": [
+        250,
+        248,
+        253,
+        252
+      ],
+      "method": "Actual alpha>0.1 rectangle bounds and direct corner alpha readback.",
+      "limitation": "Native occupied rectangle90×120 is3:4, while prompt requested4:5. No forced aspect correction performed; choose physical frame dimensions from actual art or explicitly document later geometric mapping."
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+  "id": "detail_clock",
+  "source_id": "front_clock",
+  "source": "docs/artifacts/building35/details-native/front_clock/native.png",
+  "ppu": 127,
+  "source_bbox_alpha_gt_0p1": [
+    12,
+    8,
+    134,
+    127
+  ],
+  "physical_width_m": 0.34,
+  "physical_height_or_depth_m": 0.3316393442622951,
+  "plane": "XY",
+  "faces": [
+    {
+      "id": "XY",
+      "source_xy": [
+        [
+          11.5,
+          7.5
+        ],
+        [
+          133.5,
+          7.5
+        ],
+        [
+          133.5,
+          126.5
+        ],
+        [
+          11.5,
+          126.5
+        ]
+      ],
+      "xyz": [
+        [
+          -0.17,
+          0.3316393442622951,
+          0.0
+        ],
+        [
+          0.17,
+          0.3316393442622951,
+          0.0
+        ],
+        [
+          0.17,
+          0.0,
+          0.0
+        ],
+        [
+          -0.17,
+          0.0,
+          0.0
+        ]
+      ]
+    }
+  ],
+  "full_canvas_source_xy": [
+    [
+      -0.5,
+      -0.5
+    ],
+    [
+      145.5,
+      -0.5
+    ],
+    [
+      145.5,
+      135.5
+    ],
+    [
+      -0.5,
+      135.5
+    ]
+  ],
+  "full_canvas_xyz": [
+    [
+      -0.2034426229508197,
+      0.3539344262295082,
+      0.0
+    ],
+    [
+      0.20344262295081963,
+      0.3539344262295082,
+      0.0
+    ],
+    [
+      0.20344262295081963,
+      -0.025081967213114786,
+      0.0
+    ],
+    [
+      -0.2034426229508197,
+      -0.025081967213114786,
+      0.0
+    ]
+  ],
+  "alpha_policy": "Sample source RGBA unchanged; depth.valid only when sampled alpha/255 > 0.1",
+  "sampling": "One nearest source sample per canonical output texel; no image crop, palette change or alpha cleanup"
+}

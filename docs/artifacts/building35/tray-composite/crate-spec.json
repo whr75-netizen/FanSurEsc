@@ -1,0 +1,421 @@
+{
+  "id": "metric_empty_crate",
+  "source": "docs/artifacts/building35/tray-composite/native/crate/native.png",
+  "source_sha256": "f2650005ff318dbce8533cd99c930477a811e6ed7e13f21670266d7b87cb5f1d",
+  "ppu": 127,
+  "preserve_outline": false,
+  "ground_from_source_outline": false,
+  "camera": {
+    "pitch": 30,
+    "local_yaw": 45
+  },
+  "physical": {
+    "width_x": 0.4,
+    "depth_z": 0.3,
+    "height_y": 0.1,
+    "wood_thickness": 0.012,
+    "floor_top_y": 0.015
+  },
+  "coordinate_system": "R=(1,0,-1)/sqrt(2), U=(.5/sqrt(2),sqrt(.75),.5/sqrt(2)); source integer pixel centres, x right/y down; physical origin floor-centre",
+  "faces": [
+    {
+      "id": "outer_xmin",
+      "source_xy": [
+        [
+          30,
+          114
+        ],
+        [
+          118,
+          165
+        ],
+        [
+          118,
+          201
+        ],
+        [
+          29,
+          149
+        ]
+      ],
+      "xyz": [
+        [
+          -0.2,
+          0.1,
+          0.15
+        ],
+        [
+          -0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          -0.2,
+          0,
+          -0.15
+        ],
+        [
+          -0.2,
+          0,
+          0.15
+        ]
+      ]
+    },
+    {
+      "id": "outer_zmin",
+      "source_xy": [
+        [
+          118,
+          165
+        ],
+        [
+          255,
+          107
+        ],
+        [
+          255,
+          144
+        ],
+        [
+          118,
+          201
+        ]
+      ],
+      "xyz": [
+        [
+          -0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          0.2,
+          0,
+          -0.15
+        ],
+        [
+          -0.2,
+          0,
+          -0.15
+        ]
+      ]
+    },
+    {
+      "id": "inner_zmax",
+      "source_xy": [
+        [
+          159,
+          57
+        ],
+        [
+          34,
+          115
+        ],
+        [
+          34,
+          152
+        ],
+        [
+          159,
+          94
+        ]
+      ],
+      "xyz": [
+        [
+          0.188,
+          0.1,
+          0.138
+        ],
+        [
+          -0.188,
+          0.1,
+          0.138
+        ],
+        [
+          -0.188,
+          0.015,
+          0.138
+        ],
+        [
+          0.188,
+          0.015,
+          0.138
+        ]
+      ],
+      "source_limits": "Bottom-left is hidden and inferred; this part should remain depth-occluded by the near wall."
+    },
+    {
+      "id": "inner_xmax",
+      "source_xy": [
+        [
+          250,
+          108
+        ],
+        [
+          159,
+          57
+        ],
+        [
+          159,
+          94
+        ],
+        [
+          250,
+          145
+        ]
+      ],
+      "xyz": [
+        [
+          0.188,
+          0.1,
+          -0.138
+        ],
+        [
+          0.188,
+          0.1,
+          0.138
+        ],
+        [
+          0.188,
+          0.015,
+          0.138
+        ],
+        [
+          0.188,
+          0.015,
+          -0.138
+        ]
+      ],
+      "source_limits": "Bottom-right is hidden and inferred; this part should remain depth-occluded by the near wall."
+    },
+    {
+      "id": "interior_floor_material_patch",
+      "source_xy": [
+        [
+          159,
+          100
+        ],
+        [
+          83,
+          137
+        ],
+        [
+          120,
+          155
+        ],
+        [
+          198,
+          121
+        ]
+      ],
+      "xyz": [
+        [
+          0.188,
+          0.015,
+          0.138
+        ],
+        [
+          -0.188,
+          0.015,
+          0.138
+        ],
+        [
+          -0.188,
+          0.015,
+          -0.138
+        ],
+        [
+          0.188,
+          0.015,
+          -0.138
+        ]
+      ],
+      "source_limits": "Four selected points lie within the visibly exposed floor wood. Fullfloor UV material reuse; not recovered hidden corner correspondence."
+    },
+    {
+      "id": "rim_zmax",
+      "source_xy": [
+        [
+          159,
+          54
+        ],
+        [
+          30,
+          114
+        ],
+        [
+          34,
+          115
+        ],
+        [
+          159,
+          57
+        ]
+      ],
+      "xyz": [
+        [
+          0.2,
+          0.1,
+          0.15
+        ],
+        [
+          -0.2,
+          0.1,
+          0.15
+        ],
+        [
+          -0.2,
+          0.1,
+          0.138
+        ],
+        [
+          0.2,
+          0.1,
+          0.138
+        ]
+      ]
+    },
+    {
+      "id": "rim_xmax",
+      "source_xy": [
+        [
+          255,
+          107
+        ],
+        [
+          159,
+          54
+        ],
+        [
+          159,
+          57
+        ],
+        [
+          250,
+          108
+        ]
+      ],
+      "xyz": [
+        [
+          0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          0.2,
+          0.1,
+          0.15
+        ],
+        [
+          0.188,
+          0.1,
+          0.15
+        ],
+        [
+          0.188,
+          0.1,
+          -0.15
+        ]
+      ]
+    },
+    {
+      "id": "rim_zmin",
+      "source_xy": [
+        [
+          118,
+          165
+        ],
+        [
+          255,
+          107
+        ],
+        [
+          250,
+          108
+        ],
+        [
+          119,
+          162
+        ]
+      ],
+      "xyz": [
+        [
+          -0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          0.2,
+          0.1,
+          -0.138
+        ],
+        [
+          -0.2,
+          0.1,
+          -0.138
+        ]
+      ]
+    },
+    {
+      "id": "rim_xmin",
+      "source_xy": [
+        [
+          30,
+          114
+        ],
+        [
+          118,
+          165
+        ],
+        [
+          119,
+          162
+        ],
+        [
+          34,
+          115
+        ]
+      ],
+      "xyz": [
+        [
+          -0.2,
+          0.1,
+          0.15
+        ],
+        [
+          -0.2,
+          0.1,
+          -0.15
+        ],
+        [
+          -0.188,
+          0.1,
+          -0.15
+        ],
+        [
+          -0.188,
+          0.1,
+          0.15
+        ]
+      ]
+    }
+  ],
+  "limitations": [
+    "Generated source is a material drawing, not a metrically accurate reconstruction. Source corner measurements have approximately 2-pixel visual uncertainty.",
+    "The empty crate is an open shell: outer width .40m, depth .30m, top .10m, floor top .015m, wood .012m. There is no full opaque plane at Y=.10.",
+    "Only two exterior near faces and two interior far faces are rendered for the fixed 30/45 view. Hidden reverse faces are not recovered.",
+    "Floor uses a wholly visible interior wood patch as UV material over the physical floor. This is material reuse, not reconstruction of occluded original floor pixels.",
+    "Far-wall lower side endpoints are inferred from the observed back vertical drop. The near exterior walls occlude these portions by the common depth test; no source assurance is claimed for occluded pixels.",
+    "Rim rectangular strips use observed border quads as wood material and overlap at physical corners. They are not an assertion that the drawn caps have exactly .012m thickness.",
+    "No per-part origin shift, silhouette ground shift, resized source PNG, or additional generation. Existing project_faces nearest sampling and alpha>=128 policy applies."
+  ]
+}

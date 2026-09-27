@@ -1,0 +1,102 @@
+{
+  "id": "detail_bin",
+  "source_id": "bin",
+  "source": "docs/artifacts/building35/details-native/bin/native.png",
+  "ppu": 127,
+  "source_bbox_alpha_gt_0p1": [
+    60,
+    23,
+    153,
+    193
+  ],
+  "physical_width_m": 0.21319507734340445,
+  "physical_height_or_depth_m": 0.45,
+  "plane": "upright_2d",
+  "faces": [
+    {
+      "id": "upright_2d",
+      "source_xy": [
+        [
+          59.5,
+          22.5
+        ],
+        [
+          152.5,
+          22.5
+        ],
+        [
+          152.5,
+          192.5
+        ],
+        [
+          59.5,
+          192.5
+        ]
+      ],
+      "xyz": [
+        [
+          -0.07537584245255588,
+          0.45,
+          0.07537584245255588
+        ],
+        [
+          0.07537584245255588,
+          0.45,
+          -0.07537584245255588
+        ],
+        [
+          0.07537584245255588,
+          0.0,
+          -0.07537584245255588
+        ],
+        [
+          -0.07537584245255588,
+          -0.0,
+          0.07537584245255588
+        ]
+      ]
+    }
+  ],
+  "full_canvas_source_xy": [
+    [
+      -0.5,
+      -0.5
+    ],
+    [
+      212.5,
+      -0.5
+    ],
+    [
+      212.5,
+      214.5
+    ],
+    [
+      -0.5,
+      214.5
+    ]
+  ],
+  "full_canvas_xyz": [
+    [
+      -0.1726349940042409,
+      0.5108823529411765,
+      0.1726349940042409
+    ],
+    [
+      0.1726349940042409,
+      0.5108823529411765,
+      -0.1726349940042409
+    ],
+    [
+      0.17263499400424095,
+      -0.05823529411764711,
+      -0.17263499400424095
+    ],
+    [
+      -0.17263499400424093,
+      -0.05823529411764711,
+      0.17263499400424093
+    ]
+  ],
+  "alpha_policy": "Sample source RGBA unchanged; depth.valid only when sampled alpha/255 > 0.1",
+  "sampling": "One nearest source sample per canonical output texel; no image crop, palette change or alpha cleanup"
+}

@@ -1,0 +1,102 @@
+{
+  "id": "detail_broom",
+  "source_id": "front_broom",
+  "source": "docs/artifacts/building35/details-native/front_broom/native.png",
+  "ppu": 127,
+  "source_bbox_alpha_gt_0p1": [
+    57,
+    3,
+    83,
+    123
+  ],
+  "physical_width_m": 0.26,
+  "physical_height_or_depth_m": 1.2,
+  "plane": "ZY",
+  "faces": [
+    {
+      "id": "ZY",
+      "source_xy": [
+        [
+          56.5,
+          2.5
+        ],
+        [
+          82.5,
+          2.5
+        ],
+        [
+          82.5,
+          122.5
+        ],
+        [
+          56.5,
+          122.5
+        ]
+      ],
+      "xyz": [
+        [
+          0.0,
+          1.2,
+          0.13
+        ],
+        [
+          0.0,
+          1.2,
+          -0.13
+        ],
+        [
+          0.0,
+          0.0,
+          -0.13
+        ],
+        [
+          0.0,
+          0.0,
+          0.13
+        ]
+      ]
+    }
+  ],
+  "full_canvas_source_xy": [
+    [
+      -0.5,
+      -0.5
+    ],
+    [
+      138.5,
+      -0.5
+    ],
+    [
+      138.5,
+      124.5
+    ],
+    [
+      -0.5,
+      124.5
+    ]
+  ],
+  "full_canvas_xyz": [
+    [
+      0.0,
+      1.23,
+      0.7
+    ],
+    [
+      0.0,
+      1.23,
+      -0.6899999999999998
+    ],
+    [
+      0.0,
+      -0.020000000000000018,
+      -0.69
+    ],
+    [
+      0.0,
+      -0.020000000000000684,
+      0.7000000000000003
+    ]
+  ],
+  "alpha_policy": "Sample source RGBA unchanged; depth.valid only when sampled alpha/255 > 0.1",
+  "sampling": "One nearest source sample per canonical output texel; no image crop, palette change or alpha cleanup"
+}

@@ -1,0 +1,177 @@
+{
+  "schema": "building35-crate-source-observation/1",
+  "source": "docs/artifacts/building35/tray-composite/native/crate/native.png",
+  "source_dimensions": [
+    280,
+    225
+  ],
+  "source_sha256": "f2650005ff318dbce8533cd99c930477a811e6ed7e13f21670266d7b87cb5f1d",
+  "coordinate_convention": "Native integer pixel centres; x right, y down; zero-based",
+  "observation": "Inspected generated1402x1122 source and untouched PP280x225 native; raw feature locations mapped to nearest actual receipt cell centre.",
+  "corners": {
+    "outer_top_back": {
+      "xy": [
+        159,
+        54
+      ],
+      "status": "observed post-cap centre",
+      "uncertainty_px": 2
+    },
+    "outer_top_left": {
+      "xy": [
+        30,
+        114
+      ],
+      "status": "observed post-cap centre",
+      "uncertainty_px": 2
+    },
+    "outer_top_right": {
+      "xy": [
+        255,
+        107
+      ],
+      "status": "observed post-cap centre",
+      "uncertainty_px": 2
+    },
+    "outer_top_near": {
+      "xy": [
+        118,
+        165
+      ],
+      "status": "observed post-cap centre",
+      "uncertainty_px": 2
+    },
+    "outer_bottom_left": {
+      "xy": [
+        29,
+        149
+      ],
+      "status": "observed post bottom",
+      "uncertainty_px": 2
+    },
+    "outer_bottom_right": {
+      "xy": [
+        255,
+        144
+      ],
+      "status": "observed post bottom",
+      "uncertainty_px": 2
+    },
+    "outer_bottom_near": {
+      "xy": [
+        118,
+        201
+      ],
+      "status": "observed post bottom",
+      "uncertainty_px": 2
+    },
+    "inner_top_back": {
+      "xy": [
+        159,
+        57
+      ],
+      "status": "observed inside rim/post boundary",
+      "uncertainty_px": 2
+    },
+    "inner_top_left": {
+      "xy": [
+        34,
+        115
+      ],
+      "status": "observed inner rim boundary",
+      "uncertainty_px": 2
+    },
+    "inner_top_right": {
+      "xy": [
+        250,
+        108
+      ],
+      "status": "observed inner rim boundary",
+      "uncertainty_px": 2
+    },
+    "inner_top_near": {
+      "xy": [
+        119,
+        162
+      ],
+      "status": "observed inner rim boundary",
+      "uncertainty_px": 2
+    },
+    "floor_back": {
+      "xy": [
+        159,
+        94
+      ],
+      "status": "observed back post/floor junction",
+      "uncertainty_px": 2
+    },
+    "floor_left_hidden": {
+      "xy": [
+        34,
+        152
+      ],
+      "status": "inferred inner wall foot; top-left plus back observed vertical drop 37; not visible"
+    },
+    "floor_right_hidden": {
+      "xy": [
+        250,
+        145
+      ],
+      "status": "inferred inner wall foot; top-right plus back observed vertical drop 37; not visible"
+    },
+    "floor_near_hidden": {
+      "xy": [
+        119,
+        199
+      ],
+      "status": "inferred inner wall foot; top-near plus back observed vertical drop 37; not visible"
+    }
+  },
+  "visible_floor_clip_polygon": [
+    [
+      159,
+      94
+    ],
+    [
+      71,
+      137
+    ],
+    [
+      119,
+      162
+    ],
+    [
+      210,
+      124
+    ]
+  ],
+  "floor_material_patch": [
+    [
+      159,
+      100
+    ],
+    [
+      83,
+      137
+    ],
+    [
+      120,
+      155
+    ],
+    [
+      198,
+      121
+    ]
+  ],
+  "limitations": [
+    "Generated source is a material drawing, not a metrically accurate reconstruction. Source corner measurements have approximately 2-pixel visual uncertainty.",
+    "The empty crate is an open shell: outer width .40m, depth .30m, top .10m, floor top .015m, wood .012m. There is no full opaque plane at Y=.10.",
+    "Only two exterior near faces and two interior far faces are rendered for the fixed 30/45 view. Hidden reverse faces are not recovered.",
+    "Floor uses a wholly visible interior wood patch as UV material over the physical floor. This is material reuse, not reconstruction of occluded original floor pixels.",
+    "Far-wall lower side endpoints are inferred from the observed back vertical drop. The near exterior walls occlude these portions by the common depth test; no source assurance is claimed for occluded pixels.",
+    "Rim rectangular strips use observed border quads as wood material and overlap at physical corners. They are not an assertion that the drawn caps have exactly .012m thickness.",
+    "No per-part origin shift, silhouette ground shift, resized source PNG, or additional generation. Existing project_faces nearest sampling and alpha>=128 policy applies."
+  ],
+  "projection_spec": "docs/artifacts/building35/tray-composite/crate-spec.json",
+  "status": "material_input_only_not_projected_or_integrated"
+}

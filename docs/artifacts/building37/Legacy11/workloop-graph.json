@@ -1,0 +1,253 @@
+{
+  "goal": "Execute the unchanged old 3/4-tone quantizer; not complete pixel reconstruction",
+  "entry": "prepare",
+  "max_steps": 3,
+  "nodes": [
+    {
+      "id": "prepare",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "LEGACY11.md: unchanged old quantizer, native identity coordinates"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\legacy_tones_trial.py",
+          "prepare"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\legacy_tones_trial.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\__init__.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\perfect_pixel_noCV2.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\perfect_pixel.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\palette.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\boundary_pipeline.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\regions.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\color_ranges.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/runs/20261003T092818576216Z-59a6e7b8655b4cf4a637cf98f68e32a7/source.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/legacy_tones_trial.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/__init__.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/perfect_pixel_noCV2.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/perfect_pixel.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/palette.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/boundary_pipeline.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/regions.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/color_ranges.py"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Legacy11"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "prepare.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "quantize"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "prepare.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "quantize",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "LEGACY11.md: unchanged old quantizer, native identity coordinates"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\legacy_tones_trial.py",
+          "quantize"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\legacy_tones_trial.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\__init__.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\perfect_pixel_noCV2.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\perfect_pixel.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\palette.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\boundary_pipeline.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\regions.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\color_ranges.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/runs/20261003T092818576216Z-59a6e7b8655b4cf4a637cf98f68e32a7/source.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/legacy_tones_trial.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/__init__.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/perfect_pixel_noCV2.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/perfect_pixel.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/palette.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/boundary_pipeline.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/regions.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/color_ranges.py"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Legacy11"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "quantize.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "quantize.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "LEGACY11.md: unchanged old quantizer, native identity coordinates"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\legacy_tones_trial.py",
+          "validate"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\legacy_tones_trial.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\__init__.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\perfect_pixel_noCV2.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\perfect_pixel.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\palette.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\boundary_pipeline.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\regions.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelPalette_20260906\\src\\perfect_pixel\\color_ranges.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/runs/20261003T092818576216Z-59a6e7b8655b4cf4a637cf98f68e32a7/source.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/legacy_tones_trial.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/__init__.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/perfect_pixel_noCV2.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/perfect_pixel.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/palette.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/boundary_pipeline.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/regions.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/PerfectPixelPalette_20260906/src/perfect_pixel/color_ranges.py"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Legacy11"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "actual_old_quantizer",
+      "text": "Observed RGB ramps, exact coordinates and alpha",
+      "source": "LEGACY11.md",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

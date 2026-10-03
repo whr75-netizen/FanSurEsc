@@ -2690,3 +2690,10 @@ Interactable (abstract base class)
 - `[실제 결과]` redraw_cli WorkLoop prepare→render→validate 1회 완료. 실제 시트1489×1056 유지, visible154,249→48색. 분석.104초/재작성2.393초(색.861초/선1.499초 포함)는 저장/최종검사/프로세스 시작과 별개다. 21기술조건 통과. 후보48,892px 중15,560px 처리·33,332px 보존, 최종선11,082px·halo영역재배정4,478px·미해결0. alpha578,487px변경/nonzero73,742px제거; alpha128기준연결성19개 유지. 원화의 빨강/파랑 가장자리와 불규칙 logical grid는 그대로 남을 수 있으며 미술 합격을 주장하지 않는다.
 - `[검증/실행]` 곡면금속/2px손잡이, 어두운 중성금속 반사대, 기존native불변, 반복3px+partial edge, 3단계RGB, invalid5단계거부를 확인했다. HTTP V4의 금속fixture1회.224초 및 PNG/지도/검사 다운로드도 확인. 기존V3 idle서버 식별 후 해당PID만 종료하고 V4로 교체했다. 기존lossless/cleanup API보존. 실제 입력/native/maps/명암band 실험/비교2배/검사/workloop/web 증거는 Redraw10에 보존한다.
 - `[미완료/인계]` 임의 연속원화의 원래 logical grid 자동복구, vector contour의 정규 사선 재래스터화, 유색금속의 완전한 선/반사대 의미판별, baked조명 제거·물리적 방향성 재조명·Unity표시·미술승인은 미완료다. I=R⊙S의 비유일성 때문에 singleRGB에서 albedo/normal을 완벽복구했다고 하지 않으며 band시프트는 스타일표현 실험이다. 알려진기하의 분리passes/명시grid자료를 새입력으로 받아야 해당단계를 재개한다. V9current/Unity/C#은 보존했다.
+
+## 184. 옛 수정판의 범위별 3/4단계 명암 양자화 재사용 비교 `[MAP-01]`
+
+- `[요청/출처]` 사용자가 양자화 결과를 지적하며 옛 수정판 실행을 요청했다. LocalOnly/PerfectPixelPalette_20260906의 review04~06 color_ranges 경로를 직접 확인했다. 후기 continuous/spatial_steps는 가변K이고 legacy_regions는 최대3톤/자원한도, 선first+region_tones는 미검증 조합 차단 상태여서 이를 완성된 선+톤 통합으로 바꾸지 않았다.
+- `[실제 실행]` L11 계약에 따라 실제1489×1056 전체 시트에 기존 build_color_ranges API만 재사용했다. 기본15도 색상환 범위/중성색 분리→범위별L 최대3/4단계→실제 원본RGB lookup이며 좌표변환은 항등이다. alpha>0 전체 색을 처리하고 모든 알파·숨은RGB를 보존했다. 예전 전체 래퍼의 alpha128·격자vote·cleanup·선처리는 실행하지 않았다. 원본/옛엔진/V4/Unity 상태는 보존했다.
+- `[증거]` WorkLoop prepare→quantize→validate 1회 완료, 각case1회. visible154,249→74/98색, 색계산+lookup1.371/1.453초(저장/검사/프로세스 제외). 20조건: native크기·알파·숨은RGB·palette lookup·동일범위 원본RGB provenance·범위별톤상한·원본/엔진/출력SHA 통과. Legacy11에 PNG·2배같은ROI비교·영역/톤지도·receipt·검사·실행/옛코드 snapshot·graph/state를 보존했다.
+- `[판정/미완료]` 명암 단계화 가설은 지지했으나 약한 나뭇결은 단색에 합쳐지고 경계 잔색은 남았다. Hue범위는 의미적 재질/연결면/구조선 구분이 아니다. 실제 선 기하 재작도·logical격자복구·이미지 조명분리·미술·Unity통합은 계속 미완료다. 웹 엔진 변경이나 추가 시각 보정은 하지 않았다.

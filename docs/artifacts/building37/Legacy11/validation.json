@@ -1,0 +1,52 @@
+{
+  "checks": {
+    "source_array_preserved": true,
+    "legacy_engine_unchanged": true,
+    "3_same_size": true,
+    "3_alpha_exact": true,
+    "3_hidden_rgb_preserved": true,
+    "3_exact_palette_lookup": true,
+    "3_observed_source_rgb_only": true,
+    "3_per_range_tone_limit": true,
+    "3_same_range_representatives": true,
+    "3_saved_array_sha": true,
+    "3_saved_png_sha": true,
+    "4_same_size": true,
+    "4_alpha_exact": true,
+    "4_hidden_rgb_preserved": true,
+    "4_exact_palette_lookup": true,
+    "4_observed_source_rgb_only": true,
+    "4_per_range_tone_limit": true,
+    "4_same_range_representatives": true,
+    "4_saved_array_sha": true,
+    "4_saved_png_sha": true
+  },
+  "passed": true,
+  "cases": [
+    {
+      "levels_maximum_per_color_range": 3,
+      "elapsed_quantizer_and_lookup_seconds": 1.3706565000029514,
+      "visible_rgb_count": 74
+    },
+    {
+      "levels_maximum_per_color_range": 4,
+      "elapsed_quantizer_and_lookup_seconds": 1.4530531999989762,
+      "visible_rgb_count": 98
+    }
+  ],
+  "source_visible_rgb_count": 154249,
+  "source_size": [
+    1489,
+    1056
+  ],
+  "alpha_changed_pixels": 0,
+  "grid_recovered": false,
+  "line_geometry_redrawn": false,
+  "art_approved": false,
+  "unity_or_web_engine_changed": false,
+  "limitations": [
+    "Hue ranges are not semantic or connected material regions.",
+    "Original fractional-alpha edges remain unchanged.",
+    "No regular line reconstruction or authored-grid recovery."
+  ]
+}

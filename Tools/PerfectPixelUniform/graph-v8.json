@@ -1,0 +1,258 @@
+{
+  "goal": "V7평판구조/픽셀/외곽선보존, 이진나뭇결제한을source4단계목재명암으로수정.",
+  "entry": "material",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "wood_four_tones",
+      "text": "top내부에실제4원본색각6pixel이상,nonwood/ink/alpha/기하/표시불변",
+      "source": "사용자 추가: 2색무늬의명암부족,3~4색요구; DESIGN08",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "material",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "DESIGN08 fixed four tones on V7 material only; no geometry or image resampling"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/wood_material08.py",
+          "material",
+          "--output",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/wood_material08.py",
+          "Tools/PerfectPixelUniform/recipe08.json",
+          "Tools/PerfectPixelUniform/cabinet_pipeline06.py",
+          "Tools/PerfectPixelUniform/recipe06.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/Source06/generated-board.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/material/material.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/material/palette.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/wood-levels.npy",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/wood-tile.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/wood-tile-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/material.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "material.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "pixels"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "material.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "pixels",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "DESIGN08 fixed four tones on V7 material only; no geometry or image resampling"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/wood_material08.py",
+          "pixels",
+          "--output",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/wood_material08.py",
+          "Tools/PerfectPixelUniform/recipe08.json",
+          "Tools/PerfectPixelUniform/cabinet_pipeline06.py",
+          "Tools/PerfectPixelUniform/recipe06.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/wood-levels.npy",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/geometry/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/geometry/raster2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/pixels/native2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/pixels/shading2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/geometry/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/geometry/raster3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/pixels/native3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/pixels/shading3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/material/palette.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/native2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/preview2-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/material2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/pixel2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/native3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/preview3-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/material3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/pixel3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/comparison-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/execution.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "pixels.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "pixels.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "DESIGN08 fixed four tones on V7 material only; no geometry or image resampling"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/wood_material08.py",
+          "validate",
+          "--output",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/wood_material08.py",
+          "Tools/PerfectPixelUniform/recipe08.json",
+          "Tools/PerfectPixelUniform/cabinet_pipeline06.py",
+          "Tools/PerfectPixelUniform/recipe06.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/native2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/preview2-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/material2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/pixel2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/native3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/preview3-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/material3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/pixel3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/pixels/comparison-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/execution.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/wood-levels.npy",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/validation.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07-fixed/material/palette.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric08/validation.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

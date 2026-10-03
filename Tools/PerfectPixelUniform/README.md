@@ -1,6 +1,16 @@
 # PerfectPixel Uniform — 전역 격자와 원본 해상도 색 정리
 
-## 현재 결정 V7 · 2026-10-03 — 평판 전면으로 과한 입체감 수정
+## 현재 결정 V8 · 2026-10-03 — 나뭇결 내부를 실제4색으로 표현
+
+사용자는V7의2색무늬가명암/입체감을표현하지못한다고지적하고3~4색을요구했다. 기존palette는4목재색이지만binarygrain과band+grain으로밝은한면의내부는실제2색이었다. [DESIGN08.md](DESIGN08.md)에원인/참고작/4단계재료표현/보존조건을고정했다. [imonk목재강좌](https://itch.io/t/1452767/pixel-tutorial-wood-texture)의결방향을따라이어지는명암과무작위색반례를참고했다. [Rappenem](https://www.newgrounds.com/art/view/rappenem/pixel-art-tutorial-wood-texture)/[Pixel Pete](https://www.youtube.com/watch?v=nzzphDLsO8g)도직접작가자료링크로보존했다. 타인자산복사/추가생성은없다.
+
+V8은원래생성목재ROI의밝기p10/25/75로밝은결/중간목재/어두운결/짙은골의4역할지도를저작했다. 임의줄그리기나홈마다두꺼운하이라이트띠는없다. 기존8연결6texel미만성분을합병하는문양잡음정책을각nested밝기영역에적용하고손실수를기록했다. source관측밝기분류이며의미있는모든옹이의인식이나무손실사진복구는아니다.
+
+실제결과는`docs/artifacts/building37/Parametric08/pixels/native2.png`152×150/`native3.png`192×170이다. 상판내부의4원본목재색은각각2칸1000/2006/686/222px,3칸1332/3012/876/414px로관측했다. 단지전체palette개수로4색을썼다고주장하지않는다. `wood-levels.npy`와`wood-tile-x4.png`에재료역할/표시를보존했고`pixels/comparison-x4.png`는정확4배표시다. V7geometry·조명band·UV·nativecanvas·alpha·기존ink및목재밖RGBA는불변이다. geometry/Blender를다시계산하지않고목재내부만채웠다.
+
+graph-v8의material→pixels→validate3노드가1회완료했고저장출력과V7보존조건을확인했다. 원화RGB12견본도기존출처그대로다. 4색충족이참고작수준의미술합격증거는아니며Unity표시는미검증이다. 프로필권위는V7recipe07/scene.blend,재료권위는recipe08/source06/palette와4tone-map으로분리했다. 재실행은`wood_material08.py material/pixels/validate --output <새경로>`순서다.
+
+## V7 · 보존 기록 — 평판 전면으로 과한 입체감 수정
 
 사용자는 V6의 카툰 같은 입체감과 돌출 외곽/함몰 패널 구조를 거부했다. V6의 기술검사 통과는 미술합격이 아니었다. 원인은 문틀50mm 단차·손잡이112.5mm 돌출·문짝사이125mm 몸체노출·51mm 상판이었다. 새 [DESIGN07.md](DESIGN07.md)의 프로필로 수정했다. 색감·나뭇결·명암 알고리즘·픽셀밀도·2/3칸·V6 원본/코드/결과는 보존했다.
 

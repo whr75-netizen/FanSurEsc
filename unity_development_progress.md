@@ -2660,3 +2660,10 @@ Interactable (abstract base class)
 - `[실패/근본수정]` 새프로필스크립트의sibling import경로가Blender에없어ModuleNotFoundError. Blender프로세스exit0을생산완료로간주하여pixels가부재기하를읽다가차단됐다. 실패code/log/부분자료/blocked graph를Parametric07에보존했고script디렉터리명시import와worker_completed생산metadata를연결했다. 프로필값을바꾸지않고Parametric07-fixed에서새수정그래프3노드를완료했다.
 - `[실제 결과/관측]` native152×150/192×170·각12색/동일밀도, Frame/Inset0, 모든판깊이동일, visiblegroups11/15와shadow388/430px. 실제PNG/팔레트/alpha/최근접boxslab/가시edge/평행2중선/정수4배/모듈/V6SHA보존의244조건통과. 읽기전용별도감사도평판/두께/handle/재료hash/밀도를확인했으며미술승인하지않았다. Blender시작포함3.218초/픽셀.257초는생성·설계·코드작업과별도다.
 - `[완료 범위]` 기하정정과표시자산을제출가능상태로저장했다. 미술승인/범용모딩/Unity표시미검증. 추가로사용자가지적한2색나뭇결의부족은별도재료변경원인으로연결하며기하를다시바꾸지않는다. 현재구조는README V7/DESIGN07/Parametric07-fixed를따른다.
+
+## 180. 2색 나뭇결을 원화 밝기 기반 4색 재료로 수정 `[MAP-01]`
+
+- `[최신 요청/원인]` 2색나뭇결이명암/입체감부족하여잘그린참고작/3~4색을요구했다. 실제4색palette가있어도binarygrain+band연산으로한면내부2색만나오는것이원인이다. DESIGN08에imonk원문(결흐름/명암연결/무작위색·급전이반례), Rappenem그림/PixelPete영상링크,수정영역과판별을먼저고정했다. 영상자막없이세부기법검증을주장하지않고타인자산을게임재료로복사하지않았다.
+- `[연산]` 같은생성목재ROI·128×54source-centre UV·물리period·4원본RGB를유지한다. source sRGB밝기p10/25/75로nested3darkmask→0..3단계. 기존8연결6texel잡음정책을nestedmask/작은bright성분에적용하여밝은결/중간목재/어두운결/짙은골을표현했다. 무작위선·두꺼운하이라이트팽창·새생성/기하조명변경/축소필터는없다. 의미적옹이완전인식이나모든원화명암보존은아니다.
+- `[실제 결과/검사]` Parametric08 native152×150/192×170. 상판내부4RGB각2칸1000/2006/686/222px·3칸1332/3012/876/414px. 전체colorcount로역할충족을대체하지않았다. V7geometry/codeSHA·camera·density·canvas·alpha·visibleink·nonwoodRGBA불변을저장출력에서확인했고geometry재계산없음. 정확4배표시/원화견본출처도관측했다.4UVlevel1556/3820/1025/511texel,작은성분합병손실metadata를보존했다.
+- `[실행/범위]` graph-v8재료→목재내부채움→최종검사3노드를1회연속완료. material.112초/3노드process포함약1.37초는조사·설계·AI시간과별개다. 미술승인/범용재료인식/Unity표시미검증. 평판구조는V7에보존,재료현재계약은README V8/DESIGN08/recipe08이다. 이전결과/8768웹/Unity를바꾸지않았다.

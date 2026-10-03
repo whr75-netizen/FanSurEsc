@@ -1,0 +1,2078 @@
+{
+  "count": 3,
+  "size": [
+    192,
+    170
+  ],
+  "camera": {
+    "azimuth_degrees": 45,
+    "elevation_degrees": 30,
+    "pixels_per_meter": 90.50966799187809,
+    "margin_pixels": 8
+  },
+  "pixels_per_meter": 90.50966799187809,
+  "screen_origin": [
+    -52.0,
+    -167.0
+  ],
+  "camera_distance": 4.497552605815658,
+  "world_mapping": "(-z/32,x/32,y/(32sqrt(6)))",
+  "projection": "u=2x-2z;v=-x-z-y;origin is whole native pixels",
+  "projection_max_error_px": 2.842170943040401e-14,
+  "shadow_offset_m": 7.748603820800781e-06,
+  "to_light_world": [
+    0.6488978097900537,
+    -0.24957608068848222,
+    0.7187791123828288
+  ],
+  "foreground_pixels": 16662,
+  "shadow_pixels": 1345,
+  "parts": [
+    {
+      "id": 0,
+      "name": "Body",
+      "role": "paint",
+      "bay": null,
+      "boxes": [
+        "N3_Body_solid"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 1,
+      "name": "Counter",
+      "role": "wood",
+      "bay": null,
+      "boxes": [
+        "N3_Counter_solid"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 2,
+      "name": "Plinth",
+      "role": "paint",
+      "bay": null,
+      "boxes": [
+        "N3_Plinth_solid"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 3,
+      "name": "Bay0DoorFrame",
+      "role": "paint",
+      "bay": 0,
+      "boxes": [
+        "N3_Bay0DoorFrame_bottom",
+        "N3_Bay0DoorFrame_top",
+        "N3_Bay0DoorFrame_left",
+        "N3_Bay0DoorFrame_right"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 4,
+      "name": "Bay0DoorInset",
+      "role": "paint",
+      "bay": 0,
+      "boxes": [
+        "N3_Bay0DoorInset_panel"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 5,
+      "name": "Bay0DrawerFrame",
+      "role": "paint",
+      "bay": 0,
+      "boxes": [
+        "N3_Bay0DrawerFrame_bottom",
+        "N3_Bay0DrawerFrame_top",
+        "N3_Bay0DrawerFrame_left",
+        "N3_Bay0DrawerFrame_right"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 6,
+      "name": "Bay0DrawerInset",
+      "role": "paint",
+      "bay": 0,
+      "boxes": [
+        "N3_Bay0DrawerInset_panel"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 7,
+      "name": "Bay0DoorHandle",
+      "role": "brass",
+      "bay": 0,
+      "boxes": [
+        "N3_Bay0DoorHandle_bar",
+        "N3_Bay0DoorHandle_anchor_36.5",
+        "N3_Bay0DoorHandle_anchor_40.5"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 8,
+      "name": "Bay0DrawerHandle",
+      "role": "brass",
+      "bay": 0,
+      "boxes": [
+        "N3_Bay0DrawerHandle_bar",
+        "N3_Bay0DrawerHandle_anchor_-1",
+        "N3_Bay0DrawerHandle_anchor_1"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 9,
+      "name": "Bay1DoorFrame",
+      "role": "paint",
+      "bay": 1,
+      "boxes": [
+        "N3_Bay1DoorFrame_bottom",
+        "N3_Bay1DoorFrame_top",
+        "N3_Bay1DoorFrame_left",
+        "N3_Bay1DoorFrame_right"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 10,
+      "name": "Bay1DoorInset",
+      "role": "paint",
+      "bay": 1,
+      "boxes": [
+        "N3_Bay1DoorInset_panel"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 11,
+      "name": "Bay1DrawerFrame",
+      "role": "paint",
+      "bay": 1,
+      "boxes": [
+        "N3_Bay1DrawerFrame_bottom",
+        "N3_Bay1DrawerFrame_top",
+        "N3_Bay1DrawerFrame_left",
+        "N3_Bay1DrawerFrame_right"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 12,
+      "name": "Bay1DrawerInset",
+      "role": "paint",
+      "bay": 1,
+      "boxes": [
+        "N3_Bay1DrawerInset_panel"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 13,
+      "name": "Bay1DoorHandle",
+      "role": "brass",
+      "bay": 1,
+      "boxes": [
+        "N3_Bay1DoorHandle_bar",
+        "N3_Bay1DoorHandle_anchor_36.5",
+        "N3_Bay1DoorHandle_anchor_40.5"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 14,
+      "name": "Bay1DrawerHandle",
+      "role": "brass",
+      "bay": 1,
+      "boxes": [
+        "N3_Bay1DrawerHandle_bar",
+        "N3_Bay1DrawerHandle_anchor_-1",
+        "N3_Bay1DrawerHandle_anchor_1"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 15,
+      "name": "Bay2DoorFrame",
+      "role": "paint",
+      "bay": 2,
+      "boxes": [
+        "N3_Bay2DoorFrame_bottom",
+        "N3_Bay2DoorFrame_top",
+        "N3_Bay2DoorFrame_left",
+        "N3_Bay2DoorFrame_right"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 16,
+      "name": "Bay2DoorInset",
+      "role": "paint",
+      "bay": 2,
+      "boxes": [
+        "N3_Bay2DoorInset_panel"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 17,
+      "name": "Bay2DrawerFrame",
+      "role": "paint",
+      "bay": 2,
+      "boxes": [
+        "N3_Bay2DrawerFrame_bottom",
+        "N3_Bay2DrawerFrame_top",
+        "N3_Bay2DrawerFrame_left",
+        "N3_Bay2DrawerFrame_right"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 18,
+      "name": "Bay2DrawerInset",
+      "role": "paint",
+      "bay": 2,
+      "boxes": [
+        "N3_Bay2DrawerInset_panel"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 19,
+      "name": "Bay2DoorHandle",
+      "role": "brass",
+      "bay": 2,
+      "boxes": [
+        "N3_Bay2DoorHandle_bar",
+        "N3_Bay2DoorHandle_anchor_36.5",
+        "N3_Bay2DoorHandle_anchor_40.5"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 20,
+      "name": "Bay2DrawerHandle",
+      "role": "brass",
+      "bay": 2,
+      "boxes": [
+        "N3_Bay2DrawerHandle_bar",
+        "N3_Bay2DrawerHandle_anchor_-1",
+        "N3_Bay2DrawerHandle_anchor_1"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 21,
+      "name": "SideFrame",
+      "role": "paint",
+      "bay": null,
+      "boxes": [
+        "N3_SideFrame_bottom",
+        "N3_SideFrame_top",
+        "N3_SideFrame_front",
+        "N3_SideFrame_back"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    },
+    {
+      "id": 22,
+      "name": "SideInset",
+      "role": "paint",
+      "bay": null,
+      "boxes": [
+        "N3_SideInset_panel"
+      ],
+      "face_ids": {
+        "-X": 0,
+        "+X": 1,
+        "-Y": 2,
+        "+Y": 3,
+        "-Z": 4,
+        "+Z": 5
+      }
+    }
+  ],
+  "boxes": [
+    {
+      "name": "N3_Body_solid",
+      "part": 0,
+      "role": "paint",
+      "bay": null,
+      "local_minimum_ticks": [
+        0.0,
+        6.0,
+        0.0
+      ],
+      "local_maximum_ticks": [
+        64.0,
+        68.0,
+        20.0
+      ],
+      "minimum": [
+        -0.625,
+        0.0,
+        0.07654655446197432
+      ],
+      "maximum": [
+        -0.0,
+        2.0,
+        0.867527617235709
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Counter_solid",
+      "part": 1,
+      "role": "wood",
+      "bay": null,
+      "local_minimum_ticks": [
+        -1.0,
+        68.0,
+        -1.0
+      ],
+      "local_maximum_ticks": [
+        65.0,
+        72.0,
+        21.0
+      ],
+      "minimum": [
+        -0.65625,
+        -0.03125,
+        0.867527617235709
+      ],
+      "maximum": [
+        0.03125,
+        2.03125,
+        0.9185586535436918
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Plinth_solid",
+      "part": 2,
+      "role": "paint",
+      "bay": null,
+      "local_minimum_ticks": [
+        2.0,
+        0.0,
+        3.0
+      ],
+      "local_maximum_ticks": [
+        62.0,
+        6.0,
+        20.0
+      ],
+      "minimum": [
+        -0.625,
+        0.0625,
+        0.0
+      ],
+      "maximum": [
+        -0.09375,
+        1.9375,
+        0.07654655446197432
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DoorFrame_bottom",
+      "part": 3,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        3.0,
+        12.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        19.0,
+        14.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.09375,
+        0.15309310892394865
+      ],
+      "maximum": [
+        0.0625,
+        0.59375,
+        0.1786086270779401
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DoorFrame_top",
+      "part": 3,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        3.0,
+        48.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        19.0,
+        50.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.09375,
+        0.6123724356957946
+      ],
+      "maximum": [
+        0.0625,
+        0.59375,
+        0.637887953849786
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DoorFrame_left",
+      "part": 3,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        3.0,
+        14.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        5.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.09375,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0625,
+        0.15625,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DoorFrame_right",
+      "part": 3,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        17.0,
+        14.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        19.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.53125,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0625,
+        0.59375,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DoorInset_panel",
+      "part": 4,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        5.0,
+        14.0,
+        -0.4
+      ],
+      "local_maximum_ticks": [
+        17.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.15625,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0125,
+        0.53125,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DrawerFrame_bottom",
+      "part": 5,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        3.0,
+        54.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        19.0,
+        55.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.09375,
+        0.6889189901577689
+      ],
+      "maximum": [
+        0.0625,
+        0.59375,
+        0.7080556287732624
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DrawerFrame_top",
+      "part": 5,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        3.0,
+        62.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        19.0,
+        64.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.09375,
+        0.7973599423122325
+      ],
+      "maximum": [
+        0.0625,
+        0.59375,
+        0.8164965809277261
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DrawerFrame_left",
+      "part": 5,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        3.0,
+        55.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        4.5,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.09375,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0625,
+        0.140625,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DrawerFrame_right",
+      "part": 5,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        17.5,
+        55.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        19.0,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.546875,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0625,
+        0.59375,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DrawerInset_panel",
+      "part": 6,
+      "role": "paint",
+      "bay": 0,
+      "local_minimum_ticks": [
+        4.5,
+        55.5,
+        -0.4
+      ],
+      "local_maximum_ticks": [
+        17.5,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.140625,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0125,
+        0.546875,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DoorHandle_bar",
+      "part": 7,
+      "role": "brass",
+      "bay": 0,
+      "local_minimum_ticks": [
+        17.0,
+        36.0,
+        -4.0
+      ],
+      "local_maximum_ticks": [
+        18.5,
+        42.0,
+        -3.0
+      ],
+      "minimum": [
+        0.09375,
+        0.53125,
+        0.4592793267718459
+      ],
+      "maximum": [
+        0.125,
+        0.578125,
+        0.5358258812338202
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DoorHandle_anchor_36.5",
+      "part": 7,
+      "role": "brass",
+      "bay": 0,
+      "local_minimum_ticks": [
+        17.25,
+        36.5,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        18.25,
+        37.5,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        0.5390625,
+        0.46565820631034377
+      ],
+      "maximum": [
+        0.09375,
+        0.5703125,
+        0.4784159653873395
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DoorHandle_anchor_40.5",
+      "part": 7,
+      "role": "brass",
+      "bay": 0,
+      "local_minimum_ticks": [
+        17.25,
+        40.5,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        18.25,
+        41.5,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        0.5390625,
+        0.5166892426183267
+      ],
+      "maximum": [
+        0.09375,
+        0.5703125,
+        0.5294470016953224
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DrawerHandle_bar",
+      "part": 8,
+      "role": "brass",
+      "bay": 0,
+      "local_minimum_ticks": [
+        8.0,
+        58.0,
+        -4.0
+      ],
+      "local_maximum_ticks": [
+        14.0,
+        60.0,
+        -3.0
+      ],
+      "minimum": [
+        0.09375,
+        0.25,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.125,
+        0.4375,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DrawerHandle_anchor_-1",
+      "part": 8,
+      "role": "brass",
+      "bay": 0,
+      "local_minimum_ticks": [
+        8.0,
+        58.0,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        9.0,
+        60.0,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        0.25,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.09375,
+        0.28125,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay0DrawerHandle_anchor_1",
+      "part": 8,
+      "role": "brass",
+      "bay": 0,
+      "local_minimum_ticks": [
+        13.0,
+        58.0,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        14.0,
+        60.0,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        0.40625,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.09375,
+        0.4375,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DoorFrame_bottom",
+      "part": 9,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        23.0,
+        12.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        39.0,
+        14.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.71875,
+        0.15309310892394865
+      ],
+      "maximum": [
+        0.0625,
+        1.21875,
+        0.1786086270779401
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DoorFrame_top",
+      "part": 9,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        23.0,
+        48.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        39.0,
+        50.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.71875,
+        0.6123724356957946
+      ],
+      "maximum": [
+        0.0625,
+        1.21875,
+        0.637887953849786
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DoorFrame_left",
+      "part": 9,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        23.0,
+        14.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        25.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.71875,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0625,
+        0.78125,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DoorFrame_right",
+      "part": 9,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        37.0,
+        14.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        39.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.15625,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0625,
+        1.21875,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DoorInset_panel",
+      "part": 10,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        25.0,
+        14.0,
+        -0.4
+      ],
+      "local_maximum_ticks": [
+        37.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.78125,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0125,
+        1.15625,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DrawerFrame_bottom",
+      "part": 11,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        23.0,
+        54.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        39.0,
+        55.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.71875,
+        0.6889189901577689
+      ],
+      "maximum": [
+        0.0625,
+        1.21875,
+        0.7080556287732624
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DrawerFrame_top",
+      "part": 11,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        23.0,
+        62.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        39.0,
+        64.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.71875,
+        0.7973599423122325
+      ],
+      "maximum": [
+        0.0625,
+        1.21875,
+        0.8164965809277261
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DrawerFrame_left",
+      "part": 11,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        23.0,
+        55.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        24.5,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.71875,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0625,
+        0.765625,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DrawerFrame_right",
+      "part": 11,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        37.5,
+        55.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        39.0,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.171875,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0625,
+        1.21875,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DrawerInset_panel",
+      "part": 12,
+      "role": "paint",
+      "bay": 1,
+      "local_minimum_ticks": [
+        24.5,
+        55.5,
+        -0.4
+      ],
+      "local_maximum_ticks": [
+        37.5,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        0.765625,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0125,
+        1.171875,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DoorHandle_bar",
+      "part": 13,
+      "role": "brass",
+      "bay": 1,
+      "local_minimum_ticks": [
+        37.0,
+        36.0,
+        -4.0
+      ],
+      "local_maximum_ticks": [
+        38.5,
+        42.0,
+        -3.0
+      ],
+      "minimum": [
+        0.09375,
+        1.15625,
+        0.4592793267718459
+      ],
+      "maximum": [
+        0.125,
+        1.203125,
+        0.5358258812338202
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DoorHandle_anchor_36.5",
+      "part": 13,
+      "role": "brass",
+      "bay": 1,
+      "local_minimum_ticks": [
+        37.25,
+        36.5,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        38.25,
+        37.5,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        1.1640625,
+        0.46565820631034377
+      ],
+      "maximum": [
+        0.09375,
+        1.1953125,
+        0.4784159653873395
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DoorHandle_anchor_40.5",
+      "part": 13,
+      "role": "brass",
+      "bay": 1,
+      "local_minimum_ticks": [
+        37.25,
+        40.5,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        38.25,
+        41.5,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        1.1640625,
+        0.5166892426183267
+      ],
+      "maximum": [
+        0.09375,
+        1.1953125,
+        0.5294470016953224
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DrawerHandle_bar",
+      "part": 14,
+      "role": "brass",
+      "bay": 1,
+      "local_minimum_ticks": [
+        28.0,
+        58.0,
+        -4.0
+      ],
+      "local_maximum_ticks": [
+        34.0,
+        60.0,
+        -3.0
+      ],
+      "minimum": [
+        0.09375,
+        0.875,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.125,
+        1.0625,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DrawerHandle_anchor_-1",
+      "part": 14,
+      "role": "brass",
+      "bay": 1,
+      "local_minimum_ticks": [
+        28.0,
+        58.0,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        29.0,
+        60.0,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        0.875,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.09375,
+        0.90625,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay1DrawerHandle_anchor_1",
+      "part": 14,
+      "role": "brass",
+      "bay": 1,
+      "local_minimum_ticks": [
+        33.0,
+        58.0,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        34.0,
+        60.0,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        1.03125,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.09375,
+        1.0625,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DoorFrame_bottom",
+      "part": 15,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        43.0,
+        12.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        59.0,
+        14.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.34375,
+        0.15309310892394865
+      ],
+      "maximum": [
+        0.0625,
+        1.84375,
+        0.1786086270779401
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DoorFrame_top",
+      "part": 15,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        43.0,
+        48.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        59.0,
+        50.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.34375,
+        0.6123724356957946
+      ],
+      "maximum": [
+        0.0625,
+        1.84375,
+        0.637887953849786
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DoorFrame_left",
+      "part": 15,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        43.0,
+        14.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        45.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.34375,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0625,
+        1.40625,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DoorFrame_right",
+      "part": 15,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        57.0,
+        14.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        59.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.78125,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0625,
+        1.84375,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DoorInset_panel",
+      "part": 16,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        45.0,
+        14.0,
+        -0.4
+      ],
+      "local_maximum_ticks": [
+        57.0,
+        48.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.40625,
+        0.1786086270779401
+      ],
+      "maximum": [
+        0.0125,
+        1.78125,
+        0.6123724356957946
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DrawerFrame_bottom",
+      "part": 17,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        43.0,
+        54.0,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        59.0,
+        55.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.34375,
+        0.6889189901577689
+      ],
+      "maximum": [
+        0.0625,
+        1.84375,
+        0.7080556287732624
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DrawerFrame_top",
+      "part": 17,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        43.0,
+        62.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        59.0,
+        64.0,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.34375,
+        0.7973599423122325
+      ],
+      "maximum": [
+        0.0625,
+        1.84375,
+        0.8164965809277261
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DrawerFrame_left",
+      "part": 17,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        43.0,
+        55.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        44.5,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.34375,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0625,
+        1.390625,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DrawerFrame_right",
+      "part": 17,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        57.5,
+        55.5,
+        -2.0
+      ],
+      "local_maximum_ticks": [
+        59.0,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.796875,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0625,
+        1.84375,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DrawerInset_panel",
+      "part": 18,
+      "role": "paint",
+      "bay": 2,
+      "local_minimum_ticks": [
+        44.5,
+        55.5,
+        -0.4
+      ],
+      "local_maximum_ticks": [
+        57.5,
+        62.5,
+        0.0
+      ],
+      "minimum": [
+        -0.0,
+        1.390625,
+        0.7080556287732624
+      ],
+      "maximum": [
+        0.0125,
+        1.796875,
+        0.7973599423122325
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DoorHandle_bar",
+      "part": 19,
+      "role": "brass",
+      "bay": 2,
+      "local_minimum_ticks": [
+        57.0,
+        36.0,
+        -4.0
+      ],
+      "local_maximum_ticks": [
+        58.5,
+        42.0,
+        -3.0
+      ],
+      "minimum": [
+        0.09375,
+        1.78125,
+        0.4592793267718459
+      ],
+      "maximum": [
+        0.125,
+        1.828125,
+        0.5358258812338202
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DoorHandle_anchor_36.5",
+      "part": 19,
+      "role": "brass",
+      "bay": 2,
+      "local_minimum_ticks": [
+        57.25,
+        36.5,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        58.25,
+        37.5,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        1.7890625,
+        0.46565820631034377
+      ],
+      "maximum": [
+        0.09375,
+        1.8203125,
+        0.4784159653873395
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DoorHandle_anchor_40.5",
+      "part": 19,
+      "role": "brass",
+      "bay": 2,
+      "local_minimum_ticks": [
+        57.25,
+        40.5,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        58.25,
+        41.5,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        1.7890625,
+        0.5166892426183267
+      ],
+      "maximum": [
+        0.09375,
+        1.8203125,
+        0.5294470016953224
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DrawerHandle_bar",
+      "part": 20,
+      "role": "brass",
+      "bay": 2,
+      "local_minimum_ticks": [
+        48.0,
+        58.0,
+        -4.0
+      ],
+      "local_maximum_ticks": [
+        54.0,
+        60.0,
+        -3.0
+      ],
+      "minimum": [
+        0.09375,
+        1.5,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.125,
+        1.6875,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DrawerHandle_anchor_-1",
+      "part": 20,
+      "role": "brass",
+      "bay": 2,
+      "local_minimum_ticks": [
+        48.0,
+        58.0,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        49.0,
+        60.0,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        1.5,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.09375,
+        1.53125,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_Bay2DrawerHandle_anchor_1",
+      "part": 20,
+      "role": "brass",
+      "bay": 2,
+      "local_minimum_ticks": [
+        53.0,
+        58.0,
+        -3.0
+      ],
+      "local_maximum_ticks": [
+        54.0,
+        60.0,
+        -0.4
+      ],
+      "minimum": [
+        0.0125,
+        1.65625,
+        0.7399500264657518
+      ],
+      "maximum": [
+        0.09375,
+        1.6875,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_SideFrame_bottom",
+      "part": 21,
+      "role": "paint",
+      "bay": null,
+      "local_minimum_ticks": [
+        -2.0,
+        12.0,
+        3.0
+      ],
+      "local_maximum_ticks": [
+        0.0,
+        14.0,
+        17.0
+      ],
+      "minimum": [
+        -0.53125,
+        -0.0625,
+        0.15309310892394865
+      ],
+      "maximum": [
+        -0.09375,
+        0.0,
+        0.1786086270779401
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_SideFrame_top",
+      "part": 21,
+      "role": "paint",
+      "bay": null,
+      "local_minimum_ticks": [
+        -2.0,
+        60.0,
+        3.0
+      ],
+      "local_maximum_ticks": [
+        0.0,
+        62.0,
+        17.0
+      ],
+      "minimum": [
+        -0.53125,
+        -0.0625,
+        0.7654655446197433
+      ],
+      "maximum": [
+        -0.09375,
+        0.0,
+        0.7909810627737347
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_SideFrame_front",
+      "part": 21,
+      "role": "paint",
+      "bay": null,
+      "local_minimum_ticks": [
+        -2.0,
+        14.0,
+        3.0
+      ],
+      "local_maximum_ticks": [
+        0.0,
+        60.0,
+        5.0
+      ],
+      "minimum": [
+        -0.15625,
+        -0.0625,
+        0.1786086270779401
+      ],
+      "maximum": [
+        -0.09375,
+        0.0,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_SideFrame_back",
+      "part": 21,
+      "role": "paint",
+      "bay": null,
+      "local_minimum_ticks": [
+        -2.0,
+        14.0,
+        15.0
+      ],
+      "local_maximum_ticks": [
+        0.0,
+        60.0,
+        17.0
+      ],
+      "minimum": [
+        -0.53125,
+        -0.0625,
+        0.1786086270779401
+      ],
+      "maximum": [
+        -0.46875,
+        0.0,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    },
+    {
+      "name": "N3_SideInset_panel",
+      "part": 22,
+      "role": "paint",
+      "bay": null,
+      "local_minimum_ticks": [
+        -0.4,
+        14.0,
+        5.0
+      ],
+      "local_maximum_ticks": [
+        0.0,
+        60.0,
+        15.0
+      ],
+      "minimum": [
+        -0.46875,
+        -0.0125,
+        0.1786086270779401
+      ],
+      "maximum": [
+        -0.15625,
+        0.0,
+        0.7654655446197433
+      ],
+      "mesh_readback_bounds_match": true
+    }
+  ],
+  "slab_checks": [
+    {
+      "group": "Body",
+      "visible": true,
+      "pixel": [
+        134,
+        105
+      ],
+      "same_owner": true,
+      "depth_error_m": 4.396413437746105e-07
+    },
+    {
+      "group": "Counter",
+      "visible": true,
+      "pixel": [
+        47,
+        55
+      ],
+      "same_owner": true,
+      "depth_error_m": 5.887951477490105e-07
+    },
+    {
+      "group": "Plinth",
+      "visible": true,
+      "pixel": [
+        34,
+        152
+      ],
+      "same_owner": true,
+      "depth_error_m": 1.1291213386499521e-07
+    },
+    {
+      "group": "Bay0DoorFrame",
+      "visible": true,
+      "pixel": [
+        62,
+        126
+      ],
+      "same_owner": true,
+      "depth_error_m": 3.793202099089399e-07
+    },
+    {
+      "group": "Bay0DoorInset",
+      "visible": true,
+      "pixel": [
+        71,
+        126
+      ],
+      "same_owner": true,
+      "depth_error_m": 7.571940390249665e-07
+    },
+    {
+      "group": "Bay0DrawerFrame",
+      "visible": true,
+      "pixel": [
+        74,
+        96
+      ],
+      "same_owner": true,
+      "depth_error_m": 1.5478913439892494e-07
+    },
+    {
+      "group": "Bay0DrawerInset",
+      "visible": true,
+      "pixel": [
+        74,
+        98
+      ],
+      "same_owner": true,
+      "depth_error_m": 4.903548989076967e-07
+    },
+    {
+      "group": "Bay0DoorHandle",
+      "visible": true,
+      "pixel": [
+        95,
+        113
+      ],
+      "same_owner": true,
+      "depth_error_m": 1.7242957284224758e-08
+    },
+    {
+      "group": "SideFrame",
+      "visible": true,
+      "pixel": [
+        41,
+        120
+      ],
+      "same_owner": true,
+      "depth_error_m": 1.5478913439892494e-07
+    },
+    {
+      "group": "SideInset",
+      "visible": true,
+      "pixel": [
+        25,
+        121
+      ],
+      "same_owner": true,
+      "depth_error_m": 4.396997788091994e-08
+    }
+  ],
+  "native_pixel_centres": true,
+  "source_rgb_used": false,
+  "image_resize": false,
+  "semantic_frame_seams_suppressed": true,
+  "buffers_sha256": "62d2249d40a5c04c8e79c4ef2375c0f208f3961c3c2e40b7f8a29595e5fc1fb8",
+  "elapsed_seconds": 0.38969859999997425
+}

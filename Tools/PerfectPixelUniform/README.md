@@ -1,6 +1,44 @@
 # PerfectPixel Uniform — 전역 격자와 원본 해상도 색 정리
 
-## 현재 결정 V5 · 2026-10-03 — 픽셀 구조를 직접 저작하는 수납장
+## 현재 결정 V6 · 2026-10-03 — 생성 재료와 입체 구조를 결합한 수납장
+
+사용자 요청에 따라 **색감·재료 디자인은 새 생성 원화에서 가져오고, 경계·깊이·명암 영역은 부품 기하에서 계산**했다. 같은 디자인의 2칸/3칸 수납장을 실제 제작했다. 생성 원화를 축소해 최종 스프라이트로 제출한 것이 아니다. V5·기존 원본·8768 웹·Unity 배치는 보존했다.
+
+설계 계약과 기술 비교의 단일 원본은 [DESIGN06.md](DESIGN06.md)다. imagegen으로 만든 `Source06/generated-board.png`는 1254×1254 RGB의 디자인/재료 참고이며, `Source06/prompt.txt`와 `provenance.json`에 원본·요청을 보존했다. 숨은 치수를 한 장에서 유일하게 복원했다고 주장하지 않는다.
+
+계산 순서는 **원화의 중앙 RGB 표본 12개·UV 무늬 → 실제 입체 부품 → native 픽셀 중심의 최근접 표면 → 명암 역할 선택 → 보이는 경계 → 저장 결과 검사**다. 문틀/서랍 프레임, 안쪽 패널, 손잡이와 브래킷, 상판 돌출, 하부 받침, 측면 패널은 실제 유한 박스로 구성된다. BVH 깊이가 가림을 결정하며 부품 이름이나 임의 레이어가 깊이를 덮어쓰지 않는다.
+
+색은 paint/wood/brass 각 light/base/shade/edge의 **원화 한 점 RGB 그대로**다. `normal·light`와 실제 shadow ray로 3명암 영역을 구분하며 RGB 밝기 곱·그라데이션·디더링이 없다. 평면 목재 ROI의 어두운 무늬는 고정 물리 UV 역할 지도로 옮겼다. 이는 표현 밀도에 맞춘 명시적 재료 저작이며 원본 무늬 전부의 무손실 복구가 아니다. 작은 독립 성분 101개/255texel을 제외하고 1536grain texel을 유지했다.
+
+크기 확장은 `W(n)=4+20n`, `x_i=2+20i`의 **고정 끝단+동일 수납칸 반복**이다. 두 결과는 깊이·높이·문틀·손잡이 규격, 64√2 px/m 밀도와 물리 UV 주기가 같다. 전체 가구 PNG나 UV를 길게 늘리지 않았다. Blender Array와 같은 배치식을 코드로 실행했으며 Array Modifier 자체를 사용했다는 뜻은 아니다. 사선 전체 PNG에 9-slice를 적용하는 방식은 상판·측면 접합을 보존하지 못해 제외했다.
+
+| 실제 파일 | 내용 |
+|---|---|
+| `docs/artifacts/building37/Parametric06/pixels/native2.png` | 2칸, 152×150 RGBA, 12색 |
+| `docs/artifacts/building37/Parametric06/pixels/native3.png` | 3칸, 192×170 RGBA, 12색 |
+| `pixels/comparison-x4.png` | 위 두 PNG의 정확한 정수4배 비교 표시, 제작 자산 아님 |
+| `geometry/scene.blend` | 두 크기의 실제 메시·카메라를 각각 둔 편집 가능 Blender 파일 |
+| `geometry/parts.json`, `geometry/buffers*.npz` | 부품 치수와 실제 표면 위치/법선/소유자/깊이/그림자 가시성 |
+| `material/palette.json`, `grain.npy`, `material.json` | 원화 표본 좌표·RGB, 무늬 역할·물리 주기·손실 기록 |
+| `pixels/shading*.npz` | 명암/무늬/경계/색 인덱스의 분리 지도 |
+| `validation.json`, `workloop-state.json` | 실제 저장 결과 검사와 4노드 실행 기록 |
+
+native PNG는 처음부터 1px 격자에서 생성했다. 추가 PerfectPixel·사진 축소·PNG 늘림·외곽선 팽창은 없다. canvas 차이는 가구 폭과 투영 bounds의 차이이며 픽셀 밀도 변경이 아니다. Blender 파일의 viewport 재료는 편집용 기본색이다. **Blender F12 beauty render는 최종 픽셀 PNG가 아니며**, 현재 재제작 입력은 `.blend` 수작업 수정이 아니라 치수 recipe/부품 코드다.
+
+마지막 저장 결과 검사에서 source RGB 출처·이진 alpha·최근접 깊이·보이는 경계 소유·평행 면 2중선 없음·동일 모듈/UV·실제 shadow·모든 문/서랍/손잡이의 가시 픽셀·정수4배 대응과 원본/V5 SHA 보존을 확인했다. 두 결과 shadow는 각각 1143/1345px다. 고정 그래프 4노드를 1회 연속 실행하여 완료했고 생산 재실행/추가 시각 보정은 하지 않았다. **기술 조건 확인이며 미술 승인, 원화 99% 복제, 범용 가구 자동 설계, Unity 표시 검증은 아니다.**
+
+재료 계산 .142초 + Blender 실행 9.147초 + 픽셀 채움 .303초 = 약9.59초. Blender 안의 기하/가시성 계산은 .787초, 최종 검사는 .436초였다. 생성 서비스 대기·설계·코드 작성·AI 추론은 별도이며 전체 작업 10초 보장이 아니다.
+
+재실행은 기존 출력과 다른 새 디렉터리에 아래 단계를 연속 호출한다. 검토된 recipe는 2/3칸, 45° azimuth/30° elevation, 현재 부품 치수에 한정한다. `graph-v6.json`은 이번 실행의 고정 절대경로 계약이며 이미 결과가 있으면 덮어쓰기 대신 중단한다.
+
+```powershell
+python -B Tools/PerfectPixelUniform/cabinet_pipeline06.py material --output LocalOnly/Cabinet06-new
+python -B Tools/PerfectPixelUniform/cabinet_pipeline06.py geometry --output LocalOnly/Cabinet06-new
+python -B Tools/PerfectPixelUniform/cabinet_pipeline06.py pixels --output LocalOnly/Cabinet06-new
+python -B Tools/PerfectPixelUniform/validate06.py --output LocalOnly/Cabinet06-new
+```
+
+## V5 · 보존 기록 — 픽셀 구조를 직접 저작하는 수납장
 
 사용자의 최신 정정은 ‘흐린 나뭇결의 색만 줄이는 것으로는 도트 나뭇결·명암 덩어리·한 줄 경계가 만들어지지 않는다. 수학적으로 직접 그려 달라’이다. V4는 이 요구에 미달했다. **새 수납장 한 개를 템플릿에서 native 픽셀로 직접 제작**한다. 기존 나무 상판/청록색 수납장의 물체 종류·색 방향을 참고하며, 생성 원본의 동일 복구나 전체 실내 제작으로 확대하지 않는다. 원본/V1~V4/웹/Unity를 보존한다.
 

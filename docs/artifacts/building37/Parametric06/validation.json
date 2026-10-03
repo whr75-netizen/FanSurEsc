@@ -1,0 +1,1733 @@
+{
+  "schema": "parametric-cabinet-independent-audit/6",
+  "passed": true,
+  "checks": [
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\recipe06.json",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\Source06\\provenance.json",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Direct05\\native.png",
+      "passed": true
+    },
+    {
+      "check": "v5_native_preserved",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Direct05\\geometry.npz",
+      "passed": true
+    },
+    {
+      "check": "v5_geometry.npz_preserved",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Direct05\\geometry.json",
+      "passed": true
+    },
+    {
+      "check": "v5_geometry.json_preserved",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Direct05\\material.json",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\draw_parametric.py",
+      "passed": true
+    },
+    {
+      "check": "v5_code_preserved",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_recipe.json",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building37\\Source\\sheet.png",
+      "passed": true
+    },
+    {
+      "check": "original_sheet_preserved",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\Source06\\generated-board.png",
+      "passed": true
+    },
+    {
+      "check": "recipe_source_sha",
+      "passed": true
+    },
+    {
+      "check": "file_present:material\\palette.json",
+      "passed": true
+    },
+    {
+      "check": "file_present:material\\material.json",
+      "passed": true
+    },
+    {
+      "check": "palette_source_sha",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:paint:0",
+      "passed": true,
+      "observed": [
+        116,
+        919
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:paint:0",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:paint:1",
+      "passed": true,
+      "observed": [
+        116,
+        996
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:paint:1",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:paint:2",
+      "passed": true,
+      "observed": [
+        116,
+        1072
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:paint:2",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:paint:3",
+      "passed": true,
+      "observed": [
+        116,
+        1149
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:paint:3",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:wood:0",
+      "passed": true,
+      "observed": [
+        273,
+        919
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:wood:0",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:wood:1",
+      "passed": true,
+      "observed": [
+        273,
+        996
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:wood:1",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:wood:2",
+      "passed": true,
+      "observed": [
+        273,
+        1072
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:wood:2",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:wood:3",
+      "passed": true,
+      "observed": [
+        273,
+        1149
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:wood:3",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:brass:0",
+      "passed": true,
+      "observed": [
+        430,
+        919
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:brass:0",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:brass:1",
+      "passed": true,
+      "observed": [
+        430,
+        996
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:brass:1",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:brass:2",
+      "passed": true,
+      "observed": [
+        430,
+        1072
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:brass:2",
+      "passed": true
+    },
+    {
+      "check": "palette_coordinate:brass:3",
+      "passed": true,
+      "observed": [
+        430,
+        1149
+      ]
+    },
+    {
+      "check": "palette_raw_rgb:brass:3",
+      "passed": true
+    },
+    {
+      "check": "twelve_role_samples",
+      "passed": true,
+      "observed": 12
+    },
+    {
+      "check": "palette_shape",
+      "passed": true,
+      "observed": [
+        12,
+        3
+      ]
+    },
+    {
+      "check": "file_present:material\\grain.npy",
+      "passed": true
+    },
+    {
+      "check": "material_grain_binary",
+      "passed": true,
+      "observed": [
+        54,
+        128
+      ]
+    },
+    {
+      "check": "material_grain_no_small_islands",
+      "passed": true,
+      "observed": {
+        "components": 60,
+        "minimum_size": 6
+      }
+    },
+    {
+      "check": "declared_sha:material.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\Source06\\generated-board.png",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:material.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\recipe06.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:material.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_pipeline06.py",
+      "passed": true
+    },
+    {
+      "check": "input_output_hash_maps:material.json",
+      "passed": true,
+      "observed": 3
+    },
+    {
+      "check": "material_palette_sha",
+      "passed": true
+    },
+    {
+      "check": "material_grain_sha",
+      "passed": true
+    },
+    {
+      "check": "file_present:geometry\\parts.json",
+      "passed": true
+    },
+    {
+      "check": "file_present:geometry\\scene.blend",
+      "passed": true
+    },
+    {
+      "check": "geometry_recipe_sha",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_geometry06.py",
+      "passed": true
+    },
+    {
+      "check": "geometry_code_sha",
+      "passed": true
+    },
+    {
+      "check": "geometry_no_source_image",
+      "passed": true
+    },
+    {
+      "check": "geometry_no_mesh_scale",
+      "passed": true
+    },
+    {
+      "check": "exact_variant_counts",
+      "passed": true
+    },
+    {
+      "check": "n2:module_width_formula",
+      "passed": true
+    },
+    {
+      "check": "n2:unchanged_height_depth",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Body_solid",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Counter_solid",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Plinth_solid",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DoorFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DoorFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DoorFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DoorFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DoorInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DrawerFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DrawerFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DrawerFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DrawerFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DrawerInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DoorHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DoorHandle_anchor_36.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DoorHandle_anchor_40.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DrawerHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DrawerHandle_anchor_-1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay0DrawerHandle_anchor_1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DoorFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DoorFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DoorFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DoorFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DoorInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DrawerFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DrawerFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DrawerFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DrawerFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DrawerInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DoorHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DoorHandle_anchor_36.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DoorHandle_anchor_40.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DrawerHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DrawerHandle_anchor_-1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_Bay1DrawerHandle_anchor_1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_SideFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_SideFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_SideFrame_front",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_SideFrame_back",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N2_SideInset_panel",
+      "passed": true
+    },
+    {
+      "check": "n3:module_width_formula",
+      "passed": true
+    },
+    {
+      "check": "n3:unchanged_height_depth",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Body_solid",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Counter_solid",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Plinth_solid",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DoorFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DoorFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DoorFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DoorFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DoorInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DrawerFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DrawerFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DrawerFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DrawerFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DrawerInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DoorHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DoorHandle_anchor_36.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DoorHandle_anchor_40.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DrawerHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DrawerHandle_anchor_-1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay0DrawerHandle_anchor_1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DoorFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DoorFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DoorFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DoorFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DoorInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DrawerFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DrawerFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DrawerFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DrawerFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DrawerInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DoorHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DoorHandle_anchor_36.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DoorHandle_anchor_40.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DrawerHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DrawerHandle_anchor_-1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay1DrawerHandle_anchor_1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DoorFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DoorFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DoorFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DoorFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DoorInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DrawerFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DrawerFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DrawerFrame_left",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DrawerFrame_right",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DrawerInset_panel",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DoorHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DoorHandle_anchor_36.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DoorHandle_anchor_40.5",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DrawerHandle_bar",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DrawerHandle_anchor_-1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_Bay2DrawerHandle_anchor_1",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_SideFrame_bottom",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_SideFrame_top",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_SideFrame_front",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_SideFrame_back",
+      "passed": true
+    },
+    {
+      "check": "mesh_readback:N3_SideInset_panel",
+      "passed": true
+    },
+    {
+      "check": "repeated_module_dimensions_identical",
+      "passed": true,
+      "observed": {
+        "DoorFrame:bottom": 1,
+        "DoorFrame:top": 1,
+        "DoorFrame:left": 1,
+        "DoorFrame:right": 1,
+        "DoorInset:panel": 1,
+        "DrawerFrame:bottom": 1,
+        "DrawerFrame:top": 1,
+        "DrawerFrame:left": 1,
+        "DrawerFrame:right": 1,
+        "DrawerInset:panel": 1,
+        "DoorHandle:bar": 1,
+        "DoorHandle:anchor_36.5": 1,
+        "DoorHandle:anchor_40.5": 1,
+        "DrawerHandle:bar": 1,
+        "DrawerHandle:anchor_-1": 1,
+        "DrawerHandle:anchor_1": 1
+      }
+    },
+    {
+      "check": "file_present:geometry\\buffers2.npz",
+      "passed": true
+    },
+    {
+      "check": "file_present:geometry\\raster2.json",
+      "passed": true
+    },
+    {
+      "check": "file_present:pixels\\shading2.npz",
+      "passed": true
+    },
+    {
+      "check": "file_present:pixels\\pixel2.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\buffers2.npz",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\raster2.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\palette.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\material.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\grain.npy",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\recipe06.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_pipeline06.py",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\native2.png",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\preview2-x4.png",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel2.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\shading2.npz",
+      "passed": true
+    },
+    {
+      "check": "input_output_hash_maps:pixel2.json",
+      "passed": true,
+      "observed": 11
+    },
+    {
+      "check": "file_present:pixels\\native2.png",
+      "passed": true
+    },
+    {
+      "check": "rgba_source_mode:native2.png",
+      "passed": true,
+      "observed": "RGBA"
+    },
+    {
+      "check": "file_present:pixels\\preview2-x4.png",
+      "passed": true
+    },
+    {
+      "check": "rgba_source_mode:preview2-x4.png",
+      "passed": true,
+      "observed": "RGBA"
+    },
+    {
+      "check": "n2:array_shapes",
+      "passed": true
+    },
+    {
+      "check": "n2:binary_alpha",
+      "passed": true
+    },
+    {
+      "check": "n2:alpha_geometry_match",
+      "passed": true
+    },
+    {
+      "check": "n2:finite_buffers",
+      "passed": true
+    },
+    {
+      "check": "n2:normal_unit",
+      "passed": true
+    },
+    {
+      "check": "n2:finite_surface_ids",
+      "passed": true
+    },
+    {
+      "check": "n2:source_palette_only",
+      "passed": true,
+      "observed": 12
+    },
+    {
+      "check": "n2:palette_index_valid",
+      "passed": true
+    },
+    {
+      "check": "n2:final_rgb_matches_indices",
+      "passed": true
+    },
+    {
+      "check": "n2:visible_edge_owners",
+      "passed": true
+    },
+    {
+      "check": "n2:ink_inside_geometry",
+      "passed": true
+    },
+    {
+      "check": "n2:parallel_double_strokes_absent",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "check": "n2:exact_fourfold_preview",
+      "passed": true
+    },
+    {
+      "check": "n2:geometry_no_source_rgb",
+      "passed": true
+    },
+    {
+      "check": "n2:native_centres",
+      "passed": true
+    },
+    {
+      "check": "n2:fixed_density",
+      "passed": true
+    },
+    {
+      "check": "n2:whole_origin_phase",
+      "passed": true
+    },
+    {
+      "check": "n2:projection_formula",
+      "passed": true
+    },
+    {
+      "check": "n2:actual_shadow",
+      "passed": true,
+      "observed": 1143
+    },
+    {
+      "check": "n2:required_detail_groups_visible",
+      "passed": true,
+      "observed": {
+        "Bay0DoorFrame": 825,
+        "Bay0DoorInset": 651,
+        "Bay0DrawerFrame": 338,
+        "Bay0DrawerInset": 62,
+        "Bay0DoorHandle": 42,
+        "Bay0DrawerHandle": 88,
+        "Bay1DoorFrame": 823,
+        "Bay1DoorInset": 651,
+        "Bay1DrawerFrame": 338,
+        "Bay1DrawerInset": 62,
+        "Bay1DoorHandle": 44,
+        "Bay1DrawerHandle": 88,
+        "SideFrame": 981,
+        "SideInset": 731
+      }
+    },
+    {
+      "check": "n2:raster_buffer_sha",
+      "passed": true
+    },
+    {
+      "check": "n2:independent_depth:Body",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          134,
+          92
+        ],
+        "depth_error_m": 9.349029994609737e-09
+      }
+    },
+    {
+      "check": "n2:independent_depth:Counter",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          27,
+          45
+        ],
+        "depth_error_m": 4.1107806936224733e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Plinth",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          34,
+          132
+        ],
+        "depth_error_m": 2.56666377040915e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay0DoorFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          62,
+          106
+        ],
+        "depth_error_m": 5.230744539730381e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay0DoorInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          71,
+          106
+        ],
+        "depth_error_m": 6.134397958490467e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay0DrawerFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          74,
+          76
+        ],
+        "depth_error_m": 1.1034891223005161e-08
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay0DrawerInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          74,
+          78
+        ],
+        "depth_error_m": 3.466006557317769e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay0DoorHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          95,
+          93
+        ],
+        "depth_error_m": 1.6099720046014454e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay0DrawerHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          71,
+          80
+        ],
+        "depth_error_m": 2.3692905326555547e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay1DoorFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          103,
+          86
+        ],
+        "depth_error_m": 1.6121273294089633e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay1DoorInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          111,
+          86
+        ],
+        "depth_error_m": 5.175550876757029e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay1DrawerFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          114,
+          56
+        ],
+        "depth_error_m": 3.9198734125278634e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay1DrawerInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          114,
+          58
+        ],
+        "depth_error_m": 2.5071594667025465e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay1DoorHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          135,
+          73
+        ],
+        "depth_error_m": 2.568819095216668e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:Bay1DrawerHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          111,
+          60
+        ],
+        "depth_error_m": 1.440233967642257e-07
+      }
+    },
+    {
+      "check": "n2:independent_depth:SideFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          41,
+          100
+        ],
+        "depth_error_m": 1.1034891223005161e-08
+      }
+    },
+    {
+      "check": "n2:independent_depth:SideInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          25,
+          101
+        ],
+        "depth_error_m": 1.8772422194501814e-07
+      }
+    },
+    {
+      "check": "n2:separate_band_grain_maps",
+      "passed": true
+    },
+    {
+      "check": "n2:recipe_light_direction",
+      "passed": true
+    },
+    {
+      "check": "n2:normal_visibility_band_selection",
+      "passed": true
+    },
+    {
+      "check": "n2:fixed_world_uv_grain",
+      "passed": true
+    },
+    {
+      "check": "n2:separate_material_shading_fill",
+      "passed": true
+    },
+    {
+      "check": "file_present:geometry\\buffers3.npz",
+      "passed": true
+    },
+    {
+      "check": "file_present:geometry\\raster3.json",
+      "passed": true
+    },
+    {
+      "check": "file_present:pixels\\shading3.npz",
+      "passed": true
+    },
+    {
+      "check": "file_present:pixels\\pixel3.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\buffers3.npz",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\raster3.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\palette.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\material.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\grain.npy",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\recipe06.json",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_pipeline06.py",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\native3.png",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\preview3-x4.png",
+      "passed": true
+    },
+    {
+      "check": "declared_sha:pixel3.json:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\shading3.npz",
+      "passed": true
+    },
+    {
+      "check": "input_output_hash_maps:pixel3.json",
+      "passed": true,
+      "observed": 11
+    },
+    {
+      "check": "file_present:pixels\\native3.png",
+      "passed": true
+    },
+    {
+      "check": "rgba_source_mode:native3.png",
+      "passed": true,
+      "observed": "RGBA"
+    },
+    {
+      "check": "file_present:pixels\\preview3-x4.png",
+      "passed": true
+    },
+    {
+      "check": "rgba_source_mode:preview3-x4.png",
+      "passed": true,
+      "observed": "RGBA"
+    },
+    {
+      "check": "n3:array_shapes",
+      "passed": true
+    },
+    {
+      "check": "n3:binary_alpha",
+      "passed": true
+    },
+    {
+      "check": "n3:alpha_geometry_match",
+      "passed": true
+    },
+    {
+      "check": "n3:finite_buffers",
+      "passed": true
+    },
+    {
+      "check": "n3:normal_unit",
+      "passed": true
+    },
+    {
+      "check": "n3:finite_surface_ids",
+      "passed": true
+    },
+    {
+      "check": "n3:source_palette_only",
+      "passed": true,
+      "observed": 12
+    },
+    {
+      "check": "n3:palette_index_valid",
+      "passed": true
+    },
+    {
+      "check": "n3:final_rgb_matches_indices",
+      "passed": true
+    },
+    {
+      "check": "n3:visible_edge_owners",
+      "passed": true
+    },
+    {
+      "check": "n3:ink_inside_geometry",
+      "passed": true
+    },
+    {
+      "check": "n3:parallel_double_strokes_absent",
+      "passed": true,
+      "observed": []
+    },
+    {
+      "check": "n3:exact_fourfold_preview",
+      "passed": true
+    },
+    {
+      "check": "n3:geometry_no_source_rgb",
+      "passed": true
+    },
+    {
+      "check": "n3:native_centres",
+      "passed": true
+    },
+    {
+      "check": "n3:fixed_density",
+      "passed": true
+    },
+    {
+      "check": "n3:whole_origin_phase",
+      "passed": true
+    },
+    {
+      "check": "n3:projection_formula",
+      "passed": true
+    },
+    {
+      "check": "n3:actual_shadow",
+      "passed": true,
+      "observed": 1345
+    },
+    {
+      "check": "n3:required_detail_groups_visible",
+      "passed": true,
+      "observed": {
+        "Bay0DoorFrame": 825,
+        "Bay0DoorInset": 651,
+        "Bay0DrawerFrame": 338,
+        "Bay0DrawerInset": 62,
+        "Bay0DoorHandle": 42,
+        "Bay0DrawerHandle": 88,
+        "Bay1DoorFrame": 823,
+        "Bay1DoorInset": 651,
+        "Bay1DrawerFrame": 338,
+        "Bay1DrawerInset": 62,
+        "Bay1DoorHandle": 44,
+        "Bay1DrawerHandle": 88,
+        "Bay2DoorFrame": 823,
+        "Bay2DoorInset": 651,
+        "Bay2DrawerFrame": 338,
+        "Bay2DrawerInset": 62,
+        "Bay2DoorHandle": 44,
+        "Bay2DrawerHandle": 88,
+        "SideFrame": 981,
+        "SideInset": 731
+      }
+    },
+    {
+      "check": "n3:raster_buffer_sha",
+      "passed": true
+    },
+    {
+      "check": "n3:independent_depth:Body",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          134,
+          105
+        ],
+        "depth_error_m": 2.958871005986907e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Counter",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          47,
+          55
+        ],
+        "depth_error_m": 3.521200220291121e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Plinth",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          34,
+          152
+        ],
+        "depth_error_m": 2.56666377040915e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay0DoorFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          62,
+          126
+        ],
+        "depth_error_m": 5.230744539730381e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay0DoorInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          71,
+          126
+        ],
+        "depth_error_m": 6.134397958490467e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay0DrawerFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          74,
+          96
+        ],
+        "depth_error_m": 1.1034891223005161e-08
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay0DrawerInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          74,
+          98
+        ],
+        "depth_error_m": 3.466006557317769e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay0DoorHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          95,
+          113
+        ],
+        "depth_error_m": 1.6099720046014454e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay0DrawerHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          71,
+          100
+        ],
+        "depth_error_m": 2.3692905326555547e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay1DoorFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          103,
+          106
+        ],
+        "depth_error_m": 1.6121273294089633e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay1DoorInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          111,
+          106
+        ],
+        "depth_error_m": 5.175550876757029e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay1DrawerFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          114,
+          76
+        ],
+        "depth_error_m": 3.9198734125278634e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay1DrawerInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          114,
+          78
+        ],
+        "depth_error_m": 2.5071594667025465e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay1DoorHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          135,
+          93
+        ],
+        "depth_error_m": 2.568819095216668e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay1DrawerHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          111,
+          80
+        ],
+        "depth_error_m": 1.440233967642257e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay2DoorFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          143,
+          86
+        ],
+        "depth_error_m": 2.5709744111424016e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay2DoorInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          151,
+          86
+        ],
+        "depth_error_m": 5.516677958894434e-08
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay2DrawerFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          154,
+          56
+        ],
+        "depth_error_m": 2.961026321912641e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay2DrawerInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          154,
+          58
+        ],
+        "depth_error_m": 1.5483123849691083e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay2DoorHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          175,
+          73
+        ],
+        "depth_error_m": 3.527666176950106e-07
+      }
+    },
+    {
+      "check": "n3:independent_depth:Bay2DrawerHandle",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          151,
+          60
+        ],
+        "depth_error_m": 4.8138688590881884e-08
+      }
+    },
+    {
+      "check": "n3:independent_depth:SideFrame",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          41,
+          120
+        ],
+        "depth_error_m": 1.1034891223005161e-08
+      }
+    },
+    {
+      "check": "n3:independent_depth:SideInset",
+      "passed": true,
+      "observed": {
+        "pixel": [
+          25,
+          121
+        ],
+        "depth_error_m": 1.8772422194501814e-07
+      }
+    },
+    {
+      "check": "n3:separate_band_grain_maps",
+      "passed": true
+    },
+    {
+      "check": "n3:recipe_light_direction",
+      "passed": true
+    },
+    {
+      "check": "n3:normal_visibility_band_selection",
+      "passed": true
+    },
+    {
+      "check": "n3:fixed_world_uv_grain",
+      "passed": true
+    },
+    {
+      "check": "n3:separate_material_shading_fill",
+      "passed": true
+    },
+    {
+      "check": "file_present:pixels\\comparison-x4.png",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py",
+      "passed": true
+    },
+    {
+      "check": "file_present:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\validate06.py",
+      "passed": true
+    },
+    {
+      "check": "source_still_unchanged",
+      "passed": true
+    }
+  ],
+  "observations": {
+    "material": {
+      "palette_source": "exact centre pixels of generated source",
+      "palette_unique_colours": 12,
+      "grain_size": [
+        128,
+        54
+      ],
+      "minimum_dark_component": 6,
+      "semantic_limit": "Generated reference is design input; its hidden dimensions are not uniquely recovered."
+    },
+    "variant2": {
+      "native_size": [
+        152,
+        150
+      ],
+      "colours": 12,
+      "foreground_pixels": 12342,
+      "visible_groups": {
+        "Body": 1956,
+        "Counter": 4592,
+        "Plinth": 70,
+        "Bay0DoorFrame": 825,
+        "Bay0DoorInset": 651,
+        "Bay0DrawerFrame": 338,
+        "Bay0DrawerInset": 62,
+        "Bay0DoorHandle": 42,
+        "Bay0DrawerHandle": 88,
+        "Bay1DoorFrame": 823,
+        "Bay1DoorInset": 651,
+        "Bay1DrawerFrame": 338,
+        "Bay1DrawerInset": 62,
+        "Bay1DoorHandle": 44,
+        "Bay1DrawerHandle": 88,
+        "SideFrame": 981,
+        "SideInset": 731
+      },
+      "independent_box_rays": 17,
+      "boundary_policies": 99,
+      "shadow_pixels": 1143
+    },
+    "variant3": {
+      "native_size": [
+        192,
+        170
+      ],
+      "colours": 12,
+      "foreground_pixels": 16662,
+      "visible_groups": {
+        "Body": 2350,
+        "Counter": 6512,
+        "Plinth": 70,
+        "Bay0DoorFrame": 825,
+        "Bay0DoorInset": 651,
+        "Bay0DrawerFrame": 338,
+        "Bay0DrawerInset": 62,
+        "Bay0DoorHandle": 42,
+        "Bay0DrawerHandle": 88,
+        "Bay1DoorFrame": 823,
+        "Bay1DoorInset": 651,
+        "Bay1DrawerFrame": 338,
+        "Bay1DrawerInset": 62,
+        "Bay1DoorHandle": 44,
+        "Bay1DrawerHandle": 88,
+        "Bay2DoorFrame": 823,
+        "Bay2DoorInset": 651,
+        "Bay2DrawerFrame": 338,
+        "Bay2DrawerInset": 62,
+        "Bay2DoorHandle": 44,
+        "Bay2DrawerHandle": 88,
+        "SideFrame": 981,
+        "SideInset": 731
+      },
+      "independent_box_rays": 23,
+      "boundary_policies": 140,
+      "shadow_pixels": 1345
+    }
+  },
+  "files_sha256": {
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\recipe06.json": "24cbf339c0366fb182c5ba3c316b44b740ee4643961c3298cb5222c97a54a9d3",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\Source06\\provenance.json": "eae9908758cc1f3667b2618ef92517ffa780e5230f3bf2e319fd5044b69144c5",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Direct05\\native.png": "c5b00805510094b96f746347c27feec96a2844e3e8fb5b42bf2da463cbaa0411",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Direct05\\geometry.npz": "8fc820512311e3a3ed4252e8afb49ae6d376e96b7724687e9ba7ccaa222f5840",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Direct05\\geometry.json": "49bc461dad97c775a99a6328206237fc6c40f591176e20152277bd9d9895155f",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Direct05\\material.json": "11b2842139e31317903002433b78a88159f8782ed71ee2d770303e08fac0eb9f",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\draw_parametric.py": "cf56ae41ab285e4619e23132a3fedb3c7c9b10e129842e2c93d8d5014a829c0e",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_recipe.json": "eddb1b8ebad0386ad7d4a1cbc303d237789244e0d9467e46dcad6100f8814dff",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building37\\Source\\sheet.png": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\Source06\\generated-board.png": "cf5d9fdf2524f250b1248c9b225675ed4f6784f6c643d9173a697c474dc73cd4",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\palette.json": "611b82ff08a7b86b7657fc519603fe10c5f78421ba79b16bed6a41f2f6a2ab91",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\material.json": "8e440f1165e53ebb68287afab41a31d7c7a78ddf23a2548abfb43ad4067fc12a",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\material\\grain.npy": "3721b1d17e94c2e2cc8f1077aba1dfd86e13baa2c5b02bf666edd5461c39d197",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_pipeline06.py": "40d14410cd9a22f3c66f3b8a85ab208027eb8bd69731be2b162f324d72ca2ccb",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\parts.json": "fc78469c37ca46ba99f17f1a86a1a64bb688668e2f0ef99d4c3d3c389725ddd9",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\scene.blend": "c4ea2338d49c9c4e27f0873239d0c8c60706a99cbaf4694fbe358675e3d75344",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_geometry06.py": "cc9cdcf2f74f7204a9b3e19b26e67b59f561dbf7363312a81ee51c1990a2384a",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\buffers2.npz": "762dd11c30afc40d8ba24865daab7094f7e363089f4c3e7e99ad8cdd3b294bcb",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\raster2.json": "7a43ed052a71d44ee801ffe7c6d68976127c6a62e72b0b948360e201f1310bed",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\shading2.npz": "2a4c1304534011a292e1feaa76f5a0ecbb60e607f732f1599df6be7d75e2210b",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\pixel2.json": "eae6609e7f90880d72db63d4a7d15a8afba95f30b9d70ca9fc6c3fdd0bfdda5e",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py": "ce269e196d5fcabfa34976e1c617867577f8f3c1ae7872d6db381db62ee1301f",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\native2.png": "517708a0f7b70329b22d53305f87a6785cfa3a7c0d3d4b8e9b9aaad2d74a6e20",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\preview2-x4.png": "8ac8f6094541dd79f60af26e081b004c656e3f627dc9d331279e993e40fe4d89",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\buffers3.npz": "62d2249d40a5c04c8e79c4ef2375c0f208f3961c3c2e40b7f8a29595e5fc1fb8",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\geometry\\raster3.json": "d7c6e288ae1bd62b14bcbc69e5a20ebb73c48604fd8ef133503dd8a76ad0e556",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\shading3.npz": "fe4cb5f724506c52936cc8602e41b820e1d3216464786f7f6c8fbd87d28e7645",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\pixel3.json": "ddaeaefd6fda055bbd763cd66e4e1781549f296847556c2a877d4f95c85ab7dc",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\native3.png": "33c94af63bbed6e77f1a6d2a56b2140e1ba544748b7b96194dcf37af0072afe9",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\preview3-x4.png": "1ae02d1a037ed62aea5d1c907e63cc5c16864283f0a4bcf151d004bb56148c78",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Parametric06\\pixels\\comparison-x4.png": "0741173164455ffce1c30ad5f44ed94e0ab626f630b2dbd56c401528effeb8c6",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\validate06.py": "1be3e9484c91a5828a1c2450b8fe49c964810881e6268f5e0f09ad3fc909de9a"
+  },
+  "scope": "Saved native PNG, material provenance, semantic geometry, visibility, edges and integer display only",
+  "not_verified": [
+    "aesthetic approval",
+    "99 percent source reconstruction",
+    "unique hidden-dimension recovery",
+    "Unity import/display",
+    "general furniture generator"
+  ],
+  "elapsed_seconds": 0.43624159999671974
+}

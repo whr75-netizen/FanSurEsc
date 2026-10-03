@@ -1,0 +1,79 @@
+{
+  "schema": "perfect-pixel-colour-cleanup/3",
+  "algorithm": "bounded bilateral + median-cut palette, dithering NONE",
+  "grid_status": "source_resolution_cleanup",
+  "grid_recovered": false,
+  "period_source_px": 1,
+  "source_dimensions": [
+    1489,
+    1056
+  ],
+  "output_dimensions": [
+    1489,
+    1056
+  ],
+  "source_array_sha256": "b2b1699e64618f4027f3a286ac082421bac6212ef1b27521096b68960562c5e2",
+  "output_array_sha256": "24716a5b970572b5c70a4c19066ea697538422ff8243bf038c9cdb31b429fd81",
+  "producer_sha256": "52ffb7a6dd854738eabb1691b8bb677586183ee5a9da30bd4cec7539f5df79f4",
+  "settings": {
+    "maximum_delta_e76": 4,
+    "candidate_palette_colors": 256,
+    "radius_source_px": 2,
+    "sigma_space_px": 1,
+    "sigma_colour_delta_e76": 4,
+    "strong_edge_threshold_delta_e76": 12,
+    "dithering": "NONE",
+    "palette_training": "alpha >= 16; all visible only if no such pixel exists",
+    "filter_average_space": "stored sRGB byte values; CIELAB D65 weights"
+  },
+  "geometry": {
+    "nonlinear_warp": false,
+    "inverse_jacobian": [
+      [
+        1,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "resized": false,
+    "cropped": false
+  },
+  "invariants": {
+    "input_unchanged": true,
+    "alpha_byte_exact": true,
+    "hidden_rgb_exact": true,
+    "protected_edge_rgb_exact": true,
+    "protected_edge_pixel_count": 215329,
+    "maximum_measured_delta_e76": 3.999974250793457
+  },
+  "colour_statistics": {
+    "visible_rgb_colors_before": 154249,
+    "visible_rgb_colors_after": 136682,
+    "changed_visible_pixels": 357806,
+    "palette_mapped_pixels": 322254,
+    "preservation_fallback_pixels": 41763,
+    "already_limited_palette_noop": false
+  },
+  "low_contrast_statistics": {
+    "source_selected_pair_count": 480288,
+    "squared_delta_e76_before": 1482519.9099020585,
+    "squared_delta_e76_after": 1391555.9914770648,
+    "energy_ratio": 0.9386423630351087,
+    "meaning": "local colour variation only; not a semantic feature or art quality score"
+  },
+  "elapsed_seconds": 3.629729899999802,
+  "stage_seconds": {
+    "bilateral_seconds": 2.0069032999999763,
+    "palette_seconds": 0.6781078999993042
+  },
+  "warnings": [
+    "원본 크기의 색 정리 후보입니다. 원래 픽셀 격자 복원이나 모든 의미 있는 특징 보존을 증명하지 않습니다.",
+    "보호 색과 오차 제한 때문에 최종 색 수는 후보 팔레트 수보다 많을 수 있습니다.",
+    "고대비 외곽 잔색과 alpha 번짐은 보존될 수 있습니다. 이 경로는 alpha/matte를 변경하지 않습니다."
+  ],
+  "source_path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\runs\\20261003T092818576216Z-59a6e7b8655b4cf4a637cf98f68e32a7\\source.png",
+  "source_file_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae"
+}

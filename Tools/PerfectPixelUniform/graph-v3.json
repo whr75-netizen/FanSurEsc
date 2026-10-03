@@ -1,0 +1,235 @@
+{
+  "goal": "사용자 실제 입력의 내부 색번짐을 원본크기/alpha/강경계/색오차한도 안에서 정리하고 웹 별도모드로 제공. 격자복원과 미술승인은 별개.",
+  "entry": "source",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "bounded_colour_cleanup",
+      "text": "실제 결과 PNG 및 독립fixture/HTTP조건을 마지막검증; 원본/Unity보존, no mosaic resize",
+      "source": "2026-10-03 최신 사용자 색번짐 정리 요청; README V3",
+      "predicate": {
+        "op": "all",
+        "args": [
+          {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "http.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "source",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "source_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+            "contract": "README V3 source-sized colour-only cleanup"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/cleanup.py",
+          "--source",
+          "Tools/PerfectPixelUniform/runs/20261003T092818576216Z-59a6e7b8655b4cf4a637cf98f68e32a7/source.png",
+          "--output-dir",
+          "docs/artifacts/building37/Uniform03"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/cleanup.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/runs/20261003T092818576216Z-59a6e7b8655b4cf4a637cf98f68e32a7/source.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform03/output.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform03/receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "source.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "source.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "source_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+            "contract": "README V3 source-sized colour-only cleanup"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/test_cleanup.py",
+          "docs/artifacts/building37/Uniform03/tests.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/cleanup.py",
+          "Tools/PerfectPixelUniform/test_cleanup.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform03/receipt.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform03/tests.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "http"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "http",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "source_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+            "contract": "README V3 source-sized colour-only cleanup"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/test_web.py",
+          "docs/artifacts/building37/Uniform03/web-tests.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/uniform.py",
+          "Tools/PerfectPixelUniform/cleanup.py",
+          "Tools/PerfectPixelUniform/web.py",
+          "Tools/PerfectPixelUniform/index.html",
+          "Tools/PerfectPixelUniform/test_web.py"
+        ]
+      },
+      "reads": [],
+      "writes": [
+        "art:PerfectPixelUniform-V3-HTTP-runs",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform03/web-tests.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "http.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "http.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

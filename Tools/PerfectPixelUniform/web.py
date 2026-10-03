@@ -24,10 +24,15 @@ import numpy as np
 from PIL import Image
 
 from uniform import process_array
+from cleanup import process_cleanup
 
 
 ROOT = Path(__file__).resolve().parent
-CORE_SHA = hashlib.sha256((ROOT / "uniform.py").read_bytes()).hexdigest()
+def code_sha():
+    return hashlib.sha256(b"".join((ROOT / name).read_bytes() for name in ("uniform.py", "cleanup.py", "web.py"))).hexdigest()
+
+
+CORE_SHA = code_sha()
 RUNS = ROOT / "runs"
 MAX_FILE_BYTES = 20 * 1024 * 1024
 MAX_PIXELS = 4_000_000
@@ -67,7 +72,7 @@ class LocalServer(ThreadingHTTPServer):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "PerfectPixelUniform/2"
+    server_version = "PerfectPixelUniform/3"
 
     def reply(self, status, body, content_type="application/json; charset=utf-8"):
         payload = json_bytes(body) if not isinstance(body, bytes) else body
@@ -102,7 +107,7 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8")
             return
         if path == "/api/health":
-            self.reply(200, {"application": "PerfectPixelUniform", "version": 2, "busy": WORK_LOCK.locked(), "loaded_core_sha256": CORE_SHA})
+            self.reply(200, {"application": "PerfectPixelUniform", "version": 3, "busy": WORK_LOCK.locked(), "loaded_core_sha256": CORE_SHA})
             return
         parts = path.split("/")
         if len(parts) != 4 or parts[1] != "runs" or not RUN_ID.fullmatch(parts[2]):
@@ -125,7 +130,7 @@ class Handler(BaseHTTPRequestHandler):
         if self.path != "/api/normalize":
             self.reply(404, {"error": "경로가 없습니다."})
             return
-        if hashlib.sha256((ROOT / "uniform.py").read_bytes()).hexdigest() != CORE_SHA:
+        if code_sha() != CORE_SHA:
             self.reply(503, {"error": "계산 코드가 변경되었습니다. 실행기를 재시작한 뒤 처리해 주세요."})
             return
         if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
@@ -181,7 +186,13 @@ class Handler(BaseHTTPRequestHandler):
             source_name = "source" + suffix
             if source_name != "source.bin":
                 save_new(run_dir / source_name, raw)
-            output, report = process_array(pixels)
+            mode = request.get("mode", "lossless")  # Preserve existing V2 API calls.
+            if mode == "cleanup":
+                output, report = process_cleanup(pixels, request.get("strength", 4), request.get("palette_colors", 256))
+            elif mode == "lossless":
+                output, report = process_array(pixels)
+            else:
+                raise ValueError("처리 모드는 cleanup 또는 lossless여야 합니다.")
             if not isinstance(output, np.ndarray) or output.dtype != np.uint8 or output.ndim != 3:
                 raise ValueError("처리기가 uint8 RGB/RGBA 배열을 반환하지 않았습니다.")
             if output.shape[2] != pixels.shape[2] or output.shape[0] <= 0 or output.shape[1] <= 0:
@@ -203,6 +214,7 @@ class Handler(BaseHTTPRequestHandler):
                 "input_bytes_preserved": True,
                 "preview_scaling_only": True,
                 "run_id": run_id,
+                "processing_mode": mode,
             }
             receipt_data = json_bytes(receipt)
             save_new(run_dir / "output.png", png)
@@ -247,7 +259,7 @@ def main():
                 health = json.load(response)
             if health.get("application") != "PerfectPixelUniform":
                 raise RuntimeError("다른 프로그램이 로컬 포트를 사용 중입니다.")
-            if health.get("version") != 2 or health.get("loaded_core_sha256") != CORE_SHA:
+            if health.get("version") != 3 or health.get("loaded_core_sha256") != CORE_SHA:
                 raise RuntimeError("이전 버전 실행기가 동작 중입니다. 해당 실행기를 종료하고 다시 실행해 주세요.")
         except (URLError, ValueError, RuntimeError):
             raise

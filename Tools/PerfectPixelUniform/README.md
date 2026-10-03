@@ -1,6 +1,36 @@
-# PerfectPixel Uniform — 국소 좌표 왜곡 없는 별도 보정 경로
+# PerfectPixel Uniform — 전역 격자와 원본 해상도 색 정리
 
-## 현재 결정 V2 · 2026-10-03 — 특징 손실을 허용하지 않는 축약
+## 현재 결정 V3 · 2026-10-03 — 해상도 유지와 색 번짐 정리
+
+최신 요구: V2는 실제 생성형 시트에 결과를 주지 못했고, 확대할수록 주변의 여러 색·미세 명암이 더러워 보인다. **무손실 반복 제거와 색 잡음 정리는 다른 연산**이다. V2의 byte equality를 색 정리의 통과 조건으로 쓴 요구 해석을 수정한다. 원본·과거 출력·Unity를 보존하며 원본 크기에서 색만 정리하는 별도 경로를 웹 기본 모드로 제공한다. 정규 격자 복원을 성공했다고 바꿔 말하지 않는다.
+
+### 구현 전 선택·수학 계약
+
+- 후보: (A) nearest 축소/고정 목표 크기 — 특징을 버려 제외. (B) 작은 반경 bilateral + 오차 제한 팔레트 매핑 — 채택. (C) guided filter — 같은 역할의 대안이며 연속 추가하지 않는다. 미확정 격자의 강제 정렬·local warp는 제외한다.
+- 좌표: `RGB(A) source[y,x] → 동일 source pixel 좌표의 색 연산 → 동일 W×H PNG`. 좌상단 원점, X오른쪽/Y아래, source px 단위, 중심 `(x+.5,y+.5)`, 부모/회전 없음, 기하 Jacobian=identity. resize/crop/sample 이동 없음. alpha와 alpha0의 숨은 RGB는 byte 그대로 유지한다.
+- 색 거리: sRGB를 표준 D65 CIELAB로 변환해 `ΔE76=||Lab(a)-Lab(b)||₂`로 계산한다. 색공간 변환은 가중치·오차 측정용이며 저장 모드는 원래 RGB(A)다.
+- 필터: 반경2px, `σSpace=1px`, `σColor=t`인 bilateral 1회. `w=exp(-||i-j||²/2-ΔE76(i,j)²/(2t²))*alpha(j)/255`, alpha0 이웃 제외. 저장된 sRGB byte의 weighted RGB를 round한 후보가 원본에서 t보다 멀면 원본을 유지한다. 이미지 밖 이웃은 제외한다. t=2/4/8은 보수적/표준/강 정리의 명시된 색 오차 설정이며 문헌의 보장값이 아니다.
+- 팔레트: alpha≥16인 색에서 Pillow median-cut 후보 팔레트 K=64/128/256을 만든 뒤 **dithering NONE**으로 매핑한다(해당 pixel이 없으면 전체 보이는 색). 낮은 coverage의 원색 fringe가 팔레트를 과점하는 것을 줄인다. 원본 대비 ΔE76≤t인 후보만 수락하고, 초과하면 오차 제한 필터 결과를 유지한다. 보호 색도 남으므로 최종 색 수가 K 이하여야 한다고 주장하지 않는다. 이미 보이는 RGB 색 수≤K인 입력은 그대로 유지한다.
+- 경계: source 4-neighbor 색 차이가 `max(12,3t)` 이상인 양 끝 pixel의 RGB를 정확히 유지한다. 이는 명시된 강한 경계와 고대비 1px 특징 보호이며, 낮은 대비의 의미 있는 특징과 잡음을 자동 구별한다는 보장이 아니다. 강한 경계를 보호하면서 잔색을 정리하는 정도를 실제 시트로 관찰한다.
+- 불변조건: 입력 불변, W/H/채널 불변, alpha 및 hidden RGB byte equality, 보호 pixel RGB equality, 모든 변경 pixel ΔE76≤t(+float tolerance .001), 디더링 없음. 오류는 해당 색 단계에 귀속하며 결과 저장 전에 중단한다. 출력 label은 `source_resolution_cleanup`이고 grid 검증 상태와 분리한다.
+
+가설/판별: 내부 저대비 변동은 감소하고 고대비 선·실루엣·크기는 유지된다. 합성 flat+noise/1px 눈·선/alpha 경계와 실제 사용자 run을 검사한다. 새 격자·재저작·게임 통합은 이번 범위가 아니다. 색 fringe가 높은 대비를 가진 원본 결함이면 이 보수적 경로에서 남을 수 있으며, alpha/matte 변경을 몰래 추가하지 않는다.
+
+근거: [OpenCV bilateral 설명](https://docs.opencv.org/4.x/d4/d13/tutorial_py_filtering.html), [guided 원 논문](https://people.csail.mit.edu/kaiming/publications/eccv10guidedfilter.pdf), [Aseprite ColorQuantization](https://www.aseprite.org/api/command/ColorQuantization), [Aseprite dithering none](https://www.aseprite.com/docs/cli/#--dithering-algorithm), [Pillow quantize](https://pillow.readthedocs.io/en/stable/reference/Image.html#PIL.Image.Image.quantize). 외부 fixer/OpenCV를 새로 설치하지 않으며 NumPy의 직접 bilateral 식과 기존 Pillow를 사용한다. alpha 분리·색오차 제한·경계 고정은 이 도구의 보존 계약이다.
+
+### 실행·판별 결과
+
+웹 기본은 **색 번짐 정리 · 해상도 유지**이며 정리 강도/후보 팔레트만 선택한다. 확대 1/2/4/8배는 원본과 결과에 똑같이 적용하고 PNG를 다시 확대 저장하지 않는다. API는 `mode: cleanup, strength: 4, palette_colors: 256`; mode 생략은 과거 V2 호출 호환을 위해 lossless다. CLI는 `cleanup.py --source <원본> --output-dir <새 폴더>`이고 격자 규격/목표 해상도를 받지 않는다.
+
+사용자 run `20261003T092818576216Z-59a6e7b8655b4cf4a637cf98f68e32a7`은 B37와 같은 source다. `graph-v3.json` WorkLoop3단계 완료: 실제 source 계산 1회 → 독립 fixture/저장결과 검사 → HTTP9조건. `docs/artifacts/building37/Uniform03/output.png`는 **1489×1056 그대로**인 색 정리 후보, 계산3.630초, alpha/hidden RGB byte 동일, 강한 경계215329px의 RGB 동일, 최대색변화3.999974ΔE76≤4. source SHA 불변. RGB 고유색154249→136682, 변경357806 visible px. 원본에서 선택한 저대비 인접쌍의 제곱색차 비율0.938642로6.14%감소했다. 이 수치는 국소 색 변동이며 특징/인지/미술 합격 점수가 아니다. 효과는 보수적인 수준으로, 고대비 fringe·원래 격자·픽셀아트 저작 문제를 해결했다고 주장하지 않는다.
+
+9개 fixture/실제artifact 검사와 HTTP9조건 통과. 실제 아트는 재생성 없이 저장결과를 읽어 검사했다. `comparison-crop-x4.png`는 같은128×128 영역을 nearest4배로 보여주는 별도 미리보기(1032×540)이며 게임 자산이 아니다. 실제 원본의 매우낮은alpha1~15에 원색 red3367/yellow223px가 있어 matte 오염 가능성은 있지만 원인은 확정하지 않았다. 해당 색을 몰래 삭제하거나 alpha를 다시 만들지 않았다.
+
+실제8768서버가V2로남아있어 경로/유휴상태를확인한PID36976만종료하고V3로교체했다. `live-server.json`의version3/계산SHA일치와netstat의리스너PID40068을확인했다. OS프로세스조회는기본sandbox에서거부되어승인된조회로대상을확인했고,Stop-Process실행오류후동일PID의taskkill성공을관측했다. 화면버전과색처리/격자/웹코드의합성SHA를확인해오래된계산기를새화면에서재사용하지않도록했다. 실제개인브라우저UI자동화와Unity변경/Play검사는하지않았다.
+
+남은 범위: source-resolution 색 정리는 확인했지만 fake-pixel의 진짜 저작 격자를 복원한 것은 아니다. 낮은 대비의 유효 무늬도 색 정리 강도에 영향을 받을 수 있다. 외곽 matte 정리와 확실한 격자 복원은 해당 단계의 별도 증거/명세가 있어야 추가한다. 원본/V1/V2/Unity는 보존하며 같은 입력의 반복 생성이나 강제 축소로 대체하지 않는다.
+
+## V2 설계·증거 — 보존 기록
 
 사용자 확인: V1의 휘어짐은 사라졌지만 특징이 모자이크처럼 소실됐다. 원인 수정 범위는 **간격 검출 → 셀 표본화 → 출력 허용**이다. 원본·V1 결과·Unity는 보존한다. V1의 등간격 검사 성공을 정확한 픽셀 복원으로 승격하지 않는다.
 

@@ -50,7 +50,7 @@ def main():
                 if time.monotonic() > deadline or process.poll() is not None:
                     raise RuntimeError("Local server startup failed")
                 time.sleep(0.05)
-        assert status == 200 and json.loads(raw)["application"] == "PerfectPixelUniform" and json.loads(raw)["version"] == 2
+        assert status == 200 and json.loads(raw)["application"] == "PerfectPixelUniform" and json.loads(raw)["version"] == 3
         cases.append("local server health")
         status, page = request("/")
         assert status == 200 and b"/api/normalize" in page and b"drawImage" not in page and b"<canvas" not in page
@@ -100,10 +100,42 @@ def main():
         status, saved_source = request(real_failure["source_url"])
         assert status == 200 and saved_source == real_bytes
         cases.append("actual pseudo-pixel sheet rejected with diagnosis, no PNG; exact source retrievable")
+        noisy = np.random.default_rng(27).integers(85, 116, (60, 70, 4), dtype=np.uint8)
+        noisy[..., 3] = 253
+        noisy[5, 5] = [10, 10, 10, 255]
+        noisy[0, 0] = [1, 200, 17, 0]
+        clean_stream = io.BytesIO()
+        Image.fromarray(noisy).save(clean_stream, format="PNG")
+        clean_bytes = clean_stream.getvalue()
+        clean_payload = {"filename": "colour-noise.png", "image_base64": base64.b64encode(clean_bytes).decode("ascii"),
+                         "mode": "cleanup", "strength": 4, "palette_colors": 64}
+        status, clean_reply = request("/api/normalize", clean_payload, url)
+        assert status == 200, clean_reply.decode()
+        clean_answer = json.loads(clean_reply)
+        status, clean_png = request(clean_answer["output_url"])
+        cleaned = np.array(Image.open(io.BytesIO(clean_png)))
+        assert status == 200 and cleaned.shape == noisy.shape
+        assert np.array_equal(cleaned[..., 3], noisy[..., 3])
+        assert np.array_equal(cleaned[5, 5], noisy[5, 5]) and np.array_equal(cleaned[0, 0], noisy[0, 0])
+        assert clean_answer["report"]["grid_status"] == "source_resolution_cleanup"
+        assert clean_answer["report"]["grid_recovered"] is False
+        assert clean_answer["report"]["invariants"]["maximum_measured_delta_e76"] <= 4.001
+        assert clean_answer["report"]["colour_statistics"]["changed_visible_pixels"] > 0
+        status, clean_receipt = request(clean_answer["receipt_url"])
+        assert json.loads(clean_receipt)["_web"]["processing_mode"] == "cleanup"
+        status, clean_saved_source = request(clean_answer["source_url"])
+        assert clean_saved_source == clean_bytes
+        cases.append("colour cleanup produces source-sized PNG with exact alpha, thin feature, hidden RGB, bounded colour changes and provenance")
+        clean_payload["strength"] = 99
+        status, invalid_reply = request("/api/normalize", clean_payload, url)
+        invalid = json.loads(invalid_reply)
+        assert status == 422 and not (ROOT / "runs" / invalid["run_id"] / "output.png").exists()
+        cases.append("invalid cleanup settings rejected without PNG")
         report = {"schema": "perfect-pixel-uniform-web-tests/1", "passed": True, "cases": cases,
                   "processing_http_seconds": elapsed, "core_seconds": answer["report"]["elapsed_seconds"],
                   "successful_run_id": answer["run_id"], "failed_run_id": failure["run_id"],
                   "actual_rejected_run_id": real_failure["run_id"],
+                  "cleanup_run_id": clean_answer["run_id"],
                   "scope": "HTTP/PNG/HTML integration; no personal browser UI automation or Unity changes"}
         destination = Path(sys.argv[1])
         with destination.open("x", encoding="utf-8") as stream:

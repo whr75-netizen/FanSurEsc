@@ -2652,3 +2652,11 @@ Interactable (abstract base class)
 - `[실제 결과]` Parametric06 native2.png152×150/native3.png192×170, 각12색/alpha0·255. 모든 bay의 DoorFrame/Inset·DrawerFrame/Inset·DoorHandle/DrawerHandle 및 SideFrame/Inset >0px, 실제shadow1143/1345px. 두 크기모듈치수/밀도/UV/정수phase 일치. scene.blend에2개의 실제mesh scene+camera를 저장했다. viewport는편집용기본색이며 F12 beauty render가 finalPNG인것은아니다. 현재 재제작 권위입력은 recipe/부품code다.
 - `[실제 검사/시간]` graph-v6의 material→geometry→pixels→validate 4노드가1회연속완료했다. 생산 재실행 없음. 별도 작성된 검사기는 실제PNG/배열/원본RGB좌표/팔레트/명암/고정UV/edge/평행2중선/정수4배/모듈과 SHA를 확인했고 각 visible group1점씩 box slab(17/23ray)로 BVH깊이를 대조했다.299조건통과이며 미술합격점수가아니다. 재료 .142초+Blender시작포함9.147초+pixel .303초=약9.59초, native기하 .787초/최종검사 .436초. 생성·설계·코드·AI추론시간은별도다. workloop-state.json과validation.json을보존했다.
 - `[완료/미검증]` 이번두크기의생성재료→입체구조→native pixel 제작과기술조건을확인했다. 원화99%복제/유일치수복구/미술승인/범용가구·게임모딩시스템/Unityimport·조명·표시는미검증이다. 기존게임이나8768웹을수정하거나Play/빌드검사를하지않았다. 현재결정/재실행/한계는Tools/PerfectPixelUniform/README.md V6와DESIGN06을따른다.
+
+## 179. 돌출 문틀·함몰 패널을 평판 전면으로 수정 `[MAP-01]`
+
+- `[최신 정정/원인]` V6카툰입체감/외곽돌출과가운데함몰구조를사용자가거부했다. 실제frame/panel차50mm(투영3.58px), handle상대112.5mm, 문간몸체노출125mm/상판51.03mm를읽어원인을기하프로필로고정했다. DESIGN07에평판프로필과기존색/무늬/명암/투영/두크기보존을먼저명세했다.
+- `[변경]` Frame/Inset/SideFrame제거, 모든문/서랍판frontz-.4tick, 판폭19.5tick/반복20tick/틈.5tick, door y7..53.5와drawer54.5..69.5. 몸체top70/counter70..72로상판25.52mm, 작은handle전면-1.25tick/판기준26.56mm. 기존BVH/nativecentre/가시선/RGB표본/밴드/UV함수를재사용하고재료를byte동일복사했다. 원화/기존V6code·결과/Unity웹은보존했다.
+- `[실패/근본수정]` 새프로필스크립트의sibling import경로가Blender에없어ModuleNotFoundError. Blender프로세스exit0을생산완료로간주하여pixels가부재기하를읽다가차단됐다. 실패code/log/부분자료/blocked graph를Parametric07에보존했고script디렉터리명시import와worker_completed생산metadata를연결했다. 프로필값을바꾸지않고Parametric07-fixed에서새수정그래프3노드를완료했다.
+- `[실제 결과/관측]` native152×150/192×170·각12색/동일밀도, Frame/Inset0, 모든판깊이동일, visiblegroups11/15와shadow388/430px. 실제PNG/팔레트/alpha/최근접boxslab/가시edge/평행2중선/정수4배/모듈/V6SHA보존의244조건통과. 읽기전용별도감사도평판/두께/handle/재료hash/밀도를확인했으며미술승인하지않았다. Blender시작포함3.218초/픽셀.257초는생성·설계·코드작업과별도다.
+- `[완료 범위]` 기하정정과표시자산을제출가능상태로저장했다. 미술승인/범용모딩/Unity표시미검증. 추가로사용자가지적한2색나뭇결의부족은별도재료변경원인으로연결하며기하를다시바꾸지않는다. 현재구조는README V7/DESIGN07/Parametric07-fixed를따른다.

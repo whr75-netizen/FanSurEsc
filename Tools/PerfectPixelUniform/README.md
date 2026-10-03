@@ -1,6 +1,18 @@
 # PerfectPixel Uniform — 전역 격자와 원본 해상도 색 정리
 
-## 현재 결정 V6 · 2026-10-03 — 생성 재료와 입체 구조를 결합한 수납장
+## 현재 결정 V7 · 2026-10-03 — 평판 전면으로 과한 입체감 수정
+
+사용자는 V6의 카툰 같은 입체감과 돌출 외곽/함몰 패널 구조를 거부했다. V6의 기술검사 통과는 미술합격이 아니었다. 원인은 문틀50mm 단차·손잡이112.5mm 돌출·문짝사이125mm 몸체노출·51mm 상판이었다. 새 [DESIGN07.md](DESIGN07.md)의 프로필로 수정했다. 색감·나뭇결·명암 알고리즘·픽셀밀도·2/3칸·V6 원본/코드/결과는 보존했다.
+
+V7은 실제 평판 문/서랍을 같은 z=-.4tick에 두고 Frame/Inset/SideFrame을 제거한다. 틈은 .5tick=15.625mm, 상판25.52mm, 손잡이의 판기준 최대 돌출26.56mm다. 몸체앞면을 대부분 덮는19.5tick 판을20tick마다 반복하여 넓은 테두리가 읽히지 않도록 했다. 면마다 임의 색칠/조명/스케일 보정은 추가하지 않았다. `cabinet_profile07.py`는 새 box 프로필을 기존 `cabinet_geometry06.raster_variant`와 `cabinet_pipeline06.pixels`에 전달하는 어댑터다. 재료는 V6의 byte동일 복사이며 새 생성이나 무늬 재계산은 없다.
+
+실제 결과는 `docs/artifacts/building37/Parametric07-fixed/pixels/native2.png`152×150, `native3.png`192×170, 각12색과 동일한 native 밀도다. `pixels/comparison-x4.png`는 정확4배 표시이며 `geometry/scene.blend`에두실제모델을보존했다. 평판 동깊이·테두리삭제·상판접합·손잡이돌출·가시선/최근접깊이·팔레트/alpha·모듈/표시/V6SHA보존의 마지막244조건을 확인했다. 그림자는388/430px로 줄었다. **미술승인이나 범용모딩/Unity표시 검증은 아니다.**
+
+첫 실행은 Blender가 sibling renderer 모듈 경로를 찾지 못했다. 실패코드/로그/blocked state를 `Parametric07`에 보존했다. Blender exit0만으로 성공처럼 다음 단계가 진행된 관측 오류도 있었으므로, module import 경로와 worker 완료 metadata 요구를 고쳤다. 치수/재료/카메라는 바꾸지 않고 새 출력 `Parametric07-fixed`에서 `graph-v7-import-fix.json`의 geometry→pixels→validate3노드를 완료했다. Blender 시작 포함 기하3.218초/픽셀.257초로, 생성/설계/코드작성/검사시간과별도다. 기존V6를덮어쓰거나재계산하지않았다.
+
+재실행은 `cabinet_profile07.py geometry/pixels/validate --output <새경로>`를 순서대로 호출한다. profile 입력은 recipe07, 변경하지 않은 색·UV·명암 계약은 recipe06이며 각 실제 입력 SHA를 기록한다. `.blend` viewport/F12와 final native PNG의 구분은 V6와 같다.
+
+## V6 · 보존 기록 — 생성 재료와 입체 구조를 결합한 수납장
 
 사용자 요청에 따라 **색감·재료 디자인은 새 생성 원화에서 가져오고, 경계·깊이·명암 영역은 부품 기하에서 계산**했다. 같은 디자인의 2칸/3칸 수납장을 실제 제작했다. 생성 원화를 축소해 최종 스프라이트로 제출한 것이 아니다. V5·기존 원본·8768 웹·Unity 배치는 보존했다.
 

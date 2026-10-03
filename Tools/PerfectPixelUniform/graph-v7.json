@@ -1,0 +1,298 @@
+{
+  "goal": "과장된 V6 돌출 문틀과 함몰 패널을 평판 문/서랍과 얕은 틈으로 수정. 색·무늬·명암 알고리즘·native 밀도·두크기 및 V6 보존.",
+  "entry": "geometry",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "flat_front",
+      "text": "Frame/Inset 제거; plate동일깊이; 작은손잡이; 기존재료/반복밀도/가림/경계/표시보존",
+      "source": "최신 사용자 V6 카툰입체감/서랍함몰 거부, DESIGN07",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "geometry",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "DESIGN07 geometry-only correction; reuse V6 material byte-for-byte"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/cabinet_profile07.py",
+          "geometry",
+          "--output",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/cabinet_profile07.py",
+          "Tools/PerfectPixelUniform/recipe07.json",
+          "Tools/PerfectPixelUniform/cabinet_geometry06.py",
+          "Tools/PerfectPixelUniform/cabinet_pipeline06.py",
+          "Tools/PerfectPixelUniform/validate06.py",
+          "Tools/PerfectPixelUniform/recipe06.json",
+          "Tools/PixelPipeline/common.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/recipe07.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric06/material/palette.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/parts.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/scene.blend",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/raster2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/raster3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/execution.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/stdout.txt",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/stderr.txt"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "geometry.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "pixels"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "geometry.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "pixels",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "DESIGN07 geometry-only correction; reuse V6 material byte-for-byte"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/cabinet_profile07.py",
+          "pixels",
+          "--output",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/cabinet_profile07.py",
+          "Tools/PerfectPixelUniform/recipe07.json",
+          "Tools/PerfectPixelUniform/cabinet_geometry06.py",
+          "Tools/PerfectPixelUniform/cabinet_pipeline06.py",
+          "Tools/PerfectPixelUniform/validate06.py",
+          "Tools/PerfectPixelUniform/recipe06.json",
+          "Tools/PixelPipeline/common.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/recipe06.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/raster2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/raster3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric06/material/palette.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric06/material/grain.npy",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric06/material/material.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/reuse.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/grain.npy",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/grain-role.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/source-wood-roi.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/palette.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/palette.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/material.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/native2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/preview2-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/shading2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/pixel2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/normals2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/visibility2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/native3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/preview3-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/shading3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/pixel3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/normals3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/visibility3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/comparison-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/execution.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "pixels.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "pixels.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "DESIGN07 geometry-only correction; reuse V6 material byte-for-byte"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/cabinet_profile07.py",
+          "validate",
+          "--output",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "Tools/PerfectPixelUniform/cabinet_profile07.py",
+          "Tools/PerfectPixelUniform/recipe07.json",
+          "Tools/PerfectPixelUniform/cabinet_geometry06.py",
+          "Tools/PerfectPixelUniform/cabinet_pipeline06.py",
+          "Tools/PerfectPixelUniform/validate06.py",
+          "Tools/PerfectPixelUniform/recipe06.json",
+          "Tools/PixelPipeline/common.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/parts.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/scene.blend",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/raster2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/raster3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/execution.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/stdout.txt",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/geometry/stderr.txt",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/reuse.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/grain.npy",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/grain-role.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/source-wood-roi.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/palette.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/palette.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/material/material.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/native2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/preview2-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/shading2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/pixel2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/normals2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/visibility2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/native3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/preview3-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/shading3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/pixel3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/normals3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/visibility3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/comparison-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/pixels/execution.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric06/validation.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Parametric07/validation.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

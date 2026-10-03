@@ -1,0 +1,37 @@
+{
+  "schema": "r10-additional-observed-cases/1",
+  "evidence": "Direct Python calls earlier in this turn; fixture web replay separately in web-test.json",
+  "cases": [
+    {
+      "case": "curved_metal",
+      "passed": true,
+      "seconds": 0.1842569
+    },
+    {
+      "case": "dark_reflection",
+      "passed": true,
+      "seconds": 0.1764372
+    },
+    {
+      "case": "native",
+      "passed": true,
+      "input_unchanged": true
+    },
+    {
+      "case": "exact_partial_cells",
+      "passed": true,
+      "input_unchanged": true,
+      "pitch": 3
+    },
+    {
+      "case": "three_levels",
+      "passed": true,
+      "input_unchanged": true
+    },
+    {
+      "case": "invalid_levels5",
+      "rejected": true
+    }
+  ],
+  "art_approved": false
+}

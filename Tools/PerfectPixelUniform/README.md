@@ -2,6 +2,18 @@
 
 **다음 작업 진입점:** [WORKFLOW.md](WORKFLOW.md)에 고정 사선·좌표·모듈·원인별 단계·실패 귀속·Unity 적용 경계를 정리했다. `pipeline_cli.py`의 `reuse / plan / start / run / status / stop / resume`은 기존 WorkLoop를 호출한다. `current.json`이 제출 PNG를 가리키며 현재 V9다. 임의 새 기하와 V8 목재의 자동 연결·Unity 적용은 아직 없다.
 
+## R10 · 2026-10-03 — 생성 원화의 선·영역·단계 명암 재작성
+
+[REDRAW_DESIGN.md](REDRAW_DESIGN.md)에5개 연구 기법·기존 수정판 공백·좌표/색/선·조명·실패 기준을 정리했다. `redraw_cli.py`는 WorkLoop의 prepare→render→validate를 한 번에 실행하며 8768 웹 V4의 **선·영역 재작성** 버튼도 같은 계산을 사용한다. 이전 lossless/cleanup 모드는 보존한다. 기본4단계(3단계 선택 가능), 최대12개 색도 재질 후보의 **실제 원본 대표RGB**만 쓰며 narrow dark ridge 중 양측 재질/색도 근거가 있는 후보만 가늘게 고정한다. 중성 금속 반사대 의심 후보는 보존한다.
+
+실제1489×1056 시트는 크기를 바꾸지 않고 visible154,249→48색, 분석+재작성 약2.50초다. 원본파일·native·선/명암지도·원본/결과2배 비교·palette band 실험·기술검사21개·WorkLoop 기록은 `docs/artifacts/building37/Redraw10`에 있다. 원본의 반투명alpha는128규칙으로 변경했고 변화 수를 기록했다. **원래 logical 픽셀 격자 자동 복구는 미확정**이며 source1px 재작성 prototype이다. 나머지 불규칙한 선/원화의 방향 오류를 모두 고쳤다고 주장하지 않는다. 그림의 baked 명암도 유지하므로 진짜 방향성 재조명/albedo/normal 분리·Unity 통합·미술 승인은 미완료다. V9캐비닛/current.json은 바꾸지 않았다.
+
+```powershell
+& '<bundled-python>' -B Tools/PerfectPixelUniform/redraw_cli.py --source '<PNG>' --output '<새 workspace 폴더>' --levels 4
+```
+
+브라우저는 `Start_Uniform_Web.cmd` 실행 → 파일 선택 → 선·영역 재작성 → 처리다. 추가 모델/API 사용 없이 일반 로컬 수학 계산만 실행한다. 이미 native인 작은 팔레트는 재그리기/선처리를 건너뛴다. 다운로드 PNG와 정수 확대 비교판을 구분한다.
+
 ## 현재 결정 V9 · 2026-10-03 — 추가 칸 손잡이 경계 누락 수정
 
 [DESIGN09.md](DESIGN09.md)의 정확 closed-box 교차로 같은 손잡이가 다르게 잘리는 원인을 고쳤다. 기존 기하 BVH에서 추가 문 오른쪽5px와 서랍 끝1px를 놓쳤으며 첫 문의 면 선택도 모듈 수에 따라 달랐다. native centre가 box 모서리에 정확히 닿는 경우를 canonical 정수 slab와 고정 면 동률 규칙으로 판정한다. 모든 실제 box와 최전면 경쟁을 계산하므로 가려진 손잡이를 앞으로 칠하는 보정은 아니다.

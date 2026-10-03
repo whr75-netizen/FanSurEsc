@@ -25,11 +25,14 @@ from PIL import Image
 
 from uniform import process_array
 from cleanup import process_cleanup
+from redraw10 import process_redraw
+from redraw_checks import verify
 
 
 ROOT = Path(__file__).resolve().parent
 def code_sha():
-    return hashlib.sha256(b"".join((ROOT / name).read_bytes() for name in ("uniform.py", "cleanup.py", "web.py"))).hexdigest()
+    return hashlib.sha256(b"".join((ROOT / name).read_bytes() for name in (
+        "uniform.py", "cleanup.py", "redraw10.py", "redraw_tones.py", "redraw_checks.py", "web.py", "index.html"))).hexdigest()
 
 
 CORE_SHA = code_sha()
@@ -72,7 +75,7 @@ class LocalServer(ThreadingHTTPServer):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "PerfectPixelUniform/3"
+    server_version = "PerfectPixelUniform/4"
 
     def reply(self, status, body, content_type="application/json; charset=utf-8"):
         payload = json_bytes(body) if not isinstance(body, bytes) else body
@@ -107,14 +110,14 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8")
             return
         if path == "/api/health":
-            self.reply(200, {"application": "PerfectPixelUniform", "version": 3, "busy": WORK_LOCK.locked(), "loaded_core_sha256": CORE_SHA})
+            self.reply(200, {"application": "PerfectPixelUniform", "version": 4, "busy": WORK_LOCK.locked(), "loaded_core_sha256": CORE_SHA})
             return
         parts = path.split("/")
         if len(parts) != 4 or parts[1] != "runs" or not RUN_ID.fullmatch(parts[2]):
             self.reply(404, {"error": "경로가 없습니다."})
             return
         name = parts[3]
-        if name not in {"output.png", "receipt.json", "failure.json", "source.bin"} and name not in {"source" + suffix for suffix in FORMAT_SUFFIXES.values()}:
+        if name not in {"output.png", "receipt.json", "failure.json", "source.bin", "maps.npz", "line-mask.png", "tone-map.png", "validation.json"} and name not in {"source" + suffix for suffix in FORMAT_SUFFIXES.values()}:
             self.reply(404, {"error": "경로가 없습니다."})
             return
         artifact = RUNS / parts[2] / name
@@ -187,12 +190,18 @@ class Handler(BaseHTTPRequestHandler):
             if source_name != "source.bin":
                 save_new(run_dir / source_name, raw)
             mode = request.get("mode", "lossless")  # Preserve existing V2 API calls.
+            maps = checks = None
             if mode == "cleanup":
                 output, report = process_cleanup(pixels, request.get("strength", 4), request.get("palette_colors", 256))
             elif mode == "lossless":
                 output, report = process_array(pixels)
+            elif mode == "redraw":
+                output, report, maps = process_redraw(pixels, request.get("levels", 4))
+                checks = verify(pixels, output, report, maps)
+                if not checks["passed"]:
+                    raise ValueError("선·영역 재작성의 기술 조건 실패: " + json.dumps(checks, ensure_ascii=False))
             else:
-                raise ValueError("처리 모드는 cleanup 또는 lossless여야 합니다.")
+                raise ValueError("처리 모드는 redraw, cleanup 또는 lossless여야 합니다.")
             if not isinstance(output, np.ndarray) or output.dtype != np.uint8 or output.ndim != 3:
                 raise ValueError("처리기가 uint8 RGB/RGBA 배열을 반환하지 않았습니다.")
             if output.shape[2] != pixels.shape[2] or output.shape[0] <= 0 or output.shape[1] <= 0:
@@ -218,6 +227,16 @@ class Handler(BaseHTTPRequestHandler):
             }
             receipt_data = json_bytes(receipt)
             save_new(run_dir / "output.png", png)
+            if maps is not None:
+                map_stream = io.BytesIO()
+                np.savez_compressed(map_stream, **maps)
+                save_new(run_dir / "maps.npz", map_stream.getvalue())
+                for name, values in (("line-mask.png", maps["line_mask"].astype(np.uint8)*255),
+                                     ("tone-map.png", maps["tone_id"]*(255//max(1,report["settings"]["levels"]-1)))):
+                    stream = io.BytesIO()
+                    Image.fromarray(values).save(stream, format="PNG")
+                    save_new(run_dir / name, stream.getvalue())
+                save_new(run_dir / "validation.json", json_bytes(checks))
             save_new(run_dir / "receipt.json", receipt_data)
             prefix = "/runs/" + run_id + "/"
             self.reply(200, {
@@ -225,6 +244,10 @@ class Handler(BaseHTTPRequestHandler):
                 "source_url": prefix + source_name,
                 "output_url": prefix + "output.png",
                 "receipt_url": prefix + "receipt.json",
+                "maps_url": prefix + "maps.npz" if maps is not None else None,
+                "line_url": prefix + "line-mask.png" if maps is not None else None,
+                "tones_url": prefix + "tone-map.png" if maps is not None else None,
+                "validation_url": prefix + "validation.json" if checks is not None else None,
                 "report": report,
                 "input_mode": source_mode,
                 "output_mode": result_image.mode,
@@ -259,7 +282,7 @@ def main():
                 health = json.load(response)
             if health.get("application") != "PerfectPixelUniform":
                 raise RuntimeError("다른 프로그램이 로컬 포트를 사용 중입니다.")
-            if health.get("version") != 3 or health.get("loaded_core_sha256") != CORE_SHA:
+            if health.get("version") != 4 or health.get("loaded_core_sha256") != CORE_SHA:
                 raise RuntimeError("이전 버전 실행기가 동작 중입니다. 해당 실행기를 종료하고 다시 실행해 주세요.")
         except (URLError, ValueError, RuntimeError):
             raise

@@ -1,0 +1,152 @@
+{
+  "ok": true,
+  "passed": true,
+  "failures": [],
+  "checks": {
+    "input_uint8_rgb_or_rgba": {
+      "passed": true
+    },
+    "output_uint8_rgb_or_rgba": {
+      "passed": true
+    },
+    "finite_palette_budget": {
+      "passed": true,
+      "actual_visible": 48,
+      "maximum": 48,
+      "hidden_rgb_colors": 7562
+    },
+    "binary_output_alpha": {
+      "passed": true
+    },
+    "channel_contract": {
+      "passed": true
+    },
+    "canonical_maps_present": {
+      "passed": true,
+      "missing": []
+    },
+    "canonical_map_alignment": {
+      "passed": true
+    },
+    "integer_material_and_tone_ids": {
+      "passed": true
+    },
+    "binary_line_mask": {
+      "passed": true
+    },
+    "palette_uint8_material_tone_rgb": {
+      "passed": true
+    },
+    "material_tone_capacity": {
+      "passed": true,
+      "materials": 12,
+      "tones": 4
+    },
+    "alpha_map_matches_output": {
+      "passed": true
+    },
+    "background_material_only_transparent": {
+      "passed": true
+    },
+    "final_visible_rgb_is_exact_palette_lookup": {
+      "passed": true
+    },
+    "lighting_band_lookup_keeps_palette_budget": {
+      "passed": true
+    },
+    "declared_uniform_integer_transform": {
+      "passed": true,
+      "transform": {
+        "uniform_pitch": 1,
+        "source_origin": [
+          0,
+          0
+        ],
+        "nonlinear_warp": false
+      }
+    },
+    "grid_status_explicit": {
+      "passed": true,
+      "value": "uncertified_source_lattice"
+    },
+    "source_and_native_lattice_dimensions": {
+      "passed": true,
+      "expected_native_shape": [
+        1056,
+        1489
+      ]
+    },
+    "pitch_requires_certificate": {
+      "passed": true
+    },
+    "alpha128_coverage_contract": {
+      "passed": true
+    },
+    "stage_timings_recorded": {
+      "passed": true
+    }
+  },
+  "observations": {
+    "source_shape": [
+      1056,
+      1489,
+      4
+    ],
+    "output_shape": [
+      1056,
+      1489,
+      4
+    ],
+    "source_array_sha256": "b2b1699e64618f4027f3a286ac082421bac6212ef1b27521096b68960562c5e2",
+    "output_array_sha256": "1c3689a3242c58d56bdc8d1409f360188750da98d4000c1c338d160fd77d2ff2",
+    "source_rgb_colors_all": 154249,
+    "source_rgb_colors_visible": 154249,
+    "source_rgb_colors_hidden": 49,
+    "output_rgb_colors_all": 7609,
+    "output_rgb_colors_visible": 48,
+    "output_rgb_colors_hidden": 7562,
+    "palette_shape": [
+      12,
+      4,
+      3
+    ],
+    "rgb_changed_pixels": 505027,
+    "alpha_changed_pixels": 578487,
+    "alpha_threshold_mismatch_pixels": 0,
+    "alpha_partial_source_pixels": 578487,
+    "alpha_removed_source_pixels": 73742,
+    "hidden_rgb_changed_source_pixels": 0,
+    "silhouette_components_source_threshold128": 19,
+    "silhouette_components_output": 19,
+    "reported_stage_timings": {
+      "analysis": 0.10360279999440536,
+      "tones": 0.8606174000015017,
+      "lines": 1.4992493000027025,
+      "render_total": 2.3932724999976926
+    },
+    "reported_stage_timing_key": "timings_seconds"
+  },
+  "fixture_tested": false,
+  "fixture_features_passed": null,
+  "global_logical_grid_certified": false,
+  "grid_status_reported_by_core": "uncertified_source_lattice",
+  "whole_normalization_completed": false,
+  "art_approval": false,
+  "physical_material_or_lighting_recovered": false,
+  "scope": "Numeric invariants and only the independently known fixture features; not whole-image artistic or semantic reconstruction.",
+  "files_sha256": {
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\analysis.json": "e252093851a3e84d5a683fce93bfe00fe1a28750e2c9fc15904f9cece0706afc",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\band-bright.png": "4e831d91e11642b6231e627978508e232e514853d4a83752df3d9f1df0ead7b9",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\band-dim.png": "b7cc448db88679e296e6ed5ff19d5a61fd7675cef1f38e31eca524ef25a09635",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\line-mask.png": "154969b80d5701134904546664ddea290cfac614d7f804665fadd64bc7c87dd9",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\maps.npz": "6dddceb40442ee07385580f2771a7ad055fda8695dd69d3f3ed5f2176a563271",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\native.png": "eaa15736318aeb35c6e190e03186771591965912f3f160c487fb780d679cd2ae",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\prepared.npz": "97d3daec96d9f5b6e4adc2d0f0b985202ccbb4bdf6ce43bddb64c58c8dd04127",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\receipt.json": "de6b271b1a785f4e15ffb3d5cc27cedaf2d617365c9fd53a58f43c29bc8be0d7",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\source.png": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\tone-map.png": "8d5a8e8069b99d5da6b855bce54c122e383bec1a7b7f2f2c1c2e4af99cea5837"
+  },
+  "art_approved": false,
+  "repeated_lattice_recovered": false,
+  "whole_normalization_certified": false
+}

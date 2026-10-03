@@ -1,0 +1,175 @@
+{
+  "ok": true,
+  "passed": true,
+  "failures": [],
+  "checks": {
+    "input_uint8_rgb_or_rgba": {
+      "passed": true
+    },
+    "output_uint8_rgb_or_rgba": {
+      "passed": true
+    },
+    "finite_palette_budget": {
+      "passed": true,
+      "actual_visible": 48,
+      "maximum": 48,
+      "hidden_rgb_colors": 1
+    },
+    "binary_output_alpha": {
+      "passed": true
+    },
+    "channel_contract": {
+      "passed": true
+    },
+    "canonical_maps_present": {
+      "passed": true,
+      "missing": []
+    },
+    "canonical_map_alignment": {
+      "passed": true
+    },
+    "integer_material_and_tone_ids": {
+      "passed": true
+    },
+    "binary_line_mask": {
+      "passed": true
+    },
+    "palette_uint8_material_tone_rgb": {
+      "passed": true
+    },
+    "material_tone_capacity": {
+      "passed": true,
+      "materials": 12,
+      "tones": 4
+    },
+    "alpha_map_matches_output": {
+      "passed": true
+    },
+    "background_material_only_transparent": {
+      "passed": true
+    },
+    "final_visible_rgb_is_exact_palette_lookup": {
+      "passed": true
+    },
+    "lighting_band_lookup_keeps_palette_budget": {
+      "passed": true
+    },
+    "declared_uniform_integer_transform": {
+      "passed": true,
+      "transform": {
+        "uniform_pitch": 1,
+        "source_origin": [
+          0,
+          0
+        ],
+        "nonlinear_warp": false
+      }
+    },
+    "grid_status_explicit": {
+      "passed": true,
+      "value": "uncertified_source_lattice"
+    },
+    "source_and_native_lattice_dimensions": {
+      "passed": true,
+      "expected_native_shape": [
+        128,
+        192
+      ]
+    },
+    "pitch_requires_certificate": {
+      "passed": true
+    },
+    "alpha128_coverage_contract": {
+      "passed": true
+    },
+    "fixture_metal_has_at_least_three_tones": {
+      "passed": true,
+      "tone_ids": 3,
+      "distinct_luminance_groups_gap10": 3
+    },
+    "fixture_bright_band_is_not_dark_line": {
+      "passed": true,
+      "line_pixels": 0,
+      "dark_pixels": 0
+    },
+    "fixture_thin_handle_connected_with_hole": {
+      "passed": true,
+      "components_8_connected": 1,
+      "holes_4_connected_background": 1,
+      "dark_border_pixels": 185,
+      "reference_border_pixels": 240,
+      "central_hole_clear": true
+    },
+    "fixture_one_pixel_structural_outline_survives": {
+      "passed": true,
+      "missing_dark_pixels": 0
+    },
+    "fixture_dark_metal_band_not_accepted_outline": {
+      "passed": true,
+      "accepted_line_pixels": 0,
+      "output_band_median_luminance": 85.0,
+      "known_source_band_luminance": 86
+    },
+    "fixture_dark_metal_band_keeps_tone_contrast": {
+      "passed": true,
+      "output_luminance_contrast": 84.0,
+      "minimum_luminance_contrast": 30,
+      "output_band_median_tone_id": 1.0,
+      "output_anchor_median_tone_id": 2.0,
+      "known_source_anchor_minimum_luminance": 170
+    },
+    "stage_timings_recorded": {
+      "passed": true
+    }
+  },
+  "observations": {
+    "source_shape": [
+      128,
+      192,
+      4
+    ],
+    "output_shape": [
+      128,
+      192,
+      4
+    ],
+    "source_array_sha256": "f23000a69df759d2f9c88041f2fda6e6f132cb7ab2306806d7a05f1fd46c6123",
+    "output_array_sha256": "4c3832bdc255e5722aba49d1835791bec4ab09b2542ea9c4fe1a1e178aeb5c79",
+    "source_rgb_colors_all": 507,
+    "source_rgb_colors_visible": 506,
+    "source_rgb_colors_hidden": 1,
+    "output_rgb_colors_all": 49,
+    "output_rgb_colors_visible": 48,
+    "output_rgb_colors_hidden": 1,
+    "palette_shape": [
+      12,
+      4,
+      3
+    ],
+    "rgb_changed_pixels": 15198,
+    "alpha_changed_pixels": 0,
+    "alpha_threshold_mismatch_pixels": 0,
+    "alpha_partial_source_pixels": 0,
+    "alpha_removed_source_pixels": 0,
+    "hidden_rgb_changed_source_pixels": 0,
+    "silhouette_components_source_threshold128": 1,
+    "silhouette_components_output": 1,
+    "fixture_kind": "dark_metal_reflection",
+    "fixture_metal_rgb_colors": 3,
+    "reported_stage_timings": {
+      "analysis": 0.01342119999753777,
+      "tones": 0.04497990000527352,
+      "lines": 0.015127799997571856,
+      "render_total": 0.060880100005306304
+    },
+    "reported_stage_timing_key": "timings_seconds"
+  },
+  "fixture_tested": true,
+  "fixture_features_passed": true,
+  "global_logical_grid_certified": false,
+  "grid_status_reported_by_core": "uncertified_source_lattice",
+  "whole_normalization_completed": false,
+  "art_approval": false,
+  "physical_material_or_lighting_recovered": false,
+  "scope": "Numeric invariants and only the independently known fixture features; not whole-image artistic or semantic reconstruction."
+}

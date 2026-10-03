@@ -1,0 +1,4049 @@
+{
+  "wood_top": {
+    "role": "wood",
+    "sample_count": 4993,
+    "tone_count": 4,
+    "defaults": {
+      "shade_basis": "quadratic_uv",
+      "shade_huber_iterations": 6,
+      "neighbors": 12,
+      "tensor_coherence_wood": 0.35,
+      "tensor_coherence_paint": 0.55,
+      "detail_gain_wood": 1.7,
+      "detail_gain_paint": 0.7,
+      "detail_minimum_lab_l": 0.4,
+      "quantizer_iterations": 24
+    },
+    "source_rgb_colors": 2446,
+    "output_rgb_colors": 4,
+    "occupied_tone_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "palette_source_sample_indices": [
+      3091,
+      387,
+      1250,
+      1829
+    ],
+    "palette_is_exact_observed_rgb": true,
+    "source_lightness_range": [
+      14.703003318525276,
+      85.1832843222043
+    ],
+    "shade_lightness_range": [
+      35.68165843649197,
+      56.552115510482025
+    ],
+    "source_residual_mad_lab_l": 6.21209802414195,
+    "score_centers_before_palette_order": [
+      23.356324211968847,
+      46.544230901562194,
+      56.1952932877155,
+      66.4212374348769
+    ],
+    "detail_gain": 1.7,
+    "output_vs_source_lightness_mae": 2.449811162206835,
+    "shade_fit": {
+      "basis": "quadratic_uv",
+      "coefficient_order": [
+        "1",
+        "u",
+        "v",
+        "u2",
+        "uv",
+        "v2"
+      ],
+      "normalized_basis_coefficients": [
+        55.59948725514018,
+        0.8433468929751236,
+        -6.299996260929226,
+        -2.040197506039205,
+        0.06470597131211042,
+        -11.416238823807891
+      ],
+      "fit_residual_mad_lab_l": 6.21209802414195,
+      "downweighted_sample_count": 254
+    },
+    "directional_detail": {
+      "direction_test_available": true,
+      "analysis_uv_metric": "caller_uv_with_one_uniform_scalar_normalization",
+      "neighbor_spacing_normalized_uv": 0.00596228412067616,
+      "noise_mad_lab_l": 0.8135962375814475,
+      "minimum_detail_amplitude_lab_l": 0.5695173663070132,
+      "minimum_tensor_coherence": 0.35,
+      "grain_candidates": 4240,
+      "grain_candidate_fraction": 0.8491888644101743,
+      "mean_tensor_coherence": 0.7681883549305514,
+      "coherent_residual_lab_l_range": [
+        -34.14555660983037,
+        34.83004913820601
+      ],
+      "candidate_semantics": "directional_source_detail_hypothesis_not_verified_wood_grain"
+    },
+    "timings_seconds": {
+      "shade_fit": 0.005438100000901613,
+      "directional_detail": 0.22435530000075232,
+      "palette_quantization": 0.0033122999957413413,
+      "total": 0.23310569999739528
+    },
+    "warnings": [],
+    "failure_conditions": [
+      "grain_pattern_lost_or_replaced_by_new_lines_in_native_visual_comparison",
+      "directional_noise_promoted_as_grain_or_structural_boundary_blurred",
+      "palette_or_sampling_contains_colors_not_observed_in_original_source",
+      "face_geometry_uv_or_input_semantic_role_is_incorrect"
+    ],
+    "scope": "R13 shade/detail experiment; no recovered original grid, semantic guarantee, physical albedo, normals, or artistic approval"
+  },
+  "paint_side": {
+    "role": "paint",
+    "sample_count": 2008,
+    "tone_count": 4,
+    "defaults": {
+      "shade_basis": "quadratic_uv",
+      "shade_huber_iterations": 6,
+      "neighbors": 12,
+      "tensor_coherence_wood": 0.35,
+      "tensor_coherence_paint": 0.55,
+      "detail_gain_wood": 1.7,
+      "detail_gain_paint": 0.7,
+      "detail_minimum_lab_l": 0.4,
+      "quantizer_iterations": 24
+    },
+    "source_rgb_colors": 355,
+    "output_rgb_colors": 4,
+    "occupied_tone_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "palette_source_sample_indices": [
+      1,
+      1894,
+      1645,
+      1465
+    ],
+    "palette_is_exact_observed_rgb": true,
+    "source_lightness_range": [
+      3.5224894233508586,
+      18.416169499331538
+    ],
+    "shade_lightness_range": [
+      3.5224894233508586,
+      17.226729681548132
+    ],
+    "source_residual_mad_lab_l": 0.7944590481093604,
+    "score_centers_before_palette_order": [
+      10.431681184256226,
+      13.927233751565625,
+      15.556639454152288,
+      16.656325135349178
+    ],
+    "detail_gain": 0.7,
+    "output_vs_source_lightness_mae": 0.6429847284927042,
+    "shade_fit": {
+      "basis": "quadratic_uv",
+      "coefficient_order": [
+        "1",
+        "u",
+        "v",
+        "u2",
+        "uv",
+        "v2"
+      ],
+      "normalized_basis_coefficients": [
+        14.19394519455592,
+        0.05214098573816495,
+        11.120429876746318,
+        0.03551023518123997,
+        -0.7872786375313728,
+        -11.623110181326782
+      ],
+      "fit_residual_mad_lab_l": 0.7944590481093604,
+      "downweighted_sample_count": 194
+    },
+    "directional_detail": {
+      "direction_test_available": true,
+      "analysis_uv_metric": "caller_uv_with_one_uniform_scalar_normalization",
+      "neighbor_spacing_normalized_uv": 0.010138046599849404,
+      "noise_mad_lab_l": 0.2137071151667956,
+      "minimum_detail_amplitude_lab_l": 0.4,
+      "minimum_tensor_coherence": 0.55,
+      "grain_candidates": 845,
+      "grain_candidate_fraction": 0.4208167330677291,
+      "mean_tensor_coherence": 0.698606392494297,
+      "coherent_residual_lab_l_range": [
+        -4.562753190525575,
+        6.99038160292922
+      ],
+      "candidate_semantics": "directional_source_detail_hypothesis_not_verified_wood_grain"
+    },
+    "timings_seconds": {
+      "shade_fit": 0.0026912999965134077,
+      "directional_detail": 0.10947960000339663,
+      "palette_quantization": 0.00831149999430636,
+      "total": 0.1204823999942164
+    },
+    "warnings": [],
+    "failure_conditions": [
+      "grain_pattern_lost_or_replaced_by_new_lines_in_native_visual_comparison",
+      "directional_noise_promoted_as_grain_or_structural_boundary_blurred",
+      "palette_or_sampling_contains_colors_not_observed_in_original_source",
+      "face_geometry_uv_or_input_semantic_role_is_incorrect"
+    ],
+    "scope": "R13 shade/detail experiment; no recovered original grid, semantic guarantee, physical albedo, normals, or artistic approval"
+  },
+  "paint_front": {
+    "role": "paint",
+    "sample_count": 6399,
+    "tone_count": 4,
+    "defaults": {
+      "shade_basis": "quadratic_uv",
+      "shade_huber_iterations": 6,
+      "neighbors": 12,
+      "tensor_coherence_wood": 0.35,
+      "tensor_coherence_paint": 0.55,
+      "detail_gain_wood": 1.7,
+      "detail_gain_paint": 0.7,
+      "detail_minimum_lab_l": 0.4,
+      "quantizer_iterations": 24
+    },
+    "source_rgb_colors": 587,
+    "output_rgb_colors": 4,
+    "occupied_tone_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "palette_source_sample_indices": [
+      1509,
+      764,
+      1791,
+      2011
+    ],
+    "palette_is_exact_observed_rgb": true,
+    "source_lightness_range": [
+      17.255731944223356,
+      34.66221384028496
+    ],
+    "shade_lightness_range": [
+      22.747682206221548,
+      25.85616315621992
+    ],
+    "source_residual_mad_lab_l": 1.2571786239824503,
+    "score_centers_before_palette_order": [
+      22.60658435897735,
+      23.86928916482823,
+      25.059719338755837,
+      27.32711182715113
+    ],
+    "detail_gain": 0.7,
+    "output_vs_source_lightness_mae": 0.7751311825215415,
+    "shade_fit": {
+      "basis": "quadratic_uv",
+      "coefficient_order": [
+        "1",
+        "u",
+        "v",
+        "u2",
+        "uv",
+        "v2"
+      ],
+      "normalized_basis_coefficients": [
+        24.47490430357145,
+        0.015973722337966567,
+        -1.146007687613187,
+        0.6877747976784288,
+        0.1926183405759021,
+        -0.5984459034553959
+      ],
+      "fit_residual_mad_lab_l": 1.2571786239824503,
+      "downweighted_sample_count": 321
+    },
+    "directional_detail": {
+      "direction_test_available": true,
+      "analysis_uv_metric": "caller_uv_with_one_uniform_scalar_normalization",
+      "neighbor_spacing_normalized_uv": 0.007807838855043658,
+      "noise_mad_lab_l": 0.19474568076155427,
+      "minimum_detail_amplitude_lab_l": 0.4,
+      "minimum_tensor_coherence": 0.55,
+      "grain_candidates": 3682,
+      "grain_candidate_fraction": 0.5754024066260354,
+      "mean_tensor_coherence": 0.6958643064685777,
+      "coherent_residual_lab_l_range": [
+        -7.2633067873380535,
+        10.45877346062118
+      ],
+      "candidate_semantics": "directional_source_detail_hypothesis_not_verified_wood_grain"
+    },
+    "timings_seconds": {
+      "shade_fit": 0.0062840000027790666,
+      "directional_detail": 0.33454840000194963,
+      "palette_quantization": 0.007576600000902545,
+      "total": 0.34840900000563124
+    },
+    "warnings": [],
+    "failure_conditions": [
+      "grain_pattern_lost_or_replaced_by_new_lines_in_native_visual_comparison",
+      "directional_noise_promoted_as_grain_or_structural_boundary_blurred",
+      "palette_or_sampling_contains_colors_not_observed_in_original_source",
+      "face_geometry_uv_or_input_semantic_role_is_incorrect"
+    ],
+    "scope": "R13 shade/detail experiment; no recovered original grid, semantic guarantee, physical albedo, normals, or artistic approval"
+  },
+  "dark_structure": {
+    "detected_lines": [
+      {
+        "points": [
+          [
+            292.5,
+            96.5
+          ],
+          [
+            292.5,
+            154.5
+          ]
+        ],
+        "source_length": 58.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            229.5,
+            116.5
+          ],
+          [
+            229.5,
+            161.5
+          ]
+        ],
+        "source_length": 45.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            218.5,
+            124.5
+          ],
+          [
+            218.5,
+            191.5
+          ]
+        ],
+        "source_length": 67.82842712474618,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            35.5,
+            162.5
+          ],
+          [
+            22.5,
+            155.5
+          ],
+          [
+            19.5,
+            156.5
+          ],
+          [
+            20.5,
+            224.5
+          ]
+        ],
+        "source_length": 89.72792206135786,
+        "width": 4.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            163.5,
+            168.5
+          ],
+          [
+            164.5,
+            216.5
+          ]
+        ],
+        "source_length": 48.41421356237309,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            152.5,
+            173.5
+          ],
+          [
+            152.5,
+            225.5
+          ]
+        ],
+        "source_length": 53.65685424949238,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            299.5,
+            174.5
+          ],
+          [
+            291.5,
+            177.5
+          ],
+          [
+            287.5,
+            181.5
+          ]
+        ],
+        "source_length": 17.82842712474619,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            287.5,
+            181.5
+          ],
+          [
+            285.5,
+            181.5
+          ],
+          [
+            285.5,
+            183.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            287.5,
+            181.5
+          ],
+          [
+            285.5,
+            183.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            285.5,
+            183.5
+          ],
+          [
+            281.5,
+            183.5
+          ],
+          [
+            255.5,
+            197.5
+          ]
+        ],
+        "source_length": 39.89949493661166,
+        "width": 2.799999952316284,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            90.5,
+            186.5
+          ],
+          [
+            88.5,
+            190.5
+          ],
+          [
+            89.5,
+            256.5
+          ]
+        ],
+        "source_length": 71.24264068711928,
+        "width": 4.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            70.5,
+            187.5
+          ],
+          [
+            70.5,
+            260.5
+          ]
+        ],
+        "source_length": 74.65685424949238,
+        "width": 4.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            255.5,
+            197.5
+          ],
+          [
+            253.5,
+            198.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            255.5,
+            197.5
+          ],
+          [
+            254.5,
+            199.5
+          ],
+          [
+            253.5,
+            198.5
+          ]
+        ],
+        "source_length": 3.82842712474619,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            253.5,
+            198.5
+          ],
+          [
+            237.5,
+            206.5
+          ]
+        ],
+        "source_length": 21.65685424949238,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            237.5,
+            206.5
+          ],
+          [
+            235.5,
+            207.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            237.5,
+            206.5
+          ],
+          [
+            235.5,
+            208.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            235.5,
+            207.5
+          ],
+          [
+            233.5,
+            208.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            235.5,
+            207.5
+          ],
+          [
+            235.5,
+            208.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            233.5,
+            208.5
+          ],
+          [
+            229.5,
+            210.5
+          ]
+        ],
+        "source_length": 4.82842712474619,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            233.5,
+            208.5
+          ],
+          [
+            235.5,
+            208.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            229.5,
+            210.5
+          ],
+          [
+            227.5,
+            210.5
+          ],
+          [
+            227.5,
+            212.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            229.5,
+            210.5
+          ],
+          [
+            227.5,
+            212.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            225.5,
+            212.5
+          ],
+          [
+            223.5,
+            212.5
+          ],
+          [
+            223.5,
+            214.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            225.5,
+            212.5
+          ],
+          [
+            227.5,
+            212.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.799999952316284,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            225.5,
+            212.5
+          ],
+          [
+            223.5,
+            214.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            223.5,
+            214.5
+          ],
+          [
+            219.5,
+            214.5
+          ],
+          [
+            218.5,
+            216.5
+          ],
+          [
+            213.5,
+            217.5
+          ],
+          [
+            212.5,
+            219.5
+          ],
+          [
+            209.5,
+            219.5
+          ],
+          [
+            208.5,
+            221.5
+          ],
+          [
+            205.5,
+            221.5
+          ],
+          [
+            204.5,
+            223.5
+          ],
+          [
+            189.5,
+            230.5
+          ]
+        ],
+        "source_length": 45.89949493661166,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            154.5,
+            227.5
+          ],
+          [
+            132.5,
+            237.5
+          ]
+        ],
+        "source_length": 31.414213562373096,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            188.5,
+            229.5
+          ],
+          [
+            189.5,
+            230.5
+          ]
+        ],
+        "source_length": 1.4142135623730951,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            189.5,
+            230.5
+          ],
+          [
+            187.5,
+            231.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            180.5,
+            235.5
+          ],
+          [
+            174.5,
+            236.5
+          ],
+          [
+            172.5,
+            239.5
+          ],
+          [
+            161.5,
+            244.5
+          ]
+        ],
+        "source_length": 23.899494936611664,
+        "width": 2.799999952316284,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            161.5,
+            244.5
+          ],
+          [
+            159.5,
+            245.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            161.5,
+            244.5
+          ],
+          [
+            159.5,
+            246.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            159.5,
+            245.5
+          ],
+          [
+            157.5,
+            247.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            159.5,
+            245.5
+          ],
+          [
+            159.5,
+            246.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            159.5,
+            246.5
+          ],
+          [
+            157.5,
+            247.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            157.5,
+            247.5
+          ],
+          [
+            153.5,
+            247.5
+          ],
+          [
+            145.5,
+            252.5
+          ]
+        ],
+        "source_length": 15.828427124746192,
+        "width": 2.799999952316284,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            145.5,
+            252.5
+          ],
+          [
+            143.5,
+            253.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            145.5,
+            252.5
+          ],
+          [
+            144.5,
+            254.5
+          ],
+          [
+            143.5,
+            253.5
+          ]
+        ],
+        "source_length": 4.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            143.5,
+            253.5
+          ],
+          [
+            129.5,
+            260.5
+          ]
+        ],
+        "source_length": 18.071067811865476,
+        "width": 2.799999952316284,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            129.5,
+            260.5
+          ],
+          [
+            127.5,
+            262.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            129.5,
+            260.5
+          ],
+          [
+            127.5,
+            262.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            127.5,
+            262.5
+          ],
+          [
+            114.5,
+            267.5
+          ]
+        ],
+        "source_length": 16.48528137423857,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            45.5,
+            267.5
+          ],
+          [
+            66.5,
+            277.5
+          ]
+        ],
+        "source_length": 26.899494936611667,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            114.5,
+            267.5
+          ],
+          [
+            112.5,
+            268.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            114.5,
+            267.5
+          ],
+          [
+            113.5,
+            269.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            112.5,
+            268.5
+          ],
+          [
+            111.5,
+            269.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            112.5,
+            268.5
+          ],
+          [
+            113.5,
+            269.5
+          ]
+        ],
+        "source_length": 1.4142135623730951,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            111.5,
+            269.5
+          ],
+          [
+            108.5,
+            269.5
+          ],
+          [
+            96.5,
+            276.5
+          ]
+        ],
+        "source_length": 19.65685424949238,
+        "width": 2.0,
+        "closed": false
+      },
+      {
+        "points": [
+          [
+            111.5,
+            269.5
+          ],
+          [
+            113.5,
+            269.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false
+      }
+    ],
+    "source_candidate_pixels": 6683,
+    "excluded_source_halo_pixels": 11534
+  },
+  "trim_structure": {
+    "detected_lines": [
+      {
+        "points": [
+          [
+            307.5,
+            63.5
+          ],
+          [
+            305.5,
+            67.5
+          ],
+          [
+            308.5,
+            80.5
+          ],
+          [
+            308.5,
+            145.5
+          ],
+          [
+            306.5,
+            162.5
+          ]
+        ],
+        "source_length": 107.31370849898477,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            293.5,
+            67.5
+          ],
+          [
+            276.5,
+            76.5
+          ]
+        ],
+        "source_length": 20.727922061357855,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            291.5,
+            77.5
+          ],
+          [
+            280.5,
+            83.5
+          ]
+        ],
+        "source_length": 13.485281374238571,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            297.5,
+            77.5
+          ],
+          [
+            297.5,
+            122.5
+          ]
+        ],
+        "source_length": 47.48528137423857,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            258.5,
+            85.5
+          ],
+          [
+            246.5,
+            91.5
+          ]
+        ],
+        "source_length": 15.071067811865476,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            277.5,
+            85.5
+          ],
+          [
+            265.5,
+            90.5
+          ]
+        ],
+        "source_length": 15.242640687119287,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            286.5,
+            91.5
+          ],
+          [
+            288.5,
+            90.5
+          ],
+          [
+            287.5,
+            92.5
+          ]
+        ],
+        "source_length": 5.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            286.5,
+            91.5
+          ],
+          [
+            275.5,
+            96.5
+          ]
+        ],
+        "source_length": 14.242640687119287,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            286.5,
+            91.5
+          ],
+          [
+            287.5,
+            92.5
+          ]
+        ],
+        "source_length": 1.4142135623730951,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            244.5,
+            92.5
+          ],
+          [
+            230.5,
+            99.5
+          ]
+        ],
+        "source_length": 17.48528137423857,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            287.5,
+            92.5
+          ],
+          [
+            287.5,
+            153.5
+          ],
+          [
+            252.5,
+            170.5
+          ],
+          [
+            251.5,
+            172.5
+          ],
+          [
+            248.5,
+            172.5
+          ],
+          [
+            236.5,
+            180.5
+          ],
+          [
+            233.5,
+            180.5
+          ],
+          [
+            233.5,
+            118.5
+          ],
+          [
+            243.5,
+            114.5
+          ]
+        ],
+        "source_length": 205.94112549695427,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            261.5,
+            93.5
+          ],
+          [
+            238.5,
+            103.5
+          ],
+          [
+            230.5,
+            109.5
+          ]
+        ],
+        "source_length": 41.14213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            228.5,
+            100.5
+          ],
+          [
+            216.5,
+            106.5
+          ]
+        ],
+        "source_length": 14.485281374238571,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            230.5,
+            109.5
+          ],
+          [
+            227.5,
+            109.5
+          ],
+          [
+            217.5,
+            115.5
+          ]
+        ],
+        "source_length": 16.656854249492383,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            230.5,
+            109.5
+          ],
+          [
+            231.5,
+            110.5
+          ]
+        ],
+        "source_length": 1.4142135623730951,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            207.5,
+            111.5
+          ],
+          [
+            148.5,
+            141.5
+          ]
+        ],
+        "source_length": 74.94112549695427,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            224.5,
+            116.5
+          ],
+          [
+            223.5,
+            146.5
+          ]
+        ],
+        "source_length": 31.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            214.5,
+            117.5
+          ],
+          [
+            202.5,
+            122.5
+          ]
+        ],
+        "source_length": 15.242640687119286,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            297.5,
+            124.5
+          ],
+          [
+            297.5,
+            142.5
+          ]
+        ],
+        "source_length": 18.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            198.5,
+            125.5
+          ],
+          [
+            185.5,
+            131.5
+          ]
+        ],
+        "source_length": 16.65685424949238,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            213.5,
+            128.5
+          ],
+          [
+            213.5,
+            130.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            213.5,
+            130.5
+          ],
+          [
+            207.5,
+            131.5
+          ],
+          [
+            206.5,
+            133.5
+          ],
+          [
+            170.5,
+            150.5
+          ]
+        ],
+        "source_length": 53.62741699796951,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            213.5,
+            130.5
+          ],
+          [
+            212.5,
+            190.5
+          ],
+          [
+            171.5,
+            212.5
+          ],
+          [
+            167.5,
+            211.5
+          ],
+          [
+            168.5,
+            163.5
+          ]
+        ],
+        "source_length": 170.62741699796953,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            181.5,
+            133.5
+          ],
+          [
+            153.5,
+            147.5
+          ]
+        ],
+        "source_length": 37.89949493661166,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            10.5,
+            138.5
+          ],
+          [
+            16.5,
+            142.5
+          ]
+        ],
+        "source_length": 8.242640687119284,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            16.5,
+            142.5
+          ],
+          [
+            19.5,
+            142.5
+          ],
+          [
+            21.5,
+            145.5
+          ],
+          [
+            36.5,
+            151.5
+          ],
+          [
+            37.5,
+            153.5
+          ],
+          [
+            79.5,
+            175.5
+          ],
+          [
+            102.5,
+            165.5
+          ]
+        ],
+        "source_length": 114.35533905932738,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            16.5,
+            142.5
+          ],
+          [
+            14.5,
+            146.5
+          ],
+          [
+            15.5,
+            151.5
+          ],
+          [
+            13.5,
+            152.5
+          ],
+          [
+            13.5,
+            229.5
+          ],
+          [
+            15.5,
+            231.5
+          ],
+          [
+            15.5,
+            236.5
+          ]
+        ],
+        "source_length": 98.65685424949238,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            149.5,
+            149.5
+          ],
+          [
+            137.5,
+            155.5
+          ]
+        ],
+        "source_length": 16.242640687119284,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            223.5,
+            154.5
+          ],
+          [
+            222.5,
+            184.5
+          ]
+        ],
+        "source_length": 31.242640687119287,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            135.5,
+            156.5
+          ],
+          [
+            92.5,
+            179.5
+          ]
+        ],
+        "source_length": 58.38477631085023,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            297.5,
+            160.5
+          ],
+          [
+            298.5,
+            161.5
+          ]
+        ],
+        "source_length": 1.4142135623730951,
+        "width": 3.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            298.5,
+            161.5
+          ],
+          [
+            300.5,
+            161.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            298.5,
+            161.5
+          ],
+          [
+            295.5,
+            165.5
+          ],
+          [
+            289.5,
+            166.5
+          ]
+        ],
+        "source_length": 12.828427124746192,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            300.5,
+            161.5
+          ],
+          [
+            301.5,
+            159.5
+          ],
+          [
+            302.5,
+            161.5
+          ]
+        ],
+        "source_length": 5.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            300.5,
+            161.5
+          ],
+          [
+            302.5,
+            161.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            293.5,
+            162.5
+          ],
+          [
+            289.5,
+            165.5
+          ]
+        ],
+        "source_length": 6.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            289.5,
+            165.5
+          ],
+          [
+            286.5,
+            166.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            289.5,
+            165.5
+          ],
+          [
+            289.5,
+            166.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            286.5,
+            166.5
+          ],
+          [
+            284.5,
+            167.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            286.5,
+            166.5
+          ],
+          [
+            286.5,
+            168.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            289.5,
+            166.5
+          ],
+          [
+            289.5,
+            168.5
+          ],
+          [
+            286.5,
+            168.5
+          ]
+        ],
+        "source_length": 5.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            284.5,
+            167.5
+          ],
+          [
+            281.5,
+            169.5
+          ]
+        ],
+        "source_length": 4.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            284.5,
+            167.5
+          ],
+          [
+            284.5,
+            168.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            284.5,
+            168.5
+          ],
+          [
+            286.5,
+            168.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            284.5,
+            168.5
+          ],
+          [
+            284.5,
+            170.5
+          ],
+          [
+            281.5,
+            170.5
+          ]
+        ],
+        "source_length": 5.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            281.5,
+            169.5
+          ],
+          [
+            277.5,
+            171.5
+          ]
+        ],
+        "source_length": 5.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            281.5,
+            169.5
+          ],
+          [
+            281.5,
+            170.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            25.5,
+            170.5
+          ],
+          [
+            25.5,
+            229.5
+          ]
+        ],
+        "source_length": 59.82842712474619,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            157.5,
+            170.5
+          ],
+          [
+            158.5,
+            175.5
+          ]
+        ],
+        "source_length": 6.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            281.5,
+            170.5
+          ],
+          [
+            281.5,
+            172.5
+          ],
+          [
+            277.5,
+            171.5
+          ]
+        ],
+        "source_length": 6.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            277.5,
+            171.5
+          ],
+          [
+            274.5,
+            172.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            274.5,
+            172.5
+          ],
+          [
+            271.5,
+            174.5
+          ]
+        ],
+        "source_length": 4.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            274.5,
+            172.5
+          ],
+          [
+            274.5,
+            175.5
+          ],
+          [
+            271.5,
+            176.5
+          ]
+        ],
+        "source_length": 6.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            159.5,
+            173.5
+          ],
+          [
+            158.5,
+            175.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            271.5,
+            174.5
+          ],
+          [
+            267.5,
+            175.5
+          ],
+          [
+            267.5,
+            177.5
+          ]
+        ],
+        "source_length": 6.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            271.5,
+            174.5
+          ],
+          [
+            271.5,
+            176.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            158.5,
+            175.5
+          ],
+          [
+            158.5,
+            181.5
+          ]
+        ],
+        "source_length": 6.0,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            271.5,
+            176.5
+          ],
+          [
+            267.5,
+            177.5
+          ]
+        ],
+        "source_length": 5.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            264.5,
+            177.5
+          ],
+          [
+            262.5,
+            178.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            264.5,
+            177.5
+          ],
+          [
+            267.5,
+            177.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            264.5,
+            177.5
+          ],
+          [
+            264.5,
+            180.5
+          ],
+          [
+            262.5,
+            180.5
+          ]
+        ],
+        "source_length": 5.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            262.5,
+            178.5
+          ],
+          [
+            259.5,
+            180.5
+          ]
+        ],
+        "source_length": 4.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            262.5,
+            178.5
+          ],
+          [
+            262.5,
+            180.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            259.5,
+            180.5
+          ],
+          [
+            258.5,
+            181.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            259.5,
+            180.5
+          ],
+          [
+            260.5,
+            182.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            262.5,
+            180.5
+          ],
+          [
+            262.5,
+            182.5
+          ],
+          [
+            260.5,
+            182.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            158.5,
+            181.5
+          ],
+          [
+            157.5,
+            196.5
+          ]
+        ],
+        "source_length": 16.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            158.5,
+            181.5
+          ],
+          [
+            158.5,
+            211.5
+          ]
+        ],
+        "source_length": 32.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            258.5,
+            181.5
+          ],
+          [
+            257.5,
+            182.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            258.5,
+            181.5
+          ],
+          [
+            259.5,
+            182.5
+          ]
+        ],
+        "source_length": 1.4142135623730951,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            257.5,
+            182.5
+          ],
+          [
+            255.5,
+            182.5
+          ],
+          [
+            255.5,
+            184.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            257.5,
+            182.5
+          ],
+          [
+            257.5,
+            183.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            259.5,
+            182.5
+          ],
+          [
+            260.5,
+            182.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            259.5,
+            182.5
+          ],
+          [
+            257.5,
+            183.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            257.5,
+            183.5
+          ],
+          [
+            255.5,
+            184.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            255.5,
+            184.5
+          ],
+          [
+            252.5,
+            185.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            101.5,
+            185.5
+          ],
+          [
+            134.5,
+            167.5
+          ],
+          [
+            146.5,
+            163.5
+          ],
+          [
+            147.5,
+            223.5
+          ],
+          [
+            99.5,
+            248.5
+          ],
+          [
+            98.5,
+            188.5
+          ]
+        ],
+        "source_length": 240.5685424949238,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            249.5,
+            185.5
+          ],
+          [
+            252.5,
+            185.5
+          ]
+        ],
+        "source_length": 5.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            249.5,
+            185.5
+          ],
+          [
+            246.5,
+            186.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            249.5,
+            185.5
+          ],
+          [
+            250.5,
+            187.5
+          ],
+          [
+            252.5,
+            185.5
+          ]
+        ],
+        "source_length": 5.82842712474619,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            246.5,
+            186.5
+          ],
+          [
+            244.5,
+            188.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            246.5,
+            186.5
+          ],
+          [
+            247.5,
+            188.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            62.5,
+            187.5
+          ],
+          [
+            62.5,
+            249.5
+          ],
+          [
+            58.5,
+            248.5
+          ]
+        ],
+        "source_length": 66.41421356237309,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            244.5,
+            188.5
+          ],
+          [
+            242.5,
+            188.5
+          ],
+          [
+            242.5,
+            190.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            244.5,
+            188.5
+          ],
+          [
+            244.5,
+            190.5
+          ],
+          [
+            242.5,
+            190.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            242.5,
+            190.5
+          ],
+          [
+            232.5,
+            194.5
+          ]
+        ],
+        "source_length": 12.242640687119286,
+        "width": 4.196899890899658,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            232.5,
+            194.5
+          ],
+          [
+            228.5,
+            197.5
+          ]
+        ],
+        "source_length": 5.82842712474619,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            232.5,
+            194.5
+          ],
+          [
+            232.5,
+            197.5
+          ],
+          [
+            228.5,
+            197.5
+          ]
+        ],
+        "source_length": 7.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            228.5,
+            197.5
+          ],
+          [
+            218.5,
+            202.5
+          ],
+          [
+            214.5,
+            202.5
+          ]
+        ],
+        "source_length": 17.242640687119284,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            214.5,
+            202.5
+          ],
+          [
+            212.5,
+            202.5
+          ],
+          [
+            212.5,
+            204.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            214.5,
+            202.5
+          ],
+          [
+            214.5,
+            204.5
+          ],
+          [
+            212.5,
+            204.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            212.5,
+            204.5
+          ],
+          [
+            204.5,
+            208.5
+          ]
+        ],
+        "source_length": 10.242640687119284,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            157.5,
+            205.5
+          ],
+          [
+            158.5,
+            211.5
+          ]
+        ],
+        "source_length": 7.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            204.5,
+            208.5
+          ],
+          [
+            202.5,
+            208.5
+          ],
+          [
+            202.5,
+            210.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            204.5,
+            208.5
+          ],
+          [
+            204.5,
+            210.5
+          ],
+          [
+            202.5,
+            210.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            202.5,
+            210.5
+          ],
+          [
+            201.5,
+            212.5
+          ],
+          [
+            178.5,
+            220.5
+          ],
+          [
+            166.5,
+            229.5
+          ],
+          [
+            152.5,
+            234.5
+          ]
+        ],
+        "source_length": 64.62741699796952,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            158.5,
+            211.5
+          ],
+          [
+            158.5,
+            222.5
+          ]
+        ],
+        "source_length": 11.0,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            28.5,
+            231.5
+          ],
+          [
+            40.5,
+            239.5
+          ],
+          [
+            54.5,
+            245.5
+          ]
+        ],
+        "source_length": 35.89949493661166,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            152.5,
+            234.5
+          ],
+          [
+            149.5,
+            234.5
+          ],
+          [
+            148.5,
+            237.5
+          ]
+        ],
+        "source_length": 7.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            152.5,
+            234.5
+          ],
+          [
+            151.5,
+            237.5
+          ],
+          [
+            148.5,
+            237.5
+          ]
+        ],
+        "source_length": 6.414213562373095,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            15.5,
+            236.5
+          ],
+          [
+            17.5,
+            236.5
+          ],
+          [
+            17.5,
+            238.5
+          ],
+          [
+            15.5,
+            238.5
+          ]
+        ],
+        "source_length": 6.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            15.5,
+            236.5
+          ],
+          [
+            15.5,
+            238.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            148.5,
+            237.5
+          ],
+          [
+            137.5,
+            242.5
+          ]
+        ],
+        "source_length": 14.242640687119287,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            21.5,
+            241.5
+          ],
+          [
+            29.5,
+            245.5
+          ]
+        ],
+        "source_length": 10.242640687119284,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            137.5,
+            242.5
+          ],
+          [
+            135.5,
+            241.5
+          ],
+          [
+            133.5,
+            244.5
+          ]
+        ],
+        "source_length": 6.82842712474619,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            137.5,
+            242.5
+          ],
+          [
+            136.5,
+            245.5
+          ],
+          [
+            133.5,
+            245.5
+          ]
+        ],
+        "source_length": 6.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            132.5,
+            244.5
+          ],
+          [
+            130.5,
+            244.5
+          ],
+          [
+            130.5,
+            246.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            132.5,
+            244.5
+          ],
+          [
+            133.5,
+            244.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            132.5,
+            244.5
+          ],
+          [
+            132.5,
+            245.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            133.5,
+            244.5
+          ],
+          [
+            133.5,
+            245.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 3.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            29.5,
+            245.5
+          ],
+          [
+            31.5,
+            245.5
+          ],
+          [
+            31.5,
+            247.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            29.5,
+            245.5
+          ],
+          [
+            31.5,
+            247.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            132.5,
+            245.5
+          ],
+          [
+            133.5,
+            245.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 3.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            132.5,
+            245.5
+          ],
+          [
+            130.5,
+            246.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            130.5,
+            246.5
+          ],
+          [
+            127.5,
+            247.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 4.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            31.5,
+            247.5
+          ],
+          [
+            40.5,
+            251.5
+          ]
+        ],
+        "source_length": 11.828427124746192,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            127.5,
+            247.5
+          ],
+          [
+            125.5,
+            248.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            127.5,
+            247.5
+          ],
+          [
+            127.5,
+            249.5
+          ],
+          [
+            125.5,
+            249.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            124.5,
+            248.5
+          ],
+          [
+            122.5,
+            248.5
+          ],
+          [
+            122.5,
+            250.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            124.5,
+            248.5
+          ],
+          [
+            125.5,
+            248.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            124.5,
+            248.5
+          ],
+          [
+            124.5,
+            249.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            125.5,
+            248.5
+          ],
+          [
+            125.5,
+            249.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            124.5,
+            249.5
+          ],
+          [
+            125.5,
+            249.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            124.5,
+            249.5
+          ],
+          [
+            122.5,
+            250.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            41.5,
+            250.5
+          ],
+          [
+            40.5,
+            251.5
+          ]
+        ],
+        "source_length": 1.4142135623730951,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            118.5,
+            250.5
+          ],
+          [
+            116.5,
+            252.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            118.5,
+            250.5
+          ],
+          [
+            120.5,
+            250.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            118.5,
+            250.5
+          ],
+          [
+            119.5,
+            252.5
+          ]
+        ],
+        "source_length": 2.414213562373095,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            120.5,
+            250.5
+          ],
+          [
+            122.5,
+            250.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            120.5,
+            250.5
+          ],
+          [
+            119.5,
+            252.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            40.5,
+            251.5
+          ],
+          [
+            41.5,
+            253.5
+          ],
+          [
+            45.5,
+            253.5
+          ],
+          [
+            45.5,
+            255.5
+          ],
+          [
+            49.5,
+            255.5
+          ],
+          [
+            56.5,
+            259.5
+          ]
+        ],
+        "source_length": 22.242640687119287,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            116.5,
+            252.5
+          ],
+          [
+            114.5,
+            252.5
+          ],
+          [
+            114.5,
+            254.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            116.5,
+            252.5
+          ],
+          [
+            116.5,
+            253.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            119.5,
+            252.5
+          ],
+          [
+            116.5,
+            253.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 2
+      },
+      {
+        "points": [
+          [
+            116.5,
+            253.5
+          ],
+          [
+            114.5,
+            254.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            114.5,
+            254.5
+          ],
+          [
+            108.5,
+            256.5
+          ]
+        ],
+        "source_length": 7.414213562373095,
+        "width": 4.393799781799316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            108.5,
+            256.5
+          ],
+          [
+            106.5,
+            256.5
+          ],
+          [
+            106.5,
+            258.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            108.5,
+            256.5
+          ],
+          [
+            108.5,
+            258.5
+          ],
+          [
+            106.5,
+            258.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            106.5,
+            258.5
+          ],
+          [
+            104.5,
+            259.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 3.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            56.5,
+            259.5
+          ],
+          [
+            59.5,
+            259.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            56.5,
+            259.5
+          ],
+          [
+            57.5,
+            261.5
+          ],
+          [
+            68.5,
+            265.5
+          ]
+        ],
+        "source_length": 16.242640687119284,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            101.5,
+            259.5
+          ],
+          [
+            99.5,
+            261.5
+          ]
+        ],
+        "source_length": 3.414213562373095,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            101.5,
+            259.5
+          ],
+          [
+            102.5,
+            259.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            101.5,
+            259.5
+          ],
+          [
+            101.5,
+            260.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            102.5,
+            259.5
+          ],
+          [
+            104.5,
+            259.5
+          ]
+        ],
+        "source_length": 4.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            102.5,
+            259.5
+          ],
+          [
+            102.5,
+            260.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            104.5,
+            259.5
+          ],
+          [
+            102.5,
+            260.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            101.5,
+            260.5
+          ],
+          [
+            102.5,
+            260.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            101.5,
+            260.5
+          ],
+          [
+            99.5,
+            261.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            99.5,
+            261.5
+          ],
+          [
+            90.5,
+            267.5
+          ],
+          [
+            80.5,
+            267.5
+          ]
+        ],
+        "source_length": 23.242640687119284,
+        "width": 4.393799781799316,
+        "closed": false,
+        "tone_id": 3
+      },
+      {
+        "points": [
+          [
+            80.5,
+            267.5
+          ],
+          [
+            80.5,
+            269.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 4.393799781799316,
+        "closed": false,
+        "tone_id": 3
+      },
+      {
+        "points": [
+          [
+            78.5,
+            269.5
+          ],
+          [
+            76.5,
+            268.5
+          ],
+          [
+            76.5,
+            270.5
+          ],
+          [
+            78.5,
+            270.5
+          ]
+        ],
+        "source_length": 7.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            78.5,
+            269.5
+          ],
+          [
+            80.5,
+            269.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 1
+      },
+      {
+        "points": [
+          [
+            78.5,
+            269.5
+          ],
+          [
+            78.5,
+            270.5
+          ]
+        ],
+        "source_length": 1.0,
+        "width": 2.0,
+        "closed": false,
+        "tone_id": 0
+      },
+      {
+        "points": [
+          [
+            80.5,
+            269.5
+          ],
+          [
+            80.5,
+            271.5
+          ]
+        ],
+        "source_length": 2.0,
+        "width": 2.799999952316284,
+        "closed": false,
+        "tone_id": 3
+      },
+      {
+        "points": [
+          [
+            78.5,
+            270.5
+          ],
+          [
+            80.5,
+            271.5
+          ]
+        ],
+        "source_length": 3.0,
+        "width": 2.4000000953674316,
+        "closed": false,
+        "tone_id": 2
+      }
+    ],
+    "source_skeleton_cells": 2313
+  },
+  "palettes": {
+    "wood_top": [
+      [
+        96,
+        63,
+        41
+      ],
+      [
+        156,
+        109,
+        69
+      ],
+      [
+        172,
+        120,
+        74
+      ],
+      [
+        185,
+        132,
+        84
+      ]
+    ],
+    "paint_side": [
+      [
+        13,
+        29,
+        38
+      ],
+      [
+        19,
+        38,
+        48
+      ],
+      [
+        21,
+        42,
+        53
+      ],
+      [
+        24,
+        44,
+        55
+      ]
+    ],
+    "paint_front": [
+      [
+        36,
+        55,
+        67
+      ],
+      [
+        39,
+        60,
+        71
+      ],
+      [
+        44,
+        62,
+        70
+      ],
+      [
+        56,
+        71,
+        76
+      ]
+    ],
+    "metal": [
+      [
+        64,
+        49,
+        35
+      ],
+      [
+        97,
+        77,
+        55
+      ],
+      [
+        151,
+        114,
+        72
+      ],
+      [
+        205,
+        163,
+        102
+      ]
+    ],
+    "ink": [
+      [
+        14,
+        23,
+        32
+      ]
+    ]
+  }
+}

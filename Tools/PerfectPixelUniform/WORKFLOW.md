@@ -6,7 +6,7 @@
 
 옛 수정판의 명암 양자화 비교는 [L11](LEGACY11.md)과 `Legacy11` 산출물을 참고한다. 옛 `build_color_ranges`만 native 좌표에 재사용해 3/4단계를 비교했으며, 선 재작도·격자 복구·웹 엔진 교체는 하지 않았다. `legacy_tones_trial.py`는 이 고정 실험의 실행 기록이고 기존 출력 재생성을 거부한다.
 
-현재 재작도 실험은 [R13](REDRAW13.md)의 닫힌 캐비닛이며 `Run-Redraw13.cmd` 또는 `redraw13_cli.py`로 기하→면/무늬→정수 픽셀→마지막 검사까지 연속 실행한다. 최종은 `docs/artifacts/building37/Redraw13e`다. source/code/artifact 해시가 같으면 재계산 없이 재사용한다. 역할/형상 계약이 다른 물체를 같은 캐비닛 규칙에 억지로 넣지 않는다.
+현재 재작도 실험은 [R13](REDRAW13.md)의 닫힌 캐비닛이며 `Run-Redraw13.cmd` 또는 `redraw13_cli.py`로 기하→면/무늬→정수 픽셀→마지막 검사까지 연속 실행한다. 현재는 `docs/artifacts/building37/Redraw13f`다. e의 볼록 외곽/독립 중복선은 사용자 정정으로 기각하고 source 순서 contour·유한 연결 chain을 사용한다. source/code/artifact 해시가 같으면 재계산 없이 재사용한다. 역할/형상 계약이 다른 물체를 같은 캐비닛 규칙에 억지로 넣지 않는다.
 
 일반 미해결 문제와 다른 후보는 [R12 연구](REDRAW_DESIGN.md)의 P1~P8·후보A~F를 따른다. R13은 C/E의 한 입력에 대한 실행이며 원래 격자 복원·모든 사물의 미술 완성·조명/Unity 표시 통합의 완료가 아니다.
 

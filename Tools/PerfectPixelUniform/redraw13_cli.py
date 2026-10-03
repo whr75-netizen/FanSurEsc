@@ -19,7 +19,7 @@ def start(source,output):
     source=Path(source).resolve();output=Path(output).resolve()
     if not source.is_file() or not output.is_relative_to(ROOT) or digest(source)!=SOURCE_SHA:
         raise ValueError('Unchanged reference sheet and a fresh workspace output are required')
-    code=[str(HERE/name) for name in ('redraw13.py','redraw_geometry13.py','redraw_detail13.py','redraw13_cli.py')]
+    code=[str(HERE/name) for name in ('redraw13.py','redraw_geometry13.py','redraw_detail13.py','redraw_lines13.py','redraw13_cli.py')]
     hashes={Path(p).name:digest(p) for p in code}
     if output.exists():
         record=read_execution(output)
@@ -36,7 +36,7 @@ def start(source,output):
     phases=['geometry','detail','raster','validate'];nodes=[]
     artifacts={
         'geometry':['source-cabinet.png','geometry.json','geometry.npz','geometry-overlay.png','geometry-receipt.json'],
-        'detail':['detail.json','detail.npz','detail-receipt.json'],
+        'detail':['detail.json','detail.npz','detail-receipt.json','stroke-overlay.png'],
         'raster':['native.png','preview-x4.png','preview-x8.png','structure-mask.png','raster.npz','comparison.png','raster-receipt.json'],
         'validate':['validation.json','validate-receipt.json']}
     preceding=[]
@@ -88,7 +88,7 @@ if __name__=='__main__':
     parser.add_argument('--output')
     args=parser.parse_args();sys.stdout.reconfigure(encoding='utf-8')
     if not args.output:
-        version=''.join(digest(HERE/name) for name in ['redraw13.py','redraw_geometry13.py','redraw_detail13.py','redraw13_cli.py'])
+        version=''.join(digest(HERE/name) for name in ['redraw13.py','redraw_geometry13.py','redraw_detail13.py','redraw_lines13.py','redraw13_cli.py'])
         import hashlib
         key=hashlib.sha256((SOURCE_SHA+version).encode()).hexdigest()[:16]
         args.output=str(ROOT/'LocalOnly/PerfectPixelUniform'/('R13-'+key))

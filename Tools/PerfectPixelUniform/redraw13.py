@@ -6,8 +6,9 @@ import json
 import time
 import numpy as np
 from PIL import Image, ImageDraw
-from redraw_geometry13 import geometry, inside, cv2, structural_lines
+from redraw_geometry13 import geometry, inside, cv2, source_profile
 from redraw_detail13 import face_samples, _lab, _quantize
+from redraw_lines13 import thin, source_strokes, raster_strokes
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE_SHA = 'e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae'
@@ -71,15 +72,13 @@ def dark_geometry(rgb,paint,wood,g):
         below=np.roll(light,(dy,dx),(0,1));above=np.roll(light,(-dy,-dx),(0,1))
         valley |= (np.minimum(below,above)-light)>3.5
     valley &= paint & ~wood
-    lines,_=structural_lines(valley,np.array(g['top']))
+    # Derive finite connected source chains, not Hough lines spanning unrelated
+    # valleys. The mask is also the authority for every submitted stroke cell.
+    lines,skeleton=source_strokes(valley,minimum_length=25.)
     sy,sx=np.indices(paint.shape);centers=np.stack((sx+.5,sy+.5),-1)
     halo=np.zeros(paint.shape,bool)
-    for entry in lines:
-        if entry['kind']!='trim_line':continue
-        a,b=np.array(entry['a']),np.array(entry['b']);d=b-a;length=np.linalg.norm(d);d/=length
-        n=np.array([-d[1],d[0]]);t=(centers-a)@d
-        halo|=(t>=-1)&(t<=length+1)&(abs((centers-a)@n)<=entry['width']/2+1)
-    return lines,halo,{'source_candidate_pixels':int(valley.sum()),'excluded_source_halo_pixels':int((halo&paint).sum())}
+    halo=cv2.dilate(valley.astype(np.uint8),np.ones((3,3),np.uint8))>0
+    return lines,halo,valley,{'source_candidate_pixels':int(valley.sum()),'excluded_source_halo_pixels':int((halo&paint).sum())}
 
 
 def geometry_stage(source, output):
@@ -98,8 +97,7 @@ def geometry_stage(source, output):
     # Source-space evidence: long fitted lines, protected feature boxes and cap.
     preview = Image.fromarray(rgba); draw = ImageDraw.Draw(preview)
     draw.line([tuple(p) for p in g['top'] + [g['top'][0]]], fill=(245,80,220,255), width=1)
-    for entry in g['lines']:
-        draw.line((tuple(entry['a']), tuple(entry['b'])), fill=(80,240,220,255), width=1)
+    draw.line([tuple(p) for p in g['silhouette']+[g['silhouette'][0]]],fill=(80,240,220,255),width=1)
     for f in g['features']:
         draw.rectangle(f['bbox'], outline=(255,255,255,255), width=1)
     preview.save(output/'geometry-overlay.png')
@@ -117,7 +115,12 @@ def detail_stage(output):
     front = outer & ~top & ~side
     sy, sx = np.indices(rgba.shape[:2]); source_centers = np.stack((sx+.5, sy+.5), -1)
     paint = (rgb[..., 2] > rgb[..., 0]) & (rgb[..., 1] > rgb[..., 0]) & data['body']
-    dark_lines,halo,dark_analysis=dark_geometry(rgb,paint,data['wood'],g)
+    dark_lines,halo,dark_support,dark_analysis=dark_geometry(rgb,paint,data['wood'],g)
+    # Brass AA fringes can be cool-neutral and satisfy B>R by one channel unit.
+    # Exclude their two-source-pixel neighborhood from face color sampling;
+    # this removes the old line halo instead of copying it beside the new line.
+    metal_fringe=cv2.dilate(data['metal'].astype(np.uint8),np.ones((5,5),np.uint8))>0
+    halo |= metal_fringe
     clean_paint=paint & ~halo
     # Keep source position/color lineage separate from output palette IDs.
     colors = np.zeros((*outer.shape, 3), np.uint8)
@@ -144,8 +147,18 @@ def detail_stage(output):
         source_xy[selected] = lineage[selected]
         metadata[name] = result['analysis']; palettes[name] = palette.tolist()
     source_metal = data['metal']
+    trim_lines,trim_skeleton=source_strokes(source_metal & (data['detail_labels']==0), narrow_only=True)
     metal_rgb = rgb[source_metal]
     metal_palette, _ = actual_palette(metal_rgb, 4)
+    metal_luma=_lab(metal_palette.astype(float))[:,0]
+    for path in trim_lines:
+        points=np.array(path['points']);coords=np.floor(points).astype(int)
+        allowed=source_metal
+        # The finite source chain owns its observed tone, not a globally imposed
+        # dark line color. End/junction samples are from this same material.
+        sampled,_=nearest_role(rgb,points,allowed)
+        observed=float(np.median(_lab(sampled.astype(float))[:,0]))
+        path['tone_id']=int(np.argmin(abs(metal_luma-observed)))
     # Mask coverage is sampled from the original small decorations. Long narrow
     # strokes are replaced in raster; no palette operation may erase handles.
     yi = np.clip(np.floor(centers[...,1]).astype(int),0,rgb.shape[0]-1)
@@ -162,41 +175,35 @@ def detail_stage(output):
     roles[metal_mask]=4; tones[metal_mask]=metal_ids[metal_mask]
     source_xy[metal_mask]=np.stack((xi,yi),-1)[metal_mask]
     palettes['metal']=metal_palette.tolist()
-    for entry in g['lines']:
-        if entry['kind']!='metal_band':continue
-        a,b=np.array(entry['a']),np.array(entry['b']);d=b-a;length=np.linalg.norm(d);d/=length
-        n=np.array([-d[1],d[0]]);t=(centers-a)@d;across=(centers-a)@n
-        strip=(t>=0)&(t<=length)&(np.abs(across)<=entry['width']/2)&outer&~top
-        if not np.any(strip):continue
-        # Median source tone across each cross-section bin removes accidental
-        # along-strip noise while retaining the observed metal reflectance band.
-        source_t=(source_centers-a)@d;source_n=(source_centers-a)@n
-        support=source_metal&(source_t>=0)&(source_t<=length)&(np.abs(source_n)<=entry['width']/2+1)
-        bins=np.linspace(-entry['width']/2,entry['width']/2,4)
-        table=[]
-        luma=_lab(metal_palette.astype(float))[:,0]
-        for lo,hi in zip(bins,bins[1:]):
-            samples=rgb[support&(source_n>=lo)&(source_n<=hi)]
-            value=float(np.median(_lab(samples.astype(float))[:,0])) if len(samples) else float(np.median(luma))
-            table.append(int(np.argmin(abs(luma-value))))
-        band=np.clip(np.searchsorted(bins,across,side='right')-1,0,2)
-        ids=np.array(table,np.uint8)[band]
-        colors[strip]=metal_palette[ids[strip]];roles[strip]=4;tones[strip]=ids[strip]
-        # Retain the observed widening/end ornament, not an invented fitting.
-        end=((source_t>=-6)&(source_t<=min(10,length/3)))|((source_t>=length-min(10,length/3))&(source_t<=length+6))
-        end &= source_metal & (abs(source_n)<=entry['width']*.9+1)
-        native_end=end[yi,xi]&outer&~top
-        colors[native_end]=metal_palette[metal_ids[native_end]]
-        roles[native_end]=4;tones[native_end]=metal_ids[native_end]
+    # Wide material bands are surfaces, not completed rectangles inferred from
+    # a fitted centerline. Preserve their source coverage and observed end caps.
+    radius=cv2.distanceTransform(source_metal.astype(np.uint8),cv2.DIST_L2,5)
+    broad_core=radius>=2.6
+    broad=cv2.dilate(broad_core.astype(np.uint8),np.ones((5,5),np.uint8)).astype(bool)&source_metal
+    broad_native=broad[yi,xi]&outer&~top
+    colors[broad_native]=metal_palette[metal_ids[broad_native]]
+    roles[broad_native]=4;tones[broad_native]=metal_ids[broad_native]
+    # A dark gradient next to a brass stroke is not a second independent edge.
+    # Brass owns that boundary; keep separate dark seams only outside its halo.
+    metal_halo=cv2.dilate(source_metal.astype(np.uint8),np.ones((7,7),np.uint8))>0
+    dark_support &= ~metal_halo
+    dark_lines,_=source_strokes(dark_support,minimum_length=25.)
     # Actual source dark paint representative, not invented outline black.
     paint_rgb=rgb[paint]; luma=_lab(paint_rgb.astype(float))[:,0]
     ink_rgb=paint_rgb[np.argmin(np.abs(luma-np.percentile(luma,4)))].tolist()
     palettes['ink']=[ink_rgb]
     metadata['dark_structure']={'detected_lines':dark_lines,**dark_analysis}
+    metadata['trim_structure']={'detected_lines':trim_lines,'source_skeleton_cells':int(trim_skeleton.sum())}
     metadata['palettes']=palettes
+    overlay=Image.fromarray(rgba);draw=ImageDraw.Draw(overlay)
+    for rows,color in ((trim_lines,(230,220,100,255)),(dark_lines,(80,240,220,255))):
+        for path in rows:draw.line([tuple(v) for v in path['points']],fill=color,width=1)
+    overlay.save(output/'stroke-overlay.png')
     np.savez_compressed(output/'detail.npz', colors=colors, roles=roles, tones=tones,
                         detail=residual, confidence=confidence, coverage=outer, top=top,
                         source_xy=source_xy, protected=protected, source_halo=halo,
+                        dark_support=dark_support, trim_support=source_metal,
+                        broad_metal=broad_native,
                         sampled_detail_labels=detail_labels)
     write(output/'detail.json',metadata)
     return {'stage':'detail','role_palettes':palettes,'wood_grain_candidates':metadata['wood_top']['directional_detail']['grain_candidates']}
@@ -206,31 +213,30 @@ def raster_stage(output):
     g=read(output/'geometry.json'); details=read(output/'detail.json'); data=np.load(output/'detail.npz')
     coverage=data['coverage']; rgb=data['colors'].copy(); roles=data['roles'].copy()
     ink=tuple(details['palettes']['ink'][0]); metal=details['palettes']['metal']
-    size=tuple(g['size']); ink_mask=Image.new('L',size,0); draw=ImageDraw.Draw(ink_mask)
-    for entry in details['dark_structure']['detected_lines']:
-        if entry['kind']=='trim_line':
-            draw.line((snapped(entry['a'],g),snapped(entry['b'],g)),fill=255,width=1)
+    size=tuple(g['size']); centers=grid(g)
+    yi=np.clip(np.floor(centers[...,1]).astype(int),0,data['dark_support'].shape[0]-1)
+    xi=np.clip(np.floor(centers[...,0]).astype(int),0,data['dark_support'].shape[1]-1)
+    def supported(role):
+        distance=cv2.distanceTransform((~data[role]).astype(np.uint8),cv2.DIST_L2,5)
+        # RDP source error + output-center quantization, in source pixel units.
+        return distance[yi,xi]<=1.25+g['pitch']/np.sqrt(2)
+    ink_mask,ink_receipt,ink_owners=raster_strokes(details['dark_structure']['detected_lines'],g,supported('dark_support'))
     # Outer profile has a single owned 1px boundary. Interior source grain is
     # untouched by this operation, and invisible pixels never become ink.
     boundary=np.zeros(coverage.shape,np.uint8)
     contours=cv2.findContours(coverage.astype(np.uint8),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_NONE)[0]
     cv2.drawContours(boundary,contours,-1,1,1,cv2.LINE_8)
-    boundary=boundary.astype(bool)
-    drawn=np.array(ink_mask)>0; drawn &= coverage & ~data['top']
+    boundary=thin(boundary.astype(bool))
+    trim_mask,trim_receipt,trim_owners=raster_strokes(details['trim_structure']['detected_lines'],g,supported('trim_support'))
+    trim=trim_mask&coverage&~data['top']&~boundary&~data['broad_metal']
+    # One final owner per cell. The source brass boundary also excludes nearby
+    # dark duplicate strokes; no synthetic closed cap-rim overlay is submitted.
+    occupied=trim|data['broad_metal']|data['protected']|boundary
+    clearance=cv2.dilate(occupied.astype(np.uint8),np.ones((3,3),np.uint8))>0
+    drawn=ink_mask&coverage&~data['top']&~clearance
     rgb[drawn|boundary]=ink;roles[drawn|boundary]=5
-    trim_mask=Image.new('L',size,0); draw=ImageDraw.Draw(trim_mask)
-    for entry in g['lines']:
-        if entry['kind']=='trim_line':
-            draw.line((snapped(entry['a'],g),snapped(entry['b'],g)),fill=255,width=1)
-    trim=(np.array(trim_mask)>0)&coverage&~data['top']&~boundary
-    rgb[trim]=metal[1];roles[trim]=4
-    # The cap's four edges use the same shared continuous vertices. Rim tone is
-    # taken from the actual warm palette; it is not an AA gradient halo.
-    rim=Image.new('L',size,0);draw=ImageDraw.Draw(rim)
-    p=[snapped(v,g) for v in g['top']]
-    draw.line(p+[p[0]],fill=255,width=1)
-    rim=(np.array(rim)>0)&coverage&~boundary
-    rgb[rim]=details['palettes']['wood_top'][3];roles[rim]=1
+    table=np.array([0]+[v['tone_id'] for v in details['trim_structure']['detected_lines']],np.uint8)
+    rgb[trim]=np.array(metal,np.uint8)[table[trim_owners[trim]]];roles[trim]=4
     # Handles are foreground decorations attached to door faces. A fitted
     # background seam cannot overwrite their observed cells.
     protected=data['protected']&coverage&~data['top']&~boundary
@@ -244,7 +250,8 @@ def raster_stage(output):
     final_trim=trim&(roles==4)&~protected
     Image.fromarray((final_ink*255).astype(np.uint8)).save(output/'structure-mask.png')
     np.savez_compressed(output/'raster.npz', roles=roles, trim=final_trim, ink=final_ink,
-                        vector_ink=final_ink&drawn&~boundary, rgba=rgba)
+                        boundary=boundary, vector_ink=final_ink&drawn&~boundary, rgba=rgba,
+                        trim_owners=trim_owners, ink_owners=ink_owners)
     # Native source-density view uses pixel replication for display only. Source
     # is never resampled into the final PNG. Clearly separated panes/labels.
     source=Image.open(output/'source-cabinet.png').convert('RGBA')
@@ -257,6 +264,7 @@ def raster_stage(output):
     text=ImageDraw.Draw(comparison);text.text((8,8),'SOURCE 1x',fill='white');text.text((source.width+24,8),'NATIVE 4x / nearest',fill='white')
     comparison.save(output/'comparison.png')
     return {'stage':'raster','native_size':list(size),'visible_colors':int(np.unique(rgba[coverage,:3],axis=0).shape[0]),
+            'finite_source_strokes':{'ink':ink_receipt,'trim':trim_receipt},
             'partial_alpha':int(np.count_nonzero((rgba[...,3]>0)&(rgba[...,3]<255)))}
 
 
@@ -313,34 +321,31 @@ def validate_stage(source,output):
     xy=data['source_xy'];face=np.isin(data['roles'],[2,3])
     forbidden=data['source_halo'][xy[...,1],xy[...,0]]
     add('source_line_halo_not_resampled',not np.any(forbidden&face),int(np.count_nonzero(forbidden&face)))
-    line_positions=[]
-    for kind,entries,owned in [('ink',details['dark_structure']['detected_lines'],raster['vector_ink']),('trim',g['lines'],raster['trim'])]:
-        points=centers[owned]
-        distances=np.full(len(points),np.inf)
-        for entry in entries:
-            if entry['kind']!='trim_line':continue
-            a,b=np.array(entry['a']),np.array(entry['b']);delta=b-a
-            t=np.clip((points-a)@delta/(delta@delta),0,1)
-            distance=np.linalg.norm(points-(a+t[:,None]*delta),axis=1)/g['pitch']
-            distances=np.minimum(distances,distance)
-        # All owned final vector pixels participate. There is no pre-filter on
-        # distance that would make the bound tautologically pass.
-        line_positions.append({'kind':kind,'visible_cells':len(points),
-                               'max_center_distance_native_px':float(distances.max()) if len(points) else None})
-    add('actual_line_positions',all(v['visible_cells']>=10 and v['max_center_distance_native_px']<=1.1 for v in line_positions),line_positions)
-    # Each submitted thin vector stroke must be a single Bresenham path before
-    # foreground occlusion/joins. This inspects actual fitted segments, not just
-    # an unrelated illustrative fixture.
-    strokes=[]
-    for kind,entries in [('ink',details['dark_structure']['detected_lines']),('trim',g['lines'])]:
-        for j,entry in enumerate(entries):
-            if entry['kind']!='trim_line':continue
-            plane=Image.new('L',tuple(g['size']),0);draw=ImageDraw.Draw(plane)
-            a,b=snapped(entry['a'],g),snapped(entry['b'],g)
-            draw.line((a,b),fill=255,width=1)
-            yy,xx=np.nonzero(np.array(plane));major=xx if abs(b[0]-a[0])>=abs(b[1]-a[1]) else yy
-            strokes.append({'kind':kind,'line':j,'cells':len(major),'major_positions':len(np.unique(major))})
-    add('actual_vector_strokes_single_pixel',all(v['cells']==v['major_positions'] for v in strokes),strokes)
+    # Compare against immutable source support, not our own fitted invented line.
+    ix=np.clip(np.floor(centers[...,0]).astype(int),0,source_data['rgba'].shape[1]-1)
+    iy=np.clip(np.floor(centers[...,1]).astype(int),0,source_data['rgba'].shape[0]-1)
+    source_fg=source_data['rgba'][...,3]>160
+    distance=cv2.distanceTransform((~source_fg).astype(np.uint8),cv2.DIST_L2,5)
+    maximum=float(distance[iy,ix][coverage].max())
+    add('actual_profile_stays_with_source',maximum<=2.,{'max_distance_source_px':maximum,
+        'outside_opaque_centers':int((coverage&~source_fg[iy,ix]).sum()),'opaque_threshold':160})
+    support_results=[]
+    for kind,key,owned in [('ink','dark_support',raster['vector_ink']),('trim','trim_support',raster['trim'])]:
+        distance=cv2.distanceTransform((~data[key]).astype(np.uint8),cv2.DIST_L2,5)
+        values=distance[iy,ix][owned]
+        support_results.append({'kind':kind,'cells':len(values),'max_source_distance':float(values.max()) if len(values) else None})
+    support_limit=1.25+g['pitch']/np.sqrt(2)
+    add('final_strokes_have_source_support',all(v['cells']>=10 and v['max_source_distance']<=support_limit for v in support_results),
+        {'limit_source_px':float(support_limit),'strokes':support_results})
+    def blocks(mask):return int((mask[:-1,:-1]&mask[1:,:-1]&mask[:-1,1:]&mask[1:,1:]).sum())
+    unions={key:blocks(raster[key]) for key in ['vector_ink','trim','boundary']}
+    add('actual_stroke_unions_not_thick_blocks',all(v==0 for v in unions.values()),unions)
+    add('final_outer_profile_one_connected_contour',cv2.connectedComponents(raster['boundary'].astype(np.uint8),8)[0]==2,
+        int(cv2.connectedComponents(raster['boundary'].astype(np.uint8),8)[0]-1))
+    add('no_independent_dark_duplicate_next_to_trim',not np.any(raster['vector_ink']&cv2.dilate(
+        (raster['trim']|data['broad_metal']|data['protected']|raster['boundary']).astype(np.uint8),np.ones((3,3),np.uint8)).astype(bool)),
+        int(raster['vector_ink'].sum()))
+    add('wide_metal_coverage_is_source_owned',not np.any(data['broad_metal']&~source_data['metal'][iy,ix]),int(data['broad_metal'].sum()))
     band_observations=[]
     for j,entry in enumerate(g['lines']):
         if entry['family']!=2 or entry['width']<6:continue
@@ -357,6 +362,23 @@ def validate_stage(source,output):
     fixture=np.zeros((24,40),np.uint8);cv2.line(fixture,(2,19),(35,3),255,1,cv2.LINE_8)
     yy,xx=np.nonzero(fixture)
     add('line8_single_stroke_fixture',np.unique(xx).size==len(xx) and np.isin(fixture,[0,255]).all(),{'cells':len(xx),'columns':np.unique(xx).size})
+    # The old convex-hull implementation fails this projecting-cap neck case.
+    neck=np.zeros((42,46),bool);neck[3:12,3:42]=True;neck[12:38,12:34]=True
+    yy,xx=np.indices(neck.shape);positions=np.stack((xx+.5,yy+.5),-1)
+    neck_profile=inside(positions,source_profile(neck))
+    add('projecting_cap_does_not_fill_neck_fixture',not neck_profile[20,7] and not neck_profile[20,38]
+        and neck_profile[7,7] and neck_profile[22,22],{'left_neck':bool(neck_profile[20,7]),'right_neck':bool(neck_profile[20,38])})
+    # No endpoint completion even when finite chains point toward each other.
+    split=np.zeros((24,64),bool);split[10:13,3:25]=True;split[10:13,35:59]=True
+    paths,skel=source_strokes(split,minimum_length=12.)
+    fixture_grid={'size':[32,12],'origin':[0,0],'pitch':2.}
+    split_raster,_,_=raster_strokes(paths,fixture_grid,np.ones((12,32),bool))
+    count=int(cv2.connectedComponents(split_raster.astype(np.uint8),8)[0]-1)
+    add('disconnected_finite_chains_stay_disconnected_fixture',count==2 and not split_raster[:,13:16].any(),{'components':count})
+    thick=np.zeros((24,40),bool);thick[9:14,4:35]=True
+    thinned=thin(thick); yy,xx=np.nonzero(thinned)
+    add('one_thick_source_stroke_becomes_one_path_fixture',len(xx)==len(np.unique(xx)) and cv2.connectedComponents(thinned.astype(np.uint8),8)[0]==2,
+        {'cells':len(xx),'columns':len(np.unique(xx))})
     # Different source direction families must not be replaced by symmetric +/- .5.
     slopes=[v[1]/v[0] for v in g['families'][:2]]
     add('observed_asymmetric_projection',abs(abs(slopes[0])-abs(slopes[1]))>.005,slopes)
@@ -365,7 +387,7 @@ def validate_stage(source,output):
     result={'passed':all(v['passed'] for v in checks),'checks':checks,'art_approved':False,
             'scope':'Source-derived closed-cabinet reconstruction, not universal normalization or AI-art-free proof',
             'unverified':['reference-game style equivalence','physical albedo/Unity relighting','other objects/sheets',
-                          'global stroke unions are 1px everywhere including intersections','semantic correctness of every detected detail']}
+                          'semantic correctness of every detected detail','all source/output graph junctions and cycles correspond']}
     write(output/'validation.json',result)
     if not result['passed']:
         raise ValueError('FINAL_CONTRACT_FAILED:'+','.join(v['id'] for v in checks if not v['passed']))

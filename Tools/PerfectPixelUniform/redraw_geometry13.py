@@ -34,6 +34,11 @@ def contour(mask):
     return max(found, key=cv2.contourArea).reshape(-1, 2).astype(float) + .5
 
 
+def source_profile(mask):
+    """Ordered nonconvex profile; never manufacture a shared corner."""
+    return cv2.approxPolyDP(contour(mask).astype(np.float32),1.,True).reshape(-1,2)
+
+
 def fit(points):
     # Welsch robust orthogonal fitting; returned direction sign is canonical.
     d = cv2.fitLine(np.asarray(points, np.float32), cv2.DIST_WELSCH, 0, .01, .001).reshape(-1)
@@ -219,11 +224,12 @@ def small_features(gold, lines, body):
 
 def geometry(rgba):
     body, wood, gold, top, errors = masks(rgba)
-    # This closed cabinet's outer profile is convex. Source role thresholds cut
-    # notches under the cap; the convex profile restores these missing edge
-    # samples, while no door/handle topology is inferred from the hull.
-    outer = cv2.convexHull(contour(body | wood).astype(np.float32)).reshape(-1, 2)
-    silhouette, errors_body = fitted_polygon(outer, 4, minimum_edge=18)
+    # A projecting cap and feet have real concave necks. Preserve contour order;
+    # a convex envelope or intersections of infinite lines invents new surfaces.
+    # The fitted wood plane is a face subdivision, not foreground evidence.
+    # Its extended corner must never enlarge the source-backed silhouette.
+    silhouette = source_profile(body)
+    errors_body = []
     features, labels = small_features(gold, [], body)
     # Source knob blobs cannot vote for an extended plane-boundary line.
     lines, families = structural_lines(gold & (labels==0), top)
@@ -260,4 +266,5 @@ def geometry(rgba):
             'families': families.tolist(), 'features': features, 'origin': origin.tolist(),
             'pitch': chosen['pitch'], 'size': chosen['size'], 'candidates': candidates,
             'fit_residuals_source_px': errors + errors_body,
+            'silhouette_method':'ordered source contour; epsilon 1 source px; no convex envelope/intersections',
             'observed_grid_recovered': False}, (body, wood, gold, labels)

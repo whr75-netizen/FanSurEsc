@@ -1,5 +1,45 @@
 # R13 — 원화 캐비닛의 구조선·면·장식 재작도
 
+## 현재 정정: 원본 연결 관계가 선의 권위 (R13f)
+
+R13e의 볼록 외곽 가정은 기각한다. `convexHull`이 상판 돌출부와 몸체를
+직선으로 연결해 원본에 없는 면을 만들었고, 어두운 선/금속 선/상판 rim의
+독립 중첩은 개별 width=1이어도 합성 결과의 한 줄을 보장하지 못했다.
+기존 19개 검사는 이 두 원인을 검사하지 않아 충분하지 않았다.
+
+이번 수정 범위는 외곽/선/금속 coverage다. 원본, 이전 출력, 면의 색/목재
+분석, pitch=2 source px, 웹/Unity를 보존한다. 새 디자인과 끝점 연장은 금지한다.
+외곽은 원본의 **순서 있는 비볼록 contour**를 최대 1 source px로 근사하며
+무한 지지선의 교점을 만들지 않는다. 최종 coverage의 source 밖 거리를 검사한다.
+
+내부선은 source 역할 mask의 Zhang–Suen 세선화 → 실제 연결 graph의 유한
+chain → 오차 1.25 source px 이내 polyline → 같은 native 격자의 LINE_8로
+연결한다. source에 없는 두 끝점을 잇거나 닫힌 공간을 추론하지 않는다.
+재질 띠와 한 줄은 구분하며, 넓은 금속도 source support 밖으로 펼치지 않는다.
+외곽/금속/내부선은 단일 raster 소유권으로 조립하고 별도 상판 rim은 겹치지 않는다.
+Hough의 33후보는 방향/격자 예산 분석에만 남기고 최종선/금속면의 권위로 쓰지 않는다.
+face 표본에서 금속 mask의 2source px 주변을 제외해 예전 흐린 금속선의 색을
+새 선 옆에 재복사하지 않는다. 연결 component 전체가 충분히 길면 그 안의 짧은
+모서리 branch도 남긴다. 각 branch 길이로 탈락시키면 실제 모서리가 끊어진다.
+
+출력 중심 quantization 오차 `h/√2`와 RDP 오차1.25의 합을 source support
+corridor의 상한으로 사용한다. 현재 h=2에서2.664source px이며 실제 최종선의
+최대 관측 거리는2source px다. 이는 출처 없는 끝점 연결을 허용하는 조건이 아니다.
+이미 source에서 이어진 chain만 제출하며 output 합집합 세선화는 픽셀 삭제만 한다.
+
+비교 후보: 기존 Hough/교점 경로는 연결 의미가 없어서 기각, 전체 Canny는
+그라데이션 양쪽을 복수선으로 만들기 때문에 보류, source mask graph는 연결
+관계와 유한 끝점 근거를 보존하므로 이번 단일 자산에 채택한다. 다만 역할
+분류가 틀리면 graph도 틀리므로 보편적 사물 의미 인식으로 주장하지 않는다.
+
+반례는 돌출 상판의 오목한 목 부분, 떨어진 두 선, 한 개의 두꺼운 선이다.
+실물 출력에서는 source 밖 새 면, source 지원 없는 선, 선 mask의 2×2 중복,
+손잡이/목재 소실을 검사하고 원본·새 PNG를 실제로 함께 보여드린다.
+[OpenCV contour/convexHull](https://docs.opencv.org/4.x/d3/dc0/group__imgproc__shape.html)은
+연산 의미의 근거이며, [세선화 공식 설명](https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html)은
+연결을 유지하며 단일 중심선을 만드는 원리의 근거다. 새 패키지를 설치하지
+않고 NumPy로 Zhang–Suen을 구현한다. 이 표준 연산들이 미술 합격을 증명하지는 않는다.
+
 ## 실행 전 계약 (2026-10-04)
 
 사용자 요청: 기존 생성 사물 시트에서 한 개를, 넓은 범위에서 감지한 선을
@@ -83,9 +123,38 @@ topology/특징 budget과 grain 역할 연결은 본 실험의 독자 구현이�
 Unity 재조명 성공의 증거가 아니다. 미술적 “AI 티 0%”도 자동 검사로 증명하지
 않으며, 실제 그림을 숨기지 않고 제시한다.
 
-## 실제 결과
+## 현재 실제 결과 — R13f
 
-최종 실행은 `docs/artifacts/building37/Redraw13e`이며 [실제 비교](../../docs/artifacts/building37/Redraw13e/comparison.png),
+현재 재개/캐시 기준은 `docs/artifacts/building37/Redraw13f`다.
+[native](../../docs/artifacts/building37/Redraw13f/native.png),
+[원본 비교](../../docs/artifacts/building37/Redraw13f/comparison.png),
+`stroke-overlay.png`/`geometry-overlay.png`, source/계산배열/receipt/코드/WorkLoop
+snapshot을 보존했다. 162×141, pitch2, 17색, alpha0/255이며 원본은 그대로다.
+
+- R13e의 alpha>160 원본 지지 밖 opaque 출력 중심236셀·최대거리9source px에서
+  **8셀·최대거리1source px**로 바뀌었다. 8셀은 contour 근사/격자 위상의 경계
+  오차이며 원본과 pixel-perfect 일치했다고 주장하지 않는다. 236셀이 전부
+  alpha0 원본의 공간이었다는 뜻도 아니다.
+- 원본 broad metal coverage454셀, 최종 내부 암부선256셀·금속선840셀이다.
+  한 source mask의 역할/소유권으로 조립해 Hough band106셀 중복 덮어쓰기를
+  제거했다. 독립적인 어두운 선과 금속선의 인접 중복도 제거한다.
+- 완성된 외곽·암부·금속선 각 mask의 2×2 전면 채움은0개, 외곽은1연결 contour다.
+  이 조건은 폭/평행선/모든 junction의 의미를 전부 증명하지는 않는다.
+- 손잡이 지지47/26/23셀·각4색, 목재4톤/원화잔차4,157셀 유지. 새 무늬를 그리지 않았다.
+- 마지막 **27개 검사**는 원본 밖 외곽 거리·source 지원 선·최종 합집합·외곽 연결·
+  금속 coverage 및 실제 source 정보를 검사한다. 상판 돌출 목 부분/끊어진 두
+  선/두꺼운 단일선 반례도 포함한다. 구형 개별width1재그림 검사는 제거했다.
+- geometry→detail→raster→validate는3.537초(프로세스/검사 포함), 외부생성0회다.
+  원본에 없는 면을 잇는 원인은 수정했지만 자동 미술 합격은 기록하지 않는다.
+
+실험 중 `LocalOnly/PerfectPixelUniform/R13f-*-study`는 원인 판별 기록이다.
+짧은 branch 제거 문제 및 source 지원 corridor를 과도하게 좁힌 문제를 확인해
+최종 f에서 수정했다. 원본 역할분류가 모든 경계를 정확히 해석하는지, source와
+최종 graph의 모든 junction/cycle이 대응하는지는 아직 입증되지 않았다.
+
+## R13e 당시 결과 — 사용자 정정으로 외곽/선 합격 기각
+
+당시 실행은 `docs/artifacts/building37/Redraw13e`이며 [실제 비교](../../docs/artifacts/building37/Redraw13e/comparison.png),
 [native](../../docs/artifacts/building37/Redraw13e/native.png),
 [4배 표시](../../docs/artifacts/building37/Redraw13e/preview-x4.png),
 `geometry.json`, `detail.json`, `validation.json`, `execution.json`과 단계별 배열/
@@ -126,7 +195,7 @@ alpha0/255, source2px pitch다. 이는 재작도 격자이며 원래 저작 격�
 그 검사는 source에서 이미1px 간격/접촉하는 material support를 의미상 독립한
 손잡이로 오인했다. source관계를 먼저 측정하는 계약으로 수정했으며 임의 간격을
 새로 그려 통과시키지 않았다. d→e는 전체 선 위치 검사 보강이며 native 바이트가
-같다. 재개용 최종은 **Redraw13e** 하나다.
+같다. 이 당시 기록은 보존하며 현재 제작에는 **Redraw13f**를 사용한다.
 
 ### 반복 실행
 
@@ -139,7 +208,7 @@ alpha0/255, source2px pitch다. 이는 재작도 격자이며 원래 저작 격�
 $pixelPython = 'C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe'
 & $pixelPython -B Tools/PerfectPixelUniform/redraw13_cli.py
 # 보존된 최종 결과의 캐시 확인
-& $pixelPython -B Tools/PerfectPixelUniform/redraw13_cli.py --output docs/artifacts/building37/Redraw13e
+& $pixelPython -B Tools/PerfectPixelUniform/redraw13_cli.py --output docs/artifacts/building37/Redraw13f
 ```
 
 `geometry→detail→raster→validate`는 WorkLoop의 고정 `command.run` 노드다.
@@ -148,8 +217,8 @@ $pixelPython = 'C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependen
 
 ### 남은 범위
 
-이 경로는 **이 source의 닫힌 목재/남색/금속 캐비닛**이다. convex silhouette와
-역할 색 분류가 입력 조건이다. 다른 가구/곡면/유리/열린 선반에는 별도 적합성
+이 경로는 **이 source의 닫힌 목재/남색/금속 캐비닛**이다. source-supported contour와
+역할 색 분류가 입력 조건이다. 볼록 silhouette 가정은 삭제했다. 다른 가구/곡면/유리/열린 선반에는 별도 적합성
 검토와 역할/구조 계약이 필요하다. 원래 격자 자동 복원, reference게임과 같은
 미술 완성도, 개별 장식의 의미100%, 모든 교점/인접선 합집합의 전역1px 폭,
 순수albedo·Unity 조명/표시는 아직 확인한 것이 아니다. “AI 티0%”는 자동 검사의

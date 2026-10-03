@@ -1,6 +1,44 @@
 # PerfectPixel Uniform — 전역 격자와 원본 해상도 색 정리
 
-## 현재 결정 V4 · 2026-10-03 — 기존 선 우선 수정판의 실제 적용 시험
+## 현재 결정 V5 · 2026-10-03 — 픽셀 구조를 직접 저작하는 수납장
+
+사용자의 최신 정정은 ‘흐린 나뭇결의 색만 줄이는 것으로는 도트 나뭇결·명암 덩어리·한 줄 경계가 만들어지지 않는다. 수학적으로 직접 그려 달라’이다. V4는 이 요구에 미달했다. **새 수납장 한 개를 템플릿에서 native 픽셀로 직접 제작**한다. 기존 나무 상판/청록색 수납장의 물체 종류·색 방향을 참고하며, 생성 원본의 동일 복구나 전체 실내 제작으로 확대하지 않는다. 원본/V1~V4/웹/Unity를 보존한다.
+
+### 제작 전에 고정한 구조와 계산
+
+1. 표현 후보: 원본 필터 추가는 기존 반례를 해결하지 않아 기각. 외부 생성 모델은 픽셀 위치의 결정적 제어 요구에 부족. **정수 면 도형·단일 경계·정의된 Bézier grain 클러스터를 직접 그리는 템플릿**을 선택한다. 물체 형태·색 역할은 저작 데이터이며 수학이 좋은 디자인을 자동 발견한다는 뜻은 아니다.
+2. 좌표: local `(x,y,z)`는 투영 tick, X가구 길이/Y위/Z깊이. world metres로의 embedding은 `(x/32, y/(32√6), z/32)`다. 오른손 local 기저이고 parent 없음. orthographic native projection은 `u=58+2x-2z`, `v=174-x-z-y`, 원점 좌상단/+U오른쪽/+V아래. 실제 균일 world density `64√2 px/m`, pitch30°에 대응한다. ground 선 화면 변각은26.565°이고 pitch30°와 혼동하지 않는다. 카메라/world를 수정하는 작업은 아니다.
+3. 구조: width64/depth20/height72tick → 실물2.0×.625×.9186m. native204×192 canvas는 이 투영 bounds와 여백에서 정한다. 상판 두께4tick, 하부 받침6tick, 같은 폭16tick 문3개/틈4tick/좌우여백4tick. native 손잡이 폭≥3px·높이6px, 나뭇결/옹이≥수px가 읽히는 저작 규격이다. 기존 이미지를 이 크기로 줄이지 않는다.
+4. 변환: 모든 구조 정점의 공통 affine projection→`floor(value+.5)` 한 번. convex polygon은 pixel centre/half-open top-left 규칙으로 채운다. 색은 면/재료 역할에서 선택한 고정 팔레트다. side/front/top 영역은 겹침0이어야 한다. 최종 edge 소유자 한 명, endpoint pair로 중복 제거 후 비AA Bresenham 1회. 선 주변으로 색을 보간하지 않는다.
+5. 질감: 나무판3개, 끊긴 곡선과 옹이2개를 top UV `(x,z)`에서 cubic Bézier로 정의한다. De Casteljau로 control hull의 chord 거리≤.125native px까지 적응 분할, 각 chord를 동일 Bresenham으로 그린다. 최대깊이16에서 만족 못하면 실패. ellipse knot는4cubic 근사, 내부 core는 식 기반 binary fill이다. 곡선 길이/위치/끊김은 recipe의 결정적 저작 변수이며 random/dither 없다. **전체 곡선의 모든 native 점이 top 내부이고 구조선과 겹치지 않을 때만 곡선을 통째로 기록**한다. core도 같은 경계를 따른다. 경계 충돌이면 조각내서 숨기지 않고 재료 단계가 실패한다. 부드러운 원본 나뭇결·사진 RGB는 읽어 칠하지 않는다.
+6. 명암: top/side/front의 고정 역할색, 단차 아래 한 덩어리 음영, 문 내부의 단일 색, 금속 손잡이의 base/highlight 두 덩어리다. PBR·광택·연속 조명 gradient·색 평균 없음. 구조 경계는 질감보다 나중에 한 번 출력한다. 이 PNG의 정적 명암과 미래 Unity 동적 조명은 별개다.
+7. 마지막 검사: 원본 SHA 보존, native dimensions, alpha0/255, 고정 palette 외 RGB0, shared face overlap0, edge 중복0, 각 선8연결/major-axis 한 점, 최종 구조색=선 recipe, grain top 내부·경계 침범0・8연결 이웃 없는 단독점0, 같은 문 폭·손잡이 규격, 저장 PNG/표시4배의 byte 대응. 기술 통과는 디자인/참고작 합격과 구별한다.
+
+파이프라인: `recipe → geometry masks/unique edges → face colours/material grain → native PNG → 마지막 저장결과 검사 + 별도4배 표시`. `draw_parametric.py`는 geometry/material/validate 단계이고 `graph-v5.json`으로 연속 실행한다. 새 패키지·생성형·PerfectPixel·Aseprite 호출 없이 기존 NumPy/Pillow로 직접 저작한다. 원본은 reference SHA 확인용이며 원본 RGB 표본을 출력에 사용하지 않는다.
+
+근거: [Bresenham 원논문](https://ibm-1401.info/Pics3/bresenham1965.pdf), [Zingl의 비AA 정수 rasterization](https://zingl.github.io/bresenham.html), [De Casteljau 분할 설명](https://pomax.github.io/bezierinfo/#decasteljau), [공유 경계 top-left 규칙](https://learn.microsoft.com/en-us/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules), [픽셀 작가 cure의 클러스터·밴딩·노이즈 설명](https://pixeljoint.com/forum/forum_posts.asp?TID=11299). De Casteljau의 bounded chord 연결과 role palette는 이 템플릿의 구현 조합이며 위 자료가 완성된 가구 생성기를 제공한다는 뜻은 아니다.
+
+### 재료 경계의 원인 수정 계약
+
+첫 저장 결과의 독립 감사에서 grain637px 중8연결 단독점40개를 발견했다. source curve를 다시 추적한 진단에서11개 곡선은 자르기 전 모두 한 덩어리였으며, 경계선을1px 팽창한 raster mask로 자른 뒤에만 곡선2/3/6이 다수 단독점으로 바뀌었다. 곡선19개(11grain+8knot quarter)의 원래 점은 모두 top 내부이고 실제 구조선 침범0이었다. 따라서 임의로 넓힌 경계 배제대가 원인이다.
+
+수정은 **재료 단계의 부분 clipping 제거→전체 stroke 허용/거부**와 누락된 단독점 검사를 추가하는 범위다. recipe·기하·팔레트는 유지한다. 기하 NPZ/JSON은 재계산하지 않고 이전 producer SHA를 보존하며 재료 기록에서 입력 bytes SHA를 고정한다. 이전 PNG/재료/검사/성공 그래프를 `Direct05/failed-grain`에 보존하고 재료→마지막 검사만 새 recovery 그래프로 실행한다. 원본 필터·resize·외딴점 삭제 후처리로 대체하지 않는다. 첫 그래프의 exit0은 이 누락된 조건의 성공 증거가 아니었다.
+
+### 실제 결과 · 이번 요청의 관측 범위
+
+`docs/artifacts/building37/Direct05/native.png`는 **204×192 RGBA, 실제15색, alpha0/255**다. 원본을 축소한 것이 아니라 recipe의 기하·색 역할·곡선을 pixel array에 직접 기록한 새로운 수납장이다. source sheet의 RGB는 읽어 사용하지 않았다. palette16역할 중 `wood_light`는 현재 미사용이다. 문3개/손잡이3개, 나무판3개/곡선11개/옹이2개, unique 구조선31개를 저작했고 마지막 구조선 우선순위는 `wood_edge > edge > wood_joint`다. 공유 endpoint를 제외한 각 선은 major-axis마다 native1점이며 번짐·반투명선·dither·연속 조명 계산이 없다. 명암은 저작한 sRGB 역할색이지 물리광학/sRGB 광량 시뮬레이션이 아니다.
+
+초기 geometry 계산 후 NumPy int64의 JSON 직렬화가 실패했다. `quantize`의 Python int 반환과 파일 열기 전 직렬화로 원인을 수정했고, 실패 NPZ/부분JSON/원래 코드/blocked graph를 `failed-json`에 보존했다. 복구된 모든 geometry mask는 실패 시 이미 계산된 mask와 byte 동일했다. 기하 계산 .2937초·첫 재료 계산 .0782초였으나 그 재료의 경계 clipping이 grain 단독점40개를 만들었다. 저장결과 감사에 따라 위 계약으로 재료만 수정했다.
+
+최종 재료 계산 .0604초, grain695px/구조선 침범0/8연결 이웃 없는 단독점0. `graph-v5-recovery.json`의 **material→validate 2노드**가 완료됐고 기하 NPZ/JSON SHA는 그대로다. 최종 validation은 저장된 픽셀・recipe・구조 mask/색・공통 치수・입력 SHA・정수4배 대응을 확인했다. 기하와 최종 재료의 계산 합계 약.354초는 process 시작/검사/AI 작업 시간과 구별하며 전체 제작의 고정 소요시간 보장이 아니다.
+
+별도 읽기 전용 감사에서 recipe/geometry producer/input SHA 유지, old grain637px 전부 유지+58px만 추가, old/newgrain 바깥 변경0px, 손잡이 mask・최종 edge RGBA 동일을 확인했다. 최종 grain8연결 component10개는24/30/32/55/64/69/79/105/116/121px이고1px·2px독립섬0이다. 직접 검사와 감사 모두 미술 점수로 대체하지 않았으며 감사에서 재제작하지 않았다(`independent-audit.json`).
+
+`preview-x4.png`는 native각점의 정확한4×4복제(816×768), `display-x4.png`는 그 위에 배경/설명을 붙인848×832 미리보기다. 둘 다 제작 자산으로 되먹이지 않는다. 원본/과거/V3웹/Unity는 보존했고 이번에는 기존 실내에 배치하거나 동적 조명을 연결하지 않았다. 실행 예는 새 출력이 없는 상태에서 `work_loop.py init <새 state> graph-v5.json`→`run <같은 state>`다. 기존 산출물이 있으면 덮어쓰기 대신 실패하며, 이번 원인 재개는 별도 recovery 그래프/기록을 사용했다.
+
+**직접 native 저작과 기술 조건은 확인, 미술적 완성·참고작 동일 복제·모든 가구 자동 제작은 미검증**이다. 현재 수납장 한 종류의 결정적 템플릿이며 curve/색/치수는 저작 데이터다. 그림에서 의미 있는 무늬를 자동 찾거나 사진 전체를 이상적 pixel art로 바꾸는 기능을 구현했다고 바꿔 말하지 않는다.
+
+## V4 설계·증거 — 보존 기록
 
 최신 정정: V3의 154249→136682색 변화는 너무 작으며 픽셀 경계 복구로 볼 수 없다. 사용자가 지정한 과거 **선 검출/고정 → 연결된 색 영역 채움** 구현을 `LocalOnly/PerfectPixelPalette_20260906`에서 찾았다. 원본 PNG는 raster이며, PNG라는 형식만으로 규칙적인 저작 픽셀 격자임을 뜻하지 않는다. V3의 약한 색 정리는 이 요구의 완료가 아니다.
 

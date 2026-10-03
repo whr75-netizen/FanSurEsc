@@ -1,0 +1,25 @@
+{
+  "goal": "V5의 raster 경계 팽창 clipping으로 생긴 grain 단독점만 수정. 기존 recipe와 geometry bytes 유지, 전체 stroke 소유권으로 material부터 재개.",
+  "entry": "material", "max_steps": 2,
+  "requirements": [{"id": "whole_grain_strokes", "text": "직접 저작 PNG의 전체 곡선 소유권·단독점0·기존 기하 불변을 저장 결과에서 검사",
+    "source": "README V5 재료 경계의 원인 수정 계약",
+    "predicate": {"op": "eq", "args": [{"ref": "validate.exit_code"}, {"literal": 0}]}}],
+  "nodes": [
+    {"id": "material", "algorithm": "command.run", "phase": "work",
+     "inputs": {"stdin": {"literal": {"contract": "preserve geometry and palette; whole grain stroke ownership without fragment clipping"}}},
+     "parameters": {"argv": ["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe", "-B", "Tools/PerfectPixelUniform/draw_parametric.py", "material"],
+       "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game", "timeout": 60,
+       "code_files": ["Tools/PerfectPixelUniform/draw_parametric.py", "Tools/PerfectPixelUniform/cabinet_recipe.json"]},
+     "reads": ["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/geometry.npz", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/geometry.json", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/cabinet_recipe.json"],
+     "writes": ["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/native.png", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/grain-layer.png", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/material.npz", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/material.json"],
+     "edges": [{"when": {"op": "eq", "args": [{"ref": "material.exit_code"}, {"literal": 0}]}, "to": "validate"}, {"when": {"op": "ne", "args": [{"ref": "material.exit_code"}, {"literal": 0}]}, "to": "@blocked"}]},
+    {"id": "validate", "algorithm": "command.run", "phase": "validation",
+     "inputs": {"stdin": {"literal": {"contract": "stored pixels/masks, geometry input hashes, isolated grain0; no geometry regeneration"}}},
+     "parameters": {"argv": ["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe", "-B", "Tools/PerfectPixelUniform/draw_parametric.py", "validate"],
+       "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game", "timeout": 60,
+       "code_files": ["Tools/PerfectPixelUniform/draw_parametric.py", "Tools/PerfectPixelUniform/cabinet_recipe.json"]},
+     "reads": ["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/geometry.npz", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/native.png", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/material.npz", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/geometry.json", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/material.json"],
+     "writes": ["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/preview-x4.png", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/display-x4.png", "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Direct05/validation.json"],
+     "edges": [{"when": {"op": "eq", "args": [{"ref": "validate.exit_code"}, {"literal": 0}]}, "to": "@complete"}, {"when": {"op": "ne", "args": [{"ref": "validate.exit_code"}, {"literal": 0}]}, "to": "@blocked"}]}
+  ]
+}

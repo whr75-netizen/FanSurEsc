@@ -1,0 +1,43 @@
+{
+  "checked_date": "2026-10-04",
+  "timezone": "Asia/Seoul",
+  "provider": "PixelLab MCP",
+  "status": "blocked_before_generation",
+  "generation_called": false,
+  "job_id": null,
+  "native_png": null,
+  "balance_tool": "mcp__pixellab__get_balance",
+  "balance_response": {
+    "credits_usd": 0.0,
+    "generations_remaining": 0,
+    "generations_used": 0,
+    "generations_total": 2000,
+    "subscription": "expired",
+    "ended": "2026-09-20",
+    "note": "2000 generations on your plan are frozen until you renew"
+  },
+  "source_png": "docs/artifacts/building37/Redraw13f/source-cabinet.png",
+  "source_sha256": "1fa9f77864d42e25bf5605426370728c3e62bf9d0e31b9a0bb15f88e55c2505b",
+  "source_size": [324, 292],
+  "source_bytes": 120360,
+  "planned_native_size": [162, 146],
+  "output_size_is": "PixelLab generation canvas, not a local downsampled source",
+  "available_relevant_tools": [
+    "mcp__pixellab__edit_image",
+    "mcp__pixellab__inpaint_image",
+    "mcp__pixellab__get_image"
+  ],
+  "not_exposed_here": [
+    "create_image_pixflux",
+    "create_image_pixen",
+    "create_map_object",
+    "image_to_pixelart",
+    "reduce_colors",
+    "correct_pixelart"
+  ],
+  "sources": [
+    "https://www.pixellab.ai/docs/tools/edit-image-pro",
+    "https://www.pixellab.ai/docs/tools/image-to-pixel-art",
+    "https://www.pixellab.ai/docs/tools/resize"
+  ]
+}

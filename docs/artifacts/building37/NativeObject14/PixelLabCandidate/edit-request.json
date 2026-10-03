@@ -1,0 +1,19 @@
+{
+  "status": "prepared_not_submitted",
+  "tool": "mcp__pixellab__edit_image",
+  "image_encoding": "Base64 of the exact original source PNG, without resampling",
+  "source_png": "docs/artifacts/building37/Redraw13f/source-cabinet.png",
+  "args_without_image_payload": {
+    "description": "Redraw this exact cabinet as a polished native-resolution pixel-art game object. Preserve its restrained realistic proportions: a thin honey-brown wooden top, a dark teal painted body, three flush recessed front panels, a dark teal left side panel, slim antique brass trim, small rounded brass handles, and short corner feet. Preserve the original camera angle, silhouette, panel arrangement, relative widths and original material colors. Do not bulge or extrude the decorative frame; brass trim is a thin surface decoration, not a raised padded tube. Render rich but restrained pixel clusters: 4 wood tones with broad organic wood-grain motifs taken from this design, 3 teal light/shadow tones with visible local under-top and panel-recess shadows, and 3 brass tones. Separate the top, front and left side by clear controlled value differences. Use exactly one native-pixel-wide solid black structural outlines at the silhouette and genuine panel boundaries; no duplicate parallel black strokes, antialiased halos, blurred gradients, random dithering or black texture speckles. Keep wood texture colored, not black. No newly invented diagonal connections, no extra geometry, no perspective warp, no painted environmental cast shadow, no background. Deliver a transparent native pixel-art PNG composed directly on the requested pixel grid, with clean 2:1-style diagonal stair-step rhythm consistent across this one object, while preserving the supplied design.",
+    "width": 162,
+    "height": 146,
+    "no_background": true,
+    "seed": 140031
+  },
+  "limitations": [
+    "Prompt instructions do not guarantee exact 1px stroke topology; the returned pixels still require source-aware structural inspection.",
+    "The MCP tool exposes no hard target-palette argument or geometric constraint mask.",
+    "No job was submitted because the account reports zero available credits and expired subscription.",
+    "The output dimensions would be a new authored generation grid, not recovered original pixel pitch."
+  ]
+}

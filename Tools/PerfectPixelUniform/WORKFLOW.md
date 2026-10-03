@@ -2,6 +2,8 @@
 
 현재 행동과 진입점의 단일 원본이다. 제작 이력은 [README](README.md), 구현별 계약은 DESIGN06/07/08/09, 일반 실행기는 [WorkLoop](../WorkLoop/README.md)를 따른다. 실행 구조는 기존 계산을 연결하고 명시된 변경 원인의 단계만 수정한다.
 
+최신 오브젝트 제작은 [N14](NATIVE14.md): 생성 표현 참고 → 편집 가능한 평면 부품/치수 → 관측 RGB 재료·명암 → 가림을 반영한 한 줄 구조선 → native PNG다. `Run-Native14.cmd`로 AI 재판단 없이 같은 캐비닛의2/3문을 재생성한다. 최종 `NativeObject14/delivery`는183×165/14색이며 기존 웹/Unity를 교체하지 않았다. 아래R13은 과거 원화 선 복원 실험이다.
+
 생성 원화의 색/선 정리는 [R10](REDRAW_DESIGN.md) → `redraw_cli.py --source <PNG> --output <새폴더> --levels 4` 또는8768웹V4를 사용한다. 이 경로의 source1px 재작성과 V9의 알려진 기하 픽셀 제작은 서로 다른 입력 계약이다. 원래 logical grid 복원/물리 재조명/Unity 통합 완료로 바꾸지 않는다.
 
 옛 수정판의 명암 양자화 비교는 [L11](LEGACY11.md)과 `Legacy11` 산출물을 참고한다. 옛 `build_color_ranges`만 native 좌표에 재사용해 3/4단계를 비교했으며, 선 재작도·격자 복구·웹 엔진 교체는 하지 않았다. `legacy_tones_trial.py`는 이 고정 실험의 실행 기록이고 기존 출력 재생성을 거부한다.

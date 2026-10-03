@@ -1,0 +1,323 @@
+{
+  "goal": "One complete editable cabinet object; technical conditions separated from art approval",
+  "entry": "geometry",
+  "max_steps": 4,
+  "requirements": [
+    {
+      "id": "actual_native_object",
+      "text": "Source materials, editable module geometry, independent black lines and actual PNG",
+      "source": "NATIVE14.md; latest user request",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "geometry",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE14.md exact editable surface pixel production"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14.py",
+          "geometry",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\base03"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native14_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/geometry",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/geometry-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "geometry.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "material"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "geometry.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "material",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE14.md exact editable surface pixel production"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14.py",
+          "material",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\base03"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native14_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/geometry"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/material",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/material-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "material.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "raster"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "material.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "raster",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE14.md exact editable surface pixel production"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14.py",
+          "raster",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\base03"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native14_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/geometry",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/material"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/raster",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/raster-receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/preview-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/modular-preview-x4.png"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "raster.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "raster.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE14.md exact editable surface pixel production"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14.py",
+          "validate",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\base03"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native14_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/geometry",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/material",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/raster"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/validate",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/validate-receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/base03/validation.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

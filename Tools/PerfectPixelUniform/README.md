@@ -1,5 +1,7 @@
 # PerfectPixel Uniform — 전역 격자와 원본 해상도 색 정리
 
+**다음 작업 진입점:** [WORKFLOW.md](WORKFLOW.md)에 고정 사선·좌표·모듈·원인별 단계·실패 귀속·Unity 적용 경계를 정리했다. `pipeline_cli.py`의 `reuse / plan / start / run / status / stop / resume`은 기존 WorkLoop를 호출하며, 현재 아트/생산 알고리즘을 바꾸지 않는다. 새 기하와 V8 목재의 자동 연결·Unity 적용은 아직 없다.
+
 ## 현재 결정 V8 · 2026-10-03 — 나뭇결 내부를 실제4색으로 표현
 
 사용자는V7의2색무늬가명암/입체감을표현하지못한다고지적하고3~4색을요구했다. 기존palette는4목재색이지만binarygrain과band+grain으로밝은한면의내부는실제2색이었다. [DESIGN08.md](DESIGN08.md)에원인/참고작/4단계재료표현/보존조건을고정했다. [imonk목재강좌](https://itch.io/t/1452767/pixel-tutorial-wood-texture)의결방향을따라이어지는명암과무작위색반례를참고했다. [Rappenem](https://www.newgrounds.com/art/view/rappenem/pixel-art-tutorial-wood-texture)/[Pixel Pete](https://www.youtube.com/watch?v=nzzphDLsO8g)도직접작가자료링크로보존했다. 타인자산복사/추가생성은없다.

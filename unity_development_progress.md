@@ -2667,3 +2667,11 @@ Interactable (abstract base class)
 - `[연산]` 같은생성목재ROI·128×54source-centre UV·물리period·4원본RGB를유지한다. source sRGB밝기p10/25/75로nested3darkmask→0..3단계. 기존8연결6texel잡음정책을nestedmask/작은bright성분에적용하여밝은결/중간목재/어두운결/짙은골을표현했다. 무작위선·두꺼운하이라이트팽창·새생성/기하조명변경/축소필터는없다. 의미적옹이완전인식이나모든원화명암보존은아니다.
 - `[실제 결과/검사]` Parametric08 native152×150/192×170. 상판내부4RGB각2칸1000/2006/686/222px·3칸1332/3012/876/414px. 전체colorcount로역할충족을대체하지않았다. V7geometry/codeSHA·camera·density·canvas·alpha·visibleink·nonwoodRGBA불변을저장출력에서확인했고geometry재계산없음. 정확4배표시/원화견본출처도관측했다.4UVlevel1556/3820/1025/511texel,작은성분합병손실metadata를보존했다.
 - `[실행/범위]` graph-v8재료→목재내부채움→최종검사3노드를1회연속완료. material.112초/3노드process포함약1.37초는조사·설계·AI시간과별개다. 미술승인/범용재료인식/Unity표시미검증. 평판구조는V7에보존,재료현재계약은README V8/DESIGN08/recipe08이다. 이전결과/8768웹/Unity를바꾸지않았다.
+
+## 181. 쿼터뷰 제작 행동·로컬 실행 진입점 정리 `[MAP-01]`
+
+- `[요청/범위]` 시각 수정은 나중에 하고 일정 사선과 빠른 제작/적용을 위한 기술 행동·실행 구조를 로컬에 남기라는 요청이다. 기존 생성 원화·V6/V7/V8 코드/recipe/산출물·Unity 씬과 미술 상태는 보존했다.
+- `[현재 계약]` Tools/PerfectPixelUniform/WORKFLOW.md를 다음 작업의 단일 진입점으로 연결했다. tick→world→native 투영, camera elevation30°와 화면 사선26.565° 구분, 2:1 축선·같은 깊이/경계 소유권, 고정 끝단+bay 반복·UV/공통 밀도, 원인별 단계 선택·정보 손실·실패 귀속·최종 검사·실제 Unity 적용 경계를 명세했다. 원인 없는 재생성/축소/축별 늘림/이중 픽셀화 없이 기존 결과를 재사용한다.
+- `[실행 구조]` pipeline_cli.py는 기존 WorkLoop 그래프의 출력만 새 LocalOnly run에 바인딩한다. reuse/plan/start/run/status/stop/resume과 변경 이유, 입력 SHA, transitive code 해시, 원본 보존·별도 미생성 outputs 폴더를 제공한다. wood는 기존 V7 기하의 V8 목재 생산이고 structure는 V7 기하+V6 재료이며, 새 기하와 V8 재료의 자동 연결은 미구현으로 명시했다. 완료는 WorkLoop graph_complete/state.complete/저장 validation/실제 native SHA를 함께 확인한다. 실패·불확실 실행·완료 입력을 자동 재실행하지 않는다.
+- `[실제 확인]` 두 경로 plan/init을 실행했고 생산 steps0·events0·outputs 부재, 입력/코드 SHA·출력 바인딩·마지막 validation 위치 등 30조건을 확인했다. 기존 run ID 거부, idle stop→paused run exit1→resume ready, V7/V8의 서로 다른 native metadata SHA 형식도 확인했다. 기록은 LocalOnly/PerfectPixelUniform/workflow-validation.json과 runs/workflow-*-20261003이다. 독립 읽기 검토에서 진행 중 stop 미지원과 완료 후 PNG SHA 누락을 발견하여 문서/래퍼를 수정했고 해당 수정 확인을 받았다.
+- `[미검증/인계]` 이 래퍼로 새 생산 start를 실행하지 않았고 Blender/재료/픽셀 생산·Unity 적용/Play/미술 검사를 하지 않았다. 기존 생산 증거는 §179/180을 재사용한다. WorkLoop가 연속 실행 전체에 lock을 유지하므로 stop/resume은 대기 상태 pause만 지원하며 실행 중 즉시/다음 단계 취소는 미지원이다. 다음 요청의 변경 원인을 WORKFLOW에서 분류하고 담당 단계만 작업한다.

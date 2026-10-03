@@ -1,0 +1,529 @@
+{
+  "configuration": {
+    "source": "binary-alpha-source.png",
+    "base_grid": [
+      1489,
+      1056
+    ],
+    "scale": "1.0",
+    "preview_zoom": 1,
+    "features": {
+      "region_colors": {
+        "enabled": true,
+        "scope": {
+          "kind": "all"
+        },
+        "options": {
+          "colors": 64,
+          "iterations": 3
+        }
+      },
+      "cell_sampling": {
+        "enabled": true,
+        "scope": {
+          "kind": "all"
+        },
+        "options": {
+          "method": "source_regions",
+          "coverage": 0.5,
+          "color_edge_threshold": 0.08
+        }
+      },
+      "line_normalization": {
+        "enabled": true,
+        "scope": {
+          "kind": "all"
+        },
+        "options": {
+          "mode": "line_first",
+          "fill_source_guard": true
+        }
+      }
+    },
+    "notes": "Legacy line-first trial at source resolution, not automatic authored-grid recovery. Explicit alpha128 and 64-colour representative palette. Original and engine unchanged."
+  },
+  "configuration_path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Uniform04\\config.json",
+  "input_file_sha256": "942db2a0cca4fb033d191b4a72bb0e5d7d54af1359f56f49d6e4a7089d5c2949",
+  "input_array_sha256": "b20fc9a227b1bb2e726840519e83097d2b057511f50c44989e1dd3918303260c",
+  "configuration_file_sha256": "81508d527e3503603624894ebefb17b4c199d3698f046e7c52a6fdcb62255af0",
+  "input_masks": [],
+  "comparison_previous_sha256": null,
+  "code_sha256": {
+    "trigger_cli.py": "ecfa91445f0ccd9fa36c6bd4d3afbd14ad829e17a11b195903f60ee995476d32",
+    "requirements-boundary.txt": "28d131c246e5fc47913841d3b0ed607a1dc7992a26a71b1324dfc1823a070c29",
+    "src/perfect_pixel/trigger_pipeline.py": "80230267713cd68097cf6d63a74af4a48267464faa2cbdcd1809a3f49e79f5a2",
+    "src/perfect_pixel/line_triggers.py": "88806f325cca52ef8ae842c2762f07c04c1753d1715621f79cb6470d2aa20f39",
+    "src/perfect_pixel/line_first.py": "ef1329082b1216c6bbd745a1e15701f1306a11a5941009ddb7dbeb05f2cee66c",
+    "src/perfect_pixel/source_sampling.py": "2da74307eeca67b2e8e21197baaec8d54813aa1430668d6bdba07cb5015310ba",
+    "src/perfect_pixel/boundary_pipeline.py": "7a7b7d3b22366102984b6bca94969dc8c2cd495eee6be3c53a4bea6da013eb58",
+    "src/perfect_pixel/boundary_regions.py": "341a0754a78dfd7119268ad442bed69f3128b4e3f42a0a8cb7d45bf6d1002193",
+    "src/perfect_pixel/region_palette.py": "11adb4eb2d4fa19787935dce4e9240f214509a27026bd2208ee4c28e6640a053",
+    "src/perfect_pixel/gradient_tones.py": "604c9a991e7adf272315069ae574857360458d96465a4dc8f4474fe87d8cd043",
+    "src/perfect_pixel/gradient_steps.py": "491ae94619edef67a2d2cbd398eabdd13a96966e97d11b61871fc8768e65ac77",
+    "src/perfect_pixel/spatial_tones.py": "7e9e1fa51b955f3cea0d9051ba6d0f3c2fa20a30d73895237613e19da1fe04df",
+    "src/perfect_pixel/highlight_accents.py": "619b0a08b75f3577df08769dad2ce828d073b79456a814dfe27e92544530bb79",
+    "src/perfect_pixel/color_layers.py": "ece317febd922e6f4d3292952329aa792cf0f3dcf43deee918cff475918ca912",
+    "src/perfect_pixel/tone_controls.py": "356a5b1f7ae43217832304f8a50feec3934f838b0b3bed8dd5eef2354696023d",
+    "src/perfect_pixel/feature_scopes.py": "dc530e3cc354c9ed9fcc1f9368698230e54f68fa35eb6f7c963c6d64428a1b61",
+    "src/perfect_pixel/palette.py": "2f5c955931c9e601a9e6998a5b3af39c3820b423c40a31b73c008c7f83c8f1bb",
+    "src/perfect_pixel/__init__.py": "25cc9981152ab3fbf6963c0d0df63e49f13a6afc9c02357261cfd75d26a55a26",
+    "src/perfect_pixel/perfect_pixel_noCV2.py": "99cbd4e0a9febae704a9637aeba79c68d3e0731e494db17424533c4ef1642522",
+    "src/perfect_pixel/perfect_pixel.py": "c5ca7012825573250132b9dd169aa58cb5bc70b732541881bfb11765e3abb338"
+  },
+  "result": {
+    "grid": [
+      1489,
+      1056
+    ],
+    "base_grid": [
+      1489,
+      1056
+    ],
+    "scale": "1.0",
+    "features": {
+      "mask_cleanup": {
+        "enabled": false,
+        "scope_pixels": 0
+      },
+      "region_colors": {
+        "enabled": true,
+        "scope_pixels": 1572384,
+        "palette": [
+          [
+            0,
+            0,
+            0
+          ],
+          [
+            247,
+            244,
+            234
+          ],
+          [
+            42,
+            60,
+            69
+          ],
+          [
+            174,
+            124,
+            78
+          ],
+          [
+            25,
+            42,
+            51
+          ],
+          [
+            9,
+            10,
+            10
+          ],
+          [
+            60,
+            75,
+            81
+          ],
+          [
+            219,
+            185,
+            143
+          ],
+          [
+            127,
+            88,
+            56
+          ],
+          [
+            1,
+            1,
+            2
+          ],
+          [
+            93,
+            64,
+            42
+          ],
+          [
+            146,
+            101,
+            63
+          ],
+          [
+            17,
+            25,
+            26
+          ],
+          [
+            200,
+            155,
+            107
+          ],
+          [
+            63,
+            45,
+            32
+          ],
+          [
+            249,
+            229,
+            153
+          ],
+          [
+            113,
+            134,
+            130
+          ],
+          [
+            95,
+            117,
+            62
+          ],
+          [
+            0,
+            0,
+            3
+          ],
+          [
+            120,
+            141,
+            73
+          ],
+          [
+            97,
+            105,
+            104
+          ],
+          [
+            195,
+            75,
+            48
+          ],
+          [
+            229,
+            217,
+            197
+          ],
+          [
+            146,
+            146,
+            136
+          ],
+          [
+            63,
+            88,
+            48
+          ],
+          [
+            145,
+            56,
+            37
+          ],
+          [
+            43,
+            28,
+            20
+          ],
+          [
+            1,
+            0,
+            0
+          ],
+          [
+            169,
+            172,
+            106
+          ],
+          [
+            209,
+            122,
+            70
+          ],
+          [
+            161,
+            113,
+            71
+          ],
+          [
+            193,
+            186,
+            171
+          ],
+          [
+            236,
+            204,
+            156
+          ],
+          [
+            134,
+            100,
+            119
+          ],
+          [
+            46,
+            68,
+            40
+          ],
+          [
+            21,
+            33,
+            37
+          ],
+          [
+            3,
+            5,
+            6
+          ],
+          [
+            125,
+            122,
+            112
+          ],
+          [
+            28,
+            16,
+            11
+          ],
+          [
+            87,
+            36,
+            27
+          ],
+          [
+            176,
+            136,
+            147
+          ],
+          [
+            107,
+            75,
+            50
+          ],
+          [
+            214,
+            166,
+            111
+          ],
+          [
+            36,
+            51,
+            59
+          ],
+          [
+            243,
+            232,
+            208
+          ],
+          [
+            186,
+            138,
+            90
+          ],
+          [
+            167,
+            74,
+            44
+          ],
+          [
+            12,
+            4,
+            2
+          ],
+          [
+            171,
+            167,
+            170
+          ],
+          [
+            156,
+            160,
+            141
+          ],
+          [
+            33,
+            49,
+            30
+          ],
+          [
+            74,
+            88,
+            91
+          ],
+          [
+            179,
+            171,
+            150
+          ],
+          [
+            237,
+            198,
+            108
+          ],
+          [
+            67,
+            64,
+            55
+          ],
+          [
+            10,
+            17,
+            19
+          ],
+          [
+            79,
+            53,
+            35
+          ],
+          [
+            213,
+            200,
+            182
+          ],
+          [
+            224,
+            178,
+            114
+          ],
+          [
+            47,
+            39,
+            30
+          ],
+          [
+            116,
+            50,
+            35
+          ],
+          [
+            5,
+            1,
+            1
+          ],
+          [
+            190,
+            102,
+            59
+          ],
+          [
+            90,
+            95,
+            65
+          ]
+        ],
+        "changed_pixels": 502696,
+        "method": "observed-RGB Oklab representatives; no RGB averaging"
+      },
+      "region_tones": {
+        "enabled": false,
+        "scope_pixels": 0
+      },
+      "highlight_accents": {
+        "enabled": false,
+        "scope_pixels": 0
+      },
+      "cell_sampling": {
+        "enabled": true,
+        "scope_pixels": 1572384,
+        "method": "source_regions",
+        "palette_independent_coordinates": true
+      },
+      "line_normalization": {
+        "enabled": true,
+        "scope_pixels": 1572384,
+        "method": "scoped_sato_two_sided_ridge_thinning_v1",
+        "options": {
+          "max_width_source_px": 6.0,
+          "min_contrast": 0.045,
+          "min_response": 0.006,
+          "min_component_pixels": 3
+        },
+        "source_shape": [
+          1056,
+          1489,
+          4
+        ],
+        "target_grid": [
+          1489,
+          1056
+        ],
+        "source_candidate_pixels": 228852,
+        "source_skeleton_pixels": 106138,
+        "source_components": 3928,
+        "target_line_pixels": 104358,
+        "collision_cells": 0,
+        "target_scope_rejected_samples": 0,
+        "source_exact_rgba": true,
+        "alpha_requirement": 255,
+        "endpoint_gap_bridging": false,
+        "semantic_detection": false,
+        "topology_preservation_guaranteed": false,
+        "notes": [
+          "Custom bounded heuristic; not Superpixelator.",
+          "Equal-lightness color lines may be missed.",
+          "Thinning/projection may collapse branches or separate lines at small grids.",
+          "min_component_pixels filters candidate components, not the original image."
+        ],
+        "sigmas_source_px": [
+          0.6,
+          1.5,
+          3.0
+        ],
+        "mode": "line_first",
+        "composition": {
+          "method": "scoped_source_supported_priority_flood_v2",
+          "grid": [
+            1489,
+            1056
+          ],
+          "source_region_count": 9802,
+          "coverage": 0.5,
+          "color_edge_threshold": 0.08,
+          "fixed_line_cells": 104358,
+          "collision_cells": 0,
+          "mixed_source_region_cells": 0,
+          "marker_cells": 276752,
+          "expanded_unseeded_cells": 46640,
+          "unresolved_cells": 77854,
+          "unresolved_components": 14213,
+          "deleted_target_cells": 0,
+          "palette_in_geometry": false,
+          "fill_source_guard": true,
+          "unsupported_owner_proposals": 28600,
+          "new_line_pixels_created": false,
+          "semantic_segmentation": false,
+          "limitations": [
+            "Color connectivity can chain through gradual color changes.",
+            "Open lines remain open; topology after downscaling is not guaranteed.",
+            "Unseeded components and collisions preserve raw center samples.",
+            "Several source regions competing for one target cell cannot all survive."
+          ],
+          "same_cell_fill_samples": 276752,
+          "same_region_nearest_samples": 46640,
+          "rendered_line_cells": 104358,
+          "fixed_line_geometry_unchanged": true,
+          "rgb_blending": false,
+          "render_palette_changes_geometry": false,
+          "integration_fallback_stage": "pre-line palette/cell output",
+          "integration_fallback_cells": 77854
+        }
+      }
+    },
+    "changed_target_cells": 502728,
+    "limitations": [
+      "Color regions are not semantic parts.",
+      "Full-support line cells are not guessed or inpainted.",
+      "Downscaling cannot guarantee topology or lost detail recovery."
+    ]
+  },
+  "technical_checks": {
+    "source_unchanged": true,
+    "binary_alpha": true,
+    "native_grid": [
+      1489,
+      1056
+    ],
+    "unique_opaque_rgb": 64,
+    "opaque_rgb_from_original": true,
+    "design_approval": "user review pending"
+  }
+}

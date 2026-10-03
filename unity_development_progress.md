@@ -2621,3 +2621,15 @@ Interactable (abstract base class)
 - `[실제 제작/검증]` graph-v3 WorkLoop3단계완료. uploaded run20261003T092818576216Z-59a6e7b8655b4cf4a637cf98f68e32a7 source와B37동일SHA. Uniform03/output.png1489×1056그대로,3.630초,alpha/hiddenRGB일치·경계215329pxRGB일치·최대ΔE3.999974≤4. RGB154249→136682색/visible357806px변경. 동일source저대비쌍제곱색차0.938642배는국소변동6.14%감소이며미술/인지점수가아니다. 독립fixture및actual저장결과9검사+HTTP9조건통과. comparison-crop-x4는같은128×128영역의정수4배표시1032×540별도미리보기다.
 - `[서버/제출]` 웹기본cleanup과기존lossless/API생략호환분리,UI버전3및uniform+cleanup+web코드SHA검사. 실제8768V2서버PID36976을경로/유휴확인후교체했다(Stop-Process실행오류후동일PIDtaskkill성공);version3/loadedSHA일치와netstat리스너PID40068확인. sourcequery로이전업로드불러오기가능. 원본/이전실행기록/Unity변경없음. 개인브라우저UI자동화/UnityPlay/게임통합/새아트생성은실행하지않았다.
 - `[한계/재개]` 보수적인내부색정리후보까지확인했으며실제픽셀격자복원·외곽matte·디자인합격은미완료다. 원본의saturatedred3367/yellow223px모두alpha1~15라matte오염가능성이있지만원인확정이나색상일괄삭제근거는아니다. weakcontrast유효특징은자동식별불가하며강도를높인결과를보존합격으로승격하지않는다. 도구README가현재결정/원리/증거의단일원본이다.
+
+## 176. 과거 선 우선 수정판의 원본 해상도 시험 `[MAP-01]`
+
+최신 요청은 V3의 15만→13만색 변화가 너무 작고, 과거 선을 먼저 검출/복구한 뒤 안쪽 색을 채우는 수정판을 써보자는 것이다. `LocalOnly/PerfectPixelPalette_20260906`에서 실제 `line_first` 경로를 확인했다. `source_regions`만으로는 선 우선이 아니며, 이 수정판도 자동 저작 격자 검출·이상적 선/곡선 복원·없는 선 추론을 하지 않는다. README V4에 입력 적합성·좌표·단계별 원인·실패 귀속을 고정한 뒤 원본 해상도에서 기존 코드를 1회 실행했다.
+
+- 실제 입력은 앞선 user run과 동일한 source SHA e4eb81a6…(1489×1056 RGBA)다. 별도 복사본에 alpha≥128→255/미만→0, 투명 RGB0을 명시했고, 원본·이전 결과·기존 엔진·Unity는 보존했다. alpha 변경578487px, nonzero alpha 중 투명 변경73742px를 `preparation.json`에 기록했다.
+- 계산은 원본 크기/scale1.0/region_colors64·3회/line_first/guard true. raw Sato ridge→Zhang skeleton→고정선→4연결 raw Oklab 영역→source-supported priority flood→영역의 실제 palette 표본. 수동 erase/이중 resize/local warp/새 highlight·tones는 적용하지 않았다. 기존 과학 패키지는 sandbox 읽기가 막혀 있었으며 승인된 읽기로 사용, 설치·수정하지 않았다.
+- `graph-v4.json`은 준비→고정 엔진 외부 실행 인계→저장 map 검사 3노드다. command.run의 최대60초를 늘리지 않고 엔진만 ai.work로 맡긴 뒤 실제 argv/PID/exit/time/log SHA를 반환했다. 전체 제작을 AI 성공 문장/파일 존재 검사로 바꾸지 않았다. 엔진 exit0·169.632초·stderr0bytes, 제작 재실행 없음.
+- 실제 `Uniform04/engine/pixel_native.png`는 1489×1056/RGB64. 팔레트 변경502696opaque px, 선 단계 추가 변경31064px. 후보선228852→source skeleton106138→고정선104358px, 영역9802개, 채움323392px. 고정선 좌표는 identity지만 원색102614px는 팔레트로 변경됐다. 같은 색 영역 가까운 표본46640px를 써서 색 경계/선 두께가 달라진다.
+- 미해결77854px(opaque505604px의15.40%)는 pre-line palette색을 유지했다. 충돌0, 지지 없는 영역 제안 거부28600은 엔진 metadata 수치다. map 기반 검사는 원본/엔진SHA, 동일W/H, 준비 alpha mask, 원본 관측RGB≤64, 고정선 좌표/색/영역 표본과 실제PNG, fallback 출처를 확인했다. 별도 읽기 전용 감사도 저장 결과를 독립 확인했다. 연결 영역2440개에는 최종2색 이상(최대26색)이 남으므로 영역별 단색 평탄화라고 설명하지 않는다. `comparison-crop-x4.png`는 같은128×128 crop nearest4배 미리보기이며 자산 재확대가 아니다.
+
+**기존 수정판 적용 시험은 완료했으나 깨끗한 정규 픽셀 복구는 미달**이다. 확대 결과에도 잔색과 불규칙 경계가 남으며, 코드 실행/64색/이진 alpha는 구조선 복원·native 저작 격자·의미 특징/미술 완성 증거가 아니다. 선을 추가 추측하거나 원본을 줄여 완료 처리하지 않았다. 다음 부족 단계는 유효 격자와 구조선 정의/복원으로 귀속한다. 8768의 V3 기본과 Unity 배치는 변경하지 않았고 Play 검사도 하지 않았다.

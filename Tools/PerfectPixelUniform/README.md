@@ -1,6 +1,36 @@
 # PerfectPixel Uniform — 전역 격자와 원본 해상도 색 정리
 
-## 현재 결정 V3 · 2026-10-03 — 해상도 유지와 색 번짐 정리
+## 현재 결정 V4 · 2026-10-03 — 기존 선 우선 수정판의 실제 적용 시험
+
+최신 정정: V3의 154249→136682색 변화는 너무 작으며 픽셀 경계 복구로 볼 수 없다. 사용자가 지정한 과거 **선 검출/고정 → 연결된 색 영역 채움** 구현을 `LocalOnly/PerfectPixelPalette_20260906`에서 찾았다. 원본 PNG는 raster이며, PNG라는 형식만으로 규칙적인 저작 픽셀 격자임을 뜻하지 않는다. V3의 약한 색 정리는 이 요구의 완료가 아니다.
+
+### 구현 전 요구·원인·연산 계약
+
+- 요청 결과: 같은 실제 시트에 과거 수정판을 적용한 새 PNG와 같은 좌표의 원본/결과 비교. 제작 원본·V1~V3·기존 엔진·Unity는 보존한다. 게임 통합·새 아트 생성·격자 추측 축소는 제외한다.
+- 원인 단계: V3의 작은 색오차 한도는 많은 색을 남겼으며 선/색 영역 재구성을 실행하지 않았다. `source_regions`만으로는 선 우선이 아니다. 기존 `line_normalization.mode=line_first`를 명시적으로 켠다. 이 구현도 숨은 원래 격자·없는 선·이상적인 벡터 모양을 자동 복구하는 알고리즘은 아니다.
+- 입력 적합성: 엔진은 uint8 RGBA의 이진 alpha만 받는다. 원본 alpha는 256단계이므로 **별도 복사본에서 alpha≥128→255, 미만→0**을 명시적으로 적용한다. 투명 RGB는 이 복사본에서만 0으로 한다. alpha 변화/삭제 수와 원본 SHA를 기록한다. 같은 크기에서 마스크만 바뀌며 가장자리 의미 보존은 보장하지 않는다.
+- 좌표: source/target 원점 좌상단, X오른쪽/Y아래, source px, 중심 `(x+.5,y+.5)`. `base_grid=[W,H]`, scale1.0으로 **1489×1056 유지**. 선 투영 `floor((x+.5)*targetW/sourceW)`은 이 시험에서 identity다. RGB 공간 연산으로 Jacobian이나 배율을 바꾸지 않는다. 별도4배 crop은 표시용이며 자산에 되먹이지 않는다.
+- 연산: raw Oklab L의 dark/bright Sato ridge → 반대편 색 대비/폭 필터 → Zhang skeleton → 동일 target 좌표에 선 고정 → 선 제외 4연결 raw Oklab 색영역 → source-supported priority flood(`fill_source_guard=true`) → 해당 영역의 실제 팔레트 RGB 표본으로 채움. 선 기본값 폭≤6source px, contrast≥.045, response≥.006, component≥3을 그대로 사용한다. 팔레트는 원본 관측 RGB 중 Oklab 64대표색/3회이며 디더링과 RGB 블렌딩이 없다. 과거 캐릭터의 수동 erase 좌표·별도 명암·highlight는 사용하지 않는다.
+- 실패 귀속: 입력/alpha는 준비 단계, ridge·선 충돌/열린 선은 선 단계, 영역 연결/지지 없는 채움은 영역 단계, 색 소실은 64색 선택 단계다. 기존 엔진은 충돌/미해결 셀에 pre-line palette 색을 남기므로 그 수를 분리 공개한다. 이를 선 복구 성공으로 계산하지 않는다.
+- 마지막 자동 검사: 원본/코드 SHA 불변, 같은 W/H, 이진 alpha와 준비 마스크 동일, opaque RGB≤64 및 실제 원본색 포함, 고정선/소유영역/표본 좌표와 실제 저장 PNG의 일치, 충돌/미해결 fallback 수, 색 변화와 선 처리의 추가 변화 수. 사라진 의미적 특징·디자인·native 저작 격자는 검사 통과로 주장하지 않는다.
+
+근거는 기존 코드와 [Sato ridge](https://scikit-image.org/docs/stable/api/skimage.filters.html#skimage.filters.sato), [skeletonization](https://scikit-image.org/docs/stable/auto_examples/edges/plot_skeleton.html), [marker watershed](https://scikit-image.org/docs/stable/auto_examples/segmentation/plot_watershed.html)다. guard=true는 기존 구현의 source-supported priority flood이며 표준 watershed와 구분한다. 실제 입력에서 유효한 선을 검출하는지는 결과를 보고 판정해야 한다. 기존 의존성은 읽기 권한을 확인해 사용하며 새 패키지/플러그인은 설치하지 않는다.
+
+`graph-v4.json`의 준비 → 기존 엔진 계산 → 저장 결과 검사만 실행한다. `trial_line_first.py prepare/validate`는 경로·전처리·출처·미리보기만 담당하며 기존 선/팔레트/영역 알고리즘을 다시 만들지 않는다. V4는 독립 시험이며 8768의 V3 기본 모드를 몰래 바꾸지 않는다.
+
+### 실제 결과와 현재 판정
+
+`docs/artifacts/building37/Uniform04/engine/pixel_native.png`는 **1489×1056, opaque RGB64**다. 기존 CLI를 새 패키지 없이 1회 실행했고 169.632초/exit0, stderr0bytes다. 기존 WorkLoop의 command.run은 최대60초라 엔진만 고정 명령을 외부 실행 인계(`ai.work`)로 호출했다. 준비·저장결과 판정은 별도 일반 계산이다. `execution.json`은 실제 argv/PID/exit/시간/로그 SHA이며 AI의 성공 문장이 아니다. 그래프3노드와 마지막 저장결과 검사는 완료했지만, 그 판정은 아래 기술 범위다.
+
+팔레트 단계502696opaque px 변경, 선 우선 단계31064px **추가** 변경. source 후보선228852px→source skeleton106138px→target 고정선104358px, raw 색 연결 영역9802개, 채움323392px(그중 같은 영역 가까운 표본46640px). 고정선의 **좌표**는 identity이며 102614px의 원색은64색 팔레트로 바뀌었다. 후보선을 skeleton으로 줄이면서 주변을 다른 색 영역 표본으로 채우므로 캔버스/투영은 유지돼도 색 경계·선 두께가 불변이라는 뜻은 아니다.
+
+미해결77854px(시험 opaque505604px의15.40%)는 팔레트 처리된 pre-line 색을 그대로 남겼고 충돌0이다. guard가 거부한 영역 제안28600개는 엔진 metadata 수치이며 개별 제안 지도가 없어 독립 재산정하지 않았다. fallback을 복구 성공에 포함하지 않는다. source alpha128 복사본에서 alpha578487px가 변했고 기존 nonzero-alpha73742px가 투명해졌다. 최종 alpha는 **준비된 복사본**과 동일하며 원본 alpha 보존이 아니다. 전체RGB비교154249→64는 전처리/팔레트/선 단계를 합친 수치다.
+
+실제 map 검사로 원본/엔진 SHA불변, W/H동일, 명시 alpha128 mask, 관측 원본RGB≤64, 고정선/영역 표본의 최종 색 일치, fallback 귀속을 확인했다(`validation.json`). 별도 읽기 전용 감사도 같은 저장 결과를 확인했으며 재생성하지 않았다. 연결 영역2440개에는 최종2색 이상(최대26색)이 남아, 영역별 단색 평탄화가 아님을 추가 확인했다. `comparison-crop-x4.png`는 원본과 결과의 같은128×128영역을 nearest4배로 표시한 미리보기다.
+
+**현재 판정: 기존 수정판 적용 시험은 완료, 깨끗한 정규 픽셀 복구는 미달.** 확대 비교에 잔색 반점/불규칙 경계가 남는다. 이 코드는 Sato검출·선 가늘게 고정·연결 색 영역 표본화이며 이상적인 직선/곡선 복원·자동 저작 격자 검출·영역 전체 단색 채움이 아니다. 모든 색 경계를 직선화하거나64색을 더 줄이는 후처리를 완료 해결책으로 추가하지 않는다. 다음 제작의 부족 단계는 palette수보다 **유효 격자와 구조선의 정의/복원**이며, 그 근거 없는 임의 축소는 계속 금지한다. V3웹/Unity에는 이 시험을 통합하지 않았다.
+
+## V3 설계·증거 — 보존 기록
 
 최신 요구: V2는 실제 생성형 시트에 결과를 주지 못했고, 확대할수록 주변의 여러 색·미세 명암이 더러워 보인다. **무손실 반복 제거와 색 잡음 정리는 다른 연산**이다. V2의 byte equality를 색 정리의 통과 조건으로 쓴 요구 해석을 수정한다. 원본·과거 출력·Unity를 보존하며 원본 크기에서 색만 정리하는 별도 경로를 웹 기본 모드로 제공한다. 정규 격자 복원을 성공했다고 바꿔 말하지 않는다.
 

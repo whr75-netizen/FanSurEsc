@@ -1,0 +1,43 @@
+{
+  "source": "binary-alpha-source.png",
+  "base_grid": [
+    1489,
+    1056
+  ],
+  "scale": "1.0",
+  "preview_zoom": 1,
+  "features": {
+    "region_colors": {
+      "enabled": true,
+      "scope": {
+        "kind": "all"
+      },
+      "options": {
+        "colors": 64,
+        "iterations": 3
+      }
+    },
+    "cell_sampling": {
+      "enabled": true,
+      "scope": {
+        "kind": "all"
+      },
+      "options": {
+        "method": "source_regions",
+        "coverage": 0.5,
+        "color_edge_threshold": 0.08
+      }
+    },
+    "line_normalization": {
+      "enabled": true,
+      "scope": {
+        "kind": "all"
+      },
+      "options": {
+        "mode": "line_first",
+        "fill_source_guard": true
+      }
+    }
+  },
+  "notes": "Legacy line-first trial at source resolution, not automatic authored-grid recovery. Explicit alpha128 and 64-colour representative palette. Original and engine unchanged."
+}

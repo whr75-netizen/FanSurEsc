@@ -1,0 +1,24 @@
+{
+  "input": "docs\\artifacts\\building37\\Legacy11\\native-4.png",
+  "partial_alpha_pixels": 578487,
+  "visible_alpha_levels": 255,
+  "visible_RGB_count": 98,
+  "visible_RGBA_count": 5756,
+  "compositing": "linear sRGB, opaque background, round to 8-bit output",
+  "composited_black_RGB_count": 2789,
+  "composited_white_RGB_count": 3665,
+  "input_png_sha256": "557b41c4f62ec26c7d42f6333eddbd458f64c516269ebafdd3317649f68b0d63",
+  "size": [
+    1489,
+    1056
+  ],
+  "assumption": "RGB byte values treated as sRGB; alpha is linear coverage.",
+  "formula": "linear_out = alpha*linear_foreground + (1-alpha)*opaque_background; sRGB encode then numpy.rint to 8-bit RGB",
+  "unity_capture": false,
+  "png_modified": false,
+  "date": "2026-10-04",
+  "numpy": "2.3.5",
+  "pillow": "12.3.0",
+  "reproduction_code": "alpha_observation.py",
+  "reproduction_code_sha256": "c10e50e542942c92e47865da6cfb5808a0766abc021274173af57fbfb6b8e177"
+}

@@ -1,0 +1,85 @@
+{
+  "scope": "Representative two-sample technical experiment only",
+  "fullSceneCompleted": false,
+  "artApprovalClaimed": false,
+  "unverified": [
+    "All 26 scene bindings",
+    "Wall and character occlusion",
+    "Exterior roof visibility",
+    "Design quality"
+  ],
+  "exit_code": 2,
+  "failures": [
+    {
+      "code": "ROOF_OVERFLOW",
+      "stage": "geometry",
+      "detail": {
+        "id": "detail_clock",
+        "measured": 187,
+        "expected": 0
+      }
+    }
+  ],
+  "evidence": {
+    "input_sha256": {
+      "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building36\\R3\\report.json": "7ac355b7ab8cf1df7c6eff0db207ba5ce7b5544f8df51172324df87267133669",
+      "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building36\\slices\\manifest.json": "20998ffc34b973db35e9aef44c2c778d2037b5be9161f80ea261ee00751570ed",
+      "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building36\\unity-import.json": "5418146404c417cf37616adbcbaf22c5d31b44090583ab30e34a085d09b1fb1f",
+      "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building36\\native-final\\native.png": "b9dee0e6eb7f3183f70543e81c1c2467ca7b068781641134022417dc514711ea"
+    },
+    "captures": {
+      "gameCapture": {
+        "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building36\\R3\\play-interior.png",
+        "sha256": "aef3708daf4c260cdf8d851021637df12e3942aa839a86869c381c09f83ef48d",
+        "dimensions_px": [
+          1114,
+          857
+        ]
+      },
+      "overviewCapture": {
+        "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building36\\R3\\overview-interior.png",
+        "sha256": "13f7c97ac79a6970bbe45eef45edecef52abe9337710bdda6d8e21eaaf30de39",
+        "dimensions_px": [
+          2560,
+          1600
+        ]
+      }
+    },
+    "observed_samples": [
+      {
+        "id": "stock_shelf",
+        "textureAsset": "Assets/Art/NativeSheet36/stock_shelf.png",
+        "width": 56,
+        "height": 62,
+        "opaqueTexels": 1852,
+        "roofOverflowTexels": 0,
+        "screenU": [
+          6.0001220703125,
+          0.0
+        ],
+        "screenV": [
+          0.0001220703125,
+          6.0
+        ],
+        "maxLocalY": 2.49033260345459
+      },
+      {
+        "id": "detail_clock",
+        "textureAsset": "Assets/Art/NativeSheet36/detail_clock.png",
+        "width": 47,
+        "height": 43,
+        "opaqueTexels": 419,
+        "roofOverflowTexels": 187,
+        "screenU": [
+          5.9998626708984375,
+          -0.0001220703125
+        ],
+        "screenV": [
+          -0.00026702880859375,
+          5.9998779296875
+        ],
+        "maxLocalY": 3.1593310832977295
+      }
+    ]
+  }
+}

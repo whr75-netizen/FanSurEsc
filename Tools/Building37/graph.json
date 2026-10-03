@@ -1,0 +1,226 @@
+{
+  "goal": "이미 실행된 원본 PerfectPixel 전체 자동 정규화의 실제 receipt/해시를 재사용하고, 측정한 투명 gutter의 정수 crop과 전체 RGBA 파티션을 검사한다. 재료 하위 그래프이며 Unity 통합·미술 완료가 아니다.",
+  "entry": "normalize",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "exact_common_material_partition",
+      "source": "사용자: 한 시트 전체를 원본 PerfectPixel로 자동 정규화한 뒤 잘라 그대로 사용; Building37 물리 입력 계약",
+      "text": "18종과 모든 잔여 RGBA를 측정한 정수 gutter로만 분리한다. 정규화 재실행·개별 resize/warp/alpha 수정 금지.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "normalize",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "scope": "Reuse the already-executed original whole-sheet normalization. Do not rerun PerfectPixel.",
+            "source_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+            "actual_receipt_sha256": "18ce2a1983e63c39a774e602707c22049cb092792a5fc117b2694a1019cf461a",
+            "actual_native_sha256": "0101a9e42f97778a11b9371af0d0dd3f298581f5bb008f6b6528b62fda1695c7",
+            "original_producer": "Tools/Building33/native_normalize.py"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building37/slice_sheet.py",
+          "--check-normalization-only"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/Building37/slice_sheet.py",
+          "Tools/Building33/native_normalize.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/native-final/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/native-final/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/input-contract.json",
+        "file:C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/perfect_pixel.py",
+        "file:C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/__init__.py"
+      ],
+      "writes": [],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "normalize.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "slice"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "normalize.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "slice",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "ref": "normalize"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building37/slice_sheet.py",
+          "--reuse-existing"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/Building37/slice_sheet.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/native-final/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/native-final/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/input-contract.json",
+        "file:C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/perfect_pixel.py",
+        "file:C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/__init__.py"
+      ],
+      "writes": [
+        "art:B37-integer-crops",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/slices/manifest.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "slice.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "slice.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "ref": "slice"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building37/slice_sheet.py",
+          "--verify-only",
+          "--reuse-existing"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/Building37/slice_sheet.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/native-final/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/native-final/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/input-contract.json",
+        "file:C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/perfect_pixel.py",
+        "file:C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/__init__.py",
+        "art:B37-integer-crops",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/slices/manifest.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/technical-validation.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

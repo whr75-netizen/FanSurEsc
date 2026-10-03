@@ -1,0 +1,3879 @@
+{
+  "schema": "building37-generation-physical-input/1",
+  "scope": "18 shared assets from preserved 20+6 placement; generation input only. No PNG transformation, Unity changes or scene completion.",
+  "canvas_logical_texels": [
+    384,
+    272
+  ],
+  "pixels_per_metre": 32,
+  "world_view": {
+    "pitch_degrees": 30,
+    "building_local_yaw_degrees": 45,
+    "world_yaw_degrees": 350,
+    "building_root_yaw_degrees": 305,
+    "coordinate_system": "building local XYZ metres, Y up, fixed orthographic basis",
+    "R": [
+      0.707106781,
+      0,
+      -0.707106781
+    ],
+    "U": [
+      0.353553391,
+      0.866025404,
+      0.353553391
+    ],
+    "screen_xy_formula": "x=32*dot(R,pointXYZ); y=-32*dot(U,pointXYZ); source y down",
+    "projection_shape_rule": "A physical cuboid/rectangle envelope is a scale guide. Organic/circular visible alpha may occupy only part of it."
+  },
+  "source_document_sha256": {
+    "docs/artifacts/building35/placement.json": "e399122f0fb847ff9447ceb85b8aaa2774bfe7b9423411f7265fdc4c928cadd4",
+    "docs/artifacts/building35/details/placement.json": "95a48cbcff229247caac02ddf36ea15ce14204df239f45b9e03017cbef290129",
+    "docs/artifacts/building36/R4/support-plan.json": "2246a20f1857ec2432086e0107b3077dadf2c01c973659e6abc7dd46596fa1d7",
+    "Tools/Building35/metric-catalog.json": "ceda8140f9c06bf6b0b74d03ab3e4d09018a697a5dea82c7a114a91ca39a6611",
+    "docs/artifacts/building35/details/detail_clock/spec.json": "c2b55ab0350fe9b4237c46b244f45dc44a94bd94ba9ba68627ffd20f6fbad098",
+    "docs/artifacts/building35/details/detail_poster/spec.json": "399a3be664430c81fb728794016f836e45b289d45d39ed543690d586c7ec13c2",
+    "docs/artifacts/building35/details/detail_broom/spec.json": "a1acdb0f45bcec97ca27197c1d82637bf33c1718bc62bae46e870ae66b274946"
+},
+  "source_documents": [
+    "docs/artifacts/building35/placement.json",
+    "docs/artifacts/building35/details/placement.json",
+    "docs/artifacts/building36/R4/support-plan.json",
+    "Tools/Building35/metric-catalog.json",
+    "docs/artifacts/building35/details/detail_clock/spec.json",
+    "docs/artifacts/building35/details/detail_poster/spec.json",
+    "docs/artifacts/building35/details/detail_broom/spec.json"
+  ],
+  "packing": {
+    "algorithm": "stable asset order, row shelf packing, 8 texels on each side; integer floor(min)/ceil(max) projection envelopes",
+    "used_height_px": 261,
+    "guide_asset": "Tools/Building37/guide.svg",
+    "guide_is_generation_conditioning_not_output_resize": true
+  },
+  "generation_contract": {
+    "single_sheet": true,
+    "shared_pixel_size_palette_lighting": true,
+    "transparent_background": true,
+    "no_labels_borders_grids_in_generated_art": true,
+    "no_individual_asset_resize_or_warp": true,
+    "match_physical_role_and_relative_dimensions": true,
+    "style_references": [
+      "Grave Seasons",
+      "Whisper of the House",
+      "Graveyard Keeper 2",
+      "딤레이스 (영문명 미확정)",
+      "Unpacking"
+    ],
+    "native_feature_rule": "Use minimum pixels for legible characteristics. Preserve this global PPU instead of giving every asset a similarly-sized crop."
+  },
+  "normalization_contract": {
+    "algorithm": "Unmodified original PerfectPixel auto grid detection, once for the whole sheet",
+    "forced_output_size": null,
+    "crop_rule": "Detected canonical integer-grid rectangles only. Sheet regions must be mapped to the detected grid before cropping.",
+    "forbidden": [
+      "Per-object normalization",
+      "Arbitrary target-size resampling",
+      "Nonuniform scale",
+      "UV homography to fit generated color",
+      "Downsample then upscale",
+      "Using guide cells as forced PNG resize destinations"
+    ],
+    "input_rejection": "If automatic grid/physical envelopes/region separation do not support the shared source contract, preserve the failed input and report its specific cause; do not resize to make it pass."
+  },
+  "limitations": [
+    "Collider dimensions are physical placement constraints, not proof of the previous image silhouette.",
+    "Clock/poster/broom metrics are prior declared geometry with no current colliders; they are traced explicitly.",
+    "Ledger physical thickness at 32 PPU is below one source texel; the exact thickness silhouette cannot be guaranteed.",
+    "Existing counter supported-object positions may include the older visual support-height offset. Existing origins are recorded; this file does not alter them.",
+    "Generation conditioning does not mathematically guarantee camera/scale/geometry. The generated sheet must supply an appropriate common input before integration.",
+    "No hidden 3D surfaces or volumetric depth are recovered from this guide."
+  ],
+  "assets": [
+    {
+      "id": "empty_counter",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[checkout].before.collider",
+      "size_xyz_m": [
+        2.4,
+        1,
+        0.8
+      ],
+      "footprint_xz_m": [
+        2.4,
+        0.8
+      ],
+      "physical_height_m": 1,
+      "physical_top_support_local_y_m": 1,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "-Z",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "checkout",
+          "role": "customer checkout body",
+          "support": "floor",
+          "facing": "-Z",
+          "position_local_m": [
+            -2.950000048,
+            0.015,
+            -1.350000024
+          ],
+          "collider_state": {
+            "size": [
+              2.4000000953674316,
+              1,
+              0.800000011920929
+            ],
+            "center": [
+              0,
+              0.5,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -1.13137085,
+          -1.431710829,
+          1.13137085,
+          0.565685425
+        ],
+        "bbox_native_px_continuous": [
+          -36.203867197,
+          -45.814746519,
+          36.203867197,
+          18.101933598
+        ],
+        "integer_envelope_px": [
+          -37,
+          -46,
+          37,
+          19
+        ],
+        "integer_envelope_size_px": [
+          74,
+          65
+        ],
+        "corners_local_xyz_m": [
+          [
+            -1.2,
+            0,
+            -0.4
+          ],
+          [
+            1.2,
+            0,
+            -0.4
+          ],
+          [
+            1.2,
+            0,
+            0.4
+          ],
+          [
+            -1.2,
+            0,
+            0.4
+          ],
+          [
+            -1.2,
+            1,
+            -0.4
+          ],
+          [
+            1.2,
+            1,
+            -0.4
+          ],
+          [
+            1.2,
+            1,
+            0.4
+          ],
+          [
+            -1.2,
+            1,
+            0.4
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -18.101933598,
+            18.101933598
+          ],
+          [
+            36.203867197,
+            -9.050966799
+          ],
+          [
+            18.101933598,
+            -18.101933598
+          ],
+          [
+            -36.203867197,
+            9.050966799
+          ],
+          [
+            -18.101933598,
+            -9.610879323
+          ],
+          [
+            36.203867197,
+            -36.76377972
+          ],
+          [
+            18.101933598,
+            -45.814746519
+          ],
+          [
+            -36.203867197,
+            -18.661846122
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          37,
+          46
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          0,
+          0,
+          90,
+          81
+        ],
+        "art_envelope_xyxy_exclusive": [
+          8,
+          8,
+          82,
+          73
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            26.898066402,
+            72.101933598
+          ],
+          [
+            81.203867197,
+            44.949033201
+          ],
+          [
+            63.101933598,
+            35.898066402
+          ],
+          [
+            8.796132803,
+            63.050966799
+          ],
+          [
+            26.898066402,
+            44.389120677
+          ],
+          [
+            81.203867197,
+            17.23622028
+          ],
+          [
+            63.101933598,
+            8.185253481
+          ],
+          [
+            8.796132803,
+            35.338153878
+          ]
+        ]
+      }
+    },
+    {
+      "id": "left_shelf",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[right_sales_shelf].before.collider",
+      "size_xyz_m": [
+        0.6,
+        1.8,
+        2.4
+      ],
+      "footprint_xz_m": [
+        0.6,
+        2.4
+      ],
+      "physical_height_m": 1.8,
+      "physical_top_support_local_y_m": 1.8,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "-X",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "right_sales_shelf",
+          "role": "wall pantry merchandise; existing painted goods are part of this one instance",
+          "support": "floor",
+          "facing": "-X",
+          "position_local_m": [
+            4.550000191,
+            0.015,
+            -0.5
+          ],
+          "collider_state": {
+            "size": [
+              0.6000000238418579,
+              1.7999999523162842,
+              2.4000000953674316
+            ],
+            "center": [
+              0,
+              0.8999999761581421,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -1.060660172,
+          -2.089175813,
+          1.060660172,
+          0.530330086
+        ],
+        "bbox_native_px_continuous": [
+          -33.941125497,
+          -66.853626006,
+          33.941125497,
+          16.970562748
+        ],
+        "integer_envelope_px": [
+          -34,
+          -67,
+          34,
+          17
+        ],
+        "integer_envelope_size_px": [
+          68,
+          84
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.3,
+            0,
+            -1.2
+          ],
+          [
+            0.3,
+            0,
+            -1.2
+          ],
+          [
+            0.3,
+            0,
+            1.2
+          ],
+          [
+            -0.3,
+            0,
+            1.2
+          ],
+          [
+            -0.3,
+            1.8,
+            -1.2
+          ],
+          [
+            0.3,
+            1.8,
+            -1.2
+          ],
+          [
+            0.3,
+            1.8,
+            1.2
+          ],
+          [
+            -0.3,
+            1.8,
+            1.2
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            20.364675298,
+            16.970562748
+          ],
+          [
+            33.941125497,
+            10.182337649
+          ],
+          [
+            -20.364675298,
+            -16.970562748
+          ],
+          [
+            -33.941125497,
+            -10.182337649
+          ],
+          [
+            20.364675298,
+            -32.91250051
+          ],
+          [
+            33.941125497,
+            -39.700725609
+          ],
+          [
+            -20.364675298,
+            -66.853626006
+          ],
+          [
+            -33.941125497,
+            -60.065400907
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          34,
+          67
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          90,
+          0,
+          84,
+          100
+        ],
+        "art_envelope_xyxy_exclusive": [
+          98,
+          8,
+          166,
+          92
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            152.364675298,
+            91.970562748
+          ],
+          [
+            165.941125497,
+            85.182337649
+          ],
+          [
+            111.635324702,
+            58.029437252
+          ],
+          [
+            98.058874503,
+            64.817662351
+          ],
+          [
+            152.364675298,
+            42.08749949
+          ],
+          [
+            165.941125497,
+            35.299274391
+          ],
+          [
+            111.635324702,
+            8.146373994
+          ],
+          [
+            98.058874503,
+            14.934599093
+          ]
+        ]
+      }
+    },
+    {
+      "id": "rear_shelf",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[rear_shelf].before.collider",
+      "size_xyz_m": [
+        2.9,
+        1.8,
+        0.6
+      ],
+      "footprint_xz_m": [
+        2.9,
+        0.6
+      ],
+      "physical_height_m": 1.8,
+      "physical_top_support_local_y_m": 1.8,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "-Z",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "rear_shelf",
+          "role": "rear pantry merchandise; painted goods not additional instances",
+          "support": "floor",
+          "facing": "-Z",
+          "position_local_m": [
+            -1.049999952,
+            0.015,
+            3.625
+          ],
+          "collider_state": {
+            "size": [
+              2.9000000953674316,
+              1.7999999523162842,
+              0.6000000238418579
+            ],
+            "center": [
+              0,
+              0.8999999761581421,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -1.237436867,
+          -2.17756416,
+          1.237436867,
+          0.618718434
+        ],
+        "bbox_native_px_continuous": [
+          -39.597979746,
+          -69.682053131,
+          39.597979746,
+          19.798989873
+        ],
+        "integer_envelope_px": [
+          -40,
+          -70,
+          40,
+          20
+        ],
+        "integer_envelope_size_px": [
+          80,
+          90
+        ],
+        "corners_local_xyz_m": [
+          [
+            -1.45,
+            0,
+            -0.3
+          ],
+          [
+            1.45,
+            0,
+            -0.3
+          ],
+          [
+            1.45,
+            0,
+            0.3
+          ],
+          [
+            -1.45,
+            0,
+            0.3
+          ],
+          [
+            -1.45,
+            1.8,
+            -0.3
+          ],
+          [
+            1.45,
+            1.8,
+            -0.3
+          ],
+          [
+            1.45,
+            1.8,
+            0.3
+          ],
+          [
+            -1.45,
+            1.8,
+            0.3
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -26.021529548,
+            19.798989873
+          ],
+          [
+            39.597979746,
+            -13.010764774
+          ],
+          [
+            26.021529548,
+            -19.798989873
+          ],
+          [
+            -39.597979746,
+            13.010764774
+          ],
+          [
+            -26.021529548,
+            -30.084073385
+          ],
+          [
+            39.597979746,
+            -62.893828032
+          ],
+          [
+            26.021529548,
+            -69.682053131
+          ],
+          [
+            -39.597979746,
+            -36.872298484
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          40,
+          70
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          174,
+          0,
+          96,
+          106
+        ],
+        "art_envelope_xyxy_exclusive": [
+          182,
+          8,
+          262,
+          98
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            195.978470452,
+            97.798989873
+          ],
+          [
+            261.597979746,
+            64.989235226
+          ],
+          [
+            248.021529548,
+            58.201010127
+          ],
+          [
+            182.402020254,
+            91.010764774
+          ],
+          [
+            195.978470452,
+            47.915926615
+          ],
+          [
+            261.597979746,
+            15.106171968
+          ],
+          [
+            248.021529548,
+            8.317946869
+          ],
+          [
+            182.402020254,
+            41.127701516
+          ]
+        ]
+      }
+    },
+    {
+      "id": "island_body_template",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[display_island].before.collider",
+      "size_xyz_m": [
+        1.6,
+        0.65,
+        1.2
+      ],
+      "footprint_xz_m": [
+        1.6,
+        1.2
+      ],
+      "physical_height_m": 0.65,
+      "physical_top_support_local_y_m": 0.65,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "-X",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "display_island",
+          "role": "low produce display body",
+          "support": "floor",
+          "facing": "-X",
+          "position_local_m": [
+            1.799999952,
+            0.015,
+            -2.099999905
+          ],
+          "collider_state": {
+            "size": [
+              1.600000023841858,
+              0.6499999761581421,
+              1.2000000476837158
+            ],
+            "center": [
+              0,
+              0.32499998807907104,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.989949494,
+          -1.057891259,
+          0.989949494,
+          0.494974747
+        ],
+        "bbox_native_px_continuous": [
+          -31.678383797,
+          -33.852520297,
+          31.678383797,
+          15.839191899
+        ],
+        "integer_envelope_px": [
+          -32,
+          -34,
+          32,
+          16
+        ],
+        "integer_envelope_size_px": [
+          64,
+          50
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.8,
+            0,
+            -0.6
+          ],
+          [
+            0.8,
+            0,
+            -0.6
+          ],
+          [
+            0.8,
+            0,
+            0.6
+          ],
+          [
+            -0.8,
+            0,
+            0.6
+          ],
+          [
+            -0.8,
+            0.65,
+            -0.6
+          ],
+          [
+            0.8,
+            0.65,
+            -0.6
+          ],
+          [
+            0.8,
+            0.65,
+            0.6
+          ],
+          [
+            -0.8,
+            0.65,
+            0.6
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -4.5254834,
+            15.839191899
+          ],
+          [
+            31.678383797,
+            -2.2627417
+          ],
+          [
+            4.5254834,
+            -15.839191899
+          ],
+          [
+            -31.678383797,
+            2.2627417
+          ],
+          [
+            -4.5254834,
+            -2.1741365
+          ],
+          [
+            31.678383797,
+            -20.276070099
+          ],
+          [
+            4.5254834,
+            -33.852520297
+          ],
+          [
+            -31.678383797,
+            -15.750586699
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          32,
+          34
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          270,
+          0,
+          80,
+          66
+        ],
+        "art_envelope_xyxy_exclusive": [
+          278,
+          8,
+          342,
+          58
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            305.4745166,
+            57.839191899
+          ],
+          [
+            341.678383797,
+            39.7372583
+          ],
+          [
+            314.5254834,
+            26.160808101
+          ],
+          [
+            278.321616203,
+            44.2627417
+          ],
+          [
+            305.4745166,
+            39.8258635
+          ],
+          [
+            341.678383797,
+            21.723929901
+          ],
+          [
+            314.5254834,
+            8.147479703
+          ],
+          [
+            278.321616203,
+            26.249413301
+          ]
+        ]
+      }
+    },
+    {
+      "id": "stock_shelf",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[stock_shelf].before.collider",
+      "size_xyz_m": [
+        2.45,
+        1.8,
+        0.6
+      ],
+      "footprint_xz_m": [
+        2.45,
+        0.6
+      ],
+      "physical_height_m": 1.8,
+      "physical_top_support_local_y_m": 1.8,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "-Z",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "stock_shelf",
+          "role": "staff backstock; painted cartons not additional instances",
+          "support": "floor",
+          "facing": "-Z",
+          "position_local_m": [
+            3.325000048,
+            0.015,
+            3.575000048
+          ],
+          "collider_state": {
+            "size": [
+              2.450000047683716,
+              1.7999999523162842,
+              0.6000000238418579
+            ],
+            "center": [
+              0,
+              0.8999999761581421,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -1.078337841,
+          -2.098014647,
+          1.078337841,
+          0.539168921
+        ],
+        "bbox_native_px_continuous": [
+          -34.506810922,
+          -67.136468719,
+          34.506810922,
+          17.253405461
+        ],
+        "integer_envelope_px": [
+          -35,
+          -68,
+          35,
+          18
+        ],
+        "integer_envelope_size_px": [
+          70,
+          86
+        ],
+        "corners_local_xyz_m": [
+          [
+            -1.225,
+            0,
+            -0.3
+          ],
+          [
+            1.225,
+            0,
+            -0.3
+          ],
+          [
+            1.225,
+            0,
+            0.3
+          ],
+          [
+            -1.225,
+            0,
+            0.3
+          ],
+          [
+            -1.225,
+            1.8,
+            -0.3
+          ],
+          [
+            1.225,
+            1.8,
+            -0.3
+          ],
+          [
+            1.225,
+            1.8,
+            0.3
+          ],
+          [
+            -1.225,
+            1.8,
+            0.3
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -20.930360723,
+            17.253405461
+          ],
+          [
+            34.506810922,
+            -10.465180362
+          ],
+          [
+            20.930360723,
+            -17.253405461
+          ],
+          [
+            -34.506810922,
+            10.465180362
+          ],
+          [
+            -20.930360723,
+            -32.629657797
+          ],
+          [
+            34.506810922,
+            -60.34824362
+          ],
+          [
+            20.930360723,
+            -67.136468719
+          ],
+          [
+            -34.506810922,
+            -39.417882896
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          35,
+          68
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          0,
+          106,
+          86,
+          102
+        ],
+        "art_envelope_xyxy_exclusive": [
+          8,
+          114,
+          78,
+          200
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            22.069639277,
+            199.253405461
+          ],
+          [
+            77.506810922,
+            171.534819638
+          ],
+          [
+            63.930360723,
+            164.746594539
+          ],
+          [
+            8.493189078,
+            192.465180362
+          ],
+          [
+            22.069639277,
+            149.370342203
+          ],
+          [
+            77.506810922,
+            121.65175638
+          ],
+          [
+            63.930360723,
+            114.863531281
+          ],
+          [
+            8.493189078,
+            142.582117104
+          ]
+        ]
+      }
+    },
+    {
+      "id": "fridge",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[retail_fridge].before.collider",
+      "size_xyz_m": [
+        1.55,
+        1.9,
+        0.65
+      ],
+      "footprint_xz_m": [
+        1.55,
+        0.65
+      ],
+      "physical_height_m": 1.9,
+      "physical_top_support_local_y_m": 1.9,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "-Z",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "retail_fridge",
+          "role": "rear-left chilled retail drinks",
+          "support": "floor",
+          "facing": "-Z",
+          "position_local_m": [
+            -3.799999952,
+            0.015,
+            3.599999905
+          ],
+          "collider_state": {
+            "size": [
+              1.5499999523162842,
+              1.899999976158142,
+              0.6499999761581421
+            ],
+            "center": [
+              0,
+              0.949999988079071,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.777817459,
+          -2.034356997,
+          0.777817459,
+          0.38890873
+        ],
+        "bbox_native_px_continuous": [
+          -24.890158698,
+          -65.099423899,
+          24.890158698,
+          12.445079349
+        ],
+        "integer_envelope_px": [
+          -25,
+          -66,
+          25,
+          13
+        ],
+        "integer_envelope_size_px": [
+          50,
+          79
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.775,
+            0,
+            -0.325
+          ],
+          [
+            0.775,
+            0,
+            -0.325
+          ],
+          [
+            0.775,
+            0,
+            0.325
+          ],
+          [
+            -0.775,
+            0,
+            0.325
+          ],
+          [
+            -0.775,
+            1.9,
+            -0.325
+          ],
+          [
+            0.775,
+            1.9,
+            -0.325
+          ],
+          [
+            0.775,
+            1.9,
+            0.325
+          ],
+          [
+            -0.775,
+            1.9,
+            0.325
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -10.182337649,
+            12.445079349
+          ],
+          [
+            24.890158698,
+            -5.091168825
+          ],
+          [
+            10.182337649,
+            -12.445079349
+          ],
+          [
+            -24.890158698,
+            5.091168825
+          ],
+          [
+            -10.182337649,
+            -40.209265201
+          ],
+          [
+            24.890158698,
+            -57.745513375
+          ],
+          [
+            10.182337649,
+            -65.099423899
+          ],
+          [
+            -24.890158698,
+            -47.563175726
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          25,
+          66
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          86,
+          106,
+          66,
+          95
+        ],
+        "art_envelope_xyxy_exclusive": [
+          94,
+          114,
+          144,
+          193
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            108.817662351,
+            192.445079349
+          ],
+          [
+            143.890158698,
+            174.908831175
+          ],
+          [
+            129.182337649,
+            167.554920651
+          ],
+          [
+            94.109841302,
+            185.091168825
+          ],
+          [
+            108.817662351,
+            139.790734799
+          ],
+          [
+            143.890158698,
+            122.254486625
+          ],
+          [
+            129.182337649,
+            114.900576101
+          ],
+          [
+            94.109841302,
+            132.436824274
+          ]
+        ]
+      }
+    },
+    {
+      "id": "utility_bench",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[utility_bench].before.collider",
+      "size_xyz_m": [
+        1.3,
+        0.9,
+        0.55
+      ],
+      "footprint_xz_m": [
+        1.3,
+        0.55
+      ],
+      "physical_height_m": 0.9,
+      "physical_top_support_local_y_m": 0.9,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "+Z",
+      "facing_note": "Declared +Z front points away from the 30/45 camera; generate its physically visible rear/side, do not turn the art to show hidden front.",
+      "instances": [
+        {
+          "id": "utility_bench",
+          "role": "staff preparation and cleaning work surface",
+          "support": "floor",
+          "facing": "+Z",
+          "position_local_m": [
+            2.75,
+            0.015,
+            1.299999952
+          ],
+          "collider_state": {
+            "size": [
+              1.2999999523162842,
+              0.8999999761581421,
+              0.550000011920929
+            ],
+            "center": [
+              0,
+              0.44999998807907104,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.654073773,
+          -1.10645975,
+          0.654073773,
+          0.327036886
+        ],
+        "bbox_native_px_continuous": [
+          -20.930360723,
+          -35.406711991,
+          20.930360723,
+          10.465180362
+        ],
+        "integer_envelope_px": [
+          -21,
+          -36,
+          21,
+          11
+        ],
+        "integer_envelope_size_px": [
+          42,
+          47
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.65,
+            0,
+            -0.275
+          ],
+          [
+            0.65,
+            0,
+            -0.275
+          ],
+          [
+            0.65,
+            0,
+            0.275
+          ],
+          [
+            -0.65,
+            0,
+            0.275
+          ],
+          [
+            -0.65,
+            0.9,
+            -0.275
+          ],
+          [
+            0.65,
+            0.9,
+            -0.275
+          ],
+          [
+            0.65,
+            0.9,
+            0.275
+          ],
+          [
+            -0.65,
+            0.9,
+            0.275
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -8.485281374,
+            10.465180362
+          ],
+          [
+            20.930360723,
+            -4.242640687
+          ],
+          [
+            8.485281374,
+            -10.465180362
+          ],
+          [
+            -20.930360723,
+            4.242640687
+          ],
+          [
+            -8.485281374,
+            -14.476351267
+          ],
+          [
+            20.930360723,
+            -29.184172316
+          ],
+          [
+            8.485281374,
+            -35.406711991
+          ],
+          [
+            -20.930360723,
+            -20.698890942
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          21,
+          36
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          152,
+          106,
+          58,
+          63
+        ],
+        "art_envelope_xyxy_exclusive": [
+          160,
+          114,
+          202,
+          161
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            172.514718626,
+            160.465180362
+          ],
+          [
+            201.930360723,
+            145.757359313
+          ],
+          [
+            189.485281374,
+            139.534819638
+          ],
+          [
+            160.069639277,
+            154.242640687
+          ],
+          [
+            172.514718626,
+            135.523648733
+          ],
+          [
+            201.930360723,
+            120.815827684
+          ],
+          [
+            189.485281374,
+            114.593288009
+          ],
+          [
+            160.069639277,
+            129.301109058
+          ]
+        ]
+      }
+    },
+    {
+      "id": "cleaning_cabinet",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[cleaning_cabinet].before.collider",
+      "size_xyz_m": [
+        0.6,
+        1.65,
+        0.6
+      ],
+      "footprint_xz_m": [
+        0.6,
+        0.6
+      ],
+      "physical_height_m": 1.65,
+      "physical_top_support_local_y_m": 1.65,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "+Z",
+      "facing_note": "Declared +Z front points away from the 30/45 camera; generate its physically visible rear/side, do not turn the art to show hidden front.",
+      "instances": [
+        {
+          "id": "cleaning_cabinet",
+          "role": "staff cleaning supplies storage",
+          "support": "floor",
+          "facing": "+Z",
+          "position_local_m": [
+            3.950000048,
+            0.015,
+            1.325000048
+          ],
+          "collider_state": {
+            "size": [
+              0.6000000238418579,
+              1.649999976158142,
+              0.6000000238418579
+            ],
+            "center": [
+              0,
+              0.824999988079071,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.424264069,
+          -1.641073951,
+          0.424264069,
+          0.212132034
+        ],
+        "bbox_native_px_continuous": [
+          -13.576450199,
+          -52.514366419,
+          13.576450199,
+          6.788225099
+        ],
+        "integer_envelope_px": [
+          -14,
+          -53,
+          14,
+          7
+        ],
+        "integer_envelope_size_px": [
+          28,
+          60
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.3,
+            0,
+            -0.3
+          ],
+          [
+            0.3,
+            0,
+            -0.3
+          ],
+          [
+            0.3,
+            0,
+            0.3
+          ],
+          [
+            -0.3,
+            0,
+            0.3
+          ],
+          [
+            -0.3,
+            1.65,
+            -0.3
+          ],
+          [
+            0.3,
+            1.65,
+            -0.3
+          ],
+          [
+            0.3,
+            1.65,
+            0.3
+          ],
+          [
+            -0.3,
+            1.65,
+            0.3
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            0,
+            6.788225099
+          ],
+          [
+            13.576450199,
+            0
+          ],
+          [
+            0,
+            -6.788225099
+          ],
+          [
+            -13.576450199,
+            0
+          ],
+          [
+            0,
+            -38.93791622
+          ],
+          [
+            13.576450199,
+            -45.72614132
+          ],
+          [
+            0,
+            -52.514366419
+          ],
+          [
+            -13.576450199,
+            -45.72614132
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          14,
+          53
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          210,
+          106,
+          44,
+          76
+        ],
+        "art_envelope_xyxy_exclusive": [
+          218,
+          114,
+          246,
+          174
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            232,
+            173.788225099
+          ],
+          [
+            245.576450199,
+            167
+          ],
+          [
+            232,
+            160.211774901
+          ],
+          [
+            218.423549801,
+            167
+          ],
+          [
+            232,
+            128.06208378
+          ],
+          [
+            245.576450199,
+            121.27385868
+          ],
+          [
+            232,
+            114.485633581
+          ],
+          [
+            218.423549801,
+            121.27385868
+          ]
+        ]
+      }
+    },
+    {
+      "id": "register",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[checkout_register].before.collider",
+      "size_xyz_m": [
+        0.55,
+        0.42,
+        0.4
+      ],
+      "footprint_xz_m": [
+        0.55,
+        0.4
+      ],
+      "physical_height_m": 0.42,
+      "physical_top_support_local_y_m": 0.42,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "-Z",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "checkout_register",
+          "role": "checkout payment device",
+          "support": "checkout",
+          "facing": "-Z",
+          "position_local_m": [
+            -3.299999952,
+            1.056636453,
+            -1.350000024
+          ],
+          "collider_state": {
+            "size": [
+              0.550000011920929,
+              0.41999998688697815,
+              0.4000000059604645
+            ],
+            "center": [
+              0,
+              0.20999999344348907,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": 0.015
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.335875721,
+          -0.53166853,
+          0.335875721,
+          0.167937861
+        ],
+        "bbox_native_px_continuous": [
+          -10.748023074,
+          -17.013392964,
+          10.748023074,
+          5.374011537
+        ],
+        "integer_envelope_px": [
+          -11,
+          -18,
+          11,
+          6
+        ],
+        "integer_envelope_size_px": [
+          22,
+          24
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.275,
+            0,
+            -0.2
+          ],
+          [
+            0.275,
+            0,
+            -0.2
+          ],
+          [
+            0.275,
+            0,
+            0.2
+          ],
+          [
+            -0.275,
+            0,
+            0.2
+          ],
+          [
+            -0.275,
+            0.42,
+            -0.2
+          ],
+          [
+            0.275,
+            0.42,
+            -0.2
+          ],
+          [
+            0.275,
+            0.42,
+            0.2
+          ],
+          [
+            -0.275,
+            0.42,
+            0.2
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -1.697056275,
+            5.374011537
+          ],
+          [
+            10.748023074,
+            -0.848528137
+          ],
+          [
+            1.697056275,
+            -5.374011537
+          ],
+          [
+            -10.748023074,
+            0.848528137
+          ],
+          [
+            -1.697056275,
+            -6.26536989
+          ],
+          [
+            10.748023074,
+            -12.487909564
+          ],
+          [
+            1.697056275,
+            -17.013392964
+          ],
+          [
+            -10.748023074,
+            -10.790853289
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          11,
+          18
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          254,
+          106,
+          38,
+          40
+        ],
+        "art_envelope_xyxy_exclusive": [
+          262,
+          114,
+          284,
+          138
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            271.302943725,
+            137.374011537
+          ],
+          [
+            283.748023074,
+            131.151471863
+          ],
+          [
+            274.697056275,
+            126.625988463
+          ],
+          [
+            262.251976926,
+            132.848528137
+          ],
+          [
+            271.302943725,
+            125.73463011
+          ],
+          [
+            283.748023074,
+            119.512090436
+          ],
+          [
+            274.697056275,
+            114.986607036
+          ],
+          [
+            262.251976926,
+            121.209146711
+          ]
+        ]
+      }
+    },
+    {
+      "id": "appletray",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[island_apple_tray_left].before.collider",
+      "size_xyz_m": [
+        0.4,
+        0.2,
+        0.3
+      ],
+      "footprint_xz_m": [
+        0.4,
+        0.3
+      ],
+      "physical_height_m": 0.2,
+      "physical_top_support_local_y_m": 0.2,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": "-X",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "island_apple_tray_left",
+          "role": "produce offer left tray",
+          "support": "display_island",
+          "facing": "-X",
+          "position_local_m": [
+            1.399999976,
+            0.693441629,
+            -2.099999905
+          ],
+          "collider_state": {
+            "size": [
+              0.4000000059604645,
+              0.20000000298023224,
+              0.30000001192092896
+            ],
+            "center": [
+              0,
+              0.10000000149011612,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": 0.015
+        },
+        {
+          "id": "island_apple_tray_right",
+          "role": "produce offer right tray",
+          "support": "display_island",
+          "facing": "-X",
+          "position_local_m": [
+            2.200000048,
+            0.693441629,
+            -2.099999905
+          ],
+          "collider_state": {
+            "size": [
+              0.4000000059604645,
+              0.20000000298023224,
+              0.30000001192092896
+            ],
+            "center": [
+              0,
+              0.10000000149011612,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": 0.015
+        },
+        {
+          "id": "checkout_produce",
+          "role": "small produce tray reusing the approved display asset",
+          "support": "checkout",
+          "facing": null,
+          "position_local_m": [
+            -2.150000095,
+            1.056636453,
+            -1.399999976
+          ],
+          "collider_state": {
+            "size": [
+              0.4000000059604645,
+              0.20000000298023224,
+              0.30000001192092896
+            ],
+            "center": [
+              0,
+              0.10000000149011612,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": 0.015
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.247487373,
+          -0.296948767,
+          0.247487373,
+          0.123743687
+        ],
+        "bbox_native_px_continuous": [
+          -7.919595949,
+          -9.502360559,
+          7.919595949,
+          3.959797975
+        ],
+        "integer_envelope_px": [
+          -8,
+          -10,
+          8,
+          4
+        ],
+        "integer_envelope_size_px": [
+          16,
+          14
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.2,
+            0,
+            -0.15
+          ],
+          [
+            0.2,
+            0,
+            -0.15
+          ],
+          [
+            0.2,
+            0,
+            0.15
+          ],
+          [
+            -0.2,
+            0,
+            0.15
+          ],
+          [
+            -0.2,
+            0.2,
+            -0.15
+          ],
+          [
+            0.2,
+            0.2,
+            -0.15
+          ],
+          [
+            0.2,
+            0.2,
+            0.15
+          ],
+          [
+            -0.2,
+            0.2,
+            0.15
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -1.13137085,
+            3.959797975
+          ],
+          [
+            7.919595949,
+            -0.565685425
+          ],
+          [
+            1.13137085,
+            -3.959797975
+          ],
+          [
+            -7.919595949,
+            0.565685425
+          ],
+          [
+            -1.13137085,
+            -1.58276461
+          ],
+          [
+            7.919595949,
+            -6.108248009
+          ],
+          [
+            1.13137085,
+            -9.502360559
+          ],
+          [
+            -7.919595949,
+            -4.976877159
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          8,
+          10
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          292,
+          106,
+          32,
+          30
+        ],
+        "art_envelope_xyxy_exclusive": [
+          300,
+          114,
+          316,
+          128
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            306.86862915,
+            127.959797975
+          ],
+          [
+            315.919595949,
+            123.434314575
+          ],
+          [
+            309.13137085,
+            120.040202025
+          ],
+          [
+            300.080404051,
+            124.565685425
+          ],
+          [
+            306.86862915,
+            122.41723539
+          ],
+          [
+            315.919595949,
+            117.891751991
+          ],
+          [
+            309.13137085,
+            114.497639441
+          ],
+          [
+            300.080404051,
+            119.023122841
+          ]
+        ]
+      }
+    },
+    {
+      "id": "plant",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[entry_plant].before.collider",
+      "size_xyz_m": [
+        0.6,
+        1,
+        0.6
+      ],
+      "footprint_xz_m": [
+        0.6,
+        0.6
+      ],
+      "physical_height_m": 1,
+      "physical_top_support_local_y_m": 1,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": null,
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "entry_plant",
+          "role": "single entrance-side potted plant outside entry circulation",
+          "support": "floor",
+          "facing": null,
+          "position_local_m": [
+            -4.550000191,
+            0.015,
+            -3.400000095
+          ],
+          "collider_state": {
+            "size": [
+              0.6000000238418579,
+              1,
+              0.6000000238418579
+            ],
+            "center": [
+              0,
+              0.5,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        },
+        {
+          "id": "staff_corner_plant",
+          "role": "left wall plant beyond staff counter end",
+          "support": "floor",
+          "facing": null,
+          "position_local_m": [
+            -4.550000191,
+            0.015,
+            -0.300000012
+          ],
+          "collider_state": {
+            "size": [
+              0.6000000238418579,
+              1,
+              0.6000000238418579
+            ],
+            "center": [
+              0,
+              0.5,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.424264069,
+          -1.078157438,
+          0.424264069,
+          0.212132034
+        ],
+        "bbox_native_px_continuous": [
+          -13.576450199,
+          -34.50103802,
+          13.576450199,
+          6.788225099
+        ],
+        "integer_envelope_px": [
+          -14,
+          -35,
+          14,
+          7
+        ],
+        "integer_envelope_size_px": [
+          28,
+          42
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.3,
+            0,
+            -0.3
+          ],
+          [
+            0.3,
+            0,
+            -0.3
+          ],
+          [
+            0.3,
+            0,
+            0.3
+          ],
+          [
+            -0.3,
+            0,
+            0.3
+          ],
+          [
+            -0.3,
+            1,
+            -0.3
+          ],
+          [
+            0.3,
+            1,
+            -0.3
+          ],
+          [
+            0.3,
+            1,
+            0.3
+          ],
+          [
+            -0.3,
+            1,
+            0.3
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            0,
+            6.788225099
+          ],
+          [
+            13.576450199,
+            0
+          ],
+          [
+            0,
+            -6.788225099
+          ],
+          [
+            -13.576450199,
+            0
+          ],
+          [
+            0,
+            -20.924587822
+          ],
+          [
+            13.576450199,
+            -27.712812921
+          ],
+          [
+            0,
+            -34.50103802
+          ],
+          [
+            -13.576450199,
+            -27.712812921
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          14,
+          35
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          324,
+          106,
+          44,
+          58
+        ],
+        "art_envelope_xyxy_exclusive": [
+          332,
+          114,
+          360,
+          156
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            346,
+            155.788225099
+          ],
+          [
+            359.576450199,
+            149
+          ],
+          [
+            346,
+            142.211774901
+          ],
+          [
+            332.423549801,
+            149
+          ],
+          [
+            346,
+            128.075412178
+          ],
+          [
+            359.576450199,
+            121.287187079
+          ],
+          [
+            346,
+            114.49896198
+          ],
+          [
+            332.423549801,
+            121.287187079
+          ]
+        ]
+      }
+    },
+    {
+      "id": "barrel",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[bulk_barrel_a].before.collider",
+      "size_xyz_m": [
+        0.46,
+        0.65,
+        0.46
+      ],
+      "footprint_xz_m": [
+        0.46,
+        0.46
+      ],
+      "physical_height_m": 0.65,
+      "physical_top_support_local_y_m": 0.65,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": null,
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "bulk_barrel_a",
+          "role": "sealed bulk-food container along left display wall; not waste bin",
+          "support": "floor",
+          "facing": null,
+          "position_local_m": [
+            -4.550000191,
+            0.015,
+            0.600000024
+          ],
+          "collider_state": {
+            "size": [
+              0.46000000834465027,
+              0.6499999761581421,
+              0.46000000834465027
+            ],
+            "center": [
+              0,
+              0.32499998807907104,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        },
+        {
+          "id": "bulk_barrel_b",
+          "role": "second sealed bulk-food container in same product group",
+          "support": "floor",
+          "facing": null,
+          "position_local_m": [
+            -4.550000191,
+            0.015,
+            1.200000048
+          ],
+          "collider_state": {
+            "size": [
+              0.46000000834465027,
+              0.6499999761581421,
+              0.46000000834465027
+            ],
+            "center": [
+              0,
+              0.32499998807907104,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.325269119,
+          -0.725551072,
+          0.325269119,
+          0.16263456
+        ],
+        "bbox_native_px_continuous": [
+          -10.408611819,
+          -23.217634308,
+          10.408611819,
+          5.20430591
+        ],
+        "integer_envelope_px": [
+          -11,
+          -24,
+          11,
+          6
+        ],
+        "integer_envelope_size_px": [
+          22,
+          30
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.23,
+            0,
+            -0.23
+          ],
+          [
+            0.23,
+            0,
+            -0.23
+          ],
+          [
+            0.23,
+            0,
+            0.23
+          ],
+          [
+            -0.23,
+            0,
+            0.23
+          ],
+          [
+            -0.23,
+            0.65,
+            -0.23
+          ],
+          [
+            0.23,
+            0.65,
+            -0.23
+          ],
+          [
+            0.23,
+            0.65,
+            0.23
+          ],
+          [
+            -0.23,
+            0.65,
+            0.23
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            0,
+            5.20430591
+          ],
+          [
+            10.408611819,
+            0
+          ],
+          [
+            0,
+            -5.20430591
+          ],
+          [
+            -10.408611819,
+            0
+          ],
+          [
+            0,
+            -12.809022489
+          ],
+          [
+            10.408611819,
+            -18.013328399
+          ],
+          [
+            0,
+            -23.217634308
+          ],
+          [
+            -10.408611819,
+            -18.013328399
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          11,
+          24
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          0,
+          208,
+          38,
+          46
+        ],
+        "art_envelope_xyxy_exclusive": [
+          8,
+          216,
+          30,
+          246
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            19,
+            245.20430591
+          ],
+          [
+            29.408611819,
+            240
+          ],
+          [
+            19,
+            234.79569409
+          ],
+          [
+            8.591388181,
+            240
+          ],
+          [
+            19,
+            227.190977511
+          ],
+          [
+            29.408611819,
+            221.986671601
+          ],
+          [
+            19,
+            216.782365692
+          ],
+          [
+            8.591388181,
+            221.986671601
+          ]
+        ]
+      }
+    },
+    {
+      "id": "crate",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[left_crate_base].before.collider",
+      "size_xyz_m": [
+        0.5,
+        0.35,
+        0.4
+      ],
+      "footprint_xz_m": [
+        0.5,
+        0.4
+      ],
+      "physical_height_m": 0.35,
+      "physical_top_support_local_y_m": 0.35,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": null,
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "left_crate_base",
+          "role": "packaged pantry stock at left-rear wall",
+          "support": "floor",
+          "facing": null,
+          "position_local_m": [
+            -4.550000191,
+            0.015,
+            1.899999976
+          ],
+          "collider_state": {
+            "size": [
+              0.5,
+              0.3499999940395355,
+              0.4000000059604645
+            ],
+            "center": [
+              0,
+              0.17499999701976776,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        },
+        {
+          "id": "left_crate_top",
+          "role": "second pantry stock crate stacked on matching base",
+          "support": "left_crate_base",
+          "facing": null,
+          "position_local_m": [
+            -4.550000191,
+            0.375856519,
+            1.899999976
+          ],
+          "collider_state": {
+            "size": [
+              0.5,
+              0.3499999940395355,
+              0.4000000059604645
+            ],
+            "center": [
+              0,
+              0.17499999701976776,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": 0.015
+        },
+        {
+          "id": "left_crate_single",
+          "role": "low refill crate before rear-left refrigeration bay",
+          "support": "floor",
+          "facing": null,
+          "position_local_m": [
+            -4.550000191,
+            0.015,
+            2.450000048
+          ],
+          "collider_state": {
+            "size": [
+              0.5,
+              0.3499999940395355,
+              0.4000000059604645
+            ],
+            "center": [
+              0,
+              0.17499999701976776,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        },
+        {
+          "id": "stock_crate_base",
+          "role": "staff reserve crate in stockroom back-left corner",
+          "support": "floor",
+          "facing": null,
+          "position_local_m": [
+            1.600000024,
+            0.015,
+            3.5
+          ],
+          "collider_state": {
+            "size": [
+              0.5,
+              0.3499999940395355,
+              0.4000000059604645
+            ],
+            "center": [
+              0,
+              0.17499999701976776,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        },
+        {
+          "id": "stock_crate_top",
+          "role": "second reserve crate stacked on stock corner base",
+          "support": "stock_crate_base",
+          "facing": null,
+          "position_local_m": [
+            1.600000024,
+            0.375856519,
+            3.5
+          ],
+          "collider_state": {
+            "size": [
+              0.5,
+              0.3499999940395355,
+              0.4000000059604645
+            ],
+            "center": [
+              0,
+              0.17499999701976776,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": 0.015
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.318198052,
+          -0.462207917,
+          0.318198052,
+          0.159099026
+        ],
+        "bbox_native_px_continuous": [
+          -10.182337649,
+          -14.790653347,
+          10.182337649,
+          5.091168825
+        ],
+        "integer_envelope_px": [
+          -11,
+          -15,
+          11,
+          6
+        ],
+        "integer_envelope_size_px": [
+          22,
+          21
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.25,
+            0,
+            -0.2
+          ],
+          [
+            0.25,
+            0,
+            -0.2
+          ],
+          [
+            0.25,
+            0,
+            0.2
+          ],
+          [
+            -0.25,
+            0,
+            0.2
+          ],
+          [
+            -0.25,
+            0.35,
+            -0.2
+          ],
+          [
+            0.25,
+            0.35,
+            -0.2
+          ],
+          [
+            0.25,
+            0.35,
+            0.2
+          ],
+          [
+            -0.25,
+            0.35,
+            0.2
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -1.13137085,
+            5.091168825
+          ],
+          [
+            10.182337649,
+            -0.565685425
+          ],
+          [
+            1.13137085,
+            -5.091168825
+          ],
+          [
+            -10.182337649,
+            0.565685425
+          ],
+          [
+            -1.13137085,
+            -4.608315698
+          ],
+          [
+            10.182337649,
+            -10.265169947
+          ],
+          [
+            1.13137085,
+            -14.790653347
+          ],
+          [
+            -10.182337649,
+            -9.133799097
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          11,
+          15
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          38,
+          208,
+          38,
+          37
+        ],
+        "art_envelope_xyxy_exclusive": [
+          46,
+          216,
+          68,
+          237
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            55.86862915,
+            236.091168825
+          ],
+          [
+            67.182337649,
+            230.434314575
+          ],
+          [
+            58.13137085,
+            225.908831175
+          ],
+          [
+            46.817662351,
+            231.565685425
+          ],
+          [
+            55.86862915,
+            226.391684302
+          ],
+          [
+            67.182337649,
+            220.734830053
+          ],
+          [
+            58.13137085,
+            216.209346653
+          ],
+          [
+            46.817662351,
+            221.866200903
+          ]
+        ]
+      }
+    },
+    {
+      "id": "detail_ledger",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[checkout_ledger].before.collider",
+      "size_xyz_m": [
+        0.38,
+        0.02,
+        0.220993
+      ],
+      "footprint_xz_m": [
+        0.38,
+        0.220993
+      ],
+      "physical_height_m": 0.02,
+      "physical_top_support_local_y_m": 0.02,
+      "plane_semantics": "horizontal tabletop XZ",
+      "facing": null,
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "checkout_ledger",
+          "role": "staff open ledger and pen on actual counter support",
+          "support": "checkout",
+          "facing": null,
+          "position_local_m": [
+            -2.75,
+            1.056636453,
+            -1.299999952
+          ],
+          "collider_state": {
+            "size": [
+              0.3799999952316284,
+              0.019999999552965164,
+              0.22099290788173676
+            ],
+            "center": [
+              0,
+              0.009999999776482582,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": 0.015
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.212483113,
+          -0.123562065,
+          0.212483113,
+          0.106241556
+        ],
+        "bbox_native_px_continuous": [
+          -6.799459612,
+          -3.953986064,
+          6.799459612,
+          3.399729806
+        ],
+        "integer_envelope_px": [
+          -7,
+          -4,
+          7,
+          4
+        ],
+        "integer_envelope_size_px": [
+          14,
+          8
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.19,
+            0,
+            -0.1104965
+          ],
+          [
+            0.19,
+            0,
+            -0.1104965
+          ],
+          [
+            0.19,
+            0,
+            0.1104965
+          ],
+          [
+            -0.19,
+            0,
+            0.1104965
+          ],
+          [
+            -0.19,
+            0.02,
+            -0.1104965
+          ],
+          [
+            0.19,
+            0.02,
+            -0.1104965
+          ],
+          [
+            0.19,
+            0.02,
+            0.1104965
+          ],
+          [
+            -0.19,
+            0.02,
+            0.1104965
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -1.798958847,
+            3.399729806
+          ],
+          [
+            6.799459612,
+            -0.899479424
+          ],
+          [
+            1.798958847,
+            -3.399729806
+          ],
+          [
+            -6.799459612,
+            0.899479424
+          ],
+          [
+            -1.798958847,
+            2.845473548
+          ],
+          [
+            6.799459612,
+            -1.453735682
+          ],
+          [
+            1.798958847,
+            -3.953986064
+          ],
+          [
+            -6.799459612,
+            0.345223165
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          7,
+          4
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          76,
+          208,
+          30,
+          24
+        ],
+        "art_envelope_xyxy_exclusive": [
+          84,
+          216,
+          98,
+          224
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            89.201041153,
+            223.399729806
+          ],
+          [
+            97.799459612,
+            219.100520576
+          ],
+          [
+            92.798958847,
+            216.600270194
+          ],
+          [
+            84.200540388,
+            220.899479424
+          ],
+          [
+            89.201041153,
+            222.845473548
+          ],
+          [
+            97.799459612,
+            218.546264318
+          ],
+          [
+            92.798958847,
+            216.046013936
+          ],
+          [
+            84.200540388,
+            220.345223165
+          ]
+        ]
+      }
+    },
+    {
+      "id": "detail_clock",
+      "dimension_status": "declared_geometry_metrics_no_collider",
+      "dimension_source": "docs/artifacts/building35/details/detail_clock/spec.json:physical_width_m/physical_height_or_depth_m + docs/artifacts/building35/details/placement.json:role thickness",
+      "size_xyz_m": [
+        0.34,
+        0.3316393442622951,
+        0.02
+      ],
+      "footprint_xz_m": [
+        0.34,
+        0.02
+      ],
+      "physical_height_m": 0.3316393442622951,
+      "physical_top_support_local_y_m": 0.3316393442622951,
+      "plane_semantics": "rear wall XY",
+      "facing": "-Z",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "wall_clock",
+          "role": "shop clock above gap between fridge and shelf; .02m frame",
+          "support": "wall_back",
+          "facing": null,
+          "position_local_m": [
+            -2.75,
+            2.034179926,
+            3.904999971
+          ],
+          "collider_state": null,
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.127279221,
+          -0.350847707,
+          0.127279221,
+          0.06363961
+        ],
+        "bbox_native_px_continuous": [
+          -4.07293506,
+          -11.227126635,
+          4.07293506,
+          2.03646753
+        ],
+        "integer_envelope_px": [
+          -5,
+          -12,
+          5,
+          3
+        ],
+        "integer_envelope_size_px": [
+          10,
+          15
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.17,
+            0,
+            -0.01
+          ],
+          [
+            0.17,
+            0,
+            -0.01
+          ],
+          [
+            0.17,
+            0,
+            0.01
+          ],
+          [
+            -0.17,
+            0,
+            0.01
+          ],
+          [
+            -0.17,
+            0.331639344,
+            -0.01
+          ],
+          [
+            0.17,
+            0.331639344,
+            -0.01
+          ],
+          [
+            0.17,
+            0.331639344,
+            0.01
+          ],
+          [
+            -0.17,
+            0.331639344,
+            0.01
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            -3.62038672,
+            2.03646753
+          ],
+          [
+            4.07293506,
+            -1.81019336
+          ],
+          [
+            3.62038672,
+            -2.03646753
+          ],
+          [
+            -4.07293506,
+            1.81019336
+          ],
+          [
+            -3.62038672,
+            -7.154191575
+          ],
+          [
+            4.07293506,
+            -11.000852465
+          ],
+          [
+            3.62038672,
+            -11.227126635
+          ],
+          [
+            -4.07293506,
+            -7.380465745
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          5,
+          12
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          106,
+          208,
+          26,
+          31
+        ],
+        "art_envelope_xyxy_exclusive": [
+          114,
+          216,
+          124,
+          231
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            115.37961328,
+            230.03646753
+          ],
+          [
+            123.07293506,
+            226.18980664
+          ],
+          [
+            122.62038672,
+            225.96353247
+          ],
+          [
+            114.92706494,
+            229.81019336
+          ],
+          [
+            115.37961328,
+            220.845808425
+          ],
+          [
+            123.07293506,
+            216.999147535
+          ],
+          [
+            122.62038672,
+            216.772873365
+          ],
+          [
+            114.92706494,
+            220.619534255
+          ]
+        ]
+      }
+    },
+    {
+      "id": "detail_poster",
+      "dimension_status": "declared_geometry_metrics_no_collider",
+      "dimension_source": "docs/artifacts/building35/details/detail_poster/spec.json:physical_width_m/physical_height_or_depth_m + docs/artifacts/building35/details/placement.json:role thickness",
+      "size_xyz_m": [
+        0.015,
+        0.48,
+        0.36
+      ],
+      "footprint_xz_m": [
+        0.015,
+        0.36
+      ],
+      "physical_height_m": 0.48,
+      "physical_top_support_local_y_m": 0.48,
+      "plane_semantics": "right wall ZY",
+      "facing": "-X",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "botanical_poster",
+          "role": "sales-wall botanical print; .015m frame",
+          "support": "wall_right",
+          "facing": null,
+          "position_local_m": [
+            4.909999847,
+            1.899999976,
+            -2.799999952
+          ],
+          "collider_state": null,
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.132582521,
+          -0.481983455,
+          0.132582521,
+          0.066291261
+        ],
+        "bbox_native_px_continuous": [
+          -4.242640687,
+          -15.423470546,
+          4.242640687,
+          2.121320344
+        ],
+        "integer_envelope_px": [
+          -5,
+          -16,
+          5,
+          3
+        ],
+        "integer_envelope_size_px": [
+          10,
+          19
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.0075,
+            0,
+            -0.18
+          ],
+          [
+            0.0075,
+            0,
+            -0.18
+          ],
+          [
+            0.0075,
+            0,
+            0.18
+          ],
+          [
+            -0.0075,
+            0,
+            0.18
+          ],
+          [
+            -0.0075,
+            0.48,
+            -0.18
+          ],
+          [
+            0.0075,
+            0.48,
+            -0.18
+          ],
+          [
+            0.0075,
+            0.48,
+            0.18
+          ],
+          [
+            -0.0075,
+            0.48,
+            0.18
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            3.903229432,
+            2.121320344
+          ],
+          [
+            4.242640687,
+            1.951614716
+          ],
+          [
+            -3.903229432,
+            -2.121320344
+          ],
+          [
+            -4.242640687,
+            -1.951614716
+          ],
+          [
+            3.903229432,
+            -11.180829859
+          ],
+          [
+            4.242640687,
+            -11.350535486
+          ],
+          [
+            -3.903229432,
+            -15.423470546
+          ],
+          [
+            -4.242640687,
+            -15.253764918
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          5,
+          16
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          132,
+          208,
+          26,
+          35
+        ],
+        "art_envelope_xyxy_exclusive": [
+          140,
+          216,
+          150,
+          235
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            148.903229432,
+            234.121320344
+          ],
+          [
+            149.242640687,
+            233.951614716
+          ],
+          [
+            141.096770568,
+            229.878679656
+          ],
+          [
+            140.757359313,
+            230.048385284
+          ],
+          [
+            148.903229432,
+            220.819170141
+          ],
+          [
+            149.242640687,
+            220.649464514
+          ],
+          [
+            141.096770568,
+            216.576529454
+          ],
+          [
+            140.757359313,
+            216.746235082
+          ]
+        ]
+      }
+    },
+    {
+      "id": "detail_broom",
+      "dimension_status": "declared_geometry_metrics_no_collider",
+      "dimension_source": "docs/artifacts/building35/details/detail_broom/spec.json:physical_width_m/physical_height_or_depth_m + docs/artifacts/building35/details/placement.json:role thickness",
+      "size_xyz_m": [
+        0.04,
+        1.2,
+        0.26
+      ],
+      "footprint_xz_m": [
+        0.04,
+        0.26
+      ],
+      "physical_height_m": 1.2,
+      "physical_top_support_local_y_m": 1.2,
+      "plane_semantics": "right wall ZY",
+      "facing": "-X",
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "staff_broom",
+          "role": "wall-stored staff broom; .04m mount/shaft stand-off",
+          "support": "wall_right",
+          "facing": null,
+          "position_local_m": [
+            4.885000229,
+            0.200000003,
+            2.299999952
+          ],
+          "collider_state": null,
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.106066017,
+          -1.092263493,
+          0.106066017,
+          0.053033009
+        ],
+        "bbox_native_px_continuous": [
+          -3.39411255,
+          -34.95243178,
+          3.39411255,
+          1.697056275
+        ],
+        "integer_envelope_px": [
+          -4,
+          -35,
+          4,
+          2
+        ],
+        "integer_envelope_size_px": [
+          8,
+          37
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.02,
+            0,
+            -0.13
+          ],
+          [
+            0.02,
+            0,
+            -0.13
+          ],
+          [
+            0.02,
+            0,
+            0.13
+          ],
+          [
+            -0.02,
+            0,
+            0.13
+          ],
+          [
+            -0.02,
+            1.2,
+            -0.13
+          ],
+          [
+            0.02,
+            1.2,
+            -0.13
+          ],
+          [
+            0.02,
+            1.2,
+            0.13
+          ],
+          [
+            -0.02,
+            1.2,
+            0.13
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            2.48901587,
+            1.697056275
+          ],
+          [
+            3.39411255,
+            1.244507935
+          ],
+          [
+            -2.48901587,
+            -1.697056275
+          ],
+          [
+            -3.39411255,
+            -1.244507935
+          ],
+          [
+            2.48901587,
+            -31.55831923
+          ],
+          [
+            3.39411255,
+            -32.01086757
+          ],
+          [
+            -2.48901587,
+            -34.95243178
+          ],
+          [
+            -3.39411255,
+            -34.49988344
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          4,
+          35
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          158,
+          208,
+          24,
+          53
+        ],
+        "art_envelope_xyxy_exclusive": [
+          166,
+          216,
+          174,
+          253
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            172.48901587,
+            252.697056275
+          ],
+          [
+            173.39411255,
+            252.244507935
+          ],
+          [
+            167.51098413,
+            249.302943725
+          ],
+          [
+            166.60588745,
+            249.755492065
+          ],
+          [
+            172.48901587,
+            219.44168077
+          ],
+          [
+            173.39411255,
+            218.98913243
+          ],
+          [
+            167.51098413,
+            216.04756822
+          ],
+          [
+            166.60588745,
+            216.50011656
+          ]
+        ]
+      }
+    },
+    {
+      "id": "detail_bin",
+      "dimension_status": "current_physical_dimensions",
+      "dimension_source": "docs/artifacts/building36/R4/support-plan.json:bindings[staff_bin].before.collider",
+      "size_xyz_m": [
+        0.3,
+        0.45,
+        0.3
+      ],
+      "footprint_xz_m": [
+        0.3,
+        0.3
+      ],
+      "physical_height_m": 0.45,
+      "physical_top_support_local_y_m": 0.45,
+      "plane_semantics": "fixed-view object volume envelope; sprite depth is not reconstructed volume",
+      "facing": null,
+      "facing_note": null,
+      "instances": [
+        {
+          "id": "staff_bin",
+          "role": "single small indoor pedal bin beside staff cleaning cabinet",
+          "support": "floor",
+          "facing": null,
+          "position_local_m": [
+            4.579999924,
+            0.015,
+            1.299999952
+          ],
+          "collider_state": {
+            "size": [
+              0.30000001192092896,
+              0.44999998807907104,
+              0.30000001192092896
+            ],
+            "center": [
+              0,
+              0.22499999403953552,
+              0
+            ],
+            "enabled": true,
+            "trigger": false
+          },
+          "support_origin_existing_y_m": null
+        }
+      ],
+      "projection": {
+        "bbox_screen_m": [
+          -0.212132034,
+          -0.495777449,
+          0.212132034,
+          0.106066017
+        ],
+        "bbox_native_px_continuous": [
+          -6.788225099,
+          -15.864878364,
+          6.788225099,
+          3.39411255
+        ],
+        "integer_envelope_px": [
+          -7,
+          -16,
+          7,
+          4
+        ],
+        "integer_envelope_size_px": [
+          14,
+          20
+        ],
+        "corners_local_xyz_m": [
+          [
+            -0.15,
+            0,
+            -0.15
+          ],
+          [
+            0.15,
+            0,
+            -0.15
+          ],
+          [
+            0.15,
+            0,
+            0.15
+          ],
+          [
+            -0.15,
+            0,
+            0.15
+          ],
+          [
+            -0.15,
+            0.45,
+            -0.15
+          ],
+          [
+            0.15,
+            0.45,
+            -0.15
+          ],
+          [
+            0.15,
+            0.45,
+            0.15
+          ],
+          [
+            -0.15,
+            0.45,
+            0.15
+          ]
+        ],
+        "corners_native_xy_px": [
+          [
+            0,
+            3.39411255
+          ],
+          [
+            6.788225099,
+            0
+          ],
+          [
+            0,
+            -3.39411255
+          ],
+          [
+            -6.788225099,
+            0
+          ],
+          [
+            0,
+            -9.076653265
+          ],
+          [
+            6.788225099,
+            -12.470765814
+          ],
+          [
+            0,
+            -15.864878364
+          ],
+          [
+            -6.788225099,
+            -12.470765814
+          ]
+        ],
+        "screen_height_includes_footprint_depth": true,
+        "base_center_anchor_in_envelope_px": [
+          7,
+          16
+        ]
+      },
+      "packing": {
+        "cell_xywh": [
+          182,
+          208,
+          30,
+          36
+        ],
+        "art_envelope_xyxy_exclusive": [
+          190,
+          216,
+          204,
+          236
+        ],
+        "padding_each_side_px": 8,
+        "projected_corners_sheet_xy_px": [
+          [
+            197,
+            235.39411255
+          ],
+          [
+            203.788225099,
+            232
+          ],
+          [
+            197,
+            228.60588745
+          ],
+          [
+            190.211774901,
+            232
+          ],
+          [
+            197,
+            222.923346735
+          ],
+          [
+            203.788225099,
+            219.529234186
+          ],
+          [
+            197,
+            216.135121636
+          ],
+          [
+            190.211774901,
+            219.529234186
+          ]
+        ]
+      }
+    }
+  ]
+}

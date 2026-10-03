@@ -1,0 +1,24 @@
+{
+  "goal": "정규화 원본을 보존하는 B36 대표2개 표시의 실제 기술 실험. 이 하위 그래프 완료는 기존26개 실내 교체 완료가 아니다.",
+  "entry": "experiment",
+  "max_steps": 2,
+  "requirements": [{"id":"representative_display_only","source":"사용자 원본규격 보존 요구와 playbook R3 입력 적합성 실험","text":"대표2개 실제 Play Mode 화면 texel 및 roof-height 관측","predicate":{"op":"eq","args":[{"ref":"gate.exit_code"},{"literal":0}]}}],
+  "nodes": [
+    {
+      "id":"experiment","algorithm":"ai.work","phase":"work","inputs":{},
+      "parameters":{"scope":"NativeSheetDisplay36를 통해 기존 Play씬의 대표 stock_shelf/wall_clock 메시·재질만 가역적으로 시험하고 실제 docs/artifacts/building36/R3/report.json을 반환한다. canonical/source/import PNG의 크기나 RGBA를 바꾸지 않는다. scene·prefab 저장, collider/layout/shell 변경, 개별 scale/rotation/겉보기 offset 금지. 이 범위는 대표2개 R3 기술실험이며 전체26개 통합이나 미술 합격을 선언하지 않는다."},
+      "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Editor/NativeSheetDisplay36.cs","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-import.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/slices/manifest.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/native.png","asset:B36-native-sprites"],
+      "writes":["runtime:GameMap1-B36-R3-probe","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R3/report.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R3/play-interior.png","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R3/overview-interior.png"],
+      "question":"실제 Editor 생산자가 기록한 대표2개 관측과 캡처의 readback_path를 반환한다. 관측 수치를 AI 추측으로 채우지 않는다.",
+      "output_schema":{"readback_path":{"type":"string"}},
+      "edges":[{"when":{"op":"known","args":[{"ref":"experiment.readback_path"}]},"to":"gate"}]
+    },
+    {
+      "id":"gate","algorithm":"command.run","phase":"validation","inputs":{"stdin":{"ref":"experiment"}},
+      "parameters":{"argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-B","Tools/Building36/R3-gate.py","--output","docs/artifacts/building36/R3/gate.json"],"cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game","timeout":30,"code_files":["Tools/Building36/R3-gate.py"]},
+      "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R3/report.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R3/play-interior.png","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R3/overview-interior.png","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-import.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/slices/manifest.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/native.png","asset:B36-native-sprites"],
+      "writes":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R3/gate.json"],
+      "edges":[{"when":{"op":"eq","args":[{"ref":"gate.exit_code"},{"literal":0}]},"to":"@complete"},{"when":{"op":"ne","args":[{"ref":"gate.exit_code"},{"literal":0}]},"to":"@blocked"}]
+    }
+  ]
+}

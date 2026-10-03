@@ -1,5 +1,33 @@
 # 공통 오브젝트 시트 — B35 원본 변형 교정
 
+## 최신 연결 결과 — 2026-10-03
+
+아래R3/R4와9월28일 인계는 당시 기록이다. B36원본의 가구/소품 상대크기 한계로 q2실험을 통합하지 않았고, 물리규격 가이드로 제작한 **B37전체시트 자동정규화→정수crop→26개 기존참조 연결**을 실제 적용했다. 최신결정·실행·화면·한계는 [B37 README](../Building37/README.md)와 진행§172를 따른다. B36정규화/import와 실패관측은 보존하며 다시생성하지 않는다.
+
+## R4 현재 설계 — 원본 색의 직접 표시
+
+R3 실제 Play 관측은 화면 texel6×6을 보존했지만 camera-facing 벽시계187texel이 지붕 높이를 넘고 선반이 벽에 잘렸다. 복원한 실패 기록은 `R3/report.json`, `R3/gate.json`이다. 같은 실험을 반복하거나 색을 다시 늘려 통과시키지 않는다.
+
+R4는 현재 건물의 수직 전면/부착 평면을 canonical 색의 표시 면으로 사용한다. crop 좌표(u오른쪽/v아래), 건물local metre, View30°/45°의 R/U/F 기저에서 `S=R*u/ppu-U*v/ppu`, `P=S+F*(dot(n,P0)-dot(n,S))/dot(n,F)`다. R·F=U·F=0이므로 화면 투영에서 가로·세로 texel은 동일 크기로 남는다. 원본 RGBA를 UV0..1로 읽으며 색 homography·resize·팔레트 보정은 없다. 이는 **2D 그림의 평면 표시이며 3D 부피 복원이 아니다.**
+
+P0는 현재 Collider 전면 또는 기존 벽 템플릿의 부착면이다. 바닥/지지물은 가시 alpha texel의 최소Y를 기존 부모 접점에, 벽 부착물은 최대Y를 기존 부착 상단에 맞추는 공통 규칙을 사용한다. 부위별 임의 offset/rotation/scale은 없다. 같은 asset은 shared mesh/material 하나를 사용한다. 기존 부모 pose·Collider·Player·Camera는 유지한다.
+
+초기 R4 `plan.json`은 q1을 골랐으므로 통합하지 않았다. facing이 없는 원통/식물/상자에 존재하지 않는 Collider 전면을 가정해 벽 쪽으로 밀어낸 것이 원인이었다. 이 그룹은 **기존 지지/발 접점 중심을 지나는 수직 표시 평면**을 사용한다. 이는 표면 없는 2D sprite의 공통 anchor 규칙이며 부위별 겉보기 보정이 아니다. 수정된 명세의 별도 관측은 `support-plan.json`이고, 후보 q마다 제한한 인스턴스를 기록한다. PNG·원본 PP 처리·원래 배치 데이터는 다시 계산하지 않는다.
+
+공통 표시 배율 q는 기존 카메라 grid127PPU에서 1..6 중 모든26개 가시 texel 모서리가 건물 bounds에 들어가는 최대 정수다. q6이 옛 변형된 계산대 폭에서 유래했다는 점을 수정한다. `ppu=127/q`는 **화면/월드 표시 밀도**이고 PNG 해상도를 변경하지 않는다. 다른 asset을 따로 축소하지 않는다. 시트 자체의 상대 실물 크기와 방향 문제를 이 계산으로 교정했다고 주장하지 않는다.
+
+실패 조건: 원본/import hash·RGBA 불일치, view와 평면 평행, q>=1에서도 실내 범위 초과, 비단위 Transform, 동일 asset의 표시 크기 차이, 실제 Play에서 벽/roof/Player 가림 결함. 계획 계산→대표 선반·벽시계 실제 렌더→통합→최종 게임 카메라/지붕 관측 순으로 진행한다. bounds 통과와 수학식만으로 가림이나 미술 합격을 대신하지 않는다. 기존 R3 기록과 아래 인수인계는 당시 상태이며 최신 결정은 이 절이다.
+
+## R3 현재 결정 — 2026-10-03 재개
+
+요구는 정규화 후 픽셀/비율 변형을 제거하는 것이다. 현재 씬의26개는 여전히 B35 projected 색을 사용한다. 이번 입력은 해시가 같은 B36 canonical/crop을 재사용하며 정규화를 반복하지 않는다. 색 전달은 `canonical RGBA → integer crop → exact Unity Texture → full UV quad → orthographic screen`으로 고정한다. 바꿀 단계는 projected 색/mesh binding이며 배치·Collider·Player 셸은 보존한다.
+
+먼저 기존 `IsometricAtlasSurface`의 depth-off와 camera-facing quad를 **실제 게임 카메라에서 가역 실험**한다. 수직 Y/cos30 후보는 q6 선반의 높이가 roof2.65m를 넘어 탈락했다. camera-facing 후보는 색 좌표를 보존하지만 뒤벽에 잘리는 반례가 있으므로 실패를 개별 offset이나 scale로 숨기지 않는다. 이 실험은 통합 승인이나 전체 목표 완료가 아니다.
+
+좌표는 crop 왼쪽 위(u오른쪽/v아래, texel), 건물local(X/Y/Z, metre, Unity basis), world→camera→screen(pixel) 순서다. View=`Quaternion.Euler(30,45,0)` local, R=View·X/U=View·Y. q6과 PPU127/6은 기존 import와 같은 **표시 단위**이며 PNG 규격이 아니다. 원본alpha bbox의 아래 중앙을 공통 표시 anchor로 정의하고 모든 자산에 같은 규칙을 적용한다(실제 부피/발 접점을 추론했다는 뜻은 아니다). `P=R*(u-anchorX)/ppu+U*(anchorY-v)/ppu`, 상위 scale1. 원본UV0..1과 같은 asset의 sharedmesh/material을 사용한다.
+
+검사: 원본RGBA/hash/크기 유지, 동일원본 인스턴스 비율/크기 동일, 화면축 정수배·교차항0(0.01screen px 이내, 기존snap허용오차), 실내 지붕 숨김/외부 지붕 가림, 벽 부착 픽셀 누락과 Player앞/뒤. 수학식·PNG존재·컴파일만으로 최종 통합 합격을 주장하지 않는다. 출처: [Unity WorldToScreenPoint](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Camera.WorldToScreenPoint.html), [원본 PerfectPixel](https://github.com/theamusing/perfectPixel), 기존 shader의 SnapNativeSprite/ResolveSurfaceDepth 실제 구현. Unity6000.5.9f1에서 EntityId 관측을 사용한다.
+
 ## 재개 인수인계 — 2026-09-28 사용자 요청으로 중단
 
 **먼저 읽을 결론:** 전체 시트 정규화·정수 crop·Unity 원본 import까지 완료했다. **게임에 보이는 기존 B35 26개 오브젝트는 아직 교체하지 않았다.** 새 재료가 Project에 있다는 사실을 실내 수정 완료로 해석하지 않는다. 사용량이 끝나간다는 사용자 요청에 따라 추가 구현을 멈추고 현재 결과를 보존했다.

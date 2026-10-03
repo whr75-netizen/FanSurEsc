@@ -1,0 +1,832 @@
+{
+  "schema": "building37-common-sheet-slices/1",
+  "mode": "slice",
+  "scope": "Whole-sheet upstream-auto normalization reuse and exact integer-crop materials only",
+  "native": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\native-final\\native.png",
+  "native_sha256": "0101a9e42f97778a11b9371af0d0dd3f298581f5bb008f6b6528b62fda1695c7",
+  "native_canvas_px": [
+    301,
+    211
+  ],
+  "normalization_receipt": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\native-final\\receipt.json",
+  "normalization_receipt_sha256": "18ce2a1983e63c39a774e602707c22049cb092792a5fc117b2694a1019cf461a",
+  "source": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building37\\Source\\sheet.png",
+  "source_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+  "input_contract_sha256": "4e0594270b049437128afaf9b6cdc1f82a71b2eb33ab00512cd4eb939d3c8aa0",
+  "grid": {
+    "expected_objects_per_row": [
+      4,
+      7,
+      7
+    ],
+    "native_y_edges": [
+      2,
+      84,
+      161,
+      201
+    ],
+    "row_partition": {
+      "available_internal_bands": [
+        [
+          80,
+          89
+        ],
+        [
+          157,
+          166
+        ]
+      ],
+      "selected_bands": [
+        [
+          80,
+          89
+        ],
+        [
+          157,
+          166
+        ]
+      ],
+      "hints_fraction_only": [
+        0.3897058823529412,
+        0.7647058823529411
+      ],
+      "selected_integer_lines": [
+        84,
+        161
+      ],
+      "normalized_hint_distance_squared": 7.333078655234335e-05,
+      "meaning": "Actual transparent bands choose cuts; guide proximity only resolves ordering"
+    },
+    "column_partitions_by_row": [
+      {
+        "available_internal_bands": [
+          [
+            67,
+            76
+          ],
+          [
+            134,
+            141
+          ],
+          [
+            206,
+            218
+          ]
+        ],
+        "selected_bands": [
+          [
+            67,
+            76
+          ],
+          [
+            134,
+            141
+          ],
+          [
+            206,
+            218
+          ]
+        ],
+        "hints_fraction_only": [
+          0.234375,
+          0.453125,
+          0.703125
+        ],
+        "selected_integer_lines": [
+          71,
+          137,
+          212
+        ],
+        "normalized_hint_distance_squared": 7.790317401297787e-06,
+        "meaning": "Actual transparent bands choose cuts; guide proximity only resolves ordering",
+        "measured_trailing_residual_start_x": 284
+      },
+      {
+        "available_internal_bands": [
+          [
+            59,
+            72
+          ],
+          [
+            114,
+            123
+          ],
+          [
+            164,
+            171
+          ],
+          [
+            195,
+            206
+          ],
+          [
+            222,
+            236
+          ],
+          [
+            251,
+            262
+          ]
+        ],
+        "selected_bands": [
+          [
+            59,
+            72
+          ],
+          [
+            114,
+            123
+          ],
+          [
+            164,
+            171
+          ],
+          [
+            195,
+            206
+          ],
+          [
+            222,
+            236
+          ],
+          [
+            251,
+            262
+          ]
+        ],
+        "hints_fraction_only": [
+          0.22395833333333334,
+          0.3958333333333333,
+          0.546875,
+          0.6614583333333334,
+          0.7604166666666666,
+          0.84375
+        ],
+        "selected_integer_lines": [
+          65,
+          118,
+          167,
+          200,
+          229,
+          256
+        ],
+        "normalized_hint_distance_squared": 0.0001964010904918571,
+        "meaning": "Actual transparent bands choose cuts; guide proximity only resolves ordering",
+        "measured_trailing_residual_start_x": 288
+      },
+      {
+        "available_internal_bands": [
+          [
+            23,
+            34
+          ],
+          [
+            54,
+            64
+          ],
+          [
+            81,
+            91
+          ],
+          [
+            100,
+            112
+          ],
+          [
+            122,
+            133
+          ],
+          [
+            142,
+            152
+          ]
+        ],
+        "selected_bands": [
+          [
+            23,
+            34
+          ],
+          [
+            54,
+            64
+          ],
+          [
+            81,
+            91
+          ],
+          [
+            100,
+            112
+          ],
+          [
+            122,
+            133
+          ],
+          [
+            142,
+            152
+          ]
+        ],
+        "hints_fraction_only": [
+          0.09895833333333333,
+          0.19791666666666666,
+          0.2760416666666667,
+          0.34375,
+          0.4114583333333333,
+          0.4739583333333333
+        ],
+        "selected_integer_lines": [
+          28,
+          59,
+          86,
+          106,
+          127,
+          147
+        ],
+        "normalized_hint_distance_squared": 0.0005204742823080186,
+        "meaning": "Actual transparent bands choose cuts; guide proximity only resolves ordering",
+        "measured_trailing_residual_start_x": 163
+      }
+    ]
+  },
+  "alpha_policy": "Analysis A>=26 only. Every source RGBA byte, including faint alpha/background residuals, is preserved.",
+  "observed_regions": {
+    "objects": 18,
+    "nonvisible_residual_regions": 5,
+    "rgba_identical_to_source_crop": null
+  },
+  "partition_area_px": 63511,
+  "sheet_area_px": 63511,
+  "cells": [
+    {
+      "id": "empty_counter",
+      "role": "object",
+      "row": 0,
+      "column": 0,
+      "integer_crop_xyxy_exclusive": [
+        0,
+        2,
+        71,
+        84
+      ],
+      "canvas_px": [
+        71,
+        82
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        5,
+        3,
+        67,
+        58
+      ],
+      "visible_alpha_pixels": 2202,
+      "original_nonzero_alpha_pixels": 2482,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\empty_counter.png",
+      "sha256": "d1bb5030a0ca34c95ef19ab7bfac150d682f33cad882be6f6a6efbe21fd57e68"
+    },
+    {
+      "id": "left_shelf",
+      "role": "object",
+      "row": 0,
+      "column": 1,
+      "integer_crop_xyxy_exclusive": [
+        71,
+        2,
+        137,
+        84
+      ],
+      "canvas_px": [
+        66,
+        82
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        5,
+        0,
+        63,
+        72
+      ],
+      "visible_alpha_pixels": 2987,
+      "original_nonzero_alpha_pixels": 3257,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\left_shelf.png",
+      "sha256": "59272014219cbf197e97ee33ae682e86078a70ea6c99bca6ae15681693517aeb"
+    },
+    {
+      "id": "rear_shelf",
+      "role": "object",
+      "row": 0,
+      "column": 2,
+      "integer_crop_xyxy_exclusive": [
+        137,
+        2,
+        212,
+        84
+      ],
+      "canvas_px": [
+        75,
+        82
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        4,
+        0,
+        69,
+        78
+      ],
+      "visible_alpha_pixels": 3463,
+      "original_nonzero_alpha_pixels": 3785,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\rear_shelf.png",
+      "sha256": "026c44e8aca1dca330214c5f842e70dbd1c1bd3f09e2c8e13984be84014743b6"
+    },
+    {
+      "id": "island_body_template",
+      "role": "object",
+      "row": 0,
+      "column": 3,
+      "integer_crop_xyxy_exclusive": [
+        212,
+        2,
+        284,
+        84
+      ],
+      "canvas_px": [
+        72,
+        82
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        6,
+        6,
+        71,
+        58
+      ],
+      "visible_alpha_pixels": 2240,
+      "original_nonzero_alpha_pixels": 2455,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\island_body_template.png",
+      "sha256": "ed9b5b25db31aa68f8ada78d6d754709a436353d072a6dc9495e4f7d6b99528b"
+    },
+    {
+      "id": "residual_row_00",
+      "role": "nonvisible_residual_region",
+      "integer_crop_xyxy_exclusive": [
+        284,
+        2,
+        301,
+        84
+      ],
+      "canvas_px": [
+        17,
+        82
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": null,
+      "visible_alpha_pixels": 0,
+      "original_nonzero_alpha_pixels": 1,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\residual_row_00.png",
+      "sha256": "11df03b6848a8180826d221292abef6cac8c62b2d8e097ac028e2c2c29d738f6"
+    },
+    {
+      "id": "stock_shelf",
+      "role": "object",
+      "row": 1,
+      "column": 0,
+      "integer_crop_xyxy_exclusive": [
+        0,
+        84,
+        65,
+        161
+      ],
+      "canvas_px": [
+        65,
+        77
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        5,
+        5,
+        59,
+        73
+      ],
+      "visible_alpha_pixels": 2730,
+      "original_nonzero_alpha_pixels": 3026,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\stock_shelf.png",
+      "sha256": "b5243dcd4e20b13fc25cc22e863375a9c1f7dfd1a56421b54806a8bfb9a2a9ab"
+    },
+    {
+      "id": "fridge",
+      "role": "object",
+      "row": 1,
+      "column": 1,
+      "integer_crop_xyxy_exclusive": [
+        65,
+        84,
+        118,
+        161
+      ],
+      "canvas_px": [
+        53,
+        77
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        7,
+        6,
+        49,
+        70
+      ],
+      "visible_alpha_pixels": 2242,
+      "original_nonzero_alpha_pixels": 2451,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\fridge.png",
+      "sha256": "74d726cd18c18889671ec5840ce2161b1d9f27aee3ab81d7832a4909b80d8e6c"
+    },
+    {
+      "id": "utility_bench",
+      "role": "object",
+      "row": 1,
+      "column": 2,
+      "integer_crop_xyxy_exclusive": [
+        118,
+        84,
+        167,
+        161
+      ],
+      "canvas_px": [
+        49,
+        77
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        5,
+        10,
+        46,
+        54
+      ],
+      "visible_alpha_pixels": 1198,
+      "original_nonzero_alpha_pixels": 1385,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\utility_bench.png",
+      "sha256": "c5f8cdbaa49da276ec538403eef10258becab2253d5bd9c8145e07d54e5d3294"
+    },
+    {
+      "id": "cleaning_cabinet",
+      "role": "object",
+      "row": 1,
+      "column": 3,
+      "integer_crop_xyxy_exclusive": [
+        167,
+        84,
+        200,
+        161
+      ],
+      "canvas_px": [
+        33,
+        77
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        4,
+        6,
+        28,
+        58
+      ],
+      "visible_alpha_pixels": 1094,
+      "original_nonzero_alpha_pixels": 1194,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\cleaning_cabinet.png",
+      "sha256": "f6912bc43fc3514180ad89bd1ac2de6bc5d77c7ca84990cf380880e08b83f77f"
+    },
+    {
+      "id": "register",
+      "role": "object",
+      "row": 1,
+      "column": 4,
+      "integer_crop_xyxy_exclusive": [
+        200,
+        84,
+        229,
+        161
+      ],
+      "canvas_px": [
+        29,
+        77
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        6,
+        15,
+        22,
+        32
+      ],
+      "visible_alpha_pixels": 199,
+      "original_nonzero_alpha_pixels": 253,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\register.png",
+      "sha256": "55516eefde44304ef9f8ea20f5bf65b41d64b443dfd191397424634c991069d8"
+    },
+    {
+      "id": "appletray",
+      "role": "object",
+      "row": 1,
+      "column": 5,
+      "integer_crop_xyxy_exclusive": [
+        229,
+        84,
+        256,
+        161
+      ],
+      "canvas_px": [
+        27,
+        77
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        7,
+        18,
+        22,
+        29
+      ],
+      "visible_alpha_pixels": 108,
+      "original_nonzero_alpha_pixels": 148,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\appletray.png",
+      "sha256": "9e7de96e063c167e517bd1f21a89f5e0388e8513065cef92427355a779483f8e"
+    },
+    {
+      "id": "plant",
+      "role": "object",
+      "row": 1,
+      "column": 6,
+      "integer_crop_xyxy_exclusive": [
+        256,
+        84,
+        288,
+        161
+      ],
+      "canvas_px": [
+        32,
+        77
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        6,
+        8,
+        31,
+        48
+      ],
+      "visible_alpha_pixels": 598,
+      "original_nonzero_alpha_pixels": 776,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\plant.png",
+      "sha256": "ffd93cc57fdba33937fa142da60a1f7df77330c3786408f5ef822f79f8014816"
+    },
+    {
+      "id": "residual_row_01",
+      "role": "nonvisible_residual_region",
+      "integer_crop_xyxy_exclusive": [
+        288,
+        84,
+        301,
+        161
+      ],
+      "canvas_px": [
+        13,
+        77
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": null,
+      "visible_alpha_pixels": 0,
+      "original_nonzero_alpha_pixels": 1,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\residual_row_01.png",
+      "sha256": "e7c184053bf237e13e701b54b8218347404229d4aad3c3a434d0cc30f6ed4815"
+    },
+    {
+      "id": "barrel",
+      "role": "object",
+      "row": 2,
+      "column": 0,
+      "integer_crop_xyxy_exclusive": [
+        0,
+        161,
+        28,
+        201
+      ],
+      "canvas_px": [
+        28,
+        40
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        6,
+        10,
+        23,
+        36
+      ],
+      "visible_alpha_pixels": 381,
+      "original_nonzero_alpha_pixels": 472,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\barrel.png",
+      "sha256": "93045a5ba2afaf2a6eb4e2893be8f6e20c89e74f3d7133256e2aefd775720a1c"
+    },
+    {
+      "id": "crate",
+      "role": "object",
+      "row": 2,
+      "column": 1,
+      "integer_crop_xyxy_exclusive": [
+        28,
+        161,
+        59,
+        201
+      ],
+      "canvas_px": [
+        31,
+        40
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        6,
+        11,
+        26,
+        30
+      ],
+      "visible_alpha_pixels": 279,
+      "original_nonzero_alpha_pixels": 356,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\crate.png",
+      "sha256": "445cf26b1fbee2e082edc96f55728bfaf500e9fa258c192eaa2db0119415c17d"
+    },
+    {
+      "id": "detail_ledger",
+      "role": "object",
+      "row": 2,
+      "column": 2,
+      "integer_crop_xyxy_exclusive": [
+        59,
+        161,
+        86,
+        201
+      ],
+      "canvas_px": [
+        27,
+        40
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        5,
+        10,
+        22,
+        22
+      ],
+      "visible_alpha_pixels": 118,
+      "original_nonzero_alpha_pixels": 170,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\detail_ledger.png",
+      "sha256": "063291fdb8f2468f277a3791eb2fd68d0cc7c8fecf998f361636c1f79e18761d"
+    },
+    {
+      "id": "detail_clock",
+      "role": "object",
+      "row": 2,
+      "column": 3,
+      "integer_crop_xyxy_exclusive": [
+        86,
+        161,
+        106,
+        201
+      ],
+      "canvas_px": [
+        20,
+        40
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        5,
+        11,
+        14,
+        22
+      ],
+      "visible_alpha_pixels": 81,
+      "original_nonzero_alpha_pixels": 123,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\detail_clock.png",
+      "sha256": "4fa5266cb2171b99aaa3939cec8ab67890dba5c7d7ad0a2f7fe41bc090f9f437"
+    },
+    {
+      "id": "detail_poster",
+      "role": "object",
+      "row": 2,
+      "column": 4,
+      "integer_crop_xyxy_exclusive": [
+        106,
+        161,
+        127,
+        201
+      ],
+      "canvas_px": [
+        21,
+        40
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        6,
+        9,
+        16,
+        31
+      ],
+      "visible_alpha_pixels": 172,
+      "original_nonzero_alpha_pixels": 242,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\detail_poster.png",
+      "sha256": "a460aad0ec7bc17bec72d921e0d4d49ad96d562d2efb7856e66893befd7af55b"
+    },
+    {
+      "id": "detail_broom",
+      "role": "object",
+      "row": 2,
+      "column": 5,
+      "integer_crop_xyxy_exclusive": [
+        127,
+        161,
+        147,
+        201
+      ],
+      "canvas_px": [
+        20,
+        40
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        6,
+        5,
+        15,
+        40
+      ],
+      "visible_alpha_pixels": 138,
+      "original_nonzero_alpha_pixels": 200,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\detail_broom.png",
+      "sha256": "dc1e156fb5fbcbe07989277b9bbd0ed6a2b01a6bc84dd585733ad9060cc49865"
+    },
+    {
+      "id": "detail_bin",
+      "role": "object",
+      "row": 2,
+      "column": 6,
+      "integer_crop_xyxy_exclusive": [
+        147,
+        161,
+        163,
+        201
+      ],
+      "canvas_px": [
+        16,
+        40
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": [
+        5,
+        11,
+        15,
+        28
+      ],
+      "visible_alpha_pixels": 158,
+      "original_nonzero_alpha_pixels": 194,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\detail_bin.png",
+      "sha256": "fc2ccb4ea8a75582f67becae6180442cc107a266bad3e9313655f34c3cf3990f"
+    },
+    {
+      "id": "residual_row_02",
+      "role": "nonvisible_residual_region",
+      "integer_crop_xyxy_exclusive": [
+        163,
+        161,
+        301,
+        201
+      ],
+      "canvas_px": [
+        138,
+        40
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": null,
+      "visible_alpha_pixels": 0,
+      "original_nonzero_alpha_pixels": 0,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\residual_row_02.png",
+      "sha256": "2180d0589cb71d16506c55d7cb7b3e99d38969c4cc954ea91f39f257fae12768"
+    },
+    {
+      "id": "residual_top",
+      "role": "nonvisible_residual_region",
+      "integer_crop_xyxy_exclusive": [
+        0,
+        0,
+        301,
+        2
+      ],
+      "canvas_px": [
+        301,
+        2
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": null,
+      "visible_alpha_pixels": 0,
+      "original_nonzero_alpha_pixels": 7,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\residual_top.png",
+      "sha256": "3906b37bab81d0b25bc21d1111e6aa7813d42b2de957d22db3af5f801ce532a4"
+    },
+    {
+      "id": "residual_bottom",
+      "role": "nonvisible_residual_region",
+      "integer_crop_xyxy_exclusive": [
+        0,
+        201,
+        301,
+        211
+      ],
+      "canvas_px": [
+        301,
+        10
+      ],
+      "visible_alpha_gt_0p1_bbox_in_crop": null,
+      "visible_alpha_pixels": 0,
+      "original_nonzero_alpha_pixels": 0,
+      "output": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\slices\\residual_bottom.png",
+      "sha256": "a1a63a85662339a1bac9d0e5dd3f6414c9f1726cdd4dcd909696212543569706"
+    }
+  ],
+  "failures": [],
+  "exit_code": 0,
+  "limitations": [
+    "Gutters and hints do not prove object semantic identity or design approval",
+    "No feature-preservation claim for upstream normalization",
+    "No physical-size or Unity integration completion"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "scope": "representative",
+  "exit_code": 0,
+  "failures": [],
+  "evidence": {
+    "support-plan.json": {
+      "sha256": "f5339381cd4e144ed35b7cd62b0aec99b1f3e0696aa1c724833306f72c2af0f5"
+    },
+    "experiment.json": {
+      "sha256": "01a6091b70041064f148b70bba667a346737a08034a560d3b8c44162266a4087"
+    },
+    "play-interior.png": {
+      "sha256": "35f904e5455d421c61b38b85f14ec181776ab873f44fafc6cc85991c092e3fe6",
+      "dimensions": [
+        1114,
+        857
+      ]
+    },
+    "overview-interior.png": {
+      "sha256": "7751e51a0b585a5989bacc45458b46a5ea563e161596db80c6f6cf048d601fb0",
+      "dimensions": [
+        2560,
+        1600
+      ]
+    },
+    "q": 4,
+    "canonical_sha256": "0101a9e42f97778a11b9371af0d0dd3f298581f5bb008f6b6528b62fda1695c7"
+  },
+  "artApprovalClaimed": false,
+  "unverified": [
+    "Handheld keyboard traversal (unchanged colliders reuse prior evidence)",
+    "Photorealistic/volumetric occlusion: representation is 2D planar art",
+    "Exact generated shape and semantic details versus physical diagram"
+  ],
+  "planHash": "f5339381cd4e144ed35b7cd62b0aec99b1f3e0696aa1c724833306f72c2af0f5",
+  "experimentHash": "01a6091b70041064f148b70bba667a346737a08034a560d3b8c44162266a4087",
+  "authoringCodeHash": "416180e89e176ce86cc900b09ed5156eef7eddef3703e3996c6b56c4cf89a6e5"
+}

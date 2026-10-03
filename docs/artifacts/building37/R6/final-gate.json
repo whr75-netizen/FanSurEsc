@@ -1,0 +1,55 @@
+{
+  "scope": "final",
+  "exit_code": 0,
+  "failures": [],
+  "evidence": {
+    "binding.json": {
+      "sha256": "7be5a4e17ad806f666e781b7d8315a7dd992814a2d43120e1cb13e415083bd40"
+    },
+    "live.json": {
+      "sha256": "c73528b2cbbe0dd1d4fae9ce3717237cf06808bbd4a8d91a433b371d2c84a012"
+    },
+    "live-outside.json": {
+      "sha256": "091745450ef2a9e1f71949079a03817f861377d9afd9dca7b2f949ababaf3a6a"
+    },
+    "final/play-interior.png": {
+      "sha256": "3dc3f46808d5af5bb20adb9aa38638f9aa14541cb55bfc2ad8c088922a3c1671",
+      "dimensions": [
+        1114,
+        857
+      ]
+    },
+    "final/play-exterior.png": {
+      "sha256": "ec4806d3ff5666a5a3208f61b67af7ef9cbc5664eed2f923332fec79e0dd2992",
+      "dimensions": [
+        1114,
+        857
+      ]
+    },
+    "final/overview-interior.png": {
+      "sha256": "3e856c54b3c333a5d3d7fe5f34ff647137fddc6f0d1d9dff68c3c4c0b84a8e42",
+      "dimensions": [
+        2560,
+        1600
+      ]
+    },
+    "final/overview-exterior.png": {
+      "sha256": "b05bb9b9d8b609731ce148df112b46d3441b0da12169914a9a1a564a763d0ea8",
+      "dimensions": [
+        2560,
+        1600
+      ]
+    },
+    "final/play-observation.json": {
+      "sha256": "d312363c5396173b1146a3baed2c8188b25593287dd2187248df84b76e6cd53c"
+    },
+    "q": 4,
+    "canonical_sha256": "0101a9e42f97778a11b9371af0d0dd3f298581f5bb008f6b6528b62fda1695c7"
+  },
+  "artApprovalClaimed": false,
+  "unverified": [
+    "Handheld keyboard traversal (unchanged colliders reuse prior evidence)",
+    "Photorealistic/volumetric occlusion: representation is 2D planar art",
+    "Exact generated shape and semantic details versus physical diagram"
+  ]
+}

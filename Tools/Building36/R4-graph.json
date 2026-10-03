@@ -1,0 +1,24 @@
+{
+  "goal": "R4 공통 support-plane 대표2개 실제 표시 실험. 원본 픽셀을 재표본화하지 않으며 하위 실험 성공은 기존26개 통합 완료가 아니다.",
+  "entry": "experiment",
+  "max_steps": 2,
+  "requirements": [{"id":"representative_ray_plane_display","source":"원본규격 보존 요구와 R3 clock-overflow 반례","text":"고정된 support-plan 공통q로 대표2개 실제 화면 texel 기저와 roof-height 검증","predicate":{"op":"eq","args":[{"ref":"gate.exit_code"},{"literal":0}]}}],
+  "nodes": [
+    {
+      "id":"experiment","algorithm":"ai.work","phase":"work","inputs":{},
+      "parameters":{"scope":"고정된 R4/support-plan.json의 공통q와 plane 규칙으로 NativeSheetDisplay36.ApplyPlanarSources의 experiment만 실행한다. 기존 stock_shelf/wall_clock mesh/material의 가역적 대표2개 시험을 실제 Play Mode에서 관측해 R4/experiment.json과 실제캡처를 반환한다. facing없는 객체는 기존foot/support anchor를 통과하는공통2.5D plane이며 실제3D부피복원이 아니다. PNG정규화/resize/warp, scene·prefab저장, collider/layout/shell변경, 개별눈대중offset/scale/rotation금지. 실제실험이있으면 재실행대신readback을 재사용한다."},
+      "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Editor/NativeSheetDisplay36.cs","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/support-plan.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-import.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/slices/manifest.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/native.png","asset:B36-native-sprites"],
+      "writes":["runtime:GameMap1-B36-R4-probe","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/experiment.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/play-interior.png","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/overview-interior.png"],
+      "question":"대표2개 actual Editor생산자의 experiment.json readback_path를 반환한다. Unity관측을 AI추정이나승인boolean으로만들지않는다.",
+      "output_schema":{"readback_path":{"type":"string"}},
+      "edges":[{"when":{"op":"known","args":[{"ref":"experiment.readback_path"}]},"to":"gate"}]
+    },
+    {
+      "id":"gate","algorithm":"command.run","phase":"validation","inputs":{"stdin":{"ref":"experiment"}},
+      "parameters":{"argv":["C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe","-B","Tools/Building36/R4-gate.py","--output","docs/artifacts/building36/R4/gate.json"],"cwd":"C:/Users/JG/Documents/work/Fantasy Survival Escape Game","timeout":30,"code_files":["Tools/Building36/R4-gate.py"]},
+      "reads":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Editor/NativeSheetDisplay36.cs","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/support-plan.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/experiment.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/play-interior.png","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/overview-interior.png","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/unity-import.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/slices/manifest.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/native-final/native.png","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building35/placement.json","file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building35/details/placement.json","asset:B36-native-sprites"],
+      "writes":["file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building36/R4/gate.json"],
+      "edges":[{"when":{"op":"eq","args":[{"ref":"gate.exit_code"},{"literal":0}]},"to":"@complete"},{"when":{"op":"ne","args":[{"ref":"gate.exit_code"},{"literal":0}]},"to":"@blocked"}]
+    }
+  ]
+}

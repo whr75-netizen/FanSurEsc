@@ -1,0 +1,174 @@
+{
+  "capture": "docs/artifacts/building37/R6/final/play-interior.png",
+  "capture_dimensions": [
+    1114,
+    857
+  ],
+  "scope": "Saved gameplay camera GPU readback; fixed left-shelf region only",
+  "region_xywh": [
+    40,
+    240,
+    180,
+    150
+  ],
+  "block_size": 4,
+  "equal_horizontal_neighbours": 0.7312104283054004,
+  "equal_vertical_neighbours": 0.7028337061894109,
+  "phases": [
+    {
+      "phase": [
+        0,
+        0
+      ],
+      "blocks": 1628,
+      "identical_rgb_blocks": 35,
+      "mean_max_channel_range": 30.32063882063882
+    },
+    {
+      "phase": [
+        1,
+        0
+      ],
+      "blocks": 1628,
+      "identical_rgb_blocks": 3,
+      "mean_max_channel_range": 56.45515970515971
+    },
+    {
+      "phase": [
+        2,
+        0
+      ],
+      "blocks": 1628,
+      "identical_rgb_blocks": 2,
+      "mean_max_channel_range": 56.19164619164619
+    },
+    {
+      "phase": [
+        3,
+        0
+      ],
+      "blocks": 1628,
+      "identical_rgb_blocks": 2,
+      "mean_max_channel_range": 56.38083538083538
+    },
+    {
+      "phase": [
+        0,
+        1
+      ],
+      "blocks": 1628,
+      "identical_rgb_blocks": 1428,
+      "mean_max_channel_range": 3.0343980343980346
+    },
+    {
+      "phase": [
+        1,
+        1
+      ],
+      "blocks": 1628,
+      "identical_rgb_blocks": 24,
+      "mean_max_channel_range": 33.12100737100737
+    },
+    {
+      "phase": [
+        2,
+        1
+      ],
+      "blocks": 1628,
+      "identical_rgb_blocks": 22,
+      "mean_max_channel_range": 32.7014742014742
+    },
+    {
+      "phase": [
+        3,
+        1
+      ],
+      "blocks": 1628,
+      "identical_rgb_blocks": 21,
+      "mean_max_channel_range": 33.18366093366093
+    },
+    {
+      "phase": [
+        0,
+        2
+      ],
+      "blocks": 1584,
+      "identical_rgb_blocks": 35,
+      "mean_max_channel_range": 29.969065656565657
+    },
+    {
+      "phase": [
+        1,
+        2
+      ],
+      "blocks": 1584,
+      "identical_rgb_blocks": 3,
+      "mean_max_channel_range": 56.19318181818182
+    },
+    {
+      "phase": [
+        2,
+        2
+      ],
+      "blocks": 1584,
+      "identical_rgb_blocks": 3,
+      "mean_max_channel_range": 55.94760101010101
+    },
+    {
+      "phase": [
+        3,
+        2
+      ],
+      "blocks": 1584,
+      "identical_rgb_blocks": 2,
+      "mean_max_channel_range": 56.17739898989899
+    },
+    {
+      "phase": [
+        0,
+        3
+      ],
+      "blocks": 1584,
+      "identical_rgb_blocks": 35,
+      "mean_max_channel_range": 30.28219696969697
+    },
+    {
+      "phase": [
+        1,
+        3
+      ],
+      "blocks": 1584,
+      "identical_rgb_blocks": 3,
+      "mean_max_channel_range": 56.26262626262626
+    },
+    {
+      "phase": [
+        2,
+        3
+      ],
+      "blocks": 1584,
+      "identical_rgb_blocks": 2,
+      "mean_max_channel_range": 55.895833333333336
+    },
+    {
+      "phase": [
+        3,
+        3
+      ],
+      "blocks": 1584,
+      "identical_rgb_blocks": 2,
+      "mean_max_channel_range": 56.27146464646464
+    }
+  ],
+  "best_phase": {
+    "phase": [
+      0,
+      1
+    ],
+    "blocks": 1628,
+    "identical_rgb_blocks": 1428,
+    "mean_max_channel_range": 3.0343980343980346
+  },
+  "interpretation": "A dominant four-pixel plateau is present after renderer passes. Remaining nonconstant blocks may include occlusion, background or lighting; this is not an all-pixel equality or artistic acceptance test.",
+  "source_cause_limit": "High-frequency source colour and original detector sample loss can still look soft. No palette reduction, PNG resize, new full-screen pixelation or light disabling is authorized by this observation."
+}

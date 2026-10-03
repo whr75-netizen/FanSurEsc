@@ -1,0 +1,1781 @@
+{
+  "count": 3,
+  "size": [
+    192,
+    170
+  ],
+  "inputs": {
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelUniform\\runs\\handle-boundary09-20261003\\outputs\\base\\geometry\\buffers3.npz": "c7622da869615a9a08ac992b1eea707def6eaf825e2a2d7204c78d268b145455",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelUniform\\runs\\handle-boundary09-20261003\\outputs\\base\\geometry\\raster3.json": "0f96f1061b39e38fcac2ae10a23652b167037c76f0afbb8a6053f341b6d48bea",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelUniform\\runs\\handle-boundary09-20261003\\outputs\\base\\material\\palette.json": "611b82ff08a7b86b7657fc519603fe10c5f78421ba79b16bed6a41f2f6a2ab91",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelUniform\\runs\\handle-boundary09-20261003\\outputs\\base\\material\\material.json": "8e440f1165e53ebb68287afab41a31d7c7a78ddf23a2548abfb43ad4067fc12a",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelUniform\\runs\\handle-boundary09-20261003\\outputs\\base\\material\\grain.npy": "3721b1d17e94c2e2cc8f1077aba1dfd86e13baa2c5b02bf666edd5461c39d197",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\recipe06.json": "24cbf339c0366fb182c5ba3c316b44b740ee4643961c3298cb5222c97a54a9d3",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\cabinet_pipeline06.py": "40d14410cd9a22f3c66f3b8a85ab208027eb8bd69731be2b162f324d72ca2ccb",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py": "ce269e196d5fcabfa34976e1c617867577f8f3c1ae7872d6db381db62ee1301f"
+  },
+  "outputs": {
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelUniform\\runs\\handle-boundary09-20261003\\outputs\\base\\pixels\\native3.png": "df4430d47f73174fd0ccb5cca0ca7f079695c5382f3c8fb3f4597a7aa281a8eb",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelUniform\\runs\\handle-boundary09-20261003\\outputs\\base\\pixels\\preview3-x4.png": "24ec35fa90796e25746839396606a0b662b730bc0efce70d4bedbd87c1e1a4ef",
+    "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\LocalOnly\\PerfectPixelUniform\\runs\\handle-boundary09-20261003\\outputs\\base\\pixels\\shading3.npz": "1df0db95ead001457edd4207f6c4b7463f890ca29e21178e328db6c2a2debbe5"
+  },
+  "grain_pixels": 1420,
+  "ink_pixels": 1714,
+  "band_pixels": {
+    "0": 5946,
+    "1": 7790,
+    "2": 2910
+  },
+  "edge_policies": [
+    {
+      "pair": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 197
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 12
+    },
+    {
+      "pair": [
+        [
+          1,
+          1
+        ],
+        [
+          12,
+          1
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 59
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          12,
+          1
+        ]
+      ],
+      "owner": [
+        12,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 16
+    },
+    {
+      "pair": [
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          5
+        ]
+      ],
+      "owner": [
+        12,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          13,
+          1
+        ],
+        [
+          13,
+          5
+        ]
+      ],
+      "owner": [
+        13,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ]
+      ],
+      "owner": [
+        13,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 24
+    },
+    {
+      "pair": [
+        [
+          11,
+          5
+        ],
+        [
+          12,
+          1
+        ]
+      ],
+      "owner": [
+        12,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 58
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          11,
+          5
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          11,
+          1
+        ],
+        [
+          11,
+          5
+        ]
+      ],
+      "owner": [
+        11,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 58
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          11,
+          1
+        ]
+      ],
+      "owner": [
+        11,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 47
+    },
+    {
+      "pair": [
+        [
+          1,
+          1
+        ],
+        [
+          8,
+          1
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 59
+    },
+    {
+      "pair": [
+        [
+          8,
+          1
+        ],
+        [
+          12,
+          2
+        ]
+      ],
+      "owner": [
+        8,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 12
+    },
+    {
+      "pair": [
+        [
+          12,
+          1
+        ],
+        [
+          12,
+          2
+        ]
+      ],
+      "owner": [
+        12,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 12
+    },
+    {
+      "pair": [
+        [
+          8,
+          1
+        ],
+        [
+          12,
+          0
+        ]
+      ],
+      "owner": [
+        8,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          12,
+          0
+        ],
+        [
+          12,
+          1
+        ]
+      ],
+      "owner": [
+        12,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          11,
+          1
+        ],
+        [
+          14,
+          5
+        ]
+      ],
+      "owner": [
+        11,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 6
+    },
+    {
+      "pair": [
+        [
+          14,
+          1
+        ],
+        [
+          14,
+          5
+        ]
+      ],
+      "owner": [
+        14,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 3
+    },
+    {
+      "pair": [
+        [
+          11,
+          1
+        ],
+        [
+          14,
+          1
+        ]
+      ],
+      "owner": [
+        14,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 12
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          8,
+          1
+        ]
+      ],
+      "owner": [
+        8,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 2
+    },
+    {
+      "pair": [
+        [
+          8,
+          1
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "owner": [
+        8,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          11,
+          2
+        ],
+        [
+          11,
+          5
+        ]
+      ],
+      "owner": [
+        11,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          11,
+          1
+        ],
+        [
+          14,
+          2
+        ]
+      ],
+      "owner": [
+        11,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 2
+    },
+    {
+      "pair": [
+        [
+          14,
+          1
+        ],
+        [
+          14,
+          2
+        ]
+      ],
+      "owner": [
+        14,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "owner": [
+        8,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          9,
+          1
+        ],
+        [
+          9,
+          5
+        ]
+      ],
+      "owner": [
+        9,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ]
+      ],
+      "owner": [
+        9,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 24
+    },
+    {
+      "pair": [
+        [
+          7,
+          5
+        ],
+        [
+          8,
+          1
+        ]
+      ],
+      "owner": [
+        8,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 58
+    },
+    {
+      "pair": [
+        [
+          7,
+          5
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "owner": [
+        11,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          11,
+          1
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "owner": [
+        11,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 41
+    },
+    {
+      "pair": [
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          5
+        ]
+      ],
+      "owner": [
+        7,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 58
+    },
+    {
+      "pair": [
+        [
+          7,
+          1
+        ],
+        [
+          11,
+          0
+        ]
+      ],
+      "owner": [
+        7,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 4
+    },
+    {
+      "pair": [
+        [
+          11,
+          0
+        ],
+        [
+          11,
+          1
+        ]
+      ],
+      "owner": [
+        11,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 4
+    },
+    {
+      "pair": [
+        [
+          7,
+          1
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "owner": [
+        7,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 40
+    },
+    {
+      "pair": [
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          5
+        ]
+      ],
+      "owner": [
+        1,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 65
+    },
+    {
+      "pair": [
+        [
+          1,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 59
+    },
+    {
+      "pair": [
+        [
+          4,
+          1
+        ],
+        [
+          8,
+          2
+        ]
+      ],
+      "owner": [
+        4,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          8,
+          1
+        ],
+        [
+          8,
+          2
+        ]
+      ],
+      "owner": [
+        8,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "owner": [
+        1,
+        2
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 60
+    },
+    {
+      "pair": [
+        [
+          4,
+          1
+        ],
+        [
+          8,
+          0
+        ]
+      ],
+      "owner": [
+        4,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 3
+    },
+    {
+      "pair": [
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          1
+        ]
+      ],
+      "owner": [
+        8,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 3
+    },
+    {
+      "pair": [
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          5
+        ]
+      ],
+      "owner": [
+        7,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 6
+    },
+    {
+      "pair": [
+        [
+          10,
+          1
+        ],
+        [
+          10,
+          5
+        ]
+      ],
+      "owner": [
+        10,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 3
+    },
+    {
+      "pair": [
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          1
+        ]
+      ],
+      "owner": [
+        10,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 12
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "owner": [
+        4,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 4
+    },
+    {
+      "pair": [
+        [
+          4,
+          1
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "owner": [
+        4,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          7,
+          2
+        ],
+        [
+          7,
+          5
+        ]
+      ],
+      "owner": [
+        7,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          7,
+          1
+        ],
+        [
+          10,
+          2
+        ]
+      ],
+      "owner": [
+        7,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 2
+    },
+    {
+      "pair": [
+        [
+          10,
+          1
+        ],
+        [
+          10,
+          2
+        ]
+      ],
+      "owner": [
+        10,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          7,
+          1
+        ]
+      ],
+      "owner": [
+        7,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 6
+    },
+    {
+      "pair": [
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "owner": [
+        4,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          5
+        ]
+      ],
+      "owner": [
+        5,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ]
+      ],
+      "owner": [
+        5,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 24
+    },
+    {
+      "pair": [
+        [
+          3,
+          5
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "owner": [
+        4,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 58
+    },
+    {
+      "pair": [
+        [
+          3,
+          5
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "owner": [
+        7,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "owner": [
+        7,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 34
+    },
+    {
+      "pair": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "owner": [
+        3,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 58
+    },
+    {
+      "pair": [
+        [
+          3,
+          1
+        ],
+        [
+          7,
+          0
+        ]
+      ],
+      "owner": [
+        3,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 8
+    },
+    {
+      "pair": [
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          1
+        ]
+      ],
+      "owner": [
+        7,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 8
+    },
+    {
+      "pair": [
+        [
+          3,
+          1
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "owner": [
+        3,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 33
+    },
+    {
+      "pair": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 2
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          1
+        ]
+      ],
+      "owner": [
+        4,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 15
+    },
+    {
+      "pair": [
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "owner": [
+        4,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 10
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 62
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "owner": [
+        3,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 7
+    },
+    {
+      "pair": [
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          5
+        ]
+      ],
+      "owner": [
+        3,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 6
+    },
+    {
+      "pair": [
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          5
+        ]
+      ],
+      "owner": [
+        6,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 3
+    },
+    {
+      "pair": [
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          1
+        ]
+      ],
+      "owner": [
+        6,
+        1
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 12
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          5
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          3,
+          1
+        ],
+        [
+          6,
+          2
+        ]
+      ],
+      "owner": [
+        3,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 2
+    },
+    {
+      "pair": [
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          2
+        ]
+      ],
+      "owner": [
+        6,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 45
+    },
+    {
+      "pair": [
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "owner": [
+        3,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 39
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          0
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 5
+    },
+    {
+      "pair": [
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ]
+      ],
+      "owner": [
+        3,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 5
+    },
+    {
+      "pair": [
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "owner": [
+        0,
+        2
+      ],
+      "rule": "nearer_parallel_plane",
+      "samples": 51
+    },
+    {
+      "pair": [
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "owner": [
+        2,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 2
+    },
+    {
+      "pair": [
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          1
+        ]
+      ],
+      "owner": [
+        2,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 2
+    },
+    {
+      "pair": [
+        [
+          1,
+          1
+        ],
+        [
+          12,
+          2
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          12,
+          0
+        ],
+        [
+          12,
+          2
+        ]
+      ],
+      "owner": [
+        12,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 2
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          12,
+          2
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 4
+    },
+    {
+      "pair": [
+        [
+          14,
+          2
+        ],
+        [
+          14,
+          5
+        ]
+      ],
+      "owner": [
+        14,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          11,
+          0
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "owner": [
+        11,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 8
+    },
+    {
+      "pair": [
+        [
+          1,
+          1
+        ],
+        [
+          8,
+          2
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          8,
+          0
+        ],
+        [
+          8,
+          2
+        ]
+      ],
+      "owner": [
+        8,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 5
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          8,
+          0
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 7
+    },
+    {
+      "pair": [
+        [
+          10,
+          2
+        ],
+        [
+          10,
+          5
+        ]
+      ],
+      "owner": [
+        10,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          7,
+          0
+        ],
+        [
+          7,
+          2
+        ]
+      ],
+      "owner": [
+        7,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 9
+    },
+    {
+      "pair": [
+        [
+          1,
+          1
+        ],
+        [
+          4,
+          0
+        ]
+      ],
+      "owner": [
+        1,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          4,
+          0
+        ],
+        [
+          4,
+          2
+        ]
+      ],
+      "owner": [
+        4,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          0,
+          1
+        ],
+        [
+          7,
+          0
+        ]
+      ],
+      "owner": [
+        0,
+        1
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 3
+    },
+    {
+      "pair": [
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          5
+        ]
+      ],
+      "owner": [
+        6,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 1
+    },
+    {
+      "pair": [
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          2
+        ]
+      ],
+      "owner": [
+        3,
+        2
+      ],
+      "rule": "camera_facing_stroke",
+      "samples": 8
+    }
+  ],
+  "image_resize": false,
+  "rgb_blending": false,
+  "native_surface_depth_ownership": true,
+  "preview_scale": 4
+}

@@ -1,0 +1,12 @@
+{
+  "schema": "exact-handle-boundary/9",
+  "previous_geometry": "docs/artifacts/building37/Parametric07-fixed",
+  "previous_material": "docs/artifacts/building37/Parametric08",
+  "output": "docs/artifacts/building37/Parametric09",
+  "ray": "q(t)=(u/2+t,-v-u/2-2t,t)",
+  "boundary": "closed entry<=exit",
+  "face_tie_order": [1, 2, 5],
+  "variants": [2, 3],
+  "expected_visible_pixels": {"DoorHandle": 14, "DrawerHandle": 16},
+  "preserve": "meshes,bounds,camera,density,canvas,alpha,source palette,wood map,nonhandle buffers"
+}

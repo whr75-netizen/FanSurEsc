@@ -12,12 +12,13 @@ ROOT = Path(__file__).resolve().parents[2]
 HERE = Path(__file__).resolve().parent
 RUNS = ROOT / 'LocalOnly/PerfectPixelUniform/runs'
 ENGINE = ROOT / 'Tools/WorkLoop/work_loop.py'
-CURRENT = ROOT / 'docs/artifacts/building37/Parametric08'
 ROUTES = {
     'wood': ('graph-v8.json', 'Parametric07-fixed',
              'Existing V7 geometry -> four-tone wood; no new geometry or Unity apply'),
     'structure': ('graph-v7-import-fix.json', 'Parametric06',
                   'V7 flat geometry -> existing V6 material; not combined with V8 wood'),
+    'handles': ('graph-v9.json', 'Parametric07-fixed',
+                'Exact handle boundary rays on unchanged V7 boxes; existing V8 wood preserved'),
 }
 CODE = [
     'Tools/PerfectPixelUniform/cabinet_geometry06.py',
@@ -165,11 +166,14 @@ def native_outputs(output):
 
 
 def reuse():
-    if read(CURRENT/'validation.json').get('passed') is not True:
+    current = (ROOT/read(HERE/'current.json')['output']).resolve()
+    if not current.is_relative_to(ROOT):
+        raise ValueError('Current output must stay in workspace')
+    if read(current/'validation.json').get('passed') is not True:
         raise ValueError('Current saved technical validation has not passed')
-    return {'action': 'reused', 'native_outputs': native_outputs(CURRENT),
+    return {'action': 'reused', 'native_outputs': native_outputs(current),
             'production_executed': False, 'unity_apply': False,
-            'scope': 'Saved V8 PNG hashes only; no renewed art or engine approval'}
+            'scope': 'Saved current PNG hashes only; no renewed art or engine approval'}
 
 
 def main():

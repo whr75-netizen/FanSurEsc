@@ -1,6 +1,12 @@
 # PerfectPixel Uniform — 전역 격자와 원본 해상도 색 정리
 
-**다음 작업 진입점:** [WORKFLOW.md](WORKFLOW.md)에 고정 사선·좌표·모듈·원인별 단계·실패 귀속·Unity 적용 경계를 정리했다. `pipeline_cli.py`의 `reuse / plan / start / run / status / stop / resume`은 기존 WorkLoop를 호출하며, 현재 아트/생산 알고리즘을 바꾸지 않는다. 새 기하와 V8 목재의 자동 연결·Unity 적용은 아직 없다.
+**다음 작업 진입점:** [WORKFLOW.md](WORKFLOW.md)에 고정 사선·좌표·모듈·원인별 단계·실패 귀속·Unity 적용 경계를 정리했다. `pipeline_cli.py`의 `reuse / plan / start / run / status / stop / resume`은 기존 WorkLoop를 호출한다. `current.json`이 제출 PNG를 가리키며 현재 V9다. 임의 새 기하와 V8 목재의 자동 연결·Unity 적용은 아직 없다.
+
+## 현재 결정 V9 · 2026-10-03 — 추가 칸 손잡이 경계 누락 수정
+
+[DESIGN09.md](DESIGN09.md)의 정확 closed-box 교차로 같은 손잡이가 다르게 잘리는 원인을 고쳤다. 기존 기하 BVH에서 추가 문 오른쪽5px와 서랍 끝1px를 놓쳤으며 첫 문의 면 선택도 모듈 수에 따라 달랐다. native centre가 box 모서리에 정확히 닿는 경우를 canonical 정수 slab와 고정 면 동률 규칙으로 판정한다. 모든 실제 box와 최전면 경쟁을 계산하므로 가려진 손잡이를 앞으로 칠하는 보정은 아니다.
+
+Parametric09의 native152×150/192×170은 문14px·서랍16px가 모든 칸에서 같고 이동 정렬 mask/face/normal/ink/RGBA도 같다. 기존 치수·실제 mesh·camera·밀도·alpha·목재4단계/RGBA를 보존했다. 새 경로 `--route handles`는 geometry→pixels→validate를1회실행하여73조건을 확인했고 process 포함2.24초였다. 원본 V6/7/8 코드와 결과를 보존했으며 Unity/새생성/미술검사는없다. snapshot의 publication/workloop 기록에서 실제 실행 출처를 확인한다.
 
 ## 현재 결정 V8 · 2026-10-03 — 나뭇결 내부를 실제4색으로 표현
 

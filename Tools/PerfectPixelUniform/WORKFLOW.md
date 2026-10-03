@@ -1,6 +1,6 @@
 # 쿼터뷰 픽셀 제작 — 로컬 실행 계약
 
-현재 행동과 진입점의 단일 원본이다. 제작 이력은 [README](README.md), 구현별 계약은 DESIGN06/07/08, 일반 실행기는 [WorkLoop](../WorkLoop/README.md)를 따른다. 이번 정리는 기존 계산을 연결하며 원화·기하·픽셀·Unity를 수정하지 않는다.
+현재 행동과 진입점의 단일 원본이다. 제작 이력은 [README](README.md), 구현별 계약은 DESIGN06/07/08/09, 일반 실행기는 [WorkLoop](../WorkLoop/README.md)를 따른다. 실행 구조는 기존 계산을 연결하고 명시된 변경 원인의 단계만 수정한다.
 
 ## 1. 다음 작업의 행동 순서
 
@@ -33,11 +33,12 @@ x축 한 tick = (+2, -1)px; z축 한 tick = (-2, -1)px; y축 한 tick = (0, -1)p
 
 | 원인/경로 | 고정 입력 → 연산 → 출력 | 이번 실행의 경계 |
 |---|---|---|
-| 변경 없음 / `reuse` | 현재 Parametric08의 validation 및 native 해시 → 경로 반환 | 생산·변환·검사 그래프 재실행 없음 |
-| 목재 제작 / `wood` | Source06 원화+recipe08+**기존 Parametric07-fixed** → `material → pixels → validate` | 4단계 목재 내부만 채움; 구조/카메라/alpha/ink/nonwood 불변 |
-| 기하 제작 / `structure` | recipe07+실제 flat profile+기존 V6 재료 → `geometry → pixels → validate` | V7 평판 구조의 기존 생산 경로; 결과는 V7의 2색 무늬 기준 |
+| 변경 없음 / `reuse` | current.json의 현재 Parametric09 validation 및 native 해시 → 경로 반환 | 생산·변환·검사 그래프 재실행 없음 |
+| 손잡이 경계 / `handles` | 기존 V7 box/buffer+V8 wood-map → `geometry → pixels → validate` | 정확 slab 최근접 판정과 후속 경계; 새 mesh/목재 저작 없이 복구 |
+| 과거 목재 경로 / `wood` | Source06 원화+recipe08+**기존 Parametric07-fixed** → `material → pixels → validate` | V8 재현용; 기존 손잡이 경계 결함을 포함하므로 현행 제작에 사용 금지 |
+| 과거 기하 경로 / `structure` | recipe07+실제 flat profile+기존 V6 재료 → `geometry → pixels → validate` | V7 재현용; 기존 손잡이 경계 결함을 포함하므로 현행 제작에 사용 금지 |
 
-`wood`는 새 `structure` 출력과 자동 연결되지 않는다. `wood_material08.py`의 PREVIOUS가 recipe08의 기존 V7에 고정되어 있기 때문이다. **새 기하+4색의 통합은 입력 경로 계약을 먼저 변경할 다음 작업**이며 현재 실행기로 완료했다고 보고하지 않는다. 단순 색/치수 변경도 실제 구현과 검사의 허용 변수인지 먼저 확인한다. 설정 일부를 바꾸면 모든 부품이 자동 대응한다고 가정하지 않는다.
+`handles`는 고정 V7 치수의 정확 교차와 기존 V8 재료를 연결한 현재 경로다. 과거 `wood`는 새 `structure` 출력과 자동 연결되지 않는다. `wood_material08.py`의 PREVIOUS가 recipe08의 기존 V7에 고정되어 있기 때문이다. **임의 새 기하+4색의 통합은 입력 경로 계약을 먼저 변경할 다음 작업**이며 현재 실행기로 완료했다고 보고하지 않는다. 단순 색/치수 변경도 실제 구현과 검사의 허용 변수인지 먼저 확인한다. 설정 일부를 바꾸면 모든 부품이 자동 대응한다고 가정하지 않는다.
 
 | 단계 | 실제 산출/다음 소비자 | 정보 손실·실패 귀속 |
 |---|---|---|
@@ -58,18 +59,18 @@ $pixelPython = 'C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependen
 # 변경 없는 현재 결과: 생산하지 않음
 & $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py reuse
 # 계획/해시/출력 고정만: Blender·재료·픽셀 생산하지 않음
-& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py plan --route wood --run-id wood-example-01 --reason '요청된 목재 변경의 원인'
+& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py plan --route handles --run-id handle-example-01 --reason '요청된 손잡이 경계 수정의 원인'
 # 기존 계획을 1회 연속 실행
-& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py run --run-id wood-example-01
+& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py run --run-id handle-example-01
 # 실제 생산이 승인된 작업에서 계획+실행을 한 번에
-& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py start --route wood --run-id wood-example-02 --reason '요청된 목재 변경의 원인'
+& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py start --route handles --run-id handle-example-02 --reason '요청된 손잡이 경계 수정의 원인'
 # 상태/중단/재개: resume은 재개 허용만 하며 run은 별도
-& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py status --run-id wood-example-01
-& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py stop --run-id wood-example-01
-& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py resume --run-id wood-example-01
+& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py status --run-id handle-example-01
+& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py stop --run-id handle-example-01
+& $pixelPython -B Tools/PerfectPixelUniform/pipeline_cli.py resume --run-id handle-example-01
 ```
 
-기하 경로는 `--route structure`다. `reason`은 변경 이유 기록이며 이유의 타당성을 프로그램이 증명하지 않는다. 이미 끝난 결과를 동일 입력으로 다시 생산하는 명령으로 쓰지 않는다. 사용자가 명령을 매번 작성하는 방식이 아니라 AI가 위 계약으로 원인을 정하고 호출한다.
+현재 복구 경로는 `--route handles`다. 과거 wood/structure는 역사 재현용이며 현행 자산 제작에 사용하지 않는다. `reason`은 변경 이유 기록이며 이유의 타당성을 프로그램이 증명하지 않는다. 이미 끝난 결과를 동일 입력으로 다시 생산하는 명령으로 쓰지 않는다. 사용자가 명령을 매번 작성하는 방식이 아니라 AI가 위 계약으로 원인을 정하고 호출한다.
 
 산출 위치는 `LocalOnly/PerfectPixelUniform/runs/<run-id>/`의 `graph.json`, `state.json`, `binding.json`, `outputs/`다. 메타데이터 폴더와 아직 존재하지 않는 outputs 폴더를 분리한다. 기존 run ID는 덮어쓰지 않는다. `plan`은 그래프를 고정하되 생산하지 않는다. 출력 위치만 새로 바인딩하고 원본 그래프/코드/recipe를 바꾸지 않는다.
 
@@ -83,8 +84,8 @@ Point sampling, 압축/밉맵/AA/후처리 재표본화, 표시 격자 위상을
 
 ## 6. 다음 세션에서 먼저 읽을 것
 
-이 문서 → 변경 원인의 DESIGN/recipe/담당 함수만 읽는다. 원인 없는 전체 이력/전체 검사 반복은 하지 않는다. 현재 구조는 Parametric07-fixed, 현재 재료/제출 PNG는 Parametric08이며 승인된 게임 씬은 그대로 보존한다. 통합/실제 표시/디자인 수정 요청이 생기면 그 단계의 입력과 완료 기준을 먼저 확정한다.
+이 문서 → 변경 원인의 DESIGN/recipe/담당 함수만 읽는다. 원인 없는 전체 이력/전체 검사 반복은 하지 않는다. 실제 mesh 치수는 Parametric07-fixed, 재료는 Parametric08, 수정 surface/제출 PNG는 Parametric09다. 승인된 게임 씬은 그대로 보존한다. 통합/실제 표시/디자인 수정 요청이 생기면 그 단계의 입력과 완료 기준을 먼저 확정한다.
 
 근거: 기존 코드와 저장 결과가 직접 실행 근거다. 직교 투영 원리는 [PBRT](https://www.pbr-book.org/4ed/Cameras_and_Film/Projective_Camera_Models), 같은 부품 반복은 [Blender Array API](https://docs.blender.org/api/5.0/bpy.types.ArrayModifier.html), 평면 직사각형 9-slice의 적용 범위는 [Unity 공식 문서](https://docs.unity3d.com/6000.0/Documentation/Manual/sprite/9-slice/9-slicing.html)를 참고한다. 현재 반복은 직접 계산이며 실제 ArrayModifier 사용이 아니고, 사선 전체 외형을 9-slice로 늘리는 방식도 아니다.
 
-2026-10-03 확인 범위: 두 경로의 실제 plan/init, 생산 0회·미생성 output, 고정 입력/코드/경로·최종 검사 위치의 30조건, 대기 pause/resume과 paused run 비성공, 기존 run ID 거부, V7/V8 native SHA 확인. 기록은 `LocalOnly/PerfectPixelUniform/workflow-validation.json`과 `runs/workflow-*-20261003`이다. 이 래퍼로 실제 생산을 start한 확인과 Unity 적용은 하지 않았다. 기존 생산의 실행 증거는 README V7/V8을 재사용한다.
+실행 구조 정리 당시(2026-10-03)의 두 과거 경로 plan/init·생산0회·경로/해시30조건·pause/run거부 기록은 `LocalOnly/PerfectPixelUniform/workflow-validation.json`에 보존한다. 이후 사용자 손잡이 수정 요청으로 handles 경로 start를 실제1회완주했다. 모든 문14/서랍16px·이동 정렬 mask/face/normal/ink/RGBA·원본/목재/alpha 보존 등73조건을 확인했고 실행기는process포함2.24초였다. Parametric09/publication/workloop 기록이 현재 근거다. Unity 적용은 하지 않았다.

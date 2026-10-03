@@ -1,0 +1,1605 @@
+{
+  "checks": [
+    {
+      "name": "reference_preserved",
+      "pass": true,
+      "detail": {
+        "sha256": "5781d919337a71fb0acb1b9947e541575d9c5167478e927df4baa97c48c43556",
+        "expected": "5781d919337a71fb0acb1b9947e541575d9c5167478e927df4baa97c48c43556"
+      }
+    },
+    {
+      "name": "palette.wood.shape",
+      "pass": true,
+      "detail": {
+        "actual_shape": [
+          4,
+          3
+        ],
+        "expected_shape": [
+          4,
+          3
+        ]
+      }
+    },
+    {
+      "name": "palette.wood.observed_source_rgb",
+      "pass": true,
+      "detail": {
+        "colors": [
+          [
+            114,
+            73,
+            44
+          ],
+          [
+            160,
+            109,
+            68
+          ],
+          [
+            193,
+            130,
+            76
+          ],
+          [
+            218,
+            150,
+            82
+          ]
+        ],
+        "source_position_relocation": false
+      }
+    },
+    {
+      "name": "palette.wood.excludes_black",
+      "pass": true,
+      "detail": {
+        "black_is_reserved_for_strong_seams": true
+      }
+    },
+    {
+      "name": "palette.navy.shape",
+      "pass": true,
+      "detail": {
+        "actual_shape": [
+          3,
+          3
+        ],
+        "expected_shape": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "palette.navy.observed_source_rgb",
+      "pass": true,
+      "detail": {
+        "colors": [
+          [
+            10,
+            28,
+            43
+          ],
+          [
+            36,
+            62,
+            81
+          ],
+          [
+            54,
+            81,
+            102
+          ]
+        ],
+        "source_position_relocation": false
+      }
+    },
+    {
+      "name": "palette.navy.excludes_black",
+      "pass": true,
+      "detail": {
+        "black_is_reserved_for_strong_seams": true
+      }
+    },
+    {
+      "name": "palette.side.shape",
+      "pass": true,
+      "detail": {
+        "actual_shape": [
+          3,
+          3
+        ],
+        "expected_shape": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "palette.side.observed_source_rgb",
+      "pass": true,
+      "detail": {
+        "colors": [
+          [
+            5,
+            19,
+            32
+          ],
+          [
+            21,
+            45,
+            62
+          ],
+          [
+            33,
+            58,
+            78
+          ]
+        ],
+        "source_position_relocation": false
+      }
+    },
+    {
+      "name": "palette.side.excludes_black",
+      "pass": true,
+      "detail": {
+        "black_is_reserved_for_strong_seams": true
+      }
+    },
+    {
+      "name": "palette.brass.shape",
+      "pass": true,
+      "detail": {
+        "actual_shape": [
+          3,
+          3
+        ],
+        "expected_shape": [
+          3,
+          3
+        ]
+      }
+    },
+    {
+      "name": "palette.brass.observed_source_rgb",
+      "pass": true,
+      "detail": {
+        "colors": [
+          [
+            78,
+            50,
+            22
+          ],
+          [
+            191,
+            131,
+            53
+          ],
+          [
+            250,
+            195,
+            93
+          ]
+        ],
+        "source_position_relocation": false
+      }
+    },
+    {
+      "name": "palette.brass.excludes_black",
+      "pass": true,
+      "detail": {
+        "black_is_reserved_for_strong_seams": true
+      }
+    },
+    {
+      "name": "comparison_modes",
+      "pass": true,
+      "detail": {
+        "modes": [
+          "planar",
+          "solid"
+        ]
+      }
+    },
+    {
+      "name": "module_variants",
+      "pass": true,
+      "detail": {
+        "variants": [
+          2,
+          3
+        ]
+      }
+    },
+    {
+      "name": "lighting_inputs",
+      "pass": true,
+      "detail": {
+        "world_to_light": [
+          0.5,
+          -0.2,
+          0.84
+        ],
+        "thresholds": [
+          0.32,
+          0.72
+        ]
+      }
+    },
+    {
+      "name": "planar.2.native_buffer_shapes",
+      "pass": true,
+      "detail": {
+        "native_width_height": [
+          143,
+          145
+        ],
+        "rgba": [
+          145,
+          143,
+          4
+        ]
+      }
+    },
+    {
+      "name": "planar.2.native_buffer_dtypes",
+      "pass": true,
+      "detail": {
+        "geometry_mask": "bool",
+        "shade": {
+          "rgb": "uint8",
+          "band": "int8",
+          "shadow": "bool",
+          "material": "int8"
+        },
+        "owners": {
+          "roles": "uint8",
+          "strong": "bool"
+        }
+      }
+    },
+    {
+      "name": "planar.2.geometry_nonempty_finite",
+      "pass": true,
+      "detail": {
+        "visible_pixels": 13040
+      }
+    },
+    {
+      "name": "planar.2.alpha_is_exact_geometry_coverage",
+      "pass": true,
+      "detail": {
+        "extra_visible_pixels": 0,
+        "missing_visible_pixels": 0,
+        "perimeter_expansion_pixels": 0
+      }
+    },
+    {
+      "name": "planar.2.transparent_pixels_clean",
+      "pass": true,
+      "detail": {
+        "nonzero_transparent_channels": 0
+      }
+    },
+    {
+      "name": "planar.2.world_normals_and_visible_face_ids",
+      "pass": true,
+      "detail": {
+        "visible_faces": [
+          0,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "name": "planar.2.declared_part_dimensions",
+      "pass": true,
+      "detail": {
+        "solid_count": 4,
+        "required_body_cap_handles": 4
+      }
+    },
+    {
+      "name": "planar.2.independent_fraction_corner_geometry",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 231,
+        "visible_witnesses": 180,
+        "mismatches": [],
+        "mismatch_count": 0,
+        "method": "Fraction finite slab / directed half-open plane intervals"
+      }
+    },
+    {
+      "name": "planar.2.independent_corner_shadow_rays",
+      "pass": true,
+      "detail": {
+        "tested_visible_pixels": 180,
+        "mismatches": [],
+        "mismatch_count": 0
+      }
+    },
+    {
+      "name": "planar.2.material_domains_are_on_actual_visible_parts",
+      "pass": true,
+      "detail": {
+        "wrong_domain_pixels": 0,
+        "body_brass_is_flush_inlay": true
+      }
+    },
+    {
+      "name": "planar.2.shade_preserves_authored_material_domains",
+      "pass": true,
+      "detail": {
+        "wrong_material_pixels": 0
+      }
+    },
+    {
+      "name": "planar.2.normal_light_owns_geometric_band",
+      "pass": true,
+      "detail": {
+        "wrong_band_pixels": 0,
+        "face_target_bands": {
+          "top": 2,
+          "front": 1,
+          "side": 0
+        },
+        "shadow_has_separate_bool_authority": true
+      }
+    },
+    {
+      "name": "planar.2.unshadowed_top_band_2",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 4048
+      }
+    },
+    {
+      "name": "planar.2.unshadowed_front_band_1",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 6176
+      }
+    },
+    {
+      "name": "planar.2.unshadowed_side_band_0",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 2816
+      }
+    },
+    {
+      "name": "planar.2.planar_volume_shadow_policy",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "mode": "planar"
+      }
+    },
+    {
+      "name": "planar.2.solid_cap_contact_shadow_exists",
+      "pass": true,
+      "detail": {
+        "actual_front_contact_pixels": 0,
+        "volume_required": false
+      }
+    },
+    {
+      "name": "planar.2.shadow_navy_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "planar.2.shadow_wood_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "planar.2.shadow_brass_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "planar.2.paint_face_tones_follow_band_table",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 7170
+      }
+    },
+    {
+      "name": "planar.2.fascia_uses_wood_band_not_black_extra_line",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 544
+      }
+    },
+    {
+      "name": "planar.2.top_preserves_source_grain_rank_with_geometric_band",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 4048,
+        "grain_rank_counts": [
+          64,
+          707,
+          2822,
+          455
+        ]
+      }
+    },
+    {
+      "name": "planar.2.material_1_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 7170
+      }
+    },
+    {
+      "name": "planar.2.material_2_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 4592
+      }
+    },
+    {
+      "name": "planar.2.material_3_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 1278
+      }
+    },
+    {
+      "name": "planar.2.edge_role_domain",
+      "pass": true,
+      "detail": {
+        "role_counts": {
+          "0": 20031,
+          "1": 406,
+          "2": 60,
+          "3": 0,
+          "4": 137,
+          "5": 101
+        }
+      }
+    },
+    {
+      "name": "planar.2.black_iff_strong_silhouette_or_explicit_seam",
+      "pass": true,
+      "detail": {
+        "unowned_black_pixels": 0,
+        "missing_strong_black_pixels": 0
+      }
+    },
+    {
+      "name": "planar.2.surface_crease_role_3_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 0,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "planar.2.surface_crease_role_4_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 137,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "planar.2.surface_crease_role_5_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 101,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "planar.2.nonedge_rgb_is_unchanged_shade",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 12336
+      }
+    },
+    {
+      "name": "planar.2.explicit_seams_are_on_body_front",
+      "pass": true,
+      "detail": {
+        "seam_pixels": 60
+      }
+    },
+    {
+      "name": "planar.2.one_pixel_explicit_join_seams_only",
+      "pass": true,
+      "detail": {
+        "seam_pixels": 60,
+        "off_join_or_height_pixels": 0,
+        "double_pixel_rows": [],
+        "module_join_u": [
+          44
+        ]
+      }
+    },
+    {
+      "name": "planar.2.surface_crease_contains_no_black",
+      "pass": true,
+      "detail": {
+        "black_surface_crease_pixels": 0
+      }
+    },
+    {
+      "name": "planar.2.shadow_hardware_never_overwritten_with_bright_metal",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 0
+      }
+    },
+    {
+      "name": "planar.2.raster_policy_evidence_loaded",
+      "pass": true,
+      "detail": {
+        "policy_type": "list",
+        "art_approval": false
+      }
+    },
+    {
+      "name": "planar.3.native_buffer_shapes",
+      "pass": true,
+      "detail": {
+        "native_width_height": [
+          183,
+          165
+        ],
+        "rgba": [
+          165,
+          183,
+          4
+        ]
+      }
+    },
+    {
+      "name": "planar.3.native_buffer_dtypes",
+      "pass": true,
+      "detail": {
+        "geometry_mask": "bool",
+        "shade": {
+          "rgb": "uint8",
+          "band": "int8",
+          "shadow": "bool",
+          "material": "int8"
+        },
+        "owners": {
+          "roles": "uint8",
+          "strong": "bool"
+        }
+      }
+    },
+    {
+      "name": "planar.3.geometry_nonempty_finite",
+      "pass": true,
+      "detail": {
+        "visible_pixels": 17600
+      }
+    },
+    {
+      "name": "planar.3.alpha_is_exact_geometry_coverage",
+      "pass": true,
+      "detail": {
+        "extra_visible_pixels": 0,
+        "missing_visible_pixels": 0,
+        "perimeter_expansion_pixels": 0
+      }
+    },
+    {
+      "name": "planar.3.transparent_pixels_clean",
+      "pass": true,
+      "detail": {
+        "nonzero_transparent_channels": 0
+      }
+    },
+    {
+      "name": "planar.3.world_normals_and_visible_face_ids",
+      "pass": true,
+      "detail": {
+        "visible_faces": [
+          0,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "name": "planar.3.declared_part_dimensions",
+      "pass": true,
+      "detail": {
+        "solid_count": 5,
+        "required_body_cap_handles": 5
+      }
+    },
+    {
+      "name": "planar.3.independent_fraction_corner_geometry",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 279,
+        "visible_witnesses": 228,
+        "mismatches": [],
+        "mismatch_count": 0,
+        "method": "Fraction finite slab / directed half-open plane intervals"
+      }
+    },
+    {
+      "name": "planar.3.independent_corner_shadow_rays",
+      "pass": true,
+      "detail": {
+        "tested_visible_pixels": 228,
+        "mismatches": [],
+        "mismatch_count": 0
+      }
+    },
+    {
+      "name": "planar.3.material_domains_are_on_actual_visible_parts",
+      "pass": true,
+      "detail": {
+        "wrong_domain_pixels": 0,
+        "body_brass_is_flush_inlay": true
+      }
+    },
+    {
+      "name": "planar.3.shade_preserves_authored_material_domains",
+      "pass": true,
+      "detail": {
+        "wrong_material_pixels": 0
+      }
+    },
+    {
+      "name": "planar.3.normal_light_owns_geometric_band",
+      "pass": true,
+      "detail": {
+        "wrong_band_pixels": 0,
+        "face_target_bands": {
+          "top": 2,
+          "front": 1,
+          "side": 0
+        },
+        "shadow_has_separate_bool_authority": true
+      }
+    },
+    {
+      "name": "planar.3.unshadowed_top_band_2",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 5808
+      }
+    },
+    {
+      "name": "planar.3.unshadowed_front_band_1",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 8976
+      }
+    },
+    {
+      "name": "planar.3.unshadowed_side_band_0",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 2816
+      }
+    },
+    {
+      "name": "planar.3.planar_volume_shadow_policy",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "mode": "planar"
+      }
+    },
+    {
+      "name": "planar.3.solid_cap_contact_shadow_exists",
+      "pass": true,
+      "detail": {
+        "actual_front_contact_pixels": 0,
+        "volume_required": false
+      }
+    },
+    {
+      "name": "planar.3.shadow_navy_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "planar.3.shadow_wood_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "planar.3.shadow_brass_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "planar.3.paint_face_tones_follow_band_table",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 9583
+      }
+    },
+    {
+      "name": "planar.3.fascia_uses_wood_band_not_black_extra_line",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 704
+      }
+    },
+    {
+      "name": "planar.3.top_preserves_source_grain_rank_with_geometric_band",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 5808,
+        "grain_rank_counts": [
+          84,
+          900,
+          4098,
+          726
+        ]
+      }
+    },
+    {
+      "name": "planar.3.material_1_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 9583
+      }
+    },
+    {
+      "name": "planar.3.material_2_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 6512
+      }
+    },
+    {
+      "name": "planar.3.material_3_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 1505
+      }
+    },
+    {
+      "name": "planar.3.edge_role_domain",
+      "pass": true,
+      "detail": {
+        "role_counts": {
+          "0": 29293,
+          "1": 486,
+          "2": 120,
+          "3": 0,
+          "4": 177,
+          "5": 119
+        }
+      }
+    },
+    {
+      "name": "planar.3.black_iff_strong_silhouette_or_explicit_seam",
+      "pass": true,
+      "detail": {
+        "unowned_black_pixels": 0,
+        "missing_strong_black_pixels": 0
+      }
+    },
+    {
+      "name": "planar.3.surface_crease_role_3_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 0,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "planar.3.surface_crease_role_4_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 177,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "planar.3.surface_crease_role_5_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 119,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "planar.3.nonedge_rgb_is_unchanged_shade",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 16698
+      }
+    },
+    {
+      "name": "planar.3.explicit_seams_are_on_body_front",
+      "pass": true,
+      "detail": {
+        "seam_pixels": 120
+      }
+    },
+    {
+      "name": "planar.3.one_pixel_explicit_join_seams_only",
+      "pass": true,
+      "detail": {
+        "seam_pixels": 120,
+        "off_join_or_height_pixels": 0,
+        "double_pixel_rows": [],
+        "module_join_u": [
+          44,
+          84
+        ]
+      }
+    },
+    {
+      "name": "planar.3.surface_crease_contains_no_black",
+      "pass": true,
+      "detail": {
+        "black_surface_crease_pixels": 0
+      }
+    },
+    {
+      "name": "planar.3.shadow_hardware_never_overwritten_with_bright_metal",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 0
+      }
+    },
+    {
+      "name": "planar.3.raster_policy_evidence_loaded",
+      "pass": true,
+      "detail": {
+        "policy_type": "list",
+        "art_approval": false
+      }
+    },
+    {
+      "name": "solid.2.native_buffer_shapes",
+      "pass": true,
+      "detail": {
+        "native_width_height": [
+          143,
+          145
+        ],
+        "rgba": [
+          145,
+          143,
+          4
+        ]
+      }
+    },
+    {
+      "name": "solid.2.native_buffer_dtypes",
+      "pass": true,
+      "detail": {
+        "geometry_mask": "bool",
+        "shade": {
+          "rgb": "uint8",
+          "band": "int8",
+          "shadow": "bool",
+          "material": "int8"
+        },
+        "owners": {
+          "roles": "uint8",
+          "strong": "bool"
+        }
+      }
+    },
+    {
+      "name": "solid.2.geometry_nonempty_finite",
+      "pass": true,
+      "detail": {
+        "visible_pixels": 13040
+      }
+    },
+    {
+      "name": "solid.2.alpha_is_exact_geometry_coverage",
+      "pass": true,
+      "detail": {
+        "extra_visible_pixels": 0,
+        "missing_visible_pixels": 0,
+        "perimeter_expansion_pixels": 0
+      }
+    },
+    {
+      "name": "solid.2.transparent_pixels_clean",
+      "pass": true,
+      "detail": {
+        "nonzero_transparent_channels": 0
+      }
+    },
+    {
+      "name": "solid.2.world_normals_and_visible_face_ids",
+      "pass": true,
+      "detail": {
+        "visible_faces": [
+          0,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "name": "solid.2.declared_part_dimensions",
+      "pass": true,
+      "detail": {
+        "solid_count": 4,
+        "required_body_cap_handles": 4
+      }
+    },
+    {
+      "name": "solid.2.independent_fraction_corner_geometry",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 231,
+        "visible_witnesses": 180,
+        "mismatches": [],
+        "mismatch_count": 0,
+        "method": "Fraction finite slab / directed half-open plane intervals"
+      }
+    },
+    {
+      "name": "solid.2.independent_corner_shadow_rays",
+      "pass": true,
+      "detail": {
+        "tested_visible_pixels": 180,
+        "mismatches": [],
+        "mismatch_count": 0
+      }
+    },
+    {
+      "name": "solid.2.material_domains_are_on_actual_visible_parts",
+      "pass": true,
+      "detail": {
+        "wrong_domain_pixels": 0,
+        "body_brass_is_flush_inlay": true
+      }
+    },
+    {
+      "name": "solid.2.shade_preserves_authored_material_domains",
+      "pass": true,
+      "detail": {
+        "wrong_material_pixels": 0
+      }
+    },
+    {
+      "name": "solid.2.normal_light_owns_geometric_band",
+      "pass": true,
+      "detail": {
+        "wrong_band_pixels": 0,
+        "face_target_bands": {
+          "top": 2,
+          "front": 1,
+          "side": 0
+        },
+        "shadow_has_separate_bool_authority": true
+      }
+    },
+    {
+      "name": "solid.2.unshadowed_top_band_2",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 4060
+      }
+    },
+    {
+      "name": "solid.2.unshadowed_front_band_1",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 5964
+      }
+    },
+    {
+      "name": "solid.2.unshadowed_side_band_0",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 2496
+      }
+    },
+    {
+      "name": "solid.2.planar_volume_shadow_policy",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 520,
+        "mode": "solid"
+      }
+    },
+    {
+      "name": "solid.2.solid_cap_contact_shadow_exists",
+      "pass": true,
+      "detail": {
+        "actual_front_contact_pixels": 190,
+        "volume_required": true
+      }
+    },
+    {
+      "name": "solid.2.shadow_navy_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 422,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "solid.2.shadow_wood_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "solid.2.shadow_brass_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 98,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "solid.2.paint_face_tones_follow_band_table",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 6728
+      }
+    },
+    {
+      "name": "solid.2.fascia_uses_wood_band_not_black_extra_line",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 544
+      }
+    },
+    {
+      "name": "solid.2.top_preserves_source_grain_rank_with_geometric_band",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 4048,
+        "grain_rank_counts": [
+          64,
+          707,
+          2822,
+          455
+        ]
+      }
+    },
+    {
+      "name": "solid.2.material_1_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 7150
+      }
+    },
+    {
+      "name": "solid.2.material_2_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 4592
+      }
+    },
+    {
+      "name": "solid.2.material_3_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 1298
+      }
+    },
+    {
+      "name": "solid.2.edge_role_domain",
+      "pass": true,
+      "detail": {
+        "role_counts": {
+          "0": 20003,
+          "1": 406,
+          "2": 60,
+          "3": 26,
+          "4": 137,
+          "5": 103
+        }
+      }
+    },
+    {
+      "name": "solid.2.black_iff_strong_silhouette_or_explicit_seam",
+      "pass": true,
+      "detail": {
+        "unowned_black_pixels": 0,
+        "missing_strong_black_pixels": 0
+      }
+    },
+    {
+      "name": "solid.2.surface_crease_role_3_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 26,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "solid.2.surface_crease_role_4_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 137,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "solid.2.surface_crease_role_5_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 103,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "solid.2.nonedge_rgb_is_unchanged_shade",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 12308
+      }
+    },
+    {
+      "name": "solid.2.explicit_seams_are_on_body_front",
+      "pass": true,
+      "detail": {
+        "seam_pixels": 60
+      }
+    },
+    {
+      "name": "solid.2.one_pixel_explicit_join_seams_only",
+      "pass": true,
+      "detail": {
+        "seam_pixels": 60,
+        "off_join_or_height_pixels": 0,
+        "double_pixel_rows": [],
+        "module_join_u": [
+          44
+        ]
+      }
+    },
+    {
+      "name": "solid.2.surface_crease_contains_no_black",
+      "pass": true,
+      "detail": {
+        "black_surface_crease_pixels": 0
+      }
+    },
+    {
+      "name": "solid.2.shadow_hardware_never_overwritten_with_bright_metal",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 87
+      }
+    },
+    {
+      "name": "solid.2.raster_policy_evidence_loaded",
+      "pass": true,
+      "detail": {
+        "policy_type": "list",
+        "art_approval": false
+      }
+    },
+    {
+      "name": "solid.3.native_buffer_shapes",
+      "pass": true,
+      "detail": {
+        "native_width_height": [
+          183,
+          165
+        ],
+        "rgba": [
+          165,
+          183,
+          4
+        ]
+      }
+    },
+    {
+      "name": "solid.3.native_buffer_dtypes",
+      "pass": true,
+      "detail": {
+        "geometry_mask": "bool",
+        "shade": {
+          "rgb": "uint8",
+          "band": "int8",
+          "shadow": "bool",
+          "material": "int8"
+        },
+        "owners": {
+          "roles": "uint8",
+          "strong": "bool"
+        }
+      }
+    },
+    {
+      "name": "solid.3.geometry_nonempty_finite",
+      "pass": true,
+      "detail": {
+        "visible_pixels": 17600
+      }
+    },
+    {
+      "name": "solid.3.alpha_is_exact_geometry_coverage",
+      "pass": true,
+      "detail": {
+        "extra_visible_pixels": 0,
+        "missing_visible_pixels": 0,
+        "perimeter_expansion_pixels": 0
+      }
+    },
+    {
+      "name": "solid.3.transparent_pixels_clean",
+      "pass": true,
+      "detail": {
+        "nonzero_transparent_channels": 0
+      }
+    },
+    {
+      "name": "solid.3.world_normals_and_visible_face_ids",
+      "pass": true,
+      "detail": {
+        "visible_faces": [
+          0,
+          3,
+          4
+        ]
+      }
+    },
+    {
+      "name": "solid.3.declared_part_dimensions",
+      "pass": true,
+      "detail": {
+        "solid_count": 5,
+        "required_body_cap_handles": 5
+      }
+    },
+    {
+      "name": "solid.3.independent_fraction_corner_geometry",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 279,
+        "visible_witnesses": 228,
+        "mismatches": [],
+        "mismatch_count": 0,
+        "method": "Fraction finite slab / directed half-open plane intervals"
+      }
+    },
+    {
+      "name": "solid.3.independent_corner_shadow_rays",
+      "pass": true,
+      "detail": {
+        "tested_visible_pixels": 228,
+        "mismatches": [],
+        "mismatch_count": 0
+      }
+    },
+    {
+      "name": "solid.3.material_domains_are_on_actual_visible_parts",
+      "pass": true,
+      "detail": {
+        "wrong_domain_pixels": 0,
+        "body_brass_is_flush_inlay": true
+      }
+    },
+    {
+      "name": "solid.3.shade_preserves_authored_material_domains",
+      "pass": true,
+      "detail": {
+        "wrong_material_pixels": 0
+      }
+    },
+    {
+      "name": "solid.3.normal_light_owns_geometric_band",
+      "pass": true,
+      "detail": {
+        "wrong_band_pixels": 0,
+        "face_target_bands": {
+          "top": 2,
+          "front": 1,
+          "side": 0
+        },
+        "shadow_has_separate_bool_authority": true
+      }
+    },
+    {
+      "name": "solid.3.unshadowed_top_band_2",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 5826
+      }
+    },
+    {
+      "name": "solid.3.unshadowed_front_band_1",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 8666
+      }
+    },
+    {
+      "name": "solid.3.unshadowed_side_band_0",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 2501
+      }
+    },
+    {
+      "name": "solid.3.planar_volume_shadow_policy",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 607,
+        "mode": "solid"
+      }
+    },
+    {
+      "name": "solid.3.solid_cap_contact_shadow_exists",
+      "pass": true,
+      "detail": {
+        "actual_front_contact_pixels": 277,
+        "volume_required": true
+      }
+    },
+    {
+      "name": "solid.3.shadow_navy_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 508,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "solid.3.shadow_wood_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 0,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "solid.3.shadow_brass_uses_darkest_material_tone",
+      "pass": true,
+      "detail": {
+        "shadow_pixels": 99,
+        "wrong_tone_pixels": 0
+      }
+    },
+    {
+      "name": "solid.3.paint_face_tones_follow_band_table",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 9045
+      }
+    },
+    {
+      "name": "solid.3.fascia_uses_wood_band_not_black_extra_line",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 704
+      }
+    },
+    {
+      "name": "solid.3.top_preserves_source_grain_rank_with_geometric_band",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 5808,
+        "grain_rank_counts": [
+          84,
+          900,
+          4098,
+          726
+        ]
+      }
+    },
+    {
+      "name": "solid.3.material_1_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 9553
+      }
+    },
+    {
+      "name": "solid.3.material_2_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 6512
+      }
+    },
+    {
+      "name": "solid.3.material_3_palette_only",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 1535
+      }
+    },
+    {
+      "name": "solid.3.edge_role_domain",
+      "pass": true,
+      "detail": {
+        "role_counts": {
+          "0": 29251,
+          "1": 486,
+          "2": 120,
+          "3": 39,
+          "4": 177,
+          "5": 122
+        }
+      }
+    },
+    {
+      "name": "solid.3.black_iff_strong_silhouette_or_explicit_seam",
+      "pass": true,
+      "detail": {
+        "unowned_black_pixels": 0,
+        "missing_strong_black_pixels": 0
+      }
+    },
+    {
+      "name": "solid.3.surface_crease_role_3_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 39,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "solid.3.surface_crease_role_4_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 177,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "solid.3.surface_crease_role_5_uses_own_material_color",
+      "pass": true,
+      "detail": {
+        "crease_pixels": 122,
+        "wrong_color_or_material": 0
+      }
+    },
+    {
+      "name": "solid.3.nonedge_rgb_is_unchanged_shade",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 16656
+      }
+    },
+    {
+      "name": "solid.3.explicit_seams_are_on_body_front",
+      "pass": true,
+      "detail": {
+        "seam_pixels": 120
+      }
+    },
+    {
+      "name": "solid.3.one_pixel_explicit_join_seams_only",
+      "pass": true,
+      "detail": {
+        "seam_pixels": 120,
+        "off_join_or_height_pixels": 0,
+        "double_pixel_rows": [],
+        "module_join_u": [
+          44,
+          84
+        ]
+      }
+    },
+    {
+      "name": "solid.3.surface_crease_contains_no_black",
+      "pass": true,
+      "detail": {
+        "black_surface_crease_pixels": 0
+      }
+    },
+    {
+      "name": "solid.3.shadow_hardware_never_overwritten_with_bright_metal",
+      "pass": true,
+      "detail": {
+        "tested_pixels": 88
+      }
+    },
+    {
+      "name": "solid.3.raster_policy_evidence_loaded",
+      "pass": true,
+      "detail": {
+        "policy_type": "list",
+        "art_approval": false
+      }
+    },
+    {
+      "name": "planar.two_three_module_handles_have_identical_geometry",
+      "pass": true,
+      "detail": {
+        "dimensions_ticks": [
+          [
+            "3",
+            "5",
+            "1/2"
+          ],
+          [
+            "3",
+            "5",
+            "1/2"
+          ],
+          [
+            "3",
+            "5",
+            "1/2"
+          ],
+          [
+            "3",
+            "5",
+            "1/2"
+          ],
+          [
+            "3",
+            "5",
+            "1/2"
+          ]
+        ],
+        "stretching_or_image_resizing_used": false
+      }
+    },
+    {
+      "name": "solid.two_three_module_handles_have_identical_geometry",
+      "pass": true,
+      "detail": {
+        "dimensions_ticks": [
+          [
+            "3",
+            "5",
+            "1/2"
+          ],
+          [
+            "3",
+            "5",
+            "1/2"
+          ],
+          [
+            "3",
+            "5",
+            "1/2"
+          ],
+          [
+            "3",
+            "5",
+            "1/2"
+          ],
+          [
+            "3",
+            "5",
+            "1/2"
+          ]
+        ],
+        "stretching_or_image_resizing_used": false
+      }
+    }
+  ],
+  "all_pass": true,
+  "art_approved": false,
+  "scope": "N15 finite geometry, material/shade attribution, and actual native PNG; no Unity or art acceptance"
+}

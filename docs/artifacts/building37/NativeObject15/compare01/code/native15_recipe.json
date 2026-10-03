@@ -1,0 +1,19 @@
+{
+  "contract": "NATIVE15.md: native planar comparison and finite-solid pixel-center production",
+  "reference_sha256": "5781d919337a71fb0acb1b9947e541575d9c5167478e927df4baa97c48c43556",
+  "variants": [2, 3],
+  "modes": ["planar", "solid"],
+  "profile": {
+    "end_cap": 2, "module_pitch": 20, "reference_width": 64,
+    "height": 72, "cap_thickness": 4, "depth": 20, "plinth": 5,
+    "handle_x": 15, "handle_y": 55, "handle_height": 5, "handle_width": 3,
+    "door_frame_ticks": 2
+  },
+  "lighting": {"to_light_world": [0.50, -0.20, 0.84], "thresholds": [0.32, 0.72]},
+  "materials": {
+    "wood": {"quad": [[333,659],[1257,209],[964,58],[61,517]], "palette_samples": [[540,573,545,578],[525,510,530,515],[357,621,362,626],[792,261,797,266]], "tones": 4},
+    "navy": {"quad": [[345,718],[1258,272],[1260,758],[345,1145]], "palette_samples": [[1156,397,1161,402],[380,785,385,790],[552,649,557,654]], "tones": 3},
+    "side": {"quad": [[242,797],[145,744],[145,933],[242,985]], "palette_samples": [[187,1012,192,1017],[111,928,116,933],[79,720,84,725]], "tones": 3},
+    "brass": {"quad": [[323,821],[328,821],[328,826],[323,826]], "palette_samples": [[315,882,320,887],[1057,451,1062,456],[329,857,334,862]], "tones": 3}
+  }
+}

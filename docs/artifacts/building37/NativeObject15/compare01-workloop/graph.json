@@ -1,0 +1,554 @@
+{
+  "goal": "Native cabinet: genuine geometric coverage, observed material, discrete normal lighting and semantic edges",
+  "entry": "geometry",
+  "max_steps": 5,
+  "requirements": [
+    {
+      "id": "actual_native_object",
+      "source": "NATIVE15.md; latest user correction",
+      "text": "Actual A/B PNG, preserved source, editable geometry, no expanded coverage, colored creases and actual solid shadows",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "geometry",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE15.md finite solid and semantic edge roles"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "geometry",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject15\\compare01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_geometry.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_validation.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native15_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "geometry.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "material"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "geometry.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "material",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE15.md finite solid and semantic edge roles"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "material",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject15\\compare01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_geometry.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_validation.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native15_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model3.obj"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/palette.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/provenance.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/planar/materials2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/planar/materials3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/solid/materials2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/solid/materials3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "material.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "shade"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "material.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "shade",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE15.md finite solid and semantic edge roles"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "shade",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject15\\compare01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_geometry.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_validation.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native15_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/palette.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/provenance.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/planar/materials2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/planar/materials3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/solid/materials2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/solid/materials3.npz"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shade2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shadow-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shade3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shadow-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shade2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shadow-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shade3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shadow-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "shade.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "raster"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "shade.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "raster",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE15.md finite solid and semantic edge roles"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "raster",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject15\\compare01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_geometry.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_validation.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native15_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/palette.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/provenance.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/planar/materials2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/planar/materials3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/solid/materials2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/solid/materials3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shade2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shadow-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shade3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shadow-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shade2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shadow-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shade3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shadow-3.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/cabinet-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/owners2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/policies2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/edge-roles-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/preview-2-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/cabinet-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/owners3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/policies3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/edge-roles-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/preview-3-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/cabinet-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/owners2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/policies2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/edge-roles-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/preview-2-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/cabinet-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/owners3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/policies3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/edge-roles-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/preview-3-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/planar-native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/planar-preview-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/solid-native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/solid-preview-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/comparison-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "raster.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "raster.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "NATIVE15.md finite solid and semantic edge roles"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "validate",
+          "--recipe",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json",
+          "--reference",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject14\\appearance-reference.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\NativeObject15\\compare01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_geometry.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native14_materials.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_validation.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_cli.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PixelPipeline\\common.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\native15_recipe.json"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/PerfectPixelUniform/native15_recipe.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject14/appearance-reference.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/planar/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model2.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/buffers3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/geometry3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/geometry/solid/model3.obj",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/palette.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/provenance.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/planar/materials2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/planar/materials3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/solid/materials2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/material/solid/materials3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shade2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shadow-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shade3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/planar/shadow-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shade2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shadow-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shade3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/shade/solid/shadow-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/cabinet-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/owners2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/policies2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/edge-roles-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/preview-2-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/cabinet-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/owners3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/policies3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/edge-roles-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/planar/preview-3-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/cabinet-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/owners2.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/policies2.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/edge-roles-2.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/preview-2-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/cabinet-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/owners3.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/policies3.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/edge-roles-3.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/raster/solid/preview-3-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/planar-native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/planar-preview-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/solid-native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/solid-preview-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/comparison-x4.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/validation.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/NativeObject15/compare01/validate-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

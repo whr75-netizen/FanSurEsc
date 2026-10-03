@@ -1,0 +1,289 @@
+{
+  "contract": "NATIVE15.md",
+  "mode": "planar",
+  "count": 2,
+  "width_ticks": 44.0,
+  "height_ticks": 72.0,
+  "body_top_ticks": 68.0,
+  "depth_ticks": 20.0,
+  "boxes": [
+    {
+      "part": 0,
+      "name": "body",
+      "minimum_ticks": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "maximum_ticks": [
+        44.0,
+        68.0,
+        20.0
+      ]
+    },
+    {
+      "part": 1,
+      "name": "cap",
+      "minimum_ticks": [
+        -1.0,
+        68.0,
+        -1.0
+      ],
+      "maximum_ticks": [
+        45.0,
+        72.0,
+        21.0
+      ]
+    },
+    {
+      "part": 2,
+      "name": "handle.0",
+      "minimum_ticks": [
+        17.0,
+        55.0,
+        -0.5
+      ],
+      "maximum_ticks": [
+        20.0,
+        60.0,
+        0.0
+      ]
+    },
+    {
+      "part": 3,
+      "name": "handle.1",
+      "minimum_ticks": [
+        37.0,
+        55.0,
+        -0.5
+      ],
+      "maximum_ticks": [
+        40.0,
+        60.0,
+        0.0
+      ]
+    }
+  ],
+  "planar_faces": [
+    {
+      "part": 0,
+      "face": 0,
+      "vertices": [
+        [
+          0.0,
+          68.0,
+          0.0
+        ],
+        [
+          0.0,
+          68.0,
+          20.0
+        ],
+        [
+          0.0,
+          0.0,
+          20.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "part": 0,
+      "face": 4,
+      "vertices": [
+        [
+          0.0,
+          68.0,
+          0.0
+        ],
+        [
+          44.0,
+          68.0,
+          0.0
+        ],
+        [
+          44.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ]
+    },
+    {
+      "part": 2,
+      "face": 4,
+      "vertices": [
+        [
+          17.0,
+          60.0,
+          -0.5
+        ],
+        [
+          20.0,
+          60.0,
+          -0.5
+        ],
+        [
+          20.0,
+          55.0,
+          -0.5
+        ],
+        [
+          17.0,
+          55.0,
+          -0.5
+        ]
+      ]
+    },
+    {
+      "part": 3,
+      "face": 4,
+      "vertices": [
+        [
+          37.0,
+          60.0,
+          -0.5
+        ],
+        [
+          40.0,
+          60.0,
+          -0.5
+        ],
+        [
+          40.0,
+          55.0,
+          -0.5
+        ],
+        [
+          37.0,
+          55.0,
+          -0.5
+        ]
+      ]
+    },
+    {
+      "part": 1,
+      "face": 0,
+      "vertices": [
+        [
+          -1.0,
+          72.0,
+          -1.0
+        ],
+        [
+          -1.0,
+          72.0,
+          21.0
+        ],
+        [
+          -1.0,
+          68.0,
+          21.0
+        ],
+        [
+          -1.0,
+          68.0,
+          -1.0
+        ]
+      ]
+    },
+    {
+      "part": 1,
+      "face": 4,
+      "vertices": [
+        [
+          -1.0,
+          72.0,
+          -1.0
+        ],
+        [
+          45.0,
+          72.0,
+          -1.0
+        ],
+        [
+          45.0,
+          68.0,
+          -1.0
+        ],
+        [
+          -1.0,
+          68.0,
+          -1.0
+        ]
+      ]
+    },
+    {
+      "part": 1,
+      "face": 3,
+      "vertices": [
+        [
+          -1.0,
+          72.0,
+          -1.0
+        ],
+        [
+          45.0,
+          72.0,
+          -1.0
+        ],
+        [
+          45.0,
+          72.0,
+          21.0
+        ],
+        [
+          -1.0,
+          72.0,
+          21.0
+        ]
+      ]
+    }
+  ],
+  "size": [
+    143,
+    145
+  ],
+  "origin": [
+    47,
+    141
+  ],
+  "projection": "u=2*x-2*z; v=-x-z-y",
+  "world": "(-z/32, x/32, y/(32*sqrt(6))) meters",
+  "sample": "screen pixel center (x-origin.x+0.5, y-origin.y+0.5)",
+  "coverage": "affine UV interior: 0 <= u,v < 1; painter order",
+  "perimeter_expansion_pixels": 0,
+  "face_ids": {
+    "negative_x": 0,
+    "positive_x": 1,
+    "negative_y": 2,
+    "positive_y": 3,
+    "negative_z": 4,
+    "positive_z": 5
+  },
+  "face_tie_priority": [
+    3,
+    4,
+    0
+  ],
+  "depth": "primary ray parameter t; eye tick y=2000; direction=(1,-2,1)",
+  "camera": {
+    "azimuth_degrees": 45,
+    "elevation_degrees": 30,
+    "pixels_per_meter": 90.50966799187809
+  },
+  "visible_pixels": 13040,
+  "visible_faces": [
+    0,
+    3,
+    4
+  ]
+}

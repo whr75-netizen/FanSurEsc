@@ -1,0 +1,160 @@
+{
+  "goal": "원본 자동 간격 추정과 전역 등간격 보정으로 국소 좌표 warp를 제거한다. 기존 원본/결과/Unity는 보존한다. 미술 완성 판정은 범위 밖이다.",
+  "entry": "uniform",
+  "max_steps": 2,
+  "requirements": [
+    {
+      "id": "uniform_geometry",
+      "text": "같은 원본에서 등간격/직접 좌표 계산, RGBA 보존, 원본 엔진 불변, 실제 fixture 검증",
+      "source": "사용자 2026-10-03: 볼록/오목 거울처럼 모양 뒤틀림 수정; Tools/PerfectPixelUniform/README.md",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "uniform",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "source_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+            "scope": "Original detector only; global s/phase; no refinement or resize"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/uniform.py",
+          "--source",
+          "Tools/Building37/Source/sheet.png",
+          "--output-dir",
+          "docs/artifacts/building37/Uniform01"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/PerfectPixelUniform/uniform.py",
+          "Tools/Building33/native_normalize.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png",
+        "file:C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/perfect_pixel.py",
+        "file:C:/Users/JG/Desktop/GPT/3/perfectPixel-main/perfectPixel-main/src/perfect_pixel/__init__.py"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform01/output.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform01/receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "uniform.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "uniform.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "ref": "uniform"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/test_uniform.py",
+          "--actual-dir",
+          "docs/artifacts/building37/Uniform01",
+          "--report",
+          "docs/artifacts/building37/Uniform01/tests.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/PerfectPixelUniform/uniform.py",
+          "Tools/PerfectPixelUniform/test_uniform.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform01/output.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform01/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/native-final/receipt.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform01/tests.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

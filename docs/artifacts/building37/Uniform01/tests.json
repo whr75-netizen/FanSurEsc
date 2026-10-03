@@ -1,0 +1,12 @@
+{
+  "schema": "perfect-pixel-uniform-tests/1",
+  "tests_run": 5,
+  "failures": [
+    "test_blank_detection_fails_without_fallback (__main__.UniformContractTests.test_blank_detection_fails_without_fallback)\nTraceback (most recent call last):\n  File \"C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\test_uniform.py\", line 59, in test_blank_detection_fails_without_fallback\n    with self.assertRaises(uniform.GridDetectionError):\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: GridDetectionError not raised\n"
+  ],
+  "errors": [],
+  "skipped": [],
+  "passed": false,
+  "actual_result": "docs\\artifacts\\building37\\Uniform01",
+  "scope": "known full RGBA recovery, phase offset, bounded fractional coordinate error, no fallback, actual source provenance; no artistic or Unity acceptance"
+}

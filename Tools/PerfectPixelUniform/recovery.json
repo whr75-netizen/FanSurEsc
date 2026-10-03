@@ -1,0 +1,95 @@
+{
+  "goal": "Uniform01 첫 계산 결과 보존; 단색 입력의 원본 검출 허위값을 거부하는 원인 수정 후 영향받은 실패 분기와 전체 기술 판정 재검증. 실제 시트 정규화 재실행 없음.",
+  "entry": "validate",
+  "max_steps": 1,
+  "requirements": [
+    {
+      "id": "failure_and_geometry",
+      "text": "첫 결과와 원본 동일성 재사용; 수정된 단색 실패와 fixture 검증",
+      "source": "Uniform01/tests.json: blank image accepted; uniform.py added no-RGB-edge rejection only",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "cause": "blank RGB accepted as grid by upstream; reject no-RGB-edge input",
+            "preserved_output": "docs/artifacts/building37/Uniform01/output.png",
+            "no_actual_renormalization": true
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/test_uniform.py",
+          "--actual-dir",
+          "docs/artifacts/building37/Uniform01",
+          "--report",
+          "docs/artifacts/building37/Uniform01/tests-after-blank-fix.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/PerfectPixelUniform/uniform.py",
+          "Tools/PerfectPixelUniform/test_uniform.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform01/output.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform01/receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/native-final/receipt.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform01/tests-after-blank-fix.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

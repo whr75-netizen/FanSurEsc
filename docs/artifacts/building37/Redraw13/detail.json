@@ -1,0 +1,896 @@
+{
+  "wood_top": {
+    "role": "wood",
+    "sample_count": 4983,
+    "tone_count": 4,
+    "defaults": {
+      "shade_basis": "quadratic_uv",
+      "shade_huber_iterations": 6,
+      "neighbors": 12,
+      "tensor_coherence_wood": 0.35,
+      "tensor_coherence_paint": 0.55,
+      "detail_gain_wood": 1.7,
+      "detail_gain_paint": 0.7,
+      "detail_minimum_lab_l": 0.4,
+      "quantizer_iterations": 24
+    },
+    "source_rgb_colors": 2434,
+    "output_rgb_colors": 4,
+    "occupied_tone_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "palette_source_sample_indices": [
+      4055,
+      366,
+      1234,
+      1652
+    ],
+    "palette_is_exact_observed_rgb": true,
+    "source_lightness_range": [
+      3.590355828969919,
+      85.1832843222043
+    ],
+    "shade_lightness_range": [
+      35.08102230979857,
+      56.753232770553595
+    ],
+    "source_residual_mad_lab_l": 6.34345266920148,
+    "score_centers_before_palette_order": [
+      21.605536758993814,
+      46.28946004094716,
+      56.08565814201523,
+      66.29450796224148
+    ],
+    "detail_gain": 1.7,
+    "output_vs_source_lightness_mae": 2.4973600214730607,
+    "shade_fit": {
+      "basis": "quadratic_uv",
+      "coefficient_order": [
+        "1",
+        "u",
+        "v",
+        "u2",
+        "uv",
+        "v2"
+      ],
+      "normalized_basis_coefficients": [
+        55.817905087311445,
+        0.6506035458685577,
+        -6.478888908796304,
+        -2.5666207684385993,
+        -0.48262521626145694,
+        -11.973376021701936
+      ],
+      "fit_residual_mad_lab_l": 6.34345266920148,
+      "downweighted_sample_count": 257
+    },
+    "directional_detail": {
+      "direction_test_available": true,
+      "analysis_uv_metric": "caller_uv_with_one_uniform_scalar_normalization",
+      "neighbor_spacing_normalized_uv": 0.005984125693563606,
+      "noise_mad_lab_l": 0.805442332097282,
+      "minimum_detail_amplitude_lab_l": 0.5638096324680973,
+      "minimum_tensor_coherence": 0.35,
+      "grain_candidates": 4249,
+      "grain_candidate_fraction": 0.8526991772024884,
+      "mean_tensor_coherence": 0.7687726850935309,
+      "coherent_residual_lab_l_range": [
+        -43.4304712471163,
+        34.925705037452396
+      ],
+      "candidate_semantics": "directional_source_detail_hypothesis_not_verified_wood_grain"
+    },
+    "timings_seconds": {
+      "shade_fit": 0.017370399997162167,
+      "directional_detail": 0.22101950000069337,
+      "palette_quantization": 0.004660000005969778,
+      "total": 0.24304990000382531
+    },
+    "warnings": [],
+    "failure_conditions": [
+      "grain_pattern_lost_or_replaced_by_new_lines_in_native_visual_comparison",
+      "directional_noise_promoted_as_grain_or_structural_boundary_blurred",
+      "palette_or_sampling_contains_colors_not_observed_in_original_source",
+      "face_geometry_uv_or_input_semantic_role_is_incorrect"
+    ],
+    "scope": "R13 shade/detail experiment; no recovered original grid, semantic guarantee, physical albedo, normals, or artistic approval"
+  },
+  "paint_side": {
+    "role": "paint",
+    "sample_count": 2100,
+    "tone_count": 4,
+    "defaults": {
+      "shade_basis": "quadratic_uv",
+      "shade_huber_iterations": 6,
+      "neighbors": 12,
+      "tensor_coherence_wood": 0.35,
+      "tensor_coherence_paint": 0.55,
+      "detail_gain_wood": 1.7,
+      "detail_gain_paint": 0.7,
+      "detail_minimum_lab_l": 0.4,
+      "quantizer_iterations": 24
+    },
+    "source_rgb_colors": 996,
+    "output_rgb_colors": 4,
+    "occupied_tone_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "palette_source_sample_indices": [
+      77,
+      222,
+      139,
+      1634
+    ],
+    "palette_is_exact_observed_rgb": true,
+    "source_lightness_range": [
+      0.25544241003572665,
+      33.970113976936574
+    ],
+    "shade_lightness_range": [
+      0.25544241003572665,
+      17.714283068189907
+    ],
+    "source_residual_mad_lab_l": 2.330955551363749,
+    "score_centers_before_palette_order": [
+      5.943665193223913,
+      10.35201862863957,
+      13.92177705060646,
+      16.62915433181041
+    ],
+    "detail_gain": 0.7,
+    "output_vs_source_lightness_mae": 1.5996566673244446,
+    "shade_fit": {
+      "basis": "quadratic_uv",
+      "coefficient_order": [
+        "1",
+        "u",
+        "v",
+        "u2",
+        "uv",
+        "v2"
+      ],
+      "normalized_basis_coefficients": [
+        12.608002430679191,
+        1.651595383597681,
+        21.105064346542015,
+        -3.0657912189811025,
+        -0.9479908007180293,
+        -22.31571701217282
+      ],
+      "fit_residual_mad_lab_l": 2.330955551363749,
+      "downweighted_sample_count": 277
+    },
+    "directional_detail": {
+      "direction_test_available": true,
+      "analysis_uv_metric": "caller_uv_with_one_uniform_scalar_normalization",
+      "neighbor_spacing_normalized_uv": 0.010241879248945263,
+      "noise_mad_lab_l": 0.37103308226359044,
+      "minimum_detail_amplitude_lab_l": 0.463791352829488,
+      "minimum_tensor_coherence": 0.55,
+      "grain_candidates": 1169,
+      "grain_candidate_fraction": 0.5566666666666666,
+      "mean_tensor_coherence": 0.7131581391087886,
+      "coherent_residual_lab_l_range": [
+        -11.214108082701348,
+        12.256909826099426
+      ],
+      "candidate_semantics": "directional_source_detail_hypothesis_not_verified_wood_grain"
+    },
+    "timings_seconds": {
+      "shade_fit": 0.002796400003717281,
+      "directional_detail": 0.10918020000099204,
+      "palette_quantization": 0.003697799998917617,
+      "total": 0.11567440000362694
+    },
+    "warnings": [],
+    "failure_conditions": [
+      "grain_pattern_lost_or_replaced_by_new_lines_in_native_visual_comparison",
+      "directional_noise_promoted_as_grain_or_structural_boundary_blurred",
+      "palette_or_sampling_contains_colors_not_observed_in_original_source",
+      "face_geometry_uv_or_input_semantic_role_is_incorrect"
+    ],
+    "scope": "R13 shade/detail experiment; no recovered original grid, semantic guarantee, physical albedo, normals, or artistic approval"
+  },
+  "paint_front": {
+    "role": "paint",
+    "sample_count": 6515,
+    "tone_count": 4,
+    "defaults": {
+      "shade_basis": "quadratic_uv",
+      "shade_huber_iterations": 6,
+      "neighbors": 12,
+      "tensor_coherence_wood": 0.35,
+      "tensor_coherence_paint": 0.55,
+      "detail_gain_wood": 1.7,
+      "detail_gain_paint": 0.7,
+      "detail_minimum_lab_l": 0.4,
+      "quantizer_iterations": 24
+    },
+    "source_rgb_colors": 3086,
+    "output_rgb_colors": 4,
+    "occupied_tone_ids": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "palette_source_sample_indices": [
+      1842,
+      690,
+      5897,
+      2325
+    ],
+    "palette_is_exact_observed_rgb": true,
+    "source_lightness_range": [
+      0.23565384384098564,
+      68.68793912028676
+    ],
+    "shade_lightness_range": [
+      0.23565384384098564,
+      24.426050249109927
+    ],
+    "source_residual_mad_lab_l": 2.293746970343735,
+    "score_centers_before_palette_order": [
+      10.210243035988611,
+      18.78777064076636,
+      23.256033524079744,
+      29.266737400032078
+    ],
+    "detail_gain": 0.7,
+    "output_vs_source_lightness_mae": 2.419123786528828,
+    "shade_fit": {
+      "basis": "quadratic_uv",
+      "coefficient_order": [
+        "1",
+        "u",
+        "v",
+        "u2",
+        "uv",
+        "v2"
+      ],
+      "normalized_basis_coefficients": [
+        20.62790857557113,
+        -0.9020066976455872,
+        12.867647335664055,
+        -1.9371466368218606,
+        1.155410144145259,
+        -10.916293617374485
+      ],
+      "fit_residual_mad_lab_l": 2.293746970343735,
+      "downweighted_sample_count": 1366
+    },
+    "directional_detail": {
+      "direction_test_available": true,
+      "analysis_uv_metric": "caller_uv_with_one_uniform_scalar_normalization",
+      "neighbor_spacing_normalized_uv": 0.007543166351482833,
+      "noise_mad_lab_l": 0.3725545805549136,
+      "minimum_detail_amplitude_lab_l": 0.46569322569364197,
+      "minimum_tensor_coherence": 0.55,
+      "grain_candidates": 3686,
+      "grain_candidate_fraction": 0.5657712970069071,
+      "mean_tensor_coherence": 0.7388924671090907,
+      "coherent_residual_lab_l_range": [
+        -21.411206765723417,
+        32.95589847928437
+      ],
+      "candidate_semantics": "directional_source_detail_hypothesis_not_verified_wood_grain"
+    },
+    "timings_seconds": {
+      "shade_fit": 0.006715700001223013,
+      "directional_detail": 0.33979440000257455,
+      "palette_quantization": 0.0058206999965477735,
+      "total": 0.35233080000034533
+    },
+    "warnings": [],
+    "failure_conditions": [
+      "grain_pattern_lost_or_replaced_by_new_lines_in_native_visual_comparison",
+      "directional_noise_promoted_as_grain_or_structural_boundary_blurred",
+      "palette_or_sampling_contains_colors_not_observed_in_original_source",
+      "face_geometry_uv_or_input_semantic_role_is_incorrect"
+    ],
+    "scope": "R13 shade/detail experiment; no recovered original grid, semantic guarantee, physical albedo, normals, or artistic approval"
+  },
+  "dark_structure": {
+    "detected_lines": [
+      {
+        "family": 0,
+        "a": [
+          89.6399403935881,
+          175.17295687605207
+        ],
+        "b": [
+          299.9800076642016,
+          67.46707821713397
+        ],
+        "width": 4.0118030384026895,
+        "kind": "trim_line",
+        "support": 864,
+        "error_p90": 1.7433592346685745
+      },
+      {
+        "family": 0,
+        "a": [
+          88.79855552159141,
+          184.16121919119635
+        ],
+        "b": [
+          157.30255946503644,
+          149.08333777695213
+        ],
+        "width": 4.668369465829102,
+        "kind": "trim_line",
+        "support": 235,
+        "error_p90": 1.965546147229037
+      },
+      {
+        "family": 0,
+        "a": [
+          162.8728780181154,
+          146.23102313260256
+        ],
+        "b": [
+          268.72421294439994,
+          92.02921943731725
+        ],
+        "width": 4.668369465829102,
+        "kind": "trim_line",
+        "support": 298,
+        "error_p90": 2.8562113495450467
+      },
+      {
+        "family": 0,
+        "a": [
+          99.86065484743936,
+          189.5748481058338
+        ],
+        "b": [
+          151.09558749160595,
+          163.3396970474724
+        ],
+        "width": 4.141589844347749,
+        "kind": "trim_line",
+        "support": 172,
+        "error_p90": 2.024280344094515
+      },
+      {
+        "family": 0,
+        "a": [
+          168.06879031130052,
+          154.64846790091485
+        ],
+        "b": [
+          210.90287036051717,
+          132.71502322671577
+        ],
+        "width": 4.141589844347749,
+        "kind": "trim_line",
+        "support": 141,
+        "error_p90": 1.9733435678859337
+      },
+      {
+        "family": 0,
+        "a": [
+          87.5141535516346,
+          262.2798836021646
+        ],
+        "b": [
+          164.1393735177962,
+          223.04348536867724
+        ],
+        "width": 4.599348723391699,
+        "kind": "trim_line",
+        "support": 327,
+        "error_p90": 2.3326067403879054
+      },
+      {
+        "family": 0,
+        "a": [
+          169.4314537605993,
+          220.33364430092055
+        ],
+        "b": [
+          229.51732196150905,
+          189.5663192090403
+        ],
+        "width": 4.599348723391699,
+        "kind": "trim_line",
+        "support": 270,
+        "error_p90": 1.9820933156834655
+      },
+      {
+        "family": 0,
+        "a": [
+          235.30566475259366,
+          186.6023639608436
+        ],
+        "b": [
+          299.77021416402204,
+          153.5929091916943
+        ],
+        "width": 4.599348723391699,
+        "kind": "trim_line",
+        "support": 253,
+        "error_p90": 2.0738204326824077
+      },
+      {
+        "family": 0,
+        "a": [
+          92.29091560183443,
+          280.23461338935687
+        ],
+        "b": [
+          301.8045873573455,
+          172.95189545406532
+        ],
+        "width": 3.8911218217524493,
+        "kind": "trim_line",
+        "support": 586,
+        "error_p90": 1.8154913832497073
+      },
+      {
+        "family": 1,
+        "a": [
+          19.947922759992828,
+          147.05736483537328
+        ],
+        "b": [
+          69.00468640667327,
+          174.09734775197555
+        ],
+        "width": 3.1674864713870647,
+        "kind": "trim_line",
+        "support": 138,
+        "error_p90": 1.4586623632940856
+      },
+      {
+        "family": 1,
+        "a": [
+          17.215758904608116,
+          152.40978696563062
+        ],
+        "b": [
+          70.7224298454995,
+          181.90254923968382
+        ],
+        "width": 3.7286176719580766,
+        "kind": "trim_line",
+        "support": 102,
+        "error_p90": 2.7456210783265704
+      },
+      {
+        "family": 1,
+        "a": [
+          19.608824567534597,
+          233.44560960303093
+        ],
+        "b": [
+          60.65735827299373,
+          256.0714733502065
+        ],
+        "width": 4.179683829411829,
+        "kind": "trim_line",
+        "support": 178,
+        "error_p90": 1.905718657945184
+      },
+      {
+        "family": 1,
+        "a": [
+          16.00829155487098,
+          250.96100352803003
+        ],
+        "b": [
+          41.20010898521497,
+          264.84667927013044
+        ],
+        "width": 3.321643859974529,
+        "kind": "trim_line",
+        "support": 67,
+        "error_p90": 1.7309368113215042
+      },
+      {
+        "family": 1,
+        "a": [
+          46.05691452536328,
+          267.5237400681221
+        ],
+        "b": [
+          70.47179523117427,
+          280.9811699538517
+        ],
+        "width": 3.321643859974529,
+        "kind": "trim_line",
+        "support": 58,
+        "error_p90": 1.2667230681312278
+      },
+      {
+        "family": 2,
+        "a": [
+          304.5,
+          74.49
+        ],
+        "b": [
+          304.5,
+          147.5
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 200,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          299.5,
+          73.1
+        ],
+        "b": [
+          299.5,
+          124.9
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 61,
+        "error_p90": 2.0
+      },
+      {
+        "family": 2,
+        "a": [
+          299.5,
+          131.94
+        ],
+        "b": [
+          299.5,
+          159.5
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 45,
+        "error_p90": 3.0
+      },
+      {
+        "family": 2,
+        "a": [
+          292.5,
+          89.18
+        ],
+        "b": [
+          292.5,
+          159.82
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 169,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          285.5,
+          93.5
+        ],
+        "b": [
+          285.5,
+          152.38
+        ],
+        "width": 2.8000000000000114,
+        "kind": "trim_line",
+        "support": 113,
+        "error_p90": 1.7999999999999972
+      },
+      {
+        "family": 2,
+        "a": [
+          236.5,
+          118.8
+        ],
+        "b": [
+          236.5,
+          177.2
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 131,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          229.5,
+          113.5
+        ],
+        "b": [
+          229.5,
+          181.5
+        ],
+        "width": 2.0,
+        "kind": "trim_line",
+        "support": 118,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          218.0,
+          125.5
+        ],
+        "b": [
+          218.0,
+          192.13
+        ],
+        "width": 2.0,
+        "kind": "trim_line",
+        "support": 138,
+        "error_p90": 0.5
+      },
+      {
+        "family": 2,
+        "a": [
+          210.5,
+          132.5
+        ],
+        "b": [
+          210.5,
+          189.28
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 123,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          170.5,
+          151.5
+        ],
+        "b": [
+          170.5,
+          210.24
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 127,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          164.5,
+          164.5
+        ],
+        "b": [
+          164.5,
+          216.29
+        ],
+        "width": 2.0,
+        "kind": "trim_line",
+        "support": 122,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          151.5,
+          166.56
+        ],
+        "b": [
+          151.5,
+          216.44
+        ],
+        "width": 2.0,
+        "kind": "trim_line",
+        "support": 107,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          144.5,
+          165.5
+        ],
+        "b": [
+          144.5,
+          210.5
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 118,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          101.5,
+          186.13
+        ],
+        "b": [
+          101.5,
+          244.5
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 164,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          95.5,
+          190.11
+        ],
+        "b": [
+          95.5,
+          248.89
+        ],
+        "width": 1.0,
+        "kind": "trim_line",
+        "support": 62,
+        "error_p90": 0.0
+      },
+      {
+        "family": 2,
+        "a": [
+          88.5,
+          173.5
+        ],
+        "b": [
+          88.5,
+          263.5
+        ],
+        "width": 4.0,
+        "kind": "trim_line",
+        "support": 321,
+        "error_p90": 2.0
+      },
+      {
+        "family": 2,
+        "a": [
+          71.5,
+          173.5
+        ],
+        "b": [
+          71.5,
+          280.5
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 315,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          27.5,
+          167.5
+        ],
+        "b": [
+          27.5,
+          229.57999999999998
+        ],
+        "width": 2.0,
+        "kind": "trim_line",
+        "support": 93,
+        "error_p90": 1.0
+      },
+      {
+        "family": 2,
+        "a": [
+          19.5,
+          147.62
+        ],
+        "b": [
+          19.5,
+          254.5
+        ],
+        "width": 3.0,
+        "kind": "trim_line",
+        "support": 313,
+        "error_p90": 1.0
+      }
+    ],
+    "source_candidate_pixels": 6683
+  },
+  "palettes": {
+    "wood_top": [
+      [
+        94,
+        62,
+        41
+      ],
+      [
+        156,
+        109,
+        69
+      ],
+      [
+        172,
+        120,
+        74
+      ],
+      [
+        184,
+        131,
+        82
+      ]
+    ],
+    "paint_side": [
+      [
+        11,
+        15,
+        17
+      ],
+      [
+        17,
+        26,
+        31
+      ],
+      [
+        26,
+        39,
+        47
+      ],
+      [
+        27,
+        43,
+        52
+      ]
+    ],
+    "paint_front": [
+      [
+        17,
+        23,
+        28
+      ],
+      [
+        32,
+        44,
+        50
+      ],
+      [
+        41,
+        60,
+        70
+      ],
+      [
+        64,
+        77,
+        81
+      ]
+    ],
+    "metal": [
+      [
+        64,
+        49,
+        35
+      ],
+      [
+        97,
+        77,
+        55
+      ],
+      [
+        151,
+        114,
+        72
+      ],
+      [
+        205,
+        163,
+        102
+      ]
+    ],
+    "ink": [
+      [
+        14,
+        23,
+        32
+      ]
+    ]
+  }
+}

@@ -2697,3 +2697,11 @@ Interactable (abstract base class)
 - `[실제 실행]` L11 계약에 따라 실제1489×1056 전체 시트에 기존 build_color_ranges API만 재사용했다. 기본15도 색상환 범위/중성색 분리→범위별L 최대3/4단계→실제 원본RGB lookup이며 좌표변환은 항등이다. alpha>0 전체 색을 처리하고 모든 알파·숨은RGB를 보존했다. 예전 전체 래퍼의 alpha128·격자vote·cleanup·선처리는 실행하지 않았다. 원본/옛엔진/V4/Unity 상태는 보존했다.
 - `[증거]` WorkLoop prepare→quantize→validate 1회 완료, 각case1회. visible154,249→74/98색, 색계산+lookup1.371/1.453초(저장/검사/프로세스 제외). 20조건: native크기·알파·숨은RGB·palette lookup·동일범위 원본RGB provenance·범위별톤상한·원본/엔진/출력SHA 통과. Legacy11에 PNG·2배같은ROI비교·영역/톤지도·receipt·검사·실행/옛코드 snapshot·graph/state를 보존했다.
 - `[판정/미완료]` 명암 단계화 가설은 지지했으나 약한 나뭇결은 단색에 합쳐지고 경계 잔색은 남았다. Hue범위는 의미적 재질/연결면/구조선 구분이 아니다. 실제 선 기하 재작도·logical격자복구·이미지 조명분리·미술·Unity통합은 계속 미완료다. 웹 엔진 변경이나 추가 시각 보정은 하지 않았다.
+
+## 185. 원화 캐비닛의 선·면·무늬·장식 재작도와 반복 실행 `[MAP-01]`
+
+- `[요청/계약]` 사용자가 큰 범위에서 구조선을 감지하고 해상도를 선택한 뒤 한 줄로 재작도하며 명암·무늬·작은 특징을 함께 남기는 실제 사물 제작을 요청했다. REDRAW13.md에 R12 C/E 선택, sourceSHA/ROI·좌표/반올림·공통 기하·역할·오류/완료 범위를 실행 전에 고정했다. 기존 생성 시트의 첫 닫힌 목재/남색/금속 캐비닛만 입력 조건이다. 임의64슬롯 축소나 원래 격자 검출 성공으로 바꾸지 않았다.
+- `[구현]` 기존 OpenCV5.0.0의 contour/Hough/Welschfit와 공통 방향→격자/정수stroke, NumPy의 Huber명암기저/방향잔차→역할별4톤/관측RGBmedoid를 연결했다. compact metal core는 긴 선 투표 전에 분리하고 foreground로 보존했다. sourcepaint의 구조선corridor11,231px를 sampling 후보에서 제외해 흐린 기존선+새선 중첩을 제거했다. 큰 금속띠의 끝 장식은 원본영역에서 보존한다. web/V9/Unity/C#/카메라는 보존했다.
+- `[실제 산출]` docs/artifacts/building37/Redraw13e에162×141native,4/8배nearest표시,원본ROI비교,기하·tone/detail/role배열,receipt·19검사·실행코드·WorkLoop상태를 저장했다. 같은ROI의visible22,489RGB→17RGB,alpha0/255. source2pxpitch는 작은특징3셀/12셀·주금속폭3셀 예산에서 선택했으며 originalgridrecovered=false다. 작은지지cluster3개는47/26/23셀·각4색,원본centroid변화0.69/0.95/1.11sourcepx. 각pixel의선owner는최종role과일치한다.
+- `[검증]` 고정geometry→detail→raster→validate4노드가2.909초(프로세스/최종검사포함),생성AI/API0회로완료했다. 실제ink/trim전체1,051/719셀의공통선까지최대오차0.945/0.733nativepx,관측palette/halo제외·pixel규격·작은특징의source관계·실제metal2명암·정수확대등19조건통과. 동일결과재호출은cached=true로재계산없음. 별도복사본PNG1byte손상은재생성하지않고거부,원본SHA불변이다. 최종정수4배PNG를실제관찰/제시했다. Unity Play검사는범위밖이어서실행하지않았다.
+- `[수정 근거/한계]` 독립검토의최종inkmask소유권/sourcehalo재유입/특징검사공백을수정했다. 이전R13/R13b와R13c의blocked연결검사·code를보존했다. c는이미접촉한source지지영역을독립손잡이로오인했으므로source관계를먼저비교하는계약으로바꿨으며새간격을억지로그리지않았다. d→e는실제선전체오차검사보강이며PNG는동일하다. 실행경로는Run-Redraw13.cmd;미술적AI티0%/reference게임동등성·모든물체의의미/원래격자·albedo/Unity조명·모든교점의전역1px은미검증이다. 그래프완료를이전체목표의완료로승격하지않는다.

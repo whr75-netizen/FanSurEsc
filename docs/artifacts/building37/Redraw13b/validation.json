@@ -1,0 +1,196 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "id": "source_sha",
+      "passed": true,
+      "observed": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae"
+    },
+    {
+      "id": "native_geometry_size",
+      "passed": true,
+      "observed": [
+        162,
+        141
+      ]
+    },
+    {
+      "id": "binary_coverage",
+      "passed": true,
+      "observed": [
+        0,
+        255
+      ]
+    },
+    {
+      "id": "transparent_rgb_zero",
+      "passed": true,
+      "observed": 0
+    },
+    {
+      "id": "actual_source_palette",
+      "passed": true,
+      "observed": [
+        [
+          8,
+          11,
+          10
+        ],
+        [
+          14,
+          23,
+          32
+        ],
+        [
+          23,
+          35,
+          42
+        ],
+        [
+          24,
+          29,
+          32
+        ],
+        [
+          27,
+          43,
+          52
+        ],
+        [
+          39,
+          51,
+          57
+        ],
+        [
+          44,
+          61,
+          69
+        ],
+        [
+          50,
+          55,
+          54
+        ],
+        [
+          64,
+          49,
+          35
+        ],
+        [
+          70,
+          83,
+          85
+        ],
+        [
+          94,
+          62,
+          41
+        ],
+        [
+          97,
+          77,
+          55
+        ],
+        [
+          151,
+          114,
+          72
+        ],
+        [
+          156,
+          109,
+          69
+        ],
+        [
+          172,
+          120,
+          74
+        ],
+        [
+          184,
+          131,
+          82
+        ],
+        [
+          205,
+          163,
+          102
+        ]
+      ]
+    },
+    {
+      "id": "finite_role_palette",
+      "passed": true,
+      "observed": 17
+    },
+    {
+      "id": "uniform_pitch",
+      "passed": true,
+      "observed": {
+        "pitch": 2.0,
+        "grid_recovery": false
+      }
+    },
+    {
+      "id": "protected_features_survive",
+      "passed": true,
+      "observed": [
+        {
+          "id": 0,
+          "metal_cells": 47,
+          "colors": 4
+        },
+        {
+          "id": 1,
+          "metal_cells": 26,
+          "colors": 4
+        },
+        {
+          "id": 2,
+          "metal_cells": 23,
+          "colors": 4
+        }
+      ]
+    },
+    {
+      "id": "wood_has_tones_and_source_detail",
+      "passed": true,
+      "observed": {
+        "colors": 4,
+        "source_detail_cells": 4152
+      }
+    },
+    {
+      "id": "line8_single_stroke_fixture",
+      "passed": true,
+      "observed": {
+        "cells": 34,
+        "columns": 34
+      }
+    },
+    {
+      "id": "observed_asymmetric_projection",
+      "passed": true,
+      "observed": [
+        -0.5120559295074716,
+        0.5511978554343953
+      ]
+    },
+    {
+      "id": "preview_is_exact_integer_replication",
+      "passed": true,
+      "observed": [
+        1128,
+        1296,
+        4
+      ]
+    }
+  ],
+  "art_approved": false,
+  "scope": "Source-derived closed-cabinet reconstruction, not universal normalization or AI-art-free proof",
+  "unverified": [
+    "reference-game style equivalence",
+    "physical albedo/Unity relighting",
+    "other objects/sheets"
+  ]
+}

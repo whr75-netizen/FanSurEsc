@@ -1,0 +1,338 @@
+{
+  "goal": "One source cabinet reconstructed on a common authored pixel grid; no automatic art approval",
+  "entry": "geometry",
+  "max_steps": 4,
+  "requirements": [
+    {
+      "id": "r13_technical",
+      "text": "Actual source features, geometry and finite native raster",
+      "source": "REDRAW13.md",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "validate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "geometry",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "REDRAW13.md: real-source structural/detail reconstruction"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13.py",
+          "geometry",
+          "--source",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\source.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw13c"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw_geometry13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw_detail13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13_cli.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw10/source.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/source-cabinet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry-overlay.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "geometry.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "detail"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "geometry.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "detail",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "REDRAW13.md: real-source structural/detail reconstruction"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13.py",
+          "detail",
+          "--source",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\source.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw13c"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw_geometry13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw_detail13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13_cli.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw10/source.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/source-cabinet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry-overlay.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry-receipt.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "detail.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "raster"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "detail.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "raster",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "REDRAW13.md: real-source structural/detail reconstruction"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13.py",
+          "raster",
+          "--source",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\source.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw13c"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw_geometry13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw_detail13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13_cli.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw10/source.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/source-cabinet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry-overlay.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry-receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail-receipt.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/preview-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/preview-x8.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/structure-mask.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/raster.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/comparison.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/raster-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "raster.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "raster.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "REDRAW13.md: real-source structural/detail reconstruction"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13.py",
+          "validate",
+          "--source",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw10\\source.png",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building37\\Redraw13c"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw_geometry13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw_detail13.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\PerfectPixelUniform\\redraw13_cli.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw10/source.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/source-cabinet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry-overlay.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/geometry-receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/detail-receipt.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/preview-x4.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/preview-x8.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/structure-mask.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/raster.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/comparison.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/raster-receipt.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/validation.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Redraw13c/validate-receipt.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

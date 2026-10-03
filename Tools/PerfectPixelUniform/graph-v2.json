@@ -1,0 +1,234 @@
+{
+  "goal": "모자이크 특징 손실 수정: 정확한 반복 블록만 무손실 축약, 실제 불규칙 B37 시트 거부/PNG 미생성, 알려진 미세 특징과 HTTP 경로 마지막 검증. Unity/원본/V1 보존.",
+  "entry": "source",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "source_details_preserved",
+      "text": "실제 B37는 거부하고 임의 downsample PNG를 만들지 않으며, 알려진2/3/4/8px 격자·미세특징/alpha/edge를exact복원한다.",
+      "source": "2026-10-03 사용자: 특징을 뭉개는 모자이크 금지; README V2 exact byte contract",
+      "predicate": {
+        "op": "all",
+        "args": [
+          {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "http.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "source",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "source_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae",
+            "expected_case": "irregular real source; refuse lossy output",
+            "no_source_regeneration": true
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/uniform.py",
+          "--source",
+          "Tools/Building37/Source/sheet.png",
+          "--output-dir",
+          "docs/artifacts/building37/Uniform02"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/PerfectPixelUniform/uniform.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform02/failure.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "source.exit_code"
+              },
+              {
+                "literal": 2
+              }
+            ]
+          },
+          "to": "validate"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "source.exit_code"
+              },
+              {
+                "literal": 2
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "validate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "ref": "source"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/test_lattice.py",
+          "--failure-dir",
+          "docs/artifacts/building37/Uniform02",
+          "--report",
+          "docs/artifacts/building37/Uniform02/tests.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/PerfectPixelUniform/uniform.py",
+          "Tools/PerfectPixelUniform/test_lattice.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform02/failure.json"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform02/tests.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "http"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "validate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "http",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "ref": "validate"
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/PerfectPixelUniform/test_web.py",
+          "docs/artifacts/building37/Uniform02/web-tests.json"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "Tools/PerfectPixelUniform/uniform.py",
+          "Tools/PerfectPixelUniform/web.py",
+          "Tools/PerfectPixelUniform/index.html",
+          "Tools/PerfectPixelUniform/test_web.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building37/Source/sheet.png"
+      ],
+      "writes": [
+        "art:PerfectPixelUniform-V2-HTTP-runs",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building37/Uniform02/web-tests.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "http.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "http.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

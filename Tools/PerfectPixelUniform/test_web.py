@@ -50,7 +50,7 @@ def main():
                 if time.monotonic() > deadline or process.poll() is not None:
                     raise RuntimeError("Local server startup failed")
                 time.sleep(0.05)
-        assert status == 200 and json.loads(raw)["application"] == "PerfectPixelUniform"
+        assert status == 200 and json.loads(raw)["application"] == "PerfectPixelUniform" and json.loads(raw)["version"] == 2
         cases.append("local server health")
         status, page = request("/")
         assert status == 200 and b"/api/normalize" in page and b"drawImage" not in page and b"<canvas" not in page
@@ -75,6 +75,7 @@ def main():
         receipt = json.loads(receipt_bytes)
         assert status == 200 and receipt["_web"]["source_sha256"] == hashlib.sha256(input_bytes).hexdigest()
         assert receipt["_web"]["output_sha256"] == hashlib.sha256(png).hexdigest()
+        assert receipt["grid_status"] == "verified_lossless" and receipt["reconstruction"]["changed_source_texels"] == 0
         cases.append("exact uploaded bytes and output SHA persisted; receipt retrievable")
         status, _ = request("/api/normalize", payload, "https://external.invalid")
         assert status == 403
@@ -88,9 +89,21 @@ def main():
         status, _ = request(failure["failure_url"])
         assert status == 200
         cases.append("blank detection failure displayed and preserved, no replacement output")
+        real_source = ROOT.parent / "Building37/Source/sheet.png"
+        real_bytes = real_source.read_bytes()
+        status, failure_bytes = request("/api/normalize", {"filename": "sheet.png", "image_base64": base64.b64encode(real_bytes).decode("ascii")}, url)
+        assert status == 422
+        real_failure = json.loads(failure_bytes)
+        assert real_failure["report"]["grid_status"] == "rejected"
+        assert real_failure["report"]["output_dimensions"] is None
+        assert not (ROOT / "runs" / real_failure["run_id"] / "output.png").exists()
+        status, saved_source = request(real_failure["source_url"])
+        assert status == 200 and saved_source == real_bytes
+        cases.append("actual pseudo-pixel sheet rejected with diagnosis, no PNG; exact source retrievable")
         report = {"schema": "perfect-pixel-uniform-web-tests/1", "passed": True, "cases": cases,
                   "processing_http_seconds": elapsed, "core_seconds": answer["report"]["elapsed_seconds"],
                   "successful_run_id": answer["run_id"], "failed_run_id": failure["run_id"],
+                  "actual_rejected_run_id": real_failure["run_id"],
                   "scope": "HTTP/PNG/HTML integration; no personal browser UI automation or Unity changes"}
         destination = Path(sys.argv[1])
         with destination.open("x", encoding="utf-8") as stream:

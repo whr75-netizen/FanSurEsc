@@ -1,0 +1,19 @@
+{
+  "schema": "perfect-pixel-uniform-web-tests/1",
+  "passed": true,
+  "cases": [
+    "local server health",
+    "HTML served without canvas pre-resize",
+    "HTTP auto normalization recovers independently known RGB image; PNG not preview-scaled",
+    "exact uploaded bytes and output SHA persisted; receipt retrievable",
+    "external Origin rejected before processing",
+    "blank detection failure displayed and preserved, no replacement output",
+    "actual pseudo-pixel sheet rejected with diagnosis, no PNG; exact source retrievable"
+  ],
+  "processing_http_seconds": 0.043706500000553206,
+  "core_seconds": 0.002080099999147933,
+  "successful_run_id": "20261003T091957083944Z-980956a764354875aef184cbebb0e998",
+  "failed_run_id": "20261003T091957287131Z-0fc567d67bb44aa8af89e9aadf263b8f",
+  "actual_rejected_run_id": "20261003T091957339805Z-2d4197491197422fa4d3104fb13433cc",
+  "scope": "HTTP/PNG/HTML integration; no personal browser UI automation or Unity changes"
+}

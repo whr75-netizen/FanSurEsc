@@ -1,0 +1,75 @@
+{
+  "schema": "perfect-pixel-uniform/2",
+  "algorithm": "common integer boundary lattice + exact source reconstruction",
+  "source_dimensions": [
+    1489,
+    1056
+  ],
+  "source_mode": "RGBA",
+  "source_array_sha256": "b2b1699e64618f4027f3a286ac082421bac6212ef1b27521096b68960562c5e2",
+  "axis_evidence": {
+    "x": {
+      "change_boundary_count": 1450,
+      "boundary_interval_gcd": 1,
+      "first_boundary": 1,
+      "flat_axis": false,
+      "boundary_examples": [
+        1,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "evidence": "all RGB/RGBA byte changes, no threshold or peak suppression"
+    },
+    "y": {
+      "change_boundary_count": 973,
+      "boundary_interval_gcd": 1,
+      "first_boundary": 1,
+      "flat_axis": false,
+      "boundary_examples": [
+        1,
+        2,
+        3,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18
+      ],
+      "evidence": "all RGB/RGBA byte changes, no threshold or peak suppression"
+    }
+  },
+  "period_source_px": 1,
+  "grid_status": "rejected",
+  "preprocessing": "none",
+  "manual_size_fallback": false,
+  "local_refinement": false,
+  "upstream_detector_used": false,
+  "producer_sha256": "eb16488844435e905c4ee62470c776d2697456ba02c4b0a696ad6c66e0416325",
+  "reason_code": "NO_LOSSLESS_COARSER_LATTICE",
+  "output_dimensions": null,
+  "elapsed_seconds": 0.03207269999984419,
+  "error": "동일 RGBA 블록의 공통 간격을 2px 이상으로 확인하지 못했습니다. 이미 1px 원본이거나 격자가 불규칙한 입력입니다. 특징을 버리는 축소는 실행하지 않습니다.",
+  "source_path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building37\\Source\\sheet.png",
+  "source_sha256": "e4eb81a6bb53708a807e7eb182bfaa10bc39e37a5ed337c7913384323172d1ae"
+}

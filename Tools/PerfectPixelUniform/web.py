@@ -10,6 +10,7 @@ import io
 import json
 import mimetypes
 import re
+import socket
 import threading
 import uuid
 import webbrowser
@@ -26,6 +27,7 @@ from uniform import process_array
 
 
 ROOT = Path(__file__).resolve().parent
+CORE_SHA = hashlib.sha256((ROOT / "uniform.py").read_bytes()).hexdigest()
 RUNS = ROOT / "runs"
 MAX_FILE_BYTES = 20 * 1024 * 1024
 MAX_PIXELS = 4_000_000
@@ -54,8 +56,18 @@ def save_new(path, content):
         stream.write(content)
 
 
+class LocalServer(ThreadingHTTPServer):
+    # Windows SO_REUSEADDR can allow two listeners and send requests to old code.
+    allow_reuse_address = False
+
+    def server_bind(self):
+        if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+        super().server_bind()
+
+
 class Handler(BaseHTTPRequestHandler):
-    server_version = "PerfectPixelUniform/1"
+    server_version = "PerfectPixelUniform/2"
 
     def reply(self, status, body, content_type="application/json; charset=utf-8"):
         payload = json_bytes(body) if not isinstance(body, bytes) else body
@@ -90,7 +102,7 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(200, (ROOT / "index.html").read_bytes(), "text/html; charset=utf-8")
             return
         if path == "/api/health":
-            self.reply(200, {"application": "PerfectPixelUniform", "version": 1, "busy": WORK_LOCK.locked()})
+            self.reply(200, {"application": "PerfectPixelUniform", "version": 2, "busy": WORK_LOCK.locked(), "loaded_core_sha256": CORE_SHA})
             return
         parts = path.split("/")
         if len(parts) != 4 or parts[1] != "runs" or not RUN_ID.fullmatch(parts[2]):
@@ -113,6 +125,9 @@ class Handler(BaseHTTPRequestHandler):
         if self.path != "/api/normalize":
             self.reply(404, {"error": "경로가 없습니다."})
             return
+        if hashlib.sha256((ROOT / "uniform.py").read_bytes()).hexdigest() != CORE_SHA:
+            self.reply(503, {"error": "계산 코드가 변경되었습니다. 실행기를 재시작한 뒤 처리해 주세요."})
+            return
         if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
             self.reply(415, {"error": "application/json 요청만 허용합니다."})
             return
@@ -128,6 +143,7 @@ class Handler(BaseHTTPRequestHandler):
             self.reply(409, {"error": "이미 처리 중입니다. 현재 작업이 끝난 뒤 실행해 주세요."})
             return
         run_dir = None
+        source_name = "source.bin"
         try:
             request = json.loads(self.rfile.read(length))
             encoded = request.get("image_base64")
@@ -203,9 +219,12 @@ class Handler(BaseHTTPRequestHandler):
             })
         except Exception as error:
             failure = {"error": str(error), "error_type": type(error).__name__}
+            if isinstance(getattr(error, "report", None), dict):
+                failure["report"] = error.report
             if run_dir is not None:
                 failure["run_id"] = run_dir.name
                 failure["failure_url"] = "/runs/" + run_dir.name + "/failure.json"
+                failure["source_url"] = "/runs/" + run_dir.name + "/" + source_name
                 save_new(run_dir / "failure.json", json_bytes(failure))
             self.reply(422, failure)
         finally:
@@ -219,7 +238,7 @@ def main():
     args = parser.parse_args()
     url = "http://127.0.0.1:" + str(args.port)
     try:
-        server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
+        server = LocalServer(("127.0.0.1", args.port), Handler)
     except OSError:
         # Opening an already-running instance must not create another worker.
         try:
@@ -228,6 +247,8 @@ def main():
                 health = json.load(response)
             if health.get("application") != "PerfectPixelUniform":
                 raise RuntimeError("다른 프로그램이 로컬 포트를 사용 중입니다.")
+            if health.get("version") != 2 or health.get("loaded_core_sha256") != CORE_SHA:
+                raise RuntimeError("이전 버전 실행기가 동작 중입니다. 해당 실행기를 종료하고 다시 실행해 주세요.")
         except (URLError, ValueError, RuntimeError):
             raise
         if args.open:

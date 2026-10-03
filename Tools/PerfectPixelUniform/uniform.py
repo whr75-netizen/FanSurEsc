@@ -1,8 +1,8 @@
-"""Original PerfectPixel period detection followed by one global affine sampler.
+"""V2: recover only a common repeated RGBA lattice proven lossless.
 
-This is a separate correction, NOT the unchanged upstream get_perfect_pixel.
-The upstream files and input arrays are never edited. No requested output size,
-per-boundary refinement, cumulative rounding, palette processing or resize.
+No manual output size, coarse-period guess, local warp or colour conversion.
+The former upstream detector and fractional sampler remain diagnostic helpers;
+production does not call them. Unsupported sources are rejected without a PNG.
 """
 from __future__ import annotations
 
@@ -27,13 +27,17 @@ DEFAULT_DEPS = ROOT / "LocalOnly/PerfectPixelOpenCV"
 class GridDetectionError(RuntimeError):
     """Automatic detection is unusable; never invent a fallback grid."""
 
+    def __init__(self, message, report=None):
+        super().__init__(message)
+        self.report = report or {"grid_status": "rejected", "reason": message}
+
 
 def sha256(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
 def original_period(rgb, engine_root=None, deps=None):
-    """Observe original estimates before detect_grid_scale's final rounding."""
+    """V1 diagnostic only; NOT the production period selector in V2."""
     helper = ROOT / "Tools/Building33/native_normalize.py"
     spec = importlib.util.spec_from_file_location("uniform_original_loader", helper)
     loader = importlib.util.module_from_spec(spec)
@@ -159,42 +163,104 @@ def uniform_sample(pixels, period, phases):
     }
 
 
+def axis_evidence(pixels, axis):
+    """Exact byte boundaries, including weak colours and alpha-only features."""
+    if axis == 1:
+        changed = np.any(pixels[:, 1:] != pixels[:, :-1], axis=(0, 2))
+    else:
+        changed = np.any(pixels[1:] != pixels[:-1], axis=(1, 2))
+    positions = np.flatnonzero(changed).astype(np.int64) + 1
+    intervals = np.diff(positions)
+    step_gcd = int(np.gcd.reduce(intervals)) if len(intervals) else 0
+    return positions, {
+        "change_boundary_count": int(len(positions)),
+        "boundary_interval_gcd": step_gcd,
+        "first_boundary": int(positions[0]) if len(positions) else None,
+        "flat_axis": not bool(len(positions)),
+        "boundary_examples": positions[:16].tolist(),
+        "evidence": "all RGB/RGBA byte changes, no threshold or peak suppression",
+    }
+
+
+def lossless_axis(length, step, positions):
+    phase = int(positions[0] % step) if len(positions) else 0
+    source_coords = np.arange(length, dtype=np.int64)
+    global_cells = np.floor_divide(source_coords - phase, step)
+    first_cell = int(global_cells[0])
+    cells = global_cells - first_cell
+    count = int(cells[-1]) + 1
+    starts = np.r_[0, np.flatnonzero(np.diff(cells)) + 1]
+    ends = np.r_[starts[1:], length]
+    # Representative centre of the source intersection, including partial ends.
+    sample_indices = np.floor((starts + ends) / 2).astype(np.int64)
+    nominal_centres = phase + (first_cell + np.arange(count) + 0.5) * step
+    return cells, sample_indices, {
+        "boundary_phase_source_px": phase,
+        "source_offset": phase + first_cell * step,
+        "nominal_centre_origin": float(nominal_centres[0]),
+        "partial_first_cell": int(ends[0] - starts[0]) != step,
+        "partial_last_cell": int(ends[-1] - starts[-1]) != step,
+        "source_interval_centres": ((starts + ends) / 2).tolist(),
+    }
+
+
 def process_array(pixels, engine_root=None, deps=None):
     if not isinstance(pixels, np.ndarray) or pixels.dtype != np.uint8 or pixels.ndim != 3 or pixels.shape[2] not in (3, 4):
         raise ValueError("입력은 RGB/RGBA uint8 배열이어야 합니다. 자동 모드 변환은 하지 않습니다.")
     if min(pixels.shape[:2]) < 2:
         raise ValueError("입력 각 축은 2픽셀 이상이어야 합니다.")
-    if not np.any(pixels[..., :3] != pixels[0, 0, :3]):
-        raise GridDetectionError("RGB 경계 신호가 없는 단색 입력에서 자동 격자를 확정할 수 없습니다.")
     start = time.perf_counter()
     source_digest = hashlib.sha256(pixels.tobytes()).hexdigest()
-    period, detection = original_period(pixels[..., :3], engine_root, deps)
-    px, rx, known_x = global_phase(pixels, period, 1)
-    py, ry, known_y = global_phase(pixels, period, 0)
-    output, transform = uniform_sample(pixels, period, [px, py])
-    warnings = ["간격/위상은 자동 추정값입니다. 등간격 계산은 원본 특징·디자인 보존의 증명이 아닙니다."]
-    warnings.append("원본 안의 격자 중심만 표본으로 취합니다. 중심 사이의 미세 특징과 캔버스 가장자리 세부는 출력에서 사라질 수 있습니다.")
-    if len(detection["estimates"]) > 1:
-        warnings.append("원본 FFT 후보가 채택되지 않아 gradient 후보를 사용했습니다. 격자 해석이 불명확할 수 있습니다.")
-    if not known_x or not known_y:
-        warnings.append("한 축 이상의 위상 신호가 없어 명시된 0 경계 위상을 사용했습니다. 격자는 미확정입니다.")
-    if min(rx, ry) < 0.1:
-        warnings.append("전역 위상 신호가 약합니다(coherence < 0.1). 잘못된 간격/위상과 세부 손실 가능성을 확인하십시오.")
-    status = "estimated" if known_x and known_y and min(rx, ry) >= 0.1 else "unconfirmed"
+    xpos, xproof = axis_evidence(pixels, 1)
+    ypos, yproof = axis_evidence(pixels, 0)
+    gx, gy = xproof["boundary_interval_gcd"], yproof["boundary_interval_gcd"]
+    step = math.gcd(gx, gy)
+    report = {
+        "schema": "perfect-pixel-uniform/2", "algorithm": "common integer boundary lattice + exact source reconstruction",
+        "source_dimensions": [int(pixels.shape[1]), int(pixels.shape[0])],
+        "source_mode": "RGBA" if pixels.shape[2] == 4 else "RGB", "source_array_sha256": source_digest,
+        "axis_evidence": {"x": xproof, "y": yproof}, "period_source_px": step,
+        "grid_status": "rejected", "preprocessing": "none", "manual_size_fallback": False, "local_refinement": False,
+        "upstream_detector_used": False, "producer_sha256": sha256(Path(__file__)),
+    }
+    if step <= 1:
+        report.update({"reason_code": "NO_LOSSLESS_COARSER_LATTICE", "output_dimensions": None,
+                       "elapsed_seconds": time.perf_counter() - start})
+        raise GridDetectionError("동일 RGBA 블록의 공통 간격을 2px 이상으로 확인하지 못했습니다. 이미 1px 원본이거나 격자가 불규칙한 입력입니다. 특징을 버리는 축소는 실행하지 않습니다.", report)
+    candidates = [n for n in range(2, step + 1) if step % n == 0]
+    # A larger period must also reconstruct exactly; frequency strength never wins.
+    report["consistent_divisor_steps"] = candidates
+    ix, sx, xmap = lossless_axis(pixels.shape[1], step, xpos)
+    iy, sy, ymap = lossless_axis(pixels.shape[0], step, ypos)
+    output = pixels[sy[:, None], sx[None, :]].copy()
+    reconstructed = output[iy[:, None], ix[None, :]]
+    changed_texels = int(np.count_nonzero(np.any(reconstructed != pixels, axis=2)))
+    report["reconstruction"] = {"changed_source_texels": changed_texels, "required_changed_texels": 0,
+                                "scope": "entire source canvas, every RGB/RGBA byte including hidden RGB and alpha",
+                                "source_reconstructed_sha256": hashlib.sha256(reconstructed.tobytes()).hexdigest()}
+    if changed_texels:
+        report.update({"reason_code": "SOURCE_DETAIL_LOSS", "output_dimensions": None,
+                       "elapsed_seconds": time.perf_counter() - start})
+        raise GridDetectionError("픽셀 경계 후보가 원본 세부를 변경합니다. 결과를 저장하지 않습니다.", report)
     if hashlib.sha256(pixels.tobytes()).hexdigest() != source_digest:
         raise RuntimeError("입력 배열이 변경됐습니다.")
-    report = {
-        "schema": "perfect-pixel-uniform/1", "algorithm": "original detector + global phase + affine nearest sample",
-        "source_dimensions": [int(pixels.shape[1]), int(pixels.shape[0])],
+    warnings = ["관찰된 반복 표현을 무손실로 축약했습니다. 더 작은 작가 격자와 미술적 완성은 이 증거만으로 확정하지 않습니다."]
+    if any(a[key] for a in (xmap, ymap) for key in ("partial_first_cell", "partial_last_cell")):
+        warnings.append("원본 가장자리에 잘린 셀이 있습니다. source canvas/offset 기록을 함께 사용해야 같은 범위로 재표시할 수 있습니다.")
+    report.update({
+        "grid_status": "verified_lossless", "warnings": warnings,
         "output_dimensions": [int(output.shape[1]), int(output.shape[0])],
-        "source_mode": "RGBA" if pixels.shape[2] == 4 else "RGB",
-        "period_source_px": period, "grid_status": status, "phase_coherence": [rx, ry], "warnings": warnings,
-        "preprocessing": "none", "manual_size_fallback": False, "local_refinement": False,
-        "source_array_sha256": source_digest, "output_array_sha256": hashlib.sha256(output.tobytes()).hexdigest(),
-        "automatic_detection": detection, "elapsed_seconds": time.perf_counter() - start,
-        "phase_energy": "mean absolute RGB difference weighted by min opacity + absolute opacity difference; analysis only",
-        **transform,
-    }
+        "output_array_sha256": hashlib.sha256(output.tobytes()).hexdigest(),
+        "elapsed_seconds": time.perf_counter() - start,
+        "geometry": {"nonlinear_warp": False, "inverse_jacobian": [[step, 0], [0, step]], "spacing_error": 0,
+                     "source_offset": [xmap["source_offset"], ymap["source_offset"]],
+                     "edge_policy": "source canvas intersection of global cells; no discarded edge features",
+                     "axis_source_coverage": {"x": xmap, "y": ymap}},
+        "grid": {"cell_x_indices": ix.tolist(), "cell_y_indices": iy.tolist(),
+                 "sample_x_indices": sx.tolist(), "sample_y_indices": sy.tolist(),
+                 "centre_origin_source_px": [xmap["nominal_centre_origin"], ymap["nominal_centre_origin"]],
+                 "phase_boundary_source_px": [xmap["boundary_phase_source_px"], ymap["boundary_phase_source_px"]]},
+    })
     return output, report
 
 
@@ -212,7 +278,18 @@ def main():
         if image.mode not in ("RGB", "RGBA") or getattr(image, "n_frames", 1) != 1:
             parser.error("RGB/RGBA 단일 이미지만 지원합니다.")
         pixels = np.array(image)
-    output, report = process_array(pixels, args.engine, args.deps)
+    try:
+        output, report = process_array(pixels, args.engine, args.deps)
+    except GridDetectionError as error:
+        if sha256(args.source) != source_hash:
+            raise RuntimeError("원본 파일이 변경됐습니다.")
+        args.output_dir.mkdir(parents=True, exist_ok=False)
+        diagnostic = dict(error.report, error=str(error), source_path=str(args.source.resolve()), source_sha256=source_hash)
+        with (args.output_dir / "failure.json").open("x", encoding="utf-8") as stream:
+            json.dump(diagnostic, stream, ensure_ascii=False, indent=2)
+            stream.write("\n")
+        print(json.dumps(diagnostic, ensure_ascii=False))
+        raise SystemExit(2)
     if sha256(args.source) != source_hash:
         raise RuntimeError("원본 파일이 변경됐습니다.")
     args.output_dir.mkdir(parents=True, exist_ok=False)

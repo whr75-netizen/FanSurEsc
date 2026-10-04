@@ -26,7 +26,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         [HideInInspector] _SrcBlend("Source blend", Float) = 1
         [HideInInspector] _DstBlend("Destination blend", Float) = 0
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 0
-        [Enum(Lit,0,MaterialOnly,1,Normals,2,Irradiance,3,MainShadow,4,ReferenceFixture,5,ReadableFixture,6)] _DiagnosticMode("Diagnostic", Float) = 0
+        [Enum(Lit,0,MaterialOnly,1,Normals,2,Irradiance,3,MainShadow,4,ReferenceFixture,5,ReadableFixture,6,NativeAdditiveLight,7)] _DiagnosticMode("Diagnostic", Float) = 0
     }
     SubShader
     {
@@ -200,7 +200,8 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 saturate(dot(normalWS, light.direction));
         }
 
-        half3 IncidentLight(CachedSurface surface, float4 screenPosition, out half mainShadow)
+        half3 IncidentLight(CachedSurface surface, float4 screenPosition,
+            out half mainShadow, out half3 nativeAdditiveLight)
         {
             InputData inputData = (InputData)0;
             inputData.positionWS = surface.positionWS;
@@ -240,12 +241,15 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                         irradiance += DiffuseIncidentLight(light, surface.normalWS) * max(_AdditionalLightStrength, 0.0);
                 LIGHT_LOOP_END
             #endif
-            irradiance += EvaluateSteppedLocalLights(surface.positionWS, surface.normalWS, 1.0) *
-                max(_SteppedLocalLightStrength, 0.0);
+            half3 regularLocal = EvaluateSteppedLocalLights(
+                surface.positionWS, surface.normalWS, 1.0, nativeAdditiveLight);
+            float localStrength = max(_SteppedLocalLightStrength, 0.0);
+            irradiance += regularLocal * localStrength;
+            nativeAdditiveLight *= localStrength;
             return max(irradiance, 0.0);
         }
 
-        half3 Shade(CachedSurface surface, half3 irradiance)
+        half3 Shade(CachedSurface surface, half3 irradiance, half3 nativeAdditiveLight)
         {
             if (_ReadableNight > 0.5 && (_DiagnosticMode < 4.5 || _DiagnosticMode >= 5.5))
             {
@@ -255,9 +259,15 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 float column = surface.material == 1u ? (float)surface.pattern : 2.0;
                 column = min(column, BandCount(surface.material) - 1.0);
                 if (surface.edge == 3u) column = Native17CreaseColumn;
-                return Native18Color(PaletteColor(surface.material, column) * Native18Brightness(band),
+                half3 nightColor = Native18Color(
+                    PaletteColor(surface.material, column) * Native18Brightness(band),
                     max((float3)irradiance, 0.0), band);
+                // Same RGB addition as the base scene's Blend One One pass.
+                // Apply once, outside the night-band classifier. Seams above
+                // remain black; maps, depth and material ranks are unchanged.
+                return saturate(nightColor + nativeAdditiveLight);
             }
+            irradiance += nativeAdditiveLight;
             float luminance = max(dot((float3)irradiance, Native17Luminance), 0.0);
             // No fabricated minimum brightness or fixed midtone when all of
             // the existing engine/environment light contributions are zero.
@@ -295,12 +305,13 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             CachedSurface surface = ReadSurface(input.uv);
             half mainShadow;
             half3 irradiance;
-            if (_DiagnosticMode >= 5.5)
+            half3 nativeAdditiveLight = 0.0;
+            if (_DiagnosticMode >= 5.5 && _DiagnosticMode < 6.5)
             {
                 irradiance = max(_ReadableFixtureIrradiance.rgb, 0.0);
                 mainShadow = 1.0;
             }
-            else if (_DiagnosticMode >= 4.5)
+            else if (_DiagnosticMode >= 4.5 && _DiagnosticMode < 5.5)
             {
                 // The fixture is defined in the same local metre basis as the
                 // native cache; building yaw rotates both normal and light.
@@ -309,16 +320,18 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 mainShadow = 1.0;
             }
             else
-                irradiance = IncidentLight(surface, input.positionCS, mainShadow);
-            half3 color = Shade(surface, irradiance);
+                irradiance = IncidentLight(surface, input.positionCS, mainShadow, nativeAdditiveLight);
+            half3 color = Shade(surface, irradiance, nativeAdditiveLight);
             if (_DiagnosticMode > 0.5 && _DiagnosticMode < 1.5)
                 color = PaletteColor(surface.material, min((float)surface.pattern, BandCount(surface.material) - 1.0));
             else if (_DiagnosticMode >= 1.5 && _DiagnosticMode < 2.5)
                 color = surface.normalWS * 0.5 + 0.5;
             else if (_DiagnosticMode >= 2.5 && _DiagnosticMode < 3.5)
-                color = irradiance;
+                color = irradiance + nativeAdditiveLight;
             else if (_DiagnosticMode >= 3.5 && _DiagnosticMode < 4.5)
                 color = mainShadow.xxx;
+            else if (_DiagnosticMode >= 6.5)
+                color = nativeAdditiveLight;
             SurfaceOutput output;
             output.color = half4(color * _BaseColor.rgb, _BaseColor.a);
             output.depth = surface.depth;

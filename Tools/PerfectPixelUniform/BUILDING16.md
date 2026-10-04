@@ -88,7 +88,21 @@ canonical/좌표·투영/단위는 N17과 같으며 이번 자유도는 최종 �
 
 `docs/artifacts/building39/zoom20/readable-on.png`는 실제 기존 Play 카메라의 1114×857, size 2.367151, 30°/350°·원본 1픽셀당 화면 2×2픽셀이다. 같은 Player/Camera·map/mesh/Transform·36재료·shader error 0이며 기존 art 189파일은 hash 불변이다. 별도 임시 카메라의 viewport 높이 720/857/1080에서 배율 선택 2, 기존 scroll 계산 호출에서 2→1→2, native 해제 시 같은 카메라의 size 5 복원을 확인했다. 물리 휠 입력은 이번에 실행하지 않았으며 호출 확인이다. 기존 WorkLoop의 설정/실제 관측→최종 gate가 완료됐다. 밤 색감·캐릭터·디자인은 수정하지 않았다.
 
-## N22 현재 조명 계약 — 백색 3단계 양자화
+## N23 현재 조명 수선 — 세 개의 유광 구간과 백색 합성
+
+[요구/원인] 사용자는 N22 실제 화면을 두 단계·누런 광으로 판정했다. N22의 Q3={0,.5,1}는 무광0을 포함하여 유광은 두 단계이며, 이를 최종 Native18Band로 다시 분류했다. 기존 기지 SteppedLocalLightFullscreen은 `Blend One One`으로 RGB를 더하지만 native 표면은 stencil2로 제외하고 재료색에 밝기만 곱했다. 설정 white와 fixture의3종 값은 원하는 실제 화면의 증거가 아니었다. N22의 관측/수학 검사는 보존하되 시각 합격으로 사용하지 않는다.
+
+[선택/반례] 단순 bands 증가만으로는 최종 Native18Band의 재분류·목재색 강조가 남는다. 전체 광원/팔레트 변경은 다른 조명을 바꾼다. 선택은 같은 moving light에만 기본false인 native additive opt-in을 주고 기존 기지의 additive 연산을 native 표면 내부에서 한 번 적용하는 것이다. 다른 광원/기존 사용자 변경·193아트·geometry/UV·pixel grid·motion·camera는 보존한다. 3D 전환은 연구만 한다. 광원 색과 표면 색이 같아야 한다는 뜻은 아니며, 백색 광 기여 R=G=B와 실제 무늬·세 유광 구간을 관측한다.
+
+[좌표/연산] N17의 Unity Y-up meter→실제TRS→world position/normal→기존 world-cell→광원감쇠/법선→native texel→linear RGB→sRGB 표시를 재사용한다. a=saturate(1-d/r)^2·saturate(dot(N,L)), Q+(a)=ceil(3a)/3∈{0,1/3,2/3,1}다. 0은 범위 밖/면 반대 방향, 세 양수는 유광 구간이다. 기존 양자화 설정 x의 양수는 기존 경로, 음수는 opt-in과 abs(x)의 유광 단계 수를 운반한다. mode와 band의 소비자는 같은Common 하나며 global 배열/광원owner를 추가하지 않는다. Common에서 normal/opt-in 기여를 분리하며 wrapper는 합을 반환해 기존 다른 소비자를 유지한다. native ReadableNight C는 기존환경/다른광원에서 계산하고 C'=saturate(C+RGBwhite·intensity·Q+·기존strength.55)로합성한다. 나뭇결rank·깊은틈/외곽 검정·coverage/depth는 불변이다. 별도 overlay·blur·RGB연속그라데이션/추가재양자화는 없다. 이는 게임의 기존 백색 additive presentation이며 물리적albedo 조명 복원이 아니다.
+
+[실험/판정] 반경14m·intensity.8·3유광 단계와 움직임은 고정한다. actual GPU의 opt-in 기여 diagnostic에서0+세RGB값/각화면영역, 실제Play원본pixel2px·30°/350°·maps/mesh/TRS·캐릭터/카메라 동일, 백색기여채널 동일·비클리핑 목재rank, shader 오류를 판정한다. 다른6광원 serialized값과 기존Common양수 경로를 보존한다. 원본hash는 기존frozen193개와대조한다. 후보의 시각 결과는 실제PNG로 제출하며 자동 미술 합격을 주장하지 않는다.
+
+[실제 결과] `docs/artifacts/building39/light23/moving-on.png`는 실제21시·30°/350°·2px·원래Player/Camera의게임화면이다. `gpu-additive.png`의linear광량0/.146667/.293333/.44는 각각29,704/291,082/139,228/28,252화면px에존재한다. 실제최종RGB차에서도세백색기여를각각289,506/133,980/28,252px확인했다(8bit변환오차로채널당.015허용). 광원off/on과우측이동출력을보존했다. 193아트hash불변·36재료Tintwhite/strength.55·shadererror0·maps/mesh/TRS/Player/Camera동일이며, 전체8기존광원의직렬화값은새opt-in하나외에불변이다. 저장씬diff는같은movinglight의flag1행뿐이다. 관측후EditMode·saved/dirtyfalse로복귀했다. 최초graph의gate에Edit저장/다른광원검사를추가한뒤기존계약을덮어쓰지않고`request-final/state-final`로연결했으며Unity관측은재실행하지않았다. 최종graphcomplete는이한정조건의검증이며미술완벽·캐릭터수광·움직이는광원의가구차폐그림자·Standalone빌드를증명하지않는다. 원본이미지의전체표면3D/방향별프레임은[O23연구](../../docs/references/pixel_object_multiview.md)이고이번에는제작하지않았다.
+
+실행기 저장 한계: final submit 뒤 atomic state 교체가 WinError5로 막혔지만, 실제 state는 작업 제출을 보존하고 검증 노드 직전이었다. 관측/작업은 반복하지 않고 권한이 허용된 로컬 실행으로 마지막 gate와 state 저장만 이어 완료했다. 이는 기존 WorkLoop 알고리즘 변경이나 Unity 제작 재시도가 아니다.
+
+## N22 이전 조명 실험 — 사용자 피드백으로 재개
 
 사용자 최신 정정: 넓은 백색광의 그라데이션은 기지의 기존 조명처럼 3단계 양자화다. N21의 연속 RGB 보간은 요구 오해로 폐기한다. N21 이전의 Common/NativeReadable/NativePalette/SteppedLocalLight 계산을 복원하고 기존 `surfaceBands=3`을 사용한다. 현재 광원의 백색·motion·world cell·2배 카메라·기하/art를 유지한다. 기지의 기존 Glass centre/Emitter도 같은 Common에서 surfaceBands3을 사용한다. 1차 반경7.6m에서는 높이1.35m인 광원의 바닥 최고a가(1-1.35/7.6)^2≈.676으로, Q3 최고단계의 경계.75에 못 미쳤다. 실제 화면과 이 반례를 보존하고 반경14m로 넓힌다. (1-1.35/14)^2≈.816이므로 최고 바닥 단계가 가능하다. 값 표기만3으로 맞춘 첫 gate는 이 조건을 검사하지 않았으며 최종 미술 성공 증거가 아니다.
 

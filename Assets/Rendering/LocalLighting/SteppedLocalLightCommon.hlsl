@@ -60,9 +60,11 @@ float QuantizeSteppedLight01(float value, float bands)
 half3 EvaluateSteppedLocalLights(
     float3 positionWS,
     float3 normalWS,
-    float normalInfluenceScale)
+    float normalInfluenceScale,
+    out half3 nativeAdditiveLight)
 {
     half3 accumulatedLight = half3(0.0, 0.0, 0.0);
+    nativeAdditiveLight = half3(0.0, 0.0, 0.0);
 
     [loop]
     for (int index = 0; index < STEPPED_LOCAL_LIGHT_MAXIMUM; index++)
@@ -104,19 +106,37 @@ half3 EvaluateSteppedLocalLights(
             SteppedSafeNormalize(toLight)));
         float normalInfluence =
             saturate(quantization.w * normalInfluenceScale);
-        float surfaceLight = QuantizeSteppedLight01(
-            surfaceAttenuation * lerp(1.0, normalTerm, normalInfluence),
-            quantization.x);
+        float surfaceInput = surfaceAttenuation * lerp(1.0, normalTerm, normalInfluence);
+        bool nativeAdditive = quantization.x < 0.0;
+        // Three illuminated levels plus zero. The original round quantizer
+        // includes zero in its count and remains unchanged for other lights.
+        float positiveBands = max(round(abs(quantization.x)), 2.0);
+        float surfaceLight = nativeAdditive ?
+            ceil(saturate(surfaceInput) * positiveBands) / positiveBands :
+            QuantizeSteppedLight01(surfaceInput, quantization.x);
         float haloLight = QuantizeSteppedLight01(
             haloAttenuation,
             quantization.y) * quantization.z;
         float contribution = surfaceLight + haloLight * (1.0 - surfaceLight);
-        accumulatedLight +=
+        half3 lightColor =
             (half3)colorAndIntensity.rgb *
             (half)(colorAndIntensity.w * contribution);
+        if (nativeAdditive)
+            nativeAdditiveLight += lightColor;
+        else
+            accumulatedLight += lightColor;
     }
 
     return accumulatedLight;
+}
+
+// Existing fullscreen/character consumers retain the complete light field.
+half3 EvaluateSteppedLocalLights(float3 positionWS, float3 normalWS, float normalInfluenceScale)
+{
+    half3 nativeAdditiveLight;
+    half3 regularLight = EvaluateSteppedLocalLights(
+        positionWS, normalWS, normalInfluenceScale, nativeAdditiveLight);
+    return regularLight + nativeAdditiveLight;
 }
 
 #endif

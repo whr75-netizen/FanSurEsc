@@ -1,8 +1,8 @@
-# N17~N22 실행 진입점
+# N17~N23 실행 진입점
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
 
-현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. N20은 기본 카메라를 정수2배로 표시합니다. N22는 사용자 정정에 따라 N21 연속 보간을 폐기하고 기존 백색3단계 조명·반경14m·intensity.8을 사용합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 최신 실제 화면은 `docs/artifacts/building39/light22/final/readable-on.png`입니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
+현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. N20은 기본 카메라를 정수2배로 표시합니다. N23은N22가무광0을포함한두유광단계였던원인을고쳐,같은movinglight의백색3유광구간을기지의additive방식으로연결합니다. 반경14m·intensity.8·다른광원은보존합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 최신 실제 화면은 `docs/artifacts/building39/light23/moving-on.png`입니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
 
 새 제작이 승인된 경우 프로젝트 루트에서 NumPy/Pillow가 있는 Python으로 실행합니다.
 
@@ -27,4 +27,4 @@
 
 `night18.py`/`NativeReadable18.hlsl`/`NativeNight18Observation`: 기존cache/PPU/기하를그대로사용하는색계산3단계. `night18.py start --output <새폴더>`로CPU색→활성Codex의실제GPU/Play관측→최종gate를연결합니다. 이실험에서캐릭터조명·원화디자인·전체픽셀grid를변경하지않습니다.
 
-`light22_gate.py`: 현재3단계 광원 저장/Play 관측·원본hash·기존4계산파일 일치·최고 바닥 단계의 가능성·fixtureband0/1/2를 판정합니다. 계약과 실제 결과는 `light22/final/request.json`/`state.json`에 보존합니다. 첫7.6m 자료는 최고 바닥 단계 조건을 빠뜨린 반례로 남깁니다. `light21_gate.py`/`light21`은 폐기된 연속 RGB 보간 실험의 과거 증거이며 현재 실행 경로가 아닙니다. 원본/팔레트는 다시 생성하지 않습니다.
+`light23_gate.py`/`NativeLight23Observation`: 실제Play의光기여diagnostic과최종RGB차이에서0+세양수백색구간,기존8광원값/193아트/2px격자/같은Player·Camera·기하·Edit저장을확인합니다. 최종계약은`light23/request-final.json`/`state-final.json`입니다. `light22_gate.py`와`light22/final`은N22관측·fixture의증거이며사용자시각피드백으로재개한과거경로입니다. `light21_gate.py`/`light21`도폐기한연속보간이력으로보존합니다. 원본/팔레트를다시생성하지않습니다.

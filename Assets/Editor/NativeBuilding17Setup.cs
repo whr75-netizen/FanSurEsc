@@ -69,6 +69,7 @@ public static class NativeBuilding17Setup
         settings.FindProperty("radius").floatValue = 14f;
         settings.FindProperty("intensity").floatValue = .8f;
         settings.FindProperty("surfaceBands").intValue = 3;
+        settings.FindProperty("additiveNativePresentation").boolValue = true;
         settings.FindProperty("haloStrength").floatValue = 0f;
         settings.FindProperty("normalInfluence").floatValue = 1f;
         settings.FindProperty("worldCellSize").floatValue = 1f / Ppu;

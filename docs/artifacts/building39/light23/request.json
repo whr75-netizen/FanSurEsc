@@ -1,0 +1,126 @@
+{
+  "entry": "light",
+  "goal": "Three positive white additive lighting regions plus unlit night, preserving native art and existing owners",
+  "max_steps": 2,
+  "nodes": [
+    {
+      "algorithm": "ai.work",
+      "edges": [
+        {
+          "to": "final",
+          "when": {
+            "args": [
+              {
+                "ref": "light.receiptFile"
+              }
+            ],
+            "op": "known"
+          }
+        }
+      ],
+      "id": "light",
+      "inputs": {},
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "parameters": {
+        "scope": "Moving light native additive opt-in; other lights/art/geometry/grid/camera/motion preserved; actual Play and RGB observations."
+      },
+      "phase": "work",
+      "question": "Apply the fixed N23 existing-base additive light contract and return the actual saved Unity receipt; observe actual game regions.",
+      "reads": [
+        "light23:source"
+      ],
+      "writes": [
+        "light23:light"
+      ]
+    },
+    {
+      "algorithm": "command.run",
+      "edges": [
+        {
+          "to": "@complete",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "eq"
+          }
+        },
+        {
+          "to": "@blocked",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "ne"
+          }
+        }
+      ],
+      "id": "final",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "Tools/Building38/light23_gate.py"
+        ],
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\light23_gate.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Scripts\\WorldLighting\\SteppedLocalLight.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Rendering\\LocalLighting\\SteppedLocalLightCommon.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeBuilding17Setup.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeLight23Observation.cs"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30
+      },
+      "phase": "validation",
+      "reads": [
+        "light23:light"
+      ],
+      "writes": [
+        "light23:validation"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "white_gradient",
+      "text": "Actual GPU zero plus three positive white RGB contributions survive final game shading; original193 art and pixelgrid retained",
+      "source": "User: light looks two-stage and yellow; needs three-stage base-scene white gradient",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

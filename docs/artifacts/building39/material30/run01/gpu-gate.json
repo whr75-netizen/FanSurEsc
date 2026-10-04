@@ -1,0 +1,31 @@
+{
+  "legacy-readable-native": {
+    "changed_bytes": 0
+  },
+  "legacy-albedo-native": {
+    "changed_bytes": 0
+  },
+  "albedo": {
+    "coverage_mismatches": 0,
+    "max_rgb_byte_error": 0
+  },
+  "spec": {
+    "left_active_cells": 550,
+    "right_active_cells": 6067,
+    "direction_changed_cells": 5816
+  },
+  "checks": {
+    "legacy-readable-native": true,
+    "legacy-albedo-native": true,
+    "extended_gpu_albedo": true,
+    "zero_light_zero_spec": true,
+    "real_point_response": true,
+    "combined_spec_cap": true,
+    "spec-zero_coverage": true,
+    "spec-left_coverage": true,
+    "spec-right_coverage": true
+  },
+  "passed": true,
+  "shadow_validation": "attenuation code inspected; fixture has no shadow caster",
+  "art_approval_claimed": false
+}

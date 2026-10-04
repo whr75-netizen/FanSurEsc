@@ -1,4 +1,6 @@
-# N17~N29 실행 진입점
+# N17~N30 실행 진입점
+
+N30은 N29의 큰 도장 얼룩을 폐기하고 원인별 결·접촉·흠집·하단 마모·노출목재·금속 변색을 계산합니다. `run_material30.py`의 features→surface→Unity 관측→GPU gate→저장→최종 gate를 사용하며 이미 계산된 map은 `--reuse-maps`로 검증 후 재사용합니다. 현재 final state는 `LocalOnly/WorkLoop/material30-integration03`, 실제 화면은 `docs/artifacts/building39/material30/run01/comparison.png`입니다. Unity 진입점은 `NativeMaterial30Observation.Prepare/Observe/BindAndSave`이며 기존 버전에는 Prepare를 반복하지 않습니다. 실패 관측은 원래 위치에 남고 현재 관측은 `observation02`입니다. 새16열 palette에서만 normal.w 거칠기와 실제광원 spec를 사용합니다. 원래4열의 실제GPU 두 경로는 byte차0, 생산 이미지는 resize0입니다. 높이/법선은 caster 변형이 아니며 미술·성능 합격은 자동 선언하지 않습니다.
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
 

@@ -46,6 +46,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         TEXTURE2D(_PaletteMap);
         CBUFFER_START(UnityPerMaterial)
             float4 _PositionMap_TexelSize;
+            float4 _PaletteMap_TexelSize;
             float4 _BaseColor;
             float4 _MaterialBandCounts0;
             float4 _MaterialBandCounts1;
@@ -92,6 +93,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             uint material;
             uint pattern;
             uint edge;
+            half roughness;
         };
         struct SurfaceOutput
         {
@@ -180,13 +182,17 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             result.material = (uint)bytes.r;
             result.pattern = (uint)bytes.g;
             result.edge = (uint)bytes.b;
+            // Extended palettes opt into packed validity + perceptual roughness.
+            // Legacy four-column normal alpha remains validity only.
+            result.roughness = _PaletteMap_TexelSize.z > 4.5 ? clamp(normal.a * 2.0 - 1.0, 0.2, 0.9) : 0.9;
             return result;
         }
 
         half3 PaletteColor(uint material, float column)
         {
             // PNG row zero is material 1; Unity UV zero is the bottom row.
-            float2 uv = float2((clamp(column, 0.0, 3.0) + 0.5) / 4.0,
+            float width = max(_PaletteMap_TexelSize.z, 4.0);
+            float2 uv = float2((clamp(column, 0.0, width - 1.0) + 0.5) / width,
                                1.0 - (material - 0.5) / 10.0);
             return SAMPLE_TEXTURE2D_LOD(_PaletteMap, sampler_PointClamp, uv, 0).rgb;
         }
@@ -205,8 +211,32 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 saturate(dot(normalWS, light.direction));
         }
 
+        half3 DirectSurfaceSpecular(Light light, CachedSurface surface)
+        {
+            if (_PaletteMap_TexelSize.z < 4.5 || surface.edge == 3u) return 0.0;
+            BRDFData brdf;
+            half alpha = 1.0;
+            half3 albedo = PaletteColor(surface.material, (float)surface.pattern);
+            InitializeBRDFData(albedo, surface.material == 3u ? 1.0 : 0.0,
+                half3(0.04,0.04,0.04), 1.0 - surface.roughness, alpha, brdf);
+            // URP's orthographic-aware view direction avoids false panel-wide sheen.
+            half3 view = GetWorldSpaceNormalizeViewDir(surface.positionWS);
+            return brdf.specular * DirectBRDFSpecular(brdf, surface.normalWS, light.direction, view) *
+                DiffuseIncidentLight(light, surface.normalWS);
+        }
+
+        half3 SteppedSurfaceSpecular(half3 energy, uint material)
+        {
+            // Cap the sum, not each source; preserve the actual incident RGB ratios.
+            float peak = max(max(energy.r, energy.g), energy.b);
+            float cap = material == 3u ? 0.06 : 0.024;
+            if (peak < cap / 12.0) return 0.0;
+            float step = ceil(saturate(peak / cap) * 3.0) / 3.0;
+            return energy / max(peak, 0.000001) * (step * cap);
+        }
+
         half3 IncidentLight(CachedSurface surface, float4 screenPosition,
-            out half mainShadow, out half3 nativeAdditiveLight)
+            out half mainShadow, out half3 nativeAdditiveLight, out half3 directSpecular)
         {
             InputData inputData = (InputData)0;
             inputData.positionWS = surface.positionWS;
@@ -221,10 +251,14 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             mainShadow = mainLight.shadowAttenuation;
             uint meshLayers = GetMeshRenderingLayer();
             half3 irradiance = max(SampleSH(surface.normalWS), 0.0) * max(_AmbientLightStrength, 0.0);
+            directSpecular = 0.0;
             #ifdef _LIGHT_LAYERS
             if (IsMatchingLightLayer(mainLight.layerMask, meshLayers))
             #endif
+            {
                 irradiance += DiffuseIncidentLight(mainLight, surface.normalWS) * max(_MainLightStrength, 0.0);
+                directSpecular += DirectSurfaceSpecular(mainLight, surface) * max(_MainLightStrength, 0.0);
+            }
             #if defined(_ADDITIONAL_LIGHTS) || USE_CLUSTER_LIGHT_LOOP
                 #if USE_CLUSTER_LIGHT_LOOP
                 [loop] for (uint lightIndex = 0; lightIndex < min(URP_FP_DIRECTIONAL_LIGHTS_COUNT, MAX_VISIBLE_LIGHTS); lightIndex++)
@@ -234,7 +268,10 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                     #ifdef _LIGHT_LAYERS
                     if (IsMatchingLightLayer(light.layerMask, meshLayers))
                     #endif
+                    {
                         irradiance += DiffuseIncidentLight(light, surface.normalWS) * max(_AdditionalLightStrength, 0.0);
+                        directSpecular += DirectSurfaceSpecular(light, surface) * max(_AdditionalLightStrength, 0.0);
+                    }
                 }
                 #endif
                 uint pixelLightCount = GetAdditionalLightsCount();
@@ -243,7 +280,10 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                     #ifdef _LIGHT_LAYERS
                     if (IsMatchingLightLayer(light.layerMask, meshLayers))
                     #endif
+                    {
                         irradiance += DiffuseIncidentLight(light, surface.normalWS) * max(_AdditionalLightStrength, 0.0);
+                        directSpecular += DirectSurfaceSpecular(light, surface) * max(_AdditionalLightStrength, 0.0);
+                    }
                 LIGHT_LOOP_END
             #endif
             half3 regularLocal = EvaluateSteppedLocalLights(
@@ -262,7 +302,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 saturate(_NativeEdgeSRGBScale));
         }
 
-        half3 Shade(CachedSurface surface, half3 irradiance, half3 nativeAdditiveLight)
+        half3 Shade(CachedSurface surface, half3 irradiance, half3 nativeAdditiveLight, half3 directSpecular)
         {
             if (_ReadableNight > 0.5 && (_DiagnosticMode < 4.5 || _DiagnosticMode >= 5.5))
             {
@@ -270,7 +310,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 // channel as wood. Existing flag-off furniture stays unchanged.
                 float column = surface.material == 1u || _RetainPatternContrast > 0.5 ?
                     (float)surface.pattern : 2.0;
-                column = min(column, BandCount(surface.material) - 1.0);
+                column = min(column, _PaletteMap_TexelSize.z > 4.5 ? _PaletteMap_TexelSize.z - 1.0 : BandCount(surface.material) - 1.0);
                 if (surface.edge == 3u) column = Native17CreaseColumn;
                 // Both fields pass through the same actual material reflectance.
                 // Never paint raw light RGB over a finished surface or fold the
@@ -278,6 +318,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 half3 finalColor = Material27Readable(
                     PaletteColor(surface.material, column),
                     (float3)irradiance, (float3)nativeAdditiveLight);
+                if (_PaletteMap_TexelSize.z > 4.5) finalColor += directSpecular;
                 return surface.edge == 1u || surface.edge == 2u ?
                     MaterialBoundaryColor(finalColor) : finalColor;
             }
@@ -294,7 +335,12 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             // the lowest lighting band clamps all rank offsets to column zero.
             // Keep its albedo rank and apply one of three discrete light levels.
             float patternLight = 1.0;
-            if (_RetainPatternContrast > 0.5 && surface.material == 1u)
+            if (_PaletteMap_TexelSize.z > 4.5)
+            {
+                column = (float)surface.pattern;
+                patternLight = (lightingBand + 1.0) / 3.0;
+            }
+            if (_PaletteMap_TexelSize.z < 4.5 && _RetainPatternContrast > 0.5 && surface.material == 1u)
             {
                 column = min((float)surface.pattern, bands - 1.0);
                 patternLight = (lightingBand + 1.0) / 3.0;
@@ -306,6 +352,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             if (surface.edge == 3u)
                 color = PaletteColor(surface.material, Native17CreaseColumn);
             half3 finalColor = Material27Diffuse(color, tint * patternLight);
+            if (_PaletteMap_TexelSize.z > 4.5) finalColor += directSpecular;
             return surface.edge == 1u || surface.edge == 2u ?
                 MaterialBoundaryColor(finalColor) : finalColor;
         }
@@ -315,7 +362,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             UNITY_SETUP_INSTANCE_ID(input);
             UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
             CachedSurface surface = ReadSurface(input.uv);
-            if (_DiagnosticMode >= 8.5)
+            if (_DiagnosticMode >= 8.5 && _DiagnosticMode < 9.5)
             {
                 SurfaceOutput positionProbe;
                 positionProbe.color = float4(surface.positionWS, 1);
@@ -325,6 +372,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             half mainShadow;
             half3 irradiance;
             half3 nativeAdditiveLight = 0.0;
+            half3 directSpecular = 0.0;
             if (_DiagnosticMode >= 5.5 && _DiagnosticMode < 6.5)
             {
                 irradiance = max(_ReadableFixtureIrradiance.rgb, 0.0);
@@ -339,16 +387,20 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 mainShadow = 1.0;
             }
             else
-                irradiance = IncidentLight(surface, input.positionCS, mainShadow, nativeAdditiveLight);
-            half3 color = Shade(surface, irradiance, nativeAdditiveLight);
+                irradiance = IncidentLight(surface, input.positionCS, mainShadow, nativeAdditiveLight, directSpecular);
+            directSpecular = SteppedSurfaceSpecular(directSpecular, surface.material);
+            half3 color = Shade(surface, irradiance, nativeAdditiveLight, directSpecular);
             if (_DiagnosticMode > 0.5 && _DiagnosticMode < 1.5)
-                color = PaletteColor(surface.material, min((float)surface.pattern, BandCount(surface.material) - 1.0));
+                color = PaletteColor(surface.material, min((float)surface.pattern,
+                    _PaletteMap_TexelSize.z > 4.5 ? _PaletteMap_TexelSize.z - 1.0 : BandCount(surface.material) - 1.0));
             else if (_DiagnosticMode >= 1.5 && _DiagnosticMode < 2.5)
                 color = surface.normalWS * 0.5 + 0.5;
             else if (_DiagnosticMode >= 2.5 && _DiagnosticMode < 3.5)
                 color = irradiance + nativeAdditiveLight;
             else if (_DiagnosticMode >= 3.5 && _DiagnosticMode < 4.5)
                 color = mainShadow.xxx;
+            else if (_DiagnosticMode >= 9.5)
+                color = directSpecular;
             else if (_DiagnosticMode >= 7.5)
                 color = EvaluateSteppedRoomIndirect(surface.positionWS) * max(_SteppedLocalLightStrength, 0.0);
             else if (_DiagnosticMode >= 6.5)

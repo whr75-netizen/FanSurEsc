@@ -1,5 +1,27 @@
 # N17 — 테스트 건물 한 채의 공통 native 표면·실시간 조명 제작 계약
 
+## N30 현재 결정 — 원인별 재질 정보와 실제 미세 반사
+
+[설계/R2, 2026-10-05] 최신 정정은 N29 큰 얼룩이 물을 쏟은 듯하며, 원하는 생동감은 흠집·마모·결·작은 굴곡의 재질 차이와 빛 반응이라는 것이다. N29 broad(.27×.24m) field→3색영역은 요구와 연결되지 않아 폐기한다. 생성 수식/검사 성공을 디자인 타당성으로 바꾼 것이 오해였다. 대상은 같은 checkout 한 종류다. N29 결과·원본512파일·기존 상판 grain/RGB·금장/경계·PositionMap·mesh/TRS·native 격자·카메라/조명은 보존하고 새 버전만 연결한다. 모든 사물·카메라·caster·게임 기능 재작업은 제외한다.
+
+**근거/선택:** [Pelixir 개발자](https://starbi.dev/)의 재료별 팔레트·world-space scratches·ramp-mask decals, [Adobe Edge Wear](https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/metal-edge-wear)의 curvature/position 기반 접촉 마모와 [Dirt](https://experienceleague.adobe.com/en/docs/substance-3d-painter/using/effects/generators/dirt)의 환경/사용이력 mask를 읽었다. [목재 구조 연구](https://arxiv.org/abs/1511.04224)는 성장 띠·기공·섬유를 색/bump/반사와 연결하며 임의 색덩어리와 구별한다. 새 SRP/Substance 설치 대신 현재 semantic chart에 원인별 mask를 적용한다. (A) 색 수만 증가/broad 잡음 유지: 같은 반례로 제외. (B) 현재 chart+마모/결/높이/거칠기 분리: 채택. (C) 원화 전체를 texture로 복사: 구운 명암/장식 중복·입력 불일치로 보류. 수치/밀도는 프로젝트 제작 매개변수이며 공개 자료가 미술 합격을 보장하지 않는다.
+
+**canonical/계산:** N15 design_tick·design_normal·part·rotation과 기존90.5097PPU가 권위다. front chart=(tx·sx,ty·sy)m, side=(tz·sz,ty·sy)m. door/handle/profile/끝단과 하단 접촉 영역에서만 선분 흠집·소규모 chip·접촉 때를 배치한다. 미세 도장 결은 짧은 방향성 field이며 큰 patch는0이다. 각 현상은 독립 feature mask로 저장한다. 합성 우선순위는 기존 B경계/금장 보존→노출 wood chip→흠집/접촉마모→미세 도장 결이다. paint feature는 R2/part0/B0만, chip의 R2→R4만 해당 mask 안에서 허용한다. R4는 새 clone palette에서만 노출 목재이며 다른 사물의 row4는 바뀌지 않는다.
+
+**색과 광원:** intrinsic palette 폭16/행10으로 paint의 인접색·노출목재·황동 톤을 구별한다. wood row1 첫4색/G와 나무 상판 normalXYZ는 유지한다. PaletteColor는 실제 Texture texel size를 사용하며 기존4열 UV/빛 계산은 같은 식이다. 확장 폭>4를 새 표면 계약 식별자로 사용하고 ShaderLab property/새 shader name은 추가하지 않는다. 확장 G는0..15 albedo index, 조명3단계는 기존 threshold를 유지하여 색 수와 분리한다.
+
+**미세 굴곡/반사:** h(u,v)m의 물리 gradient로 N'=normalize(N−h_u·T−h_v·B), 법선 회전은 기존 rotation이다. paint boundary taper·최대 tilt검사를 적용한다. normal.w는 확장 표면에서만 valid+perceptualroughness=.5+.5r(r=.2.. .9), blank0; 원래4열에서는 기존 의미와 spec0을 유지한다. 설치 URP17.5 BRDF.hlsl의 InitializeBRDFData(smoothness=1−r)/DirectBRDFSpecular를 사용하고 F0·광원 RGB·NdotL·거리/그림자 감쇠·기존 strength/layer를 곱한다. 합산 spec의 peak와 RGB비를 유지한 뒤3양수단계/무광원0으로 양자화한다. 최대 추가 linear peak는 paint/wood .024, brass .06이며 광원별이 아니라 합산 후 상한이다. 기존 읽기용 diffuse에 bounded spec을 더하는 pixel-style 근사로, 엄밀한 PBR 에너지 보존/실제GI로 주장하지 않는다. moving stepped source에는 실제 Unity Light가 없어 이 단계의 GGX spec은 room/main/actual additional light만 받는다. albedo 흠집의 밝고 어두운 쌍을 고정해 빛 반사로 부르지 않는다.
+
+**R3/실패 조건:** 큰blob 없음은 broad 생성 제거·feature의 위치/크기/면적 제한으로 확인한다. 기존4열 palette output은 같은 GPU fixture에서 수정전 PNG와 byte 비교, 새16열 색 index도 실제GPU material diagnostic과CPU 비교한다. 같은 actual camera2px 전후, 두 방향 실제 point light/0광원 spec·격자·source SHA·geometry/lighting·saved scene을 확인한다. 새로운 노출색/반사 기법의 기술 검사가 미술 합격은 아니다. 표면 subpixel h는 silhouette/투영그림자를 바꾸지 않으며 실제 기하가 필요한 변형은 별도다. 초기 미저장 씬은 LocalOnly/Material30/before-unsaved.unity로 copy 보존했고 serialized disk와 차이는 없었다.
+
+**현재/R4·실제 Play 호출:** `material30.py features→generate`가 기존187×211 cell-centre에서 계산했다. paint 인접톤은 col4..15, 기존 paint/wood 첫4색과 모든 boundary albedo RGB는 그대로다. 독립 mask는 결11666·손 접촉74·짧은 흠집28·하단 마모71·노출목재9·금속 변색105칸이다. 작은 손 접촉 군집 최대28칸, chip 최대1칸으로 큰 물 얼룩을 만들지 않는다. paint normal 최대2.074°·높이 범위−.657~+.462mm·거칠기 packing과 N29 handle/wood XYZ 보존26조건이 통과했다. 실제 화면의 원인별 마스크/팔레트 밀도는 이번 제작값이며 원화의 흠집을 복원했다는 뜻은 아니다.
+
+**관측/저장:** 실제 URP GPU의 old4col MaterialOnly/ReadableFixture 변경 byte0, 확장 palette albedo coverage차0/최대RGB오차0이다. 실제 PointLight 좌/우에서 spec 활성550/6067칸·방향차5816칸이며 무광원 spec0·합산3단계상한 검사가 통과했다. 같은 실제 Player/Camera·30°/350°·2screenpx 실내 전후48428px 변화, geometry/lighting·원본512SHA 보존, shadererror0이다. 단일 checkout material 참조만 바꿨고 Edit/saved/clean이다. 결과는 `docs/artifacts/building39/material30/run01/comparison.png`(실제 화면 crop, resize0), canonical map은 `material.png`/`normal.f32`/`palette.png`, 실제 관측은 `observation02`다. 새 map/hash 계산은1회이며 이후 재생성0이다.
+
+**실패 귀속/실행:** 첫 graph init은 validation→save 간선의 feedback 누락으로 실행0이었다. plan02에서 features/maps만 생성했고 첫 카메라만 이동한 Play 촬영은 외부 Player membership 때문에 지붕에 가려 changedPixels0이었다. 재질 실패로 포장하지 않고 원래 map을 유지한 채 기존 TryTeleport 진입 API를 관측기에 연결했다. NumPy bool의 JSON serialize 실패도 검사 반환형만 bool로 수정했다. 첫 PNG/receipt와 LocalOnly 상태는 보존했고 integration03은 verify→관측→GPU gate→저장→최종 gate의5단계/48조건을 완료했다. 마지막 state atomic replace의 WinError5 뒤 실제 cursor=gate/active=null/save receipt 기록을 확인하고 미실행 gate만1회 실행했다. 원본 출력/Unity 작업을 재실행하지 않았다.
+
+**남은 범위:** micro-height는 normal/반사 표현이며 실제 silhouette·caster·움푹 패인 geometry를 바꾸지 않는다. spec shadow attenuation은 코드 확인이고 별도 shadow on/off fixture는 미실행이다. 기존 readable diffuse+bounded spec은 스타일 근사이며 full PBR/GI, 모든 사물 적용, 미술합격·Standalone/GPU성능은 완료하지 않았다. 사용자 반례는 grain/contact/scratch/kick/chip/patina 또는 shader 반사 단계로 귀속하며 큰 색 얼룩을 새로 넣어 대신하지 않는다.
+
 ## N29 현재 설계 — 넓은 도장 면의 색 군집과 손잡이의 곡면 명암
 
 [현재/R4, 2026-10-05] 최신 요청은 단색 면의 밋밋함을 줄이고 둥근 부위에 제한된 단계 명암을 사용하는 것이다. 작업 전 실제 empty_counter의 navy/brass G는 모두2이고 readable shader도 목재 외 column2를 강제했다. 이번 범위는 기존 checkout 수납장 한 종류다. 기존 wood grain·금장 위치·R/B/A·원본512파일·PositionMap·mesh·TRS·PPU·카메라·조명 제어를 보존하며 새 material/normal map과 material clone만 연결했다.

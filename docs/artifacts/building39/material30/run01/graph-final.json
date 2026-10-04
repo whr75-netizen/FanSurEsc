@@ -1,0 +1,319 @@
+{
+  "goal": "One cabinet: cause-specific material detail replacing broad paint blobs",
+  "entry": "surface",
+  "max_steps": 5,
+  "requirements": [
+    {
+      "id": "cause_specific_detail",
+      "source": "Latest user correction; BUILDING16 N30 R2",
+      "text": "Separate causal masks/height/roughness, preserved sources/geometry/grid; actual GPU/camera evidence. Art acceptance is not an automated predicate.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "gate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "surface",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "BUILDING16 N30 R2"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30.py",
+          "verify",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\material30\\run01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\run_material30.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material29.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30_finish.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeMaterial30Observation.cs"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Art/NativeBuilding41MaterialRepair/empty_counter.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Art/NativeBuilding39/palette.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/geometry.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/geometry.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/normal.f32",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/material29/run01/normal.f32",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/Material30/before-shader/legacy-readable-native.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/LocalOnly/Material30/before-shader/legacy-albedo-native.png"
+      ],
+      "writes": [
+        "native30:maps"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "surface.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "observe"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "surface.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {
+        "output": {
+          "literal": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\material30\\run01"
+        },
+        "contract": {
+          "literal": "BUILDING16 N30 R2"
+        }
+      },
+      "parameters": {
+        "scope": "Single Unity MCP writer: Prepare fresh version, enter existing GameMap1 Play Mode, Observe same actual camera/native scale, restore state and exit Play. Do not save/bind production before GPU gate."
+      },
+      "question": "Single Unity MCP writer: Prepare fresh version, enter existing GameMap1 Play Mode, Observe same actual camera/native scale, restore state and exit Play. Do not save/bind production before GPU gate. Return the actual receipt path and continue; this is not a user question.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "native30:maps"
+      ],
+      "writes": [
+        "unity:native30-observation"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "observe.receiptFile"
+              }
+            ]
+          },
+          "to": "gpu"
+        }
+      ]
+    },
+    {
+      "id": "gpu",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "BUILDING16 N30 R2"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30_finish.py"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\run_material30.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material29.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30_finish.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeMaterial30Observation.cs"
+        ]
+      },
+      "reads": [
+        "native30:maps",
+        "unity:native30-observation"
+      ],
+      "writes": [
+        "native30:gpu-validation"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "gpu.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "save",
+          "feedback": true
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "gpu.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "save",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {
+        "output": {
+          "literal": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\material30\\run01"
+        },
+        "contract": {
+          "literal": "BUILDING16 N30 R2"
+        }
+      },
+      "parameters": {
+        "scope": "After actual GPU gate passed, BindAndSave one checkout material reference in existing GameMap1, preserving original assets, scene geometry and lighting."
+      },
+      "question": "After actual GPU gate passed, BindAndSave one checkout material reference in existing GameMap1, preserving original assets, scene geometry and lighting. Return the actual receipt path and continue; this is not a user question.",
+      "output_schema": {
+        "finalFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "native30:gpu-validation"
+      ],
+      "writes": [
+        "unity:native30-save"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "save.finalFile"
+              }
+            ]
+          },
+          "to": "gate"
+        }
+      ]
+    },
+    {
+      "id": "gate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "BUILDING16 N30 R2"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30.py",
+          "gate",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\material30\\run01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\run_material30.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material29.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material30_finish.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeMaterial30Observation.cs"
+        ]
+      },
+      "reads": [
+        "native30:maps",
+        "native30:gpu-validation",
+        "unity:native30-save"
+      ],
+      "writes": [
+        "native30:final-validation"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "gate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "gate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

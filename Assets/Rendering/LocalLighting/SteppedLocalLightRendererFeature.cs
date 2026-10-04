@@ -25,6 +25,8 @@ namespace FantasySurvival.Rendering
             Shader.PropertyToID("_SteppedLocalLightColorsAndIntensities");
         private static readonly int QuantizationSettingsId =
             Shader.PropertyToID("_SteppedLocalLightQuantizationSettings");
+        private static readonly int RoomLightingSettingsId =
+            Shader.PropertyToID("_SteppedLocalLightRoomSettings");
         private static readonly int WorldCellSizesId =
             Shader.PropertyToID("_SteppedLocalLightWorldCellSizes");
         private static readonly int HaloRadiusMultipliersId =
@@ -48,6 +50,7 @@ namespace FantasySurvival.Rendering
         private readonly Vector4[] positionsAndRadii = new Vector4[MaximumLightCount];
         private readonly Vector4[] colorsAndIntensities = new Vector4[MaximumLightCount];
         private readonly Vector4[] quantizationSettings = new Vector4[MaximumLightCount];
+        private readonly Vector4[] roomLightingSettings = new Vector4[MaximumLightCount];
         private readonly float[] worldCellSizes = new float[MaximumLightCount];
         private readonly float[] haloRadiusMultipliers = new float[MaximumLightCount];
         private readonly float[] selectionDistances = new float[MaximumLightCount];
@@ -99,6 +102,7 @@ namespace FantasySurvival.Rendering
                 positionsAndRadii,
                 colorsAndIntensities,
                 quantizationSettings,
+                roomLightingSettings,
                 worldCellSizes,
                 haloRadiusMultipliers,
                 selectionDistances,
@@ -153,6 +157,7 @@ namespace FantasySurvival.Rendering
             passMaterial.SetVectorArray(PositionsAndRadiiId, positionsAndRadii);
             passMaterial.SetVectorArray(ColorsAndIntensitiesId, colorsAndIntensities);
             passMaterial.SetVectorArray(QuantizationSettingsId, quantizationSettings);
+            passMaterial.SetVectorArray(RoomLightingSettingsId, roomLightingSettings);
             passMaterial.SetFloatArray(WorldCellSizesId, worldCellSizes);
             passMaterial.SetFloatArray(HaloRadiusMultipliersId, haloRadiusMultipliers);
             passMaterial.SetMatrixArray(VolumeWorldToLocalId, volumeWorldToLocal);
@@ -215,6 +220,7 @@ namespace FantasySurvival.Rendering
             Shader.SetGlobalVectorArray(
                 QuantizationSettingsId,
                 quantizationSettings);
+            Shader.SetGlobalVectorArray(RoomLightingSettingsId, roomLightingSettings);
             Shader.SetGlobalFloatArray(WorldCellSizesId, worldCellSizes);
             Shader.SetGlobalFloatArray(
                 HaloRadiusMultipliersId,

@@ -1,5 +1,23 @@
 # N17 — 테스트 건물 한 채의 공통 native 표면·실시간 조명 제작 계약
 
+## N26 현재 결정 — 테스트 구체와 건물 전등 분리
+
+[확정] 사용자 요청: 움직이는 테스트 조명 구체는 유지하고 실제 건물 전등은 별도로 구현한다. 전등 켜짐은 방 전체 밝기와 국소 면 명암을 함께 바꾸어야 한다. 원본193파일·캐시·기하·배치·카메라30°/350°·90.5097PPU·2px표시·이동 궤적은 보존한다. 새 전등 모델/입력 단축키/전역 ambient 변경은 범위 밖이다.
+
+[설계/구현 전] 기존 SteppedLocalLight를 유일한 전등 설정/켜짐 권위로 확장한다. Local 역할의 테스트 구체는 이전 수식을 그대로 사용한다. RoomLamp 역할의 두 고정 벽등은 같은 anchor의 Unity Point Light로 직광·실제 shadow map을 계산하고, 지정된 두 room BoxCollider의 union 안에만 isotropic diffuse indirect 근사를 공급한다. 전등 enabled 하나가 두 경로를 함께 켜고 끈다. Unity Light는 파생 표현이며 독립 설정/중복 custom 직광을 만들지 않는다. 간접광은 실제 GI bake/APV/반사 추적이 아니라 공간적으로 상수인 diffuse ambient 근사다.
+
+입력→변환: 기존 native texel centre의 local XYZ/normal → 기존 TransformObjectToWorld/Normal로 Unity 좌수계 metres/Y-up world → room worldToLocal × [P,1]의 box membership → URP GetAdditionalLight의 거리·N·L·shadow 직광 + room diffuse irradiance → 기존 Native18Band(.12,.4)/재료 palette → 기존 native grid의2px 화면. 색 입력은 Color.linear, 출력은 기존 Linear→sRGB 경로이며 UV·coverage·depth/edge·texel centre·scale·회전은 변경0이다. 방 간접광은 E_room=Σ(enabled·color_linear·intensity·roomIndirectMultiplier·membership), 직광은 Unity Light intensity=intensity·roomDirectMultiplier이다. RoomLamp는 custom radial 직광에서 제외하여 중복 계산을 막는다. 유효 room volume이 없으면 간접광0으로 거부하며 unrestricted ambient fallback은 없다. 전등 영향 bounds는 광원 구체와 room world bounds의 union이어야 하므로 광원 중심이 화면 밖이어도 보이는 방의 간접광은 유지한다.
+
+후보: APV on/off Lighting Scenarios는 실제 baked indirect의 공식 경로지만 현재 native shader의 probe 입력·baking geometry 계약이 없어 이번 변경보다 통합 범위가 크다. 기존 radial light 반경 확대는 원형 pool·반경 밖 어둠·가구차폐 부재를 해결하지 못해 제외한다. 선택은 URP 직광/그림자 + 방 diffuse 근사이며 실제 최종 Play 비교가 통과하기 전 scene 저장/완료로 승격하지 않는다. 근거: [Unity APV Scenarios](https://docs.unity.com/en-us/engine/6000.3/manual/lighting-overview/lighting/probevolumes/probe-volumes-change-lighting-at-runtime/bakedifferentlightingsetups), [URP additional lights](https://docs.unity3d.com/cn/6000.0/Manual/urp/use-built-in-shader-methods-additional-lights-fplus.html), [URP shadow atlas/point light six faces](https://docs.unity3d.com/cn/6000.0/Manual/urp/shadow-resolution-urp.html). diffuse ambient는 입사 조도의 방향 무관 상수항이며 Unity 기존 SH ambient와 별도 방 스위치 기여만 추가한다.
+
+최소 case/고정 판정: 같은 실제 Player/Camera와21시에서 모두off / 전등만on / 구체만on / 둘다on, 전등 shadow off/on을1회씩 관측한다. L01 전등off의간접광0·구체role/local값불변, L02 먼바닥(두 전등반경밖)에도간접광>0 및room밖0, L03 white 간접광RGB차≤1/255·최종재료특징/면별명암유지·전등shadow on/off 실제변화>0, L04 기존2px바닥셀내색불일치0 및cache/source/geometry/Transform불변, L05 shadererror0·같은인스턴스·Edit저장상태. 수치오차는float32 world1e-5m、광량1/255、화면간격.001px를사용한다. room record 선택/frustum·직광동기화·shade·pixel 표시로 실패를 귀속한다. WorkLoop는 구현→실제관측→고정 판정이며 파일존재/AI합격boolean으로대체하지않는다.
+
+[현재/R4·실제 Play 호출/GPU] 두 활성 벽등을 RoomLamp로 연결했다. 같은 anchor의 Unity Point Light2개는 white·range3.2·intensity3.6·Hard shadow이며 owner enabled에 동기화된다. 두 전등의 방 간접광 합은 native linear .198, 광원 반경 밖50개 projected floor 표본에서도 GPU RGB123(.1980693), 전등off0을 확인했다. 전체 source/cache/material/mesh512파일 SHA 불변·194mesh 계층/TRS불변·같은Player/Camera·30°/350°·native2px·shadererror0이다. 전등만on은810423px,구체만on은314404px 변화하며 전등shadow on/off는109710px(>2byte 기준109350px) 차이를 만든다. 원본 무늬/금장/면 명암은 최종 `room26/play/lamps-only.png`에서 관찰한다. 두 audited 바닥ROI의8900/11310개2×2칸 내부 불일치0이며 whole-frame 미술/캐릭터 검사는 아니다. 전등/구체 on/off는 `Tools/Fantasy Survival/Room lighting`의 별도 네 메뉴와 runtime `SteppedLocalLight.SetLightingEnabled`를 사용한다. 기본값은 기존처럼 양쪽on이다.
+
+[원인/실행 기록] 최초 binding의 CLR `??`는 Unity missing-component sentinel을 실제 Light로 취급했다. Unity `==null` 판정과 실제 component 존재 검사로 원인을 고쳤으며 기존 부분변경/Undo error 기록은 남긴다. disabled room BoxCollider.bounds는 empty이므로 visibility용 room AABB는 authored centre/size의 세 변환기저 절댓값 합으로 계산한다. 이전 radial 범위를 크게 늘리거나 collider를 활성화하는 대체는 하지 않았다. 최초 WorkLoop state는 observer의 최종저장 함수 추가로 고정 code hash가 달라져 final에서 uncertain_execution으로 보존했다. 외부 gate는 해당 상태에서 실행되지 않았음을 확인하고 현재 코드·기존 실제 관측만 사용하는 명시적 validation-only request-final/state-final이1노드 완료됐다. production/Play 관측 재실행0이다. scene은 이 테스트 인스턴스의 role/reference override와 Light/URP data 추가만 저장했고 원본 prefab 전파0·EditMode/dirtyfalse이다.
+
+[한계] 방 간접광은 isotropic diffuse 근사이고 APV/GI 베이크/실시간 다중반사/문을 통한 간접광 전달은 구현하지 않았다. point direct는 기존 physical caster와 Unity shadow map을 사용하며 room volume 자체는 indirect 경계다. 실제 전등 입력/물리 스위치 모델·캐릭터 미술·Standalone build·GPU 성능 Profile은 이번 범위 밖이다. 일반 fullscreen world와 native/character의 기존 local-light blend 계수 차이는 유지한다. N26 실행 자료는 `docs/artifacts/building39/room26`, 판정기는 `Tools/Building38/room26_gate.py`다.
+
 ## N17 현재 수정 계약 (2026-10-04, 구현 전 고정)
 
 최신 요청은 N15의 부품·디테일을 보존해 테스트 건물을 다시 제작하고 바닥/사물 픽셀 크기를 통일하며 기본 밤과 좌우로 움직이는 양자화 조명을 넣는 것이다. N16은 원본 밀도를31.75로 바꾸고 preview/runtime 색 계산도 달랐으므로 외형 보존의 근거가 아니다. 아래 N16 기록은 이전 실행의 증거로만 보존한다.

@@ -1,6 +1,8 @@
-# N17~N25 실행 진입점
+# N17~N26 실행 진입점
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
+
+N26은 움직이는 Local 테스트 구체와 두 RoomLamp 전등을 분리합니다. 전등 owner는 같은 anchor의 Unity Point Light 직광/Hard shadow와 room box union 안의 diffuse indirect를 함께 켜고 끕니다. 원화·map·mesh·PPU·배치는 재생성하지 않습니다. Unity 메뉴 `Tools/Fantasy Survival/Room lighting`에서 건물 전등과 이동 구체를 각각 on/off할 수 있으며 runtime entry는 `SteppedLocalLight.SetLightingEnabled`입니다. `NativeRoom26Observation.Configure`는 기존 활성 벽등2개만 binding하고, `Capture`는 실제 Play에서 독립 on/off와 shadow를 관측/복원합니다. `SaveFinal`은 원본보존/pairedLight 조건을 확인해 한 씬만 저장합니다. `room26_gate.py`는 실제PNG·먼방표본·2pxROI·512파일hash를 판정합니다. 기존관측재사용 final graph는 `room26/request-final.json`/`state-final.json`이고 현재 화면은 `room26/play/lamps-only.png`입니다. 실제 간접반사를 추적하는 GI나 물리 스위치 모델은 아닙니다.
 
 현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. N20은 기본 카메라를 정수2배로 표시합니다. N24의 moving light는 반경5m·intensity.4와 무광 구간이 있는 ramp로 세 백색 유광 단계를 표시하며 N25에서도 유지합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
 

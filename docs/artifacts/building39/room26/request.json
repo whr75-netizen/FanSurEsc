@@ -1,0 +1,162 @@
+{
+  "entry": "binding",
+  "goal": "Separate local moving light and room lamps; room-wide switch-controlled indirect plus real direct/shadow on preserved native grid.",
+  "max_steps": 3,
+  "nodes": [
+    {
+      "id": "binding",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {},
+      "parameters": {
+        "scope": "N26 fixed contract in Tools/PerfectPixelUniform/BUILDING16.md; no art/camera/geometry changes."
+      },
+      "question": "Compile and bind only the two existing room emitters; preserve baseline geometry/mover/art. Return binding receipt.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "file:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\room26\\baseline.json"
+      ],
+      "writes": [
+        "room26:binding"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "observe",
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "binding.receiptFile"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {},
+      "parameters": {
+        "scope": "N26 fixed contract in Tools/PerfectPixelUniform/BUILDING16.md; no art/camera/geometry changes."
+      },
+      "question": "Observe the fixed actual Play matrix, restore state, save validated scene, return actual Play/final receipts.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "file:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\room26\\baseline.json"
+      ],
+      "writes": [
+        "room26:observe"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "final",
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "observe.receiptFile"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "Tools/Building38/room26_gate.py"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\room26_gate.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Scripts\\WorldLighting\\SteppedLocalLight.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Rendering\\LocalLighting\\SteppedLocalLightCommon.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Rendering\\LocalLighting\\SteppedLocalLightRendererFeature.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeRoom26Observation.cs"
+        ]
+      },
+      "reads": [
+        "room26:observe"
+      ],
+      "writes": [
+        "room26:validation"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "@complete",
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          }
+        },
+        {
+          "to": "@blocked",
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "N26_room_lighting",
+      "text": "Room switch controls direct+bounded indirect, shadow changes, mover/art/grid/instances preserved.",
+      "source": "User: 테스트 조명 구체와 실제 건물 전등을 분리해서 구현; 전등 켜면 방 전체가 밝아짐.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,4204 @@
+{
+  "success": true,
+  "contract": "Tools/PerfectPixelUniform/BUILDING16.md N26",
+  "checks": [
+    {
+      "name": "actualPlay",
+      "passed": true
+    },
+    {
+      "name": "samePlayer",
+      "passed": true
+    },
+    {
+      "name": "sameCamera",
+      "passed": true
+    },
+    {
+      "name": "nativePixelsOnScreen",
+      "passed": true
+    },
+    {
+      "name": "shaderErrors",
+      "passed": true
+    },
+    {
+      "name": "roomLampCountPlay",
+      "passed": true
+    },
+    {
+      "name": "roomLampCountEdit",
+      "passed": true
+    },
+    {
+      "name": "pairedDirectLightCount",
+      "passed": true
+    },
+    {
+      "name": "directPairsValidPlay",
+      "passed": true
+    },
+    {
+      "name": "directPairsValidEdit",
+      "passed": true
+    },
+    {
+      "name": "editMode",
+      "passed": true
+    },
+    {
+      "name": "sceneClean",
+      "passed": true
+    },
+    {
+      "name": "sceneSaved",
+      "passed": true
+    },
+    {
+      "name": "geometryPreservedPlay",
+      "passed": true
+    },
+    {
+      "name": "geometryPreservedEdit",
+      "passed": true
+    },
+    {
+      "name": "movingPreservedPlay",
+      "passed": true
+    },
+    {
+      "name": "movingPreservedEdit",
+      "passed": true
+    },
+    {
+      "name": "roomFillLinear",
+      "passed": true
+    },
+    {
+      "name": "insideFarFillLinear",
+      "passed": true
+    },
+    {
+      "name": "outsideFillLinear",
+      "passed": true
+    },
+    {
+      "name": "pixelOrigin",
+      "passed": true
+    },
+    {
+      "name": "movingBaselinePresent",
+      "passed": true
+    },
+    {
+      "name": "movingWhite",
+      "passed": true
+    },
+    {
+      "name": "movingIntensity",
+      "passed": true
+    },
+    {
+      "name": "movingRadius",
+      "passed": true
+    },
+    {
+      "name": "movingSurfaceBands",
+      "passed": true
+    },
+    {
+      "name": "movingLocalRole",
+      "passed": true
+    },
+    {
+      "name": "movingNativeCellSize",
+      "passed": true
+    },
+    {
+      "name": "movingValuesPreservedPlay",
+      "passed": true
+    },
+    {
+      "name": "movingValuesPreservedEdit",
+      "passed": true
+    },
+    {
+      "name": "geometryBaselinePresent",
+      "passed": true
+    },
+    {
+      "name": "sourceHashCoverage193",
+      "passed": true
+    },
+    {
+      "name": "sourceArtHashesPreserved",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "identicalImageDimensions",
+      "passed": true
+    },
+    {
+      "name": "lampsActualPixelChange",
+      "passed": true
+    },
+    {
+      "name": "movingActualPixelChange",
+      "passed": true
+    },
+    {
+      "name": "bothSourcesVisible",
+      "passed": true
+    },
+    {
+      "name": "shadowActualPixelChange",
+      "passed": true
+    },
+    {
+      "name": "shadowReceiptPixelChange",
+      "passed": true
+    },
+    {
+      "name": "gpuWhiteRoomFill",
+      "passed": true
+    },
+    {
+      "name": "worldPixelProbesPresent",
+      "passed": true
+    },
+    {
+      "name": "probeRecord0",
+      "passed": true
+    },
+    {
+      "name": "probeRecord1",
+      "passed": true
+    },
+    {
+      "name": "probeRecord2",
+      "passed": true
+    },
+    {
+      "name": "probeRecord3",
+      "passed": true
+    },
+    {
+      "name": "probeRecord4",
+      "passed": true
+    },
+    {
+      "name": "probeRecord5",
+      "passed": true
+    },
+    {
+      "name": "probeRecord6",
+      "passed": true
+    },
+    {
+      "name": "probeRecord7",
+      "passed": true
+    },
+    {
+      "name": "probeRecord8",
+      "passed": true
+    },
+    {
+      "name": "probeRecord9",
+      "passed": true
+    },
+    {
+      "name": "probeRecord10",
+      "passed": true
+    },
+    {
+      "name": "probeRecord11",
+      "passed": true
+    },
+    {
+      "name": "probeRecord12",
+      "passed": true
+    },
+    {
+      "name": "probeRecord13",
+      "passed": true
+    },
+    {
+      "name": "probeRecord14",
+      "passed": true
+    },
+    {
+      "name": "probeRecord15",
+      "passed": true
+    },
+    {
+      "name": "probeRecord16",
+      "passed": true
+    },
+    {
+      "name": "probeRecord17",
+      "passed": true
+    },
+    {
+      "name": "probeRecord18",
+      "passed": true
+    },
+    {
+      "name": "probeRecord19",
+      "passed": true
+    },
+    {
+      "name": "probeRecord20",
+      "passed": true
+    },
+    {
+      "name": "probeRecord21",
+      "passed": true
+    },
+    {
+      "name": "probeRecord22",
+      "passed": true
+    },
+    {
+      "name": "probeRecord23",
+      "passed": true
+    },
+    {
+      "name": "probeRecord24",
+      "passed": true
+    },
+    {
+      "name": "probeRecord25",
+      "passed": true
+    },
+    {
+      "name": "probeRecord26",
+      "passed": true
+    },
+    {
+      "name": "probeRecord27",
+      "passed": true
+    },
+    {
+      "name": "probeRecord28",
+      "passed": true
+    },
+    {
+      "name": "probeRecord29",
+      "passed": true
+    },
+    {
+      "name": "probeRecord30",
+      "passed": true
+    },
+    {
+      "name": "probeRecord31",
+      "passed": true
+    },
+    {
+      "name": "probeRecord32",
+      "passed": true
+    },
+    {
+      "name": "probeRecord33",
+      "passed": true
+    },
+    {
+      "name": "probeRecord34",
+      "passed": true
+    },
+    {
+      "name": "probeRecord35",
+      "passed": true
+    },
+    {
+      "name": "probeRecord36",
+      "passed": true
+    },
+    {
+      "name": "probeRecord37",
+      "passed": true
+    },
+    {
+      "name": "probeRecord38",
+      "passed": true
+    },
+    {
+      "name": "probeRecord39",
+      "passed": true
+    },
+    {
+      "name": "probeRecord40",
+      "passed": true
+    },
+    {
+      "name": "probeRecord41",
+      "passed": true
+    },
+    {
+      "name": "probeRecord42",
+      "passed": true
+    },
+    {
+      "name": "probeRecord43",
+      "passed": true
+    },
+    {
+      "name": "probeRecord44",
+      "passed": true
+    },
+    {
+      "name": "probeRecord45",
+      "passed": true
+    },
+    {
+      "name": "probeRecord46",
+      "passed": true
+    },
+    {
+      "name": "probeRecord47",
+      "passed": true
+    },
+    {
+      "name": "probeRecord48",
+      "passed": true
+    },
+    {
+      "name": "probeRecord49",
+      "passed": true
+    },
+    {
+      "name": "probeRecord50",
+      "passed": true
+    },
+    {
+      "name": "probeRecord51",
+      "passed": true
+    },
+    {
+      "name": "probeRecord52",
+      "passed": true
+    },
+    {
+      "name": "probeRecord53",
+      "passed": true
+    },
+    {
+      "name": "probeRecord54",
+      "passed": true
+    },
+    {
+      "name": "probeRecord55",
+      "passed": true
+    },
+    {
+      "name": "probeRecord56",
+      "passed": true
+    },
+    {
+      "name": "probeRecord57",
+      "passed": true
+    },
+    {
+      "name": "probeRecord58",
+      "passed": true
+    },
+    {
+      "name": "probeRecord59",
+      "passed": true
+    },
+    {
+      "name": "probeRecord60",
+      "passed": true
+    },
+    {
+      "name": "probeRecord61",
+      "passed": true
+    },
+    {
+      "name": "probeRecord62",
+      "passed": true
+    },
+    {
+      "name": "probeRecord63",
+      "passed": true
+    },
+    {
+      "name": "probeRecord64",
+      "passed": true
+    },
+    {
+      "name": "probeRecord65",
+      "passed": true
+    },
+    {
+      "name": "probeRecord66",
+      "passed": true
+    },
+    {
+      "name": "probeRecord67",
+      "passed": true
+    },
+    {
+      "name": "probeRecord68",
+      "passed": true
+    },
+    {
+      "name": "probeRecord69",
+      "passed": true
+    },
+    {
+      "name": "probeRecord70",
+      "passed": true
+    },
+    {
+      "name": "probeRecord71",
+      "passed": true
+    },
+    {
+      "name": "probeRecord72",
+      "passed": true
+    },
+    {
+      "name": "probeRecord73",
+      "passed": true
+    },
+    {
+      "name": "probeRecord74",
+      "passed": true
+    },
+    {
+      "name": "probeRecord75",
+      "passed": true
+    },
+    {
+      "name": "probeRecord76",
+      "passed": true
+    },
+    {
+      "name": "probeRecord77",
+      "passed": true
+    },
+    {
+      "name": "probeRecord78",
+      "passed": true
+    },
+    {
+      "name": "probeRecord79",
+      "passed": true
+    },
+    {
+      "name": "probeRecord80",
+      "passed": true
+    },
+    {
+      "name": "probeRecord81",
+      "passed": true
+    },
+    {
+      "name": "probeRecord82",
+      "passed": true
+    },
+    {
+      "name": "probeRecord83",
+      "passed": true
+    },
+    {
+      "name": "probeRecord84",
+      "passed": true
+    },
+    {
+      "name": "probeRecord85",
+      "passed": true
+    },
+    {
+      "name": "probeRecord86",
+      "passed": true
+    },
+    {
+      "name": "probeRecord87",
+      "passed": true
+    },
+    {
+      "name": "probeRecord88",
+      "passed": true
+    },
+    {
+      "name": "probeRecord89",
+      "passed": true
+    },
+    {
+      "name": "probeRecord90",
+      "passed": true
+    },
+    {
+      "name": "probeRecord91",
+      "passed": true
+    },
+    {
+      "name": "probeRecord92",
+      "passed": true
+    },
+    {
+      "name": "probeRecord93",
+      "passed": true
+    },
+    {
+      "name": "probeRecord94",
+      "passed": true
+    },
+    {
+      "name": "probeRecord95",
+      "passed": true
+    },
+    {
+      "name": "probeRecord96",
+      "passed": true
+    },
+    {
+      "name": "probeRecord97",
+      "passed": true
+    },
+    {
+      "name": "probeRecord98",
+      "passed": true
+    },
+    {
+      "name": "probeRecord99",
+      "passed": true
+    },
+    {
+      "name": "probeRecord100",
+      "passed": true
+    },
+    {
+      "name": "probeRecord101",
+      "passed": true
+    },
+    {
+      "name": "probeRecord102",
+      "passed": true
+    },
+    {
+      "name": "probeRecord103",
+      "passed": true
+    },
+    {
+      "name": "probeRecord104",
+      "passed": true
+    },
+    {
+      "name": "probeRecord105",
+      "passed": true
+    },
+    {
+      "name": "probeRecord106",
+      "passed": true
+    },
+    {
+      "name": "probeRecord107",
+      "passed": true
+    },
+    {
+      "name": "knownInteriorNativeFill",
+      "passed": true
+    },
+    {
+      "name": "knownFarInteriorNativeFill",
+      "passed": true
+    },
+    {
+      "name": "knownInteriorFillOffBlack",
+      "passed": true
+    },
+    {
+      "name": "roomFillFloorNativeGrid0",
+      "passed": true,
+      "detail": {
+        "boundsXY": [
+          200,
+          400,
+          400,
+          580
+        ],
+        "phaseXY": [
+          0,
+          1
+        ],
+        "blockCount": 8900,
+        "mismatchedBlocks": 0,
+        "distinctRGB": 5
+      }
+    },
+    {
+      "name": "roomFillFloorNativeGrid1",
+      "passed": true,
+      "detail": {
+        "boundsXY": [
+          720,
+          850,
+          350,
+          700
+        ],
+        "phaseXY": [
+          0,
+          1
+        ],
+        "blockCount": 11310,
+        "mismatchedBlocks": 0,
+        "distinctRGB": 5
+      }
+    }
+  ],
+  "movingBaseline": {
+    "color": {
+      "r": 1.0,
+      "g": 1.0,
+      "b": 1.0,
+      "a": 1.0
+    },
+    "intensity": 0.4000000059604645,
+    "radius": 5.0,
+    "worldCellSize": 0.011048543266952038,
+    "surfaceBands": 3,
+    "role": 0
+  },
+  "geometryBaselineCount": 194,
+  "sourceArtFilesPreserved": 512,
+  "imageDimensions": {
+    "all-off.png": [
+      1114,
+      857
+    ],
+    "lamps-only.png": [
+      1114,
+      857
+    ],
+    "moving-only.png": [
+      1114,
+      857
+    ],
+    "both-on.png": [
+      1114,
+      857
+    ],
+    "lamps-no-shadows.png": [
+      1114,
+      857
+    ],
+    "gpu-room-fill.png": [
+      1114,
+      857
+    ],
+    "gpu-room-fill-off.png": [
+      1114,
+      857
+    ]
+  },
+  "changedPixels": {
+    "lampsOnlyVsAllOff": 810423,
+    "movingOnlyVsAllOff": 314404,
+    "bothVsLampsOnly": 314404,
+    "bothVsMovingOnly": 812547,
+    "shadowsOnVsOff": 109710
+  },
+  "gpuWhiteTargetPixels": 406070,
+  "gpuProbes": [
+    {
+      "index": 0,
+      "world": [
+        -15.67284870147705,
+        0.15000000596046448,
+        5.108602523803711
+      ],
+      "pixel": [
+        489,
+        838
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 1,
+      "world": [
+        -14.976484298706055,
+        0.15000000596046448,
+        5.231390953063965
+      ],
+      "pixel": [
+        617,
+        838
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 2,
+      "world": [
+        -15.38606071472168,
+        0.15000000596046448,
+        5.518178939819336
+      ],
+      "pixel": [
+        553,
+        806
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 3,
+      "world": [
+        -15.795637130737305,
+        0.15000000596046448,
+        5.804966926574707
+      ],
+      "pixel": [
+        489,
+        774
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 4,
+      "world": [
+        -18.662670135498047,
+        0.15000000596046448,
+        7.812484264373779
+      ],
+      "pixel": [
+        41,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 5,
+      "world": [
+        -14.280119895935059,
+        0.15000000596046448,
+        5.354178428649902
+      ],
+      "pixel": [
+        745,
+        838
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 6,
+      "world": [
+        -14.689696311950684,
+        0.15000000596046448,
+        5.640966415405273
+      ],
+      "pixel": [
+        681,
+        806
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 7,
+      "world": [
+        -15.099272727966309,
+        0.15000000596046448,
+        5.927754878997803
+      ],
+      "pixel": [
+        617,
+        774
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 8,
+      "world": [
+        -15.508848190307617,
+        0.15000000596046448,
+        6.214543342590332
+      ],
+      "pixel": [
+        553,
+        742
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 9,
+      "world": [
+        -15.918424606323242,
+        0.15000000596046448,
+        6.501331329345703
+      ],
+      "pixel": [
+        489,
+        710
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 10,
+      "world": [
+        -16.328001022338867,
+        0.15000000596046448,
+        6.788119316101074
+      ],
+      "pixel": [
+        425,
+        678
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        104,
+        105,
+        108
+      ],
+      "offRGB": [
+        16,
+        22,
+        36
+      ],
+      "onLinearRGB": [
+        0.13843161503245183,
+        0.14126329114027164,
+        0.14995978981060856
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 11,
+      "world": [
+        -16.737577438354492,
+        0.15000000596046448,
+        7.074907302856445
+      ],
+      "pixel": [
+        361,
+        646
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 12,
+      "world": [
+        -17.147151947021484,
+        0.15000000596046448,
+        7.361695766448975
+      ],
+      "pixel": [
+        297,
+        614
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 13,
+      "world": [
+        -17.55672836303711,
+        0.15000000596046448,
+        7.648484230041504
+      ],
+      "pixel": [
+        233,
+        582
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 14,
+      "world": [
+        -17.966304779052734,
+        0.15000000596046448,
+        7.935272216796875
+      ],
+      "pixel": [
+        169,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 15,
+      "world": [
+        -18.37588119506836,
+        0.15000000596046448,
+        8.222060203552246
+      ],
+      "pixel": [
+        105,
+        518
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 16,
+      "world": [
+        -18.785457611083984,
+        0.15000000596046448,
+        8.508848190307617
+      ],
+      "pixel": [
+        41,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 17,
+      "world": [
+        -13.993331909179688,
+        0.15000000596046448,
+        5.763754367828369
+      ],
+      "pixel": [
+        809,
+        806
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 18,
+      "world": [
+        -14.402908325195312,
+        0.15000000596046448,
+        6.050542831420898
+      ],
+      "pixel": [
+        745,
+        774
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 19,
+      "world": [
+        -14.812484741210938,
+        0.15000000596046448,
+        6.3373308181762695
+      ],
+      "pixel": [
+        681,
+        742
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 20,
+      "world": [
+        -15.222060203552246,
+        0.15000000596046448,
+        6.624118804931641
+      ],
+      "pixel": [
+        617,
+        710
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 21,
+      "world": [
+        -15.631636619567871,
+        0.15000000596046448,
+        6.91090726852417
+      ],
+      "pixel": [
+        553,
+        678
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 22,
+      "world": [
+        -16.04121208190918,
+        0.15000000596046448,
+        7.197695255279541
+      ],
+      "pixel": [
+        489,
+        646
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 23,
+      "world": [
+        -16.450788497924805,
+        0.15000000596046448,
+        7.48448371887207
+      ],
+      "pixel": [
+        425,
+        614
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 24,
+      "world": [
+        -16.86036491394043,
+        0.15000000596046448,
+        7.771271705627441
+      ],
+      "pixel": [
+        361,
+        582
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 25,
+      "world": [
+        -17.269941329956055,
+        0.15000000596046448,
+        8.058059692382812
+      ],
+      "pixel": [
+        297,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 26,
+      "world": [
+        -17.679515838623047,
+        0.15000000596046448,
+        8.3448486328125
+      ],
+      "pixel": [
+        233,
+        518
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 27,
+      "world": [
+        -18.089092254638672,
+        0.15000000596046448,
+        8.631636619567871
+      ],
+      "pixel": [
+        169,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 28,
+      "world": [
+        -13.296968460083008,
+        0.15000000596046448,
+        5.886542797088623
+      ],
+      "pixel": [
+        937,
+        806
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        9,
+        14,
+        25
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.0027317428519395373,
+        0.004391442037410293,
+        0.00972121732023785
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 29,
+      "world": [
+        -13.706543922424316,
+        0.15000000596046448,
+        6.173330783843994
+      ],
+      "pixel": [
+        873,
+        774
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 30,
+      "world": [
+        -14.116120338439941,
+        0.15000000596046448,
+        6.460118770599365
+      ],
+      "pixel": [
+        809,
+        742
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 31,
+      "world": [
+        -14.52569580078125,
+        0.15000000596046448,
+        6.7469072341918945
+      ],
+      "pixel": [
+        745,
+        710
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 32,
+      "world": [
+        -14.935272216796875,
+        0.15000000596046448,
+        7.033695220947266
+      ],
+      "pixel": [
+        681,
+        678
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 33,
+      "world": [
+        -15.3448486328125,
+        0.15000000596046448,
+        7.320483207702637
+      ],
+      "pixel": [
+        617,
+        646
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 34,
+      "world": [
+        -15.754424095153809,
+        0.15000000596046448,
+        7.607271671295166
+      ],
+      "pixel": [
+        553,
+        614
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 35,
+      "world": [
+        -16.163999557495117,
+        0.15000000596046448,
+        7.894059658050537
+      ],
+      "pixel": [
+        489,
+        582
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 36,
+      "world": [
+        -16.573575973510742,
+        0.15000000596046448,
+        8.180848121643066
+      ],
+      "pixel": [
+        425,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 37,
+      "world": [
+        -16.983152389526367,
+        0.15000000596046448,
+        8.467636108398438
+      ],
+      "pixel": [
+        361,
+        518
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 38,
+      "world": [
+        -17.392728805541992,
+        0.15000000596046448,
+        8.754424095153809
+      ],
+      "pixel": [
+        297,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 39,
+      "world": [
+        -13.01017951965332,
+        0.15000000596046448,
+        6.29611873626709
+      ],
+      "pixel": [
+        1001,
+        774
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 40,
+      "world": [
+        -13.419755935668945,
+        0.15000000596046448,
+        6.582906723022461
+      ],
+      "pixel": [
+        937,
+        742
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 41,
+      "world": [
+        -13.82933235168457,
+        0.15000000596046448,
+        6.869694709777832
+      ],
+      "pixel": [
+        873,
+        710
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 42,
+      "world": [
+        -14.238907814025879,
+        0.15000000596046448,
+        7.156483173370361
+      ],
+      "pixel": [
+        809,
+        678
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 43,
+      "world": [
+        -14.648484230041504,
+        0.15000000596046448,
+        7.443271636962891
+      ],
+      "pixel": [
+        745,
+        646
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 44,
+      "world": [
+        -15.058059692382812,
+        0.15000000596046448,
+        7.730059623718262
+      ],
+      "pixel": [
+        681,
+        614
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 45,
+      "world": [
+        -15.467636108398438,
+        0.15000000596046448,
+        8.016847610473633
+      ],
+      "pixel": [
+        617,
+        582
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 46,
+      "world": [
+        -15.877212524414062,
+        0.15000000596046448,
+        8.303635597229004
+      ],
+      "pixel": [
+        553,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 47,
+      "world": [
+        -16.286788940429688,
+        0.15000000596046448,
+        8.590423583984375
+      ],
+      "pixel": [
+        489,
+        518
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 48,
+      "world": [
+        -16.69636344909668,
+        0.15000000596046448,
+        8.877212524414062
+      ],
+      "pixel": [
+        425,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 49,
+      "world": [
+        -17.105939865112305,
+        0.15000000596046448,
+        9.164000511169434
+      ],
+      "pixel": [
+        361,
+        454
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 50,
+      "world": [
+        -12.72339153289795,
+        0.15000000596046448,
+        6.705694675445557
+      ],
+      "pixel": [
+        1065,
+        742
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 51,
+      "world": [
+        -13.132966995239258,
+        0.15000000596046448,
+        6.992482662200928
+      ],
+      "pixel": [
+        1001,
+        710
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 52,
+      "world": [
+        -13.542543411254883,
+        0.15000000596046448,
+        7.279271125793457
+      ],
+      "pixel": [
+        937,
+        678
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 53,
+      "world": [
+        -13.952119827270508,
+        0.15000000596046448,
+        7.566059112548828
+      ],
+      "pixel": [
+        873,
+        646
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 54,
+      "world": [
+        -14.361696243286133,
+        0.15000000596046448,
+        7.852847099304199
+      ],
+      "pixel": [
+        809,
+        614
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 55,
+      "world": [
+        -14.771271705627441,
+        0.15000000596046448,
+        8.13963508605957
+      ],
+      "pixel": [
+        745,
+        582
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 56,
+      "world": [
+        -15.180848121643066,
+        0.15000000596046448,
+        8.426424026489258
+      ],
+      "pixel": [
+        681,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 57,
+      "world": [
+        -15.590423583984375,
+        0.15000000596046448,
+        8.713212013244629
+      ],
+      "pixel": [
+        617,
+        518
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 58,
+      "world": [
+        -16.0,
+        0.15000000596046448,
+        9.0
+      ],
+      "pixel": [
+        553,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        120,
+        98,
+        92
+      ],
+      "offRGB": [
+        13,
+        12,
+        24
+      ],
+      "onLinearRGB": [
+        0.18782077230067787,
+        0.12213877222960187,
+        0.10702310297826761
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 59,
+      "world": [
+        -16.409576416015625,
+        0.15000000596046448,
+        9.286787986755371
+      ],
+      "pixel": [
+        489,
+        454
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        120,
+        98,
+        92
+      ],
+      "offRGB": [
+        13,
+        12,
+        24
+      ],
+      "onLinearRGB": [
+        0.18782077230067787,
+        0.12213877222960187,
+        0.10702310297826761
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 60,
+      "world": [
+        -16.81915283203125,
+        0.15000000596046448,
+        9.573575973510742
+      ],
+      "pixel": [
+        425,
+        422
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 61,
+      "world": [
+        -12.846179008483887,
+        0.15000000596046448,
+        7.4020586013793945
+      ],
+      "pixel": [
+        1065,
+        678
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 62,
+      "world": [
+        -13.255755424499512,
+        0.15000000596046448,
+        7.688846588134766
+      ],
+      "pixel": [
+        1001,
+        646
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 63,
+      "world": [
+        -13.665331840515137,
+        0.15000000596046448,
+        7.975635051727295
+      ],
+      "pixel": [
+        937,
+        614
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 64,
+      "world": [
+        -14.074907302856445,
+        0.15000000596046448,
+        8.262423515319824
+      ],
+      "pixel": [
+        873,
+        582
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 65,
+      "world": [
+        -14.48448371887207,
+        0.15000000596046448,
+        8.549211502075195
+      ],
+      "pixel": [
+        809,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 66,
+      "world": [
+        -14.894060134887695,
+        0.15000000596046448,
+        8.835999488830566
+      ],
+      "pixel": [
+        745,
+        518
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 67,
+      "world": [
+        -15.303635597229004,
+        0.15000000596046448,
+        9.122787475585938
+      ],
+      "pixel": [
+        681,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 68,
+      "world": [
+        -15.713212013244629,
+        0.15000000596046448,
+        9.409576416015625
+      ],
+      "pixel": [
+        617,
+        454
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 69,
+      "world": [
+        -16.122787475585938,
+        0.15000000596046448,
+        9.696364402770996
+      ],
+      "pixel": [
+        553,
+        422
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        120,
+        98,
+        92
+      ],
+      "offRGB": [
+        13,
+        12,
+        24
+      ],
+      "onLinearRGB": [
+        0.18782077230067787,
+        0.12213877222960187,
+        0.10702310297826761
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 70,
+      "world": [
+        -16.532363891601562,
+        0.15000000596046448,
+        9.983152389526367
+      ],
+      "pixel": [
+        489,
+        390
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        40,
+        23,
+        19
+      ],
+      "offRGB": [
+        2,
+        1,
+        2
+      ],
+      "onLinearRGB": [
+        0.021219010376003555,
+        0.008568125618069307,
+        0.006512090792594475
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 71,
+      "world": [
+        -12.96896743774414,
+        0.15000000596046448,
+        8.09842300415039
+      ],
+      "pixel": [
+        1065,
+        614
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 72,
+      "world": [
+        -13.378543853759766,
+        0.15000000596046448,
+        8.385210990905762
+      ],
+      "pixel": [
+        1001,
+        582
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 73,
+      "world": [
+        -13.788119316101074,
+        0.15000000596046448,
+        8.671998977661133
+      ],
+      "pixel": [
+        937,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 74,
+      "world": [
+        -14.1976957321167,
+        0.15000000596046448,
+        8.95878791809082
+      ],
+      "pixel": [
+        873,
+        518
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 75,
+      "world": [
+        -14.607271194458008,
+        0.15000000596046448,
+        9.245575904846191
+      ],
+      "pixel": [
+        809,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 76,
+      "world": [
+        -15.016847610473633,
+        0.15000000596046448,
+        9.532363891601562
+      ],
+      "pixel": [
+        745,
+        454
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 77,
+      "world": [
+        -15.426424026489258,
+        0.15000000596046448,
+        9.819151878356934
+      ],
+      "pixel": [
+        681,
+        422
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 78,
+      "world": [
+        -15.835999488830566,
+        0.15000000596046448,
+        10.105939865112305
+      ],
+      "pixel": [
+        617,
+        390
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 79,
+      "world": [
+        -16.245574951171875,
+        0.15000000596046448,
+        10.392728805541992
+      ],
+      "pixel": [
+        553,
+        358
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        40,
+        23,
+        19
+      ],
+      "offRGB": [
+        6,
+        4,
+        6
+      ],
+      "onLinearRGB": [
+        0.021219010376003555,
+        0.008568125618069307,
+        0.006512090792594475
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 80,
+      "world": [
+        -13.091754913330078,
+        0.15000000596046448,
+        8.794787406921387
+      ],
+      "pixel": [
+        1065,
+        550
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 81,
+      "world": [
+        -13.501331329345703,
+        0.15000000596046448,
+        9.081575393676758
+      ],
+      "pixel": [
+        1001,
+        518
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 82,
+      "world": [
+        -13.910907745361328,
+        0.15000000596046448,
+        9.368363380432129
+      ],
+      "pixel": [
+        937,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 83,
+      "world": [
+        -14.320483207702637,
+        0.15000000596046448,
+        9.6551513671875
+      ],
+      "pixel": [
+        873,
+        454
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 84,
+      "world": [
+        -14.730059623718262,
+        0.15000000596046448,
+        9.941940307617188
+      ],
+      "pixel": [
+        809,
+        422
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 85,
+      "world": [
+        -15.13963508605957,
+        0.15000000596046448,
+        10.228728294372559
+      ],
+      "pixel": [
+        745,
+        390
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 86,
+      "world": [
+        -15.549211502075195,
+        0.15000000596046448,
+        10.51551628112793
+      ],
+      "pixel": [
+        681,
+        358
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 87,
+      "world": [
+        -13.214543342590332,
+        0.15000000596046448,
+        9.491151809692383
+      ],
+      "pixel": [
+        1065,
+        486
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 88,
+      "world": [
+        -13.62411880493164,
+        0.15000000596046448,
+        9.777939796447754
+      ],
+      "pixel": [
+        1001,
+        454
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 89,
+      "world": [
+        -14.033695220947266,
+        0.15000000596046448,
+        10.064727783203125
+      ],
+      "pixel": [
+        937,
+        422
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        104,
+        105,
+        108
+      ],
+      "offRGB": [
+        16,
+        22,
+        36
+      ],
+      "onLinearRGB": [
+        0.13843161503245183,
+        0.14126329114027164,
+        0.14995978981060856
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 90,
+      "world": [
+        -14.44327163696289,
+        0.15000000596046448,
+        10.351515769958496
+      ],
+      "pixel": [
+        873,
+        390
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 91,
+      "world": [
+        -14.8528470993042,
+        0.15000000596046448,
+        10.638303756713867
+      ],
+      "pixel": [
+        809,
+        358
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 92,
+      "world": [
+        -15.262423515319824,
+        0.15000000596046448,
+        10.925092697143555
+      ],
+      "pixel": [
+        745,
+        326
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 93,
+      "world": [
+        -13.33733081817627,
+        0.15000000596046448,
+        10.187515258789062
+      ],
+      "pixel": [
+        1065,
+        422
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 94,
+      "world": [
+        -13.746907234191895,
+        0.15000000596046448,
+        10.47430419921875
+      ],
+      "pixel": [
+        1001,
+        390
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 95,
+      "world": [
+        -14.156482696533203,
+        0.15000000596046448,
+        10.761092185974121
+      ],
+      "pixel": [
+        937,
+        358
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 96,
+      "world": [
+        -14.566059112548828,
+        0.15000000596046448,
+        11.047880172729492
+      ],
+      "pixel": [
+        873,
+        326
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 97,
+      "world": [
+        -14.975635528564453,
+        0.15000000596046448,
+        11.334668159484863
+      ],
+      "pixel": [
+        809,
+        294
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 98,
+      "world": [
+        -13.460119247436523,
+        0.15000000596046448,
+        10.883879661560059
+      ],
+      "pixel": [
+        1065,
+        358
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        113,
+        113,
+        115
+      ],
+      "offRGB": [
+        9,
+        14,
+        25
+      ],
+      "onLinearRGB": [
+        0.1651321945016676,
+        0.1651321945016676,
+        0.1714411007328226
+      ],
+      "whiteTarget": false,
+      "offBlack": false
+    },
+    {
+      "index": 99,
+      "world": [
+        -13.869694709777832,
+        0.15000000596046448,
+        11.17066764831543
+      ],
+      "pixel": [
+        1001,
+        326
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 100,
+      "world": [
+        -14.279271125793457,
+        0.15000000596046448,
+        11.457456588745117
+      ],
+      "pixel": [
+        937,
+        294
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 101,
+      "world": [
+        -14.688846588134766,
+        0.15000000596046448,
+        11.744244575500488
+      ],
+      "pixel": [
+        873,
+        262
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 102,
+      "world": [
+        -13.582906723022461,
+        0.15000000596046448,
+        11.580244064331055
+      ],
+      "pixel": [
+        1065,
+        294
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 103,
+      "world": [
+        -13.992483139038086,
+        0.15000000596046448,
+        11.867033004760742
+      ],
+      "pixel": [
+        1001,
+        262
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 104,
+      "world": [
+        -14.402058601379395,
+        0.15000000596046448,
+        12.153820991516113
+      ],
+      "pixel": [
+        937,
+        230
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 105,
+      "world": [
+        -13.705694198608398,
+        0.15000000596046448,
+        12.27660846710205
+      ],
+      "pixel": [
+        1065,
+        230
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 106,
+      "world": [
+        -14.115270614624023,
+        0.15000000596046448,
+        12.563396453857422
+      ],
+      "pixel": [
+        1001,
+        198
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    },
+    {
+      "index": 107,
+      "world": [
+        -13.828481674194336,
+        0.15000000596046448,
+        12.972972869873047
+      ],
+      "pixel": [
+        1065,
+        166
+      ],
+      "inside": true,
+      "far": true,
+      "eligibleNative": true,
+      "onRGB": [
+        123,
+        123,
+        123
+      ],
+      "offRGB": [
+        0,
+        0,
+        0
+      ],
+      "onLinearRGB": [
+        0.19806931955994886,
+        0.19806931955994886,
+        0.19806931955994886
+      ],
+      "whiteTarget": true,
+      "offBlack": true
+    }
+  ],
+  "insideWhiteTargetProbes": 50,
+  "farWhiteTargetProbes": 50,
+  "floorGridChecks": [
+    {
+      "boundsXY": [
+        200,
+        400,
+        400,
+        580
+      ],
+      "phaseXY": [
+        0,
+        1
+      ],
+      "blockCount": 8900,
+      "mismatchedBlocks": 0,
+      "distinctRGB": 5
+    },
+    {
+      "boundsXY": [
+        720,
+        850,
+        350,
+        700
+      ],
+      "phaseXY": [
+        0,
+        1
+      ],
+      "blockCount": 11310,
+      "mismatchedBlocks": 0,
+      "distinctRGB": 5
+    }
+  ],
+  "tolerances": {
+    "world": 1e-05,
+    "linearRGB": 0.00392156862745098,
+    "screenPixels": 0.001
+  },
+  "scope": "Actual Play receipt, PNG differences, GPU room-only fill probes and two audited floor ROIs; source hashes are measured directly. Outside-fill CPU receipt is separate from visible native GPU probes. No whole-frame black, final-frame grid, aesthetic, input or build approval."
+}

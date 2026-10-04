@@ -6,7 +6,7 @@ namespace FantasySurvival.WorldLighting
 {
     /// <summary>
     /// Defines one presentation-only local light. The renderer consumes these
-    /// values without creating a Unity Light or mutating gameplay state.
+    /// values. Room lamps also drive an explicitly paired Unity direct light.
     /// </summary>
     // Registration only: there is no edit-time Update or separate light state.
     // Native surface materials and Scene View consume this same source list.
@@ -15,7 +15,16 @@ namespace FantasySurvival.WorldLighting
     [AddComponentMenu("Fantasy Survival/World Lighting/Stepped Local Light")]
     public sealed class SteppedLocalLight : MonoBehaviour
     {
+        public enum LightingRole { Local, RoomLamp }
         private static readonly List<SteppedLocalLight> ActiveLights = new();
+
+        [SerializeField] private LightingRole role;
+        [Tooltip("Room lamps only: isotropic diffuse irradiance inside assigned room volumes. This approximates indirect light; it is not baked GI.")]
+        [SerializeField, Min(0f)] private float roomIndirectMultiplier = 1.5f;
+        [Tooltip("Room lamps only: Unity point-light intensity relative to this owner's intensity.")]
+        [SerializeField, Min(0f)] private float roomDirectMultiplier = 30f;
+        [Tooltip("Derived shadowed direct light. Configure and switch this SteppedLocalLight owner, not the paired Unity Light.")]
+        [SerializeField] private Light roomDirectLight;
 
         [Tooltip("RGB controls the tint; alpha scales the additive light contribution.")]
         [SerializeField, ColorUsage(true, true)] private Color color =
@@ -46,6 +55,30 @@ namespace FantasySurvival.WorldLighting
         public float WorldCellSize => worldCellSize;
         public BoxCollider IlluminationVolume => illuminationVolume;
         public BoxCollider IlluminationVolume2 => illuminationVolume2;
+        public LightingRole Role => role;
+        public float RoomIndirectMultiplier => roomIndirectMultiplier;
+        public float RoomDirectMultiplier => roomDirectMultiplier;
+        public Light RoomDirectLight => roomDirectLight;
+
+        public void SetLightingEnabled(bool value)
+        {
+            enabled = value;
+            SynchronizeRoomDirectLight();
+        }
+
+        public void SynchronizeRoomDirectLight()
+        {
+            if (roomDirectLight == null) return;
+            bool validRoom = illuminationVolume != null || illuminationVolume2 != null;
+            roomDirectLight.enabled = role == LightingRole.RoomLamp && validRoom &&
+                isActiveAndEnabled && intensity > 0f && color.a > 0f;
+            if (role != LightingRole.RoomLamp) return;
+            roomDirectLight.type = LightType.Point;
+            roomDirectLight.color = new Color(color.r, color.g, color.b, 1f);
+            roomDirectLight.intensity = intensity * roomDirectMultiplier * Mathf.Clamp01(color.a);
+            roomDirectLight.range = radius;
+            roomDirectLight.shadows = LightShadows.Hard;
+        }
 
         private void OnEnable()
         {
@@ -53,11 +86,14 @@ namespace FantasySurvival.WorldLighting
             {
                 ActiveLights.Add(this);
             }
+            SynchronizeRoomDirectLight();
         }
 
         private void OnDisable()
         {
             ActiveLights.Remove(this);
+            if (roomDirectLight != null && role == LightingRole.RoomLamp)
+                roomDirectLight.enabled = false;
         }
 
         private void OnValidate()
@@ -70,12 +106,16 @@ namespace FantasySurvival.WorldLighting
             haloRadiusMultiplier = Mathf.Clamp(haloRadiusMultiplier, 1f, 2f);
             normalInfluence = Mathf.Clamp01(normalInfluence);
             worldCellSize = Mathf.Max(0.01f, worldCellSize);
+            roomIndirectMultiplier = Mathf.Max(0f, roomIndirectMultiplier);
+            roomDirectMultiplier = Mathf.Max(0f, roomDirectMultiplier);
+            SynchronizeRoomDirectLight();
         }
 
         internal static int FillShaderData(
             Vector4[] positionsAndRadii,
             Vector4[] colorsAndIntensities,
             Vector4[] quantizationSettings,
+            Vector4[] roomLightingSettings,
             float[] worldCellSizes,
             float[] haloRadiusMultipliers,
             float[] selectionDistances,
@@ -104,6 +144,7 @@ namespace FantasySurvival.WorldLighting
             int clampedLimit = Mathf.Min(limit, positionsAndRadii.Length);
             clampedLimit = Mathf.Min(clampedLimit, colorsAndIntensities.Length);
             clampedLimit = Mathf.Min(clampedLimit, quantizationSettings.Length);
+            clampedLimit = Mathf.Min(clampedLimit, roomLightingSettings.Length);
             clampedLimit = Mathf.Min(clampedLimit, worldCellSizes.Length);
             clampedLimit = Mathf.Min(clampedLimit, haloRadiusMultipliers.Length);
             clampedLimit = Mathf.Min(clampedLimit, selectionDistances.Length);
@@ -145,6 +186,14 @@ namespace FantasySurvival.WorldLighting
                 Bounds influenceBounds = new Bounds(
                     position,
                     Vector3.one * (influenceRadius * 2f));
+                if (light.role == LightingRole.RoomLamp)
+                {
+                    if (light.roomDirectLight == null ||
+                        (light.illuminationVolume == null && light.illuminationVolume2 == null))
+                        continue;
+                    if (light.illuminationVolume != null) influenceBounds.Encapsulate(RoomWorldBounds(light.illuminationVolume));
+                    if (light.illuminationVolume2 != null) influenceBounds.Encapsulate(RoomWorldBounds(light.illuminationVolume2));
+                }
                 if (!GeometryUtility.TestPlanesAABB(frustumPlanes, influenceBounds))
                 {
                     continue;
@@ -172,6 +221,7 @@ namespace FantasySurvival.WorldLighting
                         colorsAndIntensities[insertIndex - 1];
                     quantizationSettings[insertIndex] =
                         quantizationSettings[insertIndex - 1];
+                    roomLightingSettings[insertIndex] = roomLightingSettings[insertIndex - 1];
                     worldCellSizes[insertIndex] = worldCellSizes[insertIndex - 1];
                     haloRadiusMultipliers[insertIndex] =
                         haloRadiusMultipliers[insertIndex - 1];
@@ -204,6 +254,8 @@ namespace FantasySurvival.WorldLighting
                     light.haloBands,
                     light.haloStrength,
                     light.normalInfluence);
+                roomLightingSettings[insertIndex] = light.role == LightingRole.RoomLamp ?
+                    new Vector4(light.roomIndirectMultiplier, 1f, 0f, 0f) : Vector4.zero;
                 worldCellSizes[insertIndex] = light.worldCellSize;
                 haloRadiusMultipliers[insertIndex] = light.haloRadiusMultiplier;
                 selectionDistances[insertIndex] = distanceSquared;
@@ -215,6 +267,20 @@ namespace FantasySurvival.WorldLighting
 
             truncated = eligibleCount > clampedLimit;
             return count;
+        }
+
+        private static Bounds RoomWorldBounds(BoxCollider volume)
+        {
+            // Room volumes may be disabled/non-physical; Collider.bounds is then empty.
+            // Transform the authored box's basis, including parent scale/rotation.
+            Vector3 h = volume.size * .5f;
+            Vector3 x = volume.transform.TransformVector(new Vector3(h.x, 0, 0));
+            Vector3 y = volume.transform.TransformVector(new Vector3(0, h.y, 0));
+            Vector3 z = volume.transform.TransformVector(new Vector3(0, 0, h.z));
+            Vector3 e = new Vector3(Mathf.Abs(x.x)+Mathf.Abs(y.x)+Mathf.Abs(z.x),
+                Mathf.Abs(x.y)+Mathf.Abs(y.y)+Mathf.Abs(z.y),
+                Mathf.Abs(x.z)+Mathf.Abs(y.z)+Mathf.Abs(z.z));
+            return new Bounds(volume.transform.TransformPoint(volume.center), e * 2f);
         }
 
         private static void WriteVolumeData(BoxCollider volume, int index,

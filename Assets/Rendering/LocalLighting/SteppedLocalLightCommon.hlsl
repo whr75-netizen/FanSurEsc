@@ -7,6 +7,7 @@ int _SteppedLocalLightCount;
 float4 _SteppedLocalLightPositionsAndRadii[STEPPED_LOCAL_LIGHT_MAXIMUM];
 float4 _SteppedLocalLightColorsAndIntensities[STEPPED_LOCAL_LIGHT_MAXIMUM];
 float4 _SteppedLocalLightQuantizationSettings[STEPPED_LOCAL_LIGHT_MAXIMUM];
+float4 _SteppedLocalLightRoomSettings[STEPPED_LOCAL_LIGHT_MAXIMUM];
 float _SteppedLocalLightWorldCellSizes[STEPPED_LOCAL_LIGHT_MAXIMUM];
 float _SteppedLocalLightHaloRadiusMultipliers[STEPPED_LOCAL_LIGHT_MAXIMUM];
 float4x4 _SteppedLocalLightVolumeWorldToLocal[STEPPED_LOCAL_LIGHT_MAXIMUM];
@@ -95,6 +96,19 @@ half3 EvaluateSteppedLocalLights(
         float4 positionAndRadius = _SteppedLocalLightPositionsAndRadii[index];
         float4 colorAndIntensity =
             _SteppedLocalLightColorsAndIntensities[index];
+        float4 roomSettings = _SteppedLocalLightRoomSettings[index];
+        if (roomSettings.y > 0.5)
+        {
+            // A missing room is invalid, never a world-wide ambient fallback.
+            bool validRoom = _SteppedLocalLightVolumeCenters[index].w > 0.5 ||
+                _SteppedLocalLightVolume2Centers[index].w > 0.5;
+            if (validRoom)
+                accumulatedLight += (half3)colorAndIntensity.rgb *
+                    (half)(colorAndIntensity.w * roomSettings.x);
+            // Real Unity point lights supply this lamp's direct/shadow term.
+            // Never add the previous custom radial light a second time.
+            continue;
+        }
         float4 quantization = _SteppedLocalLightQuantizationSettings[index];
         float3 snappedPositionWS = SnapSteppedLightWorldPosition(
             positionWS,
@@ -140,6 +154,23 @@ half3 EvaluateSteppedLocalLights(
     }
 
     return accumulatedLight;
+}
+
+half3 EvaluateSteppedRoomIndirect(float3 positionWS)
+{
+    half3 indirect = 0.0;
+    [loop] for (int index = 0; index < _SteppedLocalLightCount; index++)
+    {
+        float4 room = _SteppedLocalLightRoomSettings[index];
+        bool validRoom = _SteppedLocalLightVolumeCenters[index].w > 0.5 ||
+            _SteppedLocalLightVolume2Centers[index].w > 0.5;
+        if (room.y > 0.5 && validRoom && IsInsideSteppedLightRoom(index, positionWS))
+        {
+            float4 source = _SteppedLocalLightColorsAndIntensities[index];
+            indirect += (half3)source.rgb * (half)(source.w * room.x);
+        }
+    }
+    return indirect;
 }
 
 // Existing fullscreen/character consumers retain the complete light field.

@@ -339,6 +339,8 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 color = irradiance + nativeAdditiveLight;
             else if (_DiagnosticMode >= 3.5 && _DiagnosticMode < 4.5)
                 color = mainShadow.xxx;
+            else if (_DiagnosticMode >= 7.5)
+                color = EvaluateSteppedRoomIndirect(surface.positionWS) * max(_SteppedLocalLightStrength, 0.0);
             else if (_DiagnosticMode >= 6.5)
                 color = nativeAdditiveLight;
             SurfaceOutput output;

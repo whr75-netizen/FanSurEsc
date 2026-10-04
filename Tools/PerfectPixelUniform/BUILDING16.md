@@ -88,7 +88,21 @@ canonical/좌표·투영/단위는 N17과 같으며 이번 자유도는 최종 �
 
 `docs/artifacts/building39/zoom20/readable-on.png`는 실제 기존 Play 카메라의 1114×857, size 2.367151, 30°/350°·원본 1픽셀당 화면 2×2픽셀이다. 같은 Player/Camera·map/mesh/Transform·36재료·shader error 0이며 기존 art 189파일은 hash 불변이다. 별도 임시 카메라의 viewport 높이 720/857/1080에서 배율 선택 2, 기존 scroll 계산 호출에서 2→1→2, native 해제 시 같은 카메라의 size 5 복원을 확인했다. 물리 휠 입력은 이번에 실행하지 않았으며 호출 확인이다. 기존 WorkLoop의 설정/실제 관측→최종 gate가 완료됐다. 밤 색감·캐릭터·디자인은 수정하지 않았다.
 
-## N23 현재 조명 수선 — 세 개의 유광 구간과 백색 합성
+## N24 현재 조명 수선 — 범위·광량과 무광 구간
+
+[요구/원인] N23의 백색광이 방 전체를 덮고 너무 밝다는 사용자 정정이다. `ceil(3a)/3`은 아무리 작은 a>0도 1/3로 올리므로 반경14m 전체가 최소 광량을 받았다. 기존 `intensity=.8`과 surface strength `.55`의 최대 백색 기여는 linear RGB `.44`였다. 밝기 제어가 없는 것이 아니라 범위·광량·단계 선택을 잘못 결합한 구현이었다. N23은 원본/출력 단계 검증만 보존하고 이 요구의 시각 합격으로 사용하지 않는다.
+
+[범위/선택] 같은 moving light의 반경을5m·intensity를.4로 낮춘다. 새 원본·palette·mesh·배치·camera/PPU·motion·다른 광원·post exposure는 변경하지 않는다. 최종 합성은 N23의 백색 additive를 재사용한다. 유광 세 단계는 유지하되 최소 유효 광량과 완전 밝기 구간을 분리한 toon ramp를 사용한다. 이 값은 게임 표현용 ramp이며 물리 lux/lumen 측정값이 아니다. 자동 노출이나 전체 화면 색 필터로 범위를 덮지 않는다.
+
+[연산/좌표] N17/N23의 미터 표면 좌표→world TRS→기존 광량 a/법선→native texel→linear RGB→sRGB 경로와 픽셀 격자를 보존한다. opt-in에만 `q=0(a<.1)`, 그 외 `q=(1+floor(saturate((a-.1)/(.5-.1))·(n-1)))/n`을 쓴다. n=3의 입력 경계는.1/.3/.5, 출력은0/1⁄3/2⁄3/1이다. 일반 광원의 양수 band 경로는 그대로다. 바닥 높이차1.335m·반경5m에서 최대 a≈.537은 최고 경계.5를 넘는다. 최대/중간/바깥 유광의 RGB 기여는 intensity·.55·q=.22/.146667/.073333이며 intensity는 단계 위치와 별개로 선형 광량을 조절한다. 기존 후처리/exposure는 유지한다. 원본 픽셀과 그림자/가림 자료는 재생성하지 않는다.
+
+[픽셀 판별/실험] N23 실제 diagnostic 두 바닥 ROI(x200:400,y400:580; x720:850,y350:700),1114×857의2×2 phase(0,1) 내부RGB불일치가0이었다. Common worldXYZ snap과 화면격자는 다르지만 cached texel 입력은 이미 일정하므로 삭제할 원인 증거가 없다. 곡선의2/4/6px 계단 길이는 픽셀 크기와 구분한다. N24 actual Play에서는 같은 두 영역의2×2 일치, 세 양수 구간+0·백색 최종 RGB차·기존 N23 대비 유광 픽셀 수 감소·원본193hash·다른 광원 설정 보존을 확인한다. 전체 frame/캐릭터·비native의 합격으로 확장하지 않는다.
+
+[밝기 관리 근거] 보통 광원의 [Intensity](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Light-intensity.html)와 [Range](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Light-range.html), 환경광, 표시용 [Post Exposure](https://docs.unity.com/en-us/engine/6000.0/manual/post-processing-and-full-screen-effects/urp/effect-list/color-adjustments)를 분리한다. 픽셀 명암 단계는 그 조명 입력을 표시하는 ramp다. 이 프로젝트의 SteppedLocalLight는 물리 Light의 lumen값이 아니라 기존 스타일 광량/반경 owner다. 조명은 linear RGB에서 계산하며 정수 픽셀 표시는 공간 표본이고, 노출은 표시 밝기이므로 서로 대체하지 않는다. 이번에는 기존 owner의 intensity/radius와 opt-in ramp만 수선한다.
+
+[현재/실제 관측] `light24/moving-on.png`는 실제 기존 Play 카메라1114×857·21시·30°/350°·원본1픽셀당2×2화면픽셀이다. 실제 GPU의 linear 백색 기여0/.073333/.146667/.22 영역은337030/98330/42722/6640픽셀이며, 최종 RGB의 같은 백색 기여도97696/42722/6640픽셀에서 확인했다. 유광 영역은 N23의458562에서147692픽셀로 감소했다(같은 관측 화면, 약32%). 조명 경계를 포함한 두 바닥 ROI의8900/11310개2×2블록 내부RGB불일치는0이다. 이는 두 영역의 검사이며 캐릭터·모든 사물의 격자나 미술 합격은 아니다. 다른 광원 설정과193개아트hash·같은Player/Camera·map/mesh/TRS를 보존했고 shader error0·Edit 저장을 확인했다. 기존 좌우 이동의 두 위치도 관측했다. 전체씬diff는 같은 광원의radius/intensity 두 값뿐이다. WorkLoop `light24/request.json`→실제Unity작업/관측→`light24_gate.py`가 완료됐으며 원본 제작 재실행은0이다.
+
+## N23 이전 조명 실험 — 범위·밝기 피드백으로 재개
 
 [요구/원인] 사용자는 N22 실제 화면을 두 단계·누런 광으로 판정했다. N22의 Q3={0,.5,1}는 무광0을 포함하여 유광은 두 단계이며, 이를 최종 Native18Band로 다시 분류했다. 기존 기지 SteppedLocalLightFullscreen은 `Blend One One`으로 RGB를 더하지만 native 표면은 stencil2로 제외하고 재료색에 밝기만 곱했다. 설정 white와 fixture의3종 값은 원하는 실제 화면의 증거가 아니었다. N22의 관측/수학 검사는 보존하되 시각 합격으로 사용하지 않는다.
 

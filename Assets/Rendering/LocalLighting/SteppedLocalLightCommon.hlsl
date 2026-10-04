@@ -57,6 +57,19 @@ float QuantizeSteppedLight01(float value, float bands)
     return floor(saturate(value) * intervals + 0.5) / intervals;
 }
 
+float QuantizeNativeAdditiveLight(float value, float bands)
+{
+    // Art-directed toon ramp: weak light stays unlit, instead of ceil()
+    // promoting every positive value to the lowest illuminated level.
+    const float firstLitInput = 0.1;
+    const float fullLitInput = 0.5;
+    if (value < firstLitInput)
+        return 0.0;
+    float levels = max(round(abs(bands)), 2.0);
+    float ramp = saturate((value - firstLitInput) / (fullLitInput - firstLitInput));
+    return (1.0 + floor(ramp * (levels - 1.0))) / levels;
+}
+
 half3 EvaluateSteppedLocalLights(
     float3 positionWS,
     float3 normalWS,
@@ -108,11 +121,10 @@ half3 EvaluateSteppedLocalLights(
             saturate(quantization.w * normalInfluenceScale);
         float surfaceInput = surfaceAttenuation * lerp(1.0, normalTerm, normalInfluence);
         bool nativeAdditive = quantization.x < 0.0;
-        // Three illuminated levels plus zero. The original round quantizer
-        // includes zero in its count and remains unchanged for other lights.
-        float positiveBands = max(round(abs(quantization.x)), 2.0);
+        // Keep range, ramp thresholds and brightness gain separate. Other
+        // lights retain their original round quantizer, including zero.
         float surfaceLight = nativeAdditive ?
-            ceil(saturate(surfaceInput) * positiveBands) / positiveBands :
+            QuantizeNativeAdditiveLight(surfaceInput, quantization.x) :
             QuantizeSteppedLight01(surfaceInput, quantization.x);
         float haloLight = QuantizeSteppedLight01(
             haloAttenuation,

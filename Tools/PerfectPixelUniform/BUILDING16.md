@@ -1,5 +1,19 @@
 # N17 — 테스트 건물 한 채의 공통 native 표면·실시간 조명 제작 계약
 
+## N32 현재 결정 — 오른쪽 갈색 물체의 실제 직접광 도달 범위
+
+[현재/R4, 2026-10-05] 사용자 확정 대상은 계산대 오른쪽 갈색 물체(`checkout_produce`, 현재 catalog는 appletray)다. N31의 흰 장부는 다른 물체였으므로 지적한 그림자 완료 근거가 아니다. 새 원화를 만들거나 이름을 근거로 대상을 바꾸지 않았다. 실제 caster는 enabled/ShadowsOnly, 중심(-16.09,1.10,6.44), 높이≈.1685m다. 변경 전 Left point 거리2.991m/범위3.2m, Back point 거리5.890m/범위3.2m였고, RoomLamp가 방 전체 fill과 다른 direct cutoff에 custom radial Radius3.2를 복사하는 것이 원인이었다. 기존 Player/Camera·30°/350°·2px·원본/mesh/배치·광원 위치/색/세기를 보존하고 실제 전등의 범위 계산만 바꿨다. 임의 shadow blob·픽셀 축소·새 GI/SSAO는 추가하지 않았다.
+
+**근거/후보/반례:** 설치 URP17.5 `RealtimeLights.hlsl`의 inverse-square×smooth range attenuation과 ShadowCaster를 재사용한다. A range3.2 유지+최종 그림자 색만 강조: receiver에 직접광이 거의 없으면 가짜 차광이므로 제외. B 기존 RoomLamp의 assigned volume으로 direct cutoff만 산정: 최소 실험 대상. C SSAO/접촉 AO: 기존 shader가 소비하지 않는 별도 간접광 문제이며 이번 방향성 cast shadow를 대체할 수 없어 보류. 부족한 대비를 모든 빛/재질 조정으로 덮지 않는다.
+
+**계산/공간:** 기존 BoxCollider center±size/2의8 local-m corner → volume.TransformPoint → Y-up world-m → lamp worldP와 거리 D=max8corners(두 volume은 union) → room direct range R=max(기존Radius,2D). URP fade `(1−(d/R)^4)^2`는 d≤D에서 최소.87890625로 보장되어 방 안의 인공 cutoff를 제거하며 inverse-square와 NdotL·실제 차광은 유지한다. 2D는 fade 손실≤12.11%라는 명시한 범위 정책이며 실제 GI/미술 정답이 아니다. local rotation/scale는 기존 Transform API에서 한 번만 소비한다. 방 없는 기존 local/moving path의 radius는 그대로다. cached P,N→shared native δ→URP shadow lookup→기존N31 노출→같은screen 격자는 재사용한다.
+
+**R3 고정 판별:** 실제 GameMap1 같은21시/camera에서 갈색 caster만 ON/OFF하여 before를 저장하고, production 변경 없이 두 기존 RoomLamp range만 B의 값으로 임시 확장해 같은 ON/OFF를 관찰한다. 캐스터/책표면을 제외한 counter-top receiving 영역에서 연결된 native 셀8개 이상이 ΔY≥8/255로 감소하고 광원 반대쪽에 나타나야 하며 단일 RGB 최대값으로 판정하지 않는다. 예상 footprint는 실제 광원/캐스터의 ray projection으로 계산한다. 범위 변경으로 이 조건이 충족되지 않으면 B를 기각하고 실제 shadow/receiver 단계로 돌아간다. 통과하면 기존 owner SynchronizeRoomDirectLight에서 같은 식을 연결하고 광원 설정·전등ON/OFF·갈색 casterON/OFF·원본/기하/2px를1회 최종 확인한다. shader/이미지·지오메트리 변경은 필요하지 않다.
+
+**실험/최종 관측:** 실제 카메라의 각 renderer δ·position/normal float cache·closed mesh triangles로 camera ray 가림을 제외하고 두 전등 방향 receiving union913native cells를 산정했다. caster ON/OFF에서 기준 밝기 차이의 연결 셀은 변경 전0, range만 임시 변경한 실험447, 기존 owner에 연결한 최종447이다. 최대 ΔY는1.9278→18.0518/255이며 각 셀의 네 screen sample 모두8/255 이상인 경우만 인정한다. 갈색 물체 픽셀을 제외한 상판의 실제 그림자다. range는 Back19.445564m/Left21.330965m, 기존 Radius3.2와 moving/local 경로는 그대로다. 전등OFF656462px/이동광OFF237899px 변화, source/art/shader/씬1539SHA·geometry/TRS·같은 실제 Player/Camera·2×2uniform·제어 복원·shadererror0의29조건을 통과했다. 실제 화면 crop은 `docs/artifacts/building39/book32/comparison.png`이며 resize0이다.
+
+**구현/실행/한계:** `SteppedLocalLight.RoomDirectRange`가 기존 assigned volume의8world corners 최대 제곱거리에서 R을 구하고 기존 Synchronize가 paired Light.range에 쓴다. per-frame Update/새 Manager/serialized 설정은 추가하지 않았다. WorkLoop는 실험 gate→owner→실제 최종 관측→고정 gate의4단계 완료다. 최초 init의 validation→work feedback 계약 오류는 실행 전에 차단됐고 잘못된 graph와 hash를 보존한 뒤 baseline의 phase 분류만 수선했다. 임시/최종 capture는 각각1회, 원본 재생성0이다. Play/compiling false, 시작부터 있던 dirty true를 사본 보존하고 씬 disk는 저장하지 않았다. range는 기존 OnEnable/OnValidate/전등 API에서 자동 동기화된다. URP point bias의 world 크기도 range에 종속되며 현재 실제 cast 경계를 확인했다. 방 fill/SH의 간접광 차광·GI/SSAO·모든 사물 미술합격·Standalone/성능은 이번 완료 범위가 아니다. N31 수학검사는 유지하되 그 흰 장부 관측을 갈색 대상 해결 증거로 사용하지 않는다.
+
 ## N31 현재 결정 — 읽기용 노출과 실제 차광 손실 분리
 
 [R2, 2026-10-05] 최신 요청은 전체 조명 문제·앞선 화면 변화·자연광 유무를 확인하고 테스트 건물의 조명을 바로잡는 것이다. N30은 checkout 재질/반사만 변경했으며 책 caster는 이미 있다. 실제 GameMap1 21시 동일 카메라의 책 caster on/off는 조도 diagnostic 최대12/255 차이지만 최종색 최대3/255뿐이었다(`LocalOnly/BookShadowAudit01`). Bias0도 조도 결과가 같았다. 기존 `Q(luma(Eshadow))×Eshadow/maxRGB(Eshadow)`가 차광된 밝기를 다시 정규화하며 작은 손실을 지운 것이 확인된 원인이다. 기존 source512·palette·normal·coverage·194mesh/TRS·캐릭터/카메라 동일성·2px 표시·전등/이동광/시간 기본값을 유지한다. 새 GI/AO/광원·장식·디자인 변경은 제외한다. 미저장 씬은 `LocalOnly/Light31/unsaved-baseline.unity`로 사본 보존했고 disk와 차이0이다.

@@ -60,6 +60,35 @@ namespace FantasySurvival.WorldLighting
         public float RoomDirectMultiplier => roomDirectMultiplier;
         public Light RoomDirectLight => roomDirectLight;
 
+        // The custom radial presentation radius is not a room lamp's direct-light cutoff.
+        // At every assigned room corner d <= R/2, URP's smooth range fade is >= (15/16)^2.
+        public float RoomDirectRange
+        {
+            get
+            {
+                if (role != LightingRole.RoomLamp) return radius;
+                Vector3 origin = roomDirectLight != null ? roomDirectLight.transform.position : transform.position;
+                float farthestSquared = Mathf.Max(MaximumCornerDistanceSquared(illuminationVolume, origin),
+                    MaximumCornerDistanceSquared(illuminationVolume2, origin));
+                return Mathf.Max(radius, 2f * Mathf.Sqrt(farthestSquared));
+            }
+        }
+
+        private static float MaximumCornerDistanceSquared(BoxCollider volume, Vector3 origin)
+        {
+            if (volume == null) return 0f;
+            float farthestSquared = 0f;
+            Vector3 halfSize = volume.size * 0.5f;
+            for (int corner = 0; corner < 8; corner++)
+            {
+                Vector3 sign = new Vector3((corner & 1) == 0 ? -1f : 1f,
+                    (corner & 2) == 0 ? -1f : 1f, (corner & 4) == 0 ? -1f : 1f);
+                Vector3 world = volume.transform.TransformPoint(volume.center + Vector3.Scale(halfSize, sign));
+                farthestSquared = Mathf.Max(farthestSquared, (world - origin).sqrMagnitude);
+            }
+            return farthestSquared;
+        }
+
         public void SetLightingEnabled(bool value)
         {
             enabled = value;
@@ -76,7 +105,7 @@ namespace FantasySurvival.WorldLighting
             roomDirectLight.type = LightType.Point;
             roomDirectLight.color = new Color(color.r, color.g, color.b, 1f);
             roomDirectLight.intensity = intensity * roomDirectMultiplier * Mathf.Clamp01(color.a);
-            roomDirectLight.range = radius;
+            roomDirectLight.range = RoomDirectRange;
             roomDirectLight.shadows = LightShadows.Hard;
         }
 

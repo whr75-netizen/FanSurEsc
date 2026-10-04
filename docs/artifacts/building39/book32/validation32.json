@@ -1,0 +1,98 @@
+{
+  "passed": true,
+  "checks": {
+    "actualPlay": true,
+    "geometryWithinPhase": true,
+    "lightingWithinPhase": true,
+    "sameActualEntities": true,
+    "controlsRestored": true,
+    "shaderError0": true,
+    "integer2px": true,
+    "sourceHashes": true,
+    "actualBrownTarget": true,
+    "policyRangeMatchesRoomGeometry": true,
+    "experimentConnectedReadableShadow": true,
+    "experimentNativeUniform": true,
+    "final_actualPlay": true,
+    "final_geometryWithinPhase": true,
+    "final_lightingWithinPhase": true,
+    "final_sameActualEntities": true,
+    "final_controlsRestored": true,
+    "final_shaderError0": true,
+    "final_integer2px": true,
+    "sameGeometryAcross": true,
+    "sameLightingOwnerSettings": true,
+    "sameCameraAcross": true,
+    "sameCachedPixels": true,
+    "finalActualBrownTarget": true,
+    "finalRangeMatchesRoomGeometry": true,
+    "finalConnectedReadableShadow": true,
+    "finalNativeUniform": true,
+    "lampControl": true,
+    "movingControl": true
+  },
+  "metrics": {
+    "baseline": {
+      "visibleReceiverCells": 913,
+      "rayReceiverCellsByLight": {
+        "Back lamp": 602,
+        "Left lamp": 468
+      },
+      "qualifiedCells": 0,
+      "largestConnectedCells": 0,
+      "receiverScreenRect": [
+        622,
+        271,
+        758,
+        355
+      ],
+      "deltaYByteMedian": 0.0,
+      "deltaYByteMaximum": 1.9278252,
+      "native2x2Uniform": true,
+      "minimumCells": 8,
+      "minimumDeltaYByte": 8.0
+    },
+    "policy": {
+      "visibleReceiverCells": 913,
+      "rayReceiverCellsByLight": {
+        "Back lamp": 602,
+        "Left lamp": 468
+      },
+      "qualifiedCells": 447,
+      "largestConnectedCells": 447,
+      "receiverScreenRect": [
+        622,
+        271,
+        758,
+        355
+      ],
+      "deltaYByteMedian": 7.5619923,
+      "deltaYByteMaximum": 18.051809900000002,
+      "native2x2Uniform": true,
+      "minimumCells": 8,
+      "minimumDeltaYByte": 8.0
+    },
+    "final": {
+      "visibleReceiverCells": 913,
+      "rayReceiverCellsByLight": {
+        "Back lamp": 602,
+        "Left lamp": 468
+      },
+      "qualifiedCells": 447,
+      "largestConnectedCells": 447,
+      "receiverScreenRect": [
+        622,
+        271,
+        758,
+        355
+      ],
+      "deltaYByteMedian": 7.5619923,
+      "deltaYByteMaximum": 18.051809900000002,
+      "native2x2Uniform": true,
+      "minimumCells": 8,
+      "minimumDeltaYByte": 8.0
+    }
+  },
+  "artApprovalClaimed": false,
+  "criterion": "visible counter-top ray-shadow: 4-neighbor native cells >=8, every sample deltaY >=8 byte"
+}

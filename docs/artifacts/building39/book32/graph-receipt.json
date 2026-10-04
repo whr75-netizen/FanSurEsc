@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "complete": true,
+  "steps": 4,
+  "visits": {
+    "baseline": 1,
+    "gate": 1,
+    "observe": 1,
+    "owner": 1
+  },
+  "engine_hash": "74d8c943368ec33242fea2a04bae8e6691400ab610494b1fd3f6d03b60b2a23e",
+  "graph_hash": "3d21a8526e0710f0f98cda1c67a05e17c14bc1c721e71f9a073a83ebc808093f",
+  "nodes": {
+    "baseline": {
+      "revision": 1,
+      "signature": "bcf10a739d42e2a0371ab943bba98015411d5d7ce942776f7a4ca789ffc53852",
+      "output": {
+        "exit_code": 0,
+        "stderr": ""
+      }
+    },
+    "gate": {
+      "revision": 4,
+      "signature": "1300b4b2735a343a65105bbdc8c5ca513048519341978edd2e465c6cbb9fe817",
+      "output": {
+        "exit_code": 0,
+        "stderr": ""
+      }
+    },
+    "observe": {
+      "revision": 3,
+      "signature": "dceafb09b423083fb0294f08897c958f7e127f1324e9bee3a9980a94bd8dfd32",
+      "output": {
+        "receipt": "docs/artifacts/building39/book32/final01/observation.json"
+      }
+    },
+    "owner": {
+      "revision": 2,
+      "signature": "0bd66ae8034b51f66f6d51a3a0ba20ce7764186b30b6e0117849bfd118f10abe",
+      "output": {
+        "implementation": "Assets/Scripts/WorldLighting/SteppedLocalLight.cs"
+      }
+    }
+  },
+  "initialInitFailure": "validation-to-work needs feedback; initial graph was rejected before gate launch; baseline phase corrected to work",
+  "invalidGraphPreserved": "LocalOnly/WorkLoop/book32-run01/graph.invalid-init.json"
+}

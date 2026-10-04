@@ -88,7 +88,17 @@ canonical/좌표·투영/단위는 N17과 같으며 이번 자유도는 최종 �
 
 `docs/artifacts/building39/zoom20/readable-on.png`는 실제 기존 Play 카메라의 1114×857, size 2.367151, 30°/350°·원본 1픽셀당 화면 2×2픽셀이다. 같은 Player/Camera·map/mesh/Transform·36재료·shader error 0이며 기존 art 189파일은 hash 불변이다. 별도 임시 카메라의 viewport 높이 720/857/1080에서 배율 선택 2, 기존 scroll 계산 호출에서 2→1→2, native 해제 시 같은 카메라의 size 5 복원을 확인했다. 물리 휠 입력은 이번에 실행하지 않았으며 호출 확인이다. 기존 WorkLoop의 설정/실제 관측→최종 gate가 완료됐다. 밤 색감·캐릭터·디자인은 수정하지 않았다.
 
-## N21 조명 수선 계약 — 넓은 백색 거리 그라데이션
+## N22 현재 조명 계약 — 백색 3단계 양자화
+
+사용자 최신 정정: 넓은 백색광의 그라데이션은 기지의 기존 조명처럼 3단계 양자화다. N21의 연속 RGB 보간은 요구 오해로 폐기한다. N21 이전의 Common/NativeReadable/NativePalette/SteppedLocalLight 계산을 복원하고 기존 `surfaceBands=3`을 사용한다. 현재 광원의 백색·motion·world cell·2배 카메라·기하/art를 유지한다. 기지의 기존 Glass centre/Emitter도 같은 Common에서 surfaceBands3을 사용한다. 1차 반경7.6m에서는 높이1.35m인 광원의 바닥 최고a가(1-1.35/7.6)^2≈.676으로, Q3 최고단계의 경계.75에 못 미쳤다. 실제 화면과 이 반례를 보존하고 반경14m로 넓힌다. (1-1.35/14)^2≈.816이므로 최고 바닥 단계가 가능하다. 값 표기만3으로 맞춘 첫 gate는 이 조건을 검사하지 않았으며 최종 미술 성공 증거가 아니다.
+
+연산: `a=saturate(1-d/r)^2 * saturate(dot(N,L))`, `Q3(a)=floor(2a+.5)/2 ∈ {0,.5,1}`, 입사광은 기존 `I=환경/URP+Σ(RGB * intensity * Q)`이다. NativeReadable은 `b=step(.12,Y(I))+step(.4,Y(I))`, 밝기 `{.55,.78,1}`과 기존 양자화 tint를 사용한다. 기존 intensity4.2에서는 `.5*4.2*.55=1.155`여서 중간 광원 단계도 밝기2를 넘는다. intensity를.8로 낮추면 추가 광량은 `{0,.22,.44}`가 된다. 기준 밤 fixture의 Y≈.0447에서는 최종 세 명암 구간이 유지된다. 실제 normal/거리/다른 광원에 따라 한 면이 세 단계를 모두 보이는 것은 필수 조건이 아니다. 픽셀 이미지/팔레트/rank를 변환하는 연산은 없다.
+
+검증: 같은 이동 광원·motion·다른 광원, white/radius14/intensity.8/surfaceBands3/halo0, 바닥 최고단계 도달 가능성, 원본cache와 MaterialMap hash 불변, 복원된 기존 네 계산 파일 일치, 실제21시·30°/350°·2px 카메라 및 최종 Play PNG 한 회. 검사 성공과 건물 미술 완벽은 구분한다. 건물 평면 자동화는 A30 연구 제안이며 이번에 생성기를 변경하지 않는다.
+
+최종 실제 관측: `docs/artifacts/building39/light22/final/readable-on.png`에서 안쪽 밝음·중간·바깥 밤색을 관측했다. settings는 white/radius14/intensity.8/bands3/halo0,같은light/motion·다른6광원,shader error0이다. 실제 활성 바닥 `NativeBuilding39Floor40`의 position/material coverage를 사용한 floorY=.015m에서 최고a=.81838로 기준.75를 넘었다. 첫 바닥 observer는 shop 자식/name에 바닥이 있다고 잘못 가정해 실패했다. 반경 저장은 이미 성공했음을 확인하고 제작 재실행 없이 실제 map 참조로 관측만 교정했다. 실제21시1114×857·30°/350°·2px·같은Player/Camera·maps/mesh/Transform·36재료,art193 hash 불변,4개 기존 계산 파일의8711b7c 일치,밤fixture 최종band0/1/2를 마지막gate에서 확인했다. 1차7.6m 자료는 보존하며 최종graph만 현재 요구 판정이다. 캐릭터별 셰이더·가구 동적 shadow·전체 미술 완벽·Standalone빌드는 검증하지 않았다.
+
+## N21 이전 실험 — 사용자 정정으로 연속 RGB 보간 폐기
 
 사용자 정정: '반딧불이처럼'은 기존 좌우 움직임 요청이며 연두색 광원이 아니다. 현재 moving light의 색 (.78,1,.44), 반경 3.8m를 백색 (1,1,1), 반경 7.6m로 바꾼다. 같은 인스턴스·intensity 4.2·normal influence 1·좌우 진폭 3m/주기 8초·world cell 1/90.5097m·2배 카메라를 유지한다. 원형 경계의 원인은 Common의 4단계 광량과 ReadableNight의 세 단계 밝기/tint다. surfaceBands를 높이는 방법은 마지막 단계에서 다시 경계를 만들어 그라데이션 요구를 충족하지 못한다.
 

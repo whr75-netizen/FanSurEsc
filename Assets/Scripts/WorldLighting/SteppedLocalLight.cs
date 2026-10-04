@@ -23,8 +23,6 @@ namespace FantasySurvival.WorldLighting
         [SerializeField, Min(0.01f)] private float radius = 4.5f;
         [SerializeField, Min(0f)] private float intensity = 1.15f;
         [SerializeField, Range(2, 16)] private int surfaceBands = 5;
-        [Tooltip("Keep this light's surface falloff continuous; other lights retain their authored steps.")]
-        [SerializeField] private bool continuousFalloff;
         [SerializeField, Range(2, 16)] private int haloBands = 4;
         [SerializeField, Range(0f, 1f)] private float haloStrength = 0.18f;
         [SerializeField, Range(1f, 2f)] private float haloRadiusMultiplier = 1.25f;
@@ -38,7 +36,6 @@ namespace FantasySurvival.WorldLighting
         public float Radius => radius;
         public float Intensity => intensity;
         public int SurfaceBands => surfaceBands;
-        public bool ContinuousFalloff => continuousFalloff;
         public int HaloBands => haloBands;
         public float HaloStrength => haloStrength;
         public float HaloRadiusMultiplier => haloRadiusMultiplier;
@@ -198,7 +195,7 @@ namespace FantasySurvival.WorldLighting
                     linearColor.b,
                     light.intensity * Mathf.Clamp01(linearColor.a));
                 quantizationSettings[insertIndex] = new Vector4(
-                    light.continuousFalloff ? 0f : light.surfaceBands,
+                    light.surfaceBands,
                     light.haloBands,
                     light.haloStrength,
                     light.normalInfluence);

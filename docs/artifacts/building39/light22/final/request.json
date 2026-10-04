@@ -1,0 +1,126 @@
+{
+  "entry": "light",
+  "goal": "Three-stage white gradient with highest floor band attainable; corrected from the radius7.6 counterexample",
+  "max_steps": 2,
+  "nodes": [
+    {
+      "algorithm": "ai.work",
+      "edges": [
+        {
+          "to": "final",
+          "when": {
+            "args": [
+              {
+                "ref": "light.receiptFile"
+              }
+            ],
+            "op": "known"
+          }
+        }
+      ],
+      "id": "light",
+      "inputs": {},
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "parameters": {
+        "scope": "Existing moving-light radius14/intensity.8/bands3; all other lighting, motion, art and camera preserved."
+      },
+      "phase": "work",
+      "question": "Keep existing three-step light, widen radius to14 so the highest ground band is attainable, capture actual game output.",
+      "reads": [
+        "light22final:source"
+      ],
+      "writes": [
+        "light22final:light"
+      ]
+    },
+    {
+      "algorithm": "command.run",
+      "edges": [
+        {
+          "to": "@complete",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "eq"
+          }
+        },
+        {
+          "to": "@blocked",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "ne"
+          }
+        }
+      ],
+      "id": "final",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building38/light22_gate.py"
+        ],
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\light22_gate.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Scripts\\WorldLighting\\SteppedLocalLight.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Rendering\\LocalLighting\\SteppedLocalLightCommon.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativeReadable18.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeBuilding17Setup.cs"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30
+      },
+      "phase": "validation",
+      "reads": [
+        "light22final:light"
+      ],
+      "writes": [
+        "light22final:validation"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "white_gradient",
+      "text": "Actual moving white light uses existing three-step quantization and no continuous RGB blend",
+      "source": "Latest user correction: quantized gradient, like the three-stage base scene light",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

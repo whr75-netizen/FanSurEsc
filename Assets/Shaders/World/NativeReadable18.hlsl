@@ -26,16 +26,4 @@ float3 Native18Color(float3 color, float3 irradiance, float band)
     float strength = min(0.5 * (1.0 - band * 0.5), min(gamutLimit.r, min(gamutLimit.g, gamutLimit.b)));
     return color + delta * strength;
 }
-// Preserve the existing night response; only explicitly continuous local lights
-// approach the same Point-sampled albedo. Lighting never blends palette columns.
-float3 Native18SmoothLocalColor(float3 nightColor, float3 albedo, float3 incident)
-{
-    incident = max(incident, 0.0);
-    float peak = max(incident.r, max(incident.g, incident.b));
-    if (peak <= 0.000001) return nightColor;
-    float energy = dot(incident, float3(0.2126729, 0.7151522, 0.0721750));
-    float amount = 1.0 - exp2(-energy);
-    float3 target = albedo * incident / peak;
-    return lerp(nightColor, target, amount);
-}
 #endif

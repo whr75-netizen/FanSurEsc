@@ -65,8 +65,9 @@ public static class NativeBuilding17Setup
         }
         var light = existing.GetComponent<SteppedLocalLight>();
         var settings = new SerializedObject(light);
-        settings.FindProperty("color").colorValue = new Color(.78f, 1f, .44f, 1f);
-        settings.FindProperty("radius").floatValue = 3.8f;
+        settings.FindProperty("color").colorValue = Color.white;
+        settings.FindProperty("radius").floatValue = 7.6f;
+        settings.FindProperty("continuousFalloff").boolValue = true;
         settings.FindProperty("intensity").floatValue = 4.2f;
         settings.FindProperty("surfaceBands").intValue = 4;
         settings.FindProperty("haloStrength").floatValue = 0f;

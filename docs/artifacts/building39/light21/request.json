@@ -1,0 +1,126 @@
+{
+  "entry": "light",
+  "goal": "Change only the existing moving light to a wide white continuous gradient; preserve native pixel art, night baseline and camera",
+  "max_steps": 2,
+  "nodes": [
+    {
+      "algorithm": "ai.work",
+      "edges": [
+        {
+          "to": "final",
+          "when": {
+            "args": [
+              {
+                "ref": "light.receiptFile"
+              }
+            ],
+            "op": "known"
+          }
+        }
+      ],
+      "id": "light",
+      "inputs": {},
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "parameters": {
+        "scope": "Existing moving light white/radius7.6/continuous only; source art, geometry, camera, night baseline and other lights preserved."
+      },
+      "phase": "work",
+      "question": "Apply only the contracted light/shader change; save actual settings and unchanged-camera night captures.",
+      "reads": [
+        "light21:source"
+      ],
+      "writes": [
+        "light21:light"
+      ]
+    },
+    {
+      "algorithm": "command.run",
+      "edges": [
+        {
+          "to": "@complete",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "eq"
+          }
+        },
+        {
+          "to": "@blocked",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "ne"
+          }
+        }
+      ],
+      "id": "final",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building38/light21_gate.py"
+        ],
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\light21_gate.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Scripts\\WorldLighting\\SteppedLocalLight.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Rendering\\LocalLighting\\SteppedLocalLightCommon.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativeReadable18.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeBuilding17Setup.cs"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30
+      },
+      "phase": "validation",
+      "reads": [
+        "light21:light"
+      ],
+      "writes": [
+        "light21:validation"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "white_gradient",
+      "text": "Current moving light uses white radius7.6 continuous falloff in actual 2x night gameplay",
+      "source": "Latest explicit user correction",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

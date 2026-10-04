@@ -88,6 +88,16 @@ canonical/좌표·투영/단위는 N17과 같으며 이번 자유도는 최종 �
 
 `docs/artifacts/building39/zoom20/readable-on.png`는 실제 기존 Play 카메라의 1114×857, size 2.367151, 30°/350°·원본 1픽셀당 화면 2×2픽셀이다. 같은 Player/Camera·map/mesh/Transform·36재료·shader error 0이며 기존 art 189파일은 hash 불변이다. 별도 임시 카메라의 viewport 높이 720/857/1080에서 배율 선택 2, 기존 scroll 계산 호출에서 2→1→2, native 해제 시 같은 카메라의 size 5 복원을 확인했다. 물리 휠 입력은 이번에 실행하지 않았으며 호출 확인이다. 기존 WorkLoop의 설정/실제 관측→최종 gate가 완료됐다. 밤 색감·캐릭터·디자인은 수정하지 않았다.
 
+## N21 조명 수선 계약 — 넓은 백색 거리 그라데이션
+
+사용자 정정: '반딧불이처럼'은 기존 좌우 움직임 요청이며 연두색 광원이 아니다. 현재 moving light의 색 (.78,1,.44), 반경 3.8m를 백색 (1,1,1), 반경 7.6m로 바꾼다. 같은 인스턴스·intensity 4.2·normal influence 1·좌우 진폭 3m/주기 8초·world cell 1/90.5097m·2배 카메라를 유지한다. 원형 경계의 원인은 Common의 4단계 광량과 ReadableNight의 세 단계 밝기/tint다. surfaceBands를 높이는 방법은 마지막 단계에서 다시 경계를 만들어 그라데이션 요구를 충족하지 못한다.
+
+선택: 기존 광원에 continuousFalloff 기본 false를 추가하고 현재 움직이는 광원만 true로 설정한다. 같은 global 배열에서 surfaceBands=0을 연속 감쇠 표시로 사용한다. 기존 g=max(1-d/r,0)^2·max(dot(N,L),0)·intensity 계산을 유지하고, 해당 광원만 광량 양자화를 생략한다. 한 번의 기존 광원 순회에서 총 입사광 I와 연속 광원 기여 S, 나머지 광원 기여 B를 함께 반환한다. Native ReadableNight의 기존 밤색 C는 기존 URP 입사광+B로 직접 계산하여 기본 밤과 다른 조명을 보존한다. 이는 이상적인 I-S와 같지만 half 정밀도에서 밝은 S를 차감하며 작은 밤광이 손실되는 문제를 피한다. B와 S에는 기존 surface strength .55를 똑같이 적용한다. 새 광원 기여는 e=max(dot(S,Y),0), w=1-exp2(-e), T=Albedo·S/max(S)로 분리하고 lerp(C,T,w)로 적용한다. 백색 S는 Albedo 자체를 향해 밝기만 변화한다. 표면 모서리/무늬 rank는 같은 Point 팔레트 값이며 검정 역할은 그대로 검정이다. 0광은 w=0, alpha/coverage/depth/XYZ/normal/UV/픽셀 격자는 불변이다. RGB 이미지를 흐리거나 팔레트 열을 보간하는 단계가 아니다.
+
+검증 범위는 동일 실제 게임 카메라의 밤 light off/on과 광원/2배 배율 readback, 기존 입력 art hash 불변, 셰이더 컴파일, baseline 밤색 수식 불변, 연속 광량의 유한성/단조성/0기여 항등이다. 사용자에게 실제 화면을 제출하며 수치 성공을 미술 완벽으로 승격하지 않는다. 다른 광원·캐릭터 재료·기본 밤색·가구/원본은 재작업하지 않는다.
+
+N21 실제 관측: GameMap1의 같은 moving light에 white/radius7.6/continuous=true를 저장했다. intensity4.2/halo0·같은 motion·다른 활성 광원은 readback에서 불변이며 씬 diff는 이 광원의 세 필드뿐이다. 실제21시 Play 카메라는1114×857·30°/350°·2px, 같은 Player/Camera·maps/mesh/Transform·36재료, shader error0이다. `docs/artifacts/building39/light21/readable-on.png`가 최종 실제 화면이고 `readable-off.png`는 같은 호출의 광원off 관측이다. 거리257표본은 유한/단조/0기여 항등이며 기존 night 함수와 원본cache189+현재MaterialMap4파일 hash가 유지된다. WorkLoop 설정/실제 관측→최종gate는 complete다. 연속 밝기는 원본 픽셀 공간 격자를 변경하지 않으며 밤과 실제광에 따라 RGB가 바뀐다. 별도 캐릭터 PBR·고정 warm 광원의 단계·원본5px marker색은 이번에 변경하지 않았다. 동적 가구 shadow solver·전체 미술 완벽·Standalone빌드는 검증하지 않았다.
+
 ## 과거 N16 결정 / R0~R2 (2026-10-04)
 
 사용자가 N15의 표현을 개선된 기준으로 확인하고 그 파이프라인을 정리한 뒤 기지 GameMap1의 테스트 건물 내부 전체에 적용하도록 요청했다. 대상은 PlannedPixelShop33의 활성 실내다. 18종/26개 사물, 기존 구조·지붕·절개·벽등을 대상으로 하며 플레이어·카메라·동선·콜라이더·방의 역할·다른 건물·도심은 보존한다. 사용자 원본 시트와 N15 결과는 그대로 남긴다.

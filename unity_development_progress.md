@@ -2766,3 +2766,8 @@ Interactable (abstract base class)
 
 - `[요청/구현]` 사용자 첨부 N15 4배 미리보기와 현재 화면의 크기 차이에 대해 카메라를 더 줌하도록 요청했다. CameraZoomController의 기존 API에 선택적인 초기 정수 배율을 연결하고 GameMap1의 테스트 NativePixelBuilding만 2배로 설정했다. 기존 크기 기반 기본값 0과 일반 줌/입력 차단·같은 카메라의 비native size 복원은 보존했다. Preview Camera는 현재 씬 override만 변경했고 가구·이미지·재료·PPU·각도는 그대로다.
 - `[실제 GPU/Play 호출]` zoom20/readable-on.png는 실제 1114×857 게임 카메라 size 2.367151·30°/350°·2px, 같은 Player/Camera·maps/mesh/Transform·36재료·shader error 0이다. 기존 art 189파일 hash 불변을 확인했다. 임시 viewport 높이 720/857/1080의 선택 배율 2·기존 scroll 계산 2→1→2·같은 카메라의 size 5 복원을 호출로 확인했다. 실제 물리 휠 입력·전체 씬 전환·Standalone빌드는 이번에 실행하지 않았다. WorkLoop 설정/관측→최종 gate 완료이며 미술 개선이나 색감 수정은 주장하지 않는다.
+
+## 194. 기존 이동 광원의 넓은 백색 그라데이션 `[MAP-01]` `[PIXEL-01]`
+
+- `[요청/원인/구현]` '반딧불이처럼'을 연두색으로 해석한 광원색과 좁은 단계형 경계를 사용자가 정정했다. 기존 광원의 color를white, radius를3.8→7.6m로 바꾸고 그 광원만 continuousFalloff=true로 저장했다. Common의 surfaceBands와 ReadableNight의 후속 밝기 단계에서 같은 기여가 두 번 계단화되는 원인을 분리했다. 같은 loop에서 기존/연속 기여를 따로 합산해 작은 밤광의 half 차감 손실을 피하며, 연속 기여만 기존 Point albedo를 향해 1-exp2(-energy)로 밝힌다. 강한 검정 경계·기존 밤 함수·다른 광원·motion·2배카메라·geometry/art는 보존했다.
+- `[실제 GPU/Play/최종 판정]` light21/settings.json은 같은 light/motion·다른 활성광원,white/radius7.6/intensity4.2/halo0,sceneSaved·shader error0이다. 실제21시1114×857·30°/350°·2px·같은 Player/Camera·maps/mesh/Transform·36재료를 light off/on PNG와 함께 관측했다. 원본cache189+현재MaterialMap4 hash 불변, 기존 night 함수 불변, 거리257표본의 유한성/단조/0기여 항등을 마지막gate에서 확인했다. WorkLoop는 complete이며 이는 제한된 기술 판정이다. 별도 캐릭터 PBR·warm광원의 단계·작은 marker 원화·동적 가구 shadow solver·전체 미술 완벽·Standalone빌드는 이번 변경/검증 대상이 아니다. 실제 화면은 light21/readable-on.png이며 Play 종료 후 저장된 편집 상태로 복귀했다.

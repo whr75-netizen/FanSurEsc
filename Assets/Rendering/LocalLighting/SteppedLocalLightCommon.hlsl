@@ -53,6 +53,9 @@ float3 SnapSteppedLightWorldPosition(float3 positionWS, float cellSize)
 
 float QuantizeSteppedLight01(float value, float bands)
 {
+    // Zero is the existing light registry's opt-in for continuous surface falloff.
+    if (bands < 0.5)
+        return saturate(value);
     float intervals = max(round(bands) - 1.0, 1.0);
     return floor(saturate(value) * intervals + 0.5) / intervals;
 }
@@ -60,9 +63,13 @@ float QuantizeSteppedLight01(float value, float bands)
 half3 EvaluateSteppedLocalLights(
     float3 positionWS,
     float3 normalWS,
-    float normalInfluenceScale)
+    float normalInfluenceScale,
+    out half3 continuousLight,
+    out half3 steppedLight)
 {
     half3 accumulatedLight = half3(0.0, 0.0, 0.0);
+    continuousLight = half3(0.0, 0.0, 0.0);
+    steppedLight = half3(0.0, 0.0, 0.0);
 
     [loop]
     for (int index = 0; index < STEPPED_LOCAL_LIGHT_MAXIMUM; index++)
@@ -111,12 +118,28 @@ half3 EvaluateSteppedLocalLights(
             haloAttenuation,
             quantization.y) * quantization.z;
         float contribution = surfaceLight + haloLight * (1.0 - surfaceLight);
-        accumulatedLight +=
+        half3 lightContribution =
             (half3)colorAndIntensity.rgb *
             (half)(colorAndIntensity.w * contribution);
+        accumulatedLight += lightContribution;
+        if (quantization.x < 0.5)
+            continuousLight += lightContribution;
+        else
+            steppedLight += lightContribution;
     }
 
     return accumulatedLight;
+}
+
+half3 EvaluateSteppedLocalLights(
+    float3 positionWS,
+    float3 normalWS,
+    float normalInfluenceScale)
+{
+    half3 continuousLight;
+    half3 steppedLight;
+    return EvaluateSteppedLocalLights(positionWS, normalWS,
+        normalInfluenceScale, continuousLight, steppedLight);
 }
 
 #endif

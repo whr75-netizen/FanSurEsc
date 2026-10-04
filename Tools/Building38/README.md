@@ -1,8 +1,8 @@
-# N17/N18/N19 실행 진입점
+# N17~N21 실행 진입점
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
 
-현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. N20은 사용자 요청으로 기본 카메라를 정수 2배로 표시합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 최신 실제 화면은 `docs/artifacts/building39/zoom20/readable-on.png`입니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
+현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. N20은 기본 카메라를 정수2배로 표시하며, N21은 기존 이동 광원만 백색·반경7.6m·연속 감쇠로 수정합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 최신 실제 화면은 `docs/artifacts/building39/light21/readable-on.png`입니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
 
 새 제작이 승인된 경우 프로젝트 루트에서 NumPy/Pillow가 있는 Python으로 실행합니다.
 
@@ -26,3 +26,5 @@
 `repair19.py`/`NativeCabinet19Repair`: 실제 serialized metadata의 금장/woodUV 분기를 복구하며 기존 기하를 재사용합니다. 낮은 PPU 표본은 동일 물리 형태의 직접 제작 비교용이며 전체 건물에는 적용하지 않았습니다. 임시 float row 수선의 명시 재개는 `reopen_comparison`이며 기존 계산과 Play 관측을 재사용합니다. `compare19.py`는 현재 제작 원본·고정 밤광·실제 게임의 native crop을 무변형으로 나란히 저장합니다.
 
 `night18.py`/`NativeReadable18.hlsl`/`NativeNight18Observation`: 기존cache/PPU/기하를그대로사용하는색계산3단계. `night18.py start --output <새폴더>`로CPU색→활성Codex의실제GPU/Play관측→최종gate를연결합니다. 이실험에서캐릭터조명·원화디자인·전체픽셀grid를변경하지않습니다.
+
+`light21_gate.py`: 기존 광원 opt-in의 실제 저장/Play 관측, 원본 hash와 제한 수학 조건의 마지막 판정입니다. 현재 WorkLoop 계약·관측은 `light21/request.json`/`state.json`에 보존하며, AI 성공 설명을 실제 관측 대신 사용하지 않습니다. 기존 `SteppedLocalLight`의 `continuousFalloff` 기본값은false이고 현재 이동 광원만true입니다. 같은 광원 순회에서 기존광/연속광을 분리하며 ReadableNight에서 연속광만 Point albedo를 향해 거리 그라데이션으로 적용합니다.

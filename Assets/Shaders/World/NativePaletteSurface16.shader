@@ -200,7 +200,8 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 saturate(dot(normalWS, light.direction));
         }
 
-        half3 IncidentLight(CachedSurface surface, float4 screenPosition, out half mainShadow)
+        half3 IncidentLight(CachedSurface surface, float4 screenPosition,
+            out half mainShadow, out half3 continuousLocalLight, out half3 baseIncidentLight)
         {
             InputData inputData = (InputData)0;
             inputData.positionWS = surface.positionWS;
@@ -240,8 +241,14 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                         irradiance += DiffuseIncidentLight(light, surface.normalWS) * max(_AdditionalLightStrength, 0.0);
                 LIGHT_LOOP_END
             #endif
-            irradiance += EvaluateSteppedLocalLights(surface.positionWS, surface.normalWS, 1.0) *
-                max(_SteppedLocalLightStrength, 0.0);
+            half3 steppedLocalLight;
+            half3 localLight = EvaluateSteppedLocalLights(surface.positionWS, surface.normalWS, 1.0,
+                continuousLocalLight, steppedLocalLight);
+            // Accumulate the baseline directly: subtracting a bright half-precision
+            // contribution from the total can erase the much smaller night light.
+            baseIncidentLight = max(irradiance + steppedLocalLight * max(_SteppedLocalLightStrength, 0.0), 0.0);
+            irradiance += localLight * max(_SteppedLocalLightStrength, 0.0);
+            continuousLocalLight *= max(_SteppedLocalLightStrength, 0.0);
             return max(irradiance, 0.0);
         }
 
@@ -295,6 +302,8 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             CachedSurface surface = ReadSurface(input.uv);
             half mainShadow;
             half3 irradiance;
+            half3 continuousLocalLight = half3(0,0,0);
+            half3 baseIncidentLight = half3(0,0,0);
             if (_DiagnosticMode >= 5.5)
             {
                 irradiance = max(_ReadableFixtureIrradiance.rgb, 0.0);
@@ -309,8 +318,18 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 mainShadow = 1.0;
             }
             else
-                irradiance = IncidentLight(surface, input.positionCS, mainShadow);
-            half3 color = Shade(surface, irradiance);
+                irradiance = IncidentLight(surface, input.positionCS, mainShadow,
+                    continuousLocalLight, baseIncidentLight);
+            bool smoothReadable = _ReadableNight > 0.5 && _DiagnosticMode < 0.5;
+            half3 color = Shade(surface, smoothReadable ? baseIncidentLight : irradiance);
+            if (smoothReadable && surface.edge != 1u && surface.edge != 2u)
+            {
+                float column = surface.material == 1u ? (float)surface.pattern : 2.0;
+                column = min(column, BandCount(surface.material) - 1.0);
+                if (surface.edge == 3u) column = Native17CreaseColumn;
+                color = Native18SmoothLocalColor(color, PaletteColor(surface.material, column),
+                    continuousLocalLight);
+            }
             if (_DiagnosticMode > 0.5 && _DiagnosticMode < 1.5)
                 color = PaletteColor(surface.material, min((float)surface.pattern, BandCount(surface.material) - 1.0));
             else if (_DiagnosticMode >= 1.5 && _DiagnosticMode < 2.5)

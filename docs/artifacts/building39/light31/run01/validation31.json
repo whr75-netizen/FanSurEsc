@@ -1,0 +1,41 @@
+{
+  "checks": {
+    "linear_color_space": true,
+    "fixture_shader_errors_zero": true,
+    "explicit_cases_complete": true,
+    "gpu_matches_cpu": true,
+    "no_shadow_legacy_parity": true,
+    "black_and_zero_zero": true,
+    "red_only_occluded": true,
+    "visibility_monotonic_same_open_Q": true,
+    "weak_shadow_survives_same_Q": true,
+    "moving_stepped_difference_preserved": true,
+    "open_Q_thresholds_exercised": true,
+    "actual_play_observation": true,
+    "same_geometry": true,
+    "same_lighting": true,
+    "same_player_camera_within_each_phase": true,
+    "integer_2px": true,
+    "same_camera_angles": true,
+    "book_shadow_max_byte_at_least_8": true,
+    "book_shadow_stronger_than_before": true,
+    "book_shadow_actual_changed_pixels": true,
+    "lamps_control_observed": true,
+    "moving_control_observed": true,
+    "controls_restored": true,
+    "actual_shader_errors_zero": true,
+    "actual_day_night_natural_recorded": true,
+    "source_hashes_preserved": true
+  },
+  "passed": true,
+  "metrics": {
+    "caseCount": 22,
+    "expectedCaseCount": 22,
+    "maximumCPUError": 2.8610229518832853e-08,
+    "maximumLegacyCPUError": 2.8610229518832853e-08,
+    "maximumNoShadowParityError": 7.450580596923828e-09,
+    "invalidSampleIndices": [],
+    "mismatches": []
+  },
+  "art_approval_claimed": false
+}

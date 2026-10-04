@@ -1,4 +1,6 @@
-# N17~N30 실행 진입점
+# N17~N31 실행 진입점
+
+N31은 같은 URP Light의 차광 손실을 보존하여 readable 노출이 그림자를 지우는 원인을 수정합니다. 원본·메시·광원 설정·픽셀 격자는 바꾸지 않습니다. `run_light31.py`는 기준 관찰→손실 계산→Unity 실제 관찰→`light31_gate.py`의 고정 판정입니다. 현재 구현은 `NativeLight31.hlsl`, 실제 GPU는 `NativeLight31FixtureObservation.Capture`, 실제 GameMap1 관찰은 `NativeLight31Observation.Capture(output, controls)`입니다. 결과는 `docs/artifacts/building39/light31/run01`이며 `light31_preview.py`는 비교 crop만 합니다. 첫 graph의 command 입력 형식 오류는 외부 gate 실행 전 차단됐으며 state를 보존했습니다. `--gate-recovery`는 그 원인에만 해당하는 한 gate 재개이고 현재 완료 상태는 `LocalOnly/WorkLoop/light31-gate-recovery02`입니다. 이미 완료한 관찰/graph를 반복하지 않습니다. 직접 자연광과 차광 지붕은 현재 존재하지만 창문별 실내 간접광/GI는 이 경로가 구현하지 않습니다.
 
 N30은 N29의 큰 도장 얼룩을 폐기하고 원인별 결·접촉·흠집·하단 마모·노출목재·금속 변색을 계산합니다. `run_material30.py`의 features→surface→Unity 관측→GPU gate→저장→최종 gate를 사용하며 이미 계산된 map은 `--reuse-maps`로 검증 후 재사용합니다. 현재 final state는 `LocalOnly/WorkLoop/material30-integration03`, 실제 화면은 `docs/artifacts/building39/material30/run01/comparison.png`입니다. Unity 진입점은 `NativeMaterial30Observation.Prepare/Observe/BindAndSave`이며 기존 버전에는 Prepare를 반복하지 않습니다. 실패 관측은 원래 위치에 남고 현재 관측은 `observation02`입니다. 새16열 palette에서만 normal.w 거칠기와 실제광원 spec를 사용합니다. 원래4열의 실제GPU 두 경로는 byte차0, 생산 이미지는 resize0입니다. 높이/법선은 caster 변형이 아니며 미술·성능 합격은 자동 선언하지 않습니다.
 

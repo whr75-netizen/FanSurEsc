@@ -39,6 +39,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         #include "Assets/Rendering/LocalLighting/SteppedLocalLightCommon.hlsl"
         #include "Assets/Shaders/World/NativeShade17.hlsl"
         #include "Assets/Shaders/World/NativeReadable18.hlsl"
+        #include "Assets/Shaders/World/NativeLight31.hlsl"
 
         TEXTURE2D(_PositionMap);
         TEXTURE2D(_NormalMap);
@@ -211,6 +212,13 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 saturate(dot(normalWS, light.direction));
         }
 
+        half3 DirectShadowLoss(Light light, half3 normalWS)
+        {
+            // Reuse this Light's cookie-adjusted color, distance and layer test.
+            return light.color * light.distanceAttenuation *
+                saturate(dot(normalWS, light.direction)) * (1.0 - saturate(light.shadowAttenuation));
+        }
+
         half3 DirectSurfaceSpecular(Light light, CachedSurface surface)
         {
             if (_PaletteMap_TexelSize.z < 4.5 || surface.edge == 3u) return 0.0;
@@ -236,7 +244,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         }
 
         half3 IncidentLight(CachedSurface surface, float4 screenPosition,
-            out half mainShadow, out half3 nativeAdditiveLight, out half3 directSpecular)
+            out half mainShadow, out half3 nativeAdditiveLight, out half3 directSpecular, out half3 shadowLoss)
         {
             InputData inputData = (InputData)0;
             inputData.positionWS = surface.positionWS;
@@ -252,11 +260,13 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             uint meshLayers = GetMeshRenderingLayer();
             half3 irradiance = max(SampleSH(surface.normalWS), 0.0) * max(_AmbientLightStrength, 0.0);
             directSpecular = 0.0;
+            shadowLoss = 0.0;
             #ifdef _LIGHT_LAYERS
             if (IsMatchingLightLayer(mainLight.layerMask, meshLayers))
             #endif
             {
                 irradiance += DiffuseIncidentLight(mainLight, surface.normalWS) * max(_MainLightStrength, 0.0);
+                shadowLoss += DirectShadowLoss(mainLight, surface.normalWS) * max(_MainLightStrength, 0.0);
                 directSpecular += DirectSurfaceSpecular(mainLight, surface) * max(_MainLightStrength, 0.0);
             }
             #if defined(_ADDITIONAL_LIGHTS) || USE_CLUSTER_LIGHT_LOOP
@@ -270,6 +280,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                     #endif
                     {
                         irradiance += DiffuseIncidentLight(light, surface.normalWS) * max(_AdditionalLightStrength, 0.0);
+                        shadowLoss += DirectShadowLoss(light, surface.normalWS) * max(_AdditionalLightStrength, 0.0);
                         directSpecular += DirectSurfaceSpecular(light, surface) * max(_AdditionalLightStrength, 0.0);
                     }
                 }
@@ -282,6 +293,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                     #endif
                     {
                         irradiance += DiffuseIncidentLight(light, surface.normalWS) * max(_AdditionalLightStrength, 0.0);
+                        shadowLoss += DirectShadowLoss(light, surface.normalWS) * max(_AdditionalLightStrength, 0.0);
                         directSpecular += DirectSurfaceSpecular(light, surface) * max(_AdditionalLightStrength, 0.0);
                     }
                 LIGHT_LOOP_END
@@ -302,7 +314,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 saturate(_NativeEdgeSRGBScale));
         }
 
-        half3 Shade(CachedSurface surface, half3 irradiance, half3 nativeAdditiveLight, half3 directSpecular)
+        half3 Shade(CachedSurface surface, half3 irradiance, half3 nativeAdditiveLight, half3 directSpecular, half3 shadowLoss)
         {
             if (_ReadableNight > 0.5 && (_DiagnosticMode < 4.5 || _DiagnosticMode >= 5.5))
             {
@@ -315,9 +327,9 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 // Both fields pass through the same actual material reflectance.
                 // Never paint raw light RGB over a finished surface or fold the
                 // already quantized moving source back into the base ramp.
-                half3 finalColor = Material27Readable(
+                half3 finalColor = Native31Readable(
                     PaletteColor(surface.material, column),
-                    (float3)irradiance, (float3)nativeAdditiveLight);
+                    (float3)irradiance, (float3)shadowLoss, (float3)nativeAdditiveLight);
                 if (_PaletteMap_TexelSize.z > 4.5) finalColor += directSpecular;
                 return surface.edge == 1u || surface.edge == 2u ?
                     MaterialBoundaryColor(finalColor) : finalColor;
@@ -373,6 +385,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             half3 irradiance;
             half3 nativeAdditiveLight = 0.0;
             half3 directSpecular = 0.0;
+            half3 shadowLoss = 0.0;
             if (_DiagnosticMode >= 5.5 && _DiagnosticMode < 6.5)
             {
                 irradiance = max(_ReadableFixtureIrradiance.rgb, 0.0);
@@ -387,9 +400,9 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 mainShadow = 1.0;
             }
             else
-                irradiance = IncidentLight(surface, input.positionCS, mainShadow, nativeAdditiveLight, directSpecular);
+                irradiance = IncidentLight(surface, input.positionCS, mainShadow, nativeAdditiveLight, directSpecular, shadowLoss);
             directSpecular = SteppedSurfaceSpecular(directSpecular, surface.material);
-            half3 color = Shade(surface, irradiance, nativeAdditiveLight, directSpecular);
+            half3 color = Shade(surface, irradiance, nativeAdditiveLight, directSpecular, shadowLoss);
             if (_DiagnosticMode > 0.5 && _DiagnosticMode < 1.5)
                 color = PaletteColor(surface.material, min((float)surface.pattern,
                     _PaletteMap_TexelSize.z > 4.5 ? _PaletteMap_TexelSize.z - 1.0 : BandCount(surface.material) - 1.0));

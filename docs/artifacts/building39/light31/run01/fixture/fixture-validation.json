@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "linear_color_space": true,
+    "fixture_shader_errors_zero": true,
+    "explicit_cases_complete": true,
+    "gpu_matches_cpu": true,
+    "no_shadow_legacy_parity": true,
+    "black_and_zero_zero": true,
+    "red_only_occluded": true,
+    "visibility_monotonic_same_open_Q": true,
+    "weak_shadow_survives_same_Q": true,
+    "moving_stepped_difference_preserved": true,
+    "open_Q_thresholds_exercised": true
+  },
+  "passed": true,
+  "metrics": {
+    "caseCount": 22,
+    "expectedCaseCount": 22,
+    "maximumCPUError": 2.8610229518832853e-08,
+    "maximumLegacyCPUError": 2.8610229518832853e-08,
+    "maximumNoShadowParityError": 7.450580596923828e-09,
+    "invalidSampleIndices": [],
+    "mismatches": []
+  },
+  "art_approval_claimed": false
+}

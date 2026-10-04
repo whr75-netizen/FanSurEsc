@@ -1,0 +1,206 @@
+{
+  "origin": [
+    -62,
+    -103
+  ],
+  "size": [
+    125,
+    136
+  ],
+  "bounds": [
+    [
+      -0.65,
+      0.0,
+      -0.2750000000000001
+    ],
+    [
+      0.65,
+      0.9,
+      0.2750000000000001
+    ]
+  ],
+  "metadata": {
+    "id": "utility_bench",
+    "units": "Unity local XYZ metres, Y-up",
+    "pixels_per_metre": 90.50966799187809,
+    "front_axis": "+Z",
+    "declared_dimensions_m": [
+      1.3,
+      0.9,
+      0.55
+    ],
+    "bounds": [
+      [
+        -0.65,
+        0.0,
+        -0.2750000000000001
+      ],
+      [
+        0.65,
+        0.9,
+        0.2750000000000001
+      ]
+    ],
+    "origin_projected_px": [
+      -62,
+      -103
+    ],
+    "size": [
+      125,
+      136
+    ],
+    "parts": [
+      {
+        "id": 0,
+        "name": "painted body",
+        "shape": "box",
+        "material": 2,
+        "bounds_canonical_m": [
+          [
+            -0.6217391304347827,
+            0.0,
+            -0.25
+          ],
+          [
+            0.6217391304347825,
+            0.8500000000000001,
+            0.25
+          ]
+        ]
+      },
+      {
+        "id": 1,
+        "name": "continuous oak top",
+        "shape": "box",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -0.65,
+            0.8500000000000001,
+            -0.275
+          ],
+          [
+            0.65,
+            0.9,
+            0.275
+          ]
+        ]
+      },
+      {
+        "id": 2,
+        "name": "door handle 0",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.14130434782608703,
+            0.6875,
+            -0.2625
+          ],
+          [
+            -0.0565217391304349,
+            0.75,
+            -0.25
+          ]
+        ]
+      },
+      {
+        "id": 3,
+        "name": "door handle 1",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.42391304347826086,
+            0.6875,
+            -0.2625
+          ],
+          [
+            0.5086956521739129,
+            0.75,
+            -0.25
+          ]
+        ]
+      }
+    ],
+    "seams": [
+      {
+        "kind": "door",
+        "pitch": 0.5652173913043478,
+        "start": -0.5652173913043479,
+        "count": 2,
+        "y0": 0.07500000000000001,
+        "y1": 0.8250000000000001,
+        "z": -0.25
+      }
+    ],
+    "R": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "U": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "F": [
+      0.6123724356957945,
+      -0.4999999999999999,
+      0.6123724356957945
+    ],
+    "coverage": "native pixel centre nearest positive finite solid hit",
+    "perimeter_expansion_pixels": 0,
+    "normal_space": "Unity local XYZ metres",
+    "shadow_mesh": "closed 16-segment/8-ring approximation of the same analytic solids",
+    "glass_policy": "fridge glazing is overlay only; opaque frame and goods own primary depth",
+    "hidden_surface_policy": "explicit semantic template, not inferred source recovery",
+    "cabinet_design": {
+      "source": "Tools/PerfectPixelUniform/native15_recipe.json",
+      "profile": {
+        "end_cap": 2,
+        "module_pitch": 20,
+        "reference_width": 64,
+        "height": 72,
+        "cap_thickness": 4,
+        "depth": 20,
+        "plinth": 5,
+        "handle_x": 15,
+        "handle_y": 55,
+        "handle_height": 5,
+        "handle_width": 3,
+        "door_frame_ticks": 2
+      },
+      "count": 2,
+      "width_ticks": 44,
+      "tick_scale_xyz": [
+        0.02826086956521739,
+        0.0125,
+        0.025
+      ],
+      "tick_offset_xyz": [
+        -0.6217391304347827,
+        0.0,
+        -0.25
+      ],
+      "adaptation": "whole N15 envelope to preserved physical bounds",
+      "rotation": [
+        [
+          -1.0,
+          0.0,
+          1.2246467991473532e-16
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -1.2246467991473532e-16,
+          0.0,
+          -1.0
+        ]
+      ]
+    }
+  }
+}

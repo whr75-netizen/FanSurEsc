@@ -1,0 +1,40 @@
+{
+  "schema": "N17.metric.native.cache.v1",
+  "paletteFile": "palette.png",
+  "assets": [
+    {
+      "id": "floor_surface",
+      "width": 1157,
+      "height": 589,
+      "origin": [
+        -578,
+        -294
+      ],
+      "ppu": 90.50966799187809,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/Floor/Native surface",
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/Floor/Native surface",
+      "bounds": [
+        [
+          -5.0,
+          -0.04,
+          -4.0
+        ],
+        [
+          5.0,
+          0.04,
+          4.0
+        ]
+      ],
+      "positionFile": "floor_surface/position.f32",
+      "normalFile": "floor_surface/normal.f32",
+      "materialFile": "floor_surface/material.png",
+      "previewFile": "floor_surface/preview.png",
+      "meshFile": "floor_surface/mesh.json"
+    }
+  ],
+  "physical_pixels_per_metre": 90.50966799187809,
+  "lighting_preview_only": true,
+  "runtime_lighting_baked": false,
+  "shade_contract_sha256": "640b164e766944c16058361401b365d20a96ece4594270ad1aefac93e9b038b8",
+  "correction": "active Floor only; preserve the other 35 run02 surface caches"
+}

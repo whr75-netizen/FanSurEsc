@@ -1,0 +1,131 @@
+{
+  "origin": [
+    -12,
+    -101
+  ],
+  "size": [
+    25,
+    109
+  ],
+  "bounds": [
+    [
+      -0.020000000000000007,
+      0.0,
+      -0.13
+    ],
+    [
+      0.020000000000000007,
+      1.2,
+      0.13
+    ]
+  ],
+  "metadata": {
+    "id": "detail_broom",
+    "units": "Unity local XYZ metres, Y-up",
+    "pixels_per_metre": 90.50966799187809,
+    "front_axis": "-X",
+    "declared_dimensions_m": [
+      0.04,
+      1.2,
+      0.26
+    ],
+    "bounds": [
+      [
+        -0.020000000000000007,
+        0.0,
+        -0.13
+      ],
+      [
+        0.020000000000000007,
+        1.2,
+        0.13
+      ]
+    ],
+    "origin_projected_px": [
+      -12,
+      -101
+    ],
+    "size": [
+      25,
+      109
+    ],
+    "parts": [
+      {
+        "id": 0,
+        "name": "broom shaft",
+        "shape": "cylinder",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -0.018000000000000002,
+            0.21600000000000003,
+            -0.018000000000000002
+          ],
+          [
+            0.018000000000000002,
+            1.2,
+            0.018000000000000002
+          ]
+        ]
+      },
+      {
+        "id": 1,
+        "name": "bound broom bristles",
+        "shape": "mesh",
+        "material": 10,
+        "bounds_canonical_m": [
+          [
+            -0.13,
+            0.0,
+            -0.02
+          ],
+          [
+            0.13,
+            0.24,
+            0.02
+          ]
+        ]
+      },
+      {
+        "id": 2,
+        "name": "broom binding",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.13,
+            0.186,
+            -0.013200000000000002
+          ],
+          [
+            0.13,
+            0.222,
+            0.013200000000000002
+          ]
+        ]
+      }
+    ],
+    "seams": [],
+    "R": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "U": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "F": [
+      0.6123724356957945,
+      -0.4999999999999999,
+      0.6123724356957945
+    ],
+    "coverage": "native pixel centre nearest positive finite solid hit",
+    "perimeter_expansion_pixels": 0,
+    "normal_space": "Unity local XYZ metres",
+    "shadow_mesh": "closed 16-segment/8-ring approximation of the same analytic solids",
+    "glass_policy": "fridge glazing is overlay only; opaque frame and goods own primary depth",
+    "hidden_surface_policy": "explicit semantic template, not inferred source recovery"
+  }
+}

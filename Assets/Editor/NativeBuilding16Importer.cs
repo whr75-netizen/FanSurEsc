@@ -85,14 +85,14 @@ public static class NativeBuilding16Importer
     }
 
     /// <summary>Creates or verifies shared Editor assets. This does not bind, instantiate or save a scene.</summary>
-    public static string Import(string folderAbsolute)
+    public static string Import(string folderAbsolute, string assetRoot = AssetRoot, bool floorOnly = false)
     {
         RequireEditMode();
         if (!BitConverter.IsLittleEndian) throw new PlatformNotSupportedException("N16 float32 input is little endian.");
         string folder = Path.GetFullPath(folderAbsolute);
         string manifestPath = SourcePath(folder, "manifest.json");
         var manifest = Read<Manifest>(manifestPath);
-        ValidateManifest(manifest);
+        ValidateManifest(manifest, floorOnly);
         var sources = new List<SourceRecord>();
         SourceRecord Record(string path)
         {
@@ -120,7 +120,7 @@ public static class NativeBuilding16Importer
             prepared.Add(new Prepared { entry = entry, position = positions, normal = normals,
                 material = materialBytes, vertices = vertices, triangles = triangles });
         }
-        string receiptPath = AssetRoot + "/import-receipt.json";
+        string receiptPath = assetRoot + "/import-receipt.json";
         if (File.Exists(receiptPath))
         {
             var previous = Read<ImportReceipt>(receiptPath);
@@ -136,13 +136,15 @@ public static class NativeBuilding16Importer
             try { if (!check.HasProperty(property)) throw new InvalidDataException("N16 shader contract missing " + property); }
             finally { Object.DestroyImmediate(check); }
         }
-        EnsureFolder(AssetRoot);
-        Texture2D paletteAsset = ImportPng(palettePath, AssetRoot + "/palette.png", false);
-        var shadowMaterial = CreateShadowMaterial();
+        if (!assetRoot.StartsWith("Assets/Art/NativeBuilding", StringComparison.Ordinal) || assetRoot.Contains(".."))
+            throw new InvalidDataException("A versioned native building asset directory is required.");
+        EnsureFolder(assetRoot);
+        Texture2D paletteAsset = ImportPng(palettePath, assetRoot + "/palette.png", false);
+        var shadowMaterial = CreateShadowMaterial(assetRoot);
         foreach (var p in prepared)
         {
             var entry = p.entry;
-            string target = AssetRoot + "/" + entry.id;
+            string target = assetRoot + "/" + entry.id;
             EnsureFolder(target);
             Texture2D position = CreateFloatMap(target + "/position.asset", entry, p.position);
             Texture2D normal = CreateFloatMap(target + "/normal.asset", entry, p.normal);
@@ -157,6 +159,7 @@ public static class NativeBuilding16Importer
                 surface.SetTexture("_PositionMap", position); surface.SetTexture("_NormalMap", normal);
                 surface.SetTexture("_MaterialMap", material); surface.SetTexture("_PaletteMap", paletteAsset);
                 surface.SetFloat("_NativeGridEnabled", 1);
+                surface.SetFloat("_RetainPatternContrast", entry.id == "floor_surface" ? 1 : 0);
                 // UV zero is the bottom left; source files themselves are top-down.
                 surface.SetVector("_NativeGridAnchorOS", display.vertices[0]);
                 surface.SetVector("_NativeGridTexelUOS", Right / entry.ppu);
@@ -169,7 +172,7 @@ public static class NativeBuilding16Importer
                 surface.GetTexture("_PaletteMap") != paletteAsset)
                 throw new InvalidDataException("Existing N16 surface material differs: " + entry.id);
         }
-        CopyUnchanged(manifestPath, AssetRoot + "/manifest.json");
+        CopyUnchanged(manifestPath, assetRoot + "/manifest.json");
         var receipt = new ImportReceipt { sourceFolder = folder, manifestSha256 = Sha(manifestPath),
             sources = sources.ToArray(), importedIds = manifest.assets.Select(a => a.id).ToArray(),
             floatMapRgbaMismatches = 0, materialRgbaMismatches = 0 };
@@ -185,20 +188,20 @@ public static class NativeBuilding16Importer
     }
 
     /// <summary>Connects existing renderers after root's minimum lighting experiment, preserving their identities and colliders.</summary>
-    public static string Apply(GameObject building)
+    public static string Apply(GameObject building, string assetRoot = AssetRoot, string baselinePath = BaselinePath)
     {
         RequireEditMode();
         if (building == null || building.name != "PlannedPixelShop33" || building.GetComponent<NativePixelBuilding>() == null)
             throw new InvalidOperationException("The preserved PlannedPixelShop33 scene instance is required.");
         if (building.transform.lossyScale != Vector3.one || Mathf.Abs(Mathf.DeltaAngle(building.transform.eulerAngles.y, 305)) > .01f)
             throw new InvalidDataException("Preserved unit building scale and 305 degree root yaw required.");
-        var manifest = Read<Manifest>(AssetRoot + "/manifest.json"); ValidateManifest(manifest);
-        var imported = Read<ImportReceipt>(AssetRoot + "/import-receipt.json");
+        var manifest = Read<Manifest>(assetRoot + "/manifest.json"); ValidateManifest(manifest);
+        var imported = Read<ImportReceipt>(assetRoot + "/import-receipt.json");
         foreach (var source in imported.sources)
             if (Sha(source.path) != source.sha256) throw new InvalidDataException("N16 calculation input changed: " + source.path);
         var entries = manifest.assets.ToDictionary(a => a.id);
         var contract = Read<PhysicalContract>(ContractPath);
-        var baseline = Read<Baseline>(BaselinePath).rows.ToDictionary(r => r.path);
+        var baseline = Read<Baseline>(baselinePath).rows.ToDictionary(r => r.path);
         var content = building.transform.Find(PixelShopInteriorCompletion.ContentName);
         if (content == null) throw new InvalidDataException("Existing shop content root is missing.");
         var parentByInstance = new Dictionary<string, Transform>();
@@ -232,7 +235,7 @@ public static class NativeBuilding16Importer
             if (!entries.TryGetValue(pair.asset.id, out var entry)) throw new InvalidDataException("Missing native template: " + pair.asset.id);
             var parent = parentByInstance[pair.instance.id];
             var visual = parent.Find("Native surface");
-            var binding = PrepareBinding(building, baseline, entry, parent, visual, false);
+            var binding = PrepareBinding(building, baseline, entry, parent, visual, false, assetRoot);
             binding.newParentY = BaseY(pair.instance.id, new HashSet<string>());
             // Existing wall clock/poster parent anchors are their vertical centres, whereas native geometry starts at its base.
             binding.newVisualY = pair.asset.id == "detail_clock" || pair.asset.id == "detail_poster" ? -pair.asset.size_xyz_m[1] * .5f : 0;
@@ -241,12 +244,11 @@ public static class NativeBuilding16Importer
         foreach (var entry in manifest.assets.Where(a => !RequiredIds.Contains(a.id)))
         {
             if (string.IsNullOrEmpty(entry.bindingPath)) throw new InvalidDataException("Structural template requires explicit original renderer bindingPath: " + entry.id);
-            if (entry.bindingPath.Contains("/Floor/")) throw new InvalidDataException("The accepted floor is preserved, not replaced by N16.");
             var visual = building.transform.Find(entry.bindingPath);
             if (visual == null) throw new InvalidDataException("Explicit structural renderer does not exist: " + entry.bindingPath);
-            bindings.Add(PrepareBinding(building, baseline, entry, visual.parent, visual, true));
+            bindings.Add(PrepareBinding(building, baseline, entry, visual.parent, visual, true, assetRoot));
         }
-        var shadowMaterial = AssetDatabase.LoadAssetAtPath<Material>(AssetRoot + "/physical-shadow.mat");
+        var shadowMaterial = AssetDatabase.LoadAssetAtPath<Material>(assetRoot + "/physical-shadow.mat");
         if (shadowMaterial == null) throw new InvalidDataException("Imported physical shadow material missing.");
         var reports = new List<BindingReport>();
         foreach (var binding in bindings)
@@ -294,7 +296,7 @@ public static class NativeBuilding16Importer
     }
 
     private static Binding PrepareBinding(GameObject building, Dictionary<string, BaselineRow> baseline, Entry entry,
-        Transform parent, Transform visual, bool structural)
+        Transform parent, Transform visual, bool structural, string assetRoot)
     {
         if (visual == null || parent == null) throw new InvalidDataException("Native renderer missing: " + entry.id);
         var filter = visual.GetComponent<MeshFilter>(); var renderer = visual.GetComponent<MeshRenderer>();
@@ -309,9 +311,9 @@ public static class NativeBuilding16Importer
         if (!string.IsNullOrEmpty(original.colliderEntity) && (collider == null || collider.GetEntityId().ToString() != original.colliderEntity ||
             !Near(collider.center, Values(original.colliderCenter)) || !Near(collider.size, Values(original.colliderSize))))
             throw new InvalidDataException("Preserved physical collider changed: " + path);
-        if (visual.localPosition != Vector3.zero)
-            throw new InvalidDataException("Native binding has a pre-existing visual offset; calculate its cause before replacing: " + path);
-        string assetPath = AssetRoot + "/" + entry.id;
+        if (!Near(visual.localPosition, Values(original.pos)))
+            throw new InvalidDataException("Native visual anchor differs from the directly observed baseline: " + path);
+        string assetPath = assetRoot + "/" + entry.id;
         var display = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath + "/display.asset");
         var caster = AssetDatabase.LoadAssetAtPath<Mesh>(assetPath + "/shadow.asset");
         var material = AssetDatabase.LoadAssetAtPath<Material>(assetPath + "/surface.mat");
@@ -319,6 +321,56 @@ public static class NativeBuilding16Importer
         return new Binding { entry = entry, parent = parent, visual = visual, filter = filter, renderer = renderer,
             display = display, caster = caster, material = material, structural = structural,
             newParentY = parent.localPosition.y, newVisualY = 0 };
+    }
+
+    /// <summary>Repairs only the active floor selected by the actual Play-mode renderer.</summary>
+    public static string ApplyFloorCorrection(GameObject building, string assetRoot, string baselinePath)
+    {
+        RequireEditMode();
+        var manifest=Read<Manifest>(assetRoot+"/manifest.json");ValidateManifest(manifest,true);
+        var imported=Read<ImportReceipt>(assetRoot+"/import-receipt.json");
+        foreach(var source in imported.sources)
+            if(Sha(source.path)!=source.sha256)throw new InvalidDataException("Floor calculation changed: "+source.path);
+        var entry=manifest.assets[0];
+        var visual=building.transform.Find(entry.bindingPath);
+        if(visual==null || !visual.gameObject.activeInHierarchy)throw new InvalidDataException("The corrected floor must be the active renderer.");
+        var baseline=Read<Baseline>(baselinePath).rows.ToDictionary(x=>x.path);
+        var binding=PrepareBinding(building,baseline,entry,visual.parent,visual,true,assetRoot);
+        var previousFloor=building.transform.Find("Interior34 - native source and physical depth/Structure - closed volumes/Floor/Native surface");
+        var previousRenderer=previousFloor?.GetComponent<MeshRenderer>();
+        var previousFilter=previousFloor?.GetComponent<MeshFilter>();
+        var previousCaster=previousFloor?.Find(CasterName);
+        if(previousRenderer!=null && AssetDatabase.GetAssetPath(previousRenderer.sharedMaterial)=="Assets/Art/NativeBuilding39/floor_surface/surface.mat")
+        {
+            if(previousFloor.gameObject.activeInHierarchy)throw new InvalidDataException("Legacy floor unexpectedly active.");
+            Undo.RecordObjects(new Object[]{previousFilter,previousRenderer},"Undo inactive floor binding error");
+            previousFilter.sharedMesh=AssetDatabase.LoadAssetAtPath<Mesh>("Assets/Art/PixelShopInterior34/Meshes/Floor.asset");
+            previousRenderer.sharedMaterial=AssetDatabase.LoadAssetAtPath<Material>("Assets/Art/PixelShopInterior34/Materials/Floor.mat");
+            if(previousCaster!=null && AssetDatabase.GetAssetPath(previousCaster.GetComponent<MeshFilter>().sharedMesh)=="Assets/Art/NativeBuilding39/floor_surface/shadow.asset")
+                Undo.DestroyObjectImmediate(previousCaster.gameObject);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(previousFilter);
+            PrefabUtility.RecordPrefabInstancePropertyModifications(previousRenderer);
+        }
+        Undo.RecordObjects(new Object[]{binding.filter,binding.renderer},"Bind active common-grid floor");
+        PreserveOcclusionProperties(binding.renderer.sharedMaterial,binding.material);
+        binding.filter.sharedMesh=binding.display;binding.renderer.sharedMaterial=binding.material;
+        binding.renderer.shadowCastingMode=ShadowCastingMode.Off;
+        var caster=visual.Find(CasterName);
+        if(caster==null)
+        {
+            var go=new GameObject(CasterName);Undo.RegisterCreatedObjectUndo(go,"Active floor physical caster");
+            caster=go.transform;caster.SetParent(visual,false);go.AddComponent<MeshFilter>();go.AddComponent<MeshRenderer>();
+        }
+        caster.gameObject.layer=binding.renderer.gameObject.layer;
+        var filter=caster.GetComponent<MeshFilter>();var renderer=caster.GetComponent<MeshRenderer>();
+        Undo.RecordObjects(new Object[]{filter,renderer},"Active floor physical caster data");
+        filter.sharedMesh=binding.caster;renderer.sharedMaterial=AssetDatabase.LoadAssetAtPath<Material>(assetRoot+"/physical-shadow.mat");
+        renderer.shadowCastingMode=ShadowCastingMode.ShadowsOnly;renderer.receiveShadows=false;
+        renderer.renderingLayerMask=binding.renderer.renderingLayerMask;
+        foreach(var changed in new Object[]{binding.filter,binding.renderer,filter,renderer})
+            PrefabUtility.RecordPrefabInstancePropertyModifications(changed);
+        AssetDatabase.SaveAssets();EditorSceneManager.MarkSceneDirty(building.scene);
+        return "Bound active floor at "+entry.bindingPath+"; original transforms/collider unchanged; inactive legacy floor restored.";
     }
 
     private static void PreserveOcclusionProperties(Material prior, Material next)
@@ -402,9 +454,9 @@ public static class NativeBuilding16Importer
             throw new InvalidDataException("PNG native domain/RGBA changed on import: " + destination);
         return texture;
     }
-    private static Material CreateShadowMaterial()
+    private static Material CreateShadowMaterial(string assetRoot)
     {
-        string path = AssetRoot + "/physical-shadow.mat";
+        string path = assetRoot + "/physical-shadow.mat";
         var material = AssetDatabase.LoadAssetAtPath<Material>(path);
         if (material != null) return material;
         Shader shader = Shader.Find("Universal Render Pipeline/Lit");
@@ -457,16 +509,21 @@ public static class NativeBuilding16Importer
         }
         public void Dispose() => Object.DestroyImmediate(texture);
     }
-    private static void ValidateManifest(Manifest manifest)
+    private static void ValidateManifest(Manifest manifest, bool floorOnly = false)
     {
-        if (manifest?.assets == null || manifest.assets.Length < RequiredIds.Length ||
+        if (floorOnly)
+        {
+            if (manifest?.assets == null || manifest.assets.Length != 1 || manifest.assets[0].id != "floor_surface")
+                throw new InvalidDataException("Floor correction imports exactly one declared floor surface.");
+        }
+        else if (manifest?.assets == null || manifest.assets.Length < RequiredIds.Length ||
             manifest.assets.Select(e => e.id).Distinct().Count() != manifest.assets.Length ||
             !RequiredIds.All(id => manifest.assets.Any(e => e.id == id)))
             throw new InvalidDataException("Native manifest must contain all eighteen distinct declared object templates.");
         foreach (var entry in manifest.assets)
             if (string.IsNullOrEmpty(entry.id) || !Regex.IsMatch(entry.id, "^[a-zA-Z0-9_-]+$") || entry.width < 1 || entry.height < 1 ||
                 entry.origin == null || entry.origin.Length != 2 || float.IsNaN(entry.ppu) || float.IsInfinity(entry.ppu) ||
-                Mathf.Abs(entry.ppu - 31.75f) > .0001f)
+                (Mathf.Abs(entry.ppu - 31.75f) > .0001f && Mathf.Abs(entry.ppu - 90.509668f) > .0001f))
                 throw new InvalidDataException("Invalid native integer-domain manifest entry: " + entry.id);
     }
     private static string SourcePath(string folder, string relative)

@@ -7,12 +7,15 @@ it is never used to create internal raster strokes.
 from __future__ import annotations
 
 import math
+import json
+from pathlib import Path
 import numpy as np
 
 R = np.array([1.0, 0.0, -1.0]) / math.sqrt(2.0)
 U = np.array([1.0 / math.sqrt(8.0), math.sqrt(3.0) / 2.0,
               1.0 / math.sqrt(8.0)])
 F = np.cross(R, U)
+DEFAULT_PPU = float(json.loads((Path(__file__).resolve().parent/'shading17.json').read_text(encoding='utf-8'))['ppu'])
 MATERIALS = {1: 'wood', 2: 'navy', 3: 'brass', 4: 'paper', 5: 'leaf',
              6: 'apple', 7: 'glass', 8: 'ceramic', 9: 'metal', 10: 'fabric'}
 
@@ -26,6 +29,7 @@ class Parts:
     def __init__(self):
         self.items = []
         self.seams = []
+        self.design = None
 
     def add(self, kind, name, material, **values):
         if material not in MATERIALS:
@@ -84,31 +88,33 @@ def _outward(vertices, triangles, center):
 
 
 def _cabinet(parts, w, h, d, kind):
-    cap = min(.05, h*.07)
-    bodytop = h-cap
-    leg = .07 if kind == 'utility_bench' else 0.
-    body_front = -d/2+.016
-    parts.box('painted body', [-w/2, leg, body_front], [w/2, bodytop, d/2], 2)
-    parts.box('continuous oak top', [-w/2, bodytop, -d/2], [w/2, h, d/2], 1)
-    if leg:
-        for x in (-w/2+.035, w/2-.035):
-            for z in (-d/2+.035, d/2-.035):
-                parts.box('foot', [x-.025, 0, z-.025], [x+.025, leg, z+.025], 2)
-    count = 1 if kind == 'cleaning_cabinet' else max(2, int(round(w/.72)))
-    pitch = w/count
+    # Use the approved N15 definition, not a second approximate door/handle
+    # design. Its complete envelope is adapted to the existing physical bounds.
+    recipe_path = Path(__file__).resolve().parents[1]/'PerfectPixelUniform/native15_recipe.json'
+    profile = json.loads(recipe_path.read_text(encoding='utf-8'))['profile'].copy()
+    count = {'empty_counter': 3, 'island_body_template': 2,
+             'utility_bench': 2, 'cleaning_cabinet': 1}[kind]
+    width = 2*profile['end_cap']+count*profile['module_pitch']
+    scale = np.array([w/(width+2), h/profile['height'], d/(profile['depth']+2)])
+    offset = np.array([-w/2+scale[0], 0., -d/2+scale[2]])
+    convert = lambda point: np.asarray(point, float)*scale+offset
+    bodytop = profile['height']-profile['cap_thickness']
+    parts.box('painted body', convert([0, 0, 0]),
+              convert([width, bodytop, profile['depth']]), 2)
+    parts.box('continuous oak top', convert([-1, bodytop, -1]),
+              convert([width+1, profile['height'], profile['depth']+1]), 1)
     for i in range(count):
-        start = -w/2+i*pitch
-        # Hardware is a finite solid inside declared bounds. The door body
-        # starts .014m behind it rather than growing the collider envelope.
-        x = start+pitch*.83
-        hy = h*.65
-        parts.box('door handle '+str(i), [x-.010, hy-.055, -d/2],
-                  [x+.010, hy+.055, -d/2+.015], 3)
-        for sy in (.22, .79):
-            parts.box('hinge '+str(i), [start+.014, h*sy, -d/2],
-                      [start+.027, h*sy+.035, -d/2+.006], 3)
-    parts.seams.append(dict(kind='door', pitch=pitch, start=-w/2, count=count,
-                            y0=leg+.07, y1=bodytop-.03, z=body_front))
+        start = profile['end_cap']+i*profile['module_pitch']
+        x = start+profile['handle_x']; y = profile['handle_y']
+        parts.box('door handle '+str(i), convert([x, y, -.5]),
+                  convert([x+profile['handle_width'], y+profile['handle_height'], 0]), 3)
+    parts.seams.append(dict(kind='door', pitch=profile['module_pitch']*scale[0],
+                            start=offset[0]+profile['end_cap']*scale[0], count=count,
+                            y0=6*scale[1], y1=66*scale[1], z=offset[2]))
+    parts.design = {'source': 'Tools/PerfectPixelUniform/native15_recipe.json',
+                    'profile': profile, 'count': count, 'width_ticks': width,
+                    'tick_scale_xyz': scale.tolist(), 'tick_offset_xyz': offset.tolist(),
+                    'adaptation': 'whole N15 envelope to preserved physical bounds'}
 
 
 def _goods(parts, w, h, d, stock=False, refrigerated=False):
@@ -493,6 +499,11 @@ def _edge_roles(result, parts, rotation):
         dot=np.sum(normal[a]*normal[b],axis=-1)
         boundary=((p[a]!=p[b])|(chart[a]!=chart[b]))&valid
         crease=boundary&(dot<.985)
+        if parts.design is not None:
+            # N15 cap/body contact is conveyed by materials and real shadow,
+            # not an extra dark line below the oak top.
+            contact=((p[a]==0)&(p[b]==1))|((p[a]==1)&(p[b]==0))
+            crease &= ~contact
         # Stable camera-facing owner. Same-normal contacting boxes get no line.
         score_a=normal[a]@(-F);score_b=normal[b]@(-F)
         owner_a=score_a>=score_b
@@ -586,16 +597,23 @@ def _build(name,parts,rotation,dimensions,ppu,facing='-Z',declared_bounds=None):
               'glass_policy':'fridge glazing is overlay only; opaque frame and goods own primary depth',
               'hidden_surface_policy':'explicit semantic template, not inferred source recovery'}
     result['metadata']=metadata
+    if parts.design is not None:
+        design = dict(parts.design, rotation=rotation.tolist())
+        metadata['cabinet_design'] = design
+        local = result['position']@rotation
+        result['design_tick'] = ((local-np.asarray(design['tick_offset_xyz']))/
+                                 np.asarray(design['tick_scale_xyz'])).astype(np.float32)
+        result['design_normal'] = (result['normal']@rotation).astype(np.float32)
     return result
 
 
-def build_asset(asset:dict,ppu=31.75):
+def build_asset(asset:dict,ppu=DEFAULT_PPU):
     """Build one of the eighteen B37 semantic templates; no source resampling."""
     parts,rotation,dimensions,facing=_parts(asset)
     return _build(asset['id'],parts,rotation,dimensions,ppu,facing)
 
 
-def build_box(name,bounds,ppu=31.75,material=2):
+def build_box(name,bounds,ppu=DEFAULT_PPU,material=2):
     """Build an actual structural box, with the caller's metre-space bounds."""
     lo,hi=np.asarray(bounds,dtype=float)
     p=Parts();p.box(name,lo,hi,material)

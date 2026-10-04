@@ -27,7 +27,7 @@ public static class NativeBuilding16Observation
     private static int ShaderErrors() => ShaderUtil.GetShaderMessages(Shader.Find(NativeBuilding16Importer.ShaderName))
         .Count(m => m.severity == UnityEditor.Rendering.ShaderCompilerMessageSeverity.Error);
 
-    private static Color32[] Capture(Camera camera, string path, int width, int height)
+    public static Color32[] Capture(Camera camera, string path, int width, int height)
     {
         var target = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32) { antiAliasing = 1 };
         var previous = RenderTexture.active;
@@ -106,7 +106,7 @@ public static class NativeBuilding16Observation
         }
     }
 
-    public static string Gameplay(string output)
+    public static string Gameplay(string output, float ppu = 31.75f)
     {
         if (!EditorApplication.isPlaying) throw new InvalidOperationException("Actual Play Mode required.");
         output=Path.GetFullPath(output); Directory.CreateDirectory(output);
@@ -129,13 +129,19 @@ public static class NativeBuilding16Observation
             Capture(camera,Path.Combine(output,"play-light-off.png"),camera.pixelWidth,camera.pixelHeight);
             for(int i=0;i<lights.Length;i++)lights[i].enabled=original[i];
             Capture(camera,Path.Combine(output,"play-interior.png"),camera.pixelWidth,camera.pixelHeight);
-            // Same runtime camera and angle. One temporary integer zoom shows the
-            // full building for review; the player's actual zoom is restored.
+            // A wider view is valid only if its native pixel scale stays integer.
+            // At 1:1 keep the actual gameplay camera instead of creating a .5px overview.
             float actualSize=camera.orthographicSize;
+            float actualScale=camera.pixelHeight/(2*actualSize*ppu);
+            string overviewFile="play-interior.png";
             try
             {
-                camera.orthographicSize=actualSize*2;
-                Capture(camera,Path.Combine(output,"play-overview.png"),camera.pixelWidth,camera.pixelHeight);
+                if (actualScale >= 2 && Mathf.Abs(actualScale/2-Mathf.Round(actualScale/2)) < .001f)
+                {
+                    camera.orthographicSize=actualSize*2;
+                    overviewFile="play-overview.png";
+                    Capture(camera,Path.Combine(output,overviewFile),camera.pixelWidth,camera.pixelHeight);
+                }
             }
             finally {camera.orthographicSize=actualSize;}
             var receipt=new Receipt {phase="play",isPlayMode=true,boundInstanceCount=objects.Length,
@@ -143,8 +149,8 @@ public static class NativeBuilding16Observation
                 samePlayer=player.GetEntityId()==playerId,sameCamera=camera.GetEntityId()==cameraId,
                 playerEntity=playerId.ToString(),cameraEntity=cameraId.ToString(),cameraPitch=camera.transform.eulerAngles.x,
                 cameraYaw=camera.transform.eulerAngles.y,insideCount=fader.InsideBuildingCount,hiddenRoofCount=fader.HiddenUpperStoreyRendererCount,
-                fadedWallCount=fader.FadedRendererCount,shaderErrorCount=ShaderErrors(),lightOnFile="play-interior.png",lightOffFile="play-light-off.png",overviewFile="play-overview.png",
-                sourcePixelsOnScreen=camera.pixelHeight/(2*camera.orthographicSize*31.75f)};
+                fadedWallCount=fader.FadedRendererCount,shaderErrorCount=ShaderErrors(),lightOnFile="play-interior.png",lightOffFile="play-light-off.png",overviewFile=overviewFile,
+                sourcePixelsOnScreen=camera.pixelHeight/(2*camera.orthographicSize*ppu)};
             File.WriteAllText(Path.Combine(output,"play-observation.json"),JsonUtility.ToJson(receipt,true));
             return JsonUtility.ToJson(receipt,true);
         }

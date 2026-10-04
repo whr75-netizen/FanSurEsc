@@ -1,6 +1,42 @@
-# N16 — 테스트 건물 한 채의 native 표면·실시간 조명 제작 계약
+# N17 — 테스트 건물 한 채의 공통 native 표면·실시간 조명 제작 계약
 
-## 현재 결정 / R0~R2 (2026-10-04)
+## N17 현재 수정 계약 (2026-10-04, 구현 전 고정)
+
+최신 요청은 N15의 부품·디테일을 보존해 테스트 건물을 다시 제작하고 바닥/사물 픽셀 크기를 통일하며 기본 밤과 좌우로 움직이는 양자화 조명을 넣는 것이다. N16은 원본 밀도를31.75로 바꾸고 preview/runtime 색 계산도 달랐으므로 외형 보존의 근거가 아니다. 아래 N16 기록은 이전 실행의 증거로만 보존한다.
+
+Canonical은 기존 building-local metres/Y-up/root yaw305/카메라30°·350°다. 공통 PPU=64√2=90.50966799, ΔscreenWorld=1/PPU다. N15 tick (x,y,z)을 (x/32,y/(32√6),z/32)로 옮기면 동일 basis에서 u=2x−2z,v=−x−z−y를 얻는다. 기존 collider·지지 높이·배치는 보존하며 수납장 계열은 N15 profile의 몸체/상판/손잡이/앞·옆 장식 정의를 기존 물리 외피에 대응시킨다. 원래 PNG를 resize하지 않는다. 치수가 다른 물리 외피의 적응을 원본 픽셀 수까지 동일하다고 표시하지 않는다.
+
+실제 활성 Floor는 PixelShopInterior34Aligned/Materials/Floor.mat,1619×819·127PPU다. 처음 측정한 PixelShopInterior34의181PPU는 비활성 이전 Floor였다. 실제 Play renderer 경로로 정정하며 원재료 Aligned/Source/floor-warm.png125×132와 판재 worldUV127×.70710678을 보존한다. 공통90.5097로 바꾸면 바닥 한 칸은1.403배 커진다. 기존 범위·높이·판재 배치를 유지하고 position/normal은 실제 수평면 ray hit로 제작하며 사물과 같은 재료/무늬/경계/명암 경로를 사용한다. 기존색 RGB 덧곱으로 밤을 흉내내지 않는다.
+
+변환은 physical geometry→pixel-centre nearest hit→local XYZ/unit normal/material/pattern/edge→world via 기존 Transform→현재 광원 linear irradiance→공통 shade 함수→sRGB PNG 또는 Linear GPU color→native grid 정수 화면 표시다. 색 계약은 Tools/Building38/shading17.json 한 곳에서 Python 및 생성 HLSL에 공급한다. 임계값[.32,.72],외곽0,crease는재질최암색,기준백색광의tint1,재질별pattern 사용을공유한다. palette는sRGB관측값이고CPU/GPU모두linear로계산한다. 기준fixture는Unity방향[-.20,.84,-.50]/광량1/ambient0로고정하며동일표본별RGB오차≤2/255,coverage불일치0을실제GPU에서확인한다. 실제밤화면은같은색규약에실제광량을입력한다.
+
+기존 SkyLightingCycleController의 initialHour=21과기존API로기본밤을설정하고일주기는기존owner가유지한다. 테스트빛은기존 SteppedLocalLight 한개를사용하며같은빛을URP와중복등록하지않는다. local x(t)=3sin(2πt/8),y=1.35,z=0의연속위치가유일한동작변수다. 표시marker는native정수그리드의작은emissive도트이며표면빛은같은registry→normal/감쇠→공통band로계산한다. 별도LightManager/생성API/전역pixelfilter는추가하지않는다. 이빛의가구차폐그림자는기존SteppedLocalLight범위밖이며기존주광shadow와혼동하지않는다.
+
+제작/검증그래프는geometry/material/export→CPU불변조건→GPU동일fixture비교→기존26사물+17구조+Floor연결→밤/이동빛/게임·개발카메라관측이다. source/code hash와새출력/자산버전을사용해N16원본을보존한다. 요구판정은공통PPU·부품정의재사용·GPU색동일성·source再resize0·같은Player/Camera/collider·pixelHeight/(2·orthoSize·PPU)가정수·광원좌우실제연속동작이다. RGB/shape/phase오류는각담당단계로반환한다. 프리팹원본전체전파없이GameMap1한채의override만저장한다. 컨셉미술승인/자유회전/전게임build는별도다.
+
+### N17 원인 단계 정정
+
+run02의 CPU/GPU 공통fixture는 통과했으나 실제 Play 관측에서 활성 Floor가 기존 셰이더·127PPU로 남아 floor/object 화면 간격 .7126745/1로 실패했다. 해당 WorkLoop는 blocked로 보존한다. floor-fix01은 활성 Floor 계산/재료만 다시 제작하고 나머지35종 캐시는 재사용한다. 비활성 이전 Floor의 잘못된 연결과 이번에 만든 caster만 되돌리고 실제 활성 Floor 하나를 연결한다. 원래 Transform·collider·support는 보존하며 production PNG resize는0이다.
+
+개발 밤 조명은 임의45° 방향값을 제거하고 기존 SkyLightingCycleController가21시 실제 계산한 방향·광량·ambient를 기록해 Edit 초기값으로 적용한다. 조명 권위/계산식은 변경하지 않는다. SceneView는 Unity 공식 GetVerticalOrthoSize의 aspect<1 보정을 포함해 native 정수 배율을 유지한다. SceneView camera의 GUI 갱신 전 값은 실제 렌더 관측으로 승격하지 않는다. 근거: [Unity SceneView 소스](https://github.com/Unity-Technologies/UnityCsReference/blob/master/Editor/Mono/SceneView/SceneView.cs).
+
+실제 밤에서는 기존 wood column=clamp(pattern+band−2)가 바닥의 주요pattern0/1/2를 전부0으로 합쳐 나뭇결이 사라졌다. 바닥만 intrinsic pattern column을 유지하고 linear 출력에(band+1)/3의 세 단계 광량을 적용한다. 완성 명암PNG를 곱하는 방식이 아니며 material rank·실제 normal/irradiance는 계속 독립이다. 중립fixture의 band2에서는 배율1·같은column이므로 기존CPU표본과GPU가 동일해야 한다. 사물35종의 기존 shade 규칙은 변경하지 않는다.
+
+### N17 현재 결과·재사용
+
+[현재/Play 호출·GPU 렌더] 18종26사물+17구조+활성Floor=44표면에 공통90.5097PPU를 연결했다. 사물/바닥/SceneView 화면 간격은1/.99999994/.99999994px로 float32 허용오차 안에서1이다. 같은 Player/Camera,30°/350°,실내등록3·숨은지붕1·벽fade9·shadererror0을 실제 관측했다. 수납장211×187의 손잡이별56/51/57px와 N15 부품 정의를 유지했고 전체 이미지resize는0이다. 치수 적응 결과를 N15 PNG의 원본 픽셀수 동일성으로 표시하지 않는다.
+
+[현재/밤·움직임] 기존 clock 초기값21시, 자동일주기·60초/day는 보존한다. 실제 Update의17프레임에서 light x최소−2.99810958/최대2.98794675m, 비교화면217,993px 변화, 나뭇결 유지와 가구·바닥의 단계 명암 반응을 기록했다. 촬영용 clock 고정과 background실행은 복원했다. Edit조명은 최종 `pattern-light/night-owner-output.json`의 기존owner출력이다. 개발카메라도30°/350°·정수1배이며 씬dirty=false다.
+
+[검증/실패 보존] 수납장/진열장/수정한Floor의 동일중립GPUfixture는coverage불일치0/RGB최대오차0이다. run02는 잘못된 비활성Floor 연결로blocked, floor-fix01은실제표시.99999994를정확비교`>=1`로거절한validatorbug로blocked다. raw관측을반올림수정하지않고기존.001px허용오차를하한에도동일하게적용했다. gate-fix01은그validator한파일의before/afterhash만허용하고모든기하/재질/실제관측을재사용해1노드graph_complete다. 반례.7126745/.5px는허용하지않는다. 그래프성공을미술합격으로표시하지않는다.
+
+현재 자료는사물/구조`Assets/Art/NativeBuilding39`,활성바닥`Assets/Art/NativeBuilding39Floor40`다. 기존 결과의 재사용에는 production/API/격자복원 재실행이 필요 없다. 실제 녹화와원본PNG는`docs/artifacts/building39/floor-fix01/pattern-light`,배포미리보기는`night-moving-light.gif`다. GIF만256색표시포맷이며Unity자료/원본PNG는변환하지않았다.
+
+새제작: `Tools/Building38/run16.py --output <새폴더>` → CPU4단계 → `NativeBuilding16Importer.Import(output,새AssetRoot)` → `NativeBuilding17Setup.CompareFixture(output,새AssetRoot)` → probe제출 → 기존instance`Apply(building,새AssetRoot,이번baseline)`·`Configure` → 실제Play밤/연속관측 → `CaptureNightPreview` → Play종료·`ApplyNightPreview`·Scene저장 → 최종receipt제출이다. 활성Floor만수선할원인에는`floor_repair17.py`와`Import(...,floorOnly:true)`/`ApplyFloorCorrection`을사용한다. 이번validator수선이력의재확인은`final_check17.py`이며생산재실행기가아니다. 실제사물배치·collider·원본prefab·Player/Camera소유자는보존했다.
+
+한계: 움직이는 SteppedLocalLight는가구차폐그림자를생성하지않는다. 기존주광의실물caster를보존했지만이번요청에서별도shadow회귀를반복하지않았다. 순수albedo복원/미술완벽/임의회전/유리overlay/Standalone빌드는미검증이다. 아래N16기록의31.75PPU·Floor보존·4px화면은현재지시가아니다.
+
+## 과거 N16 결정 / R0~R2 (2026-10-04)
 
 사용자가 N15의 표현을 개선된 기준으로 확인하고 그 파이프라인을 정리한 뒤 기지 GameMap1의 테스트 건물 내부 전체에 적용하도록 요청했다. 대상은 PlannedPixelShop33의 활성 실내다. 18종/26개 사물, 기존 구조·지붕·절개·벽등을 대상으로 하며 플레이어·카메라·동선·콜라이더·방의 역할·다른 건물·도심은 보존한다. 사용자 원본 시트와 N15 결과는 그대로 남긴다.
 

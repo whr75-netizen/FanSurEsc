@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: surface
+  m_Shader: {fileID: 4800000, guid: a30ce2656765d2a42a33620e965e3100, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 2000
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MaterialMap:
+        m_Texture: {fileID: 2800000, guid: 61d70bfaa5d9fec44be9d2468ee80ae4, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 2800000, guid: 2c5eea8e3851ff948b758fe9103378f2, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PaletteMap:
+        m_Texture: {fileID: 2800000, guid: 5f43203991405c640b26c78d50678d4a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PositionMap:
+        m_Texture: {fileID: 2800000, guid: 0bb0e757415cbc54b826419437575021, type: 2}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _AdditionalLightStrength: 1
+    - _AmbientLightStrength: 1
+    - _Cull: 0
+    - _DiagnosticMode: 0
+    - _DstBlend: 0
+    - _LightingBandMaximum: 1
+    - _MainLightStrength: 1
+    - _NativeGridEnabled: 1
+    - _SrcBlend: 1
+    - _SteppedLocalLightStrength: 0.55
+    - _ZWrite: 1
+    m_Colors:
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _MaterialBandCounts0: {r: 4, g: 4, b: 3, a: 4}
+    - _MaterialBandCounts1: {r: 4, g: 4, b: 4, a: 4}
+    - _MaterialBandCounts2: {r: 4, g: 4, b: 0, a: 0}
+    - _NativeGridAnchorOS: {r: -0.90625, g: -0.45927933, b: 0.53125006, a: 0}
+    - _NativeGridTexelUOS: {r: 0.0078125, g: 0, b: -0.0078125, a: 0}
+    - _NativeGridTexelVOS: {r: 0.00390625, g: 0.00956832, b: 0.00390625, a: 0}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

@@ -16,12 +16,16 @@ HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[1]
 sys.path.insert(0, str(ROOT/'Tools/PerfectPixelUniform'))
 from native14_materials import Appearance, _palette
+from native15 import canonical_line
 
 def read(p): return json.loads(Path(p).read_text(encoding='utf-8'))
 def write(p, v):
     p = Path(p); p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(json.dumps(v, ensure_ascii=False, indent=2, allow_nan=False)+'\n', encoding='utf-8')
 def sha(p): return hashlib.sha256(Path(p).read_bytes()).hexdigest()
+
+SHADING = read(HERE/'shading17.json')
+PPU = float(SHADING['ppu'])
 
 def inputs():
     contract = read(ROOT/'Tools/Building37/input-contract.json')
@@ -32,7 +36,7 @@ def geometry(out):
     from geometry16 import build_asset, build_box
     contract, placement = inputs(); catalog=[]
     for asset in contract['assets']:
-        data=build_asset(asset, ppu=31.75)
+        data=build_asset(asset, ppu=PPU)
         save_geometry(out, asset['id'], data, catalog)
     for row in placement['rows']:
         if 'Structure - closed volumes/' not in row['path'] and 'Cutaway bases/' not in row['path']: continue
@@ -40,8 +44,11 @@ def geometry(out):
         if name == 'Floor': continue  # approved floor geometry, UV and source remain intact
         dimensions=np.asarray(row['colliderSize'], dtype=float)
         ident='structure_'+''.join(c if c.isalnum() else '_' for c in name)
-        data=build_box(ident, [-dimensions/2, dimensions/2], ppu=31.75, material=2)
+        data=build_box(ident, [-dimensions/2, dimensions/2], ppu=PPU, material=2)
         save_geometry(out, ident, data, catalog, row['path'])
+    from floor17 import build_floor
+    floor = build_floor(PPU)
+    save_geometry(out, 'floor_surface', floor, catalog, floor['metadata']['bindingPath'])
     write(out/'geometry-catalog.json', catalog)
 
 def save_geometry(out, ident, data, catalog, path=None):
@@ -56,7 +63,7 @@ def save_geometry(out, ident, data, catalog, path=None):
     write(folder/'mesh.json', {'vertices':vertices,'triangles':triangles})
     h,w=data['mask'].shape
     catalog.append({'id':ident,'width':w,'height':h,'origin':list(map(int,data['origin'])),
-                    'ppu':31.75,'structurePath':path or '', 'bounds':np.asarray(data['bounds']).tolist(),
+                    'ppu':PPU,'structurePath':path or '', 'bounds':np.asarray(data['bounds']).tolist(),
                     'metadata':meta})
 
 def load(out, item):
@@ -67,10 +74,12 @@ def materials(out):
     settings=read(ROOT/'Tools/PerfectPixelUniform/native15_recipe.json')
     appearance=Appearance(reference, settings['materials'])
     palettes=np.zeros((10,4,3),np.uint8)
-    for row,name in enumerate(['wood','navy','brass']):
-        colors=appearance.palettes[name]
-        indices=np.floor(np.linspace(0,len(colors)-1,4)+.5).astype(int)
-        palettes[row]=colors[indices]
+    palettes[0] = appearance.palettes['wood']
+    # Shared shade band_offsets[2]=1 addresses the authored N15 paint ramp,
+    # while column zero remains the darker navy crease/contact colour.
+    palettes[1] = np.array([appearance.palettes['navy'][0], appearance.palettes['side'][1],
+                             appearance.palettes['navy'][1], appearance.palettes['navy'][2]])
+    palettes[2] = appearance.palettes['brass'][[0, 1, 2, 2]]
     sheet=ROOT/'Tools/Building37/Source/sheet.png'
     rgba=np.asarray(Image.open(sheet).convert('RGBA')); rgb=rgba[...,:3].astype(float)
     visible=(rgba[...,3]>127)&(rgb.max(-1)>20)
@@ -96,13 +105,27 @@ def materials(out):
         semantic_details(item,data,ids)
         position=data['position']; normal=data['normal']; rank=np.full(mask.shape,2,np.uint8)
         wood=mask&(ids==1)
+        design=item['metadata'].get('cabinet_design')
+        if design is not None:
+            # N15 wood grain belongs to the cap top. Its vertical fascia uses
+            # the material ramp without painting the same grain down the edge.
+            wood &= (data['part']==1)&(data['design_normal'][...,1]>.99)
         if wood.any():
-            p=position[wood]; n=normal[wood]
-            u=np.mod(np.where(abs(n[:,0])>.7,p[:,2],p[:,0])+1.04,2.08)/2.08
-            v=np.mod(np.where(abs(n[:,1])>.7,p[:,2],p[:,1]),.7)/.7
+            if design is not None:
+                tick=data['design_tick'][wood];profile=design['profile']
+                u=(tick[:,0]+1)/(profile['reference_width']+2)
+                v=(tick[:,2]+1)/(profile['depth']+2)
+            else:
+                p=position[wood]; n=normal[wood]
+                u=np.mod(np.where(abs(n[:,0])>.7,p[:,2],p[:,0])+1.04,2.08)/2.08
+                v=np.mod(np.where(abs(n[:,1])>.7,p[:,2],p[:,1]),.7)/.7
             samples=appearance.sample('wood',u,v)
             rank[wood]=np.argmin(np.sum((samples[:,None,:].astype(float)-palettes[0][None,:,:])**2,axis=-1),axis=1)
-        packed=np.stack([ids,rank,data['edge'].astype(np.uint8),mask.astype(np.uint8)*255],-1)
+        edge=data['edge'].astype(np.uint8)
+        if item['id']=='floor_surface':
+            from floor17 import assign_floor
+            ids,rank,edge=assign_floor(data,palettes)
+        packed=np.stack([ids,rank,edge,mask.astype(np.uint8)*255],-1)
         packed[~mask]=0
         Image.fromarray(packed,'RGBA').save(out/item['id']/'material.png')
     write(out/'material-receipt.json',{'material_labels':10,'observed_rgb_only':True,
@@ -115,29 +138,51 @@ def semantic_details(item,data,ids):
     These are material design features, not automatic reconstruction from RGB.
     """
     ident=item['id'];mask=data['mask'];p=data['position'];n=data['normal'];x,y,z=np.moveaxis(p,-1,0)
-    if ident in ['empty_counter','island_body_template','utility_bench','cleaning_cabinet']:
-        contract,_=inputs();definition=next(a for a in contract['assets'] if a['id']==ident)
-        width,height,depth=definition['size_xyz_m'];facing=definition['facing']
-        coordinate=z if facing=='-X' else x;span=depth if facing=='-X' else width
-        front=(n[...,0]<-.9) if facing=='-X' else ((n[...,2]>.9) if facing=='+Z' else (n[...,2]<-.9))
-        count=3 if ident=='empty_counter' else (2 if ident=='island_body_template' else 1)
-        pitch=span/count;phase=np.mod(coordinate+span/2,pitch)
-        line=.55/31.75;inset=max(.06,1.5/31.75)
-        bottom=.13;top=height-.16
-        panel=((abs(phase-inset)<line)|(abs(phase-(pitch-inset))<line))&(y>bottom)&(y<top)
-        panel|=((abs(y-bottom)<line)|(abs(y-top)<line))&(phase>inset)&(phase<pitch-inset)
-        ids[mask&front&panel&(ids==2)]=3
+    design=item['metadata'].get('cabinet_design')
+    if design is not None:
+        profile=design['profile'];count=design['count'];width=design['width_ticks']
+        tx,ty,tz=np.moveaxis(data['design_tick'],-1,0)
+        dn=data['design_normal'];body=mask&(data['part']==0)
+        front=body&(dn[...,2]<-.99);side=body&(dn[...,0]<-.99)
+        posts=front&((tx<1)|(tx>=width-1))
+        posts|=side&((tz<1)|(tz>=profile['depth']-1))
+        endplates=front&((tx<4)|(tx>=width-4))&((ty<4)|(ty>=64))
+        endplates|=side&((tz<4)|(tz>=profile['depth']-4))&((ty<4)|(ty>=64))
+        ids[posts|endplates]=3
+        paths=[]
+        for index in range(count):
+            start=profile['end_cap']+index*profile['module_pitch']
+            for height in (19,57):
+                ids[front&(tx>=start)&(tx<start+1)&(ty>=height)&(ty<height+4)]=3
+            vertices=[(start+3,12,0),(start+17,12,0),
+                      (start+17,58,0),(start+3,58,0)]
+            paths.extend(zip(vertices,vertices[1:]+vertices[:1]))
+        depth=profile['depth']
+        paths += [((1,8,0),(width-1,8,0)),((0,12,3),(0,12,depth-3)),
+                  ((0,12,depth-3),(0,58,depth-3)),((0,58,depth-3),(0,58,3)),
+                  ((0,58,3),(0,12,3))]
+        from geometry16 import R,U
+        scale=np.asarray(design['tick_scale_xyz']);offset=np.asarray(design['tick_offset_xyz'])
+        rotation=np.asarray(design['rotation'])
+        for a,b in paths:
+            points=(np.asarray([a,b])*scale+offset)@rotation.T
+            projected=np.stack([points@R,-points@U],-1)*item['ppu']
+            ends=np.floor(projected-np.asarray(item['origin'])).astype(int)
+            allowed=front if a[2]==b[2]==0 else side
+            for px,py in canonical_line(*ends):
+                if 0<=py<ids.shape[0] and 0<=px<ids.shape[1] and allowed[py,px]:
+                    ids[py,px]=3
     if ident=='detail_clock':
         # Flat face has a real circular geometry; ink is contained in that face.
         width,height,_=next(a['size_xyz_m'] for a in inputs()[0]['assets'] if a['id']==ident)
         dx=x;dy=y-height/2;radius=min(width,height)/2
-        hands=((abs(dx)<.5/31.75)&(dy>-.04)&(dy<radius*.63))
-        hands|=((abs(dy+dx*.5)<.6/31.75)&(dx>0)&(dx<radius*.53))
+        hands=((abs(dx)<.5/PPU)&(dy>-.04)&(dy<radius*.63))
+        hands|=((abs(dy+dx*.5)<.6/PPU)&(dx>0)&(dx<radius*.53))
         angle=np.arctan2(dy,dx);ring=(np.hypot(dx,dy)>radius*.72)&(np.hypot(dx,dy)<radius*.86)
         ticks=ring&(abs(np.sin(angle*6))<.28)
         ids[mask&(ids==4)&(hands|ticks)]=2
     if ident=='detail_poster':
-        height=.48;stem=mask&(ids==4)&(abs(z)<.45/31.75)&(y>.07)&(y<height-.07)
+        height=.48;stem=mask&(ids==4)&(abs(z)<.45/PPU)&(y>.07)&(y<height-.07)
         leaves=np.zeros(mask.shape,bool)
         for center,side in [(.15,1),(.23,-1),(.31,1),(.38,-1)]:
             leaves|=((z-side*.045)/.045)**2+((y-center)/.025)**2<1
@@ -146,24 +191,16 @@ def semantic_details(item,data,ids):
         ids[mask&(abs(n[...,1])>.9)&(abs(x)>.017)]=4
 
 def export(out):
+    from shade17 import shade_srgb
     palette=np.asarray(Image.open(out/'palette.png').convert('RGB'))
     catalog=read(out/'geometry-catalog.json'); entries=[]; pictures=[]
-    light=np.array([-.2,.84,-.5]);light/=np.linalg.norm(light)
     for item in catalog:
         ident=item['id']; data=load(out,item); mask=data['mask']
         for name in ['position','normal']:
             values=np.concatenate([data[name].astype(np.float32),mask[...,None].astype(np.float32)],-1)
             values[~mask]=0; values.astype('<f4').tofile(out/ident/(name+'.f32'))
         material=np.asarray(Image.open(out/ident/'material.png'))
-        lambert=np.maximum(np.sum(data['normal']*light,axis=-1),0)
-        band=np.minimum((np.clip(.2+.8*lambert,0,.999)*4).astype(int),3)
-        wood=material[...,0]==1
-        index=np.where(wood,np.clip(material[...,1].astype(int)+band-2,0,3),band)
-        color=palette[np.maximum(material[...,0].astype(int)-1,0),index].copy()
-        edge=material[...,2];color[(edge==1)|(edge==2)]=[6,9,13]
-        crease=edge==3
-        color[crease]=palette[np.maximum(material[...,0][crease].astype(int)-1,0),np.maximum(index[crease]-1,0)]
-        rgba=np.concatenate([color,mask[...,None].astype(np.uint8)*255],-1);rgba[~mask]=0
+        rgba=shade_srgb(material,palette,data['normal'],SHADING['reference_light_unity'])
         Image.fromarray(rgba,'RGBA').save(out/ident/'preview.png')
         entries.append({**{k:v for k,v in item.items() if k!='metadata'},'bindingPath':item['structurePath'],
             **{name+'File':ident+'/'+name+suffix for name,suffix in
@@ -179,8 +216,9 @@ def export(out):
         atlas.alpha_composite(Image.fromarray(p,'RGBA'),(x,y));draw.text((x,y+cellh-16),name,fill='white')
     atlas.save(out/'object-sheet-native.png')
     atlas.resize((atlas.width*4,atlas.height*4),Image.Resampling.NEAREST).save(out/'object-sheet-preview-x4.png')
-    write(out/'manifest.json',{'schema':'N16.metric.native.cache.v1','paletteFile':'palette.png','assets':entries,
-        'physical_pixels_per_metre':31.75,'lighting_preview_only':True,'runtime_lighting_baked':False})
+    write(out/'manifest.json',{'schema':'N17.metric.native.cache.v1','paletteFile':'palette.png','assets':entries,
+        'physical_pixels_per_metre':PPU,'lighting_preview_only':True,'runtime_lighting_baked':False,
+        'shade_contract_sha256':sha(HERE/'shading17.json')})
 
 def validate(out):
     from geometry16 import R,U
@@ -188,7 +226,7 @@ def validate(out):
     for item in read(out/'geometry-catalog.json'):
         d=load(out,item);m=d['mask'];n=d['normal'][m];p=d['position'][m]
         h,w=m.shape; yy,xx=np.indices((h,w))
-        projected=np.stack([p@R,-p@U],-1)*31.75
+        projected=np.stack([p@R,-p@U],-1)*item['ppu']
         expected=np.stack([xx[m]+.5+item['origin'][0],yy[m]+.5+item['origin'][1]],-1)
         roundtrip=float(np.max(abs(projected-expected)))
         normal_error=float(np.max(abs(np.linalg.norm(n,axis=-1)-1)))
@@ -201,8 +239,11 @@ def validate(out):
             'unit_normal_error':normal_error,'inside_declared_bounds':inside,
             'native_size':[w,h],'covered_pixels':int(m.sum()),
             'parts_visible':int(len(np.unique(d['part'][m]))),'edge_pixels':int(np.count_nonzero(d['edge']))})
-    objects=sum(not i['structurePath'] for i in read(out/'geometry-catalog.json'))
-    result={'success':all(x['success'] for x in checks) and objects==18,'object_types':objects,
+    catalog=read(out/'geometry-catalog.json')
+    objects=sum(not i['structurePath'] for i in catalog)
+    floor_count=sum(i['id']=='floor_surface' for i in catalog)
+    result={'success':all(x['success'] for x in checks) and objects==18 and floor_count==1 and len(catalog)==36,
+        'object_types':objects,'floor_surfaces':floor_count,'shared_asset_count':len(catalog),
         'asset_checks':checks,'production_resize_count':0,'artistic_perfection_claimed':False,
         'unity_integration_observed':False}
     write(out/'cpu-validation.json',result)

@@ -1,0 +1,140 @@
+[
+  {
+    "id": "floor_surface",
+    "width": 1157,
+    "height": 589,
+    "origin": [
+      -578,
+      -294
+    ],
+    "ppu": 90.50966799187809,
+    "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/Floor/Native surface",
+    "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/Floor/Native surface",
+    "bounds": [
+      [
+        -5.0,
+        -0.04,
+        -4.0
+      ],
+      [
+        5.0,
+        0.04,
+        4.0
+      ]
+    ],
+    "positionFile": "floor_surface/position.f32",
+    "normalFile": "floor_surface/normal.f32",
+    "materialFile": "floor_surface/material.png",
+    "previewFile": "floor_surface/preview.png",
+    "meshFile": "floor_surface/mesh.json",
+    "metadata": {
+      "id": "floor_surface",
+      "units": "Unity local XYZ metres, Y-up",
+      "pixels_per_metre": 90.50966799187809,
+      "front_axis": "-Z",
+      "declared_dimensions_m": [
+        10.0,
+        0.08,
+        8.0
+      ],
+      "bounds": [
+        [
+          -5.0,
+          -0.04,
+          -4.0
+        ],
+        [
+          5.0,
+          0.04,
+          4.0
+        ]
+      ],
+      "origin_projected_px": [
+        -578,
+        -294
+      ],
+      "size": [
+        1157,
+        589
+      ],
+      "parts": [
+        {
+          "id": 0,
+          "name": "floor_surface",
+          "shape": "box",
+          "material": 1,
+          "bounds_canonical_m": [
+            [
+              -5.0,
+              -0.04,
+              -4.0
+            ],
+            [
+              5.0,
+              0.04,
+              4.0
+            ]
+          ]
+        }
+      ],
+      "seams": [],
+      "R": [
+        0.7071067811865475,
+        0.0,
+        -0.7071067811865475
+      ],
+      "U": [
+        0.35355339059327373,
+        0.8660254037844386,
+        0.35355339059327373
+      ],
+      "F": [
+        0.6123724356957945,
+        -0.4999999999999999,
+        0.6123724356957945
+      ],
+      "coverage": "native pixel-centre ray hit on original horizontal floor top",
+      "perimeter_expansion_pixels": 0,
+      "normal_space": "Unity local XYZ metres",
+      "shadow_mesh": "original closed 10 x .08 x 8m floor slab, twelve triangles",
+      "glass_policy": "fridge glazing is overlay only; opaque frame and goods own primary depth",
+      "hidden_surface_policy": "explicit semantic template, not inferred source recovery",
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/Floor/Native surface",
+      "binding_selection": "active aligned Floor observed in actual GameMap1 Play Mode",
+      "normal": [
+        0.0,
+        1.0,
+        0.0
+      ],
+      "renderer_parent_building_y_m": -0.025,
+      "renderer_local_top_y_m": 0.04,
+      "building_local_top_y_m": 0.015,
+      "original_floor_local_bounds_m": [
+        [
+          -5.0,
+          -0.04,
+          -4.0
+        ],
+        [
+          5.0,
+          0.04,
+          4.0
+        ]
+      ],
+      "source": "Assets/Art/PixelShopInterior34Aligned/Source/floor-warm.png",
+      "source_sha256": "c3e065d2006e5199b1d046722b7ff971773acf5cb07fac6d8ca8119cba06df11",
+      "source_dimensions": [
+        125,
+        132
+      ],
+      "source_resize_count": 0,
+      "material_original_ppu": 127.0,
+      "material_uv_texels_per_metre": 89.80256106,
+      "material_uv_formula": "floor(repeat(local x/z * originalPPU * .70710678, width/height))",
+      "material_uv_origin": "original renderer-local X/Z zero; no translation added",
+      "source_row_convention": "Unity GetPixels32 is bottom-up; PIL row is height-1-y",
+      "material_world_uv_changed": false,
+      "new_perimeter_or_plank_lines": false
+    }
+  }
+]

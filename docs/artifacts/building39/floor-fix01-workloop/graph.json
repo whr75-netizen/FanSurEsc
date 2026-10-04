@@ -1,0 +1,220 @@
+{
+  "goal": "Repair the actually active aligned floor binding; preserve run02 and other caches",
+  "entry": "floorcalc",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "active_floor_live",
+      "source": "latest user correction; BUILDING16.md N17",
+      "text": "Actual active floor shares object native spacing and live quantized lighting",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final_gate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "floorcalc",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "scope": "only corrected active floor",
+            "previous": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\run02"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\floor_repair17.py",
+          "calc",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\floor-fix01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\floor17.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\geometry16.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\shade17.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\floor_repair17.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\unity_gate17.py"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Art/PixelShopInterior34Aligned/Source/floor-warm.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building34/calibration-oriented.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/palette.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building38/shading17.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building38/floor17.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building38/geometry16.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building38/shade17.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building38/floor_repair17.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building38/unity_gate17.py",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Shaders/World/NativeShade17.hlsl",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/preview.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/gpu-fixture.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/stock_shelf/preview.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/stock_shelf/gpu-fixture.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/floor-fix01",
+        "native17:floor-repair"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "floorcalc.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "unity_floor"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "floorcalc.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "unity_floor",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {
+        "output": {
+          "literal": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\floor-fix01"
+        },
+        "contract": {
+          "literal": "BUILDING16.md N17"
+        }
+      },
+      "parameters": {
+        "scope": "Import only the corrected floor using NativeBuilding17Importer floorOnly and Assets/Art/NativeBuilding39Floor40. Compare its actual neutral GPU fixture, bind the actually active aligned Floor only, retain the other 35 surface caches and original disabled floor, then record actual night, left/right motion and camera observations. Use the existing Unity writer; preserve the same Player/Camera."
+      },
+      "question": "Import only the corrected floor using NativeBuilding17Importer floorOnly and Assets/Art/NativeBuilding39Floor40. Compare its actual neutral GPU fixture, bind the actually active aligned Floor only, retain the other 35 surface caches and original disabled floor, then record actual night, left/right motion and camera observations. Use the existing Unity writer; preserve the same Player/Camera. Write floor_surface/gpu-fixture.png and play-observation.json in C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\floor-fix01.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "native17:floor-repair"
+      ],
+      "writes": [
+        "unity:native17-floor-integration",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/floor-fix01/play-observation.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/floor-fix01/floor_surface/gpu-fixture.png"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "unity_floor.receiptFile"
+              }
+            ]
+          },
+          "to": "final_gate"
+        }
+      ]
+    },
+    {
+      "id": "final_gate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "receipt": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\floor-fix01\\play-observation.json"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\floor_repair17.py",
+          "gate",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\floor-fix01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\floor17.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\geometry16.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\shade17.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\floor_repair17.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\unity_gate17.py"
+        ]
+      },
+      "reads": [
+        "native17:floor-repair",
+        "unity:native17-floor-integration",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/floor-fix01/play-observation.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/floor-fix01/floor_surface/gpu-fixture.png"
+      ],
+      "writes": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/floor-fix01/final-validation.json"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "final_gate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "final_gate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

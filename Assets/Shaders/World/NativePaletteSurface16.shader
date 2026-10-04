@@ -12,18 +12,19 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         _AdditionalLightStrength("Existing additional light strength", Float) = 1
         _SteppedLocalLightStrength("Existing stepped local light strength", Float) = 0.55
         _LightingBandMaximum("Irradiance at the last palette band", Float) = 1
-        [HideInInspector] _MaterialBandCounts0("Material 1 to 4 band counts", Vector) = (4,4,4,4)
+        [HideInInspector] _MaterialBandCounts0("Material 1 to 4 band counts", Vector) = (4,4,3,4)
         [HideInInspector] _MaterialBandCounts1("Material 5 to 8 band counts", Vector) = (4,4,4,4)
         [HideInInspector] _MaterialBandCounts2("Material 9 to 10 band counts", Vector) = (4,4,0,0)
         [HideInInspector] _NativeGridEnabled("Native grid translation", Float) = 1
         [HideInInspector] _NativeGridAnchorOS("Native grid anchor", Vector) = (0,0,0,0)
         [HideInInspector] _NativeGridTexelUOS("One native texel right", Vector) = (0,0,0,0)
         [HideInInspector] _NativeGridTexelVOS("One native texel up", Vector) = (0,0,0,0)
+        [Toggle] _RetainPatternContrast("Material pattern independent of lighting band", Float) = 0
         [HideInInspector] _ZWrite("Depth write", Float) = 1
         [HideInInspector] _SrcBlend("Source blend", Float) = 1
         [HideInInspector] _DstBlend("Destination blend", Float) = 0
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 0
-        [Enum(Lit,0,MaterialOnly,1,Normals,2,Irradiance,3,MainShadow,4)] _DiagnosticMode("Diagnostic", Float) = 0
+        [Enum(Lit,0,MaterialOnly,1,Normals,2,Irradiance,3,MainShadow,4,ReferenceFixture,5)] _DiagnosticMode("Diagnostic", Float) = 0
     }
     SubShader
     {
@@ -33,6 +34,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         #include "Packages/com.unity.render-pipelines.core/ShaderLibrary/GlobalSamplers.hlsl"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
         #include "Assets/Rendering/LocalLighting/SteppedLocalLightCommon.hlsl"
+        #include "Assets/Shaders/World/NativeShade17.hlsl"
 
         TEXTURE2D(_PositionMap);
         TEXTURE2D(_NormalMap);
@@ -47,6 +49,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             float4 _NativeGridAnchorOS;
             float4 _NativeGridTexelUOS;
             float4 _NativeGridTexelVOS;
+            float _RetainPatternContrast;
             float _AmbientLightStrength;
             float _MainLightStrength;
             float _AdditionalLightStrength;
@@ -239,25 +242,34 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
 
         half3 Shade(CachedSurface surface, half3 irradiance)
         {
-            float luminance = max(Luminance(irradiance), 0.0);
+            float luminance = max(dot((float3)irradiance, Native17Luminance), 0.0);
             // No fabricated minimum brightness or fixed midtone when all of
             // the existing engine/environment light contributions are zero.
             if (luminance <= 0.000001)
                 return half3(0,0,0);
             float bands = BandCount(surface.material);
-            float lightingBand = floor(saturate(luminance / max(_LightingBandMaximum, 0.000001)) * (bands - 1.0) + 0.5);
-            float column = clamp((float)surface.pattern + lightingBand - 2.0, 0.0, bands - 1.0);
+            float lightingBand = Native17LightingBand(luminance);
+            float column = Native17PaletteColumn(surface.material, surface.pattern, lightingBand, bands);
+            // A floor's intrinsic grain must not collapse into one colour when
+            // the lowest lighting band clamps all rank offsets to column zero.
+            // Keep its albedo rank and apply one of three discrete light levels.
+            float patternLight = 1.0;
+            if (_RetainPatternContrast > 0.5 && surface.material == 1u)
+            {
+                column = min((float)surface.pattern, bands - 1.0);
+                patternLight = (lightingBand + 1.0) / 3.0;
+            }
             // Hue follows actual RGB illumination, with only three intervals
             // per channel; no continuously blended native palette columns.
-            half3 tint = floor(clamp(irradiance / luminance, 0.0, 2.0) * 3.0 + 0.5) / 3.0;
+            half3 tint = Native17LightTint(irradiance, luminance);
             half3 color = PaletteColor(surface.material, column);
             // Strong silhouettes/seams are black. Surface creases keep the
             // actual material hue and a darker ramp entry, after lighting.
             if (surface.edge == 1u || surface.edge == 2u)
-                return half3(0,0,0);
+                return SRGBToLinear(Native17EdgeBlackSRGB);
             if (surface.edge == 3u)
-                color = PaletteColor(surface.material, min(column, 1.0));
-            return saturate(color * tint);
+                color = PaletteColor(surface.material, Native17CreaseColumn);
+            return saturate(color * tint * patternLight);
         }
 
         SurfaceOutput Frag(Varyings input)
@@ -266,7 +278,17 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
             CachedSurface surface = ReadSurface(input.uv);
             half mainShadow;
-            half3 irradiance = IncidentLight(surface, input.positionCS, mainShadow);
+            half3 irradiance;
+            if (_DiagnosticMode >= 4.5)
+            {
+                // The fixture is defined in the same local metre basis as the
+                // native cache; building yaw rotates both normal and light.
+                float3 referenceLightWS = normalize(TransformObjectToWorldDir(Native17ReferenceLightOS));
+                irradiance = saturate(dot(surface.normalWS, referenceLightWS)).xxx;
+                mainShadow = 1.0;
+            }
+            else
+                irradiance = IncidentLight(surface, input.positionCS, mainShadow);
             half3 color = Shade(surface, irradiance);
             if (_DiagnosticMode > 0.5 && _DiagnosticMode < 1.5)
                 color = PaletteColor(surface.material, min((float)surface.pattern, BandCount(surface.material) - 1.0));
@@ -274,7 +296,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 color = surface.normalWS * 0.5 + 0.5;
             else if (_DiagnosticMode >= 2.5 && _DiagnosticMode < 3.5)
                 color = irradiance;
-            else if (_DiagnosticMode >= 3.5)
+            else if (_DiagnosticMode >= 3.5 && _DiagnosticMode < 4.5)
                 color = mainShadow.xxx;
             SurfaceOutput output;
             output.color = half4(color * _BaseColor.rgb, _BaseColor.a);

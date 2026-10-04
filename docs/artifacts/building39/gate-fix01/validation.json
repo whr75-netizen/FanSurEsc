@@ -1,0 +1,28 @@
+{
+  "success": true,
+  "comparisons": [
+    {
+      "asset": "empty_counter",
+      "coverage_mismatch": 0,
+      "max_rgb_error": 0
+    },
+    {
+      "asset": "stock_shelf",
+      "coverage_mismatch": 0,
+      "max_rgb_error": 0
+    },
+    {
+      "asset": "floor_surface",
+      "coverage_mismatch": 0,
+      "max_rgb_error": 0
+    }
+  ],
+  "validator_only_reopen": {
+    "file": "Tools/Building38/unity_gate17.py",
+    "before_sha256": "f83324dfe8a0e433a579bd249bc511ad7466b16e6bef1d93b3687094cc30322f",
+    "after_sha256": "518256c67b9b80115b0da686198f480f5bf0717d4b718f052135fa6f0df82475",
+    "reason": "Observed 0.99999994px was inside integer tolerance but rejected by an exact >=1 lower bound; apply existing .001px tolerance consistently. Raw Unity receipt unchanged."
+  },
+  "source_receipt": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\floor-fix01\\play-observation.json",
+  "production_regeneration_count": 0
+}

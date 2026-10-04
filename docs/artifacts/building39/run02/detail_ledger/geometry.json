@@ -1,0 +1,154 @@
+{
+  "origin": [
+    -22,
+    -14
+  ],
+  "size": [
+    45,
+    27
+  ],
+  "bounds": [
+    [
+      -0.19,
+      0.0,
+      -0.1104965
+    ],
+    [
+      0.19,
+      0.02,
+      0.1104965
+    ]
+  ],
+  "metadata": {
+    "id": "detail_ledger",
+    "units": "Unity local XYZ metres, Y-up",
+    "pixels_per_metre": 90.50966799187809,
+    "front_axis": "-Z",
+    "declared_dimensions_m": [
+      0.38,
+      0.02,
+      0.220993
+    ],
+    "bounds": [
+      [
+        -0.19,
+        0.0,
+        -0.1104965
+      ],
+      [
+        0.19,
+        0.02,
+        0.1104965
+      ]
+    ],
+    "origin_projected_px": [
+      -22,
+      -14
+    ],
+    "size": [
+      45,
+      27
+    ],
+    "parts": [
+      {
+        "id": 0,
+        "name": "book pages",
+        "shape": "box",
+        "material": 4,
+        "bounds_canonical_m": [
+          [
+            -0.1862,
+            0.004,
+            -0.10828657
+          ],
+          [
+            0.1862,
+            0.016,
+            0.10828657
+          ]
+        ]
+      },
+      {
+        "id": 1,
+        "name": "ledger cover",
+        "shape": "box",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -0.19,
+            0.0,
+            -0.1104965
+          ],
+          [
+            0.19,
+            0.004,
+            0.1104965
+          ]
+        ]
+      },
+      {
+        "id": 2,
+        "name": "ledger cover",
+        "shape": "box",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -0.19,
+            0.016,
+            -0.1104965
+          ],
+          [
+            0.19,
+            0.02,
+            0.1104965
+          ]
+        ]
+      },
+      {
+        "id": 3,
+        "name": "book spine",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.0076,
+            0.0,
+            -0.1104965
+          ],
+          [
+            0.0076,
+            0.02,
+            0.1104965
+          ]
+        ]
+      }
+    ],
+    "seams": [
+      {
+        "kind": "book_spine",
+        "x": 0
+      }
+    ],
+    "R": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "U": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "F": [
+      0.6123724356957945,
+      -0.4999999999999999,
+      0.6123724356957945
+    ],
+    "coverage": "native pixel centre nearest positive finite solid hit",
+    "perimeter_expansion_pixels": 0,
+    "normal_space": "Unity local XYZ metres",
+    "shadow_mesh": "closed 16-segment/8-ring approximation of the same analytic solids",
+    "glass_policy": "fridge glazing is overlay only; opaque frame and goods own primary depth",
+    "hidden_surface_policy": "explicit semantic template, not inferred source recovery"
+  }
+}

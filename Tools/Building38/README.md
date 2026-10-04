@@ -1,6 +1,8 @@
-# N17~N27 실행 진입점
+# N17~N28 실행 진입점
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
+
+N28은 현재39 원형 caster를 그대로 재사용합니다. `NativeSurfaceGridAlignment`가 카메라별 원래 grid phase를 world δ로 계산하고, native card/cache·원형 shadow vertex·render bounds가 같은 이동을 한 번 소비합니다. 물리/mesh/원화/PPU/색은 변경하지 않습니다. `NativeShadow28Observation.FixtureCapture`는 네 실제 GPU world-position 경우, `AlignmentCapture`는 실제44pair를 관측합니다. 최종 판정은 `shadow28_gate.py`, 고정 그래프는 `shadow28/request-final.json`/`state-final.json`, 최종 실제 화면은 `shadow28/final-frame/both-on.png`입니다. 원본 재료에 자동 저장된 새 기본값의 실패와 Editor 복원 이력도 보존했습니다. centre sampling과 연속 mesh의 외곽 부분 coverage를 픽셀 단위로 완전히 같다고 판정하지 않습니다.
 
 현재N27은청색target보간/채널별반올림/흰RGB덧칠을제거하고 `albedo×(baseResponse+steppedIrradiance)`를사용합니다. 기존야간노출/이동광세단계/URP직광shadow/2px/원본은유지합니다. 일반world fullscreen은기존색증폭근사이며native/character의재료반응과구분합니다. `NativeLight27Observation.FixtureCapture`는96case의실제linear GPU값을저장하고 `light27_gate.py --fixture-only`가통합전판정합니다. 실제Play는기존N26관측기를재사용하고전체gate는 `light27_gate.py`입니다. 현재고정그래프 `light27/request.json`/`state.json`은3노드완료됐으며 최종그림은 `light27/play/both-on.png`, 이전그림은 `light27/before/both-on.png`입니다. N18CPU색실험을새표면의reference로재사용하지않습니다.
 

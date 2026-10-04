@@ -53,6 +53,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             float4 _NativeGridAnchorOS;
             float4 _NativeGridTexelUOS;
             float4 _NativeGridTexelVOS;
+            float4 _NativeRenderOffsetWS;
             float _RetainPatternContrast;
             float _ReadableNight;
             float _NativeEdgeSRGBScale;
@@ -94,7 +95,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         };
         struct SurfaceOutput
         {
-            half4 color : SV_Target;
+            float4 color : SV_Target;
             float depth : SV_Depth;
         };
 
@@ -147,7 +148,9 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             UNITY_SETUP_INSTANCE_ID(input);
             UNITY_TRANSFER_INSTANCE_ID(input, output);
             UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(output);
-            output.positionCS = SnapNativeGrid(TransformObjectToHClip(input.positionOS));
+            output.positionCS = _NativeRenderOffsetWS.w > 0.5 ?
+                TransformWorldToHClip(TransformObjectToWorld(input.positionOS) + _NativeRenderOffsetWS.xyz) :
+                SnapNativeGrid(TransformObjectToHClip(input.positionOS));
             output.uv = input.uv;
             return output;
         }
@@ -167,7 +170,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             float4 bytes = round(data * 255.0);
             clip(min(bytes.r - 1.0, 10.0 - bytes.r));
             CachedSurface result;
-            result.positionWS = TransformObjectToWorld(position.xyz);
+            result.positionWS = TransformObjectToWorld(position.xyz) + _NativeRenderOffsetWS.xyz;
             result.normalWS = TransformObjectToWorldNormal(normal.xyz);
             float4 surfaceCS = TransformWorldToHClip(result.positionWS);
             result.depth = surfaceCS.z / surfaceCS.w;
@@ -309,6 +312,13 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             UNITY_SETUP_INSTANCE_ID(input);
             UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input);
             CachedSurface surface = ReadSurface(input.uv);
+            if (_DiagnosticMode >= 8.5)
+            {
+                SurfaceOutput positionProbe;
+                positionProbe.color = float4(surface.positionWS, 1);
+                positionProbe.depth = surface.depth;
+                return positionProbe;
+            }
             half mainShadow;
             half3 irradiance;
             half3 nativeAdditiveLight = 0.0;

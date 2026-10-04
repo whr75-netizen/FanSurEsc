@@ -1,0 +1,5554 @@
+{
+  "success": false,
+  "contract": "Tools/PerfectPixelUniform/BUILDING16.md N28",
+  "mode": "full",
+  "checks": [
+    {
+      "name": "fixtureShaderErrorsZero",
+      "passed": true
+    },
+    {
+      "name": "fixtureFourCases",
+      "passed": true
+    },
+    {
+      "name": "fixtureFiniteBoundedMeasurements",
+      "passed": true,
+      "detail": {
+        "invalidIndices": []
+      }
+    },
+    {
+      "name": "fixtureExactPhaseScaleMatrix",
+      "passed": true,
+      "detail": {
+        "missingCases": [],
+        "duplicateIndices": [],
+        "phases": [
+          [
+            0.17,
+            -0.23
+          ],
+          [
+            -0.31,
+            0.41
+          ]
+        ],
+        "pixelScales": [
+          2,
+          4
+        ]
+      }
+    },
+    {
+      "name": "fixtureLegacyMisalignmentObserved",
+      "passed": true
+    },
+    {
+      "name": "integrationPairCount44",
+      "passed": true
+    },
+    {
+      "name": "integrationRequiredCodeCoverage",
+      "passed": true,
+      "detail": {
+        "missingPaths": []
+      }
+    },
+    {
+      "name": "integrationCurrentCodeHashesMatch",
+      "passed": true,
+      "detail": []
+    },
+    {
+      "name": "frozenSourceCoverage512",
+      "passed": true
+    },
+    {
+      "name": "frozenSourceActualHashesPreserved",
+      "passed": false,
+      "detail": [
+        {
+          "path": "Assets/Art/NativeBuilding39/appletray/surface.mat",
+          "reason": "hash changed",
+          "expected": "b4c9f5bb7da50094c2fa344a919af8498a9fc5b51ca1d40a0dab4f3f728a8be8",
+          "actual": "26b1646993bfab5d9288c355045cfe73b5838ffe65731885a77cfb816a97e257"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/barrel/surface.mat",
+          "reason": "hash changed",
+          "expected": "6c5c8e812bb86aa0a7ec86a2b942e9ae786792f5683dbf2494d285da22b23708",
+          "actual": "a8d4728d6a49a8652c680d5d605d72e88db535f811fd31be69537fee14b0a44a"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/cleaning_cabinet/surface.mat",
+          "reason": "hash changed",
+          "expected": "07ee084a2e0a4a776a04bf9b75f8b8247f3950de2c9c1ac2525cb26c34c66ecd",
+          "actual": "fa72033f36b88c513f18c63c1753c9ecea58961c22c877f9176dbcf345a1fc5e"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/crate/surface.mat",
+          "reason": "hash changed",
+          "expected": "0e9252143481de9f875432dfa140b2efee75629da2dac6b0a209cde48e55aab5",
+          "actual": "7c844cf781e45c3ce0080f8d5d914009cee7604bf513d0f26f6a9f0785a1f7c5"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_bin/surface.mat",
+          "reason": "hash changed",
+          "expected": "3c05c9cf8b563b97c37fce41dd431667a3b9fc6c6a671a5158e2bf074409f6e3",
+          "actual": "a3c83af3dfd65b9f401854b5c1a020c014a7c8c6be9e27ef7ca2279339254ddc"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_broom/surface.mat",
+          "reason": "hash changed",
+          "expected": "5cb323e694056282a7b5d234d794b65dff5ed98e86061c3d0cfd42aa9c8aba57",
+          "actual": "8dc438a84b861974cddf3c7c7a0799a3c308a4f3c0acc6603f825ff6808d0400"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_clock/surface.mat",
+          "reason": "hash changed",
+          "expected": "b1a1c1c711934b8b96eb9f03a3c188b128e6f16efd61bc1bdad9f09031fb089f",
+          "actual": "ab3dd53bc695928bfe9784dd83537af6c754088d96eb397935a5c9f1837b141c"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_ledger/surface.mat",
+          "reason": "hash changed",
+          "expected": "76d213572c4e2008841e70525c671e588baab80b2d3181b594ea63dd485acb23",
+          "actual": "b97f4f63234c38708e9e34b1552d41a2515b5222728442495426316e7c7e3e12"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_poster/surface.mat",
+          "reason": "hash changed",
+          "expected": "5001fbbfbcda0fa3e5f3cfae65893508dc5398e66143057fe264d0b734c8e4da",
+          "actual": "860b9746298d327e2cff7d25127f4bbff38270ff8f02f04c4f40ccf0dc1e8ef7"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/empty_counter/surface.mat",
+          "reason": "hash changed",
+          "expected": "9b51e894e7c4ee13dd9f75e9c183b861051be3d184785e0eb355e837190cbb21",
+          "actual": "6f947d57ac00883cf71b2a6d5c1d1ab163ec8d8405c8422065812dbb6864e183"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/fridge/surface.mat",
+          "reason": "hash changed",
+          "expected": "9bbc3281f967a0d42c3f1088a6998b331ea3ccb33a430db2c7eab0779d5d68eb",
+          "actual": "4553f26542adaa5f3f7c43141e28dba4402cb8274d3b5e013da568f0d9465345"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/island_body_template/surface.mat",
+          "reason": "hash changed",
+          "expected": "35c6d2ca15cbb3af0bcf78e140cf5f73a87147b2d427eaa436925373c9f1ac30",
+          "actual": "f696c15253657193b22617631a420d430ede776336e8df4e08a3242c81dffa58"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/left_shelf/surface.mat",
+          "reason": "hash changed",
+          "expected": "5ab5eea33c96904b7b8605059d4a703b6bf4dc50432d5224a561905c733cffa7",
+          "actual": "21c38468931fd9aaab01a1ae7499f519b1e423b48e851ada685e4efec0204f67"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/plant/surface.mat",
+          "reason": "hash changed",
+          "expected": "0d258c258a171386ae5399177ed9a8d1527a3ef16146760026436d55fabe13fe",
+          "actual": "d4f8c73ab1d50802160b56f3ac5e1d9d09a142db7ba7f67ff236bfe6d486c21d"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/rear_shelf/surface.mat",
+          "reason": "hash changed",
+          "expected": "14b427662bf02a6307c944f8cad42c38a437debe3dbdb1334b28c32c08fab0df",
+          "actual": "cbf2f9fbe822377813256c59afd736654419532fffba77df62f53280ba14a5ac"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/register/surface.mat",
+          "reason": "hash changed",
+          "expected": "7069a5879357bbd436c85be01038e423d52890a065ab48cb4ced73329eca221d",
+          "actual": "a2ea8cd8846c9684cededfaeb254612d99f329181556514067b40732a47d7f53"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/stock_shelf/surface.mat",
+          "reason": "hash changed",
+          "expected": "fb0763f85a7afede3b7d975315a4e31a29434051011ee2b16ae7d090ab7c7a21",
+          "actual": "8196eea5b5ddd2598d252cc6343d33832a0a919b1d20ddc7ca5ed13bbbb34810"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_Door_lintel_10/surface.mat",
+          "reason": "hash changed",
+          "expected": "8d1396a3c07284f8e578b308f584e441f809ef9ae85e07ed72738f0a149c0bd4",
+          "actual": "16dc1b3dcc8901981db376df5aafc7162b43fc81a08bb6aaa026f86175051029"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_Door_lintel_11/surface.mat",
+          "reason": "hash changed",
+          "expected": "9a18623cb5fc0e8c5d5f7a61d2c46cf0fc8856c6e7a4067ef2ae72cdd8356a21",
+          "actual": "1693dc34c98f803563b28abadbdb6494a461aa6e2e6b33b88b89672bfe573089"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_Roof___closed_opaque_volume/surface.mat",
+          "reason": "hash changed",
+          "expected": "96b176c5a0492192e394b66b8dd9851f638dac9e29cb4696c72c8ee28edeaa3a",
+          "actual": "d222f4909f500ba1ead061857f964ddbd115c1eaa2f0ff40a4b0fb29cf4b6971"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_south/surface.mat",
+          "reason": "hash changed",
+          "expected": "1732deed341c5ed1b5e27b242d0e250bf87269861861009eba7a24bb01fb1a83",
+          "actual": "2bc773ff20399837ac943f57f9c3551227aba722714a532e75bcd5482c596043"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_south_base/surface.mat",
+          "reason": "hash changed",
+          "expected": "6289b0b243e4af7ff565f9a5b5d83ec71029470b218343a10d38eb930caaf47a",
+          "actual": "0c2bb65b7cc8d999eeb86bc9e485fdef157729a22e7d5cfb2dbb9bb6b1ac3c71"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_west_lower/surface.mat",
+          "reason": "hash changed",
+          "expected": "17e38b75f888a407b560b0bc49acb6d2edcd5160e8a0cbc1f17614da6db2a7fe",
+          "actual": "01ebe389b79224465040699ae530a57d6f8d2901f948b4e00ff311de5e2dd3fe"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_west_lower_base/surface.mat",
+          "reason": "hash changed",
+          "expected": "5cdb2d032a7016ecd41f1fee9329082261188048c0514a05d8c1b78552a03af5",
+          "actual": "84a7f244b9dd8035955ebb13576dd8a9398cd7346d2c4ccf2f14ed7209688bf1"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_west_upper/surface.mat",
+          "reason": "hash changed",
+          "expected": "4d7ee081937f61bca42fb0c36ddce7b52d906ba34ffc60c6a109225096cebe3b",
+          "actual": "30b0ff33e9b3db3fe7b7a9ea48cf2fa188509f9fb3ce793279f8e50b7978e12d"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_west_upper_base/surface.mat",
+          "reason": "hash changed",
+          "expected": "70ac6ed848fa30fa4b9cbe5b8d8aa671cd58657e7ef2be133fe80ad4549e5231",
+          "actual": "70a3a31e1e4453d0db8f897e3843101a2d45ce21be37aeb58f61ded683284d37"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_back/surface.mat",
+          "reason": "hash changed",
+          "expected": "51006cfab4245f2841340b4a0604f467a37d30b37fd574775849d86b3ea2a19c",
+          "actual": "412598d724c27381e2f42fbe673d770816580d5e569beaafdc6d5c83df516015"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_front_left/surface.mat",
+          "reason": "hash changed",
+          "expected": "6026f0199f9aa68a4b51ca4fd0d42218bac37af660a6d9e45ea22cd48d01d6dc",
+          "actual": "cb04cbeee0cc06de45f534256f44035e5770686680adb6bd2d7adc38fa962138"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_front_left_base/surface.mat",
+          "reason": "hash changed",
+          "expected": "83285d9574787c9f08296e4728cb0a332fe61adc8a1e2ef06a5afe5057b4c30d",
+          "actual": "fb6fdb9ee41ef689c41cc18472d69ebedcbc3dc128e92ef3ca419ab362ed81fe"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_front_right/surface.mat",
+          "reason": "hash changed",
+          "expected": "a660ed7c6f12994cc90526633ca6726ad5a8a6432eba7852fee4c350df4b6af3",
+          "actual": "9b0dd7a418fe849e92007809b7ed34df52a1dfb861480a160425d52fefa750f3"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_front_right_base/surface.mat",
+          "reason": "hash changed",
+          "expected": "8fcfe72295e80a1b72942ba00137acab3be334741cc604373708505235f7c4e0",
+          "actual": "771063680bcfe0d5586f8b0a82b09aee1dd7b639b199e2dd4116486fc8cc288c"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_left/surface.mat",
+          "reason": "hash changed",
+          "expected": "e24fd5bb1abb5818d169fb274a9977795012f00a90e5ed4c783774cdc50bafc1",
+          "actual": "7329cf833bd474e9c4323489e546fec8e06a79b87575a756b7dbdb00f3e4f14e"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_left_base/surface.mat",
+          "reason": "hash changed",
+          "expected": "dfec4ffb06fa30e83add43a86d3f45d2cb9b2bb47015fdb2710f16281f30b732",
+          "actual": "16173201db6c99f17a152ea1cde34e82ae75a700203023537afb9d35b3027b93"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_right/surface.mat",
+          "reason": "hash changed",
+          "expected": "e5d2299b29998010aa8ba85ebaf58858deee3860113f65653611923abd33f04a",
+          "actual": "855faa6edd93c7a6d66cc1c3d957600bfe79ebd393744d5fab7e43e6f366801c"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/utility_bench/surface.mat",
+          "reason": "hash changed",
+          "expected": "71fa851a0bd9f525953c250405816996bc257f480ac6664a08d7864c4e7a8abb",
+          "actual": "5693011a0af7bc3a826aabcae37b2bc9fb9ff0a7b97de6cdc5d91ff169b7cef5"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39Floor40/floor_surface/surface.mat",
+          "reason": "hash changed",
+          "expected": "f5d77b6547c0d236e36200ad5895b5229c2fe74d1ef40d17ab28edea03fa65d2",
+          "actual": "d525e07a94618e3a483ada0adf7d51c65e95057de8f914ba3e0dc633f2570412"
+        }
+      ]
+    },
+    {
+      "name": "frozenGeometry194",
+      "passed": true
+    },
+    {
+      "name": "frozenMovingBaseline",
+      "passed": true
+    },
+    {
+      "name": "frozenBaselineFile:baseline-geometry.txt",
+      "passed": true
+    },
+    {
+      "name": "frozenBaselineFile:baseline-moving.json",
+      "passed": false
+    },
+    {
+      "name": "playAlignment:rendererCount",
+      "passed": true
+    },
+    {
+      "name": "playAlignment:pairCount",
+      "passed": true
+    },
+    {
+      "name": "playAlignmentShaderErrorsZero",
+      "passed": true
+    },
+    {
+      "name": "playPairOffsetAligned",
+      "passed": true
+    },
+    {
+      "name": "playSharedProjectionAligned",
+      "passed": true
+    },
+    {
+      "name": "playLegacyMisalignmentObserved",
+      "passed": true
+    },
+    {
+      "name": "N26.actualPlay",
+      "passed": true
+    },
+    {
+      "name": "N26.samePlayer",
+      "passed": true
+    },
+    {
+      "name": "N26.sameCamera",
+      "passed": true
+    },
+    {
+      "name": "N26.nativePixelsOnScreen",
+      "passed": true
+    },
+    {
+      "name": "N26.shaderErrors",
+      "passed": true
+    },
+    {
+      "name": "N26.roomLampCountPlay",
+      "passed": true
+    },
+    {
+      "name": "N26.roomLampCountEdit",
+      "passed": true
+    },
+    {
+      "name": "N26.pairedDirectLightCount",
+      "passed": true
+    },
+    {
+      "name": "N26.directPairsValidPlay",
+      "passed": true
+    },
+    {
+      "name": "N26.directPairsValidEdit",
+      "passed": true
+    },
+    {
+      "name": "N26.editMode",
+      "passed": true
+    },
+    {
+      "name": "N26.sceneClean",
+      "passed": true
+    },
+    {
+      "name": "N26.sceneSaved",
+      "passed": true
+    },
+    {
+      "name": "N26.geometryPreservedPlay",
+      "passed": true
+    },
+    {
+      "name": "N26.geometryPreservedEdit",
+      "passed": true
+    },
+    {
+      "name": "N26.movingPreservedPlay",
+      "passed": true
+    },
+    {
+      "name": "N26.movingPreservedEdit",
+      "passed": true
+    },
+    {
+      "name": "N26.roomFillLinear",
+      "passed": true
+    },
+    {
+      "name": "N26.insideFarFillLinear",
+      "passed": true
+    },
+    {
+      "name": "N26.outsideFillLinear",
+      "passed": true
+    },
+    {
+      "name": "N26.pixelOrigin",
+      "passed": true
+    },
+    {
+      "name": "N26.movingBaselinePresent",
+      "passed": true
+    },
+    {
+      "name": "N26.movingWhite",
+      "passed": true
+    },
+    {
+      "name": "N26.movingIntensity",
+      "passed": true
+    },
+    {
+      "name": "N26.movingRadius",
+      "passed": true
+    },
+    {
+      "name": "N26.movingSurfaceBands",
+      "passed": true
+    },
+    {
+      "name": "N26.movingLocalRole",
+      "passed": true
+    },
+    {
+      "name": "N26.movingNativeCellSize",
+      "passed": true
+    },
+    {
+      "name": "N26.movingValuesPreservedPlay",
+      "passed": true
+    },
+    {
+      "name": "N26.movingValuesPreservedEdit",
+      "passed": true
+    },
+    {
+      "name": "N26.geometryBaselinePresent",
+      "passed": true
+    },
+    {
+      "name": "N26.sourceHashCoverage193",
+      "passed": true
+    },
+    {
+      "name": "N26.sourceArtHashesPreserved",
+      "passed": false,
+      "detail": [
+        {
+          "path": "Assets/Art/NativeBuilding39/appletray/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/barrel/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/cleaning_cabinet/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/crate/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_bin/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_broom/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_clock/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_ledger/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/detail_poster/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/empty_counter/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/fridge/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/island_body_template/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/left_shelf/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/plant/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/rear_shelf/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/register/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/stock_shelf/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_Door_lintel_10/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_Door_lintel_11/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_Roof___closed_opaque_volume/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_south/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_south_base/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_west_lower/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_west_lower_base/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_west_upper/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_stock_west_upper_base/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_back/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_front_left/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_front_left_base/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_front_right/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_front_right_base/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_left/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_left_base/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/structure_wall_right/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39/utility_bench/surface.mat",
+          "reason": "hash changed"
+        },
+        {
+          "path": "Assets/Art/NativeBuilding39Floor40/floor_surface/surface.mat",
+          "reason": "hash changed"
+        }
+      ]
+    },
+    {
+      "name": "N26.identicalImageDimensions",
+      "passed": true
+    },
+    {
+      "name": "N26.lampsActualPixelChange",
+      "passed": true
+    },
+    {
+      "name": "N26.movingActualPixelChange",
+      "passed": true
+    },
+    {
+      "name": "N26.bothSourcesVisible",
+      "passed": true
+    },
+    {
+      "name": "N26.shadowActualPixelChange",
+      "passed": true
+    },
+    {
+      "name": "N26.shadowReceiptPixelChange",
+      "passed": true
+    },
+    {
+      "name": "N26.gpuWhiteRoomFill",
+      "passed": true
+    },
+    {
+      "name": "N26.worldPixelProbesPresent",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord0",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord1",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord2",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord3",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord4",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord5",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord6",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord7",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord8",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord9",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord10",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord11",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord12",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord13",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord14",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord15",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord16",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord17",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord18",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord19",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord20",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord21",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord22",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord23",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord24",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord25",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord26",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord27",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord28",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord29",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord30",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord31",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord32",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord33",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord34",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord35",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord36",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord37",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord38",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord39",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord40",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord41",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord42",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord43",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord44",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord45",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord46",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord47",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord48",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord49",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord50",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord51",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord52",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord53",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord54",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord55",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord56",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord57",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord58",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord59",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord60",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord61",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord62",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord63",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord64",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord65",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord66",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord67",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord68",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord69",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord70",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord71",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord72",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord73",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord74",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord75",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord76",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord77",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord78",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord79",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord80",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord81",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord82",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord83",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord84",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord85",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord86",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord87",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord88",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord89",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord90",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord91",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord92",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord93",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord94",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord95",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord96",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord97",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord98",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord99",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord100",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord101",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord102",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord103",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord104",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord105",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord106",
+      "passed": true
+    },
+    {
+      "name": "N26.probeRecord107",
+      "passed": true
+    },
+    {
+      "name": "N26.knownInteriorNativeFill",
+      "passed": true
+    },
+    {
+      "name": "N26.knownFarInteriorNativeFill",
+      "passed": true
+    },
+    {
+      "name": "N26.knownInteriorFillOffBlack",
+      "passed": true
+    },
+    {
+      "name": "N26.roomFillFloorNativeGrid0",
+      "passed": true,
+      "detail": {
+        "boundsXY": [
+          200,
+          400,
+          400,
+          580
+        ],
+        "phaseXY": [
+          0,
+          1
+        ],
+        "blockCount": 8900,
+        "mismatchedBlocks": 0,
+        "distinctRGB": 5
+      }
+    },
+    {
+      "name": "N26.roomFillFloorNativeGrid1",
+      "passed": true,
+      "detail": {
+        "boundsXY": [
+          720,
+          850,
+          350,
+          700
+        ],
+        "phaseXY": [
+          0,
+          1
+        ],
+        "blockCount": 11310,
+        "mismatchedBlocks": 0,
+        "distinctRGB": 5
+      }
+    }
+  ],
+  "fixture": {
+    "caseCount": 4,
+    "validCaseCount": 4,
+    "cases": [
+      {
+        "phase": [
+          0.17000000178813934,
+          -0.23000000417232513
+        ],
+        "pixelScale": 2,
+        "hitSamples": 90797,
+        "legacyProjectionErrorPx": 0.34849441051483154,
+        "sharedProjectionErrorPx": 6.823938019806519e-05,
+        "pairOffsetErrorM": 0.0,
+        "hitProjectionErrorPx": 0.002677211072295904
+      },
+      {
+        "phase": [
+          0.17000000178813934,
+          -0.23000000417232513
+        ],
+        "pixelScale": 4,
+        "hitSamples": 363640,
+        "legacyProjectionErrorPx": 0.6969985365867615,
+        "sharedProjectionErrorPx": 0.00013647876039613038,
+        "pairOffsetErrorM": 0.0,
+        "hitProjectionErrorPx": 0.0024264834355562925
+      },
+      {
+        "phase": [
+          -0.3100000023841858,
+          0.4099999964237213
+        ],
+        "pixelScale": 2,
+        "hitSamples": 90797,
+        "legacyProjectionErrorPx": 1.0093555450439453,
+        "sharedProjectionErrorPx": 8.63167442730628e-05,
+        "pairOffsetErrorM": 0.0,
+        "hitProjectionErrorPx": 0.0025895023718476295
+      },
+      {
+        "phase": [
+          -0.3100000023841858,
+          0.4099999964237213
+        ],
+        "pixelScale": 4,
+        "hitSamples": 363640,
+        "legacyProjectionErrorPx": 2.018666982650757,
+        "sharedProjectionErrorPx": 0.000152587890625,
+        "pairOffsetErrorM": 0.0,
+        "hitProjectionErrorPx": 0.002383498940616846
+      }
+    ],
+    "maximumSharedProjectionErrorPx": 0.000152587890625,
+    "maximumLegacyProjectionErrorPx": 2.018666982650757,
+    "maximumPairOffsetErrorM": 0.0,
+    "minimumHitSamples": 90797,
+    "maximumHitProjectionErrorPx": 0.002677211072295904
+  },
+  "integrationChecked": true,
+  "integrationVerifiedCodePaths": [
+    "Assets/Shaders/World/NativePaletteSurface16.shader",
+    "Assets/Shaders/World/NativeShadow28.shader",
+    "Assets/Scripts/WorldGeneration/NativeSurfaceGridAlignment.cs",
+    "Assets/Editor/NativeShadow28Observation.cs",
+    "Assets/Editor/NativeShadow28Fixture.shader"
+  ],
+  "sourceFilesPreserved": 476,
+  "geometryCount": 194,
+  "playAlignment": {
+    "rendererCount": 44,
+    "pairCount": 44,
+    "shaderErrors": 0,
+    "maximumPairOffsetErrorM": 0.0,
+    "maximumSharedProjectionErrorPx": 0.0,
+    "maximumLegacyProjectionErrorPx": 2.4332947731018066
+  },
+  "room26": {
+    "success": false,
+    "contract": "Tools/PerfectPixelUniform/BUILDING16.md N26",
+    "checks": [
+      {
+        "name": "actualPlay",
+        "passed": true
+      },
+      {
+        "name": "samePlayer",
+        "passed": true
+      },
+      {
+        "name": "sameCamera",
+        "passed": true
+      },
+      {
+        "name": "nativePixelsOnScreen",
+        "passed": true
+      },
+      {
+        "name": "shaderErrors",
+        "passed": true
+      },
+      {
+        "name": "roomLampCountPlay",
+        "passed": true
+      },
+      {
+        "name": "roomLampCountEdit",
+        "passed": true
+      },
+      {
+        "name": "pairedDirectLightCount",
+        "passed": true
+      },
+      {
+        "name": "directPairsValidPlay",
+        "passed": true
+      },
+      {
+        "name": "directPairsValidEdit",
+        "passed": true
+      },
+      {
+        "name": "editMode",
+        "passed": true
+      },
+      {
+        "name": "sceneClean",
+        "passed": true
+      },
+      {
+        "name": "sceneSaved",
+        "passed": true
+      },
+      {
+        "name": "geometryPreservedPlay",
+        "passed": true
+      },
+      {
+        "name": "geometryPreservedEdit",
+        "passed": true
+      },
+      {
+        "name": "movingPreservedPlay",
+        "passed": true
+      },
+      {
+        "name": "movingPreservedEdit",
+        "passed": true
+      },
+      {
+        "name": "roomFillLinear",
+        "passed": true
+      },
+      {
+        "name": "insideFarFillLinear",
+        "passed": true
+      },
+      {
+        "name": "outsideFillLinear",
+        "passed": true
+      },
+      {
+        "name": "pixelOrigin",
+        "passed": true
+      },
+      {
+        "name": "movingBaselinePresent",
+        "passed": true
+      },
+      {
+        "name": "movingWhite",
+        "passed": true
+      },
+      {
+        "name": "movingIntensity",
+        "passed": true
+      },
+      {
+        "name": "movingRadius",
+        "passed": true
+      },
+      {
+        "name": "movingSurfaceBands",
+        "passed": true
+      },
+      {
+        "name": "movingLocalRole",
+        "passed": true
+      },
+      {
+        "name": "movingNativeCellSize",
+        "passed": true
+      },
+      {
+        "name": "movingValuesPreservedPlay",
+        "passed": true
+      },
+      {
+        "name": "movingValuesPreservedEdit",
+        "passed": true
+      },
+      {
+        "name": "geometryBaselinePresent",
+        "passed": true
+      },
+      {
+        "name": "sourceHashCoverage193",
+        "passed": true
+      },
+      {
+        "name": "sourceArtHashesPreserved",
+        "passed": false,
+        "detail": [
+          {
+            "path": "Assets/Art/NativeBuilding39/appletray/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/barrel/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/cleaning_cabinet/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/crate/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/detail_bin/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/detail_broom/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/detail_clock/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/detail_ledger/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/detail_poster/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/empty_counter/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/fridge/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/island_body_template/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/left_shelf/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/plant/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/rear_shelf/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/register/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/stock_shelf/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_Door_lintel_10/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_Door_lintel_11/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_Roof___closed_opaque_volume/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_stock_south/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_stock_south_base/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_stock_west_lower/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_stock_west_lower_base/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_stock_west_upper/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_stock_west_upper_base/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_wall_back/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_wall_front_left/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_wall_front_left_base/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_wall_front_right/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_wall_front_right_base/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_wall_left/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_wall_left_base/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/structure_wall_right/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39/utility_bench/surface.mat",
+            "reason": "hash changed"
+          },
+          {
+            "path": "Assets/Art/NativeBuilding39Floor40/floor_surface/surface.mat",
+            "reason": "hash changed"
+          }
+        ]
+      },
+      {
+        "name": "identicalImageDimensions",
+        "passed": true
+      },
+      {
+        "name": "lampsActualPixelChange",
+        "passed": true
+      },
+      {
+        "name": "movingActualPixelChange",
+        "passed": true
+      },
+      {
+        "name": "bothSourcesVisible",
+        "passed": true
+      },
+      {
+        "name": "shadowActualPixelChange",
+        "passed": true
+      },
+      {
+        "name": "shadowReceiptPixelChange",
+        "passed": true
+      },
+      {
+        "name": "gpuWhiteRoomFill",
+        "passed": true
+      },
+      {
+        "name": "worldPixelProbesPresent",
+        "passed": true
+      },
+      {
+        "name": "probeRecord0",
+        "passed": true
+      },
+      {
+        "name": "probeRecord1",
+        "passed": true
+      },
+      {
+        "name": "probeRecord2",
+        "passed": true
+      },
+      {
+        "name": "probeRecord3",
+        "passed": true
+      },
+      {
+        "name": "probeRecord4",
+        "passed": true
+      },
+      {
+        "name": "probeRecord5",
+        "passed": true
+      },
+      {
+        "name": "probeRecord6",
+        "passed": true
+      },
+      {
+        "name": "probeRecord7",
+        "passed": true
+      },
+      {
+        "name": "probeRecord8",
+        "passed": true
+      },
+      {
+        "name": "probeRecord9",
+        "passed": true
+      },
+      {
+        "name": "probeRecord10",
+        "passed": true
+      },
+      {
+        "name": "probeRecord11",
+        "passed": true
+      },
+      {
+        "name": "probeRecord12",
+        "passed": true
+      },
+      {
+        "name": "probeRecord13",
+        "passed": true
+      },
+      {
+        "name": "probeRecord14",
+        "passed": true
+      },
+      {
+        "name": "probeRecord15",
+        "passed": true
+      },
+      {
+        "name": "probeRecord16",
+        "passed": true
+      },
+      {
+        "name": "probeRecord17",
+        "passed": true
+      },
+      {
+        "name": "probeRecord18",
+        "passed": true
+      },
+      {
+        "name": "probeRecord19",
+        "passed": true
+      },
+      {
+        "name": "probeRecord20",
+        "passed": true
+      },
+      {
+        "name": "probeRecord21",
+        "passed": true
+      },
+      {
+        "name": "probeRecord22",
+        "passed": true
+      },
+      {
+        "name": "probeRecord23",
+        "passed": true
+      },
+      {
+        "name": "probeRecord24",
+        "passed": true
+      },
+      {
+        "name": "probeRecord25",
+        "passed": true
+      },
+      {
+        "name": "probeRecord26",
+        "passed": true
+      },
+      {
+        "name": "probeRecord27",
+        "passed": true
+      },
+      {
+        "name": "probeRecord28",
+        "passed": true
+      },
+      {
+        "name": "probeRecord29",
+        "passed": true
+      },
+      {
+        "name": "probeRecord30",
+        "passed": true
+      },
+      {
+        "name": "probeRecord31",
+        "passed": true
+      },
+      {
+        "name": "probeRecord32",
+        "passed": true
+      },
+      {
+        "name": "probeRecord33",
+        "passed": true
+      },
+      {
+        "name": "probeRecord34",
+        "passed": true
+      },
+      {
+        "name": "probeRecord35",
+        "passed": true
+      },
+      {
+        "name": "probeRecord36",
+        "passed": true
+      },
+      {
+        "name": "probeRecord37",
+        "passed": true
+      },
+      {
+        "name": "probeRecord38",
+        "passed": true
+      },
+      {
+        "name": "probeRecord39",
+        "passed": true
+      },
+      {
+        "name": "probeRecord40",
+        "passed": true
+      },
+      {
+        "name": "probeRecord41",
+        "passed": true
+      },
+      {
+        "name": "probeRecord42",
+        "passed": true
+      },
+      {
+        "name": "probeRecord43",
+        "passed": true
+      },
+      {
+        "name": "probeRecord44",
+        "passed": true
+      },
+      {
+        "name": "probeRecord45",
+        "passed": true
+      },
+      {
+        "name": "probeRecord46",
+        "passed": true
+      },
+      {
+        "name": "probeRecord47",
+        "passed": true
+      },
+      {
+        "name": "probeRecord48",
+        "passed": true
+      },
+      {
+        "name": "probeRecord49",
+        "passed": true
+      },
+      {
+        "name": "probeRecord50",
+        "passed": true
+      },
+      {
+        "name": "probeRecord51",
+        "passed": true
+      },
+      {
+        "name": "probeRecord52",
+        "passed": true
+      },
+      {
+        "name": "probeRecord53",
+        "passed": true
+      },
+      {
+        "name": "probeRecord54",
+        "passed": true
+      },
+      {
+        "name": "probeRecord55",
+        "passed": true
+      },
+      {
+        "name": "probeRecord56",
+        "passed": true
+      },
+      {
+        "name": "probeRecord57",
+        "passed": true
+      },
+      {
+        "name": "probeRecord58",
+        "passed": true
+      },
+      {
+        "name": "probeRecord59",
+        "passed": true
+      },
+      {
+        "name": "probeRecord60",
+        "passed": true
+      },
+      {
+        "name": "probeRecord61",
+        "passed": true
+      },
+      {
+        "name": "probeRecord62",
+        "passed": true
+      },
+      {
+        "name": "probeRecord63",
+        "passed": true
+      },
+      {
+        "name": "probeRecord64",
+        "passed": true
+      },
+      {
+        "name": "probeRecord65",
+        "passed": true
+      },
+      {
+        "name": "probeRecord66",
+        "passed": true
+      },
+      {
+        "name": "probeRecord67",
+        "passed": true
+      },
+      {
+        "name": "probeRecord68",
+        "passed": true
+      },
+      {
+        "name": "probeRecord69",
+        "passed": true
+      },
+      {
+        "name": "probeRecord70",
+        "passed": true
+      },
+      {
+        "name": "probeRecord71",
+        "passed": true
+      },
+      {
+        "name": "probeRecord72",
+        "passed": true
+      },
+      {
+        "name": "probeRecord73",
+        "passed": true
+      },
+      {
+        "name": "probeRecord74",
+        "passed": true
+      },
+      {
+        "name": "probeRecord75",
+        "passed": true
+      },
+      {
+        "name": "probeRecord76",
+        "passed": true
+      },
+      {
+        "name": "probeRecord77",
+        "passed": true
+      },
+      {
+        "name": "probeRecord78",
+        "passed": true
+      },
+      {
+        "name": "probeRecord79",
+        "passed": true
+      },
+      {
+        "name": "probeRecord80",
+        "passed": true
+      },
+      {
+        "name": "probeRecord81",
+        "passed": true
+      },
+      {
+        "name": "probeRecord82",
+        "passed": true
+      },
+      {
+        "name": "probeRecord83",
+        "passed": true
+      },
+      {
+        "name": "probeRecord84",
+        "passed": true
+      },
+      {
+        "name": "probeRecord85",
+        "passed": true
+      },
+      {
+        "name": "probeRecord86",
+        "passed": true
+      },
+      {
+        "name": "probeRecord87",
+        "passed": true
+      },
+      {
+        "name": "probeRecord88",
+        "passed": true
+      },
+      {
+        "name": "probeRecord89",
+        "passed": true
+      },
+      {
+        "name": "probeRecord90",
+        "passed": true
+      },
+      {
+        "name": "probeRecord91",
+        "passed": true
+      },
+      {
+        "name": "probeRecord92",
+        "passed": true
+      },
+      {
+        "name": "probeRecord93",
+        "passed": true
+      },
+      {
+        "name": "probeRecord94",
+        "passed": true
+      },
+      {
+        "name": "probeRecord95",
+        "passed": true
+      },
+      {
+        "name": "probeRecord96",
+        "passed": true
+      },
+      {
+        "name": "probeRecord97",
+        "passed": true
+      },
+      {
+        "name": "probeRecord98",
+        "passed": true
+      },
+      {
+        "name": "probeRecord99",
+        "passed": true
+      },
+      {
+        "name": "probeRecord100",
+        "passed": true
+      },
+      {
+        "name": "probeRecord101",
+        "passed": true
+      },
+      {
+        "name": "probeRecord102",
+        "passed": true
+      },
+      {
+        "name": "probeRecord103",
+        "passed": true
+      },
+      {
+        "name": "probeRecord104",
+        "passed": true
+      },
+      {
+        "name": "probeRecord105",
+        "passed": true
+      },
+      {
+        "name": "probeRecord106",
+        "passed": true
+      },
+      {
+        "name": "probeRecord107",
+        "passed": true
+      },
+      {
+        "name": "knownInteriorNativeFill",
+        "passed": true
+      },
+      {
+        "name": "knownFarInteriorNativeFill",
+        "passed": true
+      },
+      {
+        "name": "knownInteriorFillOffBlack",
+        "passed": true
+      },
+      {
+        "name": "roomFillFloorNativeGrid0",
+        "passed": true,
+        "detail": {
+          "boundsXY": [
+            200,
+            400,
+            400,
+            580
+          ],
+          "phaseXY": [
+            0,
+            1
+          ],
+          "blockCount": 8900,
+          "mismatchedBlocks": 0,
+          "distinctRGB": 5
+        }
+      },
+      {
+        "name": "roomFillFloorNativeGrid1",
+        "passed": true,
+        "detail": {
+          "boundsXY": [
+            720,
+            850,
+            350,
+            700
+          ],
+          "phaseXY": [
+            0,
+            1
+          ],
+          "blockCount": 11310,
+          "mismatchedBlocks": 0,
+          "distinctRGB": 5
+        }
+      }
+    ],
+    "movingBaseline": {
+      "color": {
+        "r": 1.0,
+        "g": 1.0,
+        "b": 1.0,
+        "a": 1.0
+      },
+      "intensity": 0.4000000059604645,
+      "radius": 5.0,
+      "worldCellSize": 0.011048543266952038,
+      "surfaceBands": 3,
+      "role": 0
+    },
+    "geometryBaselineCount": 194,
+    "sourceArtFilesPreserved": 476,
+    "imageDimensions": {
+      "all-off.png": [
+        1114,
+        857
+      ],
+      "lamps-only.png": [
+        1114,
+        857
+      ],
+      "moving-only.png": [
+        1114,
+        857
+      ],
+      "both-on.png": [
+        1114,
+        857
+      ],
+      "lamps-no-shadows.png": [
+        1114,
+        857
+      ],
+      "gpu-room-fill.png": [
+        1114,
+        857
+      ],
+      "gpu-room-fill-off.png": [
+        1114,
+        857
+      ]
+    },
+    "changedPixels": {
+      "lampsOnlyVsAllOff": 788413,
+      "movingOnlyVsAllOff": 312234,
+      "bothVsLampsOnly": 313948,
+      "bothVsMovingOnly": 788475,
+      "shadowsOnVsOff": 151212
+    },
+    "gpuWhiteTargetPixels": 432136,
+    "gpuProbes": [
+      {
+        "index": 0,
+        "world": [
+          -15.67284870147705,
+          0.15000000596046448,
+          5.108602523803711
+        ],
+        "pixel": [
+          489,
+          838
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 1,
+        "world": [
+          -14.976484298706055,
+          0.15000000596046448,
+          5.231390953063965
+        ],
+        "pixel": [
+          617,
+          838
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 2,
+        "world": [
+          -15.38606071472168,
+          0.15000000596046448,
+          5.518178939819336
+        ],
+        "pixel": [
+          553,
+          806
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 3,
+        "world": [
+          -15.795637130737305,
+          0.15000000596046448,
+          5.804966926574707
+        ],
+        "pixel": [
+          489,
+          774
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 4,
+        "world": [
+          -18.662670135498047,
+          0.15000000596046448,
+          7.812484264373779
+        ],
+        "pixel": [
+          41,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 5,
+        "world": [
+          -14.280119895935059,
+          0.15000000596046448,
+          5.354178428649902
+        ],
+        "pixel": [
+          745,
+          838
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 6,
+        "world": [
+          -14.689696311950684,
+          0.15000000596046448,
+          5.640966415405273
+        ],
+        "pixel": [
+          681,
+          806
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 7,
+        "world": [
+          -15.099272727966309,
+          0.15000000596046448,
+          5.927754878997803
+        ],
+        "pixel": [
+          617,
+          774
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 8,
+        "world": [
+          -15.508848190307617,
+          0.15000000596046448,
+          6.214543342590332
+        ],
+        "pixel": [
+          553,
+          742
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 9,
+        "world": [
+          -15.918424606323242,
+          0.15000000596046448,
+          6.501331329345703
+        ],
+        "pixel": [
+          489,
+          710
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 10,
+        "world": [
+          -16.328001022338867,
+          0.15000000596046448,
+          6.788119316101074
+        ],
+        "pixel": [
+          425,
+          678
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          102,
+          104,
+          108
+        ],
+        "offRGB": [
+          4,
+          12,
+          32
+        ],
+        "onLinearRGB": [
+          0.13286832155381798,
+          0.13843161503245183,
+          0.14995978981060856
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 11,
+        "world": [
+          -16.737577438354492,
+          0.15000000596046448,
+          7.074907302856445
+        ],
+        "pixel": [
+          361,
+          646
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 12,
+        "world": [
+          -17.147151947021484,
+          0.15000000596046448,
+          7.361695766448975
+        ],
+        "pixel": [
+          297,
+          614
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 13,
+        "world": [
+          -17.55672836303711,
+          0.15000000596046448,
+          7.648484230041504
+        ],
+        "pixel": [
+          233,
+          582
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 14,
+        "world": [
+          -17.966304779052734,
+          0.15000000596046448,
+          7.935272216796875
+        ],
+        "pixel": [
+          169,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 15,
+        "world": [
+          -18.37588119506836,
+          0.15000000596046448,
+          8.222060203552246
+        ],
+        "pixel": [
+          105,
+          518
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 16,
+        "world": [
+          -18.785457611083984,
+          0.15000000596046448,
+          8.508848190307617
+        ],
+        "pixel": [
+          41,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 17,
+        "world": [
+          -13.993331909179688,
+          0.15000000596046448,
+          5.763754367828369
+        ],
+        "pixel": [
+          809,
+          806
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 18,
+        "world": [
+          -14.402908325195312,
+          0.15000000596046448,
+          6.050542831420898
+        ],
+        "pixel": [
+          745,
+          774
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 19,
+        "world": [
+          -14.812484741210938,
+          0.15000000596046448,
+          6.3373308181762695
+        ],
+        "pixel": [
+          681,
+          742
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 20,
+        "world": [
+          -15.222060203552246,
+          0.15000000596046448,
+          6.624118804931641
+        ],
+        "pixel": [
+          617,
+          710
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 21,
+        "world": [
+          -15.631636619567871,
+          0.15000000596046448,
+          6.91090726852417
+        ],
+        "pixel": [
+          553,
+          678
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 22,
+        "world": [
+          -16.04121208190918,
+          0.15000000596046448,
+          7.197695255279541
+        ],
+        "pixel": [
+          489,
+          646
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 23,
+        "world": [
+          -16.450788497924805,
+          0.15000000596046448,
+          7.48448371887207
+        ],
+        "pixel": [
+          425,
+          614
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 24,
+        "world": [
+          -16.86036491394043,
+          0.15000000596046448,
+          7.771271705627441
+        ],
+        "pixel": [
+          361,
+          582
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 25,
+        "world": [
+          -17.269941329956055,
+          0.15000000596046448,
+          8.058059692382812
+        ],
+        "pixel": [
+          297,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 26,
+        "world": [
+          -17.679515838623047,
+          0.15000000596046448,
+          8.3448486328125
+        ],
+        "pixel": [
+          233,
+          518
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 27,
+        "world": [
+          -18.089092254638672,
+          0.15000000596046448,
+          8.631636619567871
+        ],
+        "pixel": [
+          169,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 28,
+        "world": [
+          -13.296968460083008,
+          0.15000000596046448,
+          5.886542797088623
+        ],
+        "pixel": [
+          937,
+          806
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          2,
+          6,
+          22
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.000607053967097675,
+          0.001821161901293025,
+          0.008023192985384994
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 29,
+        "world": [
+          -13.706543922424316,
+          0.15000000596046448,
+          6.173330783843994
+        ],
+        "pixel": [
+          873,
+          774
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 30,
+        "world": [
+          -14.116120338439941,
+          0.15000000596046448,
+          6.460118770599365
+        ],
+        "pixel": [
+          809,
+          742
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 31,
+        "world": [
+          -14.52569580078125,
+          0.15000000596046448,
+          6.7469072341918945
+        ],
+        "pixel": [
+          745,
+          710
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 32,
+        "world": [
+          -14.935272216796875,
+          0.15000000596046448,
+          7.033695220947266
+        ],
+        "pixel": [
+          681,
+          678
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 33,
+        "world": [
+          -15.3448486328125,
+          0.15000000596046448,
+          7.320483207702637
+        ],
+        "pixel": [
+          617,
+          646
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 34,
+        "world": [
+          -15.754424095153809,
+          0.15000000596046448,
+          7.607271671295166
+        ],
+        "pixel": [
+          553,
+          614
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 35,
+        "world": [
+          -16.163999557495117,
+          0.15000000596046448,
+          7.894059658050537
+        ],
+        "pixel": [
+          489,
+          582
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 36,
+        "world": [
+          -16.573575973510742,
+          0.15000000596046448,
+          8.180848121643066
+        ],
+        "pixel": [
+          425,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 37,
+        "world": [
+          -16.983152389526367,
+          0.15000000596046448,
+          8.467636108398438
+        ],
+        "pixel": [
+          361,
+          518
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 38,
+        "world": [
+          -17.392728805541992,
+          0.15000000596046448,
+          8.754424095153809
+        ],
+        "pixel": [
+          297,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 39,
+        "world": [
+          -13.01017951965332,
+          0.15000000596046448,
+          6.29611873626709
+        ],
+        "pixel": [
+          1001,
+          774
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 40,
+        "world": [
+          -13.419755935668945,
+          0.15000000596046448,
+          6.582906723022461
+        ],
+        "pixel": [
+          937,
+          742
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 41,
+        "world": [
+          -13.82933235168457,
+          0.15000000596046448,
+          6.869694709777832
+        ],
+        "pixel": [
+          873,
+          710
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 42,
+        "world": [
+          -14.238907814025879,
+          0.15000000596046448,
+          7.156483173370361
+        ],
+        "pixel": [
+          809,
+          678
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 43,
+        "world": [
+          -14.648484230041504,
+          0.15000000596046448,
+          7.443271636962891
+        ],
+        "pixel": [
+          745,
+          646
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 44,
+        "world": [
+          -15.058059692382812,
+          0.15000000596046448,
+          7.730059623718262
+        ],
+        "pixel": [
+          681,
+          614
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 45,
+        "world": [
+          -15.467636108398438,
+          0.15000000596046448,
+          8.016847610473633
+        ],
+        "pixel": [
+          617,
+          582
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 46,
+        "world": [
+          -15.877212524414062,
+          0.15000000596046448,
+          8.303635597229004
+        ],
+        "pixel": [
+          553,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 47,
+        "world": [
+          -16.286788940429688,
+          0.15000000596046448,
+          8.590423583984375
+        ],
+        "pixel": [
+          489,
+          518
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 48,
+        "world": [
+          -16.69636344909668,
+          0.15000000596046448,
+          8.877212524414062
+        ],
+        "pixel": [
+          425,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 49,
+        "world": [
+          -17.105939865112305,
+          0.15000000596046448,
+          9.164000511169434
+        ],
+        "pixel": [
+          361,
+          454
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 50,
+        "world": [
+          -12.72339153289795,
+          0.15000000596046448,
+          6.705694675445557
+        ],
+        "pixel": [
+          1065,
+          742
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 51,
+        "world": [
+          -13.132966995239258,
+          0.15000000596046448,
+          6.992482662200928
+        ],
+        "pixel": [
+          1001,
+          710
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 52,
+        "world": [
+          -13.542543411254883,
+          0.15000000596046448,
+          7.279271125793457
+        ],
+        "pixel": [
+          937,
+          678
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 53,
+        "world": [
+          -13.952119827270508,
+          0.15000000596046448,
+          7.566059112548828
+        ],
+        "pixel": [
+          873,
+          646
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 54,
+        "world": [
+          -14.361696243286133,
+          0.15000000596046448,
+          7.852847099304199
+        ],
+        "pixel": [
+          809,
+          614
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 55,
+        "world": [
+          -14.771271705627441,
+          0.15000000596046448,
+          8.13963508605957
+        ],
+        "pixel": [
+          745,
+          582
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 56,
+        "world": [
+          -15.180848121643066,
+          0.15000000596046448,
+          8.426424026489258
+        ],
+        "pixel": [
+          681,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 57,
+        "world": [
+          -15.590423583984375,
+          0.15000000596046448,
+          8.713212013244629
+        ],
+        "pixel": [
+          617,
+          518
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 58,
+        "world": [
+          -16.0,
+          0.15000000596046448,
+          9.0
+        ],
+        "pixel": [
+          553,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          120,
+          98,
+          92
+        ],
+        "offRGB": [
+          13,
+          12,
+          24
+        ],
+        "onLinearRGB": [
+          0.18782077230067787,
+          0.12213877222960187,
+          0.10702310297826761
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 59,
+        "world": [
+          -16.409576416015625,
+          0.15000000596046448,
+          9.286787986755371
+        ],
+        "pixel": [
+          489,
+          454
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          120,
+          98,
+          92
+        ],
+        "offRGB": [
+          13,
+          12,
+          24
+        ],
+        "onLinearRGB": [
+          0.18782077230067787,
+          0.12213877222960187,
+          0.10702310297826761
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 60,
+        "world": [
+          -16.81915283203125,
+          0.15000000596046448,
+          9.573575973510742
+        ],
+        "pixel": [
+          425,
+          422
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 61,
+        "world": [
+          -12.846179008483887,
+          0.15000000596046448,
+          7.4020586013793945
+        ],
+        "pixel": [
+          1065,
+          678
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 62,
+        "world": [
+          -13.255755424499512,
+          0.15000000596046448,
+          7.688846588134766
+        ],
+        "pixel": [
+          1001,
+          646
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 63,
+        "world": [
+          -13.665331840515137,
+          0.15000000596046448,
+          7.975635051727295
+        ],
+        "pixel": [
+          937,
+          614
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 64,
+        "world": [
+          -14.074907302856445,
+          0.15000000596046448,
+          8.262423515319824
+        ],
+        "pixel": [
+          873,
+          582
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 65,
+        "world": [
+          -14.48448371887207,
+          0.15000000596046448,
+          8.549211502075195
+        ],
+        "pixel": [
+          809,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 66,
+        "world": [
+          -14.894060134887695,
+          0.15000000596046448,
+          8.835999488830566
+        ],
+        "pixel": [
+          745,
+          518
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 67,
+        "world": [
+          -15.303635597229004,
+          0.15000000596046448,
+          9.122787475585938
+        ],
+        "pixel": [
+          681,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 68,
+        "world": [
+          -15.713212013244629,
+          0.15000000596046448,
+          9.409576416015625
+        ],
+        "pixel": [
+          617,
+          454
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 69,
+        "world": [
+          -16.122787475585938,
+          0.15000000596046448,
+          9.696364402770996
+        ],
+        "pixel": [
+          553,
+          422
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          120,
+          98,
+          92
+        ],
+        "offRGB": [
+          13,
+          12,
+          24
+        ],
+        "onLinearRGB": [
+          0.18782077230067787,
+          0.12213877222960187,
+          0.10702310297826761
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 70,
+        "world": [
+          -16.532363891601562,
+          0.15000000596046448,
+          9.983152389526367
+        ],
+        "pixel": [
+          489,
+          390
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          40,
+          23,
+          19
+        ],
+        "offRGB": [
+          2,
+          1,
+          2
+        ],
+        "onLinearRGB": [
+          0.021219010376003555,
+          0.008568125618069307,
+          0.006512090792594475
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 71,
+        "world": [
+          -12.96896743774414,
+          0.15000000596046448,
+          8.09842300415039
+        ],
+        "pixel": [
+          1065,
+          614
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 72,
+        "world": [
+          -13.378543853759766,
+          0.15000000596046448,
+          8.385210990905762
+        ],
+        "pixel": [
+          1001,
+          582
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 73,
+        "world": [
+          -13.788119316101074,
+          0.15000000596046448,
+          8.671998977661133
+        ],
+        "pixel": [
+          937,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 74,
+        "world": [
+          -14.1976957321167,
+          0.15000000596046448,
+          8.95878791809082
+        ],
+        "pixel": [
+          873,
+          518
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 75,
+        "world": [
+          -14.607271194458008,
+          0.15000000596046448,
+          9.245575904846191
+        ],
+        "pixel": [
+          809,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 76,
+        "world": [
+          -15.016847610473633,
+          0.15000000596046448,
+          9.532363891601562
+        ],
+        "pixel": [
+          745,
+          454
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 77,
+        "world": [
+          -15.426424026489258,
+          0.15000000596046448,
+          9.819151878356934
+        ],
+        "pixel": [
+          681,
+          422
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 78,
+        "world": [
+          -15.835999488830566,
+          0.15000000596046448,
+          10.105939865112305
+        ],
+        "pixel": [
+          617,
+          390
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 79,
+        "world": [
+          -16.245574951171875,
+          0.15000000596046448,
+          10.392728805541992
+        ],
+        "pixel": [
+          553,
+          358
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          40,
+          23,
+          19
+        ],
+        "offRGB": [
+          6,
+          4,
+          6
+        ],
+        "onLinearRGB": [
+          0.021219010376003555,
+          0.008568125618069307,
+          0.006512090792594475
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 80,
+        "world": [
+          -13.091754913330078,
+          0.15000000596046448,
+          8.794787406921387
+        ],
+        "pixel": [
+          1065,
+          550
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 81,
+        "world": [
+          -13.501331329345703,
+          0.15000000596046448,
+          9.081575393676758
+        ],
+        "pixel": [
+          1001,
+          518
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 82,
+        "world": [
+          -13.910907745361328,
+          0.15000000596046448,
+          9.368363380432129
+        ],
+        "pixel": [
+          937,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          6,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 83,
+        "world": [
+          -14.320483207702637,
+          0.15000000596046448,
+          9.6551513671875
+        ],
+        "pixel": [
+          873,
+          454
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 84,
+        "world": [
+          -14.730059623718262,
+          0.15000000596046448,
+          9.941940307617188
+        ],
+        "pixel": [
+          809,
+          422
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 85,
+        "world": [
+          -15.13963508605957,
+          0.15000000596046448,
+          10.228728294372559
+        ],
+        "pixel": [
+          745,
+          390
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 86,
+        "world": [
+          -15.549211502075195,
+          0.15000000596046448,
+          10.51551628112793
+        ],
+        "pixel": [
+          681,
+          358
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 87,
+        "world": [
+          -13.214543342590332,
+          0.15000000596046448,
+          9.491151809692383
+        ],
+        "pixel": [
+          1065,
+          486
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 88,
+        "world": [
+          -13.62411880493164,
+          0.15000000596046448,
+          9.777939796447754
+        ],
+        "pixel": [
+          1001,
+          454
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 89,
+        "world": [
+          -14.033695220947266,
+          0.15000000596046448,
+          10.064727783203125
+        ],
+        "pixel": [
+          937,
+          422
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          102,
+          104,
+          108
+        ],
+        "offRGB": [
+          4,
+          12,
+          32
+        ],
+        "onLinearRGB": [
+          0.13286832155381798,
+          0.13843161503245183,
+          0.14995978981060856
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 90,
+        "world": [
+          -14.44327163696289,
+          0.15000000596046448,
+          10.351515769958496
+        ],
+        "pixel": [
+          873,
+          390
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 91,
+        "world": [
+          -14.8528470993042,
+          0.15000000596046448,
+          10.638303756713867
+        ],
+        "pixel": [
+          809,
+          358
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 92,
+        "world": [
+          -15.262423515319824,
+          0.15000000596046448,
+          10.925092697143555
+        ],
+        "pixel": [
+          745,
+          326
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 93,
+        "world": [
+          -13.33733081817627,
+          0.15000000596046448,
+          10.187515258789062
+        ],
+        "pixel": [
+          1065,
+          422
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 94,
+        "world": [
+          -13.746907234191895,
+          0.15000000596046448,
+          10.47430419921875
+        ],
+        "pixel": [
+          1001,
+          390
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 95,
+        "world": [
+          -14.156482696533203,
+          0.15000000596046448,
+          10.761092185974121
+        ],
+        "pixel": [
+          937,
+          358
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 96,
+        "world": [
+          -14.566059112548828,
+          0.15000000596046448,
+          11.047880172729492
+        ],
+        "pixel": [
+          873,
+          326
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 97,
+        "world": [
+          -14.975635528564453,
+          0.15000000596046448,
+          11.334668159484863
+        ],
+        "pixel": [
+          809,
+          294
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 98,
+        "world": [
+          -13.460119247436523,
+          0.15000000596046448,
+          10.883879661560059
+        ],
+        "pixel": [
+          1065,
+          358
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          112,
+          113,
+          115
+        ],
+        "offRGB": [
+          2,
+          7,
+          22
+        ],
+        "onLinearRGB": [
+          0.162029375639111,
+          0.1651321945016676,
+          0.1714411007328226
+        ],
+        "whiteTarget": false,
+        "offBlack": false
+      },
+      {
+        "index": 99,
+        "world": [
+          -13.869694709777832,
+          0.15000000596046448,
+          11.17066764831543
+        ],
+        "pixel": [
+          1001,
+          326
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 100,
+        "world": [
+          -14.279271125793457,
+          0.15000000596046448,
+          11.457456588745117
+        ],
+        "pixel": [
+          937,
+          294
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 101,
+        "world": [
+          -14.688846588134766,
+          0.15000000596046448,
+          11.744244575500488
+        ],
+        "pixel": [
+          873,
+          262
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 102,
+        "world": [
+          -13.582906723022461,
+          0.15000000596046448,
+          11.580244064331055
+        ],
+        "pixel": [
+          1065,
+          294
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 103,
+        "world": [
+          -13.992483139038086,
+          0.15000000596046448,
+          11.867033004760742
+        ],
+        "pixel": [
+          1001,
+          262
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 104,
+        "world": [
+          -14.402058601379395,
+          0.15000000596046448,
+          12.153820991516113
+        ],
+        "pixel": [
+          937,
+          230
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 105,
+        "world": [
+          -13.705694198608398,
+          0.15000000596046448,
+          12.27660846710205
+        ],
+        "pixel": [
+          1065,
+          230
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 106,
+        "world": [
+          -14.115270614624023,
+          0.15000000596046448,
+          12.563396453857422
+        ],
+        "pixel": [
+          1001,
+          198
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      },
+      {
+        "index": 107,
+        "world": [
+          -13.828481674194336,
+          0.15000000596046448,
+          12.972972869873047
+        ],
+        "pixel": [
+          1065,
+          166
+        ],
+        "inside": true,
+        "far": true,
+        "eligibleNative": true,
+        "onRGB": [
+          123,
+          123,
+          123
+        ],
+        "offRGB": [
+          0,
+          0,
+          0
+        ],
+        "onLinearRGB": [
+          0.19806931955994886,
+          0.19806931955994886,
+          0.19806931955994886
+        ],
+        "whiteTarget": true,
+        "offBlack": true
+      }
+    ],
+    "insideWhiteTargetProbes": 50,
+    "farWhiteTargetProbes": 50,
+    "floorGridChecks": [
+      {
+        "boundsXY": [
+          200,
+          400,
+          400,
+          580
+        ],
+        "phaseXY": [
+          0,
+          1
+        ],
+        "blockCount": 8900,
+        "mismatchedBlocks": 0,
+        "distinctRGB": 5
+      },
+      {
+        "boundsXY": [
+          720,
+          850,
+          350,
+          700
+        ],
+        "phaseXY": [
+          0,
+          1
+        ],
+        "blockCount": 11310,
+        "mismatchedBlocks": 0,
+        "distinctRGB": 5
+      }
+    ],
+    "tolerances": {
+      "world": 1e-05,
+      "linearRGB": 0.00392156862745098,
+      "screenPixels": 0.001
+    },
+    "scope": "Actual Play receipt, PNG differences, GPU room-only fill probes and two audited floor ROIs; source hashes are measured directly. Outside-fill CPU receipt is separate from visible native GPU probes. No whole-frame black, final-frame grid, aesthetic, input or build approval."
+  },
+  "tolerances": {
+    "projectionPixels": 0.02,
+    "pairWorldMetres": 1e-06,
+    "screenPhase": 1e-06
+  },
+  "scope": "Four actual GPU alignment cases and their sampled projection errors. Full mode additionally checks current production-code hashes, 44 Play renderer/caster pairs, the frozen N27 baselines and the unchanged N26 actual-Play/PNG gate. Centre-hit projection agreement does not establish silhouette-edge or aesthetic approval; no input, build or performance approval."
+}

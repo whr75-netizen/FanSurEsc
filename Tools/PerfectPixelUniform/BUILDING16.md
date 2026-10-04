@@ -1,6 +1,24 @@
 # N17 — 테스트 건물 한 채의 공통 native 표면·실시간 조명 제작 계약
 
-## N27 현재 결정 — 재료를 통과하는 조명, 색 덧칠 제거
+## N28 현재 결정 — 기존 원형 메시와 픽셀 표면의 격자 변환 공유
+
+[현재/R4, 2026-10-05] 요청은 그림자와 현재 픽셀 표면의 일치이며, 최신 정정은 원형 메시 재사용이다. 현재 N16~27 표면은 옛 Blender scene.blend에서 나온 렌더가 아니다. `geometry16.py` 부품 정의가 position/normal cache와 closed caster를 함께 만들었고, N19는 material map만 바꿨다. 캐시 재계산의 bitwise 일치와 원형 caster 연결을 읽기 전용으로 확인했다. 금색 장식은 현재 기하에서 flush inlay이며, 새 돌출을 만드는 것은 이 요청의 원인 수정이 아니다.
+
+**원인/후보:** 기존 `SnapNativeGrid`는 display clip.xy만 이동하고 캐시의 world position·depth·light query와 caster 정점은 이동하지 않는다. 활성44개 표면에서 Edit 카메라 기준 최대2.454621 screen px의 차이를 계산했다. (A) 현재 같은 메시를 그대로 쓰되 격자 변환을 전체 render 경로에 공유한다: 채택 후보. (B) 옛 Blender 메시로 교체: 현재 디자인과 달라 제외. (C) 픽셀마다 체적을 다시 제작: centre sampling/곡면 근사의 별도 문제이고 지금 확인된 원인보다 범위가 커 보류. 메시·배치·원화·색·PPU·조명 값을 변경하지 않는다.
+
+**좌표/연산 계약:** canonical은 현재 부품 정의와 local XYZ(m), 원점/Unity 축/부모 TRS는 원본 mesh와 cache가 공유한다. `local p → M p(world,left-handed,m) → p+δ → V → P → clip → canonical bottom-left raster(px)`. δ는 원래 격자 phase 이동을 world로 옮긴 한 번의 rigid translation이다. 원본 texel U/V의 view 기저 길이 ux,vy, anchor a에 대해 `s=(V3x3·a).xy/(ux,vy)`, `dsource=round(s)-s`; `q=round(abs(raster(a+u).x-raster(a).x))`; `dcamera=round(raster(0)/q)*q-raster(0)`. `draster=dsource*(uraster.x,vraster.y)+dcamera`; `δ=V^-1·(draster.x/(W*P00/2),draster.y/(H*P11/2),0)`의 vector 변환. raw Camera projection의 canonical NDC를 사용하므로 RT Y flip와 기존 _ProjectionParams.x가 상쇄된다. 분모/기저 유효성은 기존 조건을 유지하며 perspective·비정수·비정렬에는 양쪽 δ=0을 다시 쓴다. 현재 지원은 renderScale1/dynamic-resolution-off/full viewport이며 다른 설정은 명시적으로 지원 밖이다.
+
+**소비자/권위:** 건물의 renderer pair 하나가 같은 카메라 callback에서 동일 `_NativeRenderOffsetWS`를 display/caster MPB에 쓴다. display 정점과 ReadSurface world/depth/lighting도 동일 δ를 한 번만 소비한다. 원형 closed caster는 `M·vertex+δ → URP light direction → ApplyShadowBias → light VP → shadow atlas`. Unity transform/collider/원본 asset은 그대로다. render-only bounds도 같은 이동을 적용하며 기존 MPB와 원래 bounds를 보존/복원한다. 계산 API 근거: [Unity beginCameraRendering](https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Rendering.RenderPipelineManager-beginCameraRendering.html), [URP ShadowCaster source](https://github.com/Unity-Technologies/Graphics/blob/master/Packages/com.unity.render-pipelines.universal/Shaders/ShadowCasterPass.hlsl). 실행 환경의 URP17.5 로컬 source에서 SingleCameraRequest callback과 Point normalBias=0을 확인했다. 이는 표준 API를 연결한 프로젝트 수정이며 공개된 완성 pixel-shadow 제품을 복제한 것이 아니다.
+
+**R3 판정/실제 결과:** 원형 empty_counter/재료를 쓴 격리 GPU fixture, screen phase(.17,-.23),(-.31,.41) × 정수2·4배 네 case. cache world hit의 선언한 cell-centre 재투영 오차≤.02 screen px, pair δ 차이≤1e-6m, 원형 solid GPU world hit의 실제 screen sample-centre 재투영 오차≤.02px(공통 coverage 각 case100개 이상), shader error0이 기준이다. 서로 다른 cell/sample centre를 같은 점이라고 비교하지 않는다. 실제 old cache-to-display 오차 .348~2.019px → 공유 경로 최대 .000153px, solid GPU sample 최대 .002678px, 최소90,797 common hits, pair δ 차이0을 관측했다. 원형 mesh가 연속 triangle이고 픽셀은 centre-sampled square라 외곽 부분 coverage/모든 광각의 그림자 픽셀을 동일하다고 주장하지 않는다. 새 voxel/윤곽 제작으로 감추지 않는다.
+
+**통합/관측:** `NativeSurfaceGridAlignment`와 `NativeShadow28.shader`를 기지 기존44pair에 연결했다. 원본 caster asset을 유지하며 원래 Cull Off도 보존한다. 실제 Play에서 maximum old display-only 편차2.433295px, pair 공유 좌표 오차0, 전등 shadow on/off126,980개 screen pixel 차이(>2 byte), 셰이더 error0, 2px, 같은 Player/Camera, 원본512파일·194geometry·이동광/전등 제어 보존을 확인하고 GameMap1을 Edit/saved/clean으로 마쳤다. GPU sample-centre 검사와 실제 on/off는 그림자 존재/공유 transform 증거이며 모든 실루엣의 미술 합격은 아니다. 바뀐 것은 render 정렬 경계뿐이고 frame/손잡이의 원래 입체 구조·메시와 원화는 재제작하지 않았다.
+
+**실패 보존/명시 재개:** 첫 fixture는 Unity native MPB를 MonoBehaviour field initializer에서 만들고 옛38 asset을 가져온 시험장치 오류였다. OnEnable 초기화와 실제39 원형을 쓰도록 고치고 `fixture-failed-constructor.json`을 보존했다. 첫 최종 검사에서는 ShaderLab 새 속성 기본값이 원본36 material에 자동 저장된 것과 baseline-moving JSON 공백 차이를 검출했다. material 속성 선언만 제거하고 renderer MPB/HLSL uniform으로 유지했으며, Editor SerializedObject로 새 기본값 항목만 제거해 원본512 byte hash를 복원했다. moving 값은 양쪽 JSON 해석값이 동일함을 확인한 뒤 원래 기록 서식을 재사용하고 compact 실제 관측도 보존했다. GPU 네 case의 모든 측정값은 전후 동일했다. 조명 연산은 변하지 않아 기존 Play matrix를 재사용하고, 현재 uniform의 최종 실제 Play frame·44pair 관측을 추가했다. 초기 graph/failure와 code freeze는 보존했고 새 final-only graph로 재개했다. 최종174/174 조건 통과는 기술 범위의 판정이다.
+
+**진입점/한계:** `docs/artifacts/building39/shadow28/{request-final,state-final,validation28}.json`, `NativeShadow28Observation.FixtureCapture/AlignmentCapture`, `shadow28_gate.py`; 실제 최종 화면은 `shadow28/final-frame/both-on.png`다. renderScale1/full viewport/orthographic/dynamic-resolution-off PC에서 검증했다. 모바일/업스케일러/TAA/custom viewport/Standalone 성능, centre-sampled 외곽과 continuous mesh의 부분 coverage, 기존 곡면 triangulation 근사와 캐릭터 미술은 미검증/한계로 유지한다. 같은 원형의 새로운 실제 반례가 있으면 해당 좌표/coverage 단계만 재개하며 전체 메시/이미지를 재생성하지 않는다.
+
+## N27 이전 결정 — 재료를 통과하는 조명, 색 덧칠 제거
 
 [요청/범위] 모든 조명 효과가 물감처럼 섞이는 원인을 Unity 기술과 대조해 수정한다. N26의 전등/이동광 독립 제어, 원본·512 source/cache 파일·194 geometry/TRS·30°/350°·90.5097PPU·2px는 유지한다. 조명색·위치·범위·세 단계 입력·하늘 owner·캐릭터 팔레트는 변경하지 않는다. 이번 수정은 표면 반응 계산이며 그림 원본 재생성/축소나 새 후처리 색 필터는 아니다.
 

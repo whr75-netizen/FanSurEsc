@@ -1,0 +1,161 @@
+{
+  "entry": "integrate",
+  "goal": "N28 reuse original closed mesh; same render-space grid translation for native surface, depth/light queries and physical shadows.",
+  "max_steps": 3,
+  "nodes": [
+    {
+      "id": "integrate",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {},
+      "parameters": {
+        "scope": "Tools/PerfectPixelUniform/BUILDING16.md N28 fixed contract; original meshes/512 art/TRS/PPU/palette/lighting preserved. NativeSurfaceGridAlignment, NativeShadow28 and current GameMap1 building only."
+      },
+      "question": "Bind passed N28 shared transform to current 44 pairs, preserving original source/cache/meshes/transforms; return actual integration.json.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/shadow28/baseline.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/shadow28/fixture.json"
+      ],
+      "writes": [
+        "shadow28:integrate"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "observe",
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "integrate.receiptFile"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {},
+      "parameters": {
+        "scope": "Tools/PerfectPixelUniform/BUILDING16.md N28 fixed contract; original meshes/512 art/TRS/PPU/palette/lighting preserved. NativeSurfaceGridAlignment, NativeShadow28 and current GameMap1 building only."
+      },
+      "question": "Capture actual Play room shadows and source grid alignment once, restore settings and save scene; return actual play/receipt.json.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/shadow28/baseline.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/shadow28/fixture.json"
+      ],
+      "writes": [
+        "shadow28:observe"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "final",
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "observe.receiptFile"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building38/shadow28_gate.py"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building38/shadow28_gate.py",
+          "C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Tools/Building38/room26_gate.py"
+        ]
+      },
+      "reads": [
+        "shadow28:integrate",
+        "shadow28:observe"
+      ],
+      "writes": [
+        "shadow28:validation"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "@complete",
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          }
+        },
+        {
+          "to": "@blocked",
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "N28",
+      "text": "Original mesh/source preserved and shared projection and actual Play shadows measured.",
+      "source": "User: 그림자랑 픽셀메시랑 일치; 원형 메시 그대로 재사용.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

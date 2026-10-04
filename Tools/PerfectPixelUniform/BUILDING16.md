@@ -36,6 +36,30 @@ run02의 CPU/GPU 공통fixture는 통과했으나 실제 Play 관측에서 활�
 
 한계: 움직이는 SteppedLocalLight는가구차폐그림자를생성하지않는다. 기존주광의실물caster를보존했지만이번요청에서별도shadow회귀를반복하지않았다. 순수albedo복원/미술완벽/임의회전/유리overlay/Standalone빌드는미검증이다. 아래N16기록의31.75PPU·Floor보존·4px화면은현재지시가아니다.
 
+## N18 현재 결정 — 읽을 수 있는 밤 (2026-10-04, 구현 전)
+
+[사용자 요구] 밤에도 재료·세부가 보이고 푸른 명암은 그림자에 들어가야 한다. 전체 재료가 푸른색으로 덮인 N17 화면은 이 기준에 부족하다. 병은 원화 sprite를 복사한 것이 아니라 선반 semantic cylinder/label 부품→선반 전체 native cache/합친 caster다. 실제 병은 약10~11×22~28 native pixel이며 현재1:1표시다. 형상/원화 디자인 차이는 조명 수정으로 해결했다고 하지 않는다.
+
+[원인] N17 wood `clamp(rank+band−2)`는 밤 band0에서 카운터/선반 목재의85.9/87.7%를 한 색으로 합친다. `I/Y(I)` tint는 푸른 ambient에서(2/3,1,2)로 파랑을 증폭한다. 고정 .32/.72의 광량 경계도 어두운 면을 같은 단계에 모은다. 이 실패는 격자 복원이나 이미지 resize 단계가 아니라 명암/색 계산 단계다.
+
+[선택] 기존 geometry→native local XYZ/normal/material rank/edge→기존 Transform→URP main/additional/SH와SteppedLocalLight의 linear irradiance I→읽기용 palette ramp→기존 native grid의 표시를 재사용한다. source/position/normal/material/palette/mesh/PPU/배치/카메라/광원 owner는 보존한다. 완성 명암 PNG에 덧곱하기, 전역 ambient 올리기, 이미지 축소/재생성은 이 원인을 고치지 않아 제외한다. 현재 건물의 공유 재료만 opt-in한다.
+
+canonical/좌표·투영/단위는 N17과 같으며 이번 자유도는 최종 색 함수 하나다. e=dot(max(I,0),[.2126729,.7151522,.0721750]), b=step(.12,e)+step(.4,e), B=[.55,.78,1][b]를 고정한다. 목재 기준색 A=Palette(material,rank), 기타 재료 A=Palette(material,min(2,count−1)); crease는같은재질column0,깊은틈/외곽은검정이다. Q=round(3I/max(I.r,I.g,I.b))/3 (0광은Q=1), cool=I.b>I.r && I.b>I.g다. 1차 시험은C=A·B·lerp(1,Q,χ)로무늬를복원했지만목재의낮은파랑채널에새푸른색을만들지못해참고화면의밤색조에부족했다. 실제결과와당시코드는readable-night18에보존하며그graph수치성공을미술성공으로승격하지않는다.
+
+현재색식은D=A·B, S=Y(D)·Q/max(Y(Q),ε), Δ=S−D다. cool그림자에서w=min(.5(1−b/2), min_{Δc>0}((1−Dc)/Δc),1), C=D+wΔ로색조를옮긴다. 따라서Y(C)=Y(D)로무늬의밝기차이가유지되고b2에서푸른색조0이며RGB범위[0,1]안이다. 파랑채널값증가는명시적인hue shift이며전체RGB에파랑배율을곱하는것이아니다. cool이아닌색광은C=D·lerp(1,Q,.30)다. 0광NaN은허용하지않는다. GPU는linear연산→sRGB표시,CPU는같은연산→sRGB PNG다. 무늬rank·광량band는독립이다. .55최저밝기는사용자요구의명시적미술presentation값이며물리적암흑/조도재현이나pure albedo복원이라고주장하지않는다. 모서리/coverage/깊이는변경하지않는다.
+
+[판별] 실제 기존 cache·palette로 CPU 계산→고정푸른fixture GPU한선반 비교→실제Player카메라의21시에서 같은instance의구형/신형색·빛off/on을관측한다. 위치/법선/재질/팔레트/mesh 파일hash불변,검정역할·coverage불변,유한RGB・gamut[0,1]・cool hue shift의luminance불변,wood4rank구분,빛band응답,CPU/GPU최대2/255,기존30°/350°·정수표시를마지막검증으로묶는다. 해당 수치 합격은 미술 합격이나 원화 디자인 복원 증거가 아니다. 흐름은 기존 WorkLoop의색계산→Unity관측→최종검증3단계이며실패시색단계만재개한다.
+
+공식 근거: [Unity URP custom lighting](https://docs.unity3d.com/6000.0/Documentation/Manual/urp/use-built-in-shader-methods-lighting.html)의Light color/direction/attenuation과[Linear color space](https://docs.unity3d.com/6000.0/Documentation/Manual/set-project-color-space.html)의linear계산/sRGB표시를사용한다. 읽기용B·χ는이번아트규약이며Grave Seasons의내부알고리즘을확인한것은아니다. 사용자 첨부화면은외관기준이다.
+
+### N18 실제 결과와 재개
+
+[실제GPU/Play] 현재36공유재료가ReadableNight=1이다. 최종`docs/artifacts/building39/readable-night18-hue`에서189개geometry/position/normal/material/palette파일hash불변,stock_shelf의푸른fixture CPU/GPUcoverage불일치0·RGB최대오차1/255를확인했다. 실제21시같은Player/Camera·mesh/map/Transform·30.000004°/349.999969°·1pixel·shadererror0이며구형색과신형색548,666px,빛off/on62,158px변화를관측했다. 최종PNG는readable-off/on.png이며이미지축소/생성0이다. 1차시험의수치성공/따뜻한목재와코드는readable-night18에보존한다. 그래프는둘다좁은기술판정complete이며미술합격을주장하지않는다.
+
+[보존/한계] Player의기존adaptive PBR경로·sky owner·일주기·캐릭터dirty재료는변경하지않았다. 그러므로현재Player의암부는이옵션과별도다. 병은원화디자인복원이아닌절차형template이며10~11×22~28px,1:1표시라는작은크기도유지했다. 개별병상호작용·캐릭터가독성·미술완벽·Standalone빌드는미검증이다. Play관측의시각고정/빛toggle/임시GPU객체는복원/정리하고Edit로돌아왔다.
+
+재사용에는cache/API/PerfectPixel실행이필요없다. 새색계산실험이승인되면`night18.py start --output <새폴더>`→CPU색만→`NativeNight18Observation.Fixture`/`Gameplay`의실제관측→기존WorkLoop submit/최종gate다. 형상/병라벨디자인의수선은별도입력저작단계이며이색함수의임계값으로대신하지않는다. 직접기하/카메라를다시만드는것은현재수선범위가아니다.
+
 ## 과거 N16 결정 / R0~R2 (2026-10-04)
 
 사용자가 N15의 표현을 개선된 기준으로 확인하고 그 파이프라인을 정리한 뒤 기지 GameMap1의 테스트 건물 내부 전체에 적용하도록 요청했다. 대상은 PlannedPixelShop33의 활성 실내다. 18종/26개 사물, 기존 구조·지붕·절개·벽등을 대상으로 하며 플레이어·카메라·동선·콜라이더·방의 역할·다른 건물·도심은 보존한다. 사용자 원본 시트와 N15 결과는 그대로 남긴다.

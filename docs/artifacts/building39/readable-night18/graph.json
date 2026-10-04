@@ -1,0 +1,195 @@
+{
+  "goal": "Readable native night, preserve all existing geometry and pixel caches",
+  "entry": "colour",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "readable_night",
+      "text": "Rank preservation, actual GPU/Play and unchanged caches",
+      "source": "BUILDING16.md N18 and latest user correction",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "colour",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "scope": "colour only"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\night18.py",
+          "calculate",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\readable-night18"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\night18.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativeReadable18.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeNight18Observation.cs"
+        ]
+      },
+      "reads": [
+        "native18:cache"
+      ],
+      "writes": [
+        "native18:cpu"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "colour.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "unity"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "colour.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "unity",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {
+        "output": {
+          "literal": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\readable-night18"
+        }
+      },
+      "parameters": {
+        "scope": "Only active existing native material ReadableNight setting and actual observations; no geometry/cache/camera/lighting owner changes."
+      },
+      "question": "Configure existing 36 active materials, capture fixed GPU fixture and actual 21:00 legacy/readable/light-off/on; preserve instances and maps.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "native18:cpu"
+      ],
+      "writes": [
+        "native18:observation"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "unity.receiptFile"
+              }
+            ]
+          },
+          "to": "final"
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "scope": "colour only"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\night18.py",
+          "gate",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\readable-night18"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\night18.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativeReadable18.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeNight18Observation.cs"
+        ]
+      },
+      "reads": [
+        "native18:observation"
+      ],
+      "writes": [
+        "native18:validation"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

@@ -1,8 +1,8 @@
-# N17 실행 진입점
+# N17/N18 실행 진입점
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
 
-현재 결과는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·실제 좌우빛 관측과 실패/수선은 BUILDING16.md의 N17에만 기록합니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
+현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암의 현재 결정/관측은 BUILDING16.md의 N18에 기록합니다. 최종 실제 화면은 `docs/artifacts/building39/readable-night18-hue/readable-on.png`입니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
 
 새 제작이 승인된 경우 프로젝트 루트에서 NumPy/Pillow가 있는 Python으로 실행합니다.
 
@@ -22,3 +22,5 @@
 `unity_gate17.py`: 실제 GPU capture/Play 관측을 읽는 마지막 gate.
 `floor_repair17.py`: 잘못된 활성 대상의 바닥만 새 버전으로 수선한 실행 이력.
 `final_check17.py`: float32 검증 하한 결함의 명시 재개방; 생산 재실행0.
+
+`night18.py`/`NativeReadable18.hlsl`/`NativeNight18Observation`: 기존cache/PPU/기하를그대로사용하는색계산3단계. `night18.py start --output <새폴더>`로CPU색→활성Codex의실제GPU/Play관측→최종gate를연결합니다. 이실험에서캐릭터조명·원화디자인·전체픽셀grid를변경하지않습니다.

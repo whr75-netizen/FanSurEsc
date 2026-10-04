@@ -20,11 +20,13 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         [HideInInspector] _NativeGridTexelUOS("One native texel right", Vector) = (0,0,0,0)
         [HideInInspector] _NativeGridTexelVOS("One native texel up", Vector) = (0,0,0,0)
         [Toggle] _RetainPatternContrast("Material pattern independent of lighting band", Float) = 0
+        [Toggle] _ReadableNight("Readable material and shadow palette", Float) = 0
+        [HideInInspector] _ReadableFixtureIrradiance("Readable palette fixture", Vector) = (0.03,0.045,0.085,0)
         [HideInInspector] _ZWrite("Depth write", Float) = 1
         [HideInInspector] _SrcBlend("Source blend", Float) = 1
         [HideInInspector] _DstBlend("Destination blend", Float) = 0
         [Enum(UnityEngine.Rendering.CullMode)] _Cull("Cull", Float) = 0
-        [Enum(Lit,0,MaterialOnly,1,Normals,2,Irradiance,3,MainShadow,4,ReferenceFixture,5)] _DiagnosticMode("Diagnostic", Float) = 0
+        [Enum(Lit,0,MaterialOnly,1,Normals,2,Irradiance,3,MainShadow,4,ReferenceFixture,5,ReadableFixture,6)] _DiagnosticMode("Diagnostic", Float) = 0
     }
     SubShader
     {
@@ -35,6 +37,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Lighting.hlsl"
         #include "Assets/Rendering/LocalLighting/SteppedLocalLightCommon.hlsl"
         #include "Assets/Shaders/World/NativeShade17.hlsl"
+        #include "Assets/Shaders/World/NativeReadable18.hlsl"
 
         TEXTURE2D(_PositionMap);
         TEXTURE2D(_NormalMap);
@@ -50,6 +53,8 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             float4 _NativeGridTexelUOS;
             float4 _NativeGridTexelVOS;
             float _RetainPatternContrast;
+            float _ReadableNight;
+            float4 _ReadableFixtureIrradiance;
             float _AmbientLightStrength;
             float _MainLightStrength;
             float _AdditionalLightStrength;
@@ -242,6 +247,17 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
 
         half3 Shade(CachedSurface surface, half3 irradiance)
         {
+            if (_ReadableNight > 0.5 && (_DiagnosticMode < 4.5 || _DiagnosticMode >= 5.5))
+            {
+                if (surface.edge == 1u || surface.edge == 2u)
+                    return SRGBToLinear(Native17EdgeBlackSRGB);
+                float band = Native18Band(max(dot((float3)irradiance, Native17Luminance), 0.0));
+                float column = surface.material == 1u ? (float)surface.pattern : 2.0;
+                column = min(column, BandCount(surface.material) - 1.0);
+                if (surface.edge == 3u) column = Native17CreaseColumn;
+                return Native18Color(PaletteColor(surface.material, column) * Native18Brightness(band),
+                    max((float3)irradiance, 0.0), band);
+            }
             float luminance = max(dot((float3)irradiance, Native17Luminance), 0.0);
             // No fabricated minimum brightness or fixed midtone when all of
             // the existing engine/environment light contributions are zero.
@@ -279,7 +295,12 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             CachedSurface surface = ReadSurface(input.uv);
             half mainShadow;
             half3 irradiance;
-            if (_DiagnosticMode >= 4.5)
+            if (_DiagnosticMode >= 5.5)
+            {
+                irradiance = max(_ReadableFixtureIrradiance.rgb, 0.0);
+                mainShadow = 1.0;
+            }
+            else if (_DiagnosticMode >= 4.5)
             {
                 // The fixture is defined in the same local metre basis as the
                 // native cache; building yaw rotates both normal and light.

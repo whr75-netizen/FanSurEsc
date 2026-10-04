@@ -266,7 +266,10 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         {
             if (_ReadableNight > 0.5 && (_DiagnosticMode < 4.5 || _DiagnosticMode >= 5.5))
             {
-                float column = surface.material == 1u ? (float)surface.pattern : 2.0;
+                // Opt-in authored material clusters use the same native rank
+                // channel as wood. Existing flag-off furniture stays unchanged.
+                float column = surface.material == 1u || _RetainPatternContrast > 0.5 ?
+                    (float)surface.pattern : 2.0;
                 column = min(column, BandCount(surface.material) - 1.0);
                 if (surface.edge == 3u) column = Native17CreaseColumn;
                 // Both fields pass through the same actual material reflectance.

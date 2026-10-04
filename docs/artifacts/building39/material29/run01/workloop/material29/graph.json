@@ -1,0 +1,208 @@
+{
+  "goal": "One checkout cabinet: material clusters and live-light handle microrelief",
+  "entry": "material",
+  "max_steps": 3,
+  "requirements": [
+    {
+      "id": "native_material_detail",
+      "source": "Latest user request; BUILDING16 N29",
+      "text": "Canonical cluster/normal calculations, preserved source/geometry and actual 2px Play comparison; art approval is not automated.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "gate.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "material",
+      "algorithm": "command.run",
+      "phase": "work",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "BUILDING16 N29 R2"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material29.py",
+          "generate",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\material29\\run01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material29.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\run_material29.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeMaterial29Observation.cs"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Art/NativeBuilding41MaterialRepair/empty_counter.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/geometry.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/normal.f32",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/geometry.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Art/NativeBuilding39/palette.png"
+      ],
+      "writes": [
+        "native29:maps"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "material.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "unity"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "material.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "gate",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "contract": "BUILDING16 N29 R2"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material29.py",
+          "gate",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\material29\\run01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\material29.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\run_material29.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeMaterial29Observation.cs"
+        ]
+      },
+      "reads": [
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Art/NativeBuilding41MaterialRepair/empty_counter.png",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/geometry.npz",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/normal.f32",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/docs/artifacts/building39/run02/empty_counter/geometry.json",
+        "file:C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets/Art/NativeBuilding39/palette.png",
+        "native29:maps",
+        "unity:native29"
+      ],
+      "writes": [
+        "native29:validation"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "gate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "gate.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    },
+    {
+      "id": "unity",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {
+        "output": {
+          "literal": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\material29\\run01"
+        },
+        "contract": {
+          "literal": "Tools/PerfectPixelUniform/BUILDING16.md N29"
+        }
+      },
+      "parameters": {
+        "scope": "Import versioned maps/material; same actual camera before/after, normal response fixture; bind only checkout and save clean. Preserve original assets, geometry, lighting and pixel grid."
+      },
+      "question": "Perform authorized bounded Unity integration with one MCP writer; return actual observation path and continue to gate.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "native29:maps"
+      ],
+      "writes": [
+        "unity:native29"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "unity.receiptFile"
+              }
+            ]
+          },
+          "to": "gate"
+        }
+      ]
+    }
+  ]
+}

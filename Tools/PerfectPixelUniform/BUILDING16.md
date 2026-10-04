@@ -1,5 +1,23 @@
 # N17 — 테스트 건물 한 채의 공통 native 표면·실시간 조명 제작 계약
 
+## N29 현재 설계 — 넓은 도장 면의 색 군집과 손잡이의 곡면 명암
+
+[현재/R4, 2026-10-05] 최신 요청은 단색 면의 밋밋함을 줄이고 둥근 부위에 제한된 단계 명암을 사용하는 것이다. 작업 전 실제 empty_counter의 navy/brass G는 모두2이고 readable shader도 목재 외 column2를 강제했다. 이번 범위는 기존 checkout 수납장 한 종류다. 기존 wood grain·금장 위치·R/B/A·원본512파일·PositionMap·mesh·TRS·PPU·카메라·조명 제어를 보존하며 새 material/normal map과 material clone만 연결했다.
+
+**요구-원인-연산:** 큰 면의 정보 부족 → 도장 재료에 object-chart의 저주파 색 군집을 추가 → G rank1/2/3. 단색 손잡이의 면 구별 부족 → front face 안쪽 3native cell 폭의 얕은 원통형 cap 법선을 20°/40°/60°로 양자화 → 기존 엔진 입사광에 응답. 고정 광원 명암을 albedo에 굽거나 모든 외곽에 3중 선을 복사하지 않는다. 현재 box caster는 유지되므로 이 microrelief는 실루엣·미세 그림자를 바꾸지 않는다. 실제 3색 출현은 광원/양자화에 따라 달라지며 법선3띠를 3색 보장으로 바꾸지 않는다.
+
+**canonical/좌표:** 기존 geometry.npz design_tick(원본 N15 설계 tick), design_normal, part와 rotation이 권위다. 도장 chart의 x/z·y를 기존 tick_scale로 metres에 변환하고 cell-centre에서 smooth value field를 평가한다. 2D lattice value noise의 cubic interpolation, 큰 patch+짧은 결을 고정 seed로 합친 뒤 rank로 양자화한다. 외부 RGB/광원/화면 크기는 입력이 아니다. 작은 4-connected cluster(<3cells)는 base rank로 정리한다. 재료의 불균일 반사율이며 물체의 부피 명암이 아니다. 밀도/길이/색 단계는 이번 표현의 명시적 제작 매개변수이며 논문이 미술 합격을 보증한다는 뜻이 아니다.
+
+**둥근 띠:** handle front의 x-boundary screen-normal 거리 계수는 투영 Jacobian으로 계산한다. J=(R,-U)·rotation·diag(tick_scale)·PPU, x-boundary 거리 계수는 abs(det(J))/length(J_y)다. 좌우 거리 d에 대해 d<1/2/3 native px는 θ=60/40/20°, 그 안쪽은0°. N=(sign(x-mid)*sinθ,0,-cosθ)를 rotation으로 변환한다. 따라서 tick 비등방성 때문에 띠 폭이 달라지지 않으며 한 띠=1nativecell 거리다. 새 NormalMap에서 handle front만 바뀌고 P/coverage/depth는 변하지 않는다.
+
+**소비/검사:** 기존 _RetainPatternContrast flag를 새 clone에서1로 사용하여 readable branch가 모든 재료 G를 읽게 한다. 기존 flag0 분기와 목재는 동일 식이다. 변경 RGBA 범위·wood·원본 해시·법선 유효성과 변경 영역·동일 격자를 자동 검사하고, ±X direct fixture에서 N·L 순서 반전을 확인한다. WorkLoop는 재료 계산 → 단일 Unity writer의 import/동일 실제 카메라 비교 → 관측 기반 gate다. 출력 색 개수/계산 통과는 미술 승인으로 기록하지 않는다.
+
+**근거/반례:** [SLYNYRD Texture](https://www.slynyrd.com/blog/2018/2/15/pixelblog-2-texture)는 연결된 재료 군집·밀도·여백을, [Saint11 Shading](https://saint11.art/pixel_art_articles/article4/)은 평면과 곡면 명암을 구별한다. [Anti-Alias/Banding](https://saint11.art/pixel_art_articles/article5/)의 윤곽을 따라 반복되는 띠는 이번 곡률 법선과 다르다. 원화 전체 navy quad 직접 복사는 투명 texel·금장·구운 면 명암을 포함하므로 제외했다. 네 종류 전체에 front 장식을 복제하면 뒷면 설계를 발명하므로 이번에는 front가 보이는 checkout만 적용한다.
+
+**실행/결과:** `material29.py`는187×211 격자의 G5076칸, 손잡이 앞면의 normal98칸만 바꿨다. navy rank1/2/3은1378/7039/3698칸이며 기존4색 navy palette를 사용한다. 현재 patch는 도장 재료의 얼룩·결 표현으로, 목재 원화 복원이나 디자인 승인으로 부르지 않는다. 실제 Play의 같은Player/Camera·30°/350°·2screenpx에서전후19568px차이, geometry/lighting보존·shadererror0이다. 실제 GPU normal/좌우direct3장의 coverage차이0, CPU 기대 sRGB와최대RGBbyte오차0이며98handlecells의반응이반전된다. diagnostic3의연속입사광을최종3색관측으로기록하지않는다.
+
+**실패/저장/재개:** 최초 관측 도구의 존재하지 않는 enum은 컴파일/실행0에서 수정했다. 이름만으로 찾는 Single은 비활성 역사적 checkout2개를 함께 잡아 촬영전 차단됐고 활성 native대상으로 좁혔다. 생성 map은 재생성0으로보존하고 기존두 graph/state와실패기록을남긴뒤 새 code hash로통합단위만재개했다. integration03의verify→Unity→gate3단계/20조건이통과했고 GPU수식4조건도통과했다. 실제 구도의가구하단클리핑은촬영에만카메라위치를옮겨2px/각도/실제Camera를유지했고원위치로복원했다. finalEdit/saved/clean이며씬diff는checkout material참조1개다. `Assets/Art/NativeMaterial29`와`material29/run01/comparison.png`가현재출력,원본N19map은보존된다. 큰face의밀도·색표현은후속사용자피드백입력이고모든가구확대적용·caster곡면변경·미술승인·Standalone/성능은미검증이다. 새기하가필요한실루엣/투영그림자는이 normal수선으로해결했다고하지않는다.
+
 ## N28 현재 결정 — 기존 원형 메시와 픽셀 표면의 격자 변환 공유
 
 [현재/R4, 2026-10-05] 요청은 그림자와 현재 픽셀 표면의 일치이며, 최신 정정은 원형 메시 재사용이다. 현재 N16~27 표면은 옛 Blender scene.blend에서 나온 렌더가 아니다. `geometry16.py` 부품 정의가 position/normal cache와 closed caster를 함께 만들었고, N19는 material map만 바꿨다. 캐시 재계산의 bitwise 일치와 원형 caster 연결을 읽기 전용으로 확인했다. 금색 장식은 현재 기하에서 flush inlay이며, 새 돌출을 만드는 것은 이 요청의 원인 수정이 아니다.

@@ -1,6 +1,8 @@
-# N17~N28 실행 진입점
+# N17~N29 실행 진입점
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
+
+N29 재료 계산은 `material29.py generate --output <새경로>`이며 현재 입력은 기존 empty_counter의 canonical chart/normal과 N19 material map입니다. 화면 RGB를 축소하지 않고 G에 색 군집, 별도 float normal map에 손잡이의 곡면 법선을 계산합니다. `run_material29.py`는 계산→Unity writer→관측 gate를 묶고 기존 출력/상태를 덮어쓰지 않습니다. `--reuse-maps --integration-version N`은 명시된 원인 수정 후 같은 map byte를 검증해 통합만 재개합니다. 최초 두 상태는 LocalOnly에 보존됐고 최종은 material29-integration03입니다. Unity 진입점은 `NativeMaterial29Observation.Prepare/Observe/BindAndSave`, 실제GPU 검사는 `material29_finish.py`, 현재 결과는 `material29/run01/comparison.png`입니다. 기존 버전을 재사용할 때 Prepare를 반복하지 않습니다. 이번 Editor writer의 asset version은 NativeMaterial29로 고정되어 있으며 다른 물체/버전 통합은 별도 계약으로 정합니다.
 
 N28은 현재39 원형 caster를 그대로 재사용합니다. `NativeSurfaceGridAlignment`가 카메라별 원래 grid phase를 world δ로 계산하고, native card/cache·원형 shadow vertex·render bounds가 같은 이동을 한 번 소비합니다. 물리/mesh/원화/PPU/색은 변경하지 않습니다. `NativeShadow28Observation.FixtureCapture`는 네 실제 GPU world-position 경우, `AlignmentCapture`는 실제44pair를 관측합니다. 최종 판정은 `shadow28_gate.py`, 고정 그래프는 `shadow28/request-final.json`/`state-final.json`, 최종 실제 화면은 `shadow28/final-frame/both-on.png`입니다. 원본 재료에 자동 저장된 새 기본값의 실패와 Editor 복원 이력도 보존했습니다. centre sampling과 연속 mesh의 외곽 부분 coverage를 픽셀 단위로 완전히 같다고 판정하지 않습니다.
 

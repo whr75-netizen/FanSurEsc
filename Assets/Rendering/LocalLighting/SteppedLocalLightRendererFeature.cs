@@ -80,14 +80,14 @@ namespace FantasySurvival.Rendering
         {
             Camera camera = renderingData.cameraData.camera;
             PersistentGameplayShell shell = PersistentGameplayShell.Instance;
-            if (!Application.isPlaying ||
-                renderingData.cameraData.cameraType != CameraType.Game)
+            bool sceneView = renderingData.cameraData.cameraType == CameraType.SceneView;
+            if (camera == null || (!sceneView && (!Application.isPlaying ||
+                renderingData.cameraData.cameraType != CameraType.Game)))
             {
                 return;
             }
 
-            if (shell == null ||
-                shell.PlayerCamera != camera ||
+            if ((!sceneView && (shell == null || shell.PlayerCamera != camera)) ||
                 passMaterial == null)
             {
                 Shader.SetGlobalInteger(LightCountId, 0);
@@ -111,10 +111,17 @@ namespace FantasySurvival.Rendering
                 camera,
                 frustumPlanes,
                 SceneManager.GetActiveScene(),
-                shell.transform,
+                shell != null ? shell.transform : null,
                 Mathf.Clamp(visibleLightLimit, 1, MaximumLightCount),
                 out bool truncated);
             ApplyGlobalLightData(lightCount);
+            // Editor native surface shaders need current data while designing
+            // the room. Scene View does not receive the game's fullscreen light
+            // or character stencil pass, and uses no parallel light authority.
+            if (sceneView)
+            {
+                return;
+            }
             if (truncated && !limitWarningReported)
             {
                 Debug.LogWarning(

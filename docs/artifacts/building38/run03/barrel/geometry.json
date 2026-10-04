@@ -1,0 +1,203 @@
+{
+  "origin": [
+    -13,
+    -26
+  ],
+  "size": [
+    27,
+    35
+  ],
+  "bounds": [
+    [
+      -0.23,
+      0.0,
+      -0.23
+    ],
+    [
+      0.23,
+      0.65,
+      0.23
+    ]
+  ],
+  "metadata": {
+    "id": "barrel",
+    "units": "Unity local XYZ metres, Y-up",
+    "pixels_per_metre": 31.75,
+    "front_axis": "-Z",
+    "declared_dimensions_m": [
+      0.46,
+      0.65,
+      0.46
+    ],
+    "bounds": [
+      [
+        -0.23,
+        0.0,
+        -0.23
+      ],
+      [
+        0.23,
+        0.65,
+        0.23
+      ]
+    ],
+    "origin_projected_px": [
+      -13,
+      -26
+    ],
+    "size": [
+      27,
+      35
+    ],
+    "parts": [
+      {
+        "id": 0,
+        "name": "lower oak barrel",
+        "shape": "cylinder",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -0.23,
+            0.0,
+            -0.23
+          ],
+          [
+            0.23,
+            0.325,
+            0.23
+          ]
+        ]
+      },
+      {
+        "id": 1,
+        "name": "upper oak barrel",
+        "shape": "cylinder",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -0.23,
+            0.32500000000000007,
+            -0.23
+          ],
+          [
+            0.23,
+            0.65,
+            0.23
+          ]
+        ]
+      },
+      {
+        "id": 2,
+        "name": "iron hoop",
+        "shape": "cylinder",
+        "material": 2,
+        "bounds_canonical_m": [
+          [
+            -0.197156,
+            0.034125,
+            -0.197156
+          ],
+          [
+            0.197156,
+            0.069875,
+            0.197156
+          ]
+        ]
+      },
+      {
+        "id": 3,
+        "name": "iron hoop",
+        "shape": "cylinder",
+        "material": 2,
+        "bounds_canonical_m": [
+          [
+            -0.211232,
+            0.151125,
+            -0.211232
+          ],
+          [
+            0.211232,
+            0.186875,
+            0.211232
+          ]
+        ]
+      },
+      {
+        "id": 4,
+        "name": "iron hoop",
+        "shape": "cylinder",
+        "material": 2,
+        "bounds_canonical_m": [
+          [
+            -0.212014,
+            0.45662499999999995,
+            -0.212014
+          ],
+          [
+            0.212014,
+            0.492375,
+            0.212014
+          ]
+        ]
+      },
+      {
+        "id": 5,
+        "name": "iron hoop",
+        "shape": "cylinder",
+        "material": 2,
+        "bounds_canonical_m": [
+          [
+            -0.196374,
+            0.5866250000000001,
+            -0.196374
+          ],
+          [
+            0.196374,
+            0.622375,
+            0.196374
+          ]
+        ]
+      },
+      {
+        "id": 6,
+        "name": "barrel top",
+        "shape": "cylinder",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -0.18630000000000002,
+            0.6305,
+            -0.18630000000000002
+          ],
+          [
+            0.18630000000000002,
+            0.65,
+            0.18630000000000002
+          ]
+        ]
+      }
+    ],
+    "seams": [],
+    "R": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "U": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "F": [
+      0.6123724356957945,
+      -0.4999999999999999,
+      0.6123724356957945
+    ],
+    "coverage": "native pixel centre nearest positive finite solid hit",
+    "perimeter_expansion_pixels": 0,
+    "normal_space": "Unity local XYZ metres",
+    "shadow_mesh": "closed 16-segment/8-ring approximation of the same analytic solids",
+    "glass_policy": "fridge glazing is overlay only; opaque frame and goods own primary depth",
+    "hidden_surface_policy": "explicit semantic template, not inferred source recovery"
+  }
+}

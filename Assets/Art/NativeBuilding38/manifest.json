@@ -1,0 +1,1024 @@
+{
+  "schema": "N16.metric.native.cache.v1",
+  "paletteFile": "palette.png",
+  "assets": [
+    {
+      "id": "empty_counter",
+      "width": 77,
+      "height": 69,
+      "origin": [
+        -38,
+        -48
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -1.2,
+          0.0,
+          -0.4
+        ],
+        [
+          1.2,
+          1.0,
+          0.4
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "empty_counter/position.f32",
+      "normalFile": "empty_counter/normal.f32",
+      "materialFile": "empty_counter/material.png",
+      "previewFile": "empty_counter/preview.png",
+      "meshFile": "empty_counter/mesh.json"
+    },
+    {
+      "id": "left_shelf",
+      "width": 73,
+      "height": 89,
+      "origin": [
+        -36,
+        -69
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.30000000000000004,
+          0.0,
+          -1.2
+        ],
+        [
+          0.30000000000000004,
+          1.8,
+          1.2
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "left_shelf/position.f32",
+      "normalFile": "left_shelf/normal.f32",
+      "materialFile": "left_shelf/material.png",
+      "previewFile": "left_shelf/preview.png",
+      "meshFile": "left_shelf/mesh.json"
+    },
+    {
+      "id": "rear_shelf",
+      "width": 85,
+      "height": 95,
+      "origin": [
+        -42,
+        -72
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -1.45,
+          0.0,
+          -0.3
+        ],
+        [
+          1.45,
+          1.8,
+          0.3
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "rear_shelf/position.f32",
+      "normalFile": "rear_shelf/normal.f32",
+      "materialFile": "rear_shelf/material.png",
+      "previewFile": "rear_shelf/preview.png",
+      "meshFile": "rear_shelf/mesh.json"
+    },
+    {
+      "id": "island_body_template",
+      "width": 69,
+      "height": 55,
+      "origin": [
+        -34,
+        -36
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.8,
+          0.0,
+          -0.6
+        ],
+        [
+          0.8,
+          0.65,
+          0.6
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "island_body_template/position.f32",
+      "normalFile": "island_body_template/normal.f32",
+      "materialFile": "island_body_template/material.png",
+      "previewFile": "island_body_template/preview.png",
+      "meshFile": "island_body_template/mesh.json"
+    },
+    {
+      "id": "stock_shelf",
+      "width": 75,
+      "height": 90,
+      "origin": [
+        -37,
+        -69
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -1.225,
+          0.0,
+          -0.3
+        ],
+        [
+          1.225,
+          1.8,
+          0.3
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "stock_shelf/position.f32",
+      "normalFile": "stock_shelf/normal.f32",
+      "materialFile": "stock_shelf/material.png",
+      "previewFile": "stock_shelf/preview.png",
+      "meshFile": "stock_shelf/mesh.json"
+    },
+    {
+      "id": "fridge",
+      "width": 55,
+      "height": 83,
+      "origin": [
+        -27,
+        -67
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.775,
+          0.0,
+          -0.325
+        ],
+        [
+          0.7750000000000001,
+          1.9,
+          0.325
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "fridge/position.f32",
+      "normalFile": "fridge/normal.f32",
+      "materialFile": "fridge/material.png",
+      "previewFile": "fridge/preview.png",
+      "meshFile": "fridge/mesh.json"
+    },
+    {
+      "id": "utility_bench",
+      "width": 47,
+      "height": 52,
+      "origin": [
+        -23,
+        -38
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.65,
+          0.0,
+          -0.2750000000000001
+        ],
+        [
+          0.65,
+          0.9,
+          0.2750000000000001
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "utility_bench/position.f32",
+      "normalFile": "utility_bench/normal.f32",
+      "materialFile": "utility_bench/material.png",
+      "previewFile": "utility_bench/preview.png",
+      "meshFile": "utility_bench/mesh.json"
+    },
+    {
+      "id": "cleaning_cabinet",
+      "width": 33,
+      "height": 65,
+      "origin": [
+        -16,
+        -55
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.30000000000000004,
+          0.0,
+          -0.30000000000000004
+        ],
+        [
+          0.30000000000000004,
+          1.65,
+          0.30000000000000004
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "cleaning_cabinet/position.f32",
+      "normalFile": "cleaning_cabinet/normal.f32",
+      "materialFile": "cleaning_cabinet/material.png",
+      "previewFile": "cleaning_cabinet/preview.png",
+      "meshFile": "cleaning_cabinet/mesh.json"
+    },
+    {
+      "id": "register",
+      "width": 27,
+      "height": 28,
+      "origin": [
+        -13,
+        -19
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.275,
+          0.0,
+          -0.2
+        ],
+        [
+          0.275,
+          0.42,
+          0.2
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "register/position.f32",
+      "normalFile": "register/normal.f32",
+      "materialFile": "register/material.png",
+      "previewFile": "register/preview.png",
+      "meshFile": "register/mesh.json"
+    },
+    {
+      "id": "appletray",
+      "width": 21,
+      "height": 18,
+      "origin": [
+        -10,
+        -11
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.2,
+          0.0,
+          -0.15
+        ],
+        [
+          0.2,
+          0.16848961030678927,
+          0.15
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "appletray/position.f32",
+      "normalFile": "appletray/normal.f32",
+      "materialFile": "appletray/material.png",
+      "previewFile": "appletray/preview.png",
+      "meshFile": "appletray/mesh.json"
+    },
+    {
+      "id": "plant",
+      "width": 33,
+      "height": 47,
+      "origin": [
+        -16,
+        -37
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.3,
+          0.0,
+          -0.3
+        ],
+        [
+          0.3,
+          1.0,
+          0.3
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "plant/position.f32",
+      "normalFile": "plant/normal.f32",
+      "materialFile": "plant/material.png",
+      "previewFile": "plant/preview.png",
+      "meshFile": "plant/mesh.json"
+    },
+    {
+      "id": "barrel",
+      "width": 27,
+      "height": 35,
+      "origin": [
+        -13,
+        -26
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.23,
+          0.0,
+          -0.23
+        ],
+        [
+          0.23,
+          0.65,
+          0.23
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "barrel/position.f32",
+      "normalFile": "barrel/normal.f32",
+      "materialFile": "barrel/material.png",
+      "previewFile": "barrel/preview.png",
+      "meshFile": "barrel/mesh.json"
+    },
+    {
+      "id": "crate",
+      "width": 27,
+      "height": 26,
+      "origin": [
+        -13,
+        -17
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.25,
+          0.0,
+          -0.2
+        ],
+        [
+          0.25,
+          0.35,
+          0.2
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "crate/position.f32",
+      "normalFile": "crate/normal.f32",
+      "materialFile": "crate/material.png",
+      "previewFile": "crate/preview.png",
+      "meshFile": "crate/mesh.json"
+    },
+    {
+      "id": "detail_ledger",
+      "width": 19,
+      "height": 13,
+      "origin": [
+        -9,
+        -6
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.19,
+          0.0,
+          -0.1104965
+        ],
+        [
+          0.19,
+          0.02,
+          0.1104965
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "detail_ledger/position.f32",
+      "normalFile": "detail_ledger/normal.f32",
+      "materialFile": "detail_ledger/material.png",
+      "previewFile": "detail_ledger/preview.png",
+      "meshFile": "detail_ledger/mesh.json"
+    },
+    {
+      "id": "detail_clock",
+      "width": 13,
+      "height": 19,
+      "origin": [
+        -6,
+        -14
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.16581967213114754,
+          0.0,
+          -0.01
+        ],
+        [
+          0.16581967213114754,
+          0.3316393442622951,
+          0.01
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "detail_clock/position.f32",
+      "normalFile": "detail_clock/normal.f32",
+      "materialFile": "detail_clock/material.png",
+      "previewFile": "detail_clock/preview.png",
+      "meshFile": "detail_clock/mesh.json"
+    },
+    {
+      "id": "detail_poster",
+      "width": 15,
+      "height": 24,
+      "origin": [
+        -7,
+        -18
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.007500000000000011,
+          0.0,
+          -0.18
+        ],
+        [
+          0.007500000000000011,
+          0.48,
+          0.18
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "detail_poster/position.f32",
+      "normalFile": "detail_poster/normal.f32",
+      "materialFile": "detail_poster/material.png",
+      "previewFile": "detail_poster/preview.png",
+      "meshFile": "detail_poster/mesh.json"
+    },
+    {
+      "id": "detail_broom",
+      "width": 13,
+      "height": 42,
+      "origin": [
+        -6,
+        -37
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.020000000000000007,
+          0.0,
+          -0.13
+        ],
+        [
+          0.020000000000000007,
+          1.2,
+          0.13
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "detail_broom/position.f32",
+      "normalFile": "detail_broom/normal.f32",
+      "materialFile": "detail_broom/material.png",
+      "previewFile": "detail_broom/preview.png",
+      "meshFile": "detail_broom/mesh.json"
+    },
+    {
+      "id": "detail_bin",
+      "width": 19,
+      "height": 25,
+      "origin": [
+        -9,
+        -18
+      ],
+      "ppu": 31.75,
+      "structurePath": "",
+      "bounds": [
+        [
+          -0.15,
+          0.0,
+          -0.15
+        ],
+        [
+          0.15,
+          0.45,
+          0.15
+        ]
+      ],
+      "bindingPath": "",
+      "positionFile": "detail_bin/position.f32",
+      "normalFile": "detail_bin/normal.f32",
+      "materialFile": "detail_bin/material.png",
+      "previewFile": "detail_bin/preview.png",
+      "meshFile": "detail_bin/mesh.json"
+    },
+    {
+      "id": "structure_Roof___closed_opaque_volume",
+      "width": 417,
+      "height": 215,
+      "origin": [
+        -208,
+        -107
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/Roof - closed opaque volume/Native surface",
+      "bounds": [
+        [
+          -5.075,
+          -0.075,
+          -4.075
+        ],
+        [
+          5.075,
+          0.075,
+          4.075
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/Roof - closed opaque volume/Native surface",
+      "positionFile": "structure_Roof___closed_opaque_volume/position.f32",
+      "normalFile": "structure_Roof___closed_opaque_volume/normal.f32",
+      "materialFile": "structure_Roof___closed_opaque_volume/material.png",
+      "previewFile": "structure_Roof___closed_opaque_volume/preview.png",
+      "meshFile": "structure_Roof___closed_opaque_volume/mesh.json"
+    },
+    {
+      "id": "structure_wall_back",
+      "width": 237,
+      "height": 195,
+      "origin": [
+        -118,
+        -97
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_back/Native surface",
+      "bounds": [
+        [
+          -5.075,
+          -1.325,
+          -0.0749999285
+        ],
+        [
+          5.075,
+          1.325,
+          0.0749999285
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_back/Native surface",
+      "positionFile": "structure_wall_back/position.f32",
+      "normalFile": "structure_wall_back/normal.f32",
+      "materialFile": "structure_wall_back/material.png",
+      "previewFile": "structure_wall_back/preview.png",
+      "meshFile": "structure_wall_back/mesh.json"
+    },
+    {
+      "id": "structure_wall_left",
+      "width": 193,
+      "height": 173,
+      "origin": [
+        -96,
+        -86
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_left/Native surface",
+      "bounds": [
+        [
+          -0.0749998095,
+          -1.325,
+          -4.075
+        ],
+        [
+          0.0749998095,
+          1.325,
+          4.075
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_left/Native surface",
+      "positionFile": "structure_wall_left/position.f32",
+      "normalFile": "structure_wall_left/normal.f32",
+      "materialFile": "structure_wall_left/material.png",
+      "previewFile": "structure_wall_left/preview.png",
+      "meshFile": "structure_wall_left/mesh.json"
+    },
+    {
+      "id": "structure_wall_right",
+      "width": 193,
+      "height": 173,
+      "origin": [
+        -96,
+        -86
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_right/Native surface",
+      "bounds": [
+        [
+          -0.0749998095,
+          -1.325,
+          -4.075
+        ],
+        [
+          0.0749998095,
+          1.325,
+          4.075
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_right/Native surface",
+      "positionFile": "structure_wall_right/position.f32",
+      "normalFile": "structure_wall_right/normal.f32",
+      "materialFile": "structure_wall_right/material.png",
+      "previewFile": "structure_wall_right/preview.png",
+      "meshFile": "structure_wall_right/mesh.json"
+    },
+    {
+      "id": "structure_wall_front_left",
+      "width": 101,
+      "height": 127,
+      "origin": [
+        -50,
+        -63
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_front_left/Native surface",
+      "bounds": [
+        [
+          -2.0375,
+          -1.325,
+          -0.0749999285
+        ],
+        [
+          2.0375,
+          1.325,
+          0.0749999285
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_front_left/Native surface",
+      "positionFile": "structure_wall_front_left/position.f32",
+      "normalFile": "structure_wall_front_left/normal.f32",
+      "materialFile": "structure_wall_front_left/material.png",
+      "previewFile": "structure_wall_front_left/preview.png",
+      "meshFile": "structure_wall_front_left/mesh.json"
+    },
+    {
+      "id": "structure_wall_front_right",
+      "width": 101,
+      "height": 127,
+      "origin": [
+        -50,
+        -63
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_front_right/Native surface",
+      "bounds": [
+        [
+          -2.0375,
+          -1.325,
+          -0.0749999285
+        ],
+        [
+          2.0375,
+          1.325,
+          0.0749999285
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/wall_front_right/Native surface",
+      "positionFile": "structure_wall_front_right/position.f32",
+      "normalFile": "structure_wall_front_right/normal.f32",
+      "materialFile": "structure_wall_front_right/material.png",
+      "previewFile": "structure_wall_front_right/preview.png",
+      "meshFile": "structure_wall_front_right/mesh.json"
+    },
+    {
+      "id": "structure_stock_south",
+      "width": 97,
+      "height": 125,
+      "origin": [
+        -48,
+        -62
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/stock_south/Native surface",
+      "bounds": [
+        [
+          -1.95,
+          -1.325,
+          -0.075000018
+        ],
+        [
+          1.95,
+          1.325,
+          0.075000018
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/stock_south/Native surface",
+      "positionFile": "structure_stock_south/position.f32",
+      "normalFile": "structure_stock_south/normal.f32",
+      "materialFile": "structure_stock_south/material.png",
+      "previewFile": "structure_stock_south/preview.png",
+      "meshFile": "structure_stock_south/mesh.json"
+    },
+    {
+      "id": "structure_stock_west_lower",
+      "width": 15,
+      "height": 83,
+      "origin": [
+        -7,
+        -41
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/stock_west_lower/Native surface",
+      "bounds": [
+        [
+          -0.074999988,
+          -1.325,
+          -0.137499988
+        ],
+        [
+          0.074999988,
+          1.325,
+          0.137499988
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/stock_west_lower/Native surface",
+      "positionFile": "structure_stock_west_lower/position.f32",
+      "normalFile": "structure_stock_west_lower/normal.f32",
+      "materialFile": "structure_stock_west_lower/material.png",
+      "previewFile": "structure_stock_west_lower/preview.png",
+      "meshFile": "structure_stock_west_lower/mesh.json"
+    },
+    {
+      "id": "structure_stock_west_upper",
+      "width": 35,
+      "height": 93,
+      "origin": [
+        -17,
+        -46
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/stock_west_upper/Native surface",
+      "bounds": [
+        [
+          -0.074999988,
+          -1.325,
+          -0.5875
+        ],
+        [
+          0.074999988,
+          1.325,
+          0.5875
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/stock_west_upper/Native surface",
+      "positionFile": "structure_stock_west_upper/position.f32",
+      "normalFile": "structure_stock_west_upper/normal.f32",
+      "materialFile": "structure_stock_west_upper/material.png",
+      "previewFile": "structure_stock_west_upper/preview.png",
+      "meshFile": "structure_stock_west_upper/mesh.json"
+    },
+    {
+      "id": "structure_Door_lintel_10",
+      "width": 55,
+      "height": 39,
+      "origin": [
+        -27,
+        -19
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/Door lintel 10/Native surface",
+      "bounds": [
+        [
+          -1.0,
+          -0.175,
+          -0.075
+        ],
+        [
+          1.0,
+          0.175,
+          0.075
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/Door lintel 10/Native surface",
+      "positionFile": "structure_Door_lintel_10/position.f32",
+      "normalFile": "structure_Door_lintel_10/normal.f32",
+      "materialFile": "structure_Door_lintel_10/material.png",
+      "previewFile": "structure_Door_lintel_10/preview.png",
+      "meshFile": "structure_Door_lintel_10/mesh.json"
+    },
+    {
+      "id": "structure_Door_lintel_11",
+      "width": 43,
+      "height": 35,
+      "origin": [
+        -21,
+        -17
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Structure - closed volumes/Door lintel 11/Native surface",
+      "bounds": [
+        [
+          -0.075,
+          -0.175,
+          -0.75
+        ],
+        [
+          0.075,
+          0.175,
+          0.75
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Structure - closed volumes/Door lintel 11/Native surface",
+      "positionFile": "structure_Door_lintel_11/position.f32",
+      "normalFile": "structure_Door_lintel_11/normal.f32",
+      "materialFile": "structure_Door_lintel_11/material.png",
+      "previewFile": "structure_Door_lintel_11/preview.png",
+      "meshFile": "structure_Door_lintel_11/mesh.json"
+    },
+    {
+      "id": "structure_wall_left_base",
+      "width": 193,
+      "height": 115,
+      "origin": [
+        -96,
+        -57
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Cutaway bases/wall_left base/Native surface",
+      "bounds": [
+        [
+          -0.0749998095,
+          -0.275,
+          -4.075
+        ],
+        [
+          0.0749998095,
+          0.275,
+          4.075
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Cutaway bases/wall_left base/Native surface",
+      "positionFile": "structure_wall_left_base/position.f32",
+      "normalFile": "structure_wall_left_base/normal.f32",
+      "materialFile": "structure_wall_left_base/material.png",
+      "previewFile": "structure_wall_left_base/preview.png",
+      "meshFile": "structure_wall_left_base/mesh.json"
+    },
+    {
+      "id": "structure_wall_front_left_base",
+      "width": 101,
+      "height": 69,
+      "origin": [
+        -50,
+        -34
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Cutaway bases/wall_front_left base/Native surface",
+      "bounds": [
+        [
+          -2.0375,
+          -0.275,
+          -0.0749999285
+        ],
+        [
+          2.0375,
+          0.275,
+          0.0749999285
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Cutaway bases/wall_front_left base/Native surface",
+      "positionFile": "structure_wall_front_left_base/position.f32",
+      "normalFile": "structure_wall_front_left_base/normal.f32",
+      "materialFile": "structure_wall_front_left_base/material.png",
+      "previewFile": "structure_wall_front_left_base/preview.png",
+      "meshFile": "structure_wall_front_left_base/mesh.json"
+    },
+    {
+      "id": "structure_wall_front_right_base",
+      "width": 101,
+      "height": 69,
+      "origin": [
+        -50,
+        -34
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Cutaway bases/wall_front_right base/Native surface",
+      "bounds": [
+        [
+          -2.0375,
+          -0.275,
+          -0.0749999285
+        ],
+        [
+          2.0375,
+          0.275,
+          0.0749999285
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Cutaway bases/wall_front_right base/Native surface",
+      "positionFile": "structure_wall_front_right_base/position.f32",
+      "normalFile": "structure_wall_front_right_base/normal.f32",
+      "materialFile": "structure_wall_front_right_base/material.png",
+      "previewFile": "structure_wall_front_right_base/preview.png",
+      "meshFile": "structure_wall_front_right_base/mesh.json"
+    },
+    {
+      "id": "structure_stock_south_base",
+      "width": 97,
+      "height": 67,
+      "origin": [
+        -48,
+        -33
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Cutaway bases/stock_south base/Native surface",
+      "bounds": [
+        [
+          -1.95,
+          -0.275,
+          -0.075000018
+        ],
+        [
+          1.95,
+          0.275,
+          0.075000018
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Cutaway bases/stock_south base/Native surface",
+      "positionFile": "structure_stock_south_base/position.f32",
+      "normalFile": "structure_stock_south_base/normal.f32",
+      "materialFile": "structure_stock_south_base/material.png",
+      "previewFile": "structure_stock_south_base/preview.png",
+      "meshFile": "structure_stock_south_base/mesh.json"
+    },
+    {
+      "id": "structure_stock_west_lower_base",
+      "width": 15,
+      "height": 25,
+      "origin": [
+        -7,
+        -12
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Cutaway bases/stock_west_lower base/Native surface",
+      "bounds": [
+        [
+          -0.074999988,
+          -0.275,
+          -0.137499988
+        ],
+        [
+          0.074999988,
+          0.275,
+          0.137499988
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Cutaway bases/stock_west_lower base/Native surface",
+      "positionFile": "structure_stock_west_lower_base/position.f32",
+      "normalFile": "structure_stock_west_lower_base/normal.f32",
+      "materialFile": "structure_stock_west_lower_base/material.png",
+      "previewFile": "structure_stock_west_lower_base/preview.png",
+      "meshFile": "structure_stock_west_lower_base/mesh.json"
+    },
+    {
+      "id": "structure_stock_west_upper_base",
+      "width": 35,
+      "height": 35,
+      "origin": [
+        -17,
+        -17
+      ],
+      "ppu": 31.75,
+      "structurePath": "Interior34 - aligned native surfaces/Cutaway bases/stock_west_upper base/Native surface",
+      "bounds": [
+        [
+          -0.074999988,
+          -0.275,
+          -0.5875
+        ],
+        [
+          0.074999988,
+          0.275,
+          0.5875
+        ]
+      ],
+      "bindingPath": "Interior34 - aligned native surfaces/Cutaway bases/stock_west_upper base/Native surface",
+      "positionFile": "structure_stock_west_upper_base/position.f32",
+      "normalFile": "structure_stock_west_upper_base/normal.f32",
+      "materialFile": "structure_stock_west_upper_base/material.png",
+      "previewFile": "structure_stock_west_upper_base/preview.png",
+      "meshFile": "structure_stock_west_upper_base/mesh.json"
+    }
+  ],
+  "physical_pixels_per_metre": 31.75,
+  "lighting_preview_only": true,
+  "runtime_lighting_baked": false
+}

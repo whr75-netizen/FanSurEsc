@@ -1,0 +1,231 @@
+{
+  "origin": [
+    -34,
+    -36
+  ],
+  "size": [
+    69,
+    55
+  ],
+  "bounds": [
+    [
+      -0.8,
+      0.0,
+      -0.6
+    ],
+    [
+      0.8,
+      0.65,
+      0.6
+    ]
+  ],
+  "metadata": {
+    "id": "island_body_template",
+    "units": "Unity local XYZ metres, Y-up",
+    "pixels_per_metre": 31.75,
+    "front_axis": "-X",
+    "declared_dimensions_m": [
+      1.6,
+      0.65,
+      1.2
+    ],
+    "bounds": [
+      [
+        -0.8,
+        0.0,
+        -0.6
+      ],
+      [
+        0.8,
+        0.65,
+        0.6
+      ]
+    ],
+    "origin_projected_px": [
+      -34,
+      -36
+    ],
+    "size": [
+      69,
+      55
+    ],
+    "parts": [
+      {
+        "id": 0,
+        "name": "painted body",
+        "shape": "box",
+        "material": 2,
+        "bounds_canonical_m": [
+          [
+            -0.6,
+            0.0,
+            -0.784
+          ],
+          [
+            0.6,
+            0.6045,
+            0.8
+          ]
+        ]
+      },
+      {
+        "id": 1,
+        "name": "continuous oak top",
+        "shape": "box",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -0.6,
+            0.6045,
+            -0.8
+          ],
+          [
+            0.6,
+            0.65,
+            0.8
+          ]
+        ]
+      },
+      {
+        "id": 2,
+        "name": "door handle 0",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.11200000000000003,
+            0.36750000000000005,
+            -0.8
+          ],
+          [
+            -0.09200000000000004,
+            0.47750000000000004,
+            -0.785
+          ]
+        ]
+      },
+      {
+        "id": 3,
+        "name": "hinge 0",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.586,
+            0.14300000000000002,
+            -0.8
+          ],
+          [
+            -0.573,
+            0.17800000000000002,
+            -0.794
+          ]
+        ]
+      },
+      {
+        "id": 4,
+        "name": "hinge 0",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.586,
+            0.5135000000000001,
+            -0.8
+          ],
+          [
+            -0.573,
+            0.5485000000000001,
+            -0.794
+          ]
+        ]
+      },
+      {
+        "id": 5,
+        "name": "door handle 1",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.48799999999999993,
+            0.36750000000000005,
+            -0.8
+          ],
+          [
+            0.5079999999999999,
+            0.47750000000000004,
+            -0.785
+          ]
+        ]
+      },
+      {
+        "id": 6,
+        "name": "hinge 1",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.014,
+            0.14300000000000002,
+            -0.8
+          ],
+          [
+            0.027,
+            0.17800000000000002,
+            -0.794
+          ]
+        ]
+      },
+      {
+        "id": 7,
+        "name": "hinge 1",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.014,
+            0.5135000000000001,
+            -0.8
+          ],
+          [
+            0.027,
+            0.5485000000000001,
+            -0.794
+          ]
+        ]
+      }
+    ],
+    "seams": [
+      {
+        "kind": "door",
+        "pitch": 0.6,
+        "start": -0.6,
+        "count": 2,
+        "y0": 0.07,
+        "y1": 0.5745,
+        "z": -0.784
+      }
+    ],
+    "R": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "U": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "F": [
+      0.6123724356957945,
+      -0.4999999999999999,
+      0.6123724356957945
+    ],
+    "coverage": "native pixel centre nearest positive finite solid hit",
+    "perimeter_expansion_pixels": 0,
+    "normal_space": "Unity local XYZ metres",
+    "shadow_mesh": "closed 16-segment/8-ring approximation of the same analytic solids",
+    "glass_policy": "fridge glazing is overlay only; opaque frame and goods own primary depth",
+    "hidden_surface_policy": "explicit semantic template, not inferred source recovery"
+  }
+}

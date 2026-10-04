@@ -1,0 +1,285 @@
+{
+  "origin": [
+    -38,
+    -48
+  ],
+  "size": [
+    77,
+    69
+  ],
+  "bounds": [
+    [
+      -1.2,
+      0.0,
+      -0.4
+    ],
+    [
+      1.2,
+      1.0,
+      0.4
+    ]
+  ],
+  "metadata": {
+    "id": "empty_counter",
+    "units": "Unity local XYZ metres, Y-up",
+    "pixels_per_metre": 31.75,
+    "front_axis": "-Z",
+    "declared_dimensions_m": [
+      2.4,
+      1.0,
+      0.8
+    ],
+    "bounds": [
+      [
+        -1.2,
+        0.0,
+        -0.4
+      ],
+      [
+        1.2,
+        1.0,
+        0.4
+      ]
+    ],
+    "origin_projected_px": [
+      -38,
+      -48
+    ],
+    "size": [
+      77,
+      69
+    ],
+    "parts": [
+      {
+        "id": 0,
+        "name": "painted body",
+        "shape": "box",
+        "material": 2,
+        "bounds_canonical_m": [
+          [
+            -1.2,
+            0.0,
+            -0.384
+          ],
+          [
+            1.2,
+            0.95,
+            0.4
+          ]
+        ]
+      },
+      {
+        "id": 1,
+        "name": "continuous oak top",
+        "shape": "box",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -1.2,
+            0.95,
+            -0.4
+          ],
+          [
+            1.2,
+            1.0,
+            0.4
+          ]
+        ]
+      },
+      {
+        "id": 2,
+        "name": "door handle 0",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.546,
+            0.595,
+            -0.4
+          ],
+          [
+            -0.526,
+            0.7050000000000001,
+            -0.385
+          ]
+        ]
+      },
+      {
+        "id": 3,
+        "name": "hinge 0",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -1.186,
+            0.22,
+            -0.4
+          ],
+          [
+            -1.173,
+            0.255,
+            -0.394
+          ]
+        ]
+      },
+      {
+        "id": 4,
+        "name": "hinge 0",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -1.186,
+            0.79,
+            -0.4
+          ],
+          [
+            -1.173,
+            0.8250000000000001,
+            -0.394
+          ]
+        ]
+      },
+      {
+        "id": 5,
+        "name": "door handle 1",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.2539999999999999,
+            0.595,
+            -0.4
+          ],
+          [
+            0.2739999999999999,
+            0.7050000000000001,
+            -0.385
+          ]
+        ]
+      },
+      {
+        "id": 6,
+        "name": "hinge 1",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.386,
+            0.22,
+            -0.4
+          ],
+          [
+            -0.373,
+            0.255,
+            -0.394
+          ]
+        ]
+      },
+      {
+        "id": 7,
+        "name": "hinge 1",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.386,
+            0.79,
+            -0.4
+          ],
+          [
+            -0.373,
+            0.8250000000000001,
+            -0.394
+          ]
+        ]
+      },
+      {
+        "id": 8,
+        "name": "door handle 2",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            1.0539999999999998,
+            0.595,
+            -0.4
+          ],
+          [
+            1.0739999999999998,
+            0.7050000000000001,
+            -0.385
+          ]
+        ]
+      },
+      {
+        "id": 9,
+        "name": "hinge 2",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.4139999999999999,
+            0.22,
+            -0.4
+          ],
+          [
+            0.42699999999999994,
+            0.255,
+            -0.394
+          ]
+        ]
+      },
+      {
+        "id": 10,
+        "name": "hinge 2",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.4139999999999999,
+            0.79,
+            -0.4
+          ],
+          [
+            0.42699999999999994,
+            0.8250000000000001,
+            -0.394
+          ]
+        ]
+      }
+    ],
+    "seams": [
+      {
+        "kind": "door",
+        "pitch": 0.7999999999999999,
+        "start": -1.2,
+        "count": 3,
+        "y0": 0.07,
+        "y1": 0.9199999999999999,
+        "z": -0.384
+      }
+    ],
+    "R": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "U": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "F": [
+      0.6123724356957945,
+      -0.4999999999999999,
+      0.6123724356957945
+    ],
+    "coverage": "native pixel centre nearest positive finite solid hit",
+    "perimeter_expansion_pixels": 0,
+    "normal_space": "Unity local XYZ metres",
+    "shadow_mesh": "closed 16-segment/8-ring approximation of the same analytic solids",
+    "glass_policy": "fridge glazing is overlay only; opaque frame and goods own primary depth",
+    "hidden_surface_policy": "explicit semantic template, not inferred source recovery"
+  }
+}

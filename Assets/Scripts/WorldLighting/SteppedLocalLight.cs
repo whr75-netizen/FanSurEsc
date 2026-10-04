@@ -8,6 +8,9 @@ namespace FantasySurvival.WorldLighting
     /// Defines one presentation-only local light. The renderer consumes these
     /// values without creating a Unity Light or mutating gameplay state.
     /// </summary>
+    // Registration only: there is no edit-time Update or separate light state.
+    // Native surface materials and Scene View consume this same source list.
+    [ExecuteAlways]
     [DisallowMultipleComponent]
     [AddComponentMenu("Fantasy Survival/World Lighting/Stepped Local Light")]
     public sealed class SteppedLocalLight : MonoBehaviour

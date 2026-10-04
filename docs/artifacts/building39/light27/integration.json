@@ -1,0 +1,24 @@
+{
+  "requiredCodePaths": [
+    "Assets/Rendering/LocalLighting/MaterialLightResponse27.hlsl",
+    "Assets/Editor/MaterialLight27Fixture.shader",
+    "Assets/Editor/NativeLight27Observation.cs",
+    "Assets/Editor/NativeRoom26Observation.cs",
+    "Assets/Shaders/World/NativeReadable18.hlsl",
+    "Assets/Shaders/World/NativePaletteSurface16.shader",
+    "Assets/Rendering/LocalLighting/SteppedLocalLightFullscreen.shader"
+  ],
+  "codeHashes": {
+    "Assets/Rendering/LocalLighting/MaterialLightResponse27.hlsl": "3890a1769b483ee1892fdfd7737e9c34a60d4033e790ca43c6e02274fe4620be",
+    "Assets/Editor/MaterialLight27Fixture.shader": "c5ea61391154def465d1cdad02df38fec32e1d72a568beb1bede7538e8bfef6a",
+    "Assets/Editor/NativeLight27Observation.cs": "366a0e5249bee0bbf2e7d0f41db75e5fe08a1d2cbce149ec6d01003f88a0fe7a",
+    "Assets/Editor/NativeRoom26Observation.cs": "9f7c395890a662cb8d1373b256ebaf8445d55087f5ea70157df9f7da01c1fb96",
+    "Assets/Shaders/World/NativeReadable18.hlsl": "d47d817c7c6c58cf6b82c8d88d3f190054c62880b700716b4f75cfb59f0989e5",
+    "Assets/Shaders/World/NativePaletteSurface16.shader": "4b5ae9d8e8a79311757dbdc0c723ea594dee877f9c3e8e27cb28bf0b58887961",
+    "Assets/Rendering/LocalLighting/SteppedLocalLightFullscreen.shader": "8b703d8177fff4f28594402bd0bce8f6dedf9a060239c87f26ac8121b98ab517"
+  },
+  "prototype": "fixture-validation.json",
+  "baseline": "N26 existing source/cache/geometry/mover and previous four actual Play captures; no source resampling.",
+  "representation": "linear albedo * (readable base light response + already quantized local irradiance)",
+  "legacyWorld": "DstColor One material-colour gain; not reconstruction of missing albedo"
+}

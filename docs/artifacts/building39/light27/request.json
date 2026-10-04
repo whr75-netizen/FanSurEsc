@@ -1,0 +1,161 @@
+{
+  "entry": "integrate",
+  "goal": "N27 remove surface light painting; material response with preserved pixel source/geometry and independent three-level local light.",
+  "max_steps": 3,
+  "nodes": [
+    {
+      "id": "integrate",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {},
+      "parameters": {
+        "scope": "N27 BUILDING16.md fixed contract; Assets/Shaders/World/NativeReadable18.hlsl, Assets/Shaders/World/NativePaletteSurface16.shader, Assets/Rendering/LocalLighting/SteppedLocalLightFullscreen.shader"
+      },
+      "question": "Apply only N27 shader fixes after GPU fixture gate passed; freeze actual integrated code hashes and return integration.json.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "file:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\light27\\baseline.json",
+        "file:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\light27\\fixture.json"
+      ],
+      "writes": [
+        "light27:integrate"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "observe",
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "integrate.receiptFile"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "observe",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {},
+      "parameters": {
+        "scope": "N27 BUILDING16.md fixed contract; Assets/Shaders/World/NativeReadable18.hlsl, Assets/Shaders/World/NativePaletteSurface16.shader, Assets/Rendering/LocalLighting/SteppedLocalLightFullscreen.shader"
+      },
+      "question": "Observe actual N26 Play matrix with N27 shaders, restore state and save final receipt; return play/receipt.json.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "file:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\light27\\baseline.json",
+        "file:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\light27\\fixture.json"
+      ],
+      "writes": [
+        "light27:observe"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "final",
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "observe.receiptFile"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:/Users/JG/.cache/codex-runtimes/codex-primary-runtime/dependencies/python/python.exe",
+          "-B",
+          "Tools/Building38/light27_gate.py"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 30,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\light27_gate.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\room26_gate.py"
+        ]
+      },
+      "reads": [
+        "light27:integrate",
+        "light27:observe"
+      ],
+      "writes": [
+        "light27:validation"
+      ],
+      "max_visits": 1,
+      "on_error": "@blocked",
+      "edges": [
+        {
+          "to": "@complete",
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          }
+        },
+        {
+          "to": "@blocked",
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "N27",
+      "text": "GPU material response and actual Play lighting/pixel invariants pass.",
+      "source": "User: 모든 조명효과 Unity 기술 조사후 수정; 기존 원본/픽셀 유지.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

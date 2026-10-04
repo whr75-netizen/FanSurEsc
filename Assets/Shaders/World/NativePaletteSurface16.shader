@@ -255,7 +255,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         {
             // The boundary stays in the lit material's hue, with a single
             // display-space darkening. No coverage, rank or pixel change.
-            return SRGBToLinear(LinearToSRGB(saturate(surfaceColor)) *
+            return SRGBToLinear(LinearToSRGB(max(surfaceColor, 0.0)) *
                 saturate(_NativeEdgeSRGBScale));
         }
 
@@ -263,17 +263,15 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         {
             if (_ReadableNight > 0.5 && (_DiagnosticMode < 4.5 || _DiagnosticMode >= 5.5))
             {
-                float band = Native18Band(max(dot((float3)irradiance, Native17Luminance), 0.0));
                 float column = surface.material == 1u ? (float)surface.pattern : 2.0;
                 column = min(column, BandCount(surface.material) - 1.0);
                 if (surface.edge == 3u) column = Native17CreaseColumn;
-                half3 nightColor = Native18Color(
-                    PaletteColor(surface.material, column) * Native18Brightness(band),
-                    max((float3)irradiance, 0.0), band);
-                // Same RGB addition as the base scene's Blend One One pass.
-                // Apply once, outside the night-band classifier. Boundaries
-                // inherit this surface colour; maps/depth/ranks are unchanged.
-                half3 finalColor = saturate(nightColor + nativeAdditiveLight);
+                // Both fields pass through the same actual material reflectance.
+                // Never paint raw light RGB over a finished surface or fold the
+                // already quantized moving source back into the base ramp.
+                half3 finalColor = Material27Readable(
+                    PaletteColor(surface.material, column),
+                    (float3)irradiance, (float3)nativeAdditiveLight);
                 return surface.edge == 1u || surface.edge == 2u ?
                     MaterialBoundaryColor(finalColor) : finalColor;
             }
@@ -295,14 +293,13 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                 column = min((float)surface.pattern, bands - 1.0);
                 patternLight = (lightingBand + 1.0) / 3.0;
             }
-            // Hue follows actual RGB illumination, with only three intervals
-            // per channel; no continuously blended native palette columns.
-            half3 tint = Native17LightTint(irradiance, luminance);
+            // Preserve incident RGB ratios; quantize the scalar/ramp only.
+            half3 tint = Material27LightTint(irradiance);
             half3 color = PaletteColor(surface.material, column);
             // Creases retain their existing darker material ramp entry.
             if (surface.edge == 3u)
                 color = PaletteColor(surface.material, Native17CreaseColumn);
-            half3 finalColor = saturate(color * tint * patternLight);
+            half3 finalColor = Material27Diffuse(color, tint * patternLight);
             return surface.edge == 1u || surface.edge == 2u ?
                 MaterialBoundaryColor(finalColor) : finalColor;
         }

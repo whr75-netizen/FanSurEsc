@@ -1,5 +1,25 @@
 # N17 — 테스트 건물 한 채의 공통 native 표면·실시간 조명 제작 계약
 
+## N27 현재 결정 — 재료를 통과하는 조명, 색 덧칠 제거
+
+[요청/범위] 모든 조명 효과가 물감처럼 섞이는 원인을 Unity 기술과 대조해 수정한다. N26의 전등/이동광 독립 제어, 원본·512 source/cache 파일·194 geometry/TRS·30°/350°·90.5097PPU·2px는 유지한다. 조명색·위치·범위·세 단계 입력·하늘 owner·캐릭터 팔레트는 변경하지 않는다. 이번 수정은 표면 반응 계산이며 그림 원본 재생성/축소나 새 후처리 색 필터는 아니다.
+
+[R0 원인] 직접 확인한 프로젝트는 Linear, Preview Camera post=false, 활성 Volume 없음이다. Native에는 fullscreen 제외 stencil bit2가 있어 중복 pass가 원인은 아니다. `Native18Color`는 blue 우세를 분기해 재료색을 무채색 기반 blue target으로 보간하고, 채널별 tint를 반올림한다. 이어 `nightColor + nativeAdditiveLight`가 반사 재료를 거치지 않은 흰 RGB를 더한다. 캐릭터 flat/adaptive PBR 경로는 이미 albedo 곱셈이므로 수정하지 않는다. 일반 world fullscreen도 `Blend One One`로 화면색을 덧칠한다.
+
+[출처/후보] Unity6000.5/URP17.5 설치본 `Lighting.hlsl`의 radiance=light.color×distance×shadow×N·L 및 BRDF×radiance를 [공식 조명 API](https://docs.unity3d.com/6000.5/Documentation/Manual/urp/use-built-in-shader-methods-lighting.html), [Linear 색 공간](https://docs.unity3d.com/6000.5/Documentation/Manual/linear-color-space.html)와 대조했다. Standard Lit 전면 교체는 기존 native 팔레트/야간 가독성/광원 단계 계약을 잃으므로 제외한다. 총 E를 다시 세 단계로 분류하는 안은 이동광의 서로 다른 세 양수 단계를 한두 단계로 접는 반례 때문에 제외한다. 채택은 기존 toon 노출 F(Ebase)의 RGB 재색칠을 제거하고 `albedo × [F(Ebase)+Estepped]`로 재료 반응을 계산하는 최소 변경이다. Unity direct/shadow API는 그대로 사용한다.
+
+[좌표·canonical·계산] N26의 metre/Y-up world P,N 및 cache→Transform→world→camera/native pixel 변환은 그대로다. PaletteMap sRGB sampler가 만든 linear albedo A, URP/SH와 room fill의 linear Ebase, 기존 registry의 양자화된 linear Estepped가 색 canonical이다. `p=max(Ebase.rgb)`, `T=Ebase/p`(p≤1e−6이면0), `Y=dot(Ebase,[.2126729,.7151522,.072175])`, 기존 Q(Y)=.55/.78/1(.12/.4 경계), `F=Q×T`, `Lout=A×(F+Estepped)`. RGB 채널별 반올림/blue target 보간/표면 saturate를 제거한다. 이 F는 읽히는 밤을 위한 제한된 toon 노출이고 물리 HDR 조명·GI 해법으로 주장하지 않는다. 표면 경계는 같은 lit 재료에 기존 sRGB .8을 한 번 적용한다. 원본색/무늬 rank/coverage는 변하지 않는다.
+
+[일반 world·산란 경계] fullscreen에는 albedo가 없으므로 정확한 diffuse를 복원할 수 없다. `Blend DstColor One`의 기존 lit 색 증폭으로 흰 덧칠을 제거한다. 이는 `Cout=Cexisting×(1+Elocal)` 근사이며 기존색0/청색 환경광을 복구할 수 없는 한계가 있다. 실제 native/character는 이 pass에서 제외되며 정확히 자신의 A를 사용한다. volumetric/halo의 additive는 시선 산란/발광의 radiance 합이므로 유지한다. 하늘의 twilight 색 보간은 이번21시 증상 근거가 없어 바꾸지 않는다.
+
+[R1 최소 실험/반례] 프로덕션 통합 전 독립 ARGBFloat GPU fixture: black/wood/navy/paper albedo × 6 neutral/blue/warm/zero Ebase × 이동광0와 세 양수 광량 =96case. CPU↔GPU 최대오차≤1e−5(linear float), black A의 출력0, zero E의 출력0, 백색 이동광 Δ/A=.22/3 간격 및 세 양수 단계 구분을 확인한다. 임계값은 실험 전에 고정한다. 실패하면 재료 반응 단계에서 중단하며 픽셀/원화 변경으로 덮지 않는다. `MaterialLightResponse27.hlsl`, `MaterialLight27Fixture.shader`, `NativeLight27Observation.FixtureCapture`, `light27_gate.py --fixture-only`가 진입점이다.
+
+[R2 통합/관찰] R1 통과 후 담당 shader만 연결한다. 기존 `NativeRoom26Observation.Capture`의 실제 Play21시 all-off/lamps-only/moving-only/both-on/shadow-off와 room-fill GPU를 한 번 관찰한다. source hash·같은 Player/Camera·광원 파라미터·기하·2px와 기존 두 floor ROI 불변을 재사용 gate로 계산한다. 이전 N26 그림은 같은 원본/기하/조명 기준의 before로 보존한다. WorkLoop는 구현→실제 관찰→고정 판정으로 연결하며 최종 미술 합격/게임 전체 조명 일관성은 수치 검사만으로 선언하지 않는다.
+
+[실제 결과] R1의96case/12검사 통과, 최대CPU↔GPU오차4.085e−8이다. 세 백색 양수 단계가 모든18재료/환경조합에서 구분되고 black albedo 출력0을 확인했다. 실제GameMap1 Play21시에서 R2의7광원/diagnostic 비교를 저장했으며 전등shadow on/off126670px 변화, 같은Player/Camera·512파일SHA·194mesh/TRS·moving파라미터·2px를 확인했다. 두 audited floor ROI 불일치0, shadererror0, 기존Console error8개 대비신규0이다. 하얀 덧칠과 rear wood의 purple 변색은 `light27/before/both-on.png`와 `light27/play/both-on.png`에서 비교한다. CPU검사/미술판정을혼동하지않는다. WorkLoop3노드가원래고정계약으로완료됐다. Play종료/모든source상태복원/sceneSavedtrue·dirtyfalse이며scene/prefab/meta기존변경0이다.
+
+[한계/재개] 일반world의screen gain은정확한albedo기반URP조명의대체가아니다. 검정기존색이나청색cast복원은그재료의표면셰이더통합이필요하다. 현재한건물native는그경로를거치지않는다. room fill의GI근사/캐릭터미술/Standalone·GPU성능은N26한계를유지한다. N18 `night18.py`의옛색reference는역사적실험이며N27의새CPU/GPU판정대신실행하지않는다. 관측은 `docs/artifacts/building39/light27`, 현재재료반응판정은 `Tools/Building38/light27_gate.py`이고 재개는 실제반례의원인단계에서만한다. 첫MCP관측호출의중첩private클래스는도구rewriter가namespace에중복생성해컴파일전실행0이었으며단순명령으로고쳤다. 실제관측실행은1회다. 이후기존Enum drawer warning이tool을partial로표시했지만파일/receipt/finally복원을직접확인해재실행하지않았다.
+
 ## N26 현재 결정 — 테스트 구체와 건물 전등 분리
 
 [확정] 사용자 요청: 움직이는 테스트 조명 구체는 유지하고 실제 건물 전등은 별도로 구현한다. 전등 켜짐은 방 전체 밝기와 국소 면 명암을 함께 바꾸어야 한다. 원본193파일·캐시·기하·배치·카메라30°/350°·90.5097PPU·2px표시·이동 궤적은 보존한다. 새 전등 모델/입력 단축키/전역 ambient 변경은 범위 밖이다.

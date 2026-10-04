@@ -11,7 +11,11 @@ Shader "Hidden/FantasySurvival/SteppedLocalLightFullscreen"
         ZTest Always
         ZWrite Off
         Cull Off
-        Blend One One
+        // Legacy world has no albedo buffer. Modulate its existing lit colour
+        // rather than paint independent RGB over it. Native/character use
+        // their own true material response and are stencil-excluded below.
+        // This gain is not a reconstruction of missing diffuse reflectance.
+        Blend DstColor One
         ColorMask RGB
 
         Pass

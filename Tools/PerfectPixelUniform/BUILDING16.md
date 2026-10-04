@@ -60,6 +60,26 @@ canonical/좌표·투영/단위는 N17과 같으며 이번 자유도는 최종 �
 
 재사용에는cache/API/PerfectPixel실행이필요없다. 새색계산실험이승인되면`night18.py start --output <새폴더>`→CPU색만→`NativeNight18Observation.Fixture`/`Gameplay`의실제관측→기존WorkLoop submit/최종gate다. 형상/병라벨디자인의수선은별도입력저작단계이며이색함수의임계값으로대신하지않는다. 직접기하/카메라를다시만드는것은현재수선범위가아니다.
 
+## N19 현재 수선 계약 — 누락된 금속 장식과 제작 밀도 (2026-10-04)
+
+[요구/원인] 사용자에게N18의밤표현은개선되었지만금색문테두리가사라지고도트가너무작다는피드백을받았다. 카메라줌으로제작밀도문제를대체하지않는다. N17의실제catalog는`item.metadata.metadata.cabinet_design`에설계를저장하지만material단계는`item.metadata.cabinet_design`을읽어분기를건너뛰었다. 실제counter의brass164px는손잡이뿐이고body금색0이다. 같은원인이woodUV에도적용된다. N18은PPU/카메라를변경하지않았으며N17의90.51PPU/화면1px를유지했다. 과거N16은31.75PPU/화면4px였고N15미리보기는4배였다.
+
+[수선] 직렬화된geometry metadata를읽는접근함수하나로두분기를교정한다. 기존네수납장geometry/declared physical bounds/PPU/edge/coverage/관측palette를재사용하여material rank/평면장식만재계산한다. 기존N15문사각선·힌지·모서리철물을이미있는투영식과canonical_line으로가시면안에기록한다. 새돌출volume나offset/장식선은발명하지않는다. Unity는현재material의MaterialMap참조만새수선PNG로연결한다. 기존position/normal/display/shadow·sceneTransform·collider·camera·N18색함수/sky owner·원본을보존한다.
+
+[밀도판별] semantic geometry의실물치수와카메라를고정한counter하나에서90.5097와45.2548PPU로pixel-centre ray hit부터각각직접제작한다. Δworld=1/PPU이며후자의도트간격은두배다. 완성PNGresize·카메라줌을생산단계에쓰지않는다. CPU겉모양/재질이아닌같은미터bounds를canonical로재사용한다. 이한개표본은pixel밀도비교이며전체건물의새밀도승인이아니다. 45.25를전체통합하거나소스별임의scale을넣지않는다.
+
+[검증/그래프] 기존WorkLoop: 실제catalog읽기/4종재질수선·단일밀도비교→Unity single writer의PNG연결/동일고정fixture·실제밤화면→최종검증이다. metadata설계4종검출,가시면의원래금장추가counter1810/island414px,coverage/edge불변·무채색메시/PPU/hash불변,원본팔레트불변,새material만body ID변경,동일카메라/크기의두표본1px/2px를확인한다. 낮은밀도의미세특징손실은픽셀수와실제비교로남기며기술합격을미술합격이라고하지않는다. 기존밤명암검증은N18근거를재사용하고새조명수치는조정하지않는다.
+
+### N19 실제 관측과 재사용
+
+[현재] `gold-density19/fine`의 네 재질만 새 PNG로 연결했다. 금장 추가는 counter 1,810/island 414px이며, 나머지 두 종은 금장 앞면이 현재 시점의 숨은 면이라 0이다. 기존 edge/coverage·관측 palette·geometry/position/normal/caster/display 189파일은 불변이다. 실제 21시 같은 Player/Camera·30°/350°·36재료·1px·shader error 0을 관측했다. 가구 치수·배치·카메라·전체 건물 PPU는 변경하지 않았다.
+
+[비교 결함/수선] 첫 임시 comparator의 float raw row를 PNG와 맞추지 않아 coarse가 잘렸다. 실제 production importer의 ReadFloatRows는 이미 상하 행을 맞추고 있었다. 첫 이미지와 paused graph는 보존하고, 비교 코드의 동일 행 변환과 후속 GPU 관측만 재개했다. `comparison-state.json`의 최종 gate는 fine/coarse GPU→CPU coverage 차이 0·RGB 최대 오차 1/255, 기존 캐시 189파일 불변이다. 두 native 표본은 같은 물리 mesh 정점/삼각형·같은 임시 camera에서 1/2px이며 211×187/109×96이다. coarse 손잡이는 14/16/14px로 남아 있다. 45.25PPU는 비교용이며 현재 건물에 통합하지 않았다. 계산 합격을 미술 합격으로 승격하지 않는다.
+
+[실제 이미지 비교] `source-scene-comparison/source-night-game-native.png`는 좌측 현재 제작 원본 preview 211×187, 중앙 같은 재질의 고정 밤광 CPU색, 우측 실제 Play 카메라의 `matched-frame.png` 1114×857에서 측정한 checkout 영역을 자른 것이다. native 1px→화면 1px이며 이미지 resize/resampling 0, 정수 paste/crop만 사용했다. 중앙 fixture는 일정 입사광 .03/.045/.085이며 게임의 공간별 빛과 동일하다고 주장하지 않는다. 현재 금장도 밤 색조로 옅게 보인다. PNG는 현재 제작본의 미리보기이지 원화 생성본이나 runtime에 그대로 칠하는 완성 RGB 텍스처가 아니다. 실제 runtime은 재질/무늬/기하 cache와 기존 광원으로 색을 계산한다.
+
+재사용에는 네 수선 재료와 기존 cache를 그대로 쓴다. 새 수선은 `repair19.py start`의 새 출력 폴더에서 재질 단계만 실행한다. 비교 행 방향 실패처럼 원인이 확정된 경우 `reopen_comparison`은 기존 재질/유효 Play 관측을 재사용하고 fresh 비교 폴더로 후속 관측만 연결한다. `compare19.py`는 이번 실제 Unity 화면/rect receipt와 원본의 무변형 비교판이다. 전체 밀도 변경·금장의 밤 색감 개선·캐릭터 PBR·원화 100% 복원은 미완료다.
+
 ## 과거 N16 결정 / R0~R2 (2026-10-04)
 
 사용자가 N15의 표현을 개선된 기준으로 확인하고 그 파이프라인을 정리한 뒤 기지 GameMap1의 테스트 건물 내부 전체에 적용하도록 요청했다. 대상은 PlannedPixelShop33의 활성 실내다. 18종/26개 사물, 기존 구조·지붕·절개·벽등을 대상으로 하며 플레이어·카메라·동선·콜라이더·방의 역할·다른 건물·도심은 보존한다. 사용자 원본 시트와 N15 결과는 그대로 남긴다.

@@ -51,7 +51,7 @@ def geometry(out):
     save_geometry(out, 'floor_surface', floor, catalog, floor['metadata']['bindingPath'])
     write(out/'geometry-catalog.json', catalog)
 
-def save_geometry(out, ident, data, catalog, path=None):
+def save_geometry(out, ident, data, catalog, path=None, ppu=PPU):
     folder=out/ident; folder.mkdir(parents=True, exist_ok=True)
     arrays={k:v for k,v in data.items() if isinstance(v,np.ndarray)}
     np.savez_compressed(folder/'geometry.npz', **arrays)
@@ -63,11 +63,18 @@ def save_geometry(out, ident, data, catalog, path=None):
     write(folder/'mesh.json', {'vertices':vertices,'triangles':triangles})
     h,w=data['mask'].shape
     catalog.append({'id':ident,'width':w,'height':h,'origin':list(map(int,data['origin'])),
-                    'ppu':PPU,'structurePath':path or '', 'bounds':np.asarray(data['bounds']).tolist(),
+                    'ppu':float(ppu),'structurePath':path or '', 'bounds':np.asarray(data['bounds']).tolist(),
                     'metadata':meta})
 
 def load(out, item):
     with np.load(out/item['id']/'geometry.npz') as z: return {k:z[k] for k in z.files}
+
+def geometry_metadata(item):
+    """Read the actual save_geometry envelope, never a flattened test fixture."""
+    metadata = item['metadata']['metadata']
+    if not isinstance(metadata, dict):
+        raise ValueError('Serialized geometry metadata object required')
+    return metadata
 
 def materials(out):
     reference=ROOT/'docs/artifacts/building37/NativeObject14/appearance-reference.png'
@@ -105,7 +112,7 @@ def materials(out):
         semantic_details(item,data,ids)
         position=data['position']; normal=data['normal']; rank=np.full(mask.shape,2,np.uint8)
         wood=mask&(ids==1)
-        design=item['metadata'].get('cabinet_design')
+        design=geometry_metadata(item).get('cabinet_design')
         if design is not None:
             # N15 wood grain belongs to the cap top. Its vertical fascia uses
             # the material ramp without painting the same grain down the edge.
@@ -138,7 +145,7 @@ def semantic_details(item,data,ids):
     These are material design features, not automatic reconstruction from RGB.
     """
     ident=item['id'];mask=data['mask'];p=data['position'];n=data['normal'];x,y,z=np.moveaxis(p,-1,0)
-    design=item['metadata'].get('cabinet_design')
+    design=geometry_metadata(item).get('cabinet_design')
     if design is not None:
         profile=design['profile'];count=design['count'];width=design['width_ticks']
         tx,ty,tz=np.moveaxis(data['design_tick'],-1,0)
@@ -217,7 +224,7 @@ def export(out):
     atlas.save(out/'object-sheet-native.png')
     atlas.resize((atlas.width*4,atlas.height*4),Image.Resampling.NEAREST).save(out/'object-sheet-preview-x4.png')
     write(out/'manifest.json',{'schema':'N17.metric.native.cache.v1','paletteFile':'palette.png','assets':entries,
-        'physical_pixels_per_metre':PPU,'lighting_preview_only':True,'runtime_lighting_baked':False,
+        'physical_pixels_per_metre':entries[0]['ppu'],'lighting_preview_only':True,'runtime_lighting_baked':False,
         'shade_contract_sha256':sha(HERE/'shading17.json')})
 
 def validate(out):

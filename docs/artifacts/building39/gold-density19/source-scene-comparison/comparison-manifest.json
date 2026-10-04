@@ -1,0 +1,21 @@
+{
+  "source": "fine/empty_counter/preview.png",
+  "source_size": [
+    211,
+    187
+  ],
+  "night_source": "cpu-fixture.png",
+  "night_source_condition": "fixed irradiance .03/.045/.085, not exact spatial game lighting",
+  "game_frame": "matched-frame.png",
+  "game_crop_rectangle": [
+    339,
+    465,
+    567,
+    669
+  ],
+  "native_source_pixels_on_screen": 1,
+  "composition": "crop plus integer paste only",
+  "resampling_count": 0,
+  "resize_count": 0,
+  "comparison": "appearance observation; dynamic lights, props and floor make RGB equality inappropriate"
+}

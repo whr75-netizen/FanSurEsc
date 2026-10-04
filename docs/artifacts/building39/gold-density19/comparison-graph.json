@@ -1,0 +1,134 @@
+{
+  "goal": "Correct temporary float-map row direction; reuse unchanged material calculation and Play observation",
+  "entry": "unity",
+  "max_steps": 2,
+  "requirements": [
+    {
+      "id": "repair",
+      "source": "BUILDING16.md N19 and latest user feedback",
+      "text": "Original inlay and fixed physical geometry/camera density comparison",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ],
+  "nodes": [
+    {
+      "id": "unity",
+      "algorithm": "ai.work",
+      "phase": "work",
+      "inputs": {
+        "source": {
+          "literal": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\gold-density19"
+        },
+        "output": {
+          "literal": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\gold-density19\\comparison-row-fix01"
+        }
+      },
+      "parameters": {
+        "scope": "Recapture only the temporary native density comparator with PNG/float row alignment; preserve four repaired material bindings and reuse valid Play observation."
+      },
+      "question": "Recapture only the temporary native density comparator with PNG/float row alignment; preserve four repaired material bindings and reuse valid Play observation.",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "reads": [
+        "native19:material"
+      ],
+      "writes": [
+        "native19:unity"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "known",
+            "args": [
+              {
+                "ref": "unity.receiptFile"
+              }
+            ]
+          },
+          "to": "final"
+        }
+      ]
+    },
+    {
+      "id": "final",
+      "algorithm": "command.run",
+      "phase": "validation",
+      "inputs": {
+        "stdin": {
+          "literal": {
+            "scope": "N19"
+          }
+        }
+      },
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\repair19.py",
+          "gate",
+          "--output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\gold-density19",
+          "--observation-output",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\gold-density19\\comparison-row-fix01"
+        ],
+        "cwd": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game",
+        "timeout": 60,
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\repair19.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\building16.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\geometry16.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeCabinet19Repair.cs"
+        ]
+      },
+      "reads": [
+        "native19:unity"
+      ],
+      "writes": [
+        "native19:validation"
+      ],
+      "edges": [
+        {
+          "when": {
+            "op": "eq",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@complete"
+        },
+        {
+          "when": {
+            "op": "ne",
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ]
+          },
+          "to": "@blocked"
+        }
+      ]
+    }
+  ]
+}

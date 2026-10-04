@@ -1,0 +1,224 @@
+{
+  "origin": [
+    -54,
+    -67
+  ],
+  "size": [
+    109,
+    96
+  ],
+  "bounds": [
+    [
+      -1.2,
+      0.0,
+      -0.4
+    ],
+    [
+      1.1999999999999997,
+      1.0,
+      0.40000000000000013
+    ]
+  ],
+  "metadata": {
+    "id": "empty_counter",
+    "units": "Unity local XYZ metres, Y-up",
+    "pixels_per_metre": 45.254833995939045,
+    "front_axis": "-Z",
+    "declared_dimensions_m": [
+      2.4,
+      1.0,
+      0.8
+    ],
+    "bounds": [
+      [
+        -1.2,
+        0.0,
+        -0.4
+      ],
+      [
+        1.1999999999999997,
+        1.0,
+        0.40000000000000013
+      ]
+    ],
+    "origin_projected_px": [
+      -54,
+      -67
+    ],
+    "size": [
+      109,
+      96
+    ],
+    "parts": [
+      {
+        "id": 0,
+        "name": "painted body",
+        "shape": "box",
+        "material": 2,
+        "bounds_canonical_m": [
+          [
+            -1.1636363636363636,
+            0.0,
+            -0.36363636363636365
+          ],
+          [
+            1.1636363636363636,
+            0.9444444444444444,
+            0.36363636363636376
+          ]
+        ]
+      },
+      {
+        "id": 1,
+        "name": "continuous oak top",
+        "shape": "box",
+        "material": 1,
+        "bounds_canonical_m": [
+          [
+            -1.2,
+            0.9444444444444444,
+            -0.4
+          ],
+          [
+            1.1999999999999997,
+            1.0,
+            0.40000000000000013
+          ]
+        ]
+      },
+      {
+        "id": 2,
+        "name": "door handle 0",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            -0.5454545454545454,
+            0.7638888888888888,
+            -0.38181818181818183
+          ],
+          [
+            -0.4363636363636363,
+            0.8333333333333333,
+            -0.36363636363636365
+          ]
+        ]
+      },
+      {
+        "id": 3,
+        "name": "door handle 1",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.18181818181818188,
+            0.7638888888888888,
+            -0.38181818181818183
+          ],
+          [
+            0.290909090909091,
+            0.8333333333333333,
+            -0.36363636363636365
+          ]
+        ]
+      },
+      {
+        "id": 4,
+        "name": "door handle 2",
+        "shape": "box",
+        "material": 3,
+        "bounds_canonical_m": [
+          [
+            0.9090909090909092,
+            0.7638888888888888,
+            -0.38181818181818183
+          ],
+          [
+            1.018181818181818,
+            0.8333333333333333,
+            -0.36363636363636365
+          ]
+        ]
+      }
+    ],
+    "seams": [
+      {
+        "kind": "door",
+        "pitch": 0.7272727272727273,
+        "start": -1.0909090909090908,
+        "count": 3,
+        "y0": 0.08333333333333333,
+        "y1": 0.9166666666666666,
+        "z": -0.36363636363636365
+      }
+    ],
+    "R": [
+      0.7071067811865475,
+      0.0,
+      -0.7071067811865475
+    ],
+    "U": [
+      0.35355339059327373,
+      0.8660254037844386,
+      0.35355339059327373
+    ],
+    "F": [
+      0.6123724356957945,
+      -0.4999999999999999,
+      0.6123724356957945
+    ],
+    "coverage": "native pixel centre nearest positive finite solid hit",
+    "perimeter_expansion_pixels": 0,
+    "normal_space": "Unity local XYZ metres",
+    "shadow_mesh": "closed 16-segment/8-ring approximation of the same analytic solids",
+    "glass_policy": "fridge glazing is overlay only; opaque frame and goods own primary depth",
+    "hidden_surface_policy": "explicit semantic template, not inferred source recovery",
+    "cabinet_design": {
+      "source": "Tools/PerfectPixelUniform/native15_recipe.json",
+      "profile": {
+        "end_cap": 2,
+        "module_pitch": 20,
+        "reference_width": 64,
+        "height": 72,
+        "cap_thickness": 4,
+        "depth": 20,
+        "plinth": 5,
+        "handle_x": 15,
+        "handle_y": 55,
+        "handle_height": 5,
+        "handle_width": 3,
+        "door_frame_ticks": 2
+      },
+      "count": 3,
+      "width_ticks": 64,
+      "tick_scale_xyz": [
+        0.03636363636363636,
+        0.013888888888888888,
+        0.03636363636363637
+      ],
+      "tick_offset_xyz": [
+        -1.1636363636363636,
+        0.0,
+        -0.36363636363636365
+      ],
+      "adaptation": "whole N15 envelope to preserved physical bounds",
+      "rotation": [
+        [
+          1.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          1.0,
+          0.0
+        ],
+        [
+          -0.0,
+          0.0,
+          1.0
+        ]
+      ]
+    }
+  }
+}

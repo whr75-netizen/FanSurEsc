@@ -19,6 +19,8 @@ namespace FantasySurvival.WorldGeneration
         [Tooltip("Opt in only for a scene containing native sprites at this common density.")]
         public bool useNativePixelGrid;
         public float nativePixelsPerUnit = 22.627417f;
+        [Tooltip("Zero preserves the existing camera size. A positive value selects native screen pixels per texel on entry.")]
+        [Min(0)] public int initialNativeIntegerScale;
         private CameraZoomController nativeZoom;
         private Coroutine gridBinding;
 
@@ -34,7 +36,7 @@ namespace FantasySurvival.WorldGeneration
                    PersistentGameplayShell.Instance.PlayerCamera == null)
                 yield return null;
             nativeZoom = PersistentGameplayShell.Instance.PlayerCamera.GetComponent<CameraZoomController>();
-            if (nativeZoom != null) nativeZoom.SetNativePixelGrid(nativePixelsPerUnit);
+            if (nativeZoom != null) nativeZoom.SetNativePixelGrid(nativePixelsPerUnit, initialNativeIntegerScale);
             gridBinding = null;
         }
 

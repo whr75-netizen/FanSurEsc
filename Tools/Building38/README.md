@@ -2,7 +2,7 @@
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
 
-현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 최신 실제 화면은 `docs/artifacts/building39/gold-density19/source-scene-comparison/matched-frame.png`입니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
+현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. N20은 사용자 요청으로 기본 카메라를 정수 2배로 표시합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 최신 실제 화면은 `docs/artifacts/building39/zoom20/readable-on.png`입니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
 
 새 제작이 승인된 경우 프로젝트 루트에서 NumPy/Pillow가 있는 Python으로 실행합니다.
 

@@ -80,6 +80,14 @@ canonical/좌표·투영/단위는 N17과 같으며 이번 자유도는 최종 �
 
 재사용에는 네 수선 재료와 기존 cache를 그대로 쓴다. 새 수선은 `repair19.py start`의 새 출력 폴더에서 재질 단계만 실행한다. 비교 행 방향 실패처럼 원인이 확정된 경우 `reopen_comparison`은 기존 재질/유효 Play 관측을 재사용하고 fresh 비교 폴더로 후속 관측만 연결한다. `compare19.py`는 이번 실제 Unity 화면/rect receipt와 원본의 무변형 비교판이다. 전체 밀도 변경·금장의 밤 색감 개선·캐릭터 PBR·원화 100% 복원은 미완료다.
 
+## N20 현재 표시 — 사용자 요청에 따른 정수 2배 카메라 줌
+
+첨부된 N15 `NativeObject15/compare01/comparison-x4.png`는 4배 nearest 미리보기다. 현재 건물은 그 디자인/재료 설계를 실제 가구 치수에 맞춰 직접 제작한 cache를 사용하며 해당 확대 PNG를 runtime 텍스처로 붙인 것은 아니다. N19의 이미지/기하/재질/90.5097PPU는 그대로 유지하고 사용자의 새 명시 요청에 따라 카메라 표시만 2배로 바꿨다.
+
+기존 CameraZoomController.SetNativePixelGrid의 선택적 initialIntegerScale과 NativePixelBuilding.initialNativeIntegerScale을 연결했다. 현재 GameMap1 테스트 건물만 2이며 기존 호출/기본값 0은 크기 기반 정책을 유지한다. 명시한 정수 배율을 기존 native zoom 범위에 포함하고, viewport 변화에는 선택된 배율을 유지하여 size=scaledPixelHeight/(2·PPU·scale)로 계산한다. ClearNativePixelGrid는 기존 비native 목표 size를 같은 카메라에 복원하며 원래 일반 줌 제한/입력 차단은 유지한다. Preview Camera는 이 씬의 override로 같은 2배, Scene View도 기존 각도를 유지한 정수 2배로 설정했다. 원본 preview prefab의 사용자 변경은 건드리지 않았다.
+
+`docs/artifacts/building39/zoom20/readable-on.png`는 실제 기존 Play 카메라의 1114×857, size 2.367151, 30°/350°·원본 1픽셀당 화면 2×2픽셀이다. 같은 Player/Camera·map/mesh/Transform·36재료·shader error 0이며 기존 art 189파일은 hash 불변이다. 별도 임시 카메라의 viewport 높이 720/857/1080에서 배율 선택 2, 기존 scroll 계산 호출에서 2→1→2, native 해제 시 같은 카메라의 size 5 복원을 확인했다. 물리 휠 입력은 이번에 실행하지 않았으며 호출 확인이다. 기존 WorkLoop의 설정/실제 관측→최종 gate가 완료됐다. 밤 색감·캐릭터·디자인은 수정하지 않았다.
+
 ## 과거 N16 결정 / R0~R2 (2026-10-04)
 
 사용자가 N15의 표현을 개선된 기준으로 확인하고 그 파이프라인을 정리한 뒤 기지 GameMap1의 테스트 건물 내부 전체에 적용하도록 요청했다. 대상은 PlannedPixelShop33의 활성 실내다. 18종/26개 사물, 기존 구조·지붕·절개·벽등을 대상으로 하며 플레이어·카메라·동선·콜라이더·방의 역할·다른 건물·도심은 보존한다. 사용자 원본 시트와 N15 결과는 그대로 남긴다.

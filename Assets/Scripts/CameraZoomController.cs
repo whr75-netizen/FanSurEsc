@@ -26,6 +26,7 @@ public sealed class CameraZoomController : MonoBehaviour
     private float accumulatedScrollDelta;
     private float originalTargetOrthographicSize;
     private bool hasOriginalZoomTarget;
+    private int requestedNativeInitialScale;
 
     public float MinOrthographicSize => minOrthographicSize;
     public float MaxOrthographicSize => maxOrthographicSize;
@@ -35,10 +36,12 @@ public sealed class CameraZoomController : MonoBehaviour
     public int NativeIntegerScale { get; private set; }
     public bool NativeGridFitsZoomLimits { get; private set; } = true;
 
-    public void SetNativePixelGrid(float pixelsPerUnit)
+    public void SetNativePixelGrid(float pixelsPerUnit, int initialIntegerScale = 0)
     {
         if (float.IsNaN(pixelsPerUnit) || float.IsInfinity(pixelsPerUnit) || pixelsPerUnit <= 0f)
             throw new System.ArgumentOutOfRangeException(nameof(pixelsPerUnit));
+        if (initialIntegerScale < 0)
+            throw new System.ArgumentOutOfRangeException(nameof(initialIntegerScale));
         if (controlledCamera == null) controlledCamera = GetComponent<Camera>();
         if (!hasOriginalZoomTarget)
         {
@@ -48,6 +51,10 @@ public sealed class CameraZoomController : MonoBehaviour
         }
         nativePixelsPerUnit = pixelsPerUnit;
         nativePixelGrid = true;
+        // Zero preserves the original size-derived policy. An authored initial
+        // scale opts this scene into preserving its integer scale on viewport resize.
+        requestedNativeInitialScale = initialIntegerScale;
+        NativeIntegerScale = initialIntegerScale;
         zoomVelocity = 0f;
         accumulatedScrollDelta = 0f;
         ApplyZoom();
@@ -57,6 +64,7 @@ public sealed class CameraZoomController : MonoBehaviour
     {
         if (!nativePixelGrid && !hasOriginalZoomTarget) return;
         nativePixelGrid = false;
+        requestedNativeInitialScale = 0;
         if (hasOriginalZoomTarget)
             targetOrthographicSize = Mathf.Clamp(originalTargetOrthographicSize,
                 minOrthographicSize, maxOrthographicSize);
@@ -117,10 +125,10 @@ public sealed class CameraZoomController : MonoBehaviour
         {
             float sizeAtOnePixel = NativeSizeAtOnePixel();
             GetNativeScaleRange(sizeAtOnePixel, out int minimumScale, out int maximumScale);
-            int currentScale = Mathf.Clamp(Mathf.RoundToInt(sizeAtOnePixel /
-                Mathf.Max(0.01f, targetOrthographicSize)), minimumScale, maximumScale);
+            int currentScale = Mathf.Clamp(NativeIntegerScale, minimumScale, maximumScale);
             int nextScale = Mathf.Clamp(currentScale + (int)direction * stepCount,
                 minimumScale, maximumScale);
+            NativeIntegerScale = nextScale;
             targetOrthographicSize = sizeAtOnePixel / nextScale;
             return;
         }
@@ -167,7 +175,7 @@ public sealed class CameraZoomController : MonoBehaviour
         controlledCamera.orthographicSize = targetOrthographicSize;
         zoomVelocity = 0f;
         accumulatedScrollDelta = 0f;
-        if (nativePixelGrid) SetNativePixelGrid(nativePixelsPerUnit);
+        if (nativePixelGrid) SetNativePixelGrid(nativePixelsPerUnit, requestedNativeInitialScale);
     }
 
     private void ApplyZoom()
@@ -181,12 +189,15 @@ public sealed class CameraZoomController : MonoBehaviour
         {
             float sizeAtOnePixel = NativeSizeAtOnePixel();
             GetNativeScaleRange(sizeAtOnePixel, out int minimumScale, out int maximumScale);
-            NativeIntegerScale = Mathf.Clamp(Mathf.RoundToInt(sizeAtOnePixel /
-                Mathf.Max(0.01f, targetOrthographicSize)), minimumScale, maximumScale);
+            int selectedScale = requestedNativeInitialScale > 0 && NativeIntegerScale > 0
+                ? NativeIntegerScale
+                : Mathf.RoundToInt(sizeAtOnePixel / Mathf.Max(0.01f, targetOrthographicSize));
+            NativeIntegerScale = Mathf.Clamp(selectedScale, minimumScale, maximumScale);
             targetOrthographicSize = sizeAtOnePixel / NativeIntegerScale;
             controlledCamera.orthographicSize = targetOrthographicSize;
-            NativeGridFitsZoomLimits = targetOrthographicSize >= minOrthographicSize - 0.0001f &&
-                targetOrthographicSize <= maxOrthographicSize + 0.0001f;
+            NativeGridFitsZoomLimits = requestedNativeInitialScale > 0 ||
+                (targetOrthographicSize >= minOrthographicSize - 0.0001f &&
+                 targetOrthographicSize <= maxOrthographicSize + 0.0001f);
             zoomVelocity = 0f;
             return;
         }
@@ -225,6 +236,13 @@ public sealed class CameraZoomController : MonoBehaviour
         minimumScale = Mathf.Max(1, Mathf.CeilToInt(sizeAtOnePixel / maxOrthographicSize - 0.00001f));
         maximumScale = Mathf.Max(minimumScale,
             Mathf.FloorToInt(sizeAtOnePixel / minOrthographicSize + 0.00001f));
+        if (requestedNativeInitialScale > 0)
+        {
+            // Scene-authored native scale is allowed without changing ordinary
+            // gameplay zoom limits or another scene's restored camera size.
+            minimumScale = Mathf.Min(minimumScale, requestedNativeInitialScale);
+            maximumScale = Mathf.Max(maximumScale, requestedNativeInitialScale);
+        }
         // A tiny viewport may have no integer scale inside the old size interval.
         // Preserve native texels at >= 1x; expose the conflict instead of downsampling.
     }

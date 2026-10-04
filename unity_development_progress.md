@@ -2761,3 +2761,8 @@ Interactable (abstract base class)
 - `[실제 관측]` 21시 같은 Player/Camera·maps/mesh/Transform, 30°/350°·36재료·1px·shader error 0이다. 기존 cache 189파일은 불변이며 fine/coarse CPU/GPU coverage 차이 0·RGB 최대 오차 1/255다. 고정 카메라의 낮은 PPU 표본은 같은 물리 메시에서 직접 제작한 비교용으로, 전체 건물에 적용하지 않았다. 최초 임시 float raw row 누락으로 잘린 비교는 보존하고 기존 production importer의 상하 행 변환으로 후속 비교만 수선했다.
 - `[요청 비교샷]` `gold-density19/source-scene-comparison/matched-frame.png`는 실제 Play 카메라 1114×857, 원본은 fine/empty_counter/preview.png 211×187이다. 같은 호출에서 checkout 표시 사각형 212×188을 측정했고, 8px 여백 포함 228×204 crop과 원본·고정 밤광을 나란히 저장했다. rectangle의 ceil/floor 여백은 화면 측정이며 source를 늘린 것이 아니다. `source-night-game-native.png`는 crop/정수 paste만 사용하고 resize/resampling 0이다. 원본 preview와 실제 밤의 색 차이, 금장의 옅은 밤색조는 관측 사실이며 RGB 동일성/미술 완벽을 주장하지 않는다.
 - `[인계]` 현재 단계 재개와 한계는 BUILDING16.md N19, 실행은 repair19.py/compare19.py다. 원본/실패 비교/첫 paused graph와 수정 비교 complete graph를 모두 보존했다. 밀도 변경·금장 밤색감·캐릭터 PBR·원화 100% 복원·Standalone빌드는 미완료다.
+
+## 193. 기존 native 이미지의 정수 2배 카메라 줌 `[MAP-01]` `[PIXEL-01]`
+
+- `[요청/구현]` 사용자 첨부 N15 4배 미리보기와 현재 화면의 크기 차이에 대해 카메라를 더 줌하도록 요청했다. CameraZoomController의 기존 API에 선택적인 초기 정수 배율을 연결하고 GameMap1의 테스트 NativePixelBuilding만 2배로 설정했다. 기존 크기 기반 기본값 0과 일반 줌/입력 차단·같은 카메라의 비native size 복원은 보존했다. Preview Camera는 현재 씬 override만 변경했고 가구·이미지·재료·PPU·각도는 그대로다.
+- `[실제 GPU/Play 호출]` zoom20/readable-on.png는 실제 1114×857 게임 카메라 size 2.367151·30°/350°·2px, 같은 Player/Camera·maps/mesh/Transform·36재료·shader error 0이다. 기존 art 189파일 hash 불변을 확인했다. 임시 viewport 높이 720/857/1080의 선택 배율 2·기존 scroll 계산 2→1→2·같은 카메라의 size 5 복원을 호출로 확인했다. 실제 물리 휠 입력·전체 씬 전환·Standalone빌드는 이번에 실행하지 않았다. WorkLoop 설정/관측→최종 gate 완료이며 미술 개선이나 색감 수정은 주장하지 않는다.

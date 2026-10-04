@@ -88,7 +88,23 @@ canonical/좌표·투영/단위는 N17과 같으며 이번 자유도는 최종 �
 
 `docs/artifacts/building39/zoom20/readable-on.png`는 실제 기존 Play 카메라의 1114×857, size 2.367151, 30°/350°·원본 1픽셀당 화면 2×2픽셀이다. 같은 Player/Camera·map/mesh/Transform·36재료·shader error 0이며 기존 art 189파일은 hash 불변이다. 별도 임시 카메라의 viewport 높이 720/857/1080에서 배율 선택 2, 기존 scroll 계산 호출에서 2→1→2, native 해제 시 같은 카메라의 size 5 복원을 확인했다. 물리 휠 입력은 이번에 실행하지 않았으며 호출 확인이다. 기존 WorkLoop의 설정/실제 관측→최종 gate가 완료됐다. 밤 색감·캐릭터·디자인은 수정하지 않았다.
 
-## N24 현재 조명 수선 — 범위·광량과 무광 구간
+## N25 현재 색 수선 — 누런 벽등과 재료 계열 경계
+
+[요구/원인] 술병의 누런 중첩광을 점검하고, 오브젝트의 검정 테두리를 조금 짙은 재료 계열색으로 변경한다. 픽셀 밀도는 참고작과 비교하되 승인된 원본/PPU를 임의 축소하지 않는다. 직접 확인한 활성 aligned 벽등2개는 RGB(1,.74,.42), intensity.12/radius3.2였고 이동광은 N24의 white/.4/5m였다. 실제 Play의 같은 카메라에서 벽등 on/off의 왼쪽 선반ROI(x0:180,y35:340) 광량 차이는54830px, 평균linear RGB=(.023778,.011935,.003456)으로 누런 기여를 확인했다. `style25/before/material-only.png`는 병 자체의 갈색·녹색도 재료색임을 구분한다.
+
+[선택/반례] 기존 darkest palette 고정 사용은 밤 표면보다 선이 밝아질 수 있고 금장을 지나치게 어둡게 한다. 원본 map의 선 위치/역할은 유지하고 기존 최종 표면색C를 먼저 계산하여 edge1(실루엣)/2(문 경계)에만 `O=SRGBToLinear(LinearToSRGB(saturate(C))·.8)`을 적용한다. `.8`은 이번 표현의 명시적인 sRGB 감쇠값이며 물리 조도 계수가 아니다. 선은 해당 재료/같은 조명의 색을 따르고, crease3은 기존 palette column0, 바닥 edge0은 그대로다. 실제0광의 default black return은 보존한다. 원본 캐시/팔레트·geometry·depth·coverage·camera30°/350°·90.5097PPU/2px·밤 함수·N24 이동광/ramp를 변경하지 않는다. 두 활성 벽등의 색만 white로 바꾸며 다른 광원과 비활성 과거 램프는 유지한다. 캐릭터 외곽선은 별도 owner이므로 이번 오브젝트 변경에 포함하지 않는다.
+
+[좌표/출력] N17/N24의 native texel 중심→Position/Normal/MaterialMap의 같은index→local미터/actualTRS→world광량→linear표면색→sRGB 경계감쇠→linear render→sRGB 표시를 재사용한다. 표면 비edge와 무늬 rank는 기존 연산이며 재표본화/resize/추가픽셀 패스가 없다. `NativePaletteSurface16._NativeEdgeSRGBScale` 하나가 선색 강도를 소유한다(기본.8; 비교0=기존검정,1=선없는표면색). 과거 CPU/PNG 검정 미리보기는 보존하며 N25의 현재 색은 실제 렌더의 이 단계가 담당한다. 이 색 변화는 선 texel에만 적용되므로 기존 N24의 linear 백색기여 판별은 비edge에 한정한다.
+
+[최소 관측/실패] 기존 actual Play observer를 재사용하여 scale0/.8/1의 같은 카메라 화면을 비교한다. 불투명 선의 .8 출력은 scale1의sRGB80%(8bit/색변환 허용2/255), 비선 영역은 동일이어야 한다. 기존 occlusion fade의 반투명 선은 `render(k)=α·linear(edge(k))+(1-α)·background`로 합성되므로 전체 합성사진에.8을 곱하면 틀린다. 0/.8/1의 최종 linear차로 background를 제거하고 단계간순서와sRGB.8의linear감쇠범위를 확인한다. 원본193hash·기하/Camera 동일·2px·shadererror0, 두 벽등 색 외 광원값 불변·N24 세 백색단계와 바닥 두ROI격자를 마지막 gate에서 확인한다. 깊이/가림/캐릭터 디자인이나 전체 미술 합격으로 확대하지 않는다.
+
+[판정기 재개] 첫 graph는 모든 선이 불투명하고 scale0이면 최종화면도0이라고 잘못 가정해 실패했다. `UrbanOcclusionFader`가 fade material의 SrcAlpha/OneMinusSrcAlpha와 BaseColor.a를 유지하는 직접 코드, 실제 색 endpoint 차이가 근거다. 이전 state/PropertyBlock 비교는 보존하고, 기존 saved material값만 일시 변경하는 `NativeStyle25Observation`으로 세 색을 비교해 복원했다. 제품의 선식/조명/가림을 다시 수정하지 않았으며 새 final 계약은 이 합성식을 명시한다. 새 Shader 기본값.8은 Unity가 현재36재료에 같은float를 직렬화했으며, 해당 추가값 외 재료 참조/원본 map은 불변이다. Inspector의 기존8항목 Diagnostic Enum drawer 경고는 렌더 shader error와 구분하며 이번에 UI를 바꾸지 않는다.
+
+[밀도 조사/한계] 현재 캡처1114×857의2px와 제공 Grave Seasons1920×1080의약4px는 표시 해상도가 다르다. 같은 전체 가로폭에 표시할 때 참고칸은약2.32px이며 현재2px보다약16%크다. 격자로 나눈 관측 추정은 현재/참고 긴계산대 가로204/95칸, 작은병12×25/10×19칸, 캐릭터79×159/31×36칸이다. 실제 원본 sprite와 물리치수는 확인되지 않아 이를미터당PPU로 확정하지 않는다. 병이 일률적으로 압도적으로 고밀도인 근거는 없고 가구 세부/캐릭터는 차이가 크다. [공식 페이지](https://store.steampowered.com/app/3255110/Grave_Seasons/)에 원본PPU 공개는 확인하지 못했다. 이번에는 조사만 하고 PPU/카메라/저작해상도를 변경하지 않는다.
+
+[현재/관측 완료] style25/after의 실제Play는1114×857·21시·30°/350°·2px·같은Player/Camera·map/mesh/TRS이며shadererror0이다. N24의백색세유광은최종비선RGB에서97696/42722/6636px로유지된다. material-comparison의14008변경픽셀 중불투명선4680px는sRGB.8의최대오차.003137(1/255미만),반투명선9328px는합성endpoint의사이에있고linear차비율.57987~.68041이다. 선외최대RGB차0,기존193아트hash·두바닥2px블록·두벽등색외광원값이불변이다. scene은벽등2개색g/b override4개만추가됐으며36재료에는선색scale.8만1행씩추가됐다. 기존Shader색계산을추가픽셀렌더/이미지변환으로대체하지않았다. 첫실패그래프를보존하고합성식수선후final graph를완료했다. Player/미술합격·그림자차폐·Standalone빌드는이번판정대상이아니다.
+
+## N24 이전 조명 수선 — 범위·광량과 무광 구간
 
 [요구/원인] N23의 백색광이 방 전체를 덮고 너무 밝다는 사용자 정정이다. `ceil(3a)/3`은 아무리 작은 a>0도 1/3로 올리므로 반경14m 전체가 최소 광량을 받았다. 기존 `intensity=.8`과 surface strength `.55`의 최대 백색 기여는 linear RGB `.44`였다. 밝기 제어가 없는 것이 아니라 범위·광량·단계 선택을 잘못 결합한 구현이었다. N23은 원본/출력 단계 검증만 보존하고 이 요구의 시각 합격으로 사용하지 않는다.
 

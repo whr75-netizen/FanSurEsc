@@ -1,8 +1,10 @@
-# N17~N24 실행 진입점
+# N17~N25 실행 진입점
 
 설계·현재 결과·실패 귀속의 단일 원본은 [BUILDING16.md](../PerfectPixelUniform/BUILDING16.md)입니다. 입력은 B37 raw sheet/physical contract와 N15 재료 reference이며, 알려진 부품 기하에서 native pixel을 직접 제작합니다. 가짜 픽셀 원화의 격자를 복원하는 도구와 구분합니다.
 
-현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. N20은 기본 카메라를 정수2배로 표시합니다. N24는 같은 moving light의 반경5m·intensity.4와 무광 구간이 있는 ramp로 세 백색 유광 단계를 표시합니다. 범위·밝기·단계는 별개이며 다른 광원·아트·camera/PPU·motion은 유지합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 최신 실제 화면은 `docs/artifacts/building39/light24/moving-on.png`입니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
+현재 geometry/cache는 `docs/artifacts/building39/run02`의 사물35종과 `floor-fix01`의 활성 바닥입니다. 공유 Unity 자료는 `NativeBuilding39`/`NativeBuilding39Floor40`, 적용 대상은 `GameMap1/PlannedPixelShop33`입니다. 공통90.5097PPU·정수표시·21시 기본밤·좌우빛은 N17, 읽기용 밤 명암은 N18이며, 네 수납장 금장/목재UV는 N19의 `NativeBuilding41MaterialRepair` 재질 map만 참조합니다. N20은 기본 카메라를 정수2배로 표시합니다. N24의 moving light는 반경5m·intensity.4와 무광 구간이 있는 ramp로 세 백색 유광 단계를 표시하며 N25에서도 유지합니다. 현재 결정/관측은 BUILDING16.md에 기록합니다. 기존 결과 사용에는 재생성이 필요하지 않습니다.
+
+N25의 현재 색은 두 활성 벽등을 white로 맞추고, `NativePaletteSurface16._NativeEdgeSRGBScale=.8`로 강한 선만 최종 재료색보다 sRGB20%짙게 표시합니다. source/PPU/geometry는 그대로이며 캐릭터 선은 별도입니다. 최신 게임 화면은 `style25/after/moving-on.png`, 같은 재료 파라미터의 0/.8/1 비교는 `style25/material-comparison`입니다. `NativeStyle25Observation.CaptureBoundaries`는 실제 Play에서 기존 입장/카메라를 사용하여 세 값을 비교하고 복원합니다. `style25_gate.py`는 불투명선 비율과 기존 반투명선의 linear 합성식을 구분하며, 최종 계약은 `style25/request-final.json`/`state-final.json`입니다. 첫 실패 판정과 PropertyBlock 관측도 원인과 함께 보존합니다.
 
 새 제작이 승인된 경우 프로젝트 루트에서 NumPy/Pillow가 있는 Python으로 실행합니다.
 

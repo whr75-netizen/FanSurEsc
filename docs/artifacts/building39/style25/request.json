@@ -1,0 +1,127 @@
+{
+  "entry": "light",
+  "goal": "White existing wall-lamp contribution and same-hue20percent-darker object boundaries; inspect density without altering art/grid/camera.",
+  "max_steps": 2,
+  "nodes": [
+    {
+      "algorithm": "ai.work",
+      "edges": [
+        {
+          "to": "final",
+          "when": {
+            "args": [
+              {
+                "ref": "light.receiptFile"
+              }
+            ],
+            "op": "known"
+          }
+        }
+      ],
+      "id": "light",
+      "inputs": {},
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "output_schema": {
+        "receiptFile": {
+          "type": "string"
+        }
+      },
+      "parameters": {
+        "scope": "Only two active wall-lamp colours and native object edge1/2 colour expression; no art/geometry/PPU/camera/character/movinglight changes."
+      },
+      "phase": "work",
+      "question": "Apply N25 fixed colour scope; observe actual Play with existing camera and temporary PropertyBlock boundary scales; preserve sources and scene owners.",
+      "reads": [
+        "style25:source",
+        "file:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\style25\\baseline-lights.json"
+      ],
+      "writes": [
+        "style25:colour"
+      ]
+    },
+    {
+      "algorithm": "command.run",
+      "edges": [
+        {
+          "to": "@complete",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "eq"
+          }
+        },
+        {
+          "to": "@blocked",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "ne"
+          }
+        }
+      ],
+      "id": "final",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "Tools/Building38/style25_gate.py"
+        ],
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\style25_gate.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Scripts\\WorldLighting\\SteppedLocalLight.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Rendering\\LocalLighting\\SteppedLocalLightCommon.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeBuilding17Setup.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeLight23Observation.cs"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30
+      },
+      "phase": "validation",
+      "reads": [
+        "style25:colour"
+      ],
+      "writes": [
+        "style25:validation"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "material_boundaries",
+      "text": "Diagnosed warm wall light changed to white; edge colours sRGB .8 of same surface; other pixels/art/owners and movinglight/grid preserved.",
+      "source": "User: unwanted yellow light on bottles; inspect pixel density against references; dark material-coloured object borders instead of black.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

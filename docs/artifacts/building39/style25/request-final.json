@@ -1,0 +1,92 @@
+{
+  "entry": "final",
+  "goal": "N25 final: same material hue boundaries including existing alpha fade; white lamps and preserved art/grid/owners, reusing completed Unity work.",
+  "max_steps": 1,
+  "nodes": [
+    {
+      "algorithm": "command.run",
+      "edges": [
+        {
+          "to": "@complete",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "eq"
+          }
+        },
+        {
+          "to": "@blocked",
+          "when": {
+            "args": [
+              {
+                "ref": "final.exit_code"
+              },
+              {
+                "literal": 0
+              }
+            ],
+            "op": "ne"
+          }
+        }
+      ],
+      "id": "final",
+      "inputs": {
+        "stdin": {
+          "literal": {}
+        }
+      },
+      "max_visits": 3,
+      "on_error": "@blocked",
+      "parameters": {
+        "argv": [
+          "C:\\Users\\JG\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe",
+          "-B",
+          "Tools/Building38/style25_gate.py"
+        ],
+        "code_files": [
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Tools\\Building38\\style25_gate.py",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Scripts\\WorldLighting\\SteppedLocalLight.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Rendering\\LocalLighting\\SteppedLocalLightCommon.hlsl",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Shaders\\World\\NativePaletteSurface16.shader",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeBuilding17Setup.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeLight23Observation.cs",
+          "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\Editor\\NativeStyle25Observation.cs"
+        ],
+        "cwd": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+        "timeout": 30
+      },
+      "phase": "validation",
+      "reads": [
+        "style25:colour",
+        "file:C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\docs\\artifacts\\building39\\style25\\material-comparison\\boundary-receipt.json"
+      ],
+      "writes": [
+        "style25:validation"
+      ]
+    }
+  ],
+  "requirements": [
+    {
+      "id": "material_boundaries",
+      "text": "Opaque boundaries use sRGB .8; alpha-composited boundaries obey the same edge function with unchanged background; other pixels and light/art/grid contracts hold.",
+      "source": "User: unwanted yellow light on bottles; inspect pixel density against references; dark material-coloured object borders instead of black.",
+      "predicate": {
+        "op": "eq",
+        "args": [
+          {
+            "ref": "final.exit_code"
+          },
+          {
+            "literal": 0
+          }
+        ]
+      }
+    }
+  ]
+}

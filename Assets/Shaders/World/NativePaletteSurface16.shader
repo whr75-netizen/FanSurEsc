@@ -21,6 +21,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
         [HideInInspector] _NativeGridTexelVOS("One native texel up", Vector) = (0,0,0,0)
         [Toggle] _RetainPatternContrast("Material pattern independent of lighting band", Float) = 0
         [Toggle] _ReadableNight("Readable material and shadow palette", Float) = 0
+        _NativeEdgeSRGBScale("Material-coloured boundary sRGB scale", Range(0,1)) = 0.8
         [HideInInspector] _ReadableFixtureIrradiance("Readable palette fixture", Vector) = (0.03,0.045,0.085,0)
         [HideInInspector] _ZWrite("Depth write", Float) = 1
         [HideInInspector] _SrcBlend("Source blend", Float) = 1
@@ -54,6 +55,7 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             float4 _NativeGridTexelVOS;
             float _RetainPatternContrast;
             float _ReadableNight;
+            float _NativeEdgeSRGBScale;
             float4 _ReadableFixtureIrradiance;
             float _AmbientLightStrength;
             float _MainLightStrength;
@@ -249,12 +251,18 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             return max(irradiance, 0.0);
         }
 
+        half3 MaterialBoundaryColor(half3 surfaceColor)
+        {
+            // The boundary stays in the lit material's hue, with a single
+            // display-space darkening. No coverage, rank or pixel change.
+            return SRGBToLinear(LinearToSRGB(saturate(surfaceColor)) *
+                saturate(_NativeEdgeSRGBScale));
+        }
+
         half3 Shade(CachedSurface surface, half3 irradiance, half3 nativeAdditiveLight)
         {
             if (_ReadableNight > 0.5 && (_DiagnosticMode < 4.5 || _DiagnosticMode >= 5.5))
             {
-                if (surface.edge == 1u || surface.edge == 2u)
-                    return SRGBToLinear(Native17EdgeBlackSRGB);
                 float band = Native18Band(max(dot((float3)irradiance, Native17Luminance), 0.0));
                 float column = surface.material == 1u ? (float)surface.pattern : 2.0;
                 column = min(column, BandCount(surface.material) - 1.0);
@@ -263,9 +271,11 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
                     PaletteColor(surface.material, column) * Native18Brightness(band),
                     max((float3)irradiance, 0.0), band);
                 // Same RGB addition as the base scene's Blend One One pass.
-                // Apply once, outside the night-band classifier. Seams above
-                // remain black; maps, depth and material ranks are unchanged.
-                return saturate(nightColor + nativeAdditiveLight);
+                // Apply once, outside the night-band classifier. Boundaries
+                // inherit this surface colour; maps/depth/ranks are unchanged.
+                half3 finalColor = saturate(nightColor + nativeAdditiveLight);
+                return surface.edge == 1u || surface.edge == 2u ?
+                    MaterialBoundaryColor(finalColor) : finalColor;
             }
             irradiance += nativeAdditiveLight;
             float luminance = max(dot((float3)irradiance, Native17Luminance), 0.0);
@@ -289,13 +299,12 @@ Shader "FantasySurvival/World/Native Palette Surface 16"
             // per channel; no continuously blended native palette columns.
             half3 tint = Native17LightTint(irradiance, luminance);
             half3 color = PaletteColor(surface.material, column);
-            // Strong silhouettes/seams are black. Surface creases keep the
-            // actual material hue and a darker ramp entry, after lighting.
-            if (surface.edge == 1u || surface.edge == 2u)
-                return SRGBToLinear(Native17EdgeBlackSRGB);
+            // Creases retain their existing darker material ramp entry.
             if (surface.edge == 3u)
                 color = PaletteColor(surface.material, Native17CreaseColumn);
-            return saturate(color * tint * patternLight);
+            half3 finalColor = saturate(color * tint * patternLight);
+            return surface.edge == 1u || surface.edge == 2u ?
+                MaterialBoundaryColor(finalColor) : finalColor;
         }
 
         SurfaceOutput Frag(Varyings input)

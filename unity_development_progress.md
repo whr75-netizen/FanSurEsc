@@ -2456,6 +2456,69 @@ Interactable (abstract base class)
 - `[Play Mode 호출 확인]` seed1462661998, hash14583068C88F2EB4 repeat동일, 116건물/470실제3D소품/대각접도필지1. 좌표frame/vertexvolume오류0·실제벽/지붕침투0, .2m단차, 동일PlayerMovement→CharacterController문통과, 문밖→중앙NavMesh경로통과. 45Block은작은Ground섬포함연결성분수다.
 - `[기술 반례 수정]` Texture2D.whiteTexture가style직렬화후null인문제는영구PaintWhite.asset와metric검사로수정. 카메라near평면의지붕/지면잘림은실제renderer높이bounds→직교시선축후퇴로수정했다. 같은Camera/offset/rotation/zoom을보존하고Zoom뒤Follow[50]적용. 6case(zoom3.5/8×pitch10/35/80) near/far실패0, 화면XY최대차1.02894e-6, 깊이제약해제복원통과. 문/물리검사는변경되지않아반복하지않았다.
 - `[증거/중단]` `LocalOnly/UrbanDesign09/technical.json`, `camera-technical.json`, `Final/`실제화면. state-v4는user_review ticket db3a23e154064d4bb90917cb6c98fb86에서사용자요청으로paused; accepted미제출. v2 repair입력누락과v3렌더추가반례를보존하고무의미재생성은하지않았다. Play종료/backgroundfalse복원. 원본/D08/사용자dirty보존. 물리키/전체Recovery/모든seed/GPU/build/실내역할/최종픽셀출력미검증또는미구현이다.
+## 147. 기존 3D의 고정 시점 픽셀 캐시 시험 `[PIXEL-01][MAP-01]`
+
+- `[사용자 확정]` Iron Bramble·Graveyard Keeper 2·Dimraeth·Unpacking을 디자인 참고로 기록했다. 깨끗한 픽셀 출력 조건에서 기존3D 입력을 허용하며 고정/유한 방향 카메라가 가능하다. 전체화면 모자이크만으로 대체하지 않는다.
+- `[구현/호출 확인]` Editor 전용 `PixelSpriteCacheBaker`와 명시적 고정 주광 bake shader. 실제 소품12종+생성Medical건물/분리벽·지붕·바닥의4방향92개 RGBA/depth 쌍, 공통32px/m, 정수bounds/pivot. 원본 씬/모델/카메라/물리/기존후처리는변경하지않았다. 수정캡처2.417초·48,131,508bytes(비압축depth포함); 런타임성능값이아니다.
+- `[증거]` `LocalOnly/UrbanPixelCache10/manifest.json`, `preview.html`, `preview-technical.json`, state.json. PNG와rawdepth의상하행순서반례를initial-readback에보존하고수정했다. projection원점최대0.00006652px, alpha0/255·depth유효·PPU검사통과, 같은coverage 외곽선과2배정수확대를확인했다. Console오류0, Play종료/씬dirtyfalse/backgroundfalse복원. 기존다른변경의trailing whitespace는손대지않았다.
+- `[대기/후속]` graph는기술gate exit0 뒤실제사용자시각판정ticket `171d2b6030774493b587bc932c6dda6d`에대기한다. AI가accepted를제출하지않았다. 도시전체depth합성/실내fade/동적조명/시점·zoom입력연결/GPU실측은미완료이며, 평면PNG만으로가림을보존했다고주장하지않는다. 연구D10에후속입출력/실패조건을남겼다. 사용자시각승인전완료커밋없음.
+
+## 148. D12 편집 가능한 Blender 책상과 이미지 재질 수정 `[PIXEL-01]`
+
+- `[사용자 확정]` 생성형은 참고/재료 입력으로 허용하되 최종은 편집 가능한 모델에서 렌더한다. 한 시점의 책상 시험이며 게임 씬은 바꾸지 않는다. 생성 참고 그림의 전체 디자인 방향만 선호했고 비율은 승인하지 않았다. 최초 noise/임의 테이퍼 결과와 이후5색 albedo 재분류 결과는 사용자가 거절했다. 마지막 정정은 나뭇결을 생성 재료와 흡사하게 유지하고 다리뿐 아니라 바닥 모서리의 픽셀 일관성을 고치는 것이다.
+- `[구현/CLI 실행]` `Tools/PixelDesk`에 치수 recipe→31개 실제 메시→Blender5.2 EEVEE→native PNG 경로. 공개 Pixel Art Rendering 수정판 `Tramshy/pixel-art-addon-mod` commit `f13502c1fa71fd92e3969f35e9edeab17f4da52d`의 실제 재질 생성 함수를 로컬 호출했다. 다운로드/라이선스는 `LocalOnly/DeskBlender12/vendor`에 보존했다. 생성 나무 이미지1장을 material로pack했고 책상 그림을 축소/투영해 모델을 대체하지 않았다. PerfectPixel 원본/수정판 모두 호출하지 않았다.
+- `[최신 수정]` imageRGB×tint×조명5단계, 최종 전역 색표매핑 제거. 두55×55×695mm 직선 다리와 받침의 접지 정점에 연결된 bevel weight0(바닥/세로변 sharp), 공통 az45°/elev30° 투영. 바닥 XY선의2:1 기울기를 보장하지만 임의 끝점의 픽셀 위상까지 동일하다고 주장하지 않는다. 원본1.2×.6×.74m, 렌더176×172px/128px·m⁻¹. 표시용3배 확대만 별도다.
+- `[최종 기술 확인]` `source-rgb/technical-result.json`: 평가 메시 접지3부품의z=0와footprint, 실제 Blender/독립 투영오차0.00004778px미만, packed 이미지 RGB 연결과후처리재색칠없음, 저장`.blend` 재렌더동일, tint모딩RGB변경·geometry/alpha유지. Build21.464초/재개25.311초/mod25.071초이며 전체사용자대기시간/게임성능값이아니다. 이전 rejected결과와검사는각폴더에보존했다.
+- `[미술 판정 대기]` 최신 원본 `LocalOnly/DeskBlender12/source-rgb/base01/desk.blend`, 출력 `desk.png`, 실행은 `Tools/PixelDesk/build-desk.cmd`. WorkLoop `source-rgb/state.json`은 technical exit0 뒤 실제사용자판정ticket `ba473f376ba3417dbe96a53d0c73bc6e`에대기한다. AI가미술합격을제출하지않았다. Unity통합·다방향·깊이/동적조명·런타임모드로더는미구현, 완료커밋없음. 상세 계약·실험·재개는 `Tools/PixelDesk/README.md`가 소유한다.
+
+## 149. D13 원본 PerfectPixel 재료 적용과 Radical Fish 기술 조사 `[PIXEL-01]`
+
+- `[사용자 정정]` D12는 훨씬 나아졌지만 3D 느낌이 남았고, 원본 PerfectPixel 미사용을 지적하며 책상 재제작과 Radical Fish Games 기술 조사를 요청했다. D12에는 PerfectPixel이 없었다. 5색 albedo 재분류는 AI가 넣은 별도 처리였으며 원본 PerfectPixel의 문제로 돌리지 않는다. D12 그래프는 실제 추가 수정 요청으로 종료하고 이전 결과를 보존했다.
+- `[실행]` 생성 참고의 재료 표현을 따른 새 평면 나무 이미지1254² → 보관 ZIP과 동일한 PerfectPixel NumPy 원본 →64²재료 → Blender UV/조명RGB/베벨면재질 →176×172책상. 원본 PP 내부 FFT 부적합 판정 후 내장 gradient 검출이 적용됐고 처리0.288초. center 출력색 모두 입력색에 존재, 임의 전역 팔레트 변환 없음. PP는 재료에 적용했으며 완성 책상 그림을 축소하는 대체물이 아니다.
+- `[기술 확인]` `LocalOnly/DeskBlender13/technical-result.json`: ZIP/source 일치, 실제 원본 함수 실행, RGB입력색선택, packed재료/베벨, 접지/투영, 저장`.blend` 재개 렌더 재현 통과. build23.32초/재개22.33초. 원본과최종은 `base01/desk.blend`/`desk.png`, 기본실행기 `Tools/PixelDesk/build-desk.cmd`. 미술 판정ticket `478fba14f3d744feb4e9f65ab1d5badd` 대기, Unity통합/완료커밋없음.
+- `[조사/미구현]` 제작자 설명으로 Alabaster Dawn의3D골격+각도별2D빌보드선택/회전/크기조절,2023당시최대16방향,누락각도와맞춤프레임보완을확인했다. CrossCode의대부분수작업애니메이션/복합보스조립,Canvas2D와3D충돌을구분했다. 배경의정확한texel밀도/카메라/가림세부는미확인이다. 근거와일반수학/제안은 `docs/references/radical_fish_*` 세문서로분리했으며본프로젝트캐릭터구현은하지않았다.
+- `[추가 사용자 정정/실행]` 모서리입체감을더줄이고무늬를크게하라는피드백으로 `flat01` 제작. 원본PP재료그대로/전부품공통UVfootprint2.4×1.2m/밝은베벨재질제거/명암계수0.70..0.97. 실제렌더22.262초,기하·카메라보존과변경설정검사exit0. 현재판정은 `state-flat.json` ticket `18bb4bbd0f3941caa69f1a7dbeddf134` 대기, 추가생성/저장재렌더반복없음. Radical Fish 연구3문서만로컬커밋 `1bd3322`,책상미술완료커밋과push없음.
+
+## 150. D14 면별 색과 국소 구조 명암 `[PIXEL-01]`
+
+- `[사용자 정정]` D13-flat의 색 구분 소실/무늬를 거절. 강한 직사광 느낌을 없애면서 면별색·돌출/틈 명암을 살리고 픽셀을 더 크게 요구했다. 실제 답변으로 이전 graph blocked, 이전 결과 보존.
+- `[구현/실행]` 공식 Lospec Shadeless 그룹을 append. 새 평면 재료→원본PP64²→면색×국소2단계AO→Cycles96px/m 직접136×133출력. 실제31개 nominal부품/치수/좌표 유지, 나무베벨제거, UV1.2m정사각공통밀도.17mm손잡이는1.632px이며 최소세부계약1.5px를 명시했다. 최종이미지 재축소/전역5색재분류 없음.
+- `[기술 확인/대기]` `LocalOnly/DeskBlender14/technical-result.json`: 노드/pack/투영오차0.000023216px미만/접지·직선다리/새격자/저장blend 재렌더 동일 통과. 원본 `base01/desk.blend`,136×133최종 `desk.png`. graph review ticket `ac8a056304f3466eb4dceae6d0264404`, 사용자 미술판정 대기. Unity통합·시각완료커밋없음. 계약과출처는 `Tools/PixelDesk/GRAPHIC_PLAN.md`.
+- `[후속D15/사용자부분확정]` D14새무늬거절후첨부원본을원본PP수동grid64로실행,내부refinement66×64. 등방texel18.75mm에맞춰UV1.2375×1.2m. 최종 `LocalOnly/DeskBlender15/base02/desk.blend`/`desk.png`,원본SHA·원본PP·UV·기하/투영/재질보존·PNG최종검사exit0. 사용자는텍스처가훨씬나아졌다고확인했고명암웹자료를요청했다. 무늬유지,명암미승인. 공식제작자료와미구현mask대안은 `docs/references/pixel_desk_shading_research.md`. 새명암렌더/Unity적용없음.
+
+## 151. D16 역할 기반 명암 구현과 Radical Fish 종합 전달 `[PIXEL-01]`
+
+- `[요청 유지]` 사용자는 중간 자료 질문 때문에 제작을 멈추지 말고 실제3D오브젝트의픽셀표현과유튜브게임기술정리두목표를완수하도록정정했다. D15나뭇결승인유지,명암만재개했다.
+- `[구현/실행]` Lospec무조명색앞에부품역할control mask를연결하고AO를제거했다. root높이의상판밑3px상당밴드,서랍앞면상단1px상당밴드,아랫면의깊은음영을분리한다. 마스크속성과재료UV는독립. 초기Generated.z경계오류가상판에점을만든결과를보존하고명시적drawer-role gate로수정했다. 최신원본/결과는 `LocalOnly/DeskBlender16/fixed/base01/desk.blend`/`desk.png`136×133.
+- `[최종 기술 확인]` `fixed/technical-result.json`: 승인재료SHA/UV/nominal기하/투영유지,광원0/AO0,31부품mask,접지·출력,저장blend재렌더동일,높이74→80cm모드의명암구간재계산통과. 실제외형판정은 `state-v2.json` ticket `524fc41f63e64578b2b05891542dd2d7` 대기다. 기술통과를완벽한디자인으로선언하지않았으며Unity통합과미술완료커밋없음.
+- `[연구 완료]` Radical Fish 공식자료/개발자답변의종합은 `docs/references/radical_fish_technical_report.md`, 공개중단보고와공식기대동작대조는 `codex_premature_stop_research.md`. 게임의확인사실/제안/비공개공백과Codex사건의사용자보고/공식원인확인여부를분리했다.
+
+## 152. D17 방향·가림 기반 NPR 명암 `[PIXEL-01]`
+
+- `[사용자 정정]` D16은 “명암자체가사라졌다”고 거절됐다. 해당 응답을 이전 그래프에 제출해 미술 미완료로 종료했다. 승인 나뭇결과 이전 산출물은 보존했다.
+- `[구현/실행]` Never’s End/Guilty Gear 제작자 자료의 방향·가림과 최종색 분리를 채택. EEVEE 단일Sun/whiteDiffuse→binary visibility와 world N·L을 3단계 유채색ramp에 연결한다. 최종색은 같은 원본RGB×명암색이며 연속 광량/반사/AO는 없다. 모델/UV/96px/m/카메라 유지, Unity 변경 없음. 실제 `LocalOnly/DeskBlender17/base01/desk.blend`/136×133 `desk.png`, 렌더22.44초.
+- `[기술 확인/미술 대기]` `technical-result.json`: 승인재료SHA/geometry/projection/UV 유지, 저장blend의shadow만 끈 비교21.17초에서249픽셀차이/alpha동일, 출력재축소없음. 기술게이트exit0. `state.json`의review ticket `11abf89759814718a954e60255dfc1a8`에서 사용자판정대기. 광원방향과노드L의임의편집자동동기화/Unity/자유회전/모든입력모딩검증은없음. 미술완료커밋없음.
+
+## 153. D18 내부 면경계와 화면 투영 세부 폭 `[PIXEL-01]`
+
+- `[최신 요구]` D17은조금나아졌지만불충분. 확인질문자제,목재계열내부선/면구분과픽셀보다작은서랍세부수정요청. 이전graph에는실제추가수정응답을기록했다.
+- `[구현]` 동일quad면ID패스와가시면경계한쪽소유규칙으로native1px내부선을계산. 실제projection의경계수직폭공식으로서랍틈27mm/앞판33mm/실제옆틀돌출33mm/틀폭45mm/손잡이두께50mm로조정하고후퇴36mm를연결해전체1.2×0.6×0.74m보존. 나뭇결/UV/명암색/96px/m/카메라동일. 금속subpixel bevel제거·겹치는틀모서리정상접합.
+- `[실제 실행/검사]` `LocalOnly/DeskBlender18/base01/desk.blend`/136×133 `desk.png`; Build20.40초/저장재개19.93초. `technical-result.json`은승인재료·전체치수·projection·UV보존,목표투영폭,10필수면의선내본색잔존,ID/색alpha일치,내부선1266픽셀,저장PNG재현을확인했다. 세부수정산출물범위graph완료이며미술합격은포함하지않는다. 확인질문없이전달;자유시점/일반mesh/Unity통합미검증. 현재규약은 `Tools/PixelDesk/INTERNAL_EDGE_PLAN.md`.
+
+## 154. D20 생성 기준과 실제3D 재현 `[PIXEL-01]`
+
+- 새 생성원본1장과 실제12솔리드/동일4다리/목재로컬UV/면색을 Blender5.2로 렌더했다. `LocalOnly/DeskReference20/`에 모델/원본/비교/측정을 보존했다. 원본1536×1024 전경 무정렬비교와 별도192×128 큰픽셀렌더다.
+- IoU95.57272%, RGB채널당8이하50.05545%, 정확RGB3.11027%로99%재현실패. 동일다리/발Z0/접합/공통투영오차0.000372px미만은 확인했으나 부위별무늬/국소색/형상차이는남는다. 모든3D방식불가능주장이나미술승인없음.
+- crop UV/색전달 기술수정1회후 미술반복중단. WorkLoop최종입력키오류는프로세스호출전중단확인, 파일검사전용graph복구exit0. 증거완비와99%성공false를구분한다. 기존파일/Unity보존. 계약/재개조건은 `Tools/PixelDeskReference20/README.md`.
+
+## 155. D21 디자인 요소별 실행과 수학적 오류 수정 `[PIXEL-01]`
+
+- `[요청/구현]` 실제 제작 요소별 작업 그래프와 결과 부족의 수학적 진단을 구현해 보라는 요청. 기존 WorkLoop를 변경 없이 사용하고 `Tools/PixelPipeline`에 입력/실제기하/원본PerfectPixel재료/픽셀광선/명암/경계/진단/수선/제출을 독립 실행 단위로 연결했다. 최종 결과 존재나 AI의 완료 선언만으로 합격시키지 않는다.
+- `[실제 수선]` 서랍 앞판 두께.036m와45도시점이 틈을 가리는 조건을 구간교집합으로 계산. 실제투과폭0→2.000003px가 되도록 공통gap약.065463m를 선택하고 앞판 span/손잡이정렬/96PPU를 보존했다. 내부선의 수평/수직 midpoint 소유면 교대도 발견해 가시 면 쌍별 일관된 선 배치로 수정했다. 접합점 제외 평행경계 양면중복68→0, 독립측정 상판↔서랍정면43→0.
+- `[실행/복구]` 첫 진단의 NumPy bool 직렬화 오류는 앞6단계 보존 후 recover했다. 완료 뒤 독립감사로 확인된 실제 내부선 결함은 증거SHA와 이전진단/제출/검사를 보존하며 reopen했다. 마지막 복구3.824초, raster/model/shade는 pass1과 같은 SHA이며 알고리즘 재실행 없음. 처음부터 완전한 판정기가 있었다거나 전체제작3.8초라고 주장하지 않는다.
+- `[최종 증거]` `LocalOnly/PixelPipeline21/run01/pass-2/package/`:174×155최종PNG,6배표시,비교/HTML/기하blend. `pass2-final-audit.json`:가시선828기록 owner불일치0,mask밖ink0,기존43직선중복소거. 실제정수alpha/12재료명암색+경계색/4다리치수·접지·정렬·실제shadow관측 통과. 제어기19개/단계회귀8개/재료6개확인은 실제제작과 구분해 기록했다.
+- `[미완료 범위]` 사용자 외형승인/99%재현/전역모든교차점1px선폭/임의메시 모딩/Unity통합은 완료가 아니다. 전체crosspart인접ink18쌍을 모두 정상이라고 간주하지 않았다. 기존Unity/D20파일과 사용자변경을 보존했다. 연구의 현재 결정·반례·재개 조건은 `docs/references/pixel_desk_shading_research.md` D21, 실행은 `Tools/PixelPipeline/README.md`.
+
 ## 156. D22 기지의 고정 PNG와 실제 3D 조명 비교 `[PIXEL-01]`
 
 - `[요청/구현]` 기지 기존 램프 옆에 A 고정 명암 PNG / B 실제12메시를 저장했다. 원재료4색 grain과 동적 normal·shadow·local 조명을 분리한 URP 셰이더, 고정96PPU 투영과 실제 게임 카메라 촬영을 `Tools/PixelUnityProbe` 그래프로 연결했다. 최종 PNG를 B의 재질로 사용하지 않는다.

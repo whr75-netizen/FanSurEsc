@@ -1,5 +1,56 @@
 # GPT/2 등각 타일과 진입형 건물
 
+## 현재 결정 D18 — 승인된 무늬·내부 면경계·픽셀 세부 폭의 Blender 책상
+
+생성 이미지의 디자인 방향만 참고하고 치수·부품·재질을 수정해 재렌더할 수 있는 실제 책상 원본을 만든다. 방향은 이번 범위 밖이며 한 시점으로 제작한다. D11의 임의64×64축소 결과는 거절되었다. 새 계약·좌표식·최소 실험·실행 상태는 [PixelDesk](../../Tools/PixelDesk/README.md)에 둔다. 생성형 이미지 자체를 최종 오브젝트로 대체하지 않는다. D10 기존 캐시·게임 씬은 보존한다.
+
+D12의albedo5색재분류,D13-flat의전체명암축소,D14새무늬,D16명암소실은거절됐다. D17방향·가림명암은조금나아졌으나내부면경계/작은세부수정요청으로D18을제작했다. 승인나뭇결·전체치수·카메라를보존하고visible면ID1px선과투영최소폭을적용했으며실제렌더/저장재현확인까지전달한다. 불필요한확인질문없이최신요구를수행하며디자인합격은선언하지않는다. [현재 계약/실행](../../Tools/PixelDesk/INTERNAL_EDGE_PLAN.md), [명암 계약](../../Tools/PixelDesk/CONTROL_SHADOW_PLAN.md). Radical Fish Games 기술은 [종합 보고서](radical_fish_technical_report.md)에정리했고Unity구현으로채택하지않았다.
+
+## 이전 결정 D10 — 고정 시점의 오브젝트 픽셀 캐시 시험
+
+[확정·2026-09-20] 사용자는 기존 3D도 깨끗한 픽셀아트로 표현된다면 제작 입력으로 허용했다. 고정 각도 또는 정해진 몇 방향 회전이 가능하다. 색·투명 영역·실루엣·외곽선의 픽셀 크기를 통일한다. 전체 화면에 모자이크만 적용하는 경로는 채택하지 않는다. 디자인 참고작의 단일 원본은 GDD §14.1.0이다.
+
+### 후보와 선택
+
+| 후보 | 현재 입력에 대한 판단 / 실패조건 |
+|---|---|
+| 전체화면 색/깊이 양자화 | 가장 작은 변경이나 화면 이동 시 coverage가 바뀐다. 이번 목표의 단독 해결책에서 제외. |
+| 직교 카메라·렌더 위치 snap + 저해상도 실시간 렌더 | 고정 회전의 평행 이동 안정화가 가능. 조명·변형은 실시간이지만 회전/비정수 zoom의 재샘플링은 남는다. 후보 유지. |
+| 오브젝트별 방향별 RGBA/깊이 캐시 | **최소 실험 채택.** 현재 고정/유한 시점 요구에서 같은 그림을 재사용한다. 캐시 생성 비용을 플레이마다 내지 않는다. 캐시 용량·화면 fill-rate·상태 조합은 비용으로 남는다. |
+| Octahedral impostor | 연속 시점 보간에서 ghosting·근거리 parallax 문제가 있으며 픽셀색 혼합도 생긴다. 가까운 실내의 주 표현으로 채택하지 않는다. |
+| Texel splatting / cubemap probe | 3D 위치에 샘플을 고정하는 연구 경로. 숨은 면/프로브 전환·추가 캡처 비용이 남고 현재 URP에 준비된 구현이 아니다. 고정 시점 시험보다 우선하지 않는다. |
+
+근거: [Unity Pixel Perfect의 PPU/point/정수 배율](https://docs.unity3d.com/6000.0/Documentation/Manual/urp/2d-pixelperfect-ref.html), [ProPixelizer의 직교·공통 격자·ID 외곽선](https://sites.google.com/view/propixelizer/user-guide), [Holland의 camera snap와 화면 보상](https://www.davidhol.land/articles/3d-pixel-art-rendering/), [Amplify 공식 impostor 한계](https://wiki.amplify.pt/index.php?title=Unity_Products%3AAmplify_Impostors%2FManual), [Texel Splatting 원문](https://arxiv.org/html/2603.14587v1). 참고 구현/논문 수치를 이 프로젝트의 성능으로 옮기지 않는다. ProPixelizer/Amplify는 설치하지 않았으며 Unity 6000.5/URP17.5 호환 실행 증거도 없다.
+
+### 좌표·변환·캐시 계약 (구현 전)
+
+`기존 mesh local → source.localToWorld → root.worldToLocal → canonical object(m) → 고정 bake view → orthographic clip → RGBA + eye-depth(texel) → alpha 외곽선 → 캐시 → point 정수 확대`
+
+- canonical은 기존 root 원점/축/미터를 유지한다. Unity +X right/+Y up/+Z forward, 부모는 원본 root. quaternion camera 회전 `Euler(30,45+90*i,0)`(도 단위, i=0..3)은 시험 시점이며 최종 각도 승인은 아니다. source의 상위 scale은 위 행렬에서 한 번만 적용한다. 본·retargeting은 정적 도시 시험에 해당하지 않는다.
+- view의 right/up/forward는 회전 quaternion의 정규직교 기저. 투영 범위는 모든 변환된 mesh bounds 모서리에서 계산하고, X/Y 최솟값을 1/P, 최댓값을 1/P 단위로 내림/올림한 뒤 2texel 여백을 둔다. **P=32 texel/m**를 모든 물체에 공통 적용하며 물체별 fit-to-square/비균일 resize는 금지한다.
+- 영상 원점은 좌하단, sample은 `(i+.5,j+.5)`, 저장 PNG 표시 시 Y 방향은 API 규약으로 한 번만 변환한다. `W=(xmax-xmin)*P`, `H=(ymax-ymin)*P`, `orthoSize=H/(2P)`, aspect=W/H. pivot은 `(-xmin*P,-ymin*P)`로 저장한다. 공통 root를 가진 벽/지붕/실내는 같은 canvas/pivot을 쓴다.
+- coverage는 MSAA 없는 같은 캡처 alpha에서 얻는다. `M=alpha>=.5`, 외곽선은 같은 격자의 `Dilate8(M,1)-M`. 색을 별도 확대/alpha를 고해상도로 다시 그리지 않는다. 합친 건물의 외곽선은 합성 coverage에서만 만든다. 벽 파츠마다 겹치는 내부 테두리를 만들지 않는다.
+- depth는 색과 같은 카메라/크기/coverage의 eye-depth(float, meter)다. 실게임 통합 시 `p=origin+right*x+up*y+forward*depth`에서 world/clip depth를 복원해야 한다. 평면 PNG 또는 sortingOrder를 올리는 것으로 3D 가림을 대체할 수 없다.
+- 캐시 키에는 geometry/material/texture 내용, PPU, 시점, 조명/표현 버전, 숨김 상태가 필요하다. 현재 최소 실험은 고정 주광을 구운 PNG이며 낮밤/동적 그림자를 보존했다고 주장하지 않는다. 향후 albedo/normal/depth로 조명을 분리하거나 유한 조명 상태를 cache해야 한다.
+- 정수 배율 k에서 texel 하나는 k×k display pixel. 비정수 zoom/임의 회전은 캐시의 무손실 표시 범위 밖이다. 런타임 렌더 anchor의 픽셀 위상까지 맞춰야 하며 물리 Transform을 snap하지 않는다.
+
+### 최소 실험과 실패 판정
+
+기존 12개 소품과 실제 생성 건물 1개의 4시점 캐시 및 벽/지붕/실내 분리 입력을 만든다. 오브젝트 기준 캐시 재사용 미리보기를 제공하고, 도시 전체 렌더 교체 전에 사용자 시각 피드백을 받는다. 원본 모델/씬/게임 카메라/기존 후처리는 바꾸지 않는다.
+
+- G03/G04: view basis 내적/단위 오차 ≤1e-5, det 오차 ≤1e-5. G08/G09: PPU32, 두 축 배율 동일, canvas 내 투영 bounds 보존(2px 여백). NaN/누락 즉시 실패.
+- G10/G11: 투영 origin/pivot의 독립식과 Camera.WorldToViewportPoint 차이 ≤0.01px. 색/depth 크기·시점 동일, 저장 alpha와 깊이 유효 영역 일치.
+- G12: alpha는 0/255, outline은 명시된 dilation 차집합, 정수 확대 결과의 모든 k×k cell은 원 texel과 동일. 이 검사는 원본 미술 품질이나 도시 통합 성공을 뜻하지 않는다.
+- 최적성은 조건부 선택이다. 생성 시간/캐시 byte 수를 실제 측정하고 게임 GPU/draw call은 통합 전 미측정으로 남긴다. 동일 PNG를 다시 PNG로 바꾸는 작업을 새 생성 증거로 삼지 않는다.
+
+### 실험 증거 / 남은 단계
+
+[Play Mode 호출 확인] `PixelSpriteCacheBaker.Bake()`가 실제 prefab 12종과 생성된 Medical 건물 mesh/material을 읽어 4방향 92개 color/depth 쌍을 만들었다. 건물 whole 외에도 8개 개별 floor/wall/roof 버퍼를 같은 canvas/pivot으로 저장했다. `LocalOnly/UrbanPixelCache10/manifest.json`, `preview.html`, `preview-technical.json`에 보존한다. 최초 depth raw row가 PNG와 반대인 반례는 `initial-readback/`에 보존하고 저장 행 방향을 통일했다. 수정 캡처 2.417초, PNG+비압축 float depth 48,131,508 bytes. 이 수치는 편집기 bake이며 게임 FPS/VRAM 측정은 아니다.
+
+투영 원점 최대 오차 0.00006652px, 공통 PPU32/유한 depth/coverage 유효 영역/alpha0·255를 확인했다. 미리보기는 같은 alpha에서 한 texel 외곽선을 계산하고 정확한 2×2 반복을 확인했다. 물체마다 같은 사각형에 fit하지 않는다. 위치 이동 미리보기는 캐시를 정수 texel 이동하며 새 그림을 생성하지 않는다. 게임 카메라 각도/zoom과 물리 Transform은 아직 바꾸지 않았다.
+
+현재 출력은 고정 주광의 5단계 명암이다. **도시 전체 픽셀 렌더·캐릭터 앞뒤/실내 depth 합성·건물 fade·동적 낮밤/그림자·게임 GPU 최적화는 미완료**다. whole PNG의 단순 평면화는 가림을 보존하지 못하므로 통합하지 않았다. 사용자 외형 판정 후 depth 합성/파츠 숨김과 조명 분리의 최소 통합으로 이어간다. 원본 D09와 기존 비활성 전체화면 효과는 보존했다.
+
 ## 이전 결정 D09 — 정사각 표면·실제 입체 소품·블록과 POI 문법
 
 [사용자 요청/최신 정정] 도심 일관성·정사각 픽셀 재료·POI/사물 연결을 요청했고 PixelLab 사용을 허용했다. 그러나 담당AI가 픽셀 목표의 충족 없이 실제3D형상 제작을 채택했고 사용자는 이를 지적했다. D09는 기술관측이 있는 **요구에서 벗어난 시험 구현**으로 중단한다. 아래 선택/수치는 담당AI의 당시 설계이며 사용자확정이나미술완료가아니다. 다음 작업은 [인수인계](urban_pipeline_handoff.md) N01의 픽셀 제작 계약 복구부터다.

@@ -1,0 +1,9 @@
+using UnityEngine;using UnityEngine.Rendering;
+public sealed class Eye202View:MonoBehaviour{
+ public Game193View game;public RenderPipelineAsset pipeline;public bool automaticPreview;public RenderTexture Final;RenderPipelineAsset oldG,oldQ;float oldF,oldD,oldField,oldHide;bool switched;
+ void Start(){oldG=GraphicsSettings.defaultRenderPipeline;oldQ=QualitySettings.renderPipeline;oldF=Shader.GetGlobalFloat("_FHEnabled44");oldD=Shader.GetGlobalFloat("_E189Diag");oldField=Shader.GetGlobalFloat("_E189FieldEnabled");oldHide=Shader.GetGlobalFloat("_E202MainHideEyes");GraphicsSettings.defaultRenderPipeline=QualitySettings.renderPipeline=pipeline;Shader.SetGlobalFloat("_FHEnabled44",0);Shader.SetGlobalFloat("_E189Diag",0);Shader.SetGlobalFloat("_E189FieldEnabled",0);Shader.SetGlobalFloat("_E202MainHideEyes",0);Eye202Layers.Current=this;switched=true;game.SetPose(0);game.Bind(true);game.actor.Apply();}
+ public void RenderReference(bool env){Eye202Layers.Enabled=false;Shader.SetGlobalFloat("_E202MainHideEyes",0);game.Render(env);}
+ public void RenderBase(bool env,bool collect){Eye202Layers.Enabled=collect;Shader.SetGlobalFloat("_E202MainHideEyes",1);game.Render(env);Eye202Layers.Enabled=false;}
+ void OnGUI(){if(Final)GUI.DrawTexture(new Rect((Screen.width-1440)/2,(Screen.height-816)/2,1440,816),Final,ScaleMode.StretchToFill,true);GUI.Label(new Rect(8,8,1000,50),"Eye202 source-contour control / fixed B25 body130 / one P0 only.\nIndependent eye RGBA+depth, base has no duplicated eyes. Design masks pending, not adopted.");}
+ void OnDisable(){if(switched){GraphicsSettings.defaultRenderPipeline=oldG;QualitySettings.renderPipeline=oldQ;Shader.SetGlobalFloat("_FHEnabled44",oldF);Shader.SetGlobalFloat("_E189Diag",oldD);Shader.SetGlobalFloat("_E189FieldEnabled",oldField);Shader.SetGlobalFloat("_E202MainHideEyes",oldHide);switched=false;}Eye202Layers.Dispose();}
+}

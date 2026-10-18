@@ -1,0 +1,4 @@
+#pragma kernel Merge
+Texture2D<float4> _EyeColour,_EyeOwner,_Intrinsic,_EyeAudit;
+RWTexture2D<float4> _Before,_Colour,_Owner,_Domain;
+[numthreads(8,8,1)]void Merge(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;float4 intrinsic=_Intrinsic.Load(int3(p,0)),a=_EyeAudit.Load(int3(p,0)),e=_EyeOwner.Load(int3(p,0));bool domain=intrinsic.x>.5||a.x>.5||a.y>.5;_Domain[p]=float4(domain?1:0,a.y,0,0);if(!domain||round(e.w)==9)return;float4 c=_EyeColour.Load(int3(p,0));float4 old=_Owner[p];int role=(int)round(e.x)-1;float part=role>=11?7:role<=6?6:old.y;_Before[p]=c;_Colour[p]=c;_Owner[p]=float4(e.x,part,e.z,role==old.x-1?old.w:0);}

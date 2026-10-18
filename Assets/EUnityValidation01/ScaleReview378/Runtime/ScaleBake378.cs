@@ -1,0 +1,9 @@
+using System;using System.Linq;using UnityEngine;
+[ExecuteAlways,DefaultExecutionOrder(-200)]public sealed class ScaleBake378:MonoBehaviour{
+ public HeadLocal367 host;public CurrentSurface330 original;Mesh[]meshes;bool ready,oldEnabled;bool[]priorSourceEnabled;Action previous,hook;
+ void OnEnable()=>Initialise();
+ public void Initialise(){if(ready||!host||!original||original.source==null)return;oldEnabled=original.enabled;original.enabled=false;priorSourceEnabled=original.source.Select(s=>s.enabled).ToArray();meshes=original.source.Select((s,i)=>new Mesh{name="378 scale-compensated current surface "+i,hideFlags=HideFlags.DontSave}).ToArray();foreach(var s in original.source)s.enabled=false;previous=host.afterPose;hook=AfterPose;host.afterPose=hook;ready=true;Evaluate();}
+ void AfterPose(){previous?.Invoke();Evaluate();}
+ public void Evaluate(){if(!ready)return;for(int i=0;i<meshes.Length;i++){var src=original.source[i];var m=meshes[i];src.BakeMesh(m,true);var matrix=original.outputs[i].transform.worldToLocalMatrix*src.localToWorldMatrix;var normal=matrix.inverse.transpose;m.vertices=m.vertices.Select(p=>matrix.MultiplyPoint3x4(p)).ToArray();m.normals=m.normals.Select(n=>normal.MultiplyVector(n).normalized).ToArray();m.tangents=m.tangents.Select(t=>{var p=matrix.MultiplyVector(t);return new Vector4(p.x,p.y,p.z,t.w);}).ToArray();m.RecalculateBounds();original.outputs[i].sharedMesh=m;}}
+ void OnDisable(){if(!ready)return;if(host&&host.afterPose==hook)host.afterPose=previous;for(int i=0;i<meshes.Length;i++){if(original&&original.outputs[i]&&original.outputs[i].sharedMesh==meshes[i])original.outputs[i].sharedMesh=null;if(meshes[i])DestroyImmediate(meshes[i]);}if(original){for(int i=0;i<original.source.Length;i++)if(original.source[i])original.source[i].enabled=priorSourceEnabled[i];original.enabled=oldEnabled;}ready=false;}
+}

@@ -1,0 +1,9 @@
+using System;using System.Collections.Generic;using UnityEngine;using UnityEngine.LowLevel;using UnityEngine.PlayerLoop;
+public static class Eye206R2RenderStage{
+ sealed class Marker{}static Eye206R2View current;public static bool installed;public static string nativeStage="";public static int lastRenderedFrame=-1,lastRenderedIndex=-1;
+ static bool Insert(ref PlayerLoopSystem loop){var a=loop.subSystemList;if(a==null)return false;for(int i=0;i<a.Length;i++){if(a[i].type==typeof(PostLateUpdate.UpdateAllSkinnedMeshes)){var list=new List<PlayerLoopSystem>(a);list.Insert(i+1,new PlayerLoopSystem{type=typeof(Marker),updateDelegate=Render});loop.subSystemList=list.ToArray();nativeStage=a[i].type.FullName;return true;}if(Insert(ref a[i])){loop.subSystemList=a;return true;}}return false;}
+ static void Strip(ref PlayerLoopSystem loop){var a=loop.subSystemList;if(a==null)return;var list=new List<PlayerLoopSystem>();foreach(var original in a){if(original.type==typeof(Marker))continue;var n=original;Strip(ref n);list.Add(n);}loop.subSystemList=list.ToArray();}
+ public static void Install(Eye206R2View v){if(current&&current!=v)throw new Exception("206R2 stage alreadyowned");current=v;var loop=UnityEngine.LowLevel.PlayerLoop.GetCurrentPlayerLoop();Strip(ref loop);if(!Insert(ref loop))throw new Exception("Required nativeUpdateAllSkinnedMeshes stage absent; no fallbackstage");UnityEngine.LowLevel.PlayerLoop.SetPlayerLoop(loop);installed=true;}
+ static void Render(){if(!current||!Application.isPlaying||!current.automaticPreview)return;current.Render(current.context);lastRenderedFrame=Time.frameCount;lastRenderedIndex=current.frameIndex;}
+ public static void Remove(Eye206R2View v){if(current!=v)return;var loop=UnityEngine.LowLevel.PlayerLoop.GetCurrentPlayerLoop();Strip(ref loop);UnityEngine.LowLevel.PlayerLoop.SetPlayerLoop(loop);current=null;installed=false;}
+}

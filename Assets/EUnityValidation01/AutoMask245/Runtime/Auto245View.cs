@@ -1,0 +1,8 @@
+using UnityEngine;using UnityEngine.Rendering;
+public sealed class Auto245View:MonoBehaviour{
+ public RenderPipelineAsset previewPipeline;public Light lightSource;public Camera viewCamera;public Texture2D creamMember,stockMember,faceSkinMember,bodySkinMember;public Vector4 creamShade,skinShade,stockLit,stockShade;public bool movingPoint;public float period=6;RenderPipelineAsset priorG,priorQ;
+ public void Apply(){Shader.SetGlobalFloat("_Auto245Stage",2);Shader.SetGlobalFloat("_Auto245Local",lightSource&&lightSource.type==LightType.Point?1:0);Shader.SetGlobalFloat("_Auto245MembershipEnabled",1);Shader.SetGlobalTexture("_Auto245CreamMember",creamMember);Shader.SetGlobalTexture("_Auto245StockMember",stockMember);Shader.SetGlobalTexture("_Auto245FaceSkinMember",faceSkinMember);Shader.SetGlobalTexture("_Auto245BodySkinMember",bodySkinMember);Shader.SetGlobalVector("_Auto245CreamShade",creamShade);Shader.SetGlobalVector("_Auto245SkinShade",skinShade);Shader.SetGlobalVector("_Auto245StockLit",stockLit);Shader.SetGlobalVector("_Auto245StockShade",stockShade);}
+ void OnEnable(){priorG=GraphicsSettings.defaultRenderPipeline;priorQ=QualitySettings.renderPipeline;if(previewPipeline)GraphicsSettings.defaultRenderPipeline=QualitySettings.renderPipeline=previewPipeline;Apply();}
+ void Update(){if(movingPoint&&lightSource&&viewCamera){float a=Time.time/Mathf.Max(.1f,period)*Mathf.PI*2;var right=Vector3.ProjectOnPlane(viewCamera.transform.right,Vector3.up).normalized;var front=Vector3.ProjectOnPlane(-viewCamera.transform.forward,Vector3.up).normalized;lightSource.transform.position=new Vector3(0,1.6f,0)+(right*Mathf.Sin(a)+front*Mathf.Cos(a))*1.8f;}Apply();}
+ void OnDisable(){GraphicsSettings.defaultRenderPipeline=priorG;QualitySettings.renderPipeline=priorQ;}
+}

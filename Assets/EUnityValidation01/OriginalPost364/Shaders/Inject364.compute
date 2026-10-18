@@ -1,0 +1,4 @@
+#pragma kernel Inject
+Texture2D<float4> _InputColour,_InputOwner,_InputMeta,_InputUV;
+RWTexture2D<float4> _Before,_Colour,_Owner,_Meta,_UV,_Surface;
+[numthreads(8,8,1)]void Inject(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;float4 c=_InputColour.Load(int3(p,0)),o=_InputOwner.Load(int3(p,0));_Before[p]=c;_Colour[p]=c;_Owner[p]=o;_Meta[p]=_InputMeta.Load(int3(p,0));_UV[p]=_InputUV.Load(int3(p,0));for(int y=0;y<2;y++)for(int x=0;x<2;x++)_Surface[2*p+int2(x,y)]=float4(o.z,o.r,o.g,o.a);}

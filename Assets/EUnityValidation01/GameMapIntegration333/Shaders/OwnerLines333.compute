@@ -1,0 +1,32 @@
+#pragma kernel Seed
+#pragma kernel Flood
+#pragma kernel OwnerLines
+Texture2D<float4> _Before,_Owner,_Surface,_Torso,_Arms,_TriangleVertices,_Palette256;
+Texture2D<uint> _FloodRead;RWTexture2D<uint> _FloodWrite;RWTexture2D<float4> _Colour,_Audit,_PaletteAudit256;int2 _Size;float _LineTone;int _UsePalette256;float4 _DeepCream256,_DeepSkin256;
+bool inside(int2 p){return all(p>=0)&&all(p<_Size);}bool covered(int2 p){return inside(p)&&_Before.Load(int3(p,0)).a>0;}uint ext(int2 p){return inside(p)?_FloodRead.Load(int3(p,0)):1;}
+[numthreads(8,8,1)]void Seed(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(!inside(p))return;_FloodWrite[p]=!covered(p)&&(p.x==0||p.y==0||p.x==_Size.x-1||p.y==_Size.y-1)?1:0;}
+[numthreads(8,8,1)]void Flood(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(!inside(p))return;_FloodWrite[p]=covered(p)?0:(ext(p)|ext(p+int2(-1,0))|ext(p+int2(1,0))|ext(p+int2(0,-1))|ext(p+int2(0,1)));}
+int partAt(int2 p){return covered(p)?(int)round(_Owner.Load(int3(p,0)).y):0;}
+bool ownCore(int2 p,int2 inward,int part){bool a=covered(p+inward),b=covered(p+inward*2);if(part>=2&&part<=5){a=a&&partAt(p+inward)==part;b=b&&partAt(p+inward*2)==part;}return a&&b;}
+bool hasThreeInAxis(int2 p,int2 d,int part){bool a=partAt(p-d)==part,b=partAt(p+d)==part;return (a&&b)||(a&&partAt(p-d*2)==part)||(b&&partAt(p+d*2)==part);}
+bool sameSourceConnection(float a,float b){int ia=(int)round(abs(a)),ib=(int)round(abs(b));if(ia<1||ib<1)return false;float3 va=_TriangleVertices.Load(int3(ia,0,0)).xyz,vb=_TriangleVertices.Load(int3(ib,0,0)).xyz;return any(va.xxx==vb)||any(va.yyy==vb)||any(va.zzz==vb);}
+bool torsoCore(int2 p,int2 inward){return covered(p+inward)&&covered(p+2*inward)&&partAt(p+inward)==1&&partAt(p+2*inward)==1;}
+[numthreads(8,8,1)]void OwnerLines(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(!inside(p))return;float4 c=_Before.Load(int3(p,0)),owner=_Owner.Load(int3(p,0));int role=(int)round(owner.x)-1,part=(int)round(owner.y);bool eligible=role==7||role==8||role==9||role==10||role>=11;int2 dirs[4]={int2(-1,0),int2(1,0),int2(0,-1),int2(0,1)};bool outer=false,internal=false,thin=false,joint=false;
+ if(covered(p)&&eligible){for(int i=0;i<4;i++){int2 d=dirs[i];if(ext(p+d)>0){outer=true;if(!ownCore(p,-d,part))thin=true;} }
+  if(!outer&&(part==2||part==3)){float4 front=_Surface.Load(int3(p*2+1,0)),under=_Torso.Load(int3(p,0));bool underTorso=under.x>0&&round(under.z)==1&&under.x>front.x;
+   if(underTorso)for(int i=0;i<4;i++){int2 d=dirs[i];float4 other=inside(p+d)?_Owner.Load(int3(p+d,0)):0;if(covered(p+d)&&round(other.y)==1&&other.z>front.x){if(front.w<0)joint=true;else if(ownCore(p,-d,part))internal=true;else thin=true;}}
+  }
+  // Missing opposite ownership: the clothed torso is foreground and the far arm is behind it.
+  // A skin-weight blend flag does not establish a shared physical joint. Keep only exact source-vertex connectivity as the joint guard for this newly connected direction.
+  if(!outer&&part==1&&role==10){float4 front=_Surface.Load(int3(p*2+1,0)),under=_Arms.Load(int3(p,0));bool armBehind=under.x>front.x&&under.x>0&&(round(under.z)==2||round(under.z)==3);
+   if(armBehind)for(int i=0;i<4;i++){int2 d=dirs[i];float4 other=inside(p+d)?_Owner.Load(int3(p+d,0)):0;
+    if(covered(p+d)&&round(other.x)==11&&round(other.y)==round(under.z)&&other.z>front.x){bool connected=sameSourceConnection(front.w,under.w)||sameSourceConnection(front.w,other.w);if(connected)joint=true;else if(torsoCore(p,-d))internal=true;}
+   }
+  }
+ }
+ if(covered(p)&&part>=2&&part<=5&&(!hasThreeInAxis(p,int2(1,0),part)||!hasThreeInAxis(p,int2(0,1),part)))thin=true;
+ int reason=outer&&!thin&&eligible?1:internal&&!thin?2:0;
+ // One colour from the nearest foreground cell, one darker step of the existing .55 linear own-colour ramp.
+ // No neighbouring RGB averaging, role-wide fixed ink, normal-only edge or shadow-terminator edge.
+ float4 pa=0;if(reason>0){c.rgb=c.rgb*_LineTone;bool scope=(part==2||part==3)||(reason==2&&part==1);float4 family=_Palette256.Load(int3(p*2+1,0));bool own=family.w>0&&round(family.y)==round(owner.x)&&abs(family.z-owner.z)<=.00002;if(_UsePalette256>0&&scope&&own){if(round(family.x)==3){c.rgb=_DeepCream256.rgb;pa=float4(1,3,owner.x,1);}else if(round(family.x)==1){c.rgb=_DeepSkin256.rgb;pa=float4(1,1,owner.x,1);}}} _PaletteAudit256[p]=pa;_Colour[p]=c;_Audit[p]=float4(reason,outer?1:0,thin?1:0,joint?1:0);
+}

@@ -1,0 +1,7 @@
+using UnityEngine;
+[ExecuteAlways]public sealed class HairCG263View:MonoBehaviour{
+ public Curtain261View curtain;public Material[]originalNative,candidateNative,originalIndependent,candidateIndependent;public bool candidate=true,playing;public float speed=1;float elapsed;
+ void OnEnable(){Apply();}void Update(){if(playing){elapsed+=Time.unscaledDeltaTime*speed*16/1.333333373f;if(elapsed>=1){int n=(int)elapsed;elapsed-=n;curtain.walk.phaseIndex=(curtain.walk.phaseIndex+n)%16;}}Apply();}
+ public void Apply(){if(!curtain||originalNative==null||candidateNative==null||originalIndependent==null||candidateIndependent==null)return;curtain.playing=false;curtain.closure=0;curtain.irisAmplitude=0;curtain.walk.source.source.correctedSource=candidate?candidateIndependent:originalIndependent;curtain.Apply();curtain.walk.Body.renderers[2].sharedMaterials=candidate?candidateNative:originalNative;curtain.walk.source.Apply();}
+ void OnGUI(){GUI.Box(new Rect(12,12,370,86),"CG UV texture-only / originaldynamiclighting / art candidate");if(GUI.Button(new Rect(22,42,120,25),candidate?"CG mix":"Original"))candidate=!candidate;if(GUI.Button(new Rect(152,42,70,25),playing?"Pause":"Walk"))playing=!playing;if(GUI.Button(new Rect(232,42,50,25),"<")){playing=false;curtain.walk.phaseIndex=(curtain.walk.phaseIndex+15)%16;}if(GUI.Button(new Rect(292,42,50,25),">")){playing=false;curtain.walk.phaseIndex=(curtain.walk.phaseIndex+1)%16;}GUI.Label(new Rect(22,75,330,20),"Phase "+curtain.walk.phaseIndex+" / texturefield fixedin sourceUV");}
+}

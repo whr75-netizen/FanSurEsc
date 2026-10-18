@@ -1,0 +1,35 @@
+#pragma kernel Compose
+Texture2D<float4> _World,_Source,_Physical,_OriginalMToon,_Meta,_UV;
+Texture2D<float> _WorldDepth;
+RWTexture2D<float4> _Output,_Audit,_Owner,_HistoryColour,_HistoryMeta,_HistoryUV331,_WorldInfo;
+float4 _Profile,_NearFar,_Texel331[16];float _UVTolerance331;
+int _Mode,_Capture,_CommonDepth,_LocalGrid331;int2 _Delta;
+float4 Current331(int2 q,out float4 key,out float4 meta,out float lit){
+ float4 s=_Source.Load(int3(q,0)),phys=_Physical.Load(int3(q,0));meta=_Meta.Load(int3(q,0));
+ lit=step(_Profile.y,phys.x)*step(_Profile.z,phys.y);int role=(int)round(meta.y)-1;
+ key=float4(meta.y,meta.w,lit,(s.a>.5&&meta.x>0)?1:0);
+ return (role>=7&&role<=10)?float4(s.rgb*((_Profile.w>.5&&lit<.5)?_Profile.x:1),s.a):_OriginalMToon.Load(int3(q,0));
+}
+[numthreads(8,8,1)]void Compose(uint3 tid:SV_DispatchThreadID){
+ int2 p=tid.xy;if(any(p>=int2(480,272)))return;
+ if(_Capture>0){float4 k,m;float l;_HistoryColour[p]=Current331(p,k,m,l);_HistoryMeta[p]=k;_HistoryUV331[p]=_UV.Load(int3(p,0));}
+ float4 world=_World.Load(int3(p,0));float ndc=_WorldDepth.Load(int3(p,0));
+ float wd=lerp(_NearFar.x,_NearFar.y,_NearFar.z>.5?1-ndc:ndc);
+ int2 q=(_Mode==2&&_LocalGrid331>0)?p-_Delta:p;
+ if(any(q<0)||any(q>=int2(480,272))){_Output[p]=world;_Owner[p]=0;_Audit[p]=0;_WorldInfo[p]=float4(wd,ndc,0,0);return;}
+ float4 key,m;float lit;float4 colour=Current331(q,key,m,lit);
+ bool covered=key.w>.5;bool visible=covered&&(_CommonDepth==0||m.x<=wd+.0001);
+ bool used=false;int invalid=0;
+ if(_Mode==2&&_Capture==0&&visible){
+  int2 h=_LocalGrid331>0?q:p-_Delta;
+  if(all(h>=0)&&all(h<int2(480,272))){
+   float4 old=_HistoryMeta[h];int role=clamp((int)round(m.y)-1,0,15);
+   float2 distanceTexels=abs(_UV.Load(int3(q,0)).xy-_HistoryUV331[h].xy)/max(_Texel331[role].xy,1e-8);
+   if(old.w>.5&&old.x==key.x&&old.y==key.y&&old.z==key.z&&all(distanceTexels<=_UVTolerance331)){colour=_HistoryColour[h];used=true;}else invalid=1;
+  }else invalid=2;
+ }
+ _Output[p]=visible?float4(colour.rgb,1):world;
+ _Owner[p]=visible?float4(m.y,m.z,m.x,m.w):0;
+ _Audit[p]=float4(covered?1:0,visible?1:0,used?1:0,invalid);
+ _WorldInfo[p]=float4(wd,ndc,visible?1:0,lit);
+}

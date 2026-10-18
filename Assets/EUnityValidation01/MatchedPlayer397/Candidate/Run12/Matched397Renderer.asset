@@ -1,0 +1,286 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8602284528497175346
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49afdd4743a006549a0a7e3236a82566, type: 3}
+  m_Name: 395 preserve native world; E only final cells
+  m_EditorClassIdentifier: Assembly-CSharp::NativeWorldFeature395
+  m_Active: 1
+--- !u!114 &-5890863034869886517
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36f34ea632da37f48a4b7b473f8ff844, type: 3}
+  m_Name: 395 E only / FullFeature367
+  m_EditorClassIdentifier: Assembly-CSharp::FullFeature367
+  m_Active: 1
+--- !u!114 &-3289461543226881921
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9babd101e5357de4f804eff9ad570938, type: 3}
+  m_Name: 395 E only / JoinSource367
+  m_EditorClassIdentifier: Assembly-CSharp::JoinSource367
+  m_Active: 1
+--- !u!114 &-1593332681731270475
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 391de33178c4e454db5abb5cf1ed2477, type: 3}
+  m_Name: Local Volumetric Lights (Game Camera)
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Rendering.LocalVolumetricLightRendererFeature
+  m_Active: 1
+  volumeMaterial: {fileID: 2100000, guid: aa1ec260b46d2ef4f896d289e8de7188, type: 2}
+  sampleCount: 24
+--- !u!114 &-1528167783104123917
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6905df12a56dfd14cb09a21cb1845b7f, type: 3}
+  m_Name: Character Silhouette Outline
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Rendering.CharacterSilhouetteRendererFeature
+  m_Active: 1
+  settings:
+    maskMaterial: {fileID: 2100000, guid: 6a4e81adf59d4f749bd291894bdd76bf, type: 2}
+    compositeMaterial: {fileID: 2100000, guid: 8dd089e5745a9cb43b3aef2644aea9bf, type: 2}
+    injectionPoint: 550
+    adaptiveToneCompute: {fileID: 7200000, guid: ac42a62c9cb10aa4a93cad83f7edea5c, type: 3}
+    adaptiveTones:
+      enabled: 1
+      toneError: 0.06
+      relativeLightness: 1
+      lightnessRelativeError: 0.1
+      lightnessBlackFloor: 0.02
+      chromaError: 0.06
+      contrastRetention: 0.65
+      minimumContrast: 0.025
+      highlightMinimumContrast: 0.025
+      hairLighting: 0
+      hairRelativeError: 0.1
+      hairIlluminationFloor: 0.02
+      skinLighting: 0
+      skinRelativeError: 0.1
+      skinIlluminationFloor: 0.02
+      temporalStability: 1
+      shrinkMargin: 0.1
+      regionTransitions: 1
+      regionTransitionSeconds: 0.25
+--- !u!114 &-1117799798113170368
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5373cfc033508e84b88afeec627f38ff, type: 3}
+  m_Name: 395 E only / EyeRenderer367
+  m_EditorClassIdentifier: Assembly-CSharp::EyeRenderer367
+  m_Active: 1
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
+  m_Name: Matched397Renderer
+  m_EditorClassIdentifier: 
+  debugShaders:
+    debugReplacementPS: {fileID: 4800000, guid: cf852408f2e174538bcd9b7fda1c5ae7, type: 3}
+    hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
+    probeVolumeSamplingDebugComputeShader: {fileID: 7200000, guid: 53626a513ea68ce47b59dc1299fe3959, type: 3}
+  probeVolumeResources:
+    probeVolumeDebugShader: {fileID: 4800000, guid: e5c6678ed2aaa91408dd3df699057aae, type: 3}
+    probeVolumeFragmentationDebugShader: {fileID: 4800000, guid: 03cfc4915c15d504a9ed85ecc404e607, type: 3}
+    probeVolumeOffsetDebugShader: {fileID: 4800000, guid: 53a11f4ebaebf4049b3638ef78dc9664, type: 3}
+    probeVolumeSamplingDebugShader: {fileID: 4800000, guid: 8f96cd657dc40064aa21efcc7e50a2e7, type: 3}
+    probeSamplingDebugMesh: {fileID: -3555484719484374845, guid: 57d7c4c16e2765b47a4d2069b311bffe, type: 3}
+    probeSamplingDebugTexture: {fileID: 2800000, guid: 24ec0e140fb444a44ab96ee80844e18e, type: 3}
+    probeVolumeBlendStatesCS: {fileID: 7200000, guid: b9a23f869c4fd45f19c5ada54dd82176, type: 3}
+  m_RendererFeatures:
+  - {fileID: 6477045145741884247}
+  - {fileID: 8036189946109946183}
+  - {fileID: 7188384784437001789}
+  - {fileID: 5063029402038796990}
+  - {fileID: -1593332681731270475}
+  - {fileID: -1528167783104123917}
+  - {fileID: 6847679972799826529}
+  - {fileID: -3289461543226881921}
+  - {fileID: -5890863034869886517}
+  - {fileID: -1117799798113170368}
+  - {fileID: -8602284528497175346}
+  - {fileID: 6436923975031271190}
+  m_RendererFeatureMap: 57fb1c423e16e35947e972ad2d48866f3dbe3031e045c263be82e1836a7e4346b51863285e58e3e9f3ebe1727fdbcaea614a4a9aa7d8075f7f48a79d277c59d2cbd119ea47733fae400c768701c77cf0ce541656cc8b9e88162fef41408c5459
+  xrSystemData: {fileID: 0}
+  postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
+  m_AssetVersion: 3
+  m_PrepassLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_OpaqueLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_TransparentLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_DefaultStencilState:
+    overrideStencilState: 0
+    stencilReference: 1
+    stencilCompareFunction: 3
+    passOperation: 2
+    failOperation: 0
+    zFailOperation: 0
+  m_ShadowTransparentReceive: 1
+  m_RenderingMode: 2
+  m_DepthPrimingMode: 0
+  m_CopyDepthMode: 0
+  m_DepthAttachmentFormat: 0
+  m_DepthTextureFormat: 0
+  m_AccurateGbufferNormals: 0
+  m_IntermediateTextureMode: 0
+  m_TileOnlyMode: 0
+--- !u!114 &5063029402038796990
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beff5b4f63da1504f9eed1a3fc8f201f, type: 3}
+  m_Name: Stepped Local Lights (Game Camera)
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Rendering.SteppedLocalLightRendererFeature
+  m_Active: 1
+  injectionPoint: 450
+  fetchColorBuffer: 0
+  requirements: 3
+  passMaterial: {fileID: 2100000, guid: 28cdf37a34e7ea149952821d69047022, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 1
+  m_Version: 1
+  visibleLightLimit: 8
+--- !u!114 &6436923975031271190
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20863c51808ff9f4aa549479f637726f, type: 3}
+  m_Name: 397 source probe only
+  m_EditorClassIdentifier: Assembly-CSharp::ProbeFeature397
+  m_Active: 1
+--- !u!114 &6477045145741884247
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62c9c65cf3354c93be831c8bc075510, type: 3}
+  m_Name: ScreenSpaceAmbientOcclusion
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  m_Settings:
+    AOMethod: 0
+    Downsample: 0
+    AfterOpaque: 0
+    Source: 1
+    NormalSamples: 1
+    Intensity: 0.4
+    DirectLightingStrength: 0.25
+    Radius: 0.3
+    Samples: 1
+    BlurQuality: 0
+    Falloff: 100
+    SampleCount: -1
+--- !u!114 &6847679972799826529
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a230851cf1f347449810df951f3a49fe, type: 3}
+  m_Name: 395 E only / SourceFeature366
+  m_EditorClassIdentifier: Assembly-CSharp::SourceFeature366
+  m_Active: 1
+--- !u!114 &7188384784437001789
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dd740744dbe014893d4e23b4fdcd80, type: 3}
+  m_Name: Pixel Rain (Persistent Gameplay Camera)
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvival.Rendering.PixelRainRendererFeature
+  m_Active: 1
+  injectionPoint: 600
+  fetchColorBuffer: 0
+  requirements: 1
+  passMaterial: {fileID: 2100000, guid: 9d820d260288a214588e78e43ef0395a, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 0
+  m_Version: 1
+--- !u!114 &8036189946109946183
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a1e57dec8f9adf4697419b6441610e9, type: 3}
+  m_Name: 3D Pixel Art (Game Cameras)
+  m_EditorClassIdentifier: Assembly-CSharp::FantasySurvivalEscapeGame.Rendering.PixelArtRendererFeature
+  m_Active: 0
+  injectionPoint: 600
+  fetchColorBuffer: 1
+  requirements: 3
+  passMaterial: {fileID: 2100000, guid: ae3350d51f2ebad4f8d1e688a3b6d838, type: 2}
+  passIndex: 0
+  bindDepthStencilAttachment: 0
+  m_Version: 1

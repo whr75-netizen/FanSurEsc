@@ -1,0 +1,18 @@
+using System;using System.IO;using System.Linq;using System.Collections.Generic;using UnityEngine;
+[ExecuteAlways]public sealed class Surface252View:MonoBehaviour {
+ public Camera viewCamera;public Renderer[] renderers;public Material[] metadata;public ComputeShader adapter,lines;public Material present;public TextAsset bodyParts;
+ public Mesh[] poseMeshes;public int poseIndex=8;public bool linesEnabled=true,playing;public float framesPerSecond=8,lineTone=.55f;
+ public Vector3[] positions,scales;public Quaternion[] rotations;
+ float elapsed;int last=-1;Mesh proxy;int[][]sourceIndices;Vector3[] parts;
+ void OnEnable(){Apply();}void Update(){if(playing&&poseMeshes!=null&&poseMeshes.Length>0){elapsed+=Time.unscaledDeltaTime*framesPerSecond;if(elapsed>=1){int n=(int)elapsed;elapsed-=n;poseIndex=(poseIndex+n)%(poseMeshes.Length/3);}}Apply();}
+ void ReadParts(){if(parts!=null||!bodyParts)return;using var br=new BinaryReader(new MemoryStream(bodyParts.bytes));int nv=br.ReadInt32(),ns=br.ReadInt32();sourceIndices=new int[ns][];var data=new List<Vector3>();for(int sm=0;sm<ns;sm++){br.ReadInt32();int nt=br.ReadInt32();sourceIndices[sm]=new int[nt*3];for(int k=0;k<nt*3;k++)sourceIndices[sm][k]=br.ReadInt32();for(int k=0;k<nt;k++)data.Add(new Vector3(br.ReadInt32(),br.ReadInt32(),br.ReadInt32()));}parts=data.ToArray();}
+ void Proxy(Mesh source){ReadParts();if(parts==null)return;if(proxy)DestroyImmediate(proxy);proxy=new Mesh{name="A252 exact body metadata triangle attributes",indexFormat=UnityEngine.Rendering.IndexFormat.UInt32};var p=source.vertices;var n=source.normals;var uv=source.uv;var vp=new List<Vector3>();var vn=new List<Vector3>();var vu=new List<Vector2>();var vi=new List<Vector4>();var groups=new List<int[]>();int tri=0;
+  for(int sm=0;sm<source.subMeshCount;sm++){var index=source.GetTriangles(sm);if(!index.SequenceEqual(sourceIndices[sm]))throw new Exception("A252 original body topology mismatch");int start=vp.Count;for(int k=0;k<index.Length;k+=3){var info=parts[tri++];for(int z=0;z<3;z++){int id=index[k+z];vp.Add(p[id]);vn.Add(n[id]);vu.Add(uv[id]);vi.Add(new Vector4(info.x,info.y,info.z,1));}}groups.Add(Enumerable.Range(start,index.Length).ToArray());}
+  proxy.SetVertices(vp);proxy.SetNormals(vn);proxy.SetUVs(0,vu);proxy.SetUVs(3,vi);proxy.subMeshCount=groups.Count;for(int i=0;i<groups.Count;i++)proxy.SetTriangles(groups[i],i,false);proxy.bounds=source.bounds;Surface252Feature.BodyProxy=proxy;
+ }
+ public void Apply(){if(!viewCamera||renderers==null||renderers.Length!=3||metadata==null||metadata.Length!=15||!adapter||!lines||!present||!bodyParts)return;
+  if(poseMeshes!=null&&poseMeshes.Length>=3&&last!=poseIndex){poseIndex=Mathf.Clamp(poseIndex,0,poseMeshes.Length/3-1);for(int i=0;i<3;i++){int k=poseIndex*3+i;renderers[i].GetComponent<MeshFilter>().sharedMesh=poseMeshes[k];if(positions!=null&&positions.Length==poseMeshes.Length){renderers[i].transform.SetPositionAndRotation(positions[k],rotations[k]);renderers[i].transform.localScale=scales[k];}}last=poseIndex;Proxy(renderers[0].GetComponent<MeshFilter>().sharedMesh);}else if(!proxy)Proxy(renderers[0].GetComponent<MeshFilter>().sharedMesh);
+  Shader.SetGlobalFloat("_Restore250Bottom",1);Shader.SetGlobalVector("_Restore250LowerLit",new Color(51/255f,44/255f,49/255f,1).linear);Shader.SetGlobalVector("_Restore250LowerShade",new Color(35/255f,29/255f,35/255f,1).linear);Surface252Feature.Camera=viewCamera;Surface252Feature.Renderers=renderers;Surface252Feature.Metadata=metadata;Surface252Feature.Adapter=adapter;Surface252Feature.Lines=lines;Surface252Feature.Present=present;Surface252Feature.Enabled=linesEnabled;Surface252Feature.LineTone=lineTone;
+ }
+ void OnDisable(){if(proxy)DestroyImmediate(proxy);proxy=null;last=-1;}
+}

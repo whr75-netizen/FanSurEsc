@@ -1,0 +1,155 @@
+{
+  "status": "PASS_SINGLE_EVENT_AND_FIVE_FRAME_INTERVAL_ONLY_DEFAULT_OFF",
+  "activeProduct": "44d13c0f6a42007f2ac7fd59c174d630f2230e1b unchanged",
+  "candidateBase": "29d2faf7f9e67d28fa7cb0436086eb1d16723358",
+  "defaultEnabled": false,
+  "adopted": false,
+  "wholeProjectComplete": false,
+  "rootCauses": [
+    "The real first discard is CPU Visible beforeGPU, not GPUdepth rejection. It compares barycentrics from rounded pixelXY with a different world-derived depth. At exactly the497pose source90 is falsely rejected by89:123.29um apparent gap versus36.78um coherent camera-ray gap; unchanged tolerance100um.",
+    "Coherent visibility alone exposed a second existing responsibility error atprecedingphase.675: source90 really is433.64um behind adjacent89, but dropping that one packet deletes the cell even though a visible original ribbon face exists. The original shared edge indices587/588 and exact89UV/depth are recorded; no same-role assumption."
+  ],
+  "fix": {
+    "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HairBoundary491\\Runtime\\HairBoundary491.cs",
+    "sha256": "a1e757105a4f1ff3ec7469ae23f5c7cb928867233fa0a0d83f4a0662e0f24c16",
+    "scope": "Existing default-OFF single-ribbon source packet selection only;19added/11removedlines. Occluder and selected packet share a double camera-space ray from their real world coordinates. Select ranks visible original triangle-cell candidates; all-hidden cells remain hidden, unsupported cells remain explicit failures.",
+    "preserved": [
+      "Same原118triangle component and originalbarycentric/UV/world/depth packets",
+      "Original curve cell selection/ends/connectors/width rules",
+      "Exact self-triangle-only exemption; othertriangles/strands/renderers still occlude",
+      "Existing0.1mm depth tolerance and barycentric inclusion tolerance",
+      "Shader/colour/eyes/outline, staticdefaultOFF, userQuality/Time/lightingprefab settings"
+    ],
+    "notAdded": [
+      "Nohistory/temporal threshold",
+      "No masks/closing/dilation/island deletion",
+      "No role-wide occlusion exemption",
+      "No new serial depth layer; inconsistent comparison inputs replaced",
+      "No coordinate/phase hardcoding"
+    ],
+    "temporaryTraceRemoved": true,
+    "orthographicPrecondition": "Actual head projection and camera validated byStopFor498Fix; this validation covers that existing orthographic pipeline."
+  },
+  "savedInputValidation": {
+    "actualCSharp": true,
+    "cases": 13,
+    "scope": "Existing7failed495phases+6local496fixtures: curve connection/endcaps/determinism. This is not a full runtime visibility proof.",
+    "status": "PASS"
+  },
+  "limits": [
+    "No full-loop run of the new498Bselection rule. The older497loop does not validate this changed candidate.",
+    "Other497diagonal gap contacts/3to2placement/temporal staircase quality remain unresolved. No basic activation or whole-project success claim.",
+    "Old497comparison time7.98043346 versusnew498Btime2.0951972: colour/background differ. Matching old clip phases have worlddifferences<=0.477um andheadprojection<=0.0000611cell; do not call those bit-identical geometry. New baseline/candidate pairs are same pose/camera/light within each frame.",
+    "New old-comparison sourcecell224,34was alreadyactor-opaque and now has a front originalribbon owner; no silhouette gap is filled there. Same-frame headROI checks and recovered GPUowners are recorded; this is not whole-clip artistic adoption.",
+    "5frame repeating GIF is a short actual interval, not an animation-loop seam proof."
+  ],
+  "delivery": {
+    "gifLibraryId": "libfile_77645e41887481919e2813800894f452",
+    "gifBytes": 515847,
+    "gifPath": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Pairs498B\\FULL_BODY_498_SOURCE_VS_FIXED.gif",
+    "label": "Same-execution current original source with348fix versus temporary498Bcandidate;5actualWalkframes. Not an equal-light old497candidate comparison.",
+    "nativePerSide": [
+      960,
+      544
+    ],
+    "commonGrid": [
+      480,
+      272
+    ],
+    "nativeCrop": [
+      342,
+      50,
+      546,
+      356
+    ],
+    "integerDisplayScale": 2,
+    "interpolation": "NEAREST exact replication",
+    "frames": 5,
+    "reviewFrameMilliseconds": 150,
+    "actualDeltaSeconds": 0.016666666666666666
+  },
+  "restoration": {
+    "receipt": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\restore498B_final.json",
+    "play": true,
+    "paused": false,
+    "movement": true,
+    "animator": true,
+    "speed": 1,
+    "locomotion": 0,
+    "captureDeltaTime": 0,
+    "hook": "PostView366",
+    "automaticClock": true,
+    "experimentEnabled": false,
+    "temporaryResourcesReleased": true
+  },
+  "actualWalk": {
+    "status": "PASS_LOCAL_EVENT_ONLY",
+    "actualWalkSamples": 5,
+    "wholeLoopRerun": false,
+    "allSamePose": true,
+    "allSameLight": true,
+    "ready": 5,
+    "unsupported": 0,
+    "sourcePackets": 66,
+    "gpuHidden": 6,
+    "gpuOwnersRecovered": 6,
+    "gpuOwnersStrictlyNearer": true,
+    "mainMiss": 0,
+    "newSingletonPositions": 0,
+    "solid2x2": 0,
+    "facingChanges": 0,
+    "outsideHeadNativeChanges": 0,
+    "sourceUVMax": 6.418979880962183e-08,
+    "sourceWorldMax": 1.30969468065123e-06,
+    "gpuUVMax": 1.4901161193847656e-08,
+    "gpuDepthMax": 9.5367431640625e-07,
+    "targetEvent": {
+      "primitive": 89,
+      "uv": [
+        0.4016958177089691,
+        0.23728817701339722
+      ],
+      "depth": 13.765880584716797,
+      "headMeta": [
+        13.765880584716797,
+        13.0,
+        0.0,
+        90.0
+      ],
+      "headUV": [
+        0.4016958177089691,
+        0.23728817701339722,
+        90.0,
+        3.0
+      ],
+      "mainMeta": [
+        13.756819725036621,
+        13.0,
+        0.0,
+        90.0
+      ],
+      "finalAlpha": 1.0
+    },
+    "fixedHour": [
+      2.0951972
+    ]
+  },
+  "firstDiscard": {
+    "renderer": 2,
+    "submesh": 1,
+    "selectedPrimitive": 90,
+    "blockerPrimitive": 89,
+    "selectedUV": {
+      "x": 0.40171846747398376,
+      "y": 0.23728807270526886
+    },
+    "blockerUV": [
+      0.39852097997455316,
+      0.2376153301742161
+    ],
+    "sourceDepth": 13.765881538391113,
+    "roundedBlockerDepth": 13.765758248196832,
+    "coherentBlockerDepth": 13.765844701213048,
+    "firstOperation": "CPUVisible beforepacket/GPU"
+  }
+}

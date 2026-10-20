@@ -12,7 +12,9 @@ public static class HairBoundary491 {
  public static int Hidden,Unsupported;public static float MaxWidth;
  [Serializable] public class Packet {public int x,y,primitive;public Vector3 barycentric,world;public Vector2 uv,projected;public float depth,centreDistance;}
  struct Point {public Vector2 p;public Vector3 b;public Point(Vector2 p,Vector3 b){this.p=p;this.b=b;}}
- struct Triangle {public int renderer,submesh,primitive;public Vector3 a,b,c;public Vector2 pa,pb,pc;public float za,zb,zc;}
+ struct CameraPoint {public double x,y,z;public CameraPoint(Matrix4x4 view,Vector3 p){x=(double)view.m00*p.x+(double)view.m01*p.y+(double)view.m02*p.z+view.m03;y=(double)view.m10*p.x+(double)view.m11*p.y+(double)view.m12*p.z+view.m13;z=-((double)view.m20*p.x+(double)view.m21*p.y+(double)view.m22*p.z+view.m23);}}
+ struct Triangle {public int renderer,submesh,primitive;public CameraPoint a,b,c;}
+ static Matrix4x4 visibilityView;
  static Full319View335 current;static Mesh rest,pixels;static Material material;static ComputeBuffer sides;
  static int[] component,indices;static int[][] rows;static Vector3[] vertices,normals;static Vector4[] tangents;static Vector2[] uvs,projected;static Triangle[] occluders;
  static Mesh source;static readonly List<Vector3> pv=new(),pn=new();static readonly List<Vector4> pt=new(),clip=new();static readonly List<Vector2> pu=new();static readonly List<int> pi=new();
@@ -37,8 +39,8 @@ public static class HairBoundary491 {
  static float Depth(Full319View335 f,Vector3 w)=>-f.motion.camera.worldToCameraMatrix.MultiplyPoint3x4(w).z;
  static List<Point> Clip(List<Point> input,int axis,float value,bool greater){var output=new List<Point>();if(input.Count==0)return output;var a=input[input.Count-1];float da=(axis==0?a.p.x:a.p.y)-value;if(!greater)da=-da;foreach(var b in input){float db=(axis==0?b.p.x:b.p.y)-value;if(!greater)db=-db;bool ai=da>=0,bi=db>=0;if(ai!=bi){float t=da/(da-db);output.Add(new Point(Vector2.LerpUnclamped(a.p,b.p,t),Vector3.LerpUnclamped(a.b,b.b,t)));}if(bi)output.Add(b);a=b;da=db;}return output;}
  static Point Closest(List<Point> poly,Vector2 centre){var best=poly[0];float error=float.PositiveInfinity;for(int j=0;j<poly.Count;j++){var a=poly[j];var b=poly[(j+1)%poly.Count];var d=b.p-a.p;float t=d.sqrMagnitude>0?Mathf.Clamp01(Vector2.Dot(centre-a.p,d)/d.sqrMagnitude):0;var p=new Point(a.p+t*d,Vector3.LerpUnclamped(a.b,b.b,t));float e=(p.p-centre).sqrMagnitude;if(e<error){error=e;best=p;}}return best;}
- static bool Select(Full319View335 f,int x,int y,out Packet packet){
-  packet=null;var centre=new Vector2(x+.5f,y+.5f);float best=float.PositiveInfinity;
+ static bool Select(Full319View335 f,int x,int y,out Packet packet,out bool occluded){
+  packet=null;occluded=false;bool supported=false;var centre=new Vector2(x+.5f,y+.5f);float best=float.PositiveInfinity;
   foreach(int t in component){int ia=indices[t*3],ib=indices[t*3+1],ic=indices[t*3+2];var a=projected[ia];var b=projected[ib];var c=projected[ic];if(Mathf.Max(a.x,Mathf.Max(b.x,c.x))<x||Mathf.Min(a.x,Mathf.Min(b.x,c.x))>x+1||Mathf.Max(a.y,Mathf.Max(b.y,c.y))<y||Mathf.Min(a.y,Mathf.Min(b.y,c.y))>y+1)continue;
    var poly=new List<Point>{new Point(a,Vector3.right),new Point(b,Vector3.up),new Point(c,Vector3.forward)};poly=Clip(poly,0,x,true);poly=Clip(poly,0,x+1,false);poly=Clip(poly,1,y,true);poly=Clip(poly,1,y+1,false);if(poly.Count<3)continue;
    Vector3 bary=Bary(centre,a,b,c);Point q=bary.x>=0&&bary.y>=0&&bary.z>=0?new Point(centre,bary):Closest(poly,centre);
@@ -46,9 +48,13 @@ public static class HairBoundary491 {
    q.b=Vector3.Lerp(q.b,new Vector3(1f/3,1f/3,1f/3),.00001f);q.p=a*q.b.x+b*q.b.y+c*q.b.z;
    float error=(q.p-centre).sqrMagnitude;var local=vertices[ia]*q.b.x+vertices[ib]*q.b.y+vertices[ic]*q.b.z;var world=f.motion.surface.outputs[2].transform.TransformPoint(local);float z=Depth(f,world);
    if(error>best+1e-8f||(Mathf.Abs(error-best)<1e-8f&&packet!=null&&z>=packet.depth))continue;
-   best=error;packet=new Packet{x=x,y=y,primitive=t,barycentric=q.b,world=world,uv=uvs[ia]*q.b.x+uvs[ib]*q.b.y+uvs[ic]*q.b.z,projected=q.p,depth=z,centreDistance=Mathf.Sqrt(error)};
+   var candidate=new Packet{x=x,y=y,primitive=t,barycentric=q.b,world=world,uv=uvs[ia]*q.b.x+uvs[ib]*q.b.y+uvs[ic]*q.b.z,projected=q.p,depth=z,centreDistance=Mathf.Sqrt(error)};
+   if(candidate.centreDistance>Mathf.Sqrt(.5f)+.00001f)continue;supported=true;
+   // Ownership is part of choosing the original surface packet, not a later
+   // deletion of a cell which may still contain another visible ribbon face.
+   if(!Visible(candidate))continue;best=error;packet=candidate;
   }
-  return packet!=null&&packet.centreDistance<=Mathf.Sqrt(.5f)+.00001f;
+  occluded=packet==null&&supported;return packet!=null;
  }
  static void Simplify(IList<Vector2> p,int a,int b,HashSet<int> keep){if(b<=a+1)return;float far=0;int at=-1;var d=p[b]-p[a];for(int i=a+1;i<b;i++){float t=d.sqrMagnitude>0?Mathf.Clamp01(Vector2.Dot(p[i]-p[a],d)/d.sqrMagnitude):0;float e=(p[i]-(p[a]+t*d)).sqrMagnitude;if(e>far){far=e;at=i;}}if(far>.25f*.25f){keep.Add(at);Simplify(p,a,at,keep);Simplify(p,at,b,keep);}}
  struct CurveSample {public Vector2 p;public double at;public CurveSample(Vector2 p,double at){this.p=p;this.at=at;}}
@@ -100,17 +106,19 @@ public static class HairBoundary491 {
   for(int i=1;i<cells.Count;i++)if(!Neighbours(cells[i-1],cells[i]))throw new Exception("Selected original curve path is not8connected");return cells.ToArray();
  }
 
- static void BuildOccluders(Full319View335 f){var all=new List<Triangle>();for(int r=0;r<3;r++){var mf=f.motion.surface.outputs[r];var mesh=mf.sharedMesh;var v=mesh.vertices;var world=v.Select(p=>mf.transform.TransformPoint(p)).ToArray();var screen=world.Select(f.Project).ToArray();var z=world.Select(p=>Depth(f,p)).ToArray();for(int sm=0;sm<mesh.subMeshCount;sm++){var ix=mesh.GetIndices(sm);for(int t=0;t<ix.Length;t+=3){int a=ix[t],b=ix[t+1],c=ix[t+2];all.Add(new Triangle{renderer=r,submesh=sm,primitive=t/3,a=world[a],b=world[b],c=world[c],pa=screen[a],pb=screen[b],pc=screen[c],za=z[a],zb=z[b],zc=z[c]});}}}occluders=all.ToArray();}
- static bool Visible(Packet p){foreach(var t in occluders){
+ static void BuildOccluders(Full319View335 f){visibilityView=f.motion.camera.worldToCameraMatrix;var all=new List<Triangle>();for(int r=0;r<3;r++){var mf=f.motion.surface.outputs[r];var mesh=mf.sharedMesh;var v=mesh.vertices;var points=v.Select(p=>new CameraPoint(visibilityView,mf.transform.TransformPoint(p))).ToArray();for(int sm=0;sm<mesh.subMeshCount;sm++){var ix=mesh.GetIndices(sm);for(int t=0;t<ix.Length;t+=3){int a=ix[t],b=ix[t+1],c=ix[t+2];all.Add(new Triangle{renderer=r,submesh=sm,primitive=t/3,a=points[a],b=points[b],c=points[c]});}}}occluders=all.ToArray();}
+ static bool Visible(Packet p){var point=new CameraPoint(visibilityView,p.world);foreach(var t in occluders){
   // A packet lies on this exact original triangle by construction. Reprojecting
   // its near-edge-on triangle and solving float barycentrics can invent a nearer
   // intersection on itself. No other triangle, strand or owner is exempted.
   if(t.renderer==2&&t.submesh==1&&t.primitive==p.primitive)continue;
-  if(p.projected.x<Mathf.Min(t.pa.x,Mathf.Min(t.pb.x,t.pc.x))||p.projected.x>Mathf.Max(t.pa.x,Mathf.Max(t.pb.x,t.pc.x))||p.projected.y<Mathf.Min(t.pa.y,Mathf.Min(t.pb.y,t.pc.y))||p.projected.y>Mathf.Max(t.pa.y,Mathf.Max(t.pb.y,t.pc.y)))continue;
-  double ax=t.pa.x,ay=t.pa.y,bx=t.pb.x-ax,by=t.pb.y-ay,cx=t.pc.x-ax,cy=t.pc.y-ay,px=p.projected.x-ax,py=p.projected.y-ay;
+  // The selected packet and blockers share one unquantized camera-space ray.
+  // Pixel-rounded source coordinates must not be mixed with world-space depth.
+  if(point.x<Math.Min(t.a.x,Math.Min(t.b.x,t.c.x))||point.x>Math.Max(t.a.x,Math.Max(t.b.x,t.c.x))||point.y<Math.Min(t.a.y,Math.Min(t.b.y,t.c.y))||point.y>Math.Max(t.a.y,Math.Max(t.b.y,t.c.y)))continue;
+  double ax=t.a.x,ay=t.a.y,bx=t.b.x-ax,by=t.b.y-ay,cx=t.c.x-ax,cy=t.c.y-ay,px=point.x-ax,py=point.y-ay;
   double det=bx*cy-by*cx;if(Math.Abs(det)<1e-20)continue;
   double v=(px*cy-py*cx)/det,w=(bx*py-by*px)/det,u=1-v-w;
-  if(u>=-.00001&&v>=-.00001&&w>=-.00001&&u*t.za+v*t.zb+w*t.zc<p.depth-.0001f)return false;
+  if(u>=-.00001&&v>=-.00001&&w>=-.00001&&u*t.a.z+v*t.b.z+w*t.c.z<point.z-.0001f)return false;
  }return true;}
  static void Quad(Full319View335 f,Packet p,float flip){int a=indices[p.primitive*3],b=indices[p.primitive*3+1],c=indices[p.primitive*3+2];var w=p.barycentric;var local=vertices[a]*w.x+vertices[b]*w.y+vertices[c]*w.z;var normal=(normals[a]*w.x+normals[b]*w.y+normals[c]*w.z).normalized;var tangent=tangents[a]*w.x+tangents[b]*w.y+tangents[c]*w.z;int start=pv.Count;foreach(var corner in new[]{new Vector2(p.x,p.y),new Vector2(p.x+1,p.y),new Vector2(p.x+1,p.y+1),new Vector2(p.x,p.y+1)}){pv.Add(local);pn.Add(normal);pt.Add(tangent);pu.Add(p.uv);clip.Add(new Vector4(corner.x/240-1,(1-corner.y/136)*flip,p.primitive,0));}bool forward=Cross(projected[b]-projected[a],projected[c]-projected[a])>0;foreach(int i in forward?new[]{0,1,2,0,2,3}:new[]{0,2,1,0,3,2})pi.Add(start+i);}
  public static void Prepare(Full319View335 f){
@@ -118,7 +126,7 @@ public static class HairBoundary491 {
   try{var mf=f.motion.surface.outputs[2];var mesh=mf.sharedMesh;if(source!=mesh)Topology(mesh);vertices=mesh.vertices;uvs=mesh.uv;normals=mesh.normals;tangents=mesh.tangents;projected=vertices.Select(v=>f.Project(mf.transform.TransformPoint(v))).ToArray();rest.vertices=vertices;rest.normals=normals;rest.tangents=tangents;rest.bounds=mesh.bounds;
    var centre=new List<Vector2>();foreach(var row in rows){var a=projected[row[0]];var b=projected[row[1]];MaxWidth=Mathf.Max(MaxWidth,Vector2.Distance(a,b));centre.Add((a+b)*.5f);}if(MaxWidth>1)throw new Exception("Projected ribbon width exceeds1cell");
    var cells=SelectCurveCells(centre.ToArray());BuildOccluders(f);pv.Clear();pn.Clear();pt.Clear();pu.Clear();clip.Clear();pi.Clear();var written=new HashSet<Vector2Int>();float flip=GL.GetGPUProjectionMatrix(f.effectiveProjection,true)[1,1]/f.effectiveProjection[1,1];
-   foreach(var cell in cells){if(!written.Add(cell)||cell.x<0||cell.y<0||cell.x>=480||cell.y>=272)continue;if(!Select(f,cell.x,cell.y,out var p)){Unsupported++;continue;}if(!Visible(p)){Hidden++;continue;}Packets.Add(p);Quad(f,p,flip);}
+   foreach(var cell in cells){if(!written.Add(cell)||cell.x<0||cell.y<0||cell.x>=480||cell.y>=272)continue;if(!Select(f,cell.x,cell.y,out var p,out bool hidden)){if(hidden)Hidden++;else Unsupported++;continue;}Packets.Add(p);Quad(f,p,flip);}
    if(Unsupported>0)throw new Exception("Selected curve cell has no original triangle packet");
    pixels.Clear();pixels.SetVertices(pv);pixels.SetNormals(pn);pixels.SetTangents(pt);pixels.SetUVs(0,pu);pixels.SetUVs(3,clip);pixels.SetTriangles(pi,0);pixels.bounds=mesh.bounds;
    if(!material){var shader=Shader.Find("EValidation/HairBoundary491Probe");if(!shader)throw new Exception("491 shader missing");material=new Material(f.motion.materials[12]){shader=shader,hideFlags=HideFlags.DontSave};material.shaderKeywords=f.motion.materials[12].shaderKeywords;sides=new ComputeBuffer(indices.Length/3,4);sides.SetData(new float[indices.Length/3]);material.SetBuffer("_Instance331",sides);}

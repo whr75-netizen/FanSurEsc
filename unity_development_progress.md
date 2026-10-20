@@ -2992,3 +2992,12 @@ Interactable (abstract base class)
 - 활성제품44d13c0(외곽선색보존)은양쪽에서유지되고기본OFF실험29d2faf와구분한다. 다음판정에는sample55실제버림패킷/가림소유자근거가필요하며알수없는버림을사용자미관선택으로넘기지않는다. 근거 `docs/artifacts/hair-boundary497/validation.json`, `Current472/Loop497/`. 새동일실행전신GIF Library `libfile_f53eade6d9fc819184ac6d3ba79b6bb0`,실패확대 `libfile_e4415886d748819184d405be9435effa`다. 전체프로젝트완료아니다.
 
 - [497-COMPACT-DELIVERY] 기존 81프레임의 전신 전후/시간순서를 보존한 2배 정수 픽셀 복제 GIF: Library `libfile_fd176f83bfe481919d2585664eb53038`, 5,907,029 bytes. 추가 색 손실/보간/새 캡처 없음. 기존 대용량 GIF의 ChatGPT 첨부는 용량 제한으로 실패하여 미전달이며 재전송하지 않았다.
+
+
+## 215. 실제 버림 소유권과 공통 광선·보이는 원본 패킷 선택 수정 `[CHARACTER-RENDER-01]`
+
+- 497 Walk .6875 head(235,42)의 실제 첫 버림은 GPU 이전 CPU Visible이다. 선택 renderer2/submesh1/triangle90 UV(.40171847,.23728807), depth13.76588154를 triangle89 UV/깊이로 가렸다고 판정했다. 실제 기록과497변형정점/UV/투영은 정확히 같다. 반올림 화면XY와 월드깊이를 섞어123.29um 차이로 계산했지만 같은 월드 카메라 광선에서는36.78um으로 기존100um허용치 안이다.
+- 같은 기본OFF Runtime1파일에서 공통double camera-space ray로 대체했다. 이 수정만으로 앞 .675셀을 잃는 회귀를 발견해 실패 기록을 보존했다. 이때90은 실제89뒤433.64um이며 원본edge587/588과UV연결이 확인된다. 한 패킷을 고른 뒤 버리던 순서를 원본 동일ribbon의 셀교차 후보 중 보이는 패킷을 선택하는 책임으로 합쳤다. 다른가닥/몸/정확한다른triangle가림과0.1mm허용치는 유지한다. 후단mask/epsilon상향/history/좌표·phase하드코딩은 없다.
+- 기존 실패7위상+국소6입력 C#연결/끝점/결정성 통과. 최종 실제Walk .6625~.7125 5쌍은 같은pose/광원,ready5,unsupported0이다. 66source패킷/GPU가림6개는 정확한다른primitive·UV·더가까운depth확인,main누락/새고립/2x2두께/facing/머리ROI밖변화0이다. .675와.6875모두원본앞면유지, .6875triangle89 UV(.40169582,.23728818)/depth13.76588058와GPU/합성일치,alpha0→1이다.
+- 동일실행원본vs수정후보 전신5프레임GIF Library `libfile_77645e41887481919e2813800894f452`,515847bytes. 공통480x272/native960x544,전신crop후정수2배NEAREST이다. 이전497은7.9804시,이번2.0952시로배경/색은동일조건아니다. 이전과세계정점최대0.477um/투영0.0000611cell오차가있으므로비트동일포즈라고칭하지않는다. 내부224,34는기존actor불투명상태에서정확한앞면owner로바뀌었으며실루엣추가가아니다.
+- 국소원인수정만통과이며새선택규칙의전체loop/기존대각틈·3→2배열/다른시점·clip/성능·build는미검증이다. 기본OFF·미채택을유지하고44d13c0/29d2faf/사용자Quality·Time설정을보존했다. 임시trace제거,입력·Animator/Idle·Play·PostView366·자동시계/실험OFF·리소스해제복원확인. 근거 `docs/artifacts/hair-boundary498/validation.json`, `Current472/Event498/`, `Pairs498/`실패중간본, `Pairs498B/`최종국소본. 전체프로젝트완료가아니다.

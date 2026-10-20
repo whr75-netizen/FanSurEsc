@@ -2950,3 +2950,12 @@ Interactable (abstract base class)
 - 493 재판정으로 별도5셀의 정상 격자교차 해석을 철회한다. 교차한 것은RDP근사선이며 원래60단면 중심곡선은 두 행 모두x>235다. 실제가시5셀은3삭제+2추가로 같은가닥 연결이 갈라지고 가운데235,42는 후보에 남지만 가시패킷에서 빠진다. 가림거절owner미기록 및 해당face/body기하 부재로 정상가림 여부는 미확정이다. 오프라인3변경 후보는 알려진 형상·연결·폭·구멍수 조건에서 불리하지 않으나 전체가림/색/시간품질 렌더는 미검증이다. 사용자에게 필수미관tradeoff를 요구할 근거는 아직 없다. 코드변경/재촬영/새최적화/기본활성화는 하지 않았다.
 - 실험은 기본OFF,미관·전체loop·다른clip/각도·성능·build 미채택/미검증이다. Play·입력·Animator·background·원래PostView366훅 복원 및 임시리소스 해제 확인. 기존44d13c0수정과 사용자Quality/Time설정은 보존한다.
 - 재현/증거: `docs/artifacts/hair-boundary492/validation.json`, 작업폴더 `Current472/Pairs492/`의 실제 전신A/B GIF와 `TRANSITION_TRACE492.json`/`SECOND_TRANSITION492.json`이다. 다른 Play세션 RGB를 전후 근거로 섞지 않았다.
+
+## 211. 원곡선 선택과 정확한 삼각형 자기 가림 교정 `[CHARACTER-RENDER-01]`
+
+- 493 미확정 가운데head(235,42)는 같은 Walk0.325의 실제 float 조회에서 renderer2/submesh1/primitive91이 자기 자신을0.287mm 앞이라고 잘못 판정한 것이었다. body/face의 실제 가림이 아니다. 근거는 `Current472/Probe494/result.txt`, 모든3renderer의 두 포즈 기하 `Geometry494/`이다.
+- 같은 기본OFF 대안의 Runtime1파일만 수정했다. RDP는 방향 span만 나누고 선택 위치는 원래60단면 곡선과 실제 격자 단면의 교점으로 결정한다. 내부 RDP점을 끝점으로 clamp하지 않고 실제UV 양끝만 보존한다. 정확히 같은 source삼각형만 자기 가림에서 제외하며 나머지 깊이 판정은 double barycentric으로 계산한다. 기존 깊이허용값·눈·색·shader·허용outline과348수정은 유지한다.
+- 첫494시험에서0.30의 내부 분할점이 불필요한 셀을 내며 빈 공간을 둘로 쪼갠 위반을 확인해 교정했다. 최종494B의 실제Walk0.30~0.3375 네 쌍은 동일뼈4/4,원형밖후보0,가닥연결1,고립셀0,2x2두께증가0,빈 공간5셀 유지. 493의 갈라짐·두 셀 파임 사건0.3125→0.325는 셀변화0이다. 마지막프레임의 연결된1셀 계단 이동은 원곡선 지지·연결·빈 공간 보존을 함께 확인했다.
+- 45source패킷 중41GPU일치,나머지4는 정확한r2/sm0/primitive555의UV·깊이로 가려졌다. GPU UV오차1.49e-8,깊이9.54e-7m,셀중심-원곡선최대0.4672cell. 진짜UV0끝은 다른hair삼각형35~48mm 앞가림을 유지한다. 머리ROI밖 native변화0,동일삼각형 facing변경0이다.
+- 전신GIF는 새 동일실행의 원본 centre source 대494이며 각960x544/6배느린4프레임 발췌이다. 과거492를 같은 실행의 수정전 RGB로 부르지 않는다. 첫frame head offset[-3,0]/이후[-3,-1]을 기록했다. 근거 `docs/artifacts/hair-boundary494/validation.json`, 로컬 `Current472/Pairs494B/`.
+- 기본OFF·외형미채택. 전체loop/다른가닥·clip·카메라/성능/build 미검증. 종료 후Play·입력·Animator·Idle·background·PostView366 복원과 자체리소스해제 확인.44d13c0/b1b144e/사용자Quality·Time설정은 보존한다. 전체프로젝트 완료를 뜻하지 않는다.

@@ -1,0 +1,111 @@
+{
+  "status": "PASS_BOUNDED_494_FAILURE_INTERVAL_DEFAULT_OFF",
+  "scope": "One verified118triangle UV-ribbon component in the existing head source alternative. Four actual60Hz Walk frames0.30..0.3375, same-execution original source vs494. No whole-loop recapture.",
+  "cause": {
+    "centre235_42": "Actual C# float selector chose renderer2/submesh1/primitive91. Visible then rejected that exact same primitive91 as nearer. This is numerical self-occlusion, not a physically nearer body/face/other hair surface.",
+    "exactQuery": "phase=0.325\n{\"x\":235,\"y\":42,\"primitive\":91,\"barycentric\":{\"x\":0.31047099828720095,\"y\":0.6895256638526917,\"z\":0.0000033333333249174759},\"world\":{\"x\":0.14527034759521485,\"y\":1.5763102769851685,\"z\":0.02500438690185547},\"uv\":{\"x\":0.4957215189933777,\"y\":0.2256012111902237},\"projected\":{\"x\":235.1963348388672,\"y\":42.480037689208987},\"depth\":13.764487266540528,\"centreDistance\":0.3043206036090851}\nREJECT r=2 sm=1 primitive=91 bary=(0.351385921, 0.6202755, 0.0283385683) depth=13.7642 gap=0.000287055969 area=3.22315027E-05 triangle=(235.21051, 42.26448)/(235.189957, 42.57709)/(235.160172, 43.02854)\n",
+    "allRendererGeometryEvidence": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Geometry494",
+    "RDP": "The original60paired-section curve remains outside x235 at the relevant row centres; RDPchords crossed the grid first. Internal RDP endpoints also emitted clamped off-slice cells, splitting the hole atphase0.30 in the first494trial."
+  },
+  "rule": {
+    "input": "Current deformed, UV-welded118triangle ribbon boundary,60paired UV cross sections, actual head projection and original surface triangles.",
+    "continuousReference": "Piecewise linear midpoint curve of the actual paired boundaries. RDP only supplies directional span indices. Each grid slice is intersected with the original dense curve; no chord-supplied sample positions.",
+    "pixelSelection": "Only actual half-integer grid slices inside a directional span emit cells. Only the two actual UV caps emit endpoint cells. Check8connection of the quantized source path. Non-monotone/unsupported spans fail back to the original source. No screen coordinate or animation phase rules.",
+    "packet": "Select original triangle intersection in the chosen cell, then carry that same triangle/barycentric/world/UV/depth/owner into the replacement source quad.",
+    "visibility": "Skip only the exact triangle containing the source packet. Other triangles retain original0.1mm depth tolerance, with double-precision intersection barycentrics. Physical GPU depth remains active. No blanket role/strand exemption.",
+    "integration": "Replacement of the existing selected head source draw through the prior default-OFF hooks. No extra serial mask/closing/dilation/history/temporal threshold or colour layer."
+  },
+  "validation": {
+    "samePoseActualWalkPairs": 4,
+    "phases": [
+      0.299999982,
+      0.31249997,
+      0.324999958,
+      0.337499946
+    ],
+    "sameBonesAll": true,
+    "targetEventOld492VisibleChanges": 5,
+    "targetEvent494VisibleChanges": 0,
+    "sameStrandFrontierRows41_42_43_AllFrames": [
+      235,
+      235,
+      235
+    ],
+    "localStrandComponents8_AllFrames": 1,
+    "newLocalSingletons_AllFrames": 0,
+    "solid2x2SameStrand_AllFrames": 0,
+    "enclosedHoleArea_AllFrames": 5,
+    "unsupportedCurveCells": 0,
+    "sourcePackets": 45,
+    "gpuMatchedPackets": 41,
+    "gpuHiddenPackets": 4,
+    "gpuHiddenOwner": "All4 are current renderer2/submesh0/primitive555 at the same234,44pixel; actual UV reprojects within0.00174cell and depth error below6.3e-7m. Actual surface is5.89..8.10mm nearer.",
+    "maxSourceWorldErrorMetres": 1.2643508284782001e-06,
+    "maxSourceUVError": 5.043545137084493e-08,
+    "maxGpuUVError": 1.4901161193847656e-08,
+    "maxGpuDepthErrorMetres": 9.5367431640625e-07,
+    "maxCellCentreToOriginalCurve": 0.46717091450601284,
+    "samePrimitiveFacingChanges": 0,
+    "nativeChangesOutsideHeadInspectionROI": 0,
+    "trueTip": "UVv0 remains hidden behind exact hair primitives1068/731 then1067/730 with35..48mm depth gaps. Scalp cap remains visible. No actual tip deletion or other-strand joining.",
+    "remainingOneCellChange": "phase0.325->0.3375 adds234,39 on the same original curve, connected to its path; no singleton,2x2thickening or hole change. Not a zero-pixel-change objective.",
+    "sourceAndCamera": "Native960x544, common480x272grid,2native pixels per cell; same pose/camera/size within every pair. First-frame head offset[-3,0], following[-3,-1] are recorded, not hidden.",
+    "background": "Background and all pixels outside head inspection ROI are identical within each new A/B pair. Old492 vs494 are separate executions; no cross-run RGB equality claim."
+  },
+  "compile": {
+    "success": true,
+    "receipt": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\import494B_fresh.json",
+    "shaderErrors": 0,
+    "inheritedWarnings": [
+      "implicit vector truncation in MToon",
+      "derivative instruction in loop",
+      "deprecated _FORWARD_PLUS"
+    ]
+  },
+  "runtimeRestored": {
+    "receipt": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\restore494B.json",
+    "play": true,
+    "paused": false,
+    "movement": true,
+    "animator": true,
+    "speed": 1,
+    "locomotion": 0,
+    "captureDeltaTime": 0,
+    "background": true,
+    "facingDegrees": 180,
+    "hook": "PostView366",
+    "experimentEnabled": false,
+    "transientResourcesReleased": true
+  },
+  "preservedCommits": [
+    "44d13c0f6a42007f2ac7fd59c174d630f2230e1b",
+    "b1b144e0f9d09680481f19ba5b91fd40f2b1b963",
+    "56a80b3476e1a7a161787f310e5c83f34ccb6baa"
+  ],
+  "sourceFile": "Assets/EUnityValidation01/HairBoundary491/Runtime/HairBoundary491.cs",
+  "sourceSHA256": "3f6f78e04df2c194703989f91286e45b0f44bee925f84c6c12120ca937d007d1",
+  "gif": {
+    "file": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Pairs494B\\FULL_BODY_BEFORE_AFTER494B.gif",
+    "nativeFrameSize": [
+      960,
+      544
+    ],
+    "sideBySideCanvas": [
+      1920,
+      580
+    ],
+    "durationMillisecondsPerFrame": 100,
+    "actualCaptureDeltaSeconds": 0.016666666666666666,
+    "slowdown": 6,
+    "shortExcerpt": "4frames; repeated review excerpt, not a complete Walk loop"
+  },
+  "limits": [
+    "Appearance adoption not approved; experiment stays default OFF",
+    "Only this ribbon and four Walk frames validated, not all hair/other clips/cameras/whole-loop temporal behaviour",
+    "No performance/build readiness claim",
+    "RDP directional partition changes and other non-monotone spans remain untested outside this excerpt",
+    "Active gameplay improvement remains44d13c0;494 is an isolated alternative, not enabled gameplay output",
+    "No compulsory user art tradeoff proven; no automatic aesthetic adoption",
+    "Whole user project remains incomplete"
+  ]
+}

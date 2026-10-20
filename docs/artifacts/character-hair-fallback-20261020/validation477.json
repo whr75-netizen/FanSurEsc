@@ -1,0 +1,280 @@
+{
+  "status": "CURRENT_ORIGINAL_PROJECT_SHORT_ANIM_FIX_VALIDATED",
+  "project": "C:/Users/JG/Documents/work/Fantasy Survival Escape Game",
+  "versionMarkerOnly": "36cbf50da4c8104b28eafc30a07ab256fddf08f4",
+  "unity": "6000.5.9f1",
+  "urp": "17.5",
+  "scene": "Assets/Scenes/GameMap1.unity",
+  "controller": "Assets/EUnityValidation01/MatchedPlayer397/Candidate/Run12/PlayerLocomotion397.controller",
+  "actualShader": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+  "beforeSHA256": "5c46a5500233d3d117a06e64dec1f7477ebb3c49b182c66a7290afa37fa93f1c",
+  "afterSHA256": "abbc6a7a1fb230a1551f2b86f7a74433f060a17577436320d448270bab9c90d7",
+  "actualOriginalProjectApplied": true,
+  "actualAnimatorClip": "Rig|Walk_Loop",
+  "frames": 16,
+  "unityFrames": [
+    1844,
+    1859
+  ],
+  "normalizedTimeRange": [
+    0.0125,
+    0.200000033
+  ],
+  "distinctBoneHashes": 16,
+  "rootFixed": true,
+  "facingDegrees": 80,
+  "orthoSize": 1.502602,
+  "nativeGrid": [
+    960,
+    544
+  ],
+  "logicalGrid": [
+    480,
+    272
+  ],
+  "nativePixelsPerCell": 2,
+  "sameFrameBoneWorldPreparedOwnerNativeOwnerAll": true,
+  "outerLineOverwriteBefore": 11,
+  "outerLineOverwriteAfter": 0,
+  "logicalChangedCellFrames": 11,
+  "outsideOuterLineChanges": 0,
+  "coverageChanges": 0,
+  "nativePNGChangedPixelFrames": 44,
+  "firstMainCell": [
+    229,
+    48
+  ],
+  "firstCellEvidence": {
+    "POST_LINE": [
+      0.030204342678189278,
+      0.009947214275598526,
+      0.0077511160634458065,
+      1
+    ],
+    "BEFORE": [
+      0.05491698533296585,
+      0.018085842952132225,
+      0.014092938043177128,
+      1
+    ],
+    "AFTER": [
+      0.030204342678189278,
+      0.009947214275598526,
+      0.0077511160634458065,
+      1
+    ],
+    "PREPARED_OWNER": [
+      13,
+      7,
+      13.730636596679688,
+      0
+    ],
+    "META": [
+      13.730636596679688,
+      13,
+      0,
+      1253
+    ],
+    "headCell": [
+      230,
+      48
+    ],
+    "HEAD_BASE_META": [
+      13.722417831420898,
+      13,
+      0,
+      1
+    ],
+    "HEAD_HAIR_META": [
+      13.722417831420898,
+      13,
+      0,
+      1
+    ],
+    "HEAD_RAW_META": [
+      13.722417831420898,
+      13,
+      0,
+      1253
+    ],
+    "HEAD_LEGACY_INTRINSIC": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "HEAD_LEGACY_AUDIT": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "BEFORE_HEAD_VISIBLE": [
+      0,
+      2,
+      0,
+      -1
+    ],
+    "BEFORE_HEAD_AUDIT": [
+      0,
+      0,
+      1,
+      0
+    ]
+  },
+  "fix": "Preserve already-composed RGB when fallback selects the same covered hair role at exactly the same selected depth; visible feature selection and owner/depth are unchanged.",
+  "sourceCapture": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\PairedWalk477\\capture.json",
+  "firstSourceFileSHA256": {
+    "000_BEFORE_NATIVE.png": "f57dd799d80646801a066ebec58a609e2ff44d8d0963aa2e9adc97ae2d0aae6d",
+    "000_AFTER_NATIVE.png": "475a1a55766651f784c8c621d7abdcc699444e0341cc3eb559e4fad1823723b6",
+    "000_BEFORE.bin": "44362d8ddf1cbcdf5deafda6ba5c21c4658644ae9151050e836f3bf799bbd67f",
+    "000_AFTER.bin": "3b8ed54118d7de3a8d6f9762f046be343a8e9b26ba9c644dbe9c5bca489a629a",
+    "capture.json": "9979be510ec78da6fb077ead8b42b6043b59467883ee807c91f1fe46043fb200"
+  },
+  "limitations": [
+    "Short16-frame Walk interval only, not a whole loop.",
+    "Art adoption, all views/clips, contact/penetration, global shading flicker, performance and Player build remain unverified.",
+    "Earlier R1 evidence and reverted contour-filter experiments are not current-project pass evidence."
+  ],
+  "gif": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Delivery477\\Current477_ActualWalk_BeforeAfter16.gif",
+    "sha256": "7096a97647adb91fd55cf6030ec7f7b48648353c35856b9b054a3cbc727c08b1",
+    "bytes": 2800450,
+    "frames": 16,
+    "dimensions": [
+      1220,
+      894
+    ],
+    "frameDurationMs": 80,
+    "durationMs": 1280,
+    "fixedNativeCrop": [
+      328,
+      32,
+      624,
+      384
+    ],
+    "displayScaleNearest": 2,
+    "sourceNativeBBoxes": [
+      [
+        356,
+        66,
+        526,
+        332
+      ],
+      [
+        356,
+        66,
+        524,
+        332
+      ],
+      [
+        356,
+        66,
+        520,
+        332
+      ],
+      [
+        356,
+        66,
+        516,
+        332
+      ],
+      [
+        356,
+        66,
+        514,
+        332
+      ],
+      [
+        356,
+        66,
+        510,
+        332
+      ],
+      [
+        358,
+        66,
+        506,
+        332
+      ],
+      [
+        358,
+        66,
+        502,
+        330
+      ],
+      [
+        358,
+        66,
+        498,
+        330
+      ],
+      [
+        360,
+        64,
+        494,
+        328
+      ],
+      [
+        362,
+        64,
+        490,
+        328
+      ],
+      [
+        364,
+        64,
+        488,
+        326
+      ],
+      [
+        366,
+        66,
+        484,
+        326
+      ],
+      [
+        370,
+        66,
+        480,
+        326
+      ],
+      [
+        374,
+        66,
+        478,
+        326
+      ],
+      [
+        378,
+        66,
+        474,
+        328
+      ]
+    ],
+    "sharedPaletteAllFramesBothSides": true,
+    "criticalChangedColoursExact": 13,
+    "newPairDifferences": 0,
+    "hiddenPairDifferences": 0,
+    "decodedAllFrames": true
+  },
+  "defaultFrontRegression": {
+    "facingDegrees": 180,
+    "actualWalkFrames": 4,
+    "changedCells": 0,
+    "allPairInvariants": true,
+    "source": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\PairedFront478\\capture.json"
+  },
+  "library": {
+    "library_file_id": "libfile_d9ecfb30a6b08191a3882b808b3f15f0",
+    "file_id": "file_0000000022e081f58505ddca2f94dfc7",
+    "status": "succeeded",
+    "version": 0
+  },
+  "cleanup": {
+    "currentShaderBinding": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "temporaryComparisonAssetRemoved": true,
+    "originalProductionHookRestored": "PostView366.AfterRender",
+    "sourceReceipt": "C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/cleanup477_v2.json"
+  }
+}

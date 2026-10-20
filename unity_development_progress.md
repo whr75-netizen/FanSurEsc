@@ -2969,3 +2969,13 @@ Interactable (abstract base class)
 - 같은Editor실행에서A/B순서를교대하고 owner RenderFrame+1pxGPUreadback을 기록했다. 초기2표본을분리한72ready의중앙값은원본287.93ms/후보321.17ms,p95604.97/655.82ms. 변동폭이크며플레이어FPS나성능예산통과를뜻하지않는다.
 - 기존PersistentGameplayShell.prefab은21시시작/자동진행/실제60초당하루다. 실제gameTime13.556688초동안시각5.422673시간과광원이변해24/60공식과일치한다. 이번캡처는현재20.2035751시를임시고정했고밝기/색/설정은튜닝하지않았다. 과거494캡처의정확시각은미기록이다. 종료후자동시계true·입력·Animator·Idle·Play·PostView366·기본OFF·자체리소스해제확인,원래Quality/Time·프리팹해시보존.
 - 근거 `docs/artifacts/hair-boundary495/validation.json`, `Current472/Loop495/`. 전신GIF Library `libfile_cfd7cec55d388191883fd5b53748475f`는fallback표본에명시라벨이있다.406ce30/44d13c0/b1b144e는보존하며전체프로젝트완료가아니다.
+
+## 213. 원곡선 방향구간 접속 수정과 제한 검증 `[CHARACTER-RENDER-01]`
+
+- 같은기본OFF source대안Runtime1파일에서 방향span사이의 빠진연결셀 책임을 수정했다. 기존선택점이8이웃이면그대로두고,아니면그두점사이의원래UV순서곡선이통과한셀만추적한다. 순서있는후보그래프의최소8경로를고르며동일길이면원곡선과의셀중심거리합이작은경로,완전동점이면UV순서를쓴다. 후단dilation/좌표·위상조건/history/epsilon변경은없다. 원본패킷이없으면부분ready대신명시unsupported로기록한다.
+- 저장된실패7위상과정상대조6위상을실제컴파일된순수C#선택기로검증했다. 실패마다원래삼각형이있는연결셀1개만추가,연결/끝점/결정성/삼각형지지/2x2없음통과,정상6대조는변경없음. 진단JSON배열복원null의Execute NRE는이진입력으로교정했으며제품오류와구별하고기록을남겼다.
+- 최초실패주변실제Walk0.975~1.0375의6쌍만추가수집했다. 동일뼈/광원6/6,ready6/6,원본복귀/후보누락0,66source패킷headGPU·main일치,CPU가림47개는3renderer저장기하재검증과일치. 새연결셀2표본은실제primitive65/UV/깊이로GPU일치했다. sourceUV최대4.46e-8/world1.64e-6m,GPU깊이9.54e-7m,셀중심-원곡선0.4035cell다.
+- 새전경고립위치/원선택·가시선택의2x2덩어리/facing변경/머리ROI밖native변경0. 진짜UV0끝은6포즈모두기록된hair가림유지,정상4실제대조선택불변. 틈은한개로유지되며3→2셀변화는기록했고새연결셀은그전환에서동일하다. 전체시간적틈/계단품질의완료로부르지않는다.
+- 연결보장은지원정수격자안의유한한UV순서연속곡선과기존단조span조건에대한가림전source셀경로다. 각원래선분의격자통과목록이8연결이므로최소경로도항상연결되며,실제표면패킷지원은별도필수검사다. 가림/viewportclip후의모든가시조각연결·자기교차형태·전체미관보장은아니다.
+- 현재3.653758시Night만자동진행일시정지하여비교했고밝기·색·시각값은튜닝하지않았다. 종료후입력·Animator·Idle·Play·PostView366·시계자동true·기본OFF·자체리소스해제확인.44d13c0/406ce30과사용자Quality·Time·시계프리팹해시보존.
+- 수정후전체81쌍은다시찍지않았다. 나머지5실패위상은저장입력선택검증만통과했고live가림·미관은미검증이다. 전체loop/다른clip·뷰·가닥/전역틈·시간품질/성능·build·외형채택미완료. 근거 `docs/artifacts/hair-boundary496/validation.json`, `Current472/Pairs496/`, 실제C#저장입력결과 `UNIT496_VERIFIED.json`. 전신발췌GIF Library `libfile_005c4e1134208191bc23b9d9a62ecb28`이다.

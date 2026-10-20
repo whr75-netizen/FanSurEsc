@@ -1,0 +1,187 @@
+{
+  "status": "PASS_BOUNDED_JOIN_CORRECTION_DEFAULT_OFF",
+  "scope": "Directional-span join generation only, in the same disabled hair ribbon source alternative. One Runtime file changed.7saved failing phases+6controls in actual compiled C#, followed by6actual Walk frames around the first failure. No new full-loop capture.",
+  "baselineCandidateCommit": "406ce305bd28385437bc11f7e32b68fd62e67f35",
+  "implementation": {
+    "file": "Assets/EUnityValidation01/HairBoundary491/Runtime/HairBoundary491.cs",
+    "sourceSHA256": "093d4f287068a77caaf72493c2fff742a92704aec01e50982de417a59508c407",
+    "rule": "Keep original directional-span samples unchanged. When consecutive selected cells are not8neighbours, traverse only the intervening original UV-ordered piecewise curve across grid boundaries. The resulting ordered corridor supplies candidate cells. Choose a shortest8-connected path; among equal lengths choose minimum summed squared cell-centre distance to that original interval. Exact ties retain UV order.",
+    "responsibility": "The same source authoring path selects cells and obtains original triangle/barycentric/world/UV/depth packets. It is not a downstream mask repair or raster-neighbour dilation.",
+    "unchangedCases": "Already8-connected selections pass through unchanged.6saved controls and4actual connected controls were verified unchanged.",
+    "explicitFailure": "A selected cell without an original triangle packet now yields unsupported/fallback instead of partial ready. Captured fallback remains failure. No depth tolerance, visibility policy, palette, eye, outline, material, camera or shader change."
+  },
+  "visibilityValidation": {
+    "actualSelectedSourcePackets": 66,
+    "replayedCpuHidden": 47,
+    "replayErrors": 0,
+    "allBlockersHair": true,
+    "minBlockerGapMetres": 0.00010593706405970238,
+    "trueUV0TipOccludedSamples": 6
+  },
+  "newLiveConnectors": [
+    {
+      "sample": 1,
+      "phase": 0.987499952,
+      "connectors": [
+        {
+          "cell": [
+            233,
+            39
+          ],
+          "emitted": true,
+          "meta": [
+            13.729439735412598,
+            13.0,
+            0.0,
+            66.0
+          ],
+          "uv": [
+            0.4803284704685211,
+            0.44629624485969543
+          ],
+          "originalTriangleArea": 0.5042338838538853
+        }
+      ]
+    },
+    {
+      "sample": 2,
+      "phase": 0.99999994,
+      "connectors": [
+        {
+          "cell": [
+            233,
+            39
+          ],
+          "emitted": true,
+          "meta": [
+            13.729386329650879,
+            13.0,
+            0.0,
+            66.0
+          ],
+          "uv": [
+            0.4883435368537903,
+            0.4455823302268982
+          ],
+          "originalTriangleArea": 0.48620973576180404
+        }
+      ]
+    }
+  ],
+  "guarantee": {
+    "inputConditions": [
+      "Finite projected coordinates in the supported integer grid; current head grid is480x272.",
+      "An ordered continuous piecewise curve from the paired UV ribbon, with monotone directional spans accepted by the existing source sampler.",
+      "Every selected cell must have a valid original surface packet; unsupported geometry is reported as failure."
+    ],
+    "whyConnected": "Grid traversal visits an8-connected chain along each actual source segment; shared curve vertices join those chains. Thus the ordered candidate graph always contains the consecutive-corridor path. Dynamic programming only chooses8-neighbour edges, so its selected path remains connected. Existing connected edges and the two true endpoint cells are preserved.",
+    "scopeOfGuarantee": "Raw source-cell path before physical occlusion and viewport clipping. It does not force connection through occluders, join another strand, guarantee all negative-space topology, or solve global temporal staircase quality. Non-monotone spans and invalid/missing source packets still fail explicitly."
+  },
+  "localShapeReview": {
+    "fallback": 0,
+    "sourcePacketCount": 66,
+    "gpuMatched": 66,
+    "mainPacketMisses": 0,
+    "cpuHiddenRecheck": 47,
+    "cpuRecheckErrors": 0,
+    "sourceWorldMaxErrorMetres": 1.6398153591667963e-06,
+    "sourceUVMaxError": 4.45591861186756e-08,
+    "gpuUVMaxError": 1.4901161193847656e-08,
+    "gpuDepthMaxErrorMetres": 9.5367431640625e-07,
+    "maxCentreToOriginalCurveCells": 0.4034460653297443,
+    "newForegroundSingletonPositions": 0,
+    "rawOrVisibleSolid2x2": 0,
+    "facingChanges": 0,
+    "nativeChangesOutsideHeadROI": 0,
+    "tip": "Actual UV0tip remains occluded by recorded hair geometry in all6poses; true endpoint cells retained.",
+    "gap": "A single enclosed gap remains throughout the excerpt, with area3then2cells. No split/collapse or added2cell indentation is observed. The joining cell is unchanged across that1cell gap-area transition; whole-loop gap/stair aesthetics are not declared solved."
+  },
+  "clockAndRestoration": {
+    "comparisonHour": 3.653758,
+    "phase": "Night",
+    "control": "Only existing automatic advance was temporarily held at the current hour. No SetTimeHours, light intensity/colour or saved lighting changes.",
+    "restored": "Playtrue,pausefalse,inputtrue,Animatortrue/speed1/Idle,capture0,backgroundtrue,PostView366,automaticClocktrue,experimentOFF/transientsreleased.",
+    "receipt": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\restore496.json",
+    "preservedSettings": {
+      "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+      "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287",
+      "PersistentGameplayShell.prefab": "9c1dffcb46c4210d55b2a835f9cdcf3ad18d42f566ec09a53c0aa2b622fd74d8"
+    }
+  },
+  "compileAndConsole": {
+    "editorCompile": true,
+    "receipt": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\import496_fresh.json",
+    "shaderChanges": false,
+    "inheritedWarnings": [
+      "MToon vector truncation",
+      "derivative in loop",
+      "deprecated _FORWARD_PLUS"
+    ],
+    "baselineErrors": 1,
+    "finalErrors": 1,
+    "diagnosticIssue": "The first unit harness JSON input array deserialized to null in the dynamic diagnostic assembly, producing a diagnostic Execute NRE. ParseUnit496 confirmed intake exists but fixtures null. The same data was read with a fixed-size binary loader; actual C#13fixture and6live-input tests then passed. It is not a production-runtime regression. Evidence preserved, Console not cleared.",
+    "baselineLogs": [
+      {
+        "message": "NullReferenceException: Object reference not set to an instance of an object\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Capture () (at <638ba88c466148489941c396804354bd>:0)\nUnityEngine.Debug:LogException(Exception)\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript:Capture()\nHeadLocal367:RenderFrame() (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:28)\nGameplay397:Present() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:27)\nGameplay397:LateUpdate() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:11)\n",
+        "stackTrace": "",
+        "type": "Error",
+        "timestamp": "[00:38:12]"
+      }
+    ],
+    "finalLogs": [
+      {
+        "message": "NullReferenceException: Object reference not set to an instance of an object\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Capture () (at <638ba88c466148489941c396804354bd>:0)\nUnityEngine.Debug:LogException(Exception)\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript:Capture()\nHeadLocal367:RenderFrame() (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:28)\nGameplay397:Present() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:27)\nGameplay397:LateUpdate() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:11)\n",
+        "stackTrace": "",
+        "type": "Error",
+        "timestamp": "[00:38:12]"
+      }
+    ]
+  },
+  "acceptance": {
+    "saved7SelectionFailures": "Passed",
+    "saved6ConnectedControlsUnchanged": "Passed",
+    "actual6SamePoseLight": "Passed",
+    "actualFallbackOrUnsupported": "0",
+    "packetAndNewConnectorOwnership": "Passed",
+    "localConnectionThicknessTip": "Passed within excerpt",
+    "wholeCorrectedLoop": "Not run as requested",
+    "wholeLoopGapTemporalQuality": "Not validated",
+    "performanceReadiness": "Not claimed; only six existing diagnostic timings recorded",
+    "appearanceAdoption": "Not approved; default OFF"
+  },
+  "limits": [
+    "New actual rendered evidence covers0.975..1.0375only. The later five failing phases were exercised as saved selection/triangle-support inputs, not recaptured as live animation after the change.",
+    "The whole corrected loop, other cameras/clips/strands, global negative-space optimization, temporal jitter quality and builds remain unverified.",
+    "Mesh-level hidden-count reconstruction matches all47discards here; it is not a universal validation of arbitrary future shader alpha/provider deformation. New connector packets themselves match the actual GPU.",
+    "No performance-improvement claim from the six variable Editor timings.",
+    "No compulsory user design tradeoff is established by this connection fix. The complete project remains incomplete."
+  ],
+  "library": {
+    "fullBodyGif": "libfile_005c4e1134208191bc23b9d9a62ecb28",
+    "contactReview": "libfile_985135f5468c8191a88d6026f0312cca",
+    "joinRule": "libfile_bad00370709c8191b7c298d909500988"
+  },
+  "gif": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Pairs496\\FULL_BODY_BEFORE_AFTER496.gif",
+    "frames": 6,
+    "nativePerSide": [
+      960,
+      544
+    ],
+    "canvas": [
+      1920,
+      580
+    ],
+    "actualDeltaSeconds": 0.016666666666666666,
+    "reviewMillisecondsPerFrame": 100,
+    "slowdown": 6,
+    "description": "Same-execution original source vs corrected candidate. Repeated short excerpt, not a full loop or cross-execution RGB comparison."
+  },
+  "unitSummary": {
+    "savedFailures": 7,
+    "unchangedControls": 6,
+    "actualCSharp": true,
+    "originalTriangleSupport": true,
+    "solid2x2": 0
+  }
+}

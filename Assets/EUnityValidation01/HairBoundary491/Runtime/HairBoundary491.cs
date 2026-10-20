@@ -50,24 +50,54 @@ public static class HairBoundary491 {
   }
   return packet!=null&&packet.centreDistance<=Mathf.Sqrt(.5f)+.00001f;
  }
- static void Simplify(List<Vector2> p,int a,int b,HashSet<int> keep){if(b<=a+1)return;float far=0;int at=-1;var d=p[b]-p[a];for(int i=a+1;i<b;i++){float t=d.sqrMagnitude>0?Mathf.Clamp01(Vector2.Dot(p[i]-p[a],d)/d.sqrMagnitude):0;float e=(p[i]-(p[a]+t*d)).sqrMagnitude;if(e>far){far=e;at=i;}}if(far>.25f*.25f){keep.Add(at);Simplify(p,a,at,keep);Simplify(p,at,b,keep);}}
- // RDP partitions the UV-ordered curve into directional spans only. It never
- // supplies the selected position: each slice intersects the original dense curve.
- // Thus approximation error cannot move a cell across a grid boundary.
- static void CurveLine(List<Vector2> curve,int first,int last,List<Vector2Int> cells){
+ static void Simplify(IList<Vector2> p,int a,int b,HashSet<int> keep){if(b<=a+1)return;float far=0;int at=-1;var d=p[b]-p[a];for(int i=a+1;i<b;i++){float t=d.sqrMagnitude>0?Mathf.Clamp01(Vector2.Dot(p[i]-p[a],d)/d.sqrMagnitude):0;float e=(p[i]-(p[a]+t*d)).sqrMagnitude;if(e>far){far=e;at=i;}}if(far>.25f*.25f){keep.Add(at);Simplify(p,a,at,keep);Simplify(p,at,b,keep);}}
+ struct CurveSample {public Vector2 p;public double at;public CurveSample(Vector2 p,double at){this.p=p;this.at=at;}}
+ // RDP supplies directional spans, never the selected positions. Positions and
+ // connector candidates both come from the same UV-ordered dense source curve.
+ static void CurveSamples(Vector2[] curve,int first,int last,List<CurveSample> samples){
   Vector2 a=curve[first],b=curve[last],d=b-a;int axis=Mathf.Abs(d.x)>=Mathf.Abs(d.y)?0:1;
   int step=a[axis]<=b[axis]?1:-1;int low=Mathf.CeilToInt(Mathf.Min(a[axis],b[axis])-.5f),high=Mathf.FloorToInt(Mathf.Max(a[axis],b[axis])-.5f);
   for(int i=first;i<last;i++)if((curve[i+1][axis]-curve[i][axis])*step<0)throw new Exception("Original curve reverses within a directional span");
-  // Internal span anchors are not physical ends and must not emit clamped cells.
   if(low>high)return;int start=step>0?low:high,end=step>0?high:low;
   for(int z=start;;z+=step){
-   float target=z+.5f;bool found=false;Vector2 p=default;
-   for(int i=first;i<last;i++){var u=curve[i];var v=curve[i+1];if(target<Mathf.Min(u[axis],v[axis])||target>Mathf.Max(u[axis],v[axis]))continue;float delta=v[axis]-u[axis];float t=Mathf.Abs(delta)>1e-10f?(target-u[axis])/delta:0;p=Vector2.LerpUnclamped(u,v,t);found=true;break;}
+   float target=z+.5f;bool found=false;
+   for(int i=first;i<last;i++){var u=curve[i];var v=curve[i+1];if(target<Mathf.Min(u[axis],v[axis])||target>Mathf.Max(u[axis],v[axis]))continue;float delta=v[axis]-u[axis];float t=Mathf.Abs(delta)>1e-10f?(target-u[axis])/delta:0;samples.Add(new CurveSample(Vector2.LerpUnclamped(u,v,t),i+(double)t));found=true;break;}
    if(!found)throw new Exception("No original curve crossing for selected slice");
-   var cell=new Vector2Int(Mathf.FloorToInt(p.x),Mathf.FloorToInt(p.y));
-   if(cells.Count==0||cells[cells.Count-1]!=cell){if(cells.Count>0){var gap=cell-cells[cells.Count-1];if(Mathf.Max(Mathf.Abs(gap.x),Mathf.Abs(gap.y))>1)throw new Exception("Original curve selection is not8connected");}cells.Add(cell);}
    if(z==end)break;
   }
+ }
+ static bool Neighbours(Vector2Int a,Vector2Int b)=>Mathf.Max(Mathf.Abs(a.x-b.x),Mathf.Abs(a.y-b.y))<=1;
+ static void AddCell(List<Vector2Int> cells,Vector2Int cell){if(cells.Count==0||cells[cells.Count-1]!=cell)cells.Add(cell);}
+ // Traverse the actual segment across grid boundaries. A corner crossing moves
+ // both axes at once; no cell is borrowed from a raster neighbourhood.
+ static void TraceGrid(Vector2 a,Vector2 b,List<Vector2Int> cells){
+  var cell=Vector2Int.FloorToInt(a);var end=Vector2Int.FloorToInt(b);AddCell(cells,cell);
+  double dx=(double)b.x-a.x,dy=(double)b.y-a.y;int sx=Math.Sign(dx),sy=Math.Sign(dy);
+  double tx=sx==0?double.PositiveInfinity:((sx>0?cell.x+1:cell.x)-(double)a.x)/dx;
+  double ty=sy==0?double.PositiveInfinity:((sy>0?cell.y+1:cell.y)-(double)a.y)/dy;
+  double ux=sx==0?double.PositiveInfinity:1/Math.Abs(dx),uy=sy==0?double.PositiveInfinity:1/Math.Abs(dy);
+  long limit=Math.Abs((long)end.x-cell.x)+Math.Abs((long)end.y-cell.y)+1,steps=0;
+  while(cell!=end){if(++steps>limit)throw new Exception("Original segment traversal did not reach its end");double nextX=cell.x==end.x?double.PositiveInfinity:tx,nextY=cell.y==end.y?double.PositiveInfinity:ty;if(nextX<nextY){cell.x+=sx;tx+=ux;}else if(nextY<nextX){cell.y+=sy;ty+=uy;}else{cell.x+=sx;cell.y+=sy;tx+=ux;ty+=uy;}AddCell(cells,cell);}
+ }
+ static double Distance2(Vector2Int cell,List<Vector2> curve){double px=cell.x+.5,py=cell.y+.5,best=double.PositiveInfinity;for(int i=1;i<curve.Count;i++){double ax=curve[i-1].x,ay=curve[i-1].y,dx=(double)curve[i].x-ax,dy=(double)curve[i].y-ay,den=dx*dx+dy*dy,t=den>0?Math.Max(0,Math.Min(1,((px-ax)*dx+(py-ay)*dy)/den)):0;double x=px-ax-t*dx,y=py-ay-t*dy;best=Math.Min(best,x*x+y*y);}return best;}
+ static void JoinCurve(Vector2[] curve,CurveSample a,CurveSample b,List<Vector2Int> output){
+  if(b.at<a.at)throw new Exception("Source curve samples are not in UV order");
+  var interval=new List<Vector2>{a.p};for(int i=(int)Math.Floor(a.at)+1;i<(int)Math.Ceiling(b.at);i++)interval.Add(curve[i]);interval.Add(b.p);
+  var corridor=new List<Vector2Int>();for(int i=1;i<interval.Count;i++)TraceGrid(interval[i-1],interval[i],corridor);
+  if(corridor.Count==0||corridor[0]!=output[output.Count-1])throw new Exception("Source corridor start mismatch");
+  int n=corridor.Count;var count=new int[n];var parent=new int[n];var error=new double[n];for(int j=0;j<n;j++){count[j]=int.MaxValue;parent[j]=-1;error[j]=double.PositiveInfinity;}count[0]=0;error[0]=0;
+  // Ordered shortest8path: preserve a thin line; among equally short paths,
+  // prefer cell centres closest to the original interval. Exact ties keep UV order.
+  for(int j=1;j<n;j++){double penalty=Distance2(corridor[j],interval);for(int i=0;i<j;i++){if(count[i]==int.MaxValue||!Neighbours(corridor[i],corridor[j]))continue;int steps=count[i]+1;double cost=error[i]+penalty;if(steps<count[j]||(steps==count[j]&&cost<error[j])){count[j]=steps;error[j]=cost;parent[j]=i;}}}
+  if(parent[n-1]<0)throw new Exception("No connected path through original curve corridor");
+  var path=new List<Vector2Int>();for(int i=n-1;i>=0;i=parent[i])path.Add(corridor[i]);path.Reverse();for(int i=1;i<path.Count;i++)AddCell(output,path[i]);
+ }
+ // Pure selection entry point also exercises saved deformed-curve fixtures.
+ public static Vector2Int[] SelectCurveCells(Vector2[] curve){
+  if(curve==null||curve.Length<2)throw new ArgumentException("Curve requires two endpoints");foreach(var p in curve)if(float.IsNaN(p.x)||float.IsNaN(p.y)||float.IsInfinity(p.x)||float.IsInfinity(p.y))throw new ArgumentException("Curve coordinates must be finite");
+  var keep=new HashSet<int>{0,curve.Length-1};Simplify(curve,0,curve.Length-1,keep);var spans=keep.OrderBy(i=>i).ToArray();var samples=new List<CurveSample>{new CurveSample(curve[0],0)};for(int i=1;i<spans.Length;i++)CurveSamples(curve,spans[i-1],spans[i],samples);samples.Add(new CurveSample(curve[curve.Length-1],curve.Length-1));
+  var cells=new List<Vector2Int>{Vector2Int.FloorToInt(samples[0].p)};var previous=samples[0];for(int i=1;i<samples.Count;i++){var next=samples[i];var cell=Vector2Int.FloorToInt(next.p);if(cell!=cells[cells.Count-1]){if(Neighbours(cells[cells.Count-1],cell))cells.Add(cell);else JoinCurve(curve,previous,next,cells);}previous=next;}
+  for(int i=1;i<cells.Count;i++)if(!Neighbours(cells[i-1],cells[i]))throw new Exception("Selected original curve path is not8connected");return cells.ToArray();
  }
 
  static void BuildOccluders(Full319View335 f){var all=new List<Triangle>();for(int r=0;r<3;r++){var mf=f.motion.surface.outputs[r];var mesh=mf.sharedMesh;var v=mesh.vertices;var world=v.Select(p=>mf.transform.TransformPoint(p)).ToArray();var screen=world.Select(f.Project).ToArray();var z=world.Select(p=>Depth(f,p)).ToArray();for(int sm=0;sm<mesh.subMeshCount;sm++){var ix=mesh.GetIndices(sm);for(int t=0;t<ix.Length;t+=3){int a=ix[t],b=ix[t+1],c=ix[t+2];all.Add(new Triangle{renderer=r,submesh=sm,primitive=t/3,a=world[a],b=world[b],c=world[c],pa=screen[a],pb=screen[b],pc=screen[c],za=z[a],zb=z[b],zc=z[c]});}}}occluders=all.ToArray();}
@@ -87,8 +117,9 @@ public static class HairBoundary491 {
   if(!Enabled||!HeadLocal367.IsHead(f))return;current=null;Packets.Clear();Hidden=Unsupported=0;MaxWidth=0;
   try{var mf=f.motion.surface.outputs[2];var mesh=mf.sharedMesh;if(source!=mesh)Topology(mesh);vertices=mesh.vertices;uvs=mesh.uv;normals=mesh.normals;tangents=mesh.tangents;projected=vertices.Select(v=>f.Project(mf.transform.TransformPoint(v))).ToArray();rest.vertices=vertices;rest.normals=normals;rest.tangents=tangents;rest.bounds=mesh.bounds;
    var centre=new List<Vector2>();foreach(var row in rows){var a=projected[row[0]];var b=projected[row[1]];MaxWidth=Mathf.Max(MaxWidth,Vector2.Distance(a,b));centre.Add((a+b)*.5f);}if(MaxWidth>1)throw new Exception("Projected ribbon width exceeds1cell");
-   var keep=new HashSet<int>{0,centre.Count-1};Simplify(centre,0,centre.Count-1,keep);var spans=keep.OrderBy(i=>i).ToArray();var cells=new List<Vector2Int>{Vector2Int.FloorToInt(centre[0])};for(int i=1;i<spans.Length;i++)CurveLine(centre,spans[i-1],spans[i],cells);var cap=Vector2Int.FloorToInt(centre[centre.Count-1]);if(cells[cells.Count-1]!=cap){var gap=cap-cells[cells.Count-1];if(Mathf.Max(Mathf.Abs(gap.x),Mathf.Abs(gap.y))>1)throw new Exception("Original cap selection is not8connected");cells.Add(cap);}BuildOccluders(f);pv.Clear();pn.Clear();pt.Clear();pu.Clear();clip.Clear();pi.Clear();var written=new HashSet<Vector2Int>();float flip=GL.GetGPUProjectionMatrix(f.effectiveProjection,true)[1,1]/f.effectiveProjection[1,1];
+   var cells=SelectCurveCells(centre.ToArray());BuildOccluders(f);pv.Clear();pn.Clear();pt.Clear();pu.Clear();clip.Clear();pi.Clear();var written=new HashSet<Vector2Int>();float flip=GL.GetGPUProjectionMatrix(f.effectiveProjection,true)[1,1]/f.effectiveProjection[1,1];
    foreach(var cell in cells){if(!written.Add(cell)||cell.x<0||cell.y<0||cell.x>=480||cell.y>=272)continue;if(!Select(f,cell.x,cell.y,out var p)){Unsupported++;continue;}if(!Visible(p)){Hidden++;continue;}Packets.Add(p);Quad(f,p,flip);}
+   if(Unsupported>0)throw new Exception("Selected curve cell has no original triangle packet");
    pixels.Clear();pixels.SetVertices(pv);pixels.SetNormals(pn);pixels.SetTangents(pt);pixels.SetUVs(0,pu);pixels.SetUVs(3,clip);pixels.SetTriangles(pi,0);pixels.bounds=mesh.bounds;
    if(!material){var shader=Shader.Find("EValidation/HairBoundary491Probe");if(!shader)throw new Exception("491 shader missing");material=new Material(f.motion.materials[12]){shader=shader,hideFlags=HideFlags.DontSave};material.shaderKeywords=f.motion.materials[12].shaderKeywords;sides=new ComputeBuffer(indices.Length/3,4);sides.SetData(new float[indices.Length/3]);material.SetBuffer("_Instance331",sides);}
    current=f;Status="ready";

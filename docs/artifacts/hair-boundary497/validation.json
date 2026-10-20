@@ -1,0 +1,356 @@
+{
+  "status": "NOT_ADOPTED_VISIBLE_CONTOUR_AND_VISIBILITY_UNRESOLVED",
+  "implementationChangedThisUnit": false,
+  "activeProduct": {
+    "commit": "44d13c0f6a42007f2ac7fd59c174d630f2230e1b",
+    "scope": "Existing hair-outline colour preservation in eye fallback remains active in both comparison sides. This unit does not claim it solves all motion artefacts.",
+    "shaderSHA256": "abbc6a7a1fb230a1551f2b86f7a74433f060a17577436320d448270bab9c90d7"
+  },
+  "candidate": {
+    "commit": "29d2faf7f9e67d28fa7cb0436086eb1d16723358",
+    "scope": "Default-OFF single-ribbon dense-curve source selection and directional joins. Temporarily enabled only for comparison; restoredOFF. No new feature/patch loop.",
+    "sourceSHA256": "093d4f287068a77caaf72493c2fff742a92704aec01e50982de417a59508c407"
+  },
+  "offline": {
+    "input": "Saved495actual-loop geometry,81samples/80unique phases+closure",
+    "actualCSharpSelector": true,
+    "summary": {
+      "status": "PASS_SELECTION_AND_SURFACE_ONLY",
+      "samples": 81,
+      "uniquePhases": 80,
+      "fixedOldFailures": [
+        0,
+        55,
+        56,
+        57,
+        58,
+        59,
+        79,
+        80
+      ],
+      "errors": 0,
+      "newSolid2x2": 0,
+      "sourcePacketSupportFailures": 0,
+      "previouslyReadyUnchanged": 73,
+      "runtimeFullPass": false,
+      "topologyAndGapCheck": "pending separate geometry/mask assessment"
+    },
+    "interpretation": "Selection8connection, endpoint/determinism, triangle-cell intersection and no2x2support passed.73previously connected cases unchanged;8old failure samples including repeatedphase0 now construct paths. This is not a runtime or full visibility pass.",
+    "topologyLimit": "16xprojected-region counts included tiny regions not identified with the inspected gap;32xchecks exposed areas down to1/1024cell². Those preliminary region counts are not used as a source-hole preservation pass. Exact source-boundary slices and positive-width segment witnesses replace that inference."
+  },
+  "confirmedImprovement": [
+    "Actual current29d2faf loop has81ready samples,0fallback and0unsupported instead of the previous495run8fallback samples. It includes the repeated closure; no duplicate full-loop run was started.",
+    "Same bone pose and light81/81; native960x544 per side/common480x272grid.903emitted packets,862GPUmatches and41GPUhidden by exact recovered nearer surfaces.2nearer surfaces lie within the CPU0.1mm tolerance and are not two GPU errors.",
+    "No new foreground singleton positions, raw/visible2x2thickness block, facing change, main packet miss, or native pixel changes outside head inspection ROI.",
+    "The trueUV0tip remains geometrically occluded by known hair in81samples. Source input and endpoint/path rules were not changed during validation."
+  ],
+  "blockingObservation": {
+    "sample": 55,
+    "normalizedPhase": 1.68750262,
+    "phaseWithinLoop": 0.68750262,
+    "selectedCell": [
+      235,
+      42
+    ],
+    "sourceConstructionStatus": "ready",
+    "fallback": false,
+    "unsupported": 0,
+    "facts": "Raw selected path contains the cell, but no emitted packet exists. Actual HEADmeta is all0 and finalAlpha is0. Adjacent235,41 and235,43 have original source primitives85and94 with validUV/depth. The same visible ribbon is interrupted before the GPU source draw.",
+    "emptyChannelFinalAlpha": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "enclosedPocketOpensInsteadOfBeingFilled": true,
+    "notAnAuthoredTip": "This is between internal ribbon samples, while actualUV0tip is elsewhere and remains occluded.",
+    "firstKnownStage": "CPUvisibility discard branch before packets/GPU; not a later348colour overwrite or full-source fallback.",
+    "unknown": "The actual discarded packet primitive/bary/world/projected/depth and blocker renderer/submesh/triangle were not logged.Independent reconstruction offers visibleprimitive89atthiscell but is not claimed to be the actual C#chosen point.",
+    "replay": [
+      {
+        "sample": 55,
+        "phase": 1.68750262,
+        "errors": [
+          {
+            "cell": [
+              235,
+              42
+            ],
+            "kind": "unexplained_discard"
+          }
+        ],
+        "discarded": [
+          {
+            "packet": {
+              "cell": [
+                235,
+                42
+              ],
+              "primitive": 89,
+              "projected": [
+                235.41767292246823,
+                42.49863656569277
+              ],
+              "depth": 13.76588174456328,
+              "world": [
+                0.17010877834531546,
+                1.5834897117202007,
+                0.02211598678280704
+              ],
+              "uv": [
+                0.4017194037561213,
+                0.23728817390600843
+              ],
+              "bary": [
+                3.3333333333333337e-06,
+                0.6615856347217001,
+                0.3384110319449667
+              ]
+            },
+            "blockers": []
+          }
+        ]
+      }
+    ],
+    "acceptance": "Visibility/visible connection cannot be passed. No epsilon patch, dilation or automatic filling was applied."
+  },
+  "decision": {
+    "adopt": false,
+    "defaultEnabled": false,
+    "technicalEvidenceNeeded": "Actual discarded candidate and blocker packet atphase0.6875 are needed before deciding whether the omission is legitimate occlusion or a sampling/visibility defect. This unit leaves it unverified and stops.",
+    "visualSelection": "Do not ask the user to accept an unexplained dropout as style. After visibility is established, permissible full-pixel gap width versus diagonal contacts and temporal staircase quality need a stated target. The geometric alternative is not proof of a mandatory artistic tradeoff.",
+    "noFurtherAutomaticPatch": true,
+    "wholeProjectComplete": false
+  },
+  "acceptance": [
+    {
+      "criterion": "Offlinecurrent full-phase selection/surface/width",
+      "status": "Passed;offlineonly"
+    },
+    {
+      "criterion": "Actualone-cycle source construction and fallback",
+      "status": "Passed81/81"
+    },
+    {
+      "criterion": "Actualsamepose/light/protectedparts",
+      "status": "Passed81/81"
+    },
+    {
+      "criterion": "Emittedsource packet/GPUowner correspondence",
+      "status": "Passed903,41nearerGPUowners recovered"
+    },
+    {
+      "criterion": "AllCPUdiscard justification",
+      "status": "Notpassed:611of612reproduced,1unexplaineddiscard at55"
+    },
+    {
+      "criterion": "Visible ribbon connection and continuous gap representation",
+      "status": "Notpassed/unresolved; actualmiddle dropout and diagonal pinches"
+    },
+    {
+      "criterion": "Appearance/default activation",
+      "status": "Notadopted/defaultOFF"
+    },
+    {
+      "criterion": "Performance readiness",
+      "status": "Notclaimed; pairedEditor timings only"
+    },
+    {
+      "criterion": "Userstate restoration",
+      "status": "Passed"
+    }
+  ],
+  "performance": {
+    "method": "Editor owner RenderFrame call, and same call plus synchronous1pixel readback of the completed native output. File/PNG/full-buffer dumps excluded. Alternating A/B order. These are diagnostic Editor measurements, not player frame rate or CPU/GPU profiler-separated costs. First2samples separated as initialization; no failed path in this run.",
+    "steadyCount": 79,
+    "baseMedianFenceMs": 279.2857,
+    "candidateMedianFenceMs": 303.941,
+    "baseP95FenceMs": 625.00627,
+    "candidateP95FenceMs": 645.09212,
+    "interpretation": "SingleEditor same-execution A/B with alternating order and1pxsynchronousGPUreadback. File/PNG/geometry export excluded. Not playerFPS, devicebudget or an improvement claim versus older differently-lit runs."
+  },
+  "restored": {
+    "receipt": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\restore497.json",
+    "play": true,
+    "paused": false,
+    "movement": true,
+    "animator": true,
+    "speed": 1,
+    "locomotion": 0,
+    "captureDeltaTime": 0,
+    "background": true,
+    "hook": "PostView366",
+    "automaticClock": true,
+    "experimentEnabled": false,
+    "temporaryResourcesReleased": true
+  },
+  "environment": {
+    "comparisonHour": 7.98043346,
+    "noBrightnessTuning": true,
+    "control": "Existing clock automatic flag held temporarily at its current hour; no SetTimeHours/light colour/intensity writes. Both sides identical per frame, background outside head ROI identical. Existing world motion across the loop remains.",
+    "settingsHashes": {
+      "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+      "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287",
+      "PersistentGameplayShell.prefab": "9c1dffcb46c4210d55b2a835f9cdcf3ad18d42f566ec09a53c0aa2b622fd74d8"
+    }
+  },
+  "console": {
+    "baselineErrors": 1,
+    "finalErrors": 1,
+    "unchanged": true,
+    "baseline": [
+      {
+        "message": "NullReferenceException: Object reference not set to an instance of an object\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Capture () (at <638ba88c466148489941c396804354bd>:0)\nUnityEngine.Debug:LogException(Exception)\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript:Capture()\nHeadLocal367:RenderFrame() (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:28)\nGameplay397:Present() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:27)\nGameplay397:LateUpdate() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:11)\n",
+        "stackTrace": "",
+        "type": "Error",
+        "timestamp": "[00:38:12]"
+      }
+    ],
+    "final": [
+      {
+        "message": "NullReferenceException: Object reference not set to an instance of an object\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Capture () (at <638ba88c466148489941c396804354bd>:0)\nUnityEngine.Debug:LogException(Exception)\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript:Capture()\nHeadLocal367:RenderFrame() (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:28)\nGameplay397:Present() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:27)\nGameplay397:LateUpdate() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:11)\n",
+        "stackTrace": "",
+        "type": "Error",
+        "timestamp": "[00:38:12]"
+      }
+    ],
+    "note": "Pre-existing diagnostic Capture NRE remains; Console not cleared. No new product patch or error suppression."
+  },
+  "library": {
+    "fullBodyLoopGif": "libfile_f53eade6d9fc819184ac6d3ba79b6bb0",
+    "contactReview": "libfile_422b424798cc819190678713f098336f",
+    "dropoutReview": "libfile_e4415886d748819184d405be9435effa",
+    "primaryFullBodyLoopGif": "libfile_fd176f83bfe481919d2585664eb53038"
+  },
+  "gif": {
+    "file": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop497\\FULL_BODY_LOOP_BEFORE_AFTER497.gif",
+    "samples": 81,
+    "cycles": 1,
+    "closureIncluded": true,
+    "nativePerSide": [
+      960,
+      544
+    ],
+    "canvas": [
+      1920,
+      580
+    ],
+    "actualCaptureDeltaSeconds": 0.016666666666666666,
+    "reviewFrameMilliseconds": 100,
+    "slowdown": 6,
+    "failureFrameMarked": 55,
+    "comparison": "New same-execution active-source baseline versus temporary29d2faftrial; no old GIF reused."
+  },
+  "runtimeSummary": {
+    "status": "NOT_ADOPTED_VISIBLE_CONTOUR_AND_VISIBILITY_UNRESOLVED",
+    "commit": "29d2faf7f9e67d28fa7cb0436086eb1d16723358",
+    "actualWalkSamples": 81,
+    "fullCyclesCaptured": 1,
+    "allSamePose": true,
+    "allSameLightWithinPair": true,
+    "fixedHour": [
+      7.98043346
+    ],
+    "candidateReadySamples": 81,
+    "candidateFallbackSamples": 0,
+    "failed": [],
+    "unsupportedTriangleCells": 0,
+    "sourcePackets": 903,
+    "gpuHiddenPackets": 41,
+    "mainPacketMisses": 0,
+    "maxSourceUVError": 6.976479660636414e-08,
+    "maxSourceWorldErrorMetres": 1.6308910102021124e-06,
+    "maxGpuUVError": 1.4901161193847656e-08,
+    "maxGpuDepthErrorMetres": 9.5367431640625e-07,
+    "maxCellCentreToOriginalCurve": 0.5329534068234323,
+    "samePrimitiveFacingChanges": 0,
+    "nativeChangesOutsideHeadROI": 0,
+    "solid2x2Samples": [],
+    "newActorSingletonSamples": [],
+    "closure": {
+      "maxWorldVertexDifferenceMetres": 9.5367431640625e-07,
+      "maxHeadProjectedVertexDifferenceCells": 0.0001220703125,
+      "firstOffset": [
+        -2,
+        0
+      ],
+      "lastOffset": [
+        -2,
+        0
+      ],
+      "firstCandidateStatus": "ready",
+      "lastCandidateStatus": "ready"
+    },
+    "rawSelectionAndPacketConstruction": "Passed81samples",
+    "acceptanceFailures": {
+      "noClosedInspectionPocketSamples": [
+        55
+      ],
+      "unexplainedDiscardReplay": 1
+    },
+    "newActorSingletonPositions": [],
+    "rawSolid2x2Samples": [],
+    "inspectionClosedPocketAbsentSamples": [
+      55
+    ],
+    "cpuVisibility": {
+      "actualSelectedSourcePackets": 903,
+      "replayedCpuHidden": 612,
+      "replayErrors": 1,
+      "allBlockersHair": true,
+      "minBlockerGapMetres": 0.0001006269443646346,
+      "trueUV0TipOccludedSamples": 81
+    },
+    "gpuVisibility": {
+      "hidden": 41,
+      "exactHairOwnersRecovered": 41,
+      "strictlyNearer": 41,
+      "withinCpuTolerance": 2,
+      "maxDepthErrorMetres": 7.194194679982502e-07,
+      "maxProjectionCentreError": 0.0020218744142559038
+    },
+    "gpuHiddenNotBeyondCpuTolerance": 2,
+    "gapAssessment": "At55 the selected middle cell235,42is not emitted, so the same visible ribbon is interrupted and the enclosed gap opens. This is not a filled/merged hole or a fallback. Actual discarded packet/blocker was not recorded; independent geometric replay has1unexplained discard. Other poses show diagonal pinches with a positive-width source corridor. Candidate adoption is withheld, not normalized as unavoidable grid crossing."
+  },
+  "gapSummary": "3to2isexistingmidlinequantization, notnewjoinwidth;diagonalpincheswithpositive-widthsourcepathsremain. A local supported alternative is unrendered; no unavoidable tradeoff proof.",
+  "compactDelivery": {
+    "file": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop497\\FULL_BODY_COMPARE497_COMPACT2X.gif",
+    "bytes": 5907029,
+    "sha256": "c7577655a1aba1923270227ee38ca7a725ee3b012f1ebeaf548fdce8ce1fd63e",
+    "frames": 81,
+    "durationMs": 100,
+    "nativeCrop": [
+      342,
+      50,
+      546,
+      356
+    ],
+    "derivedVertexBounds": [
+      [
+        355.0006103515625,
+        63.49995422363281
+      ],
+      [
+        532.3853759765625,
+        342.66064453125
+      ]
+    ],
+    "marginNativePixels": 12,
+    "integerScale": 2,
+    "interpolation": "NEAREST exact pixel replication",
+    "paletteLoss": false,
+    "allDecodedFramesVerifiedExact": true,
+    "canvas": [
+      824,
+      668
+    ],
+    "source": "Existing497GIF only; no capture, no product/runtime change; fullbody/A-B/time order preserved",
+    "libraryFileId": "libfile_fd176f83bfe481919d2585664eb53038",
+    "libraryStatus": "succeeded"
+  },
+  "originalLargeGifDelivery": {
+    "libraryFileId": "libfile_f53eade6d9fc819184ac6d3ba79b6bb0",
+    "bytes": 21911231,
+    "chatAttachmentStatus": "failed_upload_size_limit_not_delivered",
+    "retransmitted": false
+  }
+}

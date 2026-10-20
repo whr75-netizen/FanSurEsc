@@ -2940,3 +2940,13 @@ Interactable (abstract base class)
 - `[최소 수정]` `EyeFeature348.compute`에서 base/backing fallback을 선택한 직후, 현재와 같은 covered hair 역할·정확한 깊이를 다시 고르면 이미 합성된 `old.rgb`를 보존한다. 뒤의 실제 눈 선택·더 가까운 가림·owner/depth·coverage·선 생성·색/카메라 정책은 변경하지 않았다. 새로운 cache/hysteresis/quantization/threshold는 없다.
 - `[실제 비교]` 같은 Unity 프레임마다 실제 수정 셰이더→원본 셰이더 대조→수정 셰이더 복원을 실행했다. 실제 `Rig|Walk_Loop`16쌍, 정규화시간0.0125→0.200000033, 서로 다른 뼈 해시16개, 쌍 안의 bone/world/preparedOwner/nativeOwner 불일치0이다. 외곽선 덮어쓰기11→0, 외곽선 밖 변경0, coverage 변경0이며 기본 정면 실제 Walk4쌍은 색·owner 차이0이다. 루트 고정의 짧은 구간이며 전체loop·다른방향/clip·접지/관통·미관·명암 전체·성능·Player build 통과로 확대하지 않는다.
 - `[전달·정리]` `docs/artifacts/character-hair-fallback-20261020/validation477.json`과 첫 프레임 무손실 비교에 정확한 색·깊이·SHA256·증거 경로를 보존한다. 실제 전신 GIF16프레임은 모든 프레임을 디코딩했고 공통 palette의 새 차이/숨긴 차이0이다. Library `libfile_d9ecfb30a6b08191a3882b808b3f15f0`; 원본 float/PNG·캡처 코드는 `C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/`에 있다. 임시 원본 비교 compute는 공식 asset writer로 제거했고 기존 `PostView366.AfterRender`와 실제 수정 shader 바인딩을 복원했다. 최종 Console Error/Exception/Assert0, Play=true·paused=false·compiling=false·GameMap1 dirty=false·captureDeltaTime0이다. 기존 dirty QualitySettings/TimeManager 및 다른 미추적 자산은 보존한다.
+
+## 210. 기본 비활성 머리 곡선 소스 실험의 소수 위상 보존 `[CHARACTER-RENDER-01]`
+
+- 491의 첫 누락은 head(233,40)에 선택 가닥118삼각형이 전혀 겹치지 않는데 정수화한 끝점의 Bresenham이 그 셀을 선택한 연산 오류다. 인접(234,40)에는14삼각형이 겹친다. 검색 범위·좌표·메쉬 연결 부족이 아니다.
+- 첫 급변은 같은 UV-section26의 x234.013107→233.993774가 floor234→233으로 바뀌며 두 구간의 정수 경로7셀을 재배열한 것이다. RDP제어점8개는 동일하고 연속 곡선 최대 이동은0.06682셀이다.
+- 기존 head Probe의 대안3파일에서 Line만 연속 끝점/주축 격자 중심 평가로 수정했다. 삼각형 교집합과 동일 source primitive/UV/depth/owner,재질·눈·물리가림·480논리/960native는 유지한다. 화면좌표/위상 조건·후단closing·색history·시간threshold는 없다.
+- 실제 Walk0.275~0.3625의 동일 포즈8쌍: 본행렬8/8동일,기존6프레임 후보누락→0,첫 가닥 셀전환7→1,고립셀4프레임→0. 표면패킷90개 정합,가림6개는 더 가까운 실제 다른 표면,UV최대1.49e-8·깊이9.54e-7m,머리ROI외native변화0이다.
+- 별도5셀 전환은 같은 연속선의 두 격자 교차(x235.01455→234.98515 및235.00178→234.99486)로 확인했다. 모든 픽셀 변화를 오류로 세지 않는다. 추가 안정화에는 형상/계단/span 편집 비용의 선택 기준이 필요하며 Feature-Aware전체 최적화는 구현하지 않았다.
+- 실험은 기본OFF,미관·전체loop·다른clip/각도·성능·build 미채택/미검증이다. Play·입력·Animator·background·원래PostView366훅 복원 및 임시리소스 해제 확인. 기존44d13c0수정과 사용자Quality/Time설정은 보존한다.
+- 재현/증거: `docs/artifacts/hair-boundary492/validation.json`, 작업폴더 `Current472/Pairs492/`의 실제 전신A/B GIF와 `TRANSITION_TRACE492.json`/`SECOND_TRANSITION492.json`이다. 다른 Play세션 RGB를 전후 근거로 섞지 않았다.

@@ -1,0 +1,688 @@
+{
+  "status": "DEFAULT_OFF_NOT_ADOPTED_VISIBLE_BOUNDARY_TRANSIENTS",
+  "scope": "Closed whole-hair region and common ownership implementation; not completed pixel-art/temporal design",
+  "algorithm": {
+    "status": "IMPLEMENTED_BOUNDARY_VALIDATED_NOT_ADOPTED_TEMPORAL_SELECTION",
+    "scope": "Default-OFF whole-hair closed-region replacement; face/eye proportions, materials, source animation and camera preserved",
+    "replaces": "491 open-midline 118-triangle source replacement; no serial morphology or time filter",
+    "canonical": {
+      "width": 480,
+      "height": 272,
+      "units": "one final logical pixel",
+      "origin": "top-left; texture load y=271-y",
+      "headToMainGPU": "main=head+HeadLocal367.offset"
+    },
+    "source": "Actual current deformed renderer2, all four submeshes, original primitive/UV/normal/world sample; renderer1 source union is protected parent domain",
+    "curve": {
+      "extraction": "Union of analytic projected triangle/scanline intervals at 1/8 cell, followed by oriented closed boundaries; extraction lattice is not the final mask",
+      "representation": "Closed piecewise-linear mathematical curve with RDP point-to-segment bound 0.1875 logical cell; outer rings and holes retain orientation",
+      "quantization": "Analytic signed curve/cell intersection area A; jointly choose labels q by binary s-t minimum cut",
+      "energy": "sum_i(q_i*(1-A_i)+(1-q_i)*A_i)+0.14*sum_neighbours(w_ij*abs(q_i-q_j)); orthogonal weight .58578644, diagonal .29289322",
+      "selectionMeaning": "Area fidelity balances shared boundary length. Narrow positive or negative regions may disappear or merge as part of region selection. No per-strand connectivity/endcap/all-gap constraints.",
+      "designStatus": "First bounded prototype. Boundary length discourages unnecessary perimeter, but this is not a proven full pixel-art stair-rhythm/animation metric. 0.14 is an explicit trial parameter, not a user-approved style.",
+      "finalBoundary": "Oriented closed cell-edge loops of the jointly selected regions. This selected region is the coverage authority, not the original mesh alpha."
+    },
+    "ownership": {
+      "packet": "cell, original submesh/primitive, barycentric, original world/UV, depth, normal/tangent; closest projected donor within1.1 cell; depth resolves equal projection distance",
+      "expandedCells": "Donor transfer is explicit when selected cell centre lies outside original coverage. Not claimed to be the same camera ray or a newly authored 3D surface.",
+      "drawing": "All original hair geometry is replaced by owned cell quads in Raw, Native, World, Independent and Legacy source paths; source sample supplies shading, quad supplies coverage",
+      "occlusion": "GPU depth of source donor against original face/body. Original eye S4 hair coverage is disabled; eye visibility consumes the canonical owned all-hair layer.",
+      "parent": "Quantized hair union protected original face/feature centre union; no box/hull, eye resizing, or native107-hole repair",
+      "gates": "Source fragments use common parent/hair region; Prepare and post-eye/final ownership reject head-family output outside same region. Body/world owners exempt. Existing inside one-cell outline remains derived from coverage."
+    },
+    "references": [
+      {
+        "url": "https://www.cs.cornell.edu/~rdz/Papers/KZ-PAMI04.pdf",
+        "claim": "Binary unary+nonnegative pairwise boundary energy can be represented/minimized by graph cut; does not establish pixel-art quality"
+      },
+      {
+        "url": "https://saint11.art/pixel_art_articles/article2/",
+        "claim": "Artist guidance: designed clusters, selective details, deliberate contour rhythm; not a verified automatic algorithm"
+      },
+      {
+        "url": "https://saint11.art/pixel_art_articles/article4/",
+        "claim": "Artist guidance: simplification/readability rather than resized-photo reproduction; no eye/colour redesign authorized here"
+      }
+    ],
+    "selfReview": "No independent reviewer used. Main risks: extraction/topology approximation, curve self-intersection, nearest-source material ownership at merged gaps, GPU culling and phase alignment, eye/face donor occlusion, independent-frame perceptual consistency and CPU cost.",
+    "validation": [
+      "Compile and shader errors",
+      "Binary cut energy vs exhaustive small fixtures",
+      "One pose source/native/layer/prepare/post-eye/final outside-authority counts and packet provenance",
+      "Actual Walk short paired source/candidate sequence with same pose/light; inspect silhouette, eye, colour, occlusion and microregion births/deaths",
+      "Restore input/Animator/clock/settings; candidate staysOFF"
+    ],
+    "failure": "Unsupported packet, nonclosed boundary, mask mismatch, wrong owner/depth or visible regression are explicit failures; original fallback is not a pass. No automatic patch loop or default activation."
+  },
+  "sourceFiles": [
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs",
+      "sha256": "482fe3e328f500a4716f7369bd28771622031aab0f0ff4816bb403821f3e9bd1",
+      "existing": true
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs",
+      "sha256": "f21c69ece51485e16f742ebbb617134b83e536cd21bb70672935b07930e2602c",
+      "existing": true
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/EyeRenderer367.cs",
+      "sha256": "ee9d477ec549908a0694f8b37adadc7af00cc6887a832c6495a9603bb683a5c9",
+      "existing": true
+    },
+    {
+      "path": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+      "sha256": "14fea49f4ab5a17e32548bc0d5a6e129385658836d97b7633b25622dca94770d",
+      "existing": true
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs",
+      "sha256": "7eb5f9c722d735333c205910d967831c5cd1f1618414076de7e0a4d59d52258c",
+      "existing": false
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/Region502.hlsl",
+      "sha256": "a521ba19aa96e31878aabf7ad84c3c11871ba97de5a106ba1d6c2e677cec4faa",
+      "existing": false
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Resources/HeadRegion502.compute",
+      "sha256": "26450b970e7fed4da670291018b265f2525e4ecc1cfea6c7e86aea08e4ecafc0",
+      "existing": false
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/Probe502.shader",
+      "sha256": "832f39afad692bd39f7210d299ff98e55424dbb1540ab160ec9d58ec449df3b9",
+      "existing": false
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/Native502.shader",
+      "sha256": "2bedad478888fb97d945c8e8200d0ce037b22db1576dff4f844a91b5422c4b1a",
+      "existing": false
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/World502.shader",
+      "sha256": "6ba270a1b41f5ccf4789a2492de3c0502365f69a2b180fcaf29d9af954e69058",
+      "existing": false
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/Independent502.shader",
+      "sha256": "dd9ceb9a696d203ac4a4dc4a81543d93e2e28b69f4605abb3041d0add6cca01b",
+      "existing": false
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/Legacy502.shader",
+      "sha256": "149c5ac5dee510bc1b1ad5039657d0592c6cc0c03bf64b2163b37e318941ea4f",
+      "existing": false
+    }
+  ],
+  "validation": {
+    "compileAndFiveShaders": "check502.json and actual restored Play; shaders unchanged since verified poseB/loop502",
+    "cutExhaustiveFixtures": 5,
+    "poseB": {
+      "pose": {
+        "phase": 1.66250253,
+        "clip": "Rig|Walk_Loop",
+        "sameBones": true,
+        "sameLight": true,
+        "offset": [
+          -1,
+          0
+        ],
+        "packets": 524,
+        "unsupported": 0,
+        "sourceLoops": 14,
+        "curves": 1,
+        "selectedLoops": 2,
+        "buildMs": 162.6124
+      },
+      "maskHairCells": 524,
+      "maskParentCells": 527,
+      "stages": {
+        "RAW": {
+          "hair": 518,
+          "hairOutside": 0,
+          "faceOutsideParent": 0
+        },
+        "HAIR": {
+          "hair": 524,
+          "hairOutside": 0,
+          "faceOutsideParent": 0
+        },
+        "PREPARED": {
+          "hair": 518,
+          "hairOutside": 0,
+          "faceOutsideParent": 0
+        },
+        "META": {
+          "hair": 517,
+          "hairOutside": 0,
+          "faceOutsideParent": 0
+        },
+        "NATIVE": {
+          "hair": 2052,
+          "hairOutsideRepeatedCommonGrid": 0,
+          "faceOutsideParent": 0
+        }
+      },
+      "packet": {
+        "selected": 524,
+        "visibleRaw": 518,
+        "emptyRaw": 0,
+        "rawProvenanceMismatch": [],
+        "hairLayerUVMismatch": []
+      },
+      "bodyColourMismatch": 0
+    },
+    "loop": {
+      "status": "ACTUAL_FULL_WALK_LOOP",
+      "differencesAreNotErrorCounts": true,
+      "allPoseLightMatched": true,
+      "outsideTotals": {
+        "Raw": {
+          "hair": 0,
+          "face": 0
+        },
+        "Hair": {
+          "hair": 0,
+          "face": 0
+        },
+        "Final": {
+          "hair": 0,
+          "face": 0
+        }
+      },
+      "packetMismatchTotal": 0,
+      "bodyColourMismatchTotal": 11,
+      "unsupportedTotal": 0,
+      "gif": {
+        "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop502\\WALK502_FULLBODY_BEFORE_AFTER.gif",
+        "bytes": 2630245,
+        "frames": 81,
+        "cropNativePixels": [
+          332,
+          48,
+          556,
+          358
+        ],
+        "displayDurationMs": 80,
+        "captureDeltaSeconds": 0.016666666666666666,
+        "interpolation": false,
+        "note": "same-execution full-body sequence; uniform palette is presentation compression; original PNG/buffers retained"
+      }
+    },
+    "loopSampleCount": 81,
+    "phaseRange": [
+      1.0000025,
+      2.0000062
+    ],
+    "loopSeamHairMaskDifferenceCells": 0,
+    "actualVisibleHairSingletonSamples": {
+      "source": 18,
+      "candidate": 0
+    }
+  },
+  "visibleResidual": {
+    "oneFrameBoundaryReversalObservations": 49,
+    "firstVerifiedExample": [
+      {
+        "index": 1,
+        "phase": 1.01250255,
+        "versions": {
+          "BASE": {
+            "role": 4,
+            "pngRGB": [
+              252,
+              230,
+              210
+            ]
+          },
+          "ALT": {
+            "role": 4,
+            "pngRGB": [
+              252,
+              230,
+              210
+            ]
+          }
+        }
+      },
+      {
+        "index": 2,
+        "phase": 1.0250026,
+        "versions": {
+          "BASE": {
+            "role": 4,
+            "pngRGB": [
+              252,
+              231,
+              211
+            ]
+          },
+          "ALT": {
+            "role": 14,
+            "pngRGB": [
+              16,
+              10,
+              19
+            ]
+          }
+        }
+      },
+      {
+        "index": 3,
+        "phase": 1.03750265,
+        "versions": {
+          "BASE": {
+            "role": 4,
+            "pngRGB": [
+              252,
+              231,
+              210
+            ]
+          },
+          "ALT": {
+            "role": 4,
+            "pngRGB": [
+              252,
+              231,
+              210
+            ]
+          }
+        }
+      }
+    ],
+    "causeBoundary": "The chosen region itself changes; all later source/Native/layer/compose ownership respects it. Independent-frame RDP/area/perimeter selection has no explicit temporal correspondence or stair-run design objective. Source-centre coverage constancy does not prove continuous geometry is static.",
+    "interiorColourReview": {
+      "status": "NO_LARGE_SAME_PRIMITIVE_HAIR_INTERIOR_JUMPS_AT_LOCATOR_NOT_GENERAL_SHADING_PASS",
+      "locator": "two-cell hair interior, same submesh/primitive across consecutive actual frames; max linear RGB jump>0.10, not an error threshold",
+      "observations": {
+        "source": 0,
+        "candidate": 0,
+        "bothAtSameCell": 0,
+        "candidateOnlyAtSameCell": 0
+      },
+      "representative": null,
+      "limits": "UV moves and physical light/shadow inputs are not recorded per frame; the observations do not separate texture sampling, surface lighting and moving cast shadows, nor prove each change unnecessary."
+    },
+    "notAnErrorCount": "49 observations are not49 independent bugs and are not all automatically unnecessary. The verified skin/hair/skin example prevents a claim that visible flicker is solved."
+  },
+  "bodyDifferenceClassification": {
+    "OUTER_LINE_EXPOSED_BY_NEW_HEAD_BOUNDARY": 8,
+    "OUTER_LINE_HIDDEN_BY_NEW_HEAD_COVERAGE": 2,
+    "TEMPORAL_REVIEW_CORRECTION_SOURCE_LINE_INTERRUPTS_CANDIDATE_CONTINUES": 1
+  },
+  "bodyTemporalCorrection": [
+    {
+      "phase": 1.72500253,
+      "xy": [
+        210,
+        57
+      ],
+      "versions": {
+        "BASE": {
+          "lineAudit": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.920330047607422,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.38671875,
+            0.3480468690395355,
+            0.32020315527915955,
+            1.0
+          ]
+        },
+        "OLD": {
+          "lineAudit": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.920330047607422,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.38671875,
+            0.3480468690395355,
+            0.32020315527915955,
+            1.0
+          ]
+        },
+        "ALT": {
+          "lineAudit": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.920330047607422,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.38671875,
+            0.3480468690395355,
+            0.32020315527915955,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": 1.73750257,
+      "xy": [
+        210,
+        57
+      ],
+      "versions": {
+        "BASE": {
+          "lineAudit": [
+            2.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.9192476272583,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ]
+        },
+        "OLD": {
+          "lineAudit": [
+            2.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.9192476272583,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ]
+        },
+        "ALT": {
+          "lineAudit": [
+            2.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.9192476272583,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": 1.75000262,
+      "xy": [
+        210,
+        57
+      ],
+      "versions": {
+        "BASE": {
+          "lineAudit": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.917495727539062,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.703125,
+            0.6328125,
+            0.5821875333786011,
+            1.0
+          ]
+        },
+        "OLD": {
+          "lineAudit": [
+            2.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.917495727539062,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ]
+        },
+        "ALT": {
+          "lineAudit": [
+            2.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.917495727539062,
+            11.0,
+            0.0,
+            1098.0
+          ],
+          "colour": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ]
+        }
+      }
+    },
+    {
+      "phase": 1.76250267,
+      "xy": [
+        210,
+        57
+      ],
+      "versions": {
+        "BASE": {
+          "lineAudit": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.75495719909668,
+            14.0,
+            0.0,
+            3728.0
+          ],
+          "colour": [
+            0.030495651066303253,
+            0.024336356669664383,
+            0.0468045249581337,
+            1.0
+          ]
+        },
+        "OLD": {
+          "lineAudit": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.754962921142578,
+            14.0,
+            0.0,
+            3728.0
+          ],
+          "colour": [
+            0.030514847487211227,
+            0.024336643517017365,
+            0.04680512845516205,
+            1.0
+          ]
+        },
+        "ALT": {
+          "lineAudit": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "meta": [
+            13.754962921142578,
+            14.0,
+            0.0,
+            3728.0
+          ],
+          "colour": [
+            0.030514847487211227,
+            0.024336643517017365,
+            0.04680512845516205,
+            1.0
+          ]
+        }
+      }
+    }
+  ],
+  "withdrawn503": {
+    "fourFramesOutputDifference": 0,
+    "headRawAndUVAndBodyInputsUnchanged": true,
+    "assetAndConnectionsRemoved": true,
+    "scope": "No body-core override retained; shared OwnerLines333 unchanged"
+  },
+  "restoredRuntime": {
+    "success": true,
+    "message": "Command executed successfully.",
+    "data": {
+      "isCompilationSuccessful": true,
+      "isExecutionSuccessful": true,
+      "executionId": 1,
+      "compilationLogs": "",
+      "executionLogs": "[Log] 502STATE play=True paused=False newEnabled=False oldEnabled=False movement=True animator=True locomotion=0 speed=1 capture=0 automaticClock=True hooks=PostView366 clip=Rig|Idle_Loop compiling=False",
+      "localFixedCode": "using UnityEngine;\r\nusing UnityEditor;\r\nusing System.Linq;\r\nusing FantasySurvival.WorldLighting;\r\n\r\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\r\n{\r\n    internal class CommandScript : IRunCommand\r\n    {\r\n        public void Execute(ExecutionResult result)\r\n        {\r\n            var g = UnityEngine.Object.FindFirstObjectByType<Gameplay397>();\r\n            if (!g || !g.connected)\r\n                throw new System.Exception(\"Runtime not connected\");\r\n            var h = g.player.host;\r\n            var a = h.main.motion.animation.target;\r\n            var s = UnityEngine.Object.FindFirstObjectByType<SkyLightingCycleController>();\r\n            result.Log(\"502STATE play=\" + EditorApplication.isPlaying + \" paused=\" + EditorApplication.isPaused + \" newEnabled=\" + HeadRegion502.Enabled + \" oldEnabled=\" + HairBoundary491.Enabled + \" movement=\" + g.player.player.GetComponent<PlayerMovement>().enabled + \" animator=\" + a.enabled + \" locomotion=\" + a.GetFloat(\"LocomotionSpeed\") + \" speed=\" + a.speed + \" capture=\" + Time.captureDeltaTime + \" automaticClock=\" + s.IsAdvancingAutomatically + \" hooks=\" + string.Join(\",\", h.main.validateRender.GetInvocationList().Select(x => x.Target.GetType().Name)) + \" clip=\" + a.GetCurrentAnimatorClipInfo(0)[0].clip.name + \" compiling=\" + EditorApplication.isCompiling);\r\n        }\r\n    }\r\n}",
+      "result": "Command executed successfully."
+    }
+  },
+  "preservedUserSettingsHashes": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287",
+    "Assets/EUnityValidation01/GameMapIntegration333/Shaders/OwnerLines333.compute": "3fba164218516aea7262a4c9d7c8d9a76bc06ad062f0cda147a4b73df22e6c4c"
+  },
+  "deliverables": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop502\\WALK502_FULLBODY_NORMAL_SPEED.gif",
+      "bytes": 1189876,
+      "sha256": "8a279d1d0d852b96491bb635e4d6027c8ddfefd6e3b1ea1a749df7cad1a5881a"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop502\\WALK502_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 2630245,
+      "sha256": "687c42eee0dce7c20e29711d0a7703207f98917ca24edeb3982ea1e30f9171e1"
+    }
+  ],
+  "normalSpeed": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop502\\WALK502_FULLBODY_NORMAL_SPEED.gif",
+    "bytes": 1189876,
+    "frames": 40,
+    "totalDurationMs": 1330,
+    "capturedLoopSeconds": 1.3333333333333333,
+    "sourceIndices": [
+      0,
+      2,
+      4,
+      6,
+      8,
+      10,
+      12,
+      14,
+      16,
+      18,
+      20,
+      22,
+      24,
+      26,
+      28,
+      30,
+      32,
+      34,
+      36,
+      38,
+      40,
+      42,
+      44,
+      46,
+      48,
+      50,
+      52,
+      54,
+      56,
+      58,
+      60,
+      62,
+      64,
+      66,
+      68,
+      70,
+      72,
+      74,
+      76,
+      78
+    ],
+    "spatialInterpolation": false,
+    "slowFull81Path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop502\\WALK502_FULLBODY_BEFORE_AFTER.gif",
+    "slowDurationPerFrameMs": 80
+  },
+  "library": "Earlier403 restriction; no upload retry/bypass, no new Library ID",
+  "limits": [
+    "Internal colour/light/shadow cluster design and artist stair rhythm not implemented.",
+    "Temporal correspondence/objective absent; boundary transients remain, so candidate not adopted.",
+    "Current clip/game angle only; other camera/clip, frontal eye quality, grounding and build unverified.",
+    "Per-frame CPU construction136.9–279.9ms in Editor is not production performance or playerFPS."
+  ]
+}

@@ -1,0 +1,14 @@
+#pragma kernel Gate
+Texture2D<float4> _Mask;
+RWTexture2D<float4> _Before,_Colour,_Owner,_Meta,_UV;
+int2 _Offset;
+[numthreads(8,8,1)]void Gate(uint3 id:SV_DispatchThreadID)
+{
+    int2 p=id.xy;if(any(p>=int2(480,272)))return;
+    float4 owner=_Owner[p];int role=(int)round(owner.x);
+    // Body and world ownership are outside this head-family boundary contract.
+    if(role<=0||(role>=8&&role<=11))return;
+    int2 q=p-_Offset;float4 m=0;if(all(q>=0)&&all(q<int2(480,272)))m=_Mask.Load(int3(q,0));
+    bool permitted=role>=12?m.g>.5:m.r>.5;
+    if(!permitted){_Before[p]=0;_Colour[p]=0;_Owner[p]=0;_Meta[p]=0;_UV[p]=0;}
+}

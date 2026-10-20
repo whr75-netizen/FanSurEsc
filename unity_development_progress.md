@@ -3001,3 +3001,14 @@ Interactable (abstract base class)
 - 기존 실패7위상+국소6입력 C#연결/끝점/결정성 통과. 최종 실제Walk .6625~.7125 5쌍은 같은pose/광원,ready5,unsupported0이다. 66source패킷/GPU가림6개는 정확한다른primitive·UV·더가까운depth확인,main누락/새고립/2x2두께/facing/머리ROI밖변화0이다. .675와.6875모두원본앞면유지, .6875triangle89 UV(.40169582,.23728818)/depth13.76588058와GPU/합성일치,alpha0→1이다.
 - 동일실행원본vs수정후보 전신5프레임GIF Library `libfile_77645e41887481919e2813800894f452`,515847bytes. 공통480x272/native960x544,전신crop후정수2배NEAREST이다. 이전497은7.9804시,이번2.0952시로배경/색은동일조건아니다. 이전과세계정점최대0.477um/투영0.0000611cell오차가있으므로비트동일포즈라고칭하지않는다. 내부224,34는기존actor불투명상태에서정확한앞면owner로바뀌었으며실루엣추가가아니다.
 - 국소원인수정만통과이며새선택규칙의전체loop/기존대각틈·3→2배열/다른시점·clip/성능·build는미검증이다. 기본OFF·미채택을유지하고44d13c0/29d2faf/사용자Quality·Time설정을보존했다. 임시trace제거,입력·Animator/Idle·Play·PostView366·자동시계/실험OFF·리소스해제복원확인. 근거 `docs/artifacts/hair-boundary498/validation.json`, `Current472/Event498/`, `Pairs498/`실패중간본, `Pairs498B/`최종국소본. 전체프로젝트완료가아니다.
+
+
+## 216. de06622 전체 Walk 채택 검증: 가림 정합 통과·틈 폭 손실로 미채택 `[CHARACTER-RENDER-01]`
+
+- 제품변경 없이 기존저장81위상 C#곡선선택/독립기하재평가를 먼저 통과했다. 저장입력에는 localTransform계산전 정점이 없어 독립기하검사는 비트동일privateSelect/GPU검증으로 칭하지 않는다. 이후 현재후보 실제Walk한루프81쌍을 한 번 확보했다. 동일포즈/광원81/81,ready81,fallback/unsupported0이다.
+- 원본1097패킷의 UV/world/GPU일치, GPU가림136개는 정확한다른머리primitive/UV/더가까운depth로 설명됐다. 7개는 기존CPU0.1mm허용치 안이며 오류7개가 아니다. 방출패킷 공통광선가림충돌/main누락/새고립위치/2x2두께/facing/머리ROI밖쓰기0이다. 최초.675/.6875셀도 보인다. closure세계정점최대0.954um/투영0.0000802cell이다.
+- 경로중간빈셀10개를 오류수로세지않았다. 실제3renderer삼각형과depth평면의 해석적polygon차집합으로 셀안원본표면전체가 다른머리submesh0의정확한삼각형들에가려짐을 증명했다. 최대남은면적비4.44e-12이며, 별도5기본도형검사도통과했다. 이는기하증명이며 privateCPU분기로그라고칭하지않는다.
+- 남은틈은미검증으로넘기지않는다. 실제final24위상에서 원형상양의폭통로가 대각점접촉통로로바뀐다. 대표기하선과전체3mesh의최소거리0.0473/0.3602/0.2497/0.2077cell, pixel4연결끊김/pixel8연결유지다. 완전틈폐쇄나24개별버그가아니며 요청된틈폭보존에는미달하는표현손실이다.
+- .9875→0경계의물리틈0.924735→0.907754cell인데 pixel빈영역3→2다. join233,39는그대로이며 중심선floor가234,40→233,40으로움직인다. triangle75지원/UV/공통광선가림없음/8연결/2x2없음의234,40기하대안은빈영역3/곡선오차0.42278vs0.39583으로가능하지만 미렌더대안이다. 필수디자인tradeoff나채택해법으로단정하지않는다. 현재후보는틈폭손실로미채택·기본OFF이며 새패치루프를시작하지않았다.
+- 같은실행전신81프레임GIF Library `libfile_185dfd7012808191ab6ac1f90bcfe63c`,4332893bytes,12native픽셀여백/정수2배NEAREST다. 256색팔레트양자화정보와원본PNG를보존했다. 틈확대 `libfile_712f379861b08191ba48672b32965791`. 현재19.934536시만자동진행임시정지했으며밝기조절없다. 이전시간의배경과동일조건이라칭하지않는다.
+- 입력/Animator·Idle·Play/PostView366/자동시계·실험OFF/리소스해제복원,Console기존진단오류1개변함없음. de06622/44d13c0/사용자Quality·Time설정보존. Editor진단중앙값원본270.46ms/후보392.93ms이며playerFPS·성능준비완료는아니다. 근거 `docs/artifacts/hair-boundary499/validation.json`, `Current472/Loop499/`. 다른clip/시점/크기/build및전체프로젝트완료는미검증이다.

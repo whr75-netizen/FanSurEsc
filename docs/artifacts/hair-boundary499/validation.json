@@ -1,0 +1,325 @@
+{
+  "status": "NOT_ADOPTED_POSITIVE_GAP_WIDTH_LOSS",
+  "adopt": false,
+  "defaultEnabled": false,
+  "productCommit": "de06622920f150d31a11fab538c91fefa9459bf1",
+  "activeProduct": "44d13c0f6a42007f2ac7fd59c174d630f2230e1b preserved",
+  "productCodeChangedThisUnit": false,
+  "wholeProjectComplete": false,
+  "offline": {
+    "status": "PASS_OFFLINE_GEOMETRY_REPLAY",
+    "samples": 81,
+    "uniquePhases": 80,
+    "failures": [],
+    "unsupported": 0,
+    "visiblePackets": 1097,
+    "hiddenCells": 418,
+    "actualCSharpCurveSelection": true,
+    "runtimeFullPass": false,
+    "limitations": "Independent double geometry replay uses saved world vertices; old files omit pre-TransformPoint local data. It is not byte-identical Select/GPU replay and cannot certify all visibility or final gaps. Actual runtime needed. No product code changes."
+  },
+  "coreRendering": {
+    "status": "PASS_RECORDED_RENDERING_AND_OWNERSHIP_CHECKS",
+    "samples": 81,
+    "emittedPackets": 1097,
+    "gpuHidden": 136,
+    "allGpuOwnersRecovered": true,
+    "emittedCoherentVisibilityConflicts": 0,
+    "blankReviewCandidates": 10,
+    "blankAnalyticallyOccluded": 10,
+    "newSingletonPositions": [],
+    "fallback": 0,
+    "unsupported": 0,
+    "solid2x2": 0,
+    "mainMiss": 0,
+    "facingChanges": 0,
+    "outsideHeadNativeChanges": 0,
+    "loopClosure": {
+      "maxWorldVertexDifferenceMetres": 9.5367431640625e-07,
+      "maxHeadProjectedVertexDifferenceCells": 8.0108642578125e-05,
+      "firstOffset": [
+        -2,
+        0
+      ],
+      "lastOffset": [
+        -2,
+        0
+      ],
+      "firstCandidateStatus": "ready",
+      "lastCandidateStatus": "ready"
+    },
+    "adopt": false,
+    "adoptionStatus": "NOT_ADOPTED_POSITIVE_GAP_WIDTH_LOSS",
+    "gapDiagonalOnlyPhases": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      34,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      70,
+      71,
+      72,
+      73
+    ],
+    "gapFullyBlockedIn8": []
+  },
+  "previousFailureTarget": [
+    {
+      "sample": 54,
+      "phase": 0.67500257,
+      "emitted": [
+        {
+          "primitive": 89,
+          "uv": [
+            0.3355668783187866,
+            0.23728817701339722
+          ],
+          "world": [
+            0.17027950286865234,
+            1.5845062732696533,
+            0.02024555206298828
+          ],
+          "depth": 13.76412296295166
+        }
+      ],
+      "headMeta": [
+        13.76412296295166,
+        13.0,
+        0.0,
+        90.0
+      ],
+      "headUV": [
+        0.3355668783187866,
+        0.23728817701339722,
+        90.0,
+        3.0
+      ],
+      "finalAlpha": 1.0
+    },
+    {
+      "sample": 55,
+      "phase": 0.6875026200000001,
+      "emitted": [
+        {
+          "primitive": 89,
+          "uv": [
+            0.4016958177089691,
+            0.23728817701339722
+          ],
+          "world": [
+            0.17010879516601562,
+            1.5834895372390747,
+            0.02211475372314453
+          ],
+          "depth": 13.765880584716797
+        }
+      ],
+      "headMeta": [
+        13.765880584716797,
+        13.0,
+        0.0,
+        90.0
+      ],
+      "headUV": [
+        0.4016958177089691,
+        0.23728817701339722,
+        90.0,
+        3.0
+      ],
+      "finalAlpha": 1.0
+    }
+  ],
+  "decision": {
+    "scope": "Rendering/ownership regressions checked for this one actual Walk cycle; adoption withheld for observed gap-width loss.",
+    "nextBoundaryResponsibility": "Source-cell placement must account for separation between neighbouring visible boundaries. No new patch or optimization loop started in this unit.",
+    "noUnexplainedSourceDropoutFound": true,
+    "designApprovalRequested": false
+  },
+  "restoration": {
+    "receipt": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\restore499_final.json",
+    "play": true,
+    "paused": false,
+    "movement": true,
+    "animator": true,
+    "speed": 1,
+    "locomotion": 0,
+    "captureDeltaTime": 0,
+    "background": true,
+    "hook": "PostView366",
+    "automaticClock": true,
+    "experiment": false,
+    "temporaryResourcesReleased": true
+  },
+  "limitations": [
+    "No otherclip/view/size/build/device validation. Onecycle closure differs<=0.954umworld/0.0000802cellprojection; no perfectbit-identicalclosure claim.",
+    "Actual emitted packets have coherent visibility conflicts0. CPUdiscarded packets were not directly logged in this no-code-change unit;10visuallyblankreviewcells have analytic complete-occlusion evidence.",
+    "Editor pairedrender+1pxreadbacktiming is not playerFPS: source median270.46ms vs candidate392.93ms, pairedmedian+115.04ms. No performance-readiness claim.",
+    "GIF uses256colors/frame,no dithering; paletteerror is reported. Spatial pixelpositions are exact2xNEAREST. LosslessPNGcaptures and gapreview remain for inspection."
+  ],
+  "gapSummary": {
+    "samples": 81,
+    "rawPositiveWidthSplitCases": 24,
+    "finalPositiveWidthSplitCases": 24,
+    "finalFullyBlockedCases": [],
+    "finalDiagonalOnlyCases": [
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      34,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      70,
+      71,
+      72,
+      73
+    ],
+    "method": "Actual source/final masks; exact segment-to-all-projected-triangles intersection/clearance. No supersampled hole-count equivalence or diff-count error inference."
+  },
+  "gapBoundaryTransition": {
+    "rows": [
+      {
+        "sample": 79,
+        "phase": 0.9875037670135498,
+        "ribbon": {
+          "left": 233.6926959626235,
+          "right": 234.2917879158423,
+          "leftOwner": [
+            1,
+            68
+          ],
+          "rightOwner": [
+            1,
+            75
+          ]
+        },
+        "neighbour": {
+          "left": 209.8018749343234,
+          "right": 232.76796145959324,
+          "leftOwner": [
+            2,
+            4369
+          ],
+          "rightOwner": [
+            0,
+            627
+          ]
+        },
+        "continuousGap": 0.9247345030302654,
+        "midlineAt40_5": [
+          234.01564855195267
+        ],
+        "selectedRow40": [
+          [
+            234,
+            40
+          ]
+        ],
+        "join233_39": true,
+        "currentPocketArea": 3
+      },
+      {
+        "sample": 80,
+        "phase": 1.0000038146972656,
+        "ribbon": {
+          "left": 233.66680648746222,
+          "right": 234.2713872910346,
+          "leftOwner": [
+            1,
+            68
+          ],
+          "rightOwner": [
+            1,
+            73
+          ]
+        },
+        "neighbour": {
+          "left": 209.78897424322923,
+          "right": 232.75905230130306,
+          "leftOwner": [
+            2,
+            4369
+          ],
+          "rightOwner": [
+            0,
+            721
+          ]
+        },
+        "continuousGap": 0.9077541861591669,
+        "midlineAt40_5": [
+          233.99211588043906
+        ],
+        "selectedRow40": [
+          [
+            233,
+            40
+          ]
+        ],
+        "join233_39": true,
+        "currentPocketArea": 2,
+        "unrenderedLayoutWitness": {
+          "replace": [
+            233,
+            40
+          ],
+          "withCell": [
+            234,
+            40
+          ],
+          "connected8": true,
+          "solid2x2": 0,
+          "triangleIntersectionArea": 0.2573815673185891,
+          "originalPrimitive": 75,
+          "uv": [
+            0.4957215467417241,
+            0.36682227643950344
+          ],
+          "world": [
+            0.15113473219534013,
+            1.6158155251614357,
+            0.02097849732398337
+          ],
+          "coherentBlockers": [],
+          "centreCurveError": 0.42278083268256694,
+          "currentCentreCurveError": 0.3958329097546309,
+          "hypotheticalRawPocketArea": 3,
+          "notGPUOrFinalRendered": true
+        }
+      }
+    ],
+    "judgment": "Confirmed source-pixel placement loss of positive gap width. Continuous gap changes only~0.017cell while midpoint-floor placement changes one entirecell. This is not physical one-cell gap deformation or extra joining width. A feasible local layout witness prevents claiming an unavoidable tradeoff, but is not an adopted or runtimevalidated replacement. Current candidate fails requested gap-width preservation; no new patch."
+  },
+  "delivery": {
+    "gifLibraryId": "libfile_185dfd7012808191ab6ac1f90bcfe63c",
+    "gifBytes": 4332893,
+    "gapReviewLibraryId": "libfile_712f379861b08191ba48672b32965791"
+  }
+}

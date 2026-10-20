@@ -2925,3 +2925,11 @@ Interactable (abstract base class)
 - `[증거·한계]` 전달물은 `docs/artifacts/character-silhouette-20261020/`의 `walking-before-after.gif`, `validation.json`, `active-character.json`, `decision.json`, `manifest.json`이다. GIF는 80개 원본 중 격프레임40개를 30fps에 맞춰 표시하고, 관찰용으로만 nearest 4배 확대했다. 전체 float·캡처 코드·그래프·실패 근거는 `LocalOnly/SilhouetteWalk20261020/`에 보존한다. 다른 시점/clip·실제 입력 이동 결합·thin 명암 불연속·Player build·실행 성능은 미검증이다. 테스트의 다중 GPU readback 시간은 제품 성능으로 보고하지 않는다.
 - `[종료]` 원본 Editor에서 Play=false, compiling=false, GameMap1 dirty=false, background=false, captureDeltaTime=0, timeScale=1을 읽어 확인했다. GIF40프레임·총1330ms와 문서 크기 검사, 관련 diff 공백 검사가 통과했다. 기존 QualitySettings/TimeManager 및 다른 미추적 자산은 보존하고 이번 변경 경로만 커밋한다.
 
+## 208. 사용자 요청에 따른 돌기 필터만 철회 `[CHARACTER-RENDER-01]`
+
+- `[요청·판정]` 사용자가 §207 비교에서 개선을 확인하지 못한 뒤, 추가한 돌기 필터와 연결 코드만 수정 전으로 되돌리고 다른 작업과 수정본 기록을 보존하도록 요청했다. §207의 제거61셀은 80프레임 합계이며 사용자 지적 현상의 시각적 해결을 입증한 수치가 아니다.
+- `[복원]` `HeadLocal367.cs`에서 `sourceContourEnabled`, `sourceContourResult`, `RefineSourceSilhouette`와 `RenderFrame`의 호출만 제거했다. 파일의 Git blob `29474955001e6b593ed6532af83fedf8d76dc35f`는 필터 추가 전 커밋 `111638727f8be1b064916c0c48ddec1f1d903389`와 정확히 같다. 추가했던 `SourceSilhouetteContour.cs`와 해당 `.meta`만 제거했고, `Assets`의 C#에서 필터 참조가 남지 않았음을 확인했다.
+- `[보존]` 수정본은 기존 로컬 커밋 `7e28757fb33f1b6281707fc11db1a81de4350680`에 보존한다. `docs/artifacts/character-silhouette-20261020/`의 기존 파일 전체와 기존 dirty `QualitySettings.asset`·`TimeManager.asset`은 복원 전후 SHA-256이 동일하다. 다른 자산·씬·prefab·캐릭터 원본·애니메이션은 변경하지 않았다. §207 및 비교 원본은 당시 실험 기록으로 남긴다.
+- `[검증]` Unity Editor 8176의 실제 프로젝트 경로를 확인하고 기존 재생을 중지했다. 복원 후 `PLAY=False`, `COMPILING=False`, `SCRIPT_COMPILATION_FAILED=False`, `GameMap1 DIRTY=False`, 필터 에셋 없음·기존 Head 스크립트 존재를 읽었다. 변경 전후 Error/Exception/Assert 조회 모두 0건이다. 명시적 Refresh 호출은 discovery 파일 부재로 실행되지 않았으나 이후 재연결된 Editor에서 위 import/compile 상태를 확인했다.
+- `[증거·범위]` `LocalOnly/SilhouetteWalk20261020/Rollback20261020/`에 기준 해시·정적 복원 검사·Editor 호출 결과를 보존한다. 이번 작업은 기존 코드 복원이며 걷기 재촬영·새 시각 수정·Standalone build는 실행하지 않았다. 종료 상태는 Play=false이고 씬을 저장하지 않았다.
+

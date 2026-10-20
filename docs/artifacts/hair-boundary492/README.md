@@ -16,3 +16,7 @@ whole-loop temporal quality, other views/clips and performance remain unverified
 Diagnostic entry in the shared workspace: `Current472/CapturePairs492.cs` through the installed official Unity relay.
 It captures only phase0.275..0.3625 and restores controls on completion/error.
 Call `HairBoundary491.Release()` after a trial to disable and release temporary source resources.
+
+## Interpretation correction493
+
+The remaining5cell event is not accepted as normal connected motion. Only the simplified RDPchords cross the grid; the full original midline does not. Visibility-gate evidence is incomplete. See `correction493.json` for the spatial/temporal classification and qualified offline candidates. No source-code change or new capture was made.

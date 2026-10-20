@@ -1,5 +1,7 @@
 # Closed hair region source 502
 
+This document records checkpoint `60191b59`. The current default-OFF follow-up changes only the area input; see [area504](../hair-area504/README.md). The RDP fidelity input described below is historical502 behavior.
+
 This is a default-OFF, NOT-ADOPTED prototype in the current Player renderer. It replaces the
 old 491 open-ribbon source while enabled. It is not automatically adopted and
 does not establish final pixel-art or animation quality.

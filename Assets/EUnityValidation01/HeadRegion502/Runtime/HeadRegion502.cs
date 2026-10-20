@@ -11,6 +11,8 @@ public static class HeadRegion502
     public static bool Enabled;
     public static string Status = "disabled";
     public static readonly List<Vector2[]> SourceLoops = new();
+    // RDP approximation diagnostics. SelectedLoops owns the chosen boundary;
+    // its fidelity input is the original closed source region, not this fit.
     public static readonly List<Vector2[]> Curves = new();
     public static readonly List<Vector2[]> SelectedLoops = new();
     public static readonly List<Packet> Packets = new();
@@ -182,7 +184,20 @@ public static class HeadRegion502
         }
         for (int i = 0; i < areas.Length; i++) areas[i] = Mathf.Clamp01(areas[i]); return areas;
     }
-    // Binary s/t cut: analytic area loss + shared boundary length. All cells are
+    // Exact integral of the closed1/8-cell source-region polygons. The extraction
+    // grid already partitions each logical cell into64 equal-area squares. This
+    // measures fidelity; it is not a threshold or a selected output mask.
+    static float[] SourceCellAreas504(bool[] region, int width, int height)
+    {
+        int scale = ExtractionScale, stride = width * scale;
+        if (region.Length != stride * height * scale) throw new ArgumentException("Source region dimensions differ");
+        var count = new int[width * height];
+        for (int y = 0; y < height * scale; y++) for (int x = 0; x < stride; x++)
+            if (region[y * stride + x]) count[(y / scale) * width + x / scale]++;
+        float inverseArea = 1f / (scale * scale);
+        return count.Select(n => n * inverseArea).ToArray();
+    }
+    // Binary s/t cut: source-region area loss + shared boundary length. All cells are
     // selected together. This has no input raster threshold, morphology, per-strand
     // topology constraint, animation history, or coordinate/phase special case.
     public static bool[] SelectRegions(float[] areas, int width, int height)
@@ -282,7 +297,7 @@ public static class HeadRegion502
             var indices = Enumerable.Range(0, mesh.subMeshCount).Select(sm => mesh.GetIndices(sm)).ToArray();
             var union = Union(projected, indices, out var bounds); SourceLoops.AddRange(Boundaries(union, bounds, ExtractionScale));
             Curves.AddRange(SourceLoops.Select(ClosedCurve).Where(p => p.Length >= 3));
-            var areas = CellAreas(Curves, bounds); var selected = SelectRegions(areas, bounds.width, bounds.height);
+            var areas = SourceCellAreas504(union, bounds.width, bounds.height); var selected = SelectRegions(areas, bounds.width, bounds.height);
             SelectedLoops.AddRange(Boundaries(selected, bounds, 1));
             for (int y = 0; y < bounds.height; y++) for (int x = 0; x < bounds.width; x++) if (selected[y * bounds.width + x]) Hair[(y + bounds.y) * 480 + x + bounds.x] = true;
             triangles.Clear();

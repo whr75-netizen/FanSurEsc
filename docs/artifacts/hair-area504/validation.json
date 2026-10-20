@@ -1,0 +1,885 @@
+{
+  "status": "PARTIAL_IMPROVEMENT_NOT_ADOPTED_DEFAULT_OFF",
+  "checkpoint502": "60191b59a22dfe6a2abf59e2128d935e8d0c35ff",
+  "changedRuntimeFile": "Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs",
+  "runtimeSha256": "9b114b2a9ec65a97d465343b1985ff65adfa7204c9d607f7788ad3778738c5b1",
+  "singleChange": "RDP-fit area replaced by integral of original1/8 closed extracted source region; all other costs and stages unchanged",
+  "firstActualFive": {
+    "status": "ACTUAL_FIRST_ADJACENT_FIVE",
+    "rows": [
+      {
+        "index": 0,
+        "phase": 1.0000025,
+        "offlineMaskDifferenceCells": 0,
+        "sourceHairCoverageDifferenceFromRecorded502": 0,
+        "representative": {
+          "BASE": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              200,
+              182
+            ]
+          },
+          "ALT": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              200,
+              182
+            ]
+          }
+        }
+      },
+      {
+        "index": 1,
+        "phase": 1.01250255,
+        "offlineMaskDifferenceCells": 0,
+        "sourceHairCoverageDifferenceFromRecorded502": 0,
+        "representative": {
+          "BASE": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              199,
+              182
+            ]
+          },
+          "ALT": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              199,
+              182
+            ]
+          }
+        }
+      },
+      {
+        "index": 2,
+        "phase": 1.0250026,
+        "offlineMaskDifferenceCells": 0,
+        "sourceHairCoverageDifferenceFromRecorded502": 0,
+        "representative": {
+          "BASE": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              199,
+              182
+            ]
+          },
+          "ALT": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              199,
+              182
+            ]
+          }
+        }
+      },
+      {
+        "index": 3,
+        "phase": 1.03750265,
+        "offlineMaskDifferenceCells": 0,
+        "sourceHairCoverageDifferenceFromRecorded502": 0,
+        "representative": {
+          "BASE": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              199,
+              182
+            ]
+          },
+          "ALT": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              199,
+              182
+            ]
+          }
+        }
+      },
+      {
+        "index": 4,
+        "phase": 1.05000269,
+        "offlineMaskDifferenceCells": 0,
+        "sourceHairCoverageDifferenceFromRecorded502": 0,
+        "representative": {
+          "BASE": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              199,
+              182
+            ]
+          },
+          "ALT": {
+            "role": 4,
+            "pngRGB": [
+              218,
+              199,
+              182
+            ]
+          }
+        }
+      }
+    ],
+    "allOfflineMasksMatch": true,
+    "note": "Same current source/candidate pair. No spatial alignment offsets added for comparison."
+  },
+  "groupedActualAnalysis": {
+    "status": "ACTUAL_SHORT_WALK_NOT_FULL_LOOP",
+    "differencesAreNotErrorCounts": true,
+    "allPoseLightMatched": true,
+    "outsideTotals": {
+      "Raw": {
+        "hair": 0,
+        "face": 0
+      },
+      "Hair": {
+        "hair": 0,
+        "face": 0
+      },
+      "Final": {
+        "hair": 0,
+        "face": 0
+      }
+    },
+    "packetMismatchTotal": 0,
+    "bodyColourMismatchTotal": 5,
+    "unsupportedTotal": 0,
+    "gif": {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Groups504\\WALK504_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 936891,
+      "frames": 33,
+      "cropNativePixels": [
+        334,
+        50,
+        556,
+        356
+      ],
+      "displayDurationMs": 80,
+      "captureDeltaSeconds": 0.016666666666666666,
+      "interpolation": false,
+      "note": "33 paired full-body frames in eight labelled adjacent intervals; gaps are not continuous animation. No spatial resize/interpolation; 80ms slow inspection; original PNG/buffers preserved.",
+      "sha256": "20a85c4ec1c1c1f3e1efafa1e03f9caf99337b47b2d542c9b509e562ca444dc8",
+      "groups": 8
+    }
+  },
+  "classification": {
+    "status": "AREA_INPUT_CHANGE_PARTIAL_IMPROVEMENT_NOT_ADOPTED",
+    "runtimeFrames": 38,
+    "groupedFrames": 33,
+    "maskPredictionMismatch": 0,
+    "bodyDifferences": [
+      {
+        "target": 32,
+        "mainXY": [
+          221,
+          59
+        ],
+        "baseRole": 11,
+        "altRole": 11,
+        "baseRGB": [
+          0.027971193194389343,
+          0.09421875327825546,
+          0.14923828840255737
+        ],
+        "altRGB": [
+          0.015384156256914139,
+          0.051820315420627594,
+          0.08208105713129044
+        ],
+        "baseOwner": [
+          11.0,
+          1.0,
+          13.974502563476562,
+          -13188.0
+        ],
+        "altOwner": [
+          11.0,
+          1.0,
+          13.974502563476562,
+          -13188.0
+        ],
+        "sameMeta": true,
+        "sameUV": true,
+        "coverageAudit": {
+          "BASE": {
+            "outer": false,
+            "thin": false,
+            "reason": 0
+          },
+          "ALT": {
+            "outer": true,
+            "thin": false,
+            "reason": 1
+          }
+        },
+        "rgbRatioError055": 1.4901161277114383e-09,
+        "classification": "EXPOSED_EXISTING_OUTER_BAND"
+      },
+      {
+        "target": 33,
+        "mainXY": [
+          221,
+          59
+        ],
+        "baseRole": 11,
+        "altRole": 11,
+        "baseRGB": [
+          0.031464844942092896,
+          0.1040625050663948,
+          0.16312500834465027
+        ],
+        "altRGB": [
+          0.017305664718151093,
+          0.05723438039422035,
+          0.089718759059906
+        ],
+        "baseOwner": [
+          11.0,
+          1.0,
+          13.97305679321289,
+          -13188.0
+        ],
+        "altOwner": [
+          11.0,
+          1.0,
+          13.97305679321289,
+          -13188.0
+        ],
+        "sameMeta": true,
+        "sameUV": true,
+        "coverageAudit": {
+          "BASE": {
+            "outer": false,
+            "thin": false,
+            "reason": 0
+          },
+          "ALT": {
+            "outer": true,
+            "thin": false,
+            "reason": 1
+          }
+        },
+        "rgbRatioError055": 4.470348355378739e-09,
+        "classification": "EXPOSED_EXISTING_OUTER_BAND"
+      },
+      {
+        "target": 39,
+        "mainXY": [
+          222,
+          58
+        ],
+        "baseRole": 11,
+        "altRole": 11,
+        "baseRGB": [
+          0.031464844942092896,
+          0.1040625050663948,
+          0.16312500834465027
+        ],
+        "altRGB": [
+          0.017305664718151093,
+          0.05723438039422035,
+          0.089718759059906
+        ],
+        "baseOwner": [
+          11.0,
+          1.0,
+          13.966053009033203,
+          -13188.0
+        ],
+        "altOwner": [
+          11.0,
+          1.0,
+          13.966053009033203,
+          -13188.0
+        ],
+        "sameMeta": true,
+        "sameUV": true,
+        "coverageAudit": {
+          "BASE": {
+            "outer": false,
+            "thin": false,
+            "reason": 0
+          },
+          "ALT": {
+            "outer": true,
+            "thin": false,
+            "reason": 1
+          }
+        },
+        "rgbRatioError055": 4.470348355378739e-09,
+        "classification": "EXPOSED_EXISTING_OUTER_BAND"
+      },
+      {
+        "target": 53,
+        "mainXY": [
+          222,
+          58
+        ],
+        "baseRole": 11,
+        "altRole": 11,
+        "baseRGB": [
+          0.031464844942092896,
+          0.1040625050663948,
+          0.16312500834465027
+        ],
+        "altRGB": [
+          0.017305664718151093,
+          0.05723438039422035,
+          0.089718759059906
+        ],
+        "baseOwner": [
+          11.0,
+          1.0,
+          13.969758033752441,
+          -13188.0
+        ],
+        "altOwner": [
+          11.0,
+          1.0,
+          13.969758033752441,
+          -13188.0
+        ],
+        "sameMeta": true,
+        "sameUV": true,
+        "coverageAudit": {
+          "BASE": {
+            "outer": false,
+            "thin": false,
+            "reason": 0
+          },
+          "ALT": {
+            "outer": true,
+            "thin": false,
+            "reason": 1
+          }
+        },
+        "rgbRatioError055": 4.470348355378739e-09,
+        "classification": "EXPOSED_EXISTING_OUTER_BAND"
+      },
+      {
+        "target": 76,
+        "mainXY": [
+          209,
+          56
+        ],
+        "baseRole": 11,
+        "altRole": 11,
+        "baseRGB": [
+          0.703125,
+          0.6328125,
+          0.5821875333786011
+        ],
+        "altRGB": [
+          0.38671875,
+          0.3480468690395355,
+          0.32020315527915955
+        ],
+        "baseOwner": [
+          11.0,
+          1.0,
+          13.932965278625488,
+          -12216.0
+        ],
+        "altOwner": [
+          11.0,
+          1.0,
+          13.932965278625488,
+          -12216.0
+        ],
+        "sameMeta": true,
+        "sameUV": true,
+        "coverageAudit": {
+          "BASE": {
+            "outer": false,
+            "thin": false,
+            "reason": 0
+          },
+          "ALT": {
+            "outer": true,
+            "thin": false,
+            "reason": 1
+          }
+        },
+        "rgbRatioError055": 1.1920928910669204e-08,
+        "classification": "EXPOSED_EXISTING_OUTER_BAND"
+      }
+    ],
+    "remainingReversalObservations": 9,
+    "groupedTemporalEpisodes": 8,
+    "eventClassifications": [
+      {
+        "index": 22,
+        "headXY": [
+          220,
+          57
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          8,
+          14,
+          8
+        ],
+        "packetSupport": [
+          [],
+          [
+            {
+              "submesh": 2,
+              "primitive": 2800,
+              "uv": {
+                "x": 0.7919056415557861,
+                "y": 0.16636846959590912
+              },
+              "depth": 13.731657028198242,
+              "distance": 0.27154403924942017
+            }
+          ],
+          []
+        ],
+        "selectedSequence": [
+          0,
+          1,
+          0
+        ],
+        "firstCause": "EIGHT_BY_EIGHT_EXTRACTION_AREA_ALIAS",
+        "source8AreaTurnsBack": true,
+        "evidence": "Continuous projected triangle-union area is monotonic. The 8x area turns back in this interval.",
+        "counterfactualLimit": "With recorded neighbour labels, exact local area changes at least one selected/omitted preference in the interval. This diagnoses an area-input error contribution, not a full exact-area global solve or a proven final replacement.",
+        "quality": "CONFIRMED_INPUT_ERROR_CONTRIBUTION_NOT_NORMAL_OCCLUSION"
+      },
+      {
+        "index": 31,
+        "headXY": [
+          221,
+          58
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          14,
+          8,
+          14
+        ],
+        "packetSupport": [
+          [
+            {
+              "submesh": 2,
+              "primitive": 4994,
+              "uv": {
+                "x": 0.20711779594421387,
+                "y": 0.07541781663894653
+              },
+              "depth": 13.752432823181152,
+              "distance": 0.0
+            }
+          ],
+          [],
+          [
+            {
+              "submesh": 2,
+              "primitive": 4994,
+              "uv": {
+                "x": 0.1763416975736618,
+                "y": 0.0742943212389946
+              },
+              "depth": 13.752327919006348,
+              "distance": 0.0
+            }
+          ]
+        ],
+        "selectedSequence": [
+          1,
+          0,
+          1
+        ],
+        "firstCause": "EIGHT_BY_EIGHT_EXTRACTION_AREA_ALIAS",
+        "source8AreaTurnsBack": true,
+        "evidence": "Continuous projected triangle-union area is monotonic. The 8x area turns back in this interval.",
+        "counterfactualLimit": "With recorded neighbour labels, exact local area changes at least one selected/omitted preference in the interval. This diagnoses an area-input error contribution, not a full exact-area global solve or a proven final replacement.",
+        "quality": "CONFIRMED_INPUT_ERROR_CONTRIBUTION_NOT_NORMAL_OCCLUSION"
+      },
+      {
+        "index": 38,
+        "headXY": [
+          230,
+          54
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          0,
+          14,
+          0
+        ],
+        "packetSupport": [
+          [],
+          [
+            {
+              "submesh": 2,
+              "primitive": 4546,
+              "uv": {
+                "x": 0.06532300263643265,
+                "y": 0.1276477575302124
+              },
+              "depth": 13.780219078063965,
+              "distance": 0.0
+            }
+          ],
+          []
+        ],
+        "selectedSequence": [
+          0,
+          1,
+          0
+        ],
+        "firstCause": "EIGHT_BY_EIGHT_EXTRACTION_AREA_ALIAS",
+        "source8AreaTurnsBack": true,
+        "evidence": "Continuous projected triangle-union area is monotonic. The 8x area turns back in this interval.",
+        "counterfactualLimit": "With recorded neighbour labels, exact local area changes at least one selected/omitted preference in the interval. This diagnoses an area-input error contribution, not a full exact-area global solve or a proven final replacement.",
+        "quality": "CONFIRMED_INPUT_ERROR_CONTRIBUTION_NOT_NORMAL_OCCLUSION"
+      },
+      {
+        "index": 53,
+        "headXY": [
+          215,
+          57
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          8,
+          14,
+          8
+        ],
+        "packetSupport": [
+          [],
+          [
+            {
+              "submesh": 2,
+              "primitive": 3237,
+              "uv": {
+                "x": 0.9654203057289124,
+                "y": 0.1157904714345932
+              },
+              "depth": 13.743579864501953,
+              "distance": 0.11162010580301285
+            }
+          ],
+          []
+        ],
+        "selectedSequence": [
+          0,
+          1,
+          0
+        ],
+        "firstCause": "EXTRACTION_AREA_ERROR_WITH_NEIGHBOUR_CHANGE",
+        "source8AreaTurnsBack": false,
+        "evidence": "Continuous area and 8x area are monotonic, but 8x centre area overestimation changes the local preference sign and the next pose also changes neighbour labels. Both contributions are recorded; no claim of a source-area extremum.",
+        "counterfactualLimit": "With recorded neighbour labels, exact local area changes at least one selected/omitted preference in the interval. This diagnoses an area-input error contribution, not a full exact-area global solve or a proven final replacement.",
+        "quality": "CONFIRMED_INPUT_ERROR_CONTRIBUTION_NOT_NORMAL_OCCLUSION"
+      },
+      {
+        "index": 58,
+        "headXY": [
+          230,
+          54
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          0,
+          14,
+          0
+        ],
+        "packetSupport": [
+          [],
+          [
+            {
+              "submesh": 2,
+              "primitive": 4543,
+              "uv": {
+                "x": 0.14731642603874207,
+                "y": 0.15622401237487793
+              },
+              "depth": 13.775978088378906,
+              "distance": 0.0
+            }
+          ],
+          []
+        ],
+        "selectedSequence": [
+          0,
+          1,
+          0
+        ],
+        "firstCause": "EIGHT_BY_EIGHT_EXTRACTION_AREA_ALIAS",
+        "source8AreaTurnsBack": true,
+        "evidence": "Continuous projected triangle-union area is monotonic. The 8x area turns back in this interval.",
+        "counterfactualLimit": "With recorded neighbour labels, exact local area changes at least one selected/omitted preference in the interval. This diagnoses an area-input error contribution, not a full exact-area global solve or a proven final replacement.",
+        "quality": "CONFIRMED_INPUT_ERROR_CONTRIBUTION_NOT_NORMAL_OCCLUSION"
+      },
+      {
+        "index": 69,
+        "headXY": [
+          220,
+          57
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          14,
+          8,
+          14
+        ],
+        "packetSupport": [
+          [
+            {
+              "submesh": 2,
+              "primitive": 3159,
+              "uv": {
+                "x": 1.3879538774490356,
+                "y": 0.17963871359825134
+              },
+              "depth": 13.7323579788208,
+              "distance": 0.2752091884613037
+            }
+          ],
+          [],
+          [
+            {
+              "submesh": 2,
+              "primitive": 4992,
+              "uv": {
+                "x": 0.13450244069099426,
+                "y": 0.1371246874332428
+              },
+              "depth": 13.75036334991455,
+              "distance": 0.2944203317165375
+            }
+          ]
+        ],
+        "selectedSequence": [
+          1,
+          0,
+          1
+        ],
+        "firstCause": "EIGHT_BY_EIGHT_EXTRACTION_AREA_ALIAS",
+        "source8AreaTurnsBack": true,
+        "evidence": "Continuous projected triangle-union area is monotonic. The 8x area turns back in this interval.",
+        "counterfactualLimit": "With recorded neighbour labels, exact local area changes at least one selected/omitted preference in the interval. This diagnoses an area-input error contribution, not a full exact-area global solve or a proven final replacement.",
+        "quality": "CONFIRMED_INPUT_ERROR_CONTRIBUTION_NOT_NORMAL_OCCLUSION"
+      },
+      {
+        "index": 70,
+        "headXY": [
+          220,
+          57
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          8,
+          14,
+          8
+        ],
+        "packetSupport": [
+          [],
+          [
+            {
+              "submesh": 2,
+              "primitive": 4992,
+              "uv": {
+                "x": 0.13450244069099426,
+                "y": 0.1371246874332428
+              },
+              "depth": 13.75036334991455,
+              "distance": 0.2944203317165375
+            }
+          ],
+          []
+        ],
+        "selectedSequence": [
+          0,
+          1,
+          0
+        ],
+        "firstCause": "EIGHT_BY_EIGHT_EXTRACTION_AREA_ALIAS",
+        "source8AreaTurnsBack": true,
+        "evidence": "Continuous projected triangle-union area is monotonic. The 8x area turns back in this interval.",
+        "counterfactualLimit": "With recorded neighbour labels, exact local area changes at least one selected/omitted preference in the interval. This diagnoses an area-input error contribution, not a full exact-area global solve or a proven final replacement.",
+        "quality": "CONFIRMED_INPUT_ERROR_CONTRIBUTION_NOT_NORMAL_OCCLUSION"
+      },
+      {
+        "index": 70,
+        "headXY": [
+          224,
+          58
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          14,
+          0,
+          14
+        ],
+        "packetSupport": [
+          [
+            {
+              "submesh": 2,
+              "primitive": 2570,
+              "uv": {
+                "x": 1.306992769241333,
+                "y": 0.12460923194885254
+              },
+              "depth": 13.753860473632812,
+              "distance": 0.00011627007188508287
+            }
+          ],
+          [],
+          [
+            {
+              "submesh": 2,
+              "primitive": 2571,
+              "uv": {
+                "x": 1.3457763195037842,
+                "y": 0.1172868013381958
+              },
+              "depth": 13.7548246383667,
+              "distance": 0.0
+            }
+          ]
+        ],
+        "selectedSequence": [
+          1,
+          0,
+          1
+        ],
+        "firstCause": "COUPLED_NEIGHBOUR_SELECTION_CHANGE",
+        "evidence": "Area decreases monotonically in both source8 and continuous union. Boundary delta changes +.0820101 to -.1640202 at the last pose, reversing preference despite decreasing area. Exact local-area substitution retains centre omission; neighbour cause and globally better shape are not yet established.",
+        "quality": "UNRESOLVED_SPATIAL_SELECTION_NOT_PROVEN_NORMAL_OCCLUSION"
+      },
+      {
+        "index": 75,
+        "headXY": [
+          233,
+          39
+        ],
+        "monotonicContinuousUnionArea": true,
+        "actualFinalRoles": [
+          0,
+          13,
+          0
+        ],
+        "packetSupport": [
+          [],
+          [
+            {
+              "submesh": 1,
+              "primitive": 64,
+              "uv": {
+                "x": 0.4340377151966095,
+                "y": 0.45535168051719666
+              },
+              "depth": 13.729532241821289,
+              "distance": 0.0
+            }
+          ],
+          []
+        ],
+        "selectedSequence": [
+          0,
+          1,
+          0
+        ],
+        "firstCause": "EIGHT_BY_EIGHT_EXTRACTION_AREA_ALIAS",
+        "source8AreaTurnsBack": true,
+        "evidence": "Continuous projected triangle-union area is monotonic. The 8x area turns back in this interval.",
+        "counterfactualLimit": "With recorded neighbour labels, exact local area changes at least one selected/omitted preference in the interval. This diagnoses an area-input error contribution, not a full exact-area global solve or a proven final replacement.",
+        "quality": "CONFIRMED_INPUT_ERROR_CONTRIBUTION_NOT_NORMAL_OCCLUSION"
+      }
+    ],
+    "limits": [
+      "No new full-loop runtime capture.",
+      "Seven temporal episodes (eight observations) have extraction-area instability evidence; one episode retains coupled-neighbour ambiguity.",
+      "Exact union calculations include all projected hair before occlusion; actual final owner changes are already selected at the mask stage, so they are not explained as a later depth discard.",
+      "Six of eight stable-fill observations were captured in adjacent groups; 47 and64 remain saved-input only.",
+      "No claim of full pixel-art/colour/temporal quality, all eyes/front view, or other clips/cameras."
+    ]
+  },
+  "saved81WholeMaskObservations": {
+    "old": 128,
+    "candidate": 11,
+    "introduced": 8,
+    "removed": 125,
+    "unchanged": 3,
+    "notAnErrorCount": true
+  },
+  "old49SelectionClassifications": {
+    "SHIFTED_TRANSITION": 8,
+    "STABLE_FILL_REQUIRES_SHAPE_REVIEW": 8,
+    "STABLE_OMISSION": 32,
+    "UNCHANGED_010": 1
+  },
+  "restoredState": "Play true; paused false; experiments491/502 false; movement true; Animator enabled speed1 Locomotion0 Idle; captureDelta0; automaticClock true; PostView366 single hook; compiling false",
+  "restorationEvidence": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\RESTORED_GROUPS504.json",
+  "settingsSha256": {
+    "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "sharedOwnerLinesSha256": null,
+  "deliverables": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\First504\\WALK504_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 151821,
+      "sha256": "6f739d76d3e35d12459a8a401529889b0286d49bd7b0f7f6bdb00dd594a5aa05"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Groups504\\WALK504_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 936891,
+      "sha256": "20a85c4ec1c1c1f3e1efafa1e03f9caf99337b47b2d542c9b509e562ca444dc8"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Groups504\\REMAINING_EVENTS504.png",
+      "bytes": 62550,
+      "sha256": "0569c1e679e6e284064f0d4c34b2aa10143f3a4fd11be046e8d8586468459057"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Groups504\\STABLE_FILL_SHAPES504.png",
+      "bytes": 50799,
+      "sha256": "43b18192f343618b736cbe78c782ad15ac695e3b7861ed573080777589e2bf11"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\RESTORED_GROUPS504.json",
+      "bytes": 19741,
+      "sha256": "3c03ab78101d91e38165ca2b563bcdc31fb51bb12f414d4c680bc5965bec252d"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Groups504\\GROUP_REVIEW504.json",
+      "bytes": 171253,
+      "sha256": "c47d5b3db9a82c493bed9fd1ce0f9d02f1da037377496c0c269d2be0ec735e2a"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Groups504\\CLASSIFICATION504.json",
+      "bytes": 17560,
+      "sha256": "466f1f176d88904e7de3410fdfb2b41188489642e76f5c41aab2fc05956afaaa"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Cause504\\REPLAY_ALL504.json",
+      "bytes": 126708,
+      "sha256": "9183d38fd6106b47abfca01a823421fecd6dfda994e3d17ca509c5254a7c8a1c"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Cause504\\COMPARISON504.json",
+      "bytes": 13878,
+      "sha256": "5be0211e90afb1996922d5a7003b1cdb8afe8d7adc20fc4fc02d0fb19482a0b0"
+    }
+  ],
+  "library": "403 restriction; not retried",
+  "limits": [
+    "38 paired actual poses, not full504 runtime loop.",
+    "Remaining extraction-area and coupled-selection transients prevent adoption.",
+    "No full exact-area global replacement or subsequent algorithm patch.",
+    "Other clips/cameras, front eyes, grounding, build and target-player performance remain unverified."
+  ],
+  "sharedOwnerLinesEvidence": "See preserved shared-source fingerprint in FINAL_REPORT502.json; no shared compute edited."
+}

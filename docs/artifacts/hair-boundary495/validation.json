@@ -1,0 +1,916 @@
+{
+  "status": "FAILED_FUNCTIONAL_ADOPTION_BLOCKED",
+  "candidateCommit": "406ce305bd28385437bc11f7e32b68fd62e67f35",
+  "scope": "Exactly one actual Walk cycle,81same-execution pairs including closure, source alternative OFF by default; no product code changes or second loop.",
+  "summary": {
+    "status": "FAILED_ADOPTION_FUNCTIONAL_FALLBACK",
+    "commit": "406ce305bd28385437bc11f7e32b68fd62e67f35",
+    "actualWalkSamples": 81,
+    "fullCyclesCaptured": 1,
+    "allSamePose": true,
+    "allSameLightWithinPair": true,
+    "fixedHour": [
+      20.2035751
+    ],
+    "candidateReadySamples": 73,
+    "candidateFallbackSamples": 8,
+    "failed": [
+      {
+        "sample": 0,
+        "phase": 0,
+        "status": "unsupported: Original curve selection is not8connected",
+        "offlineViolations": [
+          {
+            "kind": "gap",
+            "fromCell": [
+              233,
+              40
+            ],
+            "toCell": [
+              232,
+              38
+            ],
+            "previous": {
+              "span": [
+                20,
+                26
+              ],
+              "curveSegment": [
+                23,
+                24
+              ],
+              "axis": 1,
+              "slice": 40.5,
+              "point": [
+                233.99210303738096,
+                40.5
+              ],
+              "cell": [
+                233,
+                40
+              ]
+            },
+            "current": {
+              "span": [
+                26,
+                39
+              ],
+              "curveSegment": [
+                30,
+                31
+              ],
+              "axis": 0,
+              "slice": 232.5,
+              "point": [
+                232.5,
+                38.995067277605266
+              ],
+              "cell": [
+                232,
+                38
+              ]
+            }
+          }
+        ],
+        "kept": [
+          0,
+          14,
+          20,
+          26,
+          39,
+          53,
+          59
+        ]
+      },
+      {
+        "sample": 55,
+        "phase": 0.6875026200000001,
+        "status": "unsupported: Original curve selection is not8connected",
+        "offlineViolations": [
+          {
+            "kind": "gap",
+            "fromCell": [
+              234,
+              40
+            ],
+            "toCell": [
+              233,
+              38
+            ],
+            "previous": {
+              "span": [
+                20,
+                26
+              ],
+              "curveSegment": [
+                21,
+                22
+              ],
+              "axis": 1,
+              "slice": 40.5,
+              "point": [
+                234.9135985812351,
+                40.5
+              ],
+              "cell": [
+                234,
+                40
+              ]
+            },
+            "current": {
+              "span": [
+                26,
+                39
+              ],
+              "curveSegment": [
+                29,
+                30
+              ],
+              "axis": 0,
+              "slice": 233.5,
+              "point": [
+                233.5,
+                38.86851902765216
+              ],
+              "cell": [
+                233,
+                38
+              ]
+            }
+          }
+        ],
+        "kept": [
+          0,
+          8,
+          14,
+          20,
+          26,
+          39,
+          53,
+          59
+        ]
+      },
+      {
+        "sample": 56,
+        "phase": 0.7000026699999999,
+        "status": "unsupported: Original curve selection is not8connected",
+        "offlineViolations": [
+          {
+            "kind": "gap",
+            "fromCell": [
+              234,
+              40
+            ],
+            "toCell": [
+              233,
+              38
+            ],
+            "previous": {
+              "span": [
+                20,
+                26
+              ],
+              "curveSegment": [
+                22,
+                23
+              ],
+              "axis": 1,
+              "slice": 40.5,
+              "point": [
+                234.92788195581593,
+                40.5
+              ],
+              "cell": [
+                234,
+                40
+              ]
+            },
+            "current": {
+              "span": [
+                26,
+                39
+              ],
+              "curveSegment": [
+                29,
+                30
+              ],
+              "axis": 0,
+              "slice": 233.5,
+              "point": [
+                233.5,
+                38.89503973842422
+              ],
+              "cell": [
+                233,
+                38
+              ]
+            }
+          }
+        ],
+        "kept": [
+          0,
+          8,
+          14,
+          20,
+          26,
+          39,
+          53,
+          59
+        ]
+      },
+      {
+        "sample": 57,
+        "phase": 0.71250272,
+        "status": "unsupported: Original curve selection is not8connected",
+        "offlineViolations": [
+          {
+            "kind": "gap",
+            "fromCell": [
+              234,
+              40
+            ],
+            "toCell": [
+              233,
+              38
+            ],
+            "previous": {
+              "span": [
+                20,
+                26
+              ],
+              "curveSegment": [
+                22,
+                23
+              ],
+              "axis": 1,
+              "slice": 40.5,
+              "point": [
+                234.93545632913924,
+                40.5
+              ],
+              "cell": [
+                234,
+                40
+              ]
+            },
+            "current": {
+              "span": [
+                26,
+                39
+              ],
+              "curveSegment": [
+                29,
+                30
+              ],
+              "axis": 0,
+              "slice": 233.5,
+              "point": [
+                233.5,
+                38.92234748462496
+              ],
+              "cell": [
+                233,
+                38
+              ]
+            }
+          }
+        ],
+        "kept": [
+          0,
+          8,
+          14,
+          20,
+          26,
+          39,
+          53,
+          59
+        ]
+      },
+      {
+        "sample": 58,
+        "phase": 0.7250027699999999,
+        "status": "unsupported: Original curve selection is not8connected",
+        "offlineViolations": [
+          {
+            "kind": "gap",
+            "fromCell": [
+              234,
+              40
+            ],
+            "toCell": [
+              233,
+              38
+            ],
+            "previous": {
+              "span": [
+                20,
+                26
+              ],
+              "curveSegment": [
+                23,
+                24
+              ],
+              "axis": 1,
+              "slice": 40.5,
+              "point": [
+                234.93469978817527,
+                40.5
+              ],
+              "cell": [
+                234,
+                40
+              ]
+            },
+            "current": {
+              "span": [
+                26,
+                39
+              ],
+              "curveSegment": [
+                29,
+                30
+              ],
+              "axis": 0,
+              "slice": 233.5,
+              "point": [
+                233.5,
+                38.95130152280757
+              ],
+              "cell": [
+                233,
+                38
+              ]
+            }
+          }
+        ],
+        "kept": [
+          0,
+          8,
+          14,
+          20,
+          26,
+          39,
+          53,
+          59
+        ]
+      },
+      {
+        "sample": 59,
+        "phase": 0.7375028100000001,
+        "status": "unsupported: Original curve selection is not8connected",
+        "offlineViolations": [
+          {
+            "kind": "gap",
+            "fromCell": [
+              234,
+              40
+            ],
+            "toCell": [
+              233,
+              38
+            ],
+            "previous": {
+              "span": [
+                20,
+                26
+              ],
+              "curveSegment": [
+                23,
+                24
+              ],
+              "axis": 1,
+              "slice": 40.5,
+              "point": [
+                234.92319018015655,
+                40.5
+              ],
+              "cell": [
+                234,
+                40
+              ]
+            },
+            "current": {
+              "span": [
+                26,
+                39
+              ],
+              "curveSegment": [
+                30,
+                31
+              ],
+              "axis": 0,
+              "slice": 233.5,
+              "point": [
+                233.5,
+                38.983702431372414
+              ],
+              "cell": [
+                233,
+                38
+              ]
+            }
+          }
+        ],
+        "kept": [
+          0,
+          8,
+          14,
+          20,
+          26,
+          39,
+          53,
+          59
+        ]
+      },
+      {
+        "sample": 79,
+        "phase": 0.98750377,
+        "status": "unsupported: Original curve selection is not8connected",
+        "offlineViolations": [
+          {
+            "kind": "gap",
+            "fromCell": [
+              234,
+              40
+            ],
+            "toCell": [
+              232,
+              38
+            ],
+            "previous": {
+              "span": [
+                20,
+                26
+              ],
+              "curveSegment": [
+                23,
+                24
+              ],
+              "axis": 1,
+              "slice": 40.5,
+              "point": [
+                234.01564855195267,
+                40.5
+              ],
+              "cell": [
+                234,
+                40
+              ]
+            },
+            "current": {
+              "span": [
+                26,
+                39
+              ],
+              "curveSegment": [
+                30,
+                31
+              ],
+              "axis": 0,
+              "slice": 232.5,
+              "point": [
+                232.5,
+                38.975573583072965
+              ],
+              "cell": [
+                232,
+                38
+              ]
+            }
+          }
+        ],
+        "kept": [
+          0,
+          14,
+          20,
+          26,
+          39,
+          53,
+          59
+        ]
+      },
+      {
+        "sample": 80,
+        "phase": 1.00000381,
+        "status": "unsupported: Original curve selection is not8connected",
+        "offlineViolations": [
+          {
+            "kind": "gap",
+            "fromCell": [
+              233,
+              40
+            ],
+            "toCell": [
+              232,
+              38
+            ],
+            "previous": {
+              "span": [
+                20,
+                26
+              ],
+              "curveSegment": [
+                23,
+                24
+              ],
+              "axis": 1,
+              "slice": 40.5,
+              "point": [
+                233.99211588043906,
+                40.5
+              ],
+              "cell": [
+                233,
+                40
+              ]
+            },
+            "current": {
+              "span": [
+                26,
+                39
+              ],
+              "curveSegment": [
+                30,
+                31
+              ],
+              "axis": 0,
+              "slice": 232.5,
+              "point": [
+                232.5,
+                38.99507449244495
+              ],
+              "cell": [
+                232,
+                38
+              ]
+            }
+          }
+        ],
+        "kept": [
+          0,
+          14,
+          20,
+          26,
+          39,
+          53,
+          59
+        ]
+      }
+    ],
+    "unsupportedTriangleCells": 0,
+    "sourcePackets": 814,
+    "gpuHiddenPackets": 40,
+    "mainPacketMisses": 0,
+    "maxSourceUVError": 6.690401210818209e-08,
+    "maxSourceWorldErrorMetres": 1.7059107335626322e-06,
+    "maxGpuUVError": 1.4901161193847656e-08,
+    "maxGpuDepthErrorMetres": 9.5367431640625e-07,
+    "maxCellCentreToOriginalCurve": 0.5329498406252795,
+    "samePrimitiveFacingChanges": 0,
+    "nativeChangesOutsideHeadROI": 0,
+    "solid2x2Samples": [],
+    "newActorSingletonSamples": [],
+    "closure": {
+      "maxWorldVertexDifferenceMetres": 9.5367431640625e-07,
+      "maxHeadProjectedVertexDifferenceCells": 8.0108642578125e-05,
+      "firstOffset": [
+        -2,
+        0
+      ],
+      "lastOffset": [
+        -2,
+        0
+      ],
+      "firstCandidateStatus": "unsupported: Original curve selection is not8connected",
+      "lastCandidateStatus": "unsupported: Original curve selection is not8connected"
+    },
+    "performance": {
+      "definition": "Editor owner RenderFrame call, and same call plus synchronous1pixel readback of the completed native output. File/PNG/full-buffer dumps excluded. Alternating A/B order. These are diagnostic Editor measurements, not player frame rate or CPU/GPU profiler-separated costs. First2samples include cold failed path and first shader/material use, reported separately.",
+      "firstTwo": [
+        {
+          "sample": 0,
+          "candidateStatus": "unsupported: Original curve selection is not8connected",
+          "baseCallMs": 341.6028,
+          "altCallMs": 683.1109,
+          "baseFenceMs": 350.6372,
+          "altFenceMs": 696.458
+        },
+        {
+          "sample": 1,
+          "candidateStatus": "ready",
+          "baseCallMs": 336.9431,
+          "altCallMs": 663.423,
+          "baseFenceMs": 344.3419,
+          "altFenceMs": 670.887
+        }
+      ],
+      "steadyReady": {
+        "baseCallMs": {
+          "n": 72,
+          "median": 279.7075,
+          "p95": 596.830805,
+          "min": 225.1163,
+          "max": 633.9233
+        },
+        "altCallMs": {
+          "n": 72,
+          "median": 312.93785,
+          "p95": 642.19084,
+          "min": 254.4786,
+          "max": 660.1359
+        },
+        "baseFenceMs": {
+          "n": 72,
+          "median": 287.9308,
+          "p95": 604.965195,
+          "min": 232.5432,
+          "max": 641.3696
+        },
+        "altFenceMs": {
+          "n": 72,
+          "median": 321.17,
+          "p95": 655.815335,
+          "min": 261.4403,
+          "max": 669.1338
+        }
+      },
+      "pairedFenceDeltaMs": {
+        "n": 72,
+        "median": 51.26479999999998,
+        "p95": 393.436935,
+        "min": -354.2147,
+        "max": 415.9524
+      },
+      "byOrder": {
+        "True": {
+          "baseFenceMs": {
+            "n": 37,
+            "median": 282.602,
+            "p95": 604.1766,
+            "min": 232.5432,
+            "max": 618.9338
+          },
+          "altFenceMs": {
+            "n": 37,
+            "median": 317.3413,
+            "p95": 639.2655199999999,
+            "min": 264.7191,
+            "max": 664.5479
+          }
+        },
+        "False": {
+          "baseFenceMs": {
+            "n": 35,
+            "median": 292.677,
+            "p95": 603.6005,
+            "min": 235.9038,
+            "max": 641.3696
+          },
+          "altFenceMs": {
+            "n": 35,
+            "median": 322.8719,
+            "p95": 661.00168,
+            "min": 261.4403,
+            "max": 669.1338
+          }
+        }
+      }
+    },
+    "gpuHiddenNotBeyondCpuTolerance": 2,
+    "gpuHiddenStrictlyNearer": 40,
+    "gpuHiddenExactOwnerRecovered": 40,
+    "occlusionDiagnosticCorrection": "Two nearer GPU surfaces differ by less than the CPU0.1mm tolerance. They are still strictly nearer in the native GPU depth test; exact triangle/UV/world/depth recovery confirms ownership. Not two occlusion failures.",
+    "newActorSingletonSamplesByExactCellDifference": [],
+    "readyNegativeSpacePatterns": {
+      "[2]": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "[1, 2]": [
+        7
+      ],
+      "[2, 2]": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        70,
+        71,
+        72,
+        73
+      ],
+      "[5]": [
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        51,
+        52,
+        67,
+        68,
+        69
+      ],
+      "[6]": [
+        33,
+        50,
+        53,
+        54
+      ],
+      "[1, 4]": [
+        34,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "[4]": [
+        35,
+        36,
+        37
+      ],
+      "[1, 3]": [
+        66
+      ],
+      "[3]": [
+        74,
+        75,
+        76,
+        77,
+        78
+      ]
+    },
+    "negativeSpaceLimit": "Ready spans show different enclosed-gap patterns, including split pockets. These are observations, not a pass or proof of unavoidable artistic tradeoff. Eight functional path failures already block adoption; whole-loop shape/stair quality must be reassessed after their cause is fixed."
+  },
+  "occlusionEvidence": {
+    "gpuHidden": 40,
+    "exactHairOwnerRecovered": 40,
+    "strictlyNearer": 40,
+    "withinCpuTolerance": 2,
+    "maxDepthErrorMetres": 6.957562206366674e-07,
+    "maxPixelCentreError": 0.0020209961610071596,
+    "trueTipOccludedByKnownHairSamples": 81,
+    "maxCameraAxisAnchorSpread": 9.352143948149205e-07
+  },
+  "acceptance": [
+    {
+      "criterion": "Actual one-cycle same-pose/camera/size/light baseline and candidate",
+      "status": "Passed",
+      "evidence": "81pairs, sameBones/sameLight81/81, native960x544 per side; background outside head inspection identical in each pair."
+    },
+    {
+      "criterion": "Candidate constructs connected head ribbon for the whole cycle",
+      "status": "Failed",
+      "evidence": "8of81samples fallback to original. Unique80phases have7failures, with phase0 repeated at closure. Phases0,0.6875..0.7375,0.9875. Directional span sampling skips joining cells."
+    },
+    {
+      "criterion": "Gap/indentation and staircase quality",
+      "status": "Not validated for adoption",
+      "evidence": "Ready intervals show gap patterns2,2+2,5,6,1+4etc. Shape quality is not declared passed from small diff counts or genuine grid crossings. Functional whole-component fallback creates visible path changes; repair that first."
+    },
+    {
+      "criterion": "True tip and thickness",
+      "status": "Passed within this recorded ribbon",
+      "evidence": "All81original UV0tip rays occluded by specific hair triangles. No same-strand solid2x2block, selected point/UV/world and original curve distance checked; max centre-to-curve0.533cell. No geometry/material change or other-strand dilation."
+    },
+    {
+      "criterion": "Selected source packet and native GPU other-surface ownership",
+      "status": "Passed for recorded packets",
+      "evidence": "814source packets,774headGPUmatches,40hidden by exact recovered other triangles/UV/world/depth. All40strictly nearer;2have gaps below CPU0.1mm tolerance. No main packet miss/facing change."
+    },
+    {
+      "criterion": "All CPU-discarded intervals have correct physical visibility",
+      "status": "Not fully validated",
+      "evidence": "Hidden counter is recorded, but per-candidate CPU blocker IDs and all body/face/provider geometry were not exported for every frame. Do not claim complete visibility correctness from hair owner checks alone."
+    },
+    {
+      "criterion": "New detached foreground and protected parts",
+      "status": "Passed within captured view",
+      "evidence": "No new foreground singleton positions, no native changes outside head ROI, source/shader/integration and user settings unchanged."
+    },
+    {
+      "criterion": "Performance measurement",
+      "status": "Recorded; no performance readiness claim",
+      "evidence": "Counterbalanced paired owner renders plus1pixelGPUfence.72steadyReady samples, median287.93ms baseline vs321.17ms candidate; p95604.97/655.82ms. Editor diagnostics, not player FPS."
+    },
+    {
+      "criterion": "Restoration and default OFF",
+      "status": "Passed",
+      "evidence": "restore495.json: Playtrue,pausefalse,input/Animatortrue,speed1,Idle,capture0,originalPostView366,automaticClocktrue,experimentfalse/released."
+    }
+  ],
+  "firstFailure": {
+    "sample": 0,
+    "phase": 0,
+    "sameFailureAtClosure": true,
+    "fromCell": [
+      233,
+      40
+    ],
+    "toCell": [
+      232,
+      38
+    ],
+    "cause": "The previous span samples its y-axis slice40.5. The next span switches to x-axis slice232.5. Sampling those directional spans independently omits the connecting original curve interval, giving a Chebyshev step2. The continuous ribbon is connected. This check runs before triangle visibility; it is not caused by physical occlusion.",
+    "codeResponsibility": "Joining adjacent directional spans along the same original UV-ordered curve is not covered after internal endpoint clamping was removed. A valid original-curve connector must be selected as part of the same source-authoring responsibility. Do not fix via downstream dilation, temporal history or mandatory arbitrary endpoint pixels.",
+    "nextDecision": "Functional correction is required before activation. No unavoidable user art tradeoff is established. This validation unit implements no fix."
+  },
+  "temporalFailure": {
+    "readyToFallbackAtSample55": "Atphase0.6875 the source alternative stops and the entire component reverts to the original raster. Visible target membership changes9cells and prior gaps disappear. This is a functional source-path switch, not an accepted pixel stair transition.",
+    "fallbackToReadyAtSample60": "Atphase0.75 the alternative returns.",
+    "closure": "Original deformed geometry closes within9.54e-7m and8.01e-5headcells; first and last both reproduce the failure. Not a startup-only incident."
+  },
+  "lighting": {
+    "source": "Assets/Scripts/WorldLighting/SkyLightingCycleController.cs and Assets/Prefabs/PersistentGameplayShell.prefab",
+    "serializedUnchanged": {
+      "initialHour": 21,
+      "advanceAutomatically": true,
+      "realSecondsPerDay": 60,
+      "prefabSHA256": "9c1dffcb46c4210d55b2a835f9cdcf3ad18d42f566ec09a53c0aa2b622fd74d8"
+    },
+    "actualReads": [
+      {
+        "hour": 8.295967,
+        "gameTime": 448.22005795068,
+        "phase": "Morning",
+        "sunIntensity": 0.6847371
+      },
+      {
+        "hour": 13.71864,
+        "gameTime": 461.776746045918,
+        "phase": "Day",
+        "sunIntensity": 0.665164
+      }
+    ],
+    "relation": "Delta game time13.556688s *24/60 =5.422675game hours, matching observed5.422673. Existing automatic clock changes lighting over time; Play begins at21h. No lighting settings or brightness were tuned.",
+    "capture": "Current20.2035751h Night held temporarily using SetAutomaticAdvance(false), without SetTimeHours or colour/intensity changes; each pair and its background match. Original automatic flag restoredtrue.",
+    "historicalLimit": "Exact clock hours for older494captures were not logged, so their individual times are not reconstructed. Current behaviour and unchanged serialized settings explain why restart/elapsed time changes appearance; prior images are not exact lighting baselines."
+  },
+  "remaining": "Default OFF. Functional span-join regression blocks activation before any appearance/design adoption. Ready gap topology and unrecorded CPU visibility still need bounded evidence after correction. No performance/build/other-view/other-part claim. Whole project incomplete.",
+  "state": {
+    "restored": true,
+    "receipt": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\restore495.json",
+    "productCodeChanged": false,
+    "headCommitPreserved": "406ce305bd28385437bc11f7e32b68fd62e67f35",
+    "userSettings": {
+      "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+      "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+    },
+    "sourceSHA256": "3f6f78e04df2c194703989f91286e45b0f44bee925f84c6c12120ca937d007d1"
+  },
+  "library": {
+    "fullLoopGif": "libfile_cfd7cec55d388191883fd5b53748475f",
+    "contactReview": "libfile_2c10bbe7300c819192698e331113ed90",
+    "firstFailureDiagram": "libfile_d5a251b84328819181526221c2296c39"
+  },
+  "gif": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop495\\FULL_BODY_LOOP_BEFORE_AFTER495.gif",
+    "frames": 81,
+    "canvas": [
+      1920,
+      580
+    ],
+    "eachNativeView": [
+      960,
+      544
+    ],
+    "actualCaptureDeltaTime": 0.016666666666666666,
+    "reviewFrameMilliseconds": 100,
+    "slowdown": 6,
+    "fallbackFramesExplicitlyLabelled": true
+  }
+}

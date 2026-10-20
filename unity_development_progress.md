@@ -2959,3 +2959,13 @@ Interactable (abstract base class)
 - 45source패킷 중41GPU일치,나머지4는 정확한r2/sm0/primitive555의UV·깊이로 가려졌다. GPU UV오차1.49e-8,깊이9.54e-7m,셀중심-원곡선최대0.4672cell. 진짜UV0끝은 다른hair삼각형35~48mm 앞가림을 유지한다. 머리ROI밖 native변화0,동일삼각형 facing변경0이다.
 - 전신GIF는 새 동일실행의 원본 centre source 대494이며 각960x544/6배느린4프레임 발췌이다. 과거492를 같은 실행의 수정전 RGB로 부르지 않는다. 첫frame head offset[-3,0]/이후[-3,-1]을 기록했다. 근거 `docs/artifacts/hair-boundary494/validation.json`, 로컬 `Current472/Pairs494B/`.
 - 기본OFF·외형미채택. 전체loop/다른가닥·clip·카메라/성능/build 미검증. 종료 후Play·입력·Animator·Idle·background·PostView366 복원과 자체리소스해제 확인.44d13c0/b1b144e/사용자Quality·Time설정은 보존한다. 전체프로젝트 완료를 뜻하지 않는다.
+
+## 212. 406ce30 후보 전체 Walk 한 루프 검증 실패 `[CHARACTER-RENDER-01]`
+
+- 제품코드 변경 없이406ce30의 실제Walk 한 루프81쌍(closure포함)을 한 번 수집했다. 같은실행·뼈/광원81/81일치,각native960x544. 후보는73표본ready,8표본에서 원곡선8연결 생성 실패로 원본source로 복귀했다. 서로다른80위상 중7실패이며 위상0이closure에 반복된다. 기본활성화 불가다.
+- 최초위상0의 실제연속곡선은 연결돼 있으나 span20..26의y40.5셀(233,40)에서 다음span26..39의x232.5셀(232,38)로 넘어가며 연결구간을 샘플링하지 않는다. Chebyshev2칸 점프로 검사실패하며,이검사는visibility전이다. 위상0.6875~0.7375/0.9875에서도 재현됐다. 원래변형기하는closure에서9.54e-7m내로 같고 양끝 모두 실패해 초기진입만의 문제도 아니다.
+- 814source패킷,774headGPU일치,40개는 정확한 다른삼각형·UV·world·depth로 복원해 모두 더가까운표면임을 확인했다. 그중2개는GPU깊이차가CPU0.1mm허용값보다 작으며 오류2건을 뜻하지 않는다. sourceUV오차6.7e-8,world1.71e-6m,GPU깊이9.54e-7m,main패킷누락0/facing변경0이다. 실제UV0끝은81표본 모두 알려진hair표면에 가려졌다. CPU버림전체의blocker/몸·얼굴provider입력은 매프레임 저장하지 않아 전체가림통과로 부르지 않는다.
+- 새전경고립셀위치/2x2두께덩어리/머리ROI밖native변경은0. 다만ready에도틈2+2/1+4등분할이 관측돼 전체미관·계단규칙을 통과로 선언하지 않는다. 위상0.6875의9셀급변은 후보→원본source복귀이며 정상격자교차가 아니다. 먼저 같은원곡선의방향span접속책임을 고쳐야 하며 사용자미관선택이불가피하다는근거는없다.
+- 같은Editor실행에서A/B순서를교대하고 owner RenderFrame+1pxGPUreadback을 기록했다. 초기2표본을분리한72ready의중앙값은원본287.93ms/후보321.17ms,p95604.97/655.82ms. 변동폭이크며플레이어FPS나성능예산통과를뜻하지않는다.
+- 기존PersistentGameplayShell.prefab은21시시작/자동진행/실제60초당하루다. 실제gameTime13.556688초동안시각5.422673시간과광원이변해24/60공식과일치한다. 이번캡처는현재20.2035751시를임시고정했고밝기/색/설정은튜닝하지않았다. 과거494캡처의정확시각은미기록이다. 종료후자동시계true·입력·Animator·Idle·Play·PostView366·기본OFF·자체리소스해제확인,원래Quality/Time·프리팹해시보존.
+- 근거 `docs/artifacts/hair-boundary495/validation.json`, `Current472/Loop495/`. 전신GIF Library `libfile_cfd7cec55d388191883fd5b53748475f`는fallback표본에명시라벨이있다.406ce30/44d13c0/b1b144e는보존하며전체프로젝트완료가아니다.

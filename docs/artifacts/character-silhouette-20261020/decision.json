@@ -1,0 +1,77 @@
+{
+  "stage": "R4 integrated; actual same-frame Walk comparison PASS; other clips/views/performance remain unverified",
+  "request": "Remove animation silhouette spikes without widening them; preserve real hair and garment tips; show actual Walk before and after.",
+  "activeCharacter": {
+    "runtime": "PersistentGameplayShell(Clone)/Player/E395_Visual_165cm_Trial/AvatarSample_A144_SourceMToon_ArtUnaccepted(Clone)",
+    "bodyMeshGUID": "3c6037cd1f59e9d4c97c94249271077d",
+    "controller": "Assets/EUnityValidation01/MatchedPlayer397/Candidate/Run12/PlayerLocomotion397.controller",
+    "clip": "Rig|Walk_Loop",
+    "excluded": [
+      "Chibi_KenneyRig_review01",
+      "CC0_CharacterMedium",
+      "KenneyZombieVisual"
+    ]
+  },
+  "evidence": {
+    "baseline": "Baseline/capture.json",
+    "actualAnimatorFrames": 80,
+    "uniqueBoneMatrices": 80,
+    "rootMotion": "fixed root diagnostic; not an input locomotion test",
+    "priorRejected": "424 added a neighbouring pixel. Area-only 402 did not solve the source contour. Neither is adopted."
+  },
+  "sources": [
+    {
+      "url": "https://learn.microsoft.com/en-gb/windows/win32/direct3d11/d3d10-graphics-programming-guide-rasterizer-stage-rules",
+      "scope": "Binary centre sampling explains coverage changes; not a pixel-art contour-selection algorithm."
+    },
+    {
+      "url": "https://yongliangyang.net/docs/pixelAnim_pg16.pdf",
+      "scope": "Feature-aware contours and separate shape/pixel/temporal objectives. This local causal filter is not the paper's complete offline animation solver."
+    }
+  ],
+  "alternatives": [
+    {
+      "method": "Widen or close protrusions",
+      "decision": "rejected by explicit user requirement"
+    },
+    {
+      "method": "Erode all thin pixels or use coverage threshold only",
+      "decision": "rejected; destroys authored tips and previous coverage-only evidence failed"
+    },
+    {
+      "method": "Geometry-constrained removal of raster-only local extrema",
+      "decision": "isolated experiment before adoption"
+    }
+  ],
+  "model": {
+    "chain": "Original VRM topology -> existing ScaleBake378 current skinned vertices -> output localToWorld -> view -> existing effectiveProjection -> 480x272 logical grid -> current visibility mask -> constrained deletion map -> existing Prepare/Restore/Join/OwnerLines -> native960 composition",
+    "space": "Unity world metres, existing left-handed transform conventions; column-vector matrix product P*V*M. Logical texture origin bottom left, x right/y up, centre (x+.5,y+.5). One logical cell maps to two native pixels. No camera, scale, rotation, skinning or UV change.",
+    "authority": "Current Animator bones and current GPU owner/depth remain authoritative. Mesh rest vertices only establish physical edge topology; current baked positions establish the contour.",
+    "eligible": "One-cell outward extrema with three same-role/same-part inward support cells; body roles8..11 and parts2..5. Head/hair never edited. Existing selector edits and their neighbourhood are locked.",
+    "source": "Exact piecewise-linear outward envelope of current projected triangles for the same material and body part over a three-cell tangent interval. Evaluate every envelope breakpoint, including edge intersections.",
+    "protection": "Weld exact coincident rest-position vertices to distinguish UV seams from physical boundaries. Lock cells within one logical cell of any physical open mesh edge (hem/cuff). Retain source deviations greater than half a cell and reference-supported extrema.",
+    "selection": "Delete only if source envelope deviates <=.5 logical px from its endpoint chord, chord places this centre outside, and new boundary stays <=1 logical px from source. These are the existing selector's .5px simplification and 1px boundary budgets, not new silhouette scale factors.",
+    "limits": "Only this class of raster extrema is addressed; no claim that every legitimate silhouette endpoint or every animation brightness change should disappear. No temporal history occupancy is introduced."
+  },
+  "invariants": [
+    "No alpha additions: afterMask is a subset of beforeMask.",
+    "No changes to source meshes, rig, animation clips, materials, UVs, camera or pixel pitch.",
+    "No changes to head/hair, physical hem/cuff locks, source features exceeding .5px or same-role/part ownership guard.",
+    "Deletion may not break the three-cell inward support or change component/hole topology.",
+    "A/B captures use the same Animator pose/bone hash and same world buffer for each pair.",
+    "Compare actual 80-frame Walk at 60Hz; inspect full body and changed local regions.",
+    "Production integration only if runtime masks, protected features and visual comparison pass; no static pose translation substituted."
+  ],
+  "independentReview": "No separate agent used. Author reviewed counterexamples (UV seams, real hems, head overlap, source intersections, foreground occlusion); these remain test obligations.",
+  "actualResults": "validation.json",
+  "failedExperiments": [
+    {
+      "id": "Comparison",
+      "reason": "Capture hook ran before contourReady; selected removals were not consumed; excluded."
+    },
+    {
+      "id": "Integrated cross-session comparison",
+      "reason": "Mask/selection identical but pose hash and RGB differed between Play sessions; excluded as final A/B. Replaced by IntegratedPairs within one actual frame."
+    }
+  ]
+}

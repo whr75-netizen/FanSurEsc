@@ -295,6 +295,7 @@ public static partial class HeadRegion502
     {
         if (!Enabled || !HeadLocal367.IsHead(f)) return;
         var watch = System.Diagnostics.Stopwatch.StartNew(); current = null; Packets.Clear(); SourceLoops.Clear(); Curves.Clear(); SelectedLoops.Clear(); Unsupported = 0;
+        ClearBody512();
         AreaUncertainCells505 = AreaSelectionAmbiguous505 = 0;
         Array.Clear(Hair, 0, Hair.Length); Array.Clear(Parent, 0, Parent.Length);
         try
@@ -342,6 +343,7 @@ public static partial class HeadRegion502
             for (int y = bounds.y; y < bounds.yMax; y++) for (int x = bounds.x; x < bounds.xMax; x++) if (Hair[y * 480 + x])
             {
                 var p = Select(f, x, y); if (p == null) { if(UseAutomaticCurve511&&supported511){Auto511HiddenCells++;continue;}Unsupported++; continue; }
+                if(UseAutomaticCurve511&&UseBodyRay512)BodyRay512(p);
                 Packets.Add(p); AddQuad(f, p, pieces[p.submesh, 0], indices[p.submesh]);
                 int part = UseAutomaticCurve511 ? Part511(p,indices) : p.submesh == 0 && p.primitive >= 574 && p.primitive <= 857 ? 1 : 2;
                 AddQuad(f, p, pieces[p.submesh, part], indices[p.submesh]);
@@ -364,7 +366,7 @@ public static partial class HeadRegion502
                 for (int y = y0; y <= y1; y++) for (int x = x0; x <= x1; x++) { var weights = Bary(new Vector2(x + .5f, y + .5f), t); if (weights.x >= 0 && weights.y >= 0 && weights.z >= 0) Parent[y * 480 + x] = true; }
             }
             if (!mask) mask = new Texture2D(480, 272, TextureFormat.RGBAFloat, false, true) { name = "502 canonical parent/hair ownership", filterMode = FilterMode.Point, wrapMode = TextureWrapMode.Clamp, hideFlags = HideFlags.DontSave };
-            var colours = new Color[Hair.Length]; for (int y = 0; y < 272; y++) for (int x = 0; x < 480; x++) { int i = y * 480 + x; colours[(271 - y) * 480 + x] = new Color(Parent[i] ? 1 : 0, Hair[i] ? 1 : 0, 0, 0); }
+            var colours = new Color[Hair.Length]; for (int y = 0; y < 272; y++) for (int x = 0; x < 480; x++) { int i = y * 480 + x; colours[(271 - y) * 480 + x] = BodyMask512(i,Parent[i],Hair[i]); }
             mask.SetPixels(colours); mask.Apply(false, false); current = f; Status = "ready";
         }
         catch (Exception e) { Status = "unsupported: " + e.Message; }

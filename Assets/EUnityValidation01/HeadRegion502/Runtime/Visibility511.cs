@@ -33,6 +33,54 @@ public static partial class HeadRegion502
     static Full319View335 view511;
     public static int Auto511HiddenCells,Auto511VisibilityTests,Auto511AlphaUncertain;
     static bool supported511;
+    // Default-OFF: transport source-ray visibility with the designed hair cell.
+    // The integer display move is not a second physical sampling operation.
+    public static bool UseBodyRay512;
+    [Serializable] public sealed class BodyReference512
+    {
+        public int x,y,submesh=-1,primitive=-1,kind; // 1 opaque,2 conservative behind bound,3 no body
+        public float depth,alphaMin,alphaMax,hairDepth;
+        public Vector2 uv;
+        public Vector3 barycentric,sampleWorld;
+    }
+    public static readonly List<BodyReference512> BodyReferences512=new();
+    static readonly Dictionary<int,BodyReference512> bodyReferences512=new();
+    static void ClearBody512(){BodyReferences512.Clear();bodyReferences512.Clear();}
+    static void BodyRay512(Packet p)
+    {
+        var point=new Camera511(visibility511,p.world);
+        // Bins enclose each body triangle by the same1.1-cell donor radius.
+        // Query the selected cell, so an off-centre donor just outside the
+        // region bounds cannot be mistaken for an empty body-ray domain.
+        BodyReference512 possible=null,opaque=null;var bin=blockerBins511[p.y*480+p.x];
+        if(bin!=null)foreach(var t in bin)
+        {
+            if(t.renderer!=0)continue;var material=alpha511[t.material];if(material.range.y<material.cutoff)continue;
+            double bx=t.pb.x-t.pa.x,by=t.pb.y-t.pa.y,cx=t.pc.x-t.pa.x,cy=t.pc.y-t.pa.y,px=point.x-t.pa.x,py=point.y-t.pa.y,det=bx*cy-by*cx;
+            if(Math.Abs(det)<1e-20||material.cull==2&&det>=0)continue;
+            double v=(px*cy-py*cx)/det,w=(bx*py-by*px)/det,u=1-v-w;
+            if(u<-.00001||v<-.00001||w<-.00001)continue;
+            float z=(float)(u*t.pa.z+v*t.pb.z+w*t.pc.z);if(z<=0)continue;
+            var sampleUV=t.ua*(float)u+t.ub*(float)v+t.uc*(float)w;
+            var range=material.range.x>=material.cutoff?material.range:HeadArea505.SourceAlphaFootprint511(material.texture,sampleUV);
+            if(range.y<material.cutoff)continue;
+            var hit=new BodyReference512{x=p.x,y=p.y,submesh=t.sm,primitive=t.primitive,kind=range.x>=material.cutoff?1:2,depth=z,uv=sampleUV,barycentric=new Vector3((float)u,(float)v,(float)w),alphaMin=range.x,alphaMax=range.y,hairDepth=p.depth,sampleWorld=p.world};
+            if(possible==null||z<possible.depth)possible=hit;
+            if(hit.kind==1&&(opaque==null||z<opaque.depth))opaque=hit;
+        }
+        // A known opaque foreground surface certifies occlusion. An uncertain
+        // foreground surface cannot be turned into either a pass or hidden bias.
+        BodyReference512 chosen;
+        if(opaque!=null&&opaque.depth<p.depth-.0001f)chosen=opaque;
+        else if(possible!=null&&possible.kind==2&&possible.depth<p.depth-.0001f)throw new InvalidOperationException("512 source-ray body alpha leaves foreground ownership undecided");
+        else chosen=possible??new BodyReference512{x=p.x,y=p.y,kind=3,hairDepth=p.depth,sampleWorld=p.world};
+        bodyReferences512.Add(p.y*480+p.x,chosen);BodyReferences512.Add(chosen);
+    }
+    static Color BodyMask512(int index,bool parent,bool hair)
+    {
+        if(UseAutomaticCurve511&&UseBodyRay512&&bodyReferences512.TryGetValue(index,out var reference))return new Color(parent?1:0,hair?1:0,reference.depth,reference.kind);
+        return new Color(parent?1:0,hair?1:0,0,0);
+    }
     public static void Warm511(Full319View335 f)
     {Indices511(f,f.motion.surface.outputs[2].sharedMesh);Materials511(f);}
     static void Materials511(Full319View335 f)
@@ -100,5 +148,5 @@ public static partial class HeadRegion502
         return true;
     }
     static void ReleaseVisibility511()
-    {foreach(int at in blockerUsed511)blockerBins511[at]?.Clear();blockerUsed511.Clear();blockers511.Clear();Array.Clear(blockerMeshes511,0,blockerMeshes511.Length);alpha511=null;view511=null;}
+    {UseBodyRay512=false;ClearBody512();foreach(int at in blockerUsed511)blockerBins511[at]?.Clear();blockerUsed511.Clear();blockers511.Clear();Array.Clear(blockerMeshes511,0,blockerMeshes511.Length);alpha511=null;view511=null;}
 }

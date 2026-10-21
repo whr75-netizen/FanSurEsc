@@ -1,0 +1,36 @@
+{
+  "identityCost": 0.0,
+  "integerTranslationCost": 0.0,
+  "rigidRotation90Cost": 0.0,
+  "activeBoundaryEndedHistoryCost": 0.0,
+  "endedSpans": 4,
+  "collinearOverlapIncidence": {
+    "properIntersections": 0,
+    "uncertainSideTests": 0,
+    "activeFragments": 8,
+    "unbalancedNodes": 0,
+    "junctionNodes": 0
+  },
+  "foregroundReset": "CURRENT_FOREGROUND_RESET",
+  "nonidentityExample": {
+    "raw": 0.6000000000000005,
+    "deleteAddUpperBound": 6,
+    "normalizedDiagnostic": 0.10000000000000009,
+    "operations": [
+      {
+        "operation": "substitute",
+        "oldSpanRange": [
+          0,
+          1
+        ],
+        "newSpanRange": [
+          0,
+          1
+        ],
+        "cost": 0.6000000000000005
+      }
+    ]
+  },
+  "passed": true,
+  "scope": "Synthetic geometry/DP/reset checks only; no actual hand-crossing Walk/native-world or visual pass."
+}

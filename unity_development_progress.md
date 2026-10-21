@@ -3097,3 +3097,13 @@ Interactable (abstract base class)
 -509 Runtime추가분과이번Editor observer/자동meta만해시보호하에제거했다. Runtime/HeadArea505.cs는909e324의508과byte동일 SHA2aeca448…로복원했고,시험509코드는docs/artifacts/occlusion509의diff/standalone비교로만격리했다. Play/입력/AnimatorIdle speed1 Loc0/자동시계/capture0/PostView366한훅/실험OFF/Profilerfalse/컴파일종료를확인한다. 사용자Quality·Time/44d13c0보존,기본OFF. 새509애니동등성은미실행이며508GIF70064byte보존/Library403재시도없음.
 - 잔여:508도약3.3초Compute/약4초renderer로실시간불가. 매포즈·셀별trianglefragment/가림/양면적union반복표현이남아있다. 507의변쌍주병목주장철회유지;509는새지배구간을계측한것이아니다. 미세후보필터반복대신가시닫힌영역/경계를포즈별한번구성하고경계셀교차와내외부인증으로소비하는canonical representation의비용구조검토가필요하다. 정확도oracle505/owner·가림·상하한계약을유지하는검토이며새설계구현·속도보장·정지cache를승인한것은아니다.
 - 근거:docs/artifacts/occlusion509/README.md·validation.json·paired81.csv·UnityPairs.csv·PairArea509.cs·BOUND_PROOF509.md·REJECTED_CANDIDATE509.diff,Current472/Area509/OFFLINE509.json·UNITY509.json·SELECTION509.json,REJECTED509.json및FINAL_RESTORED509_REJECTED.json. 현재활성348과기본OFF508,509철회를분리하며전신표현/시간품질/이웃비용/눈·타각도/전체프로젝트완료를주장하지않는다.
+
+## 224. CHARACTER-RENDER-01 — 곡선 영역 런타임 표현 검토510, 구현 없음
+
+- 509 철회·운영 복원·비채택 기록을95a1382로 먼저 마무리한 뒤 코드 추가 없이 검토했다. 508은909e324의 기본OFF 후보로 보존한다. 정확면적505/508은 물리/원본 대조용이며 모든 메쉬 세부와 픽셀 마스크를 그대로 복제하는 것이 디자인 목표는 아니다.
+- 현재 `HeadRegion502.Curves`는 RDP 진단값이고 실제 선택 입력은505 원본 가시 면적이다. 저작된 머리 전체 제어망·지속 제어점 ID는 없다. 실제 저장3포즈에서 source ring20/17/13,point1868/1902/1926을 확인했다. 이는 표현 재구성의 근거이며 오류 수로 세지 않는다.
+- 최소 경로 하나: 지속 ID를 가진 저작 닫힌 Bézier 영역과 실제 primitive/barycentric/본 anchor를 준비하고, 현재 변형/투영에서 곡선을 갱신해 영역을 선택한다. Designed 분기는 현재 `Prepare`의 무조건적인 전체 `Union` 및 `HeadArea505.Build`를 앞에서 우회한다. 정적 triangle/UV/topology 색인과 포즈별 bounds refit/가림 질의로 `Select`의 셀별 전체 삼각형 검색도 분리해야 한다. 현재 BVH와 저작 곡선 자산은 없고 필요한 새 구조로 명시했다.
+- `CellAreas`의 signed ring/clip/area, `SelectRegions`의 초기 비용/동률, `Packet/Bary/AddQuad/Piece`, 기존 Raw/Native/레이어/눈/최종 공통 mask/Gate 권위를 재사용한다. 498의 같은 camera ray 깊이 비교·가시 후보 순위를 보존하며 role를 같은 surface로 보지 않는다. 연속 C와 선택된 닫힌 셀 경계 C_Q를 구분하고 C_Q 밖 침범은0이어야 한다. 원본 alpha 재clip, ROI/hull, 잔가닥/틈 전부 보존, 정지 cache, history/RGB 필터는 대안이 아니다.
+- 비용 근거는507/508/509의 측정 scope를 구별했다. 508도 약3.3초 Compute/약4초 renderer이며509는 이득 미입증이다. 새 표현의 수ms/FPS나 기존 BakeMesh/잔여 단계의 새 주병목은 측정하지 않았다. 초단위 구조를 미세 후보 제한 반복으로 해결한다고 가정하지 않는다.
+- 픽셀 덩어리·생략/통합·의미있는끝·계단 리듬은 Saint11 원저자 지침과 연결했다. 현 최소 선택기는 시간/계단 리듬 목적함수가 아니므로 .8750 이웃비용 사건 자동 해결을 주장하지 않는다. 같은 설계 품질의 공동 배치/에너지를 별도 판별하며 비용함수를 동시에 바꾸지 않는다. 실제 최소 검증 구간과 numerical/owner/가림/디자인/시간/비용 검증 계약을 REVIEW.md에 정했다. 새 구현·촬영·패키지·Library403 재시도 없음; 기본OFF·사용자 설정·운영 복원 증거 유지.
+- 근거: docs/artifacts/region-runtime510/REVIEW.md 및 PROVENANCE.json. 검토만 완료했으며 곡선 자산 저작·구현·실제 성능/아트/애니 통과는 미검증이다.

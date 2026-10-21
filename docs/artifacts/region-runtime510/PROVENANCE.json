@@ -1,0 +1,142 @@
+{
+  "status": "DESIGN_REVIEW_ONLY_NO_IMPLEMENTATION",
+  "baselineCommits": {
+    "508": "909e3240a68f1cc00b4fdd83cb9f7be7c046a1ca",
+    "509": "95a1382f04d9ed2a404e672489283b39ffba00b3"
+  },
+  "codeEvidence": {
+    "HeadRegion502": {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs",
+      "sha256": "bf273425aa8cb2ec0b35973f16d4f851128abfe8dcc6cede81d0ba7a69b662b8"
+    },
+    "HeadArea505": {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Runtime/HeadArea505.cs",
+      "sha256": "2aeca448c6742a66219a700ec053b0680e0221a9602ea1eca778a031b8b9043b"
+    },
+    "CurrentSurface330": {
+      "path": "Assets/EUnityValidation01/SourceBridge330/Runtime/CurrentSurface330.cs",
+      "sha256": "cb65eecfb321abed669e1d38e84f3daf9aba9734118ffe2c23de09e839637c60"
+    },
+    "FullFeature367": {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs",
+      "sha256": "482fe3e328f500a4716f7369bd28771622031aab0f0ff4816bb403821f3e9bd1"
+    },
+    "Region502HLSL": {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Shaders/Region502.hlsl",
+      "sha256": "a521ba19aa96e31878aabf7ad84c3c11871ba97de5a106ba1d6c2e677cec4faa"
+    },
+    "Region502Gate": {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Resources/HeadRegion502.compute",
+      "sha256": "26450b970e7fed4da670291018b265f2525e4ecc1cfea6c7e86aea08e4ecafc0"
+    },
+    "HairBoundary491": {
+      "path": "Assets/EUnityValidation01/HairBoundary491/Runtime/HairBoundary491.cs",
+      "sha256": "a1e757105a4f1ff3ec7469ae23f5c7cb928867233fa0a0d83f4a0662e0f24c16"
+    }
+  },
+  "methodLines": {
+    "HeadRegion502": {
+      "Union": 82,
+      "ClosedCurve": 155,
+      "CellAreas": 175,
+      "SelectRegions": 207,
+      "Select": 252,
+      "Prepare": 291,
+      "Draw": 368,
+      "Gate": 384
+    },
+    "CurrentSurface330.Evaluate": 7,
+    "HairBoundary491.Visible": 110
+  },
+  "savedCurveEvidence": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk508\\000_curves.json",
+      "sha256": "008fa35267e987c4550c35c88b7076ae76fbd65c2e58c4e4561cdcb30a29f73d",
+      "rings": {
+        "source": 20,
+        "curves": 2,
+        "selected": 1
+      },
+      "points": {
+        "source": 1868,
+        "curves": 109,
+        "selected": 140
+      }
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk508\\001_curves.json",
+      "sha256": "d5fb9dca309e5ac022d54bd8521243378c3b2583866a43833d87f1b2be14a133",
+      "rings": {
+        "source": 17,
+        "curves": 3,
+        "selected": 1
+      },
+      "points": {
+        "source": 1902,
+        "curves": 106,
+        "selected": 140
+      }
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk508\\002_curves.json",
+      "sha256": "10c784c8e2d2e21619c546245930aaf56b5caf0dca825cabbceb26db4d3bb419",
+      "rings": {
+        "source": 13,
+        "curves": 3,
+        "selected": 2
+      },
+      "points": {
+        "source": 1926,
+        "curves": 113,
+        "selected": 134
+      }
+    }
+  ],
+  "measurements": [
+    {
+      "path": "docs/artifacts/area-time507/validation.json",
+      "sha256": "180c3c2cfa9d61887693445ac908eab1219a1d50288bb118d40cd0c837ae4849"
+    },
+    {
+      "path": "docs/artifacts/area-active508/validation.json",
+      "sha256": "6b23ba9c55e67b496a5d76902e2b255ca317403c0b6640504dfaf6857774e3b3"
+    },
+    {
+      "path": "docs/artifacts/occlusion509/validation.json",
+      "sha256": "8c61207011b853f484c6fa0d784eb01aa4dfa51abb471134c37dfcb029b62df6"
+    }
+  ],
+  "proposedRuntimeRepresentation": "Persistent authored closed curve regions updated from actual pose; selected closed cell boundary owns all existing coverage passes. Physical mesh supplies current surface/visibility packets, not complete shape replication.",
+  "existingVsMissing": {
+    "reuse": [
+      "502 shared mask/Draw/Gate and packet/quad structure",
+      "signed ring/rect clip/area structure",
+      "unchanged selector for first isolated comparison",
+      "498 coherent-ray surface-visibility principle",
+      "330 actual deformed surface provider"
+    ],
+    "missing": [
+      "authored whole-hair curve graph and persistent controls/anchors",
+      "curve evaluation/intersection error bounds and validity checks",
+      "static triangle search topology with dynamic bound refit"
+    ]
+  },
+  "oracleContract": "505/508 physical/source comparison only; equality of every designed output cell is not required.",
+  "unresolvedNeighbourEvent": "(224,58), phases.8625/.8750/.8875; stable control correspondence does not prove a solution to coupled selection.",
+  "scope": [
+    "current game angle and Walk first",
+    "eyes/colors/proportions and internal shading unchanged",
+    "no full-loop or new captures",
+    "no runtime code, assets, library, library403 retry, filter or stationary cache added"
+  ],
+  "primarySources": [
+    "https://saint11.art/pixel_art_articles/article2/",
+    "https://saint11.art/pixel_art_articles/article4/",
+    "https://www.cs.cornell.edu/~rdz/Papers/KZ-PAMI04.pdf"
+  ],
+  "restorationEvidence": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\FINAL_RESTORED509_REJECTED.json",
+    "sha256": "87f77f94ac2bbd471a2e91294e5064c85bad28ad604ba61d73a4623448373756",
+    "note": "No further Unity mutations in document-only review."
+  }
+}

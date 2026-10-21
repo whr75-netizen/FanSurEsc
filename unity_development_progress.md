@@ -3177,3 +3177,12 @@ Interactable (abstract base class)
 - target10/13/28/66/75/77 기하 component 사건6쌍은 영향을 받은 대응 구간 종료→현재 기하에서 새 구간 시작으로 명시했다. 사건 pose prior는UNAVAILABLE/전체전이비용null이며 영향 없는 component 진단은 별도다. 물리 가림이나 무료 편집으로 해석하지 않고 전체 시간 비용·구간 합계를 만들지 않았다. 제품 시간 상태 recurrence는 바꾸지 않았다.
 - 두 실패포즈 경계 half-edge1997/2006,cycle80/82,단일paired78/80. 별도 구성46.6/56.6ms,최종binding약1.5~1.7초는Python 오프라인 진단이고 lazy구성 포함이다. 기존exact overlay비용 별도/실시간 해법 아님. 짧은 차등대조 실행은 동일 분기 재사용 효과이며 애니메이션 정지 cache가 아니다. runtime/shader/Quality·Time·44d13c0/기본OFF 보존, 마지막 직접Unity상태514 이후 호출 없음,Library403재시도/새GIF 없음.
 - 근거 docs/artifacts/local-chain519의README/MINIMUM/GENERALITY/BRANCH_EQUIVALENCE/EVENT_INTERVALS/AUDIT/VALIDATION/전체81차등ZIP/실패V1ZIP/소스해시. 대응 gate만 통과했으며516 형태고정·초기조건/시간장벽,donor471가림,내부색11+몸1,nativeworld/눈,212ms는 미해결이다. 이후 상태 비용 수정은 별도 단위이며 현재 픽셀튀김·실제Walk품질·제품채택·실시간·전체 프로젝트 완료를 주장하지 않는다.
+
+## 232. CHARACTER-RENDER-01 — 상태 비용520 kernel 최소대조, 선택기 통합 미완료·미채택
+
+- 519/8cf7957 대응을 고정하고516 정지12셀 고정 반례를 다시 묶었다. 현재static120/held118 edge 모두519대응/왕복raw36이며 과거42를 재사용하지 않았다. 공간 비용53.536999→51.494437,면적오차36.642917→34.436335,계단비율반전진단4→2. 일회성βK가 현재 이득2.042562보다 커 기존 기억 방식의 장벽이 남는다.
+- 같은 선택기 안에서 대안마다 상대 이력값을 유지하는 finite-state kernel을 오프라인 시험했다. 기존η=.5/1/2와β=.14×η를 유지하고 원81기록 간격 중앙값r=.01666666666666572초로dt/r 현재형태regret를 적분한다. 유효 raw편집 edge의 명시적 경로 envelope 안에서 비용을 비교하며 RGB/mask 후처리나 별도 출력층이 아니다.1초 기준 첫시도는 원가중치 보정을 바꾸어 미채택·보존했다.
+- 한 기준간격의 첫 결정은 기존강도와동일,dt0/동일근거는 무조건 누적·decay없음. 정지반례η별복귀33.33/50/83.33ms,30/60/120Hz 및 포화전1/2/4/8분할 값동일. 유효동반운동이 주어진 kernel시험에서 화면고정없음. 복귀는12셀동시변경이며 실제시간품질통과가 아니다. 지속이득은초기상태영향을없애지만 근거가균형인 합성주기는 서로다른 초기선택을유지한다.
+- 성분별 주변화재시작 kernel은 통과하나 전체이력삭제는 무관성분까지변경하는 반례에서실패했다. 기존516은 직전출력span한벌만저장해 대안이력/부분주변화가 아직통합되지않았다. static+기존3η의 제한4mask bank는 source사건10/13/66/75/77에서outer/holes조합4/4/8/3/4개가빠진다. 이는구조적containment진단이며source/depth/가림적격성이나오류개수가아니다. 이bank로재선택하는우회는미채택했다.
+- kernel성질과실제선택기적용gate를분리해후자는미완료/미통과로남겼고 저장Walk세계수민감도는미실행이다. 다음필요조건은같은선택기상태에서대안값과변경성분만의주변화를표현하는것이며전역mask bank/전체reset/시간threshold를붙이지않는다. 제품/519대응/계수/기본OFF/Unity상태변경0,촬영0,신규채움가림미확인,내부색/성능미해결유지.
+- 근거 docs/artifacts/state-cost520의README/PREFLIGHT/MINIMUM/RESTART_SUPPORT/VALIDATION/소스및기각1초보정ZIP. 마지막직접Unity운영확인514이후새호출없음,사용자설정/44d13c0/8cf7957보존,Library403재시도없음. 실제Walk픽셀튐·형태고정해결·제품채택·실시간·전체프로젝트완료를주장하지않는다.

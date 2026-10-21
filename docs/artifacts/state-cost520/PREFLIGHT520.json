@@ -1,0 +1,1867 @@
+{
+  "stationaryCurrentGeometryTarget": 80,
+  "preconditionPassed": true,
+  "rows": [
+    {
+      "drawing": "current-static",
+      "boundEdges": 120,
+      "inputEdges": 120,
+      "fullyBound": true,
+      "unsupported": [],
+      "spatial": {
+        "area": 34.436334656544204,
+        "perimeter": 17.058101892471313,
+        "total": 51.49443654901552
+      },
+      "stairRhythm": {
+        "dualBoundaryEdges": 120,
+        "collinearRuns": 64,
+        "stairRatioReversalsDiagnostic": 2,
+        "monotoneBlocksDiagnostic": 15,
+        "regionBoundaryLoops": 2,
+        "metricScope": "closed dual-grid run diagnostic, not paper Eq4 or an aesthetic pass"
+      },
+      "chainSummary": {
+        "newMask": false,
+        "chainConstructed": false,
+        "anchoredPairs": null,
+        "indexedPixelEdges": null,
+        "unanchoredPixelEdges": null,
+        "unresolvedPixelEdges": null,
+        "sourcePiecesResolved": 0,
+        "candidateCounts": {
+          "existingAcceptedUnitEdges": 120
+        },
+        "uniformProgressIsLocalGeometricCorrespondenceNotTemporalHistory": true
+      },
+      "maskSHA256": "992ef66f2edafd15651f4cf51d6e33947852307380bcea9d1d5ba69498647729",
+      "seconds": 8.638060299999779,
+      "physicalNovelFillVisibility": "UNVERIFIED"
+    },
+    {
+      "drawing": "past-held516",
+      "boundEdges": 118,
+      "inputEdges": 118,
+      "fullyBound": true,
+      "unsupported": [],
+      "spatial": {
+        "area": 36.64291714317369,
+        "perimeter": 16.89408168196678,
+        "total": 53.53699882514047
+      },
+      "stairRhythm": {
+        "dualBoundaryEdges": 118,
+        "collinearRuns": 60,
+        "stairRatioReversalsDiagnostic": 4,
+        "monotoneBlocksDiagnostic": 13,
+        "regionBoundaryLoops": 2,
+        "metricScope": "closed dual-grid run diagnostic, not paper Eq4 or an aesthetic pass"
+      },
+      "chainSummary": {
+        "newMask": false,
+        "chainConstructed": false,
+        "anchoredPairs": null,
+        "indexedPixelEdges": null,
+        "unanchoredPixelEdges": null,
+        "unresolvedPixelEdges": null,
+        "sourcePiecesResolved": 0,
+        "candidateCounts": {
+          "existingAcceptedUnitEdges": 118
+        },
+        "uniformProgressIsLocalGeometricCorrespondenceNotTemporalHistory": true
+      },
+      "maskSHA256": "71e4c9b6ba6dd4f3788f7f65242bd44f2f5eeaf1bc80838a69d1e82448c37f30",
+      "seconds": 8.680638700010604,
+      "physicalNovelFillVisibility": "UNVERIFIED"
+    }
+  ],
+  "differentCells": 12,
+  "recoverRaw519": 36.0,
+  "reverseRaw519": 36.0,
+  "recoverDetail": {
+    "raw": 36.0,
+    "rows": [
+      {
+        "old": 1,
+        "new": 1,
+        "oldPixelSpans": 0,
+        "newPixelSpans": 0,
+        "fitScore": 0.0,
+        "exactSameGeometry": true,
+        "rotationRadians": 0.0,
+        "translation": [
+          0.0,
+          0.0
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": null,
+        "maxPredictedMovement": 0.0,
+        "raw": 0.0,
+        "deleteAddUpperBound": 0,
+        "normalizedDiagnostic": 0.0,
+        "operations": [],
+        "cyclicOffset": 0
+      },
+      {
+        "old": 2,
+        "new": 2,
+        "oldPixelSpans": 2,
+        "newPixelSpans": 4,
+        "fitScore": 0.0,
+        "exactSameGeometry": true,
+        "rotationRadians": 0.0,
+        "translation": [
+          0.0,
+          0.0
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": 0.0,
+        "maxPredictedMovement": 0.0,
+        "raw": 2.0,
+        "deleteAddUpperBound": 8,
+        "normalizedDiagnostic": 0.25,
+        "operations": [
+          {
+            "operation": "add",
+            "oldSpanRange": [
+              0,
+              0
+            ],
+            "newSpanRange": [
+              0,
+              1
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              0,
+              1
+            ],
+            "newSpanRange": [
+              1,
+              3
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              1,
+              2
+            ],
+            "newSpanRange": [
+              3,
+              4
+            ],
+            "cost": 0.0
+          }
+        ],
+        "cyclicOffset": 0
+      },
+      {
+        "old": 0,
+        "new": 0,
+        "oldPixelSpans": 71,
+        "newPixelSpans": 72,
+        "fitScore": 0.0,
+        "exactSameGeometry": true,
+        "rotationRadians": 0.0,
+        "translation": [
+          0.0,
+          0.0
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": 0.0,
+        "maxPredictedMovement": 0.0,
+        "raw": 34.0,
+        "deleteAddUpperBound": 230,
+        "normalizedDiagnostic": 0.14782608695652175,
+        "operations": [
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              0,
+              1
+            ],
+            "newSpanRange": [
+              0,
+              1
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              1,
+              2
+            ],
+            "newSpanRange": [
+              1,
+              2
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              2,
+              4
+            ],
+            "newSpanRange": [
+              2,
+              3
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "add",
+            "oldSpanRange": [
+              4,
+              4
+            ],
+            "newSpanRange": [
+              3,
+              4
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              4,
+              6
+            ],
+            "newSpanRange": [
+              4,
+              5
+            ],
+            "cost": 4.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              6,
+              7
+            ],
+            "newSpanRange": [
+              5,
+              7
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              7,
+              8
+            ],
+            "newSpanRange": [
+              7,
+              8
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              8,
+              9
+            ],
+            "newSpanRange": [
+              8,
+              9
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              9,
+              10
+            ],
+            "newSpanRange": [
+              9,
+              10
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              10,
+              11
+            ],
+            "newSpanRange": [
+              10,
+              11
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              11,
+              12
+            ],
+            "newSpanRange": [
+              11,
+              12
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              12,
+              13
+            ],
+            "newSpanRange": [
+              12,
+              13
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              13,
+              14
+            ],
+            "newSpanRange": [
+              13,
+              14
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              14,
+              15
+            ],
+            "newSpanRange": [
+              14,
+              15
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              15,
+              16
+            ],
+            "newSpanRange": [
+              15,
+              16
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              16,
+              17
+            ],
+            "newSpanRange": [
+              16,
+              17
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              17,
+              18
+            ],
+            "newSpanRange": [
+              17,
+              18
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              18,
+              19
+            ],
+            "newSpanRange": [
+              18,
+              19
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              19,
+              20
+            ],
+            "newSpanRange": [
+              19,
+              20
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              20,
+              21
+            ],
+            "newSpanRange": [
+              20,
+              21
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              21,
+              22
+            ],
+            "newSpanRange": [
+              21,
+              22
+            ],
+            "cost": 2.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              22,
+              24
+            ],
+            "newSpanRange": [
+              22,
+              23
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              24,
+              26
+            ],
+            "newSpanRange": [
+              23,
+              24
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "delete",
+            "oldSpanRange": [
+              26,
+              27
+            ],
+            "newSpanRange": [
+              24,
+              24
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "delete",
+            "oldSpanRange": [
+              27,
+              28
+            ],
+            "newSpanRange": [
+              24,
+              24
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              28,
+              30
+            ],
+            "newSpanRange": [
+              24,
+              25
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              30,
+              31
+            ],
+            "newSpanRange": [
+              25,
+              27
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              31,
+              32
+            ],
+            "newSpanRange": [
+              27,
+              29
+            ],
+            "cost": 3.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              32,
+              33
+            ],
+            "newSpanRange": [
+              29,
+              31
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              33,
+              34
+            ],
+            "newSpanRange": [
+              31,
+              33
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              34,
+              36
+            ],
+            "newSpanRange": [
+              33,
+              34
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              36,
+              37
+            ],
+            "newSpanRange": [
+              34,
+              35
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              37,
+              38
+            ],
+            "newSpanRange": [
+              35,
+              37
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              38,
+              40
+            ],
+            "newSpanRange": [
+              37,
+              38
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              40,
+              41
+            ],
+            "newSpanRange": [
+              38,
+              39
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              41,
+              42
+            ],
+            "newSpanRange": [
+              39,
+              40
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              42,
+              43
+            ],
+            "newSpanRange": [
+              40,
+              41
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              43,
+              44
+            ],
+            "newSpanRange": [
+              41,
+              42
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "add",
+            "oldSpanRange": [
+              44,
+              44
+            ],
+            "newSpanRange": [
+              42,
+              43
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "add",
+            "oldSpanRange": [
+              44,
+              44
+            ],
+            "newSpanRange": [
+              43,
+              44
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              44,
+              45
+            ],
+            "newSpanRange": [
+              44,
+              46
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              45,
+              46
+            ],
+            "newSpanRange": [
+              46,
+              47
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              46,
+              47
+            ],
+            "newSpanRange": [
+              47,
+              48
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              47,
+              48
+            ],
+            "newSpanRange": [
+              48,
+              49
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              48,
+              49
+            ],
+            "newSpanRange": [
+              49,
+              50
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              49,
+              50
+            ],
+            "newSpanRange": [
+              50,
+              51
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              50,
+              51
+            ],
+            "newSpanRange": [
+              51,
+              52
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              51,
+              53
+            ],
+            "newSpanRange": [
+              52,
+              53
+            ],
+            "cost": 2.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              53,
+              54
+            ],
+            "newSpanRange": [
+              53,
+              55
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              54,
+              55
+            ],
+            "newSpanRange": [
+              55,
+              56
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              55,
+              56
+            ],
+            "newSpanRange": [
+              56,
+              58
+            ],
+            "cost": 2.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              56,
+              58
+            ],
+            "newSpanRange": [
+              58,
+              59
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              58,
+              59
+            ],
+            "newSpanRange": [
+              59,
+              60
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              59,
+              60
+            ],
+            "newSpanRange": [
+              60,
+              61
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              60,
+              61
+            ],
+            "newSpanRange": [
+              61,
+              62
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              61,
+              62
+            ],
+            "newSpanRange": [
+              62,
+              63
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              62,
+              63
+            ],
+            "newSpanRange": [
+              63,
+              64
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              63,
+              64
+            ],
+            "newSpanRange": [
+              64,
+              65
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              64,
+              65
+            ],
+            "newSpanRange": [
+              65,
+              66
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              65,
+              66
+            ],
+            "newSpanRange": [
+              66,
+              67
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              66,
+              67
+            ],
+            "newSpanRange": [
+              67,
+              68
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              67,
+              68
+            ],
+            "newSpanRange": [
+              68,
+              69
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              68,
+              69
+            ],
+            "newSpanRange": [
+              69,
+              70
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              69,
+              70
+            ],
+            "newSpanRange": [
+              70,
+              71
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              70,
+              71
+            ],
+            "newSpanRange": [
+              71,
+              72
+            ],
+            "cost": 0.0
+          }
+        ],
+        "cyclicOffset": 0
+      }
+    ],
+    "geometryEventResets": [],
+    "failedCorrespondences": [],
+    "valid": true,
+    "noSelectedSpanAbsenceAsOcclusion": true
+  },
+  "reverseDetail": {
+    "raw": 36.0,
+    "rows": [
+      {
+        "old": 1,
+        "new": 1,
+        "oldPixelSpans": 0,
+        "newPixelSpans": 0,
+        "fitScore": 0.0,
+        "exactSameGeometry": true,
+        "rotationRadians": 0.0,
+        "translation": [
+          0.0,
+          0.0
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": null,
+        "maxPredictedMovement": 0.0,
+        "raw": 0.0,
+        "deleteAddUpperBound": 0,
+        "normalizedDiagnostic": 0.0,
+        "operations": [],
+        "cyclicOffset": 0
+      },
+      {
+        "old": 2,
+        "new": 2,
+        "oldPixelSpans": 4,
+        "newPixelSpans": 2,
+        "fitScore": 0.0,
+        "exactSameGeometry": true,
+        "rotationRadians": 0.0,
+        "translation": [
+          0.0,
+          0.0
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": 0.0,
+        "maxPredictedMovement": 0.0,
+        "raw": 2.0,
+        "deleteAddUpperBound": 8,
+        "normalizedDiagnostic": 0.25,
+        "operations": [
+          {
+            "operation": "delete",
+            "oldSpanRange": [
+              0,
+              1
+            ],
+            "newSpanRange": [
+              0,
+              0
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              1,
+              3
+            ],
+            "newSpanRange": [
+              0,
+              1
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              3,
+              4
+            ],
+            "newSpanRange": [
+              1,
+              2
+            ],
+            "cost": 0.0
+          }
+        ],
+        "cyclicOffset": 0
+      },
+      {
+        "old": 0,
+        "new": 0,
+        "oldPixelSpans": 72,
+        "newPixelSpans": 71,
+        "fitScore": 0.0,
+        "exactSameGeometry": true,
+        "rotationRadians": 0.0,
+        "translation": [
+          0.0,
+          0.0
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": 0.0,
+        "maxPredictedMovement": 0.0,
+        "raw": 34.0,
+        "deleteAddUpperBound": 230,
+        "normalizedDiagnostic": 0.14782608695652175,
+        "operations": [
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              0,
+              1
+            ],
+            "newSpanRange": [
+              0,
+              1
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              1,
+              2
+            ],
+            "newSpanRange": [
+              1,
+              2
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              2,
+              3
+            ],
+            "newSpanRange": [
+              2,
+              4
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "delete",
+            "oldSpanRange": [
+              3,
+              4
+            ],
+            "newSpanRange": [
+              4,
+              4
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              4,
+              5
+            ],
+            "newSpanRange": [
+              4,
+              6
+            ],
+            "cost": 4.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              5,
+              7
+            ],
+            "newSpanRange": [
+              6,
+              7
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              7,
+              8
+            ],
+            "newSpanRange": [
+              7,
+              8
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              8,
+              9
+            ],
+            "newSpanRange": [
+              8,
+              9
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              9,
+              10
+            ],
+            "newSpanRange": [
+              9,
+              10
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              10,
+              11
+            ],
+            "newSpanRange": [
+              10,
+              11
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              11,
+              12
+            ],
+            "newSpanRange": [
+              11,
+              12
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              12,
+              13
+            ],
+            "newSpanRange": [
+              12,
+              13
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              13,
+              14
+            ],
+            "newSpanRange": [
+              13,
+              14
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              14,
+              15
+            ],
+            "newSpanRange": [
+              14,
+              15
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              15,
+              16
+            ],
+            "newSpanRange": [
+              15,
+              16
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              16,
+              17
+            ],
+            "newSpanRange": [
+              16,
+              17
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              17,
+              18
+            ],
+            "newSpanRange": [
+              17,
+              18
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              18,
+              19
+            ],
+            "newSpanRange": [
+              18,
+              19
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              19,
+              20
+            ],
+            "newSpanRange": [
+              19,
+              20
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              20,
+              21
+            ],
+            "newSpanRange": [
+              20,
+              21
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              21,
+              22
+            ],
+            "newSpanRange": [
+              21,
+              22
+            ],
+            "cost": 2.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              22,
+              23
+            ],
+            "newSpanRange": [
+              22,
+              24
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              23,
+              24
+            ],
+            "newSpanRange": [
+              24,
+              26
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "add",
+            "oldSpanRange": [
+              24,
+              24
+            ],
+            "newSpanRange": [
+              26,
+              27
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "add",
+            "oldSpanRange": [
+              24,
+              24
+            ],
+            "newSpanRange": [
+              27,
+              28
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              24,
+              25
+            ],
+            "newSpanRange": [
+              28,
+              30
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              25,
+              27
+            ],
+            "newSpanRange": [
+              30,
+              31
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              27,
+              29
+            ],
+            "newSpanRange": [
+              31,
+              32
+            ],
+            "cost": 3.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              29,
+              31
+            ],
+            "newSpanRange": [
+              32,
+              33
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              31,
+              33
+            ],
+            "newSpanRange": [
+              33,
+              34
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              33,
+              34
+            ],
+            "newSpanRange": [
+              34,
+              36
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              34,
+              35
+            ],
+            "newSpanRange": [
+              36,
+              37
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              35,
+              37
+            ],
+            "newSpanRange": [
+              37,
+              38
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              37,
+              38
+            ],
+            "newSpanRange": [
+              38,
+              40
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              38,
+              39
+            ],
+            "newSpanRange": [
+              40,
+              41
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              39,
+              40
+            ],
+            "newSpanRange": [
+              41,
+              42
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              40,
+              41
+            ],
+            "newSpanRange": [
+              42,
+              43
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              41,
+              42
+            ],
+            "newSpanRange": [
+              43,
+              44
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "delete",
+            "oldSpanRange": [
+              42,
+              43
+            ],
+            "newSpanRange": [
+              44,
+              44
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "delete",
+            "oldSpanRange": [
+              43,
+              44
+            ],
+            "newSpanRange": [
+              44,
+              44
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              44,
+              46
+            ],
+            "newSpanRange": [
+              44,
+              45
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              46,
+              47
+            ],
+            "newSpanRange": [
+              45,
+              46
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              47,
+              48
+            ],
+            "newSpanRange": [
+              46,
+              47
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              48,
+              49
+            ],
+            "newSpanRange": [
+              47,
+              48
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              49,
+              50
+            ],
+            "newSpanRange": [
+              48,
+              49
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              50,
+              51
+            ],
+            "newSpanRange": [
+              49,
+              50
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              51,
+              52
+            ],
+            "newSpanRange": [
+              50,
+              51
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              52,
+              53
+            ],
+            "newSpanRange": [
+              51,
+              53
+            ],
+            "cost": 2.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              53,
+              55
+            ],
+            "newSpanRange": [
+              53,
+              54
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              55,
+              56
+            ],
+            "newSpanRange": [
+              54,
+              55
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              56,
+              58
+            ],
+            "newSpanRange": [
+              55,
+              56
+            ],
+            "cost": 2.0
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              58,
+              59
+            ],
+            "newSpanRange": [
+              56,
+              58
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              59,
+              60
+            ],
+            "newSpanRange": [
+              58,
+              59
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              60,
+              61
+            ],
+            "newSpanRange": [
+              59,
+              60
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              61,
+              62
+            ],
+            "newSpanRange": [
+              60,
+              61
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              62,
+              63
+            ],
+            "newSpanRange": [
+              61,
+              62
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              63,
+              64
+            ],
+            "newSpanRange": [
+              62,
+              63
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              64,
+              65
+            ],
+            "newSpanRange": [
+              63,
+              64
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              65,
+              66
+            ],
+            "newSpanRange": [
+              64,
+              65
+            ],
+            "cost": 1.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              66,
+              67
+            ],
+            "newSpanRange": [
+              65,
+              66
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              67,
+              68
+            ],
+            "newSpanRange": [
+              66,
+              67
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              68,
+              69
+            ],
+            "newSpanRange": [
+              67,
+              68
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              69,
+              70
+            ],
+            "newSpanRange": [
+              68,
+              69
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              70,
+              71
+            ],
+            "newSpanRange": [
+              69,
+              70
+            ],
+            "cost": 0.0
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              71,
+              72
+            ],
+            "newSpanRange": [
+              70,
+              71
+            ],
+            "cost": 0.0
+          }
+        ],
+        "cyclicOffset": 0
+      }
+    ],
+    "geometryEventResets": [],
+    "failedCorrespondences": [],
+    "valid": true,
+    "noSelectedSpanAbsenceAsOcclusion": true
+  },
+  "old516Cost42IsNotAssumed519Cost": true,
+  "newStateCostImplemented": false,
+  "coefficientChanged": false,
+  "newUnityCalls": 0,
+  "selectorRuns": 0,
+  "seconds": 19.143387000003713
+}

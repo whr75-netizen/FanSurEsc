@@ -1,0 +1,11 @@
+from pathlib import Path
+import json
+R=Path(__file__).parent/'Loop514'
+p=R/'FINAL_REVIEW514.json';out=json.loads(p.read_text())
+out['worldInfoScopeCorrection']={'captured':'f.motion.worldInfo: Compose333 legacy480 preview','actualNativePresenter':'g.player.output: Native395.Present960; independent world/depth and deliveredDelta','notCaptured':['Native395 world/worldDepth','Native395 owner/cellID/depthAudit','deliveredDelta/origin for each pose','GPU Before/Flood/OwnerLines/Palette Audit','full world shadow atlas and other light inputs'],'consequence':'WORLDINFO visibility values are not evidence of native960 world visibility. Screen-vs-local coordinate seam statistics are provisional registration comparisons, not certified same-ray native world/shadow classifications. Local preworld character invariants and paired final PNG observations remain valid within their own spaces.'}
+for item in out['seamWorldClassification']:item['nativeVisibilityCertified']=False
+for item in out['seamHead']:item['worldInfoIsLegacyPreviewNotNative395']=True
+out['remainingLimits'].append('The saved WORLDINFO belongs to legacy480 Compose333, not Native395.Present960. Native world visibility/shadow/registration must not be certified using that buffer.')
+out['reviewVerdict']={'boundaryEnforcement':'PASS at captured Raw/Native/HairLayer/localFinal buffers','selectionTemporalQuality':'FAIL: two spatially separate one-frame region-selection pulses at phase.6375','colourQuality':'NOT_PASSED:12 reconstructed line-consistent hair observations,11 source/shading unresolved;8 paired body changes,7 ramp-consistent and1 unresolved','normalSpeedPresentation':'1.333sec; all80 source samples in lossless normal-speed WebP;67-sample GIF alone omits frame51','loopClosure':'local character roles/alpha repeat; region mask repeats; local colour max.00295410 linear; native visible scene colour closure not certified','adoption':'OFF / NOT_ADOPTED','noNewCaptureOrProductPatch':True,'performance':'212ms grouped packet/quad upload remains separate and unoptimized'}
+p.write_text(json.dumps(out,indent=2)+'\n')
+print(json.dumps({'verdict':out['reviewVerdict'],'nativeWorldLimit':out['worldInfoScopeCorrection']},ensure_ascii=False))

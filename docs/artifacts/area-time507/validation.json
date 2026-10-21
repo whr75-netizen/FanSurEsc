@@ -1,0 +1,601 @@
+{
+  "status": "OBSERVATION_COMPLETE_NO_OPTIMIZATION_RUNTIME_505_UNCHANGED",
+  "rejectedExperimentCommit": "790e724",
+  "scope": "Unity Editor Mono505.Compute on a single saved pose;15 measured calls,2 warmups. No renderer, projection/build, input loading or capture in Compute timing.",
+  "runtimeReference": {
+    "path": "Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadArea505.cs",
+    "sha256": "c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7"
+  },
+  "sourceInput": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\022.allmesh",
+    "sha256": "451b7d4e77e98a43fafdfcc8ac03de2a659488504f810e255dcdae76b2c3910f",
+    "materialsPath": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area505\\materials505.bin",
+    "materialsSha256": "50c98f427bbfc1702ac9048546d5c8a5f8432338fddcf2c9836bcddb4592a6a9"
+  },
+  "analysis": {
+    "status": "COMPLETED_15_CALLS_OBSERVATION_ONLY_NO_OPTIMIZATION",
+    "framework": "Mono 6.13.0 (Visual Studio built mono)",
+    "scope": "Unity Editor stored505.Compute only; no renderer call, projection/build, loading or capture inside timing",
+    "input": "Loop499/022.allmesh",
+    "phase": 1.275001049041748,
+    "modeStatistics": {
+      "0": {
+        "count": 5,
+        "computeMs": {
+          "min": 4033.5227,
+          "median": 4403.1669,
+          "max": 4509.1225
+        },
+        "allocatedByteApiValues": [
+          0.0
+        ],
+        "collectionCountMaxGeneration0": {
+          "min": 4.0,
+          "median": 4.0,
+          "max": 4.0
+        }
+      },
+      "1": {
+        "count": 5,
+        "computeMs": {
+          "min": 4409.6468,
+          "median": 4788.3959,
+          "max": 4953.3482
+        },
+        "allocatedByteApiValues": [
+          0.0
+        ],
+        "collectionCountMaxGeneration0": {
+          "min": 4.0,
+          "median": 4.0,
+          "max": 4.0
+        }
+      },
+      "2": {
+        "count": 5,
+        "computeMs": {
+          "min": 4582.255,
+          "median": 4627.9593,
+          "max": 4948.0145
+        },
+        "allocatedByteApiValues": [
+          0.0
+        ],
+        "collectionCountMaxGeneration0": {
+          "min": 4.0,
+          "median": 4.0,
+          "max": 4.0
+        }
+      }
+    },
+    "areaBitDifferenceTotal": 0,
+    "overheadPaired": {
+      "recorderDeltaMs": {
+        "min": 4.782599999999547,
+        "median": 385.22900000000027,
+        "max": 669.9962000000005
+      },
+      "recorderDeltaFraction": {
+        "min": 0.0010606498271004128,
+        "median": 0.09324953098689659,
+        "max": 0.1621451312671507
+      },
+      "stageObserverDeltaMs": {
+        "min": -353.16229999999996,
+        "median": 114.05420000000049,
+        "max": 438.84639999999945
+      },
+      "combinedDeltaMs": {
+        "min": 112.08200000000033,
+        "median": 450.1778000000004,
+        "max": 814.9704999999999
+      },
+      "combinedDeltaFraction": {
+        "min": 0.02497312952135533,
+        "median": 0.10894709324404706,
+        "max": 0.20204931535404524
+      }
+    },
+    "rawInstrumentedStagesInclusive": {
+      "Binning": {
+        "ms": {
+          "min": 2.5353,
+          "median": 2.6683,
+          "max": 12.9744
+        },
+        "calls": {
+          "min": 1.0,
+          "median": 1.0,
+          "max": 1.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.000520329922234464,
+          "median": 0.0005765608180694242,
+          "max": 0.0026759653906496144
+        }
+      },
+      "CellClip": {
+        "ms": {
+          "min": 71.6482,
+          "median": 76.7043,
+          "max": 101.6662
+        },
+        "calls": {
+          "min": 34493.0,
+          "median": 34493.0,
+          "max": 34493.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.01448019200428778,
+          "median": 0.01664989444555682,
+          "max": 0.02218693634466
+        }
+      },
+      "Occlusion": {
+        "ms": {
+          "min": 1143.9567,
+          "median": 1196.215,
+          "max": 1212.1528
+        },
+        "calls": {
+          "min": 28921.0,
+          "median": 28921.0,
+          "max": 28921.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.2449776167794173,
+          "median": 0.2496492883962154,
+          "max": 0.26345276611538676
+        }
+      },
+      "OverlapClip": {
+        "ms": {
+          "min": 190.9785,
+          "median": 201.7229,
+          "max": 230.6201
+        },
+        "calls": {
+          "min": 136803.0,
+          "median": 136803.0,
+          "max": 136803.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.04076845368985883,
+          "median": 0.041855337837564816,
+          "max": 0.05013277832967576
+        }
+      },
+      "AlphaBounds": {
+        "ms": {
+          "min": 49.8754,
+          "median": 50.1054,
+          "max": 51.1282
+        },
+        "calls": {
+          "min": 50214.0,
+          "median": 50214.0,
+          "max": 50214.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.010319185350203234,
+          "median": 0.010826672568187883,
+          "max": 0.011114376921158773
+        }
+      },
+      "Subtract": {
+        "ms": {
+          "min": 840.7934,
+          "median": 876.4439,
+          "max": 899.4873
+        },
+        "calls": {
+          "min": 49773.0,
+          "median": 49773.0,
+          "max": 49773.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.18178752305596516,
+          "median": 0.18348900268535906,
+          "max": 0.18938020911290207
+        }
+      },
+      "Union": {
+        "ms": {
+          "min": 3281.7857,
+          "median": 3345.1744,
+          "max": 3635.1522
+        },
+        "calls": {
+          "min": 1232.0,
+          "median": 1232.0,
+          "max": 1232.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.7134028431329263,
+          "median": 0.7228184569384609,
+          "max": 0.7346688656631867
+        }
+      },
+      "EdgeBuild": {
+        "ms": {
+          "min": 35.8888,
+          "median": 37.3323,
+          "max": 46.7188
+        },
+        "calls": {
+          "min": 1232.0,
+          "median": 1232.0,
+          "max": 1232.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.007754778655896995,
+          "median": 0.008115389423718722,
+          "max": 0.009635735902444908
+        }
+      },
+      "PairIntersections": {
+        "ms": {
+          "min": 528.2542,
+          "median": 549.1821,
+          "max": 558.7991
+        },
+        "calls": {
+          "min": 1232.0,
+          "median": 1232.0,
+          "max": 1232.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.10958113749649066,
+          "median": 0.11483322880494894,
+          "max": 0.12074416903363863
+        }
+      },
+      "EventSort": {
+        "ms": {
+          "min": 80.7658,
+          "median": 80.8795,
+          "max": 81.352
+        },
+        "calls": {
+          "min": 1232.0,
+          "median": 1232.0,
+          "max": 1232.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.016429802297466992,
+          "median": 0.01746337743290007,
+          "max": 0.01768450270672757
+        }
+      },
+      "Integration": {
+        "ms": {
+          "min": 2634.6423,
+          "median": 2669.4713,
+          "max": 2952.9437
+        },
+        "calls": {
+          "min": 1232.0,
+          "median": 1232.0,
+          "max": 1232.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.5727251805193351,
+          "median": 0.5768139101828316,
+          "max": 0.5967936633977123
+        }
+      },
+      "SpanBuild": {
+        "ms": {
+          "min": 2150.0614,
+          "median": 2185.5389,
+          "max": 2465.0061
+        },
+        "calls": {
+          "min": 221498.0,
+          "median": 221498.0,
+          "max": 221498.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.4673857636927238,
+          "median": 0.47224678488421445,
+          "max": 0.49818085617978686
+        }
+      },
+      "SpanSort": {
+        "ms": {
+          "min": 351.2739,
+          "median": 352.9964,
+          "max": 357.28
+        },
+        "calls": {
+          "min": 221498.0,
+          "median": 221498.0,
+          "max": 221498.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.07220674070377117,
+          "median": 0.07627474165557159,
+          "max": 0.0768390686124228
+        }
+      },
+      "SpanMerge": {
+        "ms": {
+          "min": 104.7843,
+          "median": 105.3549,
+          "max": 106.4438
+        },
+        "calls": {
+          "min": 221498.0,
+          "median": 221498.0,
+          "max": 221498.0
+        },
+        "fractionOfMeasuredCompute": {
+          "min": 0.02129235878350801,
+          "median": 0.022841212108326018,
+          "max": 0.02322956710178722
+        }
+      }
+    },
+    "rawExclusiveDerivedStages": {
+      "Binning": {
+        "min": 2.5353,
+        "median": 2.6683,
+        "max": 12.9744
+      },
+      "CellClip": {
+        "min": 71.6482,
+        "median": 76.7043,
+        "max": 101.6662
+      },
+      "OverlapClip": {
+        "min": 190.9785,
+        "median": 201.7229,
+        "max": 230.6201
+      },
+      "AlphaBounds": {
+        "min": 49.8754,
+        "median": 50.1054,
+        "max": 51.1282
+      },
+      "Subtract": {
+        "min": 840.7934,
+        "median": 876.4439,
+        "max": 899.4873
+      },
+      "EdgeBuild": {
+        "min": 35.8888,
+        "median": 37.3323,
+        "max": 46.7188
+      },
+      "PairIntersections": {
+        "min": 528.2542,
+        "median": 549.1821,
+        "max": 558.7991
+      },
+      "EventSort": {
+        "min": 80.7658,
+        "median": 80.8795,
+        "max": 81.352
+      },
+      "SpanBuild": {
+        "min": 2150.0614,
+        "median": 2185.5389,
+        "max": 2465.0061
+      },
+      "SpanSort": {
+        "min": 351.2739,
+        "median": 352.9964,
+        "max": 357.28
+      },
+      "SpanMerge": {
+        "min": 104.7843,
+        "median": 105.3549,
+        "max": 106.4438
+      },
+      "OcclusionOther": {
+        "min": 58.82099999999991,
+        "median": 59.88639999999998,
+        "max": 62.30939999999998
+      },
+      "IntegrationOther": {
+        "min": 25.227800000000144,
+        "median": 25.302699999999774,
+        "max": 25.874199999999945
+      },
+      "UnionOther": {
+        "min": 0.18769999999949505,
+        "median": 0.20210000000042783,
+        "max": 0.20490000000017972
+      },
+      "ComputeOther": {
+        "min": 25.949200000001383,
+        "median": 26.486700000000837,
+        "max": 28.8737000000001
+      }
+    },
+    "timerCalibrationMsPerPair": 4.7328e-05,
+    "estimatedTimerPairsOverheadMs": {
+      "min": 45.948814752,
+      "median": 45.948814752,
+      "max": 45.948814752
+    },
+    "gcMarkers": {
+      "GCAlloc": {
+        "validMeasuredCalls": 10,
+        "markerMs": {
+          "min": 162.9577,
+          "median": 165.79345,
+          "max": 169.5626
+        },
+        "events": {
+          "min": 6494915.0,
+          "median": 6494915.0,
+          "max": 6494915.0
+        },
+        "unit": "TimeNanoseconds from marker discovery",
+        "interpretation": "Recorded marker inclusive time. It can overlap algorithm stages and other GC/allocation markers; do not add it to stage totals."
+      },
+      "GCCollect": {
+        "validMeasuredCalls": 10,
+        "markerMs": {
+          "min": 75.5191,
+          "median": 78.82740000000001,
+          "max": 108.0911
+        },
+        "events": {
+          "min": 8.0,
+          "median": 8.0,
+          "max": 9.0
+        },
+        "unit": "TimeNanoseconds from marker discovery",
+        "interpretation": "Recorded marker inclusive time. It can overlap algorithm stages and other GC/allocation markers; do not add it to stage totals."
+      },
+      "GCIncremental": {
+        "validMeasuredCalls": 10,
+        "markerMs": {
+          "min": 0.0,
+          "median": 0.0,
+          "max": 0.0
+        },
+        "events": {
+          "min": 0.0,
+          "median": 0.0,
+          "max": 0.0
+        },
+        "unit": "TimeNanoseconds from marker discovery",
+        "interpretation": "Recorded marker inclusive time. It can overlap algorithm stages and other GC/allocation markers; do not add it to stage totals."
+      }
+    },
+    "gcWindow": {
+      "scope": "whole diagnostic window on current thread, includes between-call Editor GC; not attributable solely to Compute",
+      "markers": [
+        {
+          "name": "GC.Collect",
+          "valid": true,
+          "unit": "TimeNanoseconds",
+          "value": 1562519600,
+          "eventCount": 167,
+          "samples": 17
+        },
+        {
+          "name": "GarbageCollector.CollectIncremental",
+          "valid": true,
+          "unit": "TimeNanoseconds",
+          "value": 2800,
+          "eventCount": 16,
+          "samples": 17
+        }
+      ]
+    },
+    "allocationBytes": "UNAVAILABLE: Mono API returned0 in every measured call despite6.49million allocation marker events. It is not zero allocation.",
+    "generationNote": "GC.MaxGeneration=0. gen1/gen2 reported the same collection count; do not sum the three fields.",
+    "measurementLimits": [
+      "Raw stage durations belong to the instrumented copy with GC recorders, not an exact decomposition of the uninstrumented total.",
+      "Paired A/B/C differences include measurement cost plus natural heap/scheduling variability; no automatic overhead subtraction is applied to stage numbers.",
+      "The common window GC recorder is active in all measured modes. Its own small cost was not separately calibrated.",
+      "GC.Alloc marker time is an inclusive recorded profiler metric, not a guaranteed isolated allocator-only cost.",
+      "The window GC totals include original-mode and between-call Editor activity; no exclusive deferred-GC time is inferred.",
+      "Input loading386.946ms, runtime projection/build and renderer calls are outside the Compute timer.",
+      "One fixed stored pose was intentionally repeated for profiling; this is not an animation cache in production."
+    ],
+    "bottleneckCorrection": "Retracted count-based claim. SpanBuild (polygon/edge rescanning and span-list construction) is the largest measured section; occlusion subtraction is another substantial cost. Pair-intersection enumeration is smaller despite its large count.",
+    "noNewOptimization": true,
+    "callbackAndRecorderTerminationEvidence": "COMPLETED is written by Finish only after Tick unsubscribes, all scoped recorders have closed, window recorders dispose and their list clears. Profiler.enabled false before/after."
+  },
+  "manifest": {
+    "scope": "Unity Editor stored505.Compute only; no renderer call, projection/build, loading or capture inside timing",
+    "framework": "Mono 6.13.0 (Visual Studio built mono)",
+    "representative": "Loop499/022.allmesh",
+    "phase": 1.275001049041748,
+    "repeatsPerMode": 5,
+    "modes": [
+      "0 original without per-call recorder",
+      "1 original with GC recorders",
+      "2 instrumented copy with GC recorders"
+    ],
+    "loadOutsideComputeMs": 386.9457,
+    "maxGeneration": 0,
+    "gcWindowIsCommonToAllMeasuredModes": true,
+    "noForcedGC": true,
+    "noGlobalProfilerChange": true
+  },
+  "observerSource": [
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile507\\AreaTiming507.cs",
+      "sha256": "0f55b66286066f193baa88cca24b54b1921975b9bda6a0d4d8855c24bbfa3a79"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile507\\AreaTiming507.cs.meta",
+      "sha256": "d72b5f8e055011c947775a67de988e700dbb840a2156677ac601b52202dca0f9"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile507\\AreaProfileRunner507.cs",
+      "sha256": "dcf5587dbeae80f9220e5a7df11b899de78845b12e5929993c6224b667251c44"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile507\\AreaProfileRunner507.cs.meta",
+      "sha256": "2856618fe680627e867dee50b86d47ee9a67163d12e89015ee432b4e09356405"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor.meta",
+      "sha256": "43fc24565054b86053e1653326134137f3d2979f26397a5814d23d2ae45ae71b"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile507.meta",
+      "sha256": "ee94f8d0525a2e39176a71827799bb7b83f2b6ec215cd9c2a5c06a9f9837f153"
+    }
+  ],
+  "repeatStructureAndEquivalentProposals": {
+    "span": "Within each Union integration interval, Length traverses every polygon and every edge, constructs crossing spans, sorts the spans, then merges them. It is called221498 times in the representative pose.",
+    "occlusion": "For each cell-clipped hair triangle, traverse its cell bin, apply renderer/depth/bbox rejects, calculate triangle overlap and affine-depth clipping, test source-alpha bounds, and split lower/upper fragments through Remove/Subtract. Occlusion28921 calls contains136803 overlap clips,50214 alpha tests and49773 subtractions.",
+    "spanEquivalentCandidate": "Within a single current Union, maintain a set of polygons whose y interval contains the current midpoint. Exclude only polygons that would produce no crossing. Preserve original polygon order, original edge formula, midpoint/event list, span insertion/sort/merge arithmetic. Never reuse this set across animation poses. This is a proposal only; effect/candidate reduction must be measured before implementation.",
+    "occlusionEquivalentCandidate": "For orthographic input, D(p)=z_hair(p)-z_occluder(p) is affine. The true overlap lies in B=bbox(cell-clipped hair) intersect bbox(occluder) intersect cell. A certified upper bound of D on B comes from its four corners. If that bound is strictly negative, the occluder cannot be nearer anywhere, so overlap/alpha/subtraction are unnecessary. Keep uncertain/equal cases on the505 path and account for floating-rounding bounds; no empirical depth epsilon or role-based surface merge. Proposal only.",
+    "equivalenceCaveat": "Mathematical candidate inclusion proofs do not replace numerical validation against505 on all saved inputs and actual animation. No implementation or new measurement was started."
+  },
+  "runtimeRestoration": "COMPLETED is emitted after callback removal and recorder disposal. Direct FINAL_RESTORED507 additionally confirms globalProfiler false, Play true, paused false, input enabled, Animator Idle speed1, captureDelta0, automatic clock true, PostView366 single hook,491/502/505 flagsOFF, not compiling. No game-state setting was changed by measurement.",
+  "allocationBytes": "UNAVAILABLE in this Mono measurement;0 API values are not zero allocation. Do not reuse prior offline CoreCLR bytes as a Unity measurement.",
+  "settingsSha256": {
+    "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "deliverables": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Profile507\\Run01\\measurements.csv",
+      "bytes": 3628,
+      "sha256": "dd03ead5dec17f66e15578b6fc794a9e9b5bae86feef641191ee0cd0fda947a7"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Profile507\\Run01\\ANALYSIS507.json",
+      "bytes": 13324,
+      "sha256": "379923dbb811cbab02342fae21f1ff80499e8a2dc1a7ee84a885842ec8db5b5b"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Profile507\\Run01\\manifest.json",
+      "bytes": 514,
+      "sha256": "cc4851b79a31a4c311f4ceff8b069298884f76881614e5f0bbdde25dac862725"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Profile507\\Run01\\status.json",
+      "bytes": 183,
+      "sha256": "be2c502e1b40835dcac159dd7c0f69dc51ef0ebed5b2259adcce78e593b2c47e"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Profile507\\Run01\\gc_window.json",
+      "bytes": 370,
+      "sha256": "c10ee09326dffd55f66717da4a6e582ffacae9a918880f43f1ad18dba042458a"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\FINAL_RESTORED507.json",
+      "bytes": 21202,
+      "sha256": "eb8bdf30c69d510583ec61cef9af16aa9e18fc8e8ad74cb3a7a7b93e3d63b8bd"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\gc_markers507.json",
+      "bytes": 21771,
+      "sha256": "8cf702a19c42c7b08300af81d516f4a3e801f8f5ef4648e766d60d7e4dbd6a06"
+    }
+  ],
+  "primaryMeasurementApiSource": "https://docs.unity3d.com/6000.2/Documentation/ScriptReference/Unity.Profiling.ProfilerRecorderOptions.SumAllSamplesInFrame.html",
+  "noNewOptimization": true,
+  "noNewCapture": true
+}

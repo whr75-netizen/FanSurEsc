@@ -3066,3 +3066,15 @@ Interactable (abstract base class)
 - 근거: docs/artifacts/hair-pairs506/README.md·validation.json·paired81.csv, Current472/Area506/·Walk506/·FINAL_RESTORED506.json. 이번 단위는 정확도보존 후보제한 검증이며 실시간제품/전신시간품질/전체프로젝트 완료가 아니다.
 
 - 최신 판정: 실제속도개선 미확인·관리할당 증가로506을 미채택했다. 후보 diff만 docs/artifacts/hair-pairs506/REJECTED_CANDIDATE506.diff로 격리하고 runtime HeadArea505.cs를42cb52b의 SHA c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7로 정확히 복원했다. 2171만 변쌍을 주시간비용이라고 한 추정은 철회하고 별도 실제시간분해 단위로 확인한다. 이 체크포인트에는 새 최적화를 포함하지 않는다.
+
+
+## 221.505 면적단독15회 실제시간 분해507, 변쌍주병목 판정 정정 [CHARACTER-RENDER-01]
+
+-790e724로506을 비컴파일diff에 격리하고 runtime505를 SHA c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7로 복원했다. 새최적화/렌더패치/촬영은 없다. explicit-start Editor전용 관찰코드로 Unity Mono6.13에서 저장 Loop499/022 포즈를 원본/원본+GCrecorder/동등구간계측+GCrecorder 각5회, 순서회전하여15회 측정했다. 두워밍업을 제외했고15회 면적비트차0. renderer호출·투영/build·입력load(별도386.946ms)는 Compute 시간 밖이다.
+- A원본 중앙4403.167ms(4033.523~4509.123), B원본+GC4788.396ms, C계측본+GC4627.959ms. 서로 다른 호출의 중앙값을 빼지 않는다. repeat별 B-A 중앙385.229ms, C-B114.054ms(-353.162~438.846), C-A450.178ms/10.89%(112.082~814.970)이다. 계측+heap/scheduling/JIT 변동이 섞이며 원시구간시간에서 임의차감하지 않았다. 타이머쌍970859회의 빈 Begin/End 보정추정은45.949ms이며 공통창GCrecorder 자체비용은 따로 측정하지 않았다.
+- C의 inclusive구간중앙: SpanBuild2185.539ms/221498회, SpanSort352.996/221498, SpanMerge105.355/221498, PairIntersections549.182/1232, EventSort80.879/1232, EdgeBuild37.332/1232, Occlusion1196.215/28921(내부 OverlapClip201.723/136803, AlphaBounds50.105/50214, Subtract876.444/49773), CellClip76.704/34493, Binning2.668/1. 부모/자식 시간을 합산하지 않는다. 별도exclusive잔여를 계산해 각 호출전체와 합계 일치를 확인했다. 무계측 전체에 대한 정확귀속시간으로 바꾸어 부르지 않는다.
+- 2171만 변쌍이라는 횟수만으로 주시간비용이라고 했던 설명을 철회한다. 계측5회 모두 스팬 구축이 변쌍 계산보다 훨씬 크고, 가림의 fragment 차집합도 크다. Length가 매적분구간에서 모든 polygon/edge를 다시 훑어 span을 만들고 할당·정렬·merge하는 반복구조와, cell/hairtriangle/nonhaircandidate마다 clip/alpha/fragment분할하는 가림구조를 코드·호출수로 연결했다.
+- Mono관리할당API는 모든호출0을 반환해 측정불가로 유지한다. 과거CoreCLR byte를 Unity값으로 재사용하지 않는다. GC.MaxGeneration0이므로 동일하게 찍힌 gen0/1/2 count를 합치지 않는다. 기록된10호출 GC.Alloc 마커 중앙165.793ms/6494915events, GC.Collect78.827ms/8events, Compute내 incremental0events. 마커시간은 단계와 서로 겹칠 수 있고 고유 allocator시간이라고 단정하지 않는다. 전체관찰창 GC.Collect1562.520ms에는 A호출과 프레임사이 Editor작업도 포함돼 deferredGC를 정확히 분리했다고 하지 않는다.
+- 미구현 동등후보 경로: 현재 Union의 같은 y구간에 활성인 polygon만 원래순서로 유지해 원edge식/중점/정렬·merge를 보존한다. 가림은 orthographic affine D=z_hair-z_occluder의 실제겹침을포함하는 사각형 최대상한을4꼭짓점에서 보수적으로 구해 확실히음수인 후보만 조기제외할 수 있다. 부동소수rounding보장 필요, 불확실/동일깊이는 원505처리 유지, role만으로 표면합침/임의epsilon/표본근사는 금지한다. 이 경로는 제안뿐이며 새구현/추가측정을 시작하지 않았다.
+- COMPLETED는 콜백해제/CSVclose/scoped·windowrecorder dispose후에만 기록된다. Profiler.enabled 전후false 및 직접readbackfalse, Play/입력/Animator Idle speed1/자동시계/captureDelta0/PostView366단일훅/모든렌더실험OFF/비컴파일을 확인했다. 진단cache를 해제했고 user설정·44d13c0·505helper를 보존했다.
+- 근거: docs/artifacts/area-time507/README.md·validation.json·measurements.csv·STAGE_TABLE507.md, Current472/Profile507/Run01/ 및 FINAL_RESTORED507.json. Editor/Profile507 관찰기만 추가했고 player/runtime경로에는 연결하지 않았다. 시간실측과 연산횟수·환경·계측오버헤드를 구별한다. 실시간채택/눈/이웃비용/시간설계/전체프로젝트 완료는 여전히 미해결이다.

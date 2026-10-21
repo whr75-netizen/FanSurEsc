@@ -1,0 +1,214 @@
+{
+  "eventPairs": 6,
+  "rows": [
+    {
+      "target": 10,
+      "phase": 0.125,
+      "previousTarget": 9,
+      "events": [
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            -1,
+            1
+          ],
+          "old": [
+            1,
+            2
+          ],
+          "new": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "unaffectedMatchedArcs": [
+        [
+          0,
+          0
+        ]
+      ],
+      "oldIntervalEndsAt": 9,
+      "newIntervalStartsAt": 10,
+      "fullTransitionCost": null,
+      "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+      "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+    },
+    {
+      "target": 13,
+      "phase": 0.1625,
+      "previousTarget": 12,
+      "events": [
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            -1,
+            1
+          ],
+          "old": [
+            1,
+            2,
+            3
+          ],
+          "new": [
+            1,
+            2
+          ]
+        }
+      ],
+      "unaffectedMatchedArcs": [
+        [
+          0,
+          0
+        ]
+      ],
+      "oldIntervalEndsAt": 12,
+      "newIntervalStartsAt": 13,
+      "fullTransitionCost": null,
+      "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+      "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+    },
+    {
+      "target": 28,
+      "phase": 0.35,
+      "previousTarget": 27,
+      "events": [
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            -1,
+            1
+          ],
+          "old": [
+            1,
+            2
+          ],
+          "new": [
+            1
+          ]
+        }
+      ],
+      "unaffectedMatchedArcs": [
+        [
+          0,
+          0
+        ]
+      ],
+      "oldIntervalEndsAt": 27,
+      "newIntervalStartsAt": 28,
+      "fullTransitionCost": null,
+      "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+      "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+    },
+    {
+      "target": 66,
+      "phase": 0.825,
+      "previousTarget": 65,
+      "events": [
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            -1,
+            1
+          ],
+          "old": [
+            1
+          ],
+          "new": [
+            1,
+            2
+          ]
+        }
+      ],
+      "unaffectedMatchedArcs": [
+        [
+          0,
+          0
+        ]
+      ],
+      "oldIntervalEndsAt": 65,
+      "newIntervalStartsAt": 66,
+      "fullTransitionCost": null,
+      "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+      "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+    },
+    {
+      "target": 75,
+      "phase": 0.9375,
+      "previousTarget": 74,
+      "events": [
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            -1,
+            1
+          ],
+          "old": [
+            1,
+            2
+          ],
+          "new": [
+            1,
+            2,
+            3
+          ]
+        }
+      ],
+      "unaffectedMatchedArcs": [
+        [
+          0,
+          0
+        ]
+      ],
+      "oldIntervalEndsAt": 74,
+      "newIntervalStartsAt": 75,
+      "fullTransitionCost": null,
+      "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+      "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+    },
+    {
+      "target": 77,
+      "phase": 0.9625,
+      "previousTarget": 76,
+      "events": [
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            -1,
+            1
+          ],
+          "old": [
+            1,
+            2,
+            3
+          ],
+          "new": [
+            1,
+            2
+          ]
+        }
+      ],
+      "unaffectedMatchedArcs": [
+        [
+          0,
+          0
+        ]
+      ],
+      "oldIntervalEndsAt": 76,
+      "newIntervalStartsAt": 77,
+      "fullTransitionCost": null,
+      "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+      "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+    }
+  ],
+  "rules": [
+    "Component split/merge/birth/death ends the affected geometric correspondence interval.",
+    "At the current event pose initialize its geometric representation without claiming a zero temporal edit cost.",
+    "Next pose can use that representation only after a valid geometric correspondence is established.",
+    "Unavailable prior is explicit, not a free add/delete, hidden zero, arbitrary correspondence or physical occlusion.",
+    "Physical visibility, model/camera/clip context and seek invalidation remain distinct causes.",
+    "No coefficient, temporal state implementation or selector recurrence was changed."
+  ],
+  "implementation": "Offline validation contract only; product temporal state unchanged."
+}

@@ -1,0 +1,1400 @@
+{
+  "minimumPassed": true,
+  "targets": [
+    4,
+    5
+  ],
+  "rows": [
+    {
+      "target": 4,
+      "phase": 0.05,
+      "fullyBound": true,
+      "inputEdges": 116,
+      "boundEdges": 116,
+      "unsupported": [],
+      "eventSamples": [
+        {
+          "arc": 0,
+          "segment": 81,
+          "q": [
+            208.5,
+            53.0
+          ],
+          "direction": [
+            -1.0,
+            0.0
+          ],
+          "edge": [
+            209,
+            53,
+            208,
+            53
+          ],
+          "reference": [
+            208.51636756072332,
+            52.96527942915783
+          ],
+          "tangent": [
+            0.04937607615181707,
+            -0.9987802576662446
+          ],
+          "u": 0.9532723174053944,
+          "t": 0.09789799169872271,
+          "fit": 0.24960463222448043,
+          "bindingRule": "EXACT_ENDPOINT_PAIRED_LOCAL_CHAIN",
+          "chain": {
+            "pair": 42,
+            "root": 3504,
+            "tag": "A",
+            "cycle": 0,
+            "pixelStart": [
+              "9381703847287/44993019904",
+              "53"
+            ],
+            "pixelEnd": [
+              "3156083331177/15186460672",
+              "52"
+            ],
+            "sourceStart": [
+              "9381703847287/44993019904",
+              "53"
+            ],
+            "sourceEnd": [
+              "3156083331177/15186460672",
+              "52"
+            ],
+            "pixelProgressExact": "152753813432281/17645890840642454",
+            "pixelLengthExact": "8822945420321227/5213048761647104",
+            "sourceLength": 4.015766336580641,
+            "sourcePieceIndex": 0,
+            "sourcePieceCount": 18
+          },
+          "pixelLoop": 0,
+          "connectionFromPrevious": "CONTINUOUS_ARC_CORNER",
+          "partialIncidence": [
+            {
+              "a": [
+                "209",
+                "53"
+              ],
+              "b": [
+                "9381703847287/44993019904",
+                "53"
+              ],
+              "interval": [
+                "0",
+                "21837312649/44993019904"
+              ],
+              "kind": "D",
+              "changedComponents": [
+                3901
+              ],
+              "selectedOwner": 198
+            },
+            {
+              "a": [
+                "9381703847287/44993019904",
+                "53"
+              ],
+              "b": [
+                "208",
+                "53"
+              ],
+              "interval": [
+                "21837312649/44993019904",
+                "1"
+              ],
+              "kind": "A",
+              "changedComponents": [
+                3504
+              ],
+              "selectedOwner": 198
+            }
+          ]
+        }
+      ],
+      "complexity": {
+        "changedComponents": 82,
+        "boundaryHalfEdges": 2006,
+        "boundaryCycles": 82,
+        "roleRuns": 165,
+        "singleSourcePixelPairCycles": 80,
+        "nonAlternatingOrMultiPairCycles": 2,
+        "ambiguities": [],
+        "newMask": false,
+        "chainConstructed": true,
+        "anchoredPairs": 80,
+        "indexedPixelEdges": 116,
+        "unanchoredPixelEdges": 0,
+        "unresolvedPixelEdges": 3,
+        "sourcePiecesResolved": 1,
+        "candidateCounts": {
+          "existingAcceptedUnitEdges": 115,
+          "localUnitEdges": 1,
+          "localCandidateStates": 1
+        },
+        "uniformProgressIsLocalGeometricCorrespondenceNotTemporalHistory": true
+      },
+      "constructionSeconds": 9.2999980552122e-06,
+      "bindingSeconds": 1.5032975999929477,
+      "maskSHA256": "e2690a7f8a04b7debca86315107c55bef074f142f40d4df6a90a32547cf8aa86",
+      "newSelectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 5,
+      "phase": 0.0625,
+      "fullyBound": true,
+      "inputEdges": 116,
+      "boundEdges": 116,
+      "unsupported": [],
+      "eventSamples": [
+        {
+          "arc": 0,
+          "segment": 81,
+          "q": [
+            208.5,
+            53.0
+          ],
+          "direction": [
+            -1.0,
+            0.0
+          ],
+          "edge": [
+            209,
+            53,
+            208,
+            53
+          ],
+          "reference": [
+            208.5146408302789,
+            52.968925585382955
+          ],
+          "tangent": [
+            0.053128788854347936,
+            -0.9985876685573831
+          ],
+          "u": 0.9530206155725194,
+          "t": 0.08305063540535784,
+          "fit": 0.24946253326754741,
+          "bindingRule": "EXACT_ENDPOINT_PAIRED_LOCAL_CHAIN",
+          "chain": {
+            "pair": 40,
+            "root": 3446,
+            "tag": "A",
+            "cycle": 0,
+            "pixelStart": [
+              "9383022839977/44999704576",
+              "53"
+            ],
+            "pixelEnd": [
+              "6304955235781/30341005312",
+              "52"
+            ],
+            "sourceStart": [
+              "9383022839977/44999704576",
+              "53"
+            ],
+            "sourceEnd": [
+              "6304955235781/30341005312",
+              "52"
+            ],
+            "pixelProgressExact": "270574526518927/35622545332167130",
+            "pixelLengthExact": "17811272666083565/10416689114218496",
+            "sourceLength": 4.0968946659140135,
+            "sourcePieceIndex": 0,
+            "sourcePieceCount": 17
+          },
+          "pixelLoop": 0,
+          "connectionFromPrevious": "CONTINUOUS_ARC_CORNER",
+          "partialIncidence": [
+            {
+              "a": [
+                "209",
+                "53"
+              ],
+              "b": [
+                "9383022839977/44999704576",
+                "53"
+              ],
+              "interval": [
+                "0",
+                "21915416407/44999704576"
+              ],
+              "kind": "D",
+              "changedComponents": [
+                3843
+              ],
+              "selectedOwner": 198
+            },
+            {
+              "a": [
+                "9383022839977/44999704576",
+                "53"
+              ],
+              "b": [
+                "208",
+                "53"
+              ],
+              "interval": [
+                "21915416407/44999704576",
+                "1"
+              ],
+              "kind": "A",
+              "changedComponents": [
+                3446
+              ],
+              "selectedOwner": 198
+            }
+          ]
+        }
+      ],
+      "complexity": {
+        "changedComponents": 80,
+        "boundaryHalfEdges": 1997,
+        "boundaryCycles": 80,
+        "roleRuns": 161,
+        "singleSourcePixelPairCycles": 78,
+        "nonAlternatingOrMultiPairCycles": 2,
+        "ambiguities": [],
+        "newMask": false,
+        "chainConstructed": true,
+        "anchoredPairs": 78,
+        "indexedPixelEdges": 116,
+        "unanchoredPixelEdges": 0,
+        "unresolvedPixelEdges": 3,
+        "sourcePiecesResolved": 1,
+        "candidateCounts": {
+          "existingAcceptedUnitEdges": 115,
+          "localUnitEdges": 1,
+          "localCandidateStates": 1
+        },
+        "uniformProgressIsLocalGeometricCorrespondenceNotTemporalHistory": true
+      },
+      "constructionSeconds": 0.0034837999992305413,
+      "bindingSeconds": 1.6776575999974739,
+      "maskSHA256": "bfd6e4450718f4a1546f03daf7288bbe40f54f62d82758625f1b8c190c345848",
+      "newSelectorRuns": 0,
+      "newUnityCalls": 0
+    }
+  ],
+  "oppositeBoundaryCounterexample": {
+    "name": "same-added-ribbon-opposite-boundary-not-admitted",
+    "passed": true,
+    "localChainStatus": "UNANCHORED_CLOSED_RIBBON_NO_CROSSING_PAIR",
+    "localCandidates": [],
+    "existingGeometryCandidates": [
+      {
+        "arc": 0,
+        "segment": 0,
+        "q": [
+          3.5,
+          2.0
+        ],
+        "direction": [
+          1,
+          0
+        ],
+        "edge": [
+          3,
+          2,
+          4,
+          2
+        ],
+        "reference": [
+          3.5,
+          2.25
+        ],
+        "tangent": [
+          1.0,
+          0.0
+        ],
+        "u": 0.06944444444444445,
+        "t": 0.22727272727272727,
+        "fit": 0.0625,
+        "bindingRule": "EXISTING518_ACCEPTED_GEOMETRIC_CANDIDATE"
+      }
+    ],
+    "oppositeCandidates": [],
+    "scope": "This keeps the518 rule on unanchored boundaries; it does not claim a new pure-closed-ribbon map."
+  },
+  "exactPairedRunChecks": [
+    {
+      "target": 4,
+      "endpointsExactEqual": true,
+      "uniquePixelRun": true,
+      "uniqueSourceRun": true,
+      "sourceSegmentsInOrder": [
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ]
+      ]
+    },
+    {
+      "target": 5,
+      "endpointsExactEqual": true,
+      "uniquePixelRun": true,
+      "uniqueSourceRun": true,
+      "sourceSegmentsInOrder": [
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          81
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ],
+        [
+          0,
+          82
+        ]
+      ]
+    }
+  ],
+  "twoPoseCostCorrespondence": {
+    "raw": 8.321112527710412,
+    "rows": [
+      {
+        "old": 1,
+        "new": 1,
+        "oldPixelSpans": 0,
+        "newPixelSpans": 0,
+        "fitScore": 2.9973565616181475e-05,
+        "exactSameGeometry": false,
+        "rotationRadians": 0.004777921480717311,
+        "translation": [
+          0.27155117247838234,
+          -1.0571594543006242
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": null,
+        "maxPredictedMovement": 0.0,
+        "raw": 0.0,
+        "deleteAddUpperBound": 0,
+        "normalizedDiagnostic": 0.0,
+        "operations": [],
+        "cyclicOffset": 0
+      },
+      {
+        "old": 2,
+        "new": 2,
+        "oldPixelSpans": 2,
+        "newPixelSpans": 2,
+        "fitScore": 1.0591437983542562e-05,
+        "exactSameGeometry": false,
+        "rotationRadians": 0.0033290834603024585,
+        "translation": [
+          0.17881737777884155,
+          -0.7408145559662174
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": 1.424810755923073e-05,
+        "maxPredictedMovement": 0.06225360906554175,
+        "raw": 0.24547974039937515,
+        "deleteAddUpperBound": 6,
+        "normalizedDiagnostic": 0.040913290066562524,
+        "operations": [
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              0,
+              1
+            ],
+            "newSpanRange": [
+              0,
+              1
+            ],
+            "cost": 0.08116279565219742
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              1,
+              2
+            ],
+            "newSpanRange": [
+              1,
+              2
+            ],
+            "cost": 0.16431694474717773
+          }
+        ],
+        "cyclicOffset": 0
+      },
+      {
+        "old": 0,
+        "new": 0,
+        "oldPixelSpans": 69,
+        "newPixelSpans": 69,
+        "fitScore": 7.017830552058513e-05,
+        "exactSameGeometry": false,
+        "rotationRadians": 0.003134084080306174,
+        "translation": [
+          0.17487599037193036,
+          -0.6920738888686344
+        ],
+        "nearEqualGeometricFits": 1,
+        "curveMapFit": 0.0017207446800274185,
+        "maxPredictedMovement": 0.07137510700005337,
+        "raw": 8.075632787311037,
+        "deleteAddUpperBound": 226,
+        "normalizedDiagnostic": 0.035732888439429365,
+        "operations": [
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              0,
+              1
+            ],
+            "newSpanRange": [
+              0,
+              1
+            ],
+            "cost": 0.050442275172315476
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              1,
+              2
+            ],
+            "newSpanRange": [
+              1,
+              2
+            ],
+            "cost": 0.050436635440711086
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              2,
+              3
+            ],
+            "newSpanRange": [
+              2,
+              3
+            ],
+            "cost": 0.22180851469672547
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              3,
+              4
+            ],
+            "newSpanRange": [
+              3,
+              4
+            ],
+            "cost": 0.059251306595292874
+          },
+          {
+            "operation": "split",
+            "oldSpanRange": [
+              4,
+              5
+            ],
+            "newSpanRange": [
+              4,
+              6
+            ],
+            "cost": 1.2624821778156488
+          },
+          {
+            "operation": "merge",
+            "oldSpanRange": [
+              5,
+              7
+            ],
+            "newSpanRange": [
+              6,
+              7
+            ],
+            "cost": 1.234560363829175
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              7,
+              8
+            ],
+            "newSpanRange": [
+              7,
+              8
+            ],
+            "cost": 0.08308399366141828
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              8,
+              9
+            ],
+            "newSpanRange": [
+              8,
+              9
+            ],
+            "cost": 0.0830803652437524
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              9,
+              10
+            ],
+            "newSpanRange": [
+              9,
+              10
+            ],
+            "cost": 0.08307673682607941
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              10,
+              11
+            ],
+            "newSpanRange": [
+              10,
+              11
+            ],
+            "cost": 0.16879501245367834
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              11,
+              12
+            ],
+            "newSpanRange": [
+              11,
+              12
+            ],
+            "cost": 0.08571827562762735
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              12,
+              13
+            ],
+            "newSpanRange": [
+              12,
+              13
+            ],
+            "cost": 0.0877414150642295
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              13,
+              14
+            ],
+            "newSpanRange": [
+              13,
+              14
+            ],
+            "cost": 0.0877353466303461
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              14,
+              15
+            ],
+            "newSpanRange": [
+              14,
+              15
+            ],
+            "cost": 0.08772927819654086
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              15,
+              16
+            ],
+            "newSpanRange": [
+              15,
+              16
+            ],
+            "cost": 0.17284002763587836
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              16,
+              17
+            ],
+            "newSpanRange": [
+              16,
+              17
+            ],
+            "cost": 0.08511258670802846
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              17,
+              18
+            ],
+            "newSpanRange": [
+              17,
+              18
+            ],
+            "cost": 0.6973701044003136
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              18,
+              19
+            ],
+            "newSpanRange": [
+              18,
+              19
+            ],
+            "cost": 0.08258602239794044
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              19,
+              20
+            ],
+            "newSpanRange": [
+              19,
+              20
+            ],
+            "cost": 0.25155275714984526
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              20,
+              21
+            ],
+            "newSpanRange": [
+              20,
+              21
+            ],
+            "cost": 0.08798000055569588
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              21,
+              22
+            ],
+            "newSpanRange": [
+              21,
+              22
+            ],
+            "cost": 0.17864079764905227
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              22,
+              23
+            ],
+            "newSpanRange": [
+              22,
+              23
+            ],
+            "cost": 0.09065607851226076
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              23,
+              24
+            ],
+            "newSpanRange": [
+              23,
+              24
+            ],
+            "cost": 0.09467097836154892
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              24,
+              25
+            ],
+            "newSpanRange": [
+              24,
+              25
+            ],
+            "cost": 0.2651548490666471
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              25,
+              26
+            ],
+            "newSpanRange": [
+              25,
+              26
+            ],
+            "cost": 0.23469631970365157
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              26,
+              27
+            ],
+            "newSpanRange": [
+              26,
+              27
+            ],
+            "cost": 0.077852236873035
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              27,
+              28
+            ],
+            "newSpanRange": [
+              27,
+              28
+            ],
+            "cost": 0.14908740590990988
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              28,
+              29
+            ],
+            "newSpanRange": [
+              28,
+              29
+            ],
+            "cost": 0.13045833788750372
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              29,
+              30
+            ],
+            "newSpanRange": [
+              29,
+              30
+            ],
+            "cost": 0.06743387151817615
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              30,
+              31
+            ],
+            "newSpanRange": [
+              30,
+              31
+            ],
+            "cost": 0.0648964502797611
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              31,
+              32
+            ],
+            "newSpanRange": [
+              31,
+              32
+            ],
+            "cost": 0.06728407914102519
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              32,
+              33
+            ],
+            "newSpanRange": [
+              32,
+              33
+            ],
+            "cost": 0.12955848886426224
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              33,
+              34
+            ],
+            "newSpanRange": [
+              33,
+              34
+            ],
+            "cost": 0.05717793329818477
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              34,
+              35
+            ],
+            "newSpanRange": [
+              34,
+              35
+            ],
+            "cost": 0.10472596016816738
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              35,
+              36
+            ],
+            "newSpanRange": [
+              35,
+              36
+            ],
+            "cost": 0.04754802687000392
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              36,
+              37
+            ],
+            "newSpanRange": [
+              36,
+              37
+            ],
+            "cost": 0.21986495734132205
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              37,
+              38
+            ],
+            "newSpanRange": [
+              37,
+              38
+            ],
+            "cost": 0.02918255934466174
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              38,
+              39
+            ],
+            "newSpanRange": [
+              38,
+              39
+            ],
+            "cost": 0.061775057841195746
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              39,
+              40
+            ],
+            "newSpanRange": [
+              39,
+              40
+            ],
+            "cost": 0.032592498496534006
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              40,
+              41
+            ],
+            "newSpanRange": [
+              40,
+              41
+            ],
+            "cost": 0.031430120485438806
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              41,
+              42
+            ],
+            "newSpanRange": [
+              41,
+              42
+            ],
+            "cost": 0.05968044279730833
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              42,
+              43
+            ],
+            "newSpanRange": [
+              42,
+              43
+            ],
+            "cost": 0.024306344823848747
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              43,
+              44
+            ],
+            "newSpanRange": [
+              43,
+              44
+            ],
+            "cost": 0.07466535013777786
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              44,
+              45
+            ],
+            "newSpanRange": [
+              44,
+              45
+            ],
+            "cost": 0.019204584401038005
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              45,
+              46
+            ],
+            "newSpanRange": [
+              45,
+              46
+            ],
+            "cost": 0.019196513389779568
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              46,
+              47
+            ],
+            "newSpanRange": [
+              46,
+              47
+            ],
+            "cost": 0.018632504423251817
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              47,
+              48
+            ],
+            "newSpanRange": [
+              47,
+              48
+            ],
+            "cost": 0.028902801879340245
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              48,
+              49
+            ],
+            "newSpanRange": [
+              48,
+              49
+            ],
+            "cost": 0.01132314642867982
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              49,
+              50
+            ],
+            "newSpanRange": [
+              49,
+              50
+            ],
+            "cost": 0.01452421011381233
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              50,
+              51
+            ],
+            "newSpanRange": [
+              50,
+              51
+            ],
+            "cost": 0.014213227156396613
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              51,
+              52
+            ],
+            "newSpanRange": [
+              51,
+              52
+            ],
+            "cost": 0.012556874325547085
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              52,
+              53
+            ],
+            "newSpanRange": [
+              52,
+              53
+            ],
+            "cost": 0.03649898993427314
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              53,
+              54
+            ],
+            "newSpanRange": [
+              53,
+              54
+            ],
+            "cost": 0.013054466976477386
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              54,
+              55
+            ],
+            "newSpanRange": [
+              54,
+              55
+            ],
+            "cost": 0.04788159037173756
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              55,
+              56
+            ],
+            "newSpanRange": [
+              55,
+              56
+            ],
+            "cost": 0.02099431083149028
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              56,
+              57
+            ],
+            "newSpanRange": [
+              56,
+              57
+            ],
+            "cost": 0.02488245586983595
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              57,
+              58
+            ],
+            "newSpanRange": [
+              57,
+              58
+            ],
+            "cost": 0.023322477027207356
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              58,
+              59
+            ],
+            "newSpanRange": [
+              58,
+              59
+            ],
+            "cost": 0.025023502257617736
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              59,
+              60
+            ],
+            "newSpanRange": [
+              59,
+              60
+            ],
+            "cost": 0.028371953910159675
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              60,
+              61
+            ],
+            "newSpanRange": [
+              60,
+              61
+            ],
+            "cost": 0.028360574554547213
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              61,
+              62
+            ],
+            "newSpanRange": [
+              61,
+              62
+            ],
+            "cost": 0.02834919519892054
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              62,
+              63
+            ],
+            "newSpanRange": [
+              62,
+              63
+            ],
+            "cost": 0.030026144030763646
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              63,
+              64
+            ],
+            "newSpanRange": [
+              63,
+              64
+            ],
+            "cost": 0.032519437640580406
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              64,
+              65
+            ],
+            "newSpanRange": [
+              64,
+              65
+            ],
+            "cost": 0.07061435365999813
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              65,
+              66
+            ],
+            "newSpanRange": [
+              65,
+              66
+            ],
+            "cost": 0.07595779296148208
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              66,
+              67
+            ],
+            "newSpanRange": [
+              66,
+              67
+            ],
+            "cost": 0.03970077508986236
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              67,
+              68
+            ],
+            "newSpanRange": [
+              67,
+              68
+            ],
+            "cost": 0.04345832993610088
+          },
+          {
+            "operation": "substitute",
+            "oldSpanRange": [
+              68,
+              69
+            ],
+            "newSpanRange": [
+              68,
+              69
+            ],
+            "cost": 0.05134023346961669
+          }
+        ],
+        "cyclicOffset": 0
+      }
+    ],
+    "geometryEventResets": [],
+    "failedCorrespondences": [],
+    "valid": true,
+    "noSelectedSpanAbsenceAsOcclusion": true
+  },
+  "twoPoseCostComparable": true,
+  "all81AuditStarted": false,
+  "coefficientOrStateCostChanged": false,
+  "maskChanged": false,
+  "newUnityCalls": 0,
+  "seconds": 4.540144099999452,
+  "scope": "Offline correspondence gate, not temporal selection, animation quality or realtime pass."
+}

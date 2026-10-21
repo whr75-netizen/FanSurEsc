@@ -1,0 +1,9 @@
+"""Explicit geometry-event interval contract; no temporal state code change."""
+import json
+import active516 as G
+D=G.ROOT/'Region519';source=G.ROOT/'Region518/PartialEdgeV2/Stored81';rows=[]
+for target in[10,13,28,66,75,77]:
+    r=json.loads((source/f'{target:03d}_AUDIT.json').read_text());detail=r['costDetail'];events=detail['geometryEventResets'];assert events
+    rows.append({'target':target,'phase':target/80,'previousTarget':target-1,'events':events,'unaffectedMatchedArcs':[(q['old'],q['new'])for q in detail['rows']],'oldIntervalEndsAt':target-1,'newIntervalStartsAt':target,'fullTransitionCost':None,'currentPosePriorStatus':'UNAVAILABLE_FOR_CHANGED_COMPONENTS','interpretation':'End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference.'})
+out={'eventPairs':6,'rows':rows,'rules':['Component split/merge/birth/death ends the affected geometric correspondence interval.','At the current event pose initialize its geometric representation without claiming a zero temporal edit cost.','Next pose can use that representation only after a valid geometric correspondence is established.','Unavailable prior is explicit, not a free add/delete, hidden zero, arbitrary correspondence or physical occlusion.','Physical visibility, model/camera/clip context and seek invalidation remain distinct causes.','No coefficient, temporal state implementation or selector recurrence was changed.'],'implementation':'Offline validation contract only; product temporal state unchanged.'}
+(D/'GEOMETRY_EVENT_INTERVALS519.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps({'eventsDefined':len(rows),'stateCodeChanged':False}))

@@ -1,0 +1,2232 @@
+{
+  "mode": "ONE_STORED81_DIFFERENTIAL_CORRESPONDENCE_AUDIT_WITH_PROVEN_REPLAY",
+  "poses": 81,
+  "fullyBoundPoses": 81,
+  "comparablePairs": 74,
+  "geometryEventPairs": [
+    10,
+    13,
+    28,
+    66,
+    75,
+    77
+  ],
+  "changedPoseTargets": [
+    4,
+    5
+  ],
+  "directNeighbourCrossChecks": [
+    {
+      "target": 3,
+      "mode": "DIRECT_OLD_NEW_BINDER_CROSS_CHECK",
+      "semanticBindingsIdentical": true,
+      "newChainConstructed": false,
+      "boundEdges": 116,
+      "seconds": 10.503187900001649
+    },
+    {
+      "target": 6,
+      "mode": "DIRECT_OLD_NEW_BINDER_CROSS_CHECK",
+      "semanticBindingsIdentical": true,
+      "newChainConstructed": false,
+      "boundEdges": 120,
+      "seconds": 10.297012299997732
+    }
+  ],
+  "changedPoseReceipts": [
+    {
+      "target": 4,
+      "mode": "CURRENT519_CHANGED_POSE_MINIMUM_CACHE",
+      "sourceMinimumSHA256": "8bc42eed489a2e821df6493d04ceb26512dbc5cea27c02c14a4d9f5e8397029a",
+      "boundEdges": 116,
+      "candidateCounts": {
+        "existingAcceptedUnitEdges": 115,
+        "localUnitEdges": 1,
+        "localCandidateStates": 1
+      }
+    },
+    {
+      "target": 5,
+      "mode": "CURRENT519_CHANGED_POSE_MINIMUM_CACHE",
+      "sourceMinimumSHA256": "fb16e6264833267b67b8e31399c588afdb55c6a49ff6cb0a96eaca41b01eda38",
+      "boundEdges": 116,
+      "candidateCounts": {
+        "existingAcceptedUnitEdges": 115,
+        "localUnitEdges": 1,
+        "localCandidateStates": 1
+      }
+    }
+  ],
+  "freshPairTargets": [
+    4,
+    5,
+    6
+  ],
+  "unchangedPoseBranchProof": "BRANCH_EQUIVALENCE519.json",
+  "poseEvaluationModeCounts": {
+    "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY": 77,
+    "DIRECT_OLD_NEW_BINDER_CROSS_CHECK": 2,
+    "CURRENT519_CHANGED_POSE_MINIMUM_CACHE": 2
+  },
+  "costStatusCounts": {
+    "INITIAL_NO_PRIOR": 1,
+    "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY": 71,
+    "CURRENT519_COMPARABLE_PAIR": 3,
+    "GEOMETRY_INTERVAL_END_RESTART": 6
+  },
+  "rows": [
+    {
+      "target": 0,
+      "phase": 0.0,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "INITIAL_NO_PRIOR",
+      "comparablePairRaw": null,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "231ccc18e1f97e3a84de1cabdb0744ec30c097cf4394d69342152e49d09cd47e",
+      "maskUnchangedSHA256": "992ef66f2edafd15651f4cf51d6e33947852307380bcea9d1d5ba69498647729",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 1,
+      "phase": 0.0125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 116,
+      "inputUnitEdges": 116,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 9.644548819926875,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "bf9c6aa94eff85c1efb051e3b125a4ebb75457076831e985eb24af28e21f3ca8",
+      "maskUnchangedSHA256": "2756b0f39648f72d624977fa9022abcc2a12e6f4fabbebf03192886dfa060666",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 2,
+      "phase": 0.025,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 116,
+      "inputUnitEdges": 116,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 5.883534251603649,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "6a6fe03c38c1d328f2fb591ea516a827dce89dbad7d7d61340778598579fe84f",
+      "maskUnchangedSHA256": "2756b0f39648f72d624977fa9022abcc2a12e6f4fabbebf03192886dfa060666",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 3,
+      "phase": 0.0375,
+      "poseEvaluationMode": "DIRECT_OLD_NEW_BINDER_CROSS_CHECK",
+      "fullyBound": true,
+      "boundUnitEdges": 116,
+      "inputUnitEdges": 116,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 10.54347756619206,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "31782a338208883d3303a7713bc998d8f86e868186e24af58137cb1c21b5819c",
+      "maskUnchangedSHA256": "9503d976c3f2d8d71f9f00263b660f4bd5a124402927f001f54d59ad0094dc72",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 4,
+      "phase": 0.05,
+      "poseEvaluationMode": "CURRENT519_CHANGED_POSE_MINIMUM_CACHE",
+      "fullyBound": true,
+      "boundUnitEdges": 116,
+      "inputUnitEdges": 116,
+      "newChainEvaluated": true,
+      "bindingNumericEqualityBasis": "current519 minimum",
+      "costStatus": "CURRENT519_COMPARABLE_PAIR",
+      "comparablePairRaw": 15.69996182949616,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "b172615dce083d53f9af533c45270004ce37c46cc279be3421bb41ea2f1fb016",
+      "maskUnchangedSHA256": "e2690a7f8a04b7debca86315107c55bef074f142f40d4df6a90a32547cf8aa86",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 5,
+      "phase": 0.0625,
+      "poseEvaluationMode": "CURRENT519_CHANGED_POSE_MINIMUM_CACHE",
+      "fullyBound": true,
+      "boundUnitEdges": 116,
+      "inputUnitEdges": 116,
+      "newChainEvaluated": true,
+      "bindingNumericEqualityBasis": "current519 minimum",
+      "costStatus": "CURRENT519_COMPARABLE_PAIR",
+      "comparablePairRaw": 8.321112527710412,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "9d9dd7026dadfdfc04e94106c7e7322134a55b60d11704a8ad3818c3d0b108a9",
+      "maskUnchangedSHA256": "bfd6e4450718f4a1546f03daf7288bbe40f54f62d82758625f1b8c190c345848",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 6,
+      "phase": 0.075,
+      "poseEvaluationMode": "DIRECT_OLD_NEW_BINDER_CROSS_CHECK",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "CURRENT519_COMPARABLE_PAIR",
+      "comparablePairRaw": 16.46931460836342,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "c902f77010d35d222c870bb066702d927bce5ab41dd84f982aaf6216648f850d",
+      "maskUnchangedSHA256": "af13962526f88737334b7ee77c6c1c0f024493fedbe4ba866d9a59c088ffebc0",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 7,
+      "phase": 0.0875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 11.19094788249405,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "35ef4dc1b16f8cbc573071a874250f5fe15797faa0ac209acef22a2b4ae97b9b",
+      "maskUnchangedSHA256": "61e29ea304e013b30c49a40df969ddba3505892a41b76cb6317057ca6524ea3b",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 8,
+      "phase": 0.1,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 7.560797334901011,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "2c18c0a71eb218fde906e1afbab9f2bee018fd51f2bc1f9d575a7a611863e47f",
+      "maskUnchangedSHA256": "61e29ea304e013b30c49a40df969ddba3505892a41b76cb6317057ca6524ea3b",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 9,
+      "phase": 0.1125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 22.770020802342216,
+      "geometryEventInterval": null,
+      "reportingInterval": 0,
+      "source518RowSHA256": "cdefc106973baaeb531b9504c3a8cd240af92f1b12b16c86f66d896c5c1cc8fa",
+      "maskUnchangedSHA256": "321dad1b45603662959683637394199f9e11fac1f4b26c3049880abb911cc8bc",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 10,
+      "phase": 0.125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 128,
+      "inputUnitEdges": 128,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "GEOMETRY_INTERVAL_END_RESTART",
+      "comparablePairRaw": null,
+      "geometryEventInterval": {
+        "target": 10,
+        "phase": 0.125,
+        "previousTarget": 9,
+        "events": [
+          {
+            "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+            "kind": [
+              -1,
+              1
+            ],
+            "old": [
+              1,
+              2
+            ],
+            "new": [
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "unaffectedMatchedArcs": [
+          [
+            0,
+            0
+          ]
+        ],
+        "oldIntervalEndsAt": 9,
+        "newIntervalStartsAt": 10,
+        "fullTransitionCost": null,
+        "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+        "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+      },
+      "reportingInterval": 1,
+      "source518RowSHA256": "9758876bda2d472046aced111fc3d2ff30b39076dea258f971f1677473a1f332",
+      "maskUnchangedSHA256": "2e262e94aea6ab50783ae7c48e1335026d2b8172f3ac21e6ebce6debc90a88ae",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 11,
+      "phase": 0.1375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 16.29709742327296,
+      "geometryEventInterval": null,
+      "reportingInterval": 1,
+      "source518RowSHA256": "4c8192729f45b6117c4b9d887bac8f865f21393da430a48ca58a23e6242af399",
+      "maskUnchangedSHA256": "86e99283327f42265d558c720d6e710223439976127b97ac568fd947670166e6",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 12,
+      "phase": 0.15,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 7.873478792667157,
+      "geometryEventInterval": null,
+      "reportingInterval": 1,
+      "source518RowSHA256": "b5c36b34a53f425f3b436c08aea4bcf930d35f41914c04b53558e74135c74c15",
+      "maskUnchangedSHA256": "81ba30fa0ad713beb39062c9d8e57b862f76673755d32a7ba605d768246b5704",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 13,
+      "phase": 0.1625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "GEOMETRY_INTERVAL_END_RESTART",
+      "comparablePairRaw": null,
+      "geometryEventInterval": {
+        "target": 13,
+        "phase": 0.1625,
+        "previousTarget": 12,
+        "events": [
+          {
+            "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+            "kind": [
+              -1,
+              1
+            ],
+            "old": [
+              1,
+              2,
+              3
+            ],
+            "new": [
+              1,
+              2
+            ]
+          }
+        ],
+        "unaffectedMatchedArcs": [
+          [
+            0,
+            0
+          ]
+        ],
+        "oldIntervalEndsAt": 12,
+        "newIntervalStartsAt": 13,
+        "fullTransitionCost": null,
+        "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+        "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+      },
+      "reportingInterval": 2,
+      "source518RowSHA256": "c9d4dd538e5c76e8319bab2239a868ee6fabf54fb252d4c58d11431e2b36b1eb",
+      "maskUnchangedSHA256": "5c41e78b4f8d7c1689f88aea830a7ee554836cd79885ab772a37c2b9a890d062",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 14,
+      "phase": 0.175,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 6.836773860125938,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "f23c84c5df5910d122c57e8e4b5011cf297b60784e01225b7a1efc9804d73911",
+      "maskUnchangedSHA256": "5c41e78b4f8d7c1689f88aea830a7ee554836cd79885ab772a37c2b9a890d062",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 15,
+      "phase": 0.1875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 6.13853060856227,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "c6626b383f08294fb7ba9b10c1f8a7e6c17f8753d32fe66e372cc4ea78752b91",
+      "maskUnchangedSHA256": "4f3f6c99d4ed2e754e0f012d68d303cf54edee9b25029ac319205ae9eb6e08d6",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 16,
+      "phase": 0.2,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 27.343537242170243,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "4bccfd6e80ce6524062cdac59df91b953e4f984a52bc2c5af978ed12d331aaab",
+      "maskUnchangedSHA256": "d0cf45562fcc1d0e75a40338f6d7d73fdf32e44e688432f2aab2b9453029e189",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 17,
+      "phase": 0.2125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 12.487237542439452,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "8e01b9ab380e6c50bf8e55090b8ceae68fa51a55ef464721d452e0913d96f90c",
+      "maskUnchangedSHA256": "f64f677ceec7326883b68ff4b9ba27e10c9835535653078ddd2682e688b321d9",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 18,
+      "phase": 0.225,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 15.013778683922553,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "675c096526f875cb2f27ba6abf813eee3c7e25ded2ca72439dc18358213eae65",
+      "maskUnchangedSHA256": "8b85c2b4dac5fd6998782ac0bd138f254995166a908443452f6a421feb502f0c",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 19,
+      "phase": 0.2375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 9.439581973564088,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "b3ed8955deeef836b4229909491b0ffcfa3a77c76f95d8c0beb4e2a252a561c0",
+      "maskUnchangedSHA256": "f5b7ec23cd44bee77b5f779b5344d52b5c4a767b240f47825c1de372fa7b6f2a",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 20,
+      "phase": 0.25,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 8.54419330818719,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "446a1fae2d5b45f378580c4b61d3851e61f31214ab593d044eacea8c6e1fc444",
+      "maskUnchangedSHA256": "bb7ee2da70cf9be5aadf8de8bff22aebcc457b3356cab8e2cdccc38ce5a4b9da",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 21,
+      "phase": 0.2625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 15.556048387064116,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "525c871857f3178def3f8ffd60dc394909fb23c68063149105142e899e56b4be",
+      "maskUnchangedSHA256": "be05d27908219ca302a8131182f5fb4f17090d90dd39e0ca9a0f6812cb864711",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 22,
+      "phase": 0.275,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 128,
+      "inputUnitEdges": 128,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 22.944493733523863,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "401668626ed022752375bfc9384a117d9bc3a0e15c337a12ae55b8138853ac7c",
+      "maskUnchangedSHA256": "199d0d3207bc050965935c370e3dd9e8296de835b027ce674445ed4b7b61f624",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 23,
+      "phase": 0.2875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 17.573194513553233,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "12d3ea9d576c9024998047221856d4480418f6d949bbebd6ee954d09e7c83e7e",
+      "maskUnchangedSHA256": "99df2e8ff4571228de3f102e2fbac3ee7b8a6daa642222a0256a881284544b1e",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 24,
+      "phase": 0.3,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 8.042051687045209,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "2b2b4d8d8842f9ab83e107ac4ced03d12968eb345d71111b9e9300bc368480c0",
+      "maskUnchangedSHA256": "99df2e8ff4571228de3f102e2fbac3ee7b8a6daa642222a0256a881284544b1e",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 25,
+      "phase": 0.3125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 19.877075386021225,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "595828baee58474dba9f0dff7708b700f894c72577a5ad8cf8f2b428b99ff764",
+      "maskUnchangedSHA256": "99821deda0b03f85474619985d75262f785508df5e3d021209cbd95cd53c8541",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 26,
+      "phase": 0.325,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 17.425049360021845,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "221b6d79b1697be5a5d1055a9030ab7f2573cc7e0add3c3ea4a28da91d6fdbc3",
+      "maskUnchangedSHA256": "7c7c30d7ca9b9557bff04e8ff77c473e6383c064ecbc68acecb0eea412b1c7b1",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 27,
+      "phase": 0.3375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 118,
+      "inputUnitEdges": 118,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 12.550894006269772,
+      "geometryEventInterval": null,
+      "reportingInterval": 2,
+      "source518RowSHA256": "861802d5b826a105fcb3f5b16cf8994d116c61a1af44230745f39c580d898167",
+      "maskUnchangedSHA256": "c31ab0c2d3f1a946f386fdef339faeedf2417cb6d86036d9175368465f6ed14f",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 28,
+      "phase": 0.35,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 118,
+      "inputUnitEdges": 118,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "GEOMETRY_INTERVAL_END_RESTART",
+      "comparablePairRaw": null,
+      "geometryEventInterval": {
+        "target": 28,
+        "phase": 0.35,
+        "previousTarget": 27,
+        "events": [
+          {
+            "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+            "kind": [
+              -1,
+              1
+            ],
+            "old": [
+              1,
+              2
+            ],
+            "new": [
+              1
+            ]
+          }
+        ],
+        "unaffectedMatchedArcs": [
+          [
+            0,
+            0
+          ]
+        ],
+        "oldIntervalEndsAt": 27,
+        "newIntervalStartsAt": 28,
+        "fullTransitionCost": null,
+        "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+        "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+      },
+      "reportingInterval": 3,
+      "source518RowSHA256": "3b61a7d5e99c517c603b17e2648383c27528dd2e4d019bed0163fcf79c1af447",
+      "maskUnchangedSHA256": "c6c958852235ae7e36a2e954c9d527cf5162bdd7ee3dda1db1f62e30d2ba5071",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 29,
+      "phase": 0.3625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 118,
+      "inputUnitEdges": 118,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 11.191551908082872,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "d649b7407193b8e7de35cb6ea2daebaf5831d2dd3bc8944abbf12ae7e3880068",
+      "maskUnchangedSHA256": "dd2d1d11bb28ede4e562782e35db10110027f5555abffeeb9e2b3a1d2e84f9a4",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 30,
+      "phase": 0.375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 116,
+      "inputUnitEdges": 116,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 10.275258446680908,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "9e3811b0d46309431f4c56810db658ad29995605d06c4c82b15e3fd2b10d5634",
+      "maskUnchangedSHA256": "4dc4a37b73c798d9f75142faa7d8ce3335589dbedaf023546e78f97d00fa37d5",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 31,
+      "phase": 0.3875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 18.857813520516252,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "c0ff55658a450350fc0da89661a6ebdbe688fed4e3a39ccbaa7bdc6477218eda",
+      "maskUnchangedSHA256": "2d18867f01312fe4dbf4926c8981c95c83f3412bb04be105efe4f5143f52de22",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 32,
+      "phase": 0.4,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 16.694312564144937,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "b2e50c285498b9a2697ab0450a84b9b7c2a0d1f3edb884ac36fb1162121a75d7",
+      "maskUnchangedSHA256": "8f7a6c187da31b0bfb751ee16ce22bf06f1460c5e2d717ce432d2d0ddac7cda6",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 33,
+      "phase": 0.4125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 6.9013021271789725,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "c385b00103068cc2800ca1b1b6c02d50cecba59e7dad7c7acb40187811cf7943",
+      "maskUnchangedSHA256": "8f7a6c187da31b0bfb751ee16ce22bf06f1460c5e2d717ce432d2d0ddac7cda6",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 34,
+      "phase": 0.425,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 11.399977590502061,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "9698e28247a9bd762f618f5682d9468d081026ed453fb612bead1f8ee02f38e8",
+      "maskUnchangedSHA256": "ec60a0c8878ec1041830685d51092fb86d128fffe5963a00e10d1e025ba989d2",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 35,
+      "phase": 0.4375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 116,
+      "inputUnitEdges": 116,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 11.933589887807749,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "848b03429a610b14f0223e1d11db85485828a887e430dd5e7cd1df4f8b21c84c",
+      "maskUnchangedSHA256": "14c238915f266b0b6bd50e18855a9676b5e70db41992bf2cd3148fdd05ada6bd",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 36,
+      "phase": 0.45,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 118,
+      "inputUnitEdges": 118,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 11.700596877253133,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "6b0ed0bc6eaa483b7ff1aef4bd703838642a3ef57e518b3fa91712f1ba3177cc",
+      "maskUnchangedSHA256": "03937cb493aac44f69180dd4c17750851bd1e4ff1c9d0e2e8948d3ce83600eda",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 37,
+      "phase": 0.4625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 118,
+      "inputUnitEdges": 118,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 5.606095003633811,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "bc99e87bb541631bcfd08584dd19363b33adb5dd562e64ec5bf6dcf21a3e4327",
+      "maskUnchangedSHA256": "03937cb493aac44f69180dd4c17750851bd1e4ff1c9d0e2e8948d3ce83600eda",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 38,
+      "phase": 0.475,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 8.005736310325332,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "e38e921c869c9b6109cb9b00ae1704ff604644744b77ee7956337ca6d5d037e9",
+      "maskUnchangedSHA256": "5cb10ba269eca61dc62638b20a1e505b73bbc038d7344a11e5564dd601f03c91",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 39,
+      "phase": 0.4875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 25.325443843605605,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "a09203fbf04b47a0eb0fa860dcb63658479e945e72d11fbdb4ac98e41d2652b7",
+      "maskUnchangedSHA256": "0526bb1aee990f634943363f4ecd4bb79adf04aa03c8bafa50a82af08e81862d",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 40,
+      "phase": 0.5,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 4.202337558470134,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "804a7971d8d8b9487c12a7964e30e0a05b4a331b590178b991217fee0f27ba47",
+      "maskUnchangedSHA256": "0526bb1aee990f634943363f4ecd4bb79adf04aa03c8bafa50a82af08e81862d",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 41,
+      "phase": 0.5125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 6.555705252668787,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "486e2afb1bf0eb935ee3d8c2382e63cae5e83cab1d6578034a4f14a8fc7132ab",
+      "maskUnchangedSHA256": "b458009735000dbcffa3118497b57de4ac39b3d436fad611519185c689d9d93e",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 42,
+      "phase": 0.525,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 8.85817879737452,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "f2305b3bc5b52ebddb26f40199d1e53b54dbcb48bb8990ee6d6191d9fc7f3a4b",
+      "maskUnchangedSHA256": "12e1aa7422a07a46a091923bb9d294a9159533f698916c75d874a683a65fd2ad",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 43,
+      "phase": 0.5375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 2.3323138630146474,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "1565989c34ff512b864828dfbba741c74b87c7ad84c133e4b2165d5de714c4ce",
+      "maskUnchangedSHA256": "12e1aa7422a07a46a091923bb9d294a9159533f698916c75d874a683a65fd2ad",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 44,
+      "phase": 0.55,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 1.5512419839052285,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "6d3187fd8d996718e2e153d674ba083a419159029655e9ffb262d7e09a4ee875",
+      "maskUnchangedSHA256": "12e1aa7422a07a46a091923bb9d294a9159533f698916c75d874a683a65fd2ad",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 45,
+      "phase": 0.5625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 2.831880343491747,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "6e76217b0a60c58cecbcddd257e7c3dd010d624575a9d41a2d595eeb32a2a2bd",
+      "maskUnchangedSHA256": "cd3444f3b964cf3d2ee8d749aee25f92c29c74e0cdf1d512fac4fce288de8e31",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 46,
+      "phase": 0.575,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 0.8854855381884903,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "87f926f0c96e39f662bd4b368fa474c81102bbf60c6d5cb1f1ef238ba2741df6",
+      "maskUnchangedSHA256": "cd3444f3b964cf3d2ee8d749aee25f92c29c74e0cdf1d512fac4fce288de8e31",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 47,
+      "phase": 0.5875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 4.580513548837601,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "ab36cae3b7d5c1bad8f6bcd64eb75b1dc8b0b8e08c4dc2f71d1541fc88dc2745",
+      "maskUnchangedSHA256": "b458009735000dbcffa3118497b57de4ac39b3d436fad611519185c689d9d93e",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 48,
+      "phase": 0.6,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 5.399671696883679,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "2f37964190b1edd1ceadfbc861c9becf758700eb696a0d52308d3dfe9d44cd37",
+      "maskUnchangedSHA256": "b458009735000dbcffa3118497b57de4ac39b3d436fad611519185c689d9d93e",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 49,
+      "phase": 0.6125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 13.975506450641618,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "36fa527831b9e67e8e265ebad508f93d954ede0a5b8ca8d5f2f53d2452165110",
+      "maskUnchangedSHA256": "b6ed2b1d5f6a5f8c0a126bf8b7a1e592024b936a3dec9cbbf98ec8e7961143e7",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 50,
+      "phase": 0.625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 12.32935669522724,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "809b929709129082892fb319505460315e123960d6735a521f123bd9416ab388",
+      "maskUnchangedSHA256": "a1b1a23634302c7ae7aaf9be155e467d2333b44caf48e27e683be923ebeca095",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 51,
+      "phase": 0.6375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 46.13593289844921,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "bd8161ebefa1c6a4bdf11e80a9fd472c57a3cdd8ce5bf2019c02d8d7505942a2",
+      "maskUnchangedSHA256": "ce43581e1f93f2600ab21be10f5a3aa3c8797ba5e02e789830ef0e775957f835",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 52,
+      "phase": 0.65,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 21.13173635751056,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "807397cf64fbd5a7f8ba8c16ac786a9726c9fffd14991a71441ef67f92de722f",
+      "maskUnchangedSHA256": "224622675dce8c849929bc7f74b6bf231e9666375af6a09f5b79ac51830d0712",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 53,
+      "phase": 0.6625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 27.122211345048562,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "725194810f3ce3a276878720d95429e6f9d791519630d3c09ef01817d9cab9e0",
+      "maskUnchangedSHA256": "1ea283a8e834420b147014c856f539eeb532930d52f7acc543e6662c9df11145",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 54,
+      "phase": 0.675,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 19.239478809789,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "7799d9f532646e9afc675e0623c2935c2236024e1a614a21e9ef8220d0674914",
+      "maskUnchangedSHA256": "3e229847835634c973e5d9f0a3dc3022cf2478d8f7127dd8030be257cbc0a91f",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 55,
+      "phase": 0.6875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 128,
+      "inputUnitEdges": 128,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 22.723435614262215,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "f75815804ec0b6e30fb7c6d8be8748314f139e8b0a4c398eb416816c41e2a1c8",
+      "maskUnchangedSHA256": "954a1bfc2de72ff6057d9a3976283a020cc4e154afa1b216d3e6fb2347a9fee7",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 56,
+      "phase": 0.7,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 128,
+      "inputUnitEdges": 128,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 26.974313177845055,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "5eaf49dc2afe324966a8bbcdd0c24812e2151752fc86f7bcfd2d5c05b4f99147",
+      "maskUnchangedSHA256": "7d6d7756fd1f311d45a6e6898b162d28ac9f25ab581234f9879db4dd34e5f06a",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 57,
+      "phase": 0.7125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 29.14904776854369,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "db6808404c25963b75547bb84b63557ca94363cf53ca64cabf6ad5382974afdf",
+      "maskUnchangedSHA256": "3bf9915fb4349c9de0f2623ca9523718dd2d808a5e7aeab120cdbcb3b94e6a75",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 58,
+      "phase": 0.725,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 11.129582540382295,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "af6a4781055fa6b6e5b6d44f5be3168699b210871d45c4930f303f45e84f2d9f",
+      "maskUnchangedSHA256": "3bf9915fb4349c9de0f2623ca9523718dd2d808a5e7aeab120cdbcb3b94e6a75",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 59,
+      "phase": 0.7375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 22.860328542985215,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "fd3250a63fc31dbf62fea43a0ee54a95abf8a5ff0578ca68a6bf30973e6ee7cf",
+      "maskUnchangedSHA256": "00479ca1d6e027768cfbabd3397788337ff8f7d6e19ea32f21298a3f7dc33543",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 60,
+      "phase": 0.75,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 124,
+      "inputUnitEdges": 124,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 9.041216391895254,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "adf30bee82fc2825b423cc1a696e241d98620be9ddc13739e41c67accb7b8e55",
+      "maskUnchangedSHA256": "db0c4daf24ed44ce7d5122b2620d6214fe4e58ff6420c5df7ac32814d25ea085",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 61,
+      "phase": 0.7625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 128,
+      "inputUnitEdges": 128,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 14.023213324604328,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "384bf7dc50cc9544f67a0a3ac3ff6c09b8c995ec64aa79ef4b371d054075a6c9",
+      "maskUnchangedSHA256": "6ea0c03f900442558d2abeda40d00f30cce9b862b50b278ccee0e82ae126ad28",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 62,
+      "phase": 0.775,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 128,
+      "inputUnitEdges": 128,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 5.703634853150163,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "09edb9382cc068f2250054c77ee4198a27a86566a331a905d133ae3f77123b25",
+      "maskUnchangedSHA256": "735f9703f07e6577364dc002b40a6c4abc06e4c121a1b2adbf252ac93773dec0",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 63,
+      "phase": 0.7875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 128,
+      "inputUnitEdges": 128,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 4.819808887079311,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "8b9b7dbec42106e6a09ff23e94eea608ae236794a204cbb39e2f76dc2d19ba44",
+      "maskUnchangedSHA256": "735f9703f07e6577364dc002b40a6c4abc06e4c121a1b2adbf252ac93773dec0",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 64,
+      "phase": 0.8,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 29.91288374991933,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "385ac1f02cb58935a0933b9598e6c1ce614f345f3f8c79798f196450f0046a24",
+      "maskUnchangedSHA256": "a8fd5c0ef46386e4bb40c870f98d5e0c2a316239ae1f6500efd4738ebc7bb9c3",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 65,
+      "phase": 0.8125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 128,
+      "inputUnitEdges": 128,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 13.721051722279647,
+      "geometryEventInterval": null,
+      "reportingInterval": 3,
+      "source518RowSHA256": "fc7110eda75f436c2e6fa23afa4f62fb315ef2cca4a209e3df4d13a1ba5f2a31",
+      "maskUnchangedSHA256": "c60eb96981ef88da93de372281870d8e32c5e57d30d7eee1d99307339a46ffae",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 66,
+      "phase": 0.825,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "GEOMETRY_INTERVAL_END_RESTART",
+      "comparablePairRaw": null,
+      "geometryEventInterval": {
+        "target": 66,
+        "phase": 0.825,
+        "previousTarget": 65,
+        "events": [
+          {
+            "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+            "kind": [
+              -1,
+              1
+            ],
+            "old": [
+              1
+            ],
+            "new": [
+              1,
+              2
+            ]
+          }
+        ],
+        "unaffectedMatchedArcs": [
+          [
+            0,
+            0
+          ]
+        ],
+        "oldIntervalEndsAt": 65,
+        "newIntervalStartsAt": 66,
+        "fullTransitionCost": null,
+        "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+        "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+      },
+      "reportingInterval": 4,
+      "source518RowSHA256": "9c6eb0139c2ec9096759bfe5e76a2a662e237e8bc656bf04832a43c5bebcd02b",
+      "maskUnchangedSHA256": "b30a9f4713cd913c249f7b0807286b2b72484879f4394337fe1eb66dbf5a9192",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 67,
+      "phase": 0.8375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 17.29267689594552,
+      "geometryEventInterval": null,
+      "reportingInterval": 4,
+      "source518RowSHA256": "016c2f5dfcdf6d536a6afb1a98dec4c7c5641110afb5c8125362347e14b59650",
+      "maskUnchangedSHA256": "b55849d64494e486b97b7cb42ce4b637466b2770572f0287693c9cb95fe0e5a0",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 68,
+      "phase": 0.85,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 22.668384403284527,
+      "geometryEventInterval": null,
+      "reportingInterval": 4,
+      "source518RowSHA256": "53b58418b1bf44126b266b9e741ff922b5eded874021af68ab6c816f8ede8b68",
+      "maskUnchangedSHA256": "8962f0f432f6a99357b85a73f174f1f46eef681f782455b1f5a879ee06bbe3e5",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 69,
+      "phase": 0.8625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 12.960926572445565,
+      "geometryEventInterval": null,
+      "reportingInterval": 4,
+      "source518RowSHA256": "26620cace8b32189b8d3c2d3430f26589ba46f617105cff9ac37abd6877b0ea5",
+      "maskUnchangedSHA256": "7a3bb1c4717715a635378690fde95fc085f834629e72e189125700c83a015311",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 70,
+      "phase": 0.875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 7.638500611383286,
+      "geometryEventInterval": null,
+      "reportingInterval": 4,
+      "source518RowSHA256": "3b129ed3e6fb5074c1a5ab070258dba90eb08782d27d1e6db425c73b779370a9",
+      "maskUnchangedSHA256": "7a3bb1c4717715a635378690fde95fc085f834629e72e189125700c83a015311",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 71,
+      "phase": 0.8875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 11.173437604976606,
+      "geometryEventInterval": null,
+      "reportingInterval": 4,
+      "source518RowSHA256": "203282b3ad0f8e491292e06b65935ae25e3d484e68b41d4b9b0afc054a489ea7",
+      "maskUnchangedSHA256": "46bd8a6614edf71581585d99ab4b5b01a2317107d3851862f15202097dede2e2",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 72,
+      "phase": 0.9,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 126,
+      "inputUnitEdges": 126,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 19.43577591445844,
+      "geometryEventInterval": null,
+      "reportingInterval": 4,
+      "source518RowSHA256": "4262018f8fabcad837c26b92f34e7f78b13a2dab9bc7ef9eefef49b9ccc0780c",
+      "maskUnchangedSHA256": "a023a4addf5476a4bc9d30e374941e71ee61d58307edc0b31aa44dd5f3e06663",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 73,
+      "phase": 0.9125,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 122,
+      "inputUnitEdges": 122,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 16.49388959813261,
+      "geometryEventInterval": null,
+      "reportingInterval": 4,
+      "source518RowSHA256": "acb95a09131f25ef49bf4065093fefc46b59eaf678f83f7deff731198cb1effd",
+      "maskUnchangedSHA256": "203b7a8c5f17ec608d523a51816efdab6636dcbaddc4c8ec3957b9f70f8f0f71",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 74,
+      "phase": 0.925,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 24.564226335527998,
+      "geometryEventInterval": null,
+      "reportingInterval": 4,
+      "source518RowSHA256": "22aa5f82a7b662fdd659067ae490f2e155e931d5fec69099f8a790073ab640db",
+      "maskUnchangedSHA256": "3f24cdfbbc3f09ede687f70136b39b1e1f31e8c99d59968c3de420e9f3248342",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 75,
+      "phase": 0.9375,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 118,
+      "inputUnitEdges": 118,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "GEOMETRY_INTERVAL_END_RESTART",
+      "comparablePairRaw": null,
+      "geometryEventInterval": {
+        "target": 75,
+        "phase": 0.9375,
+        "previousTarget": 74,
+        "events": [
+          {
+            "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+            "kind": [
+              -1,
+              1
+            ],
+            "old": [
+              1,
+              2
+            ],
+            "new": [
+              1,
+              2,
+              3
+            ]
+          }
+        ],
+        "unaffectedMatchedArcs": [
+          [
+            0,
+            0
+          ]
+        ],
+        "oldIntervalEndsAt": 74,
+        "newIntervalStartsAt": 75,
+        "fullTransitionCost": null,
+        "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+        "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+      },
+      "reportingInterval": 5,
+      "source518RowSHA256": "f14f12dd41b2f8c892395eb468e4086e2e09a354333e8ac673f21cbcd286ee75",
+      "maskUnchangedSHA256": "552e1a65534b37d4f84726055507bb5d9d2e07501f133dd42b271f8eb9bea69a",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 76,
+      "phase": 0.95,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 9.397362309531594,
+      "geometryEventInterval": null,
+      "reportingInterval": 5,
+      "source518RowSHA256": "9ed5c41daa14f404e04fa57ffbffd19831f889e133e24064d26997da32c287f3",
+      "maskUnchangedSHA256": "2e73139daef1cf34657d76bdd8a06251c950ee697b7ca46928a17e5bcf39bafa",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 77,
+      "phase": 0.9625,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "GEOMETRY_INTERVAL_END_RESTART",
+      "comparablePairRaw": null,
+      "geometryEventInterval": {
+        "target": 77,
+        "phase": 0.9625,
+        "previousTarget": 76,
+        "events": [
+          {
+            "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+            "kind": [
+              -1,
+              1
+            ],
+            "old": [
+              1,
+              2,
+              3
+            ],
+            "new": [
+              1,
+              2
+            ]
+          }
+        ],
+        "unaffectedMatchedArcs": [
+          [
+            0,
+            0
+          ]
+        ],
+        "oldIntervalEndsAt": 76,
+        "newIntervalStartsAt": 77,
+        "fullTransitionCost": null,
+        "currentPosePriorStatus": "UNAVAILABLE_FOR_CHANGED_COMPONENTS",
+        "interpretation": "End correspondence only for changed/ambiguous geometry components. Start their new interval from current geometry. Matching unaffected components remain separately diagnostic; no forced whole-pose cost or physical occlusion inference."
+      },
+      "reportingInterval": 6,
+      "source518RowSHA256": "3a1df97c0e1f236c075f789ec112b78cbe3e7787f59620cf88d32ac74ad851ab",
+      "maskUnchangedSHA256": "182e3493bec08bc754d5c0e39f870751f35f6dad2a695380f7c51ae42c17f3dc",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 78,
+      "phase": 0.975,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 118,
+      "inputUnitEdges": 118,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 7.801644567542375,
+      "geometryEventInterval": null,
+      "reportingInterval": 6,
+      "source518RowSHA256": "6710f6a1d4a6e0599dcc8763b814fb5592296f003718e7248e3349e070828b74",
+      "maskUnchangedSHA256": "b25e7bee59687e6dde762070aced69eec2c8535c1efc28732ffd219770a5c60b",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 79,
+      "phase": 0.9875,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 118,
+      "inputUnitEdges": 118,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 3.80137428137877,
+      "geometryEventInterval": null,
+      "reportingInterval": 6,
+      "source518RowSHA256": "ac6b8097f045d031b1ce712795d962c1a454fe833a2f4734324940c7db1d5c5b",
+      "maskUnchangedSHA256": "b25e7bee59687e6dde762070aced69eec2c8535c1efc28732ffd219770a5c60b",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    },
+    {
+      "target": 80,
+      "phase": 1.0,
+      "poseEvaluationMode": "PROVEN_UNCHANGED_ACCEPTED_BRANCH_REPLAY",
+      "fullyBound": true,
+      "boundUnitEdges": 120,
+      "inputUnitEdges": 120,
+      "newChainEvaluated": false,
+      "bindingNumericEqualityBasis": "AST-equivalent accepted candidate/link/DP and verified unchanged inputs",
+      "costStatus": "PROVEN_UNCHANGED_COMPARABLE_PAIR_REPLAY",
+      "comparablePairRaw": 9.456494154441557,
+      "geometryEventInterval": null,
+      "reportingInterval": 6,
+      "source518RowSHA256": "1503f14d64195b2186e0b4ea460bb728c221483bc97ba6801d09e8cab6f77bd8",
+      "maskUnchangedSHA256": "992ef66f2edafd15651f4cf51d6e33947852307380bcea9d1d5ba69498647729",
+      "newUnityCalls": 0,
+      "selectorRuns": 0
+    }
+  ],
+  "reportingIntervals": [
+    {
+      "id": 0,
+      "firstTarget": 0,
+      "lastTarget": 9,
+      "availablePairTargets": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "perPairCosts": [
+        {
+          "target": 1,
+          "raw": 9.644548819926875
+        },
+        {
+          "target": 2,
+          "raw": 5.883534251603649
+        },
+        {
+          "target": 3,
+          "raw": 10.54347756619206
+        },
+        {
+          "target": 4,
+          "raw": 15.69996182949616
+        },
+        {
+          "target": 5,
+          "raw": 8.321112527710412
+        },
+        {
+          "target": 6,
+          "raw": 16.46931460836342
+        },
+        {
+          "target": 7,
+          "raw": 11.19094788249405
+        },
+        {
+          "target": 8,
+          "raw": 7.560797334901011
+        },
+        {
+          "target": 9,
+          "raw": 22.770020802342216
+        }
+      ],
+      "intervalAggregateCost": null,
+      "startPrior": "INITIAL_UNAVAILABLE"
+    },
+    {
+      "id": 1,
+      "firstTarget": 10,
+      "lastTarget": 12,
+      "availablePairTargets": [
+        11,
+        12
+      ],
+      "perPairCosts": [
+        {
+          "target": 11,
+          "raw": 16.29709742327296
+        },
+        {
+          "target": 12,
+          "raw": 7.873478792667157
+        }
+      ],
+      "intervalAggregateCost": null,
+      "startPrior": "CHANGED_GEOMETRY_COMPONENT_PRIOR_UNAVAILABLE"
+    },
+    {
+      "id": 2,
+      "firstTarget": 13,
+      "lastTarget": 27,
+      "availablePairTargets": [
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27
+      ],
+      "perPairCosts": [
+        {
+          "target": 14,
+          "raw": 6.836773860125938
+        },
+        {
+          "target": 15,
+          "raw": 6.13853060856227
+        },
+        {
+          "target": 16,
+          "raw": 27.343537242170243
+        },
+        {
+          "target": 17,
+          "raw": 12.487237542439452
+        },
+        {
+          "target": 18,
+          "raw": 15.013778683922553
+        },
+        {
+          "target": 19,
+          "raw": 9.439581973564088
+        },
+        {
+          "target": 20,
+          "raw": 8.54419330818719
+        },
+        {
+          "target": 21,
+          "raw": 15.556048387064116
+        },
+        {
+          "target": 22,
+          "raw": 22.944493733523863
+        },
+        {
+          "target": 23,
+          "raw": 17.573194513553233
+        },
+        {
+          "target": 24,
+          "raw": 8.042051687045209
+        },
+        {
+          "target": 25,
+          "raw": 19.877075386021225
+        },
+        {
+          "target": 26,
+          "raw": 17.425049360021845
+        },
+        {
+          "target": 27,
+          "raw": 12.550894006269772
+        }
+      ],
+      "intervalAggregateCost": null,
+      "startPrior": "CHANGED_GEOMETRY_COMPONENT_PRIOR_UNAVAILABLE"
+    },
+    {
+      "id": 3,
+      "firstTarget": 28,
+      "lastTarget": 65,
+      "availablePairTargets": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65
+      ],
+      "perPairCosts": [
+        {
+          "target": 29,
+          "raw": 11.191551908082872
+        },
+        {
+          "target": 30,
+          "raw": 10.275258446680908
+        },
+        {
+          "target": 31,
+          "raw": 18.857813520516252
+        },
+        {
+          "target": 32,
+          "raw": 16.694312564144937
+        },
+        {
+          "target": 33,
+          "raw": 6.9013021271789725
+        },
+        {
+          "target": 34,
+          "raw": 11.399977590502061
+        },
+        {
+          "target": 35,
+          "raw": 11.933589887807749
+        },
+        {
+          "target": 36,
+          "raw": 11.700596877253133
+        },
+        {
+          "target": 37,
+          "raw": 5.606095003633811
+        },
+        {
+          "target": 38,
+          "raw": 8.005736310325332
+        },
+        {
+          "target": 39,
+          "raw": 25.325443843605605
+        },
+        {
+          "target": 40,
+          "raw": 4.202337558470134
+        },
+        {
+          "target": 41,
+          "raw": 6.555705252668787
+        },
+        {
+          "target": 42,
+          "raw": 8.85817879737452
+        },
+        {
+          "target": 43,
+          "raw": 2.3323138630146474
+        },
+        {
+          "target": 44,
+          "raw": 1.5512419839052285
+        },
+        {
+          "target": 45,
+          "raw": 2.831880343491747
+        },
+        {
+          "target": 46,
+          "raw": 0.8854855381884903
+        },
+        {
+          "target": 47,
+          "raw": 4.580513548837601
+        },
+        {
+          "target": 48,
+          "raw": 5.399671696883679
+        },
+        {
+          "target": 49,
+          "raw": 13.975506450641618
+        },
+        {
+          "target": 50,
+          "raw": 12.32935669522724
+        },
+        {
+          "target": 51,
+          "raw": 46.13593289844921
+        },
+        {
+          "target": 52,
+          "raw": 21.13173635751056
+        },
+        {
+          "target": 53,
+          "raw": 27.122211345048562
+        },
+        {
+          "target": 54,
+          "raw": 19.239478809789
+        },
+        {
+          "target": 55,
+          "raw": 22.723435614262215
+        },
+        {
+          "target": 56,
+          "raw": 26.974313177845055
+        },
+        {
+          "target": 57,
+          "raw": 29.14904776854369
+        },
+        {
+          "target": 58,
+          "raw": 11.129582540382295
+        },
+        {
+          "target": 59,
+          "raw": 22.860328542985215
+        },
+        {
+          "target": 60,
+          "raw": 9.041216391895254
+        },
+        {
+          "target": 61,
+          "raw": 14.023213324604328
+        },
+        {
+          "target": 62,
+          "raw": 5.703634853150163
+        },
+        {
+          "target": 63,
+          "raw": 4.819808887079311
+        },
+        {
+          "target": 64,
+          "raw": 29.91288374991933
+        },
+        {
+          "target": 65,
+          "raw": 13.721051722279647
+        }
+      ],
+      "intervalAggregateCost": null,
+      "startPrior": "CHANGED_GEOMETRY_COMPONENT_PRIOR_UNAVAILABLE"
+    },
+    {
+      "id": 4,
+      "firstTarget": 66,
+      "lastTarget": 74,
+      "availablePairTargets": [
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74
+      ],
+      "perPairCosts": [
+        {
+          "target": 67,
+          "raw": 17.29267689594552
+        },
+        {
+          "target": 68,
+          "raw": 22.668384403284527
+        },
+        {
+          "target": 69,
+          "raw": 12.960926572445565
+        },
+        {
+          "target": 70,
+          "raw": 7.638500611383286
+        },
+        {
+          "target": 71,
+          "raw": 11.173437604976606
+        },
+        {
+          "target": 72,
+          "raw": 19.43577591445844
+        },
+        {
+          "target": 73,
+          "raw": 16.49388959813261
+        },
+        {
+          "target": 74,
+          "raw": 24.564226335527998
+        }
+      ],
+      "intervalAggregateCost": null,
+      "startPrior": "CHANGED_GEOMETRY_COMPONENT_PRIOR_UNAVAILABLE"
+    },
+    {
+      "id": 5,
+      "firstTarget": 75,
+      "lastTarget": 76,
+      "availablePairTargets": [
+        76
+      ],
+      "perPairCosts": [
+        {
+          "target": 76,
+          "raw": 9.397362309531594
+        }
+      ],
+      "intervalAggregateCost": null,
+      "startPrior": "CHANGED_GEOMETRY_COMPONENT_PRIOR_UNAVAILABLE"
+    },
+    {
+      "id": 6,
+      "firstTarget": 77,
+      "lastTarget": 80,
+      "availablePairTargets": [
+        78,
+        79,
+        80
+      ],
+      "perPairCosts": [
+        {
+          "target": 78,
+          "raw": 7.801644567542375
+        },
+        {
+          "target": 79,
+          "raw": 3.80137428137877
+        },
+        {
+          "target": 80,
+          "raw": 9.456494154441557
+        }
+      ],
+      "intervalAggregateCost": null,
+      "startPrior": "CHANGED_GEOMETRY_COMPONENT_PRIOR_UNAVAILABLE"
+    }
+  ],
+  "allLoopAggregateTemporalCost": null,
+  "aggregateReason": "Six geometric interval boundaries have no full prior. No all-loop cost, improvement score or zero event cost is fabricated.",
+  "sourceInputsValidated": 243,
+  "all81MasksUnchanged": true,
+  "canonicalReparameterizationReceipt": "All81 exact canonical inputs unchanged in518; geometry/selection not changed by519.",
+  "newUnityCalls": 0,
+  "selectorRuns": 0,
+  "coefficientChanged": false,
+  "temporalStateCostChanged": false,
+  "defaultOFF": true,
+  "seconds": 24.275233299995307,
+  "not81FreshOverlayComputations": true,
+  "sources": [
+    {
+      "name": "arc518.py",
+      "sha256": "2725ed431b6a60eb57d67ffe546b262ae79af547981e3545a20ebb6c7a3579d7"
+    },
+    {
+      "name": "arc519.py",
+      "sha256": "2ec93353d83f66f40265a806ea9edf5a787fb485f8b9bddea83f83a9e6111ed5"
+    },
+    {
+      "name": "correspond519.py",
+      "sha256": "161c310cd6436c0e688d2cce3778a7546fc9188395a791ff69545cc6d75c31cb"
+    },
+    {
+      "name": "chain519.py",
+      "sha256": "bfb27b8c3c07239e69e9aa7f16c0e62686033869fe4900530d13c5efcb624676"
+    },
+    {
+      "name": "edge518.py",
+      "sha256": "8df77dcda80a8827cd9a356fc16c3cd6015b3cbe7f1fe30afc91bea83eace0b3"
+    },
+    {
+      "name": "face518.py",
+      "sha256": "8d5f7a898e306753e90b80a70ea00403af6c2234b27e60958b395e2ce98d66a6"
+    },
+    {
+      "name": "span517.py",
+      "sha256": "c5b1b4619e4d9ec34f4379a951bc778ccb6700784c0151563f280f882978c43b"
+    },
+    {
+      "name": "span516.py",
+      "sha256": "f278ce7655ab53db7dafe5066d8bcf70f40174f672fe4348ed1834f0bd66ed90"
+    }
+  ],
+  "decision": "STORED_CORRESPONDENCE_GATE_PASSED_WITH_EXPLICIT_GEOMETRY_EVENTS_ONLY",
+  "limits": [
+    "77 poses are proven-branch replay,2 neighbours directly cross-checked,2 changed poses reused from the current519 minimum run.",
+    "No new temporal selector, state-barrier repair, physical donor visibility or animation quality pass.",
+    "Exact geometry and local-chain work is offline diagnosis, not realtime implementation."
+  ]
+}

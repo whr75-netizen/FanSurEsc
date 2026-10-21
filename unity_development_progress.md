@@ -3168,3 +3168,12 @@ Interactable (abstract base class)
 - 제한 삭제만으로 해결되지 않는 반례도 분리했다. 연결 A ribbon 전체의 source 소유권만 쓰면 top pixel edge에 반대 bottom 경계도 후보로 유입되며 실제 오선택까지 증명한 것은 아니다. 별도 source 영역은 incidence가 거부한다. 최소 다음 의존성은 정확 부분 전이와 선택 영역의 순서 있는 국소 경계 chain 대응이다. 이번에는 filter삭제/문턱 확대/새 규칙 패치를 하지 않았다.
 - 81 부분 수194~226/평균208.444. phase0 원 overlay6.408초+부분0.993초+대응1.512초. 새80포즈 평균 overlay6.708초/부분1.120초/대응1.610초는Python 유리수offline 진단이며 실시간 해법이 아니다. 제품runtime/shader/Quality·Time 및44d13c0 보존. 마지막 직접 운영 확인514 이후 새Unity호출 없이 기본OFF 유지. 시간 장벽·donor471가림·내부색11+몸1·nativeworld/눈·212ms는 별도 미해결이다.
 - 근거 docs/artifacts/partial-incidence518의 README/PHASE0/FIXTURES/FILTER_COUNTEREXAMPLES/VALIDATION/첫거부 및 전체81ZIP/이전실패ZIP/소스해시. Library403재시도/새GIF/제품적용 없음. 경계 대응 일부 통과와 픽셀아트·애니메이션·실시간 품질 통과를 구분하며 전체 프로젝트 완료가 아니다.
+
+## 231. CHARACTER-RENDER-01 — 국소 chain519 저장 대응 gate 통과, 시간 상태·제품 미변경
+
+- 60b40f9 이후 .0500/.0625의 edge(209,53)→(208,53)를 각자 조사했다. 서로 다른 A face 교차점 쌍을 공유하는 유일한 SOURCE/PIXEL run이 있어, 원 unit tangent 제한 대신 그 국소 경계의 순서·길이 진행으로 대응했다. 각116개 중 기존115개+새 chain1개, 두 포즈 및 인접 비용 대응 통과. 모든 edge로 새 표현을 확대한 첫 시제품은 다중-run 두 edge에서 실패하여 보존했고, 최종은 기존 수락 후보가 없을 때만 유일 paired-chain을 사용한다. 새 mask/계수/시간 상태/RGB history/Unity 호출·촬영0이다.
+- 기존 수락 후보 생성은 이름·tuple identity·진단 metadata만 정규화하면 AST동일, 연결·순서·동점·DP도 동일하다. 새 구조는 후보 거부 때만 lazy구성해 유효한518 분기에 의존성을 추가하지 않았다. 좌표/phase 예외 상수 없이 동일 저장 기하를 정수 이동·90도 회전한 합성 반례에서도116/116/새 chain1개 및 anchor변환 통과. 반대편 경계 반례도 거부했다. 다중-run/무anchor 전체 대응이나 다른 모델·가림까지 새 규칙으로 해결했다는 주장은 아니다.
+- 저장81 차등대조1회 결과81/81포즈 대응,74/80인접쌍 비교.77포즈는 증명된 동일 분기 재사용,2이웃포즈는 구·신binding 직접 동일대조,2변경포즈는 현재519 최소 검증 결과다. fresh overlay81회 재계산과 구별한다.243입력/81mask·518증거 해시 보존. 변경 인접3쌍 raw15.69996182949616/8.321112527710412/16.46931460836342는 쌍별 진단값이며 개선 점수가 아니다.
+- target10/13/28/66/75/77 기하 component 사건6쌍은 영향을 받은 대응 구간 종료→현재 기하에서 새 구간 시작으로 명시했다. 사건 pose prior는UNAVAILABLE/전체전이비용null이며 영향 없는 component 진단은 별도다. 물리 가림이나 무료 편집으로 해석하지 않고 전체 시간 비용·구간 합계를 만들지 않았다. 제품 시간 상태 recurrence는 바꾸지 않았다.
+- 두 실패포즈 경계 half-edge1997/2006,cycle80/82,단일paired78/80. 별도 구성46.6/56.6ms,최종binding약1.5~1.7초는Python 오프라인 진단이고 lazy구성 포함이다. 기존exact overlay비용 별도/실시간 해법 아님. 짧은 차등대조 실행은 동일 분기 재사용 효과이며 애니메이션 정지 cache가 아니다. runtime/shader/Quality·Time·44d13c0/기본OFF 보존, 마지막 직접Unity상태514 이후 호출 없음,Library403재시도/새GIF 없음.
+- 근거 docs/artifacts/local-chain519의README/MINIMUM/GENERALITY/BRANCH_EQUIVALENCE/EVENT_INTERVALS/AUDIT/VALIDATION/전체81차등ZIP/실패V1ZIP/소스해시. 대응 gate만 통과했으며516 형태고정·초기조건/시간장벽,donor471가림,내부색11+몸1,nativeworld/눈,212ms는 미해결이다. 이후 상태 비용 수정은 별도 단위이며 현재 픽셀튀김·실제Walk품질·제품채택·실시간·전체 프로젝트 완료를 주장하지 않는다.

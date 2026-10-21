@@ -1,0 +1,264 @@
+{
+  "passed": true,
+  "fixtures": [
+    {
+      "fixture": "integer-translation",
+      "passed": true,
+      "boundEdges": 116,
+      "inputEdges": 116,
+      "transformedEdge": [
+        222,
+        60,
+        221,
+        60
+      ],
+      "originalAcceptedCandidateCount": 0,
+      "eventSample": [
+        {
+          "arc": 0,
+          "segment": 81,
+          "q": [
+            221.5,
+            60.0
+          ],
+          "direction": [
+            -1.0,
+            0.0
+          ],
+          "edge": [
+            222,
+            60,
+            221,
+            60
+          ],
+          "reference": [
+            221.51636756072332,
+            59.96527942915783
+          ],
+          "tangent": [
+            0.04937607615181707,
+            -0.9987802576662446
+          ],
+          "u": 0.9532723174053944,
+          "t": 0.09789799169872271,
+          "fit": 0.24960463222448043,
+          "bindingRule": "EXACT_ENDPOINT_PAIRED_LOCAL_CHAIN",
+          "chain": {
+            "pair": 42,
+            "root": 3504,
+            "tag": "A",
+            "cycle": 0,
+            "pixelStart": [
+              "9966613106039/44993019904",
+              "60"
+            ],
+            "pixelEnd": [
+              "3353507319913/15186460672",
+              "59"
+            ],
+            "sourceStart": [
+              "9966613106039/44993019904",
+              "60"
+            ],
+            "sourceEnd": [
+              "3353507319913/15186460672",
+              "59"
+            ],
+            "pixelProgressExact": "152753813432281/17645890840642454",
+            "pixelLengthExact": "8822945420321227/5213048761647104",
+            "sourceLength": 4.015766336580641,
+            "sourcePieceIndex": 0,
+            "sourcePieceCount": 18
+          },
+          "pixelLoop": 0,
+          "connectionFromPrevious": "CONTINUOUS_ARC_CORNER",
+          "partialIncidence": [
+            {
+              "a": [
+                "222",
+                "60"
+              ],
+              "b": [
+                "9966613106039/44993019904",
+                "60"
+              ],
+              "interval": [
+                "0",
+                "21837312649/44993019904"
+              ],
+              "kind": "D",
+              "changedComponents": [
+                3901
+              ],
+              "selectedOwner": 198
+            },
+            {
+              "a": [
+                "9966613106039/44993019904",
+                "60"
+              ],
+              "b": [
+                "221",
+                "60"
+              ],
+              "interval": [
+                "21837312649/44993019904",
+                "1"
+              ],
+              "kind": "A",
+              "changedComponents": [
+                3504
+              ],
+              "selectedOwner": 198
+            }
+          ]
+        }
+      ],
+      "expectedTransformedReference": [
+        221.51636756072332,
+        59.96527942915783
+      ],
+      "maximumReferenceError": 0.0,
+      "tolerance": "existing517 EPS1e-9, numeric geometry equality only",
+      "candidateCounts": {
+        "existingAcceptedUnitEdges": 115,
+        "localUnitEdges": 1,
+        "localCandidateStates": 1
+      },
+      "seconds": 9.012171399997897,
+      "kind": "Synthetic rigid transform of stored geometry/mask, no new Unity pose/capture."
+    },
+    {
+      "fixture": "rotation90",
+      "passed": true,
+      "boundEdges": 116,
+      "inputEdges": 116,
+      "transformedEdge": [
+        219,
+        209,
+        219,
+        208
+      ],
+      "originalAcceptedCandidateCount": 0,
+      "eventSample": [
+        {
+          "arc": 0,
+          "segment": 29,
+          "q": [
+            219.0,
+            208.5
+          ],
+          "direction": [
+            0.0,
+            -1.0
+          ],
+          "edge": [
+            219,
+            209,
+            219,
+            208
+          ],
+          "reference": [
+            219.03472057084215,
+            208.51636756072332
+          ],
+          "tangent": [
+            0.9987802576662446,
+            0.04937607615181707
+          ],
+          "u": 0.3264350351781862,
+          "t": 0.0978979916987173,
+          "fit": 0.2496046322244801,
+          "bindingRule": "EXACT_ENDPOINT_PAIRED_LOCAL_CHAIN",
+          "chain": {
+            "pair": 3,
+            "root": 369,
+            "tag": "A",
+            "cycle": 0,
+            "pixelStart": [
+              "219",
+              "9381703847287/44993019904"
+            ],
+            "pixelEnd": [
+              "220",
+              "3156083331177/15186460672"
+            ],
+            "sourceStart": [
+              "219",
+              "9381703847287/44993019904"
+            ],
+            "sourceEnd": [
+              "220",
+              "3156083331177/15186460672"
+            ],
+            "pixelProgressExact": "152753813432281/17645890840642454",
+            "pixelLengthExact": "8822945420321227/5213048761647104",
+            "sourceLength": 4.015766336580641,
+            "sourcePieceIndex": 0,
+            "sourcePieceCount": 15
+          },
+          "pixelLoop": 0,
+          "connectionFromPrevious": "CONTINUOUS_ARC_CORNER",
+          "partialIncidence": [
+            {
+              "a": [
+                "219",
+                "209"
+              ],
+              "b": [
+                "219",
+                "9381703847287/44993019904"
+              ],
+              "interval": [
+                "0",
+                "21837312649/44993019904"
+              ],
+              "kind": "D",
+              "changedComponents": [
+                566
+              ],
+              "selectedOwner": 41
+            },
+            {
+              "a": [
+                "219",
+                "9381703847287/44993019904"
+              ],
+              "b": [
+                "219",
+                "208"
+              ],
+              "interval": [
+                "21837312649/44993019904",
+                "1"
+              ],
+              "kind": "A",
+              "changedComponents": [
+                369
+              ],
+              "selectedOwner": 41
+            }
+          ]
+        }
+      ],
+      "expectedTransformedReference": [
+        219.03472057084218,
+        208.51636756072332
+      ],
+      "maximumReferenceError": 2.842170943040401e-14,
+      "tolerance": "existing517 EPS1e-9, numeric geometry equality only",
+      "candidateCounts": {
+        "existingAcceptedUnitEdges": 115,
+        "localUnitEdges": 1,
+        "localCandidateStates": 1
+      },
+      "seconds": 9.781104499998037,
+      "kind": "Synthetic rigid transform of stored geometry/mask, no new Unity pose/capture."
+    }
+  ],
+  "algorithmHasNoEventCoordinateOrPhaseConstants": true,
+  "lazyConstructionPreservesTwoPoseNumericCorrespondence": true,
+  "newUnityCalls": 0,
+  "newMaskSelection": false,
+  "scope": "Geometric condition generality on these fixtures, not all models/cameras or visual/runtime adoption."
+}

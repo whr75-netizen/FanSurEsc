@@ -1,0 +1,136 @@
+{
+  "target": 5,
+  "phase": 0.0625,
+  "fullyBound": true,
+  "inputEdges": 116,
+  "boundEdges": 116,
+  "unsupported": [],
+  "eventSamples": [
+    {
+      "arc": 0,
+      "segment": 81,
+      "q": [
+        208.5,
+        53.0
+      ],
+      "direction": [
+        -1.0,
+        0.0
+      ],
+      "edge": [
+        209,
+        53,
+        208,
+        53
+      ],
+      "reference": [
+        208.5146408302789,
+        52.968925585382955
+      ],
+      "tangent": [
+        0.053128788854347936,
+        -0.9985876685573831
+      ],
+      "u": 0.9530206155725194,
+      "t": 0.08305063540535784,
+      "fit": 0.24946253326754741,
+      "bindingRule": "EXACT_ENDPOINT_PAIRED_LOCAL_CHAIN",
+      "chain": {
+        "pair": 40,
+        "root": 3446,
+        "tag": "A",
+        "cycle": 0,
+        "pixelStart": [
+          "9383022839977/44999704576",
+          "53"
+        ],
+        "pixelEnd": [
+          "6304955235781/30341005312",
+          "52"
+        ],
+        "sourceStart": [
+          "9383022839977/44999704576",
+          "53"
+        ],
+        "sourceEnd": [
+          "6304955235781/30341005312",
+          "52"
+        ],
+        "pixelProgressExact": "270574526518927/35622545332167130",
+        "pixelLengthExact": "17811272666083565/10416689114218496",
+        "sourceLength": 4.0968946659140135,
+        "sourcePieceIndex": 0,
+        "sourcePieceCount": 17
+      },
+      "pixelLoop": 0,
+      "connectionFromPrevious": "CONTINUOUS_ARC_CORNER",
+      "partialIncidence": [
+        {
+          "a": [
+            "209",
+            "53"
+          ],
+          "b": [
+            "9383022839977/44999704576",
+            "53"
+          ],
+          "interval": [
+            "0",
+            "21915416407/44999704576"
+          ],
+          "kind": "D",
+          "changedComponents": [
+            3843
+          ],
+          "selectedOwner": 198
+        },
+        {
+          "a": [
+            "9383022839977/44999704576",
+            "53"
+          ],
+          "b": [
+            "208",
+            "53"
+          ],
+          "interval": [
+            "21915416407/44999704576",
+            "1"
+          ],
+          "kind": "A",
+          "changedComponents": [
+            3446
+          ],
+          "selectedOwner": 198
+        }
+      ]
+    }
+  ],
+  "complexity": {
+    "changedComponents": 80,
+    "boundaryHalfEdges": 1997,
+    "boundaryCycles": 80,
+    "roleRuns": 161,
+    "singleSourcePixelPairCycles": 78,
+    "nonAlternatingOrMultiPairCycles": 2,
+    "ambiguities": [],
+    "newMask": false,
+    "chainConstructed": true,
+    "anchoredPairs": 78,
+    "indexedPixelEdges": 116,
+    "unanchoredPixelEdges": 0,
+    "unresolvedPixelEdges": 3,
+    "sourcePiecesResolved": 1,
+    "candidateCounts": {
+      "existingAcceptedUnitEdges": 115,
+      "localUnitEdges": 1,
+      "localCandidateStates": 1
+    },
+    "uniformProgressIsLocalGeometricCorrespondenceNotTemporalHistory": true
+  },
+  "constructionSeconds": 0.0034837999992305413,
+  "bindingSeconds": 1.6776575999974739,
+  "maskSHA256": "bfd6e4450718f4a1546f03daf7288bbe40f54f62d82758625f1b8c190c345848",
+  "newSelectorRuns": 0,
+  "newUnityCalls": 0
+}

@@ -1,0 +1,52 @@
+{
+  "passed": true,
+  "acceptedCandidateASTIdenticalAfterExplicitNormalization": true,
+  "outerBinderLinkOrderingTieDP_ASTIdentical": true,
+  "existingNonemptyReturnsBeforeLocalChain": true,
+  "constructorOnlyInitializesOwnFieldsNoGeometryDependency": true,
+  "localChainConstructionIsLazy": true,
+  "edgePrecondition": "integer directed unit-edge tuple, as produced by518 pixel_loops",
+  "normalizations": [
+    "Local edge/arcs/support/source/EPS names and member access",
+    "tuple(integerEdgeTuple) identity",
+    "bindingRule diagnostic metadata only"
+  ],
+  "normalizationsDoNotAlterArithmeticOrPredicates": true,
+  "reuseProof": "For every fully bound518 pose, every per-edge518 candidate list was nonempty.519 returns that identical semantic list before local chain evaluation/construction; unchanged outer binder/link/tie DP yields identical numeric/order bindings, apart from diagnostic bindingRule metadata. Same arcs/inputs therefore yield identical pair costs.",
+  "notPoseOrCoordinateException": true,
+  "branchCondition": "nonempty accepted518 geometric/incidence candidates, otherwise exact endpoint-paired local chain; no target/phase input",
+  "sources": [
+    {
+      "name": "arc518.py",
+      "sha256": "2725ed431b6a60eb57d67ffe546b262ae79af547981e3545a20ebb6c7a3579d7"
+    },
+    {
+      "name": "arc519.py",
+      "sha256": "2ec93353d83f66f40265a806ea9edf5a787fb485f8b9bddea83f83a9e6111ed5"
+    },
+    {
+      "name": "correspond519.py",
+      "sha256": "161c310cd6436c0e688d2cce3778a7546fc9188395a791ff69545cc6d75c31cb"
+    },
+    {
+      "name": "chain519.py",
+      "sha256": "bfb27b8c3c07239e69e9aa7f16c0e62686033869fe4900530d13c5efcb624676"
+    },
+    {
+      "name": "edge518.py",
+      "sha256": "8df77dcda80a8827cd9a356fc16c3cd6015b3cbe7f1fe30afc91bea83eace0b3"
+    },
+    {
+      "name": "face518.py",
+      "sha256": "8d5f7a898e306753e90b80a70ea00403af6c2234b27e60958b395e2ce98d66a6"
+    },
+    {
+      "name": "span517.py",
+      "sha256": "c5b1b4619e4d9ec34f4379a951bc778ccb6700784c0151563f280f882978c43b"
+    },
+    {
+      "name": "span516.py",
+      "sha256": "f278ce7655ab53db7dafe5066d8bcf70f40174f672fe4348ed1834f0bd66ed90"
+    }
+  ]
+}

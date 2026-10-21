@@ -1,0 +1,150 @@
+{
+  "target": 5,
+  "phase": 0.0625,
+  "loadOrExactSeconds": 7.289044999997714,
+  "chainConstructionSeconds": 0.04655389999970794,
+  "chains": {
+    "changedComponents": 80,
+    "boundaryHalfEdges": 1997,
+    "boundaryCycles": 80,
+    "roleRuns": 161,
+    "singleSourcePixelPairCycles": 78,
+    "nonAlternatingOrMultiPairCycles": 2,
+    "ambiguities": [],
+    "newMask": false
+  },
+  "missingCentreCandidateEdges": [
+    {
+      "pixelLoop": 0,
+      "edge": [
+        209,
+        53,
+        208,
+        53
+      ],
+      "parts": [
+        {
+          "a": [
+            "209",
+            "53"
+          ],
+          "b": [
+            "9383022839977/44999704576",
+            "53"
+          ],
+          "interval": [
+            "0",
+            "21915416407/44999704576"
+          ],
+          "kind": "D",
+          "changedComponents": [
+            3843
+          ],
+          "selectedOwner": 198
+        },
+        {
+          "a": [
+            "9383022839977/44999704576",
+            "53"
+          ],
+          "b": [
+            "208",
+            "53"
+          ],
+          "interval": [
+            "21915416407/44999704576",
+            "1"
+          ],
+          "kind": "A",
+          "changedComponents": [
+            3446
+          ],
+          "selectedOwner": 198
+        }
+      ],
+      "centreCandidates": [
+        {
+          "arc": 0,
+          "segment": 81,
+          "maxEndDistance2": 0.26241342301031606,
+          "directionDot": -0.1393585205078125,
+          "oldPass": false,
+          "source": [
+            [
+              "13664457/65536",
+              "871407/16384"
+            ],
+            [
+              "6836795/32768",
+              "13255871/262144"
+            ]
+          ]
+        },
+        {
+          "arc": 0,
+          "segment": 82,
+          "maxEndDistance2": 2.3660264968652074,
+          "directionDot": 1.0345001220703125,
+          "oldPass": false,
+          "source": [
+            [
+              "6836795/32768",
+              "13255871/262144"
+            ],
+            [
+              "13605793/65536",
+              "6859419/131072"
+            ]
+          ]
+        }
+      ],
+      "changedBoundaryCycles": [
+        {
+          "root": 3446,
+          "tag": "A",
+          "atomicBoundaryEdges": 24,
+          "cycles": [
+            {
+              "edges": 24,
+              "runs": [
+                {
+                  "roles": [
+                    "SOURCE"
+                  ],
+                  "a": [
+                    "6304955235781/30341005312",
+                    "52"
+                  ],
+                  "b": [
+                    "9383022839977/44999704576",
+                    "53"
+                  ],
+                  "entries": 17,
+                  "length": 4.0968946659140135
+                },
+                {
+                  "roles": [
+                    "PIXEL"
+                  ],
+                  "a": [
+                    "9383022839977/44999704576",
+                    "53"
+                  ],
+                  "b": [
+                    "6304955235781/30341005312",
+                    "52"
+                  ],
+                  "entries": 7,
+                  "length": 1.7098784912157612
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "separatelyInspected": true,
+  "newSelectorRuns": 0,
+  "newUnityCalls": 0
+}

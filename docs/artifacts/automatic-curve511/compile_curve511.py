@@ -206,6 +206,16 @@ def anchor(p,v,indices):
  if error>.0005:raise RuntimeError('Anchor projection numeric error')
  return {'submesh':sm,'primitive':primitive,'vertices':list(map(int,ids)),'barycentric':bary,'referenceXY':list(map(float,p)),'referenceDepth':best[0][0],'reprojectionError':error}
 
+def write_asset(report,path):
+ binding=report['binding'];controls=report['controls']
+ with Path(path).open('xb')as f:
+  def write(fmt,*x):f.write(struct.pack('<'+fmt,*x))
+  write('4iQ',511,2,binding['vertices'],binding['submeshes'],int(binding['bindSignature'],16))
+  write('4id',len(controls),report['sourceRings'],report['sourceBoundaryPoints'],len(report['topologyRepairs']),report['preprocessingSeconds'])
+  for ring in controls:
+   write('i',len(ring))
+   for c in ring:write('5i3d',c['submesh'],c['primitive'],*c['vertices'],*c['barycentric'])
+
 def fixtures():
  def rect(x,y,xx,yy):return [[(x,y),(xx,y),(xx,yy)],[(x,y),(xx,yy),(x,yy)]]
  cases=[('duplicate',rect(0,0,2,2)*2,4),('overlap',rect(0,0,2,2)+rect(1,0,3,2),6),('touch',rect(0,0,2,2)+rect(2,2,4,4),8),('hole',rect(0,0,3,1)+rect(0,2,3,3)+rect(0,1,1,2)+rect(2,1,3,2),8)]
@@ -227,12 +237,7 @@ def main():
   for i,r in enumerate(curves):controls.append([anchor(p,v,ix)for p in r]);progress(stage='persistent anchors',ring=i+1,rings=len(curves))
   report={'status':'COMPILED_NOT_RENDER_VALIDATED','input':str(args.input.resolve()),'inputSHA256':hashlib.sha256(args.input.read_bytes()).hexdigest(),'binding':binding,'part':args.part,'curveRepresentation':'closed piecewise-linear, source triangle/barycentric persistent anchors','sourceRings':len(raw),'sourceBoundaryPoints':sum(map(len,raw)),'curveRings':len(curves),'controlPoints':sum(map(len,curves)),'counts':counts,'regionDecisions':decisions,'topologyRepairs':repairs,'controls':controls,'preprocessingSeconds':time.perf_counter()-start,'preprocessingStagesSeconds':{'vectorExtraction':extracted-start,'regionDesign':designed-extracted,'anchorBinding':time.perf_counter()-designed},'profile':{'curveErrorLogicalCells':.1875,'areaPerimeterCost':.14},'semanticIntentInferred':False,'newPackages':False}
   (args.output/'CURVES511.json').write_text(json.dumps(report,indent=2)+'\n')
-  with(args.output/'HeadCurve511.bytes').open('wb')as f:
-   def write(fmt,*x):f.write(struct.pack('<'+fmt,*x))
-   write('4iQ',511,1,len(v),len(ix),int(binding['bindSignature'],16));write('i',len(controls))
-   for ring in controls:
-    write('i',len(ring))
-    for c in ring:write('5i3f',c['submesh'],c['primitive'],*c['vertices'],*c['barycentric'])
+  write_asset(report,args.output/'HeadCurve511.bytes')
   progress(stage='COMPLETED',**{k:report[k]for k in ['sourceRings','curveRings','controlPoints','preprocessingSeconds']});print(json.dumps({k:report[k]for k in ['status','sourceRings','sourceBoundaryPoints','curveRings','controlPoints','preprocessingSeconds']}))
  except Exception:
   progress(stage='FAILED',error=traceback.format_exc());raise

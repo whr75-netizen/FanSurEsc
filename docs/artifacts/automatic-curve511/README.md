@@ -29,6 +29,10 @@ Current prototype supports this orthographic reference view, opaque double-sided
 Hair and up to4 material roles. Preparation is view-dependent; no artist-intent
 metadata is inferred. Unsupported inputs fail explicitly.
 
+The compiler writes version2 with double barycentric anchors and preparation
+counters. Reserializing the already prepared94 anchors is byte-identical to the
+4196-byte resource actually validated in Unity; this check reruns no preparation.
+
 One first pose and16 actual Rig|Walk_Loop pairs were captured in Play Mode at the
 existing80-degree game view, unchanged camera/pitch,960x544 presentation over
 480x272 logical cells. Targets0..3,20..23,54..57,68..71 are four adjacent intervals,

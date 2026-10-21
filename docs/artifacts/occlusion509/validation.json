@@ -1,0 +1,173 @@
+{
+  "status": "NOT_ADOPTED_NO_UNITY_TIME_GAIN_509_REMOVED_508_PRESERVED",
+  "commit508": "909e3240a68f1cc00b4fdd83cb9f7be7c046a1ca",
+  "scope": "508 reference vs508+509; only conservative all-behind occluder rejection",
+  "offline": {
+    "status": "OFFLINE_COMPLETE",
+    "scope": "508 reference vs508 plus509; CoreCLR standalone Compute only; no per-stage timing/counters/recorders; alternated pair order; geometry/IO outside Compute; five additional repeated pairs for index22",
+    "all81": {
+      "pairs": 81,
+      "referenceMeanMs": 935.9421728395062,
+      "candidateMeanMs": 928.6568407407408,
+      "referenceMedianMs": 920.3867,
+      "candidateMedianMs": 904.7301,
+      "pairedSavedMedianMs": 1.8065999999998894,
+      "pairedSavedRangeMs": [
+        -277.49620000000004,
+        251.25599999999997
+      ],
+      "pairedSavedFractionMedian": 0.001750044850590271,
+      "candidateFasterPairs": 42,
+      "referenceAllocatedMean": 755976941.8271605,
+      "candidateAllocatedMean": 746577343.6049383,
+      "referenceGen0Sum": 9744,
+      "candidateGen0Sum": 9619
+    },
+    "fiveRepeatedPairs22": {
+      "pairs": 5,
+      "referenceMeanMs": 914.1979,
+      "candidateMeanMs": 891.75532,
+      "referenceMedianMs": 913.2198,
+      "candidateMedianMs": 894.3116,
+      "pairedSavedMedianMs": 33.85900000000004,
+      "pairedSavedRangeMs": [
+        -23.145399999999995,
+        70.03829999999994
+      ],
+      "pairedSavedFractionMedian": 0.03647928516589516,
+      "candidateFasterPairs": 3,
+      "referenceAllocatedMean": 743671907.2,
+      "candidateAllocatedMean": 734292417.6,
+      "referenceGen0Sum": 593,
+      "candidateGen0Sum": 585
+    },
+    "areaBitDifferences": 0,
+    "memoryApi": ".NET 10.0.11\nsentinelAllocatedBytes=1048600\nNo forced GC; measured allocations include Compute only; no stage counters, profiler recorders or per-stage timers.",
+    "pairSourceSha256": "047f10de96ab78d54dffefcc457f31480114e0eb2f3a901e673b26a3a69c4fc4",
+    "candidateFunctionsSha256": "1d024c15e56a45c309c06542a8f72a042bef7b69944b7636154e464b13575c88"
+  },
+  "unity": {
+    "status": {
+      "status": "COMPLETED",
+      "measuredCalls": 10,
+      "callbackRemoved": true,
+      "candidateOFF": true,
+      "globalProfiler": false,
+      "error": ""
+    },
+    "manifest": {
+      "framework": "Mono 6.13.0 (Visual Studio built mono)",
+      "input": "Loop499/022.allmesh",
+      "repeatsPerMode": 5,
+      "noRecorders": true,
+      "noStageTimers": true,
+      "noForcedGC": true,
+      "sentinelAllocatedBytes": 0,
+      "allocatedBytesValid": false,
+      "heapSnapshotsAreNotAllocationOrPeak": true,
+      "maxGeneration": 0
+    },
+    "pairs": [
+      {
+        "pair": 0,
+        "refMs": 3157.3352,
+        "optMs": 3530.8385,
+        "savedMs": -373.50329999999985,
+        "savedFraction": -0.11829700565210799
+      },
+      {
+        "pair": 1,
+        "refMs": 3284.3754,
+        "optMs": 2979.5002,
+        "savedMs": 304.87519999999995,
+        "savedFraction": 0.0928259297034072
+      },
+      {
+        "pair": 2,
+        "refMs": 3018.307,
+        "optMs": 3374.2028,
+        "savedMs": -355.89580000000024,
+        "savedFraction": -0.11791239260949937
+      },
+      {
+        "pair": 3,
+        "refMs": 3545.5646,
+        "optMs": 3027.2539,
+        "savedMs": 518.3107,
+        "savedFraction": 0.14618565968308683
+      },
+      {
+        "pair": 4,
+        "refMs": 3247.2512,
+        "optMs": 3653.9209,
+        "savedMs": -406.6696999999999,
+        "savedFraction": -0.12523506034888832
+      }
+    ],
+    "referenceMedianMs": 3247.2512,
+    "candidateMedianMs": 3374.2028,
+    "pairedSavedMedianMs": -355.89580000000024,
+    "pairedSavedRangeMs": [
+      -406.6696999999999,
+      518.3107
+    ],
+    "pairedSavedFractionMedian": -0.11791239260949937,
+    "candidateFasterPairs": 2,
+    "areaBitDifferences": 0,
+    "memoryLimit": "Mono allocation API valid only if sentinel succeeded; Mono live/reserved snapshots are observed heap size, not allocation/peak/isolated retained Compute memory. No counters/recorders/stage timers inside Compute."
+  },
+  "selection81": {
+    "pairs": 81,
+    "maskDifferences": 0,
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area509\\SELECTION509.json",
+    "sha256": "3279b53aa814d5e458660f7a0770cc48787398434697586bb7ca8173a263d6be"
+  },
+  "crossVersionReference508": {
+    "reference508VsNewReference509BitMismatches": [],
+    "pairs": 81,
+    "note": "Skip only saved timing-double bytes20..27; compare bounds/phase,ambiguity and both area bounds bit-for-bit."
+  },
+  "rejection": {
+    "status": "REJECTED_REMOVED_FROM_RUNTIME",
+    "restored508SHA256": "2aeca448c6742a66219a700ec053b0680e0221a9602ea1eca778a031b8b9043b",
+    "tested509SHA256": "873d3861ebf21a14198623a04dd4cd4fc3c847cce932af332bca4f6063835989",
+    "removedOwnFiles": [
+      {
+        "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile509\\AreaBench509.cs",
+        "sha256": "fb20442a1865c2fc60dc0a8ef0c508fda5c999a99082c306445b9b89b4e9e601"
+      },
+      {
+        "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile509\\AreaBench509.cs.meta",
+        "sha256": "442626e05f55347e4d3d894c63eeafcb91329cbda79f04bc7cfd5073855c7ae8"
+      },
+      {
+        "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile509.meta",
+        "sha256": "a70c3f7c0a116bcb7d9ce9872f69094cfb874819cf12db4aab1add3c7e2316dd"
+      }
+    ],
+    "archiveDiff": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area509\\REJECTED_CANDIDATE509.diff",
+    "archiveDiffSHA256": "8acad651f69852d5925e835caa1e6939b60962cce3f62283b72e998593a29a6a",
+    "noActual509WalkCapture": true
+  },
+  "postRemovalRestorationLog": "[Log] 508STATE play=True paused=False candidate508=False enabled502=False visible505=False old491=False movement=True animator=True speed=1 locomotion=0 clip=Rig|Idle_Loop capture=0 automaticClock=True hooks=PostView366 compiling=False globalProfiler=False",
+  "console": {
+    "historicalBefore": 16,
+    "historicalAfter": 16,
+    "newDelta": 0
+  },
+  "settingsSHA256": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "actual509Walk": "NOT_RUN: Unity time improvement not established",
+  "allMeasuredCallbacksFinished": true,
+  "recordersUsed": false,
+  "noNewOptimizationOrCapture": true,
+  "noLibrary403Retry": true,
+  "remainingRuntimeCost": "508 still seconds per Compute. Review designed curve-region representation rather than preserving all source mesh detail.",
+  "retained508GIF": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk508\\WALK508_FULLBODY_BEFORE_AFTER.gif",
+    "bytes": 70064,
+    "sha256": "1d554ac1ea330c13f4cc33f36f3e673394bb9320872912473822af1486188a5d"
+  }
+}

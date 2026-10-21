@@ -1,0 +1,63 @@
+--- a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadArea505.cs
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadArea505.cs
+@@ -37,8 +37,10 @@
+     static double Length(List<List<P>> polygons,double y){var spans=new List<P>();foreach(var p in polygons){double lo=double.PositiveInfinity,hi=double.NegativeInfinity;for(int i=0;i<p.Count;i++){var a=p[i];var b=p[(i+1)%p.Count];if((a.y<=y&&y<b.y)||(b.y<=y&&y<a.y)){double x=a.x+(y-a.y)*(b.x-a.x)/(b.y-a.y);lo=Math.Min(lo,x);hi=Math.Max(hi,x);}}if(lo<hi)spans.Add(new P(lo,hi));}spans.Sort((a,b)=>a.x.CompareTo(b.x));double end=double.NegativeInfinity,length=0;foreach(var span in spans){length+=Math.Max(0,span.y-Math.Max(span.x,end));end=Math.Max(end,span.y);}return length;}
+     // Candidate508 changes only Union/Length polygon candidates. DefaultOFF.
+     public static bool UseActivePolygons508;
++    // Candidate509 excludes only certified all-behind occluders. DefaultOFF.
++    public static bool UseOcclusionCandidates509;
+     public static double Union(List<List<P>> polygons){if(UseActivePolygons508)return Union508(polygons);if(polygons.Count==0)return 0;var levels=new List<double>();var edges=new List<P[]>();foreach(var p in polygons)for(int i=0;i<p.Count;i++){var a=p[i];var b=p[(i+1)%p.Count];levels.Add(a.y);if(Math.Abs(a.y-b.y)>1e-12)edges.Add(new[]{a,b});}for(int i=0;i<edges.Count;i++){var a=edges[i][0];var b=edges[i][1];double k=(b.x-a.x)/(b.y-a.y),c=a.x-k*a.y;for(int j=i+1;j<edges.Count;j++){var aa=edges[j][0];var bb=edges[j][1];double kk=(bb.x-aa.x)/(bb.y-aa.y),cc=aa.x-kk*aa.y;if(Math.Abs(k-kk)<1e-12)continue;double y=(cc-c)/(k-kk);if(y>Math.Max(Math.Min(a.y,b.y),Math.Min(aa.y,bb.y))+1e-11&&y<Math.Min(Math.Max(a.y,b.y),Math.Max(aa.y,bb.y))-1e-11)levels.Add(y);}}levels.Sort();double total=0;for(int i=0;i+1<levels.Count;i++){double dy=levels[i+1]-levels[i];if(dy>1e-12)total+=dy*Length(polygons,(levels[i]+levels[i+1])*.5);}return Math.Max(0,Math.Min(1,total));}
+-    public static Result Compute(Input input,Material[] materials){var watch=Stopwatch.StartNew();int w=input.w,h=input.h;var bins=new List<T>[w*h];foreach(var t in input.triangles){int x0=Math.Max(input.x,(int)Math.Floor(t.x0)),y0=Math.Max(input.y,(int)Math.Floor(t.y0)),x1=Math.Min(input.x+w-1,(int)Math.Floor(t.x1)),y1=Math.Min(input.y+h-1,(int)Math.Floor(t.y1));for(int y=y0;y<=y1;y++)for(int x=x0;x<=x1;x++){int at=(y-input.y)*w+x-input.x;if(bins[at]==null)bins[at]=new List<T>();bins[at].Add(t);}}var output=new Result{lower=new float[w*h],upper=new float[w*h]};for(int y=input.y;y<input.y+h;y++)for(int x=input.x;x<input.x+w;x++){int at=(y-input.y)*w+x-input.x;var bin=bins[at];if(bin==null)continue;var lower=new List<List<P>>();var upper=new List<List<P>>();foreach(var t in bin){if(t.renderer!=2)continue;var p=Cell(t,x,y);if(Area(p)<1e-12)continue;var lo=new List<List<P>>{p};var hi=new List<List<P>>{p};foreach(var o in bin){if(o.renderer==2||o.z0>=t.z1||o.x1<t.x0||o.x0>t.x1||o.y1<t.y0||o.y0>t.y1)continue;if(t.z.x==o.z.x&&t.z.y==o.z.y&&t.z.c==o.z.c)continue;var overlap=Overlap(p,o);overlap=Clip(overlap,new Plane{x=t.z.x-o.z.x,y=t.z.y-o.z.y,c=t.z.c-o.z.c});if(Area(overlap)<1e-12)continue;int coverage=Coverage(materials[o.sm],o,overlap);if(coverage==0)continue;lo=Remove(lo,overlap);if(coverage>0)hi=Remove(hi,overlap);else output.ambiguousFragments++;}lower.AddRange(lo);upper.AddRange(hi);}output.lower[at]=(float)Union(lower);output.upper[at]=(float)Union(upper);}watch.Stop();output.milliseconds=watch.Elapsed.TotalMilliseconds;return output;}
++    public static Result Compute(Input input,Material[] materials){var watch=Stopwatch.StartNew();int w=input.w,h=input.h;var bins=new List<T>[w*h];foreach(var t in input.triangles){int x0=Math.Max(input.x,(int)Math.Floor(t.x0)),y0=Math.Max(input.y,(int)Math.Floor(t.y0)),x1=Math.Min(input.x+w-1,(int)Math.Floor(t.x1)),y1=Math.Min(input.y+h-1,(int)Math.Floor(t.y1));for(int y=y0;y<=y1;y++)for(int x=x0;x<=x1;x++){int at=(y-input.y)*w+x-input.x;if(bins[at]==null)bins[at]=new List<T>();bins[at].Add(t);}}var output=new Result{lower=new float[w*h],upper=new float[w*h]};for(int y=input.y;y<input.y+h;y++)for(int x=input.x;x<input.x+w;x++){int at=(y-input.y)*w+x-input.x;var bin=bins[at];if(bin==null)continue;var lower=new List<List<P>>();var upper=new List<List<P>>();foreach(var t in bin){if(t.renderer!=2)continue;var p=Cell(t,x,y);if(Area(p)<1e-12)continue;var bounds509=UseOcclusionCandidates509?Bounds509(p):default(OcclusionBounds509);var lo=new List<List<P>>{p};var hi=new List<List<P>>{p};foreach(var o in bin){if(o.renderer==2||o.z0>=t.z1||o.x1<t.x0||o.x0>t.x1||o.y1<t.y0||o.y0>t.y1)continue;if(t.z.x==o.z.x&&t.z.y==o.z.y&&t.z.c==o.z.c)continue;if(UseOcclusionCandidates509&&Behind509(t,o,bounds509))continue;var overlap=Overlap(p,o);overlap=Clip(overlap,new Plane{x=t.z.x-o.z.x,y=t.z.y-o.z.y,c=t.z.c-o.z.c});if(Area(overlap)<1e-12)continue;int coverage=Coverage(materials[o.sm],o,overlap);if(coverage==0)continue;lo=Remove(lo,overlap);if(coverage>0)hi=Remove(hi,overlap);else output.ambiguousFragments++;}lower.AddRange(lo);upper.AddRange(hi);}output.lower[at]=(float)Union(lower);output.upper[at]=(float)Union(upper);}watch.Stop();output.milliseconds=watch.Elapsed.TotalMilliseconds;return output;}
+ 
+ 
+     // Only candidates for Length change. The original polygon order, edge
+@@ -111,6 +113,48 @@
+             total+=dy*Length508(polygons,active,y);
+         }
+         return Math.Max(0,Math.Min(1,total));
++    }
++
++    // Certified broad phase only. Bounds include three Overlap clip steps'
++    // floating interpolation error; they are not a geometric/depth epsilon.
++    struct OcclusionBounds509 { public double x0,y0,x1,y1;public bool certified; }
++    static readonly double MaxCoordinate509=Math.Sqrt(double.MaxValue/64);
++    static bool Finite509(double v)=>!double.IsNaN(v)&&!double.IsInfinity(v);
++    static double Up509(double v)
++    {
++        if(double.IsNaN(v)||v==double.PositiveInfinity)return v;
++        if(v==0)return double.Epsilon;
++        long bits=BitConverter.DoubleToInt64Bits(v);
++        return BitConverter.Int64BitsToDouble(bits+(v>0?1:-1));
++    }
++    static double Down509(double v)=>-Up509(-v);
++    static OcclusionBounds509 Bounds509(List<P> p)
++    {
++        double x0=double.PositiveInfinity,y0=x0,x1=double.NegativeInfinity,y1=x1;
++        foreach(var q in p){x0=Math.Min(x0,q.x);x1=Math.Max(x1,q.x);y0=Math.Min(y0,q.y);y1=Math.Max(y1,q.y);}
++        double m=Math.Max(1,Math.Max(Math.Max(Math.Abs(x0),Math.Abs(x1)),Math.Max(Math.Abs(y0),Math.Abs(y1))));
++        if(!Finite509(m)||m>MaxCoordinate509)return default(OcclusionBounds509);
++        // u=2^-52 conservatively bounds binary64 rounding. A+(B-A)*t,
++        // 0<=t<=1, has <16*u*M error for M>=1 and finite safe coordinates.
++        // Three successive clips need <64*u*M; scaling by2^-46 is exact.
++        double error=m*1.4210854715202004e-14;
++        return new OcclusionBounds509{x0=Down509(x0-error),x1=Up509(x1+error),y0=Down509(y0-error),y1=Up509(y1+error),certified=true};
++    }
++    static bool Behind509(T hair,T other,OcclusionBounds509 b)
++    {
++        if(!b.certified)return false;
++        double m=Math.Max(Math.Max(Math.Abs(other.x0),Math.Abs(other.x1)),Math.Max(Math.Abs(other.y0),Math.Abs(other.y1)));
++        // This derived overflow guard also makes all three Edge.At values and
++        // their opposite-sign denominators finite. Uncertified inputs fall back.
++        if(!Finite509(m)||m>MaxCoordinate509)return false;
++        double x=hair.z.x-other.z.x,y=hair.z.y-other.z.y,c=hair.z.c-other.z.c;
++        if(!Finite509(x)||!Finite509(y)||!Finite509(c))return false;
++        double a=x*(x>=0?b.x1:b.x0),d=y*(y>=0?b.y1:b.y0);
++        if(!Finite509(a)||!Finite509(d))return false;
++        double sum=Up509(Up509(a)+Up509(d));
++        if(!Finite509(sum))return false;
++        double upper=Up509(sum+c);
++        return Finite509(upper)&&upper<0;
+     }
+ 
+     static readonly Dictionary<Texture2D, byte[]> AlphaCache = new();

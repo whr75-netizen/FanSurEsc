@@ -1,0 +1,174 @@
+{
+  "target": 4,
+  "phase": 0.05,
+  "edge": [
+    209,
+    53,
+    208,
+    53
+  ],
+  "partialIncidence": [
+    {
+      "a": [
+        "209",
+        "53"
+      ],
+      "b": [
+        "9381703847287/44993019904",
+        "53"
+      ],
+      "interval": [
+        "0",
+        "21837312649/44993019904"
+      ],
+      "kind": "D",
+      "changedComponents": [
+        3901
+      ],
+      "selectedOwner": 198
+    },
+    {
+      "a": [
+        "9381703847287/44993019904",
+        "53"
+      ],
+      "b": [
+        "208",
+        "53"
+      ],
+      "interval": [
+        "21837312649/44993019904",
+        "1"
+      ],
+      "kind": "A",
+      "changedComponents": [
+        3504
+      ],
+      "selectedOwner": 198
+    }
+  ],
+  "allSourceSegmentsOwningCentreRegion": [
+    {
+      "arc": 0,
+      "segment": 81,
+      "sourceExact": [
+        [
+          "6832249/32768",
+          "13951741/262144"
+        ],
+        [
+          "13672983/65536",
+          "6632601/131072"
+        ]
+      ],
+      "sourceFloat": [
+        [
+          208.50369262695312,
+          53.2216682434082
+        ],
+        [
+          208.63316345214844,
+          50.60272979736328
+        ]
+      ],
+      "maxUnitEndpointDistance2": 0.26422001441986753,
+      "unitDirectionDotSource": -0.1294708251953125,
+      "centreRegionEvidence": {
+        "accepted": true,
+        "centreRoots": [
+          3504
+        ],
+        "candidateCentreRoots": [
+          3504
+        ],
+        "directCommon": false
+      },
+      "rejectedBy": [
+        "EXISTING_UNIT_TANGENT_DIRECTION"
+      ]
+    },
+    {
+      "arc": 0,
+      "segment": 82,
+      "sourceExact": [
+        [
+          "13672983/65536",
+          "6632601/131072"
+        ],
+        [
+          "13605735/65536",
+          "858041/16384"
+        ]
+      ],
+      "sourceFloat": [
+        [
+          208.63316345214844,
+          50.60272979736328
+        ],
+        [
+          207.60704040527344,
+          52.37066650390625
+        ]
+      ],
+      "maxUnitEndpointDistance2": 2.3123897183940794,
+      "unitDirectionDotSource": 1.026123046875,
+      "centreRegionEvidence": {
+        "accepted": true,
+        "centreRoots": [
+          3504
+        ],
+        "candidateCentreRoots": [
+          3504
+        ],
+        "directCommon": false
+      },
+      "rejectedBy": [
+        "EXISTING_UNIT_ENDPOINT_CORRIDOR"
+      ]
+    }
+  ],
+  "priorGeometryCandidateOwnsOnlyOtherPartialRegion": [
+    {
+      "arc": 0,
+      "segment": 80,
+      "sourceExact": [
+        [
+          "6848825/32768",
+          "14275491/262144"
+        ],
+        [
+          "6832249/32768",
+          "13951741/262144"
+        ]
+      ],
+      "sourceFloat": [
+        [
+          209.00955200195312,
+          54.4566764831543
+        ],
+        [
+          208.50369262695312,
+          53.2216682434082
+        ]
+      ],
+      "fit": 0.29915044562949333,
+      "wholeEdgeOwners": [
+        3901
+      ],
+      "support": {
+        "accepted": false,
+        "centreRoots": [
+          3504
+        ],
+        "candidateCentreRoots": [],
+        "directCommon": false
+      }
+    }
+  ],
+  "cause": "Partial P/M incidence is now represented, but the inherited whole-unit direction/corridor and one centre-anchor channel still exclude all exact source boundaries of the centre A region. This is not absent geometry, physical occlusion or a new area/mask decision.",
+  "nextDependency": "Define region-boundary-to-active-arc correspondence when the existing selector merges/omits concavity and a pixel unit has multiple oriented incidence portions. Reuse those exact portions instead of assigning its whole unit tangent to one source segment. No radius/coefficient/selector change was attempted.",
+  "newMask": false,
+  "newUnityCalls": 0,
+  "newSelectorRuns": 0,
+  "notYetImplemented": true
+}

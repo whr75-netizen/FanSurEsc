@@ -1,0 +1,317 @@
+{
+  "artifactIntegrityPassed": true,
+  "phase0FullCorrespondencePassed": true,
+  "fixtureCount": 19,
+  "all81CorrespondencePassed": false,
+  "fullyBoundPoses": 79,
+  "fullComparablePairs": 71,
+  "unboundTargets": [
+    4,
+    5
+  ],
+  "geometryEventPairs": [
+    10,
+    13,
+    28,
+    66,
+    75,
+    77
+  ],
+  "costStatusCounts": {
+    "INITIAL_POSE": 1,
+    "FULL_GEOMETRIC_CORRESPONDENCE": 71,
+    "UNBOUND_NULL_TOTAL": 3,
+    "GEOMETRY_EVENT_PARTIAL_NULL_TOTAL": 6
+  },
+  "sourceInputsValidated": 243,
+  "all81MaskHashesUnchanged": true,
+  "all81ReparameterizedCanonicalInputIdentical": true,
+  "partialRepresentationStats": {
+    "unitEdges": {
+      "sum": 9910,
+      "min": 116,
+      "max": 128,
+      "mean": 122.34567901234568
+    },
+    "rawSweepFragments": {
+      "sum": 50970,
+      "min": 570,
+      "max": 722,
+      "mean": 629.2592592592592
+    },
+    "normalizedPartialPieces": {
+      "sum": 16884,
+      "min": 194,
+      "max": 226,
+      "mean": 208.44444444444446
+    },
+    "splitUnitEdges": {
+      "sum": 5905,
+      "min": 67,
+      "max": 82,
+      "mean": 72.90123456790124
+    },
+    "maxPiecesPerUnit": {
+      "sum": 330,
+      "min": 3,
+      "max": 5,
+      "mean": 4.074074074074074
+    },
+    "sourceBoundaryCrossings": {
+      "sum": 6974,
+      "min": 78,
+      "max": 100,
+      "mean": 86.09876543209876
+    }
+  },
+  "offlineTimingSeconds": {
+    "exactOverlaySeconds": {
+      "poses": 80,
+      "sum": 536.605834899965,
+      "min": 6.305787899997085,
+      "max": 7.765728500002297,
+      "mean": 6.707572936249562
+    },
+    "partialIncidenceSeconds": {
+      "poses": 80,
+      "sum": 89.62138790001336,
+      "min": 0.9580283999966923,
+      "max": 1.6014623999944888,
+      "mean": 1.120267348750167
+    },
+    "bindingSeconds": {
+      "poses": 80,
+      "sum": 128.8016960999812,
+      "min": 0.15618340000219177,
+      "max": 1.9077223000058439,
+      "mean": 1.610021201249765
+    },
+    "comparisonSeconds": {
+      "poses": 81,
+      "sum": 78.55350689993065,
+      "min": 1.100008375942707e-06,
+      "max": 1.5312700000067707,
+      "mean": 0.9697963814806253
+    }
+  },
+  "phase0Costs": {
+    "partialConstructionSeconds": 0.993301300011808,
+    "bindingSeconds": 1.5122065999894403,
+    "exactOverlaySecondsFromOriginal": 6.407573900010902
+  },
+  "timingScope": "Python exact-geometry offline diagnostic only. No real-time implementation or adoption claim.",
+  "runtimeUnchanged": [
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Runtime/Visibility511.cs",
+      "name": "Visibility511.cs",
+      "before": "2a4bc54eda6f74b64b861763f330f0aad27652905a8bdd740468e389e9ba431a",
+      "after": "aa9ce50e42b69d8d015c787f39902420193b5d6be66edac406109c85d0560408"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs",
+      "name": "HeadRegion502.cs",
+      "before": "61564a48dbe5ee1c69f965b8bb482d20e6a0af340cd9429984aaf74a4ffeb6f7",
+      "after": "cc1b174e8d4638ccd741d07c24c2e52f5bda155fb7e59288f1bbe0f278937578"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs",
+      "name": "HeadLocal367.cs",
+      "before": "f21c69ece51485e16f742ebbb617134b83e536cd21bb70672935b07930e2602c",
+      "after": "24ac6b38a8aa931a859d1d70d800faae5df2ffa8fb1663914e9b275656a6d132"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Shaders/GridJoin367.compute",
+      "name": "GridJoin367.compute",
+      "before": "0e4f151617ed2f13b4f44607acebc0a115bb34780f711b104e81142cb98a2e6b",
+      "after": "ef6e352a929a3dff6fa1e1a5af1775f0488e295516181be3c4b08b1b9fd90c6e"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Editor/EditorCompare513.cs",
+      "before": null,
+      "after": "d8cdf1388b6b2d253c4e482a927e9ebdf5dd5a4997f299ebd535a2eac1c4a7a4"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Editor/GpuFixtureBody512.cs",
+      "before": null,
+      "after": "6837635be913d4cffbcf2e64761fb70bdec8a445ace6b1ec6d0ad10a0e33e9af"
+    }
+  ],
+  "rayDiagnosticUnchanged": {
+    "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Editor\\EditorRay512.cs",
+    "sha256": "2c94ea10f96ababf1ae6086a7dfdad0a7c6680efcda88c170f545d5fa06c54e0",
+    "diagnosticOnly": true
+  },
+  "protectedSettings": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "frozen516517Sources": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\active516.py",
+      "sha256": "6b76cd570aa00e772540e3348b0bcec9544594fc18e5e9e5e757644d919ab856"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\span516.py",
+      "sha256": "f278ce7655ab53db7dafe5066d8bcf70f40174f672fe4348ed1834f0bd66ed90"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\select516.py",
+      "sha256": "345d4dbe3849aa09668914dd5d1a29595c154cefcf88e1ded4bee8b25bb435a0"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\context516.py",
+      "sha256": "a89efdda73282a8c431fc228bdee3a5c5f01c9bfe046fa01744773dfbce2e3d3"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\test516.py",
+      "sha256": "0439111283e7a7c062ab8e4ca330b29bee3d48114ba8b92d0b7f24093131e944"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\review516.py",
+      "sha256": "fa88f763f06d3dff4c0776cae3d11306f7f9379e40df707b4a3ec8db6d8833c0"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\failure516.py",
+      "sha256": "0fc4ed9dec72caa8b233dd56bfd859b808f126f4cf7ebc1c56b627109d2d43db"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\support516.py",
+      "sha256": "e963ef93371ebffe7866a5755e131b9297127cb3c47a1cd36b3d3107ab597963"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\finish516.py",
+      "sha256": "8b3c56a05edfb43c35f599dbbf0f1117ed047ab80150b58a23ed9e7c4c84414e"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\validate516.py",
+      "sha256": "1a8ee34d57d892a85e49bd269809f95e4cd9c1a69d6e0edde168e6b643d2d9c5"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\arc517.py",
+      "sha256": "7887fcb46845d7c09b10db4104f4b3a42392ab59598262bf16743106936ff655"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\span517.py",
+      "sha256": "c5b1b4619e4d9ec34f4379a951bc778ccb6700784c0151563f280f882978c43b"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\test517.py",
+      "sha256": "ef588a3ce429af029c7c5e4b4fec02d5f4baa92176e3ec8a2ea3fc37da4c626a"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\audit517.py",
+      "sha256": "1a1334aad7a4ce5a883a72660f86053638b9b08a447a6c602eee42a237c31a91"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\probe517.py",
+      "sha256": "a5293b867b7458da22eefbb48bc90e202400922641c0c534cc357b9a92b63092"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\report517.py",
+      "sha256": "5824e1516b025c067ec1b25caeef43f2a8967de0b5da1ad4897205328f861e7d"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\validate517.py",
+      "sha256": "7bacb5feaef67f176315b7021b15b91ee67593240e38d2d4e98f451d5d587c82"
+    }
+  ],
+  "sources": [
+    {
+      "name": "face518.py",
+      "sha256": "8d5f7a898e306753e90b80a70ea00403af6c2234b27e60958b395e2ce98d66a6",
+      "bytes": 12601
+    },
+    {
+      "name": "edge518.py",
+      "sha256": "8df77dcda80a8827cd9a356fc16c3cd6015b3cbe7f1fe30afc91bea83eace0b3",
+      "bytes": 8763
+    },
+    {
+      "name": "arc518.py",
+      "sha256": "2725ed431b6a60eb57d67ffe546b262ae79af547981e3545a20ebb6c7a3579d7",
+      "bytes": 5768
+    },
+    {
+      "name": "minimum518.py",
+      "sha256": "9113a9ec4a394a2d8d457552f2000b4e19e68fa3a79ef74a3c5ab6cedc9afb0a",
+      "bytes": 7386
+    },
+    {
+      "name": "first518.py",
+      "sha256": "4fc72b7e368f43459ef5b76ae7a1c5b225755df2281f8e5498ff7b95f062cf72",
+      "bytes": 1545
+    },
+    {
+      "name": "probe_full518.py",
+      "sha256": "ecaeb2c202d13016dd2cef4bd949fe7aca8acd85cfbd02e01ffa65e70f2587ae",
+      "bytes": 2179
+    },
+    {
+      "name": "partial518.py",
+      "sha256": "66c9aff15735128b6fc387cb5e626ae82e714d3ae35b18a4a9842dc3869efe83",
+      "bytes": 2644
+    },
+    {
+      "name": "fixtures518.py",
+      "sha256": "f1817bb65792274166cd4f692403d0dcc57e307cf3fe9b45f0cc59fe9300fee2",
+      "bytes": 6972
+    },
+    {
+      "name": "audit518.py",
+      "sha256": "ebfca23188b354f4af8a9bdeb1823dd9838517c96b4611827ed3a049d2ac2bea",
+      "bytes": 8144
+    },
+    {
+      "name": "probe_audit518.py",
+      "sha256": "90072a33868bcc2d9a1346dfede96b41c864fd26bb1a778b648bb0b7790bc65e",
+      "bytes": 2639
+    },
+    {
+      "name": "dependency518.py",
+      "sha256": "08add035dd60a9e3fc3deba46bcb5abca8a249c160b66b9459c594e12d917d31",
+      "bytes": 2664
+    },
+    {
+      "name": "filter_evidence518.py",
+      "sha256": "7bb0d5f0d66f07c400d09a29852085ff6b8b971f178e10c09867fbb525f47b48",
+      "bytes": 3901
+    },
+    {
+      "name": "validate518.py",
+      "sha256": "112e84dd9906dd66d63b7d3c3bec7db1774956259ef0033a48982d7e1c55ca45",
+      "bytes": 6450
+    }
+  ],
+  "archives": [
+    {
+      "name": "ALL81_AUDITS518.zip",
+      "bytes": 261230,
+      "sha256": "9af74e8bb6359ddf2b47e102129df5a2c91f9211cea31176fced9da438d2fcab",
+      "entries": 81
+    },
+    {
+      "name": "PRIOR_FAILURE_CHECKPOINTS518.zip",
+      "bytes": 28291,
+      "sha256": "3f97d56aadb78b60bca06c362c99bbc7ad23db7c743ce4174ab69b73dbfe13bf",
+      "entries": 13
+    }
+  ],
+  "newUnityCalls": 0,
+  "selectorRuns": 0,
+  "timeStateCostChanged": false,
+  "coefficientChanged": false,
+  "defaultOFF": true,
+  "decision": "INCOMPLETE_OFFLINE_CORRESPONDENCE_NOT_ADOPTED",
+  "lastDirectUnityState": "RESTORED_LOOP514.json; no fresh live query in518",
+  "checks": [
+    "Phase0 both first cases and120/120 edges bound with centre incidence support",
+    "19 prior correspondence/structural fixtures preserved; exact canonical split/slide/start invariant",
+    "Whole unit lengths/cost arithmetic unchanged; added partial counts do not become new cost samples",
+    "243 stored input hashes and81 selected masks unchanged",
+    "All rejected/incomplete/event totals remain null rather than0/pass",
+    "First real rejection retains exact portion, candidate, direction and corridor evidence",
+    "Filter deletion counterexamples are diagnostic predicates only, no selector or production patch",
+    "516517 cost/state sources and actual project runtime/settings hashes unchanged",
+    "13 prototype/diagnostic sources parse; two evidence archives passCRC"
+  ]
+}

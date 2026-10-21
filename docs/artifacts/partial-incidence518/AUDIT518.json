@@ -1,0 +1,4611 @@
+{
+  "mode": "ONE_STORED81_PARTIAL_INCIDENCE_EXPANSION_AFTER_PHASE0_GATE",
+  "poses": 81,
+  "fullyBoundPoses": 79,
+  "unboundTargets": [
+    4,
+    5
+  ],
+  "fullComparablePairs": 71,
+  "geometryEventPairs": [
+    10,
+    13,
+    28,
+    66,
+    75,
+    77
+  ],
+  "costStatusCounts": {
+    "INITIAL_POSE": 1,
+    "FULL_GEOMETRIC_CORRESPONDENCE": 71,
+    "UNBOUND_NULL_TOTAL": 3,
+    "GEOMETRY_EVENT_PARTIAL_NULL_TOTAL": 6
+  },
+  "sumComparableRaw": 959.302782207099,
+  "all81ReparameterizedCanonicalInputIdentical": true,
+  "rows": [
+    {
+      "target": 0,
+      "phase": 0.0,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 614,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 104,
+          "D": 100,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 86,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "INITIAL_POSE",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": null,
+      "stageSeconds": {
+        "overlayCacheReused": true,
+        "originalOverlaySeconds": 6.407573900010902,
+        "originalPartialSeconds": 0.993301300011808,
+        "originalBindingSeconds": 1.5122065999894403,
+        "comparisonSeconds": 1.100008375942707e-06
+      },
+      "seconds": 0.06807710000430234,
+      "maskUnchangedSHA256": "992ef66f2edafd15651f4cf51d6e33947852307380bcea9d1d5ba69498647729",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 1,
+      "phase": 0.0125,
+      "fullyBound": true,
+      "inputUnitEdges": 116,
+      "boundUnitEdges": 116,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 116,
+        "rawSweepFragments": 598,
+        "normalizedPartialPieces": 194,
+        "splitUnitEdges": 67,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 78,
+        "pieceKinds": {
+          "A": 99,
+          "D": 95,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 86,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 9.644548819926875,
+      "legacy516RawFromExisting517Audit": 18.23126513159285,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.305787899997085,
+        "partialIncidenceSeconds": 0.9580283999966923,
+        "bindingSeconds": 1.5753783999971347,
+        "comparisonSeconds": 0.8323539000120945
+      },
+      "seconds": 9.688665699999547,
+      "maskUnchangedSHA256": "2756b0f39648f72d624977fa9022abcc2a12e6f4fabbebf03192886dfa060666",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 2,
+      "phase": 0.025,
+      "fullyBound": true,
+      "inputUnitEdges": 116,
+      "boundUnitEdges": 116,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 116,
+        "rawSweepFragments": 602,
+        "normalizedPartialPieces": 196,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 101,
+          "D": 95,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 86,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 5.883534251603649,
+      "legacy516RawFromExisting517Audit": 11.352135750557629,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.442610999991302,
+        "partialIncidenceSeconds": 1.0918289000110235,
+        "bindingSeconds": 1.7494475999992574,
+        "comparisonSeconds": 0.8371065999963321
+      },
+      "seconds": 10.142357400007313,
+      "maskUnchangedSHA256": "2756b0f39648f72d624977fa9022abcc2a12e6f4fabbebf03192886dfa060666",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 3,
+      "phase": 0.0375,
+      "fullyBound": true,
+      "inputUnitEdges": 116,
+      "boundUnitEdges": 116,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 116,
+        "rawSweepFragments": 603,
+        "normalizedPartialPieces": 198,
+        "splitUnitEdges": 71,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 103,
+          "D": 95,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 86,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 10.54347756619206,
+      "legacy516RawFromExisting517Audit": 14.206893927842387,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.52637870000035,
+        "partialIncidenceSeconds": 1.0533457999990787,
+        "bindingSeconds": 1.7143330999970203,
+        "comparisonSeconds": 0.8209865000098944
+      },
+      "seconds": 10.135707499997807,
+      "maskUnchangedSHA256": "9503d976c3f2d8d71f9f00263b660f4bd5a124402927f001f54d59ad0094dc72",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 4,
+      "phase": 0.05,
+      "fullyBound": false,
+      "inputUnitEdges": 116,
+      "boundUnitEdges": 0,
+      "unsupported": [
+        {
+          "reason": "NO_GEOMETRIC_UNIT_EDGE_CANDIDATE",
+          "pixelLoop": 0
+        }
+      ],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 116,
+        "rawSweepFragments": 602,
+        "normalizedPartialPieces": 198,
+        "splitUnitEdges": 70,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 105,
+          "D": 93,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 86,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "UNBOUND_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 19.350404340330265,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.537943000002997,
+        "partialIncidenceSeconds": 1.033303000003798,
+        "bindingSeconds": 0.15955310000572354,
+        "comparisonSeconds": 0.0005449000018415973
+      },
+      "seconds": 7.752942499995697,
+      "maskUnchangedSHA256": "e2690a7f8a04b7debca86315107c55bef074f142f40d4df6a90a32547cf8aa86",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 5,
+      "phase": 0.0625,
+      "fullyBound": false,
+      "inputUnitEdges": 116,
+      "boundUnitEdges": 0,
+      "unsupported": [
+        {
+          "reason": "NO_GEOMETRIC_UNIT_EDGE_CANDIDATE",
+          "pixelLoop": 0
+        }
+      ],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 116,
+        "rawSweepFragments": 603,
+        "normalizedPartialPieces": 196,
+        "splitUnitEdges": 69,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 101,
+          "D": 95,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 86,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "UNBOUND_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 11.788485656053233,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.388914099996327,
+        "partialIncidenceSeconds": 1.009189400007017,
+        "bindingSeconds": 0.15618340000219177,
+        "comparisonSeconds": 0.0005913999921176583
+      },
+      "seconds": 7.57770029999665,
+      "maskUnchangedSHA256": "bfd6e4450718f4a1546f03daf7288bbe40f54f62d82758625f1b8c190c345848",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 6,
+      "phase": 0.075,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 628,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 105,
+          "D": 101,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 86,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "UNBOUND_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 24.44533127192266,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.728516999995918,
+        "partialIncidenceSeconds": 1.1233738000009907,
+        "bindingSeconds": 1.493814300003578,
+        "comparisonSeconds": 0.0005939999973634258
+      },
+      "seconds": 9.368964599998435,
+      "maskUnchangedSHA256": "af13962526f88737334b7ee77c6c1c0f024493fedbe4ba866d9a59c088ffebc0",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 7,
+      "phase": 0.0875,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 639,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 76,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 106,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 87,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 11.19094788249405,
+      "legacy516RawFromExisting517Audit": 17.22173963333855,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.648601399996551,
+        "partialIncidenceSeconds": 1.1236829999979818,
+        "bindingSeconds": 1.5591948999935994,
+        "comparisonSeconds": 1.147957499997574
+      },
+      "seconds": 10.501133699988713,
+      "maskUnchangedSHA256": "61e29ea304e013b30c49a40df969ddba3505892a41b76cb6317057ca6524ea3b",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 8,
+      "phase": 0.1,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 642,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 76,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 107,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 87,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 7.560797334901011,
+      "legacy516RawFromExisting517Audit": 10.548184451215597,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.783926700009033,
+        "partialIncidenceSeconds": 1.1259056999988388,
+        "bindingSeconds": 1.6793291000067256,
+        "comparisonSeconds": 1.243182699996396
+      },
+      "seconds": 10.855668300006073,
+      "maskUnchangedSHA256": "61e29ea304e013b30c49a40df969ddba3505892a41b76cb6317057ca6524ea3b",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 9,
+      "phase": 0.1125,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 642,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 77,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 107,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 87,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 22.770020802342216,
+      "legacy516RawFromExisting517Audit": 19.126359693185094,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.695014299999457,
+        "partialIncidenceSeconds": 1.1633837999979733,
+        "bindingSeconds": 1.5993771999928867,
+        "comparisonSeconds": 1.3132407999946736
+      },
+      "seconds": 10.792215099994792,
+      "maskUnchangedSHA256": "321dad1b45603662959683637394199f9e11fac1f4b26c3049880abb911cc8bc",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 10,
+      "phase": 0.125,
+      "fullyBound": true,
+      "inputUnitEdges": 128,
+      "boundUnitEdges": 128,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 128,
+        "rawSweepFragments": 654,
+        "normalizedPartialPieces": 222,
+        "splitUnitEdges": 78,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 94,
+        "pieceKinds": {
+          "A": 111,
+          "D": 111,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 76,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 3,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "GEOMETRY_EVENT_PARTIAL_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 23.83363076254144,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.814572399991448,
+        "partialIncidenceSeconds": 1.1964302999986103,
+        "bindingSeconds": 1.5598691000050167,
+        "comparisonSeconds": 1.1883157999982359
+      },
+      "seconds": 10.781218600008287,
+      "maskUnchangedSHA256": "2e262e94aea6ab50783ae7c48e1335026d2b8172f3ac21e6ebce6debc90a88ae",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 11,
+      "phase": 0.1375,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 624,
+        "normalizedPartialPieces": 220,
+        "splitUnitEdges": 78,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 94,
+        "pieceKinds": {
+          "A": 112,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 76,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 3,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 16.29709742327296,
+      "legacy516RawFromExisting517Audit": 16.838909398780345,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.696520800003782,
+        "partialIncidenceSeconds": 1.2141283999953885,
+        "bindingSeconds": 1.7627436999900965,
+        "comparisonSeconds": 1.1849436999909813
+      },
+      "seconds": 10.880094699998153,
+      "maskUnchangedSHA256": "86e99283327f42265d558c720d6e710223439976127b97ac568fd947670166e6",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 12,
+      "phase": 0.15,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 636,
+        "normalizedPartialPieces": 224,
+        "splitUnitEdges": 80,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 98,
+        "pieceKinds": {
+          "A": 111,
+          "D": 113,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 76,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 3,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 7.873478792667157,
+      "legacy516RawFromExisting517Audit": 7.488929210405502,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.7897742000059225,
+        "partialIncidenceSeconds": 1.2504358000005595,
+        "bindingSeconds": 1.8013191999925766,
+        "comparisonSeconds": 1.1421410000039032
+      },
+      "seconds": 11.008150800000294,
+      "maskUnchangedSHA256": "81ba30fa0ad713beb39062c9d8e57b862f76673755d32a7ba605d768246b5704",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 13,
+      "phase": 0.1625,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 629,
+        "normalizedPartialPieces": 226,
+        "splitUnitEdges": 80,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 100,
+        "pieceKinds": {
+          "A": 112,
+          "D": 114,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "GEOMETRY_EVENT_PARTIAL_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 10.455637621795553,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.5787383999995654,
+        "partialIncidenceSeconds": 1.2292083000065759,
+        "bindingSeconds": 1.579272500006482,
+        "comparisonSeconds": 1.113993200007826
+      },
+      "seconds": 10.52338559999771,
+      "maskUnchangedSHA256": "5c41e78b4f8d7c1689f88aea830a7ee554836cd79885ab772a37c2b9a890d062",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 14,
+      "phase": 0.175,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 628,
+        "normalizedPartialPieces": 226,
+        "splitUnitEdges": 81,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 100,
+        "pieceKinds": {
+          "A": 112,
+          "D": 114,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 6.836773860125938,
+      "legacy516RawFromExisting517Audit": 9.892023758983477,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.702370600003633,
+        "partialIncidenceSeconds": 1.2800076999992598,
+        "bindingSeconds": 1.6005344000004698,
+        "comparisonSeconds": 1.0894098999997368
+      },
+      "seconds": 10.695487999997567,
+      "maskUnchangedSHA256": "5c41e78b4f8d7c1689f88aea830a7ee554836cd79885ab772a37c2b9a890d062",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 15,
+      "phase": 0.1875,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 628,
+        "normalizedPartialPieces": 226,
+        "splitUnitEdges": 82,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 100,
+        "pieceKinds": {
+          "A": 110,
+          "D": 116,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 6.13853060856227,
+      "legacy516RawFromExisting517Audit": 11.632302170904289,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.931400099987513,
+        "partialIncidenceSeconds": 1.6014623999944888,
+        "bindingSeconds": 1.5068608000001404,
+        "comparisonSeconds": 1.0970175999973435
+      },
+      "seconds": 11.159553999998025,
+      "maskUnchangedSHA256": "4f3f6c99d4ed2e754e0f012d68d303cf54edee9b25029ac319205ae9eb6e08d6",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 16,
+      "phase": 0.2,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 622,
+        "normalizedPartialPieces": 220,
+        "splitUnitEdges": 76,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 94,
+        "pieceKinds": {
+          "A": 109,
+          "D": 111,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 27.343537242170243,
+      "legacy516RawFromExisting517Audit": 19.36881601177283,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.867725799995242,
+        "partialIncidenceSeconds": 1.1738129000004847,
+        "bindingSeconds": 1.5805159000010462,
+        "comparisonSeconds": 0.9428656000090996
+      },
+      "seconds": 10.588430100004189,
+      "maskUnchangedSHA256": "d0cf45562fcc1d0e75a40338f6d7d73fdf32e44e688432f2aab2b9453029e189",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 17,
+      "phase": 0.2125,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 605,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 74,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 102,
+          "D": 112,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 12.487237542439452,
+      "legacy516RawFromExisting517Audit": 12.163602310127622,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.641969200005406,
+        "partialIncidenceSeconds": 1.226123699991149,
+        "bindingSeconds": 1.5643053999956464,
+        "comparisonSeconds": 0.8010017999913543
+      },
+      "seconds": 10.254817799999728,
+      "maskUnchangedSHA256": "f64f677ceec7326883b68ff4b9ba27e10c9835535653078ddd2682e688b321d9",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 18,
+      "phase": 0.225,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 585,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 71,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 99,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 15.013778683922553,
+      "legacy516RawFromExisting517Audit": 17.445300508363133,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.638590799993835,
+        "partialIncidenceSeconds": 1.0612231999984942,
+        "bindingSeconds": 1.622581400006311,
+        "comparisonSeconds": 0.684190399988438
+      },
+      "seconds": 10.028627100007725,
+      "maskUnchangedSHA256": "8b85c2b4dac5fd6998782ac0bd138f254995166a908443452f6a421feb502f0c",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 19,
+      "phase": 0.2375,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 618,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 71,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 97,
+          "D": 109,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 9.439581973564088,
+      "legacy516RawFromExisting517Audit": 21.626694267587716,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.731377699994482,
+        "partialIncidenceSeconds": 1.1942204999941168,
+        "bindingSeconds": 1.8800745000044117,
+        "comparisonSeconds": 0.8678895000048215
+      },
+      "seconds": 10.698294200003147,
+      "maskUnchangedSHA256": "f5b7ec23cd44bee77b5f779b5344d52b5c4a767b240f47825c1de372fa7b6f2a",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 20,
+      "phase": 0.25,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 626,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 73,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 97,
+          "D": 109,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 8.54419330818719,
+      "legacy516RawFromExisting517Audit": 18.733071188648246,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.81577039998956,
+        "partialIncidenceSeconds": 1.0531335000123363,
+        "bindingSeconds": 1.7768868999992264,
+        "comparisonSeconds": 0.8314608999935444
+      },
+      "seconds": 10.499389400007203,
+      "maskUnchangedSHA256": "bb7ee2da70cf9be5aadf8de8bff22aebcc457b3356cab8e2cdccc38ce5a4b9da",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 21,
+      "phase": 0.2625,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 672,
+        "normalizedPartialPieces": 210,
+        "splitUnitEdges": 74,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 101,
+          "D": 109,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 15.556048387064116,
+      "legacy516RawFromExisting517Audit": 21.79034765041201,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.739094100004877,
+        "partialIncidenceSeconds": 1.076710200009984,
+        "bindingSeconds": 1.6993666000053054,
+        "comparisonSeconds": 0.8586775000003399
+      },
+      "seconds": 10.397482400003355,
+      "maskUnchangedSHA256": "be05d27908219ca302a8131182f5fb4f17090d90dd39e0ca9a0f6812cb864711",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 22,
+      "phase": 0.275,
+      "fullyBound": true,
+      "inputUnitEdges": 128,
+      "boundUnitEdges": 128,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 128,
+        "rawSweepFragments": 679,
+        "normalizedPartialPieces": 216,
+        "splitUnitEdges": 74,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 88,
+        "pieceKinds": {
+          "A": 102,
+          "D": 114,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 80,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 22.944493733523863,
+      "legacy516RawFromExisting517Audit": 30.69243703350974,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.526458799999091,
+        "partialIncidenceSeconds": 1.1373821000015596,
+        "bindingSeconds": 1.9077223000058439,
+        "comparisonSeconds": 1.0588221999933012
+      },
+      "seconds": 10.653607899992494,
+      "maskUnchangedSHA256": "199d0d3207bc050965935c370e3dd9e8296de835b027ce674445ed4b7b61f624",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 23,
+      "phase": 0.2875,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 678,
+        "normalizedPartialPieces": 210,
+        "splitUnitEdges": 71,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 100,
+          "D": 110,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 80,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 17.573194513553233,
+      "legacy516RawFromExisting517Audit": 22.498878844359517,
+      "stageSeconds": {
+        "exactOverlaySeconds": 7.333687299993471,
+        "partialIncidenceSeconds": 1.0851857000088785,
+        "bindingSeconds": 1.7500389000051655,
+        "comparisonSeconds": 1.029614599989145
+      },
+      "seconds": 11.22098030000052,
+      "maskUnchangedSHA256": "99df2e8ff4571228de3f102e2fbac3ee7b8a6daa642222a0256a881284544b1e",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 24,
+      "phase": 0.3,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 687,
+        "normalizedPartialPieces": 212,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 103,
+          "D": 109,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 80,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 8.042051687045209,
+      "legacy516RawFromExisting517Audit": 12.97218300389138,
+      "stageSeconds": {
+        "exactOverlaySeconds": 7.046191000001272,
+        "partialIncidenceSeconds": 1.0929562999954214,
+        "bindingSeconds": 1.548155399999814,
+        "comparisonSeconds": 0.9803287999966415
+      },
+      "seconds": 10.689914200003841,
+      "maskUnchangedSHA256": "99df2e8ff4571228de3f102e2fbac3ee7b8a6daa642222a0256a881284544b1e",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 25,
+      "phase": 0.3125,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 699,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 70,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 98,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 80,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 19.877075386021225,
+      "legacy516RawFromExisting517Audit": 31.222947528708318,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.980973599987919,
+        "partialIncidenceSeconds": 1.1327988999983063,
+        "bindingSeconds": 1.669470300010289,
+        "comparisonSeconds": 0.9187767999974312
+      },
+      "seconds": 10.724403800006257,
+      "maskUnchangedSHA256": "99821deda0b03f85474619985d75262f785508df5e3d021209cbd95cd53c8541",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 26,
+      "phase": 0.325,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 670,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 70,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 105,
+          "D": 99,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 80,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 17.425049360021845,
+      "legacy516RawFromExisting517Audit": 23.455932521639397,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.872379299995373,
+        "partialIncidenceSeconds": 1.0899279999866849,
+        "bindingSeconds": 1.4690656999882776,
+        "comparisonSeconds": 0.9016886000026716
+      },
+      "seconds": 10.356864700006554,
+      "maskUnchangedSHA256": "7c7c30d7ca9b9557bff04e8ff77c473e6383c064ecbc68acecb0eea412b1c7b1",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 27,
+      "phase": 0.3375,
+      "fullyBound": true,
+      "inputUnitEdges": 118,
+      "boundUnitEdges": 118,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 118,
+        "rawSweepFragments": 614,
+        "normalizedPartialPieces": 200,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 102,
+          "D": 98,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 80,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 12.550894006269772,
+      "legacy516RawFromExisting517Audit": 20.37765114143012,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.812506700007361,
+        "partialIncidenceSeconds": 1.0660319000016898,
+        "bindingSeconds": 1.4585422999953153,
+        "comparisonSeconds": 1.0167598999978509
+      },
+      "seconds": 10.377197000008891,
+      "maskUnchangedSHA256": "c31ab0c2d3f1a946f386fdef339faeedf2417cb6d86036d9175368465f6ed14f",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 28,
+      "phase": 0.35,
+      "fullyBound": true,
+      "inputUnitEdges": 118,
+      "boundUnitEdges": 118,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 118,
+        "rawSweepFragments": 621,
+        "normalizedPartialPieces": 198,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 100,
+          "D": 98,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "GEOMETRY_EVENT_PARTIAL_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 13.38259112105004,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.834289399994304,
+        "partialIncidenceSeconds": 1.0346405000018422,
+        "bindingSeconds": 1.4970090999995591,
+        "comparisonSeconds": 0.8983440000010887
+      },
+      "seconds": 10.287492400006158,
+      "maskUnchangedSHA256": "c6c958852235ae7e36a2e954c9d527cf5162bdd7ee3dda1db1f62e30d2ba5071",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 29,
+      "phase": 0.3625,
+      "fullyBound": true,
+      "inputUnitEdges": 118,
+      "boundUnitEdges": 118,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 118,
+        "rawSweepFragments": 630,
+        "normalizedPartialPieces": 200,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 104,
+          "D": 96,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 11.191551908082872,
+      "legacy516RawFromExisting517Audit": 18.91817992523498,
+      "stageSeconds": {
+        "exactOverlaySeconds": 7.36146600000211,
+        "partialIncidenceSeconds": 1.1229295000084676,
+        "bindingSeconds": 1.6423912000027485,
+        "comparisonSeconds": 0.9337924999999814
+      },
+      "seconds": 11.089413499998045,
+      "maskUnchangedSHA256": "dd2d1d11bb28ede4e562782e35db10110027f5555abffeeb9e2b3a1d2e84f9a4",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 30,
+      "phase": 0.375,
+      "fullyBound": true,
+      "inputUnitEdges": 116,
+      "boundUnitEdges": 116,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 116,
+        "rawSweepFragments": 583,
+        "normalizedPartialPieces": 196,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 101,
+          "D": 95,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 10.275258446680908,
+      "legacy516RawFromExisting517Audit": 17.087790304491307,
+      "stageSeconds": {
+        "exactOverlaySeconds": 7.07539579999866,
+        "partialIncidenceSeconds": 1.0611005000100704,
+        "bindingSeconds": 1.6730747999972664,
+        "comparisonSeconds": 0.8751523999962956
+      },
+      "seconds": 10.707550099992659,
+      "maskUnchangedSHA256": "4dc4a37b73c798d9f75142faa7d8ce3335589dbedaf023546e78f97d00fa37d5",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 31,
+      "phase": 0.3875,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 593,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 103,
+          "D": 103,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 18.857813520516252,
+      "legacy516RawFromExisting517Audit": 26.630223526912793,
+      "stageSeconds": {
+        "exactOverlaySeconds": 7.142480499998783,
+        "partialIncidenceSeconds": 1.2183129000040935,
+        "bindingSeconds": 1.7641314999928,
+        "comparisonSeconds": 1.0144588999974076
+      },
+      "seconds": 11.163616000005277,
+      "maskUnchangedSHA256": "2d18867f01312fe4dbf4926c8981c95c83f3412bb04be105efe4f5143f52de22",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 32,
+      "phase": 0.4,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 593,
+        "normalizedPartialPieces": 210,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 104,
+          "D": 106,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 16.694312564144937,
+      "legacy516RawFromExisting517Audit": 28.25587980646246,
+      "stageSeconds": {
+        "exactOverlaySeconds": 7.151731599995401,
+        "partialIncidenceSeconds": 1.2263908000022639,
+        "bindingSeconds": 1.656390400006785,
+        "comparisonSeconds": 0.9358406999963336
+      },
+      "seconds": 10.993691800002125,
+      "maskUnchangedSHA256": "8f7a6c187da31b0bfb751ee16ce22bf06f1460c5e2d717ce432d2d0ddac7cda6",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 33,
+      "phase": 0.4125,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 591,
+        "normalizedPartialPieces": 210,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 104,
+          "D": 106,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 6.9013021271789725,
+      "legacy516RawFromExisting517Audit": 13.744577183275943,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.779234500005259,
+        "partialIncidenceSeconds": 1.1778652000066359,
+        "bindingSeconds": 1.7620911999983946,
+        "comparisonSeconds": 1.01269949998823
+      },
+      "seconds": 10.758432699993136,
+      "maskUnchangedSHA256": "8f7a6c187da31b0bfb751ee16ce22bf06f1460c5e2d717ce432d2d0ddac7cda6",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 34,
+      "phase": 0.425,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 593,
+        "normalizedPartialPieces": 210,
+        "splitUnitEdges": 73,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 103,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 11.399977590502061,
+      "legacy516RawFromExisting517Audit": 13.33823359121724,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.766036999993958,
+        "partialIncidenceSeconds": 1.1877669999958016,
+        "bindingSeconds": 1.710460400005104,
+        "comparisonSeconds": 1.004747099999804
+      },
+      "seconds": 10.691716500004986,
+      "maskUnchangedSHA256": "ec60a0c8878ec1041830685d51092fb86d128fffe5963a00e10d1e025ba989d2",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 35,
+      "phase": 0.4375,
+      "fullyBound": true,
+      "inputUnitEdges": 116,
+      "boundUnitEdges": 116,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 116,
+        "rawSweepFragments": 571,
+        "normalizedPartialPieces": 198,
+        "splitUnitEdges": 69,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 97,
+          "D": 101,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 11.933589887807749,
+      "legacy516RawFromExisting517Audit": 20.612950670993783,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.729814199992688,
+        "partialIncidenceSeconds": 1.0838095000071917,
+        "bindingSeconds": 1.8344482999964384,
+        "comparisonSeconds": 0.9175203999911901
+      },
+      "seconds": 10.586976999999024,
+      "maskUnchangedSHA256": "14c238915f266b0b6bd50e18855a9676b5e70db41992bf2cd3148fdd05ada6bd",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 36,
+      "phase": 0.45,
+      "fullyBound": true,
+      "inputUnitEdges": 118,
+      "boundUnitEdges": 118,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 118,
+        "rawSweepFragments": 577,
+        "normalizedPartialPieces": 200,
+        "splitUnitEdges": 69,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 96,
+          "D": 104,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 11.700596877253133,
+      "legacy516RawFromExisting517Audit": 15.416986481394773,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.40076949998911,
+        "partialIncidenceSeconds": 1.0683024999889312,
+        "bindingSeconds": 1.8027813999942737,
+        "comparisonSeconds": 0.8483448000042699
+      },
+      "seconds": 10.144564299989725,
+      "maskUnchangedSHA256": "03937cb493aac44f69180dd4c17750851bd1e4ff1c9d0e2e8948d3ce83600eda",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 37,
+      "phase": 0.4625,
+      "fullyBound": true,
+      "inputUnitEdges": 118,
+      "boundUnitEdges": 118,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 118,
+        "rawSweepFragments": 591,
+        "normalizedPartialPieces": 202,
+        "splitUnitEdges": 69,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 97,
+          "D": 105,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 5.606095003633811,
+      "legacy516RawFromExisting517Audit": 9.340294180804356,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.8546549000020605,
+        "partialIncidenceSeconds": 1.1128737999970326,
+        "bindingSeconds": 1.805746600002749,
+        "comparisonSeconds": 0.869695600005798
+      },
+      "seconds": 10.66488229999959,
+      "maskUnchangedSHA256": "03937cb493aac44f69180dd4c17750851bd1e4ff1c9d0e2e8948d3ce83600eda",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 38,
+      "phase": 0.475,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 604,
+        "normalizedPartialPieces": 202,
+        "splitUnitEdges": 70,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 98,
+          "D": 104,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 8.005736310325332,
+      "legacy516RawFromExisting517Audit": 11.820972451038585,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.6932650999951875,
+        "partialIncidenceSeconds": 1.13558020000346,
+        "bindingSeconds": 1.7639195000083419,
+        "comparisonSeconds": 0.9026044000056572
+      },
+      "seconds": 10.517550999997184,
+      "maskUnchangedSHA256": "5cb10ba269eca61dc62638b20a1e505b73bbc038d7344a11e5564dd601f03c91",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 39,
+      "phase": 0.4875,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 616,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 70,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 96,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 25.325443843605605,
+      "legacy516RawFromExisting517Audit": 15.209251054608757,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.909516800005804,
+        "partialIncidenceSeconds": 1.2577361000003293,
+        "bindingSeconds": 1.7840098000015132,
+        "comparisonSeconds": 0.9509917999967001
+      },
+      "seconds": 10.926656099996762,
+      "maskUnchangedSHA256": "0526bb1aee990f634943363f4ecd4bb79adf04aa03c8bafa50a82af08e81862d",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 40,
+      "phase": 0.5,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 608,
+        "normalizedPartialPieces": 202,
+        "splitUnitEdges": 69,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 95,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 4.202337558470134,
+      "legacy516RawFromExisting517Audit": 5.9732354337897675,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.466816200001631,
+        "partialIncidenceSeconds": 1.0653481999906944,
+        "bindingSeconds": 1.750386499988963,
+        "comparisonSeconds": 0.8753927000070689
+      },
+      "seconds": 10.180404700004146,
+      "maskUnchangedSHA256": "0526bb1aee990f634943363f4ecd4bb79adf04aa03c8bafa50a82af08e81862d",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 41,
+      "phase": 0.5125,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 655,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 70,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 96,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 6.555705252668787,
+      "legacy516RawFromExisting517Audit": 8.324760430514573,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.9233405999984825,
+        "partialIncidenceSeconds": 1.1242129999882309,
+        "bindingSeconds": 1.7324915999924997,
+        "comparisonSeconds": 0.9267231999983778
+      },
+      "seconds": 10.72950440000568,
+      "maskUnchangedSHA256": "b458009735000dbcffa3118497b57de4ac39b3d436fad611519185c689d9d93e",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 42,
+      "phase": 0.525,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 650,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 69,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 97,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 8.85817879737452,
+      "legacy516RawFromExisting517Audit": 20.387565299505724,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.465395100007299,
+        "partialIncidenceSeconds": 1.0828356999991229,
+        "bindingSeconds": 1.6923092999932123,
+        "comparisonSeconds": 0.9339997000060976
+      },
+      "seconds": 10.195963699996355,
+      "maskUnchangedSHA256": "12e1aa7422a07a46a091923bb9d294a9159533f698916c75d874a683a65fd2ad",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 43,
+      "phase": 0.5375,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 650,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 96,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 2.3323138630146474,
+      "legacy516RawFromExisting517Audit": 2.0484198459970173,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.4997716000070795,
+        "partialIncidenceSeconds": 1.0550505999999586,
+        "bindingSeconds": 1.712527699986822,
+        "comparisonSeconds": 0.9530997999972897
+      },
+      "seconds": 10.24230530000932,
+      "maskUnchangedSHA256": "12e1aa7422a07a46a091923bb9d294a9159533f698916c75d874a683a65fd2ad",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 44,
+      "phase": 0.55,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 650,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 96,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 1.5512419839052285,
+      "legacy516RawFromExisting517Audit": 1.2547510032158726,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.4538843000045745,
+        "partialIncidenceSeconds": 1.052535099996021,
+        "bindingSeconds": 1.6831755000021076,
+        "comparisonSeconds": 0.9344726999988779
+      },
+      "seconds": 10.147343799995724,
+      "maskUnchangedSHA256": "12e1aa7422a07a46a091923bb9d294a9159533f698916c75d874a683a65fd2ad",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 45,
+      "phase": 0.5625,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 650,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 67,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 96,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 2.831880343491747,
+      "legacy516RawFromExisting517Audit": 2.685716835401628,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.3995321999973385,
+        "partialIncidenceSeconds": 1.057549499993911,
+        "bindingSeconds": 1.697910500006401,
+        "comparisonSeconds": 0.9307077999983449
+      },
+      "seconds": 10.109812499998952,
+      "maskUnchangedSHA256": "cd3444f3b964cf3d2ee8d749aee25f92c29c74e0cdf1d512fac4fce288de8e31",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 46,
+      "phase": 0.575,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 650,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 67,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 96,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 0.8854855381884903,
+      "legacy516RawFromExisting517Audit": 3.2504797821942404,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.3814019999990705,
+        "partialIncidenceSeconds": 1.045259900012752,
+        "bindingSeconds": 1.702014299997245,
+        "comparisonSeconds": 0.9363238999940222
+      },
+      "seconds": 10.088276399997994,
+      "maskUnchangedSHA256": "cd3444f3b964cf3d2ee8d749aee25f92c29c74e0cdf1d512fac4fce288de8e31",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 47,
+      "phase": 0.5875,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 652,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 96,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 4.580513548837601,
+      "legacy516RawFromExisting517Audit": 9.85302757638513,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.389681999993627,
+        "partialIncidenceSeconds": 1.0531415000004927,
+        "bindingSeconds": 1.7008618999971077,
+        "comparisonSeconds": 0.9275820000038948
+      },
+      "seconds": 10.096047799990629,
+      "maskUnchangedSHA256": "b458009735000dbcffa3118497b57de4ac39b3d436fad611519185c689d9d93e",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 48,
+      "phase": 0.6,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 652,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 68,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 80,
+        "pieceKinds": {
+          "A": 96,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 5.399671696883679,
+      "legacy516RawFromExisting517Audit": 9.672993889670103,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.3996910999994725,
+        "partialIncidenceSeconds": 1.055446900005336,
+        "bindingSeconds": 1.6920518999977503,
+        "comparisonSeconds": 1.0262651000084588
+      },
+      "seconds": 10.19567110000935,
+      "maskUnchangedSHA256": "b458009735000dbcffa3118497b57de4ac39b3d436fad611519185c689d9d93e",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 49,
+      "phase": 0.6125,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 617,
+        "normalizedPartialPieces": 202,
+        "splitUnitEdges": 69,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 96,
+          "D": 106,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 13.975506450641618,
+      "legacy516RawFromExisting517Audit": 18.117284208628618,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.683134899998549,
+        "partialIncidenceSeconds": 1.0798269999941112,
+        "bindingSeconds": 1.7284094999922672,
+        "comparisonSeconds": 0.8515228000032948
+      },
+      "seconds": 10.36453469999833,
+      "maskUnchangedSHA256": "b6ed2b1d5f6a5f8c0a126bf8b7a1e592024b936a3dec9cbbf98ec8e7961143e7",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 50,
+      "phase": 0.625,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 615,
+        "normalizedPartialPieces": 202,
+        "splitUnitEdges": 69,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 97,
+          "D": 105,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 12.32935669522724,
+      "legacy516RawFromExisting517Audit": 19.041757949164662,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.7702369000035105,
+        "partialIncidenceSeconds": 1.0655411999905482,
+        "bindingSeconds": 1.7437656999973115,
+        "comparisonSeconds": 1.0128528000059305
+      },
+      "seconds": 10.615718999993987,
+      "maskUnchangedSHA256": "a1b1a23634302c7ae7aaf9be155e467d2333b44caf48e27e683be923ebeca095",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 51,
+      "phase": 0.6375,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 590,
+        "normalizedPartialPieces": 210,
+        "splitUnitEdges": 76,
+        "maxPiecesPerUnit": 3,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 107,
+          "D": 103,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 46.13593289844921,
+      "legacy516RawFromExisting517Audit": 42.98515365355797,
+      "stageSeconds": {
+        "exactOverlaySeconds": 7.765728500002297,
+        "partialIncidenceSeconds": 1.161341099999845,
+        "bindingSeconds": 1.7722501000098418,
+        "comparisonSeconds": 0.9183924999961164
+      },
+      "seconds": 11.642802500005928,
+      "maskUnchangedSHA256": "ce43581e1f93f2600ab21be10f5a3aa3c8797ba5e02e789830ef0e775957f835",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 52,
+      "phase": 0.65,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 608,
+        "normalizedPartialPieces": 210,
+        "splitUnitEdges": 75,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 88,
+        "pieceKinds": {
+          "A": 107,
+          "D": 103,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 21.13173635751056,
+      "legacy516RawFromExisting517Audit": 37.90547649182993,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.726685899993754,
+        "partialIncidenceSeconds": 1.1246507999894675,
+        "bindingSeconds": 1.78139829999418,
+        "comparisonSeconds": 0.9877645999949891
+      },
+      "seconds": 10.644440300005954,
+      "maskUnchangedSHA256": "224622675dce8c849929bc7f74b6bf231e9666375af6a09f5b79ac51830d0712",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 53,
+      "phase": 0.6625,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 640,
+        "normalizedPartialPieces": 210,
+        "splitUnitEdges": 74,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 88,
+        "pieceKinds": {
+          "A": 108,
+          "D": 102,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 27.122211345048562,
+      "legacy516RawFromExisting517Audit": 43.151124510361036,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.756957400008105,
+        "partialIncidenceSeconds": 1.1446337999950629,
+        "bindingSeconds": 1.7018137000122806,
+        "comparisonSeconds": 0.98190679999243
+      },
+      "seconds": 10.61033419999876,
+      "maskUnchangedSHA256": "1ea283a8e834420b147014c856f539eeb532930d52f7acc543e6662c9df11145",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 54,
+      "phase": 0.675,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 686,
+        "normalizedPartialPieces": 216,
+        "splitUnitEdges": 76,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 92,
+        "pieceKinds": {
+          "A": 109,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 19.239478809789,
+      "legacy516RawFromExisting517Audit": 28.07857556874078,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.765975600006641,
+        "partialIncidenceSeconds": 1.201543800008949,
+        "bindingSeconds": 1.525327900002594,
+        "comparisonSeconds": 1.027969500006293
+      },
+      "seconds": 10.543859600002179,
+      "maskUnchangedSHA256": "3e229847835634c973e5d9f0a3dc3022cf2478d8f7127dd8030be257cbc0a91f",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 55,
+      "phase": 0.6875,
+      "fullyBound": true,
+      "inputUnitEdges": 128,
+      "boundUnitEdges": 128,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 128,
+        "rawSweepFragments": 722,
+        "normalizedPartialPieces": 218,
+        "splitUnitEdges": 77,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 111,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 22.723435614262215,
+      "legacy516RawFromExisting517Audit": 24.084228352055135,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.887178599994513,
+        "partialIncidenceSeconds": 1.2054078000073787,
+        "bindingSeconds": 1.5720001000008779,
+        "comparisonSeconds": 1.2265221999987261
+      },
+      "seconds": 10.912786600005347,
+      "maskUnchangedSHA256": "954a1bfc2de72ff6057d9a3976283a020cc4e154afa1b216d3e6fb2347a9fee7",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 56,
+      "phase": 0.7,
+      "fullyBound": true,
+      "inputUnitEdges": 128,
+      "boundUnitEdges": 128,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 128,
+        "rawSweepFragments": 697,
+        "normalizedPartialPieces": 218,
+        "splitUnitEdges": 78,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 112,
+          "D": 106,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 26.974313177845055,
+      "legacy516RawFromExisting517Audit": 48.06183981375828,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.9426831000018865,
+        "partialIncidenceSeconds": 1.2026005999941844,
+        "bindingSeconds": 1.4999930999911157,
+        "comparisonSeconds": 1.3259267999965232
+      },
+      "seconds": 10.993601599999238,
+      "maskUnchangedSHA256": "7d6d7756fd1f311d45a6e6898b162d28ac9f25ab581234f9879db4dd34e5f06a",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 57,
+      "phase": 0.7125,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 630,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 77,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 108,
+          "D": 106,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 29.14904776854369,
+      "legacy516RawFromExisting517Audit": 46.42439947629684,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.774764700006926,
+        "partialIncidenceSeconds": 1.1761834000062663,
+        "bindingSeconds": 1.5116704999963986,
+        "comparisonSeconds": 1.2212748000019928
+      },
+      "seconds": 10.709657900006277,
+      "maskUnchangedSHA256": "3bf9915fb4349c9de0f2623ca9523718dd2d808a5e7aeab120cdbcb3b94e6a75",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 58,
+      "phase": 0.725,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 631,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 77,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 110,
+          "D": 104,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 11.129582540382295,
+      "legacy516RawFromExisting517Audit": 18.1802711727104,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.785381499998039,
+        "partialIncidenceSeconds": 1.1682475000125123,
+        "bindingSeconds": 1.722041100001661,
+        "comparisonSeconds": 1.2091437999915797
+      },
+      "seconds": 10.907599199999822,
+      "maskUnchangedSHA256": "3bf9915fb4349c9de0f2623ca9523718dd2d808a5e7aeab120cdbcb3b94e6a75",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 59,
+      "phase": 0.7375,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 615,
+        "normalizedPartialPieces": 212,
+        "splitUnitEdges": 77,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 109,
+          "D": 103,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 22.860328542985215,
+      "legacy516RawFromExisting517Audit": 24.961910487134517,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.729021400009515,
+        "partialIncidenceSeconds": 1.1528193999984069,
+        "bindingSeconds": 1.5214393999922322,
+        "comparisonSeconds": 1.2994835999998031
+      },
+      "seconds": 10.724398799997289,
+      "maskUnchangedSHA256": "00479ca1d6e027768cfbabd3397788337ff8f7d6e19ea32f21298a3f7dc33543",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 60,
+      "phase": 0.75,
+      "fullyBound": true,
+      "inputUnitEdges": 124,
+      "boundUnitEdges": 124,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 124,
+        "rawSweepFragments": 622,
+        "normalizedPartialPieces": 218,
+        "splitUnitEdges": 78,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 94,
+        "pieceKinds": {
+          "A": 112,
+          "D": 106,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 9.041216391895254,
+      "legacy516RawFromExisting517Audit": 14.16745427550623,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.75482539999939,
+        "partialIncidenceSeconds": 1.2079299999895738,
+        "bindingSeconds": 1.3083322000020416,
+        "comparisonSeconds": 1.3867784000030952
+      },
+      "seconds": 10.679787000000942,
+      "maskUnchangedSHA256": "db0c4daf24ed44ce7d5122b2620d6214fe4e58ff6420c5df7ac32814d25ea085",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 61,
+      "phase": 0.7625,
+      "fullyBound": true,
+      "inputUnitEdges": 128,
+      "boundUnitEdges": 128,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 128,
+        "rawSweepFragments": 669,
+        "normalizedPartialPieces": 218,
+        "splitUnitEdges": 77,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 110,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 14.023213324604328,
+      "legacy516RawFromExisting517Audit": 19.103875355970267,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.733263200003421,
+        "partialIncidenceSeconds": 1.1403432999941288,
+        "bindingSeconds": 1.3289388000121107,
+        "comparisonSeconds": 1.4498529999982566
+      },
+      "seconds": 10.674536300008185,
+      "maskUnchangedSHA256": "6ea0c03f900442558d2abeda40d00f30cce9b862b50b278ccee0e82ae126ad28",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 62,
+      "phase": 0.775,
+      "fullyBound": true,
+      "inputUnitEdges": 128,
+      "boundUnitEdges": 128,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 128,
+        "rawSweepFragments": 670,
+        "normalizedPartialPieces": 218,
+        "splitUnitEdges": 76,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 110,
+          "D": 108,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 5.703634853150163,
+      "legacy516RawFromExisting517Audit": 7.707060093992858,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.735165399994003,
+        "partialIncidenceSeconds": 1.1458220000058645,
+        "bindingSeconds": 1.3942492000060156,
+        "comparisonSeconds": 1.5312700000067707
+      },
+      "seconds": 10.829634499998065,
+      "maskUnchangedSHA256": "735f9703f07e6577364dc002b40a6c4abc06e4c121a1b2adbf252ac93773dec0",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 63,
+      "phase": 0.7875,
+      "fullyBound": true,
+      "inputUnitEdges": 128,
+      "boundUnitEdges": 128,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 128,
+        "rawSweepFragments": 683,
+        "normalizedPartialPieces": 220,
+        "splitUnitEdges": 78,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 92,
+        "pieceKinds": {
+          "A": 109,
+          "D": 111,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 4.819808887079311,
+      "legacy516RawFromExisting517Audit": 4.89143209702091,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.767146900005173,
+        "partialIncidenceSeconds": 1.1693623999890406,
+        "bindingSeconds": 1.2856784999894444,
+        "comparisonSeconds": 1.4528372999920975
+      },
+      "seconds": 10.699514899999485,
+      "maskUnchangedSHA256": "735f9703f07e6577364dc002b40a6c4abc06e4c121a1b2adbf252ac93773dec0",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 64,
+      "phase": 0.8,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 691,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 76,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 88,
+        "pieceKinds": {
+          "A": 104,
+          "D": 110,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 29.91288374991933,
+      "legacy516RawFromExisting517Audit": 25.66295137986507,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.792123499995796,
+        "partialIncidenceSeconds": 1.1504508000070928,
+        "bindingSeconds": 1.5187210000003688,
+        "comparisonSeconds": 1.3929294999979902
+      },
+      "seconds": 10.876169199997094,
+      "maskUnchangedSHA256": "a8fd5c0ef46386e4bb40c870f98d5e0c2a316239ae1f6500efd4738ebc7bb9c3",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 65,
+      "phase": 0.8125,
+      "fullyBound": true,
+      "inputUnitEdges": 128,
+      "boundUnitEdges": 128,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 128,
+        "rawSweepFragments": 665,
+        "normalizedPartialPieces": 218,
+        "splitUnitEdges": 78,
+        "maxPiecesPerUnit": 5,
+        "sourceBoundaryCrossings": 90,
+        "pieceKinds": {
+          "A": 107,
+          "D": 111,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 91,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 13.721051722279647,
+      "legacy516RawFromExisting517Audit": 17.21205845812537,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.573074600004475,
+        "partialIncidenceSeconds": 1.1231600000028266,
+        "bindingSeconds": 1.5800909999961732,
+        "comparisonSeconds": 1.373428100007004
+      },
+      "seconds": 10.671249200007878,
+      "maskUnchangedSHA256": "c60eb96981ef88da93de372281870d8e32c5e57d30d7eee1d99307339a46ffae",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 66,
+      "phase": 0.825,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 646,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 76,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 88,
+        "pieceKinds": {
+          "A": 102,
+          "D": 112,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 80,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "GEOMETRY_EVENT_PARTIAL_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 24.357661406462725,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.5025558000052115,
+        "partialIncidenceSeconds": 1.0604974000016227,
+        "bindingSeconds": 1.6566472000122303,
+        "comparisonSeconds": 1.187874000010197
+      },
+      "seconds": 10.430175400004373,
+      "maskUnchangedSHA256": "b30a9f4713cd913c249f7b0807286b2b72484879f4394337fe1eb66dbf5a9192",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 67,
+      "phase": 0.8375,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 657,
+        "normalizedPartialPieces": 214,
+        "splitUnitEdges": 75,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 88,
+        "pieceKinds": {
+          "A": 101,
+          "D": 113,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 17.29267689594552,
+      "legacy516RawFromExisting517Audit": 11.896976361753367,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.625003299996024,
+        "partialIncidenceSeconds": 1.055843599999207,
+        "bindingSeconds": 1.7794819999980973,
+        "comparisonSeconds": 1.1086309000093024
+      },
+      "seconds": 10.591733299996122,
+      "maskUnchangedSHA256": "b55849d64494e486b97b7cb42ce4b637466b2770572f0287693c9cb95fe0e5a0",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 68,
+      "phase": 0.85,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 636,
+        "normalizedPartialPieces": 208,
+        "splitUnitEdges": 73,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 101,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 22.668384403284527,
+      "legacy516RawFromExisting517Audit": 22.9476801271569,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.705010199992103,
+        "partialIncidenceSeconds": 1.0947457000002032,
+        "bindingSeconds": 1.7140606000029948,
+        "comparisonSeconds": 0.9412899000017205
+      },
+      "seconds": 10.477705099998275,
+      "maskUnchangedSHA256": "8962f0f432f6a99357b85a73f174f1f46eef681f782455b1f5a879ee06bbe3e5",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 69,
+      "phase": 0.8625,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 628,
+        "normalizedPartialPieces": 208,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 97,
+          "D": 111,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 12.960926572445565,
+      "legacy516RawFromExisting517Audit": 14.210638194059662,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.622285600009491,
+        "partialIncidenceSeconds": 1.0694879999937257,
+        "bindingSeconds": 1.714717599999858,
+        "comparisonSeconds": 0.8307094999909168
+      },
+      "seconds": 10.260096400001203,
+      "maskUnchangedSHA256": "7a3bb1c4717715a635378690fde95fc085f834629e72e189125700c83a015311",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 70,
+      "phase": 0.875,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 619,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 73,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 97,
+          "D": 109,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 7.638500611383286,
+      "legacy516RawFromExisting517Audit": 16.533878984597273,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.533949000004213,
+        "partialIncidenceSeconds": 1.0310860000026878,
+        "bindingSeconds": 1.582147699999041,
+        "comparisonSeconds": 0.8297483999922406
+      },
+      "seconds": 9.999595500004943,
+      "maskUnchangedSHA256": "7a3bb1c4717715a635378690fde95fc085f834629e72e189125700c83a015311",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 71,
+      "phase": 0.8875,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 619,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 3,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 99,
+          "D": 105,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 11.173437604976606,
+      "legacy516RawFromExisting517Audit": 17.998594741339623,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.529513700006646,
+        "partialIncidenceSeconds": 1.020312599997851,
+        "bindingSeconds": 1.5954342000040924,
+        "comparisonSeconds": 0.8561379000020679
+      },
+      "seconds": 10.02398600000015,
+      "maskUnchangedSHA256": "46bd8a6614edf71581585d99ab4b5b01a2317107d3851862f15202097dede2e2",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 72,
+      "phase": 0.9,
+      "fullyBound": true,
+      "inputUnitEdges": 126,
+      "boundUnitEdges": 126,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 126,
+        "rawSweepFragments": 644,
+        "normalizedPartialPieces": 212,
+        "splitUnitEdges": 75,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 105,
+          "D": 107,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 19.43577591445844,
+      "legacy516RawFromExisting517Audit": 23.61536981208377,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.620210099994438,
+        "partialIncidenceSeconds": 1.0671427000052063,
+        "bindingSeconds": 1.464385899991612,
+        "comparisonSeconds": 0.8999648000026355
+      },
+      "seconds": 10.077088999998523,
+      "maskUnchangedSHA256": "a023a4addf5476a4bc9d30e374941e71ee61d58307edc0b31aa44dd5f3e06663",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 73,
+      "phase": 0.9125,
+      "fullyBound": true,
+      "inputUnitEdges": 122,
+      "boundUnitEdges": 122,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 122,
+        "rawSweepFragments": 599,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 101,
+          "D": 103,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 16.49388959813261,
+      "legacy516RawFromExisting517Audit": 22.801802979773804,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.550417599995853,
+        "partialIncidenceSeconds": 0.9984018000104697,
+        "bindingSeconds": 1.5067223999940325,
+        "comparisonSeconds": 0.780732999992324
+      },
+      "seconds": 9.858389000000898,
+      "maskUnchangedSHA256": "203b7a8c5f17ec608d523a51816efdab6636dcbaddc4c8ec3957b9f70f8f0f71",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 74,
+      "phase": 0.925,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 570,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 75,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 102,
+          "D": 104,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 79,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 24.564226335527998,
+      "legacy516RawFromExisting517Audit": 25.138099529405395,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.510709099995438,
+        "partialIncidenceSeconds": 1.0639685999922222,
+        "bindingSeconds": 1.4986195000092266,
+        "comparisonSeconds": 0.8924436999950558
+      },
+      "seconds": 9.988416200008942,
+      "maskUnchangedSHA256": "3f24cdfbbc3f09ede687f70136b39b1e1f31e8c99d59968c3de420e9f3248342",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 75,
+      "phase": 0.9375,
+      "fullyBound": true,
+      "inputUnitEdges": 118,
+      "boundUnitEdges": 118,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 118,
+        "rawSweepFragments": 575,
+        "normalizedPartialPieces": 202,
+        "splitUnitEdges": 74,
+        "maxPiecesPerUnit": 3,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 98,
+          "D": 104,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 76,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 3,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "GEOMETRY_EVENT_PARTIAL_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 20.458860793350702,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.66534700000193,
+        "partialIncidenceSeconds": 1.0898420000012266,
+        "bindingSeconds": 1.6874379000073532,
+        "comparisonSeconds": 0.8787427999923239
+      },
+      "seconds": 10.342680100002326,
+      "maskUnchangedSHA256": "552e1a65534b37d4f84726055507bb5d9d2e07501f133dd42b271f8eb9bea69a",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 76,
+      "phase": 0.95,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 605,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 74,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 100,
+          "D": 104,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 76,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 3,
+          "exactSegments": 10,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 9.397362309531594,
+      "legacy516RawFromExisting517Audit": 15.021831338677181,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.423017599998275,
+        "partialIncidenceSeconds": 1.059945200002403,
+        "bindingSeconds": 1.748990699998103,
+        "comparisonSeconds": 0.9538080999918748
+      },
+      "seconds": 10.207018100001733,
+      "maskUnchangedSHA256": "2e73139daef1cf34657d76bdd8a06251c950ee697b7ca46928a17e5bcf39bafa",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 77,
+      "phase": 0.9625,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 611,
+        "normalizedPartialPieces": 206,
+        "splitUnitEdges": 75,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 86,
+        "pieceKinds": {
+          "A": 101,
+          "D": 105,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 87,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "GEOMETRY_EVENT_PARTIAL_NULL_TOTAL",
+      "comparableTotalRaw": null,
+      "legacy516RawFromExisting517Audit": 14.558116085355842,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.497271700005513,
+        "partialIncidenceSeconds": 1.1007988000055775,
+        "bindingSeconds": 1.7902259999973467,
+        "comparisonSeconds": 1.011409900005674
+      },
+      "seconds": 10.421271100000013,
+      "maskUnchangedSHA256": "182e3493bec08bc754d5c0e39f870751f35f6dad2a695380f7c51ae42c17f3dc",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 78,
+      "phase": 0.975,
+      "fullyBound": true,
+      "inputUnitEdges": 118,
+      "boundUnitEdges": 118,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 118,
+        "rawSweepFragments": 597,
+        "normalizedPartialPieces": 202,
+        "splitUnitEdges": 73,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 101,
+          "D": 101,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 87,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 7.801644567542375,
+      "legacy516RawFromExisting517Audit": 15.131274596155315,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.373896799996146,
+        "partialIncidenceSeconds": 1.0673105999885593,
+        "bindingSeconds": 1.7294766999984859,
+        "comparisonSeconds": 1.0934430000052089
+      },
+      "seconds": 10.288988900007098,
+      "maskUnchangedSHA256": "b25e7bee59687e6dde762070aced69eec2c8535c1efc28732ffd219770a5c60b",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 79,
+      "phase": 0.9875,
+      "fullyBound": true,
+      "inputUnitEdges": 118,
+      "boundUnitEdges": 118,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 118,
+        "rawSweepFragments": 592,
+        "normalizedPartialPieces": 200,
+        "splitUnitEdges": 71,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 82,
+        "pieceKinds": {
+          "A": 102,
+          "D": 98,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 87,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 3.80137428137877,
+      "legacy516RawFromExisting517Audit": 7.157562905923783,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.457357899998897,
+        "partialIncidenceSeconds": 1.0479584999993676,
+        "bindingSeconds": 1.7551923999999417,
+        "comparisonSeconds": 1.0773016999883112
+      },
+      "seconds": 10.359166399997775,
+      "maskUnchangedSHA256": "b25e7bee59687e6dde762070aced69eec2c8535c1efc28732ffd219770a5c60b",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    },
+    {
+      "target": 80,
+      "phase": 1.0,
+      "fullyBound": true,
+      "inputUnitEdges": 120,
+      "boundUnitEdges": 120,
+      "unsupported": [],
+      "junctionEvents": [],
+      "centreAnchorFailures": [],
+      "incidence": {
+        "unitEdges": 120,
+        "rawSweepFragments": 614,
+        "normalizedPartialPieces": 204,
+        "splitUnitEdges": 72,
+        "maxPiecesPerUnit": 4,
+        "sourceBoundaryCrossings": 84,
+        "pieceKinds": {
+          "A": 104,
+          "D": 100,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      },
+      "exactSourceAnnotation": [
+        {
+          "arc": 0,
+          "exactSegments": 86,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 1,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        },
+        {
+          "arc": 2,
+          "exactSegments": 4,
+          "maximumSerializationDifference": 0.0
+        }
+      ],
+      "reparameterizedCanonicalInputIdentical": true,
+      "costStatus": "FULL_GEOMETRIC_CORRESPONDENCE",
+      "comparableTotalRaw": 9.456494154441557,
+      "legacy516RawFromExisting517Audit": 12.115654028982846,
+      "stageSeconds": {
+        "exactOverlaySeconds": 6.389976300008129,
+        "partialIncidenceSeconds": 1.0522710000077495,
+        "bindingSeconds": 1.5979153999942355,
+        "comparisonSeconds": 1.048196599993389
+      },
+      "seconds": 10.110565900002257,
+      "maskUnchangedSHA256": "992ef66f2edafd15651f4cf51d6e33947852307380bcea9d1d5ba69498647729",
+      "selectorRuns": 0,
+      "newUnityCalls": 0
+    }
+  ],
+  "seconds": 836.274719100009,
+  "sourceScripts": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\face518.py",
+      "sha256": "8d5f7a898e306753e90b80a70ea00403af6c2234b27e60958b395e2ce98d66a6"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\edge518.py",
+      "sha256": "8df77dcda80a8827cd9a356fc16c3cd6015b3cbe7f1fe30afc91bea83eace0b3"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\arc518.py",
+      "sha256": "2725ed431b6a60eb57d67ffe546b262ae79af547981e3545a20ebb6c7a3579d7"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\audit518.py",
+      "sha256": "ebfca23188b354f4af8a9bdeb1823dd9838517c96b4611827ed3a049d2ac2bea"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\span517.py",
+      "sha256": "c5b1b4619e4d9ec34f4379a951bc778ccb6700784c0151563f280f882978c43b"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\span516.py",
+      "sha256": "f278ce7655ab53db7dafe5066d8bcf70f40174f672fe4348ed1834f0bd66ed90"
+    }
+  ],
+  "coefficientChanged": false,
+  "timeStateCostChanged": false,
+  "selectorRuns": 0,
+  "newUnityCalls": 0,
+  "maskChanged": false,
+  "scopeLimits": [
+    "Geometric correspondence only; numeric cost is not visual improvement.",
+    "Exact overlay and rational subdivisions are offline audit work, not runtime implementation/performance.",
+    "Physical visibility of new516 donors remains unverified; topology events are not assumed occlusions.",
+    "Unbound, failed transport and incomplete event comparisons retain null total, never zero.",
+    "Unresolved516 state barrier, internal colour and packet upload performance are unchanged."
+  ]
+}

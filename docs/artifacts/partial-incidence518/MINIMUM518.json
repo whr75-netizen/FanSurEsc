@@ -1,0 +1,709 @@
+{
+  "stage": "MINIMUM_CASE_AND_STRUCTURAL_FIXTURES",
+  "minimumPassed": true,
+  "firstTarget": 0,
+  "firstPhase": 0.0,
+  "runtimeChanged": false,
+  "maskChanged": false,
+  "selectorRerun": false,
+  "all81AuditRun": false,
+  "sourceDomain": [
+    217,
+    54,
+    219,
+    56
+  ],
+  "localSelectedCellPath": [
+    [
+      218,
+      55
+    ],
+    [
+      218,
+      54
+    ],
+    [
+      217,
+      54
+    ]
+  ],
+  "domainIsLocalProofNotWholeHeadBoundary": true,
+  "continuousRegionRule": "positive winding of the existing511 curves",
+  "selectorDecisionInput": "existing514 mask.G with hiddenCells0; stored curve-cell areas and unchanged area/perimeter coefficients",
+  "overlay": {
+    "domain": [
+      217,
+      54,
+      219,
+      56
+    ],
+    "wholeDomainWithOutsidePadding": false,
+    "criticalBands": 3,
+    "atomicFaces": 12,
+    "components": [
+      {
+        "id": 1,
+        "tag": "A",
+        "areaExact": "16798988903765936379618301/15433932771148730329989120",
+        "area": 1.0884451262590025,
+        "cells": [
+          [
+            217,
+            54
+          ],
+          [
+            218,
+            54
+          ],
+          [
+            218,
+            55
+          ]
+        ],
+        "analysisCutOpen": true,
+        "sourceBoundaryCount": 5,
+        "pixelBoundaryCount": 2,
+        "sourceRegions": [
+          0,
+          3
+        ],
+        "selectedRegions": [
+          0
+        ],
+        "negativeRegions": [
+          1
+        ]
+      },
+      {
+        "id": 8,
+        "tag": "D",
+        "areaExact": "630224589/1939111936",
+        "area": 0.325006812293687,
+        "cells": [
+          [
+            217,
+            55
+          ]
+        ],
+        "analysisCutOpen": true,
+        "sourceBoundaryCount": 1,
+        "pixelBoundaryCount": 1,
+        "sourceRegions": [
+          0
+        ],
+        "selectedRegions": [
+          0
+        ],
+        "negativeRegions": []
+      }
+    ],
+    "directSharedBoundaryFragments": 0,
+    "newMaskChosen": false,
+    "connectivity": "exact positive-length shared face boundaries; point-only contact is not adjacency"
+  },
+  "boundaryRelation": {
+    "graphRelation": true,
+    "boundaryPathJoin": true,
+    "pixelEdgesIncident": true,
+    "sameSelectedRegion": true,
+    "directSharedBoundary": false,
+    "witness": [
+      {
+        "component": 1,
+        "kind": "SELECTOR_ADDED_FACE_JOIN",
+        "tag": "A",
+        "areaExact": "16798988903765936379618301/15433932771148730329989120",
+        "cells": [
+          [
+            217,
+            54
+          ],
+          [
+            218,
+            54
+          ],
+          [
+            218,
+            55
+          ]
+        ],
+        "sourceBoundaryCount": 5,
+        "sourceRegions": [
+          0,
+          3
+        ],
+        "selectedRegions": [
+          0
+        ],
+        "outputRegionMerged": true
+      }
+    ],
+    "candidateSourceAComponents": [
+      1
+    ],
+    "candidateSourceBComponents": [
+      1,
+      8
+    ],
+    "visibleCorrespondenceAccepted": true,
+    "visibilityReason": "CURRENT_OWNER_ELIGIBLE",
+    "maskChanged": false
+  },
+  "selectionCertificate": [
+    {
+      "xy": [
+        217,
+        54
+      ],
+      "selected": true,
+      "continuousAreaExact": "1030780621/1939111936",
+      "continuousArea": 0.5315735527502833,
+      "storedSelectorArea": 0.5315735340118408,
+      "floatAreaDifference": 1.873844246436107e-08,
+      "deltaExistingSpatialCostIfToggled": 0.39118748903274536
+    },
+    {
+      "xy": [
+        218,
+        54
+      ],
+      "selected": true,
+      "continuousAreaExact": "33172264637985656591/52161930382238810112",
+      "continuousArea": 0.6359477955455584,
+      "storedSelectorArea": 0.6359478235244751,
+      "floatAreaDifference": -2.7978916739002102e-08,
+      "deltaExistingSpatialCostIfToggled": 0.6819461733102798
+    },
+    {
+      "xy": [
+        217,
+        55
+      ],
+      "selected": false,
+      "continuousAreaExact": "630224589/1939111936",
+      "continuousArea": 0.325006812293687,
+      "storedSelectorArea": 0.3250068128108978,
+      "floatAreaDifference": -5.172108297202271e-10,
+      "deltaExistingSpatialCostIfToggled": 0.021945923566818237
+    },
+    {
+      "xy": [
+        218,
+        55
+      ],
+      "selected": true,
+      "continuousAreaExact": "10064022699/13526302720",
+      "continuousArea": 0.7440335254451558,
+      "storedSelectorArea": 0.7440335154533386,
+      "floatAreaDifference": 9.991817151444593e-09,
+      "deltaExistingSpatialCostIfToggled": 0.734097346663475
+    }
+  ],
+  "visibilityScope": "Existing accepted source packets and512 hair/body reference only; no new face/native-world certification.",
+  "visibility": [
+    {
+      "cell": [
+        218,
+        55
+      ],
+      "acceptedSourcePacket": {
+        "x": 218,
+        "y": 55,
+        "submesh": 2,
+        "primitive": 2968,
+        "barycentric": {
+          "x": 0.340547651052475,
+          "y": 0.2915192246437073,
+          "z": 0.36793312430381775
+        },
+        "world": {
+          "x": -0.005065055564045906,
+          "y": 1.4786896705627441,
+          "z": -0.09984248876571655
+        },
+        "uv": {
+          "x": 1.0485084056854248,
+          "y": 0.2849181890487671
+        },
+        "projected": {
+          "x": 218.5,
+          "y": 55.5
+        },
+        "depth": 13.724119186401367,
+        "distance": 0.0
+      },
+      "bodyReference": {
+        "x": 218,
+        "y": 55,
+        "submesh": 0,
+        "primitive": 1638,
+        "kind": 1,
+        "depth": 13.81249713897705,
+        "alphaMin": 1.0,
+        "alphaMax": 1.0,
+        "hairDepth": 13.724119186401367,
+        "uv": {
+          "x": 0.4524970054626465,
+          "y": 0.9337859153747559
+        },
+        "barycentric": {
+          "x": 0.34480974078178406,
+          "y": 0.6217685341835022,
+          "z": 0.03342171385884285
+        },
+        "sampleWorld": {
+          "x": -0.005065055564045906,
+          "y": 1.4786896705627441,
+          "z": -0.09984248876571655
+        }
+      },
+      "knownBodyForeground": false
+    },
+    {
+      "cell": [
+        217,
+        54
+      ],
+      "acceptedSourcePacket": {
+        "x": 217,
+        "y": 54,
+        "submesh": 2,
+        "primitive": 5295,
+        "barycentric": {
+          "x": 0.4504667818546295,
+          "y": 0.5495267510414124,
+          "z": 6.47895240035723e-06
+        },
+        "world": {
+          "x": -0.020045552402734756,
+          "y": 1.4829108715057373,
+          "z": -0.08675689250230789
+        },
+        "uv": {
+          "x": 0.5555546879768372,
+          "y": 0.2684662640094757
+        },
+        "projected": {
+          "x": 217.37039184570312,
+          "y": 54.46821212768555
+        },
+        "depth": 13.735422134399414,
+        "distance": 0.13344940543174744
+      },
+      "bodyReference": {
+        "x": 217,
+        "y": 54,
+        "submesh": 0,
+        "primitive": 1836,
+        "kind": 1,
+        "depth": 13.811101913452148,
+        "alphaMin": 1.0,
+        "alphaMax": 1.0,
+        "hairDepth": 13.735422134399414,
+        "uv": {
+          "x": 0.2711135447025299,
+          "y": 0.9160633087158203
+        },
+        "barycentric": {
+          "x": 0.2975120544433594,
+          "y": 0.6742529273033142,
+          "z": 0.02823503315448761
+        },
+        "sampleWorld": {
+          "x": -0.020045552402734756,
+          "y": 1.4829108715057373,
+          "z": -0.08675689250230789
+        }
+      },
+      "knownBodyForeground": false
+    }
+  ],
+  "reparameterization": [
+    {
+      "fraction": "1/4",
+      "sameIncidenceFingerprint": true,
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "witness": [
+          {
+            "component": 1,
+            "kind": "SELECTOR_ADDED_FACE_JOIN",
+            "tag": "A",
+            "areaExact": "16798988903765936379618301/15433932771148730329989120",
+            "cells": [
+              [
+                217,
+                54
+              ],
+              [
+                218,
+                54
+              ],
+              [
+                218,
+                55
+              ]
+            ],
+            "sourceBoundaryCount": 5,
+            "sourceRegions": [
+              0,
+              3
+            ],
+            "selectedRegions": [
+              0
+            ],
+            "outputRegionMerged": true
+          }
+        ],
+        "candidateSourceAComponents": [
+          1
+        ],
+        "candidateSourceBComponents": [
+          1,
+          8
+        ],
+        "visibleCorrespondenceAccepted": true,
+        "visibilityReason": "CURRENT_OWNER_ELIGIBLE",
+        "maskChanged": false
+      }
+    },
+    {
+      "fraction": "3/4",
+      "sameIncidenceFingerprint": true,
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "witness": [
+          {
+            "component": 1,
+            "kind": "SELECTOR_ADDED_FACE_JOIN",
+            "tag": "A",
+            "areaExact": "16798988903765936379618301/15433932771148730329989120",
+            "cells": [
+              [
+                217,
+                54
+              ],
+              [
+                218,
+                54
+              ],
+              [
+                218,
+                55
+              ]
+            ],
+            "sourceBoundaryCount": 5,
+            "sourceRegions": [
+              0,
+              3
+            ],
+            "selectedRegions": [
+              0
+            ],
+            "outputRegionMerged": true
+          }
+        ],
+        "candidateSourceAComponents": [
+          1
+        ],
+        "candidateSourceBComponents": [
+          1,
+          8
+        ],
+        "visibleCorrespondenceAccepted": true,
+        "visibilityReason": "CURRENT_OWNER_ELIGIBLE",
+        "maskChanged": false
+      }
+    }
+  ],
+  "fixtures": [
+    {
+      "name": "selector-region-merge",
+      "passed": true,
+      "components": [
+        {
+          "id": 6,
+          "tag": "A",
+          "areaExact": "4049991549657166122391083797939467/1298074214633706907132624082305024",
+          "area": 3.1200000000000006,
+          "cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "analysisCutOpen": false,
+          "sourceBoundaryCount": 12,
+          "pixelBoundaryCount": 14,
+          "sourceRegions": [
+            12,
+            16
+          ],
+          "selectedRegions": [
+            6
+          ],
+          "negativeRegions": [
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "name": "selector-region-split-preserves-distinct-output-regions",
+      "passed": true,
+      "components": [
+        {
+          "id": 13,
+          "tag": "D",
+          "areaExact": "64851834634135139/36028797018963968",
+          "area": 1.7999999999999998,
+          "cells": [
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ]
+          ],
+          "analysisCutOpen": false,
+          "sourceBoundaryCount": 2,
+          "pixelBoundaryCount": 4,
+          "sourceRegions": [
+            12
+          ],
+          "selectedRegions": [
+            6,
+            8
+          ],
+          "negativeRegions": []
+        }
+      ]
+    },
+    {
+      "name": "near-diagonal-point-contact-is-not-region-join",
+      "passed": true,
+      "relation": {
+        "graphRelation": false,
+        "boundaryPathJoin": false,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": false,
+        "directSharedBoundary": false,
+        "witness": [],
+        "candidateSourceAComponents": null,
+        "candidateSourceBComponents": null,
+        "visibleCorrespondenceAccepted": false,
+        "visibilityReason": "CURRENT_OWNER_ELIGIBLE",
+        "maskChanged": false
+      }
+    },
+    {
+      "name": "selected-hole-omission-no-forced-strand-or-hole-preservation",
+      "passed": true,
+      "components": [
+        {
+          "id": 12,
+          "tag": "A",
+          "areaExact": "1",
+          "area": 1.0,
+          "cells": [
+            [
+              1,
+              1
+            ]
+          ],
+          "analysisCutOpen": false,
+          "sourceBoundaryCount": 4,
+          "pixelBoundaryCount": 0,
+          "sourceRegions": [
+            6
+          ],
+          "selectedRegions": [
+            6
+          ],
+          "negativeRegions": [
+            12
+          ]
+        }
+      ]
+    },
+    {
+      "name": "unchanged-region-direct-common-boundary",
+      "passed": true,
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": true,
+        "witness": [],
+        "candidateSourceAComponents": null,
+        "candidateSourceBComponents": null,
+        "visibleCorrespondenceAccepted": true,
+        "visibilityReason": "CURRENT_OWNER_ELIGIBLE",
+        "maskChanged": false
+      }
+    },
+    {
+      "name": "explicit-front-owner-blocks-region-witness",
+      "passed": true,
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "witness": [
+          {
+            "component": 1,
+            "kind": "SELECTOR_ADDED_FACE_JOIN",
+            "tag": "A",
+            "areaExact": "16798988903765936379618301/15433932771148730329989120",
+            "cells": [
+              [
+                217,
+                54
+              ],
+              [
+                218,
+                54
+              ],
+              [
+                218,
+                55
+              ]
+            ],
+            "sourceBoundaryCount": 5,
+            "sourceRegions": [
+              0,
+              3
+            ],
+            "selectedRegions": [
+              0
+            ],
+            "outputRegionMerged": true
+          }
+        ],
+        "candidateSourceAComponents": [
+          1
+        ],
+        "candidateSourceBComponents": [
+          1,
+          8
+        ],
+        "visibleCorrespondenceAccepted": false,
+        "visibilityReason": "CURRENT_FRONT_OWNER",
+        "maskChanged": false
+      }
+    },
+    {
+      "name": "unknown-visibility-not-promoted-by-geometric-donor",
+      "passed": true,
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "witness": [
+          {
+            "component": 1,
+            "kind": "SELECTOR_ADDED_FACE_JOIN",
+            "tag": "A",
+            "areaExact": "16798988903765936379618301/15433932771148730329989120",
+            "cells": [
+              [
+                217,
+                54
+              ],
+              [
+                218,
+                54
+              ],
+              [
+                218,
+                55
+              ]
+            ],
+            "sourceBoundaryCount": 5,
+            "sourceRegions": [
+              0,
+              3
+            ],
+            "selectedRegions": [
+              0
+            ],
+            "outputRegionMerged": true
+          }
+        ],
+        "candidateSourceAComponents": [
+          1
+        ],
+        "candidateSourceBComponents": [
+          1,
+          8
+        ],
+        "visibleCorrespondenceAccepted": null,
+        "visibilityReason": "VISIBILITY_UNVERIFIED",
+        "maskChanged": false
+      }
+    }
+  ],
+  "syntheticMasksAreStructuralFixturesNotClaimsOfSelectorOptimality": true,
+  "seconds": 0.07497820000571664,
+  "inputFiles": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Temporal517\\SpanArcV2\\FIRST_REJECTION517.json",
+      "sha256": "d5c8ca6cdbe4363b0f751e566045fdba2e3ce730ac4be08c5ee9656715642b2e"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop514\\000_curves.json",
+      "sha256": "6879cba033c32353ede5cab662bc60633ab7052fcfa682f93d3f1835e5aaa663"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop514\\000_MASK.bin.gz",
+      "sha256": "9f5bb8b682342e29c61652ba055eaf4dccc5640ce0002049590be54cfda1f5be"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop514\\000_areas.bin",
+      "sha256": "126b5c4c4f29f275ed14423715cd74fadc1fb7e21ca13b0acacbf9354d48a890"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop514\\000_packets.json",
+      "sha256": "f5c079bd30bed219a3d71583bd83ee902711f40ee16680ac0daf022a5b9d8a15"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop514\\000_ALT_bodyrefs512.json",
+      "sha256": "61563bcc7fa815c61b13a2984a51ee0dc8c1df8d0a66665da0a497288830e804"
+    }
+  ]
+}

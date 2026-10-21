@@ -1,0 +1,275 @@
+{
+  "phase": 0,
+  "unitEdges": 120,
+  "boundEdges": 120,
+  "unsupported": [],
+  "centreAnchorFailures": [],
+  "fullFirstPosePassed": true,
+  "exactSourceAnnotation": [
+    {
+      "arc": 0,
+      "exactSegments": 86,
+      "maximumSerializationDifference": 0.0
+    },
+    {
+      "arc": 1,
+      "exactSegments": 4,
+      "maximumSerializationDifference": 0.0
+    },
+    {
+      "arc": 2,
+      "exactSegments": 4,
+      "maximumSerializationDifference": 0.0
+    }
+  ],
+  "incidence": {
+    "unitEdges": 120,
+    "rawSweepFragments": 614,
+    "normalizedPartialPieces": 204,
+    "splitUnitEdges": 72,
+    "maxPiecesPerUnit": 4,
+    "sourceBoundaryCrossings": 84,
+    "pieceKinds": {
+      "A": 104,
+      "D": 100,
+      "COMMON": 0,
+      "OPPOSED": 0
+    },
+    "exactLengthPerUnit": "1",
+    "editCostSamplesPerUnit": 1,
+    "newSelection": false
+  },
+  "partialConstructionSeconds": 0.993301300011808,
+  "bindingSeconds": 1.5122065999894403,
+  "seconds": 2.5839171999978134,
+  "exactOverlaySecondsFromOriginal": 6.407573900010902,
+  "cases": [
+    {
+      "edges": [
+        [
+          218,
+          56,
+          218,
+          55
+        ],
+        [
+          218,
+          55,
+          217,
+          55
+        ]
+      ],
+      "pieces": [
+        [
+          {
+            "a": [
+              "218",
+              "56"
+            ],
+            "b": [
+              "218",
+              "55"
+            ],
+            "interval": [
+              "0",
+              "1"
+            ],
+            "kind": "A",
+            "changedComponents": [
+              3699
+            ],
+            "selectedOwner": 198
+          }
+        ],
+        [
+          {
+            "a": [
+              "218",
+              "55"
+            ],
+            "b": [
+              "421617792717/1939111936",
+              "55"
+            ],
+            "interval": [
+              "0",
+              "1108609331/1939111936"
+            ],
+            "kind": "A",
+            "changedComponents": [
+              3699
+            ],
+            "selectedOwner": 198
+          },
+          {
+            "a": [
+              "421617792717/1939111936",
+              "55"
+            ],
+            "b": [
+              "217",
+              "55"
+            ],
+            "interval": [
+              "1108609331/1939111936",
+              "1"
+            ],
+            "kind": "D",
+            "changedComponents": [
+              4302
+            ],
+            "selectedOwner": 198
+          }
+        ]
+      ],
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "exactSourceBoundaryTransition": false,
+        "witness": [
+          {
+            "component": 3699,
+            "tag": "A",
+            "areaExact": "937517647792349826734892753947/376946697171847472030593056768",
+            "sourceRegions": [
+              75
+            ],
+            "selectedRegions": [
+              198
+            ]
+          }
+        ],
+        "endpointKinds": [
+          "A",
+          "A"
+        ],
+        "unitCentreSupport": [
+          null,
+          null
+        ],
+        "visibleCorrespondenceAccepted": null,
+        "visibilityReason": "VISIBILITY_UNVERIFIED",
+        "maskChanged": false
+      }
+    },
+    {
+      "edges": [
+        [
+          209,
+          53,
+          209,
+          52
+        ],
+        [
+          209,
+          52,
+          208,
+          52
+        ]
+      ],
+      "pieces": [
+        [
+          {
+            "a": [
+              "209",
+              "53"
+            ],
+            "b": [
+              "209",
+              "52"
+            ],
+            "interval": [
+              "0",
+              "1"
+            ],
+            "kind": "D",
+            "changedComponents": [
+              3653
+            ],
+            "selectedOwner": 198
+          }
+        ],
+        [
+          {
+            "a": [
+              "209",
+              "52"
+            ],
+            "b": [
+              "9375186485001/44946620416",
+              "52"
+            ],
+            "interval": [
+              "0",
+              "18657181943/44946620416"
+            ],
+            "kind": "D",
+            "changedComponents": [
+              3653
+            ],
+            "selectedOwner": 198
+          },
+          {
+            "a": [
+              "9375186485001/44946620416",
+              "52"
+            ],
+            "b": [
+              "208",
+              "52"
+            ],
+            "interval": [
+              "18657181943/44946620416",
+              "1"
+            ],
+            "kind": "A",
+            "changedComponents": [
+              3472
+            ],
+            "selectedOwner": 198
+          }
+        ]
+      ],
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "exactSourceBoundaryTransition": false,
+        "witness": [
+          {
+            "component": 3653,
+            "tag": "D",
+            "areaExact": "696323611831442594489/808632073361838571520",
+            "sourceRegions": [
+              75
+            ],
+            "selectedRegions": [
+              198
+            ]
+          }
+        ],
+        "endpointKinds": [
+          "D",
+          "D"
+        ],
+        "unitCentreSupport": [
+          null,
+          null
+        ],
+        "visibleCorrespondenceAccepted": null,
+        "visibilityReason": "VISIBILITY_UNVERIFIED",
+        "maskChanged": false
+      }
+    }
+  ],
+  "selectorRuns": 0,
+  "newUnityCalls": 0,
+  "editCostPerUnitUnchanged": true,
+  "maskSHA256": "992ef66f2edafd15651f4cf51d6e33947852307380bcea9d1d5ba69498647729",
+  "curveSHA256": "6879cba033c32353ede5cab662bc60633ab7052fcfa682f93d3f1835e5aaa663"
+}

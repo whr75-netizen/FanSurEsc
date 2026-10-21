@@ -3158,3 +3158,13 @@ Interactable (abstract base class)
 - 81원곡선모두분할/직선slide/시작점변형후canonical배열bit동일이지만전체대응거부때문에실제81포즈전체편집비용불변성은미검증이다. 6개component분리/병합/birth/death진단은곡선영역위상이며물리가림으로판정하지않았다. 실제전체arc깊이/alpha/owner가림미측정,516의새donor471미인증·색11+몸1/nativeworld/212ms미해결유지.
 - 첫거부phase0 vertex(218,55),edge(218,56)→(218,55)→(217,55)는양쪽edge모두기하후보가있으나incoming은cell(218,54)/(218,55),outgoing은(217,54)/(217,55)을지나단일공유cell조건에서모든연결이끊긴다. 선택cell(217,54)/(218,54)/(218,55)은연결돼있어현재영역양자화가좁은연속U틈을통합한관계를규칙이표현하지못한것이다. 이거부에depth/alpha/owner조건없음. 과거.6375 ABA의같좌표전용예외로쓰지않았다.
 - 이번결과는저장자료대응미통과·기본OFF·제품미적용이다. 다음최소의존성은선택된연결cell영역과연속face의통합/생략incidence를명시해같은입력mask에서연결증거를만드는것이며검색반경확대·모든미세틈보존·새후처리/계수조정이아니다. 이번에는더구현하지않고원인/계약으로남겼다. runtime/shader·Quality/Time/44d13c0보존,Library403재시도없음. 근거docs/artifacts/reparameterization517의README/VERDICT/FIXTURES/FIRST_REJECTION/검증·입력hash·V2전체대조ZIP/V1실패ZIP. 새전신영상/실제시간품질/전체프로젝트완료를주장하지않는다.
+
+## 230. CHARACTER-RENDER-01 — 부분 edge518 phase0 통과, 저장81 대응 미완료·제품 보류
+
+- 517/e8c4b84의 single-cell 연결 가정을 기존 선택 M과 연속 P의 정확 face incidence로 대체하는 offline 진단을 진행했다. I=P∩M/A=M\P/D=P\M을 기존 교차점에서 구분하고 양의 길이로 연결된 face만 묶었다. 이미 선택된 영역의 통합/생략을 재사용하며 새 mask/근접 반경/계수/시간 상태/선택기 실행/Unity 호출·촬영0이다. 가닥·홀 전부 보존 조건을 넣지 않았다.
+- 첫(218,55) 통합 및(209,52) 부분 사례와19개 반례 통과. edge를 실제 P 교차점에서 부분화하고 corner 끝부분과 비용 anchor 중심부분을 구분했다. phase0 전체120/120대응/중심 소유권 거부0,614 sweep 조각→204부분/72 split edge/최대4부분. 원 유리수 활성 곡선을 float cost geometry에 유일하게 대응시켜 정확 공선성 오류를 막았고 unit 길이·비용 표본은1로 유지했다.516 원자 편집/시간 장벽/계수는 그대로다.
+- phase0 gate 이후 저장81입력을 한 번 확장했다. 전체 대응79/81, 완전 비교71/80, 미대응 target[4, 5]/phase[0.0500, 0.0625], 기하 component 사건6쌍은 물리 가림으로 추정하지 않았다. 미대응/미완전 사건 총비용은null이며 부분0/합계로 성공을 만들지 않았다.243입력/81mask 해시 및81 canonical 재매개화 입력 동일을 확인했다.
+- 첫 잔여 .0500 edge(209,53)→(208,53)는 D부분 뒤 A부분이며 중심 A3504의 실제 source81은 거리².264220014로 범위 안이지만 unit 방향 내적−.129470825로 거부된다. source82는 거리²2.312389718>2로 제외되고 기존 유일 후보80은 D만 소유한다. 실제 기하 부재/depth/alpha 가림 때문이라고 하지 않았다. unit 전체 방향/양끝 제한은 부분 영역 표현과 맞지 않는 추가 제약이다.
+- 제한 삭제만으로 해결되지 않는 반례도 분리했다. 연결 A ribbon 전체의 source 소유권만 쓰면 top pixel edge에 반대 bottom 경계도 후보로 유입되며 실제 오선택까지 증명한 것은 아니다. 별도 source 영역은 incidence가 거부한다. 최소 다음 의존성은 정확 부분 전이와 선택 영역의 순서 있는 국소 경계 chain 대응이다. 이번에는 filter삭제/문턱 확대/새 규칙 패치를 하지 않았다.
+- 81 부분 수194~226/평균208.444. phase0 원 overlay6.408초+부분0.993초+대응1.512초. 새80포즈 평균 overlay6.708초/부분1.120초/대응1.610초는Python 유리수offline 진단이며 실시간 해법이 아니다. 제품runtime/shader/Quality·Time 및44d13c0 보존. 마지막 직접 운영 확인514 이후 새Unity호출 없이 기본OFF 유지. 시간 장벽·donor471가림·내부색11+몸1·nativeworld/눈·212ms는 별도 미해결이다.
+- 근거 docs/artifacts/partial-incidence518의 README/PHASE0/FIXTURES/FILTER_COUNTEREXAMPLES/VALIDATION/첫거부 및 전체81ZIP/이전실패ZIP/소스해시. Library403재시도/새GIF/제품적용 없음. 경계 대응 일부 통과와 픽셀아트·애니메이션·실시간 품질 통과를 구분하며 전체 프로젝트 완료가 아니다.

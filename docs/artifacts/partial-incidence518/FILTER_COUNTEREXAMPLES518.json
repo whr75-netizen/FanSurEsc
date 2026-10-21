@@ -1,0 +1,139 @@
+{
+  "passed": true,
+  "actualFalseRejection": {
+    "phase": 0.05,
+    "edge": [
+      209,
+      53,
+      208,
+      53
+    ],
+    "sourceCandidate": {
+      "arc": 0,
+      "segment": 81,
+      "sourceExact": [
+        [
+          "6832249/32768",
+          "13951741/262144"
+        ],
+        [
+          "13672983/65536",
+          "6632601/131072"
+        ]
+      ],
+      "sourceFloat": [
+        [
+          208.50369262695312,
+          53.2216682434082
+        ],
+        [
+          208.63316345214844,
+          50.60272979736328
+        ]
+      ],
+      "maxUnitEndpointDistance2": 0.26422001441986753,
+      "unitDirectionDotSource": -0.1294708251953125,
+      "centreRegionEvidence": {
+        "accepted": true,
+        "centreRoots": [
+          3504
+        ],
+        "candidateCentreRoots": [
+          3504
+        ],
+        "directCommon": false
+      },
+      "rejectedBy": [
+        "EXISTING_UNIT_TANGENT_DIRECTION"
+      ]
+    },
+    "interpretation": "The unit tangent is an additional restriction not implied by the valid selected A-face incidence. Its rejection here is geometric and unrelated to physical visibility."
+  },
+  "sameRibbonOppositeBoundaryCounterexample": {
+    "edge": [
+      3,
+      2,
+      4,
+      2
+    ],
+    "localSource": [
+      [
+        2.25,
+        2.25
+      ],
+      [
+        7.75,
+        2.25
+      ]
+    ],
+    "oppositeSource": [
+      [
+        7.75,
+        5.75
+      ],
+      [
+        2.25,
+        5.75
+      ]
+    ],
+    "localSupport": {
+      "accepted": true,
+      "centreRoots": [
+        9
+      ],
+      "candidateCentreRoots": [
+        9
+      ],
+      "directCommon": false
+    },
+    "oppositeSupport": {
+      "accepted": true,
+      "centreRoots": [
+        9
+      ],
+      "candidateCentreRoots": [
+        9
+      ],
+      "directCommon": false
+    },
+    "oldGeometricPredicates": {
+      "maxEndpointDistance2": 14.0625,
+      "unitDotSource": -5.5,
+      "oldCorridorPass": false,
+      "oldDirectionPass": false
+    },
+    "interpretation": "Removing direction/distance alone admits a nonlocal opposite boundary of the same connected A ribbon. No full-path selection or bad output is asserted."
+  },
+  "disconnectedForeignRegionCounterexample": {
+    "edge": [
+      4,
+      2,
+      4,
+      3
+    ],
+    "foreignSource": [
+      [
+        5.1,
+        2.1
+      ],
+      [
+        6.9,
+        2.1
+      ]
+    ],
+    "foreignSupport": {
+      "accepted": false,
+      "centreRoots": [
+        8
+      ],
+      "candidateCentreRoots": [],
+      "directCommon": false
+    },
+    "interpretation": "Exact incidence rejects the foreign region without introducing a proximity radius."
+  },
+  "conclusion": "The whole-unit predicates conflict with the partial-edge/merged-region representation, but merely deleting them is not a complete correspondence rule. A replacement needs ordered local boundary-chain incidence across the exact partial transitions, preserving selected merge/split decisions and separating unrelated branches.",
+  "notImplemented": true,
+  "selectorRuns": 0,
+  "newUnityCalls": 0,
+  "costOrCoefficientChanged": false
+}

@@ -1,0 +1,1301 @@
+{
+  "passed": true,
+  "tests": [
+    {
+      "name": "actual-first-case-(218, 55)",
+      "passed": true,
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "exactSourceBoundaryTransition": false,
+        "witness": [
+          {
+            "component": 3699,
+            "tag": "A",
+            "areaExact": "937517647792349826734892753947/376946697171847472030593056768",
+            "sourceRegions": [
+              75
+            ],
+            "selectedRegions": [
+              198
+            ]
+          }
+        ],
+        "endpointKinds": [
+          "A",
+          "A"
+        ],
+        "unitCentreSupport": [
+          null,
+          null
+        ],
+        "visibleCorrespondenceAccepted": null,
+        "visibilityReason": "VISIBILITY_UNVERIFIED",
+        "maskChanged": false
+      },
+      "explicitFront": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "exactSourceBoundaryTransition": false,
+        "witness": [
+          {
+            "component": 3699,
+            "tag": "A",
+            "areaExact": "937517647792349826734892753947/376946697171847472030593056768",
+            "sourceRegions": [
+              75
+            ],
+            "selectedRegions": [
+              198
+            ]
+          }
+        ],
+        "endpointKinds": [
+          "A",
+          "A"
+        ],
+        "unitCentreSupport": [
+          null,
+          null
+        ],
+        "visibleCorrespondenceAccepted": false,
+        "visibilityReason": "CURRENT_FRONT_OWNER",
+        "maskChanged": false
+      }
+    },
+    {
+      "name": "actual-first-case-(209, 52)",
+      "passed": true,
+      "relation": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "exactSourceBoundaryTransition": false,
+        "witness": [
+          {
+            "component": 3653,
+            "tag": "D",
+            "areaExact": "696323611831442594489/808632073361838571520",
+            "sourceRegions": [
+              75
+            ],
+            "selectedRegions": [
+              198
+            ]
+          }
+        ],
+        "endpointKinds": [
+          "D",
+          "D"
+        ],
+        "unitCentreSupport": [
+          null,
+          null
+        ],
+        "visibleCorrespondenceAccepted": null,
+        "visibilityReason": "VISIBILITY_UNVERIFIED",
+        "maskChanged": false
+      },
+      "explicitFront": {
+        "graphRelation": true,
+        "boundaryPathJoin": true,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": true,
+        "directSharedBoundary": false,
+        "exactSourceBoundaryTransition": false,
+        "witness": [
+          {
+            "component": 3653,
+            "tag": "D",
+            "areaExact": "696323611831442594489/808632073361838571520",
+            "sourceRegions": [
+              75
+            ],
+            "selectedRegions": [
+              198
+            ]
+          }
+        ],
+        "endpointKinds": [
+          "D",
+          "D"
+        ],
+        "unitCentreSupport": [
+          null,
+          null
+        ],
+        "visibleCorrespondenceAccepted": false,
+        "visibilityReason": "CURRENT_FRONT_OWNER",
+        "maskChanged": false
+      }
+    },
+    {
+      "name": "prior-added-face-merge",
+      "passed": true,
+      "evidence": [
+        {
+          "id": 6,
+          "tag": "A",
+          "areaExact": "4049991549657166122391083797939467/1298074214633706907132624082305024",
+          "area": 3.1200000000000006,
+          "cells": [
+            [
+              0,
+              0
+            ],
+            [
+              0,
+              1
+            ],
+            [
+              1,
+              0
+            ],
+            [
+              1,
+              1
+            ],
+            [
+              2,
+              0
+            ],
+            [
+              2,
+              1
+            ]
+          ],
+          "analysisCutOpen": false,
+          "sourceBoundaryCount": 12,
+          "pixelBoundaryCount": 14,
+          "sourceRegions": [
+            12,
+            16
+          ],
+          "selectedRegions": [
+            6
+          ],
+          "negativeRegions": [
+            0
+          ]
+        }
+      ],
+      "incidence": {
+        "unitEdges": 10,
+        "rawSweepFragments": 14,
+        "normalizedPartialPieces": 10,
+        "splitUnitEdges": 0,
+        "maxPiecesPerUnit": 1,
+        "sourceBoundaryCrossings": 0,
+        "pieceKinds": {
+          "A": 10,
+          "D": 0,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      }
+    },
+    {
+      "name": "prior-removed-face-split",
+      "passed": true,
+      "evidence": {
+        "components": [
+          {
+            "id": 13,
+            "tag": "D",
+            "areaExact": "64851834634135139/36028797018963968",
+            "area": 1.7999999999999998,
+            "cells": [
+              [
+                1,
+                0
+              ],
+              [
+                1,
+                1
+              ]
+            ],
+            "analysisCutOpen": false,
+            "sourceBoundaryCount": 2,
+            "pixelBoundaryCount": 4,
+            "sourceRegions": [
+              12
+            ],
+            "selectedRegions": [
+              6,
+              8
+            ],
+            "negativeRegions": []
+          }
+        ],
+        "oppositeSides": {
+          "graphRelation": true,
+          "boundaryPathJoin": false,
+          "pixelEdgesIncident": false,
+          "sameSelectedRegion": false,
+          "directSharedBoundary": false,
+          "exactSourceBoundaryTransition": false,
+          "witness": [
+            {
+              "component": 13,
+              "tag": "D",
+              "areaExact": "64851834634135139/36028797018963968",
+              "sourceRegions": [
+                12
+              ],
+              "selectedRegions": [
+                6,
+                8
+              ]
+            }
+          ],
+          "endpointKinds": [
+            "D",
+            "D"
+          ],
+          "unitCentreSupport": [
+            null,
+            null
+          ],
+          "visibleCorrespondenceAccepted": false,
+          "visibilityReason": "CURRENT_OWNER_ELIGIBLE",
+          "maskChanged": false
+        }
+      },
+      "incidence": {
+        "unitEdges": 12,
+        "rawSweepFragments": 20,
+        "normalizedPartialPieces": 16,
+        "splitUnitEdges": 4,
+        "maxPiecesPerUnit": 2,
+        "sourceBoundaryCrossings": 4,
+        "pieceKinds": {
+          "A": 12,
+          "D": 4,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      }
+    },
+    {
+      "name": "prior-diagonal-point-contact-not-join",
+      "passed": true,
+      "evidence": {
+        "graphRelation": false,
+        "boundaryPathJoin": false,
+        "pixelEdgesIncident": true,
+        "sameSelectedRegion": false,
+        "directSharedBoundary": false,
+        "exactSourceBoundaryTransition": false,
+        "witness": [],
+        "endpointKinds": [
+          "A",
+          "A"
+        ],
+        "unitCentreSupport": [
+          null,
+          null
+        ],
+        "visibleCorrespondenceAccepted": false,
+        "visibilityReason": "CURRENT_OWNER_ELIGIBLE",
+        "maskChanged": false
+      },
+      "incidence": {
+        "unitEdges": 8,
+        "rawSweepFragments": 16,
+        "normalizedPartialPieces": 8,
+        "splitUnitEdges": 0,
+        "maxPiecesPerUnit": 1,
+        "sourceBoundaryCrossings": 0,
+        "pieceKinds": {
+          "A": 8,
+          "D": 0,
+          "COMMON": 0,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      }
+    },
+    {
+      "name": "prior-hole-omission",
+      "passed": true,
+      "evidence": [
+        {
+          "id": 12,
+          "tag": "A",
+          "areaExact": "1",
+          "area": 1.0,
+          "cells": [
+            [
+              1,
+              1
+            ]
+          ],
+          "analysisCutOpen": false,
+          "sourceBoundaryCount": 4,
+          "pixelBoundaryCount": 0,
+          "sourceRegions": [
+            6
+          ],
+          "selectedRegions": [
+            6
+          ],
+          "negativeRegions": [
+            12
+          ]
+        }
+      ],
+      "incidence": {
+        "unitEdges": 12,
+        "rawSweepFragments": 12,
+        "normalizedPartialPieces": 12,
+        "splitUnitEdges": 0,
+        "maxPiecesPerUnit": 1,
+        "sourceBoundaryCrossings": 0,
+        "pieceKinds": {
+          "A": 0,
+          "D": 0,
+          "COMMON": 12,
+          "OPPOSED": 0
+        },
+        "exactLengthPerUnit": "1",
+        "editCostSamplesPerUnit": 1,
+        "newSelection": false
+      }
+    },
+    {
+      "name": "identity",
+      "passed": true,
+      "raw": 0.0,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.0,
+          "exactSameGeometry": true,
+          "rotationRadians": 0.0,
+          "translation": [
+            0.0,
+            0.0
+          ],
+          "nearEqualGeometricFits": 1,
+          "curveMapFit": 0.0,
+          "maxPredictedMovement": 0.0,
+          "raw": 0.0,
+          "deleteAddUpperBound": 40,
+          "normalizedDiagnostic": 0.0,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 0.0
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "control-slide",
+      "passed": true,
+      "raw": 0.0,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.0,
+          "exactSameGeometry": true,
+          "rotationRadians": 0.0,
+          "translation": [
+            0.0,
+            0.0
+          ],
+          "nearEqualGeometricFits": 1,
+          "curveMapFit": 0.0,
+          "maxPredictedMovement": 0.0,
+          "raw": 0.0,
+          "deleteAddUpperBound": 40,
+          "normalizedDiagnostic": 0.0,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 0.0
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "control-split",
+      "passed": true,
+      "raw": 0.0,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.0,
+          "exactSameGeometry": true,
+          "rotationRadians": 0.0,
+          "translation": [
+            0.0,
+            0.0
+          ],
+          "nearEqualGeometricFits": 1,
+          "curveMapFit": 0.0,
+          "maxPredictedMovement": 0.0,
+          "raw": 0.0,
+          "deleteAddUpperBound": 40,
+          "normalizedDiagnostic": 0.0,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 0.0
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "cyclic-start",
+      "passed": true,
+      "raw": 0.0,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.0,
+          "exactSameGeometry": true,
+          "rotationRadians": 0.0,
+          "translation": [
+            0.0,
+            0.0
+          ],
+          "nearEqualGeometricFits": 1,
+          "curveMapFit": 0.0,
+          "maxPredictedMovement": 0.0,
+          "raw": 0.0,
+          "deleteAddUpperBound": 40,
+          "normalizedDiagnostic": 0.0,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 0.0
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "integer-translation",
+      "passed": true,
+      "raw": 8.881784197001252e-16,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.0,
+          "exactSameGeometry": false,
+          "rotationRadians": 5.329070518200759e-17,
+          "translation": [
+            1.0,
+            0.0
+          ],
+          "nearEqualGeometricFits": 2,
+          "curveMapFit": 9.860761315262648e-31,
+          "maxPredictedMovement": 1.0,
+          "raw": 8.881784197001252e-16,
+          "deleteAddUpperBound": 40,
+          "normalizedDiagnostic": 2.2204460492503132e-17,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 8.881784197001252e-16
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 0.0
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "rotation90",
+      "passed": true,
+      "raw": 1.7763568394002505e-15,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.0,
+          "exactSameGeometry": false,
+          "rotationRadians": 1.5707963267948966,
+          "translation": [
+            10.0,
+            0.0
+          ],
+          "nearEqualGeometricFits": 2,
+          "curveMapFit": 1.5777218104420236e-30,
+          "maxPredictedMovement": 5.522680508593631,
+          "raw": 1.7763568394002505e-15,
+          "deleteAddUpperBound": 40,
+          "normalizedDiagnostic": 4.4408920985006264e-17,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 1.7763568394002505e-15
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 0.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 0.0
+            }
+          ],
+          "cyclicOffset": 1
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "geometry-quarter-cell-move-mask-still",
+      "passed": true,
+      "raw": 5.000000000000003,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.0,
+          "exactSameGeometry": false,
+          "rotationRadians": 6.661338147750949e-17,
+          "translation": [
+            0.25,
+            0.0
+          ],
+          "nearEqualGeometricFits": 2,
+          "curveMapFit": 2.3665827156630354e-30,
+          "maxPredictedMovement": 0.25,
+          "raw": 5.000000000000003,
+          "deleteAddUpperBound": 40,
+          "normalizedDiagnostic": 0.12500000000000006,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 1.5
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 1.0000000000000027
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 1.5
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 1.0
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "same-geometry-pixel-edit",
+      "passed": true,
+      "raw": 11.0,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.0,
+          "exactSameGeometry": true,
+          "rotationRadians": 0.0,
+          "translation": [
+            0.0,
+            0.0
+          ],
+          "nearEqualGeometricFits": 1,
+          "curveMapFit": 0.0,
+          "maxPredictedMovement": 0.0,
+          "raw": 11.0,
+          "deleteAddUpperBound": 38,
+          "normalizedDiagnostic": 0.2894736842105263,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 4.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 4.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 3.0
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 0.0
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "actual-growth",
+      "passed": true,
+      "raw": 11.119685999211107,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 4,
+          "fitScore": 0.129931572704308,
+          "exactSameGeometry": false,
+          "rotationRadians": -0.05162817832886594,
+          "translation": [
+            0.30024120863203674,
+            0.2633559827578478
+          ],
+          "nearEqualGeometricFits": 2,
+          "curveMapFit": 1.7170391156038909,
+          "maxPredictedMovement": 1.0122207044465916,
+          "raw": 11.119685999211107,
+          "deleteAddUpperBound": 42,
+          "normalizedDiagnostic": 0.2647544285526454,
+          "operations": [
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                1
+              ],
+              "cost": 4.011991945554247
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                1,
+                2
+              ],
+              "cost": 1.5478510540513044
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                2,
+                3
+              ],
+              "cost": 4.0119919455542465
+            },
+            {
+              "operation": "substitute",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                3,
+                4
+              ],
+              "cost": 1.547851054051308
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "explicit-physical-occlusion-reset",
+      "passed": true,
+      "raw": 0,
+      "rows": [],
+      "geometryEventResets": [
+        {
+          "reason": "EXPLICIT_VISIBILITY_EVENT",
+          "oldHidden": 0,
+          "newHidden": 1
+        },
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            1,
+            0
+          ],
+          "old": [
+            0
+          ],
+          "new": []
+        }
+      ],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "selected-span-absence-is-delete",
+      "passed": true,
+      "raw": 20.0,
+      "rows": [
+        {
+          "old": 0,
+          "new": 0,
+          "oldPixelSpans": 4,
+          "newPixelSpans": 0,
+          "fitScore": 0.0,
+          "exactSameGeometry": true,
+          "rotationRadians": 0.0,
+          "translation": [
+            0.0,
+            0.0
+          ],
+          "nearEqualGeometricFits": 1,
+          "curveMapFit": 0.0,
+          "maxPredictedMovement": 0.0,
+          "raw": 20.0,
+          "deleteAddUpperBound": 20,
+          "normalizedDiagnostic": 1.0,
+          "operations": [
+            {
+              "operation": "delete",
+              "oldSpanRange": [
+                0,
+                1
+              ],
+              "newSpanRange": [
+                0,
+                0
+              ],
+              "cost": 6.0
+            },
+            {
+              "operation": "delete",
+              "oldSpanRange": [
+                1,
+                2
+              ],
+              "newSpanRange": [
+                0,
+                0
+              ],
+              "cost": 4.0
+            },
+            {
+              "operation": "delete",
+              "oldSpanRange": [
+                2,
+                3
+              ],
+              "newSpanRange": [
+                0,
+                0
+              ],
+              "cost": 6.0
+            },
+            {
+              "operation": "delete",
+              "oldSpanRange": [
+                3,
+                4
+              ],
+              "newSpanRange": [
+                0,
+                0
+              ],
+              "cost": 4.0
+            }
+          ],
+          "cyclicOffset": 0
+        }
+      ],
+      "geometryEventResets": [],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "actual-geometric-split",
+      "passed": true,
+      "raw": 0,
+      "rows": [],
+      "geometryEventResets": [
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            1,
+            0
+          ],
+          "old": [
+            0
+          ],
+          "new": [
+            0,
+            1
+          ]
+        }
+      ],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    },
+    {
+      "name": "actual-geometric-merge",
+      "passed": true,
+      "raw": 0,
+      "rows": [],
+      "geometryEventResets": [
+        {
+          "reason": "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH",
+          "kind": [
+            1,
+            0
+          ],
+          "old": [
+            0,
+            1
+          ],
+          "new": [
+            0
+          ]
+        }
+      ],
+      "failedCorrespondences": [],
+      "valid": true,
+      "noSelectedSpanAbsenceAsOcclusion": true
+    }
+  ],
+  "testCount": 19,
+  "actualPhase0Reparameterization": [
+    {
+      "splitAt": "1/4",
+      "exactCanonicalInputIdentical": true
+    },
+    {
+      "splitAt": "3/4",
+      "exactCanonicalInputIdentical": true
+    }
+  ],
+  "atomicArithmeticUnchanged": [
+    {
+      "dx": 0.0,
+      "raw": 0.0
+    },
+    {
+      "dx": 0.2,
+      "raw": 0.39999999999999997
+    },
+    {
+      "dx": 1.0,
+      "raw": 2.0
+    }
+  ],
+  "betaUnchanged": 0.14,
+  "temporalStateCostChanged": false,
+  "selectorRuns": 0,
+  "newUnityCalls": 0,
+  "seconds": 0.26119249999464955,
+  "newDonorVisibility": "unverified; correspondence fixtures do not certify physical occlusion",
+  "phase0Gate": true
+}

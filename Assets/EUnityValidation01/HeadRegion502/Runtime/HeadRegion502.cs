@@ -9,6 +9,10 @@ using UnityEngine.Rendering;
 public static class HeadRegion502
 {
     public static bool Enabled;
+    // Default-OFF accuracy experiment inside the already default-OFF region path.
+    // False retains the504 input for same-pose comparisons; no extra render layer.
+    public static bool UseVisibleArea505;
+    public static int AreaUncertainCells505, AreaSelectionAmbiguous505;
     public static string Status = "disabled";
     public static readonly List<Vector2[]> SourceLoops = new();
     // RDP approximation diagnostics. SelectedLoops owns the chosen boundary;
@@ -288,6 +292,7 @@ public static class HeadRegion502
     {
         if (!Enabled || !HeadLocal367.IsHead(f)) return;
         var watch = System.Diagnostics.Stopwatch.StartNew(); current = null; Packets.Clear(); SourceLoops.Clear(); Curves.Clear(); SelectedLoops.Clear(); Unsupported = 0;
+        AreaUncertainCells505 = AreaSelectionAmbiguous505 = 0;
         Array.Clear(Hair, 0, Hair.Length); Array.Clear(Parent, 0, Parent.Length);
         try
         {
@@ -297,7 +302,25 @@ public static class HeadRegion502
             var indices = Enumerable.Range(0, mesh.subMeshCount).Select(sm => mesh.GetIndices(sm)).ToArray();
             var union = Union(projected, indices, out var bounds); SourceLoops.AddRange(Boundaries(union, bounds, ExtractionScale));
             Curves.AddRange(SourceLoops.Select(ClosedCurve).Where(p => p.Length >= 3));
-            var areas = SourceCellAreas504(union, bounds.width, bounds.height); var selected = SelectRegions(areas, bounds.width, bounds.height);
+            bool[] selected;
+            if (UseVisibleArea505)
+            {
+                var area = HeadArea505.Build(f, bounds);
+                selected = SelectRegions(area.lower, bounds.width, bounds.height);
+                AreaUncertainCells505 = area.lower.Zip(area.upper, (a, b) => b - a > 1e-7f).Count(x => x);
+                if (AreaUncertainCells505 != 0)
+                {
+                    var upper = SelectRegions(area.upper, bounds.width, bounds.height);
+                    AreaSelectionAmbiguous505 = selected.Zip(upper, (a, b) => a != b).Count(x => x);
+                    if (AreaSelectionAmbiguous505 != 0)
+                        throw new InvalidOperationException("505 alpha-area bounds leave " + AreaSelectionAmbiguous505 + " region cells undecided");
+                }
+            }
+            else
+            {
+                var areas = SourceCellAreas504(union, bounds.width, bounds.height);
+                selected = SelectRegions(areas, bounds.width, bounds.height);
+            }
             SelectedLoops.AddRange(Boundaries(selected, bounds, 1));
             for (int y = 0; y < bounds.height; y++) for (int x = 0; x < bounds.width; x++) if (selected[y * bounds.width + x]) Hair[(y + bounds.y) * 480 + x + bounds.x] = true;
             triangles.Clear();
@@ -373,7 +396,7 @@ public static class HeadRegion502
     }
     public static void Release()
     {
-        Enabled = false; current = null; Status = "disabled";
+        Enabled = false; UseVisibleArea505 = false; HeadArea505.Release(); current = null; Status = "disabled";
         if (pieces != null) foreach (var piece in pieces) if (piece.mesh) UnityEngine.Object.DestroyImmediate(piece.mesh); pieces = null;
         foreach (var material in materials.Values) if (material) UnityEngine.Object.DestroyImmediate(material); materials.Clear();
         if (mask) UnityEngine.Object.DestroyImmediate(mask); mask = null; gate = null; Packets.Clear();

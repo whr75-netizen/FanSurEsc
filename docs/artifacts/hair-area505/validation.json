@@ -1,0 +1,1343 @@
+{
+  "status": "ACCURACY_REFERENCE_ONLY_NOT_REALTIME_NOT_ADOPTED_DEFAULT_OFF",
+  "baseCommit": "ecde05520dd8a9cbf9ffb4ac47087a47a348757e",
+  "singleInputChange": "Continuous visible triangle-union/cell area replaces8x source-region area only when both defaultOFF experiment gates are deliberately enabled. Same .14 boundary cost, weights, selector, donor, colours, UV, eyes and time handling.",
+  "sources": [
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadRegion502.cs",
+      "sha256": "bf273425aa8cb2ec0b35973f16d4f851128abfe8dcc6cede81d0ba7a69b662b8"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadArea505.cs",
+      "sha256": "c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadArea505.cs.meta",
+      "sha256": "ac514b03cbe1ddd09366ce53fc3f2553ad9acb484b9cc2f8718f4286af6f7408"
+    }
+  ],
+  "actual": {
+    "status": "ACTUAL_22_PAIRED_ADJACENT_WALK_ACCURACY_ONLY_NOT_REALTIME",
+    "rows": [
+      {
+        "capture": 0,
+        "target": 21,
+        "phase": 1.26250255,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 451.73390000127256,
+          "alt505RenderMs": 5486.361899995245,
+          "visibleAreaMs": 4483.254,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 1,
+        "target": 22,
+        "phase": 1.2750026,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 1.9073486328125e-06,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 682.2275000013178,
+          "alt505RenderMs": 4973.666200006846,
+          "visibleAreaMs": 4111.633400000001,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 2,
+        "target": 23,
+        "phase": 1.28750265,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 1.9073486328125e-06,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 5,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 441.7129999928875,
+          "alt505RenderMs": 5403.984300006414,
+          "visibleAreaMs": 4640.8372,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 3,
+        "target": 30,
+        "phase": 1.3750025,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 1.9073486328125e-06,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 3,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 460.1680999912787,
+          "alt505RenderMs": 5042.766800004756,
+          "visibleAreaMs": 4242.750300000001,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 4,
+        "target": 31,
+        "phase": 1.38750255,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 1.9073486328125e-06,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 3,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 454.95289999234956,
+          "alt505RenderMs": 4975.565600005211,
+          "visibleAreaMs": 3948.5934,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 5,
+        "target": 32,
+        "phase": 1.4000026,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 1.9073486328125e-06,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 3,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 723.4491999988677,
+          "alt505RenderMs": 4768.3961000002455,
+          "visibleAreaMs": 4000.5978,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 6,
+        "target": 37,
+        "phase": 1.46250248,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 1.9073486328125e-06,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 770.4571000067517,
+          "alt505RenderMs": 4933.561400001054,
+          "visibleAreaMs": 4099.0468,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 7,
+        "target": 38,
+        "phase": 1.47500253,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 3,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 3,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 405.17199999885634,
+          "alt505RenderMs": 5583.312999995542,
+          "visibleAreaMs": 4761.9024,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 8,
+        "target": 39,
+        "phase": 1.48750257,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 3,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 3,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 515.5588999914471,
+          "alt505RenderMs": 4843.418000004021,
+          "visibleAreaMs": 4073.5906,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 9,
+        "target": 52,
+        "phase": 1.65000248,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 5,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 5,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 722.9418999922927,
+          "alt505RenderMs": 4896.043399989139,
+          "visibleAreaMs": 4121.376,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 10,
+        "target": 53,
+        "phase": 1.66250253,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 5,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 5,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 477.8076999937184,
+          "alt505RenderMs": 4660.698200008483,
+          "visibleAreaMs": 3841.3919,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 11,
+        "target": 54,
+        "phase": 1.67500257,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 5,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 5,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 429.85430000408087,
+          "alt505RenderMs": 5086.7855999968015,
+          "visibleAreaMs": 4372.8988,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 12,
+        "target": 57,
+        "phase": 1.71250248,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 554.4325999944704,
+          "alt505RenderMs": 5005.046099991887,
+          "visibleAreaMs": 4251.307400000001,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 13,
+        "target": 58,
+        "phase": 1.72500253,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 369.8488000081852,
+          "alt505RenderMs": 5156.468300003326,
+          "visibleAreaMs": 4381.609,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 14,
+        "target": 59,
+        "phase": 1.73750257,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 1.9073486328125e-06,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 4,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 378.7504999927478,
+          "alt505RenderMs": 4825.920100003714,
+          "visibleAreaMs": 4118.9227,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 15,
+        "target": 68,
+        "phase": 1.85000253,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 5,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 618.4436000039568,
+          "alt505RenderMs": 5300.025699994876,
+          "visibleAreaMs": 4524.3073,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 16,
+        "target": 69,
+        "phase": 1.86250257,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 394.58330000343267,
+          "alt505RenderMs": 4828.514599998016,
+          "visibleAreaMs": 4115.694,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 17,
+        "target": 70,
+        "phase": 1.87500262,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 7,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 427.8255999961402,
+          "alt505RenderMs": 5355.2498999924865,
+          "visibleAreaMs": 4619.747600000001,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 18,
+        "target": 71,
+        "phase": 1.88750267,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 440.54579999647103,
+          "alt505RenderMs": 5112.393000003067,
+          "visibleAreaMs": 4241.638,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 19,
+        "target": 74,
+        "phase": 1.92500257,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 750.6097000004956,
+          "alt505RenderMs": 5053.850299998885,
+          "visibleAreaMs": 4307.6944,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 20,
+        "target": 75,
+        "phase": 1.93750262,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 9.5367431640625e-07,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 6,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 576.5896999946563,
+          "alt505RenderMs": 5196.398200001568,
+          "visibleAreaMs": 4445.311900000001,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "capture": 21,
+        "target": 76,
+        "phase": 1.95000267,
+        "candidatePredictionMismatch": 0,
+        "baseline504PredictionMismatch": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "maxNativePacketDepthError": 1.9073486328125e-06,
+        "sameSurfaceFaceColourDifferences": 0,
+        "faceFeatureCounts": {
+          "504": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 7,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          },
+          "505": {
+            "1": 0,
+            "2": 0,
+            "3": 0,
+            "4": 7,
+            "5": 0,
+            "6": 0,
+            "7": 0
+          }
+        },
+        "cost": {
+          "base504RenderMs": 485.001299995929,
+          "alt505RenderMs": 5116.410799993901,
+          "visibleAreaMs": 4359.9053,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      }
+    ],
+    "events": [
+      {
+        "index": 22,
+        "headXY": [
+          220,
+          57
+        ],
+        "causeScope": "AREA_INPUT_SEVEN_EPISODES",
+        "steps": [
+          {
+            "target": 21,
+            "q504": 0,
+            "q505": 0,
+            "role504": 8,
+            "role505": 8
+          },
+          {
+            "target": 22,
+            "q504": 1,
+            "q505": 0,
+            "role504": 14,
+            "role505": 8
+          },
+          {
+            "target": 23,
+            "q504": 0,
+            "q505": 0,
+            "role504": 8,
+            "role505": 8
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      },
+      {
+        "index": 31,
+        "headXY": [
+          221,
+          58
+        ],
+        "causeScope": "AREA_INPUT_SEVEN_EPISODES",
+        "steps": [
+          {
+            "target": 30,
+            "q504": 1,
+            "q505": 1,
+            "role504": 14,
+            "role505": 14
+          },
+          {
+            "target": 31,
+            "q504": 0,
+            "q505": 1,
+            "role504": 8,
+            "role505": 14
+          },
+          {
+            "target": 32,
+            "q504": 1,
+            "q505": 1,
+            "role504": 14,
+            "role505": 14
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      },
+      {
+        "index": 38,
+        "headXY": [
+          230,
+          54
+        ],
+        "causeScope": "AREA_INPUT_SEVEN_EPISODES",
+        "steps": [
+          {
+            "target": 37,
+            "q504": 0,
+            "q505": 0,
+            "role504": 0,
+            "role505": 0
+          },
+          {
+            "target": 38,
+            "q504": 1,
+            "q505": 0,
+            "role504": 14,
+            "role505": 0
+          },
+          {
+            "target": 39,
+            "q504": 0,
+            "q505": 0,
+            "role504": 0,
+            "role505": 0
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      },
+      {
+        "index": 53,
+        "headXY": [
+          215,
+          57
+        ],
+        "causeScope": "AREA_INPUT_SEVEN_EPISODES",
+        "steps": [
+          {
+            "target": 52,
+            "q504": 0,
+            "q505": 0,
+            "role504": 8,
+            "role505": 8
+          },
+          {
+            "target": 53,
+            "q504": 1,
+            "q505": 0,
+            "role504": 14,
+            "role505": 8
+          },
+          {
+            "target": 54,
+            "q504": 0,
+            "q505": 0,
+            "role504": 8,
+            "role505": 8
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      },
+      {
+        "index": 58,
+        "headXY": [
+          230,
+          54
+        ],
+        "causeScope": "AREA_INPUT_SEVEN_EPISODES",
+        "steps": [
+          {
+            "target": 57,
+            "q504": 0,
+            "q505": 0,
+            "role504": 0,
+            "role505": 0
+          },
+          {
+            "target": 58,
+            "q504": 1,
+            "q505": 0,
+            "role504": 14,
+            "role505": 0
+          },
+          {
+            "target": 59,
+            "q504": 0,
+            "q505": 0,
+            "role504": 0,
+            "role505": 0
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      },
+      {
+        "index": 69,
+        "headXY": [
+          220,
+          57
+        ],
+        "causeScope": "AREA_INPUT_SEVEN_EPISODES",
+        "steps": [
+          {
+            "target": 68,
+            "q504": 1,
+            "q505": 1,
+            "role504": 14,
+            "role505": 14
+          },
+          {
+            "target": 69,
+            "q504": 0,
+            "q505": 1,
+            "role504": 8,
+            "role505": 14
+          },
+          {
+            "target": 70,
+            "q504": 1,
+            "q505": 1,
+            "role504": 14,
+            "role505": 14
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      },
+      {
+        "index": 70,
+        "headXY": [
+          220,
+          57
+        ],
+        "causeScope": "AREA_INPUT_SEVEN_EPISODES",
+        "steps": [
+          {
+            "target": 69,
+            "q504": 0,
+            "q505": 1,
+            "role504": 8,
+            "role505": 14
+          },
+          {
+            "target": 70,
+            "q504": 1,
+            "q505": 1,
+            "role504": 14,
+            "role505": 14
+          },
+          {
+            "target": 71,
+            "q504": 0,
+            "q505": 0,
+            "role504": 8,
+            "role505": 8
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      },
+      {
+        "index": 70,
+        "headXY": [
+          224,
+          58
+        ],
+        "causeScope": "NEIGHBOUR_COST_SEPARATE_UNRESOLVED",
+        "steps": [
+          {
+            "target": 69,
+            "q504": 1,
+            "q505": 1,
+            "role504": 14,
+            "role505": 14
+          },
+          {
+            "target": 70,
+            "q504": 0,
+            "q505": 1,
+            "role504": 0,
+            "role505": 14
+          },
+          {
+            "target": 71,
+            "q504": 1,
+            "q505": 1,
+            "role504": 14,
+            "role505": 14
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      },
+      {
+        "index": 75,
+        "headXY": [
+          233,
+          39
+        ],
+        "causeScope": "AREA_INPUT_SEVEN_EPISODES",
+        "steps": [
+          {
+            "target": 74,
+            "q504": 0,
+            "q505": 1,
+            "role504": 0,
+            "role505": 13
+          },
+          {
+            "target": 75,
+            "q504": 1,
+            "q505": 1,
+            "role504": 13,
+            "role505": 13
+          },
+          {
+            "target": 76,
+            "q504": 0,
+            "q505": 0,
+            "role504": 0,
+            "role505": 0
+          }
+        ],
+        "note": "One-way motion is not treated as a failure. No claim of a perceptual time metric."
+      }
+    ],
+    "candidatePredictionMismatchTotal": 0,
+    "baseline504PredictionMismatchTotal": 0,
+    "nativeOutsideHairTotal": 0,
+    "nativeOutsideFaceTotal": 0,
+    "nativePrimitiveMismatches": [],
+    "maxNativePacketDepthError": 1.9073486328125e-06,
+    "sameSurfaceFaceColourDifferences": [],
+    "uniqueDeformedHairGeometryFingerprints": 22,
+    "cost": {
+      "base504RenderMs": {
+        "min": 369.8488000081852,
+        "median": 468.98789999249857,
+        "max": 770.4571000067517
+      },
+      "alt505RenderMs": {
+        "min": 4660.698200008483,
+        "median": 5048.308550001821,
+        "max": 5583.312999995542
+      },
+      "visibleAreaMs": {
+        "min": 3841.3919,
+        "median": 4247.028850000001,
+        "max": 4761.9024
+      }
+    },
+    "limits": [
+      "Seven adjacent intervals, not a full runtime loop.",
+      "Nearby saved499 geometric predictions are not bit-identical to this capture; measured mismatch is reported.",
+      "The separate neighbour-cost event changes indirectly under area input; its cause/design is not claimed solved.",
+      "Measured RenderFrame call wall time excludes capture readbacks, is Editor-specific, and is not a player FPS benchmark.",
+      "No geometry/pose cache is used; every captured pose has its own deformed geometry.",
+      "Frontal eyes and general pixel-art/internal shading/temporal quality remain unverified."
+    ]
+  },
+  "coverageChecks": {
+    "status": "ACTUAL_SHORT_WALK_NOT_FULL_LOOP",
+    "differencesAreNotErrorCounts": true,
+    "allPoseLightMatched": true,
+    "outsideTotals": {
+      "Raw": {
+        "hair": 0,
+        "face": 0
+      },
+      "Hair": {
+        "hair": 0,
+        "face": 0
+      },
+      "Final": {
+        "hair": 0,
+        "face": 0
+      }
+    },
+    "packetMismatchTotal": 0,
+    "bodyColourMismatchTotal": 0,
+    "unsupportedTotal": 0,
+    "gif": {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk505\\WALK505_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 701898,
+      "frames": 22,
+      "cropNativePixels": [
+        336,
+        50,
+        556,
+        356
+      ],
+      "displayDurationMs": 80,
+      "captureDeltaSeconds": 0.016666666666666666,
+      "interpolation": false,
+      "note": "22 paired full-body frames in seven labelled adjacent intervals; gaps are not continuous animation. No spatial resize/interpolation; 80ms slow inspection; original PNG/buffers preserved.",
+      "sha256": "3712217e7dc1db705f9bc167c8d57c905e1ca62801b56e281c65dee10d9a57aa",
+      "groups": 7
+    }
+  },
+  "correctedSaved81": {
+    "lowerUpperSelectionDifferenceCells": 0,
+    "areaUncertainCells": 1,
+    "maximumAreaInterval": 0.029163941740989685,
+    "computeMsMinMedianMax": [
+      1087.5731,
+      1202.5039,
+      2181.924
+    ],
+    "wholeMaskReversalObservations": [
+      {
+        "index": 17,
+        "headXY": [
+          217,
+          55
+        ]
+      },
+      {
+        "index": 23,
+        "headXY": [
+          219,
+          51
+        ]
+      }
+    ],
+    "observationsAreNotErrors": true,
+    "loopSeam": 0,
+    "geometryNote": "Loop499 all81; max drift vs Groups5040.00013733cell, not bit-identical input"
+  },
+  "profile": {
+    "ClipCalls": 2355912,
+    "UnionEdgePairs": 21710000,
+    "OcclusionPairs": 136803,
+    "BinAssignments": 51374,
+    "UnionMilliseconds": 1453.4978,
+    "totalComputeMs": 1688.9014,
+    "unionFractionOfThisOfflineCompute": 0.860617322005891,
+    "dataset": "Stored499 phase1.275001; current-frame geometry, depth and alpha; operation instrumentation only; not a runtime stage profiler",
+    "scalarAreaDifferenceFromUninstrumentedReference": 0.0
+  },
+  "minimumCostImprovementProposal": {
+    "implemented": false,
+    "primary": "Keep the exact clipped polygons and union integral. Deduplicate exactly identical event segments and reject edge pairs with disjoint XY bounding intervals before solving intersections. This changes the candidate list, not region ownership, area cost or time.",
+    "proof": "A duplicate segment contributes no new event ordinate. Disjoint segment bounding boxes cannot intersect. Preserve all polygon intervals for area integration and use the current reference plus fixtures/81 inputs as oracle.",
+    "expectedBenefit": "Targets21.71million event-edge pair iterations; no measured speedup or realtime forecast is claimed.",
+    "secondary": "Reuse current-frame projected hair geometry already built by HeadRegion502 and static topology/material data. Continue recomputing deformed vertices, depths and spatial bins for every animation pose.",
+    "limit": "Topology/geometry reuse alone cannot remove the dominant union cost. No frozen-pose cache or time/RGB filter."
+  },
+  "diagnosticCorrections": {
+    "oldBilinear81": "Superseded: zero-length clipped edges resurrected subtracted polygons; not final visibility evidence. Target no-front-occluder geometric area evidence remains separately recorded.",
+    "fix": "Clip emits no consecutive/closing duplicate vertices; subtraction skips zero-length edges. Eight independent union/occlusion/alpha fixtures pass after correction.",
+    "unsupportedReadback": "Direct compressed-texture readback emitted platform errors; replaced with the previously verified temporary linear ARGB32 RT copy/readback. Temporary GPU resources restored/released.",
+    "helper82242": "Separate disjoint-union cost prototype produced no result; known defective subtraction branch was cancelled through its own exec-session interrupt, exit1. Not used or committed; Unity/other processes not terminated."
+  },
+  "runtimeRestored": "Direct RESTORED505 read: Play true, paused false; movement true; Animator enabled speed1 Locomotion0 Idle; captureDelta0; automaticClock true; one PostView366 hook;491/502/505 gates false; compiling false.",
+  "settingsSha256": {
+    "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "deliverables": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk505\\WALK505_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 701898,
+      "sha256": "3712217e7dc1db705f9bc167c8d57c905e1ca62801b56e281c65dee10d9a57aa"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk505\\ACTUAL_EVENT_COMPARISON505.png",
+      "bytes": 52150,
+      "sha256": "a8b31887254a70a414efdae79b6e84ec18adfbae0321ca14c6f8ffd2bedbb7ac"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk505\\ACTUAL_REVIEW505.json",
+      "bytes": 28116,
+      "sha256": "126f3b31a825ebe814170a031ae05348017856b1f9a764050c6fb44c83cfb8ef"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\RESTORED505.json",
+      "bytes": 19869,
+      "sha256": "e95dc023988795942d6979f145f6b576072162ba3fccea2841eede1be24d5bfa"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\fixtures505_fixed.json",
+      "bytes": 23393,
+      "sha256": "3b369d88d2bb37c0caf34ab7a9c0a1925e16ccbfcfa2b88d70c7545dca9fdf85"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area505\\REPLAY_CORRECTED505.json",
+      "bytes": 240247,
+      "sha256": "9071ddba2281376586953d5f15c8006d5ab179e8a3ef4de2c521cd780bcae522"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area505\\COMPARISON_CORRECTED505.json",
+      "bytes": 3761,
+      "sha256": "36bbde171fa5a8a96a490e8b5ea565833244432fdf21cd64259c05fb544e4a8a"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area505\\ALPHA505.json",
+      "bytes": 3232,
+      "sha256": "53593ff51770ab0ba1efd74b1e6ab0affe18e4e940b4f8edde0e91d74412904f"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area505\\MIP505.json",
+      "bytes": 774,
+      "sha256": "1a8c3c7ba8d0e61a48f632729b72bca2b9d486153bb9ded0900cdb75220db6b3"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area505\\COST_TERMS505.json",
+      "bytes": 153,
+      "sha256": "049fddec1fa317f136887e96f0490309ca803ac6e26c7b83bd488c3268516d03"
+    }
+  ],
+  "library": "403 access restriction; no retry or alternate upload",
+  "limits": [
+    "22 actual paired poses in7 adjacent intervals, not full runtime505 Walk loop.",
+    "Separate neighbour-cost event changes indirectly; general spatial/temporal design remains unresolved.",
+    "Two saved whole-mask reversal observations at17(217,55),23(219,51) remain unclassified; not counted as two proven defects.",
+    "Current game angle exposes no eye roles1/2/3/5/6/7; frontal eye validation is unavailable. Only visible skin role4 and unchanged source geometry are checked.",
+    "Current-run504/505 lighting matches; absolute hour/weather was not saved, and cross-run brightness is not asserted identical.",
+    "Editor geometry/union time is measured in seconds; not a realtime path or target-player FPS result.",
+    "Finite-precision geometric guards are not a formal global error proof. Pixel-art cluster/stair/lighting design, other clips/cameras, grounding and build remain unverified."
+  ]
+}

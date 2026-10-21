@@ -3038,3 +3038,16 @@ Interactable (abstract base class)
 - (224,58),.8625/.8750/.8875는 면적 두 추정 모두 감소하지만 이웃 경계비용 기여가+.0820101→−.1640202로 바뀐다. 조건부 선택 역전 경로는 확인됐으나 동등한 형태 품질의 전역 대안은 미확인이다. exact local 면적 대조는 이웃을 고정한 진단이며 exact-area 전역 해법 검증이 아니다. 추가 패치/새 전체 캡처는 하지 않았다. 경계 강제 통과와 시간 선택 실패를 분리해 기본OFF·미채택을 유지한다.
 - Play/입력/Animator Idle speed1/자동시계/captureDelta0/PostView366 단일훅/두실험OFF/비컴파일을 직접 읽어 복원 확인했다.44d13c0와 사용자 Quality/Time 설정은 보존했다.5쌍 및33쌍 전신 전후GIF는 로컬 보존,33쌍은8구간 시간 점프를 표시한80ms 느린 검수이며 공간 보간/축소가 없다. Library403은 재시도하지 않았다.
 - 근거: docs/artifacts/hair-area504/README.md·validation.json·두진단PNG 및 Current472/Groups504/GROUP_REVIEW504.json·CLASSIFICATION504.json. 실제 전체504 Walk/타clip·각도/눈 정면/접지/색덩어리 설계/시간일관성/성능/build와 전체 프로젝트 완료는 주장하지 않는다.
+
+
+## 219. 가시 머리 영역 교차면적505 정확도 대조·실제22쌍, 실시간 미채택 [CHARACTER-RENDER-01]
+
+- ecde055 이후 확인된1/8면적추출 오차의 입력만 대체하는 기본OFF 진단 경로를 추가했다. HeadRegion502.Enabled와 UseVisibleArea505가 모두 켜진 검수에서만 사용한다. 원본 변형 삼각형을480×272 셀로 자르고, 앞쪽 non-hair의 cull/alpha/depth 영역을 빼고 합집합 면적을 적분한다. 겹친 hair는 한 번만 세며 동일 깊이는 마지막 hair draw가 이긴다. 같은.14 비용/이웃 가중치/선택기/UV·depth donor/색/눈/시간 처리를 유지했다. RDP·8x source loop는 진단용이며 최종 권위는 기존 선택 셀 경계이다.
+- 최초 차집합은 반쪽 가림 fixture에서.875(정답.5)로 실패했다. clip 경계에 중복된 꼭짓점이 생겨 길이0 제거 변이 원영역을 다시 추가하는 것이 원인이었다. 중복 endpoint/길이0 변을 제거한 뒤 독립8fixture가 통과했다. 수정 전Bilinear81 가시영역 결과는 최종 근거에서 제외한다. 압축 texture 직접 readback의 플랫폼 오류도 기존 성공한 임시linearRT copy/readback으로 교체했다. 별도 비용실험 helper82242는 결과 없이 자기 세션 중단(exit1)으로 종료했고 제품에 넣지 않았다. Unity/다른 프로세스는 종료하지 않았다.
+- 현재 원재질은 mip1/bilinear-repeat/UV변환identity/UV애니0/alpha factor1이다. UV 다각형 전체의 alpha texel 범위로 가림 상하한을 보존하고 두 면적 입력의 cut이 다르면 미확정 실패로 남긴다. 수정된 저장81입력에서 하한/상한 선택 불일치0.499 저장기하와 현재33포즈 사이 최대.00013733셀 차이가 있으므로 bit동일 원본이라 하지 않는다. 저장 전체마스크 한프레임 관측2는17(217,55),23(219,51)이며 가시 결함으로 확정한 오류수가 아니다.
+- 실제 Walk22쌍/7인접구간에서504/505를 같은pose/light로 비교했고 양쪽 예측마스크 불일치0이다. Raw/머리/최종/Native 경계 밖0·packet primitive 불일치0·몸 색 차이0·동일UV/primitive 가시피부 색 차이0·unsupported0. Native packet depth 최대차1.90735e-6. 변형 머리기하 SHA는22개 모두 달라 정지 캐시로 통과시킨 것이 아니다.
+- 대상7시간사건(8관측)의 불필요한 되돌림이 제거됐다. .8750/.9375는 한방향 이동으로 남겨 픽셀변화0을 목표로 하지 않았다. 별도 이웃비용 사건(224,58)은 입력의 간접영향으로111이 되었지만 일반 원인/디자인을 해결했다고 판정하지 않는다. 현재 게임각도에서 눈 feature role들은0셀이고 피부만 노출되어 정면 눈 회귀는 미검증이다. 원본 눈/비율/texture/카메라를 변경하지 않았다. 과거 run의 밝기와 일치한다고 하지 않으며 현재 쌍의 광원만 일치한다.
+- 실시간 채택불가: 실제22쌍 면적계산 중앙값4247ms, 렌더호출504469ms/5055048ms. 이는 capture readback 제외 Editor 호출시간이지 playerFPS가 아니다. 같은 core의 별도1포즈 계수는 bin배정51374, front가림후보136803, clip2355912, union변쌍21710000. offline union1453.5ms/계산1688.9ms(~86%)이고 계측 전후 면적차0. per-frame 삼각형·bin·polygon·fragment·edge/level·interval list 할당은 존재하나 할당 byte는 미측정이다.
+- 최소 개선 제안만 남겼다: Union event의 정확 중복 선분 제거 및 XY bbox 비교로 교차 불가능한 변쌍을 제외하고 원polygon 적분은 유지한다. 실제 교차가 없는 후보만 제거하므로 정확도 계약을 유지할 수 있으나 속도향상은 아직 측정하지 않았다. 같은 프레임의 기하 투영·불변 topology/material 재사용도 가능하지만 애니메이션의 변형정점/depth/bin은 매번 갱신해야 한다. 새 최적화 구현/전체 촬영/기본활성화는 하지 않았다.
+- Play/입력/Animator Idle speed1/시계자동/captureDelta0/PostView366 단일훅/491·502·505 모두OFF/비컴파일을 직접 읽어 복원 확인했다.44d13c0/ecde055와 사용자 Quality/Time 해시를 보존했다.22쌍 전신GIF는7구간 점프를 표시한80ms 느린 검수이며 공간 보간/축소가 없고 로컬701898bytes이다. Library403은 재시도/우회하지 않았다.
+- 근거: docs/artifacts/hair-area505/README.md·validation.json·ACTUAL_EVENT_COMPARISON505.png, Current472/Walk505/·Area505/Corrected81/·RESTORED505.json. 정확도 정답 대조용OFF 코드와 실시간 제품은 구별한다. 전체 runtime loop·타clip/각도·일반 시간일관성/계단·명암 덩어리 설계·접지·build 및 전체 프로젝트 완료는 미검증이다.

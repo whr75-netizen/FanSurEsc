@@ -3195,3 +3195,12 @@ Interactable (abstract base class)
 - 조밀q상태는값q/행렬8q²byte/closureO(q³)/crossO(q_old q_new C_edit). q16이면현재offdiagonal최대240/cross256질의가가능해작은행렬보다완성형편집호출이문제다. q4096예는행렬하나128MiB/closure68719476736triple이며실제로할당·bank작성하지않았다. 모든압축알고리즘불가능이라는주장이아니라현재black-box정확경로의부담이다.
 - 최소다음의존성은기존edit DAG의입구/출구정렬조건별min-plus전달factor와공유셀separator표현이다. 고정경계/merge삭제/계수변경으로519비용을바꾸지말고12셀반례의raw36과대안결정을조건부합성으로재현한뒤separator성장·시간비용을증명해야한다. 현재API는완성drawing의scalar/trace만제공하므로이를증명하기전추가선택기코딩/Walk세계수민감도를진행하지않았다.
 - 근거 docs/artifacts/history-scope521의README/RANGE/COST/CONCLUSION/VALIDATION/분석source. 12셀동시복귀시간품질미통과/520통합미완료/신규채움가림미확인/내부색·성능미해결유지. 제품/Unity촬영/519대응/공간비용/계수/기본OFF변경0,사용자설정·44d13c0·8cf7957보존. 실제표현개선·실시간·전체프로젝트완료를주장하지않는다.
+
+## 234. CHARACTER-RENDER-01 — 521경로 미채택 종료·인수인계522·기존 대안1회 검토
+
+- 521을22b137a로커밋하고공유셀메시지/거대한bank/전역arcDP시간선택확장경로를미채택으로종료했다. 활성수정은44d13c0의348 eye fallback hair외곽선색보존이며전체픽셀튐해결이아니다.511닫힌분절선/94anchor/공통경계와c15c2e84 source-ray513(옵션512)은유지할구현·검증근거가있지만OFF/제품미채택이다.
+- 내부색head11+body1첫GPU원인미확인,Native395 world입력미수집,grouped packet/quad/upload약212ms별도성능미해결,시간515~521실제선택기미통합/미채택을분리했다.12셀일괄복귀시간품질미통과유지. 신규render/선택기/촬영/Unity호출0,Runtime/Quality·Time해시보존,기본OFF소스그대로다. 마지막직접운영상태514이며새live조회라고하지않았다.
+- 현재514전신파일은모두local존재:normal60 all80 WebP1325022byte/1333ms,normalGIF2327242byte/67표본(원51누락),inspectionGIF2778726byte/80×40ms. Library403접근차단으로현재자료미전달/재시도없음. 이전497compact전달·과거용량차단과혼동하지않았다.
+- 기존510/511/514/515/360자료와원저자Feature-Aware/Superpixelator/ActiveStrokes/KZ를한번대조했다. 즉시채택할검증완료대체구현은없다. Feature-Aware는50×50예도5초/frame이고고정feature대응/구조전제,Superpixelator는정적벡터선,ActiveStrokes는연속선추적근거이며픽셀영역완성quantizer가아니다. 각자료를현재3D실시간·가림·아트통과근거로확대하지않았다.
+- 재사용최소기반은511 current곡선/면적＋SelectRegions의joint-cut＋공통Draw/Gate다. 제한시공간binary joint-cut은전역span상태열거를없애는별도구조후보로추론할수있지만span편집거리목적을바꾸며클러스터/계단/출몰품질·실시간성은미입증이다. 원본mask후단filter나기존실패mincut재실행을해법으로포장하지않고새구현을자동시작하지않았다.212ms도이후보가해결하지않는다.
+- 근거 docs/artifacts/render-handoff522의HANDOFF/ALTERNATIVE_REVIEW/PRESERVATION. 결과는인수인계와판단이며새시간선택기실험이아니다. 제품아트/실제Walk시간품질/실시간/전체프로젝트완료를주장하지않는다.

@@ -1,0 +1,836 @@
+{
+  "status": "LOCAL_OPTIMIZATION_VALIDATED_DEFAULT_OFF_NOT_REALTIME",
+  "scope": "Only active polygon candidates inside Union→Length; no occlusion or visual/temporal selection change",
+  "sourceFiles": [
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadArea505.cs",
+      "sha256": "2aeca448c6742a66219a700ec053b0680e0221a9602ea1eca778a031b8b9043b"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile508\\AreaBench508.cs",
+      "sha256": "1445a08c8b0e1d288ec660ebfb4832654c58aef1c680604685bb11f48d08d99a"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile508\\AreaBench508.cs.meta",
+      "sha256": "7fda70f6b54121f8c68ebbf1405b479e85afd91b21087e99f978d7087f276414"
+    },
+    {
+      "path": "Assets\\EUnityValidation01\\HeadRegion502\\Editor\\Profile508.meta",
+      "sha256": "d11baa576075e7df42bcb2cb536de69ed95935034f067a72a4257d29ea0ae494"
+    }
+  ],
+  "original505": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area508\\Reference505.cs",
+    "sha256": "c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7"
+  },
+  "offline": {
+    "status": "OFFLINE_COMPLETE",
+    "scope": "CoreCLR standalone Compute only; no per-stage timing/counters/recorders; alternated pair order; geometry/IO outside Compute; five additional repeated pairs for index22",
+    "all81": {
+      "pairs": 81,
+      "referenceMeanMs": 1207.3513049382716,
+      "candidateMeanMs": 1047.4824197530863,
+      "referenceMedianMs": 1161.8743,
+      "candidateMedianMs": 1006.9829,
+      "pairedSavedMedianMs": 162.0879000000001,
+      "pairedSavedRangeMs": [
+        -413.0935999999999,
+        558.9502
+      ],
+      "pairedSavedFractionMedian": 0.13491176731073984,
+      "candidateFasterPairs": 78,
+      "referenceAllocatedMean": 754039739.3580247,
+      "candidateAllocatedMean": 755976947.5555556,
+      "referenceGen0Sum": 9719,
+      "candidateGen0Sum": 9750
+    },
+    "fiveRepeatedPairs22": {
+      "pairs": 5,
+      "referenceMeanMs": 1118.71048,
+      "candidateMeanMs": 963.27516,
+      "referenceMedianMs": 1084.6568,
+      "candidateMedianMs": 938.6642,
+      "pairedSavedMedianMs": 132.33390000000009,
+      "pairedSavedRangeMs": [
+        69.54449999999997,
+        317.9800999999999
+      ],
+      "pairedSavedFractionMedian": 0.12406947123099121,
+      "candidateFasterPairs": 5,
+      "referenceAllocatedMean": 741734267.2,
+      "candidateAllocatedMean": 743671788.8,
+      "referenceGen0Sum": 591,
+      "candidateGen0Sum": 592
+    },
+    "areaBitDifferences": 0,
+    "memoryApi": ".NET 10.0.11\nsentinelAllocatedBytes=1048600\nNo forced GC; measured allocations include Compute only; no stage counters, profiler recorders or per-stage timers.",
+    "pairSourceSha256": "044300ed13f767731f4c24b96e09f4eb3014c850ec4f6fd9436b1022a561fabe",
+    "candidateFunctionsSha256": "0c49dfaacb68e06b35f7b9891d9d03737cacd4f816d9aeaac8e4fc1322ba5058"
+  },
+  "unity": {
+    "status": {
+      "status": "COMPLETED",
+      "measuredCalls": 10,
+      "callbackRemoved": true,
+      "candidateOFF": true,
+      "globalProfiler": false,
+      "error": ""
+    },
+    "manifest": {
+      "framework": "Mono 6.13.0 (Visual Studio built mono)",
+      "input": "Loop499/022.allmesh",
+      "repeatsPerMode": 5,
+      "noRecorders": true,
+      "noStageTimers": true,
+      "noForcedGC": true,
+      "sentinelAllocatedBytes": 0,
+      "allocatedBytesValid": false,
+      "heapSnapshotsAreNotAllocationOrPeak": true,
+      "maxGeneration": 0
+    },
+    "pairs": [
+      {
+        "pair": 0,
+        "refMs": 4965.0305,
+        "optMs": 3278.3498,
+        "savedMs": 1686.6807,
+        "savedFraction": 0.3397120521213314
+      },
+      {
+        "pair": 1,
+        "refMs": 4743.6162,
+        "optMs": 2937.4043,
+        "savedMs": 1806.2119000000002,
+        "savedFraction": 0.3807668714850919
+      },
+      {
+        "pair": 2,
+        "refMs": 4286.5058,
+        "optMs": 3422.2181,
+        "savedMs": 864.2876999999999,
+        "savedFraction": 0.2016298916474113
+      },
+      {
+        "pair": 3,
+        "refMs": 4519.9083,
+        "optMs": 2981.5655,
+        "savedMs": 1538.3428,
+        "savedFraction": 0.34034823228603994
+      },
+      {
+        "pair": 4,
+        "refMs": 4123.3603,
+        "optMs": 3359.9215,
+        "savedMs": 763.4388000000004,
+        "savedFraction": 0.18514967028226959
+      }
+    ],
+    "referenceMedianMs": 4519.9083,
+    "candidateMedianMs": 3278.3498,
+    "pairedSavedMedianMs": 1538.3428,
+    "pairedSavedRangeMs": [
+      763.4388000000004,
+      1806.2119000000002
+    ],
+    "pairedSavedFractionMedian": 0.3397120521213314,
+    "candidateFasterPairs": 5,
+    "areaBitDifferences": 0,
+    "memoryLimit": "Mono allocation API valid only if sentinel succeeded; Mono live/reserved snapshots are observed heap size, not allocation/peak/isolated retained Compute memory. No counters/recorders/stage timers inside Compute."
+  },
+  "selection": {
+    "pairs": 81,
+    "maskDifferences": 0,
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area508\\SELECTION508.json",
+    "sha256": "3279b53aa814d5e458660f7a0770cc48787398434697586bb7ca8173a263d6be"
+  },
+  "actual": {
+    "status": "ACTUAL_THREE_ADJACENT_WALK_EQUIVALENCE_ONLY_NOT_REALTIME",
+    "frames": [
+      {
+        "target": 21,
+        "phase": 1.26250255,
+        "samePoseLight": true,
+        "source505VsCandidate508": {
+          "FINAL": {
+            "valueDifferences": 346,
+            "maxAbsDifference": 2.9802322387695312e-08
+          },
+          "OWNER": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "META": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "UV": {
+            "valueDifferences": 55,
+            "maxAbsDifference": 1.4901161193847656e-08
+          },
+          "RAW": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAWUV": {
+            "valueDifferences": 56,
+            "maxAbsDifference": 1.4901161193847656e-08
+          },
+          "HAIR": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIRUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "PREPARED": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "NATIVE": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "MASK": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          }
+        },
+        "pngDifferentPixels": 0,
+        "savedPredictionMaskDifference": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "cost": {
+          "base505RenderMs": 5477.616799995303,
+          "alt508RenderMs": 4004.1914000030374,
+          "base505AreaMs": 4598.8107,
+          "visibleAreaMs": 3303.0401,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "target": 22,
+        "phase": 1.2750026,
+        "samePoseLight": true,
+        "source505VsCandidate508": {
+          "FINAL": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "OWNER": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "META": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "UV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAW": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAWUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIR": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIRUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "PREPARED": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "NATIVE": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "MASK": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          }
+        },
+        "pngDifferentPixels": 0,
+        "savedPredictionMaskDifference": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "cost": {
+          "base505RenderMs": 4820.2702999988105,
+          "alt508RenderMs": 4129.34879999375,
+          "base505AreaMs": 4051.0712000000003,
+          "visibleAreaMs": 3412.5442000000003,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "target": 23,
+        "phase": 1.28750265,
+        "samePoseLight": true,
+        "source505VsCandidate508": {
+          "FINAL": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "OWNER": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "META": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "UV": {
+            "valueDifferences": 4,
+            "maxAbsDifference": 1.4901161193847656e-08
+          },
+          "RAW": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAWUV": {
+            "valueDifferences": 4,
+            "maxAbsDifference": 1.4901161193847656e-08
+          },
+          "HAIR": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIRUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "PREPARED": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "NATIVE": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "MASK": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          }
+        },
+        "pngDifferentPixels": 0,
+        "savedPredictionMaskDifference": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "cost": {
+          "base505RenderMs": 4912.873499997659,
+          "alt508RenderMs": 3735.9314000059385,
+          "base505AreaMs": 4108.1477,
+          "visibleAreaMs": 2963.1016,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      }
+    ],
+    "allPoseLightMatched": true,
+    "allBufferValueDifferences": 465,
+    "predictionMaskDifferenceTotal": 0,
+    "nativeOutsideHairTotal": 0,
+    "nativeOutsideFaceTotal": 0,
+    "uniqueDeformedHairGeometryFingerprints": 3,
+    "cost": {
+      "base505RenderMs": {
+        "min": 4820.2702999988105,
+        "median": 4912.873499997659,
+        "max": 5477.616799995303
+      },
+      "alt508RenderMs": {
+        "min": 3735.9314000059385,
+        "median": 4004.1914000030374,
+        "max": 4129.34879999375
+      },
+      "base505AreaMs": {
+        "min": 4051.0712000000003,
+        "median": 4108.1477,
+        "max": 4598.8107
+      },
+      "visibleAreaMs": {
+        "min": 2963.1016,
+        "median": 3303.0401,
+        "max": 3412.5442000000003
+      }
+    },
+    "limits": [
+      "Three actual adjacent poses, not a new full-loop or new visual quality pass.",
+      "505 reference and508 optimized output are expected to match; a frozen animation cache is not used.",
+      "Editor call timings exclude capture readback and are not target-player FPS.",
+      "The neighbour-cost event, eye/front-view validation and temporal design are unchanged and unresolved."
+    ],
+    "pngDifferentPixelsTotal": 0
+  },
+  "gpuFloatDifferences": {
+    "rows": [
+      {
+        "frame": 0,
+        "stage": "FINAL",
+        "values": 346,
+        "pixels": 216,
+        "maxAbs": 2.9802322387695312e-08,
+        "channels": [
+          100,
+          129,
+          117,
+          0
+        ],
+        "maxUnsignedBitDistance": 2,
+        "finite": true,
+        "positive": true
+      },
+      {
+        "frame": 0,
+        "stage": "UV",
+        "values": 55,
+        "pixels": 55,
+        "maxAbs": 1.4901161193847656e-08,
+        "channels": [
+          26,
+          29,
+          0,
+          0
+        ],
+        "maxUnsignedBitDistance": 19,
+        "finite": true,
+        "positive": true
+      },
+      {
+        "frame": 0,
+        "stage": "RAWUV",
+        "values": 56,
+        "pixels": 56,
+        "maxAbs": 1.4901161193847656e-08,
+        "channels": [
+          27,
+          29,
+          0,
+          0
+        ],
+        "maxUnsignedBitDistance": 19,
+        "finite": true,
+        "positive": true
+      },
+      {
+        "frame": 2,
+        "stage": "UV",
+        "values": 4,
+        "pixels": 3,
+        "maxAbs": 1.4901161193847656e-08,
+        "channels": [
+          3,
+          1,
+          0,
+          0
+        ],
+        "maxUnsignedBitDistance": 3,
+        "finite": true,
+        "positive": true
+      },
+      {
+        "frame": 2,
+        "stage": "RAWUV",
+        "values": 4,
+        "pixels": 3,
+        "maxAbs": 1.4901161193847656e-08,
+        "channels": [
+          3,
+          1,
+          0,
+          0
+        ],
+        "maxUnsignedBitDistance": 3,
+        "finite": true,
+        "positive": true
+      }
+    ],
+    "note": "Unsigned bit-distance equals ULP distance only for finite same-sign nonnegative values; no normalized/corrected buffers."
+  },
+  "walkAnalysis": {
+    "status": "ACTUAL_SHORT_WALK_NOT_FULL_LOOP",
+    "differencesAreNotErrorCounts": true,
+    "allPoseLightMatched": true,
+    "outsideTotals": {
+      "Raw": {
+        "hair": 0,
+        "face": 0
+      },
+      "Hair": {
+        "hair": 0,
+        "face": 0
+      },
+      "Final": {
+        "hair": 0,
+        "face": 0
+      }
+    },
+    "packetMismatchTotal": 0,
+    "bodyColourMismatchTotal": 0,
+    "unsupportedTotal": 0,
+    "gif": {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk508\\WALK508_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 70064,
+      "frames": 3,
+      "cropNativePixels": [
+        378,
+        50,
+        514,
+        348
+      ],
+      "displayDurationMs": 80,
+      "captureDeltaSeconds": 0.016666666666666666,
+      "interpolation": false,
+      "note": "same-execution full-body sequence; uniform palette is presentation compression; original PNG/buffers retained"
+    }
+  },
+  "restorationLog": "[Log] 508STATE play=True paused=False candidate508=False enabled502=False visible505=False old491=False movement=True animator=True speed=1 locomotion=0 clip=Rig|Idle_Loop capture=0 automaticClock=True hooks=PostView366 compiling=False globalProfiler=False",
+  "console": {
+    "historicalBefore": 16,
+    "historicalAfter": 16,
+    "newDelta": 0
+  },
+  "gif": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk508\\WALK508_FULLBODY_BEFORE_AFTER.gif",
+    "bytes": 70064,
+    "sha256": "1d554ac1ea330c13f4cc33f36f3e673394bb9320872912473822af1486188a5d"
+  },
+  "inputs81": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\000.allmesh",
+      "sha256": "448cdc936d21b331242c1675c26431a3647d0d84c1f2dde5074860315c20e952"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\001.allmesh",
+      "sha256": "66107953baefc4498b7c2a3a649b440bc2aa1d2402ceb0da1023af3dcd9b3480"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\002.allmesh",
+      "sha256": "40b1b71e5decc780505ddfa2ac7e46ac6d2674c3079d28f002f9ff2f9a1a2e89"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\003.allmesh",
+      "sha256": "6279feb86938e3111dcc899357f66c030af225ad0a63e457e56058699774e9ef"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\004.allmesh",
+      "sha256": "c509f527d9e0a77d2d9e6fb31f3fb14d83f64051b590455c72286cc3a4ae94d1"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\005.allmesh",
+      "sha256": "83aeaa963226b4572d3113b77969eb75560753c8fbebe85a3b8c6ff51b6d7f9d"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\006.allmesh",
+      "sha256": "6de91c46e1a1c3c5189780b745e549cdc35ca83b1f59172e2d1d4e7261b3e16b"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\007.allmesh",
+      "sha256": "d8721029c2cad9f1c9ba683e972a736f491350b88ddfb0b24ba63c94e760bc00"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\008.allmesh",
+      "sha256": "da6cb986b01ecbffe2250209661f792839e8142ce7e36875855edbfaf5ec84c7"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\009.allmesh",
+      "sha256": "8e871c92a1ebfcad464168100e680b8d631a0d5c673527cad4dba2be0efc0142"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\010.allmesh",
+      "sha256": "cd9f7be1e84579e5b92ebd3ee4d8c6fda74bc7e0e1453bbbe0ad0199b5888e94"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\011.allmesh",
+      "sha256": "6f2f229777417e0fc043c774f67cd66fa904de0d52e17d70887ac2ee3f82e089"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\012.allmesh",
+      "sha256": "bafe795d0d0b2db1c831ce29b5b117b8ab6722f303701f67828f904797ae08bd"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\013.allmesh",
+      "sha256": "19a6c2999a3f20155e658581228296b1f13bff61bab06d30cc287d8c5faf3a98"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\014.allmesh",
+      "sha256": "064cc422caf345473a251d8117f8923b467d1c599cf8a8bc7db776611e59ea7d"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\015.allmesh",
+      "sha256": "2f5906e4467b771baf6fa1c9f3768894ce5072bfcc6a71a22a8e6248d4198e0b"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\016.allmesh",
+      "sha256": "ae4c65205e3d583534e4684e51110fc952651f08563dc5ca4b332248a78445d9"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\017.allmesh",
+      "sha256": "d6725e12aaf1b4976435e20fff884d96a434c499bbf8d30e5b5bada5542b464f"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\018.allmesh",
+      "sha256": "99619b60b01bbbccfc64aaba9b45da76d26ff563752779d49ca1487ae0826aa1"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\019.allmesh",
+      "sha256": "e01b4772557a92eac52346b52941380698500c8c70404f803244abc1ed888582"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\020.allmesh",
+      "sha256": "07ab24b69f8afc801c087e46694569602df4aeef22dd2edc93a3b232c471daa9"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\021.allmesh",
+      "sha256": "bb9119fe7974af6d1876d52680b55b3b3b82844755501e06b638dd2ed8b15265"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\022.allmesh",
+      "sha256": "451b7d4e77e98a43fafdfcc8ac03de2a659488504f810e255dcdae76b2c3910f"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\023.allmesh",
+      "sha256": "be88b4b66f2407409d18d18bfeaeebe74f1b9d72def5d7d4a7b03751d9102e9e"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\024.allmesh",
+      "sha256": "e0d263a3042debbee254be472f5cb1ca3db6f50b24b2a122a99d6e09e151f49c"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\025.allmesh",
+      "sha256": "fb78a2b800823f1cfe5672c50de496530b7f16a8026b9e8aa6258fd59357e8b3"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\026.allmesh",
+      "sha256": "cedb727fdcf441fbdeb058845b2b0db32742cf99a88815361035103d2fc5cdce"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\027.allmesh",
+      "sha256": "9232ed2be2e0280ca33786b52727dd3189444f6a609ae0dbb97f78eb2276bcee"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\028.allmesh",
+      "sha256": "29c360c39c7b8065b5b9f7fa17b92afdf86ccc454acc2e688da5012430766435"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\029.allmesh",
+      "sha256": "c6f28fe2a36bf93d5a5b42981ea6c51fe66e90dc0bf4d96290d8451e143f819b"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\030.allmesh",
+      "sha256": "7a8d5860dbfa27f421325fc00eb5979aa965174e4fa9ee18b3d9f612297436ac"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\031.allmesh",
+      "sha256": "9c8df8e55b043c6ab7bb032cdd9037a23237ed8f66d2c60117924445fc81de6d"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\032.allmesh",
+      "sha256": "bb044dd4cd3488b364fff34aec8ea0ad274b85233e4c2117a5c7e241124499ba"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\033.allmesh",
+      "sha256": "4d5884acfa2bf140368c8635e16cd15c81851d4082a431ab815525911e6003de"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\034.allmesh",
+      "sha256": "460c9b71cdca34f433b1470d4ecd3141343e48ce6b7aaba081b4347b54f80af0"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\035.allmesh",
+      "sha256": "d8c4c0dd0f930b23350f2f13dd67c17e96df42e972902290def4b7d02d7df43d"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\036.allmesh",
+      "sha256": "5738181a927a349546209cb149fa5ebd87162a5e21d7edb21b8dcc9328a601ff"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\037.allmesh",
+      "sha256": "9588e3d7ede09b8b037886c70ba180774d17526496e6f6e386d29eabca258418"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\038.allmesh",
+      "sha256": "7931de8834727c2aeaf42cd58fd13661905d4ad11bb83356c26a12f56e469c67"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\039.allmesh",
+      "sha256": "75d2c0bcfb57e36ed83c2190de1c1fa0fc3064cb699e33e51f65ea09af5d5626"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\040.allmesh",
+      "sha256": "60d81f0252ad54cb3b34982fb0793a73bc4babbc51db80a42ffc8f942c813af6"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\041.allmesh",
+      "sha256": "12bf7b509bf16b166739fcdab326ddc620cdbaf144f6a25c87fee49abdae3cb6"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\042.allmesh",
+      "sha256": "9b222652c5b79907fcd914bef667de8cc00e208544d10cfa263cc7770adbcc6c"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\043.allmesh",
+      "sha256": "5b82ea3d22a0143905fa8b96088b7209966bc1e230f53f8f71b0ef65dbc1381c"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\044.allmesh",
+      "sha256": "2e142987c8ab7f051185bc99c38944ea18a709b7ae2802ee2398ba3c00935f05"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\045.allmesh",
+      "sha256": "b979925e6cf71330bfa441f82377a60e06c4b8586e44d339b3ba80e26c6265ac"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\046.allmesh",
+      "sha256": "4da3525b5c5c62814d35e1a8723e13d3abbb29278de66429e55f40e96148836e"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\047.allmesh",
+      "sha256": "8aadcfe5cb69c9784ce9ec94db4dd686fa8f75ac5a4fa701a2b23696b0cef68d"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\048.allmesh",
+      "sha256": "aeafc6ee416f1f9782323d101ff0cafe537faab0b3875471b84b99bfc75cdd40"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\049.allmesh",
+      "sha256": "2bfa6a70ee8e9debb3d5dddecba28f4b826caeddef63100a69ef44a903189536"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\050.allmesh",
+      "sha256": "cdc0834c2ef357fb4508e4bf196e2f6627d220e80757f6de7ae4f7b0b2cdaea1"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\051.allmesh",
+      "sha256": "7236b39ad645e63e24fdabfb14354da9b5b3480578699772dc92a42695f3ea55"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\052.allmesh",
+      "sha256": "34d2eb93b8eb4552e61a587e1a88a1239e4ff5aaa02cbfafe7a8105af44d04df"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\053.allmesh",
+      "sha256": "96749e2b606b52df20d51b3031414511716047524ad101e62ca3364a66b07d1e"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\054.allmesh",
+      "sha256": "4d56fbf0183b492da9bb454e0a229712153dc0b25b77face02328441ff7b4d36"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\055.allmesh",
+      "sha256": "910c971ee6540e10eec92f65d5bf255e820f9118ad62d2eebe2b43c688c6b25c"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\056.allmesh",
+      "sha256": "f8a06bc0b8a20bbd553df7ea8bc01d786e959684d38b45310a099aebc7748b9c"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\057.allmesh",
+      "sha256": "0bbfaa8a17f67011e352aa24c057c7e5881f6b51738e0ca45fa27c8d8d2ac96a"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\058.allmesh",
+      "sha256": "076077cb5e7bf9d34432dcfab5fa724bad16e8fd8cd1a82b8acfedb60106907b"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\059.allmesh",
+      "sha256": "aea6eddaac66ae822f13ea41b51ace0de19c00e1fce634faec766c689e6c7f16"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\060.allmesh",
+      "sha256": "477e539e7dcd7399e3837220bc4cbc74336c1758d4ccae2fe11b73629ace0e11"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\061.allmesh",
+      "sha256": "3417e14f24df8b0186468c3ef95a1fa1546c0327e682b415d54bbcae26cda9b1"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\062.allmesh",
+      "sha256": "961ec4545256c3db6de010b1e3ff4bf3432e8b32122055c4c4d45a5b4e8c3918"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\063.allmesh",
+      "sha256": "72cb41722515c763669cd3ef1a908c1431f98a1d75b1eef25a8b2ee74ac52b32"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\064.allmesh",
+      "sha256": "b1a6db94fa42aa81ed9c2c74fa3726d5c51748163b91d3a2f0a8441ee1c682fd"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\065.allmesh",
+      "sha256": "7d39201e394eb9b638b9ee39fc3925a1402e199ec9cee2fe1764a9932157f442"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\066.allmesh",
+      "sha256": "41d8d26c2a942ef88206363146a8c5196cdafecfb7b72d77c1f202491e4b83e8"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\067.allmesh",
+      "sha256": "e43b8e3d8f570b458751e0dcc3dee7041833b91a42d2e507a3ba60035e70fdce"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\068.allmesh",
+      "sha256": "071fb26036cbb54f88b9c5efe25d0145adf1f6a7e09b82f491807f32274c719c"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\069.allmesh",
+      "sha256": "a4fb6ecb9291e522e5e72fcd9958d8b66a994124c3fb58747618055c41113de3"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\070.allmesh",
+      "sha256": "09748029b087b275c23707afea544cf6447742dfcee2a21f1977d4fc49094311"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\071.allmesh",
+      "sha256": "f710a5923315abb22d4639db14b4dc53130f764fae4516fc49828976dbc92265"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\072.allmesh",
+      "sha256": "dda2d40a97189b1d379f35a8e3bb0ccf23ef9e209266956569f71a3184e6c083"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\073.allmesh",
+      "sha256": "6cd2d129d6b6447b67b2abece8de8719321f521de88420ea093706855ea08baf"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\074.allmesh",
+      "sha256": "c309d7cd3df67a00ea7624dcb43d96ceb1ef2916b4149d97304b8fe5e49ee262"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\075.allmesh",
+      "sha256": "6106276a02de03c2f3dceb0cdf5f868e56411018b71f9279b1dfb24101c75660"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\076.allmesh",
+      "sha256": "5d8dd95e39c788c3ee072c40a6ee23314e350ff0cdcea28c0a63b40456c2aebe"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\077.allmesh",
+      "sha256": "0a920f9df7d8d9cb5415adeb1dc4c86f2dbe0974d2505fdce5061cd4658de970"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\078.allmesh",
+      "sha256": "35fb2b56ac02307cd299b9ac62920a164f4192c5cecb79a35a85b767f89b22d8"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\079.allmesh",
+      "sha256": "32e619664e58e4e16ccc5f4a47c812152e423219500827a3727b912c1c7ad487"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\080.allmesh",
+      "sha256": "80edfc883087cea2699b154c8d75bd725cc4acdf87af7731591bb3117e208bf0"
+    }
+  ],
+  "noFullLoopRecapture": true,
+  "noLibraryRetry": true
+}

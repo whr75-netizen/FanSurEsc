@@ -35,9 +35,83 @@ public static class HeadArea505
     static int Coverage(Material m,T t,List<P> p){double threshold=m.mode==1?m.cutoff:6.103515625e-5;if(m.min>=threshold)return 1;if(m.max<threshold)return 0;double u0=double.PositiveInfinity,v0=u0,u1=double.NegativeInfinity,v1=u1;foreach(var q in p){double u=t.u.At(q)*m.width-.5,v=t.v.At(q)*m.height-.5;u0=Math.Min(u0,u);u1=Math.Max(u1,u);v0=Math.Min(v0,v);v1=Math.Max(v1,v);}int xa=(int)Math.Floor(u0),xb=(int)Math.Ceiling(u1),ya=(int)Math.Floor(v0),yb=(int)Math.Ceiling(v1);int lo=255,hi=0;for(int y=ya;y<=yb;y++)for(int x=xa;x<=xb;x++){int n=m.alpha[Mod(y,m.height)*m.width+Mod(x,m.width)];lo=Math.Min(lo,n);hi=Math.Max(hi,n);}if(lo/255.0>=threshold)return 1;if(hi/255.0<threshold)return 0;return -1;}
     static List<List<P>> Remove(List<List<P>> source,List<P> remove){var output=new List<List<P>>();foreach(var p in source)output.AddRange(Subtract(p,remove));return output;}
     static double Length(List<List<P>> polygons,double y){var spans=new List<P>();foreach(var p in polygons){double lo=double.PositiveInfinity,hi=double.NegativeInfinity;for(int i=0;i<p.Count;i++){var a=p[i];var b=p[(i+1)%p.Count];if((a.y<=y&&y<b.y)||(b.y<=y&&y<a.y)){double x=a.x+(y-a.y)*(b.x-a.x)/(b.y-a.y);lo=Math.Min(lo,x);hi=Math.Max(hi,x);}}if(lo<hi)spans.Add(new P(lo,hi));}spans.Sort((a,b)=>a.x.CompareTo(b.x));double end=double.NegativeInfinity,length=0;foreach(var span in spans){length+=Math.Max(0,span.y-Math.Max(span.x,end));end=Math.Max(end,span.y);}return length;}
-    public static double Union(List<List<P>> polygons){if(polygons.Count==0)return 0;var levels=new List<double>();var edges=new List<P[]>();foreach(var p in polygons)for(int i=0;i<p.Count;i++){var a=p[i];var b=p[(i+1)%p.Count];levels.Add(a.y);if(Math.Abs(a.y-b.y)>1e-12)edges.Add(new[]{a,b});}for(int i=0;i<edges.Count;i++){var a=edges[i][0];var b=edges[i][1];double k=(b.x-a.x)/(b.y-a.y),c=a.x-k*a.y;for(int j=i+1;j<edges.Count;j++){var aa=edges[j][0];var bb=edges[j][1];double kk=(bb.x-aa.x)/(bb.y-aa.y),cc=aa.x-kk*aa.y;if(Math.Abs(k-kk)<1e-12)continue;double y=(cc-c)/(k-kk);if(y>Math.Max(Math.Min(a.y,b.y),Math.Min(aa.y,bb.y))+1e-11&&y<Math.Min(Math.Max(a.y,b.y),Math.Max(aa.y,bb.y))-1e-11)levels.Add(y);}}levels.Sort();double total=0;for(int i=0;i+1<levels.Count;i++){double dy=levels[i+1]-levels[i];if(dy>1e-12)total+=dy*Length(polygons,(levels[i]+levels[i+1])*.5);}return Math.Max(0,Math.Min(1,total));}
+    // Candidate508 changes only Union/Length polygon candidates. DefaultOFF.
+    public static bool UseActivePolygons508;
+    public static double Union(List<List<P>> polygons){if(UseActivePolygons508)return Union508(polygons);if(polygons.Count==0)return 0;var levels=new List<double>();var edges=new List<P[]>();foreach(var p in polygons)for(int i=0;i<p.Count;i++){var a=p[i];var b=p[(i+1)%p.Count];levels.Add(a.y);if(Math.Abs(a.y-b.y)>1e-12)edges.Add(new[]{a,b});}for(int i=0;i<edges.Count;i++){var a=edges[i][0];var b=edges[i][1];double k=(b.x-a.x)/(b.y-a.y),c=a.x-k*a.y;for(int j=i+1;j<edges.Count;j++){var aa=edges[j][0];var bb=edges[j][1];double kk=(bb.x-aa.x)/(bb.y-aa.y),cc=aa.x-kk*aa.y;if(Math.Abs(k-kk)<1e-12)continue;double y=(cc-c)/(k-kk);if(y>Math.Max(Math.Min(a.y,b.y),Math.Min(aa.y,bb.y))+1e-11&&y<Math.Min(Math.Max(a.y,b.y),Math.Max(aa.y,bb.y))-1e-11)levels.Add(y);}}levels.Sort();double total=0;for(int i=0;i+1<levels.Count;i++){double dy=levels[i+1]-levels[i];if(dy>1e-12)total+=dy*Length(polygons,(levels[i]+levels[i+1])*.5);}return Math.Max(0,Math.Min(1,total));}
     public static Result Compute(Input input,Material[] materials){var watch=Stopwatch.StartNew();int w=input.w,h=input.h;var bins=new List<T>[w*h];foreach(var t in input.triangles){int x0=Math.Max(input.x,(int)Math.Floor(t.x0)),y0=Math.Max(input.y,(int)Math.Floor(t.y0)),x1=Math.Min(input.x+w-1,(int)Math.Floor(t.x1)),y1=Math.Min(input.y+h-1,(int)Math.Floor(t.y1));for(int y=y0;y<=y1;y++)for(int x=x0;x<=x1;x++){int at=(y-input.y)*w+x-input.x;if(bins[at]==null)bins[at]=new List<T>();bins[at].Add(t);}}var output=new Result{lower=new float[w*h],upper=new float[w*h]};for(int y=input.y;y<input.y+h;y++)for(int x=input.x;x<input.x+w;x++){int at=(y-input.y)*w+x-input.x;var bin=bins[at];if(bin==null)continue;var lower=new List<List<P>>();var upper=new List<List<P>>();foreach(var t in bin){if(t.renderer!=2)continue;var p=Cell(t,x,y);if(Area(p)<1e-12)continue;var lo=new List<List<P>>{p};var hi=new List<List<P>>{p};foreach(var o in bin){if(o.renderer==2||o.z0>=t.z1||o.x1<t.x0||o.x0>t.x1||o.y1<t.y0||o.y0>t.y1)continue;if(t.z.x==o.z.x&&t.z.y==o.z.y&&t.z.c==o.z.c)continue;var overlap=Overlap(p,o);overlap=Clip(overlap,new Plane{x=t.z.x-o.z.x,y=t.z.y-o.z.y,c=t.z.c-o.z.c});if(Area(overlap)<1e-12)continue;int coverage=Coverage(materials[o.sm],o,overlap);if(coverage==0)continue;lo=Remove(lo,overlap);if(coverage>0)hi=Remove(hi,overlap);else output.ambiguousFragments++;}lower.AddRange(lo);upper.AddRange(hi);}output.lower[at]=(float)Union(lower);output.upper[at]=(float)Union(upper);}watch.Stop();output.milliseconds=watch.Elapsed.TotalMilliseconds;return output;}
 
+
+    // Only candidates for Length change. The original polygon order, edge
+    // formula, events, midpoint integration and span sort/merge stay unchanged.
+    static double Length508(List<List<P>> polygons,List<int> active,double y)
+    {
+        var spans=new List<P>();
+        foreach(int index in active)
+        {
+            var p=polygons[index];double lo=double.PositiveInfinity,hi=double.NegativeInfinity;
+            for(int i=0;i<p.Count;i++)
+            {
+                var a=p[i];var b=p[(i+1)%p.Count];
+                if((a.y<=y&&y<b.y)||(b.y<=y&&y<a.y))
+                {double x=a.x+(y-a.y)*(b.x-a.x)/(b.y-a.y);lo=Math.Min(lo,x);hi=Math.Max(hi,x);}
+            }
+            if(lo<hi)spans.Add(new P(lo,hi));
+        }
+        spans.Sort((a,b)=>a.x.CompareTo(b.x));
+        double end=double.NegativeInfinity,length=0;
+        foreach(var span in spans)
+        {length+=Math.Max(0,span.y-Math.Max(span.x,end));end=Math.Max(end,span.y);}
+        return length;
+    }
+    static double Union508(List<List<P>> polygons)
+    {
+        if(polygons.Count==0)return 0;
+        var levels=new List<double>();var edges=new List<P[]>();
+        int count=polygons.Count;
+        var minY=new double[count];var maxY=new double[count];
+        var starts=new int[count];var ends=new int[count];
+        for(int index=0;index<count;index++)
+        {
+            var p=polygons[index];double lo=double.PositiveInfinity,hi=double.NegativeInfinity;
+            for(int i=0;i<p.Count;i++)
+            {
+                var a=p[i];var b=p[(i+1)%p.Count];levels.Add(a.y);
+                if(Math.Abs(a.y-b.y)>1e-12)edges.Add(new[]{a,b});
+                lo=Math.Min(lo,a.y);hi=Math.Max(hi,a.y);
+            }
+            minY[index]=lo;maxY[index]=hi;starts[index]=ends[index]=index;
+        }
+        // Keep every original pair operation and every original event.
+        for(int i=0;i<edges.Count;i++)
+        {
+            var a=edges[i][0];var b=edges[i][1];double k=(b.x-a.x)/(b.y-a.y),c=a.x-k*a.y;
+            for(int j=i+1;j<edges.Count;j++)
+            {
+                var aa=edges[j][0];var bb=edges[j][1];double kk=(bb.x-aa.x)/(bb.y-aa.y),cc=aa.x-kk*aa.y;
+                if(Math.Abs(k-kk)<1e-12)continue;
+                double y=(cc-c)/(k-kk);
+                if(y>Math.Max(Math.Min(a.y,b.y),Math.Min(aa.y,bb.y))+1e-11&&y<Math.Min(Math.Max(a.y,b.y),Math.Max(aa.y,bb.y))-1e-11)levels.Add(y);
+            }
+        }
+        levels.Sort();
+        Array.Sort(starts,(i,j)=>{int c=minY[i].CompareTo(minY[j]);return c!=0?c:i.CompareTo(j);});
+        Array.Sort(ends,(i,j)=>{int c=maxY[i].CompareTo(maxY[j]);return c!=0?c:i.CompareTo(j);});
+        var active=new List<int>(count);int startAt=0,endAt=0;double total=0;
+        for(int i=0;i+1<levels.Count;i++)
+        {
+            double dy=levels[i+1]-levels[i];if(!(dy>1e-12))continue;
+            double y=(levels[i]+levels[i+1])*.5;
+            while(endAt<count&&maxY[ends[endAt]]<=y)
+            {int at=active.BinarySearch(ends[endAt++]);if(at>=0)active.RemoveAt(at);}
+            while(startAt<count&&minY[starts[startAt]]<=y)
+            {
+                int index=starts[startAt++];
+                if(y<maxY[index]){int at=active.BinarySearch(index);active.Insert(~at,index);}
+            }
+            total+=dy*Length508(polygons,active,y);
+        }
+        return Math.Max(0,Math.Min(1,total));
+    }
 
     static readonly Dictionary<Texture2D, byte[]> AlphaCache = new();
     static readonly Dictionary<Texture2D, uint> AlphaVersions = new();

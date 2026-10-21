@@ -1,0 +1,844 @@
+{
+  "status": "REJECTED_COMPARISON_ARTIFACT_ONLY_RUNTIME_RESTORED_505",
+  "baseCommit": "42cb52bc36ec439949e7a031c5fc5fe843dc13ac",
+  "singleChange": "Union intersection candidate enumeration: y-interval ordering and early stop, then disjoint x-interval rejection. All polygons, event vertices, accepted intersection arithmetic, area integration, occlusion/alpha bounds and selector costs unchanged.",
+  "offline": {
+    "status": "COMPLETED",
+    "pairedInputs": 81,
+    "order": "even reference-first / odd optimized-first",
+    "areaBitDifferences": 0,
+    "maximumAreaDifference": 0.0,
+    "unchangedClipAndOcclusionCounts": true,
+    "sameRawPotentialPairCounts": true,
+    "metrics": {
+      "refMs": {
+        "min": 1006.3176,
+        "median": 1120.8866,
+        "max": 1889.658,
+        "sum": 93018.4673
+      },
+      "optMs": {
+        "min": 937.7371,
+        "median": 1040.5531,
+        "max": 1409.6016,
+        "sum": 85489.2744
+      },
+      "refUnionMs": {
+        "min": 840.6154,
+        "median": 931.1209,
+        "max": 1641.6853,
+        "sum": 77140.7077
+      },
+      "optUnionMs": {
+        "min": 761.036,
+        "median": 844.2931,
+        "max": 1129.8262,
+        "sum": 69482.8642
+      },
+      "refAllocatedBytes": {
+        "min": 692419096.0,
+        "median": 741740264.0,
+        "max": 888490088.0,
+        "sum": 61077214872.0
+      },
+      "optAllocatedBytes": {
+        "min": 693228352.0,
+        "median": 742550688.0,
+        "max": 889334024.0,
+        "sum": 61143181304.0
+      },
+      "refPairs": {
+        "min": 20230983.0,
+        "median": 21368608.0,
+        "max": 36146539.0,
+        "sum": 1766629821.0
+      },
+      "optSweepPairs": {
+        "min": 6895611.0,
+        "median": 7117463.0,
+        "max": 17394003.0,
+        "sum": 607729944.0
+      },
+      "optLineTests": {
+        "min": 3011966.0,
+        "median": 3105395.0,
+        "max": 13204958.0,
+        "sum": 280156075.0
+      }
+    },
+    "medianPairedSpeedup": 1.0820918505321395,
+    "meanTimeReduction": 0.08094299033886587,
+    "meanLineTestReduction": 0.8414177822259233,
+    "meanAllocationChangeBytes": 814400.3950617284,
+    "memoryMeaning": "Managed bytes allocated by the synchronous Compute call on its current thread. Input/material loading and comparison are outside; this is not peak/retained RAM or GPU memory.",
+    "runtimeMeaning": "Offline CoreCLR, instrumentation enabled equally. No realtime/player-FPS claim.",
+    "uniqueDeformedGeometryInputs": 81
+  },
+  "selectionMaskDifferenceTotal": 0,
+  "actual": {
+    "status": "ACTUAL_THREE_ADJACENT_WALK_EQUIVALENCE_ONLY_NOT_REALTIME",
+    "frames": [
+      {
+        "target": 21,
+        "phase": 1.26250255,
+        "samePoseLight": true,
+        "source505VsCandidate506": {
+          "FINAL": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "OWNER": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "META": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "UV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAW": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAWUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIR": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIRUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "PREPARED": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "NATIVE": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "MASK": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          }
+        },
+        "pngDifferentPixels": 0,
+        "savedPredictionMaskDifference": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "cost": {
+          "base505RenderMs": 4939.364999998361,
+          "alt506RenderMs": 4929.321100004017,
+          "base505AreaMs": 4173.9972,
+          "visibleAreaMs": 4217.9869,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "target": 22,
+        "phase": 1.2750026,
+        "samePoseLight": true,
+        "source505VsCandidate506": {
+          "FINAL": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "OWNER": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "META": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "UV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAW": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAWUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIR": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIRUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "PREPARED": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "NATIVE": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "MASK": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          }
+        },
+        "pngDifferentPixels": 0,
+        "savedPredictionMaskDifference": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "cost": {
+          "base505RenderMs": 5225.602100006654,
+          "alt506RenderMs": 4811.614399994141,
+          "base505AreaMs": 4456.6198,
+          "visibleAreaMs": 4086.3665,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      },
+      {
+        "target": 23,
+        "phase": 1.28750265,
+        "samePoseLight": true,
+        "source505VsCandidate506": {
+          "FINAL": {
+            "valueDifferences": 387,
+            "maxAbsDifference": 3.725290298461914e-09
+          },
+          "OWNER": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "META": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "UV": {
+            "valueDifferences": 53,
+            "maxAbsDifference": 1.4901161193847656e-08
+          },
+          "RAW": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "RAWUV": {
+            "valueDifferences": 53,
+            "maxAbsDifference": 1.4901161193847656e-08
+          },
+          "HAIR": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "HAIRUV": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "PREPARED": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "NATIVE": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          },
+          "MASK": {
+            "valueDifferences": 0,
+            "maxAbsDifference": 0.0
+          }
+        },
+        "pngDifferentPixels": 0,
+        "savedPredictionMaskDifference": 0,
+        "nativeOutsideHair": 0,
+        "nativeOutsideFace": 0,
+        "cost": {
+          "base505RenderMs": 4844.144899994717,
+          "alt506RenderMs": 4994.982999996864,
+          "base505AreaMs": 4126.8084,
+          "visibleAreaMs": 4252.6159,
+          "uncertainAreaCells": 0,
+          "selectionAmbiguousCells": 0
+        }
+      }
+    ],
+    "allPoseLightMatched": true,
+    "allBufferValueDifferences": 493,
+    "predictionMaskDifferenceTotal": 0,
+    "nativeOutsideHairTotal": 0,
+    "nativeOutsideFaceTotal": 0,
+    "uniqueDeformedHairGeometryFingerprints": 3,
+    "cost": {
+      "base505RenderMs": {
+        "min": 4844.144899994717,
+        "median": 4939.364999998361,
+        "max": 5225.602100006654
+      },
+      "alt506RenderMs": {
+        "min": 4811.614399994141,
+        "median": 4929.321100004017,
+        "max": 4994.982999996864
+      },
+      "base505AreaMs": {
+        "min": 4126.8084,
+        "median": 4173.9972,
+        "max": 4456.6198
+      },
+      "visibleAreaMs": {
+        "min": 4086.3665,
+        "median": 4217.9869,
+        "max": 4252.6159
+      }
+    },
+    "limits": [
+      "Three actual adjacent poses, not a new full-loop or new visual quality pass.",
+      "505 reference and506 optimized output are expected to match; a frozen animation cache is not used.",
+      "Editor call timings exclude capture readback and are not target-player FPS.",
+      "The neighbour-cost event, eye/front-view validation and temporal design are unchanged and unresolved."
+    ],
+    "pngDifferentPixelsTotal": 0
+  },
+  "basicChecks": {
+    "status": "ACTUAL_SHORT_WALK_NOT_FULL_LOOP",
+    "differencesAreNotErrorCounts": true,
+    "allPoseLightMatched": true,
+    "outsideTotals": {
+      "Raw": {
+        "hair": 0,
+        "face": 0
+      },
+      "Hair": {
+        "hair": 0,
+        "face": 0
+      },
+      "Final": {
+        "hair": 0,
+        "face": 0
+      }
+    },
+    "packetMismatchTotal": 0,
+    "bodyColourMismatchTotal": 0,
+    "unsupportedTotal": 0,
+    "gif": {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk506\\WALK506_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 64557,
+      "frames": 3,
+      "cropNativePixels": [
+        378,
+        50,
+        514,
+        348
+      ],
+      "displayDurationMs": 80,
+      "captureDeltaSeconds": 0.016666666666666666,
+      "interpolation": false,
+      "note": "3 paired full-body frames in one actual adjacent interval; this GIF repeats a short excerpt. No spatial resize/interpolation; 80ms slow inspection; original PNG/buffers preserved.",
+      "sha256": "6db7818c40f91df763fca2cb6f4d5e4a5b654f5c23854320f954b35ede7ea3c0",
+      "groups": 1
+    }
+  },
+  "remainingCostBreakdown": {
+    "index": 22.0,
+    "phase": 1.275001049041748,
+    "refMs": 1788.2116,
+    "optMs": 1018.2552,
+    "refUnionMs": 1563.8807,
+    "optUnionMs": 815.2359,
+    "refAllocatedBytes": 741734288.0,
+    "optAllocatedBytes": 742550688.0,
+    "refPairs": 21710000.0,
+    "optSweepPairs": 7115213.0,
+    "optLineTests": 3078650.0,
+    "optPotentialPairs": 21710000.0,
+    "refClipCalls": 2355912.0,
+    "optClipCalls": 2355912.0,
+    "refOcclusionPairs": 136803.0,
+    "optOcclusionPairs": 136803.0,
+    "areaBitDifferences": 0.0,
+    "maxAreaDifference": 0.0,
+    "refLengthMs": 1298.0094,
+    "optLengthMs": 667.9118,
+    "refLengthCalls": 221498.0,
+    "optLengthCalls": 221498.0,
+    "candidateLengthFractionOfCompute": 0.6559375292166443,
+    "note": "One offline instrumented pose; timestamp overhead included. Reference-first cold/JIT stage times are not interpreted as an optimization speedup. Calls are identical; candidate time share locates remaining work."
+  },
+  "actualFloatDifferences": {
+    "RAWUV": {
+      "floatDifferences": 53,
+      "pixels": 51,
+      "maxAbs": 1.4901161193847656e-08,
+      "maxULP": 7,
+      "roles": {
+        "12": 3,
+        "13": 5,
+        "14": 43
+      },
+      "channels": [
+        0,
+        1
+      ]
+    },
+    "UV": {
+      "floatDifferences": 53,
+      "pixels": 51,
+      "maxAbs": 1.4901161193847656e-08,
+      "maxULP": 7,
+      "roles": {
+        "12": 3,
+        "13": 5,
+        "14": 43
+      },
+      "channels": [
+        0,
+        1
+      ]
+    },
+    "FINAL": {
+      "floatDifferences": 387,
+      "pixels": 261,
+      "maxAbs": 3.725290298461914e-09,
+      "maxULP": 2,
+      "roles": {
+        "12": 16,
+        "13": 38,
+        "14": 207
+      },
+      "channels": [
+        0,
+        1,
+        2
+      ]
+    },
+    "interpretation": "Only last actual pose has sub-presentation float differences; earliest observed stage RAWUV, roles12/13/14. Mask/owner/primitive/depth/Native/independentHairUV and PNG match. Underlying rendering/rounding cause was not isolated; no claim of all-buffer bit equality."
+  },
+  "betweenActualPosePngChanges": {
+    "counts": [
+      33340,
+      32647
+    ],
+    "meaning": "Motion evidence, not error counts. Each same-pose505/506 image still matches exactly."
+  },
+  "referencePreserved": {
+    "archive": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area506\\Reference505.cs",
+    "sha256": "c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7",
+    "gate": "The tested snapshot had a defaultOFF gate. The current runtime helper is restored exactly to505 and contains no506 branch; the rejected candidate is stored only in a noncompiled diff."
+  },
+  "settingsSha256": {
+    "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "deliverables": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area506\\Paired81\\paired.csv",
+      "bytes": 12228,
+      "sha256": "41b920b7309aa75aece0257c05147a8418af8500089a8214fe855114e00d571a"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area506\\PAIRED_SUMMARY506.json",
+      "bytes": 2021,
+      "sha256": "df6d9eae7526bd7cec88fd2f11eaa92a44597bbbd6cf0b662527ec2f6176df02"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area506\\SELECTION506.json",
+      "bytes": 239619,
+      "sha256": "3279b53aa814d5e458660f7a0770cc48787398434697586bb7ca8173a263d6be"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area506\\Breakdown22\\paired.csv",
+      "bytes": 472,
+      "sha256": "ff2ada9e71f428e7b1388cfca72a806f7b8e5fd0b347ce8bf91aa4eb0c2d9259"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\fixtures506.json",
+      "bytes": 28806,
+      "sha256": "b10f33068dd4a78effdb316972c733cbc55c4788704595f451b45a7cada1d3d6"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\FINAL_RESTORED506.json",
+      "bytes": 21144,
+      "sha256": "fc33ded5b5b56d958883c2c1e231cf8b622e427e9e0ea9972edc5f7a0e9658dd"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk506\\ACTUAL_REVIEW506.json",
+      "bytes": 6266,
+      "sha256": "7e1903aa9eec7e802401af871cf0a2d08b2ff8d858e1407ad0f8ae328ba02ef3"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk506\\WALK506_FULLBODY_BEFORE_AFTER.gif",
+      "bytes": 64557,
+      "sha256": "6db7818c40f91df763fca2cb6f4d5e4a5b654f5c23854320f954b35ede7ea3c0"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk506\\FLOAT_ROUNDING506.json",
+      "bytes": 740,
+      "sha256": "49ea0e90f1e884c183103dda4e57eee21bb8564b4a12b827e773ff32486c94cc"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Record506\\REJECTED_CANDIDATE506.diff",
+      "bytes": 8911,
+      "sha256": "07891c746ee52e2b856264dff5fbdca02db8e9dd68e94efb66d7e46de02e2149"
+    }
+  ],
+  "inputSet": {
+    "geometryDirectory": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499",
+    "geometrySha256": [
+      {
+        "index": 0,
+        "sha256": "448cdc936d21b331242c1675c26431a3647d0d84c1f2dde5074860315c20e952"
+      },
+      {
+        "index": 1,
+        "sha256": "66107953baefc4498b7c2a3a649b440bc2aa1d2402ceb0da1023af3dcd9b3480"
+      },
+      {
+        "index": 2,
+        "sha256": "40b1b71e5decc780505ddfa2ac7e46ac6d2674c3079d28f002f9ff2f9a1a2e89"
+      },
+      {
+        "index": 3,
+        "sha256": "6279feb86938e3111dcc899357f66c030af225ad0a63e457e56058699774e9ef"
+      },
+      {
+        "index": 4,
+        "sha256": "c509f527d9e0a77d2d9e6fb31f3fb14d83f64051b590455c72286cc3a4ae94d1"
+      },
+      {
+        "index": 5,
+        "sha256": "83aeaa963226b4572d3113b77969eb75560753c8fbebe85a3b8c6ff51b6d7f9d"
+      },
+      {
+        "index": 6,
+        "sha256": "6de91c46e1a1c3c5189780b745e549cdc35ca83b1f59172e2d1d4e7261b3e16b"
+      },
+      {
+        "index": 7,
+        "sha256": "d8721029c2cad9f1c9ba683e972a736f491350b88ddfb0b24ba63c94e760bc00"
+      },
+      {
+        "index": 8,
+        "sha256": "da6cb986b01ecbffe2250209661f792839e8142ce7e36875855edbfaf5ec84c7"
+      },
+      {
+        "index": 9,
+        "sha256": "8e871c92a1ebfcad464168100e680b8d631a0d5c673527cad4dba2be0efc0142"
+      },
+      {
+        "index": 10,
+        "sha256": "cd9f7be1e84579e5b92ebd3ee4d8c6fda74bc7e0e1453bbbe0ad0199b5888e94"
+      },
+      {
+        "index": 11,
+        "sha256": "6f2f229777417e0fc043c774f67cd66fa904de0d52e17d70887ac2ee3f82e089"
+      },
+      {
+        "index": 12,
+        "sha256": "bafe795d0d0b2db1c831ce29b5b117b8ab6722f303701f67828f904797ae08bd"
+      },
+      {
+        "index": 13,
+        "sha256": "19a6c2999a3f20155e658581228296b1f13bff61bab06d30cc287d8c5faf3a98"
+      },
+      {
+        "index": 14,
+        "sha256": "064cc422caf345473a251d8117f8923b467d1c599cf8a8bc7db776611e59ea7d"
+      },
+      {
+        "index": 15,
+        "sha256": "2f5906e4467b771baf6fa1c9f3768894ce5072bfcc6a71a22a8e6248d4198e0b"
+      },
+      {
+        "index": 16,
+        "sha256": "ae4c65205e3d583534e4684e51110fc952651f08563dc5ca4b332248a78445d9"
+      },
+      {
+        "index": 17,
+        "sha256": "d6725e12aaf1b4976435e20fff884d96a434c499bbf8d30e5b5bada5542b464f"
+      },
+      {
+        "index": 18,
+        "sha256": "99619b60b01bbbccfc64aaba9b45da76d26ff563752779d49ca1487ae0826aa1"
+      },
+      {
+        "index": 19,
+        "sha256": "e01b4772557a92eac52346b52941380698500c8c70404f803244abc1ed888582"
+      },
+      {
+        "index": 20,
+        "sha256": "07ab24b69f8afc801c087e46694569602df4aeef22dd2edc93a3b232c471daa9"
+      },
+      {
+        "index": 21,
+        "sha256": "bb9119fe7974af6d1876d52680b55b3b3b82844755501e06b638dd2ed8b15265"
+      },
+      {
+        "index": 22,
+        "sha256": "451b7d4e77e98a43fafdfcc8ac03de2a659488504f810e255dcdae76b2c3910f"
+      },
+      {
+        "index": 23,
+        "sha256": "be88b4b66f2407409d18d18bfeaeebe74f1b9d72def5d7d4a7b03751d9102e9e"
+      },
+      {
+        "index": 24,
+        "sha256": "e0d263a3042debbee254be472f5cb1ca3db6f50b24b2a122a99d6e09e151f49c"
+      },
+      {
+        "index": 25,
+        "sha256": "fb78a2b800823f1cfe5672c50de496530b7f16a8026b9e8aa6258fd59357e8b3"
+      },
+      {
+        "index": 26,
+        "sha256": "cedb727fdcf441fbdeb058845b2b0db32742cf99a88815361035103d2fc5cdce"
+      },
+      {
+        "index": 27,
+        "sha256": "9232ed2be2e0280ca33786b52727dd3189444f6a609ae0dbb97f78eb2276bcee"
+      },
+      {
+        "index": 28,
+        "sha256": "29c360c39c7b8065b5b9f7fa17b92afdf86ccc454acc2e688da5012430766435"
+      },
+      {
+        "index": 29,
+        "sha256": "c6f28fe2a36bf93d5a5b42981ea6c51fe66e90dc0bf4d96290d8451e143f819b"
+      },
+      {
+        "index": 30,
+        "sha256": "7a8d5860dbfa27f421325fc00eb5979aa965174e4fa9ee18b3d9f612297436ac"
+      },
+      {
+        "index": 31,
+        "sha256": "9c8df8e55b043c6ab7bb032cdd9037a23237ed8f66d2c60117924445fc81de6d"
+      },
+      {
+        "index": 32,
+        "sha256": "bb044dd4cd3488b364fff34aec8ea0ad274b85233e4c2117a5c7e241124499ba"
+      },
+      {
+        "index": 33,
+        "sha256": "4d5884acfa2bf140368c8635e16cd15c81851d4082a431ab815525911e6003de"
+      },
+      {
+        "index": 34,
+        "sha256": "460c9b71cdca34f433b1470d4ecd3141343e48ce6b7aaba081b4347b54f80af0"
+      },
+      {
+        "index": 35,
+        "sha256": "d8c4c0dd0f930b23350f2f13dd67c17e96df42e972902290def4b7d02d7df43d"
+      },
+      {
+        "index": 36,
+        "sha256": "5738181a927a349546209cb149fa5ebd87162a5e21d7edb21b8dcc9328a601ff"
+      },
+      {
+        "index": 37,
+        "sha256": "9588e3d7ede09b8b037886c70ba180774d17526496e6f6e386d29eabca258418"
+      },
+      {
+        "index": 38,
+        "sha256": "7931de8834727c2aeaf42cd58fd13661905d4ad11bb83356c26a12f56e469c67"
+      },
+      {
+        "index": 39,
+        "sha256": "75d2c0bcfb57e36ed83c2190de1c1fa0fc3064cb699e33e51f65ea09af5d5626"
+      },
+      {
+        "index": 40,
+        "sha256": "60d81f0252ad54cb3b34982fb0793a73bc4babbc51db80a42ffc8f942c813af6"
+      },
+      {
+        "index": 41,
+        "sha256": "12bf7b509bf16b166739fcdab326ddc620cdbaf144f6a25c87fee49abdae3cb6"
+      },
+      {
+        "index": 42,
+        "sha256": "9b222652c5b79907fcd914bef667de8cc00e208544d10cfa263cc7770adbcc6c"
+      },
+      {
+        "index": 43,
+        "sha256": "5b82ea3d22a0143905fa8b96088b7209966bc1e230f53f8f71b0ef65dbc1381c"
+      },
+      {
+        "index": 44,
+        "sha256": "2e142987c8ab7f051185bc99c38944ea18a709b7ae2802ee2398ba3c00935f05"
+      },
+      {
+        "index": 45,
+        "sha256": "b979925e6cf71330bfa441f82377a60e06c4b8586e44d339b3ba80e26c6265ac"
+      },
+      {
+        "index": 46,
+        "sha256": "4da3525b5c5c62814d35e1a8723e13d3abbb29278de66429e55f40e96148836e"
+      },
+      {
+        "index": 47,
+        "sha256": "8aadcfe5cb69c9784ce9ec94db4dd686fa8f75ac5a4fa701a2b23696b0cef68d"
+      },
+      {
+        "index": 48,
+        "sha256": "aeafc6ee416f1f9782323d101ff0cafe537faab0b3875471b84b99bfc75cdd40"
+      },
+      {
+        "index": 49,
+        "sha256": "2bfa6a70ee8e9debb3d5dddecba28f4b826caeddef63100a69ef44a903189536"
+      },
+      {
+        "index": 50,
+        "sha256": "cdc0834c2ef357fb4508e4bf196e2f6627d220e80757f6de7ae4f7b0b2cdaea1"
+      },
+      {
+        "index": 51,
+        "sha256": "7236b39ad645e63e24fdabfb14354da9b5b3480578699772dc92a42695f3ea55"
+      },
+      {
+        "index": 52,
+        "sha256": "34d2eb93b8eb4552e61a587e1a88a1239e4ff5aaa02cbfafe7a8105af44d04df"
+      },
+      {
+        "index": 53,
+        "sha256": "96749e2b606b52df20d51b3031414511716047524ad101e62ca3364a66b07d1e"
+      },
+      {
+        "index": 54,
+        "sha256": "4d56fbf0183b492da9bb454e0a229712153dc0b25b77face02328441ff7b4d36"
+      },
+      {
+        "index": 55,
+        "sha256": "910c971ee6540e10eec92f65d5bf255e820f9118ad62d2eebe2b43c688c6b25c"
+      },
+      {
+        "index": 56,
+        "sha256": "f8a06bc0b8a20bbd553df7ea8bc01d786e959684d38b45310a099aebc7748b9c"
+      },
+      {
+        "index": 57,
+        "sha256": "0bbfaa8a17f67011e352aa24c057c7e5881f6b51738e0ca45fa27c8d8d2ac96a"
+      },
+      {
+        "index": 58,
+        "sha256": "076077cb5e7bf9d34432dcfab5fa724bad16e8fd8cd1a82b8acfedb60106907b"
+      },
+      {
+        "index": 59,
+        "sha256": "aea6eddaac66ae822f13ea41b51ace0de19c00e1fce634faec766c689e6c7f16"
+      },
+      {
+        "index": 60,
+        "sha256": "477e539e7dcd7399e3837220bc4cbc74336c1758d4ccae2fe11b73629ace0e11"
+      },
+      {
+        "index": 61,
+        "sha256": "3417e14f24df8b0186468c3ef95a1fa1546c0327e682b415d54bbcae26cda9b1"
+      },
+      {
+        "index": 62,
+        "sha256": "961ec4545256c3db6de010b1e3ff4bf3432e8b32122055c4c4d45a5b4e8c3918"
+      },
+      {
+        "index": 63,
+        "sha256": "72cb41722515c763669cd3ef1a908c1431f98a1d75b1eef25a8b2ee74ac52b32"
+      },
+      {
+        "index": 64,
+        "sha256": "b1a6db94fa42aa81ed9c2c74fa3726d5c51748163b91d3a2f0a8441ee1c682fd"
+      },
+      {
+        "index": 65,
+        "sha256": "7d39201e394eb9b638b9ee39fc3925a1402e199ec9cee2fe1764a9932157f442"
+      },
+      {
+        "index": 66,
+        "sha256": "41d8d26c2a942ef88206363146a8c5196cdafecfb7b72d77c1f202491e4b83e8"
+      },
+      {
+        "index": 67,
+        "sha256": "e43b8e3d8f570b458751e0dcc3dee7041833b91a42d2e507a3ba60035e70fdce"
+      },
+      {
+        "index": 68,
+        "sha256": "071fb26036cbb54f88b9c5efe25d0145adf1f6a7e09b82f491807f32274c719c"
+      },
+      {
+        "index": 69,
+        "sha256": "a4fb6ecb9291e522e5e72fcd9958d8b66a994124c3fb58747618055c41113de3"
+      },
+      {
+        "index": 70,
+        "sha256": "09748029b087b275c23707afea544cf6447742dfcee2a21f1977d4fc49094311"
+      },
+      {
+        "index": 71,
+        "sha256": "f710a5923315abb22d4639db14b4dc53130f764fae4516fc49828976dbc92265"
+      },
+      {
+        "index": 72,
+        "sha256": "dda2d40a97189b1d379f35a8e3bb0ccf23ef9e209266956569f71a3184e6c083"
+      },
+      {
+        "index": 73,
+        "sha256": "6cd2d129d6b6447b67b2abece8de8719321f521de88420ea093706855ea08baf"
+      },
+      {
+        "index": 74,
+        "sha256": "c309d7cd3df67a00ea7624dcb43d96ceb1ef2916b4149d97304b8fe5e49ee262"
+      },
+      {
+        "index": 75,
+        "sha256": "6106276a02de03c2f3dceb0cdf5f868e56411018b71f9279b1dfb24101c75660"
+      },
+      {
+        "index": 76,
+        "sha256": "5d8dd95e39c788c3ee072c40a6ee23314e350ff0cdcea28c0a63b40456c2aebe"
+      },
+      {
+        "index": 77,
+        "sha256": "0a920f9df7d8d9cb5415adeb1dc4c86f2dbe0974d2505fdce5061cd4658de970"
+      },
+      {
+        "index": 78,
+        "sha256": "35fb2b56ac02307cd299b9ac62920a164f4192c5cecb79a35a85b767f89b22d8"
+      },
+      {
+        "index": 79,
+        "sha256": "32e619664e58e4e16ccc5f4a47c812152e423219500827a3727b912c1c7ad487"
+      },
+      {
+        "index": 80,
+        "sha256": "80edfc883087cea2699b154c8d75bd725cc4acdf87af7731591bb3117e208bf0"
+      }
+    ],
+    "materialInput": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Area505\\materials505.bin",
+    "materialSha256": "50c98f427bbfc1702ac9048546d5c8a5f8432338fddcf2c9836bcddb4592a6a9"
+  },
+  "restoration": "Direct FINAL_RESTORED506: Play true, paused false, movement true, Animator enabled speed1 Locomotion0 Idle, captureDelta0, automaticClock true, one PostView366 hook,491/502/505/506 flags false, compiling false; diagnostic caches released.",
+  "library": "403 restriction; not retried",
+  "limits": [
+    "This optimization retains identical area/selection behavior; it does not solve neighbour-cost, temporal design, eyes or existing remaining visual questions.",
+    "Offline managed allocation is measured, not peak/retained RAM or GPU memory. Runtime allocation/target-player memory was not measured.",
+    "81 saved-input pairs and3 actual adjacent poses; no repeated full-loop capture.",
+    "No demonstrated actual Editor speedup; area medians5054.174s/5064.218s remain unusable for realtime.",
+    "No current default activation or whole-project completion claim."
+  ],
+  "testedCandidateSource": {
+    "path": "Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadArea505.cs",
+    "sha256": "7722c71ad4bab167808bfeae37a18924e816cdcce245a6d7b9889b965008d40f",
+    "reference505BeforeSha256": "c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7",
+    "referenceUnionBodyUnchanged": true
+  },
+  "runtimeHelperRestored": {
+    "status": "WITHDRAWN_FROM_RUNTIME_COMPARISON_ARTIFACT_ONLY",
+    "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadArea505.cs",
+    "restoredSha256": "c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7",
+    "testedCandidateSha256": "7722c71ad4bab167808bfeae37a18924e816cdcce245a6d7b9889b965008d40f",
+    "patchPath": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Record506\\REJECTED_CANDIDATE506.diff",
+    "patchSha256": "07891c746ee52e2b856264dff5fbdca02db8e9dd68e94efb66d7e46de02e2149"
+  },
+  "adoption": "Rejected: no established actual runtime gain and increased allocation. No506 implementation remains in runtime."
+}

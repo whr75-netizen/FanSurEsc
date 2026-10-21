@@ -3051,3 +3051,18 @@ Interactable (abstract base class)
 - 최소 개선 제안만 남겼다: Union event의 정확 중복 선분 제거 및 XY bbox 비교로 교차 불가능한 변쌍을 제외하고 원polygon 적분은 유지한다. 실제 교차가 없는 후보만 제거하므로 정확도 계약을 유지할 수 있으나 속도향상은 아직 측정하지 않았다. 같은 프레임의 기하 투영·불변 topology/material 재사용도 가능하지만 애니메이션의 변형정점/depth/bin은 매번 갱신해야 한다. 새 최적화 구현/전체 촬영/기본활성화는 하지 않았다.
 - Play/입력/Animator Idle speed1/시계자동/captureDelta0/PostView366 단일훅/491·502·505 모두OFF/비컴파일을 직접 읽어 복원 확인했다.44d13c0/ecde055와 사용자 Quality/Time 해시를 보존했다.22쌍 전신GIF는7구간 점프를 표시한80ms 느린 검수이며 공간 보간/축소가 없고 로컬701898bytes이다. Library403은 재시도/우회하지 않았다.
 - 근거: docs/artifacts/hair-area505/README.md·validation.json·ACTUAL_EVENT_COMPARISON505.png, Current472/Walk505/·Area505/Corrected81/·RESTORED505.json. 정확도 정답 대조용OFF 코드와 실시간 제품은 구별한다. 전체 runtime loop·타clip/각도·일반 시간일관성/계단·명암 덩어리 설계·접지·build 및 전체 프로젝트 완료는 미검증이다.
+
+
+## 220.505 합집합 변쌍 후보제한506 동등성·비용 검증, 기본OFF [CHARACTER-RENDER-01]
+
+-42cb52b의505 Union 본문을 Union505Reference로 그대로 보존하고 기본false인 UseSpatialCandidates506 대안만 추가했다. y최솟값으로 변 인덱스를 정렬해 y구간이 겹치지 않는 이후후보를 중단하고, x구간이 분리된 변쌍을 식 계산 전에 제외한다. 살아남은 쌍은 원래 인덱스순 산술/수치guard를 유지한다. 다각형/꼭짓점/면적적분/가림/alpha상하한/비용함수/UV·depth/눈/시간은 바꾸지 않았다. bbox는 교차후보 거절에만 쓰고 영역경계가 아니다.
+- 저장81기하를 매번 읽어 reference/optimized 순서를 교차 실행했다. 면적 float비트차0·최대면적차0·상하한 cut마스크차0. clip/가림연산수와 원래 잠재변쌍수도 동일하다. 변형기하 fingerprint81개가 모두 다르며 정지캐시/표본근사를 사용하지 않는다. 기존8fixture는 두 모드 모두 통과했고 분리Y/코너접촉/수직접촉/역방향중복4경계fixture도 통과했다.
+- offline CoreCLR 중앙값: 계산1120.887→1040.553ms, Union931.121→844.293ms, 변쌍 식계산21368608→3105395. 전체쌍 합계 기준 변쌍84.14% 감소이나 시간은8.09% 감소이고 paired중앙가속1.082배이다. y겹침 순회중앙값7117463과 실제변쌍식3105395를 구별한다. 관리할당 중앙값741.740→742.551MB, 평균814400bytes/pose 증가. 이는 Compute현재thread의 누적할당이지 peak/retainedRAM/GPU메모리가 아니다.
+- 오프라인 통과 후 실제인접Walk3쌍(.2625/.2750/.2875)만 비교했다. pose/light·mask·예측·PNG동일, Raw/머리/최종/Native 경계밖0·packet불일치0·몸색차0. 변형기하hash3개가 달라 애니메이션정지로 비용을 숨기지 않았다. 새 전체loop 촬영은 하지 않았다.
+- 실제3쌍 area중앙값5054173.997ms/5064217.987ms, 렌더호출4939.365/4929.321ms이다. Editor에서 실제속도개선이 확인됐다고 하지 않으며 실시간채택불가·OFF를 유지한다. renderer호출은 capture readback 제외이고 playerFPS/runtime메모리 측정이 아니다.
+- 마지막포즈에서 RawUV53값 max1.49e-8(최대7ULP), preparedUV53값, 최종RGB387값 max3.73e-9(최대2ULP) 차이가 있다. 최초관측은 hair role12/13/14 RawUV이고 mask/owner/primitive/depth/Native/독립hairUV·8bit PNG는 같다. 원인은 분리하지 않았으며 GPU float버퍼전체 bit동일이라 하지 않는다. 이를 감추는 보정은 추가하지 않았다.
+- 남은비용1포즈계측: 후보계산1018.3ms 중 Length667.9ms/221498회(~65.6%, Union의~81.9%). 각적분구간마다 polygonedge 순회·span할당/정렬/merge가 남고 호출수는 그대로다. clip/차집합·대량할당도 미개선이다. 이 단계계측에는 JIT/계측영향이 있어 기준대비가속으로 쓰지 않는다. 두번째 최적화는 구현하지 않았다. 이웃비용사건/시간설계/눈검수/기존505잔여는 미해결 유지한다.
+- Play/입력/Animator Idle speed1/자동시계/captureDelta0/PostView366한훅/491·502·505·506OFF/비컴파일을 직접 확인했고 진단cache를 해제했다.44d13c0·42cb52b·사용자Quality/Time해시를 보존한다.3쌍 전신GIF는 로컬64557bytes,80ms느린발췌반복·공간보간없음. Library403 재시도/우회 없음.
+- 근거: docs/artifacts/hair-pairs506/README.md·validation.json·paired81.csv, Current472/Area506/·Walk506/·FINAL_RESTORED506.json. 이번 단위는 정확도보존 후보제한 검증이며 실시간제품/전신시간품질/전체프로젝트 완료가 아니다.
+
+- 최신 판정: 실제속도개선 미확인·관리할당 증가로506을 미채택했다. 후보 diff만 docs/artifacts/hair-pairs506/REJECTED_CANDIDATE506.diff로 격리하고 runtime HeadArea505.cs를42cb52b의 SHA c24b4e664bd713b35ba4107707c587adc0575b54c159a459d82b3fe736746dd7로 정확히 복원했다. 2171만 변쌍을 주시간비용이라고 한 추정은 철회하고 별도 실제시간분해 단위로 확인한다. 이 체크포인트에는 새 최적화를 포함하지 않는다.

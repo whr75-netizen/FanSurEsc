@@ -1,0 +1,1360 @@
+{
+  "decision": "517_CORRESPONDENCE_NOT_PASSED_ON_ACTUAL_STORED_DATA; DEFAULT_OFF_NO_PRODUCT_APPLICATION",
+  "run": "One completed revised span/arcV2 audit on the same81 fixed poses/masks; previous whole-cycleV1 failure retained, not rerun.",
+  "frames": 81,
+  "requestedAdjacentPairs": 80,
+  "fullyBoundFrames": 0,
+  "comparablePairs": 0,
+  "rejectedPairs": 80,
+  "acceptedComparableCostSumOld": null,
+  "acceptedComparableCostSumNew": null,
+  "acceptedCostDelta": null,
+  "unsupportedBindingReasons": {
+    "NO_CONNECTED_GEOMETRIC_SPAN_PATH": 102
+  },
+  "partialBoundUnitEdges": 124,
+  "totalInputUnitEdges": 9910,
+  "partialCostsAreNotReportedAsZeroOrPass": true,
+  "geometryEventDiagnostics": {
+    "GEOMETRIC_COMPONENT_SPLIT_MERGE_OR_BIRTH_DEATH": 6
+  },
+  "transportFailureDiagnostics": {},
+  "reparameterization": {
+    "syntheticSameRegionSlideSplitAndStartCost": {
+      "unchanged-region-control-slide": 0.0,
+      "unchanged-region-control-split": 0.0,
+      "unchanged-region-cyclic-parameter-start": 0.0
+    },
+    "actual81CanonicalGeometryVariantsBitIdentical": true,
+    "actual81CompleteCostInvarianceMeasured": false,
+    "qualification": "Geometric normalization is invariant for all stored curves; complete real edit-cost invariance is not certified when the correspondence itself is rejected."
+  },
+  "physicalVisibility": {
+    "explicitVisibilityResetFixture": true,
+    "selectedSpanAbsenceIsNotOcclusion": true,
+    "actualFullArcVisibilityMeasured": false,
+    "geometryComponentEventsAreNotPhysicalOcclusion": true,
+    "novel516Donor471": "Still uncertified; no new donors or rendered selections created."
+  },
+  "firstRejection": {
+    "target": 0,
+    "phase": 0.0,
+    "pixelVertex": [
+      218,
+      55
+    ],
+    "incidentSelectedCells": [
+      {
+        "xy": [
+          217,
+          54
+        ],
+        "selected": true
+      },
+      {
+        "xy": [
+          218,
+          54
+        ],
+        "selected": true
+      },
+      {
+        "xy": [
+          217,
+          55
+        ],
+        "selected": false
+      },
+      {
+        "xy": [
+          218,
+          55
+        ],
+        "selected": true
+      }
+    ],
+    "previousPixelEdge": [
+      218,
+      56,
+      218,
+      55
+    ],
+    "currentPixelEdge": [
+      218,
+      55,
+      217,
+      55
+    ],
+    "previousCandidateIncidentCells": [
+      [
+        [
+          218,
+          54
+        ],
+        [
+          218,
+          55
+        ]
+      ],
+      [
+        [
+          218,
+          54
+        ]
+      ]
+    ],
+    "currentCandidateIncidentCells": [
+      [
+        [
+          217,
+          54
+        ],
+        [
+          217,
+          55
+        ]
+      ]
+    ],
+    "allUnitsHaveGeometricCandidates": true,
+    "noAllowedConnection": true,
+    "sourceCondition": "Direct adjacent-arc continuation or common single logical cell required by517V2; actual region quantization omits/merges the intervening narrow source excursion across selected cells.",
+    "notCause": "No depth/alpha/owner query participates in this rejection; it is not a normal-occlusion diagnosis."
+  },
+  "minimumNextContract": [
+    "Replace the single-cell join predicate with an explicit relationship between continuous-region faces and the already selected connected cell region. Determine which narrow continuous faces are intentionally merged/omitted; retain directed boundary incidence.",
+    "Do not merely enlarge a search radius, force every microscopic gap, add a downstream filter or tune the edit coefficient. First require the existing phase0 rejection to have a region-owned connection witness without changing its mask.",
+    "Keep the516 switching-barrier/state-cost defect unchanged and separate until correspondence is valid; actual cost-only comparison must exclude every rejected pair."
+  ],
+  "betaAndAtomicArithmeticUnchanged": true,
+  "temporalStateCostUnchanged": true,
+  "selectorRuns": 0,
+  "unityCalls": 0,
+  "newCaptures": 0,
+  "reportedPairs": [
+    {
+      "target": 0,
+      "boundEdges": 4,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 1,
+      "boundEdges": 0,
+      "boundaryEdges": 116,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 2,
+      "boundEdges": 0,
+      "boundaryEdges": 116,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 3,
+      "boundEdges": 0,
+      "boundaryEdges": 116,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 4,
+      "boundEdges": 0,
+      "boundaryEdges": 116,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 5,
+      "boundEdges": 0,
+      "boundaryEdges": 116,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 6,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 7,
+      "boundEdges": 4,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 8,
+      "boundEdges": 4,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 9,
+      "boundEdges": 4,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 10,
+      "boundEdges": 0,
+      "boundaryEdges": 128,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 11,
+      "boundEdges": 0,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 12,
+      "boundEdges": 6,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 13,
+      "boundEdges": 6,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 14,
+      "boundEdges": 6,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 15,
+      "boundEdges": 0,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 16,
+      "boundEdges": 0,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 17,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 18,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 19,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 20,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 21,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 22,
+      "boundEdges": 4,
+      "boundaryEdges": 128,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 23,
+      "boundEdges": 4,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 24,
+      "boundEdges": 4,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 25,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 26,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 27,
+      "boundEdges": 0,
+      "boundaryEdges": 118,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 28,
+      "boundEdges": 0,
+      "boundaryEdges": 118,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 29,
+      "boundEdges": 0,
+      "boundaryEdges": 118,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 30,
+      "boundEdges": 0,
+      "boundaryEdges": 116,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 31,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 32,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 33,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 34,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 35,
+      "boundEdges": 6,
+      "boundaryEdges": 116,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 36,
+      "boundEdges": 0,
+      "boundaryEdges": 118,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 37,
+      "boundEdges": 0,
+      "boundaryEdges": 118,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 38,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 39,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 40,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 41,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 42,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 43,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 44,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 45,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 46,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 47,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 48,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 49,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 50,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 51,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 52,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 53,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 54,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 55,
+      "boundEdges": 0,
+      "boundaryEdges": 128,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 56,
+      "boundEdges": 0,
+      "boundaryEdges": 128,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 57,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 58,
+      "boundEdges": 0,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 59,
+      "boundEdges": 6,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 60,
+      "boundEdges": 6,
+      "boundaryEdges": 124,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 61,
+      "boundEdges": 6,
+      "boundaryEdges": 128,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 62,
+      "boundEdges": 0,
+      "boundaryEdges": 128,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 63,
+      "boundEdges": 0,
+      "boundaryEdges": 128,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 64,
+      "boundEdges": 6,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 65,
+      "boundEdges": 6,
+      "boundaryEdges": 128,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 66,
+      "boundEdges": 6,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 67,
+      "boundEdges": 6,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 68,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 69,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 70,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 71,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 72,
+      "boundEdges": 0,
+      "boundaryEdges": 126,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 73,
+      "boundEdges": 0,
+      "boundaryEdges": 122,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 74,
+      "boundEdges": 6,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 75,
+      "boundEdges": 6,
+      "boundaryEdges": 118,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 76,
+      "boundEdges": 6,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 77,
+      "boundEdges": 0,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        },
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 1
+        }
+      ]
+    },
+    {
+      "target": 78,
+      "boundEdges": 4,
+      "boundaryEdges": 118,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 79,
+      "boundEdges": 4,
+      "boundaryEdges": 118,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    },
+    {
+      "target": 80,
+      "boundEdges": 4,
+      "boundaryEdges": 120,
+      "acceptedComparablePair": false,
+      "reportedOldCost": null,
+      "reportedNewCost": null,
+      "rejectReasons": [
+        {
+          "reason": "NO_CONNECTED_GEOMETRIC_SPAN_PATH",
+          "pixelLoop": 0
+        }
+      ]
+    }
+  ],
+  "separateUnresolved": [
+    "516 switching barrier",
+    "hairColour11 and bodyColour1",
+    "native world",
+    "novel donor visibility471",
+    "packetUpload212ms"
+  ]
+}

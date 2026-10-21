@@ -1,0 +1,120 @@
+{
+  "target": 0,
+  "phase": 0.0,
+  "pixelLoopArea": 523.0,
+  "pixelLoopUnitEdges": 116,
+  "allIndividualUnitEdgesHaveGeometricCandidates": true,
+  "forcedLocalBarriers": [
+    {
+      "edgeIndex": 95,
+      "pixelVertex": [
+        218,
+        55
+      ],
+      "previousPixelEdge": [
+        218,
+        56,
+        218,
+        55
+      ],
+      "currentPixelEdge": [
+        218,
+        55,
+        217,
+        55
+      ],
+      "previousCandidates": [
+        {
+          "arc": 0,
+          "segment": 58,
+          "t": 0.7772641280495379,
+          "fit": 0.06560654213820365,
+          "reference": [
+            218.2558447829635,
+            55.5055797991701
+          ],
+          "sourceA": [
+            218.21580505371094,
+            57.34148025512695
+          ],
+          "sourceB": [
+            218.26731872558594,
+            54.97947692871094
+          ],
+          "intersectedIncidentCells": [
+            [
+              218,
+              54
+            ],
+            [
+              218,
+              55
+            ]
+          ]
+        },
+        {
+          "arc": 0,
+          "segment": 59,
+          "t": 0.0,
+          "fit": 0.5924035687930882,
+          "reference": [
+            218.26731872558594,
+            54.97947692871094
+          ],
+          "sourceA": [
+            218.26731872558594,
+            54.97947692871094
+          ],
+          "sourceB": [
+            218.8708953857422,
+            51.986568450927734
+          ],
+          "intersectedIncidentCells": [
+            [
+              218,
+              54
+            ]
+          ]
+        }
+      ],
+      "currentCandidates": [
+        {
+          "arc": 0,
+          "segment": 61,
+          "t": 0.572425100966641,
+          "fit": 0.2447009527405432,
+          "reference": [
+            217.4312248074875,
+            54.98579333265842
+          ],
+          "sourceA": [
+            218.41885375976562,
+            50.20463180541992
+          ],
+          "sourceB": [
+            216.69351196289062,
+            58.557098388671875
+          ],
+          "intersectedIncidentCells": [
+            [
+              217,
+              54
+            ],
+            [
+              217,
+              55
+            ]
+          ]
+        }
+      ],
+      "allPairTransitionsRejected": true
+    }
+  ],
+  "barrierCount": 1,
+  "physicalOcclusionQueried": false,
+  "reason": "The recorded rejection is a geometry-correspondence connection rule, not depth/alpha/owner occlusion. A source path outside the four incident cells can be omitted/merged by the existing region selector, but517V2 requires direct continuation or same-cell intersection.",
+  "completedAuditRoot": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Temporal517\\SpanArcV2\\AUDIT517.json",
+  "selectorRuns": 0,
+  "newUnityCalls": 0,
+  "noCoefficientOrTemporalStateChanges": true
+}

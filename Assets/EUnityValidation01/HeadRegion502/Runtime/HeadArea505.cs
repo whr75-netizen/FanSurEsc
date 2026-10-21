@@ -8,7 +8,7 @@ using System.Diagnostics;
 // Default-OFF experiment input: continuous projected visible hair / cell area.
 // Geometry is clipped analytically. Occlusion-alpha uncertainty stays bounded;
 // HeadRegion502 certifies that both area bounds select the same whole region.
-public static class HeadArea505
+public static partial class HeadArea505
 {
     public struct P { public double x,y; public P(double x,double y){this.x=x;this.y=y;} }
     public struct Plane { public double x,y,c; public double At(P p){return x*p.x+y*p.y+c;} }

@@ -6,7 +6,7 @@ using UnityEngine.Rendering;
 
 // Default-OFF replacement of the hair source, not a correction of a rendered mask.
 // Canonical coordinates: top-left, 480x272, one unit per final logical pixel.
-public static class HeadRegion502
+public static partial class HeadRegion502
 {
     public static bool Enabled;
     // Default-OFF accuracy experiment inside the already default-OFF region path.
@@ -252,7 +252,8 @@ public static class HeadRegion502
     static Packet Select(Full319View335 f, int x, int y)
     {
         var centre = new Vector2(x + .5f, y + .5f); Packet best = null; float error = float.PositiveInfinity;
-        foreach (var t in triangles)
+        if(UseAutomaticCurve511)supported511=false;
+        foreach (var t in UseAutomaticCurve511 ? Candidates511(x,y) : triangles)
         {
             if (centre.x < t.minX - 1.1f || centre.x > t.maxX + 1.1f || centre.y < t.minY - 1.1f || centre.y > t.maxY + 1.1f) continue;
             var b = Bary(centre, t); Vector2 q = centre;
@@ -267,7 +268,9 @@ public static class HeadRegion502
             var pWorld = world[t.ia] * b.x + world[t.ib] * b.y + world[t.ic] * b.z;
             float z = -f.motion.camera.worldToCameraMatrix.MultiplyPoint3x4(pWorld).z;
             if (best != null && Mathf.Abs(distance - error) < 1e-7f && z >= best.depth) continue;
-            error = distance; best = new Packet { x = x, y = y, submesh = t.sm, primitive = t.primitive, barycentric = b, world = pWorld, uv = uv[t.ia] * b.x + uv[t.ib] * b.y + uv[t.ic] * b.z, projected = q, depth = z, distance = Mathf.Sqrt(distance) };
+            var candidate = new Packet { x = x, y = y, submesh = t.sm, primitive = t.primitive, barycentric = b, world = pWorld, uv = uv[t.ia] * b.x + uv[t.ib] * b.y + uv[t.ic] * b.z, projected = q, depth = z, distance = Mathf.Sqrt(distance) };
+            if(UseAutomaticCurve511){supported511=true;if(!Visible511(candidate))continue;}
+            error = distance; best = candidate;
         }
         return best;
     }
@@ -299,11 +302,12 @@ public static class HeadRegion502
             var mf = f.motion.surface.outputs[2]; var mesh = mf.sharedMesh;
             vertices = mesh.vertices; normals = mesh.normals; tangents = mesh.tangents; uv = mesh.uv;
             world = vertices.Select(mf.transform.TransformPoint).ToArray(); projected = world.Select(f.Project).ToArray();
-            var indices = Enumerable.Range(0, mesh.subMeshCount).Select(sm => mesh.GetIndices(sm)).ToArray();
-            var union = Union(projected, indices, out var bounds); SourceLoops.AddRange(Boundaries(union, bounds, ExtractionScale));
-            Curves.AddRange(SourceLoops.Select(ClosedCurve).Where(p => p.Length >= 3));
+            var indices = UseAutomaticCurve511 ? Indices511(f,mesh) : Enumerable.Range(0, mesh.subMeshCount).Select(sm => mesh.GetIndices(sm)).ToArray();
+            RectInt bounds=default; bool[] union=null;
+            if(!UseAutomaticCurve511){union=Union(projected,indices,out bounds);SourceLoops.AddRange(Boundaries(union,bounds,ExtractionScale));Curves.AddRange(SourceLoops.Select(ClosedCurve).Where(p=>p.Length>=3));}
             bool[] selected;
-            if (UseVisibleArea505)
+            if(UseAutomaticCurve511){var areas=Areas511(f,out bounds);selected=SelectRegions(areas,bounds.width,bounds.height);}
+            else if (UseVisibleArea505)
             {
                 var area = HeadArea505.Build(f, bounds);
                 selected = SelectRegions(area.lower, bounds.width, bounds.height);
@@ -323,25 +327,28 @@ public static class HeadRegion502
             }
             SelectedLoops.AddRange(Boundaries(selected, bounds, 1));
             for (int y = 0; y < bounds.height; y++) for (int x = 0; x < bounds.width; x++) if (selected[y * bounds.width + x]) Hair[(y + bounds.y) * 480 + x + bounds.x] = true;
-            triangles.Clear();
+            if(UseAutomaticCurve511)Triangles511(indices,bounds,f);else{triangleCache511=false;triangles.Clear();
             for (int sm = 0; sm < indices.Length; sm++) for (int k = 0; k < indices[sm].Length; k += 3)
             {
                 int a = indices[sm][k], b = indices[sm][k + 1], c = indices[sm][k + 2]; var pa = projected[a]; var pb = projected[b]; var pc = projected[c];
                 if (Mathf.Abs(Cross(pb - pa, pc - pa)) < 1e-10f) continue;
                 triangles.Add(new Triangle { sm = sm, primitive = k / 3, ia = a, ib = b, ic = c, a = pa, b = pb, c = pc, minX = Mathf.Min(pa.x, Mathf.Min(pb.x, pc.x)), maxX = Mathf.Max(pa.x, Mathf.Max(pb.x, pc.x)), minY = Mathf.Min(pa.y, Mathf.Min(pb.y, pc.y)), maxY = Mathf.Max(pa.y, Mathf.Max(pb.y, pc.y)) });
             }
-            if (pieces == null) { pieces = new Piece[4, 3]; for (int s = 0; s < 4; s++) for (int part = 0; part < 3; part++) pieces[s, part] = new Piece("502 owned closed-region cells " + s + "/" + part); }
+            }
+            if (pieces == null) { pieces = new Piece[indices.Length, 3]; for (int s = 0; s < indices.Length; s++) for (int part = 0; part < 3; part++) pieces[s, part] = new Piece("502 owned closed-region cells " + s + "/" + part); }
             foreach (var piece in pieces) piece.Clear();
             inverseProjection = f.effectiveProjection.inverse; cameraToWorld = f.motion.camera.cameraToWorldMatrix; worldToLocal = mf.transform.worldToLocalMatrix;
+            long packetStart511=System.Diagnostics.Stopwatch.GetTimestamp();
             for (int y = bounds.y; y < bounds.yMax; y++) for (int x = bounds.x; x < bounds.xMax; x++) if (Hair[y * 480 + x])
             {
-                var p = Select(f, x, y); if (p == null) { Unsupported++; continue; }
+                var p = Select(f, x, y); if (p == null) { if(UseAutomaticCurve511&&supported511){Auto511HiddenCells++;continue;}Unsupported++; continue; }
                 Packets.Add(p); AddQuad(f, p, pieces[p.submesh, 0], indices[p.submesh]);
-                int part = p.submesh == 0 && p.primitive >= 574 && p.primitive <= 857 ? 1 : 2;
+                int part = UseAutomaticCurve511 ? Part511(p,indices) : p.submesh == 0 && p.primitive >= 574 && p.primitive <= 857 ? 1 : 2;
                 AddQuad(f, p, pieces[p.submesh, part], indices[p.submesh]);
             }
             if (Unsupported != 0) throw new Exception("Designed region has " + Unsupported + " cells without a bounded original triangle donor");
             foreach (var piece in pieces) piece.Upload(mesh.bounds);
+            if(UseAutomaticCurve511)Auto511PacketMs=1000.0*(System.Diagnostics.Stopwatch.GetTimestamp()-packetStart511)/System.Diagnostics.Stopwatch.Frequency;
             // The protected face/feature domain is the existing source union, not
             // a box/hull or a new eye design. Hair is the only redesigned family.
             Array.Copy(Hair, Parent, Hair.Length);
@@ -396,7 +403,7 @@ public static class HeadRegion502
     }
     public static void Release()
     {
-        Enabled = false; UseVisibleArea505 = false; HeadArea505.Release(); current = null; Status = "disabled";
+        Enabled = false; UseVisibleArea505 = false; Release511(); HeadArea505.Release(); current = null; Status = "disabled";
         if (pieces != null) foreach (var piece in pieces) if (piece.mesh) UnityEngine.Object.DestroyImmediate(piece.mesh); pieces = null;
         foreach (var material in materials.Values) if (material) UnityEngine.Object.DestroyImmediate(material); materials.Clear();
         if (mask) UnityEngine.Object.DestroyImmediate(mask); mask = null; gate = null; Packets.Clear();

@@ -1,0 +1,301 @@
+{
+  "status": "DEFAULT_OFF_NOT_ADOPTED; ACTUAL_16_PAIRS_WITH_UNRESOLVED_FINAL_OCCLUSION",
+  "preprocessing": {
+    "stage": "COMPLETED",
+    "sourceRings": 9,
+    "curveRings": 3,
+    "controlPoints": 94,
+    "preprocessingSeconds": 5.258322299996507,
+    "elapsedSeconds": 5.261540499996045
+  },
+  "scope": "16 actual pairs in four adjacent Walk intervals; no full loop",
+  "outside": {
+    "Raw": {
+      "hair": 0,
+      "face": 0
+    },
+    "HairLayer": {
+      "hair": 0,
+      "face": 0
+    },
+    "Final": {
+      "hair": 0,
+      "face": 0
+    },
+    "Native": {
+      "hair": 0,
+      "face": 0
+    }
+  },
+  "packetMismatchTotal": 0,
+  "nativeDepthErrorMax": 1.9073486328125e-06,
+  "poseLightMatched": true,
+  "deformedGeometryCount": 16,
+  "regionABA": [],
+  "finalVisibleRoleABA": [
+    {
+      "target": 1,
+      "version": "original",
+      "headXY": [
+        210,
+        40
+      ],
+      "roles": [
+        14,
+        8,
+        14
+      ],
+      "classification": "FINAL_VISIBLE_ROLE_ABA_OBSERVATION; continuity/occlusion must be interpreted, not counted as automatic errors"
+    },
+    {
+      "target": 1,
+      "version": "original",
+      "headXY": [
+        210,
+        41
+      ],
+      "roles": [
+        14,
+        8,
+        14
+      ],
+      "classification": "FINAL_VISIBLE_ROLE_ABA_OBSERVATION; continuity/occlusion must be interpreted, not counted as automatic errors"
+    },
+    {
+      "target": 1,
+      "version": "original",
+      "headXY": [
+        229,
+        52
+      ],
+      "roles": [
+        14,
+        4,
+        14
+      ],
+      "classification": "FINAL_VISIBLE_ROLE_ABA_OBSERVATION; continuity/occlusion must be interpreted, not counted as automatic errors"
+    },
+    {
+      "target": 1,
+      "version": "candidate",
+      "headXY": [
+        210,
+        40
+      ],
+      "roles": [
+        14,
+        8,
+        14
+      ],
+      "classification": "FINAL_VISIBLE_ROLE_ABA_OBSERVATION; continuity/occlusion must be interpreted, not counted as automatic errors"
+    },
+    {
+      "target": 1,
+      "version": "candidate",
+      "headXY": [
+        210,
+        41
+      ],
+      "roles": [
+        14,
+        8,
+        14
+      ],
+      "classification": "FINAL_VISIBLE_ROLE_ABA_OBSERVATION; continuity/occlusion must be interpreted, not counted as automatic errors"
+    },
+    {
+      "target": 22,
+      "version": "original",
+      "headXY": [
+        219,
+        48
+      ],
+      "roles": [
+        8,
+        14,
+        8
+      ],
+      "classification": "FINAL_VISIBLE_ROLE_ABA_OBSERVATION; continuity/occlusion must be interpreted, not counted as automatic errors"
+    },
+    {
+      "target": 70,
+      "version": "candidate",
+      "headXY": [
+        220,
+        45
+      ],
+      "roles": [
+        14,
+        8,
+        14
+      ],
+      "classification": "FINAL_VISIBLE_ROLE_ABA_OBSERVATION; continuity/occlusion must be interpreted, not counted as automatic errors"
+    },
+    {
+      "target": 70,
+      "version": "candidate",
+      "headXY": [
+        219,
+        49
+      ],
+      "roles": [
+        14,
+        8,
+        14
+      ],
+      "classification": "FINAL_VISIBLE_ROLE_ABA_OBSERVATION; continuity/occlusion must be interpreted, not counted as automatic errors"
+    }
+  ],
+  "knownEvents": [
+    {
+      "event": "neighbour .8750",
+      "headXY": [
+        224,
+        58
+      ],
+      "steps": [
+        {
+          "target": 69,
+          "area": 0.5805956125259399,
+          "mask": true,
+          "originalRole": 14,
+          "candidateRole": 14
+        },
+        {
+          "target": 70,
+          "area": 0.5524844527244568,
+          "mask": true,
+          "originalRole": 14,
+          "candidateRole": 14
+        },
+        {
+          "target": 71,
+          "area": 0.5248135924339294,
+          "mask": true,
+          "originalRole": 14,
+          "candidateRole": 14
+        }
+      ]
+    },
+    {
+      "event": "historic disconnected .6875",
+      "headXY": [
+        235,
+        42
+      ],
+      "steps": [
+        {
+          "target": 54,
+          "area": 0.047619856894016266,
+          "mask": false,
+          "originalRole": 0,
+          "candidateRole": 0
+        },
+        {
+          "target": 55,
+          "area": 0.05558156594634056,
+          "mask": false,
+          "originalRole": 0,
+          "candidateRole": 0
+        },
+        {
+          "target": 56,
+          "area": 0.06858769059181213,
+          "mask": false,
+          "originalRole": 0,
+          "candidateRole": 0
+        }
+      ]
+    }
+  ],
+  "cost": {
+    "curveMs": {
+      "min": 0.0281,
+      "median": 0.0343,
+      "max": 0.197
+    },
+    "areaMs": {
+      "min": 0.5183,
+      "median": 0.5322,
+      "max": 1.0105
+    },
+    "binsAndVisibilityMs": {
+      "min": 16.4293,
+      "median": 16.8904,
+      "max": 26.2581
+    },
+    "packetAndUploadMs": {
+      "min": 204.471,
+      "median": 212.33535,
+      "max": 262.0533
+    },
+    "baseOriginalRenderMs": {
+      "min": 249.45760000264272,
+      "median": 307.63054999988526,
+      "max": 708.9019999984885
+    },
+    "auto511RenderMs": {
+      "min": 489.6690000023227,
+      "median": 674.8619499994675,
+      "max": 1019.5999999996275
+    }
+  },
+  "alphaUncertainMax": 3,
+  "gif": {
+    "path": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Walk511\\WALK511_FULLBODY_BEFORE_AFTER.gif",
+    "bytes": 519305,
+    "frames": 16,
+    "nativePixelCrop": [
+      332,
+      50,
+      554,
+      356
+    ],
+    "interpolation": false,
+    "note": "same-execution original/candidate, full body, time order, 500ms pause at group jumps; palette compression only; original PNG/float buffers preserved",
+    "sha256": "4dd88555f1ddb27703a756c46ac06ae8669b75e8f0fb2a68d7f8d4edd28467dd"
+  },
+  "runtimeFiles": [
+    {
+      "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadRegion502.cs",
+      "before": "bf273425aa8cb2ec0b35973f16d4f851128abfe8dcc6cede81d0ba7a69b662b8",
+      "after": "61564a48dbe5ee1c69f965b8bb482d20e6a0af340cd9429984aaf74a4ffeb6f7"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadArea505.cs",
+      "before": "2aeca448c6742a66219a700ec053b0680e0221a9602ea1eca778a031b8b9043b",
+      "after": "55cc4190fbf4808493bc667e517cf37dad0fa01ce795cc8f274f95bcfbc109a2"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadCurve511.cs",
+      "before": null,
+      "after": "a59738ea0e3c4d906ef3c13b06ca9a36d5a3c263726b5f99efbd5c26e53c5b64"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\CurveArea511.cs",
+      "before": null,
+      "after": "c9faf4c8f105545da36e935849bb1e5f6495d8414c391cc5b9983846cd8cf1e2"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\Visibility511.cs",
+      "before": null,
+      "after": "2a4bc54eda6f74b64b861763f330f0aad27652905a8bdd740468e389e9ba431a"
+    },
+    {
+      "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Resources\\HeadCurve511.bytes",
+      "before": null,
+      "after": "f2ea9609b8dd97a9835b166030077f1b82adc5bcb389b6f56890a99734cc725c"
+    }
+  ],
+  "editorHelper": {
+    "path": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Editor\\EditorCapture511.cs",
+    "sha256": "240d20e4c3892e1959cecc234cce4ec221b28c3f0776b186436391b6ab15aa76",
+    "diagnosticOnly": true
+  },
+  "preservedUserHashes": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "noLibraryRetry": true,
+  "nextMinimumStep": "Same-ray actual deformed body triangle/sample evidence for two .8750 final ownership transitions before a full loop."
+}

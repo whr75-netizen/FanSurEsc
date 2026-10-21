@@ -1,0 +1,2050 @@
+{
+  "status": "COMPILED_NOT_RENDER_VALIDATED",
+  "input": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Loop499\\022.allmesh",
+  "inputSHA256": "451b7d4e77e98a43fafdfcc8ac03de2a659488504f810e255dcdae76b2c3910f",
+  "binding": {
+    "semanticPart": "Hair",
+    "adapterPart": 2,
+    "vertices": 8435,
+    "submeshes": 4,
+    "bindSignature": "38689B6B1DA9C1B4",
+    "bones": 91,
+    "blendShapes": 0,
+    "modelName": "B14OwnedUV1_170",
+    "semanticIntentMetadata": false
+  },
+  "part": 2,
+  "curveRepresentation": "closed piecewise-linear, source triangle/barycentric persistent anchors",
+  "sourceRings": 9,
+  "sourceBoundaryPoints": 532,
+  "curveRings": 3,
+  "controlPoints": 94,
+  "counts": {
+    "weightedEdges": 4835,
+    "bboxPairs": 24163,
+    "intersectionRecords": 9298,
+    "splitFragments": 13399,
+    "boundarySegments": 532
+  },
+  "regionDecisions": [
+    {
+      "ring": 0,
+      "parent": -1,
+      "sourceArea": 529.3714283824663,
+      "perimeter": 163.63064835635612,
+      "selectedInside": 1,
+      "retainedBoundary": true
+    },
+    {
+      "ring": 1,
+      "parent": 0,
+      "sourceArea": -0.23117340009377832,
+      "perimeter": 4.142704857956059,
+      "selectedInside": 1,
+      "retainedBoundary": false
+    },
+    {
+      "ring": 2,
+      "parent": 0,
+      "sourceArea": -0.00011489684868834954,
+      "perimeter": 0.08284873741900327,
+      "selectedInside": 1,
+      "retainedBoundary": false
+    },
+    {
+      "ring": 3,
+      "parent": 0,
+      "sourceArea": -0.45090748655198276,
+      "perimeter": 7.9299719850790735,
+      "selectedInside": 1,
+      "retainedBoundary": false
+    },
+    {
+      "ring": 4,
+      "parent": 0,
+      "sourceArea": -0.0015824889185839903,
+      "perimeter": 0.2932086939543876,
+      "selectedInside": 1,
+      "retainedBoundary": false
+    },
+    {
+      "ring": 5,
+      "parent": 0,
+      "sourceArea": -0.6789686644799869,
+      "perimeter": 10.819783964784584,
+      "selectedInside": 1,
+      "retainedBoundary": false
+    },
+    {
+      "ring": 6,
+      "parent": 0,
+      "sourceArea": -1.757345953033112,
+      "perimeter": 7.367425300348531,
+      "selectedInside": 0,
+      "retainedBoundary": true
+    },
+    {
+      "ring": 7,
+      "parent": 0,
+      "sourceArea": -5.720521366307493,
+      "perimeter": 12.610925787397829,
+      "selectedInside": 0,
+      "retainedBoundary": true
+    },
+    {
+      "ring": 8,
+      "parent": 0,
+      "sourceArea": -0.15300643114966306,
+      "perimeter": 2.3091308423422143,
+      "selectedInside": 1,
+      "retainedBoundary": false
+    }
+  ],
+  "topologyRepairs": [
+    {
+      "iteration": 0,
+      "chords": [
+        {
+          "ring": 0,
+          "sourceFrom": 66,
+          "sourceTo": 69,
+          "restoredSourceKnot": 68
+        }
+      ]
+    },
+    {
+      "iteration": 1,
+      "chords": [
+        {
+          "ring": 0,
+          "sourceFrom": 86,
+          "sourceTo": 91,
+          "restoredSourceKnot": 88
+        },
+        {
+          "ring": 7,
+          "sourceFrom": 25,
+          "sourceTo": 32,
+          "restoredSourceKnot": 28
+        }
+      ]
+    },
+    {
+      "iteration": 2,
+      "chords": [
+        {
+          "ring": 0,
+          "sourceFrom": 88,
+          "sourceTo": 91,
+          "restoredSourceKnot": 90
+        },
+        {
+          "ring": 7,
+          "sourceFrom": 28,
+          "sourceTo": 32,
+          "restoredSourceKnot": 30
+        }
+      ]
+    }
+  ],
+  "controls": [
+    [
+      {
+        "submesh": 2,
+        "primitive": 4395,
+        "vertices": [
+          5411,
+          5413,
+          5412
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          207.26925659179688,
+          52.69488525390625
+        ],
+        "referenceDepth": 13.827799797058105,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 4153,
+        "vertices": [
+          5188,
+          5190,
+          5189
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          207.29345703125,
+          51.6976318359375
+        ],
+        "referenceDepth": 13.806021690368652,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 4383,
+        "vertices": [
+          5399,
+          5401,
+          5400
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          208.61090087890625,
+          47.494144439697266
+        ],
+        "referenceDepth": 13.793914794921875,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 4367,
+        "vertices": [
+          5383,
+          5385,
+          5384
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          210.25498962402344,
+          40.158416748046875
+        ],
+        "referenceDepth": 13.754634857177734,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 1751,
+        "vertices": [
+          2741,
+          2743,
+          2742
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          212.9311065673828,
+          35.702552795410156
+        ],
+        "referenceDepth": 13.771467208862305,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 1745,
+        "vertices": [
+          2735,
+          2737,
+          2736
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          215.02671813964844,
+          34.02838897705078
+        ],
+        "referenceDepth": 13.750758171081543,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 1559,
+        "vertices": [
+          2570,
+          2572,
+          2571
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          217.2650909423828,
+          33.20702362060547
+        ],
+        "referenceDepth": 13.755196571350098,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 1187,
+        "vertices": [
+          2241,
+          2243,
+          2242
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          220.49551391601562,
+          32.688232421875
+        ],
+        "referenceDepth": 13.77054214477539,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 881,
+        "vertices": [
+          1974,
+          1975,
+          1919
+        ],
+        "barycentric": [
+          0.0,
+          0.90989841411373,
+          0.09010158588627
+        ],
+        "referenceXY": [
+          222.73413985991766,
+          33.213600866032145
+        ],
+        "referenceDepth": 13.76911033348235,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 457,
+        "vertices": [
+          1596,
+          1598,
+          1597
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          224.95465087890625,
+          33.04643249511719
+        ],
+        "referenceDepth": 13.772417068481445,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 1311,
+        "vertices": [
+          6373,
+          6375,
+          6374
+        ],
+        "barycentric": [
+          0.5282014717353039,
+          0.47179852826469615,
+          0.0
+        ],
+        "referenceXY": [
+          225.81521713841914,
+          33.62002166056902
+        ],
+        "referenceDepth": 13.756160489159958,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 811,
+        "vertices": [
+          3209,
+          3211,
+          3210
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          227.35726928710938,
+          33.88681411743164
+        ],
+        "referenceDepth": 13.767897605895996,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 1134,
+        "vertices": [
+          5464,
+          5465,
+          5466
+        ],
+        "barycentric": [
+          0.0,
+          0.9453698008214023,
+          0.054630199178597655
+        ],
+        "referenceXY": [
+          228.76139953238848,
+          34.799359585069006
+        ],
+        "referenceDepth": 13.763341639849894,
+        "reprojectionError": 7.105427357601002e-15
+      },
+      {
+        "submesh": 2,
+        "primitive": 5437,
+        "vertices": [
+          8179,
+          8181,
+          8180
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          230.7535400390625,
+          35.38404846191406
+        ],
+        "referenceDepth": 13.788469314575195,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 5438,
+        "vertices": [
+          8180,
+          8181,
+          8182
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          232.7661895751953,
+          36.62944412231445
+        ],
+        "referenceDepth": 13.781489372253418,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 5440,
+        "vertices": [
+          8182,
+          8183,
+          8184
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          233.18817138671875,
+          37.11906051635742
+        ],
+        "referenceDepth": 13.788427352905273,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 59,
+        "vertices": [
+          556,
+          558,
+          557
+        ],
+        "barycentric": [
+          0.05560468699782353,
+          0.9443953130021765,
+          0.0
+        ],
+        "referenceXY": [
+          233.3664602245909,
+          38.708259154527276
+        ],
+        "referenceDepth": 13.739016856869045,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 1,
+        "primitive": 71,
+        "vertices": [
+          568,
+          570,
+          569
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          234.60665893554688,
+          40.096649169921875
+        ],
+        "referenceDepth": 13.745862007141113,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 85,
+        "vertices": [
+          582,
+          584,
+          583
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          235.2586669921875,
+          41.940467834472656
+        ],
+        "referenceDepth": 13.756729125976562,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 89,
+        "vertices": [
+          586,
+          588,
+          587
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          235.281494140625,
+          42.52552032470703
+        ],
+        "referenceDepth": 13.760552406311035,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 90,
+        "vertices": [
+          587,
+          588,
+          589
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          235.21275329589844,
+          43.29007339477539
+        ],
+        "referenceDepth": 13.755401611328125,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 92,
+        "vertices": [
+          589,
+          590,
+          591
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          235.17324829101562,
+          43.579978942871094
+        ],
+        "referenceDepth": 13.757804870605469,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 0,
+        "primitive": 1078,
+        "vertices": [
+          6902,
+          6903,
+          6904
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          234.30979919433594,
+          47.05921936035156
+        ],
+        "referenceDepth": 13.7897367477417,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 733,
+        "vertices": [
+          1175,
+          1177,
+          1176
+        ],
+        "barycentric": [
+          0.10032327456183182,
+          0.8996767254381682,
+          0.0
+        ],
+        "referenceXY": [
+          233.90593744797266,
+          46.48016501169429
+        ],
+        "referenceDepth": 13.753670530283364,
+        "reprojectionError": 7.105427357601002e-15
+      },
+      {
+        "submesh": 1,
+        "primitive": 736,
+        "vertices": [
+          1178,
+          1179,
+          1180
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          233.88087463378906,
+          47.04518127441406
+        ],
+        "referenceDepth": 13.762894630432129,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 730,
+        "vertices": [
+          1172,
+          1173,
+          1174
+        ],
+        "barycentric": [
+          0.6180440353503134,
+          0.0,
+          0.3819559646496867
+        ],
+        "referenceXY": [
+          233.76292394869188,
+          46.4076938120545
+        ],
+        "referenceDepth": 13.745159746529865,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 0,
+        "primitive": 1058,
+        "vertices": [
+          6882,
+          6883,
+          6884
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          233.0445098876953,
+          45.92082977294922
+        ],
+        "referenceDepth": 13.747660636901855,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 708,
+        "vertices": [
+          1150,
+          1151,
+          1152
+        ],
+        "barycentric": [
+          0.04556163652499939,
+          0.0,
+          0.9544383634750007
+        ],
+        "referenceXY": [
+          232.2796984385541,
+          44.426253682865834
+        ],
+        "referenceDepth": 13.723983297992156,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 1249,
+        "vertices": [
+          6069,
+          6071,
+          6070
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          232.04031372070312,
+          47.56855773925781
+        ],
+        "referenceDepth": 13.737077713012695,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 1263,
+        "vertices": [
+          6083,
+          6085,
+          6084
+        ],
+        "barycentric": [
+          0.5471778021997178,
+          0.45282219780028227,
+          0.0
+        ],
+        "referenceXY": [
+          230.55594525164653,
+          50.51991080228788
+        ],
+        "referenceDepth": 13.742930340385648,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 2,
+        "primitive": 4549,
+        "vertices": [
+          5605,
+          5607,
+          5606
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          230.21852111816406,
+          55.676387786865234
+        ],
+        "referenceDepth": 13.783944129943848,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 56,
+        "vertices": [
+          1238,
+          1239,
+          1240
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          228.4822235107422,
+          57.809024810791016
+        ],
+        "referenceDepth": 13.797130584716797,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 1053,
+        "vertices": [
+          3429,
+          3431,
+          3430
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          226.7254638671875,
+          59.37225341796875
+        ],
+        "referenceDepth": 13.803079605102539,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2262,
+        "vertices": [
+          3525,
+          3526,
+          3527
+        ],
+        "barycentric": [
+          0.9034923791797216,
+          0.0,
+          0.09650762082027842
+        ],
+        "referenceXY": [
+          226.9714076681361,
+          57.539937741200454
+        ],
+        "referenceDepth": 13.765197679576927,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2264,
+        "vertices": [
+          3527,
+          3528,
+          3529
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          226.0595703125,
+          58.7087516784668
+        ],
+        "referenceDepth": 13.779452323913574,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2269,
+        "vertices": [
+          3532,
+          3534,
+          3533
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          224.65040588378906,
+          59.12176513671875
+        ],
+        "referenceDepth": 13.795495986938477,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2263,
+        "vertices": [
+          3526,
+          3528,
+          3527
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          225.41644287109375,
+          58.32175827026367
+        ],
+        "referenceDepth": 13.765242576599121,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2255,
+        "vertices": [
+          3518,
+          3520,
+          3519
+        ],
+        "barycentric": [
+          0.5117311754790251,
+          0.48826882452097486,
+          0.0
+        ],
+        "referenceXY": [
+          226.04883249991096,
+          54.796309148512805
+        ],
+        "referenceDepth": 13.732419241152943,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2448,
+        "vertices": [
+          3689,
+          3690,
+          3691
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          225.0491943359375,
+          57.90646743774414
+        ],
+        "referenceDepth": 13.74997329711914,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2450,
+        "vertices": [
+          3691,
+          3692,
+          3693
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          224.6107940673828,
+          58.45962142944336
+        ],
+        "referenceDepth": 13.756845474243164,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2455,
+        "vertices": [
+          3696,
+          3698,
+          3697
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          223.39453125,
+          59.07914733886719
+        ],
+        "referenceDepth": 13.773970603942871,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2449,
+        "vertices": [
+          3690,
+          3692,
+          3691
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          223.78028869628906,
+          57.874053955078125
+        ],
+        "referenceDepth": 13.744132995605469,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2441,
+        "vertices": [
+          3682,
+          3684,
+          3683
+        ],
+        "barycentric": [
+          0.8072151734274168,
+          0.1927848265725832,
+          0.0
+        ],
+        "referenceXY": [
+          224.10862159928212,
+          53.43613472690051
+        ],
+        "referenceDepth": 13.722063343748667,
+        "reprojectionError": 7.105427357601002e-15
+      },
+      {
+        "submesh": 2,
+        "primitive": 4785,
+        "vertices": [
+          6321,
+          6323,
+          6322
+        ],
+        "barycentric": [
+          0.604940127963146,
+          0.39505987203685394,
+          0.0
+        ],
+        "referenceXY": [
+          223.00701003883714,
+          56.87670037255949
+        ],
+        "referenceDepth": 13.746351278996814,
+        "reprojectionError": 7.105427357601002e-15
+      },
+      {
+        "submesh": 2,
+        "primitive": 2639,
+        "vertices": [
+          3859,
+          3861,
+          3860
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          223.4640350341797,
+          58.59592819213867
+        ],
+        "referenceDepth": 13.788410186767578,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 4789,
+        "vertices": [
+          6325,
+          6327,
+          6326
+        ],
+        "barycentric": [
+          0.9695802806931387,
+          0.030419719306861236,
+          0.0
+        ],
+        "referenceXY": [
+          222.4784960348167,
+          58.352912898246636
+        ],
+        "referenceDepth": 13.753414705988904,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 2,
+        "primitive": 4790,
+        "vertices": [
+          6326,
+          6327,
+          6328
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          222.0562744140625,
+          60.19427490234375
+        ],
+        "referenceDepth": 13.749302864074707,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 4786,
+        "vertices": [
+          6322,
+          6323,
+          6324
+        ],
+        "barycentric": [
+          0.1587672357359369,
+          0.0,
+          0.8412327642640631
+        ],
+        "referenceXY": [
+          221.5929587506328,
+          58.15244744349933
+        ],
+        "referenceDepth": 13.749924949336268,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 4996,
+        "vertices": [
+          6812,
+          6813,
+          6814
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          220.76942443847656,
+          60.141502380371094
+        ],
+        "referenceDepth": 13.750887870788574,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2784,
+        "vertices": [
+          4006,
+          4007,
+          4008
+        ],
+        "barycentric": [
+          0.09917882186887168,
+          0.0,
+          0.9008211781311283
+        ],
+        "referenceXY": [
+          220.83104914961788,
+          55.15599904644081
+        ],
+        "referenceDepth": 13.724680186632146,
+        "reprojectionError": 7.105427357601002e-15
+      },
+      {
+        "submesh": 2,
+        "primitive": 2819,
+        "vertices": [
+          4041,
+          4043,
+          4042
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          219.85665893554688,
+          59.42330551147461
+        ],
+        "referenceDepth": 13.755997657775879,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2807,
+        "vertices": [
+          4029,
+          4031,
+          4030
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          219.06077575683594,
+          58.39332962036133
+        ],
+        "referenceDepth": 13.738574028015137,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2799,
+        "vertices": [
+          4021,
+          4023,
+          4022
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          218.79150390625,
+          57.200157165527344
+        ],
+        "referenceDepth": 13.729389190673828,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2785,
+        "vertices": [
+          4007,
+          4009,
+          4008
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          218.888427734375,
+          54.82508087158203
+        ],
+        "referenceDepth": 13.72113037109375,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 2767,
+        "vertices": [
+          3989,
+          3991,
+          3990
+        ],
+        "barycentric": [
+          0.5861469228618627,
+          0.4138530771381374,
+          0.0
+        ],
+        "referenceXY": [
+          219.55644559867002,
+          51.81260788602204
+        ],
+        "referenceDepth": 13.709689257110751,
+        "reprojectionError": 7.105427357601002e-15
+      },
+      {
+        "submesh": 2,
+        "primitive": 5196,
+        "vertices": [
+          7796,
+          7797,
+          7798
+        ],
+        "barycentric": [
+          0.39662348624268245,
+          0.0,
+          0.6033765137573176
+        ],
+        "referenceXY": [
+          219.10472296185793,
+          50.03055459148233
+        ],
+        "referenceDepth": 13.708986955980052,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 5216,
+        "vertices": [
+          7816,
+          7817,
+          7818
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          217.0471954345703,
+          58.47705841064453
+        ],
+        "referenceDepth": 13.766520500183105,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 5215,
+        "vertices": [
+          7815,
+          7817,
+          7816
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          216.4591522216797,
+          58.024383544921875
+        ],
+        "referenceDepth": 13.758146286010742,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3236,
+        "vertices": [
+          4377,
+          4378,
+          4379
+        ],
+        "barycentric": [
+          0.5761333805283154,
+          0.0,
+          0.4238666194716846
+        ],
+        "referenceXY": [
+          216.20534746171035,
+          57.30486063824738
+        ],
+        "referenceDepth": 13.742128862163192,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3241,
+        "vertices": [
+          4382,
+          4384,
+          4383
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          215.60342407226562,
+          58.4771728515625
+        ],
+        "referenceDepth": 13.767070770263672,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3237,
+        "vertices": [
+          4378,
+          4380,
+          4379
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          215.1063995361328,
+          57.55595397949219
+        ],
+        "referenceDepth": 13.7478666305542,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 3,
+        "primitive": 384,
+        "vertices": [
+          8044,
+          8045,
+          8046
+        ],
+        "barycentric": [
+          0.6093850224739595,
+          0.0,
+          0.39061497752604046
+        ],
+        "referenceXY": [
+          214.92118151482677,
+          56.11139919168891
+        ],
+        "referenceDepth": 13.762899815214045,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 2,
+        "primitive": 3422,
+        "vertices": [
+          4542,
+          4543,
+          4544
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          214.36373901367188,
+          57.753334045410156
+        ],
+        "referenceDepth": 13.774802207946777,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3600,
+        "vertices": [
+          4699,
+          4700,
+          4701
+        ],
+        "barycentric": [
+          0.4318100520946787,
+          0.0,
+          0.5681899479053213
+        ],
+        "referenceXY": [
+          213.01328832847125,
+          55.83847800477128
+        ],
+        "referenceDepth": 13.749994197698067,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 3,
+        "primitive": 51,
+        "vertices": [
+          7461,
+          7463,
+          7462
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          213.224853515625,
+          56.164268493652344
+        ],
+        "referenceDepth": 13.811029434204102,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3600,
+        "vertices": [
+          4699,
+          4700,
+          4701
+        ],
+        "barycentric": [
+          0.36466645310670004,
+          0.0,
+          0.6353335468933
+        ],
+        "referenceXY": [
+          212.98467935236437,
+          55.897218664718125
+        ],
+        "referenceDepth": 13.750405418432377,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 2,
+        "primitive": 3602,
+        "vertices": [
+          4701,
+          4702,
+          4703
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          212.5222930908203,
+          56.74042892456055
+        ],
+        "referenceDepth": 13.763206481933594,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3607,
+        "vertices": [
+          4706,
+          4708,
+          4707
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          212.07643127441406,
+          56.802101135253906
+        ],
+        "referenceDepth": 13.78501033782959,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3603,
+        "vertices": [
+          4702,
+          4704,
+          4703
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          211.373291015625,
+          55.99540710449219
+        ],
+        "referenceDepth": 13.765815734863281,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3601,
+        "vertices": [
+          4700,
+          4702,
+          4701
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          211.2147979736328,
+          55.36540222167969
+        ],
+        "referenceDepth": 13.75918197631836,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3784,
+        "vertices": [
+          4861,
+          4862,
+          4863
+        ],
+        "barycentric": [
+          0.3797353606675225,
+          0.0,
+          0.6202646393324774
+        ],
+        "referenceXY": [
+          211.27435522236712,
+          53.25788191296633
+        ],
+        "referenceDepth": 13.758925306048987,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 2,
+        "primitive": 3786,
+        "vertices": [
+          4863,
+          4864,
+          4865
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          210.68905639648438,
+          54.448875427246094
+        ],
+        "referenceDepth": 13.767221450805664,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3790,
+        "vertices": [
+          4867,
+          4868,
+          4869
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          209.71812438964844,
+          55.429473876953125
+        ],
+        "referenceDepth": 13.78502082824707,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3793,
+        "vertices": [
+          4870,
+          4872,
+          4871
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          209.8180694580078,
+          55.780982971191406
+        ],
+        "referenceDepth": 13.79547119140625,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3791,
+        "vertices": [
+          4868,
+          4870,
+          4869
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          209.30267333984375,
+          55.18903350830078
+        ],
+        "referenceDepth": 13.787457466125488,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3791,
+        "vertices": [
+          4868,
+          4870,
+          4869
+        ],
+        "barycentric": [
+          0.7532723999054716,
+          0.2467276000945284,
+          0.0
+        ],
+        "referenceXY": [
+          209.30382274230942,
+          54.55655756052553
+        ],
+        "referenceDepth": 13.780267235326143,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 3971,
+        "vertices": [
+          5027,
+          5029,
+          5028
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          208.71298217773438,
+          53.34196472167969
+        ],
+        "referenceDepth": 13.791067123413086,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 4148,
+        "vertices": [
+          5183,
+          5184,
+          5185
+        ],
+        "barycentric": [
+          0.5469684745145462,
+          0.0,
+          0.45303152548545383
+        ],
+        "referenceXY": [
+          208.88893455665615,
+          50.70531652530389
+        ],
+        "referenceDepth": 13.778161148172245,
+        "reprojectionError": 7.105427357601002e-15
+      },
+      {
+        "submesh": 2,
+        "primitive": 4152,
+        "vertices": [
+          5187,
+          5188,
+          5189
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          207.76541137695312,
+          52.51100158691406
+        ],
+        "referenceDepth": 13.797098159790039,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 4156,
+        "vertices": [
+          5191,
+          5192,
+          5193
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          207.55238342285156,
+          53.652610778808594
+        ],
+        "referenceDepth": 13.816115379333496,
+        "reprojectionError": 0.0
+      }
+    ],
+    [
+      {
+        "submesh": 1,
+        "primitive": 307,
+        "vertices": [
+          808,
+          810,
+          809
+        ],
+        "barycentric": [
+          0.6787433507923826,
+          0.3212566492076175,
+          0.0
+        ],
+        "referenceXY": [
+          229.46256248917012,
+          35.20613571023654
+        ],
+        "referenceDepth": 13.756281914090245,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 49,
+        "vertices": [
+          546,
+          548,
+          547
+        ],
+        "barycentric": [
+          0.41773943735315144,
+          0.5822605626468486,
+          0.0
+        ],
+        "referenceXY": [
+          231.84480394281078,
+          37.62316820649235
+        ],
+        "referenceDepth": 13.73399451550563,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 2,
+        "primitive": 5441,
+        "vertices": [
+          8183,
+          8185,
+          8184
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          231.6522674560547,
+          36.191375732421875
+        ],
+        "referenceDepth": 13.799216270446777,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 2,
+        "primitive": 5434,
+        "vertices": [
+          8176,
+          8177,
+          8178
+        ],
+        "barycentric": [
+          0.11424456712578847,
+          0.0,
+          0.8857554328742115
+        ],
+        "referenceXY": [
+          231.34274705487448,
+          35.79944726909365
+        ],
+        "referenceDepth": 13.768969919692061,
+        "reprojectionError": 2.842170943040401e-14
+      }
+    ],
+    [
+      {
+        "submesh": 0,
+        "primitive": 625,
+        "vertices": [
+          5669,
+          5671,
+          5670
+        ],
+        "barycentric": [
+          0.5401091012388051,
+          0.45989089876119493,
+          0.0
+        ],
+        "referenceXY": [
+          232.8320098421519,
+          39.9755546454107
+        ],
+        "referenceDepth": 13.776906082707882,
+        "reprojectionError": 7.105427357601002e-15
+      },
+      {
+        "submesh": 0,
+        "primitive": 967,
+        "vertices": [
+          5973,
+          5975,
+          5974
+        ],
+        "barycentric": [
+          0.65341163853216,
+          0.34658836146783994,
+          0.0
+        ],
+        "referenceXY": [
+          233.59105223085228,
+          42.63406780487554
+        ],
+        "referenceDepth": 13.799804356112361,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 0,
+        "primitive": 976,
+        "vertices": [
+          5982,
+          5983,
+          5984
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          234.5552215576172,
+          43.759830474853516
+        ],
+        "referenceDepth": 13.796575546264648,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 0,
+        "primitive": 366,
+        "vertices": [
+          328,
+          329,
+          330
+        ],
+        "barycentric": [
+          0.37743468852742645,
+          0.0,
+          0.6225653114725735
+        ],
+        "referenceXY": [
+          234.6718190205407,
+          44.8860226658563
+        ],
+        "referenceDepth": 13.773064378646097,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 1,
+        "primitive": 99,
+        "vertices": [
+          596,
+          598,
+          597
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          234.97821044921875,
+          44.060489654541016
+        ],
+        "referenceDepth": 13.770938873291016,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 95,
+        "vertices": [
+          592,
+          594,
+          593
+        ],
+        "barycentric": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "referenceXY": [
+          235.1453857421875,
+          43.472740173339844
+        ],
+        "referenceDepth": 13.76674747467041,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 90,
+        "vertices": [
+          587,
+          588,
+          589
+        ],
+        "barycentric": [
+          0.8805577377599956,
+          0.0,
+          0.1194422622400044
+        ],
+        "referenceXY": [
+          235.2283662123303,
+          43.04606111242638
+        ],
+        "referenceDepth": 13.753383655315554,
+        "reprojectionError": 2.842170943040401e-14
+      },
+      {
+        "submesh": 1,
+        "primitive": 78,
+        "vertices": [
+          575,
+          576,
+          577
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          235.01177978515625,
+          41.69134521484375
+        ],
+        "referenceDepth": 13.742610931396484,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 68,
+        "vertices": [
+          565,
+          566,
+          567
+        ],
+        "barycentric": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "referenceXY": [
+          234.3409881591797,
+          40.46977996826172
+        ],
+        "referenceDepth": 13.73438549041748,
+        "reprojectionError": 0.0
+      },
+      {
+        "submesh": 1,
+        "primitive": 58,
+        "vertices": [
+          555,
+          556,
+          557
+        ],
+        "barycentric": [
+          0.29945011523053217,
+          0.0,
+          0.7005498847694678
+        ],
+        "referenceXY": [
+          233.1777201501145,
+          39.28238579385804
+        ],
+        "referenceDepth": 13.72801701095728,
+        "reprojectionError": 7.105427357601002e-15
+      }
+    ]
+  ],
+  "preprocessingSeconds": 5.258322299996507,
+  "preprocessingStagesSeconds": {
+    "vectorExtraction": 4.571549099986441,
+    "regionDesign": 0.28376879999996163,
+    "anchorBinding": 0.40300620000925846
+  },
+  "profile": {
+    "curveErrorLogicalCells": 0.1875,
+    "areaPerimeterCost": 0.14
+  },
+  "semanticIntentInferred": false,
+  "newPackages": false
+}

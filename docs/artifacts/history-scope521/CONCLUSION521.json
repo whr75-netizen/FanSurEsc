@@ -1,0 +1,252 @@
+{
+  "scope": "Analysis before adding alternative-history/factor code; no unbounded mask bank",
+  "observedProposalDomain": {
+    "wholeMasksPerPose": 4,
+    "maximumOuterPatterns": 4,
+    "maximumHoleUnionPatterns": 4,
+    "maximumProjectedJointStates": 16,
+    "maximumValuesIfIndependent": 8,
+    "softCoupledValidPoseCount": 39,
+    "hardContainmentPoseCount": 26,
+    "combinedCoupledPoseCount": 44,
+    "maxValidFourPointResidual": 0.3280404210090637,
+    "notFullSearchSpace": true
+  },
+  "actualFrozenDependency": {
+    "cells": [
+      {
+        "xy": [
+          229,
+          35
+        ],
+        "affectedCanonicalArcIds": [
+          0,
+          2
+        ]
+      },
+      {
+        "xy": [
+          233,
+          39
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          209,
+          42
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          233,
+          42
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          233,
+          46
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          208,
+          47
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          231,
+          47
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          218,
+          53
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          217,
+          55
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          212,
+          56
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          229,
+          56
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          224,
+          58
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      }
+    ],
+    "spatial8NeighbourPairs": [],
+    "sameCanonicalOuterArcCouplesCells": 12,
+    "arcCosts": [
+      {
+        "old": 1,
+        "new": 1,
+        "oldSpans": 0,
+        "newSpans": 0,
+        "raw": 0.0
+      },
+      {
+        "old": 2,
+        "new": 2,
+        "oldSpans": 2,
+        "newSpans": 4,
+        "raw": 2.0
+      },
+      {
+        "old": 0,
+        "new": 0,
+        "oldSpans": 71,
+        "newSpans": 72,
+        "raw": 34.0
+      }
+    ],
+    "independentBinarySpatialChoices": 12,
+    "possibleBinaryCombinationsBeforeJointCorrespondenceAndVisibilityChecks": 4096,
+    "allCombinationsCertified": false
+  },
+  "currentBlackBoxComplexity": {
+    "rawCostInterface": "complete old/new arc span sequences -> scalar cyclic edit cost/one optimal trace",
+    "cyclicEditOuterSpans": [
+      71,
+      72
+    ],
+    "linearDPGridStatesPerRotation": 5256,
+    "rotations": 72,
+    "DPCellVisitsBeforeFinalTrace": 378432,
+    "denseCurrentClosureRawOffDiagonalCallsAtq16": 240,
+    "crossPoseRawCallsAtq16": 256,
+    "currentClosureScalarTriplesAtq16": 4096,
+    "generalDenseStateFormula": "q values;8*q^2 bytes per double cost matrix;O(q^3) closure;O(q_prev*q_new*C_edit) cross transport, plus current raw matrix work",
+    "q4096Illustration": {
+      "q4096Values": 4096,
+      "q4096DoubleMatrixBytes": 134217728,
+      "q4096FloydScalarTriples": 68719476736,
+      "observedq16DoubleMatrixBytes": 2048,
+      "observedq16FloydScalarTriples": 4096
+    },
+    "q4096IsNotCertifiedRequiredBank": true
+  },
+  "measuredCost": {
+    "calls": 6,
+    "secondsMedian": 0.9453074499906506,
+    "secondsMin": 0.9335316000069724,
+    "secondsMax": 0.9599852999963332,
+    "rows": [
+      {
+        "repeat": 0,
+        "direction": "held-to-static",
+        "seconds": 0.9599852999963332,
+        "raw": 36.0,
+        "scope": "span517.compare call only, same-geometry frozen inputs, no overlay/mask construction/Unity"
+      },
+      {
+        "repeat": 0,
+        "direction": "static-to-held",
+        "seconds": 0.9335316000069724,
+        "raw": 36.0,
+        "scope": "span517.compare call only, same-geometry frozen inputs, no overlay/mask construction/Unity"
+      },
+      {
+        "repeat": 1,
+        "direction": "held-to-static",
+        "seconds": 0.9575515999895288,
+        "raw": 36.0,
+        "scope": "span517.compare call only, same-geometry frozen inputs, no overlay/mask construction/Unity"
+      },
+      {
+        "repeat": 1,
+        "direction": "static-to-held",
+        "seconds": 0.938829300008365,
+        "raw": 36.0,
+        "scope": "span517.compare call only, same-geometry frozen inputs, no overlay/mask construction/Unity"
+      },
+      {
+        "repeat": 2,
+        "direction": "held-to-static",
+        "seconds": 0.9483440999902086,
+        "raw": 36.0,
+        "scope": "span517.compare call only, same-geometry frozen inputs, no overlay/mask construction/Unity"
+      },
+      {
+        "repeat": 2,
+        "direction": "static-to-held",
+        "seconds": 0.9422707999910926,
+        "raw": 36.0,
+        "scope": "span517.compare call only, same-geometry frozen inputs, no overlay/mask construction/Unity"
+      }
+    ],
+    "noRuntimeFPSOrAllocationClaim": true,
+    "noOptimizationImplemented": true
+  },
+  "timingQualifier": "Primary6 calls launched after range analysis finished. Earlier concurrent reference retained separately; no runtimeFPS/hardware lower bound claim.",
+  "factorizationConditions": [
+    "No shared pixel/ownership label between independent variables",
+    "No area/inclusion/8-neighbour spatial factor crossing the proposed split",
+    "No temporal alignment/edit factor crossing the split, unless a conditional separator message is retained",
+    "Affected-component restart marginalizes only its variables while conditioning on shared separators"
+  ],
+  "concreteMissingInterface": "519/517 exposes a complete-arc scalar and trace, not entry/exit-conditioned min-plus messages. Existing mask->span binding also requires the completed boundary/run segmentation. A factor of history cannot be split safely just by source arc or connected screen cells.",
+  "minimumNextExperimentNotImplemented": [
+    "Expose the existing weighted edit DAG with every entry/exit alignment condition, preserving raw edge costs, cyclic choices and merge/split operations.",
+    "Use the frozen12-cell case plus shared outer/hole cell; retain the shared-cell separator instead of erasing either history.",
+    "Prove conditional-message composition reproduces raw36 and all relevant admissible choices before treating domains as independent.",
+    "Measure reachable separator/message cardinality and growth across time; do not assume a fixed4-pattern bank or runtime speed."
+  ],
+  "decision": "NO_FURTHER_SELECTOR_IMPLEMENTATION_BEFORE_CONDITIONAL_FACTOR_INTERFACE_BOUND",
+  "whyNotCodeMore": "Current exact black-box route expands complete drawing alternatives and performs measured second-scale arc queries. A compressed conditional factorization is possible in principle but neither provided nor proven bounded by the current API.",
+  "newKernelOrSelectionCode": false,
+  "walkSensitivityRun": false,
+  "productChanged": false,
+  "newUnityCalls": 0,
+  "defaultOFF": true,
+  "12CellRecoveryTimeQualityPassed": false
+}

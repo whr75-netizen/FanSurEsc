@@ -1,0 +1,2457 @@
+{
+  "posesExamined": 81,
+  "observedJointDomainMax": 16,
+  "observedContainedJointDomainMax": 16,
+  "observedLocalValuesMaxIfIndependent": 8,
+  "spaceCoupledTargets": [
+    16,
+    17,
+    18,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    74,
+    75,
+    76
+  ],
+  "softSpaceCoupledOnValidRectangles": [
+    18,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,
+    61,
+    62,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    74
+  ],
+  "hardContainmentCoupledTargets": [
+    16,
+    17,
+    18,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    74,
+    75,
+    76
+  ],
+  "maxSpaceResidual": 0.8169353380799294,
+  "maxValidRectangleSpaceCoupling": 0.3280404210090637,
+  "observedVaryingOuterCellsMax": 26,
+  "observedVaryingHoleCellsMax": 4,
+  "frozenCounterexample": {
+    "cells": [
+      {
+        "xy": [
+          229,
+          35
+        ],
+        "affectedCanonicalArcIds": [
+          0,
+          2
+        ]
+      },
+      {
+        "xy": [
+          233,
+          39
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          209,
+          42
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          233,
+          42
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          233,
+          46
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          208,
+          47
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          231,
+          47
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          218,
+          53
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          217,
+          55
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          212,
+          56
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          229,
+          56
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      },
+      {
+        "xy": [
+          224,
+          58
+        ],
+        "affectedCanonicalArcIds": [
+          0
+        ]
+      }
+    ],
+    "spatial8NeighbourPairs": [],
+    "sameCanonicalOuterArcCouplesCells": 12,
+    "arcCosts": [
+      {
+        "old": 1,
+        "new": 1,
+        "oldSpans": 0,
+        "newSpans": 0,
+        "raw": 0.0
+      },
+      {
+        "old": 2,
+        "new": 2,
+        "oldSpans": 2,
+        "newSpans": 4,
+        "raw": 2.0
+      },
+      {
+        "old": 0,
+        "new": 0,
+        "oldSpans": 71,
+        "newSpans": 72,
+        "raw": 34.0
+      }
+    ],
+    "independentBinarySpatialChoices": 12,
+    "possibleBinaryCombinationsBeforeJointCorrespondenceAndVisibilityChecks": 4096,
+    "allCombinationsCertified": false
+  },
+  "denseStateCosts": {
+    "q4096Values": 4096,
+    "q4096DoubleMatrixBytes": 134217728,
+    "q4096FloydScalarTriples": 68719476736,
+    "observedq16DoubleMatrixBytes": 2048,
+    "observedq16FloydScalarTriples": 4096
+  },
+  "rows": [
+    {
+      "target": 0,
+      "wholeCandidatesObserved": 1,
+      "outerPatternsObserved": 1,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 1,
+      "containedJointDomain": 1,
+      "factorLocalValuesIfIndependent": 2,
+      "jointValuesIfCoupled": 1,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 0,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "1",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 1,
+      "wholeCandidatesObserved": 2,
+      "outerPatternsObserved": 1,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 2,
+      "containedJointDomain": 2,
+      "factorLocalValuesIfIndependent": 3,
+      "jointValuesIfCoupled": 2,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 0,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "2",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 2,
+      "wholeCandidatesObserved": 2,
+      "outerPatternsObserved": 1,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 2,
+      "containedJointDomain": 2,
+      "factorLocalValuesIfIndependent": 3,
+      "jointValuesIfCoupled": 2,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 0,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "2",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 3,
+      "wholeCandidatesObserved": 2,
+      "outerPatternsObserved": 2,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 4,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 1,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "4",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 4,
+      "wholeCandidatesObserved": 2,
+      "outerPatternsObserved": 2,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 4,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 3,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "16",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 5,
+      "wholeCandidatesObserved": 2,
+      "outerPatternsObserved": 2,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 4,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 4,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "32",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 6,
+      "wholeCandidatesObserved": 3,
+      "outerPatternsObserved": 3,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 6,
+      "containedJointDomain": 6,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 6,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 6,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "128",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 7,
+      "wholeCandidatesObserved": 3,
+      "outerPatternsObserved": 3,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 3,
+      "containedJointDomain": 3,
+      "factorLocalValuesIfIndependent": 4,
+      "jointValuesIfCoupled": 3,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 6,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "64",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 8,
+      "wholeCandidatesObserved": 3,
+      "outerPatternsObserved": 3,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 3,
+      "containedJointDomain": 3,
+      "factorLocalValuesIfIndependent": 4,
+      "jointValuesIfCoupled": 3,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 6,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "64",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 9,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 10,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "1024",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 10,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 13,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "16384",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 11,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 18,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "524288",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 12,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "2097152",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 13,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "2097152",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 14,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "2097152",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 15,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "2097152",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 16,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.3450474739074707,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 2,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 4,
+      "observedVaryingCellsOuter": 25,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "134217728",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 17,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 5,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.14794492721557617,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 24,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "33554432",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 18,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 6,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.16402021050453186,
+      "validRectangleSpaceEnergyCouplingMax": 0.16402021050453186,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 2,
+      "observedVaryingCellsOuter": 22,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "8388608",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 19,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 16,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "65536",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 20,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 14,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "16384",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 21,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 16,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "65536",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 22,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 17,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "262144",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 23,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 15,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "65536",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 24,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 15,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "65536",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 25,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "1048576",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 26,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 22,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "4194304",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 27,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "1048576",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 28,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 18,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "262144",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 29,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "1048576",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 30,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "1048576",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 31,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "4194304",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 32,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 23,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "33554432",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 33,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 21,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "8388608",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 34,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 19,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "2097152",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 35,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "4194304",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 36,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 16,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.3280404210090637,
+      "validRectangleSpaceEnergyCouplingMax": 0.3280404210090637,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "8388608",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 37,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 16,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.3280404210090637,
+      "validRectangleSpaceEnergyCouplingMax": 0.3280404210090637,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 16,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "524288",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 38,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 16,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 15,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "131072",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 39,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.5552789270877838,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 21,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "16777216",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 40,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.6114163771271706,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 21,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "16777216",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 41,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.6549583896994591,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 22,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "33554432",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 42,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.6874488294124603,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 23,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "67108864",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 43,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.8139972016215324,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 23,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "67108864",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 44,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.8169353380799294,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 23,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "67108864",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 45,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.8127437978982925,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 23,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "67108864",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 46,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.8020757213234901,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 23,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "67108864",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 47,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.7875722497701645,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 22,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "33554432",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 48,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.7726218551397324,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 22,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "33554432",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 49,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 13,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.7588110119104385,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "8388608",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 50,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 5,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.3467419221997261,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 3,
+      "observedVaryingCellsOuter": 16,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "131072",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 51,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.647189661860466,
+      "validRectangleSpaceEnergyCouplingMax": 0.2460303157567978,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 3,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 4,
+      "observedVaryingCellsOuter": 23,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "67108864",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 52,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 12,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.5721241235733032,
+      "validRectangleSpaceEnergyCouplingMax": 0.2460303157567978,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": -1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 3,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 4,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 4,
+      "observedVaryingCellsOuter": 18,
+      "observedVaryingCellsHoleUnion": 4,
+      "binaryCombinationsUpperBoundObservedSupport": "4194304",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 53,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 14,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.2460303157567978,
+      "validRectangleSpaceEnergyCouplingMax": 0.2460303157567978,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 2,
+      "observedVaryingCellsOuter": 21,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "16777216",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 54,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 14,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.2460303157567978,
+      "validRectangleSpaceEnergyCouplingMax": 0.2460303157567978,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 2,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "8388608",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 55,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 14,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.2460303157567978,
+      "validRectangleSpaceEnergyCouplingMax": 0.2460303157567978,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 2,
+      "observedVaryingCellsOuter": 22,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "33554432",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 56,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 14,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.2460303157567978,
+      "validRectangleSpaceEnergyCouplingMax": 0.2460303157567978,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 2,
+      "observedVaryingCellsOuter": 26,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "536870912",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 57,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 11,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.2867100089788437,
+      "validRectangleSpaceEnergyCouplingMax": 0.2460303157567978,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 1,
+      "observedVaryingCellsOuter": 21,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "16777216",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 58,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 11,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.34579549729824066,
+      "validRectangleSpaceEnergyCouplingMax": 0.2460303157567978,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 0,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 1,
+      "observedVaryingCellsOuter": 17,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "1048576",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 59,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 16,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 17,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "524288",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 60,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 4,
+      "jointObservedProjectionDomain": 16,
+      "containedJointDomain": 16,
+      "factorLocalValuesIfIndependent": 8,
+      "jointValuesIfCoupled": 16,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 17,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "524288",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 61,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 12,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 19,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "2097152",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 62,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 12,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 17,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "524288",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 63,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 16,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "131072",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 64,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 12,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.16402021050453186,
+      "validRectangleSpaceEnergyCouplingMax": 0.16402021050453186,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 16,
+      "observedVaryingCellsHoleUnion": 4,
+      "binaryCombinationsUpperBoundObservedSupport": "1048576",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 65,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 12,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.16402021050453186,
+      "validRectangleSpaceEnergyCouplingMax": 0.16402021050453186,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 13,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "65536",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 66,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 12,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.16402021050453186,
+      "validRectangleSpaceEnergyCouplingMax": 0.16402021050453186,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 10,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "8192",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 67,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 3,
+      "jointObservedProjectionDomain": 12,
+      "containedJointDomain": 12,
+      "factorLocalValuesIfIndependent": 7,
+      "jointValuesIfCoupled": 12,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.16402021050453186,
+      "validRectangleSpaceEnergyCouplingMax": 0.16402021050453186,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 11,
+      "observedVaryingCellsHoleUnion": 3,
+      "binaryCombinationsUpperBoundObservedSupport": "16384",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 68,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 12,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "8192",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 69,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.08201010525226593,
+      "validRectangleSpaceEnergyCouplingMax": 0.08201010525226593,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": -1,
+          "dy": 1,
+          "links": 1,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 12,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "8192",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 70,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 11,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "2048",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 71,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 13,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "8192",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 72,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 16,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "65536",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 73,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 1,
+      "jointObservedProjectionDomain": 4,
+      "containedJointDomain": 4,
+      "factorLocalValuesIfIndependent": 5,
+      "jointValuesIfCoupled": 4,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 19,
+      "observedVaryingCellsHoleUnion": 0,
+      "binaryCombinationsUpperBoundObservedSupport": "524288",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 74,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 6,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.189094677567482,
+      "validRectangleSpaceEnergyCouplingMax": 0.16402021050453186,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 2,
+      "observedVaryingCellsOuter": 18,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "1048576",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 75,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 7,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.11195342242717743,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 1,
+      "observedVaryingCellsOuter": 20,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "4194304",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 76,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 7,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.01763834059238434,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [
+        {
+          "dx": 0,
+          "dy": 0,
+          "links": 1,
+          "kind": "SHARED_CELL"
+        },
+        {
+          "dx": 0,
+          "dy": 1,
+          "links": 2,
+          "kind": "SPATIAL_8_NEIGHBOUR"
+        }
+      ],
+      "containmentInvalidCombinations": 1,
+      "observedVaryingCellsOuter": 22,
+      "observedVaryingCellsHoleUnion": 2,
+      "binaryCombinationsUpperBoundObservedSupport": "16777216",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 77,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 17,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "262144",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 78,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 14,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "32768",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 79,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 14,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "32768",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    },
+    {
+      "target": 80,
+      "wholeCandidatesObserved": 4,
+      "outerPatternsObserved": 4,
+      "holeUnionPatternsObserved": 2,
+      "jointObservedProjectionDomain": 8,
+      "containedJointDomain": 8,
+      "factorLocalValuesIfIndependent": 6,
+      "jointValuesIfCoupled": 8,
+      "instantaneousSpaceEnergyAdditiveResidualMax": 0.0,
+      "validRectangleSpaceEnergyCouplingMax": 0.0,
+      "outerHoleCouplingLinks": [],
+      "containmentInvalidCombinations": 0,
+      "observedVaryingCellsOuter": 16,
+      "observedVaryingCellsHoleUnion": 1,
+      "binaryCombinationsUpperBoundObservedSupport": "131072",
+      "scope": "Observed4-proposal projections only; this is not the full admissible search space, geometry/visibility-certified combinations or a new selector."
+    }
+  ],
+  "noNewBankOrSelectorOrProductCode": true,
+  "scope": "Bounds for existing black-box span/state API, not impossibility of every compressed algorithm."
+}

@@ -3186,3 +3186,12 @@ Interactable (abstract base class)
 - 성분별 주변화재시작 kernel은 통과하나 전체이력삭제는 무관성분까지변경하는 반례에서실패했다. 기존516은 직전출력span한벌만저장해 대안이력/부분주변화가 아직통합되지않았다. static+기존3η의 제한4mask bank는 source사건10/13/66/75/77에서outer/holes조합4/4/8/3/4개가빠진다. 이는구조적containment진단이며source/depth/가림적격성이나오류개수가아니다. 이bank로재선택하는우회는미채택했다.
 - kernel성질과실제선택기적용gate를분리해후자는미완료/미통과로남겼고 저장Walk세계수민감도는미실행이다. 다음필요조건은같은선택기상태에서대안값과변경성분만의주변화를표현하는것이며전역mask bank/전체reset/시간threshold를붙이지않는다. 제품/519대응/계수/기본OFF/Unity상태변경0,촬영0,신규채움가림미확인,내부색/성능미해결유지.
 - 근거 docs/artifacts/state-cost520의README/PREFLIGHT/MINIMUM/RESTART_SUPPORT/VALIDATION/소스및기각1초보정ZIP. 마지막직접Unity운영확인514이후새호출없음,사용자설정/44d13c0/8cf7957보존,Library403재시도없음. 실제Walk픽셀튐·형태고정해결·제품채택·실시간·전체프로젝트완료를주장하지않는다.
+
+## 233. CHARACTER-RENDER-01 — 이력 표현521 상태수·결합·비용 분석, 추가 구현 보류
+
+- 520검증을1c90d1c로먼저커밋한뒤새선택기/무제한maskbank없이기존후보와API의범위를분석했다. 독립분리는공유pixel/owner·공간포함/8이웃·시간편집factor가없을때만성립하며공유separator는조건부로남겨야한다. 실제12셀은공간8이웃쌍0이지만모두outerarc0편집DP에속하고(229,35)는holearc2에도속한다. raw36=outer34+hole2,span71→72/2→4로arc별독립분리도자동성립하지않는다.
+- 기존4mask의81포즈projection범위는outer최대4/holeunion최대4/결합최대16,독립일때만local값최대8이다. 유효4점조합공간비용비가산39포즈/포함제약26/합집합44,유효잔차최대.328040421. 이는진단용제한후보이며전체탐색·영속owner·source/depth/가림적격성으로확대하지않았다.12이진셀4096조합예도전수적격성미확인이고필수상태수하한으로주장하지않았다.
+- 현재scalar span517.compare는전체arc cyclic merge/splitDP를호출하며outer71×72span이면회전72×표72×73=378432 DPcell(최종trace전)이다. 범위분석후별도6회call만측정해중앙0.945초/범위0.934~0.960초,overlay/mask/Unity제외다. 첫병렬측정은참고로만보존. 실시간FPS/하드웨어하한/할당측정이아니다.
+- 조밀q상태는값q/행렬8q²byte/closureO(q³)/crossO(q_old q_new C_edit). q16이면현재offdiagonal최대240/cross256질의가가능해작은행렬보다완성형편집호출이문제다. q4096예는행렬하나128MiB/closure68719476736triple이며실제로할당·bank작성하지않았다. 모든압축알고리즘불가능이라는주장이아니라현재black-box정확경로의부담이다.
+- 최소다음의존성은기존edit DAG의입구/출구정렬조건별min-plus전달factor와공유셀separator표현이다. 고정경계/merge삭제/계수변경으로519비용을바꾸지말고12셀반례의raw36과대안결정을조건부합성으로재현한뒤separator성장·시간비용을증명해야한다. 현재API는완성drawing의scalar/trace만제공하므로이를증명하기전추가선택기코딩/Walk세계수민감도를진행하지않았다.
+- 근거 docs/artifacts/history-scope521의README/RANGE/COST/CONCLUSION/VALIDATION/분석source. 12셀동시복귀시간품질미통과/520통합미완료/신규채움가림미확인/내부색·성능미해결유지. 제품/Unity촬영/519대응/공간비용/계수/기본OFF변경0,사용자설정·44d13c0·8cf7957보존. 실제표현개선·실시간·전체프로젝트완료를주장하지않는다.

@@ -1,0 +1,28 @@
+{
+  "status": "FULL_SPATIAL_SCORE_NOT_DEFINED_ON_CURRENT_REGION_INPUTS",
+  "allSpatialTermsSpecifiedTogether": true,
+  "paperEquivalentImplementationVerified": false,
+  "fullObjectiveValuesComputed": false,
+  "newMetricEvaluations": 0,
+  "newUnityCalls": 0,
+  "newCaptures": 0,
+  "newProductCode": false,
+  "535Cause": "deliberate reference eligibility exclusion + output-only extremum terms, with other spatial terms missing; not a radius-search failure",
+  "535NotExactPaperEq3": true,
+  "spatialWeights": [
+    1,
+    0.5,
+    1,
+    0.5
+  ],
+  "weightsTuned": false,
+  "missing": [
+    "pixel-centre feature-line/region-band correspondence",
+    "warped source feature-line footprint for Eq2",
+    "fixed initial span graph and valid closed-loop alignment"
+  ],
+  "noNewOptimizerOrEngine": true,
+  "runtimeCandidateOFF": true,
+  "sourceVisualRead": "web original text read; local PDF download returned HTTP403, no bypass/retry; no local figure image read claimed",
+  "noFullPaperSuccessOrFailureVerdict": true
+}

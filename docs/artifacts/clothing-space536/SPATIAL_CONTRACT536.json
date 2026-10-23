@@ -1,0 +1,132 @@
+{
+  "scope": "spatial-only specification, no scorer/selector implemented",
+  "sourceURL": "https://yongliangyang.net/docs/pixelAnim_pg16.pdf",
+  "spatialObjective": "Espace = Eso + 0.5*Esc + Eqs + 0.5*Eqj",
+  "weightsOrigin": "paper Algorithm1 spatial weights, fixed; temporal term excluded by task; not claimed optimal for region masks",
+  "terms": [
+    {
+      "name": "Eso",
+      "paper": "Eq1 / Fig4",
+      "definition": "sum of areas between turning functions of matching oriented polylines, arc-length parameterized",
+      "requires": [
+        "same reference/output line identity, orientation and line start/end",
+        "AppendixA output pixel-path vectorization",
+        "fixed unrasterized deformed reference"
+      ],
+      "current": "region contours available; pixel-centre line paths and closed-loop phase correspondence absent",
+      "equivalent": false
+    },
+    {
+      "name": "Esc",
+      "paper": "Eq2 / Fig5",
+      "definition": "per-line average of output-pixel penalties 1-ci, using weighted overlap with fixed high-resolution warped source feature-line footprint",
+      "requires": [
+        "10x source pixel-art feature-line footprint warped before low-resolution rasterization",
+        "Manhattan boundary weights and per-pixel normalization",
+        "ordered output line pixels and paper ci<0.5 handling"
+      ],
+      "current": "filled-region area A is available; it is not weighted stroke ci; original pixel-line footprint/warp is absent",
+      "equivalent": false
+    },
+    {
+      "name": "Eqs",
+      "paper": "Eq3 / Fig7",
+      "definition": "output extrema compared to nearby reference extrema; width difference over width sum for matched, inverse width for unmatched",
+      "requires": [
+        "same vectorized feature-line representation",
+        "reference extremum filtering by specified pixel perturbation",
+        "width band .5, reference height1, experimental correspondence radius2 in logical pixels"
+      ],
+      "current": "535 uses region-edge extrema and list culling, not the exact reference perturbation/line representation",
+      "equivalent": false
+    },
+    {
+      "name": "Eqj",
+      "paper": "Eq4 / Fig8",
+      "definition": "nonmonotone consecutive span-triplet count per line, normalized by initial line span count",
+      "requires": [
+        "ordered pixels grouped into spans inside extremum-separated sub-polylines",
+        "fixed initial span-count denominator",
+        "same line/junction and pixel-vectorization rules"
+      ],
+      "current": "no paper centreline/span graph or fixed initial line span denominator; region perimeter is not this quantity",
+      "equivalent": false
+    }
+  ],
+  "sharedInputs": {
+    "referenceDuringCandidateEvaluation": "immutable and independent of FitArea/selected mask",
+    "withinPoseLineCorrespondence": "required",
+    "crossPoseTemporalMatching": "not required by this spatial-only comparison",
+    "closedLoops": "need an explicit common anchor/orientation/phase rule, not independently minimum screen coordinates",
+    "regionFillAuthority": "existing common Gate retained, but it does not supply missing line/stroke inputs"
+  },
+  "currentSelector": {
+    "path": "Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs:207",
+    "inputs": "float cell fill areas + width + height",
+    "energy": "area unary + pairwise boundary length",
+    "hasPaperLineTerms": false,
+    "canAddFourIndependentPerPixelWeightsAndRemainEquivalent": false
+  },
+  "replacementContract": "Boundary choice before selected mask must receive a fixed reference plus candidate line/band/region correspondence. FitArea can generate candidates, but cannot replace the reference. Downstream fill/outline/gates must consume the same chosen closed region.",
+  "caseMatrix": [
+    {
+      "case": "actual43",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "actual44",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "actual50",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "thin0_0",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "thin0_1",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "thin1_0",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "thin1_1",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "thin2_0",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "thin2_1",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "thin3_0",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    },
+    {
+      "case": "thin3_1",
+      "fullSpatialScore": null,
+      "status": "UNDEFINED_INPUT_REPRESENTATION_NOT_EQUIVALENT"
+    }
+  ],
+  "minimumMissingAdapter": "Define one common boundary-centreline/outline-band-to-fill contract and matching per-pose pixel line graph; a band synthesized from mesh distance would be an explicit region-method adaptation, not the paper warped artist-line input.",
+  "newEngineRequiredProved": false,
+  "reasonNotImplemented": "Exact paper inputs are unavailable; choosing a different stroke/anchor/topology policy is a method change, not completing omitted arithmetic.",
+  "paperKnownLimitsRelevant": "paper does not model all relationships between nearby feature lines; part occlusion/topology change are outside its demonstrated formulation. This does not prevent per-pose spatial evaluation once valid inputs exist."
+}

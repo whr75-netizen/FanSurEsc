@@ -1,0 +1,547 @@
+{
+  "status": "535_PROXY_MECHANISM_DECOMPOSED_NOT_PAPER_RESULT",
+  "primaryMechanism": "Eligibility removed shallow reference extrema even though radius search would match them.",
+  "secondaryMechanism": "Eq3-style sum is over output extrema; deleting them removes terms. No separate lost-reference-end charge exists in that term.",
+  "wholeObjectiveOmissions": [
+    "orientation Eq1",
+    "location/weighted stroke coverage Eq2",
+    "span staircase Eq4"
+  ],
+  "exactnessMismatch": [
+    "region cell edges instead of AppendixA pixel-centre/span feature lines",
+    "feature-list eligibility instead of reference pixel perturbation"
+  ],
+  "normalCases": [
+    {
+      "case": "thin0_0",
+      "terms": [
+        {
+          "outputPosition": [
+            -1.0,
+            8.5
+          ],
+          "referencePosition": [
+            -0.75,
+            8.5
+          ],
+          "axis": 0,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            0.0,
+            5.5
+          ],
+          "referencePosition": [
+            0.0,
+            5.5
+          ],
+          "axis": 0,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.0,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            -1.0,
+            2.5
+          ],
+          "referencePosition": [
+            -0.75,
+            2.5
+          ],
+          "axis": 0,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        }
+      ],
+      "preservedCost": 1,
+      "bothEndsOmittedCost": 0.09090909090909091,
+      "radiusSearchFailure": false,
+      "explicitDeletedReferenceExtremumTermPresent": false
+    },
+    {
+      "case": "thin0_1",
+      "terms": [
+        {
+          "outputPosition": [
+            -1.0,
+            8.5
+          ],
+          "referencePosition": [
+            -0.75,
+            8.5
+          ],
+          "axis": 0,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            0.0,
+            5.5
+          ],
+          "referencePosition": [
+            0.0,
+            5.5
+          ],
+          "axis": 0,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.0,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            -1.0,
+            2.5
+          ],
+          "referencePosition": [
+            -0.75,
+            2.5
+          ],
+          "axis": 0,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        }
+      ],
+      "preservedCost": 1,
+      "bothEndsOmittedCost": 0.09090909090909091,
+      "radiusSearchFailure": false,
+      "explicitDeletedReferenceExtremumTermPresent": false
+    },
+    {
+      "case": "thin1_0",
+      "terms": [
+        {
+          "outputPosition": [
+            -8.5,
+            -1.0
+          ],
+          "referencePosition": [
+            -8.5,
+            -0.75
+          ],
+          "axis": 1,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            -5.5,
+            0.0
+          ],
+          "referencePosition": [
+            -5.5,
+            0.0
+          ],
+          "axis": 1,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.0,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            -2.5,
+            -1.0
+          ],
+          "referencePosition": [
+            -2.5,
+            -0.75
+          ],
+          "axis": 1,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        }
+      ],
+      "preservedCost": 1,
+      "bothEndsOmittedCost": 0.09090909090909091,
+      "radiusSearchFailure": false,
+      "explicitDeletedReferenceExtremumTermPresent": false
+    },
+    {
+      "case": "thin1_1",
+      "terms": [
+        {
+          "outputPosition": [
+            -8.5,
+            -1.0
+          ],
+          "referencePosition": [
+            -8.5,
+            -0.75
+          ],
+          "axis": 1,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            -5.5,
+            0.0
+          ],
+          "referencePosition": [
+            -5.5,
+            0.0
+          ],
+          "axis": 1,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.0,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            -2.5,
+            -1.0
+          ],
+          "referencePosition": [
+            -2.5,
+            -0.75
+          ],
+          "axis": 1,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        }
+      ],
+      "preservedCost": 1,
+      "bothEndsOmittedCost": 0.09090909090909091,
+      "radiusSearchFailure": false,
+      "explicitDeletedReferenceExtremumTermPresent": false
+    },
+    {
+      "case": "thin2_0",
+      "terms": [
+        {
+          "outputPosition": [
+            1.0,
+            -8.5
+          ],
+          "referencePosition": [
+            0.75,
+            -8.5
+          ],
+          "axis": 0,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            0.0,
+            -5.5
+          ],
+          "referencePosition": [
+            -0.0,
+            -5.5
+          ],
+          "axis": 0,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.0,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            1.0,
+            -2.5
+          ],
+          "referencePosition": [
+            0.75,
+            -2.5
+          ],
+          "axis": 0,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        }
+      ],
+      "preservedCost": 1,
+      "bothEndsOmittedCost": 0.09090909090909091,
+      "radiusSearchFailure": false,
+      "explicitDeletedReferenceExtremumTermPresent": false
+    },
+    {
+      "case": "thin2_1",
+      "terms": [
+        {
+          "outputPosition": [
+            1.0,
+            -8.5
+          ],
+          "referencePosition": [
+            0.75,
+            -8.5
+          ],
+          "axis": 0,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            0.0,
+            -5.5
+          ],
+          "referencePosition": [
+            -0.0,
+            -5.5
+          ],
+          "axis": 0,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.0,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            1.0,
+            -2.5
+          ],
+          "referencePosition": [
+            0.75,
+            -2.5
+          ],
+          "axis": 0,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        }
+      ],
+      "preservedCost": 1,
+      "bothEndsOmittedCost": 0.09090909090909091,
+      "radiusSearchFailure": false,
+      "explicitDeletedReferenceExtremumTermPresent": false
+    },
+    {
+      "case": "thin3_0",
+      "terms": [
+        {
+          "outputPosition": [
+            8.5,
+            1.0
+          ],
+          "referencePosition": [
+            8.5,
+            0.75
+          ],
+          "axis": 1,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            5.5,
+            0.0
+          ],
+          "referencePosition": [
+            5.5,
+            -0.0
+          ],
+          "axis": 1,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.0,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            2.5,
+            1.0
+          ],
+          "referencePosition": [
+            2.5,
+            0.75
+          ],
+          "axis": 1,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        }
+      ],
+      "preservedCost": 1,
+      "bothEndsOmittedCost": 0.09090909090909091,
+      "radiusSearchFailure": false,
+      "explicitDeletedReferenceExtremumTermPresent": false
+    },
+    {
+      "case": "thin3_1",
+      "terms": [
+        {
+          "outputPosition": [
+            8.5,
+            1.0
+          ],
+          "referencePosition": [
+            8.5,
+            0.75
+          ],
+          "axis": 1,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            5.5,
+            0.0
+          ],
+          "referencePosition": [
+            5.5,
+            -0.0
+          ],
+          "axis": 1,
+          "polarity": -1,
+          "distanceBeforeEligibility": 0.0,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        },
+        {
+          "outputPosition": [
+            2.5,
+            1.0
+          ],
+          "referencePosition": [
+            2.5,
+            0.75
+          ],
+          "axis": 1,
+          "polarity": 1,
+          "distanceBeforeEligibility": 0.25,
+          "withinRadius2BeforeEligibility": true,
+          "referenceHeight": 0.75,
+          "referenceRemovedByEligibility": true,
+          "outputWidth": 3.0,
+          "costWithEligibility": 0.3333333333333333,
+          "costWithoutEligibility": 0
+        }
+      ],
+      "preservedCost": 1,
+      "bothEndsOmittedCost": 0.09090909090909091,
+      "radiusSearchFailure": false,
+      "explicitDeletedReferenceExtremumTermPresent": false
+    }
+  ],
+  "newMetricEvaluations": 0,
+  "newUnityCalls": 0,
+  "newCaptures": 0
+}

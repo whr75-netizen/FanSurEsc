@@ -3380,3 +3380,14 @@ Interactable (abstract base class)
 -  docs/ai/CHARACTER_PIXEL_PIPELINE.md에 3렌더러15슬롯·semantic part 구분, 실제15단계 입력/출력/좌표/쓰기권한, 명암/색/곡선/면적/선/가림/합성과546수치예제를 연결. 명암은physical 표본step, 실루엣은폐곡선 cut이므로 현재 같은선택기 아님; 같은셀/표면/실루엣 gate와 향후공통화 가능한 면적/채움책임을 구분.100%전신단일파이프라인 목표의 미완료/모델의존/중복렌더/752flood/readback 명시. 새 그림자 구현 없음.
 -  공간 읽기전용: C50.75GiB여유, Codex124.01GiB, W/E_UnityValidation_01 76.04GiB·Current47214.07GiB. 원본14.79GiB(LocalOnly8.65/Library4.12). 최근24h수정파일2.68GiB는 현재크기이지증가량측정아님. 삭제/이동/압축0.
 -  기존공식host/project-path연결복구. import 응답timeout후 재import없이컴파일확인. 첫capture helper누락은 미실행으로보존후한번수정호출. 자동입력/Animator/clock 복원true; 직접Edit/unpaused/cleanScene/모든실험OFF/capture0/backgroundfalse/activeGameplay없음. Console기존진단2건동일/새0,Quality/Time바이트보존. 목적변경·증거만커밋, 제품기본OFF.
+
+
+## 255. 549 손 source 추적 / 550 헤어 동일시선 가림 (2026-10-23)
+
+- [실제 조회] 손32/33/34(207,111) primitive7997/source7998:33에만 centre barycentric(.332899,.197204,.469896) 내부. alpha1/cutoff.5, Map0, source→Prepare→final 동일. Body0는 기존 옷bits14에서 제외. 정상 끝 보존 포함 적용은 미완료.
+- [가설 정정] 얼굴35/36/41의 같은 head source ray에는 실제 불투명 Body0 Head100% primitive9648이 Face보다 앞. 시선만 고치면 해결된다는 가설 기각, 머리 피부/몸 소유권 범위 분리가 남음. 얼굴 우선·깊이편향 없음.
+- [수정] 헤어24 상단셀은 다른 body ray 비교로 거짓 가림, 아래셀은 정상 앞가림. HeadLocal/FullFeature/GridJoin3파일:기존 head centreMeta1을 allBody ray로 사용. 기존511/491 대체 패킷·Face/eyes/world 제외, 새RT/패스/필터 없음. defaultOFF.
+- [실제 검증] 연속3쌍+전체81쌍 각1회.17포즈22표본 Body8→Hair14;같은ray규칙위반0/source동일/alpha변경0/Face·눈·안정된비헤어RGB변경0. 안정된헤어RGB float최대7.45e-9,비트동일로 표기하지 않음. 손·소매 영역 알고리즘 변경 없음. 전체헤어틈/명암 해결 아님.
+- [전달] Current472/BodyHand549/FULL_WALK550.gif 2,909,861byte / losslessWebP1,428,726byte.81프레임1350ms전신보존. 메인550 첫화면 최신비교. 양쪽547Clothes ON/550만OFF vsON. Library403재시도 없음.
+- [운영] 자동입력/Animator/clock복원true+직접cleanEdit/550OFF. Console기존진단2개동일/새0.547·Quality/TimeSHA불변. import및첫긴launcher timeout은 미실행/상태확인후재import없이컴파일확인·축소실행기로연결. Reflection조회도구거절은우회없이공개상태API로대체. 새성능측정없음.
+- 증거: docs/artifacts/body-hair550/RESULT550.md 및 RECEIPT550.json. 원시작업C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/BodyHand549/. Body0/정상손끝,헤어양음영역,내부색/성능은다음범위다.

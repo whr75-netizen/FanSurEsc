@@ -143,3 +143,12 @@
 - [현재 상태](CURRENT_STATE.md), [전체 개발 이력](../../unity_development_progress.md), [543 계약](../artifacts/clothing-span543/CONSISTENCY543.md), [544 최적화](../artifacts/clothing-compact544/README544.md)
 
 로컬 상세 증거: `C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Elbow546/` 및 `Fix547/`. 원본 버퍼와 과거 실패를 보존했다. Library403은 재시도하지 않았으므로 메인.html과 로컬 자산이 전달 경로다.
+
+
+## 550 동일시선 가림 입력 (기본 OFF)
+
+`HeadLocal367.UseCentreBodyRay550`: 원래 centre hair와 body가 겹칠 때만, head 카메라에서 계산한 몸 깊이로 JoinBare를 판단한다. 기존 head `centreMeta[1]`의 torso 필터를 해제하여 모든 body part를 그리며 새 RT/패스는 없다. main torso 입력과 Face/eyes/world 경로,511·491 대체 패킷은 그대로다. 권위 있는 영역 선택 변경이나 헤어 틈 일괄 채움이 아니다.
+
+Walk24 (216,48): hair main depth13.70192792를 다른 ray의 Body13.70149994와 비교해 잘못 버렸다. 같은 source ray Body13.70083141(head좌표)는 Hair13.69875908보다 뒤다. 아래(216,49)는 같은 ray에서도 몸이 앞이어서 유지한다. 실제3쌍+전체81쌍:17포즈22표본 복구, alpha0변경/face·eye·비헤어 안정색0변경/source 동일, 기본OFF 복원. 새 성능통과 주장은 없다.
+
+손32/33/34는 Body0 source 삼각형 중심 표본의 출몰이다. Body0 얼굴35/36/41은 같은 ray에서도 머리 피부가 앞이므로 깊이 오류만으로 해소되지 않는다. 공유 material을 몸/손 의미 범위로 잘못 동일시하지 말고 머리 피부 소유권 분리가 남는다. 헤어 양/음 영역 디자인과 내부 명암도 별도 미완료다. [검증/제한](../artifacts/body-hair550/RESULT550.md).

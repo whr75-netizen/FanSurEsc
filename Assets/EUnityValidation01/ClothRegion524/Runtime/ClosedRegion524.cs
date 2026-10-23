@@ -123,6 +123,32 @@ public static class ClosedRegion524
             }while(!at.Equals(start));if(ring.Count>=3)loops.Add(ring.ToArray());}
         if(remaining!=0)throw new InvalidOperationException("524 unconsumed boundary");return loops;
     }
+    // Alternative clothing curve source, not a mask/RGB post-filter. A chord
+    // replaces its ordered arc only when its projection does not backtrack and
+    // its symmetric area difference is <= one logical cell. Width and length
+    // contribute together; opposite signed lobes never cancel. No history or
+    // frame/part exceptions. This is a default-OFF design trial, not an art pass.
+    public static Vector2[] FitArea532(Vector2[] ring)
+    {
+        int n=ring.Length,split=0;float far=0;for(int i=1;i<n;i++){float d=(ring[i]-ring[0]).sqrMagnitude;if(d>far){far=d;split=i;}}
+        var keep=new bool[n+1];keep[0]=keep[split]=keep[n]=true;
+        void Run(int a,int b)
+        {
+            if(b<=a+1)return;var p=ring[a%n];var dd=ring[b%n]-p;double length=Math.Sqrt(dd.sqrMagnitude),area=0,previousS=0,previousH=0,maxH=-1;int at=-1;bool ordered=length>0;
+            for(int k=a+1;k<=b;k++)
+            {
+                var v=ring[k%n]-p;double s=length>0?((double)v.x*dd.x+(double)v.y*dd.y)/length:0,h=length>0?((double)dd.x*v.y-(double)dd.y*v.x)/length:0;
+                if(s<previousS)ordered=false;
+                double u=Math.Abs(previousH),w=Math.Abs(h),ds=s-previousS;
+                area+=ds*(previousH*h<0?(u*u+w*w)/(2*(u+w)):(u+w)*.5);
+                if(k<b&&Math.Abs(h)>maxH){maxH=Math.Abs(h);at=k;}
+                previousS=s;previousH=h;
+            }
+            if(ordered&&area<=1.0)return;
+            if(at<=a||at>=b)at=(a+b)/2;keep[at]=true;Run(a,at);Run(at,b);
+        }
+        Run(0,split);Run(split,n);return Enumerable.Range(0,n).Where(i=>keep[i]).Select(i=>ring[i]).ToArray();
+    }
     public static Vector2[] Fit(Vector2[] ring,float error)
     {
         int n=ring.Length,split=0;float far=0;for(int i=1;i<n;i++){float d=(ring[i]-ring[0]).sqrMagnitude;if(d>far){far=d;split=i;}}

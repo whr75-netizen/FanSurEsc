@@ -1,0 +1,95 @@
+{
+  "status": "LOCAL_ACTUAL_SPUR_REMOVED_NONCLOTH5_UNRESOLVED_NOT_ADOPTED",
+  "actualWalkPairs": 4,
+  "frames": [
+    42,
+    43,
+    44,
+    45
+  ],
+  "normalThin8Preserved": true,
+  "distanceHalfcellControlRejected": true,
+  "closedClothingOnly": true,
+  "defaultOFF": true,
+  "target43TwoCellsRemoved": true,
+  "contractFailures": 0,
+  "faceEyeRGBChanges": 0,
+  "nonclothSameSurfaceChanges": 5,
+  "geometryMsMedian": 7.6037,
+  "newFullWalkCapture": false,
+  "inputAnimatorClockRestored": true,
+  "directEditOffVerified": "RESTORED_ADJACENT532.json",
+  "units": {
+    "canonicalGrid": [
+      480,
+      272
+    ],
+    "sourceCoordinate": "projected deformed geometry in logical-cell coordinates; no screen-pixel unit",
+    "nativeOutput": [
+      960,
+      544
+    ],
+    "actualScreenPixelsPerLogicalCell": 2,
+    "fixedValues": {
+      "HeadRegion502.CurveError": {
+        "value": 0.1875,
+        "unit": "logical-cell length"
+      },
+      "opacity527AndFinalClosedFitWhenUsed": {
+        "value": 0.09375,
+        "unit": "logical-cell length; CurveError*.5"
+      },
+      "FitArea532": {
+        "value": 1,
+        "unit": "logical-cell area; experimental local arc/chord area difference budget"
+      },
+      "spatialCutWeight": {
+        "value": 0.14,
+        "unit": "fixed grid energy coefficient; not explicit curvature or resolution-derived optimum"
+      }
+    },
+    "automaticTargetGridResolutionConversion": false,
+    "globalGridDimensionsHardcoded": true,
+    "nativeUpscaleDoesNotChangeLogicalBudgets": true,
+    "explicitCurvatureBound": false,
+    "researchOptimalFormulaApplied": false,
+    "implementationExpansionPaused": true,
+    "paperSpatialTerm": {
+      "reference": "https://yongliangyang.net/docs/pixelAnim_pg16.pdf section4.1/Fig7/Eq3",
+      "applied": false,
+      "referenceFeatureToSelectedBoundaryExtremaCorrespondenceVerified": false,
+      "limits": "532 local arc/chord area is not paper extrema/width correspondence; source/selected feature extraction and axis conventions are not established. No new matching/threshold implementation pending parent research."
+    },
+    "parentResearch": {
+      "geometricSubdivision": {
+        "source": "https://personal.ntu.edu.sg/asjmzheng/submit.pdf",
+        "formula": "dt<=sqrt(8*epsilon/D), D>=sup||Csecond||; arcLength ds<=sqrt(8*epsilon/kappaMax)",
+        "sourceUnitConversion": "epsilonSource=epsilonPixel*sourcePitch",
+        "applied": false,
+        "currentInputLimit": "Current piecewise-linear contours are not C2 across their corners; this bound does not by itself select a design simplification."
+      },
+      "scaleSpace": {
+        "source": "https://www.cs.ubc.ca/~mack/Publications/IEEE-PAMI92.pdf",
+        "formula": "Csigma=Gaussian(sigma)*C",
+        "applied": false,
+        "limit": "sigma is a shape simplification scale; paper does not uniquely choose optimal pixel-art scale."
+      }
+    }
+  },
+  "researchOptimalFormulaApplied": false,
+  "pending": [
+    "noncloth5 first changed pass",
+    "fullWalk and loop",
+    "current paper spatial correspondence term not applied"
+  ],
+  "media": {
+    "losslessWebP": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Shape532\\ADJACENT_WALK532.webp",
+    "bytes": 53812,
+    "frames": 4,
+    "durationMs": 67,
+    "gif": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Shape532\\ADJACENT_WALK532.gif",
+    "gifBytes": 87781,
+    "noFrameDropped": true,
+    "noInterpolation": true
+  }
+}

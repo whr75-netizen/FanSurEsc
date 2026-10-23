@@ -3265,3 +3265,11 @@ Interactable (abstract base class)
 - 실제 Walk43/44 기하2포즈 primitive/anchor/UV/part 회수. 국소소스7/6변 미대응0, cloth 내부edge(incident2), 알파/열린옷단 아님;43오른/44왼LowerArm. Project의 Vector2쌍 반환→BuildSegments 좌표합집합→Fit 좌표링에서 원구간 기원 소실. 반ULP 저장오차 대응, 중복후보를 가시owner로 단정하지 않음. 최초 header parser0프레임 실패 보존/제품reader block순서로 진단 수정. 진단만2점fit 저장 차이 정정: 제품len>=3 적용 곡선거리1.50e-5/1.53e-5cell, ROI<8e-6. 새 최종품질 통과 아님.
 - 기존529 정상0.75×3끝을 동일투영 닫힌mesh로 만들면 같은 내부edge/material/part. 회전×직선분할8반례 확인: 기원범주/ID만으로 keep/omit 불가. 전체기하 구별불가능 증명 아님. 순서있는 연속특징 범위의 공간디자인계약이 남음;529깊이규칙/시간DP/새패널티/피부확장/새RGB·loop촬영 없음. docs/artifacts/clothing-origin531 및 메인.html 반영.
 - 직접cleanEdit/paused·compile·updatefalse,clothcurveOFF,capture0,GameMap1dirtyfalse 복원 후 asset-only도EditOFF확인. 제한환경IPC미실행 뒤 기존승인host/PID22792 read정상;보안변경/Editor중복/강제종료 없음. 회색530미확정/비옷3색/내부색/성능 별도;진단RenderFrame≠PlayerFPS, Library403재시도없음. 이번 제품개선0, 전체목표미완료.
+
+## 243. CHARACTER-RENDER-01 — 532 옷 공간 영역 근사, 실제4쌍 가시 제거·비옷5색 미확정
+
+- 옷 기본OFF 실험2파일: ClosedRegion524.FitArea532 + ClothRegion524.UseAreaCurves532. 원불투명도/폐영역 추출·기존면적/공간cut·공통Gate 재사용, 거리RDP를 대체(필터/529예외/시간DP/손피부확장 없음). 현 방향s 비역행일 때 ∫|h(s)|ds<=1논리셀면적이면 원arc를현으로 근사, 아니면 기존최대수직점 분할. 국소절대면적이며 원저자검증공식/전역오차보장 아님.
+- 기존4포즈+정상끝8반례만 사용. 반셀거리대조는 정상끝1셀손실로폐기. 실제43 폭.409729/길이2.81130/arc2.97478/면적.722201; 정상끝 .75/3/4.5/2.25; 잘못된긴shortcut 거리.372104나 절대면적1.125. 영역대조는43두셀제거/44계단·정상8마스크유지,12사례 proper교차0. (200,96)의0→1→0은 연결단조계단 길이변화이며 가시로세지않음.
+- 실제Animator Walk42~45 527옷ON대조/532옷ON후보4쌍완료. 최종43두셀제거, 채움/owner/경계외쓰기/packet bary·depth 위반0,face·eye역할RGB변경0,새회색피부0. 비옷동일표면5색변경(42hair4,44role8한셀,RGB약.55배)은 최초패스미확정으로남김; 기존527비옷3과다른비교. 전체532Walk/루프미촬영·미채택.
+- 경계중앙7.6037ms; 진단RenderFrame(readback/probe포함)≠PlayerFPS. 4프레임전신losslessWebP53812B/67ms·공통팔레트GIF87781B,프레임누락/보간0. input·Animator·clock 복원 및 직접cleanEdit/paused·compile·updatefalse/cloth·opacity·areaOFF/capture0/backgroundfalse/dirtyfalse 확인. 사용자설정/44d13c0보존, docs/artifacts/clothing-shape532·메인.html 반영.
+- 해상도단위: 공통480×272, 화면2배. 거리 .1875/.09375=logicalcell 길이,532의1.0=logicalcell면적,cut .14 고정계수이며 명시곡률한계/격자변경자동환산없음. 부모가 전달한 Feature-Aware2016 §4.1/Fig7/Eq3 공간extrema/width대응은 미적용·대응미검증. 원자료최종검토전 추가수치/구현확대보류. 얼굴530/내부색/성능/Library403 별도미해결·재시도없음.

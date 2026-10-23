@@ -1,0 +1,4284 @@
+{
+  "status": "SPARSE_FLOAT_RECOVERED_NO_PRODUCT_PATCH",
+  "scope": "one controlled paused-entry reentry first produced render; initial2 PNGs retained; no Walk/full-loop capture",
+  "startupTransitions": [
+    "frame=1 where=AttachPaused ready=False connected=False head=False presentSerial=0 displayedRT=False globalStage=2",
+    "frame=94 where=beginCamera:Main Camera ready=True connected=True head=True presentSerial=0 displayedRT=True globalStage=2",
+    "frame=95 where=beginCamera:395 E local480 cells at native world pitch ready=True connected=True head=True presentSerial=1 displayedRT=True globalStage=2"
+  ],
+  "sampleCounts": {
+    "HEAD_SOURCE": {
+      "skinRole4Count": 59,
+      "nearNeutralCount": 0,
+      "minRGBChroma": 0.19921875,
+      "maxRGBChroma": 0.40380859375
+    },
+    "HEAD_PROVIDER8": {
+      "skinRole4Count": 64,
+      "nearNeutralCount": 0,
+      "minRGBChroma": 0.0791015625,
+      "maxRGBChroma": 0.510498046875
+    },
+    "HEAD_PREPARED": {
+      "skinRole4Count": 56,
+      "nearNeutralCount": 0,
+      "minRGBChroma": 0.14343750476837158,
+      "maxRGBChroma": 0.36181640625
+    },
+    "MAIN_FINAL": {
+      "skinRole4Count": 56,
+      "nearNeutralCount": 0,
+      "minRGBChroma": 0.0791015625,
+      "maxRGBChroma": 0.36181640625
+    }
+  },
+  "sameMaterialUVMatches": 43,
+  "providerUVUnmatched": [
+    {
+      "xy": [
+        215,
+        51
+      ],
+      "nearestUVError": 0.0613059401512146
+    },
+    {
+      "xy": [
+        216,
+        51
+      ],
+      "nearestUVError": 0.035402655601501465
+    },
+    {
+      "xy": [
+        217,
+        51
+      ],
+      "nearestUVError": 0.004561066627502441
+    },
+    {
+      "xy": [
+        223,
+        51
+      ],
+      "nearestUVError": 0.01460602879524231
+    },
+    {
+      "xy": [
+        225,
+        51
+      ],
+      "nearestUVError": 0.2115166187286377
+    },
+    {
+      "xy": [
+        215,
+        52
+      ],
+      "nearestUVError": 0.18946093320846558
+    },
+    {
+      "xy": [
+        218,
+        52
+      ],
+      "nearestUVError": 0.014210045337677002
+    },
+    {
+      "xy": [
+        222,
+        52
+      ],
+      "nearestUVError": 0.014407813549041748
+    },
+    {
+      "xy": [
+        224,
+        52
+      ],
+      "nearestUVError": 0.2025490403175354
+    },
+    {
+      "xy": [
+        225,
+        52
+      ],
+      "nearestUVError": 0.006627559661865234
+    },
+    {
+      "xy": [
+        215,
+        53
+      ],
+      "nearestUVError": 0.009113788604736328
+    },
+    {
+      "xy": [
+        216,
+        53
+      ],
+      "nearestUVError": 0.0033431947231292725
+    },
+    {
+      "xy": [
+        217,
+        53
+      ],
+      "nearestUVError": 0.007870614528656006
+    },
+    {
+      "xy": [
+        218,
+        53
+      ],
+      "nearestUVError": 0.010098785161972046
+    },
+    {
+      "xy": [
+        222,
+        53
+      ],
+      "nearestUVError": 0.007972776889801025
+    },
+    {
+      "xy": [
+        223,
+        53
+      ],
+      "nearestUVError": 0.008287787437438965
+    },
+    {
+      "xy": [
+        224,
+        53
+      ],
+      "nearestUVError": 0.0042206645011901855
+    },
+    {
+      "xy": [
+        225,
+        53
+      ],
+      "nearestUVError": 0.007897555828094482
+    },
+    {
+      "xy": [
+        216,
+        54
+      ],
+      "nearestUVError": 0.0008023381233215332
+    },
+    {
+      "xy": [
+        217,
+        54
+      ],
+      "nearestUVError": 0.0001436769962310791
+    },
+    {
+      "xy": [
+        222,
+        55
+      ],
+      "nearestUVError": 2.6434659957885742e-05
+    }
+  ],
+  "shadeClassifications": {
+    "OWN072_SHADE": 39,
+    "OWN_LIT": 4,
+    "OTHER_UNRESOLVED": 0
+  },
+  "matches": [
+    {
+      "providerXY": [
+        216,
+        50
+      ],
+      "sourceXY": [
+        216,
+        50
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9609375,
+        0.74658203125,
+        0.58984375,
+        1.0
+      ],
+      "providerRGBA": [
+        0.6918750405311584,
+        0.5375390648841858,
+        0.4246875047683716,
+        1.0
+      ],
+      "sourceMeta": [
+        13.684896469116211,
+        4.0,
+        0.0,
+        2275.0
+      ],
+      "providerMeta": [
+        13.684896469116211,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.3567427098751068,
+        0.5716786980628967,
+        0.16345717012882233,
+        13.684896469116211
+      ],
+      "litError": 0.26906245946884155,
+      "own072Error": 4.0531158429502057e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.684896469116211,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.6918750405311584,
+        0.5375390648841858,
+        0.4246875047683716,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          216,
+          50
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.6918750405311584,
+          0.5375390648841858,
+          0.4246875047683716,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          216,
+          48
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.6918750405311584,
+          0.5375390648841858,
+          0.4246875047683716,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        223,
+        50
+      ],
+      "sourceXY": [
+        223,
+        50
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9609375,
+        0.77734375,
+        0.62353515625,
+        1.0
+      ],
+      "providerRGBA": [
+        0.6918750405311584,
+        0.5596874952316284,
+        0.4489453434944153,
+        1.0
+      ],
+      "sourceMeta": [
+        13.685474395751953,
+        4.0,
+        0.0,
+        2753.0
+      ],
+      "providerMeta": [
+        13.685474395751953,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.6719801425933838,
+        0.5065413117408752,
+        0.06079024821519852,
+        13.685474395751953
+      ],
+      "litError": 0.26906245946884155,
+      "own072Error": 4.0531158429502057e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.685474395751953,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.6918750405311584,
+        0.5596874952316284,
+        0.4489453434944153,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          223,
+          50
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.6918750405311584,
+          0.5596874952316284,
+          0.4489453434944153,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          223,
+          48
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.6918750405311584,
+          0.5596874952316284,
+          0.4489453434944153,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        220,
+        52
+      ],
+      "sourceXY": [
+        220,
+        52
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.984375,
+        0.82421875,
+        0.6865234375,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7087500095367432,
+        0.5934375524520874,
+        0.4942969083786011,
+        1.0
+      ],
+      "sourceMeta": [
+        13.697388648986816,
+        4.0,
+        0.0,
+        2628.0
+      ],
+      "providerMeta": [
+        13.697388648986816,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.4513022005558014,
+        0.5027990341186523,
+        0.11873938143253326,
+        13.697388648986816
+      ],
+      "litError": 0.27562499046325684,
+      "own072Error": 5.245208745119356e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.697388648986816,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7087500095367432,
+        0.5934375524520874,
+        0.4942969083786011,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          220,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7087500095367432,
+          0.5934375524520874,
+          0.4942969083786011,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          220,
+          50
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7087500095367432,
+          0.5934375524520874,
+          0.4942969083786011,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        221,
+        52
+      ],
+      "sourceXY": [
+        221,
+        52
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.984375,
+        0.87890625,
+        0.74609375,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7087500095367432,
+        0.6328125,
+        0.5371875166893005,
+        1.0
+      ],
+      "sourceMeta": [
+        13.700836181640625,
+        4.0,
+        0.0,
+        3177.0
+      ],
+      "providerMeta": [
+        13.700836181640625,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.6139380931854248,
+        0.5014590620994568,
+        0.07549911737442017,
+        13.700836181640625
+      ],
+      "litError": 0.27562499046325684,
+      "own072Error": 1.668930060816365e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.700836181640625,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7087500095367432,
+        0.6328125,
+        0.5371875166893005,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          221,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7087500095367432,
+          0.6328125,
+          0.5371875166893005,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          221,
+          50
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7087500095367432,
+          0.6328125,
+          0.5371875166893005,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        219,
+        53
+      ],
+      "sourceXY": [
+        219,
+        53
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92333984375,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6648046970367432,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.707413673400879,
+        4.0,
+        0.0,
+        2555.0
+      ],
+      "providerMeta": [
+        13.707413673400879,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.1277153342962265,
+        0.5000402331352234,
+        0.20324915647506714,
+        13.707413673400879
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 1.907348634588857e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.707413673400879,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6648046970367432,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          219,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6648046970367432,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          219,
+          51
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6648046970367432,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        220,
+        53
+      ],
+      "sourceXY": [
+        220,
+        53
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.921875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.70534610748291,
+        4.0,
+        0.0,
+        2624.0
+      ],
+      "providerMeta": [
+        13.705345153808594,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.28823354840278625,
+        0.5003542304039001,
+        0.1611052304506302,
+        13.70534610748291
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 5.245208745119356e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.70534610748291,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          220,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 9.5367431640625e-07,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          220,
+          51
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018462181091308594,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        221,
+        53
+      ],
+      "sourceXY": [
+        221,
+        53
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.9228515625,
+        0.79150390625,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6644531488418579,
+        0.5698828101158142,
+        1.0
+      ],
+      "sourceMeta": [
+        13.708588600158691,
+        4.0,
+        0.0,
+        3190.0
+      ],
+      "providerMeta": [
+        13.708588600158691,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.40141165256500244,
+        0.5001925230026245,
+        0.13125796616077423,
+        13.708588600158691
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 2.384185793236071e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.708588600158691,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6644531488418579,
+        0.5698828101158142,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          221,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6644531488418579,
+          0.5698828101158142,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          221,
+          51
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6644531488418579,
+          0.5698828101158142,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        215,
+        54
+      ],
+      "sourceXY": [
+        215,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.990234375,
+        0.798828125,
+        0.62841796875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.990234375,
+        0.798828125,
+        0.62841796875,
+        1.0
+      ],
+      "sourceMeta": [
+        13.730117797851562,
+        4.0,
+        0.0,
+        880.0
+      ],
+      "providerMeta": [
+        13.730117797851562,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        0.08111250400543213,
+        0.5544340014457703,
+        0.2862958610057831,
+        13.730117797851562
+      ],
+      "litError": 0.0,
+      "own072Error": 0.27726562500000007,
+      "classification": "OWN_LIT",
+      "sourceLegacyClassifier": [
+        1.0,
+        4.0,
+        13.730117797851562,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.990234375,
+        0.798828125,
+        0.62841796875,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          215,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.990234375,
+          0.798828125,
+          0.62841796875,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          215,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.990234375,
+          0.798828125,
+          0.62841796875,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        218,
+        54
+      ],
+      "sourceXY": [
+        218,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.9296875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6693750023841858,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.713985443115234,
+        4.0,
+        0.0,
+        2031.0
+      ],
+      "providerMeta": [
+        13.713985443115234,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        0.02583373710513115,
+        0.5012132525444031,
+        0.24423164129257202,
+        13.713985443115234
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 1.907348634588857e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.713985443115234,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6693750023841858,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          218,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6693750023841858,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          218,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6693750023841858,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        219,
+        54
+      ],
+      "sourceXY": [
+        219,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.921875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.712262153625488,
+        4.0,
+        0.0,
+        2567.0
+      ],
+      "providerMeta": [
+        13.712262153625488,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.029407614842057228,
+        0.5000900626182556,
+        0.22914451360702515,
+        13.712262153625488
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 5.245208745119356e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.712262153625488,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          219,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          219,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        220,
+        54
+      ],
+      "sourceXY": [
+        220,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.9296875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6693750023841858,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.710205078125,
+        4.0,
+        0.0,
+        2615.0
+      ],
+      "providerMeta": [
+        13.710204124450684,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        0.0267411507666111,
+        0.5000576376914978,
+        0.2439073771238327,
+        13.710205078125
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 1.907348634588857e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.710205078125,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6693750023841858,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          220,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6693750023841858,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 9.5367431640625e-07,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          220,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6693750023841858,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018462181091308594,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        221,
+        54
+      ],
+      "sourceXY": [
+        221,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92431640625,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6655078530311584,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.713176727294922,
+        4.0,
+        0.0,
+        3200.0
+      ],
+      "providerMeta": [
+        13.713176727294922,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.22869543731212616,
+        0.5,
+        0.17665909230709076,
+        13.713176727294922
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 4.0531158429502057e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.713176727294922,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6655078530311584,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          221,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6655078530311584,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          221,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6655078530311584,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        222,
+        54
+      ],
+      "sourceXY": [
+        222,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.921875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.716002464294434,
+        4.0,
+        0.0,
+        1194.0
+      ],
+      "providerMeta": [
+        13.71600341796875,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.2015395313501358,
+        0.5000266432762146,
+        0.18381518125534058,
+        13.716002464294434
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 5.245208745119356e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.716002464294434,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          222,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": -9.5367431640625e-07,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          222,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.01846027374267578,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        223,
+        54
+      ],
+      "sourceXY": [
+        223,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.853515625,
+        0.70703125,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6145312786102295,
+        0.5090625286102295,
+        1.0
+      ],
+      "sourceMeta": [
+        13.719858169555664,
+        4.0,
+        0.0,
+        1169.0
+      ],
+      "providerMeta": [
+        13.719858169555664,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.27817097306251526,
+        0.5,
+        0.16363921761512756,
+        13.719858169555664
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 2.8610229518832853e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.719858169555664,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6145312786102295,
+        0.5090625286102295,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          223,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6145312786102295,
+          0.5090625286102295,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          223,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6145312786102295,
+          0.5090625286102295,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        224,
+        54
+      ],
+      "sourceXY": [
+        224,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.990234375,
+        0.77978515625,
+        0.6123046875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7129687666893005,
+        0.5614453554153442,
+        0.4408594071865082,
+        1.0
+      ],
+      "sourceMeta": [
+        13.7255859375,
+        4.0,
+        0.0,
+        1053.0
+      ],
+      "providerMeta": [
+        13.7255859375,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.45953449606895447,
+        0.5,
+        0.11591196805238724,
+        13.7255859375
+      ],
+      "litError": 0.27726560831069946,
+      "own072Error": 4.291534427824928e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.7255859375,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7129687666893005,
+        0.5614453554153442,
+        0.4408594071865082,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          224,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7129687666893005,
+          0.5614453554153442,
+          0.4408594071865082,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          224,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7129687666893005,
+          0.5614453554153442,
+          0.4408594071865082,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        225,
+        54
+      ],
+      "sourceXY": [
+        225,
+        54
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.7890625,
+        0.62158203125,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.5681250095367432,
+        0.4475390911102295,
+        1.0
+      ],
+      "sourceMeta": [
+        13.738211631774902,
+        4.0,
+        0.0,
+        376.0
+      ],
+      "providerMeta": [
+        13.738211631774902,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.6623959541320801,
+        0.5,
+        0.0625273734331131,
+        13.738211631774902
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 2.8610229518832853e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.738211631774902,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.5681250095367432,
+        0.4475390911102295,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          225,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.5681250095367432,
+          0.4475390911102295,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          225,
+          52
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.5681250095367432,
+          0.4475390911102295,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        215,
+        55
+      ],
+      "sourceXY": [
+        215,
+        55
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.984375,
+        0.80322265625,
+        0.64306640625,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7087500095367432,
+        0.578320324420929,
+        0.4630078375339508,
+        1.0
+      ],
+      "sourceMeta": [
+        13.740596771240234,
+        4.0,
+        0.0,
+        884.0
+      ],
+      "providerMeta": [
+        13.740596771240234,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.11788242310285568,
+        0.5696452856063843,
+        0.23448924720287323,
+        13.740596771240234
+      ],
+      "litError": 0.27562499046325684,
+      "own072Error": 2.503395080122317e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.740596771240234,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7087500095367432,
+        0.578320324420929,
+        0.4630078375339508,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          215,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7087500095367432,
+          0.578320324420929,
+          0.4630078375339508,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          215,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7087500095367432,
+          0.578320324420929,
+          0.4630078375339508,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        216,
+        55
+      ],
+      "sourceXY": [
+        216,
+        55
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.76953125,
+        0.58837890625,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.55406254529953,
+        0.42363283038139343,
+        1.0
+      ],
+      "sourceMeta": [
+        13.72755241394043,
+        4.0,
+        0.0,
+        1914.0
+      ],
+      "providerMeta": [
+        13.72755241394043,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.15260539948940277,
+        0.5393891930580139,
+        0.2121771275997162,
+        13.72755241394043
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 4.52995300159742e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.72755241394043,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.55406254529953,
+        0.42363283038139343,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          216,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.55406254529953,
+          0.42363283038139343,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          216,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.55406254529953,
+          0.42363283038139343,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        217,
+        55
+      ],
+      "sourceXY": [
+        217,
+        55
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.984375,
+        0.81298828125,
+        0.64453125,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7087500095367432,
+        0.5853515863418579,
+        0.46406251192092896,
+        1.0
+      ],
+      "sourceMeta": [
+        13.72081470489502,
+        4.0,
+        0.0,
+        1937.0
+      ],
+      "providerMeta": [
+        13.72081470489502,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.11944982409477234,
+        0.5095982551574707,
+        0.209351047873497,
+        13.72081470489502
+      ],
+      "litError": 0.27562499046325684,
+      "own072Error": 2.384185793236071e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.72081470489502,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7087500095367432,
+        0.5853515863418579,
+        0.46406251192092896,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          217,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7087500095367432,
+          0.5853515863418579,
+          0.46406251192092896,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          217,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7087500095367432,
+          0.5853515863418579,
+          0.46406251192092896,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        218,
+        55
+      ],
+      "sourceXY": [
+        218,
+        55
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.9140625,
+        0.77490234375,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6581250429153442,
+        0.5579296946525574,
+        1.0
+      ],
+      "sourceMeta": [
+        13.717719078063965,
+        4.0,
+        0.0,
+        1956.0
+      ],
+      "providerMeta": [
+        13.717719078063965,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.07185229659080505,
+        0.50221848487854,
+        0.21890056133270264,
+        13.717719078063965
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 4.291534427824928e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.717719078063965,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6581250429153442,
+        0.5579296946525574,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          218,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6581250429153442,
+          0.5579296946525574,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          218,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6581250429153442,
+          0.5579296946525574,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        219,
+        55
+      ],
+      "sourceXY": [
+        219,
+        55
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.921875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.9921875,
+        0.921875,
+        0.79296875,
+        1.0
+      ],
+      "sourceMeta": [
+        13.715343475341797,
+        4.0,
+        0.0,
+        2014.0
+      ],
+      "providerMeta": [
+        13.715343475341797,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        0.10699543356895447,
+        0.5001564621925354,
+        0.2650817334651947,
+        13.715343475341797
+      ],
+      "litError": 0.0,
+      "own072Error": 0.2778125,
+      "classification": "OWN_LIT",
+      "sourceLegacyClassifier": [
+        1.0,
+        4.0,
+        13.715343475341797,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.9921875,
+        0.921875,
+        0.79296875,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          219,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.9921875,
+          0.921875,
+          0.79296875,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          219,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.9921875,
+          0.921875,
+          0.79296875,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        220,
+        55
+      ],
+      "sourceXY": [
+        220,
+        55
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.90625,
+        0.7685546875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.9921875,
+        0.90625,
+        0.7685546875,
+        1.0
+      ],
+      "sourceMeta": [
+        13.71114730834961,
+        4.0,
+        0.0,
+        2619.0
+      ],
+      "providerMeta": [
+        13.71114730834961,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        0.434424489736557,
+        0.5001726746559143,
+        0.3512856066226959,
+        13.71114730834961
+      ],
+      "litError": 0.0,
+      "own072Error": 0.2778125,
+      "classification": "OWN_LIT",
+      "sourceLegacyClassifier": [
+        1.0,
+        4.0,
+        13.71114730834961,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.9921875,
+        0.90625,
+        0.7685546875,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          220,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.9921875,
+          0.90625,
+          0.7685546875,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          220,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.9921875,
+          0.90625,
+          0.7685546875,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        221,
+        55
+      ],
+      "sourceXY": [
+        221,
+        55
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92724609375,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6676172018051147,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.715887069702148,
+        4.0,
+        0.0,
+        1239.0
+      ],
+      "providerMeta": [
+        13.715887069702148,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.2446899265050888,
+        0.5000250339508057,
+        0.17245864868164062,
+        13.715887069702148
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 1.907348634588857e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.715887069702148,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6676172018051147,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          221,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6676172018051147,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          221,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6676172018051147,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        223,
+        55
+      ],
+      "sourceXY": [
+        223,
+        55
+      ],
+      "sameMaterialUVError": 6.258487701416016e-07,
+      "sourceRGBA": [
+        0.9921875,
+        0.82421875,
+        0.6611328125,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.5934375524520874,
+        0.4760156571865082,
+        1.0
+      ],
+      "sourceMeta": [
+        13.72440242767334,
+        4.0,
+        0.0,
+        1190.0
+      ],
+      "providerMeta": [
+        13.72440242767334,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.5176318883895874,
+        0.5,
+        0.10062318295240402,
+        13.72440242767334
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 5.245208745119356e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.72440242767334,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.5934375524520874,
+        0.4760156571865082,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          223,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.5934375524520874,
+          0.4760156571865082,
+          1.0
+        ],
+        "uvError": 6.258487701416016e-07,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          223,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.5934375524520874,
+          0.4760156571865082,
+          1.0
+        ],
+        "uvError": 6.258487701416016e-07,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        224,
+        55
+      ],
+      "sourceXY": [
+        224,
+        55
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.978515625,
+        0.74365234375,
+        0.59033203125,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7045312523841858,
+        0.5354297161102295,
+        0.4250390827655792,
+        1.0
+      ],
+      "sourceMeta": [
+        13.734554290771484,
+        4.0,
+        0.0,
+        401.0
+      ],
+      "providerMeta": [
+        13.734554290771484,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.732598066329956,
+        0.5,
+        0.04405313730239868,
+        13.734554290771484
+      ],
+      "litError": 0.2739843726158142,
+      "own072Error": 2.8610229518832853e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.734554290771484,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7045312523841858,
+        0.5354297161102295,
+        0.4250390827655792,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          224,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7045312523841858,
+          0.5354297161102295,
+          0.4250390827655792,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          224,
+          53
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7045312523841858,
+          0.5354297161102295,
+          0.4250390827655792,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        216,
+        56
+      ],
+      "sourceXY": [
+        216,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.84765625,
+        0.70751953125,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6103125214576721,
+        0.5094140768051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.742300987243652,
+        4.0,
+        0.0,
+        1890.0
+      ],
+      "providerMeta": [
+        13.742300987243652,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.3225356638431549,
+        0.5385231971740723,
+        0.16367261111736298,
+        13.742300987243652
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 2.145767219463579e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.742300987243652,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6103125214576721,
+        0.5094140768051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          216,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6103125214576721,
+          0.5094140768051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          216,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6103125214576721,
+          0.5094140768051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        217,
+        56
+      ],
+      "sourceXY": [
+        217,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.87353515625,
+        0.71728515625,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6289453506469727,
+        0.5164453387260437,
+        1.0
+      ],
+      "sourceMeta": [
+        13.731199264526367,
+        4.0,
+        0.0,
+        1903.0
+      ],
+      "providerMeta": [
+        13.731199264526367,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.34988120198249817,
+        0.5085185170173645,
+        0.14723454415798187,
+        13.731199264526367
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 3.814697269177714e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.731199264526367,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6289453506469727,
+        0.5164453387260437,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          217,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6289453506469727,
+          0.5164453387260437,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          217,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6289453506469727,
+          0.5164453387260437,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        218,
+        56
+      ],
+      "sourceXY": [
+        218,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92041015625,
+        0.78369140625,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6626953482627869,
+        0.5642578601837158,
+        1.0
+      ],
+      "sourceMeta": [
+        13.724725723266602,
+        4.0,
+        0.0,
+        1947.0
+      ],
+      "providerMeta": [
+        13.724726676940918,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.3022564947605133,
+        0.501473069190979,
+        0.15776436030864716,
+        13.724725723266602
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 4.768371586472142e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.724725723266602,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6626953482627869,
+        0.5642578601837158,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          218,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6626953482627869,
+          0.5642578601837158,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": -9.5367431640625e-07,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          218,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6626953482627869,
+          0.5642578601837158,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.01846027374267578,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        219,
+        56
+      ],
+      "sourceXY": [
+        219,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92236328125,
+        0.7919921875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6641016006469727,
+        0.5702344179153442,
+        1.0
+      ],
+      "sourceMeta": [
+        13.719337463378906,
+        4.0,
+        0.0,
+        1997.0
+      ],
+      "providerMeta": [
+        13.719337463378906,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.14015968143939972,
+        0.5001620650291443,
+        0.20002278685569763,
+        13.719337463378906
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 4.291534427824928e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.719337463378906,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6641016006469727,
+        0.5702344179153442,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          219,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6641016006469727,
+          0.5702344179153442,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          219,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6641016006469727,
+          0.5702344179153442,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        220,
+        56
+      ],
+      "sourceXY": [
+        220,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.970703125,
+        0.82568359375,
+        0.68408203125,
+        1.0
+      ],
+      "providerRGBA": [
+        0.970703125,
+        0.82568359375,
+        0.68408203125,
+        1.0
+      ],
+      "sourceMeta": [
+        13.709239959716797,
+        4.0,
+        0.0,
+        2611.0
+      ],
+      "providerMeta": [
+        13.709239959716797,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        0.5593278408050537,
+        0.5018916726112366,
+        0.38548657298088074,
+        13.709239959716797
+      ],
+      "litError": 0.0,
+      "own072Error": 0.27179687500000005,
+      "classification": "OWN_LIT",
+      "sourceLegacyClassifier": [
+        1.0,
+        4.0,
+        13.709239959716797,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.970703125,
+        0.82568359375,
+        0.68408203125,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          220,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.970703125,
+          0.82568359375,
+          0.68408203125,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          220,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.970703125,
+          0.82568359375,
+          0.68408203125,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        221,
+        56
+      ],
+      "sourceXY": [
+        221,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92333984375,
+        0.7880859375,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6648046970367432,
+        0.5674219131469727,
+        1.0
+      ],
+      "sourceMeta": [
+        13.719481468200684,
+        4.0,
+        0.0,
+        1264.0
+      ],
+      "providerMeta": [
+        13.719481468200684,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.5884987711906433,
+        0.5,
+        0.08197400718927383,
+        13.719481468200684
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 3.814697269177714e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.719481468200684,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6648046970367432,
+        0.5674219131469727,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          221,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6648046970367432,
+          0.5674219131469727,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          221,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6648046970367432,
+          0.5674219131469727,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        222,
+        56
+      ],
+      "sourceXY": [
+        222,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.921875,
+        0.7880859375,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5674219131469727,
+        1.0
+      ],
+      "sourceMeta": [
+        13.727331161499023,
+        4.0,
+        0.0,
+        1226.0
+      ],
+      "providerMeta": [
+        13.72733211517334,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.6780743598937988,
+        0.5,
+        0.058401480317115784,
+        13.727331161499023
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 5.245208745119356e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.727331161499023,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5674219131469727,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          222,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5674219131469727,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": -9.5367431640625e-07,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          222,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5674219131469727,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.01846027374267578,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        223,
+        56
+      ],
+      "sourceXY": [
+        223,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.89453125,
+        0.75439453125,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6440625190734863,
+        0.543164074420929,
+        1.0
+      ],
+      "sourceMeta": [
+        13.736717224121094,
+        4.0,
+        0.0,
+        1213.0
+      ],
+      "providerMeta": [
+        13.736717224121094,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.8072221875190735,
+        0.5,
+        0.024415208026766777,
+        13.736717224121094
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 1.907348634588857e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.736717224121094,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6440625190734863,
+        0.543164074420929,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          223,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6440625190734863,
+          0.543164074420929,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          223,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6440625190734863,
+          0.543164074420929,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        224,
+        56
+      ],
+      "sourceXY": [
+        224,
+        56
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.91650390625,
+        0.78271484375,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6598828434944153,
+        0.5635547041893005,
+        1.0
+      ],
+      "sourceMeta": [
+        13.756385803222656,
+        4.0,
+        0.0,
+        1018.0
+      ],
+      "providerMeta": [
+        13.756385803222656,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.9380555748939514,
+        0.5,
+        0.0,
+        13.756385803222656
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 3.099441525655777e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.756385803222656,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6598828434944153,
+        0.5635547041893005,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          224,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6598828434944153,
+          0.5635547041893005,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          224,
+          54
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6598828434944153,
+          0.5635547041893005,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        217,
+        57
+      ],
+      "sourceXY": [
+        217,
+        57
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92041015625,
+        0.78515625,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6626953482627869,
+        0.5653125047683716,
+        1.0
+      ],
+      "sourceMeta": [
+        13.753180503845215,
+        4.0,
+        0.0,
+        1517.0
+      ],
+      "providerMeta": [
+        13.753179550170898,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.4378775358200073,
+        0.5344349145889282,
+        0.12998650968074799,
+        13.753180503845215
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 3.5762786843029915e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.753180503845215,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6626953482627869,
+        0.5653125047683716,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          217,
+          57
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6626953482627869,
+          0.5653125047683716,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 9.5367431640625e-07,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          217,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6626953482627869,
+          0.5653125047683716,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018462181091308594,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        218,
+        57
+      ],
+      "sourceXY": [
+        218,
+        57
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92431640625,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6655078530311584,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.740477561950684,
+        4.0,
+        0.0,
+        1840.0
+      ],
+      "providerMeta": [
+        13.740477561950684,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.4195050895214081,
+        0.5052585601806641,
+        0.1277758777141571,
+        13.740477561950684
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 4.0531158429502057e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.740477561950684,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6655078530311584,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          218,
+          57
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6655078530311584,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          218,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6655078530311584,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        219,
+        57
+      ],
+      "sourceXY": [
+        219,
+        57
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92529296875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.666210949420929,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.729957580566406,
+        4.0,
+        0.0,
+        1755.0
+      ],
+      "providerMeta": [
+        13.729957580566406,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.40055087208747864,
+        0.5002050995826721,
+        0.1314879059791565,
+        13.729957580566406
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 1.907348634588857e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.729957580566406,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.666210949420929,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          219,
+          57
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.666210949420929,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          219,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.666210949420929,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        220,
+        57
+      ],
+      "sourceXY": [
+        220,
+        57
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92236328125,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6641016006469727,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.724032402038574,
+        4.0,
+        0.0,
+        1980.0
+      ],
+      "providerMeta": [
+        13.724032402038574,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.4038122892379761,
+        0.5000218152999878,
+        0.13058140873908997,
+        13.724032402038574
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 3.814697269177714e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.724032402038574,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6641016006469727,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          220,
+          57
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6641016006469727,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          220,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6641016006469727,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        221,
+        57
+      ],
+      "sourceXY": [
+        221,
+        57
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.921875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.729758262634277,
+        4.0,
+        0.0,
+        1664.0
+      ],
+      "providerMeta": [
+        13.729758262634277,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.7978876829147339,
+        0.5,
+        0.026871656998991966,
+        13.729758262634277
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 5.245208745119356e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.729758262634277,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6637500524520874,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          221,
+          57
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          221,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6637500524520874,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        222,
+        57
+      ],
+      "sourceXY": [
+        222,
+        57
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.9287109375,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6686719059944153,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.744121551513672,
+        4.0,
+        0.0,
+        1288.0
+      ],
+      "providerMeta": [
+        13.744121551513672,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.8463312983512878,
+        0.5,
+        0.014123336412012577,
+        13.744121551513672
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 3.099441525655777e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.744121551513672,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6686719059944153,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          222,
+          57
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6686719059944153,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          222,
+          55
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6686719059944153,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        219,
+        58
+      ],
+      "sourceXY": [
+        219,
+        58
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.9248046875,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6658594012260437,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.752784729003906,
+        4.0,
+        0.0,
+        1482.0
+      ],
+      "providerMeta": [
+        13.752784729003906,
+        4.0,
+        2.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.5464558005332947,
+        0.5068990588188171,
+        0.09432169049978256,
+        13.752784729003906
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 2.6226043781107933e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.752784729003906,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6658594012260437,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          219,
+          58
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6658594012260437,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          219,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6658594012260437,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        220,
+        58
+      ],
+      "sourceXY": [
+        220,
+        58
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.923828125,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6651563048362732,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.746715545654297,
+        4.0,
+        0.0,
+        1426.0
+      ],
+      "providerMeta": [
+        13.746715545654297,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.7234758138656616,
+        0.5000320076942444,
+        0.046456702053546906,
+        13.746715545654297
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 5.483627318891848e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.746715545654297,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6651563048362732,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          220,
+          58
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6651563048362732,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          220,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6651563048362732,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    },
+    {
+      "providerXY": [
+        221,
+        58
+      ],
+      "sourceXY": [
+        221,
+        58
+      ],
+      "sameMaterialUVError": 0.0,
+      "sourceRGBA": [
+        0.9921875,
+        0.92333984375,
+        0.79296875,
+        1.0
+      ],
+      "providerRGBA": [
+        0.7143750190734863,
+        0.6648046970367432,
+        0.5709375143051147,
+        1.0
+      ],
+      "sourceMeta": [
+        13.754375457763672,
+        4.0,
+        0.0,
+        1337.0
+      ],
+      "providerMeta": [
+        13.754375457763672,
+        4.0,
+        1.0,
+        1.0
+      ],
+      "sourcePhysical": [
+        -0.8639590740203857,
+        0.5,
+        0.009484448470175266,
+        13.754375457763672
+      ],
+      "litError": 0.27781248092651367,
+      "own072Error": 1.907348634588857e-08,
+      "classification": "OWN072_SHADE",
+      "sourceLegacyClassifier": [
+        0.0,
+        4.0,
+        13.754375457763672,
+        1.0
+      ],
+      "sourceLegacyRGB": [
+        0.7143750190734863,
+        0.6648046970367432,
+        0.5709375143051147,
+        1.0
+      ],
+      "legacyUVError": 0.0,
+      "HEAD_PREPARED": {
+        "xy": [
+          221,
+          58
+        ],
+        "coordinateDelta": [
+          0,
+          0
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6648046970367432,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.0,
+        "providerRGBError": 0.0
+      },
+      "MAIN_FINAL": {
+        "xy": [
+          221,
+          56
+        ],
+        "coordinateDelta": [
+          0,
+          -2
+        ],
+        "rgba": [
+          0.7143750190734863,
+          0.6648046970367432,
+          0.5709375143051147,
+          1.0
+        ],
+        "uvError": 0.0,
+        "signedDepthDifference": 0.018461227416992188,
+        "providerRGBError": 0.0
+      }
+    }
+  ],
+  "limits": [
+    "UV match proves intrinsic texture lookup equivalence, not identical triangle topology between source and provider meshes.",
+    "Initial530 nested custom lists were omitted by JSON serializer; sparse530B is independent binary evidence.",
+    "Controlled pause may warm asynchronous resources; unpaused cold-load timing equivalence not established.",
+    "Canvas before presentSerial>0 is an observed startup readiness gap; not established as a face-only gray cause.",
+    "Reported recurring gray transition and other-session trigger are not automatically reproduced by an existing .72 shade."
+  ]
+}

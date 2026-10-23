@@ -3251,3 +3251,10 @@ Interactable (abstract base class)
 - 42/43/44 목표ear1개씩 .691932/.722201/.749419셀²; 정상44 대각 구간은3포즈 모두 생략없음. 단일 정상끝은보존하지만 넓은몸에붙은.75×3셀 끝 두개반례에서2.25셀²각각을잘못생략. 4회전/직선분할동일. 정상얇은끝gate실패로 graphcut/런타임적용/실제촬영미진행. 새길이/면적조건붙이지않고 해당후보종료.
 - Opacity Boundary21행 primitive/anchor/alpha기원이 CurvedProjection.Emit234행 좌표쌍에서유실, ClosedRegion.BuildSegments99행/ClothPrepare35행ring→Select39행면적만전달. 순서만으로는source에도있는43되돌림을거부못함. 자동끝/파트연결근거와keep/merge/omit결정을동일구간에보존할표현필요; 토폴로지기원만으로충분하다는검증은없고FullLoopB경계기원미저장. 수작업좌표요구/전역상태확장안함.
 - docs/artifacts/closed-clothing529에 최소실험source/좌표/반례도 저장, 메인.html반영. 기본OFF/기존제품·사용자설정보존. 상태변경없어527복원증거재사용, 새복원조회없음.528정정/비옷3·회색·내부색·212ms별도유지, Library403재시도없음.
+
+## 241. CHARACTER-RENDER-01 — 530 얼굴 로딩/테스트 전환, 기존음영확인·반복회색미확정
+
+- 529경계확장종료/제품수정0. Native395전체renderer OFF→ON, HeadLocal별도headRT, 재질복제/플래그복사/복원 경로 확인. 최근옷테스트 얼굴write없음. 프리팹 얼굴_MainTex04/Colorwhite/Debug0/indexMPB없음. grayscale Stage1분기는있지만 각패스Stage2지정/관측2. 다른세션원인단정안함.
+- 실제한번 제어된paused진입 첫2렌더얼굴source/provider/prepared/final PNG확보. custom-list JSON누락 진단실패보존, 한번재진입 첫1렌더 sparsefloat로UV/명암값회수(전체Walk추가없음). UV43대응중39×.72오차최대5.48e-8/classifier0,4원색/classifier1;21미대응동일표면가정안함. 최초endpoint LegacySignals→BodyPalette302 role3;Provider Auto245Fragment동일식. Legacy/provider/prepared RGB0차, main UV대응(0,-2)/depthoffset.018461/RGB0차. sampledskin무채색0이나반복신고재현/해결아님.
+- frame94 Canvas표시준비/present0→95present1 관측. 첫미생산RT RGB미회수라얼굴원인연결/패치안함. 자연coldload타이밍은paused입력한계. 다음최소증거는실제회색사건전후의테스트단계/출력종류·source/class/provider/final RGBA UV meta/StageDebug/재질MPB/history. 상수덧칠/fallback보정없음.
+- ENOENT죽은24412/빈tools미실행확인후공식22792읽기로회복, 권한·계정변경없음. 두관찰완료후직접cleanEdit/pausedfalse/compilefalse/clothcurveOFF/backgroundfalse/capture0복원. 사용자settings해시보존, docs/artifacts/face-gray530/메인.html상태반영. 비옷3/내부색/212ms등별도유지, Library403재시도없음.

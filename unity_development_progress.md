@@ -3213,3 +3213,11 @@ Interactable (abstract base class)
 - 같은실제3쌍에서목표가시와경계밖쓰기/게이트위반은0이지만선택영역native2×2donor가3/3/2셀누락돼미채택.첫실패33의정상프레임한포즈추가조회는마스크비트동일이고누락3셀native4표본모두0이다.영역선택과현packet입력의불충분이남아전체Walk는미실행.원본fallback/미기록가림으로통과하지않았다.
 - 얼굴원본/Prepare/base·실제얼굴최종RGB,재질/텍스처/카메라/MPB/합성상태는3쌍과복원전후동일이고현재회색미재현이다.별도face/head렌더는실재하지만회색첫버퍼·다른테스트원인은미확인.비옷1셀은같은sourcecolour에서외곽선outer1→0으로밝아지는후보효과이며디자인허용미판정이다.
 - 옷추가계산워밍후약19ms/pose,Editor전체RenderFrame wall변동273~711ms는PlayerFPS나개선근거가아니다.실시간미채택이며기존머리packet212ms·내부색head11+body1·시간문제와구별한다.3frame전신normalWebP/검사용GIF모두프레임보존,전체루프영상아님/Library403미재시도.근거 docs/artifacts/closed-clothing524. 입력/Animator/시계/후크/초기Edit·사용자설정복원;348및이전commit보존. 전체픽셀튐·얼굴회색·프로젝트완료아님.
+
+## 236. CHARACTER-RENDER-01 — 525 MASK/연속 표면 공급 실제3쌍, 성능 실패·OFF
+
+- 524실패와da3f5fd 보존. 원본UV texel-alpha선형등고선/cutoff/ST→실제삼각형anchor→기존닫힌벡터영역/RDP/면적·둘레선택. 중심raster mask복사/단일UV 셀투명판정/좌표·phase특례없음.
+- 실제Walk33/34/35 같은실행 OFF/ON3쌍 모두보존. 소매34(198,85) 가시제거유지, 누락3/3/2→0/0/0. 불투명표면2/1/1셀은 같은ray의실제가시triangle/UV/depthpacket과GPU일치; 투명영역4관측셀은영역에서제외. 기존Probe502/Legacy502/attachment재사용, 새RT/패스/RGB이력층0.
+- 전처리711ms/12931경계조각/7742anchor; 매포즈source2602→fit38 등. steady geometry약1750ms이므로실시간미채택이며해당확장중단. packetCPU13.75~24.31ms와별도head212ms구분. 전체Walk미실행/전체시간품질미판정.
+- source색/face상태보존. 실제가시얼굴4/5/8셀RGB변경0, 회색이번미재현만확인. body33한셀은입력RGB동일/OwnerLines외곽인접판정0→1로.55톤적용; 전체시간시각채택은미검증.
+- 기본OFF/입력·Animator·시계·후크/초기Edit·cleanGameMap1 직접복원.사용자설정해시보존. 44d13c0/511/513/내부색head11+body1/종료arcDP변경없음. local모든3프레임전신WebP/GIF/PNG와원float보존;Library403재시도없음. 증거docs/artifacts/closed-clothing525.메인.html현재525반영. 전체프로젝트/가시/회색해결완료아님.

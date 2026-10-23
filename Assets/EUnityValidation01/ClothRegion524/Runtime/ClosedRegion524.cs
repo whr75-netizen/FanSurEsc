@@ -47,6 +47,16 @@ public static class ClosedRegion524
     {
         var counts=new Dictionary<(P,P),int>();
         for(int j=0;j<indices.Length;j+=3){var a=new P(points[indices[j]].x,points[indices[j]].y);var b=new P(points[indices[j+1]].x,points[indices[j+1]].y);var c=new P(points[indices[j+2]].x,points[indices[j+2]].y);double area=Cross(a,b,c);if(Math.Abs(area)<1e-12)continue;if(area<0)(b,c)=(c,b);Count(counts,a,b);Count(counts,b,c);Count(counts,c,a);}
+        return BuildCounts(counts);
+    }
+    public static List<Vector2[]> BuildSegments(IEnumerable<(Vector2,Vector2)> segments)
+    {
+        var counts=new Dictionary<(P,P),int>();
+        foreach(var line in segments)Count(counts,new P(line.Item1.x,line.Item1.y),new P(line.Item2.x,line.Item2.y));
+        return BuildCounts(counts);
+    }
+    static List<Vector2[]> BuildCounts(Dictionary<(P,P),int> counts)
+    {
         var edges=new List<Edge>();foreach(var row in counts)if(row.Value!=0)edges.Add(row.Value>0?new Edge{a=row.Key.Item1,b=row.Key.Item2,weight=row.Value}:new Edge{a=row.Key.Item2,b=row.Key.Item1,weight=-row.Value});WeightedEdges=edges.Count;
         for(int i=0;i<edges.Count;i++)for(int j=i+1;j<edges.Count;j++){var a=edges[i];var b=edges[j];if(Math.Max(Math.Min(a.a.X,a.b.X),Math.Min(b.a.X,b.b.X))>Math.Min(Math.Max(a.a.X,a.b.X),Math.Max(b.a.X,b.b.X))||Math.Max(Math.Min(a.a.Y,a.b.Y),Math.Min(b.a.Y,b.b.Y))>Math.Min(Math.Max(a.a.Y,a.b.Y),Math.Max(b.a.Y,b.b.Y)))continue;Intersect(a,b);}
         counts.Clear();foreach(var e in edges){e.split.Sort();for(int i=0;i+1<e.split.Count;i++)if(e.split[i+1]-e.split[i]>1e-12)Count(counts,At(e,e.split[i]),At(e,e.split[i+1]),e.weight);}Fragments=counts.Count;

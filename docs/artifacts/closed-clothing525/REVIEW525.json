@@ -1,0 +1,581 @@
+{
+  "status": "UNADOPTED_PERFORMANCE_GATE_FAILED",
+  "accuracyScope": "actual adjacent Walk33/34/35; all frames; no wholeWalk",
+  "closedRegionBoundaryInput": "source texture linear-texel MASK contour and original UV-triangle intersections, then projected vector union/RDP/region selection",
+  "rows": [
+    {
+      "frame": 33,
+      "packets": [
+        {
+          "xy": [
+            199,
+            89
+          ],
+          "cpuPrimitiveOneBased": 739,
+          "gpuRawMeta": [
+            13.919930458068848,
+            11.0,
+            0.0,
+            739.0
+          ],
+          "gpuUV": [
+            0.08023715019226074,
+            0.7233056426048279,
+            739.0,
+            1.0
+          ],
+          "uvErrorMax": 7.450580596923828e-09,
+          "depthError": 0.0,
+          "rawPacketMatches": true,
+          "finalMeta": [
+            13.919930458068848,
+            11.0,
+            0.0,
+            739.0
+          ],
+          "finalRGBA": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ],
+          "finalSupplied": true,
+          "source": {
+            "x": 199,
+            "y": 89,
+            "primitive": 738,
+            "sourceProjection": {
+              "x": 199.55404663085938,
+              "y": 89.48983764648438
+            },
+            "uv": {
+              "x": 0.08023714274168015,
+              "y": 0.7233056426048279
+            },
+            "barycentric": {
+              "x": 2.18349632632453e-05,
+              "y": 0.05229616537690163,
+              "z": 0.9476820230484009
+            },
+            "world": {
+              "x": -0.1889195293188095,
+              "y": 1.0555590391159058,
+              "z": -0.15944507718086243
+            },
+            "depth": 13.919930458068848,
+            "distance": 0.05499374121427536
+          }
+        },
+        {
+          "xy": [
+            202,
+            103
+          ],
+          "cpuPrimitiveOneBased": 560,
+          "gpuRawMeta": [
+            13.994827270507812,
+            11.0,
+            0.0,
+            560.0
+          ],
+          "gpuUV": [
+            0.07845652103424072,
+            0.5894887447357178,
+            560.0,
+            1.0
+          ],
+          "uvErrorMax": 0.0,
+          "depthError": 0.0,
+          "rawPacketMatches": true,
+          "finalMeta": [
+            13.994827270507812,
+            11.0,
+            0.0,
+            560.0
+          ],
+          "finalRGBA": [
+            0.33393165469169617,
+            0.28462502360343933,
+            0.23783203959465027,
+            1.0
+          ],
+          "finalSupplied": true,
+          "source": {
+            "x": 202,
+            "y": 103,
+            "primitive": 559,
+            "sourceProjection": {
+              "x": 202.57284545898438,
+              "y": 103.49246215820312
+            },
+            "uv": {
+              "x": 0.07845652103424072,
+              "y": 0.5894887447357178
+            },
+            "barycentric": {
+              "x": 2.266010881157854e-07,
+              "y": 0.062273550778627396,
+              "z": 0.9377261996269226
+            },
+            "world": {
+              "x": -0.15390369296073914,
+              "y": 0.8841294050216675,
+              "z": -0.1659557819366455
+            },
+            "depth": 13.994827270507812,
+            "distance": 0.07323441654443741
+          }
+        }
+      ],
+      "formerMissing": [
+        {
+          "xy": [
+            199,
+            89
+          ],
+          "selectedNow": true,
+          "curveAreaNow": 0.521236002445221,
+          "finalRGBA": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ],
+          "finalMeta": [
+            13.919930458068848,
+            11.0,
+            0.0,
+            739.0
+          ],
+          "reason": "continuous source packet"
+        },
+        {
+          "xy": [
+            227,
+            94
+          ],
+          "selectedNow": false,
+          "curveAreaNow": 0.04852113500237465,
+          "finalRGBA": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "finalMeta": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "reason": "opacity-aware design region excludes cell"
+        },
+        {
+          "xy": [
+            202,
+            103
+          ],
+          "selectedNow": true,
+          "curveAreaNow": 0.5348861217498779,
+          "finalRGBA": [
+            0.33393165469169617,
+            0.28462502360343933,
+            0.23783203959465027,
+            1.0
+          ],
+          "finalMeta": [
+            13.994827270507812,
+            11.0,
+            0.0,
+            560.0
+          ],
+          "reason": "continuous source packet"
+        }
+      ],
+      "selectedRegionUnfilledXY": [],
+      "actualVisibleFaceCells": 4,
+      "visibleFaceColourChanged": 0,
+      "nonClothingSamePacketRGBChanges": [
+        {
+          "role": 8,
+          "xy": [
+            225,
+            67
+          ],
+          "base": [
+            0.038543701171875,
+            0.038543701171875,
+            0.038543701171875,
+            1.0
+          ],
+          "alt": [
+            0.02119903638958931,
+            0.02119903638958931,
+            0.02119903638958931,
+            1.0
+          ],
+          "baseLine": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "altLine": [
+            1.0,
+            1.0,
+            0.0,
+            0.0
+          ],
+          "basePrepare": [
+            0.038543701171875,
+            0.038543701171875,
+            0.038543701171875,
+            1.0
+          ],
+          "altPrepare": [
+            0.038543701171875,
+            0.038543701171875,
+            0.038543701171875,
+            1.0
+          ]
+        }
+      ],
+      "coverageAddedXY": [
+        [
+          226,
+          77
+        ],
+        [
+          199,
+          89
+        ],
+        [
+          227,
+          93
+        ],
+        [
+          202,
+          103
+        ]
+      ],
+      "coverageRemovedXY": [
+        [
+          226,
+          67
+        ]
+      ]
+    },
+    {
+      "frame": 34,
+      "packets": [
+        {
+          "xy": [
+            199,
+            89
+          ],
+          "cpuPrimitiveOneBased": 726,
+          "gpuRawMeta": [
+            13.920027732849121,
+            11.0,
+            0.0,
+            726.0
+          ],
+          "gpuUV": [
+            0.08021402359008789,
+            0.7240851521492004,
+            726.0,
+            1.0
+          ],
+          "uvErrorMax": 1.4901161193847656e-08,
+          "depthError": 0.0,
+          "rawPacketMatches": true,
+          "finalMeta": [
+            13.920027732849121,
+            11.0,
+            0.0,
+            726.0
+          ],
+          "finalRGBA": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ],
+          "finalSupplied": true,
+          "source": {
+            "x": 199,
+            "y": 89,
+            "primitive": 725,
+            "sourceProjection": {
+              "x": 199.47030639648438,
+              "y": 89.24339294433594
+            },
+            "uv": {
+              "x": 0.08021403849124908,
+              "y": 0.7240851521492004
+            },
+            "barycentric": {
+              "x": 7.59856902732281e-06,
+              "y": 0.9999919533729553,
+              "z": 4.418427010932646e-07
+            },
+            "world": {
+              "x": -0.19008156657218933,
+              "y": 1.0578688383102417,
+              "z": -0.1581822782754898
+            },
+            "depth": 13.920027732849121,
+            "distance": 0.25831934809684753
+          }
+        }
+      ],
+      "formerMissing": [
+        {
+          "xy": [
+            199,
+            89
+          ],
+          "selectedNow": true,
+          "curveAreaNow": 0.5538547039031982,
+          "finalRGBA": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ],
+          "finalMeta": [
+            13.920027732849121,
+            11.0,
+            0.0,
+            726.0
+          ],
+          "reason": "continuous source packet"
+        },
+        {
+          "xy": [
+            228,
+            93
+          ],
+          "selectedNow": false,
+          "curveAreaNow": 0.0,
+          "finalRGBA": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "finalMeta": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "reason": "opacity-aware design region excludes cell"
+        },
+        {
+          "xy": [
+            227,
+            95
+          ],
+          "selectedNow": false,
+          "curveAreaNow": 0.0,
+          "finalRGBA": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "finalMeta": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "reason": "opacity-aware design region excludes cell"
+        }
+      ],
+      "selectedRegionUnfilledXY": [],
+      "actualVisibleFaceCells": 5,
+      "visibleFaceColourChanged": 0,
+      "nonClothingSamePacketRGBChanges": [],
+      "coverageAddedXY": [
+        [
+          203,
+          74
+        ],
+        [
+          199,
+          89
+        ]
+      ],
+      "coverageRemovedXY": [
+        [
+          206,
+          66
+        ],
+        [
+          199,
+          82
+        ],
+        [
+          198,
+          85
+        ]
+      ]
+    },
+    {
+      "frame": 35,
+      "packets": [
+        {
+          "xy": [
+            199,
+            89
+          ],
+          "cpuPrimitiveOneBased": 739,
+          "gpuRawMeta": [
+            13.922264099121094,
+            11.0,
+            0.0,
+            739.0
+          ],
+          "gpuUV": [
+            0.08031970262527466,
+            0.7204741835594177,
+            739.0,
+            1.0
+          ],
+          "uvErrorMax": 7.450580596923828e-09,
+          "depthError": 0.0,
+          "rawPacketMatches": true,
+          "finalMeta": [
+            13.922264099121094,
+            11.0,
+            0.0,
+            739.0
+          ],
+          "finalRGBA": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ],
+          "finalSupplied": true,
+          "source": {
+            "x": 199,
+            "y": 89,
+            "primitive": 738,
+            "sourceProjection": {
+              "x": 199.50872802734375,
+              "y": 89.49852752685547
+            },
+            "uv": {
+              "x": 0.08031971007585526,
+              "y": 0.7204741835594177
+            },
+            "barycentric": {
+              "x": 3.975887921114918e-06,
+              "y": 0.2423248589038849,
+              "z": 0.7576711773872375
+            },
+            "world": {
+              "x": -0.1897551268339157,
+              "y": 1.054309368133545,
+              "z": -0.15758934617042542
+            },
+            "depth": 13.922264099121094,
+            "distance": 0.008851363323628902
+          }
+        }
+      ],
+      "formerMissing": [
+        {
+          "xy": [
+            199,
+            89
+          ],
+          "selectedNow": true,
+          "curveAreaNow": 0.5538591146469116,
+          "finalRGBA": [
+            0.12743769586086273,
+            0.06847818195819855,
+            0.04817182198166847,
+            1.0
+          ],
+          "finalMeta": [
+            13.922264099121094,
+            11.0,
+            0.0,
+            739.0
+          ],
+          "reason": "continuous source packet"
+        },
+        {
+          "xy": [
+            228,
+            94
+          ],
+          "selectedNow": false,
+          "curveAreaNow": 0.005147666670382023,
+          "finalRGBA": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "finalMeta": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "reason": "opacity-aware design region excludes cell"
+        }
+      ],
+      "selectedRegionUnfilledXY": [],
+      "actualVisibleFaceCells": 8,
+      "visibleFaceColourChanged": 0,
+      "nonClothingSamePacketRGBChanges": [],
+      "coverageAddedXY": [
+        [
+          203,
+          74
+        ],
+        [
+          199,
+          89
+        ]
+      ],
+      "coverageRemovedXY": []
+    }
+  ],
+  "opacityPreprocessMs": 711.0704,
+  "steadyGeometryMs": [
+    1751.6863,
+    1748.6824
+  ],
+  "packetBuildMs": [
+    24.3084,
+    16.4276,
+    13.7544
+  ],
+  "newRTs": 0,
+  "newRenderPasses": 0,
+  "extraWorldOrTemporalFilters": 0,
+  "restoration": {
+    "status": "CAPTURED",
+    "error": "",
+    "frames": 3,
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true,
+    "postUnchanged": true
+  },
+  "faceStateBeforeAfterEqual": true,
+  "limits": [
+    "Source alpha contour field is piecewise linear per texel triangle; not an exact GPU bilinear iso-curve proof.",
+    "Full Walk not run because geometry cost already fails real-time adoption.",
+    "No claim that the current RDP/area/perimeter design solves all temporal boundary choices.",
+    "Face gray not reproduced in these three poses; original recurring issue remains unresolved.",
+    "Head511/source-ray513, head internal11+body1 events and head212ms packet cost remain separate."
+  ]
+}

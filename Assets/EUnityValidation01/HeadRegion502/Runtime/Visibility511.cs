@@ -5,6 +5,13 @@ using UnityEngine;
 // Shared source-alpha cache access only; exact505 area/union code is unchanged.
 public static partial class HeadArea505
 {
+    public static byte[] SourceAlphaBytes525(Texture2D texture)
+    {
+        if(Application.isPlaying)return(byte[])Alpha(texture).Clone();
+        var target=RenderTexture.GetTemporary(texture.width,texture.height,0,RenderTextureFormat.ARGB32,RenderTextureReadWrite.Linear);var prior=RenderTexture.active;var readable=new Texture2D(texture.width,texture.height,TextureFormat.RGBA32,false,true);
+        try{Graphics.Blit(texture,target);RenderTexture.active=target;readable.ReadPixels(new Rect(0,0,texture.width,texture.height),0,0,false);readable.Apply(false,false);var p=readable.GetPixels32();var result=new byte[p.Length];for(int i=0;i<p.Length;i++)result[i]=p[i].a;return result;}
+        finally{RenderTexture.active=prior;RenderTexture.ReleaseTemporary(target);UnityEngine.Object.DestroyImmediate(readable);}
+    }
     public static Vector2 SourceAlphaExtrema511(Texture2D texture)
     {var a=Alpha(texture);byte lo=255,hi=0;foreach(byte v in a){if(v<lo)lo=v;if(v>hi)hi=v;}return new Vector2(lo/255f,hi/255f);}
     public static Vector2 SourceAlphaFootprint511(Texture2D texture,Vector2 uv)

@@ -18,6 +18,8 @@ public static class ClothRegion524
     public static Texture2D Mask{get;private set;}
     public static RTHandle Audit{get;private set;}
     static Full319View335 current;
+    public static OpacityRegion525 Opacity {get;private set;}
+    static Mesh opacityMesh;static Material opacityMaterial;
     static Color[] colours=new Color[480*272];
     public static bool Ready(Full319View335 f)=>Enabled&&current==f&&Status=="ready";
     static double Ms(long t)=>1000.0*(Stopwatch.GetTimestamp()-t)/Stopwatch.Frequency;
@@ -27,7 +29,9 @@ public static class ClothRegion524
         try{
             long start=Stopwatch.GetTimestamp();var mf=f.motion.surface.outputs[0];var mesh=mf.sharedMesh;
             if(mesh.subMeshCount!=4)throw new InvalidOperationException("524 adapter requires declared body clothing material3; no semantic guessing");
-            var world=mesh.vertices.Select(mf.transform.TransformPoint).ToArray();var p=world.Select(f.Project).ToArray();Source.AddRange(ClosedRegion524.Build(p,mesh.GetIndices(3)));
+            var world=mesh.vertices.Select(mf.transform.TransformPoint).ToArray();var p=world.Select(f.Project).ToArray();var original=f.motion.surface.source[0].sharedMesh;var material=f.motion.materials[3];
+            if(Opacity==null||opacityMesh!=original||opacityMaterial!=material){Opacity=new OpacityRegion525(original,3,material);opacityMesh=original;opacityMaterial=material;}
+            Source.AddRange(ClosedRegion524.BuildSegments(Opacity.Project(p)));
             foreach(var ring in Source){SourcePoints+=ring.Length;var fit=ClosedRegion524.Fit(ring,HeadRegion502.CurveError);if(fit.Length>=3){Curves.Add(fit);ControlPoints+=fit.Length;}}
             if(Curves.Count==0)throw new InvalidOperationException("524 no closed clothing curves");
             int x0=Mathf.Clamp(Mathf.FloorToInt(Curves.Min(r=>r.Min(v=>v.x)))-2,0,479),y0=Mathf.Clamp(Mathf.FloorToInt(Curves.Min(r=>r.Min(v=>v.y)))-2,0,271),x1=Mathf.Clamp(Mathf.CeilToInt(Curves.Max(r=>r.Max(v=>v.x)))+2,x0+1,480),y1=Mathf.Clamp(Mathf.CeilToInt(Curves.Max(r=>r.Max(v=>v.y)))+2,y0+1,272);Bounds=new RectInt(x0,y0,x1-x0,y1-y0);GeometryMs=Ms(start);start=Stopwatch.GetTimestamp();
@@ -41,5 +45,5 @@ public static class ClothRegion524
     public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){cmd.SetGlobalInt("_Cloth524Enabled",Ready(f)?1:0);}
     public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f){cmd.SetComputeIntParam(shader,"_Cloth524Enabled",Ready(f)?1:0);cmd.SetComputeTextureParam(shader,kernel,"_Cloth524Mask",Mask?Mask:Texture2D.blackTexture);cmd.SetComputeTextureParam(shader,kernel,"_Audit",Audit!=null?Audit.rt:f.audit.rt);cmd.SetComputeTextureParam(shader,kernel,"_Before",f.before.rt);cmd.SetComputeTextureParam(shader,kernel,"_Colour",f.colour.rt);}
     public static void CopyAudit(CommandBuffer cmd,Full319View335 f){if(Ready(f))cmd.CopyTexture(f.audit.rt,Audit.rt);}
-    public static void Release(){Enabled=false;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);if(Mask)UnityEngine.Object.DestroyImmediate(Mask);Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;}
+    public static void Release(){Enabled=false;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);if(Mask)UnityEngine.Object.DestroyImmediate(Mask);Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}
 }

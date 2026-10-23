@@ -54,7 +54,7 @@
 | `MOVE-01` | Player 이동·달리기·8방향 회전 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §143 | Camera축·CharacterController; .2m턱/문/벽/씬왕복; 물리키 미검증 | 이동·Animator·외형 참조 변경 |
 | `CAMERA-01` | 영속 Camera 줌·회전 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §142·146·167 | 30°/350°;B34 native1배·작은뷰 줌제약 | 씬이탈·입력·높이 변경 |
 | `ENVIRONMENT-01` | 시간·날씨 | `PARTIAL` | `CALL` | `PROTOTYPE` | 진행 §55~88·94·101·108~110·121~126 | 11키 낮밤·8초 구름/주광/안개→0.75초 비; 비차단·웅덩이·큰 식생 시험장·shadow/cookie·로컬광 | 시각 승인·실내 안개·날씨 저장·풍향·GPU Profile·Transparent 차폐/합성 |
-| `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 렌더 | `PARTIAL` | `PLAY` | `PROTOTYPE` | [파이프라인](CHARACTER_PIXEL_PIPELINE.md)·진행 §258 | 348활성;547/550/551보존;553선10쌍+2조회/OFF | 정상손끝2·헤어음영역·명암·성능미해결 |
+| `CHARACTER-RENDER-01` | 3D 픽셀 캐릭터 렌더 | `PARTIAL` | `PLAY` | `PROTOTYPE` | [파이프라인](CHARACTER_PIXEL_PIPELINE.md)·진행 §259 | 348활성;547/550/551보존;553선/OFF;555손반례 | 손끝형상기준·헤어음영역·명암·성능미해결 |
 | `ITEM-01` | ItemDatabase·grid 인벤토리·회전·장비·HUD | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §12~13·38·40~45·48·50·53·89~95·105 | grid·stack·가방·장전탄·Save v7·저작창; ID 13 1×1 갑빠(방어 20%·육각); 바닥 drop/E, 일반 전환 삭제·Active Raid 복원 | item/grid/장비/world-item 저장 계약 변경 |
 | `COMBAT-01` | 시험 총기 공격·탄약·피해·사망·효과음 | `ACTIVE` | `CALL` | `PROTOTYPE` | 진행 §16·48·51·105 | 체력 1000·정수 계산·공격력 10단위·총 피해 350; 갑빠 방어 1당 최종 피해 1% 감소 | 탄종·AI 탄약·무기군 장전·반동·탄퍼짐·관통·피해 유형·조준 결정 |
 | `AI-01` | 근접·원거리 적 AI 1단계 | `ACTIVE` | `PLAY` | `PROTOTYPE` | 진행 §19·67·117 | 순찰·감지·추적·LOS 공격·총성 조사; 좀비 순찰3/전투6.8 | 엄폐·도주·저격 단계 요청 |

@@ -3204,3 +3204,12 @@ Interactable (abstract base class)
 - 기존510/511/514/515/360자료와원저자Feature-Aware/Superpixelator/ActiveStrokes/KZ를한번대조했다. 즉시채택할검증완료대체구현은없다. Feature-Aware는50×50예도5초/frame이고고정feature대응/구조전제,Superpixelator는정적벡터선,ActiveStrokes는연속선추적근거이며픽셀영역완성quantizer가아니다. 각자료를현재3D실시간·가림·아트통과근거로확대하지않았다.
 - 재사용최소기반은511 current곡선/면적＋SelectRegions의joint-cut＋공통Draw/Gate다. 제한시공간binary joint-cut은전역span상태열거를없애는별도구조후보로추론할수있지만span편집거리목적을바꾸며클러스터/계단/출몰품질·실시간성은미입증이다. 원본mask후단filter나기존실패mincut재실행을해법으로포장하지않고새구현을자동시작하지않았다.212ms도이후보가해결하지않는다.
 - 근거 docs/artifacts/render-handoff522의HANDOFF/ALTERNATIVE_REVIEW/PRESERVATION. 결과는인수인계와판단이며새시간선택기실험이아니다. 제품아트/실제Walk시간품질/실시간/전체프로젝트완료를주장하지않는다.
+
+## 235. CHARACTER-RENDER-01 — 소매523 source원인 / 닫힌옷영역524 실제3쌍 실패·OFF
+
+- 실제메인.html을현재상태와전신공통경계·옷우선으로갱신하고Chrome실표시·로컬링크를확인했다.438은과거표면표본,522/523/524는작업기록이며적용버전이아니다. 기존프로젝트/동일6000.5.9f1/공식MCP호스트를복구했으며새설치·보안변경은없다.
+- 새실제Walk33/34/35를동결하여소매(198,85)가source중심래스터에서0/1/0임과Prepare의alpha전파,OwnerLines의thin/outer→reason0,nominal1셀→native2×2를확인했다.523의동결두재렌더10버퍼전체일치.옷에독립선행닫힌디자인경계가없었고기존한팔±1셀은전신해법이아니었다.
+- 524는변형clothing2093삼각형의연속벡터합집합닫힌경계89~90점→.1875셀선분fit47/53/51점→CurveArea511면적＋SelectRegions면적/둘레공동선택을재사용한다.원본480mask복사/0.5독립threshold/형태일괄삭제/시간DP/후단보정층이아니다.같은C를source선행discard/Prepare/최종Resolve에연결하고열린한팔선택을대체했으나defaultOFF다.
+- 같은실제3쌍에서목표가시와경계밖쓰기/게이트위반은0이지만선택영역native2×2donor가3/3/2셀누락돼미채택.첫실패33의정상프레임한포즈추가조회는마스크비트동일이고누락3셀native4표본모두0이다.영역선택과현packet입력의불충분이남아전체Walk는미실행.원본fallback/미기록가림으로통과하지않았다.
+- 얼굴원본/Prepare/base·실제얼굴최종RGB,재질/텍스처/카메라/MPB/합성상태는3쌍과복원전후동일이고현재회색미재현이다.별도face/head렌더는실재하지만회색첫버퍼·다른테스트원인은미확인.비옷1셀은같은sourcecolour에서외곽선outer1→0으로밝아지는후보효과이며디자인허용미판정이다.
+- 옷추가계산워밍후약19ms/pose,Editor전체RenderFrame wall변동273~711ms는PlayerFPS나개선근거가아니다.실시간미채택이며기존머리packet212ms·내부색head11+body1·시간문제와구별한다.3frame전신normalWebP/검사용GIF모두프레임보존,전체루프영상아님/Library403미재시도.근거 docs/artifacts/closed-clothing524. 입력/Animator/시계/후크/초기Edit·사용자설정복원;348및이전commit보존. 전체픽셀튐·얼굴회색·프로젝트완료아님.

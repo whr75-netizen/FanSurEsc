@@ -1,0 +1,177 @@
+{
+  "event": {
+    "logicalXY": [
+      198,
+      85
+    ],
+    "frames": [
+      33,
+      34,
+      35
+    ],
+    "phase": [
+      0.4125,
+      0.425,
+      0.4375
+    ],
+    "nominalNativeScale": 2,
+    "nativeSizePerLogicalCell": [
+      2,
+      2
+    ]
+  },
+  "firstObservedWriter": {
+    "pass": "333 unchanged331 source control",
+    "file": "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs",
+    "function": "Probe.RecordRenderGraph",
+    "line": 11,
+    "evidence": "Live CENTRE/CENTRERAW 0→1→0; raw packet already contains primitive724"
+  },
+  "prepare": {
+    "file": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/Prepare333.compute",
+    "line": 9,
+    "alphaExpression": "c.a=m.x>0?1:0",
+    "rawRGB": [
+      0.90673828125,
+      0.7958984375,
+      0.708984375
+    ],
+    "preparedRGB": [
+      0.6528515815734863,
+      0.5730469226837158,
+      0.5104687809944153
+    ],
+    "observedRGBRatio": [
+      0.7200000286102295,
+      0.7200000882148743,
+      0.7200000286102295
+    ]
+  },
+  "post366": {
+    "currentEnabled": false,
+    "effectInThisRun": "Inject returns before dispatch; no post write"
+  },
+  "ownerLines": {
+    "file": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/OwnerLines333.compute",
+    "neighbors": [
+      {
+        "xy": [
+          197,
+          85
+        ],
+        "covered": false,
+        "part": 0,
+        "owner": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "xy": [
+          199,
+          85
+        ],
+        "covered": true,
+        "part": 3,
+        "owner": [
+          11.0,
+          3.0,
+          13.880452156066895,
+          11842.0
+        ]
+      },
+      {
+        "xy": [
+          200,
+          85
+        ],
+        "covered": true,
+        "part": 3,
+        "owner": [
+          11.0,
+          3.0,
+          13.866323471069336,
+          11852.0
+        ]
+      },
+      {
+        "xy": [
+          198,
+          84
+        ],
+        "covered": false,
+        "part": 0,
+        "owner": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "xy": [
+          198,
+          86
+        ],
+        "covered": false,
+        "part": 0,
+        "owner": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "xy": [
+          198,
+          83
+        ],
+        "covered": false,
+        "part": 0,
+        "owner": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      {
+        "xy": [
+          198,
+          87
+        ],
+        "covered": false,
+        "part": 0,
+        "owner": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      }
+    ],
+    "hasThreeHorizontal": true,
+    "hasThreeVertical": false,
+    "actualAudit_reason_outer_thin_joint": [
+      0.0,
+      1.0,
+      1.0,
+      0.0
+    ],
+    "consequence": "thin=true makes reason0; RGB and alpha pass through unchanged; no dilation"
+  },
+  "frozenRenders": {
+    "poses": 3,
+    "buffersPerPose": 10,
+    "allWholeBuffersBitEqual": true
+  },
+  "limits": [
+    "This confirms one sleeve event, not every spike.",
+    "No product fix or art-quality pass.",
+    "Exact GPU subpixel edge/interpolation is not inferred from approximate CPU barycentrics.",
+    "No independent whole-body design boundary currently constrains clothing fill."
+  ]
+}

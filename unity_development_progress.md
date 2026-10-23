@@ -3335,3 +3335,14 @@ Interactable (abstract base class)
 -비용:전체81쌍RenderFrame중앙OFF304.39/ON344.90ms는기존core동기GPUreadback포함·별도캡처PNG/분석제외이며PlayerFPS아님.옷geometry17.82/면적1.21/선택21.82/upload1.63ms 합42.48ms,packet중앙.064/최대40.15ms,콜드geometry1414ms분리.실시간기본채택불가로제품OFF유지하되실행가능Clothes모드보존,미세최적화층추가없음.
 -영상FULL540_CLOTH GIF1,525,246B/WebP848,156B,81프레임1350ms/424x346,전신·모든프레임·원래60Hz간격보존·보간0.새전체skyHour17.86330/인접7.22407로실행간배경동등가정안함.메인.html첫화면제품OFF/통합ON·정지43/50·Body0실패·비용/미해결명시,Chrome/링크실검사.자료docs/artifacts/clothing-common540와원rawworkspace경로연결. Library403재시도/우회없음.
 -운영:전체End의입력/Animator/clock복원true,최종직접Edit/비정지/모든cloth실험OFF/capture0/backgroundfalse/sceneDirtyfalse.컴파일통과·새Console오류없음(이전진단2건구분),QualitySettings/TimeManager원바이트보존.메뉴Off실행확인;ON은실제capture의동일설정으로검증했으며메뉴클릭전체조작을별도재촬영하지않음.539/540목적커밋,무관사용자/다른세션파일stage금지.
+
+
+## 251. CHARACTER-RENDER-01 — 541 Body0 최초채움 추적 / 542 캐릭터 왼팔1×2돌출 원인 확정, 제품수정없음
+
+- 540 Clothes/Off·4067f62와모든runtime소스보존.사용자새관측을우선해캐릭터기준왼팔팔꿈치를저장540전체81프레임으로검사;새전체촬영/알고리즘/threshold/성능패치0.프리팹Humanoid LeftUpperArm/LeftLowerArm→J_Bip_L_* 가중치와기존part2태그/Body3(role10·owner11)삼각형일치확인.화면좌우로부위판정안함,Clothes미적용Body0사건과구분.
+- 대표64→65→66의논리(201,73),(201,74):65에1열2행돌출(실제960화면2×4px),64해당열없음→66같은열4행.원본OFF와540ON에함께존재,540신규회귀라부르지않으나미해결누락범위정정.선행선택mask에이미포함되고65Before/PostLine동일하므로후단alpha누출/dilation생성아님.
+- Source/Curve x(y73.5/74.5)=201.395075956/201.469506670로동일;큰elbow return은24.7201772셀²·깊이2.9645233·길이15.991246이라539의<=1셀²전체return생략대상아님.셀면적64=.189482/.077738→65=.592356/.529834→66=.946597/.940668.선택식Σ(selected?1-A:A)+.14*(.58578644직교cut+.29289322대각cut)에서65두셀제거시면적+.244380116/경계-.164020203/합+.080359913.공간선택기가tab을유지하는이유확정;연산오류가아니며큰곡선의새leading-span진행/폭설계가목적식에없음.
+- OwnerLines333의별도thin예외가밝은돌출을강조:65두셀outertrue이나세로동일part2연속3셀없음/상하ownCore2셀부족→thintrue/reason0로밝은옷색유지.66지원확장→thinfalse/reason1→기존deepCream(.127438,.068478,.048172).4연결exterior/이웃part를저장Before·tag에서재계산해PostLine과일치.경계밖0·빈칸0은선택경계모양/ink시간일관성통과가아님;논리1×2를그대로허용한mask와별도선예외의책임불일치.그냥정상운동/격자교차라며완료분류안함.왼팔domain 고정셀alphaABA0도이문제를검출못함.
+- 무조건얇은끝삭제/모든thin검정칠/새penalty·history·전역DP 추가안함.이번수행은원인판별까지이며새제품수정은없음.다음수선은기존선택/생성계약안에서진행경계span과채움·선권한을같이정의해야하며원형·정상끝/손가락보존검증이필요.옷42.48ms/내부색/얼굴회색미재현은독립유지.
+- 541보존:기존35/36/41 자료에서Body0 global9627→primitive9626의정점3개가모두Head100%임을확인(Body0에머리피부포함).초기수동동결fixture는정렬불일치로원인근거제외/보존;검증된실제Walk실행기35..41 7포즈21장에누락입력만추가조회해기존3사건동일depth/UV재현.중심Body0빈칸,유일native(xx0,yy1)=(x+.25,y+.25)표본을선택면적.551148/.628022/.638847로Prepare가채움.격리RT의정확Prepare재실행owner가JoinBare전이미Body8로기존최종과동일.35Body13.698246 vsHead13.8726997+offset(-.007336277)=13.8653631이므로JoinBare는Head를거부.같은시선의정확한물리가림/Head표면범위계약은왼팔우선전환으로미완료;face무조건우선/색상수패치없음.
+- 메인540전체전신비교/메뉴보존,542미해결aside와기존540에서뽑은64/65/66전신+확대/81프레임왼팔확대연결;새수정결과로표시안함.원인수치·본/tag·GPU541입력archive·실패fixture구분은docs/artifacts/clothing-cause542,raw는원task에보존.최종직접Edit/모든cloth실험OFF/capture0/backgroundfalse/sceneDirtyfalse,7포즈input/Animator/clock복원true;사용자Quality/Time과540runtime바이트보존.403재시도/우회0,제품변경없는진단·검증기록목적커밋.

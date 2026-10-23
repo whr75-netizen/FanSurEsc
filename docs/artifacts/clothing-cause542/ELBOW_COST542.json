@@ -1,0 +1,85 @@
+{
+  "BoundaryCost": 0.14,
+  "formula": "sum(selected?1-A:A)+BoundaryCost*(.58578644 cardinal cuts+.29289322 diagonal cuts)",
+  "rows": [
+    {
+      "frame": 64,
+      "actualTwoCells": [
+        false,
+        false
+      ],
+      "areas": [
+        0.18948233127593994,
+        0.0777377113699913
+      ],
+      "chosen": {
+        "areaError": 32.278851202252554,
+        "boundaryCost": 23.782929464000002,
+        "total": 56.06178066625256
+      },
+      "withoutLeadingTwoCells": {
+        "areaError": 32.278851202252554,
+        "boundaryCost": 23.782929464000002,
+        "total": 56.06178066625256
+      },
+      "removeMinusChosen": {
+        "areaError": 0.0,
+        "boundaryCost": 0.0,
+        "total": 0.0
+      }
+    },
+    {
+      "frame": 65,
+      "actualTwoCells": [
+        true,
+        true
+      ],
+      "areas": [
+        0.5923557877540588,
+        0.5298342704772949
+      ],
+      "chosen": {
+        "areaError": 32.584101562795695,
+        "boundaryCost": 23.618909260800002,
+        "total": 56.2030108235957
+      },
+      "withoutLeadingTwoCells": {
+        "areaError": 32.8284816792584,
+        "boundaryCost": 23.4548890576,
+        "total": 56.2833707368584
+      },
+      "removeMinusChosen": {
+        "areaError": 0.24438011646270752,
+        "boundaryCost": -0.16402020320000332,
+        "total": 0.0803599132627042
+      }
+    },
+    {
+      "frame": 66,
+      "actualTwoCells": [
+        true,
+        true
+      ],
+      "areas": [
+        0.9465965032577515,
+        0.9406678080558777
+      ],
+      "chosen": {
+        "areaError": 30.772999336608336,
+        "boundaryCost": 23.4548890576,
+        "total": 54.227888394208335
+      },
+      "withoutLeadingTwoCells": {
+        "areaError": 32.547527959235595,
+        "boundaryCost": 23.618909260800002,
+        "total": 56.1664372200356
+      },
+      "removeMinusChosen": {
+        "areaError": 1.7745286226272583,
+        "boundaryCost": 0.16402020320000332,
+        "total": 1.9385488258272616
+      }
+    }
+  ],
+  "policyFinding": "The existing area+length objective has no term for the width/progression of a new leading-column tab on a retained larger bend. Correct energy minimization is not a pixel-art design-quality guarantee."
+}

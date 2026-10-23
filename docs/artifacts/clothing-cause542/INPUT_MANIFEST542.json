@@ -1,0 +1,902 @@
+{
+  "sourceCommit": "4067f62",
+  "runtimeUnchanged": {
+    "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs": "92edd979c92819a728b438d82d1d0339bc5c03279e6cd224c0423f37a86eb830",
+    "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothSurface525.cs": "0b0472e7a18c893bae4eb71dcca4862314b51dcc2cd2c98890b9ebf6b1bd9249",
+    "Assets/EUnityValidation01/VisibilityMotion331/Shaders/Probe331.shader": "5fb517ab12776b065c3f49161322ee4c9ca4348e305ce8c191cc390f2bfed113",
+    "Assets/EUnityValidation01/GameMapIntegration333/Shaders/Prepare333.compute": "fe42670e63b27dc0eb2205eeddce71b7f671b55c93ae62fd2a9c04b6d451b735",
+    "Assets/EUnityValidation01/ClothRegion524/Runtime/BoundaryModes540.cs": "41e39ad6996b86c849673ddb9ac98b0ded3bd22897023ef7f1e47987162d6fd7"
+  },
+  "protectedSettings": {
+    "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "actualInputs": [
+    {
+      "name": "35_14_HEAD_BARE_COLOUR.bin",
+      "sha256": "713f7231b51eef93267df374ac5ce2c2b247f55ca69b04f9ab5dad02347793d2",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_HEAD_BARE_OWNER.bin",
+      "sha256": "e72cf30d960b88233f1b20f7ab1cb5b0fb02fe1fa5904f142fc5c7c08dab1d90",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_HEAD_CENTRE_META.bin",
+      "sha256": "4462ca850f6d69165b85b0b7515047f125a99e92562484265de6e2ad7ba91ac5",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_HEAD_CENTRE_UV.bin",
+      "sha256": "43e1e92a82364c2bb2930ec013026994c3d727db04b8ccf2c0dbf74394a60d49",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_HEAD_NATIVE0.bin",
+      "sha256": "92458e251bea7dab7e69067b7457590d5fc51732b9d979491e900a1453e2d77f",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_HEAD_NATIVE3.bin",
+      "sha256": "93611f44c77971c73091faa51ba1710a8923f94565788027bf47e2fa5429984f",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_HEAD_NATIVE5.bin",
+      "sha256": "3d0a5fa2e91c1467080e8bc9010d1f4b86633301c393fa65605dfc27b9da27ae",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_HEAD_NATIVE6.bin",
+      "sha256": "84c5cd114b99fed1453eda8b30ba2fa95d93893171ae783f12ba57b0bc8d8610",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_HEAD_NATIVE_COLOUR.bin",
+      "sha256": "7218ed4bc60994c4ea363ecb29bd02cf4df8ae5cfa85c95f48dabb209f50c6e1",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_HEAD_REPLAY_Audit.bin",
+      "sha256": "15f9a1132fedab13b1f70006e5937aa832b1b264ee34b563ad341b34bde5b8df",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_HEAD_REPLAY_Before.bin",
+      "sha256": "26547414d6c7a5f643366e14d18b5e1e1e17a1e4d9e30ab4f765409b855b86a9",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_HEAD_REPLAY_Owner.bin",
+      "sha256": "e72cf30d960b88233f1b20f7ab1cb5b0fb02fe1fa5904f142fc5c7c08dab1d90",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_HEAD_REPLAY_PreparedMeta.bin",
+      "sha256": "4462ca850f6d69165b85b0b7515047f125a99e92562484265de6e2ad7ba91ac5",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_HEAD_REPLAY_PreparedUV.bin",
+      "sha256": "c7c2fb3d4d038df244bbe1bb7de558edbd1f0e60cf99bd53964973335347cc58",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_BARE_COLOUR.bin",
+      "sha256": "905c835b80a2165face053496835b56d9f6545f113d2fdb93eaa388a7b5de7be",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_BARE_OWNER.bin",
+      "sha256": "08911206ce20e206fc2aa7e1d6d3c4c5a78583759bdd8dbde71da423931c0958",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_CENTRE_META.bin",
+      "sha256": "02eed029b9f1de57fe45c6c706c976ad55ef922d0c8d8ed6bddcf70d6956cfe3",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_CENTRE_UV.bin",
+      "sha256": "66f0e09428173e20e52fdeb8bbfe8df25eeed3c979870c9c15f9dde26d985b6b",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_NATIVE0.bin",
+      "sha256": "e28a9461dfed2c4ed09a12b938684be3a218a5217c4ba8166097fe1ce3ac4eff",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_MAIN_NATIVE3.bin",
+      "sha256": "2a18f331a27e7011a5eb91f7de3585f855a85ba40a214b7e870d16456e734af8",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_MAIN_NATIVE5.bin",
+      "sha256": "e7cc0017079134e7ed891bfda3e04480c483cec09f22ae698045b09b5dc5a1fc",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_MAIN_NATIVE6.bin",
+      "sha256": "95dccd4d6f1777892859d92b1ec2818ce0928918553722b379e7249c2cf3c6e8",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_MAIN_NATIVE_COLOUR.bin",
+      "sha256": "c84a1726d59837a7d1f2655500ea7902143cb8403d203f32212174da1ce6ca72",
+      "bytes": 1616
+    },
+    {
+      "name": "35_14_MAIN_REPLAY_Audit.bin",
+      "sha256": "f3f43b6a2f84171a4a627874f9472c83c9562c81f46bcba61ef3671e9a0d4fcc",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_REPLAY_Before.bin",
+      "sha256": "252cac2a97b9f8aa3654b10e10e3ee701008c0dd6515df183e120c10117d0a8f",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_REPLAY_Owner.bin",
+      "sha256": "092dfd0cd8fa63d8c094ba37a810f85c3cc79865c715a772a9f1a2fe712cb240",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_REPLAY_PreparedMeta.bin",
+      "sha256": "02eed029b9f1de57fe45c6c706c976ad55ef922d0c8d8ed6bddcf70d6956cfe3",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_MAIN_REPLAY_PreparedUV.bin",
+      "sha256": "15316427a972cdd6096e88fb9bfc227e083b2638ce24d2ad54c5ea17f2be9371",
+      "bytes": 416
+    },
+    {
+      "name": "35_14_PARAMS.txt",
+      "sha256": "140be9efb774b0220bdc6f893121c098e394c5c0f999c11083816c04efce453a",
+      "bytes": 366
+    },
+    {
+      "name": "35_15_BODY_GEOMETRY.bin",
+      "sha256": "e4c3daa6c76f3ce587e9e79b373c6b5fd88efb95e95b20b023468ddba08720a4",
+      "bytes": 445296
+    },
+    {
+      "name": "35_15_HEAD_BARE_COLOUR.bin",
+      "sha256": "713f7231b51eef93267df374ac5ce2c2b247f55ca69b04f9ab5dad02347793d2",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_HEAD_BARE_OWNER.bin",
+      "sha256": "e72cf30d960b88233f1b20f7ab1cb5b0fb02fe1fa5904f142fc5c7c08dab1d90",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_HEAD_CENTRE_META.bin",
+      "sha256": "4462ca850f6d69165b85b0b7515047f125a99e92562484265de6e2ad7ba91ac5",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_HEAD_CENTRE_UV.bin",
+      "sha256": "43e1e92a82364c2bb2930ec013026994c3d727db04b8ccf2c0dbf74394a60d49",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_HEAD_NATIVE0.bin",
+      "sha256": "92458e251bea7dab7e69067b7457590d5fc51732b9d979491e900a1453e2d77f",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_HEAD_NATIVE3.bin",
+      "sha256": "93611f44c77971c73091faa51ba1710a8923f94565788027bf47e2fa5429984f",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_HEAD_NATIVE5.bin",
+      "sha256": "3d0a5fa2e91c1467080e8bc9010d1f4b86633301c393fa65605dfc27b9da27ae",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_HEAD_NATIVE6.bin",
+      "sha256": "84c5cd114b99fed1453eda8b30ba2fa95d93893171ae783f12ba57b0bc8d8610",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_HEAD_NATIVE_COLOUR.bin",
+      "sha256": "7218ed4bc60994c4ea363ecb29bd02cf4df8ae5cfa85c95f48dabb209f50c6e1",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_HEAD_REPLAY_Audit.bin",
+      "sha256": "15f9a1132fedab13b1f70006e5937aa832b1b264ee34b563ad341b34bde5b8df",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_HEAD_REPLAY_Before.bin",
+      "sha256": "26547414d6c7a5f643366e14d18b5e1e1e17a1e4d9e30ab4f765409b855b86a9",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_HEAD_REPLAY_Owner.bin",
+      "sha256": "e72cf30d960b88233f1b20f7ab1cb5b0fb02fe1fa5904f142fc5c7c08dab1d90",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_HEAD_REPLAY_PreparedMeta.bin",
+      "sha256": "4462ca850f6d69165b85b0b7515047f125a99e92562484265de6e2ad7ba91ac5",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_HEAD_REPLAY_PreparedUV.bin",
+      "sha256": "c7c2fb3d4d038df244bbe1bb7de558edbd1f0e60cf99bd53964973335347cc58",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_BARE_COLOUR.bin",
+      "sha256": "6863bd52d4a0b00ff0ff96557895be4a818969270517aa80f1ac7d5a38e36a59",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_BARE_OWNER.bin",
+      "sha256": "d678c59e71c8d3d3819341f4e8f4fb635bfd0e75358898fcc0ea14bcae8774d3",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_CENTRE_META.bin",
+      "sha256": "79629a0cdfd676ea2eaf91082006840d7016f60879a5ca1f99c3f0d225512c5e",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_CENTRE_UV.bin",
+      "sha256": "3c62e5c9f151ebf2ffcc44e7df811af13f953774067995e1008dc6afa5e7cfd8",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_NATIVE0.bin",
+      "sha256": "e28a9461dfed2c4ed09a12b938684be3a218a5217c4ba8166097fe1ce3ac4eff",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_MAIN_NATIVE3.bin",
+      "sha256": "2a18f331a27e7011a5eb91f7de3585f855a85ba40a214b7e870d16456e734af8",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_MAIN_NATIVE5.bin",
+      "sha256": "e7cc0017079134e7ed891bfda3e04480c483cec09f22ae698045b09b5dc5a1fc",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_MAIN_NATIVE6.bin",
+      "sha256": "95dccd4d6f1777892859d92b1ec2818ce0928918553722b379e7249c2cf3c6e8",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_MAIN_NATIVE_COLOUR.bin",
+      "sha256": "c84a1726d59837a7d1f2655500ea7902143cb8403d203f32212174da1ce6ca72",
+      "bytes": 1616
+    },
+    {
+      "name": "35_15_MAIN_REPLAY_Audit.bin",
+      "sha256": "13faef62b56b07e39e2ecdc0517c6368837dc72f1b78e6dc3b1acb7e259abe54",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_REPLAY_Before.bin",
+      "sha256": "87e2fac9a4c62d9be0c6ef56146fd57873ae2663f9838e1e7476a41314abcd61",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_REPLAY_Owner.bin",
+      "sha256": "c04da2ef48ff8f80df60d44e0d14db1e57a52e1da705f68dacf11988b5341335",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_REPLAY_PreparedMeta.bin",
+      "sha256": "e281e8dbc5eb98e7ccbe0209adacc5b3a9da87581d8a5f3bf5c0e5d32a315c0f",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_MAIN_REPLAY_PreparedUV.bin",
+      "sha256": "a5a5c5cd542b97b349fd0ce9ae5087afe0282166d20677cdbbe7e72445122918",
+      "bytes": 416
+    },
+    {
+      "name": "35_15_PARAMS.txt",
+      "sha256": "151e19fb37be8b066d909b3363d8ebb1f483426e6a92ccdf23b2b5329bc0a83b",
+      "bytes": 370
+    },
+    {
+      "name": "36_14_HEAD_BARE_COLOUR.bin",
+      "sha256": "c65d68fb2b6227fdc20a173ec0bdfc5c8565772b8a5477e9c0bcc0cc972f345d",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_HEAD_BARE_OWNER.bin",
+      "sha256": "17340e8767fc8f908ff05ea3994f1122613d25d39b184fd666ff5998be384b82",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_HEAD_CENTRE_META.bin",
+      "sha256": "083088374c99d0c04589e166cc408b4fcee41599fed6b7e638f66d63ec5ad42e",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_HEAD_CENTRE_UV.bin",
+      "sha256": "1020c4eec71a0f3c4656d93fd12a8d79dff8777eb392ad4d37373f44944fee0e",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_HEAD_NATIVE0.bin",
+      "sha256": "22408918b444dec29dc15d1d7d1c2a4768d7b4cc316b9330dcf4a1980fe4f085",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_HEAD_NATIVE3.bin",
+      "sha256": "f1e55e66521e24e3909eeaa26629497f178db84443361c82dda59c8c9dd2e84d",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_HEAD_NATIVE5.bin",
+      "sha256": "de79d45003c7fb1cfd108d1aa3e0e031797acdd46a7c4063c94d27b28d985906",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_HEAD_NATIVE6.bin",
+      "sha256": "eeb31c8d4314049ce0be1949878d9fd1e844b86e4699b2997f5bd5a6f8b2c160",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_HEAD_NATIVE_COLOUR.bin",
+      "sha256": "871f64a86b903dc020ceadc82a85eb3b2cf63a2b8530723fa08018bef6918fe5",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_HEAD_REPLAY_Audit.bin",
+      "sha256": "15f9a1132fedab13b1f70006e5937aa832b1b264ee34b563ad341b34bde5b8df",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_HEAD_REPLAY_Before.bin",
+      "sha256": "b5f76726562ea30b492ede086f2d78d6ffac544d074ddac49f74bf7673fa8f90",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_HEAD_REPLAY_Owner.bin",
+      "sha256": "17340e8767fc8f908ff05ea3994f1122613d25d39b184fd666ff5998be384b82",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_HEAD_REPLAY_PreparedMeta.bin",
+      "sha256": "083088374c99d0c04589e166cc408b4fcee41599fed6b7e638f66d63ec5ad42e",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_HEAD_REPLAY_PreparedUV.bin",
+      "sha256": "0719672c94c2dd836980e94f2c68cb948d0cafd0bc2ba14381b9cc2dfaa05445",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_BARE_COLOUR.bin",
+      "sha256": "c4238c0c44ab7804347065260a287c4a47e881b325bb92e02eb88ad19c98cfcc",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_BARE_OWNER.bin",
+      "sha256": "5db876c5b3c976179e3dd0d57285c993cd082133111ada4ea38263135ab18fb4",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_CENTRE_META.bin",
+      "sha256": "538813065abcdd6df44838665169cc7033d371c1047a3dd26d6a2687fd6c1ac5",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_CENTRE_UV.bin",
+      "sha256": "2cc6fa6ec5a00723fd8d35fdccd64e2b66b73a39d824c69e0347cb4530425c23",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_NATIVE0.bin",
+      "sha256": "85ccb7974ad7c7432d048de2818a61ffc99d363462e2a073c7c551f2beb30a7a",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_MAIN_NATIVE3.bin",
+      "sha256": "6f5bc2625c4b14815d1e7040f05ae82bf2a785704981bfbe26d46c2d7528a9ee",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_MAIN_NATIVE5.bin",
+      "sha256": "ddcbc2161af66b608add93487873fdad55cd54d93561bfa64664ea06e193a3a4",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_MAIN_NATIVE6.bin",
+      "sha256": "71bf8d37256064876b58ae915e3376773f7d2220e37626a747d8175abcc92678",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_MAIN_NATIVE_COLOUR.bin",
+      "sha256": "cb764446640104fcef9104bb0e6090fdbb9c5ef5dd93d0e637830aa1b61630cf",
+      "bytes": 1616
+    },
+    {
+      "name": "36_14_MAIN_REPLAY_Audit.bin",
+      "sha256": "f3f43b6a2f84171a4a627874f9472c83c9562c81f46bcba61ef3671e9a0d4fcc",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_REPLAY_Before.bin",
+      "sha256": "7c8a49f0e730b713451f034b5c17472462fa6a6cc206c047c173415509f6cba8",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_REPLAY_Owner.bin",
+      "sha256": "144da705f80f9788933a0b103ee83a302eeb821bbb1dc18a34cf07bde93cb573",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_REPLAY_PreparedMeta.bin",
+      "sha256": "538813065abcdd6df44838665169cc7033d371c1047a3dd26d6a2687fd6c1ac5",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_MAIN_REPLAY_PreparedUV.bin",
+      "sha256": "4282b0a9e293ee83b3ff304d17517509f4f175dd251455381105f861a7088c0d",
+      "bytes": 416
+    },
+    {
+      "name": "36_14_PARAMS.txt",
+      "sha256": "e1d3048234a4864d464c41627fb751971c35a0dbca1f8b3f3a7b69ced66a93b2",
+      "bytes": 372
+    },
+    {
+      "name": "36_15_BODY_GEOMETRY.bin",
+      "sha256": "7eb09cb7647c8d42a0c39c6a5591f4790315d8ecae4988f5677f14507da074a0",
+      "bytes": 445296
+    },
+    {
+      "name": "36_15_HEAD_BARE_COLOUR.bin",
+      "sha256": "c65d68fb2b6227fdc20a173ec0bdfc5c8565772b8a5477e9c0bcc0cc972f345d",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_HEAD_BARE_OWNER.bin",
+      "sha256": "17340e8767fc8f908ff05ea3994f1122613d25d39b184fd666ff5998be384b82",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_HEAD_CENTRE_META.bin",
+      "sha256": "083088374c99d0c04589e166cc408b4fcee41599fed6b7e638f66d63ec5ad42e",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_HEAD_CENTRE_UV.bin",
+      "sha256": "1020c4eec71a0f3c4656d93fd12a8d79dff8777eb392ad4d37373f44944fee0e",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_HEAD_NATIVE0.bin",
+      "sha256": "22408918b444dec29dc15d1d7d1c2a4768d7b4cc316b9330dcf4a1980fe4f085",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_HEAD_NATIVE3.bin",
+      "sha256": "f1e55e66521e24e3909eeaa26629497f178db84443361c82dda59c8c9dd2e84d",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_HEAD_NATIVE5.bin",
+      "sha256": "de79d45003c7fb1cfd108d1aa3e0e031797acdd46a7c4063c94d27b28d985906",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_HEAD_NATIVE6.bin",
+      "sha256": "eeb31c8d4314049ce0be1949878d9fd1e844b86e4699b2997f5bd5a6f8b2c160",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_HEAD_NATIVE_COLOUR.bin",
+      "sha256": "871f64a86b903dc020ceadc82a85eb3b2cf63a2b8530723fa08018bef6918fe5",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_HEAD_REPLAY_Audit.bin",
+      "sha256": "15f9a1132fedab13b1f70006e5937aa832b1b264ee34b563ad341b34bde5b8df",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_HEAD_REPLAY_Before.bin",
+      "sha256": "b5f76726562ea30b492ede086f2d78d6ffac544d074ddac49f74bf7673fa8f90",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_HEAD_REPLAY_Owner.bin",
+      "sha256": "17340e8767fc8f908ff05ea3994f1122613d25d39b184fd666ff5998be384b82",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_HEAD_REPLAY_PreparedMeta.bin",
+      "sha256": "083088374c99d0c04589e166cc408b4fcee41599fed6b7e638f66d63ec5ad42e",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_HEAD_REPLAY_PreparedUV.bin",
+      "sha256": "0719672c94c2dd836980e94f2c68cb948d0cafd0bc2ba14381b9cc2dfaa05445",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_BARE_COLOUR.bin",
+      "sha256": "22a046fc9731cfed7aabc61d0de58dc9ee55fb168cf24fad11e51099139d737f",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_BARE_OWNER.bin",
+      "sha256": "26b33a64664a54c203fcf0e880bc3a6b44bb908674a3f954f67fab1500ee134a",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_CENTRE_META.bin",
+      "sha256": "6bbc9f9bdb59e19aeb98a5141480ae923abfa5c2af648b447d0ae701ea826b33",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_CENTRE_UV.bin",
+      "sha256": "67dc43187ae7c827a903acbe8a572b1cc22e9ee7f04633026ef866eee3f4648a",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_NATIVE0.bin",
+      "sha256": "85ccb7974ad7c7432d048de2818a61ffc99d363462e2a073c7c551f2beb30a7a",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_MAIN_NATIVE3.bin",
+      "sha256": "6f5bc2625c4b14815d1e7040f05ae82bf2a785704981bfbe26d46c2d7528a9ee",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_MAIN_NATIVE5.bin",
+      "sha256": "ddcbc2161af66b608add93487873fdad55cd54d93561bfa64664ea06e193a3a4",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_MAIN_NATIVE6.bin",
+      "sha256": "71bf8d37256064876b58ae915e3376773f7d2220e37626a747d8175abcc92678",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_MAIN_NATIVE_COLOUR.bin",
+      "sha256": "cb764446640104fcef9104bb0e6090fdbb9c5ef5dd93d0e637830aa1b61630cf",
+      "bytes": 1616
+    },
+    {
+      "name": "36_15_MAIN_REPLAY_Audit.bin",
+      "sha256": "132aa3c72eda6319ce0faefafd2d479ec2835df6ef5d9f2e66e7b6853d9b4c1a",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_REPLAY_Before.bin",
+      "sha256": "aef99e28fde88da408f15f81d5022564a9b54ed1a1e6f98f824cce3fc3ab2123",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_REPLAY_Owner.bin",
+      "sha256": "75f340bde6f5505434f8be25662d7e8c29e972e1f126155d53ba4fb8c37366ef",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_REPLAY_PreparedMeta.bin",
+      "sha256": "b1e4e325b8969e2c39a6cb5bc83ea78dc1434d1996bc708336ed84484c9d9bb2",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_MAIN_REPLAY_PreparedUV.bin",
+      "sha256": "d46058b5c3edffbd54c4af057cc7dc4bd0efcf284431428816f9cef12551e447",
+      "bytes": 416
+    },
+    {
+      "name": "36_15_PARAMS.txt",
+      "sha256": "9f1e81719398a9408230af560bf175a3debbc783a1791b0d8ec5b1e4b82a3db4",
+      "bytes": 372
+    },
+    {
+      "name": "41_14_HEAD_BARE_COLOUR.bin",
+      "sha256": "a2fe59945c1ee96fa80075ccad912ed948533d5bdeb4a0f2f0d9c14cd03c75a7",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_HEAD_BARE_OWNER.bin",
+      "sha256": "511a1bde09a69af8ada6447a84ad9856b5297354ccf372171c6868424c166ed3",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_HEAD_CENTRE_META.bin",
+      "sha256": "16f0252448bf473dac99f7dde616cc6e518075564e4e9e5ff4261ab3deb284fa",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_HEAD_CENTRE_UV.bin",
+      "sha256": "b0869314a1635262c26c8dcdb46337406fa031664bf95e1c9b5a1b3eb6d2086d",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_HEAD_NATIVE0.bin",
+      "sha256": "7d615a4f281afb5619e08c259fa34cc1a641fd4f30761736145fad40e1d0804d",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_HEAD_NATIVE3.bin",
+      "sha256": "0dc828a62a84b39441a8a23053aa95717f70cffdb23c55d858309111ca93cbe3",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_HEAD_NATIVE5.bin",
+      "sha256": "90934dc9fd744f2d2756da5971bda9ae40f94220f724c3e1c0b0addf8ff7efba",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_HEAD_NATIVE6.bin",
+      "sha256": "31b4ba2622fe7e46c5057a0a48ed10c8e1496791415201e0cc60531916bf6aae",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_HEAD_NATIVE_COLOUR.bin",
+      "sha256": "5a80ed4c542b8717a7beb0fa2bd375636c65fdbf6ab22e906230c3808dd5cd0a",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_HEAD_REPLAY_Audit.bin",
+      "sha256": "15f9a1132fedab13b1f70006e5937aa832b1b264ee34b563ad341b34bde5b8df",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_HEAD_REPLAY_Before.bin",
+      "sha256": "4646842fda148751112a15a8daaffa4177a014614e06ba6098b745ad1da3b3c9",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_HEAD_REPLAY_Owner.bin",
+      "sha256": "511a1bde09a69af8ada6447a84ad9856b5297354ccf372171c6868424c166ed3",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_HEAD_REPLAY_PreparedMeta.bin",
+      "sha256": "16f0252448bf473dac99f7dde616cc6e518075564e4e9e5ff4261ab3deb284fa",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_HEAD_REPLAY_PreparedUV.bin",
+      "sha256": "c19d14190215693d54577fcf49e4465aaaff26dacc9d17dc7a90130d4fc16851",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_BARE_COLOUR.bin",
+      "sha256": "b12c42e708c8c9bfc873b6c5227f0114a51096af9e7ddf0b6fb175c334f1e4aa",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_BARE_OWNER.bin",
+      "sha256": "279d4061c53b0e607c69c490959493d8178daeac85e84a018bbd6fde6efd3c66",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_CENTRE_META.bin",
+      "sha256": "61f6bd99a5dcce4175edd2c5bd54f8524ee8c7a818f962064713000d834cfa70",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_CENTRE_UV.bin",
+      "sha256": "7eac9098164eb6b40a7fd15b8a19ec2f66689c84f117546603777c1ed16eebf1",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_NATIVE0.bin",
+      "sha256": "9768dfbe4b773a389ff34617125c1ca5f04440a1607cf371110abbbea9111a69",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_MAIN_NATIVE3.bin",
+      "sha256": "03fc2640bbb64a42beb64bd6e28d4b2e4a1f8443920d29bdaf96142c5f52ff93",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_MAIN_NATIVE5.bin",
+      "sha256": "6ce2ef31cdef974f796ece6ea00be2629049e31f0e360bb1ee43096bb0eb52ee",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_MAIN_NATIVE6.bin",
+      "sha256": "4fdca1a084b88df2d82d468102bb1b3017558bc3e2bddfc72cc2b5a4ac242726",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_MAIN_NATIVE_COLOUR.bin",
+      "sha256": "3a658dc1cb0d8c3c5f59f79d0a71bec28122018075c5cdc561ca2f0bb493b5a9",
+      "bytes": 1616
+    },
+    {
+      "name": "41_14_MAIN_REPLAY_Audit.bin",
+      "sha256": "7318b5f7717b6c5afcab448552488e0b4edb2ed6922653f6061ffc2f7029cdeb",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_REPLAY_Before.bin",
+      "sha256": "e78865811162b7669ecbf0dfa05855482115371a74b8260d6721bc1174c78a13",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_REPLAY_Owner.bin",
+      "sha256": "c2b0dc6676d7cbc548e0a819d055f38f36b2a22bd23bbf40ebd21f10c5b550fe",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_REPLAY_PreparedMeta.bin",
+      "sha256": "61f6bd99a5dcce4175edd2c5bd54f8524ee8c7a818f962064713000d834cfa70",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_MAIN_REPLAY_PreparedUV.bin",
+      "sha256": "51ff6990fafecfcadc88988904291d338305a1d917bfc78589e277cde1414338",
+      "bytes": 416
+    },
+    {
+      "name": "41_14_PARAMS.txt",
+      "sha256": "12a989323d5bfa8e0f9015282fab6cae78f1436e79745d2e4bff0f0dede9c789",
+      "bytes": 370
+    },
+    {
+      "name": "41_15_BODY_GEOMETRY.bin",
+      "sha256": "b10b3c3d4f3ac3af4b9058e6fa5aaa6cf257e89d1f6341e499af04d778e26053",
+      "bytes": 445296
+    },
+    {
+      "name": "41_15_HEAD_BARE_COLOUR.bin",
+      "sha256": "a2fe59945c1ee96fa80075ccad912ed948533d5bdeb4a0f2f0d9c14cd03c75a7",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_HEAD_BARE_OWNER.bin",
+      "sha256": "511a1bde09a69af8ada6447a84ad9856b5297354ccf372171c6868424c166ed3",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_HEAD_CENTRE_META.bin",
+      "sha256": "16f0252448bf473dac99f7dde616cc6e518075564e4e9e5ff4261ab3deb284fa",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_HEAD_CENTRE_UV.bin",
+      "sha256": "b0869314a1635262c26c8dcdb46337406fa031664bf95e1c9b5a1b3eb6d2086d",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_HEAD_NATIVE0.bin",
+      "sha256": "7d615a4f281afb5619e08c259fa34cc1a641fd4f30761736145fad40e1d0804d",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_HEAD_NATIVE3.bin",
+      "sha256": "0dc828a62a84b39441a8a23053aa95717f70cffdb23c55d858309111ca93cbe3",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_HEAD_NATIVE5.bin",
+      "sha256": "90934dc9fd744f2d2756da5971bda9ae40f94220f724c3e1c0b0addf8ff7efba",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_HEAD_NATIVE6.bin",
+      "sha256": "31b4ba2622fe7e46c5057a0a48ed10c8e1496791415201e0cc60531916bf6aae",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_HEAD_NATIVE_COLOUR.bin",
+      "sha256": "5a80ed4c542b8717a7beb0fa2bd375636c65fdbf6ab22e906230c3808dd5cd0a",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_HEAD_REPLAY_Audit.bin",
+      "sha256": "15f9a1132fedab13b1f70006e5937aa832b1b264ee34b563ad341b34bde5b8df",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_HEAD_REPLAY_Before.bin",
+      "sha256": "4646842fda148751112a15a8daaffa4177a014614e06ba6098b745ad1da3b3c9",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_HEAD_REPLAY_Owner.bin",
+      "sha256": "511a1bde09a69af8ada6447a84ad9856b5297354ccf372171c6868424c166ed3",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_HEAD_REPLAY_PreparedMeta.bin",
+      "sha256": "16f0252448bf473dac99f7dde616cc6e518075564e4e9e5ff4261ab3deb284fa",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_HEAD_REPLAY_PreparedUV.bin",
+      "sha256": "c19d14190215693d54577fcf49e4465aaaff26dacc9d17dc7a90130d4fc16851",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_BARE_COLOUR.bin",
+      "sha256": "682723688e86038a4f6ffa04fefa997f7323efa09b7209eb678794606d5597b9",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_BARE_OWNER.bin",
+      "sha256": "14f4993ed34af1c7c72710e16cfc20be0676eb3ec741dae786969adec21b3c66",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_CENTRE_META.bin",
+      "sha256": "4e5da2d2c9b9ebdcfda4d36bf8b00e705bdf14095b4230fdc046e4e0d9f393db",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_CENTRE_UV.bin",
+      "sha256": "878ae7c32b10c7e22f7dbf4d21697813f982cd0b136a644f09e09fd5a3f7be38",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_NATIVE0.bin",
+      "sha256": "9768dfbe4b773a389ff34617125c1ca5f04440a1607cf371110abbbea9111a69",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_MAIN_NATIVE3.bin",
+      "sha256": "03fc2640bbb64a42beb64bd6e28d4b2e4a1f8443920d29bdaf96142c5f52ff93",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_MAIN_NATIVE5.bin",
+      "sha256": "6ce2ef31cdef974f796ece6ea00be2629049e31f0e360bb1ee43096bb0eb52ee",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_MAIN_NATIVE6.bin",
+      "sha256": "4fdca1a084b88df2d82d468102bb1b3017558bc3e2bddfc72cc2b5a4ac242726",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_MAIN_NATIVE_COLOUR.bin",
+      "sha256": "3a658dc1cb0d8c3c5f59f79d0a71bec28122018075c5cdc561ca2f0bb493b5a9",
+      "bytes": 1616
+    },
+    {
+      "name": "41_15_MAIN_REPLAY_Audit.bin",
+      "sha256": "8ffcdc11fc9546286f44472600734209d609037fa488f94daa36f8dd6a1017ac",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_REPLAY_Before.bin",
+      "sha256": "c0fda1afe709fd66d283a7c072172d769d32fbc3626d86c0025c8cb2784dc8ca",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_REPLAY_Owner.bin",
+      "sha256": "4205252b21b8b3a82a9f8edb3df488077c57773458908bcaf44a462e4b7a45f8",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_REPLAY_PreparedMeta.bin",
+      "sha256": "640b17ade77ddadb596f831e9406d39a1bb11f4897d5618acdcd48106fdb29a4",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_MAIN_REPLAY_PreparedUV.bin",
+      "sha256": "b6058c870eb32fe570d68c3cd216d9e7a23432bf234c3f62e98d7806037e7fcf",
+      "bytes": 416
+    },
+    {
+      "name": "41_15_PARAMS.txt",
+      "sha256": "5f8e5a4b82507bf6e45244f85ff1c1e890060ba78215207eab61276e0c52308c",
+      "bytes": 373
+    }
+  ],
+  "manualFixtureExcluded": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\BodyRay541\\Probe"
+}

@@ -1,0 +1,53 @@
+{
+  "state": "REJECTED_WITHDRAWN",
+  "actualPairs": 9,
+  "actualFrames": [
+    17,
+    18,
+    19,
+    24,
+    35,
+    50,
+    51,
+    52,
+    64
+  ],
+  "baseline": "same-execution511+513,Clothes547,550flag=true,BodyScope=false",
+  "trial": "negative core grouping560 (withdrawn)",
+  "productCodeDiff": "0 in three edited existing files; own helper/meta absent",
+  "captureRestore": {
+    "status": "CAPTURED",
+    "poses": 9,
+    "error": "",
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true
+  },
+  "directCheck": {
+    "success": true,
+    "message": "Command executed successfully.",
+    "data": {
+      "isCompilationSuccessful": true,
+      "isExecutionSuccessful": true,
+      "executionId": 1,
+      "compilationLogs": "",
+      "executionLogs": "[Log] 560 withdrawn compiling=False playing=False paused=False dirty=False cloth=False body=False head=False sameRay550=False",
+      "localFixedCode": "using UnityEditor.SceneManagement;\r\nusing UnityEditor;\r\n\r\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\r\n{\r\n    internal class CommandScript : IRunCommand\r\n    {\r\n        public void Execute(ExecutionResult result)\r\n        {\r\n            result.Log(\"560 withdrawn compiling=\" + EditorApplication.isCompiling + \" playing=\" + EditorApplication.isPlaying + \" paused=\" + EditorApplication.isPaused + \" dirty=\" + EditorSceneManager.GetActiveScene().isDirty + \" cloth=\" + ClothRegion524.Enabled + \" body=\" + ClothRegion524.UseBodyScope551 + \" head=\" + HeadRegion502.Enabled + \" sameRay550=\" + HeadLocal367.UseCentreBodyRay550);\r\n        }\r\n    }\r\n}",
+      "result": "Command executed successfully."
+    }
+  },
+  "consoleErrorCount": 2,
+  "consoleFirstLines": [
+    "Destroy may not be called from edit mode! Use DestroyImmediate instead.",
+    "Failed getting indices. Submesh index is out of bounds."
+  ],
+  "userSettings": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "mainHtmlSha256": "42a182dd87f9869180af05d904475d428d7e306f2d29fab10d9ddcff96e14572",
+  "browser": "Chrome headless exit0; MAIN560.png visually inspected; new section8 links exist",
+  "library": "not retried; prior403 remains",
+  "allocations": "not measured; performance optimization not in this trial",
+  "rawBuffers": "only workspace Current472/HairRegion560/Compare560; no full loop duplicate"
+}

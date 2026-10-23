@@ -3445,3 +3445,12 @@ Interactable (abstract base class)
 - A는뒤손원영역.931309521→독립Fit .450592041,이웃항+.164020211,합계+.262836128로false.다른기여6성분도false여서공급전ORmask부터빈다.본래투영된손의합성덮임을독립디자인영역으로놓은계약실패다. .931310을depthclip한개별가시면적이라고부르지않음.
 - 원기하/UV/스킨/알파/깊이는있지만원union contributor와앞조각생략시뒤공급상태가현재1bit재질mask+공급자1개에없다.공통그림영역구성또는깊이순대체공급을표현해야하며새분리/penalty/최대면적/시간filter/fallback패치로확장하지않음.헤어511/512/513계약·35채움/24실제앞가림/눈fixture·정상틈미확정상태보존.
 - input/Animator/clock복원true·직접컴파일/cleanEdit/OFF확인,Console기존2/새0,사용자설정보존.신규raw약0.25MB만보존.메인.html558원인note/기존557B영상분리.근거기존surface-owner557/RESULT557.md의558절,TRACE558.json/COST·NEIGHBOURS·SHEETS·RAY558.csv/CELL_CAUSE558.png.제품소스커밋없고검증기록만추가.
+
+## 262. 559 손 대체공급 계약 / 560 헤어 틈 단위 실제 대조 미채택 — 2026-10-23
+
+- 손은기존입력의이웃고정대조만:48손/다리비용+.087537184/+.211435084로둘다생략,50앞/뒤손+.154198721/-1.272669569로앞생략뒤유지가능.뒤7122같은ray UV/depth/alpha존재.현재재질R비트+최근접공급자1개에는원영역contributor/표면별유지상태/깊이순대체packet이없음.새손패치없이COMPOSITE_CONTRACT559.md/json으로필드·변경단계명시.기하에있다는것과버퍼가표현한다는것을구분.
+- 헤어511positive3폐곡선/94anchor+면적/8이웃cut은음의틈단위를보관하지않음.512/513은source-ray가림,550centre분기는502OFF일때만.저장실제50~52 head21855의틈폭1.155252327→1.158239692→1.161805217인데선택F/T/F.35기존채움은중복보정대상아님.
+- 560은같은연속sweep에서bounded음의span접속/core셀을구성하고기존SelectRegions543의equalitygroup에전달.가로/세로동일음의중심공유만병합,면적/색/가림/후속mask경로보존.저장81입력면적bit동일/0.2틈통합·1.8정상틈·transpose·8면적반례통과.619선택차분을오류수로세지않음.
+- 새실제9쌍17/18/19/24/35/50/51/52/64,동일phase·면적exact·unsupported0.50~52 main21755의최종8/15/8→8/8/8,35/정상두셀틈/64Face4표본유지.다만목덜미main21959기존8/8/8→14/8/14,headoffset-1/-1/-2.그룹4/독립1/2셀,면적.281907797/.273951620/.276684403,유지−생략비용-.640273571/+.616116971/-.130179167로그룹지지변화원인확인.정상운동ABA를자동오류로세지는않지만디자인시간품질보존미확정이므로미채택·철회.추가시간필터/penalty/전체루프없음.
+- MASK는헤더head좌표정렬,final은main고정좌표.초기crop인덱스ABA집계폐기.뒤게임각도Eye348visibleFeature0이므로눈회귀미검증(출력nonzero는baseline머리도포함).머리밖PNG동일,전체앞가림/내부명암/회색얼굴/시간품질해결주장없음.추가area+group중앙1.4443ms/transpose+merge.7198ms(첫수집제외)/기존packet211.6779ms는9쌍진단관측,PlayerFPS·할당benchmark아님.
+- 캡처입력/Animator/clock복원true,직접cleanEdit/OFF/컴파일완료,Console기존2/새0.이번3기존C#diff0·새helper/meta제거,547/544/550/551/553보존.시험patch기록만보존.50~52전신GIF649623B/WebP206022B,17~19GIF646978B/WebP204966B,각3프레임약50ms전부보존·전체루프아님.좌기존511/513대우철회560(제품OFF대비아님).메인.html최신전신/실패/559계약연결.전체버퍼복제없이증거약2.28MB만docs/artifacts/hair-region560보존,Library403미시도.

@@ -1,0 +1,155 @@
+{
+  "note": "Head masks aligned by canonical head coordinates per header; final labels are fixed main coordinates. Fixed-cell ABA is an observation, not alone a defect judgment.",
+  "(17, 18, 19)": {
+    "OFF": {
+      "headMaskABA": [],
+      "finalHairABA": [
+        [
+          218,
+          50
+        ]
+      ]
+    },
+    "ON": {
+      "headMaskABA": [],
+      "finalHairABA": [
+        [
+          218,
+          50
+        ],
+        [
+          219,
+          59
+        ]
+      ]
+    }
+  },
+  "(50, 51, 52)": {
+    "OFF": {
+      "headMaskABA": [
+        [
+          234,
+          43
+        ],
+        [
+          218,
+          55
+        ]
+      ],
+      "finalHairABA": [
+        [
+          233,
+          43
+        ],
+        [
+          217,
+          55
+        ]
+      ]
+    },
+    "ON": {
+      "headMaskABA": [],
+      "finalHairABA": []
+    }
+  },
+  "eyeVisibleFeatures": [
+    {
+      "frame": 17,
+      "count": [
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 18,
+      "count": [
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 19,
+      "count": [
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 24,
+      "count": [
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 35,
+      "count": [
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 50,
+      "count": [
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 51,
+      "count": [
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 52,
+      "count": [
+        0,
+        0
+      ]
+    },
+    {
+      "frame": 64,
+      "count": [
+        0,
+        0
+      ]
+    }
+  ],
+  "sameAreaAll": true,
+  "samePhaseAll": true,
+  "outsideParentAll": true,
+  "frame64Guard": {
+    "OFF": [
+      13.705310821533203,
+      4.0,
+      0.0,
+      0.0
+    ],
+    "ON": [
+      13.705310821533203,
+      4.0,
+      0.0,
+      0.0
+    ]
+  },
+  "observedTimingMs": {
+    "candidateExtraTransposeMerge": {
+      "median": 0.7198,
+      "min": 0.693,
+      "max": 4.4815
+    },
+    "candidateFullAreaIncludingGroups": {
+      "median": 1.4443,
+      "min": 1.4032,
+      "max": 6.8488
+    },
+    "candidatePacketStage": {
+      "median": 211.6779,
+      "min": 208.0267,
+      "max": 260.3279
+    },
+    "scope": "Nine diagnostic RenderFrame observations; not warmed Player performance benchmark; negativeMs excludes first sweep collector; GC unmeasured."
+  }
+}

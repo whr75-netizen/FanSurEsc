@@ -1,0 +1,154 @@
+diff --git a/Assets/EUnityValidation01/HeadRegion502/Runtime/CurveArea511.cs b/Assets/EUnityValidation01/HeadRegion502/Runtime/CurveArea511.cs
+index 3eda229..3b40d2a 100644
+--- a/Assets/EUnityValidation01/HeadRegion502/Runtime/CurveArea511.cs
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/CurveArea511.cs
+@@ -11,7 +11,7 @@ public static class CurveArea511
+     public static int LastCrossings,LastEvents;
+     static double Cross(P a,P b)=>a.x*b.y-a.y*b.x;
+     static P Sub(P a,P b)=>new P(a.x-b.x,a.y-b.y);
+-    public static float[] Compute(IList<P[]> rings,int x0,int y0,int width,int height)
++    public static float[] Compute(IList<P[]> rings,int x0,int y0,int width,int height,NegativeSpan560 negative=null)
+     {
+         var edges=new List<Edge>();var levels=new List<double>();LastCrossings=0;
+         foreach(var ring in rings)for(int i=0;i<ring.Length;i++)
+@@ -36,7 +36,7 @@ public static class CurveArea511
+         {
+             double lo=levels[band],hi=levels[band+1],dy=hi-lo;if(!(dy>1e-12))continue;
+             double middle=(lo+hi)*.5;int row=(int)Math.Floor(middle);if(row<y0||row>=y0+height)continue;
+-            crossings.Clear();
++            negative?.BeginBand(lo,hi);crossings.Clear();
+             for(int i=0;i<edges.Count;i++)
+             {
+                 var e=edges[i];if((e.a.y<=middle&&middle<e.b.y)||(e.b.y<=middle&&middle<e.a.y))crossings.Add(new Crossing{x=e.X(middle),edge=i,delta=e.b.y>e.a.y?1:-1});
+@@ -51,7 +51,7 @@ public static class CurveArea511
+                 {
+                     var l=edges[left];var r=edges[crossing.edge];double lm=l.X(middle),rm=r.X(middle);
+                     int first=Math.Max(x0,(int)Math.Floor(lm)),last=Math.Min(x0+width-1,(int)Math.Floor(rm));
+-                    double l0=l.X(lo),l1=l.X(hi),r0=r.X(lo),r1=r.X(hi);
++                    double l0=l.X(lo),l1=l.X(hi),r0=r.X(lo),r1=r.X(hi);negative?.Positive(l0,l1,r0,r1);
+                     for(int x=first;x<=last;x++)
+                     {
+                         double a=Math.Max(0,Math.Min(x+1,r0)-Math.Max(x,l0)),b=Math.Max(0,Math.Min(x+1,r1)-Math.Max(x,l1));
+@@ -59,7 +59,7 @@ public static class CurveArea511
+                     }
+                 }
+             }
+-            if(winding!=0)throw new InvalidOperationException("511 control graph winding is not closed");
++            negative?.EndBand();if(winding!=0)throw new InvalidOperationException("511 control graph winding is not closed");
+         }
+         var output=new float[result.Length];for(int i=0;i<output.Length;i++)output[i]=(float)Math.Max(0,Math.Min(1,result[i]));return output;
+     }
+diff --git a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadCurve511.cs b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadCurve511.cs
+index 22e2c19..acd4575 100644
+--- a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadCurve511.cs
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadCurve511.cs
+@@ -9,6 +9,11 @@ using UnityEngine;
+ public static partial class HeadRegion502
+ {
+     public static bool UseAutomaticCurve511;
++    // Trial only. A bounded continuous negative region owns one core-cell label;
++    // its whole core may remain empty or be integrated into the positive region.
++    public static bool UseNegativeGroups560;
++    public static readonly List<int[]> NegativeGroups560=new();
++    public static double NegativeMs560;
+     public static string Auto511Status="disabled";
+     public static int Auto511Controls,Auto511SourcePoints,Auto511SourceRings,Auto511Repairs,Auto511CurveCrossings,Auto511CurveEvents;
+     public static double Auto511PreparationSeconds,Auto511InitMs,Auto511CurveMs,Auto511AreaMs,Auto511BinMs,Auto511PacketMs;
+@@ -80,7 +85,18 @@ public static partial class HeadRegion502
+         bounds=new RectInt(Mathf.Clamp(Mathf.FloorToInt(x0)-2,0,479),Mathf.Clamp(Mathf.FloorToInt(y0)-2,0,271),0,0);bounds.xMax=Mathf.Clamp(Mathf.CeilToInt(x1)+2,bounds.x+1,480);bounds.yMax=Mathf.Clamp(Mathf.CeilToInt(y1)+2,bounds.y+1,272);
+         Auto511CurveMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;start=Stopwatch.GetTimestamp();
+         var graph=new List<CurveArea511.P[]>();foreach(var ring in Curves){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++)p[i]=new CurveArea511.P(ring[i].x,ring[i].y);graph.Add(p);}
+-        var result=CurveArea511.Compute(graph,bounds.x,bounds.y,bounds.width,bounds.height);Auto511CurveCrossings=CurveArea511.LastCrossings;Auto511CurveEvents=CurveArea511.LastEvents;
++        NegativeGroups560.Clear();NegativeMs560=0;
++        var negative=UseNegativeGroups560?new NegativeSpan560(bounds.x,bounds.y,bounds.width,bounds.height):null;
++        var result=CurveArea511.Compute(graph,bounds.x,bounds.y,bounds.width,bounds.height,negative);Auto511CurveCrossings=CurveArea511.LastCrossings;Auto511CurveEvents=CurveArea511.LastEvents;
++        if(negative!=null)
++        {
++            long negativeStart=Stopwatch.GetTimestamp();var swapped=new List<CurveArea511.P[]>();
++            foreach(var ring in graph){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++){var a=ring[ring.Length-1-i];p[i]=new CurveArea511.P(a.y,a.x);}swapped.Add(p);}
++            var other=new NegativeSpan560(bounds.y,bounds.x,bounds.height,bounds.width,true);
++            CurveArea511.Compute(swapped,bounds.y,bounds.x,bounds.height,bounds.width,other);
++            NegativeGroups560.AddRange(NegativeSpan560.Merge(negative.Features(),other.Features()));
++            NegativeMs560=1000.0*(Stopwatch.GetTimestamp()-negativeStart)/Stopwatch.Frequency;
++        }
+         Auto511AreaMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;Auto511Areas=result;Auto511Bounds=bounds;Auto511Status="ready polygonal curve graph input";return result;
+     }
+     static void Triangles511(int[][] indices,RectInt bounds,Full319View335 f)
+@@ -109,7 +125,7 @@ public static partial class HeadRegion502
+     static int Part511(Packet p,int[][] indices){var a=indices[p.submesh];int i=p.primitive*3;return registeredTriangles511.Contains(Key511(a[i],a[i+1],a[i+2]))?1:2;}
+     static void Release511()
+     {
+-        UseAutomaticCurve511=false;controls511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
++        UseAutomaticCurve511=UseNegativeGroups560=false;NegativeGroups560.Clear();controls511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
+         foreach(int at in usedBins511)bins511[at]?.Clear();usedBins511.Clear();registeredTriangles511.Clear();Auto511Areas=null;Auto511Status="disabled";ReleaseVisibility511();
+     }
+ }
+diff --git a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs
+index 690b9a4..b326a10 100644
+--- a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs
+@@ -337,7 +337,7 @@ public static partial class HeadRegion502
+             RectInt bounds=default; bool[] union=null;
+             if(!UseAutomaticCurve511){union=Union(projected,indices,out bounds);SourceLoops.AddRange(Boundaries(union,bounds,ExtractionScale));Curves.AddRange(SourceLoops.Select(ClosedCurve).Where(p=>p.Length>=3));}
+             bool[] selected;
+-            if(UseAutomaticCurve511){var areas=Areas511(f,out bounds);selected=SelectRegions(areas,bounds.width,bounds.height);}
++            if(UseAutomaticCurve511){var areas=Areas511(f,out bounds);selected=SelectRegions543(areas,bounds.width,bounds.height,UseNegativeGroups560?NegativeGroups560:null);}
+             else if (UseVisibleArea505)
+             {
+                 var area = HeadArea505.Build(f, bounds);
+--- /dev/null
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/NegativeSpan560.cs
+@@ -0,0 +1,48 @@
++using System;
++using System.Collections.Generic;
++
++// Diagnostic prototype. Continuous bounded gaps between consecutive positive
++// winding spans form units before grid selection; this never edits a raster mask.
++public sealed class NegativeSpan560
++{
++ struct PositiveSpan{public double l0,l1,r0,r1;}
++ sealed class Node{public int parent;public double l0,l1,r0,r1;public readonly List<int> cells=new List<int>();}
++ readonly int x0,y0,width,height,originalWidth;readonly bool transpose;
++ readonly List<PositiveSpan> positive=new List<PositiveSpan>();readonly List<Node> nodes=new List<Node>();
++ List<int> previous=new List<int>();double lo,hi,previousHi=double.NaN;
++ public NegativeSpan560(int x0,int y0,int width,int height,bool transpose=false){this.x0=x0;this.y0=y0;this.width=width;this.height=height;this.transpose=transpose;originalWidth=transpose?height:width;}
++ int Root(int i){while(nodes[i].parent!=i){nodes[i].parent=nodes[nodes[i].parent].parent;i=nodes[i].parent;}return i;}
++ public void BeginBand(double lo,double hi){this.lo=lo;this.hi=hi;positive.Clear();}
++ public void Positive(double l0,double l1,double r0,double r1){positive.Add(new PositiveSpan{l0=l0,l1=l1,r0=r0,r1=r1});}
++ public void EndBand()
++ {
++  var current=new List<int>();for(int i=0;i+1<positive.Count;i++)
++  {
++   var a=positive[i];var b=positive[i+1];double left0=a.r0,left1=a.r1,right0=b.l0,right1=b.l1;if((right0+right1-left0-left1)*.5<=1e-12)continue;
++   int id=nodes.Count;var n=new Node{parent=id,l0=left0,l1=left1,r0=right0,r1=right1};nodes.Add(n);current.Add(id);
++   if(previousHi==lo)foreach(int other in previous){var p=nodes[other];if(Math.Min(n.r0,p.r1)-Math.Max(n.l0,p.l1)>1e-12)nodes[Root(id)].parent=Root(other);}
++   for(int y=Math.Max(y0,(int)Math.Ceiling(lo-.5));y<y0+height&&y+.5<hi;y++)
++   {
++    double cy=y+.5;if(cy<lo)continue;double t=(cy-lo)/(hi-lo),left=left0+(left1-left0)*t,right=right0+(right1-right0)*t;
++    for(int x=Math.Max(x0,(int)Math.Ceiling(left-.5));x<x0+width&&x+.5<right;x++)if(x+.5>left)
++    {int cell=transpose?(x-x0)*originalWidth+y-y0:(y-y0)*originalWidth+x-x0;n.cells.Add(cell);}
++   }
++  }
++  previous=current;previousHi=hi;
++ }
++ public List<int[]> Features()
++ {
++  var components=new Dictionary<int,Dictionary<int,bool>>();for(int i=0;i<nodes.Count;i++){int root=Root(i);if(!components.TryGetValue(root,out var cells))components.Add(root,cells=new Dictionary<int,bool>());foreach(int cell in nodes[i].cells)cells[cell]=true;}
++  var result=new List<int[]>();foreach(var cells in components.Values){if(cells.Count==0)continue;var list=new List<int>(cells.Keys);list.Sort();result.Add(list.ToArray());}result.Sort((a,b)=>a[0].CompareTo(b[0]));return result;
++ }
++ // The two sweeps are joined only at an identical negative-region grid centre,
++ // never by an added radius. This treats horizontal and vertical gaps alike.
++ public static List<int[]> Merge(List<int[]> first,List<int[]> second)
++ {
++  var features=new List<int[]>(first);features.AddRange(second);var parent=new int[features.Count];for(int i=0;i<parent.Length;i++)parent[i]=i;
++  int RootOf(int i){while(parent[i]!=i){parent[i]=parent[parent[i]];i=parent[i];}return i;}
++  var owner=new Dictionary<int,int>();for(int i=0;i<features.Count;i++)foreach(int cell in features[i]){if(owner.TryGetValue(cell,out int old))parent[RootOf(i)]=RootOf(old);else owner.Add(cell,i);}
++  var components=new Dictionary<int,Dictionary<int,bool>>();for(int i=0;i<features.Count;i++){int root=RootOf(i);if(!components.TryGetValue(root,out var cells))components.Add(root,cells=new Dictionary<int,bool>());foreach(int cell in features[i])cells[cell]=true;}
++  var groups=new List<int[]>();foreach(var cells in components.Values){if(cells.Count<2)continue;var list=new List<int>(cells.Keys);list.Sort();groups.Add(list.ToArray());}groups.Sort((a,b)=>a[0].CompareTo(b[0]));return groups;
++ }
++}
+--- /dev/null
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/NegativeSpan560.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 58c7ab2c623c2e4449e86b5421a3680b

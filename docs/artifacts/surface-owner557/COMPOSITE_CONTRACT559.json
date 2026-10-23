@@ -1,0 +1,140 @@
+{
+  "meaning": "local compositing feasibility under the original frozen neighbour labels; not a new runtime selector or global/temporal optimization",
+  "cases": [
+    {
+      "pose": 48,
+      "cell": [
+        209,
+        110
+      ],
+      "neighbourDelta": -0.2460303157567978,
+      "sourceSnapshot": "SourcePose556 + DOMAIN_UNION556.csv + SELECTION_CAUSE556.txt",
+      "layers": [
+        {
+          "name": "front_hand",
+          "area": 0.33321625,
+          "sourcePrimitive": 7920,
+          "unaryKeepMinusDrop": 0.3335675,
+          "keepMinusDropWithFixedNeighbours": 0.08753718424320223,
+          "keep": false
+        },
+        {
+          "name": "rear_leg",
+          "area": 0.2712673,
+          "sourcePrimitiveCandidates": [
+            3149,
+            3150,
+            3547
+          ],
+          "unaryKeepMinusDrop": 0.4574654,
+          "keepMinusDropWithFixedNeighbours": 0.21143508424320223,
+          "keep": false
+        }
+      ],
+      "retained": [],
+      "compositeOccupied": false,
+      "result": "empty: both candidate supports rejected; no colour packet required",
+      "sameRayRearLegWitness": "not asserted; no retained rear-leg layer, so this fixture needs no fallback packet"
+    },
+    {
+      "pose": 50,
+      "cell": [
+        231,
+        87
+      ],
+      "neighbourDelta": -0.41005052626132965,
+      "sourceSnapshot": "same frozen558 input; opacity and base selector exact",
+      "layers": [
+        {
+          "name": "sheet_10",
+          "area": 0.9313095211982727,
+          "sourcePrimitive": 7122,
+          "unaryKeepMinusDrop": -0.8626190423965454,
+          "keepMinusDropWithFixedNeighbours": -1.272669568657875,
+          "keep": true
+        },
+        {
+          "name": "sheet_18",
+          "area": 0.20617841184139252,
+          "sourcePrimitive": null,
+          "unaryKeepMinusDrop": 0.587643176317215,
+          "keepMinusDropWithFixedNeighbours": 0.17759265005588531,
+          "keep": false
+        },
+        {
+          "name": "sheet_21",
+          "area": 0.22250685095787048,
+          "sourcePrimitive": null,
+          "unaryKeepMinusDrop": 0.554986298084259,
+          "keepMinusDropWithFixedNeighbours": 0.14493577182292938,
+          "keep": false
+        },
+        {
+          "name": "sheet_22",
+          "area": 0.05033796653151512,
+          "sourcePrimitive": null,
+          "unaryKeepMinusDrop": 0.8993240669369698,
+          "keepMinusDropWithFixedNeighbours": 0.4892735406756401,
+          "keep": false
+        },
+        {
+          "name": "sheet_43",
+          "area": 0.04939340427517891,
+          "sourcePrimitive": null,
+          "unaryKeepMinusDrop": 0.9012131914496422,
+          "keepMinusDropWithFixedNeighbours": 0.49116266518831253,
+          "keep": false
+        },
+        {
+          "name": "sheet_44",
+          "area": 0.2178753763437271,
+          "sourcePrimitive": 8549,
+          "unaryKeepMinusDrop": 0.5642492473125458,
+          "keepMinusDropWithFixedNeighbours": 0.15419872105121613,
+          "keep": false
+        },
+        {
+          "name": "sheet_45",
+          "area": 0.020851578563451767,
+          "sourcePrimitive": null,
+          "unaryKeepMinusDrop": 0.9582968428730965,
+          "keepMinusDropWithFixedNeighbours": 0.5482463166117668,
+          "keep": false
+        }
+      ],
+      "retained": [
+        "sheet_10"
+      ],
+      "compositeOccupied": true,
+      "result": "foreground8549 omitted; retain back-hand sheet10 and supply primitive7122 at the same source-UV ray",
+      "fallbackPacketFromActualRay": {
+        "primitive": "7122",
+        "sheet": "10",
+        "depth": "14.301152876036307",
+        "alpha": "1",
+        "opaque": "True",
+        "baryA": "0.057268087418755942",
+        "baryB": "0.49140903603186403",
+        "baryC": "0.45132287654938",
+        "uvX": "0.61378288269042969",
+        "uvY": "0.947338342666626"
+      }
+    }
+  ],
+  "otherBodyMaterialGeometricHitsAt50Witness": [],
+  "limits": [
+    "projected raw component support; not an all-surface depth-resolved visible-area partition",
+    "source-domain grouping remains undefined in the current product representation",
+    "external world occlusion not revalidated; final depth path must remain authoritative",
+    "same source ray witnessed for retained50 backend only; no colour borrowed from a different native sample",
+    "a complete layer-labelled spatial objective and join/loop quality are unvalidated"
+  ],
+  "minimalState": [
+    "domainId and contributor primitive IDs retained through region construction",
+    "cell-domain area and retain state, separate from whole-material coverage",
+    "rayKey plus ordered opaque candidates at that ray",
+    "original primitive/UV/barycentric/world/depth/normal/palette/physical packet for each retained candidate",
+    "nearest retained owner; next opaque owner only when all nearer managed candidates are omitted; unmanaged occluders remain active"
+  ],
+  "implementationScope": "extend existing region metadata, source selection and Probe/Prepare gates; reuse existing packet drawing/composition; no new engine implemented"
+}

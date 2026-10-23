@@ -1,0 +1,3902 @@
+{
+  "status": "ONE_UNLABELLED_CENTRE_PATH_NOT_A_GENERAL_LOSSLESS_REGION_ADAPTER",
+  "newUnityCalls": 0,
+  "newCaptures": 0,
+  "newProductCode": false,
+  "conditionsForSinglePath": "Under an explicitly fixed adjacency: one component, all degrees2 for a closed path; or exactly two degrees1 and other degrees2 for an open path. Start/orientation still need an anchor.",
+  "graphChoiceNotImplicit": "G8 and G4 have different results; do not silently remove diagonals or thin cells to force a path.",
+  "minimalLosslessDecision": "Keep labelled oriented region boundary loops and per-edge outer/hole/side ownership authoritative; any centreline outline is a separate graph with branch/dual-incidence labels, not the sole fill boundary.",
+  "paperReproduction535": false,
+  "noNewSelector": "This audit does not choose a pixel simplification policy or port the paper.",
+  "rows": [
+    {
+      "case": "actual43",
+      "definition": "B4=S minus cells whose four axial neighbours are all in S; outside grid is empty",
+      "filledCells": 1193,
+      "innerOutlineCells": 129,
+      "regionBoundaryLoops": 1,
+      "regionBoundaryTurnDecisions": 0,
+      "G8": {
+        "vertices": 129,
+        "edges": 131,
+        "components": 1,
+        "degreeHistogram": {
+          "2": 125,
+          "3": 4
+        },
+        "junctionCells": 4,
+        "isolatedCells": 0,
+        "allComponentsSinglePath": false,
+        "singleClosedPath": false,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 129,
+            "edges": 131,
+            "degreeHistogram": {
+              "2": 125,
+              "3": 4
+            },
+            "cycleRank": 3,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          }
+        ],
+        "junctionExamples": [
+          [
+            202,
+            104
+          ],
+          [
+            203,
+            105
+          ],
+          [
+            228,
+            76
+          ],
+          [
+            229,
+            77
+          ]
+        ]
+      },
+      "G4Diagnostic": {
+        "vertices": 129,
+        "edges": 80,
+        "components": 49,
+        "degreeHistogram": {
+          "0": 18,
+          "1": 62,
+          "2": 49
+        },
+        "junctionCells": 0,
+        "isolatedCells": 18,
+        "allComponentsSinglePath": false,
+        "singleClosedPath": false,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 5,
+            "edges": 4,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 3
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 9,
+            "edges": 8,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 7
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 4,
+            "edges": 3,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 7,
+            "edges": 6,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 5
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 4,
+            "edges": 3,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 4,
+            "edges": 3,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 5,
+            "edges": 4,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 3
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 4,
+            "edges": 3,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 10,
+            "edges": 9,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 8
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 8,
+            "edges": 7,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 6
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          }
+        ],
+        "junctionExamples": []
+      },
+      "cellsIncidentToSeveralRegionBoundaryLoops": 0,
+      "multiLoopIncidence": [],
+      "boundaryOrderedCentreWalks": [
+        {
+          "regionLoopID": 0,
+          "centreCount": 129,
+          "distinctCentres": 129,
+          "repeatedNonconsecutiveCentres": 0,
+          "allTransitionsWithin8": true,
+          "simpleCycle": true,
+          "centresXY": [
+            [
+              213.5,
+              53.5
+            ],
+            [
+              214.5,
+              53.5
+            ],
+            [
+              215.5,
+              53.5
+            ],
+            [
+              216.5,
+              54.5
+            ],
+            [
+              217.5,
+              54.5
+            ],
+            [
+              218.5,
+              54.5
+            ],
+            [
+              219.5,
+              55.5
+            ],
+            [
+              220.5,
+              56.5
+            ],
+            [
+              221.5,
+              57.5
+            ],
+            [
+              222.5,
+              58.5
+            ],
+            [
+              223.5,
+              59.5
+            ],
+            [
+              223.5,
+              60.5
+            ],
+            [
+              224.5,
+              61.5
+            ],
+            [
+              225.5,
+              62.5
+            ],
+            [
+              225.5,
+              63.5
+            ],
+            [
+              226.5,
+              64.5
+            ],
+            [
+              226.5,
+              65.5
+            ],
+            [
+              227.5,
+              66.5
+            ],
+            [
+              227.5,
+              67.5
+            ],
+            [
+              227.5,
+              68.5
+            ],
+            [
+              227.5,
+              69.5
+            ],
+            [
+              227.5,
+              70.5
+            ],
+            [
+              227.5,
+              71.5
+            ],
+            [
+              227.5,
+              72.5
+            ],
+            [
+              227.5,
+              73.5
+            ],
+            [
+              227.5,
+              74.5
+            ],
+            [
+              227.5,
+              75.5
+            ],
+            [
+              228.5,
+              76.5
+            ],
+            [
+              229.5,
+              76.5
+            ],
+            [
+              229.5,
+              77.5
+            ],
+            [
+              230.5,
+              78.5
+            ],
+            [
+              231.5,
+              79.5
+            ],
+            [
+              232.5,
+              79.5
+            ],
+            [
+              233.5,
+              80.5
+            ],
+            [
+              233.5,
+              81.5
+            ],
+            [
+              233.5,
+              82.5
+            ],
+            [
+              232.5,
+              83.5
+            ],
+            [
+              231.5,
+              84.5
+            ],
+            [
+              230.5,
+              84.5
+            ],
+            [
+              229.5,
+              85.5
+            ],
+            [
+              229.5,
+              86.5
+            ],
+            [
+              229.5,
+              87.5
+            ],
+            [
+              229.5,
+              88.5
+            ],
+            [
+              229.5,
+              89.5
+            ],
+            [
+              229.5,
+              90.5
+            ],
+            [
+              229.5,
+              91.5
+            ],
+            [
+              229.5,
+              92.5
+            ],
+            [
+              228.5,
+              93.5
+            ],
+            [
+              228.5,
+              94.5
+            ],
+            [
+              228.5,
+              95.5
+            ],
+            [
+              227.5,
+              96.5
+            ],
+            [
+              226.5,
+              97.5
+            ],
+            [
+              225.5,
+              98.5
+            ],
+            [
+              224.5,
+              99.5
+            ],
+            [
+              223.5,
+              99.5
+            ],
+            [
+              222.5,
+              100.5
+            ],
+            [
+              221.5,
+              100.5
+            ],
+            [
+              220.5,
+              101.5
+            ],
+            [
+              219.5,
+              101.5
+            ],
+            [
+              218.5,
+              101.5
+            ],
+            [
+              217.5,
+              102.5
+            ],
+            [
+              216.5,
+              102.5
+            ],
+            [
+              215.5,
+              102.5
+            ],
+            [
+              214.5,
+              102.5
+            ],
+            [
+              213.5,
+              101.5
+            ],
+            [
+              212.5,
+              101.5
+            ],
+            [
+              211.5,
+              101.5
+            ],
+            [
+              210.5,
+              100.5
+            ],
+            [
+              209.5,
+              101.5
+            ],
+            [
+              209.5,
+              102.5
+            ],
+            [
+              209.5,
+              103.5
+            ],
+            [
+              208.5,
+              104.5
+            ],
+            [
+              207.5,
+              105.5
+            ],
+            [
+              206.5,
+              105.5
+            ],
+            [
+              205.5,
+              105.5
+            ],
+            [
+              204.5,
+              105.5
+            ],
+            [
+              203.5,
+              105.5
+            ],
+            [
+              202.5,
+              105.5
+            ],
+            [
+              202.5,
+              104.5
+            ],
+            [
+              201.5,
+              103.5
+            ],
+            [
+              201.5,
+              102.5
+            ],
+            [
+              201.5,
+              101.5
+            ],
+            [
+              201.5,
+              100.5
+            ],
+            [
+              200.5,
+              99.5
+            ],
+            [
+              200.5,
+              98.5
+            ],
+            [
+              201.5,
+              97.5
+            ],
+            [
+              200.5,
+              96.5
+            ],
+            [
+              200.5,
+              95.5
+            ],
+            [
+              200.5,
+              94.5
+            ],
+            [
+              200.5,
+              93.5
+            ],
+            [
+              200.5,
+              92.5
+            ],
+            [
+              200.5,
+              91.5
+            ],
+            [
+              200.5,
+              90.5
+            ],
+            [
+              200.5,
+              89.5
+            ],
+            [
+              200.5,
+              88.5
+            ],
+            [
+              199.5,
+              87.5
+            ],
+            [
+              199.5,
+              86.5
+            ],
+            [
+              199.5,
+              85.5
+            ],
+            [
+              199.5,
+              84.5
+            ],
+            [
+              199.5,
+              83.5
+            ],
+            [
+              200.5,
+              82.5
+            ],
+            [
+              200.5,
+              81.5
+            ],
+            [
+              200.5,
+              80.5
+            ],
+            [
+              201.5,
+              79.5
+            ],
+            [
+              201.5,
+              78.5
+            ],
+            [
+              202.5,
+              77.5
+            ],
+            [
+              203.5,
+              76.5
+            ],
+            [
+              203.5,
+              75.5
+            ],
+            [
+              204.5,
+              74.5
+            ],
+            [
+              205.5,
+              73.5
+            ],
+            [
+              205.5,
+              72.5
+            ],
+            [
+              206.5,
+              71.5
+            ],
+            [
+              207.5,
+              70.5
+            ],
+            [
+              207.5,
+              69.5
+            ],
+            [
+              207.5,
+              68.5
+            ],
+            [
+              207.5,
+              67.5
+            ],
+            [
+              208.5,
+              66.5
+            ],
+            [
+              208.5,
+              65.5
+            ],
+            [
+              208.5,
+              64.5
+            ],
+            [
+              208.5,
+              63.5
+            ],
+            [
+              209.5,
+              62.5
+            ],
+            [
+              209.5,
+              61.5
+            ],
+            [
+              209.5,
+              60.5
+            ],
+            [
+              209.5,
+              59.5
+            ],
+            [
+              209.5,
+              58.5
+            ],
+            [
+              210.5,
+              57.5
+            ],
+            [
+              210.5,
+              56.5
+            ],
+            [
+              211.5,
+              55.5
+            ],
+            [
+              212.5,
+              54.5
+            ]
+          ]
+        }
+      ],
+      "innerOutlineCellsXY": [
+        [
+          199,
+          83
+        ],
+        [
+          199,
+          84
+        ],
+        [
+          199,
+          85
+        ],
+        [
+          199,
+          86
+        ],
+        [
+          199,
+          87
+        ],
+        [
+          200,
+          80
+        ],
+        [
+          200,
+          81
+        ],
+        [
+          200,
+          82
+        ],
+        [
+          200,
+          88
+        ],
+        [
+          200,
+          89
+        ],
+        [
+          200,
+          90
+        ],
+        [
+          200,
+          91
+        ],
+        [
+          200,
+          92
+        ],
+        [
+          200,
+          93
+        ],
+        [
+          200,
+          94
+        ],
+        [
+          200,
+          95
+        ],
+        [
+          200,
+          96
+        ],
+        [
+          200,
+          98
+        ],
+        [
+          200,
+          99
+        ],
+        [
+          201,
+          78
+        ],
+        [
+          201,
+          79
+        ],
+        [
+          201,
+          97
+        ],
+        [
+          201,
+          100
+        ],
+        [
+          201,
+          101
+        ],
+        [
+          201,
+          102
+        ],
+        [
+          201,
+          103
+        ],
+        [
+          202,
+          77
+        ],
+        [
+          202,
+          104
+        ],
+        [
+          202,
+          105
+        ],
+        [
+          203,
+          75
+        ],
+        [
+          203,
+          76
+        ],
+        [
+          203,
+          105
+        ],
+        [
+          204,
+          74
+        ],
+        [
+          204,
+          105
+        ],
+        [
+          205,
+          72
+        ],
+        [
+          205,
+          73
+        ],
+        [
+          205,
+          105
+        ],
+        [
+          206,
+          71
+        ],
+        [
+          206,
+          105
+        ],
+        [
+          207,
+          67
+        ],
+        [
+          207,
+          68
+        ],
+        [
+          207,
+          69
+        ],
+        [
+          207,
+          70
+        ],
+        [
+          207,
+          105
+        ],
+        [
+          208,
+          63
+        ],
+        [
+          208,
+          64
+        ],
+        [
+          208,
+          65
+        ],
+        [
+          208,
+          66
+        ],
+        [
+          208,
+          104
+        ],
+        [
+          209,
+          58
+        ],
+        [
+          209,
+          59
+        ],
+        [
+          209,
+          60
+        ],
+        [
+          209,
+          61
+        ],
+        [
+          209,
+          62
+        ],
+        [
+          209,
+          101
+        ],
+        [
+          209,
+          102
+        ],
+        [
+          209,
+          103
+        ],
+        [
+          210,
+          56
+        ],
+        [
+          210,
+          57
+        ],
+        [
+          210,
+          100
+        ],
+        [
+          211,
+          55
+        ],
+        [
+          211,
+          101
+        ],
+        [
+          212,
+          54
+        ],
+        [
+          212,
+          101
+        ],
+        [
+          213,
+          53
+        ],
+        [
+          213,
+          101
+        ],
+        [
+          214,
+          53
+        ],
+        [
+          214,
+          102
+        ],
+        [
+          215,
+          53
+        ],
+        [
+          215,
+          102
+        ],
+        [
+          216,
+          54
+        ],
+        [
+          216,
+          102
+        ],
+        [
+          217,
+          54
+        ],
+        [
+          217,
+          102
+        ],
+        [
+          218,
+          54
+        ],
+        [
+          218,
+          101
+        ],
+        [
+          219,
+          55
+        ],
+        [
+          219,
+          101
+        ],
+        [
+          220,
+          56
+        ],
+        [
+          220,
+          101
+        ],
+        [
+          221,
+          57
+        ],
+        [
+          221,
+          100
+        ],
+        [
+          222,
+          58
+        ],
+        [
+          222,
+          100
+        ],
+        [
+          223,
+          59
+        ],
+        [
+          223,
+          60
+        ],
+        [
+          223,
+          99
+        ],
+        [
+          224,
+          61
+        ],
+        [
+          224,
+          99
+        ],
+        [
+          225,
+          62
+        ],
+        [
+          225,
+          63
+        ],
+        [
+          225,
+          98
+        ],
+        [
+          226,
+          64
+        ],
+        [
+          226,
+          65
+        ],
+        [
+          226,
+          97
+        ],
+        [
+          227,
+          66
+        ],
+        [
+          227,
+          67
+        ],
+        [
+          227,
+          68
+        ],
+        [
+          227,
+          69
+        ],
+        [
+          227,
+          70
+        ],
+        [
+          227,
+          71
+        ],
+        [
+          227,
+          72
+        ],
+        [
+          227,
+          73
+        ],
+        [
+          227,
+          74
+        ],
+        [
+          227,
+          75
+        ],
+        [
+          227,
+          96
+        ],
+        [
+          228,
+          76
+        ],
+        [
+          228,
+          93
+        ],
+        [
+          228,
+          94
+        ],
+        [
+          228,
+          95
+        ],
+        [
+          229,
+          76
+        ],
+        [
+          229,
+          77
+        ],
+        [
+          229,
+          85
+        ],
+        [
+          229,
+          86
+        ],
+        [
+          229,
+          87
+        ],
+        [
+          229,
+          88
+        ],
+        [
+          229,
+          89
+        ],
+        [
+          229,
+          90
+        ],
+        [
+          229,
+          91
+        ],
+        [
+          229,
+          92
+        ],
+        [
+          230,
+          78
+        ],
+        [
+          230,
+          84
+        ],
+        [
+          231,
+          79
+        ],
+        [
+          231,
+          84
+        ],
+        [
+          232,
+          79
+        ],
+        [
+          232,
+          83
+        ],
+        [
+          233,
+          80
+        ],
+        [
+          233,
+          81
+        ],
+        [
+          233,
+          82
+        ]
+      ],
+      "inputPath": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Shape532\\actual43_baseline.bin",
+      "inputSHA256": "14e29d614d1cca1d2b6f3a20464c274875ef8f9f5ea63570f49a0a467a1845cf"
+    },
+    {
+      "case": "actual50",
+      "definition": "B4=S minus cells whose four axial neighbours are all in S; outside grid is empty",
+      "filledCells": 1165,
+      "innerOutlineCells": 126,
+      "regionBoundaryLoops": 1,
+      "regionBoundaryTurnDecisions": 0,
+      "G8": {
+        "vertices": 126,
+        "edges": 126,
+        "components": 1,
+        "degreeHistogram": {
+          "2": 126
+        },
+        "junctionCells": 0,
+        "isolatedCells": 0,
+        "allComponentsSinglePath": true,
+        "singleClosedPath": true,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 126,
+            "edges": 126,
+            "degreeHistogram": {
+              "2": 126
+            },
+            "cycleRank": 1,
+            "singleClosedPath": true,
+            "singleOpenPath": false
+          }
+        ],
+        "junctionExamples": []
+      },
+      "G4Diagnostic": {
+        "vertices": 126,
+        "edges": 82,
+        "components": 44,
+        "degreeHistogram": {
+          "0": 15,
+          "1": 58,
+          "2": 53
+        },
+        "junctionCells": 0,
+        "isolatedCells": 15,
+        "allComponentsSinglePath": false,
+        "singleClosedPath": false,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 7,
+            "edges": 6,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 5
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 8,
+            "edges": 7,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 6
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 4,
+            "edges": 3,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 5,
+            "edges": 4,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 3
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 4,
+            "edges": 3,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 5,
+            "edges": 4,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 3
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 9,
+            "edges": 8,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 7
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 4,
+            "edges": 3,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 14,
+            "edges": 13,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 12
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 7,
+            "edges": 6,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 5
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          }
+        ],
+        "junctionExamples": []
+      },
+      "cellsIncidentToSeveralRegionBoundaryLoops": 0,
+      "multiLoopIncidence": [],
+      "boundaryOrderedCentreWalks": [
+        {
+          "regionLoopID": 0,
+          "centreCount": 126,
+          "distinctCentres": 126,
+          "repeatedNonconsecutiveCentres": 0,
+          "allTransitionsWithin8": true,
+          "simpleCycle": true,
+          "centresXY": [
+            [
+              214.5,
+              53.5
+            ],
+            [
+              215.5,
+              53.5
+            ],
+            [
+              216.5,
+              53.5
+            ],
+            [
+              217.5,
+              53.5
+            ],
+            [
+              218.5,
+              54.5
+            ],
+            [
+              219.5,
+              54.5
+            ],
+            [
+              220.5,
+              55.5
+            ],
+            [
+              221.5,
+              56.5
+            ],
+            [
+              222.5,
+              57.5
+            ],
+            [
+              223.5,
+              58.5
+            ],
+            [
+              224.5,
+              59.5
+            ],
+            [
+              224.5,
+              60.5
+            ],
+            [
+              225.5,
+              61.5
+            ],
+            [
+              225.5,
+              62.5
+            ],
+            [
+              226.5,
+              63.5
+            ],
+            [
+              227.5,
+              64.5
+            ],
+            [
+              227.5,
+              65.5
+            ],
+            [
+              227.5,
+              66.5
+            ],
+            [
+              228.5,
+              67.5
+            ],
+            [
+              228.5,
+              68.5
+            ],
+            [
+              228.5,
+              69.5
+            ],
+            [
+              228.5,
+              70.5
+            ],
+            [
+              228.5,
+              71.5
+            ],
+            [
+              228.5,
+              72.5
+            ],
+            [
+              228.5,
+              73.5
+            ],
+            [
+              228.5,
+              74.5
+            ],
+            [
+              228.5,
+              75.5
+            ],
+            [
+              228.5,
+              76.5
+            ],
+            [
+              228.5,
+              77.5
+            ],
+            [
+              228.5,
+              78.5
+            ],
+            [
+              228.5,
+              79.5
+            ],
+            [
+              228.5,
+              80.5
+            ],
+            [
+              229.5,
+              81.5
+            ],
+            [
+              230.5,
+              82.5
+            ],
+            [
+              230.5,
+              83.5
+            ],
+            [
+              230.5,
+              84.5
+            ],
+            [
+              229.5,
+              85.5
+            ],
+            [
+              229.5,
+              86.5
+            ],
+            [
+              230.5,
+              87.5
+            ],
+            [
+              230.5,
+              88.5
+            ],
+            [
+              230.5,
+              89.5
+            ],
+            [
+              230.5,
+              90.5
+            ],
+            [
+              230.5,
+              91.5
+            ],
+            [
+              230.5,
+              92.5
+            ],
+            [
+              230.5,
+              93.5
+            ],
+            [
+              229.5,
+              94.5
+            ],
+            [
+              229.5,
+              95.5
+            ],
+            [
+              229.5,
+              96.5
+            ],
+            [
+              228.5,
+              97.5
+            ],
+            [
+              227.5,
+              98.5
+            ],
+            [
+              226.5,
+              98.5
+            ],
+            [
+              225.5,
+              99.5
+            ],
+            [
+              224.5,
+              100.5
+            ],
+            [
+              223.5,
+              100.5
+            ],
+            [
+              222.5,
+              100.5
+            ],
+            [
+              221.5,
+              101.5
+            ],
+            [
+              220.5,
+              101.5
+            ],
+            [
+              219.5,
+              101.5
+            ],
+            [
+              218.5,
+              101.5
+            ],
+            [
+              217.5,
+              101.5
+            ],
+            [
+              216.5,
+              101.5
+            ],
+            [
+              215.5,
+              101.5
+            ],
+            [
+              214.5,
+              101.5
+            ],
+            [
+              213.5,
+              101.5
+            ],
+            [
+              212.5,
+              100.5
+            ],
+            [
+              211.5,
+              100.5
+            ],
+            [
+              210.5,
+              101.5
+            ],
+            [
+              210.5,
+              102.5
+            ],
+            [
+              210.5,
+              103.5
+            ],
+            [
+              209.5,
+              104.5
+            ],
+            [
+              208.5,
+              105.5
+            ],
+            [
+              207.5,
+              105.5
+            ],
+            [
+              206.5,
+              105.5
+            ],
+            [
+              205.5,
+              105.5
+            ],
+            [
+              204.5,
+              105.5
+            ],
+            [
+              203.5,
+              104.5
+            ],
+            [
+              202.5,
+              103.5
+            ],
+            [
+              202.5,
+              102.5
+            ],
+            [
+              202.5,
+              101.5
+            ],
+            [
+              202.5,
+              100.5
+            ],
+            [
+              201.5,
+              99.5
+            ],
+            [
+              201.5,
+              98.5
+            ],
+            [
+              202.5,
+              97.5
+            ],
+            [
+              201.5,
+              96.5
+            ],
+            [
+              201.5,
+              95.5
+            ],
+            [
+              201.5,
+              94.5
+            ],
+            [
+              201.5,
+              93.5
+            ],
+            [
+              201.5,
+              92.5
+            ],
+            [
+              201.5,
+              91.5
+            ],
+            [
+              201.5,
+              90.5
+            ],
+            [
+              201.5,
+              89.5
+            ],
+            [
+              200.5,
+              88.5
+            ],
+            [
+              200.5,
+              87.5
+            ],
+            [
+              200.5,
+              86.5
+            ],
+            [
+              200.5,
+              85.5
+            ],
+            [
+              200.5,
+              84.5
+            ],
+            [
+              200.5,
+              83.5
+            ],
+            [
+              200.5,
+              82.5
+            ],
+            [
+              201.5,
+              81.5
+            ],
+            [
+              201.5,
+              80.5
+            ],
+            [
+              202.5,
+              79.5
+            ],
+            [
+              202.5,
+              78.5
+            ],
+            [
+              203.5,
+              77.5
+            ],
+            [
+              203.5,
+              76.5
+            ],
+            [
+              204.5,
+              75.5
+            ],
+            [
+              205.5,
+              74.5
+            ],
+            [
+              205.5,
+              73.5
+            ],
+            [
+              206.5,
+              72.5
+            ],
+            [
+              207.5,
+              71.5
+            ],
+            [
+              207.5,
+              70.5
+            ],
+            [
+              208.5,
+              69.5
+            ],
+            [
+              208.5,
+              68.5
+            ],
+            [
+              208.5,
+              67.5
+            ],
+            [
+              208.5,
+              66.5
+            ],
+            [
+              209.5,
+              65.5
+            ],
+            [
+              209.5,
+              64.5
+            ],
+            [
+              209.5,
+              63.5
+            ],
+            [
+              209.5,
+              62.5
+            ],
+            [
+              209.5,
+              61.5
+            ],
+            [
+              210.5,
+              60.5
+            ],
+            [
+              210.5,
+              59.5
+            ],
+            [
+              210.5,
+              58.5
+            ],
+            [
+              211.5,
+              57.5
+            ],
+            [
+              211.5,
+              56.5
+            ],
+            [
+              212.5,
+              55.5
+            ],
+            [
+              213.5,
+              54.5
+            ]
+          ]
+        }
+      ],
+      "innerOutlineCellsXY": [
+        [
+          200,
+          82
+        ],
+        [
+          200,
+          83
+        ],
+        [
+          200,
+          84
+        ],
+        [
+          200,
+          85
+        ],
+        [
+          200,
+          86
+        ],
+        [
+          200,
+          87
+        ],
+        [
+          200,
+          88
+        ],
+        [
+          201,
+          80
+        ],
+        [
+          201,
+          81
+        ],
+        [
+          201,
+          89
+        ],
+        [
+          201,
+          90
+        ],
+        [
+          201,
+          91
+        ],
+        [
+          201,
+          92
+        ],
+        [
+          201,
+          93
+        ],
+        [
+          201,
+          94
+        ],
+        [
+          201,
+          95
+        ],
+        [
+          201,
+          96
+        ],
+        [
+          201,
+          98
+        ],
+        [
+          201,
+          99
+        ],
+        [
+          202,
+          78
+        ],
+        [
+          202,
+          79
+        ],
+        [
+          202,
+          97
+        ],
+        [
+          202,
+          100
+        ],
+        [
+          202,
+          101
+        ],
+        [
+          202,
+          102
+        ],
+        [
+          202,
+          103
+        ],
+        [
+          203,
+          76
+        ],
+        [
+          203,
+          77
+        ],
+        [
+          203,
+          104
+        ],
+        [
+          204,
+          75
+        ],
+        [
+          204,
+          105
+        ],
+        [
+          205,
+          73
+        ],
+        [
+          205,
+          74
+        ],
+        [
+          205,
+          105
+        ],
+        [
+          206,
+          72
+        ],
+        [
+          206,
+          105
+        ],
+        [
+          207,
+          70
+        ],
+        [
+          207,
+          71
+        ],
+        [
+          207,
+          105
+        ],
+        [
+          208,
+          66
+        ],
+        [
+          208,
+          67
+        ],
+        [
+          208,
+          68
+        ],
+        [
+          208,
+          69
+        ],
+        [
+          208,
+          105
+        ],
+        [
+          209,
+          61
+        ],
+        [
+          209,
+          62
+        ],
+        [
+          209,
+          63
+        ],
+        [
+          209,
+          64
+        ],
+        [
+          209,
+          65
+        ],
+        [
+          209,
+          104
+        ],
+        [
+          210,
+          58
+        ],
+        [
+          210,
+          59
+        ],
+        [
+          210,
+          60
+        ],
+        [
+          210,
+          101
+        ],
+        [
+          210,
+          102
+        ],
+        [
+          210,
+          103
+        ],
+        [
+          211,
+          56
+        ],
+        [
+          211,
+          57
+        ],
+        [
+          211,
+          100
+        ],
+        [
+          212,
+          55
+        ],
+        [
+          212,
+          100
+        ],
+        [
+          213,
+          54
+        ],
+        [
+          213,
+          101
+        ],
+        [
+          214,
+          53
+        ],
+        [
+          214,
+          101
+        ],
+        [
+          215,
+          53
+        ],
+        [
+          215,
+          101
+        ],
+        [
+          216,
+          53
+        ],
+        [
+          216,
+          101
+        ],
+        [
+          217,
+          53
+        ],
+        [
+          217,
+          101
+        ],
+        [
+          218,
+          54
+        ],
+        [
+          218,
+          101
+        ],
+        [
+          219,
+          54
+        ],
+        [
+          219,
+          101
+        ],
+        [
+          220,
+          55
+        ],
+        [
+          220,
+          101
+        ],
+        [
+          221,
+          56
+        ],
+        [
+          221,
+          101
+        ],
+        [
+          222,
+          57
+        ],
+        [
+          222,
+          100
+        ],
+        [
+          223,
+          58
+        ],
+        [
+          223,
+          100
+        ],
+        [
+          224,
+          59
+        ],
+        [
+          224,
+          60
+        ],
+        [
+          224,
+          100
+        ],
+        [
+          225,
+          61
+        ],
+        [
+          225,
+          62
+        ],
+        [
+          225,
+          99
+        ],
+        [
+          226,
+          63
+        ],
+        [
+          226,
+          98
+        ],
+        [
+          227,
+          64
+        ],
+        [
+          227,
+          65
+        ],
+        [
+          227,
+          66
+        ],
+        [
+          227,
+          98
+        ],
+        [
+          228,
+          67
+        ],
+        [
+          228,
+          68
+        ],
+        [
+          228,
+          69
+        ],
+        [
+          228,
+          70
+        ],
+        [
+          228,
+          71
+        ],
+        [
+          228,
+          72
+        ],
+        [
+          228,
+          73
+        ],
+        [
+          228,
+          74
+        ],
+        [
+          228,
+          75
+        ],
+        [
+          228,
+          76
+        ],
+        [
+          228,
+          77
+        ],
+        [
+          228,
+          78
+        ],
+        [
+          228,
+          79
+        ],
+        [
+          228,
+          80
+        ],
+        [
+          228,
+          97
+        ],
+        [
+          229,
+          81
+        ],
+        [
+          229,
+          85
+        ],
+        [
+          229,
+          86
+        ],
+        [
+          229,
+          94
+        ],
+        [
+          229,
+          95
+        ],
+        [
+          229,
+          96
+        ],
+        [
+          230,
+          82
+        ],
+        [
+          230,
+          83
+        ],
+        [
+          230,
+          84
+        ],
+        [
+          230,
+          87
+        ],
+        [
+          230,
+          88
+        ],
+        [
+          230,
+          89
+        ],
+        [
+          230,
+          90
+        ],
+        [
+          230,
+          91
+        ],
+        [
+          230,
+          92
+        ],
+        [
+          230,
+          93
+        ]
+      ],
+      "inputPath": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Contour534\\Math\\50_area.bin",
+      "inputSHA256": "2625dbe188b590ea4ed7270f09c4356201cb7424a99c6615061b4b9258d43537"
+    },
+    {
+      "case": "normalThin",
+      "definition": "B4=S minus cells whose four axial neighbours are all in S; outside grid is empty",
+      "filledCells": 50,
+      "innerOutlineCells": 26,
+      "regionBoundaryLoops": 1,
+      "regionBoundaryTurnDecisions": 0,
+      "G8": {
+        "vertices": 26,
+        "edges": 28,
+        "components": 1,
+        "degreeHistogram": {
+          "2": 22,
+          "3": 4
+        },
+        "junctionCells": 4,
+        "isolatedCells": 0,
+        "allComponentsSinglePath": false,
+        "singleClosedPath": false,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 26,
+            "edges": 28,
+            "degreeHistogram": {
+              "2": 22,
+              "3": 4
+            },
+            "cycleRank": 3,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          }
+        ],
+        "junctionExamples": [
+          [
+            2,
+            0
+          ],
+          [
+            2,
+            10
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            3,
+            9
+          ]
+        ]
+      },
+      "G4Diagnostic": {
+        "vertices": 26,
+        "edges": 22,
+        "components": 4,
+        "degreeHistogram": {
+          "1": 8,
+          "2": 18
+        },
+        "junctionCells": 0,
+        "isolatedCells": 0,
+        "allComponentsSinglePath": true,
+        "singleClosedPath": false,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 17,
+            "edges": 16,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 15
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          },
+          {
+            "vertices": 3,
+            "edges": 2,
+            "degreeHistogram": {
+              "1": 2,
+              "2": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          }
+        ],
+        "junctionExamples": []
+      },
+      "cellsIncidentToSeveralRegionBoundaryLoops": 0,
+      "multiLoopIncidence": [],
+      "boundaryOrderedCentreWalks": [
+        {
+          "regionLoopID": 0,
+          "centreCount": 26,
+          "distinctCentres": 26,
+          "repeatedNonconsecutiveCentres": 0,
+          "allTransitionsWithin8": true,
+          "simpleCycle": true,
+          "centresXY": [
+            [
+              0.5,
+              0.5
+            ],
+            [
+              1.5,
+              0.5
+            ],
+            [
+              2.5,
+              0.5
+            ],
+            [
+              3.5,
+              0.5
+            ],
+            [
+              3.5,
+              1.5
+            ],
+            [
+              3.5,
+              2.5
+            ],
+            [
+              3.5,
+              3.5
+            ],
+            [
+              3.5,
+              4.5
+            ],
+            [
+              3.5,
+              5.5
+            ],
+            [
+              3.5,
+              6.5
+            ],
+            [
+              3.5,
+              7.5
+            ],
+            [
+              3.5,
+              8.5
+            ],
+            [
+              3.5,
+              9.5
+            ],
+            [
+              3.5,
+              10.5
+            ],
+            [
+              2.5,
+              10.5
+            ],
+            [
+              1.5,
+              10.5
+            ],
+            [
+              0.5,
+              10.5
+            ],
+            [
+              -0.5,
+              9.5
+            ],
+            [
+              -0.5,
+              8.5
+            ],
+            [
+              -0.5,
+              7.5
+            ],
+            [
+              0.5,
+              6.5
+            ],
+            [
+              0.5,
+              5.5
+            ],
+            [
+              0.5,
+              4.5
+            ],
+            [
+              -0.5,
+              3.5
+            ],
+            [
+              -0.5,
+              2.5
+            ],
+            [
+              -0.5,
+              1.5
+            ]
+          ]
+        }
+      ],
+      "innerOutlineCellsXY": [
+        [
+          -1,
+          1
+        ],
+        [
+          -1,
+          2
+        ],
+        [
+          -1,
+          3
+        ],
+        [
+          -1,
+          7
+        ],
+        [
+          -1,
+          8
+        ],
+        [
+          -1,
+          9
+        ],
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          0,
+          5
+        ],
+        [
+          0,
+          6
+        ],
+        [
+          0,
+          10
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          10
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          10
+        ],
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          3,
+          8
+        ],
+        [
+          3,
+          9
+        ],
+        [
+          3,
+          10
+        ]
+      ],
+      "inputPath": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\Shape532\\thin0_0_baseline.bin",
+      "inputSHA256": "69690b74013c445a45d1fc421a3a13f835f2cbafca3dedc91e96807240e8e15f"
+    },
+    {
+      "case": "diagonal_contact_2cells",
+      "definition": "B4=S minus cells whose four axial neighbours are all in S; outside grid is empty",
+      "filledCells": 2,
+      "innerOutlineCells": 2,
+      "regionBoundaryLoops": 2,
+      "regionBoundaryTurnDecisions": 1,
+      "G8": {
+        "vertices": 2,
+        "edges": 1,
+        "components": 1,
+        "degreeHistogram": {
+          "1": 2
+        },
+        "junctionCells": 0,
+        "isolatedCells": 0,
+        "allComponentsSinglePath": true,
+        "singleClosedPath": false,
+        "singleOpenPath": true,
+        "componentStats": [
+          {
+            "vertices": 2,
+            "edges": 1,
+            "degreeHistogram": {
+              "1": 2
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": true
+          }
+        ],
+        "junctionExamples": []
+      },
+      "G4Diagnostic": {
+        "vertices": 2,
+        "edges": 0,
+        "components": 2,
+        "degreeHistogram": {
+          "0": 2
+        },
+        "junctionCells": 0,
+        "isolatedCells": 2,
+        "allComponentsSinglePath": false,
+        "singleClosedPath": false,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          },
+          {
+            "vertices": 1,
+            "edges": 0,
+            "degreeHistogram": {
+              "0": 1
+            },
+            "cycleRank": 0,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          }
+        ],
+        "junctionExamples": []
+      },
+      "cellsIncidentToSeveralRegionBoundaryLoops": 0,
+      "multiLoopIncidence": [],
+      "boundaryOrderedCentreWalks": [
+        {
+          "regionLoopID": 0,
+          "centreCount": 1,
+          "distinctCentres": 1,
+          "repeatedNonconsecutiveCentres": 0,
+          "allTransitionsWithin8": true,
+          "simpleCycle": false,
+          "centresXY": [
+            [
+              0.5,
+              0.5
+            ]
+          ]
+        },
+        {
+          "regionLoopID": 1,
+          "centreCount": 1,
+          "distinctCentres": 1,
+          "repeatedNonconsecutiveCentres": 0,
+          "allTransitionsWithin8": true,
+          "simpleCycle": false,
+          "centresXY": [
+            [
+              1.5,
+              1.5
+            ]
+          ]
+        }
+      ],
+      "innerOutlineCellsXY": [
+        [
+          0,
+          0
+        ],
+        [
+          1,
+          1
+        ]
+      ],
+      "inputPath": null,
+      "inputSHA256": null
+    },
+    {
+      "case": "hole_3x3_wall1",
+      "definition": "B4=S minus cells whose four axial neighbours are all in S; outside grid is empty",
+      "filledCells": 8,
+      "innerOutlineCells": 8,
+      "regionBoundaryLoops": 2,
+      "regionBoundaryTurnDecisions": 0,
+      "G8": {
+        "vertices": 8,
+        "edges": 12,
+        "components": 1,
+        "degreeHistogram": {
+          "2": 4,
+          "4": 4
+        },
+        "junctionCells": 4,
+        "isolatedCells": 0,
+        "allComponentsSinglePath": false,
+        "singleClosedPath": false,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 8,
+            "edges": 12,
+            "degreeHistogram": {
+              "2": 4,
+              "4": 4
+            },
+            "cycleRank": 5,
+            "singleClosedPath": false,
+            "singleOpenPath": false
+          }
+        ],
+        "junctionExamples": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            0
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            1
+          ]
+        ]
+      },
+      "G4Diagnostic": {
+        "vertices": 8,
+        "edges": 8,
+        "components": 1,
+        "degreeHistogram": {
+          "2": 8
+        },
+        "junctionCells": 0,
+        "isolatedCells": 0,
+        "allComponentsSinglePath": true,
+        "singleClosedPath": true,
+        "singleOpenPath": false,
+        "componentStats": [
+          {
+            "vertices": 8,
+            "edges": 8,
+            "degreeHistogram": {
+              "2": 8
+            },
+            "cycleRank": 1,
+            "singleClosedPath": true,
+            "singleOpenPath": false
+          }
+        ],
+        "junctionExamples": []
+      },
+      "cellsIncidentToSeveralRegionBoundaryLoops": 4,
+      "multiLoopIncidence": [
+        {
+          "xy": [
+            0,
+            1
+          ],
+          "loopIDs": [
+            0,
+            1
+          ]
+        },
+        {
+          "xy": [
+            1,
+            0
+          ],
+          "loopIDs": [
+            0,
+            1
+          ]
+        },
+        {
+          "xy": [
+            1,
+            2
+          ],
+          "loopIDs": [
+            0,
+            1
+          ]
+        },
+        {
+          "xy": [
+            2,
+            1
+          ],
+          "loopIDs": [
+            0,
+            1
+          ]
+        }
+      ],
+      "boundaryOrderedCentreWalks": [
+        {
+          "regionLoopID": 0,
+          "centreCount": 8,
+          "distinctCentres": 8,
+          "repeatedNonconsecutiveCentres": 0,
+          "allTransitionsWithin8": true,
+          "simpleCycle": true,
+          "centresXY": [
+            [
+              0.5,
+              0.5
+            ],
+            [
+              1.5,
+              0.5
+            ],
+            [
+              2.5,
+              0.5
+            ],
+            [
+              2.5,
+              1.5
+            ],
+            [
+              2.5,
+              2.5
+            ],
+            [
+              1.5,
+              2.5
+            ],
+            [
+              0.5,
+              2.5
+            ],
+            [
+              0.5,
+              1.5
+            ]
+          ]
+        },
+        {
+          "regionLoopID": 1,
+          "centreCount": 4,
+          "distinctCentres": 4,
+          "repeatedNonconsecutiveCentres": 0,
+          "allTransitionsWithin8": true,
+          "simpleCycle": true,
+          "centresXY": [
+            [
+              0.5,
+              1.5
+            ],
+            [
+              1.5,
+              2.5
+            ],
+            [
+              2.5,
+              1.5
+            ],
+            [
+              1.5,
+              0.5
+            ]
+          ]
+        }
+      ],
+      "innerOutlineCellsXY": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ]
+      ],
+      "inputPath": null,
+      "inputSHA256": null,
+      "centreCycleAsFillBoundary": {
+        "path": [
+          [
+            0.5,
+            0.5
+          ],
+          [
+            0.5,
+            1.5
+          ],
+          [
+            0.5,
+            2.5
+          ],
+          [
+            1.5,
+            2.5
+          ],
+          [
+            2.5,
+            2.5
+          ],
+          [
+            2.5,
+            1.5
+          ],
+          [
+            2.5,
+            0.5
+          ],
+          [
+            1.5,
+            0.5
+          ]
+        ],
+        "holeCentre": [
+          1.5,
+          1.5
+        ],
+        "strictlyInside": true,
+        "originalFilledAtHoleCentre": false,
+        "wouldWronglyFillHoleIfOnlyThisCycleUsed": true
+      }
+    }
+  ]
+}

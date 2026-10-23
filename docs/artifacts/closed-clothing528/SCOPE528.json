@@ -1,0 +1,51 @@
+{
+  "status": "STORED_DATA_CAUSAL_AUDIT_NO_PRODUCT_CHANGE",
+  "sourceCommit": "40db9925121f3b072eabd875f9b95a2ee7f98891",
+  "newUnityCalls": 0,
+  "newCaptures": 0,
+  "productCodeChanged": false,
+  "defaultOFF": true,
+  "frame43": "persistent subcell curve bend plus spatial area/length selection makes one-frame1x2cell boundary excursion",
+  "frame44Correction": "monotone diagonal boundary crossing; not same protruding boundary failure",
+  "timingCorrection": "RenderFrame wall includes synchronous GPU readback and disabled-candidate diagnostics; excludes capture PNG/file saving; PlayerFPS unmeasured",
+  "remaining": [
+    "frame43 design selection",
+    "non-cloth colour3",
+    "gray-face startup unreproduced/unresolved",
+    "separate internal head11+body1",
+    "old head packet212ms"
+  ],
+  "codeReferences": [
+    {
+      "path": "Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs",
+      "lines": [
+        207,
+        220
+      ],
+      "sha256": "cc1b174e8d4638ccd741d07c24c2e52f5bda155fb7e59288f1bbe0f278937578"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs",
+      "lines": [
+        28,
+        38
+      ],
+      "sha256": "dced1cda573e5d9f8e974676e5ae491c3fa3aa612de079d9517ffa25204dd529"
+    },
+    {
+      "path": "Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs",
+      "lines": [
+        66
+      ],
+      "sha256": "6c60d4c9bec47796ab70529d8c1e9985d243ff67b32b6089fbb830b4e030c1bb"
+    },
+    {
+      "path": "Assets/EUnityValidation01/SurfaceDepth366/Runtime/PostView366.cs",
+      "lines": [
+        15,
+        34
+      ],
+      "sha256": "101954534e7526aed601254a93bacf48b614174613a076cb5dd14eb757dd044e"
+    }
+  ]
+}

@@ -3237,3 +3237,10 @@ Interactable (abstract base class)
 - 경계 강제 통과와 시간품질 실패 분리: frame43 (200,98/99) C=0→1→0의1×2논리셀 출몰, frame44 (231,78) 새1셀. 기존 선택비용을 계산해 전후/해당 선택이 더 낮음을 입증; 최종 누출 아님. 동일표면 비옷RGB33중30은.55tone, 나머지3 palette/내부선 원인 미확인. 얼굴RGB변화0/회색이번루프미재현, 로딩 원인 해결 아님.
 - 경계 median7.884/p9513.434/max36.743ms, 모델 전처리약.7초와 구분. 전체 RenderFrame wall median 원본319.605/후보328.118ms: 실시간 채택 불가, PlayerFPS 아님. 출력/시간회귀로 미채택·기본OFF. loop mask/coverage0이나29RGB소차는 pose/UV/cloud입력 완전동등 미검증. head11+body1/머리212ms/종료arcDP 별도 유지.
 - 모든81프레임 전신 losslessWebP2,289,420B/GIF2,892,811B,1350ms(endpoint17ms hold;GIF20/10/20ms). 로컬만 전달, Library403 재시도 없음. 입력/Animator/시계/hook 및 clean Edit·cloth/curveOFF 직접 복원. 사용자 두 settings 해시 보존. 메인.html527 및 docs/artifacts/closed-clothing527 연결. 전체 프로젝트 완료가 아니며 새 최적화/촬영 시작 없음.
+
+## 239. CHARACTER-RENDER-01 — 528 저장43/44 벡터·픽셀 경계 대조 및 시간 범위 정정
+
+- 제품/Unity 호출/새촬영0, 40db9925/OFF 유지. 43번 주변 source와 최종 곡선의 국소 꼭짓점은 같고 작은 굴곡이42/43/44 모두 지속. y98.5 x200.377048→200.312755→200.387847의.064~.075셀 이동이 픽셀경계201→200→201로 증폭. 두셀 삭제 대안 Δ면적+.367665/Δ경계−.164020/합+.203644로 기존 면적+길이 선택기가 거부. 진행순서/턴/계단리듬 규칙이 없음; 좌표·동률 버그로 입증되지 않아 수치/패턴 패치 안 함. 필요한 구조는 기존 선택기에 경계 구간의 진행/중요끝·생략근거를 전달하는 것; 전역시간bank 확장 안 함.
+- 44번(231,78)은 곡선 x(y78.5)=231.403615→231.515521→231.405707에 따른 단조 대각 계단. 527의 확정가시 판정 정정; 단순ABA/셀크기만으로 같은결함 아님. 단순얇은셀삭제의 실제 반례. 43 가시 미채택은 유지.
+- 타이머는 h.RenderFrame만 포함하고 Save/PNG/파일쓰기는 밖. 함수 내부 Full319.Read는 AsyncGPUReadback+WaitForCompletion이며 main 공통8개+기준3/후보2개; Post366.AfterRender는 candidateOFF여도28read+Process/업로드 실행. LateUpdate도 같은 함수를 호출하지만 이 동결포즈 수동call wall319.605/328.118ms를 PlayerFPS로 단정할 수 없음. 기존 '전체 실시간불가'를 '진단 포함 함수 고비용·PlayerFPS미측정'으로 정정. 7.884ms 경계/packet/진단 구별. 새계측·최적화 없음.
+- docs/artifacts/closed-clothing528에 동일좌표 경계도/수식/코드위치 저장, 메인.html 정정. 원81프레임·복원증거 재사용. 비옷3/얼굴회색/내부색/212ms 별도 미해결, Library403 재시도 없음.

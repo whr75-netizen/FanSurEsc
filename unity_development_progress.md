@@ -3368,3 +3368,15 @@ Interactable (abstract base class)
 - Mono 할당API는 실제1MB양성대조도0이라 프레임할당 bytes미측정으로남겼다. 별도 코드상graph allocation객체는 실제65outerwear1980→169node/38524→3412E; 측정bytes로혼동안함. timer빈쌍p95.000100ms,10만회loop평균.0000586ms. 새Profiler/GC/설정조작없음.
 - 메인543 전신GIF81프레임3095462B/1350ms를동일기능비교로정직하게재사용하고544성능/전체동등성/새정지쌍/할당한계추가,Chrome표시·로컬링크검사. 원본실패/대조/수정gate/원raw경로는docs/artifacts/clothing-compact544. Library403재시도/우회0.
 - 명시Clothes543 모드에만동등축소채택,제품기본OFF/540/348보존. 실제81End입력/Animator/시계복원true,직접Edit/비정지/spans·compact·clothOFF/capture0/backgroundfalse/sceneDirtyfalse. Console은기존진단2건그대로/신규0,Quality/Time원바이트보존. 전체프로젝트/Body0얼굴·손·내부명암·회색원인·머리/실시간성능완료아님.
+
+## 254. CHARACTER-RENDER-01 — 547 단순화 전 구간 참조 / 실제81쌍 / 파이프라인 문서
+
+- 546에서 확인된 Fit539→Groups543 구간 재탐색 손실만 수정했다. 면적.240015713셀²의 작은 return 생략으로 큰 국소 구간이 전체의 비단조 arc로 바뀌어 그룹이 빠졌었다. ClothRegion524 한 파일에서 group 참조를 Source로 전달하고 fitted Areas/지지/비용/544 cut/셰이더는 유지한다. 이전 입력 비교용 UseSimplifiedSpanReference546 외 새 renderer/filter/시간상태/좌표예외 없음. 정상 span 경로에서 false, Release에서도 복원.
+-  저장251입력 native baseline exact, 후보23입력31셀 변화. 정상 얇은끝8개,34/43/44/50,65소매 유지. 실제64~70 7쌍 후 실제81쌍 한 루프; 포즈/카메라/변형정점/clock 해시 일치,243마스크가 저장예측과 동일.68왼쪽소매(200,73)/(200,74), source11300/11298 제거. 전체팔꿈치/전신시간품질 완성으로 확대하지 않는다.
+-  최종옷gate/unsupported/invalid owner0, 성분8·hole4 수 동일. 화면RGBA8 차이는18프레임266픽셀, 얼굴눈머리0.51머리 float2표본 미세차는 화면0이며 산술원인 미확정. 같은표면색47표본은 PREPARED동일/POSTLINE최초변화/바뀐경계1~2셀 이내.76(225,106)은 더 앞 옷13.899133이Body0 14.214467을 가림; Body0 알고리즘 확장이 아님.
+-  실제 source와 선택경계/전체순서를 함께검토, 정상 끝·구멍/연결 회귀 미관측. 양팔 경로 동일, 이전65만으로 전체팔 통과라던 범위오류는546부터 정정 보존. 방향동률16/69·내부명암·Body0얼굴·회색사용자관측·손/머리/실시간성능은 별도 미해결.
+-  GIF1,878,993B/WebP1,282,638B,81프레임1350ms 전부 보존. OLD543/544 vsFIX547 같은실행, 제품OFF영상 아님. skyHour3.1476202로 이전실행과 배경다름 명시. 메인 첫화면 최신영상/디스크/알고리즘 링크, 이전결과보존. Library403 재시도없음.
+-  선택기 중앙2.2511→2.2360ms, geometry18.0667→18.0652ms; core353.6486→341.1058ms는 기존readback 포함 Editor호출. 품질캡처 고정순서이므로 새최적화율/PlayerFPS아님.544 최적화와545할당증거 별도유지.
+-  docs/ai/CHARACTER_PIXEL_PIPELINE.md에 3렌더러15슬롯·semantic part 구분, 실제15단계 입력/출력/좌표/쓰기권한, 명암/색/곡선/면적/선/가림/합성과546수치예제를 연결. 명암은physical 표본step, 실루엣은폐곡선 cut이므로 현재 같은선택기 아님; 같은셀/표면/실루엣 gate와 향후공통화 가능한 면적/채움책임을 구분.100%전신단일파이프라인 목표의 미완료/모델의존/중복렌더/752flood/readback 명시. 새 그림자 구현 없음.
+-  공간 읽기전용: C50.75GiB여유, Codex124.01GiB, W/E_UnityValidation_01 76.04GiB·Current47214.07GiB. 원본14.79GiB(LocalOnly8.65/Library4.12). 최근24h수정파일2.68GiB는 현재크기이지증가량측정아님. 삭제/이동/압축0.
+-  기존공식host/project-path연결복구. import 응답timeout후 재import없이컴파일확인. 첫capture helper누락은 미실행으로보존후한번수정호출. 자동입력/Animator/clock 복원true; 직접Edit/unpaused/cleanScene/모든실험OFF/capture0/backgroundfalse/activeGameplay없음. Console기존진단2건동일/새0,Quality/Time바이트보존. 목적변경·증거만커밋, 제품기본OFF.

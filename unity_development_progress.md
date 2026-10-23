@@ -3436,3 +3436,12 @@ Interactable (abstract base class)
 - B는원래전체Fit/8이웃선택을유지,첫prepared owner/기존sparsepacket의primitive가속한앞면성분원면적으로unary만상한제한하고GPU/native/채움까지같은공급성분을강제.실제동일15쌍32/33/34/35/36/41/43/44/47/48/49/50/51/65/68:48원면적.333209902/최종투명,옷1/2/3maskexact,공급범위위반0/unsupported0.그러나6포즈의새닫힌빈셀관찰이남아미채택.반복사건을오류6개로세지않음.앞면성분은전체손디자인영역/실제가림영역과동의어가아니므로추가penalty/시간필터로확장하지않았다.
 - Bsource귀속build중앙19.3644ms/resolve4.3263ms는15포즈단계표본이며resolve는packet구간에포함.최적화/할당대조/PlayerFPS아님.51hairfloat2셀차이최대1.87e-5/실제RGBA8블록동일,내부몸색차이별도.얼굴회색미재현은해결표기하지않음.
 - 두캡처input/Animator/clock복원true,최종직접컴파일완료/cleanEdit/전체실험OFF.6기존소스gitdiff0/실험cs·meta제거,547/544/550/553및사용자Quality/Time보존.정확한미채택코드W/Prototype557B에해시보관.추가전체루프/Playerbuild/헤어수정/할당검사미실행.47~51전신5프레임WebP172700B/GIF288525B와48PNG42683B;이전553대실험557B이며전체루프아님.메인.html첫화면최신실패비교/556원인구분.Library403재시도없음.근거docs/artifacts/surface-owner557/RESULT557.md/EVIDENCE557.json.
+
+## 261. 558 새 구멍50 한 셀의 최초 원인 — 2026-10-23
+
+- 기존15쌍A/B의공통구멍50(231,87)에한정.추가조회는기존553의단일포즈1회이며새후보렌더/제품수정/전체루프0.같은558스냅샷에서Opacity source/기존selector exact.새phase1.6250025와저장B1.62500262의실행간기하를비트동일로혼용하지않음.
+- firstcentre/owner/final553의primitive8549·UV(.661820114,.0530857444)동일,packet0.같은UV재투영ray에서front8549 z14.2904841/뒤7122 z14.3011529 둘다alpha1.순서정상.앞16tri성분은원메시cull없이32tri별도성분,뒤손은252tri이므로삼각형개별선택이나공유변파손으로부르지않음.
+- B첫손실은Attribute의min(Afit,AsupplierSheet).전체손원합집합/Fit .999505579→.217875376.이웃선택7true/1false·항-.410050526동일,543그룹0.유지−삭제unary -.999011159→+.564249247,합계-1.409061685→+.154198721로false.대상입력한셀만바꿔도false재현.이후Body0공통마스크/공급자44고정이뒤손까지삭제.새UV/깊이문턱이나donor누락이최초원인아님.
+- A는뒤손원영역.931309521→독립Fit .450592041,이웃항+.164020211,합계+.262836128로false.다른기여6성분도false여서공급전ORmask부터빈다.본래투영된손의합성덮임을독립디자인영역으로놓은계약실패다. .931310을depthclip한개별가시면적이라고부르지않음.
+- 원기하/UV/스킨/알파/깊이는있지만원union contributor와앞조각생략시뒤공급상태가현재1bit재질mask+공급자1개에없다.공통그림영역구성또는깊이순대체공급을표현해야하며새분리/penalty/최대면적/시간filter/fallback패치로확장하지않음.헤어511/512/513계약·35채움/24실제앞가림/눈fixture·정상틈미확정상태보존.
+- input/Animator/clock복원true·직접컴파일/cleanEdit/OFF확인,Console기존2/새0,사용자설정보존.신규raw약0.25MB만보존.메인.html558원인note/기존557B영상분리.근거기존surface-owner557/RESULT557.md의558절,TRACE558.json/COST·NEIGHBOURS·SHEETS·RAY558.csv/CELL_CAUSE558.png.제품소스커밋없고검증기록만추가.

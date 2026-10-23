@@ -1,0 +1,34 @@
+{
+  "state": "REJECTED_WITHDRAWN",
+  "actualPairs": [
+    48,
+    50,
+    47
+  ],
+  "unexecuted": [
+    49,
+    35,
+    36,
+    41
+  ],
+  "fullLoopExecuted": false,
+  "captureRestore": {
+    "status": "FIRST_FAILURE",
+    "pairs": 3,
+    "error": "frame=47 primary=True enclosedHoles=1 face=0",
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true
+  },
+  "directRestore": "[Log] 560 withdrawn compiling=False playing=False paused=False dirty=False cloth=False body=False head=False sameRay550=False",
+  "consoleErrors": 2,
+  "consoleFirstLines": [
+    "Destroy may not be called from edit mode! Use DestroyImmediate instead.",
+    "Failed getting indices. Submesh index is out of bounds."
+  ],
+  "sourceDiff": "five edited files diff0; own helper/HLSL/meta absent",
+  "userSettings": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  }
+}

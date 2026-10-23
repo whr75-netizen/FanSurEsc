@@ -3407,3 +3407,7 @@ Interactable (abstract base class)
 - 새실제34/35/36 세쌍: 547 Clothes+550 대기존511폐영역+513source-ray. 35틈이hair14로채워짐, 눈owner/색차이0, finalhair outsideMask0, unsupported0. 새제품헤어코드없음. packet합산217~228ms는Select/BodyRay/AddQuad/Upload전체이고업로드단독원인이라고단정하지않음.
 - 정상틈/끝전체,514 .6375선택반전, 내부색/전시간품질은미해결;기본OFF/미채택. 3프레임/50ms의짧은원래시간출력을전체루프라고표시하지않음. input/Animator/clock복원및직접Edit/clean/OFF확인. Console기존진단2건동일/새0.
 - 근거 docs/artifacts/hair-gap552/RESULT552.md/RECEIPT552.json. 메인.html551전신및552짧은전신·머리확대비교 연결. Library403재시도없음. 몸551수정0d96a66과독립검사이며전체완료아님.
+
+### 551 옷 회귀 보충 — 저장81쌍
+
+- 동일옷owner 색차이10표본은UV/depth/sourceID동일. 8은.55 또는역수,33의크림2셀은PREPARED동일/최종deepCream대체만다름. 최초단계OwnerLines333. 입력영역변경에따른outer/internal/thin/support재분류이며개별조건과품질정당성미확정. 옷색전체불변/품질통과로확대하지않음. 다음은33선처리입력단일조회이며새보정/전체촬영없음.

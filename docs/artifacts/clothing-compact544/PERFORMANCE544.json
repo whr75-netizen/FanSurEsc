@@ -1,0 +1,194 @@
+{
+  "adoptedForExplicitMode": true,
+  "defaultEnabled": false,
+  "scope": "Same543 cloth boundary/area/span groups; algebraically eliminate non-grouped strict fixed0/1 labels from existing cut. Geometry/colors/depth/weights/time unchanged. Existing540 remains available.",
+  "actualWalkPoses": 81,
+  "totals": {
+    "rgba": 0,
+    "meta": 0,
+    "uv": 0,
+    "world": 0,
+    "mask": 0,
+    "selfRGBA": 21495,
+    "selfUV": 5237,
+    "selfWorld": 1720,
+    "screenSelf": 0,
+    "screenOpt": 0,
+    "novelRGBA": 0,
+    "novelUV": 0,
+    "novelWorld": 0
+  },
+  "timingMs": {
+    "REFERENCE": {
+      "renderMs": {
+        "median": 347.0020000022487,
+        "p95": 747.1663000033004,
+        "min": 274.6419000031892,
+        "max": 967.8972999972757
+      },
+      "geometryMs": {
+        "median": 17.736800000000002,
+        "p95": 36.1883,
+        "min": 16.6765,
+        "max": 65.36949999999999
+      },
+      "areaMs": {
+        "median": 1.2538,
+        "p95": 2.126,
+        "min": 1.029,
+        "max": 4.229299999999999
+      },
+      "selectionMs": {
+        "median": 22.3029,
+        "p95": 42.0085,
+        "min": 16.1535,
+        "max": 81.3732
+      },
+      "uploadMs": {
+        "median": 1.8462,
+        "p95": 2.8334,
+        "min": 1.2707000000000002,
+        "max": 6.2452
+      },
+      "packetMs": {
+        "median": 0.0505,
+        "p95": 18.2953,
+        "min": 0.025,
+        "max": 64.4102
+      },
+      "boundaryTotalMs": {
+        "median": 43.2429,
+        "p95": 94.3667,
+        "min": 36.6457,
+        "max": 115.0937
+      }
+    },
+    "COMPACT": {
+      "renderMs": {
+        "median": 323.3646000007866,
+        "p95": 725.8657999991556,
+        "min": 261.4518000045791,
+        "max": 828.564199997345
+      },
+      "geometryMs": {
+        "median": 17.756,
+        "p95": 30.5595,
+        "min": 16.6819,
+        "max": 48.75359999999999
+      },
+      "areaMs": {
+        "median": 1.2355,
+        "p95": 1.4802,
+        "min": 1.0243,
+        "max": 2.2521
+      },
+      "selectionMs": {
+        "median": 2.1455,
+        "p95": 2.8867,
+        "min": 1.8919000000000001,
+        "max": 11.8686
+      },
+      "uploadMs": {
+        "median": 1.8102,
+        "p95": 2.5338000000000003,
+        "min": 1.3256,
+        "max": 3.9536000000000002
+      },
+      "packetMs": {
+        "median": 0.0404,
+        "p95": 17.9791,
+        "min": 0.0247,
+        "max": 62.8833
+      },
+      "boundaryTotalMs": {
+        "median": 23.064300000000003,
+        "p95": 35.934599999999996,
+        "min": 21.211299999999998,
+        "max": 63.64639999999999
+      }
+    }
+  },
+  "pairedReferenceMinusCompactMs": {
+    "renderMs": {
+      "median": 22.351899999193847,
+      "p95": 426.05290000210516,
+      "min": -490.3068999919924,
+      "max": 607.9699999972945
+    },
+    "selectionMs": {
+      "median": 20.0774,
+      "p95": 39.579699999999995,
+      "min": 12.351300000000002,
+      "max": 79.10679999999999
+    }
+  },
+  "standaloneCut21PairedMs": {
+    "referenceMs": {
+      "median": 8.790699997916818,
+      "p95": 9.799200000998098,
+      "min": 7.879500000854023,
+      "max": 11.973699998634402
+    },
+    "compactMs": {
+      "median": 0.8343000008608215,
+      "p95": 0.9663000018917955,
+      "min": 0.7578000004286878,
+      "max": 1.0678000035113655
+    }
+  },
+  "storedMasks": {
+    "actual": 243,
+    "thinEnds": 8,
+    "exact": true
+  },
+  "managedAllocatedBytesPerFrame": null,
+  "allocationProbe": {
+    "requestedBytes": 1048576,
+    "observedBytes": 0
+  },
+  "memoryLimitation": "Current Mono GC.GetAllocatedBytesForCurrentThread returned0 even after real1MB allocation. Frame allocation bytes cannot be reported as0 or as measured reduction. No retained-heap proxy used.",
+  "objectCountEvidence": {
+    "case": "actual65 outerwear",
+    "cells": 1980,
+    "freeCells": 169,
+    "referenceEObjects": 38524,
+    "compactEObjects": 3412,
+    "note": "Exact E-object allocation counts from code; not managed bytes or frame allocation measurement"
+  },
+  "inputs": {
+    "logical": [
+      480,
+      272
+    ],
+    "native": [
+      960,
+      544
+    ],
+    "clip": "Rig|Walk_Loop",
+    "captureDeltaSeconds": 0.016666666666666666,
+    "warmup": "existing initialized gameplay plus3 repetitions of both modes before measured loop; self-control every pose; alternating measured pair order",
+    "firstPose": {
+      "frame": 0,
+      "phase": 2.503395e-06,
+      "skyHour": 8.599611
+    },
+    "lastPose": {
+      "frame": 80,
+      "phase": 6.198883e-06,
+      "skyHour": 8.599611
+    }
+  },
+  "measurementBoundary": "RenderFrame timer includes existing runtime GPU readbacks. Additional verification readbacks, native8 conversion,2PNG samples and files are outside timer. CoreRenderFrame is not PlayerFPS. Stage timings from existing code.",
+  "old54042_48ms": "Earlier-run boundary statistic, different scene hour/order/load; context only. Optimisation claim uses paired current run.",
+  "rejectedFirstGate": "Runtime544 stopped at pose2 after strict float mismatch. Control544 reproduced same change with no optimisation: input mesh/camera/time equal, hair RGB max7.45e-9/UV1.49e-8/world1.86e-9, nativePNG8 difference0. REF_B/OPT/REF_C then bit-identical. Original failure retained.",
+  "correctedGate": "Every actual pose retained reference self-repeat. Exact masks/meta/native8. Candidate float must exactly equal a value actually observed in same-pose reference controls; no epsilon. Raw float changes and reference drift remain reported.",
+  "restoration": {
+    "status": "CAPTURED",
+    "error": "",
+    "poses": 81,
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true
+  },
+  "gif": "FULL_WALK543.gif 3095462bytes: pre-optimisation same-functional-output comparison; reused honestly, not a new544 video. Actual544 pose65 reference/compact PNG pair retained."
+}

@@ -3357,3 +3357,14 @@ Interactable (abstract base class)
 - 전신 GIF3,095,462B/WebP1,509,156B,81프레임1350ms,3열636x346. 보간/프레임누락0, GIF 시간단위10ms 근사와 WebP16/17ms를 구분했다. 메인.html 첫화면에 새543과 이전540을 구분하여 표시하고 Chrome/6로컬링크/스크린샷 확인. Library403 재시도·우회0. 상세 docs/artifacts/clothing-span543; 원raw는 Current472/Span543/FullLoop543.
 - 최적화 전 후보 geometry19.2517/area1.3041/selection25.3016/upload1.8614ms는 각 중앙값이며, core RenderFrame423.3248ms는 기존 런타임 readback 포함·별도 캡처/PNG/저장 제외, PlayerFPS가 아니다. 이전54042.48ms와 다른 실행조건으로 최적화 효과를 주장하지 않았다. 다음은 같은 수정본/동일입력의 결과보존 최적화 측정이다. 제품 기본OFF, 실행가능 Shape543 모드 제공.
 - End의 입력/Animator/시계복원true, 직접 Edit/비정지/실험OFF/capture0/backgroundfalse/sceneDirtyfalse 확인. 사용자변경·348·540/Body0진단 보존. 새 구조/셰이더 층은 남기지 않고 실제 형상 수정과 증거만 목적커밋한다.
+
+## 253. CHARACTER-RENDER-01 — 544 경계 cut 동등축소 / 실제81포즈 출력·비용 검증
+
+- 543/f53b1e2 형상수정과 기존540 모드를 보존하고 한 원인인 선택기 그래프 크기만 줄였다. 기존 .14에서8이웃 경계비용합 .4920614<unary1이므로 그룹에 속하지 않은 A0/내부A1 라벨은 엄밀히 고정된다. 그룹셀은 유지하고 fixed/free 링크를 같은 terminal 비용으로 옮기며 고정쌍상수만 제외한다. 기하·면적·span·가중치·시간·색/UV/depth 변경, 정지캐시, 추가필터0.
+- 저장81포즈x3부위243마스크와8끝반례 exact. 대표 고정입력21회 비계측짝지은 cut 시간 중앙8.7907→.8343ms/p959.7992→.9663ms. 실제 경로의 새 mode Clothes543에 연결하고 참조 선택기도 보존했다.
+- 첫 Runtime544는2번 float 차이로 정지, 오판을 숨기지 않았다. 후속 단일 실제0..2 prefix+2번 REF_A/REF_B/OPT/REF_C 대조에서 메시/카메라/hash/time 동일, 원본반복 자체가 머리RGB262/UV70/world24표본의<=7.45e-9/1.49e-8/1.86e-9 차이를 보였으나 nativePNG8 차이0; REF_B/OPT/REF_C는float0. 최초실패의 원버퍼는 미보존이라 동일픽셀/산술원인까지소급확정하지 않았다. 원본반복비교 없이 float count를 화면회귀로 본 검사한계를 정정했다.
+- 수정된 gate는 실제 Walk81포즈 모두 원본self-control을 유지하고 측정쌍 순서를 번갈아 적용했다. mask/meta/실제native8 exact, candidate float가 같은포즈 원본들에 없으면 epsilon없이 거부한다. 최종 참조/최적화 RGBA/UV/meta/world/mask 차이 모두0. 원본self float drift21495/5237/1720관측은별도기록하며8bit0; 프레임폐기/시간필터없음.
+- 실제 선택기 중앙22.3029→2.1455ms/p9542.0085→2.8867; 전체옷경계 중앙43.2429→23.0643/p9594.3667→35.9346ms. geometry17.7368→17.7560ms로변경없음. coreRenderFrame347.002→323.3646/p95747.1663→725.8658ms는 기존runtime readback포함·추가검증readback/PNG/파일제외, PlayerFPS아님.54042.48ms와실행조건이다르므로효과는현재짝지은값으로만평가했다. 초당60프레임채택/전체성능완료로과장하지않는다.
+- Mono 할당API는 실제1MB양성대조도0이라 프레임할당 bytes미측정으로남겼다. 별도 코드상graph allocation객체는 실제65outerwear1980→169node/38524→3412E; 측정bytes로혼동안함. timer빈쌍p95.000100ms,10만회loop평균.0000586ms. 새Profiler/GC/설정조작없음.
+- 메인543 전신GIF81프레임3095462B/1350ms를동일기능비교로정직하게재사용하고544성능/전체동등성/새정지쌍/할당한계추가,Chrome표시·로컬링크검사. 원본실패/대조/수정gate/원raw경로는docs/artifacts/clothing-compact544. Library403재시도/우회0.
+- 명시Clothes543 모드에만동등축소채택,제품기본OFF/540/348보존. 실제81End입력/Animator/시계복원true,직접Edit/비정지/spans·compact·clothOFF/capture0/backgroundfalse/sceneDirtyfalse. Console은기존진단2건그대로/신규0,Quality/Time원바이트보존. 전체프로젝트/Body0얼굴·손·내부명암·회색원인·머리/실시간성능완료아님.

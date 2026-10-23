@@ -6,17 +6,19 @@ using UnityEngine;
 public static class BoundaryModes540
 {
     [MenuItem("EValidation/Boundary540/Off (current product)")]
-    public static void Off(){ClothRegion524.Enabled=false;ClothRegion524.UseOpacityCurves527=ClothRegion524.UseAreaCurves532=ClothRegion524.UseWholeRegions539=ClothRegion524.UseSpans543=false;Shader.SetGlobalInt("_Cloth524Enabled",0);Refresh();}
+    public static void Off(){ClothRegion524.Enabled=false;ClothRegion524.UseOpacityCurves527=ClothRegion524.UseAreaCurves532=ClothRegion524.UseWholeRegions539=ClothRegion524.UseSpans543=ClothRegion524.UseCompact544=false;Shader.SetGlobalInt("_Cloth524Enabled",0);Refresh();}
     [MenuItem("EValidation/Boundary540/Clothes (outerwear-bottom-shoes)")]
     public static void Clothes(){Trial543(false,ClothRegion524.Clothing540);}
     [MenuItem("EValidation/Boundary540/Experimental Body0 plus clothes (includes hands)")]
     public static void BodyAndClothes(){Trial543(false,ClothRegion524.BodyAndClothing540);}
     [MenuItem("EValidation/Boundary540/Experimental543 Shape only")]
     public static void Shape543(){Trial543(true,ClothRegion524.Clothing540);}
-    static void Trial543(bool shape,int parts)
+    [MenuItem("EValidation/Boundary540/Clothes543 (validated spans)")]
+    public static void Clothes543(){Trial543(true,ClothRegion524.Clothing540,true);}
+    static void Trial543(bool shape,int parts,bool compact=false)
     {
-        bool oldShape=ClothRegion524.UseSpans543;
-        try{ClothRegion524.UseSpans543=shape;Enable(parts);}catch{ClothRegion524.UseSpans543=oldShape;throw;}
+        bool oldShape=ClothRegion524.UseSpans543,oldCompact=ClothRegion524.UseCompact544;
+        try{ClothRegion524.UseSpans543=shape;ClothRegion524.UseCompact544=compact;Enable(parts);}catch{ClothRegion524.UseSpans543=oldShape;ClothRegion524.UseCompact544=oldCompact;throw;}
     }
     static void Enable(int parts)
     {

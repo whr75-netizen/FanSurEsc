@@ -3244,3 +3244,10 @@ Interactable (abstract base class)
 - 44번(231,78)은 곡선 x(y78.5)=231.403615→231.515521→231.405707에 따른 단조 대각 계단. 527의 확정가시 판정 정정; 단순ABA/셀크기만으로 같은결함 아님. 단순얇은셀삭제의 실제 반례. 43 가시 미채택은 유지.
 - 타이머는 h.RenderFrame만 포함하고 Save/PNG/파일쓰기는 밖. 함수 내부 Full319.Read는 AsyncGPUReadback+WaitForCompletion이며 main 공통8개+기준3/후보2개; Post366.AfterRender는 candidateOFF여도28read+Process/업로드 실행. LateUpdate도 같은 함수를 호출하지만 이 동결포즈 수동call wall319.605/328.118ms를 PlayerFPS로 단정할 수 없음. 기존 '전체 실시간불가'를 '진단 포함 함수 고비용·PlayerFPS미측정'으로 정정. 7.884ms 경계/packet/진단 구별. 새계측·최적화 없음.
 - docs/artifacts/closed-clothing528에 동일좌표 경계도/수식/코드위치 저장, 메인.html 정정. 원81프레임·복원증거 재사용. 비옷3/얼굴회색/내부색/212ms 별도 미해결, Library403 재시도 없음.
+
+## 240. CHARACTER-RENDER-01 — 529 순서 구간→생략 최소 매핑의 정상 얇은 끝 반례 실패
+
+- 저장527 닫힌ring/기존픽셀cycle 표현만 재사용. 시간arcDP/상태bank/계수/Unity호출/촬영/제품변경0. 한 축의1셀미만 되돌림+다른축 단조 구간을 명시적 OMIT shortcut으로 매핑하는 단일 소형 시험.
+- 42/43/44 목표ear1개씩 .691932/.722201/.749419셀²; 정상44 대각 구간은3포즈 모두 생략없음. 단일 정상끝은보존하지만 넓은몸에붙은.75×3셀 끝 두개반례에서2.25셀²각각을잘못생략. 4회전/직선분할동일. 정상얇은끝gate실패로 graphcut/런타임적용/실제촬영미진행. 새길이/면적조건붙이지않고 해당후보종료.
+- Opacity Boundary21행 primitive/anchor/alpha기원이 CurvedProjection.Emit234행 좌표쌍에서유실, ClosedRegion.BuildSegments99행/ClothPrepare35행ring→Select39행면적만전달. 순서만으로는source에도있는43되돌림을거부못함. 자동끝/파트연결근거와keep/merge/omit결정을동일구간에보존할표현필요; 토폴로지기원만으로충분하다는검증은없고FullLoopB경계기원미저장. 수작업좌표요구/전역상태확장안함.
+- docs/artifacts/closed-clothing529에 최소실험source/좌표/반례도 저장, 메인.html반영. 기본OFF/기존제품·사용자설정보존. 상태변경없어527복원증거재사용, 새복원조회없음.528정정/비옷3·회색·내부색·212ms별도유지, Library403재시도없음.

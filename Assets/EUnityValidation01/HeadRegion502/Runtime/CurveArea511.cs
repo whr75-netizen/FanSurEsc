@@ -6,18 +6,18 @@ using System.Collections.Generic;
 public static class CurveArea511
 {
     public struct P {public double x,y;public P(double x,double y){this.x=x;this.y=y;}}
-    struct Edge {public P a,b;public double X(double y)=>a.x+(y-a.y)*(b.x-a.x)/(b.y-a.y);}
+    struct Edge {public P a,b;public long sourceId;public double X(double y)=>a.x+(y-a.y)*(b.x-a.x)/(b.y-a.y);}
     struct Crossing {public double x;public int edge,delta;}
     public static int LastCrossings,LastEvents;
     static double Cross(P a,P b)=>a.x*b.y-a.y*b.x;
     static P Sub(P a,P b)=>new P(a.x-b.x,a.y-b.y);
-    public static float[] Compute(IList<P[]> rings,int x0,int y0,int width,int height)
+    public static float[] Compute(IList<P[]> rings,int x0,int y0,int width,int height,NegativeRegion563 negative=null)
     {
         var edges=new List<Edge>();var levels=new List<double>();LastCrossings=0;
-        foreach(var ring in rings)for(int i=0;i<ring.Length;i++)
+        for(int ringId=0;ringId<rings.Count;ringId++)for(int i=0;i<rings[ringId].Length;i++)
         {
-            var a=ring[i];var b=ring[(i+1)%ring.Length];levels.Add(a.y);
-            if(a.y!=b.y)edges.Add(new Edge{a=a,b=b});
+            var ring=rings[ringId];var a=ring[i];var b=ring[(i+1)%ring.Length];levels.Add(a.y);
+            if(a.y!=b.y)edges.Add(new Edge{a=a,b=b,sourceId=negative!=null?negative.EdgeId(ringId,i,ring.Length):0});
             if(a.x!=b.x)
             {
                 int lo=Math.Max(x0,(int)Math.Ceiling(Math.Min(a.x,b.x))),hi=Math.Min(x0+width,(int)Math.Floor(Math.Max(a.x,b.x)));
@@ -36,7 +36,7 @@ public static class CurveArea511
         {
             double lo=levels[band],hi=levels[band+1],dy=hi-lo;if(!(dy>1e-12))continue;
             double middle=(lo+hi)*.5;int row=(int)Math.Floor(middle);if(row<y0||row>=y0+height)continue;
-            crossings.Clear();
+            negative?.BeginBand(lo,hi);crossings.Clear();
             for(int i=0;i<edges.Count;i++)
             {
                 var e=edges[i];if((e.a.y<=middle&&middle<e.b.y)||(e.b.y<=middle&&middle<e.a.y))crossings.Add(new Crossing{x=e.X(middle),edge=i,delta=e.b.y>e.a.y?1:-1});
@@ -51,7 +51,7 @@ public static class CurveArea511
                 {
                     var l=edges[left];var r=edges[crossing.edge];double lm=l.X(middle),rm=r.X(middle);
                     int first=Math.Max(x0,(int)Math.Floor(lm)),last=Math.Min(x0+width-1,(int)Math.Floor(rm));
-                    double l0=l.X(lo),l1=l.X(hi),r0=r.X(lo),r1=r.X(hi);
+                    double l0=l.X(lo),l1=l.X(hi),r0=r.X(lo),r1=r.X(hi);negative?.Positive(l0,l1,r0,r1,l.sourceId,r.sourceId);
                     for(int x=first;x<=last;x++)
                     {
                         double a=Math.Max(0,Math.Min(x+1,r0)-Math.Max(x,l0)),b=Math.Max(0,Math.Min(x+1,r1)-Math.Max(x,l1));
@@ -59,7 +59,7 @@ public static class CurveArea511
                     }
                 }
             }
-            if(winding!=0)throw new InvalidOperationException("511 control graph winding is not closed");
+            negative?.EndBand();if(winding!=0)throw new InvalidOperationException("511 control graph winding is not closed");
         }
         var output=new float[result.Length];for(int i=0;i<output.Length;i++)output[i]=(float)Math.Max(0,Math.Min(1,result[i]));return output;
     }

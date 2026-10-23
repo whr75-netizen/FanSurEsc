@@ -1,0 +1,74 @@
+{
+  "status": "EQ3_ONLY_GATE_FAILED_NORMAL_END_OMISSION",
+  "newUnityCalls": 0,
+  "newCaptures": 0,
+  "newProductCode": false,
+  "fixedReference": "saved pre-Fit Source per pose; no fitted candidate feedback; upstream opacity approximation/persistent cross-pose feature IDs not certified",
+  "paperConstantsLogicalPixels": {
+    "widthHeightBand": 0.5,
+    "referenceHeightMinimum": 1,
+    "matchRadiusExperimental": 2
+  },
+  "localRecordedEventComparisons": [
+    {
+      "case": "actual43",
+      "oldScore": [
+        2.4238001618473426,
+        2.4238001618473426
+      ],
+      "newScore": [
+        0.9238001618473425,
+        0.9238001618473425
+      ],
+      "newUndefined": 0,
+      "changedCells": 2
+    },
+    {
+      "case": "actual50",
+      "oldScore": [
+        2.992855558433273,
+        2.992855558433273
+      ],
+      "newScore": [
+        1.4928555584332728,
+        1.4928555584332728
+      ],
+      "newUndefined": 0,
+      "changedCells": 1
+    },
+    {
+      "case": "actual44",
+      "oldScore": [
+        1.007783685405047,
+        1.007783685405047
+      ],
+      "newScore": [
+        1.007783685405047,
+        1.007783685405047
+      ],
+      "newUndefined": 0,
+      "changedCells": 1
+    }
+  ],
+  "allEightNormalEndOmissionsPreferred": true,
+  "normalPreservedScore": 1,
+  "normalBothEndsLostScore": 0.09090909090909091,
+  "normalHeight": 0.75,
+  "normalWidth": 3,
+  "noHeightFilterDiagnostic": {
+    "preserve": 0,
+    "omit": 0.09090909090909091
+  },
+  "diagnosticCorrectionEligibleScoresUnchanged": true,
+  "gatePassed": false,
+  "paperFullMethodImplementedOrDisproved": false,
+  "missingContract": [
+    "valid reference/output boundary feature-line pairing and line/band coordinate convention",
+    "shape/location fidelity together with width; Eq3 alone is insufficient",
+    "staircase span quality: recorded44 cell removal has unchanged Eq3",
+    "candidate construction must preserve fixed reference information before final selected mask"
+  ],
+  "replacementPoint": "SelectRegions boundary selection needs the fixed reference and boundary candidates; FitArea may not overwrite the reference. No replacement justified by this failed gate.",
+  "defaultOFF": true,
+  "runtimeValidation": "not executed; entry gate failed"
+}

@@ -3454,3 +3454,16 @@ Interactable (abstract base class)
 - 새실제9쌍17/18/19/24/35/50/51/52/64,동일phase·면적exact·unsupported0.50~52 main21755의최종8/15/8→8/8/8,35/정상두셀틈/64Face4표본유지.다만목덜미main21959기존8/8/8→14/8/14,headoffset-1/-1/-2.그룹4/독립1/2셀,면적.281907797/.273951620/.276684403,유지−생략비용-.640273571/+.616116971/-.130179167로그룹지지변화원인확인.정상운동ABA를자동오류로세지는않지만디자인시간품질보존미확정이므로미채택·철회.추가시간필터/penalty/전체루프없음.
 - MASK는헤더head좌표정렬,final은main고정좌표.초기crop인덱스ABA집계폐기.뒤게임각도Eye348visibleFeature0이므로눈회귀미검증(출력nonzero는baseline머리도포함).머리밖PNG동일,전체앞가림/내부명암/회색얼굴/시간품질해결주장없음.추가area+group중앙1.4443ms/transpose+merge.7198ms(첫수집제외)/기존packet211.6779ms는9쌍진단관측,PlayerFPS·할당benchmark아님.
 - 캡처입력/Animator/clock복원true,직접cleanEdit/OFF/컴파일완료,Console기존2/새0.이번3기존C#diff0·새helper/meta제거,547/544/550/551/553보존.시험patch기록만보존.50~52전신GIF649623B/WebP206022B,17~19GIF646978B/WebP204966B,각3프레임약50ms전부보존·전체루프아님.좌기존511/513대우철회560(제품OFF대비아님).메인.html최신전신/실패/559계약연결.전체버퍼복제없이증거약2.28MB만docs/artifacts/hair-region560보존,Library403미시도.
+
+## 263. 561 손 표면 유지/뒤 표면 잔존의 최소 후보 — 2026-10-23
+
+- 559계약을기존Opacity primitive기원+스킨seam weld/앞면영역에연결.각영역독립Fit/cut없이원래공통이웃에서1-2min(Afit,Adomain)+B(Ncommon)조건부유지상태,재질coverage는그OR.primitive/domain/range/셀상태를기존Probe331·Prepare333/native선택·Resolve·sparse공급Visible에일치시켰다.생략앞면만제외하고뒤표면실제depthtest잔존,새RT/색donor/bias/얼굴우선없음.
+- 실제동결3쌍48→50→47:48손.3332099/다리.2712673생략으로가시제거.50앞8549/.217875376생략,뒤7122/.9313095유지,첫centre→prepared→최종모두7122/depth14.3010979/UV(.613725007,.947355211).559재투영ray깊이와혼용하지않음.공급상태표현은작동했다.
+- 다음47(209,105)정상손목새구멍1로FIRST_FAILURE즉시중단.원면적.575037062동일하지만합성coverage false,기존7823/depth14.0008383→최종0.최초손실은공급전표면선택OR.이실패셀의domain별면적/비용은미기록이므로상세기여까지단정안함.49/얼굴35·36·41/전체loop미실행.새손변형안붙임.
+- 입력/Animator/clock복원true,직접컴파일/cleanEdit/OFF/기존Console2·새0.5기존파일diff0/새helper·HLSL·meta제거,제품·사용자설정보존.후보build18.97~23.61ms/상태7105~7412셀은진단3관측,OFF의잔존카운터는비용대조아님.정적전신/확대및정확patch만docs/artifacts/retained-surface561보존.메인.html최초실패와목표통과분리.연속animation/fullpass주장없음.
+
+## 264. 562 헤어 연속 음의 영역과core기원 손실 — 2026-10-23
+
+- 손과별도,헤어새코드/Unity재촬영/81재대조없음.저장실제514의17/18/19곡선사용;fresh560면적은최대6.53e-5/8.10e-5/9.10e-5차로실행간bit동일아님.단동일sweep의전체그룹집합은fresh560세포즈와전부exact.
+- 17main21959/head22059는x220.5의세로span y55.642999~59.868101,edge49/48의4core.18sourceanchor48.x가220.493088→220.547012로수직중심선을지나lowerhair재교차없어져boundedcore0.연속49/48음의면적은.246006044→.229068560→.210399834로존재하지만Features가core0단위를버린다.19headoffset-2로head22159는다른edge47/46의2core.따라서같은화면ABA를동일틈ID반전으로단정하지않음.
+- 원곡선3개94지속anchor/arc순서는있어경계ID추적가능.현재Edge/NegativeSpan은기원·연속면적을보내지않고중심셀만전달.열린틈은외부배경과이어질수있으므로음의connectedcomponent ID만으로디자인단위완성아님.좌우arc/진행·입구범위·면적/폭·교차정보와core0feature표현이필요하며분리통합/가림참조종료는미검증.새선택기/계수/이력/일괄틈채움없음.근거docs/artifacts/hair-cause562의RESULT/TRACE/지속arc·도표;기존35채움·제품OFF보존.

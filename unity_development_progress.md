@@ -3221,3 +3221,11 @@ Interactable (abstract base class)
 - 전처리711ms/12931경계조각/7742anchor; 매포즈source2602→fit38 등. steady geometry약1750ms이므로실시간미채택이며해당확장중단. packetCPU13.75~24.31ms와별도head212ms구분. 전체Walk미실행/전체시간품질미판정.
 - source색/face상태보존. 실제가시얼굴4/5/8셀RGB변경0, 회색이번미재현만확인. body33한셀은입력RGB동일/OwnerLines외곽인접판정0→1로.55톤적용; 전체시간시각채택은미검증.
 - 기본OFF/입력·Animator·시계·후크/초기Edit·cleanGameMap1 직접복원.사용자설정해시보존. 44d13c0/511/513/내부색head11+body1/종료arcDP변경없음. local모든3프레임전신WebP/GIF/PNG와원float보존;Library403재시도없음. 증거docs/artifacts/closed-clothing525.메인.html현재525반영. 전체프로젝트/가시/회색해결완료아님.
+
+## 237. CHARACTER-RENDER-01 — 526 정확 후보제한, 실제3쌍 출력 유지·아직 OFF
+
+- 525 모델 불변전처리 약.7~.85초/12931조각은 이미캐시됨. 포즈투영.52~.78ms, 합집합약1.8초가반복비용.33유효변6985/2439만변쌍/최대5068만winding순회.실측pair.66초·winding1.14~1.18초로분리.직선중복약1%라표현삭제안은미적용.
+- ClosedRegion524 한파일에서 AABB1셀검색후보/정확반열린축sweep으로원래연산순서·수식유지. 저장3pose 원525source/fit바이트동일,union1.8초→55~66ms. alpha/곡선/RDP/영역cost/UV/가림/시간상태변경없음.
+- 같은실행실제Walk33/34/35(옷ON양쪽) source/fit·mask/면적·owner·source패킷·전신PNG동일.누락/경계위반0유지.모든float동일은아님:머리RGB최대2.98e-8차이,alpha/owner/실제얼굴변경0,원인미추적.실제geometry67.5/110.3/58.6ms로여전히실시간미채택/OFF,전체Loop추가촬영없음.변쌍후보약24~27만/winding7.6~8.1만,새엔진/필터없음.
+- 저장525faceRAW7/8/11셀유색;재질/faceflags불변.395초기화allrenderer OFF→ON/setup5frame경로는있으나얼굴만gray대체근거없음.해당시작전환버퍼부재로gray원인미확인.코드추가/무차별촬영없음.
+- 입력/Animator/시계/후크/초기cleanEdit·ClothOFF복원직접확인.인덱스는OFF실험내부만true.사용자설정/44d13c0/511/513/내부색/212ms보존.증거docs/artifacts/closed-clothing526,전신모든3frame미디어로컬보존·메인.html반영;Library403재시도없음.후보만증식하지않고추가자동최적화중단.

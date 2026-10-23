@@ -3399,3 +3399,11 @@ Interactable (abstract base class)
 - 실제31~42 12쌍 후 전체0~80 Walk81쌍. 양쪽547 Clothes+550 동일; 우측만 몸·손 추가. 얼굴/눈/헤어 소유권·얼굴색 변화0, 비Body0 소유권 변화0, unsupported0. 33 손 기부 순간셀 제외. distal손끝114중112동일셀,33엄지/49새끼2표본은 면적0.4719/0.4635로 생략. 전체 출몰/손끝 품질 완료 아님.
 - 코드 내부 단계(첫포즈 제외80쌍) 경계 중앙값52.2466ms/p95 91.2553ms, 별도 공급0.11975/21.2163ms. 기준Clothes경계21.09075/52.9294ms. readback·파일비용 제외 단계이며 기존42.48ms와 범위가 다르다. GC.Alloc ProfilerRecorder1MiB 양성 대조 valid=true/samples0으로 할당량 미측정.
 - 전신81프레임/1350ms WebP1,208,822B/GIF2,723,716B. 자동 input/Animator/clock복원true, 직접Edit/clean/OFF 확인. Library403 재시도 없음. 자료: docs/artifacts/body-scope551/RESULT551.md 및 RECEIPT551.json. 원시작업 Current472/BodyScope551. 헤어552는 별도 비교.
+
+## 257. 552 헤어 한 셀 틈의 기존 영역 경로 재사용 — 2026-10-23
+
+- 550기준81포즈에서 head-local 좌표를 맞춘 source 음의셀 출몰 후보7개 확보(오류수 아님). 35번(226,54)은source부터얼굴4이고34/36은hair14. 후단가림이새로만든틈아님.
+- 기존514 같은포즈의source owner/primitive대응을확인. 과거면적34/35/36=0.982091/0.980956/0.979902, mask hair=true. 과거조명과현재조명이다르므로RGB대조에쓰지않음.
+- 새실제34/35/36 세쌍: 547 Clothes+550 대기존511폐영역+513source-ray. 35틈이hair14로채워짐, 눈owner/색차이0, finalhair outsideMask0, unsupported0. 새제품헤어코드없음. packet합산217~228ms는Select/BodyRay/AddQuad/Upload전체이고업로드단독원인이라고단정하지않음.
+- 정상틈/끝전체,514 .6375선택반전, 내부색/전시간품질은미해결;기본OFF/미채택. 3프레임/50ms의짧은원래시간출력을전체루프라고표시하지않음. input/Animator/clock복원및직접Edit/clean/OFF확인. Console기존진단2건동일/새0.
+- 근거 docs/artifacts/hair-gap552/RESULT552.md/RECEIPT552.json. 메인.html551전신및552짧은전신·머리확대비교 연결. Library403재시도없음. 몸551수정0d96a66과독립검사이며전체완료아님.

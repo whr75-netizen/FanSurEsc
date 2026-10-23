@@ -3411,3 +3411,12 @@ Interactable (abstract base class)
 ### 551 옷 회귀 보충 — 저장81쌍
 
 - 동일옷owner 색차이10표본은UV/depth/sourceID동일. 8은.55 또는역수,33의크림2셀은PREPARED동일/최종deepCream대체만다름. 최초단계OwnerLines333. 입력영역변경에따른outer/internal/thin/support재분류이며개별조건과품질정당성미확정. 옷색전체불변/품질통과로확대하지않음. 다음은33선처리입력단일조회이며새보정/전체촬영없음.
+
+## 258. 553 선색의 영역 계약 수정 / 554 손끝 미채택 — 2026-10-23
+
+- 실제33 입력에서 같은CREAM/UV/depth/sourceID와옆alpha0에도외부flood연결1→0이outer선색을없앤경로확정. 전체10색표본은5global연결/5실제이웃coverage변화로분리.CPU수식과GPUaudit/RGB일치.thin원인설정은정정했다.
+- 실험553만관리옷/551non-head몸의outer를ext>0대신!covered로판정.마스크/면적/가중치/색상표/thin/깊이불변.4기존파일변경,명시적메뉴/Off복원.기존752flood는보존하여최적화와분리했다.
+- 실제10쌍(1/2/3/32/33/34/40/49/53/56)및추가53UV/56옷조회2회.선택mask/PREPARED/owner/meta exact,alpha0변화,최종색변경role8/9/11만.33기대크림선색복구,56옷audit0→1×.55확인.최초53전체UV차이는좌표미보존으로원인미확정;추가53exact/56동일설정반복69headUV최대1.49e-8변동은별도보존.전체버퍼비트동일/새81루프통과아님.
+- 정상손끝33/49의source→fit셀면적.485724→.471973/.506141→.463276;49원극점이Fit539에서평탄화되고기존면적+.14경계선택도제외.원형유지extrema/내부지원인증554의13저장반례에서33만복구/49누락,44도2셀변경.미채택/제품미적용,새수치조정없음.손끝2표본은미해결.
+- 545 Bytes Recorder양성/선형대조1MiB1048608B/2MiB2097184B/empty0.실제33동결3warmup후각5회Prepare호출창전체스레드할당중앙값Clothes4882678B/Body55111908437B;readback/파일제외.553선최적화/Player프레임할당아님.헤어217~228ms는Select/BodyRay512/AddQuad/Upload합산,기존bin도존재하므로업로드단독병목가정패치없음.음의component를명시단위로선택하는정책은기존511에없다.
+- 전신32~34모든3프레임/50msWebP64762B·GIF87400B/PNG26551B.좌551선대우553선,전체루프아님.입력/Animator/시계자동복원true,최종직접cleanEdit/OFF/컴파일확인.Console기존진단2건/새0.중간discovery끊김은공식projectpath복구,Editor강제종료없음.Library403재시도없음.547/550/551및사용자설정보존.근거docs/artifacts/owner-lines553/RESULT553.md·RECEIPT553.json,작업Current472/OwnerLines553.

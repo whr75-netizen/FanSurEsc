@@ -157,8 +157,18 @@ Walk24 (216,48): hair main depth13.70192792를 다른 ray의 Body13.70149994와 
 
 Body0의 주 연결 성분에는 머리와 몸이 이어져 있다. 명시적 Humanoid Head 하위 뼈 영향이 없는8,762삼각형만 공통 영역 처리에 넣고 머리/혼합 목1,260개는 원본 렌더를 유지한다. ClothRegion524.Scope551의 원본 primitive 범위표가 OpacityRegion525 경계 입력, Probe331, Prepare333 donor/Resolve, ClothSurface525 표면 후보에 공통 적용된다. 모델/화면좌표/프레임별 예외나 얼굴 깊이 바이어스가 아니다.
 
-동일547 Clothes+550 기준 대 몸·손 포함81쌍에서 얼굴/눈/헤어 소유권 및 얼굴색 차이0, 채움 누락0. distal 손끝 표본114중2개가 생략되어 모든 세부 보존은 미확정. 경계 계산 중앙값52.25ms/p95 91.26ms(별도 공급0.12/21.22ms)로 기본 실시간 채택 근거는 부족하다. 할당량은 GC.Alloc 양성 대조 실패로 미측정이다. 명시적 Boundary540/Experimental551 Body-hands 모드로 시험 가능하며 Off로 복원한다. [증거·한계](../artifacts/body-scope551/RESULT551.md). 헤어 양/음 영역 및 내부 명암은 별도다.
+동일547 Clothes+550 기준 대 몸·손 포함81쌍에서 얼굴/눈/헤어 소유권 및 얼굴색 차이0, 채움 누락0. distal 손끝 표본114중2개가 생략되어 모든 세부 보존은 미확정. 경계 계산 중앙값52.25ms/p95 91.26ms(별도 공급0.12/21.22ms)로 기본 실시간 채택 근거는 부족하다. 당시 실패한GC.Alloc 대신553에서545의Bytes Recorder로 호출창 할당을 확인했다(아래). 명시적 Boundary540/Experimental551 Body-hands 모드로 시험 가능하며 Off로 복원한다. [증거·한계](../artifacts/body-scope551/RESULT551.md). 헤어 양/음 영역 및 내부 명암은 별도다.
 
 ### 552 헤어 음의 영역: 기존 경로 재사용 검사
 
 550 이후35번 head-cell(226,54)의 얼굴 한 셀은 source 단계에서 발생한다. 기존514의 같은 포즈 곡선 면적은 약0.981셀로 머리 선택이 유지된다. 현재 프로젝트 실제34/35/36의550기준 대 기존511/513 경로3쌍에서도 틈 채움, 눈 소유권/색 차이0, 머리 마스크 밖 쓰기0을 확인했다. 새 헤어 제품 코드는 추가하지 않았다. 기존 공간 선택의 음의 영역 지속ID/폭 정책,514 선택 반전과217~228ms packet 합산 구간(Select/BodyRay512/AddQuad/Upload)은 미해결이므로 OFF/미채택이다. [실행 범위와 근거](../artifacts/hair-gap552/RESULT552.md).
+
+### 553 외곽선의 빈 영역 계약 / 554 손끝 미채택
+
+관리 대상의 선택 형상이 확정된 뒤,옆 빈칸의 화면 외부 연결 여부가 같은 표면의 선색을 바꾸면 국소 형상 계약과 어긋난다. 실험553은 기존 OwnerLines333의 outer 입력만 `ext>0`→`!covered`로 대체한다. closed domain의 빈 이웃은 enclosed hole이어도 경계다. 같은551 non-head primitive 범위를 쓰며 얼굴/눈/헤어는 기존 경로를 유지한다. thin·팔레트·alpha/Selected/깊이는 바꾸지 않는다.752 flood는 남겨 성능 변경과 분리했다. 기본OFF,명시적 Experimental553 메뉴.
+
+옷색10표본 중5는 global exterior 연결 변화,5는 실제 이웃 coverage 변화다. 실제10쌍+옷-only56/UV self-repeat53의2포즈 조회에서553 기대 선색을 확인했다. mask/owner/meta/alpha 보존,관리 role 외 최종색 변화0.53 최초 UV strict 차이는 좌표 미보존으로 원인 확정하지 않았고,추가53 exact/56 self-repeat에서1.49e-8 헤어 UV 변동을 별도로 기록했다. 새81루프/전체 비트동일 판정은 없다.
+
+손끝33/49의 source→Fit 면적은 .485724→.471973/.506141→.463276이다. Fit539가 정상끝 일부를 작은 outward return으로 생략하고 현재 셀 선택도 제외한다. 유지된 extrema 인증554는13오프라인 사례에서49를 복구하지 못해 제품 미적용. 손끝 보존과 전체 시간품질 미완료. 음의 영역의 지속ID/폭/덩어리 단위 선택 역시 현재헤어 cut에 없다.
+
+545 Bytes Recorder 양성대조를 통과한553 한 포즈 Prepare 호출창 전체 스레드 관리할당 중앙값은 Clothes4,882,678B/Body55111,908,437B(각5회,3워밍업)다. readback/파일은 창 밖이며553 선 최적화나 Player프레임 수치가 아니다. [원인·수정·검증·한계](../artifacts/owner-lines553/RESULT553.md).

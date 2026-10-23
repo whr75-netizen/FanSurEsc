@@ -3229,3 +3229,11 @@ Interactable (abstract base class)
 - 같은실행실제Walk33/34/35(옷ON양쪽) source/fit·mask/면적·owner·source패킷·전신PNG동일.누락/경계위반0유지.모든float동일은아님:머리RGB최대2.98e-8차이,alpha/owner/실제얼굴변경0,원인미추적.실제geometry67.5/110.3/58.6ms로여전히실시간미채택/OFF,전체Loop추가촬영없음.변쌍후보약24~27만/winding7.6~8.1만,새엔진/필터없음.
 - 저장525faceRAW7/8/11셀유색;재질/faceflags불변.395초기화allrenderer OFF→ON/setup5frame경로는있으나얼굴만gray대체근거없음.해당시작전환버퍼부재로gray원인미확인.코드추가/무차별촬영없음.
 - 입력/Animator/시계/후크/초기cleanEdit·ClothOFF복원직접확인.인덱스는OFF실험내부만true.사용자설정/44d13c0/511/513/내부색/212ms보존.증거docs/artifacts/closed-clothing526,전신모든3frame미디어로컬보존·메인.html반영;Library403재시도없음.후보만증식하지않고추가자동최적화중단.
+
+## 238. CHARACTER-RENDER-01 — 527 불투명도 곡선 입력, 실제 Walk81쌍 / 시간 품질 실패·기본 OFF
+
+- OpacityRegion525/ClothRegion524 두 파일. UV alpha 연속 경로를 모델별 전처리한 뒤 매 포즈 투영 RDP(.09375셀)→벡터 합집합→닫힌 RDP(.09375)→면적/경계비용 선택→기존 공통mask Draw/Gate와 표면공급. 원 중심mask 복사/특정셀/프레임특례/시간필터 없음. raw opacity6714→약145, 입력12931→약6362. topology guard82회 명시(primitive12 매포즈/1599 frame61); 미기록 누락 fallback 없음.
+- 실제 인접3쌍 후 FullLoopB81/81 종료·원본/후보PNG각81, 최종 채움/소유권/경계 밖 쓰기/표면Unsupported0. 초기 FullLoop는 합성 전 감사 오판2건으로 중지 보존; 최종 pr2512/2634·UV·depth·색이 원본과 일치함을 확인하고 검사 위치만 정정. 독립 최종 누락 검사 유지.
+- 경계 강제 통과와 시간품질 실패 분리: frame43 (200,98/99) C=0→1→0의1×2논리셀 출몰, frame44 (231,78) 새1셀. 기존 선택비용을 계산해 전후/해당 선택이 더 낮음을 입증; 최종 누출 아님. 동일표면 비옷RGB33중30은.55tone, 나머지3 palette/내부선 원인 미확인. 얼굴RGB변화0/회색이번루프미재현, 로딩 원인 해결 아님.
+- 경계 median7.884/p9513.434/max36.743ms, 모델 전처리약.7초와 구분. 전체 RenderFrame wall median 원본319.605/후보328.118ms: 실시간 채택 불가, PlayerFPS 아님. 출력/시간회귀로 미채택·기본OFF. loop mask/coverage0이나29RGB소차는 pose/UV/cloud입력 완전동등 미검증. head11+body1/머리212ms/종료arcDP 별도 유지.
+- 모든81프레임 전신 losslessWebP2,289,420B/GIF2,892,811B,1350ms(endpoint17ms hold;GIF20/10/20ms). 로컬만 전달, Library403 재시도 없음. 입력/Animator/시계/hook 및 clean Edit·cloth/curveOFF 직접 복원. 사용자 두 settings 해시 보존. 메인.html527 및 docs/artifacts/closed-clothing527 연결. 전체 프로젝트 완료가 아니며 새 최적화/촬영 시작 없음.

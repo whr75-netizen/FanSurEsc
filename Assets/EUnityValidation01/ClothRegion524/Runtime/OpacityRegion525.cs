@@ -18,7 +18,7 @@ public sealed class OpacityRegion525
     }
     struct Line { public D a,b; public Line(D a,D b){this.a=a;this.b=b;} }
     public struct Anchor {public int a,b,c;public Vector3 weights;public Vector3 Local(Vector3[] p)=>p[a]*weights.x+p[b]*weights.y+p[c]*weights.z;}
-    public struct Boundary {public int primitive,a,b;}
+    public struct Boundary {public int primitive,a,b;public bool opacity;}
     public readonly List<Anchor> Anchors=new();
     public readonly List<Boundary> Segments=new();
     public readonly List<int>[] TriangleSegments;
@@ -67,7 +67,7 @@ public sealed class OpacityRegion525
             AddContour(p,q,r,a,b,c,cut);AddContour(p,r,s,a,c,d,cut);
         }
         TexelContourSegments=contour.Count;
-        for(int pr=0;pr<Indices.Length/3;pr++)BuildTriangle(pr);
+        for(int pr=0;pr<Indices.Length/3;pr++)BuildTriangle(pr);BuildPlans527();
         PreprocessMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;
     }
     D Tex(Vector2 v)=>new D(v.x*ST.x+ST.z,v.y*ST.y+ST.w);
@@ -112,10 +112,10 @@ public sealed class OpacityRegion525
         }
         var inner=(pr,(long)Math.Round(p.x*1e10),(long)Math.Round(p.y*1e10));if(innerAnchors.TryGetValue(inner,out int prior))return prior;int index=Anchors.Count;Anchors.Add(new Anchor{a=ids[0],b=ids[1],c=ids[2],weights=new Vector3((float)w[0],(float)w[1],(float)w[2])});innerAnchors.Add(inner,index);return index;
     }
-    void Add(int pr,D a,D b,D[] tri)
+    void Add(int pr,D a,D b,D[] tri,bool opacity=false)
     {
         if(Math.Abs(a.x-b.x)+Math.Abs(a.y-b.y)<1e-13)return;
-        int index=Segments.Count;Segments.Add(new Boundary{primitive=pr,a=AnchorAt(pr,a,tri),b=AnchorAt(pr,b,tri)});TriangleSegments[pr].Add(index);
+        int index=Segments.Count;Segments.Add(new Boundary{primitive=pr,a=AnchorAt(pr,a,tri),b=AnchorAt(pr,b,tri),opacity=opacity});TriangleSegments[pr].Add(index);
     }
     void BuildTriangle(int pr)
     {
@@ -129,7 +129,7 @@ public sealed class OpacityRegion525
             var line=contour[i];double lo=0,hi=1;bool valid=true;
             for(int e=0;e<3;e++){D a=tri[e],b=tri[(e+1)%3];double da=Cross(a,b,line.a)*Math.Sign(det),db=Cross(a,b,line.b)*Math.Sign(det);if(da<0&&db<0){valid=false;break;}if((da<0)!=(db<0)){double t=da/(da-db);if(da<0)lo=Math.Max(lo,t);else hi=Math.Min(hi,t);}}
             if(!valid||hi-lo<1e-11)continue;D pa=line.a+(line.b-line.a)*lo,pb=line.a+(line.b-line.a)*hi;
-            Add(pr,pa,pb,tri);
+            Add(pr,pa,pb,tri,true);
             foreach(D p in new[]{pa,pb})for(int e=0;e<3;e++){D a=tri[e],d=tri[(e+1)%3]-a;double den=d.x*d.x+d.y*d.y,t=((p.x-a.x)*d.x+(p.y-a.y)*d.y)/den;if(t>=-1e-9&&t<=1+1e-9&&Math.Abs(Cross(d,p-a))<1e-10*Math.Sqrt(den))split[e].Add(Math.Max(0,Math.Min(1,t)));}
         }
         for(int e=0;e<3;e++)
@@ -138,13 +138,115 @@ public sealed class OpacityRegion525
             for(int j=0;j+1<list.Count;j++){double lo=list[j],hi=list[j+1];if(hi-lo<1e-10||Field(a+d*((lo+hi)*.5))*Factor<Cutoff)continue;D p=a+d*lo,q=a+d*hi;if(det<0)(p,q)=(q,p);Add(pr,p,q,tri);}
         }
     }
-    public List<(Vector2,Vector2)> Project(Vector2[] original)
+    public List<(Vector2,Vector2)> Project(Vector2[] original,bool fitOpacity=false)
     {
         var p=new Vector2[Anchors.Count];for(int i=0;i<p.Length;i++){var a=Anchors[i];p[i]=original[a.a]*a.weights.x+original[a.b]*a.weights.y+original[a.c]*a.weights.z;}
         var orientation=new int[Indices.Length/3];
         for(int pr=0;pr<orientation.Length;pr++){int at=pr*3;var a=original[Indices[at]];var b=original[Indices[at+1]];var c=original[Indices[at+2]];double det=(double)(b.x-a.x)*(c.y-a.y)-(double)(b.y-a.y)*(c.x-a.x),uvDet=Cross(Tex(uv[Indices[at]]),Tex(uv[Indices[at+1]]),Tex(uv[Indices[at+2]]));orientation[pr]=Math.Abs(det)<1e-10?0:Math.Sign(det*uvDet);}
+        InputSegments527=OpacitySegments527=FitOpacitySegments527=TopologyFallbacks527=0;UsedCurveFit527=false;CurveBuildMs527=0;TopologyFallbackDetails527.Clear();
+        if(fitOpacity)return CurvedProjection527(p,orientation);
         var result=new List<(Vector2,Vector2)>(Segments.Count);
-        foreach(var s in Segments){int sign=orientation[s.primitive];if(sign==0)continue;result.Add(sign>0?(p[s.a],p[s.b]):(p[s.b],p[s.a]));}
+        foreach(var s in Segments){int sign=orientation[s.primitive];if(sign==0)continue;result.Add(sign>0?(p[s.a],p[s.b]):(p[s.b],p[s.a]));}InputSegments527=result.Count;
         return result;
     }
+    sealed class Chain527
+    {
+        public int[] nodes;public bool[] keep;public readonly List<int> fitted=new();
+        public Chain527(int[] nodes){this.nodes=nodes;keep=new bool[nodes.Length];}
+    }
+    sealed class Plan527
+    {
+        public bool valid;public Boundary[] fixedEdges;public Chain527[] chains;public int[][] loops;
+        public readonly Dictionary<int,int> membership=new();public readonly List<(int,int)> candidate=new();
+    }
+    Plan527[] plans527;
+    public int InputSegments527,OpacitySegments527,FitOpacitySegments527,TopologyFallbacks527;
+    public readonly List<string> TopologyFallbackDetails527=new();
+    public bool UsedCurveFit527;
+    public double CurveBuildMs527;
+    static bool Trace527(List<(int,int)> edges,bool closedOnly,out List<int[]> paths)
+    {
+        paths=new List<int[]>();var next=new Dictionary<int,int>();var previous=new Dictionary<int,int>();
+        foreach(var e in edges){if(e.Item1==e.Item2)continue;if(next.ContainsKey(e.Item1)||previous.ContainsKey(e.Item2))return false;next.Add(e.Item1,e.Item2);previous.Add(e.Item2,e.Item1);}
+        var starts=new List<int>();foreach(int a in next.Keys)if(!previous.ContainsKey(a))starts.Add(a);starts.Sort();if(closedOnly&&starts.Count!=0)return false;
+        var remaining=new HashSet<int>(next.Keys);
+        while(remaining.Count!=0)
+        {
+            int start;if(starts.Count!=0){start=starts[0];starts.RemoveAt(0);}else{start=int.MaxValue;foreach(int a in remaining)if(a<start)start=a;}
+            var path=new List<int>{start};int at=start;
+            while(next.TryGetValue(at,out int b)&&remaining.Remove(at)){path.Add(b);at=b;if(at==start)break;}
+            if(path.Count<2||closedOnly&&at!=start)return false;paths.Add(path.ToArray());
+        }
+        return true;
+    }
+    void BuildPlans527()
+    {
+        plans527=new Plan527[TriangleSegments.Length];
+        for(int pr=0;pr<plans527.Length;pr++)
+        {
+            var cut=new List<(int,int)>();var all=new List<(int,int)>();var fixedEdges=new List<Boundary>();
+            foreach(int i in TriangleSegments[pr]){var s=Segments[i];all.Add((s.a,s.b));if(s.opacity)cut.Add((s.a,s.b));else fixedEdges.Add(s);}
+            if(cut.Count==0)continue;var plan=plans527[pr]=new Plan527{fixedEdges=fixedEdges.ToArray()};
+            if(!Trace527(cut,false,out var paths)||!Trace527(all,true,out var loops))continue;
+            plan.chains=paths.ConvertAll(nodes=>new Chain527(nodes)).ToArray();plan.loops=loops.ToArray();
+            for(int k=0;k<loops.Count;k++)foreach(int a in loops[k])plan.membership[a]=k;plan.valid=true;
+        }
+    }
+    static List<int> FitChain527(Chain527 chain,Vector2[] p,float error)
+    {
+        Array.Clear(chain.keep,0,chain.keep.Length);chain.fitted.Clear();int n=chain.nodes.Length-1;chain.keep[0]=chain.keep[n]=true;
+        void Run(int a,int b)
+        {
+            if(b<=a+1)return;var first=p[chain.nodes[a]];var d=p[chain.nodes[b]]-first;float den=d.sqrMagnitude,best=error*error;int at=-1;
+            for(int j=a+1;j<b;j++){var v=p[chain.nodes[j]]-first;float t=den>0?Mathf.Clamp01(Vector2.Dot(v,d)/den):0,e=(v-t*d).sqrMagnitude;if(e>best){best=e;at=j;}}
+            if(at<0)return;chain.keep[at]=true;Run(a,at);Run(at,b);
+        }
+        bool closed=chain.nodes[0]==chain.nodes[n];
+        if(closed){int split=0;float far=0;for(int i=1;i<n;i++){float d=(p[chain.nodes[i]]-p[chain.nodes[0]]).sqrMagnitude;if(d>far){far=d;split=i;}}chain.keep[split]=true;Run(0,split);Run(split,n);}else Run(0,n);
+        for(int i=0;i<=n;i++)if(chain.keep[i])chain.fitted.Add(chain.nodes[i]);
+        if(closed&&chain.fitted.Count<4){chain.fitted.Clear();chain.fitted.AddRange(chain.nodes);}return chain.fitted;
+    }
+    static double Area527(int[] ring,Vector2[] p)
+    {double a=0;for(int i=0;i+1<ring.Length;i++){var u=p[ring[i]];var v=p[ring[i+1]];a+=(double)u.x*v.y-(double)u.y*v.x;}return a*.5;}
+    static bool SameTopology527(Plan527 plan,Vector2[] p,out string reason)
+    {
+        reason="";if(!Trace527(plan.candidate,true,out var loops)||loops.Count!=plan.loops.Length){reason="closed incidence or component count";return false;}
+        var matched=new bool[plan.loops.Length];
+        foreach(var loop in loops)
+        {
+            if(loop.Length<4||!plan.membership.TryGetValue(loop[0],out int source)||matched[source]){reason="loop incidence";return false;}
+            foreach(int a in loop)if(!plan.membership.TryGetValue(a,out int group)||group!=source){reason="component merge";return false;}
+            double before=Area527(plan.loops[source],p),after=Area527(loop,p);if(before*after<=0){reason="loop area sign";return false;}matched[source]=true;
+        }
+        var edges=plan.candidate;
+        for(int i=0;i<edges.Count;i++)for(int j=i+1;j<edges.Count;j++)
+        {
+            var a=edges[i];var b=edges[j];if(a.Item1==b.Item1||a.Item1==b.Item2||a.Item2==b.Item1||a.Item2==b.Item2)continue;
+            Vector2 av=p[a.Item1],bv=p[a.Item2],cv=p[b.Item1],dv=p[b.Item2];double rx=(double)bv.x-av.x,ry=(double)bv.y-av.y,sx=(double)dv.x-cv.x,sy=(double)dv.y-cv.y,qx=(double)cv.x-av.x,qy=(double)cv.y-av.y,den=rx*sy-ry*sx;
+            if(Math.Abs(den)>1e-14){double t=(qx*sy-qy*sx)/den,u=(qx*ry-qy*rx)/den;if(t>0&&t<1&&u>0&&u<1){reason="new crossing";return false;}}
+            else if(Math.Abs(qx*ry-qy*rx)<1e-12){bool x=Math.Abs(rx)>=Math.Abs(ry);double a0=x?av.x:av.y,a1=x?bv.x:bv.y,b0=x?cv.x:cv.y,b1=x?dv.x:dv.y;if(Math.Min(Math.Max(a0,a1),Math.Max(b0,b1))-Math.Max(Math.Min(a0,a1),Math.Min(b0,b1))>1e-8){reason="collinear overlap";return false;}}
+        }
+        return true;
+    }
+    List<(Vector2,Vector2)> CurvedProjection527(Vector2[] p,int[] orientation)
+    {
+        long start=Stopwatch.GetTimestamp();var result=new List<(Vector2,Vector2)>(Segments.Count);
+        void Emit(int a,int b,int sign){if(sign>0)result.Add((p[a],p[b]));else result.Add((p[b],p[a]));}
+        for(int pr=0;pr<TriangleSegments.Length;pr++)
+        {
+            int sign=orientation[pr];if(sign==0)continue;var plan=plans527[pr];bool fitted=false;
+            if(plan!=null&&plan.valid)
+            {
+                plan.candidate.Clear();foreach(var s in plan.fixedEdges)plan.candidate.Add((s.a,s.b));int raw=0,after=0;
+                foreach(var chain in plan.chains){var chosen=FitChain527(chain,p,HeadRegion502.CurveError*.5f);raw+=chain.nodes.Length-1;after+=chosen.Count-1;for(int i=0;i+1<chosen.Count;i++)plan.candidate.Add((chosen[i],chosen[i+1]));}
+                OpacitySegments527+=raw;
+                string reason="unchanged";if(after<raw&&SameTopology527(plan,p,out reason)){FitOpacitySegments527+=after;fitted=UsedCurveFit527=true;foreach(var e in plan.candidate)Emit(e.Item1,e.Item2,sign);}
+                else{FitOpacitySegments527+=raw;if(after<raw){TopologyFallbacks527++;TopologyFallbackDetails527.Add(pr+":"+reason);}}
+            }
+            else if(plan!=null){TopologyFallbacks527++;TopologyFallbackDetails527.Add(pr+":source incidence");}
+            if(!fitted)foreach(int i in TriangleSegments[pr]){var s=Segments[i];Emit(s.a,s.b,sign);}
+        }
+        InputSegments527=result.Count;CurveBuildMs527=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;return result;
+    }
+
 }

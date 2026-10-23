@@ -1,0 +1,83 @@
+[
+  {
+    "frame": 42,
+    "cells": [
+      {
+        "xy": [
+          200,
+          98
+        ],
+        "area": 0.57319575548172,
+        "selected": false,
+        "alternative": true
+      },
+      {
+        "xy": [
+          200,
+          99
+        ],
+        "area": 0.4869682490825653,
+        "selected": false,
+        "alternative": true
+      }
+    ],
+    "alternativeUnaryDelta": -0.12032800912857056,
+    "alternativeBoundaryDelta": 0.16402020320000005,
+    "alternativeTotalDelta": 0.04369219407142949,
+    "formula": "E=sum(z?1-A:A)+.14*8-neighbour weighted boundary; flip the whole2-cell set, no temporal state or product patch"
+  },
+  {
+    "frame": 43,
+    "cells": [
+      {
+        "xy": [
+          200,
+          98
+        ],
+        "area": 0.637881338596344,
+        "selected": true,
+        "alternative": false
+      },
+      {
+        "xy": [
+          200,
+          99
+        ],
+        "area": 0.5459509491920471,
+        "selected": true,
+        "alternative": false
+      }
+    ],
+    "alternativeUnaryDelta": 0.3676645755767822,
+    "alternativeBoundaryDelta": -0.16402020320000005,
+    "alternativeTotalDelta": 0.20364437237678218,
+    "formula": "E=sum(z?1-A:A)+.14*8-neighbour weighted boundary; flip the whole2-cell set, no temporal state or product patch"
+  },
+  {
+    "frame": 44,
+    "cells": [
+      {
+        "xy": [
+          200,
+          98
+        ],
+        "area": 0.5734907388687134,
+        "selected": false,
+        "alternative": true
+      },
+      {
+        "xy": [
+          200,
+          99
+        ],
+        "area": 0.46300941705703735,
+        "selected": false,
+        "alternative": true
+      }
+    ],
+    "alternativeUnaryDelta": -0.07300031185150146,
+    "alternativeBoundaryDelta": 0.16402020320000005,
+    "alternativeTotalDelta": 0.09101989134849858,
+    "formula": "E=sum(z?1-A:A)+.14*8-neighbour weighted boundary; flip the whole2-cell set, no temporal state or product patch"
+  }
+]

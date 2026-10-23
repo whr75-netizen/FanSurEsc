@@ -1,0 +1,159 @@
+{
+  "status": "FULL81_CONTRACTS_PASS_TEMPORAL_QUALITY_FAIL_UNADOPTED",
+  "actualPairs": 81,
+  "basePNGCount": 81,
+  "altPNGCount": 81,
+  "restoration": {
+    "status": "CAPTURED",
+    "error": "",
+    "frames": 81,
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true,
+    "postUnchanged": true
+  },
+  "comparison": "same execution current active clothOFF versus527 candidateON;same actualWalk poses",
+  "independentFinalContractFailures": 0,
+  "preJoinObservations": 2,
+  "preJoinValidFinalOwners": 2,
+  "preJoinSameCurrentSurface": 2,
+  "preJoinOwnerRoleCounts": {
+    "14": 2
+  },
+  "faceChangedAbove1e-6": 0,
+  "newGraySkinCells": 0,
+  "sameSurfaceNonClothingChanges": 33,
+  "curveGuardFallbackCount": 82.0,
+  "orthoValues": [
+    1.502602
+  ],
+  "nativePixelsPerCellValues": [
+    2
+  ],
+  "offsetValues": [
+    [
+      0,
+      0,
+      2
+    ]
+  ],
+  "metrics": {
+    "geometryMs": {
+      "min": 7.2892,
+      "p50": 7.8843,
+      "p95": 13.4339,
+      "max": 36.7427,
+      "maxFrame": 51
+    },
+    "opacityCurveBuildMs": {
+      "min": 1.1861,
+      "p50": 1.3036,
+      "p95": 2.0198,
+      "max": 9.5437,
+      "maxFrame": 51
+    },
+    "areaMs": {
+      "min": 0.256,
+      "p50": 0.294,
+      "p95": 0.5222,
+      "max": 1.0996,
+      "maxFrame": 12
+    },
+    "selectMs": {
+      "min": 7.8167,
+      "p50": 9.304,
+      "p95": 22.4838,
+      "max": 57.2556,
+      "maxFrame": 51
+    },
+    "uploadMs": {
+      "min": 0.3143,
+      "p50": 0.3961,
+      "p95": 0.5999,
+      "max": 0.9214,
+      "maxFrame": 3
+    },
+    "packetBuildMs": {
+      "min": 0.0112,
+      "p50": 0.0139,
+      "p95": 16.2928,
+      "max": 48.5926,
+      "maxFrame": 73
+    },
+    "packetRequested": {
+      "min": 0.0,
+      "p50": 0.0,
+      "p95": 1.0,
+      "max": 1.0,
+      "maxFrame": 13
+    },
+    "baseRenderMs": {
+      "min": 243.460699999559,
+      "p50": 319.604700000127,
+      "p95": 719.224099999337,
+      "max": 837.530699998752,
+      "maxFrame": 5
+    },
+    "altRenderMs": {
+      "min": 251.674200000707,
+      "p50": 328.118299999915,
+      "p95": 718.4914999998,
+      "max": 970.284200000606,
+      "maxFrame": 3
+    },
+    "curveInputSegments": {
+      "min": 6362.0,
+      "p50": 6363.0,
+      "p95": 6364.0,
+      "max": 6467.0,
+      "maxFrame": 61
+    },
+    "sourcePoints": {
+      "min": 119.0,
+      "p50": 128.0,
+      "p95": 134.0,
+      "max": 138.0,
+      "maxFrame": 45
+    },
+    "controls": {
+      "min": 55.0,
+      "p50": 61.0,
+      "p95": 65.0,
+      "max": 67.0,
+      "maxFrame": 16
+    },
+    "topologyFallbacks": {
+      "min": 1.0,
+      "p50": 1.0,
+      "p95": 1.0,
+      "max": 2.0,
+      "maxFrame": 61
+    }
+  },
+  "loop": {
+    "maskChangedCells": 0,
+    "actorCoverageChanged": 0,
+    "sameApproxSurfaceColourChangesAbove1e-5": 29,
+    "sameApproxSurfaceColourMax": 0.0007031261920928955,
+    "phase0": 2.5033950805664062e-06,
+    "phase80": 6.198883056640625e-06,
+    "limits": "Endpoint RGB is a measured output; native world/lighting equivalence is not established by equal phase alone."
+  },
+  "tipABACandidates": {
+    "BASE": 8,
+    "ALT": 7
+  },
+  "adopted": false,
+  "defaultOFF": true,
+  "limits": [
+    "Geometry stage timings are not total renderer cost or PlayerFPS.",
+    "Coverage constraints are not full pixel-art temporal quality acceptance.",
+    "Head internal colour/native-world/212ms and reported gray startup defect remain separate."
+  ],
+  "finalClassification": "Frame43 two-cell mask pulse and frame44 new one-cell pulse; non-ramp body colour3 unresolved; total renderer not realtime.",
+  "finishedAnalysis": [
+    "QUALITY_CLASSIFICATION527.json",
+    "REGION_SCREEN_PROOF527.json",
+    "SELECTION_COST527.json"
+  ]
+}

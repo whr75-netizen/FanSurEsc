@@ -1,0 +1,903 @@
+{
+  "status": "SAME_INPUT_TRANSFORM_REPLAY_COMPLETE",
+  "rows": [
+    {
+      "frame": 49,
+      "sharedInputSourcePoints": 125,
+      "localAcceptedAreaChord": {
+        "ring": 0,
+        "edge": 32,
+        "a": [
+          201.1710968017578,
+          99.51211547851562
+        ],
+        "b": [
+          201.5154571533203,
+          97.10639953613281
+        ],
+        "crossing97_5": 201.45911617318853,
+        "sourceArcIndices": [
+          117,
+          118,
+          119
+        ],
+        "sourceArc": [
+          [
+            201.1710968017578,
+            99.51211547851562
+          ],
+          [
+            201.08096313476562,
+            98.40191650390625
+          ],
+          [
+            201.5154571533203,
+            97.10639953613281
+          ]
+        ],
+        "skippedVertices": [
+          {
+            "sourceIndex": 118,
+            "xy": [
+              201.08096313476562,
+              98.40191650390625
+            ],
+            "retainedByDistance": true
+          }
+        ],
+        "metrics": {
+          "arcLength": 2.4802885079111157,
+          "chordLength": 2.430237282070019,
+          "maxPerpendicularError": 0.24653744646229972,
+          "orderedProjection": true,
+          "implementedNormalizedArea": 0.29957223940435207,
+          "independentLobeArea": 0.29957225441467017,
+          "absoluteAreaError": 1.5010318099584197e-08,
+          "lobeAreas": [
+            0.29957225441467017
+          ],
+          "h": [
+            0.0,
+            -0.24653744646229972,
+            0.0
+          ],
+          "s": [
+            0.0,
+            1.0862251453894889,
+            2.4302372211854832
+          ]
+        },
+        "areaBudget": 1,
+        "distanceBudget": 0.09375
+      },
+      "variants": {
+        "source": {
+          "curvePoints": [
+            125,
+            7
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.8150334358215332,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.6216259002685547,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.8774280548095703,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.7626734972000122,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.2367544025182724,
+              "selected": false
+            }
+          ]
+        },
+        "distance": {
+          "curvePoints": [
+            58
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.8150334358215332,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.6216259002685547,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.8774280548095703,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.7626734972000122,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.2367544025182724,
+              "selected": false
+            }
+          ]
+        },
+        "area": {
+          "curvePoints": [
+            36,
+            3
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.6766387820243835,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.5434871912002563,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.6840264201164246,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.7332568764686584,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.24241898953914642,
+              "selected": false
+            }
+          ]
+        }
+      },
+      "exactAreaReplayVsRuntime": {
+        "maskSymmetricDifference": 0,
+        "areaMaxErrorOnOriginalBounds": 0.0,
+        "curveFloatArraysExact": true
+      },
+      "opacityCurveUsedInStoredRun": true,
+      "flipCosts": {
+        "source": {
+          "currentlySelected": true,
+          "flipUnaryDelta": 0.24325180053710938,
+          "flipBoundaryDelta": 0.16402021050453186,
+          "flipTotalDelta": 0.40727201104164124
+        },
+        "distance": {
+          "currentlySelected": true,
+          "flipUnaryDelta": 0.24325180053710938,
+          "flipBoundaryDelta": 0.16402021050453186,
+          "flipTotalDelta": 0.40727201104164124
+        },
+        "area": {
+          "currentlySelected": true,
+          "flipUnaryDelta": 0.0869743824005127,
+          "flipBoundaryDelta": 0.16402021050453186,
+          "flipTotalDelta": 0.25099459290504456
+        }
+      }
+    },
+    {
+      "frame": 50,
+      "sharedInputSourcePoints": 127,
+      "localAcceptedAreaChord": {
+        "ring": 0,
+        "edge": 32,
+        "a": [
+          201.3292999267578,
+          99.5776138305664
+        ],
+        "b": [
+          201.6648712158203,
+          97.15858459472656
+        ],
+        "crossing97_5": 201.61750956927386,
+        "sourceArcIndices": [
+          119,
+          120,
+          121
+        ],
+        "sourceArc": [
+          [
+            201.3292999267578,
+            99.5776138305664
+          ],
+          [
+            201.23416137695312,
+            98.46575927734375
+          ],
+          [
+            201.6648712158203,
+            97.15858459472656
+          ]
+        ],
+        "skippedVertices": [
+          {
+            "sourceIndex": 120,
+            "xy": [
+              201.23416137695312,
+              98.46575927734375
+            ],
+            "retainedByDistance": true
+          }
+        ],
+        "metrics": {
+          "arcLength": 2.4922229334829016,
+          "chordLength": 2.4421937953182518,
+          "maxPerpendicularError": 0.2470112808845557,
+          "orderedProjection": true,
+          "implementedNormalizedArea": 0.30162471799593565,
+          "independentLobeArea": 0.30162469955394045,
+          "absoluteAreaError": 1.8441995208728912e-08,
+          "lobeAreas": [
+            0.30162469955394045
+          ],
+          "h": [
+            0.0,
+            -0.2470112808845557,
+            0.0
+          ],
+          "s": [
+            0.0,
+            1.0882359093667675,
+            2.4421938699787913
+          ]
+        },
+        "areaBudget": 1,
+        "distanceBudget": 0.09375
+      },
+      "variants": {
+        "source": {
+          "curvePoints": [
+            127,
+            7
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.7111596465110779,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.45894700288772583,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.7178884148597717,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.626918613910675,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.12035918235778809,
+              "selected": false
+            }
+          ]
+        },
+        "distance": {
+          "curvePoints": [
+            59
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.7111596465110779,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.45894700288772583,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.7178884148597717,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.626918613910675,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.12035918235778809,
+              "selected": false
+            }
+          ]
+        },
+        "area": {
+          "curvePoints": [
+            36,
+            3
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.5476120114326477,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.38829177618026733,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.5212119221687317,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.5895029902458191,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.12035918235778809,
+              "selected": false
+            }
+          ]
+        }
+      },
+      "exactAreaReplayVsRuntime": {
+        "maskSymmetricDifference": 0,
+        "areaMaxErrorOnOriginalBounds": 0.0,
+        "curveFloatArraysExact": true
+      },
+      "opacityCurveUsedInStoredRun": true,
+      "flipCosts": {
+        "source": {
+          "currentlySelected": true,
+          "flipUnaryDelta": -0.08210599422454834,
+          "flipBoundaryDelta": 0.16402021050453186,
+          "flipTotalDelta": 0.08191421627998352
+        },
+        "distance": {
+          "currentlySelected": true,
+          "flipUnaryDelta": -0.08210599422454834,
+          "flipBoundaryDelta": 0.16402021050453186,
+          "flipTotalDelta": 0.08191421627998352
+        },
+        "area": {
+          "currentlySelected": false,
+          "flipUnaryDelta": 0.22341644763946533,
+          "flipBoundaryDelta": -0.16402021050453186,
+          "flipTotalDelta": 0.05939623713493347
+        }
+      }
+    },
+    {
+      "frame": 51,
+      "sharedInputSourcePoints": 126,
+      "localAcceptedAreaChord": {
+        "ring": 0,
+        "edge": 30,
+        "a": [
+          201.50436401367188,
+          99.67193603515625
+        ],
+        "b": [
+          201.82627868652344,
+          97.2392349243164
+        ],
+        "crossing97_5": 201.79177214412258,
+        "sourceArcIndices": [
+          117,
+          118,
+          119
+        ],
+        "sourceArc": [
+          [
+            201.50436401367188,
+            99.67193603515625
+          ],
+          [
+            201.40208435058594,
+            98.5584487915039
+          ],
+          [
+            201.82627868652344,
+            97.2392349243164
+          ]
+        ],
+        "skippedVertices": [
+          {
+            "sourceIndex": 118,
+            "xy": [
+              201.40208435058594,
+              98.5584487915039
+            ],
+            "retainedByDistance": true
+          }
+        ],
+        "metrics": {
+          "arcLength": 2.5039114888977743,
+          "chordLength": 2.4539078530536833,
+          "maxPerpendicularError": 0.2474680275080713,
+          "orderedProjection": true,
+          "implementedNormalizedArea": 0.3036318701966524,
+          "independentLobeArea": 0.3036318658851087,
+          "absoluteAreaError": 4.3115436776375304e-09,
+          "lobeAreas": [
+            0.3036318658851087
+          ],
+          "h": [
+            0.0,
+            -0.2474680275080713,
+            0.0
+          ],
+          "s": [
+            0.0,
+            1.0904469562400023,
+            2.453907870476313
+          ]
+        },
+        "areaBudget": 1,
+        "distanceBudget": 0.09375
+      },
+      "variants": {
+        "source": {
+          "curvePoints": [
+            126,
+            7
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.6046053767204285,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.2834523022174835,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.5388210415840149,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.4809458255767822,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.059402089565992355,
+              "selected": false
+            }
+          ]
+        },
+        "distance": {
+          "curvePoints": [
+            61
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.6046053767204285,
+              "selected": true
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.2834523022174835,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.5388210415840149,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.4809458255767822,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.059402089565992355,
+              "selected": false
+            }
+          ]
+        },
+        "area": {
+          "curvePoints": [
+            34,
+            3
+          ],
+          "cells": [
+            {
+              "xy": [
+                201,
+                96
+              ],
+              "area": 0.4180387556552887,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                97
+              ],
+              "area": 0.22147247195243835,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                98
+              ],
+              "area": 0.34055593609809875,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                99
+              ],
+              "area": 0.4303366541862488,
+              "selected": false
+            },
+            {
+              "xy": [
+                201,
+                100
+              ],
+              "area": 0.059402089565992355,
+              "selected": false
+            }
+          ]
+        }
+      },
+      "exactAreaReplayVsRuntime": {
+        "maskSymmetricDifference": 0,
+        "areaMaxErrorOnOriginalBounds": 0.0,
+        "curveFloatArraysExact": true
+      },
+      "opacityCurveUsedInStoredRun": true,
+      "flipCosts": {
+        "source": {
+          "currentlySelected": false,
+          "flipUnaryDelta": 0.43309539556503296,
+          "flipBoundaryDelta": 0.0,
+          "flipTotalDelta": 0.43309539556503296
+        },
+        "distance": {
+          "currentlySelected": false,
+          "flipUnaryDelta": 0.43309539556503296,
+          "flipBoundaryDelta": 0.0,
+          "flipTotalDelta": 0.43309539556503296
+        },
+        "area": {
+          "currentlySelected": false,
+          "flipUnaryDelta": 0.5570550560951233,
+          "flipBoundaryDelta": 0.16402021050453186,
+          "flipTotalDelta": 0.7210752665996552
+        }
+      }
+    }
+  ],
+  "equalAreaGeometryControls": [
+    {
+      "variant": 0,
+      "sourceArc": [
+        [
+          20.0,
+          20.0
+        ],
+        [
+          22.0,
+          20.375
+        ],
+        [
+          24.0,
+          20.0
+        ]
+      ],
+      "metrics": {
+        "arcLength": 4.0697051490249265,
+        "chordLength": 4.0,
+        "maxPerpendicularError": 0.375,
+        "orderedProjection": true,
+        "implementedNormalizedArea": 0.75,
+        "independentLobeArea": 0.75,
+        "absoluteAreaError": 0.0,
+        "lobeAreas": [
+          0.75
+        ],
+        "h": [
+          0.0,
+          0.375,
+          0.0
+        ],
+        "s": [
+          0.0,
+          2.0,
+          4.0
+        ]
+      },
+      "sourceClosedArea": 8.75,
+      "areaCurve": [
+        [
+          20.0,
+          20.0
+        ],
+        [
+          24.0,
+          20.0
+        ],
+        [
+          24.0,
+          18.0
+        ],
+        [
+          20.0,
+          18.0
+        ]
+      ],
+      "distanceCurve": [
+        [
+          20.0,
+          20.0
+        ],
+        [
+          22.0,
+          20.375
+        ],
+        [
+          24.0,
+          20.0
+        ],
+        [
+          24.0,
+          18.0
+        ],
+        [
+          20.0,
+          18.0
+        ]
+      ]
+    },
+    {
+      "variant": 1,
+      "sourceArc": [
+        [
+          20.0,
+          20.0
+        ],
+        [
+          21.0,
+          20.25
+        ],
+        [
+          23.0,
+          20.25
+        ],
+        [
+          24.0,
+          20.0
+        ]
+      ],
+      "metrics": {
+        "arcLength": 4.061552812808831,
+        "chordLength": 4.0,
+        "maxPerpendicularError": 0.25,
+        "orderedProjection": true,
+        "implementedNormalizedArea": 0.75,
+        "independentLobeArea": 0.75,
+        "absoluteAreaError": 0.0,
+        "lobeAreas": [
+          0.75
+        ],
+        "h": [
+          0.0,
+          0.25,
+          0.25,
+          0.0
+        ],
+        "s": [
+          0.0,
+          1.0,
+          3.0,
+          4.0
+        ]
+      },
+      "sourceClosedArea": 8.75,
+      "areaCurve": [
+        [
+          20.0,
+          20.0
+        ],
+        [
+          24.0,
+          20.0
+        ],
+        [
+          24.0,
+          18.0
+        ],
+        [
+          20.0,
+          18.0
+        ]
+      ],
+      "distanceCurve": [
+        [
+          20.0,
+          20.0
+        ],
+        [
+          21.0,
+          20.25
+        ],
+        [
+          23.0,
+          20.25
+        ],
+        [
+          24.0,
+          20.0
+        ],
+        [
+          24.0,
+          18.0
+        ],
+        [
+          20.0,
+          18.0
+        ]
+      ]
+    }
+  ],
+  "equalAreaControlInterpretation": "Two different source height/width distributions with identical0.75 local error and8.75 enclosed area collapse to the same chord under area fit; this is a property of its aggregate objective, not proof that actual frame50 selected an equal-area tie.",
+  "noNewRender": true,
+  "noProductPatch": true
+}

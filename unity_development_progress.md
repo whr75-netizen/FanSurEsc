@@ -3281,3 +3281,12 @@ Interactable (abstract base class)
 - 전체후보실패:50(201,97)비워연결경계파임→아래201,98~99가1×2논리셀돌출.실제PNG확인,mask밖누출아님. A=.3882917762,채우기Δunary+.2234164476/Δboundary-.1640202105/합+.0593962371로현재선택기가파임유지. 원곡선subcell굴곡·근사·area+perimeter가디자인보장못함.49/50/51입력보존·무작위threshold/penalty/새시간층추가없음.짧은return20후보는오류수아님.
 - 루프actor alpha0차/소유자·UV근접28셀RGB차최대.0737744 원인미확정(world/shadow/시간전부동일미검증).경계중앙7.6307ms≠PlayerFPS. losslessWebP1,101,318B/GIF2,419,755B·81프레임1350ms(명목60Hz+17ms닫힘hold),누락/보간0.전체후보전신sheet/대표대조육안확인. CAPTURED81/input·Animator·clock복원true후직접cleanEdit/paused·compile·updatefalse/cloth·opacity·areaOFF/capture0/backgroundfalse/dirtyfalse·face상태동일확인.
 - docs/artifacts/clothing-full533·메인.html 갱신,전체raw W Current472/Outline533/FullLoop 및SHA보존. pixel단위고정상수≠해상도독립source/world상수,투영pitch가변하면source오차도변함;grid일반변경·연구식자동환산미구현.532지역면적근사와2016참조extrema/폭대응은목적공유하나후자는미적용.시간DP/Gaussian/curvature식병합없음.얼굴530/기존내부색/성능별도미해결,Library403재시도없음.
+
+## 245. CHARACTER-RENDER-01 — 534 저장자료 인과분리, 면적근사 국소정보 손실·루프입력 미동일
+
+- 새 렌더/Play/제품패치0. 기존 컴파일함수 Edit 수학호출1회로49/50/51의 동일Source→source/distance/area→면적/선택 대조. area곡선float배열·면적·mask 모두533runtime와오차0. 후보532/b75ecb1d는OFF/미채택,활성348/44d13c0와사용자Quality/Time보존.
+- 50에서FitArea532가Source스냅샷index120(201.23416138,98.46575928)을생략. chord최대위치오차.24701128셀>옛distance.09375이나적분면적.301624718셀²<예산1로승인. 독립lobe면적차1.84e-8,상쇄/좌표변환오류없음. 셀201,97면적source/distance.458947003→area.388291776,채움→비움. 최초정보손실FitArea532:147,최초이산파임SelectRegions(ClothRegion524:40),후단누출아님. 비움유지flip비용+.059396237;옛결과비움비용+.081914216.49/51도같은승인경로/연속오차이며새재귀분기불연속을가정하지않음.
+- 같은chord/오차면적.75/폐면적8.75인서로다른합성곡선2개가같은area근사로소실. 총면적은국소분포·폭·span을인코딩하지않음. 실제50동일면적동률증거는없음. 수학구현오류가아닌목적/표현부족이므로예외·벌점·threshold·시간층추가없음;옛distance복귀도정상얇은끝손상근거로성공처리안함. 참조/출력경계형상대응정보필요,2016폭항미구현.
+- 루프28표본은모두같은실행527ON대조와양끝RGBA각각동일(area추가효과0). 과거원본OFF도근접매칭28/좌표27공유이나다른실행·광원이어서동등대조아님. phase0=2.50339508e-6/80=6.19888306e-6,Source최대좌표차.000854492셀/area.000259399셀. clip·회전·ortho·skyHour5.016488는같으나bone/skin·카메라행렬·전체빛/그림자·shaderclock·history미저장. UV2e-5근접매칭≠같은입력. 동일입력회귀판정및개별색원인미확정. 측정RT는worldComposite전이므로후단worldhistory의역방향원인불가,상류/눈history전체배제주장안함.
+- 기존5색표본은OwnerLines의인접빈영역외부연결/외곽노출재분류(42옷209,57→hair4셀,44옷227,65→226,65). preparedRGB동일/postLine=Before*.55,원색변조버그아님.533GPU근거재사용,미술채택과구분. 얼굴회색미재현/내부색/패킷212ms/시간선택미채택은별도유지. 새기능·촬영없으므로Play재검증반복없음;수학호출Edit/OFFguard·상태변경없음/533직접복원증거유지.
+- docs/artifacts/clothing-cause534 및메인.html534에수치·도식·15수학결과·입력가용성보존. 기존533전신GIF2,419,755B/81프레임1350ms를명시적으로재사용(새영상아님). Library403재시도없음. 전체해결/실시간채택판정없음.

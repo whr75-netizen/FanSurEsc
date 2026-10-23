@@ -1,0 +1,69 @@
+{
+  "status": "LOCAL_INFORMATION_LOSS_CONFIRMED_NO_GENERAL_FIX_APPLIED",
+  "sameSourceMathReplayFrames": [
+    49,
+    50,
+    51
+  ],
+  "newRenderedFrames": 0,
+  "newPlaySessions": 0,
+  "newProductCode": false,
+  "sourcePoint": {
+    "sourceIndex": 120,
+    "xy": [
+      201.23416137695312,
+      98.46575927734375
+    ],
+    "retainedByDistance": true
+  },
+  "areaChordError": 0.30162471799593565,
+  "independentAreaError": 1.8441995208728912e-08,
+  "pointwiseError": 0.2470112808845557,
+  "distanceBound": 0.09375,
+  "sourceAndDistanceCell97": {
+    "xy": [
+      201,
+      97
+    ],
+    "area": 0.45894700288772583,
+    "selected": true
+  },
+  "areaCell97": {
+    "xy": [
+      201,
+      97
+    ],
+    "area": 0.38829177618026733,
+    "selected": false
+  },
+  "pixelFlipCosts": {
+    "source": {
+      "currentlySelected": true,
+      "flipUnaryDelta": -0.08210599422454834,
+      "flipBoundaryDelta": 0.16402021050453186,
+      "flipTotalDelta": 0.08191421627998352
+    },
+    "distance": {
+      "currentlySelected": true,
+      "flipUnaryDelta": -0.08210599422454834,
+      "flipBoundaryDelta": 0.16402021050453186,
+      "flipTotalDelta": 0.08191421627998352
+    },
+    "area": {
+      "currentlySelected": false,
+      "flipUnaryDelta": 0.22341644763946533,
+      "flipBoundaryDelta": -0.16402021050453186,
+      "flipTotalDelta": 0.05939623713493347
+    }
+  },
+  "actualEqualAreaTieProved": false,
+  "equalAreaGeometryControlsCollapse": true,
+  "firstBinaryNotch": "SelectRegions on area-fitted coverage",
+  "earliestCausalInformationLoss": "FitArea532 accepts low integral error while dropping the distance-retained local point",
+  "conversionOrSignedCancellationBugFound": false,
+  "neededInformation": "Spatial distribution/local displacement and reference-to-output boundary feature/width/span fidelity; scalar area/perimeter does not encode these. No new threshold, exception or paper term implemented.",
+  "loopRegressionVerdict": "not established: endpoint inputs not identical; all28 area samples equal same-run distance control at both endpoints",
+  "originalOFFHistoricalApproxColourChanges": 28,
+  "historicalCoordinatesShared": 27,
+  "mainRemainsCandidateOFF": true
+}

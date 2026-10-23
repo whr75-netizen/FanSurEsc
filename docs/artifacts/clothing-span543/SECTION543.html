@@ -1,0 +1,10 @@
+<section id="current543" style="background:#f5f7fb;border-bottom:4px solid #316a73;padding:16px;max-width:1320px;color:#20252c">
+<h1 style="margin:0 0 8px">최신543 — 왼쪽 팔꿈치 영역 선택 수정</h1>
+<p><b>왼쪽 팔꿈치 가시 수정 및 전체 Walk 회귀검사 통과 / 제품 기본 OFF 유지</b> 같은 실행의 제품 OFF / 기존540 Clothes / 543 형상 후보입니다. 실제 Walk81포즈·243렌더, 모든 프레임을 원래 시간순서로 보존했습니다. 아래540 영상은 이전 결과이며 새 수정으로 표시하지 않습니다.</p>
+<p>선택 마스크가 가시 두 셀을 허용했고, 별도의 thin 예외가 밝게 남긴 것이 원인이었습니다. 선색은 마스크와 다릅니다. 넓은 원형 내부가 확인된 선행 경계 구간을 하나의 선택 단위로 묶었습니다. 선 명도만 바꾼 실험은 가시가 남아 철회했고 원래 셰이더를 복원했습니다.</p>
+<p>적용: <b>겉옷·하의·신발 공통 경로</b>. 기본 자동 활성화는 OFF입니다. Unity 메뉴 <code>EValidation/Boundary540/Experimental543 Shape only</code>로 실행할 수 있고 기존 Clothes/Off도 유지합니다. Body0의 상의·스타킹·피부·손, 얼굴·눈·헤어는 확장하지 않았습니다.</p>
+<p>65번1×2논리셀 돌출 제거,34/43 가시·44 계단·50 홈과8얇은끝 반례 유지. 변경된22포즈를 전신 대조했습니다. 얼굴·눈·헤어 변화0, 경계밖쓰기·누락·패킷실패0. 전신의 모든 픽셀 출몰이나 내부 명암을 해결했다는 판정은 아닙니다. Body0 얼굴 소유권과 손 적용은 별도 미해결입니다. 비용은 최적화 전 수치이며 캡처시간을 게임 FPS로 해석하지 않습니다. 얼굴 회색은 이번 미재현이며 원인 해결 표기가 아닙니다.</p>
+<figure style="margin:0"><img id="proof543" src="file:///C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Span543/FULL_WALK543.webp" style="max-width:100%;image-rendering:pixelated" alt="같은 실제 걷기 제품 OFF 기존540 형상543 전신 비교"><figcaption>좌: 제품 OFF / 중: 기존540 Clothes / 우:543 형상 후보. 논리480×272→실제960×544, 전신을 유지한 정수 좌표 자르기, 보간 축소 없음. WebP81프레임 1350ms. GIF는10ms 시간단위로 근사합니다.</figcaption></figure>
+<p><a href="file:///C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Span543/FULL_WALK543.gif">전신 GIF (3,095,462byte)</a> · <a href="file:///C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Span543/LATEST543.png">65번 전신 정지 비교</a> · <a href="file:///C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Span543/ELBOW543_65.png">형상/명도 독립 실험 확대</a> · <a href="file:///C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Span543/CONSISTENCY543.md">실제 함수·수식·일관성 판정</a> · <a href="file:///C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Span543/FULL_RESULT543.json">81포즈 검증 수치</a></p>
+<p>전달 상태: 로컬 페이지·파일 제공. 이전 Library403 접근 제한은 재시도하거나 우회하지 않았습니다.</p>
+</section>

@@ -205,6 +205,8 @@ public static partial class HeadRegion502
     // selected together. This has no input raster threshold, morphology, per-strand
     // topology constraint, animation history, or coordinate/phase special case.
     public static bool[] SelectRegions(float[] areas, int width, int height)
+        =>SelectRegions543(areas,width,height,null);
+    public static bool[] SelectRegions543(float[] areas,int width,int height,List<int[]> groups)
     {
         var flow = new Cut(areas.Length + 2); int source = areas.Length, sink = source + 1;
         for (int y = 0; y < height; y++) for (int x = 0; x < width; x++)
@@ -217,6 +219,7 @@ public static partial class HeadRegion502
             if (y + 1 < height && x + 1 < width) flow.Link(i, i + width + 1, BoundaryCost * .29289322f);
             if (y + 1 < height && x > 0) flow.Link(i, i + width - 1, BoundaryCost * .29289322f);
         }
+        if(groups!=null)foreach(var group in groups)for(int j=1;j<group.Length;j++)flow.Link(group[0],group[j],100000);
         return flow.Solve(source, sink).Take(areas.Length).ToArray();
     }
     sealed class Cut

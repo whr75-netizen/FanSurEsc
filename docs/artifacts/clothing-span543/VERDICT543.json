@@ -1,0 +1,13 @@
+{
+  "reviewCompleted": true,
+  "headline": "왼쪽 팔꿈치 가시 수정 및 전체 Walk 회귀검사 통과 / 제품 기본 OFF 유지",
+  "limits": "65번1×2논리셀 돌출 제거,34/43 가시·44 계단·50 홈과8얇은끝 반례 유지. 변경된22포즈를 전신 대조했습니다. 얼굴·눈·헤어 변화0, 경계밖쓰기·누락·패킷실패0. 전신의 모든 픽셀 출몰이나 내부 명암을 해결했다는 판정은 아닙니다. Body0 얼굴 소유권과 손 적용은 별도 미해결입니다.",
+  "sourceInput": "Actual Rig|Walk_Loop81 poses, same camera/native960x544/logical480x272. skyHour13.128116607666016 fixed. Source and design geometry preserved; only spatial grouped labels changed.",
+  "shapeOnlyAcceptedForExplicitTrial": true,
+  "inkAblationAdopted": false,
+  "defaultEnabled": false,
+  "optimisation": "Not implemented or measured yet. Existing54042.48ms is an earlier capture-run boundary statistic, not a controlled optimisation baseline or PlayerFPS.",
+  "colourEvidence": "44 same-source colour differences all had identical PREPARED input and first differed by POSTLINE. Three non-clothing observations (0 and80 same loop event;12 another) were reproduced by neighbour exterior/core tests. See COLOUR_FIRST_STAGE543 and BODY_COLOUR_NEIGHBOURS543. No source colour patch.",
+  "visualReview": ["CHANGED_REVIEW543_0.png", "CHANGED_REVIEW543_1.png", "CHANGED_REVIEW543_2.png", "CHANGED_REVIEW543_3.png", "CHANGED_REVIEW543_4.png", "CHANGED_REVIEW543_5.png", "ELBOW543_65.png", "ELBOW543_66.png"],
+  "restoration": "Direct Edit check: play/paused/compiling/updating/cloth/shape/whole false; captureDelta0, backgroundfalse, sceneDirtyfalse. Runner input/Animator/clock restore true."
+}

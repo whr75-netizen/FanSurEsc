@@ -122,12 +122,13 @@ SubShader{Tags{"RenderPipeline"="UniversalPipeline"}
             #include "Packages/com.vrmc.vrm/MToon10/Shaders/vrmc_materials_mtoon_forward_fragment.hlsl"
 
 
-Texture2D<float4> _Cloth524Mask;int _Cloth524Enabled;
+Texture2D<float4> _Cloth524Mask;int _Cloth524Enabled,_Cloth524Parts;
 float4 _Source329Metadata; StructuredBuffer<float> _Instance331;int _ProbeRole331,_ProbeSide331;float4 _ClipShift331;
 Varyings MToonVertex331(const Attributes v){Varyings o=MToonVertex(v);o.pos.xy+=_ClipShift331.xy*o.pos.w;return o;}
 struct Out329{float4 source:SV_Target0;float4 geometry:SV_Target1;float4 effective:SV_Target2;float4 physical:SV_Target3;float4 original:SV_Target4;float4 endpoint:SV_Target5;float4 provenance:SV_Target6;};
 Out329 Probe288Fragment(const Varyings v,uint primitiveID:SV_PrimitiveID,bool facing:SV_IsFrontFace){
- if(_Cloth524Enabled!=0&&round(_Source329Metadata.x)==10&&_Cloth524Mask.Load(int3((int2)v.pos.xy,0)).r<.5)discard;
+ int bodyPart540=(int)round(_Source329Metadata.x)-7;
+ if(_Cloth524Enabled!=0&&bodyPart540>=0&&bodyPart540<4&&(_Cloth524Parts&(1<<bodyPart540))!=0&&_Cloth524Mask.Load(int3((int2)v.pos.xy,0))[bodyPart540]<.5)discard;
  FragmentInput f;f.varyings=v;f.facing=facing?1:-1;UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(v);
  float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);
  if(_ProbeRole331>0&&(int)round(_Source329Metadata.x)+1!=_ProbeRole331)discard;if(_ProbeSide331>0&&(int)round(_Instance331[primitiveID])!=_ProbeSide331)discard;

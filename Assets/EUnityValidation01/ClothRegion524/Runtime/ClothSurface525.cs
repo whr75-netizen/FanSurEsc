@@ -12,7 +12,7 @@ public static class ClothSurface525
 {
     [Serializable] public sealed class Packet
     {
-        public int x,y,primitive;
+        public int x,y,primitive,submesh;
         public Vector2 sourceProjection,uv;
         public Vector3 barycentric,world;
         public float depth,distance;
@@ -76,15 +76,20 @@ public static class ClothSurface525
             front=t;weights=b;nearest=depth;
         }
         if(uncertain<=nearest){UncertainCandidates++;return false;}
-        if(front==null||front.renderer!=0||front.submesh!=3){OccludedCandidates++;return false;}return true;
+        if(front==null||front.renderer!=0||!ClothRegion524.Active540(front.submesh)){OccludedCandidates++;return false;}return true;
     }
     public static void BeginFrame(){current=null;Packets.Clear();Requested=Unsupported=OccludedCandidates=UncertainCandidates=0;BuildMs=0;}
     public static void Prepare(Full319View335 f,Color[] centre,Color[] owner)
     {
-        if(!ClothRegion524.Ready(f))return;long start=Stopwatch.GetTimestamp();var region=ClothRegion524.Bounds;
-        var cells=new List<Vector2Int>();for(int y=0;y<region.height;y++)for(int x=0;x<region.width;x++){int at=y*region.width+x,px=x+region.x,py=y+region.y,i=(271-py)*480+px;if(ClothRegion524.Selected[at]&&centre[i].r<=0&&owner[i].b<=0)cells.Add(new Vector2Int(px,py));}
+        if(!ClothRegion524.Ready(f))return;long start=Stopwatch.GetTimestamp();
+        var requests=new bool[480*272];var cells=new List<Vector2Int>();
+        foreach(var part in ClothRegion524.Parts540)
+        {
+            if(!ClothRegion524.Active540(part.submesh))continue;var region=part.bounds;
+            for(int y=0;y<region.height;y++)for(int x=0;x<region.width;x++){int at=y*region.width+x,px=x+region.x,py=y+region.y,i=(271-py)*480+px;if(part.selected[at]&&!requests[i]&&centre[i].r<=0&&owner[i].b<=0){requests[i]=true;cells.Add(new Vector2Int(px,py));}}
+        }
         Requested=cells.Count;if(Requested==0){current=f;BuildMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;return;}
-        Geometry(f);var clothing=triangles.Where(t=>t.renderer==0&&t.submesh==3).ToArray();
+        Geometry(f);var clothing=triangles.Where(t=>t.renderer==0&&ClothRegion524.Active540(t.submesh)).ToArray();
         foreach(var cell in cells)
         {
             var centrePoint=new Vector2(cell.x+.5f,cell.y+.5f);Packet best=null;
@@ -92,15 +97,16 @@ public static class ClothSurface525
             float radius=HeadRegion502.CurveError+Mathf.Sqrt(.5f),bestError=radius*radius;
             foreach(var t in clothing)
             {
+                if(!ClothRegion524.Selected540(t.submesh,cell.x,cell.y))continue;
                 if(t.maxX<cell.x-radius||t.minX>cell.x+1+radius||t.maxY<cell.y-radius||t.minY>cell.y+1+radius)continue;
                 var candidates=new List<Vector2>();var near=Closest(centrePoint,t);var b=Bary(near,t);b=b*.99999f+Vector3.one*(.00001f/3);candidates.Add(t.pa*b.x+t.pb*b.y+t.pc*b.z);
                 var polygon=new List<Vector2>{t.pa,t.pb,t.pc};polygon=Clip(polygon,0,cell.x,true);polygon=Clip(polygon,0,cell.x+1,false);polygon=Clip(polygon,1,cell.y,true);polygon=Clip(polygon,1,cell.y+1,false);if(polygon.Count>=3)candidates.Add(polygon.Aggregate(Vector2.zero,(sum,p)=>sum+p)/polygon.Count);
                 foreach(var q in candidates)
                 {
-                    float error=(q-centrePoint).sqrMagnitude;if(error>bestError)continue;var own=Bary(q,t);if(own.x<0||own.y<0||own.z<0)continue;var sourceUV=t.ua*own.x+t.ub*own.y+t.uc*own.z;if(!ClothRegion524.Opacity.Opaque(sourceUV))continue;
-                    if(!Visible(f,q,out var source,out var weights))continue;sourceUV=source.ua*weights.x+source.ub*weights.y+source.uc*weights.z;if(!ClothRegion524.Opacity.Opaque(sourceUV))continue;
+                    float error=(q-centrePoint).sqrMagnitude;if(error>bestError)continue;var own=Bary(q,t);if(own.x<0||own.y<0||own.z<0)continue;var sourceUV=t.ua*own.x+t.ub*own.y+t.uc*own.z;if(!ClothRegion524.Parts540[t.submesh].opacity.Opaque(sourceUV))continue;
+                    if(!Visible(f,q,out var source,out var weights)||!ClothRegion524.Selected540(source.submesh,cell.x,cell.y))continue;sourceUV=source.ua*weights.x+source.ub*weights.y+source.uc*weights.z;if(!ClothRegion524.Parts540[source.submesh].opacity.Opaque(sourceUV))continue;
                     var world=source.wa*weights.x+source.wb*weights.y+source.wc*weights.z;float depth=-f.motion.camera.worldToCameraMatrix.MultiplyPoint3x4(world).z;
-                    if(error==bestError&&best!=null&&depth>=best.depth)continue;bestError=error;best=new Packet{x=cell.x,y=cell.y,primitive=source.primitive,barycentric=weights,world=world,uv=sourceUV,sourceProjection=q,depth=depth,distance=Mathf.Sqrt(error)};
+                    if(error==bestError&&best!=null&&depth>=best.depth)continue;bestError=error;best=new Packet{x=cell.x,y=cell.y,primitive=source.primitive,submesh=source.submesh,barycentric=weights,world=world,uv=sourceUV,sourceProjection=q,depth=depth,distance=Mathf.Sqrt(error)};
                 }
             }
             if(best==null)Unsupported++;else Packets.Add(best);
@@ -110,20 +116,25 @@ public static class ClothSurface525
     static void Upload(Full319View335 f)
     {
         if(!quads)quads=new Mesh{name="525 sparse visible clothing source packets",hideFlags=HideFlags.DontSave,indexFormat=IndexFormat.UInt32};
-        var output=f.motion.surface.outputs[0];var mesh=output.sharedMesh;var verts=mesh.vertices;var normals=mesh.normals;var tangents=mesh.tangents;var indices=mesh.GetIndices(3);var v=new List<Vector3>();var n=new List<Vector3>();var ta=new List<Vector4>();var uv=new List<Vector2>();var pr=new List<Vector4>();var source=new List<Vector4>();var ix=new List<int>();var inv=f.effectiveProjection.inverse;var toWorld=f.motion.camera.cameraToWorldMatrix;var toLocal=output.transform.worldToLocalMatrix;
+        var output=f.motion.surface.outputs[0];var mesh=output.sharedMesh;var verts=mesh.vertices;var normals=mesh.normals;var tangents=mesh.tangents;var indices=Enumerable.Range(0,4).Select(sm=>mesh.GetIndices(sm)).ToArray();var v=new List<Vector3>();var n=new List<Vector3>();var ta=new List<Vector4>();var uv=new List<Vector2>();var pr=new List<Vector4>();var source=new List<Vector4>();var ix=Enumerable.Range(0,4).Select(_=>new List<int>()).ToArray();var inv=f.effectiveProjection.inverse;var toWorld=f.motion.camera.cameraToWorldMatrix;var toLocal=output.transform.worldToLocalMatrix;
         foreach(var p in Packets)
         {
-            int a=indices[p.primitive*3],b=indices[p.primitive*3+1],c=indices[p.primitive*3+2],at=v.Count;var weights=p.barycentric;var local=verts[a]*weights.x+verts[b]*weights.y+verts[c]*weights.z;var normal=(normals[a]*weights.x+normals[b]*weights.y+normals[c]*weights.z).normalized;var tangent=tangents[a]*weights.x+tangents[b]*weights.y+tangents[c]*weights.z;
+            var ids=indices[p.submesh];int a=ids[p.primitive*3],b=ids[p.primitive*3+1],c=ids[p.primitive*3+2],at=v.Count;var weights=p.barycentric;var local=verts[a]*weights.x+verts[b]*weights.y+verts[c]*weights.z;var normal=(normals[a]*weights.x+normals[b]*weights.y+normals[c]*weights.z).normalized;var tangent=tangents[a]*weights.x+tangents[b]*weights.y+tangents[c]*weights.z;
             foreach(var corner in new[]{new Vector2(p.x,p.y),new Vector2(p.x+1,p.y),new Vector2(p.x+1,p.y+1),new Vector2(p.x,p.y+1)}){var q=inv*new Vector4(corner.x/240-1,1-corner.y/136,0,1);q/=q.w;var target=toWorld.MultiplyPoint3x4(new Vector3(q.x,q.y,-p.depth));v.Add(toLocal.MultiplyPoint3x4(target));n.Add(normal);ta.Add(tangent);uv.Add(p.uv);pr.Add(new Vector4(p.primitive,p.x,p.y,1));source.Add(new Vector4(local.x,local.y,local.z,1));}
-            var pa=f.Project(output.transform.TransformPoint(verts[a]));var pb=f.Project(output.transform.TransformPoint(verts[b]));var pc=f.Project(output.transform.TransformPoint(verts[c]));bool forward=Cross(pb-pa,pc-pa)>0;foreach(int i in forward?new[]{0,1,2,0,2,3}:new[]{0,2,1,0,3,2})ix.Add(at+i);
+            var pa=f.Project(output.transform.TransformPoint(verts[a]));var pb=f.Project(output.transform.TransformPoint(verts[b]));var pc=f.Project(output.transform.TransformPoint(verts[c]));bool forward=Cross(pb-pa,pc-pa)>0;foreach(int i in forward?new[]{0,1,2,0,2,3}:new[]{0,2,1,0,3,2})ix[p.submesh].Add(at+i);
         }
-        quads.Clear();quads.SetVertices(v);quads.SetNormals(n);quads.SetTangents(ta);quads.SetUVs(0,uv);quads.SetUVs(3,pr);quads.SetUVs(4,source);quads.SetTriangles(ix,0);quads.bounds=mesh.bounds;
+        quads.Clear();quads.SetVertices(v);quads.SetNormals(n);quads.SetTangents(ta);quads.SetUVs(0,uv);quads.SetUVs(3,pr);quads.SetUVs(4,source);quads.subMeshCount=4;for(int sm=0;sm<4;sm++)quads.SetTriangles(ix[sm],sm);quads.bounds=mesh.bounds;
     }
     public static void Draw(RasterCommandBuffer cmd,Full319View335 f,Material source,int kind)
     {
-        if(current!=f||!ClothRegion524.Ready(f)||Packets.Count==0)return;var key=(source,kind);
+        if(current!=f||!ClothRegion524.Ready(f)||Packets.Count==0)return;
+        foreach(var part in ClothRegion524.Parts540)
+        {
+        if(!ClothRegion524.Active540(part.submesh)||!Packets.Any(p=>p.submesh==part.submesh))continue;
+        source=kind==0?f.motion.materials[part.submesh]:f.legacySignalsMats[part.submesh];var key=(source,kind);
         if(!materials.TryGetValue(key,out var material)||!material){var shader=Shader.Find("EValidation/HeadRegion502"+(kind==0?"Probe":"Legacy"));if(!shader)throw new InvalidOperationException("525 existing packet shader missing");material=new Material(source){shader=shader,hideFlags=HideFlags.DontSave};material.shaderKeywords=source.shaderKeywords;material.SetFloat("_M_CullMode",0);materials[key]=material;}
-        material.SetTexture("_Region502Mask",ClothRegion524.Mask);cmd.SetGlobalVector("_Source329Metadata",new Vector4(10,0,0,0));cmd.SetGlobalMatrix("_Region502ViewProjection",f.effectiveProjection*f.motion.camera.worldToCameraMatrix);cmd.SetGlobalFloat("_Region502Scale",1);cmd.SetGlobalVector("_Region502OwnedShift",f.motion.clipShift);cmd.SetGlobalInt("_Region502Quad",1);cmd.SetGlobalInt("_Region502Hair",0);cmd.DrawMesh(quads,f.motion.surface.outputs[0].transform.localToWorldMatrix,material,0,0);cmd.SetGlobalInt("_Region502Quad",0);
+        material.SetTexture("_Region502Mask",part.mask);cmd.SetGlobalVector("_Source329Metadata",new Vector4(7+part.submesh,0,0,0));cmd.SetGlobalMatrix("_Region502ViewProjection",f.effectiveProjection*f.motion.camera.worldToCameraMatrix);cmd.SetGlobalFloat("_Region502Scale",1);cmd.SetGlobalVector("_Region502OwnedShift",f.motion.clipShift);cmd.SetGlobalInt("_Region502Quad",1);cmd.SetGlobalInt("_Region502Hair",0);cmd.DrawMesh(quads,f.motion.surface.outputs[0].transform.localToWorldMatrix,material,part.submesh,0);cmd.SetGlobalInt("_Region502Quad",0);
+        }
     }
     public static void Release(){BeginFrame();if(quads)UnityEngine.Object.DestroyImmediate(quads);quads=null;foreach(var m in materials.Values)if(m)UnityEngine.Object.DestroyImmediate(m);materials.Clear();triangles.Clear();}
 }

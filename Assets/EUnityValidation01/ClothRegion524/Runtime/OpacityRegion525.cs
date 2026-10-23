@@ -23,6 +23,7 @@ public sealed class OpacityRegion525
     public readonly List<Boundary> Segments=new();
     public readonly List<int>[] TriangleSegments;
     public readonly int[] Indices;
+    public readonly bool[] Included551;
     public readonly Texture2D Texture;
     public readonly Vector4 ST;
     public readonly float Cutoff,Factor;
@@ -39,7 +40,7 @@ public sealed class OpacityRegion525
     const int Bin=16;
     static double Cross(D a,D b)=>a.x*b.y-a.y*b.x;
     static double Cross(D a,D b,D c)=>Cross(b-a,c-a);
-    public OpacityRegion525(Mesh original,int submesh,Material material)
+    public OpacityRegion525(Mesh original,int submesh,Material material,bool[] included551=null)
     {
         long start=Stopwatch.GetTimestamp();
         Texture=material.mainTexture as Texture2D;
@@ -51,7 +52,8 @@ public sealed class OpacityRegion525
         Cutoff=material.GetFloat("_Cutoff");
         if(Factor<=0)throw new InvalidOperationException("525 zero material alpha");
         alpha=HeadArea505.SourceAlphaBytes525(Texture);width=Texture.width;height=Texture.height;
-        uv=original.uv;Indices=original.GetIndices(submesh);TriangleSegments=new List<int>[Indices.Length/3];
+        uv=original.uv;Indices=original.GetIndices(submesh);TriangleSegments=new List<int>[Indices.Length/3];Included551=included551;
+        if(Included551!=null&&Included551.Length!=TriangleSegments.Length)throw new InvalidOperationException("551 semantic scope topology mismatch");
         canonical=new int[original.vertexCount];var verts=original.vertices;var weights=original.boneWeights;
         if(weights.Length!=verts.Length)throw new InvalidOperationException("525 anchor weld needs original skin weights");
         var weld=new Dictionary<(Vector3,BoneWeight),int>();
@@ -67,7 +69,7 @@ public sealed class OpacityRegion525
             AddContour(p,q,r,a,b,c,cut);AddContour(p,r,s,a,c,d,cut);
         }
         TexelContourSegments=contour.Count;
-        for(int pr=0;pr<Indices.Length/3;pr++)BuildTriangle(pr);BuildPlans527();
+        for(int pr=0;pr<Indices.Length/3;pr++){if(Included551==null||Included551[pr])BuildTriangle(pr);else TriangleSegments[pr]=new List<int>();}BuildPlans527();
         PreprocessMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;
     }
     D Tex(Vector2 v)=>new D(v.x*ST.x+ST.z,v.y*ST.y+ST.w);
@@ -142,7 +144,7 @@ public sealed class OpacityRegion525
     {
         var p=new Vector2[Anchors.Count];for(int i=0;i<p.Length;i++){var a=Anchors[i];p[i]=original[a.a]*a.weights.x+original[a.b]*a.weights.y+original[a.c]*a.weights.z;}
         var orientation=new int[Indices.Length/3];
-        for(int pr=0;pr<orientation.Length;pr++){int at=pr*3;var a=original[Indices[at]];var b=original[Indices[at+1]];var c=original[Indices[at+2]];double det=(double)(b.x-a.x)*(c.y-a.y)-(double)(b.y-a.y)*(c.x-a.x),uvDet=Cross(Tex(uv[Indices[at]]),Tex(uv[Indices[at+1]]),Tex(uv[Indices[at+2]]));orientation[pr]=Math.Abs(det)<1e-10?0:Math.Sign(det*uvDet);}
+        for(int pr=0;pr<orientation.Length;pr++){if(Included551!=null&&!Included551[pr])continue;int at=pr*3;var a=original[Indices[at]];var b=original[Indices[at+1]];var c=original[Indices[at+2]];double det=(double)(b.x-a.x)*(c.y-a.y)-(double)(b.y-a.y)*(c.x-a.x),uvDet=Cross(Tex(uv[Indices[at]]),Tex(uv[Indices[at+1]]),Tex(uv[Indices[at+2]]));orientation[pr]=Math.Abs(det)<1e-10?0:Math.Sign(det*uvDet);}
         InputSegments527=OpacitySegments527=FitOpacitySegments527=TopologyFallbacks527=0;UsedCurveFit527=false;CurveBuildMs527=0;TopologyFallbackDetails527.Clear();
         if(fitOpacity)return CurvedProjection527(p,orientation);
         var result=new List<(Vector2,Vector2)>(Segments.Count);

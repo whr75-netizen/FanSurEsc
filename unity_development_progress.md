@@ -3391,3 +3391,11 @@ Interactable (abstract base class)
 - [전달] Current472/BodyHand549/FULL_WALK550.gif 2,909,861byte / losslessWebP1,428,726byte.81프레임1350ms전신보존. 메인550 첫화면 최신비교. 양쪽547Clothes ON/550만OFF vsON. Library403재시도 없음.
 - [운영] 자동입력/Animator/clock복원true+직접cleanEdit/550OFF. Console기존진단2개동일/새0.547·Quality/TimeSHA불변. import및첫긴launcher timeout은 미실행/상태확인후재import없이컴파일확인·축소실행기로연결. Reflection조회도구거절은우회없이공개상태API로대체. 새성능측정없음.
 - 증거: docs/artifacts/body-hair550/RESULT550.md 및 RECEIPT550.json. 원시작업C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/BodyHand549/. Body0/정상손끝,헤어양음영역,내부색/성능은다음범위다.
+
+## 256. 551 몸·손 범위와 머리 피부 분리 — 2026-10-23
+
+- Body0 10,022삼각형 중 주 연결 성분9,702개에 머리/몸이 함께 있다. Humanoid Head 하위 영향0인8,762개만 몸·손 대상으로, 머리/목 혼합1,260개는 원본 렌더 유지. 원본 mesh+Head binding별 범위를 캐시하되 매포즈 변형/투영/영역 선택은 갱신한다.
+- 범위표를 경계 입력/원본 마스크/Prepare donor·Resolve/채움 표면에 공통 적용. 547 span reference와544 선택기 수식 보존. 얼굴 우선 덮기/깊이 바이어스/좌표 예외 없음. 6기존 파일 변경, 명시적 Experimental551 메뉴, 기본OFF.
+- 실제31~42 12쌍 후 전체0~80 Walk81쌍. 양쪽547 Clothes+550 동일; 우측만 몸·손 추가. 얼굴/눈/헤어 소유권·얼굴색 변화0, 비Body0 소유권 변화0, unsupported0. 33 손 기부 순간셀 제외. distal손끝114중112동일셀,33엄지/49새끼2표본은 면적0.4719/0.4635로 생략. 전체 출몰/손끝 품질 완료 아님.
+- 코드 내부 단계(첫포즈 제외80쌍) 경계 중앙값52.2466ms/p95 91.2553ms, 별도 공급0.11975/21.2163ms. 기준Clothes경계21.09075/52.9294ms. readback·파일비용 제외 단계이며 기존42.48ms와 범위가 다르다. GC.Alloc ProfilerRecorder1MiB 양성 대조 valid=true/samples0으로 할당량 미측정.
+- 전신81프레임/1350ms WebP1,208,822B/GIF2,723,716B. 자동 input/Animator/clock복원true, 직접Edit/clean/OFF 확인. Library403 재시도 없음. 자료: docs/artifacts/body-scope551/RESULT551.md 및 RECEIPT551.json. 원시작업 Current472/BodyScope551. 헤어552는 별도 비교.

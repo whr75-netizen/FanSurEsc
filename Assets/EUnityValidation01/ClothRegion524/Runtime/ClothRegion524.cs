@@ -17,6 +17,28 @@ public static class ClothRegion524
     // Diagnostic comparison only: the normal span path uses the pre-fit reference.
     // A removed sub-cell return must not merge two retained feature intervals.
     public static bool UseSimplifiedSpanReference546;
+    // Explicit body/hand trial. Head-influenced and mixed neck primitives retain
+    // their original rendering; material slot zero alone is not an anatomical scope.
+    public static bool UseBodyScope551;
+    static Mesh scopeMesh551;static Transform scopeHead551;static bool[] included551;static ComputeBuffer scopeBuffer551;
+    public static int ScopeIncluded551{get;private set;}
+    public static bool InScope551(int sm,int primitive)=>!UseBodyScope551||sm!=0||(included551!=null&&primitive>=0&&primitive<included551.Length&&included551[primitive]);
+    static ComputeBuffer ScopeBuffer551(){if(scopeBuffer551==null){scopeBuffer551=new ComputeBuffer(1,sizeof(float));scopeBuffer551.SetData(new[]{1f});}return scopeBuffer551;}
+    static bool[] Scope551(Full319View335 f)
+    {
+        if(!UseBodyScope551)return null;
+        var source=f.motion.surface.source[0];var mesh=source.sharedMesh;var animator=f.motion.animation.target;
+        if(!animator.isHuman)throw new InvalidOperationException("551 body scope requires an explicit Humanoid Head binding");
+        var head=animator.GetBoneTransform(HumanBodyBones.Head);if(!head)throw new InvalidOperationException("551 Head binding missing");
+        if(scopeMesh551==mesh&&scopeHead551==head&&included551!=null)return included551;
+        var bones=source.bones;var weights=mesh.boneWeights;if(weights.Length!=mesh.vertexCount)throw new InvalidOperationException("551 original skin weights missing");
+        var vertex=new bool[weights.Length];
+        bool Head(int bone,float weight)=>weight>0&&bone>=0&&bone<bones.Length&&bones[bone]&&bones[bone].IsChildOf(head);
+        for(int i=0;i<weights.Length;i++){var b=weights[i];vertex[i]=Head(b.boneIndex0,b.weight0)||Head(b.boneIndex1,b.weight1)||Head(b.boneIndex2,b.weight2)||Head(b.boneIndex3,b.weight3);}
+        var ix=mesh.GetIndices(0);included551=new bool[ix.Length/3];var data=new float[included551.Length];ScopeIncluded551=0;
+        for(int pr=0;pr<included551.Length;pr++)if(included551[pr]=!vertex[ix[3*pr]]&&!vertex[ix[3*pr+1]]&&!vertex[ix[3*pr+2]]){data[pr]=1;ScopeIncluded551++;}
+        scopeBuffer551?.Release();scopeBuffer551=new ComputeBuffer(data.Length,sizeof(float));scopeBuffer551.SetData(data);scopeMesh551=mesh;scopeHead551=head;return included551;
+    }
     public const int Outerwear540=8,Clothing540=14,BodyAndClothing540=15;
     public static int PartBits540=Outerwear540;
     public sealed class Part540
@@ -80,7 +102,8 @@ public static class ClothRegion524
             long start=Stopwatch.GetTimestamp();var mf=f.motion.surface.outputs[0];var mesh=mf.sharedMesh;
             if(mesh.subMeshCount!=4)throw new InvalidOperationException("524 adapter requires declared body clothing material3; no semantic guessing");
             var world=mesh.vertices.Select(mf.transform.TransformPoint).ToArray();var p=world.Select(f.Project).ToArray();var original=f.motion.surface.source[0].sharedMesh;var material=f.motion.materials[buildingPart540];
-            if(Opacity==null||opacityMesh!=original||opacityMaterial!=material){Opacity=new OpacityRegion525(original,buildingPart540,material);opacityMesh=original;opacityMaterial=material;}
+            var scope=buildingPart540==0?Scope551(f):null;
+            if(Opacity==null||opacityMesh!=original||opacityMaterial!=material||Opacity.Included551!=scope){Opacity=new OpacityRegion525(original,buildingPart540,material,scope);opacityMesh=original;opacityMaterial=material;}
             Source.AddRange(ClosedRegion524.BuildSegments(Opacity.Project(p,UseOpacityCurves527)));
             foreach(var ring in Source){SourcePoints+=ring.Length;var fit=UseWholeRegions539?ClosedRegionDesign539.Fit(ring):UseAreaCurves532?ClosedRegion524.FitArea532(ring):ClosedRegion524.Fit(ring,HeadRegion502.CurveError*(UseOpacityCurves527&&Opacity.UsedCurveFit527 ? .5f : 1f));if(fit.Length>=3){Curves.Add(fit);ControlPoints+=fit.Length;}}
             if(Curves.Count==0)throw new InvalidOperationException("524 no closed clothing curves");
@@ -96,8 +119,8 @@ public static class ClothRegion524
             Mask.SetPixels(colours);Mask.Apply(false,false);Shader.SetGlobalTexture("_Cloth524Mask",Mask);UploadMs=Ms(start);current=f;Status="ready";
         }catch(Exception e){Status="unsupported: "+e.Message;}
     }
-    public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){cmd.SetGlobalInt("_Cloth524Enabled",Ready(f)?1:0);cmd.SetGlobalInt("_Cloth524Parts",PartBits540);}
-    public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f){cmd.SetComputeIntParam(shader,"_Cloth524Enabled",Ready(f)?1:0);cmd.SetComputeIntParam(shader,"_Cloth524Parts",PartBits540);cmd.SetComputeTextureParam(shader,kernel,"_Cloth524Mask",Atlas540?Atlas540:Texture2D.blackTexture);cmd.SetComputeTextureParam(shader,kernel,"_Audit",Audit!=null?Audit.rt:f.audit.rt);cmd.SetComputeTextureParam(shader,kernel,"_Before",f.before.rt);cmd.SetComputeTextureParam(shader,kernel,"_Colour",f.colour.rt);}
+    public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){cmd.SetGlobalInt("_Cloth524Enabled",Ready(f)?1:0);cmd.SetGlobalInt("_Cloth524Parts",PartBits540);cmd.SetGlobalInt("_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetGlobalBuffer("_BodyScope551",ScopeBuffer551());}
+    public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f){cmd.SetComputeIntParam(shader,"_Cloth524Enabled",Ready(f)?1:0);cmd.SetComputeIntParam(shader,"_Cloth524Parts",PartBits540);cmd.SetComputeIntParam(shader,"_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetComputeBufferParam(shader,kernel,"_BodyScope551",ScopeBuffer551());cmd.SetComputeTextureParam(shader,kernel,"_Cloth524Mask",Atlas540?Atlas540:Texture2D.blackTexture);cmd.SetComputeTextureParam(shader,kernel,"_Audit",Audit!=null?Audit.rt:f.audit.rt);cmd.SetComputeTextureParam(shader,kernel,"_Before",f.before.rt);cmd.SetComputeTextureParam(shader,kernel,"_Colour",f.colour.rt);}
     public static void CopyAudit(CommandBuffer cmd,Full319View335 f){if(Ready(f))cmd.CopyTexture(f.audit.rt,Audit.rt);}
-    public static void Release(){Enabled=UseOpacityCurves527=UseAreaCurves532=UseWholeRegions539=UseSpans543=UseCompact544=UseSimplifiedSpanReference546=false;PartBits540=Outerwear540;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);foreach(var p in Parts540){if(p.mask)UnityEngine.Object.DestroyImmediate(p.mask);p.mask=null;p.opacity=null;p.original=null;p.material=null;p.source=null;p.curves=null;p.areas=null;p.selected=null;}if(Atlas540)UnityEngine.Object.DestroyImmediate(Atlas540);Atlas540=null;Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}
+    public static void Release(){UseBodyScope551=false;scopeBuffer551?.Release();scopeBuffer551=null;scopeMesh551=null;scopeHead551=null;included551=null;ScopeIncluded551=0;Enabled=UseOpacityCurves527=UseAreaCurves532=UseWholeRegions539=UseSpans543=UseCompact544=UseSimplifiedSpanReference546=false;PartBits540=Outerwear540;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalInt("_BodyScope551Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);foreach(var p in Parts540){if(p.mask)UnityEngine.Object.DestroyImmediate(p.mask);p.mask=null;p.opacity=null;p.original=null;p.material=null;p.source=null;p.curves=null;p.areas=null;p.selected=null;}if(Atlas540)UnityEngine.Object.DestroyImmediate(Atlas540);Atlas540=null;Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}
 }

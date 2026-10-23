@@ -6,7 +6,7 @@ using UnityEngine;
 public static class BoundaryModes540
 {
     [MenuItem("EValidation/Boundary540/Off (current product)")]
-    public static void Off(){ClothRegion524.Enabled=false;ClothRegion524.UseOpacityCurves527=ClothRegion524.UseAreaCurves532=ClothRegion524.UseWholeRegions539=ClothRegion524.UseSpans543=ClothRegion524.UseCompact544=false;Shader.SetGlobalInt("_Cloth524Enabled",0);Refresh();}
+    public static void Off(){ClothRegion524.Enabled=false;ClothRegion524.UseBodyScope551=false;HeadLocal367.UseCentreBodyRay550=false;ClothRegion524.UseOpacityCurves527=ClothRegion524.UseAreaCurves532=ClothRegion524.UseWholeRegions539=ClothRegion524.UseSpans543=ClothRegion524.UseCompact544=false;Shader.SetGlobalInt("_Cloth524Enabled",0);Refresh();}
     [MenuItem("EValidation/Boundary540/Clothes (outerwear-bottom-shoes)")]
     public static void Clothes(){Trial543(false,ClothRegion524.Clothing540);}
     [MenuItem("EValidation/Boundary540/Experimental Body0 plus clothes (includes hands)")]
@@ -15,10 +15,12 @@ public static class BoundaryModes540
     public static void Shape543(){Trial543(true,ClothRegion524.Clothing540);}
     [MenuItem("EValidation/Boundary540/Clothes543 (validated spans)")]
     public static void Clothes543(){Trial543(true,ClothRegion524.Clothing540,true);}
-    static void Trial543(bool shape,int parts,bool compact=false)
+    [MenuItem("EValidation/Boundary540/Experimental551 Body-hands (head retained; same-ray550)")]
+    public static void BodyAndHands551(){Trial543(true,ClothRegion524.BodyAndClothing540,true,true);}
+    static void Trial543(bool shape,int parts,bool compact=false,bool bodyScope=false)
     {
-        bool oldShape=ClothRegion524.UseSpans543,oldCompact=ClothRegion524.UseCompact544;
-        try{ClothRegion524.UseSpans543=shape;ClothRegion524.UseCompact544=compact;Enable(parts);}catch{ClothRegion524.UseSpans543=oldShape;ClothRegion524.UseCompact544=oldCompact;throw;}
+        bool oldShape=ClothRegion524.UseSpans543,oldCompact=ClothRegion524.UseCompact544,oldScope=ClothRegion524.UseBodyScope551,oldRay=HeadLocal367.UseCentreBodyRay550;
+        try{ClothRegion524.UseSpans543=shape;ClothRegion524.UseCompact544=compact;ClothRegion524.UseBodyScope551=bodyScope;HeadLocal367.UseCentreBodyRay550=bodyScope;Enable(parts);}catch{ClothRegion524.UseSpans543=oldShape;ClothRegion524.UseCompact544=oldCompact;ClothRegion524.UseBodyScope551=oldScope;HeadLocal367.UseCentreBodyRay550=oldRay;throw;}
     }
     static void Enable(int parts)
     {

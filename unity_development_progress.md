@@ -3258,3 +3258,10 @@ Interactable (abstract base class)
 - 실제한번 제어된paused진입 첫2렌더얼굴source/provider/prepared/final PNG확보. custom-list JSON누락 진단실패보존, 한번재진입 첫1렌더 sparsefloat로UV/명암값회수(전체Walk추가없음). UV43대응중39×.72오차최대5.48e-8/classifier0,4원색/classifier1;21미대응동일표면가정안함. 최초endpoint LegacySignals→BodyPalette302 role3;Provider Auto245Fragment동일식. Legacy/provider/prepared RGB0차, main UV대응(0,-2)/depthoffset.018461/RGB0차. sampledskin무채색0이나반복신고재현/해결아님.
 - frame94 Canvas표시준비/present0→95present1 관측. 첫미생산RT RGB미회수라얼굴원인연결/패치안함. 자연coldload타이밍은paused입력한계. 다음최소증거는실제회색사건전후의테스트단계/출력종류·source/class/provider/final RGBA UV meta/StageDebug/재질MPB/history. 상수덧칠/fallback보정없음.
 - ENOENT죽은24412/빈tools미실행확인후공식22792읽기로회복, 권한·계정변경없음. 두관찰완료후직접cleanEdit/pausedfalse/compilefalse/clothcurveOFF/backgroundfalse/capture0복원. 사용자settings해시보존, docs/artifacts/face-gray530/메인.html상태반영. 비옷3/내부색/212ms등별도유지, Library403재시도없음.
+
+## 242. CHARACTER-RENDER-01 — 531 옷 기원 복원, 범주만으로 정상 끝 구별 불충분
+
+- [현재] 527 material3 선언 범위/제품OFF. Edit 정확한 finger bone 검사: slot3 1224정점 중 finger가중치0, skin slot0 1432정점 양수. 현재 모델 맨손/손끝 직접 미적용; 모델 공통 해부학 필터 아님. 초기 Ring부분일치가 HoodString을 세던 진단만 정정. 사용자 설정/기존 활성44d13c0 보존.
+- 실제 Walk43/44 기하2포즈 primitive/anchor/UV/part 회수. 국소소스7/6변 미대응0, cloth 내부edge(incident2), 알파/열린옷단 아님;43오른/44왼LowerArm. Project의 Vector2쌍 반환→BuildSegments 좌표합집합→Fit 좌표링에서 원구간 기원 소실. 반ULP 저장오차 대응, 중복후보를 가시owner로 단정하지 않음. 최초 header parser0프레임 실패 보존/제품reader block순서로 진단 수정. 진단만2점fit 저장 차이 정정: 제품len>=3 적용 곡선거리1.50e-5/1.53e-5cell, ROI<8e-6. 새 최종품질 통과 아님.
+- 기존529 정상0.75×3끝을 동일투영 닫힌mesh로 만들면 같은 내부edge/material/part. 회전×직선분할8반례 확인: 기원범주/ID만으로 keep/omit 불가. 전체기하 구별불가능 증명 아님. 순서있는 연속특징 범위의 공간디자인계약이 남음;529깊이규칙/시간DP/새패널티/피부확장/새RGB·loop촬영 없음. docs/artifacts/clothing-origin531 및 메인.html 반영.
+- 직접cleanEdit/paused·compile·updatefalse,clothcurveOFF,capture0,GameMap1dirtyfalse 복원 후 asset-only도EditOFF확인. 제한환경IPC미실행 뒤 기존승인host/PID22792 read정상;보안변경/Editor중복/강제종료 없음. 회색530미확정/비옷3색/내부색/성능 별도;진단RenderFrame≠PlayerFPS, Library403재시도없음. 이번 제품개선0, 전체목표미완료.

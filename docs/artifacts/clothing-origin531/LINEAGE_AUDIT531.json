@@ -1,0 +1,2758 @@
+{
+  "status": "LOCAL_LINEAGE_AUDIT_ONLY_NO_SELECTOR_CHANGE",
+  "model": {
+    "vertices": 7964,
+    "trianglesByMaterial": {
+      "0": 10022,
+      "1": 555,
+      "2": 540,
+      "3": 2093
+    },
+    "declaredHeaders": {
+      "0": 7,
+      "1": 8,
+      "2": 9,
+      "3": 10
+    },
+    "anchors": 7742,
+    "segments": 12931,
+    "partSideTagsClothHistogram": {
+      "1,0": 525,
+      "2,0": 372,
+      "2,1": 198,
+      "3,0": 372,
+      "3,1": 198,
+      "1,1": 300,
+      "4,0": 64,
+      "5,0": 64
+    },
+    "tagThirdField": "global triangle identity, not a semantic feature tag"
+  },
+  "actualCases": [
+    {
+      "frame": 43,
+      "pose": {
+        "frame": 43,
+        "requestedPhase": 0.5375045537948608,
+        "actualPhase": 0.5375045537948608,
+        "sourceFrame": 21.50018310546875,
+        "evaluatedFrame": 21.5,
+        "ortho": 1.502601981163025,
+        "clip": "Rig|Walk_Loop",
+        "productClothEnabled": false,
+        "productCurveEnabled": false,
+        "rotation": {
+          "x": 0.0,
+          "y": 80.0,
+          "z": 0.0
+        },
+        "playerPosition": {
+          "x": 0.0,
+          "y": 0.5499998331069946,
+          "z": 2.38418573772492e-09
+        },
+        "segments": 6363,
+        "sourceLoops": 2,
+        "sourcePoints": 135,
+        "curvePoints": 63,
+        "preprocessMs": 769.4361
+      },
+      "sourceHausdorffVs527": 4.086238643445918e-05,
+      "curveHausdorffVs527": 1.4931995993978576e-05,
+      "roi": [
+        198,
+        95,
+        204,
+        103
+      ],
+      "sourceEdges": [
+        {
+          "ring": 0,
+          "edge": 116,
+          "a": [
+            201.41481018066406,
+            104.38227081298828
+          ],
+          "b": [
+            201.38015747070312,
+            102.49870300292969
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1682,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1682,
+                  "primitive": 559,
+                  "anchors": [
+                    311,
+                    310
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11677
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7079,
+                        7080
+                      ],
+                      "clothIncidentTriangles": [
+                        559,
+                        563
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          559
+                        ],
+                        [
+                          3,
+                          563
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1693,
+                  "primitive": 563,
+                  "anchors": [
+                    310,
+                    311
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11681
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7079,
+                        7080
+                      ],
+                      "clothIncidentTriangles": [
+                        559,
+                        563
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          559
+                        ],
+                        [
+                          3,
+                          563
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1693,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1682,
+                  "primitive": 559,
+                  "anchors": [
+                    311,
+                    310
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11677
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7079,
+                        7080
+                      ],
+                      "clothIncidentTriangles": [
+                        559,
+                        563
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          559
+                        ],
+                        [
+                          3,
+                          563
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1693,
+                  "primitive": 563,
+                  "anchors": [
+                    310,
+                    311
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11681
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7079,
+                        7080
+                      ],
+                      "clothIncidentTriangles": [
+                        559,
+                        563
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          559
+                        ],
+                        [
+                          3,
+                          563
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 117,
+          "a": [
+            201.38015747070312,
+            102.49870300292969
+          ],
+          "b": [
+            201.1141815185547,
+            100.63941192626953
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1703,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1703,
+                  "primitive": 566,
+                  "anchors": [
+                    315,
+                    311
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11684
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7080,
+                        7086
+                      ],
+                      "clothIncidentTriangles": [
+                        566,
+                        568
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          566
+                        ],
+                        [
+                          3,
+                          568
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1708,
+                  "primitive": 568,
+                  "anchors": [
+                    311,
+                    315
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11686
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7080,
+                        7086
+                      ],
+                      "clothIncidentTriangles": [
+                        566,
+                        568
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          566
+                        ],
+                        [
+                          3,
+                          568
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1708,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1703,
+                  "primitive": 566,
+                  "anchors": [
+                    315,
+                    311
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11684
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7080,
+                        7086
+                      ],
+                      "clothIncidentTriangles": [
+                        566,
+                        568
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          566
+                        ],
+                        [
+                          3,
+                          568
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1708,
+                  "primitive": 568,
+                  "anchors": [
+                    311,
+                    315
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11686
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7080,
+                        7086
+                      ],
+                      "clothIncidentTriangles": [
+                        566,
+                        568
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          566
+                        ],
+                        [
+                          3,
+                          568
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 118,
+          "a": [
+            201.1141815185547,
+            100.63941192626953
+          ],
+          "b": [
+            200.4129180908203,
+            99.5863265991211
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1784,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1784,
+                  "primitive": 593,
+                  "anchors": [
+                    315,
+                    332
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11711
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7086,
+                        7104
+                      ],
+                      "clothIncidentTriangles": [
+                        593,
+                        594
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          593
+                        ],
+                        [
+                          3,
+                          594
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1788,
+                  "primitive": 594,
+                  "anchors": [
+                    332,
+                    315
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11712
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7086,
+                        7104
+                      ],
+                      "clothIncidentTriangles": [
+                        593,
+                        594
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          593
+                        ],
+                        [
+                          3,
+                          594
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1788,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1784,
+                  "primitive": 593,
+                  "anchors": [
+                    315,
+                    332
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11711
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7086,
+                        7104
+                      ],
+                      "clothIncidentTriangles": [
+                        593,
+                        594
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          593
+                        ],
+                        [
+                          3,
+                          594
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1788,
+                  "primitive": 594,
+                  "anchors": [
+                    332,
+                    315
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11712
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7086,
+                        7104
+                      ],
+                      "clothIncidentTriangles": [
+                        593,
+                        594
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          593
+                        ],
+                        [
+                          3,
+                          594
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 119,
+          "a": [
+            200.4129180908203,
+            99.5863265991211
+          ],
+          "b": [
+            200.31130981445312,
+            98.48433685302734
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1801,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1801,
+                  "primitive": 599,
+                  "anchors": [
+                    332,
+                    335
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11717
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7104,
+                        7107
+                      ],
+                      "clothIncidentTriangles": [
+                        599,
+                        600
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          599
+                        ],
+                        [
+                          3,
+                          600
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1806,
+                  "primitive": 600,
+                  "anchors": [
+                    335,
+                    332
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11718
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7104,
+                        7107
+                      ],
+                      "clothIncidentTriangles": [
+                        599,
+                        600
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          599
+                        ],
+                        [
+                          3,
+                          600
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1806,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1801,
+                  "primitive": 599,
+                  "anchors": [
+                    332,
+                    335
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11717
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7104,
+                        7107
+                      ],
+                      "clothIncidentTriangles": [
+                        599,
+                        600
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          599
+                        ],
+                        [
+                          3,
+                          600
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1806,
+                  "primitive": 600,
+                  "anchors": [
+                    335,
+                    332
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11718
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7104,
+                        7107
+                      ],
+                      "clothIncidentTriangles": [
+                        599,
+                        600
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          599
+                        ],
+                        [
+                          3,
+                          600
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 120,
+          "a": [
+            200.31130981445312,
+            98.48433685302734
+          ],
+          "b": [
+            200.72103881835938,
+            97.23773956298828
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                2.5774378118428403e-06
+              ],
+              "emittedSegment": 1836,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1836,
+                  "primitive": 610,
+                  "anchors": [
+                    335,
+                    342
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11728
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7107,
+                        7114
+                      ],
+                      "clothIncidentTriangles": [
+                        610,
+                        613
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          610
+                        ],
+                        [
+                          3,
+                          613
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1843,
+                  "primitive": 613,
+                  "anchors": [
+                    342,
+                    335
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11731
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7107,
+                        7114
+                      ],
+                      "clothIncidentTriangles": [
+                        610,
+                        613
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          610
+                        ],
+                        [
+                          3,
+                          613
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                2.5774378118428403e-06
+              ],
+              "emittedSegment": 1843,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1836,
+                  "primitive": 610,
+                  "anchors": [
+                    335,
+                    342
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11728
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7107,
+                        7114
+                      ],
+                      "clothIncidentTriangles": [
+                        610,
+                        613
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          610
+                        ],
+                        [
+                          3,
+                          613
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1843,
+                  "primitive": 613,
+                  "anchors": [
+                    342,
+                    335
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11731
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7107,
+                        7114
+                      ],
+                      "clothIncidentTriangles": [
+                        610,
+                        613
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          610
+                        ],
+                        [
+                          3,
+                          613
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 121,
+          "a": [
+            200.72103881835938,
+            97.23773956298828
+          ],
+          "b": [
+            199.9142608642578,
+            95.77399444580078
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                4.087516036631613e-06,
+                0.0
+              ],
+              "emittedSegment": 1890,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1890,
+                  "primitive": 628,
+                  "anchors": [
+                    353,
+                    348
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11746
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7120,
+                        7125
+                      ],
+                      "clothIncidentTriangles": [
+                        628,
+                        768
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          628
+                        ],
+                        [
+                          3,
+                          768
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 2310,
+                  "primitive": 768,
+                  "anchors": [
+                    348,
+                    353
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11886
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7120,
+                        7125
+                      ],
+                      "clothIncidentTriangles": [
+                        628,
+                        768
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          628
+                        ],
+                        [
+                          3,
+                          768
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                4.087516036631613e-06,
+                0.0
+              ],
+              "emittedSegment": 2310,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1890,
+                  "primitive": 628,
+                  "anchors": [
+                    353,
+                    348
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11746
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7120,
+                        7125
+                      ],
+                      "clothIncidentTriangles": [
+                        628,
+                        768
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          628
+                        ],
+                        [
+                          3,
+                          768
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 2310,
+                  "primitive": 768,
+                  "anchors": [
+                    348,
+                    353
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11886
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7120,
+                        7125
+                      ],
+                      "clothIncidentTriangles": [
+                        628,
+                        768
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          628
+                        ],
+                        [
+                          3,
+                          768
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 122,
+          "a": [
+            199.9142608642578,
+            95.77399444580078
+          ],
+          "b": [
+            199.54844665527344,
+            93.59056091308594
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1891,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1891,
+                  "primitive": 629,
+                  "anchors": [
+                    348,
+                    354
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11747
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7120,
+                        7126
+                      ],
+                      "clothIncidentTriangles": [
+                        629,
+                        767
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          629
+                        ],
+                        [
+                          3,
+                          767
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 2305,
+                  "primitive": 767,
+                  "anchors": [
+                    354,
+                    348
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11885
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7120,
+                        7126
+                      ],
+                      "clothIncidentTriangles": [
+                        629,
+                        767
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          629
+                        ],
+                        [
+                          3,
+                          767
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 2305,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1891,
+                  "primitive": 629,
+                  "anchors": [
+                    348,
+                    354
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11747
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7120,
+                        7126
+                      ],
+                      "clothIncidentTriangles": [
+                        629,
+                        767
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          629
+                        ],
+                        [
+                          3,
+                          767
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 2305,
+                  "primitive": 767,
+                  "anchors": [
+                    354,
+                    348
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    3,
+                    0,
+                    11885
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7120,
+                        7126
+                      ],
+                      "clothIncidentTriangles": [
+                        629,
+                        767
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          629
+                        ],
+                        [
+                          3,
+                          767
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "originKindCounts": {
+        "INTERIOR_PROJECTED_EDGE": 28
+      },
+      "unmappedSourceEdges": 0,
+      "ringPointCounts": {
+        "newSource": [
+          128,
+          7
+        ],
+        "oldSource": [
+          128,
+          7
+        ],
+        "newCurve": [
+          61,
+          2
+        ],
+        "oldCurve": [
+          61
+        ]
+      },
+      "localCurveComparison": {
+        "maxEndpointToOtherSegments": 7.36553646522838e-06,
+        "newClippedEdges": 7,
+        "oldClippedEdges": 7
+      },
+      "localSourceComparison": {
+        "maxEndpointToOtherSegments": 7.36553646522838e-06,
+        "newClippedEdges": 7,
+        "oldClippedEdges": 7
+      },
+      "unfilteredDiagnosticCurveDistance": 0.32244128550952983,
+      "diagnosticCorrection": "ExtractOrigins531B wrote a 2-point degenerate fit. Production Prepare excludes fits with <3 points; compare valid closed regions only. Raw binary retained."
+    },
+    {
+      "frame": 44,
+      "pose": {
+        "frame": 44,
+        "requestedPhase": 0.5500046014785767,
+        "actualPhase": 0.5500046014785767,
+        "sourceFrame": 22.00018310546875,
+        "evaluatedFrame": 22.0,
+        "ortho": 1.502601981163025,
+        "clip": "Rig|Walk_Loop",
+        "productClothEnabled": false,
+        "productCurveEnabled": false,
+        "rotation": {
+          "x": 0.0,
+          "y": 80.0,
+          "z": 0.0
+        },
+        "playerPosition": {
+          "x": 0.0,
+          "y": 0.5499998331069946,
+          "z": 2.38418573772492e-09
+        },
+        "segments": 6363,
+        "sourceLoops": 2,
+        "sourcePoints": 137,
+        "curvePoints": 63,
+        "preprocessMs": 769.4361
+      },
+      "sourceHausdorffVs527": 1.52587890625e-05,
+      "curveHausdorffVs527": 1.52587890625e-05,
+      "roi": [
+        229,
+        76,
+        235,
+        82
+      ],
+      "sourceEdges": [
+        {
+          "ring": 0,
+          "edge": 56,
+          "a": [
+            228.661865234375,
+            75.65948486328125
+          ],
+          "b": [
+            229.8504638671875,
+            76.43682861328125
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1401,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1401,
+                  "primitive": 465,
+                  "anchors": [
+                    266,
+                    269
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11583
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7020,
+                        7023
+                      ],
+                      "clothIncidentTriangles": [
+                        465,
+                        488
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          465
+                        ],
+                        [
+                          3,
+                          488
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1469,
+                  "primitive": 488,
+                  "anchors": [
+                    269,
+                    266
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11606
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7020,
+                        7023
+                      ],
+                      "clothIncidentTriangles": [
+                        465,
+                        488
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          465
+                        ],
+                        [
+                          3,
+                          488
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1469,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1401,
+                  "primitive": 465,
+                  "anchors": [
+                    266,
+                    269
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11583
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7020,
+                        7023
+                      ],
+                      "clothIncidentTriangles": [
+                        465,
+                        488
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          465
+                        ],
+                        [
+                          3,
+                          488
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1469,
+                  "primitive": 488,
+                  "anchors": [
+                    269,
+                    266
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11606
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7020,
+                        7023
+                      ],
+                      "clothIncidentTriangles": [
+                        465,
+                        488
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          465
+                        ],
+                        [
+                          3,
+                          488
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 57,
+          "a": [
+            229.8504638671875,
+            76.43682861328125
+          ],
+          "b": [
+            230.9906005859375,
+            78.02603149414062
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1446,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1446,
+                  "primitive": 480,
+                  "anchors": [
+                    269,
+                    276
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11598
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7023,
+                        7031
+                      ],
+                      "clothIncidentTriangles": [
+                        480,
+                        483
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          480
+                        ],
+                        [
+                          3,
+                          483
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1454,
+                  "primitive": 483,
+                  "anchors": [
+                    276,
+                    269
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11601
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7023,
+                        7031
+                      ],
+                      "clothIncidentTriangles": [
+                        480,
+                        483
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          480
+                        ],
+                        [
+                          3,
+                          483
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1454,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1446,
+                  "primitive": 480,
+                  "anchors": [
+                    269,
+                    276
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11598
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7023,
+                        7031
+                      ],
+                      "clothIncidentTriangles": [
+                        480,
+                        483
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          480
+                        ],
+                        [
+                          3,
+                          483
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1454,
+                  "primitive": 483,
+                  "anchors": [
+                    276,
+                    269
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11601
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7023,
+                        7031
+                      ],
+                      "clothIncidentTriangles": [
+                        480,
+                        483
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          480
+                        ],
+                        [
+                          3,
+                          483
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 58,
+          "a": [
+            230.9906005859375,
+            78.02603149414062
+          ],
+          "b": [
+            232.27880859375,
+            79.274658203125
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1441,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1441,
+                  "primitive": 479,
+                  "anchors": [
+                    276,
+                    273
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11597
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7027,
+                        7031
+                      ],
+                      "clothIncidentTriangles": [
+                        479,
+                        481
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          479
+                        ],
+                        [
+                          3,
+                          481
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1447,
+                  "primitive": 481,
+                  "anchors": [
+                    273,
+                    276
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11599
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7027,
+                        7031
+                      ],
+                      "clothIncidentTriangles": [
+                        479,
+                        481
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          479
+                        ],
+                        [
+                          3,
+                          481
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1447,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1441,
+                  "primitive": 479,
+                  "anchors": [
+                    276,
+                    273
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11597
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7027,
+                        7031
+                      ],
+                      "clothIncidentTriangles": [
+                        479,
+                        481
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          479
+                        ],
+                        [
+                          3,
+                          481
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1447,
+                  "primitive": 481,
+                  "anchors": [
+                    273,
+                    276
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11599
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7027,
+                        7031
+                      ],
+                      "clothIncidentTriangles": [
+                        479,
+                        481
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          479
+                        ],
+                        [
+                          3,
+                          481
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 59,
+          "a": [
+            232.27880859375,
+            79.274658203125
+          ],
+          "b": [
+            233.80755615234375,
+            80.56956481933594
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1426,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1426,
+                  "primitive": 474,
+                  "anchors": [
+                    273,
+                    272
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11592
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7026,
+                        7027
+                      ],
+                      "clothIncidentTriangles": [
+                        474,
+                        475
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          474
+                        ],
+                        [
+                          3,
+                          475
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1429,
+                  "primitive": 475,
+                  "anchors": [
+                    272,
+                    273
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11593
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7026,
+                        7027
+                      ],
+                      "clothIncidentTriangles": [
+                        474,
+                        475
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          474
+                        ],
+                        [
+                          3,
+                          475
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1429,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1426,
+                  "primitive": 474,
+                  "anchors": [
+                    273,
+                    272
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11592
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7026,
+                        7027
+                      ],
+                      "clothIncidentTriangles": [
+                        474,
+                        475
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          474
+                        ],
+                        [
+                          3,
+                          475
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1429,
+                  "primitive": 475,
+                  "anchors": [
+                    272,
+                    273
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11593
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7026,
+                        7027
+                      ],
+                      "clothIncidentTriangles": [
+                        474,
+                        475
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          474
+                        ],
+                        [
+                          3,
+                          475
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 60,
+          "a": [
+            233.80755615234375,
+            80.56956481933594
+          ],
+          "b": [
+            234.00146484375,
+            81.48030090332031
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1430,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1430,
+                  "primitive": 475,
+                  "anchors": [
+                    274,
+                    272
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11593
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7026,
+                        7028
+                      ],
+                      "clothIncidentTriangles": [
+                        475,
+                        477
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          475
+                        ],
+                        [
+                          3,
+                          477
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1435,
+                  "primitive": 477,
+                  "anchors": [
+                    272,
+                    274
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11595
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7026,
+                        7028
+                      ],
+                      "clothIncidentTriangles": [
+                        475,
+                        477
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          475
+                        ],
+                        [
+                          3,
+                          477
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1435,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1430,
+                  "primitive": 475,
+                  "anchors": [
+                    274,
+                    272
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11593
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7026,
+                        7028
+                      ],
+                      "clothIncidentTriangles": [
+                        475,
+                        477
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          475
+                        ],
+                        [
+                          3,
+                          477
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1435,
+                  "primitive": 477,
+                  "anchors": [
+                    272,
+                    274
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11595
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7026,
+                        7028
+                      ],
+                      "clothIncidentTriangles": [
+                        475,
+                        477
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          475
+                        ],
+                        [
+                          3,
+                          477
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ring": 0,
+          "edge": 61,
+          "a": [
+            234.00146484375,
+            81.48030090332031
+          ],
+          "b": [
+            234.15370178222656,
+            82.01358032226562
+          ],
+          "endpointStorageErrorBounds": [
+            8.530022399520072e-06,
+            8.530022399520072e-06
+          ],
+          "lineage": [
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1459,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1459,
+                  "primitive": 485,
+                  "anchors": [
+                    274,
+                    279
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11603
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7028,
+                        7034
+                      ],
+                      "clothIncidentTriangles": [
+                        485,
+                        489
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          485
+                        ],
+                        [
+                          3,
+                          489
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1471,
+                  "primitive": 489,
+                  "anchors": [
+                    279,
+                    274
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11607
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7028,
+                        7034
+                      ],
+                      "clothIncidentTriangles": [
+                        485,
+                        489
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          485
+                        ],
+                        [
+                          3,
+                          489
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            },
+            {
+              "endpointResiduals": [
+                0.0,
+                0.0
+              ],
+              "emittedSegment": 1471,
+              "resolution": "EXACT_RAW_ANCHOR_PAIR",
+              "origins": [
+                {
+                  "sourceSegment": 1459,
+                  "primitive": 485,
+                  "anchors": [
+                    274,
+                    279
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11603
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7028,
+                        7034
+                      ],
+                      "clothIncidentTriangles": [
+                        485,
+                        489
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          485
+                        ],
+                        [
+                          3,
+                          489
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                },
+                {
+                  "sourceSegment": 1471,
+                  "primitive": 489,
+                  "anchors": [
+                    279,
+                    274
+                  ],
+                  "opacity": false,
+                  "materialSlot": 3,
+                  "declaredPartHeader": 10,
+                  "partTags": [
+                    2,
+                    0,
+                    11607
+                  ],
+                  "meshEdgeCandidates": [
+                    {
+                      "vertices": [
+                        7028,
+                        7034
+                      ],
+                      "clothIncidentTriangles": [
+                        485,
+                        489
+                      ],
+                      "allMaterialIncidence": [
+                        [
+                          3,
+                          485
+                        ],
+                        [
+                          3,
+                          489
+                        ]
+                      ],
+                      "kind": "INTERIOR_PROJECTED_EDGE"
+                    }
+                  ],
+                  "kind": "INTERIOR_PROJECTED_EDGE"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "originKindCounts": {
+        "INTERIOR_PROJECTED_EDGE": 24
+      },
+      "unmappedSourceEdges": 0,
+      "ringPointCounts": {
+        "newSource": [
+          130,
+          7
+        ],
+        "oldSource": [
+          130,
+          7
+        ],
+        "newCurve": [
+          61,
+          2
+        ],
+        "oldCurve": [
+          61
+        ]
+      },
+      "localCurveComparison": {
+        "maxEndpointToOtherSegments": 6.9173354120266595e-06,
+        "newClippedEdges": 4,
+        "oldClippedEdges": 4
+      },
+      "localSourceComparison": {
+        "maxEndpointToOtherSegments": 6.3851208217556475e-06,
+        "newClippedEdges": 6,
+        "oldClippedEdges": 6
+      },
+      "unfilteredDiagnosticCurveDistance": 0.3197373320797987,
+      "diagnosticCorrection": "ExtractOrigins531B wrote a 2-point degenerate fit. Production Prepare excludes fits with <3 points; compare valid closed regions only. Raw binary retained."
+    }
+  ],
+  "limits": [
+    "IDs are provenance, not feature importance.",
+    "Union lineage is audited only in the two requested local ROIs.",
+    "Float endpoint matching uses half-ULP storage error, no free pixel radius.",
+    "Coincident source candidates are retained; no role-only same-surface assumption.",
+    "Curve comparison applies the existing production fit.Length>=3 guard; unfiltered diagnostic binary and distances are preserved."
+  ]
+}

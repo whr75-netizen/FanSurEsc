@@ -1,0 +1,194 @@
+--- a/Assets/EUnityValidation01/ClothRegion524/Runtime/OpacityRegion525.cs
++++ b/Assets/EUnityValidation01/ClothRegion524/Runtime/OpacityRegion525.cs
+@@ -143 +143,2 @@
+-    public List<(Vector2,Vector2)> Project(Vector2[] original,bool fitOpacity=false)
++    public int Canonical557(int vertex)=>canonical[vertex];
++    public List<(Vector2,Vector2)> Project(Vector2[] original,bool fitOpacity=false,Action<int,Vector2,Vector2> owned557=null)
+@@ -149 +150 @@
+-        if(fitOpacity)return CurvedProjection527(p,orientation);
++        if(fitOpacity)return CurvedProjection527(p,orientation,owned557);
+@@ -151 +152 @@
+-        foreach(var s in Segments){int sign=orientation[s.primitive];if(sign==0)continue;result.Add(sign>0?(p[s.a],p[s.b]):(p[s.b],p[s.a]));}InputSegments527=result.Count;
++        foreach(var s in Segments){int sign=orientation[s.primitive];if(sign==0)continue;var a=p[sign>0?s.a:s.b];var b=p[sign>0?s.b:s.a];result.Add((a,b));owned557?.Invoke(s.primitive,a,b);}InputSegments527=result.Count;
+@@ -233 +234 @@
+-    List<(Vector2,Vector2)> CurvedProjection527(Vector2[] p,int[] orientation)
++    List<(Vector2,Vector2)> CurvedProjection527(Vector2[] p,int[] orientation,Action<int,Vector2,Vector2> owned557)
+@@ -236 +237 @@
+-        void Emit(int a,int b,int sign){if(sign>0)result.Add((p[a],p[b]));else result.Add((p[b],p[a]));}
++        void Emit(int primitive,int a,int b,int sign){var first=p[sign>0?a:b];var last=p[sign>0?b:a];result.Add((first,last));owned557?.Invoke(primitive,first,last);}
+@@ -245 +246 @@
+-                string reason="unchanged";if(after<raw&&SameTopology527(plan,p,out reason)){FitOpacitySegments527+=after;fitted=UsedCurveFit527=true;foreach(var e in plan.candidate)Emit(e.Item1,e.Item2,sign);}
++                string reason="unchanged";if(after<raw&&SameTopology527(plan,p,out reason)){FitOpacitySegments527+=after;fitted=UsedCurveFit527=true;foreach(var e in plan.candidate)Emit(pr,e.Item1,e.Item2,sign);}
+@@ -249 +250 @@
+-            if(!fitted)foreach(int i in TriangleSegments[pr]){var s=Segments[i];Emit(s.a,s.b,sign);}
++            if(!fitted)foreach(int i in TriangleSegments[pr]){var s=Segments[i];Emit(pr,s.a,s.b,sign);}
+--- a/Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs
++++ b/Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs
+@@ -23,0 +24 @@
++    public static bool UseSurfaceSheets557;
+@@ -60,0 +62 @@
++    public static bool SelectedSource557(int sm,int primitive,int x,int y)=>Selected540(sm,x,y)&&(sm!=0||!UseSurfaceSheets557||!UseBodyScope551||SurfaceSheets557.Selected(primitive,x,y));
+@@ -108,9 +110,4 @@
+-            Source.AddRange(ClosedRegion524.BuildSegments(Opacity.Project(p,UseOpacityCurves527)));
+-            foreach(var ring in Source){SourcePoints+=ring.Length;var fit=UseWholeRegions539?ClosedRegionDesign539.Fit(ring):UseAreaCurves532?ClosedRegion524.FitArea532(ring):ClosedRegion524.Fit(ring,HeadRegion502.CurveError*(UseOpacityCurves527&&Opacity.UsedCurveFit527 ? .5f : 1f));if(fit.Length>=3){Curves.Add(fit);ControlPoints+=fit.Length;}}
+-            if(Curves.Count==0)throw new InvalidOperationException("524 no closed clothing curves");
+-            int x0=Mathf.Clamp(Mathf.FloorToInt(Curves.Min(r=>r.Min(v=>v.x)))-2,0,479),y0=Mathf.Clamp(Mathf.FloorToInt(Curves.Min(r=>r.Min(v=>v.y)))-2,0,271),x1=Mathf.Clamp(Mathf.CeilToInt(Curves.Max(r=>r.Max(v=>v.x)))+2,x0+1,480),y1=Mathf.Clamp(Mathf.CeilToInt(Curves.Max(r=>r.Max(v=>v.y)))+2,y0+1,272);Bounds=new RectInt(x0,y0,x1-x0,y1-y0);GeometryMs=Ms(start);start=Stopwatch.GetTimestamp();
+-            var graph=Curves.Select(r=>r.Select(v=>new CurveArea511.P(v.x,v.y)).ToArray()).ToList();Areas=CurveArea511.Compute(graph,x0,y0,Bounds.width,Bounds.height);AreaMs=Ms(start);start=Stopwatch.GetTimestamp();
+-            // Only feature correspondence uses Source. The fitted design area still
+-            // owns eligibility, full inward support, cut costs and the final mask.
+-            var groups=UseSpans543?BoundarySpan543.Groups(UseSimplifiedSpanReference546?Curves:Source,Areas,Bounds):null;
+-            Selected=UseSpans543?(UseCompact544?HeadRegion502.SelectRegionsCompact544(Areas,Bounds.width,Bounds.height,groups):HeadRegion502.SelectRegions543(Areas,Bounds.width,Bounds.height,groups)):HeadRegion502.SelectRegions(Areas,Bounds.width,Bounds.height);SelectionMs=Ms(start);start=Stopwatch.GetTimestamp();
++            double inputMs=Ms(start);AreaMs=SelectionMs=0;
++            if(buildingPart540==0&&UseBodyScope551&&UseSurfaceSheets557)SurfaceSheets557.Build(Opacity,p,(int)material.GetFloat("_M_CullMode"));
++            Source.AddRange(ClosedRegion524.BuildSegments(Opacity.Project(p,UseOpacityCurves527)));double unionMs=Ms(start);var r=Design557(Source);Curves.AddRange(r.curves);Bounds=r.bounds;Areas=r.areas;Selected=r.selected;GeometryMs=unionMs+r.geometryMs;
++            SourcePoints=Source.Sum(r=>r.Length);ControlPoints=Curves.Sum(r=>r.Length);int x0=Bounds.x,y0=Bounds.y;start=Stopwatch.GetTimestamp();
+@@ -123,2 +120,14 @@
+-    public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){cmd.SetGlobalInt("_Cloth524Enabled",Ready(f)?1:0);cmd.SetGlobalInt("_Cloth524Parts",PartBits540);cmd.SetGlobalInt("_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetGlobalBuffer("_BodyScope551",ScopeBuffer551());}
+-    public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f){cmd.SetComputeIntParam(shader,"_Cloth524Enabled",Ready(f)?1:0);cmd.SetComputeIntParam(shader,"_Cloth524Parts",PartBits540);cmd.SetComputeIntParam(shader,"_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetComputeBufferParam(shader,kernel,"_BodyScope551",ScopeBuffer551());cmd.SetComputeTextureParam(shader,kernel,"_Cloth524Mask",Atlas540?Atlas540:Texture2D.blackTexture);cmd.SetComputeTextureParam(shader,kernel,"_Audit",Audit!=null?Audit.rt:f.audit.rt);cmd.SetComputeTextureParam(shader,kernel,"_Before",f.before.rt);cmd.SetComputeTextureParam(shader,kernel,"_Colour",f.colour.rt);}
++    public static SurfaceSheets557.Region Design557(IEnumerable<Vector2[]> source)
++    {
++        long start=Stopwatch.GetTimestamp();var r=new SurfaceSheets557.Region{source=source.ToArray()};var curves=new List<Vector2[]>();
++        foreach(var ring in r.source){var fit=UseWholeRegions539?ClosedRegionDesign539.Fit(ring):UseAreaCurves532?ClosedRegion524.FitArea532(ring):ClosedRegion524.Fit(ring,HeadRegion502.CurveError*(UseOpacityCurves527&&Opacity.UsedCurveFit527 ? .5f : 1f));if(fit.Length>=3)curves.Add(fit);}
++        if(curves.Count==0)throw new InvalidOperationException("524 no closed clothing curves");r.curves=curves.ToArray();int x0=Mathf.Clamp(Mathf.FloorToInt(curves.Min(a=>a.Min(v=>v.x)))-2,0,479),y0=Mathf.Clamp(Mathf.FloorToInt(curves.Min(a=>a.Min(v=>v.y)))-2,0,271),x1=Mathf.Clamp(Mathf.CeilToInt(curves.Max(a=>a.Max(v=>v.x)))+2,x0+1,480),y1=Mathf.Clamp(Mathf.CeilToInt(curves.Max(a=>a.Max(v=>v.y)))+2,y0+1,272);r.bounds=new RectInt(x0,y0,x1-x0,y1-y0);r.geometryMs=Ms(start);start=Stopwatch.GetTimestamp();
++        r.areas=CurveArea511.Compute(curves.Select(a=>a.Select(v=>new CurveArea511.P(v.x,v.y)).ToArray()).ToList(),x0,y0,r.bounds.width,r.bounds.height);AreaMs+=Ms(start);start=Stopwatch.GetTimestamp();IList<Vector2[]> reference=UseSimplifiedSpanReference546?curves:(IList<Vector2[]>)r.source;var groups=UseSpans543?BoundarySpan543.Groups(reference,r.areas,r.bounds):null;
++        r.selected=UseSpans543?(UseCompact544?HeadRegion502.SelectRegionsCompact544(r.areas,r.bounds.width,r.bounds.height,groups):HeadRegion502.SelectRegions543(r.areas,r.bounds.width,r.bounds.height,groups)):HeadRegion502.SelectRegions(r.areas,r.bounds.width,r.bounds.height);SelectionMs+=Ms(start);return r;
++    }
++    public static void UploadBodyAttribution557()
++    {
++        var part=Parts540[0];var pixels=new Color[480*272];for(int y=0;y<part.bounds.height;y++)for(int x=0;x<part.bounds.width;x++){int at=y*part.bounds.width+x,i=(271-y-part.bounds.y)*480+x+part.bounds.x;pixels[i]=new Color(part.selected[at]?1:0,part.areas[at],0,1);var c=atlas540[i];c.r=part.selected[at]?1:0;atlas540[i]=c;}part.mask.SetPixels(pixels);part.mask.Apply(false,false);Atlas540.SetPixels(atlas540);Atlas540.Apply(false,false);
++    }
++    public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){SurfaceSheets557.BindProbe(cmd,Ready(f));cmd.SetGlobalInt("_Cloth524Enabled",Ready(f)?1:0);cmd.SetGlobalInt("_Cloth524Parts",PartBits540);cmd.SetGlobalInt("_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetGlobalBuffer("_BodyScope551",ScopeBuffer551());}
++    public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f){SurfaceSheets557.Bind(cmd,shader,kernel,Ready(f));cmd.SetComputeIntParam(shader,"_Cloth524Enabled",Ready(f)?1:0);cmd.SetComputeIntParam(shader,"_Cloth524Parts",PartBits540);cmd.SetComputeIntParam(shader,"_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetComputeBufferParam(shader,kernel,"_BodyScope551",ScopeBuffer551());cmd.SetComputeTextureParam(shader,kernel,"_Cloth524Mask",Atlas540?Atlas540:Texture2D.blackTexture);cmd.SetComputeTextureParam(shader,kernel,"_Audit",Audit!=null?Audit.rt:f.audit.rt);cmd.SetComputeTextureParam(shader,kernel,"_Before",f.before.rt);cmd.SetComputeTextureParam(shader,kernel,"_Colour",f.colour.rt);}
+@@ -131 +140 @@
+-    public static void Release(){UseBodyScope551=UseDomainBoundary553=false;scopeBuffer551?.Release();scopeBuffer551=null;scopeMesh551=null;scopeHead551=null;included551=null;ScopeIncluded551=0;Enabled=UseOpacityCurves527=UseAreaCurves532=UseWholeRegions539=UseSpans543=UseCompact544=UseSimplifiedSpanReference546=false;PartBits540=Outerwear540;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalInt("_BodyScope551Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);foreach(var p in Parts540){if(p.mask)UnityEngine.Object.DestroyImmediate(p.mask);p.mask=null;p.opacity=null;p.original=null;p.material=null;p.source=null;p.curves=null;p.areas=null;p.selected=null;}if(Atlas540)UnityEngine.Object.DestroyImmediate(Atlas540);Atlas540=null;Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}
++    public static void Release(){UseSurfaceSheets557=false;SurfaceSheets557.Release();UseBodyScope551=UseDomainBoundary553=false;scopeBuffer551?.Release();scopeBuffer551=null;scopeMesh551=null;scopeHead551=null;included551=null;ScopeIncluded551=0;Enabled=UseOpacityCurves527=UseAreaCurves532=UseWholeRegions539=UseSpans543=UseCompact544=UseSimplifiedSpanReference546=false;PartBits540=Outerwear540;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalInt("_BodyScope551Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);foreach(var p in Parts540){if(p.mask)UnityEngine.Object.DestroyImmediate(p.mask);p.mask=null;p.opacity=null;p.original=null;p.material=null;p.source=null;p.curves=null;p.areas=null;p.selected=null;}if(Atlas540)UnityEngine.Object.DestroyImmediate(Atlas540);Atlas540=null;Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}
+--- a/Assets/EUnityValidation01/ClothRegion524/Runtime/ClothSurface525.cs
++++ b/Assets/EUnityValidation01/ClothRegion524/Runtime/ClothSurface525.cs
+@@ -91 +91 @@
+-        Requested=cells.Count;if(Requested==0){current=f;BuildMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;return;}
++        Requested=cells.Count;if(Requested==0){SurfaceSheets557.Resolve(f,owner,Packets);current=f;BuildMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;return;}
+@@ -107 +107 @@
+-                    if(!Visible(f,q,out var source,out var weights)||!ClothRegion524.Selected540(source.submesh,cell.x,cell.y))continue;sourceUV=source.ua*weights.x+source.ub*weights.y+source.uc*weights.z;if(!ClothRegion524.Parts540[source.submesh].opacity.Opaque(sourceUV))continue;
++                    if(!Visible(f,q,out var source,out var weights)||!ClothRegion524.SelectedSource557(source.submesh,source.primitive,cell.x,cell.y))continue;sourceUV=source.ua*weights.x+source.ub*weights.y+source.uc*weights.z;if(!ClothRegion524.Parts540[source.submesh].opacity.Opaque(sourceUV))continue;
+@@ -114 +114 @@
+-        Upload(f);current=f;BuildMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;
++        SurfaceSheets557.Resolve(f,owner,Packets);Packets.RemoveAll(p=>!ClothRegion524.SelectedSource557(p.submesh,p.primitive,p.x,p.y));Upload(f);current=f;BuildMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;
+--- a/Assets/EUnityValidation01/ClothRegion524/Runtime/BoundaryModes540.cs
++++ b/Assets/EUnityValidation01/ClothRegion524/Runtime/BoundaryModes540.cs
+@@ -9 +9 @@
+-    public static void Off(){ClothRegion524.Enabled=false;ClothRegion524.UseBodyScope551=ClothRegion524.UseDomainBoundary553=false;HeadLocal367.UseCentreBodyRay550=false;ClothRegion524.UseOpacityCurves527=ClothRegion524.UseAreaCurves532=ClothRegion524.UseWholeRegions539=ClothRegion524.UseSpans543=ClothRegion524.UseCompact544=false;Shader.SetGlobalInt("_Cloth524Enabled",0);Refresh();}
++    public static void Off(){ClothRegion524.Enabled=false;ClothRegion524.UseSurfaceSheets557=ClothRegion524.UseBodyScope551=ClothRegion524.UseDomainBoundary553=false;HeadLocal367.UseCentreBodyRay550=false;ClothRegion524.UseOpacityCurves527=ClothRegion524.UseAreaCurves532=ClothRegion524.UseWholeRegions539=ClothRegion524.UseSpans543=ClothRegion524.UseCompact544=false;Shader.SetGlobalInt("_Cloth524Enabled",0);Refresh();}
+@@ -22 +22,3 @@
+-    static void Trial543(bool shape,int parts,bool compact=false,bool bodyScope=false,bool closedLines=false)
++    [MenuItem("EValidation/Boundary540/Experimental557 Surface sheets (body-hands)")]
++    public static void BodyAndHands557(){Trial543(true,ClothRegion524.BodyAndClothing540,true,true,true,true);}
++    static void Trial543(bool shape,int parts,bool compact=false,bool bodyScope=false,bool closedLines=false,bool sheets=false)
+@@ -24,2 +26,2 @@
+-        bool oldShape=ClothRegion524.UseSpans543,oldCompact=ClothRegion524.UseCompact544,oldScope=ClothRegion524.UseBodyScope551,oldRay=HeadLocal367.UseCentreBodyRay550,oldClosed=ClothRegion524.UseDomainBoundary553;
+-        try{ClothRegion524.UseSpans543=shape;ClothRegion524.UseCompact544=compact;ClothRegion524.UseBodyScope551=bodyScope;ClothRegion524.UseDomainBoundary553=closedLines;HeadLocal367.UseCentreBodyRay550=bodyScope;Enable(parts);}catch{ClothRegion524.UseSpans543=oldShape;ClothRegion524.UseCompact544=oldCompact;ClothRegion524.UseBodyScope551=oldScope;ClothRegion524.UseDomainBoundary553=oldClosed;HeadLocal367.UseCentreBodyRay550=oldRay;throw;}
++        bool oldShape=ClothRegion524.UseSpans543,oldCompact=ClothRegion524.UseCompact544,oldScope=ClothRegion524.UseBodyScope551,oldRay=HeadLocal367.UseCentreBodyRay550,oldClosed=ClothRegion524.UseDomainBoundary553,oldSheets=ClothRegion524.UseSurfaceSheets557;
++        try{ClothRegion524.UseSpans543=shape;ClothRegion524.UseCompact544=compact;ClothRegion524.UseBodyScope551=bodyScope;ClothRegion524.UseDomainBoundary553=closedLines;ClothRegion524.UseSurfaceSheets557=sheets;HeadLocal367.UseCentreBodyRay550=bodyScope;Enable(parts);}catch{ClothRegion524.UseSpans543=oldShape;ClothRegion524.UseCompact544=oldCompact;ClothRegion524.UseBodyScope551=oldScope;ClothRegion524.UseDomainBoundary553=oldClosed;ClothRegion524.UseSurfaceSheets557=oldSheets;HeadLocal367.UseCentreBodyRay550=oldRay;throw;}
+--- a/Assets/EUnityValidation01/VisibilityMotion331/Shaders/Probe331.shader
++++ b/Assets/EUnityValidation01/VisibilityMotion331/Shaders/Probe331.shader
+@@ -126,0 +127,2 @@
++StructuredBuffer<int> _SheetPrimitive557,_SheetOwner557;int _SurfaceSheets557;
++bool SheetSelected557(uint primitive,int2 p){if(_SurfaceSheets557==0)return true;int sheet=_SheetPrimitive557[primitive];return sheet>=0&&all(p>=0)&&all(p<int2(480,272))&&sheet==_SheetOwner557[p.y*480+p.x];}
+@@ -132,0 +135 @@
++  if(_Cloth524Enabled!=0&&scoped551&&bodyPart540==0&&(_Cloth524Parts&1)!=0&&!SheetSelected557(primitiveID,(int2)v.pos.xy))discard;
+--- a/Assets/EUnityValidation01/GameMapIntegration333/Shaders/Prepare333.compute
++++ b/Assets/EUnityValidation01/GameMapIntegration333/Shaders/Prepare333.compute
+@@ -9,0 +10,2 @@
++StructuredBuffer<int> _SheetPrimitive557,_SheetOwner557;int _SurfaceSheets557;
++bool SheetSelected557(int part,float primitive,int2 p){if(_SurfaceSheets557==0||part!=0)return true;if(primitive<=0)return false;int sheet=_SheetPrimitive557[(int)round(primitive)-1];return sheet>=0&&sheet==_SheetOwner557[p.y*480+p.x];}
+@@ -12,0 +15 @@
++bool SelectedSource557(int part,float primitive,int2 p){return SelectedPart540(part,p)&&SheetSelected557(part,primitive,p);}
+@@ -17,2 +20,2 @@
+- if(ActivePart540(ownPart)&&InScope551(ownPart,r.w)&&!SelectedPart540(ownPart,p)){m=0;f=0;r=0;uv=0;c=0;}
+- if(selected&&r.x<=0){int2 best=int2(-1,-1);int score=100;for(int yy=0;yy<2;yy++)for(int xx=0;xx<2;xx++){int2 q=2*p+int2(xx,yy);float4 rm=_RawMeta.Load(int3(q,0)),nc=_NativeInput.Load(int3(q,0));int part=(int)round(rm.y)-8;int d=(xx-1)*(xx-1)+(yy-1)*(yy-1);if(rm.x>0&&InScope551(part,rm.w)&&SelectedPart540(part,p)&&nc.a>.5&&d<score){score=d;best=q;}}if(best.x>=0){n=best;added=true;donated=true;m=_Surface.Load(int3(n,0));f=_Palette.Load(int3(n,0));r=_RawMeta.Load(int3(n,0));uv=_RawUV.Load(int3(n,0));c=_NativeInput.Load(int3(n,0));}else missing=true;}
++ if(ActivePart540(ownPart)&&InScope551(ownPart,r.w)&&!SelectedSource557(ownPart,r.w,p)){m=0;f=0;r=0;uv=0;c=0;}
++ if(selected&&r.x<=0){int2 best=int2(-1,-1);int score=100;for(int yy=0;yy<2;yy++)for(int xx=0;xx<2;xx++){int2 q=2*p+int2(xx,yy);float4 rm=_RawMeta.Load(int3(q,0)),nc=_NativeInput.Load(int3(q,0));int part=(int)round(rm.y)-8;int d=(xx-1)*(xx-1)+(yy-1)*(yy-1);if(rm.x>0&&InScope551(part,rm.w)&&SelectedSource557(part,rm.w,p)&&nc.a>.5&&d<score){score=d;best=q;}}if(best.x>=0){n=best;added=true;donated=true;m=_Surface.Load(int3(n,0));f=_Palette.Load(int3(n,0));r=_RawMeta.Load(int3(n,0));uv=_RawUV.Load(int3(n,0));c=_NativeInput.Load(int3(n,0));}else missing=true;}
+@@ -21 +24 @@
+-[numthreads(8,8,1)]void Resolve(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;float4 o=_Owner[p],r=_PreparedMeta[p];int part=(int)round(o.x)-8;if(_Cloth524Enabled!=0&&ActivePart540(part)&&InScope551(part,r.w)&&!SelectedPart540(part,p)){float4 a=_Audit[p];a.b=1;_Audit[p]=a;_Before[p]=0;_Colour[p]=0;_Owner[p]=0;_PreparedMeta[p]=0;_PreparedUV[p]=0;o=0;r=0;}_ResolvedMeta[p]=float4(o.z,o.x,r.z,o.w);_ResolvedUV[p]=_PreparedUV[p];}
++[numthreads(8,8,1)]void Resolve(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;float4 o=_Owner[p],r=_PreparedMeta[p];int part=(int)round(o.x)-8;if(_Cloth524Enabled!=0&&ActivePart540(part)&&InScope551(part,r.w)&&!SelectedSource557(part,r.w,p)){float4 a=_Audit[p];a.b=1;_Audit[p]=a;_Before[p]=0;_Colour[p]=0;_Owner[p]=0;_PreparedMeta[p]=0;_PreparedUV[p]=0;o=0;r=0;}_ResolvedMeta[p]=float4(o.z,o.x,r.z,o.w);_ResolvedUV[p]=_PreparedUV[p];}
+--- /dev/null
++++ b/Assets/EUnityValidation01/ClothRegion524/Runtime/SurfaceSheets557.cs
+@@ -0,0 +1,74 @@
++using System;
++using System.Collections.Generic;
++using System.Diagnostics;
++using System.Linq;
++using UnityEngine;
++using UnityEngine.Rendering;
++
++// A material is not a source surface. The existing common region selector stays
++// intact; only its area evidence is attributed to the actual first-pass supplier.
++// Front-facing sheets are source attribution, not independent design/cut domains.
++public static class SurfaceSheets557
++{
++    public sealed class Region
++    {
++        public Vector2[][] source,curves;
++        public RectInt bounds;
++        public float[] areas;
++        public bool[] selected;
++        public double geometryMs;
++    }
++    public static readonly List<Region> Regions=new();
++    public static int[] PrimitiveSheet {get;private set;}
++    public static double BuildMs;
++    static ComputeBuffer primitives,selection;
++    static int[] owners;
++    public static bool Resolved {get;private set;}
++    public static int ChangedAreas;
++    public static double ResolveMs;
++    static void Data<T>(ref ComputeBuffer buffer,T[] data,int stride)where T:struct
++    {
++        if(data.Length==0)throw new InvalidOperationException("557 empty GPU table");
++        if(buffer==null||buffer.count!=data.Length){buffer?.Release();buffer=new ComputeBuffer(data.Length,stride);}buffer.SetData(data);
++    }
++    static void Buffers(){if(primitives==null)Data(ref primitives,new[]{-1},4);if(selection==null)Data(ref selection,new[]{-1},4);}
++    public static bool Active=>ClothRegion524.UseSurfaceSheets557&&ClothRegion524.UseBodyScope551&&PrimitiveSheet!=null&&Regions.Count>0;
++    public static bool Selected(int primitive,int x,int y)
++    {
++        if(!Active||!Resolved)return true;if(primitive<0||primitive>=PrimitiveSheet.Length||x<0||x>=480||y<0||y>=272)return false;return PrimitiveSheet[primitive]>=0&&PrimitiveSheet[primitive]==owners[(271-y)*480+x];
++    }
++    public static void Build(OpacityRegion525 opacity,Vector2[] projected,int cull)
++    {
++        long start=Stopwatch.GetTimestamp();Resolved=false;Regions.Clear();int count=opacity.Indices.Length/3;var parent=new int[count];var sign=new int[count];var edges=new Dictionary<(int,int,int),int>();
++        int Root(int i){while(parent[i]!=i){parent[i]=parent[parent[i]];i=parent[i];}return i;}
++        for(int i=0;i<count;i++)
++        {
++            parent[i]=i;if(opacity.Included551!=null&&!opacity.Included551[i])continue;int at=i*3;var a=projected[opacity.Indices[at]];var b=projected[opacity.Indices[at+1]];var c=projected[opacity.Indices[at+2]];double det=(double)(b.x-a.x)*(c.y-a.y)-(double)(b.y-a.y)*(c.x-a.x);
++            if(Math.Abs(det)<1e-10||cull==2&&det<=0||cull==1&&det>=0)continue;sign[i]=Math.Sign(det);
++            for(int e=0;e<3;e++){int u=opacity.Canonical557(opacity.Indices[at+e]),v=opacity.Canonical557(opacity.Indices[at+(e+1)%3]);var key=(Math.Min(u,v),Math.Max(u,v),sign[i]);if(edges.TryGetValue(key,out int other))parent[Root(i)]=Root(other);else edges.Add(key,i);}
++        }
++        var ids=new Dictionary<int,int>();PrimitiveSheet=new int[count];var segments=new List<List<(Vector2,Vector2)>>();
++        for(int i=0;i<count;i++){PrimitiveSheet[i]=-1;if(sign[i]==0)continue;int root=Root(i);if(!ids.TryGetValue(root,out int id)){id=ids.Count;ids.Add(root,id);segments.Add(new List<(Vector2,Vector2)>());}PrimitiveSheet[i]=id;}
++        opacity.Project(projected,ClothRegion524.UseOpacityCurves527,(pr,a,b)=>{int id=PrimitiveSheet[pr];if(id>=0)segments[id].Add((a,b));});
++        // Remap after genuinely zero-area projections; no raster fallback.
++        var remap=new int[segments.Count];for(int i=0;i<segments.Count;i++){var source=ClosedRegion524.BuildSegments(segments[i]);remap[i]=-1;if(source.Count==0)continue;remap[i]=Regions.Count;int x=Mathf.Clamp(Mathf.FloorToInt(source.Min(r=>r.Min(p=>p.x))),0,479),y=Mathf.Clamp(Mathf.FloorToInt(source.Min(r=>r.Min(p=>p.y))),0,271),right=Mathf.Clamp(Mathf.CeilToInt(source.Max(r=>r.Max(p=>p.x))),x+1,480),bottom=Mathf.Clamp(Mathf.CeilToInt(source.Max(r=>r.Max(p=>p.y))),y+1,272);var bounds=new RectInt(x,y,right-x,bottom-y);Regions.Add(new Region{source=source.ToArray(),curves=source.ToArray(),bounds=bounds,areas=CurveArea511.Compute(source.Select(r=>r.Select(p=>new CurveArea511.P(p.x,p.y)).ToArray()).ToList(),x,y,bounds.width,bounds.height)});}
++        for(int i=0;i<count;i++)if(PrimitiveSheet[i]>=0)PrimitiveSheet[i]=remap[PrimitiveSheet[i]];
++        if(Regions.Count==0)throw new InvalidOperationException("557 no closed visible surface sheets");
++        owners=Enumerable.Repeat(-1,480*272).ToArray();Data(ref primitives,PrimitiveSheet,4);Data(ref selection,owners,4);BuildMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;
++    }
++    public static void Resolve(Full319View335 f,Color[] sourceOwner,List<ClothSurface525.Packet> packets)
++    {
++        if(!Active)return;long start=Stopwatch.GetTimestamp();ChangedAreas=0;var part=ClothRegion524.Parts540[0];
++        void Attribute(int x,int y,int primitive)
++        {
++            if(!ClothRegion524.InScope551(0,primitive)||!part.bounds.Contains(new Vector2Int(x,y)))return;int at=(y-part.bounds.y)*part.bounds.width+x-part.bounds.x;if(!part.selected[at])return;if(primitive<0||primitive>=PrimitiveSheet.Length||PrimitiveSheet[primitive]<0)throw new InvalidOperationException("557 supplier lacks front-facing source sheet");int sheet=PrimitiveSheet[primitive];owners[(271-y)*480+x]=sheet;var r=Regions[sheet];float area=r.bounds.Contains(new Vector2Int(x,y))?r.areas[(y-r.bounds.y)*r.bounds.width+x-r.bounds.x]:0;float next=Mathf.Min(part.areas[at],area);if(next!=part.areas[at]){part.areas[at]=next;ChangedAreas++;}
++        }
++        for(int y=part.bounds.y;y<part.bounds.yMax;y++)for(int x=part.bounds.x;x<part.bounds.xMax;x++){var o=sourceOwner[(271-y)*480+x];if(o.b>0&&Mathf.RoundToInt(o.r)==8)Attribute(x,y,Mathf.RoundToInt(o.a)-1);}
++        foreach(var p in packets)if(p.submesh==0)Attribute(p.x,p.y,p.primitive);
++        var groups=ClothRegion524.UseSpans543?BoundarySpan543.Groups(ClothRegion524.UseSimplifiedSpanReference546?part.curves:part.source,part.areas,part.bounds):null;var selected=ClothRegion524.UseSpans543?(ClothRegion524.UseCompact544?HeadRegion502.SelectRegionsCompact544(part.areas,part.bounds.width,part.bounds.height,groups):HeadRegion502.SelectRegions543(part.areas,part.bounds.width,part.bounds.height,groups)):HeadRegion502.SelectRegions(part.areas,part.bounds.width,part.bounds.height);
++        for(int i=0;i<selected.Length;i++)if(selected[i]&&!part.selected[i])throw new InvalidOperationException("557 unexpected selection expansion");part.selected=selected;ClothRegion524.UploadBodyAttribution557();Data(ref selection,owners,4);Resolved=true;ResolveMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;
++    }
++    public static void BindProbe(RasterCommandBuffer cmd,bool enabled){Buffers();cmd.SetGlobalInt("_SurfaceSheets557",enabled&&Active&&Resolved?1:0);cmd.SetGlobalBuffer("_SheetPrimitive557",primitives);cmd.SetGlobalBuffer("_SheetOwner557",selection);}
++    public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,bool enabled){Buffers();cmd.SetComputeIntParam(shader,"_SurfaceSheets557",enabled&&Active&&Resolved?1:0);cmd.SetComputeBufferParam(shader,kernel,"_SheetPrimitive557",primitives);cmd.SetComputeBufferParam(shader,kernel,"_SheetOwner557",selection);}
++    public static void Release(){primitives?.Release();selection?.Release();primitives=selection=null;PrimitiveSheet=null;owners=null;Regions.Clear();Resolved=false;BuildMs=ResolveMs=0;}
++}
+--- /dev/null
++++ b/Assets/EUnityValidation01/ClothRegion524/Runtime/SurfaceSheets557.cs.meta
+@@ -0,0 +1,2 @@
++fileFormatVersion: 2
++guid: 0f52989b3fc60304a8d5be97a00f9817

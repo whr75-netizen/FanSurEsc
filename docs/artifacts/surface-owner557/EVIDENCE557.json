@@ -1,0 +1,180 @@
+{
+  "outcome": "not adopted; experimental product changes withdrawn; prior553/547 restored",
+  "patchValidation": {"format":"zero-context unified diff","defaultCheck":"failed on3 mixed-EOL working-tree files","whitespaceNormalizedCheck":"git apply --check --ignore-space-change --unidiff-zero passed","applied":false,"exactCandidateBytes":"Prototype557B/MANIFEST557B.json"},
+  "cause556": {
+    "cell": [
+      209,
+      110
+    ],
+    "pose": 48,
+    "handRawArea": 0.33321625,
+    "rearLegRawArea": 0.2712673,
+    "unionRawArea": 0.598074555,
+    "unionFitArea": 0.581639,
+    "supplierPrimitive": 7920,
+    "sameRayHandDepth": 14.006278,
+    "rearLegDepthRange": [
+      14.235926628112793,
+      14.273967742919922
+    ]
+  },
+  "trialA": {
+    "poses": 15,
+    "status": "CAPTURED",
+    "targetRemoved": true,
+    "rejected": "independent sheet Fit/cut changes spatial support, creates new holes; area at48 wrist209105 unchanged .365497053"
+  },
+  "trialB": {
+    "poses": 15,
+    "status": "CAPTURED",
+    "targetRemoved": true,
+    "sameSurfaceProxy": "front-facing original-edge connected component; not a certified whole-hand design domain",
+    "actual48HandRawArea": 0.33320990204811096,
+    "sourceEligibilityViolation": 0,
+    "packetViolation": 0,
+    "unsupported": 0,
+    "clothesMasksAllExact": true,
+    "newClosedHoleObservations": [
+      {
+        "frame": 41,
+        "cells": [
+          {
+            "xy": [
+              234,
+              85
+            ],
+            "newOpaque": false,
+            "oldRole": 8,
+            "oldPrimitive": 8532,
+            "newRole": 0,
+            "newHole": true
+          }
+        ]
+      },
+      {
+        "frame": 43,
+        "cells": [
+          {
+            "xy": [
+              234,
+              85
+            ],
+            "newOpaque": false,
+            "oldRole": 8,
+            "oldPrimitive": 8544,
+            "newRole": 0,
+            "newHole": true
+          }
+        ]
+      },
+      {
+        "frame": 44,
+        "cells": [
+          {
+            "xy": [
+              234,
+              85
+            ],
+            "newOpaque": false,
+            "oldRole": 8,
+            "oldPrimitive": 8548,
+            "newRole": 0,
+            "newHole": true
+          }
+        ]
+      },
+      {
+        "frame": 47,
+        "cells": [
+          {
+            "xy": [
+              209,
+              105
+            ],
+            "newOpaque": false,
+            "oldRole": 8,
+            "oldPrimitive": 7823,
+            "newRole": 0,
+            "newHole": true
+          }
+        ]
+      },
+      {
+        "frame": 48,
+        "cells": [
+          {
+            "xy": [
+              233,
+              86
+            ],
+            "newOpaque": false,
+            "oldRole": 8,
+            "oldPrimitive": 8546,
+            "newRole": 0,
+            "newHole": true
+          }
+        ]
+      },
+      {
+        "frame": 50,
+        "cells": [
+          {
+            "xy": [
+              231,
+              87
+            ],
+            "newOpaque": false,
+            "oldRole": 8,
+            "oldPrimitive": 8549,
+            "newRole": 0,
+            "newHole": true
+          }
+        ]
+      }
+    ],
+    "rawHairFloatDifferences": [
+      {
+        "frame": 51,
+        "xy": [
+          231,
+          38
+        ],
+        "maxRawFloatDelta": 1.3036653399467468e-05,
+        "actualRGBA8BlockEqual": true
+      },
+      {
+        "frame": 51,
+        "xy": [
+          221,
+          57
+        ],
+        "maxRawFloatDelta": 1.8713995814323425e-05,
+        "actualRGBA8BlockEqual": true
+      }
+    ],
+    "sourceBuildMsMedian": 19.3644,
+    "resolveMsMedian": 4.3263,
+    "timingScope": "source attribution build and selector area resolve; Resolve is included in packet stage; not Player frame, excludes subsequent readback/save; not an optimization benchmark"
+  },
+  "notRun": [
+    "full Walk loop for557",
+    "Player build",
+    "optimization or allocation comparison",
+    "hair negative-region modification"
+  ],
+  "restoration": {
+    "captureB": {
+      "status": "CAPTURED",
+      "poses": 15,
+      "error": "",
+      "inputRestored": true,
+      "animatorRestored": true,
+      "clockRestored": true
+    },
+    "directUnityReceipt": "FINAL_RESTORED557.json",
+    "codeArchive": "Prototype557B/PROTOTYPE557B.patch",
+    "newScriptAndMetaRemoved": true
+  },
+  "prior556TipVerdict": "33/49 are real local alpha contractions; whole-finger loss not established; fixed-cell restoration stopped",
+  "nextDependency": "A front-facing connected sheet is not the whole local surface/design region of a hand. Preserve source incidence through folds and actual visibility/joins before attributing area, instead of independent cuts, arbitrary neighbour retention, or bone-aesthetic constants."
+}

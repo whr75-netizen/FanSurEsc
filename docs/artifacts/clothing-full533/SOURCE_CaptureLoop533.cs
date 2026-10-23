@@ -1,0 +1,97 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEditor;
+using FantasySurvival.WorldLighting;
+public static class CaptureLoop533{
+ static string Root;static int firstFrame,lastFrame;
+ static Gameplay397 g;static HeadLocal367 h;static Full319View335 f;static PostView366 post;static Animator a;static PlayerMovement move;static SkyLightingCycleController sky;static Action prior;
+ static bool oldMove,oldAnim,oldAuto,oldBg,oldPaused,oldIndex,oldCurve,oldArea;static float oldLoc,oldSpeed,oldCapture,oldTime;static int oldState,count;static Quaternion oldRotation;static bool queued;static double deadline;
+ [Serializable]class PacketRecord{public ClothSurface525.Packet[] packets;}
+ [Serializable]class Probe{public int frame;public float phase,skyHour;public string clip;public bool paused,postEnabled,headPostEnabled;public int roiX,roiY,roiW,roiH;public int[]offset;public float capture;public Vector3 rotation;public List<Stage>stages=new();public List<Sample>samples=new();public List<Tri>triangles=new();}
+ [Serializable]class Stage{public string name;public bool[]patch;}
+ [Serializable]class Sample{public int group,x,y,sx,sy;public Color rgba,surface,meta,uv;}
+ [Serializable]class Tri{public int primitive,submesh;public int[]vertices;public Vector3[]world;public Vector2[]projected,uv;}
+ static Color[] Read(RenderTexture rt){var prior=RenderTexture.active;try{RenderTexture.active=rt;var t=new Texture2D(rt.width,rt.height,TextureFormat.RGBAFloat,false,true);try{t.ReadPixels(new Rect(0,0,rt.width,rt.height),0,0,false);t.Apply(false,false);return t.GetPixels();}finally{UnityEngine.Object.Destroy(t);}}finally{RenderTexture.active=prior;}}
+ static void Dump(string name,RenderTexture rt){var t=Read(rt);using(var s=new FileStream(Root+name+".bin",FileMode.CreateNew))using(var b=new BinaryWriter(s)){b.Write(rt.width);b.Write(rt.height);b.Write(0);b.Write(0);for(int y=rt.height-1;y>=0;y--)for(int x=0;x<rt.width;x++){var c=t[y*rt.width+x];b.Write(c.r);b.Write(c.g);b.Write(c.b);b.Write(c.a);}}}
+ static void Png(string name){var cs=Read(g.player.output.rt);var t=new Texture2D(960,544,TextureFormat.RGBA32,false);try{t.SetPixels(cs.Select(c=>new Color(Mathf.LinearToGammaSpace(c.r),Mathf.LinearToGammaSpace(c.g),Mathf.LinearToGammaSpace(c.b),1)).ToArray());t.Apply();File.WriteAllBytes(Root+name+".png",t.EncodeToPNG());}finally{UnityEngine.Object.Destroy(t);}}
+ static Color[][] lineBase;
+ static Color[] lastColour,lastMeta,lastUV,baseOwnerMeta,baseOwnerUV,baseOwnerColour;
+ static void Crop(string name,Color[] data,RectInt bounds){using(var w=new BinaryWriter(File.Create(Root+name+".bin"))){w.Write(bounds.width);w.Write(bounds.height);w.Write(bounds.x);w.Write(bounds.y);for(int y=bounds.y;y<bounds.yMax;y++)for(int x=bounds.x;x<bounds.xMax;x++){var p=data[(271-y)*480+x];w.Write(p.r);w.Write(p.g);w.Write(p.b);w.Write(p.a);}}}
+ static void Save(string prefix){
+  lastColour=Read(f.colour.rt);lastMeta=Read(f.preparedMeta.rt);lastUV=Read(f.preparedUV.rt);int x0=480,y0=272,x1=0,y1=0;
+  for(int y=0;y<272;y++)for(int x=0;x<480;x++)if(lastColour[(271-y)*480+x].a>.5f){x0=Math.Min(x0,x);y0=Math.Min(y0,y);x1=Math.Max(x1,x+1);y1=Math.Max(y1,y+1);}
+  if(x1<=x0||y1<=y0)throw new Exception("527 full actor absent");x0=Math.Max(0,x0-2);y0=Math.Max(0,y0-2);x1=Math.Min(480,x1+2);y1=Math.Min(272,y1+2);var bounds=new RectInt(x0,y0,x1-x0,y1-y0);
+  using(var w=new BinaryWriter(File.Create(Root+prefix+"_PACKETS.bin"))){w.Write(ClothSurface525.Packets.Count);foreach(var p in ClothSurface525.Packets){w.Write(p.x);w.Write(p.y);w.Write(p.primitive);foreach(float v in new[]{p.sourceProjection.x,p.sourceProjection.y,p.uv.x,p.uv.y,p.barycentric.x,p.barycentric.y,p.barycentric.z,p.world.x,p.world.y,p.world.z,p.depth,p.distance})w.Write(v);}}
+  Crop(prefix+"_FINAL",lastColour,bounds);Crop(prefix+"_META",lastMeta,bounds);Crop(prefix+"_UV",lastUV,bounds);Png(prefix);LineInputs(prefix);
+ }
+
+ static void LineInputs(string prefix)
+ {
+  var stage=new[]{Read(f.prepared.rt),Read(f.preparedOwner.rt),Read(f.postLine.rt),Read(f.audit.rt),Read(f.paletteAudit.rt)};
+  if(prefix.EndsWith("_BASE")){lineBase=stage;return;}
+  var points=new List<Vector2Int>();int changed=0;
+  for(int i=0;i<lastColour.Length;i++)
+  {
+   var b=baseOwnerMeta[i];var a=lastMeta[i];
+   bool same=baseOwnerColour[i].a>.5&&lastColour[i].a>.5&&b.g==a.g&&b.a==a.a&&Mathf.Abs(b.r-a.r)<.000002f&&Mathf.Abs(baseOwnerUV[i].r-lastUV[i].r)<.000002f&&Mathf.Abs(baseOwnerUV[i].g-lastUV[i].g)<.000002f;
+   float difference=Mathf.Max(Mathf.Abs(baseOwnerColour[i].r-lastColour[i].r),Mathf.Abs(baseOwnerColour[i].g-lastColour[i].g),Mathf.Abs(baseOwnerColour[i].b-lastColour[i].b));
+   if(!same||Mathf.RoundToInt(b.g)==11||difference<=.000001f)continue;
+   changed++;int px=i%480,py=271-i/480;
+   for(int dy=-2;dy<=2;dy++)for(int dx=-2;dx<=2;dx++){var p=new Vector2Int(px+dx,py+dy);if(p.x>=0&&p.x<480&&p.y>=0&&p.y<272&&!points.Contains(p))points.Add(p);}
+  }
+  if(changed==0)return;
+  using(var w=new BinaryWriter(File.Create(Root+prefix+"_LINE_INPUTS.bin")))
+  {
+   w.Write(534);w.Write(changed);w.Write(points.Count);
+   foreach(var p in points.OrderBy(p=>p.y).ThenBy(p=>p.x)){w.Write(p.x);w.Write(p.y);int i=(271-p.y)*480+p.x;foreach(var group in new[]{lineBase,stage})foreach(var values in group){var c=values[i];w.Write(c.r);w.Write(c.g);w.Write(c.b);w.Write(c.a);}}
+  }
+  foreach(int tag in new[]{0,1})using(var w=new BinaryWriter(File.Create(Root+prefix+"_LINE_COVERAGE_"+tag+".bin"))){var values=(tag==0?lineBase:stage)[0];for(int y=0;y<272;y++)for(int x=0;x<480;x++)w.Write((byte)(values[(271-y)*480+x].a>0?1:0));}
+  File.WriteAllText(Root+prefix+"_LINE_PARAMS.txt","lineTone="+f.lineTone+" usePalette="+f.usePalette+" deepCream="+f.deepCream+" deepSkin="+f.deepSkin+" actualHour="+sky.CurrentHour);
+ }
+
+ static void Geometry(string prefix){
+  using(var w=new BinaryWriter(File.Create(Root+prefix+"_GEOMETRY.bin"))){foreach(var list in new[]{ClothRegion524.Source,ClothRegion524.Curves}){w.Write(list.Count);foreach(var ring in list){w.Write(ring.Length);foreach(var q in ring){w.Write(q.x);w.Write(q.y);}}}}
+  using(var w=new BinaryWriter(File.Create(Root+prefix+"_REGION.bin"))){var b=ClothRegion524.Bounds;w.Write(b.x);w.Write(b.y);w.Write(b.width);w.Write(b.height);foreach(float a in ClothRegion524.Areas)w.Write(a);foreach(bool a in ClothRegion524.Selected)w.Write(a);}
+ }
+ static void Census(Probe p,string prefix){
+  var audit=Read(ClothRegion524.Audit.rt);var mask=ClothRegion524.Mask.GetPixels();int missing=0,gate=0,unfilled=0,outside=0,invalidOwner=0;
+  for(int i=0;i<mask.Length;i++){if(audit[i].a>.5)missing++;if(audit[i].b>.5)gate++;if(mask[i].r>.5&&lastColour[i].a<.5)unfilled++;if(mask[i].r>.5&&lastColour[i].a>.5&&lastMeta[i].r<=0)invalidOwner++;if(mask[i].r<.5&&lastColour[i].a>.5&&Mathf.RoundToInt(lastMeta[i].g)==11)outside++;}
+  File.WriteAllText(Root+prefix+"_census.json","{\"missing\":"+missing+",\"gate\":"+gate+",\"unfilled\":"+unfilled+",\"outside\":"+outside+",\"geometryMs\":"+ClothRegion524.GeometryMs.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+",\"ortho\":"+f.motion.camera.orthographicSize.ToString("R",System.Globalization.CultureInfo.InvariantCulture)+",\"nativePixelsPerCell\":"+g.player.nativePixelsPerCell+"}");
+  if(missing>0)using(var w=new BinaryWriter(File.Create(Root+prefix+"_PREJOIN_OWNER.bin"))){w.Write(missing);for(int i=0;i<audit.Length;i++)if(audit[i].a>.5){w.Write(i%480);w.Write(271-i/480);foreach(var v in new[]{baseOwnerMeta[i],lastMeta[i],baseOwnerUV[i],lastUV[i],baseOwnerColour[i],lastColour[i]}){w.Write(v.r);w.Write(v.g);w.Write(v.b);w.Write(v.a);}}}
+  File.WriteAllText(Root+prefix+"_sky.json",JsonUtility.ToJson(sky,true));
+  if(gate+unfilled+outside+invalidOwner>0||ClothSurface525.Unsupported>0){File.WriteAllText(Root+prefix+"_probe.json",JsonUtility.ToJson(p,true));Dump(prefix+"_FIRSTFAIL_CENTRE",f.motion.raw[5].rt);Dump(prefix+"_FIRSTFAIL_AUDIT",ClothRegion524.Audit.rt);throw new Exception("527 first contract failure at frame"+p.frame+" preJoinMissing="+missing+" gate="+gate+" unfilled="+unfilled+" outside="+outside+" invalidOwner="+invalidOwner+" packetUnsupported="+ClothSurface525.Unsupported);}
+ }
+ static void End(string status,string error=""){
+  ClothRegion524.Enabled=false;ClosedRegion524.UseSpatialIndex526=oldIndex;ClothRegion524.UseOpacityCurves527=oldCurve;ClothRegion524.UseAreaCurves532=oldArea;Shader.SetGlobalInt("_Cloth524Enabled",0);if(f)f.validateRender=prior;if(sky)sky.SetAutomaticAdvance(oldAuto);if(a){a.transform.rotation=oldRotation;a.SetFloat("LocomotionSpeed",oldLoc);a.speed=oldSpeed;a.Play(oldState,0,oldTime);a.Update(0);a.enabled=oldAnim;}if(move)move.enabled=oldMove;Time.captureDeltaTime=oldCapture;Application.runInBackground=oldBg;EditorApplication.update-=Tick;EditorApplication.delayCall-=Capture;EditorApplication.isPaused=oldPaused;
+  if(h)File.WriteAllText(Root+"face_after.txt",FaceState524.Snapshot(h));File.WriteAllText(Root+"status.json","{\"status\":\""+status+"\",\"error\":\""+error.Replace("\\","/").Replace("\"","'").Replace("\r"," ").Replace("\n"," ")+"\",\"frames\":"+count+",\"inputRestored\":"+(move&&move.enabled==oldMove?"true":"false")+",\"animatorRestored\":"+(a&&a.enabled==oldAnim&&a.speed==oldSpeed?"true":"false")+",\"clockRestored\":"+(sky&&sky.IsAdvancingAutomatically==oldAuto?"true":"false")+",\"postUnchanged\":"+(post&&!post.candidateEnabled?"true":"false")+"}");
+  if(EditorApplication.isPlaying)EditorApplication.isPlaying=false;
+ }
+ static void Tick(){if(!EditorApplication.isPlaying||EditorApplication.timeSinceStartup>deadline){End("FAILED","Play ended or600s deadline");return;}EditorApplication.QueuePlayerLoopUpdate();}
+ static void OnFinal(){prior?.Invoke();if(!f.contourReady||queued)return;queued=true;f.validateRender=prior;EditorApplication.isPaused=true;EditorApplication.delayCall+=Capture;}
+ static void Capture(){try{
+  int frame=firstFrame+count;string prefix=frame.ToString("D3");var info=a.GetCurrentAnimatorStateInfo(0);
+  var p=new Probe{frame=frame,phase=Mathf.Repeat(info.normalizedTime,1),skyHour=sky.CurrentHour,clip=a.GetCurrentAnimatorClipInfo(0)[0].clip.name,paused=EditorApplication.isPaused,postEnabled=post.candidateEnabled,headPostEnabled=h.headPost&&h.headPost.candidateEnabled,roiX=post.roi.x,roiY=post.roi.y,roiW=post.roi.width,roiH=post.roi.height,offset=new[]{g.player.origin.x,g.player.origin.y,g.player.nativePixelsPerCell},capture=Time.captureDeltaTime,rotation=a.transform.rotation.eulerAngles};
+  if(p.clip!="Rig|Walk_Loop")throw new Exception("Expected actual Walk, found "+p.clip);
+  ClothRegion524.Enabled=true;ClosedRegion524.UseSpatialIndex526=true;ClothRegion524.UseOpacityCurves527=true;ClothRegion524.UseAreaCurves532=false;double b0=EditorApplication.timeSinceStartup;h.RenderFrame();double baseMs=(EditorApplication.timeSinceStartup-b0)*1000;Save(prefix+"_BASE");baseOwnerMeta=lastMeta;baseOwnerUV=lastUV;baseOwnerColour=lastColour;string baselineCost=" baseGeometryMs="+ClothRegion524.GeometryMs+" basePairMs="+ClosedRegion524.PairMs526+" baseWindingMs="+ClosedRegion524.WindingMs526+" basePairCandidates="+ClosedRegion524.PairCandidates526+" baseWindingCandidates="+ClosedRegion524.WindingCandidates526;File.WriteAllText(Root+prefix+"_face_BASE.txt",FaceState524.Snapshot(h));
+  ClothRegion524.Enabled=true;ClosedRegion524.UseSpatialIndex526=true;ClothRegion524.UseOpacityCurves527=true;ClothRegion524.UseAreaCurves532=true;double a0=EditorApplication.timeSinceStartup;h.RenderFrame();double altMs=(EditorApplication.timeSinceStartup-a0)*1000;if(!ClothRegion524.Ready(f))throw new Exception(ClothRegion524.Status);Save(prefix+"_ALT");Geometry(prefix+"_ALT");File.WriteAllText(Root+prefix+"_face_ALT.txt",FaceState524.Snapshot(h));
+  File.WriteAllText(Root+prefix+"_cost.txt","baseRenderMs="+baseMs+" altRenderMs="+altMs+" geometryMs="+ClothRegion524.GeometryMs+" areaMs="+ClothRegion524.AreaMs+" selectMs="+ClothRegion524.SelectionMs+" uploadMs="+ClothRegion524.UploadMs+" sourcePoints="+ClothRegion524.SourcePoints+" controls="+ClothRegion524.ControlPoints);
+  File.WriteAllText(Root+prefix+"_packets.json",JsonUtility.ToJson(new PacketRecord{packets=ClothSurface525.Packets.ToArray()},true));
+  File.AppendAllText(Root+prefix+"_cost.txt"," actualSkyHour="+sky.CurrentHour+" opacityPreprocessMs="+ClothRegion524.Opacity.PreprocessMs+" opacityAnchors="+ClothRegion524.Opacity.Anchors.Count+" opacityBoundarySegments="+ClothRegion524.Opacity.Segments.Count+" packetBuildMs="+ClothSurface525.BuildMs+" packetRequested="+ClothSurface525.Requested+" packets="+ClothSurface525.Packets.Count+" packetUnsupported="+ClothSurface525.Unsupported+" uncertainCandidates="+ClothSurface525.UncertainCandidates);
+  File.AppendAllText(Root+prefix+"_cost.txt",baselineCost+" indexedPairMs="+ClosedRegion524.PairMs526+" indexedWindingMs="+ClosedRegion524.WindingMs526+" indexedPairCandidates="+ClosedRegion524.PairCandidates526+" indexedWindingCandidates="+ClosedRegion524.WindingCandidates526+" indexUsed="+ClosedRegion524.PairIndexUsed526);
+  File.AppendAllText(Root+prefix+"_cost.txt"," opacityCurveBuildMs="+ClothRegion524.Opacity.CurveBuildMs527+" curveInputSegments="+ClothRegion524.Opacity.InputSegments527+" rawOpacityRuns="+ClothRegion524.Opacity.OpacitySegments527+" fitOpacityRuns="+ClothRegion524.Opacity.FitOpacitySegments527+" topologyFallbacks="+ClothRegion524.Opacity.TopologyFallbacks527+" usedOpacityCurve="+ClothRegion524.Opacity.UsedCurveFit527);File.WriteAllLines(Root+prefix+"_topology_guards.txt",ClothRegion524.Opacity.TopologyFallbackDetails527);
+  Census(p,prefix);
+  ClothRegion524.Enabled=false;ClothRegion524.UseAreaCurves532=false;h.RenderFrame();
+  File.WriteAllText(Root+prefix+"_probe.json",JsonUtility.ToJson(p,true));count++;File.WriteAllText(Root+"range.txt",firstFrame+" "+lastFrame);File.WriteAllText(Root+"progress.json","{\"capturedPairs\":"+count+",\"targetPairs\":"+(lastFrame-firstFrame+1)+",\"lastFrame\":"+frame+"}");if(count==lastFrame-firstFrame+1){End("CAPTURED");return;}queued=false;f.validateRender=OnFinal;EditorApplication.isPaused=false;
+ }catch(Exception e){End("FAILED",e.ToString());}}
+ public static void Start(int first,int last,string root){
+  firstFrame=first;lastFrame=last;Root=root;
+  g=UnityEngine.Object.FindFirstObjectByType<Gameplay397>();if(!EditorApplication.isPlaying||EditorApplication.isPaused||!g||!g.connected)throw new Exception("Expected ready current runtime");h=g.player.host;f=h.main;post=h.post;a=f.motion.animation.target;move=g.player.player.GetComponent<PlayerMovement>();sky=UnityEngine.Object.FindFirstObjectByType<SkyLightingCycleController>();
+  if(ClothRegion524.Enabled||ClothRegion524.UseAreaCurves532||!post||post.candidateEnabled||HeadRegion502.Enabled||HeadRegion502.UseAutomaticCurve511||HeadRegion502.UseBodyRay512)throw new Exception("Current baseline flags changed; preserve and inspect");prior=f.validateRender;if(prior!=null&&prior.GetInvocationList().Any(x=>!(x.Target is PostView366)))throw new Exception("Other capture hook active");if(Directory.Exists(Root))throw new Exception("Live output exists; no duplicate capture");Directory.CreateDirectory(Root);
+  File.WriteAllText(Root+"face_before.txt",FaceState524.Snapshot(h));oldCurve=ClothRegion524.UseOpacityCurves527;oldArea=ClothRegion524.UseAreaCurves532;oldIndex=ClosedRegion524.UseSpatialIndex526;oldMove=move.enabled;oldAnim=a.enabled;oldAuto=sky.IsAdvancingAutomatically;oldBg=Application.runInBackground;oldPaused=EditorApplication.isPaused;oldLoc=a.GetFloat("LocomotionSpeed");oldSpeed=a.speed;oldCapture=Time.captureDeltaTime;oldRotation=a.transform.rotation;var state=a.GetCurrentAnimatorStateInfo(0);oldState=state.fullPathHash;oldTime=state.normalizedTime;
+  sky.SetAutomaticAdvance(false);move.enabled=false;a.enabled=true;a.speed=1;a.SetFloat("LocomotionSpeed",1);a.transform.rotation=Quaternion.Euler(0,80,0);a.Play(oldState,0,1f+(firstFrame-1)/80f+.00000248f);a.Update(0);Time.captureDeltaTime=1f/60;Application.runInBackground=true;count=0;queued=false;deadline=EditorApplication.timeSinceStartup+600;f.validateRender=OnFinal;EditorApplication.update+=Tick;
+  File.WriteAllText(Root+"comparison.txt","same execution:527 clothing ON baseline vs532 clothing ON alternative; product default OFF; range "+firstFrame+".."+lastFrame);File.WriteAllText(Root+"started.json","{\"firstFrame\":"+firstFrame+",\"lastFrame\":"+lastFrame+",\"pairs\":"+(lastFrame-firstFrame+1)+",\"postEnabled\":false,\"candidateDefaultOFF\":true,\"sameFrozenPoseRenders\":2,\"note\":\"actual Walk advances between captures; each observed pose paused then rendered twice; restore on completion/error\"}");
+ }
+}

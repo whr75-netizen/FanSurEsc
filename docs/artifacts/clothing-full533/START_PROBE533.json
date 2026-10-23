@@ -1,0 +1,252 @@
+{
+  "initialize": {
+    "result": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {
+        "tools": {
+          "listChanged": true
+        },
+        "prompts": {}
+      },
+      "serverInfo": {
+        "name": "unity-mcp-server",
+        "version": "1.0.0"
+      }
+    },
+    "jsonrpc": "2.0",
+    "id": 1
+  },
+  "tools": {
+    "result": {
+      "tools": [
+        {
+          "name": "Unity_AssetGeneration_GenerateAsset",
+          "description": "Generates or modifies a Unity asset. ONLY call this tool when the user has explicitly asked to create, generate, or modify a specific asset (e.g., 'generate a sprite', 'create a 3D model', 'make a sound effect', 'generate a texture'). Do NOT call this tool to answer questions about Unity, explain how generation works, set up a project, or for any task where the user has not explicitly requested asset creation or modification. Do NOT call this tool as the first action in a game or feature creation task. The specific action is determined by the 'command' parameter. The model id parameter requires a valid model ID from the list of available models for asset generation. For optimal performance, you are strongly encouraged to generate multiple independent assets in parallel by issuing multiple tool calls simultaneously in a single response. CONSENT REQUIRED (once per conversation): Before the FIRST call to this tool in a conversation, do NOT call it yet. First send the user a plain-text message (a normal conversational reply, not a tool call or popup) that: briefly lists the specific asset(s) you intend to generate; explains that generations run in parallel but the assistant is BLOCKED until every generation completes \u2014 it cannot take other actions or reply mid-generation; notes there is no precise ETA and generation can take from tens of seconds to several minutes depending on the model, cold starts, and third-party provider queues; and asks the user to confirm they want to proceed. Then stop and wait for the user's confirmation on a following turn before calling this tool. Ask for this confirmation only ONCE per conversation: if the user has already confirmed an earlier generation in this conversation, do not ask again. A new conversation requires asking again. To generate a humanoid animation from a text prompt, use 'GenerateHumanoidAnimation' with a 'prompt'. To generate a humanoid animation from a video (video-to-motion), use 'GenerateHumanoidAnimation' with 'targetAssetPath' pointing to a VideoClip asset in the project. When using video-to-motion, 'prompt' is not required. Optional parameter: 'durationInSeconds' to control the animation length. To generate a sprite, use 'GenerateSprite' you should then call 'RemoveImageBackground'. To generate an image (e.g., a portrait or environment), use 'GenerateImage'. To remove the background from an existing sprite or image, use 'RemoveImageBackground'. To upscale an existing image, use 'UpscaleImage'. To upscale an existing sprite, use 'UpscaleSprite'. Both require a target asset path. To recolor an existing image or sprite, use 'RecolorImage' or 'RecolorSprite'. Both require a target asset path for the source image and a 'referenceImageInstanceId' for the color palette image. To edit a sprite using a prompt, use 'EditSpriteWithPrompt'. To edit an image using a prompt, use 'EditImageWithPrompt'. To edit a sprite using a prompt into a sprite sheet (Spritesheet), use 'GenerateSpritesheet'. All editing commands require a target asset path. To generate a cubemap, use 'GenerateCubemap'. To upscale an existing cubemap, use 'UpscaleCubemap' and provide the target asset path. To generate a base material (texture only), use 'GenerateMaterial'. To add PBR maps to an existing material, use 'AddPbrToMaterial' and provide the target asset path. The same applies to 'GenerateTerrainLayer' and 'AddPbrToTerrainLayer'. For base Material and TerrainLayer generation, it's highly recommended to ask for the list of available composition patterns to use as a starting point. To generate a sound effect or voice, use 'GenerateSound'. For voice/speech generation, the prompt must contain ONLY the spoken text exactly as it should be pronounced, not a description of the voice. Use the 'voiceName' parameter to select a specific voice from the available voices listed in the model description. Optional parameters: 'durationInSeconds' (1-10 seconds) and 'loop' (for seamless looping). To generate a 3D model, use 'GenerateMesh'. This command generates a self-contained Prefab asset that includes the generated mesh and a corresponding material, ready to be used in a scene. Use the 'meshFormat' parameter to specify the output file format ('glb' or 'fbx'). If the user requests a specific format (e.g. 'generate a GLB'), set 'meshFormat' accordingly. Defaults to 'fbx' if not specified. For multiview models, you can provide multiple reference images via 'referenceImageInstanceIds' and label each one with 'referenceImageLabels' (e.g., 'front', 'back', 'left') to assign them to specific view slots. To retopologize an existing mesh (improve its topology), use 'RetopologyMesh' and provide the target asset path. To add textures to an existing mesh, use 'TextureMesh' and provide the target asset path with a prompt, a reference image, or both. When both a prompt and a reference image are provided, the image guides the visual style while the prompt drives the content. To add rigging to an existing mesh, use 'RigMesh' and provide the target asset path.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string",
+                "enum": [
+                  "GenerateHumanoidAnimation",
+                  "GenerateCubemap",
+                  "UpscaleCubemap",
+                  "GenerateMaterial",
+                  "AddPbrToMaterial",
+                  "GenerateMesh",
+                  "GenerateSound",
+                  "GenerateSprite",
+                  "GenerateImage",
+                  "GenerateSpritesheet",
+                  "RemoveSpriteBackground",
+                  "RemoveImageBackground",
+                  "UpscaleImage",
+                  "UpscaleSprite",
+                  "RecolorImage",
+                  "RecolorSprite",
+                  "EditSpriteWithPrompt",
+                  "EditImageWithPrompt",
+                  "GenerateTerrainLayer",
+                  "AddPbrToTerrainLayer",
+                  "RetopologyMesh",
+                  "TextureMesh",
+                  "RigMesh"
+                ]
+              },
+              "modelId": {
+                "type": "string"
+              },
+              "prompt": {
+                "type": "string"
+              },
+              "savePath": {
+                "type": "string"
+              },
+              "waitForCompletion": {
+                "type": "boolean"
+              },
+              "targetAssetPath": {
+                "type": "string"
+              },
+              "referenceImageInstanceId": {
+                "type": "integer"
+              },
+              "referenceImageInstanceIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "referenceImageLabels": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "durationInSeconds": {
+                "type": "number"
+              },
+              "loop": {
+                "type": "boolean"
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "voiceName": {
+                "type": "string"
+              },
+              "forceGeneration": {
+                "type": "boolean"
+              },
+              "meshFormat": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "command"
+            ]
+          }
+        },
+        {
+          "name": "Unity_AssetGeneration_GetModels",
+          "description": "Gets a list of available models for asset generation. When asked for a model list always include the ModelId guid in the response.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "includeAllModels": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_Camera_Capture",
+          "description": "Renders an image from a specific camera in the scene by GameObject instance ID that has a Camera component. It is useful to capture a specific camera, in cases like camera placement or when this view doesn't match the scene/game view. Optionally, it can be used without the camera ID parameter to capture the current scene view for cases when the scene view is not available on the screen. Note: this is a computationally expensive tool, and should be used carefully only when scene view context is necessary.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "cameraInstanceID": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_GetConsoleLogs",
+          "description": "Get Unity Console logs including messages, warnings, and errors with their stack traces. Useful for debugging and understanding what errors or issues are occurring in the Unity Editor.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "maxEntries": {
+                "type": "integer"
+              },
+              "includeStackTrace": {
+                "type": "boolean"
+              },
+              "logTypes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_RunCommand",
+          "description": "Compile and execute a C# script in the Unity Editor.\n\nThis tool first validates that the code can be compiled, then executes it if compilation succeeds.\nArgs: code (required), title (optional).\nReturns: compilation status, execution status, logs, and results.\n\nThis is a powerful tool that allows you to programmatically control virtually every aspect of the game, including physics, input, graphics, gameplay logic, project setting and package management.\n\n### The Golden Template\n```csharp\nusing UnityEngine;\nusing UnityEditor;\n\ninternal class CommandScript : IRunCommand\n{\n    public void Execute(ExecutionResult result)\n    {\n        // 1. Your logic here\n        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);\n\n        // 2. Register changes for Undo/Redo and tracking\n        result.RegisterObjectCreation(cube);\n\n        // 3. Log the result\n        result.Log(\"Created {0}\", cube);\n    }\n}\n```\n### Rules for Success\n1. **Class Name is Mandatory**: The class MUST be named `CommandScript`. Using any other name will cause a NullReferenceException or execution failure.\n2. **Use `internal` Accessibility**: Always use `internal class CommandScript`. Using `public` will cause an \"Inconsistent Accessibility\" compilation error.\n3. **Use the `result` Object**:\n   - **Creation**: Use `result.RegisterObjectCreation(obj)` after creating objects.\n   - **Modification**: Use `result.RegisterObjectModification(obj)` BEFORE changing properties.\n   - **Deletion**: Use `result.DestroyObject(obj)` instead of `Object.DestroyImmediate`.\n   - **Logging**:\n     - `result.Log(\"Created {0}\", obj)` - Log with object references using `{0}`, `{1}`, etc.\n     - `result.LogWarning(\"Warning message\")` - Log warnings\n     - `result.LogError(\"Error message\")` - Log errors\n4. **Avoid Top-Level Statements**: Always wrap your code in the class structure above.\n\n",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "Code": {
+                "type": "string",
+                "description": "The C# script code to compile and execute. Should implement IRunCommand interface or be a valid C# script.",
+                "default": ""
+              },
+              "Title": {
+                "type": "string",
+                "description": "Optional title for the execution command",
+                "default": ""
+              }
+            },
+            "required": [
+              "Code"
+            ]
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {}
+          },
+          "title": "Compile and execute a C# script"
+        },
+        {
+          "name": "Unity_SceneView_Capture2DScene",
+          "description": "Captures a specific rectangular region of a 2D scene using orthographic (top-down) projection. Specify world coordinates (X, Y) and dimensions (width, height) to capture exactly that area. Ideal for 2D scenes, tilemaps, or capturing specific portions of a scene. The pixelsPerUnit parameter controls resolution (higher = more detail but larger image).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "worldX": {
+                "type": "number"
+              },
+              "worldY": {
+                "type": "number"
+              },
+              "worldWidth": {
+                "type": "number"
+              },
+              "worldHeight": {
+                "type": "number"
+              },
+              "pixelsPerUnit": {
+                "type": "integer"
+              },
+              "backgroundColor": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "worldX",
+              "worldY",
+              "worldWidth",
+              "worldHeight"
+            ]
+          }
+        },
+        {
+          "name": "Unity_SceneView_CaptureMultiAngleSceneView",
+          "description": "Captures a multi-angle view of the current Scene View from 4 different perspectives in a 2x2 grid (Isometric, Front, Top, Right). This tool is designed for validating scene structure in 3D projects. ONLY use it for 3D scene checks, to validate object positions and scene layout.DO NOT use for 2D projects or to retrieve info about Unity Editor window.The isometric view uses perspective projection for depth, while Front/Top/Right use orthographic projection. Optionally, provide focusObjectIds to frame specific objects (e.g., newly placed houses) - the camera will be positioned to ensure these objects are centered and visible. If focusObjectIds is not provided or empty, the camera frames all visible objects in the scene. Note: this is a computationally expensive tool, and should be used carefully only when multi-view context is necessary.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "focusObjectIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 2
+  },
+  "execution": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": false,\n  \"error\": \"COMPILATION_FAILED: Code failed to compile.\",\n  \"data\": {\n    \"isCompilationSuccessful\": false,\n    \"isExecutionSuccessful\": false,\n    \"compilationLogs\": \"- Error Error CS0012: The type 'ISet<>' is defined in an assembly that is not referenced. You must add a reference to assembly 'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'. (Line: 111)\\r\\n\",\n    \"localFixedCode\": \"using FantasySurvival.WorldLighting;\\r\\nusing System.Collections.Generic;\\r\\nusing System.IO;\\r\\nusing System.Linq;\\r\\nusing System;\\r\\nusing UnityEditor;\\r\\nusing UnityEngine;\\r\\n\\r\\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\\r\\n{\\r\\n    internal class CommandScript : IRunCommand\\r\\n    {\\r\\n        public void Execute(ExecutionResult result)\\r\\n        {\\r\\n            ProbeOutline533.Start();\\r\\n            result.Log(\\\"533 two frozen source poses armed once; missing OwnerLines input/output buffers only; restore and return Edit on end/error\\\");\\r\\n        }\\r\\n    }\\r\\n\\r\\n    public static class ProbeOutline533\\r\\n    {\\r\\n        const string Root = \\\"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Outline533/GPU/\\\";\\r\\n        const string Reference = \\\"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/Shape532/Adjacent/\\\";\\r\\n        [Serializable]\\r\\n        class RefPose\\r\\n        {\\r\\n            public float phase;\\r\\n            public string clip;\\r\\n            public Vector3 rotation;\\r\\n        }\\r\\n\\r\\n        [Serializable]\\r\\n        class Status\\r\\n        {\\r\\n            public string status, error;\\r\\n            public int renders;\\r\\n            public bool restored, cloth, opacity, area;\\r\\n        }\\r\\n\\r\\n        [Serializable]\\r\\n        class Meta\\r\\n        {\\r\\n            public int frame;\\r\\n            public float requestedPhase, actualPhase, hour, lineTone, ortho;\\r\\n            public bool usePalette;\\r\\n            public Vector3 rotation;\\r\\n            public string clip;\\r\\n        }\\r\\n\\r\\n        static bool armed, oldBg, oldPaused;\\r\\n        static int renders;\\r\\n        static double deadline;\\r\\n        static Color[] Read(RenderTexture rt)\\r\\n        {\\r\\n            var previous = RenderTexture.active;\\r\\n            Texture2D t = null;\\r\\n            try\\r\\n            {\\r\\n                RenderTexture.active = rt;\\r\\n                t = new Texture2D(rt.width, rt.height, TextureFormat.RGBAFloat, false, true);\\r\\n                t.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0, false);\\r\\n                t.Apply(false, false);\\r\\n                return t.GetPixels();\\r\\n            }\\r\\n            finally\\r\\n            {\\r\\n                if (t)\\r\\n                    UnityEngine.Object.DestroyImmediate(t);\\r\\n                RenderTexture.active = previous;\\r\\n            }\\r\\n        }\\r\\n\\r\\n        static Color Value(Color[] values, RenderTexture rt, int x, int y)\\r\\n        {\\r\\n            return x >= 0 && x < rt.width && y >= 0 && y < rt.height ? values[y * rt.width + x] : Color.clear;\\r\\n        }\\r\\n\\r\\n        static void Colour(BinaryWriter w, Color c)\\r\\n        {\\r\\n            w.Write(c.r);\\r\\n            w.Write(c.g);\\r\\n            w.Write(c.b);\\r\\n            w.Write(c.a);\\r\\n        }\\r\\n\\r\\n        static void Dump(Full319View335 f, int frame, string tag)\\r\\n        {\\r\\n            var before = Read(f.prepared.rt);\\r\\n            var owner = Read(f.preparedOwner.rt);\\r\\n            var line = Read(f.postLine.rt);\\r\\n            var audit = Read(f.audit.rt);\\r\\n            var final = Read(f.colour.rt);\\r\\n            var meta = Read(f.preparedMeta.rt);\\r\\n            var uv = Read(f.preparedUV.rt);\\r\\n            var surface = Read(f.gridSurface.rt);\\r\\n            var torso = Read(f.centreMeta[1].rt);\\r\\n            var arms = Read(f.centreMeta[2].rt);\\r\\n            var palette = Read(f.gridPalette.rt);\\r\\n            var paletteAudit = Read(f.paletteAudit.rt);\\r\\n            var targets = frame == 42 ? new[]{new Vector2Int(209, 54), new Vector2Int(210, 55), new Vector2Int(210, 56), new Vector2Int(210, 57)} : new[]{new Vector2Int(226, 65)};\\r\\n            var points = new HashSet<Vector2Int>();\\r\\n            foreach (var p in targets)\\r\\n                for (int y = -2; y <= 2; y++)\\r\\n                    for (int x = -2; x <= 2; x++)\\r\\n                        points.Add(p + new Vector2Int(x, y));\\r\\n            string prefix = Root + frame.ToString(\\\"D3\\\") + \\\"_\\\" + tag;\\r\\n            using (var w = new BinaryWriter(File.Create(prefix + \\\"_SPARSE.bin\\\")))\\r\\n            {\\r\\n                w.Write(533);\\r\\n                w.Write(points.Count);\\r\\n                foreach (var p in points.OrderBy(p => p.y).ThenBy(p => p.x))\\r\\n                {\\r\\n                    int x = p.x, y = 271 - p.y;\\r\\n                    w.Write(p.x);\\r\\n                    w.Write(p.y);\\r\\n                    foreach (var values in new[]{before, owner, line, audit, final, meta, uv})\\r\\n                        Colour(w, values[y * 480 + x]);\\r\\n                    Colour(w, Value(surface, f.gridSurface.rt, x * 2 + 1, y * 2 + 1));\\r\\n                    Colour(w, Value(torso, f.centreMeta[1].rt, x, y));\\r\\n                    Colour(w, Value(arms, f.centreMeta[2].rt, x, y));\\r\\n                    Colour(w, Value(palette, f.gridPalette.rt, x * 2 + 1, y * 2 + 1));\\r\\n                    Colour(w, paletteAudit[y * 480 + x]);\\r\\n                }\\r\\n            }\\r\\n\\r\\n            using (var w = new BinaryWriter(File.Create(prefix + \\\"_COVERAGE.bin\\\")))\\r\\n            {\\r\\n                for (int y = 0; y < 272; y++)\\r\\n                    for (int x = 0; x < 480; x++)\\r\\n                        w.Write((byte)(before[(271 - y) * 480 + x].a > 0 ? 1 : 0));\\r\\n            }\\r\\n        }\\r\\n\\r\\n        static void Record(string status, string error = \\\"\\\", bool restored = false)\\r\\n        {\\r\\n            File.WriteAllText(Root + \\\"status.json\\\", JsonUtility.ToJson(new Status{status = status, error = error, renders = renders, restored = restored, cloth = ClothRegion524.Enabled, opacity = ClothRegion524.UseOpacityCurves527, area = ClothRegion524.UseAreaCurves532}, true));\\r\\n        }\\r\\n\\r\\n        static void Tick()\\r\\n        {\\r\\n            if (!armed)\\r\\n                return;\\r\\n            if (!EditorApplication.isPlaying || EditorApplication.timeSinceStartup > deadline)\\r\\n            {\\r\\n                Finish(\\\"FAILED\\\", \\\"Play ended or ready deadline\\\");\\r\\n                return;\\r\\n            }\\r\\n\\r\\n            var g = UnityEngine.Object.FindFirstObjectByType<Gameplay397>();\\r\\n            if (!g || !g.connected)\\r\\n                return;\\r\\n            EditorApplication.update -= Tick;\\r\\n            EditorApplication.isPaused = true;\\r\\n            EditorApplication.delayCall += Work;\\r\\n        }\\r\\n\\r\\n        static void Work()\\r\\n        {\\r\\n            Gameplay397 g = null;\\r\\n            Full319View335 f = null;\\r\\n            Animator a = null;\\r\\n            PlayerMovement move = null;\\r\\n            SkyLightingCycleController sky = null;\\r\\n            bool oldAnim = false, oldMove = false, oldAuto = false;\\r\\n            float loc = 0, speed = 0, time = 0, sourceFrame = 0;\\r\\n            int state = 0;\\r\\n            Quaternion rotation = Quaternion.identity;\\r\\n            Vector3 avatarPosition = default, avatarScale = default;\\r\\n            string error = \\\"\\\";\\r\\n            bool saved = false;\\r\\n            try\\r\\n            {\\r\\n                g = UnityEngine.Object.FindFirstObjectByType<Gameplay397>();\\r\\n                if (!g || !g.connected || g.runInputTest)\\r\\n                    throw new Exception(\\\"Expected actual connected runtime\\\");\\r\\n                var h = g.player.host;\\r\\n                f = h.main;\\r\\n                var m = f.motion;\\r\\n                a = m.animation.target;\\r\\n                move = g.player.player.GetComponent<PlayerMovement>();\\r\\n                sky = UnityEngine.Object.FindFirstObjectByType<SkyLightingCycleController>();\\r\\n                if (ClothRegion524.Enabled || ClothRegion524.UseOpacityCurves527 || ClothRegion524.UseAreaCurves532 || HeadRegion502.Enabled || h.post.candidateEnabled)\\r\\n                    throw new Exception(\\\"Preserve baseline flags\\\");\\r\\n                if (f.validateRender != null && f.validateRender.GetInvocationList().Any(x => !(x.Target is PostView366)))\\r\\n                    throw new Exception(\\\"Other capture hook active\\\");\\r\\n                oldAnim = a.enabled;\\r\\n                oldMove = move.enabled;\\r\\n                oldAuto = sky.IsAdvancingAutomatically;\\r\\n                loc = a.GetFloat(\\\"LocomotionSpeed\\\");\\r\\n                speed = a.speed;\\r\\n                rotation = a.transform.rotation;\\r\\n                var s = a.GetCurrentAnimatorStateInfo(0);\\r\\n                state = s.fullPathHash;\\r\\n                time = s.normalizedTime;\\r\\n                sourceFrame = m.sourceFrame;\\r\\n                avatarPosition = g.player.avatar.position;\\r\\n                avatarScale = g.player.avatar.localScale;\\r\\n                saved = true;\\r\\n                move.enabled = false;\\r\\n                sky.SetAutomaticAdvance(false);\\r\\n                a.enabled = true;\\r\\n                a.speed = 0;\\r\\n                a.SetFloat(\\\"LocomotionSpeed\\\", 1);\\r\\n                foreach (int frame in new[]{42, 44})\\r\\n                {\\r\\n                    var reference = JsonUtility.FromJson<RefPose>(File.ReadAllText(Reference + frame.ToString(\\\"D3\\\") + \\\"_probe.json\\\"));\\r\\n                    a.Play(state, 0, reference.phase);\\r\\n                    a.Update(0);\\r\\n                    a.transform.rotation = Quaternion.Euler(reference.rotation);\\r\\n                    g.player.avatar.position = g.player.feet.position;\\r\\n                    g.player.avatar.localScale = Vector3.one * (g.player.bodyHeight / g.player.sourceHeight);\\r\\n                    m.sourceFrame = reference.phase * 40;\\r\\n                    g.player.bake.Evaluate();\\r\\n                    foreach (string tag in new[]{\\\"BASE\\\", \\\"ALT\\\"})\\r\\n                    {\\r\\n                        ClothRegion524.Enabled = true;\\r\\n                        ClothRegion524.UseOpacityCurves527 = true;\\r\\n                        ClothRegion524.UseAreaCurves532 = tag == \\\"ALT\\\";\\r\\n                        h.RenderFrame();\\r\\n                        if (!ClothRegion524.Ready(f))\\r\\n                            throw new Exception(ClothRegion524.Status);\\r\\n                        Dump(f, frame, tag);\\r\\n                        renders++;\\r\\n                        Record(\\\"PROBING\\\");\\r\\n                    }\\r\\n\\r\\n                    File.WriteAllText(Root + frame.ToString(\\\"D3\\\") + \\\"_META.json\\\", JsonUtility.ToJson(new Meta{frame = frame, requestedPhase = reference.phase, actualPhase = Mathf.Repeat(a.GetCurrentAnimatorStateInfo(0).normalizedTime, 1), clip = a.GetCurrentAnimatorClipInfo(0)[0].clip.name, rotation = a.transform.rotation.eulerAngles, hour = sky.CurrentHour, lineTone = f.lineTone, usePalette = f.usePalette, ortho = m.camera.orthographicSize}, true));\\r\\n                }\\r\\n            }\\r\\n            catch (Exception e)\\r\\n            {\\r\\n                error = e.ToString();\\r\\n            }\\r\\n            finally\\r\\n            {\\r\\n                ClothRegion524.Enabled = ClothRegion524.UseOpacityCurves527 = ClothRegion524.UseAreaCurves532 = false;\\r\\n                Shader.SetGlobalInt(\\\"_Cloth524Enabled\\\", 0);\\r\\n                if (saved)\\r\\n                {\\r\\n                    a.SetFloat(\\\"LocomotionSpeed\\\", loc);\\r\\n                    a.speed = speed;\\r\\n                    a.Play(state, 0, time);\\r\\n                    a.Update(0);\\r\\n                    a.transform.rotation = rotation;\\r\\n                    a.enabled = oldAnim;\\r\\n                    move.enabled = oldMove;\\r\\n                    sky.SetAutomaticAdvance(oldAuto);\\r\\n                    f.motion.sourceFrame = sourceFrame;\\r\\n                    g.player.avatar.position = avatarPosition;\\r\\n                    g.player.avatar.localScale = avatarScale;\\r\\n                }\\r\\n\\r\\n                Finish(error == \\\"\\\" ? \\\"PROBED\\\" : \\\"FAILED\\\", error, saved);\\r\\n            }\\r\\n        }\\r\\n\\r\\n        static void Finish(string status, string error = \\\"\\\", bool restored = false)\\r\\n        {\\r\\n            armed = false;\\r\\n            EditorApplication.update -= Tick;\\r\\n            EditorApplication.delayCall -= Work;\\r\\n            Application.runInBackground = oldBg;\\r\\n            EditorApplication.isPaused = oldPaused;\\r\\n            Record(status, error, restored);\\r\\n            if (EditorApplication.isPlaying)\\r\\n                EditorApplication.isPlaying = false;\\r\\n        }\\r\\n\\r\\n        public static void Start()\\r\\n        {\\r\\n            if (Application.dataPath != \\\"C:/Users/JG/Documents/work/Fantasy Survival Escape Game/Assets\\\" || !EditorApplication.isPlaying || EditorApplication.isPaused)\\r\\n                throw new Exception(\\\"Expected current Play\\\");\\r\\n            if (Directory.Exists(Root))\\r\\n                throw new Exception(\\\"Probe output exists; no duplicate execution\\\");\\r\\n            Directory.CreateDirectory(Root);\\r\\n            oldBg = Application.runInBackground;\\r\\n            oldPaused = EditorApplication.isPaused;\\r\\n            Application.runInBackground = true;\\r\\n            renders = 0;\\r\\n            armed = true;\\r\\n            deadline = EditorApplication.timeSinceStartup + 120;\\r\\n            EditorApplication.update += Tick;\\r\\n            Record(\\\"WAITING_RUNTIME\\\");\\r\\n            EditorApplication.QueuePlayerLoopUpdate();\\r\\n        }\\r\\n    }\\r\\n\\r\\n    [Serializable]\\r\\n    class RefPose\\r\\n    {\\r\\n        public float phase;\\r\\n        public string clip;\\r\\n        public Vector3 rotation;\\r\\n    }\\r\\n\\r\\n    [Serializable]\\r\\n    class Status\\r\\n    {\\r\\n        public string status, error;\\r\\n        public int renders;\\r\\n        public bool restored, cloth, opacity, area;\\r\\n    }\\r\\n\\r\\n    [Serializable]\\r\\n    class Meta\\r\\n    {\\r\\n        public int frame;\\r\\n        public float requestedPhase, actualPhase, hour, lineTone, ortho;\\r\\n        public bool usePalette;\\r\\n        public Vector3 rotation;\\r\\n        public string clip;\\r\\n    }\\r\\n}\"\n  }\n}"
+        }
+      ],
+      "isError": true
+    },
+    "jsonrpc": "2.0",
+    "id": 3
+  },
+  "transportErrors": [
+    "[INFO ] [Unity Mcp Server] log [Tool Response] Unity_RunCommand data preview: {\"isCompilationSuccessful\":false,\"isExecutionSuccessful\":false,\"compilationLogs\":\"- Error Error CS0012: The type 'ISet<>' is defined in an assembly that is not referenced. You must add a reference to assembly 'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'. (Line: 111)\\r\\n\",\"localFixedCode\":\"using FantasySurvival.WorldLighting;\\r\\nusing System.Collections.Generic;\\r\\nusing System.IO;\\r\\nusing System.Linq;\\r\\nusing System;\\r\\nusing UnityEditor;\\r\\nusing UnityEngine;\\r\\...",
+    "[INFO ] [Unity Mcp Server] tool_call.execute (1691ms) success=false error=COMPILATION_FAILED: Code failed to compile."
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "sourceChanged": false,
+  "userSettingsSHA256": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "sourceVRMSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "geometryShaderSHA256": {
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSkin348.shader": "9ea84191546d5743842d33d6a106cce302aa6135a8474bfdbc1be3c92e501d53",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSurface348.shader": "9d1639c9222e698f0d830edf474d894cc487648b9dfc2f1a1244ccb4ceffc8fa"
+  },
+  "finalRestore": {
+    "success": true,
+    "message": "Command executed successfully.",
+    "data": {
+      "isCompilationSuccessful": true,
+      "isExecutionSuccessful": true,
+      "executionId": 1,
+      "compilationLogs": "",
+      "executionLogs": "[Log] lash583=False iris582=False play=False paused=False compiling=False dirty=False head=False generatedView=False revision=0 inputBytes=0 clothes=False captureDelta=0 background=False",
+      "localFixedCode": "using UnityEditor.SceneManagement;\r\nusing UnityEditor;\r\nusing UnityEngine;\r\n\r\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\r\n{\r\n    internal class CommandScript : IRunCommand\r\n    {\r\n        public void Execute(ExecutionResult result)\r\n        {\r\n            result.Log(\"lash583=\" + EyeFeature348.UseLashRegion583 + \" iris582=\" + EyeFeature348.UseIrisSurface582 + \" play=\" + EditorApplication.isPlaying + \" paused=\" + EditorApplication.isPaused + \" compiling=\" + EditorApplication.isCompiling + \" dirty=\" + EditorSceneManager.GetActiveScene().isDirty + \" head=\" + HeadRegion502.Enabled + \" generatedView=\" + HeadRegion502.UseViewInput579 + \" revision=\" + HeadRegion502.ViewInput579Revision + \" inputBytes=\" + (HeadRegion502.CopyCurveInput511()?.Length ?? 0) + \" clothes=\" + ClothRegion524.Enabled + \" captureDelta=\" + Time.captureDeltaTime + \" background=\" + Application.runInBackground);\r\n        }\r\n    }\r\n}",
+      "result": "Command executed successfully."
+    }
+  },
+  "aiDocsValidator": "PASS; AGENTS18220bytes/CURRENT_STATE12264bytes",
+  "browserLinks": 9,
+  "newFullFrameCaptures": 0,
+  "referenceAndGpuFilterDifferenceDeclared": true
+}

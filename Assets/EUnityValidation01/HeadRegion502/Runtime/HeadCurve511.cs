@@ -11,6 +11,8 @@ public static partial class HeadRegion502
     public static bool UseAutomaticCurve511;
     public static bool UseNegativeRegions563; // Default-OFF source-domain output contract trial.
     public static bool UseNegativeBranches566; // Alternative source grouping, never a mask postprocess.
+    public static bool UseRegionFamilies574; // Exterior boundary first; internal source families choose KEEP/FILL.
+    public static HairRegions574.Layout RegionLayout574;
     public static readonly List<NegativeRegion563.Feature> NegativeRegions563=new();
     public static readonly List<NegativeRegion563.Feature> NegativeBranches566=new();
     public static readonly List<int[]> NegativeGroups563=new();
@@ -87,6 +89,14 @@ public static partial class HeadRegion502
         Auto511CurveMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;start=Stopwatch.GetTimestamp();
         var graph=new List<CurveArea511.P[]>();foreach(var ring in Curves){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++)p[i]=new CurveArea511.P(ring[i].x,ring[i].y);graph.Add(p);}
         NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();NegativeMs563=0;
+        if(UseRegionFamilies574)
+        {
+            RegionLayout574=HairRegions574.Build(graph,bounds.x,bounds.y,bounds.width,bounds.height);
+            Curves.Clear();foreach(var ring in RegionLayout574.envelopeCurves){var p=new Vector2[ring.Length];for(int i=0;i<p.Length;i++)p[i]=new Vector2((float)ring[i].x,(float)ring[i].y);Curves.Add(p);}
+            foreach(var family in RegionLayout574.families)if(family.mode=="KEEP")foreach(var ring in family.polygons){var p=new Vector2[ring.Length];for(int i=0;i<p.Length;i++){var q=ring[ring.Length-1-i];p[i]=new Vector2((float)q.x,(float)q.y);}Curves.Add(p);}
+            Auto511CurveCrossings=CurveArea511.LastCrossings;Auto511CurveEvents=CurveArea511.LastEvents;Auto511AreaMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;Auto511Areas=RegionLayout574.areas;Auto511Bounds=bounds;Auto511Status="ready exterior-first source region families";return Auto511Areas;
+        }
+        RegionLayout574=null;
         var negative=UseNegativeRegions563?new NegativeRegion563(bounds.x,bounds.y,bounds.width,bounds.height,false,UseNegativeBranches566):null;
         var result=CurveArea511.Compute(graph,bounds.x,bounds.y,bounds.width,bounds.height,negative);Auto511CurveCrossings=CurveArea511.LastCrossings;Auto511CurveEvents=CurveArea511.LastEvents;
         if(negative!=null)
@@ -125,7 +135,7 @@ public static partial class HeadRegion502
     static int Part511(Packet p,int[][] indices){var a=indices[p.submesh];int i=p.primitive*3;return registeredTriangles511.Contains(Key511(a[i],a[i+1],a[i+2]))?1:2;}
     static void Release511()
     {
-        UseAutomaticCurve511=UseNegativeRegions563=UseNegativeBranches566=false;NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();controls511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
+        UseAutomaticCurve511=UseNegativeRegions563=UseNegativeBranches566=UseRegionFamilies574=false;RegionLayout574=null;NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();controls511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
         foreach(int at in usedBins511)bins511[at]?.Clear();usedBins511.Clear();registeredTriangles511.Clear();Auto511Areas=null;Auto511Status="disabled";ReleaseVisibility511();
     }
 }

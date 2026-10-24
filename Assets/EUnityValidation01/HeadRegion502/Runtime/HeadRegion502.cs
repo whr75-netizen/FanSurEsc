@@ -337,7 +337,7 @@ public static partial class HeadRegion502
             RectInt bounds=default; bool[] union=null;
             if(!UseAutomaticCurve511){union=Union(projected,indices,out bounds);SourceLoops.AddRange(Boundaries(union,bounds,ExtractionScale));Curves.AddRange(SourceLoops.Select(ClosedCurve).Where(p=>p.Length>=3));}
             bool[] selected;
-            if(UseAutomaticCurve511){var areas=Areas511(f,out bounds);selected=SelectRegions543(areas,bounds.width,bounds.height,UseNegativeRegions563?NegativeGroups563:null);}
+            if(UseAutomaticCurve511){var areas=Areas511(f,out bounds);selected=UseRegionFamilies574?RegionLayout574.selected:SelectRegions543(areas,bounds.width,bounds.height,UseNegativeRegions563?NegativeGroups563:null);}
             else if (UseVisibleArea505)
             {
                 var area = HeadArea505.Build(f, bounds);

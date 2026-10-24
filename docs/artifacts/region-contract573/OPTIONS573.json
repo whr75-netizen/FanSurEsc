@@ -1,0 +1,166 @@
+{
+  "frame": 16,
+  "originalClosedBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+  "postDesignClosedArea": 4.258059744165979,
+  "selectedNegativeArea": 3.3460491839673816,
+  "sourceCells": [
+    [
+      233,
+      40
+    ],
+    [
+      233,
+      41
+    ],
+    [
+      233,
+      42
+    ],
+    [
+      233,
+      43
+    ],
+    [
+      234,
+      40
+    ],
+    [
+      234,
+      41
+    ],
+    [
+      234,
+      42
+    ],
+    [
+      234,
+      43
+    ],
+    [
+      235,
+      41
+    ],
+    [
+      235,
+      42
+    ],
+    [
+      235,
+      43
+    ]
+  ],
+  "pureSelectedHoleCells": [
+    [
+      233,
+      41
+    ],
+    [
+      234,
+      42
+    ],
+    [
+      234,
+      43
+    ]
+  ],
+  "KEEP": {
+    "intent": "preserve one connected closed pixel pocket, grow a hair rim and redesign one source-supported bridge",
+    "desiredPixelHole": [
+      [
+        233,
+        41
+      ],
+      [
+        234,
+        41
+      ],
+      [
+        234,
+        42
+      ],
+      [
+        234,
+        43
+      ]
+    ],
+    "changedCells": [
+      [
+        234,
+        40
+      ],
+      [
+        235,
+        41
+      ],
+      [
+        235,
+        42
+      ],
+      [
+        235,
+        43
+      ]
+    ],
+    "addedHairCells": 4,
+    "removedHairCells": 0,
+    "closedPixelComponents": [
+      [
+        [
+          233,
+          41
+        ],
+        [
+          234,
+          41
+        ],
+        [
+          234,
+          42
+        ],
+        [
+          234,
+          43
+        ]
+      ]
+    ]
+  },
+  "FILL": {
+    "intent": "omit the closed pocket, integrate with the hair mass",
+    "changedCells": [
+      [
+        234,
+        40
+      ],
+      [
+        233,
+        41
+      ],
+      [
+        234,
+        41
+      ],
+      [
+        235,
+        41
+      ],
+      [
+        234,
+        42
+      ],
+      [
+        235,
+        42
+      ],
+      [
+        234,
+        43
+      ],
+      [
+        235,
+        43
+      ]
+    ],
+    "closedPixelComponents": []
+  },
+  "kind": "explicit geometric layout illustrations, not evaluated by a new selector, not product patches, no new RGB/UV/depth render"
+}

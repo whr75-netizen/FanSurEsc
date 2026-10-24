@@ -1,0 +1,73 @@
+{
+  "invalidAudit": "AUDIT573 initial ownership counts invalid: area integrator micro-band omission was mistaken for geometric disconnection",
+  "firstUniformBackgroundWitness": {
+    "frame": 16,
+    "cell": [
+      205,
+      35
+    ],
+    "positiveArea": 0.0,
+    "negativeLocalComponents": [
+      {
+        "area": 0.8022903749992878,
+        "nodeIds": [
+          759,
+          778,
+          797,
+          815,
+          832,
+          849,
+          867,
+          885,
+          902,
+          918
+        ],
+        "sourceBoundaryIDs": [
+          -9223372036854775808,
+          3,
+          4
+        ],
+        "sourceBranches": []
+      },
+      {
+        "area": 0.08324322944004336,
+        "nodeIds": [
+          934,
+          950,
+          965
+        ],
+        "sourceBoundaryIDs": [
+          -9223372036854775808,
+          3
+        ],
+        "sourceBranches": []
+      },
+      {
+        "area": 0.11446639556064753,
+        "nodeIds": [
+          980,
+          996
+        ],
+        "sourceBoundaryIDs": [
+          -9223372036854775808,
+          3
+        ],
+        "sourceBranches": []
+      }
+    ],
+    "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+  },
+  "sourcePositiveArea": 0,
+  "gapExamples": [
+    [
+      35.80229037499929,
+      35.8022903749993
+    ],
+    [
+      35.885533604439345,
+      35.88553360443935
+    ]
+  ],
+  "correction": "Observe all positive-height bands; retain dy>1e-12 for numeric area integration. Recheck saved positive area bit equality.",
+  "productChanges": 0
+}

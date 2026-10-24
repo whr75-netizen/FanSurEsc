@@ -1,0 +1,6068 @@
+{
+  "policy": "No new mask or owner-merge rule. Disconnected continuous negative pieces in one empty output cell remain unresolved.",
+  "summary": [
+    {
+      "frame": 16,
+      "atomCount": 4946,
+      "singleLocalOwnerNegativeCells": 539,
+      "noSourceNegativeCells": 0,
+      "conflictedNegativeCells": 7,
+      "numericUncertainCells": 8,
+      "nonOpenDecisionRecords": 16,
+      "nonOpenTypes": {
+        "cap>cap": 8,
+        "cap>merge": 7,
+        "merge>cap": 1
+      },
+      "observedModes": {
+        "RETAINED_NEEDS_JUNCTION_OWNER": 11,
+        "CONTINUOUS_FILL": 3,
+        "SPATIAL_FILL": 2
+      },
+      "sourceEventErrors": [],
+      "sourceAxisOverlapOvercountMax": 1.1379786002407855e-15,
+      "tinyIntersectionsFlagged": 88
+    },
+    {
+      "frame": 51,
+      "atomCount": 4731,
+      "singleLocalOwnerNegativeCells": 539,
+      "noSourceNegativeCells": 0,
+      "conflictedNegativeCells": 5,
+      "numericUncertainCells": 6,
+      "nonOpenDecisionRecords": 12,
+      "nonOpenTypes": {
+        "cap>cap": 4,
+        "cap>merge": 8
+      },
+      "observedModes": {
+        "SPATIAL_FILL": 6,
+        "RETAINED_NEEDS_JUNCTION_OWNER": 2,
+        "CONTINUOUS_FILL": 4
+      },
+      "sourceEventErrors": [],
+      "sourceAxisOverlapOvercountMax": 1.27675647831893e-15,
+      "tinyIntersectionsFlagged": 103
+    },
+    {
+      "frame": 62,
+      "atomCount": 5210,
+      "singleLocalOwnerNegativeCells": 547,
+      "noSourceNegativeCells": 0,
+      "conflictedNegativeCells": 6,
+      "numericUncertainCells": 4,
+      "nonOpenDecisionRecords": 12,
+      "nonOpenTypes": {
+        "cap>cap": 4,
+        "cap>merge": 7,
+        "merge>cap": 1
+      },
+      "observedModes": {
+        "RETAINED_NEEDS_JUNCTION_OWNER": 7,
+        "CONTINUOUS_FILL": 5
+      },
+      "sourceEventErrors": [],
+      "sourceAxisOverlapOvercountMax": 1.1934897514720433e-15,
+      "tinyIntersectionsFlagged": 107
+    },
+    {
+      "frame": 71,
+      "atomCount": 4985,
+      "singleLocalOwnerNegativeCells": 544,
+      "noSourceNegativeCells": 0,
+      "conflictedNegativeCells": 6,
+      "numericUncertainCells": 4,
+      "nonOpenDecisionRecords": 14,
+      "nonOpenTypes": {
+        "cap>cap": 8,
+        "cap>merge": 5,
+        "merge>cap": 1
+      },
+      "observedModes": {
+        "RETAINED_NEEDS_JUNCTION_OWNER": 10,
+        "CONTINUOUS_FILL": 2,
+        "SPATIAL_FILL": 2
+      },
+      "sourceEventErrors": [],
+      "sourceAxisOverlapOvercountMax": 5.48172618408671e-16,
+      "tinyIntersectionsFlagged": 104
+    },
+    {
+      "frame": 72,
+      "atomCount": 4826,
+      "singleLocalOwnerNegativeCells": 545,
+      "noSourceNegativeCells": 0,
+      "conflictedNegativeCells": 7,
+      "numericUncertainCells": 2,
+      "nonOpenDecisionRecords": 14,
+      "nonOpenTypes": {
+        "cap>cap": 8,
+        "cap>merge": 5,
+        "merge>cap": 1
+      },
+      "observedModes": {
+        "RETAINED_NEEDS_JUNCTION_OWNER": 10,
+        "CONTINUOUS_FILL": 2,
+        "SPATIAL_FILL": 2
+      },
+      "sourceEventErrors": [],
+      "sourceAxisOverlapOvercountMax": 3.3306690738754696e-16,
+      "tinyIntersectionsFlagged": 98
+    },
+    {
+      "frame": 73,
+      "atomCount": 4877,
+      "singleLocalOwnerNegativeCells": 551,
+      "noSourceNegativeCells": 0,
+      "conflictedNegativeCells": 3,
+      "numericUncertainCells": 1,
+      "nonOpenDecisionRecords": 14,
+      "nonOpenTypes": {
+        "cap>cap": 8,
+        "cap>merge": 5,
+        "merge>cap": 1
+      },
+      "observedModes": {
+        "RETAINED_NEEDS_JUNCTION_OWNER": 10,
+        "CONTINUOUS_FILL": 2,
+        "SPATIAL_FILL": 2
+      },
+      "sourceEventErrors": [],
+      "sourceAxisOverlapOvercountMax": 4.371503159461554e-16,
+      "tinyIntersectionsFlagged": 127
+    },
+    {
+      "frame": 77,
+      "atomCount": 4753,
+      "singleLocalOwnerNegativeCells": 507,
+      "noSourceNegativeCells": 0,
+      "conflictedNegativeCells": 6,
+      "numericUncertainCells": 6,
+      "nonOpenDecisionRecords": 10,
+      "nonOpenTypes": {
+        "cap>cap": 7,
+        "cap>merge": 3
+      },
+      "observedModes": {
+        "RETAINED_NEEDS_JUNCTION_OWNER": 7,
+        "CONTINUOUS_FILL": 3
+      },
+      "sourceEventErrors": [],
+      "sourceAxisOverlapOvercountMax": 3.5388358909926865e-16,
+      "tinyIntersectionsFlagged": 99
+    }
+  ],
+  "allNonOpenDecisionRecords": 92,
+  "allSourceEventsReciprocal": true,
+  "allSourceOverlapOvercountMax": 1.27675647831893e-15,
+  "ownershipConflictCells": 40,
+  "records": [
+    {
+      "frame": 16,
+      "nonOpenRecords": [
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.8850119083654133,
+          "postDesignNegativeArea": 0.6652329288266936,
+          "selectedNegativeArea": 0.6643516924935164,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.8850119083654133,
+          "postDesignNegativeArea": 0.6652329288266936,
+          "selectedNegativeArea": 0.6643516924935164,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 5.421020610927379,
+          "postDesignNegativeArea": 4.258059744165979,
+          "selectedNegativeArea": 3.3460491839673816,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              234,
+              43
+            ],
+            [
+              235,
+              41
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 5.421020610927379,
+          "postDesignNegativeArea": 4.258059744165979,
+          "selectedNegativeArea": 3.3460491839673816,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              234,
+              43
+            ],
+            [
+              235,
+              41
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:27|R:0:26,0:25,0:24|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 2.4434848213607805,
+          "postDesignNegativeArea": 1.7030494503159517,
+          "selectedNegativeArea": 1.334215590567011,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              232,
+              46
+            ],
+            [
+              232,
+              47
+            ],
+            [
+              233,
+              47
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:23|R:0:22|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.13242131702081608,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 2.2395290240947845,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:37,0:38,0:39|R:0:36,0:35|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.6545591206883823,
+          "postDesignNegativeArea": 0.3760916677056766,
+          "selectedNegativeArea": 0.21834012478322667,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              223,
+              59
+            ],
+            [
+              224,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:33,0:34|R:0:32|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.9853999213457499,
+          "postDesignNegativeArea": 0.4868074174544657,
+          "selectedNegativeArea": 0.3959719055283921,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              224,
+              59
+            ],
+            [
+              225,
+              59
+            ],
+            [
+              226,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:45|R:0:44|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.1374317914979501,
+          "postDesignNegativeArea": 0.026312639903231898,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:43|cap>merge",
+          "axis": "x",
+          "sourceType": "cap>merge",
+          "originalArea": 0.812488197347649,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:40,0:41|merge>cap",
+          "axis": "x",
+          "sourceType": "merge>cap",
+          "originalArea": 1.4293870549835679,
+          "postDesignNegativeArea": 0.002346228236399477,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.8850119083654133,
+          "postDesignNegativeArea": 0.6652329288266936,
+          "selectedNegativeArea": 0.6643516924935167,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.8850119083654133,
+          "postDesignNegativeArea": 0.6652329288266936,
+          "selectedNegativeArea": 0.6643516924935167,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 5.42102061092737,
+          "postDesignNegativeArea": 4.258059744165974,
+          "selectedNegativeArea": 3.346049183967378,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              234,
+              43
+            ],
+            [
+              235,
+              41
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 5.42102061092737,
+          "postDesignNegativeArea": 4.258059744165974,
+          "selectedNegativeArea": 3.346049183967378,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              234,
+              43
+            ],
+            [
+              235,
+              41
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        }
+      ],
+      "firstConflicts": [
+        {
+          "frame": 16,
+          "cell": [
+            231,
+            35
+          ],
+          "positiveArea": 0.09163077175617218,
+          "negativeLocalComponents": [
+            {
+              "area": 0.8906388861300245,
+              "nodeIds": [
+                771,
+                790,
+                808,
+                825,
+                842,
+                860,
+                878,
+                895,
+                911,
+                927,
+                943,
+                959,
+                974,
+                989,
+                1005,
+                1021,
+                1038
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                11,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.017730343865387653,
+              "nodeIds": [
+                1037
+              ],
+              "sourceBoundaryIDs": [
+                4294967299,
+                137438953473
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 16,
+          "cell": [
+            234,
+            40
+          ],
+          "positiveArea": 0.4935445785522461,
+          "negativeLocalComponents": [
+            {
+              "area": 0.3479078397999781,
+              "nodeIds": [
+                1407,
+                1417,
+                1427,
+                1437,
+                1447,
+                1457,
+                1467,
+                1477,
+                1489,
+                1502,
+                1514,
+                1526
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16,
+                17
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.15854757924166812,
+              "nodeIds": [
+                1488,
+                1501,
+                1513,
+                1525
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599,
+                8589934600,
+                146028888065
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 16,
+          "cell": [
+            234,
+            41
+          ],
+          "positiveArea": 0.2228677123785019,
+          "negativeLocalComponents": [
+            {
+              "area": 0.754699797420754,
+              "nodeIds": [
+                1537,
+                1549,
+                1559,
+                1569
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 0.022432486035347005,
+              "nodeIds": [
+                1538
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 16,
+          "cell": [
+            235,
+            41
+          ],
+          "positiveArea": 0.06914372742176056,
+          "negativeLocalComponents": [
+            {
+              "area": 0.9303434394893382,
+              "nodeIds": [
+                1539,
+                1550,
+                1560,
+                1571
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.0005128345404358359,
+              "nodeIds": [
+                1570
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 16,
+          "cell": [
+            235,
+            42
+          ],
+          "positiveArea": 0.19300569593906403,
+          "negativeLocalComponents": [
+            {
+              "area": 0.11929093605074048,
+              "nodeIds": [
+                1581,
+                1592,
+                1603,
+                1614,
+                1625,
+                1636,
+                1647
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934593,
+                8589934598,
+                8589934599,
+                150323855363
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 0.6877033712769519,
+              "nodeIds": [
+                1582,
+                1593,
+                1604,
+                1615,
+                1626,
+                1637,
+                1648
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17,
+                18,
+                19
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 16,
+          "cell": [
+            235,
+            43
+          ],
+          "positiveArea": 0.15973074734210968,
+          "negativeLocalComponents": [
+            {
+              "area": 0.10170050198894909,
+              "nodeIds": [
+                1658,
+                1668,
+                1678
+              ],
+              "sourceBoundaryIDs": [
+                8589934593,
+                150323855363
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 0.738568748615746,
+              "nodeIds": [
+                1659,
+                1669,
+                1679,
+                1688,
+                1696,
+                1705,
+                1714,
+                1722,
+                1730
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                19,
+                20,
+                21
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 16,
+          "cell": [
+            207,
+            52
+          ],
+          "positiveArea": 0.47842440009117126,
+          "negativeLocalComponents": [
+            {
+              "area": 0.29828846354783206,
+              "nodeIds": [
+                2173,
+                2185,
+                2196,
+                2207,
+                2220
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                0,
+                79
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.22328713166517247,
+              "nodeIds": [
+                2208,
+                2221
+              ],
+              "sourceBoundaryIDs": [
+                76,
+                78
+              ],
+              "sourceBranches": [
+                "y|L:0:77,0:78|R:0:76,0:75|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ],
+      "numericUncertainCells": [
+        {
+          "frame": 16,
+          "cell": [
+            230,
+            35
+          ],
+          "positiveArea": 0.5230774879455566,
+          "negativeLocalComponents": [
+            {
+              "area": 0.47683798581324943,
+              "nodeIds": [
+                770,
+                789,
+                807,
+                824,
+                841,
+                859,
+                877,
+                894
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                11,
+                12
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 2.0194839173657902e-28,
+              "nodeIds": [
+                1004
+              ],
+              "sourceBoundaryIDs": [
+                4294967296,
+                17179869185
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 5.212210939021731e-16,
+              "nodeIds": [
+                1020
+              ],
+              "sourceBoundaryIDs": [
+                4294967296,
+                137438953474
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 8.45301509621992e-05,
+              "nodeIds": [
+                1036
+              ],
+              "sourceBoundaryIDs": [
+                4294967299,
+                137438953473
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 16,
+          "cell": [
+            231,
+            36
+          ],
+          "positiveArea": 0.2951471507549286,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6465368184771731,
+              "nodeIds": [
+                1054,
+                1071,
+                1088,
+                1104
+              ],
+              "sourceBoundaryIDs": [
+                4294967297,
+                4294967298,
+                4294967299,
+                137438953473
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            },
+            {
+              "area": 0.05831602123465243,
+              "nodeIds": [
+                1055,
+                1072
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 1.0546889433262265e-15,
+              "nodeIds": [
+                1119
+              ],
+              "sourceBoundaryIDs": [
+                4294967297,
+                21474836480
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 1.3993598048557425e-16,
+              "nodeIds": [
+                1218
+              ],
+              "sourceBoundaryIDs": [
+                4294967296,
+                21474836481
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 16,
+          "cell": [
+            234,
+            43
+          ],
+          "positiveArea": 0.4675917625427246,
+          "negativeLocalComponents": [
+            {
+              "area": 0.5324082430848465,
+              "nodeIds": [
+                1657,
+                1667,
+                1677
+              ],
+              "sourceBoundaryIDs": [
+                8589934593,
+                150323855363
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 1.1816214704706417e-15,
+              "nodeIds": [
+                1687
+              ],
+              "sourceBoundaryIDs": [
+                8589934593,
+                30064771076
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 7.645267859115947e-16,
+              "nodeIds": [
+                1704
+              ],
+              "sourceBoundaryIDs": [
+                8589934593,
+                30064771076
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 3.0292258760486853e-28,
+              "nodeIds": [
+                1713
+              ],
+              "sourceBoundaryIDs": [
+                8589934593,
+                30064771076
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ]
+    },
+    {
+      "frame": 51,
+      "nonOpenRecords": [
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.5285960052278829,
+          "postDesignNegativeArea": 0.16764921764265664,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.5285960052278829,
+          "postDesignNegativeArea": 0.16764921764265664,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:55|R:0:54,0:53,0:52,0:51,0:50|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 9.347376341407085,
+          "postDesignNegativeArea": 6.549779757480685,
+          "selectedNegativeArea": 3.7196362077441405,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              217,
+              58
+            ],
+            [
+              218,
+              56
+            ],
+            [
+              218,
+              57
+            ],
+            [
+              218,
+              58
+            ],
+            [
+              219,
+              57
+            ],
+            [
+              219,
+              58
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 2.54412662464007,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:37,0:38,0:39|R:0:36,0:35|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.4447431141306712,
+          "postDesignNegativeArea": 0.1358844182961006,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:63|R:0:62|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.03637109795019808,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:65|R:0:64|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.01172392131652901,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:33,0:34|R:0:32|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.0731893537300674,
+          "postDesignNegativeArea": 0.564770404247391,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:58|R:0:57,0:56|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.6332061204770932,
+          "postDesignNegativeArea": 0.2558186891823185,
+          "selectedNegativeArea": 0.2558186891823185,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              216,
+              58
+            ],
+            [
+              217,
+              58
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:45|R:0:44|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.07791566061539171,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.5285960052278824,
+          "postDesignNegativeArea": 0.1676492176426563,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.5285960052278824,
+          "postDesignNegativeArea": 0.1676492176426563,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        }
+      ],
+      "firstConflicts": [
+        {
+          "frame": 51,
+          "cell": [
+            234,
+            39
+          ],
+          "positiveArea": 0.29671862721443176,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6493504517284555,
+              "nodeIds": [
+                1368,
+                1378,
+                1388,
+                1398,
+                1410,
+                1423,
+                1435,
+                1449,
+                1462
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16,
+                17
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.05393091381592731,
+              "nodeIds": [
+                1448,
+                1461
+              ],
+              "sourceBoundaryIDs": [
+                8589934599,
+                8589934600,
+                146028888065
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 51,
+          "cell": [
+            234,
+            40
+          ],
+          "positiveArea": 0.2174198478460312,
+          "negativeLocalComponents": [
+            {
+              "area": 0.5772558686118577,
+              "nodeIds": [
+                1474,
+                1487,
+                1500,
+                1513
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599,
+                146028888065
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 0.20532428390439988,
+              "nodeIds": [
+                1475,
+                1488,
+                1501,
+                1514
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 51,
+          "cell": [
+            234,
+            41
+          ],
+          "positiveArea": 0.036107633262872696,
+          "negativeLocalComponents": [
+            {
+              "area": 0.9635755644857599,
+              "nodeIds": [
+                1526,
+                1538,
+                1550,
+                1561,
+                1571,
+                1581,
+                1591,
+                1602
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934598,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 0.00031680192251103926,
+              "nodeIds": [
+                1527,
+                1539
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 51,
+          "cell": [
+            235,
+            41
+          ],
+          "positiveArea": 0.08002930134534836,
+          "negativeLocalComponents": [
+            {
+              "area": 0.9092716225310332,
+              "nodeIds": [
+                1528,
+                1540,
+                1551,
+                1562,
+                1572,
+                1582,
+                1593,
+                1604
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17,
+                18,
+                19
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.010699075161346014,
+              "nodeIds": [
+                1592,
+                1603
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934598
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 51,
+          "cell": [
+            207,
+            53
+          ],
+          "positiveArea": 0.43199634552001953,
+          "negativeLocalComponents": [
+            {
+              "area": 0.4442091138859686,
+              "nodeIds": [
+                2214,
+                2225,
+                2239,
+                2254,
+                2269,
+                2283,
+                2297,
+                2310,
+                2324,
+                2339,
+                2353,
+                2368
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                0,
+                79
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.12379453765210913,
+              "nodeIds": [
+                2240,
+                2255,
+                2270,
+                2284,
+                2298,
+                2311,
+                2325,
+                2340,
+                2354,
+                2369
+              ],
+              "sourceBoundaryIDs": [
+                75,
+                76,
+                77,
+                78
+              ],
+              "sourceBranches": [
+                "y|L:0:77,0:78|R:0:76,0:75|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ],
+      "numericUncertainCells": [
+        {
+          "frame": 51,
+          "cell": [
+            233,
+            38
+          ],
+          "positiveArea": 0.47827771306037903,
+          "negativeLocalComponents": [
+            {
+              "area": 0.5217222898419934,
+              "nodeIds": [
+                1307,
+                1319,
+                1331,
+                1343,
+                1355
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                15,
+                16
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 1.6923882957302109e-15,
+              "nodeIds": [
+                1354
+              ],
+              "sourceBoundaryIDs": [
+                8589934600,
+                25769803778
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 51,
+          "cell": [
+            233,
+            39
+          ],
+          "positiveArea": 0.36011171340942383,
+          "negativeLocalComponents": [
+            {
+              "area": 1.4961326060500603e-15,
+              "nodeIds": [
+                1366
+              ],
+              "sourceBoundaryIDs": [
+                8589934600,
+                25769803778
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.001326835463144141,
+              "nodeIds": [
+                1367
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.6385614606929088,
+              "nodeIds": [
+                1409,
+                1422,
+                1434,
+                1447,
+                1460
+              ],
+              "sourceBoundaryIDs": [
+                8589934599,
+                8589934600,
+                146028888065
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 51,
+          "cell": [
+            210,
+            56
+          ],
+          "positiveArea": 0.028405874967575073,
+          "negativeLocalComponents": [
+            {
+              "area": 1.0615685203013692e-15,
+              "nodeIds": [
+                2766
+              ],
+              "sourceBoundaryIDs": [
+                72,
+                107374182402
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.9715941258687365,
+              "nodeIds": [
+                2767,
+                2786,
+                2787,
+                2805,
+                2806,
+                2824,
+                2825,
+                2845,
+                2864,
+                2882,
+                2901,
+                2921,
+                2941,
+                2962,
+                2983,
+                3003,
+                3025,
+                3047
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                67,
+                68,
+                73,
+                107374182401
+              ],
+              "sourceBranches": [
+                "y|L:0:70,0:71,0:72|R:0:69,0:68|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ]
+    },
+    {
+      "frame": 62,
+      "nonOpenRecords": [
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.622084025526437,
+          "postDesignNegativeArea": 0.2814078191258228,
+          "selectedNegativeArea": 0.015678863493072525,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.622084025526437,
+          "postDesignNegativeArea": 0.2814078191258228,
+          "selectedNegativeArea": 0.015678863493072525,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 2.4728676617020926,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:37,0:38,0:39|R:0:36,0:35|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.4574479955171828,
+          "postDesignNegativeArea": 0.24035440274107334,
+          "selectedNegativeArea": 0.20976372387710224,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              223,
+              59
+            ],
+            [
+              224,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:63|R:0:62|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.019971902654102335,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:65|R:0:64|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.0161592671340397,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:33,0:34|R:0:32|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.9399964946888224,
+          "postDesignNegativeArea": 0.4621160742804099,
+          "selectedNegativeArea": 0.3731047557563734,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              224,
+              59
+            ],
+            [
+              225,
+              59
+            ],
+            [
+              226,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:45|R:0:44|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.09840114270234981,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:43|cap>merge",
+          "axis": "x",
+          "sourceType": "cap>merge",
+          "originalArea": 0.36945359856745474,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:40,0:41|merge>cap",
+          "axis": "x",
+          "sourceType": "merge>cap",
+          "originalArea": 2.1431427639689105,
+          "postDesignNegativeArea": 0.03972870083428976,
+          "selectedNegativeArea": 0.002925947930043654,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              223,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.6220840255264184,
+          "postDesignNegativeArea": 0.28140781912582274,
+          "selectedNegativeArea": 0.01567886349307282,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.6220840255264184,
+          "postDesignNegativeArea": 0.28140781912582274,
+          "selectedNegativeArea": 0.01567886349307282,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              231,
+              35
+            ]
+          ]
+        }
+      ],
+      "firstConflicts": [
+        {
+          "frame": 62,
+          "cell": [
+            231,
+            35
+          ],
+          "positiveArea": 0.16535525023937225,
+          "negativeLocalComponents": [
+            {
+              "area": 0.8189658866440787,
+              "nodeIds": [
+                820,
+                838,
+                855,
+                872,
+                889,
+                906,
+                923,
+                939,
+                955,
+                971,
+                987,
+                1003,
+                1019,
+                1036
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.015678863493072525,
+              "nodeIds": [
+                1035
+              ],
+              "sourceBoundaryIDs": [
+                4294967299,
+                146028888065
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 62,
+          "cell": [
+            234,
+            40
+          ],
+          "positiveArea": 0.4477784335613251,
+          "negativeLocalComponents": [
+            {
+              "area": 0.060631938673013,
+              "nodeIds": [
+                1496,
+                1506,
+                1518,
+                1530
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.4915896284561089,
+              "nodeIds": [
+                1517,
+                1529,
+                1541,
+                1553,
+                1565,
+                1576
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599,
+                8589934600,
+                154618822657
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 62,
+          "cell": [
+            235,
+            41
+          ],
+          "positiveArea": 0.20740410685539246,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6292459397578609,
+              "nodeIds": [
+                1588,
+                1600,
+                1612
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.16334995333637045,
+              "nodeIds": [
+                1599,
+                1611
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934598,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 62,
+          "cell": [
+            235,
+            42
+          ],
+          "positiveArea": 0.12776078283786774,
+          "negativeLocalComponents": [
+            {
+              "area": 0.4694040343289089,
+              "nodeIds": [
+                1623,
+                1635,
+                1646,
+                1657,
+                1668
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934593,
+                8589934598
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 0.4028351900532493,
+              "nodeIds": [
+                1624,
+                1636,
+                1647,
+                1658,
+                1669
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17,
+                18,
+                19
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 62,
+          "cell": [
+            207,
+            52
+          ],
+          "positiveArea": 0.5425899624824524,
+          "negativeLocalComponents": [
+            {
+              "area": 0.30690416761607836,
+              "nodeIds": [
+                2213,
+                2224,
+                2235,
+                2246,
+                2259,
+                2272,
+                2285,
+                2299,
+                2313
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                0,
+                79
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.1505058562013324,
+              "nodeIds": [
+                2247,
+                2260,
+                2273,
+                2286,
+                2300,
+                2314
+              ],
+              "sourceBoundaryIDs": [
+                76,
+                77,
+                78
+              ],
+              "sourceBranches": [
+                "y|L:0:77,0:78|R:0:76,0:75|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 62,
+          "cell": [
+            222,
+            59
+          ],
+          "positiveArea": 0.3531219959259033,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6297553828695797,
+              "nodeIds": [
+                4632,
+                4665,
+                4697,
+                4730,
+                4763,
+                4797,
+                4829,
+                4861,
+                4893,
+                4925,
+                4957,
+                4991,
+                5026
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                32,
+                35,
+                40,
+                45
+              ],
+              "sourceBranches": [
+                "y|L:0:45|R:0:32|merge>open-mouth",
+                "y|L:0:45|R:0:35|merge>merge",
+                "y|L:0:45|R:0:40|merge>merge"
+              ]
+            },
+            {
+              "area": 0.017122610357217346,
+              "nodeIds": [
+                4990,
+                5025
+              ],
+              "sourceBoundaryIDs": [
+                46,
+                47
+              ],
+              "sourceBranches": [
+                "y|L:0:47|R:0:46|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ],
+      "numericUncertainCells": [
+        {
+          "frame": 62,
+          "cell": [
+            232,
+            36
+          ],
+          "positiveArea": 0.5283528566360474,
+          "negativeLocalComponents": [
+            {
+              "area": 0.4716471476741113,
+              "nodeIds": [
+                1054,
+                1071,
+                1087,
+                1102,
+                1117,
+                1131,
+                1145,
+                1159,
+                1173,
+                1187,
+                1201,
+                1215,
+                1230
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 2.76812534580696e-15,
+              "nodeIds": [
+                1229
+              ],
+              "sourceBoundaryIDs": [
+                4294967297,
+                150323855360
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 62,
+          "cell": [
+            233,
+            40
+          ],
+          "positiveArea": 0.43417075276374817,
+          "negativeLocalComponents": [
+            {
+              "area": 0.5658292594197499,
+              "nodeIds": [
+                1516,
+                1528,
+                1540,
+                1552,
+                1564,
+                1575
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599,
+                8589934600,
+                154618822657
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 5.44697750445855e-15,
+              "nodeIds": [
+                1551
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                154618822658
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 2.8826043560794883e-15,
+              "nodeIds": [
+                1563
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                154618822658
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 62,
+          "cell": [
+            209,
+            55
+          ],
+          "positiveArea": 0.21318377554416656,
+          "negativeLocalComponents": [
+            {
+              "area": 0.7868162183879399,
+              "nodeIds": [
+                2650,
+                2668,
+                2685,
+                2703,
+                2704,
+                2722,
+                2724,
+                2742,
+                2743,
+                2761,
+                2763,
+                2780,
+                2781,
+                2799,
+                2801,
+                2819,
+                2820,
+                2838,
+                2839,
+                2858,
+                2876,
+                2894,
+                2913,
+                2933,
+                2951,
+                2970,
+                2991
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                67,
+                68,
+                69,
+                71,
+                73,
+                103079215106,
+                107374182401
+              ],
+              "sourceBranches": [
+                "y|L:0:70,0:71,0:72|R:0:69,0:68|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 1.1048174118348449e-16,
+              "nodeIds": [
+                2723
+              ],
+              "sourceBoundaryIDs": [
+                71,
+                107374182400
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 1.7450233966154194e-16,
+              "nodeIds": [
+                2762
+              ],
+              "sourceBoundaryIDs": [
+                71,
+                107374182400
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 1.390455785503874e-16,
+              "nodeIds": [
+                2800
+              ],
+              "sourceBoundaryIDs": [
+                72,
+                107374182402
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ]
+    },
+    {
+      "frame": 71,
+      "nonOpenRecords": [
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.9428739004069917,
+          "postDesignNegativeArea": 0.7220133693098363,
+          "selectedNegativeArea": 0.5295878670303503,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.9428739004069917,
+          "postDesignNegativeArea": 0.7220133693098363,
+          "selectedNegativeArea": 0.5295878670303503,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 5.300357224099567,
+          "postDesignNegativeArea": 4.131018152659493,
+          "selectedNegativeArea": 3.2342090351726323,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 5.300357224099567,
+          "postDesignNegativeArea": 4.131018152659493,
+          "selectedNegativeArea": 3.2342090351726323,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 2.218368875168227,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:37,0:38,0:39|R:0:36,0:35|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.594220708736622,
+          "postDesignNegativeArea": 0.313250648345761,
+          "selectedNegativeArea": 0.23855296679794818,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              223,
+              59
+            ],
+            [
+              224,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:33,0:34|R:0:32|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.9726499814793272,
+          "postDesignNegativeArea": 0.47988859773795106,
+          "selectedNegativeArea": 0.3575604250416003,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              224,
+              59
+            ],
+            [
+              225,
+              59
+            ],
+            [
+              226,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:45|R:0:44|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.0947381891117568,
+          "postDesignNegativeArea": 0.01394873133262729,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:43|cap>merge",
+          "axis": "x",
+          "sourceType": "cap>merge",
+          "originalArea": 0.843463818989678,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:40,0:41|merge>cap",
+          "axis": "x",
+          "sourceType": "merge>cap",
+          "originalArea": 1.3806251895634598,
+          "postDesignNegativeArea": 0.005720133384902502,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.9428739004069886,
+          "postDesignNegativeArea": 0.7220133693098366,
+          "selectedNegativeArea": 0.5295878670303508,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.9428739004069886,
+          "postDesignNegativeArea": 0.7220133693098366,
+          "selectedNegativeArea": 0.5295878670303508,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 5.300357224099573,
+          "postDesignNegativeArea": 4.131018152659488,
+          "selectedNegativeArea": 3.234209035172628,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 5.300357224099573,
+          "postDesignNegativeArea": 4.131018152659488,
+          "selectedNegativeArea": 3.234209035172628,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        }
+      ],
+      "firstConflicts": [
+        {
+          "frame": 71,
+          "cell": [
+            230,
+            35
+          ],
+          "positiveArea": 0.5024193525314331,
+          "negativeLocalComponents": [
+            {
+              "area": 0.45840717213638493,
+              "nodeIds": [
+                787,
+                805,
+                822,
+                839,
+                857,
+                874,
+                891
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.039173472480425756,
+              "nodeIds": [
+                968,
+                984,
+                1001
+              ],
+              "sourceBoundaryIDs": [
+                4294967298,
+                4294967299,
+                133143986177
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 71,
+          "cell": [
+            231,
+            35
+          ],
+          "positiveArea": 0.06365185976028442,
+          "negativeLocalComponents": [
+            {
+              "area": 0.913430380519084,
+              "nodeIds": [
+                788,
+                806,
+                823,
+                840,
+                858,
+                875,
+                892,
+                908,
+                923,
+                938,
+                953,
+                969,
+                986,
+                1003
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.02291775648737511,
+              "nodeIds": [
+                985,
+                1002
+              ],
+              "sourceBoundaryIDs": [
+                4294967298,
+                4294967299,
+                133143986177
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 71,
+          "cell": [
+            234,
+            40
+          ],
+          "positiveArea": 0.44162651896476746,
+          "negativeLocalComponents": [
+            {
+              "area": 0.445092860247116,
+              "nodeIds": [
+                1364,
+                1375,
+                1385,
+                1395,
+                1408,
+                1421,
+                1435,
+                1448,
+                1460
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16,
+                17
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.11328062335454407,
+              "nodeIds": [
+                1420,
+                1434,
+                1447,
+                1459
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599,
+                8589934600,
+                141733920769
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 71,
+          "cell": [
+            234,
+            41
+          ],
+          "positiveArea": 0.25437813997268677,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6708317524073646,
+              "nodeIds": [
+                1471,
+                1482,
+                1493,
+                1503
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934598,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 0.0747900936977074,
+              "nodeIds": [
+                1472,
+                1483
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 71,
+          "cell": [
+            235,
+            42
+          ],
+          "positiveArea": 0.16998764872550964,
+          "negativeLocalComponents": [
+            {
+              "area": 0.8051868044261734,
+              "nodeIds": [
+                1514,
+                1524,
+                1535,
+                1546,
+                1557,
+                1568,
+                1579
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17,
+                18,
+                19
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.02482554396209844,
+              "nodeIds": [
+                1534,
+                1545,
+                1556,
+                1567,
+                1578
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934593,
+                8589934598,
+                146028888067
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 71,
+          "cell": [
+            235,
+            43
+          ],
+          "positiveArea": 0.1066027507185936,
+          "negativeLocalComponents": [
+            {
+              "area": 0.024067523668686325,
+              "nodeIds": [
+                1589,
+                1599,
+                1609
+              ],
+              "sourceBoundaryIDs": [
+                8589934593,
+                146028888067
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 0.8693297266338497,
+              "nodeIds": [
+                1590,
+                1600,
+                1610,
+                1618,
+                1626,
+                1634,
+                1642,
+                1650,
+                1659,
+                1667,
+                1675
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                19,
+                20,
+                21
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ],
+      "numericUncertainCells": [
+        {
+          "frame": 71,
+          "cell": [
+            231,
+            36
+          ],
+          "positiveArea": 0.45966437458992004,
+          "negativeLocalComponents": [
+            {
+              "area": 0.4674966380625565,
+              "nodeIds": [
+                1019,
+                1036,
+                1053,
+                1070,
+                1086
+              ],
+              "sourceBoundaryIDs": [
+                4294967297,
+                4294967298,
+                133143986177
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            },
+            {
+              "area": 0.07283897921366657,
+              "nodeIds": [
+                1020,
+                1037,
+                1054
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 2.4213461597787416e-16,
+              "nodeIds": [
+                1143
+              ],
+              "sourceBoundaryIDs": [
+                4294967297,
+                21474836480
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 71,
+          "cell": [
+            209,
+            55
+          ],
+          "positiveArea": 0.31918638944625854,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6808136145954597,
+              "nodeIds": [
+                2457,
+                2472,
+                2488,
+                2503,
+                2504,
+                2519,
+                2520,
+                2535,
+                2537,
+                2552,
+                2553,
+                2570,
+                2571,
+                2588,
+                2589,
+                2608,
+                2609,
+                2627,
+                2628,
+                2646,
+                2664,
+                2682,
+                2700
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                68,
+                69,
+                71,
+                73,
+                74,
+                98784247809
+              ],
+              "sourceBranches": [
+                "y|L:0:70,0:71,0:72|R:0:69,0:68|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 3.27656701829759e-16,
+              "nodeIds": [
+                2536
+              ],
+              "sourceBoundaryIDs": [
+                71,
+                98784247808
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 71,
+          "cell": [
+            215,
+            58
+          ],
+          "positiveArea": 0.2913137674331665,
+          "negativeLocalComponents": [
+            {
+              "area": 0.708686227388453,
+              "nodeIds": [
+                3652,
+                3676,
+                3700,
+                3727,
+                3751,
+                3776,
+                3802,
+                3828,
+                3856,
+                3857,
+                3884,
+                3885,
+                3912,
+                3913,
+                3941,
+                3942,
+                3968,
+                3996,
+                4022,
+                4047,
+                4074,
+                4102,
+                4130,
+                4159,
+                4188,
+                4218,
+                4248,
+                4278,
+                4309,
+                4338,
+                4368,
+                4398,
+                4428
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                50,
+                56,
+                58,
+                59
+              ],
+              "sourceBranches": [
+                "y|L:0:58|R:0:57,0:56|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 2.5789917076912694e-15,
+              "nodeIds": [
+                3653
+              ],
+              "sourceBoundaryIDs": [
+                58,
+                77309411330
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 8.152658236004751e-16,
+              "nodeIds": [
+                3701
+              ],
+              "sourceBoundaryIDs": [
+                58,
+                77309411330
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 5.083506694833761e-16,
+              "nodeIds": [
+                3752
+              ],
+              "sourceBoundaryIDs": [
+                58,
+                77309411330
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 6.592146657350123e-17,
+              "nodeIds": [
+                3777
+              ],
+              "sourceBoundaryIDs": [
+                58,
+                77309411330
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 4.07833318845108e-16,
+              "nodeIds": [
+                3829
+              ],
+              "sourceBoundaryIDs": [
+                58,
+                77309411330
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ]
+    },
+    {
+      "frame": 72,
+      "nonOpenRecords": [
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.9749510980618645,
+          "postDesignNegativeArea": 0.7701685008135826,
+          "selectedNegativeArea": 0.5162709992391127,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 1.9749510980618645,
+          "postDesignNegativeArea": 0.7701685008135826,
+          "selectedNegativeArea": 0.5162709992391127,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 5.182584447145924,
+          "postDesignNegativeArea": 3.995476996935086,
+          "selectedNegativeArea": 3.08700290818824,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 5.182584447145924,
+          "postDesignNegativeArea": 3.995476996935086,
+          "selectedNegativeArea": 3.08700290818824,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 2.1906085195036407,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:37,0:38,0:39|R:0:36,0:35|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.6159512564403877,
+          "postDesignNegativeArea": 0.3256338664119239,
+          "selectedNegativeArea": 0.23434733628868193,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              223,
+              59
+            ],
+            [
+              224,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:33,0:34|R:0:32|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.9812134624798083,
+          "postDesignNegativeArea": 0.4852414108424311,
+          "selectedNegativeArea": 0.34792280435006007,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              224,
+              59
+            ],
+            [
+              225,
+              59
+            ],
+            [
+              226,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:45|R:0:44|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.09580873349667701,
+          "postDesignNegativeArea": 0.017067362705051277,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:43|cap>merge",
+          "axis": "x",
+          "sourceType": "cap>merge",
+          "originalArea": 0.920529810509354,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:40,0:41|merge>cap",
+          "axis": "x",
+          "sourceType": "merge>cap",
+          "originalArea": 1.2732271075929884,
+          "postDesignNegativeArea": 0.0031483985986716207,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.9749510980618643,
+          "postDesignNegativeArea": 0.7701685008135785,
+          "selectedNegativeArea": 0.5162709992391086,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 1.9749510980618643,
+          "postDesignNegativeArea": 0.7701685008135785,
+          "selectedNegativeArea": 0.5162709992391086,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ],
+            [
+              231,
+              36
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 5.1825844471459295,
+          "postDesignNegativeArea": 3.9954769969350767,
+          "selectedNegativeArea": 3.087002908188232,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 5.1825844471459295,
+          "postDesignNegativeArea": 3.9954769969350767,
+          "selectedNegativeArea": 3.087002908188232,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ],
+            [
+              235,
+              42
+            ],
+            [
+              235,
+              43
+            ]
+          ]
+        }
+      ],
+      "firstConflicts": [
+        {
+          "frame": 72,
+          "cell": [
+            230,
+            35
+          ],
+          "positiveArea": 0.48465123772621155,
+          "negativeLocalComponents": [
+            {
+              "area": 0.4601740582443007,
+              "nodeIds": [
+                788,
+                806,
+                823,
+                840,
+                857,
+                874,
+                891
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.05517470715179284,
+              "nodeIds": [
+                968,
+                984,
+                1001
+              ],
+              "sourceBoundaryIDs": [
+                4294967298,
+                4294967299,
+                133143986177
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 72,
+          "cell": [
+            231,
+            35
+          ],
+          "positiveArea": 0.057629648596048355,
+          "negativeLocalComponents": [
+            {
+              "area": 0.920793728184132,
+              "nodeIds": [
+                789,
+                807,
+                824,
+                841,
+                858,
+                875,
+                892,
+                908,
+                923,
+                938,
+                953,
+                969,
+                986,
+                1003
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.021576622248811718,
+              "nodeIds": [
+                985,
+                1002
+              ],
+              "sourceBoundaryIDs": [
+                4294967298,
+                4294967299,
+                133143986177
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 72,
+          "cell": [
+            231,
+            36
+          ],
+          "positiveArea": 0.4808172583580017,
+          "negativeLocalComponents": [
+            {
+              "area": 0.4395196698385114,
+              "nodeIds": [
+                1019,
+                1037,
+                1054,
+                1071
+              ],
+              "sourceBoundaryIDs": [
+                4294967297,
+                4294967298,
+                133143986177
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            },
+            {
+              "area": 0.0796630576590512,
+              "nodeIds": [
+                1020,
+                1038,
+                1055
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                13
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 72,
+          "cell": [
+            234,
+            40
+          ],
+          "positiveArea": 0.4145556092262268,
+          "negativeLocalComponents": [
+            {
+              "area": 0.49923760723706845,
+              "nodeIds": [
+                1370,
+                1380,
+                1390,
+                1400,
+                1412,
+                1425,
+                1438,
+                1451,
+                1464,
+                1476,
+                1487
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16,
+                17
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.08620678228350649,
+              "nodeIds": [
+                1424,
+                1437,
+                1450,
+                1463,
+                1475,
+                1486
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599,
+                8589934600,
+                141733920769
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 72,
+          "cell": [
+            234,
+            41
+          ],
+          "positiveArea": 0.27254655957221985,
+          "negativeLocalComponents": [
+            {
+              "area": 0.614287921832573,
+              "nodeIds": [
+                1497,
+                1508,
+                1518
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934598,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 0.11316551204216879,
+              "nodeIds": [
+                1498
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 72,
+          "cell": [
+            235,
+            42
+          ],
+          "positiveArea": 0.13846614956855774,
+          "negativeLocalComponents": [
+            {
+              "area": 0.8608445181729287,
+              "nodeIds": [
+                1529,
+                1539,
+                1549,
+                1559,
+                1570,
+                1581,
+                1592
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17,
+                18,
+                19
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.0006893344680505886,
+              "nodeIds": [
+                1569,
+                1580,
+                1591
+              ],
+              "sourceBoundaryIDs": [
+                8589934593,
+                8589934598,
+                146028888067
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 72,
+          "cell": [
+            235,
+            43
+          ],
+          "positiveArea": 0.07038536667823792,
+          "negativeLocalComponents": [
+            {
+              "area": 0.0009990321872010792,
+              "nodeIds": [
+                1602,
+                1613,
+                1623
+              ],
+              "sourceBoundaryIDs": [
+                8589934593,
+                146028888067
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 0.9286156018722019,
+              "nodeIds": [
+                1603,
+                1614,
+                1624,
+                1632,
+                1640,
+                1648,
+                1656,
+                1665,
+                1673,
+                1682,
+                1690,
+                1699
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                19,
+                20,
+                21
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ],
+      "numericUncertainCells": [
+        {
+          "frame": 72,
+          "cell": [
+            209,
+            55
+          ],
+          "positiveArea": 0.33346840739250183,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6665315912080678,
+              "nodeIds": [
+                2425,
+                2438,
+                2452,
+                2468,
+                2484,
+                2485,
+                2500,
+                2501,
+                2516,
+                2518,
+                2534,
+                2535,
+                2550,
+                2552,
+                2569,
+                2571,
+                2587,
+                2588,
+                2604,
+                2605,
+                2623,
+                2624,
+                2641,
+                2642,
+                2660,
+                2661,
+                2678,
+                2697,
+                2715
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                68,
+                69,
+                71,
+                73,
+                74,
+                98784247809
+              ],
+              "sourceBranches": [
+                "y|L:0:70,0:71,0:72|R:0:69,0:68|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 1.8505850767123702e-16,
+              "nodeIds": [
+                2517
+              ],
+              "sourceBoundaryIDs": [
+                71,
+                98784247808
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 2.373971748206793e-16,
+              "nodeIds": [
+                2551
+              ],
+              "sourceBoundaryIDs": [
+                71,
+                98784247808
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 3.0292258760486853e-28,
+              "nodeIds": [
+                2570
+              ],
+              "sourceBoundaryIDs": [
+                71,
+                98784247808
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 72,
+          "cell": [
+            215,
+            58
+          ],
+          "positiveArea": 0.30604881048202515,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6939511798997163,
+              "nodeIds": [
+                3568,
+                3592,
+                3617,
+                3642,
+                3665,
+                3688,
+                3712,
+                3737,
+                3764,
+                3765,
+                3793,
+                3794,
+                3820,
+                3821,
+                3848,
+                3849,
+                3875,
+                3902,
+                3927,
+                3953,
+                3980,
+                4010,
+                4039,
+                4068,
+                4097,
+                4125,
+                4156,
+                4187,
+                4215,
+                4244,
+                4276
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                50,
+                56,
+                58,
+                59
+              ],
+              "sourceBranches": [
+                "y|L:0:58|R:0:57,0:56|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 3.5041414214731503e-16,
+              "nodeIds": [
+                3593
+              ],
+              "sourceBoundaryIDs": [
+                58,
+                77309411330
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ]
+    },
+    {
+      "frame": 73,
+      "nonOpenRecords": [
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 2.005793529096989,
+          "postDesignNegativeArea": 0.8168140066897119,
+          "selectedNegativeArea": 0.09196499649918265,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 2.005793529096989,
+          "postDesignNegativeArea": 0.8168140066897119,
+          "selectedNegativeArea": 0.09196499649918265,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 5.06814346869942,
+          "postDesignNegativeArea": 3.8635436983082982,
+          "selectedNegativeArea": 3.482333988965075,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              233,
+              42
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 5.06814346869942,
+          "postDesignNegativeArea": 3.8635436983082982,
+          "selectedNegativeArea": 3.482333988965075,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              233,
+              42
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 2.163607519641119,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:37,0:38,0:39|R:0:36,0:35|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.637519359694354,
+          "postDesignNegativeArea": 0.33806187264902127,
+          "selectedNegativeArea": 0.22991308020356857,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              223,
+              59
+            ],
+            [
+              224,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:33,0:34|R:0:32|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.9897559237113867,
+          "postDesignNegativeArea": 0.4905928663796678,
+          "selectedNegativeArea": 0.338234393413012,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              224,
+              59
+            ],
+            [
+              225,
+              59
+            ],
+            [
+              226,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:45|R:0:44|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.09709085498697043,
+          "postDesignNegativeArea": 0.020090699980653867,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:43|cap>merge",
+          "axis": "x",
+          "sourceType": "cap>merge",
+          "originalArea": 1.0000743449399507,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:40,0:41|merge>cap",
+          "axis": "x",
+          "sourceType": "merge>cap",
+          "originalArea": 1.164817060335412,
+          "postDesignNegativeArea": 0.001283885634228571,
+          "selectedNegativeArea": 0.0,
+          "outputState": "SPATIAL_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 2.0057935290969904,
+          "postDesignNegativeArea": 0.8168140066897107,
+          "selectedNegativeArea": 0.09196499649918276,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 2.0057935290969904,
+          "postDesignNegativeArea": 0.8168140066897107,
+          "selectedNegativeArea": 0.09196499649918276,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 5.068143468699417,
+          "postDesignNegativeArea": 3.863543698308278,
+          "selectedNegativeArea": 3.48233398896506,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              233,
+              42
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 5.068143468699417,
+          "postDesignNegativeArea": 3.863543698308278,
+          "selectedNegativeArea": 3.48233398896506,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              233,
+              40
+            ],
+            [
+              233,
+              41
+            ],
+            [
+              233,
+              42
+            ],
+            [
+              234,
+              40
+            ],
+            [
+              234,
+              41
+            ],
+            [
+              234,
+              42
+            ]
+          ]
+        }
+      ],
+      "firstConflicts": [
+        {
+          "frame": 73,
+          "cell": [
+            231,
+            35
+          ],
+          "positiveArea": 0.052686646580696106,
+          "negativeLocalComponents": [
+            {
+              "area": 0.9275977413125653,
+              "nodeIds": [
+                788,
+                806,
+                823,
+                841,
+                858,
+                875,
+                892,
+                908,
+                923,
+                938,
+                954,
+                971,
+                987,
+                1005,
+                1022
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.01971561200106457,
+              "nodeIds": [
+                1004,
+                1021
+              ],
+              "sourceBoundaryIDs": [
+                4294967298,
+                4294967299,
+                128849018881
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 73,
+          "cell": [
+            234,
+            40
+          ],
+          "positiveArea": 0.385718435049057,
+          "negativeLocalComponents": [
+            {
+              "area": 0.5520621835766192,
+              "nodeIds": [
+                1402,
+                1413,
+                1423,
+                1434,
+                1447,
+                1460,
+                1473,
+                1485,
+                1497
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16,
+                17
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.062219395191541245,
+              "nodeIds": [
+                1459,
+                1472,
+                1484,
+                1496
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599,
+                8589934600,
+                137438953473
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 73,
+          "cell": [
+            234,
+            41
+          ],
+          "positiveArea": 0.28356021642684937,
+          "negativeLocalComponents": [
+            {
+              "area": 0.5590612504199264,
+              "nodeIds": [
+                1508,
+                1519,
+                1530,
+                1541
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934598,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+                "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+              ]
+            },
+            {
+              "area": 0.15737852142646708,
+              "nodeIds": [
+                1509,
+                1520,
+                1531
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ],
+      "numericUncertainCells": [
+        {
+          "frame": 73,
+          "cell": [
+            230,
+            35
+          ],
+          "positiveArea": 0.4651385247707367,
+          "negativeLocalComponents": [
+            {
+              "area": 0.46261208416142674,
+              "nodeIds": [
+                787,
+                805,
+                822,
+                840,
+                857,
+                874,
+                891,
+                907
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 7.199859249889568e-16,
+              "nodeIds": [
+                953
+              ],
+              "sourceBoundaryIDs": [
+                4294967299,
+                17179869186
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.07224938449811916,
+              "nodeIds": [
+                970,
+                986,
+                1003,
+                1020
+              ],
+              "sourceBoundaryIDs": [
+                4294967298,
+                4294967299,
+                128849018881
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ]
+    },
+    {
+      "frame": 77,
+      "nonOpenRecords": [
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 2.1081353789486394,
+          "postDesignNegativeArea": 0.9417961244297105,
+          "selectedNegativeArea": 0.13595243691974765,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:1:0|R:1:3,1:2,1:1|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 2.1081353789486394,
+          "postDesignNegativeArea": 0.9417961244297105,
+          "selectedNegativeArea": 0.13595243691974765,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:42,0:43|R:0:41,0:40|cap>cap",
+          "axis": "y",
+          "sourceType": "cap>cap",
+          "originalArea": 2.070818082391908,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "y|L:0:37,0:38,0:39|R:0:36,0:35|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.7165692388397022,
+          "postDesignNegativeArea": 0.3878472353373751,
+          "selectedNegativeArea": 0.2168085894267763,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              223,
+              59
+            ],
+            [
+              224,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:33,0:34|R:0:32|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 1.017394301436093,
+          "postDesignNegativeArea": 0.5076129857708622,
+          "selectedNegativeArea": 0.31534333367279826,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              224,
+              59
+            ],
+            [
+              225,
+              59
+            ],
+            [
+              226,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "y|L:0:45|R:0:44,0:40|cap>merge",
+          "axis": "y",
+          "sourceType": "cap>merge",
+          "originalArea": 0.7026868455446318,
+          "postDesignNegativeArea": 0.5998982002310049,
+          "selectedNegativeArea": 0.19719075381034762,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              222,
+              59
+            ],
+            [
+              223,
+              59
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:43,0:40,0:41|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 2.07081808239191,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:0:42|R:0:43,0:40,0:41|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 2.07081808239191,
+          "postDesignNegativeArea": 0.0,
+          "selectedNegativeArea": 0.0,
+          "outputState": "CONTINUOUS_FILL",
+          "selectedCells": []
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2|R:1:0,1:1|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 2.108135378948646,
+          "postDesignNegativeArea": 0.9417961244297104,
+          "selectedNegativeArea": 0.13595243691974815,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ]
+          ]
+        },
+        {
+          "sourceBranch": "x|L:1:3,1:2|R:1:0,1:1|cap>cap",
+          "axis": "x",
+          "sourceType": "cap>cap",
+          "originalArea": 2.108135378948646,
+          "postDesignNegativeArea": 0.9417961244297104,
+          "selectedNegativeArea": 0.13595243691974815,
+          "outputState": "RETAINED_NEEDS_JUNCTION_OWNER",
+          "selectedCells": [
+            [
+              230,
+              35
+            ],
+            [
+              231,
+              35
+            ]
+          ]
+        }
+      ],
+      "firstConflicts": [
+        {
+          "frame": 77,
+          "cell": [
+            230,
+            35
+          ],
+          "positiveArea": 0.39120402932167053,
+          "negativeLocalComponents": [
+            {
+              "area": 0.48257598313350164,
+              "nodeIds": [
+                785,
+                802,
+                818,
+                834,
+                850,
+                865,
+                880,
+                895,
+                910,
+                927
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.1262199934507508,
+              "nodeIds": [
+                926,
+                942,
+                957,
+                973,
+                990
+              ],
+              "sourceBoundaryIDs": [
+                4294967298,
+                4294967299,
+                133143986177
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2|R:1:0,1:1|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 77,
+          "cell": [
+            231,
+            35
+          ],
+          "positiveArea": 0.04117942973971367,
+          "negativeLocalComponents": [
+            {
+              "area": 0.9490881251465941,
+              "nodeIds": [
+                786,
+                803,
+                819,
+                835,
+                851,
+                866,
+                881,
+                896,
+                911,
+                928,
+                943,
+                958,
+                975,
+                992
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                12,
+                13
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.00973244346899647,
+              "nodeIds": [
+                974,
+                991
+              ],
+              "sourceBoundaryIDs": [
+                4294967298,
+                4294967299,
+                133143986177
+              ],
+              "sourceBranches": [
+                "x|L:1:3,1:2|R:1:0,1:1|cap>cap",
+                "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 77,
+          "cell": [
+            233,
+            40
+          ],
+          "positiveArea": 0.519135057926178,
+          "negativeLocalComponents": [
+            {
+              "area": 0.0006769142258668929,
+              "nodeIds": [
+                1359
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.4801880272199729,
+              "nodeIds": [
+                1421,
+                1431,
+                1441,
+                1451,
+                1461
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599,
+                8589934600,
+                141733920770
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6,2:5|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 77,
+          "cell": [
+            234,
+            40
+          ],
+          "positiveArea": 0.2667555809020996,
+          "negativeLocalComponents": [
+            {
+              "area": 0.7274696824345389,
+              "nodeIds": [
+                1360,
+                1369,
+                1379,
+                1388,
+                1396,
+                1404,
+                1412,
+                1422,
+                1432,
+                1442,
+                1452,
+                1463
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                16,
+                17
+              ],
+              "sourceBranches": []
+            },
+            {
+              "area": 0.005774737712525714,
+              "nodeIds": [
+                1462
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6,2:5|cap>open-mouth"
+              ]
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 77,
+          "cell": [
+            234,
+            41
+          ],
+          "positiveArea": 0.3021775484085083,
+          "negativeLocalComponents": [
+            {
+              "area": 0.37252214815453255,
+              "nodeIds": [
+                1473,
+                1483,
+                1493
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934598,
+                8589934599
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6,2:5|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 0.3253002901257033,
+              "nodeIds": [
+                1474,
+                1484,
+                1494
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 77,
+          "cell": [
+            234,
+            42
+          ],
+          "positiveArea": 0.19980934262275696,
+          "negativeLocalComponents": [
+            {
+              "area": 0.7115257339677522,
+              "nodeIds": [
+                1503,
+                1513,
+                1523,
+                1533
+              ],
+              "sourceBoundaryIDs": [
+                8589934592,
+                8589934593,
+                8589934598
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6,2:5|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 0.08866492968513408,
+              "nodeIds": [
+                1504,
+                1514,
+                1524,
+                1534
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                17,
+                18,
+                19
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ],
+      "numericUncertainCells": [
+        {
+          "frame": 77,
+          "cell": [
+            234,
+            43
+          ],
+          "positiveArea": 0.36219850182533264,
+          "negativeLocalComponents": [
+            {
+              "area": 0.6378014874152004,
+              "nodeIds": [
+                1543,
+                1544,
+                1553,
+                1554,
+                1563,
+                1564,
+                1572,
+                1573,
+                1581,
+                1582,
+                1590,
+                1598,
+                1606,
+                1614,
+                1622,
+                1630,
+                1639
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                19,
+                20,
+                21,
+                8589934593,
+                8589934598,
+                154618822658
+              ],
+              "sourceBranches": [
+                "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4|cap>open-mouth",
+                "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6,2:5|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 2.734303668899818e-15,
+              "nodeIds": [
+                1638
+              ],
+              "sourceBoundaryIDs": [
+                8589934594,
+                30064771074
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 77,
+          "cell": [
+            233,
+            47
+          ],
+          "positiveArea": 0.05713879317045212,
+          "negativeLocalComponents": [
+            {
+              "area": 0.9428612070963854,
+              "nodeIds": [
+                1765,
+                1775,
+                1785,
+                1787,
+                1797,
+                1807,
+                1817
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775807,
+                24,
+                27,
+                28,
+                150323855361
+              ],
+              "sourceBranches": [
+                "y|L:0:27|R:0:26,0:25,0:24|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 5.116892153045338e-16,
+              "nodeIds": [
+                1786
+              ],
+              "sourceBoundaryIDs": [
+                23,
+                150323855362
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        },
+        {
+          "frame": 77,
+          "cell": [
+            207,
+            53
+          ],
+          "positiveArea": 0.18766571581363678,
+          "negativeLocalComponents": [
+            {
+              "area": 0.8123342793977711,
+              "nodeIds": [
+                2114,
+                2125,
+                2126,
+                2137,
+                2138,
+                2149,
+                2150,
+                2161,
+                2162,
+                2173,
+                2174,
+                2185,
+                2186,
+                2197,
+                2208
+              ],
+              "sourceBoundaryIDs": [
+                -9223372036854775808,
+                75,
+                76,
+                78,
+                79
+              ],
+              "sourceBranches": [
+                "y|L:0:77,0:78|R:0:76,0:75|cap>open-mouth"
+              ]
+            },
+            {
+              "area": 3.783226686435127e-15,
+              "nodeIds": [
+                2115
+              ],
+              "sourceBoundaryIDs": [
+                78,
+                47244640257
+              ],
+              "sourceBranches": []
+            }
+          ],
+          "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+        }
+      ]
+    }
+  ],
+  "firstWitnesses": [
+    {
+      "frame": 16,
+      "cell": [
+        231,
+        35
+      ],
+      "positiveArea": 0.09163077175617218,
+      "negativeLocalComponents": [
+        {
+          "area": 0.8906388861300245,
+          "nodeIds": [
+            771,
+            790,
+            808,
+            825,
+            842,
+            860,
+            878,
+            895,
+            911,
+            927,
+            943,
+            959,
+            974,
+            989,
+            1005,
+            1021,
+            1038
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            11,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.017730343865387653,
+          "nodeIds": [
+            1037
+          ],
+          "sourceBoundaryIDs": [
+            4294967299,
+            137438953473
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 16,
+      "cell": [
+        234,
+        40
+      ],
+      "positiveArea": 0.4935445785522461,
+      "negativeLocalComponents": [
+        {
+          "area": 0.3479078397999781,
+          "nodeIds": [
+            1407,
+            1417,
+            1427,
+            1437,
+            1447,
+            1457,
+            1467,
+            1477,
+            1489,
+            1502,
+            1514,
+            1526
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            16,
+            17
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.15854757924166812,
+          "nodeIds": [
+            1488,
+            1501,
+            1513,
+            1525
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934599,
+            8589934600,
+            146028888065
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+            "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 16,
+      "cell": [
+        234,
+        41
+      ],
+      "positiveArea": 0.2228677123785019,
+      "negativeLocalComponents": [
+        {
+          "area": 0.754699797420754,
+          "nodeIds": [
+            1537,
+            1549,
+            1559,
+            1569
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934599
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+            "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+          ]
+        },
+        {
+          "area": 0.022432486035347005,
+          "nodeIds": [
+            1538
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            17
+          ],
+          "sourceBranches": []
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 51,
+      "cell": [
+        234,
+        39
+      ],
+      "positiveArea": 0.29671862721443176,
+      "negativeLocalComponents": [
+        {
+          "area": 0.6493504517284555,
+          "nodeIds": [
+            1368,
+            1378,
+            1388,
+            1398,
+            1410,
+            1423,
+            1435,
+            1449,
+            1462
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            16,
+            17
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.05393091381592731,
+          "nodeIds": [
+            1448,
+            1461
+          ],
+          "sourceBoundaryIDs": [
+            8589934599,
+            8589934600,
+            146028888065
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+            "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 51,
+      "cell": [
+        234,
+        40
+      ],
+      "positiveArea": 0.2174198478460312,
+      "negativeLocalComponents": [
+        {
+          "area": 0.5772558686118577,
+          "nodeIds": [
+            1474,
+            1487,
+            1500,
+            1513
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934599,
+            146028888065
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+            "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+          ]
+        },
+        {
+          "area": 0.20532428390439988,
+          "nodeIds": [
+            1475,
+            1488,
+            1501,
+            1514
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            17
+          ],
+          "sourceBranches": []
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 51,
+      "cell": [
+        234,
+        41
+      ],
+      "positiveArea": 0.036107633262872696,
+      "negativeLocalComponents": [
+        {
+          "area": 0.9635755644857599,
+          "nodeIds": [
+            1526,
+            1538,
+            1550,
+            1561,
+            1571,
+            1581,
+            1591,
+            1602
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934598,
+            8589934599
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+            "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+          ]
+        },
+        {
+          "area": 0.00031680192251103926,
+          "nodeIds": [
+            1527,
+            1539
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            17
+          ],
+          "sourceBranches": []
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 62,
+      "cell": [
+        231,
+        35
+      ],
+      "positiveArea": 0.16535525023937225,
+      "negativeLocalComponents": [
+        {
+          "area": 0.8189658866440787,
+          "nodeIds": [
+            820,
+            838,
+            855,
+            872,
+            889,
+            906,
+            923,
+            939,
+            955,
+            971,
+            987,
+            1003,
+            1019,
+            1036
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.015678863493072525,
+          "nodeIds": [
+            1035
+          ],
+          "sourceBoundaryIDs": [
+            4294967299,
+            146028888065
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 62,
+      "cell": [
+        234,
+        40
+      ],
+      "positiveArea": 0.4477784335613251,
+      "negativeLocalComponents": [
+        {
+          "area": 0.060631938673013,
+          "nodeIds": [
+            1496,
+            1506,
+            1518,
+            1530
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            16
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.4915896284561089,
+          "nodeIds": [
+            1517,
+            1529,
+            1541,
+            1553,
+            1565,
+            1576
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934599,
+            8589934600,
+            154618822657
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+            "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 62,
+      "cell": [
+        235,
+        41
+      ],
+      "positiveArea": 0.20740410685539246,
+      "negativeLocalComponents": [
+        {
+          "area": 0.6292459397578609,
+          "nodeIds": [
+            1588,
+            1600,
+            1612
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            17
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.16334995333637045,
+          "nodeIds": [
+            1599,
+            1611
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934598,
+            8589934599
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>open-mouth",
+            "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6|cap>open-mouth"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 71,
+      "cell": [
+        230,
+        35
+      ],
+      "positiveArea": 0.5024193525314331,
+      "negativeLocalComponents": [
+        {
+          "area": 0.45840717213638493,
+          "nodeIds": [
+            787,
+            805,
+            822,
+            839,
+            857,
+            874,
+            891
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.039173472480425756,
+          "nodeIds": [
+            968,
+            984,
+            1001
+          ],
+          "sourceBoundaryIDs": [
+            4294967298,
+            4294967299,
+            133143986177
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 71,
+      "cell": [
+        231,
+        35
+      ],
+      "positiveArea": 0.06365185976028442,
+      "negativeLocalComponents": [
+        {
+          "area": 0.913430380519084,
+          "nodeIds": [
+            788,
+            806,
+            823,
+            840,
+            858,
+            875,
+            892,
+            908,
+            923,
+            938,
+            953,
+            969,
+            986,
+            1003
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.02291775648737511,
+          "nodeIds": [
+            985,
+            1002
+          ],
+          "sourceBoundaryIDs": [
+            4294967298,
+            4294967299,
+            133143986177
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 71,
+      "cell": [
+        234,
+        40
+      ],
+      "positiveArea": 0.44162651896476746,
+      "negativeLocalComponents": [
+        {
+          "area": 0.445092860247116,
+          "nodeIds": [
+            1364,
+            1375,
+            1385,
+            1395,
+            1408,
+            1421,
+            1435,
+            1448,
+            1460
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            16,
+            17
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.11328062335454407,
+          "nodeIds": [
+            1420,
+            1434,
+            1447,
+            1459
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934599,
+            8589934600,
+            141733920769
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+            "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 72,
+      "cell": [
+        230,
+        35
+      ],
+      "positiveArea": 0.48465123772621155,
+      "negativeLocalComponents": [
+        {
+          "area": 0.4601740582443007,
+          "nodeIds": [
+            788,
+            806,
+            823,
+            840,
+            857,
+            874,
+            891
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.05517470715179284,
+          "nodeIds": [
+            968,
+            984,
+            1001
+          ],
+          "sourceBoundaryIDs": [
+            4294967298,
+            4294967299,
+            133143986177
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 72,
+      "cell": [
+        231,
+        35
+      ],
+      "positiveArea": 0.057629648596048355,
+      "negativeLocalComponents": [
+        {
+          "area": 0.920793728184132,
+          "nodeIds": [
+            789,
+            807,
+            824,
+            841,
+            858,
+            875,
+            892,
+            908,
+            923,
+            938,
+            953,
+            969,
+            986,
+            1003
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.021576622248811718,
+          "nodeIds": [
+            985,
+            1002
+          ],
+          "sourceBoundaryIDs": [
+            4294967298,
+            4294967299,
+            133143986177
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 72,
+      "cell": [
+        231,
+        36
+      ],
+      "positiveArea": 0.4808172583580017,
+      "negativeLocalComponents": [
+        {
+          "area": 0.4395196698385114,
+          "nodeIds": [
+            1019,
+            1037,
+            1054,
+            1071
+          ],
+          "sourceBoundaryIDs": [
+            4294967297,
+            4294967298,
+            133143986177
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        },
+        {
+          "area": 0.0796630576590512,
+          "nodeIds": [
+            1020,
+            1038,
+            1055
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            13
+          ],
+          "sourceBranches": []
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 73,
+      "cell": [
+        231,
+        35
+      ],
+      "positiveArea": 0.052686646580696106,
+      "negativeLocalComponents": [
+        {
+          "area": 0.9275977413125653,
+          "nodeIds": [
+            788,
+            806,
+            823,
+            841,
+            858,
+            875,
+            892,
+            908,
+            923,
+            938,
+            954,
+            971,
+            987,
+            1005,
+            1022
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.01971561200106457,
+          "nodeIds": [
+            1004,
+            1021
+          ],
+          "sourceBoundaryIDs": [
+            4294967298,
+            4294967299,
+            128849018881
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2,1:1|R:1:0|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 73,
+      "cell": [
+        234,
+        40
+      ],
+      "positiveArea": 0.385718435049057,
+      "negativeLocalComponents": [
+        {
+          "area": 0.5520621835766192,
+          "nodeIds": [
+            1402,
+            1413,
+            1423,
+            1434,
+            1447,
+            1460,
+            1473,
+            1485,
+            1497
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            16,
+            17
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.062219395191541245,
+          "nodeIds": [
+            1459,
+            1472,
+            1484,
+            1496
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934599,
+            8589934600,
+            137438953473
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+            "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 73,
+      "cell": [
+        234,
+        41
+      ],
+      "positiveArea": 0.28356021642684937,
+      "negativeLocalComponents": [
+        {
+          "area": 0.5590612504199264,
+          "nodeIds": [
+            1508,
+            1519,
+            1530,
+            1541
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934598,
+            8589934599
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4,2:5|cap>cap",
+            "y|L:2:9,2:0,2:1,2:2|R:2:8,2:7,2:6,2:5,2:4,2:3|cap>cap"
+          ]
+        },
+        {
+          "area": 0.15737852142646708,
+          "nodeIds": [
+            1509,
+            1520,
+            1531
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            17
+          ],
+          "sourceBranches": []
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 77,
+      "cell": [
+        230,
+        35
+      ],
+      "positiveArea": 0.39120402932167053,
+      "negativeLocalComponents": [
+        {
+          "area": 0.48257598313350164,
+          "nodeIds": [
+            785,
+            802,
+            818,
+            834,
+            850,
+            865,
+            880,
+            895,
+            910,
+            927
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.1262199934507508,
+          "nodeIds": [
+            926,
+            942,
+            957,
+            973,
+            990
+          ],
+          "sourceBoundaryIDs": [
+            4294967298,
+            4294967299,
+            133143986177
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2|R:1:0,1:1|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 77,
+      "cell": [
+        231,
+        35
+      ],
+      "positiveArea": 0.04117942973971367,
+      "negativeLocalComponents": [
+        {
+          "area": 0.9490881251465941,
+          "nodeIds": [
+            786,
+            803,
+            819,
+            835,
+            851,
+            866,
+            881,
+            896,
+            911,
+            928,
+            943,
+            958,
+            975,
+            992
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            12,
+            13
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.00973244346899647,
+          "nodeIds": [
+            974,
+            991
+          ],
+          "sourceBoundaryIDs": [
+            4294967298,
+            4294967299,
+            133143986177
+          ],
+          "sourceBranches": [
+            "x|L:1:3,1:2|R:1:0,1:1|cap>cap",
+            "y|L:1:0|R:1:3,1:2,1:1|cap>cap"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    },
+    {
+      "frame": 77,
+      "cell": [
+        233,
+        40
+      ],
+      "positiveArea": 0.519135057926178,
+      "negativeLocalComponents": [
+        {
+          "area": 0.0006769142258668929,
+          "nodeIds": [
+            1359
+          ],
+          "sourceBoundaryIDs": [
+            -9223372036854775807,
+            16
+          ],
+          "sourceBranches": []
+        },
+        {
+          "area": 0.4801880272199729,
+          "nodeIds": [
+            1421,
+            1431,
+            1441,
+            1451,
+            1461
+          ],
+          "sourceBoundaryIDs": [
+            8589934592,
+            8589934599,
+            8589934600,
+            141733920770
+          ],
+          "sourceBranches": [
+            "x|L:2:9,2:8,2:7,2:6|R:2:0,2:1,2:2,2:3,2:4|cap>open-mouth",
+            "y|L:2:9,2:0,2:1|R:2:8,2:7,2:6,2:5|cap>open-mouth"
+          ]
+        }
+      ],
+      "sourceSelectedOwner": "UNRESOLVED: disconnected negative pieces merged by one empty output cell"
+    }
+  ],
+  "productIntegration": "BLOCKED until disconnected-source region merge/elision ownership is explicitly decided; counts are not visual-error counts."
+}

@@ -48,8 +48,23 @@ public sealed class NegativeRegion563
  }
  // Feature records are never discarded. Only the selector's cell constraints
  // omit singleton/empty lists; they are not feature existence or identity.
- public static List<int[]> Groups(List<Feature> first,List<Feature> second)
+ public static List<int[]> Groups(List<Feature> first,List<Feature> second,int width,int height)
  {
-  var groups=new List<int[]>();foreach(var f in first){var g=f.OwnedCells();if(g.Length>=2)groups.Add(g);}foreach(var f in second){var g=f.OwnedCells();if(g.Length>=2)groups.Add(g);}return groups;
+  var groups=new List<int[]>();
+  void Add(Feature f)
+  {
+   var owned=f.OwnedCells();var remaining=new Dictionary<int,bool>();foreach(int i in owned)remaining.Add(i,true);
+   foreach(int start in owned)
+   {
+    if(!remaining.Remove(start))continue;var component=new List<int>{start};
+    for(int at=0;at<component.Count;at++){int i=component[at],x=i%width,y=i/width;for(int dy=-1;dy<=1;dy++)for(int dx=-1;dx<=1;dx++){if(dx==0&&dy==0)continue;int xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=width||yy>=height)continue;int next=yy*width+xx;if(remaining.Remove(next))component.Add(next);}}
+    // Same adjacency as the existing spatial cut. A continuous source feature
+    // may have separate quantized pieces; it does not justify a long-range
+    // equality across cells owned by other regions. Singletons use the same
+    // ordinary area/perimeter cut, rather than being deleted.
+    if(component.Count>=2){component.Sort();groups.Add(component.ToArray());}
+   }
+  }
+  foreach(var f in first)Add(f);foreach(var f in second)Add(f);return groups;
  }
 }

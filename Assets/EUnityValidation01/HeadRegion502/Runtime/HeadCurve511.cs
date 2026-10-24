@@ -91,7 +91,7 @@ public static partial class HeadRegion502
         {
             long negativeStart=Stopwatch.GetTimestamp();var swapped=new List<CurveArea511.P[]>();foreach(var ring in graph){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++){var a=ring[ring.Length-1-i];p[i]=new CurveArea511.P(a.y,a.x);}swapped.Add(p);}
             var other=new NegativeRegion563(bounds.y,bounds.x,bounds.height,bounds.width,true);CurveArea511.Compute(swapped,bounds.y,bounds.x,bounds.height,bounds.width,other);
-            var first=negative.Features();var second=other.Features();NegativeRegions563.AddRange(first);NegativeRegions563.AddRange(second);NegativeGroups563.AddRange(NegativeRegion563.Groups(first,second));NegativeMs563=1000.0*(Stopwatch.GetTimestamp()-negativeStart)/Stopwatch.Frequency;
+            var first=negative.Features();var second=other.Features();NegativeRegions563.AddRange(first);NegativeRegions563.AddRange(second);NegativeGroups563.AddRange(NegativeRegion563.Groups(first,second,bounds.width,bounds.height));NegativeMs563=1000.0*(Stopwatch.GetTimestamp()-negativeStart)/Stopwatch.Frequency;
         }
         Auto511AreaMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;Auto511Areas=result;Auto511Bounds=bounds;Auto511Status="ready polygonal curve graph input";return result;
     }

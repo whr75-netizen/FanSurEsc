@@ -1,0 +1,32 @@
+{
+  "record": 588,
+  "centralOriginalModified": false,
+  "nodes": [
+    {
+      "id": "587-boundary-error",
+      "status": "DECOMPOSED",
+      "input": "Actual float32 quad/constants and saved GPU area",
+      "output": "geometry.002408100 + band.000300968; alpha/ownership0",
+      "evidence": "DECOMPOSITION588.json"
+    },
+    {
+      "id": "partial-coverage-core",
+      "status": "OFFLINE_LIMITED_PASS",
+      "input": "Proven alpha-pass affine convex support domains",
+      "function": "Kernel.nearest/visible/enclosure + solve",
+      "output": "18 certified intervals,4 explicit unresolved",
+      "evidence": "COVERAGE588.json"
+    },
+    {
+      "id": "actual-alpha-and-support-provider",
+      "status": "NOT_IMPLEMENTED",
+      "input": "GPU-filter alpha domains; canonical reference/support fallback",
+      "output": "Required before product connection"
+    },
+    {
+      "id": "gpu-and-actual-animation",
+      "status": "NOT_EXECUTED",
+      "reason": "This unit limited to one small offline candidate and counterexamples"
+    }
+  ]
+}

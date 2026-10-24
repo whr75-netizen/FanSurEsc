@@ -1,0 +1,60 @@
+[
+  {
+    "fixture": {
+      "target": 0.49900001287460327,
+      "scale": 0.6311163306236267,
+      "u0": -1.0800000429153442,
+      "u1": 1.0800000429153442,
+      "x0": 0.8183943629264832,
+      "x1": 2.181605577468872,
+      "y0": 0.5533255338668823,
+      "y1": 1.8155581951141357
+    },
+    "referenceArea": "4712922031755171954125/9444732965739290427392",
+    "referenceAreaDecimal": 0.4990000298421636,
+    "gpuArea": 0.4976806640625,
+    "acceptedXColumns": 174,
+    "columnExactYArea": 0.49759579317603875,
+    "cpuCentreArea": 0.4976806640625,
+    "missingArea": {
+      "sourceSideBoundary": 0.0014042366661248494,
+      "bandTopBottomRounding": -8.487088646128016e-05,
+      "cpuVersusSavedGPU": 0.0,
+      "alpha": 0,
+      "ownership": 0,
+      "total": 0.0013193657796635692
+    },
+    "input": "Exact rational interpretation of actual float32 mesh endpoints and shader constants; no change to source mesh or shader.",
+    "alphaProof": "White texture/alpha1, no alpha cutout; every covered fragment passes. Empty hair/brow/body inputs.",
+    "ownershipProof": "Two adjacent coplanar source0 triangles, same eye/front and same affine rest mapping. Shared diagonal changes no covered area; no front occluder."
+  },
+  {
+    "fixture": {
+      "target": 0.5009999871253967,
+      "scale": 0.6323798298835754,
+      "u0": -1.0800000429153442,
+      "u1": 1.0800000429153442,
+      "x0": 0.8170297741889954,
+      "x1": 2.1829702854156494,
+      "y0": 0.5514302253723145,
+      "y1": 1.8161898851394653
+    },
+    "referenceArea": "4731812005763428453257/9444732965739290427392",
+    "referenceAreaDecimal": 0.5010000836368849,
+    "gpuArea": 0.498291015625,
+    "acceptedXColumns": 174,
+    "columnExactYArea": 0.49859198339632704,
+    "cpuCentreArea": 0.498291015625,
+    "missingArea": {
+      "sourceSideBoundary": 0.0024081002405578274,
+      "bandTopBottomRounding": 0.00030096777132707087,
+      "cpuVersusSavedGPU": 0.0,
+      "alpha": 0,
+      "ownership": 0,
+      "total": 0.0027090680118848983
+    },
+    "input": "Exact rational interpretation of actual float32 mesh endpoints and shader constants; no change to source mesh or shader.",
+    "alphaProof": "White texture/alpha1, no alpha cutout; every covered fragment passes. Empty hair/brow/body inputs.",
+    "ownershipProof": "Two adjacent coplanar source0 triangles, same eye/front and same affine rest mapping. Shared diagonal changes no covered area; no front occluder."
+  }
+]

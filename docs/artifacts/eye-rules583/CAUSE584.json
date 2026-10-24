@@ -1,0 +1,907 @@
+{
+  "record": 584,
+  "createdUTC": "2026-10-24T19:16:48.338825+00:00",
+  "sourceCommit": "420b3aef31eccb077dee61f95c3d96886c3d7437",
+  "sourceChanged": false,
+  "sourceSHA256": {
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute": "a5a99fe3dfd5cbec8dae7e23c65a4e5d78b1eb53a859863612a11f4ffa5c8ea6",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeFeature348.cs": "f6d61d733d7c2513b7c64343d129d7b9fd1641a4cd71a3005a22a60483881edb",
+    "Assets/EUnityValidation01/HeadLocal367/Runtime/EyeRenderer367.cs": "139561cd1ded69acb64f05548c26c1e6098b258a22b3515d8c61c3dd7e853c39"
+  },
+  "imageCapturesAdded": 0,
+  "sourceQueryPoses": 9,
+  "sourceQueryCellRecords": 1251,
+  "GPUOracleMismatches": 0,
+  "savedTurnVisibleIntrinsicMismatches": 0,
+  "events": [
+    {
+      "event": 2,
+      "classification": "CURRENT_VISIBLE_AREA_QUOTA_ROUNDING",
+      "completePhysicalOcclusion": false,
+      "continuousWidthVsSamplingError": "NOT_SEPARATED",
+      "evidence": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\EyeFollow584\\ONECASE2_ANALYSIS584.json",
+      "records": [
+        {
+          "sourceTurnFrame": 1,
+          "cells": 132,
+          "params": {
+            "frame": 0,
+            "sourceFrame": 1,
+            "phase": 0.700004339,
+            "offsetX": -1,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 127.000046,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 132,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 132,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 3,
+              "maxAbsoluteDifference": 9.5367431640625e-07
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            }
+          },
+          "eye2IntrinsicSampleArea": 0.8125,
+          "eye2VisibleSupportArea": 0.3125,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 8,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 5.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.3125,
+            "budget": 0,
+            "selectedHeadCells": [],
+            "eligible": [
+              {
+                "head": [
+                  225,
+                  52
+                ],
+                "displacementCost": 1.0,
+                "sourceU": -0.9362871050834656,
+                "sourceV": -0.561410129070282
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": []
+        },
+        {
+          "sourceTurnFrame": 2,
+          "cells": 143,
+          "params": {
+            "frame": 1,
+            "sourceFrame": 2,
+            "phase": 0.7125044,
+            "offsetX": -2,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 128.500046,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 143,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 143,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 1,
+              "maxAbsoluteDifference": 9.5367431640625e-07
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 1,
+              "maxAbsoluteDifference": 2.8312206268310547e-07
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 1,
+              "maxAbsoluteDifference": 1.8477439880371094e-06
+            }
+          },
+          "eye2IntrinsicSampleArea": 1.0625,
+          "eye2VisibleSupportArea": 0.5,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 9,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 8.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.5,
+            "budget": 1,
+            "selectedHeadCells": [
+              [
+                225,
+                52
+              ]
+            ],
+            "eligible": [
+              {
+                "head": [
+                  225,
+                  52
+                ],
+                "displacementCost": -1.0,
+                "sourceU": -0.8721013069152832,
+                "sourceV": -0.7275575995445251
+              },
+              {
+                "head": [
+                  224,
+                  52
+                ],
+                "displacementCost": 2.0,
+                "sourceU": -0.3058249056339264,
+                "sourceV": -1.035284161567688
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": [
+            [
+              225,
+              52
+            ]
+          ]
+        },
+        {
+          "sourceTurnFrame": 3,
+          "cells": 143,
+          "params": {
+            "frame": 2,
+            "sourceFrame": 3,
+            "phase": 0.725004435,
+            "offsetX": -2,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 130.000046,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 143,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 143,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 8,
+              "maxAbsoluteDifference": 9.5367431640625e-07
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            }
+          },
+          "eye2IntrinsicSampleArea": 0.6875,
+          "eye2VisibleSupportArea": 0.25,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 7,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 4.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.25,
+            "budget": 0,
+            "selectedHeadCells": [],
+            "eligible": [
+              {
+                "head": [
+                  225,
+                  52
+                ],
+                "displacementCost": -3.0,
+                "sourceU": -0.958432674407959,
+                "sourceV": -0.5980033874511719
+              },
+              {
+                "head": [
+                  224,
+                  52
+                ],
+                "displacementCost": 6.0,
+                "sourceU": -0.7658612728118896,
+                "sourceV": -0.6902493238449097
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": []
+        }
+      ]
+    },
+    {
+      "event": 5,
+      "classification": "CURRENT_VISIBLE_AREA_QUOTA_ROUNDING",
+      "completePhysicalOcclusion": false,
+      "continuousWidthVsSamplingError": "NOT_SEPARATED",
+      "evidence": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\EyeFollow584\\ONECASE5B_ANALYSIS584.json",
+      "records": [
+        {
+          "sourceTurnFrame": 4,
+          "cells": 130,
+          "params": {
+            "frame": 0,
+            "sourceFrame": 4,
+            "phase": 0.7375045,
+            "offsetX": -2,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 131.500046,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 130,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 130,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            }
+          },
+          "eye2IntrinsicSampleArea": 1.1875,
+          "eye2VisibleSupportArea": 0.4375,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 12,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 7.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.4375,
+            "budget": 0,
+            "selectedHeadCells": [],
+            "eligible": [
+              {
+                "head": [
+                  224,
+                  52
+                ],
+                "displacementCost": -4.0,
+                "sourceU": -0.7381806373596191,
+                "sourceV": -0.7569177746772766
+              },
+              {
+                "head": [
+                  225,
+                  52
+                ],
+                "displacementCost": -1.0,
+                "sourceU": -1.076692819595337,
+                "sourceV": -0.5203765630722046
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": []
+        },
+        {
+          "sourceTurnFrame": 5,
+          "cells": 140,
+          "params": {
+            "frame": 1,
+            "sourceFrame": 5,
+            "phase": 0.75000453,
+            "offsetX": -2,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 133.000061,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 140,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 140,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 8,
+              "maxAbsoluteDifference": 9.5367431640625e-07
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 1,
+              "maxAbsoluteDifference": 3.501772880554199e-07
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 1,
+              "maxAbsoluteDifference": 2.473592758178711e-06
+            }
+          },
+          "eye2IntrinsicSampleArea": 1.125,
+          "eye2VisibleSupportArea": 0.5625,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 9,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 9.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.5625,
+            "budget": 1,
+            "selectedHeadCells": [
+              [
+                224,
+                52
+              ]
+            ],
+            "eligible": [
+              {
+                "head": [
+                  224,
+                  52
+                ],
+                "displacementCost": -3.0,
+                "sourceU": -0.8559737801551819,
+                "sourceV": -0.7254921197891235
+              },
+              {
+                "head": [
+                  223,
+                  52
+                ],
+                "displacementCost": -2.0,
+                "sourceU": -0.23311588168144226,
+                "sourceV": -1.0926804542541504
+              },
+              {
+                "head": [
+                  224,
+                  53
+                ],
+                "displacementCost": 7.0,
+                "sourceU": -0.9937999844551086,
+                "sourceV": -0.32681381702423096
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": [
+            [
+              224,
+              52
+            ]
+          ]
+        },
+        {
+          "sourceTurnFrame": 6,
+          "cells": 140,
+          "params": {
+            "frame": 2,
+            "sourceFrame": 6,
+            "phase": 0.7625046,
+            "offsetX": -2,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 134.500061,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 140,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 140,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 12,
+              "maxAbsoluteDifference": 9.5367431640625e-07
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            }
+          },
+          "eye2IntrinsicSampleArea": 0.8125,
+          "eye2VisibleSupportArea": 0.3125,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 8,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 5.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.3125,
+            "budget": 0,
+            "selectedHeadCells": [],
+            "eligible": [
+              {
+                "head": [
+                  224,
+                  52
+                ],
+                "displacementCost": -2.0,
+                "sourceU": -0.8872193098068237,
+                "sourceV": -0.711397647857666
+              },
+              {
+                "head": [
+                  224,
+                  53
+                ],
+                "displacementCost": 1.0,
+                "sourceU": -0.9416333436965942,
+                "sourceV": -0.38889771699905396
+              },
+              {
+                "head": [
+                  223,
+                  52
+                ],
+                "displacementCost": 2.0,
+                "sourceU": -0.18861785531044006,
+                "sourceV": -1.1656159162521362
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": []
+        }
+      ]
+    },
+    {
+      "event": 16,
+      "classification": "CURRENT_VISIBLE_AREA_QUOTA_ROUNDING",
+      "completePhysicalOcclusion": false,
+      "continuousWidthVsSamplingError": "NOT_SEPARATED",
+      "evidence": "C:\\Users\\JG\\Documents\\Codex\\2026-10-07\\task\\Current472\\EyeFollow584\\ONECASE16_ANALYSIS584.json",
+      "records": [
+        {
+          "sourceTurnFrame": 15,
+          "cells": 144,
+          "params": {
+            "frame": 0,
+            "sourceFrame": 15,
+            "phase": 0.875005,
+            "offsetX": -1,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 147.87,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 144,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 144,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 2,
+              "maxAbsoluteDifference": 9.5367431640625e-07
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            }
+          },
+          "eye2IntrinsicSampleArea": 1.0625,
+          "eye2VisibleSupportArea": 0.5625,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 8,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 9.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.5625,
+            "budget": 1,
+            "selectedHeadCells": [
+              [
+                221,
+                52
+              ]
+            ],
+            "eligible": [
+              {
+                "head": [
+                  221,
+                  52
+                ],
+                "displacementCost": -2.0,
+                "sourceU": -0.8321141004562378,
+                "sourceV": -0.8147546648979187
+              },
+              {
+                "head": [
+                  220,
+                  52
+                ],
+                "displacementCost": 1.0,
+                "sourceU": -0.29322439432144165,
+                "sourceV": -1.0865099430084229
+              },
+              {
+                "head": [
+                  221,
+                  53
+                ],
+                "displacementCost": 4.0,
+                "sourceU": -1.0033777952194214,
+                "sourceV": -0.443006306886673
+              },
+              {
+                "head": [
+                  219,
+                  52
+                ],
+                "displacementCost": 4.0,
+                "sourceU": -0.0363147035241127,
+                "sourceV": -0.9691610336303711
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": [
+            [
+              221,
+              52
+            ]
+          ]
+        },
+        {
+          "sourceTurnFrame": 16,
+          "cells": 144,
+          "params": {
+            "frame": 1,
+            "sourceFrame": 16,
+            "phase": 0.887505054,
+            "offsetX": -1,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 149.362488,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 144,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 144,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 8,
+              "maxAbsoluteDifference": 9.5367431640625e-07
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            }
+          },
+          "eye2IntrinsicSampleArea": 0.8125,
+          "eye2VisibleSupportArea": 0.375,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 7,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 6.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.375,
+            "budget": 0,
+            "selectedHeadCells": [],
+            "eligible": [
+              {
+                "head": [
+                  221,
+                  52
+                ],
+                "displacementCost": -1.0,
+                "sourceU": -0.9417916536331177,
+                "sourceV": -0.8053812980651855
+              },
+              {
+                "head": [
+                  220,
+                  52
+                ],
+                "displacementCost": -1.0,
+                "sourceU": -0.585910439491272,
+                "sourceV": -0.9538097381591797
+              },
+              {
+                "head": [
+                  221,
+                  53
+                ],
+                "displacementCost": 2.0,
+                "sourceU": -0.9532527923583984,
+                "sourceV": -0.48461148142814636
+              },
+              {
+                "head": [
+                  219,
+                  52
+                ],
+                "displacementCost": 6.0,
+                "sourceU": -0.27782490849494934,
+                "sourceV": -0.9817833304405212
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": []
+        },
+        {
+          "sourceTurnFrame": 17,
+          "cells": 135,
+          "params": {
+            "frame": 2,
+            "sourceFrame": 17,
+            "phase": 0.9000051,
+            "offsetX": -1,
+            "offsetY": 0,
+            "irisSupport582": true,
+            "lashRegion583": true
+          },
+          "view": {
+            "yaw": 150.856064,
+            "manualRecordedPose": true
+          },
+          "samePoseReplay": {
+            "EYE_VISIBLE": {
+              "comparedCells": 135,
+              "changedCells": 0,
+              "examples": []
+            },
+            "EYE_INTRINSIC": {
+              "comparedCells": 135,
+              "changedCells": 0,
+              "examples": []
+            }
+          },
+          "oldLocalSampleComparison": {
+            "m": {
+              "records": 448,
+              "nonBitExactRecords": 1,
+              "maxAbsoluteDifference": 9.5367431640625e-07
+            },
+            "p": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            },
+            "u": {
+              "records": 448,
+              "nonBitExactRecords": 0,
+              "maxAbsoluteDifference": 0.0
+            }
+          },
+          "eye2IntrinsicSampleArea": 1.0625,
+          "eye2VisibleSupportArea": 0.625,
+          "lashSampleDisposition": {
+            "noSourceSupport": 0,
+            "hair": 7,
+            "brow": 0,
+            "body": 0,
+            "other": 0,
+            "visible": 10.0
+          },
+          "allocation": {
+            "eyeID": 2,
+            "areaEstimate": 0.625,
+            "budget": 1,
+            "selectedHeadCells": [
+              [
+                220,
+                52
+              ]
+            ],
+            "eligible": [
+              {
+                "head": [
+                  220,
+                  52
+                ],
+                "displacementCost": -1.0,
+                "sourceU": -0.8087203502655029,
+                "sourceV": -0.8327654004096985
+              },
+              {
+                "head": [
+                  218,
+                  52
+                ],
+                "displacementCost": 3.98895263671875,
+                "sourceU": 0.27409595251083374,
+                "sourceV": -1.0764753818511963
+              },
+              {
+                "head": [
+                  219,
+                  52
+                ],
+                "displacementCost": 6.0,
+                "sourceU": -0.45426875352859497,
+                "sourceV": -0.9595209956169128
+              },
+              {
+                "head": [
+                  220,
+                  53
+                ],
+                "displacementCost": 11.0,
+                "sourceU": -0.9277435541152954,
+                "sourceV": -0.41651496291160583
+              }
+            ]
+          },
+          "eye2GPUVisibleLashCells": [
+            [
+              220,
+              52
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "initialInvalidReplay": "OneCase5: stale scaled baked source surface; 410 CPU/GPU records match but saved-input parity fails; excluded. Fixed only diagnostic preparation with Gameplay397.Present public calls, then checked parity anew.",
+  "restorationLog": "[Log] lash583=False iris582=False play=False paused=False compiling=False dirty=False head=False generatedView=False revision=0 inputBytes=0 clothes=False captureDelta=0 background=False",
+  "prior90sStartGuard": "CANCELLED_BEFORE_START_AFTER_90S_TIMEOUT\n",
+  "prior90sRunAbsent": true,
+  "runtimeQuality": "NOT_ADOPTED_DEFAULT_OFF",
+  "independentOpenItems": [
+    "continuous projected visible-lash width/area versus 4x4 sampling error",
+    "disconnected visible arcs currently one anatomical group",
+    "body internal-line palette3",
+    "normal-runtime performance and allocations",
+    "wider animation directions and loop seam"
+  ]
+}

@@ -86,4 +86,4 @@
 | `GAP-SAVE-POLICY` | `DECISION` | 3슬롯과 기지·Active Raid 주메뉴 자동저장은 현재 확정; 수동 저장 범위·클라우드·migration 지원 기간 미정 | 현 슬롯/Recovery를 우회하는 별도 저장 경로를 만들지 않음 |
 | `GAP-BASE-CONTENT` | `DECISION` | 시험 상인·의뢰 이후의 기지 성장·정식 경제·제작·치료·정식 퀘스트 범위 미정 | GDD에서 다음 우선 기능과 정식 범위를 결정한 뒤 진행 |
 
-- 583: 420b3ae·기본 OFF. [눈 검증·미해결](../artifacts/eye-rules583/RESULT583.md).
+- 584: 기본 OFF. [583 비교·출몰 원인](../artifacts/eye-rules583/CAUSE584.md).

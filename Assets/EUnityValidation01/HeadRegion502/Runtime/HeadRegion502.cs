@@ -414,7 +414,9 @@ public static partial class HeadRegion502
         var key = (material, kind);
         if (!materials.TryGetValue(key, out var owned) || !owned)
         {
-            var shader = Shader.Find("EValidation/HeadRegion502" + ShaderNames[kind]); if (!shader) throw new Exception("502 shader missing: " + ShaderNames[kind]);
+            // Preserve the explicit face-provider colour policy while applying the same region clip.
+            bool provider580 = kind == 3 && material == f.legacyProviderMat;
+            var shader = Shader.Find(provider580 ? "EValidation/HeadRegion502LegacyProvider580" : "EValidation/HeadRegion502" + ShaderNames[kind]); if (!shader) throw new Exception("502 shader missing: " + ShaderNames[kind]);
             owned = new Material(material) { shader = shader, hideFlags = HideFlags.DontSave }; owned.shaderKeywords = material.shaderKeywords; materials[key] = owned;
         }
         owned.SetTexture("_Region502Mask", mask); cmd.SetGlobalMatrix("_Region502ViewProjection", current.effectiveProjection * current.motion.camera.worldToCameraMatrix);

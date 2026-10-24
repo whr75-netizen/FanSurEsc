@@ -85,3 +85,6 @@
 | `GAP-EXTRACTION` | `DECISION` | 최종 탈출 대기 시간·피격 중단·암전 중 사망 판정 미정 | 현재 시험 포탈의 즉시 생환·피해 차단·자동 기지 정산은 임시 유지 |
 | `GAP-SAVE-POLICY` | `DECISION` | 3슬롯과 기지·Active Raid 주메뉴 자동저장은 현재 확정; 수동 저장 범위·클라우드·migration 지원 기간 미정 | 현 슬롯/Recovery를 우회하는 별도 저장 경로를 만들지 않음 |
 | `GAP-BASE-CONTENT` | `DECISION` | 시험 상인·의뢰 이후의 기지 성장·정식 경제·제작·치료·정식 퀘스트 범위 미정 | GDD에서 다음 우선 기능과 정식 범위를 결정한 뒤 진행 |
+
+
+- 579 렌더 후속: 기본 OFF 자동 뷰 입력3소스 구현·컴파일. 실제 회전14쌍과 native/auto8쌍, 같은 실패 포즈 자동 실행 완료. 100° 얼굴색/owner 불일치가 EyeFeature348 resolve에서 재현되어 전체 전이 확대 보류. Edit clean/실험 OFF/input0·사용자 설정 복원. [현재 결과와 재개](../artifacts/hair-auto579/CHECKPOINT579.md).

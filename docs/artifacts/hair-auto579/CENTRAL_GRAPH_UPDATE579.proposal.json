@@ -1,0 +1,60 @@
+{
+  "target": "C:\\Users\\JG\\Documents\\Codex\\2026-10-15\\task-5\\central_pixel_cause_graph_397_20261018\\WORK_GRAPH.json",
+  "writePerformed": false,
+  "kind": "579 follow-up to578; central owner must rebase, not overwrite",
+  "preserve": [
+    "575 reference view81",
+    "577 opposite26081",
+    "578 front17081",
+    "all prior failures and user decisions"
+  ],
+  "nodes": [
+    {
+      "id": "auto_view_input579",
+      "input": "actual deformed opaque Hair mesh + camera/root view + source signature",
+      "code": [
+        "ClosedRegion524.BuildAnchored579",
+        "CurveInputDesigner579.Fit",
+        "HeadRegion502.CurrentViewInput579",
+        "HeadCurve511.Indices511"
+      ],
+      "output": "in-memory511v2 source-anchored closed curves",
+      "invariant": "same existing style and original UV/anchor/reprojection contract; default OFF",
+      "status": "implemented and compiled; three reference masks equivalent",
+      "evidence": [
+        "Source579/MANIFEST579.json",
+        "ORIGIN_NATIVE579_CALL.json",
+        "STYLE_NATIVE_READY579_CALL.json"
+      ]
+    },
+    {
+      "id": "actual_turn579",
+      "input": "actual Walk + RotateTowards; same camera/time per pair",
+      "output": "14 fixed-chart/auto pairs +8 native/auto pairs",
+      "status": "execution complete, whole transition art gate not passed",
+      "failure": "fixed yaw80 chart becomes noncanonical at97.97345; auto same pose actually runs; one RGB/owner discrepancy reproduced in eye resolve",
+      "evidence": [
+        "REVIEW579_Turn80To100.json",
+        "REVIEW579_Native96To100.json",
+        "FACE_TRACE579.json"
+      ]
+    },
+    {
+      "id": "eye_rgb_owner579",
+      "code": [
+        "EyeRenderer367.Dispatch",
+        "EyeFeature348.compute Evaluate/UnpackA/Merge"
+      ],
+      "input": "same face owner/prepared/postLine; head230,48 at100deg/.475003362",
+      "output": "candidate eyeOutput colour becomes dark while metadata/visible stay equal",
+      "status": "first differing stage confirmed; exact base/backing branch pending",
+      "next": "one3x3 input/rule trace; no extra whole loop or shader patch before cause"
+    },
+    {
+      "id": "later_gates579",
+      "status": "not run",
+      "dependsOn": "eye_rgb_owner579",
+      "output": "wider actual transitions -> existing view regression -> supported directions -> separate performance"
+    }
+  ]
+}

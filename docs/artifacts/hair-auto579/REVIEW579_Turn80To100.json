@@ -1,0 +1,2819 @@
+{
+  "name": "Turn80To100",
+  "comparison": "fixed yaw80 input/common577 vs auto-view579/common577",
+  "status": {
+    "status": "FAILED",
+    "poses": 14,
+    "error": "System.Exception: unsupported: 574 noncanonical winding/area overlap    at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.TurnView579.Capture () [0x00145] in <ff8d3971e35e458fbf7200b2bd1549c3>:0 ",
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true
+  },
+  "pairs": 14,
+  "actualRotation": [
+    {
+      "captureFrame": "0",
+      "yaw": "80",
+      "stepDegrees": "0",
+      "normalizedTime": "1.2750026",
+      "Time": "161.962814"
+    },
+    {
+      "captureFrame": "1",
+      "yaw": "80",
+      "stepDegrees": "0",
+      "normalizedTime": "1.28750265",
+      "Time": "161.979477"
+    },
+    {
+      "captureFrame": "2",
+      "yaw": "80",
+      "stepDegrees": "0",
+      "normalizedTime": "1.30000269",
+      "Time": "161.99614"
+    },
+    {
+      "captureFrame": "3",
+      "yaw": "81.49401",
+      "stepDegrees": "1.49401093",
+      "normalizedTime": "1.31250274",
+      "Time": "162.012817"
+    },
+    {
+      "captureFrame": "4",
+      "yaw": "82.989",
+      "stepDegrees": "1.49498749",
+      "normalizedTime": "1.32500279",
+      "Time": "162.02948"
+    },
+    {
+      "captureFrame": "5",
+      "yaw": "84.48486",
+      "stepDegrees": "1.49586487",
+      "normalizedTime": "1.33750284",
+      "Time": "162.046143"
+    },
+    {
+      "captureFrame": "6",
+      "yaw": "85.98153",
+      "stepDegrees": "1.496666",
+      "normalizedTime": "1.35000288",
+      "Time": "162.0628"
+    },
+    {
+      "captureFrame": "7",
+      "yaw": "87.47891",
+      "stepDegrees": "1.49738312",
+      "normalizedTime": "1.36250293",
+      "Time": "162.079483"
+    },
+    {
+      "captureFrame": "8",
+      "yaw": "88.97693",
+      "stepDegrees": "1.49801636",
+      "normalizedTime": "1.375003",
+      "Time": "162.096146"
+    },
+    {
+      "captureFrame": "9",
+      "yaw": "90.47548",
+      "stepDegrees": "1.49855042",
+      "normalizedTime": "1.387503",
+      "Time": "162.112808"
+    },
+    {
+      "captureFrame": "10",
+      "yaw": "91.97448",
+      "stepDegrees": "1.49900055",
+      "normalizedTime": "1.40000308",
+      "Time": "162.129471"
+    },
+    {
+      "captureFrame": "11",
+      "yaw": "93.47386",
+      "stepDegrees": "1.499382",
+      "normalizedTime": "1.41250312",
+      "Time": "162.146149"
+    },
+    {
+      "captureFrame": "12",
+      "yaw": "94.97358",
+      "stepDegrees": "1.49971771",
+      "normalizedTime": "1.42500317",
+      "Time": "162.162811"
+    },
+    {
+      "captureFrame": "13",
+      "yaw": "96.47345",
+      "stepDegrees": "1.4998703",
+      "normalizedTime": "1.43750322",
+      "Time": "162.179474"
+    }
+  ],
+  "allCameraClockPoseExact": true,
+  "sums": {
+    "outsideHeadScreenChanges": 0,
+    "outsideEnvelope": 0,
+    "outsideMaskFinalHair": 0,
+    "nonHairSameMetaRGBChanges": 0,
+    "faceCoverageChanged": 23,
+    "intrinsicEyeBufferDiff": 0,
+    "visibleEyeBufferDiff": 2
+  },
+  "rows": [
+    {
+      "frame": 0,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 0,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=142 irisCovered=21",
+      "view": {
+        "automatic": true,
+        "yaw": 80,
+        "revision": 1,
+        "suppliedInputBytes": 0,
+        "controls": 94,
+        "sourceRings": 9,
+        "sourcePoints": 532,
+        "generationMs": 177.1357,
+        "keyMs": 11.3685
+      },
+      "selectionChanged": 0
+    },
+    {
+      "frame": 1,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 0,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=137 irisCovered=20",
+      "view": {
+        "automatic": true,
+        "yaw": 80,
+        "revision": 1,
+        "suppliedInputBytes": 0,
+        "controls": 94,
+        "sourceRings": 9,
+        "sourcePoints": 532,
+        "generationMs": 177.1357,
+        "keyMs": 1.3882
+      },
+      "selectionChanged": 0
+    },
+    {
+      "frame": 2,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 0,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=139 irisCovered=20",
+      "view": {
+        "automatic": true,
+        "yaw": 80,
+        "revision": 1,
+        "suppliedInputBytes": 0,
+        "controls": 94,
+        "sourceRings": 9,
+        "sourcePoints": 532,
+        "generationMs": 177.1357,
+        "keyMs": 1.0316
+      },
+      "selectionChanged": 0
+    },
+    {
+      "frame": 3,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 0,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=137 irisCovered=20",
+      "view": {
+        "automatic": true,
+        "yaw": 81.49401,
+        "revision": 2,
+        "suppliedInputBytes": 0,
+        "controls": 98,
+        "sourceRings": 8,
+        "sourcePoints": 512,
+        "generationMs": 166.4517,
+        "keyMs": 1.0427
+      },
+      "selectionChanged": 1
+    },
+    {
+      "frame": 4,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 0,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=143 irisCovered=23",
+      "view": {
+        "automatic": true,
+        "yaw": 82.989,
+        "revision": 3,
+        "suppliedInputBytes": 0,
+        "controls": 94,
+        "sourceRings": 8,
+        "sourcePoints": 529,
+        "generationMs": 167.8685,
+        "keyMs": 1.044
+      },
+      "selectionChanged": 8
+    },
+    {
+      "frame": 5,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 0,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=142 irisCovered=22",
+      "view": {
+        "automatic": true,
+        "yaw": 84.48486,
+        "revision": 4,
+        "suppliedInputBytes": 0,
+        "controls": 94,
+        "sourceRings": 8,
+        "sourcePoints": 548,
+        "generationMs": 167.0019,
+        "keyMs": 1.0311
+      },
+      "selectionChanged": 3
+    },
+    {
+      "frame": 6,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 0,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=145 irisCovered=24",
+      "view": {
+        "automatic": true,
+        "yaw": 85.98153,
+        "revision": 5,
+        "suppliedInputBytes": 0,
+        "controls": 101,
+        "sourceRings": 11,
+        "sourcePoints": 570,
+        "generationMs": 170.2475,
+        "keyMs": 1.0282
+      },
+      "selectionChanged": 4
+    },
+    {
+      "frame": 7,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 1,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=144 irisCovered=27",
+      "view": {
+        "automatic": true,
+        "yaw": 87.47891,
+        "revision": 6,
+        "suppliedInputBytes": 0,
+        "controls": 97,
+        "sourceRings": 10,
+        "sourcePoints": 564,
+        "generationMs": 168.042,
+        "keyMs": 1.0302
+      },
+      "selectionChanged": 8
+    },
+    {
+      "frame": 8,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 1,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=149 irisCovered=29",
+      "view": {
+        "automatic": true,
+        "yaw": 88.97693,
+        "revision": 7,
+        "suppliedInputBytes": 0,
+        "controls": 101,
+        "sourceRings": 11,
+        "sourcePoints": 572,
+        "generationMs": 354.4092,
+        "keyMs": 1.0582
+      },
+      "selectionChanged": 7
+    },
+    {
+      "frame": 9,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 3,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=150 irisCovered=30",
+      "view": {
+        "automatic": true,
+        "yaw": 90.47548,
+        "revision": 8,
+        "suppliedInputBytes": 0,
+        "controls": 95,
+        "sourceRings": 10,
+        "sourcePoints": 556,
+        "generationMs": 170.658,
+        "keyMs": 1.0345
+      },
+      "selectionChanged": 10
+    },
+    {
+      "frame": 10,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 4,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 1,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=147 irisCovered=32",
+      "view": {
+        "automatic": true,
+        "yaw": 91.97448,
+        "revision": 9,
+        "suppliedInputBytes": 0,
+        "controls": 96,
+        "sourceRings": 13,
+        "sourcePoints": 526,
+        "generationMs": 170.7515,
+        "keyMs": 1.0329
+      },
+      "selectionChanged": 15
+    },
+    {
+      "frame": 11,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 4,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=150 irisCovered=34",
+      "view": {
+        "automatic": true,
+        "yaw": 93.47386,
+        "revision": 10,
+        "suppliedInputBytes": 0,
+        "controls": 96,
+        "sourceRings": 11,
+        "sourcePoints": 534,
+        "generationMs": 174.6805,
+        "keyMs": 1.0318
+      },
+      "selectionChanged": 23
+    },
+    {
+      "frame": 12,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 5,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 1,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=158 irisCovered=35",
+      "view": {
+        "automatic": true,
+        "yaw": 94.97358,
+        "revision": 11,
+        "suppliedInputBytes": 0,
+        "controls": 91,
+        "sourceRings": 13,
+        "sourcePoints": 538,
+        "generationMs": 208.6634,
+        "keyMs": 1.0334
+      },
+      "selectionChanged": 25
+    },
+    {
+      "frame": 13,
+      "phaseExact": true,
+      "cameraExact": true,
+      "clockExact": true,
+      "outsideHeadScreenChanges": 0,
+      "outsideEnvelope": 0,
+      "outsideMaskFinalHair": 0,
+      "nonHairSameMetaRGBChanges": 0,
+      "faceCoverageChanged": 5,
+      "intrinsicEyeBufferDiff": 0,
+      "visibleEyeBufferDiff": 0,
+      "sourceEyeInput": "bitChannelDiff=0 scleraCovered=155 irisCovered=37",
+      "view": {
+        "automatic": true,
+        "yaw": 96.47345,
+        "revision": 12,
+        "suppliedInputBytes": 0,
+        "controls": 90,
+        "sourceRings": 16,
+        "sourcePoints": 537,
+        "generationMs": 164.2762,
+        "keyMs": 1.0314
+      },
+      "selectionChanged": 24
+    }
+  ],
+  "faceChanges": [
+    {
+      "frame": 7,
+      "main": [
+        227,
+        51
+      ],
+      "head": [
+        230,
+        50
+      ],
+      "before": [
+        13.802531242370605,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.73466682434082,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 8,
+      "main": [
+        226,
+        50
+      ],
+      "head": [
+        230,
+        49
+      ],
+      "before": [
+        13.796429634094238,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.72836685180664,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 9,
+      "main": [
+        227,
+        47
+      ],
+      "head": [
+        231,
+        46
+      ],
+      "before": [
+        13.760376930236816,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.716958045959473,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 9,
+      "main": [
+        226,
+        50
+      ],
+      "head": [
+        230,
+        49
+      ],
+      "before": [
+        13.796836853027344,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.726348876953125,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 9,
+      "main": [
+        225,
+        54
+      ],
+      "head": [
+        229,
+        53
+      ],
+      "before": [
+        13.784185409545898,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.748384475708008,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 10,
+      "main": [
+        227,
+        46
+      ],
+      "head": [
+        231,
+        46
+      ],
+      "before": [
+        13.758390426635742,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.71360969543457,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 10,
+      "main": [
+        225,
+        51
+      ],
+      "head": [
+        229,
+        51
+      ],
+      "before": [
+        13.772890090942383,
+        4.0,
+        2.0,
+        0.0
+      ],
+      "after": [
+        13.733017921447754,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 10,
+      "main": [
+        225,
+        52
+      ],
+      "head": [
+        229,
+        52
+      ],
+      "before": [
+        13.775609016418457,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.739173889160156,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 10,
+      "main": [
+        225,
+        53
+      ],
+      "head": [
+        229,
+        53
+      ],
+      "before": [
+        13.78252124786377,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.745482444763184,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 11,
+      "main": [
+        227,
+        46
+      ],
+      "head": [
+        231,
+        46
+      ],
+      "before": [
+        13.759134292602539,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.709596633911133,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 11,
+      "main": [
+        225,
+        51
+      ],
+      "head": [
+        229,
+        51
+      ],
+      "before": [
+        13.774215698242188,
+        4.0,
+        2.0,
+        0.0
+      ],
+      "after": [
+        13.72976016998291,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 11,
+      "main": [
+        225,
+        52
+      ],
+      "head": [
+        229,
+        52
+      ],
+      "before": [
+        13.774863243103027,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.73593521118164,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 11,
+      "main": [
+        225,
+        53
+      ],
+      "head": [
+        229,
+        53
+      ],
+      "before": [
+        13.781044006347656,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.742300987243652,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 12,
+      "main": [
+        227,
+        46
+      ],
+      "head": [
+        231,
+        46
+      ],
+      "before": [
+        13.76260757446289,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.706354141235352,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 12,
+      "main": [
+        225,
+        50
+      ],
+      "head": [
+        229,
+        50
+      ],
+      "before": [
+        13.768380165100098,
+        5.0,
+        2.0,
+        0.0
+      ],
+      "after": [
+        13.719670295715332,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 12,
+      "main": [
+        225,
+        51
+      ],
+      "head": [
+        229,
+        51
+      ],
+      "before": [
+        13.772823333740234,
+        4.0,
+        2.0,
+        0.0
+      ],
+      "after": [
+        13.726435661315918,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 12,
+      "main": [
+        225,
+        52
+      ],
+      "head": [
+        229,
+        52
+      ],
+      "before": [
+        13.773967742919922,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.732636451721191,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 12,
+      "main": [
+        225,
+        53
+      ],
+      "head": [
+        229,
+        53
+      ],
+      "before": [
+        13.779706954956055,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.739063262939453,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 13,
+      "main": [
+        226,
+        48
+      ],
+      "head": [
+        230,
+        48
+      ],
+      "before": [
+        13.767087936401367,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.710022926330566,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 13,
+      "main": [
+        225,
+        50
+      ],
+      "head": [
+        229,
+        50
+      ],
+      "before": [
+        13.769743919372559,
+        4.0,
+        2.0,
+        0.0
+      ],
+      "after": [
+        13.717281341552734,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 13,
+      "main": [
+        225,
+        51
+      ],
+      "head": [
+        229,
+        51
+      ],
+      "before": [
+        13.771636009216309,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.71904468536377,
+        13.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 13,
+      "main": [
+        225,
+        52
+      ],
+      "head": [
+        229,
+        52
+      ],
+      "before": [
+        13.772927284240723,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.729315757751465,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 13,
+      "main": [
+        225,
+        53
+      ],
+      "head": [
+        229,
+        53
+      ],
+      "before": [
+        13.778173446655273,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.735812187194824,
+        14.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "addedHairFaceWitnesses": [
+    {
+      "change": {
+        "frame": 7,
+        "main": [
+          227,
+          51
+        ],
+        "head": [
+          230,
+          50
+        ],
+        "before": [
+          13.802531242370605,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.73466682434082,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "230",
+          "headY": "50",
+          "mainX": "227",
+          "mainY": "51",
+          "sourceProjX": "230.26202392578125",
+          "sourceProjY": "50.331661224365234",
+          "sourceToCentre": "0.29149709309490546",
+          "hairSM": "1",
+          "hairTri": "1261",
+          "hairU": "0.33152905106544495",
+          "hairV": "0.196932852268219",
+          "hairCamX": "-0.10759028287644679",
+          "hairCamY": "0.94651049471596815",
+          "hairCamZ": "13.73216318881906",
+          "hairPacketDepth": "13.732163429260254",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2565",
+          "anyCamZ": "13.792671784000625",
+          "anyAlpha": "1",
+          "anyU": "0.46595492959022522",
+          "anyV": "0.407376229763031",
+          "anyBaryU": "0.8129304051399231",
+          "anyBaryV": "0.0022782338783144951",
+          "anyBaryW": "0.18479134142398834",
+          "anyWorldX": "0.089328698813915253",
+          "anyWorldY": "1.4869412183761597",
+          "anyWorldZ": "-0.0037578896153718233",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2565",
+          "skinCamZ": "13.792671784000625",
+          "skinAlpha": "1",
+          "skinU": "0.46595492959022522",
+          "skinV": "0.407376229763031",
+          "skinBaryU": "0.8129304051399231",
+          "skinBaryV": "0.0022782338783144951",
+          "skinBaryW": "0.18479134142398834",
+          "skinWorldX": "0.089328698813915253",
+          "skinWorldY": "1.4869412183761597",
+          "skinWorldZ": "-0.0037578896153718233",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.73466682434082",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 8,
+        "main": [
+          226,
+          50
+        ],
+        "head": [
+          230,
+          49
+        ],
+        "before": [
+          13.796429634094238,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.72836685180664,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "230",
+          "headY": "49",
+          "mainX": "226",
+          "mainY": "50",
+          "sourceProjX": "230.5",
+          "sourceProjY": "49.5",
+          "sourceToCentre": "0",
+          "hairSM": "1",
+          "hairTri": "1256",
+          "hairU": "0.27704831957817078",
+          "hairV": "0.3142259418964386",
+          "hairCamX": "-0.10496130371286538",
+          "hairCamY": "0.955699055656231",
+          "hairCamZ": "13.726175101178699",
+          "hairPacketDepth": "13.726175308227539",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2623",
+          "anyCamZ": "13.794273962638576",
+          "anyAlpha": "1",
+          "anyU": "0.49248605966567993",
+          "anyV": "0.42876642942428589",
+          "anyBaryU": "0.32005792856216431",
+          "anyBaryV": "0.0021272480953484774",
+          "anyBaryW": "0.67781484127044678",
+          "anyWorldX": "0.089704155921936035",
+          "anyWorldY": "1.494504451751709",
+          "anyWorldZ": "0.0022529391571879387",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2623",
+          "skinCamZ": "13.794273962638576",
+          "skinAlpha": "1",
+          "skinU": "0.49248605966567993",
+          "skinV": "0.42876642942428589",
+          "skinBaryU": "0.32005792856216431",
+          "skinBaryV": "0.0021272480953484774",
+          "skinBaryW": "0.67781484127044678",
+          "skinWorldX": "0.089704155921936035",
+          "skinWorldY": "1.494504451751709",
+          "skinWorldZ": "0.0022529391571879387",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.728366851806641",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 9,
+        "main": [
+          227,
+          47
+        ],
+        "head": [
+          231,
+          46
+        ],
+        "before": [
+          13.760376930236816,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.716958045959473,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "231",
+          "headY": "46",
+          "mainX": "227",
+          "mainY": "47",
+          "sourceProjX": "231.357421875",
+          "sourceProjY": "46.491558074951172",
+          "sourceToCentre": "0.14282782581501988",
+          "hairSM": "1",
+          "hairTri": "1243",
+          "hairU": "0.33152925968170166",
+          "hairV": "0.59459418058395386",
+          "hairCamX": "-0.095487956298526466",
+          "hairCamY": "0.98893808580698828",
+          "hairCamZ": "13.715183334698379",
+          "hairPacketDepth": "13.715183258056641",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2501",
+          "anyCamZ": "13.747748229931821",
+          "anyAlpha": "1",
+          "anyU": "0.42203891277313232",
+          "anyV": "0.578233540058136",
+          "anyBaryU": "0.22378335893154144",
+          "anyBaryV": "0.52962756156921387",
+          "anyBaryW": "0.2465890645980835",
+          "anyWorldX": "0.10241807997226715",
+          "anyWorldY": "1.5471818447113037",
+          "anyWorldZ": "-0.019661217927932739",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2501",
+          "skinCamZ": "13.747748229931821",
+          "skinAlpha": "1",
+          "skinU": "0.42203891277313232",
+          "skinV": "0.578233540058136",
+          "skinBaryU": "0.22378335893154144",
+          "skinBaryV": "0.52962756156921387",
+          "skinBaryW": "0.2465890645980835",
+          "skinWorldX": "0.10241807997226715",
+          "skinWorldY": "1.5471818447113037",
+          "skinWorldZ": "-0.019661217927932739",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.716958045959473",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 9,
+        "main": [
+          226,
+          50
+        ],
+        "head": [
+          230,
+          49
+        ],
+        "before": [
+          13.796836853027344,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.726348876953125,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "230",
+          "headY": "49",
+          "mainX": "226",
+          "mainY": "50",
+          "sourceProjX": "230.5",
+          "sourceProjY": "49.5",
+          "sourceToCentre": "0",
+          "hairSM": "1",
+          "hairTri": "1255",
+          "hairU": "0.31418052315711975",
+          "hairV": "0.32811880111694336",
+          "hairCamX": "-0.10496114703384452",
+          "hairCamY": "0.95569914668064637",
+          "hairCamZ": "13.724573332461622",
+          "hairPacketDepth": "13.724573135375977",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2664",
+          "anyCamZ": "13.79510455036972",
+          "anyAlpha": "1",
+          "anyU": "0.50393432378768921",
+          "anyV": "0.42710945010185242",
+          "anyBaryU": "0.35490256547927856",
+          "anyBaryV": "0.40547245740890503",
+          "anyBaryW": "0.2396249920129776",
+          "anyWorldX": "0.0888531282544136",
+          "anyWorldY": "1.4947179555892944",
+          "anyWorldZ": "0.0027155047282576561",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2664",
+          "skinCamZ": "13.79510455036972",
+          "skinAlpha": "1",
+          "skinU": "0.50393432378768921",
+          "skinV": "0.42710945010185242",
+          "skinBaryU": "0.35490256547927856",
+          "skinBaryV": "0.40547245740890503",
+          "skinBaryW": "0.2396249920129776",
+          "skinWorldX": "0.0888531282544136",
+          "skinWorldY": "1.4947179555892944",
+          "skinWorldZ": "0.0027155047282576561",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.726348876953125",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 9,
+        "main": [
+          225,
+          54
+        ],
+        "head": [
+          229,
+          53
+        ],
+        "before": [
+          13.784185409545898,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.748384475708008,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "53",
+          "mainX": "225",
+          "mainY": "54",
+          "sourceProjX": "229.5",
+          "sourceProjY": "53.500003814697266",
+          "sourceToCentre": "3.814697265625E-06",
+          "hairSM": "2",
+          "hairTri": "4538",
+          "hairU": "0.26004007458686829",
+          "hairV": "0.21091268956661224",
+          "hairCamX": "-0.11600974622064042",
+          "hairCamY": "0.91150483931091131",
+          "hairCamZ": "13.746609531799239",
+          "hairPacketDepth": "13.746609687805176",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "1915",
+          "anyCamZ": "13.782397323424009",
+          "anyAlpha": "1",
+          "anyU": "0.39072811603546143",
+          "anyV": "0.32129722833633423",
+          "anyBaryU": "0.29668134450912476",
+          "anyBaryV": "0.10706187039613724",
+          "anyBaryW": "0.5962567925453186",
+          "anyWorldX": "0.083720490336418152",
+          "anyWorldY": "1.4627981185913086",
+          "anyWorldZ": "-0.031802110373973846",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "1915",
+          "skinCamZ": "13.782397323424009",
+          "skinAlpha": "1",
+          "skinU": "0.39072811603546143",
+          "skinV": "0.32129722833633423",
+          "skinBaryU": "0.29668134450912476",
+          "skinBaryV": "0.10706187039613724",
+          "skinBaryW": "0.5962567925453186",
+          "skinWorldX": "0.083720490336418152",
+          "skinWorldY": "1.4627981185913086",
+          "skinWorldZ": "-0.031802110373973846",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.748384475708008",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 10,
+        "main": [
+          227,
+          46
+        ],
+        "head": [
+          231,
+          46
+        ],
+        "before": [
+          13.758390426635742,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.71360969543457,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "231",
+          "headY": "46",
+          "mainX": "227",
+          "mainY": "46",
+          "sourceProjX": "231.20988464355469",
+          "sourceProjY": "46.481739044189453",
+          "sourceToCentre": "0.29068949508454117",
+          "hairSM": "1",
+          "hairTri": "1243",
+          "hairU": "0.33152800798416138",
+          "hairV": "0.60169845819473267",
+          "hairCamX": "-0.097117982483734711",
+          "hairCamY": "0.98904653818864663",
+          "hairCamZ": "13.712356372779157",
+          "hairPacketDepth": "13.712356567382813",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2494",
+          "anyCamZ": "13.740347169592418",
+          "anyAlpha": "1",
+          "anyU": "0.40966105461120605",
+          "anyV": "0.58775538206100464",
+          "anyBaryU": "0.40299159288406372",
+          "anyBaryV": "0.19294421374797821",
+          "anyBaryW": "0.40406417846679688",
+          "anyWorldX": "0.10162248462438583",
+          "anyWorldY": "1.5517985820770264",
+          "anyWorldZ": "-0.026385515928268433",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2494",
+          "skinCamZ": "13.740347169592418",
+          "skinAlpha": "1",
+          "skinU": "0.40966105461120605",
+          "skinV": "0.58775538206100464",
+          "skinBaryU": "0.40299159288406372",
+          "skinBaryV": "0.19294421374797821",
+          "skinBaryW": "0.40406417846679688",
+          "skinWorldX": "0.10162248462438583",
+          "skinWorldY": "1.5517985820770264",
+          "skinWorldZ": "-0.026385515928268433",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.71360969543457",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 10,
+        "main": [
+          225,
+          51
+        ],
+        "head": [
+          229,
+          51
+        ],
+        "before": [
+          13.772890090942383,
+          4.0,
+          2.0,
+          0.0
+        ],
+        "after": [
+          13.733017921447754,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "51",
+          "mainX": "225",
+          "mainY": "51",
+          "sourceProjX": "229.38743591308594",
+          "sourceProjY": "51.492286682128906",
+          "sourceToCentre": "0.11282805030389008",
+          "hairSM": "2",
+          "hairTri": "4529",
+          "hairU": "0.277774840593338",
+          "hairV": "0.29159754514694214",
+          "hairCamX": "-0.11725334876968141",
+          "hairCamY": "0.93368739510949306",
+          "hairCamZ": "13.73176503054562",
+          "hairPacketDepth": "13.731764793395996",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2158",
+          "anyCamZ": "13.771597539594936",
+          "anyAlpha": "1",
+          "anyU": "0.40312236547470093",
+          "anyV": "0.40571027994155884",
+          "anyBaryU": "0.36266914010047913",
+          "anyBaryV": "0.35829895734786987",
+          "anyBaryW": "0.279031902551651",
+          "anyWorldX": "0.0818999856710434",
+          "anyWorldY": "1.4882309436798096",
+          "anyWorldZ": "-0.030488595366477966",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2158",
+          "skinCamZ": "13.771597539594936",
+          "skinAlpha": "1",
+          "skinU": "0.40312236547470093",
+          "skinV": "0.40571027994155884",
+          "skinBaryU": "0.36266914010047913",
+          "skinBaryV": "0.35829895734786987",
+          "skinBaryW": "0.279031902551651",
+          "skinWorldX": "0.0818999856710434",
+          "skinWorldY": "1.4882309436798096",
+          "skinWorldZ": "-0.030488595366477966",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.733017921447754",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 10,
+        "main": [
+          225,
+          52
+        ],
+        "head": [
+          229,
+          52
+        ],
+        "before": [
+          13.775609016418457,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.739173889160156,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "52",
+          "mainX": "225",
+          "mainY": "52",
+          "sourceProjX": "229.35064697265625",
+          "sourceProjY": "52.496265411376953",
+          "sourceToCentre": "0.14939971194392018",
+          "hairSM": "2",
+          "hairTri": "4533",
+          "hairU": "0.2777780294418335",
+          "hairV": "0.252787709236145",
+          "hairCamX": "-0.11765974628863063",
+          "hairCamY": "0.92259474767316374",
+          "hairCamZ": "13.737920215694412",
+          "hairPacketDepth": "13.737919807434082",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "1940",
+          "anyCamZ": "13.771089326454483",
+          "anyAlpha": "1",
+          "anyU": "0.38616275787353516",
+          "anyV": "0.37406763434410095",
+          "anyBaryU": "0.57667708396911621",
+          "anyBaryV": "0.25319364666938782",
+          "anyBaryW": "0.17012928426265717",
+          "anyWorldX": "0.082539297640323639",
+          "anyWorldY": "1.4788784980773926",
+          "anyWorldZ": "-0.036454670131206512",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "1940",
+          "skinCamZ": "13.771089326454483",
+          "skinAlpha": "1",
+          "skinU": "0.38616275787353516",
+          "skinV": "0.37406763434410095",
+          "skinBaryU": "0.57667708396911621",
+          "skinBaryV": "0.25319364666938782",
+          "skinBaryW": "0.17012928426265717",
+          "skinWorldX": "0.082539297640323639",
+          "skinWorldY": "1.4788784980773926",
+          "skinWorldZ": "-0.036454670131206512",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.739173889160156",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 10,
+        "main": [
+          225,
+          53
+        ],
+        "head": [
+          229,
+          53
+        ],
+        "before": [
+          13.78252124786377,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.745482444763184,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "53",
+          "mainX": "225",
+          "mainY": "53",
+          "sourceProjX": "229.36619567871094",
+          "sourceProjY": "53.504753112792969",
+          "sourceToCentre": "0.13388871676451808",
+          "hairSM": "2",
+          "hairTri": "4537",
+          "hairU": "0.27777299284935",
+          "hairV": "0.21364893019199371",
+          "hairCamX": "-0.11748817752331986",
+          "hairCamY": "0.91145253195886622",
+          "hairCamZ": "13.744229156724362",
+          "hairPacketDepth": "13.744229316711426",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "1922",
+          "anyCamZ": "13.778422701053927",
+          "anyAlpha": "1",
+          "anyU": "0.38736814260482788",
+          "anyV": "0.32685312628746033",
+          "anyBaryU": "0.10387703031301498",
+          "anyBaryV": "0.45771417021751404",
+          "anyBaryW": "0.43840879201889038",
+          "anyWorldX": "0.082572847604751587",
+          "anyWorldY": "1.4655623435974121",
+          "anyWorldZ": "-0.035656943917274475",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "1922",
+          "skinCamZ": "13.778422701053927",
+          "skinAlpha": "1",
+          "skinU": "0.38736814260482788",
+          "skinV": "0.32685312628746033",
+          "skinBaryU": "0.10387703031301498",
+          "skinBaryV": "0.45771417021751404",
+          "skinBaryW": "0.43840879201889038",
+          "skinWorldX": "0.082572847604751587",
+          "skinWorldY": "1.4655623435974121",
+          "skinWorldZ": "-0.035656943917274475",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.745482444763184",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 11,
+        "main": [
+          227,
+          46
+        ],
+        "head": [
+          231,
+          46
+        ],
+        "before": [
+          13.759134292602539,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.709596633911133,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "231",
+          "headY": "46",
+          "mainX": "227",
+          "mainY": "46",
+          "sourceProjX": "231.69877624511719",
+          "sourceProjY": "46.349666595458984",
+          "sourceToCentre": "0.24922304898179234",
+          "hairSM": "1",
+          "hairTri": "718",
+          "hairU": "0.18941645324230194",
+          "hairV": "0.53531032800674438",
+          "hairCamX": "-0.091716612989409363",
+          "hairCamY": "0.99050575823653286",
+          "hairCamZ": "13.708966281500668",
+          "hairPacketDepth": "13.708966255187988",
+          "anyMaterial": "",
+          "anySM": "",
+          "anyTri": "",
+          "anyCamZ": "",
+          "anyAlpha": "",
+          "anyU": "",
+          "anyV": "",
+          "anyBaryU": "",
+          "anyBaryV": "",
+          "anyBaryW": "",
+          "anyWorldX": "",
+          "anyWorldY": "",
+          "anyWorldZ": "",
+          "anyRay": "",
+          "skinMaterial": "",
+          "skinSM": "",
+          "skinTri": "",
+          "skinCamZ": "",
+          "skinAlpha": "",
+          "skinU": "",
+          "skinV": "",
+          "skinBaryU": "",
+          "skinBaryV": "",
+          "skinBaryW": "",
+          "skinWorldX": "",
+          "skinWorldY": "",
+          "skinWorldZ": "",
+          "skinRay": "",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.709596633911133",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 11,
+        "main": [
+          225,
+          51
+        ],
+        "head": [
+          229,
+          51
+        ],
+        "before": [
+          13.774215698242188,
+          4.0,
+          2.0,
+          0.0
+        ],
+        "after": [
+          13.72976016998291,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "51",
+          "mainX": "225",
+          "mainY": "51",
+          "sourceProjX": "229.22195434570313",
+          "sourceProjY": "51.481288909912109",
+          "sourceToCentre": "0.27867452478770727",
+          "hairSM": "2",
+          "hairTri": "4529",
+          "hairU": "0.27777737379074097",
+          "hairV": "0.29532909393310547",
+          "hairCamX": "-0.11908192029959341",
+          "hairCamY": "0.9338087656950036",
+          "hairCamZ": "13.729129024278885",
+          "hairPacketDepth": "13.729128837585449",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2158",
+          "anyCamZ": "13.768841358179804",
+          "anyAlpha": "1",
+          "anyU": "0.40189683437347412",
+          "anyV": "0.40957820415496826",
+          "anyBaryU": "0.064443744719028473",
+          "anyBaryV": "0.66708993911743164",
+          "anyBaryW": "0.26846632361412048",
+          "anyWorldX": "0.080652907490730286",
+          "anyWorldY": "1.4906699657440186",
+          "anyWorldZ": "-0.033239316195249557",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2158",
+          "skinCamZ": "13.768841358179804",
+          "skinAlpha": "1",
+          "skinU": "0.40189683437347412",
+          "skinV": "0.40957820415496826",
+          "skinBaryU": "0.064443744719028473",
+          "skinBaryV": "0.66708993911743164",
+          "skinBaryW": "0.26846632361412048",
+          "skinWorldX": "0.080652907490730286",
+          "skinWorldY": "1.4906699657440186",
+          "skinWorldZ": "-0.033239316195249557",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.72976016998291",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 11,
+        "main": [
+          225,
+          52
+        ],
+        "head": [
+          229,
+          52
+        ],
+        "before": [
+          13.774863243103027,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.73593521118164,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "52",
+          "mainX": "225",
+          "mainY": "52",
+          "sourceProjX": "229.18234252929688",
+          "sourceProjY": "52.492630004882813",
+          "sourceToCentre": "0.317742955109211",
+          "hairSM": "2",
+          "hairTri": "4533",
+          "hairU": "0.27777612209320068",
+          "hairV": "0.25624287128448486",
+          "hairCamX": "-0.11951953869544463",
+          "hairCamY": "0.92263509482523176",
+          "hairCamZ": "13.735303851596786",
+          "hairPacketDepth": "13.73530387878418",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "1940",
+          "anyCamZ": "13.767630449848392",
+          "anyAlpha": "1",
+          "anyU": "0.38302415609359741",
+          "anyV": "0.37907081842422485",
+          "anyBaryU": "0.14251503348350525",
+          "anyBaryV": "0.7692912220954895",
+          "anyBaryW": "0.088193736970424652",
+          "anyWorldX": "0.081374190747737885",
+          "anyWorldY": "1.4815988540649414",
+          "anyWorldZ": "-0.039850011467933655",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "1940",
+          "skinCamZ": "13.767630449848392",
+          "skinAlpha": "1",
+          "skinU": "0.38302415609359741",
+          "skinV": "0.37907081842422485",
+          "skinBaryU": "0.14251503348350525",
+          "skinBaryV": "0.7692912220954895",
+          "skinBaryW": "0.088193736970424652",
+          "skinWorldX": "0.081374190747737885",
+          "skinWorldY": "1.4815988540649414",
+          "skinWorldZ": "-0.039850011467933655",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.735935211181641",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 11,
+        "main": [
+          225,
+          53
+        ],
+        "head": [
+          229,
+          53
+        ],
+        "before": [
+          13.781044006347656,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.742300987243652,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "53",
+          "mainX": "225",
+          "mainY": "53",
+          "sourceProjX": "229.19476318359375",
+          "sourceProjY": "53.511360168457031",
+          "sourceToCentre": "0.30544814210794424",
+          "hairSM": "2",
+          "hairTri": "4537",
+          "hairU": "0.27777671813964844",
+          "hairV": "0.21672363579273224",
+          "hairCamX": "-0.11938214171420469",
+          "hairCamY": "0.91137944759159528",
+          "hairCamZ": "13.741669524008467",
+          "hairPacketDepth": "13.741669654846191",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "1921",
+          "anyCamZ": "13.773870957209601",
+          "anyAlpha": "1",
+          "anyU": "0.38237521052360535",
+          "anyV": "0.33402460813522339",
+          "anyBaryU": "0.37374457716941833",
+          "anyBaryV": "0.16465297341346741",
+          "anyBaryW": "0.46160244941711426",
+          "anyWorldX": "0.0815482884645462",
+          "anyWorldY": "1.4687309265136719",
+          "anyWorldZ": "-0.040046148002147675",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "1921",
+          "skinCamZ": "13.773870957209601",
+          "skinAlpha": "1",
+          "skinU": "0.38237521052360535",
+          "skinV": "0.33402460813522339",
+          "skinBaryU": "0.37374457716941833",
+          "skinBaryV": "0.16465297341346741",
+          "skinBaryW": "0.46160244941711426",
+          "skinWorldX": "0.0815482884645462",
+          "skinWorldY": "1.4687309265136719",
+          "skinWorldZ": "-0.040046148002147675",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.742300987243652",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 12,
+        "main": [
+          227,
+          46
+        ],
+        "head": [
+          231,
+          46
+        ],
+        "before": [
+          13.76260757446289,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.706354141235352,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "231",
+          "headY": "46",
+          "mainX": "227",
+          "mainY": "46",
+          "sourceProjX": "231.54060363769531",
+          "sourceProjY": "46.469558715820313",
+          "sourceToCentre": "0.0507476814899035",
+          "hairSM": "1",
+          "hairTri": "718",
+          "hairU": "0.18941926956176758",
+          "hairV": "0.532937228679657",
+          "hairCamX": "-0.093464171894615422",
+          "hairCamY": "0.98918109852488012",
+          "hairCamZ": "13.706431307665193",
+          "hairPacketDepth": "13.70643138885498",
+          "anyMaterial": "",
+          "anySM": "",
+          "anyTri": "",
+          "anyCamZ": "",
+          "anyAlpha": "",
+          "anyU": "",
+          "anyV": "",
+          "anyBaryU": "",
+          "anyBaryV": "",
+          "anyBaryW": "",
+          "anyWorldX": "",
+          "anyWorldY": "",
+          "anyWorldZ": "",
+          "anyRay": "",
+          "skinMaterial": "",
+          "skinSM": "",
+          "skinTri": "",
+          "skinCamZ": "",
+          "skinAlpha": "",
+          "skinU": "",
+          "skinV": "",
+          "skinBaryU": "",
+          "skinBaryV": "",
+          "skinBaryW": "",
+          "skinWorldX": "",
+          "skinWorldY": "",
+          "skinWorldZ": "",
+          "skinRay": "",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.706354141235352",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 12,
+        "main": [
+          225,
+          50
+        ],
+        "head": [
+          229,
+          50
+        ],
+        "before": [
+          13.768380165100098,
+          5.0,
+          2.0,
+          0.0
+        ],
+        "after": [
+          13.719670295715332,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "50",
+          "mainX": "225",
+          "mainY": "50",
+          "sourceProjX": "229.5",
+          "sourceProjY": "50.5",
+          "sourceToCentre": "0",
+          "hairSM": "1",
+          "hairTri": "1259",
+          "hairU": "0.29247045516967773",
+          "hairV": "0.23216046392917633",
+          "hairCamX": "-0.11600971143007932",
+          "hairCamY": "0.94465075729809089",
+          "hairCamZ": "13.719748254127898",
+          "hairPacketDepth": "13.719748497009277",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2178",
+          "anyCamZ": "13.770590976284645",
+          "anyAlpha": "1",
+          "anyU": "0.43187868595123291",
+          "anyV": "0.43371063470840454",
+          "anyBaryU": "0.16597186028957367",
+          "anyBaryV": "0.28480380773544312",
+          "anyBaryW": "0.549224317073822",
+          "anyWorldX": "0.08307453989982605",
+          "anyWorldY": "1.5002093315124512",
+          "anyWorldZ": "-0.025998063385486603",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2178",
+          "skinCamZ": "13.770590976284645",
+          "skinAlpha": "1",
+          "skinU": "0.43187868595123291",
+          "skinV": "0.43371063470840454",
+          "skinBaryU": "0.16597186028957367",
+          "skinBaryV": "0.28480380773544312",
+          "skinBaryW": "0.549224317073822",
+          "skinWorldX": "0.08307453989982605",
+          "skinWorldY": "1.5002093315124512",
+          "skinWorldZ": "-0.025998063385486603",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.719670295715332",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 12,
+        "main": [
+          225,
+          51
+        ],
+        "head": [
+          229,
+          51
+        ],
+        "before": [
+          13.772823333740234,
+          4.0,
+          2.0,
+          0.0
+        ],
+        "after": [
+          13.726435661315918,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "51",
+          "mainX": "225",
+          "mainY": "51",
+          "sourceProjX": "229.05030822753906",
+          "sourceProjY": "51.470294952392578",
+          "sourceToCentre": "0.45067180971569409",
+          "hairSM": "2",
+          "hairTri": "4529",
+          "hairU": "0.27777710556983948",
+          "hairV": "0.29906666278839111",
+          "hairCamX": "-0.12097814664687645",
+          "hairCamY": "0.93393007216356083",
+          "hairCamZ": "13.72651264930151",
+          "hairPacketDepth": "13.726512908935547",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2159",
+          "anyCamZ": "13.765996370664636",
+          "anyAlpha": "1",
+          "anyU": "0.39990800619125366",
+          "anyV": "0.41394615173339844",
+          "anyBaryU": "0.27015998959541321",
+          "anyBaryV": "0.016040975227952003",
+          "anyBaryW": "0.713798999786377",
+          "anyWorldX": "0.079803347587585449",
+          "anyWorldY": "1.4932222366333008",
+          "anyWorldZ": "-0.036058325320482254",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2159",
+          "skinCamZ": "13.765996370664636",
+          "skinAlpha": "1",
+          "skinU": "0.39990800619125366",
+          "skinV": "0.41394615173339844",
+          "skinBaryU": "0.27015998959541321",
+          "skinBaryV": "0.016040975227952003",
+          "skinBaryW": "0.713798999786377",
+          "skinWorldX": "0.079803347587585449",
+          "skinWorldY": "1.4932222366333008",
+          "skinWorldZ": "-0.036058325320482254",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.726435661315918",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 12,
+        "main": [
+          225,
+          52
+        ],
+        "head": [
+          229,
+          52
+        ],
+        "before": [
+          13.773967742919922,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.732636451721191,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "52",
+          "mainX": "225",
+          "mainY": "52",
+          "sourceProjX": "229.00785827636719",
+          "sourceProjY": "52.489547729492188",
+          "sourceToCentre": "0.49225270552739891",
+          "hairSM": "2",
+          "hairTri": "4533",
+          "hairU": "0.27777910232543945",
+          "hairV": "0.25967684388160706",
+          "hairCamX": "-0.12144736133461675",
+          "hairCamY": "0.92266901207131857",
+          "hairCamZ": "13.732713735893316",
+          "hairPacketDepth": "13.73271369934082",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2036",
+          "anyCamZ": "13.764376424865338",
+          "anyAlpha": "1",
+          "anyU": "0.38019958138465881",
+          "anyV": "0.38380923867225647",
+          "anyBaryU": "0.72202503681182861",
+          "anyBaryV": "0.26552864909172058",
+          "anyBaryW": "0.01244630478322506",
+          "anyWorldX": "0.080562613904476166",
+          "anyWorldY": "1.4842798709869385",
+          "anyWorldZ": "-0.043066393584012985",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2036",
+          "skinCamZ": "13.764376424865338",
+          "skinAlpha": "1",
+          "skinU": "0.38019958138465881",
+          "skinV": "0.38380923867225647",
+          "skinBaryU": "0.72202503681182861",
+          "skinBaryV": "0.26552864909172058",
+          "skinBaryW": "0.01244630478322506",
+          "skinWorldX": "0.080562613904476166",
+          "skinWorldY": "1.4842798709869385",
+          "skinWorldZ": "-0.043066393584012985",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.732636451721191",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 12,
+        "main": [
+          225,
+          53
+        ],
+        "head": [
+          229,
+          53
+        ],
+        "before": [
+          13.779706954956055,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.739063262939453,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "53",
+          "mainX": "225",
+          "mainY": "53",
+          "sourceProjX": "229.01718139648438",
+          "sourceProjY": "53.518901824951172",
+          "sourceToCentre": "0.48318845483647788",
+          "hairSM": "2",
+          "hairTri": "4537",
+          "hairU": "0.27777576446533203",
+          "hairV": "0.21976085007190704",
+          "hairCamX": "-0.12134414727051945",
+          "hairCamY": "0.91129610880415779",
+          "hairCamZ": "13.739141197944104",
+          "hairPacketDepth": "13.739141464233398",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "1928",
+          "anyCamZ": "13.769496720535196",
+          "anyAlpha": "1",
+          "anyU": "0.3772411048412323",
+          "anyV": "0.34025776386260986",
+          "anyBaryU": "0.65229249000549316",
+          "anyBaryV": "0.083173856139183044",
+          "anyBaryW": "0.264533668756485",
+          "anyWorldX": "0.080881692469120026",
+          "anyWorldY": "1.4718705415725708",
+          "anyWorldZ": "-0.044281594455242157",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "1928",
+          "skinCamZ": "13.769496720535196",
+          "skinAlpha": "1",
+          "skinU": "0.3772411048412323",
+          "skinV": "0.34025776386260986",
+          "skinBaryU": "0.65229249000549316",
+          "skinBaryV": "0.083173856139183044",
+          "skinBaryW": "0.264533668756485",
+          "skinWorldX": "0.080881692469120026",
+          "skinWorldY": "1.4718705415725708",
+          "skinWorldZ": "-0.044281594455242157",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.739063262939453",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 13,
+        "main": [
+          226,
+          48
+        ],
+        "head": [
+          230,
+          48
+        ],
+        "before": [
+          13.767087936401367,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.710022926330566,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "230",
+          "headY": "48",
+          "mainX": "226",
+          "mainY": "48",
+          "sourceProjX": "230.45013427734375",
+          "sourceProjY": "48.487876892089844",
+          "sourceToCentre": "0.051318223287944581",
+          "hairSM": "1",
+          "hairTri": "1249",
+          "hairU": "0.3315277099609375",
+          "hairV": "0.47740375995635986",
+          "hairCamX": "-0.10551220559337837",
+          "hairCamY": "0.9668817083329746",
+          "hairCamZ": "13.710860089840233",
+          "hairPacketDepth": "13.710860252380371",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2549",
+          "anyCamZ": "13.764201381802614",
+          "anyAlpha": "1",
+          "anyU": "0.46626603603363037",
+          "anyV": "0.50324898958206177",
+          "anyBaryU": "0.4802490770816803",
+          "anyBaryV": "0.17443081736564636",
+          "anyBaryW": "0.34532010555267334",
+          "anyWorldX": "0.093434914946556091",
+          "anyWorldY": "1.52366304397583",
+          "anyWorldZ": "-0.018804486840963364",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2549",
+          "skinCamZ": "13.764201381802614",
+          "skinAlpha": "1",
+          "skinU": "0.46626603603363037",
+          "skinV": "0.50324898958206177",
+          "skinBaryU": "0.4802490770816803",
+          "skinBaryV": "0.17443081736564636",
+          "skinBaryW": "0.34532010555267334",
+          "skinWorldX": "0.093434914946556091",
+          "skinWorldY": "1.52366304397583",
+          "skinWorldZ": "-0.018804486840963364",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.710022926330566",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 13,
+        "main": [
+          225,
+          50
+        ],
+        "head": [
+          229,
+          50
+        ],
+        "before": [
+          13.769743919372559,
+          4.0,
+          2.0,
+          0.0
+        ],
+        "after": [
+          13.717281341552734,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "50",
+          "mainX": "225",
+          "mainY": "50",
+          "sourceProjX": "229.49028015136719",
+          "sourceProjY": "50.493423461914063",
+          "sourceToCentre": "0.011735685350271348",
+          "hairSM": "1",
+          "hairTri": "1259",
+          "hairU": "0.33152720332145691",
+          "hairV": "0.24839396774768829",
+          "hairCamX": "-0.11611695110159559",
+          "hairCamY": "0.94472322931420361",
+          "hairCamZ": "13.718118325799734",
+          "hairPacketDepth": "13.718118667602539",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2193",
+          "anyCamZ": "13.76914853880786",
+          "anyAlpha": "1",
+          "anyU": "0.43582406640052795",
+          "anyV": "0.43429061770439148",
+          "anyBaryU": "0.53440243005752563",
+          "anyBaryV": "0.33985444903373718",
+          "anyBaryW": "0.125743106007576",
+          "anyWorldX": "0.084171198308467865",
+          "anyWorldY": "1.5019996166229248",
+          "anyWorldZ": "-0.027337633073329926",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2193",
+          "skinCamZ": "13.76914853880786",
+          "skinAlpha": "1",
+          "skinU": "0.43582406640052795",
+          "skinV": "0.43429061770439148",
+          "skinBaryU": "0.53440243005752563",
+          "skinBaryV": "0.33985444903373718",
+          "skinBaryW": "0.125743106007576",
+          "skinWorldX": "0.084171198308467865",
+          "skinWorldY": "1.5019996166229248",
+          "skinWorldZ": "-0.027337633073329926",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.717281341552734",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 13,
+        "main": [
+          225,
+          51
+        ],
+        "head": [
+          229,
+          51
+        ],
+        "before": [
+          13.771636009216309,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.71904468536377,
+          13.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "51",
+          "mainX": "225",
+          "mainY": "51",
+          "sourceProjX": "229.02438354492188",
+          "sourceProjY": "51.131927490234375",
+          "sourceToCentre": "0.6014053415012609",
+          "hairSM": "1",
+          "hairTri": "1261",
+          "hairU": "0.33152779936790466",
+          "hairV": "0.160353422164917",
+          "hairCamX": "-0.12126440930998772",
+          "hairCamY": "0.93766861760881892",
+          "hairCamZ": "13.719881676415284",
+          "hairPacketDepth": "13.719882011413574",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2162",
+          "anyCamZ": "13.76523169008534",
+          "anyAlpha": "1",
+          "anyU": "0.41061362624168396",
+          "anyV": "0.42520040273666382",
+          "anyBaryU": "0.750067412853241",
+          "anyBaryV": "0.12155777961015701",
+          "anyBaryW": "0.12837481498718262",
+          "anyWorldX": "0.080303490161895752",
+          "anyWorldY": "1.4978486299514771",
+          "anyWorldZ": "-0.03504575788974762",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2162",
+          "skinCamZ": "13.76523169008534",
+          "skinAlpha": "1",
+          "skinU": "0.41061362624168396",
+          "skinV": "0.42520040273666382",
+          "skinBaryU": "0.750067412853241",
+          "skinBaryV": "0.12155777961015701",
+          "skinBaryW": "0.12837481498718262",
+          "skinWorldX": "0.080303490161895752",
+          "skinWorldY": "1.4978486299514771",
+          "skinWorldZ": "-0.03504575788974762",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.71904468536377",
+          "metaG": "13",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 13,
+        "main": [
+          225,
+          52
+        ],
+        "head": [
+          229,
+          52
+        ],
+        "before": [
+          13.772927284240723,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.729315757751465,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "52",
+          "mainX": "225",
+          "mainY": "52",
+          "sourceProjX": "228.82711791992188",
+          "sourceProjY": "52.486824035644531",
+          "sourceToCentre": "0.67301106954266421",
+          "hairSM": "2",
+          "hairTri": "4533",
+          "hairU": "0.27777692675590515",
+          "hairV": "0.26310208439826965",
+          "hairCamX": "-0.12344434153990047",
+          "hairCamY": "0.9226990756280129",
+          "hairCamZ": "13.730153716111269",
+          "hairPacketDepth": "13.730154037475586",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "2037",
+          "anyCamZ": "13.761348394493709",
+          "anyAlpha": "1",
+          "anyU": "0.37787896394729614",
+          "anyV": "0.38819786906242371",
+          "anyBaryU": "0.671528697013855",
+          "anyBaryV": "0.28008037805557251",
+          "anyBaryW": "0.048390939831733704",
+          "anyWorldX": "0.080040380358695984",
+          "anyWorldY": "1.4868263006210327",
+          "anyWorldZ": "-0.046107299625873566",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "2037",
+          "skinCamZ": "13.761348394493709",
+          "skinAlpha": "1",
+          "skinU": "0.37787896394729614",
+          "skinV": "0.38819786906242371",
+          "skinBaryU": "0.671528697013855",
+          "skinBaryV": "0.28008037805557251",
+          "skinBaryW": "0.048390939831733704",
+          "skinWorldX": "0.080040380358695984",
+          "skinWorldY": "1.4868263006210327",
+          "skinWorldZ": "-0.046107299625873566",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.729315757751465",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    },
+    {
+      "change": {
+        "frame": 13,
+        "main": [
+          225,
+          53
+        ],
+        "head": [
+          229,
+          53
+        ],
+        "before": [
+          13.778173446655273,
+          4.0,
+          0.0,
+          0.0
+        ],
+        "after": [
+          13.735812187194824,
+          14.0,
+          0.0,
+          0.0
+        ]
+      },
+      "witness": [
+        {
+          "headX": "229",
+          "headY": "53",
+          "mainX": "225",
+          "mainY": "53",
+          "sourceProjX": "228.83328247070313",
+          "sourceProjY": "53.527263641357422",
+          "sourceToCentre": "0.66727473353319433",
+          "hairSM": "2",
+          "hairTri": "4537",
+          "hairU": "0.27777639031410217",
+          "hairV": "0.22276635468006134",
+          "hairCamX": "-0.12337593651932366",
+          "hairCamY": "0.911203718035966",
+          "hairCamZ": "13.736648507629702",
+          "hairPacketDepth": "13.736648559570313",
+          "anyMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "anySM": "3",
+          "anyTri": "1927",
+          "anyCamZ": "13.765901325112061",
+          "anyAlpha": "1",
+          "anyU": "0.373867392539978",
+          "anyV": "0.34527012705802917",
+          "anyBaryU": "0.27033171057701111",
+          "anyBaryV": "0.54504489898681641",
+          "anyBaryW": "0.18462337553501129",
+          "anyWorldX": "0.080421127378940582",
+          "anyWorldY": "1.4745943546295166",
+          "anyWorldZ": "-0.047872729599475861",
+          "anyRay": "same_source_ray",
+          "skinMaterial": "N00_000_00_Face_00_SKIN (Instance)",
+          "skinSM": "3",
+          "skinTri": "1927",
+          "skinCamZ": "13.765901325112061",
+          "skinAlpha": "1",
+          "skinU": "0.373867392539978",
+          "skinV": "0.34527012705802917",
+          "skinBaryU": "0.27033171057701111",
+          "skinBaryV": "0.54504489898681641",
+          "skinBaryW": "0.18462337553501129",
+          "skinWorldX": "0.080421127378940582",
+          "skinWorldY": "1.4745943546295166",
+          "skinWorldZ": "-0.047872729599475861",
+          "skinRay": "same_source_ray",
+          "anyFront": "0",
+          "skinFront": "0",
+          "metaR": "13.735812187194824",
+          "metaG": "14",
+          "metaB": "0",
+          "metaA": "0"
+        }
+      ]
+    }
+  ],
+  "missingFaceWitnesses": 0,
+  "opaqueFaceAheadOfAcceptedHair": 0,
+  "scope": "Narrow real Walk+root rotation; not full transition or all directions. Fixed-grid changes are not automatically flicker errors. Generation/packet timings are during diagnostic capture, not Player FPS."
+}

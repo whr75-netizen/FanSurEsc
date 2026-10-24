@@ -1,0 +1,102 @@
+[
+  {
+    "run": "Turn80To100",
+    "comparison": [
+      "fixed yaw80 chart / common577",
+      "auto579 / common577"
+    ],
+    "pairs": 14,
+    "partial": true,
+    "status": {
+      "status": "FAILED",
+      "poses": 14,
+      "error": "System.Exception: unsupported: 574 noncanonical winding/area overlap    at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.TurnView579.Capture () [0x00145] in <ff8d3971e35e458fbf7200b2bd1549c3>:0 ",
+      "inputRestored": true,
+      "animatorRestored": true,
+      "clockRestored": true
+    },
+    "originalCanvas": [
+      960,
+      544
+    ],
+    "originalFramesRetained": true,
+    "derivedCommonCropLTRB": [
+      378,
+      62,
+      518,
+      340
+    ],
+    "allCharacterCellsIncluded": true,
+    "rescale": false,
+    "sourceTimeStep": 0.016666666666666666,
+    "notFullWalkLoop": true,
+    "gifQuantizedPalette": true,
+    "loopWrapNotAValidatedMotionTransition": true,
+    "files": {
+      "Turn80To100.webp": {
+        "bytes": 195916,
+        "sha256": "5f8f0242b5f23f0d0db19c44068d4e64f8a8ccc820be4426a9930dcd604ae551",
+        "frames": 14,
+        "durationMs": 233,
+        "lossless": true
+      },
+      "Turn80To100.gif": {
+        "bytes": 346089,
+        "sha256": "795a54b71c6f231523febbeafc1e61587c328a0164c46f7b7d931de0b462108f",
+        "frames": 14,
+        "durationMs": 230,
+        "lossless": false
+      }
+    }
+  },
+  {
+    "run": "Native96To100",
+    "comparison": [
+      "native head / region OFF",
+      "auto579 / common577"
+    ],
+    "pairs": 8,
+    "partial": false,
+    "status": {
+      "status": "CAPTURED",
+      "poses": 8,
+      "error": "",
+      "inputRestored": true,
+      "animatorRestored": true,
+      "clockRestored": true
+    },
+    "originalCanvas": [
+      960,
+      544
+    ],
+    "originalFramesRetained": true,
+    "derivedCommonCropLTRB": [
+      364,
+      62,
+      528,
+      344
+    ],
+    "allCharacterCellsIncluded": true,
+    "rescale": false,
+    "sourceTimeStep": 0.016666666666666666,
+    "notFullWalkLoop": true,
+    "gifQuantizedPalette": true,
+    "loopWrapNotAValidatedMotionTransition": true,
+    "files": {
+      "Native96To100.webp": {
+        "bytes": 112162,
+        "sha256": "509c16d15dc3573f588782d21b7950e207a4c18d2c451386a50f4cb3cd4472ab",
+        "frames": 8,
+        "durationMs": 133,
+        "lossless": true
+      },
+      "Native96To100.gif": {
+        "bytes": 218260,
+        "sha256": "26a72f2f39b8220f669d1e49905cbdf6ac1d46ac887dc0fe4c4dbd1937607555",
+        "frames": 8,
+        "durationMs": 130,
+        "lossless": false
+      }
+    }
+  }
+]

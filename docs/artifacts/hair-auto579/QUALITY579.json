@@ -1,0 +1,171 @@
+{
+  "record": 579,
+  "sourceChanges": {
+    "ClosedRegion524.cs": {
+      "target": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\ClothRegion524\\Runtime\\ClosedRegion524.cs",
+      "originalSHA256": "ec49e36828f3956b24b6af98b47615d024882501bfb7c9053ec2efd3d866f97d",
+      "newSHA256": "177236b19b0586c3f6264cf42db239f98e34ff81d5f2a5aef65184c56e638936"
+    },
+    "HeadCurve511.cs": {
+      "target": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadCurve511.cs",
+      "originalSHA256": "df89425f9207d5a88b28879ececa4d6d17c76c59141b04dd60e8f0b0b563f912",
+      "newSHA256": "e2431c138b8267a880af057d22ab966c2689ba8a59241f2b0e0c554c3d8e3c5b"
+    },
+    "HeadViewInput579.cs": {
+      "target": "C:\\Users\\JG\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadRegion502\\Runtime\\HeadViewInput579.cs",
+      "originalSHA256": null,
+      "newSHA256": "2a8dc3286c2c05b9663e9e2ce57eb7fb012782a09ea500a0cba34551ec074a07"
+    }
+  },
+  "default": "OFF",
+  "scope": "Orthographic opaque double-sided Hair; no direction table; one current chart in memory",
+  "implemented": "Source-edge provenance + existing511 style port + runtime root/camera-view key and input generation/replacement",
+  "notImplementedOrValidated": [
+    "Full80-to170/260 animated transition",
+    "All camera/model/head-bone motion invalidation",
+    "All-direction temporal art quality",
+    "Eye resolve RGB/owner consistency fix",
+    "Performance/managed allocation optimization"
+  ],
+  "referenceInputs": {
+    "yaw80": {
+      "rings": 3,
+      "controls": 94,
+      "selectedDiff": 0
+    },
+    "yaw170": {
+      "rings": 2,
+      "controls": 92,
+      "selectedDiff": 0
+    },
+    "yaw260": {
+      "rings": 2,
+      "controls": 114,
+      "selectedDiff": 0
+    }
+  },
+  "actualRuns": {
+    "fixedViewComparison": {
+      "pairs": 14,
+      "completed": false,
+      "failureSide": "fixed yaw80 baseline, not auto",
+      "failureFrame": 14,
+      "yaw": 97.97345,
+      "normalizedTime": 1.45000327,
+      "savedCurrentInputReplay": "PASS; 527 selected cells, 3 rings/91 controls"
+    },
+    "nativeComparison": {
+      "pairs": 8,
+      "completed": true,
+      "yawPath": [
+        96.47345,
+        97.97345,
+        99.47333,
+        99.99999,
+        98.5,
+        97.00012,
+        96.47345,
+        96.47345
+      ],
+      "actualWalkContinues": true,
+      "sameFailedPoseActuallyRendered": true
+    },
+    "singleFrozenFaceTrace": {
+      "pairs": 1,
+      "completed": true,
+      "sameObservedRGBReproduced": true
+    }
+  },
+  "qualityGate": "NOT PASSED: RGB/owner discrepancy reproduced in EyeFeature348 resolution; no further transition expansion or default enable",
+  "timingScope": "CPU spans during diagnostic capture; generation is separate from packet and Build. Not GPU time/Player FPS; no allocation claim. Same non-rotating view rows repeat prior generationMs and are not new generation samples.",
+  "timings": {
+    "Turn80To100": {
+      "generationMs": {
+        "samples": 12,
+        "median": 170.45274999999998,
+        "p95": 274.2490099999999,
+        "min": 164.2762,
+        "max": 354.4092
+      },
+      "keyMs": {
+        "samples": 14,
+        "median": 1.03315,
+        "p95": 4.881304999999997,
+        "min": 1.0282,
+        "max": 11.3685
+      },
+      "buildMs": {
+        "median": 410.2844,
+        "p95": 525.90914,
+        "min": 246.2673,
+        "max": 681.9172
+      },
+      "curveMs": {
+        "median": 0.0298,
+        "p95": 0.032115,
+        "min": 0.0256,
+        "max": 0.0327
+      },
+      "areaMs": {
+        "median": 14.4411,
+        "p95": 21.633739999999996,
+        "min": 13.6252,
+        "max": 32.8868
+      },
+      "packetMs": {
+        "median": 200.43455,
+        "p95": 219.455595,
+        "min": 191.4462,
+        "max": 242.4914
+      }
+    },
+    "Native96To100": {
+      "generationMs": {
+        "samples": 7,
+        "median": 167.3378,
+        "p95": 340.8555599999999,
+        "min": 163.4498,
+        "max": 364.9344
+      },
+      "keyMs": {
+        "samples": 8,
+        "median": 1.1469,
+        "p95": 160.91593499999988,
+        "min": 1.0281,
+        "max": 246.1367
+      },
+      "buildMs": {
+        "median": 394.1011,
+        "p95": 823.0997549999998,
+        "min": 233.5643,
+        "max": 945.9283
+      },
+      "curveMs": {
+        "median": 0.02985,
+        "p95": 0.036184999999999995,
+        "min": 0.026,
+        "max": 0.0386
+      },
+      "areaMs": {
+        "median": 14.0988,
+        "p95": 49.35569999999997,
+        "min": 13.0392,
+        "max": 68.2004
+      },
+      "packetMs": {
+        "median": 186.8741,
+        "p95": 194.61908499999998,
+        "min": 182.7054,
+        "max": 194.6642
+      }
+    }
+  },
+  "settingsSHA256": {
+    "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "finalState": "[Log] play=False paused=False compiling=False dirty=False head=False generatedView=False revision=0 inputBytes=0 clothes=False captureDelta=0 background=False",
+  "Library": "Prior403 not retried; local deliverables only",
+  "sourceCommit": "ff6c3b57d92ede720d7d3c88b0f78bedf71772a8",
+  "browserDisplay": "Installed Chrome actual Main screenshot/DOM +6 links verified; initial restricted-context GPU child failed, same command in owner context succeeded without browser/security flag changes."
+}

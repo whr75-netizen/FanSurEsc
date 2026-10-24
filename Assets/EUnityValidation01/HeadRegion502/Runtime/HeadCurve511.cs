@@ -24,6 +24,11 @@ public static partial class HeadRegion502
     public static RectInt Auto511Bounds;
     sealed class Control511 {public int sm,primitive,a,b,c;public double u,v,w;}
     static Control511[][] controls511;
+    // Optional immutable input prepared for the caller's current reference view.
+    // No angle table or automatic all-view support is implied by this adapter.
+    static byte[] suppliedCurveInput511,loadedCurveInput511;
+    public static byte[] CopyCurveInput511()=>suppliedCurveInput511==null?null:(byte[])suppliedCurveInput511.Clone();
+    public static void SetCurveInput511(byte[] input){suppliedCurveInput511=input==null?null:(byte[])input.Clone();}
     static Mesh source511,output511,registered511;
     static int[][] indices511;
     static readonly HashSet<(int,int,int)> registeredTriangles511=new();
@@ -45,10 +50,10 @@ public static partial class HeadRegion502
     static int[][] Indices511(Full319View335 f,Mesh output)
     {
         var source=f.motion.surface.source[2].sharedMesh; // Declared Hair adapter.
-        if(source511==source&&output511==output&&controls511!=null)return indices511;
-        long start=Stopwatch.GetTimestamp();var asset=Resources.Load<TextAsset>("HeadCurve511");
-        if(!asset)throw new InvalidOperationException("511 model curve input not compiled");
-        using var r=new BinaryReader(new MemoryStream(asset.bytes));
+        if(source511==source&&output511==output&&controls511!=null&&ReferenceEquals(loadedCurveInput511,suppliedCurveInput511))return indices511;
+        long start=Stopwatch.GetTimestamp();var input=suppliedCurveInput511;
+        if(input==null){var asset=Resources.Load<TextAsset>("HeadCurve511");if(!asset)throw new InvalidOperationException("511 model curve input not compiled");input=asset.bytes;}
+        using var r=new BinaryReader(new MemoryStream(input));
         if(r.ReadInt32()!=511||r.ReadInt32()!=2)throw new InvalidOperationException("511 curve format differs");
         int nv=r.ReadInt32(),ns=r.ReadInt32();ulong expected=r.ReadUInt64();
         if(nv!=source.vertexCount||nv!=output.vertexCount||ns!=source.subMeshCount||ns!=output.subMeshCount||expected!=Fingerprint511(source))throw new InvalidOperationException("511 model topology/UV/bind signature requires automatic recompilation");
@@ -67,7 +72,7 @@ public static partial class HeadRegion502
             }
         }
         if(r.BaseStream.Position!=r.BaseStream.Length)throw new InvalidOperationException("511 curve input trailing data");
-        source511=source;output511=output;registered511=null;triangleCache511=false;triangles.Clear();Auto511Status="loaded automatic polygonal curves";
+        source511=source;output511=output;loadedCurveInput511=suppliedCurveInput511;registered511=null;triangleCache511=false;triangles.Clear();Auto511Status="loaded automatic polygonal curves";
         Auto511InitMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;return indices511;
     }
     static float[] Areas511(Full319View335 f,out RectInt bounds)
@@ -135,7 +140,7 @@ public static partial class HeadRegion502
     static int Part511(Packet p,int[][] indices){var a=indices[p.submesh];int i=p.primitive*3;return registeredTriangles511.Contains(Key511(a[i],a[i+1],a[i+2]))?1:2;}
     static void Release511()
     {
-        UseAutomaticCurve511=UseNegativeRegions563=UseNegativeBranches566=UseRegionFamilies574=false;RegionLayout574=null;NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();controls511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
+        UseAutomaticCurve511=UseNegativeRegions563=UseNegativeBranches566=UseRegionFamilies574=false;RegionLayout574=null;NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();controls511=null;suppliedCurveInput511=loadedCurveInput511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
         foreach(int at in usedBins511)bins511[at]?.Clear();usedBins511.Clear();registeredTriangles511.Clear();Auto511Areas=null;Auto511Status="disabled";ReleaseVisibility511();
     }
 }

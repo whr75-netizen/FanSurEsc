@@ -1,0 +1,99 @@
+{
+  "input": "Saved actual yaw260 Walk70; no new render",
+  "cell": [
+    206,
+    38
+  ],
+  "sourceHoleCellAreaDouble": 0.530209756980387,
+  "sourceHoleCellAreaFloat32": 0.5302097797393799,
+  "BoundaryCost": 0.14000000059604645,
+  "deltaUnselectedToSelected": {
+    "area": -0.060419559478759766,
+    "neighbourBoundary": 0.08201010525226593,
+    "total": 0.021590545773506165
+  },
+  "neighbours": [
+    {
+      "xy": [
+        205,
+        38
+      ],
+      "holeArea": 0.02654936589267536,
+      "selectedNegative": false,
+      "outsideEnvelopeForcedFalseByUnaryBound": true,
+      "pairWeight": 0.08201010525226593
+    },
+    {
+      "xy": [
+        207,
+        38
+      ],
+      "holeArea": 0.880993688164613,
+      "selectedNegative": true,
+      "outsideEnvelopeForcedFalseByUnaryBound": false,
+      "pairWeight": 0.08201010525226593
+    },
+    {
+      "xy": [
+        206,
+        37
+      ],
+      "holeArea": 0.0,
+      "selectedNegative": false,
+      "outsideEnvelopeForcedFalseByUnaryBound": true,
+      "pairWeight": 0.08201010525226593
+    },
+    {
+      "xy": [
+        206,
+        39
+      ],
+      "holeArea": 1.0,
+      "selectedNegative": true,
+      "outsideEnvelopeForcedFalseByUnaryBound": false,
+      "pairWeight": 0.08201010525226593
+    },
+    {
+      "xy": [
+        205,
+        37
+      ],
+      "holeArea": 0.0,
+      "selectedNegative": false,
+      "outsideEnvelopeForcedFalseByUnaryBound": true,
+      "pairWeight": 0.041005052626132965
+    },
+    {
+      "xy": [
+        207,
+        37
+      ],
+      "holeArea": 0.21444808857865205,
+      "selectedNegative": false,
+      "outsideEnvelopeForcedFalseByUnaryBound": false,
+      "pairWeight": 0.041005052626132965
+    },
+    {
+      "xy": [
+        205,
+        39
+      ],
+      "holeArea": 0.5758395937574627,
+      "selectedNegative": true,
+      "outsideEnvelopeForcedFalseByUnaryBound": false,
+      "pairWeight": 0.041005052626132965
+    },
+    {
+      "xy": [
+        207,
+        39
+      ],
+      "holeArea": 0.47662001323958236,
+      "selectedNegative": false,
+      "outsideEnvelopeForcedFalseByUnaryBound": false,
+      "pairWeight": 0.041005052626132965
+    }
+  ],
+  "conclusion": "The available four-connected bridge is omitted because adding it raises the existing cut objective. Adding it alone still touches the fixed exterior envelope and does not satisfy the closed-source KEEP contract. No cost/threshold/code change applied.",
+  "precision": "Cell intersection independently calculated from saved float32 curve vertices; total cell area matches polygon shoelace area to <1e-7. C# area arithmetic was not rerun because Editor launch was rejected."
+}

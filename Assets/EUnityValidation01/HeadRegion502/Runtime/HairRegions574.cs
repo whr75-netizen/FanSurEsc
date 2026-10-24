@@ -9,7 +9,7 @@ public static class HairRegions574
  public const double MinimumBroadWidth=2.0; // logical pixels: thinner features occupy at most one pixel across.
  [Serializable]public sealed class Family
  {
-  public string id,kind,mode;public double width,sourceArea;public bool sourceOpen;public int pixelCount,owner;
+  public string id,kind,mode;public double width,sourceArea;public bool sourceOpen,referenceOpen;public int pixelCount,owner;
   public long[] sourceEdges;public List<CurveArea511.P[]> polygons=new();
  }
  public sealed class Layout
@@ -89,7 +89,9 @@ public static class HairRegions574
   var sourceBranches=negative.Branches566();foreach(var b in sourceBranches)if(b.start566.kind=="open-mouth"||b.end566.kind=="open-mouth")closed[membership[b.geometry[0]]]=false;
   output.envelopeCurves.AddRange(positive);
   for(int i=0;i<features.Count;i++)if(closed[i]){var edge=Edges(features[i],original);var f=new Family{id="enclosed:"+string.Join(",",edge),kind="source-enclosed-component",sourceEdges=edge.ToArray(),polygons=Parts(features[i])};output.envelopeCurves.AddRange(f.polygons);output.families.Add(f);}
-  output.protectedPositive=SourcePositive(source,x,y,w,h);
+  // The signed source cut owns both positive hair and KEEP's negative cells.
+  // Continuous source closure and its coarse-grid opening remain separate facts.
+  output.protectedPositive=SourcePositive(source,x,y,w,h);var referenceOutside=Exterior(output.protectedPositive,w,h);
   var rootAreas=CurveArea511.Compute(output.envelopeCurves,x,y,w,h);var proposal=HeadRegion502.SelectRegions543(rootAreas,w,h,null,output.protectedPositive);var outside=Exterior(proposal,w,h);output.envelope=new bool[proposal.Length];
   for(int i=0;i<proposal.Length;i++)if(output.protectedPositive[i]&&!proposal[i])throw new InvalidOperationException("575 internal FILL erased the protected positive boundary");
   for(int i=0;i<proposal.Length;i++){output.envelope[i]=!outside[i];if(!proposal[i]&&!outside[i])output.filledAliasCells++;}
@@ -113,9 +115,11 @@ public static class HairRegions574
    for(int i=0;i<clipped.Length;i++){double a=rootAreas[i]+(double)holeAreas[i]-combined[i];if(a < -2e-6||a>Math.Min(rootAreas[i],holeAreas[i])+2e-6)throw new InvalidOperationException("574 noncanonical winding/area overlap");clipped[i]=(float)Math.Max(0,Math.Min(Math.Min(rootAreas[i],holeAreas[i]),a));family.sourceArea+=clipped[i];outsideArea+=Math.Max(0,holeAreas[i]-clipped[i]);}
    family.sourceOpen=outsideArea>1e-6;
    if(family.mode=="FILL"){output.filledFamilies++;continue;}
-   output.keptFamilies++;var hole=HeadRegion502.SelectRegions543(holeAreas,w,h,null);var visible=new bool[hole.Length];bool touches=false;
+   // Do not run a second, independent cut for KEEP: it can split a supported
+   // diagonal mouth and disagree with the already selected positive boundary.
+   output.keptFamilies++;var hole=new bool[holeAreas.Length];for(int i=0;i<hole.Length;i++)if(!output.protectedPositive[i]&&clipped[i]>0){hole[i]=true;if(referenceOutside[i])family.referenceOpen=true;}var visible=new bool[hole.Length];bool touches=false;
    for(int i=0;i<hole.Length;i++)if(hole[i]&&output.envelope[i]){visible[i]=true;family.pixelCount++;int xx=i%w,yy=i/w;if(xx==0||yy==0||xx==w-1||yy==h-1||!output.envelope[i-1]||!output.envelope[i+1]||!output.envelope[i-w]||!output.envelope[i+w])touches=true;if(output.owner[i]>1)throw new InvalidOperationException("574 KEEP families compete for one cell; source union is required");output.owner[i]=family.owner;output.selected[i]=false;}
-   if(Components(visible,w,h)!=1||touches!=family.sourceOpen)throw new InvalidOperationException("574 broad KEEP family loses its source topology: "+family.id);
+   if(Components(visible,w,h)!=1||touches!=family.referenceOpen)throw new InvalidOperationException("576 KEEP differs from the canonical signed region: "+family.id);
    for(int i=0;i<clipped.Length;i++)output.areas[i]=Math.Max(0,output.areas[i]-clipped[i]);
   }
   for(int i=0;i<proposal.Length;i++)if(output.selected[i]&&!output.envelope[i])throw new InvalidOperationException("574 family changed the authoritative exterior");

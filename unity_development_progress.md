@@ -3565,3 +3565,11 @@ Interactable (abstract base class)
 - 이번 실제81개 원입력에 이전574/575 선택기를 한번씩 재계산.실제575 불일치0/외부15표본복구/574양의영역손실0/추가양의셀0.목덜미21–24/41–48와후두부8–10 복구.실행간float입력차이는회귀로세지않고동일입력판정과분리했다.얼굴48표본 선택도574와동일하여기존동일ray검증재사용;새감사미실행 수치는null.
 - 이번내부CPU Build median(P95)기준294.91(386.06)/후보296.73(400.54)ms,영역3.29→17.76/기존packet256.74→250.74ms.계측창밖readback/파일쓰기,PlayerFPS/GPU/최적화효과 아님.할당미측정.기준뷰수정통과이나511방향·손·명암·모든시간품질·성능미해결로기본OFF.
 - 실제전신GIF3,475,191B/WebP1,511,586B 모두81프레임1350ms·보간/누락없음.동일입력마스크도표와현재실렌더구분·메인첫화면 최신화.검증기+직접MCP로입력/Animator/시계·cleanEdit·실험/ProfilerOFF 복원,사용자설정해시와547/550/553보존.Library403재시도/대량raw복사없음. [결과](docs/artifacts/hair-regions575/RESULT575.md).
+
+### 277. CHARACTER-RENDER-01 / 576 — 반대 옆 KEEP 공통 소유권·전체 캡처 수정 / 42번 보호 검사 미통과
+
+- 명시 승인된 HairRegions574 한 파일 수정 적용·컴파일. KEEP 독립 재cut 대신 signed 양의 형상과 같은 음의 셀 선택을 사용하고 sourceOpen/referenceOpen을 분리했다. FILL 폭/외부 보호/계수/이력은 유지. HeadCurve511 준비 입력 adapter는 기존 리소스 기본을 보존하며 자동 전 방향 지원은 아니다.
+- 실제 yaw26070–74 다섯 쌍·yaw80 원래 입력71–73 세 쌍은 제한 회귀 통과. 기존 저장yaw80 81마스크 동등성과 실제3쌍을 구분한다. 전체yaw260 첫 시도는0번OFF 고정 크롭의8셀누락으로poses0 중단. 렌더 변경 없이 캡처만 원본960×544전체저장으로 수정해0번1쌍과카메라/시간일치 확인.
+- 새 전체루프는0–41번42쌍 완료 후42번ON에서 기존 broad source parting narrow-cap 보호식이 거부했다. KEEP분기 이전 proposal/Exterior의닫힌영역검사이며 해당원본곡선/면적/42OFF 보존. 초과셀수치는미추출. 전체루프/루프연결미검증,방향전체실패로채택보류,제품헤어OFF.
+- 완료42쌍 경계밖/새닫힌구멍/같은비헤어meta색/머리밖전신색/눈버퍼차이0. 얼굴→헤어15표본은새source-ray원삼각형/UV/alpha/depth로앞얼굴덮임0;destination/world확대주장없음. 원본PNG85장작업경로유지,파생42프레임700ms부분전신GIF1,141,439B/무손실WebP480,536B,메인최신표시. 모든가닥시간품질통과아님.
+- 캡처중내부CPU median/P95 Build225.07/270.52ms,packet182.35/214.34,area16.67/34.07. 외부readback/파일쓰기와별도이며PlayerFPS/GPU/최적화효과아님. 새할당미측정. 직접Edit/씬clean/실험OFF/임시input0와입력/Animator/시계복원,Quality/Time해시보존. 손·명암·자동방향·성능별도미해결. [결과](docs/artifacts/hair-directions576/RESULT576.md).

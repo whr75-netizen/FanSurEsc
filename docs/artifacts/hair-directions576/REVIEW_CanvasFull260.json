@@ -1,0 +1,4422 @@
+{
+  "poses": 42,
+  "samePoseAndSource": true,
+  "ownerExact": true,
+  "outsideEnvelope": 0,
+  "outsideParent": 0,
+  "newClosedHoles": 0,
+  "sameNonHairMetaRGBChanges": 0,
+  "faceCoverageChanges": 15,
+  "faceChangesMissingSameRayPacket": 0,
+  "eyeSourceUnchanged": true,
+  "eyeVisibleBufferDiff": 0,
+  "sameRayEvidence": "Fresh ON packet source-ray witnesses for all 15 changed face cells; no opaque face in front. No destination-ray/world claim.",
+  "sourceFaceRayPackets": 15,
+  "sourceFaceSkinHits": 13,
+  "acceptedPacketsWithOpaqueSkinInFront": 0,
+  "acceptedPacketsWithAnyOpaqueFaceInFront": 0,
+  "wholeBodyChangesOutsideHeadROI": 0,
+  "timingsMeasuredDuringCaptureNotPlayerFPS": {
+    "OFF": {
+      "negativeGroups": {
+        "median": 7.0,
+        "p95": 9.0,
+        "min": 5.0,
+        "max": 9.0
+      },
+      "negativeMs": {
+        "median": 3.2965999999999998,
+        "p95": 11.025299999999994,
+        "min": 2.8698,
+        "max": 15.5695
+      },
+      "buildMs": {
+        "median": 217.03199999999998,
+        "p95": 300.76694499999996,
+        "min": 209.6458,
+        "max": 323.6811
+      },
+      "curveMs": {
+        "median": 0.033600000000000005,
+        "p95": 0.03977999999999999,
+        "min": 0.0307,
+        "max": 0.0516
+      },
+      "areaMs": {
+        "median": 4.5028,
+        "p95": 13.013515,
+        "min": 4.073,
+        "max": 19.5849
+      },
+      "packetMs": {
+        "median": 182.7184,
+        "p95": 237.62319999999997,
+        "min": 172.5466,
+        "max": 242.4055
+      },
+      "packets": {
+        "median": 506.0,
+        "p95": 510.0,
+        "min": 500.0,
+        "max": 512.0
+      },
+      "unsupported": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    },
+    "ON": {
+      "negativeGroups": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "negativeMs": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "buildMs": {
+        "median": 225.06765000000001,
+        "p95": 270.515295,
+        "min": 217.6504,
+        "max": 374.5472
+      },
+      "curveMs": {
+        "median": 0.032600000000000004,
+        "p95": 0.04558499999999999,
+        "min": 0.0301,
+        "max": 0.0631
+      },
+      "areaMs": {
+        "median": 16.67405,
+        "p95": 34.07425499999998,
+        "min": 15.05,
+        "max": 52.435
+      },
+      "packetMs": {
+        "median": 182.3494,
+        "p95": 214.343675,
+        "min": 174.0244,
+        "max": 296.1944
+      },
+      "packets": {
+        "median": 509.5,
+        "p95": 517.0,
+        "min": 505.0,
+        "max": 518.0
+      },
+      "unsupported": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    }
+  },
+  "faceSourceRayWitness": [],
+  "missingFaceWitnesses": [],
+  "rows": [
+    {
+      "frame": 0,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=14",
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=14"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 1,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=144 irisCovered=15",
+        "bitChannelDiff=0 scleraCovered=144 irisCovered=15"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 2,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=14",
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=14"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 3,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=14",
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=14"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 4,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=13",
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=13"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 5,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=137 irisCovered=13",
+        "bitChannelDiff=0 scleraCovered=137 irisCovered=13"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 6,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 2,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=134 irisCovered=15",
+        "bitChannelDiff=0 scleraCovered=134 irisCovered=15"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 7,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 2,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=13",
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=13"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 8,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=12",
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=12"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 9,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=14",
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=14"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 10,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=135 irisCovered=15",
+        "bitChannelDiff=0 scleraCovered=135 irisCovered=15"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 11,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=15",
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=15"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 12,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=13",
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=13"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 13,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 6,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=13",
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=13"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 14,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 3,
+      "addedHair": 3,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 7,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=139 irisCovered=12",
+        "bitChannelDiff=0 scleraCovered=139 irisCovered=12"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 15,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 6,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=15",
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=15"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 16,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 3,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=16",
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=16"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 17,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 3,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=17",
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=17"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 18,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 3,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=132 irisCovered=18",
+        "bitChannelDiff=0 scleraCovered=132 irisCovered=18"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 19,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 3,
+      "addedHair": 3,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=18",
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=18"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 20,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 3,
+      "addedHair": 3,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=17",
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=17"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 21,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=17",
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=17"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 22,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=139 irisCovered=18",
+        "bitChannelDiff=0 scleraCovered=139 irisCovered=18"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 23,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=137 irisCovered=18",
+        "bitChannelDiff=0 scleraCovered=137 irisCovered=18"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 24,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=18",
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=18"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 25,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=133 irisCovered=19",
+        "bitChannelDiff=0 scleraCovered=133 irisCovered=19"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 26,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 2,
+      "addedHair": 2,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 4,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=18",
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=18"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 27,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 4,
+      "addedHair": 4,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 6,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 2,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=19",
+        "bitChannelDiff=0 scleraCovered=138 irisCovered=19"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 28,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 4,
+      "addedHair": 4,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 6,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=22",
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=22"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 29,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 4,
+      "addedHair": 4,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 6,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=139 irisCovered=21",
+        "bitChannelDiff=0 scleraCovered=139 irisCovered=21"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 30,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 4,
+      "addedHair": 4,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 6,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=21",
+        "bitChannelDiff=0 scleraCovered=140 irisCovered=21"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 31,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 4,
+      "addedHair": 4,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 6,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=141 irisCovered=21",
+        "bitChannelDiff=0 scleraCovered=141 irisCovered=21"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 32,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 4,
+      "addedHair": 4,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 6,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=20",
+        "bitChannelDiff=0 scleraCovered=136 irisCovered=20"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 33,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 5,
+      "addedHair": 5,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 7,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=139 irisCovered=22",
+        "bitChannelDiff=0 scleraCovered=139 irisCovered=22"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 34,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 6,
+      "addedHair": 6,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 8,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=23",
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=23"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 35,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 16,
+      "addedHair": 16,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 24,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 2,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=23",
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=23"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 36,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 15,
+      "addedHair": 15,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 23,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=145 irisCovered=22",
+        "bitChannelDiff=0 scleraCovered=145 irisCovered=22"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 37,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 13,
+      "addedHair": 13,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 19,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=147 irisCovered=23",
+        "bitChannelDiff=0 scleraCovered=147 irisCovered=23"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 38,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 13,
+      "addedHair": 13,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 20,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=145 irisCovered=24",
+        "bitChannelDiff=0 scleraCovered=145 irisCovered=24"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 39,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 15,
+      "addedHair": 15,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 21,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=25",
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=25"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 40,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 15,
+      "addedHair": 15,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 21,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=144 irisCovered=25",
+        "bitChannelDiff=0 scleraCovered=144 irisCovered=25"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 41,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 15,
+      "addedHair": 15,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 21,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=26",
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=26"
+      ],
+      "eyeVisibleBufferDiff": 0
+    }
+  ],
+  "faceChanges": [
+    {
+      "frame": 14,
+      "main": [
+        219,
+        51
+      ],
+      "head": [
+        220,
+        50
+      ],
+      "before": [
+        13.68846321105957,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.686589241027832,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 19,
+      "main": [
+        218,
+        50
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.69772720336914,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.69367790222168,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 20,
+      "main": [
+        218,
+        50
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.698639869689941,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.694539070129395,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 27,
+      "main": [
+        220,
+        50
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.70460319519043,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.701031684875488,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 27,
+      "main": [
+        220,
+        51
+      ],
+      "head": [
+        219,
+        50
+      ],
+      "before": [
+        13.709220886230469,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.707468032836914,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 28,
+      "main": [
+        220,
+        50
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.70512866973877,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.701775550842285,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 29,
+      "main": [
+        220,
+        50
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.705537796020508,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.702422142028809,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 30,
+      "main": [
+        220,
+        50
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.7061767578125,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.702961921691895,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 35,
+      "main": [
+        220,
+        49
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.707761764526367,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.703064918518066,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 35,
+      "main": [
+        222,
+        50
+      ],
+      "head": [
+        221,
+        50
+      ],
+      "before": [
+        13.7057466506958,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.704029083251953,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 36,
+      "main": [
+        220,
+        49
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.707786560058594,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.702820777893066,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 37,
+      "main": [
+        220,
+        49
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.70761775970459,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.702354431152344,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 38,
+      "main": [
+        220,
+        49
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.707923889160156,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.702361106872559,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 39,
+      "main": [
+        219,
+        49
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.708248138427734,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.70242977142334,
+        14.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 40,
+      "main": [
+        219,
+        49
+      ],
+      "head": [
+        219,
+        49
+      ],
+      "before": [
+        13.7086763381958,
+        4.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.702631950378418,
+        14.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "imageRows": [
+    {
+      "frame": 0,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 1,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 2,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 3,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 4,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 5,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 6,
+      "changedScreenPixels": 8,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 7,
+      "changedScreenPixels": 8,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 8,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 9,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 10,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 11,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 12,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 13,
+      "changedScreenPixels": 24,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 14,
+      "changedScreenPixels": 28,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 15,
+      "changedScreenPixels": 24,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 16,
+      "changedScreenPixels": 12,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 17,
+      "changedScreenPixels": 12,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 18,
+      "changedScreenPixels": 12,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 19,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 20,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 21,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 22,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 23,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 24,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 25,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 26,
+      "changedScreenPixels": 16,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 27,
+      "changedScreenPixels": 24,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 28,
+      "changedScreenPixels": 24,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 29,
+      "changedScreenPixels": 24,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 30,
+      "changedScreenPixels": 24,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 31,
+      "changedScreenPixels": 24,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 32,
+      "changedScreenPixels": 24,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 33,
+      "changedScreenPixels": 28,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 34,
+      "changedScreenPixels": 32,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 35,
+      "changedScreenPixels": 96,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 36,
+      "changedScreenPixels": 92,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 37,
+      "changedScreenPixels": 76,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 38,
+      "changedScreenPixels": 76,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 39,
+      "changedScreenPixels": 84,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 40,
+      "changedScreenPixels": 84,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 41,
+      "changedScreenPixels": 84,
+      "changedOutsideHeadROI": 0
+    }
+  ],
+  "families": [
+    {
+      "frame": 0,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0828158029072767",
+      "area": "9.5613423544782563",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 1,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0868940116248211",
+      "area": "9.5697797512882516",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 2,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.090709947513858",
+      "area": "9.5782167442521313",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 3,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0936850244326877",
+      "area": "9.5835472295293584",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 4,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0959877871302979",
+      "area": "9.5872695998987183",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 5,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0977669419388576",
+      "area": "9.5890394288799143",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 6,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.09891652052886",
+      "area": "9.5898135676980019",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 7,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0995670165320917",
+      "area": "9.5886563071981072",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "13",
+      "owner": "2"
+    },
+    {
+      "frame": 8,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0993949360240549",
+      "area": "9.5855130320705939",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 9,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0985285724684957",
+      "area": "9.5791216464785975",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 10,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0968136288591097",
+      "area": "9.5691419478680473",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "11",
+      "owner": "2"
+    },
+    {
+      "frame": 11,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0941861075470456",
+      "area": "9.5554249297215534",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 12,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0906688155242534",
+      "area": "9.5374729337636381",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 13,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0862468011978024",
+      "area": "9.5153205336537212",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "11",
+      "owner": "2"
+    },
+    {
+      "frame": 14,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0810621048149187",
+      "area": "9.4884954321896657",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "11",
+      "owner": "2"
+    },
+    {
+      "frame": 15,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0751041477621186",
+      "area": "9.4581280082929879",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "11",
+      "owner": "2"
+    },
+    {
+      "frame": 16,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0686310066982969",
+      "area": "9.4245762564241886",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "11",
+      "owner": "2"
+    },
+    {
+      "frame": 17,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0623432523272243",
+      "area": "9.3890534741804",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "11",
+      "owner": "2"
+    },
+    {
+      "frame": 18,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.056254965492343",
+      "area": "9.3520222683437169",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 19,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0499985415685273",
+      "area": "9.314011205904535",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 20,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.04364684351458",
+      "area": "9.2755095945904031",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 21,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0371727824878292",
+      "area": "9.2363998501095921",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "13",
+      "owner": "2"
+    },
+    {
+      "frame": 22,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0325536490727814",
+      "area": "9.1968605413567275",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 23,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0299980099643733",
+      "area": "9.15699726715684",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 24,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0274620169079185",
+      "area": "9.11707088118419",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    },
+    {
+      "frame": 25,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0248724477614246",
+      "area": "9.0760021537716966",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "11",
+      "owner": "2"
+    },
+    {
+      "frame": 26,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0221856849051107",
+      "area": "9.035064021270955",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "11",
+      "owner": "2"
+    },
+    {
+      "frame": 27,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0195737588054214",
+      "area": "8.9944439620812773",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "10",
+      "owner": "2"
+    },
+    {
+      "frame": 28,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0169276331518518",
+      "area": "8.95455335843144",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "10",
+      "owner": "2"
+    },
+    {
+      "frame": 29,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0143394243474688",
+      "area": "8.9151669621505789",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "10",
+      "owner": "2"
+    },
+    {
+      "frame": 30,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0117222638471048",
+      "area": "8.87686499999836",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "10",
+      "owner": "2"
+    },
+    {
+      "frame": 31,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0092654177194049",
+      "area": "8.83988137068144",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "9",
+      "owner": "2"
+    },
+    {
+      "frame": 32,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.011522121069532432",
+      "area": "0.00040000127046369016",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 32,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0067786483683676",
+      "area": "8.8040898719918914",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "9",
+      "owner": "3"
+    },
+    {
+      "frame": 33,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.014697029466361755",
+      "area": "0.000636672688415274",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 33,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0043964497216962",
+      "area": "8.76976255630143",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "9",
+      "owner": "3"
+    },
+    {
+      "frame": 34,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.01746323731364896",
+      "area": "0.00088232957750733476",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 34,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0020972456923403",
+      "area": "8.7375193815678358",
+      "sourceOpen": "True",
+      "referenceOpen": "True",
+      "pixels": "9",
+      "owner": "3"
+    },
+    {
+      "frame": 35,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.019854770089068552",
+      "area": "0.0011231862008571625",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 35,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9999533311482196",
+      "area": "8.7068984773941338",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 36,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.021895659324712824",
+      "area": "0.0013487646356225014",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 36,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9980066463882906",
+      "area": "8.6789503050968051",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 37,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.023682479467055373",
+      "area": "0.0015612123534083366",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 37,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9960934033196622",
+      "area": "8.65293758455664",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 38,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.025179606119252185",
+      "area": "0.0017492531333118677",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 38,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9943697102290514",
+      "area": "8.62995700724423",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 39,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.02642805932293868",
+      "area": "0.0019135667243972421",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 39,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9928883699906237",
+      "area": "8.6101376470178366",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 40,
+      "id": "enclosed:88,89,90,91",
+      "mode": "FILL",
+      "width": "0.3549924412584744",
+      "area": "0.15270643495023251",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 40,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.02739332864359767",
+      "area": "0.0020448802970349789",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 40,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.991699524354317",
+      "area": "8.59408500045538",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "4"
+    },
+    {
+      "frame": 41,
+      "id": "enclosed:88,89,90,91",
+      "mode": "FILL",
+      "width": "0.35648657737365852",
+      "area": "0.15371519140899181",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 41,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.028181847880858868",
+      "area": "0.0021553256083279848",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 41,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9906583356107603",
+      "area": "8.5819437261670828",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "4"
+    }
+  ],
+  "KEEP_checks": [
+    {
+      "frame": 0,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 1,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 2,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 3,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 4,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 5,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 6,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 7,
+      "id": "hole-ring:1",
+      "pixels": 13,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 8,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 9,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 10,
+      "id": "hole-ring:1",
+      "pixels": 11,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 11,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 12,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 13,
+      "id": "hole-ring:1",
+      "pixels": 11,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 14,
+      "id": "hole-ring:1",
+      "pixels": 11,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 15,
+      "id": "hole-ring:1",
+      "pixels": 11,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 16,
+      "id": "hole-ring:1",
+      "pixels": 11,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 17,
+      "id": "hole-ring:1",
+      "pixels": 11,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 18,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 19,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 20,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 21,
+      "id": "hole-ring:1",
+      "pixels": 13,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 22,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 23,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 24,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 25,
+      "id": "hole-ring:1",
+      "pixels": 11,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 26,
+      "id": "hole-ring:1",
+      "pixels": 11,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 27,
+      "id": "hole-ring:1",
+      "pixels": 10,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 28,
+      "id": "hole-ring:1",
+      "pixels": 10,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 29,
+      "id": "hole-ring:1",
+      "pixels": 10,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 30,
+      "id": "hole-ring:1",
+      "pixels": 10,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 31,
+      "id": "hole-ring:1",
+      "pixels": 9,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 32,
+      "id": "hole-ring:1",
+      "pixels": 9,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 33,
+      "id": "hole-ring:1",
+      "pixels": 9,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    },
+    {
+      "frame": 34,
+      "id": "hole-ring:1",
+      "pixels": 9,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": true,
+      "referenceOpen": true,
+      "valid": true
+    }
+  ],
+  "KEEP_all_valid": true,
+  "originalCanvasChecks": [
+    {
+      "frame": 0,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 8,
+          "visibleLogicalCells": 2891,
+          "charBounds": [
+            173,
+            34,
+            258,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 8,
+          "visibleLogicalCells": 2892,
+          "charBounds": [
+            173,
+            34,
+            258,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 1,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2889,
+          "charBounds": [
+            175,
+            34,
+            259,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2890,
+          "charBounds": [
+            175,
+            34,
+            259,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2896,
+          "charBounds": [
+            176,
+            34,
+            260,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2897,
+          "charBounds": [
+            176,
+            34,
+            260,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2902,
+          "charBounds": [
+            178,
+            34,
+            260,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2903,
+          "charBounds": [
+            178,
+            34,
+            260,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2906,
+          "charBounds": [
+            180,
+            34,
+            260,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2907,
+          "charBounds": [
+            180,
+            34,
+            260,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2910,
+          "charBounds": [
+            181,
+            34,
+            259,
+            166
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2912,
+          "charBounds": [
+            181,
+            34,
+            259,
+            166
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2896,
+          "charBounds": [
+            183,
+            34,
+            259,
+            166
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2897,
+          "charBounds": [
+            183,
+            34,
+            259,
+            166
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2887,
+          "charBounds": [
+            185,
+            34,
+            259,
+            166
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2888,
+          "charBounds": [
+            185,
+            34,
+            259,
+            166
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2882,
+          "charBounds": [
+            187,
+            34,
+            259,
+            166
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2883,
+          "charBounds": [
+            187,
+            34,
+            259,
+            166
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2862,
+          "charBounds": [
+            189,
+            34,
+            259,
+            166
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2863,
+          "charBounds": [
+            189,
+            34,
+            259,
+            166
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 10,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2849,
+          "charBounds": [
+            191,
+            34,
+            258,
+            167
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2850,
+          "charBounds": [
+            191,
+            34,
+            258,
+            167
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 11,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2802,
+          "charBounds": [
+            193,
+            34,
+            257,
+            167
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2803,
+          "charBounds": [
+            193,
+            34,
+            257,
+            167
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 12,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2758,
+          "charBounds": [
+            194,
+            34,
+            256,
+            167
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2759,
+          "charBounds": [
+            194,
+            34,
+            256,
+            167
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 13,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2720,
+          "charBounds": [
+            196,
+            34,
+            254,
+            168
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2722,
+          "charBounds": [
+            196,
+            34,
+            254,
+            168
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 14,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2663,
+          "charBounds": [
+            198,
+            34,
+            253,
+            168
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2665,
+          "charBounds": [
+            198,
+            34,
+            253,
+            168
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 15,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2631,
+          "charBounds": [
+            199,
+            34,
+            251,
+            168
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2633,
+          "charBounds": [
+            199,
+            34,
+            251,
+            168
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 16,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2627,
+          "charBounds": [
+            201,
+            34,
+            249,
+            169
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2628,
+          "charBounds": [
+            201,
+            34,
+            249,
+            169
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 17,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2642,
+          "charBounds": [
+            202,
+            34,
+            246,
+            169
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2643,
+          "charBounds": [
+            202,
+            34,
+            246,
+            169
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 18,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2644,
+          "charBounds": [
+            200,
+            34,
+            244,
+            169
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2645,
+          "charBounds": [
+            200,
+            34,
+            244,
+            169
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 19,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2648,
+          "charBounds": [
+            198,
+            34,
+            242,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2649,
+          "charBounds": [
+            198,
+            34,
+            242,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 20,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2636,
+          "charBounds": [
+            197,
+            34,
+            239,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2637,
+          "charBounds": [
+            197,
+            34,
+            239,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 21,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2602,
+          "charBounds": [
+            195,
+            34,
+            236,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2603,
+          "charBounds": [
+            195,
+            34,
+            236,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 22,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2577,
+          "charBounds": [
+            194,
+            34,
+            236,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2578,
+          "charBounds": [
+            194,
+            34,
+            236,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 23,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2578,
+          "charBounds": [
+            193,
+            34,
+            236,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2579,
+          "charBounds": [
+            193,
+            34,
+            236,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 24,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2677,
+          "charBounds": [
+            192,
+            34,
+            237,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2678,
+          "charBounds": [
+            192,
+            34,
+            237,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 25,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2728,
+          "charBounds": [
+            191,
+            34,
+            237,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2729,
+          "charBounds": [
+            191,
+            34,
+            237,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 26,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2751,
+          "charBounds": [
+            191,
+            34,
+            238,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2752,
+          "charBounds": [
+            191,
+            34,
+            238,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 27,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2771,
+          "charBounds": [
+            190,
+            34,
+            238,
+            170
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2772,
+          "charBounds": [
+            190,
+            34,
+            238,
+            170
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 28,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2795,
+          "charBounds": [
+            190,
+            34,
+            238,
+            169
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2796,
+          "charBounds": [
+            190,
+            34,
+            238,
+            169
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 29,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2805,
+          "charBounds": [
+            190,
+            34,
+            240,
+            169
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2806,
+          "charBounds": [
+            190,
+            34,
+            240,
+            169
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 30,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2823,
+          "charBounds": [
+            189,
+            34,
+            241,
+            169
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2824,
+          "charBounds": [
+            189,
+            34,
+            241,
+            169
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 31,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2853,
+          "charBounds": [
+            186,
+            33,
+            243,
+            168
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2854,
+          "charBounds": [
+            186,
+            33,
+            243,
+            168
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 32,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2852,
+          "charBounds": [
+            183,
+            33,
+            244,
+            168
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2853,
+          "charBounds": [
+            183,
+            33,
+            244,
+            168
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 33,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2856,
+          "charBounds": [
+            181,
+            33,
+            245,
+            168
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2857,
+          "charBounds": [
+            181,
+            33,
+            245,
+            168
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 34,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2841,
+          "charBounds": [
+            179,
+            33,
+            247,
+            167
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2843,
+          "charBounds": [
+            179,
+            33,
+            247,
+            167
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 35,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2836,
+          "charBounds": [
+            177,
+            33,
+            248,
+            167
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2847,
+          "charBounds": [
+            177,
+            33,
+            248,
+            167
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 36,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2832,
+          "charBounds": [
+            176,
+            33,
+            249,
+            166
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2843,
+          "charBounds": [
+            176,
+            33,
+            249,
+            166
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 37,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2850,
+          "charBounds": [
+            175,
+            33,
+            251,
+            166
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2859,
+          "charBounds": [
+            175,
+            33,
+            251,
+            166
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 38,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 5,
+          "visibleLogicalCells": 2854,
+          "charBounds": [
+            173,
+            33,
+            252,
+            166
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 5,
+          "visibleLogicalCells": 2863,
+          "charBounds": [
+            173,
+            33,
+            252,
+            166
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 39,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 11,
+          "visibleLogicalCells": 2869,
+          "charBounds": [
+            172,
+            33,
+            253,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 11,
+          "visibleLogicalCells": 2880,
+          "charBounds": [
+            172,
+            33,
+            253,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 40,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 11,
+          "visibleLogicalCells": 2877,
+          "charBounds": [
+            172,
+            33,
+            255,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 11,
+          "visibleLogicalCells": 2888,
+          "charBounds": [
+            172,
+            33,
+            255,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 41,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 3,
+          "visibleLogicalCells": 2881,
+          "charBounds": [
+            174,
+            33,
+            255,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 3,
+          "visibleLogicalCells": 2893,
+          "charBounds": [
+            174,
+            33,
+            255,
+            165
+          ]
+        }
+      ]
+    }
+  ],
+  "originalCanvasAllValid": true,
+  "comparisonDefinition": {
+    "OFF": "same yaw260 prepared curve input, signed selection566",
+    "ON": "same input, common signed-region KEEP576",
+    "notCompared": "native head/product default OFF is not the left side of this narrow causal comparison"
+  },
+  "captureStatus": {
+    "status": "FAILED",
+    "poses": 42,
+    "error": "System.Exception: unsupported: 574 broad source parting sealed outside its narrow cap: y|0:41,0:42,0:43,0:44,0:45,0:46,0:47,0:48,0:49,0:50,0:51,0:52,0:53,0:54    at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CanvasView576.Capture () [0x00124] in <10afffd6f65446f7bcf9308ed102a37a>:0 ",
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true
+  },
+  "wholeLoopPassed": false
+}

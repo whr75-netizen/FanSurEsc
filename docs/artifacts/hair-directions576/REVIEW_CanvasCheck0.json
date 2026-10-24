@@ -1,0 +1,233 @@
+{
+  "poses": 1,
+  "samePoseAndSource": true,
+  "ownerExact": true,
+  "outsideEnvelope": 0,
+  "outsideParent": 0,
+  "newClosedHoles": 0,
+  "sameNonHairMetaRGBChanges": 0,
+  "faceCoverageChanges": 0,
+  "faceChangesMissingSameRayPacket": null,
+  "eyeSourceUnchanged": true,
+  "eyeVisibleBufferDiff": 0,
+  "sameRayEvidence": "Fresh same-ray witnesses are captured in this run if face coverage changes; pending inspection",
+  "sourceFaceRayPackets": 0,
+  "sourceFaceSkinHits": 0,
+  "acceptedPacketsWithOpaqueSkinInFront": null,
+  "acceptedPacketsWithAnyOpaqueFaceInFront": null,
+  "wholeBodyChangesOutsideHeadROI": 0,
+  "timingsMeasuredDuringCaptureNotPlayerFPS": {
+    "OFF": {
+      "negativeGroups": {
+        "median": 5.0,
+        "p95": 5.0,
+        "min": 5.0,
+        "max": 5.0
+      },
+      "negativeMs": {
+        "median": 15.6019,
+        "p95": 15.6019,
+        "min": 15.6019,
+        "max": 15.6019
+      },
+      "buildMs": {
+        "median": 263.9462,
+        "p95": 263.9462,
+        "min": 263.9462,
+        "max": 263.9462
+      },
+      "curveMs": {
+        "median": 0.0569,
+        "p95": 0.0569,
+        "min": 0.0569,
+        "max": 0.0569
+      },
+      "areaMs": {
+        "median": 20.2404,
+        "p95": 20.2404,
+        "min": 20.2404,
+        "max": 20.2404
+      },
+      "packetMs": {
+        "median": 190.2965,
+        "p95": 190.2965,
+        "min": 190.2965,
+        "max": 190.2965
+      },
+      "packets": {
+        "median": 510.0,
+        "p95": 510.0,
+        "min": 510.0,
+        "max": 510.0
+      },
+      "unsupported": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    },
+    "ON": {
+      "negativeGroups": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "negativeMs": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "buildMs": {
+        "median": 237.3148,
+        "p95": 237.3148,
+        "min": 237.3148,
+        "max": 237.3148
+      },
+      "curveMs": {
+        "median": 0.0365,
+        "p95": 0.0365,
+        "min": 0.0365,
+        "max": 0.0365
+      },
+      "areaMs": {
+        "median": 25.6462,
+        "p95": 25.6462,
+        "min": 25.6462,
+        "max": 25.6462
+      },
+      "packetMs": {
+        "median": 185.0572,
+        "p95": 185.0572,
+        "min": 185.0572,
+        "max": 185.0572
+      },
+      "packets": {
+        "median": 511.0,
+        "p95": 511.0,
+        "min": 511.0,
+        "max": 511.0
+      },
+      "unsupported": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    }
+  },
+  "faceSourceRayWitness": [],
+  "missingFaceWitnesses": [],
+  "rows": [
+    {
+      "frame": 0,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 1,
+      "addedHair": 1,
+      "removedHair": 0,
+      "closedHoles4": [
+        0,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 5,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=14",
+        "bitChannelDiff=0 scleraCovered=142 irisCovered=14"
+      ],
+      "eyeVisibleBufferDiff": 0
+    }
+  ],
+  "faceChanges": [],
+  "imageRows": [
+    {
+      "frame": 0,
+      "changedScreenPixels": 20,
+      "changedOutsideHeadROI": 0
+    }
+  ],
+  "families": [
+    {
+      "frame": 0,
+      "id": "hole-ring:1",
+      "mode": "KEEP",
+      "width": "2.0828158029072767",
+      "area": "9.5613423544782563",
+      "sourceOpen": "False",
+      "referenceOpen": "True",
+      "pixels": "12",
+      "owner": "2"
+    }
+  ],
+  "KEEP_checks": [
+    {
+      "frame": 0,
+      "id": "hole-ring:1",
+      "pixels": 12,
+      "components4": 1,
+      "touchesExterior": true,
+      "sourceOpen": false,
+      "referenceOpen": true,
+      "valid": true
+    }
+  ],
+  "KEEP_all_valid": true,
+  "originalCanvasChecks": [
+    {
+      "frame": 0,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 8,
+          "visibleLogicalCells": 2891,
+          "charBounds": [
+            173,
+            34,
+            258,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 8,
+          "visibleLogicalCells": 2892,
+          "charBounds": [
+            173,
+            34,
+            258,
+            165
+          ]
+        }
+      ]
+    }
+  ],
+  "originalCanvasAllValid": true,
+  "comparisonDefinition": {
+    "OFF": "same yaw260 prepared curve input, signed selection566",
+    "ON": "same input, common signed-region KEEP576",
+    "notCompared": "native head/product default OFF is not the left side of this narrow causal comparison"
+  }
+}

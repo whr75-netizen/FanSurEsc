@@ -6,19 +6,26 @@ using System.Collections.Generic;
 public sealed class NegativeRegion563
 {
  public struct Span {public double lo,hi,l0,l1,r0,r1;public long left,right;}
+ public sealed class BoundaryEvent566
+ {
+  public string kind;public double level,left,right;public long leftId,rightId;
+  public readonly List<string> neighbours=new();
+ }
  public sealed class Feature
  {
   public string boundaryId,relationId;public double area;public int centreCount;
   public readonly List<Span> geometry=new();
   public readonly Dictionary<int,double> cellArea=new();
+  public readonly List<long> leftPath566=new(),rightPath566=new();
+  public BoundaryEvent566 start566,end566;
   public int[] OwnedCells(){var cells=new List<int>();foreach(var pair in cellArea)if(pair.Value>.5)cells.Add(pair.Key);cells.Sort();return cells.ToArray();}
  }
  struct PositiveSpan{public double l0,l1,r0,r1;public long left,right;}
- sealed class Node{public int parent;public double lo,hi,l0,l1,r0,r1,area;public long left,right;public int centres;public readonly Dictionary<int,double> cells=new();}
- readonly int x0,y0,width,height,originalWidth;readonly bool transpose;
+ sealed class Node{public int parent;public double lo,hi,l0,l1,r0,r1,area;public long left,right;public int centres;public readonly Dictionary<int,double> cells=new();public List<int> previous,next;}
+ readonly int x0,y0,width,height,originalWidth;readonly bool transpose,keepBranches566;
  readonly List<PositiveSpan> positive=new();readonly List<Node> nodes=new();
  List<int> previous=new();double lo,hi,previousHi=double.NaN;
- public NegativeRegion563(int x0,int y0,int width,int height,bool transpose=false){this.x0=x0;this.y0=y0;this.width=width;this.height=height;this.transpose=transpose;originalWidth=transpose?height:width;}
+ public NegativeRegion563(int x0,int y0,int width,int height,bool transpose=false,bool branchGraph566=false){this.x0=x0;this.y0=y0;this.width=width;this.height=height;this.transpose=transpose;keepBranches566=branchGraph566;originalWidth=transpose?height:width;}
  public long EdgeId(int ring,int segment,int count)=>((long)ring<<32)|(uint)(transpose?(count-2-segment+count)%count:segment);
  int Root(int i){while(nodes[i].parent!=i){nodes[i].parent=nodes[nodes[i].parent].parent;i=nodes[i].parent;}return i;}
  int Index(int x,int y)=>transpose?(x-x0)*originalWidth+y-y0:(y-y0)*originalWidth+x-x0;
@@ -31,7 +38,8 @@ public sealed class NegativeRegion563
   {
    var a=positive[i];var b=positive[i+1];double l0=a.r0,l1=a.r1,r0=b.l0,r1=b.l1;if((r0+r1-l0-l1)*.5<=1e-12)continue;
    int id=nodes.Count;var n=new Node{parent=id,lo=lo,hi=hi,l0=l0,l1=l1,r0=r0,r1=r1,left=a.right,right=b.left,area=dy*(r0+r1-l0-l1)*.5};nodes.Add(n);current.Add(id);
-   if(previousHi==lo)foreach(int other in previous){var p=nodes[other];if(Math.Min(r0,p.r1)-Math.Max(l0,p.l1)>1e-12)nodes[Root(id)].parent=Root(other);}
+   if(keepBranches566){n.previous=new();n.next=new();}
+   if(previousHi==lo)foreach(int other in previous){var p=nodes[other];if(Math.Min(r0,p.r1)-Math.Max(l0,p.l1)>1e-12){nodes[Root(id)].parent=Root(other);if(keepBranches566){n.previous.Add(other);p.next.Add(id);}}}
    // CurveArea already splits at integer-grid crossings. The clipped span is
    // linear within this band, so the trapezoid integral is exact, not sampling.
    int first=Math.Max(x0,(int)Math.Floor((l0+l1)*.5)),last=Math.Min(x0+width-1,(int)Math.Floor((r0+r1)*.5));
@@ -45,6 +53,32 @@ public sealed class NegativeRegion563
   var components=new Dictionary<int,Feature>();var boundaries=new Dictionary<int,Dictionary<long,bool>>();
   for(int i=0;i<nodes.Count;i++){int root=Root(i);var n=nodes[i];if(!components.TryGetValue(root,out var f)){components.Add(root,f=new Feature());boundaries.Add(root,new());}f.area+=n.area;f.centreCount+=n.centres;f.geometry.Add(new Span{lo=n.lo,hi=n.hi,l0=n.l0,l1=n.l1,r0=n.r0,r1=n.r1,left=n.left,right=n.right});boundaries[root][n.left]=boundaries[root][n.right]=true;foreach(var p in n.cells){f.cellArea.TryGetValue(p.Key,out double old);f.cellArea[p.Key]=old+p.Value;}}
   var result=new List<Feature>();foreach(var p in components){var ids=new List<long>(boundaries[p.Key].Keys);ids.Sort();var words=new List<string>();foreach(long id in ids)words.Add((id>>32)+":"+(uint)id);p.Value.boundaryId=(transpose?"x|":"y|")+string.Join(",",words);var relations=new List<string>();foreach(var s in p.Value.geometry){string q=(s.left>>32)+":"+(uint)s.left+">"+(s.right>>32)+":"+(uint)s.right;if(!relations.Contains(q))relations.Add(q);}relations.Sort(StringComparer.Ordinal);p.Value.relationId=(transpose?"x|":"y|")+string.Join(",",relations);result.Add(p.Value);}result.Sort((a,b)=>string.CompareOrdinal(a.boundaryId,b.boundaryId));return result;
+ }
+ // Maximal source chains between continuous split/merge/cap/mouth events.
+ // Integer-grid band subdivision does not create a branch. Cell incidence is
+ // attached only after the source chain and its ordered boundary identity exist.
+ public List<Feature> Branches566()
+ {
+  if(!keepBranches566)throw new InvalidOperationException("566 source adjacency was not requested");
+  var paths=new List<List<int>>();var branchOf=new int[nodes.Count];
+  for(int i=0;i<nodes.Count;i++){var n=nodes[i];int b;if(n.previous.Count==1&&nodes[n.previous[0]].next.Count==1){b=branchOf[n.previous[0]];paths[b].Add(i);}else{b=paths.Count;paths.Add(new List<int>{i});}branchOf[i]=b;}
+  string Edge(long id)=>(id>>32)+":"+(uint)id;
+  string Path(List<long> ids){var words=new List<string>();foreach(long id in ids)words.Add(Edge(id));return string.Join(",",words);}
+  BoundaryEvent566 Event(Node n,bool first)
+  {
+   var adjacent=first?n.previous:n.next;double l=first?n.l0:n.l1,r=first?n.r0:n.r1;
+   string kind=adjacent.Count==0?(Math.Abs(r-l)<=1e-10?"cap":"open-mouth"):adjacent.Count>1?(first?"merge":"split"):(first?"split":"merge");
+   return new BoundaryEvent566{kind=kind,level=first?n.lo:n.hi,left=l,right=r,leftId=n.left,rightId=n.right};
+  }
+  var result=new List<Feature>();
+  foreach(var path in paths)
+  {
+   var f=new Feature{start566=Event(nodes[path[0]],true),end566=Event(nodes[path[path.Count-1]],false)};
+   foreach(int i in path){var n=nodes[i];f.area+=n.area;f.centreCount+=n.centres;f.geometry.Add(new Span{lo=n.lo,hi=n.hi,l0=n.l0,l1=n.l1,r0=n.r0,r1=n.r1,left=n.left,right=n.right});if(f.leftPath566.Count==0||f.leftPath566[f.leftPath566.Count-1]!=n.left)f.leftPath566.Add(n.left);if(f.rightPath566.Count==0||f.rightPath566[f.rightPath566.Count-1]!=n.right)f.rightPath566.Add(n.right);foreach(var p in n.cells){f.cellArea.TryGetValue(p.Key,out double old);f.cellArea[p.Key]=old+p.Value;}}
+   f.boundaryId=(transpose?"x|":"y|")+"L:"+Path(f.leftPath566)+"|R:"+Path(f.rightPath566)+"|"+f.start566.kind+">"+f.end566.kind;f.relationId=f.boundaryId;result.Add(f);
+  }
+  for(int b=0;b<paths.Count;b++){var path=paths[b];foreach(int i in nodes[path[0]].previous){string id=result[branchOf[i]].boundaryId;if(!result[b].start566.neighbours.Contains(id))result[b].start566.neighbours.Add(id);}foreach(int i in nodes[path[path.Count-1]].next){string id=result[branchOf[i]].boundaryId;if(!result[b].end566.neighbours.Contains(id))result[b].end566.neighbours.Add(id);}}
+  return result;
  }
  // Feature records are never discarded. Only the selector's cell constraints
  // omit singleton/empty lists; they are not feature existence or identity.

@@ -1,0 +1,1240 @@
+[
+  {
+    "frame": 15,
+    "sourceRegions": 23,
+    "branches": 33,
+    "targetBranches": [
+      {
+        "id": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+        "axis": "y",
+        "area": 2.2203838132562597,
+        "start": {
+          "kind": "cap",
+          "level": 53.59088897705078,
+          "interval": [
+            223.82168579101562,
+            223.82168579101562
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.696868896484375,
+          "interval": [
+            223.20822143554688,
+            223.23678364829743
+          ],
+          "boundary": [
+            "0:43",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "y|L:0:45|R:0:40|merge>merge"
+          ]
+        },
+        "leftPath": [
+          "0:42",
+          "0:43"
+        ],
+        "rightPath": [
+          "0:41",
+          "0:40"
+        ],
+        "sourceFeature": "y|0:32,0:33,0:34,0:35,0:36,0:37,0:38,0:39,0:40,0:41,0:42,0:43,0:44,0:45",
+        "nodes": 63,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.5684886077018353,
+        "ownedCoordinates": [
+          [
+            223,
+            56
+          ]
+        ]
+      },
+      {
+        "id": "x|L:0:42|R:0:43|cap>merge",
+        "axis": "x",
+        "area": 0.8355940622836971,
+        "start": {
+          "kind": "cap",
+          "level": 222.69483947753906,
+          "interval": [
+            56.99040985107422,
+            56.99040985107422
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 223.20822143554688,
+          "interval": [
+            55.4416159634587,
+            58.696868896484375
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:40,0:41|merge>cap"
+          ]
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:43"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 8,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.20741424516684306,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "x|L:0:42|R:0:40,0:41|merge>cap",
+        "axis": "x",
+        "area": 1.3861839491617038,
+        "start": {
+          "kind": "merge",
+          "level": 223.20822143554688,
+          "interval": [
+            55.4416159634587,
+            58.79449425914861
+          ],
+          "boundary": [
+            "0:42",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:43|cap>merge",
+            "x|L:0:44|R:0:40|open-mouth>merge"
+          ]
+        },
+        "end": {
+          "kind": "cap",
+          "level": 223.82168579101562,
+          "interval": [
+            53.59088897705078,
+            53.59088897705078
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:40",
+          "0:41"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 10,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.3610743625349897,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+        "axis": "y",
+        "area": 2.2203838132562597,
+        "start": {
+          "kind": "cap",
+          "level": 53.59088897705078,
+          "interval": [
+            223.82168579101562,
+            223.82168579101562
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.696868896484375,
+          "interval": [
+            223.20822143554688,
+            223.23678364829743
+          ],
+          "boundary": [
+            "0:43",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "y|L:0:45|R:0:40|merge>merge"
+          ]
+        },
+        "leftPath": [
+          "0:42",
+          "0:43"
+        ],
+        "rightPath": [
+          "0:41",
+          "0:40"
+        ],
+        "sourceFeature": "y|0:32,0:33,0:34,0:35,0:36,0:37,0:38,0:39,0:40,0:41,0:42,0:43,0:44,0:45",
+        "nodes": 63,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.48253733787092135,
+        "ownedCoordinates": [
+          [
+            223,
+            56
+          ]
+        ]
+      },
+      {
+        "id": "x|L:0:42|R:0:43|cap>merge",
+        "axis": "x",
+        "area": 0.8355940622836971,
+        "start": {
+          "kind": "cap",
+          "level": 222.69483947753906,
+          "interval": [
+            56.99040985107422,
+            56.99040985107422
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 223.20822143554688,
+          "interval": [
+            55.4416159634587,
+            58.696868896484375
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:40,0:41|merge>cap"
+          ]
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:43"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 8,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.208221435546875,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "x|L:0:42|R:0:40,0:41|merge>cap",
+        "axis": "x",
+        "area": 1.3861839491617038,
+        "start": {
+          "kind": "merge",
+          "level": 223.20822143554688,
+          "interval": [
+            55.4416159634587,
+            58.79449425914861
+          ],
+          "boundary": [
+            "0:42",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:43|cap>merge",
+            "x|L:0:44|R:0:40|open-mouth>merge"
+          ]
+        },
+        "end": {
+          "kind": "cap",
+          "level": 223.82168579101562,
+          "interval": [
+            53.59088897705078,
+            53.59088897705078
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:40",
+          "0:41"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 10,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.2743159023240452,
+        "ownedCoordinates": []
+      }
+    ]
+  },
+  {
+    "frame": 16,
+    "sourceRegions": 24,
+    "branches": 34,
+    "targetBranches": [
+      {
+        "id": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+        "axis": "y",
+        "area": 2.2395309381604656,
+        "start": {
+          "kind": "cap",
+          "level": 53.572235107421875,
+          "interval": [
+            223.86402893066406,
+            223.86402893066406
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.68519592285156,
+          "interval": [
+            223.240966796875,
+            223.2783609062672
+          ],
+          "boundary": [
+            "0:43",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "y|L:0:45|R:0:40|merge>merge"
+          ]
+        },
+        "leftPath": [
+          "0:42",
+          "0:43"
+        ],
+        "rightPath": [
+          "0:41",
+          "0:40"
+        ],
+        "sourceFeature": "y|0:32,0:33,0:34,0:35,0:36,0:37,0:38,0:39,0:40,0:41,0:42,0:43,0:44,0:45",
+        "nodes": 62,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.6073729459894964,
+        "ownedCoordinates": [
+          [
+            223,
+            56
+          ],
+          [
+            223,
+            57
+          ]
+        ]
+      },
+      {
+        "id": "x|L:0:42|R:0:43|cap>merge",
+        "axis": "x",
+        "area": 0.812489259239015,
+        "start": {
+          "kind": "cap",
+          "level": 222.73779296875,
+          "interval": [
+            56.97682189941406,
+            56.97682189941406
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 223.240966796875,
+          "interval": [
+            55.455738372300374,
+            58.68519592285156
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:40,0:41|merge>cap"
+          ]
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:43"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 8,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.2353563185031927,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "x|L:0:42|R:0:40,0:41|merge>cap",
+        "axis": "x",
+        "area": 1.4293877246150026,
+        "start": {
+          "kind": "merge",
+          "level": 223.240966796875,
+          "interval": [
+            55.455738372300374,
+            58.81067267476144
+          ],
+          "boundary": [
+            "0:42",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:43|cap>merge",
+            "x|L:0:44|R:0:40|open-mouth>merge"
+          ]
+        },
+        "end": {
+          "kind": "cap",
+          "level": 223.86402893066406,
+          "interval": [
+            53.572235107421875,
+            53.572235107421875
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:40",
+          "0:41"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 10,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.3720166274863151,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+        "axis": "y",
+        "area": 2.2395309381604656,
+        "start": {
+          "kind": "cap",
+          "level": 53.572235107421875,
+          "interval": [
+            223.86402893066406,
+            223.86402893066406
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.68519592285156,
+          "interval": [
+            223.240966796875,
+            223.2783609062672
+          ],
+          "boundary": [
+            "0:43",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "y|L:0:45|R:0:40|merge>merge"
+          ]
+        },
+        "leftPath": [
+          "0:42",
+          "0:43"
+        ],
+        "rightPath": [
+          "0:41",
+          "0:40"
+        ],
+        "sourceFeature": "y|0:32,0:33,0:34,0:35,0:36,0:37,0:38,0:39,0:40,0:41,0:42,0:43,0:44,0:45",
+        "nodes": 62,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.5246268864354264,
+        "ownedCoordinates": [
+          [
+            223,
+            56
+          ],
+          [
+            223,
+            57
+          ]
+        ]
+      },
+      {
+        "id": "x|L:0:42|R:0:43|cap>merge",
+        "axis": "x",
+        "area": 0.812489259239015,
+        "start": {
+          "kind": "cap",
+          "level": 222.73779296875,
+          "interval": [
+            56.97682189941406,
+            56.97682189941406
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 223.240966796875,
+          "interval": [
+            55.455738372300374,
+            58.68519592285156
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:40,0:41|merge>cap"
+          ]
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:43"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 8,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.23836438937814308,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "x|L:0:42|R:0:40,0:41|merge>cap",
+        "axis": "x",
+        "area": 1.4293877246150026,
+        "start": {
+          "kind": "merge",
+          "level": 223.240966796875,
+          "interval": [
+            55.455738372300374,
+            58.81067267476144
+          ],
+          "boundary": [
+            "0:42",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:43|cap>merge",
+            "x|L:0:44|R:0:40|open-mouth>merge"
+          ]
+        },
+        "end": {
+          "kind": "cap",
+          "level": 223.86402893066406,
+          "interval": [
+            53.572235107421875,
+            53.572235107421875
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:40",
+          "0:41"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 10,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.2862624970572805,
+        "ownedCoordinates": []
+      }
+    ]
+  },
+  {
+    "frame": 17,
+    "sourceRegions": 24,
+    "branches": 34,
+    "targetBranches": [
+      {
+        "id": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+        "axis": "y",
+        "area": 2.257888872018322,
+        "start": {
+          "kind": "cap",
+          "level": 53.551353454589844,
+          "interval": [
+            223.90550231933594,
+            223.90550231933594
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.67185974121094,
+          "interval": [
+            223.27601623535156,
+            223.32168546008603
+          ],
+          "boundary": [
+            "0:43",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "y|L:0:45|R:0:40|merge>merge"
+          ]
+        },
+        "leftPath": [
+          "0:42",
+          "0:43"
+        ],
+        "rightPath": [
+          "0:41",
+          "0:40"
+        ],
+        "sourceFeature": "y|0:32,0:33,0:34,0:35,0:36,0:37,0:38,0:39,0:40,0:41,0:42,0:43,0:44,0:45",
+        "nodes": 63,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.6423182108564993,
+        "ownedCoordinates": [
+          [
+            223,
+            56
+          ],
+          [
+            223,
+            57
+          ]
+        ]
+      },
+      {
+        "id": "x|L:0:42|R:0:43|cap>merge",
+        "axis": "x",
+        "area": 0.7936241158231149,
+        "start": {
+          "kind": "cap",
+          "level": 222.7816162109375,
+          "interval": [
+            56.96156692504883,
+            56.96156692504883
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 223.27601623535156,
+          "interval": [
+            55.461406356773196,
+            58.67185974121094
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:40,0:41|merge>cap"
+          ]
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:43"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 8,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.2612920289684579,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "x|L:0:42|R:0:40,0:41|merge>cap",
+        "axis": "x",
+        "area": 1.4677124866821847,
+        "start": {
+          "kind": "merge",
+          "level": 223.27601623535156,
+          "interval": [
+            55.461406356773196,
+            58.822846779287985
+          ],
+          "boundary": [
+            "0:42",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:43|cap>merge",
+            "x|L:0:44|R:0:40|open-mouth>merge"
+          ]
+        },
+        "end": {
+          "kind": "cap",
+          "level": 223.90550231933594,
+          "interval": [
+            53.551353454589844,
+            53.551353454589844
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:40",
+          "0:41"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 10,
+        "target": [
+          223,
+          56
+        ],
+        "cellArea": 0.38102618188803566,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "y|L:0:42,0:43|R:0:41,0:40|cap>merge",
+        "axis": "y",
+        "area": 2.257888872018322,
+        "start": {
+          "kind": "cap",
+          "level": 53.551353454589844,
+          "interval": [
+            223.90550231933594,
+            223.90550231933594
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.67185974121094,
+          "interval": [
+            223.27601623535156,
+            223.32168546008603
+          ],
+          "boundary": [
+            "0:43",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "y|L:0:45|R:0:40|merge>merge"
+          ]
+        },
+        "leftPath": [
+          "0:42",
+          "0:43"
+        ],
+        "rightPath": [
+          "0:41",
+          "0:40"
+        ],
+        "sourceFeature": "y|0:32,0:33,0:34,0:35,0:36,0:37,0:38,0:39,0:40,0:41,0:42,0:43,0:44,0:45",
+        "nodes": 63,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.5611309645641553,
+        "ownedCoordinates": [
+          [
+            223,
+            56
+          ],
+          [
+            223,
+            57
+          ]
+        ]
+      },
+      {
+        "id": "x|L:0:42|R:0:43|cap>merge",
+        "axis": "x",
+        "area": 0.7936241158231149,
+        "start": {
+          "kind": "cap",
+          "level": 222.7816162109375,
+          "interval": [
+            56.96156692504883,
+            56.96156692504883
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 223.27601623535156,
+          "interval": [
+            55.461406356773196,
+            58.67185974121094
+          ],
+          "boundary": [
+            "0:42",
+            "0:43"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:40,0:41|merge>cap"
+          ]
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:43"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 8,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.26444277089297014,
+        "ownedCoordinates": []
+      },
+      {
+        "id": "x|L:0:42|R:0:40,0:41|merge>cap",
+        "axis": "x",
+        "area": 1.4677124866821847,
+        "start": {
+          "kind": "merge",
+          "level": 223.27601623535156,
+          "interval": [
+            55.461406356773196,
+            58.822846779287985
+          ],
+          "boundary": [
+            "0:42",
+            "0:40"
+          ],
+          "neighbourBranches": [
+            "x|L:0:42|R:0:43|cap>merge",
+            "x|L:0:44|R:0:40|open-mouth>merge"
+          ]
+        },
+        "end": {
+          "kind": "cap",
+          "level": 223.90550231933594,
+          "interval": [
+            53.551353454589844,
+            53.551353454589844
+          ],
+          "boundary": [
+            "0:42",
+            "0:41"
+          ],
+          "neighbourBranches": []
+        },
+        "leftPath": [
+          "0:42"
+        ],
+        "rightPath": [
+          "0:40",
+          "0:41"
+        ],
+        "sourceFeature": "x|0:40,0:41,0:42,0:43,0:44",
+        "nodes": 10,
+        "target": [
+          223,
+          57
+        ],
+        "cellArea": 0.29668819367118543,
+        "ownedCoordinates": []
+      }
+    ]
+  },
+  {
+    "frame": 50,
+    "sourceRegions": 25,
+    "branches": 35,
+    "targetBranches": [
+      {
+        "id": "y|L:0:55|R:0:54,0:53,0:52,0:51,0:50|cap>merge",
+        "axis": "y",
+        "area": 9.357936136329059,
+        "start": {
+          "kind": "cap",
+          "level": 50.13139343261719,
+          "interval": [
+            219.5442657470703,
+            219.5442657470703
+          ],
+          "boundary": [
+            "0:55",
+            "0:54"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.64982604980469,
+          "interval": [
+            217.6776885986328,
+            219.94598604543458
+          ],
+          "boundary": [
+            "0:55",
+            "0:50"
+          ],
+          "neighbourBranches": [
+            "y|L:0:58|R:0:50|merge>open-mouth"
+          ]
+        },
+        "leftPath": [
+          "0:55"
+        ],
+        "rightPath": [
+          "0:54",
+          "0:53",
+          "0:52",
+          "0:51",
+          "0:50"
+        ],
+        "sourceFeature": "y|0:50,0:51,0:52,0:53,0:54,0:55,0:56,0:57,0:58",
+        "nodes": 79,
+        "target": [
+          218,
+          55
+        ],
+        "cellArea": 0.6321147900497667,
+        "ownedCoordinates": [
+          [
+            219,
+            51
+          ],
+          [
+            219,
+            52
+          ],
+          [
+            219,
+            53
+          ],
+          [
+            219,
+            54
+          ],
+          [
+            218,
+            55
+          ],
+          [
+            219,
+            55
+          ],
+          [
+            218,
+            56
+          ],
+          [
+            219,
+            56
+          ],
+          [
+            218,
+            57
+          ],
+          [
+            219,
+            57
+          ],
+          [
+            218,
+            58
+          ],
+          [
+            219,
+            58
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "frame": 51,
+    "sourceRegions": 25,
+    "branches": 35,
+    "targetBranches": [
+      {
+        "id": "y|L:0:55|R:0:54,0:53,0:52,0:51,0:50|cap>merge",
+        "axis": "y",
+        "area": 9.347355138013533,
+        "start": {
+          "kind": "cap",
+          "level": 50.133460998535156,
+          "interval": [
+            219.5614776611328,
+            219.5614776611328
+          ],
+          "boundary": [
+            "0:55",
+            "0:54"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.63692092895508,
+          "interval": [
+            217.63531494140625,
+            219.89271521296396
+          ],
+          "boundary": [
+            "0:55",
+            "0:50"
+          ],
+          "neighbourBranches": [
+            "y|L:0:58|R:0:50|merge>open-mouth"
+          ]
+        },
+        "leftPath": [
+          "0:55"
+        ],
+        "rightPath": [
+          "0:54",
+          "0:53",
+          "0:52",
+          "0:51",
+          "0:50"
+        ],
+        "sourceFeature": "y|0:50,0:51,0:52,0:53,0:54,0:55,0:56,0:57,0:58",
+        "nodes": 79,
+        "target": [
+          218,
+          55
+        ],
+        "cellArea": 0.6541248633880126,
+        "ownedCoordinates": [
+          [
+            219,
+            51
+          ],
+          [
+            219,
+            52
+          ],
+          [
+            219,
+            53
+          ],
+          [
+            219,
+            54
+          ],
+          [
+            218,
+            55
+          ],
+          [
+            219,
+            55
+          ],
+          [
+            218,
+            56
+          ],
+          [
+            218,
+            57
+          ],
+          [
+            219,
+            57
+          ],
+          [
+            218,
+            58
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "frame": 52,
+    "sourceRegions": 25,
+    "branches": 35,
+    "targetBranches": [
+      {
+        "id": "y|L:0:55|R:0:54,0:53,0:52,0:51,0:50|cap>merge",
+        "axis": "y",
+        "area": 9.336500007703947,
+        "start": {
+          "kind": "cap",
+          "level": 50.135154724121094,
+          "interval": [
+            219.5799560546875,
+            219.5799560546875
+          ],
+          "boundary": [
+            "0:55",
+            "0:54"
+          ],
+          "neighbourBranches": []
+        },
+        "end": {
+          "kind": "merge",
+          "level": 58.62199020385742,
+          "interval": [
+            217.5885467529297,
+            219.83434634358886
+          ],
+          "boundary": [
+            "0:55",
+            "0:50"
+          ],
+          "neighbourBranches": [
+            "y|L:0:58|R:0:50|merge>open-mouth"
+          ]
+        },
+        "leftPath": [
+          "0:55"
+        ],
+        "rightPath": [
+          "0:54",
+          "0:53",
+          "0:52",
+          "0:51",
+          "0:50"
+        ],
+        "sourceFeature": "y|0:50,0:51,0:52,0:53,0:54,0:55,0:56,0:57,0:58",
+        "nodes": 79,
+        "target": [
+          218,
+          55
+        ],
+        "cellArea": 0.6788880469079079,
+        "ownedCoordinates": [
+          [
+            219,
+            51
+          ],
+          [
+            219,
+            52
+          ],
+          [
+            219,
+            53
+          ],
+          [
+            219,
+            54
+          ],
+          [
+            218,
+            55
+          ],
+          [
+            218,
+            56
+          ],
+          [
+            218,
+            57
+          ],
+          [
+            219,
+            57
+          ],
+          [
+            218,
+            58
+          ]
+        ]
+      }
+    ]
+  }
+]

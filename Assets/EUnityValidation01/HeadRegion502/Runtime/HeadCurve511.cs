@@ -10,7 +10,9 @@ public static partial class HeadRegion502
 {
     public static bool UseAutomaticCurve511;
     public static bool UseNegativeRegions563; // Default-OFF source-domain output contract trial.
+    public static bool UseNegativeBranches566; // Alternative source grouping, never a mask postprocess.
     public static readonly List<NegativeRegion563.Feature> NegativeRegions563=new();
+    public static readonly List<NegativeRegion563.Feature> NegativeBranches566=new();
     public static readonly List<int[]> NegativeGroups563=new();
     public static double NegativeMs563;
     public static string Auto511Status="disabled";
@@ -84,14 +86,16 @@ public static partial class HeadRegion502
         bounds=new RectInt(Mathf.Clamp(Mathf.FloorToInt(x0)-2,0,479),Mathf.Clamp(Mathf.FloorToInt(y0)-2,0,271),0,0);bounds.xMax=Mathf.Clamp(Mathf.CeilToInt(x1)+2,bounds.x+1,480);bounds.yMax=Mathf.Clamp(Mathf.CeilToInt(y1)+2,bounds.y+1,272);
         Auto511CurveMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;start=Stopwatch.GetTimestamp();
         var graph=new List<CurveArea511.P[]>();foreach(var ring in Curves){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++)p[i]=new CurveArea511.P(ring[i].x,ring[i].y);graph.Add(p);}
-        NegativeRegions563.Clear();NegativeGroups563.Clear();NegativeMs563=0;
-        var negative=UseNegativeRegions563?new NegativeRegion563(bounds.x,bounds.y,bounds.width,bounds.height):null;
+        NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();NegativeMs563=0;
+        var negative=UseNegativeRegions563?new NegativeRegion563(bounds.x,bounds.y,bounds.width,bounds.height,false,UseNegativeBranches566):null;
         var result=CurveArea511.Compute(graph,bounds.x,bounds.y,bounds.width,bounds.height,negative);Auto511CurveCrossings=CurveArea511.LastCrossings;Auto511CurveEvents=CurveArea511.LastEvents;
         if(negative!=null)
         {
             long negativeStart=Stopwatch.GetTimestamp();var swapped=new List<CurveArea511.P[]>();foreach(var ring in graph){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++){var a=ring[ring.Length-1-i];p[i]=new CurveArea511.P(a.y,a.x);}swapped.Add(p);}
-            var other=new NegativeRegion563(bounds.y,bounds.x,bounds.height,bounds.width,true);CurveArea511.Compute(swapped,bounds.y,bounds.x,bounds.height,bounds.width,other);
-            var first=negative.Features();var second=other.Features();NegativeRegions563.AddRange(first);NegativeRegions563.AddRange(second);NegativeGroups563.AddRange(NegativeRegion563.Groups(first,second,bounds.width,bounds.height));NegativeMs563=1000.0*(Stopwatch.GetTimestamp()-negativeStart)/Stopwatch.Frequency;
+            var other=new NegativeRegion563(bounds.y,bounds.x,bounds.height,bounds.width,true,UseNegativeBranches566);CurveArea511.Compute(swapped,bounds.y,bounds.x,bounds.height,bounds.width,other);
+            var first=negative.Features();var second=other.Features();NegativeRegions563.AddRange(first);NegativeRegions563.AddRange(second);
+            if(UseNegativeBranches566){first=negative.Branches566();second=other.Branches566();NegativeBranches566.AddRange(first);NegativeBranches566.AddRange(second);}
+            NegativeGroups563.AddRange(NegativeRegion563.Groups(first,second,bounds.width,bounds.height));NegativeMs563=1000.0*(Stopwatch.GetTimestamp()-negativeStart)/Stopwatch.Frequency;
         }
         Auto511AreaMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;Auto511Areas=result;Auto511Bounds=bounds;Auto511Status="ready polygonal curve graph input";return result;
     }
@@ -121,7 +125,7 @@ public static partial class HeadRegion502
     static int Part511(Packet p,int[][] indices){var a=indices[p.submesh];int i=p.primitive*3;return registeredTriangles511.Contains(Key511(a[i],a[i+1],a[i+2]))?1:2;}
     static void Release511()
     {
-        UseAutomaticCurve511=UseNegativeRegions563=false;NegativeRegions563.Clear();NegativeGroups563.Clear();controls511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
+        UseAutomaticCurve511=UseNegativeRegions563=UseNegativeBranches566=false;NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();controls511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
         foreach(int at in usedBins511)bins511[at]?.Clear();usedBins511.Clear();registeredTriangles511.Clear();Auto511Areas=null;Auto511Status="disabled";ReleaseVisibility511();
     }
 }

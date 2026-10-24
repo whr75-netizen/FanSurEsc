@@ -204,3 +204,12 @@ Body0의 주 연결 성분에는 머리와 몸이 이어져 있다. 명시적 Hu
 CurveArea511의이미계산된연속구간접속→분기/합류사이1-in/1-out최대chain→ordered좌/우arc·source이벤트level/구간·이웃branchID·연속면적→셀교차면적→기존8이웃cut의순서다. 셀수나>.5로가지존재/ID를정의하지않는다. NegativeRegion563.Branches566와HeadCurve511.UseNegativeBranches566가564그룹생성의대안이며후단filter가아니다. false의564/기존source-ray가림과공통mask권위는보존한다. sourcearc는기존triangle/barycentricControl511에연결되며새의미/깊이추론없음. terminal구간표기만으로전체2D틈개방/닫힘까지증명하지않는다.
 
 16의가지입구0:44와51의입구0:56은원곡선에서유지됐다. band재분할불변/저장81대조후실제6쌍에서16순간틈제거와51기존틈유지를동시에확인했다. 소유셀0가지도보존한다. 새실행자체branch재구성오차0이고과거실행과의미세기하차이는분리기록했다. 전체실제루프/모든회전·가림·시간품질·성능은미검증이므로기본OFF/전체채택보류. [정확한표현·검증·새실제전신구간](../artifacts/hair-branches566/RESULT566.md) · [현재계약](../artifacts/hair-branches566/CONTRACT566.md).
+
+
+### 567 전체 검증과511 방향 입력 한계 — 전체채택실패/OFF
+
+25f3281의564/566을yaw80에서실제81쌍비교했다.16/51/목덜미개선과공통경계/공급계약은유지,얼굴coverage·동일비헤어meta색차0.30셀관측중16의3은기존버그수정,다른27은형태판정미확정이다.원Walk변형을566차이로세지않고모든프레임전신비교를보존했다.
+
+가시눈/앞가림표본이없어yaw260의실제3포즈를보완했으나564/566모두머리0/0/2셀로공통입력실패.첫0의주링투영signedArea+525.50→-263.13,positive-winding영역518.85→2.70이최초단계다.현재Control511의같은3Danchor순서투영이모든방향에서권위있는가시폐곡선역할을보장하지않는다.분기나최종합성문턱으로해결할문제가아니며방향별절댓값/반전패치없이한계보존.원본입력의뷰적합성/가시경계역할이검증되기전범용Player채택금지;현재는검증한referenceyaw80preview후보/OFF다.
+
+별도HeadRegion502.Prepare측정은readback/파일창밖CPU·Unityupload호출만이고566median256.37ms중기존packet221.43/area3.45ms다.GPU시간/PlayerFPS아님.545Recorder양성대조0/51만할당신뢰·16은미측정.유효호출창median약12.96MB,전체할당/GC·성능통과로확대하지않음.품질미통과이므로새최적화없음. [전체실행·분류·실패·정확한성능창](../artifacts/hair-full567/RESULT567.md).

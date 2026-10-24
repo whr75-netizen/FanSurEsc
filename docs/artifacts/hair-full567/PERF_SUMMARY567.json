@@ -1,0 +1,143 @@
+{
+  "scope": "HeadRegion502.Prepare CPU/Unity upload call only; no h.RenderFrame readbacks, file writes, image encoding or GetPixels inside measured windows",
+  "poses": [
+    0,
+    16,
+    51
+  ],
+  "warmupsPerModePerPose": 3,
+  "pairedRepeatsPerPose": 5,
+  "modeOrder": "alternating AB/BA",
+  "resolution": [
+    480,
+    272
+  ],
+  "yaw": 80,
+  "allocationScope": "all-thread immediate recorder delta, not retained memory/main-thread-only/whole player frame",
+  "controls": {
+    "0": {
+      "valid": true,
+      "empty": 0,
+      "oneMiB": 1048608,
+      "twoMiB": 2097184,
+      "unit": "Bytes",
+      "scope": "all-thread immediate Prepare call window"
+    },
+    "16": {
+      "valid": false,
+      "empty": 0,
+      "oneMiB": 1048786,
+      "twoMiB": 2098592,
+      "unit": "Bytes",
+      "scope": "all-thread immediate Prepare call window"
+    },
+    "51": {
+      "valid": true,
+      "empty": 0,
+      "oneMiB": 1048608,
+      "twoMiB": 2097184,
+      "unit": "Bytes",
+      "scope": "all-thread immediate Prepare call window"
+    }
+  },
+  "modes": {
+    "564": {
+      "headCoreMs": {
+        "n": 15,
+        "median": 258.4024999960093,
+        "p95NearestRank": 340.34999999857973,
+        "min": 248.93279999378137,
+        "max": 340.34999999857973
+      },
+      "areaMs": {
+        "n": 15,
+        "median": 2.753,
+        "p95NearestRank": 3.1649,
+        "min": 2.476,
+        "max": 3.1649
+      },
+      "negativeMs": {
+        "n": 15,
+        "median": 1.8046,
+        "p95NearestRank": 2.0636,
+        "min": 1.6345,
+        "max": 2.0636
+      },
+      "packetMs": {
+        "n": 15,
+        "median": 223.4629,
+        "p95NearestRank": 306.4546,
+        "min": 214.8014,
+        "max": 306.4546
+      },
+      "emptyWindowMs": {
+        "n": 15,
+        "median": 0.000900006853044033,
+        "p95NearestRank": 0.003200009814463556,
+        "min": 0.000100000761449337,
+        "max": 0.003200009814463556
+      },
+      "allocationBytes": {
+        "n": 10,
+        "median": 12657160.0,
+        "p95NearestRank": 12733005,
+        "min": 12560092,
+        "max": 12733005
+      },
+      "allocationMeasuredPoses": [
+        0,
+        51
+      ],
+      "unmeasuredRows": 5
+    },
+    "566": {
+      "headCoreMs": {
+        "n": 15,
+        "median": 256.36970000050496,
+        "p95NearestRank": 372.67729999439325,
+        "min": 245.5824000062421,
+        "max": 372.67729999439325
+      },
+      "areaMs": {
+        "n": 15,
+        "median": 3.4485,
+        "p95NearestRank": 12.4568,
+        "min": 3.0579,
+        "max": 12.4568
+      },
+      "negativeMs": {
+        "n": 15,
+        "median": 2.2508,
+        "p95NearestRank": 8.1882,
+        "min": 2.0546,
+        "max": 8.1882
+      },
+      "packetMs": {
+        "n": 15,
+        "median": 221.4304,
+        "p95NearestRank": 336.9715,
+        "min": 211.1825,
+        "max": 336.9715
+      },
+      "emptyWindowMs": {
+        "n": 15,
+        "median": 0.0009999930625781417,
+        "p95NearestRank": 0.0014999968698248267,
+        "min": 0.000100000761449337,
+        "max": 0.0014999968698248267
+      },
+      "allocationBytes": {
+        "n": 10,
+        "median": 12957003.5,
+        "p95NearestRank": 13040027,
+        "min": 12880048,
+        "max": 13040027
+      },
+      "allocationMeasuredPoses": [
+        0,
+        51
+      ],
+      "unmeasuredRows": 5
+    }
+  }
+}

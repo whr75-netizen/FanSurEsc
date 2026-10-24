@@ -3582,3 +3582,8 @@ Interactable (abstract base class)
 - 최종코드의새연속yaw260 Walk0–80 **81쌍 CAPTURED**,원본전체960×544 PNG162장보존. 두실패통과,원본/pose/카메라/시간일치,소유권/KEEP전체영역연결통과. 경계밖/새닫힌구멍/같은비헤어meta색/머리밖전신색/눈차이0. 얼굴31변화중26추가헤어source-ray원삼각형UV·알파·깊이대조앞얼굴덮임0,5건뒤피부노출. destination/world전체주장없음.
 - 전신GIF2,253,766B/무손실WebP957,336B 모두81프레임1350ms,중간부분루프합성아님. 큰틈KEEP0–34/FILL35–50/KEEP51–80,루프형상/role/눈동일. 양끝캐릭터PNG20화면픽셀최대2/255색차는양쪽공통이며Time.time이다르므로명암잔여미판정으로보존. 모든가닥시간품질완료아님.
 - 내부CPU ON Build median/P95 219.03/324.16ms,packet175.59/226.63,area17.70/29.05. 외부readback/파일쓰기와별도,PlayerFPS/GPU/최적화성과아님. 할당새측정없음. 직접cleanEdit/실험OFF/input0·입력/Animator/시계복원,Quality/Time해시불변. 자동모든방향/손/명암/실시간성능미완료로헤어기본OFF. 메인최신81비교/파이프라인/중앙그래프반영안정합,Library403재시도·P접근없음. [결과](docs/artifacts/hair-passages577/RESULT577.md).
+
+
+## 279. CHARACTER-RENDER-01 — 578 정면 입력부터 실제 전체 Walk 검증
+
+제품577 알고리즘 변경 없이 yaw170의 실제 투영 메시에서 기존 생성기가2폐곡선92anchor를 구성했다. 국소5쌍과 전체81쌍 및 기존 두 옆모습 저장162입력 회귀 완료. 경계/소유권/동일비헤어색 오류0, 눈 가시성1셀은 앞머리FILL에 따른 약한윗속눈썹 가림 시점 차이로 동일ray/깊이 근거 기록. 기본OFF, 자동전방향차트·미세명암·성능 미완료. [실제 전신 비교·방향 범위·복원·한계](docs/artifacts/hair-direction578/RESULT578.md).

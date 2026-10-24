@@ -16,7 +16,7 @@ public static class HairRegions574
  {
   public readonly List<Family> families=new();public readonly List<CurveArea511.P[]> envelopeCurves=new();
   public readonly List<string> aliasCapSources=new();
-  public float[] areas;public bool[] envelope,selected;public int[] owner;public int filledAliasCells,filledFamilies,keptFamilies;
+  public float[] areas;public bool[] envelope,selected,protectedPositive;public int[] owner;public int filledAliasCells,filledFamilies,keptFamilies;
  }
  static double Signed(CurveArea511.P[] p){double a=0;var o=p[0];for(int i=1;i+1<p.Length;i++)a+=(p[i].x-o.x)*(p[i+1].y-o.y)-(p[i].y-o.y)*(p[i+1].x-o.x);return a*.5;}
  static double Cross(CurveArea511.P a,CurveArea511.P b,CurveArea511.P c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
@@ -68,6 +68,16 @@ public static class HairRegions574
   var seen=new bool[mask.Length];var q=new List<int>();int count=0;void Add(int i){if(mask[i]&&!seen[i]){seen[i]=true;q.Add(i);}}
   for(int i=0;i<mask.Length;i++){if(!mask[i]||seen[i])continue;count++;q.Clear();Add(i);for(int k=0;k<q.Count;k++){int n=q[k],x=n%w,y=n/w;if(x>0)Add(n-1);if(x+1<w)Add(n+1);if(y>0)Add(n-w);if(y+1<h)Add(n+w);}}return count;
  }
+ static bool[] SourcePositive(IList<CurveArea511.P[]> source,int x,int y,int w,int h)
+ {
+  // Current-pose canonical curves and the existing source grouping decide which
+  // positive shape is already retained. FILL may expand it, never erase it.
+  // The complementary empty cells are not pinned: they remain design choices.
+  var first=new NegativeRegion563(x,y,w,h,false,true);var area=CurveArea511.Compute(source,x,y,w,h,first);
+  var swapped=new List<CurveArea511.P[]>();foreach(var ring in source){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++){var q=ring[ring.Length-1-i];p[i]=new CurveArea511.P(q.y,q.x);}swapped.Add(p);}
+  var second=new NegativeRegion563(y,x,h,w,true,true);CurveArea511.Compute(swapped,y,x,h,w,second);
+  return HeadRegion502.SelectRegions543(area,w,h,NegativeRegion563.Groups(first.Branches566(),second.Branches566(),w,h));
+ }
  public static Layout Build(IList<CurveArea511.P[]> source,int x,int y,int w,int h)
  {
   if(source.Count==0)throw new InvalidOperationException("574 source boundary missing");
@@ -79,7 +89,9 @@ public static class HairRegions574
   var sourceBranches=negative.Branches566();foreach(var b in sourceBranches)if(b.start566.kind=="open-mouth"||b.end566.kind=="open-mouth")closed[membership[b.geometry[0]]]=false;
   output.envelopeCurves.AddRange(positive);
   for(int i=0;i<features.Count;i++)if(closed[i]){var edge=Edges(features[i],original);var f=new Family{id="enclosed:"+string.Join(",",edge),kind="source-enclosed-component",sourceEdges=edge.ToArray(),polygons=Parts(features[i])};output.envelopeCurves.AddRange(f.polygons);output.families.Add(f);}
-  var rootAreas=CurveArea511.Compute(output.envelopeCurves,x,y,w,h);var proposal=HeadRegion502.SelectRegions543(rootAreas,w,h,null);var outside=Exterior(proposal,w,h);output.envelope=new bool[proposal.Length];
+  output.protectedPositive=SourcePositive(source,x,y,w,h);
+  var rootAreas=CurveArea511.Compute(output.envelopeCurves,x,y,w,h);var proposal=HeadRegion502.SelectRegions543(rootAreas,w,h,null,output.protectedPositive);var outside=Exterior(proposal,w,h);output.envelope=new bool[proposal.Length];
+  for(int i=0;i<proposal.Length;i++)if(output.protectedPositive[i]&&!proposal[i])throw new InvalidOperationException("575 internal FILL erased the protected positive boundary");
   for(int i=0;i<proposal.Length;i++){output.envelope[i]=!outside[i];if(!proposal[i]&&!outside[i])output.filledAliasCells++;}
   // Interior fill of the chosen exterior contour must not silently erase a broad,
   // source-open parting which the spatial proposal accidentally sealed.

@@ -1,0 +1,39 @@
+{
+  "prepare": {
+    "n": 5,
+    "medianMs": 0.20869999934802763,
+    "p95Ms": 0.3652799983683508,
+    "minMs": 0.20500000027823262,
+    "maxMs": 0.3909999977622647
+  },
+  "renderOFF": {
+    "n": 5,
+    "medianMs": 624.7489000015776,
+    "p95Ms": 820.2529800008051,
+    "minMs": 530.9051999975054,
+    "maxMs": 860.9724000016286
+  },
+  "renderON": {
+    "n": 5,
+    "medianMs": 613.5379000006651,
+    "p95Ms": 857.2420599986799,
+    "minMs": 526.3752999999269,
+    "maxMs": 857.6003999987734
+  },
+  "scope": "Wall clock under profiler; render call includes existing pipeline waits/readbacks; no new capture/file IO inside scope. Not GPU-only or Player FPS.",
+  "managedAllocation": "UNMEASURED: raw profiler scopes did not arrive; first batch and one frame-scoped correction retained as failures.",
+  "gpu": "UNMEASURED: no nonzero matched GPU samples.",
+  "textureLogicalBytes": 188088320,
+  "profilerStatuses": [
+    {
+      "status": "UNMEASURED",
+      "error": "Raw scoped frame data did not arrive within15s",
+      "profilerRestored": true
+    },
+    {
+      "status": "UNMEASURED",
+      "error": "Raw scoped frame data did not arrive within60s",
+      "profilerRestored": true
+    }
+  ]
+}

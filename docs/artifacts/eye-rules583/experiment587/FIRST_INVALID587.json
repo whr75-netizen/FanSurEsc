@@ -1,0 +1,9 @@
+{
+  "run": "Runtime587/First587",
+  "status": "INVALID_GPU_SHADER_VARIANTS",
+  "capturedRecordsAreNotAPass": true,
+  "cause": ["Compute forced-loop-unroll compilation failed at first dispatch", "MToon pixel shader dynamic branch triggered compiler internal error"],
+  "areaZeroIsNotValidMeasurement": true,
+  "restored": true,
+  "next": "Explicit loop and compile-time area shader variant; retest same pose in a new output directory"
+}

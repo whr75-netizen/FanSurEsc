@@ -1,0 +1,312 @@
+--- a/Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeFeature348.cs
++++ b/Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeFeature348.cs
+@@ -3,6 +3,9 @@
+  [Serializable]public class ModelEye{public int stableId;public Vector3 centre,axisX,axisY,normal;public Vector2 measuredRadii;public int[]closedBoundary;public bool boundaryClosed;}
+  [Serializable]public class Style{public string version="V11_CURVES_CURRENT_PIGMENT_348_02";public Vector2 upper=new Vector2(-.82f,.35f),lower=new Vector2(.72f,-.26f),irisRadii=new Vector2(.55f,.84f),catchU=new Vector2(-.46f,-.08f),catchV=new Vector2(-.55f,-.08f);public float irisOffset=.05f,irisPower=3;public Vector2 referenceSocketMetres=new Vector2(.0195f,.0145f);public Vector2[]radiusScale;public bool newCatchPigment=false,whiteNeighbourSupport=false;}
+  public string modelTopologySHA256;public Full319View335 full;public Shader sampleShader,skinShader;public ComputeShader candidateShader;public bool candidateEnabled=true,showControls=true;public ModelEye[]modelEyes;public Style style=new Style();public Vector4 faceLidShadeEndpoint;public string lidPigmentProvenance="Existing335.skinShade style endpoint";public static EyeFeature348 Active;public static bool UseIrisSurface582,UseLashRegion583;
++ public static bool UseLashArea587;
++ [NonSerialized]public EyeArea587 area587;
++ [NonSerialized]public ComputeBuffer lashArea587;
+  public sealed class Layer{public RTHandle rgba,meta,point,uv,depth;}
+  [NonSerialized]public Layer[]samples;[NonSerialized]public RTHandle output,owner,intrinsic,visible,histA,histB,surface,pigment,audit,domain,bary,supportMeta;
+  [NonSerialized]public ComputeBuffer restTriangles,records;[NonSerialized]public Vector4[]triangleRanges=new Vector4[16];public bool samplesOnly;
+@@ -12,12 +15,13 @@
+  public void Initialise(){if(ready||!full)return;Active=this;full.Initialise();full.PrepareCurrent();var src=full.motion.surface.source[1];var original=src.sharedMesh;var hash348=EyeBoundaryBinding348.Hash(original);if(!string.IsNullOrEmpty(modelTopologySHA256)&&modelTopologySHA256!=hash348)throw new Exception("348 MODEL_BINDING_MISMATCH_REGENERATE_ADAPTER");modelTopologySHA256=hash348;headBoneIndex=Array.IndexOf(src.bones,full.motion.animation.target.GetBoneTransform(HumanBodyBones.Head));if(headBoneIndex<0)throw new Exception("348 Head bindpose unavailable");sourceToRestHead=original.bindposes[headBoneIndex];var rest=original.vertices.Select(p=>sourceToRestHead.MultiplyPoint3x4(p)).ToArray();if(modelEyes==null||modelEyes.Length!=2){var ix=original.GetIndices(4).Distinct().ToArray();var local=ix.Select(i=>rest[i]).ToArray();var rings348=EyeBoundaryBinding348.ClosedRings(original,3);if(rings348.Length<2)throw new Exception("348 NO_CLOSED_NATIVE_EYE_BOUNDARY");modelEyes=new ModelEye[2];style.radiusScale=new Vector2[2];for(int e=0;e<2;e++){var spec=full.eyes[e];var n=spec.whiteNormalHead.normalized;var y=Vector3.up;var x=Vector3.Cross(y,n).normalized;y=Vector3.Cross(n,x).normalized;var c=spec.whiteCentreHead;var ring348=rings348.OrderBy(ring=>{var mean=ring.Select(i=>rest[i]).Aggregate(Vector3.zero,(a,b)=>a+b)/ring.Length;return (mean-c).sqrMagnitude;}).First();var ringMean348=ring348.Select(i=>rest[i]).Aggregate(Vector3.zero,(a,b)=>a+b)/ring348.Length;float separation348=(full.eyes[0].whiteCentreHead-full.eyes[1].whiteCentreHead).magnitude;if((ringMean348-c).magnitude>separation348*.25f)throw new Exception("348 EYE_BOUNDARY_BINDING_DISTANCE");var own=ring348.Select(i=>rest[i]).ToArray();var radii=new Vector2(own.Max(p=>Mathf.Abs(Vector3.Dot(p-c,x))),own.Max(p=>Mathf.Abs(Vector3.Dot(p-c,y))));if(radii.x<=0||radii.y<=0)throw new Exception("348 no native eye radius support");modelEyes[e]=new ModelEye{stableId=e==0?2:1,centre=c,axisX=x,axisY=y,normal=n,measuredRadii=radii,closedBoundary=ring348,boundaryClosed=true};style.radiusScale[e]=new Vector2(style.referenceSocketMetres.x/radii.x,style.referenceSocketMetres.y/radii.y);}}
+   sampleFace=Instantiate(original);sampleFace.name="348 native source current surface + original Head-bind rest attribute";sampleFace.hideFlags=HideFlags.DontSave;sampleFace.SetUVs(1,rest.ToList());sampleFace.SetUVs(7,rest.Select(p=>new Vector2((p-modelEyes[0].centre).sqrMagnitude<=(p-modelEyes[1].centre).sqrMagnitude?modelEyes[0].stableId:modelEyes[1].stableId,0)).ToList());if(faceLidShadeEndpoint.w<=0)faceLidShadeEndpoint=full.skinShade;var triangles=new List<Vector4>();for(int sm=0;sm<7;sm++){var ix=original.GetIndices(sm);triangleRanges[sm]=new Vector4(triangles.Count,ix.Length/3,0,0);foreach(int i in ix)triangles.Add(rest[i]);}restTriangles=new ComputeBuffer(triangles.Count,16);restTriangles.SetData(triangles);
+   materials=full.independentMats.Select(m=>new Material(m){shader=sampleShader,hideFlags=HideFlags.DontSave}).ToArray();skinMaterial=new Material(full.legacyProviderMat){shader=skinShader,hideFlags=HideFlags.DontSave};
+-  records=new ComputeBuffer(480*272,16*16);output=T(480,272);owner=T(480,272);intrinsic=T(480,272);visible=T(480,272);histA=T(480,272);histB=T(480,272);surface=T(480,272);pigment=T(480,272);audit=T(480,272);domain=T(480,272);bary=T(480,272);supportMeta=T(480,272);ready=true;
++  records=new ComputeBuffer(480*272,16*16);lashArea587=new ComputeBuffer(2,16);lashArea587.SetData(new Vector4[2]);output=T(480,272);owner=T(480,272);intrinsic=T(480,272);visible=T(480,272);histA=T(480,272);histB=T(480,272);surface=T(480,272);pigment=T(480,272);audit=T(480,272);domain=T(480,272);bary=T(480,272);supportMeta=T(480,272);ready=true;
+  }
+  public void Prepare(){Initialise();var ph=full.phases[full.phaseIndex];headMatrix=full.providerMatrix*ph.head;centres=new Vector4[2];axesX=new Vector4[2];axesY=new Vector4[2];normals=new Vector4[2];var min=new Vector2(float.PositiveInfinity,float.PositiveInfinity);var max=new Vector2(float.NegativeInfinity,float.NegativeInfinity);for(int e=0;e<2;e++){var m=modelEyes[e];var r=Vector2.Scale(m.measuredRadii,style.radiusScale[e]);centres[e]=new Vector4(m.centre.x,m.centre.y,m.centre.z,m.stableId);axesX[e]=new Vector4(m.axisX.x,m.axisX.y,m.axisX.z,r.x);axesY[e]=new Vector4(m.axisY.x,m.axisY.y,m.axisY.z,r.y);normals[e]=new Vector4(m.normal.x,m.normal.y,m.normal.z,0);foreach(float u in new[]{-1.4f,1.4f})foreach(float v in new[]{-1.4f,1.4f}){var s=full.Project(headMatrix.MultiplyPoint3x4(m.centre+m.axisX*(u*r.x)+m.axisY*(v*r.y)));min=Vector2.Min(min,s);max=Vector2.Max(max,s);}}
+-  var current=full.motion.surface.outputs[1].sharedMesh;if(current.vertexCount!=sampleFace.vertexCount)throw new Exception("348 native topology changed");sampleFace.vertices=current.vertices;sampleFace.normals=current.normals;sampleFace.tangents=current.tangents;sampleFace.bounds=current.bounds;
++  var current=full.motion.surface.outputs[1].sharedMesh;if(current.vertexCount!=sampleFace.vertexCount)throw new Exception("348 native topology changed");var currentPositions587=current.vertices;sampleFace.vertices=currentPositions587;sampleFace.normals=current.normals;sampleFace.tangents=current.tangents;sampleFace.bounds=current.bounds;
+   int x0=Mathf.Clamp(Mathf.FloorToInt(min.x)-1,0,479),y0=Mathf.Clamp(Mathf.FloorToInt(min.y)-1,0,271),x1=Mathf.Clamp(Mathf.CeilToInt(max.x)+1,x0+1,480),y1=Mathf.Clamp(Mathf.CeilToInt(max.y)+1,y0+1,272);var next=new RectInt(x0,y0,x1-x0,y1-y0);if(samples==null||next.width!=roi.width||next.height!=roi.height){if(samples!=null)foreach(var l in samples)foreach(var t in new[]{l.rgba,l.meta,l.point,l.uv,l.depth})t.Release();samples=Enumerable.Range(0,7).Select(_=>new Layer{rgba=T(next.width*4,next.height*4,false),meta=T(next.width*4,next.height*4,false),point=T(next.width*4,next.height*4,false),uv=T(next.width*4,next.height*4,false),depth=RTHandles.Alloc(next.width*4,next.height*4,depthBufferBits:DepthBits.Depth32)}).ToArray();}roi=next;var crop=Matrix4x4.identity;crop[0,0]=480f/roi.width;crop[0,3]=(480f-2*roi.x-roi.width)/roi.width;crop[1,1]=272f/roi.height;crop[1,3]=(2*roi.y+roi.height-272f)/roi.height;cropProjection=crop*full.effectiveProjection;
++  if(UseLashArea587&&UseLashRegion583){area587??=new EyeArea587();area587.Prepare(this,currentPositions587);}
+  }
+  void OnGUI(){if(!showControls||!full)return;GUILayout.BeginArea(new Rect(10,165,730,98),GUI.skin.box);bool next=GUILayout.Toggle(candidateEnabled,"348 independent V11 eye feature curves / actual16samples / source pigments /343 registration");if(next!=candidateEnabled){candidateEnabled=next;full.motion.resetHistory=true;full.RenderFrame();}GUILayout.Label("Same main camera/grid. Strict all-hair/body depth. No screen-painted line, new texture or hair deletion.");GUILayout.EndArea();}
+- void OnDisable(){if(Active==this)Active=null;if(materials!=null)foreach(var m in materials)if(m)DestroyImmediate(m);if(skinMaterial)DestroyImmediate(skinMaterial);if(sampleFace)DestroyImmediate(sampleFace);restTriangles?.Dispose();records?.Dispose();if(samples!=null)foreach(var l in samples)foreach(var t in new[]{l.rgba,l.meta,l.point,l.uv,l.depth})t?.Release();foreach(var t in new[]{output,owner,intrinsic,visible,histA,histB,surface,pigment,audit,domain,bary,supportMeta})t?.Release();ready=false;}
++ void OnDisable(){if(Active==this)Active=null;if(materials!=null)foreach(var m in materials)if(m)DestroyImmediate(m);if(skinMaterial)DestroyImmediate(skinMaterial);if(sampleFace)DestroyImmediate(sampleFace);restTriangles?.Dispose();records?.Dispose();lashArea587?.Dispose();area587?.Dispose();area587=null;if(samples!=null)foreach(var l in samples)foreach(var t in new[]{l.rgba,l.meta,l.point,l.uv,l.depth})t?.Release();foreach(var t in new[]{output,owner,intrinsic,visible,histA,histB,surface,pigment,audit,domain,bary,supportMeta})t?.Release();ready=false;}
+ }
+--- a/Assets/EUnityValidation01/HeadLocal367/Runtime/EyeRenderer367.cs
++++ b/Assets/EUnityValidation01/HeadLocal367/Runtime/EyeRenderer367.cs
+@@ -1,16 +1,25 @@
+ using UnityEngine;using UnityEngine.Rendering;using UnityEngine.Rendering.Universal;using UnityEngine.Rendering.RenderGraphModule;
+ public sealed class EyeRenderer367:ScriptableRendererFeature{
+- Samples sample;Candidate resolve;public override void Create(){sample=new Samples{renderPassEvent=(RenderPassEvent)550};resolve=new Candidate{renderPassEvent=(RenderPassEvent)551};}
+- public override void AddRenderPasses(ScriptableRenderer r,ref RenderingData d){var e=HeadLocal367.EyesForCamera(d.cameraData.camera);if(!e||!e.full||e.full.motion.camera!=d.cameraData.camera||(!e.candidateEnabled&&!e.samplesOnly))return;e.Prepare();r.EnqueuePass(sample);if(e.candidateEnabled&&!e.samplesOnly)r.EnqueuePass(resolve);}
+- sealed class Data{public EyeFeature348 e;public int layer;}
++ Samples sample;AreaSamples587 areaSample;Candidate resolve;public override void Create(){sample=new Samples{renderPassEvent=(RenderPassEvent)550};areaSample=new AreaSamples587{renderPassEvent=(RenderPassEvent)550};resolve=new Candidate{renderPassEvent=(RenderPassEvent)551};}
++ public override void AddRenderPasses(ScriptableRenderer r,ref RenderingData d){var e=HeadLocal367.EyesForCamera(d.cameraData.camera);if(!e||!e.full||e.full.motion.camera!=d.cameraData.camera||(!e.candidateEnabled&&!e.samplesOnly))return;e.Prepare();r.EnqueuePass(sample);if(EyeFeature348.UseLashArea587&&EyeFeature348.UseLashRegion583)r.EnqueuePass(areaSample);if(e.candidateEnabled&&!e.samplesOnly)r.EnqueuePass(resolve);}
++ sealed class Data{public EyeFeature348 e;public int layer,areaEye;}
+  sealed class Samples:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var e=EyeFeature348.Active;for(int i=0;i<7;i++){using var b=g.AddRasterRenderPass<Data>("348 same-main-grid actual4x4 eye surface "+i,out var d);d.e=e;d.layer=i;var s=e.samples[i];b.SetRenderAttachment(g.ImportTexture(s.rgba),0,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.meta),1,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.point),2,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.uv),3,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(s.depth),AccessFlags.Write);b.UseAllGlobalTextures(true);var res=f.Get<UniversalResourceData>();if(res.mainShadowsTexture.IsValid())b.UseTexture(res.mainShadowsTexture);if(res.additionalShadowsTexture.IsValid())b.UseTexture(res.additionalShadowsTexture);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);b.SetRenderFunc(static(Data d,RasterGraphContext c)=>{var e=d.e;var v=e.full;var cam=v.motion.camera;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetViewProjectionMatrices(cam.worldToCameraMatrix,e.cropProjection);c.cmd.SetGlobalVector("_ROI348",new Vector4(e.roi.x,272-e.roi.y-e.roi.height,e.roi.width,e.roi.height));c.cmd.SetGlobalMatrix("_WorldToHead348",e.headMatrix.inverse);c.cmd.SetGlobalInt("_SupportKind348",d.layer);c.cmd.SetGlobalVector("_ClipShift333",Vector4.zero);c.cmd.SetGlobalVector("_Profile333",v.motion.animation.shadeProfile);
+   if(d.layer<=3||d.layer==5){int sm=d.layer==0?3:d.layer==1?4:d.layer==2?1:d.layer==3?6:5;var mat=d.layer==0?e.skinMaterial:e.materials[4+sm];c.cmd.DrawMesh(e.sampleFace,v.motion.surface.outputs[1].transform.localToWorldMatrix,mat,sm,0);}else if(d.layer==4&&!HeadRegion502.Ready){var mf=v.motion.surface.outputs[2];for(int sm=0;sm<4;sm++)c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,e.materials[11+sm],sm,0);}else if(d.layer==6){var mf=v.motion.surface.outputs[0];for(int sm=0;sm<4;sm++)c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,e.materials[sm],sm,0);}
+   c.cmd.SetViewProjectionMatrices(cam.worldToCameraMatrix,cam.projectionMatrix);c.cmd.SetGlobalVector("_ClipShift333",v.motion.clipShift);
+  });}}}
+- sealed class Candidate:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var e=EyeFeature348.Active;var v=e.full;using var b=g.AddUnsafePass<Data>("348 source-supported normalized eye features and metadata",out var d);d.e=e;foreach(var s in e.samples)foreach(var t in new[]{s.rgba,s.meta,s.point,s.uv})b.UseTexture(g.ImportTexture(t));foreach(var t in new[]{v.layers[8].rgba,v.layers[8].meta,v.layers[10].rgba,v.layers[10].meta,v.layers[6].rgba,v.layers[6].meta,v.layers[7].rgba,v.layers[7].meta,v.motion.raw[5],v.motion.raw[6],v.postLine,v.eyeOwner,v.intrinsic})b.UseTexture(g.ImportTexture(t));foreach(var t in new[]{v.before,v.colour,v.owner,v.preparedMeta,v.preparedUV,v.resolvedMeta,v.resolvedUV,v.domain,e.output,e.owner,e.intrinsic,e.visible,e.histA,e.histB,e.surface,e.pigment,e.audit,e.domain,e.bary,e.supportMeta})b.UseTexture(g.ImportTexture(t),AccessFlags.ReadWrite);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);b.SetRenderFunc(static(Data d,UnsafeGraphContext c)=>Dispatch(d.e,CommandBufferHelpers.GetNativeCommandBuffer(c.cmd)));}}
+- public static void Dispatch(EyeFeature348 e,CommandBuffer cmd){var v=e.full;var cs=e.candidateShader;int k=cs.FindKernel("Evaluate");cmd.SetComputeIntParam(cs,"_UseHairRegion502",HeadRegion502.Ready?1:0);cmd.SetComputeIntParam(cs,"_UseIrisSurface582",EyeFeature348.UseIrisSurface582?1:0);cmd.SetComputeIntParam(cs,"_UseLashRegion583",EyeFeature348.UseLashRegion583?1:0);void T(string n,RTHandle t)=>cmd.SetComputeTextureParam(cs,k,n,t.rt);for(int i=0;i<7;i++){var s=e.samples[i];T("_S"+i+"RGBA",s.rgba);T("_S"+i+"META",s.meta);T("_S"+i+"POINT",s.point);T("_S"+i+"UV",s.uv);}T("_BaseRGBA",v.layers[8].rgba);T("_BaseMETA",v.layers[8].meta);T("_BackingRGBA",v.layers[10].rgba);T("_BackingMETA",v.layers[10].meta);T("_HairRGBA",v.layers[6].rgba);T("_HairMETA",v.layers[6].meta);T("_BrowRGBA",v.layers[7].rgba);T("_BrowMETA",v.layers[7].meta);T("_RawMETA",v.motion.raw[5]);T("_RawUV",v.motion.raw[6]);T("_PostLine",v.postLine);T("_BaselineColour348",v.colour);T("_BaselineOwner348",v.owner);T("_BaselineMeta348",v.preparedMeta);T("_BaselineUV348",v.preparedUV);T("_BaselineDomain348",v.domain);cmd.SetComputeBufferParam(cs,k,"_RecordsWrite348",e.records);
++ sealed class AreaSamples587:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var e=EyeFeature348.Active;for(int eye=0;eye<2;eye++)for(int layer=0;layer<7;layer++){
++  using var b=g.AddRasterRenderPass<Data>("587 continuous lash area source",out var d);d.e=e;d.layer=layer;d.areaEye=eye;var view=e.area587.views[eye];b.SetRenderAttachment(g.ImportTexture(view.signal[layer]),0,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(view.depth[layer]),AccessFlags.Write);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);b.UseAllGlobalTextures(true);
++  b.SetRenderFunc(static(Data d,RasterGraphContext c)=>{var e=d.e;var v=e.full;var view=e.area587.views[d.areaEye];var cam=v.motion.camera;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetViewProjectionMatrices(cam.worldToCameraMatrix,view.projection);c.cmd.SetGlobalFloat("_AreaDensity587",EyeArea587.Density);c.cmd.SetGlobalVector("_AreaCentre587",e.centres[d.areaEye]);c.cmd.SetGlobalVector("_AreaAxisX587",e.axesX[d.areaEye]);c.cmd.SetGlobalVector("_AreaAxisY587",e.axesY[d.areaEye]);c.cmd.SetGlobalVector("_AreaUpper587",new Vector4(e.style.upper.x,e.style.upper.y,0,0));
++   if(d.layer<=3||d.layer==5){int sm=d.layer==0?3:d.layer==1?4:d.layer==2?1:d.layer==3?6:5;var mat=d.layer==0?e.area587.skinMaterial:e.area587.materials[4+sm];c.cmd.DrawMesh(e.sampleFace,v.motion.surface.outputs[1].transform.localToWorldMatrix,mat,sm,0);}else if(d.layer==4&&!HeadRegion502.Ready){var mf=v.motion.surface.outputs[2];for(int sm=0;sm<4;sm++)c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,e.area587.materials[11+sm],sm,0);}else if(d.layer==6){var mf=v.motion.surface.outputs[0];for(int sm=0;sm<4;sm++)c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,e.area587.materials[sm],sm,0);}
++   c.cmd.SetViewProjectionMatrices(cam.worldToCameraMatrix,cam.projectionMatrix);
++  });
++ }}}
++ sealed class Candidate:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var e=EyeFeature348.Active;var v=e.full;using var b=g.AddUnsafePass<Data>("348 source-supported normalized eye features and metadata",out var d);d.e=e;foreach(var s in e.samples)foreach(var t in new[]{s.rgba,s.meta,s.point,s.uv})b.UseTexture(g.ImportTexture(t));if(EyeFeature348.UseLashArea587&&EyeFeature348.UseLashRegion583)foreach(var a in e.area587.views)foreach(var t in a.signal)b.UseTexture(g.ImportTexture(t));foreach(var t in new[]{v.layers[8].rgba,v.layers[8].meta,v.layers[10].rgba,v.layers[10].meta,v.layers[6].rgba,v.layers[6].meta,v.layers[7].rgba,v.layers[7].meta,v.motion.raw[5],v.motion.raw[6],v.postLine,v.eyeOwner,v.intrinsic})b.UseTexture(g.ImportTexture(t));foreach(var t in new[]{v.before,v.colour,v.owner,v.preparedMeta,v.preparedUV,v.resolvedMeta,v.resolvedUV,v.domain,e.output,e.owner,e.intrinsic,e.visible,e.histA,e.histB,e.surface,e.pigment,e.audit,e.domain,e.bary,e.supportMeta})b.UseTexture(g.ImportTexture(t),AccessFlags.ReadWrite);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);b.SetRenderFunc(static(Data d,UnsafeGraphContext c)=>Dispatch(d.e,CommandBufferHelpers.GetNativeCommandBuffer(c.cmd)));}}
++ public static void Dispatch(EyeFeature348 e,CommandBuffer cmd){var v=e.full;var cs=e.candidateShader;int k=cs.FindKernel("Evaluate");bool area587=EyeFeature348.UseLashArea587&&EyeFeature348.UseLashRegion583;cmd.SetComputeIntParam(cs,"_UseLashArea587",area587?1:0);cmd.SetComputeBufferParam(cs,k,"_LashArea587",e.lashArea587);cmd.SetComputeIntParam(cs,"_UseHairRegion502",HeadRegion502.Ready?1:0);cmd.SetComputeIntParam(cs,"_UseIrisSurface582",EyeFeature348.UseIrisSurface582?1:0);cmd.SetComputeIntParam(cs,"_UseLashRegion583",EyeFeature348.UseLashRegion583?1:0);void T(string n,RTHandle t)=>cmd.SetComputeTextureParam(cs,k,n,t.rt);for(int i=0;i<7;i++){var s=e.samples[i];T("_S"+i+"RGBA",s.rgba);T("_S"+i+"META",s.meta);T("_S"+i+"POINT",s.point);T("_S"+i+"UV",s.uv);}T("_BaseRGBA",v.layers[8].rgba);T("_BaseMETA",v.layers[8].meta);T("_BackingRGBA",v.layers[10].rgba);T("_BackingMETA",v.layers[10].meta);T("_HairRGBA",v.layers[6].rgba);T("_HairMETA",v.layers[6].meta);T("_BrowRGBA",v.layers[7].rgba);T("_BrowMETA",v.layers[7].meta);T("_RawMETA",v.motion.raw[5]);T("_RawUV",v.motion.raw[6]);T("_PostLine",v.postLine);T("_BaselineColour348",v.colour);T("_BaselineOwner348",v.owner);T("_BaselineMeta348",v.preparedMeta);T("_BaselineUV348",v.preparedUV);T("_BaselineDomain348",v.domain);cmd.SetComputeBufferParam(cs,k,"_RecordsWrite348",e.records);
+   T("_OldEyeOwner",v.eyeOwner);T("_OldIntrinsic",v.intrinsic);cmd.SetComputeMatrixParam(cs,"_WorldToHead348",e.headMatrix.inverse);cmd.SetComputeIntParams(cs,"_ROI348",e.roi.x,272-e.roi.y-e.roi.height,e.roi.width,e.roi.height);cmd.SetComputeVectorArrayParam(cs,"_Centres348",e.centres);cmd.SetComputeVectorArrayParam(cs,"_AxesX348",e.axesX);cmd.SetComputeVectorArrayParam(cs,"_AxesY348",e.axesY);cmd.SetComputeVectorParam(cs,"_UpperLower348",new Vector4(e.style.upper.x,e.style.upper.y,e.style.lower.x,e.style.lower.y));cmd.SetComputeVectorParam(cs,"_Iris348",new Vector4(e.style.irisRadii.x,e.style.irisRadii.y,e.style.irisOffset,e.style.irisPower));cmd.SetComputeVectorParam(cs,"_Catch348",new Vector4(e.style.catchU.x,e.style.catchU.y,e.style.catchV.x,e.style.catchV.y));cmd.SetComputeVectorParam(cs,"_FaceLidShade348",e.faceLidShadeEndpoint);cmd.SetComputeBufferParam(cs,k,"_RestTriangles348",e.restTriangles);cmd.SetComputeVectorArrayParam(cs,"_TriangleRanges348",e.triangleRanges);cmd.SetComputeTextureParam(cs,k,"_TemplateRGBA",v.templateRGBA);cmd.SetComputeTextureParam(cs,k,"_TemplateRole",v.templateRole);
+-  for(int i=0;i<2;i++){cmd.SetComputeMatrixParam(cs,"_Inverse348_"+i,v.eyeInverse[i]);cmd.SetComputeVectorParam(cs,"_Plane348_"+i,v.eyePlanes[i]);var b=v.calibration.eyes[i].referenceBounds;cmd.SetComputeIntParams(cs,"_ColourBounds348_"+i,Mathf.FloorToInt(b.x)-1,Mathf.FloorToInt(b.y)-1,Mathf.CeilToInt(b.z)+1,Mathf.CeilToInt(b.w)+1);}cmd.SetComputeVectorParam(cs,"_RayBase348",v.rayBase);cmd.SetComputeVectorParam(cs,"_RayX348",v.rayX);cmd.SetComputeVectorParam(cs,"_RayY348",v.rayY);cmd.SetComputeVectorParam(cs,"_RayDepth348",v.rayDepth);cmd.DispatchCompute(cs,k,60,34,1);
++  for(int i=0;i<2;i++){cmd.SetComputeMatrixParam(cs,"_Inverse348_"+i,v.eyeInverse[i]);cmd.SetComputeVectorParam(cs,"_Plane348_"+i,v.eyePlanes[i]);var b=v.calibration.eyes[i].referenceBounds;cmd.SetComputeIntParams(cs,"_ColourBounds348_"+i,Mathf.FloorToInt(b.x)-1,Mathf.FloorToInt(b.y)-1,Mathf.CeilToInt(b.z)+1,Mathf.CeilToInt(b.w)+1);}cmd.SetComputeVectorParam(cs,"_RayBase348",v.rayBase);cmd.SetComputeVectorParam(cs,"_RayX348",v.rayX);cmd.SetComputeVectorParam(cs,"_RayY348",v.rayY);cmd.SetComputeVectorParam(cs,"_RayDepth348",v.rayDepth);
++  if(area587){int ak=cs.FindKernel("IntegrateArea587"),fk=cs.FindKernel("FinalizeArea587");cmd.BeginSample("587 lash area GPU reduction");cmd.SetComputeTextureParam(cs,ak,"_HairMETA",v.layers[6].meta.rt);cmd.SetComputeBufferParam(cs,ak,"_AreaPartials587",e.area587.partials);cmd.SetComputeBufferParam(cs,fk,"_AreaPartials587",e.area587.partials);cmd.SetComputeBufferParam(cs,fk,"_LashArea587",e.lashArea587);cmd.SetComputeIntParam(cs,"_AreaDensity587",EyeArea587.Density);for(int eye=0;eye<2;eye++){var a=e.area587.views[eye];cmd.SetComputeIntParam(cs,"_AreaEyeIndex587",eye);cmd.SetComputeIntParams(cs,"_AreaBox587",a.box.x,272-a.box.y-a.box.height,a.box.width,a.box.height);for(int s=0;s<7;s++)cmd.SetComputeTextureParam(cs,ak,"_A"+s+"_587",a.signal[s].rt);cmd.DispatchCompute(cs,ak,(a.box.width*a.box.height*EyeArea587.Density*EyeArea587.Density+255)/256,1,1);cmd.DispatchCompute(cs,fk,1,1,1);}cmd.EndSample("587 lash area GPU reduction");}
++  cmd.DispatchCompute(cs,k,60,34,1);
+   k=cs.FindKernel("UnpackA");cmd.SetComputeBufferParam(cs,k,"_RecordsRead348",e.records);T("_Output348",e.output);T("_Owner348",e.owner);T("_Intrinsic348",e.intrinsic);T("_Visible348",e.visible);T("_HistA348",e.histA);T("_HistB348",e.histB);T("_Surface348",e.surface);T("_Pigment348",e.pigment);cmd.DispatchCompute(cs,k,60,34,1);
+   k=cs.FindKernel("UnpackB");cmd.SetComputeBufferParam(cs,k,"_RecordsRead348",e.records);T("_Audit348",e.audit);T("_Domain348",e.domain);T("_Bary348",e.bary);T("_SupportMeta348",e.supportMeta);cmd.DispatchCompute(cs,k,60,34,1);
+   k=cs.FindKernel("Merge");cmd.SetComputeBufferParam(cs,k,"_RecordsRead348",e.records);T("_Before",v.before);T("_Colour",v.colour);T("_Owner",v.owner);T("_PreparedMeta",v.preparedMeta);T("_PreparedUV",v.preparedUV);T("_ResolvedMeta",v.resolvedMeta);T("_ResolvedUV",v.resolvedUV);T("_OldDomain",v.domain);cmd.DispatchCompute(cs,k,60,34,1);
+--- a/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute
++++ b/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute
+@@ -2,6 +2,8 @@
+ #pragma kernel UnpackA
+ #pragma kernel UnpackB
+ #pragma kernel Merge
++#pragma kernel IntegrateArea587
++#pragma kernel FinalizeArea587
+ Texture2D<float4> _S0RGBA,_S0META,_S0POINT,_S0UV,_S1RGBA,_S1META,_S1POINT,_S1UV,_S2RGBA,_S2META,_S2POINT,_S2UV,_S3RGBA,_S3META,_S3POINT,_S3UV,_S4RGBA,_S4META,_S4POINT,_S4UV,_S5RGBA,_S5META,_S5POINT,_S5UV,_S6RGBA,_S6META,_S6POINT,_S6UV;
+ Texture2D<float4> _BaseRGBA,_BaseMETA,_BackingRGBA,_BackingMETA,_HairRGBA,_HairMETA,_BrowRGBA,_BrowMETA,_RawMETA,_RawUV,_PostLine,_TemplateRGBA,_TemplateRole,_OldEyeOwner,_OldIntrinsic;
+ RWTexture2D<float4> _Before,_Colour,_Owner,_PreparedMeta,_PreparedUV,_ResolvedMeta,_ResolvedUV,_OldDomain;
+@@ -11,6 +13,10 @@
+ Texture2D<float4> _BaselineColour348,_BaselineOwner348,_BaselineMeta348,_BaselineUV348,_BaselineDomain348;
+ StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];
+ int _UseHairRegion502,_UseIrisSurface582,_UseLashRegion583;int4 _ROI348;float4 _Centres348[2],_AxesX348[2],_AxesY348[2],_UpperLower348,_Iris348,_Catch348,_FaceLidShade348;
++int _UseLashArea587,_AreaDensity587,_AreaEyeIndex587;int4 _AreaBox587;
++Texture2D<float4> _A0_587,_A1_587,_A2_587,_A3_587,_A4_587,_A5_587,_A6_587;
++RWStructuredBuffer<float4> _LashArea587;
++RWStructuredBuffer<float4> _AreaPartials587;
+ float4x4 _Inverse348_0,_Inverse348_1,_WorldToHead348;float4 _Plane348_0,_Plane348_1,_RayBase348,_RayX348,_RayY348,_RayDepth348;int4 _ColourBounds348_0,_ColourBounds348_1;
+ bool cov(float4 m){return m.x>0&&m.y>.5&&m.w>1e-6;}
+ float4 M(int s,int2 q){if(s==0)return _S0META.Load(int3(q,0));if(s==1)return _S1META.Load(int3(q,0));if(s==2)return _S2META.Load(int3(q,0));return _S3META.Load(int3(q,0));}
+@@ -53,7 +59,47 @@
+  float area=0;int rank=0;for(int y=_ROI348.y;y<_ROI348.y+_ROI348.w;y++)for(int x=_ROI348.x;x<_ROI348.x+_ROI348.z;x++){
+   int2 q=int2(x,y);float4 c;float2 u;LashCounts583(q,eye,c,u);if(c.x<=0)continue;area+=c.x/16;
+   if(LashBefore583(c,u,q,own,ownU,p))rank++;
+- }return rank<(int)floor(area+.5);
++ }if(_UseLashArea587!=0)area=_LashArea587[eye].x;return rank<(int)floor(area+.5);
++}
++
++bool AreaCov587(float4 m){return m.x>0&&m.y>1e-6;}
++bool AreaEye587(float4 m,int owner){return AreaCov587(m)&&round(m.z)==owner;}
++float AreaWeight587(int2 q){
++ int owner=(int)round(_Centres348[_AreaEyeIndex587].w);
++ float4 skin=_A0_587.Load(int3(q,0)),white=_A1_587.Load(int3(q,0)),iris=_A2_587.Load(int3(q,0)),eyeline=_A3_587.Load(int3(q,0));
++ float4 reference=AreaEye587(skin,owner)?skin:AreaEye587(white,owner)?white:AreaEye587(iris,owner)?iris:AreaEye587(eyeline,owner)?eyeline:0;
++ if(reference.w<.5)return 0;
++ float4 support=AreaEye587(skin,owner)?skin:AreaEye587(eyeline,owner)?eyeline:0;
++ if(!AreaCov587(support))return 0;
++ int2 p=_AreaBox587.xy+q/_AreaDensity587;
++ float4 hair=_UseHairRegion502!=0?_HairMETA.Load(int3(p,0)):_A4_587.Load(int3(q,0));
++ float weight=1;
++ // Packet META has depth/role/owner/alpha, area signals have depth/alpha.
++ if(_UseHairRegion502!=0){if(cov(hair)&&hair.x<support.x)weight*=1-saturate(hair.w);}
++ else if(AreaCov587(hair)&&hair.x<support.x)weight*=1-saturate(hair.y);
++ float4 brow=_A5_587.Load(int3(q,0)),body=_A6_587.Load(int3(q,0));
++ if(AreaCov587(brow)&&brow.x<support.x)weight*=1-saturate(brow.y);
++ if(AreaCov587(body)&&body.x<support.x)weight=0;
++ return weight;
++}
++groupshared float4 AreaSums587[64];
++// Four interlaced64x64 rules retain the original source filter footprint.
++// Their spread is an error estimate, not a proven bound or temporal filter.
++[numthreads(64,1,1)]void IntegrateArea587(uint3 tid:SV_GroupThreadID,uint3 gid:SV_GroupID){
++ int width=_AreaBox587.z*_AreaDensity587,height=_AreaBox587.w*_AreaDensity587;
++ float4 sums=0;
++ uint end=min((gid.x+1)*256,(uint)(width*height));
++ [loop]for(uint k=gid.x*256+tid.x;k<end;k+=64){int2 q=int2(k%width,k/width);float w=AreaWeight587(q);int phase=(q.x&1)+2*(q.y&1);sums+=w*float4(phase==0,phase==1,phase==2,phase==3);}
++ AreaSums587[tid.x]=sums;GroupMemoryBarrierWithGroupSync();
++ for(uint stride=32;stride>0;stride>>=1){if(tid.x<stride)AreaSums587[tid.x]+=AreaSums587[tid.x+stride];GroupMemoryBarrierWithGroupSync();}
++ if(tid.x==0)_AreaPartials587[gid.x]=AreaSums587[0];
++}
++[numthreads(64,1,1)]void FinalizeArea587(uint3 tid:SV_GroupThreadID){
++ int width=_AreaBox587.z*_AreaDensity587,height=_AreaBox587.w*_AreaDensity587;uint count=(width*height+255)/256;float4 sums=0;
++ [loop]for(uint k=tid.x;k<count;k+=64)sums+=_AreaPartials587[k];
++ AreaSums587[tid.x]=sums;GroupMemoryBarrierWithGroupSync();
++ for(uint stride=32;stride>0;stride>>=1){if(tid.x<stride)AreaSums587[tid.x]+=AreaSums587[tid.x+stride];GroupMemoryBarrierWithGroupSync();}
++ if(tid.x==0){float4 phases=AreaSums587[0]*(4.0/(_AreaDensity587*_AreaDensity587));float area=dot(phases,float4(.25,.25,.25,.25));float error=2*max(max(abs(phases.x-area),abs(phases.y-area)),max(abs(phases.z-area),abs(phases.w-area)));_LashArea587[_AreaEyeIndex587]=float4(area,error,min(min(phases.x,phases.y),min(phases.z,phases.w)),max(max(phases.x,phases.y),max(phases.z,phases.w)));}
+ }
+ int ChooseRegion583(float c[8],int2 p,int eye){
+  if(c[5]>0&&LashAllocated583(p,eye))return c[5]>=5?5:7;
+--- a/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSurface348.shader
++++ b/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSurface348.shader
+@@ -114,6 +114,7 @@
+             
+             #pragma vertex Eye333Vertex
+             #pragma fragment Eye333Fragment
++            #pragma multi_compile_local_fragment _ EYE_AREA_587
+ 
+             #define MTOON_URP
+ 
+@@ -124,12 +125,18 @@
+             #include "Packages/com.vrmc.vrm/MToon10/Shaders/vrmc_materials_mtoon_forward_fragment.hlsl"
+ 
+ 
++#include "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/AreaSource587.hlsl"
+ float4 _ClipShift333,_Profile333;float _Eye253Part,_Eye253Tag;float4 _ROI348;float4x4 _WorldToHead348;int _SupportKind348;
+ Varyings Eye333Vertex(const Attributes v){Varyings o=MToonVertex(v);o.e202Control=v.apertureControl.xy;o.e202Owner=v.e202SourceOwner.x;o.restHead348=v.texcoord1;return o;}
+ struct O333{float4 rgba:SV_Target0;float4 meta:SV_Target1;float4 restPosition:SV_Target2;float4 uv:SV_Target3;};
+ O333 Eye333Fragment(const Varyings input,uint primitiveID:SV_PrimitiveID,bool facing:SV_IsFrontFace){Varyings v=input;v.pos.xy=_ROI348.xy+input.pos.xy/4;FragmentInput f;f.varyings=v;f.facing=facing?1:-1;
++ #if defined(EYE_AREA_587)
++ O333 a=(O333)0;a.rgba=AreaSource587(v,facing);return a;
++ #else
+  float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;float4 c=MToonFragment(f);int role=(int)round(_Auto245Role);
+- O333 o;o.rgba=float4(c.rgb,alpha);o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,round(v.e202Owner),alpha);o.restPosition=float4(v.restHead348,facing?1:-1);o.uv=float4(uv,primitiveID+1,_SupportKind348);return o;}
++ O333 o;o.rgba=float4(c.rgb,alpha);o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,round(v.e202Owner),alpha);o.restPosition=float4(v.restHead348,facing?1:-1);o.uv=float4(uv,primitiveID+1,_SupportKind348);return o;
++ #endif
++ }
+ ENDHLSL
+         }
+ }
+--- a/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSkin348.shader
++++ b/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSkin348.shader
+@@ -114,6 +114,7 @@
+             
+             #pragma vertex Eye333Vertex
+             #pragma fragment Eye333Fragment
++            #pragma multi_compile_local_fragment _ EYE_AREA_587
+ 
+             #define MTOON_URP
+ 
+@@ -124,12 +125,18 @@
+             #include "Assets/EUnityValidation01/Restore250R2/Shaders/Auto245Fragment.hlsl"
+ 
+ 
++#include "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/AreaSource587.hlsl"
+ float4 _ClipShift333,_Profile333;float _Eye253Part,_Eye253Tag;float4 _ROI348;float4x4 _WorldToHead348;int _SupportKind348;
+ Varyings Eye333Vertex(const Attributes v){Varyings o=MToonVertex(v);o.e202Control=v.apertureControl.xy;o.e202Owner=v.e202SourceOwner.x;o.restHead348=v.texcoord1;return o;}
+ struct O333{float4 rgba:SV_Target0;float4 meta:SV_Target1;float4 restPosition:SV_Target2;float4 uv:SV_Target3;};
+ O333 Eye333Fragment(const Varyings input,uint primitiveID:SV_PrimitiveID,bool facing:SV_IsFrontFace){Varyings v=input;v.pos.xy=_ROI348.xy+input.pos.xy/4;FragmentInput f;f.varyings=v;f.facing=facing?1:-1;
++ #if defined(EYE_AREA_587)
++ O333 a=(O333)0;a.rgba=AreaSource587(v,facing);return a;
++ #else
+  float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;float4 c=MToonFragment(f);int role=(int)round(_Auto245Role);
+- O333 o;o.rgba=float4(c.rgb,alpha);o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,round(v.e202Owner),alpha);o.restPosition=float4(v.restHead348,facing?1:-1);o.uv=float4(uv,primitiveID+1,_SupportKind348);return o;}
++ O333 o;o.rgba=float4(c.rgb,alpha);o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,round(v.e202Owner),alpha);o.restPosition=float4(v.restHead348,facing?1:-1);o.uv=float4(uv,primitiveID+1,_SupportKind348);return o;
++ #endif
++ }
+ ENDHLSL
+         }
+ }
+--- /dev/null
++++ b/Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeArea587.cs
+@@ -0,0 +1,93 @@
++using System;
++using System.Collections.Generic;
++using UnityEngine;
++using UnityEngine.Rendering;
++using UnityEngine.Experimental.Rendering;
++
++// Area input only. Original per-cell feature support, rank, pigments and
++// compositing stay in EyeFeature348. No pose results or readback are cached.
++public sealed class EyeArea587 : IDisposable {
++ public const int Density=128;
++ public sealed class View {
++  public RectInt box;
++  public Matrix4x4 projection;
++  public RTHandle[] signal,depth;
++ }
++ public readonly View[] views={new View(),new View()};
++ public long textureBytes;
++ public int referenceVertexCount;
++ public ComputeBuffer partials;
++ public Material[] materials;
++ public Material skinMaterial;
++ int partialCapacity;
++ int[][] vertices;
++ readonly Vector4[] signature=new Vector4[7];
++ bool bound;
++
++ bool Changed(EyeFeature348 e) {
++  if(!bound)return true;
++  for(int i=0;i<2;i++)if(signature[i]!=e.centres[i]||signature[2+i]!=e.axesX[i]||signature[4+i]!=e.axesY[i])return true;
++  return signature[6]!=new Vector4(e.style.upper.x,e.style.upper.y,0,0);
++ }
++ void Bind(EyeFeature348 e) {
++  var rest=new List<Vector3>();e.sampleFace.GetUVs(1,rest);
++  var owners=new List<Vector2>();e.sampleFace.GetUVs(7,owners);
++  var indices=new List<int>();foreach(int sm in new[]{3,4,1,6})indices.AddRange(e.sampleFace.GetIndices(sm));
++  vertices=new int[2][];referenceVertexCount=0;
++  for(int eye=0;eye<2;eye++) {
++   var selected=new HashSet<int>();var c=(Vector3)e.centres[eye];var ax=e.axesX[eye];var ay=e.axesY[eye];float id=e.centres[eye].w;
++   for(int k=0;k<indices.Count;k+=3) {
++    float u0=float.PositiveInfinity,u1=float.NegativeInfinity,v0=u0,v1=u1,o0=u0,o1=u1;
++    for(int j=0;j<3;j++) {
++     int i=indices[k+j];var d=rest[i]-c;float u=Vector3.Dot(d,(Vector3)ax)/ax.w,v=-Vector3.Dot(d,(Vector3)ay)/ay.w;
++     u0=Mathf.Min(u0,u);u1=Mathf.Max(u1,u);v0=Mathf.Min(v0,v);v1=Mathf.Max(v1,v);o0=Mathf.Min(o0,owners[i].x);o1=Mathf.Max(o1,owners[i].x);
++    }
++    float sq0=u0<=0&&u1>=0?0:Mathf.Min(u0*u0,u1*u1),sq1=Mathf.Max(u0*u0,u1*u1);
++    float b0=e.style.upper.y*sq0,b1=e.style.upper.y*sq1;
++    float g0=v0-e.style.upper.x-Mathf.Max(b0,b1),g1=v1-e.style.upper.x-Mathf.Min(b0,b1);
++    if(u1 < -1.08f||u0 > 1.08f||g1 < -.36f||g0 > .22f||o1 < id-.5f||o0 > id+.5f)continue;
++    for(int j=0;j<3;j++)selected.Add(indices[k+j]);
++   }
++   vertices[eye]=new int[selected.Count];selected.CopyTo(vertices[eye]);referenceVertexCount+=selected.Count;
++   signature[eye]=e.centres[eye];signature[2+eye]=e.axesX[eye];signature[4+eye]=e.axesY[eye];
++  }
++  signature[6]=new Vector4(e.style.upper.x,e.style.upper.y,0,0);bound=true;
++ }
++ public void Prepare(EyeFeature348 e,Vector3[] current) {
++  if(Changed(e))Bind(e);
++  if(materials==null){materials=new Material[e.materials.Length];for(int i=0;i<materials.Length;i++)materials[i]=new Material(e.materials[i]){hideFlags=HideFlags.DontSave};skinMaterial=new Material(e.skinMaterial){hideFlags=HideFlags.DontSave};}
++  for(int i=0;i<materials.Length;i++){materials[i].CopyPropertiesFromMaterial(e.materials[i]);materials[i].EnableKeyword("EYE_AREA_587");}skinMaterial.CopyPropertiesFromMaterial(e.skinMaterial);skinMaterial.EnableKeyword("EYE_AREA_587");
++  var mvp=e.full.effectiveProjection*e.full.motion.camera.worldToCameraMatrix*e.full.motion.surface.outputs[1].transform.localToWorldMatrix;
++  textureBytes=0;int requiredPartials=1;
++  for(int eye=0;eye<2;eye++) {
++   var lo=new Vector2(float.PositiveInfinity,float.PositiveInfinity);var hi=new Vector2(float.NegativeInfinity,float.NegativeInfinity);
++   foreach(int i in vertices[eye]) {
++    var p=current[i];var q=mvp*new Vector4(p.x,p.y,p.z,1);
++    if(q.w<=0)throw new InvalidOperationException("587 area reference crosses projection plane");
++    var xy=new Vector2((q.x/q.w*.5f+.5f)*480,(.5f-q.y/q.w*.5f)*272);lo=Vector2.Min(lo,xy);hi=Vector2.Max(hi,xy);
++   }
++   int x0=e.roi.x,y0=e.roi.y,x1=x0+1,y1=y0+1;
++   if(vertices[eye].Length>0) {
++    x0=Mathf.Clamp(Mathf.FloorToInt(lo.x)-1,e.roi.x,e.roi.xMax-1);y0=Mathf.Clamp(Mathf.FloorToInt(lo.y)-1,e.roi.y,e.roi.yMax-1);
++    x1=Mathf.Clamp(Mathf.CeilToInt(hi.x)+1,x0+1,e.roi.xMax);y1=Mathf.Clamp(Mathf.CeilToInt(hi.y)+1,y0+1,e.roi.yMax);
++   }
++   var box=new RectInt(x0,y0,x1-x0,y1-y0);var v=views[eye];int w=box.width*Density,h=box.height*Density;
++   if(w>SystemInfo.maxTextureSize||h>SystemInfo.maxTextureSize)throw new InvalidOperationException("587 area target exceeds GPU texture limit");
++   if(v.signal==null||v.box.size!=box.size) {
++    Release(v);v.signal=new RTHandle[7];v.depth=new RTHandle[7];
++    for(int s=0;s<7;s++) {
++     v.signal[s]=RTHandles.Alloc(w,h,colorFormat:GraphicsFormat.R32G32B32A32_SFloat,filterMode:FilterMode.Point);
++     v.depth[s]=RTHandles.Alloc(w,h,depthBufferBits:DepthBits.Depth32);
++    }
++   }
++   v.box=box;var crop=Matrix4x4.identity;crop[0,0]=480f/box.width;crop[0,3]=(480f-2*box.x-box.width)/box.width;crop[1,1]=272f/box.height;crop[1,3]=(2*box.y+box.height-272f)/box.height;v.projection=crop*e.full.effectiveProjection;
++   textureBytes+=(long)w*h*20*7;
++   requiredPartials=Mathf.Max(requiredPartials,(w*h+255)/256);
++  }
++  if(requiredPartials>partialCapacity){partials?.Dispose();partials=new ComputeBuffer(requiredPartials,16);partialCapacity=requiredPartials;}
++ }
++ static void Release(View v) {
++  if(v.signal!=null)foreach(var t in v.signal)t?.Release();if(v.depth!=null)foreach(var t in v.depth)t?.Release();v.signal=null;v.depth=null;
++ }
++ public void Dispose(){foreach(var v in views)Release(v);partials?.Dispose();partials=null;partialCapacity=0;if(materials!=null)foreach(var m in materials)if(m)UnityEngine.Object.DestroyImmediate(m);if(skinMaterial)UnityEngine.Object.DestroyImmediate(skinMaterial);materials=null;skinMaterial=null;}
++}
+--- /dev/null
++++ b/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/AreaSource587.hlsl
+@@ -0,0 +1,19 @@
++#ifndef EYE_AREA_SOURCE_587
++#define EYE_AREA_SOURCE_587
++float _AreaDensity587;
++float4 _AreaCentre587,_AreaAxisX587,_AreaAxisY587,_AreaUpper587;
++// Same source alpha/material/cull/depth path. Density changes integration
++// coordinates, not the original four-samples-per-cell texture footprint.
++float4 AreaSource587(Varyings v,bool facing) {
++ float2 uv=GetMToonGeometry_Uv(v.uv);
++ float2 dx=ddx(uv)*(_AreaDensity587/4),dy=ddy(uv)*(_AreaDensity587/4);
++ half4 src=SAMPLE_TEXTURE2D_GRAD(_MainTex,sampler_MainTex,uv,dx,dy)*_Color;
++ half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;
++ float3 d=v.restHead348-_AreaCentre587.xyz;
++ float u=dot(d,_AreaAxisX587.xyz)/_AreaAxisX587.w;
++ float y=-dot(d,_AreaAxisY587.xyz)/_AreaAxisY587.w;
++ float upper=_AreaUpper587.x+_AreaUpper587.y*u*u;
++ bool band=abs(u)<=1.08&&y>=upper-.36&&y<=upper+.22;
++ return float4(-TransformWorldToView(v.positionWS).z,alpha,round(v.e202Owner)*(facing?1:-1),band?1:0);
++}
++#endif

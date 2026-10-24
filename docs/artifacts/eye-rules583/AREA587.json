@@ -1,0 +1,858 @@
+{
+  "record": 587,
+  "createdUTC": "2026-10-24T21:35:21.667247+00:00",
+  "status": "NOT_ADOPTED_BOUNDARY_ACCURACY_FAILURE",
+  "productionRestored": {
+    "baseCommit": "e10bbb66c5abd5288a9cc223ce2fd91bd29be7a9",
+    "trackedFilesByteExact": 5,
+    "ownNewSourcesRemoved": 2,
+    "ownMetasRemoved": 2,
+    "prototypePreserved": true,
+    "default587PathAbsent": true
+  },
+  "productionSourceSHA256": {
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeFeature348.cs": "f6d61d733d7c2513b7c64343d129d7b9fd1641a4cd71a3005a22a60483881edb",
+    "Assets/EUnityValidation01/HeadLocal367/Runtime/EyeRenderer367.cs": "139561cd1ded69acb64f05548c26c1e6098b258a22b3515d8c61c3dd7e853c39",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute": "a5a99fe3dfd5cbec8dae7e23c65a4e5d78b1eb53a859863612a11f4ffa5c8ea6",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSurface348.shader": "9d1639c9222e698f0d830edf474d894cc487648b9dfc2f1a1244ccb4ceffc8fa",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSkin348.shader": "9ea84191546d5743842d33d6a106cce302aa6135a8474bfdbc1be3c92e501d53"
+  },
+  "prototypeSHA256": {
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeFeature348.cs": "d35c396a804c33eb886debcfa58eb4a68a74c2a5bcf3be49ddd9b1ff8d5e080a",
+    "Assets/EUnityValidation01/HeadLocal367/Runtime/EyeRenderer367.cs": "bc09fcd38d5683953fa507a80b854b48b6677292924c330709e60c90c8f90f35",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute": "16e5d36d62e2ee73dce7e62068691c3a5e9f8c4893ffe3a8af936a650908fb02",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSurface348.shader": "424ac29ded99156eef4791f6bc3bb73ff4d58b2d03474fa1e65bf58465ebec90",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeSkin348.shader": "418065289ba3d6f22d5f8383568af69ca086c339401f09001e0f9942d9ae4b5d",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeArea587.cs": "5ee3f9d72a7716affd0a95aebe14c38bf93fdf87bb815dccf492917fb658ec62",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/AreaSource587.hlsl": "912f9a5d093101ec00ef7defe9d3f8187a5aed5a719c12633242a9a044078839"
+  },
+  "runtimeReadback": false,
+  "pipeline": "Existing source draw meshes/material data -> separate area shader variant with original4x4 texture footprint -> seven depth/alpha/eye/band signals per eye -> GPU partial/final reduction -> A only in unchanged floor(A+.5)/rank selector.",
+  "nineFrozenPoses": {
+    "poses": 9,
+    "records": [
+      {
+        "case": 2,
+        "frame": 0,
+        "run": "Eight587",
+        "index": 0,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [],
+        "area": 0.345458984,
+        "areaReference": 0.34552001953125,
+        "referenceDelta": -6.103553124997552e-05,
+        "interlacedErrorEstimate": 0.00390625,
+        "budget": 0,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [],
+          "ON": []
+        },
+        "changes": [],
+        "textureBytes": 172032000
+      },
+      {
+        "case": 2,
+        "frame": 1,
+        "run": "Eight587",
+        "index": 1,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [
+          {
+            "cell": [
+              225,
+              52
+            ],
+            "buffer": "EyeVisible",
+            "before": [
+              7.0,
+              2.0,
+              4.0,
+              5.0
+            ],
+            "after": [
+              1.0,
+              2.0,
+              3.0,
+              1.0
+            ]
+          }
+        ],
+        "area": 0.44934082,
+        "areaReference": 0.44940185546875,
+        "referenceDelta": -6.103546875002586e-05,
+        "interlacedErrorEstimate": 0.00756835938,
+        "budget": 0,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [
+            [
+              225,
+              52
+            ]
+          ],
+          "ON": []
+        },
+        "changes": [
+          {
+            "cell": [
+              225,
+              52
+            ],
+            "buffer": "EyeVisible",
+            "before": [
+              7.0,
+              2.0,
+              4.0,
+              5.0
+            ],
+            "after": [
+              1.0,
+              2.0,
+              3.0,
+              1.0
+            ]
+          },
+          {
+            "cell": [
+              225,
+              52
+            ],
+            "buffer": "Colour",
+            "before": [
+              0.033591494,
+              0.0209845752,
+              0.03288519,
+              1.0
+            ],
+            "after": [
+              0.9765625,
+              0.9453125,
+              0.9453125,
+              1.0
+            ]
+          },
+          {
+            "cell": [
+              225,
+              52
+            ],
+            "buffer": "Owner",
+            "before": [
+              7.0,
+              6.0,
+              13.716692,
+              0.0
+            ],
+            "after": [
+              5.0,
+              6.0,
+              13.7229786,
+              0.0
+            ]
+          }
+        ],
+        "textureBytes": 172032000
+      },
+      {
+        "case": 2,
+        "frame": 2,
+        "run": "Eight587",
+        "index": 2,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [],
+        "area": 0.4083252,
+        "areaReference": 0.4083251953125,
+        "referenceDelta": 4.6874999992674304e-09,
+        "interlacedErrorEstimate": 0.00219726563,
+        "budget": 0,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [],
+          "ON": []
+        },
+        "changes": [],
+        "textureBytes": 160563200
+      },
+      {
+        "case": 5,
+        "frame": 0,
+        "run": "Eight587",
+        "index": 3,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [],
+        "area": 0.368835449,
+        "areaReference": 0.36883544921875,
+        "referenceDelta": -2.1875001809945616e-10,
+        "interlacedErrorEstimate": 0.00256347656,
+        "budget": 0,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [],
+          "ON": []
+        },
+        "changes": [],
+        "textureBytes": 174325760
+      },
+      {
+        "case": 5,
+        "frame": 1,
+        "run": "First587B",
+        "index": 0,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [],
+        "area": 0.463623047,
+        "areaReference": 0.46368408203125,
+        "referenceDelta": -6.103503124998966e-05,
+        "interlacedErrorEstimate": 0.008300781,
+        "budget": 0,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [
+            [
+              224,
+              52
+            ]
+          ],
+          "ON": []
+        },
+        "changes": [
+          {
+            "cell": [
+              224,
+              52
+            ],
+            "buffer": "EyeVisible",
+            "before": [
+              7.0,
+              2.0,
+              4.0,
+              1.0
+            ],
+            "after": [
+              0.0,
+              2.0,
+              0.0,
+              -1.0
+            ]
+          },
+          {
+            "cell": [
+              224,
+              52
+            ],
+            "buffer": "Colour",
+            "before": [
+              0.0190532915,
+              0.0162604358,
+              0.0245681386,
+              1.0
+            ],
+            "after": [
+              0.7133203,
+              0.660937548,
+              0.5628516,
+              1.0
+            ]
+          },
+          {
+            "cell": [
+              224,
+              52
+            ],
+            "buffer": "Owner",
+            "before": [
+              7.0,
+              6.0,
+              13.711648,
+              0.0
+            ],
+            "after": [
+              4.0,
+              6.0,
+              13.7068577,
+              0.0
+            ]
+          }
+        ],
+        "textureBytes": 188088320
+      },
+      {
+        "case": 5,
+        "frame": 2,
+        "run": "Eight587",
+        "index": 4,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [],
+        "area": 0.422363281,
+        "areaReference": 0.42230224609375,
+        "referenceDelta": 6.1034906249979315e-05,
+        "interlacedErrorEstimate": 0.00244140625,
+        "budget": 0,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [],
+          "ON": []
+        },
+        "changes": [],
+        "textureBytes": 169738240
+      },
+      {
+        "case": 16,
+        "frame": 0,
+        "run": "Eight587",
+        "index": 5,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [],
+        "area": 0.571960449,
+        "areaReference": 0.57196044921875,
+        "referenceDelta": -2.1875001809945616e-10,
+        "interlacedErrorEstimate": 0.00158691406,
+        "budget": 1,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [
+            [
+              221,
+              52
+            ]
+          ],
+          "ON": [
+            [
+              221,
+              52
+            ]
+          ]
+        },
+        "changes": [],
+        "textureBytes": 188088320
+      },
+      {
+        "case": 16,
+        "frame": 1,
+        "run": "Eight587",
+        "index": 6,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [],
+        "area": 0.5189209,
+        "areaReference": 0.51898193359375,
+        "referenceDelta": -6.103359374998174e-05,
+        "interlacedErrorEstimate": 0.00317382813,
+        "budget": 1,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [],
+          "ON": [
+            [
+              221,
+              52
+            ]
+          ]
+        },
+        "changes": [
+          {
+            "cell": [
+              221,
+              52
+            ],
+            "buffer": "EyeVisible",
+            "before": [
+              0.0,
+              2.0,
+              0.0,
+              -1.0
+            ],
+            "after": [
+              7.0,
+              2.0,
+              1.0,
+              0.0
+            ]
+          },
+          {
+            "cell": [
+              221,
+              52
+            ],
+            "buffer": "Colour",
+            "before": [
+              0.9921875,
+              0.9003906,
+              0.7578125,
+              1.0
+            ],
+            "after": [
+              0.009044224,
+              0.007980142,
+              0.0118394895,
+              1.0
+            ]
+          },
+          {
+            "cell": [
+              221,
+              52
+            ],
+            "buffer": "Owner",
+            "before": [
+              4.0,
+              6.0,
+              13.6929932,
+              0.0
+            ],
+            "after": [
+              7.0,
+              6.0,
+              13.698967,
+              0.0
+            ]
+          }
+        ],
+        "textureBytes": 174325760
+      },
+      {
+        "case": 16,
+        "frame": 2,
+        "run": "Eight587",
+        "index": 7,
+        "baselineParityChanges": 0,
+        "intrinsicChanges": [],
+        "irisWhiteFeatureChanges": [],
+        "area": 0.643676758,
+        "areaReference": 0.6436767578125,
+        "referenceDelta": 1.8750001551381956e-10,
+        "interlacedErrorEstimate": 0.00268554688,
+        "budget": 1,
+        "thresholdIntervalSeparated": true,
+        "visible": {
+          "OFF": [
+            [
+              220,
+              52
+            ]
+          ],
+          "ON": [
+            [
+              220,
+              52
+            ]
+          ]
+        },
+        "changes": [],
+        "textureBytes": 188088320
+      }
+    ],
+    "baselineVisibleIntrinsicChanges": 0,
+    "intrinsicChanges": 0,
+    "irisWhiteFeatureChanges": 1,
+    "maxAreaReferenceDelta": 6.103553124997552e-05,
+    "maxInterlacedErrorEstimate": 0.008300781,
+    "budgetByCase": {
+      "2": [
+        0,
+        0,
+        0
+      ],
+      "5": [
+        0,
+        0,
+        0
+      ],
+      "16": [
+        1,
+        1,
+        1
+      ]
+    },
+    "newActualRotationFrames": 0,
+    "allFrozenRunsRestored": true
+  },
+  "counterexamples": [
+    {
+      "case": "0",
+      "targetArea": "0.49",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.4868164",
+      "errorEstimate": "0.00048828125",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.00318360329"
+    },
+    {
+      "case": "1",
+      "targetArea": "0.499",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.497680664",
+      "errorEstimate": "0.00366210938",
+      "budget": "0",
+      "thresholdSeparated": "False",
+      "absoluteError": "0.00131934881"
+    },
+    {
+      "case": "2",
+      "targetArea": "0.5",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.498291016",
+      "errorEstimate": "0.00341796875",
+      "budget": "0",
+      "thresholdSeparated": "False",
+      "absoluteError": "0.00170898438"
+    },
+    {
+      "case": "3",
+      "targetArea": "0.501",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.498291016",
+      "errorEstimate": "0.00146484375",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.0027089715"
+    },
+    {
+      "case": "4",
+      "targetArea": "0.51",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.508422852",
+      "errorEstimate": "0.00170898438",
+      "budget": "1",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.0015771389"
+    },
+    {
+      "case": "5",
+      "targetArea": "0.65",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.6529541",
+      "errorEstimate": "0.000244140625",
+      "budget": "1",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.0029541254"
+    },
+    {
+      "case": "6",
+      "targetArea": "0.55",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.5522461",
+      "errorEstimate": "0.001953125",
+      "budget": "1",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.00224608183"
+    },
+    {
+      "case": "7",
+      "targetArea": "0.45",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "8",
+      "targetArea": "0.35",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.350219727",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000219732523"
+    },
+    {
+      "case": "9",
+      "targetArea": "0.51",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "True",
+      "GPUArea": "0",
+      "errorEstimate": "0",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0"
+    },
+    {
+      "case": "10",
+      "targetArea": "0",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0",
+      "errorEstimate": "0",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0"
+    },
+    {
+      "case": "11",
+      "targetArea": "0.45",
+      "shiftX": "0",
+      "shiftY": "0",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "12",
+      "targetArea": "0.45",
+      "shiftX": "0.0625",
+      "shiftY": "0.4375",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "13",
+      "targetArea": "0.45",
+      "shiftX": "0.125",
+      "shiftY": "0.875",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "14",
+      "targetArea": "0.45",
+      "shiftX": "0.1875",
+      "shiftY": "0.3125",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "15",
+      "targetArea": "0.45",
+      "shiftX": "0.25",
+      "shiftY": "0.75",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "16",
+      "targetArea": "0.45",
+      "shiftX": "0.3125",
+      "shiftY": "0.1875",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "17",
+      "targetArea": "0.45",
+      "shiftX": "0.375",
+      "shiftY": "0.625",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "18",
+      "targetArea": "0.45",
+      "shiftX": "0.4375",
+      "shiftY": "0.0625",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "19",
+      "targetArea": "0.45",
+      "shiftX": "0.5",
+      "shiftY": "0.5",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "20",
+      "targetArea": "0.45",
+      "shiftX": "0.5625",
+      "shiftY": "0.9375",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "21",
+      "targetArea": "0.45",
+      "shiftX": "0.625",
+      "shiftY": "0.375",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "22",
+      "targetArea": "0.45",
+      "shiftX": "0.6875",
+      "shiftY": "0.8125",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "23",
+      "targetArea": "0.45",
+      "shiftX": "0.75",
+      "shiftY": "0.25",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "24",
+      "targetArea": "0.45",
+      "shiftX": "0.8125",
+      "shiftY": "0.6875",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "25",
+      "targetArea": "0.45",
+      "shiftX": "0.875",
+      "shiftY": "0.125",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    },
+    {
+      "case": "26",
+      "targetArea": "0.45",
+      "shiftX": "0.9375",
+      "shiftY": "0.5625",
+      "fullyOccluded": "False",
+      "GPUArea": "0.450317383",
+      "errorEstimate": "0.000244140625",
+      "budget": "0",
+      "thresholdSeparated": "True",
+      "absoluteError": "0.000317394733"
+    }
+  ],
+  "cost": {
+    "prepare": {
+      "n": 5,
+      "medianMs": 0.20869999934802763,
+      "p95Ms": 0.3652799983683508,
+      "minMs": 0.20500000027823262,
+      "maxMs": 0.3909999977622647
+    },
+    "renderOFF": {
+      "n": 5,
+      "medianMs": 624.7489000015776,
+      "p95Ms": 820.2529800008051,
+      "minMs": 530.9051999975054,
+      "maxMs": 860.9724000016286
+    },
+    "renderON": {
+      "n": 5,
+      "medianMs": 613.5379000006651,
+      "p95Ms": 857.2420599986799,
+      "minMs": 526.3752999999269,
+      "maxMs": 857.6003999987734
+    },
+    "scope": "Wall clock under profiler; render call includes existing pipeline waits/readbacks; no new capture/file IO inside scope. Not GPU-only or Player FPS.",
+    "managedAllocation": "UNMEASURED: raw profiler scopes did not arrive; first batch and one frame-scoped correction retained as failures.",
+    "gpu": "UNMEASURED: no nonzero matched GPU samples.",
+    "textureLogicalBytes": 188088320,
+    "profilerStatuses": [
+      {
+        "status": "UNMEASURED",
+        "error": "Raw scoped frame data did not arrive within15s",
+        "profilerRestored": true
+      },
+      {
+        "status": "UNMEASURED",
+        "error": "Raw scoped frame data did not arrive within60s",
+        "profilerRestored": true
+      }
+    ]
+  },
+  "finalState": "lash583=False iris582=False play=False paused=False compiling=False dirty=False head=False generatedView=False inputBytes=0 clothes=False captureDelta=0 background=False profiler=False currentShaderErrors=0",
+  "userSettingsSHA256": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "validationScope": {
+    "realFrozenPairs": 9,
+    "actualContinuousRotationFrames": 0,
+    "newFullImages": 0,
+    "newGIF": 0,
+    "threeDirectionRegression": "NOT_EXECUTED: boundary gate failed",
+    "oldVideo": "583 unchanged, not new candidate result"
+  },
+  "missingInput": "Within-pixel triangle/band intersection coverage and same-ray visibility ownership; binary band-at-centre signal cannot recover it. No new penalties/density tuning or engine rewrite started.",
+  "hardwareAlphaResidual15": "Not revalidated or claimed resolved; matching nine finite reference areas is not proof of full continuous GPU alpha equivalence."
+}

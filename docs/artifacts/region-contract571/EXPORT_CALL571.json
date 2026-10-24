@@ -1,0 +1,273 @@
+{
+  "initialize": {
+    "result": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {
+        "tools": {
+          "listChanged": true
+        },
+        "prompts": {}
+      },
+      "serverInfo": {
+        "name": "unity-mcp-server",
+        "version": "1.0.0"
+      }
+    },
+    "jsonrpc": "2.0",
+    "id": 1
+  },
+  "tools": {
+    "result": {
+      "tools": [
+        {
+          "name": "Unity_AssetGeneration_GenerateAsset",
+          "description": "Generates or modifies a Unity asset. ONLY call this tool when the user has explicitly asked to create, generate, or modify a specific asset (e.g., 'generate a sprite', 'create a 3D model', 'make a sound effect', 'generate a texture'). Do NOT call this tool to answer questions about Unity, explain how generation works, set up a project, or for any task where the user has not explicitly requested asset creation or modification. Do NOT call this tool as the first action in a game or feature creation task. The specific action is determined by the 'command' parameter. The model id parameter requires a valid model ID from the list of available models for asset generation. For optimal performance, you are strongly encouraged to generate multiple independent assets in parallel by issuing multiple tool calls simultaneously in a single response. CONSENT REQUIRED (once per conversation): Before the FIRST call to this tool in a conversation, do NOT call it yet. First send the user a plain-text message (a normal conversational reply, not a tool call or popup) that: briefly lists the specific asset(s) you intend to generate; explains that generations run in parallel but the assistant is BLOCKED until every generation completes \u2014 it cannot take other actions or reply mid-generation; notes there is no precise ETA and generation can take from tens of seconds to several minutes depending on the model, cold starts, and third-party provider queues; and asks the user to confirm they want to proceed. Then stop and wait for the user's confirmation on a following turn before calling this tool. Ask for this confirmation only ONCE per conversation: if the user has already confirmed an earlier generation in this conversation, do not ask again. A new conversation requires asking again. To generate a humanoid animation from a text prompt, use 'GenerateHumanoidAnimation' with a 'prompt'. To generate a humanoid animation from a video (video-to-motion), use 'GenerateHumanoidAnimation' with 'targetAssetPath' pointing to a VideoClip asset in the project. When using video-to-motion, 'prompt' is not required. Optional parameter: 'durationInSeconds' to control the animation length. To generate a sprite, use 'GenerateSprite' you should then call 'RemoveImageBackground'. To generate an image (e.g., a portrait or environment), use 'GenerateImage'. To remove the background from an existing sprite or image, use 'RemoveImageBackground'. To upscale an existing image, use 'UpscaleImage'. To upscale an existing sprite, use 'UpscaleSprite'. Both require a target asset path. To recolor an existing image or sprite, use 'RecolorImage' or 'RecolorSprite'. Both require a target asset path for the source image and a 'referenceImageInstanceId' for the color palette image. To edit a sprite using a prompt, use 'EditSpriteWithPrompt'. To edit an image using a prompt, use 'EditImageWithPrompt'. To edit a sprite using a prompt into a sprite sheet (Spritesheet), use 'GenerateSpritesheet'. All editing commands require a target asset path. To generate a cubemap, use 'GenerateCubemap'. To upscale an existing cubemap, use 'UpscaleCubemap' and provide the target asset path. To generate a base material (texture only), use 'GenerateMaterial'. To add PBR maps to an existing material, use 'AddPbrToMaterial' and provide the target asset path. The same applies to 'GenerateTerrainLayer' and 'AddPbrToTerrainLayer'. For base Material and TerrainLayer generation, it's highly recommended to ask for the list of available composition patterns to use as a starting point. To generate a sound effect or voice, use 'GenerateSound'. For voice/speech generation, the prompt must contain ONLY the spoken text exactly as it should be pronounced, not a description of the voice. Use the 'voiceName' parameter to select a specific voice from the available voices listed in the model description. Optional parameters: 'durationInSeconds' (1-10 seconds) and 'loop' (for seamless looping). To generate a 3D model, use 'GenerateMesh'. This command generates a self-contained Prefab asset that includes the generated mesh and a corresponding material, ready to be used in a scene. Use the 'meshFormat' parameter to specify the output file format ('glb' or 'fbx'). If the user requests a specific format (e.g. 'generate a GLB'), set 'meshFormat' accordingly. Defaults to 'fbx' if not specified. For multiview models, you can provide multiple reference images via 'referenceImageInstanceIds' and label each one with 'referenceImageLabels' (e.g., 'front', 'back', 'left') to assign them to specific view slots. To retopologize an existing mesh (improve its topology), use 'RetopologyMesh' and provide the target asset path. To add textures to an existing mesh, use 'TextureMesh' and provide the target asset path with a prompt, a reference image, or both. When both a prompt and a reference image are provided, the image guides the visual style while the prompt drives the content. To add rigging to an existing mesh, use 'RigMesh' and provide the target asset path.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string",
+                "enum": [
+                  "GenerateHumanoidAnimation",
+                  "GenerateCubemap",
+                  "UpscaleCubemap",
+                  "GenerateMaterial",
+                  "AddPbrToMaterial",
+                  "GenerateMesh",
+                  "GenerateSound",
+                  "GenerateSprite",
+                  "GenerateImage",
+                  "GenerateSpritesheet",
+                  "RemoveSpriteBackground",
+                  "RemoveImageBackground",
+                  "UpscaleImage",
+                  "UpscaleSprite",
+                  "RecolorImage",
+                  "RecolorSprite",
+                  "EditSpriteWithPrompt",
+                  "EditImageWithPrompt",
+                  "GenerateTerrainLayer",
+                  "AddPbrToTerrainLayer",
+                  "RetopologyMesh",
+                  "TextureMesh",
+                  "RigMesh"
+                ]
+              },
+              "modelId": {
+                "type": "string"
+              },
+              "prompt": {
+                "type": "string"
+              },
+              "savePath": {
+                "type": "string"
+              },
+              "waitForCompletion": {
+                "type": "boolean"
+              },
+              "targetAssetPath": {
+                "type": "string"
+              },
+              "referenceImageInstanceId": {
+                "type": "integer"
+              },
+              "referenceImageInstanceIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "referenceImageLabels": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "durationInSeconds": {
+                "type": "number"
+              },
+              "loop": {
+                "type": "boolean"
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "voiceName": {
+                "type": "string"
+              },
+              "forceGeneration": {
+                "type": "boolean"
+              },
+              "meshFormat": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "command"
+            ]
+          }
+        },
+        {
+          "name": "Unity_AssetGeneration_GetModels",
+          "description": "Gets a list of available models for asset generation. When asked for a model list always include the ModelId guid in the response.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "includeAllModels": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_Camera_Capture",
+          "description": "Renders an image from a specific camera in the scene by GameObject instance ID that has a Camera component. It is useful to capture a specific camera, in cases like camera placement or when this view doesn't match the scene/game view. Optionally, it can be used without the camera ID parameter to capture the current scene view for cases when the scene view is not available on the screen. Note: this is a computationally expensive tool, and should be used carefully only when scene view context is necessary.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "cameraInstanceID": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_GetConsoleLogs",
+          "description": "Get Unity Console logs including messages, warnings, and errors with their stack traces. Useful for debugging and understanding what errors or issues are occurring in the Unity Editor.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "maxEntries": {
+                "type": "integer"
+              },
+              "includeStackTrace": {
+                "type": "boolean"
+              },
+              "logTypes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_RunCommand",
+          "description": "Compile and execute a C# script in the Unity Editor.\n\nThis tool first validates that the code can be compiled, then executes it if compilation succeeds.\nArgs: code (required), title (optional).\nReturns: compilation status, execution status, logs, and results.\n\nThis is a powerful tool that allows you to programmatically control virtually every aspect of the game, including physics, input, graphics, gameplay logic, project setting and package management.\n\n### The Golden Template\n```csharp\nusing UnityEngine;\nusing UnityEditor;\n\ninternal class CommandScript : IRunCommand\n{\n    public void Execute(ExecutionResult result)\n    {\n        // 1. Your logic here\n        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);\n\n        // 2. Register changes for Undo/Redo and tracking\n        result.RegisterObjectCreation(cube);\n\n        // 3. Log the result\n        result.Log(\"Created {0}\", cube);\n    }\n}\n```\n### Rules for Success\n1. **Class Name is Mandatory**: The class MUST be named `CommandScript`. Using any other name will cause a NullReferenceException or execution failure.\n2. **Use `internal` Accessibility**: Always use `internal class CommandScript`. Using `public` will cause an \"Inconsistent Accessibility\" compilation error.\n3. **Use the `result` Object**:\n   - **Creation**: Use `result.RegisterObjectCreation(obj)` after creating objects.\n   - **Modification**: Use `result.RegisterObjectModification(obj)` BEFORE changing properties.\n   - **Deletion**: Use `result.DestroyObject(obj)` instead of `Object.DestroyImmediate`.\n   - **Logging**:\n     - `result.Log(\"Created {0}\", obj)` - Log with object references using `{0}`, `{1}`, etc.\n     - `result.LogWarning(\"Warning message\")` - Log warnings\n     - `result.LogError(\"Error message\")` - Log errors\n4. **Avoid Top-Level Statements**: Always wrap your code in the class structure above.\n\n",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "Code": {
+                "type": "string",
+                "description": "The C# script code to compile and execute. Should implement IRunCommand interface or be a valid C# script.",
+                "default": ""
+              },
+              "Title": {
+                "type": "string",
+                "description": "Optional title for the execution command",
+                "default": ""
+              }
+            },
+            "required": [
+              "Code"
+            ]
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {}
+          },
+          "title": "Compile and execute a C# script"
+        },
+        {
+          "name": "Unity_SceneView_Capture2DScene",
+          "description": "Captures a specific rectangular region of a 2D scene using orthographic (top-down) projection. Specify world coordinates (X, Y) and dimensions (width, height) to capture exactly that area. Ideal for 2D scenes, tilemaps, or capturing specific portions of a scene. The pixelsPerUnit parameter controls resolution (higher = more detail but larger image).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "worldX": {
+                "type": "number"
+              },
+              "worldY": {
+                "type": "number"
+              },
+              "worldWidth": {
+                "type": "number"
+              },
+              "worldHeight": {
+                "type": "number"
+              },
+              "pixelsPerUnit": {
+                "type": "integer"
+              },
+              "backgroundColor": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "worldX",
+              "worldY",
+              "worldWidth",
+              "worldHeight"
+            ]
+          }
+        },
+        {
+          "name": "Unity_SceneView_CaptureMultiAngleSceneView",
+          "description": "Captures a multi-angle view of the current Scene View from 4 different perspectives in a 2x2 grid (Isometric, Front, Top, Right). This tool is designed for validating scene structure in 3D projects. ONLY use it for 3D scene checks, to validate object positions and scene layout.DO NOT use for 2D projects or to retrieve info about Unity Editor window.The isometric view uses perspective projection for depth, while Front/Top/Right use orthographic projection. Optionally, provide focusObjectIds to frame specific objects (e.g., newly placed houses) - the camera will be positioned to ensure these objects are centered and visible. If focusObjectIds is not provided or empty, the camera frames all visible objects in the scene. Note: this is a computationally expensive tool, and should be used carefully only when multi-view context is necessary.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "focusObjectIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 2
+  },
+  "execution": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": true,\n  \"message\": \"Command executed successfully.\",\n  \"data\": {\n    \"isCompilationSuccessful\": true,\n    \"isExecutionSuccessful\": true,\n    \"executionId\": 1,\n    \"compilationLogs\": \"\",\n    \"executionLogs\": \"[Log] 571 canonical source features/ports exported for seven existing poses only\",\n    \"localFixedCode\": \"using System.Collections.Generic;\\r\\nusing System.IO;\\r\\nusing System.Linq;\\r\\nusing System;\\r\\nusing UnityEditor;\\r\\nusing UnityEngine;\\r\\n\\r\\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\\r\\n{\\r\\n    internal class CommandScript : IRunCommand\\r\\n    {\\r\\n        public void Execute(ExecutionResult result)\\r\\n        {\\r\\n            if (EditorApplication.isPlaying || EditorApplication.isCompiling)\\r\\n                throw new Exception(\\\"Read-only stored export requires Edit/no compiling\\\");\\r\\n            const string input = \\\"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/HairContract570/Full570/\\\";\\r\\n            const string output = \\\"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/RegionContract571/Source571/\\\";\\r\\n            if (Directory.Exists(output))\\r\\n                throw new Exception(\\\"Existing export: inspect before repeating\\\");\\r\\n            Directory.CreateDirectory(output);\\r\\n            foreach (int frame in new[]{16, 51, 62, 71, 72, 73, 77})\\r\\n            {\\r\\n                string p = input + frame.ToString(\\\"D3\\\");\\r\\n                int x0, y0, w, h;\\r\\n                float[] areas;\\r\\n                using (var r = new BinaryReader(File.OpenRead(p + \\\"_ON_AREAS.bin\\\")))\\r\\n                {\\r\\n                    x0 = r.ReadInt32();\\r\\n                    y0 = r.ReadInt32();\\r\\n                    w = r.ReadInt32();\\r\\n                    h = r.ReadInt32();\\r\\n                    areas = new float[w * h];\\r\\n                    for (int i = 0; i < areas.Length; i++)\\r\\n                        areas[i] = r.ReadSingle();\\r\\n                }\\r\\n\\r\\n                var graph = new List<CurveArea511.P[]>();\\r\\n                using (var r = new BinaryReader(File.OpenRead(p + \\\"_ON_CURVES.bin\\\")))\\r\\n                {\\r\\n                    int n = r.ReadInt32();\\r\\n                    for (int i = 0; i < n; i++)\\r\\n                    {\\r\\n                        var ring = new CurveArea511.P[r.ReadInt32()];\\r\\n                        for (int j = 0; j < ring.Length; j++)\\r\\n                            ring[j] = new CurveArea511.P(r.ReadSingle(), r.ReadSingle());\\r\\n                        graph.Add(ring);\\r\\n                    }\\r\\n                }\\r\\n\\r\\n                var negative = new NegativeRegion563(x0, y0, w, h, false, true);\\r\\n                var rebuilt = CurveArea511.Compute(graph, x0, y0, w, h, negative);\\r\\n                if (!areas.Select(BitConverter.SingleToInt32Bits).SequenceEqual(rebuilt.Select(BitConverter.SingleToInt32Bits)))\\r\\n                    throw new Exception(\\\"Source area bit mismatch \\\" + frame);\\r\\n                var swap = new List<CurveArea511.P[]>();\\r\\n                foreach (var ring in graph)\\r\\n                {\\r\\n                    var q = new CurveArea511.P[ring.Length];\\r\\n                    for (int j = 0; j < q.Length; j++)\\r\\n                    {\\r\\n                        var a = ring[ring.Length - 1 - j];\\r\\n                        q[j] = new CurveArea511.P(a.y, a.x);\\r\\n                    }\\r\\n\\r\\n                    swap.Add(q);\\r\\n                }\\r\\n\\r\\n                var other = new NegativeRegion563(y0, x0, h, w, true, true);\\r\\n                CurveArea511.Compute(swap, y0, x0, h, w, other);\\r\\n                var branches = negative.Branches566();\\r\\n                var baseline = HeadRegion502.SelectRegions543(areas, w, h, NegativeRegion563.Groups(branches, other.Branches566(), w, h));\\r\\n                using (var r = new BinaryReader(File.OpenRead(p + \\\"_OFF_MASK.bin\\\")))\\r\\n                {\\r\\n                    int mw = r.ReadInt32(), mh = r.ReadInt32(), mx = r.ReadInt32(), my = r.ReadInt32();\\r\\n                    for (int y = 0; y < mh; y++)\\r\\n                        for (int x = 0; x < mw; x++)\\r\\n                        {\\r\\n                            r.ReadSingle();\\r\\n                            bool selected = r.ReadSingle() > .5f;\\r\\n                            r.ReadSingle();\\r\\n                            r.ReadSingle();\\r\\n                            int xx = x + mx - x0, yy = y + my - y0;\\r\\n                            if (xx >= 0 && yy >= 0 && xx < w && yy < h && baseline[yy * w + xx] != selected)\\r\\n                                throw new Exception(\\\"Original selector mismatch \\\" + frame);\\r\\n                        }\\r\\n                }\\r\\n\\r\\n                using (var b = new BinaryWriter(File.Create(output + frame.ToString(\\\"D3\\\") + \\\"_SOURCE.bin\\\")))\\r\\n                {\\r\\n                    b.Write(571);\\r\\n                    b.Write(frame);\\r\\n                    b.Write(x0);\\r\\n                    b.Write(y0);\\r\\n                    b.Write(w);\\r\\n                    b.Write(h);\\r\\n                    void Geometry(NegativeRegion563.Feature f)\\r\\n                    {\\r\\n                        b.Write(f.geometry.Count);\\r\\n                        foreach (var s in f.geometry)\\r\\n                        {\\r\\n                            b.Write(s.lo);\\r\\n                            b.Write(s.hi);\\r\\n                            b.Write(s.l0);\\r\\n                            b.Write(s.l1);\\r\\n                            b.Write(s.r0);\\r\\n                            b.Write(s.r1);\\r\\n                            b.Write(s.left);\\r\\n                            b.Write(s.right);\\r\\n                        }\\r\\n                    }\\r\\n\\r\\n                    var features = negative.Features();\\r\\n                    b.Write(features.Count);\\r\\n                    foreach (var f in features)\\r\\n                    {\\r\\n                        b.Write(f.boundaryId);\\r\\n                        Geometry(f);\\r\\n                    }\\r\\n\\r\\n                    b.Write(branches.Count);\\r\\n                    foreach (var f in branches)\\r\\n                    {\\r\\n                        b.Write(f.boundaryId);\\r\\n                        Geometry(f);\\r\\n                        foreach (var e in new[]{f.start566, f.end566})\\r\\n                        {\\r\\n                            b.Write(e.kind);\\r\\n                            b.Write(e.level);\\r\\n                            b.Write(e.left);\\r\\n                            b.Write(e.right);\\r\\n                            b.Write(e.leftId);\\r\\n                            b.Write(e.rightId);\\r\\n                        }\\r\\n                    }\\r\\n                }\\r\\n\\r\\n                File.AppendAllText(output + \\\"STATUS.tsv\\\", frame + \\\"\\\\tareaBitsExact\\\\tbaselineMaskExact\\\\n\\\");\\r\\n            }\\r\\n\\r\\n            File.WriteAllText(output + \\\"DONE.txt\\\", \\\"Seven stored inputs; source and baseline bit checks passed; no Play/render/product writes\\\");\\r\\n            result.Log(\\\"571 canonical source features/ports exported for seven existing poses only\\\");\\r\\n        }\\r\\n    }\\r\\n}\",\n    \"result\": \"Command executed successfully.\"\n  }\n}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Command executed successfully.",
+        "data": {
+          "isCompilationSuccessful": true,
+          "isExecutionSuccessful": true,
+          "executionId": 1,
+          "compilationLogs": "",
+          "executionLogs": "[Log] 571 canonical source features/ports exported for seven existing poses only",
+          "localFixedCode": "using System.Collections.Generic;\r\nusing System.IO;\r\nusing System.Linq;\r\nusing System;\r\nusing UnityEditor;\r\nusing UnityEngine;\r\n\r\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\r\n{\r\n    internal class CommandScript : IRunCommand\r\n    {\r\n        public void Execute(ExecutionResult result)\r\n        {\r\n            if (EditorApplication.isPlaying || EditorApplication.isCompiling)\r\n                throw new Exception(\"Read-only stored export requires Edit/no compiling\");\r\n            const string input = \"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/HairContract570/Full570/\";\r\n            const string output = \"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/RegionContract571/Source571/\";\r\n            if (Directory.Exists(output))\r\n                throw new Exception(\"Existing export: inspect before repeating\");\r\n            Directory.CreateDirectory(output);\r\n            foreach (int frame in new[]{16, 51, 62, 71, 72, 73, 77})\r\n            {\r\n                string p = input + frame.ToString(\"D3\");\r\n                int x0, y0, w, h;\r\n                float[] areas;\r\n                using (var r = new BinaryReader(File.OpenRead(p + \"_ON_AREAS.bin\")))\r\n                {\r\n                    x0 = r.ReadInt32();\r\n                    y0 = r.ReadInt32();\r\n                    w = r.ReadInt32();\r\n                    h = r.ReadInt32();\r\n                    areas = new float[w * h];\r\n                    for (int i = 0; i < areas.Length; i++)\r\n                        areas[i] = r.ReadSingle();\r\n                }\r\n\r\n                var graph = new List<CurveArea511.P[]>();\r\n                using (var r = new BinaryReader(File.OpenRead(p + \"_ON_CURVES.bin\")))\r\n                {\r\n                    int n = r.ReadInt32();\r\n                    for (int i = 0; i < n; i++)\r\n                    {\r\n                        var ring = new CurveArea511.P[r.ReadInt32()];\r\n                        for (int j = 0; j < ring.Length; j++)\r\n                            ring[j] = new CurveArea511.P(r.ReadSingle(), r.ReadSingle());\r\n                        graph.Add(ring);\r\n                    }\r\n                }\r\n\r\n                var negative = new NegativeRegion563(x0, y0, w, h, false, true);\r\n                var rebuilt = CurveArea511.Compute(graph, x0, y0, w, h, negative);\r\n                if (!areas.Select(BitConverter.SingleToInt32Bits).SequenceEqual(rebuilt.Select(BitConverter.SingleToInt32Bits)))\r\n                    throw new Exception(\"Source area bit mismatch \" + frame);\r\n                var swap = new List<CurveArea511.P[]>();\r\n                foreach (var ring in graph)\r\n                {\r\n                    var q = new CurveArea511.P[ring.Length];\r\n                    for (int j = 0; j < q.Length; j++)\r\n                    {\r\n                        var a = ring[ring.Length - 1 - j];\r\n                        q[j] = new CurveArea511.P(a.y, a.x);\r\n                    }\r\n\r\n                    swap.Add(q);\r\n                }\r\n\r\n                var other = new NegativeRegion563(y0, x0, h, w, true, true);\r\n                CurveArea511.Compute(swap, y0, x0, h, w, other);\r\n                var branches = negative.Branches566();\r\n                var baseline = HeadRegion502.SelectRegions543(areas, w, h, NegativeRegion563.Groups(branches, other.Branches566(), w, h));\r\n                using (var r = new BinaryReader(File.OpenRead(p + \"_OFF_MASK.bin\")))\r\n                {\r\n                    int mw = r.ReadInt32(), mh = r.ReadInt32(), mx = r.ReadInt32(), my = r.ReadInt32();\r\n                    for (int y = 0; y < mh; y++)\r\n                        for (int x = 0; x < mw; x++)\r\n                        {\r\n                            r.ReadSingle();\r\n                            bool selected = r.ReadSingle() > .5f;\r\n                            r.ReadSingle();\r\n                            r.ReadSingle();\r\n                            int xx = x + mx - x0, yy = y + my - y0;\r\n                            if (xx >= 0 && yy >= 0 && xx < w && yy < h && baseline[yy * w + xx] != selected)\r\n                                throw new Exception(\"Original selector mismatch \" + frame);\r\n                        }\r\n                }\r\n\r\n                using (var b = new BinaryWriter(File.Create(output + frame.ToString(\"D3\") + \"_SOURCE.bin\")))\r\n                {\r\n                    b.Write(571);\r\n                    b.Write(frame);\r\n                    b.Write(x0);\r\n                    b.Write(y0);\r\n                    b.Write(w);\r\n                    b.Write(h);\r\n                    void Geometry(NegativeRegion563.Feature f)\r\n                    {\r\n                        b.Write(f.geometry.Count);\r\n                        foreach (var s in f.geometry)\r\n                        {\r\n                            b.Write(s.lo);\r\n                            b.Write(s.hi);\r\n                            b.Write(s.l0);\r\n                            b.Write(s.l1);\r\n                            b.Write(s.r0);\r\n                            b.Write(s.r1);\r\n                            b.Write(s.left);\r\n                            b.Write(s.right);\r\n                        }\r\n                    }\r\n\r\n                    var features = negative.Features();\r\n                    b.Write(features.Count);\r\n                    foreach (var f in features)\r\n                    {\r\n                        b.Write(f.boundaryId);\r\n                        Geometry(f);\r\n                    }\r\n\r\n                    b.Write(branches.Count);\r\n                    foreach (var f in branches)\r\n                    {\r\n                        b.Write(f.boundaryId);\r\n                        Geometry(f);\r\n                        foreach (var e in new[]{f.start566, f.end566})\r\n                        {\r\n                            b.Write(e.kind);\r\n                            b.Write(e.level);\r\n                            b.Write(e.left);\r\n                            b.Write(e.right);\r\n                            b.Write(e.leftId);\r\n                            b.Write(e.rightId);\r\n                        }\r\n                    }\r\n                }\r\n\r\n                File.AppendAllText(output + \"STATUS.tsv\", frame + \"\\tareaBitsExact\\tbaselineMaskExact\\n\");\r\n            }\r\n\r\n            File.WriteAllText(output + \"DONE.txt\", \"Seven stored inputs; source and baseline bit checks passed; no Play/render/product writes\");\r\n            result.Log(\"571 canonical source features/ports exported for seven existing poses only\");\r\n        }\r\n    }\r\n}",
+          "result": "Command executed successfully."
+        }
+      }
+    },
+    "jsonrpc": "2.0",
+    "id": 3
+  },
+  "console": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": true,\n  \"message\": \"Tool 'GetConsoleLogs' executed successfully\",\n  \"data\": {\n    \"logs\": [\n      {\n        \"message\": \"Destroy may not be called from edit mode! Use DestroyImmediate instead.\\nDestroying an object in edit mode destroys it permanently\\nUnityEngine.Object:Destroy (UnityEngine.Object)\\nHeadArea505:Alpha (UnityEngine.Texture2D) (at Assets/EUnityValidation01/HeadRegion502/Runtime/HeadArea505.cs:135)\\nHeadArea505:SourceAlphaBytes525 (UnityEngine.Texture2D) (at Assets/EUnityValidation01/HeadRegion502/Runtime/Visibility511.cs:8)\\nOpacityRegion525:.ctor (UnityEngine.Mesh,int,UnityEngine.Material) (at Assets/EUnityValidation01/ClothRegion524/Runtime/OpacityRegion525.cs:53)\\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript:Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult)\\nUnity.AI.Assistant.Editor.RunCommand.AgentRunCommand:Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult&,string) (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Editor/Assistant/RunCommand/AgentRunCommand.cs:56)\\nUnity.AI.Assistant.Editor.RunCommand.RunCommandUtils:Execute (Unity.AI.Assistant.Editor.RunCommand.AgentRunCommand,string) (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Editor/Assistant/RunCommand/RunCommandUtils.cs:75)\\nUnity.AI.Assistant.Tools.Editor.RunCommandTool/<ExecuteCommand>d__6:MoveNext () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.Assistant.Tools/Scripting/RunCommandTool.cs:73)\\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<Unity.AI.Assistant.Tools.Editor.RunCommandTool/ExecutionOutput>:Start<Unity.AI.Assistant.Tools.Editor.RunCommandTool/<ExecuteCommand>d__6> (Unity.AI.Assistant.Tools.Editor.RunCommandTool/<ExecuteCommand>d__6&)\\nUnity.AI.Assistant.Tools.Editor.RunCommandTool:ExecuteCommand (Unity.AI.Assistant.FunctionCalling.ToolExecutionContext,string,string)\\nUnity.AI.MCP.Editor.Tools.RunCommand/<HandleCommand>d__4:MoveNext () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/Tools/RunCommand.cs:155)\\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<object>:Start<Unity.AI.MCP.Editor.Tools.RunCommand/<HandleCommand>d__4> (Unity.AI.MCP.Editor.Tools.RunCommand/<HandleCommand>d__4&)\\nUnity.AI.MCP.Editor.Tools.RunCommand:HandleCommand (Unity.AI.MCP.Editor.Tools.Parameters.RunCommandParams)\\nSystem.Reflection.MethodBase:Invoke (object,object[])\\nUnity.AI.MCP.Editor.ToolRegistry.TypedToolHandler:ExecuteAsync (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/ToolRegistry/IToolHandler.cs:164)\\nUnity.AI.MCP.Editor.ToolRegistry.McpToolRegistry/<ExecuteToolAsync>d__14:MoveNext () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/ToolRegistry/McpToolRegistry.cs:244)\\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<object>:Start<Unity.AI.MCP.Editor.ToolRegistry.McpToolRegistry/<ExecuteToolAsync>d__14> (Unity.AI.MCP.Editor.ToolRegistry.McpToolRegistry/<ExecuteToolAsync>d__14&)\\nUnity.AI.MCP.Editor.ToolRegistry.McpToolRegistry:ExecuteToolAsync (string,Newtonsoft.Json.Linq.JObject)\\nUnity.AI.MCP.Editor.Bridge/<ExecuteCommandAsync>d__75:MoveNext () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/Bridge.cs:1783)\\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>:Start<Unity.AI.MCP.Editor.Bridge/<ExecuteCommandAsync>d__75> (Unity.AI.MCP.Editor.Bridge/<ExecuteCommandAsync>d__75&)\\nUnity.AI.MCP.Editor.Bridge:ExecuteCommandAsync (Unity.AI.MCP.Editor.Models.Command,Unity.AI.MCP.Editor.Connection.IConnectionTransport,System.Threading.CancellationToken)\\nUnity.AI.MCP.Editor.Bridge:ProcessCommands () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/Bridge.cs:1537)\\nUnity.AI.MCP.Editor.Bridge:<RequestDrainOnMainThread>b__69_0 (object) (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/Bridge.cs:1468)\\nUnityEngine.UnitySynchronizationContext:ExecuteTasks ()\\n\",\n        \"stackTrace\": \"\",\n        \"type\": \"Error\",\n        \"timestamp\": \"[11:31:55]\"\n      },\n      {\n        \"message\": \"Failed getting indices. Submesh index is out of bounds.\\nUnityEngine.Mesh:GetIndices (int)\\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExtractOrigins531:Model (Full319View335,OpacityRegion525)\\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExtractOrigins531:Work ()\\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\\n\",\n        \"stackTrace\": \"\",\n        \"type\": \"Error\",\n        \"timestamp\": \"[15:02:01]\"\n      }\n    ],\n    \"totalCount\": 2,\n    \"errorCount\": 2,\n    \"warningCount\": 0\n  }\n}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 4
+  },
+  "transportErrors": []
+}

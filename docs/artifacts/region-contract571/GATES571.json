@@ -1,0 +1,206 @@
+[
+  {
+    "frame": 62,
+    "negativeMouthGate": [
+      {
+        "head": [
+          219,
+          53
+        ],
+        "hair": false,
+        "positiveArea": 0.4611731469631195
+      },
+      {
+        "head": [
+          218,
+          54
+        ],
+        "hair": false,
+        "positiveArea": 0.27521812915802
+      }
+    ],
+    "positiveCorners": [
+      {
+        "head": [
+          219,
+          54
+        ],
+        "hair": true,
+        "positiveArea": 0.7108301520347595
+      },
+      {
+        "head": [
+          218,
+          53
+        ],
+        "hair": true,
+        "positiveArea": 0.5581834316253662
+      }
+    ],
+    "sharedCorner": [
+      219,
+      54
+    ],
+    "sourceNegativeAtCorner": [
+      {
+        "source": "y|0:50,0:51,0:52,0:53,0:54,0:55",
+        "side": "above",
+        "negativeInterval": [
+          218.41670078753947,
+          219.41380229519788
+        ],
+        "negativeClearance": 0.4138022951978826,
+        "leftBoundary": [
+          0,
+          55
+        ],
+        "rightBoundary": [
+          0,
+          53
+        ]
+      },
+      {
+        "source": "y|0:50,0:51,0:52,0:53,0:54,0:55",
+        "side": "below",
+        "negativeInterval": [
+          218.41670078753947,
+          219.41380229519788
+        ],
+        "negativeClearance": 0.4138022951978826,
+        "leftBoundary": [
+          0,
+          55
+        ],
+        "rightBoundary": [
+          0,
+          53
+        ]
+      }
+    ],
+    "retainAllFourLabelsAndEdgePassageSolutions": 0,
+    "minimalPixelChangesForEdgePassage": 1,
+    "minimalAbstractGateLayouts": [
+      {
+        "labels": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "changes": 1
+      },
+      {
+        "labels": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "changes": 1
+      }
+    ],
+    "note": "Satisfiability witnesses only; no pixel masks modified and no positive corner declared expendable."
+  },
+  {
+    "frame": 77,
+    "negativeMouthGate": [
+      {
+        "head": [
+          218,
+          54
+        ],
+        "hair": false,
+        "positiveArea": 0.49968379735946655
+      },
+      {
+        "head": [
+          217,
+          55
+        ],
+        "hair": false,
+        "positiveArea": 0.4333927035331726
+      }
+    ],
+    "positiveCorners": [
+      {
+        "head": [
+          218,
+          55
+        ],
+        "hair": true,
+        "positiveArea": 0.6158602237701416
+      },
+      {
+        "head": [
+          217,
+          54
+        ],
+        "hair": true,
+        "positiveArea": 0.6450505256652832
+      }
+    ],
+    "sharedCorner": [
+      218,
+      55
+    ],
+    "sourceNegativeAtCorner": [
+      {
+        "source": "y|0:50,0:51,0:52,0:53,0:54,0:55",
+        "side": "above",
+        "negativeInterval": [
+          217.53922160819678,
+          218.3987742170732
+        ],
+        "negativeClearance": 0.39877421707319627,
+        "leftBoundary": [
+          0,
+          55
+        ],
+        "rightBoundary": [
+          0,
+          53
+        ]
+      },
+      {
+        "source": "y|0:50,0:51,0:52,0:53,0:54,0:55",
+        "side": "below",
+        "negativeInterval": [
+          217.53922160819678,
+          218.3987742170732
+        ],
+        "negativeClearance": 0.39877421707319627,
+        "leftBoundary": [
+          0,
+          55
+        ],
+        "rightBoundary": [
+          0,
+          53
+        ]
+      }
+    ],
+    "retainAllFourLabelsAndEdgePassageSolutions": 0,
+    "minimalPixelChangesForEdgePassage": 1,
+    "minimalAbstractGateLayouts": [
+      {
+        "labels": [
+          false,
+          false,
+          true,
+          false
+        ],
+        "changes": 1
+      },
+      {
+        "labels": [
+          false,
+          false,
+          false,
+          true
+        ],
+        "changes": 1
+      }
+    ],
+    "note": "Satisfiability witnesses only; no pixel masks modified and no positive corner declared expendable."
+  }
+]

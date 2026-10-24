@@ -1,0 +1,372 @@
+{
+  "gates": [
+    {
+      "frame": 62,
+      "negativeMouthGate": [
+        {
+          "head": [
+            219,
+            53
+          ],
+          "hair": false,
+          "positiveArea": 0.4611731469631195
+        },
+        {
+          "head": [
+            218,
+            54
+          ],
+          "hair": false,
+          "positiveArea": 0.27521812915802
+        }
+      ],
+      "positiveCorners": [
+        {
+          "head": [
+            219,
+            54
+          ],
+          "hair": true,
+          "positiveArea": 0.7108301520347595,
+          "sourcePositiveSpansAtCentreRow": [
+            {
+              "left": 219.2887777267726,
+              "right": 224.09369985966862,
+              "leftBoundary": [
+                0,
+                53
+              ],
+              "rightBoundary": [
+                0,
+                42
+              ],
+              "widthLogicalPixels": 4.804922132896024,
+              "cellRowOverlap": 0.7112222732274063
+            }
+          ]
+        },
+        {
+          "head": [
+            218,
+            53
+          ],
+          "hair": true,
+          "positiveArea": 0.5581834316253662,
+          "sourcePositiveSpansAtCentreRow": [
+            {
+              "left": 211.45977831137927,
+              "right": 218.55818345215874,
+              "leftBoundary": [
+                0,
+                69
+              ],
+              "rightBoundary": [
+                0,
+                55
+              ],
+              "widthLogicalPixels": 7.098405140779477,
+              "cellRowOverlap": 0.5581834521587439
+            }
+          ]
+        }
+      ],
+      "sharedCorner": [
+        219,
+        54
+      ],
+      "sourceNegativeAtCorner": [
+        {
+          "source": "y|0:50,0:51,0:52,0:53,0:54,0:55",
+          "side": "above",
+          "negativeInterval": [
+            218.41670078753947,
+            219.41380229519788
+          ],
+          "negativeClearance": 0.4138022951978826,
+          "leftBoundary": [
+            0,
+            55
+          ],
+          "rightBoundary": [
+            0,
+            53
+          ]
+        },
+        {
+          "source": "y|0:50,0:51,0:52,0:53,0:54,0:55",
+          "side": "below",
+          "negativeInterval": [
+            218.41670078753947,
+            219.41380229519788
+          ],
+          "negativeClearance": 0.4138022951978826,
+          "leftBoundary": [
+            0,
+            55
+          ],
+          "rightBoundary": [
+            0,
+            53
+          ]
+        }
+      ],
+      "retainAllFourLabelsAndEdgePassageSolutions": 0,
+      "minimalPixelChangesForEdgePassage": 1,
+      "minimalAbstractGateLayouts": [
+        {
+          "labels": [
+            false,
+            false,
+            true,
+            false
+          ],
+          "changes": 1
+        },
+        {
+          "labels": [
+            false,
+            false,
+            false,
+            true
+          ],
+          "changes": 1
+        }
+      ],
+      "note": "Satisfiability witnesses only; no pixel masks modified and no positive corner declared expendable."
+    },
+    {
+      "frame": 77,
+      "negativeMouthGate": [
+        {
+          "head": [
+            218,
+            54
+          ],
+          "hair": false,
+          "positiveArea": 0.49968379735946655
+        },
+        {
+          "head": [
+            217,
+            55
+          ],
+          "hair": false,
+          "positiveArea": 0.4333927035331726
+        }
+      ],
+      "positiveCorners": [
+        {
+          "head": [
+            218,
+            55
+          ],
+          "hair": true,
+          "positiveArea": 0.6158602237701416,
+          "sourcePositiveSpansAtCentreRow": [
+            {
+              "left": 218.38410841572133,
+              "right": 220.32182885764107,
+              "leftBoundary": [
+                0,
+                52
+              ],
+              "rightBoundary": [
+                0,
+                49
+              ],
+              "widthLogicalPixels": 1.937720441919737,
+              "cellRowOverlap": 0.6158915842786712
+            }
+          ]
+        },
+        {
+          "head": [
+            217,
+            54
+          ],
+          "hair": true,
+          "positiveArea": 0.6450505256652832,
+          "sourcePositiveSpansAtCentreRow": [
+            {
+              "left": 210.9415967398483,
+              "right": 217.6450505243676,
+              "leftBoundary": [
+                0,
+                69
+              ],
+              "rightBoundary": [
+                0,
+                55
+              ],
+              "widthLogicalPixels": 6.703453784519297,
+              "cellRowOverlap": 0.6450505243676048
+            }
+          ]
+        }
+      ],
+      "sharedCorner": [
+        218,
+        55
+      ],
+      "sourceNegativeAtCorner": [
+        {
+          "source": "y|0:50,0:51,0:52,0:53,0:54,0:55",
+          "side": "above",
+          "negativeInterval": [
+            217.53922160819678,
+            218.3987742170732
+          ],
+          "negativeClearance": 0.39877421707319627,
+          "leftBoundary": [
+            0,
+            55
+          ],
+          "rightBoundary": [
+            0,
+            53
+          ]
+        },
+        {
+          "source": "y|0:50,0:51,0:52,0:53,0:54,0:55",
+          "side": "below",
+          "negativeInterval": [
+            217.53922160819678,
+            218.3987742170732
+          ],
+          "negativeClearance": 0.39877421707319627,
+          "leftBoundary": [
+            0,
+            55
+          ],
+          "rightBoundary": [
+            0,
+            53
+          ]
+        }
+      ],
+      "retainAllFourLabelsAndEdgePassageSolutions": 0,
+      "minimalPixelChangesForEdgePassage": 1,
+      "minimalAbstractGateLayouts": [
+        {
+          "labels": [
+            false,
+            false,
+            true,
+            false
+          ],
+          "changes": 1
+        },
+        {
+          "labels": [
+            false,
+            false,
+            false,
+            true
+          ],
+          "changes": 1
+        }
+      ],
+      "note": "Satisfiability witnesses only; no pixel masks modified and no positive corner declared expendable."
+    }
+  ],
+  "frontCell": [
+    {
+      "frame": 71,
+      "headCell": [
+        232,
+        45
+      ],
+      "sourcePositiveSpansAtCentreRow": [
+        {
+          "left": 209.02673757940497,
+          "right": 232.0856017130525,
+          "leftBoundary": [
+            0,
+            2
+          ],
+          "rightBoundary": [
+            0,
+            27
+          ],
+          "widthLogicalPixels": 23.058864133647546,
+          "cellRowOverlap": 0.08560171305251174
+        },
+        {
+          "left": 232.5842468625822,
+          "right": 234.68464089897302,
+          "leftBoundary": [
+            0,
+            26
+          ],
+          "rightBoundary": [
+            0,
+            21
+          ],
+          "widthLogicalPixels": 2.10039403639081,
+          "cellRowOverlap": 0.41575313741779496
+        }
+      ]
+    },
+    {
+      "frame": 72,
+      "headCell": [
+        232,
+        45
+      ],
+      "sourcePositiveSpansAtCentreRow": [
+        {
+          "left": 208.99666443875628,
+          "right": 232.01456284153267,
+          "leftBoundary": [
+            0,
+            2
+          ],
+          "rightBoundary": [
+            0,
+            27
+          ],
+          "widthLogicalPixels": 23.01789840277638,
+          "cellRowOverlap": 0.014562841532665516
+        },
+        {
+          "left": 232.53216898766024,
+          "right": 234.63610273176977,
+          "leftBoundary": [
+            0,
+            26
+          ],
+          "rightBoundary": [
+            0,
+            21
+          ],
+          "widthLogicalPixels": 2.1039337441095256,
+          "cellRowOverlap": 0.467831012339758
+        }
+      ]
+    },
+    {
+      "frame": 73,
+      "headCell": [
+        232,
+        45
+      ],
+      "sourcePositiveSpansAtCentreRow": [
+        {
+          "left": 232.4815614199451,
+          "right": 234.58905747570643,
+          "leftBoundary": [
+            0,
+            26
+          ],
+          "rightBoundary": [
+            0,
+            21
+          ],
+          "widthLogicalPixels": 2.1074960557613167,
+          "cellRowOverlap": 0.518438580054891
+        }
+      ]
+    }
+  ],
+  "units": "width/overlap are one-dimensional logical-pixel lengths at the specified row; positiveArea is the original two-dimensional cell area."
+}

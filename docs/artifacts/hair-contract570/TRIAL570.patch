@@ -1,0 +1,112 @@
+diff --git a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadCurve511.cs b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadCurve511.cs
+index 9351c3f..5521002 100644
+--- a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadCurve511.cs
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadCurve511.cs
+@@ -11,6 +11,8 @@ public static partial class HeadRegion502
+     public static bool UseAutomaticCurve511;
+     public static bool UseNegativeRegions563; // Default-OFF source-domain output contract trial.
+     public static bool UseNegativeBranches566; // Alternative source grouping, never a mask postprocess.
++    public static bool UseBoundaryOrder570; // Default-OFF alternative constraints inside the same region selector.
++    public static readonly List<NegativeOrder570.Rule> NegativeRules570=new();
+     public static readonly List<NegativeRegion563.Feature> NegativeRegions563=new();
+     public static readonly List<NegativeRegion563.Feature> NegativeBranches566=new();
+     public static readonly List<int[]> NegativeGroups563=new();
+@@ -86,7 +88,8 @@ public static partial class HeadRegion502
+         bounds=new RectInt(Mathf.Clamp(Mathf.FloorToInt(x0)-2,0,479),Mathf.Clamp(Mathf.FloorToInt(y0)-2,0,271),0,0);bounds.xMax=Mathf.Clamp(Mathf.CeilToInt(x1)+2,bounds.x+1,480);bounds.yMax=Mathf.Clamp(Mathf.CeilToInt(y1)+2,bounds.y+1,272);
+         Auto511CurveMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;start=Stopwatch.GetTimestamp();
+         var graph=new List<CurveArea511.P[]>();foreach(var ring in Curves){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++)p[i]=new CurveArea511.P(ring[i].x,ring[i].y);graph.Add(p);}
+-        NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();NegativeMs563=0;
++        NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();NegativeRules570.Clear();NegativeMs563=0;
++        if(UseBoundaryOrder570&&(!UseNegativeRegions563||!UseNegativeBranches566))throw new InvalidOperationException("570 requires continuous negative branches566");
+         var negative=UseNegativeRegions563?new NegativeRegion563(bounds.x,bounds.y,bounds.width,bounds.height,false,UseNegativeBranches566):null;
+         var result=CurveArea511.Compute(graph,bounds.x,bounds.y,bounds.width,bounds.height,negative);Auto511CurveCrossings=CurveArea511.LastCrossings;Auto511CurveEvents=CurveArea511.LastEvents;
+         if(negative!=null)
+@@ -95,7 +98,9 @@ public static partial class HeadRegion502
+             var other=new NegativeRegion563(bounds.y,bounds.x,bounds.height,bounds.width,true,UseNegativeBranches566);CurveArea511.Compute(swapped,bounds.y,bounds.x,bounds.height,bounds.width,other);
+             var first=negative.Features();var second=other.Features();NegativeRegions563.AddRange(first);NegativeRegions563.AddRange(second);
+             if(UseNegativeBranches566){first=negative.Branches566();second=other.Branches566();NegativeBranches566.AddRange(first);NegativeBranches566.AddRange(second);}
+-            NegativeGroups563.AddRange(NegativeRegion563.Groups(first,second,bounds.width,bounds.height));NegativeMs563=1000.0*(Stopwatch.GetTimestamp()-negativeStart)/Stopwatch.Frequency;
++            NegativeGroups563.AddRange(NegativeRegion563.Groups(first,second,bounds.width,bounds.height));
++            if(UseBoundaryOrder570)NegativeRules570.AddRange(NegativeOrder570.Build(first,second,bounds.x,bounds.y,bounds.width,bounds.height));
++            NegativeMs563=1000.0*(Stopwatch.GetTimestamp()-negativeStart)/Stopwatch.Frequency;
+         }
+         Auto511AreaMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;Auto511Areas=result;Auto511Bounds=bounds;Auto511Status="ready polygonal curve graph input";return result;
+     }
+diff --git a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs
+index 2a31693..808bbd2 100644
+--- a/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/HeadRegion502.cs
+@@ -206,7 +206,7 @@ public static partial class HeadRegion502
+     // topology constraint, animation history, or coordinate/phase special case.
+     public static bool[] SelectRegions(float[] areas, int width, int height)
+         =>SelectRegions543(areas,width,height,null);
+-    public static bool[] SelectRegions543(float[] areas,int width,int height,List<int[]> groups)
++    public static bool[] SelectRegions543(float[] areas,int width,int height,List<int[]> groups,List<NegativeOrder570.Rule> ordered=null)
+     {
+         var flow = new Cut(areas.Length + 2); int source = areas.Length, sink = source + 1;
+         for (int y = 0; y < height; y++) for (int x = 0; x < width; x++)
+@@ -219,7 +219,8 @@ public static partial class HeadRegion502
+             if (y + 1 < height && x + 1 < width) flow.Link(i, i + width + 1, BoundaryCost * .29289322f);
+             if (y + 1 < height && x > 0) flow.Link(i, i + width - 1, BoundaryCost * .29289322f);
+         }
+-        if(groups!=null)foreach(var group in groups)for(int j=1;j<group.Length;j++)flow.Link(group[0],group[j],100000);
++        if(ordered!=null){foreach(var rule in ordered){if(rule.equality)flow.Link(rule.from,rule.to,100000);else flow.Add(rule.from,rule.to,100000);}}
++        else if(groups!=null)foreach(var group in groups)for(int j=1;j<group.Length;j++)flow.Link(group[0],group[j],100000);
+         return flow.Solve(source, sink).Take(areas.Length).ToArray();
+     }
+  public static bool[] SelectRegionsCompact544(float[] areas,int width,int height,List<int[]> groups)
+@@ -337,7 +338,7 @@ public static partial class HeadRegion502
+             RectInt bounds=default; bool[] union=null;
+             if(!UseAutomaticCurve511){union=Union(projected,indices,out bounds);SourceLoops.AddRange(Boundaries(union,bounds,ExtractionScale));Curves.AddRange(SourceLoops.Select(ClosedCurve).Where(p=>p.Length>=3));}
+             bool[] selected;
+-            if(UseAutomaticCurve511){var areas=Areas511(f,out bounds);selected=SelectRegions543(areas,bounds.width,bounds.height,UseNegativeRegions563?NegativeGroups563:null);}
++            if(UseAutomaticCurve511){var areas=Areas511(f,out bounds);selected=SelectRegions543(areas,bounds.width,bounds.height,UseNegativeRegions563?NegativeGroups563:null,UseBoundaryOrder570?NegativeRules570:null);}
+             else if (UseVisibleArea505)
+             {
+                 var area = HeadArea505.Build(f, bounds);
+diff --git a/Assets/EUnityValidation01/HeadRegion502/Runtime/NegativeRegion563.cs b/Assets/EUnityValidation01/HeadRegion502/Runtime/NegativeRegion563.cs
+index d0f4391..7daba2c 100644
+--- a/Assets/EUnityValidation01/HeadRegion502/Runtime/NegativeRegion563.cs
++++ b/Assets/EUnityValidation01/HeadRegion502/Runtime/NegativeRegion563.cs
+@@ -1,5 +1,6 @@
+ using System;
+ using System.Collections.Generic;
++using System.Linq;
+ 
+ // Source geometry exists independently of a grid centre. Fractional cell
+ // incidence determines whole-cell ownership; it never edits a rendered mask.
+@@ -102,3 +103,34 @@ public sealed class NegativeRegion563
+   foreach(var f in first)Add(f);foreach(var f in second)Add(f);return groups;
+  }
+ }
++
++
++// Exterior-mouth source order: preserve the adjacent positive boundary instead of false equality.
++// No coordinates, frame conditions, history, colour or post-mask edits.
++public static class NegativeOrder570
++{
++ public struct Rule { public int from,to; public bool equality; public string branch; public double forwardDifference,reverseDifference; }
++ struct Band { public double lo,hi,l0,l1,r0,r1; }
++ static List<Band> Footprint(NegativeRegion563.Feature f,int i,int x0,int y0,int width)
++ {
++  int x=x0+i%width,y=y0+i/width;bool transpose=f.boundaryId.StartsWith("x|",StringComparison.Ordinal);int u=transpose?y:x,v=transpose?x:y;var result=new List<Band>();
++  foreach(var z in f.geometry){double a=Math.Max(z.lo,v),b=Math.Min(z.hi,v+1);if(b<=a)continue;double t0=(a-z.lo)/(z.hi-z.lo),t1=(b-z.lo)/(z.hi-z.lo);double Clip(double p)=>Math.Max(0,Math.Min(1,p-u));var q=new Band{lo=a-v,hi=b-v,l0=Clip(z.l0+(z.l1-z.l0)*t0),l1=Clip(z.l0+(z.l1-z.l0)*t1),r0=Clip(z.r0+(z.r1-z.r0)*t0),r1=Clip(z.r0+(z.r1-z.r0)*t1)};if(q.r0>q.l0||q.r1>q.l1)result.Add(q);}
++  return result;
++ }
++ static double[] At(List<Band> bands,double a,double b)
++ {
++  double middle=(a+b)*.5;foreach(var z in bands)if(z.lo<=middle&&middle<=z.hi){double t0=(a-z.lo)/(z.hi-z.lo),t1=(b-z.lo)/(z.hi-z.lo);return new[]{z.l0+(z.l1-z.l0)*t0,z.l0+(z.l1-z.l0)*t1,z.r0+(z.r1-z.r0)*t0,z.r0+(z.r1-z.r0)*t1};}return new double[4];
++ }
++ static double Difference(List<Band> first,List<Band> second)
++ {
++  var levels=new List<double>{0,1};foreach(var z in first){levels.Add(z.lo);levels.Add(z.hi);}foreach(var z in second){levels.Add(z.lo);levels.Add(z.hi);}levels.Sort();var p=levels.Distinct().ToList();double total=0;
++  for(int i=0;i+1<p.Count;i++){double lo=p[i],hi=p[i+1];var a=At(first,lo,hi);var b=At(second,lo,hi);var knots=new List<double>{0,1};var lines=new[]{new[]{a[0],a[1]},new[]{a[2],a[3]},new[]{b[0],b[1]},new[]{b[2],b[3]}};for(int j=0;j<4;j++)for(int k=j+1;k<4;k++){double d0=lines[j][0]-lines[k][0],d1=lines[j][1]-lines[k][1];if(d0*d1<0)knots.Add(d0/(d0-d1));}double Value(double t){double al=a[0]+(a[1]-a[0])*t,ar=a[2]+(a[3]-a[2])*t,bl=b[0]+(b[1]-b[0])*t,br=b[2]+(b[3]-b[2])*t;return Math.Max(0,ar-al)-Math.Max(0,Math.Min(ar,br)-Math.Max(al,bl));}knots.Sort();var ts=knots.Distinct().ToList();for(int j=0;j+1<ts.Count;j++)total+=(Value(ts[j])+Value(ts[j+1]))*.5*(ts[j+1]-ts[j])*(hi-lo);}
++  return Math.Max(0,total);
++ }
++ public static List<Rule> Build(List<NegativeRegion563.Feature> first,List<NegativeRegion563.Feature> second,int x0,int y0,int width,int height)
++ {
++  var output=new List<Rule>();
++  void Add(NegativeRegion563.Feature f){bool exterior=f.start566!=null&&f.end566!=null&&(f.start566.kind=="open-mouth"||f.end566.kind=="open-mouth");var owned=new HashSet<int>(f.OwnedCells());var footprints=new Dictionary<int,List<Band>>();if(exterior)foreach(int i in owned)footprints.Add(i,Footprint(f,i,x0,y0,width));foreach(int i in owned){int x=i%width,y=i/width;for(int dy=0;dy<=1;dy++)for(int dx=-1;dx<=1;dx++){if(dy==0&&dx<=0)continue;int xx=x+dx,yy=y+dy;if(xx<0||yy<0||xx>=width||yy>=height)continue;int j=yy*width+xx;if(!owned.Contains(j))continue;double a=exterior?Difference(footprints[i],footprints[j]):0,b=exterior?Difference(footprints[j],footprints[i]):0;bool aInB=a<=1e-12,bInA=b<=1e-12;var rule=new Rule{from=i,to=j,equality=true,branch=f.boundaryId,forwardDifference=a,reverseDifference=b};if(aInB&&!bInA){rule.from=j;rule.to=i;rule.equality=false;}else if(bInA&&!aInB){rule.equality=false;}output.Add(rule);}}}
++  foreach(var f in first)Add(f);foreach(var f in second)Add(f);return output;
++ }
++}

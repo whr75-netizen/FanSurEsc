@@ -1,0 +1,60 @@
+{
+  "adjacent": {
+    "status": "CAPTURED",
+    "poses": 14,
+    "error": "",
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true
+  },
+  "full": {
+    "status": "CAPTURED",
+    "poses": 81,
+    "error": "",
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true
+  },
+  "finalExecution": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": true,\n  \"message\": \"Command executed successfully.\",\n  \"data\": {\n    \"isCompilationSuccessful\": true,\n    \"isExecutionSuccessful\": true,\n    \"executionId\": 1,\n    \"compilationLogs\": \"\",\n    \"executionLogs\": \"[Log] 567 compiling=False playing=False paused=False dirty=False cloth=False body=False head=False negative=False branches=False profiler=False\\n[Log] Unity=6000.5.9f1 CPU=Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz GPU=NVIDIA GeForce RTX 2080 Ti API=Direct3D11\",\n    \"localFixedCode\": \"using UnityEditor.SceneManagement;\\r\\nusing UnityEditor;\\r\\nusing UnityEngine;\\r\\n\\r\\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\\r\\n{\\r\\n    internal class CommandScript : IRunCommand\\r\\n    {\\r\\n        public void Execute(ExecutionResult result)\\r\\n        {\\r\\n            result.Log(\\\"567 compiling=\\\" + EditorApplication.isCompiling + \\\" playing=\\\" + EditorApplication.isPlaying + \\\" paused=\\\" + EditorApplication.isPaused + \\\" dirty=\\\" + EditorSceneManager.GetActiveScene().isDirty + \\\" cloth=\\\" + ClothRegion524.Enabled + \\\" body=\\\" + ClothRegion524.UseBodyScope551 + \\\" head=\\\" + HeadRegion502.Enabled + \\\" negative=\\\" + HeadRegion502.UseNegativeRegions563 + \\\" branches=\\\" + HeadRegion502.UseNegativeBranches566 + \\\" profiler=\\\" + UnityEngine.Profiling.Profiler.enabled);\\r\\n            result.Log(\\\"Unity=\\\" + Application.unityVersion + \\\" CPU=\\\" + SystemInfo.processorType + \\\" GPU=\\\" + SystemInfo.graphicsDeviceName + \\\" API=\\\" + SystemInfo.graphicsDeviceType);\\r\\n        }\\r\\n    }\\r\\n}\",\n    \"result\": \"Command executed successfully.\"\n  }\n}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Command executed successfully.",
+        "data": {
+          "isCompilationSuccessful": true,
+          "isExecutionSuccessful": true,
+          "executionId": 1,
+          "compilationLogs": "",
+          "executionLogs": "[Log] 567 compiling=False playing=False paused=False dirty=False cloth=False body=False head=False negative=False branches=False profiler=False\n[Log] Unity=6000.5.9f1 CPU=Intel(R) Core(TM) i7-9700K CPU @ 3.60GHz GPU=NVIDIA GeForce RTX 2080 Ti API=Direct3D11",
+          "localFixedCode": "using UnityEditor.SceneManagement;\r\nusing UnityEditor;\r\nusing UnityEngine;\r\n\r\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\r\n{\r\n    internal class CommandScript : IRunCommand\r\n    {\r\n        public void Execute(ExecutionResult result)\r\n        {\r\n            result.Log(\"567 compiling=\" + EditorApplication.isCompiling + \" playing=\" + EditorApplication.isPlaying + \" paused=\" + EditorApplication.isPaused + \" dirty=\" + EditorSceneManager.GetActiveScene().isDirty + \" cloth=\" + ClothRegion524.Enabled + \" body=\" + ClothRegion524.UseBodyScope551 + \" head=\" + HeadRegion502.Enabled + \" negative=\" + HeadRegion502.UseNegativeRegions563 + \" branches=\" + HeadRegion502.UseNegativeBranches566 + \" profiler=\" + UnityEngine.Profiling.Profiler.enabled);\r\n            result.Log(\"Unity=\" + Application.unityVersion + \" CPU=\" + SystemInfo.processorType + \" GPU=\" + SystemInfo.graphicsDeviceName + \" API=\" + SystemInfo.graphicsDeviceType);\r\n        }\r\n    }\r\n}",
+          "result": "Command executed successfully."
+        }
+      }
+    },
+    "jsonrpc": "2.0",
+    "id": 3
+  },
+  "consoleErrorsBefore": [
+    "fb80af1b0f6cc23c188b99521c244cc8081b4d313c42b0c9cd36ff5e8190c1ba",
+    "42798102bbc144fc3ecee983be74e4eaee74018d3b94015a5a73e4dcd7eae91c"
+  ],
+  "consoleErrorsAfter": [
+    "fb80af1b0f6cc23c188b99521c244cc8081b4d313c42b0c9cd36ff5e8190c1ba",
+    "42798102bbc144fc3ecee983be74e4eaee74018d3b94015a5a73e4dcd7eae91c"
+  ],
+  "newConsoleErrors": [],
+  "assemblyNewerThanRestoredSources": true,
+  "settings": {
+    "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "sourceDiff": "exact three runtime files restored; git diff empty",
+  "library": "403 not retried; local only",
+  "status": "candidate withdrawn after full regression; original569 unresolved"
+}

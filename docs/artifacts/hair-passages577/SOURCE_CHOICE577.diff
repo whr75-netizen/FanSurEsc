@@ -1,0 +1,111 @@
+--- before/HeadRegion502.cs
++++ after/HeadRegion502.cs
+@@ -206,9 +206,10 @@
+     // topology constraint, animation history, or coordinate/phase special case.
+     public static bool[] SelectRegions(float[] areas, int width, int height)
+         =>SelectRegions543(areas,width,height,null);
+-    public static bool[] SelectRegions543(float[] areas,int width,int height,List<int[]> groups,bool[] requiredPositive=null)
++    public static bool[] SelectRegions543(float[] areas,int width,int height,List<int[]> groups,bool[] requiredPositive=null,bool[] requiredNegative=null)
+     {
+         if(requiredPositive!=null&&requiredPositive.Length!=areas.Length)throw new ArgumentException("Positive boundary constraint grid differs");
++        if(requiredNegative!=null&&requiredNegative.Length!=areas.Length)throw new ArgumentException("Negative boundary constraint grid differs");
+         var flow = new Cut(areas.Length + 2); int source = areas.Length, sink = source + 1;
+         for (int y = 0; y < height; y++) for (int x = 0; x < width; x++)
+         {
+@@ -216,6 +217,7 @@
+             bool border = x == 0 || y == 0 || x == width - 1 || y == height - 1;
+             flow.Add(source, i, areas[i]); flow.Add(i, sink, border ? 100000 : 1 - areas[i]);
+             if(requiredPositive!=null&&requiredPositive[i])flow.Add(source,i,100000);
++            if(requiredNegative!=null&&requiredNegative[i]){if(requiredPositive!=null&&requiredPositive[i])throw new ArgumentException("Conflicting signed boundary constraints");flow.Add(i,sink,100000);}
+             if (x + 1 < width) flow.Link(i, i + 1, BoundaryCost * .58578644f);
+             if (y + 1 < height) flow.Link(i, i + width, BoundaryCost * .58578644f);
+             if (y + 1 < height && x + 1 < width) flow.Link(i, i + width + 1, BoundaryCost * .29289322f);
+@@ -443,3 +445,4 @@
+         if (mask) UnityEngine.Object.DestroyImmediate(mask); mask = null; gate = null; Packets.Clear();
+     }
+ }
++
+--- before/HairRegions574.cs
++++ after/HairRegions574.cs
+@@ -68,7 +68,7 @@
+   var seen=new bool[mask.Length];var q=new List<int>();int count=0;void Add(int i){if(mask[i]&&!seen[i]){seen[i]=true;q.Add(i);}}
+   for(int i=0;i<mask.Length;i++){if(!mask[i]||seen[i])continue;count++;q.Clear();Add(i);for(int k=0;k<q.Count;k++){int n=q[k],x=n%w,y=n/w;if(x>0)Add(n-1);if(x+1<w)Add(n+1);if(y>0)Add(n-w);if(y+1<h)Add(n+w);}}return count;
+  }
+- static bool[] SourcePositive(IList<CurveArea511.P[]> source,int x,int y,int w,int h)
++ static bool[] SourcePositive(IList<CurveArea511.P[]> source,int x,int y,int w,int h,out float[] sourceAreas,out List<int[]> sourceGroups)
+  {
+   // Current-pose canonical curves and the existing source grouping decide which
+   // positive shape is already retained. FILL may expand it, never erase it.
+@@ -76,7 +76,42 @@
+   var first=new NegativeRegion563(x,y,w,h,false,true);var area=CurveArea511.Compute(source,x,y,w,h,first);
+   var swapped=new List<CurveArea511.P[]>();foreach(var ring in source){var p=new CurveArea511.P[ring.Length];for(int i=0;i<p.Length;i++){var q=ring[ring.Length-1-i];p[i]=new CurveArea511.P(q.y,q.x);}swapped.Add(p);}
+   var second=new NegativeRegion563(y,x,h,w,true,true);CurveArea511.Compute(swapped,y,x,h,w,second);
+-  return HeadRegion502.SelectRegions543(area,w,h,NegativeRegion563.Groups(first.Branches566(),second.Branches566(),w,h));
++  sourceAreas=area;sourceGroups=NegativeRegion563.Groups(first.Branches566(),second.Branches566(),w,h);return HeadRegion502.SelectRegions543(area,w,h,sourceGroups);
++ }
++ // A grid bridge is admissible only when the original negative geometry joins
++ // its two faces inside the same cell. Mere proximity/diagonal contact is not enough.
++ static bool SourceCrosses577(NegativeRegion563.Feature f,int x,int y,int fromFaces,int toFaces)
++ {
++  const double epsilon=1e-12;var nodes=new List<NegativeRegion563.Span>();var faces=new List<int>();
++  foreach(var s in f.geometry){if((int)Math.Floor((s.lo+s.hi)*.5)!=y)continue;var q=s;q.l0=Math.Max(x,s.l0);q.l1=Math.Max(x,s.l1);q.r0=Math.Min(x+1,s.r0);q.r1=Math.Min(x+1,s.r1);if((q.r0-q.l0+q.r1-q.l1)*(q.hi-q.lo)<=epsilon)continue;
++   int mask=0;double left=(s.l0+s.l1)*.5,right=(s.r0+s.r1)*.5;if(left<x&&right>x)mask|=1;if(left<x+1&&right>x+1)mask|=2;if(s.lo==y&&q.r0-q.l0>epsilon)mask|=4;if(s.hi==y+1&&q.r1-q.l1>epsilon)mask|=8;nodes.Add(q);faces.Add(mask);
++  }
++  var parent=new int[nodes.Count];for(int i=0;i<parent.Length;i++)parent[i]=i;int Root(int a){while(parent[a]!=a)a=parent[a];return a;}
++  for(int i=0;i<nodes.Count;i++)for(int j=0;j<i;j++){var a=nodes[j];var b=nodes[i];if(a.hi==b.lo&&Math.Min(a.r1,b.r0)-Math.Max(a.l1,b.l0)>epsilon)parent[Root(i)]=Root(j);else if(b.hi==a.lo&&Math.Min(b.r1,a.r0)-Math.Max(b.l1,a.l0)>epsilon)parent[Root(i)]=Root(j);}
++  var combined=new int[nodes.Count];for(int i=0;i<nodes.Count;i++)combined[Root(i)]|=faces[i];foreach(int mask in combined)if((mask&fromFaces)!=0&&(mask&toFaces)!=0)return true;return false;
++ }
++ static double OmitCost577(int i,float[] area,bool[] selected,int w,int h)
++ {
++  double cost=2*(double)area[i]-1;int x=i%w,y=i/w;for(int dy=-1;dy<=1;dy++)for(int dx=-1;dx<=1;dx++){if(dx==0&&dy==0)continue;int u=x+dx,v=y+dy;if(u<0||u>=w||v<0||v>=h)continue;float weight=HeadRegion502.BoundaryCost*(dx!=0&&dy!=0?.29289322f:.58578644f);cost+=(selected[v*w+u]?1:-1)*(double)weight;}return cost;
++ }
++ static bool[] SourcePassages577(List<NegativeRegion563.Feature> features,List<NegativeRegion563.Feature> branches,bool[] closed,int x0,int y0,int w,int h,float[] area,List<int[]> groups,ref bool[] positive)
++ {
++  bool any=false;var selected=positive;var outside=Exterior(selected,w,h);var label=new int[selected.Length];Array.Fill(label,-1);int count=0;var queue=new List<int>();
++  for(int i=0;i<selected.Length;i++)if(!selected[i]&&!outside[i]&&label[i]<0){queue.Clear();queue.Add(i);label[i]=count;for(int k=0;k<queue.Count;k++){int n=queue[k],x=n%w,y=n/w;void Add(int j){if(!selected[j]&&!outside[j]&&label[j]<0){label[j]=count;queue.Add(j);}}if(x>0)Add(n-1);if(x+1<w)Add(n+1);if(y>0)Add(n-w);if(y+1<h)Add(n+w);}count++;}
++  if(count==0)return null;var required=new bool[selected.Length];
++  for(int f=0;f<features.Count;f++)if(!closed[f]&&Width(Parts(features[f]))>=MinimumBroadWidth){var feature=features[f];var cap=new double[selected.Length];foreach(var branch in branches)if(feature.geometry.Contains(branch.geometry[0]))NarrowCaps(branch,x0,y0,w,h,cap);
++   var needs=new HashSet<int>();foreach(var cell in feature.cellArea)if(label[cell.Key]>=0&&cell.Value-cap[cell.Key]>1e-9)needs.Add(label[cell.Key]);
++   foreach(int component in needs){int best=-1;double least=double.PositiveInfinity;foreach(var cell in feature.cellArea){int i=cell.Key,x=i%w,y=i/w;if(!selected[i]||cell.Value<=0)continue;int from=0,to=0;
++     void Face(int j,int bit){if(!feature.cellArea.TryGetValue(j,out double a)||a<=0||selected[j])return;if(label[j]==component)from|=bit;if(outside[j])to|=bit;}
++     if(x>0)Face(i-1,1);if(x+1<w)Face(i+1,2);if(y>0)Face(i-w,4);if(y+1<h)Face(i+w,8);if(from==0||to==0||!SourceCrosses577(feature,x+x0,y+y0,from,to))continue;
++     double cost=OmitCost577(i,area,selected,w,h);if(cost<least||(cost==least&&i<best)){best=i;least=cost;}
++    }
++    if(best<0)throw new InvalidOperationException("577 broad source passage requires more than one source-supported cell: "+feature.boundaryId);
++    required[best]=true;any=true;
++   }
++  }
++  if(!any)return null;
++  positive=HeadRegion502.SelectRegions543(area,w,h,groups,null,required);return required;
+  }
+  public static Layout Build(IList<CurveArea511.P[]> source,int x,int y,int w,int h)
+  {
+@@ -89,10 +124,8 @@
+   var sourceBranches=negative.Branches566();foreach(var b in sourceBranches)if(b.start566.kind=="open-mouth"||b.end566.kind=="open-mouth")closed[membership[b.geometry[0]]]=false;
+   output.envelopeCurves.AddRange(positive);
+   for(int i=0;i<features.Count;i++)if(closed[i]){var edge=Edges(features[i],original);var f=new Family{id="enclosed:"+string.Join(",",edge),kind="source-enclosed-component",sourceEdges=edge.ToArray(),polygons=Parts(features[i])};output.envelopeCurves.AddRange(f.polygons);output.families.Add(f);}
+-  // The signed source cut owns both positive hair and KEEP's negative cells.
+-  // Continuous source closure and its coarse-grid opening remain separate facts.
+-  output.protectedPositive=SourcePositive(source,x,y,w,h);var referenceOutside=Exterior(output.protectedPositive,w,h);
+-  var rootAreas=CurveArea511.Compute(output.envelopeCurves,x,y,w,h);var proposal=HeadRegion502.SelectRegions543(rootAreas,w,h,null,output.protectedPositive);var outside=Exterior(proposal,w,h);output.envelope=new bool[proposal.Length];
++  output.protectedPositive=SourcePositive(source,x,y,w,h,out var sourceAreas,out var sourceGroups);var requiredNegative=SourcePassages577(features,sourceBranches,closed,x,y,w,h,sourceAreas,sourceGroups,ref output.protectedPositive);var referenceOutside=Exterior(output.protectedPositive,w,h);
++  var rootAreas=CurveArea511.Compute(output.envelopeCurves,x,y,w,h);var proposal=HeadRegion502.SelectRegions543(rootAreas,w,h,null,output.protectedPositive,requiredNegative);var outside=Exterior(proposal,w,h);output.envelope=new bool[proposal.Length];
+   for(int i=0;i<proposal.Length;i++)if(output.protectedPositive[i]&&!proposal[i])throw new InvalidOperationException("575 internal FILL erased the protected positive boundary");
+   for(int i=0;i<proposal.Length;i++){output.envelope[i]=!outside[i];if(!proposal[i]&&!outside[i])output.filledAliasCells++;}
+   // Interior fill of the chosen exterior contour must not silently erase a broad,
+@@ -115,8 +148,6 @@
+    for(int i=0;i<clipped.Length;i++){double a=rootAreas[i]+(double)holeAreas[i]-combined[i];if(a < -2e-6||a>Math.Min(rootAreas[i],holeAreas[i])+2e-6)throw new InvalidOperationException("574 noncanonical winding/area overlap");clipped[i]=(float)Math.Max(0,Math.Min(Math.Min(rootAreas[i],holeAreas[i]),a));family.sourceArea+=clipped[i];outsideArea+=Math.Max(0,holeAreas[i]-clipped[i]);}
+    family.sourceOpen=outsideArea>1e-6;
+    if(family.mode=="FILL"){output.filledFamilies++;continue;}
+-   // Do not run a second, independent cut for KEEP: it can split a supported
+-   // diagonal mouth and disagree with the already selected positive boundary.
+    output.keptFamilies++;var hole=new bool[holeAreas.Length];for(int i=0;i<hole.Length;i++)if(!output.protectedPositive[i]&&clipped[i]>0){hole[i]=true;if(referenceOutside[i])family.referenceOpen=true;}var visible=new bool[hole.Length];bool touches=false;
+    for(int i=0;i<hole.Length;i++)if(hole[i]&&output.envelope[i]){visible[i]=true;family.pixelCount++;int xx=i%w,yy=i/w;if(xx==0||yy==0||xx==w-1||yy==h-1||!output.envelope[i-1]||!output.envelope[i+1]||!output.envelope[i-w]||!output.envelope[i+w])touches=true;if(output.owner[i]>1)throw new InvalidOperationException("574 KEEP families compete for one cell; source union is required");output.owner[i]=family.owner;output.selected[i]=false;}
+    if(Components(visible,w,h)!=1||touches!=family.referenceOpen)throw new InvalidOperationException("576 KEEP differs from the canonical signed region: "+family.id);
+@@ -126,3 +157,6 @@
+   return output;
+  }
+ }
++
++
++

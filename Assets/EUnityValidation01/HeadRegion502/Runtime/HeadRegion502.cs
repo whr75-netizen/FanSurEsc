@@ -206,9 +206,10 @@ public static partial class HeadRegion502
     // topology constraint, animation history, or coordinate/phase special case.
     public static bool[] SelectRegions(float[] areas, int width, int height)
         =>SelectRegions543(areas,width,height,null);
-    public static bool[] SelectRegions543(float[] areas,int width,int height,List<int[]> groups,bool[] requiredPositive=null)
+    public static bool[] SelectRegions543(float[] areas,int width,int height,List<int[]> groups,bool[] requiredPositive=null,bool[] requiredNegative=null)
     {
         if(requiredPositive!=null&&requiredPositive.Length!=areas.Length)throw new ArgumentException("Positive boundary constraint grid differs");
+        if(requiredNegative!=null&&requiredNegative.Length!=areas.Length)throw new ArgumentException("Negative boundary constraint grid differs");
         var flow = new Cut(areas.Length + 2); int source = areas.Length, sink = source + 1;
         for (int y = 0; y < height; y++) for (int x = 0; x < width; x++)
         {
@@ -216,6 +217,7 @@ public static partial class HeadRegion502
             bool border = x == 0 || y == 0 || x == width - 1 || y == height - 1;
             flow.Add(source, i, areas[i]); flow.Add(i, sink, border ? 100000 : 1 - areas[i]);
             if(requiredPositive!=null&&requiredPositive[i])flow.Add(source,i,100000);
+            if(requiredNegative!=null&&requiredNegative[i]){if(requiredPositive!=null&&requiredPositive[i])throw new ArgumentException("Conflicting signed boundary constraints");flow.Add(i,sink,100000);}
             if (x + 1 < width) flow.Link(i, i + 1, BoundaryCost * .58578644f);
             if (y + 1 < height) flow.Link(i, i + width, BoundaryCost * .58578644f);
             if (y + 1 < height && x + 1 < width) flow.Link(i, i + width + 1, BoundaryCost * .29289322f);

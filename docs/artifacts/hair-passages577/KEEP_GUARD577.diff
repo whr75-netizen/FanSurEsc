@@ -1,0 +1,26 @@
+--- before-guard/HairRegions574.cs
++++ after-guard/HairRegions574.cs
+@@ -113,6 +113,14 @@
+   if(!any)return null;
+   positive=HeadRegion502.SelectRegions543(area,w,h,groups,null,required);return required;
+  }
++ static bool KeepConnected577(bool[] visible,bool[] envelope,int w,int h,bool open)
++ {
++  bool any=false;foreach(bool v in visible)any|=v;if(!any)return false;
++  if(!open)return Components(visible,w,h)==1;
++  // Clipping an open source region to the head can yield several visible arcs.
++  // They must all connect through the SAME exterior, not become interior holes.
++  var complete=new bool[visible.Length];for(int i=0;i<complete.Length;i++)complete[i]=visible[i]||!envelope[i];return Components(complete,w,h)==1;
++ }
+  public static Layout Build(IList<CurveArea511.P[]> source,int x,int y,int w,int h)
+  {
+   if(source.Count==0)throw new InvalidOperationException("574 source boundary missing");
+@@ -150,7 +158,7 @@
+    if(family.mode=="FILL"){output.filledFamilies++;continue;}
+    output.keptFamilies++;var hole=new bool[holeAreas.Length];for(int i=0;i<hole.Length;i++)if(!output.protectedPositive[i]&&clipped[i]>0){hole[i]=true;if(referenceOutside[i])family.referenceOpen=true;}var visible=new bool[hole.Length];bool touches=false;
+    for(int i=0;i<hole.Length;i++)if(hole[i]&&output.envelope[i]){visible[i]=true;family.pixelCount++;int xx=i%w,yy=i/w;if(xx==0||yy==0||xx==w-1||yy==h-1||!output.envelope[i-1]||!output.envelope[i+1]||!output.envelope[i-w]||!output.envelope[i+w])touches=true;if(output.owner[i]>1)throw new InvalidOperationException("574 KEEP families compete for one cell; source union is required");output.owner[i]=family.owner;output.selected[i]=false;}
+-   if(Components(visible,w,h)!=1||touches!=family.referenceOpen)throw new InvalidOperationException("576 KEEP differs from the canonical signed region: "+family.id);
++   if(!KeepConnected577(visible,output.envelope,w,h,family.referenceOpen)||touches!=family.referenceOpen)throw new InvalidOperationException("576 KEEP differs from the canonical signed region: "+family.id);
+    for(int i=0;i<clipped.Length;i++)output.areas[i]=Math.Max(0,output.areas[i]-clipped[i]);
+   }
+   for(int i=0;i<proposal.Length;i++)if(output.selected[i]&&!output.envelope[i])throw new InvalidOperationException("574 family changed the authoritative exterior");

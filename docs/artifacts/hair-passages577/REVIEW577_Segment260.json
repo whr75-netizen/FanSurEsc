@@ -1,0 +1,556 @@
+{
+  "poses": 3,
+  "samePoseAndSource": true,
+  "ownerExact": true,
+  "outsideEnvelope": 0,
+  "outsideParent": 0,
+  "newClosedHoles": 0,
+  "sameNonHairMetaRGBChanges": 0,
+  "faceCoverageChanges": 2,
+  "faceChangesMissingSameRayPacket": 0,
+  "eyeSourceUnchanged": true,
+  "eyeVisibleBufferDiff": 0,
+  "sameRayEvidence": "Fresh packet source-ray witnesses for added hair only; absent ON hair packets at removed-hair cells are not missing witnesses. Destination-ray/world not claimed",
+  "sourceFaceRayPackets": 0,
+  "sourceFaceSkinHits": 0,
+  "acceptedPacketsWithOpaqueSkinInFront": 0,
+  "acceptedPacketsWithAnyOpaqueFaceInFront": 0,
+  "wholeBodyChangesOutsideHeadROI": 0,
+  "timingsMeasuredDuringCaptureNotPlayerFPS": {
+    "OFF": {
+      "negativeGroups": {
+        "median": 7.0,
+        "p95": 7.0,
+        "min": 7.0,
+        "max": 7.0
+      },
+      "negativeMs": {
+        "median": 9.1711,
+        "p95": 17.66539,
+        "min": 3.1887,
+        "max": 18.6092
+      },
+      "buildMs": {
+        "median": 277.1923,
+        "p95": 554.8702,
+        "min": 215.8578,
+        "max": 585.7233
+      },
+      "curveMs": {
+        "median": 0.0323,
+        "p95": 0.05282,
+        "min": 0.0317,
+        "max": 0.0551
+      },
+      "areaMs": {
+        "median": 11.1616,
+        "p95": 22.232590000000002,
+        "min": 4.461,
+        "max": 23.4627
+      },
+      "packetMs": {
+        "median": 201.3282,
+        "p95": 466.06338,
+        "min": 178.6568,
+        "max": 495.4784
+      },
+      "packets": {
+        "median": 502.0,
+        "p95": 502.0,
+        "min": 501.0,
+        "max": 502.0
+      },
+      "unsupported": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    },
+    "ON": {
+      "negativeGroups": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "negativeMs": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      },
+      "buildMs": {
+        "median": 264.8431,
+        "p95": 298.63945,
+        "min": 232.381,
+        "max": 302.3946
+      },
+      "curveMs": {
+        "median": 0.0326,
+        "p95": 0.03359,
+        "min": 0.0321,
+        "max": 0.0337
+      },
+      "areaMs": {
+        "median": 30.2265,
+        "p95": 45.29862,
+        "min": 28.0304,
+        "max": 46.9733
+      },
+      "packetMs": {
+        "median": 191.2812,
+        "p95": 217.82085,
+        "min": 178.8824,
+        "max": 220.7697
+      },
+      "packets": {
+        "median": 511.0,
+        "p95": 516.4,
+        "min": 511.0,
+        "max": 517.0
+      },
+      "unsupported": {
+        "median": 0.0,
+        "p95": 0.0,
+        "min": 0.0,
+        "max": 0.0
+      }
+    }
+  },
+  "faceSourceRayWitness": [],
+  "missingFaceWitnesses": [],
+  "rows": [
+    {
+      "frame": 41,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 15,
+      "addedHair": 15,
+      "removedHair": 0,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 21,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 0,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=26",
+        "bitChannelDiff=0 scleraCovered=143 irisCovered=26"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 42,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 11,
+      "addedHair": 10,
+      "removedHair": 1,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 16,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=145 irisCovered=25",
+        "bitChannelDiff=0 scleraCovered=145 irisCovered=25"
+      ],
+      "eyeVisibleBufferDiff": 0
+    },
+    {
+      "frame": 43,
+      "phaseExact": true,
+      "sourceCurvesExact": true,
+      "maskChanged": 12,
+      "addedHair": 11,
+      "removedHair": 1,
+      "closedHoles4": [
+        1,
+        0
+      ],
+      "singleOwnerExact": true,
+      "outsideEnvelope": 0,
+      "outsideParent": [
+        0,
+        0
+      ],
+      "RGBChanged": 17,
+      "sameNonHairMetaRGBChanged": 0,
+      "faceCoverageChanged": 1,
+      "eyeSourceInputs": [
+        "bitChannelDiff=0 scleraCovered=145 irisCovered=24",
+        "bitChannelDiff=0 scleraCovered=145 irisCovered=24"
+      ],
+      "eyeVisibleBufferDiff": 0
+    }
+  ],
+  "faceChanges": [
+    {
+      "frame": 42,
+      "main": [
+        219,
+        50
+      ],
+      "head": [
+        219,
+        50
+      ],
+      "before": [
+        13.709800720214844,
+        14.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.71701717376709,
+        4.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 43,
+      "main": [
+        219,
+        50
+      ],
+      "head": [
+        219,
+        50
+      ],
+      "before": [
+        13.699930191040039,
+        14.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.71741008758545,
+        4.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "imageRows": [
+    {
+      "frame": 41,
+      "changedScreenPixels": 84,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 42,
+      "changedScreenPixels": 64,
+      "changedOutsideHeadROI": 0
+    },
+    {
+      "frame": 43,
+      "changedScreenPixels": 68,
+      "changedOutsideHeadROI": 0
+    }
+  ],
+  "families": [
+    {
+      "frame": 41,
+      "id": "enclosed:88,89,90,91",
+      "mode": "FILL",
+      "width": "0.35648318159573478",
+      "area": "0.15371077135205269",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 41,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.028180697308442859",
+      "area": "0.0021551605314016342",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 41,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9906591250378654",
+      "area": "8.5819939654320478",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "4"
+    },
+    {
+      "frame": 42,
+      "id": "enclosed:88,89,90,91,99,100",
+      "mode": "FILL",
+      "width": "0.35761714528157995",
+      "area": "0.15469048917293549",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 42,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.028730820330167717",
+      "area": "0.0022341422736644745",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 42,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9899290311318794",
+      "area": "8.5739656537771225",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "4"
+    },
+    {
+      "frame": 43,
+      "id": "enclosed:88,89,90,91,99,100",
+      "mode": "FILL",
+      "width": "0.35824209578984778",
+      "area": "0.15551531687378883",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "2"
+    },
+    {
+      "frame": 43,
+      "id": "enclosed:95,96,99",
+      "mode": "FILL",
+      "width": "0.029073361833866329",
+      "area": "0.0022837591823190451",
+      "sourceOpen": "False",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "3"
+    },
+    {
+      "frame": 43,
+      "id": "hole-ring:1",
+      "mode": "FILL",
+      "width": "1.9894850657971404",
+      "area": "8.5707974284887314",
+      "sourceOpen": "True",
+      "referenceOpen": "False",
+      "pixels": "0",
+      "owner": "4"
+    }
+  ],
+  "KEEP_checks": [],
+  "KEEP_all_valid": true,
+  "originalCanvasChecks": [
+    {
+      "frame": 41,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 3,
+          "visibleLogicalCells": 2881,
+          "charBounds": [
+            174,
+            33,
+            255,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 3,
+          "visibleLogicalCells": 2893,
+          "charBounds": [
+            174,
+            33,
+            255,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 42,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2887,
+          "charBounds": [
+            176,
+            33,
+            255,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2897,
+          "charBounds": [
+            176,
+            33,
+            255,
+            165
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 43,
+      "originalCanvasComplete": true,
+      "cameraExact": true,
+      "timeExact": true,
+      "captures": [
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2899,
+          "charBounds": [
+            177,
+            33,
+            256,
+            165
+          ]
+        },
+        {
+          "originalWidth": 960,
+          "originalHeight": 544,
+          "logicalWidth": 480,
+          "logicalHeight": 272,
+          "scale": 2,
+          "sourceCropApplied": false,
+          "oldCropWouldMissLogicalCells": 0,
+          "visibleLogicalCells": 2910,
+          "charBounds": [
+            177,
+            33,
+            256,
+            165
+          ]
+        }
+      ]
+    }
+  ],
+  "originalCanvasAllValid": true,
+  "comparisonDefinition": {
+    "OFF": "same yaw260 prepared curve input, signed selection566",
+    "ON": "same input, common signed passage577",
+    "notCompared": "native head/product default OFF is not the left side of this narrow causal comparison"
+  },
+  "captureStatus": {
+    "status": "CAPTURED",
+    "poses": 3,
+    "error": "",
+    "inputRestored": true,
+    "animatorRestored": true,
+    "clockRestored": true
+  },
+  "wholeLoopPassed": false,
+  "removedHairRevealsFace": [
+    {
+      "frame": 42,
+      "main": [
+        219,
+        50
+      ],
+      "head": [
+        219,
+        50
+      ],
+      "before": [
+        13.709800720214844,
+        14.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.71701717376709,
+        4.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 43,
+      "main": [
+        219,
+        50
+      ],
+      "head": [
+        219,
+        50
+      ],
+      "before": [
+        13.699930191040039,
+        14.0,
+        0.0,
+        0.0
+      ],
+      "after": [
+        13.71741008758545,
+        4.0,
+        0.0,
+        0.0
+      ]
+    }
+  ]
+}

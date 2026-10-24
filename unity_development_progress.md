@@ -3573,3 +3573,12 @@ Interactable (abstract base class)
 - 새 전체루프는0–41번42쌍 완료 후42번ON에서 기존 broad source parting narrow-cap 보호식이 거부했다. KEEP분기 이전 proposal/Exterior의닫힌영역검사이며 해당원본곡선/면적/42OFF 보존. 초과셀수치는미추출. 전체루프/루프연결미검증,방향전체실패로채택보류,제품헤어OFF.
 - 완료42쌍 경계밖/새닫힌구멍/같은비헤어meta색/머리밖전신색/눈버퍼차이0. 얼굴→헤어15표본은새source-ray원삼각형/UV/alpha/depth로앞얼굴덮임0;destination/world확대주장없음. 원본PNG85장작업경로유지,파생42프레임700ms부분전신GIF1,141,439B/무손실WebP480,536B,메인최신표시. 모든가닥시간품질통과아님.
 - 캡처중내부CPU median/P95 Build225.07/270.52ms,packet182.35/214.34,area16.67/34.07. 외부readback/파일쓰기와별도이며PlayerFPS/GPU/최적화효과아님. 새할당미측정. 직접Edit/씬clean/실험OFF/임시input0와입력/Animator/시계복원,Quality/Time해시보존. 손·명암·자동방향·성능별도미해결. [결과](docs/artifacts/hair-directions576/RESULT576.md).
+
+### 278. CHARACTER-RENDER-01 / 577 — 음의 통로 선택·열린KEEP 검사영역 정정 / 반대뷰 실제81쌍
+
+- 저장42의 첫위반(219,48): 틈면적.6667775819−cap.3777043188=.2890732631셀². 기준P에서 이미4빈셀이4연결외부와단절, 후속FILL이입구를막은것이아니었다. 원본8이웃가지그룹과4연결영역사이의부분셀통로누락. 실제원본틈이이어지는(219,50)을기존비용+0.756579로선택;더싼(220,49)+0.308203은L/T와B/R원본영역이끊겨제외. 좌표는진단결과이고런타임특례아님.
+- HeadRegion502.SelectRegions543에requiredNegative를추가,HairRegions574.SourcePassages577이source와envelope선택에같은제약전달. 폭/비용계수/시간/색/깊이/캡처코어유지. 저장129입력의기존성공128마스크동일,42는이전출력없음을분리. 정상끝·틈6반례와실제41–43/기준뷰3/반대뷰5통과.
+- 중간전체55쌍후55번KEEP거부는이전576에도재현. visible9셀이8+1로갈려도둘다같은외부에연결됐다. 열린KEEP를visible∪!envelope에서검사하도록같은HairRegions파일의KeepConnected577정정;픽셀선택/임계값불변. 부유내부/끊긴닫힌영역/빈KEEP거부등5반례·제품55마스크동일·실제54–56통과.
+- 최종코드의새연속yaw260 Walk0–80 **81쌍 CAPTURED**,원본전체960×544 PNG162장보존. 두실패통과,원본/pose/카메라/시간일치,소유권/KEEP전체영역연결통과. 경계밖/새닫힌구멍/같은비헤어meta색/머리밖전신색/눈차이0. 얼굴31변화중26추가헤어source-ray원삼각형UV·알파·깊이대조앞얼굴덮임0,5건뒤피부노출. destination/world전체주장없음.
+- 전신GIF2,253,766B/무손실WebP957,336B 모두81프레임1350ms,중간부분루프합성아님. 큰틈KEEP0–34/FILL35–50/KEEP51–80,루프형상/role/눈동일. 양끝캐릭터PNG20화면픽셀최대2/255색차는양쪽공통이며Time.time이다르므로명암잔여미판정으로보존. 모든가닥시간품질완료아님.
+- 내부CPU ON Build median/P95 219.03/324.16ms,packet175.59/226.63,area17.70/29.05. 외부readback/파일쓰기와별도,PlayerFPS/GPU/최적화성과아님. 할당새측정없음. 직접cleanEdit/실험OFF/input0·입력/Animator/시계복원,Quality/Time해시불변. 자동모든방향/손/명암/실시간성능미완료로헤어기본OFF. 메인최신81비교/파이프라인/중앙그래프반영안정합,Library403재시도·P접근없음. [결과](docs/artifacts/hair-passages577/RESULT577.md).

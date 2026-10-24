@@ -1,0 +1,273 @@
+{
+  "initialize": {
+    "result": {
+      "protocolVersion": "2024-11-05",
+      "capabilities": {
+        "tools": {
+          "listChanged": true
+        },
+        "prompts": {}
+      },
+      "serverInfo": {
+        "name": "unity-mcp-server",
+        "version": "1.0.0"
+      }
+    },
+    "jsonrpc": "2.0",
+    "id": 1
+  },
+  "tools": {
+    "result": {
+      "tools": [
+        {
+          "name": "Unity_AssetGeneration_GenerateAsset",
+          "description": "Generates or modifies a Unity asset. ONLY call this tool when the user has explicitly asked to create, generate, or modify a specific asset (e.g., 'generate a sprite', 'create a 3D model', 'make a sound effect', 'generate a texture'). Do NOT call this tool to answer questions about Unity, explain how generation works, set up a project, or for any task where the user has not explicitly requested asset creation or modification. Do NOT call this tool as the first action in a game or feature creation task. The specific action is determined by the 'command' parameter. The model id parameter requires a valid model ID from the list of available models for asset generation. For optimal performance, you are strongly encouraged to generate multiple independent assets in parallel by issuing multiple tool calls simultaneously in a single response. CONSENT REQUIRED (once per conversation): Before the FIRST call to this tool in a conversation, do NOT call it yet. First send the user a plain-text message (a normal conversational reply, not a tool call or popup) that: briefly lists the specific asset(s) you intend to generate; explains that generations run in parallel but the assistant is BLOCKED until every generation completes \u2014 it cannot take other actions or reply mid-generation; notes there is no precise ETA and generation can take from tens of seconds to several minutes depending on the model, cold starts, and third-party provider queues; and asks the user to confirm they want to proceed. Then stop and wait for the user's confirmation on a following turn before calling this tool. Ask for this confirmation only ONCE per conversation: if the user has already confirmed an earlier generation in this conversation, do not ask again. A new conversation requires asking again. To generate a humanoid animation from a text prompt, use 'GenerateHumanoidAnimation' with a 'prompt'. To generate a humanoid animation from a video (video-to-motion), use 'GenerateHumanoidAnimation' with 'targetAssetPath' pointing to a VideoClip asset in the project. When using video-to-motion, 'prompt' is not required. Optional parameter: 'durationInSeconds' to control the animation length. To generate a sprite, use 'GenerateSprite' you should then call 'RemoveImageBackground'. To generate an image (e.g., a portrait or environment), use 'GenerateImage'. To remove the background from an existing sprite or image, use 'RemoveImageBackground'. To upscale an existing image, use 'UpscaleImage'. To upscale an existing sprite, use 'UpscaleSprite'. Both require a target asset path. To recolor an existing image or sprite, use 'RecolorImage' or 'RecolorSprite'. Both require a target asset path for the source image and a 'referenceImageInstanceId' for the color palette image. To edit a sprite using a prompt, use 'EditSpriteWithPrompt'. To edit an image using a prompt, use 'EditImageWithPrompt'. To edit a sprite using a prompt into a sprite sheet (Spritesheet), use 'GenerateSpritesheet'. All editing commands require a target asset path. To generate a cubemap, use 'GenerateCubemap'. To upscale an existing cubemap, use 'UpscaleCubemap' and provide the target asset path. To generate a base material (texture only), use 'GenerateMaterial'. To add PBR maps to an existing material, use 'AddPbrToMaterial' and provide the target asset path. The same applies to 'GenerateTerrainLayer' and 'AddPbrToTerrainLayer'. For base Material and TerrainLayer generation, it's highly recommended to ask for the list of available composition patterns to use as a starting point. To generate a sound effect or voice, use 'GenerateSound'. For voice/speech generation, the prompt must contain ONLY the spoken text exactly as it should be pronounced, not a description of the voice. Use the 'voiceName' parameter to select a specific voice from the available voices listed in the model description. Optional parameters: 'durationInSeconds' (1-10 seconds) and 'loop' (for seamless looping). To generate a 3D model, use 'GenerateMesh'. This command generates a self-contained Prefab asset that includes the generated mesh and a corresponding material, ready to be used in a scene. Use the 'meshFormat' parameter to specify the output file format ('glb' or 'fbx'). If the user requests a specific format (e.g. 'generate a GLB'), set 'meshFormat' accordingly. Defaults to 'fbx' if not specified. For multiview models, you can provide multiple reference images via 'referenceImageInstanceIds' and label each one with 'referenceImageLabels' (e.g., 'front', 'back', 'left') to assign them to specific view slots. To retopologize an existing mesh (improve its topology), use 'RetopologyMesh' and provide the target asset path. To add textures to an existing mesh, use 'TextureMesh' and provide the target asset path with a prompt, a reference image, or both. When both a prompt and a reference image are provided, the image guides the visual style while the prompt drives the content. To add rigging to an existing mesh, use 'RigMesh' and provide the target asset path.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "command": {
+                "type": "string",
+                "enum": [
+                  "GenerateHumanoidAnimation",
+                  "GenerateCubemap",
+                  "UpscaleCubemap",
+                  "GenerateMaterial",
+                  "AddPbrToMaterial",
+                  "GenerateMesh",
+                  "GenerateSound",
+                  "GenerateSprite",
+                  "GenerateImage",
+                  "GenerateSpritesheet",
+                  "RemoveSpriteBackground",
+                  "RemoveImageBackground",
+                  "UpscaleImage",
+                  "UpscaleSprite",
+                  "RecolorImage",
+                  "RecolorSprite",
+                  "EditSpriteWithPrompt",
+                  "EditImageWithPrompt",
+                  "GenerateTerrainLayer",
+                  "AddPbrToTerrainLayer",
+                  "RetopologyMesh",
+                  "TextureMesh",
+                  "RigMesh"
+                ]
+              },
+              "modelId": {
+                "type": "string"
+              },
+              "prompt": {
+                "type": "string"
+              },
+              "savePath": {
+                "type": "string"
+              },
+              "waitForCompletion": {
+                "type": "boolean"
+              },
+              "targetAssetPath": {
+                "type": "string"
+              },
+              "referenceImageInstanceId": {
+                "type": "integer"
+              },
+              "referenceImageInstanceIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              },
+              "referenceImageLabels": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "durationInSeconds": {
+                "type": "number"
+              },
+              "loop": {
+                "type": "boolean"
+              },
+              "width": {
+                "type": "integer"
+              },
+              "height": {
+                "type": "integer"
+              },
+              "voiceName": {
+                "type": "string"
+              },
+              "forceGeneration": {
+                "type": "boolean"
+              },
+              "meshFormat": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "command"
+            ]
+          }
+        },
+        {
+          "name": "Unity_AssetGeneration_GetModels",
+          "description": "Gets a list of available models for asset generation. When asked for a model list always include the ModelId guid in the response.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "includeAllModels": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_Camera_Capture",
+          "description": "Renders an image from a specific camera in the scene by GameObject instance ID that has a Camera component. It is useful to capture a specific camera, in cases like camera placement or when this view doesn't match the scene/game view. Optionally, it can be used without the camera ID parameter to capture the current scene view for cases when the scene view is not available on the screen. Note: this is a computationally expensive tool, and should be used carefully only when scene view context is necessary.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "cameraInstanceID": {
+                "type": "integer"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_GetConsoleLogs",
+          "description": "Get Unity Console logs including messages, warnings, and errors with their stack traces. Useful for debugging and understanding what errors or issues are occurring in the Unity Editor.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "maxEntries": {
+                "type": "integer"
+              },
+              "includeStackTrace": {
+                "type": "boolean"
+              },
+              "logTypes": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        {
+          "name": "Unity_RunCommand",
+          "description": "Compile and execute a C# script in the Unity Editor.\n\nThis tool first validates that the code can be compiled, then executes it if compilation succeeds.\nArgs: code (required), title (optional).\nReturns: compilation status, execution status, logs, and results.\n\nThis is a powerful tool that allows you to programmatically control virtually every aspect of the game, including physics, input, graphics, gameplay logic, project setting and package management.\n\n### The Golden Template\n```csharp\nusing UnityEngine;\nusing UnityEditor;\n\ninternal class CommandScript : IRunCommand\n{\n    public void Execute(ExecutionResult result)\n    {\n        // 1. Your logic here\n        GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);\n\n        // 2. Register changes for Undo/Redo and tracking\n        result.RegisterObjectCreation(cube);\n\n        // 3. Log the result\n        result.Log(\"Created {0}\", cube);\n    }\n}\n```\n### Rules for Success\n1. **Class Name is Mandatory**: The class MUST be named `CommandScript`. Using any other name will cause a NullReferenceException or execution failure.\n2. **Use `internal` Accessibility**: Always use `internal class CommandScript`. Using `public` will cause an \"Inconsistent Accessibility\" compilation error.\n3. **Use the `result` Object**:\n   - **Creation**: Use `result.RegisterObjectCreation(obj)` after creating objects.\n   - **Modification**: Use `result.RegisterObjectModification(obj)` BEFORE changing properties.\n   - **Deletion**: Use `result.DestroyObject(obj)` instead of `Object.DestroyImmediate`.\n   - **Logging**:\n     - `result.Log(\"Created {0}\", obj)` - Log with object references using `{0}`, `{1}`, etc.\n     - `result.LogWarning(\"Warning message\")` - Log warnings\n     - `result.LogError(\"Error message\")` - Log errors\n4. **Avoid Top-Level Statements**: Always wrap your code in the class structure above.\n\n",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "Code": {
+                "type": "string",
+                "description": "The C# script code to compile and execute. Should implement IRunCommand interface or be a valid C# script.",
+                "default": ""
+              },
+              "Title": {
+                "type": "string",
+                "description": "Optional title for the execution command",
+                "default": ""
+              }
+            },
+            "required": [
+              "Code"
+            ]
+          },
+          "outputSchema": {
+            "type": "object",
+            "properties": {}
+          },
+          "title": "Compile and execute a C# script"
+        },
+        {
+          "name": "Unity_SceneView_Capture2DScene",
+          "description": "Captures a specific rectangular region of a 2D scene using orthographic (top-down) projection. Specify world coordinates (X, Y) and dimensions (width, height) to capture exactly that area. Ideal for 2D scenes, tilemaps, or capturing specific portions of a scene. The pixelsPerUnit parameter controls resolution (higher = more detail but larger image).",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "worldX": {
+                "type": "number"
+              },
+              "worldY": {
+                "type": "number"
+              },
+              "worldWidth": {
+                "type": "number"
+              },
+              "worldHeight": {
+                "type": "number"
+              },
+              "pixelsPerUnit": {
+                "type": "integer"
+              },
+              "backgroundColor": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "worldX",
+              "worldY",
+              "worldWidth",
+              "worldHeight"
+            ]
+          }
+        },
+        {
+          "name": "Unity_SceneView_CaptureMultiAngleSceneView",
+          "description": "Captures a multi-angle view of the current Scene View from 4 different perspectives in a 2x2 grid (Isometric, Front, Top, Right). This tool is designed for validating scene structure in 3D projects. ONLY use it for 3D scene checks, to validate object positions and scene layout.DO NOT use for 2D projects or to retrieve info about Unity Editor window.The isometric view uses perspective projection for depth, while Front/Top/Right use orthographic projection. Optionally, provide focusObjectIds to frame specific objects (e.g., newly placed houses) - the camera will be positioned to ensure these objects are centered and visible. If focusObjectIds is not provided or empty, the camera frames all visible objects in the scene. Note: this is a computationally expensive tool, and should be used carefully only when multi-view context is necessary.",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "focusObjectIds": {
+                "type": "array",
+                "items": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 2
+  },
+  "execution": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": true,\n  \"message\": \"Command executed successfully.\",\n  \"data\": {\n    \"isCompilationSuccessful\": true,\n    \"isExecutionSuccessful\": true,\n    \"executionId\": 1,\n    \"compilationLogs\": \"\",\n    \"executionLogs\": \"[Log] 572 metadata 16 records=33 existing derived curve values exact; no area/selector/render rerun\\n[Log] 572 metadata 51 records=32 existing derived curve values exact; no area/selector/render rerun\\n[Log] 572 metadata 62 records=34 existing derived curve values exact; no area/selector/render rerun\\n[Log] 572 metadata 71 records=32 existing derived curve values exact; no area/selector/render rerun\\n[Log] 572 metadata 72 records=32 existing derived curve values exact; no area/selector/render rerun\\n[Log] 572 metadata 73 records=31 existing derived curve values exact; no area/selector/render rerun\\n[Log] 572 metadata 77 records=34 existing derived curve values exact; no area/selector/render rerun\",\n    \"localFixedCode\": \"using System.Collections.Generic;\\r\\nusing System.IO;\\r\\nusing System;\\r\\nusing UnityEditor;\\r\\n\\r\\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\\r\\n{\\r\\n    internal class CommandScript : IRunCommand\\r\\n    {\\r\\n        public void Execute(ExecutionResult result)\\r\\n        {\\r\\n            if (EditorApplication.isPlaying || EditorApplication.isCompiling)\\r\\n                throw new Exception(\\\"Stored metadata only; requires Edit/no compiling\\\");\\r\\n            const string input = \\\"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/HairContract570/Full570/\\\";\\r\\n            const string output = \\\"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/RegionContract572/Stored572/\\\";\\r\\n            int oldCross = CurveArea511.LastCrossings, oldEvents = CurveArea511.LastEvents;\\r\\n            try\\r\\n            {\\r\\n                foreach (int frame in new[]{16, 51, 62, 71, 72, 73, 77})\\r\\n                {\\r\\n                    string p = input + frame.ToString(\\\"D3\\\"), o = output + frame.ToString(\\\"D3\\\");\\r\\n                    if (File.Exists(o + \\\"_DECISIONS.bin\\\"))\\r\\n                        throw new Exception(\\\"Metadata exists; inspect rather than repeat\\\");\\r\\n                    int x, y, w, h;\\r\\n                    using (var r = new BinaryReader(File.OpenRead(p + \\\"_ON_AREAS.bin\\\")))\\r\\n                    {\\r\\n                        x = r.ReadInt32();\\r\\n                        y = r.ReadInt32();\\r\\n                        w = r.ReadInt32();\\r\\n                        h = r.ReadInt32();\\r\\n                    }\\r\\n\\r\\n                    var graph = new List<CurveArea511.P[]>();\\r\\n                    using (var r = new BinaryReader(File.OpenRead(p + \\\"_ON_CURVES.bin\\\")))\\r\\n                    {\\r\\n                        int n = r.ReadInt32();\\r\\n                        for (int i = 0; i < n; i++)\\r\\n                        {\\r\\n                            var q = new CurveArea511.P[r.ReadInt32()];\\r\\n                            for (int j = 0; j < q.Length; j++)\\r\\n                                q[j] = new CurveArea511.P(r.ReadSingle(), r.ReadSingle());\\r\\n                            graph.Add(q);\\r\\n                        }\\r\\n                    }\\r\\n\\r\\n                    var build = CapContract572.Create(graph, x, y, w, h, 1.0);\\r\\n                    using (var r = new BinaryReader(File.OpenRead(o + \\\"_CURVES.bin\\\")))\\r\\n                    {\\r\\n                        if (r.ReadInt32() != build.rings.Count)\\r\\n                            throw new Exception(\\\"Ring count mismatch\\\");\\r\\n                        foreach (var ring in build.rings)\\r\\n                        {\\r\\n                            if (r.ReadInt32() != ring.Length)\\r\\n                                throw new Exception(\\\"Control count mismatch\\\");\\r\\n                            foreach (var q in ring)\\r\\n                                if (r.ReadDouble() != q.x || r.ReadDouble() != q.y)\\r\\n                                    throw new Exception(\\\"Ring value mismatch\\\");\\r\\n                        }\\r\\n\\r\\n                        if (r.BaseStream.Position != r.BaseStream.Length)\\r\\n                            throw new Exception(\\\"Trailing curves\\\");\\r\\n                    }\\r\\n\\r\\n                    using (var b = new BinaryWriter(File.Create(o + \\\"_DECISIONS.bin\\\")))\\r\\n                    {\\r\\n                        b.Write(572);\\r\\n                        b.Write(frame);\\r\\n                        b.Write(build.decisions.Count);\\r\\n                        foreach (var d in build.decisions)\\r\\n                        {\\r\\n                            b.Write(d.sourceBranch);\\r\\n                            b.Write(d.axis);\\r\\n                            b.Write(d.mode);\\r\\n                            b.Write(d.splitRule);\\r\\n                            foreach (double z in new[]{d.pitch, d.sourceLo, d.sourceHi, d.fillLo, d.fillHi, d.keepLo, d.keepHi})\\r\\n                                b.Write(z);\\r\\n                            b.Write(d.insertedRing);\\r\\n                            foreach (var path in new[]{d.positiveLeftBoundary, d.positiveRightBoundary})\\r\\n                            {\\r\\n                                b.Write(path.Length);\\r\\n                                foreach (long id in path)\\r\\n                                    b.Write(id);\\r\\n                            }\\r\\n\\r\\n                            foreach (var port in new[]{d.sourceStart, d.sourceEnd})\\r\\n                            {\\r\\n                                b.Write(port.kind);\\r\\n                                b.Write(port.level);\\r\\n                                b.Write(port.left);\\r\\n                                b.Write(port.right);\\r\\n                                b.Write(port.leftId);\\r\\n                                b.Write(port.rightId);\\r\\n                            }\\r\\n                        }\\r\\n                    }\\r\\n\\r\\n                    result.Log(\\\"572 metadata \\\" + frame + \\\" records=\\\" + build.decisions.Count + \\\" existing derived curve values exact; no area/selector/render rerun\\\");\\r\\n                }\\r\\n            }\\r\\n            finally\\r\\n            {\\r\\n                CurveArea511.LastCrossings = oldCross;\\r\\n                CurveArea511.LastEvents = oldEvents;\\r\\n            }\\r\\n        }\\r\\n    }\\r\\n\\r\\n    // Stored-input prototype only. No runtime integration, history or mask editing.\\r\\n    // Existing closed rings remain at their original indices: original arc IDs survive.\\r\\n    public static class CapContract572\\r\\n    {\\r\\n        [Serializable]\\r\\n        public sealed class Port\\r\\n        {\\r\\n            public string kind;\\r\\n            public double level, left, right;\\r\\n            public long leftId, rightId;\\r\\n        }\\r\\n\\r\\n        [Serializable]\\r\\n        public sealed class Decision\\r\\n        {\\r\\n            public string sourceBranch, axis, mode, splitRule;\\r\\n            public double pitch, sourceLo, sourceHi, fillLo, fillHi, keepLo, keepHi;\\r\\n            public int insertedRing;\\r\\n            public long[] positiveLeftBoundary, positiveRightBoundary;\\r\\n            public Port sourceStart, sourceEnd;\\r\\n            public int[] selectedPortCells;\\r\\n            public string selectedPortStatus;\\r\\n        }\\r\\n\\r\\n        public sealed class Build\\r\\n        {\\r\\n            public readonly List<CurveArea511.P[]> rings = new();\\r\\n            public readonly List<Decision> decisions = new();\\r\\n            public readonly List<NegativeRegion563.Feature> sourceBranches = new();\\r\\n            public readonly List<bool> transposed = new();\\r\\n        }\\r\\n\\r\\n        static Port Copy(NegativeRegion563.BoundaryEvent566 p) => new Port{kind = p.kind, level = p.level, left = p.left, right = p.right, leftId = p.leftId, rightId = p.rightId};\\r\\n        static CurveArea511.P Convert(double x, double y, bool transpose) => transpose ? new CurveArea511.P(y, x) : new CurveArea511.P(x, y);\\r\\n        public static Build Create(IList<CurveArea511.P[]> source, int x0, int y0, int width, int height, double pitch)\\r\\n        {\\r\\n            if (!(pitch > 0))\\r\\n                throw new ArgumentOutOfRangeException(nameof(pitch));\\r\\n            var output = new Build();\\r\\n            foreach (var ring in source)\\r\\n                output.rings.Add(ring);\\r\\n            for (int axis = 0; axis < 2; axis++)\\r\\n            {\\r\\n                bool transpose = axis != 0;\\r\\n                var graph = new List<CurveArea511.P[]>();\\r\\n                foreach (var ring in source)\\r\\n                {\\r\\n                    if (!transpose)\\r\\n                    {\\r\\n                        graph.Add(ring);\\r\\n                        continue;\\r\\n                    }\\r\\n\\r\\n                    var p = new CurveArea511.P[ring.Length];\\r\\n                    for (int j = 0; j < p.Length; j++)\\r\\n                    {\\r\\n                        var a = ring[ring.Length - 1 - j];\\r\\n                        p[j] = new CurveArea511.P(a.y, a.x);\\r\\n                    }\\r\\n\\r\\n                    graph.Add(p);\\r\\n                }\\r\\n\\r\\n                var domain = new NegativeRegion563(transpose ? y0 : x0, transpose ? x0 : y0, transpose ? height : width, transpose ? width : height, transpose, true);\\r\\n                CurveArea511.Compute(graph, transpose ? y0 : x0, transpose ? x0 : y0, transpose ? height : width, transpose ? width : height, domain);\\r\\n                foreach (var branch in domain.Branches566())\\r\\n                {\\r\\n                    output.sourceBranches.Add(branch);\\r\\n                    output.transposed.Add(transpose);\\r\\n                    bool filledAll = false;\\r\\n                    for (int end = 0; end < 2; end++)\\r\\n                    {\\r\\n                        if (filledAll)\\r\\n                            break;\\r\\n                        if ((end == 0 ? branch.start566 : branch.end566).kind != \\\"cap\\\")\\r\\n                            continue;\\r\\n                        var prefix = new List<NegativeRegion563.Span>();\\r\\n                        bool reachedPitch = false;\\r\\n                        for (int n = 0; n < branch.geometry.Count; n++)\\r\\n                        {\\r\\n                            int j = end == 0 ? n : branch.geometry.Count - 1 - n;\\r\\n                            var s = branch.geometry[j];\\r\\n                            double near = end == 0 ? s.r0 - s.l0 : s.r1 - s.l1, far = end == 0 ? s.r1 - s.l1 : s.r0 - s.l0;\\r\\n                            if (near >= pitch)\\r\\n                            {\\r\\n                                reachedPitch = true;\\r\\n                                break;\\r\\n                            }\\r\\n\\r\\n                            if (far >= pitch)\\r\\n                            {\\r\\n                                double t = (pitch - near) / (far - near);\\r\\n                                if (end == 0)\\r\\n                                {\\r\\n                                    s.hi = s.lo + (s.hi - s.lo) * t;\\r\\n                                    s.l1 = s.l0 + (s.l1 - s.l0) * t;\\r\\n                                    s.r1 = s.r0 + (s.r1 - s.r0) * t;\\r\\n                                }\\r\\n                                else\\r\\n                                {\\r\\n                                    s.lo = s.hi + (s.lo - s.hi) * t;\\r\\n                                    s.l0 = s.l1 + (s.l0 - s.l1) * t;\\r\\n                                    s.r0 = s.r1 + (s.r0 - s.r1) * t;\\r\\n                                }\\r\\n\\r\\n                                if (s.hi > s.lo)\\r\\n                                    prefix.Add(s);\\r\\n                                reachedPitch = true;\\r\\n                                break;\\r\\n                            }\\r\\n\\r\\n                            prefix.Add(s);\\r\\n                        }\\r\\n\\r\\n                        if (prefix.Count == 0)\\r\\n                            continue;\\r\\n                        if (end != 0)\\r\\n                            prefix.Reverse();\\r\\n                        var left = new List<CurveArea511.P>();\\r\\n                        var right = new List<CurveArea511.P>();\\r\\n                        var first = prefix[0];\\r\\n                        left.Add(Convert(first.l0, first.lo, transpose));\\r\\n                        right.Add(Convert(first.r0, first.lo, transpose));\\r\\n                        for (int n = 0; n < prefix.Count; n++)\\r\\n                        {\\r\\n                            var s = prefix[n];\\r\\n                            bool last = n + 1 == prefix.Count;\\r\\n                            if (last || prefix[n + 1].left != s.left)\\r\\n                                left.Add(Convert(s.l1, s.hi, transpose));\\r\\n                            if (last || prefix[n + 1].right != s.right)\\r\\n                                right.Add(Convert(s.r1, s.hi, transpose));\\r\\n                        }\\r\\n\\r\\n                        var polygon = new List<CurveArea511.P>(left);\\r\\n                        right.Reverse();\\r\\n                        polygon.AddRange(right);\\r\\n                        for (int n = polygon.Count - 1; n > 0; n--)\\r\\n                            if (polygon[n].x == polygon[n - 1].x && polygon[n].y == polygon[n - 1].y)\\r\\n                                polygon.RemoveAt(n);\\r\\n                        if (polygon.Count > 1 && polygon[0].x == polygon[polygon.Count - 1].x && polygon[0].y == polygon[polygon.Count - 1].y)\\r\\n                            polygon.RemoveAt(polygon.Count - 1);\\r\\n                        double signed = 0;\\r\\n                        for (int n = 0; n < polygon.Count; n++)\\r\\n                        {\\r\\n                            var a = polygon[n];\\r\\n                            var b = polygon[(n + 1) % polygon.Count];\\r\\n                            signed += a.x * b.y - a.y * b.x;\\r\\n                        }\\r\\n\\r\\n                        if (polygon.Count < 3 || signed == 0)\\r\\n                            continue;\\r\\n                        if (signed < 0)\\r\\n                            polygon.Reverse();\\r\\n                        double lo = branch.geometry[0].lo, hi = branch.geometry[branch.geometry.Count - 1].hi, fl = prefix[0].lo, fh = prefix[prefix.Count - 1].hi;\\r\\n                        output.decisions.Add(new Decision{sourceBranch = branch.boundaryId, axis = transpose ? \\\"x\\\" : \\\"y\\\", mode = reachedPitch ? \\\"FILL_CAP_KEEP_REMAINDER\\\" : \\\"FILL_SOURCE_BRANCH\\\", splitRule = \\\"first continuous cap width reaches one grid pitch; no cell-count or centre threshold\\\", pitch = pitch, sourceLo = lo, sourceHi = hi, fillLo = fl, fillHi = fh, keepLo = end == 0 ? fh : lo, keepHi = end == 0 ? hi : fl, insertedRing = output.rings.Count, positiveLeftBoundary = branch.leftPath566.ToArray(), positiveRightBoundary = branch.rightPath566.ToArray(), sourceStart = Copy(branch.start566), sourceEnd = Copy(branch.end566), selectedPortStatus = \\\"NOT_RESOLVED\\\"});\\r\\n                        output.rings.Add(polygon.ToArray());\\r\\n                        filledAll = !reachedPitch;\\r\\n                    }\\r\\n                }\\r\\n            }\\r\\n\\r\\n            return output;\\r\\n        }\\r\\n    }\\r\\n\\r\\n    [Serializable]\\r\\n    public sealed class Port\\r\\n    {\\r\\n        public string kind;\\r\\n        public double level, left, right;\\r\\n        public long leftId, rightId;\\r\\n    }\\r\\n\\r\\n    [Serializable]\\r\\n    public sealed class Decision\\r\\n    {\\r\\n        public string sourceBranch, axis, mode, splitRule;\\r\\n        public double pitch, sourceLo, sourceHi, fillLo, fillHi, keepLo, keepHi;\\r\\n        public int insertedRing;\\r\\n        public long[] positiveLeftBoundary, positiveRightBoundary;\\r\\n        public Port sourceStart, sourceEnd;\\r\\n        public int[] selectedPortCells;\\r\\n        public string selectedPortStatus;\\r\\n    }\\r\\n\\r\\n    public sealed class Build\\r\\n    {\\r\\n        public readonly List<CurveArea511.P[]> rings = new();\\r\\n        public readonly List<Decision> decisions = new();\\r\\n        public readonly List<NegativeRegion563.Feature> sourceBranches = new();\\r\\n        public readonly List<bool> transposed = new();\\r\\n    }\\r\\n}\",\n    \"result\": \"Command executed successfully.\"\n  }\n}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Command executed successfully.",
+        "data": {
+          "isCompilationSuccessful": true,
+          "isExecutionSuccessful": true,
+          "executionId": 1,
+          "compilationLogs": "",
+          "executionLogs": "[Log] 572 metadata 16 records=33 existing derived curve values exact; no area/selector/render rerun\n[Log] 572 metadata 51 records=32 existing derived curve values exact; no area/selector/render rerun\n[Log] 572 metadata 62 records=34 existing derived curve values exact; no area/selector/render rerun\n[Log] 572 metadata 71 records=32 existing derived curve values exact; no area/selector/render rerun\n[Log] 572 metadata 72 records=32 existing derived curve values exact; no area/selector/render rerun\n[Log] 572 metadata 73 records=31 existing derived curve values exact; no area/selector/render rerun\n[Log] 572 metadata 77 records=34 existing derived curve values exact; no area/selector/render rerun",
+          "localFixedCode": "using System.Collections.Generic;\r\nusing System.IO;\r\nusing System;\r\nusing UnityEditor;\r\n\r\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\r\n{\r\n    internal class CommandScript : IRunCommand\r\n    {\r\n        public void Execute(ExecutionResult result)\r\n        {\r\n            if (EditorApplication.isPlaying || EditorApplication.isCompiling)\r\n                throw new Exception(\"Stored metadata only; requires Edit/no compiling\");\r\n            const string input = \"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/HairContract570/Full570/\";\r\n            const string output = \"C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/RegionContract572/Stored572/\";\r\n            int oldCross = CurveArea511.LastCrossings, oldEvents = CurveArea511.LastEvents;\r\n            try\r\n            {\r\n                foreach (int frame in new[]{16, 51, 62, 71, 72, 73, 77})\r\n                {\r\n                    string p = input + frame.ToString(\"D3\"), o = output + frame.ToString(\"D3\");\r\n                    if (File.Exists(o + \"_DECISIONS.bin\"))\r\n                        throw new Exception(\"Metadata exists; inspect rather than repeat\");\r\n                    int x, y, w, h;\r\n                    using (var r = new BinaryReader(File.OpenRead(p + \"_ON_AREAS.bin\")))\r\n                    {\r\n                        x = r.ReadInt32();\r\n                        y = r.ReadInt32();\r\n                        w = r.ReadInt32();\r\n                        h = r.ReadInt32();\r\n                    }\r\n\r\n                    var graph = new List<CurveArea511.P[]>();\r\n                    using (var r = new BinaryReader(File.OpenRead(p + \"_ON_CURVES.bin\")))\r\n                    {\r\n                        int n = r.ReadInt32();\r\n                        for (int i = 0; i < n; i++)\r\n                        {\r\n                            var q = new CurveArea511.P[r.ReadInt32()];\r\n                            for (int j = 0; j < q.Length; j++)\r\n                                q[j] = new CurveArea511.P(r.ReadSingle(), r.ReadSingle());\r\n                            graph.Add(q);\r\n                        }\r\n                    }\r\n\r\n                    var build = CapContract572.Create(graph, x, y, w, h, 1.0);\r\n                    using (var r = new BinaryReader(File.OpenRead(o + \"_CURVES.bin\")))\r\n                    {\r\n                        if (r.ReadInt32() != build.rings.Count)\r\n                            throw new Exception(\"Ring count mismatch\");\r\n                        foreach (var ring in build.rings)\r\n                        {\r\n                            if (r.ReadInt32() != ring.Length)\r\n                                throw new Exception(\"Control count mismatch\");\r\n                            foreach (var q in ring)\r\n                                if (r.ReadDouble() != q.x || r.ReadDouble() != q.y)\r\n                                    throw new Exception(\"Ring value mismatch\");\r\n                        }\r\n\r\n                        if (r.BaseStream.Position != r.BaseStream.Length)\r\n                            throw new Exception(\"Trailing curves\");\r\n                    }\r\n\r\n                    using (var b = new BinaryWriter(File.Create(o + \"_DECISIONS.bin\")))\r\n                    {\r\n                        b.Write(572);\r\n                        b.Write(frame);\r\n                        b.Write(build.decisions.Count);\r\n                        foreach (var d in build.decisions)\r\n                        {\r\n                            b.Write(d.sourceBranch);\r\n                            b.Write(d.axis);\r\n                            b.Write(d.mode);\r\n                            b.Write(d.splitRule);\r\n                            foreach (double z in new[]{d.pitch, d.sourceLo, d.sourceHi, d.fillLo, d.fillHi, d.keepLo, d.keepHi})\r\n                                b.Write(z);\r\n                            b.Write(d.insertedRing);\r\n                            foreach (var path in new[]{d.positiveLeftBoundary, d.positiveRightBoundary})\r\n                            {\r\n                                b.Write(path.Length);\r\n                                foreach (long id in path)\r\n                                    b.Write(id);\r\n                            }\r\n\r\n                            foreach (var port in new[]{d.sourceStart, d.sourceEnd})\r\n                            {\r\n                                b.Write(port.kind);\r\n                                b.Write(port.level);\r\n                                b.Write(port.left);\r\n                                b.Write(port.right);\r\n                                b.Write(port.leftId);\r\n                                b.Write(port.rightId);\r\n                            }\r\n                        }\r\n                    }\r\n\r\n                    result.Log(\"572 metadata \" + frame + \" records=\" + build.decisions.Count + \" existing derived curve values exact; no area/selector/render rerun\");\r\n                }\r\n            }\r\n            finally\r\n            {\r\n                CurveArea511.LastCrossings = oldCross;\r\n                CurveArea511.LastEvents = oldEvents;\r\n            }\r\n        }\r\n    }\r\n\r\n    // Stored-input prototype only. No runtime integration, history or mask editing.\r\n    // Existing closed rings remain at their original indices: original arc IDs survive.\r\n    public static class CapContract572\r\n    {\r\n        [Serializable]\r\n        public sealed class Port\r\n        {\r\n            public string kind;\r\n            public double level, left, right;\r\n            public long leftId, rightId;\r\n        }\r\n\r\n        [Serializable]\r\n        public sealed class Decision\r\n        {\r\n            public string sourceBranch, axis, mode, splitRule;\r\n            public double pitch, sourceLo, sourceHi, fillLo, fillHi, keepLo, keepHi;\r\n            public int insertedRing;\r\n            public long[] positiveLeftBoundary, positiveRightBoundary;\r\n            public Port sourceStart, sourceEnd;\r\n            public int[] selectedPortCells;\r\n            public string selectedPortStatus;\r\n        }\r\n\r\n        public sealed class Build\r\n        {\r\n            public readonly List<CurveArea511.P[]> rings = new();\r\n            public readonly List<Decision> decisions = new();\r\n            public readonly List<NegativeRegion563.Feature> sourceBranches = new();\r\n            public readonly List<bool> transposed = new();\r\n        }\r\n\r\n        static Port Copy(NegativeRegion563.BoundaryEvent566 p) => new Port{kind = p.kind, level = p.level, left = p.left, right = p.right, leftId = p.leftId, rightId = p.rightId};\r\n        static CurveArea511.P Convert(double x, double y, bool transpose) => transpose ? new CurveArea511.P(y, x) : new CurveArea511.P(x, y);\r\n        public static Build Create(IList<CurveArea511.P[]> source, int x0, int y0, int width, int height, double pitch)\r\n        {\r\n            if (!(pitch > 0))\r\n                throw new ArgumentOutOfRangeException(nameof(pitch));\r\n            var output = new Build();\r\n            foreach (var ring in source)\r\n                output.rings.Add(ring);\r\n            for (int axis = 0; axis < 2; axis++)\r\n            {\r\n                bool transpose = axis != 0;\r\n                var graph = new List<CurveArea511.P[]>();\r\n                foreach (var ring in source)\r\n                {\r\n                    if (!transpose)\r\n                    {\r\n                        graph.Add(ring);\r\n                        continue;\r\n                    }\r\n\r\n                    var p = new CurveArea511.P[ring.Length];\r\n                    for (int j = 0; j < p.Length; j++)\r\n                    {\r\n                        var a = ring[ring.Length - 1 - j];\r\n                        p[j] = new CurveArea511.P(a.y, a.x);\r\n                    }\r\n\r\n                    graph.Add(p);\r\n                }\r\n\r\n                var domain = new NegativeRegion563(transpose ? y0 : x0, transpose ? x0 : y0, transpose ? height : width, transpose ? width : height, transpose, true);\r\n                CurveArea511.Compute(graph, transpose ? y0 : x0, transpose ? x0 : y0, transpose ? height : width, transpose ? width : height, domain);\r\n                foreach (var branch in domain.Branches566())\r\n                {\r\n                    output.sourceBranches.Add(branch);\r\n                    output.transposed.Add(transpose);\r\n                    bool filledAll = false;\r\n                    for (int end = 0; end < 2; end++)\r\n                    {\r\n                        if (filledAll)\r\n                            break;\r\n                        if ((end == 0 ? branch.start566 : branch.end566).kind != \"cap\")\r\n                            continue;\r\n                        var prefix = new List<NegativeRegion563.Span>();\r\n                        bool reachedPitch = false;\r\n                        for (int n = 0; n < branch.geometry.Count; n++)\r\n                        {\r\n                            int j = end == 0 ? n : branch.geometry.Count - 1 - n;\r\n                            var s = branch.geometry[j];\r\n                            double near = end == 0 ? s.r0 - s.l0 : s.r1 - s.l1, far = end == 0 ? s.r1 - s.l1 : s.r0 - s.l0;\r\n                            if (near >= pitch)\r\n                            {\r\n                                reachedPitch = true;\r\n                                break;\r\n                            }\r\n\r\n                            if (far >= pitch)\r\n                            {\r\n                                double t = (pitch - near) / (far - near);\r\n                                if (end == 0)\r\n                                {\r\n                                    s.hi = s.lo + (s.hi - s.lo) * t;\r\n                                    s.l1 = s.l0 + (s.l1 - s.l0) * t;\r\n                                    s.r1 = s.r0 + (s.r1 - s.r0) * t;\r\n                                }\r\n                                else\r\n                                {\r\n                                    s.lo = s.hi + (s.lo - s.hi) * t;\r\n                                    s.l0 = s.l1 + (s.l0 - s.l1) * t;\r\n                                    s.r0 = s.r1 + (s.r0 - s.r1) * t;\r\n                                }\r\n\r\n                                if (s.hi > s.lo)\r\n                                    prefix.Add(s);\r\n                                reachedPitch = true;\r\n                                break;\r\n                            }\r\n\r\n                            prefix.Add(s);\r\n                        }\r\n\r\n                        if (prefix.Count == 0)\r\n                            continue;\r\n                        if (end != 0)\r\n                            prefix.Reverse();\r\n                        var left = new List<CurveArea511.P>();\r\n                        var right = new List<CurveArea511.P>();\r\n                        var first = prefix[0];\r\n                        left.Add(Convert(first.l0, first.lo, transpose));\r\n                        right.Add(Convert(first.r0, first.lo, transpose));\r\n                        for (int n = 0; n < prefix.Count; n++)\r\n                        {\r\n                            var s = prefix[n];\r\n                            bool last = n + 1 == prefix.Count;\r\n                            if (last || prefix[n + 1].left != s.left)\r\n                                left.Add(Convert(s.l1, s.hi, transpose));\r\n                            if (last || prefix[n + 1].right != s.right)\r\n                                right.Add(Convert(s.r1, s.hi, transpose));\r\n                        }\r\n\r\n                        var polygon = new List<CurveArea511.P>(left);\r\n                        right.Reverse();\r\n                        polygon.AddRange(right);\r\n                        for (int n = polygon.Count - 1; n > 0; n--)\r\n                            if (polygon[n].x == polygon[n - 1].x && polygon[n].y == polygon[n - 1].y)\r\n                                polygon.RemoveAt(n);\r\n                        if (polygon.Count > 1 && polygon[0].x == polygon[polygon.Count - 1].x && polygon[0].y == polygon[polygon.Count - 1].y)\r\n                            polygon.RemoveAt(polygon.Count - 1);\r\n                        double signed = 0;\r\n                        for (int n = 0; n < polygon.Count; n++)\r\n                        {\r\n                            var a = polygon[n];\r\n                            var b = polygon[(n + 1) % polygon.Count];\r\n                            signed += a.x * b.y - a.y * b.x;\r\n                        }\r\n\r\n                        if (polygon.Count < 3 || signed == 0)\r\n                            continue;\r\n                        if (signed < 0)\r\n                            polygon.Reverse();\r\n                        double lo = branch.geometry[0].lo, hi = branch.geometry[branch.geometry.Count - 1].hi, fl = prefix[0].lo, fh = prefix[prefix.Count - 1].hi;\r\n                        output.decisions.Add(new Decision{sourceBranch = branch.boundaryId, axis = transpose ? \"x\" : \"y\", mode = reachedPitch ? \"FILL_CAP_KEEP_REMAINDER\" : \"FILL_SOURCE_BRANCH\", splitRule = \"first continuous cap width reaches one grid pitch; no cell-count or centre threshold\", pitch = pitch, sourceLo = lo, sourceHi = hi, fillLo = fl, fillHi = fh, keepLo = end == 0 ? fh : lo, keepHi = end == 0 ? hi : fl, insertedRing = output.rings.Count, positiveLeftBoundary = branch.leftPath566.ToArray(), positiveRightBoundary = branch.rightPath566.ToArray(), sourceStart = Copy(branch.start566), sourceEnd = Copy(branch.end566), selectedPortStatus = \"NOT_RESOLVED\"});\r\n                        output.rings.Add(polygon.ToArray());\r\n                        filledAll = !reachedPitch;\r\n                    }\r\n                }\r\n            }\r\n\r\n            return output;\r\n        }\r\n    }\r\n\r\n    [Serializable]\r\n    public sealed class Port\r\n    {\r\n        public string kind;\r\n        public double level, left, right;\r\n        public long leftId, rightId;\r\n    }\r\n\r\n    [Serializable]\r\n    public sealed class Decision\r\n    {\r\n        public string sourceBranch, axis, mode, splitRule;\r\n        public double pitch, sourceLo, sourceHi, fillLo, fillHi, keepLo, keepHi;\r\n        public int insertedRing;\r\n        public long[] positiveLeftBoundary, positiveRightBoundary;\r\n        public Port sourceStart, sourceEnd;\r\n        public int[] selectedPortCells;\r\n        public string selectedPortStatus;\r\n    }\r\n\r\n    public sealed class Build\r\n    {\r\n        public readonly List<CurveArea511.P[]> rings = new();\r\n        public readonly List<Decision> decisions = new();\r\n        public readonly List<NegativeRegion563.Feature> sourceBranches = new();\r\n        public readonly List<bool> transposed = new();\r\n    }\r\n}",
+          "result": "Command executed successfully."
+        }
+      }
+    },
+    "jsonrpc": "2.0",
+    "id": 3
+  },
+  "console": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": true,\n  \"message\": \"Tool 'GetConsoleLogs' executed successfully\",\n  \"data\": {\n    \"logs\": [\n      {\n        \"message\": \"Destroy may not be called from edit mode! Use DestroyImmediate instead.\\nDestroying an object in edit mode destroys it permanently\\nUnityEngine.Object:Destroy (UnityEngine.Object)\\nHeadArea505:Alpha (UnityEngine.Texture2D) (at Assets/EUnityValidation01/HeadRegion502/Runtime/HeadArea505.cs:135)\\nHeadArea505:SourceAlphaBytes525 (UnityEngine.Texture2D) (at Assets/EUnityValidation01/HeadRegion502/Runtime/Visibility511.cs:8)\\nOpacityRegion525:.ctor (UnityEngine.Mesh,int,UnityEngine.Material) (at Assets/EUnityValidation01/ClothRegion524/Runtime/OpacityRegion525.cs:53)\\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript:Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult)\\nUnity.AI.Assistant.Editor.RunCommand.AgentRunCommand:Execute (Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExecutionResult&,string) (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Editor/Assistant/RunCommand/AgentRunCommand.cs:56)\\nUnity.AI.Assistant.Editor.RunCommand.RunCommandUtils:Execute (Unity.AI.Assistant.Editor.RunCommand.AgentRunCommand,string) (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Editor/Assistant/RunCommand/RunCommandUtils.cs:75)\\nUnity.AI.Assistant.Tools.Editor.RunCommandTool/<ExecuteCommand>d__6:MoveNext () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.Assistant.Tools/Scripting/RunCommandTool.cs:73)\\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<Unity.AI.Assistant.Tools.Editor.RunCommandTool/ExecutionOutput>:Start<Unity.AI.Assistant.Tools.Editor.RunCommandTool/<ExecuteCommand>d__6> (Unity.AI.Assistant.Tools.Editor.RunCommandTool/<ExecuteCommand>d__6&)\\nUnity.AI.Assistant.Tools.Editor.RunCommandTool:ExecuteCommand (Unity.AI.Assistant.FunctionCalling.ToolExecutionContext,string,string)\\nUnity.AI.MCP.Editor.Tools.RunCommand/<HandleCommand>d__4:MoveNext () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/Tools/RunCommand.cs:155)\\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<object>:Start<Unity.AI.MCP.Editor.Tools.RunCommand/<HandleCommand>d__4> (Unity.AI.MCP.Editor.Tools.RunCommand/<HandleCommand>d__4&)\\nUnity.AI.MCP.Editor.Tools.RunCommand:HandleCommand (Unity.AI.MCP.Editor.Tools.Parameters.RunCommandParams)\\nSystem.Reflection.MethodBase:Invoke (object,object[])\\nUnity.AI.MCP.Editor.ToolRegistry.TypedToolHandler:ExecuteAsync (Newtonsoft.Json.Linq.JObject) (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/ToolRegistry/IToolHandler.cs:164)\\nUnity.AI.MCP.Editor.ToolRegistry.McpToolRegistry/<ExecuteToolAsync>d__14:MoveNext () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/ToolRegistry/McpToolRegistry.cs:244)\\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<object>:Start<Unity.AI.MCP.Editor.ToolRegistry.McpToolRegistry/<ExecuteToolAsync>d__14> (Unity.AI.MCP.Editor.ToolRegistry.McpToolRegistry/<ExecuteToolAsync>d__14&)\\nUnity.AI.MCP.Editor.ToolRegistry.McpToolRegistry:ExecuteToolAsync (string,Newtonsoft.Json.Linq.JObject)\\nUnity.AI.MCP.Editor.Bridge/<ExecuteCommandAsync>d__75:MoveNext () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/Bridge.cs:1783)\\nSystem.Runtime.CompilerServices.AsyncTaskMethodBuilder`1<string>:Start<Unity.AI.MCP.Editor.Bridge/<ExecuteCommandAsync>d__75> (Unity.AI.MCP.Editor.Bridge/<ExecuteCommandAsync>d__75&)\\nUnity.AI.MCP.Editor.Bridge:ExecuteCommandAsync (Unity.AI.MCP.Editor.Models.Command,Unity.AI.MCP.Editor.Connection.IConnectionTransport,System.Threading.CancellationToken)\\nUnity.AI.MCP.Editor.Bridge:ProcessCommands () (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/Bridge.cs:1537)\\nUnity.AI.MCP.Editor.Bridge:<RequestDrainOnMainThread>b__69_0 (object) (at ./Library/PackageCache/com.unity.ai.assistant@c0127625258e/Modules/Unity.AI.MCP.Editor/Bridge.cs:1468)\\nUnityEngine.UnitySynchronizationContext:ExecuteTasks ()\\n\",\n        \"stackTrace\": \"\",\n        \"type\": \"Error\",\n        \"timestamp\": \"[11:31:55]\"\n      },\n      {\n        \"message\": \"Failed getting indices. Submesh index is out of bounds.\\nUnityEngine.Mesh:GetIndices (int)\\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExtractOrigins531:Model (Full319View335,OpacityRegion525)\\nUnity.AI.Assistant.Agent.Dynamic.Extension.Editor.ExtractOrigins531:Work ()\\nUnityEditor.EditorApplication:Internal_CallDelayFunctions ()\\n\",\n        \"stackTrace\": \"\",\n        \"type\": \"Error\",\n        \"timestamp\": \"[15:02:01]\"\n      }\n    ],\n    \"totalCount\": 2,\n    \"errorCount\": 2,\n    \"warningCount\": 0\n  }\n}"
+        }
+      ]
+    },
+    "jsonrpc": "2.0",
+    "id": 4
+  },
+  "transportErrors": []
+}

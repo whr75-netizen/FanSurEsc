@@ -1,0 +1,27 @@
+{
+  "record": 589,
+  "centralOriginalModified": false,
+  "nodes": [
+    {
+      "id": "alpha-source-data",
+      "status": "BYTES_AND_SETTINGS_MATCHED",
+      "evidence": "ALPHA_ASSET_PARITY589.json"
+    },
+    {
+      "id": "reference-support-provider",
+      "status": "ACTUAL_S0_SUBSET_ONLY",
+      "output": "48S0/S0;S3fallbackUNKNOWN"
+    },
+    {
+      "id": "actual-input-area",
+      "status": "ACCURACY_GATE_NOT_PASSED",
+      "output": "nominalwidth.0186426;notGPUguarantee",
+      "evidence": "REVIEW589.json"
+    },
+    {
+      "id": "product-connection",
+      "status": "NOT_IMPLEMENTED",
+      "reason": "Missing actualalpha/projection bounds; offline cost20.24s"
+    }
+  ]
+}

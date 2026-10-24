@@ -3597,3 +3597,9 @@ Interactable (abstract base class)
 ## 281. CHARACTER-RENDER-01 — 580 얼굴 공급 정책 보존과 실제 회전
 
 HeadRegion502의 일반 shader 대체가 얼굴 provider 색 규칙을 잃는 원인을 동일 UV/depth/alpha/meta에서 확정했다. c216d3e에서 원래 색 계산과 공통 clip을 함께 보존하도록 최소 수정. 실제6+8+50쌍 완료, 새 전신 비교 제공. 홍채 가시성1→0→1 및 내부선 palette3표본은 별도 미판정이며 전체 시간 품질/실시간 채택은 미완료. [결과·재개](docs/artifacts/hair-provider580/RESULT580.md).
+
+## 581 — 눈 출몰의 최초 선택 조건 확인
+
+- 580 c216d3e를 보존하고 제품 소스는 바꾸지 않았다. 실제 회전17~19 홍채24셀 및34~36 속눈썹108셀의 선택/가림 계산이 GPU와 일치했다. 원본 눈 ROI도 동일했다. 속눈썹은 가시 지지 합4가3+1에서2+2로 나뉘어 Choose가 모두 버리는 공간 선택 손실이다. 홍채는 피부를 포함하는 정규화 지원과 실제/선택 머리 가림 차이 및5개 선택 조건을 분리했다.
+- source 개구부 alpha 제한은 오프라인 대조만 수행했고 흰자도 줄어 미채택이다. 원본 명목각 차이 조회는 제외하고 실제 각도 조회로 검증했다. iris 세 번째 파일 저장 뒤 float step guard FAILED/poses2를 성공으로 바꾸지 않았다. 새 전체 루프·제품 수정·정상 세 방향 품질 회귀는 미실행이다.
+- 기본 OFF/clean Edit/입력·Animator·시계 복원. 내부선3건과 성능은 별도 미해결. [근거](docs/artifacts/eye-visibility581/RESULT581.md).

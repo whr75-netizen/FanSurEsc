@@ -1,0 +1,33 @@
+{
+  "record": 581,
+  "originalCentralGraphWritten": false,
+  "productSourceChanged": false,
+  "nodes": [
+    {
+      "id": "eye-iris-17-19",
+      "state": "CAUSE_CONFIRMED_NOT_FIXED",
+      "input": "580 original turn +581 matched support query",
+      "code": "EyeFeature348.Evaluate/Classify/Choose",
+      "proof": "CAUSE581.json iris",
+      "output": "skin-labelled iris support and 4/5 per-cell visibility transition"
+    },
+    {
+      "id": "eye-lash-34-36",
+      "state": "CAUSE_CONFIRMED_NOT_FIXED",
+      "input": "580 actual recorded angles +581 exact pose query",
+      "code": "EyeFeature348.Choose",
+      "proof": "CAUSE581.json lash",
+      "output": "same total4 visible lash supports redistributed3+1 to2+2; all pixels discarded"
+    },
+    {
+      "id": "eye-preserving-common-selection",
+      "state": "NOT_IMPLEMENTED",
+      "input": "Existing normalized model-bound feature curves + same-ray real occlusion",
+      "invariants": [
+        "No RGB/history/coordinate exceptions",
+        "Preserve designed eye size and true foreground occlusion"
+      ],
+      "next": "bounded spatial allocation contract before product edit, then adjacent real rotation +80/170/260 regression"
+    }
+  ]
+}

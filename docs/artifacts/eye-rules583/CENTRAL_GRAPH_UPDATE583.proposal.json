@@ -1,0 +1,30 @@
+{
+  "originalCentralWritten": false,
+  "sourceCommit": "420b3aef31eccb077dee61f95c3d96886c3d7437",
+  "nodes": [
+    {
+      "id": "iris-source-support582",
+      "state": "LOCAL_ACTUAL_PASS",
+      "evidence": "IRIS_ANALYSIS582.json",
+      "source": "EyeFeature348.compute Sample583"
+    },
+    {
+      "id": "lash-area583",
+      "state": "LOCAL_PASS_TIME_QUALITY_UNRESOLVED",
+      "evidence": [
+        "Lash34To36_ORACLE583.json",
+        "Turn17To36_PAIRS583.json"
+      ],
+      "firstNewObservations": [
+        2,
+        5,
+        16
+      ]
+    },
+    {
+      "id": "first-new-source-query583",
+      "state": "NOT_EXECUTED_TIMEOUT_CANCELLED",
+      "next": "Read saved evidence; no new rule/whole capture before source cause"
+    }
+  ]
+}

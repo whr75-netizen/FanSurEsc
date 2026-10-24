@@ -1,0 +1,47 @@
+{
+  "commit": "420b3aef31eccb077dee61f95c3d96886c3d7437",
+  "defaultIris582": false,
+  "defaultLash583": false,
+  "productAdopted": false,
+  "sourceFiles": {
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute": {
+      "sha256": "a5a99fe3dfd5cbec8dae7e23c65a4e5d78b1eb53a859863612a11f4ffa5c8ea6",
+      "bytes": 15402
+    },
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeFeature348.cs": {
+      "sha256": "f6d61d733d7c2513b7c64343d129d7b9fd1641a4cd71a3005a22a60483881edb",
+      "bytes": 8789
+    },
+    "Assets/EUnityValidation01/HeadLocal367/Runtime/EyeRenderer367.cs": {
+      "sha256": "139561cd1ded69acb64f05548c26c1e6098b258a22b3515d8c61c3dd7e853c39",
+      "bytes": 7872
+    }
+  },
+  "irisActualPairs": 3,
+  "irisObservedGPUDecisionsMatched": 24,
+  "lashActualFrozenPairs": 3,
+  "lashFullRoiRecordsMatched": 846,
+  "threeDirectionActualPairs": 6,
+  "threeDirectionFullRoiRecordsMatched": 1136,
+  "actualContinuousTurnPairs": 20,
+  "actualTurnState": "CAPTURED_AND_RESTORED",
+  "actualTurnOutsideEyeChanges": 0,
+  "actualTurnSavedSilhouetteChanges": 0,
+  "actualTurnNewLashPresenceObservations": [
+    2,
+    5,
+    16
+  ],
+  "timeQualityAdopted": false,
+  "firstNewQuery": "90s tools/call timeout, no marker/output; cancelled before start using existing start guard. Not a pass.",
+  "lastCaptureFile": "019_ON.png",
+  "lastCaptureUTC": "2026-10-24T18:26:21.495419+00:00",
+  "mainUpdatedThisTurn": false,
+  "mainLatestRecord": 581,
+  "settingsPreserved": {
+    "QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  },
+  "toolBlocker": "Large first-new source-query RunCommand timed out90s; small official State/Console/restore calls work. Optional System.Reflection inspection was rejected; not bypassed.",
+  "sourceCommitScope": "Three files only; user settings and untracked art assets excluded."
+}

@@ -1,0 +1,203 @@
+{
+  "token": "AreaGrid64_586",
+  "n": 64,
+  "offset": 0.5,
+  "records": [
+    {
+      "case": 2,
+      "frame": 0,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.346435546875,
+          "budget": 0,
+          "positivePoints": 1419
+        },
+        "gpuLevel0": {
+          "area": 0.346435546875,
+          "budget": 0,
+          "positivePoints": 1419
+        },
+        "gpuManualBilinear": {
+          "area": 0.346435546875,
+          "budget": 0,
+          "positivePoints": 1419
+        }
+      }
+    },
+    {
+      "case": 2,
+      "frame": 1,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.4482421875,
+          "budget": 0,
+          "positivePoints": 1836
+        },
+        "gpuLevel0": {
+          "area": 0.4482421875,
+          "budget": 0,
+          "positivePoints": 1836
+        },
+        "gpuManualBilinear": {
+          "area": 0.4482421875,
+          "budget": 0,
+          "positivePoints": 1836
+        }
+      }
+    },
+    {
+      "case": 2,
+      "frame": 2,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.40771484375,
+          "budget": 0,
+          "positivePoints": 1670
+        },
+        "gpuLevel0": {
+          "area": 0.40771484375,
+          "budget": 0,
+          "positivePoints": 1670
+        },
+        "gpuManualBilinear": {
+          "area": 0.40771484375,
+          "budget": 0,
+          "positivePoints": 1670
+        }
+      }
+    },
+    {
+      "case": 5,
+      "frame": 0,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.369873046875,
+          "budget": 0,
+          "positivePoints": 1515
+        },
+        "gpuLevel0": {
+          "area": 0.369873046875,
+          "budget": 0,
+          "positivePoints": 1515
+        },
+        "gpuManualBilinear": {
+          "area": 0.369873046875,
+          "budget": 0,
+          "positivePoints": 1515
+        }
+      }
+    },
+    {
+      "case": 5,
+      "frame": 1,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.467041015625,
+          "budget": 0,
+          "positivePoints": 1913
+        },
+        "gpuLevel0": {
+          "area": 0.467041015625,
+          "budget": 0,
+          "positivePoints": 1913
+        },
+        "gpuManualBilinear": {
+          "area": 0.467041015625,
+          "budget": 0,
+          "positivePoints": 1913
+        }
+      }
+    },
+    {
+      "case": 5,
+      "frame": 2,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.423095703125,
+          "budget": 0,
+          "positivePoints": 1733
+        },
+        "gpuLevel0": {
+          "area": 0.423095703125,
+          "budget": 0,
+          "positivePoints": 1733
+        },
+        "gpuManualBilinear": {
+          "area": 0.423095703125,
+          "budget": 0,
+          "positivePoints": 1733
+        }
+      }
+    },
+    {
+      "case": 16,
+      "frame": 0,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.572265625,
+          "budget": 1,
+          "positivePoints": 2344
+        },
+        "gpuLevel0": {
+          "area": 0.572265625,
+          "budget": 1,
+          "positivePoints": 2344
+        },
+        "gpuManualBilinear": {
+          "area": 0.572265625,
+          "budget": 1,
+          "positivePoints": 2344
+        }
+      }
+    },
+    {
+      "case": 16,
+      "frame": 1,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.518310546875,
+          "budget": 1,
+          "positivePoints": 2123
+        },
+        "gpuLevel0": {
+          "area": 0.518310546875,
+          "budget": 1,
+          "positivePoints": 2123
+        },
+        "gpuManualBilinear": {
+          "area": 0.518310546875,
+          "budget": 1,
+          "positivePoints": 2123
+        }
+      }
+    },
+    {
+      "case": 16,
+      "frame": 2,
+      "variants": {
+        "gpuGrad": {
+          "area": 0.64501953125,
+          "budget": 1,
+          "positivePoints": 2642
+        },
+        "gpuLevel0": {
+          "area": 0.64501953125,
+          "budget": 1,
+          "positivePoints": 2642
+        },
+        "gpuManualBilinear": {
+          "area": 0.64501953125,
+          "budget": 1,
+          "positivePoints": 2642
+        }
+      }
+    }
+  ],
+  "inputScope": "All ray-hit candidates, including fragments absent from old raster; original fixed footprint. Geometry derivatives approximate, hardware filtered alpha evaluated on original GPU/texture state.",
+  "gpu": {
+    "groups": 6,
+    "secondsIncludingReadback": 0.424601700000494,
+    "settingsChanged": false,
+    "originalRenderBuffersTouched": false
+  }
+}

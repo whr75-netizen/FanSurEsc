@@ -1,0 +1,1001 @@
+{
+  "record": 586,
+  "createdUTC": "2026-10-24T20:42:08.326381+00:00",
+  "productionSourceCommit": "420b3aef31eccb077dee61f95c3d96886c3d7437",
+  "productionSourcesChanged": false,
+  "sourceSHA256": {
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute": "a5a99fe3dfd5cbec8dae7e23c65a4e5d78b1eb53a859863612a11f4ffa5c8ea6",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Runtime/EyeFeature348.cs": "f6d61d733d7c2513b7c64343d129d7b9fd1641a4cd71a3005a22a60483881edb",
+    "Assets/EUnityValidation01/HeadLocal367/Runtime/EyeRenderer367.cs": "139561cd1ded69acb64f05548c26c1e6098b258a22b3515d8c61c3dd7e853c39"
+  },
+  "diagnosticAsset": "Assets/EUnityValidation01/EyeBoundaryRestore348/Diagnostics586/AlphaSampler586.compute",
+  "filterSettings": {
+    "mips": 1,
+    "filter": "Bilinear",
+    "textureAnisotropy": 1,
+    "quality": "ForceEnable",
+    "wrap": "Repeat",
+    "UVAnimation": 0,
+    "textureST": [
+      1,
+      1,
+      0,
+      0
+    ],
+    "cutoff": 0.5,
+    "graphicsAPI": "Direct3D11",
+    "GPU": "RTX2080Ti"
+  },
+  "coveredSampleCount": 23986,
+  "recordedAlphaComparison": {
+    "maxLOD0Error": 0.38771652189025874,
+    "maxSampleGradError": 0.008300906185979846,
+    "sampleGradErrorsAbove001": 15,
+    "caveat": "Actual recorded UV. QUAD/UV-fit derivatives where available; remaining projected-geometry derivatives not a shader ddx readback. One recorded crop-projection query improved one residual. No full-hardware equivalence claim."
+  },
+  "areaReference": "Recorded projected triangles/rest-head upper-lash band; all candidate depth layers; actual GPU SampleGrad at the original4x4 footprint held fixed while integration density increases; same saved HairMETA; same brow/body visibility. UV gradients remain geometry-derived.",
+  "records": [
+    {
+      "case": 2,
+      "frame": 0,
+      "currentArea4": 0.3125,
+      "area128": 0.34552001953125,
+      "numericalErrorEstimate": 0.0018310546875,
+      "budget": 0,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.3125,
+            "budget": 0,
+            "positivePoints": 5,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.3125,
+            "budget": 0,
+            "positivePoints": 5,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.3125,
+            "budget": 0,
+            "positivePoints": 5,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.34375,
+            "budget": 0,
+            "positivePoints": 352
+          },
+          "gpuLevel0": {
+            "area": 0.34375,
+            "budget": 0,
+            "positivePoints": 352
+          },
+          "gpuManualBilinear": {
+            "area": 0.34375,
+            "budget": 0,
+            "positivePoints": 352
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.346435546875,
+            "budget": 0,
+            "positivePoints": 1419
+          },
+          "gpuLevel0": {
+            "area": 0.346435546875,
+            "budget": 0,
+            "positivePoints": 1419
+          },
+          "gpuManualBilinear": {
+            "area": 0.346435546875,
+            "budget": 0,
+            "positivePoints": 1419
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.34552001953125,
+            "budget": 0,
+            "positivePoints": 5661
+          },
+          "gpuLevel0": {
+            "area": 0.34552001953125,
+            "budget": 0,
+            "positivePoints": 5661
+          },
+          "gpuManualBilinear": {
+            "area": 0.34552001953125,
+            "budget": 0,
+            "positivePoints": 5661
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.34637451171875,
+            "budget": 0,
+            "positivePoints": 5675
+          },
+          "gpuLevel0": {
+            "area": 0.34637451171875,
+            "budget": 0,
+            "positivePoints": 5675
+          },
+          "gpuManualBilinear": {
+            "area": 0.34637451171875,
+            "budget": 0,
+            "positivePoints": 5675
+          }
+        }
+      },
+      "thresholdMargin": 0.15447998046875
+    },
+    {
+      "case": 2,
+      "frame": 1,
+      "currentArea4": 0.5,
+      "area128": 0.44940185546875,
+      "numericalErrorEstimate": 0.0023193359375,
+      "budget": 0,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.5,
+            "budget": 1,
+            "positivePoints": 8,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.5,
+            "budget": 1,
+            "positivePoints": 8,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.5,
+            "budget": 1,
+            "positivePoints": 8,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.4443359375,
+            "budget": 0,
+            "positivePoints": 455
+          },
+          "gpuLevel0": {
+            "area": 0.4443359375,
+            "budget": 0,
+            "positivePoints": 455
+          },
+          "gpuManualBilinear": {
+            "area": 0.4443359375,
+            "budget": 0,
+            "positivePoints": 455
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.4482421875,
+            "budget": 0,
+            "positivePoints": 1836
+          },
+          "gpuLevel0": {
+            "area": 0.4482421875,
+            "budget": 0,
+            "positivePoints": 1836
+          },
+          "gpuManualBilinear": {
+            "area": 0.4482421875,
+            "budget": 0,
+            "positivePoints": 1836
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.44940185546875,
+            "budget": 0,
+            "positivePoints": 7363
+          },
+          "gpuLevel0": {
+            "area": 0.44940185546875,
+            "budget": 0,
+            "positivePoints": 7363
+          },
+          "gpuManualBilinear": {
+            "area": 0.44940185546875,
+            "budget": 0,
+            "positivePoints": 7363
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.45050048828125,
+            "budget": 0,
+            "positivePoints": 7381
+          },
+          "gpuLevel0": {
+            "area": 0.45050048828125,
+            "budget": 0,
+            "positivePoints": 7381
+          },
+          "gpuManualBilinear": {
+            "area": 0.45050048828125,
+            "budget": 0,
+            "positivePoints": 7381
+          }
+        }
+      },
+      "thresholdMargin": 0.05059814453125
+    },
+    {
+      "case": 2,
+      "frame": 2,
+      "currentArea4": 0.25,
+      "area128": 0.4083251953125,
+      "numericalErrorEstimate": 0.002197265625,
+      "budget": 0,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.25,
+            "budget": 0,
+            "positivePoints": 4,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.25,
+            "budget": 0,
+            "positivePoints": 4,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.25,
+            "budget": 0,
+            "positivePoints": 4,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.4150390625,
+            "budget": 0,
+            "positivePoints": 425
+          },
+          "gpuLevel0": {
+            "area": 0.4150390625,
+            "budget": 0,
+            "positivePoints": 425
+          },
+          "gpuManualBilinear": {
+            "area": 0.4150390625,
+            "budget": 0,
+            "positivePoints": 425
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.40771484375,
+            "budget": 0,
+            "positivePoints": 1670
+          },
+          "gpuLevel0": {
+            "area": 0.40771484375,
+            "budget": 0,
+            "positivePoints": 1670
+          },
+          "gpuManualBilinear": {
+            "area": 0.40771484375,
+            "budget": 0,
+            "positivePoints": 1670
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.4083251953125,
+            "budget": 0,
+            "positivePoints": 6690
+          },
+          "gpuLevel0": {
+            "area": 0.4083251953125,
+            "budget": 0,
+            "positivePoints": 6690
+          },
+          "gpuManualBilinear": {
+            "area": 0.4083251953125,
+            "budget": 0,
+            "positivePoints": 6690
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.409423828125,
+            "budget": 0,
+            "positivePoints": 6708
+          },
+          "gpuLevel0": {
+            "area": 0.409423828125,
+            "budget": 0,
+            "positivePoints": 6708
+          },
+          "gpuManualBilinear": {
+            "area": 0.409423828125,
+            "budget": 0,
+            "positivePoints": 6708
+          }
+        }
+      },
+      "thresholdMargin": 0.0916748046875
+    },
+    {
+      "case": 5,
+      "frame": 0,
+      "currentArea4": 0.4375,
+      "area128": 0.36883544921875,
+      "numericalErrorEstimate": 0.0020751953125,
+      "budget": 0,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.4375,
+            "budget": 0,
+            "positivePoints": 7,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.4375,
+            "budget": 0,
+            "positivePoints": 7,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.4375,
+            "budget": 0,
+            "positivePoints": 7,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.36328125,
+            "budget": 0,
+            "positivePoints": 372
+          },
+          "gpuLevel0": {
+            "area": 0.36328125,
+            "budget": 0,
+            "positivePoints": 372
+          },
+          "gpuManualBilinear": {
+            "area": 0.36328125,
+            "budget": 0,
+            "positivePoints": 372
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.369873046875,
+            "budget": 0,
+            "positivePoints": 1515
+          },
+          "gpuLevel0": {
+            "area": 0.369873046875,
+            "budget": 0,
+            "positivePoints": 1515
+          },
+          "gpuManualBilinear": {
+            "area": 0.369873046875,
+            "budget": 0,
+            "positivePoints": 1515
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.36883544921875,
+            "budget": 0,
+            "positivePoints": 6043
+          },
+          "gpuLevel0": {
+            "area": 0.36883544921875,
+            "budget": 0,
+            "positivePoints": 6043
+          },
+          "gpuManualBilinear": {
+            "area": 0.36883544921875,
+            "budget": 0,
+            "positivePoints": 6043
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.36871337890625,
+            "budget": 0,
+            "positivePoints": 6041
+          },
+          "gpuLevel0": {
+            "area": 0.36871337890625,
+            "budget": 0,
+            "positivePoints": 6041
+          },
+          "gpuManualBilinear": {
+            "area": 0.36871337890625,
+            "budget": 0,
+            "positivePoints": 6041
+          }
+        }
+      },
+      "thresholdMargin": 0.13116455078125
+    },
+    {
+      "case": 5,
+      "frame": 1,
+      "currentArea4": 0.5625,
+      "area128": 0.46368408203125,
+      "numericalErrorEstimate": 0.0067138671875,
+      "budget": 0,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.5625,
+            "budget": 1,
+            "positivePoints": 9,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.5625,
+            "budget": 1,
+            "positivePoints": 9,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.5625,
+            "budget": 1,
+            "positivePoints": 9,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.4736328125,
+            "budget": 0,
+            "positivePoints": 485
+          },
+          "gpuLevel0": {
+            "area": 0.4736328125,
+            "budget": 0,
+            "positivePoints": 485
+          },
+          "gpuManualBilinear": {
+            "area": 0.4736328125,
+            "budget": 0,
+            "positivePoints": 485
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.467041015625,
+            "budget": 0,
+            "positivePoints": 1913
+          },
+          "gpuLevel0": {
+            "area": 0.467041015625,
+            "budget": 0,
+            "positivePoints": 1913
+          },
+          "gpuManualBilinear": {
+            "area": 0.467041015625,
+            "budget": 0,
+            "positivePoints": 1913
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.46368408203125,
+            "budget": 0,
+            "positivePoints": 7597
+          },
+          "gpuLevel0": {
+            "area": 0.46368408203125,
+            "budget": 0,
+            "positivePoints": 7597
+          },
+          "gpuManualBilinear": {
+            "area": 0.46368408203125,
+            "budget": 0,
+            "positivePoints": 7597
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.4622802734375,
+            "budget": 0,
+            "positivePoints": 7574
+          },
+          "gpuLevel0": {
+            "area": 0.4622802734375,
+            "budget": 0,
+            "positivePoints": 7574
+          },
+          "gpuManualBilinear": {
+            "area": 0.4622802734375,
+            "budget": 0,
+            "positivePoints": 7574
+          }
+        }
+      },
+      "thresholdMargin": 0.03631591796875
+    },
+    {
+      "case": 5,
+      "frame": 2,
+      "currentArea4": 0.3125,
+      "area128": 0.42230224609375,
+      "numericalErrorEstimate": 0.002197265625,
+      "budget": 0,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.3125,
+            "budget": 0,
+            "positivePoints": 5,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.3125,
+            "budget": 0,
+            "positivePoints": 5,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.3125,
+            "budget": 0,
+            "positivePoints": 5,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.4208984375,
+            "budget": 0,
+            "positivePoints": 431
+          },
+          "gpuLevel0": {
+            "area": 0.4208984375,
+            "budget": 0,
+            "positivePoints": 431
+          },
+          "gpuManualBilinear": {
+            "area": 0.4208984375,
+            "budget": 0,
+            "positivePoints": 431
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.423095703125,
+            "budget": 0,
+            "positivePoints": 1733
+          },
+          "gpuLevel0": {
+            "area": 0.423095703125,
+            "budget": 0,
+            "positivePoints": 1733
+          },
+          "gpuManualBilinear": {
+            "area": 0.423095703125,
+            "budget": 0,
+            "positivePoints": 1733
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.42230224609375,
+            "budget": 0,
+            "positivePoints": 6919
+          },
+          "gpuLevel0": {
+            "area": 0.42230224609375,
+            "budget": 0,
+            "positivePoints": 6919
+          },
+          "gpuManualBilinear": {
+            "area": 0.42230224609375,
+            "budget": 0,
+            "positivePoints": 6919
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.42340087890625,
+            "budget": 0,
+            "positivePoints": 6937
+          },
+          "gpuLevel0": {
+            "area": 0.42340087890625,
+            "budget": 0,
+            "positivePoints": 6937
+          },
+          "gpuManualBilinear": {
+            "area": 0.42340087890625,
+            "budget": 0,
+            "positivePoints": 6937
+          }
+        }
+      },
+      "thresholdMargin": 0.07769775390625
+    },
+    {
+      "case": 16,
+      "frame": 0,
+      "currentArea4": 0.5625,
+      "area128": 0.57196044921875,
+      "numericalErrorEstimate": 0.0006103515625,
+      "budget": 1,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.5625,
+            "budget": 1,
+            "positivePoints": 9,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.5625,
+            "budget": 1,
+            "positivePoints": 9,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.5625,
+            "budget": 1,
+            "positivePoints": 9,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.5703125,
+            "budget": 1,
+            "positivePoints": 584
+          },
+          "gpuLevel0": {
+            "area": 0.5703125,
+            "budget": 1,
+            "positivePoints": 584
+          },
+          "gpuManualBilinear": {
+            "area": 0.5703125,
+            "budget": 1,
+            "positivePoints": 584
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.572265625,
+            "budget": 1,
+            "positivePoints": 2344
+          },
+          "gpuLevel0": {
+            "area": 0.572265625,
+            "budget": 1,
+            "positivePoints": 2344
+          },
+          "gpuManualBilinear": {
+            "area": 0.572265625,
+            "budget": 1,
+            "positivePoints": 2344
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.57196044921875,
+            "budget": 1,
+            "positivePoints": 9371
+          },
+          "gpuLevel0": {
+            "area": 0.57196044921875,
+            "budget": 1,
+            "positivePoints": 9371
+          },
+          "gpuManualBilinear": {
+            "area": 0.57196044921875,
+            "budget": 1,
+            "positivePoints": 9371
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.57220458984375,
+            "budget": 1,
+            "positivePoints": 9375
+          },
+          "gpuLevel0": {
+            "area": 0.57220458984375,
+            "budget": 1,
+            "positivePoints": 9375
+          },
+          "gpuManualBilinear": {
+            "area": 0.57220458984375,
+            "budget": 1,
+            "positivePoints": 9375
+          }
+        }
+      },
+      "thresholdMargin": 0.07196044921875
+    },
+    {
+      "case": 16,
+      "frame": 1,
+      "currentArea4": 0.375,
+      "area128": 0.51898193359375,
+      "numericalErrorEstimate": 0.0013427734375,
+      "budget": 1,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.375,
+            "budget": 0,
+            "positivePoints": 6,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.375,
+            "budget": 0,
+            "positivePoints": 6,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.375,
+            "budget": 0,
+            "positivePoints": 6,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.5185546875,
+            "budget": 1,
+            "positivePoints": 531
+          },
+          "gpuLevel0": {
+            "area": 0.5185546875,
+            "budget": 1,
+            "positivePoints": 531
+          },
+          "gpuManualBilinear": {
+            "area": 0.5185546875,
+            "budget": 1,
+            "positivePoints": 531
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.518310546875,
+            "budget": 1,
+            "positivePoints": 2123
+          },
+          "gpuLevel0": {
+            "area": 0.518310546875,
+            "budget": 1,
+            "positivePoints": 2123
+          },
+          "gpuManualBilinear": {
+            "area": 0.518310546875,
+            "budget": 1,
+            "positivePoints": 2123
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.51898193359375,
+            "budget": 1,
+            "positivePoints": 8503
+          },
+          "gpuLevel0": {
+            "area": 0.51898193359375,
+            "budget": 1,
+            "positivePoints": 8503
+          },
+          "gpuManualBilinear": {
+            "area": 0.51898193359375,
+            "budget": 1,
+            "positivePoints": 8503
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.51873779296875,
+            "budget": 1,
+            "positivePoints": 8499
+          },
+          "gpuLevel0": {
+            "area": 0.51873779296875,
+            "budget": 1,
+            "positivePoints": 8499
+          },
+          "gpuManualBilinear": {
+            "area": 0.51873779296875,
+            "budget": 1,
+            "positivePoints": 8499
+          }
+        }
+      },
+      "thresholdMargin": 0.01898193359375
+    },
+    {
+      "case": 16,
+      "frame": 2,
+      "currentArea4": 0.625,
+      "area128": 0.6436767578125,
+      "numericalErrorEstimate": 0.002685546875,
+      "budget": 1,
+      "sequence": {
+        "4": {
+          "gpuGrad": {
+            "area": 0.625,
+            "budget": 1,
+            "positivePoints": 10,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuLevel0": {
+            "area": 0.625,
+            "budget": 1,
+            "positivePoints": 10,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          },
+          "gpuManualBilinear": {
+            "area": 0.625,
+            "budget": 1,
+            "positivePoints": 10,
+            "oldGridWeightMismatches": 0,
+            "maxOldGridWeightError": 0.0
+          }
+        },
+        "32": {
+          "gpuGrad": {
+            "area": 0.6376953125,
+            "budget": 1,
+            "positivePoints": 653
+          },
+          "gpuLevel0": {
+            "area": 0.6376953125,
+            "budget": 1,
+            "positivePoints": 653
+          },
+          "gpuManualBilinear": {
+            "area": 0.6376953125,
+            "budget": 1,
+            "positivePoints": 653
+          }
+        },
+        "64": {
+          "gpuGrad": {
+            "area": 0.64501953125,
+            "budget": 1,
+            "positivePoints": 2642
+          },
+          "gpuLevel0": {
+            "area": 0.64501953125,
+            "budget": 1,
+            "positivePoints": 2642
+          },
+          "gpuManualBilinear": {
+            "area": 0.64501953125,
+            "budget": 1,
+            "positivePoints": 2642
+          }
+        },
+        "128": {
+          "gpuGrad": {
+            "area": 0.6436767578125,
+            "budget": 1,
+            "positivePoints": 10546
+          },
+          "gpuLevel0": {
+            "area": 0.6436767578125,
+            "budget": 1,
+            "positivePoints": 10546
+          },
+          "gpuManualBilinear": {
+            "area": 0.6436767578125,
+            "budget": 1,
+            "positivePoints": 10546
+          }
+        },
+        "shift": {
+          "gpuGrad": {
+            "area": 0.6441650390625,
+            "budget": 1,
+            "positivePoints": 10554
+          },
+          "gpuLevel0": {
+            "area": 0.6441650390625,
+            "budget": 1,
+            "positivePoints": 10554
+          },
+          "gpuManualBilinear": {
+            "area": 0.6441650390625,
+            "budget": 1,
+            "positivePoints": 10554
+          }
+        }
+      },
+      "thresholdMargin": 0.1436767578125
+    }
+  ],
+  "numericalErrorEstimateMax": 0.0067138671875,
+  "errorEstimateIsFormalBound": false,
+  "filteredAreaDifferencesAcrossTestedSamplers": 0,
+  "original4x4CandidatePoints": 2896,
+  "original4x4CandidateWeightMismatches": 0,
+  "newFullImageCaptures": 0,
+  "runtimeAreaReplacement": "NOT_IMPLEMENTED; no low-cost continuous-A provider exists in the current4x4-only interface. This CPU-ray/GPU-query oracle is offline diagnostics, not production code.",
+  "diagnostic128Cost": {
+    "prepareSeconds": 31.30629449999833,
+    "GPUQuerySecondsIncludingReadback": 1.280351299999893,
+    "scope": "All nine poses batched, includes diagnostic transfer/readback; neither Player FPS nor full render cost."
+  },
+  "actualRotationValidation": "NOT_RERUN; original583 segment still shows unresolved temporal quality.",
+  "regression": "Unchanged source hashes preserve iris24/lash846/three-direction1136 evidence; no new regression claim.",
+  "nativeAlphaProofLimit": "Covered-sample residual15 >.001 persists; continuous actual implicit derivatives at unseen fragments not measured. Finite convergence/shift checks are numerical evidence, not a formal upper bound.",
+  "restore": {
+    "result": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\n  \"success\": true,\n  \"message\": \"Command executed successfully.\",\n  \"data\": {\n    \"isCompilationSuccessful\": true,\n    \"isExecutionSuccessful\": true,\n    \"executionId\": 1,\n    \"compilationLogs\": \"\",\n    \"executionLogs\": \"[Log] lash583=False iris582=False play=False paused=False compiling=False dirty=False head=False generatedView=False revision=0 inputBytes=0 clothes=False captureDelta=0 background=False\",\n    \"localFixedCode\": \"using UnityEditor.SceneManagement;\\r\\nusing UnityEditor;\\r\\nusing UnityEngine;\\r\\n\\r\\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\\r\\n{\\r\\n    internal class CommandScript : IRunCommand\\r\\n    {\\r\\n        public void Execute(ExecutionResult result)\\r\\n        {\\r\\n            result.Log(\\\"lash583=\\\" + EyeFeature348.UseLashRegion583 + \\\" iris582=\\\" + EyeFeature348.UseIrisSurface582 + \\\" play=\\\" + EditorApplication.isPlaying + \\\" paused=\\\" + EditorApplication.isPaused + \\\" compiling=\\\" + EditorApplication.isCompiling + \\\" dirty=\\\" + EditorSceneManager.GetActiveScene().isDirty + \\\" head=\\\" + HeadRegion502.Enabled + \\\" generatedView=\\\" + HeadRegion502.UseViewInput579 + \\\" revision=\\\" + HeadRegion502.ViewInput579Revision + \\\" inputBytes=\\\" + (HeadRegion502.CopyCurveInput511()?.Length ?? 0) + \\\" clothes=\\\" + ClothRegion524.Enabled + \\\" captureDelta=\\\" + Time.captureDeltaTime + \\\" background=\\\" + Application.runInBackground);\\r\\n        }\\r\\n    }\\r\\n}\",\n    \"result\": \"Command executed successfully.\"\n  }\n}"
+        }
+      ],
+      "structuredContent": {
+        "success": true,
+        "message": "Command executed successfully.",
+        "data": {
+          "isCompilationSuccessful": true,
+          "isExecutionSuccessful": true,
+          "executionId": 1,
+          "compilationLogs": "",
+          "executionLogs": "[Log] lash583=False iris582=False play=False paused=False compiling=False dirty=False head=False generatedView=False revision=0 inputBytes=0 clothes=False captureDelta=0 background=False",
+          "localFixedCode": "using UnityEditor.SceneManagement;\r\nusing UnityEditor;\r\nusing UnityEngine;\r\n\r\nnamespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor\r\n{\r\n    internal class CommandScript : IRunCommand\r\n    {\r\n        public void Execute(ExecutionResult result)\r\n        {\r\n            result.Log(\"lash583=\" + EyeFeature348.UseLashRegion583 + \" iris582=\" + EyeFeature348.UseIrisSurface582 + \" play=\" + EditorApplication.isPlaying + \" paused=\" + EditorApplication.isPaused + \" compiling=\" + EditorApplication.isCompiling + \" dirty=\" + EditorSceneManager.GetActiveScene().isDirty + \" head=\" + HeadRegion502.Enabled + \" generatedView=\" + HeadRegion502.UseViewInput579 + \" revision=\" + HeadRegion502.ViewInput579Revision + \" inputBytes=\" + (HeadRegion502.CopyCurveInput511()?.Length ?? 0) + \" clothes=\" + ClothRegion524.Enabled + \" captureDelta=\" + Time.captureDeltaTime + \" background=\" + Application.runInBackground);\r\n        }\r\n    }\r\n}",
+          "result": "Command executed successfully."
+        }
+      }
+    },
+    "jsonrpc": "2.0",
+    "id": 3
+  },
+  "unchangedSettings": {
+    "ProjectSettings/QualitySettings.asset": "819a7e0414a299c9a208fe6958a929df8c23c83bda91d9fb57b90ba7776d9ba6",
+    "ProjectSettings/TimeManager.asset": "3396f52fdc16d445024e01d7a2d99db6f0a37569d1d73c0302e9ffb857d90287"
+  }
+}

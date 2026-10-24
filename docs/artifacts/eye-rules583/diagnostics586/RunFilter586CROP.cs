@@ -1,0 +1,19 @@
+using System;
+using System.IO;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+[Serializable]public class FilterGroup586{public string name,input,output;public int count;}
+[Serializable]public class FilterGroups586{public FilterGroup586[] groups;}
+public struct FilterInput586{public Vector4 uvdx,dyparams;}
+internal class CommandScript:IRunCommand{public void Execute(ExecutionResult result){
+ const string root="C:/Users/JG/Documents/Codex/2026-10-07/task/Current472/EyeFilter586/";const string asset="Assets/EUnityValidation01/EyeBoundaryRestore348/Diagnostics586/AlphaSampler586.compute";
+ if(EditorApplication.isPlaying||EditorApplication.isCompiling||File.Exists(root+"PROBE_STARTED586CROP.txt"))throw new Exception("Clean Edit and one unique probe required; inspect existing output before retry");
+ var groups=File.ReadAllLines(root+"GROUPS586CROP.tsv").Skip(1).Where(line=>line.Length>0).Select(line=>{var q=line.Split('\t');if(q.Length!=4)throw new Exception("Manifest columns");return new FilterGroup586{name=q[0],count=int.Parse(q[1]),input=q[2],output=q[3]};}).ToArray();if(groups.Length!=7)throw new Exception("Expected7 texture groups");foreach(var g in groups)if(File.Exists(g.output))throw new Exception("Existing output must be inspected");
+ File.WriteAllText(root+"PROBE_STARTED586CROP.txt","ENTERED");var shader=AssetDatabase.LoadAssetAtPath<ComputeShader>(asset);if(!shader||!shader.HasKernel("Probe586"))throw new Exception("Diagnostic compute shader not ready");
+ var textures=AssetDatabase.LoadAllAssetsAtPath("Assets/EUnityValidation01/VRoidSampleA144/Inputs/AvatarSample_A.vrm").OfType<Texture2D>().GroupBy(t=>t.name).ToDictionary(g=>g.Key,g=>g.First());int kernel=shader.FindKernel("Probe586"),done=0;
+ using(var info=new StreamWriter(root+"RUNTIME_FILTER586CROP.tsv")){info.WriteLine("texture\twidth\theight\tmips\tfilter\taniso\twrap\tGPUProbeMsIncludesReadback");foreach(var g in groups){var texture=textures[g.name];var data=new FilterInput586[g.count];using(var b=new BinaryReader(File.OpenRead(g.input))){if(b.ReadInt32()!=g.count)throw new Exception("Input count mismatch");for(int i=0;i<g.count;i++)data[i]=new FilterInput586{uvdx=new Vector4(b.ReadSingle(),b.ReadSingle(),b.ReadSingle(),b.ReadSingle()),dyparams=new Vector4(b.ReadSingle(),b.ReadSingle(),b.ReadSingle(),b.ReadSingle())};}
+ ComputeBuffer input=null,output=null;try{input=new ComputeBuffer(g.count,32);output=new ComputeBuffer(g.count,16);input.SetData(data);shader.SetInt("_Count586",g.count);shader.SetTexture(kernel,"_MainTex",texture);shader.SetBuffer(kernel,"_Input586",input);shader.SetBuffer(kernel,"_Output586",output);double startTime586=EditorApplication.timeSinceStartup;shader.Dispatch(kernel,(g.count+63)/64,1,1);var values=new Vector4[g.count];output.GetData(values);double elapsed586=(EditorApplication.timeSinceStartup-startTime586)*1000;using(var b=new BinaryWriter(new FileStream(g.output,FileMode.CreateNew))){b.Write(g.count);foreach(var v in values){b.Write(v.x);b.Write(v.y);b.Write(v.z);b.Write(v.w);}}info.WriteLine(g.name+"\t"+texture.width+"\t"+texture.height+"\t"+texture.mipmapCount+"\t"+texture.filterMode+"\t"+texture.anisoLevel+"\t"+texture.wrapMode+"\t"+elapsed586.ToString("R",System.Globalization.CultureInfo.InvariantCulture));done++;File.WriteAllText(root+"PROBE_PROGRESS586CROP.json","{\"groups\":"+done+"}");}finally{input?.Release();output?.Release();}
+ }}
+ File.WriteAllText(root+"PROBE_COMPLETE586CROP.json","{\"groups\":"+done+",\"qualityAnisotropy\":\""+QualitySettings.anisotropicFiltering+"\",\"graphicsAPI\":\""+SystemInfo.graphicsDeviceType+"\",\"graphicsDevice\":\""+SystemInfo.graphicsDeviceName+"\",\"settingsChanged\":false,\"renderBuffersTouched\":false}");result.Log("586 GPU filter probe complete for"+done+" textures; source data/settings untouched; compare before claiming parity");
+}}

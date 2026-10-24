@@ -1,0 +1,19 @@
+#pragma kernel Probe586
+Texture2D<float4> _MainTex;
+SamplerState sampler_MainTex;
+struct Input586 {float4 uvdx;float4 dyparams;};
+StructuredBuffer<Input586> _Input586;
+RWStructuredBuffer<float4> _Output586;
+int _Count586;
+int2 Wrap586(int2 p,int2 size){return (p%size+size)%size;}
+float Manual586(float2 uv){uint w,h;_MainTex.GetDimensions(w,h);int2 size=int2(w,h);float2 p=uv*float2(w,h)-.5;int2 q=(int2)floor(p);float2 t=frac(p);
+ float a=_MainTex.Load(int3(Wrap586(q,size),0)).a,b=_MainTex.Load(int3(Wrap586(q+int2(1,0),size),0)).a,c=_MainTex.Load(int3(Wrap586(q+int2(0,1),size),0)).a,d=_MainTex.Load(int3(Wrap586(q+1,size),0)).a;
+ return lerp(lerp(a,b,t.x),lerp(c,d,t.x),t.y);
+}
+float Alpha586(float raw,float mode){if(mode<.5)return 1;if(mode<1.5)return raw>=.5?1:0;return raw;}
+[numthreads(64,1,1)]void Probe586(uint3 id:SV_DispatchThreadID){if(id.x>=_Count586)return;Input586 p=_Input586[id.x];
+ float grad=_MainTex.SampleGrad(sampler_MainTex,p.uvdx.xy,p.uvdx.zw,p.dyparams.xy).a*p.dyparams.z;
+ float level=_MainTex.SampleLevel(sampler_MainTex,p.uvdx.xy,0).a*p.dyparams.z;
+ float manual=Manual586(p.uvdx.xy)*p.dyparams.z;
+ _Output586[id.x]=float4(Alpha586(grad,p.dyparams.w),Alpha586(level,p.dyparams.w),Alpha586(manual,p.dyparams.w),grad);
+}

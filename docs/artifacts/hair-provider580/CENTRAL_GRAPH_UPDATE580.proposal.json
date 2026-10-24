@@ -1,0 +1,42 @@
+{
+  "target": "C:\\Users\\JG\\Documents\\Codex\\2026-10-15\\task-5\\central_pixel_cause_graph_397_20261018\\WORK_GRAPH.json",
+  "originalWritten": false,
+  "kind": "580 follow-up proposal; central owner rebase required",
+  "correctPriorFirstObservedStage": "579 eyeOutput was first observed difference;580 proves upstream Eyes layer8 shader-policy mismatch",
+  "nodes": [
+    {
+      "id": "face_provider580",
+      "input": "same100deg source face UV/depth/alpha/meta, explicit legacy provider material",
+      "function": "FullFeature367.Eyes -> HeadRegion502.Draw kind3",
+      "output": "BaseRGB differs because original policy replaced",
+      "status": "cause proved and minimum mapping/clip variant fixed",
+      "sourceCommit": "c216d3ebdc4922730dceb74500e8c9ff46fdb2f0",
+      "evidence": [
+        "CAUSE580.json",
+        "FIX580.json",
+        "SHADER_CONTRACT580.json"
+      ]
+    },
+    {
+      "id": "turn580",
+      "input": "same pair pose/camera/clock; actual Walk + root RotateTowards",
+      "output": "reference6+narrow8+wider50 pairs",
+      "status": "executed; face colour fix validated; temporal art gate pending",
+      "evidence": [
+        "QUALITY580.json",
+        "EYE_SERIES580.json"
+      ]
+    },
+    {
+      "id": "eye_event18_580",
+      "input": "stable eye2, source intrinsic moving3->1 and neighbouring hair area/selection",
+      "output": "iris visibility1/0/1",
+      "status": "observed and partly traced; subpixel support/occlusion classification pending",
+      "next": "reuse stored17/18/19 first; no new time filter or full capture"
+    },
+    {
+      "id": "body_palette580",
+      "status": "independent existing internal-line palette3samples unclassified; no patch"
+    }
+  ]
+}

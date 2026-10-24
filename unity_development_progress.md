@@ -3592,3 +3592,8 @@ Interactable (abstract base class)
 ## 280. CHARACTER-RENDER-01 — 579 자동 뷰 입력과 좁은 실제 회전
 
 원본 경계 출처를 전달하는 자동 입력 생성·교체를 기본 OFF로 연결했다. 참조 3방향 마스크 동등, 실제 고정차트/자동14쌍과 native/자동8쌍. 기존 고정차트가 실패한97.97345° 포즈를 자동 입력으로 실제 렌더 완료했다. 전체 회전 품질은100° 얼굴색/owner 불일치의 눈 resolve 게이트에서 보류했다. 전신 비교는 새14/8프레임 구간이며 기존81루프를 새 결과로 표기하지 않는다. [결과·비교·미해결](docs/artifacts/hair-auto579/RESULT579.md).
+
+
+## 281. CHARACTER-RENDER-01 — 580 얼굴 공급 정책 보존과 실제 회전
+
+HeadRegion502의 일반 shader 대체가 얼굴 provider 색 규칙을 잃는 원인을 동일 UV/depth/alpha/meta에서 확정했다. c216d3e에서 원래 색 계산과 공통 clip을 함께 보존하도록 최소 수정. 실제6+8+50쌍 완료, 새 전신 비교 제공. 홍채 가시성1→0→1 및 내부선 palette3표본은 별도 미판정이며 전체 시간 품질/실시간 채택은 미완료. [결과·재개](docs/artifacts/hair-provider580/RESULT580.md).

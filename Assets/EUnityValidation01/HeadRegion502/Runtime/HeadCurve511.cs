@@ -50,8 +50,9 @@ public static partial class HeadRegion502
     static int[][] Indices511(Full319View335 f,Mesh output)
     {
         var source=f.motion.surface.source[2].sharedMesh; // Declared Hair adapter.
-        if(source511==source&&output511==output&&controls511!=null&&ReferenceEquals(loadedCurveInput511,suppliedCurveInput511))return indices511;
-        long start=Stopwatch.GetTimestamp();var input=suppliedCurveInput511;
+        byte[] currentInput511=UseViewInput579?CurrentViewInput579(f,output,source):suppliedCurveInput511;
+        if(source511==source&&output511==output&&controls511!=null&&ReferenceEquals(loadedCurveInput511,currentInput511))return indices511;
+        long start=Stopwatch.GetTimestamp();var input=currentInput511;
         if(input==null){var asset=Resources.Load<TextAsset>("HeadCurve511");if(!asset)throw new InvalidOperationException("511 model curve input not compiled");input=asset.bytes;}
         using var r=new BinaryReader(new MemoryStream(input));
         if(r.ReadInt32()!=511||r.ReadInt32()!=2)throw new InvalidOperationException("511 curve format differs");
@@ -72,7 +73,7 @@ public static partial class HeadRegion502
             }
         }
         if(r.BaseStream.Position!=r.BaseStream.Length)throw new InvalidOperationException("511 curve input trailing data");
-        source511=source;output511=output;loadedCurveInput511=suppliedCurveInput511;registered511=null;triangleCache511=false;triangles.Clear();Auto511Status="loaded automatic polygonal curves";
+        source511=source;output511=output;loadedCurveInput511=currentInput511;registered511=null;triangleCache511=false;triangles.Clear();Auto511Status="loaded automatic polygonal curves";
         Auto511InitMs=1000.0*(Stopwatch.GetTimestamp()-start)/Stopwatch.Frequency;return indices511;
     }
     static float[] Areas511(Full319View335 f,out RectInt bounds)
@@ -140,7 +141,7 @@ public static partial class HeadRegion502
     static int Part511(Packet p,int[][] indices){var a=indices[p.submesh];int i=p.primitive*3;return registeredTriangles511.Contains(Key511(a[i],a[i+1],a[i+2]))?1:2;}
     static void Release511()
     {
-        UseAutomaticCurve511=UseNegativeRegions563=UseNegativeBranches566=UseRegionFamilies574=false;RegionLayout574=null;NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();controls511=null;suppliedCurveInput511=loadedCurveInput511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
+        ReleaseViewInput579();UseAutomaticCurve511=UseNegativeRegions563=UseNegativeBranches566=UseRegionFamilies574=false;RegionLayout574=null;NegativeRegions563.Clear();NegativeBranches566.Clear();NegativeGroups563.Clear();controls511=null;suppliedCurveInput511=loadedCurveInput511=null;source511=output511=registered511=null;indices511=null;triangleCache511=false;
         foreach(int at in usedBins511)bins511[at]?.Clear();usedBins511.Clear();registeredTriangles511.Clear();Auto511Areas=null;Auto511Status="disabled";ReleaseVisibility511();
     }
 }

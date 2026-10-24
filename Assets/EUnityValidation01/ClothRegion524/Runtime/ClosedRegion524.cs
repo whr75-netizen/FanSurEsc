@@ -19,7 +19,25 @@ public static class ClosedRegion524
         public int CompareTo(P p){int c=x.CompareTo(p.x);return c!=0?c:y.CompareTo(p.y);}
         public Vector2 Vector=>new Vector2((float)X,(float)Y);
     }
-    sealed class Edge{public P a,b;public int weight;public readonly List<double> split=new List<double>{0,1};}
+    public sealed class Anchor579 {public int sm,primitive,a,b,c;public double u,v,w;}
+    public sealed class Node579 {public Vector2 point;public List<Anchor579> anchors;}
+    sealed class Origin579 {public P start,end;public int sm,primitive,a,b,c,from,to;}
+    sealed class Edge{public P a,b;public int weight;public readonly List<double> split=new List<double>{0,1};public List<Origin579> origins579;}
+    static (P,P) OriginKey579(P a,P b)=>a.CompareTo(b)<0?(a,b):(b,a);
+    static void Register579(Dictionary<P,List<Anchor579>> output,P p,Edge edge,double t)
+    {
+        if(output==null)return;if(!output.TryGetValue(p,out var list))output.Add(p,list=new List<Anchor579>());
+        foreach(var source in edge.origins579){double along=source.start.Equals(edge.a)?t:1-t;var weights=new double[3];weights[source.from]=1-along;weights[source.to]=along;list.Add(new Anchor579{sm=source.sm,primitive=source.primitive,a=source.a,b=source.b,c=source.c,u=weights[0],v=weights[1],w=weights[2]});}
+    }
+    public static List<Node579[]> BuildAnchored579(Vector2[] points,int[][] indices)
+    {
+        var counts=new Dictionary<(P,P),int>();var origins=new Dictionary<(P,P),List<Origin579>>();
+        for(int sm=0;sm<indices.Length;sm++)for(int j=0;j<indices[sm].Length;j+=3){
+            var ids=new[]{indices[sm][j],indices[sm][j+1],indices[sm][j+2]};var p=ids.Select(i=>new P(points[i].x,points[i].y)).ToArray();var role=new[]{0,1,2};double area=Cross(p[0],p[1],p[2]);if(Math.Abs(area)<1e-12)continue;if(area<0){(p[1],p[2])=(p[2],p[1]);(role[1],role[2])=(role[2],role[1]);}
+            for(int e=0;e<3;e++){int next=(e+1)%3;var a=p[e];var b=p[next];Count(counts,a,b);if(a.Equals(b))continue;var key=OriginKey579(a,b);if(!origins.TryGetValue(key,out var list))origins.Add(key,list=new List<Origin579>());list.Add(new Origin579{start=a,end=b,sm=sm,primitive=j/3,a=ids[0],b=ids[1],c=ids[2],from=role[e],to=role[next]});}
+        }
+        var result=new List<Node579[]>();BuildCounts(counts,origins,result);return result;
+    }
     static double Cross(double x,double y,double u,double v)=>x*v-y*u;
     static double Cross(P a,P b,P c)=>Cross(b.X-a.X,b.Y-a.Y,c.X-a.X,c.Y-a.Y);
     static void Count(Dictionary<(P,P),int> counts,P a,P b,int n=1){if(a.Equals(b))return;bool ordered=a.CompareTo(b)<0;var key=ordered?(a,b):(b,a);counts.TryGetValue(key,out int old);counts[key]=old+(ordered?n:-n);}
@@ -102,13 +120,15 @@ public static class ClosedRegion524
         foreach(var line in segments)Count(counts,new P(line.Item1.x,line.Item1.y),new P(line.Item2.x,line.Item2.y));
         return BuildCounts(counts);
     }
-    static List<Vector2[]> BuildCounts(Dictionary<(P,P),int> counts)
+    static List<Vector2[]> BuildCounts(Dictionary<(P,P),int> counts,Dictionary<(P,P),List<Origin579>> origins579=null,List<Node579[]> anchored579=null)
     {
         var edges=new List<Edge>();foreach(var row in counts)if(row.Value!=0)edges.Add(row.Value>0?new Edge{a=row.Key.Item1,b=row.Key.Item2,weight=row.Value}:new Edge{a=row.Key.Item2,b=row.Key.Item1,weight=-row.Value});WeightedEdges=edges.Count;
+        if(origins579!=null)foreach(var edge in edges)edge.origins579=origins579[OriginKey579(edge.a,edge.b)];
+        var nodes579=origins579==null?null:new Dictionary<P,List<Anchor579>>();
         PairCandidates526=WindingCandidates526=0;PairIndexUsed526=false;long pairStart=Stopwatch.GetTimestamp();
         if(UseSpatialIndex526)Pairs526(edges);else{PairCandidates526=(long)edges.Count*(edges.Count-1)/2;for(int i=0;i<edges.Count;i++)for(int j=i+1;j<edges.Count;j++)if(Overlap526(edges[i],edges[j]))Intersect(edges[i],edges[j]);}
         PairMs526=Elapsed526(pairStart);
-        counts.Clear();foreach(var e in edges){e.split.Sort();for(int i=0;i+1<e.split.Count;i++)if(e.split[i+1]-e.split[i]>1e-12)Count(counts,At(e,e.split[i]),At(e,e.split[i+1]),e.weight);}Fragments=counts.Count;
+        counts.Clear();foreach(var e in edges){e.split.Sort();for(int i=0;i+1<e.split.Count;i++)if(e.split[i+1]-e.split[i]>1e-12){var a=At(e,e.split[i]);var b=At(e,e.split[i+1]);Count(counts,a,b,e.weight);Register579(nodes579,a,e,e.split[i]);Register579(nodes579,b,e,e.split[i+1]);}}Fragments=counts.Count;
         long windingStart=Stopwatch.GetTimestamp();var queries=new List<Fragment526>();
         foreach(var row in counts){if(row.Value==0)continue;P a=row.Value>0?row.Key.Item1:row.Key.Item2,b=row.Value>0?row.Key.Item2:row.Key.Item1;queries.Add(new Fragment526{a=a,b=b,weight=Math.Abs(row.Value),rotated=Math.Abs(b.X-a.X)>Math.Abs(b.Y-a.Y)});}
         if(UseSpatialIndex526){Sweep526(edges,queries,false);Sweep526(edges,queries,true);}else foreach(var q in queries)q.winding=Winding((q.a.X+q.b.X)*.5,(q.a.Y+q.b.Y)*.5,edges,q.rotated);
@@ -116,11 +136,11 @@ public static class ClosedRegion524
         foreach(var q in queries){P a=q.a,b=q.b;int w=q.weight;double dx=b.X-a.X,dy=b.Y-a.Y;bool rotated=q.rotated;int sign=(rotated?dx:dy)>0?1:-1;int right=q.winding,minus=right+sign*w,left=sign>0?minus:right;right=sign>0?right:minus;
             if(left<0||right<0)throw new InvalidOperationException("524 negative union winding");if((left>0)==(right>0))continue;if(left<=0)(a,b)=(b,a);if(!outgoing.TryGetValue(a,out var targets)){targets=new HashSet<P>();outgoing.Add(a,targets);}if(targets.Add(b))BoundaryEdges++;}
         var loops=new List<Vector2[]>();int remaining=BoundaryEdges;
-        while(outgoing.Count>0){P start=outgoing.Keys.Min(),at=start,prior=default;bool first=true;var ring=new List<Vector2>();
-            do{if(!outgoing.TryGetValue(at,out var targets)||targets.Count==0)throw new InvalidOperationException("524 open vector boundary");ring.Add(at.Vector);P next;
+        while(outgoing.Count>0){P start=outgoing.Keys.Min(),at=start,prior=default;bool first=true;var ring=new List<Vector2>();var originRing579=anchored579==null?null:new List<Node579>();
+            do{if(!outgoing.TryGetValue(at,out var targets)||targets.Count==0)throw new InvalidOperationException("524 open vector boundary");ring.Add(at.Vector);if(originRing579!=null)originRing579.Add(new Node579{point=at.Vector,anchors=nodes579[at]});P next;
                 if(first)next=targets.Min();else{double dx=at.X-prior.X,dy=at.Y-prior.Y;next=targets.OrderByDescending(q=>Math.Atan2(Cross(dx,dy,q.X-at.X,q.Y-at.Y),dx*(q.X-at.X)+dy*(q.Y-at.Y))).ThenBy(q=>q).First();}
                 targets.Remove(next);if(targets.Count==0)outgoing.Remove(at);if(--remaining<0)throw new InvalidOperationException("524 cyclic edge traversal");prior=at;at=next;first=false;
-            }while(!at.Equals(start));if(ring.Count>=3)loops.Add(ring.ToArray());}
+            }while(!at.Equals(start));if(ring.Count>=3){loops.Add(ring.ToArray());if(originRing579!=null)anchored579.Add(originRing579.ToArray());}}
         if(remaining!=0)throw new InvalidOperationException("524 unconsumed boundary");return loops;
     }
     // Alternative clothing curve source, not a mask/RGB post-filter. A chord

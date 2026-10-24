@@ -1,0 +1,620 @@
+{
+  "schema": "read-only-hand-proposal568",
+  "runtimeImplementationChanged": false,
+  "sameOriginalMesh": true,
+  "sources": [
+    {
+      "reference": "Assets/Prefabs/PersistentGameplayShell.prefab",
+      "meshAsset": "Assets/EUnityValidation01/VRoidSampleA144/Inputs/AvatarSample_A.vrm",
+      "meshName": "Body (merged)",
+      "meshEntityId": "568105584918859736",
+      "bindings": [
+        {
+          "human": "LeftThumbProximal",
+          "available": true,
+          "bone": "J_Bip_L_Thumb1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Thumb1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftIndexProximal",
+          "available": true,
+          "bone": "J_Bip_L_Index1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Index1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftMiddleProximal",
+          "available": true,
+          "bone": "J_Bip_L_Middle1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Middle1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftRingProximal",
+          "available": true,
+          "bone": "J_Bip_L_Ring1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Ring1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftLittleProximal",
+          "available": true,
+          "bone": "J_Bip_L_Little1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Little1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightThumbProximal",
+          "available": true,
+          "bone": "J_Bip_R_Thumb1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Thumb1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightIndexProximal",
+          "available": true,
+          "bone": "J_Bip_R_Index1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Index1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightMiddleProximal",
+          "available": true,
+          "bone": "J_Bip_R_Middle1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Middle1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightRingProximal",
+          "available": true,
+          "bone": "J_Bip_R_Ring1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Ring1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightLittleProximal",
+          "available": true,
+          "bone": "J_Bip_R_Little1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Little1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftHand",
+          "available": true,
+          "bone": "J_Bip_L_Hand",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightHand",
+          "available": true,
+          "bone": "J_Bip_R_Hand",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftLowerArm",
+          "available": true,
+          "bone": "J_Bip_L_LowerArm",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightLowerArm",
+          "available": true,
+          "bone": "J_Bip_R_LowerArm",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftUpperLeg",
+          "available": true,
+          "bone": "J_Bip_L_UpperLeg",
+          "path": "Root/J_Bip_C_Hips/J_Bip_L_UpperLeg",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightUpperLeg",
+          "available": true,
+          "bone": "J_Bip_R_UpperLeg",
+          "path": "Root/J_Bip_C_Hips/J_Bip_R_UpperLeg",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftThumbIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Thumb2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Thumb1/J_Bip_L_Thumb2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftThumbDistal",
+          "available": true,
+          "bone": "J_Bip_L_Thumb3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Thumb1/J_Bip_L_Thumb2/J_Bip_L_Thumb3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftIndexIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Index2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Index1/J_Bip_L_Index2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftIndexDistal",
+          "available": true,
+          "bone": "J_Bip_L_Index3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Index1/J_Bip_L_Index2/J_Bip_L_Index3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftMiddleIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Middle2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Middle1/J_Bip_L_Middle2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftMiddleDistal",
+          "available": true,
+          "bone": "J_Bip_L_Middle3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Middle1/J_Bip_L_Middle2/J_Bip_L_Middle3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftRingIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Ring2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Ring1/J_Bip_L_Ring2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftRingDistal",
+          "available": true,
+          "bone": "J_Bip_L_Ring3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Ring1/J_Bip_L_Ring2/J_Bip_L_Ring3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftLittleIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Little2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Little1/J_Bip_L_Little2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftLittleDistal",
+          "available": true,
+          "bone": "J_Bip_L_Little3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Little1/J_Bip_L_Little2/J_Bip_L_Little3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightThumbIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Thumb2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Thumb1/J_Bip_R_Thumb2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightThumbDistal",
+          "available": true,
+          "bone": "J_Bip_R_Thumb3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Thumb1/J_Bip_R_Thumb2/J_Bip_R_Thumb3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightIndexIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Index2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Index1/J_Bip_R_Index2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightIndexDistal",
+          "available": true,
+          "bone": "J_Bip_R_Index3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Index1/J_Bip_R_Index2/J_Bip_R_Index3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightMiddleIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Middle2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Middle1/J_Bip_R_Middle2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightMiddleDistal",
+          "available": true,
+          "bone": "J_Bip_R_Middle3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Middle1/J_Bip_R_Middle2/J_Bip_R_Middle3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightRingIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Ring2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Ring1/J_Bip_R_Ring2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightRingDistal",
+          "available": true,
+          "bone": "J_Bip_R_Ring3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Ring1/J_Bip_R_Ring2/J_Bip_R_Ring3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightLittleIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Little2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Little1/J_Bip_R_Little2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightLittleDistal",
+          "available": true,
+          "bone": "J_Bip_R_Little3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Little1/J_Bip_R_Little2/J_Bip_R_Little3",
+          "method": "GetBoneTransform"
+        }
+      ],
+      "witnesses": [
+        {
+          "primitiveZeroBased": 7122,
+          "meanVertexSkinMembership": {
+            "LeftThumbProximal": 0.02666666731238365,
+            "LeftRingProximal": 0.026666666691501934,
+            "LeftLittleProximal": 0.036666667088866234,
+            "LeftPalm": 0.9100000063578289
+          }
+        },
+        {
+          "primitiveZeroBased": 7823,
+          "meanVertexSkinMembership": {
+            "RightThumbProximal": 0.48524754059811437,
+            "RightPalm": 0.29574257632096607,
+            "RightForearm": 0.21900990108648935
+          }
+        },
+        {
+          "primitiveZeroBased": 7920,
+          "meanVertexSkinMembership": {
+            "RightIndexProximal": 0.6300000150998434,
+            "RightPalm": 0.3700000047683716
+          }
+        },
+        {
+          "primitiveZeroBased": 8549,
+          "meanVertexSkinMembership": {
+            "LeftRingProximal": 1.0
+          }
+        }
+      ],
+      "counts": {
+        "meshVertices": 7964,
+        "bodyTriangles": 10022,
+        "bodyVertices": 5870,
+        "skinBones": 91,
+        "singleFingerMembershipVertices": 1188,
+        "multipleFingerMembershipVertices": 244,
+        "fingerPalmOrForearmBlendVertices": 382,
+        "handForearmBlendVertices": 218,
+        "handLegBlendVertices": 0,
+        "multipleFingerMembershipTriangles": 504,
+        "handForearmBlendTriangles": 388
+      }
+    },
+    {
+      "reference": "Assets/EUnityValidation01/OriginalIntegration399/Export/ValidatedPresentation399.prefab",
+      "meshAsset": "Assets/EUnityValidation01/VRoidSampleA144/Inputs/AvatarSample_A.vrm",
+      "meshName": "Body (merged)",
+      "meshEntityId": "568105584918859736",
+      "bindings": [
+        {
+          "human": "LeftThumbProximal",
+          "available": true,
+          "bone": "J_Bip_L_Thumb1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Thumb1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftIndexProximal",
+          "available": true,
+          "bone": "J_Bip_L_Index1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Index1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftMiddleProximal",
+          "available": true,
+          "bone": "J_Bip_L_Middle1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Middle1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftRingProximal",
+          "available": true,
+          "bone": "J_Bip_L_Ring1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Ring1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftLittleProximal",
+          "available": true,
+          "bone": "J_Bip_L_Little1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Little1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightThumbProximal",
+          "available": true,
+          "bone": "J_Bip_R_Thumb1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Thumb1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightIndexProximal",
+          "available": true,
+          "bone": "J_Bip_R_Index1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Index1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightMiddleProximal",
+          "available": true,
+          "bone": "J_Bip_R_Middle1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Middle1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightRingProximal",
+          "available": true,
+          "bone": "J_Bip_R_Ring1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Ring1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightLittleProximal",
+          "available": true,
+          "bone": "J_Bip_R_Little1",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Little1",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftHand",
+          "available": true,
+          "bone": "J_Bip_L_Hand",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightHand",
+          "available": true,
+          "bone": "J_Bip_R_Hand",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftLowerArm",
+          "available": true,
+          "bone": "J_Bip_L_LowerArm",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightLowerArm",
+          "available": true,
+          "bone": "J_Bip_R_LowerArm",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftUpperLeg",
+          "available": true,
+          "bone": "J_Bip_L_UpperLeg",
+          "path": "Root/J_Bip_C_Hips/J_Bip_L_UpperLeg",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightUpperLeg",
+          "available": true,
+          "bone": "J_Bip_R_UpperLeg",
+          "path": "Root/J_Bip_C_Hips/J_Bip_R_UpperLeg",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftThumbIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Thumb2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Thumb1/J_Bip_L_Thumb2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftThumbDistal",
+          "available": true,
+          "bone": "J_Bip_L_Thumb3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Thumb1/J_Bip_L_Thumb2/J_Bip_L_Thumb3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftIndexIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Index2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Index1/J_Bip_L_Index2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftIndexDistal",
+          "available": true,
+          "bone": "J_Bip_L_Index3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Index1/J_Bip_L_Index2/J_Bip_L_Index3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftMiddleIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Middle2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Middle1/J_Bip_L_Middle2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftMiddleDistal",
+          "available": true,
+          "bone": "J_Bip_L_Middle3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Middle1/J_Bip_L_Middle2/J_Bip_L_Middle3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftRingIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Ring2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Ring1/J_Bip_L_Ring2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftRingDistal",
+          "available": true,
+          "bone": "J_Bip_L_Ring3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Ring1/J_Bip_L_Ring2/J_Bip_L_Ring3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftLittleIntermediate",
+          "available": true,
+          "bone": "J_Bip_L_Little2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Little1/J_Bip_L_Little2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "LeftLittleDistal",
+          "available": true,
+          "bone": "J_Bip_L_Little3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_L_Shoulder/J_Bip_L_UpperArm/J_Bip_L_LowerArm/J_Bip_L_Hand/J_Bip_L_Little1/J_Bip_L_Little2/J_Bip_L_Little3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightThumbIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Thumb2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Thumb1/J_Bip_R_Thumb2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightThumbDistal",
+          "available": true,
+          "bone": "J_Bip_R_Thumb3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Thumb1/J_Bip_R_Thumb2/J_Bip_R_Thumb3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightIndexIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Index2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Index1/J_Bip_R_Index2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightIndexDistal",
+          "available": true,
+          "bone": "J_Bip_R_Index3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Index1/J_Bip_R_Index2/J_Bip_R_Index3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightMiddleIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Middle2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Middle1/J_Bip_R_Middle2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightMiddleDistal",
+          "available": true,
+          "bone": "J_Bip_R_Middle3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Middle1/J_Bip_R_Middle2/J_Bip_R_Middle3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightRingIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Ring2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Ring1/J_Bip_R_Ring2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightRingDistal",
+          "available": true,
+          "bone": "J_Bip_R_Ring3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Ring1/J_Bip_R_Ring2/J_Bip_R_Ring3",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightLittleIntermediate",
+          "available": true,
+          "bone": "J_Bip_R_Little2",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Little1/J_Bip_R_Little2",
+          "method": "GetBoneTransform"
+        },
+        {
+          "human": "RightLittleDistal",
+          "available": true,
+          "bone": "J_Bip_R_Little3",
+          "path": "Root/J_Bip_C_Hips/J_Bip_C_Spine/J_Bip_C_Chest/J_Bip_C_UpperChest/J_Bip_R_Shoulder/J_Bip_R_UpperArm/J_Bip_R_LowerArm/J_Bip_R_Hand/J_Bip_R_Little1/J_Bip_R_Little2/J_Bip_R_Little3",
+          "method": "GetBoneTransform"
+        }
+      ],
+      "witnesses": [
+        {
+          "primitiveZeroBased": 7122,
+          "meanVertexSkinMembership": {
+            "LeftThumbProximal": 0.02666666731238365,
+            "LeftRingProximal": 0.026666666691501934,
+            "LeftLittleProximal": 0.036666667088866234,
+            "LeftPalm": 0.9100000063578289
+          }
+        },
+        {
+          "primitiveZeroBased": 7823,
+          "meanVertexSkinMembership": {
+            "RightThumbProximal": 0.48524754059811437,
+            "RightPalm": 0.29574257632096607,
+            "RightForearm": 0.21900990108648935
+          }
+        },
+        {
+          "primitiveZeroBased": 7920,
+          "meanVertexSkinMembership": {
+            "RightIndexProximal": 0.6300000150998434,
+            "RightPalm": 0.3700000047683716
+          }
+        },
+        {
+          "primitiveZeroBased": 8549,
+          "meanVertexSkinMembership": {
+            "LeftRingProximal": 1.0
+          }
+        }
+      ],
+      "counts": {
+        "meshVertices": 7964,
+        "bodyTriangles": 10022,
+        "bodyVertices": 5870,
+        "skinBones": 91,
+        "singleFingerMembershipVertices": 1188,
+        "multipleFingerMembershipVertices": 244,
+        "fingerPalmOrForearmBlendVertices": 382,
+        "handForearmBlendVertices": 218,
+        "handLegBlendVertices": 0,
+        "multipleFingerMembershipTriangles": 504,
+        "handForearmBlendTriangles": 388
+      }
+    }
+  ],
+  "membershipMeaning": "Mean original vertex skin weights: provenance only, not pixel area, visibility or a hard partition.",
+  "counterexample47": "Normal joint area .575037062, per-domain state missing from 561 recording; simultaneous 47/48/50 success is unproved.",
+  "rawSha256": "ff9af1b9e00c7168f9492c7dd46fb70a14ad7ad0d7a9fb5d140fa4985b73b2f0"
+}

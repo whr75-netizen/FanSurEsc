@@ -23,7 +23,7 @@ using FantasySurvival.CharacterPresentation;
  public float pixelPitch;public bool manualDelta;public Vector2 delta;
  static readonly string interactiveScope="InteractiveReview395_"+DateTime.UtcNow.ToString("yyyyMMdd_HHmmss_fff");
  public static string RunName {get{var args=Environment.GetCommandLineArgs();int at=Array.IndexOf(args,"-native395Run");return at>=0?args[at+1]:interactiveScope;}}
- public static string Out=>"C:/Users/JG/Documents/Codex/2026-10-07/task/UnityMcpAccess399/OriginalRuntime/Native395/"+RunName+"/";
+ public static string Out=>Path.GetFullPath(Path.Combine(Application.dataPath,"..","LocalOnly","Runtime399","Native395",RunName))+Path.DirectorySeparatorChar;
  Material gui;int setupWait,lastZoomTrace=-1;
  void Awake(){if(host&&host.main&&host.main.motion.surface.outputs!=null)foreach(var item in host.main.motion.surface.outputs)if(item)item.GetComponent<Renderer>().enabled=false;}
  void OnEnable(){Active=this;if(Application.isPlaying&&pipeline){GraphicsSettings.defaultRenderPipeline=pipeline;QualitySettings.renderPipeline=pipeline;}}

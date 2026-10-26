@@ -35,7 +35,7 @@
 - 설명에는 이 파일만, 구현·버그·검증에는 `docs/ai/CURRENT_STATE.md`의 관련 행과 git status/diff, 실제 담당 코드·씬만 먼저 읽는다. 긴 문서는 `rg`로 필요한 절만 찾으며 진행 이력은 필요한 증거를 찾을 때만 읽는다.
 - 정정·요약 뒤에는 최신 요구와 영향받는 계약·diff를 재동기화한다. 원인 없는 재생성·완료 기능 재작업·관련 없는 재검증은 하지 않는다.
 - 여러 작업 단위가 필요한 구현은 기존 `Tools/WorkLoop/README.md`를 사용한다. AI는 맡은 부위의 도구를 선택하지만, 원본·알고리즘·허용 변경·완료 기준을 실행 중 바꾸지 않는다. 도구 호출마다 노드를 만들거나 사용자에게 실행기 조작을 넘기지 않는다.
-- 현재 E 픽셀 캐릭터 작업의 중앙 실행·판정 계약은 [WORK_GRAPH_POLICY_KO.md](C:/Users/JG/Documents/Codex/2026-10-15/task-5/central_pixel_cause_graph_397_20261018/WORK_GRAPH_POLICY_KO.md)와 같은 폴더의 `WORK_GRAPH.json`에 연결한다. 최신 사용자 지시와 기존 승인 범위를 유지하며, 진행 중인 Unity 단일 작성자의 작업을 재시작하거나 중복 할당하지 않는다.
+- 현재 E 픽셀 캐릭터 작업의 중앙 실행·판정 계약은 [WORK_GRAPH_POLICY_KO.md](C:/Users/15352/Documents/Codex/2026-10-15/task-5/central_pixel_cause_graph_397_20261018/WORK_GRAPH_POLICY_KO.md)와 같은 폴더의 `WORK_GRAPH.json`에 연결한다. 최신 사용자 지시와 기존 승인 범위를 유지하며, 진행 중인 Unity 단일 작성자의 작업을 재시작하거나 중복 할당하지 않는다.
 - 제작 알고리즘이 정해진 부분은 요소별 계산·오류 귀속·영향받는 후속 단계로 연결하며 전체 제작을 한 `ai.work`와 파일 존재 검사로 대체하지 않는다(실행 예: `Tools/PixelPipeline/README.md`).
 - **그래프의 계산 성공은 요구 해석의 타당성을 증명하지 않는다.** 새 제작/반복 실패는 playbook §1.4~1.6의 요구-원인-연산 연결부터 확인한다. 하위 실험·질문 전송·검사 통과를 전체 목표 완료로 바꾸지 않는다.
 

@@ -4,7 +4,7 @@ using System;using System.IO;using System.Linq;using System.Reflection;using Sys
 [DefaultExecutionOrder(800)]public sealed class Gameplay397:MonoBehaviour{
  public bool showReviewUI = true;
  public NativePlayer395 player;public RuntimeAnimatorController controller;public bool activateGameplay,connected,testFinished,runInputTest=true;public bool actualInputPassed;public string failure;public Source329WalkView originalSource,sourceProxy;
- public static string ReportFile=>"C:/Users/JG/Documents/Codex/2026-10-07/task/UnityMcpAccess399/OriginalRuntime/GAMEPLAY_LATEST399.json";
+ public static string ReportFile=>Path.GetFullPath(Path.Combine(Application.dataPath,"..","LocalOnly","Runtime399","GAMEPLAY_LATEST399.json"));
  Animator animator;PlayerMovement movement;Keyboard testKeyboard;InputSettings previousInputSettings;Material gui;int testFrame,renderSerial;Vector3 initialPosition;Quaternion initialFacing;List<Sample>samples=new();
  [Serializable]class Sample{public bool keyboardEnabled,keyW,mapEnabled,actionUpEnabled,focused;public int frame,serial;public string stage;public Vector2 input;public bool runBinding,running;public Vector3 position;public Quaternion facing;public float deltaTime,speed,locomotion,normalisedTime;public int stateHash;public Matrix4x4 leftFoot,rightFoot,hips;}
  [Serializable]class Report{public string status,failure,player,animator,controller,sourceClip;public string inputFocusPolicy="Temporary cloned InputSettings IgnoreFocus/AllDeviceInputAlwaysGoesToGameView for synthetic test only";public bool actualInputPassed,originalMovementEnabled,manualGraphValid,avatarHuman,feetFollow,walkObserved,runObserved,idleObserved;public float horizontalDisplacement;public List<Sample>samples;}

@@ -3638,3 +3638,8 @@ HeadRegion502의 일반 shader 대체가 얼굴 provider 색 규칙을 잃는 �
 ### 589 실제 면적 입력의 제한 연결 (CHARACTER-RENDER-01)
 
 기존 실제 포즈의 132개 삼각형에서 48개 S0/S0 참조·지지 조각을 588에 연결했다. 알파 미확정 42조각(S2:19/S3:23)이 남아 조건부 구간 0.345210~0.363853/폭 0.018643으로 정확도 기준 미통과. 이 조건부 구간은 실제 GPU 오차 보장이 아니다. 저장 GPU 11점 primitive 일치/깊이 최대 차이 5.59835e-6, 원본 7개 텍스처 알파 SHA가 실제 Unity 자산과 일치했다. 실제 품질 ForceEnable/D3D11이며 MASK의 half/fwidth 및 필터 footprint 경계는 미증명이다. 오프라인 20.243초(커널 0.476초)는 실시간 근거가 아니다. 제품 소스/사용자 설정 유지/Edit clean/실험 OFF. 새 렌더·회전은 없다. [입력 계약·최소 파일/패스·대안](docs/artifacts/eye-rules583/INPUT589.md).
+
+
+### 590 closedBoundary 속눈썹 영역 전환 — 정적 검증, 실제 실행 차단
+
+기존3제품파일에 native 닫힌 영역→기하 후보→독립 색 공급을 구현했습니다. 원본 알파로 후보를 제거하지 않으며 기본OFF·홍채/흰자·기존 가림을 보존합니다. 저장9포즈 포함74비Unity검사, 현재 런타임/Editor Roslyn 및4HLSL kernel 컴파일 통과. 재부팅 후 실제 검증은 라이선스 없음으로 Driver590.Run 전에 exit198, 새렌더/GIF0·미술/시간품질 미채택입니다. Hub Editor/프로젝트 새 경로 등록은 실사용자 CLI로 확인했습니다. [구현·검증범위·비용·재개](docs/artifacts/eye-rules583/RESULT590.md).

@@ -1,0 +1,623 @@
+{
+  "status": "PASS",
+  "tests": 74,
+  "scope": "Pure C# geometry and recorded-input replay; no Unity render or GPU execution",
+  "results": [
+    {
+      "name": "existing-curve-area-fixtures",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "native-upper-chain",
+      "passed": true,
+      "detail": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "name": "ring-order-invariance",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "ring-start-invariance",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "fractional-area",
+      "passed": true,
+      "detail": 0.7199999958975241
+    },
+    {
+      "name": "duplicate-region-union",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "overlapping-regions-union",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "thin-geometry-with-no-center-sample",
+      "passed": true,
+      "detail": 0.012000000104308128
+    },
+    {
+      "name": "normal-shrink-no-minimum-pixel",
+      "passed": true,
+      "detail": [
+        1,
+        1,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "empty-region",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "zero-width-region",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "rotated-translated-area-0",
+      "passed": true,
+      "detail": 0.7199999958975241
+    },
+    {
+      "name": "same-ray-depth-rest-plane-0",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "rotated-translated-area-1",
+      "passed": true,
+      "detail": 0.7199999963049777
+    },
+    {
+      "name": "same-ray-depth-rest-plane-1",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "rotated-translated-area-2",
+      "passed": true,
+      "detail": 0.7200000028824434
+    },
+    {
+      "name": "same-ray-depth-rest-plane-2",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "rotated-translated-area-3",
+      "passed": true,
+      "detail": 0.7200000003213063
+    },
+    {
+      "name": "same-ray-depth-rest-plane-3",
+      "passed": true,
+      "detail": 0
+    },
+    {
+      "name": "saved-native-chain-2-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-2-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-2-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-2-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-2-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-2-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-2-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-2-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-2-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-2-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-2-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-2-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-2-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-2-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-2-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-2-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-2-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-2-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-5-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-5-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-5-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-5-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-5-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-5-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-5-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-5-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-5-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-5-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-5-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-5-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-5-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-5-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-5-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-5-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-5-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-5-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-16-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-16-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-16-0-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-16-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-16-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-16-0-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-16-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-16-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-16-1-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-16-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-16-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-16-1-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-16-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-16-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-16-2-2",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-native-chain-16-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-region-packets-valid-16-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-occlusion-monotonic-16-2-1",
+      "passed": true,
+      "detail": null
+    },
+    {
+      "name": "saved-nine-pose-offline-replay",
+      "passed": true,
+      "detail": [
+        {
+          "sourceCase": 2,
+          "frame": 0,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.0847738104861264,
+              "visibleArea": 0.33640075649600476,
+              "budget": 0,
+              "packetBytes": 33792,
+              "helperMilliseconds": 0.5043,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 0.5428580283296469,
+              "visibleArea": 0.01837860606610775,
+              "budget": 0,
+              "packetBytes": 33792,
+              "helperMilliseconds": 0.2459,
+              "insideRecordedROI": true
+            }
+          ]
+        },
+        {
+          "sourceCase": 2,
+          "frame": 1,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.0995124217297416,
+              "visibleArea": 0.8076880691514816,
+              "budget": 1,
+              "packetBytes": 36608,
+              "helperMilliseconds": 2.405,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 0.6027609387583652,
+              "visibleArea": 0.018131311982870102,
+              "budget": 0,
+              "packetBytes": 36608,
+              "helperMilliseconds": 0.2226,
+              "insideRecordedROI": true
+            }
+          ]
+        },
+        {
+          "sourceCase": 2,
+          "frame": 2,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.114068320428487,
+              "visibleArea": 0.6416223772102967,
+              "budget": 1,
+              "packetBytes": 36608,
+              "helperMilliseconds": 0.2379,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 0.6617893021630152,
+              "visibleArea": 0,
+              "budget": 0,
+              "packetBytes": 36608,
+              "helperMilliseconds": 0.182,
+              "insideRecordedROI": true
+            }
+          ]
+        },
+        {
+          "sourceCase": 5,
+          "frame": 0,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.1286898718667544,
+              "visibleArea": 0.4687582789347289,
+              "budget": 0,
+              "packetBytes": 33280,
+              "helperMilliseconds": 0.2599,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 0.7223300904151984,
+              "visibleArea": 0,
+              "budget": 0,
+              "packetBytes": 33280,
+              "helperMilliseconds": 0.2397,
+              "insideRecordedROI": true
+            }
+          ]
+        },
+        {
+          "sourceCase": 5,
+          "frame": 1,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.1437368139158934,
+              "visibleArea": 0.9163344649132341,
+              "budget": 1,
+              "packetBytes": 35840,
+              "helperMilliseconds": 0.3375,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 0.7860935516182508,
+              "visibleArea": 0.05792743340134621,
+              "budget": 0,
+              "packetBytes": 35840,
+              "helperMilliseconds": 2.4735,
+              "insideRecordedROI": true
+            }
+          ]
+        },
+        {
+          "sourceCase": 5,
+          "frame": 2,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.159190250771644,
+              "visibleArea": 0.7429731007359806,
+              "budget": 1,
+              "packetBytes": 35840,
+              "helperMilliseconds": 0.3106,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 0.8548228104991722,
+              "visibleArea": 0,
+              "budget": 0,
+              "packetBytes": 35840,
+              "helperMilliseconds": 0.2119,
+              "insideRecordedROI": true
+            }
+          ]
+        },
+        {
+          "sourceCase": 16,
+          "frame": 0,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.248808212064432,
+              "visibleArea": 1.4818230634073188,
+              "budget": 1,
+              "packetBytes": 36864,
+              "helperMilliseconds": 0.2896,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 1.4752069895039313,
+              "visibleArea": 0.18309303058777004,
+              "budget": 0,
+              "packetBytes": 36864,
+              "helperMilliseconds": 0.2182,
+              "insideRecordedROI": true
+            }
+          ]
+        },
+        {
+          "sourceCase": 16,
+          "frame": 1,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.250566917562537,
+              "visibleArea": 1.2868818185270356,
+              "budget": 1,
+              "packetBytes": 36864,
+              "helperMilliseconds": 0.2643,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 1.539116588750403,
+              "visibleArea": 1.374883885828712,
+              "budget": 1,
+              "packetBytes": 36864,
+              "helperMilliseconds": 0.2407,
+              "insideRecordedROI": true
+            }
+          ]
+        },
+        {
+          "sourceCase": 16,
+          "frame": 2,
+          "eyes": [
+            {
+              "id": 2,
+              "facing": true,
+              "geometryArea": 2.2499773554882267,
+              "visibleArea": 1.7132717438653344,
+              "budget": 2,
+              "packetBytes": 34560,
+              "helperMilliseconds": 0.2601,
+              "insideRecordedROI": true
+            },
+            {
+              "id": 1,
+              "facing": true,
+              "geometryArea": 1.6012264547753148,
+              "visibleArea": 0.9794991935486905,
+              "budget": 1,
+              "packetBytes": 34560,
+              "helperMilliseconds": 0.2051,
+              "insideRecordedROI": true
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

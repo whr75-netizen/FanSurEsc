@@ -22,26 +22,37 @@ struct FeatureSample583{int feat,support;float depth,weight,hairBlocked,bodyBloc
 // CPU packet rows are top-left; the render graph ROI and q rows are bottom-left.
 float4 LashGeometry590(int2 p,int eye,int k){int2 q=(p-_ROI348.xy)*4+int2(k%4,k/4);int w=_ROI348.z*4,h=_ROI348.w*4;return _LashGeometry590[eye*w*h+(h-1-q.y)*w+q.x];}
 FeatureSample583 Sample583(int2 p,int eye,int k){FeatureSample583 r=(FeatureSample583)0;r.support=-1;int owner=(int)round(_Centres348[eye].w);int2 lc=p-_ROI348.xy;
- int2 q=lc*4+int2(k%4,k/4);float2 st=float2(p.x+(k%4+.5)/4,272-p.y-(k/4+.5)/4);float4 plane=eye==0?_Plane348_0:_Plane348_1;float3 near=_RayBase348.xyz+st.x*_RayX348.xyz+st.y*_RayY348.xyz;float planeDepth=-(dot(plane.xyz,near)+plane.w)/dot(plane.xyz,_RayDepth348.xyz);float3 hypothetical=mul(_WorldToHead348,float4(near+planeDepth*_RayDepth348.xyz,1)).xyz;
- int support=-1;for(int s=0;s<4;s++){float4 m=M(s,q);if(cov(m)&&round(m.z)==owner&&P(s,q).w>.5){support=s;break;}}
- float3 rest=support>=0?P(support,q).xyz:hypothetical;int feat=Classify(rest,eye);float4 geometry=0;
- if(_UseLashRegion583!=0&&_UseClosedLash590!=0){geometry=LashGeometry590(p,eye,k);if(geometry.x>0){feat=5;rest=_Centres348[eye].xyz+_AxesX348[eye].xyz*(geometry.z*_AxesX348[eye].w)-_AxesY348[eye].xyz*(geometry.w*_AxesY348[eye].w);}else if(feat==5)feat=0;}
- if(feat==0)return r;r.feat=feat;r.rest=rest;
- if(feat==5||feat==6){support=-1;if(feat==5&&_UseLashRegion583!=0&&_UseClosedLash590!=0)support=4;else{float4 skin=M(0,q),eyelineSample=M(3,q);if(cov(skin)&&round(skin.z)==owner&&P(0,q).w>.5)support=0;else if(feat==5&&cov(eyelineSample)&&round(eyelineSample.z)==owner&&P(3,q).w>.5)support=3;}}
- // Iris support remains independent from the new lash shape authority.
- float sourceWeight582=support==4?geometry.x:1;
- if(_UseIrisSurface582!=0&&feat>=2&&feat<=4){float4 irisSource=M(2,q),skinSource=M(0,q);support=-1;if(cov(irisSource)&&round(irisSource.z)==owner&&P(2,q).w>.5){support=2;sourceWeight582=saturate(irisSource.w);if(cov(skinSource)&&skinSource.x<irisSource.x)sourceWeight582*=1-saturate(skinSource.w);}}
- r.support=support;if(support<0)return r;float depth=support==4?geometry.y:(feat==5||feat==6?M(support,q).x:planeDepth);float weight=sourceWeight582;
- float4 hair=_UseHairRegion502!=0?_HairMETA.Load(int3(p,0)):_S4META.Load(int3(q,0)),br=_S5META.Load(int3(q,0)),body=_S6META.Load(int3(q,0));
- if(cov(hair)&&hair.x<depth){weight*=1-saturate(hair.w);r.hairBlocked=1;}if(cov(br)&&br.x<depth)weight*=1-saturate(br.w);if(cov(body)&&body.x<depth){weight=0;r.bodyBlocked=1;}r.depth=depth;r.weight=weight;return r;
+int2 q=lc*4+int2(k%4,k/4);float2 st=float2(p.x+(k%4+.5)/4,272-p.y-(k/4+.5)/4);float4 plane=eye==0?_Plane348_0:_Plane348_1;float3 near=_RayBase348.xyz+st.x*_RayX348.xyz+st.y*_RayY348.xyz;float planeDepth=-(dot(plane.xyz,near)+plane.w)/dot(plane.xyz,_RayDepth348.xyz);float3 hypothetical=mul(_WorldToHead348,float4(near+planeDepth*_RayDepth348.xyz,1)).xyz;
+   int support=-1;for(int s=0;s<4;s++){float4 m=M(s,q);if(cov(m)&&round(m.z)==owner&&P(s,q).w>.5){support=s;break;}}float3 rest=support>=0?P(support,q).xyz:hypothetical;int feat=Classify(rest,eye);if(feat==0)return r;r.feat=feat;r.rest=rest;if(feat==5||feat==6){support=-1;float4 skin=M(0,q),eyelineSample=M(3,q);if(cov(skin)&&round(skin.z)==owner&&P(0,q).w>.5)support=0;else if(feat==5&&cov(eyelineSample)&&round(eyelineSample.z)==owner&&P(3,q).w>.5)support=3;}
+   // Classification is the existing model-bound design geometry. Its reference
+   // surface is not permission for skin to supply iris/catch visibility.
+   float sourceWeight582=1;
+   if(_UseIrisSurface582!=0&&feat>=2&&feat<=4){
+    float4 irisSource=M(2,q),skinSource=M(0,q);support=-1;
+    if(cov(irisSource)&&round(irisSource.z)==owner&&P(2,q).w>.5){
+     support=2;sourceWeight582=saturate(irisSource.w);
+     if(cov(skinSource)&&skinSource.x<irisSource.x)sourceWeight582*=1-saturate(skinSource.w);
+    }
+   }
+   r.support=support;if(support<0)return r;float4 meta=M(support,q);float depth=feat==5||feat==6?meta.x:planeDepth;float weight=sourceWeight582;float4 hair=_UseHairRegion502!=0?_HairMETA.Load(int3(p,0)):_S4META.Load(int3(q,0)),br=_S5META.Load(int3(q,0)),body=_S6META.Load(int3(q,0));if(cov(hair)&&hair.x<depth){weight*=1-saturate(hair.w);r.hairBlocked=1;}if(cov(br)&&br.x<depth)weight*=1-saturate(br.w);if(cov(body)&&body.x<depth){weight=0;r.bodyBlocked=1;}r.depth=depth;r.weight=weight;return r;
 }
+// Independent geometric overlay. A partial ribbon never reclassifies a whole
+// iris/sclera sample; those original samples remain available to the selector.
+FeatureSample583 CurveSample590(int2 p,int eye,int k){FeatureSample583 r=(FeatureSample583)0;r.support=-1;float4 g=LashGeometry590(p,eye,k);if(g.x<=0||g.y<=0)return r;
+ r.feat=5;r.support=4;r.depth=g.y;r.rest=_Centres348[eye].xyz+_AxesX348[eye].xyz*(g.z*_AxesX348[eye].w)-_AxesY348[eye].xyz*(g.w*_AxesY348[eye].w);float weight=g.x;int2 q=(p-_ROI348.xy)*4+int2(k%4,k/4);
+ float4 hair=_UseHairRegion502!=0?_HairMETA.Load(int3(p,0)):_S4META.Load(int3(q,0)),br=_S5META.Load(int3(q,0)),body=_S6META.Load(int3(q,0));
+ if(cov(hair)&&hair.x<g.y){weight*=1-saturate(hair.w);r.hairBlocked=1;}if(cov(br)&&br.x<g.y)weight*=1-saturate(br.w);if(cov(body)&&body.x<g.y){weight=0;r.bodyBlocked=1;}r.weight=weight;return r;
+}
+
 int Choose(float c[8]){float ir=c[2]+c[3]+c[4],tot=c[5]+ir+c[1];if(tot>=4){if(c[5]>=5&&ir<=4)return 5;if(ir>=5){if(c[4]>=4)return 4;return c[2]>=c[3]?2:3;}if(c[1]>=3)return 1;if(c[5]>=3)return 7;}else if(c[6]>=5)return 6;return 0;}
 // One closed native-curve upper-lash region per eye. Continuous geometric
 // area times existing sampled occlusion sets the budget; no source-alpha gate.
-void LashCounts583(int2 p,int eye,out float4 counts,out float2 curveMean){counts=0;curveMean=0;
- for(int k=0;k<16;k++){FeatureSample583 a=Sample583(p,eye,k);if(a.support<0||a.weight<=0)continue;
-  if(a.feat==5){counts.x+=a.weight;float3 d=a.rest-_Centres348[eye].xyz;curveMean+=a.weight*float2(dot(d,_AxesX348[eye].xyz)/_AxesX348[eye].w,-dot(d,_AxesY348[eye].xyz)/_AxesY348[eye].w);}
-  else if(a.feat>=2&&a.feat<=4)counts.y+=a.weight;else if(a.feat==1)counts.z+=a.weight;else if(a.feat==6)counts.w+=a.weight;
+void LashCounts583(int2 p,int eye,out float4 counts,out float2 curveMean){counts=0;curveMean=0;bool closed=_UseLashRegion583!=0&&_UseClosedLash590!=0;
+ for(int k=0;k<16;k++){
+  FeatureSample583 baseSample=Sample583(p,eye,k);FeatureSample583 lash=baseSample;if(closed)lash=CurveSample590(p,eye,k);
+  if(lash.feat==5&&lash.support>=0&&lash.weight>0){counts.x+=lash.weight;float3 d=lash.rest-_Centres348[eye].xyz;curveMean+=lash.weight*float2(dot(d,_AxesX348[eye].xyz)/_AxesX348[eye].w,-dot(d,_AxesY348[eye].xyz)/_AxesY348[eye].w);}
+  if(baseSample.support<0||baseSample.weight<=0)continue;
+  if(baseSample.feat>=2&&baseSample.feat<=4)counts.y+=baseSample.weight;else if(baseSample.feat==1)counts.z+=baseSample.weight;else if(baseSample.feat==6)counts.w+=baseSample.weight;
  }if(counts.x>0)curveMean/=counts.x;
 }
 bool LashBefore583(float4 a,float2 au,int2 ap,float4 b,float2 bu,int2 bp){
@@ -56,8 +67,8 @@ bool LashAllocated583(int2 p,int eye){float4 own;float2 ownU;LashCounts583(p,eye
   if(LashBefore583(c,u,q,own,ownU,p))rank++;
  }return rank<(int)floor(area+.5);
 }
-int ChooseRegion583(float c[8],int2 p,int eye){
- if(c[5]>0&&LashAllocated583(p,eye))return c[5]>=5?5:7;
+int ChooseRegion583(float c[8],int2 p,int eye,float curveCount){
+ float lashCount=_UseClosedLash590!=0?curveCount:c[5];if(lashCount>0&&LashAllocated583(p,eye))return lashCount>=5?5:7;
  float ir=c[2]+c[3]+c[4],tot=c[5]+ir+c[1];
  if(tot>=4){if(ir>=5){if(c[4]>=4)return 4;return c[2]>=c[3]?2:3;}if(c[1]>=3)return 1;}
  else if(c[6]>=5)return 6;return 0;
@@ -70,11 +81,24 @@ float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=
  Pixel348 record=(Pixel348)0;record.colour=old;record.owner=float4(oldOwner.x,oldMeta.z,oldOwner.z,0);record.globalOwner=oldOwner;record.preparedMeta=oldMeta;record.preparedUV=oldUV;_RecordsWrite348[p.y*480+p.x]=record;
  if(!inROI&&!oldDomain)return;
  int win=0,eyeWin=-1,repIndex=-1,supportWin=-1;float winCount=0,bestIntrinsicCount=0;int intrinsicWin=0,intrinsicEye=-1;float visibleHist[8],intrinsicHist[8];float4 histVisible=0,histIntrinsic=0;float noSupport=0,hairBlocked=0,bodyBlocked=0;float depthWin=0;float4 uvWin=0,restWin=0;int labels[16],supports[16];float depths[16],weights[16];
- for(int eye=0;eye<2;eye++){for(int z=0;z<8;z++){visibleHist[z]=0;intrinsicHist[z]=0;}int owner=(int)round(_Centres348[eye].w);
-  for(int k=0;k<16;k++){labels[k]=0;supports[k]=-1;depths[k]=0;weights[k]=0;if(!inROI)continue;FeatureSample583 smp583=Sample583(p,eye,k);int feat=smp583.feat;if(feat==0)continue;intrinsicHist[feat]++;labels[k]=feat;supports[k]=smp583.support;if(smp583.support<0){noSupport++;continue;}depths[k]=smp583.depth;weights[k]=smp583.weight;hairBlocked+=smp583.hairBlocked;bodyBlocked+=smp583.bodyBlocked;visibleHist[feat]+=smp583.weight;
+ for(int eye=0;eye<2;eye++){
+  for(int z=0;z<8;z++){visibleHist[z]=0;intrinsicHist[z]=0;}int owner=(int)round(_Centres348[eye].w);bool closed590=_UseLashRegion583!=0&&_UseClosedLash590!=0;float curveVisible590=0,curveIntrinsic590=0;
+  for(int k=0;k<16;k++){
+   labels[k]=0;supports[k]=-1;depths[k]=0;weights[k]=0;if(!inROI)continue;
+   if(closed590){FeatureSample583 curve=CurveSample590(p,eye,k);curveIntrinsic590+=LashGeometry590(p,eye,k).x;curveVisible590+=curve.weight;hairBlocked+=curve.hairBlocked;bodyBlocked+=curve.bodyBlocked;}
+   FeatureSample583 smp=Sample583(p,eye,k);int feat=smp.feat;if(feat==0)continue;intrinsicHist[feat]++;labels[k]=feat;supports[k]=smp.support;
+   if(smp.support<0){if(!closed590||feat!=5)noSupport++;continue;}depths[k]=smp.depth;weights[k]=smp.weight;if(!closed590||feat!=5){hairBlocked+=smp.hairBlocked;bodyBlocked+=smp.bodyBlocked;}visibleHist[feat]+=smp.weight;
   }
+  if(closed590)intrinsicHist[5]=curveIntrinsic590;
   int iw=Choose(intrinsicHist);float ic=0;for(int k=1;k<8;k++)ic+=intrinsicHist[k];if(ic>bestIntrinsicCount){bestIntrinsicCount=ic;intrinsicWin=iw;intrinsicEye=eye;histIntrinsic=float4(intrinsicHist[5],intrinsicHist[2]+intrinsicHist[3]+intrinsicHist[4],intrinsicHist[1],intrinsicHist[6]);}
-  int w=_UseLashRegion583!=0?ChooseRegion583(visibleHist,p,eye):Choose(visibleHist);float count=w>=2&&w<=4?visibleHist[2]+visibleHist[3]+visibleHist[4]:w==7?visibleHist[5]:visibleHist[w];if(w>0&&count>winCount){float nearest=1e20;int idx=-1;for(int k=0;k<16;k++){if(!sameFeature(labels[k],w)||supports[k]<0||weights[k]<=0)continue;float2 d=(float2(k%4,k/4)+.5)/4-.5;float dd=dot(d,d);if(dd<nearest){nearest=dd;idx=k;}}if(idx>=0){win=w;eyeWin=eye;winCount=count;repIndex=idx;supportWin=supports[idx];depthWin=depths[idx];int2 q=lc*4+int2(idx%4,idx/4);if(supportWin==4){float4 g=LashGeometry590(p,eye,idx);uvWin=float4(g.zw,0,0);restWin=float4(_Centres348[eye].xyz+_AxesX348[eye].xyz*(g.z*_AxesX348[eye].w)-_AxesY348[eye].xyz*(g.w*_AxesY348[eye].w),1);}else{uvWin=U(supportWin,q);restWin=P(supportWin,q);}histVisible=float4(visibleHist[5],visibleHist[2]+visibleHist[3]+visibleHist[4],visibleHist[1],visibleHist[6]);}}
+  int w=_UseLashRegion583!=0?ChooseRegion583(visibleHist,p,eye,curveVisible590):Choose(visibleHist);bool curveWinner590=closed590&&(w==5||w==7);float count=curveWinner590?curveVisible590:w>=2&&w<=4?visibleHist[2]+visibleHist[3]+visibleHist[4]:w==7?visibleHist[5]:visibleHist[w];
+  if(w>0&&count>winCount){float nearest=1e20;int idx=-1;for(int k=0;k<16;k++){
+   if(curveWinner590){FeatureSample583 rep=CurveSample590(p,eye,k);if(rep.support<0||rep.weight<=0)continue;}else if(!sameFeature(labels[k],w)||supports[k]<0||weights[k]<=0)continue;
+   float2 d=(float2(k%4,k/4)+.5)/4-.5;float dd=dot(d,d);if(dd<nearest){nearest=dd;idx=k;}}
+   if(idx>=0){win=w;eyeWin=eye;winCount=count;repIndex=idx;supportWin=curveWinner590?4:supports[idx];depthWin=curveWinner590?LashGeometry590(p,eye,idx).y:depths[idx];int2 q=lc*4+int2(idx%4,idx/4);
+    if(supportWin==4){float4 g=LashGeometry590(p,eye,idx);uvWin=float4(g.zw,0,0);restWin=float4(_Centres348[eye].xyz+_AxesX348[eye].xyz*(g.z*_AxesX348[eye].w)-_AxesY348[eye].xyz*(g.w*_AxesY348[eye].w),1);}else{uvWin=U(supportWin,q);restWin=P(supportWin,q);}
+    histVisible=float4(closed590?curveVisible590:visibleHist[5],visibleHist[2]+visibleHist[3]+visibleHist[4],visibleHist[1],visibleHist[6]);}
+  }
  }
  bool domain=oldDomain||bestIntrinsicCount>0;if(!domain)return;int selectedEye=eyeWin>=0?eyeWin:intrinsicEye;float eyeId=selectedEye>=0?_Centres348[selectedEye].w:_OldIntrinsic.Load(int3(p,0)).y;if(eyeId<=0)eyeId=_OldEyeOwner.Load(int3(p,0)).y;
  float4 bm=_BaseMETA.Load(int3(p,0)),bc=_BaseRGBA.Load(int3(p,0)),back=_BackingMETA.Load(int3(p,0));if(cov(back)&&(!cov(bm)||back.x<bm.x)){bm=back;bc=_BackingRGBA.Load(int3(p,0));}float4 c=cov(bm)?float4(bc.rgb,1):0;float4 o=cov(bm)?float4(bm.y,bm.z,bm.x,0):0;

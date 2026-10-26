@@ -1,0 +1,578 @@
+{
+  "status": "IMPLEMENTED_AND_RUNTIME_VALIDATED_WITH_REMAINING_TEMPORAL_FAILURE",
+  "project": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game",
+  "editor": "C:\\Users\\15352\\Documents\\work\\6000.5.9f1\\Editor\\Unity.exe",
+  "unityVersion": "6000.5.9f1 (b57deb96f08d)",
+  "graphics": "D3D11 / AMD Radeon RX 9070 XT",
+  "runRoot": "C:\\Users\\15352\\Documents\\Codex\\2026-10-26\\task\\Runtime590\\R4",
+  "pairs": 35,
+  "pngFrames": 70,
+  "compileAndShaderErrors": [],
+  "preexistingConsoleIssue": "UVCS NotConfiguredClientException / client.conf absent retained in baseline-errors.log; other new error/exception would fail Driver590.",
+  "sameFrameCameraTimeAndEyeInputVerifiedPairs": 35,
+  "outsideEyeChangedRGBPixels": 0,
+  "savedROISilhouetteChanges": 0,
+  "irisToOtherThanLashCells": 0,
+  "scleraToOtherThanLashCells": 0,
+  "sourceColourAudit": [
+    {
+      "run": "Frozen2",
+      "frame": 0,
+      "fullRoiAudit": true,
+      "auditedCells": 132,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 67584,
+      "intrinsicAreaByModelEyeIndex": [
+        2.0847623268504094,
+        0.5428401668832521
+      ]
+    },
+    {
+      "run": "Frozen2",
+      "frame": 1,
+      "fullRoiAudit": true,
+      "auditedCells": 143,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73216,
+      "intrinsicAreaByModelEyeIndex": [
+        2.0995161642931635,
+        0.6027613104888587
+      ]
+    },
+    {
+      "run": "Frozen2",
+      "frame": 2,
+      "fullRoiAudit": true,
+      "auditedCells": 143,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73216,
+      "intrinsicAreaByModelEyeIndex": [
+        2.1140571897558402,
+        0.6617852960243908
+      ]
+    },
+    {
+      "run": "Frozen5",
+      "frame": 0,
+      "fullRoiAudit": true,
+      "auditedCells": 130,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 66560,
+      "intrinsicAreaByModelEyeIndex": [
+        2.1287092248135195,
+        0.7223552806899534
+      ]
+    },
+    {
+      "run": "Frozen5",
+      "frame": 1,
+      "fullRoiAudit": true,
+      "auditedCells": 140,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 71680,
+      "intrinsicAreaByModelEyeIndex": [
+        2.143700743705267,
+        0.7860821491376555
+      ]
+    },
+    {
+      "run": "Frozen5",
+      "frame": 2,
+      "fullRoiAudit": true,
+      "auditedCells": 140,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 71680,
+      "intrinsicAreaByModelEyeIndex": [
+        2.1591943614184856,
+        0.8548191049749221
+      ]
+    },
+    {
+      "run": "Frozen16",
+      "frame": 0,
+      "fullRoiAudit": true,
+      "auditedCells": 144,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73728,
+      "intrinsicAreaByModelEyeIndex": [
+        2.248806358282309,
+        1.4752025486086495
+      ]
+    },
+    {
+      "run": "Frozen16",
+      "frame": 1,
+      "fullRoiAudit": true,
+      "auditedCells": 144,
+      "visibleLashAuditedCells": 2,
+      "geometrySentinelLashCells": 2,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73728,
+      "intrinsicAreaByModelEyeIndex": [
+        2.2505706852989533,
+        1.539126407961703
+      ]
+    },
+    {
+      "run": "Frozen16",
+      "frame": 2,
+      "fullRoiAudit": true,
+      "auditedCells": 135,
+      "visibleLashAuditedCells": 3,
+      "geometrySentinelLashCells": 3,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 69120,
+      "intrinsicAreaByModelEyeIndex": [
+        2.2499661213660147,
+        1.601219521369785
+      ]
+    },
+    {
+      "run": "Reg80",
+      "frame": 0,
+      "fullRoiAudit": true,
+      "auditedCells": 78,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 39936,
+      "intrinsicAreaByModelEyeIndex": [
+        1.0063110086557572,
+        0.0
+      ]
+    },
+    {
+      "run": "Reg80",
+      "frame": 1,
+      "fullRoiAudit": true,
+      "auditedCells": 78,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 39936,
+      "intrinsicAreaByModelEyeIndex": [
+        0.9975276653131004,
+        0.0
+      ]
+    },
+    {
+      "run": "Reg170",
+      "frame": 0,
+      "fullRoiAudit": true,
+      "auditedCells": 128,
+      "visibleLashAuditedCells": 4,
+      "geometrySentinelLashCells": 4,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 65536,
+      "intrinsicAreaByModelEyeIndex": [
+        1.967588379137851,
+        2.040283319487145
+      ]
+    },
+    {
+      "run": "Reg170",
+      "frame": 1,
+      "fullRoiAudit": true,
+      "auditedCells": 128,
+      "visibleLashAuditedCells": 4,
+      "geometrySentinelLashCells": 4,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 65536,
+      "intrinsicAreaByModelEyeIndex": [
+        1.973360238399323,
+        2.0349883575140666
+      ]
+    },
+    {
+      "run": "Reg260",
+      "frame": 0,
+      "fullRoiAudit": true,
+      "auditedCells": 78,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 39936,
+      "intrinsicAreaByModelEyeIndex": [
+        0.0,
+        0.8336487519554794
+      ]
+    },
+    {
+      "run": "Reg260",
+      "frame": 1,
+      "fullRoiAudit": true,
+      "auditedCells": 78,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 39936,
+      "intrinsicAreaByModelEyeIndex": [
+        0.0,
+        0.8417122995015234
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 0,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 67584,
+      "intrinsicAreaByModelEyeIndex": [
+        2.0694072930964467,
+        0.5111628442008822
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 1,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 67584,
+      "intrinsicAreaByModelEyeIndex": [
+        2.0847576624763633,
+        0.5428393237507407
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 2,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73216,
+      "intrinsicAreaByModelEyeIndex": [
+        2.09952113511099,
+        0.6027574312211073
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 3,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73216,
+      "intrinsicAreaByModelEyeIndex": [
+        2.1140519231848884,
+        0.6617821698837361
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 4,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 66560,
+      "intrinsicAreaByModelEyeIndex": [
+        2.12871055529331,
+        0.722356729565945
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 5,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 71680,
+      "intrinsicAreaByModelEyeIndex": [
+        2.143695258157095,
+        0.7860793771724275
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 6,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 71680,
+      "intrinsicAreaByModelEyeIndex": [
+        2.1591943614184856,
+        0.8548191049749221
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 7,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 1,
+      "geometrySentinelLashCells": 1,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 71680,
+      "intrinsicAreaByModelEyeIndex": [
+        2.1736390158475842,
+        0.9237124652809143
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 8,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 76800,
+      "intrinsicAreaByModelEyeIndex": [
+        2.185839489461614,
+        0.9937100353417918
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 9,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 76800,
+      "intrinsicAreaByModelEyeIndex": [
+        2.1973526367796694,
+        1.0641913377478431
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 10,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 76800,
+      "intrinsicAreaByModelEyeIndex": [
+        2.209388138857321,
+        1.134701778225235
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 11,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 71680,
+      "intrinsicAreaByModelEyeIndex": [
+        2.220313255329529,
+        1.204854262949084
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 12,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 69120,
+      "intrinsicAreaByModelEyeIndex": [
+        2.2302603592106607,
+        1.2741414071060717
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 13,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 69120,
+      "intrinsicAreaByModelEyeIndex": [
+        2.2384758391526702,
+        1.3424588610896464
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 14,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 69120,
+      "intrinsicAreaByModelEyeIndex": [
+        2.244777835229854,
+        1.4096248184796423
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 15,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73728,
+      "intrinsicAreaByModelEyeIndex": [
+        2.24880899443815,
+        1.4752010412630625
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 16,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73728,
+      "intrinsicAreaByModelEyeIndex": [
+        2.2505720149310946,
+        1.5391214357796343
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 17,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 69120,
+      "intrinsicAreaByModelEyeIndex": [
+        2.2499683445785195,
+        1.6012220400152728
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 18,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73728,
+      "intrinsicAreaByModelEyeIndex": [
+        2.246820747091988,
+        1.6611112971704642
+      ]
+    },
+    {
+      "run": "Turn20",
+      "frame": 19,
+      "fullRoiAudit": false,
+      "auditedCells": 4,
+      "visibleLashAuditedCells": 0,
+      "geometrySentinelLashCells": 0,
+      "colourFailureCells": 0,
+      "geometryBufferBytes": 73728,
+      "intrinsicAreaByModelEyeIndex": [
+        2.240800639339909,
+        1.718511227566296
+      ]
+    }
+  ],
+  "remainingReversals": [
+    {
+      "side": "ON",
+      "eye": "2",
+      "feature": "lash",
+      "frame": 4,
+      "counts": [
+        1,
+        0,
+        1
+      ]
+    }
+  ],
+  "fullOcclusionPlans": [
+    "Reg80",
+    "Reg260"
+  ],
+  "cost": {
+    "wholeRenderCall": {
+      "False": {
+        "allSamples": 35,
+        "allMedianMs": 380.60650000000004,
+        "allP95Ms": 1040.77521,
+        "excludingFirstOfEachPlanSamples": 28,
+        "excludingFirstMedianMs": 375.29805,
+        "excludingFirstP95Ms": 599.5256699999998
+      },
+      "True": {
+        "allSamples": 35,
+        "allMedianMs": 266.5674,
+        "allP95Ms": 513.0962199999998,
+        "excludingFirstOfEachPlanSamples": 28,
+        "excludingFirstMedianMs": 263.6087,
+        "excludingFirstP95Ms": 293.842715
+      }
+    },
+    "warmEyePrepare": {
+      "False": {
+        "samples": 5,
+        "medianMs": 0.0315,
+        "p95Ms": 0.056339999999999994
+      },
+      "True": {
+        "samples": 5,
+        "medianMs": 0.5209,
+        "p95Ms": 0.58152
+      }
+    },
+    "allocationPositiveControl": {
+      "oneMiBDelta": 0,
+      "twoMiBDelta": 0,
+      "valid": false
+    },
+    "managedAllocation": "UNMEASURED: byte counter remained zero for new 1MiB and 2MiB arrays; render/prepare zero deltas are invalid as allocation evidence.",
+    "gpu": "UNMEASURED; no new GPU timing claim. Previous587 raw profiler/GPU attempts were failures; not repeated.",
+    "geometryBufferByteRange": [
+      39936,
+      76800
+    ],
+    "scope": "Whole RenderFrame stopwatch includes existing render pipeline CPU work/waits; excludes diagnostic exports/readbacks/file IO. Sequential OFF then ON has order/cold-start bias, no speedup claim. Warm Prepare 5 OFF/5 ON alternates order at fixed last pose; no GPU-only/full Player FPS claim. Retained buffer may stay allocated after OFF; initially dummy16B."
+  },
+  "limits": [
+    "20-frame excerpt only; no full walk loop or repetition seam validation",
+    "Remaining eyeID2 lash presence reversal frame4 (1,0,1) follows existing sampled hair depth mask; not resolved by new geometry.",
+    "Default UseLashRegion583 remains false. No art adoption.",
+    "Only current avatar and prescribed poses/platform exercised; model-generic algorithm is not a claim all models were rendered.",
+    "No Player build or real input hardware test in this run.",
+    "Full colour audit15 poses; Turn20 has inherited sparse4-cell source audit plus full RGB/visible/intrinsic captures."
+  ]
+}

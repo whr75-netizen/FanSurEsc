@@ -1,0 +1,51 @@
+--- C:\Users\15352\Documents\work\Fantasy Survival Escape Game\Assets\EUnityValidation01\EyeBoundaryRestore348\Shaders\EyeFeature348.compute
++++ render-fix21\continuous47-counts\candidate\EyeFeature348_visibility_gate47.compute
+@@ -1,3 +1,4 @@
++// EXPERIMENT ONLY / NOT IMPORTED / NOT GPU COMPILED. Based on product SHA256 1a8b9664429f84a9208770db927a894e9a6687d8841a91d1ec5be5879d7ccd03
+ #pragma kernel Evaluate
+ #pragma kernel CountFeatures19
+ #pragma kernel UnpackA
+@@ -120,13 +121,22 @@
+ bool InEyeROI19(int2 p){int2 c=p-_ROI348.xy;return all(c>=0)&&all(c<_ROI348.zw);}
+ FeaturePacket19 Packet19(int2 p,int eye){if(!InEyeROI19(p))return (FeaturePacket19)0;return _FeatureCounts19[PacketIndex19(p,eye)];}
+ float IrisCount19(FeaturePacket19 c){return c.a.z+c.a.w+c.b.x;}
++// Offline47 proposal: align iris eligibility with the already-existing final-cell depth gate.
++bool FinalIrisCellVisible47(int2 p,float depth){
++ if(depth<=0)return false;
++ float4 hair=_HairMETA.Load(int3(p,0)),brow=_BrowMETA.Load(int3(p,0)),raw=_RawMETA.Load(int3(p,0));
++ if(cov(hair)&&hair.x<depth)return false;
++ if(cov(brow)&&brow.x<depth)return false;
++ bool rawBody=cov(raw)&&round(raw.y)>=8&&round(raw.y)<=11;
++ return !rawBody||raw.x>=depth;
++}
+ FeaturePacket19 CountPacket19(int2 p,int eye){
+- FeaturePacket19 packet=(FeaturePacket19)0;float h[8];for(int i=0;i<8;i++)h[i]=0;float2 mean=0;float total=0;
++ FeaturePacket19 packet=(FeaturePacket19)0;float h[8];for(int i=0;i<8;i++)h[i]=0;float2 mean=0;float total=0;float irisNearest47=1e20,irisDepth47=0;
+  for(int k=0;k<16;k++)for(int f=0;f<3;f++){
+   FeatureSample583 s=LayerSample19(p,eye,k,f);if(s.support<0||s.feat<=0||s.weight<=0)continue;h[s.feat]+=s.weight;
+-  if(s.feat>=2&&s.feat<=4){float3 d=s.rest-_Centres348[eye].xyz;mean+=s.weight*float2(dot(d,_AxesX348[eye].xyz)/_AxesX348[eye].w,-dot(d,_AxesY348[eye].xyz)/_AxesY348[eye].w);total+=s.weight;}
+- }
+- if(total>0)mean/=total;packet.a=float4(h[0],h[1],h[2],h[3]);packet.b=float4(h[4],h[5],h[6],h[7]);packet.uv=float4(mean,0,0);return packet;
++  if(s.feat>=2&&s.feat<=4){float3 d=s.rest-_Centres348[eye].xyz;mean+=s.weight*float2(dot(d,_AxesX348[eye].xyz)/_AxesX348[eye].w,-dot(d,_AxesY348[eye].xyz)/_AxesY348[eye].w);total+=s.weight;float2 centre47=(float2(k%4,k/4)+.5)/4-.5;float distance47=dot(centre47,centre47);if(distance47<irisNearest47){irisNearest47=distance47;irisDepth47=s.depth;}}
++ }
++ if(total>0)mean/=total;packet.a=float4(h[0],h[1],h[2],h[3]);packet.b=float4(h[4],h[5],h[6],h[7]);packet.uv=float4(mean,irisDepth47,FinalIrisCellVisible47(p,irisDepth47)?1:0);return packet;
+ }
+ [numthreads(8,8,1)]void CountFeatures19(uint3 id:SV_DispatchThreadID){if(any(id.xy>=(uint2)_ROI348.zw)||id.z>=2)return;int2 p=_ROI348.xy+(int2)id.xy;_FeatureCounts19[PacketIndex19(p,id.z)]=CountPacket19(p,id.z);}
+ bool BeforeIris19(FeaturePacket19 a,int2 ap,FeaturePacket19 b,int2 bp){
+@@ -134,9 +144,9 @@
+  if(ac!=bc)return ac<bc;if(a.uv.x!=b.uv.x)return a.uv.x<b.uv.x;if(a.uv.y!=b.uv.y)return a.uv.y<b.uv.y;return ap.y!=bp.y?ap.y<bp.y:ap.x<bp.x;
+ }
+ bool IrisAllocated19(int2 p,int eye){
+- FeaturePacket19 own=Packet19(p,eye);if(IrisCount19(own)<=0)return false;float area=0;int rank=0;
++ FeaturePacket19 own=Packet19(p,eye);if(IrisCount19(own)<=0||own.uv.w<.5)return false;float area=0;int rank=0;
+  for(int y=_ROI348.y;y<_ROI348.y+_ROI348.w;y++)for(int x=_ROI348.x;x<_ROI348.x+_ROI348.z;x++){
+-  int2 q=int2(x,y);FeaturePacket19 c=Packet19(q,eye);float a=IrisCount19(c);if(a<=0)continue;area+=a/16;if(BeforeIris19(c,q,own,p))rank++;
++  int2 q=int2(x,y);FeaturePacket19 c=Packet19(q,eye);float a=IrisCount19(c);if(a<=0)continue;area+=a/16;if(c.uv.w>.5&&BeforeIris19(c,q,own,p))rank++;
+  }return rank<(int)floor(area+.5);
+ }
+ 
+@@ -220,3 +230,4 @@
+ [numthreads(8,8,1)]void UnpackA(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];_Output348[p]=r.colour;_Owner348[p]=r.owner;_Intrinsic348[p]=r.intrinsic;_Visible348[p]=r.visible;_HistA348[p]=r.histA;_HistB348[p]=r.histB;_Surface348[p]=r.surface;_Pigment348[p]=r.pigment;}
+ [numthreads(8,8,1)]void UnpackB(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];_Audit348[p]=r.audit;_Domain348[p]=r.domain;_Bary348[p]=r.bary;_SupportMeta348[p]=r.supportMeta;}
+ [numthreads(8,8,1)]void Merge(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];if(r.control.x<.5)return;_OldDomain[p]=r.domain;if(r.control.y>.5)return;_Before[p]=r.colour;_Colour[p]=r.colour;_Owner[p]=r.globalOwner;_PreparedMeta[p]=r.preparedMeta;_PreparedUV[p]=r.preparedUV;_ResolvedMeta[p]=float4(r.preparedMeta.x,r.preparedMeta.y,r.preparedMeta.z,r.globalOwner.w);_ResolvedUV[p]=r.preparedUV;}
++

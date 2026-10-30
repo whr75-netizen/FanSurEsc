@@ -1,0 +1,40 @@
+{
+  "counterAPI": "UnityEngine.Profiling.Profiler.GetTotalAllocatedMemoryLong",
+  "counterIsWindowsWorkingSet": false,
+  "endpoints": [
+    {
+      "experiment": "continuous46",
+      "point": "FINAL_EDIT",
+      "utc": "2026-10-30T19:55:21.0029839Z",
+      "allocated": 1628792522,
+      "rtCount": 30,
+      "rtRuntimeBytes": 114517796
+    },
+    {
+      "experiment": "continuous47-counts",
+      "point": "FINAL_EDIT",
+      "utc": "2026-10-30T20:16:11.7433007Z",
+      "allocated": 2001161288,
+      "rtCount": 30,
+      "rtRuntimeBytes": 114517796
+    }
+  ],
+  "differenceBytes": 372368766,
+  "differenceMiB": 355.11852836608887,
+  "correctionHistory": "Earlier +2GB-increase interpretation was wrong. 2001161288 bytes is final total, not delta.",
+  "remainingOwnerUnknown": true,
+  "latestUnityCounterRead": "40 second timeout; execution result uncertain; not retried here",
+  "newPlayGCOrCleanup": false,
+  "sources": [
+    {
+      "source": "MEMORY48/REPORT_KO.md",
+      "sha256": "43afa9c93dd761c91f41c4e989b4ab17fb123f232d5146b55a53d94c87e6e334",
+      "bytes": 7382
+    },
+    {
+      "source": "MEMORY48/MEMORY_TIMELINE.json",
+      "sha256": "e4dc80b4040659367f2f52a55eee3b03dc56aae4b30990b64e9d363ad77b9d2e",
+      "bytes": 17383
+    }
+  ]
+}

@@ -1,0 +1,1011 @@
+{
+  "standaloneBoundedPacketReplay": true,
+  "fullUnityCaptureOrRestorationReplay": false,
+  "sourceAliases": {
+    "CONTINUOUS47": "%USERPROFILE%/Documents/Codex/2026-10-27/task-2/render-fix21/continuous47-counts",
+    "EXP27": "%USERPROFILE%/Documents/Codex/2026-10-27/task-2/render-fix21"
+  },
+  "excluded": [
+    {
+      "source": "CONTINUOUS47/CAPTURE_DONE.json",
+      "sha256": "00337cc72e33065065fc4a0d5bd68576dfc34fc5502eb7d0c147a7df43286bf4",
+      "bytes": 209
+    },
+    {
+      "source": "CONTINUOUS47/CAPTURE_STARTED.txt",
+      "sha256": "fd5fc36e2bf9cc89ec660eb6baeba0d857cf5d2671397194655988be652c50c7",
+      "bytes": 89
+    },
+    {
+      "source": "CONTINUOUS47/FILES_BEFORE.json",
+      "sha256": "a06b05183e2e20b5f5319e84f8683cd4a7eea517aa029389b644cde502de71b8",
+      "bytes": 2647
+    },
+    {
+      "source": "CONTINUOUS47/FINAL_STATE.json",
+      "sha256": "bf84587d05d95957a4cd9332a01bddb94d48e99bfa0c5ea4f79069f00e54727e",
+      "bytes": 5426
+    },
+    {
+      "source": "CONTINUOUS47/INDEX.html",
+      "sha256": "e60d44a08df2669d625e480d0b94d5cc31487f35c92c8a2141f2ddc674814e0b",
+      "bytes": 3177
+    },
+    {
+      "source": "CONTINUOUS47/MANIFEST.json",
+      "sha256": "1b0cd661235b18b49286ba0a52d7ff84d5f3c96fdb53fbea3b9571f98e2171da",
+      "bytes": 22725
+    },
+    {
+      "source": "CONTINUOUS47/publish_report.py",
+      "sha256": "927855ba4b75a58f094d3fade8b5beb1ddf4620190d7f1ae8578a765311adba7",
+      "bytes": 13933
+    },
+    {
+      "source": "CONTINUOUS47/Ready.cs",
+      "sha256": "e2048e43edf1dbb6e6bc7e5526b1505f3be2d5c2a1aa1f6cfa4166c5cb149717",
+      "bytes": 2110
+    },
+    {
+      "source": "CONTINUOUS47/READY.txt",
+      "sha256": "19606ac40d5053ed47add717e30845546a1aaa26e86be77338ce340bbf703281",
+      "bytes": 94
+    },
+    {
+      "source": "CONTINUOUS47/RUNTIME_BEFORE.json",
+      "sha256": "34eb37949fa3b6a25fc6b1e2cd8c45c8abac625846bee709e4d9fc87b65960f0",
+      "bytes": 4906
+    },
+    {
+      "source": "CONTINUOUS47/SCENE_AFTER.ndjson",
+      "sha256": "8004608b264cd862901a707d49f8f10a7627922be848e35ce61c1a57a6994e83",
+      "bytes": 2176844
+    },
+    {
+      "source": "CONTINUOUS47/SCENE_BEFORE.ndjson",
+      "sha256": "6de1b50a527c70536fcfed6baba46631fc880d0e5060113f7b5f700bd67ff97f",
+      "bytes": 2181537
+    },
+    {
+      "source": "CONTINUOUS47/STOP_REQUEST.json",
+      "sha256": "b10b0d53bfbfc0b6a464ac0dfc502b03fda99c4c65be58960b212818d24ee3c4",
+      "bytes": 2231
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/brow-meta.bin",
+      "sha256": "04fe3b0f435bdb70ac1e29c65b950b698454e7a6cc8c2ea645cc1c52ff9b5c83",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-audit.bin",
+      "sha256": "97afbb0e8ebef02d45762d0a7ea2e2db1da61408c540965d49b8360e1e99069f",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-histA.bin",
+      "sha256": "7350729d7e049930d4a57697c4385740c7fc56fc3dd63d35b67488288c375f6e",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-histB.bin",
+      "sha256": "027bc775213edbe4a8fd7de11e97c70afeed7dcddc7ef581a99b044eed0d291a",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-intrinsic.bin",
+      "sha256": "251fb962fe10fe155f302275669d61f678926a55bb7b6924e7f3503a63e05b4c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-output.bin",
+      "sha256": "c9b0ef316a5d291b6df19861fc4fad61029e869f23c8de3549c5943a5858398c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-owner.bin",
+      "sha256": "797e6f9554275eea72bd0efbbd67cd7d4a6c7089ab12a276cf5fff9b71839a84",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-pigment.bin",
+      "sha256": "4a51909f8763cae48b3ae230ba6644b557172a7ced0fb3aabc2c089e37473988",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-supportMeta.bin",
+      "sha256": "770fa4ada338c987c2fc2a7e62dc423b7e3c35b62a339be33614823c4ae9aa1b",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-surface.bin",
+      "sha256": "a0f63a2c6d0f0ebe930929ea4fdacdb92229189daa62433ec5479fbb872d083a",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/eye-visible.bin",
+      "sha256": "8950f30b5d0f516b056a33ea7f40a46fafd8292ba5d27e618398afacec24ea7e",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/FeatureCounts19.bin",
+      "sha256": "2f0dc5a40c885f784eb87a018b61922d9f7fd60aed278a9e258149078452a816",
+      "bytes": 12304
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/final-native.bin",
+      "sha256": "ee4ad9a8688d7d0c8402d45bc0dd345013c3047da48649c36b2191d2124cc802",
+      "bytes": 8200
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/hair-meta.bin",
+      "sha256": "669f969567ba42dae58baeadd91ce09f465b0a60204fe7f7a1910db219edd724",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/head-colour.bin",
+      "sha256": "c9b0ef316a5d291b6df19861fc4fad61029e869f23c8de3549c5943a5858398c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/meta.json",
+      "sha256": "32757b166f4b618bb91899158d6e43fff0d66481bf28373f8e228a24bb6e8d89",
+      "bytes": 5751
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/raw-meta.bin",
+      "sha256": "149c98b73e13b177e5a002f34e79539c1603adfbfda9f7ba0e86bd89d0f10b30",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S0META.bin",
+      "sha256": "342210e4383e5a54ffcd7bfe5f0e9932225368179ec7661deda939e015e73f06",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S0POINT.bin",
+      "sha256": "da1e56d53f46543553f3522d1aad47c86921c2b9b8d447ffd9c2acdb6eeffc83",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S1META.bin",
+      "sha256": "909e054ed9d8c71aaf0d8a939fc600ca2cae01e28ea1461bf9afd4528140e61e",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S1POINT.bin",
+      "sha256": "b5788d72e16036a82666a9ecd98d738c795b94219eedc84565b27c8acc20a202",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S1UV.bin",
+      "sha256": "3d180deaf89d70637b4d6e7ef9606b3d71f63aa91ca60b8eb12fbbc54b317605",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S2META.bin",
+      "sha256": "0201bfbf3c64d68978a5fa072be39083e493f8d79e9f584ffbb94ea446c9cc85",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S2POINT.bin",
+      "sha256": "517eee888ad1f1cc25b891b8a77f3be34bdd68f12a74ed2f80b2c0b1c85f7a44",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S2UV.bin",
+      "sha256": "0949907603af5a19bd096e5e50d782e4b79c9c3d1a5ac7efac27d6971bbcc250",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S3META.bin",
+      "sha256": "a732eaa75a07f58381f2766f084864dc1eac0283529678dd34eb92ebfabd6b18",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S3POINT.bin",
+      "sha256": "0dbbc5fc8469ec82fd6812ae8441e419c407f66161682bbaae3f40d86519a3b9",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S3UV.bin",
+      "sha256": "94f6c9c2c73aa5894eb3742b8ff65a292bc6e959a05f7da3d3f60b9b4f33db17",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S4META.bin",
+      "sha256": "febe5fa96a5fdef4690801962ddbb73b3d568a438279fffa585cc133c2837b5a",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S5META.bin",
+      "sha256": "9d64c78c36a59640a63cc490086e498627b1051c320ab7ff1277998bb18110f1",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/00/S6META.bin",
+      "sha256": "3138d205210c9f6f86b1db4878e273aececf0242a9b10f3bcc7181e53625f905",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/brow-meta.bin",
+      "sha256": "131de94dc04a4874a81674bb4e590b598c08c2a4ed9d8c16617bc2d6d6c63d5c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-audit.bin",
+      "sha256": "e979f55b3c0340ac05d0cc6815b1b47162fbb875ebd8bdd26105d1b141e83bd4",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-histA.bin",
+      "sha256": "fdecc6a619003e8d0ef723a6a21bc6ffab196936aefcf4118b7c216583310297",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-histB.bin",
+      "sha256": "44165cc665e4051e3be1ff4703fc3e27389dff895e14080782e03646131db103",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-intrinsic.bin",
+      "sha256": "44a21ee25f743f71a945ecf54af9a30f4c9feee85642d9bb801215a2a03b9850",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-output.bin",
+      "sha256": "583ba2bced334bc4ade55eb60d46bf1dc2a505edf11cc6873c30c0f72367f145",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-owner.bin",
+      "sha256": "722c34d4cc2700502ad1f9d19e17a10a1d028253e723e8bbae2a2d80d69f7b4e",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-pigment.bin",
+      "sha256": "eaff89e7943c839a4cbe5e954fcaa779e3de8d4531c868bae0b75270cab90f7d",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-supportMeta.bin",
+      "sha256": "6ebc7ca115d210a3614172e14a355e84600fb7be7aba8a9a85ba3b652e2022e4",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-surface.bin",
+      "sha256": "9782fa6283dd3de3c486eafdca3b997496bd1a0e13d74b821c9c442f1703d5f0",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/eye-visible.bin",
+      "sha256": "ff8a5a075925fbcb20cd14f6389480b401231f1a590098df30203cebb07f93a0",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/FeatureCounts19.bin",
+      "sha256": "2aae7a6fe0c2ea77aeb00f8a44a44f96f98958d443807fc038bba7f779334846",
+      "bytes": 12304
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/final-native.bin",
+      "sha256": "36216a02ec3ec5a0d1f4dd446c407e3c82777865b29df68db8b4920f871f129e",
+      "bytes": 8200
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/hair-meta.bin",
+      "sha256": "873378163e5722e4eba2139867cec6224c8bca311cb0a7e140c6b6c5ba0dad1b",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/head-colour.bin",
+      "sha256": "583ba2bced334bc4ade55eb60d46bf1dc2a505edf11cc6873c30c0f72367f145",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/meta.json",
+      "sha256": "57502188cec434bce1fb48af40a267ae44f989db9da0cbfacb97678ecfba37e5",
+      "bytes": 5753
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/raw-meta.bin",
+      "sha256": "ad4b2b4a897dad9f97b153ce693b7b477e0c776218336d00605ca812a6709cbf",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S0META.bin",
+      "sha256": "88e3a23f899410c8cadd0d10527b337d2cb3d09ea76cb1d3c081700145f9b168",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S0POINT.bin",
+      "sha256": "0cc59c9cc90666bc06d2677e33f2fa74bf96c611b80ac52720169613f704a92c",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S1META.bin",
+      "sha256": "5f262884fe707836f4e817209a139266032252d7be94e52894f56940ae3e1c60",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S1POINT.bin",
+      "sha256": "2b43948630e344d4670e9dc53c6da245587d45b248dad42dc3f1bd819ea71c27",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S1UV.bin",
+      "sha256": "415f2080ccfd05a6e27916684d6b352bddb221eacb82bf6b92fc31995b0a2629",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S2META.bin",
+      "sha256": "b1ca2c308f6246db5b1e31ebcb0d456eab4b90d1461cae928589b53093f5e49d",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S2POINT.bin",
+      "sha256": "21692e786bdf3d87af253bc37db221481841b1e84cce62e0efc53069b3418290",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S2UV.bin",
+      "sha256": "813fa961401f9e7504a8e15effbceb0061e52dfac9b39ee98c0c6b3835951bd9",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S3META.bin",
+      "sha256": "a37117441527288c7b38af6e09556e21e8e48d0e95ddc6e5b1f36317d5f76c88",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S3POINT.bin",
+      "sha256": "b88cbf853fa0541e8a6883b2c920dbfc31b79048f4bb03954917f51e1cc4e9ea",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S3UV.bin",
+      "sha256": "1632a1a3a76d8a860be481f4166b67e04af1c468eb2c90a040bcad711c18ea58",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S4META.bin",
+      "sha256": "eb094825e02739615df58774485854bddbdeb41702e305dadbfbf101445f75fb",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S5META.bin",
+      "sha256": "042e20172c5bfb38f8f717578c344d122c6d6263a8eb41585a3c7b28219210ec",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/01/S6META.bin",
+      "sha256": "040b23c35f5460a07b2aa4589953990c240339ce441efa956d9299a99c2c54d1",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/brow-meta.bin",
+      "sha256": "131de94dc04a4874a81674bb4e590b598c08c2a4ed9d8c16617bc2d6d6c63d5c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-audit.bin",
+      "sha256": "ed35e803760f6ad5ddeb095f115d6ac08d570044f45f6a2f50f73273100ca083",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-histA.bin",
+      "sha256": "5716502d2e5b1de492b44d6b8e5003ad72652330fc1b2960cd37bc85a8a9b08b",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-histB.bin",
+      "sha256": "e5ff40d24228d1836743c16185e7761af9de45e675ed3ed3f9d9e446c6fcb6f7",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-intrinsic.bin",
+      "sha256": "59e5365af42f00741c7d69a635c99a42c795a2ce58252cfd8c27313bf9a05a6e",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-output.bin",
+      "sha256": "e67f055f3083a8f4eb17d86b918b9569250c9db9a9a9feee504e1b9da5b56f7a",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-owner.bin",
+      "sha256": "4e587fc25c6a8121f173841a6555eda3a368a0ac93b05e16ae8a9686ae58eada",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-pigment.bin",
+      "sha256": "293c38383a6794173e84ea1eac2100a8dcbf2f9c5fd58eef8c37e56a1d1942e0",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-supportMeta.bin",
+      "sha256": "01fbd329f24dd95b3119bd872534d98a3e64da7d1982abaa48c00145d88d1847",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-surface.bin",
+      "sha256": "b55cebfb5b62460fafea80b1121ff4949e22a4599ec63f61c704cd0bce45dbd3",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/eye-visible.bin",
+      "sha256": "c359b91059fab095c6b0c14b840e3d8c411570d987cc0d2530ab4022f48b28d0",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/FeatureCounts19.bin",
+      "sha256": "57c8689076b36dd96b36dacfd53e9d306c7458d830170512ed20219f78963a5a",
+      "bytes": 12304
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/final-native.bin",
+      "sha256": "4a1c0f3160e5f53d20b8caa6c2b81ce82b10e5b793da05bdce2a64151a440d2a",
+      "bytes": 8200
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/hair-meta.bin",
+      "sha256": "038482adb6e2214a7ed4c7528f3729476fd6b1e13110d2005909ad788ec27b0a",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/head-colour.bin",
+      "sha256": "e67f055f3083a8f4eb17d86b918b9569250c9db9a9a9feee504e1b9da5b56f7a",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/meta.json",
+      "sha256": "f56c65573aebce65a3f95582b48aacfe1941c42876e3113b64a2af9a217e7486",
+      "bytes": 5758
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/raw-meta.bin",
+      "sha256": "d01f9c0b87f08301d1c97a4f0798fbfc5cc890ae93faad700135ccdcaeaee7d3",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S0META.bin",
+      "sha256": "51d09bc11b2bf09ef7d1cb78f6f4cc650b21d1fdf3169ee3b62a8ad9b294bafc",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S0POINT.bin",
+      "sha256": "79e37bfd6bf60a23483bc1135defe11e344d335e133515e35189b543fd854054",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S1META.bin",
+      "sha256": "8dfa81905770343a58021d6bce45618bc10a7137ec0aa0dec519384a1b0804fe",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S1POINT.bin",
+      "sha256": "d2ad117d165bd59b5522afd545181cbcc23f8a497ea870ca8f4347f9c68b7bde",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S1UV.bin",
+      "sha256": "fd2d2de84164f80e16fa1e38fd8b653964ae5e3d6c491b7bdcecc103bc5d8cd0",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S2META.bin",
+      "sha256": "0ee5e37d20efc73ba685c1d6f35387d48f5c8bec12ef40f453c99ef34c78d2c4",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S2POINT.bin",
+      "sha256": "76b72ba64e48dfb8a7d0e60009c5c35732754013bb733cc86170bf1a8e4d337e",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S2UV.bin",
+      "sha256": "a4121a961496d0a8fdc234aefa3200dbf05eb967f804e5b69d424d9655e1185c",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S3META.bin",
+      "sha256": "80d31c3011e24bbe96923027d59c00791fbe741d540a9d875a9b47a406221721",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S3POINT.bin",
+      "sha256": "61e5d7933d271862d124f5df341ad06e015aaa19748101f8847b4f537c1f2798",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S3UV.bin",
+      "sha256": "331f8e6dbfaec8d8bef756f7f3bdcaa96ad6b44a8d0f7ee0c3712ee38f25ceb2",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S4META.bin",
+      "sha256": "9323205e1b2ab747cbb6fb3344a0e514674b4612d470967b1315155619fa7dd0",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S5META.bin",
+      "sha256": "12aa449869f70311b3d47a864e735b39506b6783ef6d59f2cb272246f8e59b20",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/02/S6META.bin",
+      "sha256": "332540c55458ddc662d8cb520c2306ad9862499a45a25d4771b603ad48c18014",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/brow-meta.bin",
+      "sha256": "131de94dc04a4874a81674bb4e590b598c08c2a4ed9d8c16617bc2d6d6c63d5c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-audit.bin",
+      "sha256": "80e15305abd4b328d58d806ac57c3543b65f0ca34c158558f5b10bbe8f0f8b0c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-histA.bin",
+      "sha256": "4c5e05f732fdcd3ee464ab1f541b812c9c88195de81a35cca2b1d0da97bb29df",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-histB.bin",
+      "sha256": "6692ad9fe5202c52ba33a3100ac44b5a5bb41fe127ea43dc2425fe324695353d",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-intrinsic.bin",
+      "sha256": "6618fa762ac63319f103ad2d2305639a19b43769be75303427c0b7b5d4b689fe",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-output.bin",
+      "sha256": "dfded5f8efc369cacc5112b8a8ec578efaff2190f55e6937d50bc5e0ef4cddab",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-owner.bin",
+      "sha256": "8c8745245eaed90be0a3d1384fc903940eb4cac43f53ed15502273c3b687d45c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-pigment.bin",
+      "sha256": "c009b96c27847a61e7aa6b4e302ebd23f5aef0bc61bd89a0e1ed909e54404253",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-supportMeta.bin",
+      "sha256": "212683f4f3956ba335026a35bfca40978c20f15b0315b41224e38f4ff2cada13",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-surface.bin",
+      "sha256": "3e4e30ec65110624ce26ae6361c4e03fcc373b385dac53345df08ce2f17d4a22",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/eye-visible.bin",
+      "sha256": "6c93cda0c308198ba7c167a9ce7466fb048c7e1ca785a0b8e7d4fa56e9953f85",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/FeatureCounts19.bin",
+      "sha256": "3a0e05bf1525905630f32938ea401a65a79bdbbe2d9f8d823cb99f9e18d7f4e2",
+      "bytes": 12304
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/final-native.bin",
+      "sha256": "04f09c9b0a2523faa9879531184b79aee219edf2961635025522d2d11633c542",
+      "bytes": 8200
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/hair-meta.bin",
+      "sha256": "493868ad3f3a9dfb3786d246841b2d32f1ea6849fbe34c22a025666a2e09d16a",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/head-colour.bin",
+      "sha256": "dfded5f8efc369cacc5112b8a8ec578efaff2190f55e6937d50bc5e0ef4cddab",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/meta.json",
+      "sha256": "5e62b60db27a56285bba67c06ac5b0dbcefbde2feb882c19e11d436a68d39feb",
+      "bytes": 5755
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/raw-meta.bin",
+      "sha256": "5413f3f4d9989dc7276f7d5d4d052828c45ce9823d9b69c29830919358b97ea0",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S0META.bin",
+      "sha256": "15b80069b5873f728222019c5406dcaf82b930c38c1984153db8251df5ee735b",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S0POINT.bin",
+      "sha256": "c1da702b2124898b2f9e9c2b9f904c520f7a10d0a94d76c06c7a5ce10f617226",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S1META.bin",
+      "sha256": "9c1a65828e74784c17421f9a3790b1d31d1b5c767dced9eed9ec79ec88c47b2c",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S1POINT.bin",
+      "sha256": "ad0e5e98f2448d622588dd93511abff3853650f14ac9624acf42e63fee206dee",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S1UV.bin",
+      "sha256": "f11734951332a4a96ccb581f9ac524ab2357f3a88cc9f482c6035c25a8b307cb",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S2META.bin",
+      "sha256": "8a1abb86d7b666909c747d807c8fa9183ad2c55a43493c301714b07b7797a6d4",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S2POINT.bin",
+      "sha256": "6cbc743dabdfa2c942c2013be8bc3c39f760183f095a03e5d91a1a24a32b345b",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S2UV.bin",
+      "sha256": "260c9b4de4f196d8512bf3465102aca93291645b9b0884d27d9a1f2c7c317e45",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S3META.bin",
+      "sha256": "a0744427902e1b31d28b3cf30f60ab5bb2dd96fea577856b47f9b09da56b3735",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S3POINT.bin",
+      "sha256": "74cb43185023db9e07c4667fc9419f0cb3a472fb26663b3ae48fd2637e704798",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S3UV.bin",
+      "sha256": "c3c5dc3b85ac46ab5929e23be6bfa7b6fb62acc71384fb746113a31bcf436a9d",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S4META.bin",
+      "sha256": "e44319349eef4241a937b42cce612cef84eacf0e0045ecb049d47857002bb62f",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S5META.bin",
+      "sha256": "05b8208608a991531f61762ce316cd64cefcba7316a2bd6a3561ad50a6d5b84b",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/03/S6META.bin",
+      "sha256": "3067a7ec475b33e98aa0b5a28d2024f16e7e095ae51838856a77cb5efc62881f",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/brow-meta.bin",
+      "sha256": "9db6919e101733e34de74db75a7af6310109140bc7223ddf9218d01846b8971d",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-audit.bin",
+      "sha256": "bbfa314628b8fb606a4a7bf0d7a84bbdc549fc21992db152a42982f907650985",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-histA.bin",
+      "sha256": "b0903407f29706fb1f13766ac30b74b16a92b294617d9c89532acbefcd1b6093",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-histB.bin",
+      "sha256": "856fcc8e32e28ee129f80b573831e6a3d69b9edbbc8296552689cb2022ff17ad",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-intrinsic.bin",
+      "sha256": "70b7862c98630496905b7d07ab41162c123e59c4a8e3b3d3627ea074a6735002",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-output.bin",
+      "sha256": "be199a8b304b5f697228b1e8684f1b0c236fd0eb534fe31d54e703003575e412",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-owner.bin",
+      "sha256": "693fa1e7d73bdba14bf7607a4367ec28ecc92cd3b51337cc37738665fdf7c509",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-pigment.bin",
+      "sha256": "165539ae3b293a0d75780ca75d3da6bca72a419ebae685745719779ddd3a87f8",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-supportMeta.bin",
+      "sha256": "3e629005c85fc1ee59d2358585a3bab48f58625a21d94ac4e3300f1785c34c9f",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-surface.bin",
+      "sha256": "1e74126524fe61a3787e4ab8920b2ad47103a03de2859bc7234a81845e6e160a",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/eye-visible.bin",
+      "sha256": "716f701a5c11d250681a20a20f1f240e32859a8d35f6f9d31efb7b0c55a19fa6",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/FeatureCounts19.bin",
+      "sha256": "491085e4fe8da01ef88301efd952c4980f98e89b02807d76329094386fba7bea",
+      "bytes": 12304
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/final-native.bin",
+      "sha256": "bd8ba8c34bb38184a14258816f8a3bbde532e1e2e25a24072c6a467edce68d0b",
+      "bytes": 8200
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/hair-meta.bin",
+      "sha256": "2ab65af32d3308255572c2be3ea6a90431ba5c60c8a996fc08e03551752ce8ea",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/head-colour.bin",
+      "sha256": "be199a8b304b5f697228b1e8684f1b0c236fd0eb534fe31d54e703003575e412",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/meta.json",
+      "sha256": "0a229c84d59630c853814e4e97ad92166c8f9c35d69f4ec87ba2e9fd87713ebc",
+      "bytes": 5752
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/raw-meta.bin",
+      "sha256": "e91bd00b3b53678179a7ec2f0322154430e171ea9c8535d56e164f1aa00c4c16",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S0META.bin",
+      "sha256": "090c36185f2dd02f53b83549b5fb91797f16f4999d504ff74e87edd51b4d7244",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S0POINT.bin",
+      "sha256": "f0ae0dcae214362e84268e08f7a35a3962dc18bf861c490501ff59fc71b65890",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S1META.bin",
+      "sha256": "48e6c438034f3e85fee831b434d50351e1ef47f634b2c40a6e3b295c84607bc9",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S1POINT.bin",
+      "sha256": "9159f6f8299a4eb67526d63c3d98d6e0b956204678dd9b0c9fe1c595420d8d4c",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S1UV.bin",
+      "sha256": "61d7558ee27825541d1fe62e1d4d8145aea34294283914722943bff4d169bd91",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S2META.bin",
+      "sha256": "83eb0b9b81f5d6fa2369f1c4717c6f10e7b007728448f77f70827ecad3f80c3c",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S2POINT.bin",
+      "sha256": "d0de1fb78b24b4fcef32484e4d8623ab2c640cc59769c9d6c6068ff40f764dd9",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S2UV.bin",
+      "sha256": "d9cff6baaf199f8612029e5893dc23bcb22af44d8ed92b2df94e91bbdbc0b35b",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S3META.bin",
+      "sha256": "e9758d9985b604e1d31da2a8c4f1f2115180cadf631a7cac26229f74b3124447",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S3POINT.bin",
+      "sha256": "7a22485b03da42c7f536c5b659cb231422c36b5ecc193864231109caad6343c4",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S3UV.bin",
+      "sha256": "04b9b1326e4d867127de31445cd0bd50c066a7601291803c2fe13d3e0f8b49f5",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S4META.bin",
+      "sha256": "d306b0b720e144c1e1dc521fd5f4800125cf1b6f101f3094a3c3d8db1af74580",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S5META.bin",
+      "sha256": "f8849558a9d823bd0d89339810fda0a5ef5be03f80fd3012b7c80db6d37f7d58",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/04/S6META.bin",
+      "sha256": "865786cd8da6c591b8a6b900baaf7d73ecc2952b006db2ef128d271b3fbe9648",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/brow-meta.bin",
+      "sha256": "131de94dc04a4874a81674bb4e590b598c08c2a4ed9d8c16617bc2d6d6c63d5c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-audit.bin",
+      "sha256": "cbb6f6ff46146ac7515e3b6607bd0e69625dd631027542618ee3e0497337386e",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-histA.bin",
+      "sha256": "57dfafde6f250deac0c3f06ac35dc2ede7cc8f171b1e68664ef79e0e4b6b1c17",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-histB.bin",
+      "sha256": "1e908f6ff3b1299162eaaf15acfde4d8e63609f798492cefb2e1cc7319491b7a",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-intrinsic.bin",
+      "sha256": "51f7686074cf60fa5b13c5eecde89954884955568701e4742a21e7d49d2bb838",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-output.bin",
+      "sha256": "7834ef6543d179b21830eb59a1ba29a9e90a769bc0e747616d3b2eb03902122e",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-owner.bin",
+      "sha256": "e326f7b2bea978af419e94f6363b980b9b92357564317b1b42afb1f381198671",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-pigment.bin",
+      "sha256": "145ab5ede47605895c8ec11b530e8ada51a0a89700a3578270523ca7dbf34935",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-supportMeta.bin",
+      "sha256": "794edc9bee037b5aaec9f382e663b99871c1ea3504a54c49c8949376dccf84a7",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-surface.bin",
+      "sha256": "7bc0743a55983b2693dec8463f99c16d81a59bef42ed5aaede66cc92f8a032b7",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/eye-visible.bin",
+      "sha256": "7cb12ffdd0f826dadb9361bd1a8699f8701d68951a456481bec2b2f836af250c",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/FeatureCounts19.bin",
+      "sha256": "a84527d7b9dd2871ceab5c54d8e3acc0a81e4812a306b15faa90ce6d2b8d82f2",
+      "bytes": 12304
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/final-native.bin",
+      "sha256": "cddf802890b1a9512e181704eb224842b7fbe2391040628d8c34ac2d5c92736f",
+      "bytes": 8200
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/hair-meta.bin",
+      "sha256": "4219a75374e542682d80f411ceaa5a3224327fbb6b835520cb240b74d6879781",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/head-colour.bin",
+      "sha256": "7834ef6543d179b21830eb59a1ba29a9e90a769bc0e747616d3b2eb03902122e",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/meta.json",
+      "sha256": "089933bd5a82df7620232ea2ecc792ba579aaf88332a95c8d74e4343ce13c962",
+      "bytes": 5754
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/raw-meta.bin",
+      "sha256": "68b4395e34a41ddcfd66b77582a2f4f817920926b48101201726fc48e91da13e",
+      "bytes": 2056
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S0META.bin",
+      "sha256": "1e2551d4e1d1ca5e954f83a728e71b8cd83d91f6fe3b215d1bb18715a902057b",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S0POINT.bin",
+      "sha256": "c7373335e3069dbd21fe40eb912d278518d121be49df3c4066dda8e32421dc7c",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S1META.bin",
+      "sha256": "c047d539089818d8096cf74304a9cc1ffee3a50c95af13f25c9e7714522c0fab",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S1POINT.bin",
+      "sha256": "3768980dfeafbd8b50c97d787313ce8cc6e9ea34fcf14075ea65fc286f044ecc",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S1UV.bin",
+      "sha256": "92f23dd1b5562d60c37b9cefebe81084e3348a57ccc0dcd4d72eeaa265c87ccf",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S2META.bin",
+      "sha256": "d481fcc9cdf06e7455ce801a62dc1cf053d2eb6845fb64795aca566a2c571a56",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S2POINT.bin",
+      "sha256": "8f4e9ac542c6fe6edefc6a675c6c610437113486ad82244c277296ecea24d9f9",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S2UV.bin",
+      "sha256": "5bef6582084eb7d2a9c5c44c0a609b5224842a277e3b60dc80dea9ff556fd502",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S3META.bin",
+      "sha256": "63bedbfa21d645b76da5b2478ccf5944838bcc64cb6a8c3b33c285c3c90cf49b",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S3POINT.bin",
+      "sha256": "febb643e1dfab851c3ff003aecfe344d18048621bc60163e6fb99f2719000580",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S3UV.bin",
+      "sha256": "74238995c4c6efd20fcccb92373151b1fa19be4981de21a1e8bd454abc19d882",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S4META.bin",
+      "sha256": "aaee0fce0638558d21191b05a246667e77b094c0a863c2344e8f2d1a12e5a35f",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S5META.bin",
+      "sha256": "c8cf4f65f476170e7605b7de3fad48083c59d3212a40b5a8902857f0f933778f",
+      "bytes": 32776
+    },
+    {
+      "source": "CONTINUOUS47/frames/05/S6META.bin",
+      "sha256": "efd6493fae8c10d610a18c713d108941127d9909e29910673d78004738d9ab23",
+      "bytes": 32776
+    }
+  ],
+  "notIncluded": [
+    "original VRM/texture assets",
+    "full scene serialization dump",
+    "ongoing memory diagnosis",
+    "Unity executable and active Editor state"
+  ]
+}

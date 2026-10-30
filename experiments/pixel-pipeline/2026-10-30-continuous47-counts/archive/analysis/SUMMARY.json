@@ -1,0 +1,136 @@
+{
+  "sequenceId": "counts47-087454994917423fa13c5fe72eceb7f4",
+  "newSourceNotOld46": true,
+  "frames": [
+    96,
+    97,
+    98,
+    99,
+    100,
+    101
+  ],
+  "actualVisibleEye1": [
+    2,
+    2,
+    2,
+    2,
+    1,
+    2
+  ],
+  "actualVisibleEye2": [
+    2,
+    2,
+    2,
+    2,
+    2,
+    2
+  ],
+  "maxCPUvsGPU": 5.960464477539063e-08,
+  "packetBytesTotal": 73728,
+  "totalTextureReadBytes": 2973696,
+  "packetGetDataMS": [
+    1.0163999977521598,
+    4.024900001240894,
+    4.062199994223192,
+    6.753399997251108,
+    6.183399993460625,
+    7.755799997539725
+  ],
+  "allRenderSerialStable": true,
+  "productIntegrated": false,
+  "candidateCompiledOnGPU": false,
+  "focus": [
+    {
+      "frame": 96,
+      "xy": [
+        223,
+        52
+      ],
+      "IrisCount": 6.0,
+      "whiteCount": 2.009413719177246,
+      "lineCount": 1.104411244392395,
+      "cost": -3.990586280822754,
+      "rank0based": 1,
+      "originalSelected": true,
+      "candidateSelected": true,
+      "finalGatePass": true
+    },
+    {
+      "frame": 97,
+      "xy": [
+        223,
+        52
+      ],
+      "IrisCount": 6.0,
+      "whiteCount": 2.0,
+      "lineCount": 1.4077043533325195,
+      "cost": -4.0,
+      "rank0based": 1,
+      "originalSelected": true,
+      "candidateSelected": true,
+      "finalGatePass": true
+    },
+    {
+      "frame": 98,
+      "xy": [
+        223,
+        52
+      ],
+      "IrisCount": 5.0,
+      "whiteCount": 2.005192995071411,
+      "lineCount": 2.106201171875,
+      "cost": -2.893798828125,
+      "rank0based": 1,
+      "originalSelected": true,
+      "candidateSelected": true,
+      "finalGatePass": true
+    },
+    {
+      "frame": 99,
+      "xy": [
+        223,
+        52
+      ],
+      "IrisCount": 5.0,
+      "whiteCount": 2.0,
+      "lineCount": 1.0649356842041016,
+      "cost": -3.0,
+      "rank0based": 1,
+      "originalSelected": true,
+      "candidateSelected": true,
+      "finalGatePass": true
+    },
+    {
+      "frame": 100,
+      "xy": [
+        223,
+        52
+      ],
+      "IrisCount": 5.0,
+      "whiteCount": 2.0,
+      "lineCount": 2.101174831390381,
+      "cost": -2.898825168609619,
+      "rank0based": 2,
+      "originalSelected": false,
+      "candidateSelected": true,
+      "finalGatePass": true
+    },
+    {
+      "frame": 101,
+      "xy": [
+        223,
+        52
+      ],
+      "IrisCount": 5.0,
+      "whiteCount": 2.0,
+      "lineCount": 2.0832433700561523,
+      "cost": -2.9167566299438477,
+      "rank0based": 2,
+      "originalSelected": false,
+      "candidateSelected": false,
+      "finalGatePass": true
+    }
+  ],
+  "remaining": "visibility-only gate still permits diagonal eye1 at101; joint cluster/state cache needed for shape continuity, rotation/blink not tested",
+  "captureCaveat": "synchronous GetData/WaitForCompletion stalls GPU/Editor; same render serial proves no interleaved frame, not zero timing perturbation; controlled Step sequence is not a wall-clock gameplay benchmark"
+}

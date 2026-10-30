@@ -1,0 +1,37 @@
+from pathlib import Path
+import base64,json
+from pngio import write,zoom
+R=Path(__file__).resolve().parent;load=lambda n:json.loads((R/n).read_text(encoding='utf-8'));data=load('INPUT.json');legacy=load('PALETTE_LEGACY.json');fixed=load('PALETTE_DISTINCT.json');summary=load('SUMMARY.json');mapping=load('MAPPING_AUDIT.json');cases=load('RESULTS.json')['outputs']
+labels={'pattern-unlit':'원본 패턴 · 무조명','flat-unlit':'단색 입력 · 무조명','pattern-legacy':'원본 패턴 · 같은 기존P','flat-legacy':'단색 입력 · 같은 기존P','pattern-distinct':'원본 패턴 · 분리P','flat-distinct':'단색 입력 · 분리P','flat-unlit-inherited-fallback':'실패 재현 · 단색 무조명+10셀 원색 통과','flat-legacy-inherited-fallback':'실패 재현 · 단색 기존P+10셀 원색 통과'}
+# Greys represent Q labels only, never a hair albedo or final palette.
+rgba=bytearray(b'\0\0\0\0'*(64*80));maskRGBA=bytearray(rgba)
+for c in data['cells']:
+ if not c:continue
+ x,y=c['index']%32,c['index']//32;v=round(c['Q']/3*255)
+ for dy in range(2):
+  for dx in range(2):p=((y*2+dy)*64+x*2+dx)*4;rgba[p:p+4]=bytes([v,v,v,255]);maskRGBA[p:p+4]=bytes([255,255,255,255])
+for n,img in [('Q-labels',rgba),('hair-mask',maskRGBA)]:write(R/(n+'-1x.png'),64,80,img);write(R/(n+'-8x.png'),512,640,zoom(img,64,80,8))
+def gallery(names):
+ return'<div class="grid">'+''.join(f'<article><h3>{labels.get(n,n)}</h3><img class="native" src="{n}-1x.png"><a href="{n}-8x.png"><img class="head" src="{n}-8x.png"></a></article>'for n in names)+'</div>'
+table='<table><tr><th>동일 입력의 분기</th><th>입력RGB8</th><th>Q 점유</th><th>Q영역4/8</th><th>최종RGB</th><th>RGB성분4/8</th><th>단독4/8</th><th>예상표 밖 셀</th></tr>'
+for n in labels:
+ s=summary[n];table+=f'<tr><td>{labels[n]}</td><td>{s["inputRGB8Unique"]}</td><td>{s["QOccupiedBins"]}</td><td>{s["QRegionCount4"]}/{s["QRegionCount8"]}</td><td>{s["finalRGBUnique"]}</td><td>{s["finalRGBComponents4"]}/{s["finalRGBComponents8"]}</td><td>{s["finalRGBSingleton4"]}/{s["finalRGBSingleton8"]}</td><td>{s["offExpectedPaletteCells"]}</td></tr>'
+table+='</table>';modelData={'input':data,'legacy':legacy,'fixed':fixed,'settings':{n:v['settings']for n,v in cases.items()},'regions':{n:{k:v[k]for k in ['QRegion4','QRegion8','emissionRegion4','emissionRegion8']}for n,v in mapping.items()}}
+html='''<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width"><title>단색 알베도 · 알고리즘 일관성 대조</title><style>body{font:15px/1.6 "Malgun Gothic",sans-serif;background:#202126;color:#eee;margin:24px;max-width:1600px}h1{font-size:25px}a{color:#a9cdf5}.note{background:#3e3030;padding:15px}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px}article{background:#292a30;padding:12px}h3{font-size:16px}img,canvas{image-rendering:pixelated;max-width:100%}.head{width:256px;height:320px}.native{width:64px;height:80px;display:block;margin:10px 0}table{border-collapse:collapse;font-size:14px}td,th{border:1px solid #666;padding:7px}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#282932;padding:12px}select{font:inherit;padding:7px}.inspection{display:flex;gap:25px;flex-wrap:wrap}.inspection pre{max-width:850px}@media(max-width:950px){.grid{grid-template-columns:1fr 1fr}}</style>
+<h1>헤어 단색 알베도 · 알고리즘 일관성 대조</h1><p class="note">디자인 선택이 아닌 원인 분리 실험입니다. 저장 frame95의 동일 geometry/카메라/g/임계값과 같은 팔레트를 고정한 원본패턴↔단색 짝 비교입니다. 원본 asset·제품·Unity·31·34·dirty25는 변경하지 않았습니다. 실시간 Unity 렌더나 시간 안정성 검사가 아닙니다.</p>
+<p><a href="REPORT_KO.md">구현·확정 원인·미해결</a> · <a href="CONSTANT_SOURCE.json">단색 선택 규칙·실제 texel</a> · <a href="SUMMARY.json">단계별 전체 수치</a> · <a href="MAPPING_AUDIT.json">라벨→RGB 전수 추적</a> · <a href="CURRENT_PIPELINE_AUDIT.json">현재 main의 실제 라벨/PNG 감사</a> · <a href="SHADE_FRAGMENTATION.json">남은6개 Q 단독 셀</a> · <a href="VERIFIED.json">검증 기록</a></p>
+<p>단색은 임의 갈색 상수가 아닙니다. 원본 재질11/12/13 텍스처 전체에서 실제 native texel medoid를 골랐으며 RGB8(94,64,63), 재질12·이미지18·texel(166,236)입니다. 모델 변경 시 해당 source에서 규칙을 다시 계산해야 하며 제품 기본색으로 저장하지 않습니다.</p>
+<h2>고정된 기존 팔레트의 짝 비교</h2>__PAIR1__
+<h2>무조명 대조 · 전체 머리 마스크와 Q라벨</h2>__UNLIT__<p>Q지도 회색은 라벨 시각화이며 실제 헤어색이 아닙니다. 마스크 밖 얼굴/눈/배경은 비교에서 제외하고 그대로 둡니다.</p>
+<h2>별도 진단 · Q쌍 중복색을 분리한 팔레트</h2><p>이 행은 앞 행과 팔레트가 다릅니다. 행 안의 원본/단색은 같은 수정P를 씁니다. g/Q와 원색 기준은 그대로이고, 기존 명암 폭 안에서4개 서로 다른 native 단계를 선택했습니다. 본 프레임은4단계 중3단계만 점유하므로 최종3색이 기대값입니다. 제품/미술 팔레트로 채택하지 않았습니다.</p>__PAIR2__
+<h2>실패 재현 · 기존10셀 원색 통과를 물려받으면</h2>__BAD__<p class="note">단색 무조명인데8색이 나온 원인은 AA가 아니라 기존 표시색을 통과시킨10셀입니다. 진단 분기는 검증된 hair mask368셀 전체의 알베도를 덮어 이 통과 경로를 차단했습니다. 원래 특징 미확정 플래그는 메타데이터로 유지합니다.</p>
+<h2>색·영역·연결성분 수</h2>__TABLE__<p>4연결은 변을 공유할 때,8연결은 변/꼭짓점을 공유할 때입니다. 색 종류와 떨어진 연결영역 수가 같을 필요는 없습니다. 검증 조건은 동일한 완전한 출력 라벨이 서로 다른 RGB를 만들지 않는 것입니다.</p>
+<h2>실제 셀→Q→라벨→RGB</h2><p><label>분기 <select id="case">__OPTIONS__</select></label> <label>셀 번호 <input id="cell" type="number" min="0" max="1279" value="235"></label></p><div class="inspection"><canvas id="result" class="head" width="64" height="80"></canvas><pre id="trace"></pre></div><p>이미지 클릭으로 같은 논리 셀을 선택합니다. 원색·g·Q를 조절하는 미술 슬라이더가 아닙니다.</p>
+<p class="note">단색에서도 명암 라벨은4연결11영역/단독6셀,8연결8영역/단독3셀입니다. 이는 원본 패턴으로 설명할 수 없는 남은 g/표본선택/래스터 문제입니다. 이번 시험에서 g를 평활화하거나 영역을 임의 합치지 않았습니다. “후광만이 전부 원인” 또는 “알고리즘 전체 해결”로 판정하지 않습니다.</p>
+<script id="data" type="application/json">__DATA__</script><script src="palette_math.cjs"></script><script src="engine.cjs"></script><script>
+const data=JSON.parse(document.getElementById('data').textContent),initial=JSON.stringify(data.input),selector=document.getElementById('case'),cell=document.getElementById('cell'),canvas=document.getElementById('result'),ctx=canvas.getContext('2d');let last;
+function draw(){const name=selector.value,model=name.includes('distinct')?data.fixed:data.legacy;last=FlatControl.render(data.input,model,data.settings[name]);ctx.putImageData(new ImageData(new Uint8ClampedArray(last.pixels),64,80),0,0);const i=Number(cell.value),r=last.rows[i];document.getElementById('trace').textContent=r?JSON.stringify({case:name,cell:[i%32,Math.floor(i/32)],originalSourceRGBA:r.sourceRGBAlinear,effectiveSourceRGBA:r.effectiveSourceRGBAlinear,g:r.g,Q:r.Q,sourceFamily:r.sourceFamilyId,sourceReference:r.sourceReferenceId,QRegion4:data.regions[name].QRegion4[i],QRegion8:data.regions[name].QRegion8[i],emissionRegion4:data.regions[name].emissionRegion4[i],completeEmissionKey:r.emissionKey,RGB:r.rgb,originalFeatureUnknown:r.originalFeatureUnknown,passthrough:r.passthrough},null,2):'hair mask 밖';}
+selector.addEventListener('change',draw);cell.addEventListener('input',draw);canvas.addEventListener('click',e=>{const b=canvas.getBoundingClientRect(),x=Math.min(31,Math.floor((e.clientX-b.left)/b.width*32)),y=Math.min(39,Math.floor((e.clientY-b.top)/b.height*40));cell.value=y*32+x;draw();});draw();window.workbench={ready:true,snapshot:()=>({case:selector.value,pixels:last.pixels,sourceAndGUnchanged:JSON.stringify(data.input)===initial,trace:document.getElementById('trace').textContent})};
+</script></html>'''
+html=html.replace('__PAIR1__',gallery(['pattern-legacy','flat-legacy'])).replace('__UNLIT__',gallery(['pattern-unlit','flat-unlit','Q-labels'])).replace('__PAIR2__',gallery(['pattern-distinct','flat-distinct','hair-mask'])).replace('__BAD__',gallery(['flat-unlit-inherited-fallback','flat-unlit'])).replace('__TABLE__',table).replace('__OPTIONS__',''.join(f'<option value="{n}"{" selected"if n=="flat-distinct"else""}>{t}</option>'for n,t in labels.items())).replace('__DATA__',json.dumps(modelData,ensure_ascii=False).replace('</','<\\/'))
+(R/'INDEX.html').write_text(html,encoding='utf-8');print('diagnostic page ready')

@@ -1,0 +1,438 @@
+{
+  "fullRawAssetReproduction": false,
+  "excluded": [
+    {
+      "source": "EXP27/final-validation/neutral/buffers.gz",
+      "sha256": "c012e659a00e9408208ef13f93edfc73f2125c233b6f7d905ceec6c0b87dfa10",
+      "bytes": 246166,
+      "neededFor": "rebuild original saved eye source packets from full frame",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/walk-00/buffers.gz",
+      "sha256": "98ccef374a94fd4b92232989ba64852358e85767c7ca1cf3908765e3a790c531",
+      "bytes": 242982,
+      "neededFor": "rebuild original saved eye source packets from full frame",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/walk-01/buffers.gz",
+      "sha256": "36fde18d8dcd19a8a7dc0939d21dc9786b0f210acf10353f2c63707027322019",
+      "bytes": 242481,
+      "neededFor": "rebuild original saved eye source packets from full frame",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/walk-02/buffers.gz",
+      "sha256": "7d3bda5a4421a9f462c25c7613ea653865bc4f38c0f056157b376918f1bade57",
+      "bytes": 242371,
+      "neededFor": "rebuild original saved eye source packets from full frame",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/walk-03/buffers.gz",
+      "sha256": "35cd4b196e749d3a7b16483f4b4374de8f11918fedbd1ced83587c6f7dcb1153",
+      "bytes": 241401,
+      "neededFor": "rebuild original saved eye source packets from full frame",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/geometry-export/EVALUATED.npz",
+      "sha256": "ebd1c878f555e0c8d316faf93c7629ab4a23132e2bbd446fa1af74fd4b1b0da6",
+      "bytes": 108611,
+      "neededFor": "full mesh/frame geometry reconstruction or all-cell representative selection",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/SOURCE_TOPOLOGY.npz",
+      "sha256": "6838fd90f700b9d5f9ee23c50692f6475ec146a3ad9e90ff186f0a1833e493fe",
+      "bytes": 301059,
+      "neededFor": "full mesh/frame geometry reconstruction or all-cell representative selection",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/source-export/CAPTURE.json",
+      "sha256": "9b3cb16f9437504dd322358258bc5caf51b6416f38654c2695e8bfbbf88ddff7",
+      "bytes": 2164,
+      "neededFor": "full mesh/frame geometry reconstruction or all-cell representative selection",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/coverage-v3/PACKET_POOL.json",
+      "sha256": "008019c75a34bdd13868bffdaa6014f323d320a235deadf7d805558a37a7d46b",
+      "bytes": 617649,
+      "neededFor": "full mesh/frame geometry reconstruction or all-cell representative selection",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/source-export/bundle/prelight-source.json",
+      "sha256": "08137e65ae970a13dbdab07fd30dd3852a9d06184d6ad8b39cf5bfdedfc08e53",
+      "bytes": 414562,
+      "neededFor": "re-extract or rebind original material/UV/native colour provenance",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/source-export/bundle/frame-source-data.json",
+      "sha256": "044e7c707caa693e08680d960debc887bb4426bec8a91300b0cfc29d3f7c4457",
+      "bytes": 91922,
+      "neededFor": "re-extract or rebind original material/UV/native colour provenance",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/source-export/source480-6.bin",
+      "sha256": "e9485382709d1419c2c38eb007aab33a253b3d48840c75a5137354cbc6df9511",
+      "bytes": 20488,
+      "neededFor": "redo raw GPU buffer/hash validation; no new Unity capture",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/source-export/source960-6.bin",
+      "sha256": "b1903c89a083597b9d10f4dfd46f47bbebd275248f6d56e3c745799817c48580",
+      "bytes": 81928,
+      "neededFor": "redo raw GPU buffer/hash validation; no new Unity capture",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/source-export/light480-3.bin",
+      "sha256": "48d98b8c2a5e4cee3c1818dccdde65b8683eb717a4e5e5ced945b9bd0c369a15",
+      "bytes": 20488,
+      "neededFor": "redo raw GPU buffer/hash validation; no new Unity capture",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/source-export/light960-3.bin",
+      "sha256": "2c05674584b3d3eb21ff85095090a71cdb81eb2fb36762dea6c2091a7d2a6c6e",
+      "bytes": 81928,
+      "neededFor": "redo raw GPU buffer/hash validation; no new Unity capture",
+      "included": false
+    },
+    {
+      "source": "MODEL/AvatarSample_A.vrm",
+      "sha256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+      "bytes": 18495680,
+      "neededFor": "original model export, native texture palette refitting; not redistributed",
+      "included": false
+    },
+    {
+      "source": "EXP30/palette-v3/BINDINGS.json",
+      "sha256": "666c5869757a62658db16a80c9373790033728a4dce72db35c837037fa30bbde",
+      "bytes": 1742305,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/palette-v3/EDGES.json",
+      "sha256": "f443d5be40132c2521e980febf6a2314b4580cf91d640118143cffd5b3b65b11",
+      "bytes": 1129361,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/palette-v3/INDEX.html",
+      "sha256": "08f70228ba83401da4d5fdd671d063945b8861c3d30ff91ae08578a44d81c1a9",
+      "bytes": 1075900,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/palette-v4-feature/BUDGET_BINDINGS.json",
+      "sha256": "df6dcd66291be44f31dd3fa062687c2e9bc98ff7494f33f3e0a5f9ed6379f252",
+      "bytes": 5758200,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/palette-v4-feature/EXPECTED_PIXELS.json",
+      "sha256": "923ea86d84cf943f7b9a426c757770b615efe9d86cefe72ef4a5c09a7bb94d5a",
+      "bytes": 834021,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/palette-v4-feature/FRAGMENT_AUDIT.json",
+      "sha256": "5ee1f496897d157b8f6e3dd41e83ebc79aa509d0b7b3153c52e1698efe4f92fc",
+      "bytes": 1440076,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/palette-v4-feature/INDEX.html",
+      "sha256": "25e9c405a59168b37d229a72acdd8fa21a34c9f70a6003f25acfea2d46f9d1ee",
+      "bytes": 1154993,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/palette-v4-feature/INPUT_SAMPLES.json",
+      "sha256": "1418019513f0c79f4c4823e7a91035649bfcc9df86eaed5754f6b95a60f50518",
+      "bytes": 966841,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/flat-albedo-control/EXPECTED_PIXELS.json",
+      "sha256": "41453699944da1766e275962bd91ca0028cc7f1e322558cce66ebed045d9863b",
+      "bytes": 553437,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/flat-albedo-control/MAPPING_AUDIT.json",
+      "sha256": "0390d00d9f336c7329d41baeacd5f57cef6958a6cf76a295a76af7a9f55098a3",
+      "bytes": 960065,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/flat-albedo-control/RESULTS.json",
+      "sha256": "60a840b46a708f78a19dd0d4a03cedb34ff22c354c401c38a05a41007aaaf2cd",
+      "bytes": 5179477,
+      "neededFor": "full historical diagnostics/HTML or refitting; portable replay uses bounded fixtures",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-0.png",
+      "sha256": "76acbc6191cc92f2d00a356b31f5889e5133d592c081aaa006af4776b9d0bd33",
+      "bytes": 51432,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-1.png",
+      "sha256": "9e084b8d331ed370ca9822b57c207a18b7ec0aa672a2b0487d2caaa86df26567",
+      "bytes": 69,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-10.png",
+      "sha256": "4ba4fafe7187c32de6514a5d4677ebe28a5fdd258ee0d96082f2d1836487900d",
+      "bytes": 3287372,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-11.png",
+      "sha256": "c1f03762154dd74c79c12f461a9b2ddd53d495f662ded4bc7842ac0cb168ca92",
+      "bytes": 2454319,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-12.png",
+      "sha256": "e963718ed5dc65009e4f113f8d745d7f119eec7637ace88f186d540590185852",
+      "bytes": 179766,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-13.png",
+      "sha256": "d9388455ee4c7bb35fd113db84af24fe8d58528572a14d9753196902c685b462",
+      "bytes": 172507,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-14.png",
+      "sha256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+      "bytes": 1049774,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-15.png",
+      "sha256": "9ac49cae8ad7d0b5b5d95ef9f6a9c33564fd37bbdde47f66a567c3e1796d1dfe",
+      "bytes": 100687,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-16.png",
+      "sha256": "e28dd7aa18101b8775942b445674a166cdf391513bfdf420d7a05473214daed0",
+      "bytes": 6944,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-17.png",
+      "sha256": "86426d781334c6a440439db9039a9a47ce8b9f16f82fd805a56c6f0f8047bf52",
+      "bytes": 97368,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-18.png",
+      "sha256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+      "bytes": 144488,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-19.png",
+      "sha256": "e28dd7aa18101b8775942b445674a166cdf391513bfdf420d7a05473214daed0",
+      "bytes": 6944,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-2.png",
+      "sha256": "d76fc537166ea42dad9f97cde34574ae348397e1279710fb69b8f2e743b2cc95",
+      "bytes": 79,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-20.png",
+      "sha256": "63243977c6826b164a91fbc227cb89dd017e8f604b1c4a8aad202128c3de28ec",
+      "bytes": 192506,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-21.png",
+      "sha256": "e28dd7aa18101b8775942b445674a166cdf391513bfdf420d7a05473214daed0",
+      "bytes": 6944,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-22.png",
+      "sha256": "cd3d96796b8e14a35beffae375e416960ac2dfcce230e5644ec671c14e1c47e8",
+      "bytes": 49461,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-23.png",
+      "sha256": "e28dd7aa18101b8775942b445674a166cdf391513bfdf420d7a05473214daed0",
+      "bytes": 6944,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-24.png",
+      "sha256": "4891e29095eb6028e3f3d3ea37bfe641dc9518c5a3bc20880bd8d274ca953696",
+      "bytes": 1730983,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-25.png",
+      "sha256": "9e084b8d331ed370ca9822b57c207a18b7ec0aa672a2b0487d2caaa86df26567",
+      "bytes": 69,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-26.png",
+      "sha256": "d5c7fc19d8aa5279d9e006cd283dd280d82a36a2ed9239fec92fb2cb359c1816",
+      "bytes": 14079,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-3.png",
+      "sha256": "11d1dfda2897e6e253692b670ccee82e42633ef317d03ac6f39f796336d498a2",
+      "bytes": 154744,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-4.png",
+      "sha256": "3ed814ac34c4706446ae7c27fe7b30995262724d6ee3196ade0013a6671f02dd",
+      "bytes": 27274,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-5.png",
+      "sha256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+      "bytes": 734700,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-6.png",
+      "sha256": "dca1fea84bde4c850d99e8913f2860fb3a87edf483e0baf54e81f6aa101ac331",
+      "bytes": 501027,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-7.png",
+      "sha256": "b6ede6a05e704e23397ba3065a92b7fa8ac1961bd17582ae3b65238f14cd29a1",
+      "bytes": 230082,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-8.png",
+      "sha256": "cf7e85d0b2cb94a0bd429652461a396b4c1d8cd1692dec0a378341ceca42f058",
+      "bytes": 33503,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP30/model-source/image-9.png",
+      "sha256": "32476919c11a2986435460542cdf3e8de8c11c8327cea6cf0a34ce6cda4f52f6",
+      "bytes": 81448,
+      "neededFor": "native texture refitting; original image not copied",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/ribbon-path/GEOMETRY_PACKETS.json",
+      "sha256": "76fc49b722854b71f9112462b4a4753b1c59549eb700ab84b887f5257d2bf9cc",
+      "bytes": 128132,
+      "neededFor": "rebuild original source binding",
+      "included": false
+    },
+    {
+      "source": "EXP27/author33/feature34/ribbon-path/PALETTE_V2_BINDING.json",
+      "sha256": "fa10aac75caf22b22e499252f2221d1c7671badfb3d21fc829b2526ee5afe042",
+      "bytes": 762687,
+      "neededFor": "rebuild original source binding",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/neutral/params.json",
+      "sha256": "a8618123ef009b21cfacd0278b3e5c0acec1b1cc72ccf649fe30fdd4c099c3c2",
+      "bytes": 6076,
+      "neededFor": "original eye packet extraction",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/walk-00/params.json",
+      "sha256": "515646a9c8529d0fe70880e524b1fc6c67a9082f9165b8caefa79e8b2f28bfa0",
+      "bytes": 6075,
+      "neededFor": "original eye packet extraction",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/walk-01/params.json",
+      "sha256": "7f435794e84f8c28cee36107a8698302cf451bc07d6911bed6dd8fe90aaf3232",
+      "bytes": 6076,
+      "neededFor": "original eye packet extraction",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/walk-02/params.json",
+      "sha256": "0aabcff85a1816141712d20c7c8d8f1a9005d8aa0f1e2a406d79ad91be215f00",
+      "bytes": 6082,
+      "neededFor": "original eye packet extraction",
+      "included": false
+    },
+    {
+      "source": "EXP27/final-validation/walk-03/params.json",
+      "sha256": "e3c21a4a29d4b7a6d26ec54b064b0e6c8cc41277c2be8b7e4dc31efd98aa9ea7",
+      "bytes": 6105,
+      "neededFor": "original eye packet extraction",
+      "included": false
+    }
+  ],
+  "sourceAliases": {
+    "EXP27": "%USERPROFILE%/Documents/Codex/2026-10-27/task-2/render-fix21",
+    "EXP30": "%USERPROFILE%/Documents/Codex/2026-10-30/task",
+    "PRODUCT": "%USERPROFILE%/Documents/work/Fantasy Survival Escape Game",
+    "MODEL": "%USERPROFILE%/Desktop/작업폴더"
+  }
+}

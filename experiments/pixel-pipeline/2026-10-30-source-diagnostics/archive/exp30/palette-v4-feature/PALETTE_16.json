@@ -1,0 +1,544 @@
+{
+  "kind": "fixed-gap-native-palette-budget-candidate",
+  "version": 3,
+  "sourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "originalMaterialIds": [
+    11,
+    12,
+    13
+  ],
+  "originalAppearanceGroupIds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "status": "budget comparison only, no art choice",
+  "paletteInputSHA256": "75368163de04ab6267486e7e0dc900e8e43c468234d101aaad6e461642d9094e",
+  "referenceShadeK": 3,
+  "sourceReferenceRule": "nearest full OKLab native colour in one verified warm chromatic family; appearance remains metadata and geometry signal, not an independent far-apart palette bank",
+  "shadeRule": "same measured Lab-L shadow target for all budgets; nearest observed colour below anchor; Q0/1 lower and Q2/3 anchor",
+  "intervalRule": "Lab(native anchor)+m*(Lab(measured shade colour)-Lab(native anchor)); source selection and Q(g) labels never use m",
+  "references": [
+    {
+      "id": 0,
+      "anchorRGB8": [
+        28,
+        13,
+        14
+      ],
+      "anchorLab": [
+        0.1814234903786404,
+        0.024996792899726866,
+        0.0069995573541180856
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 239,
+        "y": 217
+      },
+      "nativeTexelSupport": 10777
+    },
+    {
+      "id": 1,
+      "anchorRGB8": [
+        43,
+        22,
+        23
+      ],
+      "anchorLab": [
+        0.22982269711896447,
+        0.03277628692066156,
+        0.010032113617665428
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 224,
+        "y": 208
+      },
+      "nativeTexelSupport": 159451
+    },
+    {
+      "id": 2,
+      "anchorRGB8": [
+        50,
+        27,
+        28
+      ],
+      "anchorLab": [
+        0.25353430112431674,
+        0.03497890861686416,
+        0.010804619623725475
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 7,
+        "y": 173
+      },
+      "nativeTexelSupport": 367001
+    },
+    {
+      "id": 3,
+      "anchorRGB8": [
+        66,
+        39,
+        41
+      ],
+      "anchorLab": [
+        0.3075462430631655,
+        0.03951697750359612,
+        0.010521727616629895
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 504,
+        "y": 357
+      },
+      "nativeTexelSupport": 66230
+    },
+    {
+      "id": 4,
+      "anchorRGB8": [
+        79,
+        50,
+        52
+      ],
+      "anchorLab": [
+        0.3525283926103344,
+        0.040908350974820984,
+        0.010903930562764064
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 510,
+        "y": 402
+      },
+      "nativeTexelSupport": 88731
+    },
+    {
+      "id": 5,
+      "anchorRGB8": [
+        92,
+        61,
+        63
+      ],
+      "anchorLab": [
+        0.39620721180087176,
+        0.0423575679879003,
+        0.011342405049049598
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 179,
+        "y": 510
+      },
+      "nativeTexelSupport": 149188
+    },
+    {
+      "id": 6,
+      "anchorRGB8": [
+        103,
+        71,
+        71
+      ],
+      "anchorLab": [
+        0.4333210425237075,
+        0.04176146000279973,
+        0.014395337203634673
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 88,
+        "y": 545
+      },
+      "nativeTexelSupport": 216149
+    },
+    {
+      "id": 7,
+      "anchorRGB8": [
+        116,
+        83,
+        81
+      ],
+      "anchorLab": [
+        0.4767978782936399,
+        0.041081206610741106,
+        0.017264637786555015
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 117,
+        "y": 587
+      },
+      "nativeTexelSupport": 128426
+    },
+    {
+      "id": 8,
+      "anchorRGB8": [
+        130,
+        95,
+        93
+      ],
+      "anchorLab": [
+        0.5210820766611226,
+        0.04261661030747457,
+        0.017641891025667655
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 16,
+        "y": 775
+      },
+      "nativeTexelSupport": 63275
+    },
+    {
+      "id": 9,
+      "anchorRGB8": [
+        144,
+        107,
+        104
+      ],
+      "anchorLab": [
+        0.5641871020961963,
+        0.04374052817737048,
+        0.019455391163117508
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 156,
+        "y": 227
+      },
+      "nativeTexelSupport": 66717
+    },
+    {
+      "id": 10,
+      "anchorRGB8": [
+        158,
+        120,
+        116
+      ],
+      "anchorLab": [
+        0.6087493208302486,
+        0.043616783792117975,
+        0.020765450434434063
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 69,
+        "y": 914
+      },
+      "nativeTexelSupport": 88436
+    },
+    {
+      "id": 11,
+      "anchorRGB8": [
+        171,
+        133,
+        128
+      ],
+      "anchorLab": [
+        0.6514971543134174,
+        0.04237748723595519,
+        0.02165553111985108
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 158,
+        "y": 929
+      },
+      "nativeTexelSupport": 87915
+    },
+    {
+      "id": 12,
+      "anchorRGB8": [
+        184,
+        144,
+        138
+      ],
+      "anchorLab": [
+        0.6891743092644773,
+        0.04366187730151033,
+        0.023439673524475624
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 222,
+        "y": 985
+      },
+      "nativeTexelSupport": 53460
+    },
+    {
+      "id": 13,
+      "anchorRGB8": [
+        209,
+        154,
+        143
+      ],
+      "anchorLab": [
+        0.7356454545753379,
+        0.05829597588159735,
+        0.035749145744135125
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 20,
+        "y": 994
+      },
+      "nativeTexelSupport": 20717
+    },
+    {
+      "id": 14,
+      "anchorRGB8": [
+        203,
+        173,
+        170
+      ],
+      "anchorLab": [
+        0.7730007960974941,
+        0.0320868501883016,
+        0.014751132111118559
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 175,
+        "y": 217
+      },
+      "nativeTexelSupport": 3016
+    },
+    {
+      "id": 15,
+      "anchorRGB8": [
+        214,
+        189,
+        187
+      ],
+      "anchorLab": [
+        0.8189702696771635,
+        0.026413925030136565,
+        0.011331081728387815
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 107,
+        "y": 190
+      },
+      "nativeTexelSupport": 3375
+    }
+  ],
+  "compactPaletteRGB8": [
+    [
+      28,
+      13,
+      14
+    ],
+    [
+      43,
+      22,
+      23
+    ],
+    [
+      50,
+      27,
+      28
+    ],
+    [
+      66,
+      39,
+      41
+    ],
+    [
+      79,
+      50,
+      52
+    ],
+    [
+      92,
+      61,
+      63
+    ],
+    [
+      103,
+      71,
+      71
+    ],
+    [
+      116,
+      83,
+      81
+    ],
+    [
+      130,
+      95,
+      93
+    ],
+    [
+      144,
+      107,
+      104
+    ],
+    [
+      158,
+      120,
+      116
+    ],
+    [
+      171,
+      133,
+      128
+    ],
+    [
+      184,
+      144,
+      138
+    ],
+    [
+      209,
+      154,
+      143
+    ],
+    [
+      203,
+      173,
+      170
+    ],
+    [
+      214,
+      189,
+      187
+    ]
+  ],
+  "perReferenceShadePaletteIndices": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      2,
+      2
+    ],
+    [
+      2,
+      2,
+      3,
+      3
+    ],
+    [
+      3,
+      3,
+      4,
+      4
+    ],
+    [
+      4,
+      4,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      6,
+      6
+    ],
+    [
+      6,
+      6,
+      7,
+      7
+    ],
+    [
+      7,
+      7,
+      8,
+      8
+    ],
+    [
+      8,
+      8,
+      9,
+      9
+    ],
+    [
+      9,
+      9,
+      10,
+      10
+    ],
+    [
+      10,
+      10,
+      11,
+      11
+    ],
+    [
+      11,
+      11,
+      12,
+      12
+    ],
+    [
+      12,
+      12,
+      13,
+      13
+    ],
+    [
+      13,
+      13,
+      14,
+      14
+    ],
+    [
+      14,
+      14,
+      15,
+      15
+    ]
+  ],
+  "sourceFeatureIdRemainsNull": true,
+  "sourceToneClassRemovedFromPaletteSelection": true,
+  "originalAppearanceClassifierUnchanged": true,
+  "limitations": [
+    "finite16-colour quantization creates new tone boundaries and can merge small real colour differences; inspect edge evidence, not only pixel errors",
+    "adjacent native colour gaps are data-derived and unequal; common predecessor rule is a candidate shading model, not an approved art style",
+    "material14 and other model SHA are unmodelled; no source colour fallback",
+    "continuous source gradient versus normalization remains unchosen; this mapping reads whichever legitimate source sample upstream supplies"
+  ],
+  "nativeCoverageFitSHA256": "8ebad17773885e33d0b1bb6a35e1aa939ed685e06ad6a236b13125fab64e68c2",
+  "fitRule": "native equal-L coverage bands with actual observed OKLab medoid; no screen-colour mean",
+  "chromaticFamilyScope": "one source-evidenced warm family in current materials11/12/13; other colour families require separate source fit and classification, never a warm fallback",
+  "paletteColourBudget": 16,
+  "nativeLBounds": [
+    0.15693478974222658,
+    0.8432359670877161
+  ],
+  "nativeBandWidthL": 0.04289382358409309,
+  "fixedShadowTargetGapL": 0.043678819190537344
+}

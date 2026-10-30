@@ -1,0 +1,158 @@
+{
+  "checks": [
+    {
+      "name": "native image SHA material11",
+      "pass": true
+    },
+    {
+      "name": "native image SHA material12",
+      "pass": true
+    },
+    {
+      "name": "native image SHA material13",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 0",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 1",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 2",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 3",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 4",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 5",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 6",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 7",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 8",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 9",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 10",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 11",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 12",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 13",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 14",
+      "pass": true
+    },
+    {
+      "name": "palette texel RGB exact 15",
+      "pass": true
+    },
+    {
+      "name": "preserve all original Q(g) labels unchanged",
+      "pass": true
+    },
+    {
+      "name": "preserve exact358 resolved +10 unresolved +912 outside",
+      "pass": true
+    },
+    {
+      "name": "preserve old exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "preserve existing16 exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "preserve new exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "preserve source exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "simplify all original Q(g) labels unchanged",
+      "pass": true
+    },
+    {
+      "name": "simplify exact358 resolved +10 unresolved +912 outside",
+      "pass": true
+    },
+    {
+      "name": "simplify old exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "simplify existing16 exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "simplify new exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "simplify source exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "original main binding not edited",
+      "pass": true
+    },
+    {
+      "name": "main geometry packets not edited",
+      "pass": true
+    },
+    {
+      "name": "tone-boundary manifest not edited",
+      "pass": true
+    },
+    {
+      "name": "self-contained colour math is byte-exact unmodified v2 copy",
+      "pass": true
+    }
+  ],
+  "passed": 35,
+  "filesSHA256": {
+    "SHARED_NATIVE_PALETTE.json": "7acc7a4ce281eabe22e9092d4638b1dba063e575b536aceca5085af2d9ba412f",
+    "SHARED_EXISTING16_ABLATION.json": "6e64e34cfc0de85b1d5c7d866f5be1b91ce51fd65ca9983b33e73c0ed3dba484",
+    "NATIVE_COVERAGE_FIT.json": "8ebad17773885e33d0b1bb6a35e1aa939ed685e06ad6a236b13125fab64e68c2",
+    "SOURCE_FAMILY_INPUT.json": "b353e01a3dd0381226c7d32b695fa288d0f8bf86fc054f3b4f40c02a905d0b12",
+    "BINDINGS.json": "666c5869757a62658db16a80c9373790033728a4dce72db35c837037fa30bbde",
+    "palette.cjs": "a01ead9a8ed802fe0d5404c58d34e352cde54be65613fbab18d8a0a79247601e",
+    "palette_math.cjs": "85ede7c7963bd2d0e037f86e2288a03d2dea637544303f82c9433f40262e9ffe",
+    "SUMMARY.json": "9ae353c25b81b18fe43da8d910d33629ab04e0aed2c74832a02ce576ae55948c",
+    "EDGES.json": "f443d5be40132c2521e980febf6a2314b4580cf91d640118143cffd5b3b65b11",
+    "PIXEL_EVIDENCE.json": "a2d7bfc1ff9d895df60c067107eca5122999db341decb29433c637c300e75ff9"
+  },
+  "scope": "native provenance and fixed-input pixel checks; no art, shape or temporal approval"
+}

@@ -1,0 +1,764 @@
+{
+  "kind": "source-feature-contrast-constrained-palette",
+  "version": 3,
+  "sourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "originalMaterialIds": [
+    11,
+    12,
+    13
+  ],
+  "originalAppearanceGroupIds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "status": "budget comparison only, no art choice",
+  "paletteInputSHA256": "75368163de04ab6267486e7e0dc900e8e43c468234d101aaad6e461642d9094e",
+  "referenceShadeK": 3,
+  "sourceReferenceRule": "monotone source-L quantizer through native feature contrast certificates; warm-family only; source metadata and Q remain independent",
+  "shadeRule": "same measured Lab-L shadow target for all budgets; nearest observed colour below anchor; Q0/1 lower and Q2/3 anchor",
+  "intervalRule": "Lab(native anchor)+m*(Lab(measured shade colour)-Lab(native anchor)); source selection and Q(g) labels never use m",
+  "references": [
+    {
+      "id": 0,
+      "anchorRGB8": [
+        28,
+        13,
+        14
+      ],
+      "anchorLab": [
+        0.1814234903786404,
+        0.024996792899726866,
+        0.0069995573541180856
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 239,
+        "y": 217
+      },
+      "nativeTexelSupport": 10777
+    },
+    {
+      "id": 1,
+      "anchorRGB8": [
+        43,
+        22,
+        23
+      ],
+      "anchorLab": [
+        0.22982269711896447,
+        0.03277628692066156,
+        0.010032113617665428
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 224,
+        "y": 208
+      },
+      "nativeTexelSupport": 159451
+    },
+    {
+      "id": 2,
+      "anchorRGB8": [
+        50,
+        27,
+        28
+      ],
+      "anchorLab": [
+        0.25353430112431674,
+        0.03497890861686416,
+        0.010804619623725475
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 7,
+        "y": 173
+      },
+      "nativeTexelSupport": 367001
+    },
+    {
+      "id": 3,
+      "anchorRGB8": [
+        66,
+        39,
+        41
+      ],
+      "anchorLab": [
+        0.3075462430631655,
+        0.03951697750359612,
+        0.010521727616629895
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 504,
+        "y": 357
+      },
+      "nativeTexelSupport": 66230
+    },
+    {
+      "id": 4,
+      "anchorRGB8": [
+        79,
+        50,
+        52
+      ],
+      "anchorLab": [
+        0.3525283926103344,
+        0.040908350974820984,
+        0.010903930562764064
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 510,
+        "y": 402
+      },
+      "nativeTexelSupport": 88731
+    },
+    {
+      "id": 5,
+      "anchorRGB8": [
+        92,
+        61,
+        63
+      ],
+      "anchorLab": [
+        0.39620721180087176,
+        0.0423575679879003,
+        0.011342405049049598
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 179,
+        "y": 510
+      },
+      "nativeTexelSupport": 149188
+    },
+    {
+      "id": 6,
+      "anchorRGB8": [
+        103,
+        71,
+        71
+      ],
+      "anchorLab": [
+        0.4333210425237075,
+        0.04176146000279973,
+        0.014395337203634673
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 88,
+        "y": 545
+      },
+      "nativeTexelSupport": 216149
+    },
+    {
+      "id": 7,
+      "anchorRGB8": [
+        116,
+        83,
+        81
+      ],
+      "anchorLab": [
+        0.4767978782936399,
+        0.041081206610741106,
+        0.017264637786555015
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 117,
+        "y": 587
+      },
+      "nativeTexelSupport": 128426
+    },
+    {
+      "id": 8,
+      "anchorRGB8": [
+        130,
+        95,
+        93
+      ],
+      "anchorLab": [
+        0.5210820766611226,
+        0.04261661030747457,
+        0.017641891025667655
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 16,
+        "y": 775
+      },
+      "nativeTexelSupport": 63275
+    },
+    {
+      "id": 9,
+      "anchorRGB8": [
+        144,
+        107,
+        104
+      ],
+      "anchorLab": [
+        0.5641871020961963,
+        0.04374052817737048,
+        0.019455391163117508
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 156,
+        "y": 227
+      },
+      "nativeTexelSupport": 66717
+    },
+    {
+      "id": 10,
+      "anchorRGB8": [
+        158,
+        120,
+        116
+      ],
+      "anchorLab": [
+        0.6087493208302486,
+        0.043616783792117975,
+        0.020765450434434063
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 69,
+        "y": 914
+      },
+      "nativeTexelSupport": 88436
+    },
+    {
+      "id": 11,
+      "anchorRGB8": [
+        171,
+        133,
+        128
+      ],
+      "anchorLab": [
+        0.6514971543134174,
+        0.04237748723595519,
+        0.02165553111985108
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 158,
+        "y": 929
+      },
+      "nativeTexelSupport": 87915
+    },
+    {
+      "id": 12,
+      "anchorRGB8": [
+        184,
+        144,
+        138
+      ],
+      "anchorLab": [
+        0.6891743092644773,
+        0.04366187730151033,
+        0.023439673524475624
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 222,
+        "y": 985
+      },
+      "nativeTexelSupport": 53460
+    },
+    {
+      "id": 13,
+      "anchorRGB8": [
+        209,
+        154,
+        143
+      ],
+      "anchorLab": [
+        0.7356454545753379,
+        0.05829597588159735,
+        0.035749145744135125
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 20,
+        "y": 994
+      },
+      "nativeTexelSupport": 20717
+    },
+    {
+      "id": 14,
+      "anchorRGB8": [
+        203,
+        173,
+        170
+      ],
+      "anchorLab": [
+        0.7730007960974941,
+        0.0320868501883016,
+        0.014751132111118559
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 175,
+        "y": 217
+      },
+      "nativeTexelSupport": 3016
+    },
+    {
+      "id": 15,
+      "anchorRGB8": [
+        214,
+        189,
+        187
+      ],
+      "anchorLab": [
+        0.8189702696771635,
+        0.026413925030136565,
+        0.011331081728387815
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 107,
+        "y": 190
+      },
+      "nativeTexelSupport": 3375
+    }
+  ],
+  "compactPaletteRGB8": [
+    [
+      28,
+      13,
+      14
+    ],
+    [
+      43,
+      22,
+      23
+    ],
+    [
+      50,
+      27,
+      28
+    ],
+    [
+      66,
+      39,
+      41
+    ],
+    [
+      79,
+      50,
+      52
+    ],
+    [
+      92,
+      61,
+      63
+    ],
+    [
+      103,
+      71,
+      71
+    ],
+    [
+      116,
+      83,
+      81
+    ],
+    [
+      130,
+      95,
+      93
+    ],
+    [
+      144,
+      107,
+      104
+    ],
+    [
+      158,
+      120,
+      116
+    ],
+    [
+      171,
+      133,
+      128
+    ],
+    [
+      184,
+      144,
+      138
+    ],
+    [
+      209,
+      154,
+      143
+    ],
+    [
+      203,
+      173,
+      170
+    ],
+    [
+      214,
+      189,
+      187
+    ]
+  ],
+  "perReferenceShadePaletteIndices": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      2,
+      2
+    ],
+    [
+      2,
+      2,
+      3,
+      3
+    ],
+    [
+      3,
+      3,
+      4,
+      4
+    ],
+    [
+      4,
+      4,
+      5,
+      5
+    ],
+    [
+      5,
+      5,
+      6,
+      6
+    ],
+    [
+      6,
+      6,
+      7,
+      7
+    ],
+    [
+      7,
+      7,
+      8,
+      8
+    ],
+    [
+      8,
+      8,
+      9,
+      9
+    ],
+    [
+      9,
+      9,
+      10,
+      10
+    ],
+    [
+      10,
+      10,
+      11,
+      11
+    ],
+    [
+      11,
+      11,
+      12,
+      12
+    ],
+    [
+      12,
+      12,
+      13,
+      13
+    ],
+    [
+      13,
+      13,
+      14,
+      14
+    ],
+    [
+      14,
+      14,
+      15,
+      15
+    ]
+  ],
+  "sourceFeatureIdRemainsNull": true,
+  "sourceToneClassRemovedFromPaletteSelection": true,
+  "originalAppearanceClassifierUnchanged": true,
+  "limitations": [
+    "finite16-colour quantization creates new tone boundaries and can merge small real colour differences; inspect edge evidence, not only pixel errors",
+    "adjacent native colour gaps are data-derived and unequal; common predecessor rule is a candidate shading model, not an approved art style",
+    "material14 and other model SHA are unmodelled; no source colour fallback",
+    "continuous source gradient versus normalization remains unchosen; this mapping reads whichever legitimate source sample upstream supplies"
+  ],
+  "nativeCoverageFitSHA256": "8ebad17773885e33d0b1bb6a35e1aa939ed685e06ad6a236b13125fab64e68c2",
+  "fitRule": "native equal-L coverage bands with actual observed OKLab medoid; no screen-colour mean",
+  "chromaticFamilyScope": "one source-evidenced warm family in current materials11/12/13; other colour families require separate source fit and classification, never a warm fallback",
+  "paletteColourBudget": 16,
+  "nativeLBounds": [
+    0.15693478974222658,
+    0.8432359670877161
+  ],
+  "nativeBandWidthL": 0.04289382358409309,
+  "fixedShadowTargetGapL": 0.043678819190537344,
+  "sourceSelectionKnots": [
+    {
+      "sourceL": 0.15693478974222658,
+      "paletteReferenceId": 0
+    },
+    {
+      "sourceL": 0.2944380850559484,
+      "paletteReferenceId": 1
+    },
+    {
+      "sourceL": 0.3078559933830558,
+      "paletteReferenceId": 3
+    },
+    {
+      "sourceL": 0.31992354639917975,
+      "paletteReferenceId": 3
+    },
+    {
+      "sourceL": 0.4154161933800706,
+      "paletteReferenceId": 5
+    },
+    {
+      "sourceL": 0.43378778206771884,
+      "paletteReferenceId": 5
+    },
+    {
+      "sourceL": 0.4457718578758052,
+      "paletteReferenceId": 6
+    },
+    {
+      "sourceL": 0.4594241178370024,
+      "paletteReferenceId": 6
+    },
+    {
+      "sourceL": 0.4646628690508086,
+      "paletteReferenceId": 6
+    },
+    {
+      "sourceL": 0.4754078025364443,
+      "paletteReferenceId": 6
+    },
+    {
+      "sourceL": 0.4756806508927461,
+      "paletteReferenceId": 6
+    },
+    {
+      "sourceL": 0.4820980447787505,
+      "paletteReferenceId": 7
+    },
+    {
+      "sourceL": 0.48210320476037166,
+      "paletteReferenceId": 7
+    },
+    {
+      "sourceL": 0.4888938739706231,
+      "paletteReferenceId": 7
+    },
+    {
+      "sourceL": 0.49248638309269777,
+      "paletteReferenceId": 7
+    },
+    {
+      "sourceL": 0.8432359670877161,
+      "paletteReferenceId": 15
+    }
+  ],
+  "constraintScope": "eight reviewed native source contrast pairs; default m=1, equal Q; not full authored-feature discovery",
+  "featureContrastCertificates": [
+    {
+      "a": 9,
+      "b": 13,
+      "gap": 0.016805732199951684,
+      "certificateId": 0,
+      "sourceL": [
+        0.4756806508927461,
+        0.49248638309269777
+      ],
+      "referenceIds": [
+        6,
+        7
+      ],
+      "outputContrastAtEqualQ": [
+        0.03711383072283575,
+        0.04347683576993239
+      ]
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "gap": 0.01341790832710743,
+      "certificateId": 2,
+      "sourceL": [
+        0.2944380850559484,
+        0.3078559933830558
+      ],
+      "referenceIds": [
+        1,
+        3
+      ],
+      "outputContrastAtEqualQ": [
+        0.07211081074567638,
+        0.07772354594420106
+      ]
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "gap": 0.025485461343231375,
+      "certificateId": 3,
+      "sourceL": [
+        0.2944380850559484,
+        0.31992354639917975
+      ],
+      "referenceIds": [
+        1,
+        3
+      ],
+      "outputContrastAtEqualQ": [
+        0.07211081074567638,
+        0.07772354594420106
+      ]
+    },
+    {
+      "a": 4,
+      "b": 11,
+      "gap": 0.04831542269265282,
+      "certificateId": 4,
+      "sourceL": [
+        0.43378778206771884,
+        0.48210320476037166
+      ],
+      "referenceIds": [
+        5,
+        7
+      ],
+      "outputContrastAtEqualQ": [
+        0.0807926499133731,
+        0.08059066649276814
+      ]
+    },
+    {
+      "a": 6,
+      "b": 10,
+      "gap": 0.022673926941748135,
+      "certificateId": 5,
+      "sourceL": [
+        0.4594241178370024,
+        0.4820980447787505
+      ],
+      "referenceIds": [
+        6,
+        7
+      ],
+      "outputContrastAtEqualQ": [
+        0.03711383072283575,
+        0.04347683576993239
+      ]
+    },
+    {
+      "a": 8,
+      "b": 12,
+      "gap": 0.013486071434178792,
+      "certificateId": 6,
+      "sourceL": [
+        0.4754078025364443,
+        0.4888938739706231
+      ],
+      "referenceIds": [
+        6,
+        7
+      ],
+      "outputContrastAtEqualQ": [
+        0.03711383072283575,
+        0.04347683576993239
+      ]
+    },
+    {
+      "a": 7,
+      "b": 12,
+      "gap": 0.024231004919814503,
+      "certificateId": 7,
+      "sourceL": [
+        0.4646628690508086,
+        0.4888938739706231
+      ],
+      "referenceIds": [
+        6,
+        7
+      ],
+      "outputContrastAtEqualQ": [
+        0.03711383072283575,
+        0.04347683576993239
+      ]
+    },
+    {
+      "a": 3,
+      "b": 5,
+      "gap": 0.030355664495734624,
+      "certificateId": 8,
+      "sourceL": [
+        0.4154161933800706,
+        0.4457718578758052
+      ],
+      "referenceIds": [
+        5,
+        6
+      ],
+      "outputContrastAtEqualQ": [
+        0.043678819190537344,
+        0.03711383072283575
+      ]
+    }
+  ],
+  "featureConstraintStatus": {
+    "feasible": true,
+    "passes": 11,
+    "moves": 23,
+    "scope": "source-certified painted features at equal Q; sourceFeatureId remains inferred/null",
+    "excessWithinOneNativeBand": false
+  }
+}

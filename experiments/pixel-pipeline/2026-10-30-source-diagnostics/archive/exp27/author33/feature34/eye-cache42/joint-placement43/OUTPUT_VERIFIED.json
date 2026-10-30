@@ -1,0 +1,336 @@
+{
+  "passed": 36,
+  "checks": [
+    {
+      "name": "neutral: every saved RGBA pixel has exact reference-cell colour/family and outside-alpha0",
+      "pass": true
+    },
+    {
+      "name": "neutral: 12x RGBA nearest exact",
+      "pass": true
+    },
+    {
+      "name": "neutral: reference iteration order cannot change placement",
+      "pass": true
+    },
+    {
+      "name": "neutral: all serialized layouts equal source cells plus one common integer translation",
+      "pass": true
+    },
+    {
+      "name": "neutral: partial visibility does not generate replacement cells or change hidden intrinsic IDs",
+      "pass": true
+    },
+    {
+      "name": "walk-00: every saved RGBA pixel has exact reference-cell colour/family and outside-alpha0",
+      "pass": true
+    },
+    {
+      "name": "walk-00: 12x RGBA nearest exact",
+      "pass": true
+    },
+    {
+      "name": "walk-00: reference iteration order cannot change placement",
+      "pass": true
+    },
+    {
+      "name": "walk-00: all serialized layouts equal source cells plus one common integer translation",
+      "pass": true
+    },
+    {
+      "name": "walk-00: partial visibility does not generate replacement cells or change hidden intrinsic IDs",
+      "pass": true
+    },
+    {
+      "name": "walk-01: every saved RGBA pixel has exact reference-cell colour/family and outside-alpha0",
+      "pass": true
+    },
+    {
+      "name": "walk-01: 12x RGBA nearest exact",
+      "pass": true
+    },
+    {
+      "name": "walk-01: reference iteration order cannot change placement",
+      "pass": true
+    },
+    {
+      "name": "walk-01: all serialized layouts equal source cells plus one common integer translation",
+      "pass": true
+    },
+    {
+      "name": "walk-01: partial visibility does not generate replacement cells or change hidden intrinsic IDs",
+      "pass": true
+    },
+    {
+      "name": "walk-02: every saved RGBA pixel has exact reference-cell colour/family and outside-alpha0",
+      "pass": true
+    },
+    {
+      "name": "walk-02: 12x RGBA nearest exact",
+      "pass": true
+    },
+    {
+      "name": "walk-02: reference iteration order cannot change placement",
+      "pass": true
+    },
+    {
+      "name": "walk-02: all serialized layouts equal source cells plus one common integer translation",
+      "pass": true
+    },
+    {
+      "name": "walk-02: partial visibility does not generate replacement cells or change hidden intrinsic IDs",
+      "pass": true
+    },
+    {
+      "name": "walk-03: every saved RGBA pixel has exact reference-cell colour/family and outside-alpha0",
+      "pass": true
+    },
+    {
+      "name": "walk-03: 12x RGBA nearest exact",
+      "pass": true
+    },
+    {
+      "name": "walk-03: reference iteration order cannot change placement",
+      "pass": true
+    },
+    {
+      "name": "walk-03: all serialized layouts equal source cells plus one common integer translation",
+      "pass": true
+    },
+    {
+      "name": "walk-03: partial visibility does not generate replacement cells or change hidden intrinsic IDs",
+      "pass": true
+    },
+    {
+      "name": "registered pose round-trip chooses its own entry, not previous coordinates",
+      "pass": true
+    },
+    {
+      "name": "unregistered input blink50/af83524acf4ffe rejects stale/open-eye substitution",
+      "pass": true
+    },
+    {
+      "name": "unregistered input blink100/af83524acf4ffe rejects stale/open-eye substitution",
+      "pass": true
+    },
+    {
+      "name": "unregistered input unseen-pos/af83524acf4ffe rejects stale/open-eye substitution",
+      "pass": true
+    },
+    {
+      "name": "unregistered input 201f4bf1fe/changed-model rejects stale/open-eye substitution",
+      "pass": true
+    },
+    {
+      "name": "unregistered input 201f4bf1fe/changed-style rejects stale/open-eye substitution",
+      "pass": true
+    },
+    {
+      "name": "unregistered input 201f4bf1fe/changed-role-o rejects stale/open-eye substitution",
+      "pass": true
+    },
+    {
+      "name": "common snap tie/negative boundary (-0.5, 0.5)",
+      "pass": true
+    },
+    {
+      "name": "common snap tie/negative boundary (-0.50001, 0.49999)",
+      "pass": true
+    },
+    {
+      "name": "common snap tie/negative boundary (1.5, -1.5)",
+      "pass": true
+    },
+    {
+      "name": "all tracked product/template hashes still match initial audit",
+      "pass": true
+    }
+  ],
+  "layoutPlacementsRead": 21125,
+  "actualTemporalFrames": 0,
+  "UnityCalls": 0,
+  "productEdits": 0,
+  "unsupportedBlinkStatesInvented": 0,
+  "registrationResiduals": [
+    {
+      "pose": "neutral",
+      "perEyeRegistrationResidual": {
+        "1": {
+          "sourceCentre": [
+            225.70076043165798,
+            51.62489903270043
+          ],
+          "continuousReferenceCentre": [
+            225.52177788996448,
+            52.09107015376813
+          ],
+          "residualXY": [
+            -0.17898254169350025,
+            0.46617112106770264
+          ],
+          "distanceCells": 0.49934984164269464
+        },
+        "2": {
+          "sourceCentre": [
+            218.342795348271,
+            52.55724127483582
+          ],
+          "continuousReferenceCentre": [
+            218.52177788996448,
+            52.09107015376813
+          ],
+          "residualXY": [
+            0.17898254169347183,
+            -0.46617112106768843
+          ],
+          "distanceCells": 0.4993498416426712
+        }
+      },
+      "interpretation": "Rigid-template mismatch to projected source; not corrected/hidden by independent eye offsets"
+    },
+    {
+      "pose": "walk-00",
+      "perEyeRegistrationResidual": {
+        "1": {
+          "sourceCentre": [
+            223.48099014950026,
+            53.046301777706695
+          ],
+          "continuousReferenceCentre": [
+            223.1935906075749,
+            52.9513416653478
+          ],
+          "residualXY": [
+            -0.28739954192536743,
+            -0.09496011235889767
+          ],
+          "distanceCells": 0.3026812178482925
+        },
+        "2": {
+          "sourceCentre": [
+            215.9061910656495,
+            52.856381552988935
+          ],
+          "continuousReferenceCentre": [
+            216.1935906075749,
+            52.9513416653478
+          ],
+          "residualXY": [
+            0.28739954192539585,
+            0.09496011235886215
+          ],
+          "distanceCells": 0.3026812178483083
+        }
+      },
+      "interpretation": "Rigid-template mismatch to projected source; not corrected/hidden by independent eye offsets"
+    },
+    {
+      "pose": "walk-01",
+      "perEyeRegistrationResidual": {
+        "1": {
+          "sourceCentre": [
+            223.0208697554752,
+            53.16309195097401
+          ],
+          "continuousReferenceCentre": [
+            222.75180470856822,
+            52.95046982296532
+          ],
+          "residualXY": [
+            -0.26906504690697375,
+            -0.21262212800868951
+          ],
+          "distanceCells": 0.34293464214919367
+        },
+        "2": {
+          "sourceCentre": [
+            215.4827396616613,
+            52.73784769495662
+          ],
+          "continuousReferenceCentre": [
+            215.75180470856822,
+            52.95046982296532
+          ],
+          "residualXY": [
+            0.2690650469069169,
+            0.21262212800869662
+          ],
+          "distanceCells": 0.3429346421491535
+        }
+      },
+      "interpretation": "Rigid-template mismatch to projected source; not corrected/hidden by independent eye offsets"
+    },
+    {
+      "pose": "walk-02",
+      "perEyeRegistrationResidual": {
+        "1": {
+          "sourceCentre": [
+            222.56144887151484,
+            53.175798964408294
+          ],
+          "continuousReferenceCentre": [
+            222.28838937299338,
+            52.84534197040722
+          ],
+          "residualXY": [
+            -0.2730594985214623,
+            -0.3304569940010751
+          ],
+          "distanceCells": 0.42867623519040454
+        },
+        "2": {
+          "sourceCentre": [
+            215.0153298744719,
+            52.514884976406144
+          ],
+          "continuousReferenceCentre": [
+            215.28838937299338,
+            52.84534197040722
+          ],
+          "residualXY": [
+            0.2730594985214907,
+            0.3304569940010751
+          ],
+          "distanceCells": 0.42867623519042264
+        }
+      },
+      "interpretation": "Rigid-template mismatch to projected source; not corrected/hidden by independent eye offsets"
+    },
+    {
+      "pose": "walk-03",
+      "perEyeRegistrationResidual": {
+        "1": {
+          "sourceCentre": [
+            222.08641711303338,
+            53.187338130634075
+          ],
+          "continuousReferenceCentre": [
+            221.8685609105076,
+            52.772335115118324
+          ],
+          "residualXY": [
+            -0.21785620252578042,
+            -0.4150030155157509
+          ],
+          "distanceCells": 0.46870974799562304
+        },
+        "2": {
+          "sourceCentre": [
+            214.65070470798184,
+            52.35733209960257
+          ],
+          "continuousReferenceCentre": [
+            214.8685609105076,
+            52.772335115118324
+          ],
+          "residualXY": [
+            0.217856202525752,
+            0.4150030155157509
+          ],
+          "distanceCells": 0.4687097479956098
+        }
+      },
+      "interpretation": "Rigid-template mismatch to projected source; not corrected/hidden by independent eye offsets"
+    }
+  ]
+}

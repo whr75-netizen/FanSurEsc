@@ -1,0 +1,5 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),R=__dirname,read=p=>JSON.parse(fs.readFileSync(p,'utf8'));
+const source=read(path.join(R,'../palette-v3/BINDINGS.json')),{referenceForSample,buildPalette}=require('./palette.cjs');
+const variants={};for(const N of [16,32,64])for(const constrained of [false,true]){const model=read(path.join(R,`${constrained?'CONSTRAINED':'PALETTE'}_${N}.json`));if(model.feasible===false)continue;const P=buildPalette(model,1).tablesRGB8,key=N+(constrained?'-protected':'');variants[key]={};for(const name of ['preserve','simplify'])variants[key][name]=source.variants[name].rows.map(r=>{if(!r||r.unresolved)return r;const v=referenceForSample(model,r.sample,{colourGroupId:r.appearance,uncertain:false});return {...r,v3RGB8:r.rgb,...v,rgb:P[v.paletteReferenceId][r.shadeK]};});}
+fs.writeFileSync(path.join(R,'BUDGET_BINDINGS.json'),JSON.stringify({sourceId:source.sourceId,modelSHA256:source.modelSHA256,variants},null,2));console.log('budget bindings ready');

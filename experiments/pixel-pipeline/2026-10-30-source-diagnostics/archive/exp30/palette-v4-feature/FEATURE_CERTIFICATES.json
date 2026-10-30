@@ -1,0 +1,398 @@
+[
+  {
+    "id": 0,
+    "sourcePair": [
+      {
+        "materialId": 13,
+        "uv": [
+          0.23169884085655212,
+          0.4886297285556793
+        ],
+        "RGBAlinear": [
+          0.177734375,
+          0.08475494384765625,
+          0.078125,
+          1
+        ],
+        "appearance": 1
+      },
+      {
+        "materialId": 13,
+        "uv": [
+          0.2196386754512787,
+          0.44011056423187256
+        ],
+        "RGBAlinear": [
+          0.1943359375,
+          0.09521484375,
+          0.08642578125,
+          1
+        ],
+        "appearance": 2
+      }
+    ],
+    "sourceGapL": 0.016805732199951684,
+    "sourceGapLab": 0.016841857515562605,
+    "review": {
+      "id": 0,
+      "protect": true,
+      "type": "painted-stroke colour contrast",
+      "evidence": "same visible chart; native13 UV patches show repeated bright strokes; source L contrast0.016806. Q3/2 share reference level. v2 contrast direction is inverted.",
+      "certainty": "native painted pattern observed; authored semantic ID unknown"
+    },
+    "protect": true,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  },
+  {
+    "id": 1,
+    "sourcePair": [
+      {
+        "materialId": 11,
+        "uv": [
+          1.2817291021347046,
+          0.6412656903266907
+        ],
+        "RGBAlinear": [
+          0.056319236755371094,
+          0.021335601806640625,
+          0.021658658981323242,
+          1
+        ],
+        "appearance": 1
+      },
+      {
+        "materialId": 11,
+        "uv": [
+          1.1912908554077148,
+          0.6815203428268433
+        ],
+        "RGBAlinear": [
+          0.055197715759277344,
+          0.020694732666015625,
+          0.0185546875,
+          1
+        ],
+        "appearance": 2
+      }
+    ],
+    "sourceGapL": 0.003463511381975759,
+    "sourceGapLab": 0.005759068507798386,
+    "review": {
+      "id": 1,
+      "protect": false,
+      "type": "old contrast greatly exaggerated; local separability unconfirmed",
+      "evidence": "different charts; actual source deltaE0.005759 and deltaL0.003464. Native11 patches contain strokes, but these two projected samples have nearly identical colour. v2 deltaL0.083151 is not evidence that this local edge should be conspicuous.",
+      "certainty": "do not force a visible seam or claim that the texture contains no feature"
+    },
+    "protect": false,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  },
+  {
+    "id": 2,
+    "sourcePair": [
+      {
+        "materialId": 12,
+        "uv": [
+          0.16487443447113037,
+          0.6812199354171753
+        ],
+        "RGBAlinear": [
+          0.056179046630859375,
+          0.02028677612543106,
+          0.018622957170009613,
+          1
+        ],
+        "appearance": 2
+      },
+      {
+        "materialId": 12,
+        "uv": [
+          0.3810046911239624,
+          0.6405689716339111
+        ],
+        "RGBAlinear": [
+          0.048095703125,
+          0.0177001953125,
+          0.0194091796875,
+          1
+        ],
+        "appearance": 1
+      }
+    ],
+    "sourceGapL": 0.01341790832710743,
+    "sourceGapLab": 0.015254643747196006,
+    "review": {
+      "id": 2,
+      "protect": true,
+      "type": "painted-stroke colour contrast",
+      "evidence": "native12 patches show distinct painted stroke/background positions; actual deltaL0.013418, not old0.083151 bank contrast.",
+      "certainty": "preserve measured source contrast, not appearance bank amplitude"
+    },
+    "protect": true,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  },
+  {
+    "id": 3,
+    "sourcePair": [
+      {
+        "materialId": 12,
+        "uv": [
+          0.3810046911239624,
+          0.6405689716339111
+        ],
+        "RGBAlinear": [
+          0.048095703125,
+          0.0177001953125,
+          0.0194091796875,
+          1
+        ],
+        "appearance": 1
+      },
+      {
+        "materialId": 12,
+        "uv": [
+          0.3666980266571045,
+          0.6094311475753784
+        ],
+        "RGBAlinear": [
+          0.060324668884277344,
+          0.023193359375,
+          0.025146484375,
+          1
+        ],
+        "appearance": 0
+      }
+    ],
+    "sourceGapL": 0.025485461343231375,
+    "sourceGapLab": 0.025527639810531834,
+    "review": {
+      "id": 3,
+      "protect": true,
+      "type": "painted-line colour contrast",
+      "evidence": "same chart and native12 line/stroke present; measured source deltaL0.025485. Preserve actual source brightness order, not the meaning suggested by dark-line role number.",
+      "certainty": "source gradient affects local order; no gradient-removal art choice"
+    },
+    "protect": true,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  },
+  {
+    "id": 4,
+    "sourcePair": [
+      {
+        "materialId": 12,
+        "uv": [
+          0.24422842264175415,
+          0.562675952911377
+        ],
+        "RGBAlinear": [
+          0.138671875,
+          0.06298828125,
+          0.057861328125,
+          1
+        ],
+        "appearance": 1
+      },
+      {
+        "materialId": 12,
+        "uv": [
+          0.22532770037651062,
+          0.4799608886241913
+        ],
+        "RGBAlinear": [
+          0.1845703125,
+          0.0888671875,
+          0.07816314697265625,
+          1
+        ],
+        "appearance": 2
+      }
+    ],
+    "sourceGapL": 0.04831542269265282,
+    "sourceGapLab": 0.04842662947510304,
+    "review": {
+      "id": 4,
+      "protect": true,
+      "type": "painted feature with differing illumination stages",
+      "evidence": "native12 stroke versus local background. source deltaL0.048315. Equal-Q contrast is protected; actual Q2/Q1 may reduce/cancel contrast by design and must not be counted as a pure selector failure.",
+      "certainty": "actual-Q cancellation remains separately reported"
+    },
+    "protect": true,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  },
+  {
+    "id": 5,
+    "sourcePair": [
+      {
+        "materialId": 11,
+        "uv": [
+          1.111952304840088,
+          0.5211117267608643
+        ],
+        "RGBAlinear": [
+          0.162109375,
+          0.076171875,
+          0.06640625,
+          1
+        ],
+        "appearance": 1
+      },
+      {
+        "materialId": 11,
+        "uv": [
+          0.11540043354034424,
+          0.47158902883529663
+        ],
+        "RGBAlinear": [
+          0.1845703125,
+          0.0888671875,
+          0.078125,
+          1
+        ],
+        "appearance": 2
+      }
+    ],
+    "sourceGapL": 0.022673926941748135,
+    "sourceGapLab": 0.022682240665593774,
+    "review": {
+      "id": 5,
+      "protect": true,
+      "type": "painted-stroke colour contrast",
+      "evidence": "native11 stroke/background positions and source deltaL0.022674. Preserve actual sign and magnitude; source patches and projected native crop inspected.",
+      "certainty": "inferred source feature, not authored semantic label"
+    },
+    "protect": true,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  },
+  {
+    "id": 6,
+    "sourcePair": [
+      {
+        "materialId": 13,
+        "uv": [
+          1.2959941625595093,
+          0.4902023673057556
+        ],
+        "RGBAlinear": [
+          0.177734375,
+          0.08447265625,
+          0.078125,
+          1
+        ],
+        "appearance": 1
+      },
+      {
+        "materialId": 13,
+        "uv": [
+          1.3131775856018066,
+          0.4419683814048767
+        ],
+        "RGBAlinear": [
+          0.1908111572265625,
+          0.09288978576660156,
+          0.08447265625,
+          1
+        ],
+        "appearance": 2
+      }
+    ],
+    "sourceGapL": 0.013486071434178792,
+    "sourceGapLab": 0.013536218437039811,
+    "review": {
+      "id": 6,
+      "protect": true,
+      "type": "painted-stroke colour contrast",
+      "evidence": "same chart, native13 repeated light stroke; source deltaL0.013486. v2 bank contrast sign is inverted.",
+      "certainty": "preserve measured native colour signal"
+    },
+    "protect": true,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  },
+  {
+    "id": 7,
+    "sourcePair": [
+      {
+        "materialId": 13,
+        "uv": [
+          1.3131775856018066,
+          0.4419683814048767
+        ],
+        "RGBAlinear": [
+          0.1908111572265625,
+          0.09288978576660156,
+          0.08447265625,
+          1
+        ],
+        "appearance": 2
+      },
+      {
+        "materialId": 12,
+        "uv": [
+          1.1929513216018677,
+          0.5146671533584595
+        ],
+        "RGBAlinear": [
+          0.16644668579101562,
+          0.07906341552734375,
+          0.0703125,
+          1
+        ],
+        "appearance": 1
+      }
+    ],
+    "sourceGapL": 0.024231004919814503,
+    "sourceGapLab": 0.024260382727646607,
+    "review": {
+      "id": 7,
+      "protect": true,
+      "type": "source paint contrast across visible surface boundary",
+      "evidence": "native13 light stroke and native12 local background; source deltaL0.024231. Source surfaces stay separate; only palette contrast is constrained, no geometric union.",
+      "certainty": "not proof that both surfaces form one authored strand"
+    },
+    "protect": true,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  },
+  {
+    "id": 8,
+    "sourcePair": [
+      {
+        "materialId": 13,
+        "uv": [
+          1.3371148109436035,
+          0.3928278982639313
+        ],
+        "RGBAlinear": [
+          0.1220703125,
+          0.054443359375,
+          0.05615234375,
+          1
+        ],
+        "appearance": 1
+      },
+      {
+        "materialId": 12,
+        "uv": [
+          1.1947550773620605,
+          0.46141961216926575
+        ],
+        "RGBAlinear": [
+          0.14995574951171875,
+          0.06808143854141235,
+          0.06609535217285156,
+          1
+        ],
+        "appearance": 2
+      }
+    ],
+    "sourceGapL": 0.030355664495734624,
+    "sourceGapLab": 0.030624338539817192,
+    "review": {
+      "id": 8,
+      "protect": true,
+      "type": "source painted-stroke contrast",
+      "evidence": "native13 background and native12 repeated light stroke; source deltaL0.030356. Direct native patches/projected crop support the colour difference.",
+      "certainty": "sourceFeatureId remains null"
+    },
+    "protect": true,
+    "requiredContrastRule": "measured original unlit L difference, at every equal shade stage; no epsilon RGB separation"
+  }
+]

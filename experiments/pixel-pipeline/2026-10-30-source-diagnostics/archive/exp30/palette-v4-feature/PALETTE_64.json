@@ -1,0 +1,2032 @@
+{
+  "kind": "fixed-gap-native-palette-budget-candidate",
+  "version": 3,
+  "sourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "originalMaterialIds": [
+    11,
+    12,
+    13
+  ],
+  "originalAppearanceGroupIds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "status": "budget comparison only, no art choice",
+  "paletteInputSHA256": "75368163de04ab6267486e7e0dc900e8e43c468234d101aaad6e461642d9094e",
+  "referenceShadeK": 3,
+  "sourceReferenceRule": "nearest full OKLab native colour in one verified warm chromatic family; appearance remains metadata and geometry signal, not an independent far-apart palette bank",
+  "shadeRule": "same measured Lab-L shadow target for all budgets; nearest observed colour below anchor; Q0/1 lower and Q2/3 anchor",
+  "intervalRule": "Lab(native anchor)+m*(Lab(measured shade colour)-Lab(native anchor)); source selection and Q(g) labels never use m",
+  "references": [
+    {
+      "id": 0,
+      "anchorRGB8": [
+        23,
+        9,
+        10
+      ],
+      "anchorLab": [
+        0.16172694009069016,
+        0.024112818832623326,
+        0.0066875598377878626
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 504,
+        "y": 260
+      },
+      "nativeTexelSupport": 1982
+    },
+    {
+      "id": 1,
+      "anchorRGB8": [
+        26,
+        11,
+        11
+      ],
+      "anchorLab": [
+        0.17218711330204242,
+        0.02475676377297331,
+        0.009075041980893178
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 235,
+        "y": 247
+      },
+      "nativeTexelSupport": 2385
+    },
+    {
+      "id": 2,
+      "anchorRGB8": [
+        29,
+        14,
+        14
+      ],
+      "anchorLab": [
+        0.1854844082929615,
+        0.0242998654124255,
+        0.008756055549570846
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 233,
+        "y": 227
+      },
+      "nativeTexelSupport": 2446
+    },
+    {
+      "id": 3,
+      "anchorRGB8": [
+        32,
+        16,
+        17
+      ],
+      "anchorLab": [
+        0.1962334887785111,
+        0.02610613339078957,
+        0.0073825988768347894
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 498,
+        "y": 205
+      },
+      "nativeTexelSupport": 3964
+    },
+    {
+      "id": 4,
+      "anchorRGB8": [
+        34,
+        18,
+        18
+      ],
+      "anchorLab": [
+        0.20454283917507401,
+        0.02528415493132681,
+        0.0090225512258916
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 260,
+        "y": 195
+      },
+      "nativeTexelSupport": 11025
+    },
+    {
+      "id": 5,
+      "anchorRGB8": [
+        38,
+        20,
+        21
+      ],
+      "anchorLab": [
+        0.21662722857482603,
+        0.028584855824442784,
+        0.00831431876562802
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 228,
+        "y": 190
+      },
+      "nativeTexelSupport": 6479
+    },
+    {
+      "id": 6,
+      "anchorRGB8": [
+        43,
+        22,
+        23
+      ],
+      "anchorLab": [
+        0.22982269711896447,
+        0.03277628692066156,
+        0.010032113617665428
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 224,
+        "y": 208
+      },
+      "nativeTexelSupport": 67451
+    },
+    {
+      "id": 7,
+      "anchorRGB8": [
+        45,
+        23,
+        24
+      ],
+      "anchorLab": [
+        0.23557063390416147,
+        0.03409931214740182,
+        0.010566180304470457
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 207,
+        "y": 227
+      },
+      "nativeTexelSupport": 74496
+    },
+    {
+      "id": 8,
+      "anchorRGB8": [
+        48,
+        26,
+        27
+      ],
+      "anchorLab": [
+        0.24790216243728772,
+        0.03366804020683692,
+        0.010280487506420577
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 493,
+        "y": 21
+      },
+      "nativeTexelSupport": 180492
+    },
+    {
+      "id": 9,
+      "anchorRGB8": [
+        50,
+        28,
+        29
+      ],
+      "anchorLab": [
+        0.25606435609393813,
+        0.03339095729960201,
+        0.010106664607733185
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 0,
+        "y": 94
+      },
+      "nativeTexelSupport": 154858
+    },
+    {
+      "id": 10,
+      "anchorRGB8": [
+        55,
+        30,
+        31
+      ],
+      "anchorLab": [
+        0.2687250025262925,
+        0.037427618596341666,
+        0.011748228729727
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 89,
+        "y": 324
+      },
+      "nativeTexelSupport": 16035
+    },
+    {
+      "id": 11,
+      "anchorRGB8": [
+        58,
+        33,
+        34
+      ],
+      "anchorLab": [
+        0.2806922162388025,
+        0.03701719343518624,
+        0.011483394235228428
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 498,
+        "y": 336
+      },
+      "nativeTexelSupport": 15616
+    },
+    {
+      "id": 12,
+      "anchorRGB8": [
+        61,
+        35,
+        37
+      ],
+      "anchorLab": [
+        0.2904173812389305,
+        0.03864694795690435,
+        0.010242399946705394
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 502,
+        "y": 344
+      },
+      "nativeTexelSupport": 16013
+    },
+    {
+      "id": 13,
+      "anchorRGB8": [
+        64,
+        38,
+        39
+      ],
+      "anchorLab": [
+        0.3018779076383362,
+        0.037771251455863575,
+        0.011666218619980878
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 508,
+        "y": 353
+      },
+      "nativeTexelSupport": 14517
+    },
+    {
+      "id": 14,
+      "anchorRGB8": [
+        67,
+        40,
+        42
+      ],
+      "anchorLab": [
+        0.311434640101135,
+        0.03938826390515884,
+        0.010448464028235516
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 504,
+        "y": 360
+      },
+      "nativeTexelSupport": 17595
+    },
+    {
+      "id": 15,
+      "anchorRGB8": [
+        71,
+        43,
+        45
+      ],
+      "anchorLab": [
+        0.3244527783161384,
+        0.04039013662115884,
+        0.010806783329851605
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 508,
+        "y": 370
+      },
+      "nativeTexelSupport": 18105
+    },
+    {
+      "id": 16,
+      "anchorRGB8": [
+        74,
+        45,
+        47
+      ],
+      "anchorLab": [
+        0.3335276778985112,
+        0.04151119177966395,
+        0.011232399282880445
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 505,
+        "y": 380
+      },
+      "nativeTexelSupport": 17685
+    },
+    {
+      "id": 17,
+      "anchorRGB8": [
+        77,
+        48,
+        50
+      ],
+      "anchorLab": [
+        0.34495240410510747,
+        0.04114498611576728,
+        0.01103045437143435
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 508,
+        "y": 391
+      },
+      "nativeTexelSupport": 20382
+    },
+    {
+      "id": 18,
+      "anchorRGB8": [
+        80,
+        50,
+        52
+      ],
+      "anchorLab": [
+        0.3538908781245482,
+        0.04226083031409966,
+        0.011452579312472178
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 506,
+        "y": 403
+      },
+      "nativeTexelSupport": 25423
+    },
+    {
+      "id": 19,
+      "anchorRGB8": [
+        83,
+        53,
+        55
+      ],
+      "anchorLab": [
+        0.36517058063484287,
+        0.041909878205214635,
+        0.01126479777549122
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 510,
+        "y": 429
+      },
+      "nativeTexelSupport": 25241
+    },
+    {
+      "id": 20,
+      "anchorRGB8": [
+        87,
+        56,
+        58
+      ],
+      "anchorLab": [
+        0.3777053896052969,
+        0.042906445761460715,
+        0.011623315586667071
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 28,
+        "y": 466
+      },
+      "nativeTexelSupport": 28036
+    },
+    {
+      "id": 21,
+      "anchorRGB8": [
+        90,
+        59,
+        61
+      ],
+      "anchorLab": [
+        0.38882788324272466,
+        0.04257326133961642,
+        0.011451212874591388
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 180,
+        "y": 498
+      },
+      "nativeTexelSupport": 27167
+    },
+    {
+      "id": 22,
+      "anchorRGB8": [
+        93,
+        61,
+        62
+      ],
+      "anchorLab": [
+        0.39719700636181937,
+        0.043226622726975056,
+        0.013414139576340689
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 179,
+        "y": 486
+      },
+      "nativeTexelSupport": 32021
+    },
+    {
+      "id": 23,
+      "anchorRGB8": [
+        96,
+        64,
+        66
+      ],
+      "anchorLab": [
+        0.4085001116943299,
+        0.04335711561814046,
+        0.01170323146931912
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 93,
+        "y": 531
+      },
+      "nativeTexelSupport": 61964
+    },
+    {
+      "id": 24,
+      "anchorRGB8": [
+        99,
+        67,
+        68
+      ],
+      "anchorLab": [
+        0.4191307636062562,
+        0.042600850975072324,
+        0.01308190728919445
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 50,
+        "y": 555
+      },
+      "nativeTexelSupport": 68797
+    },
+    {
+      "id": 25,
+      "anchorRGB8": [
+        102,
+        70,
+        70
+      ],
+      "anchorLab": [
+        0.42970791441303124,
+        0.041857561427653595,
+        0.014446966933141014
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 175,
+        "y": 540
+      },
+      "nativeTexelSupport": 50706
+    },
+    {
+      "id": 26,
+      "anchorRGB8": [
+        105,
+        73,
+        73
+      ],
+      "anchorLab": [
+        0.44052829991243464,
+        0.04157241414396426,
+        0.014294688938499112
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 134,
+        "y": 587
+      },
+      "nativeTexelSupport": 54200
+    },
+    {
+      "id": 27,
+      "anchorRGB8": [
+        108,
+        76,
+        75
+      ],
+      "anchorLab": [
+        0.4509969727432265,
+        0.040853418051201684,
+        0.015646922925323548
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 169,
+        "y": 586
+      },
+      "nativeTexelSupport": 42446
+    },
+    {
+      "id": 28,
+      "anchorRGB8": [
+        112,
+        79,
+        77
+      ],
+      "anchorLab": [
+        0.4626206661311621,
+        0.04142666235128206,
+        0.01746321105864218
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 172,
+        "y": 542
+      },
+      "nativeTexelSupport": 37999
+    },
+    {
+      "id": 29,
+      "anchorRGB8": [
+        115,
+        82,
+        80
+      ],
+      "anchorLab": [
+        0.4732622107197538,
+        0.04116622939925005,
+        0.017313202405809414
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 107,
+        "y": 587
+      },
+      "nativeTexelSupport": 34806
+    },
+    {
+      "id": 30,
+      "anchorRGB8": [
+        118,
+        85,
+        82
+      ],
+      "anchorLab": [
+        0.4835668499709393,
+        0.04047452433369189,
+        0.018633235082219812
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 110,
+        "y": 587
+      },
+      "nativeTexelSupport": 34919
+    },
+    {
+      "id": 31,
+      "anchorRGB8": [
+        121,
+        88,
+        86
+      ],
+      "anchorLab": [
+        0.49439183531564357,
+        0.040668911178710854,
+        0.01703185986347988
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 67,
+        "y": 792
+      },
+      "nativeTexelSupport": 20702
+    },
+    {
+      "id": 32,
+      "anchorRGB8": [
+        124,
+        91,
+        89
+      ],
+      "anchorLab": [
+        0.5048822487186096,
+        0.04043133319404779,
+        0.016899689577086596
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 135,
+        "y": 803
+      },
+      "nativeTexelSupport": 16676
+    },
+    {
+      "id": 33,
+      "anchorRGB8": [
+        128,
+        94,
+        92
+      ],
+      "anchorLab": [
+        0.5164692068157805,
+        0.041448876938962986,
+        0.017228360886349436
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 218,
+        "y": 817
+      },
+      "nativeTexelSupport": 14564
+    },
+    {
+      "id": 34,
+      "anchorRGB8": [
+        131,
+        97,
+        95
+      ],
+      "anchorLab": [
+        0.5268528387858902,
+        0.041219001329794336,
+        0.017102099759993605
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 192,
+        "y": 827
+      },
+      "nativeTexelSupport": 16651
+    },
+    {
+      "id": 35,
+      "anchorRGB8": [
+        135,
+        100,
+        97
+      ],
+      "anchorLab": [
+        0.5380364194734271,
+        0.041803301557774036,
+        0.018860576649470495
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 13,
+        "y": 810
+      },
+      "nativeTexelSupport": 15384
+    },
+    {
+      "id": 36,
+      "anchorRGB8": [
+        138,
+        103,
+        100
+      ],
+      "anchorLab": [
+        0.5483195670469031,
+        0.04158232364239936,
+        0.01873418326560128
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 89,
+        "y": 850
+      },
+      "nativeTexelSupport": 14851
+    },
+    {
+      "id": 37,
+      "anchorRGB8": [
+        142,
+        106,
+        103
+      ],
+      "anchorLab": [
+        0.5596722167659461,
+        0.04259132898319001,
+        0.019053993863981156
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 492,
+        "y": 853
+      },
+      "nativeTexelSupport": 18129
+    },
+    {
+      "id": 38,
+      "anchorRGB8": [
+        145,
+        109,
+        106
+      ],
+      "anchorLab": [
+        0.5698601126108434,
+        0.04237661151094613,
+        0.018932558702723035
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 65,
+        "y": 871
+      },
+      "nativeTexelSupport": 14689
+    },
+    {
+      "id": 39,
+      "anchorRGB8": [
+        149,
+        112,
+        108
+      ],
+      "anchorLab": [
+        0.5808289091717205,
+        0.04295912443617675,
+        0.02065393382057884
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 441,
+        "y": 842
+      },
+      "nativeTexelSupport": 19048
+    },
+    {
+      "id": 40,
+      "anchorRGB8": [
+        152,
+        115,
+        111
+      ],
+      "anchorLab": [
+        0.590926717136843,
+        0.04275186158918737,
+        0.020532187968710702
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 52,
+        "y": 894
+      },
+      "nativeTexelSupport": 18434
+    },
+    {
+      "id": 41,
+      "anchorRGB8": [
+        156,
+        118,
+        114
+      ],
+      "anchorLab": [
+        0.6020704873919537,
+        0.04375205547257244,
+        0.020844175263342035
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 287,
+        "y": 840
+      },
+      "nativeTexelSupport": 21966
+    },
+    {
+      "id": 42,
+      "anchorRGB8": [
+        159,
+        121,
+        117
+      ],
+      "anchorLab": [
+        0.6120825227236056,
+        0.04354996483778856,
+        0.02072668190923882
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 35,
+        "y": 916
+      },
+      "nativeTexelSupport": 25327
+    },
+    {
+      "id": 43,
+      "anchorRGB8": [
+        162,
+        124,
+        120
+      ],
+      "anchorLab": [
+        0.622057588336458,
+        0.043352692325593356,
+        0.020612672046431302
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 212,
+        "y": 925
+      },
+      "nativeTexelSupport": 22709
+    },
+    {
+      "id": 44,
+      "anchorRGB8": [
+        165,
+        128,
+        123
+      ],
+      "anchorLab": [
+        0.6339732279232,
+        0.04149711971764242,
+        0.021419906548920453
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 69,
+        "y": 914
+      },
+      "nativeTexelSupport": 19158
+    },
+    {
+      "id": 45,
+      "anchorRGB8": [
+        169,
+        131,
+        126
+      ],
+      "anchorLab": [
+        0.6449219603108991,
+        0.04249859679745138,
+        0.021727709785605787
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 143,
+        "y": 922
+      },
+      "nativeTexelSupport": 20747
+    },
+    {
+      "id": 46,
+      "anchorRGB8": [
+        173,
+        134,
+        129
+      ],
+      "anchorLab": [
+        0.655824632367875,
+        0.04349467087813552,
+        0.022034551190882712
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 90,
+        "y": 971
+      },
+      "nativeTexelSupport": 22268
+    },
+    {
+      "id": 47,
+      "anchorRGB8": [
+        177,
+        137,
+        132
+      ],
+      "anchorLab": [
+        0.6666823777065282,
+        0.04448550394736772,
+        0.0223404445245311
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 66,
+        "y": 989
+      },
+      "nativeTexelSupport": 25742
+    },
+    {
+      "id": 48,
+      "anchorRGB8": [
+        180,
+        140,
+        135
+      ],
+      "anchorLab": [
+        0.6764573150336975,
+        0.04430375701461786,
+        0.022233204430017195
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 145,
+        "y": 1006
+      },
+      "nativeTexelSupport": 17963
+    },
+    {
+      "id": 49,
+      "anchorRGB8": [
+        184,
+        144,
+        138
+      ],
+      "anchorLab": [
+        0.6891743092644773,
+        0.04366187730151033,
+        0.023439673524475624
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 222,
+        "y": 985
+      },
+      "nativeTexelSupport": 13935
+    },
+    {
+      "id": 50,
+      "anchorRGB8": [
+        187,
+        147,
+        141
+      ],
+      "anchorLab": [
+        0.6988748733543341,
+        0.04349040115885283,
+        0.02333490265349325
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 124,
+        "y": 995
+      },
+      "nativeTexelSupport": 14269
+    },
+    {
+      "id": 51,
+      "anchorRGB8": [
+        194,
+        148,
+        140
+      ],
+      "anchorLab": [
+        0.707768289628019,
+        0.049562183173802954,
+        0.028402009175602316
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 240,
+        "y": 975
+      },
+      "nativeTexelSupport": 7293
+    },
+    {
+      "id": 52,
+      "anchorRGB8": [
+        200,
+        151,
+        141
+      ],
+      "anchorLab": [
+        0.7200086349210371,
+        0.05202059636863354,
+        0.03213312037296301
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 160,
+        "y": 983
+      },
+      "nativeTexelSupport": 5094
+    },
+    {
+      "id": 53,
+      "anchorRGB8": [
+        206,
+        153,
+        143
+      ],
+      "anchorLab": [
+        0.7305949464355361,
+        0.056478088384179226,
+        0.03367635304467387
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 8,
+        "y": 986
+      },
+      "nativeTexelSupport": 4732
+    },
+    {
+      "id": 54,
+      "anchorRGB8": [
+        212,
+        155,
+        144
+      ],
+      "anchorLab": [
+        0.7409429539095563,
+        0.06050813725946985,
+        0.036521191249650475
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 7,
+        "y": 996
+      },
+      "nativeTexelSupport": 6481
+    },
+    {
+      "id": 55,
+      "anchorRGB8": [
+        217,
+        158,
+        145
+      ],
+      "anchorLab": [
+        0.7520665999971957,
+        0.0617696033709923,
+        0.03976291153020062
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 251,
+        "y": 1016
+      },
+      "nativeTexelSupport": 4410
+    },
+    {
+      "id": 56,
+      "anchorRGB8": [
+        222,
+        160,
+        147
+      ],
+      "anchorLab": [
+        0.7615640627734588,
+        0.06502442799635383,
+        0.040885199484805845
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 6,
+        "y": 1019
+      },
+      "nativeTexelSupport": 1200
+    },
+    {
+      "id": 57,
+      "anchorRGB8": [
+        201,
+        174,
+        171
+      ],
+      "anchorLab": [
+        0.7733854486976206,
+        0.028690260961291125,
+        0.01360874454708283
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 57,
+        "y": 180
+      },
+      "nativeTexelSupport": 494
+    },
+    {
+      "id": 58,
+      "anchorRGB8": [
+        204,
+        178,
+        175
+      ],
+      "anchorLab": [
+        0.7851001445336494,
+        0.027448227918091817,
+        0.013172758973320597
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 64,
+        "y": 179
+      },
+      "nativeTexelSupport": 610
+    },
+    {
+      "id": 59,
+      "anchorRGB8": [
+        207,
+        181,
+        179
+      ],
+      "anchorLab": [
+        0.7948185479039903,
+        0.02774925710881454,
+        0.01180544884147905
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 75,
+        "y": 175
+      },
+      "nativeTexelSupport": 712
+    },
+    {
+      "id": 60,
+      "anchorRGB8": [
+        210,
+        185,
+        183
+      ],
+      "anchorLab": [
+        0.8064664854695951,
+        0.026525383957335225,
+        0.011383680444004396
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 88,
+        "y": 179
+      },
+      "nativeTexelSupport": 963
+    },
+    {
+      "id": 61,
+      "anchorRGB8": [
+        213,
+        188,
+        187
+      ],
+      "anchorLab": [
+        0.8161263339610634,
+        0.026829335356188533,
+        0.010029396294184534
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 105,
+        "y": 186
+      },
+      "nativeTexelSupport": 1237
+    },
+    {
+      "id": 62,
+      "anchorRGB8": [
+        216,
+        192,
+        191
+      ],
+      "anchorLab": [
+        0.8277092784793235,
+        0.025622653086196767,
+        0.009620925461942154
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 105,
+        "y": 205
+      },
+      "nativeTexelSupport": 816
+    },
+    {
+      "id": 63,
+      "anchorRGB8": [
+        219,
+        195,
+        193
+      ],
+      "anchorLab": [
+        0.8367569775488151,
+        0.02515903256040286,
+        0.01089534136345316
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 111,
+        "y": 214
+      },
+      "nativeTexelSupport": 359
+    }
+  ],
+  "compactPaletteRGB8": [
+    [
+      23,
+      9,
+      10
+    ],
+    [
+      26,
+      11,
+      11
+    ],
+    [
+      29,
+      14,
+      14
+    ],
+    [
+      32,
+      16,
+      17
+    ],
+    [
+      34,
+      18,
+      18
+    ],
+    [
+      38,
+      20,
+      21
+    ],
+    [
+      43,
+      22,
+      23
+    ],
+    [
+      45,
+      23,
+      24
+    ],
+    [
+      48,
+      26,
+      27
+    ],
+    [
+      50,
+      28,
+      29
+    ],
+    [
+      55,
+      30,
+      31
+    ],
+    [
+      58,
+      33,
+      34
+    ],
+    [
+      61,
+      35,
+      37
+    ],
+    [
+      64,
+      38,
+      39
+    ],
+    [
+      67,
+      40,
+      42
+    ],
+    [
+      71,
+      43,
+      45
+    ],
+    [
+      74,
+      45,
+      47
+    ],
+    [
+      77,
+      48,
+      50
+    ],
+    [
+      80,
+      50,
+      52
+    ],
+    [
+      83,
+      53,
+      55
+    ],
+    [
+      87,
+      56,
+      58
+    ],
+    [
+      90,
+      59,
+      61
+    ],
+    [
+      93,
+      61,
+      62
+    ],
+    [
+      96,
+      64,
+      66
+    ],
+    [
+      99,
+      67,
+      68
+    ],
+    [
+      102,
+      70,
+      70
+    ],
+    [
+      105,
+      73,
+      73
+    ],
+    [
+      108,
+      76,
+      75
+    ],
+    [
+      112,
+      79,
+      77
+    ],
+    [
+      115,
+      82,
+      80
+    ],
+    [
+      118,
+      85,
+      82
+    ],
+    [
+      121,
+      88,
+      86
+    ],
+    [
+      124,
+      91,
+      89
+    ],
+    [
+      128,
+      94,
+      92
+    ],
+    [
+      131,
+      97,
+      95
+    ],
+    [
+      135,
+      100,
+      97
+    ],
+    [
+      138,
+      103,
+      100
+    ],
+    [
+      142,
+      106,
+      103
+    ],
+    [
+      145,
+      109,
+      106
+    ],
+    [
+      149,
+      112,
+      108
+    ],
+    [
+      152,
+      115,
+      111
+    ],
+    [
+      156,
+      118,
+      114
+    ],
+    [
+      159,
+      121,
+      117
+    ],
+    [
+      162,
+      124,
+      120
+    ],
+    [
+      165,
+      128,
+      123
+    ],
+    [
+      169,
+      131,
+      126
+    ],
+    [
+      173,
+      134,
+      129
+    ],
+    [
+      177,
+      137,
+      132
+    ],
+    [
+      180,
+      140,
+      135
+    ],
+    [
+      184,
+      144,
+      138
+    ],
+    [
+      187,
+      147,
+      141
+    ],
+    [
+      194,
+      148,
+      140
+    ],
+    [
+      200,
+      151,
+      141
+    ],
+    [
+      206,
+      153,
+      143
+    ],
+    [
+      212,
+      155,
+      144
+    ],
+    [
+      217,
+      158,
+      145
+    ],
+    [
+      222,
+      160,
+      147
+    ],
+    [
+      201,
+      174,
+      171
+    ],
+    [
+      204,
+      178,
+      175
+    ],
+    [
+      207,
+      181,
+      179
+    ],
+    [
+      210,
+      185,
+      183
+    ],
+    [
+      213,
+      188,
+      187
+    ],
+    [
+      216,
+      192,
+      191
+    ],
+    [
+      219,
+      195,
+      193
+    ]
+  ],
+  "perReferenceShadePaletteIndices": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      0,
+      2,
+      2
+    ],
+    [
+      0,
+      0,
+      3,
+      3
+    ],
+    [
+      0,
+      0,
+      4,
+      4
+    ],
+    [
+      1,
+      1,
+      5,
+      5
+    ],
+    [
+      2,
+      2,
+      6,
+      6
+    ],
+    [
+      3,
+      3,
+      7,
+      7
+    ],
+    [
+      4,
+      4,
+      8,
+      8
+    ],
+    [
+      5,
+      5,
+      9,
+      9
+    ],
+    [
+      6,
+      6,
+      10,
+      10
+    ],
+    [
+      7,
+      7,
+      11,
+      11
+    ],
+    [
+      8,
+      8,
+      12,
+      12
+    ],
+    [
+      9,
+      9,
+      13,
+      13
+    ],
+    [
+      10,
+      10,
+      14,
+      14
+    ],
+    [
+      11,
+      11,
+      15,
+      15
+    ],
+    [
+      12,
+      12,
+      16,
+      16
+    ],
+    [
+      13,
+      13,
+      17,
+      17
+    ],
+    [
+      14,
+      14,
+      18,
+      18
+    ],
+    [
+      15,
+      15,
+      19,
+      19
+    ],
+    [
+      16,
+      16,
+      20,
+      20
+    ],
+    [
+      17,
+      17,
+      21,
+      21
+    ],
+    [
+      18,
+      18,
+      22,
+      22
+    ],
+    [
+      19,
+      19,
+      23,
+      23
+    ],
+    [
+      20,
+      20,
+      24,
+      24
+    ],
+    [
+      21,
+      21,
+      25,
+      25
+    ],
+    [
+      22,
+      22,
+      26,
+      26
+    ],
+    [
+      23,
+      23,
+      27,
+      27
+    ],
+    [
+      24,
+      24,
+      28,
+      28
+    ],
+    [
+      25,
+      25,
+      29,
+      29
+    ],
+    [
+      26,
+      26,
+      30,
+      30
+    ],
+    [
+      27,
+      27,
+      31,
+      31
+    ],
+    [
+      28,
+      28,
+      32,
+      32
+    ],
+    [
+      29,
+      29,
+      33,
+      33
+    ],
+    [
+      30,
+      30,
+      34,
+      34
+    ],
+    [
+      31,
+      31,
+      35,
+      35
+    ],
+    [
+      32,
+      32,
+      36,
+      36
+    ],
+    [
+      33,
+      33,
+      37,
+      37
+    ],
+    [
+      34,
+      34,
+      38,
+      38
+    ],
+    [
+      35,
+      35,
+      39,
+      39
+    ],
+    [
+      36,
+      36,
+      40,
+      40
+    ],
+    [
+      37,
+      37,
+      41,
+      41
+    ],
+    [
+      38,
+      38,
+      42,
+      42
+    ],
+    [
+      39,
+      39,
+      43,
+      43
+    ],
+    [
+      40,
+      40,
+      44,
+      44
+    ],
+    [
+      41,
+      41,
+      45,
+      45
+    ],
+    [
+      42,
+      42,
+      46,
+      46
+    ],
+    [
+      43,
+      43,
+      47,
+      47
+    ],
+    [
+      44,
+      44,
+      48,
+      48
+    ],
+    [
+      45,
+      45,
+      49,
+      49
+    ],
+    [
+      46,
+      46,
+      50,
+      50
+    ],
+    [
+      47,
+      47,
+      51,
+      51
+    ],
+    [
+      48,
+      48,
+      52,
+      52
+    ],
+    [
+      49,
+      49,
+      53,
+      53
+    ],
+    [
+      51,
+      51,
+      54,
+      54
+    ],
+    [
+      51,
+      51,
+      55,
+      55
+    ],
+    [
+      52,
+      52,
+      56,
+      56
+    ],
+    [
+      52,
+      52,
+      57,
+      57
+    ],
+    [
+      57,
+      57,
+      58,
+      58
+    ],
+    [
+      57,
+      57,
+      59,
+      59
+    ],
+    [
+      57,
+      57,
+      60,
+      60
+    ],
+    [
+      57,
+      57,
+      61,
+      61
+    ],
+    [
+      58,
+      58,
+      62,
+      62
+    ],
+    [
+      59,
+      59,
+      63,
+      63
+    ]
+  ],
+  "sourceFeatureIdRemainsNull": true,
+  "sourceToneClassRemovedFromPaletteSelection": true,
+  "originalAppearanceClassifierUnchanged": true,
+  "limitations": [
+    "finite16-colour quantization creates new tone boundaries and can merge small real colour differences; inspect edge evidence, not only pixel errors",
+    "adjacent native colour gaps are data-derived and unequal; common predecessor rule is a candidate shading model, not an approved art style",
+    "material14 and other model SHA are unmodelled; no source colour fallback",
+    "continuous source gradient versus normalization remains unchosen; this mapping reads whichever legitimate source sample upstream supplies"
+  ],
+  "nativeCoverageFitSHA256": "8ebad17773885e33d0b1bb6a35e1aa939ed685e06ad6a236b13125fab64e68c2",
+  "fitRule": "native equal-L coverage bands with actual observed OKLab medoid; no screen-colour mean",
+  "chromaticFamilyScope": "one source-evidenced warm family in current materials11/12/13; other colour families require separate source fit and classification, never a warm fallback",
+  "paletteColourBudget": 64,
+  "nativeLBounds": [
+    0.15693478974222658,
+    0.8432359670877161
+  ],
+  "nativeBandWidthL": 0.010723455896023273,
+  "fixedShadowTargetGapL": 0.043678819190537344
+}

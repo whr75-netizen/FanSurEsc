@@ -1,0 +1,479 @@
+{
+  "kind": "source-pattern-reference-palette-candidate",
+  "version": 2,
+  "sourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "status": "unapproved palette-only candidate; two source-tone classes per inferred appearance role",
+  "originalMaterialIds": [
+    11,
+    12,
+    13
+  ],
+  "appearanceGroupsUnchanged": true,
+  "sourceToneClassCutsLabL": [
+    0.3034354758491653,
+    0.3920610553604049,
+    0.4189716896310457,
+    0.7083539415738134
+  ],
+  "referenceShadeK": 3,
+  "sourceToneClassRule": "classify actual unlit sample L before g; cuts from optimal native weighted L SSE two-class split within each appearance role",
+  "referenceRule": "actual native medoid per appearance/tone class; sourceRGBA is preserved separately; reference is a palette estimate, not replaced source",
+  "shadeRule": "P[2*appearanceGroup+sourceToneClass][Q(g)]; two observed levels per reference, shade table [low,low,anchor,anchor]",
+  "intervalRule": "Lab(anchor)+m*(Lab(P)-Lab(anchor)); m acts on palette intervals only; ref shade3 exactly native anchor at every m",
+  "continuousGUsedInPaletteGeneration": false,
+  "sourceFeatureIdAuthored": false,
+  "references": [
+    {
+      "id": 0,
+      "appearanceGroupId": 0,
+      "sourceToneClass": 0,
+      "nativeTexelCount": 35445,
+      "anchorRGB8": [
+        41,
+        22,
+        23
+      ],
+      "anchorLab": [
+        0.22664405776961483,
+        0.02980414166819864,
+        0.008770620338634239
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 2,
+        "y": 345
+      },
+      "lowerSupportRGB8": [
+        31,
+        16,
+        16
+      ],
+      "lowerSupportOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 234,
+        "y": 198
+      },
+      "nativeBandLBounds": [
+        0.15693478974222658,
+        0.3032676601036645
+      ],
+      "paletteGapL": 0.03238711039863401,
+      "selection": "exact observed OKLab medoid of native within-appearance tone class; lower support is native lower-part medoid, not min/max endpoint"
+    },
+    {
+      "id": 1,
+      "appearanceGroupId": 0,
+      "sourceToneClass": 1,
+      "nativeTexelCount": 131547,
+      "anchorRGB8": [
+        87,
+        58,
+        59
+      ],
+      "anchorLab": [
+        0.38220573009613856,
+        0.03956313412125778,
+        0.012020565907338465
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 225,
+        "y": 656
+      },
+      "lowerSupportRGB8": [
+        79,
+        49,
+        51
+      ],
+      "lowerSupportOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 496,
+        "y": 400
+      },
+      "nativeBandLBounds": [
+        0.30360329159466615,
+        0.6567493585719547
+      ],
+      "paletteGapL": 0.03209021512221738,
+      "selection": "exact observed OKLab medoid of native within-appearance tone class; lower support is native lower-part medoid, not min/max endpoint"
+    },
+    {
+      "id": 2,
+      "appearanceGroupId": 1,
+      "sourceToneClass": 0,
+      "nativeTexelCount": 592095,
+      "anchorRGB8": [
+        52,
+        29,
+        30
+      ],
+      "anchorLab": [
+        0.2616434727545175,
+        0.03470096996639119,
+        0.010626745105457913
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 75,
+        "y": 167
+      },
+      "lowerSupportRGB8": [
+        47,
+        26,
+        27
+      ],
+      "lowerSupportOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 0,
+        "y": 0
+      },
+      "nativeBandLBounds": [
+        0.18483294977959797,
+        0.3919094720249466
+      ],
+      "paletteGapL": 0.015287284501602272,
+      "selection": "exact observed OKLab medoid of native within-appearance tone class; lower support is native lower-part medoid, not min/max endpoint"
+    },
+    {
+      "id": 3,
+      "appearanceGroupId": 1,
+      "sourceToneClass": 1,
+      "nativeTexelCount": 745725,
+      "anchorRGB8": [
+        131,
+        95,
+        93
+      ],
+      "anchorLab": [
+        0.5222344341513595,
+        0.04386050747102435,
+        0.018099886917498587
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 410,
+        "y": 761
+      },
+      "lowerSupportRGB8": [
+        106,
+        73,
+        73
+      ],
+      "lowerSupportOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 145,
+        "y": 588
+      },
+      "nativeBandLBounds": [
+        0.3922126386958632,
+        0.7655370663722134
+      ],
+      "paletteGapL": 0.08047242015686035,
+      "selection": "exact observed OKLab medoid of native within-appearance tone class; lower support is native lower-part medoid, not min/max endpoint"
+    },
+    {
+      "id": 4,
+      "appearanceGroupId": 2,
+      "sourceToneClass": 0,
+      "nativeTexelCount": 17562,
+      "anchorRGB8": [
+        82,
+        53,
+        51
+      ],
+      "anchorLab": [
+        0.36261443920570635,
+        0.03870402007365603,
+        0.017009122557224754
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 135,
+        "y": 373
+      },
+      "lowerSupportRGB8": [
+        72,
+        45,
+        43
+      ],
+      "lowerSupportOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 44,
+        "y": 218
+      },
+      "nativeBandLBounds": [
+        0.27121256344426764,
+        0.41882993275583247
+      ],
+      "paletteGapL": 0.03310732152389184,
+      "selection": "exact observed OKLab medoid of native within-appearance tone class; lower support is native lower-part medoid, not min/max endpoint"
+    },
+    {
+      "id": 5,
+      "appearanceGroupId": 2,
+      "sourceToneClass": 1,
+      "nativeTexelCount": 34974,
+      "anchorRGB8": [
+        117,
+        82,
+        79
+      ],
+      "anchorLab": [
+        0.4753803282139218,
+        0.043269134165033585,
+        0.019727598505676347
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 162,
+        "y": 520
+      },
+      "lowerSupportRGB8": [
+        111,
+        78,
+        75
+      ],
+      "lowerSupportOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 173,
+        "y": 512
+      },
+      "nativeBandLBounds": [
+        0.41911344650625887,
+        0.6415208294877841
+      ],
+      "paletteGapL": 0.01660399297707882,
+      "selection": "exact observed OKLab medoid of native within-appearance tone class; lower support is native lower-part medoid, not min/max endpoint"
+    },
+    {
+      "id": 6,
+      "appearanceGroupId": 3,
+      "sourceToneClass": 0,
+      "nativeTexelCount": 8724,
+      "anchorRGB8": [
+        165,
+        124,
+        122
+      ],
+      "anchorLab": [
+        0.6258320249531368,
+        0.04775139032347342,
+        0.019134945069560594
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 154,
+        "y": 222
+      },
+      "lowerSupportRGB8": [
+        153,
+        111,
+        109
+      ],
+      "lowerSupportOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 182,
+        "y": 199
+      },
+      "nativeBandLBounds": [
+        0.499673476423796,
+        0.7082414228650932
+      ],
+      "paletteGapL": 0.04224824823915341,
+      "selection": "exact observed OKLab medoid of native within-appearance tone class; lower support is native lower-part medoid, not min/max endpoint"
+    },
+    {
+      "id": 7,
+      "appearanceGroupId": 3,
+      "sourceToneClass": 1,
+      "nativeTexelCount": 6792,
+      "anchorRGB8": [
+        206,
+        180,
+        177
+      ],
+      "anchorLab": [
+        0.791397794768165,
+        0.027387956960482407,
+        0.01314143038660398
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 69,
+        "y": 177
+      },
+      "lowerSupportRGB8": [
+        197,
+        168,
+        164
+      ],
+      "lowerSupportOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 47,
+        "y": 177
+      },
+      "nativeBandLBounds": [
+        0.7084664602825337,
+        0.8432359670877161
+      ],
+      "paletteGapL": 0.03545683396186694,
+      "selection": "exact observed OKLab medoid of native within-appearance tone class; lower support is native lower-part medoid, not min/max endpoint"
+    }
+  ],
+  "compactPaletteRGB8": [
+    [
+      31,
+      16,
+      16
+    ],
+    [
+      41,
+      22,
+      23
+    ],
+    [
+      79,
+      49,
+      51
+    ],
+    [
+      87,
+      58,
+      59
+    ],
+    [
+      47,
+      26,
+      27
+    ],
+    [
+      52,
+      29,
+      30
+    ],
+    [
+      106,
+      73,
+      73
+    ],
+    [
+      131,
+      95,
+      93
+    ],
+    [
+      72,
+      45,
+      43
+    ],
+    [
+      82,
+      53,
+      51
+    ],
+    [
+      111,
+      78,
+      75
+    ],
+    [
+      117,
+      82,
+      79
+    ],
+    [
+      153,
+      111,
+      109
+    ],
+    [
+      165,
+      124,
+      122
+    ],
+    [
+      197,
+      168,
+      164
+    ],
+    [
+      206,
+      180,
+      177
+    ]
+  ],
+  "perReferenceShadePaletteIndices": [
+    [
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      2,
+      2,
+      3,
+      3
+    ],
+    [
+      4,
+      4,
+      5,
+      5
+    ],
+    [
+      6,
+      6,
+      7,
+      7
+    ],
+    [
+      8,
+      8,
+      9,
+      9
+    ],
+    [
+      10,
+      10,
+      11,
+      11
+    ],
+    [
+      12,
+      12,
+      13,
+      13
+    ],
+    [
+      14,
+      14,
+      15,
+      15
+    ]
+  ],
+  "unknownPolicy": "preserve main unresolved set explicitly; no palette fallback",
+  "limitations": [
+    "2 tone classes approximate continuous native gradients; new tone boundary is inferred and has not received main geometry/region correction",
+    "16 entries are an upper bound; only two distinct shade values per reference; not a proven final colour count",
+    "unlit texture includes painted tone; whether it is dye or lighting is unknown; this variant retains the source tone field rather than removing it",
+    "material14 not modelled; no warm-family fallback"
+  ]
+}

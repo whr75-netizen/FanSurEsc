@@ -1,0 +1,83 @@
+{
+  "checks": [
+    {
+      "name": "16 original sample RGB/output exact and no Q/UV/source mutation",
+      "pass": true
+    },
+    {
+      "name": "16 m0/native anchors/half interval and source IDs independent of g and spacing",
+      "pass": true
+    },
+    {
+      "name": "16-protected original sample RGB/output exact and no Q/UV/source mutation",
+      "pass": true
+    },
+    {
+      "name": "16-protected all8 measured source contrasts and direction survive all equal Q",
+      "pass": true
+    },
+    {
+      "name": "16-protected m0/native anchors/half interval and source IDs independent of g and spacing",
+      "pass": true
+    },
+    {
+      "name": "32 original sample RGB/output exact and no Q/UV/source mutation",
+      "pass": true
+    },
+    {
+      "name": "32 m0/native anchors/half interval and source IDs independent of g and spacing",
+      "pass": true
+    },
+    {
+      "name": "32-protected original sample RGB/output exact and no Q/UV/source mutation",
+      "pass": true
+    },
+    {
+      "name": "32-protected all8 measured source contrasts and direction survive all equal Q",
+      "pass": true
+    },
+    {
+      "name": "32-protected m0/native anchors/half interval and source IDs independent of g and spacing",
+      "pass": true
+    },
+    {
+      "name": "64 original sample RGB/output exact and no Q/UV/source mutation",
+      "pass": true
+    },
+    {
+      "name": "64 m0/native anchors/half interval and source IDs independent of g and spacing",
+      "pass": true
+    },
+    {
+      "name": "64-protected original sample RGB/output exact and no Q/UV/source mutation",
+      "pass": true
+    },
+    {
+      "name": "64-protected all8 measured source contrasts and direction survive all equal Q",
+      "pass": true
+    },
+    {
+      "name": "64-protected m0/native anchors/half interval and source IDs independent of g and spacing",
+      "pass": true
+    },
+    {
+      "name": "only64 meets measured contrast excess within one native band",
+      "pass": true
+    },
+    {
+      "name": "unconfirmed pair1 is not forced; different-Q pair4 is separately certified",
+      "pass": true
+    },
+    {
+      "name": "other model, missing material and unresolved reject without fallback",
+      "pass": true
+    },
+    {
+      "name": "R6 and v3 unchanged",
+      "pass": true
+    }
+  ],
+  "passed": 19,
+  "perturbations": 8592,
+  "scope": "eight source certificates/default m1; not all authored features, art or temporal pass"
+}

@@ -1,0 +1,56 @@
+{
+  "checks": [
+    {
+      "name": "same16 measured budget, monotone measured native palette and bounded adjacent gap",
+      "pass": true
+    },
+    {
+      "name": "preserve actual source samples give stored new output",
+      "pass": true
+    },
+    {
+      "name": "preserve g/depth/screen and role bank cannot change source reference",
+      "pass": true
+    },
+    {
+      "name": "preserve original appearance/shade/source/geometry values unchanged",
+      "pass": true
+    },
+    {
+      "name": "simplify actual source samples give stored new output",
+      "pass": true
+    },
+    {
+      "name": "simplify g/depth/screen and role bank cannot change source reference",
+      "pass": true
+    },
+    {
+      "name": "simplify original appearance/shade/source/geometry values unchanged",
+      "pass": true
+    },
+    {
+      "name": "zero interval, seven multiplier reference anchors and exact half-gap",
+      "pass": true
+    },
+    {
+      "name": "independent shade labels index the completed palette, not continuous g multiplication",
+      "pass": true
+    },
+    {
+      "name": "other model, unmodelled material and unresolved source reject without colour fallback",
+      "pass": true
+    },
+    {
+      "name": "source/model/control objects not mutated",
+      "pass": true
+    },
+    {
+      "name": "active R6 and v2 candidate preserved",
+      "pass": true
+    }
+  ],
+  "passed": 12,
+  "samples": 716,
+  "perturbations": 2864,
+  "scope": "source mapping/spacing contract, not art/temporal approval"
+}

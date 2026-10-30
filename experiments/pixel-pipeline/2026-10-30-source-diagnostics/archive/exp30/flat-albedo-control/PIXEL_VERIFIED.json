@@ -1,0 +1,182 @@
+{
+  "checks": [
+    {
+      "name": "pattern-unlit raw PNG exactly equals direct emitter",
+      "pass": true
+    },
+    {
+      "name": "pattern-unlit outside mask and alpha preserved",
+      "pass": true
+    },
+    {
+      "name": "pattern-unlit no AA/mixing within logical2x2",
+      "pass": true
+    },
+    {
+      "name": "pattern-unlit exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "pattern-unlit no off-recipe colours",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit raw PNG exactly equals direct emitter",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit outside mask and alpha preserved",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit no AA/mixing within logical2x2",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit no off-recipe colours",
+      "pass": true
+    },
+    {
+      "name": "pattern-legacy raw PNG exactly equals direct emitter",
+      "pass": true
+    },
+    {
+      "name": "pattern-legacy outside mask and alpha preserved",
+      "pass": true
+    },
+    {
+      "name": "pattern-legacy no AA/mixing within logical2x2",
+      "pass": true
+    },
+    {
+      "name": "pattern-legacy exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "pattern-legacy no off-recipe colours",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy raw PNG exactly equals direct emitter",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy outside mask and alpha preserved",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy no AA/mixing within logical2x2",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy no off-recipe colours",
+      "pass": true
+    },
+    {
+      "name": "pattern-distinct raw PNG exactly equals direct emitter",
+      "pass": true
+    },
+    {
+      "name": "pattern-distinct outside mask and alpha preserved",
+      "pass": true
+    },
+    {
+      "name": "pattern-distinct no AA/mixing within logical2x2",
+      "pass": true
+    },
+    {
+      "name": "pattern-distinct exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "pattern-distinct no off-recipe colours",
+      "pass": true
+    },
+    {
+      "name": "flat-distinct raw PNG exactly equals direct emitter",
+      "pass": true
+    },
+    {
+      "name": "flat-distinct outside mask and alpha preserved",
+      "pass": true
+    },
+    {
+      "name": "flat-distinct no AA/mixing within logical2x2",
+      "pass": true
+    },
+    {
+      "name": "flat-distinct exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "flat-distinct no off-recipe colours",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit-inherited-fallback raw PNG exactly equals direct emitter",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit-inherited-fallback outside mask and alpha preserved",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit-inherited-fallback no AA/mixing within logical2x2",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit-inherited-fallback exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy-inherited-fallback raw PNG exactly equals direct emitter",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy-inherited-fallback outside mask and alpha preserved",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy-inherited-fallback no AA/mixing within logical2x2",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy-inherited-fallback exact integer8x",
+      "pass": true
+    },
+    {
+      "name": "constant exactly original native texel and image SHA",
+      "pass": true
+    },
+    {
+      "name": "all source GPU/native sampler RGB8 errors at most1",
+      "pass": true
+    },
+    {
+      "name": "flat-unlit fixed g/Q regions are identical",
+      "pass": true
+    },
+    {
+      "name": "flat-legacy fixed g/Q regions are identical",
+      "pass": true
+    },
+    {
+      "name": "flat-distinct fixed g/Q regions are identical",
+      "pass": true
+    },
+    {
+      "name": "actual main colourRegion/Q still one RGB per label, featureDomain not confused",
+      "pass": true
+    }
+  ],
+  "passed": 44,
+  "scope": "saved-frame offline diagnostic; no claim about live Unity AA/composite/cache or temporal behaviour"
+}

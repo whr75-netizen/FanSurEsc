@@ -1,0 +1,102 @@
+{
+  "passed": 23,
+  "checks": [
+    {
+      "name": "source/input/palette/geometry packet binding unchanged",
+      "pass": true
+    },
+    {
+      "name": "all original Q values preserved separately and exactly equal count(g>=threshold)",
+      "pass": true
+    },
+    {
+      "name": "all source g samples preserved exactly",
+      "pass": true
+    },
+    {
+      "name": "before image exactly reproduces upstream flat-distinct diagnostic",
+      "pass": true
+    },
+    {
+      "name": "outside hair mask and all alpha unchanged",
+      "pass": true
+    },
+    {
+      "name": "every final 2x2 cell exactly equals P[correctedQ], no RGB averages or extra colours",
+      "pass": true
+    },
+    {
+      "name": "changed-cell log is complete",
+      "pass": true
+    },
+    {
+      "name": "all changed cells have same-chart measured native stage/visible witness",
+      "pass": true
+    },
+    {
+      "name": "all source witnesses stay within the declared spatial correction corridor",
+      "pass": true
+    },
+    {
+      "name": "changed-cell g interval errors reported, not hidden as primary-Q correctness",
+      "pass": true
+    },
+    {
+      "name": "before exact nearest 8x RGBA",
+      "pass": true
+    },
+    {
+      "name": "corrected exact nearest 8x RGBA",
+      "pass": true
+    },
+    {
+      "name": "no new standalone cells introduced by final candidate",
+      "pass": true
+    },
+    {
+      "name": "all six original singleton locations retained, not silently called noise",
+      "pass": true
+    },
+    {
+      "name": "reverse scan proof from original candidate run",
+      "pass": true
+    },
+    {
+      "name": "failure counterexample retained and final excludes its thin-connection cut",
+      "pass": true
+    },
+    {
+      "name": "spacing 0: fixed Q/Qprime/source maps; every pixel in that supplied palette",
+      "pass": true
+    },
+    {
+      "name": "spacing 0.5: fixed Q/Qprime/source maps; every pixel in that supplied palette",
+      "pass": true
+    },
+    {
+      "name": "spacing 1: fixed Q/Qprime/source maps; every pixel in that supplied palette",
+      "pass": true
+    },
+    {
+      "name": "spacing 1.5: fixed Q/Qprime/source maps; every pixel in that supplied palette",
+      "pass": true
+    },
+    {
+      "name": "shared path updates two faces oppositely with no gap/overlap in fixed example",
+      "pass": true
+    },
+    {
+      "name": "reversing an oriented path reverses winding, no hidden RGB operation",
+      "pass": true
+    },
+    {
+      "name": "eleven tracked product/template inputs unchanged",
+      "pass": true
+    }
+  ],
+  "newUnityCalls": 0,
+  "newCaptures": 0,
+  "productEdits": 0,
+  "DesktopWrites": 0,
+  "temporalVerification": false
+}

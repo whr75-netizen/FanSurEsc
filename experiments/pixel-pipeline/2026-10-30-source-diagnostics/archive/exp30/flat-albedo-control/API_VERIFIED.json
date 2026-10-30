@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "name": "paired original/flat use identical geometry/g/Q/threshold and palette",
+      "pass": true
+    },
+    {
+      "name": "flat unlit all368 mask cells exactly one original-native test colour",
+      "pass": true
+    },
+    {
+      "name": "legacy merges active Q2/Q3, corrected table distinguishes all four fixed-Q probes",
+      "pass": true
+    },
+    {
+      "name": "active references have native capacity without moving source anchor",
+      "pass": true
+    },
+    {
+      "name": "lit emission always directly selects the complete precomputed palette",
+      "pass": true
+    },
+    {
+      "name": "unlit raw-source emission key includes raw source, not a coarser palette ID",
+      "pass": true
+    },
+    {
+      "name": "inherited10 original-colour passthrough fails flat-region invariant and is absent from corrected branch",
+      "pass": true
+    },
+    {
+      "name": "raw Q region is not used as flat colour-region label for multi-source input",
+      "pass": true
+    },
+    {
+      "name": "new family-only diagnostic selector equals legacy selector on validated source samples",
+      "pass": true
+    },
+    {
+      "name": "wrong old primary capture, stale binding and stale Q reject",
+      "pass": true
+    },
+    {
+      "name": "cache epochs change for albedo, palette/lighting and fallback, while original capture is preserved",
+      "pass": true
+    },
+    {
+      "name": "spacing alters palette intervals, never g/Q/source labels",
+      "pass": true
+    },
+    {
+      "name": "all original inputs/models remain unchanged",
+      "pass": true
+    },
+    {
+      "name": "R6 and previous v4 remain byte-exact",
+      "pass": true
+    }
+  ],
+  "passed": 14,
+  "scope": "fixed frame controlled albedo experiment and mapping consistency, not art/temporal/Unity validation"
+}

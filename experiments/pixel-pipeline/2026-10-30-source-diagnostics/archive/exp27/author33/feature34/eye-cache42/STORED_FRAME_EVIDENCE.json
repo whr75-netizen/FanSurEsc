@@ -1,0 +1,641 @@
+[
+  {
+    "name": "neutral",
+    "sourcePhase": 5.0,
+    "viewAngle": 0.0,
+    "iris582": false,
+    "lash583": false,
+    "style": {
+      "version": "V11_CURVES_CURRENT_PIGMENT_348_02",
+      "upper": {
+        "x": -0.8199999928474426,
+        "y": 0.3499999940395355
+      },
+      "lower": {
+        "x": 0.7200000286102295,
+        "y": -0.25999999046325684
+      },
+      "irisRadii": {
+        "x": 0.550000011920929,
+        "y": 0.8399999737739563
+      },
+      "catchU": {
+        "x": -0.46000000834465027,
+        "y": -0.07999999821186066
+      },
+      "catchV": {
+        "x": -0.550000011920929,
+        "y": -0.07999999821186066
+      },
+      "irisOffset": 0.05000000074505806,
+      "irisPower": 3.0,
+      "referenceSocketMetres": {
+        "x": 0.019500000402331352,
+        "y": 0.014499999582767487
+      },
+      "radiusScale": [
+        {
+          "x": 1.0133600234985352,
+          "y": 1.093858242034912
+        },
+        {
+          "x": 1.0133697986602783,
+          "y": 1.093878149986267
+        }
+      ],
+      "newCatchPigment": false,
+      "whiteNeighbourSupport": false
+    },
+    "eyes": [
+      {
+        "stableEyeId": 2,
+        "rawIntrinsicS2Samples": 71,
+        "classifiedIrisSamples": 39,
+        "normalizedReclassifiedSamples": 32,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 4.122330665588379,
+        "afterNormalizedIrisAreaCells": 2.2972519397735596,
+        "S2ClassificationDistribution": {
+          "0": 1,
+          "1": 8,
+          "2": 16,
+          "3": 17,
+          "4": 6,
+          "5": 20,
+          "6": 3
+        },
+        "storedFinalIrisCells": [
+          [
+            217,
+            52
+          ],
+          [
+            218,
+            52
+          ]
+        ],
+        "storedUpperCells": 1,
+        "prototypeCacheId": "eye2:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye2:role1:template:213,78",
+          "eye2:role1:template:214,78",
+          "eye2:role1:template:213,79",
+          "eye2:role1:template:214,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      },
+      {
+        "stableEyeId": 1,
+        "rawIntrinsicS2Samples": 57,
+        "classifiedIrisSamples": 34,
+        "normalizedReclassifiedSamples": 23,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.3610334396362305,
+        "afterNormalizedIrisAreaCells": 2.0640692710876465,
+        "S2ClassificationDistribution": {
+          "0": 1,
+          "1": 4,
+          "2": 13,
+          "3": 16,
+          "4": 5,
+          "5": 17,
+          "6": 1
+        },
+        "storedFinalIrisCells": [
+          [
+            226,
+            51
+          ],
+          [
+            225,
+            52
+          ]
+        ],
+        "storedUpperCells": 1,
+        "prototypeCacheId": "eye1:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye1:role1:template:220,78",
+          "eye1:role1:template:221,78",
+          "eye1:role1:template:220,79",
+          "eye1:role1:template:221,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      }
+    ],
+    "buffersSHA256": "c012e659a00e9408208ef13f93edfc73f2125c233b6f7d905ceec6c0b87dfa10",
+    "paramsSHA256": "a8618123ef009b21cfacd0278b3e5c0acec1b1cc72ccf649fe30fdd4c099c3c2",
+    "sourceFacesSHA256": "889093f2754e497dcbbde522c4bcbdd207d59002005297f868defb877d5f6d1b"
+  },
+  {
+    "name": "walk-00",
+    "sourcePhase": 7.0,
+    "viewAngle": 0.0,
+    "iris582": false,
+    "lash583": false,
+    "style": {
+      "version": "V11_CURVES_CURRENT_PIGMENT_348_02",
+      "upper": {
+        "x": -0.8199999928474426,
+        "y": 0.3499999940395355
+      },
+      "lower": {
+        "x": 0.7200000286102295,
+        "y": -0.25999999046325684
+      },
+      "irisRadii": {
+        "x": 0.550000011920929,
+        "y": 0.8399999737739563
+      },
+      "catchU": {
+        "x": -0.46000000834465027,
+        "y": -0.07999999821186066
+      },
+      "catchV": {
+        "x": -0.550000011920929,
+        "y": -0.07999999821186066
+      },
+      "irisOffset": 0.05000000074505806,
+      "irisPower": 3.0,
+      "referenceSocketMetres": {
+        "x": 0.019500000402331352,
+        "y": 0.014499999582767487
+      },
+      "radiusScale": [
+        {
+          "x": 1.0133600234985352,
+          "y": 1.093858242034912
+        },
+        {
+          "x": 1.0133697986602783,
+          "y": 1.093878149986267
+        }
+      ],
+      "newCatchPigment": false,
+      "whiteNeighbourSupport": false
+    },
+    "eyes": [
+      {
+        "stableEyeId": 2,
+        "rawIntrinsicS2Samples": 61,
+        "classifiedIrisSamples": 34,
+        "normalizedReclassifiedSamples": 27,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.5992231369018555,
+        "afterNormalizedIrisAreaCells": 2.0600333213806152,
+        "S2ClassificationDistribution": {
+          "0": 2,
+          "1": 6,
+          "2": 13,
+          "3": 16,
+          "4": 5,
+          "5": 17,
+          "6": 2
+        },
+        "storedFinalIrisCells": [
+          [
+            215,
+            52
+          ],
+          [
+            216,
+            53
+          ]
+        ],
+        "storedUpperCells": 1,
+        "prototypeCacheId": "eye2:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye2:role1:template:213,78",
+          "eye2:role1:template:214,78",
+          "eye2:role1:template:213,79",
+          "eye2:role1:template:214,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      },
+      {
+        "stableEyeId": 1,
+        "rawIntrinsicS2Samples": 61,
+        "classifiedIrisSamples": 35,
+        "normalizedReclassifiedSamples": 26,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.5423362255096436,
+        "afterNormalizedIrisAreaCells": 2.1244356632232666,
+        "S2ClassificationDistribution": {
+          "0": 2,
+          "1": 6,
+          "2": 13,
+          "3": 17,
+          "4": 5,
+          "5": 17,
+          "6": 1
+        },
+        "storedFinalIrisCells": [
+          [
+            223,
+            52
+          ],
+          [
+            223,
+            53
+          ]
+        ],
+        "storedUpperCells": 0,
+        "prototypeCacheId": "eye1:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye1:role1:template:220,78",
+          "eye1:role1:template:221,78",
+          "eye1:role1:template:220,79",
+          "eye1:role1:template:221,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      }
+    ],
+    "buffersSHA256": "98ccef374a94fd4b92232989ba64852358e85767c7ca1cf3908765e3a790c531",
+    "paramsSHA256": "515646a9c8529d0fe70880e524b1fc6c67a9082f9165b8caefa79e8b2f28bfa0",
+    "sourceFacesSHA256": "9d3a4ddf2979f4899e4ed89521131d37b4aa0f84ba6df4ffc9b2d9defac03f19"
+  },
+  {
+    "name": "walk-01",
+    "sourcePhase": 9.0,
+    "viewAngle": 4.0,
+    "iris582": false,
+    "lash583": false,
+    "style": {
+      "version": "V11_CURVES_CURRENT_PIGMENT_348_02",
+      "upper": {
+        "x": -0.8199999928474426,
+        "y": 0.3499999940395355
+      },
+      "lower": {
+        "x": 0.7200000286102295,
+        "y": -0.25999999046325684
+      },
+      "irisRadii": {
+        "x": 0.550000011920929,
+        "y": 0.8399999737739563
+      },
+      "catchU": {
+        "x": -0.46000000834465027,
+        "y": -0.07999999821186066
+      },
+      "catchV": {
+        "x": -0.550000011920929,
+        "y": -0.07999999821186066
+      },
+      "irisOffset": 0.05000000074505806,
+      "irisPower": 3.0,
+      "referenceSocketMetres": {
+        "x": 0.019500000402331352,
+        "y": 0.014499999582767487
+      },
+      "radiusScale": [
+        {
+          "x": 1.0133600234985352,
+          "y": 1.093858242034912
+        },
+        {
+          "x": 1.0133697986602783,
+          "y": 1.093878149986267
+        }
+      ],
+      "newCatchPigment": false,
+      "whiteNeighbourSupport": false
+    },
+    "eyes": [
+      {
+        "stableEyeId": 2,
+        "rawIntrinsicS2Samples": 55,
+        "classifiedIrisSamples": 34,
+        "normalizedReclassifiedSamples": 21,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.169879198074341,
+        "afterNormalizedIrisAreaCells": 2.0623016357421875,
+        "S2ClassificationDistribution": {
+          "0": 2,
+          "1": 5,
+          "2": 13,
+          "3": 17,
+          "4": 4,
+          "5": 14
+        },
+        "storedFinalIrisCells": [
+          [
+            215,
+            52
+          ],
+          [
+            215,
+            53
+          ]
+        ],
+        "storedUpperCells": 0,
+        "prototypeCacheId": "eye2:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye2:role1:template:213,78",
+          "eye2:role1:template:214,78",
+          "eye2:role1:template:213,79",
+          "eye2:role1:template:214,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      },
+      {
+        "stableEyeId": 1,
+        "rawIntrinsicS2Samples": 63,
+        "classifiedIrisSamples": 37,
+        "normalizedReclassifiedSamples": 26,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.5476956367492676,
+        "afterNormalizedIrisAreaCells": 2.222167491912842,
+        "S2ClassificationDistribution": {
+          "0": 1,
+          "1": 5,
+          "2": 17,
+          "3": 17,
+          "4": 3,
+          "5": 17,
+          "6": 3
+        },
+        "storedFinalIrisCells": [
+          [
+            222,
+            53
+          ],
+          [
+            223,
+            53
+          ]
+        ],
+        "storedUpperCells": 0,
+        "prototypeCacheId": "eye1:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye1:role1:template:220,78",
+          "eye1:role1:template:221,78",
+          "eye1:role1:template:220,79",
+          "eye1:role1:template:221,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      }
+    ],
+    "buffersSHA256": "36fde18d8dcd19a8a7dc0939d21dc9786b0f210acf10353f2c63707027322019",
+    "paramsSHA256": "7f435794e84f8c28cee36107a8698302cf451bc07d6911bed6dd8fe90aaf3232",
+    "sourceFacesSHA256": "0cf20a1b30a3a2b1b388322b5cee1f3d2431cd4743e2f1df6bf25b5bf0a3ca03"
+  },
+  {
+    "name": "walk-02",
+    "sourcePhase": 11.0,
+    "viewAngle": 8.0,
+    "iris582": false,
+    "lash583": false,
+    "style": {
+      "version": "V11_CURVES_CURRENT_PIGMENT_348_02",
+      "upper": {
+        "x": -0.8199999928474426,
+        "y": 0.3499999940395355
+      },
+      "lower": {
+        "x": 0.7200000286102295,
+        "y": -0.25999999046325684
+      },
+      "irisRadii": {
+        "x": 0.550000011920929,
+        "y": 0.8399999737739563
+      },
+      "catchU": {
+        "x": -0.46000000834465027,
+        "y": -0.07999999821186066
+      },
+      "catchV": {
+        "x": -0.550000011920929,
+        "y": -0.07999999821186066
+      },
+      "irisOffset": 0.05000000074505806,
+      "irisPower": 3.0,
+      "referenceSocketMetres": {
+        "x": 0.019500000402331352,
+        "y": 0.014499999582767487
+      },
+      "radiusScale": [
+        {
+          "x": 1.0133600234985352,
+          "y": 1.093858242034912
+        },
+        {
+          "x": 1.0133697986602783,
+          "y": 1.093878149986267
+        }
+      ],
+      "newCatchPigment": false,
+      "whiteNeighbourSupport": false
+    },
+    "eyes": [
+      {
+        "stableEyeId": 2,
+        "rawIntrinsicS2Samples": 54,
+        "classifiedIrisSamples": 33,
+        "normalizedReclassifiedSamples": 21,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.127171516418457,
+        "afterNormalizedIrisAreaCells": 2.062009811401367,
+        "S2ClassificationDistribution": {
+          "0": 1,
+          "1": 4,
+          "2": 14,
+          "3": 15,
+          "4": 4,
+          "5": 15,
+          "6": 1
+        },
+        "storedFinalIrisCells": [
+          [
+            214,
+            52
+          ],
+          [
+            215,
+            52
+          ]
+        ],
+        "storedUpperCells": 0,
+        "prototypeCacheId": "eye2:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye2:role1:template:213,78",
+          "eye2:role1:template:214,78",
+          "eye2:role1:template:213,79",
+          "eye2:role1:template:214,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      },
+      {
+        "stableEyeId": 1,
+        "rawIntrinsicS2Samples": 61,
+        "classifiedIrisSamples": 39,
+        "normalizedReclassifiedSamples": 22,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.686938524246216,
+        "afterNormalizedIrisAreaCells": 2.4369378089904785,
+        "S2ClassificationDistribution": {
+          "0": 1,
+          "1": 4,
+          "2": 16,
+          "3": 18,
+          "4": 5,
+          "5": 16,
+          "6": 1
+        },
+        "storedFinalIrisCells": [
+          [
+            222,
+            53
+          ],
+          [
+            223,
+            53
+          ]
+        ],
+        "storedUpperCells": 0,
+        "prototypeCacheId": "eye1:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye1:role1:template:220,78",
+          "eye1:role1:template:221,78",
+          "eye1:role1:template:220,79",
+          "eye1:role1:template:221,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      }
+    ],
+    "buffersSHA256": "7d3bda5a4421a9f462c25c7613ea653865bc4f38c0f056157b376918f1bade57",
+    "paramsSHA256": "0aabcff85a1816141712d20c7c8d8f1a9005d8aa0f1e2a406d79ad91be215f00",
+    "sourceFacesSHA256": "c76e15cc878d023ce0a1def7600b8e4ed50cde6ae87ba112cd2130decc741705"
+  },
+  {
+    "name": "walk-03",
+    "sourcePhase": 13.000000953674316,
+    "viewAngle": 12.0,
+    "iris582": false,
+    "lash583": false,
+    "style": {
+      "version": "V11_CURVES_CURRENT_PIGMENT_348_02",
+      "upper": {
+        "x": -0.8199999928474426,
+        "y": 0.3499999940395355
+      },
+      "lower": {
+        "x": 0.7200000286102295,
+        "y": -0.25999999046325684
+      },
+      "irisRadii": {
+        "x": 0.550000011920929,
+        "y": 0.8399999737739563
+      },
+      "catchU": {
+        "x": -0.46000000834465027,
+        "y": -0.07999999821186066
+      },
+      "catchV": {
+        "x": -0.550000011920929,
+        "y": -0.07999999821186066
+      },
+      "irisOffset": 0.05000000074505806,
+      "irisPower": 3.0,
+      "referenceSocketMetres": {
+        "x": 0.019500000402331352,
+        "y": 0.014499999582767487
+      },
+      "radiusScale": [
+        {
+          "x": 1.0133600234985352,
+          "y": 1.093858242034912
+        },
+        {
+          "x": 1.0133697986602783,
+          "y": 1.093878149986267
+        }
+      ],
+      "newCatchPigment": false,
+      "whiteNeighbourSupport": false
+    },
+    "eyes": [
+      {
+        "stableEyeId": 2,
+        "rawIntrinsicS2Samples": 54,
+        "classifiedIrisSamples": 30,
+        "normalizedReclassifiedSamples": 24,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.0411670207977295,
+        "afterNormalizedIrisAreaCells": 1.8226544857025146,
+        "S2ClassificationDistribution": {
+          "1": 7,
+          "2": 11,
+          "3": 14,
+          "4": 5,
+          "5": 15,
+          "6": 2
+        },
+        "storedFinalIrisCells": [
+          [
+            214,
+            52
+          ]
+        ],
+        "storedUpperCells": 0,
+        "prototypeCacheId": "eye2:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye2:role1:template:213,78",
+          "eye2:role1:template:214,78",
+          "eye2:role1:template:213,79",
+          "eye2:role1:template:214,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      },
+      {
+        "stableEyeId": 1,
+        "rawIntrinsicS2Samples": 64,
+        "classifiedIrisSamples": 37,
+        "normalizedReclassifiedSamples": 27,
+        "float32Vs64ClassificationDifferencesOnS2": 0,
+        "rawIntrinsicAreaCells": 3.7603981494903564,
+        "afterNormalizedIrisAreaCells": 2.2902019023895264,
+        "S2ClassificationDistribution": {
+          "0": 2,
+          "1": 6,
+          "2": 16,
+          "3": 16,
+          "4": 5,
+          "5": 17,
+          "6": 2
+        },
+        "storedFinalIrisCells": [
+          [
+            221,
+            53
+          ],
+          [
+            222,
+            53
+          ]
+        ],
+        "storedUpperCells": 0,
+        "prototypeCacheId": "eye1:iris",
+        "prototypeCanonicalReferenceCellIds": [
+          "eye1:role1:template:220,78",
+          "eye1:role1:template:221,78",
+          "eye1:role1:template:220,79",
+          "eye1:role1:template:221,79"
+        ],
+        "occlusionCompleteForReplay": false,
+        "warning": "These S2 numbers precede skin/hair/body depth occlusion; missing S0/S4/S5/S6 prevents full selector/GPU replay. Prototype is intrinsic feature membership, not final-eye rendering."
+      }
+    ],
+    "buffersSHA256": "35cd4b196e749d3a7b16483f4b4374de8f11918fedbd1ced83587c6f7dcb1153",
+    "paramsSHA256": "e3c21a4a29d4b7a6d26ec54b064b0e6c8cc41277c2be8b7e4dc31efd98aa9ea7",
+    "sourceFacesSHA256": "1a027ad79aec1e652bf2d3d5ebccb112ca7fc63ce1d3f3f9aaaae0c18c78e33b"
+  }
+]

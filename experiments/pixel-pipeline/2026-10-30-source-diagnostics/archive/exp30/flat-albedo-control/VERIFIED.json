@@ -1,0 +1,61 @@
+{
+  "sourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "geometryPacketSHA256": "76fc49b722854b71f9112462b4a4753b1c59549eb700ab84b887f5257d2bf9cc",
+  "sourceModelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "constant": {
+    "RGB8": [
+      94,
+      64,
+      63
+    ],
+    "RGBAlinear": [
+      0.1119324278369056,
+      0.05126945837404324,
+      0.04970656598412723,
+      1
+    ],
+    "origin": {
+      "materialId": 12,
+      "imageId": 18,
+      "x": 166,
+      "y": 236,
+      "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124"
+    },
+    "selectionRule": "exact observed native texel weighted OKLab medoid over all pixels of verified visible-hair material images, unit native-texel weights; arithmetic moments evaluate medoid cost, no RGB mean is output",
+    "nativePixelCount": 1572864,
+    "nativeUniqueRGB8": 8255,
+    "chosenRGBNativeSupport": 18,
+    "scope": "explicit diagnostic albedo override, not product default or claimed original uniform hair colour"
+  },
+  "checks": {
+    "API": 14,
+    "pixel": 44,
+    "browsers": {
+      "chrome": 11,
+      "edge": 11
+    }
+  },
+  "fixedPalettePair": {
+    "patternOutputRGB": 51,
+    "flatOutputRGB": 2,
+    "geometryGThresholdPaletteIdentical": true
+  },
+  "separateDistinctQDiagnostic": {
+    "flatOutputRGB": 3,
+    "QOccupied": 3
+  },
+  "unlitFlatOutputRGB": 1,
+  "remainingQComponents4": 11,
+  "remainingQSingletons4": 6,
+  "noAAAddedRGBInOfflineNormalBranches": true,
+  "unknownPassthroughIsExplicitFailureReproduction": true,
+  "liveUnityCacheInvestigated": false,
+  "currentMainSameColourRegionQMultiRGB": {
+    "preserve": 0,
+    "simplify": 0
+  },
+  "sourceAssetProductUnity31_34_dirty25Edits": 0,
+  "DesktopWrites": 0,
+  "blockers": [],
+  "scope": "saved frame source-albedo intervention; separates texture/selection contribution, palette stage aliasing, unknown-original passthrough, and existing g/Q fragmentation; not full algorithm/art/temporal success"
+}

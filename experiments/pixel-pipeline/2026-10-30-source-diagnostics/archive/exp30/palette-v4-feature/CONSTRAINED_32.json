@@ -1,0 +1,1260 @@
+{
+  "kind": "source-feature-contrast-constrained-palette",
+  "version": 3,
+  "sourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "originalMaterialIds": [
+    11,
+    12,
+    13
+  ],
+  "originalAppearanceGroupIds": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "status": "budget comparison only, no art choice",
+  "paletteInputSHA256": "75368163de04ab6267486e7e0dc900e8e43c468234d101aaad6e461642d9094e",
+  "referenceShadeK": 3,
+  "sourceReferenceRule": "monotone source-L quantizer through native feature contrast certificates; warm-family only; source metadata and Q remain independent",
+  "shadeRule": "same measured Lab-L shadow target for all budgets; nearest observed colour below anchor; Q0/1 lower and Q2/3 anchor",
+  "intervalRule": "Lab(native anchor)+m*(Lab(measured shade colour)-Lab(native anchor)); source selection and Q(g) labels never use m",
+  "references": [
+    {
+      "id": 0,
+      "anchorRGB8": [
+        25,
+        10,
+        11
+      ],
+      "anchorLab": [
+        0.16807400432124847,
+        0.025466637439935103,
+        0.007316355892555804
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 235,
+        "y": 257
+      },
+      "nativeTexelSupport": 4367
+    },
+    {
+      "id": 1,
+      "anchorRGB8": [
+        31,
+        15,
+        16
+      ],
+      "anchorLab": [
+        0.1918785896647145,
+        0.026255477769940055,
+        0.007474653324490571
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 498,
+        "y": 217
+      },
+      "nativeTexelSupport": 6410
+    },
+    {
+      "id": 2,
+      "anchorRGB8": [
+        35,
+        19,
+        19
+      ],
+      "anchorLab": [
+        0.2088464621592128,
+        0.025146678326458213,
+        0.008936145574409304
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 260,
+        "y": 176
+      },
+      "nativeTexelSupport": 17504
+    },
+    {
+      "id": 3,
+      "anchorRGB8": [
+        44,
+        23,
+        24
+      ],
+      "anchorLab": [
+        0.23397474816536454,
+        0.03263054072746903,
+        0.009935352932398278
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 224,
+        "y": 198
+      },
+      "nativeTexelSupport": 141947
+    },
+    {
+      "id": 4,
+      "anchorRGB8": [
+        49,
+        27,
+        28
+      ],
+      "anchorLab": [
+        0.2519891184559238,
+        0.03352843787054781,
+        0.010192033220206037
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 406,
+        "y": 40
+      },
+      "nativeTexelSupport": 335350
+    },
+    {
+      "id": 5,
+      "anchorRGB8": [
+        56,
+        32,
+        33
+      ],
+      "anchorLab": [
+        0.2752121811207609,
+        0.035729201256010784,
+        0.010973433359062451
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 38,
+        "y": 342
+      },
+      "nativeTexelSupport": 31651
+    },
+    {
+      "id": 6,
+      "anchorRGB8": [
+        63,
+        36,
+        38
+      ],
+      "anchorLab": [
+        0.2958263992635272,
+        0.03991322855404905,
+        0.010754683491623063
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 507,
+        "y": 349
+      },
+      "nativeTexelSupport": 30530
+    },
+    {
+      "id": 7,
+      "anchorRGB8": [
+        69,
+        42,
+        44
+      ],
+      "anchorLab": [
+        0.31918440469179643,
+        0.0391358647425373,
+        0.010307960929932303
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 504,
+        "y": 367
+      },
+      "nativeTexelSupport": 35700
+    },
+    {
+      "id": 8,
+      "anchorRGB8": [
+        75,
+        47,
+        49
+      ],
+      "anchorLab": [
+        0.33977312681036775,
+        0.039901781970862304,
+        0.010540659548065434
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 26,
+        "y": 415
+      },
+      "nativeTexelSupport": 38067
+    },
+    {
+      "id": 9,
+      "anchorRGB8": [
+        82,
+        52,
+        54
+      ],
+      "anchorLab": [
+        0.3614183587597524,
+        0.04202544762275476,
+        0.011325938652428813
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 511,
+        "y": 417
+      },
+      "nativeTexelSupport": 50664
+    },
+    {
+      "id": 10,
+      "anchorRGB8": [
+        88,
+        57,
+        59
+      ],
+      "anchorLab": [
+        0.38142009167740715,
+        0.0427940766922357,
+        0.011564708522300349
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 180,
+        "y": 479
+      },
+      "nativeTexelSupport": 55203
+    },
+    {
+      "id": 11,
+      "anchorRGB8": [
+        95,
+        63,
+        64
+      ],
+      "anchorLab": [
+        0.40453516003785894,
+        0.043013295298883175,
+        0.013299112093448862
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 29,
+        "y": 499
+      },
+      "nativeTexelSupport": 93985
+    },
+    {
+      "id": 12,
+      "anchorRGB8": [
+        100,
+        68,
+        69
+      ],
+      "anchorLab": [
+        0.4227631444279713,
+        0.04250060805308567,
+        0.013030098838426651
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 172,
+        "y": 584
+      },
+      "nativeTexelSupport": 119503
+    },
+    {
+      "id": 13,
+      "anchorRGB8": [
+        107,
+        74,
+        73
+      ],
+      "anchorLab": [
+        0.4450566758786204,
+        0.04232557310315593,
+        0.016235776690633086
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 174,
+        "y": 524
+      },
+      "nativeTexelSupport": 96646
+    },
+    {
+      "id": 14,
+      "anchorRGB8": [
+        114,
+        80,
+        78
+      ],
+      "anchorLab": [
+        0.4673805930157056,
+        0.04261563817866096,
+        0.017889611216689916
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 52,
+        "y": 545
+      },
+      "nativeTexelSupport": 72805
+    },
+    {
+      "id": 15,
+      "anchorRGB8": [
+        120,
+        86,
+        83
+      ],
+      "anchorLab": [
+        0.48826548013306453,
+        0.04165763310514531,
+        0.019049757048306637
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 114,
+        "y": 581
+      },
+      "nativeTexelSupport": 55621
+    },
+    {
+      "id": 16,
+      "anchorRGB8": [
+        126,
+        92,
+        90
+      ],
+      "anchorLab": [
+        0.5095210370905994,
+        0.04160584593453476,
+        0.01731529409843613
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 221,
+        "y": 810
+      },
+      "nativeTexelSupport": 31240
+    },
+    {
+      "id": 17,
+      "anchorRGB8": [
+        133,
+        98,
+        96
+      ],
+      "anchorLab": [
+        0.5314387892343698,
+        0.042383166968036345,
+        0.017513146944860336
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 0,
+        "y": 838
+      },
+      "nativeTexelSupport": 32035
+    },
+    {
+      "id": 18,
+      "anchorRGB8": [
+        140,
+        104,
+        101
+      ],
+      "anchorLab": [
+        0.5528571874775124,
+        0.04273766256956754,
+        0.019137292869917333
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 384,
+        "y": 810
+      },
+      "nativeTexelSupport": 32980
+    },
+    {
+      "id": 19,
+      "anchorRGB8": [
+        147,
+        111,
+        107
+      ],
+      "anchorLab": [
+        0.5763523142233467,
+        0.04181454022177897,
+        0.020259453834937602
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 220,
+        "y": 878
+      },
+      "nativeTexelSupport": 33737
+    },
+    {
+      "id": 20,
+      "anchorRGB8": [
+        154,
+        117,
+        113
+      ],
+      "anchorLab": [
+        0.5976369877629508,
+        0.04261655174956397,
+        0.020453126901640306
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 128,
+        "y": 900
+      },
+      "nativeTexelSupport": 40400
+    },
+    {
+      "id": 21,
+      "anchorRGB8": [
+        160,
+        123,
+        119
+      ],
+      "anchorLab": [
+        0.6176666054207521,
+        0.04222372488459847,
+        0.020225409143348805
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 257,
+        "y": 922
+      },
+      "nativeTexelSupport": 48036
+    },
+    {
+      "id": 22,
+      "anchorRGB8": [
+        167,
+        129,
+        124
+      ],
+      "anchorLab": [
+        0.6383313567040168,
+        0.04262157732766869,
+        0.021801226802709017
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 75,
+        "y": 946
+      },
+      "nativeTexelSupport": 39905
+    },
+    {
+      "id": 23,
+      "anchorRGB8": [
+        175,
+        136,
+        131
+      ],
+      "anchorLab": [
+        0.6623720087381296,
+        0.043373300726640474,
+        0.02196256025449239
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 86,
+        "y": 943
+      },
+      "nativeTexelSupport": 48010
+    },
+    {
+      "id": 24,
+      "anchorRGB8": [
+        181,
+        142,
+        136
+      ],
+      "anchorLab": [
+        0.6816589306459702,
+        0.04261288227043286,
+        0.023103105810881597
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 221,
+        "y": 970
+      },
+      "nativeTexelSupport": 31898
+    },
+    {
+      "id": 25,
+      "anchorRGB8": [
+        189,
+        148,
+        142
+      ],
+      "anchorLab": [
+        0.7031223638826721,
+        0.04459071652105262,
+        0.02370498894875739
+      ],
+      "anchorOrigin": {
+        "materialId": 12,
+        "imageId": 18,
+        "x": 223,
+        "y": 1018
+      },
+      "nativeTexelSupport": 21562
+    },
+    {
+      "id": 26,
+      "anchorRGB8": [
+        204,
+        152,
+        142
+      ],
+      "anchorLab": [
+        0.7263562796627585,
+        0.055400364835263505,
+        0.0333131096274214
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 177,
+        "y": 990
+      },
+      "nativeTexelSupport": 9826
+    },
+    {
+      "id": 27,
+      "anchorRGB8": [
+        214,
+        156,
+        144
+      ],
+      "anchorLab": [
+        0.7449302092660246,
+        0.06117594741282323,
+        0.0381720818993897
+      ],
+      "anchorOrigin": {
+        "materialId": 13,
+        "imageId": 20,
+        "x": 5,
+        "y": 1004
+      },
+      "nativeTexelSupport": 10891
+    },
+    {
+      "id": 28,
+      "anchorRGB8": [
+        200,
+        169,
+        164
+      ],
+      "anchorLab": [
+        0.7607250304777805,
+        0.03256965689342911,
+        0.017862239918298828
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 51,
+        "y": 207
+      },
+      "nativeTexelSupport": 1694
+    },
+    {
+      "id": 29,
+      "anchorRGB8": [
+        206,
+        180,
+        177
+      ],
+      "anchorLab": [
+        0.791397794768165,
+        0.027387956960482407,
+        0.01314143038660398
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 69,
+        "y": 177
+      },
+      "nativeTexelSupport": 1322
+    },
+    {
+      "id": 30,
+      "anchorRGB8": [
+        212,
+        187,
+        185
+      ],
+      "anchorLab": [
+        0.8127242733757636,
+        0.0264693141052888,
+        0.011357204649322772
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 101,
+        "y": 177
+      },
+      "nativeTexelSupport": 2200
+    },
+    {
+      "id": 31,
+      "anchorRGB8": [
+        217,
+        193,
+        191
+      ],
+      "anchorLab": [
+        0.8305431056931346,
+        0.025210208236873477,
+        0.010919493055356888
+      ],
+      "anchorOrigin": {
+        "materialId": 11,
+        "imageId": 15,
+        "x": 109,
+        "y": 207
+      },
+      "nativeTexelSupport": 1175
+    }
+  ],
+  "compactPaletteRGB8": [
+    [
+      25,
+      10,
+      11
+    ],
+    [
+      31,
+      15,
+      16
+    ],
+    [
+      35,
+      19,
+      19
+    ],
+    [
+      44,
+      23,
+      24
+    ],
+    [
+      49,
+      27,
+      28
+    ],
+    [
+      56,
+      32,
+      33
+    ],
+    [
+      63,
+      36,
+      38
+    ],
+    [
+      69,
+      42,
+      44
+    ],
+    [
+      75,
+      47,
+      49
+    ],
+    [
+      82,
+      52,
+      54
+    ],
+    [
+      88,
+      57,
+      59
+    ],
+    [
+      95,
+      63,
+      64
+    ],
+    [
+      100,
+      68,
+      69
+    ],
+    [
+      107,
+      74,
+      73
+    ],
+    [
+      114,
+      80,
+      78
+    ],
+    [
+      120,
+      86,
+      83
+    ],
+    [
+      126,
+      92,
+      90
+    ],
+    [
+      133,
+      98,
+      96
+    ],
+    [
+      140,
+      104,
+      101
+    ],
+    [
+      147,
+      111,
+      107
+    ],
+    [
+      154,
+      117,
+      113
+    ],
+    [
+      160,
+      123,
+      119
+    ],
+    [
+      167,
+      129,
+      124
+    ],
+    [
+      175,
+      136,
+      131
+    ],
+    [
+      181,
+      142,
+      136
+    ],
+    [
+      189,
+      148,
+      142
+    ],
+    [
+      204,
+      152,
+      142
+    ],
+    [
+      214,
+      156,
+      144
+    ],
+    [
+      200,
+      169,
+      164
+    ],
+    [
+      206,
+      180,
+      177
+    ],
+    [
+      212,
+      187,
+      185
+    ],
+    [
+      217,
+      193,
+      191
+    ]
+  ],
+  "perReferenceShadePaletteIndices": [
+    [
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      1,
+      1
+    ],
+    [
+      0,
+      0,
+      2,
+      2
+    ],
+    [
+      1,
+      1,
+      3,
+      3
+    ],
+    [
+      2,
+      2,
+      4,
+      4
+    ],
+    [
+      3,
+      3,
+      5,
+      5
+    ],
+    [
+      4,
+      4,
+      6,
+      6
+    ],
+    [
+      5,
+      5,
+      7,
+      7
+    ],
+    [
+      6,
+      6,
+      8,
+      8
+    ],
+    [
+      7,
+      7,
+      9,
+      9
+    ],
+    [
+      8,
+      8,
+      10,
+      10
+    ],
+    [
+      9,
+      9,
+      11,
+      11
+    ],
+    [
+      10,
+      10,
+      12,
+      12
+    ],
+    [
+      11,
+      11,
+      13,
+      13
+    ],
+    [
+      12,
+      12,
+      14,
+      14
+    ],
+    [
+      13,
+      13,
+      15,
+      15
+    ],
+    [
+      14,
+      14,
+      16,
+      16
+    ],
+    [
+      15,
+      15,
+      17,
+      17
+    ],
+    [
+      16,
+      16,
+      18,
+      18
+    ],
+    [
+      17,
+      17,
+      19,
+      19
+    ],
+    [
+      18,
+      18,
+      20,
+      20
+    ],
+    [
+      19,
+      19,
+      21,
+      21
+    ],
+    [
+      20,
+      20,
+      22,
+      22
+    ],
+    [
+      21,
+      21,
+      23,
+      23
+    ],
+    [
+      22,
+      22,
+      24,
+      24
+    ],
+    [
+      23,
+      23,
+      25,
+      25
+    ],
+    [
+      24,
+      24,
+      26,
+      26
+    ],
+    [
+      25,
+      25,
+      27,
+      27
+    ],
+    [
+      25,
+      25,
+      28,
+      28
+    ],
+    [
+      28,
+      28,
+      29,
+      29
+    ],
+    [
+      28,
+      28,
+      30,
+      30
+    ],
+    [
+      29,
+      29,
+      31,
+      31
+    ]
+  ],
+  "sourceFeatureIdRemainsNull": true,
+  "sourceToneClassRemovedFromPaletteSelection": true,
+  "originalAppearanceClassifierUnchanged": true,
+  "limitations": [
+    "finite16-colour quantization creates new tone boundaries and can merge small real colour differences; inspect edge evidence, not only pixel errors",
+    "adjacent native colour gaps are data-derived and unequal; common predecessor rule is a candidate shading model, not an approved art style",
+    "material14 and other model SHA are unmodelled; no source colour fallback",
+    "continuous source gradient versus normalization remains unchosen; this mapping reads whichever legitimate source sample upstream supplies"
+  ],
+  "nativeCoverageFitSHA256": "8ebad17773885e33d0b1bb6a35e1aa939ed685e06ad6a236b13125fab64e68c2",
+  "fitRule": "native equal-L coverage bands with actual observed OKLab medoid; no screen-colour mean",
+  "chromaticFamilyScope": "one source-evidenced warm family in current materials11/12/13; other colour families require separate source fit and classification, never a warm fallback",
+  "paletteColourBudget": 32,
+  "nativeLBounds": [
+    0.15693478974222658,
+    0.8432359670877161
+  ],
+  "nativeBandWidthL": 0.021446911792046545,
+  "fixedShadowTargetGapL": 0.043678819190537344,
+  "sourceSelectionKnots": [
+    {
+      "sourceL": 0.15693478974222658,
+      "paletteReferenceId": 0
+    },
+    {
+      "sourceL": 0.2944380850559484,
+      "paletteReferenceId": 5
+    },
+    {
+      "sourceL": 0.3078559933830558,
+      "paletteReferenceId": 7
+    },
+    {
+      "sourceL": 0.31992354639917975,
+      "paletteReferenceId": 7
+    },
+    {
+      "sourceL": 0.4154161933800706,
+      "paletteReferenceId": 11
+    },
+    {
+      "sourceL": 0.43378778206771884,
+      "paletteReferenceId": 12
+    },
+    {
+      "sourceL": 0.4457718578758052,
+      "paletteReferenceId": 13
+    },
+    {
+      "sourceL": 0.4594241178370024,
+      "paletteReferenceId": 13
+    },
+    {
+      "sourceL": 0.4646628690508086,
+      "paletteReferenceId": 13
+    },
+    {
+      "sourceL": 0.4754078025364443,
+      "paletteReferenceId": 14
+    },
+    {
+      "sourceL": 0.4756806508927461,
+      "paletteReferenceId": 14
+    },
+    {
+      "sourceL": 0.4820980447787505,
+      "paletteReferenceId": 15
+    },
+    {
+      "sourceL": 0.48210320476037166,
+      "paletteReferenceId": 15
+    },
+    {
+      "sourceL": 0.4888938739706231,
+      "paletteReferenceId": 15
+    },
+    {
+      "sourceL": 0.49248638309269777,
+      "paletteReferenceId": 15
+    },
+    {
+      "sourceL": 0.8432359670877161,
+      "paletteReferenceId": 31
+    }
+  ],
+  "constraintScope": "eight reviewed native source contrast pairs; default m=1, equal Q; not full authored-feature discovery",
+  "featureContrastCertificates": [
+    {
+      "a": 9,
+      "b": 13,
+      "gap": 0.016805732199951684,
+      "certificateId": 0,
+      "sourceL": [
+        0.4756806508927461,
+        0.49248638309269777
+      ],
+      "referenceIds": [
+        14,
+        15
+      ],
+      "outputContrastAtEqualQ": [
+        0.022293531450649162,
+        0.020884887117358975
+      ]
+    },
+    {
+      "a": 0,
+      "b": 1,
+      "gap": 0.01341790832710743,
+      "certificateId": 2,
+      "sourceL": [
+        0.2944380850559484,
+        0.3078559933830558
+      ],
+      "referenceIds": [
+        5,
+        7
+      ],
+      "outputContrastAtEqualQ": [
+        0.041237432955396336,
+        0.043972223571035585
+      ]
+    },
+    {
+      "a": 0,
+      "b": 2,
+      "gap": 0.025485461343231375,
+      "certificateId": 3,
+      "sourceL": [
+        0.2944380850559484,
+        0.31992354639917975
+      ],
+      "referenceIds": [
+        5,
+        7
+      ],
+      "outputContrastAtEqualQ": [
+        0.041237432955396336,
+        0.043972223571035585
+      ]
+    },
+    {
+      "a": 4,
+      "b": 11,
+      "gap": 0.04831542269265282,
+      "certificateId": 4,
+      "sourceL": [
+        0.43378778206771884,
+        0.48210320476037166
+      ],
+      "referenceIds": [
+        12,
+        15
+      ],
+      "outputContrastAtEqualQ": [
+        0.06363658420121326,
+        0.06550233570509328
+      ]
+    },
+    {
+      "a": 6,
+      "b": 10,
+      "gap": 0.022673926941748135,
+      "certificateId": 5,
+      "sourceL": [
+        0.4594241178370024,
+        0.4820980447787505
+      ],
+      "referenceIds": [
+        13,
+        15
+      ],
+      "outputContrastAtEqualQ": [
+        0.04052151584076147,
+        0.04320880425444412
+      ]
+    },
+    {
+      "a": 8,
+      "b": 12,
+      "gap": 0.013486071434178792,
+      "certificateId": 6,
+      "sourceL": [
+        0.4754078025364443,
+        0.4888938739706231
+      ],
+      "referenceIds": [
+        14,
+        15
+      ],
+      "outputContrastAtEqualQ": [
+        0.022293531450649162,
+        0.020884887117358975
+      ]
+    },
+    {
+      "a": 7,
+      "b": 12,
+      "gap": 0.024231004919814503,
+      "certificateId": 7,
+      "sourceL": [
+        0.4646628690508086,
+        0.4888938739706231
+      ],
+      "referenceIds": [
+        13,
+        15
+      ],
+      "outputContrastAtEqualQ": [
+        0.04052151584076147,
+        0.04320880425444412
+      ]
+    },
+    {
+      "a": 3,
+      "b": 5,
+      "gap": 0.030355664495734624,
+      "certificateId": 8,
+      "sourceL": [
+        0.4154161933800706,
+        0.4457718578758052
+      ],
+      "referenceIds": [
+        11,
+        13
+      ],
+      "outputContrastAtEqualQ": [
+        0.04311680127810652,
+        0.04052151584076147
+      ]
+    }
+  ],
+  "featureConstraintStatus": {
+    "feasible": true,
+    "passes": 13,
+    "moves": 41,
+    "scope": "source-certified painted features at equal Q; sourceFeatureId remains inferred/null",
+    "excessWithinOneNativeBand": false
+  }
+}

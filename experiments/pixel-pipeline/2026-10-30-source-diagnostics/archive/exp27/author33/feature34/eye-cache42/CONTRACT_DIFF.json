@@ -1,0 +1,51 @@
+[
+  {
+    "stage": "원본 특징 구분",
+    "current": "S1/S2/S3 source mesh submesh4/1/6과 2D TemplateRole 역할1/4. 현재 runtime에 colour-range→source UV 영역 캐시를 만드는 단계는 없음.",
+    "requirement": "모델·재질·원본 색 범위로 나눈 source 영역을 eye/iris/white/lash/catch feature ID와 연결.",
+    "evidence": "EyeRenderer367.cs:7 / EyeFeature348.cs:14 / TemplateRole.asset",
+    "status": "source layer 분리는 존재; source colour-region/cell 대응은 미완"
+  },
+  {
+    "stage": "캐시 키와 수명",
+    "current": "modelTopologySHA256, 좌우 stableId, rest 좌표/closedBoundary, TemplateRole/RGBA 참조. GPU records/counts는 매 프레임 덮어씀. ready일 때 Initialise가 반환하며 텍스처·색 범위·style로 캐시를 재검증하지 않음.",
+    "requirement": "source feature/cell identity·기준 cluster·표정/방향 상태를 캐시. source/UV/색 범위/스타일 변경 시 명시적 무효화.",
+    "evidence": "EyeFeature348.cs:13-16,18-23,43 / EyeBoundaryBinding348.cs:3",
+    "status": "기하 adapter 캐시는 있음; 읽히는 eye cluster 캐시/무효화 계약은 없음"
+  },
+  {
+    "stage": "원본 홍채 멤버십",
+    "current": "실제 S2 홍채 표본도 Classify의 정규화 curve가2~4가 아니면 제외. 재질/눈 ID보다 스타일 geometry 분류가 선행해 역할을 버림.",
+    "requirement": "source iris identity는 보존하고 curve는 subtype/배치 attribute로 사용. 현재 가림은 별도 처리.",
+    "evidence": "EyeFeature348.compute:22,101-117",
+    "status": "정적 코드 확인 + 저장5포즈의 가림 전 분류 손실 대조"
+  },
+  {
+    "stage": "출력 셀/형태 선택",
+    "current": "16표본 histogram→전체 가시 면적 round→셀별 경쟁 점수 rank. iris 먼저, nativeLine 이후, white neighbour 예외. cluster 연결성/상안검 관계/상태별 최소형태 제약 없음.",
+    "requirement": "중요한 작은 feature의 승인된 cluster 형태와 상태별 가독성을 공동 보존. 격자 위상과 실제 표정/가림 변화 구분.",
+    "evidence": "EyeFeature348.compute:123-175,194-200",
+    "status": "합성 반례로1→2/2→3/대각선 선택 가능 확인; 실제 모든 count 변화가 오류라는 뜻 아님"
+  },
+  {
+    "stage": "팔레트/색 공급",
+    "current": "iris/white는 Own의 TemplateRGBA에서 같은 eye/role의 가까운 색을 선택. 현재 S2 표면색은 geometry/coverage 공급이며 그대로 쓰지 않음. upperLine은현재 S3 pigment×분리 shade, lowerLid는skinShade endpoint.",
+    "requirement": "cache feature 자신의 source colour/palette family와 colour ID를 유지. 다른 feature로 재분류돼 색이 바뀌지 않게 함.",
+    "evidence": "EyeFeature348.compute:80,208-209 / EyeSurface348.shader:133-136",
+    "status": "동일 source UV19개 모두 S2층RGB와 head출력RGB가 다름. 원인 supplier는 확인; 각 색이 미술적으로 잘못됐는지 전체 판정은 미실행"
+  },
+  {
+    "stage": "레이어/가림",
+    "current": "outline 뒤 MainToHead→기존 EyeMerge→EyeFeature Evaluate/Merge→EyesToMain. hair/skin/brow/body depth를 샘플/최종에서 적용.",
+    "requirement": "눈은 자기 표현 레이어에서 우선하되 실제 눈꺼풀·머리 가림을 전역 덮어쓰지 않음.",
+    "evidence": "FullFeature367.cs:54-63 / HeadLocal367.cs:36-37 / EyeFeature348.compute:211-217",
+    "status": "분리 렌더는 있음; 한 셀 한 winner의 후단 경쟁으로 특징 보존이 자동 보장되지는 않음"
+  },
+  {
+    "stage": "시간 캐시",
+    "current": "Native395는 owner/primitive/UV가 가까우면 화면 RGB history를 재사용하지만 domain≥.5인 눈은 제외. EyeFeature records/hist/counts는 이전 frame feature 상태를 읽지 않음.",
+    "requirement": "결과 RGB를 붙잡는 대신 source feature ID/셀/shape 대응을 유지하고 현재 visibility만 갱신.",
+    "evidence": "Native395.compute:20 / EyeRenderer367.cs:11-16 / EyeFeature348.compute:124,178-179,216",
+    "status": "기존 RGB history가 사용자 요구의 눈 feature cache가 아님을 코드로 확인"
+  }
+]

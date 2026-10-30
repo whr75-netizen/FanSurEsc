@@ -1,0 +1,38 @@
+{
+  "scope": "relocated repository snapshot; offline bounded replay, not Unity/product/art/temporal completion",
+  "baseHEAD": "6094e02a34fd9a51d504085be3165edfe031d701",
+  "runs": {
+    "node": {
+      "suite": "portable palette/flat replay",
+      "passed": 71,
+      "externalFileReads": 0,
+      "productChanges": 0
+    },
+    "python": {
+      "suite": "portable eye/geometry/boundary replay",
+      "passed": 88,
+      "Python": "3.13.13",
+      "NumPy": "2.3.4",
+      "externalFileReads": 0,
+      "productChanges": 0
+    },
+    "static": {
+      "suite": "snapshot integrity/size/secrets/local-module closure",
+      "passed": 149,
+      "credentialHits": [],
+      "emailFiles": [],
+      "missingPythonModules": [],
+      "missingJSModules": []
+    }
+  },
+  "resultSHA256": {
+    "node": "be076ea26f5cf3b5235a7e7e42939fe402ce9d4309a5c5a435599628eda89e56",
+    "python": "da802c2bda449fc6e55ad3e5cb26f314abe83c867e69abfe72b3a1c7462d40fb"
+  },
+  "fullRawAssetReproduction": false,
+  "includedOriginalVRM": false,
+  "continuous46Included": false,
+  "sourceOriginalsMovedOrChanged": false,
+  "AssetsPackagesWrites": 0,
+  "remotePush": false
+}

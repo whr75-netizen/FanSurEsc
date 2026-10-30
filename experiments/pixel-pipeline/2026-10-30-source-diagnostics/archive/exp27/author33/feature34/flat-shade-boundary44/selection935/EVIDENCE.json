@@ -1,0 +1,1568 @@
+{
+  "sourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "frozenFrameLabel": 95,
+  "sourceUTC": "2026-10-30T10:57:46.0365658Z",
+  "oldCentre": {
+    "sampleKind": "centre480",
+    "fineX": 15,
+    "fineY": 58,
+    "chart": 130030,
+    "role": 13,
+    "primitive": 4994,
+    "uv": [
+      0.15524756908416748,
+      0.0864819586277008
+    ],
+    "point": [
+      7.499842211884214,
+      29.500709897134826
+    ],
+    "g": 0.06597648561000824,
+    "baseRGBAlinear": [
+      0.427734375,
+      0.2458648681640625,
+      0.2234039306640625,
+      1.0
+    ],
+    "depth": 13.810456275939941
+  },
+  "coverageRepresentative": {
+    "sampleKind": "native960",
+    "fineX": 16,
+    "fineY": 58,
+    "chart": 130013,
+    "role": 13,
+    "primitive": 2566,
+    "uv": [
+      1.2624799013137817,
+      0.2252056896686554
+    ],
+    "point": [
+      7.99954120000308,
+      29.499365823833188
+    ],
+    "g": 0.02827419713139534,
+    "baseRGBAlinear": [
+      0.2906351089477539,
+      0.15010523796081543,
+      0.1412811279296875,
+      1.0
+    ],
+    "depth": 13.761902809143066
+  },
+  "gAndQ": {
+    "centre": [
+      0.06597648561000824,
+      3
+    ],
+    "selected": [
+      0.02827419713139534,
+      2
+    ]
+  },
+  "frontAtOriginal": {
+    "charts": [
+      130030
+    ],
+    "depth": 13.810456355891231,
+    "triangles": [
+      8258
+    ]
+  },
+  "frontAtSelected": {
+    "charts": [
+      130013
+    ],
+    "depth": 13.761902902790943,
+    "triangles": [
+      5830
+    ]
+  },
+  "segmentGeometry": {
+    "category": "front/back occlusion",
+    "runs": [
+      {
+        "start": 0.0,
+        "end": 0.07513747059322515,
+        "charts": [
+          130030
+        ],
+        "triangles": [
+          8258
+        ]
+      },
+      {
+        "start": 0.07513747059322515,
+        "end": 0.40769389995912503,
+        "charts": [
+          130027
+        ],
+        "triangles": [
+          8050
+        ]
+      },
+      {
+        "start": 0.4076938999591662,
+        "end": 0.40799386253599484,
+        "charts": [
+          130013
+        ],
+        "triangles": [
+          5713,
+          5772
+        ]
+      },
+      {
+        "start": 0.40799386253599484,
+        "end": 0.5869026733137406,
+        "charts": [
+          130013
+        ],
+        "triangles": [
+          5772
+        ]
+      },
+      {
+        "start": 0.5869026733137408,
+        "end": 0.7668006072790047,
+        "charts": [
+          130013
+        ],
+        "triangles": [
+          5771
+        ]
+      },
+      {
+        "start": 0.7668006072790047,
+        "end": 1.0,
+        "charts": [
+          130013
+        ],
+        "triangles": [
+          5830
+        ]
+      }
+    ],
+    "events": [
+      {
+        "t": 0.07513747059322515,
+        "beforeCharts": [
+          130030
+        ],
+        "afterCharts": [
+          130027
+        ],
+        "depthLeft": 13.809803429814803,
+        "depthRight": 13.802840263793714,
+        "depthJump": 0.006963166021089151,
+        "sameChart": false,
+        "kind": "resolved front/back depth step"
+      },
+      {
+        "t": 0.4076938999591456,
+        "beforeCharts": [
+          130027
+        ],
+        "afterCharts": [
+          130013
+        ],
+        "depthLeft": 13.798927464567274,
+        "depthRight": 13.774859112129493,
+        "depthJump": 0.024068352437781826,
+        "sameChart": false,
+        "kind": "resolved front/back depth step"
+      },
+      {
+        "t": 0.40799386253599484,
+        "beforeCharts": [
+          130013
+        ],
+        "afterCharts": [
+          130013
+        ],
+        "depthLeft": 13.77484843918582,
+        "depthRight": 13.77484843918582,
+        "depthJump": 0.0,
+        "sameChart": true,
+        "kind": "same-chart transition"
+      },
+      {
+        "t": 0.5869026733137407,
+        "beforeCharts": [
+          130013
+        ],
+        "afterCharts": [
+          130013
+        ],
+        "depthLeft": 13.768482699566714,
+        "depthRight": 13.768482699566714,
+        "depthJump": 0.0,
+        "sameChart": true,
+        "kind": "same-chart transition"
+      },
+      {
+        "t": 0.7668006072790047,
+        "beforeCharts": [
+          130013
+        ],
+        "afterCharts": [
+          130013
+        ],
+        "depthLeft": 13.763212583244615,
+        "depthRight": 13.763212583244615,
+        "depthJump": 0.0,
+        "sameChart": true,
+        "kind": "same-chart transition"
+      }
+    ],
+    "intersectingTriangles": 10,
+    "analyticBreakpoints": 18,
+    "multipleSubpixelOwners": true
+  },
+  "geometryWasCapturedLater": true,
+  "geometryReceipt": {
+    "parentSourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+    "captureUTC": "2026-10-30T11:38:03.3943088Z",
+    "parentCaptureUTC": "2026-10-30T10:57:46.0365658Z",
+    "sameCaptureTimeOrFrameCounter": false,
+    "bindingKind": "reproduced evaluated geometry matched against frozen source samples",
+    "queryCoordinates": "actual saved source UV barycentric point projected through the original camera; not silently equated to the unsnapped ideal cell centre",
+    "bonesExact": true,
+    "vertexCount": 8435,
+    "CPUBytes": 279252,
+    "worldPositionBytes": 101220,
+    "screenMatchRows": "SOURCE_MATCH_ROWS.json",
+    "all368EndpointFrontChartAndDepthMatched": true,
+    "maxEndpointDepthError": 5.516615519951529e-07,
+    "depthClassificationFloatBound": 7.62939453125e-06,
+    "doubleSided": true,
+    "alphaEvidence": "all original hair textures alpha255, original factor alpha1 and glTF doubleSided true; hair-only visibility, not unseen face/body geometry",
+    "evaluatedBinarySHA256": "67dede4c255edfc2ecd9fdf4f8607e0a78cb389a8746b00510c23afc5e96d0fe",
+    "vertexSource": "existing transient CurrentSurface330 BakeMesh output; no original source mesh setters",
+    "explicitRenderCalls": 0,
+    "readbacks": 0,
+    "runtimePoseRestored": true
+  },
+  "integrationCases": [
+    {
+      "scale": 8,
+      "offset": [
+        0.5,
+        0.5
+      ],
+      "selection": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "details": {
+        "coverageCounts": {
+          "130013": 16,
+          "130027": 16,
+          "130030": 6
+        },
+        "hairSamples": 38,
+        "samples": 64,
+        "centroids": {
+          "130013": [
+            7.875,
+            29.5
+          ],
+          "130027": [
+            7.625,
+            29.5
+          ],
+          "130030": [
+            7.395833333333333,
+            29.791666666666668
+          ]
+        },
+        "sourceCandidates": [
+          {
+            "chart": 130013,
+            "areaCount": 16,
+            "originalPreference": false,
+            "distanceSquared": 0.015510912677617643,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 58,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2566,
+              "uv": [
+                1.2624799013137817,
+                0.2252056896686554
+              ],
+              "point": [
+                7.99954120000308,
+                29.499365823833188
+              ],
+              "g": 0.02827419713139534,
+              "baseRGBAlinear": [
+                0.2906351089477539,
+                0.15010523796081543,
+                0.1412811279296875,
+                1.0
+              ],
+              "depth": 13.761902809143066
+            }
+          },
+          {
+            "chart": 130013,
+            "areaCount": 16,
+            "originalPreference": false,
+            "distanceSquared": 0.26491373219979547,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 59,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2568,
+              "uv": [
+                1.2711259126663208,
+                0.19409149885177612
+              ],
+              "point": [
+                7.999538190818669,
+                29.999403615553
+              ],
+              "g": 0.014397663064301014,
+              "baseRGBAlinear": [
+                0.33642578125,
+                0.177734375,
+                0.167236328125,
+                1.0
+              ],
+              "depth": 13.765830993652344
+            }
+          },
+          {
+            "chart": 130027,
+            "areaCount": 16,
+            "originalPreference": false,
+            "distanceSquared": 0.2652238094531171,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 15,
+              "fineY": 59,
+              "chart": 130027,
+              "role": 13,
+              "primitive": 4788,
+              "uv": [
+                0.0629211962223053,
+                0.07825902104377747
+              ],
+              "point": [
+                7.500232337670241,
+                29.999656722050133
+              ],
+              "g": 0.05513789877295494,
+              "baseRGBAlinear": [
+                0.44744110107421875,
+                0.25390625,
+                0.2265625,
+                1.0
+              ],
+              "depth": 13.803743362426758
+            }
+          },
+          {
+            "chart": 130013,
+            "areaCount": 16,
+            "originalPreference": false,
+            "distanceSquared": 0.26607725016031086,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 57,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2566,
+              "uv": [
+                1.253904104232788,
+                0.25602948665618896
+              ],
+              "point": [
+                8.000481760376829,
+                28.99966853189806
+              ],
+              "g": 0.03513086959719658,
+              "baseRGBAlinear": [
+                0.19692230224609375,
+                0.09844779968261719,
+                0.09389495849609375,
+                1.0
+              ],
+              "depth": 13.758479118347168
+            }
+          },
+          {
+            "chart": 130030,
+            "areaCount": 6,
+            "originalPreference": true,
+            "distanceSquared": 0.09547368855381752,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "centre480",
+              "fineX": 15,
+              "fineY": 58,
+              "chart": 130030,
+              "role": 13,
+              "primitive": 4994,
+              "uv": [
+                0.15524756908416748,
+                0.0864819586277008
+              ],
+              "point": [
+                7.499842211884214,
+                29.500709897134826
+              ],
+              "g": 0.06597648561000824,
+              "baseRGBAlinear": [
+                0.427734375,
+                0.2458648681640625,
+                0.2234039306640625,
+                1.0
+              ],
+              "depth": 13.810456275939941
+            }
+          },
+          {
+            "chart": 130030,
+            "areaCount": 6,
+            "originalPreference": true,
+            "distanceSquared": 0.0955186937980218,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 15,
+              "fineY": 58,
+              "chart": 130030,
+              "role": 13,
+              "primitive": 4994,
+              "uv": [
+                0.1550256907939911,
+                0.08646929264068604
+              ],
+              "point": [
+                7.49953696216545,
+                29.50052365856743
+              ],
+              "g": 0.06597598642110825,
+              "baseRGBAlinear": [
+                0.427734375,
+                0.2459259033203125,
+                0.2234649658203125,
+                1.0
+              ],
+              "depth": 13.810462951660156
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scale": 16,
+      "offset": [
+        0.5,
+        0.5
+      ],
+      "selection": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "details": {
+        "coverageCounts": {
+          "130013": 78,
+          "130027": 40,
+          "130030": 27
+        },
+        "hairSamples": 145,
+        "samples": 256,
+        "centroids": {
+          "130013": [
+            7.846955128205128,
+            29.51121794871795
+          ],
+          "130027": [
+            7.6140625,
+            29.5328125
+          ],
+          "130030": [
+            7.413194444444445,
+            29.75810185185185
+          ]
+        },
+        "sourceCandidates": [
+          {
+            "chart": 130013,
+            "areaCount": 78,
+            "originalPreference": false,
+            "distanceSquared": 0.02342298217101372,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 58,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2566,
+              "uv": [
+                1.2624799013137817,
+                0.2252056896686554
+              ],
+              "point": [
+                7.99954120000308,
+                29.499365823833188
+              ],
+              "g": 0.02827419713139534,
+              "baseRGBAlinear": [
+                0.2906351089477539,
+                0.15010523796081543,
+                0.1412811279296875,
+                1.0
+              ],
+              "depth": 13.761902809143066
+            }
+          },
+          {
+            "chart": 130013,
+            "areaCount": 78,
+            "originalPreference": false,
+            "distanceSquared": 0.261606836299711,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 59,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2568,
+              "uv": [
+                1.2711259126663208,
+                0.19409149885177612
+              ],
+              "point": [
+                7.999538190818669,
+                29.999403615553
+              ],
+              "g": 0.014397663064301014,
+              "baseRGBAlinear": [
+                0.33642578125,
+                0.177734375,
+                0.167236328125,
+                1.0
+              ],
+              "depth": 13.765830993652344
+            }
+          },
+          {
+            "chart": 130013,
+            "areaCount": 78,
+            "originalPreference": false,
+            "distanceSquared": 0.28525323263475366,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 57,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2566,
+              "uv": [
+                1.253904104232788,
+                0.25602948665618896
+              ],
+              "point": [
+                8.000481760376829,
+                28.99966853189806
+              ],
+              "g": 0.03513086959719658,
+              "baseRGBAlinear": [
+                0.19692230224609375,
+                0.09844779968261719,
+                0.09389495849609375,
+                1.0
+              ],
+              "depth": 13.758479118347168
+            }
+          },
+          {
+            "chart": 130027,
+            "areaCount": 40,
+            "originalPreference": false,
+            "distanceSquared": 0.23090083351761492,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 15,
+              "fineY": 59,
+              "chart": 130027,
+              "role": 13,
+              "primitive": 4788,
+              "uv": [
+                0.0629211962223053,
+                0.07825902104377747
+              ],
+              "point": [
+                7.500232337670241,
+                29.999656722050133
+              ],
+              "g": 0.05513789877295494,
+              "baseRGBAlinear": [
+                0.44744110107421875,
+                0.25390625,
+                0.2265625,
+                1.0
+              ],
+              "depth": 13.803743362426758
+            }
+          },
+          {
+            "chart": 130030,
+            "areaCount": 27,
+            "originalPreference": true,
+            "distanceSquared": 0.07375845395534776,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "centre480",
+              "fineX": 15,
+              "fineY": 58,
+              "chart": 130030,
+              "role": 13,
+              "primitive": 4994,
+              "uv": [
+                0.15524756908416748,
+                0.0864819586277008
+              ],
+              "point": [
+                7.499842211884214,
+                29.500709897134826
+              ],
+              "g": 0.06597648561000824,
+              "baseRGBAlinear": [
+                0.427734375,
+                0.2458648681640625,
+                0.2234039306640625,
+                1.0
+              ],
+              "depth": 13.810456275939941
+            }
+          },
+          {
+            "chart": 130030,
+            "areaCount": 27,
+            "originalPreference": true,
+            "distanceSquared": 0.07380155602206827,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 15,
+              "fineY": 58,
+              "chart": 130030,
+              "role": 13,
+              "primitive": 4994,
+              "uv": [
+                0.1550256907939911,
+                0.08646929264068604
+              ],
+              "point": [
+                7.49953696216545,
+                29.50052365856743
+              ],
+              "g": 0.06597598642110825,
+              "baseRGBAlinear": [
+                0.427734375,
+                0.2459259033203125,
+                0.2234649658203125,
+                1.0
+              ],
+              "depth": 13.810462951660156
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scale": 32,
+      "offset": [
+        0.5,
+        0.5
+      ],
+      "selection": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "details": {
+        "coverageCounts": {
+          "130013": 303,
+          "130027": 179,
+          "130030": 101
+        },
+        "hairSamples": 583,
+        "samples": 1024,
+        "centroids": {
+          "130013": [
+            7.851639851485149,
+            29.513149752475247
+          ],
+          "130027": [
+            7.615310754189944,
+            29.517370810055866
+          ],
+          "130030": [
+            7.404857673267327,
+            29.782642326732674
+          ]
+        },
+        "sourceCandidates": [
+          {
+            "chart": 130013,
+            "areaCount": 303,
+            "originalPreference": false,
+            "distanceSquared": 0.02206480558223188,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 58,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2566,
+              "uv": [
+                1.2624799013137817,
+                0.2252056896686554
+              ],
+              "point": [
+                7.99954120000308,
+                29.499365823833188
+              ],
+              "g": 0.02827419713139534,
+              "baseRGBAlinear": [
+                0.2906351089477539,
+                0.15010523796081543,
+                0.1412811279296875,
+                1.0
+              ],
+              "depth": 13.761902809143066
+            }
+          },
+          {
+            "chart": 130013,
+            "areaCount": 303,
+            "originalPreference": false,
+            "distanceSquared": 0.2583167381356511,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 59,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2568,
+              "uv": [
+                1.2711259126663208,
+                0.19409149885177612
+              ],
+              "point": [
+                7.999538190818669,
+                29.999403615553
+              ],
+              "g": 0.014397663064301014,
+              "baseRGBAlinear": [
+                0.33642578125,
+                0.177734375,
+                0.167236328125,
+                1.0
+              ],
+              "depth": 13.765830993652344
+            }
+          },
+          {
+            "chart": 130013,
+            "areaCount": 303,
+            "originalPreference": false,
+            "distanceSquared": 0.2858168777279572,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 57,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2566,
+              "uv": [
+                1.253904104232788,
+                0.25602948665618896
+              ],
+              "point": [
+                8.000481760376829,
+                28.99966853189806
+              ],
+              "g": 0.03513086959719658,
+              "baseRGBAlinear": [
+                0.19692230224609375,
+                0.09844779968261719,
+                0.09389495849609375,
+                1.0
+              ],
+              "depth": 13.758479118347168
+            }
+          },
+          {
+            "chart": 130027,
+            "areaCount": 179,
+            "originalPreference": false,
+            "distanceSquared": 0.24584274285682495,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 15,
+              "fineY": 59,
+              "chart": 130027,
+              "role": 13,
+              "primitive": 4788,
+              "uv": [
+                0.0629211962223053,
+                0.07825902104377747
+              ],
+              "point": [
+                7.500232337670241,
+                29.999656722050133
+              ],
+              "g": 0.05513789877295494,
+              "baseRGBAlinear": [
+                0.44744110107421875,
+                0.25390625,
+                0.2265625,
+                1.0
+              ],
+              "depth": 13.803743362426758
+            }
+          },
+          {
+            "chart": 130030,
+            "areaCount": 101,
+            "originalPreference": true,
+            "distanceSquared": 0.08850795743520862,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "centre480",
+              "fineX": 15,
+              "fineY": 58,
+              "chart": 130030,
+              "role": 13,
+              "primitive": 4994,
+              "uv": [
+                0.15524756908416748,
+                0.0864819586277008
+              ],
+              "point": [
+                7.499842211884214,
+                29.500709897134826
+              ],
+              "g": 0.06597648561000824,
+              "baseRGBAlinear": [
+                0.427734375,
+                0.2458648681640625,
+                0.2234039306640625,
+                1.0
+              ],
+              "depth": 13.810456275939941
+            }
+          },
+          {
+            "chart": 130030,
+            "areaCount": 101,
+            "originalPreference": true,
+            "distanceSquared": 0.08855511067358468,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 15,
+              "fineY": 58,
+              "chart": 130030,
+              "role": 13,
+              "primitive": 4994,
+              "uv": [
+                0.1550256907939911,
+                0.08646929264068604
+              ],
+              "point": [
+                7.49953696216545,
+                29.50052365856743
+              ],
+              "g": 0.06597598642110825,
+              "baseRGBAlinear": [
+                0.427734375,
+                0.2459259033203125,
+                0.2234649658203125,
+                1.0
+              ],
+              "depth": 13.810462951660156
+            }
+          }
+        ]
+      }
+    },
+    {
+      "scale": 64,
+      "offset": [
+        0.5,
+        0.5
+      ],
+      "selection": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "details": {
+        "coverageCounts": {
+          "130013": 1203,
+          "130027": 728,
+          "130030": 411
+        },
+        "hairSamples": 2342,
+        "samples": 4096,
+        "centroids": {
+          "130013": [
+            7.8530561616791354,
+            29.504591386118037
+          ],
+          "130027": [
+            7.615899725274725,
+            29.527708619505496
+          ],
+          "130030": [
+            7.406535127737226,
+            29.77587059002433
+          ]
+        },
+        "sourceCandidates": [
+          {
+            "chart": 130013,
+            "areaCount": 1203,
+            "originalPreference": false,
+            "distanceSquared": 0.021485172953960244,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 58,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2566,
+              "uv": [
+                1.2624799013137817,
+                0.2252056896686554
+              ],
+              "point": [
+                7.99954120000308,
+                29.499365823833188
+              ],
+              "g": 0.02827419713139534,
+              "baseRGBAlinear": [
+                0.2906351089477539,
+                0.15010523796081543,
+                0.1412811279296875,
+                1.0
+              ],
+              "depth": 13.761902809143066
+            }
+          },
+          {
+            "chart": 130013,
+            "areaCount": 1203,
+            "originalPreference": false,
+            "distanceSquared": 0.2662961272592336,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 59,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2568,
+              "uv": [
+                1.2711259126663208,
+                0.19409149885177612
+              ],
+              "point": [
+                7.999538190818669,
+                29.999403615553
+              ],
+              "g": 0.014397663064301014,
+              "baseRGBAlinear": [
+                0.33642578125,
+                0.177734375,
+                0.167236328125,
+                1.0
+              ],
+              "depth": 13.765830993652344
+            }
+          },
+          {
+            "chart": 130013,
+            "areaCount": 1203,
+            "originalPreference": false,
+            "distanceSquared": 0.27668139586502155,
+            "Q": 2,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 16,
+              "fineY": 57,
+              "chart": 130013,
+              "role": 13,
+              "primitive": 2566,
+              "uv": [
+                1.253904104232788,
+                0.25602948665618896
+              ],
+              "point": [
+                8.000481760376829,
+                28.99966853189806
+              ],
+              "g": 0.03513086959719658,
+              "baseRGBAlinear": [
+                0.19692230224609375,
+                0.09844779968261719,
+                0.09389495849609375,
+                1.0
+              ],
+              "depth": 13.758479118347168
+            }
+          },
+          {
+            "chart": 130027,
+            "areaCount": 728,
+            "originalPreference": false,
+            "distanceSquared": 0.23611395605072935,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 15,
+              "fineY": 59,
+              "chart": 130027,
+              "role": 13,
+              "primitive": 4788,
+              "uv": [
+                0.0629211962223053,
+                0.07825902104377747
+              ],
+              "point": [
+                7.500232337670241,
+                29.999656722050133
+              ],
+              "g": 0.05513789877295494,
+              "baseRGBAlinear": [
+                0.44744110107421875,
+                0.25390625,
+                0.2265625,
+                1.0
+              ],
+              "depth": 13.803743362426758
+            }
+          },
+          {
+            "chart": 130030,
+            "areaCount": 411,
+            "originalPreference": true,
+            "distanceSquared": 0.08441961886344489,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "centre480",
+              "fineX": 15,
+              "fineY": 58,
+              "chart": 130030,
+              "role": 13,
+              "primitive": 4994,
+              "uv": [
+                0.15524756908416748,
+                0.0864819586277008
+              ],
+              "point": [
+                7.499842211884214,
+                29.500709897134826
+              ],
+              "g": 0.06597648561000824,
+              "baseRGBAlinear": [
+                0.427734375,
+                0.2458648681640625,
+                0.2234039306640625,
+                1.0
+              ],
+              "depth": 13.810456275939941
+            }
+          },
+          {
+            "chart": 130030,
+            "areaCount": 411,
+            "originalPreference": true,
+            "distanceSquared": 0.08446527386974463,
+            "Q": 3,
+            "packet": {
+              "sampleKind": "native960",
+              "fineX": 15,
+              "fineY": 58,
+              "chart": 130030,
+              "role": 13,
+              "primitive": 4994,
+              "uv": [
+                0.1550256907939911,
+                0.08646929264068604
+              ],
+              "point": [
+                7.49953696216545,
+                29.50052365856743
+              ],
+              "g": 0.06597598642110825,
+              "baseRGBAlinear": [
+                0.427734375,
+                0.2459259033203125,
+                0.2234649658203125,
+                1.0
+              ],
+              "depth": 13.810462951660156
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "fixedFootprintOffsets": [
+    {
+      "offset": [
+        0.25,
+        0.25
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 71,
+        "130027": 44,
+        "130030": 25
+      }
+    },
+    {
+      "offset": [
+        0.25,
+        0.5
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 71,
+        "130027": 45,
+        "130030": 27
+      }
+    },
+    {
+      "offset": [
+        0.25,
+        0.75
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 72,
+        "130027": 44,
+        "130030": 28
+      }
+    },
+    {
+      "offset": [
+        0.5,
+        0.25
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 78,
+        "130027": 39,
+        "130030": 27
+      }
+    },
+    {
+      "offset": [
+        0.5,
+        0.5
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 78,
+        "130027": 40,
+        "130030": 27
+      }
+    },
+    {
+      "offset": [
+        0.5,
+        0.75
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 79,
+        "130027": 40,
+        "130030": 27
+      }
+    },
+    {
+      "offset": [
+        0.75,
+        0.25
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 80,
+        "130027": 45,
+        "130030": 23
+      }
+    },
+    {
+      "offset": [
+        0.75,
+        0.5
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 80,
+        "130027": 46,
+        "130030": 24
+      }
+    },
+    {
+      "offset": [
+        0.75,
+        0.75
+      ],
+      "chart": 130013,
+      "g": 0.02827419713139534,
+      "Q": 2,
+      "packet": {
+        "sampleKind": "native960",
+        "fineX": 16,
+        "fineY": 58,
+        "chart": 130013,
+        "role": 13,
+        "primitive": 2566,
+        "uv": [
+          1.2624799013137817,
+          0.2252056896686554
+        ],
+        "point": [
+          7.99954120000308,
+          29.499365823833188
+        ],
+        "g": 0.02827419713139534,
+        "baseRGBAlinear": [
+          0.2906351089477539,
+          0.15010523796081543,
+          0.1412811279296875,
+          1.0
+        ],
+        "depth": 13.761902809143066
+      },
+      "coverageCounts": {
+        "130013": 80,
+        "130027": 46,
+        "130030": 25
+      }
+    }
+  ],
+  "interpretation": "Different representatives of different visible surfaces within the SAME frozen cell/pose. Not an observed temporal Q3-to-Q2 transition.",
+  "limits": [
+    "later evaluated geometry matched to earlier frozen pose; not same live capture time",
+    "hair-only CPU visibility; face/body unseen surfaces not included",
+    "integration8/16/32/64 and9 offsets do not prove all camera/subpixel/animation stability",
+    "coverage-first art policy is not automatically the best feature-preservation policy"
+  ]
+}

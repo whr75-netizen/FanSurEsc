@@ -1,0 +1,80 @@
+{
+  "passed": 18,
+  "checks": [
+    {
+      "name": "paired source/frame sourceId identical",
+      "pass": true
+    },
+    {
+      "name": "both representative packets found exactly in the same frozen pool",
+      "pass": true
+    },
+    {
+      "name": "source centre g/UV/primitive agree",
+      "pass": true
+    },
+    {
+      "name": "both g values exactly match their hashed saved light buffers",
+      "pass": true
+    },
+    {
+      "name": "light480-3.bin hash belongs to this sourceId",
+      "pass": true
+    },
+    {
+      "name": "light960-3.bin hash belongs to this sourceId",
+      "pass": true
+    },
+    {
+      "name": "source480-6.bin hash belongs to this sourceId",
+      "pass": true
+    },
+    {
+      "name": "source960-6.bin hash belongs to this sourceId",
+      "pass": true
+    },
+    {
+      "name": "old and selected sample positions each hit their own front chart/depth",
+      "pass": true
+    },
+    {
+      "name": "saved 8x8 coverage reproduced exactly",
+      "pass": true
+    },
+    {
+      "name": "8x8 reversed triangle iteration selects same owner/packet",
+      "pass": true
+    },
+    {
+      "name": "saved 16x16 coverage reproduced exactly",
+      "pass": true
+    },
+    {
+      "name": "16x16 reversed triangle iteration selects same owner/packet",
+      "pass": true
+    },
+    {
+      "name": "32x32 reversed triangle iteration selects same owner/packet",
+      "pass": true
+    },
+    {
+      "name": "64x64 reversed triangle iteration selects same owner/packet",
+      "pass": true
+    },
+    {
+      "name": "fixed-cell owner and representative packet agree at all four integration resolutions",
+      "pass": true
+    },
+    {
+      "name": "nine fixed-footprint 16x16 quadrature offsets retain selected packet",
+      "pass": true
+    },
+    {
+      "name": "eight shuffled packet orders do not change this selection",
+      "pass": true
+    }
+  ],
+  "newUnityCalls": 0,
+  "newGpuReads": 0,
+  "productChanges": 0
+}

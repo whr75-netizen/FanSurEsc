@@ -118,7 +118,7 @@ Unity의 기존 미저장 상태와 dirty25, 원본 asset, 제품, 31/34 및 다
 | `source-palette.cjs:makePalette` | 관측 기준색을 최고 단계 anchor로 보존. 고정 hue의 OKLCH L/C 단계 생성, gamut 밖은 L/h 고정 C 축소. 간격 배율은 **anchor로부터의 L/C 차이**에만 적용 |
 | `source-palette.cjs:shadeIndex/resolve/shade` | Float32 입력 `k=count(g≥τ)`→`P[k]` RGB8 직접 반환. 프레임별 min/max 정규화·최종RGB×g·HairAnchor 없음 |
 | `adapter.cjs:packet/replayPacket` | source family ordinal과 팔레트 uint4/임계값 Float32 테이블 연결. material ID 고정 매핑 없음 |
-| `SourcePalette54.hlsl:SourceShade54/SourceLookup54/SourceRGB8ToLinear54` | 미활성 GPU 연결 후보. point 정수 인덱스 조회와 linear RT용 단일 decode. GPU 미컴파일·제품 미적용 |
+| `SourcePalette54.hlsl:SourceShade54/SourceLookup54/SourceRGB8ToLinear54` | point 정수 인덱스 조회와 linear RT용 단일 decode. 54 당시 GPU 미컴파일, 이후 아래57에서 격리 GPU/RT 검증. 제품 미적용 |
 
 계산 계약: 원본 UV는 normalized/top-left, 원본 texel은 sRGB8, material factor는 linear이다. 제공된 source domain의 관측 색을 Lab에서 비교한다. `t=(k/(N−1))^γ`, `Lnative=L0(dL+(1−dL)t)`, `Cnative=C0(dC+(1−dC)t)`, 간격 배율m은 `L=L0+m(Lnative−L0)`, `C=C0+m(Cnative−C0)`에만 쓴다. RGB8 반올림 뒤의 표를 canonical 팔레트로 사용한다. g/τ는 caller가 같은 단위로 주는 명암 스칼라이며 이 프로토타입의 g는 **진단 입력**이지 새 장면 광량 캡처가 아니다.
 
@@ -126,7 +126,7 @@ Unity의 기존 미저장 상태와 dirty25, 원본 asset, 제품, 31/34 및 다
 
 오프라인49검사 통과: source 출처·관측 anchor 일치, 8bit 왕복, material87, source 혼입/미등록 거부, palette 변경시k 보존, τ변경시P 보존, 최종RGB가 직접 P[k]인30출력에서 팔레트 밖0, 동일band g변화 시 RGB 동일, Float32 임계값 이웃·packet 일치, 간격0중복 표시, gamut C 축소. 기존 최종RGB×.72를 주입한 반례는 P 포함 조건에서 실패함을 확인했다. 원본/팔레트는 명암 영역의 공간 형상·고립셀·곡률을 고치지 않으며, 이를 이번 성공으로 보고하지 않는다.
 
-실제 렌더 연결 시점: material/UV source family를 초기화에 공급하고 기존 연속g/향후 보정된k'를 `SourceLookup54`에 연결해야 한다. 불투명 interior의 마지막 출력에서 한 번 decode/encode하고 이후 HairFinal/G·LineTone·추가 조명·AA가 P 밖 색을 만드는지 실제 RT에서 검사해야 한다. 현재 활성 제품의 하드코딩/곱셈은 그대로 남아 있다. 이번에는 Unity/새GPU 실행이 금지되어 import/compile/최종 후단 팔레트 보존/성능/미술은 미검증이다.
+실제 렌더 연결 시점: material/UV source family를 초기화에 공급하고 기존 연속g/향후 보정된k'를 `SourceLookup54`에 연결해야 한다. 불투명 interior의 마지막 출력에서 한 번 decode/encode하고 이후 HairFinal/G·LineTone·추가 조명·AA가 P 밖 색을 만드는지 실제 RT에서 검사해야 한다. 현재 활성 제품의 하드코딩/곱셈은 그대로 남아 있다. 54 작성 당시에는 Unity/새GPU 실행이 금지됐으며, 이후 승인된57의 격리 검증과 실제 제품 연결/성능/미술의 미검증 범위를 구분한다.
 
 원본 dirty `CURRENT_STATE.md`/AGENTS/제품은 보존하고 최신 코드 탐색과 한계는 이 인계 문서에 유지한다.
 
@@ -146,3 +146,17 @@ Unity의 기존 미저장 상태와 dirty25, 원본 asset, 제품, 31/34 및 다
 16검사 통과: 기존53 gate·표본 수 재현, 가시량 상한, native source/S0 경우 분리, 두 고정 진단 재생, 가림없음→원래alpha/전체앞불투명→0의 실제 함수 반례. `cell-fixtures.json`에 두4×4 source/destination raw 표본과 원본49/53 해시를 보관해 Unity 없이 재생한다. 실제 새GPU/캡처/제품/화면조작 없음. 관련 새 커밋은 이 문서·55경로의 Git 이력으로 추적한다.
 
 다음 설계 판단은 부분 가림을 보존한 표현에서 feature shape·공동 소유권을 결정하는 것이다. 단순 `any` 완화epsilon·새 가중치·추가 정수 이동 탐색으로 대체하지 않는다. 전체 눈/Closed 상태를 원본에 없는 shape로 채우지 않는다.
+
+## 격리 GPU/최종 sRGB 조회57 — 2026-10-31
+
+코드·결과: [gpu-probe57](../../experiments/pixel-pipeline/2026-10-31-gpu-probe57/README_KO.md). 54의 검증된 PACKET 3family·12색·9임계값·30진단표본을 그대로 사용했다. `SourcePaletteGpuProbe57.cs:Execute/Violations`는 **Assets 밖**의 기존 `Unity_RunCommand` 실행기이고, `Assets/Editor/SourcePalette54Probe/SourcePaletteProbe57.compute:Probe57`와 `SourcePaletteOffscreen57.shader:Frag57`가 같은 `SourceShade54→SourceLookup54`를 사용한다. HLSL은54와 바이트 동일하다. C# import/domain reload를 유발하지 않고 셰이더3개만 한정 import했다. 제품·씬·재질·RendererFeature·Play·SaveAssets 변경은 없다.
+
+2026-10-31 08:12:41 UTC, Unity6000.5.9f1/Direct3D11/Linear에서 dispatch1회·offscreen draw1회. compute uint4 30/30, `R8G8B8A8_SRGB` 30×1 RT 30/30이 원래 CPU RGB8과 정확 일치, 팔레트 밖0이다. fragment는 정수 P[k]를 한 번 sRGB decode하고 RT가 한 번 encode한다. PNG 원본/nearest16×와 CPU/GPU/RT 비교를 직접 열어 확인했다. 실제 머리/눈·광원·후단 외곽선 렌더가 아니라 **동결 진단 입력의 GPU 조회/출력 인코딩** 검증이다.
+
+기존 dirty24의 native JSON 3,438,997bytes, entity ID, 관련 디스크49파일 해시, GameMap1 clean/37root identity, build scene 목록, Edit 상태, domain1이 전후 동일했다. 소유 ComputeBuffer5개·NativeArray2개·Material/Compute clone/RT/CommandBuffer만 해제했고 shader compiler message0·Console 신규 오류/경고0이다. 실행 직후 기존RT30개 identity가 같았지만, 후속 읽기 시 RT수30을 유지한 채2개 identity가 교체됐다. 그 소유자/원인은 미확정이며 공유RT를 임의 정리하지 않았다.
+
+메모리 완전 원복을 주장하지 않는다. probe 전후 `Profiler.GetTotalAllocatedMemoryLong` +63,908,825bytes(+60.95MiB), `GetTotalReservedMemoryLong` −16MiB, `GetMonoUsedSizeLong` +87.84MiB다. 별도 전후 읽기 스냅샷 범위에서는 allocated +213,449,290bytes(+203.56MiB), reserved +141.28MiB, mono +129.25MiB다. 물리 working set이 아니며 동적 컴파일/JSON 직렬화/import cache/미수집 managed 할당 중 잔류 소유자는 확정하지 않았다. GC/Unload/추가 렌더로 숨기거나 장기 누적 없음으로 확대하지 않는다.
+
+실행 전 C# 타입 오류와 명령기의 불허 `System.Runtime.InteropServices` namespace 검사가 있었으며 그 단계 GPU 실행은0이었다. 도구가 지시한 불필요 namespace/속성 제거 후 **동일 공식 실행기**의 표준 C#으로 컴파일·실행됐다. namespace 정책/보안설정/실행경로를 변경하지 않았다. 성공한 GPU 실행은1회뿐이며 이전 실패는 성공 수에 넣지 않는다.
+
+다음 제품 연결에는54의 `sourceColours/extractReference/makePalette` 초기화 C# 이식, 실제 material/UV→family 공급, 모든 interior 셀의 P[k'] 기록이 필요하다. `RestoreStyle335.ApplyShadeBoundary`의 old==q 조기 반환에만 붙이면 미변경 셀은 기존색으로 남는다. 실제 family ID 버퍼와 후단 G/LineTone/alpha 경계를 설계·검증하기 전 제품 활성화하지 않는다. 눈 clean backing6표본과 부분 가림/전체 keyform 판정은 이번 시험에서 확보하지 않았다. 관련 커밋은 이 절·57 경로의 Git 이력으로 추적한다.

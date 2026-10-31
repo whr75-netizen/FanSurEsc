@@ -1,0 +1,13 @@
+#pragma kernel Probe57
+#include "SourcePalette54.hlsl"
+struct Sample57 { uint family; float g; };
+StructuredBuffer<Sample57> _Cases57;
+RWStructuredBuffer<uint4> _Output57;
+uint _Count57;
+[numthreads(64,1,1)]
+void Probe57(uint3 id : SV_DispatchThreadID)
+{
+    if(id.x >= _Count57) return;
+    Sample57 s = _Cases57[id.x];
+    _Output57[id.x] = SourceLookup54(s.family, SourceShade54(s.family, s.g));
+}

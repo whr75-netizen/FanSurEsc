@@ -1,0 +1,29 @@
+[
+  {
+    "record": "COMPILE_FAILURE1_REPLY.json",
+    "success": false,
+    "error": "COMPILATION_FAILED: Code failed to compile.",
+    "compiled": false,
+    "executed": false,
+    "compilationLogs": "- Error Error CS0246: The type or namespace name 'Vector4Int' could not be found (are you missing a using directive or an assembly reference?) (Line: 94)\r\n- Error Error CS0246: The type or namespace name 'Vector4Int' could not be found (are you missing a using directive or an assembly reference?) (Line: 96)\r\n- Error Error CS0246: The type or namespace name 'Vector4Int' could not be found (are you missing a using directive or an assembly reference?) (Line: 136)\r\n- Error Error CS1069: The type name 'InvalidDataException' could not be found in the namespace 'System.IO'. This type has been forwarded to assembly 'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' Consider adding a reference to that assembly. (Line: 142)\r\n- Error Error CS1069: The type name 'InvalidDataException' could not be found in the namespace 'System.IO'. This type has been forwarded to assembly 'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' Consider adding a reference to that assembly. (Line: 145)\r\n- Error Error CS1069: The type name 'InvalidDataException' could not be found in the namespace 'System.IO'. This type has been forwarded to assembly 'System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089' Consider adding a reference to that assembly. (Line: 152)\r\n",
+    "executionLogs": null
+  },
+  {
+    "record": "NAMESPACE_PREFLIGHT_REPLY.json",
+    "success": false,
+    "error": "UNEXPECTED_ERROR: Script uses one or more unauthorized namespaces: Namespace System.Runtime.InteropServices is imported at line 7. Remove this usage and retry.",
+    "compiled": null,
+    "executed": null,
+    "compilationLogs": null,
+    "executionLogs": null
+  },
+  {
+    "record": "PROBE_REPLY.json",
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] GPU57 finished samples=30 computeMismatch=0 rtMismatch=0 released=True preserved=True error="
+  }
+]

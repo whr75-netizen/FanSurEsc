@@ -1,0 +1,98 @@
+{
+  "scope": "One offscreen frozen packet probe, NOT actual hair/eye rendering or product integration",
+  "unityUTC": "2026-10-31T08:12:41.4942118Z",
+  "samples": 30,
+  "computeExact": 30,
+  "sRGBRTExact": 30,
+  "paletteOutside": 0,
+  "dispatches": 1,
+  "draws": 1,
+  "dirtyObjects": 24,
+  "dirtySerializedBytes": 3438997,
+  "protectedDiskFiles": 49,
+  "stateChecks": {
+    "project": true,
+    "unityVersion": true,
+    "colourSpace": true,
+    "graphicsDevice": true,
+    "pid": true,
+    "domainId": true,
+    "playing": true,
+    "paused": true,
+    "transitioning": true,
+    "compiling": true,
+    "updating": true,
+    "dirtyObjectStateLines": true,
+    "diskFileLines": true,
+    "sceneStateLines": true,
+    "buildScenes": true,
+    "renderTextureIds": false
+  },
+  "ownedResourcesReleased": true,
+  "renderTextureCountBefore": 30,
+  "renderTextureCountAfter": 30,
+  "renderTextureIdentitiesSameImmediatelyAfterProbe": true,
+  "laterNewRenderTextureIds": [
+    "568105589213750530",
+    "568105589213750534"
+  ],
+  "laterMissingRenderTextureIds": [
+    "568105589213751062",
+    "568105589213751066"
+  ],
+  "laterRTLimit": "Two Editor RT identities changed between the command end and later read-only snapshot; owner/cause not established. No shared RT was destroyed by the probe.",
+  "domainBefore": 1,
+  "domainAfter": 1,
+  "shaderCompilerMessages": [],
+  "consoleCapturedBefore": 7,
+  "consoleCapturedAfter": 7,
+  "newConsoleMessages": [],
+  "memoryProbeAPIs": {
+    "GetTotalAllocatedMemoryLong": {
+      "before": 1191332374,
+      "after": 1255241199,
+      "delta": 63908825
+    },
+    "GetTotalReservedMemoryLong": {
+      "before": 1813876736,
+      "after": 1797099520,
+      "delta": -16777216
+    },
+    "GetMonoUsedSizeLong": {
+      "before": 1404219392,
+      "after": 1496330240,
+      "delta": 92110848
+    }
+  },
+  "memoryReadOnlySnapshotAPIs": {
+    "unityAllocatedBytes": {
+      "before": 1152095451,
+      "after": 1365544741,
+      "delta": 213449290
+    },
+    "unityReservedBytes": {
+      "before": 1729986560,
+      "after": 1878126592,
+      "delta": 148140032
+    },
+    "monoUsedBytes": {
+      "before": 1392451584,
+      "after": 1527975936,
+      "delta": 135524352
+    }
+  },
+  "memorySnapshotTimes": {
+    "before": "2026-10-31T08:09:13.7994844Z",
+    "after": "2026-10-31T08:12:55.0422989Z"
+  },
+  "memoryLimit": "Unity internal counters, not physical working set. Command compilation/serialization/import caches and uncollected managed allocations are possible contributors; retained owner not established. No forced GC or long-term leak proof.",
+  "csharpImported": false,
+  "Play": false,
+  "SaveAssets": false,
+  "productIntegrated": false,
+  "files": {
+    "PACKET57.bin": "2e368de8a9a5201225c63ab575850fd7a8cca7447d6fffbafee833a4e3baf8c1",
+    "COMPUTE57.uint4": "5d157b668cb34a7f440cc6398b7547479d77a949ffb0f6aa57b60c07c620ab04",
+    "RT57.rgba": "8ac4641ba1863eb571c4a07888ded653fafe68a62beb0537dacca1d1921ca57a"
+  }
+}

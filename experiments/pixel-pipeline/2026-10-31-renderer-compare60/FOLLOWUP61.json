@@ -1,0 +1,241 @@
+{
+  "utc": "2026-10-31T09:38:55.7479357Z",
+  "noNewPlayOrRender": true,
+  "settersExecuted": 0,
+  "cleanupsExecuted": 0,
+  "globals": {
+    "currentGettersRead": 63,
+    "originalValuesRecoverableThroughPermittedAPI": false,
+    "comparableOriginalValueCount": 0,
+    "getterMismatchCount": null,
+    "bufferBindingsChanged": false,
+    "exactReason": "Compare60 saved original values only in private instance dictionaries; report exported count, not values. Finish unsubscribed its update observer. No public retrieval handle or persistent export was established. SDK retention/GC status is not proven and no reflection/heap access was attempted. No guessed restoration."
+  },
+  "Editor": {
+    "playing": false,
+    "paused": false,
+    "domain": 1,
+    "liveRendererCount": 0,
+    "APIEqualActualBefore": {
+      "optionsEnabled": true,
+      "options": true,
+      "timeScale": true,
+      "captureDeltaTime": true,
+      "graphicsPipelinePath": true,
+      "qualityPipelinePath": true
+    },
+    "sceneRootsPathCleanEqual60Finish": true
+  },
+  "dirty": {
+    "count": 30,
+    "original24EntityIdsAndDirtyPreserved": true,
+    "nativeShaderHashesNotReserializedThisFollowup": true,
+    "settings3": [
+      {
+        "path": "ProjectSettings/EditorSettings.asset",
+        "nativeHashUnchangedSince60Finish": true,
+        "APIValuesMatchActualBackup": true,
+        "codeSupportedDirtyTrigger": "Compare60.Execute sets enterPlayModeOptions; Finish assigns original options",
+        "dirtyFlagCleared": false
+      },
+      {
+        "path": "ProjectSettings/GraphicsSettings.asset",
+        "nativeHashUnchangedSince60Finish": true,
+        "APIValuesMatchActualBackup": true,
+        "codeSupportedDirtyTrigger": "NativePlayer395.OnEnable/Source329WalkView.Apply/Gameplay397.BeginGameplay assign pipeline; Compare60.Finish restores oldG",
+        "dirtyFlagCleared": false
+      },
+      {
+        "path": "ProjectSettings/TimeManager.asset",
+        "nativeHashUnchangedSince60Finish": true,
+        "APIValuesMatchActualBackup": true,
+        "codeSupportedDirtyTrigger": "NativePlayer395.Initialise and Gameplay397.BeginGameplay change Time.timeScale; Compare60.Finish restores original timeScale/captureDeltaTime",
+        "dirtyFlagCleared": false
+      }
+    ],
+    "face": {
+      "vertexAttributeBytesExactSince60": true,
+      "indexBytesExactSince60": true,
+      "bindposeFloat32Values": 1456,
+      "bindposeNumericMismatchSince60": 0,
+      "bindposeNumericMismatchAgainstDisk": 0,
+      "bindposeRawHashLimit": "Raw API hash differs from JSON re-encoding; all Float32 numbers are equal. JSON loses signed-zero bit distinctions. Do not report a content regression based on that raw hash alone.",
+      "blendShapeNamesFrameCountsWeightsExactSince60": true,
+      "meshMutationCause": "Unconfirmed: runtime CurrentSurface330/ScaleBake378 writes owned baked meshes; EyeFeature348 writes Instantiate(original) sampleFace. No direct setter of the persistent source asset was identified in the inspected path. Engine/BakeMesh cache marking is a hypothesis, not proven.",
+      "limit": "No full pre-Play native Mesh baseline. Blendshape delta arrays and every native cache field were not re-exported."
+    },
+    "newSince60Finish": [
+      {
+        "entityId": "568105584918791150",
+        "path": "Assets/Rendering/PixelArt/DeskLivePixelProbe.shader",
+        "type": "UnityEngine.Shader"
+      }
+    ],
+    "newShaderDiskDiff": "",
+    "newShaderCause": "Unconfirmed; shader already dirty at start of the read-only snapshot, no setter used. Preserve it."
+  },
+  "disk": {
+    "originalFileChangesSince60Finish": [],
+    "protectedUserModifiedFilesChanged": [],
+    "EditorGraphicsTrackedDiff": ""
+  },
+  "settingsRepresentationLimit": "Static API enabled=false/options=None matches pre-Play API backup; native/disk serialized m_EnterPlayModeOptionsEnabled=1/options=0 agree with each other. Public bindings are extern; no proven explanation for representation difference and no guessed field rewrite.",
+  "resourceLifetime": {
+    "liveCandidateMaterials": 0,
+    "liveCandidateComputeClones": 0,
+    "renderTextureCount": 30,
+    "publicProductCaches": {
+      "ClothRegion524.AreasLength": 0,
+      "ClothRegion524.AtlasLive": false,
+      "ClothRegion524.AuditLive": false,
+      "ClothRegion524.CurvesCount": 0,
+      "ClothRegion524.SelectedLength": 0,
+      "ClothRegion524.SourceCount": 0,
+      "ClothSurface525.PacketsCount": 0,
+      "ContourSelect333.TagBytesLength": 317080,
+      "HeadRegion502.CurvesCount": 0,
+      "HeadRegion502.HairLength": 130560,
+      "HeadRegion502.MaskLive": false,
+      "HeadRegion502.PacketsCount": 0,
+      "HeadRegion502.ParentLength": 130560,
+      "HeadRegion502.SourceLoopsCount": 0
+    },
+    "readOnlyAuditInternalCounterDeltaBytes": {
+      "GetTotalAllocatedMemoryLong": 0,
+      "GetTotalReservedMemoryLong": 0,
+      "GetMonoUsedSizeLong": 4538368
+    },
+    "privateFixedArrayBytesFromExistingCode": {
+      "ClothRegion524.coloursAndAtlas540": 4177920
+    },
+    "sourceReasoning": "Compare60 has no static large-array fields. GPU buffers/material/compute clones are released and lists cleared. Capture float arrays are synchronous method locals, not exported as array references or captured by callbacks. Actual managed roots/SDK retention cannot be proven with allowed APIs. Existing product fixed caches are not experiment-owned and were not cleared. No evidence proves them the source of +353.31MiB."
+  },
+  "colour": {
+    "stageStatistics": {
+      "source-unlit": {
+        "uniqueRGB8": 189,
+        "OKLabLmin": 0.18419248463394897,
+        "OKLabLmedian": 0.2560643560939381,
+        "OKLabLmax": 0.8254816298999098
+      },
+      "source-medoid": {
+        "uniqueRGB8": 3,
+        "OKLabLmin": 0.36463512071709625,
+        "OKLabLmedian": 0.40453516003785894,
+        "OKLabLmax": 0.41342994306271263
+      },
+      "P-Q-before-line": {
+        "uniqueRGB8": 6,
+        "OKLabLmin": 0.2013922287260489,
+        "OKLabLmedian": 0.36463512071709625,
+        "OKLabLmax": 0.41342994306271263
+      },
+      "candidate-final": {
+        "uniqueRGB8": 9,
+        "OKLabLmin": 0.16542778636974528,
+        "OKLabLmedian": 0.33920794909152374,
+        "OKLabLmax": 0.41342994306271263
+      },
+      "product-control": {
+        "uniqueRGB8": 32,
+        "OKLabLmin": 0.1047739031575406,
+        "OKLabLmedian": 0.1412707240965345,
+        "OKLabLmax": 0.3865367426337145
+      }
+    },
+    "materialReferenceGroups": [
+      {
+        "draw": 11,
+        "visibleCells": 77,
+        "visibleSourceUniqueRGB8": 54,
+        "referenceRGB8": [
+          95,
+          63,
+          64
+        ],
+        "visibleSourceMedianL": 0.25882064667481025,
+        "referenceL": 0.40453516003785894,
+        "paletteRGB8": [
+          [
+            38,
+            22,
+            23
+          ],
+          [
+            95,
+            63,
+            64
+          ]
+        ],
+        "occupiedQCounts": {
+          "0": 50,
+          "1": 27
+        },
+        "sourceReferenceSelection": "32 evenly spaced triangle-centroid samples per material, including offscreen source; not area/saliency-weighted or per-painted-pattern references"
+      },
+      {
+        "draw": 12,
+        "visibleCells": 131,
+        "visibleSourceUniqueRGB8": 92,
+        "referenceRGB8": [
+          81,
+          54,
+          55
+        ],
+        "visibleSourceMedianL": 0.34512438014030034,
+        "referenceL": 0.36463512071709625,
+        "paletteRGB8": [
+          [
+            32,
+            18,
+            18
+          ],
+          [
+            81,
+            54,
+            55
+          ]
+        ],
+        "occupiedQCounts": {
+          "0": 73,
+          "1": 58
+        },
+        "sourceReferenceSelection": "32 evenly spaced triangle-centroid samples per material, including offscreen source; not area/saliency-weighted or per-painted-pattern references"
+      },
+      {
+        "draw": 13,
+        "visibleCells": 165,
+        "visibleSourceUniqueRGB8": 84,
+        "referenceRGB8": [
+          98,
+          65,
+          67
+        ],
+        "visibleSourceMedianL": 0.2560643560939381,
+        "referenceL": 0.41342994306271263,
+        "paletteRGB8": [
+          [
+            40,
+            23,
+            24
+          ],
+          [
+            98,
+            65,
+            67
+          ]
+        ],
+        "occupiedQCounts": {
+          "0": 58,
+          "1": 107
+        },
+        "sourceReferenceSelection": "32 evenly spaced triangle-centroid samples per material, including offscreen source; not area/saliency-weighted or per-painted-pattern references"
+      }
+    ],
+    "representativeSelectionEffect": "All visible unlit texel variations inside one material collapse to one medoid before Q. Three visible material anchors substitute for many source colours; painted/gradient features are not independently preserved.",
+    "brightnessHueEffect": "Old product HairFinal335 multiplies HairBase by channel gain (.0852688534,.1188193462,.249105814) and shade floor. Candidate bypasses that strong darkening/blue bias and uses warm original texture medoids as bright endpoints. This explains a real pipeline difference, not an sRGB-white multiplication bug.",
+    "stepIntervalEffect": "Two levels inherited from actual surfaceShadeSteps, threshold .5. darkLRatio .55/darkCRatio .6 are diagnostic parameters; they alter contrast and relative region brightness, not source identity. No alternative parameters were applied.",
+    "lineEffect": "52 cells are exactly linear P*.55. This only darkens edge RGB; it cannot explain brighter warm interior or disappearance of texture patterns.",
+    "causalLimit": "Stored stages and code separate these transformations, but no new GPU ablation was executed. This is not a new aesthetic success claim."
+  }
+}

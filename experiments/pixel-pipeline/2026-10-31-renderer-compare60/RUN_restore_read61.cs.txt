@@ -1,0 +1,150 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEngine.Profiling;
+using Unity.Collections;
+using UnityEngine.Rendering;
+// Small dependency-free JSON boundary for the existing RunCommand reference set.
+// No reflection, package loading, runtime serialization of arbitrary objects.
+
+public class Json58 : IEnumerable<Json58>
+{
+    protected Dictionary<string,Json58> fields;protected List<Json58> items;protected object value;
+    public Json58 this[string key] {get {Json58 v;return fields!=null&&fields.TryGetValue(key,out v)?v:null;}set {fields[key]=value;}}
+    public Json58 this[int i] {get {return items[i];}}
+    public int Count {get {return items!=null?items.Count:fields!=null?fields.Count:0;}}
+    public void Add(Json58 v) {items.Add(v);}
+    public IEnumerable<T> Values<T>() {return this.Select(v=>(T)Convert.ChangeType(v.value,typeof(T),CultureInfo.InvariantCulture));}
+    public IEnumerator<Json58> GetEnumerator() {return (items??(fields==null?new List<Json58>():fields.Values.ToList())).GetEnumerator();}
+    IEnumerator IEnumerable.GetEnumerator() {return GetEnumerator();}
+    public static implicit operator Json58(string v) {return v==null?null:new Json58{value=v};}
+    public static implicit operator Json58(int v) {return new Json58{value=v};}
+    public static implicit operator Json58(long v) {return new Json58{value=v};}
+    public static implicit operator Json58(float v) {return new Json58{value=(double)v};}
+    public static implicit operator Json58(double v) {return new Json58{value=v};}
+    public static implicit operator Json58(bool v) {return new Json58{value=v};}
+    public static explicit operator string(Json58 v) {return v==null?null:Convert.ToString(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator int(Json58 v) {return Convert.ToInt32(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator long(Json58 v) {return Convert.ToInt64(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator double(Json58 v) {return Convert.ToDouble(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator bool(Json58 v) {return Convert.ToBoolean(v.value,CultureInfo.InvariantCulture);}
+    public static Json58 Wrap(object v) {
+        if(v==null)return null;if(v is Json58)return(Json58)v;if(v is string)return(string)v;if(v is bool)return(bool)v;
+        if(v is double)return(double)v;if(v is float)return(float)v;if(v is int)return(int)v;if(v is long)return(long)v;
+        if(v is IEnumerable){var a=new Arr58();foreach(var x in(IEnumerable)v)a.Add(Wrap(x));return a;}
+        throw new ArgumentException("Unsupported JSON boundary value: "+v.GetType().Name);
+    }
+    static string Quote(string text) {
+        var b=new StringBuilder("\"");foreach(char c in text){switch(c){case '"':b.Append("\\\"");break;case '\\':b.Append("\\\\");break;case '\b':b.Append("\\b");break;case '\f':b.Append("\\f");break;case '\n':b.Append("\\n");break;case '\r':b.Append("\\r");break;case '\t':b.Append("\\t");break;default:if(c<32)b.Append("\\u"+((int)c).ToString("x4"));else b.Append(c);break;}}return b.Append('"').ToString();
+    }
+    public override string ToString() {
+        if(fields!=null)return "{"+string.Join(",",fields.OrderBy(p=>p.Key,StringComparer.Ordinal).Select(p=>Quote(p.Key)+":"+(p.Value==null?"null":p.Value.ToString())))+"}";
+        if(items!=null)return "["+string.Join(",",items.Select(v=>v==null?"null":v.ToString()))+"]";
+        if(value==null)return "null";if(value is string)return Quote((string)value);if(value is bool)return(bool)value?"true":"false";
+        if(value is double){double x=(double)value;if(double.IsNaN(x)||double.IsInfinity(x))throw new ArgumentException("Nonfinite JSON number");return x.ToString("R",CultureInfo.InvariantCulture);}
+        return Convert.ToString(value,CultureInfo.InvariantCulture);
+    }
+    public static bool DeepEquals(Json58 a,Json58 b) {return a==null?b==null:b!=null&&a.ToString()==b.ToString();}
+    public static Json58 Parse(string text) {int p=0;var result=ParseValue(text,ref p,0);Space(text,ref p);if(p!=text.Length)throw new ArgumentException("Trailing JSON data");return result;}
+    static void Space(string s,ref int p) {while(p<s.Length&&char.IsWhiteSpace(s[p]))p++;}
+    static string ParseString(string s,ref int p) {
+        if(s[p++]!='"')throw new ArgumentException("JSON string expected");var b=new StringBuilder();
+        while(p<s.Length){char c=s[p++];if(c=='"')return b.ToString();if(c=='\\'){char e=s[p++];switch(e){case '"':case '\\':case '/':b.Append(e);break;case 'b':b.Append('\b');break;case 'f':b.Append('\f');break;case 'n':b.Append('\n');break;case 'r':b.Append('\r');break;case 't':b.Append('\t');break;case 'u':b.Append((char)int.Parse(s.Substring(p,4),NumberStyles.HexNumber,CultureInfo.InvariantCulture));p+=4;break;default:throw new ArgumentException("JSON escape");}}else{if(c<32)throw new ArgumentException("JSON control character");b.Append(c);}}
+        throw new ArgumentException("Unterminated JSON string");
+    }
+    static Json58 ParseValue(string s,ref int p,int depth) {
+        if(depth>128)throw new ArgumentException("JSON nesting limit");Space(s,ref p);if(p>=s.Length)throw new ArgumentException("JSON value expected");char c=s[p];
+        if(c=='"')return ParseString(s,ref p);
+        if(c=='{'||c=='['){bool obj=c=='{';p++;Json58 result=obj?(Json58)new Obj58():new Arr58();Space(s,ref p);if(p<s.Length&&s[p]==(obj?'}':']')){p++;return result;}
+            while(true){Space(s,ref p);string key=null;if(obj){key=ParseString(s,ref p);Space(s,ref p);if(s[p++]!=':')throw new ArgumentException("JSON colon");}var v=ParseValue(s,ref p,depth+1);if(obj)result[key]=v;else result.Add(v);Space(s,ref p);char end=s[p++];if(end==(obj?'}':']'))break;if(end!=',')throw new ArgumentException("JSON separator");}return result;}
+        foreach(string word in new[]{"true","false","null"})if(s.Substring(p).StartsWith(word,StringComparison.Ordinal)){p+=word.Length;return word=="null"?null:(Json58)(word=="true");}
+        int start=p;while(p<s.Length&&"-+0123456789.eE".IndexOf(s[p])>=0)p++;if(start==p)throw new ArgumentException("JSON token");return double.Parse(s.Substring(start,p-start),CultureInfo.InvariantCulture);
+    }
+}
+public sealed class Obj58 : Json58 {public Obj58(){fields=new Dictionary<string,Json58>(StringComparer.Ordinal);}public new static Obj58 Parse(string text){return(Obj58)Json58.Parse(text);}}
+public sealed class Arr58 : Json58 {public Arr58(params object[] values){items=new List<Json58>();if(values.Length==1&&values[0] is IEnumerable&&!(values[0] is string)&&!(values[0] is Json58)){foreach(var v in(IEnumerable)values[0])Add(Wrap(v));}else foreach(var v in values)Add(Wrap(v));}}
+
+// Small hash-only state snapshots. One native serialization per dirty object.
+
+public static class State58
+{
+    public static string Hash(byte[] b) {using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(b)).Replace("-","").ToLowerInvariant();}
+    public static Obj58 Memory() {return new Obj58 { ["utc"]=DateTime.UtcNow.ToString("O"),["GetTotalAllocatedMemoryLong"]=Profiler.GetTotalAllocatedMemoryLong(),["GetTotalReservedMemoryLong"]=Profiler.GetTotalReservedMemoryLong(),["GetMonoUsedSizeLong"]=Profiler.GetMonoUsedSizeLong()};}
+    public static Obj58 Read() {
+        var dirty=new Arr58();long serializedBytes=0;
+        var objects=Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o))
+            .Where(o=>AssetDatabase.GetAssetPath(o).StartsWith("Assets/")||AssetDatabase.GetAssetPath(o).StartsWith("ProjectSettings/"))
+            .OrderBy(o=>AssetDatabase.GetAssetPath(o)).ThenBy(o=>o.GetEntityId().ToString());
+        foreach(var o in objects) {
+            string native=EditorJsonUtility.ToJson(o);byte[] bytes=System.Text.Encoding.UTF8.GetBytes(native);serializedBytes+=bytes.Length;
+            dirty.Add(new Obj58 {["path"]=AssetDatabase.GetAssetPath(o),["guid"]=AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(o)),
+                ["entityId"]=o.GetEntityId().ToString(),["type"]=o.GetType().FullName,["sha256"]=Hash(bytes),["bytes"]=bytes.Length});
+            // Neither full JSON nor byte copies enter the snapshot/return value.
+        }
+        var active=SceneManager.GetActiveScene();var scenes=new Arr58();
+        foreach(var s in Enumerable.Range(0,SceneManager.sceneCount).Select(i=>SceneManager.GetSceneAt(i)))scenes.Add(new Obj58 {
+            ["path"]=s.path,["dirty"]=s.isDirty,["loaded"]=s.isLoaded,["active"]=s==active,
+            ["roots"]=new Arr58(s.isLoaded?s.GetRootGameObjects().Select(o=>o.GetEntityId().ToString()).OrderBy(v=>v):Enumerable.Empty<string>())});
+        var files=new Arr58();
+        foreach(var path in dirty.Select(r=>(string)r["path"]).Concat(scenes.Select(s=>(string)s["path"]))
+            .SelectMany(p=>new[]{p,p+".meta"}).Distinct().OrderBy(p=>p).Where(File.Exists))files.Add(new Obj58 {["path"]=path,["sha256"]=Hash(File.ReadAllBytes(path))});
+        var textures=new Arr58(Resources.FindObjectsOfTypeAll<Texture2D>().Select(t=>t.GetEntityId().ToString()).OrderBy(v=>v));
+        var rts=new Arr58(Resources.FindObjectsOfTypeAll<RenderTexture>().Select(t=>t.GetEntityId().ToString()).OrderBy(v=>v));
+        return new Obj58 {["utc"]=DateTime.UtcNow.ToString("O"),["project"]=Application.dataPath,["version"]=Application.unityVersion,
+            ["domain"]=AppDomain.CurrentDomain.Id,["playing"]=EditorApplication.isPlaying,["paused"]=EditorApplication.isPaused,
+            ["transitioning"]=EditorApplication.isPlayingOrWillChangePlaymode,["compiling"]=EditorApplication.isCompiling,["updating"]=EditorApplication.isUpdating,
+            ["dirty"]=dirty,["serializedBytes"]=serializedBytes,["files"]=files,["scenes"]=scenes,["texture2DIds"]=textures,["rtIds"]=rts,
+            ["buildScenes"]=new Arr58(EditorBuildSettings.scenes.Select(s=>(s.enabled?"1":"0")+"\t"+s.path+"\t"+s.guid))};
+    }
+    public static string[] Changes(Obj58 a,Obj58 b) {return new[]{"project","version","domain","playing","paused","transitioning","compiling","updating","dirty","files","scenes","buildScenes"}.Where(k=>!Json58.DeepEquals(a[k],b[k])).ToArray();}
+    public static void RequireEdit(Obj58 state) {
+        if((bool)state["playing"]||(bool)state["transitioning"]||(bool)state["compiling"]||(bool)state["updating"])throw new InvalidOperationException("Stable Edit state required");
+    }
+}
+
+
+internal class CommandScript:IRunCommand {
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\renderer-compare60";
+ static Arr58 V(Vector4 v){return new Arr58(new[]{v.x,v.y,v.z,v.w});}
+ public void Execute(ExecutionResult result){
+  if(EditorApplication.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit only; no restoration writes");
+  var r=new Obj58{["utc"]=DateTime.UtcNow.ToString("O"),["project"]=Application.dataPath,["domain"]=AppDomain.CurrentDomain.Id,["playing"]=EditorApplication.isPlaying,["paused"]=EditorApplication.isPaused,["settersExecuted"]=0,["globalOriginalValuesAvailable"]=false,["globalBufferBindingsChanged"]=false,["memoryBefore"]=State58.Memory()};
+  var globals=new Arr58();
+  foreach(var g in Json58.Parse(File.ReadAllText(Path.Combine(Root,"GLOBAL_NAMES60.json")))){
+   string name=(string)g["name"],type=(string)g["type"];var row=new Obj58{["name"]=name,["type"]=type};
+   switch(type){case "Float":row["current"]=Shader.GetGlobalFloat(name);break;case "Int":row["current"]=Shader.GetGlobalInt(name);break;case "Vector":row["current"]=V(Shader.GetGlobalVector(name));break;case "Matrix":var m=Shader.GetGlobalMatrix(name);row["current"]=new Arr58(Enumerable.Range(0,16).Select(i=>m[i/4,i%4]));break;case "Texture":var t=Shader.GetGlobalTexture(name);row["current"]=t?new Obj58{["entityId"]=t.GetEntityId().ToString(),["name"]=t.name,["asset"]=AssetDatabase.GetAssetPath(t),["width"]=t.width,["height"]=t.height}:null;break;}
+   globals.Add(row);
+  }
+  r["currentGlobals"]=globals;
+  var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var dirty=new Arr58();var settings=new Obj58();
+  var wanted=new[]{"ProjectSettings/EditorSettings.asset","ProjectSettings/GraphicsSettings.asset","ProjectSettings/TimeManager.asset"};
+  foreach(var o in all.Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).OrderBy(o=>AssetDatabase.GetAssetPath(o)).ThenBy(o=>o.GetEntityId().ToString())){
+   string p=AssetDatabase.GetAssetPath(o);if(!p.StartsWith("Assets/")&&!p.StartsWith("ProjectSettings/"))continue;
+   dirty.Add(new Obj58{["path"]=p,["entityId"]=o.GetEntityId().ToString(),["type"]=o.GetType().FullName});
+   if(wanted.Contains(p)){string text=EditorJsonUtility.ToJson(o);settings[p]=new Obj58{["bytes"]=System.Text.Encoding.UTF8.GetByteCount(text),["sha256"]=State58.Hash(System.Text.Encoding.UTF8.GetBytes(text)),["native"]=text.Length<65536?Json58.Parse(text):null};}
+  }
+  r["dirty"]=dirty;r["smallSettings"]=settings;r["fullShaderNativeJsonGenerated"]=false;
+  r["optionsEnabled"]=EditorSettings.enterPlayModeOptionsEnabled;r["options"]=(int)EditorSettings.enterPlayModeOptions;r["timeScale"]=Time.timeScale;r["captureDeltaTime"]=Time.captureDeltaTime;r["graphicsPipelinePath"]=AssetDatabase.GetAssetPath(GraphicsSettings.defaultRenderPipeline);r["qualityPipelinePath"]=AssetDatabase.GetAssetPath(QualitySettings.renderPipeline);
+  var scenes=new Arr58();foreach(var s in Enumerable.Range(0,SceneManager.sceneCount).Select(SceneManager.GetSceneAt))scenes.Add(new Obj58{["path"]=s.path,["dirty"]=s.isDirty,["roots"]=new Arr58(s.GetRootGameObjects().Select(o=>o.GetEntityId().ToString()).OrderBy(v=>v)),["active"]=s==SceneManager.GetActiveScene()});r["scenes"]=scenes;
+  r["liveNativeCount"]=UnityEngine.Object.FindObjectsByType<NativePlayer395>(FindObjectsInactive.Include,FindObjectsSortMode.None).Length;
+  var mat=Resources.FindObjectsOfTypeAll<Material>().Where(m=>m&&m.shader&&m.shader.name.StartsWith("Hidden/Renderer60/")).ToArray();r["liveCandidateMaterials"]=new Arr58(mat.Select(m=>new Obj58{["entityId"]=m.GetEntityId().ToString(),["name"]=m.name,["shader"]=m.shader.name,["asset"]=AssetDatabase.GetAssetPath(m),["flags"]=m.hideFlags.ToString()}));
+  r["liveCandidateComputeClones"]=new Arr58(Resources.FindObjectsOfTypeAll<ComputeShader>().Where(c=>c&&c.name.StartsWith("RestoreStyle60")&&!EditorUtility.IsPersistent(c)).Select(c=>new Obj58{["entityId"]=c.GetEntityId().ToString(),["name"]=c.name,["flags"]=c.hideFlags.ToString()}));
+  r["renderTextures"]=new Arr58(Resources.FindObjectsOfTypeAll<RenderTexture>().Select(t=>new Obj58{["id"]=t.GetEntityId().ToString(),["name"]=t.name,["width"]=t.width,["height"]=t.height,["asset"]=AssetDatabase.GetAssetPath(t)}));
+  r["publicProductCaches"]=new Obj58{["ContourSelect333.TagBytesLength"]=ContourSelect333.TagBytes==null?0:ContourSelect333.TagBytes.Length,["ClothRegion524.SourceCount"]=ClothRegion524.Source.Count,["ClothRegion524.CurvesCount"]=ClothRegion524.Curves.Count,["ClothRegion524.AreasLength"]=ClothRegion524.Areas==null?0:ClothRegion524.Areas.Length,["ClothRegion524.SelectedLength"]=ClothRegion524.Selected==null?0:ClothRegion524.Selected.Length,["ClothRegion524.AtlasLive"]=ClothRegion524.Atlas540!=null,["ClothRegion524.AuditLive"]=ClothRegion524.Audit!=null,["ClothSurface525.PacketsCount"]=ClothSurface525.Packets.Count,["HeadRegion502.SourceLoopsCount"]=HeadRegion502.SourceLoops.Count,["HeadRegion502.CurvesCount"]=HeadRegion502.Curves.Count,["HeadRegion502.PacketsCount"]=HeadRegion502.Packets.Count,["HeadRegion502.MaskLive"]=HeadRegion502.Mask!=null,["HeadRegion502.HairLength"]=HeadRegion502.Hair.Length,["HeadRegion502.ParentLength"]=HeadRegion502.Parent.Length};
+  var mesh=AssetDatabase.LoadAssetAtPath<UnityEngine.Mesh>("Assets/EUnityValidation01/EyeContoursLayers202/Meshes/FaceSourceOwner202.asset");
+  if(mesh){var view=new Obj58{["entityId"]=mesh.GetEntityId().ToString(),["vertexCount"]=mesh.vertexCount,["subMeshCount"]=mesh.subMeshCount,["blendShapeCount"]=mesh.blendShapeCount,["isReadable"]=mesh.isReadable};
+   using(var data=UnityEngine.Mesh.AcquireReadOnlyMeshData(mesh)){var m=data[0];using(var bytes=new MemoryStream()){for(int i=0;i<m.vertexBufferCount;i++){byte[] b=m.GetVertexData<byte>(i).ToArray();bytes.Write(b,0,b.Length);}view["vertexBytes"]=bytes.Length;view["vertexSHA256"]=State58.Hash(bytes.ToArray());}var ix=m.GetIndexData<byte>().ToArray();view["indexBytes"]=ix.Length;view["indexSHA256"]=State58.Hash(ix);}
+   using(var stream=new MemoryStream()){using(var writer=new BinaryWriter(stream)){foreach(var m in mesh.bindposes)for(int i=0;i<16;i++)writer.Write(m[i/4,i%4]);}view["bindposesSHA256"]=State58.Hash(stream.ToArray());}
+   view["blendShapes"]=new Arr58(Enumerable.Range(0,mesh.blendShapeCount).Select(i=>new Obj58{["name"]=mesh.GetBlendShapeName(i),["frameCount"]=mesh.GetBlendShapeFrameCount(i),["weights"]=new Arr58(Enumerable.Range(0,mesh.GetBlendShapeFrameCount(i)).Select(j=>mesh.GetBlendShapeFrameWeight(i,j)))}));r["faceMesh"]=view;
+  }
+  r["memoryAfter"]=State58.Memory();File.WriteAllText(Path.Combine(Root,"RESTORE_READ61.json"),r.ToString());result.Log("61 read-only; Edit; dirty="+dirty.Count+" globalsRead="+globals.Count+" ownedCandidateMaterials="+mat.Length+" no setters/Play/GC");
+ }
+}

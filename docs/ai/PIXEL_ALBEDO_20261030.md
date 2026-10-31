@@ -210,3 +210,12 @@ frame94/sourceId renderer60-20261031T092325108Z: 실제헤어373셀의 source/tr
 정상Play1회 종료 후 Edit/GameMap1 clean37root/domain1/liveNative0, options false/None·pipeline·시간복원. 원래24와 Play직전25dirty내용/ID·기존파일 hash변화0. 최종 dirty29: Play전 CommonSurface shader1(원인미확정), Play후 EditorSettings/GraphicsSettings/TimeManager/FaceSourceOwner202 추가. 저장·discard·dirty강제해제 없음. 얼굴 vertex584640/index85464바이트는 saved disk와 동일하나 전체prePlay native비교는 아님. Shader global63개 setter복원했지만 원래값 export/getter비교·bufferbinding백업은 누락했다. RT30→30, allocated+353.31MiB/reserved+358.41MiB/mono-320.67MiB는 내부counter이며 retained allocation원인미확정이다. 신규Console Error0/변경없는Eye경로cold Warning33, 후보ShaderUtil상속Warning2 기록. Console삭제/GC/새Play를 하지 않았다. [복원 감사](../../experiments/pixel-pipeline/2026-10-31-renderer-compare60/RESTORE_AUDIT60.json)의 subset/content검사와 전체dirty목록동일성검사를 구분한다.
 
 실행shader4개+meta만 Assets/Editor/RendererCompare60Probe에 격리보관하고 C#은 Assets밖/in-memory로 실행했다. 저장 buffer ZIP17개를 오프라인 재분석해 수치·PNG byte동일을 확인했다. 이 절과 해당60경로/격리shader만 이번 로컬commit에 포함하며 기존 사용자변경은 제외한다.
+
+
+## 복원 읽기 후속61 — Play/렌더/추정 복원 0회
+
+60폴더의 `RestoreAudit61.cs:Execute`/`BindposeRead61.cs:Execute`와 `followup61.py`, [FOLLOWUP61.json](../../experiments/pixel-pipeline/2026-10-31-renderer-compare60/FOLLOWUP61.json), [색 성분 PNG](../../experiments/pixel-pipeline/2026-10-31-renderer-compare60/COLOUR_COMPONENTS61.png). Shader native 전체 JSON을 반복하지 않고 현재63getter/작은설정3개/메쉬read-only view만 읽었다. 60의 원래63값은 private인스턴스딕셔너리에만 있었고 지속export/회수handle을 만들지 않아 비교가능 원래값0개, 불일치수null이다. SDK보유/GC여부는 미확정이며 private reflection/추정setter/bufferbinding변경을 하지 않았다. 전체global 동등성증명은 불가다.
+
+Edit/scene clean37root/domain1/liveNative0, 옵션·pipeline·시간 API는prePlay백업과 동일. 설정3개 nativehash는60종료와 동일/원래디스크변화0. 얼굴vertex584640/index85464바이트와 bindpose1456 Float32값,57morph의이름/프레임수/weight는60종료와 동일; bindpose는disk와도숫자차이0. 사전전체native/morph delta백업은없어전체형태동일성확대금지. 설정3dirty는관련APIsetter/원복setter에연결되며 얼굴dirty의정확API원인은미확정이다. dirty30은60종료29+기존DeskLivePixelProbe.shader1(원인미확정/diskdiff0)이고저장/해제하지않았다. 원래24ID/dirty와기존파일을보존했다. API enabled=false와native/disk enabled1/options0표현차이는추정수정하지않았다.
+
+후보재질0/computeclone0/RT30. 자체코드static대형배열없음, GPU자원해제및큰배열의동기local수명확인. 제품고정색배열약4MiB/tag317080bytes/bool2×130560은존재하지만+353.31MiB소유자로확정불가, SDKmanaged root미확인. 어떤자원도강제정리/GC하지않았다. 같은373셀은원색189→재질대표3→Q팔레트6→선색후9색이며L중앙값.256→.405→.365→.339(제품.141). 무늬감소·밝기편향은per-material/offscreen포함32표본medoid선정에서이미발생하고, 기존G=(.0853,.1188,.2491)감광/청색편향우회도색차에기여한다. LineTone.55는52셀을어둡게만하므로내부갈색/밝기의원인이아니다. 새후보/파라미터변경/제품변경없이기존저장자료에서분해했다.

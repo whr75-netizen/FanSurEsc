@@ -1,5 +1,19 @@
 # 실제 캐릭터 헤어 팔레트 연결 비교 60
 
+## 최신 읽기 후속61 — 새 Play/렌더/복원 setter 없음
+
+[FOLLOWUP61.json](FOLLOWUP61.json), [색 성분 분리 PNG](COLOUR_COMPONENTS61.png). `RestoreAudit61.cs:Execute`가 큰 Shader native JSON 없이 getter63개·설정3개·dirty/ID·read-only mesh view·후보 자원 잔존을 읽었다. `BindposeRead61.cs:Execute`는 의심된 bindpose 해시 차이를1456개 Float32 값으로 한정해 재확인했다. 실제 비교·진단은 `followup61.py`다.
+
+63개 global 원래 값은 60 실행 객체의 private 딕셔너리에만 있었고 파일에는 이름/개수만 저장했다. observer 제거 후 해당 인스턴스의 허용된 회수 handle을 만들지 않았으며 SDK 보유/GC 상태도 확인되지 않았다. **현재63 getter는 읽었지만 비교 가능한 원래값0개이므로 불일치 수는 미확정(null)**이다. 추정 setter/buffer binding 복원은0회다. 이 백업 누락으로 전체 global 동등성은 증명 불가다.
+
+현재 Edit/scene clean37root/domain1/live Native0. 옵션·pipeline·시간 API는 실제 pre-Play 백업과 같다. 추가 dirty 설정3개의 native 해시는60종료와 동일하고 모든 원래 파일/보호 파일 디스크 변화0이다. EditorSettings에는 API enabled=false/None과 native·disk의 enabled=1/options=0 표현 차이가 있지만 native/disk끼리는 같고 이를 새 회귀라고 단정하거나 내부 필드를 고치지 않았다. 현재 dirty30: 기존29 외 `Assets/Rendering/PixelArt/DeskLivePixelProbe.shader`가 추가로 관찰됐다. 이 getter 스냅샷 시작 시 이미 dirty였으며 원인 미확정/디스크 diff0, 보존했다. 원래24의 ID/dirty를 확인했으며 Shader 전체 native hash는 이번에 다시 만들지 않았다.
+
+추가4개 경로: `ProjectSettings/EditorSettings.asset`, `ProjectSettings/GraphicsSettings.asset`, `ProjectSettings/TimeManager.asset`, `Assets/EUnityValidation01/EyeContoursLayers202/Meshes/FaceSourceOwner202.asset`. 설정 dirty는 60의 Play 옵션 setter, 기존 renderer의 pipeline/time setter 및 원복 setter와 직접 연결된다. 얼굴은 실제 asset setter를 찾지 못했으며 BakeMesh/native cache 추정은 확정이 아니다. 얼굴 vertex/index raw바이트는60종료·디스크와 일치한다. bindpose1456 Float32 값과57 morph의 이름/프레임수/weight도60종료와 같고 bindpose는 디스크와도 같다. raw bindpose hash 차이는 JSON 재인코딩의 signed-zero bit 차이를 그대로 content 회귀로 오독하면 안 된다. 전체pre-Play native/morph delta 동일성은 여전히 미확인이다.
+
+살아 있는 후보 재질0/compute clone0/RT30. 실험 코드에는 static 대형 배열이 없고, GPU 자원은 해제·목록clear, 큰 색 배열은 동기 함수 local이며 callback으로 포획하거나 결과에 배열 참조로 저장하지 않는다. SDK managed root 보유 여부는 허용 API로 입증하지 못했다. 제품의 고정4.0MiB 색 배열·317080바이트 tag·두130560길이 bool 배열은 코드/공개 getter에서 확인되지만 +353.31MiB의 소유자라고 볼 근거가 없다. 사용자/제품 캐시를 정리하지 않았다.
+
+같은373셀의 색 흐름은 **원본 UV189색 → 재질 대표색3개 → P[Q]6색 → 선색후9색**이다. OKLab L 중앙값은 각각 .2561→.4045→.3646→.3392이고 기존 제품은 .1413이다. draw11·13의 대표색은 가시 원색 중앙 명도보다 약.146/.157 높다. 재질마다 offscreen을 포함한32개 triangle 중심의 medoid 하나를 쓰는 공급이 칠해진 무늬를 먼저 없애고 밝은 기준으로 치환했다. 기존 제품의 `HairAnchor335=(.08527,.11882,.24911)` 강한 감광/청색 편향을 새 후보가 우회한 차이도 있다. 두 단계/간격은 대비를 만들고, 선색 `.55`는52셀을 어둡게만 한다. 새 후보나 값 조절 없이 저장 자료와 실제 수식에서 분리한 결과이며, 원래 제품 gain이 올바른 디자인이라는 뜻은 아니다.
+
 **임시 GPU 연결을 검증했으며 제품 기본 경로로 적용하지 않았다.** 정상 Play 1회, frame94, sourceId `renderer60-20261031T092325108Z`에서 기존/후보를 같은 포즈·메쉬·카메라·격자로 렌더했다. [INDEX](INDEX.html), [전체/확대 비교 PNG](COMPARE60.png), [셀 수치](CELL_AUDIT60.json), [복원 감사](RESTORE_AUDIT60.json).
 
 ## 실제로 연결한 지점

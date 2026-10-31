@@ -197,3 +197,16 @@ GPU draw2/dispatch1회:64표본 중 opaque62(동일Q52·변경Q10), partial alph
 
 
 59 Play 경계 추가 점검: 현재 dirty24는 Shader23+EditorBuildSettings1이다. 사전 SaveAssets는 필요 조건이 아니며 실행하지 않는다. SubsystemRegistration에 shell singleton·GameStartRequest·직접 Play 임시 저장 경로의 초기화가 있다. renderer callback은 OnDisable 해제 경로가 있지만 다른 static/비직렬화 상태까지 자동 복원되지는 않는다. 따라서 DisableDomainReload 설정만으로 무손실을 보장하지 않고 pipeline/시간/Shader global·dirty내용 전후 검사가 필요하다. 현재 renderer는 Application.isPlaying/Camera.main/Player/CharacterController/world render serial을 요구하며 같은 흐름을 지원하는 PreviewScene 경로가 없다. scene reload를 유지한 정상 Play 1회가 최소안이고, 설정 변경·Play·새 GPU 실행은 아직 하지 않았다. Shader native 상태 전체를 직렬화 해시가 백업한다고 주장하지 않는다.
+
+
+## 실제 캐릭터 source→팔레트 GPU 연결60 — 임시 검증, 미채택
+
+[전체·헤어 비교와 상태](../../experiments/pixel-pipeline/2026-10-31-renderer-compare60/INDEX.html), [코드/한계](../../experiments/pixel-pipeline/2026-10-31-renderer-compare60/README_KO.md).
+
+`Compare60.cs:Capture`는 실제3mesh/15material을 `RendererFamily59` 전체UV/index hash로 다시 연결하고, 실제각 hair primitive UV의128원본표본에서 `SourcePalette58.ExtractReference/MakePalette`를 공급한다. 원본 source별색/실제surfaceShadeSteps2를 사용하며 재질별대표색이라는 한계가 있다. 초기 `LegacySignals60.shader:Eye333Fragment`, 독립 `Independent60.shader:Eye333Fragment`, 최종 `RestoreStyle60.compute:ApplyShadeBoundary`에 clone으로 직접 P를 연결했다. 후자는 old==q도 LUT 통과한다. 원본 shader/재질/RendererFeature 및 제품 default는 미변경이다. 정확한 실행본은 `RUN_compare3.cs.txt`, 단일Play observer는 `Tick/BeginExit/Finish`다.
+
+frame94/sourceId renderer60-20261031T092325108Z: 실제헤어373셀의 source/triangle/UV확정373, 미확정0, 초기RGB8 LUT불일치0. 내부263셀/최종1052픽셀 P일치, 경계110중52셀/208픽셀은 기존 OwnerLines333.compute:35의 선형색×.55로 P이탈(오차최대5.07e-9). 헤어외RGBA/owner/depth변화0, pose/geometry동일. preparedUV.z의9개정수tag를 Q로 오독하지 않도록 source class.x==mask.x로 수치검사했다. 실제 PNG는 후보의 밝은갈색/무늬축소를 보여주며 미술개선으로 채택하지 않았다. 새 backing6표본/눈/회전/blink/연속검증은 미수행이다.
+
+정상Play1회 종료 후 Edit/GameMap1 clean37root/domain1/liveNative0, options false/None·pipeline·시간복원. 원래24와 Play직전25dirty내용/ID·기존파일 hash변화0. 최종 dirty29: Play전 CommonSurface shader1(원인미확정), Play후 EditorSettings/GraphicsSettings/TimeManager/FaceSourceOwner202 추가. 저장·discard·dirty강제해제 없음. 얼굴 vertex584640/index85464바이트는 saved disk와 동일하나 전체prePlay native비교는 아님. Shader global63개 setter복원했지만 원래값 export/getter비교·bufferbinding백업은 누락했다. RT30→30, allocated+353.31MiB/reserved+358.41MiB/mono-320.67MiB는 내부counter이며 retained allocation원인미확정이다. 신규Console Error0/변경없는Eye경로cold Warning33, 후보ShaderUtil상속Warning2 기록. Console삭제/GC/새Play를 하지 않았다. [복원 감사](../../experiments/pixel-pipeline/2026-10-31-renderer-compare60/RESTORE_AUDIT60.json)의 subset/content검사와 전체dirty목록동일성검사를 구분한다.
+
+실행shader4개+meta만 Assets/Editor/RendererCompare60Probe에 격리보관하고 C#은 Assets밖/in-memory로 실행했다. 저장 buffer ZIP17개를 오프라인 재분석해 수치·PNG byte동일을 확인했다. 이 절과 해당60경로/격리shader만 이번 로컬commit에 포함하며 기존 사용자변경은 제외한다.

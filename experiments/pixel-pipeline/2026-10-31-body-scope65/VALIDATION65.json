@@ -1,0 +1,38 @@
+{
+  "status": "OFFLINE_TESTED_UNAPPLIED",
+  "source_invariants": [
+    [
+      "eligibility unchanged",
+      true
+    ],
+    [
+      "no global buffer writer",
+      true
+    ],
+    [
+      "compute and lines kernel-local",
+      true
+    ],
+    [
+      "cleanup before ready guard",
+      true
+    ],
+    [
+      "two-file patch only",
+      true
+    ]
+  ],
+  "cpu_fake_lifecycle_cases": 13,
+  "fake_allocations": 20,
+  "fake_releases": 20,
+  "current_asset_files_sha_unchanged": [
+    "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs",
+    "Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs"
+  ],
+  "compiled": "exact candidate owner fragment + exact BeginProbe + CPU fakes",
+  "not_compiled": "full Unity assemblies, renderer, shaders",
+  "unity_calls": 0,
+  "gpu_dispatches": 0,
+  "patch_applied": false,
+  "source_sha256": "11f128eab29004747657d046e8afd9bdaee8f9210f561694167600f932adfb20"
+}

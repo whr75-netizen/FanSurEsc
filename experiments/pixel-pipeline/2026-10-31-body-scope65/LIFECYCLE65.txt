@@ -1,0 +1,14 @@
+PASS lazy_create_repeated_acquire
+PASS two_renderer_instances_isolated
+PASS transaction_success_cpu_gpu_pair
+PASS allocation_failure_keeps_previous
+PASS upload_failure_releases_only_candidate
+PASS first_upload_failure_retry
+PASS invalid_mask_no_allocation
+PASS cancel_after_partial_initialization
+PASS exception_before_ready_cleanup_hook
+PASS disable_repeated_and_reenter
+PASS release_one_preserves_other_cpu_selection
+PASS exact_BeginProbe_local_binding_global_untouched
+PASS global_release_idempotent_owned_only
+CASES 13 CREATED 20 RELEASED 20

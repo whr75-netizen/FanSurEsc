@@ -1,0 +1,150 @@
+--- a/Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs
++++ b/Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs
+@@ -32,24 +32,107 @@
+     // their original rendering; material slot zero alone is not an anatomical scope.
+     public static bool UseBodyScope551;
+     public static bool UseDomainBoundary553;
+-    static Mesh scopeMesh551;static Transform scopeHead551;static bool[] included551;static ComputeBuffer scopeBuffer551;
+-    public static int ScopeIncluded551{get;private set;}
+-    public static bool InScope551(int sm,int primitive)=>!UseBodyScope551||sm!=0||(included551!=null&&primitive>=0&&primitive<included551.Length&&included551[primitive]);
+-    static ComputeBuffer ScopeBuffer551(){if(scopeBuffer551==null){scopeBuffer551=new ComputeBuffer(1,sizeof(float));scopeBuffer551.SetData(new[]{1f});}return scopeBuffer551;}
++    // 65: one owner per Full319View335. No global buffer setter/getter or borrowed buffer.
++    sealed class BodyScopeResources551 : IDisposable
++    {
++        public Mesh Mesh { get; private set; }
++        public Transform Head { get; private set; }
++        public bool[] Included { get; private set; }
++        public int Count { get; private set; }
++        ComputeBuffer buffer;
++
++        static ComputeBuffer Upload(float[] data)
++        {
++            ComputeBuffer candidate = null;
++            try
++            {
++                candidate = new ComputeBuffer(data.Length, sizeof(float));
++                candidate.SetData(data);
++                return candidate;
++            }
++            catch
++            {
++                if (candidate != null) candidate.Release();
++                throw;
++            }
++        }
++
++        public ComputeBuffer Buffer()
++        {
++            // Even disabled kernels need a valid binding. Allocate only on first use.
++            if (buffer == null) buffer = Upload(new[] { 1f });
++            return buffer;
++        }
++
++        public void Commit(Mesh mesh, Transform head, bool[] included, float[] data, int count)
++        {
++            if (included == null || data == null || data.Length == 0 || included.Length != data.Length)
++                throw new ArgumentException("551 scope mask/buffer length mismatch");
++            // A failed allocation/upload must keep the previous CPU/GPU pair intact.
++            var candidate = Upload(data);
++            var previous = buffer;
++            buffer = candidate;
++            Mesh = mesh; Head = head; Included = included; Count = count;
++            if (previous != null) previous.Release();
++        }
++
++        public void Dispose()
++        {
++            var previous = buffer;
++            buffer = null;
++            Mesh = null; Head = null; Included = null; Count = 0;
++            if (previous != null) previous.Release();
++        }
++    }
++
++    static readonly Dictionary<Full319View335, BodyScopeResources551> scopes551 = new Dictionary<Full319View335, BodyScopeResources551>();
++    static BodyScopeResources551 selectedScope551;
++    static bool[] included551 { get { return selectedScope551 == null ? null : selectedScope551.Included; } }
++    public static int ScopeIncluded551 { get { return selectedScope551 == null ? 0 : selectedScope551.Count; } }
++    public static bool InScope551(int sm,int primitive)
++    { return !UseBodyScope551||sm!=0||(included551!=null&&primitive>=0&&primitive<included551.Length&&included551[primitive]); }
++    static BodyScopeResources551 ScopeOwner551(Full319View335 f)
++    {
++        if (ReferenceEquals(f, null)) throw new ArgumentNullException("f");
++        BodyScopeResources551 owner;
++        if (!scopes551.TryGetValue(f, out owner))
++        {
++            owner = new BodyScopeResources551();
++            scopes551.Add(f, owner);
++        }
++        return owner;
++    }
++    static ComputeBuffer ScopeBuffer551(Full319View335 f) { return ScopeOwner551(f).Buffer(); }
++    public static void ReleaseScope551(Full319View335 f)
++    {
++        BodyScopeResources551 owner;
++        if (!scopes551.TryGetValue(f, out owner)) return;
++        scopes551.Remove(f);
++        if (ReferenceEquals(selectedScope551, owner)) selectedScope551 = null;
++        if (current == f) current = null;
++        owner.Dispose();
++    }
++    static void ReleaseAllScopes551()
++    {
++        foreach (var owner in scopes551.Values) owner.Dispose();
++        scopes551.Clear(); selectedScope551 = null;
++    }
++
+     static bool[] Scope551(Full319View335 f)
+     {
+         if(!UseBodyScope551)return null;
+         var source=f.motion.surface.source[0];var mesh=source.sharedMesh;var animator=f.motion.animation.target;
+         if(!animator.isHuman)throw new InvalidOperationException("551 body scope requires an explicit Humanoid Head binding");
+         var head=animator.GetBoneTransform(HumanBodyBones.Head);if(!head)throw new InvalidOperationException("551 Head binding missing");
+-        if(scopeMesh551==mesh&&scopeHead551==head&&included551!=null)return included551;
++        var owner=ScopeOwner551(f);
++        if(owner.Mesh==mesh&&owner.Head==head&&owner.Included!=null){selectedScope551=owner;return owner.Included;}
+         var bones=source.bones;var weights=mesh.boneWeights;if(weights.Length!=mesh.vertexCount)throw new InvalidOperationException("551 original skin weights missing");
+         var vertex=new bool[weights.Length];
+         bool Head(int bone,float weight)=>weight>0&&bone>=0&&bone<bones.Length&&bones[bone]&&bones[bone].IsChildOf(head);
+         for(int i=0;i<weights.Length;i++){var b=weights[i];vertex[i]=Head(b.boneIndex0,b.weight0)||Head(b.boneIndex1,b.weight1)||Head(b.boneIndex2,b.weight2)||Head(b.boneIndex3,b.weight3);}
+-        var ix=mesh.GetIndices(0);included551=new bool[ix.Length/3];var data=new float[included551.Length];ScopeIncluded551=0;
+-        for(int pr=0;pr<included551.Length;pr++)if(included551[pr]=!vertex[ix[3*pr]]&&!vertex[ix[3*pr+1]]&&!vertex[ix[3*pr+2]]){data[pr]=1;ScopeIncluded551++;}
+-        scopeBuffer551?.Release();scopeBuffer551=new ComputeBuffer(data.Length,sizeof(float));scopeBuffer551.SetData(data);scopeMesh551=mesh;scopeHead551=head;return included551;
++        var ix=mesh.GetIndices(0);var included=new bool[ix.Length/3];var data=new float[included.Length];int count=0;
++        for(int pr=0;pr<included.Length;pr++)if(included[pr]=!vertex[ix[3*pr]]&&!vertex[ix[3*pr+1]]&&!vertex[ix[3*pr+2]]){data[pr]=1;count++;}
++        owner.Commit(mesh,head,included,data,count);selectedScope551=owner;return owner.Included;
+     }
+     public const int Outerwear540=8,Clothing540=14,BodyAndClothing540=15;
+     public static int PartBits540=Outerwear540;
+@@ -131,13 +214,16 @@
+             Mask.SetPixels(colours);Mask.Apply(false,false);Shader.SetGlobalTexture("_Cloth524Mask",Mask);UploadMs=Ms(start);current=f;Status="ready";
+         }catch(Exception e){Status="unsupported: "+e.Message;}
+     }
+-    public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){cmd.SetGlobalInt("_Cloth524Enabled",Ready(f)?1:0);cmd.SetGlobalInt("_Cloth524Parts",PartBits540);cmd.SetGlobalInt("_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetGlobalBuffer("_BodyScope551",ScopeBuffer551());}
+-    public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f){cmd.SetComputeIntParam(shader,"_Cloth524Enabled",Ready(f)?1:0);cmd.SetComputeIntParam(shader,"_Cloth524Parts",PartBits540);cmd.SetComputeIntParam(shader,"_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetComputeBufferParam(shader,kernel,"_BodyScope551",ScopeBuffer551());cmd.SetComputeTextureParam(shader,kernel,"_Cloth524Mask",Atlas540?Atlas540:Texture2D.blackTexture);cmd.SetComputeTextureParam(shader,kernel,"_Audit",Audit!=null?Audit.rt:f.audit.rt);cmd.SetComputeTextureParam(shader,kernel,"_Before",f.before.rt);cmd.SetComputeTextureParam(shader,kernel,"_Colour",f.colour.rt);}
++    public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){cmd.SetGlobalInt("_Cloth524Enabled",Ready(f)?1:0);cmd.SetGlobalInt("_Cloth524Parts",PartBits540);cmd.SetGlobalInt("_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);// 65: motion.materials are runtime-owned clones (MotionView331.Initialise).
++        // Bind before the existing probe draws; never overwrite an unknown global.
++        var buffer=ScopeBuffer551(f);
++        foreach(var material in f.motion.materials)if(material)material.SetBuffer("_BodyScope551",buffer);}
++    public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f){cmd.SetComputeIntParam(shader,"_Cloth524Enabled",Ready(f)?1:0);cmd.SetComputeIntParam(shader,"_Cloth524Parts",PartBits540);cmd.SetComputeIntParam(shader,"_BodyScope551Enabled",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetComputeBufferParam(shader,kernel,"_BodyScope551",ScopeBuffer551(f));cmd.SetComputeTextureParam(shader,kernel,"_Cloth524Mask",Atlas540?Atlas540:Texture2D.blackTexture);cmd.SetComputeTextureParam(shader,kernel,"_Audit",Audit!=null?Audit.rt:f.audit.rt);cmd.SetComputeTextureParam(shader,kernel,"_Before",f.before.rt);cmd.SetComputeTextureParam(shader,kernel,"_Colour",f.colour.rt);}
+     public static void CopyAudit(CommandBuffer cmd,Full319View335 f){if(Ready(f))cmd.CopyTexture(f.audit.rt,Audit.rt);}
+     public static void BindLines553(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f)
+     {
+         bool active=Ready(f)&&UseDomainBoundary553;
+-        cmd.SetComputeIntParam(shader,"_ClosedDomain553",active?1:0);cmd.SetComputeIntParam(shader,"_ClosedParts553",PartBits540);cmd.SetComputeIntParam(shader,"_HeadScope553",active&&UseBodyScope551?1:0);cmd.SetComputeIntParam(shader,"_BodyCount553",included551?.Length??1);cmd.SetComputeBufferParam(shader,kernel,"_BodySource553",ScopeBuffer551());
+-    }
+-    public static void Release(){UseBodyScope551=UseDomainBoundary553=false;scopeBuffer551?.Release();scopeBuffer551=null;scopeMesh551=null;scopeHead551=null;included551=null;ScopeIncluded551=0;Enabled=UseOpacityCurves527=UseAreaCurves532=UseWholeRegions539=UseSpans543=UseCompact544=UseSimplifiedSpanReference546=false;PartBits540=Outerwear540;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalInt("_BodyScope551Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);foreach(var p in Parts540){if(p.mask)UnityEngine.Object.DestroyImmediate(p.mask);p.mask=null;p.opacity=null;p.original=null;p.material=null;p.source=null;p.curves=null;p.areas=null;p.selected=null;}if(Atlas540)UnityEngine.Object.DestroyImmediate(Atlas540);Atlas540=null;Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}
++        cmd.SetComputeIntParam(shader,"_ClosedDomain553",active?1:0);cmd.SetComputeIntParam(shader,"_ClosedParts553",PartBits540);cmd.SetComputeIntParam(shader,"_HeadScope553",active&&UseBodyScope551?1:0);cmd.SetComputeIntParam(shader,"_BodyCount553",ScopeOwner551(f).Included?.Length??1);cmd.SetComputeBufferParam(shader,kernel,"_BodySource553",ScopeBuffer551(f));
++    }
++    public static void Release(){UseBodyScope551=UseDomainBoundary553=false;ReleaseAllScopes551();Enabled=UseOpacityCurves527=UseAreaCurves532=UseWholeRegions539=UseSpans543=UseCompact544=UseSimplifiedSpanReference546=false;PartBits540=Outerwear540;current=null;Status="disabled";Shader.SetGlobalInt("_Cloth524Enabled",0);Shader.SetGlobalInt("_BodyScope551Enabled",0);Shader.SetGlobalTexture("_Cloth524Mask",Texture2D.blackTexture);foreach(var p in Parts540){if(p.mask)UnityEngine.Object.DestroyImmediate(p.mask);p.mask=null;p.opacity=null;p.original=null;p.material=null;p.source=null;p.curves=null;p.areas=null;p.selected=null;}if(Atlas540)UnityEngine.Object.DestroyImmediate(Atlas540);Atlas540=null;Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}
+ }
+--- a/Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs
++++ b/Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs
+@@ -80,6 +80,7 @@
+ #if UNITY_EDITOR
+  EditorApplication.update-=EditorTick;
+ #endif
++  ClothRegion524.ReleaseScope551(this); // also runs after incomplete Initialise / cancelled capture
+   if(Active==this)Active=null;if(!ready)return;foreach(var m in legacySignalsMats)if(m)DestroyImmediate(m);if(legacyProviderMat)DestroyImmediate(legacyProviderMat);foreach(var t in style480.Concat(style960))t.Release();shadeMask480.Release();shadeMask960.Release();styleDepth480.Release();styleDepth960.Release();beforeStyle.Release();sourceTags?.Dispose();foreach(var m in nativeMats.Concat(worldMats).Concat(independentMats))if(m)DestroyImmediate(m);foreach(var m in new[]{bodyProxy,registeredHair,otherHair})if(m)DestroyImmediate(m);if(geometryCamera)DestroyImmediate(geometryCamera.gameObject);if(actionMap)DestroyImmediate(actionMap);var all=new List<RTHandle>();all.AddRange(native);all.AddRange(meta);all.AddRange(normal);all.AddRange(centreMeta);all.AddRange(centreNormal);all.Add(centreFamily);all.AddRange(flood);foreach(var s in layers)all.AddRange(new[]{s.rgba,s.meta,s.uv,s.depth});all.AddRange(new[]{family,nativeDepth,colourNative,before,colour,owner,audit,gridSurface,gridPalette,paletteAudit,prepared,preparedOwner,postLine,preparedUV,preparedMeta,resolvedMeta,resolvedUV,eyeOutput,eyeOwner,intrinsic,eyeAudit,domain});foreach(var t in all)t?.Release();ready=false;}
+ }
+ public static class Homography335{public static Matrix4x4 Solve(Vector2[]from,Vector2[]to){double[,]a=new double[8,9];for(int k=0;k<4;k++){double x=from[k].x,y=from[k].y,u=to[k].x,v=to[k].y;int i=k*2;a[i,0]=x;a[i,1]=y;a[i,2]=1;a[i,6]=-u*x;a[i,7]=-u*y;a[i,8]=u;a[i+1,3]=x;a[i+1,4]=y;a[i+1,5]=1;a[i+1,6]=-v*x;a[i+1,7]=-v*y;a[i+1,8]=v;}for(int col=0;col<8;col++){int pivot=col;for(int k=col+1;k<8;k++)if(Math.Abs(a[k,col])>Math.Abs(a[pivot,col]))pivot=k;if(Math.Abs(a[pivot,col])<1e-10)throw new Exception("Unsupported edge-on original eye basis");for(int k=col;k<9;k++)(a[col,k],a[pivot,k])=(a[pivot,k],a[col,k]);double value=a[col,col];for(int k=col;k<9;k++)a[col,k]/=value;for(int row=0;row<8;row++)if(row!=col){value=a[row,col];for(int k=col;k<9;k++)a[row,k]-=a[col,k]*value;}}var m=Matrix4x4.zero;m.SetRow(0,new Vector4((float)a[0,8],(float)a[1,8],(float)a[2,8],0));m.SetRow(1,new Vector4((float)a[3,8],(float)a[4,8],(float)a[5,8],0));m.SetRow(2,new Vector4((float)a[6,8],(float)a[7,8],1,0));return m;}}

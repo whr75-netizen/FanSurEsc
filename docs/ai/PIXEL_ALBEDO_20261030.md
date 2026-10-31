@@ -281,3 +281,18 @@ current UV colour-range66개는 화면186조각이다. 배타 분류37개는 여
 다음 실제 캡처는 sourceId/viewId/frame/renderSerial 하나에 평가 geometry와 raw/effective CPU/GPU P·nativeShift/grid/subsample, sourceRGBA와g정의/owner/depth/coverage, mode/state, 실제 backing을 묶어야 한다. `FullFeature367.Eyes` part10은 ph.backing의 RGBA/meta/UV를 실제로 그리지만 EyeCompose는 meta만 참조한다. layer10 RGBA는 styled pre-eye 값으로 unlit source와 구분하고 옛6목적지는 새feature좌표로 대응시킨다. 주변 피부 추정으로 채우지 않는다.
 
 **새 Play 승인과 별개의 기술적 실행 차단:** 정상 `FullFeature367.Probe:11`이 `ClothRegion524.BeginProbe:134`를 호출해 `_BodyScope551` global buffer를 설정한다. private owner의 `ScopeBuffer551:38`은 null이면 생성하며 public Shader global buffer getter가 없다. 정확한 원래 binding·수명 보존 또는 local-binding 경로 없이는 기존 정상Play를 재사용하지 않는다. C# journal이 이를 해결했다고 주장하지 않으며64에서는 실행0이다. 과거60 원래global 백업도 복구한 것이 아니다. 부모에게 이 정확한 범위를 보고하고 새 승인 전 Unity 접근 금지를 유지했다.
+
+## BodyScope551 소유권65 — 오프라인 패치, Assets 미적용
+
+[65 패치·함수·검증 한계](../../experiments/pixel-pipeline/2026-10-31-body-scope65/README_KO.md), [두 파일 검토 diff](../../experiments/pixel-pipeline/2026-10-31-body-scope65/body-scope65.patch), [실제 검사 결과](../../experiments/pixel-pipeline/2026-10-31-body-scope65/VALIDATION65.json). 기준 commit `b0312165aa7b331415f6f06394808ff5f69c3538`; 이번 commit은65 경로/이 절의 Git 이력으로 추적한다. 현재 수정 작업본 SHA에 맞춘 후보이며 **제품 파일 적용·import·Unity 조회·Play·렌더 0**이다.
+
+| 스크립트·함수 | 확인/변경 |
+|---|---|
+| `audit65.py` / `SOURCE_AUDIT65.json` | Assets C#/shader/compute/hlsl483파일에서19관련 호출/선언,8파일과 생성/종료 근거2파일. 전역 buffer literal setter는 `ClothRegion524.BeginProbe` 한 곳. compute Prepare/Resolve와 OwnerLines는 이미 kernel-local. 컴파일 DLL·동적 이름까지 증명한 것은 아님 |
+| 후보 `ClothRegion524.cs:BodyScopeResources551.Upload/Buffer/Commit/Dispose` | renderer별 직접 소유 buffer, lazy fallback, 성공 업로드 뒤 CPU/GPU 쌍 교체, 실패 candidate만 해제. 기존 skin-weight/primitive 포함 판정 식은 유지 |
+| `ScopeOwner551/ReleaseScope551/ReleaseAllScopes551` | `Full319View335`별 소유권. 개별 종료와 기존 전체 adapter 종료를 분리·반복 해제 방지. CPU clothing의 기존 단일 current 준비 구조 전체를 재설계한 것은 아님 |
+| `BeginProbe/Bind/BindLines553` | 전역 buffer 쓰기 대신 `MotionView331.Initialise`가 생성·소유한 probe 재질들의 `Material.SetBuffer`. compute는 해당 renderer buffer/count를 커널에 연결. unknown global getter/null/추정 복원 없음 |
+| 후보 `Full319View335.cs:OnDisable` | `!ready` return보다 앞에서 scope owner 해제. 초기화 취소/실패 경로를 포함하며 기존 자산 저장/dirty 정리는 추가하지 않음 |
+| `validate65.py` / `Harness65.cs` | 실제 후보 owner와 BeginProbe를 그대로 추출해 설치된 .NET csc+CPU fake로 컴파일/실행. 수명13사례, 생성20/해제20, 소스 불변식5개, 대상 Assets SHA변경0. `git apply --check`만 성공, apply 안 함 |
+
+새 짧은 Play 승인은 도착했지만 실제 실행 전 안전성 조건은 남았다. 두 기존 C# 파일을 활성화하려면 import/재컴파일이 필요하며, Play의 `DisableDomainReload`만으로 script import reload를 막을 수 없다. 외부 command runner helper는 기존 정적 호출을 교체하지 않는다. 현재 미저장 내용과 reload 회피를 모두 보장할 방법은 미확인이라 이 단계에서 멈췄다. private reflection/hotpatch/추정 global/null 복원을 사용하지 않았다. 실제 Unity 전체 컴파일 실패·domain reload·GPU in-flight 수명·shader local override·scope off/on 이미지 동등성은 미검증이다. 이 모의 자원 수치를 실제 GPU 메모리 측정/안전한 Play 완료로 확대하지 않는다. 이전60 global 백업 부재와64 입력/곡선 공백도 해결됐다고 쓰지 않는다.

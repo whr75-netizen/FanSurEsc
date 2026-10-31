@@ -1,0 +1,223 @@
+{
+  "kind": "SOURCE_ONLY",
+  "scanned_assets_sources": 483,
+  "global_literal_writer_count": 1,
+  "global_literal_writers": [
+    {
+      "path": "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs",
+      "line": 134,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){cmd.SetGlobalInt(\"_Cloth524Enabled\",Ready(f)?1:0);cmd.SetGlobalInt(\"_Cloth524Parts\",PartBits540);cmd.SetGlobalInt(\"_BodyScope551Enabled\",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetGlobalBuffer(\"_BodyScope551\",ScopeBuffer551());}"
+    }
+  ],
+  "hits": [
+    {
+      "path": "Assets/Editor/Order21Prepare.compute",
+      "line": 9,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "StructuredBuffer<float> _BodyScope551;int _BodyScope551Enabled;"
+    },
+    {
+      "path": "Assets/Editor/Order21Prepare.compute",
+      "line": 10,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "bool InScope551(int part,float primitive){return _BodyScope551Enabled==0||part!=0||(primitive>0&&_BodyScope551[(int)round(primitive)-1]>.5);}"
+    },
+    {
+      "path": "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs",
+      "line": 134,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "public static void BeginProbe(RasterCommandBuffer cmd,Full319View335 f){cmd.SetGlobalInt(\"_Cloth524Enabled\",Ready(f)?1:0);cmd.SetGlobalInt(\"_Cloth524Parts\",PartBits540);cmd.SetGlobalInt(\"_BodyScope551Enabled\",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetGlobalBuffer(\"_BodyScope551\",ScopeBuffer551());}"
+    },
+    {
+      "path": "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs",
+      "line": 135,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "public static void Bind(CommandBuffer cmd,ComputeShader shader,int kernel,Full319View335 f){cmd.SetComputeIntParam(shader,\"_Cloth524Enabled\",Ready(f)?1:0);cmd.SetComputeIntParam(shader,\"_Cloth524Parts\",PartBits540);cmd.SetComputeIntParam(shader,\"_BodyScope551Enabled\",Ready(f)&&UseBodyScope551&&Active540(0)?1:0);cmd.SetComputeBufferParam(shader,kernel,\"_BodyScope551\",ScopeBuffer551());cmd.SetComputeTextureParam(shader,kernel,\"_Cloth524Mask\",Atlas540?Atlas540:Texture2D.blackTexture);cmd.SetComputeTextureParam(shader,kernel,\"_Audit\",Audit!=null?Audit.rt:f.audit.rt);cmd.SetComputeTextureParam(shader,kernel,\"_Before\",f.before.rt);cmd.SetComputeTextureParam(shader,kernel,\"_Colour\",f.colour.rt);}"
+    },
+    {
+      "path": "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs",
+      "line": 140,
+      "tokens": [
+        "_BodySource553"
+      ],
+      "source": "cmd.SetComputeIntParam(shader,\"_ClosedDomain553\",active?1:0);cmd.SetComputeIntParam(shader,\"_ClosedParts553\",PartBits540);cmd.SetComputeIntParam(shader,\"_HeadScope553\",active&&UseBodyScope551?1:0);cmd.SetComputeIntParam(shader,\"_BodyCount553\",included551?.Length??1);cmd.SetComputeBufferParam(shader,kernel,\"_BodySource553\",ScopeBuffer551());"
+    },
+    {
+      "path": "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs",
+      "line": 142,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "public static void Release(){UseBodyScope551=UseDomainBoundary553=false;scopeBuffer551?.Release();scopeBuffer551=null;scopeMesh551=null;scopeHead551=null;included551=null;ScopeIncluded551=0;Enabled=UseOpacityCurves527=UseAreaCurves532=UseWholeRegions539=UseSpans543=UseCompact544=UseSimplifiedSpanReference546=false;PartBits540=Outerwear540;current=null;Status=\"disabled\";Shader.SetGlobalInt(\"_Cloth524Enabled\",0);Shader.SetGlobalInt(\"_BodyScope551Enabled\",0);Shader.SetGlobalTexture(\"_Cloth524Mask\",Texture2D.blackTexture);foreach(var p in Parts540){if(p.mask)UnityEngine.Object.DestroyImmediate(p.mask);p.mask=null;p.opacity=null;p.original=null;p.material=null;p.source=null;p.curves=null;p.areas=null;p.selected=null;}if(Atlas540)UnityEngine.Object.DestroyImmediate(Atlas540);Atlas540=null;Mask=null;Audit?.Release();Audit=null;Source.Clear();Curves.Clear();Areas=null;Selected=null;Opacity=null;opacityMesh=null;opacityMaterial=null;ClothSurface525.Release();}"
+    },
+    {
+      "path": "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothSurface525.cs",
+      "line": 79,
+      "tokens": [
+        "ClothRegion524.InScope551("
+      ],
+      "source": "if(front==null||front.renderer!=0||!ClothRegion524.Active540(front.submesh)||!ClothRegion524.InScope551(front.submesh,front.primitive)){OccludedCandidates++;return false;}return true;"
+    },
+    {
+      "path": "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothSurface525.cs",
+      "line": 92,
+      "tokens": [
+        "ClothRegion524.InScope551("
+      ],
+      "source": "Geometry(f);var clothing=triangles.Where(t=>t.renderer==0&&ClothRegion524.Active540(t.submesh)&&ClothRegion524.InScope551(t.submesh,t.primitive)).ToArray();"
+    },
+    {
+      "path": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/OwnerLines333.compute",
+      "line": 6,
+      "tokens": [
+        "_BodySource553"
+      ],
+      "source": "int _ClosedDomain553,_ClosedParts553,_HeadScope553,_BodyCount553;StructuredBuffer<float> _BodySource553;"
+    },
+    {
+      "path": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/OwnerLines333.compute",
+      "line": 9,
+      "tokens": [
+        "_BodySource553"
+      ],
+      "source": "bool closedDomain553(float4 owner){int part=(int)round(owner.x)-8;if(_ClosedDomain553==0||part<0||part>3||(_ClosedParts553&(1<<part))==0)return false;if(part==0&&_HeadScope553!=0){int i=(int)round(abs(owner.w))-1;if(i<0||i>=_BodyCount553)return false;return _BodySource553[i]>.5;}return true;}"
+    },
+    {
+      "path": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/Prepare333.compute",
+      "line": 9,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "StructuredBuffer<float> _BodyScope551;int _BodyScope551Enabled;"
+    },
+    {
+      "path": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/Prepare333.compute",
+      "line": 10,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "bool InScope551(int part,float primitive){return _BodyScope551Enabled==0||part!=0||(primitive>0&&_BodyScope551[(int)round(primitive)-1]>.5);}"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs",
+      "line": 11,
+      "tokens": [
+        "ClothRegion524.BeginProbe("
+      ],
+      "source": "sealed class Probe:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;using var b=g.AddRasterRenderPass<D>(\"333 unchanged331 source control\",out var d);d.v=v;for(int i=0;i<7;i++)b.SetRenderAttachment(g.ImportTexture(v.motion.raw[i]),i,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(v.motion.depth),AccessFlags.Write);Shadows(b,g,f);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{ClothRegion524.BeginProbe(c.cmd,d.v);var m=d.v.motion;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalInt(\"_ProbeRole331\",m.probeRole);c.cmd.SetGlobalInt(\"_ProbeSide331\",m.probeSide);c.cmd.SetGlobalVector(\"_ClipShift331\",m.clipShift);int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<m.surface.outputs[r].sharedMesh.subMeshCount;sm++){if(!HeadLocal367.DrawSource(d.v,r)){k++;continue;}c.cmd.SetGlobalVector(\"_Source329Metadata\",new Vector4(Role(r,sm),r,0,0));int materialIndex=k++;if(HeadRegion502.Draw(c.cmd,d.v,r,sm,m.surface.outputs[r].sharedMesh,m.surface.outputs[r].transform.localToWorldMatrix,m.materials[materialIndex],0)){}else if(!HeadRegion502.Enabled&&HairBoundary491.TryGet(d.v,r,sm,out var remainin"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs",
+      "line": 54,
+      "tokens": [
+        "ClothRegion524.Bind("
+      ],
+      "source": "k=cs.FindKernel(\"Prepare\");ClothRegion524.Bind(cmd,cs,k,v);cmd.SetComputeIntParam(cs,\"_ContourMode\",v.contourReady?1:0);T(cs,k,\"_Map\",v.actionMap);T(cs,k,\"_Physical\",v.native[3].rt);T(cs,k,\"_CentreRaw\",v.motion.raw[0].rt);T(cs,k,\"_CentrePhysical\",v.motion.raw[3].rt);T(cs,k,\"_CentreOriginal\",v.motion.raw[4].rt);T(cs,k,\"_CentreMeta\",v.motion.raw[5].rt);T(cs,k,\"_CentreUV\",v.motion.raw[6].rt);T(cs,k,\"_CentreSurface\",v.centreMeta[0].rt);T(cs,k,\"_CentrePalette\",v.centreFamily.rt);T(cs,k,\"_Surface\",v.meta[0].rt);T(cs,k,\"_Palette\",v.family.rt);T(cs,k,\"_NativeInput\",v.colourNative.rt);T(cs,k,\"_RawMeta\",v.native[5].rt);T(cs,k,\"_RawUV\",v.native[6].rt);T(cs,k,\"_Before\",v.before.rt);T(cs,k,\"_Colour\",v.colour.rt);T(cs,k,\"_Owner\",v.owner.rt);T(cs,k,\"_Audit\",v.audit.rt);T(cs,k,\"_GridSurface\",v.gridSurface.rt);T(cs,k,\"_GridPalette\",v.gridPalette.rt);T(cs,k,\"_PreparedUV\",v.preparedUV.rt);T(cs,k,\"_PreparedMeta\",v.preparedMeta.rt);cmd.DispatchCompute(cs,k,60,34,1);ClothRegion524.CopyAudit(cmd,v);cmd.CopyTexture(v.before.rt,v.beforeStyle.rt);var rs=v.restoreStyle;int rk=rs.FindKernel(\"Restore\");cmd.SetComputeIntParam(rs,\"_SurfaceLayers335\",v.layeredSurface&&v.styleEnabled?1:0);cmd.SetComputeIntParam(rs"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs",
+      "line": 55,
+      "tokens": [
+        "ClothRegion524.BindLines553("
+      ],
+      "source": "if(!HeadLocal367.IsHead(v)){HeadLocal367.CountOutline(v);cs=v.lines;int seed=cs.FindKernel(\"Seed\"),ff=cs.FindKernel(\"Flood\"),edge=cs.FindKernel(\"OwnerLines\");ClothRegion524.BindLines553(cmd,cs,edge,v);cmd.SetComputeIntParams(cs,\"_Size\",480,272);cmd.SetComputeFloatParam(cs,\"_LineTone\",v.lineTone);T(cs,seed,\"_Before\",v.before.rt);T(cs,seed,\"_FloodWrite\",v.flood[0].rt);cmd.DispatchCompute(cs,seed,60,34,1);T(cs,ff,\"_Before\",v.before.rt);for(int i=0;i<752;i++){T(cs,ff,\"_FloodRead\",v.flood[i%2].rt);T(cs,ff,\"_FloodWrite\",v.flood[1-i%2].rt);cmd.DispatchCompute(cs,ff,60,34,1);}T(cs,edge,\"_Before\",v.before.rt);T(cs,edge,\"_Owner\",v.owner.rt);T(cs,edge,\"_Surface\",v.gridSurface.rt);T(cs,edge,\"_Torso\",v.centreMeta[1].rt);T(cs,edge,\"_Arms\",v.centreMeta[2].rt);T(cs,edge,\"_TriangleVertices\",v.triangleVertices);T(cs,edge,\"_FloodRead\",v.flood[0].rt);T(cs,edge,\"_Colour\",v.colour.rt);T(cs,edge,\"_Audit\",v.audit.rt);T(cs,edge,\"_Palette256\",v.gridPalette.rt);T(cs,edge,\"_PaletteAudit256\",v.paletteAudit.rt);cmd.SetComputeIntParam(cs,\"_UsePalette256\",v.usePalette?1:0);cmd.SetComputeVectorParam(cs,\"_DeepCream256\",v.deepCream);cmd.SetComputeVectorParam(cs,\"_DeepSkin256\",v.deepSkin);cmd.DispatchCompute(cs,edge,"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs",
+      "line": 63,
+      "tokens": [
+        "ClothRegion524.Bind("
+      ],
+      "source": "cs=v.prepare;k=cs.FindKernel(\"Resolve\");ClothRegion524.Bind(cmd,cs,k,v);T(cs,k,\"_Owner\",v.owner.rt);T(cs,k,\"_PreparedMeta\",v.preparedMeta.rt);T(cs,k,\"_PreparedUV\",v.preparedUV.rt);T(cs,k,\"_ResolvedMeta\",v.resolvedMeta.rt);T(cs,k,\"_ResolvedUV\",v.resolvedUV.rt);cmd.DispatchCompute(cs,k,60,34,1);"
+    },
+    {
+      "path": "Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs",
+      "line": 48,
+      "tokens": [
+        "ClothRegion524.Release()"
+      ],
+      "source": "ClothRegion524.Release();UseCentreBodyRay550=false;"
+    },
+    {
+      "path": "Assets/EUnityValidation01/VisibilityMotion331/Shaders/Probe331.shader",
+      "line": 126,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "StructuredBuffer<float> _BodyScope551;int _BodyScope551Enabled;"
+    },
+    {
+      "path": "Assets/EUnityValidation01/VisibilityMotion331/Shaders/Probe331.shader",
+      "line": 132,
+      "tokens": [
+        "_BodyScope551"
+      ],
+      "source": "bool scoped551=_BodyScope551Enabled==0||bodyPart540!=0||_BodyScope551[primitiveID]>.5;"
+    }
+  ],
+  "owner_traces": [
+    {
+      "path": "Assets/EUnityValidation01/VisibilityMotion331/Runtime/MotionView331.cs",
+      "line": 32,
+      "source": "var src=surface.source[i].sharedMaterials[sm];var m=new Material(src){shader=shader,hideFlags=HideFlags.DontSave};m.CopyPropertiesFromMaterial(src);m.shaderKeywords=src.shaderKeywords;int role=i==0?new[]{7,8,9,10}[sm]:i==1?new[]{0,1,2,3,4,5,6}[sm]:new[]{11,12,13,14}[sm];var tx=src.GetTexture(\"_MainTex\");texelSizes[role]=new Vector4(tx?1f/tx.width:1,tx?1f/tx.height:1,0,0);"
+    },
+    {
+      "path": "Assets/EUnityValidation01/VisibilityMotion331/Runtime/MotionView331.cs",
+      "line": 37,
+      "source": "}materials=mats.ToArray();"
+    },
+    {
+      "path": "Assets/EUnityValidation01/VisibilityMotion331/Runtime/MotionView331.cs",
+      "line": 53,
+      "source": "void OnDisable(){"
+    },
+    {
+      "path": "Assets/EUnityValidation01/VisibilityMotion331/Runtime/MotionView331.cs",
+      "line": 58,
+      "source": "if(materials!=null)foreach(var m in materials)if(m)DestroyImmediate(m);foreach(var b in buffers)b.Dispose();buffers.Clear();if(raw!=null)foreach(var t in raw)t.Release();foreach(var t in new[]{depth,output,audit,owner,historyColour,historyMeta,historyUV,worldInfo})t?.Release();ready=false;gridReady=false;"
+    },
+    {
+      "path": "Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs",
+      "line": 41,
+      "source": "nativeMats=motion.materials.Select(m=>new Material(m){shader=nativeShader,hideFlags=HideFlags.DontSave}).ToArray();worldMats=nativeMats.Select(m=>new Material(m){shader=Shader.Find(\"EValidation/GameMap333World\"),hideFlags=HideFlags.DontSave}).ToArray();var mats=new List<Material>();int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<motion.surface.source[r].sharedMaterials.Length;sm++){var src=motion.surface.source[r].sharedMaterials[sm];int role=r==0?new[]{7,8,9,10}[sm]:r==1?sm:new[]{11,12,13,14}[sm];var m=new Material(src){shader=independentShader,hideFlags=HideFlags.DontSave};m.SetFloat(\"_Auto245Role\",role);mats.Add(m);k++;}independentMats=mats.ToArray();"
+    },
+    {
+      "path": "Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs",
+      "line": 44,
+      "source": "legacySignalsMats=motion.materials.Select((src,i)=>{var m=new Material(src){shader=legacySignalsShader,hideFlags=HideFlags.DontSave};int role=i<4?new[]{7,8,9,10}[i]:i<11?i-4:i; m.SetFloat(\"_Auto245Role\",role);if(role==3||role==7)LegacyClass(m,role==3?role3Reflectance:role7Reflectance);return m;}).ToArray();"
+    },
+    {
+      "path": "Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs",
+      "line": 79,
+      "source": "void OnDisable(){"
+    }
+  ],
+  "files_sha256": {
+    "Assets/Editor/Order21Prepare.compute": "c3b35c6b780a7d69311b033795b43329dd7e172cebb0973c3cdedf950691c522",
+    "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs": "c6df0232f8fd9e9d58426b1a6ffcca3b17fe17e832dbb6dcc73cffec56f56253",
+    "Assets/EUnityValidation01/ClothRegion524/Runtime/ClothSurface525.cs": "47b79f57e9c6625b5bf6ef0caaceae27a3fe71f53a30c431a5f0b3b8b0bba9b5",
+    "Assets/EUnityValidation01/GameMapIntegration333/Shaders/OwnerLines333.compute": "be1cfa3fee35fc195e07eb80152bebc4f3520e7aa37fdf6aaa93549f3ae2c5c9",
+    "Assets/EUnityValidation01/GameMapIntegration333/Shaders/Prepare333.compute": "ccb8904c531934ec73eef86231591446e9a2f716ad778a9369c51478eccba2f9",
+    "Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs": "8dea00db4dfff7bed00569a6e86d3314c6828264959d365dd46c1c50f75cf8a5",
+    "Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs": "81b7ae29ea3791f38c46e686b9b7e1a2be387390a59b12d67873b0174cb2bd5f",
+    "Assets/EUnityValidation01/VisibilityMotion331/Shaders/Probe331.shader": "c6a604fde2eeb89f076d1dbb5e93ee33e299e3efc7b6558832beb94ce5d63538",
+    "Assets/EUnityValidation01/VisibilityMotion331/Runtime/MotionView331.cs": "0ac44544006a08b1b24c1fb326069db5df7741a92b9e2b840e147b4af9356783",
+    "Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs": "47770484023f6c0e6df722367e21d63a8cc8fdb3510ae33558f65c9059c52d36"
+  },
+  "limits": [
+    "Does not inspect compiled plugins or runtime reflection/dynamic property-name construction.",
+    "Editor/Order21Prepare.compute is a diagnostic copy; product kernels are Prepare333/OwnerLines333.",
+    "No runtime state, Shader globals, GPU buffers or native objects were queried."
+  ]
+}

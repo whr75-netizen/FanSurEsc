@@ -260,3 +260,24 @@ current UV colour-range66개는 화면186조각이다. 배타 분류37개는 여
 기존 R3 원본 indexed 소스는 옛 경로에서 확보하지 못해32 색인과 현재31 후속 함수의 원문/hash를 구분해 보관했다. 현재 `regionCorrect31`은 Q 뒤의 perimeter E/2×2 corner C 목적이고 원본 source 곡선 목적이 없다. R5 동시 적용 수정은 이미 있어 과거 in-place 오류를 현재 결함으로 재주장하지 않는다. 44는 색 특징 경계가 아니라 Q 경계다. 저장 path4 접선 .203877926→.171808151/위치 이탈 .799877799→.692588333을 재계산했지만 기존4셀 수정과11영역/6singleton은 그대로이며 전체 미감 성공이 아니다.
 
 현재 실질 보정에 필요한 것은 같은 sourceId의 evaluated 위치(8435정점이면 약101,220bytes)·view/projection/grid와 source sample screen 위치, native 원본 색 경계의 투영 대응이다. 색/gradient의 source 특징 계층 추출 구현도 미완이다. 이는 자동 추출이 불가능하거나 수동 semantic 정답이 반드시 필요하다는 뜻이 아니다. 버퍼 공백과 구현 공백을 구분했으며 이미 양자화한62의 계단을 원곡선으로 fit하지 않았다. 현63은 분류·분리 표현·측정까지이고 실제 공유 곡선 재배치/RGB 개선은 끝나지 않았다. 현재 실행 금지 범위를 넘어 새 캡처하지 않았다.
+
+## 원본 UV 기울기/경계64 — 오프라인 코드·검사, 캡처 준비 미완
+
+[64 source·반례](../../experiments/pixel-pipeline/2026-10-31-uv-features64/INDEX.html), [수식/한계](../../experiments/pixel-pipeline/2026-10-31-uv-features64/README_KO.md), [함수 색인](../../experiments/pixel-pipeline/2026-10-31-uv-features64/FUNCTION_INDEX64.json). 기준 commit `fd1639188dcd99ffc3f332acbab3c73bc986e00a`; 새 commit은64 경로/이 절의 이력으로 추적한다. Unity 조회·Play·렌더·새캡처·제품·31/34 변경0. Python은 실행했고 C# helper는 미컴파일·미실행이다. 현재 RGB/팔레트를 개선했다고 주장하지 않는다.
+
+| 스크립트·함수 | 변경 전제/실제 검사 |
+|---|---|
+| `uv_features64.py:colour_intervals/intercept_weights/jump_interval/axis_evidence` | Lab 절대 구간 대신 원본 양쪽 affine 기울기를 제거한 jump 구간. native2/4/8 모든 스케일 검출·모델 적합성·구간 일관성 검사 |
+| `thin_ridges/barrier_components/edge_components/extract/source_key` | 얇은 후보·닫힌 면·열린 contour/DAG 분리. 면적 삭제·gap 강제 연결 없음. source/UV support/규칙 버전 캐시, g/Q/material/화면위치 키 아님 |
+| `palette_invariant/test_uv64.py/run_source64.py` | 합성9사례·3200 encoding 구간 표본·원본PNG4장SHA/373UV 대응. 같은 sourceRGB/Q의 기존18인접쌍 실패를 그대로 기록, 새189family/P 생성 안 함 |
+| `capture_contract64.py:validate/require`, `test_capture64.py` | source/view/frame/serial·투영·실제 tap·색공간/g정의·mode·clean backing·global 복원·readback 예산 계약. 합성1/거부8검사 통과 |
+| `CpuSourceCapture64.cs:WriteCpuGeometry/WriteCamera/WriteOwnedPlane` | 기존 evaluated mesh/indices/UV/material/texture·bonepose 읽기, raw/effective CPU/GPU 투영 분리, 직접 소유ROI≤1MiB를 순차 streaming/Dispose. entry point·render/global setter 없음 |
+| `GlobalJournal64.cs:Snapshot/VerifyExternal/RequireRecoverable/RestoreMarked/VerifyMarked` | 외부 binary+SHA+전체 역읽기 검증+public회수핸들 준비. LegacyInt float 보존, getter bit/identity 검증. buffer setter·reflection 없음 |
+
+합성 일정/선형/이차 gradient는 persistent0, step은 원경계65개/영역2, 분리된 같은색 무늬는 contour2/영역3,1/3texel선과 작은점은 fine에 보존했다. 매끄러운 좁은 봉우리는 fine/ridge 미확정으로 남겼다. 최초 ghost 경계/봉우리 오분류와 “구간 교집합만으로 전 스케일 지지” 오판을 `ABLATION64.json`에 보존했다. 후자는 원본12 X prefix1053→2092→11956이 반례였고, 모든 스케일 검출 조건 후1053→31→6이다. threshold 수치 튜닝이 아니라 논리 조건 수정이며 규칙 `uv-affine-jump64.2`로 캐시를 갱신했다.
+
+원본 image15/18/20/22 bytes를 그대로 보관했고 RGB변경0, 기존373UV 모두 원본점/계층/Q 대응을 재검사했다. native coarse/fine면 수2/458·2/310·1/1·1/1은 palette나 의미 특징 수가 아니다. 열린 선을 별도로 보존하며 실제 흐린 무늬는 contour가 많이 끊어져 **전체 특징 마스크·공유 곡선 조립은 미완**이다. 임의 면적 삭제/연결로 수를 줄이지 않았다. 1x source/evidence PNG를 직접 검수했으며 새 캐릭터 렌더는 없다. 기존31/32·R3 근거/한계는63 인계를 유지한다.
+
+다음 실제 캡처는 sourceId/viewId/frame/renderSerial 하나에 평가 geometry와 raw/effective CPU/GPU P·nativeShift/grid/subsample, sourceRGBA와g정의/owner/depth/coverage, mode/state, 실제 backing을 묶어야 한다. `FullFeature367.Eyes` part10은 ph.backing의 RGBA/meta/UV를 실제로 그리지만 EyeCompose는 meta만 참조한다. layer10 RGBA는 styled pre-eye 값으로 unlit source와 구분하고 옛6목적지는 새feature좌표로 대응시킨다. 주변 피부 추정으로 채우지 않는다.
+
+**새 Play 승인과 별개의 기술적 실행 차단:** 정상 `FullFeature367.Probe:11`이 `ClothRegion524.BeginProbe:134`를 호출해 `_BodyScope551` global buffer를 설정한다. private owner의 `ScopeBuffer551:38`은 null이면 생성하며 public Shader global buffer getter가 없다. 정확한 원래 binding·수명 보존 또는 local-binding 경로 없이는 기존 정상Play를 재사용하지 않는다. C# journal이 이를 해결했다고 주장하지 않으며64에서는 실행0이다. 과거60 원래global 백업도 복구한 것이 아니다. 부모에게 이 정확한 범위를 보고하고 새 승인 전 Unity 접근 금지를 유지했다.

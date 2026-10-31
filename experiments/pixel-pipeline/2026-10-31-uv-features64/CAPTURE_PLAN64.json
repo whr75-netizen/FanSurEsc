@@ -1,0 +1,96 @@
+{
+  "status": "code and input contract only; no Unity access or capture approved for task64",
+  "captureCount": 1,
+  "identity": [
+    "new sourceId",
+    "Time.frameCount",
+    "renderedSerial335",
+    "renderedSource335",
+    "phaseIndex",
+    "sourceFrame",
+    "evaluatedFrame",
+    "poseDigest",
+    "viewId for main/head camera scope; same frame alone does not identify a camera"
+  ],
+  "cpuGeometry": {
+    "source": "Full319View335.motion.surface.outputs already-evaluated MeshFilter meshes; do not BakeMesh again or assign vertices",
+    "meshFields": [
+      "local vertices",
+      "normals",
+      "UV0",
+      "submesh uint32 indices",
+      "localToWorld",
+      "renderer/source material bindings and asset GUID",
+      "source texture image hash and ST"
+    ],
+    "bonePose": [
+      "source SkinnedMeshRenderer bones localToWorld",
+      "root matrix",
+      "blendshape names and current weights",
+      "original bindposes hash"
+    ],
+    "reuse": "59 UV/indices may be referenced by SHA when byte-identical; evaluated vertices are always new sourceId data",
+    "hair8435VerticesPositionBytes": 101220
+  },
+  "camera": [
+    "worldToCameraMatrix",
+    "camera.projectionMatrix raw CPU",
+    "Full319View335.effectiveProjection CPU (clip shift already included)",
+    "GL.GetGPUProjectionMatrix(camera.projectionMatrix,true) raw GPU",
+    "GL.GetGPUProjectionMatrix(effectiveProjection,true) effective GPU",
+    "nativeShift applied by actual producer to raw projection only, not blindly added again to effective projection",
+    "motion.clipShift",
+    "viewport",
+    "logical/native resolution",
+    "pixel centre and top/bottom conventions"
+  ],
+  "surfaceSamples": {
+    "required": [
+      "actual source-sample screen coordinate, no integer rounding",
+      "draw/renderer/submesh/primitive",
+      "barycentric",
+      "UV",
+      "world position",
+      "sourceRGBA before shading",
+      "independent g",
+      "Q and correctedQ separate",
+      "source feature/colour-policy IDs or explicit unknown",
+      "owner/depth/coverage/occlusion",
+      "sourceColorSpace",
+      "g producer formula/normalisation/units",
+      "actual modeFlags including Eye LayerMode19 and state/key-form identity"
+    ],
+    "coordinates": "Offsets and tap count must come from the actual native/EyeFeature sampler shader and active mode flags; do not assume final 2x nearest pixels are independent samples",
+    "budget": "hair ROI and eyes ROI only; at most one owned readback plane in flight, <=1MiB, stream directly to binary without ToArray or Texture2D/PNG duplication"
+  },
+  "cleanBacking": {
+    "source": "FullFeature367.Eyes part10 actually draws ph.backing before EyeCompose/EyeMerge; read layer10 rgba/meta/uv together and record providerMatrix/phase backing geometry",
+    "limitations": "EyeCompose currently binds only _BackingMETA; do not infer RGBA from neighbouring skin. Capture actual layer10 RGBA and meta at the same sample positions. If alpha/coverage is absent, record absent and fail the required backing contract.",
+    "phase": "same sourceId/frame/serial; six original failure destinations mapped to new feature coordinates, not copied old absolute positions",
+    "colourStage": "layer10 RGBA is rendered pre-eye and may already include style/shading; label this separately from original unlit sourceRGBA. Record UV and linear-RT encoding; do not call it raw albedo."
+  },
+  "globalState": {
+    "externalBackup": "before any mutation write numeric scalars/vectors/matrices/arrays and persistent texture references to a small external file, hash+read-back verify; public retained restoration handle in addition to file",
+    "arrays": "do not change array length; absent/zero length array cannot be assumed recoverable",
+    "buffer": "Unity6000.5 public Shader API source has SetGlobalBuffer but no GetGlobalBuffer; no reflection; unknown original bindings must not be changed",
+    "identifiedBlocker": {
+      "name": "_BodyScope551",
+      "writer": "ClothRegion524.BeginProbe:134 RasterCommandBuffer.SetGlobalBuffer",
+      "owner": "ClothRegion524.scopeBuffer551 private; ScopeBuffer551:38 creates a buffer if null",
+      "implication": "normal renderer may mutate it even when scope is disabled; cannot claim full restore from the old63-value manifest. Do not run that path until an exact original binding ownership contract or a scoped local-binding capture path is provided.",
+      "actualCallSite": "FullFeature367.Probe:11 calls ClothRegion524.BeginProbe in the normal333 source control pass"
+    },
+    "captureHelpersSetGlobals": false
+  },
+  "restoreAndMemory": [
+    "current dirty/content/files/scene/pipeline/time/options before capture",
+    "no SaveAssets, ClearDirty, domain reload or source mutation",
+    "owned resources disposed after completed readback",
+    "before/after/release allocated/reserved/mono counters as small summaries",
+    "RT identity + static roots are separate from RAM counters",
+    "no forced GC or claim of full restoration from RT count alone"
+  ],
+  "newUnityCalls": 0,
+  "csharpRuntimeCompiled": false,
+  "readyToExecuteNormalPlay": false
+}

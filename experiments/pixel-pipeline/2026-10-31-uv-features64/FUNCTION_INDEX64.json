@@ -1,0 +1,58 @@
+[
+  {
+    "script": "capture_contract64.py",
+    "functions": {
+      "validate": 4,
+      "require": 45
+    }
+  },
+  {
+    "script": "run_source64.py",
+    "functions": {}
+  },
+  {
+    "script": "test_capture64.py",
+    "functions": {}
+  },
+  {
+    "script": "test_uv64.py",
+    "functions": {
+      "gray_L": 8
+    }
+  },
+  {
+    "script": "uv_features64.py",
+    "functions": {
+      "source_key": 13,
+      "lab": 17,
+      "colour_intervals": 21,
+      "intercept_weights": 40,
+      "shifted": 46,
+      "jump_interval": 49,
+      "axis_evidence": 58,
+      "thin_ridges": 86,
+      "barrier_components": 100,
+      "edge_components": 119,
+      "extract": 143,
+      "palette_invariant": 156,
+      "decode": 31,
+      "find": 103
+    }
+  },
+  {
+    "script": "CpuSourceCapture64.cs",
+    "functions": {
+      "WriteCpuGeometry": "read-only evaluated mesh, source material/texture, bonepose",
+      "WriteCamera": "raw/effective CPU/GPU and view scope",
+      "WriteOwnedPlane": "one<=1MiB owned array stream/dispose"
+    }
+  },
+  {
+    "script": "GlobalJournal64.cs",
+    "functions": {
+      "Snapshot/VerifyExternal": "external binary roundtrip and public retained handle",
+      "RequireRecoverable/BeforeMutation": "block unknown binding/array length changes",
+      "RestoreMarked/VerifyMarked/ReleaseHandleAfterVerified": "restore bits/identity, release journal references only"
+    }
+  }
+]

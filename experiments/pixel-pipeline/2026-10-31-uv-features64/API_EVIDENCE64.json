@@ -1,0 +1,12 @@
+{
+  "checkedVersion": "Unity public C# source6000.5; no current Editor query",
+  "sources": [
+    {"url":"https://raw.githubusercontent.com/Unity-Technologies/UnityCsReference/6000.5/Runtime/Export/Shaders/Shader.cs","facts":["SetGlobalInt uses float backing; Integer is a different API","public getters for scalar/vector/matrix/texture/arrays","SetGlobalBuffer/ConstantBuffer exist; no public matching global buffer getter in this class"]},
+    {"url":"https://docs.unity3d.com/6000.5/Documentation/ScriptReference/GL.GetGPUProjectionMatrix.html","facts":["GPU projection depends on graphics API and renderIntoTexture","raw camera GPU and shifted effective GPU must be distinguished"]},
+    {"local":"Assets/EUnityValidation01/ClothRegion524/Runtime/ClothRegion524.cs","lines":[35,38,134],"facts":["scopeBuffer551 private","ScopeBuffer551 creates buffer on first call","BeginProbe sets global _BodyScope551"]},
+    {"local":"Assets/EUnityValidation01/HeadLocal367/Runtime/FullFeature367.cs","lines":[11,48,49,50,58,59],"facts":["normal source Probe calls ClothRegion524.BeginProbe","Eyes part10 draws actual ph.backing into layer10 RGBA/meta/UV before eye merge","EyeCompose only consumes backing meta, so capture real RGBA separately"]},
+    {"local":"Assets/EUnityValidation01/MinimalRestore335/Runtime/Full319View335.cs","lines":[23,26,57,58,65],"facts":["actual evaluated meshes are already in motion.surface.outputs","effectiveProjection and nativeShift are distinct public values","layer10 is480x272 in this implementation; do not assume native960 subsample semantics"]}
+  ],
+  "blocker": "An approved Play capture still needs a verified exact old _BodyScope551 binding or a scoped local-binding renderer route. No reflection or guessed null restoration.",
+  "newUnityCalls": 0
+}

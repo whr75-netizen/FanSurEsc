@@ -1,0 +1,27 @@
+[
+  {
+    "fixture": "step",
+    "initialPersistentX": 65,
+    "initialFineX": 195,
+    "failure": "side extrapolation creates extra step-adjacent lines",
+    "correction": "require actual adjacent colour change and both-side affine-model compatibility; no threshold retuning"
+  },
+  {
+    "fixture": "smooth-narrow-bump",
+    "initialPersistentX": 130,
+    "initialFineX": 390,
+    "failure": "curved smooth bump falsely marked persistent without checking side affine compatibility",
+    "correction": "require actual adjacent colour change and both-side affine-model compatibility; no threshold retuning"
+  },
+  {
+    "fixture": "original material12 X evidence",
+    "initialPrefixCountsSameSupport": [
+      1053,
+      2092,
+      11956
+    ],
+    "failure": "interval intersection became nonzero only at coarse scale; it did not prove a jump resolved at every scale",
+    "correction": "persistent requires every-scale resolved evidence plus interval consistency; coarse-only evidence retained separately as scaleEmergentUncertain",
+    "thresholdsChanged": false
+  }
+]

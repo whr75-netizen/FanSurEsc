@@ -1,0 +1,71 @@
+{
+  "syntheticPacketPass": true,
+  "rejectionTests": [
+    {
+      "name": "missing-clean-backing",
+      "rejected": true,
+      "errors": [
+        "incomplete clean backing"
+      ]
+    },
+    {
+      "name": "empty-backing",
+      "rejected": true,
+      "errors": [
+        "missing required backing destinations"
+      ]
+    },
+    {
+      "name": "mixed-source",
+      "rejected": true,
+      "errors": [
+        "mixed sample source/frame/serial"
+      ]
+    },
+    {
+      "name": "mixed-view",
+      "rejected": true,
+      "errors": [
+        "mixed sample source/frame/serial"
+      ]
+    },
+    {
+      "name": "mixed-frame",
+      "rejected": true,
+      "errors": [
+        "mixed sample source/frame/serial"
+      ]
+    },
+    {
+      "name": "unbacked-buffer",
+      "rejected": true,
+      "errors": [
+        "unbacked buffer mutation:_BodyScope551",
+        "unrestorable mutation:_BodyScope551"
+      ]
+    },
+    {
+      "name": "large-readback",
+      "rejected": true,
+      "errors": [
+        "readback exceeds one-MiB packet-plane bound"
+      ]
+    },
+    {
+      "name": "guessed-backing",
+      "rejected": true,
+      "errors": [
+        "backing is not real pre-eye input"
+      ]
+    }
+  ],
+  "fractionalScreenCoordinatesPreserved": true,
+  "captureHelperNoRendererOrGlobalMutation": true,
+  "globalBufferSetterAbsent": true,
+  "externalJournalAndPublicHandlePrepared": true,
+  "csharpCompiled": false,
+  "csharpExecuted": false,
+  "realPacketCaptured": false,
+  "normalPlayPreflightBlockedByUnbackedBodyScope551": true,
+  "newUnityCalls": 0
+}

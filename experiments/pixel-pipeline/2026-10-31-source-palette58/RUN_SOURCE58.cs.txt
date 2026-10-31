@@ -1,0 +1,337 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEngine.Profiling;
+// Small dependency-free JSON boundary for the existing RunCommand reference set.
+// No reflection, package loading, runtime serialization of arbitrary objects.
+
+public class Json58 : IEnumerable<Json58>
+{
+    protected Dictionary<string,Json58> fields;protected List<Json58> items;protected object value;
+    public Json58 this[string key] {get {Json58 v;return fields!=null&&fields.TryGetValue(key,out v)?v:null;}set {fields[key]=value;}}
+    public Json58 this[int i] {get {return items[i];}}
+    public int Count {get {return items!=null?items.Count:fields!=null?fields.Count:0;}}
+    public void Add(Json58 v) {items.Add(v);}
+    public IEnumerable<T> Values<T>() {return this.Select(v=>(T)Convert.ChangeType(v.value,typeof(T),CultureInfo.InvariantCulture));}
+    public IEnumerator<Json58> GetEnumerator() {return (items??(fields==null?new List<Json58>():fields.Values.ToList())).GetEnumerator();}
+    IEnumerator IEnumerable.GetEnumerator() {return GetEnumerator();}
+    public static implicit operator Json58(string v) {return v==null?null:new Json58{value=v};}
+    public static implicit operator Json58(int v) {return new Json58{value=v};}
+    public static implicit operator Json58(long v) {return new Json58{value=v};}
+    public static implicit operator Json58(float v) {return new Json58{value=(double)v};}
+    public static implicit operator Json58(double v) {return new Json58{value=v};}
+    public static implicit operator Json58(bool v) {return new Json58{value=v};}
+    public static explicit operator string(Json58 v) {return v==null?null:Convert.ToString(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator int(Json58 v) {return Convert.ToInt32(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator long(Json58 v) {return Convert.ToInt64(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator double(Json58 v) {return Convert.ToDouble(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator bool(Json58 v) {return Convert.ToBoolean(v.value,CultureInfo.InvariantCulture);}
+    public static Json58 Wrap(object v) {
+        if(v==null)return null;if(v is Json58)return(Json58)v;if(v is string)return(string)v;if(v is bool)return(bool)v;
+        if(v is double)return(double)v;if(v is float)return(float)v;if(v is int)return(int)v;if(v is long)return(long)v;
+        if(v is IEnumerable){var a=new Arr58();foreach(var x in(IEnumerable)v)a.Add(Wrap(x));return a;}
+        throw new ArgumentException("Unsupported JSON boundary value: "+v.GetType().Name);
+    }
+    static string Quote(string text) {
+        var b=new StringBuilder("\"");foreach(char c in text){switch(c){case '"':b.Append("\\\"");break;case '\\':b.Append("\\\\");break;case '\b':b.Append("\\b");break;case '\f':b.Append("\\f");break;case '\n':b.Append("\\n");break;case '\r':b.Append("\\r");break;case '\t':b.Append("\\t");break;default:if(c<32)b.Append("\\u"+((int)c).ToString("x4"));else b.Append(c);break;}}return b.Append('"').ToString();
+    }
+    public override string ToString() {
+        if(fields!=null)return "{"+string.Join(",",fields.OrderBy(p=>p.Key,StringComparer.Ordinal).Select(p=>Quote(p.Key)+":"+(p.Value==null?"null":p.Value.ToString())))+"}";
+        if(items!=null)return "["+string.Join(",",items.Select(v=>v==null?"null":v.ToString()))+"]";
+        if(value==null)return "null";if(value is string)return Quote((string)value);if(value is bool)return(bool)value?"true":"false";
+        if(value is double){double x=(double)value;if(double.IsNaN(x)||double.IsInfinity(x))throw new ArgumentException("Nonfinite JSON number");return x.ToString("R",CultureInfo.InvariantCulture);}
+        return Convert.ToString(value,CultureInfo.InvariantCulture);
+    }
+    public static bool DeepEquals(Json58 a,Json58 b) {return a==null?b==null:b!=null&&a.ToString()==b.ToString();}
+    public static Json58 Parse(string text) {int p=0;var result=ParseValue(text,ref p,0);Space(text,ref p);if(p!=text.Length)throw new ArgumentException("Trailing JSON data");return result;}
+    static void Space(string s,ref int p) {while(p<s.Length&&char.IsWhiteSpace(s[p]))p++;}
+    static string ParseString(string s,ref int p) {
+        if(s[p++]!='"')throw new ArgumentException("JSON string expected");var b=new StringBuilder();
+        while(p<s.Length){char c=s[p++];if(c=='"')return b.ToString();if(c=='\\'){char e=s[p++];switch(e){case '"':case '\\':case '/':b.Append(e);break;case 'b':b.Append('\b');break;case 'f':b.Append('\f');break;case 'n':b.Append('\n');break;case 'r':b.Append('\r');break;case 't':b.Append('\t');break;case 'u':b.Append((char)int.Parse(s.Substring(p,4),NumberStyles.HexNumber,CultureInfo.InvariantCulture));p+=4;break;default:throw new ArgumentException("JSON escape");}}else{if(c<32)throw new ArgumentException("JSON control character");b.Append(c);}}
+        throw new ArgumentException("Unterminated JSON string");
+    }
+    static Json58 ParseValue(string s,ref int p,int depth) {
+        if(depth>128)throw new ArgumentException("JSON nesting limit");Space(s,ref p);if(p>=s.Length)throw new ArgumentException("JSON value expected");char c=s[p];
+        if(c=='"')return ParseString(s,ref p);
+        if(c=='{'||c=='['){bool obj=c=='{';p++;Json58 result=obj?(Json58)new Obj58():new Arr58();Space(s,ref p);if(p<s.Length&&s[p]==(obj?'}':']')){p++;return result;}
+            while(true){Space(s,ref p);string key=null;if(obj){key=ParseString(s,ref p);Space(s,ref p);if(s[p++]!=':')throw new ArgumentException("JSON colon");}var v=ParseValue(s,ref p,depth+1);if(obj)result[key]=v;else result.Add(v);Space(s,ref p);char end=s[p++];if(end==(obj?'}':']'))break;if(end!=',')throw new ArgumentException("JSON separator");}return result;}
+        foreach(string word in new[]{"true","false","null"})if(s.Substring(p).StartsWith(word,StringComparison.Ordinal)){p+=word.Length;return word=="null"?null:(Json58)(word=="true");}
+        int start=p;while(p<s.Length&&"-+0123456789.eE".IndexOf(s[p])>=0)p++;if(start==p)throw new ArgumentException("JSON token");return double.Parse(s.Substring(start,p-start),CultureInfo.InvariantCulture);
+    }
+}
+public sealed class Obj58 : Json58 {public Obj58(){fields=new Dictionary<string,Json58>(StringComparer.Ordinal);}public new static Obj58 Parse(string text){return(Obj58)Json58.Parse(text);}}
+public sealed class Arr58 : Json58 {public Arr58(params object[] values){items=new List<Json58>();if(values.Length==1&&values[0] is IEnumerable&&!(values[0] is string)&&!(values[0] is Json58)){foreach(var v in(IEnumerable)values[0])Add(Wrap(v));}else foreach(var v in values)Add(Wrap(v));}}
+// Pure CPU port of source-palette54. No model/material-role constants or Unity state.
+
+public static class SourcePalette58
+{
+    public sealed class Source { public string modelSHA256,imageSHA256,uvOrigin="top-left",encoding="srgb8";public int materialId;public double[] factorLinear; }
+    public sealed class Sample { public string id,imageSHA256;public int materialId,primitiveId,triangle;public double[] uv;public int[] texel,rgba8;public double weight; }
+    public sealed class Family { public string id,domainId;public Source source;public Sample[] samples; }
+    public sealed class Colour { public Sample sample;public double[] linear,lab;public int[] rgb8;public double weight; }
+    public sealed class Reference { public int[] rgb8;public double[] lab;public Sample sample;public double cost;public int sampleCount; }
+    public sealed class Settings { public int count;public double darkLRatio,darkCRatio,gamma,intervalScale; }
+    public sealed class Palette { public int[][] rgb8;public double[] targetL,requestedC,usedC,actualL;public bool[] gamutReduced;public int duplicates,LReversals; }
+    public static bool Finite(double v) {return !double.IsNaN(v)&&!double.IsInfinity(v);}
+    static void Require(bool ok,string message) {if(!ok)throw new ArgumentException(message);}
+    public static double Decode(double x) {return x<=.04045?x/12.92:Math.Pow((x+.055)/1.055,2.4);}
+    public static double Encode(double x) {return x<=.0031308?12.92*x:1.055*Math.Pow(x,1.0/2.4)-.055;}
+    static double Cbrt(double x) {return Math.Sign(x)*Math.Pow(Math.Abs(x),1.0/3);}
+    static int RGB8(double x) {return (int)Math.Floor(255*Encode(x)+.5);}
+    public static double[] LabLinear(double[] c) {
+        double r=c[0],g=c[1],b=c[2];
+        double l=Cbrt(.4122214708*r+.5363325363*g+.0514459929*b),m=Cbrt(.2119034982*r+.6806995451*g+.1073969566*b),s=Cbrt(.0883024619*r+.2817188376*g+.6299787005*b);
+        return new[]{.2104542553*l+.793617785*m-.0040720468*s,1.9779984951*l-2.428592205*m+.4505937099*s,.0259040371*l+.7827717662*m-.808675766*s};
+    }
+    public static double[] LabRGB(int[] rgb) {return LabLinear(rgb.Select(v=>Decode(v/255.0)).ToArray());}
+    public static double[] LinearLch(double L,double C,double h) {
+        double a=C*Math.Cos(h),b=C*Math.Sin(h),l=Math.Pow(L+.3963377774*a+.2158037573*b,3),m=Math.Pow(L-.1055613458*a-.0638541728*b,3),s=Math.Pow(L-.0894841775*a-1.291485548*b,3);
+        return new[]{4.0767416621*l-3.3077115913*m+.2309699292*s,-1.2684380046*l+2.6097574011*m-.3413193965*s,-.0041960863*l-.7034186147*m+1.707614701*s};
+    }
+    static bool Valid(double[] v) {return v.All(x=>x>=-1e-9&&x<=1+1e-9);}
+    public static int[] Gamut(double L,double C,double h,out double usedC) {
+        usedC=C;var v=LinearLch(L,C,h);
+        if(!Valid(v)) {double lo=0,hi=C;for(int i=0;i<28;i++){double mid=(lo+hi)/2;if(Valid(LinearLch(L,mid,h)))lo=mid;else hi=mid;}usedC=lo;v=LinearLch(L,usedC,h);}
+        return v.Select(x=>RGB8(Math.Max(0,Math.Min(1,x)))).ToArray();
+    }
+    public static Colour[] SourceColours(Family f) {
+        Require(f!=null&&f.source!=null&&f.samples!=null,"Explicit source family required");var s=f.source;
+        Require(!string.IsNullOrEmpty(s.modelSHA256)&&!string.IsNullOrEmpty(s.imageSHA256)&&s.uvOrigin=="top-left"&&s.encoding=="srgb8","Original source/encoding required");
+        Require(s.factorLinear!=null&&s.factorLinear.Length==4&&s.factorLinear.All(x=>Finite(x)&&x>=0&&x<=1),"Linear material factor required");
+        var result=new List<Colour>();
+        foreach(var v in f.samples) {
+            Require(v.materialId==s.materialId&&v.imageSHA256==s.imageSHA256,"Source family mismatch");
+            Require(!string.IsNullOrEmpty(v.id)&&v.uv!=null&&v.uv.Length==2&&v.uv.All(Finite)&&v.texel!=null&&v.texel.Length==2,"Original UV/texel missing");
+            Require(v.rgba8!=null&&v.rgba8.Length==4&&v.rgba8.All(x=>x>=0&&x<=255)&&v.weight>0&&Finite(v.weight),"Invalid source sample");
+            double weight=v.weight*v.rgba8[3]/255.0*s.factorLinear[3];
+            if(weight<=0)continue;
+            var linear=Enumerable.Range(0,3).Select(i=>Decode(v.rgba8[i]/255.0)*s.factorLinear[i]).ToArray();
+            result.Add(new Colour {sample=v,linear=linear,lab=LabLinear(linear),rgb8=linear.Select(RGB8).ToArray(),weight=weight});
+        }
+        return result.ToArray();
+    }
+    public static Reference ExtractReference(Family f) {
+        var samples=SourceColours(f);Require(samples.Length>0,"No visible source samples");Colour best=null;double cost=double.PositiveInfinity;
+        foreach(var c in samples) {
+            double sum=0;foreach(var s in samples){double q=0;for(int i=0;i<3;i++)q+=(s.lab[i]-c.lab[i])*(s.lab[i]-c.lab[i]);sum+=s.weight*q;}
+            // Stable original ASCII sample IDs in this provider; see portability limit.
+            if(sum<cost||(sum==cost&&(best==null||StringComparer.Ordinal.Compare(c.sample.id,best.sample.id)<0))){best=c;cost=sum;}
+        }
+        return new Reference {rgb8=(int[])best.rgb8.Clone(),lab=(double[])best.lab.Clone(),sample=best.sample,cost=cost,sampleCount=samples.Length};
+    }
+    public static Palette MakePalette(Reference reference,Settings p) {
+        Require(p.count>=2&&p.count<=256&&Finite(p.darkLRatio)&&Finite(p.darkCRatio)&&p.darkLRatio>=0&&p.darkLRatio<=1&&p.darkCRatio>=0&&p.darkCRatio<=1&&p.gamma>0&&Finite(p.gamma)&&p.intervalScale>=0&&Finite(p.intervalScale),"Invalid palette settings");
+        var lab=LabRGB(reference.rgb8);double L0=lab[0],C0=Math.Sqrt(lab[1]*lab[1]+lab[2]*lab[2]),h=Math.Atan2(lab[2],lab[1]);
+        var result=new Palette {rgb8=new int[p.count][],targetL=new double[p.count],requestedC=new double[p.count],usedC=new double[p.count],actualL=new double[p.count],gamutReduced=new bool[p.count]};
+        for(int k=0;k<p.count;k++) {
+            double t=Math.Pow((double)k/(p.count-1),p.gamma),L=L0+p.intervalScale*(L0*(p.darkLRatio+(1-p.darkLRatio)*t)-L0),C=C0+p.intervalScale*(C0*(p.darkCRatio+(1-p.darkCRatio)*t)-C0);
+            Require(L>=0&&L<=1&&C>=0,"Palette interval exceeds L/C domain");result.targetL[k]=L;result.requestedC[k]=C;
+            if(k==p.count-1||p.intervalScale==0){result.rgb8[k]=(int[])reference.rgb8.Clone();result.usedC[k]=C0;}
+            else {double used;result.rgb8[k]=Gamut(L,C,h,out used);result.usedC[k]=used;result.gamutReduced[k]=C-used>1e-7;}
+            result.actualL[k]=LabRGB(result.rgb8[k])[0];if(k>0&&result.actualL[k]<result.actualL[k-1]-1e-9)result.LReversals++;
+        }
+        result.duplicates=p.count-result.rgb8.Select(v=>string.Join(",",v)).Distinct().Count();return result;
+    }
+    public static int ShadeIndex(double g,double[] thresholds) {
+        Require(Finite(g)&&thresholds!=null&&thresholds.All(Finite),"Finite shade inputs required");
+        float x=(float)g;Require(!float.IsInfinity(x),"Shade exceeds Float32");int k=0;float previous=float.NegativeInfinity;
+        foreach(double value in thresholds){float cut=(float)value;Require(!float.IsInfinity(cut)&&cut>previous,"Sorted distinct Float32 thresholds required");if(x>=cut)k++;previous=cut;}return k;
+    }
+    public static int[] Resolve(Palette p,int k) {Require(k>=0&&k<p.rgb8.Length,"Unbound shade index");return (int[])p.rgb8[k].Clone();}
+}
+public static class SourceJson58
+{
+    public static SourcePalette58.Settings ReadSettings(Json58 p){return new SourcePalette58.Settings{count=(int)p["count"],darkLRatio=(double)p["darkLRatio"],darkCRatio=(double)p["darkCRatio"],gamma=(double)p["gamma"],intervalScale=(double)p["intervalScale"]};}
+    public static Obj58 Sample(SourcePalette58.Sample s){return new Obj58{["id"]=s.id,["imageSHA256"]=s.imageSHA256,["materialId"]=s.materialId,["primitiveId"]=s.primitiveId,["triangle"]=s.triangle,["uv"]=new Arr58(s.uv),["texel"]=new Arr58(s.texel),["rgba8"]=new Arr58(s.rgba8),["weight"]=s.weight};}
+    public static Obj58 Family(SourcePalette58.Family f){var s=f.source;return new Obj58{["id"]=f.id,["domainId"]=f.domainId,["source"]=new Obj58{["modelSHA256"]=s.modelSHA256,["imageSHA256"]=s.imageSHA256,["materialId"]=s.materialId,["encoding"]=s.encoding,["uvOrigin"]=s.uvOrigin,["factorLinear"]=new Arr58(s.factorLinear)},["samples"]=new Arr58(f.samples.Select(Sample))};}
+    public static Obj58 Reference(SourcePalette58.Reference r){return new Obj58{["rgb8"]=new Arr58(r.rgb8),["lab"]=new Arr58(r.lab),["sample"]=Sample(r.sample),["cost"]=r.cost,["sampleCount"]=r.sampleCount};}
+    public static Obj58 Settings(SourcePalette58.Settings p){return new Obj58{["count"]=p.count,["darkLRatio"]=p.darkLRatio,["darkCRatio"]=p.darkCRatio,["gamma"]=p.gamma,["intervalScale"]=p.intervalScale};}
+    public static Obj58 Palette(SourcePalette58.Palette p){return new Obj58{["rgb8"]=new Arr58(p.rgb8.Select(v=>new Arr58(v))),["targetL"]=new Arr58(p.targetL),["requestedC"]=new Arr58(p.requestedC),["usedC"]=new Arr58(p.usedC),["actualL"]=new Arr58(p.actualL),["gamutReduced"]=new Arr58(p.gamutReduced),["duplicates"]=p.duplicates,["LReversals"]=p.LReversals};}
+}
+// Original GLB material/UV -> source family. No renderer-role/name/triangle-range map.
+
+public static class OriginalMaterialUv58
+{
+    public static string FamilyKey(string model,int mesh,int primitive,int material) {return model+"/mesh"+mesh+"/primitive"+primitive+"/material"+material;}
+    public static int ResolveFamily(SourcePalette58.Family[] families,string model,int mesh,int primitive,int material,double[] uv) {
+        if(uv==null||uv.Length!=2||!uv.All(SourcePalette58.Finite))throw new ArgumentException("Finite source UV required");
+        string key=FamilyKey(model,mesh,primitive,material);int result=Array.FindIndex(families,f=>f.id==key);
+        if(result<0)throw new ArgumentException("Unbound original material/primitive");return result;
+    }
+    static string Hash(byte[] b) {using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(b)).Replace("-","").ToLowerInvariant();}
+    static int Number(Json58 t,int d=0) {return t==null?d:(int)t;}
+    static double[] Factor(Json58 t) {return t==null?new[]{1.0,1,1,1}:t.Values<double>().ToArray();}
+    static int Width(Json58 accessor) {switch((string)accessor["type"]){case "VEC2":return 2;case "VEC3":return 3;case "SCALAR":return 1;default:throw new NotSupportedException("Accessor shape");}}
+    static double[] ReadAccessor(Obj58 doc,byte[] glb,int bin,int accessorIndex,int element) {
+        var a=doc["accessors"][accessorIndex];if(a["sparse"]!=null)throw new NotSupportedException("Sparse accessor not implemented");
+        var view=doc["bufferViews"][Number(a["bufferView"])];if(Number(view["buffer"])!=0)throw new NotSupportedException("External buffer");
+        int component=Number(a["componentType"]),width=Width(a),bytes=component==5121?1:component==5123?2:4;
+        int offset=bin+Number(view["byteOffset"])+Number(a["byteOffset"])+element*Number(view["byteStride"],bytes*width);
+        var result=new double[width];
+        for(int i=0;i<width;i++) {
+            int p=offset+i*bytes;
+            if(component==5126)result[i]=BitConverter.ToSingle(glb,p);
+            else if(component==5125)result[i]=BitConverter.ToUInt32(glb,p);
+            else if(component==5123)result[i]=BitConverter.ToUInt16(glb,p);
+            else if(component==5121)result[i]=glb[p];
+            else throw new NotSupportedException("Accessor component");
+        }
+        return result;
+    }
+    static double Wrap(double x,int mode) {
+        if(mode==33071)return Math.Max(0,Math.Min(1,x));
+        if(mode==33648){double v=x-2*Math.Floor(x/2);return v<=1?v:2-v;}
+        if(mode==10497)return x-Math.Floor(x);
+        throw new NotSupportedException("Sampler wrap mode");
+    }
+    public static SourcePalette58.Family[] Read(string modelPath,string expectedModelSHA,Arr58 domains,int sampleCount,long maxDecodedImageBytes,out long peakOwnedTextureBytes,out string modelSHA) {
+        byte[] glb=File.ReadAllBytes(modelPath);modelSHA=Hash(glb);peakOwnedTextureBytes=0;
+        if(modelSHA!=expectedModelSHA)throw new InvalidOperationException("Original model hash changed before image decode");
+        if(BitConverter.ToUInt32(glb,0)!=0x46546c67||BitConverter.ToUInt32(glb,4)!=2)throw new NotSupportedException("GLB2 required");
+        int jsonLength=BitConverter.ToInt32(glb,12),binHeader=20+jsonLength,bin=binHeader+8;
+        if(BitConverter.ToUInt32(glb,16)!=0x4e4f534a||BitConverter.ToUInt32(glb,binHeader+4)!=0x004e4942)throw new NotSupportedException("GLB JSON/BIN chunks required");
+        var doc=Obj58.Parse(System.Text.Encoding.UTF8.GetString(glb,20,jsonLength));
+        var families=new System.Collections.Generic.List<SourcePalette58.Family>();
+        foreach(var domain in domains) {
+            int meshIndex=(int)domain["meshIndex"],primitiveIndex=(int)domain["primitiveIndex"];
+            var primitive=doc["meshes"][meshIndex]["primitives"][primitiveIndex];
+            if(Number(primitive["mode"],4)!=4)throw new NotSupportedException("Triangle primitive required");
+            int material=Number(primitive["material"],-1);if(material<0)throw new NotSupportedException("Explicit source material required");
+            var pbr=doc["materials"][material]["pbrMetallicRoughness"];var baseTexture=pbr["baseColorTexture"];
+            var transform=baseTexture["extensions"]?["KHR_texture_transform"];
+            var offset=transform?["offset"]==null?new[]{0.0,0}:transform["offset"].Values<double>().ToArray();
+            var scale=transform?["scale"]==null?new[]{1.0,1}:transform["scale"].Values<double>().ToArray();
+            if(Number(transform?["texCoord"],Number(baseTexture["texCoord"]))!=0||offset.Length!=2||scale.Length!=2||offset.Any(v=>v!=0)||scale.Any(v=>v!=1)||
+                (transform?["rotation"]!=null&&(double)transform["rotation"]!=0))throw new NotSupportedException("Nonidentity texture transform/TEXCOORD set not implemented");
+            var textureInfo=doc["textures"][(int)baseTexture["index"]];int imageId=(int)textureInfo["source"];
+            var image=doc["images"][imageId];if(image["bufferView"]==null)throw new NotSupportedException("Embedded source image required");
+            var imageView=doc["bufferViews"][(int)image["bufferView"]];
+            var png=new byte[(int)imageView["byteLength"]];Array.Copy(glb,bin+Number(imageView["byteOffset"]),png,0,png.Length);
+            if(png.Length<24||png[0]!=137||png[1]!=80||png[2]!=78||png[3]!=71)throw new NotSupportedException("Native PNG required");
+            long pngWidth=((long)png[16]<<24)|((long)png[17]<<16)|((long)png[18]<<8)|png[19];
+            long pngHeight=((long)png[20]<<24)|((long)png[21]<<16)|((long)png[22]<<8)|png[23];
+            if(pngWidth<=0||pngHeight<=0||pngWidth*pngHeight*4>maxDecodedImageBytes)throw new InvalidOperationException("Declared one-image decode budget exceeded");
+            string imageSHA=Hash(png);var factor=Factor(pbr["baseColorFactor"]);
+            Json58 sampler=textureInfo["sampler"]==null?null:doc["samplers"][(int)textureInfo["sampler"]];
+            int wrapS=Number(sampler?["wrapS"],10497),wrapT=Number(sampler?["wrapT"],10497);
+            int positions=(int)primitive["attributes"]["POSITION"],uvs=(int)primitive["attributes"]["TEXCOORD_0"];
+            if(Number(doc["accessors"][positions]["componentType"])!=5126||Number(doc["accessors"][uvs]["componentType"])!=5126)throw new NotSupportedException("Float32 POSITION/UV required");
+            int indices=Number(primitive["indices"],-1),indexCount=indices<0?(int)doc["accessors"][positions]["count"]:(int)doc["accessors"][indices]["count"],triangles=indexCount/3;
+            if(indexCount%3!=0||sampleCount<2)throw new ArgumentException("Triangle/sample count");
+            var samples=new System.Collections.Generic.List<SourcePalette58.Sample>();Texture2D texture=null;
+            try {
+                texture=new Texture2D(2,2,TextureFormat.RGBA32,false,true){hideFlags=HideFlags.HideAndDontSave};
+                if(!ImageConversion.LoadImage(texture,png,false)||(texture.format!=TextureFormat.ARGB32&&texture.format!=TextureFormat.RGBA32&&texture.format!=TextureFormat.RGB24))throw new NotSupportedException("Uncompressed native image decode required: "+texture.format);
+                peakOwnedTextureBytes=Math.Max(peakOwnedTextureBytes,(long)texture.width*texture.height*4);
+                // Sparse CPU pixel reads let Unity handle ARGB32/RGBA32 channel layout.
+                // No whole-image GetPixels copy and no borrowed array disposal.
+                for(int sample=0;sample<sampleCount;sample++) {
+                    int triangle=(int)Math.Floor((double)sample*(triangles-1)/(sampleCount-1));
+                    var ids=Enumerable.Range(0,3).Select(c=>indices<0?triangle*3+c:(int)ReadAccessor(doc,glb,bin,indices,triangle*3+c)[0]).ToArray();
+                    var p=ids.Select(i=>ReadAccessor(doc,glb,bin,positions,i)).ToArray();var uv=ids.Select(i=>ReadAccessor(doc,glb,bin,uvs,i)).ToArray();
+                    var a=Enumerable.Range(0,3).Select(i=>p[1][i]-p[0][i]).ToArray();var b=Enumerable.Range(0,3).Select(i=>p[2][i]-p[0][i]).ToArray();
+                    double x=a[1]*b[2]-a[2]*b[1],y=a[2]*b[0]-a[0]*b[2],z=a[0]*b[1]-a[1]*b[0],area=Math.Sqrt(x*x+y*y+z*z)/2;
+                    if(area<=0)continue;
+                    var centre=new[]{uv.Sum(v=>v[0])/3,uv.Sum(v=>v[1])/3};
+                    int tx=Math.Min(texture.width-1,(int)Math.Floor(Wrap(centre[0],wrapS)*texture.width));
+                    int ty=Math.Min(texture.height-1,(int)Math.Floor(Wrap(centre[1],wrapT)*texture.height));
+                    Color32 colour=texture.GetPixel(tx,texture.height-1-ty);
+                    if(colour.a==0)continue;
+                    samples.Add(new SourcePalette58.Sample {id="mesh"+meshIndex+"/primitive"+primitiveIndex+"/triangle"+triangle,materialId=material,primitiveId=primitiveIndex,triangle=triangle,
+                        uv=centre,texel=new[]{tx,ty},rgba8=new[]{(int)colour.r,(int)colour.g,(int)colour.b,(int)colour.a},weight=area,imageSHA256=imageSHA});
+                }
+            } finally {if(texture)UnityEngine.Object.DestroyImmediate(texture);}
+            string key=FamilyKey(modelSHA,meshIndex,primitiveIndex,material);
+            families.Add(new SourcePalette58.Family {id=key,domainId="mesh"+meshIndex+"/primitive"+primitiveIndex,
+                source=new SourcePalette58.Source {modelSHA256=modelSHA,materialId=material,imageSHA256=imageSHA,factorLinear=factor},samples=samples.ToArray()});
+        }
+        return families.ToArray();
+    }
+}
+// Small hash-only state snapshots. One native serialization per dirty object.
+
+public static class State58
+{
+    public static string Hash(byte[] b) {using(var h=SHA256.Create())return BitConverter.ToString(h.ComputeHash(b)).Replace("-","").ToLowerInvariant();}
+    public static Obj58 Memory() {return new Obj58 { ["utc"]=DateTime.UtcNow.ToString("O"),["GetTotalAllocatedMemoryLong"]=Profiler.GetTotalAllocatedMemoryLong(),["GetTotalReservedMemoryLong"]=Profiler.GetTotalReservedMemoryLong(),["GetMonoUsedSizeLong"]=Profiler.GetMonoUsedSizeLong()};}
+    public static Obj58 Read() {
+        var dirty=new Arr58();long serializedBytes=0;
+        var objects=Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o))
+            .Where(o=>AssetDatabase.GetAssetPath(o).StartsWith("Assets/")||AssetDatabase.GetAssetPath(o).StartsWith("ProjectSettings/"))
+            .OrderBy(o=>AssetDatabase.GetAssetPath(o)).ThenBy(o=>o.GetEntityId().ToString());
+        foreach(var o in objects) {
+            string native=EditorJsonUtility.ToJson(o);byte[] bytes=System.Text.Encoding.UTF8.GetBytes(native);serializedBytes+=bytes.Length;
+            dirty.Add(new Obj58 {["path"]=AssetDatabase.GetAssetPath(o),["guid"]=AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(o)),
+                ["entityId"]=o.GetEntityId().ToString(),["type"]=o.GetType().FullName,["sha256"]=Hash(bytes),["bytes"]=bytes.Length});
+            // Neither full JSON nor byte copies enter the snapshot/return value.
+        }
+        var active=SceneManager.GetActiveScene();var scenes=new Arr58();
+        foreach(var s in Enumerable.Range(0,SceneManager.sceneCount).Select(i=>SceneManager.GetSceneAt(i)))scenes.Add(new Obj58 {
+            ["path"]=s.path,["dirty"]=s.isDirty,["loaded"]=s.isLoaded,["active"]=s==active,
+            ["roots"]=new Arr58(s.isLoaded?s.GetRootGameObjects().Select(o=>o.GetEntityId().ToString()).OrderBy(v=>v):Enumerable.Empty<string>())});
+        var files=new Arr58();
+        foreach(var path in dirty.Select(r=>(string)r["path"]).Concat(scenes.Select(s=>(string)s["path"]))
+            .SelectMany(p=>new[]{p,p+".meta"}).Distinct().OrderBy(p=>p).Where(File.Exists))files.Add(new Obj58 {["path"]=path,["sha256"]=Hash(File.ReadAllBytes(path))});
+        var textures=new Arr58(Resources.FindObjectsOfTypeAll<Texture2D>().Select(t=>t.GetEntityId().ToString()).OrderBy(v=>v));
+        var rts=new Arr58(Resources.FindObjectsOfTypeAll<RenderTexture>().Select(t=>t.GetEntityId().ToString()).OrderBy(v=>v));
+        return new Obj58 {["utc"]=DateTime.UtcNow.ToString("O"),["project"]=Application.dataPath,["version"]=Application.unityVersion,
+            ["domain"]=AppDomain.CurrentDomain.Id,["playing"]=EditorApplication.isPlaying,["paused"]=EditorApplication.isPaused,
+            ["transitioning"]=EditorApplication.isPlayingOrWillChangePlaymode,["compiling"]=EditorApplication.isCompiling,["updating"]=EditorApplication.isUpdating,
+            ["dirty"]=dirty,["serializedBytes"]=serializedBytes,["files"]=files,["scenes"]=scenes,["texture2DIds"]=textures,["rtIds"]=rts,
+            ["buildScenes"]=new Arr58(EditorBuildSettings.scenes.Select(s=>(s.enabled?"1":"0")+"\t"+s.path+"\t"+s.guid))};
+    }
+    public static string[] Changes(Obj58 a,Obj58 b) {return new[]{"project","version","domain","playing","paused","transitioning","compiling","updating","dirty","files","scenes","buildScenes"}.Where(k=>!Json58.DeepEquals(a[k],b[k])).ToArray();}
+    public static void RequireEdit(Obj58 state) {
+        if((bool)state["playing"]||(bool)state["transitioning"]||(bool)state["compiling"]||(bool)state["updating"])throw new InvalidOperationException("Stable Edit state required");
+    }
+}
+
+internal class CommandScript : IRunCommand
+{
+    const string Output=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\source-palette58";
+    public void Execute(ExecutionResult result) {
+        var report=new Obj58 {["memoryBefore"]=State58.Memory()};Obj58 before=null;
+        try {
+            before=State58.Read();State58.RequireEdit(before);report["before"]=before;
+            var config=Obj58.Parse(File.ReadAllText(Path.Combine(Output,"CONFIG58.json")));
+            long peak;string sha;var families=OriginalMaterialUv58.Read((string)config["modelPath"],(string)config["modelSHA256"],(Arr58)config["domains"],(int)config["sampleCount"],16*1024*1024,out peak,out sha);
+            if(sha!=(string)config["modelSHA256"])throw new InvalidOperationException("Source model hash changed");
+            var records=new Arr58();var cases=new Arr58();var colours=new Arr58();var cuts=new Arr58();var familyWords=new Arr58();
+            for(int i=0;i<families.Length;i++) {
+                var family=families[i];var settings=SourceJson58.ReadSettings(config["domains"][i]["settings"]);
+                var reference=SourcePalette58.ExtractReference(family);var palette=SourcePalette58.MakePalette(reference,settings);
+                var thresholds=config["domains"][i]["thresholds"].Values<double>().ToArray();
+                if(thresholds.Length!=palette.rgb8.Length-1)throw new InvalidOperationException("Threshold count");
+                int po=colours.Count,to=cuts.Count;foreach(var rgb in palette.rgb8)colours.Add(new Arr58(rgb.Concat(new[]{255})));
+                foreach(var t in thresholds)cuts.Add((float)t);familyWords.Add(new Arr58(po,palette.rgb8.Length,to,thresholds.Length));
+                records.Add(new Obj58 {["family"]=SourceJson58.Family(family),["reference"]=SourceJson58.Reference(reference),["settings"]=SourceJson58.Settings(settings),["palette"]=SourceJson58.Palette(palette),["thresholds"]=new Arr58(thresholds)});
+                for(int j=0;j<family.samples.Length;j++) {
+                    var source=family.samples[j];int ordinal=OriginalMaterialUv58.ResolveFamily(families,sha,(int)config["domains"][i]["meshIndex"],source.primitiveId,source.materialId,source.uv);
+                    double g=(double)j/Math.Max(1,family.samples.Length-1);int k=SourcePalette58.ShadeIndex(g,thresholds),corrected=j%7==0?(k+1)%palette.rgb8.Length:k;
+                    cases.Add(new Obj58 {["family"]=ordinal,["sourceSampleId"]=source.id,["sourceUV"]=new Arr58(source.uv),["g"]=(float)g,["k"]=k,["kPrime"]=corrected,
+                        ["bound"]=true,["sourceRGB8"]=new Arr58(source.rgba8.Take(3)),["initialRGB8"]=new Arr58(SourcePalette58.Resolve(palette,k)),["finalRGB8"]=new Arr58(SourcePalette58.Resolve(palette,corrected))});
+                }
+            }
+            // Diagnostic unbound cell checks scope/alpha preservation, not source colour.
+            cases.Add(new Obj58 {["family"]=0,["g"]=.5,["k"]=0,["kPrime"]=0,["bound"]=false,["initialRGB8"]=new Arr58(17,93,141),["finalRGB8"]=new Arr58(17,93,141)});
+            report["modelSHA256"]=sha;report["records"]=records;report["rgb8"]=colours;report["thresholds"]=cuts;report["familyWords"]=familyWords;report["cases"]=cases;
+            report["peakOwnedDecodedTextureBytes"]=peak;report["automaticSemanticSegmentation"]=false;report["sampleRule"]="Original selected primitive local triangle area weights/UV centroids, native PNG point samples; not visible frame cells";
+            report["status"]="source-generated";
+        } catch(Exception e) {report["error"]=e.GetType().Name+": "+e.Message;}
+        finally {
+            var after=State58.Read();report["after"]=after;report["memoryAfter"]=State58.Memory();
+            if(before!=null)report["stateChanges"]=new Arr58(State58.Changes(before,after));
+            report["ownedTextureIdentitiesRestored"]=before!=null&&Json58.DeepEquals(before["texture2DIds"],after["texture2DIds"]);
+            File.WriteAllText(Path.Combine(Output,"SOURCE58.json"),report.ToString());
+        }
+        result.Log("SOURCE58 status="+report["status"]+" error="+report["error"]+" changes="+report["stateChanges"]);
+    }
+}

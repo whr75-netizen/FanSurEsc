@@ -1,0 +1,13 @@
+using System.Linq;
+public static class SourceJson58
+{
+    public static SourcePalette58.Family ReadFamily(Json58 f){var source=f["source"];return new SourcePalette58.Family{id=(string)f["id"],domainId=(string)f["domainId"],
+        source=new SourcePalette58.Source{modelSHA256=(string)source["modelSHA256"],imageSHA256=(string)source["imageSHA256"],materialId=(int)source["materialId"],encoding=(string)source["encoding"],uvOrigin=(string)source["uvOrigin"],factorLinear=source["factorLinear"].Values<double>().ToArray()},
+        samples=f["samples"].Select(s=>new SourcePalette58.Sample{id=(string)s["id"],imageSHA256=(string)s["imageSHA256"],materialId=(int)s["materialId"],primitiveId=(int)s["primitiveId"],triangle=(int)s["triangle"],uv=s["uv"].Values<double>().ToArray(),texel=s["texel"].Values<int>().ToArray(),rgba8=s["rgba8"].Values<int>().ToArray(),weight=(double)s["weight"]}).ToArray()};}
+    public static SourcePalette58.Settings ReadSettings(Json58 p){return new SourcePalette58.Settings{count=(int)p["count"],darkLRatio=(double)p["darkLRatio"],darkCRatio=(double)p["darkCRatio"],gamma=(double)p["gamma"],intervalScale=(double)p["intervalScale"]};}
+    public static Obj58 Sample(SourcePalette58.Sample s){return new Obj58{["id"]=s.id,["imageSHA256"]=s.imageSHA256,["materialId"]=s.materialId,["primitiveId"]=s.primitiveId,["triangle"]=s.triangle,["uv"]=new Arr58(s.uv),["texel"]=new Arr58(s.texel),["rgba8"]=new Arr58(s.rgba8),["weight"]=s.weight};}
+    public static Obj58 Family(SourcePalette58.Family f){var s=f.source;return new Obj58{["id"]=f.id,["domainId"]=f.domainId,["source"]=new Obj58{["modelSHA256"]=s.modelSHA256,["imageSHA256"]=s.imageSHA256,["materialId"]=s.materialId,["encoding"]=s.encoding,["uvOrigin"]=s.uvOrigin,["factorLinear"]=new Arr58(s.factorLinear)},["samples"]=new Arr58(f.samples.Select(Sample))};}
+    public static Obj58 Reference(SourcePalette58.Reference r){return new Obj58{["rgb8"]=new Arr58(r.rgb8),["lab"]=new Arr58(r.lab),["sample"]=Sample(r.sample),["cost"]=r.cost,["sampleCount"]=r.sampleCount};}
+    public static Obj58 Settings(SourcePalette58.Settings p){return new Obj58{["count"]=p.count,["darkLRatio"]=p.darkLRatio,["darkCRatio"]=p.darkCRatio,["gamma"]=p.gamma,["intervalScale"]=p.intervalScale};}
+    public static Obj58 Palette(SourcePalette58.Palette p){return new Obj58{["rgb8"]=new Arr58(p.rgb8.Select(v=>new Arr58(v))),["targetL"]=new Arr58(p.targetL),["requestedC"]=new Arr58(p.requestedC),["usedC"]=new Arr58(p.usedC),["actualL"]=new Arr58(p.actualL),["gamutReduced"]=new Arr58(p.gamutReduced),["duplicates"]=p.duplicates,["LReversals"]=p.LReversals};}
+}

@@ -1,0 +1,32 @@
+{
+  "gpuOutputVerified": true,
+  "samples": 64,
+  "opaqueBound": 62,
+  "oldEqualsCorrectedForcedLUT": 52,
+  "changedCorrectedIndex": 10,
+  "partialSourcePreserved": 1,
+  "unboundSentinelPreserved": 1,
+  "sRGBRGBAExact": 64,
+  "paletteOutsideBoundOpaque": 0,
+  "maxLinearError": 2.423339741097763e-07,
+  "metadataFloat32Exact": 64,
+  "alphaExact": 64,
+  "factorExact": 64,
+  "originalCSharpReportFlag": false,
+  "originalCSharpCheckerFalsePositiveCount": 63,
+  "checkerCorrection": "Expected depth must be rounded to uploaded Float32 before equality. Saved class data matches all64 Float32 seeds; original GPU report is preserved and not rewritten.",
+  "gpuReexecutedForChecker": false,
+  "correctedCSharpSavedDataCheckPassed": true,
+  "newConsoleWarningsOrErrors": [],
+  "stateChanges": [],
+  "resourcesReleased": true,
+  "sourceAndGPUInputLimit": "Original primitive UV samples plus diagnostic g/kPrime; not live renderer visible cells. Final join has an explicit negative control, not uninterrupted candidate frame flow.",
+  "memoryDelta": {
+    "GetMonoUsedSizeLong": -21995520,
+    "GetTotalAllocatedMemoryLong": -254457950,
+    "GetTotalReservedMemoryLong": -181690368
+  },
+  "texture2DIdentitiesSame": true,
+  "rtIdentitiesSame": true,
+  "sourceSHA256": "ed947c3a8663314b341a19dd129b2002b2be11ce929bf6b14f1540cae5401315"
+}

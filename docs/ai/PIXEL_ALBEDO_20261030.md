@@ -160,3 +160,26 @@ Unity의 기존 미저장 상태와 dirty25, 원본 asset, 제품, 31/34 및 다
 실행 전 C# 타입 오류와 명령기의 불허 `System.Runtime.InteropServices` namespace 검사가 있었으며 그 단계 GPU 실행은0이었다. 도구가 지시한 불필요 namespace/속성 제거 후 **동일 공식 실행기**의 표준 C#으로 컴파일·실행됐다. namespace 정책/보안설정/실행경로를 변경하지 않았다. 성공한 GPU 실행은1회뿐이며 이전 실패는 성공 수에 넣지 않는다.
 
 다음 제품 연결에는54의 `sourceColours/extractReference/makePalette` 초기화 C# 이식, 실제 material/UV→family 공급, 모든 interior 셀의 P[k'] 기록이 필요하다. `RestoreStyle335.ApplyShadeBoundary`의 old==q 조기 반환에만 붙이면 미변경 셀은 기존색으로 남는다. 실제 family ID 버퍼와 후단 G/LineTone/alpha 경계를 설계·검증하기 전 제품 활성화하지 않는다. 눈 clean backing6표본과 부분 가림/전체 keyform 판정은 이번 시험에서 확보하지 않았다. 관련 커밋은 이 절·57 경로의 Git 이력으로 추적한다.
+
+## 원본 공급·C# 이식·초기/최종 색 후보58 — 2026-10-31
+
+[58 코드·증거](../../experiments/pixel-pipeline/2026-10-31-source-palette58/README_KO.md). 시작 commit `1879cc65257b0590e1daef0f277c5a10fc09ff46`; 이번 commit은 이 절과58경로의 Git 이력에서 찾는다. 제품 미적용이며 C#은 Assets 밖에서 기존 명령기로 실행했다.
+
+| 스크립트·함수 | 변경과 실제 검증 범위 |
+|---|---|
+| `SourcePalette58.cs:SourceColours/ExtractReference/MakePalette/ShadeIndex/Resolve` |54 JS의 source 출처/alpha 가중 medoid·OKLCH 램프·Float32 Q→P 직접 출력 이식 |
+| `OriginalMaterialUv58.cs:Read/ReadAccessor/FamilyKey/ResolveFamily` | 실제 원본 GLB material/texture/factor/UV/PNG를 읽어 modelSHA+mesh+primitive+material family 공급. 이름/역할/삼각형 구간 분류 없음 |
+| `ReadSource58.cs:Execute`, `SourceJson58.cs` | 원본18,495,680bytes SHA 검사 후 두 명시 domain의63 UV 표본 새 추출. 한 번에 원본 이미지 최대16MiB 생성/해제 |
+| `State58.cs:Read/Changes` | dirty JSON을 객체당 한 번 해시하고 큰 원문을 snapshot에 남기지 않음. `Json58.cs`는 명령기 참조 집합용 기본 C# JSON 경계 |
+| `SurfaceLayerOutput58.hlsl:SurfaceLayerOutput335`, `RestoreStyle58.compute:ApplyShadeBoundary` | 제품 함수의 독립 clone. 초기 P[Q(g)], 최종 bound opaque 분기는 role/old==q 검사 **앞에서** P[k′] 기록. 기존 제품 원문/기본값 변경 없음 |
+| `GpuProbe58.cs:Execute/ReadFloat/ReadByte`, `Recheck58.cs:Execute` | 실제63 source 표본에서 C#이 계산한 팔레트로 offscreen 시험. 저장값 CPU 재검사는 GPU 재실행 없음 |
+
+원본 PNG63/63, 실제 두 재질의 대표색·출처·전체 팔레트 RGB가 JS와 정확 일치했다. 기준색 `(66,42,41)` 및 `(250,238,228)`, 좌표 최대오차2.220446049250313e-16. 간격배율 .5 변경시 Q 고정, 임계값 변경시 P 고정이며 C# 두 variant도 JS와 같았다. 이 값은 fixture 설정/유한표본 결과이고 모델100% 범용성·자동 의미분할/미술 최적값이 아니다.
+
+GPU draw2/dispatch1회:64표본 중 opaque62(동일Q52·변경Q10), partial alpha 원본1, 미등록sentinel1. 초기 linear 최대오차2.423339741097763e-7, 최종 sRGB64/64·alpha/class/factor64/64 일치, bound opaque 팔레트 밖0. **최종 join 반례 검사에서만** 동일Q52셀 RGB를 magenta로 오염시켜 조기반환으로 거짓 통과하지 못하게 했고 모두 LUT로 교체됐다. source/UV/g/alpha는 유지했다. 이 결과를 실제 연속 캐릭터 프레임이나 중간 오염 없는 전체 렌더 통합이라고 하지 않는다.
+
+원래 C# GPU report는 `classMismatches=63/gpuPass=false`였다. 비교식 `.4f+i*.001f`의 미저장 중간 정밀도가 업로드 Float32와 달랐다. 원본 report/제출 코드를 유지했고, 저장값의 C# CPU 재검사에서 원래식63불일치·업로드된 Float32 성분0불일치를 함께 확인했다. 현재 검사기는 실제 업로드 Color 배열을 비교하도록 교정, GPU 재실행 없음. `VERIFIED58.json`과 `CSHARP_RECHECK58.json`이 정정 근거다. 단순 허용오차 완화로 데이터 변경을 숨기지 않았다.
+
+57 수명 감사: submitted 코드의 static 큰 배열/이벤트/비동기 callback 잔류는 없고 owned 자원 해제 경로가 있었다. 다만 DirtyLines의 객체당 JSON2회와 전체 문자열/UTF8/snapshot 반복 할당은 확인돼58에서 1회/객체+작은 해시 요약으로 줄였다. 57 RT2개 identity 교체 소유자/Unity 잔류 할당 소유자는 미확정이다.58 source 단계 allocated −33.248MiB/reserved +16.008MiB/mono −39.059MiB, GPU 단계 allocated −242.670MiB/reserved −173.273MiB/mono −20.977MiB. Unity 내부 counter의 단기 관측이며 물리RAM/누수 해결 증거가 아니다.
+
+현재 dirty24 native내용/entity ID·관련49파일·씬 clean/37root·Edit/domain 보존, 소유 자원 회수와 신규 Console 오류/경고0 확인. 원본 제품 두 함수와 기존 변경은 보존했다. 부분alpha1셀은 opaque LUT를 강제하지 않았다. source의 PNG identity transform/UV0만 지원하며 비identity 변환·다른 UV·sparse는 미지원이다. family domain 선택은 CONFIG58의 명시 primitive이고 원본 UV는 색 표본을 고르지만 primitive 내부 painted 특징을 자동 분할하지 않는다. **현재 renderer의 실제 가시 셀→원본 primitive/family provenance 버퍼 연결은 아직 없고**, 기존 Full319View335의 역할 분류도 그대로다. 다음 연결은 이 버퍼와 후단 alpha/outline/AA 보존이며 새 머리/눈 렌더 검증·제품 활성화는 별도다.

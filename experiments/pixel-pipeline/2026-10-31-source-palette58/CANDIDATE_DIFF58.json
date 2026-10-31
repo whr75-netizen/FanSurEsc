@@ -1,0 +1,12 @@
+{
+  "initialProduct": "Assets\\EUnityValidation01\\SkinPalette302\\Shaders\\FaceSceneLight335.hlsl",
+  "initialSHA256": "2c242968100e8becfe279701347eef6b8d73efd87cee05e3ed9c0ccb7a3e2adc",
+  "finalProduct": "Assets\\EUnityValidation01\\MinimalRestore335\\Shaders\\RestoreStyle335.compute",
+  "finalSHA256": "554b503349f5bf7c48150ab32fdf5f6171b8380455bf7407b926084d928ec2af",
+  "initialFunctionBefore": "float3 SurfaceLayerOutput335(float3 colour,float3 factor,float continuous,float quantized){\n if(_SurfaceLayerView335==1)return colour;\n if(_SurfaceLayerView335==2)return continuous.xxx;\n if(_SurfaceLayerView335==3)return quantized.xxx;\n return colour*factor;\n}",
+  "initialFunctionAfter": "float3 SurfaceLayerOutput335(float3 colour,float3 factor,float continuous,float quantized,uint sourceFamily58){\n if(_SurfaceLayerView335==1)return colour;\n if(_SurfaceLayerView335==2)return continuous.xxx;\n if(_SurfaceLayerView335==3)return quantized.xxx;\n return SourceRGB8ToLinear54(SourceLookup54(sourceFamily58,SourceShade54(sourceFamily58,continuous)).rgb);\n}",
+  "finalInsertedBranch": "// Bound opaque interior is resolved BEFORE legacy role and old==q gates.\n uint flat58=p.y*_ShadeSize335.x+p.x;uint2 binding58=_SourceBinding58[flat58];\n if(binding58.y!=0){\n  float4 colour58=_ShadeColourOut335[p];\n  colour58.rgb=SourceRGB8ToLinear54(SourceLookup54(binding58.x,_SourceIndex58[flat58]).rgb);\n  _ShadeColourOut335[p]=colour58;\n  float4 cls58=_ShadeClassOut335[p];cls58.x=_ShadeMaskRead335.Load(int3(p,0)).x;_ShadeClassOut335[p]=cls58;\n  float4 factor58=_ShadeFactorOut335[p];factor58.rgb=1;_ShadeFactorOut335[p]=factor58;\n  return;\n }\n float4 m=_ShadeMeta335.Load(int3(p,0));if(!ShadeRole335(m))return;",
+  "sourceRoleRulesModified": false,
+  "boundBranchBeforeOldEqualsCorrected": true,
+  "productModified": false
+}

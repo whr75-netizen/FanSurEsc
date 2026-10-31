@@ -1,0 +1,375 @@
+{
+  "summary": {
+    "frames": [
+      100,
+      101
+    ],
+    "oldBlanketZero": [
+      0.0,
+      0.0
+    ],
+    "nativeFootprintVisible": [
+      0.013491877078195103,
+      0.10666229018534068
+    ],
+    "withOriginalSourceSkin": [
+      0.013491877078195103,
+      0.10666229018534068
+    ],
+    "refuted": [
+      true,
+      true
+    ],
+    "tests": 16,
+    "finalCellOwnerSolved": false,
+    "GPUReplay": false,
+    "productModified": false,
+    "newCapture": false,
+    "assumption": "Recorded native S3 alpha/depth footprint retargeted upward1 logical cell without resampling; foreground sampled from recorded destination. This is a2D source-piece counterfactual, not a new3D pose.",
+    "decision": "any(front) is not evidence of full invisibility here. Positive fractional area does not select an opaque pixel, approveA or solve whole-eye art."
+  },
+  "cells": [
+    {
+      "frame": 100,
+      "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:100",
+      "sourceXY": [
+        222,
+        52
+      ],
+      "targetXY": [
+        222,
+        51
+      ],
+      "oldAnyFront": true,
+      "oldRuleVisibleArea": 0.0,
+      "oldFrontSampleCounts": {
+        "S4META": 4,
+        "S5META": 2,
+        "S6META": 0
+      },
+      "exactFrontSampleCounts": {
+        "S4META": 1,
+        "S5META": 1,
+        "S6META": 0
+      },
+      "nativeAlpha": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.36278578639030457
+        ],
+        [
+          0.0,
+          0.21196384727954865,
+          0.9960774779319763,
+          0.0
+        ]
+      ],
+      "nativeDepth": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          13.695870399475098
+        ],
+        [
+          0.0,
+          13.697181701660156,
+          13.701070785522461,
+          0.0
+        ]
+      ],
+      "destinationTransmittance": [
+        [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0,
+          1.0,
+          0.0
+        ],
+        [
+          1.0,
+          1.0,
+          0.003921568393707275,
+          1.0
+        ]
+      ],
+      "visibleAlpha": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.21196384727954865,
+          0.003906185971572995,
+          0.0
+        ]
+      ],
+      "visibleAlphaWithOriginalSourceSkin": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.21196384727954865,
+          0.003906185971572995,
+          0.0
+        ]
+      ],
+      "sourceNativeArea": 0.09817669447511435,
+      "sourceNativeAfterSkinArea": 0.09817669447511435,
+      "perSampleExternalVisibleArea": 0.013491877078195103,
+      "perSampleAfterSourceSkinVisibleArea": 0.013491877078195103,
+      "blanketZeroRefuted": true,
+      "blanketZeroRefutedEvenWithOriginalSourceSkin": true,
+      "finalLogicalOwnerDecided": false,
+      "styleCandidateAApproved": false
+    },
+    {
+      "frame": 101,
+      "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:101",
+      "sourceXY": [
+        222,
+        52
+      ],
+      "targetXY": [
+        222,
+        51
+      ],
+      "oldAnyFront": true,
+      "oldRuleVisibleArea": 0.0,
+      "oldFrontSampleCounts": {
+        "S4META": 2,
+        "S5META": 2,
+        "S6META": 0
+      },
+      "exactFrontSampleCounts": {
+        "S4META": 0,
+        "S5META": 1,
+        "S6META": 0
+      },
+      "nativeAlpha": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.8086995482444763
+        ],
+        [
+          0.0,
+          0.8939984440803528,
+          0.9941559433937073,
+          0.0
+        ]
+      ],
+      "nativeDepth": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          13.695866584777832
+        ],
+        [
+          0.0,
+          13.69707202911377,
+          13.700718879699707,
+          0.0
+        ]
+      ],
+      "destinationTransmittance": [
+        [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        [
+          1.0,
+          1.0,
+          0.003921568393707275,
+          1.0
+        ]
+      ],
+      "visibleAlpha": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.8086995482444763
+        ],
+        [
+          0.0,
+          0.8939984440803528,
+          0.0038986506406217813,
+          0.0
+        ]
+      ],
+      "visibleAlphaWithOriginalSourceSkin": [
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0,
+          0.8086995482444763
+        ],
+        [
+          0.0,
+          0.8939984440803528,
+          0.0038986506406217813,
+          0.0
+        ]
+      ],
+      "sourceNativeArea": 0.16855337098240852,
+      "sourceNativeAfterSkinArea": 0.16855337098240852,
+      "perSampleExternalVisibleArea": 0.10666229018534068,
+      "perSampleAfterSourceSkinVisibleArea": 0.10666229018534068,
+      "blanketZeroRefuted": true,
+      "blanketZeroRefutedEvenWithOriginalSourceSkin": true,
+      "finalLogicalOwnerDecided": false,
+      "styleCandidateAApproved": false
+    }
+  ],
+  "checks": [
+    "fully open native-source LayerMode19",
+    "old any-front veto reproduced",
+    "joint visibility bounded by original source alpha",
+    "native visible with source skin separately bounded",
+    "positive area refutes blanket zero for this input",
+    "same frozen diagnostic reproduced",
+    "no foreground preserves actual source alpha",
+    "fully opaque nearer foreground really produces zero",
+    "fully open native-source LayerMode19",
+    "old any-front veto reproduced",
+    "joint visibility bounded by original source alpha",
+    "native visible with source skin separately bounded",
+    "positive area refutes blanket zero for this input",
+    "same frozen diagnostic reproduced",
+    "no foreground preserves actual source alpha",
+    "fully opaque nearer foreground really produces zero"
+  ]
+}

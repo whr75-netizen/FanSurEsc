@@ -1,0 +1,37 @@
+function regionCorrect31(d,source,tau,opt){
+ const {w,h,mask,g,depth,clear,worldPixel}=d,L=w*h,labels=source.slice(),changes=[],rejected={},proposals=[];
+ const dirs4=[[-1,0],[1,0],[0,-1],[0,1]],dirs8=[...dirs4,[-1,-1],[-1,1],[1,-1],[1,1]];
+ const inside=(x,y)=>x>=0&&y>=0&&x<w&&y<h,at=(x,y)=>y*w+x,xy=i=>[i%w,Math.floor(i/w)],Q=v=>{let k=0;while(k<tau.length&&v>=tau[k])k++;return k;};
+ const loss=Array.from({length:L},(_,i)=>mask[i]?Q(Math.max(g[i],clear[i]))-source[i]:0);
+ function neighbours(i,diagonal=false,surface=true){let [x,y]=xy(i),out=[];for(let [dx,dy] of diagonal?dirs8:dirs4){let nx=x+dx,ny=y+dy;if(!inside(nx,ny))continue;let j=at(nx,ny);if(!mask[j])continue;if(surface&&(Math.abs(depth[i]-depth[j])>worldPixel*2*Math.hypot(dx,dy)||loss[i]!==loss[j]))continue;out.push(j);}return out;}
+ const graph4=Array.from({length:L},(_,i)=>mask[i]?neighbours(i,false,true):[]),graph8=Array.from({length:L},(_,i)=>mask[i]?neighbours(i,true,true):[]);
+ function component(map,start,surface=false,skip=new Set()){let seen=new Set([start]),queue=[start];while(queue.length){let i=queue.pop();for(let j of surface?graph8[i]:neighbours(i,true,false)){if(!skip.has(j)&&map[j]===map[start]&&!seen.has(j)){seen.add(j);queue.push(j);}}}return [...seen];}
+ function statistics(map){let seen=new Set(),sizes=[];for(let i=0;i<L;i++)if(mask[i]&&!seen.has(i)){let c=component(map,i);c.forEach(j=>seen.add(j));sizes.push(c.length);}let edges=0;for(let i=0;i<L;i++)if(mask[i])for(let j of neighbours(i,false,false))if(j>i&&map[j]!==map[i])edges++;let runs=[];for(let axis=0;axis<2;axis++){let lines=axis?h:w,span=axis?w:h;for(let line=0;line<lines;line++){let active=0;for(let t=0;t<span;t++){let x=axis?t:line,y=axis?line:t,i=at(x,y),nx=x+(axis?0:1),ny=y+(axis?1:0),edge=mask[i]&&inside(nx,ny)&&mask[at(nx,ny)]&&map[i]!==map[at(nx,ny)];if(edge)active++;else if(active){runs.push(active);active=0;}}if(active)runs.push(active);}}return {components8:sizes.length,singletons8:sizes.filter(x=>x===1).length,internalEdges:edges,cornerUnits:cornerCost(map),boundaryRuns:runs.length,length1Runs:runs.filter(x=>x===1).length,runLengths:runs};}
+ function cornerCost(map){let total=0;for(let y=0;y<h-1;y++)for(let x=0;x<w-1;x++){let ids=[at(x,y),at(x+1,y),at(x,y+1),at(x+1,y+1)];if(!ids.every(i=>mask[i]))continue;let vals=ids.map(i=>map[i]);for(let k of new Set(vals)){let c=vals.filter(v=>v===k).length;if(c===1||c===3)total++;else if(c===2&&((vals[0]===k&&vals[3]===k)||(vals[1]===k&&vals[2]===k)))total+=4;}}return total;}
+ function localEdges(map,indices){let pairs=new Set(),v=0;for(let i of indices)for(let j of neighbours(i,false,false)){let a=Math.min(i,j),b=Math.max(i,j),key=a+':'+b;if(!pairs.has(key)){pairs.add(key);if(map[a]!==map[b])v++;}}return v;}
+ function displacement(i,target){let old=source[i];if(Math.abs(target-old)!==1)return Infinity;let cut=tau[Math.min(old,target)],bounds=[d.gMin,...tau,d.gMax],width=Math.min(bounds[old+1]-bounds[old],bounds[target+1]-bounds[target]);return width>0?Math.abs(g[i]-cut)/width:Infinity;}
+ // Candidate evaluation reads the original classification only. Scratch edits are restored.
+ const sourceComponents=[],componentID=Array(L).fill(-1);
+ for(let i=0;i<L;i++)if(mask[i]&&componentID[i]<0){let c=component(source,i),id=sourceComponents.length;c.forEach(j=>componentID[j]=id);sourceComponents.push(c);}
+ function connectedRemainder(whole,removed){let remain=whole.filter(i=>!removed.has(i));if(!remain.length)return whole.length<=opt.maxIsland;let seen=new Set([remain[0]]),q=[remain[0]],old=source[remain[0]];while(q.length){let i=q.pop();for(let j of neighbours(i,true,false))if(!removed.has(j)&&source[j]===old&&!seen.has(j)){seen.add(j);q.push(j);}}return seen.size===remain.length;}
+ function tryMove(indices,kind){let old=source[indices[0]],set=new Set(indices),targets=new Set();for(let i of indices)for(let j of graph4[i])if(!set.has(j)&&Math.abs(source[j]-old)===1)targets.add(source[j]);let options=[];
+  if(!connectedRemainder(sourceComponents[componentID[indices[0]]],set)){rejected.connectivity=(rejected.connectivity||0)+1;return;}
+  let oldE=localEdges(source,indices),oldC=before.cornerUnits;
+  for(let target of targets){let ds=indices.map(i=>displacement(i,target));if(ds.some(x=>x>opt.tolerance+1e-12)){rejected.lightBudget=(rejected.lightBudget||0)+1;continue;}indices.forEach(i=>labels[i]=target);let e=localEdges(labels,indices),c=cornerCost(labels);indices.forEach(i=>labels[i]=source[i]);if(e<oldE||(e===oldE&&c<oldC))options.push({target,e,c,cost:ds.reduce((a,x)=>a+x*x,0),ds});}
+  if(!options.length)return;options.sort((a,b)=>a.e-b.e||a.c-b.c||a.cost-b.cost||a.target-b.target);proposals.push({indices,kind,old,oldE,oldC,...options[0]});
+ }
+ const before=statistics(source);
+ if(opt.enabled){let seen=new Set(),islands=[];for(let i=0;i<L;i++)if(mask[i]&&!seen.has(i)){let c=component(source,i,true);c.forEach(j=>seen.add(j));if(c.length<=opt.maxIsland)islands.push(c);}const islandCells=new Set(islands.flat());for(let c of islands)tryMove(c,'small-region');
+  let boundary=[];for(let i=0;i<L;i++)if(mask[i]&&!islandCells.has(i)&&graph4[i].some(j=>source[j]!==source[i]))boundary.push(i);for(let i of boundary)tryMove([i],'boundary-tip-or-step');
+  // Combined removals must preserve each ORIGINAL component, not a shrinking intermediate one.
+  let removed=sourceComponents.map(()=>new Set());for(let p of proposals)for(let i of p.indices)removed[componentID[i]].add(i);
+  let invalid=new Set();sourceComponents.forEach((c,id)=>{if(removed[id].size&&!connectedRemainder(c,removed[id])){invalid.add(id);let key=removed[id].size===c.length?'originalComponentSize':'batchConnectivity';rejected[key]=(rejected[key]||0)+1;}});
+  let accepted=proposals.filter(p=>p.indices.every(i=>!invalid.has(componentID[i])));
+  for(let p of accepted)for(let i of p.indices)labels[i]=p.target;
+  // Simultaneous interacting proposals must also meet the existing E/C acceptance rule.
+  let batch=statistics(labels);if(!(batch.internalEdges<before.internalEdges||(batch.internalEdges===before.internalEdges&&batch.cornerUnits<before.cornerUnits))){if(accepted.length)rejected.batchEnergy=accepted.length;accepted=[];for(let i=0;i<L;i++)labels[i]=source[i];}
+  for(let p of accepted)p.indices.forEach((i,k)=>{let [x,y]=xy(i);changes.push({x,y,oldK:p.old,newK:p.target,g:g[i],normalisedThresholdDistance:p.ds[k],thresholdDistance:Math.abs(g[i]-tau[Math.min(p.old,p.target)]),owner:d.owner[i],depth:depth[i],clearG:clear[i],shadowBandLoss:loss[i],kind:p.kind,edgesDelta:p.e-p.oldE,cornersDelta:p.c-p.oldC,sourceComponentSize:sourceComponents[componentID[i]].length,sourceNeighbours8:dirs8.map(([dx,dy])=>inside(x+dx,y+dy)&&mask[at(x+dx,y+dy)]?source[at(x+dx,y+dy)]:-1)});});
+ }
+ changes.sort((a,b)=>a.y-b.y||a.x-b.x);
+ return {labels,changes,before,after:statistics(labels),rejected,neighbourOffsets:dirs8,scope:'Original shade labels determine all proposals; one simultaneous batch. Original component size/connectivity, exact visible hair mask, depth and measured shadow-band discontinuities are preserved. Different hair owners alone do not block changes.'};
+}

@@ -239,3 +239,24 @@ Edit/scene clean37root/domain1/liveNative0, 옵션·pipeline·시간 API는prePl
 최초 Python OKLab 행렬 계수 두 개 오기로 자홍색이 난 실패는 `invalid-math-*`로 보존하고, 기존54 함수518색 최대오차6.80e-16/왕복0불일치를 확인한 수정 결과만 후속 검사했다. 순회·연결 검사와 지표 감소를 미감 증명으로 확대하지 않는다. 실제 GPU·필터 footprint·회전/가림·시간 검증은 하지 않았다.
 
 global63 백업 추가 코드 검토:60 `CommandScript` private 딕셔너리와 SDK private `m_ActionInstance` 보유 가능성은 있으나 반환된 핸들이 없고 `CommandScriptPostBox.Pull`은 키를 제거한다. 공개 실행 결과는 ID/로그만 반환한다. 기존 참조에서 안전한 생존 객체 접근 경로를 찾지 못했다. GC 여부를 단정하지 않으며 추가 probe/반사/추정 setter 없이 원래값 백업 부재·동등성 미증명 상태를 유지한다. 마지막 실제 Unity 상태는61이며62에서 현재 상태를 재확인했다고 주장하지 않는다.
+
+## 최초 분절·누락 단계63 — 구조/측정 구현, 공간 보정 미완
+
+[63 단계·원인 mask](../../experiments/pixel-pipeline/2026-10-31-region-stages63/INDEX.html), [구현/입력 공백](../../experiments/pixel-pipeline/2026-10-31-region-stages63/README_KO.md), [함수 위치 색인](../../experiments/pixel-pipeline/2026-10-31-region-stages63/FUNCTION_INDEX63.json). 기준 commit `e0983eb69037cbb2111be5901b263c7a7c789be4`; 새 commit은63 경로/이 절의 이력으로 추적한다. **62 미채택 유지, 현재373셀 RGB 변경0, 실제 공간 보정 미구현**이다. Unity/제품/31/34/팔레트/임계값/GC/SaveAssets 변경 없이 저장 자료만 사용했다.
+
+실제62 호출은 `run62 → build_regions(Lab 절단→cc4→표지 분리→medoid/참조 공유) → structure_components → resolve(material/UV→region→P[저장Q]) → 기존 .55`다. 원본 특징 경계 추출과 색 하위영역의 공유 경계 보정은 없다. 최초 인공 분절은 `build_regions`의 colour box 절단이다. Q가 독립/병렬로 계산된 것이 결함은 아니며, 빠진 source 경계/색 영역 단계를 Q 후처리나 팔레트 공유로 대체한 것이 문제다. 기존에 없던 hard-feature gate를 제거했다고 주장하지 않는다. seed 포함 영역 전체를 certified feature라고 부른 메타데이터는 근거가 부족했다.
+
+| 스크립트·함수 | 실제 변경/대조 |
+|---|---|
+| `audit63.py:components`, 본문 | current66/legacy140를 source별로 분리 분류. topology·가림·UV 재배치·색 범위 cut 구분 |
+| `shared_boundary63.py:separate_layers` | 확정된 머리 소속/미추출 하위 feature/colour range/structure/owner/Q 분리 adapter. family 공유를 공간 보정으로 처리하지 않음 |
+| `shared_boundary63.py:trace/path_metrics/reference_metrics` |44의 공유 경계 원리를 일반 label에 적용. 고정 source arclength 접선/위치 이탈과 별도 역행량 측정. 제곱 접선 비용만으로 놓치는 역행 반례 추가 |
+| `validate63.py` |373셀 460색 경계/357경로와49 Q경계/2경로, T접합·얇은 띠 양쪽·구멍, 실제44의11영역/6singleton 반례 및 무제약12/7 실패 재검사 |
+
+current UV colour-range66개는 화면186조각이다. 배타 분류37개는 여러 source 구조에 걸침,28개는 가시 조각 하나,1개는 한 구조 내 화면 분리 원인 미확정이다. 중복 진단인 same-structure split16개와 앞 수를 합하지 않는다. 원본 RGB/Q가 같은 인접18쌍은 서로 다른 재질의 range/anchor 때문에 서로 다른 색이 나온다(.55 전). 예(223,226)–(224,226): source(44,22,23)/Q0, output(37,16,17)/(31,12,13). 이를 고치려 source structure를 합치거나 최근접색을 셀별 재선택하지 않았다.
+
+옛140 신규경계는 matched geometry 기준 가림/틈72, 소유권 전환/겹침15, 같은 전면의 색 범위 분절50, 색UV 재배치 대응 미확인3으로 배타 분류했다. index492·523 두 셀의 colour UV와 selected geometry UV가 다르며 `geometryUV` 필드가 별도로 존재하므로 데이터 손상이라고 단정하지 않는다. 기하 평가 자료는 source 표본과 최대(.001838,.001768)논리픽셀/depth5.52e-7m 대응으로 맞춘 다른 시각의 자료다. 동일 GPU capture 프레임이라고 확대하지 않는다. 현 frame94에 이 geometry를 대입하지 않았다.
+
+기존 R3 원본 indexed 소스는 옛 경로에서 확보하지 못해32 색인과 현재31 후속 함수의 원문/hash를 구분해 보관했다. 현재 `regionCorrect31`은 Q 뒤의 perimeter E/2×2 corner C 목적이고 원본 source 곡선 목적이 없다. R5 동시 적용 수정은 이미 있어 과거 in-place 오류를 현재 결함으로 재주장하지 않는다. 44는 색 특징 경계가 아니라 Q 경계다. 저장 path4 접선 .203877926→.171808151/위치 이탈 .799877799→.692588333을 재계산했지만 기존4셀 수정과11영역/6singleton은 그대로이며 전체 미감 성공이 아니다.
+
+현재 실질 보정에 필요한 것은 같은 sourceId의 evaluated 위치(8435정점이면 약101,220bytes)·view/projection/grid와 source sample screen 위치, native 원본 색 경계의 투영 대응이다. 색/gradient의 source 특징 계층 추출 구현도 미완이다. 이는 자동 추출이 불가능하거나 수동 semantic 정답이 반드시 필요하다는 뜻이 아니다. 버퍼 공백과 구현 공백을 구분했으며 이미 양자화한62의 계단을 원곡선으로 fit하지 않았다. 현63은 분류·분리 표현·측정까지이고 실제 공유 곡선 재배치/RGB 개선은 끝나지 않았다. 현재 실행 금지 범위를 넘어 새 캡처하지 않았다.

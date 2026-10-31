@@ -1,0 +1,131 @@
+{
+  "currentSourceId": "renderer60-20261031T092325108Z",
+  "current373": {
+    "visibleRangeRegions": 66,
+    "screenComponents": 186,
+    "regionsAcrossDifferentStructures": 37,
+    "sameStructureScreenSplitRegions": 16,
+    "certificateSeedMemberRegions": 8,
+    "edges": 685,
+    "rangeCutEdges": 460,
+    "rangeCutEdgesWithSameTriangle": 1,
+    "samePointRGBButDifferentOutputSameQ": 18,
+    "exclusiveDisplaySplitClass": {
+      "UV-region-spans-distinct-source-structures": 37,
+      "single-visible-fragment-of-a-colour-range": 28,
+      "same-structure-disconnected-on-screen-cause-unresolved": 1
+    }
+  },
+  "legacySourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "legacy140": {
+    "edges": 140,
+    "classification": {
+      "actual-occlusion-or-gap": 72,
+      "surface-ownership-or-overlap": 15,
+      "continuous-front-surface-colour-range-cut": 50,
+      "colour-reference-UV-rebound-needs-bridge": 3
+    },
+    "geometryCategory": {
+      "front/back occlusion": 63,
+      "depth-continuous ownership change": 15,
+      "same front source chart throughout": 51,
+      "projected uncovered hair gap": 11
+    },
+    "packetSHA256": "76fc49b722854b71f9112462b4a4753b1c59549eb700ab84b887f5257d2bf9cc",
+    "geometryEndpointChartMatches": 672,
+    "colourSampleUVRebindings": [
+      {
+        "index": 492,
+        "colourSampleUV": [
+          1.0639396993087145,
+          0.8305774432468855
+        ],
+        "geometryUV": [
+          1.1042988300323486,
+          0.8326085805892944
+        ],
+        "sourceBindingGeometryUV": [
+          1.1042988300323486,
+          0.8326085805892944
+        ],
+        "classification": "colour-reference UV differs from selected surface UV; not assumed corrupt or equivalent"
+      },
+      {
+        "index": 523,
+        "colourSampleUV": [
+          1.037677044776503,
+          0.8116355897105749
+        ],
+        "geometryUV": [
+          1.0820374488830566,
+          0.8128523826599121
+        ],
+        "sourceBindingGeometryUV": [
+          1.0820374488830566,
+          0.8128523826599121
+        ],
+        "classification": "colour-reference UV differs from selected surface UV; not assumed corrupt or equivalent"
+      }
+    ],
+    "sameSourceAs373": false,
+    "evaluatedGeometryCorrespondence": {
+      "parentSourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+      "sampleCount": 368,
+      "screenMaxLogicalPixels": [
+        0.001837602042570552,
+        0.0017676292275865535
+      ],
+      "screenRMSLogicalPixels": 0.0007963943560544312,
+      "depthMaxMetres": 5.516615519951529e-07,
+      "baryOutsideMax": 0,
+      "cameraView": [
+        0.9848077297210693,
+        -0.08682423830032349,
+        0.15038397908210754,
+        0.0,
+        3.725290298461914e-09,
+        0.8660253882408142,
+        0.5000000596046448,
+        0.0,
+        0.17364847660064697,
+        0.49240389466285706,
+        -0.8528684377670288,
+        0.0,
+        -0.22963905334472656,
+        -0.35990792512893677,
+        -14.534777641296387,
+        1.0
+      ],
+      "cameraProjection": [
+        0.3771235942840576,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.665512204170227,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0020006000995635986,
+        0.0,
+        0.0,
+        0.0,
+        -1.0006000995635986,
+        1.0
+      ],
+      "worldPositionsSHA256": "19de0e7f50f8d4f1b75727182ba5d6cdd43833252049f5bae2e43266f92a23bd",
+      "sameCaptureTimeOrFrameCounter": false
+    }
+  },
+  "firstFragmentation": "region62.build_regions Lab bin cuts before any actual source feature-domain/curve stage",
+  "missingStages": [
+    "actual source feature boundaries/key IDs beyond hair membership and sparse contrast witnesses",
+    "source-colour shared boundary correction before shade lookup",
+    "frame60 source-guided boundary geometry"
+  ],
+  "paletteSharingIsRegionCorrection": false,
+  "labelsOrRGBChanged": 0,
+  "noActiveFeatureBoundaryLockExistedIn62": true,
+  "minimalAdapterChange": "remove unsupported feature-name promotion; expose separate source/colour/structure/shade layers and shared edges. This does not claim a spatial correction."
+}

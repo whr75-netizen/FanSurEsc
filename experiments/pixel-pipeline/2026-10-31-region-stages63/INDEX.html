@@ -1,0 +1,19 @@
+<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>63 · 최초 영역 분절과 누락 단계</title>
+<style>body{background:#191c21;color:#e7e7e7;margin:24px;font:15px/1.6 system-ui,sans-serif}h1{font-size:24px}h2{font-size:19px;margin-top:30px}a{color:#96c7ff}.notice{padding:12px 18px;border-left:4px solid #d5a24d;background:#292c33}.scroll{overflow:auto}img{image-rendering:pixelated}table{border-collapse:collapse}th,td{border:1px solid #59606d;padding:7px 12px}.row{display:flex;gap:24px}figure{margin:0}.small{color:#b8c2d2}</style>
+<h1>63 · 최초 영역 분절과 누락 단계</h1>
+<p class="notice"><b>공간 보정 미완 / 현재373셀 RGB 변경0 / 62 미채택 유지.</b><br>실제 특징 경계보다 Lab 색 범위를 먼저 절단한 뒤 팔레트를 공급했고, 색 영역의 공유 경계 보정은 빠져 있었습니다. 이번 산출물은 그 원인 분류와 분리 adapter·경계 측정입니다. 개선된 새 렌더가 아닙니다.</p>
+<p><a href="README_KO.md">실제 함수 순서·자료 공백·재사용 근거</a> · <a href="AUDIT63.json">분류 수치</a> · <a href="VALIDATION63.json">검사 결과</a> · <a href="LAYER_PLAN63.json">분리한 영역 계획</a></p>
+<h2>같은 현재373셀의 레이어</h2><p>원본색 / colour-range66 / 확정된 가시 머리 소속(하위 특징 미추출) / topology45 / 저장Q / 변경 없는62 RGB입니다. 가운데 단색은 단색 렌더 제안이 아니라 아직 하위 특징이 없다는 debug 표시입니다.</p>
+<div class="scroll"><img src="CURRENT_LAYERS63.png" alt="source, 색 범위, 확인된 도메인, 구조, Q, 미변경 RGB"></div>
+<p>colour-range 경계460변·357경로와 Q 경계49변·2경로를 구분했습니다. 66 UV 영역은 화면186조각입니다. 37영역은 다른 원본 구조에 걸치며, 단일 구조의 화면 분리만 남는 영역은1개입니다. <a href="REGIONS66.json">66개별 근거</a>.</p>
+<h2>과거140경계 · 원인별 작은 mask</h2><p>아래는 다른 sourceId의 과거 반례입니다. 빨강·노랑 사각형이 각 비교 쌍입니다. 색 표본 UV와 기하 UV 재배치가 있는3경계는 별도 분류했습니다.</p>
+<div class="scroll"><img src="LEGACY_CAUSE_MASKS63.png" alt="가림, UV재배치, 동일 전면 색 범위, 소유권 전환 대표 mask"></div>
+<table><tr><th>원인</th><th>쌍</th></tr><tr><td>matched geometry의 가림/틈</td><td>72</td></tr><tr><td>표면 소유권 전환/겹침</td><td>15</td></tr><tr><td>같은 전면 표면의 색 범위 경계</td><td>50</td></tr><tr><td>색 UV 재배치 대응 별도 검증</td><td>3</td></tr></table>
+<p class="small">matched geometry는 같은 capture 시각이 아니며 대응 오차를 기록했습니다. 위50쌍도 모두 삭제할 잡음이라고 판정하지 않았습니다. <a href="LEGACY_140_EDGES63.json">140쌍 실제 수치</a>.</p>
+<h2>같은 RGB·Q인데 다른 색이 되는18쌍</h2><p>예: (223,226)–(224,226), 원본 RGB(44,22,23)와 Q0이 같은데 출력은 (37,16,17)/(31,12,13)입니다. 전부 서로 다른 재질 사이의 range/anchor 차이입니다. .55 외곽 처리 전 수치입니다. 기하·영역 ID를 합쳐 숨기지 않았습니다.</p>
+<p><a href="EQUAL_INPUT_DIFFERENT_OUTPUT63.json">18쌍 좌표·원본·anchor·출력</a></p>
+<h2>44의 단색11영역·6단독 셀 반례 재대조</h2><div class="row scroll"><figure><img src="FLAT44_BEFORE.png" alt="기존44 Q보정 전"><figcaption>원래 입력</figcaption></figure><figure><img src="FLAT44_AFTER.png" alt="기존44 Q보정 후"><figcaption>기존 source-supported4셀 보정</figcaption></figure><figure><img src="FLAT44_FAILURE.png" alt="44 얇은 연결을 자른 실패"><figcaption>무제약 실패:12영역/7단독 셀</figcaption></figure></div>
+<p>기존 path4의 고정 source arclength 접선 오차 .203878→.171808, 최대 위치 이탈 .799878→.692588을 재계산했습니다. source-supported 결과도 여전히11영역/6단독 셀입니다. 이 Q 경계 보정을 현재 색 특징 영역 보정으로 대신하지 않습니다.</p>
+<p><a href="REPLAY44_METRICS63.json">44 실제 재계산</a> · <a href="SHARED_BOUNDARIES63.json">373셀 공유 경계·run·회전 측정</a></p>
+<h2>아직 필요한 것</h2><p>현재 sourceId의 평가 정점·view/projection/grid/sample 위치와 원본 색 경계의 투영 대응이 없습니다. 원본 texture에서 특징/gradient의 계층을 추출하는 구현도 미완입니다. 다른 pose의 geometry나 이미 양자화한 계단을 원곡선으로 간주하지 않았습니다. 새 Unity 접근·제품 변경은 하지 않았습니다.</p>
+</html>

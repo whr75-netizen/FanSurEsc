@@ -1,0 +1,219 @@
+{
+  "format": "source-palette54-rgb8-point/v1",
+  "rgb8": [
+    [
+      25,
+      12,
+      12,
+      255
+    ],
+    [
+      38,
+      22,
+      21,
+      255
+    ],
+    [
+      52,
+      32,
+      31,
+      255
+    ],
+    [
+      66,
+      42,
+      41,
+      255
+    ],
+    [
+      111,
+      105,
+      100,
+      255
+    ],
+    [
+      178,
+      169,
+      162,
+      255
+    ],
+    [
+      250,
+      238,
+      228,
+      255
+    ],
+    [
+      0,
+      64,
+      74,
+      255
+    ],
+    [
+      0,
+      84,
+      97,
+      255
+    ],
+    [
+      0,
+      105,
+      122,
+      255
+    ],
+    [
+      0,
+      127,
+      147,
+      255
+    ],
+    [
+      8,
+      150,
+      172,
+      255
+    ]
+  ],
+  "thresholds": [
+    0.25,
+    0.5,
+    0.75,
+    0.3333333432674408,
+    0.6666666865348816,
+    0.20000000298023224,
+    0.4000000059604645,
+    0.6000000238418579,
+    0.800000011920929
+  ],
+  "families": [
+    {
+      "id": "material-12-primitive-1",
+      "materialId": 12,
+      "paletteOffset": 0,
+      "paletteCount": 4,
+      "thresholdOffset": 0,
+      "thresholdCount": 3,
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "id": "material-10-primitive-3",
+      "materialId": 10,
+      "paletteOffset": 4,
+      "paletteCount": 3,
+      "thresholdOffset": 3,
+      "thresholdCount": 2,
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "id": "synthetic-ocean/material-87",
+      "materialId": 87,
+      "paletteOffset": 7,
+      "paletteCount": 5,
+      "thresholdOffset": 5,
+      "thresholdCount": 4,
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    }
+  ],
+  "familyWords": [
+    [
+      0,
+      4,
+      0,
+      3
+    ],
+    [
+      4,
+      3,
+      3,
+      2
+    ],
+    [
+      7,
+      5,
+      5,
+      4
+    ]
+  ],
+  "outputContract": "Opaque RGB8 direct lookup; no subsequent light/G/colour interpolation. Shader linear/sRGB target roundtrip must be validated before integration."
+}

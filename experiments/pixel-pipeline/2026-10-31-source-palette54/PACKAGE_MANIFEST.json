@@ -1,0 +1,85 @@
+{
+  "kind": "source-palette54-portable",
+  "files": [
+    {
+      "path": "colour-math.cjs",
+      "bytes": 1530,
+      "sha256": "e5142c0d0db996b4d304703929b3533a38c38fc7fa48d8d63dea341cfe2af039"
+    },
+    {
+      "path": "source-palette.cjs",
+      "bytes": 5530,
+      "sha256": "1ace6f6bfb92aaeebb2634b0e5e409a04a972670deeb7cc3bf3e20568d8c5fe2"
+    },
+    {
+      "path": "adapter.cjs",
+      "bytes": 1212,
+      "sha256": "68f0c0a0f007c312686955220de9e96b4cf0fe4662a02973ce345dc4c9364221"
+    },
+    {
+      "path": "SourcePalette54.hlsl",
+      "bytes": 1217,
+      "sha256": "d9961d87df48ad0e2a84b4612a33f8508ec059addb0deee083d1ec7f89c02cb8"
+    },
+    {
+      "path": "fixtures.json",
+      "bytes": 61756,
+      "sha256": "6ff918b8669e5b4d09628ec11eb9fb7ce1d4307b8b8dc4fec1ec7667776045e3"
+    },
+    {
+      "path": "freeze_samples.py",
+      "bytes": 5310,
+      "sha256": "52999e8c55bdb06f34a5831c4771fd3107bff140932537561e5783f0d64f9630"
+    },
+    {
+      "path": "test.cjs",
+      "bytes": 7863,
+      "sha256": "24e6d02582721808d4d67e965391a7004468dcd19a2ec4596feaca02fb050925"
+    },
+    {
+      "path": "RESULTS.json",
+      "bytes": 44550,
+      "sha256": "706f5317066fe96bdb94483503458869ed969a5cf2a1fdff4a525155794a68de"
+    },
+    {
+      "path": "PACKET.json",
+      "bytes": 3777,
+      "sha256": "dd4f0f40501b6cb52860eba8b9ee8c93aa65d0fa317fb438a26f03382ead621d"
+    },
+    {
+      "path": "preview.py",
+      "bytes": 2377,
+      "sha256": "8d1ca51cc782f11a41a215c15810407a84c42062cdf445f504fe6ff65875f42f"
+    },
+    {
+      "path": "palette-contract.png",
+      "bytes": 28237,
+      "sha256": "5f3a37fa8f821cc3729bbffb98ac408f2c7b8b467779a3a6fc5ba24b525d728d"
+    },
+    {
+      "path": "README_KO.md",
+      "bytes": 1126,
+      "sha256": "c7abd392e0cfbed1474433f219cf2098e428f1b6b529d356c5604f292c216486"
+    }
+  ],
+  "tests": 49,
+  "GPUCompiled": false,
+  "productIntegrated": false,
+  "regionShapeCorrected": false,
+  "reusedMath": {
+    "source": "../hair-colour-tool31/ramp-core.js",
+    "sha256": "0f3dc3003aa59e40ace32c83203db3c8dbad840a4cfc4dfddf4e664c64b23c04",
+    "functions": [
+      "rgbLab31",
+      "linearLCH31",
+      "gamut31"
+    ],
+    "scope": "numeric transforms only; no UI/default colour/HairAnchor/model-role table"
+  },
+  "currentHandoff": "docs/ai/PIXEL_ALBEDO_20261030.md:54",
+  "limits": [
+    "Two real materials from one model and one synthetic fixture, not100%model generality",
+    "Point native-texel authoring sample contract; no GPU bilinear/mip replay",
+    "Fine colour-feature domains, region correction and actual render after lookup remain unverified"
+  ]
+}

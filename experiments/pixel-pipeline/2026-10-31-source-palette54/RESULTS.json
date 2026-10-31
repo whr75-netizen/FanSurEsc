@@ -1,0 +1,1861 @@
+{
+  "cases": 49,
+  "passed": [
+    "sRGB8 decode/encode roundtrip all256 values",
+    "OKLab black/white basis",
+    "packet uint4 family offsets match HLSL layout",
+    "material-12-primitive-1 reference is an observed source/material colour with UV",
+    "material-12-primitive-1 exact source anchor at brightest stage",
+    "material-12-primitive-1 RGB8 L order / no duplicate in this diagnostic range",
+    "material-12-primitive-1 same g maps to same k independent of source RGB and palette",
+    "material-12-primitive-1 palette and thresholds are independent in binding",
+    "material-12-primitive-1 final direct P[k], packet equivalence, g cannot scale RGB",
+    "material-12-primitive-1 interval0 collapses explicitly, not hidden unique-colour enforcement",
+    "material-12-primitive-1 threshold equality goes to next band",
+    "material-12-primitive-1 legacy final RGB multiply is detected as contract failure",
+    "material-12-primitive-1 input/source unchanged",
+    "material-12-primitive-1 source order does not choose a different reference",
+    "material-12-primitive-1 Float32 boundary agrees with packet arithmetic",
+    "material-10-primitive-3 reference is an observed source/material colour with UV",
+    "material-10-primitive-3 exact source anchor at brightest stage",
+    "material-10-primitive-3 RGB8 L order / no duplicate in this diagnostic range",
+    "material-10-primitive-3 same g maps to same k independent of source RGB and palette",
+    "material-10-primitive-3 palette and thresholds are independent in binding",
+    "material-10-primitive-3 final direct P[k], packet equivalence, g cannot scale RGB",
+    "material-10-primitive-3 interval0 collapses explicitly, not hidden unique-colour enforcement",
+    "material-10-primitive-3 threshold equality goes to next band",
+    "material-10-primitive-3 legacy final RGB multiply is detected as contract failure",
+    "material-10-primitive-3 input/source unchanged",
+    "material-10-primitive-3 source order does not choose a different reference",
+    "material-10-primitive-3 Float32 boundary agrees with packet arithmetic",
+    "synthetic-ocean/material-87 reference is an observed source/material colour with UV",
+    "synthetic-ocean/material-87 exact source anchor at brightest stage",
+    "synthetic-ocean/material-87 RGB8 L order / no duplicate in this diagnostic range",
+    "synthetic-ocean/material-87 same g maps to same k independent of source RGB and palette",
+    "synthetic-ocean/material-87 palette and thresholds are independent in binding",
+    "synthetic-ocean/material-87 final direct P[k], packet equivalence, g cannot scale RGB",
+    "synthetic-ocean/material-87 interval0 collapses explicitly, not hidden unique-colour enforcement",
+    "synthetic-ocean/material-87 threshold equality goes to next band",
+    "synthetic-ocean/material-87 legacy final RGB multiply is detected as contract failure",
+    "synthetic-ocean/material-87 input/source unchanged",
+    "synthetic-ocean/material-87 source order does not choose a different reference",
+    "synthetic-ocean/material-87 Float32 boundary agrees with packet arithmetic",
+    "different materials produce different source-derived anchors",
+    "synthetic independent model/role87 uses same functions",
+    "family mismatch does not borrow a different material colour",
+    "unknown source family rejected",
+    "NaN and non-increasing thresholds rejected",
+    "requested out-of-domain palette interval rejected, not silently brightened",
+    "low-chroma and black samples remain explicit cases",
+    "out-of-gamut dark fixed-hue request reduces chroma explicitly",
+    "Float32-collapsed cuts rejected rather than relabelled silently",
+    "fully transparent source cannot become an invented opaque reference"
+  ],
+  "binding": [
+    {
+      "id": "material-12-primitive-1",
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "imageFile": "image-18.png",
+        "textureSize": [
+          512,
+          1024
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "encoding": "srgb8",
+        "uvOrigin": "top-left",
+        "sampleRule": "native PNG texel containing original mesh UV centroid; point authoring fixture, not GPU bilinear/mip replay"
+      },
+      "reference": {
+        "rgb8": [
+          66,
+          42,
+          41
+        ],
+        "lab": [
+          0.31403907516295143,
+          0.033522990290260374,
+          0.01352139927464091
+        ],
+        "provenance": {
+          "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+          "materialId": 12,
+          "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+          "sampleId": "mesh2/primitive1/triangle1636",
+          "primitiveId": 1,
+          "triangle": 1636,
+          "uv": [
+            0.4629629850387573,
+            0.6851851940155029
+          ],
+          "texel": [
+            237,
+            701
+          ],
+          "nativeRGBA8": [
+            66,
+            42,
+            41,
+            255
+          ],
+          "factorLinear": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "extraction": {
+          "method": "observed weighted squared-OKLab medoid",
+          "sampleCount": 32,
+          "cost": 0.000013216755140735179,
+          "domainId": "mesh2/primitive1"
+        }
+      },
+      "palette": {
+        "rgb8": [
+          [
+            25,
+            12,
+            12
+          ],
+          [
+            38,
+            22,
+            21
+          ],
+          [
+            52,
+            32,
+            31
+          ],
+          [
+            66,
+            42,
+            41
+          ]
+        ],
+        "rows": [
+          {
+            "rgb8": [
+              25,
+              12,
+              12
+            ],
+            "usedC": 0.021688312103164097,
+            "gamutReduced": false,
+            "targetL": 0.1727214913396233,
+            "requestedC": 0.021688312103164097,
+            "hue": 0.3833884315868003,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              38,
+              22,
+              21
+            ],
+            "usedC": 0.026507937014978337,
+            "gamutReduced": false,
+            "targetL": 0.219827352614066,
+            "requestedC": 0.026507937014978337,
+            "hue": 0.3833884315868003,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              52,
+              32,
+              31
+            ],
+            "usedC": 0.031327561926792584,
+            "gamutReduced": false,
+            "targetL": 0.2669332138885087,
+            "requestedC": 0.031327561926792584,
+            "hue": 0.3833884315868003,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              66,
+              42,
+              41
+            ],
+            "usedC": 0.03614718683860683,
+            "gamutReduced": false,
+            "targetL": 0.31403907516295143,
+            "requestedC": 0.03614718683860683,
+            "hue": 0.3833884315868003,
+            "anchor": true
+          }
+        ],
+        "reference": {
+          "rgb8": [
+            66,
+            42,
+            41
+          ],
+          "lab": [
+            0.31403907516295143,
+            0.033522990290260374,
+            0.01352139927464091
+          ],
+          "provenance": {
+            "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+            "materialId": 12,
+            "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+            "sampleId": "mesh2/primitive1/triangle1636",
+            "primitiveId": 1,
+            "triangle": 1636,
+            "uv": [
+              0.4629629850387573,
+              0.6851851940155029
+            ],
+            "texel": [
+              237,
+              701
+            ],
+            "nativeRGBA8": [
+              66,
+              42,
+              41,
+              255
+            ],
+            "factorLinear": [
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          "extraction": {
+            "method": "observed weighted squared-OKLab medoid",
+            "sampleCount": 32,
+            "cost": 0.000013216755140735179,
+            "domainId": "mesh2/primitive1"
+          }
+        },
+        "settings": {
+          "count": 4,
+          "darkLRatio": 0.55,
+          "darkCRatio": 0.6,
+          "gamma": 1,
+          "intervalScale": 1
+        },
+        "diagnostics": {
+          "duplicates": 0,
+          "actualLabL": [
+            0.17325899529700436,
+            0.22132139369636425,
+            0.2686852098821854,
+            0.31403907516295143
+          ],
+          "LReversals": 0,
+          "adjacentDeltaE": [
+            0.04822713873318888,
+            0.047625964577559014,
+            0.045607058022788007
+          ]
+        }
+      },
+      "thresholds": [
+        0.25,
+        0.5,
+        0.75
+      ]
+    },
+    {
+      "id": "material-10-primitive-3",
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "imageFile": "image-14.png",
+        "textureSize": [
+          2048,
+          2048
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ],
+        "encoding": "srgb8",
+        "uvOrigin": "top-left",
+        "sampleRule": "native PNG texel containing original mesh UV centroid; point authoring fixture, not GPU bilinear/mip replay"
+      },
+      "reference": {
+        "rgb8": [
+          250,
+          238,
+          228
+        ],
+        "lab": [
+          0.9558326823642799,
+          0.008621144793763968,
+          0.01652878564448257
+        ],
+        "provenance": {
+          "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+          "materialId": 10,
+          "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+          "sampleId": "mesh1/primitive3/triangle1147",
+          "primitiveId": 3,
+          "triangle": 1147,
+          "uv": [
+            0.8021712899208069,
+            0.6633527278900146
+          ],
+          "texel": [
+            1642,
+            1358
+          ],
+          "nativeRGBA8": [
+            250,
+            238,
+            228,
+            255
+          ],
+          "factorLinear": [
+            1,
+            1,
+            1,
+            1
+          ]
+        },
+        "extraction": {
+          "method": "observed weighted squared-OKLab medoid",
+          "sampleCount": 31,
+          "cost": 0.000006141656268308257,
+          "domainId": "mesh1/primitive3"
+        }
+      },
+      "palette": {
+        "rgb8": [
+          [
+            111,
+            105,
+            100
+          ],
+          [
+            178,
+            169,
+            162
+          ],
+          [
+            250,
+            238,
+            228
+          ]
+        ],
+        "rows": [
+          {
+            "rgb8": [
+              111,
+              105,
+              100
+            ],
+            "usedC": 0.011185211722496216,
+            "gamutReduced": false,
+            "targetL": 0.525707975300354,
+            "requestedC": 0.011185211722496216,
+            "hue": 1.0900312458247048,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              178,
+              169,
+              162
+            ],
+            "usedC": 0.014913615629994957,
+            "gamutReduced": false,
+            "targetL": 0.740770328832317,
+            "requestedC": 0.014913615629994957,
+            "hue": 1.0900312458247048,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              250,
+              238,
+              228
+            ],
+            "usedC": 0.018642019537493695,
+            "gamutReduced": false,
+            "targetL": 0.9558326823642799,
+            "requestedC": 0.018642019537493695,
+            "hue": 1.0900312458247048,
+            "anchor": true
+          }
+        ],
+        "reference": {
+          "rgb8": [
+            250,
+            238,
+            228
+          ],
+          "lab": [
+            0.9558326823642799,
+            0.008621144793763968,
+            0.01652878564448257
+          ],
+          "provenance": {
+            "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+            "materialId": 10,
+            "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+            "sampleId": "mesh1/primitive3/triangle1147",
+            "primitiveId": 3,
+            "triangle": 1147,
+            "uv": [
+              0.8021712899208069,
+              0.6633527278900146
+            ],
+            "texel": [
+              1642,
+              1358
+            ],
+            "nativeRGBA8": [
+              250,
+              238,
+              228,
+              255
+            ],
+            "factorLinear": [
+              1,
+              1,
+              1,
+              1
+            ]
+          },
+          "extraction": {
+            "method": "observed weighted squared-OKLab medoid",
+            "sampleCount": 31,
+            "cost": 0.000006141656268308257,
+            "domainId": "mesh1/primitive3"
+          }
+        },
+        "settings": {
+          "count": 3,
+          "darkLRatio": 0.55,
+          "darkCRatio": 0.6,
+          "gamma": 1,
+          "intervalScale": 1
+        },
+        "diagnostics": {
+          "duplicates": 0,
+          "actualLabL": [
+            0.5247176704844521,
+            0.7403247106775237,
+            0.9558326823642799
+          ],
+          "LReversals": 0,
+          "adjacentDeltaE": [
+            0.21563723573834312,
+            0.21555019561869723
+          ]
+        }
+      },
+      "thresholds": [
+        0.3333333333333333,
+        0.6666666666666666
+      ]
+    },
+    {
+      "id": "synthetic-ocean/material-87",
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "imageFile": "synthetic-source",
+        "textureSize": [
+          3,
+          1
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ],
+        "encoding": "srgb8",
+        "uvOrigin": "top-left",
+        "sampleRule": "explicit synthetic3texel fixture"
+      },
+      "reference": {
+        "rgb8": [
+          8,
+          150,
+          172
+        ],
+        "lab": [
+          0.6186474256191439,
+          -0.08995848424154573,
+          -0.05776335426486234
+        ],
+        "provenance": {
+          "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+          "materialId": 87,
+          "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+          "sampleId": "synthetic-texel-0",
+          "primitiveId": 0,
+          "triangle": 0,
+          "uv": [
+            0.16666666666666666,
+            0.5
+          ],
+          "texel": [
+            0,
+            0
+          ],
+          "nativeRGBA8": [
+            10,
+            150,
+            180,
+            255
+          ],
+          "factorLinear": [
+            0.8,
+            1,
+            0.9,
+            1
+          ]
+        },
+        "extraction": {
+          "method": "observed weighted squared-OKLab medoid",
+          "sampleCount": 3,
+          "cost": 0.05677768250404101,
+          "domainId": "test-domain-not-a-real-avatar"
+        }
+      },
+      "palette": {
+        "rgb8": [
+          [
+            0,
+            64,
+            74
+          ],
+          [
+            0,
+            84,
+            97
+          ],
+          [
+            0,
+            105,
+            122
+          ],
+          [
+            0,
+            127,
+            147
+          ],
+          [
+            8,
+            150,
+            172
+          ]
+        ],
+        "rows": [
+          {
+            "rgb8": [
+              0,
+              64,
+              74
+            ],
+            "usedC": 0.05954245980026629,
+            "gamutReduced": true,
+            "targetL": 0.3403345681649163,
+            "requestedC": 0.06423164266619431,
+            "hue": -2.5662703738726638,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              0,
+              84,
+              97
+            ],
+            "usedC": 0.07172159848007006,
+            "gamutReduced": true,
+            "targetL": 0.40994845710774014,
+            "requestedC": 0.07493691644389336,
+            "hue": -2.5662703738726638,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              0,
+              105,
+              122
+            ],
+            "usedC": 0.08390073731939487,
+            "gamutReduced": true,
+            "targetL": 0.4795623460505639,
+            "requestedC": 0.08564219022159242,
+            "hue": -2.5662703738726638,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              0,
+              127,
+              147
+            ],
+            "usedC": 0.09607987631824066,
+            "gamutReduced": true,
+            "targetL": 0.5491762349933876,
+            "requestedC": 0.09634746399929148,
+            "hue": -2.5662703738726638,
+            "anchor": false
+          },
+          {
+            "rgb8": [
+              8,
+              150,
+              172
+            ],
+            "usedC": 0.10705273777699052,
+            "gamutReduced": false,
+            "targetL": 0.6187901239362115,
+            "requestedC": 0.10705273777699052,
+            "hue": -2.5662703738726638,
+            "anchor": true
+          }
+        ],
+        "reference": {
+          "rgb8": [
+            8,
+            150,
+            172
+          ],
+          "lab": [
+            0.6186474256191439,
+            -0.08995848424154573,
+            -0.05776335426486234
+          ],
+          "provenance": {
+            "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+            "materialId": 87,
+            "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+            "sampleId": "synthetic-texel-0",
+            "primitiveId": 0,
+            "triangle": 0,
+            "uv": [
+              0.16666666666666666,
+              0.5
+            ],
+            "texel": [
+              0,
+              0
+            ],
+            "nativeRGBA8": [
+              10,
+              150,
+              180,
+              255
+            ],
+            "factorLinear": [
+              0.8,
+              1,
+              0.9,
+              1
+            ]
+          },
+          "extraction": {
+            "method": "observed weighted squared-OKLab medoid",
+            "sampleCount": 3,
+            "cost": 0.05677768250404101,
+            "domainId": "test-domain-not-a-real-avatar"
+          }
+        },
+        "settings": {
+          "count": 5,
+          "darkLRatio": 0.55,
+          "darkCRatio": 0.6,
+          "gamma": 1,
+          "intervalScale": 1
+        },
+        "diagnostics": {
+          "duplicates": 0,
+          "actualLabL": [
+            0.34097117300539176,
+            0.40946769269274447,
+            0.478814197818361,
+            0.5483314254289463,
+            0.6187901239362115
+          ],
+          "LReversals": 0,
+          "adjacentDeltaE": [
+            0.06956065076597995,
+            0.07050206107720372,
+            0.07057218619443441,
+            0.07129242234635003
+          ]
+        }
+      },
+      "thresholds": [
+        0.2,
+        0.4,
+        0.6,
+        0.8
+      ]
+    }
+  ],
+  "output": [
+    {
+      "family": "material-12-primitive-1",
+      "g": -0.1,
+      "k": 0,
+      "rgb8": [
+        25,
+        12,
+        12
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 0,
+      "k": 0,
+      "rgb8": [
+        25,
+        12,
+        12
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 0.1,
+      "k": 0,
+      "rgb8": [
+        25,
+        12,
+        12
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 0.249999,
+      "k": 0,
+      "rgb8": [
+        25,
+        12,
+        12
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 0.25,
+      "k": 1,
+      "rgb8": [
+        38,
+        22,
+        21
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 0.3333333333333333,
+      "k": 1,
+      "rgb8": [
+        38,
+        22,
+        21
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 0.5,
+      "k": 2,
+      "rgb8": [
+        52,
+        32,
+        31
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 0.75,
+      "k": 3,
+      "rgb8": [
+        66,
+        42,
+        41
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 1,
+      "k": 3,
+      "rgb8": [
+        66,
+        42,
+        41
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-12-primitive-1",
+      "g": 3,
+      "k": 3,
+      "rgb8": [
+        66,
+        42,
+        41
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 12,
+        "imageSHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "sampleId": "mesh2/primitive1/triangle1636",
+        "primitiveId": 1,
+        "triangle": 1636,
+        "uv": [
+          0.4629629850387573,
+          0.6851851940155029
+        ],
+        "texel": [
+          237,
+          701
+        ],
+        "nativeRGBA8": [
+          66,
+          42,
+          41,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": -0.1,
+      "k": 0,
+      "rgb8": [
+        111,
+        105,
+        100
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 0,
+      "k": 0,
+      "rgb8": [
+        111,
+        105,
+        100
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 0.1,
+      "k": 0,
+      "rgb8": [
+        111,
+        105,
+        100
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 0.249999,
+      "k": 0,
+      "rgb8": [
+        111,
+        105,
+        100
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 0.25,
+      "k": 0,
+      "rgb8": [
+        111,
+        105,
+        100
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 0.3333333333333333,
+      "k": 1,
+      "rgb8": [
+        178,
+        169,
+        162
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 0.5,
+      "k": 1,
+      "rgb8": [
+        178,
+        169,
+        162
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 0.75,
+      "k": 2,
+      "rgb8": [
+        250,
+        238,
+        228
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 1,
+      "k": 2,
+      "rgb8": [
+        250,
+        238,
+        228
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "material-10-primitive-3",
+      "g": 3,
+      "k": 2,
+      "rgb8": [
+        250,
+        238,
+        228
+      ],
+      "source": {
+        "modelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+        "materialId": 10,
+        "imageSHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "sampleId": "mesh1/primitive3/triangle1147",
+        "primitiveId": 3,
+        "triangle": 1147,
+        "uv": [
+          0.8021712899208069,
+          0.6633527278900146
+        ],
+        "texel": [
+          1642,
+          1358
+        ],
+        "nativeRGBA8": [
+          250,
+          238,
+          228,
+          255
+        ],
+        "factorLinear": [
+          1,
+          1,
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": -0.1,
+      "k": 0,
+      "rgb8": [
+        0,
+        64,
+        74
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 0,
+      "k": 0,
+      "rgb8": [
+        0,
+        64,
+        74
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 0.1,
+      "k": 0,
+      "rgb8": [
+        0,
+        64,
+        74
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 0.249999,
+      "k": 1,
+      "rgb8": [
+        0,
+        84,
+        97
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 0.25,
+      "k": 1,
+      "rgb8": [
+        0,
+        84,
+        97
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 0.3333333333333333,
+      "k": 1,
+      "rgb8": [
+        0,
+        84,
+        97
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 0.5,
+      "k": 2,
+      "rgb8": [
+        0,
+        105,
+        122
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 0.75,
+      "k": 3,
+      "rgb8": [
+        0,
+        127,
+        147
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 1,
+      "k": 4,
+      "rgb8": [
+        8,
+        150,
+        172
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    },
+    {
+      "family": "synthetic-ocean/material-87",
+      "g": 3,
+      "k": 4,
+      "rgb8": [
+        8,
+        150,
+        172
+      ],
+      "source": {
+        "modelSHA256": "563f92c4eeee61a1ad5858bbf648337311e5f1a6af379735cb6772a425350cbe",
+        "materialId": 87,
+        "imageSHA256": "1fc61aa43ed36b9c5bfdf161c7b10fd98c6b220ff937f16d942869049c7526a9",
+        "sampleId": "synthetic-texel-0",
+        "primitiveId": 0,
+        "triangle": 0,
+        "uv": [
+          0.16666666666666666,
+          0.5
+        ],
+        "texel": [
+          0,
+          0
+        ],
+        "nativeRGBA8": [
+          10,
+          150,
+          180,
+          255
+        ],
+        "factorLinear": [
+          0.8,
+          1,
+          0.9,
+          1
+        ]
+      }
+    }
+  ],
+  "paletteOutsideCount": 0,
+  "sourceDomainsAutomaticallySegmented": false,
+  "regionShapeCorrected": false,
+  "UnityRun": false,
+  "HLSLCompiled": false,
+  "activeProductChanged": false
+}

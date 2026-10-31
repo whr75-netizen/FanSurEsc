@@ -4,7 +4,9 @@ HERE=Path(__file__).resolve().parent
 mode=sys.argv[1]
 base=HERE.parent/'source-palette58'
 if not base.exists():base=HERE.parent/'2026-10-31-source-palette58'
-files=[base/'Json58.cs',HERE/(mode+'.cs')]
+files=[HERE/'Json58Linear66.cs']
+if mode in ('Save66','Recovered66'):files.append(HERE/'SerializedContent66.cs')
+files.append(HERE/(mode+'.cs'))
 usings=[];body=[]
 for p in files:
  s=p.read_text(encoding='utf-8-sig')

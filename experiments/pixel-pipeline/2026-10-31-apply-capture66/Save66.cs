@@ -28,16 +28,25 @@ internal class CommandScript : IRunCommand
   {
    string path=AssetDatabase.GetAssetPath(o);
    var row=new Obj58{["path"]=path,["type"]=o.GetType().FullName,["beforeSHA256"]=Hash(path),["dirtyBefore"]=EditorUtility.IsDirty(o)};
+   File.WriteAllText(Path.Combine(Root,"SAVE_ITEM_STAGE66.json"),new Obj58{["path"]=path,["stage"]="before SaveAssetIfDirty(Object)",["utc"]=DateTime.UtcNow.ToString("O")}.ToString());
    try{AssetDatabase.SaveAssetIfDirty(o);row["apiReturned"]=true;}
    catch(Exception e){row["error"]=e.GetType().Name+": "+e.Message;}
+   File.WriteAllText(Path.Combine(Root,"SAVE_ITEM_STAGE66.json"),new Obj58{["path"]=path,["stage"]="after SaveAssetIfDirty(Object)",["utc"]=DateTime.UtcNow.ToString("O")}.ToString());
    row["dirtyAfter"]=EditorUtility.IsDirty(o);row["afterSHA256"]=Hash(path);
    if(!(o is Shader))
    {
-    string native=EditorJsonUtility.ToJson(o);string prior=File.ReadAllText(Path.Combine(Root,"backup","serialized",path+".json"));
-    row["serializedContentSame"]=Json58.DeepEquals(Json58.Parse(prior),Json58.Parse(native));
+    File.WriteAllText(Path.Combine(Root,"SAVE_ITEM_STAGE66.json"),new Obj58{["path"]=path,["stage"]="before ToJson/streaming verification",["utc"]=DateTime.UtcNow.ToString("O")}.ToString());
+    string native=EditorJsonUtility.ToJson(o);
+    var comparison=SerializedContent66.Verify(Path.Combine(Root,"backup","serialized",path+".json"),native);
+    row["serializedComparisonStatus"]=comparison.Status;row["serializedComparisonReason"]=comparison.Reason;
+    row["serializedBeforeSHA256"]=comparison.BeforeSHA256;row["serializedAfterSHA256"]=comparison.AfterSHA256;
+    row["serializedContentSame"]=comparison.Equivalent.HasValue?(Json58)comparison.Equivalent.Value:null;
+    row["verificationStopped"]=!comparison.Equivalent.HasValue||!comparison.Equivalent.Value;
    }
    rows.Add(row);
    File.WriteAllText(Path.Combine(Root,"SAVE_PROGRESS66.json"),rows.ToString());
+   if(row["verificationStopped"]!=null&&(bool)row["verificationStopped"])
+   {File.WriteAllText(Path.Combine(Root,"SAVE_STOPPED66.json"),row.ToString());throw new InvalidOperationException("Serialized content not verified; inspect saved progress, do not retry automatically");}
   }
   var remaining=new Arr58(Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).Select(o=>new Obj58{["path"]=AssetDatabase.GetAssetPath(o),["type"]=o.GetType().FullName,["entityId"]=o.GetEntityId().ToString()}));
   var scenes=new Arr58();for(int i=0;i<SceneManager.sceneCount;i++){var s=SceneManager.GetSceneAt(i);scenes.Add(new Obj58{["path"]=s.path,["dirty"]=s.isDirty});}

@@ -1,0 +1,1294 @@
+{
+  "waitChains": [
+    {
+      "queriedThread": 13200,
+      "success": true,
+      "error": 0,
+      "cycleReported": false,
+      "nodeCount": 3,
+      "nodes": [
+        {
+          "objectType": 8,
+          "objectStatus": 3,
+          "processId": 28304,
+          "threadId": 13200,
+          "waitTime": 1002932,
+          "contextSwitches": 352826
+        },
+        {
+          "objectType": 1,
+          "objectStatus": 6
+        },
+        {
+          "objectType": 8,
+          "objectStatus": 2,
+          "processId": 28304,
+          "threadId": 28308,
+          "waitTime": 1002937,
+          "contextSwitches": 1988900
+        }
+      ]
+    },
+    {
+      "queriedThread": 28112,
+      "success": true,
+      "error": 0,
+      "cycleReported": false,
+      "nodeCount": 1,
+      "nodes": [
+        {
+          "objectType": 8,
+          "objectStatus": 3,
+          "processId": 28304,
+          "threadId": 28112,
+          "waitTime": 978292,
+          "contextSwitches": 559057
+        }
+      ]
+    },
+    {
+      "queriedThread": 28308,
+      "success": true,
+      "error": 0,
+      "cycleReported": false,
+      "nodeCount": 1,
+      "nodes": [
+        {
+          "objectType": 8,
+          "objectStatus": 2,
+          "processId": 28304,
+          "threadId": 28308,
+          "waitTime": 1002937,
+          "contextSwitches": 1988900
+        }
+      ]
+    },
+    {
+      "queriedThread": 28404,
+      "success": true,
+      "error": 0,
+      "cycleReported": false,
+      "nodeCount": 1,
+      "nodes": [
+        {
+          "objectType": 8,
+          "objectStatus": 3,
+          "processId": 28304,
+          "threadId": 28404,
+          "waitTime": 989941,
+          "contextSwitches": 7606
+        }
+      ]
+    },
+    {
+      "queriedThread": 28520,
+      "success": true,
+      "error": 0,
+      "cycleReported": false,
+      "nodeCount": 1,
+      "nodes": [
+        {
+          "objectType": 8,
+          "objectStatus": 3,
+          "processId": 28304,
+          "threadId": 28520,
+          "waitTime": 1002939,
+          "contextSwitches": 3313974
+        }
+      ]
+    }
+  ],
+  "processId": 28304,
+  "limits": "No UI/Responding polling, debugger, dump, process memory read, thread suspension, privilege changes, COM callbacks or Unity queue commands. WCT success/no-cycle does not rule out unsupported locks or busy loops.",
+  "threads": [
+    {
+      "state": "Running",
+      "cpuSeconds": 492.140625,
+      "id": 28308,
+      "startUTC": "2026-10-31T07:03:39.7209398Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.109375,
+      "id": 28404,
+      "startUTC": "2026-10-31T07:03:40.3159458Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0625,
+      "id": 28408,
+      "startUTC": "2026-10-31T07:03:40.3249741Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28412,
+      "startUTC": "2026-10-31T07:03:40.3254751Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.03125,
+      "id": 28416,
+      "startUTC": "2026-10-31T07:03:40.3256023Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.046875,
+      "id": 28420,
+      "startUTC": "2026-10-31T07:03:40.3257291Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28424,
+      "startUTC": "2026-10-31T07:03:40.3258428Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28428,
+      "startUTC": "2026-10-31T07:03:40.3259706Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.03125,
+      "id": 28432,
+      "startUTC": "2026-10-31T07:03:40.3260718Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.046875,
+      "id": 28436,
+      "startUTC": "2026-10-31T07:03:40.3261894Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.015625,
+      "id": 28440,
+      "startUTC": "2026-10-31T07:03:40.3262962Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28444,
+      "startUTC": "2026-10-31T07:03:40.3263808Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.078125,
+      "id": 28448,
+      "startUTC": "2026-10-31T07:03:40.3264569Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.03125,
+      "id": 28452,
+      "startUTC": "2026-10-31T07:03:40.3265470Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28456,
+      "startUTC": "2026-10-31T07:03:40.3266232Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28460,
+      "startUTC": "2026-10-31T07:03:40.3266950Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28464,
+      "startUTC": "2026-10-31T07:03:40.3268051Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28468,
+      "startUTC": "2026-10-31T07:03:40.3269657Z"
+    },
+    {
+      "waitReason": "EventPairLow",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28492,
+      "startUTC": "2026-10-31T07:03:40.3412454Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 27.21875,
+      "id": 28520,
+      "startUTC": "2026-10-31T07:03:40.3598959Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 1.21875,
+      "id": 25092,
+      "startUTC": "2026-10-31T07:03:40.9888326Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.78125,
+      "id": 27180,
+      "startUTC": "2026-10-31T07:03:41.0197953Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.859375,
+      "id": 27240,
+      "startUTC": "2026-10-31T07:03:41.0198167Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.796875,
+      "id": 27184,
+      "startUTC": "2026-10-31T07:03:41.0198275Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.71875,
+      "id": 27188,
+      "startUTC": "2026-10-31T07:03:41.0198441Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.671875,
+      "id": 26380,
+      "startUTC": "2026-10-31T07:03:41.0198548Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.734375,
+      "id": 26384,
+      "startUTC": "2026-10-31T07:03:41.0198680Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.625,
+      "id": 20108,
+      "startUTC": "2026-10-31T07:03:41.0198802Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.6875,
+      "id": 19120,
+      "startUTC": "2026-10-31T07:03:41.0198935Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 1.5,
+      "id": 24836,
+      "startUTC": "2026-10-31T07:03:41.0199033Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.75,
+      "id": 24856,
+      "startUTC": "2026-10-31T07:03:41.0199267Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.546875,
+      "id": 24868,
+      "startUTC": "2026-10-31T07:03:41.0199421Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.6875,
+      "id": 24880,
+      "startUTC": "2026-10-31T07:03:41.0199720Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.671875,
+      "id": 24876,
+      "startUTC": "2026-10-31T07:03:41.0199904Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.671875,
+      "id": 24872,
+      "startUTC": "2026-10-31T07:03:41.0200086Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.59375,
+      "id": 24644,
+      "startUTC": "2026-10-31T07:03:41.0200238Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 24884,
+      "startUTC": "2026-10-31T07:03:41.0206818Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.3125,
+      "id": 24888,
+      "startUTC": "2026-10-31T07:03:41.0206943Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.328125,
+      "id": 25012,
+      "startUTC": "2026-10-31T07:03:41.0207057Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 25016,
+      "startUTC": "2026-10-31T07:03:41.0207171Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 25108,
+      "startUTC": "2026-10-31T07:03:41.0207290Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 25156,
+      "startUTC": "2026-10-31T07:03:41.0207405Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0625,
+      "id": 25384,
+      "startUTC": "2026-10-31T07:03:41.0207532Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 20656,
+      "startUTC": "2026-10-31T07:03:41.0207653Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 2484,
+      "startUTC": "2026-10-31T07:03:41.0207786Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.015625,
+      "id": 23852,
+      "startUTC": "2026-10-31T07:03:41.0207994Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 24760,
+      "startUTC": "2026-10-31T07:03:41.0208156Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 27232,
+      "startUTC": "2026-10-31T07:03:41.0208284Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.015625,
+      "id": 1796,
+      "startUTC": "2026-10-31T07:03:41.0208495Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 2520,
+      "startUTC": "2026-10-31T07:03:41.0208622Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.78125,
+      "id": 24768,
+      "startUTC": "2026-10-31T07:03:41.0208748Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 2536,
+      "startUTC": "2026-10-31T07:03:41.0208866Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.03125,
+      "id": 25148,
+      "startUTC": "2026-10-31T07:03:41.0209687Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 24696,
+      "startUTC": "2026-10-31T07:03:41.0221065Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 8.78125,
+      "id": 10988,
+      "startUTC": "2026-10-31T07:03:41.4771462Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.40625,
+      "id": 27336,
+      "startUTC": "2026-10-31T07:03:41.7949788Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.015625,
+      "id": 26168,
+      "startUTC": "2026-10-31T07:03:41.7949979Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.015625,
+      "id": 4088,
+      "startUTC": "2026-10-31T07:03:41.7950103Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 23120,
+      "startUTC": "2026-10-31T07:03:41.7950204Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.171875,
+      "id": 24752,
+      "startUTC": "2026-10-31T07:03:41.7950379Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.140625,
+      "id": 3928,
+      "startUTC": "2026-10-31T07:03:41.7950501Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 24984,
+      "startUTC": "2026-10-31T07:03:41.7950627Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.015625,
+      "id": 25020,
+      "startUTC": "2026-10-31T07:03:41.7950757Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.5,
+      "id": 25040,
+      "startUTC": "2026-10-31T07:03:41.7950942Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 25032,
+      "startUTC": "2026-10-31T07:03:41.7951081Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.015625,
+      "id": 25044,
+      "startUTC": "2026-10-31T07:03:41.7951229Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 25036,
+      "startUTC": "2026-10-31T07:03:41.7951509Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.015625,
+      "id": 25124,
+      "startUTC": "2026-10-31T07:03:41.7951682Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 25128,
+      "startUTC": "2026-10-31T07:03:41.7951919Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.921875,
+      "id": 25052,
+      "startUTC": "2026-10-31T07:03:41.8365397Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 1.0625,
+      "id": 12600,
+      "startUTC": "2026-10-31T07:03:41.8459511Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 21.953125,
+      "id": 28112,
+      "startUTC": "2026-10-31T07:03:41.8524546Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 9644,
+      "startUTC": "2026-10-31T07:03:43.0566586Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.03125,
+      "id": 8392,
+      "startUTC": "2026-10-31T07:03:43.0566827Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 8320,
+      "startUTC": "2026-10-31T07:03:43.0566929Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 8336,
+      "startUTC": "2026-10-31T07:03:43.0567032Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 8400,
+      "startUTC": "2026-10-31T07:03:43.0567157Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 8352,
+      "startUTC": "2026-10-31T07:03:43.0567324Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 8312,
+      "startUTC": "2026-10-31T07:03:43.0567435Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 8396,
+      "startUTC": "2026-10-31T07:03:43.0567547Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.203125,
+      "id": 8344,
+      "startUTC": "2026-10-31T07:03:43.2468600Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.078125,
+      "id": 8308,
+      "startUTC": "2026-10-31T07:03:43.2472046Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 8368,
+      "startUTC": "2026-10-31T07:03:43.2840021Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.265625,
+      "id": 8356,
+      "startUTC": "2026-10-31T07:03:43.2844905Z"
+    },
+    {
+      "waitReason": "EventPairLow",
+      "state": "Wait",
+      "cpuSeconds": 1.671875,
+      "id": 13988,
+      "startUTC": "2026-10-31T07:03:43.2847931Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 18964,
+      "startUTC": "2026-10-31T07:03:46.8033473Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.125,
+      "id": 13832,
+      "startUTC": "2026-10-31T07:03:51.4778799Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.4375,
+      "id": 11432,
+      "startUTC": "2026-10-31T07:04:03.5884349Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.53125,
+      "id": 11168,
+      "startUTC": "2026-10-31T07:04:08.8077915Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.484375,
+      "id": 11160,
+      "startUTC": "2026-10-31T07:04:08.8081495Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.578125,
+      "id": 11348,
+      "startUTC": "2026-10-31T07:04:08.8083245Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.453125,
+      "id": 11388,
+      "startUTC": "2026-10-31T07:04:08.8084777Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.546875,
+      "id": 10000,
+      "startUTC": "2026-10-31T07:04:08.8086323Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.546875,
+      "id": 11004,
+      "startUTC": "2026-10-31T07:04:08.8087935Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.515625,
+      "id": 11448,
+      "startUTC": "2026-10-31T07:04:08.8089742Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.4375,
+      "id": 11008,
+      "startUTC": "2026-10-31T07:04:08.8091164Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.5625,
+      "id": 11288,
+      "startUTC": "2026-10-31T07:04:08.8092529Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.90625,
+      "id": 11304,
+      "startUTC": "2026-10-31T07:04:08.8094389Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.640625,
+      "id": 10856,
+      "startUTC": "2026-10-31T07:04:08.8096281Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 1.203125,
+      "id": 11212,
+      "startUTC": "2026-10-31T07:04:08.8098155Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.59375,
+      "id": 10828,
+      "startUTC": "2026-10-31T07:04:08.8099820Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.546875,
+      "id": 9712,
+      "startUTC": "2026-10-31T07:04:08.8101722Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.515625,
+      "id": 11256,
+      "startUTC": "2026-10-31T07:04:08.8103784Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0625,
+      "id": 10788,
+      "startUTC": "2026-10-31T07:04:08.8122810Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 2.8125,
+      "id": 9532,
+      "startUTC": "2026-10-31T07:04:10.3222071Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 14.125,
+      "id": 13200,
+      "startUTC": "2026-10-31T07:04:11.2006381Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.171875,
+      "id": 13244,
+      "startUTC": "2026-10-31T07:04:12.4367349Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.328125,
+      "id": 16448,
+      "startUTC": "2026-10-31T07:04:14.7115639Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 1.015625,
+      "id": 23116,
+      "startUTC": "2026-10-31T07:04:15.0801587Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 3.46875,
+      "id": 23104,
+      "startUTC": "2026-10-31T07:04:15.0898545Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.25,
+      "id": 17040,
+      "startUTC": "2026-10-31T07:04:19.8003582Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.171875,
+      "id": 5636,
+      "startUTC": "2026-10-31T07:04:19.8227875Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.03125,
+      "id": 25340,
+      "startUTC": "2026-10-31T07:04:20.4251639Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.296875,
+      "id": 27668,
+      "startUTC": "2026-10-31T07:04:20.4360188Z"
+    },
+    {
+      "waitReason": "ExecutionDelay",
+      "state": "Wait",
+      "cpuSeconds": 0.03125,
+      "id": 28656,
+      "startUTC": "2026-10-31T07:04:21.0752190Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.140625,
+      "id": 28660,
+      "startUTC": "2026-10-31T07:04:21.0755814Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 28664,
+      "startUTC": "2026-10-31T07:04:21.0758211Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 27940,
+      "startUTC": "2026-10-31T07:04:21.0925865Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 27576,
+      "startUTC": "2026-10-31T07:04:21.0926111Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 4420,
+      "startUTC": "2026-10-31T07:04:21.0926295Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 24536,
+      "startUTC": "2026-10-31T07:04:21.0926447Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 24544,
+      "startUTC": "2026-10-31T07:04:21.0926623Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 26904,
+      "startUTC": "2026-10-31T07:04:21.0926829Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 4876,
+      "startUTC": "2026-10-31T07:04:21.0927041Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 26988,
+      "startUTC": "2026-10-31T07:04:21.0927176Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 9976,
+      "startUTC": "2026-10-31T07:04:21.0927338Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 25356,
+      "startUTC": "2026-10-31T07:04:21.0927469Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 24848,
+      "startUTC": "2026-10-31T07:04:21.0927623Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 8000,
+      "startUTC": "2026-10-31T07:04:21.0927784Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 7440,
+      "startUTC": "2026-10-31T07:04:21.0928099Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 27416,
+      "startUTC": "2026-10-31T07:04:21.0928245Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 27420,
+      "startUTC": "2026-10-31T07:04:21.1020938Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 7272,
+      "startUTC": "2026-10-31T07:04:21.1089706Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 1.09375,
+      "id": 25804,
+      "startUTC": "2026-10-31T07:04:21.8806199Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 6.140625,
+      "id": 27440,
+      "startUTC": "2026-10-31T07:04:23.4267701Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.609375,
+      "id": 27520,
+      "startUTC": "2026-10-31T07:04:23.4270641Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.640625,
+      "id": 27532,
+      "startUTC": "2026-10-31T07:04:23.4270871Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.609375,
+      "id": 27544,
+      "startUTC": "2026-10-31T07:04:23.4271008Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.5,
+      "id": 27524,
+      "startUTC": "2026-10-31T07:04:23.4271122Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.6875,
+      "id": 27492,
+      "startUTC": "2026-10-31T07:04:23.4271251Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.71875,
+      "id": 27488,
+      "startUTC": "2026-10-31T07:04:23.4271366Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.78125,
+      "id": 27436,
+      "startUTC": "2026-10-31T07:04:23.4271493Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.75,
+      "id": 27460,
+      "startUTC": "2026-10-31T07:04:23.4271605Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.828125,
+      "id": 10468,
+      "startUTC": "2026-10-31T07:04:23.4271729Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.6875,
+      "id": 27480,
+      "startUTC": "2026-10-31T07:04:23.4271852Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.671875,
+      "id": 27484,
+      "startUTC": "2026-10-31T07:04:23.4271978Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.671875,
+      "id": 27476,
+      "startUTC": "2026-10-31T07:04:23.4272094Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.65625,
+      "id": 27456,
+      "startUTC": "2026-10-31T07:04:23.4272271Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.65625,
+      "id": 17224,
+      "startUTC": "2026-10-31T07:04:23.4272461Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.6875,
+      "id": 12076,
+      "startUTC": "2026-10-31T07:04:23.4272662Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.90625,
+      "id": 11460,
+      "startUTC": "2026-10-31T07:04:23.4272824Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 2.734375,
+      "id": 7956,
+      "startUTC": "2026-10-31T08:26:52.9195224Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 1.5625,
+      "id": 36492,
+      "startUTC": "2026-10-31T09:21:08.5256686Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 1.109375,
+      "id": 32912,
+      "startUTC": "2026-10-31T09:21:08.5260811Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 2.015625,
+      "id": 25460,
+      "startUTC": "2026-10-31T09:21:08.7970674Z"
+    },
+    {
+      "waitReason": "Unknown",
+      "state": "Wait",
+      "cpuSeconds": 0.109375,
+      "id": 33180,
+      "startUTC": "2026-10-31T09:23:41.9268246Z"
+    },
+    {
+      "waitReason": "EventPairLow",
+      "state": "Wait",
+      "cpuSeconds": 0.140625,
+      "id": 35244,
+      "startUTC": "2026-10-31T11:11:40.3503543Z"
+    },
+    {
+      "waitReason": "EventPairLow",
+      "state": "Wait",
+      "cpuSeconds": 0.140625,
+      "id": 38388,
+      "startUTC": "2026-10-31T11:14:10.3410003Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.0625,
+      "id": 29076,
+      "startUTC": "2026-10-31T11:18:21.8667232Z"
+    },
+    {
+      "waitReason": "UserRequest",
+      "state": "Wait",
+      "cpuSeconds": 0.046875,
+      "id": 2512,
+      "startUTC": "2026-10-31T11:18:21.8820789Z"
+    },
+    {
+      "waitReason": "EventPairLow",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 39636,
+      "startUTC": "2026-10-31T11:19:33.3779260Z"
+    },
+    {
+      "waitReason": "EventPairLow",
+      "state": "Wait",
+      "cpuSeconds": 0.0,
+      "id": 6224,
+      "startUTC": "2026-10-31T11:21:56.5751596Z"
+    }
+  ],
+  "utc": "2026-10-31T11:22:03.0239424Z",
+  "samples": [
+    {
+      "kernel100ns": 1463437500,
+      "processId": 28304,
+      "otherOps": 3718188,
+      "writeOps": 60944,
+      "workingSetBytes": 3679465472,
+      "handles": 17282,
+      "threads": 161,
+      "utc": "2026-10-31T11:21:45.4709911Z",
+      "alive": true,
+      "readOps": 1459992,
+      "readBytes": 4091729369,
+      "privateCommitBytes": 7030833152,
+      "writeBytes": 175968260,
+      "user100ns": 5942187500,
+      "otherBytes": 229337331
+    },
+    {
+      "kernel100ns": 1472500000,
+      "processId": 28304,
+      "otherOps": 3719056,
+      "writeOps": 60944,
+      "workingSetBytes": 3679490048,
+      "handles": 17282,
+      "threads": 161,
+      "utc": "2026-10-31T11:21:53.5864133Z",
+      "alive": true,
+      "readOps": 1460636,
+      "readBytes": 4091729369,
+      "privateCommitBytes": 7030833152,
+      "writeBytes": 175968260,
+      "user100ns": 6013125000,
+      "otherBytes": 229354099
+    },
+    {
+      "kernel100ns": 1481406250,
+      "processId": 28304,
+      "otherOps": 3719808,
+      "writeOps": 60944,
+      "workingSetBytes": 3679522816,
+      "handles": 17282,
+      "threads": 162,
+      "utc": "2026-10-31T11:22:01.6425619Z",
+      "alive": true,
+      "readOps": 1461276,
+      "readBytes": 4091729369,
+      "privateCommitBytes": 7030861824,
+      "writeBytes": 175968260,
+      "user100ns": 6085468750,
+      "otherBytes": 229362483
+    }
+  ],
+  "queryFlags": 0,
+  "waitChainError": null
+}

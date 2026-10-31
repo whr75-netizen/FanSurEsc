@@ -1,21 +1,31 @@
 {
-  "utc": "2026-10-31T11:18:40.640196+00:00",
-  "status": "SAVE_CALL_OUTCOME_UNCERTAIN",
-  "backupVerified": true,
-  "diskFilesBackedUp": 110,
-  "serializedBackups": 5,
-  "returnedIndividualSaveCalls": 29,
-  "returnedCallsStillDirty": 29,
-  "pendingTarget": "ProjectSettings/TimeManager.asset",
-  "pendingAPI": "AssetDatabase.SaveAssetIfDirty(UnityEditor.TimeManager)",
-  "finalSaveReportPresent": false,
+  "utc": "2026-10-31T11:37:09.127164+00:00",
+  "status": "RECOVERED_VERIFIED_NO_PRODUCT_PATCH",
+  "oldPID": 28304,
+  "newPID": 31520,
+  "project": "C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets",
+  "scene": [
+    {
+      "active": true,
+      "dirty": false,
+      "path": "Assets/Scenes/GameMap1.unity",
+      "roots": 37
+    }
+  ],
+  "native5Exact": true,
+  "dirtyBeforeRead": 24,
+  "dirtyAfterRead": 25,
   "protectedDiskChanges": [],
-  "patchApplied": false,
-  "AssetsImport": false,
+  "preexisting30Preserved": true,
+  "parserOfflineCases": 14,
+  "actualInputTestRuns": 1,
+  "actualInputBytes": 9357126,
+  "actualHashMilliseconds": 12.311,
+  "hashBuffersBytes": 81920,
+  "patch65Applied": false,
+  "AssetsImportByOurPatch": false,
   "newPlay": false,
-  "capture": false,
-  "UnityKilled": false,
-  "CUA": false,
-  "scope65Commit": "fa74521697731f3d4618cef742ac2b590910b310",
-  "nextRequirement": "Establish pending save completion and current Unity response/dialog state without duplicating or resetting."
+  "newCapture": false,
+  "correction": "TimeManager returned row26; incomplete Mesh JSON verification, not proven native save deadlock.",
+  "remaining": "Apply65 two files/compile/local-buffer GPU validation, then64 same-source capture; no full native/runtime identity restoration claim."
 }

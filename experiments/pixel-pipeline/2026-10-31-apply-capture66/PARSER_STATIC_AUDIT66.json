@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-31T11:24:33.756004+00:00",
+  "source": "source-palette58/Json58.cs:ParseValue",
+  "preparedCaller": "apply-capture66/Save66.cs:36-37",
+  "inputBytes": 9357126,
+  "inputChars": 9357126,
+  "allBMP": true,
+  "numericTokens": 536436,
+  "literalTokens": 117,
+  "predictedSubstringUTF16BytesForOneCompleteParse": 15187761456482,
+  "predictedSubstringTiBForOneCompleteParse": 13.81318857646147,
+  "twoParsesBeforeCompare": true,
+  "confirmedCodeIssue": "Each numeric token calls s.Substring(p) for true,false,null; copies the whole remaining input three times. Quadratic total copying for long numeric arrays.",
+  "limits": "Static lexical count and allocation prediction only. Did not run the C# parser or inspect a live Unity stack. Cannot prove which statement the live thread is on."
+}

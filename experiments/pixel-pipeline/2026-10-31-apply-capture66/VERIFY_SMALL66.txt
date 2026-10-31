@@ -1,0 +1,19 @@
+PASS unchanged
+PASS changed
+PASS field_order
+PASS whitespace_number_spelling
+PASS unicode_escaped
+PASS duplicate_member
+PASS precise_integer_change
+PASS invalid
+PASS array_order
+PASS utf8_chunk_boundary
+SCALE chars=1027 hashedBytes=2054 ms=0.907
+SCALE chars=2051 hashedBytes=4102 ms=0.784
+SCALE chars=4099 hashedBytes=8198 ms=0.796
+SCALE chars=8195 hashedBytes=16390 ms=4.337
+PASS large_numeric_exact
+PASS large_numeric_changed_no_tree
+PASS large_field_order_explicit_unverified
+PASS direct_large_parser_budget
+CASES 14

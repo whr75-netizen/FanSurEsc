@@ -1,0 +1,51 @@
+{
+  "utc": "2026-10-31T11:32:16.641949+00:00",
+  "scope": "Offline CLI only, no Unity reinjection",
+  "compiler": "Installed .NET Framework csc /warnaserror+",
+  "casesPassed": 14,
+  "actualInputRuns": 1,
+  "actualInputBytes": 9357126,
+  "actualHashInputBytes": 18714252,
+  "actualVerificationMilliseconds": 12.311,
+  "extraHashBufferBytes": 81920,
+  "largeInputParsed": false,
+  "semantics": "Exact UTF8 SHA verifies preservation; small <=64KiB fallback ignores field order; large mismatches, duplicate keys, invalid JSON and precision-sensitive numbers remain explicit unverified or different.",
+  "oldParserLiveUpdate": false,
+  "cases": [
+    "unchanged",
+    "changed",
+    "field_order",
+    "whitespace_number_spelling",
+    "unicode_escaped",
+    "duplicate_member",
+    "precise_integer_change",
+    "invalid",
+    "array_order",
+    "utf8_chunk_boundary",
+    "large_numeric_exact",
+    "large_numeric_changed_no_tree",
+    "large_field_order_explicit_unverified",
+    "direct_large_parser_budget"
+  ],
+  "scaleHashedBytes": [
+    2054,
+    4102,
+    8198,
+    16390
+  ],
+  "scaleMilliseconds": [
+    4.437,
+    4.401,
+    4.239,
+    4.44
+  ],
+  "timeCaveat": "Small wall times dominated by setup/file/JIT; operation bytes show linear work. One actual input timing is not a general benchmark.",
+  "sourceSHA256": {
+    "Json58Linear66.cs": "54ecfad371ff37c4e494b3a7c7adc69e7dd44dbd02df707f62b42200932c2cf3",
+    "SerializedContent66.cs": "43cc7b6a07c17e1b1af207d313a9723c88c35886cb32f8f820948134b2c0fdb9",
+    "TestVerification66.cs": "3640e5883643c5c3d0013eab3351962390853290cbe32ee3017bd826ce1b88ba"
+  },
+  "postRegexRemovalSmallCases": 14,
+  "actualInputReused": "HashFile/HashText unchanged; no repeated9.36MB test after removing Regex only from small precision fallback",
+  "updatedUTC": "2026-10-31T11:33:07.993132+00:00"
+}

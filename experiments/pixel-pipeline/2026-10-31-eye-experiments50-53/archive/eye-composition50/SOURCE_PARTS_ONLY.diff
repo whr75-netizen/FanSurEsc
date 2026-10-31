@@ -1,0 +1,46 @@
+--- gate47-not-product
++++ source-parts50-not-GPU-compiled
+@@ -143,19 +143,22 @@
+  float ac=max(max(a.a.y,a.b.y),a.b.z)-IrisCount19(a),bc=max(max(b.a.y,b.b.y),b.b.z)-IrisCount19(b);
+  if(ac!=bc)return ac<bc;if(a.uv.x!=b.uv.x)return a.uv.x<b.uv.x;if(a.uv.y!=b.uv.y)return a.uv.y<b.uv.y;return ap.y!=bp.y?ap.y<bp.y:ap.x<bp.x;
+ }
+-bool IrisAllocated19(int2 p,int eye){
++bool SourceIrisAllocated19(int2 p,int eye){
+  FeaturePacket19 own=Packet19(p,eye);if(IrisCount19(own)<=0||own.uv.w<.5)return false;float area=0;int rank=0;
+  for(int y=_ROI348.y;y<_ROI348.y+_ROI348.w;y++)for(int x=_ROI348.x;x<_ROI348.x+_ROI348.z;x++){
+   int2 q=int2(x,y);FeaturePacket19 c=Packet19(q,eye);float a=IrisCount19(c);if(a<=0)continue;area+=a/16;if(c.uv.w>.5&&BeforeIris19(c,q,own,p))rank++;
+  }return rank<(int)floor(area+.5);
+ }
+ 
++// Registered cache occupancy can later replace this wrapper only.
++bool IrisAllocated19(int2 p,int eye){return SourceIrisAllocated19(p,eye);}
++
+ bool SourceWhiteNeighbour19(int2 p,int eye){
+  FeaturePacket19 c=Packet19(p,eye);if(c.a.y<1)return false;
+  return IrisCount19(Packet19(p+int2(-1,0),eye))>0||IrisCount19(Packet19(p+int2(1,0),eye))>0;
+ }
+ bool NativeLineAllocated19(int2 p,int eye){
+- FeaturePacket19 own=Packet19(p,eye);if(own.b.y<=0||IrisAllocated19(p,eye))return false;
++ FeaturePacket19 own=Packet19(p,eye);if(own.b.y<=0||SourceIrisAllocated19(p,eye))return false;
+  int whiteCandidates=0;float area=0;
+  for(int sumY=_ROI348.y;sumY<_ROI348.y+_ROI348.w;sumY++)for(int sumX=_ROI348.x;sumX<_ROI348.x+_ROI348.z;sumX++){
+   int2 cell=int2(sumX,sumY);FeaturePacket19 c=Packet19(cell,eye);area+=c.b.y/16;
+@@ -165,7 +168,7 @@
+  float ownCost=max(own.a.y,IrisCount19(own))-own.b.y;int rank=0;
+  for(int rankY=_ROI348.y;rankY<_ROI348.y+_ROI348.w;rankY++)for(int rankX=_ROI348.x;rankX<_ROI348.x+_ROI348.z;rankX++){
+   int2 cell=int2(rankX,rankY);FeaturePacket19 c=Packet19(cell,eye);
+-  if(c.b.y<=0||(whiteCandidates==1&&SourceWhiteNeighbour19(cell,eye))||IrisAllocated19(cell,eye))continue;
++  if(c.b.y<=0||(whiteCandidates==1&&SourceWhiteNeighbour19(cell,eye))||SourceIrisAllocated19(cell,eye))continue;
+   float cost=max(c.a.y,IrisCount19(c))-c.b.y;
+   if(cost<ownCost||(cost==ownCost&&(cell.y<p.y||(cell.y==p.y&&cell.x<p.x))))rank++;
+  }
+@@ -173,8 +176,8 @@
+ }
+ 
+ int ChooseLayers19(float c[8],int2 p,int eye,int curveFeature){
++ if(NativeLineAllocated19(p,eye))return 5;
+  if(IrisAllocated19(p,eye)){if(c[4]>=4)return 4;return c[2]>=c[3]?2:3;}
+- if(NativeLineAllocated19(p,eye))return 5;
+  // Keep the approved non-iris curve choice where its own mesh still supports it.
+  // Correcting iris support is not permission to redesign white or lid pixels.
+  if(curveFeature==1&&c[1]>0)return 1;

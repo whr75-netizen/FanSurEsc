@@ -1,0 +1,3414 @@
+{
+  "status": "offline bounded joint allocation candidate; not art/GPU/temporal completion",
+  "sourceFrames": [
+    100,
+    101
+  ],
+  "cohortUsesBothFramesOffline": true,
+  "targetCounts": {
+    "iris": 4,
+    "sclera": 6,
+    "upper-lid": 1
+  },
+  "targetCountRule": "exact retained Template glyph plus independently observed native source part; no global iris/lid count",
+  "budgetZeroFeasible": 0,
+  "budgetOneEnumerated": 125,
+  "budgetOneFeasible": 2,
+  "selected": {
+    "shifts": {
+      "iris": [
+        0,
+        1
+      ],
+      "sclera": [
+        0,
+        1
+      ],
+      "upper-lid": [
+        0,
+        0
+      ]
+    },
+    "movementPerPart": 2.0,
+    "curveError": 0.42780836839845476,
+    "relativeCentreError": 2.0,
+    "boundingAreaChange": 4,
+    "collisions": [],
+    "externalBlocks": [],
+    "violations": [],
+    "feasible": true
+  },
+  "alternativeLidFixed": {
+    "shifts": {
+      "iris": [
+        0,
+        1
+      ],
+      "sclera": [
+        0,
+        1
+      ],
+      "upper-lid": [
+        0,
+        0
+      ]
+    },
+    "movementPerPart": 2.0,
+    "curveError": 0.42780836839845476,
+    "relativeCentreError": 2.0,
+    "boundingAreaChange": 4,
+    "collisions": [],
+    "externalBlocks": [],
+    "violations": [],
+    "feasible": true
+  },
+  "sourceGrowthOcclusionChecked": true,
+  "compositeIsPartial": true,
+  "missingUnderlayByFrame": {
+    "100": [
+      [
+        223,
+        52
+      ],
+      [
+        225,
+        52
+      ]
+    ],
+    "101": [
+      [
+        223,
+        52
+      ],
+      [
+        224,
+        52
+      ],
+      [
+        225,
+        52
+      ],
+      [
+        225,
+        53
+      ]
+    ]
+  },
+  "rejectedLogicalOnlyA": {
+    "shifts": {
+      "iris": [
+        0,
+        0
+      ],
+      "sclera": [
+        0,
+        0
+      ],
+      "upper-lid": [
+        0,
+        -1
+      ]
+    },
+    "movementPerPart": 1.0,
+    "curveError": 1.9196668222436195,
+    "relativeCentreError": 2.0,
+    "boundingAreaChange": 4,
+    "collisions": [],
+    "externalBlocks": [],
+    "violations": [],
+    "feasible": true
+  },
+  "actualNativeSupportPerFrame": {
+    "100": [
+      {
+        "support": true,
+        "source": 3,
+        "k": 1,
+        "depth": 13.697181701660156,
+        "weight": 0.21196384727954865,
+        "sourceSamples": 3,
+        "sampleBlockers": [],
+        "knownFinalBlocks": []
+      }
+    ],
+    "101": [
+      {
+        "support": true,
+        "source": 3,
+        "k": 1,
+        "depth": 13.69707202911377,
+        "weight": 0.8939984440803528,
+        "sourceSamples": 3,
+        "sampleBlockers": [],
+        "knownFinalBlocks": []
+      }
+    ]
+  },
+  "syntheticPhasePlacements": 578,
+  "frameResults": [
+    {
+      "frame": 100,
+      "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:100",
+      "emittedByPart": {
+        "iris": 4,
+        "sclera": 5,
+        "upper-lid": 1
+      },
+      "movedTokens": [
+        {
+          "id": "eye1:role1:template:220,78",
+          "part": "iris",
+          "fromXY": [
+            222,
+            52
+          ],
+          "toXY": [
+            222,
+            53
+          ],
+          "rgba8": [
+            67,
+            44,
+            33,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,78",
+          "part": "iris",
+          "fromXY": [
+            223,
+            52
+          ],
+          "toXY": [
+            223,
+            53
+          ],
+          "rgba8": [
+            66,
+            45,
+            38,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role1:template:220,79",
+          "part": "iris",
+          "fromXY": [
+            222,
+            53
+          ],
+          "toXY": [
+            222,
+            54
+          ],
+          "rgba8": [
+            81,
+            59,
+            52,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,79",
+          "part": "iris",
+          "fromXY": [
+            223,
+            53
+          ],
+          "toXY": [
+            223,
+            54
+          ],
+          "rgba8": [
+            124,
+            85,
+            69,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,78",
+          "part": "sclera",
+          "fromXY": [
+            224,
+            52
+          ],
+          "toXY": [
+            224,
+            53
+          ],
+          "rgba8": [
+            216,
+            197,
+            195,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:219,79",
+          "part": "sclera",
+          "fromXY": [
+            221,
+            53
+          ],
+          "toXY": [
+            221,
+            54
+          ],
+          "rgba8": [
+            232,
+            219,
+            218,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,79",
+          "part": "sclera",
+          "fromXY": [
+            224,
+            53
+          ],
+          "toXY": [
+            224,
+            54
+          ],
+          "rgba8": [
+            254,
+            252,
+            253,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:220,80",
+          "part": "sclera",
+          "fromXY": [
+            222,
+            54
+          ],
+          "toXY": [
+            222,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:221,80",
+          "part": "sclera",
+          "fromXY": [
+            223,
+            54
+          ],
+          "toXY": [
+            223,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,80",
+          "part": "sclera",
+          "fromXY": [
+            224,
+            54
+          ],
+          "toXY": [
+            224,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "changesVsLidPriorityCells": [
+        [
+          221,
+          53
+        ],
+        [
+          221,
+          54
+        ],
+        [
+          222,
+          53
+        ],
+        [
+          222,
+          54
+        ],
+        [
+          222,
+          55
+        ],
+        [
+          223,
+          52
+        ],
+        [
+          223,
+          53
+        ],
+        [
+          223,
+          54
+        ],
+        [
+          223,
+          55
+        ],
+        [
+          224,
+          53
+        ],
+        [
+          224,
+          54
+        ],
+        [
+          224,
+          55
+        ]
+      ],
+      "changedPhysicalPixelsVsActual": 48,
+      "outsideEyeUnionChanges": 0,
+      "selectedRows": [
+        {
+          "id": "eye1:role1:template:220,78",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            222,
+            53
+          ],
+          "rgba8": [
+            67,
+            44,
+            33,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 5,
+            "triangleVertexIds": [
+              16,
+              4,
+              5
+            ],
+            "barycentric": [
+              0.001212367782892243,
+              0.5944036412094368,
+              0.404383991007671
+            ],
+            "uv": [
+              0.468749795290661,
+              0.6785714160262186
+            ],
+            "restHeadPoint": [
+              -0.032910000990638594,
+              0.07095916951462639,
+              0.08738144437044573
+            ],
+            "paletteTexel": [
+              3,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              67,
+              44,
+              33,
+              255
+            ],
+            "templateRGBA8": [
+              67,
+              44,
+              33,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,78",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            223,
+            53
+          ],
+          "rgba8": [
+            66,
+            45,
+            38,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 7,
+            "triangleVertexIds": [
+              16,
+              6,
+              7
+            ],
+            "barycentric": [
+              0.09279183962817728,
+              0.10580547633612591,
+              0.8014026840356968
+            ],
+            "uv": [
+              0.5937504238325437,
+              0.6785715940954476
+            ],
+            "restHeadPoint": [
+              -0.043414941003391765,
+              0.06966598525884703,
+              0.08334529710701738
+            ],
+            "paletteTexel": [
+              4,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              66,
+              45,
+              38,
+              255
+            ],
+            "templateRGBA8": [
+              66,
+              45,
+              38,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:220,79",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            222,
+            54
+          ],
+          "rgba8": [
+            81,
+            59,
+            52,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 2,
+            "triangleVertexIds": [
+              16,
+              1,
+              2
+            ],
+            "barycentric": [
+              0.5265273761327076,
+              0.24685957367625413,
+              0.22661305019103822
+            ],
+            "uv": [
+              0.46874985117780776,
+              0.5357143204962572
+            ],
+            "restHeadPoint": [
+              -0.032887096682531904,
+              0.058124591795702125,
+              0.08739024776801675
+            ],
+            "paletteTexel": [
+              3,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              81,
+              59,
+              52,
+              255
+            ],
+            "templateRGBA8": [
+              81,
+              59,
+              52,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,79",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            223,
+            54
+          ],
+          "rgba8": [
+            124,
+            85,
+            69,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 11,
+            "triangleVertexIds": [
+              16,
+              10,
+              11
+            ],
+            "barycentric": [
+              0.5645514645240335,
+              0.3252451154385145,
+              0.11020342003745198
+            ],
+            "uv": [
+              0.5937504797196904,
+              0.5357144985654856
+            ],
+            "restHeadPoint": [
+              -0.043392035787417654,
+              0.05683140774992394,
+              0.08335410038875042
+            ],
+            "paletteTexel": [
+              4,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              124,
+              85,
+              69,
+              255
+            ],
+            "templateRGBA8": [
+              124,
+              85,
+              69,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,78",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            53
+          ],
+          "rgba8": [
+            216,
+            197,
+            195,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 17,
+            "triangleVertexIds": [
+              24,
+              16,
+              17
+            ],
+            "barycentric": [
+              0.007631352932608304,
+              0.9064382262003506,
+              0.08593042086704107
+            ],
+            "uv": [
+              0.7187500630628875,
+              0.6785710840449952
+            ],
+            "restHeadPoint": [
+              -0.05391980905960723,
+              0.06837223165162887,
+              0.07929125341310847
+            ],
+            "paletteTexel": [
+              5,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              216,
+              197,
+              195,
+              255
+            ],
+            "templateRGBA8": [
+              216,
+              197,
+              195,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:219,79",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            221,
+            54
+          ],
+          "rgba8": [
+            232,
+            219,
+            218,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 10,
+            "triangleVertexIds": [
+              24,
+              9,
+              10
+            ],
+            "barycentric": [
+              0.12320350694126825,
+              0.6099810379494651,
+              0.26681545510926663
+            ],
+            "uv": [
+              0.3437499218641866,
+              0.5357140685606394
+            ],
+            "restHeadPoint": [
+              -0.022382231741862334,
+              0.05941724604446756,
+              0.09140844019853972
+            ],
+            "paletteTexel": [
+              2,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              232,
+              219,
+              218,
+              255
+            ],
+            "templateRGBA8": [
+              232,
+              219,
+              218,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,79",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            54
+          ],
+          "rgba8": [
+            254,
+            252,
+            253,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 19,
+            "triangleVertexIds": [
+              24,
+              18,
+              19
+            ],
+            "barycentric": [
+              0.4537800206010256,
+              0.0364859649036432,
+              0.5097340144953312
+            ],
+            "uv": [
+              0.7187501536449837,
+              0.5357140905786696
+            ],
+            "restHeadPoint": [
+              -0.053896906507338624,
+              0.05553766433621924,
+              0.0793000549306932
+            ],
+            "paletteTexel": [
+              5,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              254,
+              252,
+              253,
+              255
+            ],
+            "templateRGBA8": [
+              254,
+              252,
+              253,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:220,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            222,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 4,
+            "triangleVertexIds": [
+              24,
+              3,
+              4
+            ],
+            "barycentric": [
+              0.21315271784425938,
+              0.06978005026749437,
+              0.7170672318882463
+            ],
+            "uv": [
+              0.4687500897065488,
+              0.3928570824336577
+            ],
+            "restHeadPoint": [
+              -0.03286422126026618,
+              0.04528948286714608,
+              0.08738111147565193
+            ],
+            "paletteTexel": [
+              3,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:221,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            223,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 2,
+            "triangleVertexIds": [
+              24,
+              1,
+              2
+            ],
+            "barycentric": [
+              0.3458435545688705,
+              0.41802105871288253,
+              0.23613538671824696
+            ],
+            "uv": [
+              0.593750166966814,
+              0.3928570897730015
+            ],
+            "restHeadPoint": [
+              -0.043369114023786494,
+              0.04399629001104181,
+              0.08334498201432107
+            ],
+            "paletteTexel": [
+              4,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 24,
+            "triangleVertexIds": [
+              24,
+              23,
+              0
+            ],
+            "barycentric": [
+              0.07341622711392137,
+              0.578748998137725,
+              0.3478347747483537
+            ],
+            "uv": [
+              0.7187502442270797,
+              0.392857097112345
+            ],
+            "restHeadPoint": [
+              -0.05387400405732982,
+              0.04270309447322041,
+              0.07930885152616939
+            ],
+            "paletteTexel": [
+              5,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:native6:source101:primitive10",
+          "eye": 1,
+          "role": 6,
+          "part": "upper-lid",
+          "xy": [
+            222,
+            52
+          ],
+          "rgba8": [
+            81,
+            63,
+            54,
+            255
+          ],
+          "provenance": {
+            "kind": "measured native part, cached final reference pigment",
+            "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:101",
+            "outputXY": [
+              222,
+              52
+            ],
+            "feature": 5,
+            "sourceLayer": 3,
+            "primitive": 10,
+            "UV": [
+              0.5974501967430115,
+              0.7389123439788818
+            ],
+            "barycentric": [
+              0.11237279887683438,
+              0.6309622051236632,
+              0.25666499599950243
+            ],
+            "restHeadPoint": [
+              -0.025948531925678253,
+              0.06936068087816238,
+              0.09672177582979202
+            ],
+            "pointError": 2.0665711685605972e-09,
+            "pigmentFrame": 101,
+            "pigmentIsUnlit": false,
+            "sourceWeight": 0.8939984440803528
+          },
+          "partShift": [
+            0,
+            0
+          ]
+        }
+      ],
+      "lidFixedAlternativeRows": [
+        {
+          "id": "eye1:role1:template:220,78",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            222,
+            53
+          ],
+          "rgba8": [
+            67,
+            44,
+            33,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 5,
+            "triangleVertexIds": [
+              16,
+              4,
+              5
+            ],
+            "barycentric": [
+              0.001212367782892243,
+              0.5944036412094368,
+              0.404383991007671
+            ],
+            "uv": [
+              0.468749795290661,
+              0.6785714160262186
+            ],
+            "restHeadPoint": [
+              -0.032910000990638594,
+              0.07095916951462639,
+              0.08738144437044573
+            ],
+            "paletteTexel": [
+              3,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              67,
+              44,
+              33,
+              255
+            ],
+            "templateRGBA8": [
+              67,
+              44,
+              33,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,78",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            223,
+            53
+          ],
+          "rgba8": [
+            66,
+            45,
+            38,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 7,
+            "triangleVertexIds": [
+              16,
+              6,
+              7
+            ],
+            "barycentric": [
+              0.09279183962817728,
+              0.10580547633612591,
+              0.8014026840356968
+            ],
+            "uv": [
+              0.5937504238325437,
+              0.6785715940954476
+            ],
+            "restHeadPoint": [
+              -0.043414941003391765,
+              0.06966598525884703,
+              0.08334529710701738
+            ],
+            "paletteTexel": [
+              4,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              66,
+              45,
+              38,
+              255
+            ],
+            "templateRGBA8": [
+              66,
+              45,
+              38,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:220,79",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            222,
+            54
+          ],
+          "rgba8": [
+            81,
+            59,
+            52,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 2,
+            "triangleVertexIds": [
+              16,
+              1,
+              2
+            ],
+            "barycentric": [
+              0.5265273761327076,
+              0.24685957367625413,
+              0.22661305019103822
+            ],
+            "uv": [
+              0.46874985117780776,
+              0.5357143204962572
+            ],
+            "restHeadPoint": [
+              -0.032887096682531904,
+              0.058124591795702125,
+              0.08739024776801675
+            ],
+            "paletteTexel": [
+              3,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              81,
+              59,
+              52,
+              255
+            ],
+            "templateRGBA8": [
+              81,
+              59,
+              52,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,79",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            223,
+            54
+          ],
+          "rgba8": [
+            124,
+            85,
+            69,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 11,
+            "triangleVertexIds": [
+              16,
+              10,
+              11
+            ],
+            "barycentric": [
+              0.5645514645240335,
+              0.3252451154385145,
+              0.11020342003745198
+            ],
+            "uv": [
+              0.5937504797196904,
+              0.5357144985654856
+            ],
+            "restHeadPoint": [
+              -0.043392035787417654,
+              0.05683140774992394,
+              0.08335410038875042
+            ],
+            "paletteTexel": [
+              4,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              124,
+              85,
+              69,
+              255
+            ],
+            "templateRGBA8": [
+              124,
+              85,
+              69,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,78",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            53
+          ],
+          "rgba8": [
+            216,
+            197,
+            195,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 17,
+            "triangleVertexIds": [
+              24,
+              16,
+              17
+            ],
+            "barycentric": [
+              0.007631352932608304,
+              0.9064382262003506,
+              0.08593042086704107
+            ],
+            "uv": [
+              0.7187500630628875,
+              0.6785710840449952
+            ],
+            "restHeadPoint": [
+              -0.05391980905960723,
+              0.06837223165162887,
+              0.07929125341310847
+            ],
+            "paletteTexel": [
+              5,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              216,
+              197,
+              195,
+              255
+            ],
+            "templateRGBA8": [
+              216,
+              197,
+              195,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:219,79",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            221,
+            54
+          ],
+          "rgba8": [
+            232,
+            219,
+            218,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 10,
+            "triangleVertexIds": [
+              24,
+              9,
+              10
+            ],
+            "barycentric": [
+              0.12320350694126825,
+              0.6099810379494651,
+              0.26681545510926663
+            ],
+            "uv": [
+              0.3437499218641866,
+              0.5357140685606394
+            ],
+            "restHeadPoint": [
+              -0.022382231741862334,
+              0.05941724604446756,
+              0.09140844019853972
+            ],
+            "paletteTexel": [
+              2,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              232,
+              219,
+              218,
+              255
+            ],
+            "templateRGBA8": [
+              232,
+              219,
+              218,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,79",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            54
+          ],
+          "rgba8": [
+            254,
+            252,
+            253,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 19,
+            "triangleVertexIds": [
+              24,
+              18,
+              19
+            ],
+            "barycentric": [
+              0.4537800206010256,
+              0.0364859649036432,
+              0.5097340144953312
+            ],
+            "uv": [
+              0.7187501536449837,
+              0.5357140905786696
+            ],
+            "restHeadPoint": [
+              -0.053896906507338624,
+              0.05553766433621924,
+              0.0793000549306932
+            ],
+            "paletteTexel": [
+              5,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              254,
+              252,
+              253,
+              255
+            ],
+            "templateRGBA8": [
+              254,
+              252,
+              253,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:220,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            222,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 4,
+            "triangleVertexIds": [
+              24,
+              3,
+              4
+            ],
+            "barycentric": [
+              0.21315271784425938,
+              0.06978005026749437,
+              0.7170672318882463
+            ],
+            "uv": [
+              0.4687500897065488,
+              0.3928570824336577
+            ],
+            "restHeadPoint": [
+              -0.03286422126026618,
+              0.04528948286714608,
+              0.08738111147565193
+            ],
+            "paletteTexel": [
+              3,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:221,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            223,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 2,
+            "triangleVertexIds": [
+              24,
+              1,
+              2
+            ],
+            "barycentric": [
+              0.3458435545688705,
+              0.41802105871288253,
+              0.23613538671824696
+            ],
+            "uv": [
+              0.593750166966814,
+              0.3928570897730015
+            ],
+            "restHeadPoint": [
+              -0.043369114023786494,
+              0.04399629001104181,
+              0.08334498201432107
+            ],
+            "paletteTexel": [
+              4,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 24,
+            "triangleVertexIds": [
+              24,
+              23,
+              0
+            ],
+            "barycentric": [
+              0.07341622711392137,
+              0.578748998137725,
+              0.3478347747483537
+            ],
+            "uv": [
+              0.7187502442270797,
+              0.392857097112345
+            ],
+            "restHeadPoint": [
+              -0.05387400405732982,
+              0.04270309447322041,
+              0.07930885152616939
+            ],
+            "paletteTexel": [
+              5,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:native6:source101:primitive10",
+          "eye": 1,
+          "role": 6,
+          "part": "upper-lid",
+          "xy": [
+            222,
+            52
+          ],
+          "rgba8": [
+            81,
+            63,
+            54,
+            255
+          ],
+          "provenance": {
+            "kind": "measured native part, cached final reference pigment",
+            "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:101",
+            "outputXY": [
+              222,
+              52
+            ],
+            "feature": 5,
+            "sourceLayer": 3,
+            "primitive": 10,
+            "UV": [
+              0.5974501967430115,
+              0.7389123439788818
+            ],
+            "barycentric": [
+              0.11237279887683438,
+              0.6309622051236632,
+              0.25666499599950243
+            ],
+            "restHeadPoint": [
+              -0.025948531925678253,
+              0.06936068087816238,
+              0.09672177582979202
+            ],
+            "pointError": 2.0665711685605972e-09,
+            "pigmentFrame": 101,
+            "pigmentIsUnlit": false,
+            "sourceWeight": 0.8939984440803528
+          },
+          "partShift": [
+            0,
+            0
+          ]
+        }
+      ],
+      "unknownUnderlayCells": [
+        [
+          223,
+          52
+        ],
+        [
+          225,
+          52
+        ]
+      ],
+      "sourceExternalHidden": [
+        "eye1:role4:template:222,78"
+      ]
+    },
+    {
+      "frame": 101,
+      "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:101",
+      "emittedByPart": {
+        "iris": 4,
+        "sclera": 6,
+        "upper-lid": 1
+      },
+      "movedTokens": [
+        {
+          "id": "eye1:role1:template:220,78",
+          "part": "iris",
+          "fromXY": [
+            222,
+            52
+          ],
+          "toXY": [
+            222,
+            53
+          ],
+          "rgba8": [
+            67,
+            44,
+            33,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,78",
+          "part": "iris",
+          "fromXY": [
+            223,
+            52
+          ],
+          "toXY": [
+            223,
+            53
+          ],
+          "rgba8": [
+            66,
+            45,
+            38,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role1:template:220,79",
+          "part": "iris",
+          "fromXY": [
+            222,
+            53
+          ],
+          "toXY": [
+            222,
+            54
+          ],
+          "rgba8": [
+            81,
+            59,
+            52,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,79",
+          "part": "iris",
+          "fromXY": [
+            223,
+            53
+          ],
+          "toXY": [
+            223,
+            54
+          ],
+          "rgba8": [
+            124,
+            85,
+            69,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,78",
+          "part": "sclera",
+          "fromXY": [
+            224,
+            52
+          ],
+          "toXY": [
+            224,
+            53
+          ],
+          "rgba8": [
+            216,
+            197,
+            195,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:219,79",
+          "part": "sclera",
+          "fromXY": [
+            221,
+            53
+          ],
+          "toXY": [
+            221,
+            54
+          ],
+          "rgba8": [
+            232,
+            219,
+            218,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,79",
+          "part": "sclera",
+          "fromXY": [
+            224,
+            53
+          ],
+          "toXY": [
+            224,
+            54
+          ],
+          "rgba8": [
+            254,
+            252,
+            253,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:220,80",
+          "part": "sclera",
+          "fromXY": [
+            222,
+            54
+          ],
+          "toXY": [
+            222,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:221,80",
+          "part": "sclera",
+          "fromXY": [
+            223,
+            54
+          ],
+          "toXY": [
+            223,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,80",
+          "part": "sclera",
+          "fromXY": [
+            224,
+            54
+          ],
+          "toXY": [
+            224,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ]
+        }
+      ],
+      "changesVsLidPriorityCells": [
+        [
+          221,
+          53
+        ],
+        [
+          221,
+          54
+        ],
+        [
+          222,
+          53
+        ],
+        [
+          222,
+          54
+        ],
+        [
+          222,
+          55
+        ],
+        [
+          223,
+          52
+        ],
+        [
+          223,
+          53
+        ],
+        [
+          223,
+          54
+        ],
+        [
+          223,
+          55
+        ],
+        [
+          224,
+          52
+        ],
+        [
+          224,
+          53
+        ],
+        [
+          224,
+          54
+        ],
+        [
+          224,
+          55
+        ]
+      ],
+      "changedPhysicalPixelsVsActual": 56,
+      "outsideEyeUnionChanges": 0,
+      "selectedRows": [
+        {
+          "id": "eye1:role1:template:220,78",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            222,
+            53
+          ],
+          "rgba8": [
+            67,
+            44,
+            33,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 5,
+            "triangleVertexIds": [
+              16,
+              4,
+              5
+            ],
+            "barycentric": [
+              0.001212367782892243,
+              0.5944036412094368,
+              0.404383991007671
+            ],
+            "uv": [
+              0.468749795290661,
+              0.6785714160262186
+            ],
+            "restHeadPoint": [
+              -0.032910000990638594,
+              0.07095916951462639,
+              0.08738144437044573
+            ],
+            "paletteTexel": [
+              3,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              67,
+              44,
+              33,
+              255
+            ],
+            "templateRGBA8": [
+              67,
+              44,
+              33,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,78",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            223,
+            53
+          ],
+          "rgba8": [
+            66,
+            45,
+            38,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 7,
+            "triangleVertexIds": [
+              16,
+              6,
+              7
+            ],
+            "barycentric": [
+              0.09279183962817728,
+              0.10580547633612591,
+              0.8014026840356968
+            ],
+            "uv": [
+              0.5937504238325437,
+              0.6785715940954476
+            ],
+            "restHeadPoint": [
+              -0.043414941003391765,
+              0.06966598525884703,
+              0.08334529710701738
+            ],
+            "paletteTexel": [
+              4,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              66,
+              45,
+              38,
+              255
+            ],
+            "templateRGBA8": [
+              66,
+              45,
+              38,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:220,79",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            222,
+            54
+          ],
+          "rgba8": [
+            81,
+            59,
+            52,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 2,
+            "triangleVertexIds": [
+              16,
+              1,
+              2
+            ],
+            "barycentric": [
+              0.5265273761327076,
+              0.24685957367625413,
+              0.22661305019103822
+            ],
+            "uv": [
+              0.46874985117780776,
+              0.5357143204962572
+            ],
+            "restHeadPoint": [
+              -0.032887096682531904,
+              0.058124591795702125,
+              0.08739024776801675
+            ],
+            "paletteTexel": [
+              3,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              81,
+              59,
+              52,
+              255
+            ],
+            "templateRGBA8": [
+              81,
+              59,
+              52,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,79",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            223,
+            54
+          ],
+          "rgba8": [
+            124,
+            85,
+            69,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 11,
+            "triangleVertexIds": [
+              16,
+              10,
+              11
+            ],
+            "barycentric": [
+              0.5645514645240335,
+              0.3252451154385145,
+              0.11020342003745198
+            ],
+            "uv": [
+              0.5937504797196904,
+              0.5357144985654856
+            ],
+            "restHeadPoint": [
+              -0.043392035787417654,
+              0.05683140774992394,
+              0.08335410038875042
+            ],
+            "paletteTexel": [
+              4,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              124,
+              85,
+              69,
+              255
+            ],
+            "templateRGBA8": [
+              124,
+              85,
+              69,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,78",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            53
+          ],
+          "rgba8": [
+            216,
+            197,
+            195,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 17,
+            "triangleVertexIds": [
+              24,
+              16,
+              17
+            ],
+            "barycentric": [
+              0.007631352932608304,
+              0.9064382262003506,
+              0.08593042086704107
+            ],
+            "uv": [
+              0.7187500630628875,
+              0.6785710840449952
+            ],
+            "restHeadPoint": [
+              -0.05391980905960723,
+              0.06837223165162887,
+              0.07929125341310847
+            ],
+            "paletteTexel": [
+              5,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              216,
+              197,
+              195,
+              255
+            ],
+            "templateRGBA8": [
+              216,
+              197,
+              195,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:219,79",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            221,
+            54
+          ],
+          "rgba8": [
+            232,
+            219,
+            218,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 10,
+            "triangleVertexIds": [
+              24,
+              9,
+              10
+            ],
+            "barycentric": [
+              0.12320350694126825,
+              0.6099810379494651,
+              0.26681545510926663
+            ],
+            "uv": [
+              0.3437499218641866,
+              0.5357140685606394
+            ],
+            "restHeadPoint": [
+              -0.022382231741862334,
+              0.05941724604446756,
+              0.09140844019853972
+            ],
+            "paletteTexel": [
+              2,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              232,
+              219,
+              218,
+              255
+            ],
+            "templateRGBA8": [
+              232,
+              219,
+              218,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,79",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            54
+          ],
+          "rgba8": [
+            254,
+            252,
+            253,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 19,
+            "triangleVertexIds": [
+              24,
+              18,
+              19
+            ],
+            "barycentric": [
+              0.4537800206010256,
+              0.0364859649036432,
+              0.5097340144953312
+            ],
+            "uv": [
+              0.7187501536449837,
+              0.5357140905786696
+            ],
+            "restHeadPoint": [
+              -0.053896906507338624,
+              0.05553766433621924,
+              0.0793000549306932
+            ],
+            "paletteTexel": [
+              5,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              254,
+              252,
+              253,
+              255
+            ],
+            "templateRGBA8": [
+              254,
+              252,
+              253,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:220,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            222,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 4,
+            "triangleVertexIds": [
+              24,
+              3,
+              4
+            ],
+            "barycentric": [
+              0.21315271784425938,
+              0.06978005026749437,
+              0.7170672318882463
+            ],
+            "uv": [
+              0.4687500897065488,
+              0.3928570824336577
+            ],
+            "restHeadPoint": [
+              -0.03286422126026618,
+              0.04528948286714608,
+              0.08738111147565193
+            ],
+            "paletteTexel": [
+              3,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:221,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            223,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 2,
+            "triangleVertexIds": [
+              24,
+              1,
+              2
+            ],
+            "barycentric": [
+              0.3458435545688705,
+              0.41802105871288253,
+              0.23613538671824696
+            ],
+            "uv": [
+              0.593750166966814,
+              0.3928570897730015
+            ],
+            "restHeadPoint": [
+              -0.043369114023786494,
+              0.04399629001104181,
+              0.08334498201432107
+            ],
+            "paletteTexel": [
+              4,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 24,
+            "triangleVertexIds": [
+              24,
+              23,
+              0
+            ],
+            "barycentric": [
+              0.07341622711392137,
+              0.578748998137725,
+              0.3478347747483537
+            ],
+            "uv": [
+              0.7187502442270797,
+              0.392857097112345
+            ],
+            "restHeadPoint": [
+              -0.05387400405732982,
+              0.04270309447322041,
+              0.07930885152616939
+            ],
+            "paletteTexel": [
+              5,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:native6:source101:primitive10",
+          "eye": 1,
+          "role": 6,
+          "part": "upper-lid",
+          "xy": [
+            222,
+            52
+          ],
+          "rgba8": [
+            81,
+            63,
+            54,
+            255
+          ],
+          "provenance": {
+            "kind": "measured native part, cached final reference pigment",
+            "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:101",
+            "outputXY": [
+              222,
+              52
+            ],
+            "feature": 5,
+            "sourceLayer": 3,
+            "primitive": 10,
+            "UV": [
+              0.5974501967430115,
+              0.7389123439788818
+            ],
+            "barycentric": [
+              0.11237279887683438,
+              0.6309622051236632,
+              0.25666499599950243
+            ],
+            "restHeadPoint": [
+              -0.025948531925678253,
+              0.06936068087816238,
+              0.09672177582979202
+            ],
+            "pointError": 2.0665711685605972e-09,
+            "pigmentFrame": 101,
+            "pigmentIsUnlit": false,
+            "sourceWeight": 0.8939984440803528
+          },
+          "partShift": [
+            0,
+            0
+          ]
+        }
+      ],
+      "lidFixedAlternativeRows": [
+        {
+          "id": "eye1:role1:template:220,78",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            222,
+            53
+          ],
+          "rgba8": [
+            67,
+            44,
+            33,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 5,
+            "triangleVertexIds": [
+              16,
+              4,
+              5
+            ],
+            "barycentric": [
+              0.001212367782892243,
+              0.5944036412094368,
+              0.404383991007671
+            ],
+            "uv": [
+              0.468749795290661,
+              0.6785714160262186
+            ],
+            "restHeadPoint": [
+              -0.032910000990638594,
+              0.07095916951462639,
+              0.08738144437044573
+            ],
+            "paletteTexel": [
+              3,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              67,
+              44,
+              33,
+              255
+            ],
+            "templateRGBA8": [
+              67,
+              44,
+              33,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,78",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            223,
+            53
+          ],
+          "rgba8": [
+            66,
+            45,
+            38,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 7,
+            "triangleVertexIds": [
+              16,
+              6,
+              7
+            ],
+            "barycentric": [
+              0.09279183962817728,
+              0.10580547633612591,
+              0.8014026840356968
+            ],
+            "uv": [
+              0.5937504238325437,
+              0.6785715940954476
+            ],
+            "restHeadPoint": [
+              -0.043414941003391765,
+              0.06966598525884703,
+              0.08334529710701738
+            ],
+            "paletteTexel": [
+              4,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              66,
+              45,
+              38,
+              255
+            ],
+            "templateRGBA8": [
+              66,
+              45,
+              38,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:220,79",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            222,
+            54
+          ],
+          "rgba8": [
+            81,
+            59,
+            52,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 2,
+            "triangleVertexIds": [
+              16,
+              1,
+              2
+            ],
+            "barycentric": [
+              0.5265273761327076,
+              0.24685957367625413,
+              0.22661305019103822
+            ],
+            "uv": [
+              0.46874985117780776,
+              0.5357143204962572
+            ],
+            "restHeadPoint": [
+              -0.032887096682531904,
+              0.058124591795702125,
+              0.08739024776801675
+            ],
+            "paletteTexel": [
+              3,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              81,
+              59,
+              52,
+              255
+            ],
+            "templateRGBA8": [
+              81,
+              59,
+              52,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role1:template:221,79",
+          "eye": 1,
+          "role": 1,
+          "part": "iris",
+          "xy": [
+            223,
+            54
+          ],
+          "rgba8": [
+            124,
+            85,
+            69,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 1,
+            "primitive": 11,
+            "triangleVertexIds": [
+              16,
+              10,
+              11
+            ],
+            "barycentric": [
+              0.5645514645240335,
+              0.3252451154385145,
+              0.11020342003745198
+            ],
+            "uv": [
+              0.5937504797196904,
+              0.5357144985654856
+            ],
+            "restHeadPoint": [
+              -0.043392035787417654,
+              0.05683140774992394,
+              0.08335410038875042
+            ],
+            "paletteTexel": [
+              4,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              124,
+              85,
+              69,
+              255
+            ],
+            "templateRGBA8": [
+              124,
+              85,
+              69,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,78",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            53
+          ],
+          "rgba8": [
+            216,
+            197,
+            195,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 17,
+            "triangleVertexIds": [
+              24,
+              16,
+              17
+            ],
+            "barycentric": [
+              0.007631352932608304,
+              0.9064382262003506,
+              0.08593042086704107
+            ],
+            "uv": [
+              0.7187500630628875,
+              0.6785710840449952
+            ],
+            "restHeadPoint": [
+              -0.05391980905960723,
+              0.06837223165162887,
+              0.07929125341310847
+            ],
+            "paletteTexel": [
+              5,
+              4
+            ],
+            "carrierSampleRGBA8": [
+              216,
+              197,
+              195,
+              255
+            ],
+            "templateRGBA8": [
+              216,
+              197,
+              195,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:219,79",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            221,
+            54
+          ],
+          "rgba8": [
+            232,
+            219,
+            218,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 10,
+            "triangleVertexIds": [
+              24,
+              9,
+              10
+            ],
+            "barycentric": [
+              0.12320350694126825,
+              0.6099810379494651,
+              0.26681545510926663
+            ],
+            "uv": [
+              0.3437499218641866,
+              0.5357140685606394
+            ],
+            "restHeadPoint": [
+              -0.022382231741862334,
+              0.05941724604446756,
+              0.09140844019853972
+            ],
+            "paletteTexel": [
+              2,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              232,
+              219,
+              218,
+              255
+            ],
+            "templateRGBA8": [
+              232,
+              219,
+              218,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,79",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            54
+          ],
+          "rgba8": [
+            254,
+            252,
+            253,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 19,
+            "triangleVertexIds": [
+              24,
+              18,
+              19
+            ],
+            "barycentric": [
+              0.4537800206010256,
+              0.0364859649036432,
+              0.5097340144953312
+            ],
+            "uv": [
+              0.7187501536449837,
+              0.5357140905786696
+            ],
+            "restHeadPoint": [
+              -0.053896906507338624,
+              0.05553766433621924,
+              0.0793000549306932
+            ],
+            "paletteTexel": [
+              5,
+              3
+            ],
+            "carrierSampleRGBA8": [
+              254,
+              252,
+              253,
+              255
+            ],
+            "templateRGBA8": [
+              254,
+              252,
+              253,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:220,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            222,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 4,
+            "triangleVertexIds": [
+              24,
+              3,
+              4
+            ],
+            "barycentric": [
+              0.21315271784425938,
+              0.06978005026749437,
+              0.7170672318882463
+            ],
+            "uv": [
+              0.4687500897065488,
+              0.3928570824336577
+            ],
+            "restHeadPoint": [
+              -0.03286422126026618,
+              0.04528948286714608,
+              0.08738111147565193
+            ],
+            "paletteTexel": [
+              3,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:221,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            223,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 2,
+            "triangleVertexIds": [
+              24,
+              1,
+              2
+            ],
+            "barycentric": [
+              0.3458435545688705,
+              0.41802105871288253,
+              0.23613538671824696
+            ],
+            "uv": [
+              0.593750166966814,
+              0.3928570897730015
+            ],
+            "restHeadPoint": [
+              -0.043369114023786494,
+              0.04399629001104181,
+              0.08334498201432107
+            ],
+            "paletteTexel": [
+              4,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:role4:template:222,80",
+          "eye": 1,
+          "role": 4,
+          "part": "sclera",
+          "xy": [
+            224,
+            55
+          ],
+          "rgba8": [
+            255,
+            255,
+            255,
+            255
+          ],
+          "provenance": {
+            "kind": "authored205-carrier",
+            "eye": 1,
+            "materialRole": 4,
+            "primitive": 24,
+            "triangleVertexIds": [
+              24,
+              23,
+              0
+            ],
+            "barycentric": [
+              0.07341622711392137,
+              0.578748998137725,
+              0.3478347747483537
+            ],
+            "uv": [
+              0.7187502442270797,
+              0.392857097112345
+            ],
+            "restHeadPoint": [
+              -0.05387400405732982,
+              0.04270309447322041,
+              0.07930885152616939
+            ],
+            "paletteTexel": [
+              5,
+              2
+            ],
+            "carrierSampleRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "templateRGBA8": [
+              255,
+              255,
+              255,
+              255
+            ],
+            "literalPaletteAgreement": true,
+            "nativeOriginalUVNotProven": true
+          },
+          "partShift": [
+            0,
+            1
+          ]
+        },
+        {
+          "id": "eye1:native6:source101:primitive10",
+          "eye": 1,
+          "role": 6,
+          "part": "upper-lid",
+          "xy": [
+            222,
+            52
+          ],
+          "rgba8": [
+            81,
+            63,
+            54,
+            255
+          ],
+          "provenance": {
+            "kind": "measured native part, cached final reference pigment",
+            "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:101",
+            "outputXY": [
+              222,
+              52
+            ],
+            "feature": 5,
+            "sourceLayer": 3,
+            "primitive": 10,
+            "UV": [
+              0.5974501967430115,
+              0.7389123439788818
+            ],
+            "barycentric": [
+              0.11237279887683438,
+              0.6309622051236632,
+              0.25666499599950243
+            ],
+            "restHeadPoint": [
+              -0.025948531925678253,
+              0.06936068087816238,
+              0.09672177582979202
+            ],
+            "pointError": 2.0665711685605972e-09,
+            "pigmentFrame": 101,
+            "pigmentIsUnlit": false,
+            "sourceWeight": 0.8939984440803528
+          },
+          "partShift": [
+            0,
+            0
+          ]
+        }
+      ],
+      "unknownUnderlayCells": [
+        [
+          223,
+          52
+        ],
+        [
+          224,
+          52
+        ],
+        [
+          225,
+          52
+        ],
+        [
+          225,
+          53
+        ]
+      ],
+      "sourceExternalHidden": []
+    }
+  ],
+  "preservedFrame101LidAndReferenceIris": true,
+  "fullEyeArtApproved": false,
+  "oldPosesRegistered": false,
+  "unregisteredCloseReused": false,
+  "GPUIntegrated": false,
+  "productModified": false,
+  "newUnityCalls": 0,
+  "newCapture": 0,
+  "newCommit": false,
+  "assertions": 108,
+  "limits": [
+    "Only this registered open100/101 source pair; native target derives from observed source101",
+    "Clean underlay of vacated original eye cells was not captured; magenta marks unknown, not a complete final composite",
+    "Cached native colour is observed final frame101 RGB, not unlit or new per-frame lighting",
+    "One-cell retarget alters spatial source fidelity and upper contour; assess at original size",
+    "Both frames inform offline assignment; no claim of a causal runtime cache",
+    "No actual rotation/blink or changed lighting test; no unknown pose/state filling"
+  ]
+}

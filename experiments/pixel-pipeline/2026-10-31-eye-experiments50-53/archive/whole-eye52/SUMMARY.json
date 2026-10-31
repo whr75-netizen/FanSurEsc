@@ -1,0 +1,98 @@
+{
+  "kind": "whole-eye52-offline-result",
+  "phasePlacements": 11979,
+  "oldIndependentPoses": 5,
+  "actualFrozenFrames": [
+    96,
+    97,
+    98,
+    99,
+    100,
+    101
+  ],
+  "relativeWholeShapeVariantsPerProbe": 1,
+  "boundTemplateCells": 20,
+  "literalSourceCarrierAgreement": 20,
+  "nativeReferenceLidCells": 2,
+  "nativeReferenceLowerLidCells": 0,
+  "referenceOpaqueConflicts": [
+    {
+      "xy": [
+        219,
+        79
+      ],
+      "parts": [
+        "sclera",
+        "upper-lid"
+      ],
+      "ids": [
+        "eye1:role4:template:219,79",
+        "eye1:native6:reference:219,79"
+      ],
+      "status": "one opaque output cannot show both source parts at this cell"
+    },
+    {
+      "xy": [
+        221,
+        78
+      ],
+      "parts": [
+        "iris",
+        "upper-lid"
+      ],
+      "ids": [
+        "eye1:role1:template:221,78",
+        "eye1:native6:reference:221,78"
+      ],
+      "status": "one opaque output cannot show both source parts at this cell"
+    }
+  ],
+  "nativeVisibleCellsPerActualFrame": [
+    2,
+    2,
+    2,
+    2,
+    1,
+    2
+  ],
+  "actualMeasuredSourceBindings": 131,
+  "maxActualSourcePointError": 7.962420342039184e-09,
+  "maxActualUVError": 1.698909215200191e-07,
+  "visibleConflictsPerFrame": [
+    2,
+    2,
+    2,
+    2,
+    1,
+    2
+  ],
+  "sourceLid50Frame101": [
+    [
+      222,
+      52
+    ]
+  ],
+  "iris1AfterPreservingSourceLid": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    3
+  ],
+  "wholeShapeSolved": false,
+  "fullyClosedPixelFormAvailable": false,
+  "GPUApplied": false,
+  "productModified": false,
+  "liveEditorState": "unknown; not queried; parent reported instance change",
+  "newUnityCalls": 0,
+  "newCommit": false,
+  "testAssertions": 60124,
+  "limits": [
+    "Native reference raster is incomplete/conflicting and is NOT adopted",
+    "Common translation proves pure phase invariance, not pose/blink/occlusion invariance",
+    "Actual S3RGBA/S3Shade and S0 deformation-control buffer were not captured",
+    "No source-free pixel generation or invented replacement cells",
+    "Open Template20 lacks a coherent jointly designed lid/iris/sclera raster"
+  ]
+}

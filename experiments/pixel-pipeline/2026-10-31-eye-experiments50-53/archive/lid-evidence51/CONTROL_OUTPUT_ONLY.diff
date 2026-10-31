@@ -1,0 +1,21 @@
+--- actual S0 supplier EyeSkin348
++++ workspace-only EyeSkin348_ControlEvidence51
+@@ -1,4 +1,4 @@
+-Shader "EValidation/EyeSkin348"
++Shader "EValidation/EyeSkin348_ControlEvidence51"
+ {
+     Properties
+     {
+@@ -126,10 +126,10 @@
+ 
+ float4 _ClipShift333,_Profile333;float _Eye253Part,_Eye253Tag;float4 _ROI348;float4x4 _WorldToHead348;int _SupportKind348;
+ Varyings Eye333Vertex(const Attributes v){Varyings o=MToonVertex(v);o.e202Control=v.apertureControl.xy;o.e202Owner=v.e202SourceOwner.x;o.restHead348=v.texcoord1;return o;}
+-struct O333{float4 rgba:SV_Target0;float4 meta:SV_Target1;float4 restPosition:SV_Target2;float4 uv:SV_Target3;};
++struct O333{float4 rgba:SV_Target0;float4 meta:SV_Target1;float4 restPosition:SV_Target2;float4 uv:SV_Target3;float4 control:SV_Target4;};
+ O333 Eye333Fragment(const Varyings input,uint primitiveID:SV_PrimitiveID,bool facing:SV_IsFrontFace){Varyings v=input;v.pos.xy=_ROI348.xy+input.pos.xy/4;FragmentInput f;f.varyings=v;f.facing=facing?1:-1;
+  float2 uv=GetMToonGeometry_Uv(v.uv);half4 src=MTOON_SAMPLE_TEXTURE2D(_MainTex,uv)*_Color;half alpha=GetMToonGeometry_Alpha(src);if(alpha<=1e-6)discard;float4 c=MToonFragment(f);int role=(int)round(_Auto245Role);
+- O333 o;o.rgba=float4(c.rgb,alpha);o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,round(v.e202Owner),alpha);o.restPosition=float4(v.restHead348,facing?1:-1);o.uv=float4(uv,primitiveID+1,_SupportKind348);return o;}
++ O333 o;o.rgba=float4(c.rgb,alpha);o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,round(v.e202Owner),alpha);o.restPosition=float4(v.restHead348,facing?1:-1);o.uv=float4(uv,primitiveID+1,_SupportKind348);o.control=float4(v.e202Control.xy,0,alpha);return o;}
+ ENDHLSL
+         }
+ }

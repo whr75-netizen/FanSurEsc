@@ -1,0 +1,119 @@
+{
+  "frame": 101,
+  "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:101",
+  "xy": [
+    222,
+    52
+  ],
+  "cachedIrisSourceCell": {
+    "cellId": "eye1:role1:template:220,78",
+    "eye": 1,
+    "role": 1,
+    "referenceXY": [
+      220,
+      78
+    ],
+    "xy": [
+      222,
+      52
+    ],
+    "rgba8": [
+      67,
+      44,
+      33,
+      255
+    ],
+    "representative": {
+      "support": true,
+      "source": 2,
+      "sourceSamples": 5,
+      "weightSum": 1.2126688320550123,
+      "sampleBlockers": [
+        "S3META"
+      ],
+      "k": 6,
+      "depth": 13.703081130981445,
+      "weight": 0.0117647061124444
+    },
+    "knownFinalBlocks": [],
+    "visible": true,
+    "skinPolicy": "generic face underlay only inside registered existing-open aperture",
+    "nativeLidMaskInvented": false
+  },
+  "originalSourceNativeLid": [
+    [
+      222,
+      52
+    ]
+  ],
+  "existingReferenceIris": [
+    [
+      222,
+      52
+    ],
+    [
+      223,
+      52
+    ],
+    [
+      222,
+      53
+    ],
+    [
+      223,
+      53
+    ]
+  ],
+  "orderTruthTable": [
+    {
+      "rule": "iris-first",
+      "iris": [
+        [
+          222,
+          52
+        ],
+        [
+          223,
+          52
+        ],
+        [
+          222,
+          53
+        ],
+        [
+          223,
+          53
+        ]
+      ],
+      "lid": [],
+      "bothOriginalPartsIntact": false
+    },
+    {
+      "rule": "lid-first",
+      "iris": [
+        [
+          223,
+          52
+        ],
+        [
+          222,
+          53
+        ],
+        [
+          223,
+          53
+        ]
+      ],
+      "lid": [
+        [
+          222,
+          52
+        ]
+      ],
+      "bothOriginalPartsIntact": false
+    }
+  ],
+  "conclusion": "This particular fixed raster plus the source lid is incompatible at one opaque cell. It does not prove eye correction impossible; a joint state raster must change their shared placement rather than merely priority.",
+  "newDesignAdopted": false,
+  "productModified": false
+}

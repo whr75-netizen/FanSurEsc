@@ -1,0 +1,52 @@
+{
+  "budgetL1Cells": 0,
+  "partTargetCounts": {
+    "iris": 4,
+    "sclera": 6,
+    "upper-lid": 1
+  },
+  "enumerated": 1,
+  "feasible": 0,
+  "trials": [
+    {
+      "shifts": {
+        "iris": [
+          0,
+          0
+        ],
+        "sclera": [
+          0,
+          0
+        ],
+        "upper-lid": [
+          0,
+          0
+        ]
+      },
+      "movementPerPart": 0.0,
+      "curveError": 0.18474457804890554,
+      "relativeCentreError": 0.0,
+      "boundingAreaChange": 0,
+      "collisions": [
+        {
+          "xy": [
+            222,
+            52
+          ],
+          "ids": [
+            "eye1:role1:template:220,78",
+            "eye1:native6:source101:primitive10"
+          ]
+        }
+      ],
+      "externalBlocks": [],
+      "violations": [
+        "internal part collision"
+      ],
+      "feasible": false
+    }
+  ],
+  "selected": null,
+  "rows": [],
+  "pareto": []
+}

@@ -1,0 +1,155 @@
+{
+  "sequenceId": "counts47-087454994917423fa13c5fe72eceb7f4",
+  "baselineCommit": "d0ca21f4ac87e82151357253582f9ce079596a2d",
+  "frame101LidCause": "NativeLineAllocated19 excludes new cached iris occupancy and re-ranks into a spare tiny source fragment; not anchor change",
+  "anchorConstant": [
+    2,
+    -26
+  ],
+  "lineFeedbackRegressions": [
+    [
+      101,
+      1
+    ]
+  ],
+  "lineFixed": [
+    {
+      "frame": 101,
+      "eye": 1,
+      "fromBad": [
+        [
+          221,
+          53
+        ]
+      ],
+      "restoredSource": [
+        [
+          222,
+          52
+        ]
+      ]
+    }
+  ],
+  "lineIndependentAfter50": true,
+  "whiteCauseIndependent": true,
+  "actualID1Iris": [
+    2,
+    2,
+    2,
+    2,
+    1,
+    2
+  ],
+  "cache49ID1Iris": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    4
+  ],
+  "candidate50ID1Iris": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    3
+  ],
+  "scleraStrict49": [
+    4,
+    4,
+    4,
+    4,
+    4,
+    5
+  ],
+  "scleraS0BypassNotAdopted": [
+    10,
+    10,
+    10,
+    9,
+    9,
+    10
+  ],
+  "sourceNativeLineBudget": [
+    {
+      "frame": 96,
+      "eye": 2,
+      "area": 0.49388420581817627,
+      "budget": 0
+    },
+    {
+      "frame": 96,
+      "eye": 1,
+      "area": 0.39682209491729736,
+      "budget": 0
+    },
+    {
+      "frame": 97,
+      "eye": 2,
+      "area": 0.5685574412345886,
+      "budget": 1
+    },
+    {
+      "frame": 97,
+      "eye": 1,
+      "area": 0.44627371430397034,
+      "budget": 0
+    },
+    {
+      "frame": 98,
+      "eye": 2,
+      "area": 0.5738625526428223,
+      "budget": 1
+    },
+    {
+      "frame": 98,
+      "eye": 1,
+      "area": 0.390857458114624,
+      "budget": 0
+    },
+    {
+      "frame": 99,
+      "eye": 2,
+      "area": 0.3581966161727905,
+      "budget": 0
+    },
+    {
+      "frame": 99,
+      "eye": 1,
+      "area": 0.4174230098724365,
+      "budget": 0
+    },
+    {
+      "frame": 100,
+      "eye": 2,
+      "area": 0.3534192740917206,
+      "budget": 0
+    },
+    {
+      "frame": 100,
+      "eye": 1,
+      "area": 0.45362746715545654,
+      "budget": 0
+    },
+    {
+      "frame": 101,
+      "eye": 2,
+      "area": 0.4288645088672638,
+      "budget": 0
+    },
+    {
+      "frame": 101,
+      "eye": 1,
+      "area": 0.5035616755485535,
+      "budget": 1
+    }
+  ],
+  "checks": 1637,
+  "GPUCompiled": false,
+  "productModified": false,
+  "newUnityCalls": 0,
+  "fullEyeSolved": false,
+  "remaining": "upper-lid source budget still switches at .5; full registered lid/iris/sclera form and ordinary face-skin vs actual lid split missing; no through-skin fill adopted"
+}

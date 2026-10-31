@@ -1,0 +1,197 @@
+{
+  "status": "offline bounded joint allocation candidate; not art/GPU/temporal completion",
+  "sourceFrames": [
+    100,
+    101
+  ],
+  "cohortUsesBothFramesOffline": true,
+  "targetCounts": {
+    "iris": 4,
+    "sclera": 6,
+    "upper-lid": 1
+  },
+  "targetCountRule": "exact retained Template glyph plus independently observed native source part; no global iris/lid count",
+  "budgetZeroFeasible": 0,
+  "budgetOneEnumerated": 125,
+  "budgetOneFeasible": 3,
+  "selected": {
+    "shifts": {
+      "iris": [
+        0,
+        0
+      ],
+      "sclera": [
+        0,
+        0
+      ],
+      "upper-lid": [
+        0,
+        -1
+      ]
+    },
+    "movementPerPart": 1.0,
+    "curveError": 1.9196668222436195,
+    "relativeCentreError": 2.0,
+    "boundingAreaChange": 4,
+    "collisions": [],
+    "externalBlocks": [],
+    "violations": [],
+    "feasible": true
+  },
+  "alternativeLidFixed": {
+    "shifts": {
+      "iris": [
+        0,
+        1
+      ],
+      "sclera": [
+        0,
+        1
+      ],
+      "upper-lid": [
+        0,
+        0
+      ]
+    },
+    "movementPerPart": 2.0,
+    "curveError": 0.42780836839845476,
+    "relativeCentreError": 2.0,
+    "boundingAreaChange": 4,
+    "collisions": [],
+    "externalBlocks": [],
+    "violations": [],
+    "feasible": true
+  },
+  "actualNativeSupportPerFrame": {
+    "100": [
+      {
+        "support": true,
+        "source": 3,
+        "k": 1,
+        "depth": 13.697181701660156,
+        "weight": 0.21196384727954865,
+        "sourceSamples": 3,
+        "sampleBlockers": [],
+        "knownFinalBlocks": []
+      }
+    ],
+    "101": [
+      {
+        "support": true,
+        "source": 3,
+        "k": 1,
+        "depth": 13.69707202911377,
+        "weight": 0.8939984440803528,
+        "sourceSamples": 3,
+        "sampleBlockers": [],
+        "knownFinalBlocks": []
+      }
+    ]
+  },
+  "syntheticPhasePlacements": 578,
+  "frameResults": [
+    {
+      "frame": 100,
+      "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:100",
+      "emittedByPart": {
+        "iris": 4,
+        "sclera": 5,
+        "upper-lid": 1
+      },
+      "movedTokens": [
+        {
+          "id": "eye1:native6:source101:primitive10",
+          "part": "upper-lid",
+          "fromXY": [
+            222,
+            52
+          ],
+          "toXY": [
+            222,
+            51
+          ],
+          "rgba8": [
+            81,
+            63,
+            54,
+            255
+          ]
+        }
+      ],
+      "changesVsLidPriorityCells": [
+        [
+          222,
+          51
+        ],
+        [
+          222,
+          52
+        ]
+      ],
+      "changedPhysicalPixelsVsActual": 40,
+      "outsideEyeUnionChanges": 0,
+      "sourceExternalHidden": [
+        "eye1:role4:template:222,78"
+      ]
+    },
+    {
+      "frame": 101,
+      "sourceId": "counts47-087454994917423fa13c5fe72eceb7f4:101",
+      "emittedByPart": {
+        "iris": 4,
+        "sclera": 6,
+        "upper-lid": 1
+      },
+      "movedTokens": [
+        {
+          "id": "eye1:native6:source101:primitive10",
+          "part": "upper-lid",
+          "fromXY": [
+            222,
+            52
+          ],
+          "toXY": [
+            222,
+            51
+          ],
+          "rgba8": [
+            81,
+            63,
+            54,
+            255
+          ]
+        }
+      ],
+      "changesVsLidPriorityCells": [
+        [
+          222,
+          51
+        ],
+        [
+          222,
+          52
+        ]
+      ],
+      "changedPhysicalPixelsVsActual": 44,
+      "outsideEyeUnionChanges": 0,
+      "sourceExternalHidden": []
+    }
+  ],
+  "preservedFrame101LidAndReferenceIris": true,
+  "fullEyeArtApproved": false,
+  "oldPosesRegistered": false,
+  "unregisteredCloseReused": false,
+  "GPUIntegrated": false,
+  "productModified": false,
+  "newUnityCalls": 0,
+  "newCapture": 0,
+  "newCommit": false,
+  "assertions": 104,
+  "limits": [
+    "Only this registered open100/101 source pair; native target derives from observed source101",
+    "Cached native colour is observed final frame101 RGB, not unlit or new per-frame lighting",
+    "One-cell retarget alters spatial source fidelity and upper contour; assess at original size",
+    "Both frames inform offline assignment; no claim of a causal runtime cache",
+    "No actual rotation/blink or changed lighting test; no unknown pose/state filling"
+  ]
+}

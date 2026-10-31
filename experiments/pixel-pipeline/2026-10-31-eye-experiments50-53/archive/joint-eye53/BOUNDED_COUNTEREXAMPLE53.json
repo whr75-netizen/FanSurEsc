@@ -1,0 +1,106 @@
+{
+  "scope": "this exact rigid-glyph/L1<=1 candidate family only",
+  "withNoIrisVerticalDisplacementFeasible": 0,
+  "reason": "All two source-occlusion-safe solutions move iris/sclera down one cell. Native-up alone intersects nearer hair/brow source. This is not a proof that non-rigid joint eye correction is impossible.",
+  "rejectedNativeUp": {
+    "shifts": {
+      "iris": [
+        0,
+        0
+      ],
+      "sclera": [
+        0,
+        0
+      ],
+      "upper-lid": [
+        0,
+        -1
+      ]
+    },
+    "movementPerPart": 1.0,
+    "curveError": 1.9196668222436195,
+    "relativeCentreError": 2.0,
+    "boundingAreaChange": 4,
+    "collisions": [],
+    "externalBlocks": [
+      {
+        "frame": 100,
+        "id": "eye1:native6:source101:primitive10",
+        "xy": [
+          222,
+          51
+        ],
+        "veto": [
+          "new-cell source occlusion S4META: 4/16",
+          "new-cell source occlusion S5META: 2/16"
+        ]
+      },
+      {
+        "frame": 101,
+        "id": "eye1:native6:source101:primitive10",
+        "xy": [
+          222,
+          51
+        ],
+        "veto": [
+          "new-cell source occlusion S4META: 2/16",
+          "new-cell source occlusion S5META: 2/16"
+        ]
+      }
+    ],
+    "violations": [
+      "would hide an originally visible source token behind external layer"
+    ],
+    "feasible": false
+  },
+  "feasible": [
+    {
+      "shifts": {
+        "iris": [
+          0,
+          1
+        ],
+        "sclera": [
+          0,
+          1
+        ],
+        "upper-lid": [
+          0,
+          0
+        ]
+      },
+      "movementPerPart": 2.0,
+      "curveError": 0.42780836839845476,
+      "relativeCentreError": 2.0,
+      "boundingAreaChange": 4,
+      "collisions": [],
+      "externalBlocks": [],
+      "violations": [],
+      "feasible": true
+    },
+    {
+      "shifts": {
+        "iris": [
+          0,
+          1
+        ],
+        "sclera": [
+          0,
+          1
+        ],
+        "upper-lid": [
+          1,
+          0
+        ]
+      },
+      "movementPerPart": 3.0,
+      "curveError": 0.30447683653134583,
+      "relativeCentreError": 4.0,
+      "boundingAreaChange": 4,
+      "collisions": [],
+      "externalBlocks": [],
+      "violations": [],
+      "feasible": true
+    }
+  ]
+}

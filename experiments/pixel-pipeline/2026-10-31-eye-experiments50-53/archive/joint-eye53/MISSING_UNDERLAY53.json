@@ -1,0 +1,41 @@
+{
+  "missingCells": {
+    "100": [
+      [
+        223,
+        52
+      ],
+      [
+        225,
+        52
+      ]
+    ],
+    "101": [
+      [
+        223,
+        52
+      ],
+      [
+        224,
+        52
+      ],
+      [
+        225,
+        52
+      ],
+      [
+        225,
+        53
+      ]
+    ]
+  },
+  "logicalSamples": 6,
+  "why": "Old same-eye feature pixels must be removed when the glyph moves. Saved final/head/eye-output already contain old eye RGB; using them as a clean backing leaves ghost features.",
+  "requiredSameFrameInput": "The existing Evaluate-selected bc/bm before win-colour replacement: BaseRGBA/META versus BackingRGBA/META nearest valid depth, or an equivalent verified eye-free skin layer.",
+  "relevantCode": "EyeFeature348.compute Evaluate selects Base/Backing; EyeRenderer367.Candidate.Dispatch already binds v.layers[8] and [10].",
+  "alternative": "S0RGBA plus source metadata and the exact original resolve rule, if equivalent backing selection is proven; not texture-mean/nearby-skin copying.",
+  "captureNotExecuted": true,
+  "currentUnityProhibited": true,
+  "pastSourceIdsCannotBeReusedForNewFrames": true,
+  "practicalNextInput": "A new paired frozen replay with the same metadata and selected clean underlay at vacated old-feature cells; keep its new sourceId distinct from frozen100/101. No large capture loop is required."
+}

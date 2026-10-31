@@ -1,0 +1,23 @@
+{
+  "status": "offline whole source adapter complete; coherent full pixel form not solved/not adopted",
+  "entry": "INDEX.html",
+  "runOrder": [
+    "prepare52.py",
+    "build52.py",
+    "verify52.py",
+    "constraints52.py",
+    "finalize52.py"
+  ],
+  "outputs": "No new commit. Keep all52 files separate from approved49.",
+  "liveEditorState": "unknown; no query",
+  "pendingProcess": null,
+  "need": "joint source-supported pixel state and scoped GPU evidence; not a priority-only patch",
+  "prohibitedUntilChanged": [
+    "Unity calls",
+    "new captures",
+    "GC/unload",
+    "UI control",
+    "new product writes",
+    "new commit"
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "candidates": [
+    {
+      "candidate": "B",
+      "shifts": {
+        "iris": [
+          0,
+          1
+        ],
+        "sclera": [
+          0,
+          1
+        ],
+        "upper-lid": [
+          0,
+          0
+        ]
+      },
+      "perPartSquaredMovement": 2.0,
+      "sourceRegionCurveErrorSquared": 0.42780836839845476,
+      "relativePartCentroidErrorSquared": 2.0,
+      "originalBoundsCells": [
+        4,
+        3
+      ],
+      "outputBoundsCells": [
+        4,
+        4
+      ],
+      "heightScale": 1.3333333333333333,
+      "irisShiftVsUnmodifiedOtherEye": [
+        0.0,
+        1.0
+      ],
+      "irisComponents": 1,
+      "wholeComponents": 1,
+      "singleNativeLidCellCannotProveCurveFit": true,
+      "paletteChanged": false,
+      "opticalReadability": "NOT automatically passed; source geometry, component and colour checks are insufficient for art approval"
+    },
+    {
+      "candidate": "C",
+      "shifts": {
+        "iris": [
+          0,
+          1
+        ],
+        "sclera": [
+          0,
+          1
+        ],
+        "upper-lid": [
+          1,
+          0
+        ]
+      },
+      "perPartSquaredMovement": 3.0,
+      "sourceRegionCurveErrorSquared": 0.30447683653134583,
+      "relativePartCentroidErrorSquared": 4.0,
+      "originalBoundsCells": [
+        4,
+        3
+      ],
+      "outputBoundsCells": [
+        4,
+        4
+      ],
+      "heightScale": 1.3333333333333333,
+      "irisShiftVsUnmodifiedOtherEye": [
+        0.0,
+        1.0
+      ],
+      "irisComponents": 1,
+      "wholeComponents": 1,
+      "singleNativeLidCellCannotProveCurveFit": true,
+      "paletteChanged": false,
+      "opticalReadability": "NOT automatically passed; source geometry, component and colour checks are insufficient for art approval"
+    }
+  ],
+  "sourceUpperCurveSpan": [
+    3.223131640005988,
+    1.0865266127473632
+  ],
+  "sourceUpperCurveLength": 3.9905150247378454,
+  "limitation": "One observed native output pixel is an evidenced part token, not a complete authored lid stroke. No claim of reconstructed upper/lower-eye art curve.",
+  "objectiveMeaning": "Movement is normalized per part; region/curve distances use source geometry; centroid error is relative part-layout change. These do not constitute a validated human aesthetic function."
+}

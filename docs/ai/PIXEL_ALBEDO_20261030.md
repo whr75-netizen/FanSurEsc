@@ -316,3 +316,21 @@ current UV colour-range66개는 화면186조각이다. 배타 분류37개는 여
 | `Recovered66.cs:Execute` |11:33:15UTC 새Editor GameMap1 Edit/scene clean/roots37, options false/None, time1/captureDelta0/양PC_RPAsset 확인. Mesh와 설정4 serialized SHA 모두 백업과 ExactUTF8. dirty24→25는 Mesh load/ToJson 구간이며 Mesh 내용 동일 |
 
 보호110파일과 기존30수정 bytes 변경0. 차이가 없어 원본 위에 backup을 복사하지 않았다. native object identity/compiled shader cache/GPU buffers/RT/static상태 완전복구 주장은 하지 않는다. 이후65 두 C# 적용·컴파일·실제 local-buffer 검증과64 동일source 입력 캡처가 남았다. O(N²) 검증이나 일괄저장/강제dirty해제를 다시 쓰지 않는다.
+
+
+## BodyScope65 제품 적용·검증67 — 컴파일/작은native 통과, 실제 캡처 미완
+
+[실제 적용·복원·차단 요약](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/PRODUCT_RESULT65.json), [선별 stage 보존 증거](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/PRODUCT_STAGE_PROOF65.json), [Play observer 종료 기록](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/CAPTURE_STATE66.json). 이전66 복구 상태에서 이어간 최신 단계다. 이번 commit은 두 제품 경로/이 절의 Git 이력으로 추적한다.
+
+| 경로·함수 | 실제 변경·검증·미완 |
+|---|---|
+| `ClothRegion524.cs:BodyScopeResources551/ScopeOwner551/Scope551/BeginProbe/Bind/BindLines553/ReleaseScope551/Release` |65후보 실제 적용. runtime material-local buffer, kernel-local compute, renderer별 소유 및 upload-success 후 교체. source predicate/팔레트/기하 변경 없음 |
+| `Full319View335.cs:OnDisable` |ready 전 scope 해제 hook 적용. 기존 두 파일의 사용자13/2·9/5 line delta는 unstaged에 그대로 남도록 index hunk만 분리 |
+| `Compile66.cs:Execute` / `COMPILED65.json` |적용 후 자동 script compile/domain reload 완료, 새 public ReleaseScope551 직접 method-group 참조 성공. 명시적 Refresh는 bridge 재생성 중 Unity-not-detected로 미실행. 새 C# compile error0 |
+| `ScopeCheck66.cs`, 추출 owner parity |실제 Unity ComputeBuffer3개 총20bytes, 임시 Material2개로 upload/교체/분리 handle/반복해제/invalid mask 검사 통과. global buffer 쓰기0/scene 변경0. private 제품 dictionary 직접 검사는 아님 |
+| `Global66.cs` / `GLOBAL_NAMES66.json` |renderer63+scene rain11=74 named globals 외부 binary/SHA/역읽기 검증, 모두 복원 가능. engine-owned builtins 전체 상태까지 보장하지 않음 |
+| `Capture66.cs:Execute/Tick/Finish` |승인된 Play 실제1회 진입. 정상 ready70초 timeout, 새 frame/plane/image0. frame1·2 trace만 있어 정상 renderer binding/64입력 계약은 미완. 배경/포커스 원인은 미확정 |
+| `CAPTURE_STATE66.json`, `POST_CAPTURE66.json` |정상 Play 종료·observer 제거·options/pipeline/time 복원,74 getter 불일치0. RT41→41. Mesh/settings5 serialized 내용 모두 동일. allocated+451796588/reserved+431951872/mono-172806144bytes는 내부 Profiler counter이며 physical RAM/no-leak 보장 아님 |
+| `CaptureRetry66.cs`, `prepare_retry66.py` |첫 실행 종료·복원 확인 후 기존 Editor 캡처처럼 runInBackground 임시true+상태trace를 준비. 자동심사가 추가Play/옵션변경 명시승인 없음으로 프로세스 생성 전에 거부. 실행/옵션변경0, 우회·재시도0. 추가 사용자 승인 필요 |
+
+현재31520 Edit/GameMap1 clean, pausefalse/optionsfalse/None/time1/captureDelta0. 보호110파일 중 이번 두 C# 외 변경0, 다른 기존28파일 SHA와 두 파일의 기존 사용자 delta를 보존했다. NoSubscription은 별도 Unity AI 오류로 기록하고 변경하지 않았다. O(N²) helper나 일괄 저장을 재실행하지 않았다. sourceId `capture67-20261031T115608773Z`는 global journal만 있으며 실제 샘플 packet이 아니다. 새 이미지/미술 개선/시간 안정성 성공을 주장하지 않는다.

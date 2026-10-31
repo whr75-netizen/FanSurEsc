@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>62 · 재질 내부 원본 색 영역 — 미채택 후보</title>
+<style>
+body{margin:24px;background:#181b20;color:#e8e8e8;font:15px/1.6 system-ui,sans-serif}a{color:#92c8ff}h1{font-size:24px}h2{font-size:19px;margin-top:32px}.status{border-left:4px solid #e2a952;padding:10px 18px;background:#25282e}.scroll{overflow:auto;margin:15px 0}.pixel{image-rendering:pixelated;image-rendering:crisp-edges}table{border-collapse:collapse}td,th{border:1px solid #48505c;padding:7px 12px;text-align:left}.stages{display:flex;gap:24px;align-items:flex-start}.stages figure{margin:0;min-width:170px}.stages img{width:168px;height:216px;object-fit:contain;object-position:left top}.native img{width:21px;height:27px}.native figure{min-width:170px}figcaption{font-size:12px;max-width:170px}.small{color:#bac0cc}code{color:#e9c999}summary{cursor:pointer}
+</style>
+<h1>62 · 재질 내부 원본 색 영역</h1>
+<p class="status"><b>독립 오프라인 실험 / 제품 미적용 / 미술 판정 미통과.</b><br>60의 같은 frame94에 원본 UV 색 영역 팔레트를 직접 대입했습니다. 새 Unity 렌더·연속 프레임이 아닙니다. 다른 파츠·실루엣·알파는 보존했습니다.</p>
+<p><a href="README_KO.md">연산·입력·실패와 한계</a> · <a href="RESULT62.json">373셀 수치</a> · <a href="REGRESSION62.json">과거 반례 재검사</a> · <a href="FEATURE_TESTS62.json">특징별 실제 RGB8 / Q</a> · <a href="SOURCE_PROFILE_AUDIT62.json">native 명도 프로필</a></p>
+<h2>같은 전체 프레임 · 원래 크기</h2>
+<p class="small">왼쪽: 원래 제품 저장 출력. 가운데: 재질당 대표색60의 실제 GPU 출력. 오른쪽: 원본 색 영역62의 오프라인 재합성. 960×544 각 컷을 원래 크기로 나란히 표시합니다.</p>
+<div class="scroll"><img class="pixel" src="FULL_COMPARE62.png" width="2880" height="574" alt="같은 전체 입력의 원래 제품, 재질 대표색60, 원본 영역62 비교"></div>
+<h2>머리 단계 · nearest 8배</h2>
+<p>색과 명암을 구분합니다. source 영역은 <code>materialId</code>나 실제 가림 owner와 동일하지 않습니다. 마지막 열은 색이 아닌 영역 ID의 디버그 표시입니다.</p>
+<div class="scroll"><img class="pixel" src="COMPARE62.png" alt="원본189색, 재질60, 영역 기준색, 팔레트 직접 출력, 동일 외곽 처리, 영역 ID"></div>
+<details><summary>같은 머리 · 원래 논리 크기</summary><div class="scroll stages native">
+<figure><img class="pixel" src="source62-1x.png" alt="원본 색"><figcaption>원본189색</figcaption></figure>
+<figure><img class="pixel" src="material60-1x.png" alt="60 재질 대표색"><figcaption>60 최종9색</figcaption></figure>
+<figure><img class="pixel" src="regions62-1x.png" alt="62 영역 기준색"><figcaption>영역 anchor45색</figcaption></figure>
+<figure><img class="pixel" src="preline62-1x.png" alt="62 팔레트 직접 출력"><figcaption>P[region,Q]62색</figcaption></figure>
+<figure><img class="pixel" src="final62-1x.png" alt="62 기존 외곽 처리 후"><figcaption>기존52셀 선 처리 후74색</figcaption></figure>
+</div></details>
+<table><thead><tr><th>같은373셀</th><th>RGB8</th><th>RGB 4연결 영역</th><th>단독 셀</th><th>L 중앙값</th></tr></thead><tbody>
+<tr><td>원본 point</td><td>189</td><td>287</td><td>262</td><td>.256064</td></tr>
+<tr><td>재질60 최종</td><td>9</td><td>37</td><td>13</td><td>.339208</td></tr>
+<tr><td>영역62 anchor</td><td>45</td><td>162</td><td>117</td><td>.256064</td></tr>
+<tr><td>영역62 P 조회</td><td>62</td><td>175</td><td>132</td><td>.256064</td></tr>
+<tr><td>영역62 동일 선 처리</td><td>74</td><td>189</td><td>144</td><td>.251989</td></tr>
+</tbody></table>
+<p>원본 무늬는 복구됐지만 작은 색 조각은 여전히 많습니다. 숫자의 감소·원본 중앙값 근접을 미술적 성공으로 해석하지 않습니다. palette 간격 조절은 영역/Q를 바꾸지 않으며 RGB×g나 전체 밝기 맞춤 배율은 없습니다.</p>
+<h2>이전 64색·작은 특징 소실·0변경 반례</h2>
+<p>이 부분은 다른 sourceId의 이전 프레임입니다. 기존 358 source-known 셀을 동일 범위로 검사하며 정보 없는10셀은 원래 값을 유지합니다. 단독184→136이지만 이전 v3의106보다 많고, 추가 경계도113→140으로 늘어 여전히 미채택입니다.</p>
+<div class="scroll"><img class="pixel" src="LEGACY_COMPARE62.png" alt="v3, protected64, 영역62, contrast-bounded0변경 결과"></div>
+<p>보호7쌍의 색 구분과 방향은 유지했지만 과거 filtered 원본 대비 하한까지 4Q 전부 만족한 것은4쌍입니다. native point와 filtered source 차이를 대비 증폭으로 숨기지 않았습니다. <a href="FEATURE_TESTS62.json">실패 id3·5·8과 실제 색</a>.</p>
+<h2>동일 재질·다른 영역 / 동일 색·다른 구조 최소 반례</h2>
+<img class="pixel" src="IDENTITY_FIXTURE62.png" width="450" height="270" alt="같은 재질에 분리된 두 무늬와 하나의 작은 강조 셀">
+<p>분리된 두 무늬는 별도 UV region ID, 같은 색의 별도 기하는 별도 structure ID로 유지합니다. 팔레트 참조 공유가 실제 가림 owner 병합을 의미하지 않습니다. 1texel 강조는 면적 필터로 삭제하지 않습니다. 이 합성 검사를 전체 실제 특징 검증으로 확대하지 않습니다.</p>
+<details><summary>원본 texture와 UV 색 영역</summary><div class="scroll stages">
+<figure><img class="pixel" src="source-11-native62.png" style="width:256px;height:512px" alt="material11 원본"><figcaption>material11 원본</figcaption></figure>
+<figure><img class="pixel" src="source-11-regions62.png" style="width:256px;height:512px" alt="material11 영역"><figcaption>색 영역 ID</figcaption></figure>
+<figure><img class="pixel" src="source-12-native62.png" style="width:256px;height:512px" alt="material12 원본"><figcaption>material12 원본</figcaption></figure>
+<figure><img class="pixel" src="source-12-regions62.png" style="width:256px;height:512px" alt="material12 영역"><figcaption>색 영역 ID</figcaption></figure>
+</div></details>
+<p class="small">원본 source의 연속 기울기·그려진 무늬·형태를 자동 구별하는 분류는 미완입니다. native3표본이 완만한 기울기와 양립한다는 것은 제거 허가가 아닙니다. GPU/회전/가림/시간 안정성은62에서 시험하지 않았습니다. 기존 global63개의 원래 값은 안전한 회수 핸들이 없으므로 복원 동등성 미증명 상태를 유지합니다.</p>
+<p><a href="unpooled-COMPARE62.png">팔레트 공유 전 ablation</a> · <a href="MATH_TEST62.json">기존 색 함수518색 대조</a> · <a href="PNG_PRESERVATION62.json">최종 PNG 보존 검사</a></p>
+</html>

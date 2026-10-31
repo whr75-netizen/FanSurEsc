@@ -219,3 +219,23 @@ frame94/sourceId renderer60-20261031T092325108Z: 실제헤어373셀의 source/tr
 Edit/scene clean37root/domain1/liveNative0, 옵션·pipeline·시간 API는prePlay백업과 동일. 설정3개 nativehash는60종료와 동일/원래디스크변화0. 얼굴vertex584640/index85464바이트와 bindpose1456 Float32값,57morph의이름/프레임수/weight는60종료와 동일; bindpose는disk와도숫자차이0. 사전전체native/morph delta백업은없어전체형태동일성확대금지. 설정3dirty는관련APIsetter/원복setter에연결되며 얼굴dirty의정확API원인은미확정이다. dirty30은60종료29+기존DeskLivePixelProbe.shader1(원인미확정/diskdiff0)이고저장/해제하지않았다. 원래24ID/dirty와기존파일을보존했다. API enabled=false와native/disk enabled1/options0표현차이는추정수정하지않았다.
 
 후보재질0/computeclone0/RT30. 자체코드static대형배열없음, GPU자원해제및큰배열의동기local수명확인. 제품고정색배열약4MiB/tag317080bytes/bool2×130560은존재하지만+353.31MiB소유자로확정불가, SDKmanaged root미확인. 어떤자원도강제정리/GC하지않았다. 같은373셀은원색189→재질대표3→Q팔레트6→선색후9색이며L중앙값.256→.405→.365→.339(제품.141). 무늬감소·밝기편향은per-material/offscreen포함32표본medoid선정에서이미발생하고, 기존G=(.0853,.1188,.2491)감광/청색편향우회도색차에기여한다. LineTone.55는52셀을어둡게만하므로내부갈색/밝기의원인이아니다. 새후보/파라미터변경/제품변경없이기존저장자료에서분해했다.
+
+## 재질 내부 원본 색 영역62 — 오프라인 구현, 미채택
+
+[62 전체/머리/이전 반례 비교](../../experiments/pixel-pipeline/2026-10-31-source-regions62/INDEX.html), [계약·실패·재생 방법](../../experiments/pixel-pipeline/2026-10-31-source-regions62/README_KO.md). 기준 commit `c5be02ddd64ad32511c421b8698a1bfdbadc5675`; 이번 commit은 이 절과62 경로의 Git 이력으로 추적한다. Unity 조회·Play·렌더·제품 변경·GC·SaveAssets·화면 조작 없이 저장60 frame94/sourceId와 원본 VRM만 사용했다.
+
+| 스크립트·함수 | 변경·검증 범위 |
+|---|---|
+| `region62.py:build_regions/cc4` | 원본 PNG의 OKLab 색 범위 → UV 연결 영역. 재질 ID·색 영역 ID·topology 구조·실제 occlusion owner를 분리. 원본 대비 표지로만 추가 분리하며 면적 삭제 없음 |
+| `region62.py:palette/structure_components` | 실제 native texel anchor → 유한 P 직접 조회. 동일 색 범위의 다른 영역은 참조만 공유. 원본 기하 연결은 별도 ID이며 미술 묶음/정렬 owner로 승격하지 않음 |
+| `run62.py:resolve` | 실제373셀의 primitive/material/UV→source region→P[저장Q] 연결. 원래52셀 LineTone .55는 그대로 별도 적용. g를 RGB에 곱하거나 중앙값 보정 배율을 쓰지 않음 |
+| `test_math62.py`, `test_regions62.py` | 기존54와518색·RGB8 왕복, 분리된 두 무늬/같은 색 다른 구조/작은 강조 셀 반례. 현재373셀의 직접 P/간격·Q 독립성과 옛 source-known358셀의106/184 singleton·113 추가 경계·region40 대비 소실/0변경을 재현 |
+| `audit_source62.py` | original imageSHA 검증·native3표본 L 구간의 affine 적합 가능성 진단. 365/373 양립은 의미 특징/제거 대상의 판정이 아니며 라벨 변경0 |
+
+같은373셀: 원본189색 → 가시 UV 영역66/구조45/instance196 → anchor45색 → P62색 → 동일 선 처리74색. 최종 RGB 연결 영역189/단독144, L 중앙값 .251989(원본 .256064,60 .339208). 실제 전체 PNG의 머리 밖 RGBA/전체 alpha 변경0. 원본 무늬는 다시 보이지만 하단 잔무늬가 남아 미술 성공으로 채택하지 않았다. 전체 UV cache2146개 영역은 실제 미술 특징2146개라는 뜻이 아니다. 원본 색 범위 폭·명암 간격은 기존 측정 ΔL .043678819190537344를 쓴 진단 설정이며 최적값이 아니다.
+
+옛 프레임은 다른 sourceId이며358 source-known만 같은 범위로 비교했다. v3 단독106/추가 경계113, protected64 단독184/추가207,62 단독136/추가140이다. 정보 없는10셀은 기존 PNG로 유지했다. 보호7쌍×4Q의 색 구분·방향은 유지하나 기존 filtered 원본 최소 대비는4쌍만 모든Q 통과(id3·5·8 실패). equal-Q id4도 최소 대비는 Q0·2만 통과. native point/filtered 원본 차이와 RGB8 오차를 밝기/대비 증폭으로 숨기지 않았다. 모든 원본 gradient를 의미 경계로 고정하거나 source RGB189개를 그대로 family로 복제하지 않았지만, 그려진 긴 무늬와 부드러운 texture gradient를 구별하는 구조는 여전히 미완이다.
+
+최초 Python OKLab 행렬 계수 두 개 오기로 자홍색이 난 실패는 `invalid-math-*`로 보존하고, 기존54 함수518색 최대오차6.80e-16/왕복0불일치를 확인한 수정 결과만 후속 검사했다. 순회·연결 검사와 지표 감소를 미감 증명으로 확대하지 않는다. 실제 GPU·필터 footprint·회전/가림·시간 검증은 하지 않았다.
+
+global63 백업 추가 코드 검토:60 `CommandScript` private 딕셔너리와 SDK private `m_ActionInstance` 보유 가능성은 있으나 반환된 핸들이 없고 `CommandScriptPostBox.Pull`은 키를 제거한다. 공개 실행 결과는 ID/로그만 반환한다. 기존 참조에서 안전한 생존 객체 접근 경로를 찾지 못했다. GC 여부를 단정하지 않으며 추가 probe/반사/추정 setter 없이 원래값 백업 부재·동등성 미증명 상태를 유지한다. 마지막 실제 Unity 상태는61이며62에서 현재 상태를 재확인했다고 주장하지 않는다.

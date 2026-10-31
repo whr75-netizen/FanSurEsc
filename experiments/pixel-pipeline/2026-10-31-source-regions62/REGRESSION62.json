@@ -1,0 +1,407 @@
+{
+  "sourceId": "95d042f14adf8e99685f26838beeb00ab57773e445e5997d16a9c61d0f1e2c3f",
+  "distinctFromFrame60": true,
+  "minimumCounterexamples": {
+    "twoDisconnectedMotifsOneMaterial": {
+      "regionIds": [
+        2,
+        3
+      ],
+      "sameNativeReference": true
+    },
+    "sameColourDifferentStructures": [
+      0,
+      1
+    ],
+    "oneTexelAccentPreserved": true,
+    "sourceMutations": 0
+  },
+  "currentDirectPChecks": 373,
+  "currentIntervalAndQIndependenceChecks": 373,
+  "oldFrame": {
+    "totalCells": 368,
+    "knownSourceCells": 358,
+    "unknownFrozenCells": 10,
+    "v3": {
+      "cells": 358,
+      "usedRGB8": 16,
+      "RGB4Components": 145,
+      "singleCells": 106,
+      "visibleRGBCardinalEdges": 337,
+      "Lmin": 0.18142349037864036,
+      "Lmedian": 0.25353430112431674,
+      "Lmax": 0.8189702696771634
+    },
+    "protected64": {
+      "cells": 358,
+      "usedRGB8": 51,
+      "RGB4Components": 214,
+      "singleCells": 184,
+      "visibleRGBCardinalEdges": 451,
+      "Lmin": 0.16172694009069016,
+      "Lmedian": 0.2560643560939381,
+      "Lmax": 0.8277092784793234
+    },
+    "candidate62": {
+      "cells": 358,
+      "usedRGB8": 79,
+      "RGB4Components": 178,
+      "singleCells": 136,
+      "visibleRGBCardinalEdges": 398,
+      "Lmin": 0.19900746776844305,
+      "Lmedian": 0.2540267372749309,
+      "Lmax": 0.8001967739620379
+    },
+    "v3Edges": {
+      "sameAppearanceSameQPairs": 400,
+      "visibleBoundaries": 140,
+      "additionalVsV2": 113,
+      "mergedV2Boundaries": 2
+    },
+    "protected64Edges": {
+      "sameAppearanceSameQPairs": 400,
+      "visibleBoundaries": 236,
+      "additionalVsV2": 207,
+      "mergedV2Boundaries": 0
+    },
+    "candidate62Edges": {
+      "sameAppearanceSameQPairs": 400,
+      "visibleBoundaries": 167,
+      "additionalVsV2": 140,
+      "mergedV2Boundaries": 2
+    },
+    "changedCells": 338
+  },
+  "region40Witnesses": {
+    "originalChangedCells": 24,
+    "coherentChangedCells": 4,
+    "contrastBoundedChangedCells": 0,
+    "contrastBoundedRejections": 18,
+    "coherentLocalContrastLoss": [
+      {
+        "cell": [
+          11,
+          14
+        ],
+        "neighbour": [
+          12,
+          14
+        ],
+        "beforeRGB8": [
+          48,
+          26,
+          27
+        ],
+        "afterRGB8": [
+          50,
+          28,
+          29
+        ],
+        "neighbourBeforeRGB8": [
+          50,
+          28,
+          29
+        ],
+        "beforeAbsDeltaL": 0.008162193656650385,
+        "afterAbsDeltaL": 0.0,
+        "sourceDeltaL": 0.002267002146005781,
+        "note": "source contrast loss witness, not automatic semantic certification",
+        "candidate62RGB8": [
+          [
+            49,
+            27,
+            28
+          ],
+          [
+            50,
+            28,
+            29
+          ]
+        ],
+        "candidate62AbsDeltaL": 0.004075237638014317,
+        "candidate62NotCollapsed": true
+      },
+      {
+        "cell": [
+          11,
+          14
+        ],
+        "neighbour": [
+          11,
+          13
+        ],
+        "beforeRGB8": [
+          48,
+          26,
+          27
+        ],
+        "afterRGB8": [
+          50,
+          28,
+          29
+        ],
+        "neighbourBeforeRGB8": [
+          50,
+          28,
+          29
+        ],
+        "beforeAbsDeltaL": 0.008162193656650385,
+        "afterAbsDeltaL": 0.0,
+        "sourceDeltaL": 0.002267002146005781,
+        "note": "source contrast loss witness, not automatic semantic certification",
+        "candidate62RGB8": [
+          [
+            49,
+            27,
+            28
+          ],
+          [
+            49,
+            27,
+            28
+          ]
+        ],
+        "candidate62AbsDeltaL": 0.0,
+        "candidate62NotCollapsed": false
+      },
+      {
+        "cell": [
+          8,
+          18
+        ],
+        "neighbour": [
+          9,
+          18
+        ],
+        "beforeRGB8": [
+          45,
+          23,
+          24
+        ],
+        "afterRGB8": [
+          43,
+          22,
+          23
+        ],
+        "neighbourBeforeRGB8": [
+          43,
+          22,
+          23
+        ],
+        "beforeAbsDeltaL": 0.005747936785196972,
+        "afterAbsDeltaL": 0.0,
+        "sourceDeltaL": 0.0014376098723117292,
+        "note": "source contrast loss witness, not automatic semantic certification",
+        "candidate62RGB8": [
+          [
+            42,
+            22,
+            23
+          ],
+          [
+            42,
+            22,
+            23
+          ]
+        ],
+        "candidate62AbsDeltaL": 0.0,
+        "candidate62NotCollapsed": false
+      },
+      {
+        "cell": [
+          18,
+          20
+        ],
+        "neighbour": [
+          19,
+          20
+        ],
+        "beforeRGB8": [
+          32,
+          16,
+          17
+        ],
+        "afterRGB8": [
+          29,
+          14,
+          14
+        ],
+        "neighbourBeforeRGB8": [
+          29,
+          14,
+          14
+        ],
+        "beforeAbsDeltaL": 0.01074908048554965,
+        "afterAbsDeltaL": 0.0,
+        "sourceDeltaL": 0.004306205567542465,
+        "note": "source contrast loss witness, not automatic semantic certification",
+        "candidate62RGB8": [
+          [
+            41,
+            19,
+            20
+          ],
+          [
+            41,
+            19,
+            20
+          ]
+        ],
+        "candidate62AbsDeltaL": 0.0,
+        "candidate62NotCollapsed": false
+      },
+      {
+        "cell": [
+          18,
+          20
+        ],
+        "neighbour": [
+          18,
+          21
+        ],
+        "beforeRGB8": [
+          32,
+          16,
+          17
+        ],
+        "afterRGB8": [
+          29,
+          14,
+          14
+        ],
+        "neighbourBeforeRGB8": [
+          29,
+          14,
+          14
+        ],
+        "beforeAbsDeltaL": 0.01074908048554965,
+        "afterAbsDeltaL": 0.0,
+        "sourceDeltaL": 0.004306205567542465,
+        "note": "source contrast loss witness, not automatic semantic certification",
+        "candidate62RGB8": [
+          [
+            41,
+            19,
+            20
+          ],
+          [
+            41,
+            19,
+            20
+          ]
+        ],
+        "candidate62AbsDeltaL": 0.0,
+        "candidate62NotCollapsed": false
+      },
+      {
+        "cell": [
+          22,
+          20
+        ],
+        "neighbour": [
+          21,
+          20
+        ],
+        "beforeRGB8": [
+          32,
+          16,
+          17
+        ],
+        "afterRGB8": [
+          29,
+          14,
+          14
+        ],
+        "neighbourBeforeRGB8": [
+          29,
+          14,
+          14
+        ],
+        "beforeAbsDeltaL": 0.01074908048554965,
+        "afterAbsDeltaL": 0.0,
+        "sourceDeltaL": 0.005618025228922963,
+        "note": "source contrast loss witness, not automatic semantic certification",
+        "candidate62RGB8": [
+          [
+            35,
+            15,
+            17
+          ],
+          [
+            41,
+            19,
+            20
+          ]
+        ],
+        "candidate62AbsDeltaL": 0.019956573500484187,
+        "candidate62NotCollapsed": true
+      },
+      {
+        "cell": [
+          22,
+          20
+        ],
+        "neighbour": [
+          22,
+          19
+        ],
+        "beforeRGB8": [
+          32,
+          16,
+          17
+        ],
+        "afterRGB8": [
+          29,
+          14,
+          14
+        ],
+        "neighbourBeforeRGB8": [
+          29,
+          14,
+          14
+        ],
+        "beforeAbsDeltaL": 0.01074908048554965,
+        "afterAbsDeltaL": 0.0,
+        "sourceDeltaL": 0.001700079479744765,
+        "note": "source contrast loss witness, not automatic semantic certification",
+        "candidate62RGB8": [
+          [
+            35,
+            15,
+            17
+          ],
+          [
+            35,
+            15,
+            17
+          ]
+        ],
+        "candidate62AbsDeltaL": 0.0,
+        "candidate62NotCollapsed": false
+      }
+    ]
+  },
+  "featureCertificates": {
+    "protectedSevenNotCollapsedAllFourQ": true,
+    "protectedSevenDirectionAllFourQ": true,
+    "strictLegacyMinimumContrastAllQPassIds": [
+      0,
+      2,
+      6,
+      7
+    ],
+    "strictLegacyMinimumContrastAllQFailIds": [
+      3,
+      5,
+      8
+    ],
+    "equalQCancellationNotCollapsed": true,
+    "equalQStrictMinimumPassQ": [
+      0,
+      2
+    ],
+    "weakPair1NotForced": true
+  },
+  "acceptance": false,
+  "reason": "identity/direct palette contracts pass; strict legacy contrast and pixel-art cleanup are incomplete. Native point vs recorded filtered source and RGB8 rounding are separate limitations."
+}

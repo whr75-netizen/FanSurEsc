@@ -296,3 +296,15 @@ current UV colour-range66개는 화면186조각이다. 배타 분류37개는 여
 | `validate65.py` / `Harness65.cs` | 실제 후보 owner와 BeginProbe를 그대로 추출해 설치된 .NET csc+CPU fake로 컴파일/실행. 수명13사례, 생성20/해제20, 소스 불변식5개, 대상 Assets SHA변경0. `git apply --check`만 성공, apply 안 함 |
 
 새 짧은 Play 승인은 도착했지만 실제 실행 전 안전성 조건은 남았다. 두 기존 C# 파일을 활성화하려면 import/재컴파일이 필요하며, Play의 `DisableDomainReload`만으로 script import reload를 막을 수 없다. 외부 command runner helper는 기존 정적 호출을 교체하지 않는다. 현재 미저장 내용과 reload 회피를 모두 보장할 방법은 미확인이라 이 단계에서 멈췄다. private reflection/hotpatch/추정 global/null 복원을 사용하지 않았다. 실제 Unity 전체 컴파일 실패·domain reload·GPU in-flight 수명·shader local override·scope off/on 이미지 동등성은 미검증이다. 이 모의 자원 수치를 실제 GPU 메모리 측정/안전한 Play 완료로 확대하지 않는다. 이전60 global 백업 부재와64 입력/곡선 공백도 해결됐다고 쓰지 않는다.
+
+
+## 승인 실행66 — 백업 검증 완료, TimeManager 개별 저장 반환 미확인
+
+[66 상태/정확한 경로와 한계](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/README_KO.md), [마지막 실제 상태](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/STATUS66.json). 기준 commit `fa74521697731f3d4618cef742ac2b590910b310`; 이번 기록의 commit은66 경로/이 절의 Git 이력으로 추적한다. **65 패치 적용/import/Play/렌더 0**이며 실험이 성공적으로 끝났다고 쓰지 않는다.
+
+- `Read66.cs:Execute`:11:13:49UTC 공식 relay PID28304/Unity6000.5.9f1/GameMap1 Edit·scene clean·dirty30 확인. Shader25/Mesh1/설정4. `Mesh` namespace 충돌은 실행 전 실패였고 타입 한정 후1회만 재실행했다.
+- `Backup66.cs:Execute/MeshBackup`, `check_backup66.py`:디스크110파일11,225,609bytes와 non-Shader5객체 native JSON을 SHA 검증. 공개 Mesh binary9,008,928bytes는4,060정점/7submesh/91bindposes/57morph delta를 실제로 끝까지 파싱했다. 큰 Shader native JSON은 생성하지 않았다. 대용량 원본 백업은 workspace `render-fix21/apply-capture66/backup`에 있고 Git에는 manifest/검사만 보관한다.
+- `Save66.cs:Execute`:검증된 동일30dirty 객체에 개별 `AssetDatabase.SaveAssetIfDirty`를 호출. 11:15:37UTC 앞29건은 반환됐지만 dirty가 유지되고 파일/확인된 직렬화 내용 변경0. 마지막 `ProjectSettings/TimeManager.asset` 호출의 반환 기록·최종 SAVE66.json이 없다. relay45초 timeout 뒤 relay만 EOF 종료했으며 저장 재시도/SaveAssets/ClearDirty/씬 저장은0이다.
+- 호스트 Unity PID28304 생존·Responding=False 확인. 대화상자/UI는 미확인이며 기본 Editor.log는10월28일 자료라 새 오류 증거가 아니다. 11:18:40UTC 보호된110파일 변경0·기존30수정 보존. 앱 종료/reset/GC/CUA/추정 global 복원은 하지 않았다. GPU/compiled shader cache/비직렬화 static 상태를 이 백업으로 완전 복원할 수 있다고 주장하지 않는다.
+
+현재는 **저장 호출 결과 불확실**이므로 재실행·패치·import·캡처를 막는다. Unity의 실제 저장 진행/대화상자/응답 상태와 마지막 API 반환부터 확인해야 한다. Save66.cs는 정지 재현 증거이며 안전한 재실행 코드가 아니다. 한정된 helper/기록만 커밋하고 사용자 자산 변경은 stage하지 않았다.

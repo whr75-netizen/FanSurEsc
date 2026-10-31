@@ -183,3 +183,17 @@ GPU draw2/dispatch1회:64표본 중 opaque62(동일Q52·변경Q10), partial alph
 57 수명 감사: submitted 코드의 static 큰 배열/이벤트/비동기 callback 잔류는 없고 owned 자원 해제 경로가 있었다. 다만 DirtyLines의 객체당 JSON2회와 전체 문자열/UTF8/snapshot 반복 할당은 확인돼58에서 1회/객체+작은 해시 요약으로 줄였다. 57 RT2개 identity 교체 소유자/Unity 잔류 할당 소유자는 미확정이다.58 source 단계 allocated −33.248MiB/reserved +16.008MiB/mono −39.059MiB, GPU 단계 allocated −242.670MiB/reserved −173.273MiB/mono −20.977MiB. Unity 내부 counter의 단기 관측이며 물리RAM/누수 해결 증거가 아니다.
 
 현재 dirty24 native내용/entity ID·관련49파일·씬 clean/37root·Edit/domain 보존, 소유 자원 회수와 신규 Console 오류/경고0 확인. 원본 제품 두 함수와 기존 변경은 보존했다. 부분alpha1셀은 opaque LUT를 강제하지 않았다. source의 PNG identity transform/UV0만 지원하며 비identity 변환·다른 UV·sparse는 미지원이다. family domain 선택은 CONFIG58의 명시 primitive이고 원본 UV는 색 표본을 고르지만 primitive 내부 painted 특징을 자동 분할하지 않는다. **현재 renderer의 실제 가시 셀→원본 primitive/family provenance 버퍼 연결은 아직 없고**, 기존 Full319View335의 역할 분류도 그대로다. 다음 연결은 이 버퍼와 후단 alpha/outline/AA 보존이며 새 머리/눈 렌더 검증·제품 활성화는 별도다.
+
+
+## Renderer 실제 구성 연결59 — Play 직전 대기
+
+[59 source 연결·정확한 실행 경계](../../experiments/pixel-pipeline/2026-10-31-renderer-family59/README_KO.md). 현재 GameMap1 Edit에는 live NativePlayer395가 0개다. GameplayShellBootstrap.Awake가 실제 shellPrefab(PersistentGameplayShell)을 생성하고 nested ValidatedPresentation399를 초기화하는 정상 Play 진입이 필요하다. prefab을 활성 Instantiate하는 우회나 초기화는 하지 않았다.
+
+`ReadRenderer59.cs`가 실제 bootstrap의 직렬화 참조를 따라 3개 source mesh/15개 material slot을 읽고 UV/indices를 보존했다. `map_sources59.py`는 전체 UV·indices·material factor를 실제 texture가 참조하는 원본 VRM과 대조해 15개 모두 유일하게 연결했다. 수동 두 primitive/재질명 분류는 없다. `RendererFamily59.cs:constructor/TryReadSourcePoint/PackDrawDescriptors`는 실제 renderer 배열에서 해시를 재검증하고 source texture만 읽으며, 누락/범위 밖/미지원 입력에는 false/reason을 반환한다. `CheckConfiguredSources59.cs`에서 15개 draw의 원본 RGBA 120/120, descriptor uint4 240바이트를 확인했다. 이는 구성·원본 point 검사이며 가시 셀 RT/실제 프레임 성공이 아니다.
+
+현재 Play 옵션은 enabled=false/None으로 domain reload가 발생하므로, 59의 domain reload 회피 및 모드 변경 직전 중지 조건에 따라 Play는 미실행이다. 필요한 다음 범위는 EditorSettings.asset의 옵션을 일시적으로 DisableDomainReload로 변경 → GameMap1 정상 Play 1회 → ready 후 pause에서 원본/복제 후보 동일 프레임 비교 → 정상 종료 → 옵션/pipeline/씬·dirty 내용/파일 해시 원복·검증이다. runInputTest=0 유지, Editor.Step/원본 재질·RendererFeature 편집/SaveAssets/CUA/앱 종료/push 없음. 설정 변경도 아직 실행하지 않았다.
+
+현재 source 검사 전후 dirty 24개 내용/identity·씬 clean/37root·Edit/domain 변경 0. source helper 구간 allocated +412,592bytes/reserved 0/mono +45,936,640bytes는 내부 counter이며 누수 판정이 아니다. 실제 visible-cell provenance, 헤어 palette/g 연결, 전체 PNG, interior/경계별 후단 palette 밖 색 수는 미측정(null)이다. 이 범위를 준비 완료/미술 완료로 확대하지 않는다. 관련 commit은 이 절과59 경로의 Git 이력에서 추적한다.
+
+
+59 Play 경계 추가 점검: 현재 dirty24는 Shader23+EditorBuildSettings1이다. 사전 SaveAssets는 필요 조건이 아니며 실행하지 않는다. SubsystemRegistration에 shell singleton·GameStartRequest·직접 Play 임시 저장 경로의 초기화가 있다. renderer callback은 OnDisable 해제 경로가 있지만 다른 static/비직렬화 상태까지 자동 복원되지는 않는다. 따라서 DisableDomainReload 설정만으로 무손실을 보장하지 않고 pipeline/시간/Shader global·dirty내용 전후 검사가 필요하다. 현재 renderer는 Application.isPlaying/Camera.main/Player/CharacterController/world render serial을 요구하며 같은 흐름을 지원하는 PreviewScene 경로가 없다. scene reload를 유지한 정상 Play 1회가 최소안이고, 설정 변경·Play·새 GPU 실행은 아직 하지 않았다. Shader native 상태 전체를 직렬화 해시가 백업한다고 주장하지 않는다.

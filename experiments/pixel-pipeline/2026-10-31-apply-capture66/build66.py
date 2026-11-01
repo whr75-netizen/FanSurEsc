@@ -5,7 +5,7 @@ mode=sys.argv[1]
 base=HERE.parent/'source-palette58'
 if not base.exists():base=HERE.parent/'2026-10-31-source-palette58'
 files=[HERE/'Json58Linear66.cs']
-if mode in ('Save66','Recovered66','Finish66'):files.append(HERE/'SerializedContent66.cs')
+if mode in ('Save66','Recovered66','Finish66','Resume68','Post68'):files.append(HERE/'SerializedContent66.cs')
 deps=HERE.parent/'uv-features64'
 if not deps.exists():deps=HERE.parent/'2026-10-31-uv-features64'
 if mode in ('Global66','Capture66','CaptureRetry66'):files.append(deps/'GlobalJournal64.cs')

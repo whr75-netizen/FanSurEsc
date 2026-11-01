@@ -334,3 +334,16 @@ current UV colour-range66개는 화면186조각이다. 배타 분류37개는 여
 | `CaptureRetry66.cs`, `prepare_retry66.py` |첫 실행 종료·복원 확인 후 기존 Editor 캡처처럼 runInBackground 임시true+상태trace를 준비. 자동심사가 추가Play/옵션변경 명시승인 없음으로 프로세스 생성 전에 거부. 실행/옵션변경0, 우회·재시도0. 추가 사용자 승인 필요 |
 
 현재31520 Edit/GameMap1 clean, pausefalse/optionsfalse/None/time1/captureDelta0. 보호110파일 중 이번 두 C# 외 변경0, 다른 기존28파일 SHA와 두 파일의 기존 사용자 delta를 보존했다. NoSubscription은 별도 Unity AI 오류로 기록하고 변경하지 않았다. O(N²) helper나 일괄 저장을 재실행하지 않았다. sourceId `capture67-20261031T115608773Z`는 global journal만 있으며 실제 샘플 packet이 아니다. 새 이미지/미술 개선/시간 안정성 성공을 주장하지 않는다.
+
+## 재개68 — 현재 연결 확인, 추가 Play 재차 미실행
+
+[현재 결과](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/RESUME_RESULT68.json), [현재 기준선](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/RESUME68.json). 2026-11-01 05:22 UTC 기준 새 Editor PID35364/session1, Unity6000.5.9f1, 같은 프로젝트의 GameMap1 Edit/scene clean/options false·None/time1/captureDelta0/runInBackground false를 실제 공식 relay로 읽었다. 어제 PID/dirty를 현재값으로 재사용하지 않았다.
+
+- `Resume68.cs:Execute`: 현재 미저장24개를 먼저 기록하고 resident Mesh/settings5의 직렬화 내용을 외부 파일/SHA로 검증했다. 얼굴 Mesh의 `EditorJsonUtility.ToJson` 읽기에서 dirty false→true가 다시 발생했다. 내용 SHA는 기존 백업과 같으며 저장·ClearDirty·추정 복원을 하지 않았다. 큰 JSON 전체 parse를 사용하지 않았다.
+- `CaptureRetry66.cs:Tick`: 기존 준비 trace에 focused/native enabled·active·warmup·failure/gameplay active를 추가했다. `build66.py`로 Assets 밖 코드만 구성했으며 이번 추가 Play 코드는 실행되지 않았다.
+- `relay66.py CaptureRetry66`: 새 재개 지시를 근거로 한 번 요청했지만 자동 승인 심사가 “resume만으로 이전 차단된 옵션 변경과 추가 Play를 명시 승인한 것은 아님”으로 프로세스 생성 전에 거절했다. 요청 marker·state·frame·GPU readback·옵션 변경0. 재시도/우회하지 않는다. 임시 runInBackground true와 추가 Play1회·정상 종료/원복의 구체 승인 대기다.
+- 연결 통로: source 편집은 Codex `apply_patch`; Editor 실행은 `exec_command → relay66.py → ~/.unity/relay/relay_win.exe --mcp → Unity MCP bridge → Unity_RunCommand/Unity_GetConsoleLogs`. 현재 read command의 compile/execution 모두 성공했다. manifest/lock/설치본의 `com.unity.ai.assistant=2.18.0-pre.2`; inference2.6.1/navigation2.0.14, 별도 Codex/MCP 패키지는 manifest에서 발견하지 못했다.
+- 설치 패키지 `Documentation~/integration/unity-mcp-get-started.md:116–129`는 direct-client 최초 승인과 승인 기억/자동 재연결을 설명한다. `Modules/Unity.AI.MCP.Editor/Settings/UI/ConnectionApprovalDialog.cs`와 `Modules/Unity.AI.Assistant.Tools/Scripting/RunCommandTool.cs:55–73`의 연결 승인/unsafe 실행 승인은 별도다. 사용자가 과거 본 창이 어느 쪽인지는 미확인이다. 승인창 부재만으로 Win11 연동 해제를 단정하지 않는다.
+- 오늘 Console에도 `NoSubscription` Info5건(로컬14:21:27–29)이 있으며 `ModelSelectorSuperProxyActions`의 Unity 생성 모델 목록 조회 경로다. 동시에 MCP 조회는 성공했다. Unity 내장 모델 서비스와 현재 외부 Codex 도구 통로를 구분하며 로그인/설정/패키지를 변경하지 않았다.
+
+현재 tracked 관련31파일의 전후 디스크 SHA 변경0, stage는 별도 선택 커밋에서만 갱신한다. 이번은 준비/연결 근거만이며 새 렌더 입력·팔레트/영역 보정·미술 성공 증거는 없다. 기존65 제품 변경 커밋은 `6a1f2f4a`; 이번 재개 기록의 커밋은 이 절의 Git 이력으로 확인한다.

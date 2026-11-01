@@ -4,7 +4,7 @@ import datetime,hashlib,json,queue,subprocess,threading,time,sys
 HERE=Path(__file__).resolve().parent
 PROJECT=Path(r'C:\Users\15352\Documents\work\Fantasy Survival Escape Game')
 mode=sys.argv[1]
-assert mode in ('Read66','Backup66','Save66','Compile66','ScopeCheck66','Capture66','Finish66','Recovered66','Import66','Global66','CaptureRetry66')
+assert mode in ('Read66','Backup66','Save66','Compile66','ScopeCheck66','Capture66','Finish66','Recovered66','Import66','Global66','CaptureRetry66','Resume68','Post68')
 marker=HERE/(mode+'_REQUEST.json')
 if marker.exists():
  assert sys.argv[2:]==['--retry-compile-failure-once'],'Previous request exists: inspect outcome first, do not repeat'

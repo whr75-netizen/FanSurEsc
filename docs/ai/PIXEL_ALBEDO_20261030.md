@@ -452,3 +452,28 @@ Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reser
 49의 공통 `floor(delta+.5)`는 정수 이동이고,53의 any(front)는 전체 기각의 과도한 가정이며 pareto 필드는 실제 Pareto 집합이 아니라는 기존 정정을 유지한다.74는 이들을 다시 실행해 근거로 삼지 않았다. 55의 부분 가시량은 실제 opaque cell 채택/합성을 보장하지 않는다. 과거 source47과 현재 source73은 섞지 않았다. 현재73 연속프레임은 없고, 과거47는 실제6프레임이지만 새 후보는 그 동결 입력의 CPU 재생일 뿐 live GPU 시간 검증이 아니다.
 
 다음의 설계/관측을 구분한다. **설계:** 중요 눈의 전체 keyform에서 허용할 크기·연결·안검/흰자/홍채 관계와 source 기하 이동 사이의 대가를 공동으로 정의해야 한다. 이를2px 최소나 연결성 하나로 대체할 수 없다. **관측:**73은 각16 subsample의 역할/가림과 TemplateRole/RGBA bank 전체를 저장하지 않았으며 완전한 현재 state binding도 없다. 과거47의 바뀌는 셀 clean backing을73의 새 source로 채우지 않는다. 따라서 기존 그림 위에 iris만 재색칠한 완성 RGB를 만들지 않았다. 비교 PNG는 실제 RGB/기존 가시 iris ID/조건부 후보 ID의 순서이고 뒤 두 열은 진단색이다. 새 후보를 더 늘리거나 가중치를 튜닝하지 않고 이 충돌을 남긴다. 원본 및 제품/사용자 파일은 보존하며 현재 Editor dirty 상태를 새로 조회하지 않았다.
+
+## 전체 눈75 — 실제 bank 복원·공동 제약 감사, 완성 후보 없음
+
+경로 `experiments/pixel-pipeline/2026-11-01-whole-eye75/INDEX.html`. Unity 호출/추가 Play/import/제품 변경0회. 기존 데이터만 사용했다. 관련 커밋은 이 절의 Git 이력 참조.
+
+### 복원한 실제 자료와 코드 경로
+
+- `audit75.py:texture/main`: 실제 ValidatedPresentation399.prefab의 Template GUID를 따라 SocketTemplate216/Inputs/TemplateRGBA.asset(RGBA32)와 TemplateRole.asset(RGBAFloat)를 직접 읽었다.480×272 단일2D bank의 유효20셀은 눈마다 iris role1=4/white role4=6이며 role6 안검은0이다. 과거49 fixture20셀의 ID/좌표/색과 전부 동일하다. 현재73의 Own 경유10표본도 원본 bank좌표/role와 대응하고 최종 인코딩 sRGB8 차이0이다. 표준 sRGB 역변환과 실제 선형float의 최대차.0019122는 남기며 bit-exact 선형 일치라고 하지 않는다. 현재 GPU bank 전체/미사용 texel binding을 읽은 것은 아니다. bank 원색 확인을 위해 추가 Play나 거대한 Texture readback이 필요한 것은 아니었다.
+- `EyeRenderer367.Dispatch`는 단일 templateRGBA/Role를 모든 phase에 바인딩한다. `EyeFeature348.compute:Own`은 role/eye에 맞는 색 texel을 선택하지만 `Classify/CountPacket19/IrisAllocated19`는 그20셀을 전체 눈 shape로 사용하지 않는다. 따라서 **색 bank의 texel 개수4/6을 곧 모든 프레임의 필수 가시 픽셀 예산으로 바꾼 것은 잘못된 전제**다. 기존49의 정수 glyph 이동,52/53의 모든 glyph를 서로 다른 opaque 셀에 남기는 조건을 완전한 원목표로 취급하지 않는다.
+- 실제 공동 형상의 기반은 이미 `Full319View335.BindEyes`의 연속 homography와 `EyeCompose333.template262/inside295`의 parent/iris 공유 영역에 있다. 이후348이 별도 normalized Classify와 부위별 top-K로 재선정한다. baseline native line 예외도333 Compose에 있다. 이를 새 독립 팔레트/shape 은행으로 중복 구현할 필요는 없다. 다만 기존 homography의 최종 raster 자체를 시간 안정성/완성 미감으로 승인하지 않는다.
+- `EyeFeature348.Initialise/Prepare/BuildLashCurves590`: 저장하는 것은 native topology/rest geometry/closedBoundary와 재사용 sample/record buffer다. source pixel별 전체 눈 keyform/state cache가 아니다. Native upper/lower ring 및 Close morph 기하는52에 있고,590에는 native upper-arc와 기존 두께 규칙이 있다. 그러나 현재73은 UseLashRegion583=false이며 Closed50/100의 등록된 픽셀 keyform은 없다. lower-like feature6은 S0 skin에서도 생성되며 실제 native 하안검으로 승격하지 않는다.52의 native lid2셀은 서로 iris/white와 충돌하는 미채택 source-derived 후보였다.
+
+### 실제 제약 검사와 첫 잘못된 제한
+
+- `joint75.py:hall`: 부위들을 동시에 보는 정확한 capacity/Hall 검사다. 개별 top-K/새 가중치 없이, 선언된 domain과 요구수의 양립 여부만 검사한다. shape/곡률/색 순서까지 통과했다는 뜻은 아니다.
+- **조건부 반례:** bank의 iris4/white6을 전부 opaque로 보여야 한다고 요구하면서 현재73 counts>0 셀만 허용하면 양 눈 모두 불가능하다. white 자체가6개 필요하지만 ID2는4셀, ID1은5셀뿐이고 I/W 합집합은 둘 다6셀이다. 이것은 원래 목표의 불가능 증명이 아니라 잘못된 'bank count=가시 budget'와 'counts=원본 domain' 전제의 충돌이다.
+- 같은 검사를 과거47의12 eye-frame에 source별 ablation했다. 실제 counts domain0/12 통과, raw source-owner geometry support12/12 통과, Classify를 제거하되 모든 기록 가림을 적용하면0/12, S0만 뺀 감도검사12/12다. 즉 source가 없어서만 못 놓는 것이 아니라 S0 generic skin 처리가 domain을 줄인다. **S0 전체 무시는 채택하지 않는다.** 기존51의 등록 open-aperture underlay 구분을 재사용할 수 있는 부분과 실제 lid/Close 가림을 분리해야 한다. 현재73은4×4 S0~S3 개별 표본이 없어 같은 ablation을 현재 source에서 확정할 수 없다.
+- `joint75.layered_identity`: 캐시의 source ID/role/색은 가려져도 남는다. '원본 특징 정체성 보존'과 '모든 reference texel이 매 프레임 전부 가시'는 다르다. 두 source part가 같은 opaque 셀을 요구하는52의(222,52) 반례는 후자의 조건에서 불가능하지만, layered cache의 정체성 자체를 삭제해야 한다는 뜻은 아니다. 부분 가림55를 any(front) 전체 기각으로 되돌리지 않았다.
+- `test75.py`:10검사 통과. 공유 셀의 공동 capacity, 순회 독립, source 없음/미등록 state 거절, 가려진 캐시 ID/색 보존, capacity 통과가 상대 형태를 보장하지 않는 반례를 포함한다. 완성 joint RGB 후보를 렌더하거나 원래 state를 임의 생성하지 않았다.
+
+### 중단점과 최소 다음 계약
+
+원본 iris/white bank와 parent/iris 곡선·native 안검 기하는 복원 가능하다. 없는 것은 단일 색 bank를 대신할 **일관된 전체 눈의 현재 상태/공유 경계·가시성 계약**이다. 특히 authored295 opening과 실제 native skin opening이 다를 때 전체 눈을 어느 공통 경계로 변형할지, native 안검의 가림이 intrinsic glyph를 어디까지 자를지 정의돼야 한다. 이것을2/4셀 최소나 임의 점수 가중치로 해결하지 않는다. 설계상 source-cache 정체성은 가려져도 유지하고 최종 가시는 실제 가림으로 결정해야 한다. 기존 bank의 모든 texel 가시를 무조건 강제하는 조건은 폐기 대상이다. 기존 shared parent/iris와 native closedBoundary를 같은 변형/합성 경로로 연결하는 것이 다음 구현 단위이며, 현재 bank를 새로 칠하라는 뜻은 아니다.
+
+추가 관측이 필요하다면 전체재촬영이 아니라 동일 source의 작은 eye ROI에서 **348 Evaluate 대입 전 baseline colour/owner/meta/UV/domain**, S0~S3의4×4 META/POINT/UV 및 S3RGBA/Shade, 외부 가림 S4~S6META, 실제 homography/ray/style/bank asset hash를 대응시켜야 한다. 현재73의 counts는 합계이고 최종 records는 baseline 일부를 덮어써 generic skin/실제 lid의 최초 차이와 full joint colour 합성을 역산할 수 없다. Template 두 asset 자체는 이번에 읽었으므로 다시 대형 readback할 이유가 없다. 현재 입력으로 전체 공동 RGB/회전/blink를 검증했다고 하지 않고 여기서 멈춘다. 새로운 Unity 접근이나 사용자에게 추가 캡처 요청을 보내지 않았다.

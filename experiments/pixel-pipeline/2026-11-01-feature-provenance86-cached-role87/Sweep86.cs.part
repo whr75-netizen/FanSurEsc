@@ -1,0 +1,14 @@
+ CameraFollow follow86;Camera sweepCamera86;Vector3 followOffset86,cameraPosition86;Quaternion cameraRotation86;float far86;string followJSON86,cameraJSON86;bool sweepStarted86;
+ void BeginSweep86(){
+  sweepCamera86=native.gameCamera;follow86=sweepCamera86?sweepCamera86.GetComponent<CameraFollow>():null;
+  if(!follow86||!follow86.enabled||follow86.IsOrbiting||!follow86.target)throw new InvalidOperationException("Normal non-orbiting CameraFollow required for measured relative phase sweep");
+  followOffset86=follow86.offset;cameraPosition86=sweepCamera86.transform.position;cameraRotation86=sweepCamera86.transform.rotation;far86=sweepCamera86.farClipPlane;followJSON86=UnityEditor.EditorJsonUtility.ToJson(follow86);cameraJSON86=UnityEditor.EditorJsonUtility.ToJson(sweepCamera86);
+  CreateOnly73.Text(Path.Combine(backupDirectory,"CAMERA_SWEEP_BEFORE86.json"),new Obj58{["cameraId"]=sweepCamera86.GetEntityId().ToString(),["followId"]=follow86.GetEntityId().ToString(),["followJSON"]=followJSON86,["cameraJSON"]=cameraJSON86,["position"]=V(cameraPosition86),["rotation"]=Q(cameraRotation86),["offset"]=V(followOffset86),["far"]=far86,["stepWorldSize"]=native.host.Cell/8,["InputSettingsReference"]=priorSettings.GetEntityId().ToString(),["InputSettingsJSON"]=JsonUtility.ToJson(priorSettings)}.ToString());
+  sweepStarted86=true;animator.speed=0;requested=Vector2.zero;InputSystem.QueueStateEvent(keyboard,new KeyboardState());SetSweep86(0);
+ }
+ void SetSweep86(int i){float phase=i<9?i/8f:0;follow86.offset=followOffset86-sweepCamera86.transform.right*(native.host.Cell*phase);}
+ void RestoreSweep86(){
+  if(!sweepStarted86)return;if(!follow86||!sweepCamera86)throw new InvalidOperationException("Borrowed camera/follow disappeared; external backup retained");
+  follow86.offset=followOffset86;sweepCamera86.transform.SetPositionAndRotation(cameraPosition86,cameraRotation86);sweepCamera86.farClipPlane=far86;
+  if(UnityEditor.EditorJsonUtility.ToJson(follow86)!=followJSON86||UnityEditor.EditorJsonUtility.ToJson(sweepCamera86)!=cameraJSON86)throw new InvalidOperationException("Borrowed camera/follow serialized content differs after restoring public fields");
+ }

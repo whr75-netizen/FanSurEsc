@@ -1,0 +1,41 @@
+#pragma kernel Compose
+Texture2D<float4> _Reference,_OriginalFullMeta,_BaseRGBA,_BaseMETA,_BackingMETA,_AllHairMETA,_TaggedHairMETA,_TaggedHairUV,_OtherHairRGBA,_OtherHairMETA,_BrowRGBA,_BrowMETA,_TemplateRGBA,_TemplateRole;
+RWTexture2D<float4> _Colour,_Owner,_Intrinsic,_Audit;
+int2 _Delta,_LogicalSize,_TemplateSize;int _CellSize;float4 _Plane0,_Plane1;float4 _RayBase,_RayX,_RayY,_RayDepth;
+float4x4 _Inverse262_0,_Inverse262_1;float4 _Plane262_0,_Plane262_1;int _Visible262_0,_Visible262_1;
+float2 local262(float2 p,int eye){float3 q=mul(eye==0?_Inverse262_0:_Inverse262_1,float4(p,1,0)).xyz;return q.xy/q.z;}
+int _ParentCount295_0,_ParentCount295_1,_IrisCount295_0,_IrisCount295_1;
+float4 _Parent295_0[32],_Parent295_1[32],_Iris295_0[32],_Iris295_1[32];
+int4 _ColourBounds295_0,_ColourBounds295_1;
+bool inside295(float2 p,int eye,bool iris){bool yes=false;int n=iris?(eye==0?_IrisCount295_0:_IrisCount295_1):(eye==0?_ParentCount295_0:_ParentCount295_1);for(int i=0,j=n-1;i<n;j=i++){float2 a=iris?(eye==0?_Iris295_0[i].xy:_Iris295_1[i].xy):(eye==0?_Parent295_0[i].xy:_Parent295_1[i].xy),b=iris?(eye==0?_Iris295_0[j].xy:_Iris295_1[j].xy):(eye==0?_Parent295_0[j].xy:_Parent295_1[j].xy);if((a.y>p.y)!=(b.y>p.y)&&p.x<(b.x-a.x)*(p.y-a.y)/(b.y-a.y)+a.x)yes=!yes;}return yes;}
+// Source pixels define the authored feature; continuous contours are its authoring input.
+// The already-bound role cache is also used by ownColour295, so shape and colour
+// now refer to the same source texel/owner. Actual depth/alpha gates below remain.
+float4 template262(float2 p,int eye){
+ if((eye==0?_Visible262_0:_Visible262_1)==0)return 0;
+ float2 q=local262(p,eye);int2 k=(int2)floor(q);
+ if(any(k<0)||any(k>=_TemplateSize))return 0;
+ float4 source=_TemplateRole.Load(int3(k.x,_TemplateSize.y-1-k.y,0));
+ int owner=eye==0?2:1;int role=(int)round(source.x);
+ if(round(source.y)!=owner||(role!=1&&role!=4))return 0;
+ return float4(role,owner,0,0);
+}
+float4 ownColour295(float2 q,int eye,int role,out int support){int owner=eye==0?2:1;int2 k=(int2)floor(q);if(all(k>=0)&&all(k<_TemplateSize)){float4 r=_TemplateRole.Load(int3(k.x,_TemplateSize.y-1-k.y,0));if(round(r.x)==role&&round(r.y)==owner){support=1;return _TemplateRGBA.Load(int3(k.x,_TemplateSize.y-1-k.y,0));}}
+ int4 box=eye==0?_ColourBounds295_0:_ColourBounds295_1;float best=1e20;float4 c=0;support=0;for(int y=box.y;y<box.w;y++)for(int x=box.x;x<box.z;x++){float4 r=_TemplateRole.Load(int3(x,_TemplateSize.y-1-y,0));if(round(r.x)!=role||round(r.y)!=owner)continue;float d=dot(float2(x+.75,y+.25)-q,float2(x+.75,y+.25)-q);if(d<best){best=d;c=_TemplateRGBA.Load(int3(x,_TemplateSize.y-1-y,0));support=2;}}return c;}
+bool cov(float4 m){return m.y>.5&&m.x>0;}
+[numthreads(8,8,1)]void Compose(uint3 gid:SV_DispatchThreadID){int2 p=int2(gid.xy);if(p.x>=_LogicalSize.x||p.y>=_LogicalSize.y)return;int2 top=int2(p.x,_LogicalSize.y-1-p.y);int2 n=_CellSize*p+int2((int)floor(_CellSize*.75),_CellSize-1-(int)floor(_CellSize*.25));int3 np=int3(n,0);float2 screen=float2(top)+float2(.5,.5);float4 r0=template262(screen,0),r1=template262(screen,1);float4 tr=r0.x>.5?r0:r1;int ei=round(tr.y)==2?0:1;float2 ref=local262(screen,ei);int2 oldTop=(int2)floor(ref);int colourSupport=0;float4 tc=0;if(tr.x>.5)tc=ownColour295(ref,ei,(int)round(tr.x),colourSupport);bool ap=tr.x>.5;float4 fm=_OriginalFullMeta.Load(np),bm=_BaseMETA.Load(np),bc=_BaseRGBA.Load(np),allHair=_AllHairMETA.Load(np),tagged=_TaggedHairMETA.Load(np),other=_OtherHairMETA.Load(np),brow=_BrowMETA.Load(np);bool selected=cov(tagged)&&_TaggedHairUV.Load(np).w>.5&&cov(allHair)&&round(allHair.y)==12&&abs(tagged.x-allHair.x)<=.00002;
+ float4 c=_Reference.Load(int3(p,0));float4 owner=float4(fm.y,fm.z,fm.x,0);float4 intrinsic=0,audit=0;
+ bool nativeLine=ap&&cov(fm)&&round(fm.y)==7&&fm.w>0&&c.a>0;
+ bool nativeBlocked=(cov(allHair)&&allHair.x<fm.x&&allHair.w>0)||(cov(brow)&&brow.x<fm.x&&brow.w>0)||(cov(bm)&&bm.x<fm.x&&round(bm.y)!=7);
+ if(nativeLine&&!nativeBlocked){_Colour[p]=c;_Owner[p]=owner;_Intrinsic[p]=0;_Audit[p]=0;return;}
+ if(!ap){int role=(int)round(fm.y)-1;bool legacy=(role==1||role==2||role==4||role==6)&&(round(fm.z)==1||round(fm.z)==2);if(legacy){if(cov(bm)){c=bc;owner=float4(bm.y,bm.z,bm.x,5);audit.x=1;}else{owner=float4(-1,0,0,9);audit.y=1;}}}
+ else{int eye=(int)round(tr.y);float4 plane=eye==2?_Plane262_0:_Plane262_1;float3 near=_RayBase.xyz+(top.x+.5)*_RayX.xyz+(top.y+.5)*_RayY.xyz;float depth=-(dot(plane.xyz,near)+plane.w)/dot(plane.xyz,_RayDepth.xyz);c=float4(tc.rgb,1);owner=float4(tr.x+1,eye,depth,1);intrinsic=float4(tr.x,eye,depth,selected?1:0);float closest=depth;bool baseIsSelected=selected&&round(bm.y)==12&&abs(bm.x-allHair.x)<=.00002;bool browHidden=cov(allHair)&&cov(brow)&&allHair.x<brow.x;
+  // Explicit skin/socket first, eye over skin. Brow5 is exclusively composed by its own RGBA/alpha branch below; base is its selection input, never an opaque duplicate. Actual geometry depth retained; no epsilon/depth repair.
+  if(cov(bm)&&round(bm.y)!=4&&round(bm.y)!=6&&!baseIsSelected&&bm.x<closest&&!(round(bm.y)==6&&browHidden)){c=bc;owner=float4(bm.y,bm.z,bm.x,2);closest=bm.x;}
+  if(cov(other)&&other.x<closest){float4 hc=_OtherHairRGBA.Load(np);c=float4(lerp(tc.rgb,hc.rgb,saturate(other.w)),1);owner=float4(other.y,other.z,other.x,3);closest=other.x;}
+  // The selected strand yields only to authored eye pixels; all hair still hides brow.
+  if(cov(brow)&&brow.x<closest&&!browHidden){float4 br=_BrowRGBA.Load(np);c=float4(lerp(tc.rgb,br.rgb,saturate(brow.w)),1);owner=float4(brow.y,brow.z,brow.x,4);closest=brow.x;}
+  audit.y=colourSupport;audit.z=selected?1:0;float4 sk=_BackingMETA.Load(np);audit.w=cov(sk)&&sk.x<depth?1:0;
+ }
+ _Colour[p]=c;_Owner[p]=owner;_Intrinsic[p]=intrinsic;_Audit[p]=audit;
+}

@@ -1,0 +1,27 @@
+from pathlib import Path
+import json,re,sys
+HERE=Path(__file__).resolve().parent;ROOT=HERE.parent;OLD=ROOT/'input-event83/motion85';OUT=HERE/'run';OUT.mkdir(exist_ok=True)
+assert not list(OUT.glob('*_REQUEST.json')),'Inspect existing86 before rebuilding'
+sys.path.insert(0,str(ROOT/'boundary-input69'));from prepare73 import bundle
+m=(OLD/'MotionScope82.cs').read_text();assert '#if UNITY_EDITOR'not in m;m=m.replace('MotionScope82','MotionScope86');m=m.replace('"turn"','"sweep"')
+insert=(HERE/'Sweep86.cs.part').read_text();m=m.replace(' public Arr58 warmup=new Arr58();',insert+'\n public Arr58 warmup=new Arr58();')
+m=m.replace('if(input.sqrMagnitude<=0||Vector2.Dot(input.normalized,requested.normalized)<.999f)throw', 'if(Stage=="sweep"?input.sqrMagnitude>1e-8f:(input.sqrMagnitude<=0||Vector2.Dot(input.normalized,requested.normalized)<.999f))throw')
+start=m.index(' public bool Advance(){');end=m.index('\n public bool HasWarmup',start)
+m=m[:start]+''' public bool Advance(){index++;if(index>=TotalFrames)return false;if(index==PhaseFrames){movement.speed=priorSpeed;animator.speed=priorAnimatorSpeed;warm=8;Queue(direction);}else if(index==PhaseFrames+WalkFrames){BeginSweep86();warm=2;}else if(index>PhaseFrames+WalkFrames){SetSweep86(index-PhaseFrames-WalkFrames);}return true;}
+'''+m[end:]
+m=m.replace('// Restore borrowed objects first,','Try(()=>RestoreSweep86());\n  // Restore borrowed objects first,')
+(OUT/'MotionScope86.cs').write_bytes(m.encode())
+s=(OLD/'Capture85.cs').read_text();s=re.sub(r'const string Root=@"[^"]+";',lambda _: 'const string Root=@"'+str(OUT)+'";',s,count=1).replace('MotionScope82','MotionScope86').replace('STATE85-','STATE86-').replace('TRACE85-','TRACE86-').replace('eye85-','eye86-')
+start=s.index(' void Capture(NativePlayer395 n,Gameplay397 gp)');s=s[:start]+(HERE/'Trace86.cs.part').read_text()+'\n}\n'
+s=s.replace('6 frozen-pose quarter-cell steps,8 walking frames after8 warmup,10 normal turn frames; one Play, no history reset','6 frozen-pose world steps,8 walk frames,10 measured horizontal camera-relative sweep frames; small provenance/physical ROI only; no product change')
+s=s.replace('["revision85"]="83/84 proved missing UNITY_EDITOR symbol; direct Editor-host policy assignment only",','["revision86"]="Provenance/physical trace and measured camera-relative sweep; no candidate product change",')
+(OUT/'Capture86.cs').write_bytes(s.encode())
+B=ROOT/'apply-capture66';O=ROOT/'eye-observer73';U=ROOT/'uv-features64';deps=[B/'Json58Linear66.cs',B/'SerializedContent66.cs',U/'GlobalJournal64.cs',U/'CpuSourceCapture64.cs',O/'EyeReadback73.cs',O/'UnityEyeBuffer70.cs',O/'CreateOnly73.cs',O/'NativeSnapshot73.cs',ROOT/'eye-continuity77/NativeSource77.cs',OUT/'MotionScope86.cs']
+bundle(deps+[OUT/'Capture86.cs'],OUT/'RUN_Capture86.cs.txt');c=s.replace(' public void Execute(ExecutionResult result)\n {',' public void Execute(ExecutionResult result)\n {result.Log("86 ROI provenance/physical/sweep observer compiled only");return;}\n void Prepared86(ExecutionResult result)\n {',1);(OUT/'Compile86.cs').write_bytes(c.encode());bundle(deps+[OUT/'Compile86.cs'],OUT/'RUN_Compile86.cs.txt')
+for mode,prev,filename in [('Read86','Read85','CURRENT86.json'),('Post86','Post85','POST86.json')]:
+ c=(OLD/(prev+'.cs')).read_text().replace(str(OLD),str(OUT)).replace('CURRENT85.json',filename).replace('POST85.json',filename);(OUT/(mode+'.cs')).write_bytes(c.encode());bundle([B/'Json58Linear66.cs',O/'CreateOnly73.cs',OUT/(mode+'.cs')],OUT/('RUN_'+mode+'.cs.txt'))
+c=(OLD/'Verify85.cs').read_text().replace(str(OLD),str(OUT)).replace('VERIFY85.json','VERIFY86.json');(OUT/'Verify86.cs').write_bytes(c.encode());bundle([B/'Json58Linear66.cs',B/'SerializedContent66.cs',O/'CreateOnly73.cs',O/'NativeSnapshot73.cs',OUT/'Verify86.cs'],OUT/'RUN_Verify86.cs.txt')
+r=(OLD/'relay76.py').read_text().replace("'Verify85')","'Verify85','Read86','Compile86','Capture86','Post86','Verify86')");(OUT/'relay76.py').write_bytes(r.encode());(OUT/'GLOBAL_NAMES66.json').write_bytes((OLD/'GLOBAL_NAMES66.json').read_bytes())
+assert not re.search(r'InputSystem\.settings\s*=(?!=)',s+m)and 'InputSystem.Update('not in m and 'EditorApplication.isPaused=true'not in s
+(HERE/'PLAN86.json').write_bytes((json.dumps({'source':'new source86: same6+8 input as85 and10 relative camera phases','phaseSweep':[0,.125,.25,.375,.5,.625,.75,.875,1,0],'phaseChange':'public runtime CameraFollow.offset only, camera-right times sceneCellPitch; Animator frozen and no movement keys; measure evaluated source centroid under actual captured projection','borrowedState':['same InputSettings/22values','CameraFollow offset/full JSON and Camera JSON/position/rotation/far clip external before sweep','movement/Animator speeds/devices/options/time/pipeline/globals/user assets'],'lifetime':'normal cleanup restores only fields changed, compares serialized camera/follow, normal Play exit, no reset/save','observations':['typed authored contours/sample and bank identity','head eye baseline/individual4x samples/counts/records/occlusion','corresponding main5x5 centre+native raw physical and legacy class/endpoints','current single-face evaluated geometry/cameras/bones per frame'],'excludes':'No candidate shader or product/source palette change; no whole960 image or full3-mesh repeated capture'},indent=2)+'\n').encode())
+print('86 prepared:24 bounded ROI frames incl measured relative sweep; all borrowed states externally backed/restored')

@@ -1,0 +1,176 @@
+{
+  "continuousLight": {
+    "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\SkinPalette302\\Shaders\\FaceSceneLight335.hlsl",
+    "SHA256": "2c242968100e8becfe279701347eef6b8d73efd87cee05e3ed9c0ccb7a3e2adc",
+    "matches": [
+      {
+        "line": 17,
+        "text": "void AccumulateSurfaceLight335(Light light,float3 normalWS,inout float lit,inout float available){"
+      },
+      {
+        "line": 24,
+        "text": "float ContinuousSurfaceLight335(const Varyings input,const MToonInput material){"
+      },
+      {
+        "line": 34,
+        "text": "AccumulateSurfaceLight335(mainLight,normalWS,lit,available);"
+      },
+      {
+        "line": 42,
+        "text": "AccumulateSurfaceLight335(light,normalWS,lit,available);"
+      },
+      {
+        "line": 48,
+        "text": "AccumulateSurfaceLight335(light,normalWS,lit,available);"
+      }
+    ]
+  },
+  "originalSource": {
+    "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\EyeBoundaryRestore348\\Shaders\\EyeSurface348.shader",
+    "SHA256": "1460843da900970d3910a49e6b9a90a078d42e8bc63175433f7a52981668d132",
+    "matches": [
+      {
+        "line": 115,
+        "text": "#pragma vertex Eye333Vertex"
+      },
+      {
+        "line": 116,
+        "text": "#pragma fragment Eye333Fragment"
+      },
+      {
+        "line": 128,
+        "text": "Varyings Eye333Vertex(const Attributes v){Varyings o=MToonVertex(v);o.e202Control=v.apertureControl.xy;o.e202Owner=v.e202SourceOwner.x;o.restHead348=v.texcoord1;return o;}"
+      },
+      {
+        "line": 130,
+        "text": "O333 Eye333Fragment(const Varyings input,uint primitiveID:SV_PrimitiveID,bool facing:SV_IsFrontFace){Varyings v=input;v.pos.xy=_ROI348.xy+input.pos.xy/4;FragmentInput f;f.varyings=v;f.facing=facing?1:-1;"
+      }
+    ]
+  },
+  "retargetSource": {
+    "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-27\\task-2\\render-fix21\\native-feature89\\NativeSurface89.shader",
+    "SHA256": "59edc9ec584ce54d22ef7284644c93bbceb1ecd19739a6d794e4c1096f68cc07",
+    "matches": [
+      {
+        "line": 115,
+        "text": "#pragma vertex Eye333Vertex"
+      },
+      {
+        "line": 116,
+        "text": "#pragma fragment Eye333Fragment"
+      },
+      {
+        "line": 144,
+        "text": "float2 SourceLogicalScreen89(float3 world){"
+      },
+      {
+        "line": 149,
+        "text": "Varyings Eye333Vertex(const Attributes v){"
+      },
+      {
+        "line": 156,
+        "text": "O333 Eye333Fragment(const Varyings input,uint primitiveID:SV_PrimitiveID,bool facing:SV_IsFrontFace){Varyings v=input;v.pos.xy=_Control89==3?_SourcePhysicalROI89.xy+input.pos.xy/4:SourceLogicalScreen89(v.positionWS);if(_SelectedOwner89>0&&round(v.e202Owner)!=_SelectedOwner89)discard;FragmentInput f;f.varyings=v;f.facing=facing?1:-1;"
+      }
+    ]
+  },
+  "normal": {
+    "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-06\\task-7\\R1Comparison\\Library\\PackageCache\\com.vrmc.vrm@15377e8dd0a5\\MToon10\\Shaders\\vrmc_materials_mtoon_geometry_normal.hlsl",
+    "SHA256": "bd4aa0aa4c834b856da00270883dfbaf9663de653afaef4a4bbe37409dc0b2d8",
+    "matches": [
+      {
+        "line": 9,
+        "text": "inline float3 GetMToonGeometry_NormalWithoutNormalMap(const half3 normalWS)"
+      },
+      {
+        "line": 14,
+        "text": "inline float3 GetMToonGeometry_Normal(const Varyings input, const MTOON_FRONT_FACE_TYPE facing, const float2 mtoonUv)"
+      },
+      {
+        "line": 26,
+        "text": "return GetMToonGeometry_NormalWithoutNormalMap(normalWS);"
+      }
+    ]
+  },
+  "vertex": {
+    "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-06\\task-7\\R1Comparison\\Library\\PackageCache\\com.vrmc.vrm@15377e8dd0a5\\MToon10\\Shaders\\vrmc_materials_mtoon_forward_vertex.hlsl",
+    "SHA256": "e54e403339d0c60b2bdcc38391e9428d53640d0a2e6f46f3c37a5a0baffb75a6",
+    "matches": [
+      {
+        "line": 11,
+        "text": "Varyings MToonVertex(const Attributes v) // v is UnityCG macro specified name."
+      }
+    ]
+  },
+  "alpha": {
+    "path": "C:\\Users\\15352\\Documents\\Codex\\2026-10-06\\task-7\\R1Comparison\\Library\\PackageCache\\com.vrmc.vrm@15377e8dd0a5\\MToon10\\Shaders\\vrmc_materials_mtoon_geometry_alpha.hlsl",
+    "SHA256": "036c11b8c497f1fa5c1841f32c0378420d781ac49fee1c610cb5574d08762408",
+    "matches": [
+      {
+        "line": 8,
+        "text": "inline half GetMToonGeometry_Alpha(half4 litColor)"
+      }
+    ]
+  },
+  "backingProducer": {
+    "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\HeadLocal367\\Runtime\\FullFeature367.cs",
+    "SHA256": "8dea00db4dfff7bed00569a6e86d3314c6828264959d365dd46c1c50f75cf8a5",
+    "matches": [
+      {
+        "line": 11,
+        "text": "sealed class Probe:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;using var b=g.AddRasterRenderPass<D>(\"333 unchanged331 source control\",out var d);d.v=v;for(int i=0;i<7;i++)b.SetRenderAttachment(g.ImportTexture(v.motion.raw[i]),i,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(v.motion.depth),AccessFlags.Write);Shadows(b,g,f);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{ClothRegion524.BeginProbe(c.cmd,d.v);var m=d.v.motion;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalInt(\"_ProbeRole331\",m.probeRole);c.cmd.SetGlobalInt(\"_ProbeSide331\",m.probeSide);c.cmd.SetGlobalVector(\"_ClipShift331\",m.clipShift);int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<m.surface.outputs[r].sharedMesh.subMeshCount;sm++){if(!HeadLocal367.DrawSource(d.v,r)){k++;continue;}c.cmd.SetGlobalVector(\"_Source329Metadata\",new Vector4(Role(r,sm),r,0,0));int materialIndex=k++;if(HeadRegion502.Draw(c.cmd,d.v,r,sm,m.surface.outputs[r].sharedMesh,m.surface.outputs[r].transform.localToWorldMatrix,m.materials[materialIndex],0)){}else if(!HeadRegion502.Enabled&&HairBoundary491.TryGet(d.v,r,sm,out var remaining,out var cells,out var pixelMaterial)){c.cmd.DrawMesh(remaining,m.surface.outputs[r].transform.localToWorldMatrix,m.materials[materialIndex],0,0);c.cmd.DrawMesh(cells,m.surface.outputs[r].transform.localToWorldMatrix,pixelMaterial,0,0);}else c.cmd.DrawMesh(m.surface.outputs[r].sharedMesh,m.surface.outputs[r].transform.localToWorldMatrix,m.materials[materialIndex],sm,0);}ClothSurface525.Draw(c.cmd,d.v,m.materials[3],0);});}}"
+      },
+      {
+        "line": 12,
+        "text": "sealed class Native:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;for(int pass=0;pass<2;pass++){using var b=g.AddRasterRenderPass<D>(pass==0?\"333 same-grid native source\":\"333 same-grid source world correspondence\",out var d);d.v=v;d.part=pass;if(pass==0){for(int i=0;i<7;i++)b.SetRenderAttachment(g.ImportTexture(v.native[i]),i,AccessFlags.Write);}else b.SetRenderAttachment(g.ImportTexture(v.native[7]),0,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(v.nativeDepth),AccessFlags.Write);Shadows(b,g,f);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{var v=d.v;var m=v.motion;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalInt(\"_ProbeRole331\",0);c.cmd.SetGlobalInt(\"_ProbeSide331\",0);c.cmd.SetGlobalVector(\"_ClipShift331\",v.nativeShift);int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<m.surface.outputs[r].sharedMesh.subMeshCount;sm++){if(!HeadLocal367.DrawSource(d.v,r)){k++;continue;}c.cmd.SetGlobalVector(\"_Source329Metadata\",new Vector4(Role(r,sm),r,0,0));var mat=(d.part==0?v.nativeMats:v.worldMats)[k++];if(!HeadRegion502.Draw(c.cmd,v,r,sm,m.surface.outputs[r].sharedMesh,m.surface.outputs[r].transform.localToWorldMatrix,mat,d.part==0?1:2))c.cmd.DrawMesh(m.surface.outputs[r].sharedMesh,m.surface.outputs[r].transform.localToWorldMatrix,mat,sm,0);}});}}}"
+      },
+      {
+        "line": 17,
+        "text": "sealed class Metadata:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;for(int s=0;s<6;s++){if(s%3==0)continue;bool centre=s>=3;int scope=s%3;using var b=g.AddRasterRenderPass<D>(\"333 current source owner family \"+s,out var d);d.v=v;d.part=s;b.SetRenderAttachment(g.ImportTexture(centre?v.centreMeta[scope]:v.meta[scope]),0,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(centre?v.centreNormal[scope]:v.normal[scope]),1,AccessFlags.Write);if(scope==0)b.SetRenderAttachment(g.ImportTexture(centre?v.centreFamily:v.family),2,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(centre?v.motion.depth:v.nativeDepth),AccessFlags.Write);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{var v=d.v;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalVector(\"_ClipShift333\",d.part>=3?v.motion.clipShift:v.nativeShift);c.cmd.SetGlobalFloat(\"_Surface255Filter\",HeadLocal367.UseCentreBodyRay550&&HeadLocal367.IsHead(v)&&d.part==4?0:d.part%3);int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<v.motion.surface.outputs[r].sharedMesh.subMeshCount;sm++){var m=v.metadata[k++];if(r>0&&d.part%3!=0)continue;var mf=v.motion.surface.outputs[r];c.cmd.DrawMesh(r==0?v.bodyProxy:mf.sharedMesh,mf.transform.localToWorldMatrix,m,sm,0);}c.cmd.SetGlobalFloat(\"_Surface255Filter\",0);});}}}"
+      },
+      {
+        "line": 18,
+        "text": "sealed class LegacySignals:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;for(int pass=0;pass<2;pass++){using var b=g.AddRasterRenderPass<D>(\"335 existing302 colour endpoints and classifier \"+pass,out var d);d.v=v;d.part=pass;var targets=pass==0?v.style480:v.style960;for(int i=0;i<4;i++)b.SetRenderAttachment(g.ImportTexture(targets[i]),i,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(pass==0?v.styleDepth480:v.styleDepth960),AccessFlags.Write);Shadows(b,g,f);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{var v=d.v;SurfaceLayerGlobals(c.cmd,v,d.part!=0);c.cmd.SetGlobalFloat(\"_Auto245Stage\",2);c.cmd.SetGlobalFloat(\"_Auto245Local\",0);c.cmd.SetGlobalFloat(\"_Auto245MembershipEnabled\",1);c.cmd.SetGlobalFloat(\"_Auto249VisibilityOne\",0);c.cmd.SetGlobalFloat(\"_Auto249Probe\",0);c.cmd.SetGlobalFloat(\"_Style297Enabled\",1);c.cmd.SetGlobalFloat(\"_Style297SkinMode\",1);c.cmd.SetGlobalFloat(\"_Style297OwnShade\",.72f);c.cmd.SetGlobalVector(\"_Auto245StockLit\",v.stockLit);c.cmd.SetGlobalVector(\"_Auto245StockShade\",v.stockShade);c.cmd.SetGlobalVector(\"_Auto245CreamShade\",v.creamShade);c.cmd.SetGlobalVector(\"_Auto245SkinShade\",v.skinShade);c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalVector(\"_ClipShift333\",d.part==0?v.motion.clipShift:v.nativeShift);int k=0;for(int r=0;r<3;r++)for(int sm=0;sm<v.motion.surface.outputs[r].sharedMesh.subMeshCount;sm++){if(!HeadLocal367.DrawSource(d.v,r)){k++;continue;}var mf=v.motion.surface.outputs[r];var mat=v.legacySignalsMats[k++];if(!HeadRegion502.Draw(c.cmd,v,r,sm,mf.sharedMesh,mf.transform.localToWorldMatrix,mat,4,0,d.part==0?1:2))c.cmd.DrawMesh(mf.sharedMesh,mf.transform.localToWorldMatrix,mat,sm,0);}if(d.part==0)ClothSurface525.Draw(c.cmd,v,v.legacySignalsMats[3],4);});}}}"
+      },
+      {
+        "line": 20,
+        "text": "public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;"
+      },
+      {
+        "line": 48,
+        "text": "sealed class Eyes:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;for(int p=0;p<13;p++){using var b=g.AddRasterRenderPass<D>(\"333 current original eye layer \"+p,out var d);d.v=v;d.part=p;var s=v.layers[p];d.colour=g.ImportTexture(v.shadeMask480);b.UseTexture(d.colour);b.SetRenderAttachment(g.ImportTexture(s.rgba),0,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.meta),1,AccessFlags.Write);b.SetRenderAttachment(g.ImportTexture(s.uv),2,AccessFlags.Write);b.SetRenderAttachmentDepth(g.ImportTexture(s.depth),AccessFlags.Write);Shadows(b,g,f);b.SetRenderFunc(static(D d,RasterGraphContext c)=>{var v=d.v;SurfaceLayerGlobals(c.cmd,v);c.cmd.SetGlobalTexture(\"_SurfaceShadeMask335\",d.colour);c.cmd.SetGlobalFloat(\"_SurfaceMaskReady335\",v.layeredSurface&&v.styleEnabled?1:0);c.cmd.SetGlobalFloat(\"_Auto245Stage\",2);c.cmd.SetGlobalFloat(\"_Auto245Local\",0);c.cmd.SetGlobalFloat(\"_Auto245MembershipEnabled\",1);c.cmd.SetGlobalFloat(\"_Auto249VisibilityOne\",0);c.cmd.SetGlobalFloat(\"_Auto249Probe\",0);c.cmd.SetGlobalFloat(\"_Style297Enabled\",1);c.cmd.SetGlobalFloat(\"_Style297SkinMode\",1);c.cmd.SetGlobalFloat(\"_Style297OwnShade\",.72f);c.cmd.SetGlobalVector(\"_Auto245StockLit\",v.stockLit);c.cmd.SetGlobalVector(\"_Auto245StockShade\",v.stockShade);c.cmd.SetGlobalVector(\"_Auto245CreamShade\",v.creamShade);c.cmd.SetGlobalVector(\"_Auto245SkinShade\",v.skinShade);var ph=v.phases[v.phaseIndex];int p=d.part;c.cmd.ClearRenderTarget(RTClearFlags.All,Color.clear,1,0);c.cmd.SetGlobalVector(\"_ClipShift333\",v.motion.clipShift);c.cmd.SetGlobalVector(\"_Profile333\",v.motion.animation.shadeProfile);c.cmd.SetGlobalFloat(\"_Eye253Part\",p);c.cmd.SetGlobalFloat(\"_Eye253Tag\",0);"
+      },
+      {
+        "line": 52,
+        "text": "sealed class Post:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;using var b=g.AddUnsafePass<D>(\"333 full319 Prepare contour owned lines and current-camera eyes\",out var d);d.v=v;foreach(var t in v.native)b.UseTexture(g.ImportTexture(t));foreach(var t in v.meta)b.UseTexture(g.ImportTexture(t),AccessFlags.ReadWrite);foreach(var t in v.centreMeta)b.UseTexture(g.ImportTexture(t),AccessFlags.ReadWrite);b.UseTexture(g.ImportTexture(v.normal[0]),AccessFlags.ReadWrite);b.UseTexture(g.ImportTexture(v.centreNormal[0]),AccessFlags.ReadWrite);foreach(var t in v.motion.raw)b.UseTexture(g.ImportTexture(t));b.UseTexture(g.ImportTexture(v.family),AccessFlags.ReadWrite);b.UseTexture(g.ImportTexture(v.centreFamily),AccessFlags.ReadWrite);foreach(var t in v.style480.Concat(v.style960))b.UseTexture(g.ImportTexture(t));b.UseTexture(g.ImportTexture(v.beforeStyle),AccessFlags.ReadWrite);foreach(var s in v.layers){b.UseTexture(g.ImportTexture(s.rgba));b.UseTexture(g.ImportTexture(s.meta));b.UseTexture(g.ImportTexture(s.uv));}foreach(var t in new[]{v.colourNative,v.before,v.colour,v.owner,v.audit,v.gridSurface,v.gridPalette,v.paletteAudit,v.prepared,v.preparedOwner,v.postLine,v.preparedUV,v.preparedMeta,v.resolvedMeta,v.resolvedUV,v.eyeOutput,v.eyeOwner,v.intrinsic,v.eyeAudit,v.domain})b.UseTexture(g.ImportTexture(t),AccessFlags.ReadWrite);foreach(var t in v.flood)b.UseTexture(g.ImportTexture(t),AccessFlags.ReadWrite);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);HeadLocal367.Declare(b,g,v);b.SetRenderFunc(static(D d,UnsafeGraphContext c)=>DispatchPost(d.v,CommandBufferHelpers.GetNativeCommandBuffer(c.cmd)));}}"
+      },
+      {
+        "line": 65,
+        "text": "sealed class Composite:ScriptableRenderPass{public override void RecordRenderGraph(RenderGraph g,ContextContainer f){var v=Full319View335.Active;var res=f.Get<UniversalResourceData>();using var b=g.AddUnsafePass<D>(\"333 current world-depth R2 final composition\",out var d);d.v=v;d.colour=res.activeColorTexture;d.depth=res.cameraDepthTexture.IsValid()?res.cameraDepthTexture:res.activeDepthTexture;b.UseTexture(d.colour,AccessFlags.ReadWrite);b.UseTexture(d.depth);foreach(var t in v.motion.raw)b.UseTexture(g.ImportTexture(t));foreach(var t in new[]{v.colour,v.resolvedMeta,v.resolvedUV,v.domain,v.audit})b.UseTexture(g.ImportTexture(t));foreach(var t in new[]{v.motion.output,v.motion.audit,v.motion.owner,v.motion.historyColour,v.motion.historyMeta,v.motion.historyUV,v.motion.worldInfo})b.UseTexture(g.ImportTexture(t),AccessFlags.ReadWrite);b.AllowPassCulling(false);b.AllowGlobalStateModification(true);b.SetRenderFunc(static(D d,UnsafeGraphContext c)=>{var full=d.v;var v=full.motion;var cmd=CommandBufferHelpers.GetNativeCommandBuffer(c.cmd);bool integrated=full.integrated&&!proofOnly;var cs=integrated?full.compose:v.compose;int k=cs.FindKernel(\"Compose\");void T(string n,Texture t)=>cmd.SetComputeTextureParam(cs,k,n,t);RTHandle world=d.colour,depth=d.depth;T(\"_World\",world.rt);T(\"_WorldDepth\",depth.rt);T(\"_Source\",v.raw[0].rt);T(\"_Physical\",v.raw[3].rt);T(\"_OriginalMToon\",v.raw[4].rt);T(\"_Meta\",v.raw[5].rt);T(\"_UV\",v.raw[6].rt);T(\"_Output\",v.output.rt);T(\"_Audit\",v.audit.rt);T(\"_Owner\",v.owner.rt);T(\"_HistoryColour\",v.historyColour.rt);T(\"_HistoryMeta\",v.historyMeta.rt);T(\"_HistoryUV331\",v.historyUV.rt);T(\"_WorldInfo\",v.worldInfo.rt);if(integrated){T(\"_Integrated333\",full.colour.rt);T(\"_IntegratedMeta333\",full.resolvedMeta.rt);T(\"_IntegratedUV333\",full.resolvedUV.rt);T(\"_IntegratedDomain333\",full.domain.rt);T(\"_IntegratedLine333\",full.audit.rt);}cmd.SetComputeVectorParam(cs,\"_Profile\",v.animation.shadeProfile);cmd.SetComputeVectorParam(cs,\"_NearFar\",new Vector4(v.camera.nearClipPlane,v.camera.farClipPlane,SystemInfo.usesReversedZBuffer?1:0,0));cmd.SetComputeIntParam(cs,\"_Mode\",2);cmd.SetComputeIntParam(cs,\"_LocalGrid331\",1);cmd.SetComputeVectorArrayParam(cs,\"_Texel331\",v.texelSizes);cmd.SetComputeFloatParam(cs,\"_UVTolerance331\",v.uvToleranceTexels);cmd.SetComputeIntParam(cs,\"_Capture\",full.capturePending&&full.contourReady?1:0);cmd.SetComputeIntParam(cs,\"_CommonDepth\",1);cmd.SetComputeIntParams(cs,\"_Delta\",Mathf.RoundToInt(v.composeDelta.x),Mathf.RoundToInt(v.composeDelta.y));cmd.DispatchCompute(cs,k,60,34,1);cmd.Blit(v.output.rt,(RenderTargetIdentifier)d.colour);});}}"
+      }
+    ]
+  },
+  "phaseCacheConsumer": {
+    "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\MinimalRestore335\\Runtime\\Full319View335.cs",
+    "SHA256": "755cfb99ef658359e67c555a0253bcb7a70e9d8d584b14ba1b81f78f4bb8d6b7",
+    "matches": [
+      {
+        "line": 56,
+        "text": "public void PrepareCurrent(){Initialise();Shader.SetGlobalTexture(\"_Auto245StockMember\",stockMember);Shader.SetGlobalTexture(\"_Auto245BodySkinMember\",skinMember);Shader.SetGlobalTexture(\"_Auto245CreamMember\",creamMember);int styleKey=styleEnabled?(stockMode+8*(faceMain?1:0)+16*(faceProvider?1:0)):0;if(styleKey!=priorStyleKey){motion.resetHistory=true;priorStyleKey=styleKey;}var actorPosition=motion.animation.target.transform.position;var actorRotation=motion.animation.target.transform.rotation;motion.Evaluate();motion.animation.target.transform.SetPositionAndRotation(actorPosition,actorRotation);motion.surface.Evaluate();motion.PrepareCapture();capturePending|=motion.captureNow;if(priorIntegrated!=(integrated?1:0)){capturePending=true;priorIntegrated=integrated?1:0;}"
+      },
+      {
+        "line": 71,
+        "text": "public void RenderFrame(){if(rendering)return;Initialise();if(!ready)return;rendering=true;try{PrepareCurrent();contourReady=false;motion.camera.Render();validateRender?.Invoke();var src=Read(meta[0]);var pal=Read(family);var raw=Read(native[0]);var phys=Read(native[3]);var uv=Read(native[6]);var world=Read(native[7]);var key=Read(native[5]);var own=Read(colourNative);var corr0=new Color[960*544];for(int i=0;i<corr0.Length;i++)corr0[i]=new Color(uv[i].r,uv[i].g,key[i].g,key[i].a);var sig=new Color[7][];sig[2]=phys;sig[3]=raw;sig[5]=raw;sig[6]=key;"
+      }
+    ]
+  },
+  "independentMetadata": {
+    "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Assets\\EUnityValidation01\\GameMapIntegration333\\Shaders\\Independent333.shader",
+    "SHA256": "7ffeb2e21cce15847c20a1e0f2c8c7c377e356ef50789a6e692dfb5659c36d03",
+    "matches": [
+      {
+        "line": 133,
+        "text": "O333 o;o.rgba=c;o.meta=float4(-TransformWorldToView(v.positionWS).z,role+1,role<=6?round(v.e202Owner):0,alpha);o.uv=float4(uv,v.e202Control.x,_Eye253Tag);return o;}"
+      }
+    ]
+  }
+}

@@ -1,0 +1,2896 @@
+{
+  "status": "CLOSED_SCLERA_COUNTEREXAMPLE_RESOLVED_OFFLINE_NOT_PRODUCT_INTEGRATED",
+  "target": {
+    "id": "f140-s54-21",
+    "frame": 140,
+    "sourceId": "eye89-20261101T121649399Z-a2061c6c-frame140",
+    "canonicalCellAbsolute": [
+      5,
+      0
+    ],
+    "rasterCell": [
+      13,
+      5
+    ],
+    "sample": [
+      54,
+      21
+    ],
+    "physicalXYTopLeft": [
+      226.37305136238652,
+      52.56976587858712
+    ],
+    "whiteDepth": 13.74600601196289,
+    "whitePrimitive": 344,
+    "whiteUV": [
+      0.8335106372833252,
+      0.26820293068885803
+    ],
+    "sourceBankTexel": [
+      222,
+      80
+    ],
+    "owner": 1,
+    "whiteAlpha": 1.0,
+    "oldNeighbourSkin": {
+      "sampleMemory": [
+        49,
+        17
+      ],
+      "primitive": 3120,
+      "depth": 13.733007431030273,
+      "alpha": 1.0,
+      "uv": [
+        0.670615553855896,
+        0.5077618360519409
+      ]
+    },
+    "actualRaySkinHits": [
+      {
+        "primitive": 3116,
+        "vertices": [
+          2995,
+          2989,
+          2996
+        ],
+        "barycentric": [
+          0.5856799822700722,
+          0.10611258870218629,
+          0.3082074290277415
+        ],
+        "uv": [
+          0.67107992240132,
+          0.5117761293547165
+        ],
+        "depth": 13.731933542919817,
+        "projectedWinding": 1,
+        "queryKey": "f140-s54-21-skin3116"
+      },
+      {
+        "primitive": 133,
+        "vertices": [
+          1427,
+          1422,
+          1421
+        ],
+        "barycentric": [
+          0.14481255061581755,
+          0.23184762105542522,
+          0.6233398283287572
+        ],
+        "uv": [
+          0.82824750597967,
+          0.18859301901161984
+        ],
+        "depth": 13.807124469415156,
+        "projectedWinding": -1,
+        "queryKey": "f140-s54-21-skin133"
+      }
+    ],
+    "observedFrontWinding": [
+      1
+    ],
+    "candidateColourRGBA": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ]
+  },
+  "targetCorrection": {
+    "id": "f140-s54-21",
+    "sample": [
+      54,
+      21
+    ],
+    "sourceBankTexel": [
+      222,
+      80
+    ],
+    "oldScalarVisibility": 1.0,
+    "skinVisibilityBounds": [
+      0.0,
+      0.0
+    ],
+    "oldUnknown": true,
+    "occluders": [
+      {
+        "primitive": 3116,
+        "vertices": [
+          2995,
+          2989,
+          2996
+        ],
+        "barycentric": [
+          0.5856799822700722,
+          0.10611258870218629,
+          0.3082074290277415
+        ],
+        "uv": [
+          0.67107992240132,
+          0.5117761293547165
+        ],
+        "depth": 13.731933542919817,
+        "projectedWinding": 1,
+        "queryKey": "f140-s54-21-skin3116",
+        "alphaBounds": [
+          1.0,
+          1.0
+        ]
+      }
+    ],
+    "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+  },
+  "frames": [
+    {
+      "frame": 135,
+      "getterClose": 0,
+      "evaluatedVertexDelta": 0.0,
+      "cellAbsolute": [
+        5,
+        0
+      ],
+      "rasterCell": [
+        13,
+        5
+      ],
+      "oldChosenRole": 4,
+      "oldMass": 0.687119547277689,
+      "scalarCandidateAfterExactSkinRole": 4,
+      "robustDecision": {
+        "winner": null,
+        "possibleLabels": [
+          4,
+          0
+        ],
+        "massBounds": {
+          "1": [
+            0.0,
+            0.0
+          ],
+          "4": [
+            2.0,
+            8.993912756443024
+          ],
+          "6": [
+            0.0,
+            0.0
+          ],
+          "0": [
+            7.006087243556976,
+            14.0
+          ]
+        },
+        "paletteLookupAllowed": false
+      },
+      "whiteDefinitelyNotWinner": false,
+      "sourceWhiteRGBUnchanged": true,
+      "stateGetterUsedByAlgorithm": false
+    },
+    {
+      "frame": 138,
+      "getterClose": 50,
+      "evaluatedVertexDelta": 0.012864590622484684,
+      "cellAbsolute": [
+        5,
+        0
+      ],
+      "rasterCell": [
+        13,
+        5
+      ],
+      "oldChosenRole": 4,
+      "oldMass": 0.6875,
+      "scalarCandidateAfterExactSkinRole": 0,
+      "robustDecision": {
+        "winner": 0,
+        "possibleLabels": [
+          0
+        ],
+        "massBounds": {
+          "1": [
+            0.0,
+            0.0
+          ],
+          "4": [
+            4.0,
+            7.0
+          ],
+          "6": [
+            0.0,
+            0.0
+          ],
+          "0": [
+            9.0,
+            12.0
+          ]
+        },
+        "paletteLookupAllowed": false
+      },
+      "whiteDefinitelyNotWinner": true,
+      "sourceWhiteRGBUnchanged": true,
+      "stateGetterUsedByAlgorithm": false
+    },
+    {
+      "frame": 140,
+      "getterClose": 100,
+      "evaluatedVertexDelta": 0.025728734210133553,
+      "cellAbsolute": [
+        5,
+        0
+      ],
+      "rasterCell": [
+        13,
+        5
+      ],
+      "oldChosenRole": 4,
+      "oldMass": 0.4183693677186966,
+      "scalarCandidateAfterExactSkinRole": 0,
+      "robustDecision": {
+        "winner": 0,
+        "possibleLabels": [
+          0
+        ],
+        "massBounds": {
+          "1": [
+            0.0,
+            0.0
+          ],
+          "4": [
+            0.0,
+            0.0
+          ],
+          "6": [
+            0.0,
+            4.897620797157288
+          ],
+          "0": [
+            11.102379202842712,
+            16.0
+          ]
+        },
+        "paletteLookupAllowed": false
+      },
+      "whiteDefinitelyNotWinner": true,
+      "sourceWhiteRGBUnchanged": true,
+      "stateGetterUsedByAlgorithm": false
+    },
+    {
+      "frame": 141,
+      "getterClose": 0,
+      "evaluatedVertexDelta": 0.025728734210133553,
+      "cellAbsolute": [
+        5,
+        0
+      ],
+      "rasterCell": [
+        13,
+        5
+      ],
+      "oldChosenRole": 4,
+      "oldMass": 0.4183693677186966,
+      "scalarCandidateAfterExactSkinRole": 0,
+      "robustDecision": {
+        "winner": 0,
+        "possibleLabels": [
+          0
+        ],
+        "massBounds": {
+          "1": [
+            0.0,
+            0.0
+          ],
+          "4": [
+            0.0,
+            0.0
+          ],
+          "6": [
+            0.0,
+            4.897620797157288
+          ],
+          "0": [
+            11.102379202842712,
+            16.0
+          ]
+        },
+        "paletteLookupAllowed": false
+      },
+      "whiteDefinitelyNotWinner": true,
+      "sourceWhiteRGBUnchanged": true,
+      "stateGetterUsedByAlgorithm": false
+    },
+    {
+      "frame": 142,
+      "getterClose": 0,
+      "evaluatedVertexDelta": 0.0,
+      "cellAbsolute": [
+        5,
+        0
+      ],
+      "rasterCell": [
+        13,
+        5
+      ],
+      "oldChosenRole": 4,
+      "oldMass": 0.687119547277689,
+      "scalarCandidateAfterExactSkinRole": 4,
+      "robustDecision": {
+        "winner": null,
+        "possibleLabels": [
+          4,
+          0
+        ],
+        "massBounds": {
+          "1": [
+            0.0,
+            0.0
+          ],
+          "4": [
+            2.0,
+            8.993912756443024
+          ],
+          "6": [
+            0.0,
+            0.0
+          ],
+          "0": [
+            7.006087243556976,
+            14.0
+          ]
+        },
+        "paletteLookupAllowed": false
+      },
+      "whiteDefinitelyNotWinner": false,
+      "sourceWhiteRGBUnchanged": true,
+      "stateGetterUsedByAlgorithm": false
+    }
+  ],
+  "trace": [
+    {
+      "id": "f135-s52-20",
+      "sample": [
+        52,
+        20
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s53-20",
+      "sample": [
+        53,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s54-20",
+      "sample": [
+        54,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s55-20",
+      "sample": [
+        55,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": false,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s52-21",
+      "sample": [
+        52,
+        21
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s53-21",
+      "sample": [
+        53,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s54-21",
+      "sample": [
+        54,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": false,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s55-21",
+      "sample": [
+        55,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s52-22",
+      "sample": [
+        52,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s53-22",
+      "sample": [
+        53,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s54-22",
+      "sample": [
+        54,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s55-22",
+      "sample": [
+        55,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1105,
+          "vertices": [
+            1963,
+            1969,
+            1962
+          ],
+          "barycentric": [
+            0.02943287958102858,
+            0.32079726075434606,
+            0.6497698596646253
+          ],
+          "uv": [
+            0.6887574972107878,
+            0.4205550247332926
+          ],
+          "depth": 13.740024545436608,
+          "projectedWinding": 1,
+          "queryKey": "f135-s55-22-skin1105",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f135-s52-23",
+      "sample": [
+        52,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.9939127564430237,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f135-s53-23",
+      "sample": [
+        53,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": false,
+      "occluders": [
+        {
+          "primitive": 1106,
+          "vertices": [
+            1969,
+            1963,
+            1970
+          ],
+          "barycentric": [
+            0.035017452222150025,
+            0.20666129594809488,
+            0.7583212518297551
+          ],
+          "uv": [
+            0.673316331315863,
+            0.41851279223545823
+          ],
+          "depth": 13.737743071096611,
+          "projectedWinding": 1,
+          "queryKey": "f135-s53-23-skin1106",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f135-s54-23",
+      "sample": [
+        54,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1105,
+          "vertices": [
+            1963,
+            1969,
+            1962
+          ],
+          "barycentric": [
+            0.5899270393633572,
+            0.040446691273793946,
+            0.3696262693628488
+          ],
+          "uv": [
+            0.680890717079716,
+            0.41696269776744366
+          ],
+          "depth": 13.73876372318634,
+          "projectedWinding": 1,
+          "queryKey": "f135-s54-23-skin1105",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f138-s52-20",
+      "sample": [
+        52,
+        20
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s53-20",
+      "sample": [
+        53,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s54-20",
+      "sample": [
+        54,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s55-20",
+      "sample": [
+        55,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": false,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s52-21",
+      "sample": [
+        52,
+        21
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s53-21",
+      "sample": [
+        53,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s54-21",
+      "sample": [
+        54,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": false,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s55-21",
+      "sample": [
+        55,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s52-22",
+      "sample": [
+        52,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": false,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s53-22",
+      "sample": [
+        53,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": false,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f138-s54-22",
+      "sample": [
+        54,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1106,
+          "vertices": [
+            1969,
+            1963,
+            1970
+          ],
+          "barycentric": [
+            0.5008937131300302,
+            0.2521264443906843,
+            0.24697984247928562
+          ],
+          "uv": [
+            0.6803850970983265,
+            0.420126150894045
+          ],
+          "depth": 13.737970746461102,
+          "projectedWinding": 1,
+          "queryKey": "f138-s54-22-skin1106",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f138-s55-22",
+      "sample": [
+        55,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1095,
+          "vertices": [
+            1962,
+            1958,
+            1963
+          ],
+          "barycentric": [
+            0.9030035867125626,
+            0.05176153548655559,
+            0.04523487780088172
+          ],
+          "uv": [
+            0.688798804927809,
+            0.41874799259606765
+          ],
+          "depth": 13.73937838115714,
+          "projectedWinding": 1,
+          "queryKey": "f138-s55-22-skin1095",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f138-s52-23",
+      "sample": [
+        52,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1110,
+          "vertices": [
+            1967,
+            1972,
+            1970
+          ],
+          "barycentric": [
+            0.3224331607221753,
+            0.27910807089035844,
+            0.3984587683874663
+          ],
+          "uv": [
+            0.6639633448351114,
+            0.41724153967497163
+          ],
+          "depth": 13.735098337957705,
+          "projectedWinding": 1,
+          "queryKey": "f138-s52-23-skin1110",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f138-s53-23",
+      "sample": [
+        53,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1107,
+          "vertices": [
+            1970,
+            1963,
+            1967
+          ],
+          "barycentric": [
+            0.2942111058244673,
+            0.6079233287292055,
+            0.09786556544632716
+          ],
+          "uv": [
+            0.6724916335771494,
+            0.41610604567908105
+          ],
+          "depth": 13.736662779532764,
+          "projectedWinding": 1,
+          "queryKey": "f138-s53-23-skin1107",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s52-20",
+      "sample": [
+        52,
+        20
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 2801,
+          "vertices": [
+            2834,
+            2850,
+            2833
+          ],
+          "barycentric": [
+            0.17988570049156005,
+            0.24401184947260288,
+            0.576102450035837
+          ],
+          "uv": [
+            0.6517231793316588,
+            0.5285655995496449
+          ],
+          "depth": 13.723204016484576,
+          "projectedWinding": 1,
+          "queryKey": "f140-s52-20-skin2801",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s53-20",
+      "sample": [
+        53,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": false,
+      "occluders": [
+        {
+          "primitive": 2801,
+          "vertices": [
+            2834,
+            2850,
+            2833
+          ],
+          "barycentric": [
+            0.2929081624668638,
+            0.506082512445815,
+            0.20100932508732114
+          ],
+          "uv": [
+            0.6600183211251391,
+            0.5266540141358362
+          ],
+          "depth": 13.725428774243465,
+          "projectedWinding": 1,
+          "queryKey": "f140-s53-20-skin2801",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s54-20",
+      "sample": [
+        54,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": false,
+      "occluders": [
+        {
+          "primitive": 2800,
+          "vertices": [
+            2850,
+            2834,
+            2845
+          ],
+          "barycentric": [
+            0.6341615662531122,
+            0.14642674637879813,
+            0.21941168736808975
+          ],
+          "uv": [
+            0.668834719654632,
+            0.5233218249453976
+          ],
+          "depth": 13.72797597329514,
+          "projectedWinding": 1,
+          "queryKey": "f140-s54-20-skin2800",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s55-20",
+      "sample": [
+        55,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.6113262176513672,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3102,
+          "vertices": [
+            2850,
+            2845,
+            2989
+          ],
+          "barycentric": [
+            0.26970732834435296,
+            0.1420372562885763,
+            0.5882554153670707
+          ],
+          "uv": [
+            0.678269055405794,
+            0.516211659740016
+          ],
+          "depth": 13.731207870202116,
+          "projectedWinding": 1,
+          "queryKey": "f140-s55-20-skin3102",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s52-21",
+      "sample": [
+        52,
+        21
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 2804,
+          "vertices": [
+            2852,
+            2833,
+            2850
+          ],
+          "barycentric": [
+            0.3904487024947073,
+            0.05089532978758138,
+            0.5586559677177113
+          ],
+          "uv": [
+            0.6547577298376999,
+            0.5229044147725701
+          ],
+          "depth": 13.726596543824389,
+          "projectedWinding": 1,
+          "queryKey": "f140-s52-21-skin2804",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s53-21",
+      "sample": [
+        53,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": false,
+      "occluders": [
+        {
+          "primitive": 3113,
+          "vertices": [
+            2852,
+            2850,
+            2995
+          ],
+          "barycentric": [
+            0.05462573728654602,
+            0.5318056029929783,
+            0.4135686597204757
+          ],
+          "uv": [
+            0.662757449332047,
+            0.5193796447643388
+          ],
+          "depth": 13.72887694861553,
+          "projectedWinding": 1,
+          "queryKey": "f140-s53-21-skin3113",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s54-21",
+      "sample": [
+        54,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3116,
+          "vertices": [
+            2995,
+            2989,
+            2996
+          ],
+          "barycentric": [
+            0.5856799822700722,
+            0.10611258870218629,
+            0.3082074290277415
+          ],
+          "uv": [
+            0.67107992240132,
+            0.5117761293547165
+          ],
+          "depth": 13.731933542919817,
+          "projectedWinding": 1,
+          "queryKey": "f140-s54-21-skin3116",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s55-21",
+      "sample": [
+        55,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3121,
+          "vertices": [
+            2999,
+            2996,
+            2997
+          ],
+          "barycentric": [
+            0.027026425313915414,
+            0.16164035687853232,
+            0.8113332178075523
+          ],
+          "uv": [
+            0.6794018243177171,
+            0.5015455156133873
+          ],
+          "depth": 13.73595101227865,
+          "projectedWinding": 1,
+          "queryKey": "f140-s55-21-skin3121",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "primitive": 1108,
+          "vertices": [
+            1971,
+            1962,
+            1969
+          ],
+          "barycentric": [
+            0.036763303581077156,
+            0.2545901044115659,
+            0.7086465920073569
+          ],
+          "uv": [
+            0.6884537593467456,
+            0.422472214516209
+          ],
+          "depth": 13.738476210339652,
+          "projectedWinding": 1,
+          "queryKey": "f140-s55-21-skin1108",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s52-22",
+      "sample": [
+        52,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3126,
+          "vertices": [
+            3002,
+            2995,
+            2999
+          ],
+          "barycentric": [
+            0.33425736849544646,
+            0.21469373910609799,
+            0.4510488923984555
+          ],
+          "uv": [
+            0.6562112991457869,
+            0.5116624071440489
+          ],
+          "depth": 13.730242251772328,
+          "projectedWinding": 1,
+          "queryKey": "f140-s52-22-skin3126",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s53-22",
+      "sample": [
+        53,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.004028797149658203,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3123,
+          "vertices": [
+            2997,
+            3000,
+            2999
+          ],
+          "barycentric": [
+            0.10058986118978874,
+            0.31257890616650424,
+            0.586831232643707
+          ],
+          "uv": [
+            0.6639938563086696,
+            0.5056193551249715
+          ],
+          "depth": 13.73315146695274,
+          "projectedWinding": 1,
+          "queryKey": "f140-s53-22-skin3123",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "primitive": 1107,
+          "vertices": [
+            1970,
+            1963,
+            1967
+          ],
+          "barycentric": [
+            0.8908684264433654,
+            0.04980599714510545,
+            0.05932557641152915
+          ],
+          "uv": [
+            0.6716691349345492,
+            0.4187368048380599
+          ],
+          "depth": 13.735661385835986,
+          "projectedWinding": 1,
+          "queryKey": "f140-s53-22-skin1107",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s54-22",
+      "sample": [
+        54,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3122,
+          "vertices": [
+            3000,
+            2997,
+            2998
+          ],
+          "barycentric": [
+            0.35944595004929947,
+            0.003161731768825138,
+            0.6373923181818754
+          ],
+          "uv": [
+            0.6719190740253964,
+            0.4982725363970403
+          ],
+          "depth": 13.736288607681116,
+          "projectedWinding": 1,
+          "queryKey": "f140-s54-22-skin3122",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "primitive": 1105,
+          "vertices": [
+            1963,
+            1969,
+            1962
+          ],
+          "barycentric": [
+            0.5856427856283684,
+            0.36490592570780217,
+            0.049451288663829425
+          ],
+          "uv": [
+            0.680019414893615,
+            0.4181623875850712
+          ],
+          "depth": 13.737134563288581,
+          "projectedWinding": 1,
+          "queryKey": "f140-s54-22-skin1105",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s55-22",
+      "sample": [
+        55,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1092,
+          "vertices": [
+            1958,
+            1962,
+            1956
+          ],
+          "barycentric": [
+            0.1978816659588876,
+            0.5977927069026968,
+            0.2043256271384156
+          ],
+          "uv": [
+            0.6885494656005992,
+            0.4159703031873091
+          ],
+          "depth": 13.739057635005272,
+          "projectedWinding": 1,
+          "queryKey": "f140-s55-22-skin1092",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s52-23",
+      "sample": [
+        52,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3127,
+          "vertices": [
+            3003,
+            3000,
+            3001
+          ],
+          "barycentric": [
+            0.22021765593790577,
+            0.16519914778824163,
+            0.6145831962738526
+          ],
+          "uv": [
+            0.6571345780734037,
+            0.4995823261517975
+          ],
+          "depth": 13.734076543904555,
+          "projectedWinding": 1,
+          "queryKey": "f140-s52-23-skin3127",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "primitive": 1107,
+          "vertices": [
+            1970,
+            1963,
+            1967
+          ],
+          "barycentric": [
+            0.21684755467703887,
+            0.06420810338480168,
+            0.7189443419381595
+          ],
+          "uv": [
+            0.6633092901567952,
+            0.4151086169398169
+          ],
+          "depth": 13.734108665689002,
+          "projectedWinding": 1,
+          "queryKey": "f140-s52-23-skin1107",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f140-s53-23",
+      "sample": [
+        53,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1101,
+          "vertices": [
+            1963,
+            1959,
+            1967
+          ],
+          "barycentric": [
+            0.7830354137456608,
+            0.13841509960111528,
+            0.07854948665322395
+          ],
+          "uv": [
+            0.6717131858793657,
+            0.41386568594998835
+          ],
+          "depth": 13.735759325879961,
+          "projectedWinding": 1,
+          "queryKey": "f140-s53-23-skin1101",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s52-20",
+      "sample": [
+        52,
+        20
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 2801,
+          "vertices": [
+            2834,
+            2850,
+            2833
+          ],
+          "barycentric": [
+            0.17988570049156005,
+            0.24401184947260288,
+            0.576102450035837
+          ],
+          "uv": [
+            0.6517231793316588,
+            0.5285655995496449
+          ],
+          "depth": 13.723204016484576,
+          "projectedWinding": 1,
+          "queryKey": "f141-s52-20-skin2801",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s53-20",
+      "sample": [
+        53,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": false,
+      "occluders": [
+        {
+          "primitive": 2801,
+          "vertices": [
+            2834,
+            2850,
+            2833
+          ],
+          "barycentric": [
+            0.2929081624668638,
+            0.506082512445815,
+            0.20100932508732114
+          ],
+          "uv": [
+            0.6600183211251391,
+            0.5266540141358362
+          ],
+          "depth": 13.725428774243465,
+          "projectedWinding": 1,
+          "queryKey": "f141-s53-20-skin2801",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s54-20",
+      "sample": [
+        54,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": false,
+      "occluders": [
+        {
+          "primitive": 2800,
+          "vertices": [
+            2850,
+            2834,
+            2845
+          ],
+          "barycentric": [
+            0.6341615662531122,
+            0.14642674637879813,
+            0.21941168736808975
+          ],
+          "uv": [
+            0.668834719654632,
+            0.5233218249453976
+          ],
+          "depth": 13.72797597329514,
+          "projectedWinding": 1,
+          "queryKey": "f141-s54-20-skin2800",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s55-20",
+      "sample": [
+        55,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.6113262176513672,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3102,
+          "vertices": [
+            2850,
+            2845,
+            2989
+          ],
+          "barycentric": [
+            0.26970732834435296,
+            0.1420372562885763,
+            0.5882554153670707
+          ],
+          "uv": [
+            0.678269055405794,
+            0.516211659740016
+          ],
+          "depth": 13.731207870202116,
+          "projectedWinding": 1,
+          "queryKey": "f141-s55-20-skin3102",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s52-21",
+      "sample": [
+        52,
+        21
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 2804,
+          "vertices": [
+            2852,
+            2833,
+            2850
+          ],
+          "barycentric": [
+            0.3904487024947073,
+            0.05089532978758138,
+            0.5586559677177113
+          ],
+          "uv": [
+            0.6547577298376999,
+            0.5229044147725701
+          ],
+          "depth": 13.726596543824389,
+          "projectedWinding": 1,
+          "queryKey": "f141-s52-21-skin2804",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s53-21",
+      "sample": [
+        53,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": false,
+      "occluders": [
+        {
+          "primitive": 3113,
+          "vertices": [
+            2852,
+            2850,
+            2995
+          ],
+          "barycentric": [
+            0.05462573728654602,
+            0.5318056029929783,
+            0.4135686597204757
+          ],
+          "uv": [
+            0.662757449332047,
+            0.5193796447643388
+          ],
+          "depth": 13.72887694861553,
+          "projectedWinding": 1,
+          "queryKey": "f141-s53-21-skin3113",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s54-21",
+      "sample": [
+        54,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3116,
+          "vertices": [
+            2995,
+            2989,
+            2996
+          ],
+          "barycentric": [
+            0.5856799822700722,
+            0.10611258870218629,
+            0.3082074290277415
+          ],
+          "uv": [
+            0.67107992240132,
+            0.5117761293547165
+          ],
+          "depth": 13.731933542919817,
+          "projectedWinding": 1,
+          "queryKey": "f141-s54-21-skin3116",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s55-21",
+      "sample": [
+        55,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3121,
+          "vertices": [
+            2999,
+            2996,
+            2997
+          ],
+          "barycentric": [
+            0.027026425313915414,
+            0.16164035687853232,
+            0.8113332178075523
+          ],
+          "uv": [
+            0.6794018243177171,
+            0.5015455156133873
+          ],
+          "depth": 13.73595101227865,
+          "projectedWinding": 1,
+          "queryKey": "f141-s55-21-skin3121",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "primitive": 1108,
+          "vertices": [
+            1971,
+            1962,
+            1969
+          ],
+          "barycentric": [
+            0.036763303581077156,
+            0.2545901044115659,
+            0.7086465920073569
+          ],
+          "uv": [
+            0.6884537593467456,
+            0.422472214516209
+          ],
+          "depth": 13.738476210339652,
+          "projectedWinding": 1,
+          "queryKey": "f141-s55-21-skin1108",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s52-22",
+      "sample": [
+        52,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3126,
+          "vertices": [
+            3002,
+            2995,
+            2999
+          ],
+          "barycentric": [
+            0.33425736849544646,
+            0.21469373910609799,
+            0.4510488923984555
+          ],
+          "uv": [
+            0.6562112991457869,
+            0.5116624071440489
+          ],
+          "depth": 13.730242251772328,
+          "projectedWinding": 1,
+          "queryKey": "f141-s52-22-skin3126",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s53-22",
+      "sample": [
+        53,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.004028797149658203,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3123,
+          "vertices": [
+            2997,
+            3000,
+            2999
+          ],
+          "barycentric": [
+            0.10058986118978874,
+            0.31257890616650424,
+            0.586831232643707
+          ],
+          "uv": [
+            0.6639938563086696,
+            0.5056193551249715
+          ],
+          "depth": 13.73315146695274,
+          "projectedWinding": 1,
+          "queryKey": "f141-s53-22-skin3123",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "primitive": 1107,
+          "vertices": [
+            1970,
+            1963,
+            1967
+          ],
+          "barycentric": [
+            0.8908684264433654,
+            0.04980599714510545,
+            0.05932557641152915
+          ],
+          "uv": [
+            0.6716691349345492,
+            0.4187368048380599
+          ],
+          "depth": 13.735661385835986,
+          "projectedWinding": 1,
+          "queryKey": "f141-s53-22-skin1107",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s54-22",
+      "sample": [
+        54,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3122,
+          "vertices": [
+            3000,
+            2997,
+            2998
+          ],
+          "barycentric": [
+            0.35944595004929947,
+            0.003161731768825138,
+            0.6373923181818754
+          ],
+          "uv": [
+            0.6719190740253964,
+            0.4982725363970403
+          ],
+          "depth": 13.736288607681116,
+          "projectedWinding": 1,
+          "queryKey": "f141-s54-22-skin3122",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "primitive": 1105,
+          "vertices": [
+            1963,
+            1969,
+            1962
+          ],
+          "barycentric": [
+            0.5856427856283684,
+            0.36490592570780217,
+            0.049451288663829425
+          ],
+          "uv": [
+            0.680019414893615,
+            0.4181623875850712
+          ],
+          "depth": 13.737134563288581,
+          "projectedWinding": 1,
+          "queryKey": "f141-s54-22-skin1105",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s55-22",
+      "sample": [
+        55,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1092,
+          "vertices": [
+            1958,
+            1962,
+            1956
+          ],
+          "barycentric": [
+            0.1978816659588876,
+            0.5977927069026968,
+            0.2043256271384156
+          ],
+          "uv": [
+            0.6885494656005992,
+            0.4159703031873091
+          ],
+          "depth": 13.739057635005272,
+          "projectedWinding": 1,
+          "queryKey": "f141-s55-22-skin1092",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s52-23",
+      "sample": [
+        52,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 3127,
+          "vertices": [
+            3003,
+            3000,
+            3001
+          ],
+          "barycentric": [
+            0.22021765593790577,
+            0.16519914778824163,
+            0.6145831962738526
+          ],
+          "uv": [
+            0.6571345780734037,
+            0.4995823261517975
+          ],
+          "depth": 13.734076543904555,
+          "projectedWinding": 1,
+          "queryKey": "f141-s52-23-skin3127",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        },
+        {
+          "primitive": 1107,
+          "vertices": [
+            1970,
+            1963,
+            1967
+          ],
+          "barycentric": [
+            0.21684755467703887,
+            0.06420810338480168,
+            0.7189443419381595
+          ],
+          "uv": [
+            0.6633092901567952,
+            0.4151086169398169
+          ],
+          "depth": 13.734108665689002,
+          "projectedWinding": 1,
+          "queryKey": "f141-s52-23-skin1107",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f141-s53-23",
+      "sample": [
+        53,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1101,
+          "vertices": [
+            1963,
+            1959,
+            1967
+          ],
+          "barycentric": [
+            0.7830354137456608,
+            0.13841509960111528,
+            0.07854948665322395
+          ],
+          "uv": [
+            0.6717131858793657,
+            0.41386568594998835
+          ],
+          "depth": 13.735759325879961,
+          "projectedWinding": 1,
+          "queryKey": "f141-s53-23-skin1101",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f142-s52-20",
+      "sample": [
+        52,
+        20
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s53-20",
+      "sample": [
+        53,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s54-20",
+      "sample": [
+        54,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s55-20",
+      "sample": [
+        55,
+        20
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": false,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s52-21",
+      "sample": [
+        52,
+        21
+      ],
+      "sourceBankTexel": [
+        221,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s53-21",
+      "sample": [
+        53,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s54-21",
+      "sample": [
+        54,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": false,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s55-21",
+      "sample": [
+        55,
+        21
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s52-22",
+      "sample": [
+        52,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s53-22",
+      "sample": [
+        53,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s54-22",
+      "sample": [
+        54,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s55-22",
+      "sample": [
+        55,
+        22
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1105,
+          "vertices": [
+            1963,
+            1969,
+            1962
+          ],
+          "barycentric": [
+            0.02943287958102858,
+            0.32079726075434606,
+            0.6497698596646253
+          ],
+          "uv": [
+            0.6887574972107878,
+            0.4205550247332926
+          ],
+          "depth": 13.740024545436608,
+          "projectedWinding": 1,
+          "queryKey": "f142-s55-22-skin1105",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f142-s52-23",
+      "sample": [
+        52,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.9939127564430237,
+      "skinVisibilityBounds": [
+        1.0,
+        1.0
+      ],
+      "oldUnknown": true,
+      "occluders": [],
+      "reason": "remaining non-skin uncertainty retained"
+    },
+    {
+      "id": "f142-s53-23",
+      "sample": [
+        53,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 0.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": false,
+      "occluders": [
+        {
+          "primitive": 1106,
+          "vertices": [
+            1969,
+            1963,
+            1970
+          ],
+          "barycentric": [
+            0.035017452222150025,
+            0.20666129594809488,
+            0.7583212518297551
+          ],
+          "uv": [
+            0.673316331315863,
+            0.41851279223545823
+          ],
+          "depth": 13.737743071096611,
+          "projectedWinding": 1,
+          "queryKey": "f142-s53-23-skin1106",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    },
+    {
+      "id": "f142-s54-23",
+      "sample": [
+        54,
+        23
+      ],
+      "sourceBankTexel": [
+        222,
+        80
+      ],
+      "oldScalarVisibility": 1.0,
+      "skinVisibilityBounds": [
+        0.0,
+        0.0
+      ],
+      "oldUnknown": true,
+      "occluders": [
+        {
+          "primitive": 1105,
+          "vertices": [
+            1963,
+            1969,
+            1962
+          ],
+          "barycentric": [
+            0.5899270393633572,
+            0.040446691273793946,
+            0.3696262693628488
+          ],
+          "uv": [
+            0.680890717079716,
+            0.41696269776744366
+          ],
+          "depth": 13.73876372318634,
+          "projectedWinding": 1,
+          "queryKey": "f142-s54-23-skin1105",
+          "alphaBounds": [
+            1.0,
+            1.0
+          ]
+        }
+      ],
+      "reason": "actual opaque source triangle blocks ray; independent of Close getter"
+    }
+  ],
+  "alphaEvidence": {
+    "queries": 46,
+    "GetPixelCalls": 230,
+    "actualSourceMips": 1,
+    "actualAlphaMode": 1,
+    "sourceModeReturnsOpaqueAfterPassedMask": true,
+    "sourceTextureSource": "configured actual source material, public CPU getters; immutable model hash verified",
+    "noNewCapture": true
+  },
+  "pipelineFailure": "Nearest4x neighbour triangle3120 missed the real ray intersection3116; unknown was then treated as clear by the scalar joint allocator. The final89 validity mask already rejected this output, but the internal role remained white.",
+  "fix": "Query actual stored source triangles at the feature ray, preserve unknown as an interval, and prevent LUT emission until a winner is known. No Close conditional or forced sclera alpha edit.",
+  "limits": [
+    "Only the fixed cell(5,0) and its5 recorded states are corrected here. No whole89 candidate re-tuning or adoption.",
+    "Remaining native-lid/other-layer uncertainty and the colour for any vacated pixel remain independent.",
+    "No full movement or whole-eye production success claim."
+  ]
+}

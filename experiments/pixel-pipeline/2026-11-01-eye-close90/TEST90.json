@@ -1,0 +1,22 @@
+{
+  "passed": 15,
+  "tests": [
+    "query finds adjacent actual triangle rather than treating missed neighbour as transparent",
+    "opaque geometry blocks independently of expression getter",
+    "behind surface does not occlude",
+    "same surface is not self-occlusion",
+    "transparent actual surface does not occlude",
+    "unknown visibility cannot silently become a visible palette selection",
+    "one occluded fragment does not reject whole important feature",
+    "all genuinely occluded fragments do not emit source colour",
+    "role+1 decode accepts skin4 and excludes native white5",
+    "clear and partial alpha are not invented opaque backing",
+    "actual140 nearest3120/exact3116 counterexample closed",
+    "evaluated closed mesh is respected despite reopened getter lag",
+    "actual reopened source matches original open bounds without a fixed pixel count",
+    "actual140 backing false-missing5/9 distinguished from remaining4/9",
+    "portable actual world-space triangle witness independently rejects3120 and finds3116"
+  ],
+  "UnityPlayEntries": 0,
+  "productIntegration": false
+}

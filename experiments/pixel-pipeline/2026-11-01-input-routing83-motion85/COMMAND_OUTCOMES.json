@@ -1,0 +1,198 @@
+[
+  {
+    "mode": "Compile83",
+    "request": {
+      "utc": "2026-11-01T10:21:29.350103+00:00",
+      "pid": 35364,
+      "sourceSHA256": "5a0abe173031c65271e1b60a63d5602bb954326a4b5b443531b3fc4b92a5f2a5"
+    },
+    "success": false,
+    "error": "COMPILATION_FAILED: Code failed to compile.",
+    "compiled": false,
+    "executed": false,
+    "compileLogs": "- Error Error CS0117: 'EyeFeature348' does not contain a definition for 'UseIrisSurface583' (Line: 843)\r\n- Error Error CS0117: 'EyeFeature348' does not contain a definition for 'UseIrisSurface583' (Line: 843)\r\n- Error Error CS0117: 'EyeFeature348' does not contain a definition for 'UseIrisSurface583' (Line: 886)\r\n- Error Error CS0117: 'EyeFeature348' does not contain a definition for 'UseIrisSurface583' (Line: 899)\r\n",
+    "executionLogs": null
+  },
+  {
+    "mode": "Compile83Fixed",
+    "request": {
+      "utc": "2026-11-01T10:21:59.241520+00:00",
+      "pid": 35364,
+      "sourceSHA256": "f80f6a468d697838a582f6553e55310d87f22651c909faa9cc138b2508780741"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 83 minimal input-only observer/event probe compiled only"
+  },
+  {
+    "mode": "Probe83",
+    "request": {
+      "utc": "2026-11-01T10:22:14.311732+00:00",
+      "pid": 35364,
+      "sourceSHA256": "fedfdc571ee129ccf3be91683bf14e256f8f09a838fce6a4a61e4a2c8b01ad27"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 67 single normal Play armed; observer owns normal exit/restore, no repeated rendering"
+  },
+  {
+    "mode": "Post83",
+    "request": {
+      "utc": "2026-11-01T10:22:37.932595+00:00",
+      "pid": 35364,
+      "sourceSHA256": "eafb288ce46672f8631fc2ec757cecefc6b67e7a48026eeac7863562ec0310d3"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Verify83",
+    "request": {
+      "utc": "2026-11-01T10:23:07.773817+00:00",
+      "pid": 35364,
+      "sourceSHA256": "9d4ef6262b1c5859657db029b081ac96c1ed76c0448be25fbed4ddd3a2290df5"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 80 separate read-only settings/native content verification"
+  },
+  {
+    "mode": "Symbol83",
+    "request": {
+      "utc": "2026-11-01T10:23:21.659509+00:00",
+      "pid": 35364,
+      "sourceSHA256": "6dba343469da62d6426f8414afa06eaab334319cd8e28afa85ea386183f64eb9"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 83 dynamic compiler UNITY_EDITOR=False; no settings changed"
+  },
+  {
+    "mode": "Compile84",
+    "request": {
+      "utc": "2026-11-01T10:23:56.083530+00:00",
+      "pid": 35364,
+      "sourceSHA256": "b8e6f0cb1776dbe56b8f045ad4b5ae3aabc97f75a87ed68890a44578dd4afc55"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 84 guard-only input routing correction compiled only"
+  },
+  {
+    "mode": "Probe84",
+    "request": {
+      "utc": "2026-11-01T10:24:09.989622+00:00",
+      "pid": 35364,
+      "sourceSHA256": "19e9fd22e1f0bdf9a20f3ea5e1bec66c082786e483a87736ec7ed289fc5fc3db"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 67 single normal Play armed; observer owns normal exit/restore, no repeated rendering"
+  },
+  {
+    "mode": "Post84",
+    "request": {
+      "utc": "2026-11-01T10:24:49.269890+00:00",
+      "pid": 35364,
+      "sourceSHA256": "33d4b905609bf37ef7db2381133c8e661ae57e3234124f03ee3e3d033ad7c746"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Verify84",
+    "request": {
+      "utc": "2026-11-01T10:24:53.703360+00:00",
+      "pid": 35364,
+      "sourceSHA256": "4e8807e5ce62b3102bec7ec8fc694ff1a932356429d25ef821181f6353d48b9c"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 80 separate read-only settings/native content verification"
+  },
+  {
+    "mode": "Compile85",
+    "request": {
+      "utc": "2026-11-01T10:25:03.333619+00:00",
+      "pid": 35364,
+      "sourceSHA256": "8c896315b7a09ecbb4e560a5289ea271518901c3a19553f9cbd23ba38f2bc6ee"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 85 final motion observer, proven policy correction, compiled only"
+  },
+  {
+    "mode": "Capture85",
+    "request": {
+      "utc": "2026-11-01T10:25:22.108834+00:00",
+      "pid": 35364,
+      "sourceSHA256": "7a356e6c87e8148e722a90564b3aeccf6dd6d94854ef8dec695e3705190fd4be"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 67 single normal Play armed; observer owns normal exit/restore, no repeated rendering"
+  },
+  {
+    "mode": "Post85",
+    "request": {
+      "utc": "2026-11-01T10:26:08.720961+00:00",
+      "pid": 35364,
+      "sourceSHA256": "243bc7ea4331be595744e8c041a7655937804debb675eb4bb425a5352e1413d2"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=29"
+  },
+  {
+    "mode": "Verify85",
+    "request": {
+      "utc": "2026-11-01T10:26:12.552846+00:00",
+      "pid": 35364,
+      "sourceSHA256": "f4753ce8ff5d3a0ff5906efd1f30899eb1c743b16ccba40e0774e524bca9c920"
+    },
+    "success": true,
+    "error": null,
+    "compiled": true,
+    "executed": true,
+    "compileLogs": "",
+    "executionLogs": "[Log] 80 separate read-only settings/native content verification"
+  }
+]

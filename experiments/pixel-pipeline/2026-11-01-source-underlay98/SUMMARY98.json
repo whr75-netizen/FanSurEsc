@@ -1,0 +1,187 @@
+{
+  "status": "TECHNICAL_UNDERLAY_FIXED_EXACT_TIE_ART_POLICY_NOT_ADOPTED",
+  "productDefault": 77,
+  "baseCommit": "ab51a469c6e476fda88a756172599512d5cdb524",
+  "newShaderAssets": [
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/WholeEye98.compute",
+    "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/CurrentNonEye98.shader"
+  ],
+  "AssetsCSharpImport": false,
+  "runtimeGPUSelectionActuallyExecuted": true,
+  "runtimeSelectionNotOfflineReplay": true,
+  "finalActualStates": 35,
+  "actualPlayEntriesIncludingRejectedTrials": 3,
+  "sourceId": "eye98c-20261101T162728074Z-4dce5c01",
+  "phaseFrames": 10,
+  "walkFrames": 8,
+  "turnFrames": 10,
+  "evaluatedCloseFrames": 7,
+  "phaseMeasuredXRange": [
+    0.0,
+    0.9999847412109375
+  ],
+  "phaseMeasuredYRange": [
+    -1.52587890625e-05,
+    4.57763671875e-05
+  ],
+  "phaseRoleOwnerSignatures": 1,
+  "phaseColourSignatures": 1,
+  "wholeEyeSourceRGBAFamilyDirect": true,
+  "sameFrameLegacyBeforeInvalid": 12,
+  "sameFrameAfterInvalid": 9,
+  "fixedThree": 3,
+  "previousValidNativeSamplesAllFourFieldsExact": 202959,
+  "newInvalidRegression": 0,
+  "repairedCurrentHair": 1,
+  "repairedActualWorld": 2,
+  "CPUAgainstGPU35StatesColourOwnerDepthAuditAllExact": true,
+  "protectedNativeExact": true,
+  "completeCloseNoIrisScleraAndReopened": true,
+  "worldDepthExactToOriginalNativeAll35": true,
+  "sourceProof": {
+    "samePrimitiveUVInsideTriangle": true,
+    "exactNativeRGBAOwnerPrimitiveCopy": true,
+    "doubleCPUUVBitExact": false,
+    "hairUVAbsoluteDifference": 0.000154472747410761,
+    "hairCPUReprojectionPixelError": [
+      0.0001904679044741897,
+      0.00019629852231872746
+    ],
+    "worldRaysHaveNoNonCulledNonEyeSourceHit": true
+  },
+  "coverageTiePolicy": "unresolved source-preserving default retained; two offline explicit priority comparisons, not adopted",
+  "remainingRotationNativeByFrame": {
+    "127": 3,
+    "128": 4,
+    "136": 2
+  },
+  "policyCPUAgainstActualBaselineValidated": true,
+  "policyAlternativesGPUIntegrated": false,
+  "GPUProfile": {
+    "WholeEye96 BVH visibility and joint selection": {
+      "GPUBlocks": 0,
+      "GPUTimeAvailable": false,
+      "CPURecordedNanosecondsMinMedianMax": [
+        39300.0,
+        45100.0,
+        71800.0
+      ],
+      "notSerialSynchronized": true,
+      "CPUIsNotGPUTime": true
+    },
+    "WholeEye98 current non-eye backing": {
+      "GPUBlocks": 0,
+      "GPUTimeAvailable": false,
+      "CPURecordedNanosecondsMinMedianMax": [
+        142200.0,
+        167700.0,
+        371400.0
+      ],
+      "notSerialSynchronized": true,
+      "CPUIsNotGPUTime": true
+    },
+    "WholeEye98 exact world underlay pack": {
+      "GPUBlocks": 0,
+      "GPUTimeAvailable": false,
+      "CPURecordedNanosecondsMinMedianMax": [
+        11000.0,
+        16800.0,
+        24200.0
+      ],
+      "notSerialSynchronized": true,
+      "CPUIsNotGPUTime": true
+    },
+    "WholeEye98 final compose": {
+      "GPUBlocks": 0,
+      "GPUTimeAvailable": false,
+      "CPURecordedNanosecondsMinMedianMax": [
+        5200.0,
+        11200.0,
+        20400.0
+      ],
+      "notSerialSynchronized": true,
+      "CPUIsNotGPUTime": true
+    }
+  },
+  "GPUDurationMeasured": false,
+  "newUnderlayPlusWorldRTBytesMax": 224672,
+  "diagnosticLegacyComparisonRTBytesMax": 375360,
+  "sourceNonEyeDraws": 11,
+  "source20KVerticesUploadStillCPU": true,
+  "sourceGeometryBVHStatsUnchangedByUnderlay": true,
+  "realtimeGPUToCPUReadbackCalls": 0,
+  "diagnosticReadbacksInCaptureOnly": true,
+  "lifetime": "all three normal Play exits disposed owner buffers/materials/RTs; borrowed sources not disposed; RT30->30 each. Prior97 simultaneous owner tests cover common engine; new non-eye pass two actual URP views not separately exercised.",
+  "rounds": [
+    {
+      "folder": "capture",
+      "sourceSequence": "eye98-20261101T161743154Z-9f67d855",
+      "frames": 35,
+      "PlayEntries": 1,
+      "PlayExited": true,
+      "dirtyBefore": 31,
+      "dirtyAfter": 31,
+      "native47DirectExact": true,
+      "publicDifferences": [],
+      "InputSettingsSameIdentityAndJSON": true,
+      "globalJournalRestoreErrors": [],
+      "sourceRTBeforeAfter": [
+        30,
+        30
+      ],
+      "UnityGetTotalAllocatedMemoryLongDeltaMiB": 35.76977252960205,
+      "newConsoleErrors": [],
+      "latestPostUTC": "2026-11-01T16:18:57.0978116Z"
+    },
+    {
+      "folder": "capture-b",
+      "sourceSequence": "eye98b-20261101T162300108Z-b1f8ea43",
+      "frames": 35,
+      "PlayEntries": 1,
+      "PlayExited": true,
+      "dirtyBefore": 31,
+      "dirtyAfter": 31,
+      "native47DirectExact": true,
+      "publicDifferences": [],
+      "InputSettingsSameIdentityAndJSON": true,
+      "globalJournalRestoreErrors": [],
+      "sourceRTBeforeAfter": [
+        30,
+        30
+      ],
+      "UnityGetTotalAllocatedMemoryLongDeltaMiB": 26.211074829101562,
+      "newConsoleErrors": [],
+      "latestPostUTC": "2026-11-01T16:25:01.2034511Z"
+    },
+    {
+      "folder": "capture-c",
+      "sourceSequence": "eye98c-20261101T162728074Z-4dce5c01",
+      "frames": 35,
+      "PlayEntries": 1,
+      "PlayExited": true,
+      "dirtyBefore": 31,
+      "dirtyAfter": 31,
+      "native47DirectExact": true,
+      "publicDifferences": [],
+      "InputSettingsSameIdentityAndJSON": true,
+      "globalJournalRestoreErrors": [],
+      "sourceRTBeforeAfter": [
+        30,
+        30
+      ],
+      "UnityGetTotalAllocatedMemoryLongDeltaMiB": 35.938804626464844,
+      "newConsoleErrors": [],
+      "latestPostUTC": "2026-11-01T16:28:28.6864368Z"
+    }
+  ],
+  "remainingTechnicalLimits": [
+    "Non-eye partial alpha has no new palette-aware quantizer: keep old valid skin result, fail closed if only an ambiguous partial underlay remains.",
+    "Runtime sources/material role relations and sampler are current project contracts; other models, material in-place edits and multiple actual URP views not newly validated.",
+    "GPU profiler markers valid but GPU sample count0; CPU counters are not a GPU/frame-budget result.",
+    "Source and final passes remain isolated external runner integration; product77 is not replaced."
+  ],
+  "aestheticSuccess": false,
+  "lastPublicReadUTC": "2026-11-01T16:37:05.3271260Z",
+  "owned98NativeMaterialsRTComputeClonesRemaining": 0,
+  "lastEditorPlaying": false
+}

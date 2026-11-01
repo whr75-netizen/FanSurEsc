@@ -1,0 +1,3093 @@
+{
+  "status": "DESIGN_COMPARISON_NOT_ADOPTED",
+  "baselineCPUAll35GPUFieldsExact": true,
+  "strictHasNoUnjustifiedPriority": true,
+  "originalPartDepthHierarchyAlreadyUsedBeforeCellCoverage": "source depth determines sample-level occlusion; it does not decide equal aggregate iris/white coverage",
+  "cacheRule": "same original visible source texel only; weaker role-only or wrong canonical-origin reuse is not justified",
+  "policyAlternatives": "eye-first: iris > sclera > line > background, background-first: background > sclera > iris > line, only exact current coverage ties; unknown alpha unchanged",
+  "GPUValidations": "strict baseline actual; alternatives offline only",
+  "baseline": [
+    {
+      "frame": 101,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 102,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 103,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 104,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 105,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 106,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 107,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 108,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 109,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 110,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 119,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 120,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 121,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 122,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 123,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 124,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 125,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 126,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 127,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 128,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 129,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 130,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 131,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 132,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 133,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 134,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 135,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 136,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 140,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 141,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 143,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 145,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 146,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 148,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "frame": 149,
+      "fieldsExact": [
+        true,
+        true,
+        true,
+        true
+      ],
+      "maxDifference": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "rows": [
+    {
+      "frame": 127,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame127",
+      "stage": "turn",
+      "index": 0,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [
+            {
+              "cell": [
+                11,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  8.0,
+                  8.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "possible": [
+                1,
+                4
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                44,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "sourcePrimitive": 245.0,
+              "sourceEye": 1.0
+            },
+            {
+              "cell": [
+                12,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  8.0,
+                  8.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "possible": [
+                1,
+                4
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                48,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "sourcePrimitive": 248.0,
+              "sourceEye": 1.0
+            }
+          ],
+          "changedNativeRGBPixels": 6,
+          "changes": [
+            {
+              "nativeROIxy": [
+                41,
+                31
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7794045209884644,
+                0.6343750357627869,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731687545776367,
+                245.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                42,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731687545776367,
+                245.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                43,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731921195983887,
+                248.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                44,
+                31
+              ],
+              "beforeRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731921195983887,
+                248.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                41,
+                32
+              ],
+              "beforeRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731687545776367,
+                245.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                44,
+                32
+              ],
+              "beforeRGBA": [
+                0.201171875,
+                0.0908203125,
+                0.0595703125,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731921195983887,
+                248.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [
+            {
+              "cell": [
+                11,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  8.0,
+                  8.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "possible": [
+                1,
+                4
+              ],
+              "chosenRole": 4,
+              "designPolicy": "background-first",
+              "adopted": false,
+              "sourceSample": [
+                44,
+                26
+              ],
+              "literalSourceRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "sourcePrimitive": 471.0,
+              "sourceEye": 1.0
+            },
+            {
+              "cell": [
+                12,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  8.0,
+                  8.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  0.0,
+                  0.0
+                ]
+              },
+              "possible": [
+                1,
+                4
+              ],
+              "chosenRole": 4,
+              "designPolicy": "background-first",
+              "adopted": false,
+              "sourceSample": [
+                48,
+                26
+              ],
+              "literalSourceRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "sourcePrimitive": 514.0,
+              "sourceEye": 1.0
+            }
+          ],
+          "changedNativeRGBPixels": 7,
+          "changes": [
+            {
+              "nativeROIxy": [
+                41,
+                31
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7794045209884644,
+                0.6343750357627869,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.740068435668945,
+                471.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                42,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.740068435668945,
+                471.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                43,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.742074966430664,
+                514.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                41,
+                32
+              ],
+              "beforeRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.740068435668945,
+                471.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                42,
+                32
+              ],
+              "beforeRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.740068435668945,
+                471.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                43,
+                32
+              ],
+              "beforeRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.742074966430664,
+                514.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                44,
+                32
+              ],
+              "beforeRGBA": [
+                0.201171875,
+                0.0908203125,
+                0.0595703125,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.742074966430664,
+                514.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 128,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame128",
+      "stage": "turn",
+      "index": 1,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [
+            {
+              "cell": [
+                9,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  7.0,
+                  7.0
+                ],
+                "4": [
+                  7.0,
+                  7.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  2.0,
+                  2.0
+                ]
+              },
+              "possible": [
+                1,
+                4
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                38,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "sourcePrimitive": 276.0,
+              "sourceEye": 1.0
+            },
+            {
+              "cell": [
+                11,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                44,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.201171875,
+                0.0908203125,
+                0.0595703125,
+                1.0
+              ],
+              "sourcePrimitive": 360.0,
+              "sourceEye": 1.0
+            }
+          ],
+          "changedNativeRGBPixels": 4,
+          "changes": [
+            {
+              "nativeROIxy": [
+                34,
+                32
+              ],
+              "beforeRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731230735778809,
+                276.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                35,
+                32
+              ],
+              "beforeRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731230735778809,
+                276.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                34,
+                33
+              ],
+              "beforeRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731230735778809,
+                276.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                35,
+                33
+              ],
+              "beforeRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731230735778809,
+                276.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [
+            {
+              "cell": [
+                9,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  7.0,
+                  7.0
+                ],
+                "4": [
+                  7.0,
+                  7.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  2.0,
+                  2.0
+                ]
+              },
+              "possible": [
+                1,
+                4
+              ],
+              "chosenRole": 4,
+              "designPolicy": "background-first",
+              "adopted": false,
+              "sourceSample": [
+                36,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "sourcePrimitive": 468.0,
+              "sourceEye": 1.0
+            },
+            {
+              "cell": [
+                11,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 0,
+              "designPolicy": "background-first",
+              "adopted": false
+            }
+          ],
+          "changedNativeRGBPixels": 4,
+          "changes": [
+            {
+              "nativeROIxy": [
+                38,
+                32
+              ],
+              "beforeRGBA": [
+                0.201171875,
+                0.0908203125,
+                0.0595703125,
+                1.0
+              ],
+              "afterRGBA": [
+                0.7003125548362732,
+                0.6328125,
+                0.5821875333786011,
+                1.0
+              ],
+              "owner": [
+                11.0,
+                0.0,
+                14.001590728759766,
+                1777.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                32
+              ],
+              "beforeRGBA": [
+                0.201171875,
+                0.0908203125,
+                0.0595703125,
+                1.0
+              ],
+              "afterRGBA": [
+                0.7003125548362732,
+                0.6328125,
+                0.5821875333786011,
+                1.0
+              ],
+              "owner": [
+                11.0,
+                0.0,
+                13.99891471862793,
+                1779.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                38,
+                33
+              ],
+              "beforeRGBA": [
+                0.201171875,
+                0.0908203125,
+                0.0595703125,
+                1.0
+              ],
+              "afterRGBA": [
+                0.632244348526001,
+                0.5474298596382141,
+                0.48322731256484985,
+                1.0
+              ],
+              "owner": [
+                11.0,
+                0.0,
+                13.982123374938965,
+                1765.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                33
+              ],
+              "beforeRGBA": [
+                0.201171875,
+                0.0908203125,
+                0.0595703125,
+                1.0
+              ],
+              "afterRGBA": [
+                0.005710681900382042,
+                0.0034984410740435123,
+                0.00708820391446352,
+                1.0
+              ],
+              "owner": [
+                13.0,
+                0.0,
+                13.69495964050293,
+                1159.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 129,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame129",
+      "stage": "turn",
+      "index": 2,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 130,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame130",
+      "stage": "turn",
+      "index": 3,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 131,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame131",
+      "stage": "turn",
+      "index": 4,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 132,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame132",
+      "stage": "turn",
+      "index": 5,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 133,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame133",
+      "stage": "turn",
+      "index": 6,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 134,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame134",
+      "stage": "turn",
+      "index": 7,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 135,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame135",
+      "stage": "turn",
+      "index": 8,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 136,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame136",
+      "stage": "turn",
+      "index": 9,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [
+            {
+              "cell": [
+                11,
+                4
+              ],
+              "massBounds": {
+                "1": [
+                  7.0,
+                  7.0
+                ],
+                "4": [
+                  7.0,
+                  7.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  2.0,
+                  2.0
+                ]
+              },
+              "possible": [
+                1,
+                4
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                46,
+                16
+              ],
+              "literalSourceRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "sourcePrimitive": 276.0,
+              "sourceEye": 1.0
+            },
+            {
+              "cell": [
+                12,
+                5
+              ],
+              "massBounds": {
+                "1": [
+                  0.0,
+                  0.0
+                ],
+                "4": [
+                  8.0,
+                  8.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                4,
+                0
+              ],
+              "chosenRole": 4,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                48,
+                20
+              ],
+              "literalSourceRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "sourcePrimitive": 472.0,
+              "sourceEye": 1.0
+            }
+          ],
+          "changedNativeRGBPixels": 6,
+          "changes": [
+            {
+              "nativeROIxy": [
+                49,
+                30
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7668758034706116,
+                0.612060546875,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.745850563049316,
+                472.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                50,
+                30
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7228168845176697,
+                0.572802722454071,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.745850563049316,
+                472.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                49,
+                31
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7668758034706116,
+                0.612060546875,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.745850563049316,
+                472.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                50,
+                31
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7228168845176697,
+                0.572802722454071,
+                1.0
+              ],
+              "afterRGBA": [
+                1.0,
+                1.0,
+                1.0,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.745850563049316,
+                472.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                47,
+                32
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7771406173706055,
+                0.6343750357627869,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731428146362305,
+                276.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                47,
+                33
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7771406173706055,
+                0.6343750357627869,
+                1.0
+              ],
+              "afterRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                1.0,
+                13.731428146362305,
+                276.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [
+            {
+              "cell": [
+                11,
+                4
+              ],
+              "massBounds": {
+                "1": [
+                  7.0,
+                  7.0
+                ],
+                "4": [
+                  7.0,
+                  7.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  2.0,
+                  2.0
+                ]
+              },
+              "possible": [
+                1,
+                4
+              ],
+              "chosenRole": 4,
+              "designPolicy": "background-first",
+              "adopted": false,
+              "sourceSample": [
+                45,
+                16
+              ],
+              "literalSourceRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "sourcePrimitive": 468.0,
+              "sourceEye": 1.0
+            },
+            {
+              "cell": [
+                12,
+                5
+              ],
+              "massBounds": {
+                "1": [
+                  0.0,
+                  0.0
+                ],
+                "4": [
+                  8.0,
+                  8.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                4,
+                0
+              ],
+              "chosenRole": 0,
+              "designPolicy": "background-first",
+              "adopted": false
+            }
+          ],
+          "changedNativeRGBPixels": 4,
+          "changes": [
+            {
+              "nativeROIxy": [
+                47,
+                32
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7771406173706055,
+                0.6343750357627869,
+                1.0
+              ],
+              "afterRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.738334655761719,
+                468.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                48,
+                32
+              ],
+              "beforeRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "afterRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.738334655761719,
+                468.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                47,
+                33
+              ],
+              "beforeRGBA": [
+                0.9227343797683716,
+                0.7771406173706055,
+                0.6343750357627869,
+                1.0
+              ],
+              "afterRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.738334655761719,
+                468.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                48,
+                33
+              ],
+              "beforeRGBA": [
+                0.08251953125,
+                0.043701171875,
+                0.034423828125,
+                1.0
+              ],
+              "afterRGBA": [
+                0.80859375,
+                0.70703125,
+                0.69921875,
+                1.0
+              ],
+              "owner": [
+                5.0,
+                1.0,
+                13.738334655761719,
+                468.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 140,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame140",
+      "stage": "evaluated-blink",
+      "index": 0,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                20,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "sourcePrimitive": 21.0,
+              "sourceEye": 2.0
+            }
+          ],
+          "changedNativeRGBPixels": 4,
+          "changes": [
+            {
+              "nativeROIxy": [
+                38,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                38,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 0,
+              "designPolicy": "background-first",
+              "adopted": false
+            }
+          ],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 141,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame141",
+      "stage": "evaluated-blink",
+      "index": 1,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                20,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "sourcePrimitive": 21.0,
+              "sourceEye": 2.0
+            }
+          ],
+          "changedNativeRGBPixels": 4,
+          "changes": [
+            {
+              "nativeROIxy": [
+                38,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                38,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 0,
+              "designPolicy": "background-first",
+              "adopted": false
+            }
+          ],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 143,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame143",
+      "stage": "evaluated-blink",
+      "index": 2,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                20,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "sourcePrimitive": 21.0,
+              "sourceEye": 2.0
+            }
+          ],
+          "changedNativeRGBPixels": 4,
+          "changes": [
+            {
+              "nativeROIxy": [
+                38,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724273681640625,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724273681640625,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                38,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724273681640625,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724273681640625,
+                21.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 0,
+              "designPolicy": "background-first",
+              "adopted": false
+            }
+          ],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 145,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame145",
+      "stage": "evaluated-blink",
+      "index": 3,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 146,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame146",
+      "stage": "evaluated-blink",
+      "index": 4,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 148,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame148",
+      "stage": "evaluated-blink",
+      "index": 5,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                20,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "sourcePrimitive": 21.0,
+              "sourceEye": 2.0
+            }
+          ],
+          "changedNativeRGBPixels": 4,
+          "changes": [
+            {
+              "nativeROIxy": [
+                38,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                38,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 0,
+              "designPolicy": "background-first",
+              "adopted": false
+            }
+          ],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    },
+    {
+      "frame": 149,
+      "sourceId": "eye98c-20261101T162728074Z-4dce5c01-frame149",
+      "stage": "evaluated-blink",
+      "index": 6,
+      "policies": [
+        {
+          "name": "eye-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 1,
+              "designPolicy": "eye-first",
+              "adopted": false,
+              "sourceSample": [
+                20,
+                24
+              ],
+              "literalSourceRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "sourcePrimitive": 21.0,
+              "sourceEye": 2.0
+            }
+          ],
+          "changedNativeRGBPixels": 4,
+          "changes": [
+            {
+              "nativeROIxy": [
+                38,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                30
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                38,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            },
+            {
+              "nativeROIxy": [
+                39,
+                31
+              ],
+              "beforeRGBA": [
+                0.4735315442085266,
+                0.21223072707653046,
+                0.16513222455978394,
+                1.0
+              ],
+              "afterRGBA": [
+                0.451171875,
+                0.23828125,
+                0.150390625,
+                1.0
+              ],
+              "owner": [
+                2.0,
+                2.0,
+                13.724271774291992,
+                21.0
+              ]
+            }
+          ],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        },
+        {
+          "name": "background-first",
+          "events": [
+            {
+              "cell": [
+                5,
+                6
+              ],
+              "massBounds": {
+                "1": [
+                  8.0,
+                  8.0
+                ],
+                "4": [
+                  0.0,
+                  0.0
+                ],
+                "6": [
+                  0.0,
+                  0.0
+                ],
+                "0": [
+                  8.0,
+                  8.0
+                ]
+              },
+              "possible": [
+                1,
+                0
+              ],
+              "chosenRole": 0,
+              "designPolicy": "background-first",
+              "adopted": false
+            }
+          ],
+          "changedNativeRGBPixels": 0,
+          "changes": [],
+          "remainingInvalidNative": 0,
+          "GPUValidated": false,
+          "adopted": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "rawFilesUnchanged": true,
+  "sourceIdFrameSerialMatch": true,
+  "nonEyeProducer": {
+    "files": "current-non-eye98-0..3.plane",
+    "camera": "source.camera (physical head view)",
+    "grid": "currentSources91.roiTopLeft, 2x raster",
+    "depth": "physical head-view eye depth; Compose adds source.camera.view.m23 - main.camera.view.m23",
+    "note": "Raw exporter grouped these four planes under native-final viewId; that label identifies the readback group, not the source camera. Use this explicit mapping and captured source matrices; do not use the native-main camera to interpret their source depth."
+  },
+  "worldProducer": {
+    "files": "actual-world98-0..1.plane",
+    "camera": "actual Native395 world; original quantized worldSample coordinates in proof.xy",
+    "depth": "proof.w is original native depthAudit.x exact"
+  },
+  "finalProducer": {
+    "files": "live96-final0..3.plane",
+    "camera": "native final/main view"
+  },
+  "nextExporterFix": "select Frame(f, physical-source98, serial) for non-eye fields, nativeFrame87 for final/world fields; GPU algorithm unchanged"
+}

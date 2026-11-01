@@ -1,0 +1,421 @@
+{
+  "sourceModelAsset": "Assets/EUnityValidation01/VRoidSampleA144/Inputs/AvatarSample_A.vrm",
+  "sourceModelSHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+  "materials": [
+    {
+      "sourceRendererOrdinal": 1,
+      "sourceSubmesh": 3,
+      "materialId": 3,
+      "materialName": "N00_000_00_Face_00_SKIN (Instance)",
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "mtoonScalarAndFactorFields": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "parametricRimColorFactor": [
+          0.005769958,
+          0.005769958,
+          0.005769958
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "worldCoordinates",
+        "outlineWidthFactor": 0.00075,
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 0,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      },
+      "textures": {
+        "baseColorTexture": {
+          "textureId": 5,
+          "imageId": 5,
+          "imageSHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+          "size": [
+            1024,
+            1024
+          ],
+          "mode": "RGBA",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "normalTexture": {
+          "textureId": 6,
+          "imageId": 6,
+          "imageSHA256": "dca1fea84bde4c850d99e8913f2860fb3a87edf483e0baf54e81f6aa101ac331",
+          "size": [
+            1024,
+            1024
+          ],
+          "mode": "RGB",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "emissiveTexture": {
+          "textureId": 1,
+          "imageId": 1,
+          "imageSHA256": "9e084b8d331ed370ca9822b57c207a18b7ec0aa672a2b0487d2caaa86df26567",
+          "size": [
+            8,
+            8
+          ],
+          "mode": "RGB",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "shadeMultiplyTexture": {
+          "textureId": 5,
+          "imageId": 5,
+          "imageSHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+          "size": [
+            1024,
+            1024
+          ],
+          "mode": "RGBA",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "matcapTexture": {
+          "textureId": 25,
+          "imageId": 25,
+          "imageSHA256": "9e084b8d331ed370ca9822b57c207a18b7ec0aa672a2b0487d2caaa86df26567",
+          "size": [
+            8,
+            8
+          ],
+          "mode": "RGB",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "outlineWidthMultiplyTexture": {
+          "textureId": 26,
+          "imageId": 26,
+          "imageSHA256": "d5c7fc19d8aa5279d9e006cd283dd280d82a36a2ed9239fec92fb2cb359c1816",
+          "size": [
+            256,
+            256
+          ],
+          "mode": "RGB",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        }
+      },
+      "materialExtrasKeys": [],
+      "sourcePrimitiveExtrasKeys": [
+        "targetNames"
+      ]
+    },
+    {
+      "sourceRendererOrdinal": 1,
+      "sourceSubmesh": 6,
+      "materialId": 6,
+      "materialName": "N00_000_00_FaceEyeline_00_FACE (Instance)",
+      "baseColorFactor": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "alphaMode": "BLEND",
+      "alphaCutoff": 0.5,
+      "mtoonScalarAndFactorFields": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": -2,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "parametricRimColorFactor": [
+          0,
+          0,
+          0
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      },
+      "textures": {
+        "baseColorTexture": {
+          "textureId": 9,
+          "imageId": 9,
+          "imageSHA256": "32476919c11a2986435460542cdf3e8de8c11c8327cea6cf0a34ce6cda4f52f6",
+          "size": [
+            1024,
+            256
+          ],
+          "mode": "RGBA",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "normalTexture": {
+          "textureId": 2,
+          "imageId": 2,
+          "imageSHA256": "d76fc537166ea42dad9f97cde34574ae348397e1279710fb69b8f2e743b2cc95",
+          "size": [
+            8,
+            8
+          ],
+          "mode": "RGB",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "emissiveTexture": {
+          "textureId": 1,
+          "imageId": 1,
+          "imageSHA256": "9e084b8d331ed370ca9822b57c207a18b7ec0aa672a2b0487d2caaa86df26567",
+          "size": [
+            8,
+            8
+          ],
+          "mode": "RGB",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "shadeMultiplyTexture": {
+          "textureId": 9,
+          "imageId": 9,
+          "imageSHA256": "32476919c11a2986435460542cdf3e8de8c11c8327cea6cf0a34ce6cda4f52f6",
+          "size": [
+            1024,
+            256
+          ],
+          "mode": "RGBA",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        },
+        "matcapTexture": {
+          "textureId": 25,
+          "imageId": 25,
+          "imageSHA256": "9e084b8d331ed370ca9822b57c207a18b7ec0aa672a2b0487d2caaa86df26567",
+          "size": [
+            8,
+            8
+          ],
+          "mode": "RGB",
+          "PNGChunkTypes": [
+            "IDAT",
+            "IEND",
+            "IHDR"
+          ],
+          "sampler": {
+            "magFilter": 9729,
+            "minFilter": 9729,
+            "wrapS": 10497,
+            "wrapT": 10497
+          }
+        }
+      },
+      "materialExtrasKeys": [],
+      "sourcePrimitiveExtrasKeys": [
+        "targetNames"
+      ]
+    }
+  ],
+  "blinkSourceBindings": {
+    "blink": {
+      "morphTargetBinds": [
+        {
+          "node": 91,
+          "index": 13,
+          "weight": 1
+        }
+      ],
+      "isBinary": false
+    },
+    "blinkLeft": {
+      "morphTargetBinds": [
+        {
+          "node": 91,
+          "index": 15,
+          "weight": 1
+        }
+      ],
+      "isBinary": false
+    },
+    "blinkRight": {
+      "morphTargetBinds": [
+        {
+          "node": 91,
+          "index": 14,
+          "weight": 1
+        }
+      ],
+      "isBinary": false
+    }
+  },
+  "authorLayerSourceFilesInExactModelInputFolder": [],
+  "searchScope": "exact source model Input folder only, not entire user drive",
+  "existingBankRoleCounts": {
+    "0.0": 130540,
+    "1.0": 8,
+    "4.0": 12
+  },
+  "implementedBankConsumer": "NativeSurface89 only uses bank for native role1/4; parent/iris registration does not provide source face blush/shading-layer labels",
+  "separatedClues": [
+    "native primitive/material/UV support and source-alpha domains",
+    "native eyelid vs skin geometry",
+    "existing native upper/lower lid component IDs",
+    "registered eye parent/iris and original source atlas colours",
+    "VRM blink morph bindings"
+  ],
+  "notEquivalent": [
+    "material ID is not a painted colour-region ID",
+    "a source shadow-like gradient is not the current scene lighting g",
+    "normal/outline/alpha maps are not automatically blush/skin/paint layer labels",
+    "generic source RGB quantisation noise bounds do not authorise deleting coherent low-contrast paint"
+  ],
+  "minimumAutomaticContract": {
+    "required": [
+      "source hash/material/texture/sampler/UV/mesh-domain provenance",
+      "unchanged unlit source RGBA field",
+      "hierarchical colour/shape evidence with coherent weak-child support and explicit uncertainty",
+      "separate source tone/colour identity from dynamic g/Q",
+      "declared colour-loss and feature-importance policy before flattening a source field to finite P"
+    ],
+    "optionalAuthorEvidence": [
+      "paint layer/region masks or registered feature constraints when available"
+    ],
+    "fallback": "retain unresolved source field/feature evidence; do not silently average or discard it as lighting"
+  },
+  "reviewQuestions": [
+    "What objective can preserve weak coherent strokes while assigning finite-width AA transition to shared regions without treating every gradient band as a feature?",
+    "Should a colour region carry a continuous source field and source-tone label separately from LightQ, rather than a single flat representative colour?",
+    "How should registered skin-ring curve support and source lid-pigment support jointly allocate cells where102 iris/white protection prevents a connected line?"
+  ]
+}

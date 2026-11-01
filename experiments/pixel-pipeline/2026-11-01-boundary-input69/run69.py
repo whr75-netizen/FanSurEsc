@@ -13,7 +13,9 @@ def main():
  for name,v in a.items():
   if name.startswith('source-meta-strip-'):y=int(name.rsplit('-',1)[1]);meta[y:y+len(v)]=v
  lm=meta[oy:oy+hh,ox:ox+ww];mask=(lm[...,0]>0)&(lm[...,1]>=11.5)&(lm[...,1]<=15.5);nm=a['native-endpoint'];nativeMask=(nm[...,0]>0)&(nm[...,1]>=11.5)&(nm[...,1]<=15.5)
- q=shade_labels(a['shade-class480'],mask,'LegacySignals335.classifier_after_ShadeBoundary');g=a['style-class'][...,1]
+ steps=int(state['modeFlags']['surfaceSteps'])
+ if steps!=2:raise ValueError('This frozen area diagnostic is binary; do not collapse3/4-step shade IDs')
+ q=shade_labels(a['shade-class480'],mask,'LegacySignals335.classifier_after_ShadeBoundary',steps);g=a['style-class'][...,1]
  _,meshes=geometry(PACKET/'evaluated-source.geometry');faceVertices={}
  for m in meshes:
   for sm,s in enumerate(m['submeshes']):

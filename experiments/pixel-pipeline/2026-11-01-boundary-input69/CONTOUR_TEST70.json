@@ -1,0 +1,21 @@
+{
+  "passed": 14,
+  "cases": [
+    "confidence transition keeps one connected curve with per-edge tiers",
+    "tier/scan order does not change path identity",
+    "redundant fine evidence does not downgrade persistent confidence",
+    "T-junction and endpoints pin all three full branches",
+    "paired one-texel ribbon edges remain distinct, no size deletion",
+    "small closed boundary remains a loop",
+    "missing source edge is not bridged into a new reference curve",
+    "producer-tagged2/3/4-step Q keeps intermediate IDs",
+    "nondeclared half-level rejected for4-step source",
+    "post-eye UV cannot become shade by numeric coincidence",
+    "two continuous fields share native/centre samples but have different contours",
+    "actual source confidence and whole paths retained without artistic promotion",
+    "actual repeated source curve placements retain separate geometry keys",
+    "projected pieces keep ordered source parameters and do not bridge visibility gaps"
+  ],
+  "UnityCalls": 0,
+  "limits": "graph representation/provenance tests; not aesthetic/analytic-curvature/temporal success"
+}

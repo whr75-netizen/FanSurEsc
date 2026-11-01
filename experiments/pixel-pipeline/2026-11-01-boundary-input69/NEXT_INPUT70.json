@@ -1,0 +1,26 @@
+{
+  "status": "Plan only, no new Unity call, Play or capture authorized/performed",
+  "eyeMinimum": {
+    "scope": "One frozen normal-render frame first; no large repeated sequence or product-default changes",
+    "lookup": "n.host.headEyes or n.host.mainEyes matched to e.full and view identity; no global FindObjectsByType lookup of hidden runtime objects",
+    "compiledProtocol": ["EyeReadback70.cs", "UnityEyeBuffer70.cs"],
+    "callerPatch": "EYE_CALLER70.patch unapplied, new output root/sourceId and current-state preflight still required",
+    "counts": "Actual FeaturePacket19(float4 a,b,uv),48bytes. Entire actual ROI for both eyes in row-sized arrays. If UseIrisSurface582 or UseLashRegion583 skips CountFeatures19, mark skipped/invalid rather than treating old or zero data as valid.",
+    "records": "Actual Pixel348 sixteen float4 fields,256bytes. Only actual eye ROI rows from the480x272 full-grid buffer; preserve each global GPU index. No full33,423,360byte allocation/read.",
+    "ROI": "Save original e.roi top-left and shader _ROI348 bottom-left. Convert exactly once with yGPU=272-yTop-height.",
+    "identity": ["new sourceId", "viewId", "frameCount", "actual main render serial", "model topology hash", "eye stable IDs", "style version", "phase/evaluated pose", "head/crop/source camera matrices", "actual runtime producer flags"],
+    "companionInputs": "Same-frame pre-eye layer RGBA/meta/UV (including real part10 backing) and source feature sample support as needed. Save exact source pigment/family provenance; do not manufacture absent skin/lid or unregistered blink shapes.",
+    "limits": "This first packet validates layout/first loss at one real pose. It does not reproduce old frame100/101 or validate rotation/blink/temporal stability. Such scenarios require their actual registered state and separately bounded normal-history observations.",
+    "ownership": "Borrowed ComputeBuffers are never disposed. Own arrays are scoped rows, max122880bytes for a full-width record row; each payload <=1MiB. Identity/cancel/read failure retains an incomplete.partial file and never emits a completed packet."
+  },
+  "hairReferenceMinimum": {
+    "existingDataStillUsable": "Current texture/geometry/input graph can be analysed offline. New Play is not needed merely to trace or represent source evidence.",
+    "CPUOnlyMetadataMissing": ["actual texture wrapU/wrapV", "filterMode/mip count/mip bias", "material texture local IDs and sampling transform", "actual shader keyword/producer schema"],
+    "whyNoCurrentCorrection": "Ordered raster-edge evidence is uncertain and often fragmented. It is not an independently approved continuous shape. Current sparse native g plus a centre sample does not uniquely identify the intervening isocontour. Do not fit/smooth and declare that result to be the truth.",
+    "optionalIndependentObservation": "If validating a light-derived curve, collect one higher-density g-only hair ROI with the SAME producer/pose/light/shadow inputs. Use6x logical sampling as a diagnostic nested grid, not a new product pixel size or palette stage count.",
+    "nestedGrid": "6x/2x=3 is odd: common sample indices are k=3j+1 in each axis when projection/ROI/nativeShift phase is identical. Train on the2x subset, evaluate held-out6x observations; refuse the reference if common samples disagree.",
+    "ROIByteExample": "Current21x27logical hair box at6x is126x162: R32_SFloat81,648bytes or R32G32B32A32_SFloat326,592bytes, below1MiB per owned plane. Record exact sample positions, depth/source primitive, visibility and reference uncertainty.",
+    "preflight": "Additional offscreen draw/pass feasibility and lighting binding must be proven before execution; no silent RendererFeature asset change/import. Unknown buffer bindings are not overwritten. Snapshot all changed globals and full native PlayerSettings in addition to existing5objects; restore and getter-compare. No SaveAssets/ClearDirty/reset/GC/app shutdown.",
+    "artContractGap": "Source bitmap gradients do not contain a unique authored vector boundary. A chosen inference/design prior or an independently reviewed source region/corridor is required for artistic adoption; denser GPU samples alone do not supply that intent."
+  }
+}

@@ -375,3 +375,22 @@ Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reser
 대표 좌표(225,59)/(230,55)는 같은 hair domain의4방향 이웃이 없는 실루엣/틈이다. (212,48)은 g=.499622이며 한 셀 안 native source가sm2 primitive4851/4849·2364와sm1 primitive1024로 달라진다. (226,36)도 silhouette에 인접하고 native1007/1009/1068과1193이 섞인다. 모두 잡음으로 덮는 대조군은 영역7→5/단독4→3/경계46→40으로 줄지만 실제 표면을 넘는 보간이므로 채택하지 않았다. 원배율·정수 확대와 실제 원본 texture 도판을 직접 열어 확인했다.
 
 확정된 분석/입력 연결 수정과 미채택 공간 후보를 구분한다. 전체 source-feature 영역·공유 곡선의 완성/현재 캐릭터의 미술 개선/시간 안정성은 입증하지 못했다. 머리의 soft 경계 선택·투영/더 완전한 surface 연결 분석은 현재 자료로 계속할 수 있어 새 Play를 이유로 멈출 부분이 아니다. 실제 눈 공동 배치/가림 검증에는 정확한 eye count/record ROI 및 feature state가 필요하며, 새 sourceId의 추가 캡처는 별도 승인 전 실행하지 않는다. 기존 dirty29는 마지막 live 확인값이며 이번 오프라인 작업에서 다시 조회하거나 해제하지 않았다. 변경 파일과 관련 커밋은 이 절의 Git 이력으로 확인한다.
+
+## 경계70 — 연결 경계 계약 수정·관측 한계·bounded 눈 읽기 준비
+
+[현재 검토 페이지의70절](../../experiments/pixel-pipeline/2026-11-01-boundary-input69/INDEX.html), [실제 곡선 감사](../../experiments/pixel-pipeline/2026-11-01-boundary-input69/CURVE_REPORT70.json), [다음 최소 입력 계약](../../experiments/pixel-pipeline/2026-11-01-boundary-input69/NEXT_INPUT70.json). 이번도 Unity 호출/Play/렌더/import/제품·RGB·Q·팔레트 변경0이다.
+
+| 스크립트·함수 | 실제 변경·검증·미적용 구분 |
+|---|---|
+| `schema69.py:shade_labels` | producer schema를 강제하고 실제 단계 수의 정수ID를 반환한다. 2/3/4단계의 중간값을 binary round로 소실시키지 않으며 float32 한ULP 밖의 미등록 값을 거부한다.69의 면적 후보는 명시적으로2단계 전용이며 다른 단계 입력을 중단한다 |
+| `source_contours70.py:trace_evidence` | persistent/fine/uncertain을 먼저 합쳐 같은 연결 경로를 하나의 순서 있는 곡선 ID로 전달한다. 등급이 바뀌었다는 이유로 분리하지 않고, 간선별 등급과 실제 분기점/끝점 pin을 유지한다. 얇은 띠 양쪽·작은 loop·원래 gap은 보존한다. uncertain은 hard feature가 아니다 |
+| `run_contours70.py:clip_segments/main` | 같은 capture67의 평가 geometry와 camera로 실제 관측된 삼각형에 source 경계를 투영했다. 원본 source 곡선 ID, 기하 배치 ID, source 구간 매개변수, primitive, 가까운 native 표본의 일치 여부를 분리한다. 반복된 texture의 다른 배치를 하나의 가시 곡선/가림 owner로 합치지 않는다. runtime wrap/filter가 없으므로 unit texture tile만 다루며 전체 가시성은 미확인이다 |
+| `test_contours70.py` | 연결 등급 전환·순회 순서·분기·한texel 띠·loop·gap·2/3/4단계 schema·반복 배치·source 구간 등14검사 통과. 기존69 회귀10건도 통과했다. 합성 반례의 연속장 두 개가 같은 sparse 표본을 내면서 다른 중간 등명암선을 가질 수 있음을 확인했다. 실제 장면 재현이나 픽셀아트 불가능의 증명이 아니다 |
+| `EyeReadback70.cs:Readback.Counts/Records`, `UnityEyeBuffer70.cs` | 실제48byte FeaturePacket19와256byte Pixel348을 typed 행별 GetData로 읽는 독립 코어/비소유 adapter 구현. source/frame/view/serial·ROI·stride/count·1MiB payload를 검사한다. 실패·취소·상태 변경은 partial을 남기며 완료 파일을 만들지 않고, 중복은 덮어쓰지 않는다. borrowed ComputeBuffer를 Dispose하지 않는다 |
+| `TestEyeReadback70.cs`, `test_eye70.py` | 독립 C# 실행11검사 및 실제6000.5 Unity CoreModule 참조 adapter 컴파일 통과. 테스트 records 행8,448bytes, 전체 너비 행도122,880bytes. 실제 GPU 읽기·Unity 동적SDK 컴파일·호출자 연결은 미실행이다. `EYE_CALLER70.patch`는 direct host 참조, ROI 변환, mode에 따른 count skip, typed reader 호출의 미적용 패치다 |
+
+정정:64에는 이미 persistent/fine contour component가 있었다.69에서 확인한 누락은 uncertain 등급 및 등급 사이의 순서/정체성 전달이다. fill region 수1은 경계 증거가0이라는 뜻이 아니다.70의 source13은15,998간선/4,983순서 경로이며 그중26개만 전 구간 persistent 검출이다. 이것도 의미 특징의 자동 승인 수가 아니다. 대표281texel 경로는 실제 기하 배치 하나에서 약3.085논리px의 가까운 표본 일치 길이가 있었지만 직선 source 구분선이며 밝은 띠 전체의 승인된 곡선이 아니다. 단절·가림을 추정으로 메우거나 자체 평활화를 정답으로 놓지 않았다.
+
+현재 기준은 원본 source64 검출 raster 간선과 같은 프레임의 실제 geometry이다. source 색 경계를 g 명암 경계의 정답으로 교체하지 않는다. 승인된 연속 특징 경계/영역과 독립적인 고밀도 g 기준이 없으므로, 전체 곡선 재배치·픽셀 미술 개선 판정 직전에서 중단한다. 다음 입력은 CPU sampler metadata와 실제 eye count/records ROI이며, 명암 곡선을 검증한다면 같은 조명 producer의 작은6배 ROI가 선택적 독립 관측이다.6배는 기존2배 표본을 k=3j+1로 포함시키기 위한 진단 격자이며 제품 해상도나 palette 단계가 아니다. dense 자료도 작가의 의도를 주지는 않으므로 형태 추론 기준 또는 독립 검토한 source 영역/corridor가 별도로 필요하다. 실행 승인은 요청/실행하지 않았다.
+
+제품 기본 경로와 기존 사용자 파일은 유지했다. 마지막 live dirty29를 현재값으로 재가정하지 않았고 이번에는 조회/해제하지 않았다. 이 절의 변경 파일·함수와 커밋은 Git 이력으로 확인한다.

@@ -1,0 +1,224 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEditor;
+namespace Unity.AI.Assistant.Agent.Dynamic.Extension.Editor
+{
+// Offline66 candidate. Historical58 source is unchanged; loaded Unity code is unchanged.
+// Small dependency-free JSON boundary for the existing RunCommand reference set.
+// No reflection, package loading, runtime serialization of arbitrary objects.
+
+public class Json58 : IEnumerable<Json58>
+{
+    protected Dictionary<string,Json58> fields;protected List<Json58> items;protected object value;
+    public Json58 this[string key] {get {Json58 v;return fields!=null&&fields.TryGetValue(key,out v)?v:null;}set {fields[key]=value;}}
+    public Json58 this[int i] {get {return items[i];}}
+    public int Count {get {return items!=null?items.Count:fields!=null?fields.Count:0;}}
+    public void Add(Json58 v) {items.Add(v);}
+    public IEnumerable<T> Values<T>() {return this.Select(v=>(T)Convert.ChangeType(v.value,typeof(T),CultureInfo.InvariantCulture));}
+    public IEnumerator<Json58> GetEnumerator() {return (items??(fields==null?new List<Json58>():fields.Values.ToList())).GetEnumerator();}
+    IEnumerator IEnumerable.GetEnumerator() {return GetEnumerator();}
+    public static implicit operator Json58(string v) {return v==null?null:new Json58{value=v};}
+    public static implicit operator Json58(int v) {return new Json58{value=v};}
+    public static implicit operator Json58(long v) {return new Json58{value=v};}
+    public static implicit operator Json58(float v) {return new Json58{value=(double)v};}
+    public static implicit operator Json58(double v) {return new Json58{value=v};}
+    public static implicit operator Json58(bool v) {return new Json58{value=v};}
+    public static explicit operator string(Json58 v) {return v==null?null:Convert.ToString(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator int(Json58 v) {return Convert.ToInt32(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator long(Json58 v) {return Convert.ToInt64(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator double(Json58 v) {return Convert.ToDouble(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator bool(Json58 v) {return Convert.ToBoolean(v.value,CultureInfo.InvariantCulture);}
+    public static Json58 Wrap(object v) {
+        if(v==null)return null;if(v is Json58)return(Json58)v;if(v is string)return(string)v;if(v is bool)return(bool)v;
+        if(v is double)return(double)v;if(v is float)return(float)v;if(v is int)return(int)v;if(v is long)return(long)v;
+        if(v is IEnumerable){var a=new Arr58();foreach(var x in(IEnumerable)v)a.Add(Wrap(x));return a;}
+        throw new ArgumentException("Unsupported JSON boundary value: "+v.GetType().Name);
+    }
+    static string Quote(string text) {
+        var b=new StringBuilder("\"");foreach(char c in text){switch(c){case '"':b.Append("\\\"");break;case '\\':b.Append("\\\\");break;case '\b':b.Append("\\b");break;case '\f':b.Append("\\f");break;case '\n':b.Append("\\n");break;case '\r':b.Append("\\r");break;case '\t':b.Append("\\t");break;default:if(c<32)b.Append("\\u"+((int)c).ToString("x4"));else b.Append(c);break;}}return b.Append('"').ToString();
+    }
+    public override string ToString() {
+        if(fields!=null)return "{"+string.Join(",",fields.OrderBy(p=>p.Key,StringComparer.Ordinal).Select(p=>Quote(p.Key)+":"+(p.Value==null?"null":p.Value.ToString())))+"}";
+        if(items!=null)return "["+string.Join(",",items.Select(v=>v==null?"null":v.ToString()))+"]";
+        if(value==null)return "null";if(value is string)return Quote((string)value);if(value is bool)return(bool)value?"true":"false";
+        if(value is double){double x=(double)value;if(double.IsNaN(x)||double.IsInfinity(x))throw new ArgumentException("Nonfinite JSON number");return x.ToString("R",CultureInfo.InvariantCulture);}
+        return Convert.ToString(value,CultureInfo.InvariantCulture);
+    }
+    public static bool DeepEquals(Json58 a,Json58 b) {return a==null?b==null:b!=null&&a.ToString()==b.ToString();}
+    public const int MaxInputChars66=65536;
+    public static Json58 Parse(string text) {if(text.Length>MaxInputChars66)throw new ArgumentException("Small JSON budget exceeded; use streaming verification");int p=0;var result=ParseValue(text,ref p,0);Space(text,ref p);if(p!=text.Length)throw new ArgumentException("Trailing JSON data");return result;}
+    static void Space(string s,ref int p) {while(p<s.Length&&char.IsWhiteSpace(s[p]))p++;}
+    static string ParseString(string s,ref int p) {
+        if(s[p++]!='"')throw new ArgumentException("JSON string expected");var b=new StringBuilder();
+        while(p<s.Length){char c=s[p++];if(c=='"')return b.ToString();if(c=='\\'){char e=s[p++];switch(e){case '"':case '\\':case '/':b.Append(e);break;case 'b':b.Append('\b');break;case 'f':b.Append('\f');break;case 'n':b.Append('\n');break;case 'r':b.Append('\r');break;case 't':b.Append('\t');break;case 'u':b.Append((char)int.Parse(s.Substring(p,4),NumberStyles.HexNumber,CultureInfo.InvariantCulture));p+=4;break;default:throw new ArgumentException("JSON escape");}}else{if(c<32)throw new ArgumentException("JSON control character");b.Append(c);}}
+        throw new ArgumentException("Unterminated JSON string");
+    }
+    static Json58 ParseValue(string s,ref int p,int depth) {
+        if(depth>128)throw new ArgumentException("JSON nesting limit");Space(s,ref p);if(p>=s.Length)throw new ArgumentException("JSON value expected");char c=s[p];
+        if(c=='"')return ParseString(s,ref p);
+        if(c=='{'||c=='['){bool obj=c=='{';p++;Json58 result=obj?(Json58)new Obj58():new Arr58();Space(s,ref p);if(p<s.Length&&s[p]==(obj?'}':']')){p++;return result;}
+            while(true){Space(s,ref p);string key=null;if(obj){key=ParseString(s,ref p);if(result.fields.ContainsKey(key))throw new ArgumentException("Duplicate JSON member");Space(s,ref p);if(s[p++]!=':')throw new ArgumentException("JSON colon");}var v=ParseValue(s,ref p,depth+1);if(obj)result[key]=v;else result.Add(v);Space(s,ref p);char end=s[p++];if(end==(obj?'}':']'))break;if(end!=',')throw new ArgumentException("JSON separator");}return result;}
+        foreach(string word in new[]{"true","false","null"})if(p+word.Length<=s.Length&&string.CompareOrdinal(s,p,word,0,word.Length)==0){p+=word.Length;return word=="null"?null:(Json58)(word=="true");}
+        int start=p;while(p<s.Length&&"-+0123456789.eE".IndexOf(s[p])>=0)p++;if(start==p)throw new ArgumentException("JSON token");return double.Parse(s.Substring(start,p-start),CultureInfo.InvariantCulture);
+    }
+}
+public sealed class Obj58 : Json58 {public Obj58(){fields=new Dictionary<string,Json58>(StringComparer.Ordinal);}public new static Obj58 Parse(string text){return(Obj58)Json58.Parse(text);}}
+public sealed class Arr58 : Json58 {public Arr58(params object[] values){items=new List<Json58>();if(values.Length==1&&values[0] is IEnumerable&&!(values[0] is string)&&!(values[0] is Json58)){foreach(var v in(IEnumerable)values[0])Add(Wrap(v));}else foreach(var v in values)Add(Wrap(v));}}
+
+// Offline66 candidate: no Unity/API/thread/process/GC actions.
+
+public static class SerializedContent66
+{
+ public const int SmallSemanticBudgetBytes=65536;
+ public const int CharChunk=8192,ByteChunk=32768;
+ public sealed class Comparison
+ {
+  public string Status,BeforeSHA256,AfterSHA256,Reason;
+  public long BeforeBytes,AfterBytes,HashInputBytes;
+  public bool? Equivalent;
+ }
+ static string Finish(SHA256 h)
+ {
+  h.TransformFinalBlock(new byte[0],0,0);
+  return BitConverter.ToString(h.Hash).Replace("-","").ToLowerInvariant();
+ }
+ static string HashFile(string path,out long length)
+ {
+  length=0;
+  using(var h=SHA256.Create())using(var f=File.OpenRead(path))
+  {
+   var buffer=new byte[ByteChunk];int n;
+   while((n=f.Read(buffer,0,buffer.Length))>0){h.TransformBlock(buffer,0,n,buffer,0);length+=n;}
+   return Finish(h);
+  }
+ }
+ static string HashText(string text,out long length)
+ {
+  length=0;var chars=new char[CharChunk];var bytes=new byte[ByteChunk];
+  var encoder=new UTF8Encoding(false,true).GetEncoder();
+  using(var h=SHA256.Create())
+  {
+   int position=0;bool completed=false;
+   do
+   {
+    int count=Math.Min(chars.Length,text.Length-position);
+    text.CopyTo(position,chars,0,count);
+    int charsUsed,bytesUsed;
+    encoder.Convert(chars,0,count,bytes,0,bytes.Length,position+count==text.Length,out charsUsed,out bytesUsed,out completed);
+    if(charsUsed==0&&bytesUsed==0&&!completed)throw new InvalidOperationException("UTF8 encoder made no progress");
+    position+=charsUsed;
+    if(bytesUsed>0){h.TransformBlock(bytes,0,bytesUsed,bytes,0);length+=bytesUsed;}
+   }while(position<text.Length||!completed);
+   return Finish(h);
+  }
+ }
+ static bool RequiresExactNumericReview(string text)
+ {
+  int i=0;
+  while(i<text.Length)
+  {
+   if(text[i]=='"')
+   {i++;while(i<text.Length){char c=text[i++];if(c=='\\'){if(i<text.Length)i++;}else if(c=='"')break;}continue;}
+   char first=text[i];
+   if(first=='-'||(first>='0'&&first<='9'))
+   {
+    int j=i;if(text[j]=='-')j++;int significant=0;bool started=false;
+    while(j<text.Length)
+    {
+     char c=text[j];if(c=='.'){j++;continue;}
+     if(c<'0'||c>'9')break;if(c!='0')started=true;if(started)significant++;j++;
+    }
+    if(significant>15)return true;
+    if(j<text.Length&&(text[j]=='e'||text[j]=='E')){j++;if(j<text.Length&&(text[j]=='+'||text[j]=='-'))j++;while(j<text.Length&&text[j]>='0'&&text[j]<='9')j++;}
+    i=Math.Max(i+1,j);continue;
+   }
+   i++;
+  }
+  return false;
+ }
+ public static Comparison Verify(string beforePath,string currentSerialized)
+ {
+  if(currentSerialized==null)throw new ArgumentNullException("currentSerialized");
+  var r=new Comparison();long before,after;
+  r.BeforeSHA256=HashFile(beforePath,out before);r.AfterSHA256=HashText(currentSerialized,out after);
+  r.BeforeBytes=before;r.AfterBytes=after;r.HashInputBytes=before+after;
+  if(before==after&&r.BeforeSHA256==r.AfterSHA256)
+  {r.Status="ExactUTF8";r.Equivalent=true;r.Reason="Same serialized UTF8 fingerprint; no JSON parse/re-serialization.";return r;}
+  if(before>SmallSemanticBudgetBytes||after>SmallSemanticBudgetBytes)
+  {r.Status="UnverifiedRepresentationChange";r.Equivalent=null;r.Reason="Large nonidentical input exceeds bounded semantic fallback; not declared changed or equivalent.";return r;}
+  string previous=File.ReadAllText(beforePath,new UTF8Encoding(false,true));
+  if(RequiresExactNumericReview(previous)||RequiresExactNumericReview(currentSerialized))
+  {r.Status="UnverifiedNumericPrecision";r.Equivalent=null;r.Reason="No double-rounding equivalence for >15 significant digits.";return r;}
+  try
+  {
+   r.Equivalent=Json58.DeepEquals(Json58.Parse(previous),Json58.Parse(currentSerialized));
+   r.Status=r.Equivalent.Value?"SmallSemanticEquivalent":"SmallSemanticDifferent";
+   r.Reason="Fallback <=64KiB; no suffix copying. High-precision numbers/duplicate keys are not accepted as equivalent.";
+  }
+  catch(Exception e)
+  {
+   if(!(e is ArgumentException)&&!(e is FormatException)&&!(e is OverflowException)&&!(e is IndexOutOfRangeException))throw;
+   r.Status="UnverifiedInvalidOrUnsupportedJSON";r.Equivalent=null;r.Reason=e.GetType().Name+": "+e.Message;
+  }
+  return r;
+ }
+}
+
+public static class CreateOnly73
+{
+ public static void Text(string path,string text)
+ {using(var f=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read))using(var w=new StreamWriter(f,new UTF8Encoding(false))){w.Write(text);w.Flush();f.Flush(true);}}
+}
+
+public static class NativeSnapshot73
+{
+ public static Arr58 Backup(string root)
+ {
+  var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var rows=new Arr58();bool player=false;int i=0;
+  foreach(var o in all.Where(x=>x&&EditorUtility.IsPersistent(x)).OrderBy(x=>AssetDatabase.GetAssetPath(x)))
+  {
+   string path=AssetDatabase.GetAssetPath(o);if(!path.StartsWith("Assets/")&&!path.StartsWith("ProjectSettings/"))continue;
+   if(!EditorUtility.IsDirty(o)&&!path.StartsWith("ProjectSettings/"))continue;
+   bool dirty=EditorUtility.IsDirty(o);string name="native-before-"+(i++)+".json";string file=Path.Combine(root,name);if(File.Exists(file))throw new IOException("Snapshot already exists");
+   string text=EditorJsonUtility.ToJson(o);CreateOnly73.Text(file,text);var c=SerializedContent66.Verify(file,text);if(c.Equivalent!=true)throw new IOException("Native backup failed: "+path);
+   rows.Add(new Obj58{["path"]=path,["type"]=o.GetType().FullName,["entityId"]=o.GetEntityId().ToString(),["snapshot"]=name,["sha256"]=c.BeforeSHA256,["bytes"]=c.BeforeBytes,["dirtyBefore"]=dirty,["dirtyAfter"]=EditorUtility.IsDirty(o)});
+   if(o is PlayerSettings)player=true;
+  }
+  if(!player)throw new InvalidOperationException("Full loaded PlayerSettings snapshot unavailable; no Play");
+  CreateOnly73.Text(Path.Combine(root,"NATIVE_BEFORE73.json"),rows.ToString());return rows;
+ }
+ public static Arr58 Compare(string root,Arr58 rows)
+ {
+  var all=Resources.FindObjectsOfTypeAll<UnityEngine.Object>();var checks=new Arr58();
+  foreach(Obj58 row in rows)
+  {
+   string path=(string)row["path"],type=(string)row["type"];var o=all.FirstOrDefault(x=>x&&AssetDatabase.GetAssetPath(x)==path&&x.GetType().FullName==type);
+   if(!o){checks.Add(new Obj58{["path"]=path,["type"]=type,["status"]="Unavailable",["equal"]=null});continue;}
+   var c=SerializedContent66.Verify(Path.Combine(root,(string)row["snapshot"]),EditorJsonUtility.ToJson(o));checks.Add(new Obj58{["path"]=path,["type"]=type,["status"]=c.Status,["equal"]=c.Equivalent.HasValue?(Json58)c.Equivalent.Value:null,["beforeSHA"]=c.BeforeSHA256,["afterSHA"]=c.AfterSHA256,["dirty"]=EditorUtility.IsDirty(o)});
+  }
+  return checks;
+ }
+}
+
+internal class CommandScript:IRunCommand{
+ public void Execute(ExecutionResult result){
+  if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("107 stable Edit required");
+  const string path="Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/ForwardEye107.compute";
+  AssetDatabase.ImportAsset(path,ImportAssetOptions.ForceSynchronousImport);var s=AssetDatabase.LoadAssetAtPath<ComputeShader>(path);var rows=new Arr58();bool pass=true;
+  foreach(string name in new[]{"ResolveCurve107","ApplyCurve106","ComposeForward102","PackWorld98","PackPart","Refit","Query","Select","Compose"}){
+   int k=s.FindKernel(name);bool supported=s.IsSupported(k);uint x=0,y=0,z=0;if(supported)s.GetKernelThreadGroupSizes(k,out x,out y,out z);pass&=supported&&x*y*z>0;rows.Add(new Obj58{["kernel"]=name,["index"]=k,["supported"]=supported,["group"]=new Arr58((int)x,(int)y,(int)z)});
+  }
+  var messages=ShaderUtil.GetComputeShaderMessages(s);CreateOnly73.Text(@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\joint-lid107\capture\IMPORT107c.json",new Obj58{["utc"]=DateTime.UtcNow.ToString("O"),["supportedAll"]=pass,["rows"]=rows,["messages"]=new Arr58(messages.Select(m=>new Obj58{["message"]=m.message,["severity"]=m.severity.ToString(),["line"]=m.line})),["noCSharpImport"]=true,["playing"]=EditorApplication.isPlaying,["domain"]=AppDomain.CurrentDomain.Id}.ToString());
+  if(!pass||messages.Any(m=>m.severity.ToString()=="Error"))throw new InvalidOperationException("107 forced kernel compile failed; no Play");result.Log("107 forced9-kernel support/group check passed; no Play");
+ }
+}
+
+
+}

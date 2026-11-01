@@ -1,0 +1,41 @@
+ void Capture(NativePlayer395 n,Gameplay397 gp)
+ {
+  int serial=n.host.main.renderedSerial335,frameIndex=Time.frameCount;var f=n.host.head;var e=n.host.headEyes;
+  if(!f||!e||e!=probeEye||e.candidateShader!=probeShader)throw new InvalidOperationException("Actual head probe binding changed");
+  var frame=Frame(f,"head",serial);var mainFrame=Frame(n.host.main,"main-final",serial);
+  var roi=new RectInt(e.roi.x,272-e.roi.y-e.roi.height,e.roi.width,e.roi.height);
+  if(!probeROI.Contains(roi.min)||!probeROI.Contains(roi.max-Vector2Int.one))throw new InvalidOperationException("Actual eye ROI left probe bounds");
+  var visits=new uint[1];probeVisits.GetData(visits);if(visits[0]<1||visits[0]>4)throw new InvalidOperationException("Unexpected Evaluate dispatch visits");
+  var rows=new Baseline76[probeROI.width*probeROI.height];probeBuffer.GetData(rows);
+  foreach(var b in rows)if(b.stamp.z!=frameIndex||b.stamp.w!=serial-1)throw new InvalidOperationException("Baseline frame/serial stamp mismatch");
+  using(var w=new BinaryWriter(new FileStream(Path.Combine(output,"baseline76.buffer"),FileMode.CreateNew,FileAccess.Write,FileShare.Read)))
+  {w.Write("baseline76/v1");w.Write(sourceId);w.Write(frame.viewId);w.Write(frameIndex);w.Write(serial);w.Write(probeROI.x);w.Write(probeROI.y);w.Write(probeROI.width);w.Write(probeROI.height);w.Write(96);foreach(var b in rows)foreach(var v in new[]{b.colour,b.owner,b.meta,b.uv,b.domain,b.stamp}){w.Write(v.x);w.Write(v.y);w.Write(v.z);w.Write(v.w);}}
+  report["baseline76"]=new Obj58{["file"]="baseline76.buffer",["roiBottomLeft"]=new Arr58(probeROI.x,probeROI.y,probeROI.width,probeROI.height),["stride"]=96,["visits"]=visits[0],["producer"]="actual Evaluate entry before record writes; last deferred dispatch",["frameIndex"]=frameIndex,["mainSerial"]=serial,["allStampsVerified"]=true};
+  report["largestOwnedReadbackBytes"]=Math.Max((long)report["largestOwnedReadbackBytes"],rows.Length*96L);
+  var sampleROI=new RectInt(0,0,e.roi.width*4,e.roi.height*4);
+  for(int s=0;s<7;s++)
+  {
+   Plane(frame,"S"+s+"-meta",e.samples[s].meta,sampleROI,"EyeRenderer367.Samples current 4x","depth / role / stable eye ID / coverage");
+   if(s>3)continue;
+   Plane(frame,"S"+s+"-point",e.samples[s].point,sampleROI,"EyeRenderer367.Samples current 4x","rest head xyz / valid");
+   Plane(frame,"S"+s+"-uv",e.samples[s].uv,sampleROI,"EyeRenderer367.Samples current 4x","source UV / primitive");
+   Plane(frame,"S"+s+"-rgba",e.samples[s].rgba,sampleROI,"EyeRenderer367.Samples current 4x","source linear colour / alpha");
+  }
+  Plane(frame,"S3-shade",e.samples[3].shade,sampleROI,"EyeRenderer367.Samples current 4x","actual eyeline shade inputs");
+  var ident=new PixelReadback70.Identity{source=sourceId,view="head",frame=frameIndex,serial=serial};
+  var gpuROI=PixelReadback70.Readback.FromTopLeft(e.roi.x,e.roi.y,e.roi.width,e.roi.height);
+  Func<PixelReadback70.Identity> now=()=>new PixelReadback70.Identity{source=sourceId,view="head",frame=Time.frameCount,serial=n.host.main.renderedSerial335};
+  if(EyeFeature348.UseIrisSurface582||EyeFeature348.UseLashRegion583)throw new InvalidOperationException("Counts producer inactive; not an equivalent LayerMode19 input");
+  PixelReadback70.Readback.Counts(output,"eye-counts76.bin",new PixelReadback70.UnityEyeBuffer(e.featureCounts19),ident,gpuROI,now,()=>exiting||finished);
+  PixelReadback70.Readback.Records(output,"eye-records76.bin",new PixelReadback70.UnityEyeBuffer(e.records),ident,gpuROI,now,()=>exiting||finished);
+  foreach(var item in new[]{new{n="head-final",t=f.colour},new{n="head-owner",t=f.owner},new{n="old-eye-owner",t=f.eyeOwner},new{n="old-intrinsic",t=f.intrinsic},new{n="old-eye-audit",t=f.eyeAudit},new{n="base-rgba",t=f.layers[8].rgba},new{n="base-meta",t=f.layers[8].meta},new{n="backing-rgba",t=f.layers[10].rgba},new{n="backing-meta",t=f.layers[10].meta},new{n="hair-meta",t=f.layers[6].meta},new{n="brow-meta",t=f.layers[7].meta}})Plane(frame,item.n,item.t,probeROI,"current deferred head graph","named channel; no guessed backing");
+  for(int y=0;y<n.output.rt.height;y+=64)Plane(mainFrame,"final-strip-"+y,n.output,new RectInt(0,y,n.output.rt.width,Math.Min(64,n.output.rt.height-y)),"Native395 normal output","final linear RGBA");
+  CpuSourceCapture64.WriteCpuGeometry(Path.Combine(output,"evaluated-source.geometry"),frame,f.motion.surface.outputs,f.motion.surface.source);CpuSourceCapture64.WriteCamera(Path.Combine(output,"source.camera"),frame);CpuSourceCapture64.WriteCamera(Path.Combine(output,"main.camera"),mainFrame);
+  var ph=f.phases[f.phaseIndex];AuxMesh("phase-native-face",ph.nativeFace,f.providerMatrix*ph.nativeFaceMatrix,frame);
+  report["eyeFeature"]=new Obj58{["roiTopLeft"]=new Arr58(e.roi.x,e.roi.y,e.roi.width,e.roi.height),["headMatrix"]=M(e.headMatrix),["inverse"]=new Arr58(f.eyeInverse.Select(x=>M(x))),["planes"]=new Arr58(f.eyePlanes.Select(x=>V(x))),["rayBase"]=V(f.rayBase),["rayX"]=V(f.rayX),["rayY"]=V(f.rayY),["rayDepth"]=V(f.rayDepth),["centres"]=new Arr58(e.centres.Select(x=>V(x))),["axesX"]=new Arr58(e.axesX.Select(x=>V(x))),["axesY"]=new Arr58(e.axesY.Select(x=>V(x))),["topologySHA256"]=e.modelTopologySHA256,["styleVersion"]=e.style.version,["upper"]=V(e.style.upper),["lower"]=V(e.style.lower),["irisRadii"]=V(e.style.irisRadii),["catchU"]=V(e.style.catchU),["catchV"]=V(e.style.catchV),["irisOffset"]=e.style.irisOffset,["irisPower"]=e.style.irisPower,["modelEyes"]=new Arr58(e.modelEyes.Select(x=>new Obj58{["id"]=x.stableId,["centre"]=V(x.centre),["axisX"]=V(x.axisX),["axisY"]=V(x.axisY),["measuredRadii"]=V(x.measuredRadii),["closedBoundary"]=new Arr58(x.closedBoundary)}))};
+  report["modeFlags"]=new Obj58{["UseIrisSurface582"]=EyeFeature348.UseIrisSurface582,["UseLashRegion583"]=EyeFeature348.UseLashRegion583,["UseClosedLash590"]=EyeFeature348.UseClosedLash590,["phaseIndex"]=f.phaseIndex};
+  report["frameIndex"]=frameIndex;report["mainSerial"]=serial;report["sourceFrame"]=f.motion.sourceFrame;report["evaluatedFrame"]=f.motion.evaluatedFrame;
+  report["frameUnchangedDuringReadback"]=Time.frameCount==frameIndex&&n.host.main.renderedSerial335==serial;if(!(bool)report["frameUnchangedDuringReadback"])throw new InvalidOperationException("Frame changed during reads");
+  report["packetComplete"]=true;CreateOnly73.Text(Path.Combine(output,"RAW_MANIFEST.json"),report.ToString());
+  CreateOnly73.Text(Path.Combine(output,"RAW_COMPLETE76.marker"),SHA(Path.Combine(output,"RAW_MANIFEST.json")));Save("actual-pre348-and-individual-samples-complete");
+ }

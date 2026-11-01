@@ -1,0 +1,97 @@
+--- a/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute
++++ b/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute
+@@ -128,7 +128,10 @@
+  }
+  if(total>0)mean/=total;packet.a=float4(h[0],h[1],h[2],h[3]);packet.b=float4(h[4],h[5],h[6],h[7]);packet.uv=float4(mean,0,0);return packet;
+ }
+-[numthreads(8,8,1)]void CountFeatures19(uint3 id:SV_DispatchThreadID){if(any(id.xy>=(uint2)_ROI348.zw)||id.z>=2)return;int2 p=_ROI348.xy+(int2)id.xy;_FeatureCounts19[PacketIndex19(p,id.z)]=CountPacket19(p,id.z);}
++bool ComposedSource76(int2 p,float4 old,float4 owner,bool domain,out int eyeId,out int feature,out float weight,out int sampleIndex);
++[numthreads(8,8,1)]void CountFeatures19(uint3 id:SV_DispatchThreadID){if(any(id.xy>=(uint2)_ROI348.zw)||id.z>=2)return;int2 p=_ROI348.xy+(int2)id.xy;FeaturePacket19 packet76=CountPacket19(p,id.z);float4 baseOwner76=_BaselineOwner348.Load(int3(p,0));
++ if(round(baseOwner76.x)==7){int eye76,feature76,sample76;float weight76;if(ComposedSource76(p,_BaselineColour348.Load(int3(p,0)),baseOwner76,_BaselineDomain348.Load(int3(p,0)).x>.5,eye76,feature76,weight76,sample76)&&feature76==5&&eye76==(int)round(_Centres348[id.z].w))packet76.uv.z=1;}
++ _FeatureCounts19[PacketIndex19(p,id.z)]=packet76;}
+ bool BeforeIris19(FeaturePacket19 a,int2 ap,FeaturePacket19 b,int2 bp){
+  float ac=max(max(a.a.y,a.b.y),a.b.z)-IrisCount19(a),bc=max(max(b.a.y,b.b.y),b.b.z)-IrisCount19(b);
+  if(ac!=bc)return ac<bc;if(a.uv.x!=b.uv.x)return a.uv.x<b.uv.x;if(a.uv.y!=b.uv.y)return a.uv.y<b.uv.y;return ap.y!=bp.y?ap.y<bp.y:ap.x<bp.x;
+@@ -146,9 +149,13 @@
+ }
+ bool NativeLineAllocated19(int2 p,int eye){
+  FeaturePacket19 own=Packet19(p,eye);if(own.b.y<=0||IrisAllocated19(p,eye))return false;
+- int whiteCandidates=0;float area=0;
++ int whiteCandidates=0;float area=0;int reserved76=0;
+  for(int sumY=_ROI348.y;sumY<_ROI348.y+_ROI348.w;sumY++)for(int sumX=_ROI348.x;sumX<_ROI348.x+_ROI348.z;sumX++){
+   int2 cell=int2(sumX,sumY);FeaturePacket19 c=Packet19(cell,eye);area+=c.b.y/16;
++#ifndef ORIGINAL76
++  if(c.uv.z>.5)reserved76++;
++#endif
++
+   if(SourceWhiteNeighbour19(cell,eye))whiteCandidates++;
+  }
+  if(whiteCandidates==1&&SourceWhiteNeighbour19(p,eye))return false;
+@@ -159,7 +166,7 @@
+   float cost=max(c.a.y,IrisCount19(c))-c.b.y;
+   if(cost<ownCost||(cost==ownCost&&(cell.y<p.y||(cell.y==p.y&&cell.x<p.x))))rank++;
+  }
+- return rank<(int)floor(area+.5);
++ return rank<max(0,(int)floor(area+.5)-reserved76);
+ }
+ 
+ int ChooseLayers19(float c[8],int2 p,int eye,int curveFeature){
+@@ -175,9 +182,58 @@
+  if(w<=1&&c[1]>=1&&(IrisAllocated19(p+int2(-1,0),eye)||IrisAllocated19(p+int2(1,0),eye)))return 1;return w;
+ }
+ 
++// The shared parent/iris compositor has already placed these source features.
++// A second independent top-K must not replace a still-visible part with another
++// part. Require current native source support; closed/fully occluded parts are
++// not made visible by their cached identity. Generic skin is not globally ignored.
++bool ComposedSource76(int2 p,float4 old,float4 owner,bool domain,out int eyeId,out int feature,out float weight,out int sampleIndex){
++ eyeId=0;feature=0;weight=0;sampleIndex=-1;if(!LayerMode19()||old.a<=0||owner.z<=0)return false;
++ int role=(int)round(owner.x),source=role==2?2:role==5?1:role==7?3:-1;
++ if(source<0||((role==2||role==5)&&!domain))return false;
++ // Domain.y is colour-support provenance, NOT an eye identity.
++ float4 composedOwner=_OldEyeOwner.Load(int3(p,0));
++ if(role!=7&&round(composedOwner.x)!=role)return false;
++ float wanted=composedOwner.y;float closest=1e30;
++ for(uint sample76=0;sample76<16;sample76++){
++  int2 q=(p-_ROI348.xy)*4+int2(sample76&3,sample76>>2);float4 m=M(source,q);
++  if(!cov(m)||P(source,q).w<=.5||m.z<.5||m.z>2.5)continue;
++  if(role!=7&&round(m.z)!=round(wanted))continue;
++  float visible=saturate(m.w);float4 sk=M(0,q);
++  if(cov(sk)&&sk.x<m.x)visible*=1-saturate(sk.w);
++  if(source==1){float4 ir=M(2,q);if(cov(ir)&&ir.x<m.x)visible*=1-saturate(ir.w);}
++  if(source!=3){float4 lid=M(3,q);if(cov(lid)&&lid.x<m.x)visible*=1-saturate(lid.w);}
++  float4 hair=_S4META.Load(int3(q,0)),brow=_S5META.Load(int3(q,0)),body=_S6META.Load(int3(q,0));
++  if(cov(hair)&&hair.x<m.x)visible*=1-saturate(hair.w);
++  if(cov(brow)&&brow.x<m.x)visible*=1-saturate(brow.w);
++  if(cov(body)&&body.x<m.x)visible=0;
++  if(visible<=0)continue;weight+=visible;
++  float d=abs(m.x-owner.z);if(d<closest){closest=d;eyeId=(int)round(m.z);sampleIndex=(int)sample76;}
++ }
++ feature=role==2?2:role==5?1:5;return weight>0&&eyeId>0;
++}
++float4 ComposedPigment76(float2 screen,int eye,int role){
++ float2 ref=reference(screen,eye);int2 top=(int2)floor(ref);
++ if(all(top>=0)&&all(top<int2(480,272))){float4 r=_TemplateRole.Load(int3(top.x,271-top.y,0));if(round(r.x)==role&&round(r.y)==round(_Centres348[eye].w))return float4(top,role,1);}
++ float4 provenance=0;float4 sampled76=Own(ref,eye,role,provenance);return provenance;
++}
++
+ [numthreads(8,8,1)]void Evaluate(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;float4 old=_BaselineColour348.Load(int3(p,0)),oldOwner=_BaselineOwner348.Load(int3(p,0)),oldMeta=_BaselineMeta348.Load(int3(p,0)),oldUV=_BaselineUV348.Load(int3(p,0));bool oldDomain=_BaselineDomain348.Load(int3(p,0)).x>.5;int2 lc=p-_ROI348.xy;bool inROI=all(lc>=0)&&all(lc<_ROI348.zw);float2 screen=float2(p.x+.5,271.5-p.y);
+  Pixel348 record=(Pixel348)0;record.colour=old;record.owner=float4(oldOwner.x,oldMeta.z,oldOwner.z,0);record.globalOwner=oldOwner;record.preparedMeta=oldMeta;record.preparedUV=oldUV;_RecordsWrite348[p.y*480+p.x]=record;
+  if(!inROI&&!oldDomain)return;
++ int composedEye76,composedFeature76,composedSample76;float composedWeight76;
++ if(inROI&&ComposedSource76(p,old,oldOwner,oldDomain,composedEye76,composedFeature76,composedWeight76,composedSample76)){
++  record.owner=float4(oldOwner.x,composedEye76,oldOwner.z,0);
++  record.visible=float4(composedFeature76,composedEye76,composedWeight76,composedSample76);
++  int source76=composedFeature76==5?3:composedFeature76==1?1:2;int2 sq76=lc*4+int2(composedSample76&3,composedSample76>>2);float4 uv76=U(source76,sq76),sm76=M(source76,sq76);
++  record.surface=float4(uv76.xyz,source76+1);record.supportMeta=float4(sm76.x,sm76.y,sm76.w,1);
++  int sourceRole76=source76==1?4:source76==2?1:6;record.bary=float4(barycentric(P(source76,sq76).xyz,sourceRole76,(int)round(uv76.z)),sourceRole76+1);
++  int eyeIndex76=round(_Centres348[0].w)==composedEye76?0:1;
++  record.pigment=composedFeature76==5?float4(uv76.xy,6,2):ComposedPigment76(screen,eyeIndex76,composedFeature76==1?4:1);
++  record.domain=_BaselineDomain348.Load(int3(p,0));record.control=float4(0,0,1,0);
++  // No Merge write: retain the already-composed colour, owner, depth and UV.
++  _RecordsWrite348[p.y*480+p.x]=record;return;
++ }
++
+  int win=0,eyeWin=-1,repIndex=-1,supportWin=-1;float winCount=0,bestIntrinsicCount=0;int intrinsicWin=0,intrinsicEye=-1;float visibleHist[8],intrinsicHist[8];float4 histVisible=0,histIntrinsic=0;float noSupport=0,hairBlocked=0,bodyBlocked=0;float depthWin=0;float4 uvWin=0,restWin=0;int labels[16],supports[16];float depths[16],weights[16];
+  for(int eye=0;eye<2;eye++){
+   for(int z=0;z<8;z++){visibleHist[z]=0;intrinsicHist[z]=0;}int owner=(int)round(_Centres348[eye].w);bool closed590=_UseLashRegion583!=0&&_UseClosedLash590!=0;float curveVisible590=0,curveIntrinsic590=0;

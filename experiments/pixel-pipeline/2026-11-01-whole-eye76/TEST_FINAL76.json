@@ -1,0 +1,136 @@
+{
+  "sourceId": "eye76-20261101T075632160Z-7bf6c81a",
+  "tests": [
+    "visible authored iris retained",
+    "outside authored aperture not extended",
+    "domain colour-support never used as eye ID",
+    "wrong composed part rejected",
+    "fully front skin/closed lid not ignored",
+    "partial skin is fractional not whole-cell veto",
+    "actual front hair blocks support",
+    "body blocks support",
+    "other eye source is not used",
+    "generic face is not treated as eyelid",
+    "line needs actual S3 not colour role only",
+    "native precomposed line can keep partial support",
+    "actual lost line21752 has current native support",
+    "actual iris21753 has current native support",
+    "actual iris22352 has current native support"
+  ],
+  "passed": 15,
+  "sourcePredictionEyeId": "baselineMeta.z for this prediction only; final GPU validation requires actual old-eye-owner plane",
+  "expectedProtectedCells": [
+    {
+      "xyTopLeft": [
+        215,
+        53
+      ],
+      "role": 5,
+      "eye": 2,
+      "visibleWeight": 6.976294903084636
+    },
+    {
+      "xyTopLeft": [
+        216,
+        53
+      ],
+      "role": 2,
+      "eye": 2,
+      "visibleWeight": 14.608101665973663
+    },
+    {
+      "xyTopLeft": [
+        217,
+        53
+      ],
+      "role": 2,
+      "eye": 2,
+      "visibleWeight": 9.999954044818878
+    },
+    {
+      "xyTopLeft": [
+        223,
+        53
+      ],
+      "role": 2,
+      "eye": 1,
+      "visibleWeight": 7.0
+    },
+    {
+      "xyTopLeft": [
+        224,
+        53
+      ],
+      "role": 2,
+      "eye": 1,
+      "visibleWeight": 8.0
+    },
+    {
+      "xyTopLeft": [
+        225,
+        53
+      ],
+      "role": 5,
+      "eye": 1,
+      "visibleWeight": 2.0
+    },
+    {
+      "xyTopLeft": [
+        215,
+        52
+      ],
+      "role": 5,
+      "eye": 2,
+      "visibleWeight": 6.011764705181122
+    },
+    {
+      "xyTopLeft": [
+        216,
+        52
+      ],
+      "role": 2,
+      "eye": 2,
+      "visibleWeight": 11.0
+    },
+    {
+      "xyTopLeft": [
+        217,
+        52
+      ],
+      "role": 7,
+      "eye": 2,
+      "visibleWeight": 1.840982586145401
+    },
+    {
+      "xyTopLeft": [
+        223,
+        52
+      ],
+      "role": 2,
+      "eye": 1,
+      "visibleWeight": 8.0
+    },
+    {
+      "xyTopLeft": [
+        224,
+        52
+      ],
+      "role": 2,
+      "eye": 1,
+      "visibleWeight": 15.005231320858002
+    },
+    {
+      "xyTopLeft": [
+        225,
+        52
+      ],
+      "role": 5,
+      "eye": 1,
+      "visibleWeight": 10.416161179542542
+    }
+  ],
+  "remaining": [
+    "Preserves already composed source features only; new whole-eye state design and temporal correspondence remain separate",
+    "No current Close or rotation frame is used as if observed"
+  ]
+}

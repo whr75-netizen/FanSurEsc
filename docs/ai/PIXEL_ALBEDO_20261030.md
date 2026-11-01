@@ -477,3 +477,20 @@ Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reser
 원본 iris/white bank와 parent/iris 곡선·native 안검 기하는 복원 가능하다. 없는 것은 단일 색 bank를 대신할 **일관된 전체 눈의 현재 상태/공유 경계·가시성 계약**이다. 특히 authored295 opening과 실제 native skin opening이 다를 때 전체 눈을 어느 공통 경계로 변형할지, native 안검의 가림이 intrinsic glyph를 어디까지 자를지 정의돼야 한다. 이것을2/4셀 최소나 임의 점수 가중치로 해결하지 않는다. 설계상 source-cache 정체성은 가려져도 유지하고 최종 가시는 실제 가림으로 결정해야 한다. 기존 bank의 모든 texel 가시를 무조건 강제하는 조건은 폐기 대상이다. 기존 shared parent/iris와 native closedBoundary를 같은 변형/합성 경로로 연결하는 것이 다음 구현 단위이며, 현재 bank를 새로 칠하라는 뜻은 아니다.
 
 추가 관측이 필요하다면 전체재촬영이 아니라 동일 source의 작은 eye ROI에서 **348 Evaluate 대입 전 baseline colour/owner/meta/UV/domain**, S0~S3의4×4 META/POINT/UV 및 S3RGBA/Shade, 외부 가림 S4~S6META, 실제 homography/ray/style/bank asset hash를 대응시켜야 한다. 현재73의 counts는 합계이고 최종 records는 baseline 일부를 덮어써 generic skin/실제 lid의 최초 차이와 full joint colour 합성을 역산할 수 없다. Template 두 asset 자체는 이번에 읽었으므로 다시 대형 readback할 이유가 없다. 현재 입력으로 전체 공동 RGB/회전/blink를 검증했다고 하지 않고 여기서 멈춘다. 새로운 Unity 접근이나 사용자에게 추가 캡처 요청을 보내지 않았다.
+
+
+## 눈76 — 실제 348 직전 관측, 기존 공동 특징 보존과 안검 예산 계상
+
+실제 적용 파일은 `Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute`다. `ComposedSource76`은 앞선333/295 공동 parent/iris 합성의 가시 iris/white 및 실제 native eyeline을 현재 S0~S6의 깊이·alpha와 source ID로 확인하여 독립348 top-K가 다른 부위로 덮지 않게 한다. S0 전체를 무시하거나2/4px를 고정하지 않는다. `domain.y`는 eye ID가 아니라 colour-support 값이므로 `_OldEyeOwner.y`를 사용한다. `ComposedPigment76`은333의 직접 texel 우선/동일 role 최근접 색 출처를 기록한다. 이미 합성된 RGB/owner/depth/UV 자체는 Merge에서 재작성하지 않는다. 현재 표본의 UV/primitive/barycentric은 별도 surface/bary 필드에 남긴다.
+
+`CountFeatures19`는48byte packet의 종전 미사용 `uv.z`에 같은 눈의 보존 native line 예약을 표시한다(uv.xy 및 원래 명암/feature counts 불변). `NativeLineAllocated19`는 그 수를 독립 면적 예산에서 차감한다. 이 계상이 없던 중간 후보는 한 눈에 보존 안검+독립 안검을 중복 배정했으므로 채택하지 않았다. 현재 수정은 완성 joint allocator/state bank나 소수 좌표 history cache가 아니다.
+
+실험/재현 경로: `experiments/pixel-pipeline/2026-11-01-whole-eye76/INDEX.html`. `ActualRunner76.cs.txt:Arm76/CameraBegin76/Capture/FrozenOriginal76/Release76`은 실제 deferred Evaluate 직전6×float4를24×16 소유 버퍼에 기록하고 S0~S3 개별4× 표본·외부 가림과 대응시킨다. 기존 알고리즘은 `BaselineProbe76.compute:OriginalEvaluate76`에서 같은 frame/source/view/serial의 동결 입력으로96KiB 소유 record 버퍼에만 재생한다. 원래 전역 buffer/texture는 쓰거나 해제하지 않는다. `ORIGINAL76` 분기에서는 예약 차감도 적용하지 않는다. 이전 Play의 미세한 포즈 차이를 동일 입력 비교로 사용하지 않았다.
+
+검증: actual frame95~100/serial2~7의6연속 프레임에서 보호13셀/프레임(78검사), 같은 입력 대비 변경10셀, 영향 없는 영역의 Evaluate RGB 오차0, bank 경유 sRGB8 오차0. iris8셀은 source에서 나온 결과이며 고정 예산이 아니다. 중복 native line1셀은 매 프레임 제거됐다. `test_archive76.py`는 저장된 실제 compact fixture로 이 조건과16개 표본 인덱스 동치를 재현한다. 원배율·정수 확대 PNG를 직접 검수했다. 전체 PNG는 실제 수정 렌더이고, 같은 프레임 기존/수정 비교의 범위는 eye Evaluate ROI다. 다른 Play의 전체 PNG를 동일 입력 회귀라고 부르지 않는다.
+
+남은 실패: 미보존 쪽 native line이 면적0.5 경계/순위에 반응하여 추가 셀이 남거나 사라진다(현재 native line 총2→1). 현재13셀 보호는 이 전체 눈의 상태/곡선 설계를 해결하지 않는다. 일반 face underlay와 실제 lid/Close 상태의 완전한 공동 경계·변형 계약, 보행/회전/blink 및 실제 subpixel 표면 대응 검증은 미완이다.6프레임의 deltaTime은 매우 짧고 bin0 안의 미세한 실제 입력 변화만 있어 전체 시간 안정성으로 확대하지 않는다. 기존 lower-like S0 shade/머리 영역·팔레트 문제도 미완 그대로다.
+
+원복: PID35364에서 정상 Edit 복귀, GameMap1 clean/기존 dirty29 identity·내용 유지, 옵션 false/None·background false·time/pipeline/global getter 복원, RT30→30. 비교44개는 ExactUTF8이며 PlayerSettings와29 dirty 모두 포함한다. 비dirty ProjectSettings AssetImporter1개는 Play후 객체 부재로 미확인이다. Unity 내부 allocated +32.03MiB는 physical RAM/누수 확정이 아니며 capture-only delta는 약0.00069MiB다. 최종 경고 정리(초기값 명시·유효0..15 인덱스의 동치 bit 연산)는 추가 Play 없이 compute compile/native 비교로 확인했고 신규 정규화 경고·오류는 관측 마지막50개에서0이다. GPU검증 SHA와 경고정리 후 SHA는 `FINAL_COMPILE76.json`에 따로 있다.
+
+로컬 커밋에는 정확한 제품 패치/전후 소스 snapshot, 실제 fixture·검증·진단 asset와 이 인계만 포함한다. 원래 제품 compute에는 이전부터 미커밋 LayerMode19 등의 사용자 변경이 있어 HEAD와 안전하게 분리되지 않는다. 따라서 그 파일 전체를 stage하지 않았다. 실제 작업 트리에는 적용·컴파일되어 있으며 정확한 변경은 `PRODUCT_FINAL76.patch`와 `PATCH_FINAL76.json`으로 보존한다. 관련 커밋은 이 절의 Git 이력이다. CUA/앱 종료/SaveAssets/초기화/push는 하지 않았다.

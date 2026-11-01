@@ -1,0 +1,26 @@
+{
+  "directHostLookupPatch": "../2026-10-31-apply-capture66/EYE_OBSERVER68.patch",
+  "lookupOnlyPatchReadyForCapture": false,
+  "newUnityCalls": 0,
+  "findings": [
+    {
+      "source": "EyeFeature348.cs:21 / EyeFeature348.compute:83-84",
+      "buffer": "featureCounts19",
+      "count": "roi.width * roi.height * 2",
+      "strideBytes": 48,
+      "HLSL": "FeaturePacket19 { float4 a,b,uv; }",
+      "existingReader": "CaptureRetry66.Buffer only handles stride4 or stride16; direct lookup would reach unsupported-stride failure",
+      "minimumReadPlan": "Use a matching blittable three-Vector4 struct, write owned row-sized arrays and preserve each GPU buffer index / eye / ROI schema. Never reinterpret as uint counts."
+    },
+    {
+      "source": "EyeFeature348.cs:16 / EyeFeature348.compute:11",
+      "buffer": "records",
+      "count": 130560,
+      "strideBytes": 256,
+      "fullBytes": 33423360,
+      "existingReader": "Full buffer exceeds the one-MiB budget and stride256 is unsupported",
+      "minimumReadPlan": "Use the exact sixteen-Vector4 Pixel348 field layout. Read actual eye ROI rows with GetData(destination, 0, y*480+x, width), record global cell coordinates and sourceId/frame/serial. A maximal full-width row is122880bytes; no whole buffer allocation. Do not read invented padding as source information."
+    }
+  ],
+  "remainingValidation": "Type/stride and row/index arithmetic can be tested offline. Public API compile, actual GPU field contents and current eye joint-placement/occlusion need a separately approved future capture with a new sourceId. No new Play is requested or executed in69."
+}

@@ -359,3 +359,19 @@ current UV colour-range66개는 화면186조각이다. 배타 분류37개는 여
 Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reserved +433508352bytes, mono -532090880bytes다. ready→readback 해제의 allocated 증가는 +852240bytes(0.813MiB), RT는 30→ready437→종료30이다. physical RAM 측정/총메모리 복원/누수 없음의 증명이 아니다. 종료 후 Console 최근 50건에는 Error/Exception/Assert 0이며 새 material binding 오류를 찾지 못했다. 전체 Console 역사에 오류가 없다는 뜻은 아니다.
 
 아직 UV source-feature 경계 graph 투영, 연속 셀 부분 coverage 적분, 과거 6backing 목표와 새 source의 surface 대응, 누락된 눈 feature/count, 실제 회전/blink/시간 안정성은 미검증이라 raw `packetComplete=false`를 유지한다. 이번 제품 파일 변경은 0이며 기존 65커밋 `6a1f2f4a`를 유지한다. 실제 캡처와 오프라인 검증/관찰기 패치를 기존 실험 폴더에만 선택 커밋하며 관련 커밋은 이 절의 Git 이력으로 확인한다.
+
+## 경계69 — 실제 source 대조, 면적 후보 미채택
+
+[동일 입력 비교 PNG·수치](../../experiments/pixel-pipeline/2026-11-01-boundary-input69/INDEX.html), [좌표별 결과](../../experiments/pixel-pipeline/2026-11-01-boundary-input69/RESULT69.json), [회귀10건](../../experiments/pixel-pipeline/2026-11-01-boundary-input69/TEST69.json). 입력은68의 새 sourceId/frame94만 사용했다. 이번 Unity 호출/Play/렌더/옵션 변경/제품 변경은 모두0이다. RGB blur, 새 palette, 명암 임계값 조절은 하지 않았다.
+
+| 스크립트·함수 | 변경 전제·검증·한계 |
+|---|---|
+| `probe69.py:counts/main`, `schema69.py:shade_labels` | 실제 logical hair373셀의 Q는4연결7영역/단독4셀, native1463표본은17영역/단독7셀이다. 현재 ShadeBoundary 전후 변경0. EyeFeature348.compute:217/222 후단 UV.z는9개 셀에서 primitive 번호로 바뀐다. 이를 Q로 읽는 분석은 잘못이며 producer schema로 거부한다. 제품 RGB 버그나 실제 분할 감소로 확대하지 않는다. 과거63의 색 범위66영역과 현재Q7영역은 서로 다른 집계다 |
+| `coverage_boundary69.py:build_reference/both_diagonals` | native g의 선형 보간에서 두 대각선 모두의 면적 하한을 구해 방향 편향을 막았다. source의 실제 공유 정점이 확인되지 않은 구간은 미확인 면적으로 남겼다. 이는 보수적인 충분 조건이며 탈락 구간 전부가 실제 가림이라는 뜻은 아니다. 연속 조명/mesh coverage의 해석적 정답이 아니다 |
+| `run69.py:main`, `metrics69.py:fixed_reference/reference_gate` | 후보는(213,51),(213,50) 두 셀의Q를0→1로 바꾼다(논리 y-down). 밝음 면적 하한.609501/.711969로 면적 목표는 개선됐지만, 고정 참조의 위치RMSE .382867→.343831px와 달리 접선 비용.238490→.264986이 악화됐다. 다른 대각선에서도 별도 평가했다. 영역7/단독4/경계46 유지. 접선 회귀로 거부하고 QAccepted는 원본을 유지한다 |
+| `run69.py`의 원본 source64 대조 | 현재 평가 mesh UV/index 해시와 기존 원본 PNG 해시를 확인했다. 원본의 밝은 무늬가 보이는 material13에서도64 coarse/fine 영역은 각각1개다. 불확실 edge11,652개는 존재하지만 기존 contour 계층에서 제외됐다. 69는 이를 soft contour로 export한다. 조각3,973개를 의미 특징이나 강제 경계로 승격하지 않았다. hard jump 검출만으로 넓은 gradient 무늬의 특징 영역이 완성됐다고 보는 전제가 틀렸다 |
+| `test69.py`, `OBSERVER_REQUIREMENTS69.json` | 회전90/180/270, 얇은 띠/구멍/다른 source 보존, 잘못된 Q schema 거부, 실제 접선 회귀 거부 등10건 통과. direct-host 눈 패치는 source API 참조만 확인했으며 미적용이다. 추가로 count stride48(float4 a,b,uv), records stride256·전체33,423,360bytes가 기존4/16stride·1MiB 읽기 함수와 맞지 않음을 확인했다. 실제ROI 행별 typed readback이 추가로 필요하다 |
+
+대표 좌표(225,59)/(230,55)는 같은 hair domain의4방향 이웃이 없는 실루엣/틈이다. (212,48)은 g=.499622이며 한 셀 안 native source가sm2 primitive4851/4849·2364와sm1 primitive1024로 달라진다. (226,36)도 silhouette에 인접하고 native1007/1009/1068과1193이 섞인다. 모두 잡음으로 덮는 대조군은 영역7→5/단독4→3/경계46→40으로 줄지만 실제 표면을 넘는 보간이므로 채택하지 않았다. 원배율·정수 확대와 실제 원본 texture 도판을 직접 열어 확인했다.
+
+확정된 분석/입력 연결 수정과 미채택 공간 후보를 구분한다. 전체 source-feature 영역·공유 곡선의 완성/현재 캐릭터의 미술 개선/시간 안정성은 입증하지 못했다. 머리의 soft 경계 선택·투영/더 완전한 surface 연결 분석은 현재 자료로 계속할 수 있어 새 Play를 이유로 멈출 부분이 아니다. 실제 눈 공동 배치/가림 검증에는 정확한 eye count/record ROI 및 feature state가 필요하며, 새 sourceId의 추가 캡처는 별도 승인 전 실행하지 않는다. 기존 dirty29는 마지막 live 확인값이며 이번 오프라인 작업에서 다시 조회하거나 해제하지 않았다. 변경 파일과 관련 커밋은 이 절의 Git 이력으로 확인한다.

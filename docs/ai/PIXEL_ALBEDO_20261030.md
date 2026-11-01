@@ -520,3 +520,12 @@ W 소유권은 `CACHE_OWNERSHIP77.json`과 전체 Assets 참조12개로 감사�
 `MotionScope78.FAILED.cs:Start/Dispose`와 실패 runner는 당시 코드이다. `MotionScope78.cs`는 **미컴파일·미실행 제안**이며 설정 포인터를 교체하지 않고 외부 JSON을 먼저 저장한 뒤 transient 두 필드만 바꿔 복원한다. 입력은 queue만 하고 정상 Dynamic update를 기다린다. 기존 Editor callback에서의 `InputSystem.Update()`가 Editor 상태에 이벤트를 소비했을 가능성은 source에 근거한 가설이며 아직 재검증하지 않았다. 복구 확인 전 이 제안을 실행하지 않는다.
 
 자산/씬/기타 옵션은 별도 대조했다: PID35364 Edit/domain1, 사용자 dirty29 identity 동일, native44/45 exact(비dirty Importer1 unavailable), globals 복구, options false/None/background false/time/pipeline 동일, RT30→30, 임시 장치/관찰기 자원 해제와 실제 product rest buffer 미교체 확인. 프로젝트 tracked30 해시는 모두 불변이다. 따라서 입력 native 상태 사고를 다른 상태 보존이나 움직임 품질 성공으로 감추지 않는다.
+
+
+## Eye79 — 실제 회수22필드로 InputSettings native 객체 복구 완료
+
+현재 상태는78의 복구 대기에서 **복구 연결·검증 완료**로 바뀌었다. `experiments/pixel-pipeline/2026-11-01-input-recovery79/INDEX.html` 및 `VALIDATION79.json`이 근거다. `Restore79.cs:Execute`는 손상된 관리 참조/Json을 static `InputRecoveryAnchor79`와 외부 파일에 먼저 보존하고, 새 비자산 InputSettings에 실제22필드 payload(SHA ca3f68bea248d3f95f9daef0889228a710740dd1efc8867ffda63b97b07f4286)를 overwrite했다. 연결 전 exact roundtrip 통과 뒤 public setter로 연결했으며 별도 `Verify79.cs:Execute` 조회에서도 같은 새native ID/동일22필드를 확인했다. 활성 객체는 임의 Destroy하지 않고 InputManager의 HideAndDontSave 임시 소유권을 따른다. 기본값 추정·InputSystem.Reset·Play·재시작·SaveAssets·C# Assets import·private Reflection은 없었다.
+
+복구 전후 native45/45 ExactUTF8, 사용자 dirty29 identity/내용, GameMap1 clean/Edit/domain1, options false/None/background false/time/pipeline, device IDs/layouts/current Keyboard가 동일하다. 프로젝트 기존30 tracked 파일 해시도 불변이다. 이번79에는 RT 전후 counter를 별도 기록하지 않았고 RenderTexture API는 호출하지 않았다(78의 RT30→30과 구분). 원래 파괴된 객체 ID는 되살리지 못하며 새객체로 직렬화내용을 복구한 것이다. m_FeatureFlags는 NonSerialized/internal이고 전체 공개 getter가 없어 원래flags 복원을 보장하지 않는다. 공개 useIMGUIEditorForAssets 복합값은 전후false였지만 전체flag 증거로 확대하지 않았고 flags를 추정설정하지 않았다. 실제 OS/UI/게임 입력 정상 동작·움직임은 이 turn에서 검증하지 않았다.
+
+`NEXT_INPUT_PLAN79.json`은 미실행 계획이다. 설정 포인터 교체/clone/Destroy 없이 외부 전체JSON과 두임시값을 먼저 보존한 뒤 같은 transient 객체의 필드만 되돌린다. Editor callback에서 InputSystem.Update를 수동 호출하지 않고 정상 Dynamic update로 queue를 소비하게 한다. 우선3프레임의 가상장치 key/enabled/current·실제 action input/active device·PlayerMovement/Animator/render serial 및 복원을 확인한다. 불일치하면 즉시 원복하고 전체24프레임 눈 readback으로 진행하지 않는다. 입력연결과 원복이 입증되기 전에는 회전/보행 안정화 성공을 주장하지 않는다.

@@ -1,0 +1,20 @@
+{
+  "status": "PLAN_ONLY_NOT_COMPILED_OR_EXECUTED",
+  "preconditions": [
+    "Native settings must remain alive and external22-field JSON backup verified before any mutation.",
+    "Preserve original current settings reference and hideFlags; never assign/destroy/clone InputSystem.settings.",
+    "Narrow scope initially rejects persistent settings assets; no asset dirty/save."
+  ],
+  "temporaryScope": [
+    "Back up full JsonUtility payload externally and two changed public fields before changing either.",
+    "Keep public managed/native reference identical; restore scalar fields and exact JSON on every normal/failure/cancel exit.",
+    "Create/retire only the owned virtual Keyboard; retain and restore previous current keyboard, map state and temporary speeds/time."
+  ],
+  "inputVerification": [
+    "QueueStateEvent only; do not call parameterless InputSystem.Update from an Editor callback. Explicit update-type overload is internal, not invoked.",
+    "First inspect3 normal runtime frames: requested keys, virtual device enabled/key state/current status, actual GameInputBindings value/action-device binding, PlayerMovement speed, Animator state and render serial.",
+    "If request/actual input differ, capture the cause metadata and exit/restore; do not fake movement, enlarge timeout or proceed to24 eye readbacks."
+  ],
+  "laterMotionScope": "Only after input connection/restore pass, same normal history stream may continue to phase6/walk8/turn10 segments with source/occlusion/final-cell correspondence; no new Play executed by this plan.",
+  "source": "Offline MotionScope78.cs proposal and exact failed snapshot kept separate; no claim of runtime validation."
+}

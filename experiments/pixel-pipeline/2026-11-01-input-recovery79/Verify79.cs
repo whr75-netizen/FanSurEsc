@@ -1,0 +1,10 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.InputSystem;
+internal class CommandScript:IRunCommand{
+ public void Execute(ExecutionResult result){var current=InputSystem.settings;if(!current)throw new InvalidOperationException("Current restored native settings unavailable; do not retry creation");string payload=File.ReadAllText(@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\eye-input-recovery79\run\PAYLOAD79.json");string json=JsonUtility.ToJson(current);if(json!=payload)throw new InvalidOperationException("Current recovered content changed");InputSettings configured;bool found=EditorBuildSettings.TryGetConfigObject("com.unity.input.settings",out configured);var report=new Obj58{["utc"]=DateTime.UtcNow.ToString("O"),["playing"]=EditorApplication.isPlaying,["compiling"]=EditorApplication.isCompiling,["domain"]=AppDomain.CurrentDomain.Id,["nativeAlive"]=current?true:false,["id"]=current.GetEntityId().ToString(),["path"]=AssetDatabase.GetAssetPath(current),["persistent"]=EditorUtility.IsPersistent(current),["flags"]=current.hideFlags.ToString(),["json"]=json,["exactRoundtrip"]=json==payload,["background"]=current.backgroundBehavior.ToString(),["editorBehavior"]=current.editorInputBehaviorInPlayMode.ToString(),["updateMode"]=current.updateMode.ToString(),["deadzoneMin"]=current.defaultDeadzoneMin,["deadzoneMax"]=current.defaultDeadzoneMax,["configuredAssetFound"]=found,["deviceIds"]=new Arr58(InputSystem.devices.Select(d=>d.deviceId)),["temporaryEye78DeviceRemaining"]=InputSystem.devices.Any(d=>d.name.StartsWith("Eye78",StringComparison.Ordinal)),["keyboardExists"]=InputSystem.GetDevice<Keyboard>()!=null,["useIMGUIComposite"]=current.useIMGUIEditorForAssets};CreateOnly73.Text(@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\eye-input-recovery79\run\VERIFY79.json",report.ToString());result.Log("79 follow-up public getters/native identity/exact22-field roundtrip verified; read only");}
+}

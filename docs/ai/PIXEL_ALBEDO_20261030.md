@@ -659,3 +659,19 @@ PID35364 Edit/domain1/scene clean, InputSettings native ID568105589213679894/22�
 - PNG 원래 크기/nearest12/7상태 GIF를 직접 검수했다. 눈 노출 크기·갈색/피부 스타일 차이는 미술 승인되지 않았고 live 공동 selector는 아직 Python oracle이다. 실제 C#/HLSL로 source ownership/current visibility/cache를 이식하지 않았으므로 제품 적용/전체 미관 성공/움직임 안정화 완료가 아니다. 다음 통합 판단은 이 결과와 cold-tie/state/lifetime 한계를 먼저 읽는다.
 
 - 종료 Edit, GameMap1 clean, dirty31/47직렬화 내용/동일 InputSettings22값·장치·옵션·pipeline/time 보존. 외부 global journal getter 불일치0·buffer global writes0. RT30→30. capture 할당량 변화는 SUMMARY95의 Unity allocated counter이며 physical RAM/누수 판정이 아니다. 이번150검사 후 read-only 검증도47/47 exact·공개 상태 차이0·신규 Console 오류0. 원본 사용자30 tracked 변경/보호32파일은 커밋 전후 별도 해시 확인한다.
+
+## Eye96 — 실제 renderer 입력의 격리 GPU 공동 선택 중간 보존점
+
+- 최신: `experiments/pixel-pipeline/2026-11-01-live-joint96/INDEX.html`; 커밋은 해당 경로 git log로 조회. 새 `Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/WholeEye96.compute`와.meta만 추가, 기존 제품77/사용자30변경 유지. C#은 Assets 밖 외부 동적 컴파일이라 domain reload/import0이다.
+
+- `WholeEye96.cs` constructor/Resize/Dispatch/Compose/Dispose, `WholeEye96.compute` Refit/Query/Select/Compose: 고정 topology BVH는 초기1회, 매프레임 현재 정점의 범위를 GPU refit한다. 원본 texture alpha를 직접 읽고 같은 feature가 대체하는 원본 파츠를 중복 가림으로 세지 않는다. 공동 선택·source-key witness·현재 backing 및 실제 Native395 owner.w=primitive를 GPU에서 계산한다. CPU 선택 재생이 아니다. 원본 UV/정점과 현재 변형·가림을 분리한다.
+
+- `LiveSurface96` constructor/Update: 실제 renderer mesh/material 관계를1회 수집하고 기존 CPU 평가메쉬 정점만 매프레임 업로드. `LiveGraph96.Record/Draw`, `NativeRetarget96.RecordGraph`, `GraphSources96.RecordRenderGraph`는 source 쓰기와 compute 의존 RT/GraphicsBuffer를 같은 Graph에 선언한다. `LiveFinal96.Present`는 실제 native가 나온 동일frame/serial의 소유 출력에만 합성한다. 기본 runtime 클래스에 GetData/AsyncGPUReadback0; 캡처 관찰기만 bounded readback한다.
+
+- frozen95의7상태는 좌표→가림→선택→최종 colour/owner/depth 전체 GPU 계산이 CPU와 exact. 새 실제 source `eye96-20261101T152835759Z-98a0bc1e`도 동일7개 평가상태에서 최종3필드/공동 선택 exact, 안검 보호 exact. CPU PNG alpha 출처는 기존 Unity GetPixel4230개와 먼저 대조해flip버전 mismatch0이다. 전체 skin transmittance에는 최대2.9802322e-8의 FP32 연산순서 차이가 있으나 최종 선택/색 차이0; 이를 bit-exact 가림으로 쓰지 않는다.
+
+- 20,459정점/29,542삼각형, 약2,486~2,682쿼리에 삼각형9,540~10,586회, 최고노드197~233개, stack overflow0, 소유 알고리즘버퍼6,418,564bytes. alpha 복제60MB를 제거하고 원본 텍스처를 빌려 읽는다. 실제GPU시간은 미측정이며 debug source 렌더/동기캡처 포함 속도를 제품FPS로 주장하지 않는다.
+
+- 기존 scope거절/이중Dispose/Dispose후사용거절/ownedbytes0를 frozenGPU에서 검증. 동시 다중뷰/재초기화/88위상·회전·보행은 다음 검증이다. 최초 exact tie는 근거 없으면 원래 출력+invalid로 남기는 명시 규칙이며 파츠 우선의 미술 선택은 자동 채택하지 않았다. `LiveFinal96.PresentCurrent`는 후속 매렌더프레임 연결 준비이며 이번7캡처에서는 Present만 호출했다.
+
+- 정상Edit, scene clean/dirty31/실제입력객체·22값·장치·옵션·pipeline/time 보존. 종료직후 Resources46/47 중1개가 Unavailable였으나 분리검증에서는47/47 exact. 해당 객체는 빈145바이트 ProjectSettings AssetImporter가 일시 미조회였으나 공개GetAtPath에서 원래ID와내용exact. getter만 호출했고 reimport/저장/추측복구 없음. RT/할당량은SUMMARY96 참조. 초기 실패 shader의0query COMPLETE marker는 무효이며 후속코드는0query/overflow를 실패로 처리한다. 최신 코드/실제 실행 bundle과 실패는 분리 보존한다. 제품 기본값은 아직77이며 더 큰 눈 노출/피부스타일은 미술 승인되지 않았다.

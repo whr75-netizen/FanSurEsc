@@ -1,0 +1,62 @@
+{
+  "status": "CHECKPOINT_LIVE_ISOLATED_SEVEN_STATES_PASSED_MOTION_AND_COLD_POLICY_PENDING",
+  "product": 77,
+  "liveSelectionNotReplay": true,
+  "liveFinalCalledAtCapturedStatesOnly": true,
+  "runtimeReadbacks": 0,
+  "diagnosticReadbacksOnly": true,
+  "PlayEntries": 1,
+  "capturedStates": 7,
+  "actualSourceIds": [
+    "eye96-20261101T152835759Z-98a0bc1e-frame99",
+    "eye96-20261101T152835759Z-98a0bc1e-frame100",
+    "eye96-20261101T152835759Z-98a0bc1e-frame102",
+    "eye96-20261101T152835759Z-98a0bc1e-frame104",
+    "eye96-20261101T152835759Z-98a0bc1e-frame105",
+    "eye96-20261101T152835759Z-98a0bc1e-frame107",
+    "eye96-20261101T152835759Z-98a0bc1e-frame108"
+  ],
+  "frozenFinalAllExact": true,
+  "liveFinalAllExact": true,
+  "liveCanonicalAllExact": true,
+  "liveVisibilityRawMax": 2.9802322387695312e-08,
+  "visibilityBitExact": false,
+  "visibilityNote": "Float32 transmittance multiply/subtract order differs from independent double CPU oracle by <=2.9802322387695312e-8; no canonical/final difference. No colour tolerance used.",
+  "opaqueGeometryAndAlphaQueriesOnGPU": true,
+  "sourceVertices": 20459,
+  "sourceTriangles": 29542,
+  "ownedAlgorithmBufferBytes": 6418564,
+  "triangleTestsRange": [
+    9540,
+    10586
+  ],
+  "queryRange": [
+    2486,
+    2682
+  ],
+  "GPUTimeNotMeasured": true,
+  "sourceRenderDiagnosticsOverheadExcludedFromRealtimeClaim": true,
+  "newPlayConsoleErrors": [],
+  "publicStateDifferences": [],
+  "dirtyBefore": 31,
+  "dirtyAfter": 31,
+  "nativeResourcesDirectExact": 47,
+  "nativeResourceTotal": 47,
+  "importerPublicGetterSameIdAndContent": true,
+  "importerWasTemporarilyUnavailableToResourcesScan": true,
+  "inputSameNativeIdAndJSON": true,
+  "PlayExited": true,
+  "globalRestoreErrors": [],
+  "RTBefore": 30,
+  "RTAfter": 30,
+  "captureAllocatedDeltaMiB": 25.594775199890137,
+  "limits": [
+    "Current7states held pose, not motion stability",
+    "Cold exact tie defaults to unresolved/original pass-through; art-priority comparisons pending",
+    "LiveFinal96.PresentCurrent helper prepared after captured run, not yet motion-executed",
+    "Simultaneous multi-view GPU isolation still pending",
+    "Eye exposure and source-skin style are unapproved art changes",
+    "Runtime classes remain external isolated integration; product77 not replaced"
+  ],
+  "earlierFailure": "First shader used reserved HLSL point; invalid kernels yielded0queries and a faulty COMPLETE marker. Those outputs are invalid. New protocol rejects0queries/overflow. Import namespace/Stopwatch failures occurred before execution and were corrected without forbidden APIs."
+}

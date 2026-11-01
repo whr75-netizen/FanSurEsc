@@ -1,0 +1,5 @@
+using System;
+using System.Linq;
+using UnityEngine;
+using UnityEditor;
+internal class CommandScript:IRunCommand{public void Execute(ExecutionResult result){var shader=AssetDatabase.LoadAssetAtPath<ComputeShader>("Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/WholeEye96.compute");var a=ShaderUtil.GetComputeShaderMessages(shader);CreateOnly73.Text(@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\live-joint96\shader-read\MESSAGES96.json",new Obj58{["device"]=SystemInfo.graphicsDeviceType.ToString(),["shaderLevel"]=SystemInfo.graphicsShaderLevel,["messages"]=new Arr58(a.Select(x=>new Obj58{["message"]=x.message,["line"]=x.line,["file"]=x.file,["severity"]=x.severity.ToString()})),["Edit"]=!EditorApplication.isPlaying}.ToString());result.Log("96 read shader compilation diagnostics only");}}

@@ -1,0 +1,10650 @@
+{
+  "summary": {
+    "actualEyeStates": 40,
+    "synthetic": {
+      "independentExhaustiveCases": 6,
+      "parentUnionBeatsPerCellPartThreshold": true,
+      "zeroSourceStaysZero": true,
+      "noLineAreaQuota": true
+    },
+    "incompleteAreaEnumerations": 0,
+    "ambiguousSourceFormCases": 2,
+    "positiveUnionsExtinguished": 0,
+    "positivePartsExtinguished": 2,
+    "disconnectedIrisOrWhiteCases": 24,
+    "phase": [
+      {
+        "owner": 1,
+        "frames": [
+          121,
+          125,
+          129
+        ],
+        "completeCanonicalLayoutSetsEqual": true
+      },
+      {
+        "owner": 2,
+        "frames": [
+          121,
+          125,
+          129
+        ],
+        "completeCanonicalLayoutSetsEqual": true
+      }
+    ],
+    "newUnityCalls": 0,
+    "newGPU": 0,
+    "productApplied": false,
+    "lineAreaQuota": false,
+    "fixedEyeSize": false,
+    "screenRGBHistory": false,
+    "newFinalRGBProduced": false
+  },
+  "cases": [
+    {
+      "sourceId": "eye102-20261101T194113828Z-a6a1948a-frame104",
+      "dataset": "closed105-frame104",
+      "frame": 104,
+      "owner": 1,
+      "Close": 1.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye102-20261101T194113828Z-a6a1948a-frame104",
+      "dataset": "closed105-frame104",
+      "frame": 104,
+      "owner": 2,
+      "Close": 1.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            4,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame101",
+      "dataset": "actual107-frame101",
+      "frame": 101,
+      "owner": 1,
+      "Close": 0.25,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "75/32",
+            "75/32"
+          ],
+          [
+            "1770173801/536870912",
+            "1770173801/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            2.34375,
+            2.34375
+          ],
+          [
+            3.2972056437283754,
+            3.2972056437283754
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "192760471/536870912",
+          "511882601/536870912",
+          "127860797/33554432"
+        ],
+        "optimalChildCounts": [
+          [
+            3,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 182,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            1,
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 3,
+          "white": 3,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            1,
+            2
+          ],
+          "whiteComponents4": [
+            1,
+            2
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame101",
+      "dataset": "actual107-frame101",
+      "frame": 101,
+      "owner": 2,
+      "Close": 0.25,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "293/64",
+            "293/64"
+          ],
+          [
+            "191/64",
+            "191/64"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.578125,
+            4.578125
+          ],
+          [
+            2.984375,
+            2.984375
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "7/16",
+          "7/16",
+          "227/64"
+        ],
+        "optimalChildCounts": [
+          [
+            5,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 339,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            1,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 5,
+          "white": 3,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            4,
+            1
+          ],
+          "whiteComponents4": [
+            1,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            3,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame103",
+      "dataset": "actual107-frame103",
+      "frame": 103,
+      "owner": 1,
+      "Close": 0.5,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "31/32",
+            "31/32"
+          ],
+          [
+            "1244038405/536870912",
+            "1244038405/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.96875,
+            0.96875
+          ],
+          [
+            2.3172021005302668,
+            2.3172021005302668
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "153519365/536870912",
+          "187073797/536870912",
+          "527771953/268435456"
+        ],
+        "optimalChildCounts": [
+          [
+            1,
+            2
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 64,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 1,
+          "white": 2,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            1
+          ],
+          "whiteComponents4": [
+            2
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame103",
+      "dataset": "actual107-frame103",
+      "frame": 103,
+      "owner": 2,
+      "Close": 0.5,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "11/4",
+            "11/4"
+          ],
+          [
+            "27/16",
+            "27/16"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            2.75,
+            2.75
+          ],
+          [
+            1.6875,
+            1.6875
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "7/16",
+          "15/16",
+          "39/16"
+        ],
+        "optimalChildCounts": [
+          [
+            3,
+            1
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 160,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            2,
+            1,
+            1,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 3,
+          "white": 1,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            3
+          ],
+          "whiteComponents4": [
+            1
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            3,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame105",
+      "dataset": "actual107-frame105",
+      "frame": 105,
+      "owner": 1,
+      "Close": 0.75,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "231345413/268435456",
+            "231345413/268435456"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.8618288226425648,
+            0.8618288226425648
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "37090043/268435456",
+          "37090043/268435456",
+          "563462975/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            1
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 15,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 1,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [
+            1
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame105",
+      "dataset": "actual107-frame105",
+      "frame": 105,
+      "owner": 2,
+      "Close": 0.75,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "25/32",
+            "25/32"
+          ],
+          [
+            "11/32",
+            "11/32"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.78125,
+            0.78125
+          ],
+          [
+            0.34375,
+            0.34375
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "1/8",
+          "9/16",
+          "33/32"
+        ],
+        "optimalChildCounts": [
+          [
+            1,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 2,
+        "DPStates": 13,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "intrinsicNondominated": [
+          0,
+          1
+        ],
+        "sourceFormDimensions": [
+          {
+            "1": "1",
+            "4": null,
+            "6": "93/53",
+            "1:missingSourcePairs": "1",
+            "1:relativeGeometry": "0",
+            "4:missingSourcePairs": "1",
+            "4:relativeGeometry": "0"
+          },
+          {
+            "1": "5/7",
+            "4": null,
+            "6": "93/53",
+            "1:missingSourcePairs": "0",
+            "1:relativeGeometry": "269/392",
+            "4:missingSourcePairs": "1",
+            "4:relativeGeometry": "0"
+          }
+        ],
+        "historyAvailable": false,
+        "historyPartVectors": [],
+        "historyAfterCurrentEligibilityAndGeometry": true,
+        "noRGBScore": true,
+        "nativeIntervalRelativeGeometryNotCertified": true,
+        "sourceTransport": {
+          "bankSourceCheck": {
+            "examined": 36,
+            "unresolvedSourceKeys": 0,
+            "bankRGB8Mismatch": 0,
+            "maxGPUFloatVsAnalyticSRGBDecode": 0.001781800333117145,
+            "sampleScale": 4,
+            "primary108SampleScale": 8
+          },
+          "exactTransportTiesUnresolved": 0,
+          "carrierCellsWithoutUniqueSourceID": 59,
+          "transportRule": "rest-head-bank-centre / native-UV-section; not RGB nearest"
+        },
+        "historyApplied": false,
+        "allAreaOptimalLayoutsConsidered": true
+      },
+      "selectedIndices": [
+        0,
+        1
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 1,
+          "white": 0,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            1
+          ],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            9
+          ]
+        },
+        {
+          "iris": 1,
+          "white": 0,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            1
+          ],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [
+        {
+          "part": "white",
+          "sourceMass": 0.34375
+        }
+      ],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            4,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame107",
+      "dataset": "actual107-frame107",
+      "frame": 107,
+      "owner": 1,
+      "Close": 1.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame107",
+      "dataset": "actual107-frame107",
+      "frame": 107,
+      "owner": 2,
+      "Close": 1.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            4,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame109",
+      "dataset": "actual107-frame109",
+      "frame": 109,
+      "owner": 1,
+      "Close": 0.75,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "231345413/268435456",
+            "231345413/268435456"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.8618288226425648,
+            0.8618288226425648
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "37090043/268435456",
+          "37090043/268435456",
+          "563462975/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            1
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 15,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 1,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [
+            1
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame109",
+      "dataset": "actual107-frame109",
+      "frame": 109,
+      "owner": 2,
+      "Close": 0.75,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "25/32",
+            "25/32"
+          ],
+          [
+            "11/32",
+            "11/32"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.78125,
+            0.78125
+          ],
+          [
+            0.34375,
+            0.34375
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "1/8",
+          "9/16",
+          "33/32"
+        ],
+        "optimalChildCounts": [
+          [
+            1,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 2,
+        "DPStates": 13,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "intrinsicNondominated": [
+          0,
+          1
+        ],
+        "sourceFormDimensions": [
+          {
+            "1": "1",
+            "4": null,
+            "6": "93/53",
+            "1:missingSourcePairs": "1",
+            "1:relativeGeometry": "0",
+            "4:missingSourcePairs": "1",
+            "4:relativeGeometry": "0"
+          },
+          {
+            "1": "5/7",
+            "4": null,
+            "6": "93/53",
+            "1:missingSourcePairs": "0",
+            "1:relativeGeometry": "269/392",
+            "4:missingSourcePairs": "1",
+            "4:relativeGeometry": "0"
+          }
+        ],
+        "historyAvailable": false,
+        "historyPartVectors": [],
+        "historyAfterCurrentEligibilityAndGeometry": true,
+        "noRGBScore": true,
+        "nativeIntervalRelativeGeometryNotCertified": true,
+        "sourceTransport": {
+          "bankSourceCheck": {
+            "examined": 36,
+            "unresolvedSourceKeys": 0,
+            "bankRGB8Mismatch": 0,
+            "maxGPUFloatVsAnalyticSRGBDecode": 0.001781800333117145,
+            "sampleScale": 4,
+            "primary108SampleScale": 8
+          },
+          "exactTransportTiesUnresolved": 0,
+          "carrierCellsWithoutUniqueSourceID": 59,
+          "transportRule": "rest-head-bank-centre / native-UV-section; not RGB nearest"
+        },
+        "historyApplied": false,
+        "allAreaOptimalLayoutsConsidered": true
+      },
+      "selectedIndices": [
+        0,
+        1
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ],
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 1,
+          "white": 0,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            1
+          ],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            9
+          ]
+        },
+        {
+          "iris": 1,
+          "white": 0,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            1
+          ],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [
+        {
+          "part": "white",
+          "sourceMass": 0.34375
+        }
+      ],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            4,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame115",
+      "dataset": "actual107-frame115",
+      "frame": 115,
+      "owner": 1,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "245/64",
+            "245/64"
+          ],
+          [
+            "2252675249/536870912",
+            "2252675249/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            3.828125,
+            3.828125
+          ],
+          [
+            4.195934625342488,
+            4.195934625342488
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "12916913/536870912",
+          "197466289/536870912",
+          "2110068913/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 316,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 4,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            3,
+            1
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame115",
+      "dataset": "actual107-frame115",
+      "frame": 115,
+      "owner": 2,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "157/32",
+            "157/32"
+          ],
+          [
+            "319/64",
+            "319/64"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.90625,
+            4.90625
+          ],
+          [
+            4.984375,
+            4.984375
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "7/64",
+          "7/64",
+          "59/16"
+        ],
+        "optimalChildCounts": [
+          [
+            5,
+            5
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 715,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 5,
+          "white": 5,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            5
+          ],
+          "whiteComponents4": [
+            3,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            3,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame121",
+      "dataset": "actual107-frame121",
+      "frame": 121,
+      "owner": 1,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "245/64",
+            "245/64"
+          ],
+          [
+            "2252675249/536870912",
+            "2252675249/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            3.828125,
+            3.828125
+          ],
+          [
+            4.195934625342488,
+            4.195934625342488
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "12916913/536870912",
+          "197466289/536870912",
+          "2110068913/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 316,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 4,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            3,
+            1
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame121",
+      "dataset": "actual107-frame121",
+      "frame": 121,
+      "owner": 2,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "157/32",
+            "157/32"
+          ],
+          [
+            "319/64",
+            "319/64"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.90625,
+            4.90625
+          ],
+          [
+            4.984375,
+            4.984375
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "7/64",
+          "7/64",
+          "59/16"
+        ],
+        "optimalChildCounts": [
+          [
+            5,
+            5
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 715,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 5,
+          "white": 5,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            5
+          ],
+          "whiteComponents4": [
+            3,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            3,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame125",
+      "dataset": "actual107-frame125",
+      "frame": 125,
+      "owner": 1,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "245/64",
+            "245/64"
+          ],
+          [
+            "4505350401/1073741824",
+            "4505350401/1073741824"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            3.828125,
+            3.828125
+          ],
+          [
+            4.1959345350041986,
+            4.1959345350041986
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "25833729/1073741824",
+          "394932481/1073741824",
+          "4220137729/1073741824"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 316,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 4,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            3,
+            1
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame125",
+      "dataset": "actual107-frame125",
+      "frame": 125,
+      "owner": 2,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "157/32",
+            "157/32"
+          ],
+          [
+            "319/64",
+            "319/64"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.90625,
+            4.90625
+          ],
+          [
+            4.984375,
+            4.984375
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "7/64",
+          "7/64",
+          "59/16"
+        ],
+        "optimalChildCounts": [
+          [
+            5,
+            5
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 715,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 5,
+          "white": 5,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            5
+          ],
+          "whiteComponents4": [
+            3,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            3,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame129",
+      "dataset": "actual107-frame129",
+      "frame": 129,
+      "owner": 1,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "245/64",
+            "245/64"
+          ],
+          [
+            "1126364883/268435456",
+            "1126364883/268435456"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            3.828125,
+            3.828125
+          ],
+          [
+            4.196036171168089,
+            4.196036171168089
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "6485715/268435456",
+          "98760403/268435456",
+          "1055061715/268435456"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 316,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 4,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            3,
+            1
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame129",
+      "dataset": "actual107-frame129",
+      "frame": 129,
+      "owner": 2,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "157/32",
+            "157/32"
+          ],
+          [
+            "319/64",
+            "319/64"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.90625,
+            4.90625
+          ],
+          [
+            4.984375,
+            4.984375
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "7/64",
+          "7/64",
+          "59/16"
+        ],
+        "optimalChildCounts": [
+          [
+            5,
+            5
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 715,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 5,
+          "white": 5,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            5
+          ],
+          "whiteComponents4": [
+            3,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            3,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame139",
+      "dataset": "actual107-frame139",
+      "frame": 139,
+      "owner": 1,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "231/64",
+            "231/64"
+          ],
+          [
+            "2187290817/536870912",
+            "2187290817/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            3.609375,
+            3.609375
+          ],
+          [
+            4.074146630242467,
+            4.074146630242467
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "169908031/536870912",
+          "249522369/536870912",
+          "1025879321/268435456"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 350,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            1,
+            1,
+            0,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 4,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            4
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame139",
+      "dataset": "actual107-frame139",
+      "frame": 139,
+      "owner": 2,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "145/32",
+            "145/32"
+          ],
+          [
+            "33/8",
+            "33/8"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.53125,
+            4.53125
+          ],
+          [
+            4.125,
+            4.125
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "11/32",
+          "19/32",
+          "45/16"
+        ],
+        "optimalChildCounts": [
+          [
+            5,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 539,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            1,
+            1,
+            1,
+            2,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 5,
+          "white": 4,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            5
+          ],
+          "whiteComponents4": [
+            1,
+            1,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            2,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame147",
+      "dataset": "actual107-frame147",
+      "frame": 147,
+      "owner": 1,
+      "Close": 1.4279627321892791e-05,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "129/32",
+            "129/32"
+          ],
+          [
+            "1235927871/268435456",
+            "1235927871/268435456"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.03125,
+            4.03125
+          ],
+          [
+            4.604190107434988,
+            4.604190107434988
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "97860801/268435456",
+          "114638017/268435456",
+          "1135264575/268435456"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            5
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 356,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            1,
+            1,
+            2,
+            2,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 5,
+          "upperLine": 8,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            4,
+            1
+          ],
+          "lineComponents8": [
+            8
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame147",
+      "dataset": "actual107-frame147",
+      "frame": 147,
+      "owner": 2,
+      "Close": 1.4279627321892791e-05,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "31/8",
+            "31/8"
+          ],
+          [
+            "3565235309/1073741824",
+            "3565235309/1073741824"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            3.875,
+            3.875
+          ],
+          [
+            3.320384127087891,
+            3.320384127087891
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "209792109/1073741824",
+          "478227565/1073741824",
+          "3025899343/1073741824"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 353,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            2,
+            1,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            2,
+            1,
+            1,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 3,
+          "upperLine": 8,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            2,
+            1
+          ],
+          "lineComponents8": [
+            8
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame152",
+      "dataset": "actual107-frame152",
+      "frame": 152,
+      "owner": 1,
+      "Close": 2.262910252421392e-05,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "79/32",
+            "79/32"
+          ],
+          [
+            "2701149131/1073741824",
+            "2701149131/1073741824"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            2.46875,
+            2.46875
+          ],
+          [
+            2.5156411631032825,
+            2.5156411631032825
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "16759861/1073741824",
+          "1023392821/1073741824",
+          "33/16"
+        ],
+        "optimalChildCounts": [
+          [
+            2,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 324,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            2,
+            1,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 2,
+          "white": 3,
+          "upperLine": 6,
+          "unresolved": 0,
+          "irisComponents4": [
+            2
+          ],
+          "whiteComponents4": [
+            1,
+            2
+          ],
+          "lineComponents8": [
+            6
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame152",
+      "dataset": "actual107-frame152",
+      "frame": 152,
+      "owner": 2,
+      "Close": 2.262910252421392e-05,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 0,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": []
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame156",
+      "dataset": "actual107-frame156",
+      "frame": 156,
+      "owner": 1,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "115/32",
+            "115/32"
+          ],
+          [
+            "2141458593/536870912",
+            "2141458593/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            3.59375,
+            3.59375
+          ],
+          [
+            3.9887774605304003,
+            3.9887774605304003
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "224128863/536870912",
+          "224128863/536870912",
+          "2136731487/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 294,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 4,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            1,
+            3
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame156",
+      "dataset": "actual107-frame156",
+      "frame": 156,
+      "owner": 2,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "309/64",
+            "309/64"
+          ],
+          [
+            "289/64",
+            "289/64"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.828125,
+            4.828125
+          ],
+          [
+            4.515625,
+            4.515625
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "11/32",
+          "11/16",
+          "113/32"
+        ],
+        "optimalChildCounts": [
+          [
+            5,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 680,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            2,
+            2,
+            1,
+            1,
+            2,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 5,
+          "white": 4,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            5
+          ],
+          "whiteComponents4": [
+            2,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            2,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame162",
+      "dataset": "actual107-frame162",
+      "frame": 162,
+      "owner": 1,
+      "Close": 1.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame162",
+      "dataset": "actual107-frame162",
+      "frame": 162,
+      "owner": 2,
+      "Close": 1.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            5,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame192",
+      "dataset": "actual107-frame192",
+      "frame": 192,
+      "owner": 1,
+      "Close": 1.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 4,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": [
+            4
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame192",
+      "dataset": "actual107-frame192",
+      "frame": 192,
+      "owner": 2,
+      "Close": 1.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "0",
+            "0"
+          ],
+          [
+            "0",
+            "0"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            0.0,
+            0.0
+          ],
+          [
+            0.0,
+            0.0
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "0",
+          "0",
+          "0"
+        ],
+        "optimalChildCounts": [
+          [
+            0,
+            0
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 1,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 0,
+          "white": 0,
+          "upperLine": 0,
+          "unresolved": 0,
+          "irisComponents4": [],
+          "whiteComponents4": [],
+          "lineComponents8": []
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": true,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame204",
+      "dataset": "actual107-frame204",
+      "frame": 204,
+      "owner": 1,
+      "Close": 0.25,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "121/64",
+            "121/64"
+          ],
+          [
+            "1467081013/536870912",
+            "1467081013/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            1.890625,
+            1.890625
+          ],
+          [
+            2.7326513323932886,
+            2.7326513323932886
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "202251979/536870912",
+          "202251979/536870912",
+          "923672267/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            2,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 72,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            1,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 2,
+          "white": 3,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            1,
+            1
+          ],
+          "whiteComponents4": [
+            3
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame204",
+      "dataset": "actual107-frame204",
+      "frame": 204,
+      "owner": 2,
+      "Close": 0.25,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "37/8",
+            "37/8"
+          ],
+          [
+            "43/16",
+            "43/16"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.625,
+            4.625
+          ],
+          [
+            2.6875,
+            2.6875
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "5/16",
+          "15/16",
+          "193/64"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 346,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            2,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 3,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            1,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            5,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame207",
+      "dataset": "actual107-frame207",
+      "frame": 207,
+      "owner": 1,
+      "Close": 0.25,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "121/64",
+            "121/64"
+          ],
+          [
+            "1467081013/536870912",
+            "1467081013/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            1.890625,
+            1.890625
+          ],
+          [
+            2.7326513323932886,
+            2.7326513323932886
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "202251979/536870912",
+          "202251979/536870912",
+          "923672267/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            2,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 72,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            1,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 2,
+          "white": 3,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            1,
+            1
+          ],
+          "whiteComponents4": [
+            3
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame207",
+      "dataset": "actual107-frame207",
+      "frame": 207,
+      "owner": 2,
+      "Close": 0.25,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "37/8",
+            "37/8"
+          ],
+          [
+            "43/16",
+            "43/16"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.625,
+            4.625
+          ],
+          [
+            2.6875,
+            2.6875
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "5/16",
+          "15/16",
+          "193/64"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 346,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            2,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 3,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            1,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            5,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame210",
+      "dataset": "actual107-frame210",
+      "frame": 210,
+      "owner": 1,
+      "Close": 0.25,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "121/64",
+            "121/64"
+          ],
+          [
+            "1467081013/536870912",
+            "1467081013/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            1.890625,
+            1.890625
+          ],
+          [
+            2.7326513323932886,
+            2.7326513323932886
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "202251979/536870912",
+          "202251979/536870912",
+          "923672267/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            2,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 72,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            1,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 2,
+          "white": 3,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            1,
+            1
+          ],
+          "whiteComponents4": [
+            3
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame210",
+      "dataset": "actual107-frame210",
+      "frame": 210,
+      "owner": 2,
+      "Close": 0.25,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "37/8",
+            "37/8"
+          ],
+          [
+            "43/16",
+            "43/16"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.625,
+            4.625
+          ],
+          [
+            2.6875,
+            2.6875
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "5/16",
+          "15/16",
+          "193/64"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            3
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 346,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            2,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 3,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            1,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            5,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame99",
+      "dataset": "actual107-frame99",
+      "frame": 99,
+      "owner": 1,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "245/64",
+            "245/64"
+          ],
+          [
+            "2252675249/536870912",
+            "2252675249/536870912"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            3.828125,
+            3.828125
+          ],
+          [
+            4.195934625342488,
+            4.195934625342488
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "12916913/536870912",
+          "197466289/536870912",
+          "2110068913/536870912"
+        ],
+        "optimalChildCounts": [
+          [
+            4,
+            4
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 316,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            3,
+            1,
+            1,
+            2,
+            2,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 4,
+          "white": 4,
+          "upperLine": 7,
+          "unresolved": 0,
+          "irisComponents4": [
+            4
+          ],
+          "whiteComponents4": [
+            3,
+            1
+          ],
+          "lineComponents8": [
+            7
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": []
+    },
+    {
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame99",
+      "dataset": "actual107-frame99",
+      "frame": 99,
+      "owner": 2,
+      "Close": 0.0,
+      "allocation": {
+        "sourceMassBounds": [
+          [
+            "157/32",
+            "157/32"
+          ],
+          [
+            "319/64",
+            "319/64"
+          ]
+        ],
+        "sourceMassBoundsFloat": [
+          [
+            4.90625,
+            4.90625
+          ],
+          [
+            4.984375,
+            4.984375
+          ]
+        ],
+        "objective": [
+          "parent EyeUnion area error",
+          "child iris/white area error",
+          "source reconstruction error"
+        ],
+        "exactObjective": [
+          "7/64",
+          "7/64",
+          "59/16"
+        ],
+        "optimalChildCounts": [
+          [
+            5,
+            5
+          ]
+        ],
+        "completeOptimalEnumeration": true,
+        "optimalWitnesses": 1,
+        "DPStates": 715,
+        "fixedTargetCount": false,
+        "UpperLineIncludedInAreaQuota": false,
+        "usesRGBOrLightQ": false,
+        "unknownSourceSupportNotMadeVisible": true
+      },
+      "formRanking": {
+        "noChoiceNeeded": true,
+        "historyApplied": false
+      },
+      "selectedIndices": [
+        0
+      ],
+      "labels": [
+        [
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            3,
+            3,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3,
+            3,
+            0,
+            2,
+            1,
+            1,
+            2,
+            3,
+            3,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            2,
+            2,
+            1,
+            1,
+            2,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        ]
+      ],
+      "counts": [
+        {
+          "iris": 5,
+          "white": 5,
+          "upperLine": 9,
+          "unresolved": 0,
+          "irisComponents4": [
+            5
+          ],
+          "whiteComponents4": [
+            3,
+            2
+          ],
+          "lineComponents8": [
+            9
+          ]
+        }
+      ],
+      "positiveSourcePartsLost": [],
+      "positiveUnionExtinguished": false,
+      "boundaryIdenticalToLocal22": true,
+      "sourceEmptyIrisWhite": false,
+      "extraBoundarySourceLabelsOutsideOldROI": [
+        {
+          "cellYX": [
+            3,
+            -1
+          ],
+          "part": 3,
+          "reason": "actual native pigment source support outside old bank+padding ROI",
+          "sourcePointIndices": [
+            0,
+            1,
+            2
+          ],
+          "finalRGBOrExternalVisibilityObserved": false
+        }
+      ]
+    }
+  ]
+}

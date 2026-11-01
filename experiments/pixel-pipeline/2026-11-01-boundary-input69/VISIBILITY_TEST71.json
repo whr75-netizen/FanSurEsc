@@ -1,0 +1,17 @@
+{
+  "passed": 10,
+  "cases": [
+    "triangle entry/exit partitions whole line",
+    "affine depth crossing splits one segment",
+    "behind triangle does not occlude",
+    "coplanar tie does not create strict occlusion",
+    "narrow subpixel blocker not missed by midpoint sampling",
+    "complete opaque occlusion",
+    "overlapping blocker union not double-counted",
+    "endpoint reversal invariant",
+    "point depth agrees with analytic line",
+    "degenerate triangle excluded explicitly"
+  ],
+  "UnityCalls": 0,
+  "limits": "Opaque geometry solver only; no shader alpha or artistic reference proof"
+}

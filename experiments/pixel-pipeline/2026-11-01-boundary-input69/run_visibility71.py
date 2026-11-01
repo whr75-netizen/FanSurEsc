@@ -1,0 +1,41 @@
+"""Frozen capture67 geometry-only occlusion audit. No new candidate or pixel edit."""
+from pathlib import Path
+import json,time,hashlib,struct
+import numpy as np
+from PIL import Image,ImageDraw
+from probe69 import ROOT,PACKET,state,geometry,camera,plane,sibling
+from opaque_visibility71 import from_meshes
+def main():
+ start=time.monotonic();gi,meshes=geometry(PACKET/'evaluated-source.geometry');cam=camera(PACKET/'source.camera');assert gi['sourceId']==cam['sourceId']==state['sourceId'];assert gi['frameIndex']==cam['frameIndex']==state['frameIndex']
+ scene=from_meshes(meshes,cam);bindings=json.loads((PACKET/'offline68/SURFACE_BINDINGS68.json').read_text());report70=json.loads((ROOT/'CURVE_REPORT70.json').read_text());projection=np.load(ROOT/'CURVE_PROJECTION70.npz')
+ samples=[];mismatch=[];sourceReprojectedMatches=0
+ for s in bindings['mapped']:
+  p=np.array(s['nativeXY'])+.5;key=(s['mesh'],s['submesh'],s['primitive']);source=scene.bykey[key];ids,depth=scene.point(p);sd=float(scene.bary(p,[source])[0]@scene.depth[source]);near=float(depth.min()) if len(depth) else None;gap=sd-near if near is not None else None
+  winners=[] if near is None else [scene.keys[i].tolist() for i,d in zip(ids,depth) if d<=near+1e-6];same=list(key) in winners
+  sourceAtCentre=scene.bary(p,[source])[0];capturedBary=np.asarray(s['barycentric']);rp=capturedBary@scene.xy[source];ri,rd=scene.point(rp);rsd=float(capturedBary@scene.depth[source]);rnear=float(rd.min()) if len(rd) else None;rw=[] if rnear is None else [scene.keys[i].tolist() for i,d in zip(ri,rd) if d<=rnear+1e-6];rmatch=list(key) in rw;sourceReprojectedMatches+=int(rmatch)
+  row={'nativeXY':s['nativeXY'],'sourceKey':list(key),'hair':s['hair'],'sourceDepth':sd,'opaqueNearestDepth':near,'sourceBehindOpaqueMetres':gap,'opaqueWinnerIncludesActual':same,'opaqueNearestKeys':winners,'actualSourceBaryAtPixelCentre':sourceAtCentre.tolist(),'sourceCoversExactCentre':bool(sourceAtCentre.min()>=-1e-9),'capturedSourceReprojectedPoint':rp.tolist(),'reprojectedSourceOpaqueFrontMatches':rmatch,'reprojectedSourceBehindOpaqueMetres':None if rnear is None else rsd-rnear};samples.append(row)
+  if not same:mismatch.append(row)
+ print(json.dumps({'stage':'native opaque samples complete','count':len(samples),'mismatch':len(mismatch)}),flush=True)
+ seg=projection['segments'];keys=projection['face'];length=np.linalg.norm(seg[:,1]-seg[:,0],axis=1)/2;clear=np.empty(len(seg));representative=[];rep=report70['representative'];selection=(projection['curve']==rep['globalCurve'])&(projection['placement']==rep['placement'])
+ for n,(line,key) in enumerate(zip(seg,keys)):
+  r=scene.line(line,key);clear[n]=1-r['blockedFraction']
+  if selection[n]:representative.append({'segment':n,'sourceParameter':projection['sourceParameter'][n].tolist(),'sourceKey':key.tolist(),'screenNative':line.tolist(),'nearestSampleWitness':bool(projection['nearestPrimitiveWitness'][n]),'opaqueClearFraction':clear[n],'blockedIntervals':r['blockedIntervals'],'blockerKeys':sorted(set(tuple(b['key']) for b in r['blockers']))})
+  if n and n%10000==0:print(json.dumps({'stage':'analytic segment partition','done':n,'total':len(seg)}),flush=True)
+ sensitivity=[]
+ for eps in [1e-7,1e-6,1e-5]:
+  value=sum(length[n]*(1-scene.line(seg[n],keys[n],eps)['blockedFraction']) for n in np.flatnonzero(selection));sensitivity.append({'numericalDepthToleranceMetres':eps,'representativeClearLogicalLength':float(value)})
+ np.savez_compressed(ROOT/'OPAQUE_SEGMENTS71.npz',sourceId=np.array(state['sourceId']),opaqueClearFraction=clear,segmentLengthLogical=length,sourceCurve=projection['curve'],placement=projection['placement'])
+ (ROOT/'OPAQUE_SAMPLES71.json').write_text(json.dumps({'sourceId':state['sourceId'],'samples':samples},separators=(',',':'))+'\n')
+ (ROOT/'REPRESENTATIVE_VISIBILITY71.json').write_text(json.dumps({'sourceId':state['sourceId'],'representative':rep,'pieces':representative},indent=2)+'\n')
+ result={'sourceId':state['sourceId'],'frameIndex':state['frameIndex'],'renderSerial':state['mainRenderedSerial335'],'scope':'all captured evaluated source triangles, double-sided fully opaque counterfactual; no live Unity call','geometrySHA256':hashlib.sha256((PACKET/'evaluated-source.geometry').read_bytes()).hexdigest(),'triangleCount':len(scene.keys),'nondegenerateProjectedTriangles':int(scene.valid.sum()),'sampleCount':len(samples),'actualGpuSamplesWithSameOpaqueFront':len(samples)-len(mismatch),'actualGpuSamplesDifferFromOpaqueFront':len(mismatch),'hairSamples':sum(s['hair'] for s in samples),'hairSameOpaqueFront':sum(s['hair'] and s['opaqueWinnerIncludesActual'] for s in samples),'pointToleranceMetres':1e-6,'sourceSampleDepthGapMaxMetres':max(s['sourceBehindOpaqueMetres'] for s in mismatch) if mismatch else 0,'pointMismatchExamples':mismatch[:8],'segments':len(seg),'fullyOpaqueClearSegments':int((clear>=1-1e-10).sum()),'fullyOpaqueBlockedSegments':int((clear<=1e-10).sum()),'partlyOpaqueBlockedSegments':int(((clear>1e-10)&(clear<1-1e-10)).sum()),'projectedLengthLogicalAcrossAllPlacements':float(length.sum()),'opaqueClearLengthLogicalAcrossAllPlacements':float(length@clear),'representative':{'globalCurve':rep['globalCurve'],'placement':rep['placement'],'segments':int(selection.sum()),'totalProjectedLogicalLength':float(length[selection].sum()),'opaqueClearLogicalLength':float(length[selection]@clear[selection]),'previousNearestSampleWitnessLogicalLength':rep['placementWitnessLength'],'numericalToleranceSensitivity':sensitivity},'conditionalMeaning':'No nearer triangle anywhere on a clear interval in the captured geometry superset. Target fragment survival/texture sampling and actual render eligibility are not established. A blocked interval is only potential occlusion because the nearer surface may be discarded or culled.','shaderEvidence':'Native333.shader uses Cull [_M_CullMode], alpha keywords and GetMToonGeometry_Alpha; all original hair materials11-14 are MASK alphaCutoff0.5,doubleSided true. Actual runtime cull/keywords/sampler not captured; these disk values are not silently substituted.','uncertainInputs':['actual runtime shader culling and alpha-test/alpha-blend keywords/cutoff','texture alpha sampling: wrap/filter/mips/UV-animation state and target survival between native samples','render eligibility and clip/role/side filters for every possible source primitive','independently justified artistic curve/feature corridor, separate from geometry visibility'],'actualConfirmedCorrectableArtIntervals':0,'curveCorrectionApplied':False,'QRGBPaletteChanged':False,'newUnityCalls':0,'elapsedSeconds':time.monotonic()-start}
+ result.update({'samplesMatchedAtCapturedSourceReprojection':sourceReprojectedMatches,'exactCentreMismatchBreakdown':{'capturedTriangleDoesNotContainExactCentre':sum(not s['sourceCoversExactCentre'] for s in mismatch),'containsCentreButOtherOpaqueSurfaceInFront':sum(s['sourceCoversExactCentre'] for s in mismatch)},'sampleInterpretation':'A mismatch is not attributed to alpha alone. Five exact-centre edge disagreements are separately identified from interior opaque-depth disagreements; original source reprojection is a sensitivity check, not an adjustment to the raster or proof of its coverage rule.'})
+ # A projected line crop is diagnostic; no character pixels are recoloured.
+ chosen=seg[selection];lo=chosen.reshape(-1,2).min(0);hi=chosen.reshape(-1,2).max(0);x0,y0=np.floor(lo).astype(int)-4;x1,y1=np.ceil(hi).astype(int)+5
+ image=Image.new('RGB',(max(1,x1-x0),max(1,y1-y0)),(27,29,32));draw=ImageDraw.Draw(image)
+ for n in np.flatnonzero(selection):
+  line=seg[n];spans=scene.line(line,keys[n])['blockedIntervals'];points=sorted(set([0.,1.]+[v for a,b in spans for v in [a,b]]))
+  for a,b in zip(points[:-1],points[1:]):
+   p=line[0]+a*(line[1]-line[0]);q=line[0]+b*(line[1]-line[0]);blocked=any(c<=(a+b)/2<=d for c,d in spans);draw.line([(p[0]-x0,p[1]-y0),(q[0]-x0,q[1]-y0)],fill=(245,125,65) if blocked else (40,220,190),width=1)
+ image.resize((image.width*12,image.height*12),Image.Resampling.NEAREST).save(ROOT/'OPAQUE_LINE71.png')
+ (ROOT/'VISIBILITY71.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8');print(json.dumps({k:v for k,v in result.items() if k not in ['pointMismatchExamples','uncertainInputs']},ensure_ascii=False,indent=2),flush=True)
+if __name__=='__main__':main()

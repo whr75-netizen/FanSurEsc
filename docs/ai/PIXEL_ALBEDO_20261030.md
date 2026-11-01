@@ -394,3 +394,17 @@ Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reser
 현재 기준은 원본 source64 검출 raster 간선과 같은 프레임의 실제 geometry이다. source 색 경계를 g 명암 경계의 정답으로 교체하지 않는다. 승인된 연속 특징 경계/영역과 독립적인 고밀도 g 기준이 없으므로, 전체 곡선 재배치·픽셀 미술 개선 판정 직전에서 중단한다. 다음 입력은 CPU sampler metadata와 실제 eye count/records ROI이며, 명암 곡선을 검증한다면 같은 조명 producer의 작은6배 ROI가 선택적 독립 관측이다.6배는 기존2배 표본을 k=3j+1로 포함시키기 위한 진단 격자이며 제품 해상도나 palette 단계가 아니다. dense 자료도 작가의 의도를 주지는 않으므로 형태 추론 기준 또는 독립 검토한 source 영역/corridor가 별도로 필요하다. 실행 승인은 요청/실행하지 않았다.
 
 제품 기본 경로와 기존 사용자 파일은 유지했다. 마지막 live dirty29를 현재값으로 재가정하지 않았고 이번에는 조회/해제하지 않았다. 이 절의 변경 파일·함수와 커밋은 Git 이력으로 확인한다.
+
+## 가림71 — 저장된 전체 기하로 연속 선분의 불투명 가림 계산
+
+경로: `experiments/pixel-pipeline/2026-11-01-boundary-input69/`.
+
+- `opaque_visibility71.py:from_meshes/OpaqueScene.line`: capture67의 같은 sourceId/frame94/serial1, 평가 삼각형29,542개 전체를 사용한다. 직교 투영을 확인한 뒤 화면 삼각형 진입·이탈 및 선형 view-depth 교차로 선분 전체를 분할한다. 최근접 표본 하나로 구간 전체를 판정하지 않는다. 모든 삼각형을 양면 불투명으로 둔 조건부 계산이며, 실제 shader alpha/cull 동등성을 주장하지 않는다. perspective/near-far clipping 입력은 지원하지 않으며 조용히 생략하지 않고 거부한다.
+- `run_visibility71.py:main`: 기존 실제 GPU 표본1,734개 중 같은 불투명 최전면1,706개, 불일치28개. 머리는1,463개 중1,454개 일치. 불일치 중5개는 실제 기록 primitive가 이상적인 pixel centre를 포함하지 않는 격자 경계 사례,23개는 centre를 포함하지만 다른 불투명 삼각형이 더 앞인 사례다. alpha·culling·렌더 자격 중 원인은 아직 분리되지 않았다. 원본 source barycentric 재투영 위치에서도1,710개만 일치하므로 전체 shader 동등성은 성립하지 않는다. 좌표별 결과는 `OPAQUE_SAMPLES71.json`에 보존했다.
+- 전체 source 투영 조각34,071개 중 기하상 완전 무가림28,357개 / 완전 잠재가림5,603개 / 부분 잠재가림111개. 이는 여러 texture 배치에 걸친 원본 경계 조각 수이며 의미 특징 수나 품질 지표가 아니다. `OPAQUE_SEGMENTS71.npz`는 원본70 조각 인덱스를 그대로 사용한다.
+- 대표 curve8701/placement36의 투영 길이4.3942445logical px 중 불투명 기하상 무가림1.6610199px. 이전 최근접 native 표본 일치 길이3.0854417px와는 **측정 정의가 다르다**. 허용 오차1e-7/1e-6/1e-5m에서 대표 무가림 길이는 같았다. `REPRESENTATIVE_VISIBILITY71.json`의 sourceParameter/primitive/가림 구간과 `OPAQUE_LINE71.png`를 확인했다. 청록=기하상 무가림, 주황=불투명 가정의 잠재가림이며 실제 머리 RGB 변경 이미지가 아니다.
+- `test_visibility71.py`: 삼각형 진입·이탈, 깊이 교차, 뒤쪽/동일평면, 중점에 걸리지 않는 얇은 가림, 전체가림, 겹친 구간 합집합, 방향 반전, 점-선분 일치, 퇴화 삼각형10검사 통과.
+
+판정: 저장 기하로 **조건부 가림 구간 계산은 가능**하며 새 geometry 캡처가 반드시 필요한 상태는 아니다. 그러나 실제 Native333은 material cull과 MToon alpha 판정을 사용하고 원본 hair11~14도 MASK 재질이다. 현재 runtime keywords/cutoff/cull/texture sampling 및 구간 전체에서 target fragment가 살아남는지는 미기록이다. 따라서 기하상 무가림을 실제 최종 표시 확정으로, 잠재가림을 실제 제거 대상으로 승격하지 않는다. 독립적인 미술 기준곡선도 없으므로 이번 결과에서 확정하여 보정에 쓸 구간은0개다. 새 후보·Q/색/팔레트 수정 없이 종료한다.
+
+추가 관측 최소 범위는 geometry 재수집 자체가 아니라 actual runtime material/alpha/cull/sampler 상태와 필요한 source 경계 구간의 fragment 생존·owner/depth 검증이다. 조명 등고선의 기준은 별도 문제여서 dense g 관측 또는 명시된 설계 기준이 필요하다. 눈 최소 입력 계약은 `NEXT_INPUT70.json`을 유지한다. 이번에는 Unity 호출/Play/import/화면 제어0회. 제품 및 기존 사용자 파일은 변경하지 않았으며 관련 커밋은 이 절을 추가한 Git 이력에서 확인한다.

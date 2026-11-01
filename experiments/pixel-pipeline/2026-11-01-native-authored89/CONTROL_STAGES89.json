@@ -1,0 +1,1476 @@
+[
+  {
+    "run": "capture89",
+    "PlayEntries": 1,
+    "capturedFrames": 0,
+    "error": "System.InvalidOperationException: Current source rest/boundary registration mismatch 0.847095\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.NativeRetarget89..ctor (EyeFeature348 e, System.String registrationFile) [0x00467] in <931ac76d567147dc9e52c5167673538b>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Arm76 (NativePlayer395 n) [0x0042f] in <931ac76d567147dc9e52c5167673538b>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x004e1] in <931ac76d567147dc9e52c5167673538b>:0 ",
+    "sourceControl": null,
+    "PlayExited": true,
+    "restorationError": null,
+    "globalRestoreErrors": [],
+    "inputRestored": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    },
+    "optionsRestored": true,
+    "retargetDisposed": true
+  },
+  {
+    "run": "capture89b",
+    "PlayEntries": 1,
+    "capturedFrames": 0,
+    "error": "System.InvalidOperationException: Current source rest/boundary registration mismatch 0.847095\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.NativeRetarget89..ctor (EyeFeature348 e, System.String registrationFile, System.String diagnosticFile) [0x006a4] in <90d5e41fce0c4083bde644d04465038d>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Arm76 (NativePlayer395 n) [0x00450] in <90d5e41fce0c4083bde644d04465038d>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x004e1] in <90d5e41fce0c4083bde644d04465038d>:0 ",
+    "sourceControl": null,
+    "PlayExited": true,
+    "restorationError": null,
+    "globalRestoreErrors": [],
+    "inputRestored": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    },
+    "optionsRestored": true,
+    "retargetDisposed": true
+  },
+  {
+    "run": "capture89c",
+    "PlayEntries": 1,
+    "capturedFrames": 0,
+    "error": "System.InvalidOperationException: Retarget native source control differs; no observation/candidate adoption\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Arm76 (NativePlayer395 n) [0x004aa] in <15d71d6a44924493bb143cf9741eae5a>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x004e1] in <15d71d6a44924493bb143cf9741eae5a>:0 ",
+    "sourceControl": {
+      "pass": false,
+      "trials": [
+        {
+          "fields": [
+            {
+              "changed": 41,
+              "channel": 0,
+              "maxAbs": 0.9960784316062927
+            },
+            {
+              "changed": 41,
+              "channel": 1,
+              "maxAbs": 13.730696678161621
+            },
+            {
+              "changed": 41,
+              "channel": 2,
+              "maxAbs": 1
+            },
+            {
+              "changed": 41,
+              "channel": 3,
+              "maxAbs": 121
+            },
+            {
+              "changed": 41,
+              "channel": 4,
+              "maxAbs": 0.9960784316062927
+            }
+          ],
+          "pass": false,
+          "projection": "existing producer raw crop matrix"
+        },
+        {
+          "fields": [
+            {
+              "changed": 0,
+              "channel": 0,
+              "maxAbs": 0
+            },
+            {
+              "changed": 0,
+              "channel": 1,
+              "maxAbs": 0
+            },
+            {
+              "changed": 0,
+              "channel": 2,
+              "maxAbs": 0
+            },
+            {
+              "changed": 0,
+              "channel": 3,
+              "maxAbs": 0
+            },
+            {
+              "changed": 20,
+              "channel": 4,
+              "maxAbs": 0.07453039288520813
+            }
+          ],
+          "pass": false,
+          "projection": "GL GPU crop matrix"
+        }
+      ]
+    },
+    "PlayExited": true,
+    "restorationError": null,
+    "globalRestoreErrors": [],
+    "inputRestored": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    },
+    "optionsRestored": true,
+    "retargetDisposed": true
+  },
+  {
+    "run": "capture89d",
+    "PlayEntries": 1,
+    "capturedFrames": 0,
+    "error": "System.InvalidOperationException: Same-head-camera retarget failed ---> System.InvalidOperationException: Same-head-camera source control differs\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.CameraEnd89 (UnityEngine.Rendering.ScriptableRenderContext context, UnityEngine.Camera camera) [0x000a1] in <5bd4cfbb041b4611b252235c8f2246db>:0 \r\n   --- End of inner exception stack trace ---\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x0051e] in <5bd4cfbb041b4611b252235c8f2246db>:0 ",
+    "sourceControl": {
+      "pass": false,
+      "trials": [
+        {
+          "fields": [
+            {
+              "changed": 46,
+              "channel": 0,
+              "examples": [
+                {
+                  "index": 820,
+                  "original": [
+                    0.42090415954589844,
+                    0.1105162501335144,
+                    0.07646811008453369,
+                    0.02108130417764187
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 857,
+                  "original": [
+                    0.892621636390686,
+                    0.6663156151771545,
+                    0.5347975492477417,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 886,
+                  "original": [
+                    0.6221728324890137,
+                    0.5544238090515137,
+                    0.48079562187194824,
+                    0.43382784724235535
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.4913509786128998,
+                    0.19338607788085938,
+                    0.1450895518064499,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ],
+              "maxAbs": 0.9960784316062927,
+              "maxPerChannel": [
+                0.892621636390686,
+                0.7192400693893433,
+                0.5770909786224365,
+                0.9960784316062927
+              ]
+            },
+            {
+              "changed": 46,
+              "channel": 1,
+              "examples": [
+                {
+                  "index": 820,
+                  "original": [
+                    13.728254318237305,
+                    7,
+                    1,
+                    0.02108130417764187
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 857,
+                  "original": [
+                    13.703686714172363,
+                    7,
+                    2,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 886,
+                  "original": [
+                    13.729650497436523,
+                    7,
+                    1,
+                    0.43382784724235535
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    13.701579093933105,
+                    7,
+                    2,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ],
+              "maxAbs": 13.729650497436523,
+              "maxPerChannel": [
+                13.729650497436523,
+                7,
+                2,
+                0.9960784316062927
+              ]
+            },
+            {
+              "changed": 46,
+              "channel": 2,
+              "examples": [
+                {
+                  "index": 820,
+                  "original": [
+                    -0.0479842945933342,
+                    0.043806906789541245,
+                    0.08206309378147125,
+                    1
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 857,
+                  "original": [
+                    0.0217243991792202,
+                    0.06011871621012688,
+                    0.09483107179403305,
+                    1
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 886,
+                  "original": [
+                    -0.053237184882164,
+                    0.04501784220337868,
+                    0.07976353913545609,
+                    1
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.024252833798527718,
+                    0.06335297226905823,
+                    0.09468960016965866,
+                    1
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ],
+              "maxAbs": 1,
+              "maxPerChannel": [
+                0.06918203085660934,
+                0.07380466163158417,
+                0.09720003604888916,
+                1
+              ]
+            },
+            {
+              "changed": 46,
+              "channel": 3,
+              "examples": [
+                {
+                  "index": 820,
+                  "original": [
+                    0.7511990666389465,
+                    0.48727741837501526,
+                    115,
+                    3
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 857,
+                  "original": [
+                    0.4890163242816925,
+                    0.5842151045799255,
+                    59,
+                    3
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 886,
+                  "original": [
+                    0.7967243194580078,
+                    0.43995559215545654,
+                    121,
+                    3
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.4396548569202423,
+                    0.6201897263526917,
+                    63,
+                    3
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ],
+              "maxAbs": 121,
+              "maxPerChannel": [
+                0.9140809178352356,
+                0.7679105997085571,
+                121,
+                3
+              ]
+            },
+            {
+              "changed": 46,
+              "channel": 4,
+              "examples": [
+                {
+                  "index": 820,
+                  "original": [
+                    0.3715924918651581,
+                    0,
+                    0.7200000286102295,
+                    0.02108130417764187
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 857,
+                  "original": [
+                    0.16693489253520966,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 886,
+                  "original": [
+                    0.3544469475746155,
+                    0,
+                    0.7200000286102295,
+                    0.43382784724235535
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.15714839100837708,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0,
+                    0,
+                    0,
+                    0
+                  ]
+                }
+              ],
+              "maxAbs": 0.9960784316062927,
+              "maxPerChannel": [
+                0.3715924918651581,
+                0,
+                0.7200000286102295,
+                0.9960784316062927
+              ]
+            }
+          ],
+          "pass": false,
+          "projection": "existing producer raw crop matrix"
+        },
+        {
+          "fields": [
+            {
+              "changed": 0,
+              "channel": 0,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 1,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 2,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 3,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 30,
+              "channel": 4,
+              "examples": [
+                {
+                  "index": 857,
+                  "original": [
+                    0.16693489253520966,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0.16624128818511963,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.15714839100837708,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0.15620623528957367,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ]
+                },
+                {
+                  "index": 983,
+                  "original": [
+                    0.13951025903224945,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ],
+                  "own": [
+                    0.13745327293872833,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ]
+                },
+                {
+                  "index": 984,
+                  "original": [
+                    0.14653263986110687,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ],
+                  "own": [
+                    0.1452856957912445,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ]
+                }
+              ],
+              "maxAbs": 0.07063987851142883,
+              "maxPerChannel": [
+                0.07063987851142883,
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "pass": false,
+          "projection": "GL GPU crop matrix"
+        }
+      ]
+    },
+    "PlayExited": true,
+    "restorationError": null,
+    "globalRestoreErrors": [],
+    "inputRestored": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    },
+    "optionsRestored": true,
+    "retargetDisposed": true
+  },
+  {
+    "run": "capture89e",
+    "PlayEntries": 1,
+    "capturedFrames": 0,
+    "error": "System.InvalidOperationException: Same-head-camera retarget failed ---> System.InvalidOperationException: Same-head-camera source control differs\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.CameraEnd89 (UnityEngine.Rendering.ScriptableRenderContext context, UnityEngine.Camera camera) [0x000a1] in <48dff2e785eb4a66bdadbd64cb78f83a>:0 \r\n   --- End of inner exception stack trace ---\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x0051e] in <48dff2e785eb4a66bdadbd64cb78f83a>:0 ",
+    "sourceControl": {
+      "pass": false,
+      "trials": [
+        {
+          "fields": [
+            {
+              "changed": 0,
+              "channel": 0,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 1,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 2,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 3,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 28,
+              "channel": 4,
+              "examples": [
+                {
+                  "index": 857,
+                  "original": [
+                    0.16705010831356049,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0.16658663749694824,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.15727099776268005,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0.15655356645584106,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ]
+                },
+                {
+                  "index": 983,
+                  "original": [
+                    0.1394711434841156,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ],
+                  "own": [
+                    0.13776712119579315,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ]
+                },
+                {
+                  "index": 984,
+                  "original": [
+                    0.147628515958786,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ],
+                  "own": [
+                    0.1455022394657135,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ]
+                }
+              ],
+              "maxAbs": 0.06682886183261871,
+              "maxPerChannel": [
+                0.06682886183261871,
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "pass": false,
+          "projection": "GL GPU crop matrix",
+          "screenInput": "negative projected Y"
+        },
+        {
+          "fields": [
+            {
+              "changed": 0,
+              "channel": 0,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 1,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 2,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 3,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 28,
+              "channel": 4,
+              "examples": [
+                {
+                  "index": 857,
+                  "original": [
+                    0.16705010831356049,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0.16658663749694824,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.15727099776268005,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0.15655356645584106,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ]
+                },
+                {
+                  "index": 983,
+                  "original": [
+                    0.1394711434841156,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ],
+                  "own": [
+                    0.13776712119579315,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ]
+                },
+                {
+                  "index": 984,
+                  "original": [
+                    0.147628515958786,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ],
+                  "own": [
+                    0.1455022394657135,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ]
+                }
+              ],
+              "maxAbs": 0.06682886183261871,
+              "maxPerChannel": [
+                0.06682886183261871,
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "pass": false,
+          "projection": "GL GPU crop matrix",
+          "screenInput": "positive projected Y"
+        },
+        {
+          "fields": [
+            {
+              "changed": 0,
+              "channel": 0,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 1,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 2,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 3,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 28,
+              "channel": 4,
+              "examples": [
+                {
+                  "index": 857,
+                  "original": [
+                    0.16705010831356049,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0.16658663749694824,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.15727099776268005,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0.15655356645584106,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ]
+                },
+                {
+                  "index": 983,
+                  "original": [
+                    0.1394711434841156,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ],
+                  "own": [
+                    0.13776712119579315,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ]
+                },
+                {
+                  "index": 984,
+                  "original": [
+                    0.147628515958786,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ],
+                  "own": [
+                    0.1455022394657135,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ]
+                }
+              ],
+              "maxAbs": 0.06682886183261871,
+              "maxPerChannel": [
+                0.06682886183261871,
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "pass": false,
+          "projection": "GL GPU crop matrix",
+          "screenInput": "original SV_Position + original ROI"
+        }
+      ]
+    },
+    "PlayExited": true,
+    "restorationError": null,
+    "globalRestoreErrors": [],
+    "inputRestored": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    },
+    "optionsRestored": true,
+    "retargetDisposed": true
+  },
+  {
+    "run": "capture89f",
+    "PlayEntries": 1,
+    "capturedFrames": 32,
+    "error": null,
+    "sourceControl": {
+      "adoptionBlocked": true,
+      "geometryRGBAExact": true,
+      "pass": false,
+      "quantizedShadeExact": true,
+      "reason": "Continuous illumination mismatch retained. Geometry/coverage observation only; not original shader equivalence.",
+      "trials": [
+        {
+          "fields": [
+            {
+              "changed": 0,
+              "channel": 0,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 1,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 2,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 3,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 28,
+              "channel": 4,
+              "examples": [
+                {
+                  "index": 857,
+                  "original": [
+                    0.16705010831356049,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0.16658663749694824,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.15727099776268005,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0.15655356645584106,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ]
+                },
+                {
+                  "index": 983,
+                  "original": [
+                    0.1394711434841156,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ],
+                  "own": [
+                    0.13776712119579315,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ]
+                },
+                {
+                  "index": 984,
+                  "original": [
+                    0.147628515958786,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ],
+                  "own": [
+                    0.1455022394657135,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ]
+                }
+              ],
+              "maxAbs": 0.06682886183261871,
+              "maxPerChannel": [
+                0.06682886183261871,
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "pass": false,
+          "projection": "GL GPU crop matrix",
+          "screenInput": "negative projected Y"
+        },
+        {
+          "fields": [
+            {
+              "changed": 0,
+              "channel": 0,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 1,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 2,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 3,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 28,
+              "channel": 4,
+              "examples": [
+                {
+                  "index": 857,
+                  "original": [
+                    0.16705010831356049,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0.16658663749694824,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.15727099776268005,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0.15655356645584106,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ]
+                },
+                {
+                  "index": 983,
+                  "original": [
+                    0.1394711434841156,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ],
+                  "own": [
+                    0.13776712119579315,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ]
+                },
+                {
+                  "index": 984,
+                  "original": [
+                    0.147628515958786,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ],
+                  "own": [
+                    0.1455022394657135,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ]
+                }
+              ],
+              "maxAbs": 0.06682886183261871,
+              "maxPerChannel": [
+                0.06682886183261871,
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "pass": false,
+          "projection": "GL GPU crop matrix",
+          "screenInput": "positive projected Y"
+        },
+        {
+          "fields": [
+            {
+              "changed": 0,
+              "channel": 0,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 1,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 2,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 0,
+              "channel": 3,
+              "examples": [],
+              "maxAbs": 0,
+              "maxPerChannel": [
+                0,
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "changed": 28,
+              "channel": 4,
+              "examples": [
+                {
+                  "index": 857,
+                  "original": [
+                    0.16705010831356049,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ],
+                  "own": [
+                    0.16658663749694824,
+                    0,
+                    0.7200000286102295,
+                    0.2574893832206726
+                  ]
+                },
+                {
+                  "index": 920,
+                  "original": [
+                    0.15727099776268005,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ],
+                  "own": [
+                    0.15655356645584106,
+                    0,
+                    0.7200000286102295,
+                    0.9960784316062927
+                  ]
+                },
+                {
+                  "index": 983,
+                  "original": [
+                    0.1394711434841156,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ],
+                  "own": [
+                    0.13776712119579315,
+                    0,
+                    0.7200000286102295,
+                    0.9944297671318054
+                  ]
+                },
+                {
+                  "index": 984,
+                  "original": [
+                    0.147628515958786,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ],
+                  "own": [
+                    0.1455022394657135,
+                    0,
+                    0.7200000286102295,
+                    0.8456997871398926
+                  ]
+                }
+              ],
+              "maxAbs": 0.06682886183261871,
+              "maxPerChannel": [
+                0.06682886183261871,
+                0,
+                0,
+                0
+              ]
+            }
+          ],
+          "pass": false,
+          "projection": "GL GPU crop matrix",
+          "screenInput": "original SV_Position + original ROI"
+        }
+      ]
+    },
+    "PlayExited": true,
+    "restorationError": null,
+    "globalRestoreErrors": [],
+    "inputRestored": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    },
+    "optionsRestored": true,
+    "retargetDisposed": true
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "passed": 22,
+  "cases": [
+    "49 continuous anchor, not floor(delta+.5)",
+    "joint source support and parts invariant through289 phases",
+    "final2x raster only translates complete group without changing relations",
+    "palette change does not rebuild support or move parts",
+    "no RGB interpolation/palette escape",
+    "74 iris and sclera cannot claim the same canonical output cell",
+    "model change invalidates owned source support",
+    "different view cannot borrow old cache",
+    "actual projection deformation rebuilds",
+    "unregistered Close invalidates, no open substitution",
+    "double disposal safe; disposed owner cannot reuse",
+    "multiple renderer lifetime independent",
+    "53 partial front fragment remains fractional, not whole-cell veto",
+    "actual opaque front hair remains blocked",
+    "behind hair does not block",
+    "actual closed lid/front skin is not ignored",
+    "53 real destination partial mask frame100",
+    "53 real destination partial mask frame101",
+    "87 actual saved pure-phase canonical support has1 signature",
+    "source texel20 is not forced visible/native pixel count",
+    "same pose translation never rebuilds the feature",
+    "small important source parts retained jointly"
+  ],
+  "actual53FragmentCounterexample": [
+    {
+      "frame": 100,
+      "fractionOfUnoccludedDestinationSamples": 0.6252450980246067,
+      "notClaimed": "This is not source native visible area or clean backing proof."
+    },
+    {
+      "frame": 101,
+      "fractionOfUnoccludedDestinationSamples": 0.7502450980246067,
+      "notClaimed": "This is not source native visible area or clean backing proof."
+    }
+  ],
+  "actual87Source": "eye87-20261101T110151312Z-3694b753",
+  "remainingFailure": "Actual sampled4x visibility still changes during pure phase; canonical stability is not full final temporal stability. Native lid remains observed occluding geometry, not a new whole-eye authored form.",
+  "UnityCalls": 0
+}

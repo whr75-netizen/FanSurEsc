@@ -1,0 +1,444 @@
+{
+  "status": "NOT_ADOPTED_FINAL_VISIBILITY_AND_ILLUMINATION_UNRESOLVED",
+  "actualPlayCapture": {
+    "frames": 32,
+    "stageCounts": {
+      "phase": 6,
+      "walk": 8,
+      "sweep": 10,
+      "blink": 8
+    },
+    "sourceSequence": "eye89-20261101T121649399Z-a2061c6c",
+    "sameFrameManifests": true,
+    "noRenderPoseHistoryReset": true
+  },
+  "registrationMaxPixels": 4.1085546399699524e-05,
+  "sourceControl": {
+    "geometryRGBAExact": true,
+    "quantizedShadeExact": true,
+    "continuousShaderEquivalent": false,
+    "continuousMaxError": 0.06682886183261871,
+    "screenAndCallbackHypotheses": "Both screen signs, original SV_Position and exact camera callback did not remove continuous-only error"
+  },
+  "sourceBank": {
+    "samples": 11714,
+    "maxRGB8Error": 0,
+    "originalIntentRecovered": false
+  },
+  "protected76_77": {
+    "actualProtectedCells": 368,
+    "guardSourcePredicateMatchesGPU": true,
+    "baselineRGBAndFinalRGBUnchanged": true,
+    "activeCache77": true
+  },
+  "canonicalSweep": {
+    "frames": 10,
+    "relativeAnchorXRangePixels": 1.000091552734375,
+    "relativeAnchorYRangePixels": 0.0001373291015625,
+    "identitySignatures": 1,
+    "bankShapeRGB8Signatures": 1,
+    "returnAnchorErrorPixels": 0.0,
+    "finalVisibilityStable": false
+  },
+  "blinkEvaluatedGeometry": [
+    {
+      "frame": 135,
+      "stage": "blink",
+      "index": 0,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0,
+      "maxVertexDeltaFromInitialOpenMetres": 0.0,
+      "rawIrisCells": 4,
+      "rawScleraCells": 10
+    },
+    {
+      "frame": 136,
+      "stage": "blink",
+      "index": 1,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0,
+      "maxVertexDeltaFromInitialOpenMetres": 0.0,
+      "rawIrisCells": 4,
+      "rawScleraCells": 10
+    },
+    {
+      "frame": 137,
+      "stage": "blink",
+      "index": 2,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 50,
+      "maxVertexDeltaFromInitialOpenMetres": 0.0,
+      "rawIrisCells": 4,
+      "rawScleraCells": 10
+    },
+    {
+      "frame": 138,
+      "stage": "blink",
+      "index": 3,
+      "meshVerticesSHA": "6dfcad87ad58d492b6c137da03148535b1f3b06240557a85aa1a3bd1336ffc3f",
+      "CloseGetter": 50,
+      "maxVertexDeltaFromInitialOpenMetres": 0.012864590622484684,
+      "rawIrisCells": 3,
+      "rawScleraCells": 4
+    },
+    {
+      "frame": 139,
+      "stage": "blink",
+      "index": 4,
+      "meshVerticesSHA": "6dfcad87ad58d492b6c137da03148535b1f3b06240557a85aa1a3bd1336ffc3f",
+      "CloseGetter": 100,
+      "maxVertexDeltaFromInitialOpenMetres": 0.012864590622484684,
+      "rawIrisCells": 3,
+      "rawScleraCells": 4
+    },
+    {
+      "frame": 140,
+      "stage": "blink",
+      "index": 5,
+      "meshVerticesSHA": "0bac4dc62277e32d0cf3f35fc448924c665c9539aee163c6cc658136b69eda97",
+      "CloseGetter": 100,
+      "maxVertexDeltaFromInitialOpenMetres": 0.025728734210133553,
+      "rawIrisCells": 0,
+      "rawScleraCells": 0
+    },
+    {
+      "frame": 141,
+      "stage": "blink",
+      "index": 6,
+      "meshVerticesSHA": "0bac4dc62277e32d0cf3f35fc448924c665c9539aee163c6cc658136b69eda97",
+      "CloseGetter": 0,
+      "maxVertexDeltaFromInitialOpenMetres": 0.025728734210133553,
+      "rawIrisCells": 0,
+      "rawScleraCells": 0
+    },
+    {
+      "frame": 142,
+      "stage": "blink",
+      "index": 7,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0,
+      "maxVertexDeltaFromInitialOpenMetres": 0.0,
+      "rawIrisCells": 4,
+      "rawScleraCells": 10
+    }
+  ],
+  "finalInputFailures": {
+    "packets": 64,
+    "invalidNativePixels": 1148,
+    "missingBackingNativePixels": 224,
+    "indeterminateSourceVisibilityNativePixels": 924,
+    "countUnit": "sum over32 frames and2 candidates; not unique screen coordinates",
+    "noInferredBacking": true
+  },
+  "counterexamples": {
+    "tinyResidualDoesNotPaintOpaque": true,
+    "tinyForegroundDoesNotEraseIris": true,
+    "oneOccludedSubsampleDoesNotRejectCell": true,
+    "fullyOccludedFeatureDisappears": true
+  },
+  "stateEqual": {
+    "dirty": true,
+    "input": true,
+    "scenes": true,
+    "domain": true,
+    "playing": true,
+    "paused": true,
+    "optionsEnabled": true,
+    "options": true,
+    "timeScale": true,
+    "captureDeltaTime": true,
+    "graphicsPipelinePath": true,
+    "qualityPipelinePath": true,
+    "runInBackground": true,
+    "playerRunInBackground": true
+  },
+  "nativeContentExact": 47,
+  "dirtyCount": 31,
+  "addedDirtySincePreImport": [
+    "Assets/EUnityValidation01/SourceLight329/Shaders/CommonSurface329.shader",
+    "Assets/Rendering/PixelArt/DeskLivePixelProbe.shader"
+  ],
+  "extraDirtyCause": "Observed following original isolated shader import; cause unproven, flags preserved",
+  "restoration": {
+    "PlayExited": true,
+    "optionsRestored": true,
+    "timeRestored": true,
+    "pipelineRestored": true,
+    "backgroundRestored": true,
+    "observerRemoved": true,
+    "retargetDisposed89": true,
+    "globalRestoreErrors": [],
+    "editInputRestoration82": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    }
+  },
+  "memory": {
+    "RTbefore": 30,
+    "RTafter": 30,
+    "internalAllocatedDeltaMiB": 57.19659900665283,
+    "physicalRAMMeasured": false,
+    "leakClaim": false
+  },
+  "frames": [
+    {
+      "frame": 101,
+      "stage": "phase",
+      "index": 0,
+      "meshVerticesSHA": "1fe8ef2a1709e9a1177c179b67d2551bb38ac61106065cfe9052d3344f67bbde",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 102,
+      "stage": "phase",
+      "index": 1,
+      "meshVerticesSHA": "cf57b42cc10096da16a9748f16727c57f1b9eeb97f78636d7803775058de49c0",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 103,
+      "stage": "phase",
+      "index": 2,
+      "meshVerticesSHA": "b5181d8833d77c8b77df3cabd96054f056cf900cad9024e3f8dc6f7f53ab5ec3",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 104,
+      "stage": "phase",
+      "index": 3,
+      "meshVerticesSHA": "057156653a92054f30724c181f54e4204a71e0b9e3074ff6dc6856bc9135447d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 105,
+      "stage": "phase",
+      "index": 4,
+      "meshVerticesSHA": "346e8c11993ca1fa00c8eda1026d4849cc14375165f104f5b202ac61a1cfd32f",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 106,
+      "stage": "phase",
+      "index": 5,
+      "meshVerticesSHA": "2b16d655e40d3b88ed0723450f87e9b4f85700584b32882820e9ce977e223585",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 115,
+      "stage": "walk",
+      "index": 0,
+      "meshVerticesSHA": "439b9e2d79431a1fd984107ef3fc0fc0dc3c9336691d3c1ab0f8cb691846f758",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 116,
+      "stage": "walk",
+      "index": 1,
+      "meshVerticesSHA": "f7274cb1692dd5cae7d49ecb7b8b187a6573ececb5412f701f64b1c072e2ac4e",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 117,
+      "stage": "walk",
+      "index": 2,
+      "meshVerticesSHA": "29710b06e70ed5906664b160988eb8c4130b9bc335e846d349729be486e1e70d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 118,
+      "stage": "walk",
+      "index": 3,
+      "meshVerticesSHA": "acb0f107a83287da59a4099e91f42f207e46439e503c5a351f4f5393ba50a467",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 119,
+      "stage": "walk",
+      "index": 4,
+      "meshVerticesSHA": "f90363e9d4f1c931b8288902637c2819d3915f9d2ffca74543ab867811fe65d2",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 120,
+      "stage": "walk",
+      "index": 5,
+      "meshVerticesSHA": "0265faea1d2a3e531c04a012ab16f1f0469d4de067118cf5454b3c2ec280611e",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 121,
+      "stage": "walk",
+      "index": 6,
+      "meshVerticesSHA": "13cde99bc245b2032aa681306d9fe45eff7604ce8d9ce859bc4e24a508b2648c",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 122,
+      "stage": "walk",
+      "index": 7,
+      "meshVerticesSHA": "d728e474ed10f25f310e8c51ea69b08c02d003a4e64e9760d34a7f4424f59756",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 125,
+      "stage": "sweep",
+      "index": 0,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 126,
+      "stage": "sweep",
+      "index": 1,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 127,
+      "stage": "sweep",
+      "index": 2,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 128,
+      "stage": "sweep",
+      "index": 3,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 129,
+      "stage": "sweep",
+      "index": 4,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 130,
+      "stage": "sweep",
+      "index": 5,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 131,
+      "stage": "sweep",
+      "index": 6,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 132,
+      "stage": "sweep",
+      "index": 7,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 133,
+      "stage": "sweep",
+      "index": 8,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 134,
+      "stage": "sweep",
+      "index": 9,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0
+    },
+    {
+      "frame": 135,
+      "stage": "blink",
+      "index": 0,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0,
+      "maxVertexDeltaFromInitialOpenMetres": 0.0,
+      "rawIrisCells": 4,
+      "rawScleraCells": 10
+    },
+    {
+      "frame": 136,
+      "stage": "blink",
+      "index": 1,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0,
+      "maxVertexDeltaFromInitialOpenMetres": 0.0,
+      "rawIrisCells": 4,
+      "rawScleraCells": 10
+    },
+    {
+      "frame": 137,
+      "stage": "blink",
+      "index": 2,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 50,
+      "maxVertexDeltaFromInitialOpenMetres": 0.0,
+      "rawIrisCells": 4,
+      "rawScleraCells": 10
+    },
+    {
+      "frame": 138,
+      "stage": "blink",
+      "index": 3,
+      "meshVerticesSHA": "6dfcad87ad58d492b6c137da03148535b1f3b06240557a85aa1a3bd1336ffc3f",
+      "CloseGetter": 50,
+      "maxVertexDeltaFromInitialOpenMetres": 0.012864590622484684,
+      "rawIrisCells": 3,
+      "rawScleraCells": 4
+    },
+    {
+      "frame": 139,
+      "stage": "blink",
+      "index": 4,
+      "meshVerticesSHA": "6dfcad87ad58d492b6c137da03148535b1f3b06240557a85aa1a3bd1336ffc3f",
+      "CloseGetter": 100,
+      "maxVertexDeltaFromInitialOpenMetres": 0.012864590622484684,
+      "rawIrisCells": 3,
+      "rawScleraCells": 4
+    },
+    {
+      "frame": 140,
+      "stage": "blink",
+      "index": 5,
+      "meshVerticesSHA": "0bac4dc62277e32d0cf3f35fc448924c665c9539aee163c6cc658136b69eda97",
+      "CloseGetter": 100,
+      "maxVertexDeltaFromInitialOpenMetres": 0.025728734210133553,
+      "rawIrisCells": 0,
+      "rawScleraCells": 0
+    },
+    {
+      "frame": 141,
+      "stage": "blink",
+      "index": 6,
+      "meshVerticesSHA": "0bac4dc62277e32d0cf3f35fc448924c665c9539aee163c6cc658136b69eda97",
+      "CloseGetter": 0,
+      "maxVertexDeltaFromInitialOpenMetres": 0.025728734210133553,
+      "rawIrisCells": 0,
+      "rawScleraCells": 0
+    },
+    {
+      "frame": 142,
+      "stage": "blink",
+      "index": 7,
+      "meshVerticesSHA": "b411779a563e6acc0a714beef4d2f01c8a11e91112197270ec00176852c35f8d",
+      "CloseGetter": 0,
+      "maxVertexDeltaFromInitialOpenMetres": 0.0,
+      "rawIrisCells": 4,
+      "rawScleraCells": 10
+    }
+  ],
+  "nextObservations": [
+    "Exact face/eyeline alpha and owner at the warped source query rays, or actual source triangles plus shader sampling provenance; a neighbouring4x depth is insufficient near triangle/alpha boundaries.",
+    "Hair/body selected primitive/UV/alpha at corresponding queries; current S4/S6 export has only meta.",
+    "Actual clean backing at vacated feature pixels; current base/backing is absent at some cells."
+  ],
+  "scope": "Final allocation/visibility is not complete. GPU finite-palette fill equality will be reported separately; it cannot validate the upstream selection."
+}

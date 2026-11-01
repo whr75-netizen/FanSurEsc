@@ -1,0 +1,17 @@
+#pragma kernel Fill
+// Replay only: measured source -> offline joint labels -> direct finite LUT.
+// There is no illumination multiplication, RGB mixture or history buffer.
+StructuredBuffer<float4> _Base89,_Select89,_Palette89;
+int2 _Size89;
+int _PaletteCount89;
+RWTexture2D<float4> _Final89,_Owner89,_Valid89;
+[numthreads(8,8,1)]void Fill(uint3 id:SV_DispatchThreadID){
+ int2 p=id.xy;if(any(p>=_Size89))return;int at=p.y*_Size89.x+p.x;
+ float4 choice=_Select89[at];_Final89[p]=_Base89[at];_Owner89[p]=choice;
+ _Valid89[p]=float4(1,0,0,0);
+ if(choice.x==0)return;
+ int k=(int)choice.x-1;
+ if(k<0||k>=_PaletteCount89){_Final89[p]=0;_Valid89[p]=float4(0,1,0,0);return;}
+ _Final89[p]=_Palette89[k];
+ if(choice.w<0)_Valid89[p]=float4(0,2,0,0);
+}

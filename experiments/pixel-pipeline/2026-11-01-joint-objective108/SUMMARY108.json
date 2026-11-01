@@ -1,0 +1,42 @@
+{
+  "fixtures": 55,
+  "actual107States": 54,
+  "independent105ClosedState": 1,
+  "notAContinuousSequence": true,
+  "newPlay": 0,
+  "newGPU": 0,
+  "productChanged": false,
+  "candidateAccepted": false,
+  "statusCounts": {
+    "noCurve:exact-optima-under-stated-policy": 104,
+    "arc4:infeasible-curve-support": 53,
+    "arc8:infeasible-curve-support": 52,
+    "relaxedCarrier4:infeasible-curve-support": 21,
+    "relaxedCarrier4:exact-optima-under-stated-policy": 83,
+    "arc4:exact-optima-under-stated-policy": 51,
+    "arc8:exact-optima-under-stated-policy": 52,
+    "noCurve:no-visible-pigment": 6,
+    "arc4:no-visible-pigment": 6,
+    "arc8:no-visible-pigment": 6,
+    "relaxedCarrier4:no-visible-pigment": 6
+  },
+  "flowSubproblems": 838,
+  "seconds": 15.036313899996458,
+  "tests": {
+    "independentExhaustiveChecks": 432,
+    "exactIntegerCostAndUniquenessChecks": 329,
+    "singleCellThreePartConflict": true,
+    "thinPathMassConflict": true,
+    "noUnity": true,
+    "noRGBMath": true
+  },
+  "completeParetoFrontier": false,
+  "modelDoesNotContain": [
+    "authored full-eye shape/readability objective",
+    "validated native pigment contour",
+    "temporal surface tracking",
+    "finite lid palette/AA colour policy"
+  ],
+  "ownerSeparableBecauseNoSharedCandidateCells": true,
+  "hardPresenceIsFeaturePolicyNotUniversalSemanticTruth": true
+}

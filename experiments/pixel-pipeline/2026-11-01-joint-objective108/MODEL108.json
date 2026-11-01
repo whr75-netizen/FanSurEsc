@@ -1,0 +1,31 @@
+{
+  "schema": "joint-eye-label-objectives/108",
+  "productApplied": false,
+  "candidateAccepted": false,
+  "source": "54 frozen actual107 packets + independently identified105 closed packet; never mixed sourceIds",
+  "variables": "x[cell, eyeOwner/part] binary, including retain-clean-canvas label0",
+  "capacity": "sum_labels x[cell,label] = 1",
+  "sourceMass": "integral of measured visible contribution lower/upper over fine samples, divided by actual sample scale squared",
+  "massCost": "sum_foreground_labels distance(selected whole-cell count, [source lower mass, source upper mass])",
+  "dataProxyCost": "sum_selected_cell_label (1 - measured lower contribution in that cell); a label mismatch proxy, NOT perception or shape",
+  "massPolicy": "lexicographic min(massCost, dataProxyCost)",
+  "dataPolicy": "min(dataProxyCost) with the same hard constraints; mass is reported, not a hidden weighted term",
+  "existingPartIDs": {"1":"iris", "4":"white", "6":"native lid"},
+  "presencePolicy": "each existing eyeId/part with observed certain dominant support must appear somewhere; no target count/shape is asserted",
+  "sameCellPolicy": "foreground eligibility requires at least one certain dominant source sample of that owner/part in the same cell; a conservative hypothesis, not a universal requirement for strong feature correction",
+  "curvePolicy": "selected lid cells must contain a path between registered upper-arc endpoint cells; 4-neighbour and8-neighbour are separate hypotheses",
+  "curveReference": "evaluated registered native skin-ring upper arc, NOT validated native pigment contour; unsupported endpoint => explicit infeasible, never moved silently",
+  "relaxedCarrierPolicy": "remove same-cell locking within union of the observed owner footprint; source parts must exist but destination depth/visibility/transport remain unverified; mathematical relaxation only",
+  "noHiddenCurveAssumption": "extra lid components are permitted; all raw source AA fragments are not automatically approved independent features",
+  "occlusionScope": "source/face visibility supplied by107 inputs; external hair remains a separate actual-depth/coverage stage, not rerendered here",
+  "exactArithmetic": "frozen binary float inputs converted to dyadic integer costs; zero residual-cost cycle test for mass-policy uniqueness, exact DP for data-policy ties",
+  "connectivityAlgorithm": "exhaustive simple-path vertex sets, then exact capacitated assignment; min-cost flow alone does not enforce topology",
+  "ownerDecomposition": "per-owner only after verifying zero shared candidate cells for all55 inputs",
+  "notComputed": ["complete Pareto frontier", "final RGB or native lid palette", "production GPU timing", "new live/temporal validation", "artistic readability optimum"],
+  "counterexamples": ["107 frame103(12,4) iris30/white27/lid2/canvas5", "105 closed-lid source mass versus line reachability", "source-unsupported skin-ring endpoint", "equal-cost iris positions at partialClose75", "4/8-neighbour diagonal and L-corner", "single-cell three-part nonvanishing infeasibility", "thin path versus strict area bound"],
+  "nextQuestions": [
+    "Which feature-local native pigment path/ribbon is actually to be preserved, instead of treating registered skin-ring as pigment truth?",
+    "What source-witness transport and carrier-depth rule make a whole-feature relocation valid at its destination?",
+    "Can existing canonical shape/relative parts/surface history resolve equal-cost layouts before any new artistic parameter is requested?"
+  ]
+}

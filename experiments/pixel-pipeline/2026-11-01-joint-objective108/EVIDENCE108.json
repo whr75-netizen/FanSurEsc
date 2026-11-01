@@ -1,0 +1,2384 @@
+{
+  "focus": {
+    "frame": 103,
+    "sourceId": "eye107-20261101T203819878Z-b90efeef-frame103",
+    "cellXY": [
+      12,
+      4
+    ],
+    "sampleCountsIrisWhiteLidCanvas": [
+      30,
+      27,
+      2,
+      5
+    ],
+    "visibleMassIrisWhiteLidCanvas": [
+      0.46875,
+      0.421875,
+      0.031127450987696648,
+      0.07824754901230335
+    ],
+    "allocations": {
+      "noCurve": {
+        "label": 1,
+        "regionCounts": [
+          1,
+          2,
+          3
+        ],
+        "massError": 0.4741128886162187
+      },
+      "arc4": {
+        "label": 1,
+        "regionCounts": [
+          1,
+          2,
+          7
+        ],
+        "massError": 4.474112888616219
+      },
+      "arc8": {
+        "label": 1,
+        "regionCounts": [
+          1,
+          2,
+          6
+        ],
+        "massError": 3.4741128886162187
+      },
+      "relaxedCarrier4": {
+        "label": 1,
+        "regionCounts": [
+          1,
+          2,
+          7
+        ],
+        "massError": 4.474112888616219
+      }
+    }
+  },
+  "curveMassConflictCases": [
+    {
+      "fixture": "actual107-frame101",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.9342433702986455,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame101",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.9342433702986455,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame101",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 4.11256871135447,
+      "naturalCeilMassBudget": 5,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame101",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 4.11256871135447,
+      "naturalCeilMassBudget": 5,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame103",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.874339211914048,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame103",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.874339211914048,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame105",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 4.022337582309774,
+      "naturalCeilMassBudget": 5,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame105",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 4.022337582309774,
+      "naturalCeilMassBudget": 5,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame107",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.6058443837500818,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame107",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.6058443837500818,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame107",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 3.654224999849248,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame107",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 3.654224999849248,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame109",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 4.022337582309774,
+      "naturalCeilMassBudget": 5,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame109",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 4.022337582309774,
+      "naturalCeilMassBudget": 5,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame111",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.874339211914048,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame111",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.874339211914048,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame113",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.9342433702986455,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame113",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.9342433702986455,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame113",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 4.11256871135447,
+      "naturalCeilMassBudget": 5,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame113",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 4.11256871135447,
+      "naturalCeilMassBudget": 5,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame139",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.7579124542207865,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame139",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.7579124542207865,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame140",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.764509258679027,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame140",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.764509258679027,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame141",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.766661179581206,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame141",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.766661179581206,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame142",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.7640783618062414,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame142",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.7640783618062414,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame143",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.7982133173936745,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame143",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.7982133173936745,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame144",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.7998824124115345,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame144",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.7998824124115345,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame145",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.815843470641994,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame145",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.815843470641994,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame146",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.7768574049550807,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame146",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.7768574049550807,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame147",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 3.0434579444390693,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 8,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame147",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 3.0434579444390693,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame151",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 0.9431301639160665,
+      "naturalCeilMassBudget": 1,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame151",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 0.9431301639160665,
+      "naturalCeilMassBudget": 1,
+      "minimumCurvePathCells": 3,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame155",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 3.0777580839530856,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 8,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame155",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 3.0777580839530856,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame156",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.810954367139857,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 9,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame156",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.810954367139857,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame162",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.1274474260717398,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame162",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.1274474260717398,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame162",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 3.4946087134612753,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame162",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 3.4946087134612753,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame166",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.1274477706610924,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame166",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.1274477706610924,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame166",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 3.494232139306405,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame166",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 3.494232139306405,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame170",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.1274474260717398,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame170",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.1274474260717398,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame170",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 3.494379567260694,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame170",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 3.494379567260694,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame171",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.1274474260717398,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame171",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.1274474260717398,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame171",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 3.4946087134612753,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame171",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 3.4946087134612753,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame188",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.6843198334408953,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame188",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.6843198334408953,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame188",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 2.8782927271022345,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 8,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame188",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 2.8782927271022345,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame189",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.6253289801825304,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame189",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.6253289801825304,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame189",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 1.9018082945949573,
+      "naturalCeilMassBudget": 2,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame189",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 1.9018082945949573,
+      "naturalCeilMassBudget": 2,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame190",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.2905986446257884,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame190",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.2905986446257884,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame190",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 0.4704210481231712,
+      "naturalCeilMassBudget": 1,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame190",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 0.4704210481231712,
+      "naturalCeilMassBudget": 1,
+      "minimumCurvePathCells": 3,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame191",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 1.6979759998375812,
+      "naturalCeilMassBudget": 2,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame191",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 1.6979759998375812,
+      "naturalCeilMassBudget": 2,
+      "minimumCurvePathCells": 4,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame192",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 0.8395608432110748,
+      "naturalCeilMassBudget": 1,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame192",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 0.8395608432110748,
+      "naturalCeilMassBudget": 1,
+      "minimumCurvePathCells": 3,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame193",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 1.5606011421623407,
+      "naturalCeilMassBudget": 2,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame193",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 1.5606011421623407,
+      "naturalCeilMassBudget": 2,
+      "minimumCurvePathCells": 4,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame194",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.1943823561741738,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame194",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.1943823561741738,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame194",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 0.4315699923427019,
+      "naturalCeilMassBudget": 1,
+      "minimumCurvePathCells": 3,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame195",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.594069732927892,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame195",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.594069732927892,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame195",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 1.7668371424570068,
+      "naturalCeilMassBudget": 2,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame195",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 1.7668371424570068,
+      "naturalCeilMassBudget": 2,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame196",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.5934918383809418,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame196",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.5934918383809418,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame196",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 2.652264350494079,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 8,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame196",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 2.652264350494079,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame197",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.3679801058424346,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame197",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.3679801058424346,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame197",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 3.3587407603081374,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame197",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 3.3587407603081374,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame204",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.5046970827606856,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame204",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.5046970827606856,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame207",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.5046970827606856,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame207",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.5046970827606856,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame210",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.5046970827606856,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "actual107-frame210",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.5046970827606856,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 5,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "closed105-frame104",
+      "owner": 1,
+      "policy": "arc4",
+      "sourceLidMass": 2.6214420623145998,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "closed105-frame104",
+      "owner": 1,
+      "policy": "arc8",
+      "sourceLidMass": 2.6214420623145998,
+      "naturalCeilMassBudget": 3,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "closed105-frame104",
+      "owner": 2,
+      "policy": "arc4",
+      "sourceLidMass": 3.4269974128328613,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 7,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    },
+    {
+      "fixture": "closed105-frame104",
+      "owner": 2,
+      "policy": "arc8",
+      "sourceLidMass": 3.4269974128328613,
+      "naturalCeilMassBudget": 4,
+      "minimumCurvePathCells": 6,
+      "contradiction": "N_lid >= path minimum AND N_lid <= ceil(source mass) is infeasible; neither bound is a universal artistic rule"
+    }
+  ],
+  "strictCurveInfeasibleOwnerStates": [
+    {
+      "fixture": "actual107-frame99",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame99",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame103",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame105",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          4,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame109",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          4,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame111",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame115",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame115",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame121",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame121",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame122",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame122",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame123",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame123",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame124",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame124",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame125",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame125",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame126",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame126",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame127",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame127",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame128",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame128",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame129",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame129",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame130",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          4,
+          10
+        ],
+        [
+          3,
+          15
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame130",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame139",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame140",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame141",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame142",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame143",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame144",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame145",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame146",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame147",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          5,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame148",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          6,
+          8
+        ],
+        [
+          6,
+          13
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame148",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          2,
+          2
+        ],
+        [
+          5,
+          6
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame149",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          10
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame149",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          6,
+          4
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame150",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          7,
+          4
+        ],
+        [
+          9,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame152",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          7,
+          4
+        ],
+        [
+          9,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame153",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          7,
+          6
+        ],
+        [
+          8,
+          10
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame153",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          6,
+          4
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame154",
+      "owner": 1,
+      "endpointsYX": [
+        [
+          6,
+          8
+        ],
+        [
+          6,
+          13
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame154",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          2,
+          2
+        ],
+        [
+          5,
+          6
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame155",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          5,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame156",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame194",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          4,
+          2
+        ],
+        [
+          6,
+          4
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame204",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame207",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          7
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame210",
+      "owner": 2,
+      "endpointsYX": [
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          7
+        ]
+      ]
+    }
+  ],
+  "recoveredByCoordinateRelaxation": [
+    {
+      "fixture": "actual107-frame99",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame103",
+      "owner": 2,
+      "relocatedCells": 5,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame111",
+      "owner": 2,
+      "relocatedCells": 5,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame115",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame121",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame122",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame123",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame124",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame125",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame126",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame127",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame128",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame129",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame130",
+      "owner": 2,
+      "relocatedCells": 7,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame139",
+      "owner": 2,
+      "relocatedCells": 9,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame140",
+      "owner": 2,
+      "relocatedCells": 9,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame141",
+      "owner": 2,
+      "relocatedCells": 9,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame142",
+      "owner": 2,
+      "relocatedCells": 9,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame143",
+      "owner": 2,
+      "relocatedCells": 9,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame144",
+      "owner": 2,
+      "relocatedCells": 9,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame145",
+      "owner": 2,
+      "relocatedCells": 9,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame146",
+      "owner": 2,
+      "relocatedCells": 9,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame148",
+      "owner": 1,
+      "relocatedCells": 6,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame149",
+      "owner": 1,
+      "relocatedCells": 2,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame150",
+      "owner": 1,
+      "relocatedCells": 1,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame152",
+      "owner": 1,
+      "relocatedCells": 1,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame153",
+      "owner": 1,
+      "relocatedCells": 2,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame154",
+      "owner": 1,
+      "relocatedCells": 6,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame156",
+      "owner": 2,
+      "relocatedCells": 6,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame204",
+      "owner": 2,
+      "relocatedCells": 6,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame207",
+      "owner": 2,
+      "relocatedCells": 6,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    },
+    {
+      "fixture": "actual107-frame210",
+      "owner": 2,
+      "relocatedCells": 6,
+      "renderValid": false,
+      "reason": "destination carrier depth/visibility and source-witness transport not defined by this mathematical relaxation"
+    }
+  ],
+  "certifiedEquivalentMassFirstSolutions": [
+    {
+      "fixture": "actual107-frame99",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504256422929757,
+      "costMass": 2.9954674815435283,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame105",
+      "owner": 2,
+      "policy": "noCurve",
+      "costData": 4.878437346398641,
+      "costMass": 0.897337582309774,
+      "changedCellsXYLabelAandB": [
+        [
+          4,
+          5,
+          1,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame105",
+      "owner": 2,
+      "policy": "arc4",
+      "costData": 5.8363564119008515,
+      "costMass": 2.852662417690226,
+      "changedCellsXYLabelAandB": [
+        [
+          4,
+          5,
+          1,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame105",
+      "owner": 2,
+      "policy": "arc8",
+      "costData": 5.8363564119008515,
+      "costMass": 2.852662417690226,
+      "changedCellsXYLabelAandB": [
+        [
+          4,
+          5,
+          1,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame105",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 5.4465914761913155,
+      "costMass": 2.852662417690226,
+      "changedCellsXYLabelAandB": [
+        [
+          4,
+          5,
+          1,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame109",
+      "owner": 2,
+      "policy": "noCurve",
+      "costData": 4.878437346398641,
+      "costMass": 0.897337582309774,
+      "changedCellsXYLabelAandB": [
+        [
+          4,
+          5,
+          1,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame109",
+      "owner": 2,
+      "policy": "arc4",
+      "costData": 5.8363564119008515,
+      "costMass": 2.852662417690226,
+      "changedCellsXYLabelAandB": [
+        [
+          4,
+          5,
+          1,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame109",
+      "owner": 2,
+      "policy": "arc8",
+      "costData": 5.8363564119008515,
+      "costMass": 2.852662417690226,
+      "changedCellsXYLabelAandB": [
+        [
+          4,
+          5,
+          1,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame109",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 5.4465914761913155,
+      "costMass": 2.852662417690226,
+      "changedCellsXYLabelAandB": [
+        [
+          4,
+          5,
+          1,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame115",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504256422929757,
+      "costMass": 2.9954674815435283,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame121",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504256422929757,
+      "costMass": 2.9954674815435283,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame122",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504275392107957,
+      "costMass": 2.995444703110479,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame123",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504229360558384,
+      "costMass": 2.9954945443805627,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame124",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504168790132098,
+      "costMass": 2.9955513076474745,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame125",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504232331171806,
+      "costMass": 2.995569661294212,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame126",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504174788780801,
+      "costMass": 2.995545309231602,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame127",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504181370437436,
+      "costMass": 2.9955387268764753,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame128",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504168790132098,
+      "costMass": 2.9955513076474745,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame129",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504171760745521,
+      "costMass": 2.9956264245611237,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    },
+    {
+      "fixture": "actual107-frame130",
+      "owner": 2,
+      "policy": "relaxedCarrier4",
+      "costData": 14.504168790132098,
+      "costMass": 2.9955513076474745,
+      "changedCellsXYLabelAandB": [
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          3,
+          2,
+          1
+        ]
+      ]
+    }
+  ],
+  "sourceContrastsNotRGBChanged": true,
+  "notAProofThatFeatureCorrectionIsImpossible": true,
+  "candidateAccepted": false
+}

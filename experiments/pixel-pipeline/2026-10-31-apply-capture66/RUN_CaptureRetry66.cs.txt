@@ -1,0 +1,497 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Text;
+using System.IO;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.Rendering;
+using Unity.Collections;
+using UnityEngine.SceneManagement;
+using UnityEngine.Profiling;
+// Offline66 candidate. Historical58 source is unchanged; loaded Unity code is unchanged.
+// Small dependency-free JSON boundary for the existing RunCommand reference set.
+// No reflection, package loading, runtime serialization of arbitrary objects.
+
+public class Json58 : IEnumerable<Json58>
+{
+    protected Dictionary<string,Json58> fields;protected List<Json58> items;protected object value;
+    public Json58 this[string key] {get {Json58 v;return fields!=null&&fields.TryGetValue(key,out v)?v:null;}set {fields[key]=value;}}
+    public Json58 this[int i] {get {return items[i];}}
+    public int Count {get {return items!=null?items.Count:fields!=null?fields.Count:0;}}
+    public void Add(Json58 v) {items.Add(v);}
+    public IEnumerable<T> Values<T>() {return this.Select(v=>(T)Convert.ChangeType(v.value,typeof(T),CultureInfo.InvariantCulture));}
+    public IEnumerator<Json58> GetEnumerator() {return (items??(fields==null?new List<Json58>():fields.Values.ToList())).GetEnumerator();}
+    IEnumerator IEnumerable.GetEnumerator() {return GetEnumerator();}
+    public static implicit operator Json58(string v) {return v==null?null:new Json58{value=v};}
+    public static implicit operator Json58(int v) {return new Json58{value=v};}
+    public static implicit operator Json58(long v) {return new Json58{value=v};}
+    public static implicit operator Json58(float v) {return new Json58{value=(double)v};}
+    public static implicit operator Json58(double v) {return new Json58{value=v};}
+    public static implicit operator Json58(bool v) {return new Json58{value=v};}
+    public static explicit operator string(Json58 v) {return v==null?null:Convert.ToString(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator int(Json58 v) {return Convert.ToInt32(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator long(Json58 v) {return Convert.ToInt64(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator double(Json58 v) {return Convert.ToDouble(v.value,CultureInfo.InvariantCulture);}
+    public static explicit operator bool(Json58 v) {return Convert.ToBoolean(v.value,CultureInfo.InvariantCulture);}
+    public static Json58 Wrap(object v) {
+        if(v==null)return null;if(v is Json58)return(Json58)v;if(v is string)return(string)v;if(v is bool)return(bool)v;
+        if(v is double)return(double)v;if(v is float)return(float)v;if(v is int)return(int)v;if(v is long)return(long)v;
+        if(v is IEnumerable){var a=new Arr58();foreach(var x in(IEnumerable)v)a.Add(Wrap(x));return a;}
+        throw new ArgumentException("Unsupported JSON boundary value: "+v.GetType().Name);
+    }
+    static string Quote(string text) {
+        var b=new StringBuilder("\"");foreach(char c in text){switch(c){case '"':b.Append("\\\"");break;case '\\':b.Append("\\\\");break;case '\b':b.Append("\\b");break;case '\f':b.Append("\\f");break;case '\n':b.Append("\\n");break;case '\r':b.Append("\\r");break;case '\t':b.Append("\\t");break;default:if(c<32)b.Append("\\u"+((int)c).ToString("x4"));else b.Append(c);break;}}return b.Append('"').ToString();
+    }
+    public override string ToString() {
+        if(fields!=null)return "{"+string.Join(",",fields.OrderBy(p=>p.Key,StringComparer.Ordinal).Select(p=>Quote(p.Key)+":"+(p.Value==null?"null":p.Value.ToString())))+"}";
+        if(items!=null)return "["+string.Join(",",items.Select(v=>v==null?"null":v.ToString()))+"]";
+        if(value==null)return "null";if(value is string)return Quote((string)value);if(value is bool)return(bool)value?"true":"false";
+        if(value is double){double x=(double)value;if(double.IsNaN(x)||double.IsInfinity(x))throw new ArgumentException("Nonfinite JSON number");return x.ToString("R",CultureInfo.InvariantCulture);}
+        return Convert.ToString(value,CultureInfo.InvariantCulture);
+    }
+    public static bool DeepEquals(Json58 a,Json58 b) {return a==null?b==null:b!=null&&a.ToString()==b.ToString();}
+    public const int MaxInputChars66=65536;
+    public static Json58 Parse(string text) {if(text.Length>MaxInputChars66)throw new ArgumentException("Small JSON budget exceeded; use streaming verification");int p=0;var result=ParseValue(text,ref p,0);Space(text,ref p);if(p!=text.Length)throw new ArgumentException("Trailing JSON data");return result;}
+    static void Space(string s,ref int p) {while(p<s.Length&&char.IsWhiteSpace(s[p]))p++;}
+    static string ParseString(string s,ref int p) {
+        if(s[p++]!='"')throw new ArgumentException("JSON string expected");var b=new StringBuilder();
+        while(p<s.Length){char c=s[p++];if(c=='"')return b.ToString();if(c=='\\'){char e=s[p++];switch(e){case '"':case '\\':case '/':b.Append(e);break;case 'b':b.Append('\b');break;case 'f':b.Append('\f');break;case 'n':b.Append('\n');break;case 'r':b.Append('\r');break;case 't':b.Append('\t');break;case 'u':b.Append((char)int.Parse(s.Substring(p,4),NumberStyles.HexNumber,CultureInfo.InvariantCulture));p+=4;break;default:throw new ArgumentException("JSON escape");}}else{if(c<32)throw new ArgumentException("JSON control character");b.Append(c);}}
+        throw new ArgumentException("Unterminated JSON string");
+    }
+    static Json58 ParseValue(string s,ref int p,int depth) {
+        if(depth>128)throw new ArgumentException("JSON nesting limit");Space(s,ref p);if(p>=s.Length)throw new ArgumentException("JSON value expected");char c=s[p];
+        if(c=='"')return ParseString(s,ref p);
+        if(c=='{'||c=='['){bool obj=c=='{';p++;Json58 result=obj?(Json58)new Obj58():new Arr58();Space(s,ref p);if(p<s.Length&&s[p]==(obj?'}':']')){p++;return result;}
+            while(true){Space(s,ref p);string key=null;if(obj){key=ParseString(s,ref p);if(result.fields.ContainsKey(key))throw new ArgumentException("Duplicate JSON member");Space(s,ref p);if(s[p++]!=':')throw new ArgumentException("JSON colon");}var v=ParseValue(s,ref p,depth+1);if(obj)result[key]=v;else result.Add(v);Space(s,ref p);char end=s[p++];if(end==(obj?'}':']'))break;if(end!=',')throw new ArgumentException("JSON separator");}return result;}
+        foreach(string word in new[]{"true","false","null"})if(p+word.Length<=s.Length&&string.CompareOrdinal(s,p,word,0,word.Length)==0){p+=word.Length;return word=="null"?null:(Json58)(word=="true");}
+        int start=p;while(p<s.Length&&"-+0123456789.eE".IndexOf(s[p])>=0)p++;if(start==p)throw new ArgumentException("JSON token");return double.Parse(s.Substring(start,p-start),CultureInfo.InvariantCulture);
+    }
+}
+public sealed class Obj58 : Json58 {public Obj58(){fields=new Dictionary<string,Json58>(StringComparer.Ordinal);}public new static Obj58 Parse(string text){return(Obj58)Json58.Parse(text);}}
+public sealed class Arr58 : Json58 {public Arr58(params object[] values){items=new List<Json58>();if(values.Length==1&&values[0] is IEnumerable&&!(values[0] is string)&&!(values[0] is Json58)){foreach(var v in(IEnumerable)values[0])Add(Wrap(v));}else foreach(var v in values)Add(Wrap(v));}}
+
+// Prepared only; not imported, compiled in Unity, or executed in task64.
+// Public journal + externally hashed binary backup, never private-instance-only.
+
+public sealed class GlobalJournal64
+{
+    public enum Kind { Float,LegacyInt,Integer,Vector,Matrix,Texture,FloatArray,VectorArray,MatrixArray,Buffer,ConstantBuffer }
+    public sealed class Spec {public string name;public Kind kind;}
+    public sealed class Entry
+    {
+        public Spec spec;public float scalar;public int integer;public Vector4 vector;public Matrix4x4 matrix;
+        public float[] floats;public Vector4[] vectors;public Matrix4x4[] matrices;
+        public Texture originalTexture;public string textureKind,assetGUID;public long localId;
+        public bool restorable,mutated;public string reason;
+    }
+    public static GlobalJournal64 Active;
+    public readonly List<Entry> entries=new List<Entry>();
+    public string sourceId,externalPath,backupSHA256;
+    public bool externalVerified;
+
+    public static GlobalJournal64 Snapshot(string sourceId,string path,IEnumerable<Spec> specs)
+    {
+        if(Active!=null)throw new InvalidOperationException("existing journal requires inspection, not replacement");
+        var j=new GlobalJournal64{sourceId=sourceId,externalPath=path};
+        foreach(var s in specs)
+        {
+            if(j.entries.Any(e=>e.spec.name==s.name))throw new ArgumentException("duplicate global name");
+            var e=new Entry{spec=s,restorable=true};
+            switch(s.kind)
+            {
+                case Kind.Float:e.scalar=Shader.GetGlobalFloat(s.name);break;
+                // Legacy SetGlobalInt uses float storage in Unity6000.5. Keep
+                // the full original float, not only its integer truncation.
+                case Kind.LegacyInt:e.scalar=Shader.GetGlobalFloat(s.name);e.integer=Shader.GetGlobalInt(s.name);break;
+                case Kind.Integer:e.integer=Shader.GetGlobalInteger(s.name);break;
+                case Kind.Vector:e.vector=Shader.GetGlobalVector(s.name);break;
+                case Kind.Matrix:e.matrix=Shader.GetGlobalMatrix(s.name);break;
+                case Kind.FloatArray:e.floats=Shader.GetGlobalFloatArray(s.name);e.restorable=e.floats!=null&&e.floats.Length>0;break;
+                case Kind.VectorArray:e.vectors=Shader.GetGlobalVectorArray(s.name);e.restorable=e.vectors!=null&&e.vectors.Length>0;break;
+                case Kind.MatrixArray:e.matrices=Shader.GetGlobalMatrixArray(s.name);e.restorable=e.matrices!=null&&e.matrices.Length>0;break;
+                case Kind.Texture:
+                    e.originalTexture=Shader.GetGlobalTexture(s.name);
+                    if(!e.originalTexture)e.textureKind="null";
+                    else if(e.originalTexture==Texture2D.blackTexture)e.textureKind="builtin-black";
+                    else if(e.originalTexture==Texture2D.whiteTexture)e.textureKind="builtin-white";
+                    else if(e.originalTexture==Texture2D.grayTexture)e.textureKind="builtin-gray";
+                    else {e.restorable=EditorUtility.IsPersistent(e.originalTexture)&&AssetDatabase.TryGetGUIDAndLocalFileIdentifier(e.originalTexture,out e.assetGUID,out e.localId);e.textureKind=e.restorable?"persistent-asset":"runtime-unrecoverable";}
+                    break;
+                case Kind.Buffer:case Kind.ConstantBuffer:e.restorable=false;e.reason="No public Shader global binding getter; do not mutate";break;
+            }
+            if(!e.restorable&&string.IsNullOrEmpty(e.reason))e.reason="absent/zero array or runtime-only texture; do not mutate";
+            j.entries.Add(e);
+        }
+        j.WriteExternal();Active=j;return j;
+    }
+
+    static void Matrix(BinaryWriter w,Matrix4x4 m){for(int c=0;c<4;c++)for(int r=0;r<4;r++)w.Write(m[r,c]);}
+    static void Vector(BinaryWriter w,Vector4 v){w.Write(v.x);w.Write(v.y);w.Write(v.z);w.Write(v.w);}
+    void WriteExternal()
+    {
+        using(var stream=new FileStream(externalPath,FileMode.CreateNew,FileAccess.Write,FileShare.Read))
+        using(var w=new BinaryWriter(stream))
+        {
+            w.Write(0x34364a47);w.Write(1);w.Write(sourceId);w.Write(entries.Count);
+            foreach(var e in entries)
+            {
+                w.Write(e.spec.name);w.Write((int)e.spec.kind);w.Write(e.restorable);w.Write(e.reason??"");
+                w.Write(e.scalar);w.Write(e.integer);Vector(w,e.vector);Matrix(w,e.matrix);
+                w.Write(e.textureKind??"");w.Write(e.assetGUID??"");w.Write(e.localId);
+                w.Write(e.floats?.Length??0);if(e.floats!=null)foreach(var v in e.floats)w.Write(v);
+                w.Write(e.vectors?.Length??0);if(e.vectors!=null)foreach(var v in e.vectors)Vector(w,v);
+                w.Write(e.matrices?.Length??0);if(e.matrices!=null)foreach(var v in e.matrices)Matrix(w,v);
+            }
+            w.Flush();stream.Flush(true);
+        }
+        using(var h=SHA256.Create())using(var f=File.OpenRead(externalPath))backupSHA256=BitConverter.ToString(h.ComputeHash(f)).Replace("-","").ToLowerInvariant();
+        externalVerified=VerifyExternal();
+        if(!externalVerified)throw new IOException("external backup verification failed");
+    }
+
+    static bool Bits(float a,float b){return BitConverter.SingleToInt32Bits(a)==BitConverter.SingleToInt32Bits(b);}
+    static bool VectorBits(Vector4 a,Vector4 b){for(int i=0;i<4;i++)if(!Bits(a[i],b[i]))return false;return true;}
+    static bool MatrixBits(Matrix4x4 a,Matrix4x4 b){for(int i=0;i<16;i++)if(!Bits(a[i],b[i]))return false;return true;}
+    static bool ReadVector(BinaryReader r,Vector4 expected){for(int i=0;i<4;i++)if(!Bits(r.ReadSingle(),expected[i]))return false;return true;}
+    static bool ReadMatrix(BinaryReader r,Matrix4x4 expected){for(int c=0;c<4;c++)for(int row=0;row<4;row++)if(!Bits(r.ReadSingle(),expected[row,c]))return false;return true;}
+    bool VerifyExternal()
+    {
+        using(var r=new BinaryReader(File.OpenRead(externalPath)))
+        {
+            if(r.ReadInt32()!=0x34364a47||r.ReadInt32()!=1||r.ReadString()!=sourceId||r.ReadInt32()!=entries.Count)return false;
+            foreach(var e in entries)
+            {
+                if(r.ReadString()!=e.spec.name||r.ReadInt32()!=(int)e.spec.kind||r.ReadBoolean()!=e.restorable||r.ReadString()!=(e.reason??""))return false;
+                if(!Bits(r.ReadSingle(),e.scalar)||r.ReadInt32()!=e.integer||!ReadVector(r,e.vector)||!ReadMatrix(r,e.matrix))return false;
+                if(r.ReadString()!=(e.textureKind??"")||r.ReadString()!=(e.assetGUID??"")||r.ReadInt64()!=e.localId)return false;
+                if(r.ReadInt32()!=(e.floats?.Length??0))return false;if(e.floats!=null)foreach(float v in e.floats)if(!Bits(r.ReadSingle(),v))return false;
+                if(r.ReadInt32()!=(e.vectors?.Length??0))return false;if(e.vectors!=null)foreach(var v in e.vectors)if(!ReadVector(r,v))return false;
+                if(r.ReadInt32()!=(e.matrices?.Length??0))return false;if(e.matrices!=null)foreach(var v in e.matrices)if(!ReadMatrix(r,v))return false;
+            }
+            return r.BaseStream.Position==r.BaseStream.Length;
+        }
+    }
+
+    // Call on the ENTIRE renderer mutation inventory before normal Play/render.
+    // This does not intercept or excuse untracked setters inside product passes.
+    public void RequireRecoverable(IEnumerable<string> mutationNames)
+    {
+        if(!externalVerified)throw new InvalidOperationException("external backup not verified");
+        foreach(string name in mutationNames)
+        {var e=entries.SingleOrDefault(x=>x.spec.name==name);if(e==null||!e.restorable)throw new InvalidOperationException("unbacked global mutation: "+name);}
+    }
+    public void BeforeMutation(string name,int newArrayLength=-1)
+    {
+        RequireRecoverable(new[]{name});var e=entries.Single(x=>x.spec.name==name);
+        int old=e.floats?.Length??e.vectors?.Length??e.matrices?.Length??-1;
+        if(newArrayLength>=0&&newArrayLength!=old)throw new InvalidOperationException("global array length change forbidden");
+        e.mutated=true;
+    }
+    public void RestoreMarked()
+    {
+        // No buffer setters. Assets and built-ins are retained references, never
+        // destroyed/recreated from a guessed EntityId or surrounding colours.
+        foreach(var e in entries.Where(x=>x.mutated))
+        {
+            if(!e.restorable)throw new InvalidOperationException("unrestorable global: "+e.spec.name);
+            string n=e.spec.name;
+            switch(e.spec.kind)
+            {
+                case Kind.Float:Shader.SetGlobalFloat(n,e.scalar);break;
+                case Kind.LegacyInt:Shader.SetGlobalFloat(n,e.scalar);break;
+                case Kind.Integer:Shader.SetGlobalInteger(n,e.integer);break;
+                case Kind.Vector:Shader.SetGlobalVector(n,e.vector);break;
+                case Kind.Matrix:Shader.SetGlobalMatrix(n,e.matrix);break;
+                case Kind.Texture:
+                    if(e.textureKind!="null"&&!e.originalTexture)throw new InvalidOperationException("original texture lifetime lost");
+                    Shader.SetGlobalTexture(n,e.originalTexture);break;
+                case Kind.FloatArray:Shader.SetGlobalFloatArray(n,e.floats);break;
+                case Kind.VectorArray:Shader.SetGlobalVectorArray(n,e.vectors);break;
+                case Kind.MatrixArray:Shader.SetGlobalMatrixArray(n,e.matrices);break;
+                default:throw new InvalidOperationException("unsupported restore type");
+            }
+        }
+        // Getter-by-getter equality verification is a required caller step before
+        // clearing Active; this helper does not clear the only recovery handle.
+    }
+    public string[] VerifyMarked()
+    {
+        var errors=new List<string>();
+        foreach(var e in entries.Where(x=>x.mutated))
+        {
+            string n=e.spec.name;bool same=false;
+            switch(e.spec.kind)
+            {
+                case Kind.Float:case Kind.LegacyInt:same=Bits(Shader.GetGlobalFloat(n),e.scalar);break;
+                case Kind.Integer:same=Shader.GetGlobalInteger(n)==e.integer;break;
+                case Kind.Vector:same=VectorBits(Shader.GetGlobalVector(n),e.vector);break;
+                case Kind.Matrix:same=MatrixBits(Shader.GetGlobalMatrix(n),e.matrix);break;
+                case Kind.Texture:same=Shader.GetGlobalTexture(n)==e.originalTexture;break;
+                case Kind.FloatArray:var a=Shader.GetGlobalFloatArray(n);same=a!=null&&a.Length==e.floats.Length&&a.Zip(e.floats,Bits).All(v=>v);break;
+                case Kind.VectorArray:var b=Shader.GetGlobalVectorArray(n);same=b!=null&&b.Length==e.vectors.Length&&b.Zip(e.vectors,VectorBits).All(v=>v);break;
+                case Kind.MatrixArray:var c=Shader.GetGlobalMatrixArray(n);same=c!=null&&c.Length==e.matrices.Length&&c.Zip(e.matrices,MatrixBits).All(v=>v);break;
+            }
+            if(!same)errors.Add(n);
+        }
+        return errors.ToArray();
+    }
+    public void ReleaseHandleAfterVerified()
+    {
+        if(!externalVerified||VerifyMarked().Length!=0)throw new InvalidOperationException("restore not verified; preserve recovery handle");
+        // Drop only journal references, never Dispose/Destroy original textures
+        // or user buffers. No forced GC. External backup stays on disk.
+        entries.Clear();if(Active==this)Active=null;
+    }
+}
+
+// Prepared helper only. No entry point, Asset import, renderer call or global setter.
+
+public static class CpuSourceCapture64
+{
+    public sealed class Frame
+    {
+        public string sourceId,viewId;
+        public int frameIndex, renderSerial, phaseIndex;
+        public float renderedSource, evaluatedFrame;
+        public Matrix4x4 view, projection, effectiveProjection, gpuProjection, gpuEffectiveProjection;
+        public Vector4 viewport, clipShift, nativeShift;
+        public Vector2Int logicalSize, nativeSize;
+        public string subsampleProducer, activeModeFlags;
+    }
+
+    static void Matrix(BinaryWriter w, Matrix4x4 m)
+    { for(int c=0;c<4;c++) for(int r=0;r<4;r++) w.Write(m[r,c]); }
+    static void V3(BinaryWriter w,Vector3 p) { w.Write(p.x);w.Write(p.y);w.Write(p.z); }
+    static void V4(BinaryWriter w,Vector4 p) {w.Write(p.x);w.Write(p.y);w.Write(p.z);w.Write(p.w);}
+    static void Identity(BinaryWriter w,Frame frame)
+    {
+        if(string.IsNullOrEmpty(frame.sourceId)||string.IsNullOrEmpty(frame.viewId)||frame.frameIndex!=Time.frameCount)
+            throw new InvalidOperationException("unbound or advanced frame; no re-render");
+        w.Write(frame.sourceId);w.Write(frame.viewId);w.Write(frame.frameIndex);w.Write(frame.renderSerial);
+    }
+
+    public static void WriteCpuGeometry(string path,Frame frame,MeshFilter[] evaluated,SkinnedMeshRenderer[] sources)
+    {
+        if(evaluated==null||sources==null||evaluated.Length!=sources.Length)
+            throw new ArgumentException("actual evaluated/source renderer map required");
+        // Lists are local and reused per mesh. No serialized whole-object JSON,
+        // original mesh assignments, static geometry arrays or BakeMesh calls.
+        var vertices=new List<Vector3>();var normals=new List<Vector3>();var uv=new List<Vector2>();
+        using(var stream=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read))
+        using(var w=new BinaryWriter(stream))
+        {
+            w.Write(0x34364353);w.Write(1);Identity(w,frame);w.Write(evaluated.Length);
+            for(int r=0;r<evaluated.Length;r++)
+            {
+                var filter=evaluated[r];var mesh=filter.sharedMesh;var src=sources[r];
+                if(!mesh||!mesh.isReadable||!src)throw new InvalidOperationException("source geometry unavailable");
+                string guid;long localId;AssetDatabase.TryGetGUIDAndLocalFileIdentifier(src.sharedMesh,out guid,out localId);
+                w.Write(r);w.Write(guid??"");w.Write(localId);Matrix(w,filter.transform.localToWorldMatrix);
+                mesh.GetVertices(vertices);mesh.GetNormals(normals);mesh.GetUVs(0,uv);
+                if(normals.Count!=vertices.Count||uv.Count!=vertices.Count)throw new InvalidOperationException("missing normal/UV source");
+                w.Write(vertices.Count);foreach(var p in vertices)V3(w,p);foreach(var p in normals)V3(w,p);foreach(var p in uv){w.Write(p.x);w.Write(p.y);}
+                var materials=src.sharedMaterials;if(materials.Length!=mesh.subMeshCount)throw new InvalidOperationException("material/submesh mismatch");
+                w.Write(mesh.subMeshCount);
+                for(int sm=0;sm<mesh.subMeshCount;sm++)
+                {
+                    var ix=mesh.GetIndices(sm);w.Write(ix.Length);foreach(int index in ix)w.Write((uint)index);
+                    AssetDatabase.TryGetGUIDAndLocalFileIdentifier(materials[sm],out guid,out localId);w.Write(guid??"");w.Write(localId);
+                    var m=materials[sm];var st=m.HasProperty("_MainTex")?m.GetTextureScale("_MainTex"):Vector2.one;var offset=m.HasProperty("_MainTex")?m.GetTextureOffset("_MainTex"):Vector2.zero;
+                    w.Write(st.x);w.Write(st.y);w.Write(offset.x);w.Write(offset.y);
+                    if(!m.HasProperty("_MainTex")||!m.HasProperty("_Color"))throw new InvalidOperationException("explicit source colour contract missing");
+                    var tex=m.GetTexture("_MainTex");AssetDatabase.TryGetGUIDAndLocalFileIdentifier(tex,out guid,out localId);w.Write(guid??"");w.Write(localId);var factor=m.GetColor("_Color");V4(w,factor);
+                }
+                var bones=src.bones;w.Write(bones.Length);foreach(var bone in bones){w.Write(bone?bone.name:"");Matrix(w,bone?bone.localToWorldMatrix:Matrix4x4.identity);}
+                Matrix(w,src.transform.localToWorldMatrix);var original=src.sharedMesh;var bindposes=original.bindposes;w.Write(bindposes.Length);foreach(var pose in bindposes)Matrix(w,pose);w.Write(original.blendShapeCount);
+                for(int i=0;i<original.blendShapeCount;i++){w.Write(original.GetBlendShapeName(i));w.Write(src.GetBlendShapeWeight(i));}
+            }
+            w.Flush();stream.Flush(true);
+        }
+        if(frame.frameIndex!=Time.frameCount)throw new InvalidOperationException("frame advanced; packet stays incomplete");
+    }
+
+    public static void WriteCamera(string path,Frame frame)
+    {
+        if(string.IsNullOrEmpty(frame.subsampleProducer)||string.IsNullOrEmpty(frame.activeModeFlags))
+            throw new InvalidOperationException("actual sampler and mode flags required");
+        using(var stream=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read))
+        using(var w=new BinaryWriter(stream))
+        {
+            w.Write(0x34365043);w.Write(1);Identity(w,frame);w.Write(frame.phaseIndex);w.Write(frame.renderedSource);w.Write(frame.evaluatedFrame);
+            // Raw GPU and effective GPU are distinct. A consumer must not add
+            // nativeShift/clipShift twice after using effectiveProjection.
+            Matrix(w,frame.view);Matrix(w,frame.projection);Matrix(w,frame.effectiveProjection);Matrix(w,frame.gpuProjection);Matrix(w,frame.gpuEffectiveProjection);
+            V4(w,frame.viewport);V4(w,frame.clipShift);V4(w,frame.nativeShift);w.Write(frame.logicalSize.x);w.Write(frame.logicalSize.y);w.Write(frame.nativeSize.x);w.Write(frame.nativeSize.y);
+            w.Write("matrix:column-major; logical:y-down; each plane records its own y origin");w.Write(frame.subsampleProducer);w.Write(frame.activeModeFlags);w.Flush();stream.Flush(true);
+        }
+    }
+
+    public static void WriteOwnedPlane(string path,Frame frame,RenderTexture texture,RectInt roi,string pass,string channel,string encoding,string yConvention)
+    {
+        if(!texture||roi.width<=0||roi.height<=0||roi.xMin<0||roi.yMin<0||roi.xMax>texture.width||roi.yMax>texture.height)
+            throw new ArgumentException("invalid source ROI");
+        if((long)roi.width*roi.height*16>1024*1024)throw new InvalidOperationException("plane exceeds one MiB");
+        if(string.IsNullOrEmpty(pass)||string.IsNullOrEmpty(channel)||string.IsNullOrEmpty(encoding)||string.IsNullOrEmpty(yConvention))throw new ArgumentException("producer/channel/encoding/origin required");
+        var data=new NativeArray<Color>(roi.width*roi.height,Allocator.Persistent,NativeArrayOptions.UninitializedMemory);
+        AsyncGPUReadbackRequest request=default;bool sent=false;
+        try
+        {
+            request=AsyncGPUReadback.RequestIntoNativeArray(ref data,texture,0,roi.x,roi.width,roi.y,roi.height,0,1,TextureFormat.RGBAFloat);sent=true;request.WaitForCompletion();
+            if(request.hasError)throw new InvalidOperationException("readback failed; do not retry without inspecting packet");
+            using(var stream=new FileStream(path,FileMode.CreateNew,FileAccess.Write,FileShare.Read))
+            using(var w=new BinaryWriter(stream))
+            {
+                w.Write(0x34365052);w.Write(1);Identity(w,frame);w.Write(pass);w.Write(channel);w.Write(encoding);w.Write(yConvention);w.Write(texture.width);w.Write(texture.height);w.Write(roi.x);w.Write(roi.y);w.Write(roi.width);w.Write(roi.height);
+                // Stream owned native memory once. No GetData borrowed Dispose,
+                // ToArray, Texture2D, PNG encoding or second full-plane copy.
+                for(int i=0;i<data.Length;i++){var c=data[i];w.Write(c.r);w.Write(c.g);w.Write(c.b);w.Write(c.a);}w.Flush();stream.Flush(true);
+            }
+        }
+        finally {if(sent&&!request.done)request.WaitForCompletion();data.Dispose();}
+        if(frame.frameIndex!=Time.frameCount)throw new InvalidOperationException("frame advanced; packet stays incomplete");
+    }
+}
+
+
+// One normal Play entry, one already-rendered paused input, no RenderPose/re-render/algorithm switch.
+internal class CommandScript : IRunCommand
+{
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\apply-capture66\retry-background";
+ GlobalJournal64 journal;Obj58 report;string output,sourceId;Arr58 planes=new Arr58();
+ RenderPipelineAsset oldG,oldQ;float oldTime,oldCapture;bool oldOptions,oldPause,started,exiting,finished;EnterPlayModeOptions oldFlags;double start,lastTelemetry;bool oldBackground;int exitTicks,domain;long readyAllocated;
+ static Arr58 V(Vector2 v){return new Arr58(v.x,v.y);}static Arr58 V(Vector3 v){return new Arr58(v.x,v.y,v.z);}static Arr58 V(Vector4 v){return new Arr58(v.x,v.y,v.z,v.w);}static Arr58 M(Matrix4x4 m){return new Arr58(Enumerable.Range(0,16).Select(i=>(double)m[i]));}
+ static string SHA(string path){using(var h=SHA256.Create())using(var f=File.OpenRead(path))return BitConverter.ToString(h.ComputeHash(f)).Replace("-","").ToLowerInvariant();}
+ static Obj58 Memory(){return new Obj58{["utc"]=DateTime.UtcNow.ToString("O"),["allocated"]=Profiler.GetTotalAllocatedMemoryLong(),["reserved"]=Profiler.GetTotalReservedMemoryLong(),["mono"]=Profiler.GetMonoUsedSizeLong(),["renderTextureCount"]=Resources.FindObjectsOfTypeAll<RenderTexture>().Length};}
+ static Arr58 Dirty(){return new Arr58(Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).Select(o=>new Obj58{["path"]=AssetDatabase.GetAssetPath(o),["type"]=o.GetType().FullName}));}
+ static Arr58 Scenes(){var a=new Arr58();for(int i=0;i<SceneManager.sceneCount;i++){var s=SceneManager.GetSceneAt(i);a.Add(new Obj58{["path"]=s.path,["dirty"]=s.isDirty,["active"]=s==SceneManager.GetActiveScene(),["roots"]=s.rootCount});}return a;}
+ void Save(string stage){report["stage"]=stage;report["utc"]=DateTime.UtcNow.ToString("O");report["planes"]=planes;File.WriteAllText(Path.Combine(Root,"CAPTURE_STATE66.json"),report.ToString());}
+ public void Execute(ExecutionResult result)
+ {
+  if(File.Exists(Path.Combine(Root,"CAPTURE_STATE66.json")))throw new InvalidOperationException("Existing capture outcome must be inspected; no repeat");
+  sourceId="capture67-"+DateTime.UtcNow.ToString("yyyyMMddTHHmmssfffZ");output=Path.Combine(Root,sourceId);Directory.CreateDirectory(output);
+  report=new Obj58{["sourceId"]=sourceId,["output"]=output,["PlayEntries"]=0,["packetComplete"]=false,["captureContractStatus"]="RAW_INPUT_PENDING_OFFLINE_CORRESPONDENCE",["largestOwnedReadbackBytes"]=0,["simultaneousReadbacks"]=1,["resetHistoryRequestedByObserver"]=false};
+  try
+  {
+   if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required");
+   if(Enumerable.Range(0,SceneManager.sceneCount).Select(SceneManager.GetSceneAt).Any(s=>s.isDirty))throw new InvalidOperationException("Scene changed before capture");
+   domain=AppDomain.CurrentDomain.Id;oldBackground=Application.runInBackground;oldOptions=EditorSettings.enterPlayModeOptionsEnabled;oldFlags=EditorSettings.enterPlayModeOptions;oldPause=EditorApplication.isPaused;oldTime=Time.timeScale;oldCapture=Time.captureDeltaTime;oldG=GraphicsSettings.defaultRenderPipeline;oldQ=QualitySettings.renderPipeline;
+   report["beforeMemory"]=Memory();report["beforeDirty"]=Dirty();report["beforeScenes"]=Scenes();report["domain"]=domain;report["optionsBefore"]=new Arr58(oldOptions,(int)oldFlags);report["pipelineBefore"]=new Arr58(AssetDatabase.GetAssetPath(oldG),AssetDatabase.GetAssetPath(oldQ));
+   var specs=Json58.Parse(File.ReadAllText(Path.Combine(Root,"GLOBAL_NAMES66.json"))).Select(o=>new GlobalJournal64.Spec{name=(string)o["name"],kind=(string)o["type"]=="Int"?GlobalJournal64.Kind.LegacyInt:(GlobalJournal64.Kind)Enum.Parse(typeof(GlobalJournal64.Kind),(string)o["type"])}).ToArray();
+   journal=GlobalJournal64.Snapshot(sourceId,Path.Combine(output,"GLOBALS_BEFORE.bin"),specs);journal.RequireRecoverable(specs.Select(s=>s.name));foreach(var s in specs)journal.BeforeMutation(s.name);
+   report["globalBackupSHA256"]=journal.backupSHA256;report["globalBackupVerified"]=journal.externalVerified;report["globalCount"]=specs.Length;report["globalBufferWrites"]=0;
+   start=EditorApplication.timeSinceStartup;EditorApplication.update+=Tick;started=true;Save("ready-before-Play");
+   Application.runInBackground=true;report["backgroundBefore"]=oldBackground;report["temporaryRunInBackground"]=true;EditorSettings.enterPlayModeOptionsEnabled=true;EditorSettings.enterPlayModeOptions=EnterPlayModeOptions.DisableDomainReload;report["PlayEntries"]=1;Save("entering-Play");EditorApplication.EnterPlaymode();
+   result.Log("67 single normal Play armed; observer owns normal exit/restore, no repeated rendering");
+  }
+  catch(Exception e){report["error"]=e.ToString();if(started)BeginExit();else Finish();result.Log("67 stopped: "+e.Message);}
+ }
+ void Tick()
+ {
+  if(finished)return;
+  try
+  {
+   if(AppDomain.CurrentDomain.Id!=domain)throw new InvalidOperationException("Unexpected domain reload");
+   if(exiting){if(!EditorApplication.isPlaying&&!EditorApplication.isPlayingOrWillChangePlaymode&&++exitTicks>=8)Finish();return;}
+   if(EditorApplication.timeSinceStartup-start>70)throw new TimeoutException("Normal-ready timeout; no second Play");
+   if(!EditorApplication.isPlaying)return;
+   var n=UnityEngine.Object.FindObjectsByType<NativePlayer395>(FindObjectsSortMode.None).FirstOrDefault();
+   if(n&&!string.IsNullOrEmpty(n.failure))throw new InvalidOperationException(n.failure);
+   var gp=UnityEngine.Object.FindObjectsByType<Gameplay397>(FindObjectsSortMode.None).FirstOrDefault(g=>g.player==n);
+   if(EditorApplication.timeSinceStartup-lastTelemetry>.5){lastTelemetry=EditorApplication.timeSinceStartup;File.AppendAllText(Path.Combine(Root,"WAIT_TRACE.jsonl"),new Obj58{["utc"]=DateTime.UtcNow.ToString("O"),["frame"]=Time.frameCount,["paused"]=EditorApplication.isPaused,["focused"]=Application.isFocused,["timeScale"]=Time.timeScale,["background"]=Application.runInBackground,["hasNative"]=n!=null,["nativeEnabled"]=n&&n.enabled,["nativeActive"]=n&&n.gameObject.activeInHierarchy,["nativeWarmup"]=n?n.warmup:-1,["nativeReady"]=n&&n.ready,["nativeFailure"]=n?n.failure:null,["hasGameplay"]=gp!=null,["gameplayActive"]=gp&&gp.activateGameplay,["connected"]=gp&&gp.connected,["gameplayFailure"]=gp?gp.failure:null,["mainSerial"]=n&&n.host&&n.host.main?n.host.main.renderedSerial335:0}.ToString()+"\n");}
+   if(EditorApplication.isPaused)throw new InvalidOperationException("Runtime paused before observer ready; do not override unidentified pause");
+   if(!n||!n.ready||!gp||!gp.connected||n.host.main.renderedSerial335<=0)return;
+   if(gp.runInputTest)throw new InvalidOperationException("Synthetic input test enabled");
+   EditorApplication.isPaused=true;readyAllocated=Profiler.GetTotalAllocatedMemoryLong();report["readyMemory"]=Memory();report["frameIndex"]=Time.frameCount;report["deltaTime"]=Time.deltaTime;report["hostMainRenderSerial"]=n.host.main.renderedSerial335;Save("paused-already-rendered");
+   Capture(n,gp);report["afterCaptureReleaseMemory"]=Memory();BeginExit();
+  }
+  catch(Exception e){report["error"]=e.ToString();BeginExit();}
+ }
+ void BeginExit(){if(exiting||finished)return;exiting=true;Save("normal-Play-exit-requested");if(EditorApplication.isPlaying||EditorApplication.isPlayingOrWillChangePlaymode){EditorApplication.isPaused=false;EditorApplication.ExitPlaymode();}else Finish();}
+ void Finish()
+ {
+  if(finished)return;finished=true;EditorApplication.update-=Tick;
+  try
+  {
+   if(started){Application.runInBackground=oldBackground;EditorSettings.enterPlayModeOptionsEnabled=oldOptions;EditorSettings.enterPlayModeOptions=oldFlags;GraphicsSettings.defaultRenderPipeline=oldG;QualitySettings.renderPipeline=oldQ;Time.timeScale=oldTime;Time.captureDeltaTime=oldCapture;EditorApplication.isPaused=oldPause;}
+   if(journal!=null){journal.RestoreMarked();var errors=journal.VerifyMarked();report["globalRestoreErrors"]=new Arr58(errors);if(errors.Length>0)throw new InvalidOperationException("Global getter restoration failed");journal.ReleaseHandleAfterVerified();}
+   report["afterMemory"]=Memory();report["afterDirty"]=Dirty();report["afterScenes"]=Scenes();report["optionsRestored"]=!started||(EditorSettings.enterPlayModeOptionsEnabled==oldOptions&&EditorSettings.enterPlayModeOptions==oldFlags);report["timeRestored"]=!started||(Time.timeScale==oldTime&&Time.captureDeltaTime==oldCapture&&EditorApplication.isPaused==oldPause);report["pipelineRestored"]=!started||(GraphicsSettings.defaultRenderPipeline==oldG&&QualitySettings.renderPipeline==oldQ);
+   report["backgroundRestored"]=Application.runInBackground==oldBackground;report["PlayExited"]=!EditorApplication.isPlaying&&!EditorApplication.isPlayingOrWillChangePlaymode;report["observerRemoved"]=true;Save("finished");
+  }
+  catch(Exception e){report["restorationError"]=e.ToString();Save("restoration-incomplete");}
+ }
+ CpuSourceCapture64.Frame Frame(Full319View335 f,string view,int serial)
+ {
+  var cam=f.motion.camera;return new CpuSourceCapture64.Frame{sourceId=sourceId,viewId=view,frameIndex=Time.frameCount,renderSerial=serial,phaseIndex=f.phaseIndex,renderedSource=f.motion.sourceFrame,evaluatedFrame=f.motion.evaluatedFrame,
+   view=cam.worldToCameraMatrix,projection=cam.projectionMatrix,effectiveProjection=f.effectiveProjection,gpuProjection=GL.GetGPUProjectionMatrix(cam.projectionMatrix,true),gpuEffectiveProjection=GL.GetGPUProjectionMatrix(f.effectiveProjection,true),viewport=new Vector4(cam.pixelRect.x,cam.pixelRect.y,cam.pixelRect.width,cam.pixelRect.height),clipShift=f.motion.clipShift,nativeShift=f.nativeShift,logicalSize=new Vector2Int(480,272),nativeSize=new Vector2Int(960,544),subsampleProducer="Native333 and Probe331 SV_Position pixel-centres; nativeShift and raw/effective projection recorded separately",activeModeFlags="current FullFeature/EyeRenderer flags exported in metadata"};
+ }
+ void Plane(CpuSourceCapture64.Frame frame,string name,RTHandle texture,RectInt roi,string producer,string channel)
+ {
+  if(Profiler.GetTotalAllocatedMemoryLong()-readyAllocated>256L*1024*1024)throw new InvalidOperationException("Capture-only allocation exceeded 256MiB; stop additional reads");
+  string file=name+".plane";CpuSourceCapture64.WriteOwnedPlane(Path.Combine(output,file),frame,texture.rt,roi,producer,channel,"linear RGBAFloat; channel-specific noncolour values remain raw","RT memory bottom-left; source raster SV_Position convention recorded by projection");
+  planes.Add(new Obj58{["file"]=file,["sourceId"]=sourceId,["viewId"]=frame.viewId,["frameIndex"]=frame.frameIndex,["renderSerial"]=frame.renderSerial,["textureSize"]=new Arr58(texture.rt.width,texture.rt.height),["roiBottomLeft"]=new Arr58(roi.x,roi.y,roi.width,roi.height),["producer"]=producer,["channel"]=channel});
+  long bytes=(long)roi.width*roi.height*16;report["largestOwnedReadbackBytes"]=Math.Max((long)report["largestOwnedReadbackBytes"],bytes);Save("capturing-"+name);
+ }
+ RectInt MetaAndBounds(CpuSourceCapture64.Frame frame,Full319View335 f)
+ {
+  int minX=480,minY=272,maxX=0,maxY=0;
+  for(int y=0;y<272;y+=64)
+  {
+   int height=Math.Min(64,272-y);var roi=new RectInt(0,y,480,height);string name="source-meta-strip-"+y;
+   Plane(frame,name,f.preparedMeta,roi,"Prepare333.Prepare","selected depth/role/side/primitive metadata");
+   // Re-read only the streamed file, not GPU memory; no full-plane duplicate.
+   using(var r=new BinaryReader(File.OpenRead(Path.Combine(output,name+".plane"))))
+   {
+    r.ReadInt32();r.ReadInt32();r.ReadString();r.ReadString();r.ReadInt32();r.ReadInt32();for(int s=0;s<4;s++)r.ReadString();for(int s=0;s<6;s++)r.ReadInt32();
+    for(int i=0;i<480*height;i++){float depth=r.ReadSingle(),role=r.ReadSingle();r.ReadSingle();r.ReadSingle();if(depth>0&&role>0){int x=i%480,yy=y+i/480;minX=Math.Min(minX,x);maxX=Math.Max(maxX,x+1);minY=Math.Min(minY,yy);maxY=Math.Max(maxY,yy+1);}}
+   }
+  }
+  if(minX>=maxX||minY>=maxY)throw new InvalidOperationException("No visible source metadata");
+  minX=Math.Max(0,minX-2);minY=Math.Max(0,minY-2);maxX=Math.Min(480,maxX+2);maxY=Math.Min(272,maxY+2);
+  return new RectInt(minX,minY,maxX-minX,maxY-minY);
+ }
+ void AuxMesh(string name,UnityEngine.Mesh mesh,Matrix4x4 matrix,CpuSourceCapture64.Frame frame)
+ {
+  if(!mesh)return;string path=Path.Combine(output,name+".mesh");
+  using(var w=new BinaryWriter(File.Create(path))){w.Write("aux-mesh67/v1");w.Write(sourceId);w.Write(frame.viewId);w.Write(frame.frameIndex);w.Write(frame.renderSerial);for(int i=0;i<16;i++)w.Write(matrix[i]);var p=mesh.vertices;var uv=mesh.uv;var n=mesh.normals;w.Write(p.Length);foreach(var v in p){w.Write(v.x);w.Write(v.y);w.Write(v.z);}w.Write(n.Length);foreach(var v in n){w.Write(v.x);w.Write(v.y);w.Write(v.z);}w.Write(uv.Length);foreach(var v in uv){w.Write(v.x);w.Write(v.y);}w.Write(mesh.subMeshCount);for(int sm=0;sm<mesh.subMeshCount;sm++){var ix=mesh.GetIndices(sm);w.Write(ix.Length);foreach(int i in ix)w.Write(i);}}
+ }
+ void Buffer(string name,ComputeBuffer buffer,CpuSourceCapture64.Frame frame)
+ {
+  if(buffer==null||!buffer.IsValid())return;long size=(long)buffer.count*buffer.stride;if(size>1024*1024)throw new InvalidOperationException("Feature buffer exceeds one MiB");
+  using(var w=new BinaryWriter(File.Create(Path.Combine(output,name+".buffer")))){w.Write("buffer67/v1");w.Write(sourceId);w.Write(frame.viewId);w.Write(frame.frameIndex);w.Write(frame.renderSerial);w.Write(buffer.count);w.Write(buffer.stride);if(buffer.stride==4){var data=new uint[buffer.count];buffer.GetData(data);foreach(uint v in data)w.Write(v);}else if(buffer.stride==16){var data=new Vector4[buffer.count];buffer.GetData(data);foreach(var v in data){w.Write(v.x);w.Write(v.y);w.Write(v.z);w.Write(v.w);}}else throw new InvalidOperationException("Unimplemented feature buffer stride");}
+ }
+ void Capture(NativePlayer395 n,Gameplay397 gp)
+ {
+  int serial=n.host.main.renderedSerial335,frameIndex=Time.frameCount;var f=n.host.head?n.host.head:n.host.main;string view=n.host.head?"head":"main";var frame=Frame(f,view,serial);var mainFrame=Frame(n.host.main,"main-final",serial);
+  var bindings=new Arr58();foreach(var v in new[]{n.host.main,n.host.head}.Where(v=>v))
+  {
+   var handles=v.motion.materials.Select(m=>m.GetBuffer("_BodyScope551")).ToArray();if(handles.Any(h=>h.Equals(default(GraphicsBufferHandle)))||handles.Any(h=>!h.Equals(handles[0])))throw new InvalidOperationException("Actual production material scope bindings not coherent");
+   bindings.Add(new Obj58{["view"]=v==f?view:"main",["materialCount"]=handles.Length,["handleHash"]=handles[0].GetHashCode(),["allLocalHandlesEqual"]=true});
+  }
+  report["actualProductionMaterialBindings"]=bindings;Save("production-bindings-verified-before-readback");
+  CpuSourceCapture64.WriteCpuGeometry(Path.Combine(output,"evaluated-source.geometry"),frame,f.motion.surface.outputs,f.motion.surface.source);CpuSourceCapture64.WriteCamera(Path.Combine(output,"source.camera"),frame);CpuSourceCapture64.WriteCamera(Path.Combine(output,"main.camera"),mainFrame);
+  var roi=MetaAndBounds(frame,f);report["sourceROIBottomLeft"]=new Arr58(roi.x,roi.y,roi.width,roi.height);
+  var nativeROI=new RectInt(roi.x*2,roi.y*2,roi.width*2,roi.height*2);if((long)nativeROI.width*nativeROI.height*16>1024*1024)throw new InvalidOperationException("Source ROI too large for bounded plane; no extra readback");
+  for(int y=0;y<n.output.rt.height;y+=64)Plane(mainFrame,"final-strip-"+y,n.output,new RectInt(0,y,n.output.rt.width,Math.Min(64,n.output.rt.height-y)),"Native395 current normal output","final linear RGBA");
+  foreach(var item in new[]{new{n="unlit-source",t=f.native[0]},new{n="native-normal",t=f.native[1]},new{n="physical",t=f.native[3]},new{n="native-endpoint",t=f.native[5]},new{n="native-uv",t=f.native[6]},new{n="world",t=f.native[7]},new{n="style-class",t=f.style960[3]},new{n="shade-mask",t=f.shadeMask960}})Plane(frame,item.n,item.t,nativeROI,"Native333 / original335 signals","actual producer channels; source/class/mask definitions in code manifest");
+  foreach(var item in new[]{new{n="selected-uv",t=f.preparedUV},new{n="source-final",t=f.colour},new{n="source-owner",t=f.owner},new{n="shade-class480",t=f.style480[3]},new{n="shade-mask480",t=f.shadeMask480}})Plane(frame,item.n,item.t,roi,"Prepare333 / RestoreStyle335","selected current logical cell metadata/colour");
+  int ex0=480,ey0=272,ex1=0,ey1=0;foreach(var p in f.projectedPivots){int x=Mathf.RoundToInt(p.x),y=271-Mathf.RoundToInt(p.y);ex0=Math.Min(ex0,x-12);ex1=Math.Max(ex1,x+13);ey0=Math.Min(ey0,y-10);ey1=Math.Max(ey1,y+11);}var eyeROI=new RectInt(Math.Max(0,ex0),Math.Max(0,ey0),Math.Min(480,ex1)-Math.Max(0,ex0),Math.Min(272,ey1)-Math.Max(0,ey0));
+  report["eyeROIBottomLeft"]=new Arr58(eyeROI.x,eyeROI.y,eyeROI.width,eyeROI.height);
+  foreach(int part in new[]{0,1,2,3,4,5,6,7,8,9,10,11,12}){Plane(frame,"eye-"+part+"-rgba",f.layers[part].rgba,eyeROI,"FullFeature367.Eyes part"+part,"actual pre-eye styled RGBA; part10 is clean backing");Plane(frame,"eye-"+part+"-meta",f.layers[part].meta,eyeROI,"FullFeature367.Eyes part"+part,"actual owner/depth metadata");Plane(frame,"eye-"+part+"-uv",f.layers[part].uv,eyeROI,"FullFeature367.Eyes part"+part,"actual source UV");}
+  var ph=f.phases[f.phaseIndex];AuxMesh("phase-backing",ph.backing,f.providerMatrix,frame);AuxMesh("phase-face",ph.face,f.providerMatrix,frame);AuxMesh("phase-native-face",ph.nativeFace,f.providerMatrix*ph.nativeFaceMatrix,frame);
+  var e=UnityEngine.Object.FindObjectsByType<EyeFeature348>(FindObjectsSortMode.None).FirstOrDefault(x=>x.full==f);
+  if(e){Buffer("eye-feature-counts",e.featureCounts19,frame);Buffer("eye-records",e.records,frame);Buffer("eye-lash-geometry",e.lashGeometry590,frame);report["eyeFeature"]=new Obj58{["topologySHA256"]=e.modelTopologySHA256,["styleVersion"]=e.style.version,["roi"]=new Arr58(e.roi.x,e.roi.y,e.roi.width,e.roi.height),["headMatrix"]=M(e.headMatrix),["cropProjection"]=M(e.cropProjection),["featureCountsSkippedByDispatch"]=EyeFeature348.UseIrisSurface582||EyeFeature348.UseLashRegion583,["stableIds"]=new Arr58(e.modelEyes.Select(x=>x.stableId))};}
+  report["modeFlags"]=new Obj58{["motionMode"]=f.motion.mode,["poseBins"]=f.motion.poseBins,["phaseIndex"]=f.phaseIndex,["styleEnabled"]=f.styleEnabled,["layeredSurface"]=f.layeredSurface,["shadeLayer"]=f.shadeLayer,["surfaceSteps"]=f.surfaceShadeSteps,["UseIrisSurface582"]=EyeFeature348.UseIrisSurface582,["UseLashRegion583"]=EyeFeature348.UseLashRegion583,["UseClosedLash590"]=EyeFeature348.UseClosedLash590,["oldLayerMode19GetterAvailable"]=false};
+  report["sourceView"]=view;report["phaseIndex"]=f.phaseIndex;report["sourceFrame"]=f.motion.sourceFrame;report["evaluatedFrame"]=f.motion.evaluatedFrame;report["sourceViewRenderedSerial335"]=f.renderedSerial335;report["mainRenderedSerial335"]=n.host.main.renderedSerial335;report["renderSerialProducer"]="HeadLocal367.RenderFrame increments public main.renderedSerial335 after normal final pass; per-view counter also recorded, no private Gameplay397 access";
+  report["geometryFile"]= "evaluated-source.geometry";report["poseDigest"]=SHA(Path.Combine(output,"evaluated-source.geometry"));report["headOffset"]=new Arr58(n.host.offset.x,n.host.offset.y);report["nativeOrigin"]=new Arr58(n.origin.x,n.origin.y);report["nativeDeliveredDelta"]=V(n.deliveredDelta);report["nativePixelsPerCell"]=n.nativePixelsPerCell;report["sourceColorSpace"]="native[0] unlit texture sample*material factor in linear RT; hardware sRGB sampling per original material";
+  report["gDefinition"]=new Obj58{["producerFunction"]="ContinuousSurfaceLight335 (original current product)",["formula"]="lit=ambient+sum(luma(color)*distanceAttenuation*shadow*saturate(.5*dot(N,L)+.5)); available=ambient+sum(luma(color)*distanceAttenuation); g=saturate(lit/available)",["units"]="dimensionless normalized ratio; not absolute irradiance",["classGChannel"]="style-class.g"};
+  report["coverageDefinition"]="Native raster-sample presence and alpha are available; exact continuous projected cell area must be computed from captured geometry, not substituted by alpha.";
+  report["missingBeforeOfflineBinding"]=new Arr58("native sample to evaluated triangle/barycentric/world/screen correspondence","source UV feature-boundary projection correspondence","six historical backing destinations mapped into this sourceId/state; complete part10 backing planes captured");
+  report["lights"]=new Arr58(UnityEngine.Object.FindObjectsByType<Light>(FindObjectsSortMode.None).Select(l=>new Obj58{["type"]=l.type.ToString(),["enabled"]=l.isActiveAndEnabled,["position"]=V(l.transform.position),["forward"]=V(l.transform.forward),["colour"]=new Arr58(l.color.r,l.color.g,l.color.b),["intensity"]=l.intensity,["range"]=l.range,["spotAngle"]=l.spotAngle,["shadowStrength"]=l.shadowStrength}));
+  report["frameUnchangedDuringReadback"]=Time.frameCount==frameIndex&&n.host.main.renderedSerial335==serial;if(!(bool)report["frameUnchangedDuringReadback"])throw new InvalidOperationException("Source frame advanced; packet incomplete");
+  File.WriteAllText(Path.Combine(output,"RAW_MANIFEST.json"),report.ToString());Save("raw-input-captured-pending-offline-binding");
+ }
+}

@@ -5,18 +5,19 @@ mode=sys.argv[1]
 base=HERE.parent/'source-palette58'
 if not base.exists():base=HERE.parent/'2026-10-31-source-palette58'
 files=[HERE/'Json58Linear66.cs']
-if mode in ('Save66','Recovered66','Finish66','Resume68','Post68'):files.append(HERE/'SerializedContent66.cs')
+if mode in ('Save66','Recovered66','Finish66','Resume68','BeforePlay68','Post68'):files.append(HERE/'SerializedContent66.cs')
 deps=HERE.parent/'uv-features64'
 if not deps.exists():deps=HERE.parent/'2026-10-31-uv-features64'
 if mode in ('Global66','Capture66','CaptureRetry66'):files.append(deps/'GlobalJournal64.cs')
 if mode in ('Capture66','CaptureRetry66'):files.append(deps/'CpuSourceCapture64.cs')
-files.append(HERE/(mode+'.cs'))
+files.append(HERE/('Resume68.cs' if mode=='BeforePlay68' else mode+'.cs'))
 usings=[];body=[]
 for p in files:
  s=p.read_text(encoding='utf-8-sig')
  for u in re.findall(r'(?m)^using [^;\n]+;',s):
   if u not in usings:usings.append(u)
  body.append(re.sub(r'(?m)^using [^;\n]+;\r?\n?','',s))
+if mode=='BeforePlay68':body[-1]=body[-1].replace('RESUME68.json','BEFORE_PLAY68.json').replace('resume68-before','play68-before')
 if mode=='ScopeCheck66':
  source=Path(r'C:\Users\15352\Documents\work\Fantasy Survival Escape Game\Assets\EUnityValidation01\ClothRegion524\Runtime\ClothRegion524.cs').read_text(encoding='utf-8-sig')
  start=source.index('    sealed class BodyScopeResources551')

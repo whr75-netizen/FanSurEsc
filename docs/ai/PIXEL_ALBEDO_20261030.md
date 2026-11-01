@@ -335,15 +335,27 @@ current UV colour-range66개는 화면186조각이다. 배타 분류37개는 여
 
 현재31520 Edit/GameMap1 clean, pausefalse/optionsfalse/None/time1/captureDelta0. 보호110파일 중 이번 두 C# 외 변경0, 다른 기존28파일 SHA와 두 파일의 기존 사용자 delta를 보존했다. NoSubscription은 별도 Unity AI 오류로 기록하고 변경하지 않았다. O(N²) helper나 일괄 저장을 재실행하지 않았다. sourceId `capture67-20261031T115608773Z`는 global journal만 있으며 실제 샘플 packet이 아니다. 새 이미지/미술 개선/시간 안정성 성공을 주장하지 않는다.
 
-## 재개68 — 현재 연결 확인, 추가 Play 재차 미실행
+## 재개68 — 공식 연결·단일 Play 캡처와 원복 검증
 
 [현재 결과](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/RESUME_RESULT68.json), [현재 기준선](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/RESUME68.json). 2026-11-01 05:22 UTC 기준 새 Editor PID35364/session1, Unity6000.5.9f1, 같은 프로젝트의 GameMap1 Edit/scene clean/options false·None/time1/captureDelta0/runInBackground false를 실제 공식 relay로 읽었다. 어제 PID/dirty를 현재값으로 재사용하지 않았다.
 
 - `Resume68.cs:Execute`: 현재 미저장24개를 먼저 기록하고 resident Mesh/settings5의 직렬화 내용을 외부 파일/SHA로 검증했다. 얼굴 Mesh의 `EditorJsonUtility.ToJson` 읽기에서 dirty false→true가 다시 발생했다. 내용 SHA는 기존 백업과 같으며 저장·ClearDirty·추정 복원을 하지 않았다. 큰 JSON 전체 parse를 사용하지 않았다.
-- `CaptureRetry66.cs:Tick`: 기존 준비 trace에 focused/native enabled·active·warmup·failure/gameplay active를 추가했다. `build66.py`로 Assets 밖 코드만 구성했으며 이번 추가 Play 코드는 실행되지 않았다.
-- `relay66.py CaptureRetry66`: 새 재개 지시를 근거로 한 번 요청했지만 자동 승인 심사가 “resume만으로 이전 차단된 옵션 변경과 추가 Play를 명시 승인한 것은 아님”으로 프로세스 생성 전에 거절했다. 요청 marker·state·frame·GPU readback·옵션 변경0. 재시도/우회하지 않는다. 임시 runInBackground true와 추가 Play1회·정상 종료/원복의 구체 승인 대기다.
+- `CaptureRetry66.cs:Execute/Tick/Capture/Finish`: 05:27 UTC 사용자의 구체 승인 후 단일 Play를 실행했다. trace는 frame1→59→94, Native ready/Gameplay connected true, main serial1을 기록했다. 새 sourceId `capture67-20261101T052807007Z`, frame94/evaluated0에서66 plane(동시 읽기1개, 최대983040bytes), 평가 mesh3/material15/bone pose/view·projection/UV/source/g/Q/owner·depth 및 눈13part를 보존했다. sourceId/pose를 과거 프레임과 섞지 않았다. 실제 main/head의 material-local BodyScope551 binding15개씩을 확인했다.
+- 재개 지시만 있을 때의 자동 심사 거절은 미실행이었다. 이후 사용자가 runInBackground 임시true·추가 Play1회·종료/원복을 명시 승인해 같은 정식 relay 경로로1회 실행했고 성공했다. 추가 Play는 하지 않았다. 이번 trace의 focused는 모두true이며 어제의 실패 원인을 비활성 창 하나로 확정하지 않는다.
 - 연결 통로: source 편집은 Codex `apply_patch`; Editor 실행은 `exec_command → relay66.py → ~/.unity/relay/relay_win.exe --mcp → Unity MCP bridge → Unity_RunCommand/Unity_GetConsoleLogs`. 현재 read command의 compile/execution 모두 성공했다. manifest/lock/설치본의 `com.unity.ai.assistant=2.18.0-pre.2`; inference2.6.1/navigation2.0.14, 별도 Codex/MCP 패키지는 manifest에서 발견하지 못했다.
 - 설치 패키지 `Documentation~/integration/unity-mcp-get-started.md:116–129`는 direct-client 최초 승인과 승인 기억/자동 재연결을 설명한다. `Modules/Unity.AI.MCP.Editor/Settings/UI/ConnectionApprovalDialog.cs`와 `Modules/Unity.AI.Assistant.Tools/Scripting/RunCommandTool.cs:55–73`의 연결 승인/unsafe 실행 승인은 별도다. 사용자가 과거 본 창이 어느 쪽인지는 미확인이다. 승인창 부재만으로 Win11 연동 해제를 단정하지 않는다.
 - 오늘 Console에도 `NoSubscription` Info5건(로컬14:21:27–29)이 있으며 `ModelSelectorSuperProxyActions`의 Unity 생성 모델 목록 조회 경로다. 동시에 MCP 조회는 성공했다. Unity 내장 모델 서비스와 현재 외부 Codex 도구 통로를 구분하며 로그인/설정/패키지를 변경하지 않았다.
 
-현재 tracked 관련31파일의 전후 디스크 SHA 변경0, stage는 별도 선택 커밋에서만 갱신한다. 이번은 준비/연결 근거만이며 새 렌더 입력·팔레트/영역 보정·미술 성공 증거는 없다. 기존65 제품 변경 커밋은 `6a1f2f4a`; 이번 재개 기록의 커밋은 이 절의 Git 이력으로 확인한다.
+현재 상세 결과는 [CAPTURE_RESULT68.json](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/CAPTURE_RESULT68.json), [실제 PNG/입력 검토](../../experiments/pixel-pipeline/2026-10-31-apply-capture66/retry-background/capture67-20261101T052807007Z/offline68/INDEX.html)로 연결한다.
+
+| 경로·함수 | 실제 검증·남은 한계 |
+|---|---|
+| `Post68.cs:Execute`, `Option68.cs:Execute` | 05:28:44 UTC Edit/GameMap1 clean, 옵션 false/None·background false·time1/capture0·pipeline 복원, observer 제거,74global getter 불일치0. Mesh/settings5 native 내용 ExactUTF8 동일. PlayerSettings/Application 두 background getter도false. 전체 PlayerSettings native 사전 백업은 없어 그 객체의 모든 필드 동등성은 미검증 |
+| `CAPTURE_RESULT68.json` | Play 직전dirty25→종료후29. 기존25개 제거0, EditorSettings/GraphicsSettings/TimeManager/PlayerSettings가dirty 추가. 저장·ClearDirty하지 않았다. tracked 관련31파일 SHA 변경0 |
+| `analyse_capture68.py:plane/camera/geometry/main` |66plane의 sourceId/frame94/serial1·유한값·파일길이, final960×544 전체522240표본 검증. 가시 native1734표본 전부 actual mesh/submesh/triangle/UV·barycentric/material로 유일 연결. world오차 최대1.442e-7m, nativeShift1회 적용 재투영 오차 최대0.002593px. 코드의 material명/역할 상수로 provenance를 대신하지 않았다 |
+| `test_reader68.py`, `EYE_OBSERVER68.patch` | 동일 packet 및 잘못된 source/frame/serial 거부와 비항등 texture ST/barycentric fixture 5검사 통과. 눈 count/records는 관찰기의 전역 검색에서 누락됐다. HeadLocal367:18–19의 HideAndDontSave/headEyes 직접 소유 참조, :37의 실제 headEyes dispatch를 확인해 direct host 참조의 관찰기 최소 패치만 준비했다. 미적용·GPU 미검증이며 재캡처하지 않았다 |
+| PNG 및 원배율/nearest 확대 | full/current-source/part10 backing PNG를 실제 열어 확인했다. part10은 현재 pose의 실제 5셀이며 과거 6목표셀을 추정 피부색으로 채우지 않았다. 기존 제품 출력만 보여주며 새 팔레트/영역/눈 후보 적용이나 미술 성공이 아니다 |
+
+Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reserved +433508352bytes, mono -532090880bytes다. ready→readback 해제의 allocated 증가는 +852240bytes(0.813MiB), RT는 30→ready437→종료30이다. physical RAM 측정/총메모리 복원/누수 없음의 증명이 아니다. 종료 후 Console 최근 50건에는 Error/Exception/Assert 0이며 새 material binding 오류를 찾지 못했다. 전체 Console 역사에 오류가 없다는 뜻은 아니다.
+
+아직 UV source-feature 경계 graph 투영, 연속 셀 부분 coverage 적분, 과거 6backing 목표와 새 source의 surface 대응, 누락된 눈 feature/count, 실제 회전/blink/시간 안정성은 미검증이라 raw `packetComplete=false`를 유지한다. 이번 제품 파일 변경은 0이며 기존 65커밋 `6a1f2f4a`를 유지한다. 실제 캡처와 오프라인 검증/관찰기 패치를 기존 실험 폴더에만 선택 커밋하며 관련 커밋은 이 절의 Git 이력으로 확인한다.

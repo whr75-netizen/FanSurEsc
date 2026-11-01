@@ -1,0 +1,11 @@
+--- a/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute
++++ b/Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute
+@@ -9,7 +9,7 @@
+ struct Pixel348{float4 colour,owner,intrinsic,visible,histA,histB,surface,pigment,audit,domain,bary,globalOwner,preparedMeta,preparedUV,control,supportMeta;};
+ RWStructuredBuffer<Pixel348> _RecordsWrite348;StructuredBuffer<Pixel348> _RecordsRead348;
+ Texture2D<float4> _BaselineColour348,_BaselineOwner348,_BaselineMeta348,_BaselineUV348,_BaselineDomain348;
+-StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];
++StructuredBuffer<float4> _LashGeometry590;RWStructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];
+ int _UseHairRegion502,_UseIrisSurface582,_UseLashRegion583,_UseClosedLash590;int4 _ROI348;float4 _Centres348[2],_AxesX348[2],_AxesY348[2],_UpperLower348,_Iris348,_Catch348,_FaceLidShade348;
+ float4x4 _Inverse348_0,_Inverse348_1,_WorldToHead348;float4 _Plane348_0,_Plane348_1,_RayBase348,_RayX348,_RayY348,_RayDepth348;int4 _ColourBounds348_0,_ColourBounds348_1;
+ bool cov(float4 m){return m.x>0&&m.y>.5&&m.w>1e-6;}

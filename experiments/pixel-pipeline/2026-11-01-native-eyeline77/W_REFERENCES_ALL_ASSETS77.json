@@ -1,0 +1,206 @@
+[
+  {
+    "file": "Assets\\Editor\\Order20KeepSelectedFeatures.compute",
+    "hits": [
+      {
+        "line": 14,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 81,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\Editor\\Order20NativeLine.compute",
+    "hits": [
+      {
+        "line": 14,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 81,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\Editor\\Order20NativeLine2.compute",
+    "hits": [
+      {
+        "line": 14,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 81,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\Editor\\Order20NativeProbe.compute",
+    "hits": [
+      {
+        "line": 14,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 81,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\Editor\\Order20NoEyeMerge.compute",
+    "hits": [
+      {
+        "line": 14,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 81,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\Editor\\Order20StageProbe.compute",
+    "hits": [
+      {
+        "line": 14,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 81,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\EyeBoundaryRestore348\\Runtime\\EyeFeature348.cs",
+    "hits": [
+      {
+        "line": 8,
+        "text": "[NonSerialized]public ComputeBuffer restTriangles,records,featureCounts19;[NonSerialized]public Vector4[]triangleRanges=new Vector4[16];public bool samplesOnly;"
+      },
+      {
+        "line": 14,
+        "text": "sampleFace=Instantiate(original);sampleFace.name=\"348 native source current surface + original Head-bind rest attribute\";sampleFace.hideFlags=HideFlags.DontSave;sampleFace.SetUVs(1,rest.ToList());sampleFace.SetUVs(7,rest.Select(p=>new Vector2((p-modelEyes[0].centre).sqrMagnitude<=(p-modelEyes[1].centre).sqrMagnitude?modelEyes[0].stableId:modelEyes[1].stableId,0)).ToList());if(faceLidShadeEndpoint.w<=0)faceLidShadeEndpoint=full.skinShade;var triangles=new List<Vector4>();for(int sm=0;sm<7;sm++){var ix=original.GetIndices(sm);triangleRanges[sm]=new Vector4(triangles.Count,ix.Length/3,0,0);foreach(int i in ix)triangles.Add(rest[i]);}restTriangles=new ComputeBuffer(triangles.Count,16);restTriangles.SetData(triangles);"
+      },
+      {
+        "line": 43,
+        "text": "void OnDisable(){if(Active==this)Active=null;if(materials!=null)foreach(var m in materials)if(m)DestroyImmediate(m);if(skinMaterial)DestroyImmediate(skinMaterial);if(sampleFace)DestroyImmediate(sampleFace);restTriangles?.Dispose();records?.Dispose();featureCounts19?.Dispose();featureCounts19=null;lashGeometry590?.Dispose();lashGeometry590=null;lashRest590=null;lashArcs590=null;if(samples!=null)foreach(var l in samples)foreach(var t in new[]{l.rgba,l.meta,l.point,l.uv,l.shade,l.depth})t?.Release();foreach(var t in new[]{output,owner,intrinsic,visible,histA,histB,surface,pigment,audit,domain,bary,supportMeta})t?.Release();ready=false;}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\EyeBoundaryRestore348\\Shaders\\BaselineProbe76.compute",
+    "hits": [
+      {
+        "line": 20,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 87,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\EyeBoundaryRestore348\\Shaders\\BaselineProbe77.compute",
+    "hits": [
+      {
+        "line": 20,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 87,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      },
+      {
+        "line": 135,
+        "text": "bool NativeSourceReady77(){return _RestTriangles348[(int)_TriangleRanges348[6].x].w!=0;}"
+      },
+      {
+        "line": 136,
+        "text": "int NativeComponent77(int primitive){if(primitive<=0||primitive>(int)_TriangleRanges348[6].y)return 0;return(int)round(_RestTriangles348[(int)_TriangleRanges348[6].x+3*(primitive-1)].w);}"
+      },
+      {
+        "line": 138,
+        "text": "for(int tri77=0;tri77<(int)_TriangleRanges348[6].y;tri77++){float4 a=_RestTriangles348[base77+3*tri77],b=_RestTriangles348[base77+3*tri77+1],c=_RestTriangles348[base77+3*tri77+2];if((int)round(a.w)!=component)continue;float area=length(cross(b.xyz-a.xyz,c.xyz-a.xyz))*.5;sum+=(a.xyz+b.xyz+c.xyz)*(area/3);total+=area;}return total>0?sum/total:0;"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\EyeBoundaryRestore348\\Shaders\\BaselineProbe77GPU.compute",
+    "hits": [
+      {
+        "line": 20,
+        "text": "StructuredBuffer<float4> _LashGeometry590;RWStructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 87,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      },
+      {
+        "line": 139,
+        "text": "void NativeMeta77(int index,float value){float4 v=_RestTriangles348[index];v.w=value;_RestTriangles348[index]=v;}"
+      },
+      {
+        "line": 142,
+        "text": "if(_RestTriangles348[0].w!=0)return;uint size77,stride77;_RestTriangles348.GetDimensions(size77,stride77);int count77=(int)_TriangleRanges348[6].y,base77=(int)_TriangleRanges348[6].x;"
+      },
+      {
+        "line": 146,
+        "text": "float3 a0=_RestTriangles348[base77+3*a77].xyz,a1=_RestTriangles348[base77+3*a77+1].xyz,a2=_RestTriangles348[base77+3*a77+2].xyz;"
+      },
+      {
+        "line": 149,
+        "text": "float3 b0=_RestTriangles348[base77+3*b77].xyz,b1=_RestTriangles348[base77+3*b77+1].xyz,b2=_RestTriangles348[base77+3*b77+2].xyz;"
+      },
+      {
+        "line": 160,
+        "text": "[loop]for(int t77=0;t77<count77;t77++){if(labels77[t77]!=root77)continue;float3 a=_RestTriangles348[base77+3*t77].xyz,b=_RestTriangles348[base77+3*t77+1].xyz,c=_RestTriangles348[base77+3*t77+2].xyz;float area77=length(cross(b-a,c-a))*.5;sum77+=(a+b+c)*(area77/3);total77+=area77;}"
+      },
+      {
+        "line": 171,
+        "text": "bool NativeSourceReady77(){return _RestTriangles348[0].w==77;}"
+      },
+      {
+        "line": 172,
+        "text": "int NativeComponent77(int primitive){if(primitive<=0||primitive>(int)_TriangleRanges348[6].y)return 0;return(int)round(_RestTriangles348[(int)_TriangleRanges348[6].x+3*(primitive-1)].w);}"
+      },
+      {
+        "line": 173,
+        "text": "float3 NativeCentre77(int component){int root77=abs(component)-1;return float3(_RestTriangles348[2+4*root77].w,_RestTriangles348[3+4*root77].w,_RestTriangles348[4+4*root77].w);}"
+      },
+      {
+        "line": 174,
+        "text": "int NativeEye77(int component){return(int)round(_RestTriangles348[1+4*(abs(component)-1)].w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\EyeBoundaryRestore348\\Shaders\\EyeFeature348.compute",
+    "hits": [
+      {
+        "line": 14,
+        "text": "StructuredBuffer<float4> _LashGeometry590;StructuredBuffer<float4> _RestTriangles348;float4 _TriangleRanges348[16];"
+      },
+      {
+        "line": 81,
+        "text": "float3 barycentric(float3 restPosition,int sourceRole,int primitive){int offset=(int)_TriangleRanges348[sourceRole].x+3*(primitive-1);float3 a=_RestTriangles348[offset].xyz,b=_RestTriangles348[offset+1].xyz,c=_RestTriangles348[offset+2].xyz;float3 e=b-a,f=c-a,d=restPosition-a;float ee=dot(e,e),ff=dot(f,f),ef=dot(e,f),de=dot(d,e),df=dot(d,f);float det=ee*ff-ef*ef;float v=(ff*de-ef*df)/max(det,1e-30),w=(ee*df-ef*de)/max(det,1e-30);return float3(1-v-w,v,w);}"
+      }
+    ]
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\HeadLocal367\\Runtime\\EyeRenderer367.cs",
+    "hits": [
+      {
+        "line": 12,
+        "text": "T(\"_OldEyeOwner\",v.eyeOwner);T(\"_OldIntrinsic\",v.intrinsic);cmd.SetComputeMatrixParam(cs,\"_WorldToHead348\",e.headMatrix.inverse);cmd.SetComputeIntParams(cs,\"_ROI348\",e.roi.x,272-e.roi.y-e.roi.height,e.roi.width,e.roi.height);cmd.SetComputeVectorArrayParam(cs,\"_Centres348\",e.centres);cmd.SetComputeVectorArrayParam(cs,\"_AxesX348\",e.axesX);cmd.SetComputeVectorArrayParam(cs,\"_AxesY348\",e.axesY);cmd.SetComputeVectorParam(cs,\"_UpperLower348\",new Vector4(e.style.upper.x,e.style.upper.y,e.style.lower.x,e.style.lower.y));cmd.SetComputeVectorParam(cs,\"_Iris348\",new Vector4(e.style.irisRadii.x,e.style.irisRadii.y,e.style.irisOffset,e.style.irisPower));cmd.SetComputeVectorParam(cs,\"_Catch348\",new Vector4(e.style.catchU.x,e.style.catchU.y,e.style.catchV.x,e.style.catchV.y));cmd.SetComputeVectorParam(cs,\"_FaceLidShade348\",e.faceLidShadeEndpoint);cmd.SetComputeBufferParam(cs,k,\"_RestTriangles348\",e.restTriangles);cmd.SetComputeVectorArrayParam(cs,\"_TriangleRanges348\",e.triangleRanges);cmd.SetComputeTextureParam(cs,k,\"_TemplateRGBA\",v.templateRGBA);cmd.SetComputeTextureParam(cs,k,\"_TemplateRole\",v.templateRole);"
+      }
+    ]
+  }
+]

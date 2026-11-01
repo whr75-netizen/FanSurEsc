@@ -494,3 +494,18 @@ Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reser
 원복: PID35364에서 정상 Edit 복귀, GameMap1 clean/기존 dirty29 identity·내용 유지, 옵션 false/None·background false·time/pipeline/global getter 복원, RT30→30. 비교44개는 ExactUTF8이며 PlayerSettings와29 dirty 모두 포함한다. 비dirty ProjectSettings AssetImporter1개는 Play후 객체 부재로 미확인이다. Unity 내부 allocated +32.03MiB는 physical RAM/누수 확정이 아니며 capture-only delta는 약0.00069MiB다. 최종 경고 정리(초기값 명시·유효0..15 인덱스의 동치 bit 연산)는 추가 Play 없이 compute compile/native 비교로 확인했고 신규 정규화 경고·오류는 관측 마지막50개에서0이다. GPU검증 SHA와 경고정리 후 SHA는 `FINAL_COMPILE76.json`에 따로 있다.
 
 로컬 커밋에는 정확한 제품 패치/전후 소스 snapshot, 실제 fixture·검증·진단 asset와 이 인계만 포함한다. 원래 제품 compute에는 이전부터 미커밋 LayerMode19 등의 사용자 변경이 있어 HEAD와 안전하게 분리되지 않는다. 따라서 그 파일 전체를 stage하지 않았다. 실제 작업 트리에는 적용·컴파일되어 있으며 정확한 변경은 `PRODUCT_FINAL76.patch`와 `PATCH_FINAL76.json`으로 보존한다. 관련 커밋은 이 절의 Git 이력이다. CUA/앱 종료/SaveAssets/초기화/push는 하지 않았다.
+
+
+## Eye77 — 원본 상안검 연결 영역 선택, 실제 제품 부분 적용
+
+코드 색인: `EyeBoundaryRestore348/Shaders/NativeCacheGPU77.hlsl:NativeInit77/NativeSameInput77/NativeRoot77`(12행 부근), `NativeSourceSelection77.hlsl:NativeSample77/NativeVisible77/NativeAllocated77`, `EyeFeature348.compute:CountFeatures19`(141), `LegacyNativeLineAllocated76`(167), `NativeLineAllocated19`(190). 경로 앞에는 `Assets/EUnityValidation01/`을 붙인다. 기준 커밋은84a9c6b이고 이번 절과 실험의 커밋은 `git log -1 -- experiments/pixel-pipeline/2026-11-01-native-eyeline77`로 찾는다.
+
+확정 원인:76 실제 입력에서 S3 전체 가시 면적은0.510→0.449로 내려가 독립 반올림 budget1→0이 된다. 같은 upper source의 primitive46/5도 colour-competition rank에 의해(226,51)→(222,52)로 바뀐다. S0 무시 문제가 아니라 주로 실제 앞머리 가림이다.77은 원본 native 연결 component의 upper/lower를 구별하고, own-skin 이후 intrinsic 면적으로 예산을 정하되 실제 외부 가림 후 가시 표본이 있는 셀만 허용한다. source-rest 중심 오차로 선택하며 iris/white/이미 보존된 native 셀을 덮거나 중복하지 않는다. 최소1/2/4픽셀 고정, 피부 전체 덮기, RGB history/평균, 새 눈 색 생성은 없다. native 원색 자체가 밝은 부분은 그대로다.
+
+W 소유권은 `CACHE_OWNERSHIP77.json`과 전체 Assets 참조12개로 감사했다. instance `restTriangles`의 기존 미사용 W만 명시된 layout으로 사용하고 XYZ는 불변이다. HeadLocal 복제는 NonSerialized 버퍼를 복사하지 않으며 소유자 OnDisable에서 해제한다. Count의 한 스레드만 생산하고 다음 Evaluate dispatch부터 읽는다. count/base/size/centres/axis signature 변경 또는 새 W=0 업로드는 무효화한다. 캐시 지역배열로 생긴 레지스터 한도 경고와 무효 입력 반례는 미채택하고 고쳤다. 최종7개 실제 GPU fixture(별도 instance/반복초기화/무효입력 회복/축변경/재초기화/unknown W/용량 fallback)와 원본 index 기준140삼각형 대응이 통과했다. 현재 adapter 역할 및 정확 rest 위치 welding에 의존한다. 실행 중 sharedMesh만 교체하는 동작은 기존 Initialise부터 미지원이며77이 해결했다고 주장하지 않는다.
+
+실제 입력/검증: `experiments/pixel-pipeline/2026-11-01-native-eyeline77/INDEX.html`. 이전8프레임과 경고 정리 후 최종4프레임은 별도 sourceId다. 각각 동일 프레임의76 GPU replay와77을 비교했다. 상안검은 열린 상태(225,51), 실제 Close 상태(225,53)로 이동하고 최종4프레임 iris는8→0→0→8이다. 반감김은 이전8프레임에서5셀이다. source geometry와 표본 투영 최대오차0.00059px 이하. portable12프레임에서 보존 RGB96건/새 native source 색18건, GPU/오프라인 선택 일치, 안검 외 ROI RGB 변경0이다. 최종 ShaderUtil33메시지를 기존76과 정규화 대조해 새 종류 경고/컴파일 오류0을 확인했다. 외부 getter 보고서의 상대 경로 오류1건은 절대 경로로 수정했고 제품 동작 오류로 숨기지 않았다.
+
+복원: PID35364 Edit/domain1, GameMap1 clean, Assets/ProjectSettings dirty29 identity 및 내용 보존, options false/None/background false/time/pipeline/global 복구. native44/45 ExactUTF8이며 비dirty ProjectSettings AssetImporter1은 unavailable이다. path 없는 Editor Object/SceneVisibilityState 각1개의 raw dirty 증가를 기록했고 소유권 근거 없이 지우지 않았다. RT30→30, 임시 버퍼/셰이더만 해제하고 빌린 참조·morph·afterPose를 복원했다. 최종 Unity 내부 allocated+32.18MiB/capture-only 약0.00125MiB는 물리 RAM/누수 확정이 아니다. C# Assets import/recompile, SaveAssets, CUA, 종료/reset/push는 없었다.
+
+미완: 전체 눈 joint shape/state bank, 곡선 전체와 소수 좌표의 연속 이동, 긴 회전/보행/모든 모델 미관은 해결·검증하지 않았다. 원배율/확대 PNG를 직접 봤지만 거친 눈 모양은 남아 있다. 기존 user LayerMode19 선행 변경 때문에 전체 main compute 함수는 HEAD에 독립 적용 불가하므로 통째로 stage하지 않는다. 새 helper 실제 경로6파일과 분리 가능한 RW 선언 hunk만 선택 보존하며, 정확한 전체 작업 source/전후 snapshot/PRODUCT77.patch/컴팩트 실제 fixture는 위 실험에 남긴다. user 기존29개 다른 tracked 파일 해시는 불변이다.

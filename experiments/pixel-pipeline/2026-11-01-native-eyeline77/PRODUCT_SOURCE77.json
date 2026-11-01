@@ -1,0 +1,14 @@
+{
+  "beforeSHA": "c073eab5ff641fee8743c3ea1cbbd95cbd11b3bcce0166f1f4d945dc2a7f799c",
+  "afterSHA": "f59fc56b8f3441b5ab234533210c19221ce6e1f84b01101227b32c4919055dc8",
+  "CSharpChanged": false,
+  "newProductHelpers": [
+    "NativeCacheGPU77.hlsl",
+    "NativeSourceSelection77.hlsl"
+  ],
+  "sourceDependency": "Existing adapter roles/stable source topology; no hardcoded primitive ranges, pixel count or model colour",
+  "sourceCacheTest": "CACHE_GPU_OWNED77.json, seven strict GPU fixture checks; every source XYZ unchanged",
+  "limits": "Live sharedMesh replacement while existing renderer.ready is not supported by existing Initialise; renderer recreation/reinitialization validated, not arbitrary hot-swap",
+  "priorGPU8ProductSHA": "ef762186aa02f4766b575024d8b3b0368fe034656df9ccce5bb0bebbbd57fcbd",
+  "finalHelperSHA": "6fb369e42a270783c20bea0c8ca990b3cf9a70bfb0ca72f342864ebc551767ec"
+}

@@ -1,0 +1,18 @@
+{
+  "productionOwner": "EyeFeature348.restTriangles; NonSerialized instance ComputeBuffer, not static",
+  "createUpload": "EyeFeature348.Initialise line14, new ComputeBuffer Vector4 stride16; Vector3 conversion uploads W=0; only production upload",
+  "consumers": "EyeRenderer367.Dispatch line12 scoped compute binding on Count/Evaluate; original product and old diagnostic barycentric read xyz only",
+  "copy": "HeadLocal367.CopyFields line11 excludes NonSerializedAttribute; headEyes.Initialise allocates its own buffer (line19)",
+  "dispose": "EyeFeature348.OnDisable line43, owner Dispose; ready=false, next Initialise replaces with a fresh buffer. No test disposes borrowed buffers.",
+  "modelSwitch": "New renderer/reinitialization has a new owned buffer/W=0. Live sharedMesh replacement while ready is not supported by existing Initialise and is NOT claimed fixed by77.",
+  "invalidation": "Cache source XYZ only;19W signature stores native count/base/buffer size + two centres/stable IDs + two axesY/radii. Changed signature rebuilds. New upload W=0 rebuilds. Unknown W is not adopted.",
+  "metadataLayout": "W0 header77 ready/-77 unsupported; W1..19 input signature; W21+4*root..24+4*root eyeId,meanRest; native first-vertex W signed root+1. All XYZ immutable.",
+  "scheduling": "Count thread(0,0,0) sole W producer; other Count threads never consume W; Evaluate consumes after Count dispatch. No cross-group spin or barrier assumption.",
+  "limits": [
+    "Triangle count cap256 is a bounded resource contract, not pixel-size or model style constant.",
+    "GPU exact-rest-position welding must match original-index components in current source; coincident disconnected seams can differ in other models and are not universally validated.",
+    "Independent instance/reinit and signature tests are actual GPU fixture results; runtime product integration remains pending."
+  ],
+  "referenceFileCount": 12,
+  "sourceReferences": "W_REFERENCES_ALL_ASSETS77.json"
+}

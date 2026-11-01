@@ -1,0 +1,339 @@
+{
+  "solver": {
+    "independentExhaustiveCases": 24,
+    "infeasibleCarrierRejected": true,
+    "absentPartsCannotBeReanimated": true,
+    "noRGBOrMassRounding": true
+  },
+  "countDiagnosticIndependentExhaustiveCases": 40,
+  "fullProblemD4AndOrderChecks": 18,
+  "sourceShapeCounterexample": {
+    "histogramIsNotShape": true,
+    "relativeSourcePairsMeasuredSeparately": true,
+    "historyDoesNotReanimateUnavailableSource": true
+  },
+  "independentGPUQueryWitnesses": [
+    {
+      "frame": 101,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame101",
+      "certainGPUFrontAlphaWitnesses": 0,
+      "independentReconstructionAlsoBlocked": 0
+    },
+    {
+      "frame": 192,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame192",
+      "certainGPUFrontAlphaWitnesses": 173,
+      "independentReconstructionAlsoBlocked": 173
+    }
+  ],
+  "footprints": {
+    "piecesRetainingBaryUVWorldDepth": 35325,
+    "independentSurfaceSamples": 30667,
+    "hairQueriesAtExactRecordedS4Coordinates": 29253,
+    "partiallyVisibleCarrierCells": 672,
+    "oneCellHasBothHairFrontAndNonFront": 629,
+    "maximumWithinCellCarrierDepthRangeMetres": 0.025011367918247984,
+    "unknownAlphaOrUnobservedSamples": 764,
+    "maxClippingError": 1.1102230246251565e-16,
+    "finiteSamplesNotWholeFootprintProof": true
+  },
+  "reprojectionSensitivity": {
+    "coordinateMagnitudeFromIndependentReconstruction": 0.0015835195588774103,
+    "probes": [
+      {
+        "frame": 103,
+        "owner": 1,
+        "finitePerturbations": [
+          {
+            "direction": 0,
+            "deltaXY": [
+              0.0015835195588774103,
+              0.0
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 32,
+            "after": 32,
+            "errorPixels": 1.0216529998500026
+          },
+          {
+            "direction": 1,
+            "deltaXY": [
+              0.0011197174182237474,
+              0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 32,
+            "after": 32,
+            "errorPixels": 1.0208234075123015
+          },
+          {
+            "direction": 2,
+            "deltaXY": [
+              9.696260795832247e-20,
+              0.0015835195588774103
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 32,
+            "after": 32,
+            "errorPixels": 1.020862802354021
+          },
+          {
+            "direction": 3,
+            "deltaXY": [
+              -0.0011197174182237472,
+              0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 32,
+            "after": 32,
+            "errorPixels": 1.0217480275971176
+          },
+          {
+            "direction": 4,
+            "deltaXY": [
+              -0.0015835195588774103,
+              1.9392521591664493e-19
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 32,
+            "after": 32,
+            "errorPixels": 1.0229593048973118
+          },
+          {
+            "direction": 5,
+            "deltaXY": [
+              -0.0011197174182237474,
+              -0.0011197174182237472
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 32,
+            "after": 32,
+            "errorPixels": 1.0237871664821132
+          },
+          {
+            "direction": 6,
+            "deltaXY": [
+              -2.9088782387496736e-19,
+              -0.0015835195588774103
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 32,
+            "after": 32,
+            "errorPixels": 1.0237478841728542
+          },
+          {
+            "direction": 7,
+            "deltaXY": [
+              0.001119717418223747,
+              -0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 32,
+            "after": 32,
+            "errorPixels": 1.0228643896821807
+          }
+        ],
+        "notIntervalCertification": true,
+        "carrierEligibilityHeldFixed": true
+      },
+      {
+        "frame": 107,
+        "owner": 1,
+        "finitePerturbations": [
+          {
+            "direction": 0,
+            "deltaXY": [
+              0.0015835195588774103,
+              0.0
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 4,
+            "after": 4,
+            "errorPixels": 0.9880611966754952
+          },
+          {
+            "direction": 1,
+            "deltaXY": [
+              0.0011197174182237474,
+              0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 4,
+            "after": 4,
+            "errorPixels": 0.9871402259802253
+          },
+          {
+            "direction": 2,
+            "deltaXY": [
+              9.696260795832247e-20,
+              0.0015835195588774103
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 4,
+            "after": 4,
+            "errorPixels": 0.9870473103567777
+          },
+          {
+            "direction": 3,
+            "deltaXY": [
+              -0.0011197174182237472,
+              0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 4,
+            "after": 4,
+            "errorPixels": 0.9878370727319142
+          },
+          {
+            "direction": 4,
+            "deltaXY": [
+              -0.0015835195588774103,
+              1.9392521591664493e-19
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 4,
+            "after": 4,
+            "errorPixels": 0.9890456253404122
+          },
+          {
+            "direction": 5,
+            "deltaXY": [
+              -0.0011197174182237474,
+              -0.0011197174182237472
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 4,
+            "after": 4,
+            "errorPixels": 0.9899648234318874
+          },
+          {
+            "direction": 6,
+            "deltaXY": [
+              -2.9088782387496736e-19,
+              -0.0015835195588774103
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 4,
+            "after": 4,
+            "errorPixels": 0.9900574652505123
+          },
+          {
+            "direction": 7,
+            "deltaXY": [
+              0.001119717418223747,
+              -0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 4,
+            "after": 4,
+            "errorPixels": 0.9892694754803978
+          }
+        ],
+        "notIntervalCertification": true,
+        "carrierEligibilityHeldFixed": true
+      },
+      {
+        "frame": 207,
+        "owner": 1,
+        "finitePerturbations": [
+          {
+            "direction": 0,
+            "deltaXY": [
+              0.0015835195588774103,
+              0.0
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 2,
+            "after": 2,
+            "errorPixels": 0.9030207445004421
+          },
+          {
+            "direction": 1,
+            "deltaXY": [
+              0.0011197174182237474,
+              0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 2,
+            "after": 2,
+            "errorPixels": 0.9023324746742661
+          },
+          {
+            "direction": 2,
+            "deltaXY": [
+              9.696260795832247e-20,
+              0.0015835195588774103
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 2,
+            "after": 2,
+            "errorPixels": 0.902552635267744
+          },
+          {
+            "direction": 3,
+            "deltaXY": [
+              -0.0011197174182237472,
+              0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 2,
+            "after": 2,
+            "errorPixels": 0.9035517627391632
+          },
+          {
+            "direction": 4,
+            "deltaXY": [
+              -0.0015835195588774103,
+              1.9392521591664493e-19
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 2,
+            "after": 2,
+            "errorPixels": 0.904743285180487
+          },
+          {
+            "direction": 5,
+            "deltaXY": [
+              -0.0011197174182237474,
+              -0.0011197174182237472
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 2,
+            "after": 2,
+            "errorPixels": 0.9054297224111476
+          },
+          {
+            "direction": 6,
+            "deltaXY": [
+              -2.9088782387496736e-19,
+              -0.0015835195588774103
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 2,
+            "after": 2,
+            "errorPixels": 0.9052102615683074
+          },
+          {
+            "direction": 7,
+            "deltaXY": [
+              0.001119717418223747,
+              -0.0011197174182237474
+            ],
+            "optimalLabelSetChanged": false,
+            "before": 2,
+            "after": 2,
+            "errorPixels": 0.904212966688857
+          }
+        ],
+        "notIntervalCertification": true,
+        "carrierEligibilityHeldFixed": true
+      }
+    ],
+    "universalErrorBoundClaimed": false,
+    "producerAlphaDifferenceIsNotAnOpacityAllowance": 0.0017272338764194872
+  },
+  "UnityCalls": 0,
+  "GPUDispatches": 0,
+  "productApplied": false,
+  "seconds": 4.052391700010048
+}

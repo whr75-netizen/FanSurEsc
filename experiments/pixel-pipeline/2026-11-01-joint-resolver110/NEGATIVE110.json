@@ -1,0 +1,35 @@
+{
+  "status": "superseded negative ablations retained, not product changes",
+  "failedPremises": [
+    {
+      "premise": "Missing recorded Close defaults to0",
+      "observedWrongDepthErrorMetres": 0.0196459,
+      "correction": "Use actual held Close; otherwise explicit calibration-depth estimate, never stage-name inference. Independent reprojection checks remain separate."
+    },
+    {
+      "premise": "A continuous source curve forces connectivity across external hair",
+      "example": "F99 eye2",
+      "wrongErrorPixels": 4.141150972101058,
+      "correction": "Separate canonical placement from external hair exposure. Never force a bridge through a currently masked carrier."
+    },
+    {
+      "premise": "Any visible carrier sample gives one owner.z for the whole cell",
+      "evidence": "629 actual cells contain both hair-front and hair-nonfront samples; maximum within-cell carrier depth range .02501137m. Preserve each footprint and per-fine depth/visibility."
+    },
+    {
+      "premise": "A source-ID histogram is a shape cache",
+      "counterexample": "A+B in one cell has the same normalized IDs as A then B in neighbouring cells. Record relative source-key geometry and missing pairs separately."
+    },
+    {
+      "premise": "A bounded64-witness choice is the unique optimum",
+      "counterexample": "Exact feasibility at F99 eye1 same optimal error admits iris1..5 cells. Current source-form scores are conditional on enumerated solutions, not a complete Pareto optimum."
+    }
+  ],
+  "supersededWorkspaceFilesNotPublished": [
+    "frame103-eye1-footprint.json",
+    "frame103-eye2-footprint.json"
+  ],
+  "publishedFootprints": "*-footprint.json.gz (final exact S4 coordinate adapter)",
+  "productApplied": false,
+  "newUnityOrGPU": 0
+}

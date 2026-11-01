@@ -1,0 +1,838 @@
+{
+  "status": "sampled-minimax-geometric-optima",
+  "errorPixels": 0.9038810380821488,
+  "previousThresholdInfeasible": 0.9023608363974078,
+  "solutions": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3,
+      3,
+      0,
+      0,
+      3,
+      1,
+      2,
+      0,
+      0,
+      0,
+      2,
+      2
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3,
+      3,
+      0,
+      0,
+      3,
+      1,
+      2,
+      0,
+      0,
+      2,
+      2,
+      2
+    ]
+  ],
+  "uniqueCertified": false,
+  "enumerationComplete": true,
+  "witnesses": 2,
+  "solverCalls": 10,
+  "nodes": 147,
+  "seconds": 0.04616559998248704,
+  "active": [
+    1,
+    2,
+    3
+  ],
+  "countsAreOutputsNotConstraints": true,
+  "policy": "equal per-feature geometric error, finite points/square corners; not author intent",
+  "metrics": [
+    {
+      "1": {
+        "count": 1,
+        "sourceToSquares": 0.6434768838116876,
+        "cornersToSource": 0.31868871959954903,
+        "components4": 1,
+        "components8": 1
+      },
+      "2": {
+        "count": 3,
+        "sourceToSquares": 0.8125,
+        "cornersToSource": 0.5376453291901642,
+        "components4": 1,
+        "components8": 1
+      },
+      "3": {
+        "count": 5,
+        "sourceToSquares": 0.5686912862076238,
+        "cornersToSource": 0.9038810380821488,
+        "components4": 2,
+        "components8": 1
+      }
+    },
+    {
+      "1": {
+        "count": 1,
+        "sourceToSquares": 0.6434768838116876,
+        "cornersToSource": 0.31868871959954903,
+        "components4": 1,
+        "components8": 1
+      },
+      "2": {
+        "count": 4,
+        "sourceToSquares": 0.08838834764831845,
+        "cornersToSource": 0.5376453291901642,
+        "components4": 1,
+        "components8": 1
+      },
+      "3": {
+        "count": 5,
+        "sourceToSquares": 0.5686912862076238,
+        "cornersToSource": 0.9038810380821488,
+        "components4": 2,
+        "components8": 1
+      }
+    }
+  ],
+  "metadata": {
+    "Close": 0.25,
+    "calibration": [
+      {
+        "owner": 2,
+        "markerMaxPixels": 0.0001184590017831369,
+        "markerDepthMax": 1.2621673270984957e-06,
+        "skinRingIsCalibrationOnly": true,
+        "CloseSource": "recorded-actual-Close"
+      },
+      {
+        "owner": 1,
+        "markerMaxPixels": 3.463142216121363e-05,
+        "markerDepthMax": 1.083360512410536e-06,
+        "skinRingIsCalibrationOnly": true,
+        "CloseSource": "recorded-actual-Close"
+      }
+    ],
+    "sourceId": "eye107-20261101T203819878Z-b90efeef-frame210",
+    "frame": 210,
+    "reconstructedGeometry": true,
+    "canonicalSize": [
+      17,
+      9
+    ],
+    "carrierIncludesSameFrameExternalHairPerRecordedSample": true,
+    "referenceCurveExternalHairVisibilityBetweenSamplesUnobserved": true,
+    "placementBeforeExternalHair": true
+  },
+  "owner": 1,
+  "connectivity": {
+    "1": false,
+    "2": false,
+    "3": true
+  },
+  "cells": [
+    [
+      1,
+      14
+    ],
+    [
+      1,
+      15
+    ],
+    [
+      2,
+      12
+    ],
+    [
+      2,
+      13
+    ],
+    [
+      2,
+      14
+    ],
+    [
+      2,
+      15
+    ],
+    [
+      2,
+      16
+    ],
+    [
+      3,
+      10
+    ],
+    [
+      3,
+      11
+    ],
+    [
+      3,
+      12
+    ],
+    [
+      3,
+      13
+    ],
+    [
+      3,
+      14
+    ],
+    [
+      3,
+      15
+    ],
+    [
+      3,
+      16
+    ],
+    [
+      4,
+      10
+    ],
+    [
+      4,
+      11
+    ],
+    [
+      4,
+      12
+    ],
+    [
+      4,
+      13
+    ],
+    [
+      4,
+      14
+    ],
+    [
+      5,
+      10
+    ],
+    [
+      5,
+      11
+    ],
+    [
+      5,
+      12
+    ],
+    [
+      5,
+      13
+    ]
+  ],
+  "selectedIndicesWithinEnumeratedOptima": [
+    1
+  ],
+  "sourceIdentity": {
+    "intrinsicNondominated": [
+      1
+    ],
+    "sourceFormDimensions": [
+      {
+        "1": "5/6",
+        "4": "1/3",
+        "6": "197/106",
+        "1:missingSourcePairs": "2/3",
+        "1:relativeGeometry": "41785/137904",
+        "4:missingSourcePairs": "0",
+        "4:relativeGeometry": "39917/134784"
+      },
+      {
+        "1": "5/6",
+        "4": "1/11",
+        "6": "197/106",
+        "1:missingSourcePairs": "2/3",
+        "1:relativeGeometry": "41785/137904",
+        "4:missingSourcePairs": "0",
+        "4:relativeGeometry": "1083653/16308864"
+      }
+    ],
+    "historyAvailable": true,
+    "historyPartVectors": [],
+    "historyAfterCurrentEligibilityAndGeometry": true,
+    "noRGBScore": true,
+    "nativeIntervalRelativeGeometryNotCertified": true,
+    "bankSourceCheck": {
+      "examined": 194,
+      "unresolvedSourceKeys": 0,
+      "bankRGB8Mismatch": 0,
+      "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+      "sampleScale": 4,
+      "primary108SampleScale": 8
+    },
+    "exactTransportTiesUnresolved": 0,
+    "carrierCellsWithoutUniqueSourceID": 27,
+    "transportRule": "rest-head-bank-centre / native-UV-section; not RGB nearest"
+  },
+  "sourceHistograms": [
+    [
+      {
+        "key": [
+          1,
+          1,
+          220,
+          79
+        ],
+        "weight": "4"
+      },
+      {
+        "key": [
+          1,
+          1,
+          221,
+          79
+        ],
+        "weight": "12"
+      },
+      {
+        "key": [
+          1,
+          4,
+          220,
+          80
+        ],
+        "weight": "11"
+      },
+      {
+        "key": [
+          1,
+          4,
+          221,
+          80
+        ],
+        "weight": "13"
+      },
+      {
+        "key": [
+          1,
+          4,
+          222,
+          79
+        ],
+        "weight": "10"
+      },
+      {
+        "key": [
+          1,
+          4,
+          222,
+          80
+        ],
+        "weight": "10"
+      },
+      {
+        "key": [
+          1,
+          6,
+          62,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          85,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          105,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          120,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          127,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          1,
+          6,
+          155,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          159,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          163,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          170,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          185,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          188,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          193,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          211,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          212,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          233,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          271,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          291,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          298,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          310,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          347,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          353,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          354,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          370,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          376,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          381,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          393,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          394,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          398,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          400,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          1,
+          6,
+          408,
+          0
+        ],
+        "weight": "1"
+      }
+    ]
+  ],
+  "exposureForConditionalChoices": [
+    [
+      {
+        "cellYX": [
+          3,
+          12
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          225,
+          51
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.5625,
+          0.5625
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          3,
+          13
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          226,
+          51
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.25,
+          0.25
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          3,
+          14
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          227,
+          51
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.25,
+          0.25
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          3,
+          15
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          228,
+          51
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.125,
+          0.125
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          11
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          224,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.25,
+          0.25
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          12
+        ],
+        "part": 1,
+        "displayCellTopLeft": [
+          225,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.9375,
+          0.9375
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          13
+        ],
+        "part": 2,
+        "displayCellTopLeft": [
+          226,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.9375,
+          0.9375
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.00625392092032051,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          5,
+          11
+        ],
+        "part": 2,
+        "displayCellTopLeft": [
+          224,
+          53
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.375,
+          0.375
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.005575982761433451,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          5,
+          12
+        ],
+        "part": 2,
+        "displayCellTopLeft": [
+          225,
+          53
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.5,
+          0.5
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.006110921135435987,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          5,
+          13
+        ],
+        "part": 2,
+        "displayCellTopLeft": [
+          226,
+          53
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.1875,
+          0.1875
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.006095036451101876,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      }
+    ]
+  ],
+  "adopted": false,
+  "finalRGBProduced": false,
+  "externalHairMayHideButDoesNotReallocateFeature": true,
+  "historyCannotBypassFinalExposure": true,
+  "historyMayBeIncomplete": false
+}

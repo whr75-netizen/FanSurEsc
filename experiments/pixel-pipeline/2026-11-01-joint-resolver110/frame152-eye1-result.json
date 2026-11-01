@@ -1,0 +1,75 @@
+{
+  "status": "infeasible-carrier-or-topology",
+  "active": [
+    1,
+    2,
+    3
+  ],
+  "seconds": 0.0005537999968510121,
+  "metrics": [],
+  "metadata": {
+    "Close": 2.262910252421392e-05,
+    "calibration": [
+      {
+        "owner": 2,
+        "markerMaxPixels": 3.742556319373493e-05,
+        "markerDepthMax": 6.657842259727431e-07,
+        "skinRingIsCalibrationOnly": true,
+        "CloseSource": "fit-from-logged-ring-depth; not-independent-depth-validation"
+      },
+      {
+        "owner": 1,
+        "markerMaxPixels": 5.4640392867864406e-05,
+        "markerDepthMax": 9.564061507205679e-07,
+        "skinRingIsCalibrationOnly": true,
+        "CloseSource": "fit-from-logged-ring-depth; not-independent-depth-validation"
+      }
+    ],
+    "sourceId": "eye107-20261101T203819878Z-b90efeef-frame152",
+    "frame": 152,
+    "reconstructedGeometry": true,
+    "canonicalSize": [
+      10,
+      13
+    ],
+    "carrierIncludesSameFrameExternalHairPerRecordedSample": true,
+    "referenceCurveExternalHairVisibilityBetweenSamplesUnobserved": true
+  },
+  "owner": 1,
+  "connectivity": {
+    "3": true
+  },
+  "cells": [
+    [
+      7,
+      3
+    ],
+    [
+      7,
+      4
+    ],
+    [
+      8,
+      4
+    ],
+    [
+      9,
+      4
+    ]
+  ],
+  "sourceIdentity": {
+    "bankSourceCheck": {
+      "examined": 83,
+      "unresolvedSourceKeys": 0,
+      "bankRGB8Mismatch": 0,
+      "maxGPUFloatVsAnalyticSRGBDecode": 0.0018831419329731203,
+      "sampleScale": 4,
+      "primary108SampleScale": 8
+    },
+    "exactTransportTiesUnresolved": 0,
+    "carrierCellsWithoutUniqueSourceID": 47,
+    "transportRule": "rest-head-bank-centre / native-UV-section; not RGB nearest"
+  },
+  "adopted": false,
+  "finalPaletteRGBCompositorImplemented": false
+}

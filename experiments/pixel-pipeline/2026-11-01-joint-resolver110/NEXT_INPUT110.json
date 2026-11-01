@@ -1,0 +1,40 @@
+{
+  "status": "NOT_EXECUTED; do not port incomplete CSP as a runtime success",
+  "whyNoGPU110": "The geometric optimum admits iris1..5 cells, and 64 witnesses do not certify a final shape. A new mesh capture cannot resolve this objective plateau.",
+  "actualOfflineCost": "Surface adapter approximately0.4..3.3s per eye/state. Exact finite CSP after branching fix approximately0.01..0.14s for bounded64 witnesses in tested states. Neither is GPU timing or a worst-case bound.",
+  "runtimeSafetyBeforeIntegration": [
+    "Separate static source cache from dynamic evaluated vertices and per-view allocation/exposure.",
+    "Source cache key: model/topology/rest/UV/material+texture contents/registration/bank/policy; change invalidates source registration.",
+    "Per-view history key additionally renderer identity, camera/view and projection/layout registration; pose updates current geometry and occlusion, not immutable bank.",
+    "All query buffers/RTs/material clones owned by isolated adapter; never release borrowed renderer buffers. No global buffer rebinding.",
+    "Current Close/face visibility and final external hair exposure precede history use. History may never turn a masked latent ID into rendered colour.",
+    "No full-frame GPU-to-CPU readback, RGB averaging or allocating an exact unbounded CSP on every frame.",
+    "Repeated initialization/disposal/model replacement/multi-view must be checked on the eventual runtime implementation; offline scoping is not that lifecycle proof."
+  ],
+  "boundedDataBudgetExamplesNotMeasurements": {
+    "evaluatedFace4060Float3Bytes": 48720,
+    "sourceCurve848RecordsAt32Bytes": 27136,
+    "perView18x8x16x3RecordsAt32Bytes": 221184
+  },
+  "nextMinimumCapture": {
+    "purpose": "Replace107 geometry reconstruction and uncertain between-sample occlusion, not tune the colour or resolve the shape optimum.",
+    "preferDirectCaptureOverFurtherReconstruction": true,
+    "states": "One failing fixed-pose state is sufficient for direct geometry agreement. For real phase/history claims capture6 actual states0,.25,.5,.75,1,0 under one Play; each frame gets its own sourceId.",
+    "inputs": [
+      "Same-frame evaluated face vertices with indices/UV/material topology hashes and actual evaluated Close/bone pose.",
+      "Exact applied head inverse, nativeToAuthored P, forward H, view/projection, anchor/bounds and viewport/sample coordinates.",
+      "848 native pigment reference points: exact source UV/primitive/barycentric and current world/depth; production face and external-hair query kept separate.",
+      "For curve occlusion query record actual blocker source triangle/material/UV/depth/alpha bounds, never infer transparent when not observed. Reuse renderer geometry buffers with owned query output.",
+      "Dense iris/white source bank keys plus original primitive/UV or rest/barycentric in a bounded visible ROI. Existing107 dense metadata omits these:109/110 history audits actual4x IDs against8x primary support and must not claim complete8x source identity.",
+      "Same-frame S4 hair sample alpha/depth, baseline/backing and source bank identity channels; no mixing old/new sourceId."
+    ],
+    "costComparison": "About49KB evaluated positions plus tens of KB of curve/query records per state is more exact and cheaper than extending the reconstruction hypothesis. Capture is useful after the offline shape criterion is corrected.",
+    "statePreservation": [
+      "Fresh non-UI project/Editor/scene/dirty asset/InputSettings identity+22 values+devices preflight; current values outrank the old31 count.",
+      "External immutable snapshot/hash and serialized/native backup of only state to be changed; no unconditional SaveAssets or InputSettings replacement.",
+      "External runner/owned compute scope; no Assets import or domain reload unless separately justified and safely preserved.",
+      "Normal Play exit; restore options/background/pause/time/pipeline/globals from actual current backup; compare user assets and owned resource disposal.",
+      "New unique output directory plus complete marker after same-source validation. On uncertain call, inspect completion before retry."
+    ]
+  }
+}

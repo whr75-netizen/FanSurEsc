@@ -1,0 +1,1906 @@
+{
+  "status": "sampled-minimax-geometric-optima",
+  "errorPixels": 1.1625672023586422,
+  "previousThresholdInfeasible": 1.1622031812032423,
+  "solutions": [
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      1,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      0,
+      0,
+      0,
+      0,
+      2,
+      1,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      0,
+      0,
+      0,
+      0,
+      2,
+      1,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      0,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      3,
+      0,
+      0,
+      0,
+      0,
+      2,
+      0,
+      1,
+      0,
+      0,
+      0
+    ]
+  ],
+  "uniqueCertified": false,
+  "enumerationComplete": true,
+  "witnesses": 6,
+  "solverCalls": 7,
+  "nodes": 153,
+  "seconds": 0.02781130000948906,
+  "active": [
+    1,
+    2,
+    3
+  ],
+  "countsAreOutputsNotConstraints": true,
+  "policy": "equal per-feature geometric error, finite points/square corners; not author intent",
+  "metrics": [
+    {
+      "1": {
+        "count": 1,
+        "sourceToSquares": 0.9375,
+        "cornersToSource": 0.7551903733496608,
+        "components4": 1,
+        "components8": 1
+      },
+      "2": {
+        "count": 1,
+        "sourceToSquares": 0.7551903733496608,
+        "cornersToSource": 1.1625672023586422,
+        "components4": 1,
+        "components8": 1
+      },
+      "3": {
+        "count": 7,
+        "sourceToSquares": 1.146309641885546,
+        "cornersToSource": 0.7888350575749828,
+        "components4": 1,
+        "components8": 1
+      }
+    },
+    {
+      "1": {
+        "count": 2,
+        "sourceToSquares": 0.1875,
+        "cornersToSource": 0.8338540040078959,
+        "components4": 1,
+        "components8": 1
+      },
+      "2": {
+        "count": 1,
+        "sourceToSquares": 0.7551903733496608,
+        "cornersToSource": 1.1625672023586422,
+        "components4": 1,
+        "components8": 1
+      },
+      "3": {
+        "count": 7,
+        "sourceToSquares": 1.146309641885546,
+        "cornersToSource": 0.7888350575749828,
+        "components4": 1,
+        "components8": 1
+      }
+    },
+    {
+      "1": {
+        "count": 1,
+        "sourceToSquares": 0.9375,
+        "cornersToSource": 0.7551903733496608,
+        "components4": 1,
+        "components8": 1
+      },
+      "2": {
+        "count": 1,
+        "sourceToSquares": 0.7551903733496608,
+        "cornersToSource": 1.1625672023586422,
+        "components4": 1,
+        "components8": 1
+      },
+      "3": {
+        "count": 8,
+        "sourceToSquares": 0.2822093000901483,
+        "cornersToSource": 0.9766489439074618,
+        "components4": 1,
+        "components8": 1
+      }
+    },
+    {
+      "1": {
+        "count": 2,
+        "sourceToSquares": 0.1875,
+        "cornersToSource": 0.8338540040078959,
+        "components4": 1,
+        "components8": 1
+      },
+      "2": {
+        "count": 1,
+        "sourceToSquares": 0.7551903733496608,
+        "cornersToSource": 1.1625672023586422,
+        "components4": 1,
+        "components8": 1
+      },
+      "3": {
+        "count": 8,
+        "sourceToSquares": 0.2822093000901483,
+        "cornersToSource": 0.9766489439074618,
+        "components4": 1,
+        "components8": 1
+      }
+    },
+    {
+      "1": {
+        "count": 1,
+        "sourceToSquares": 0.9560661587986472,
+        "cornersToSource": 0.8338540040078959,
+        "components4": 1,
+        "components8": 1
+      },
+      "2": {
+        "count": 1,
+        "sourceToSquares": 0.7551903733496608,
+        "cornersToSource": 1.1625672023586422,
+        "components4": 1,
+        "components8": 1
+      },
+      "3": {
+        "count": 7,
+        "sourceToSquares": 1.146309641885546,
+        "cornersToSource": 0.7888350575749828,
+        "components4": 1,
+        "components8": 1
+      }
+    },
+    {
+      "1": {
+        "count": 1,
+        "sourceToSquares": 0.9560661587986472,
+        "cornersToSource": 0.8338540040078959,
+        "components4": 1,
+        "components8": 1
+      },
+      "2": {
+        "count": 1,
+        "sourceToSquares": 0.7551903733496608,
+        "cornersToSource": 1.1625672023586422,
+        "components4": 1,
+        "components8": 1
+      },
+      "3": {
+        "count": 8,
+        "sourceToSquares": 0.2822093000901483,
+        "cornersToSource": 0.9766489439074618,
+        "components4": 1,
+        "components8": 1
+      }
+    }
+  ],
+  "metadata": {
+    "Close": 0.75,
+    "calibration": [
+      {
+        "owner": 2,
+        "markerMaxPixels": 0.00014402090356841867,
+        "markerDepthMax": 8.704956613314607e-07,
+        "skinRingIsCalibrationOnly": true,
+        "CloseSource": "recorded-actual-Close"
+      },
+      {
+        "owner": 1,
+        "markerMaxPixels": 8.706738272135062e-05,
+        "markerDepthMax": 1.0378500885366293e-06,
+        "skinRingIsCalibrationOnly": true,
+        "CloseSource": "recorded-actual-Close"
+      }
+    ],
+    "sourceId": "eye107-20261101T203819878Z-b90efeef-frame105",
+    "frame": 105,
+    "reconstructedGeometry": true,
+    "canonicalSize": [
+      18,
+      8
+    ],
+    "carrierIncludesSameFrameExternalHairPerRecordedSample": true,
+    "referenceCurveExternalHairVisibilityBetweenSamplesUnobserved": true,
+    "placementBeforeExternalHair": true
+  },
+  "owner": 2,
+  "connectivity": {
+    "1": false,
+    "2": false,
+    "3": true
+  },
+  "cells": [
+    [
+      3,
+      0
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      4
+    ],
+    [
+      4,
+      0
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      4,
+      3
+    ],
+    [
+      4,
+      4
+    ],
+    [
+      4,
+      5
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      4,
+      7
+    ],
+    [
+      4,
+      8
+    ],
+    [
+      5,
+      0
+    ],
+    [
+      5,
+      1
+    ],
+    [
+      5,
+      2
+    ],
+    [
+      5,
+      3
+    ],
+    [
+      5,
+      4
+    ],
+    [
+      5,
+      5
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      5,
+      7
+    ],
+    [
+      5,
+      8
+    ]
+  ],
+  "selectedIndicesWithinEnumeratedOptima": [
+    2,
+    3
+  ],
+  "sourceIdentity": {
+    "intrinsicNondominated": [
+      2,
+      3
+    ],
+    "sourceFormDimensions": [
+      {
+        "1": "1",
+        "4": "1",
+        "6": "94/53",
+        "1:missingSourcePairs": "1",
+        "1:relativeGeometry": "0",
+        "4:missingSourcePairs": "1",
+        "4:relativeGeometry": "0"
+      },
+      {
+        "1": "1/7",
+        "4": "1",
+        "6": "94/53",
+        "1:missingSourcePairs": "0",
+        "1:relativeGeometry": "45/3136",
+        "4:missingSourcePairs": "1",
+        "4:relativeGeometry": "0"
+      },
+      {
+        "1": "1",
+        "4": "1",
+        "6": "375/212",
+        "1:missingSourcePairs": "1",
+        "1:relativeGeometry": "0",
+        "4:missingSourcePairs": "1",
+        "4:relativeGeometry": "0"
+      },
+      {
+        "1": "1/7",
+        "4": "1",
+        "6": "375/212",
+        "1:missingSourcePairs": "0",
+        "1:relativeGeometry": "45/3136",
+        "4:missingSourcePairs": "1",
+        "4:relativeGeometry": "0"
+      },
+      {
+        "1": "5/7",
+        "4": "1",
+        "6": "94/53",
+        "1:missingSourcePairs": "0",
+        "1:relativeGeometry": "269/392",
+        "4:missingSourcePairs": "1",
+        "4:relativeGeometry": "0"
+      },
+      {
+        "1": "5/7",
+        "4": "1",
+        "6": "375/212",
+        "1:missingSourcePairs": "0",
+        "1:relativeGeometry": "269/392",
+        "4:missingSourcePairs": "1",
+        "4:relativeGeometry": "0"
+      }
+    ],
+    "historyAvailable": true,
+    "historyPartVectors": [],
+    "historyAfterCurrentEligibilityAndGeometry": true,
+    "noRGBScore": true,
+    "nativeIntervalRelativeGeometryNotCertified": true,
+    "bankSourceCheck": {
+      "examined": 36,
+      "unresolvedSourceKeys": 0,
+      "bankRGB8Mismatch": 0,
+      "maxGPUFloatVsAnalyticSRGBDecode": 0.001781800333117145,
+      "sampleScale": 4,
+      "primary108SampleScale": 8
+    },
+    "exactTransportTiesUnresolved": 0,
+    "carrierCellsWithoutUniqueSourceID": 59,
+    "transportRule": "rest-head-bank-centre / native-UV-section; not RGB nearest"
+  },
+  "sourceHistograms": [
+    [
+      {
+        "key": [
+          2,
+          1,
+          213,
+          79
+        ],
+        "weight": "7"
+      },
+      {
+        "key": [
+          2,
+          4,
+          212,
+          79
+        ],
+        "weight": "7"
+      },
+      {
+        "key": [
+          2,
+          6,
+          0,
+          0
+        ],
+        "weight": "4"
+      },
+      {
+        "key": [
+          2,
+          6,
+          1,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          3,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          5,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          6,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          7,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          8,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          9,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          11,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          14,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          16,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          19,
+          0
+        ],
+        "weight": "4"
+      },
+      {
+        "key": [
+          2,
+          6,
+          20,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          21,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          22,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          24,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          27,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          29,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          39,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          40,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          50,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          53,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          58,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          70,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          79,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          87,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          88,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          96,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          103,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          132,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          137,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          145,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          152,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          165,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          168,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          169,
+          0
+        ],
+        "weight": "5"
+      },
+      {
+        "key": [
+          2,
+          6,
+          170,
+          0
+        ],
+        "weight": "18"
+      },
+      {
+        "key": [
+          2,
+          6,
+          191,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          205,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          221,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          230,
+          0
+        ],
+        "weight": "3"
+      },
+      {
+        "key": [
+          2,
+          6,
+          239,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          240,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          260,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          263,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          268,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          296,
+          0
+        ],
+        "weight": "8"
+      },
+      {
+        "key": [
+          2,
+          6,
+          297,
+          0
+        ],
+        "weight": "10"
+      },
+      {
+        "key": [
+          2,
+          6,
+          338,
+          0
+        ],
+        "weight": "5"
+      }
+    ],
+    [
+      {
+        "key": [
+          2,
+          1,
+          213,
+          79
+        ],
+        "weight": "8"
+      },
+      {
+        "key": [
+          2,
+          1,
+          214,
+          79
+        ],
+        "weight": "6"
+      },
+      {
+        "key": [
+          2,
+          4,
+          212,
+          79
+        ],
+        "weight": "7"
+      },
+      {
+        "key": [
+          2,
+          6,
+          0,
+          0
+        ],
+        "weight": "4"
+      },
+      {
+        "key": [
+          2,
+          6,
+          1,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          3,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          5,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          6,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          7,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          8,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          9,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          11,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          14,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          16,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          19,
+          0
+        ],
+        "weight": "4"
+      },
+      {
+        "key": [
+          2,
+          6,
+          20,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          21,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          22,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          24,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          27,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          29,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          39,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          40,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          50,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          53,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          58,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          70,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          79,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          87,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          88,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          96,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          103,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          132,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          137,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          145,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          152,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          165,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          168,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          169,
+          0
+        ],
+        "weight": "5"
+      },
+      {
+        "key": [
+          2,
+          6,
+          170,
+          0
+        ],
+        "weight": "18"
+      },
+      {
+        "key": [
+          2,
+          6,
+          191,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          205,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          221,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          230,
+          0
+        ],
+        "weight": "3"
+      },
+      {
+        "key": [
+          2,
+          6,
+          239,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          240,
+          0
+        ],
+        "weight": "2"
+      },
+      {
+        "key": [
+          2,
+          6,
+          260,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          263,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          268,
+          0
+        ],
+        "weight": "1"
+      },
+      {
+        "key": [
+          2,
+          6,
+          296,
+          0
+        ],
+        "weight": "8"
+      },
+      {
+        "key": [
+          2,
+          6,
+          297,
+          0
+        ],
+        "weight": "10"
+      },
+      {
+        "key": [
+          2,
+          6,
+          338,
+          0
+        ],
+        "weight": "5"
+      }
+    ]
+  ],
+  "exposureForConditionalChoices": [
+    [
+      {
+        "cellYX": [
+          4,
+          0
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          211,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.0,
+          0.9375
+        ],
+        "zeroCertifiedVisibleSamples": true,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          1
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          212,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.1875,
+          0.1875
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          2
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          213,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.0,
+          0.0
+        ],
+        "zeroCertifiedVisibleSamples": true,
+        "fullyMaskedAtRecordedSamples": true,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          3
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          214,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.25,
+          0.25
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          4
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          215,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          1.0,
+          1.0
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          5
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          216,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.8125,
+          0.8125
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          6
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          217,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.75,
+          0.75
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          7
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          218,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.5,
+          0.5
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          5,
+          3
+        ],
+        "part": 2,
+        "displayCellTopLeft": [
+          214,
+          53
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.0625,
+          0.0625
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.00737185122562245,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          5,
+          4
+        ],
+        "part": 1,
+        "displayCellTopLeft": [
+          215,
+          53
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.4375,
+          0.4375
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      }
+    ],
+    [
+      {
+        "cellYX": [
+          4,
+          0
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          211,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.0,
+          0.9375
+        ],
+        "zeroCertifiedVisibleSamples": true,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          1
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          212,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.1875,
+          0.1875
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          2
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          213,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.0,
+          0.0
+        ],
+        "zeroCertifiedVisibleSamples": true,
+        "fullyMaskedAtRecordedSamples": true,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          3
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          214,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.25,
+          0.25
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          4
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          215,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          1.0,
+          1.0
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          5
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          216,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.8125,
+          0.8125
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          6
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          217,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.75,
+          0.75
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          4,
+          7
+        ],
+        "part": 3,
+        "displayCellTopLeft": [
+          218,
+          52
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.5,
+          0.5
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          5,
+          3
+        ],
+        "part": 2,
+        "displayCellTopLeft": [
+          214,
+          53
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.0625,
+          0.0625
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.00737185122562245,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          5,
+          4
+        ],
+        "part": 1,
+        "displayCellTopLeft": [
+          215,
+          53
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.4375,
+          0.4375
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      },
+      {
+        "cellYX": [
+          5,
+          5
+        ],
+        "part": 1,
+        "displayCellTopLeft": [
+          216,
+          53
+        ],
+        "visibleCarrierSampleWeightBounds": [
+          0.4375,
+          0.4375
+        ],
+        "zeroCertifiedVisibleSamples": false,
+        "fullyMaskedAtRecordedSamples": false,
+        "unobservedInteriorWitnesses": 0,
+        "tiedFrontSamples": 0,
+        "maxSameSampleDepthSpread": 0.0,
+        "notRGBOpacityOrPixelOwnerDecision": true
+      }
+    ]
+  ],
+  "adopted": false,
+  "finalRGBProduced": false,
+  "externalHairMayHideButDoesNotReallocateFeature": true,
+  "historyCannotBypassFinalExposure": true,
+  "historyMayBeIncomplete": false
+}

@@ -1,0 +1,220 @@
+{
+  "status": "ISOLATED_COMPOSITE_VALIDATED_IN_OBSERVED_STATES_NOT_PRODUCT_ADOPTED",
+  "capture95FailedPlayEntries": 1,
+  "capture95FailedPackets": 0,
+  "capture95BPlayEntries": 1,
+  "frames": [
+    {
+      "frame": 99,
+      "sourceId": "eye95b-20261101T142623091Z-a7686e0a-frame99",
+      "serial": 6,
+      "planes": 110,
+      "sourceVsProjectedControlMax": {
+        "rgba": 0.0,
+        "meta": 0.0,
+        "point": 0.0,
+        "uv": 0.0,
+        "shade": 0.0
+      },
+      "evaluatedVsOwnedBakeMax": 0,
+      "evaluatedClose": 0
+    },
+    {
+      "frame": 100,
+      "sourceId": "eye95b-20261101T142623091Z-a7686e0a-frame100",
+      "serial": 7,
+      "planes": 110,
+      "sourceVsProjectedControlMax": {
+        "rgba": 0.0,
+        "meta": 0.0,
+        "point": 0.0,
+        "uv": 0.0,
+        "shade": 0.0
+      },
+      "evaluatedVsOwnedBakeMax": 0,
+      "evaluatedClose": 0
+    },
+    {
+      "frame": 102,
+      "sourceId": "eye95b-20261101T142623091Z-a7686e0a-frame102",
+      "serial": 9,
+      "planes": 110,
+      "sourceVsProjectedControlMax": {
+        "rgba": 0.0,
+        "meta": 0.0,
+        "point": 0.0,
+        "uv": 0.0,
+        "shade": 0.0
+      },
+      "evaluatedVsOwnedBakeMax": 0,
+      "evaluatedClose": 50
+    },
+    {
+      "frame": 104,
+      "sourceId": "eye95b-20261101T142623091Z-a7686e0a-frame104",
+      "serial": 11,
+      "planes": 110,
+      "sourceVsProjectedControlMax": {
+        "rgba": 0.0,
+        "meta": 0.0,
+        "point": 0.0,
+        "uv": 0.0,
+        "shade": 0.0
+      },
+      "evaluatedVsOwnedBakeMax": 0,
+      "evaluatedClose": 100
+    },
+    {
+      "frame": 105,
+      "sourceId": "eye95b-20261101T142623091Z-a7686e0a-frame105",
+      "serial": 12,
+      "planes": 110,
+      "sourceVsProjectedControlMax": {
+        "rgba": 0.0,
+        "meta": 0.0,
+        "point": 0.0,
+        "uv": 0.0,
+        "shade": 0.0
+      },
+      "evaluatedVsOwnedBakeMax": 0,
+      "evaluatedClose": 100
+    },
+    {
+      "frame": 107,
+      "sourceId": "eye95b-20261101T142623091Z-a7686e0a-frame107",
+      "serial": 14,
+      "planes": 110,
+      "sourceVsProjectedControlMax": {
+        "rgba": 0.0,
+        "meta": 0.0,
+        "point": 0.0,
+        "uv": 0.0,
+        "shade": 0.0
+      },
+      "evaluatedVsOwnedBakeMax": 0,
+      "evaluatedClose": 0
+    },
+    {
+      "frame": 108,
+      "sourceId": "eye95b-20261101T142623091Z-a7686e0a-frame108",
+      "serial": 15,
+      "planes": 110,
+      "sourceVsProjectedControlMax": {
+        "rgba": 0.0,
+        "meta": 0.0,
+        "point": 0.0,
+        "uv": 0.0,
+        "shade": 0.0
+      },
+      "evaluatedVsOwnedBakeMax": 0,
+      "evaluatedClose": 0
+    }
+  ],
+  "actualSequence": "7 condition-selected snapshots99,100,102,104,105,107,108; normal history, not consecutive full-motion validation",
+  "planeCount": 770,
+  "GPUFieldReplays": 21,
+  "GPUFloatDifference": 0,
+  "GPUReplayPlayEntries": 0,
+  "validationChecks": 150,
+  "missingBacking": 0,
+  "invalidOutputPixels": 0,
+  "sourceIdentityTieEvents": [
+    {
+      "frame": 102,
+      "cell": [
+        12,
+        4
+      ],
+      "sourceTexelKey": [
+        1,
+        1,
+        220,
+        79
+      ],
+      "referenceFrame": 100,
+      "massBounds": {
+        "1": [
+          7.0,
+          7.0
+        ],
+        "4": [
+          7.0,
+          7.0
+        ],
+        "6": [
+          0.0,
+          0.0
+        ],
+        "0": [
+          2.0,
+          2.0
+        ]
+      },
+      "chosenRole": 1,
+      "reason": "exact eye-part coverage tie; same currently visible source texel identity, not screen RGB history"
+    }
+  ],
+  "coldTieRemainsUndecided": true,
+  "nativeExact": 47,
+  "nativeTotal": 47,
+  "dirtyBefore": 31,
+  "dirtyAfter": 31,
+  "publicDifferences": [],
+  "inputSameNativeID": true,
+  "inputSettingsJSONExact": true,
+  "InputSettingsReplaced": false,
+  "restoreFlags": {
+    "PlayExited": true,
+    "backgroundRestored": true,
+    "optionsRestored": true,
+    "pipelineRestored": true,
+    "timeRestored": true,
+    "playerSettingsRunInBackgroundRestored": true,
+    "observerRemoved": true,
+    "ownedProbeReleased76": true,
+    "retargetDisposed89": true,
+    "current91Disposed": true
+  },
+  "globalCount": 74,
+  "globalRestoreErrors": [],
+  "globalBufferWrites": 0,
+  "captureRTBefore": 30,
+  "captureRTAfter": 30,
+  "captureAllocatedDeltaMiB": -12.462574005126953,
+  "replayRTBefore": 30,
+  "replayRTAfter": 30,
+  "replayAllocatedDeltaMiB": -82.39283180236816,
+  "counterMeaning": "Unity Profiler.GetTotalAllocatedMemoryLong, not physical working set or leak proof",
+  "newConsoleErrors": [],
+  "productDefault": 77,
+  "AssetsModified": 0,
+  "VisualReview": "Viewed actual open99/partial102/closed104/reopen107 ROI native PNG and nearest12 comparisons; larger eye exposure and skin/style change remain unapproved aesthetic choices",
+  "remaining": [
+    "Exact canonical eye-part tie on cold start has no source-history witness; retain original and mark unknown",
+    "Live whole-feature selector/cache/ray query C#/HLSL integration not implemented: GPU replay consumes offline selection",
+    "No full rotation/walking/subpixel final-composite motion validation",
+    "Backing is actual current source MToon colour, not certified equivalent to stylized skin palette",
+    "Native source registration is the tested89 rule, not reconstructed original author intent"
+  ],
+  "preview1Code94": {
+    "coordinate4x": [
+      56,
+      15
+    ],
+    "frame": 102,
+    "actualRGB8": [
+      230,
+      195,
+      169
+    ],
+    "graphRGB8": [
+      230,
+      195,
+      170
+    ],
+    "actualBlueLinear": 0.3993057013,
+    "graphBlueLinear": 0.3994446099,
+    "roundingBoundary": 0.3993615253289054,
+    "meaning": "Different raw linear backing floats straddle one sRGB8 threshold; final95 LUT uses literal raw Float32, not RGB8 re-encoding. Exact upstream float difference not proven."
+  }
+}

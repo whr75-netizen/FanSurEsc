@@ -1,0 +1,33 @@
+using System;
+using System.IO;
+using System.Linq;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using UnityEngine;
+using UnityEditor;
+using UnityEngine.SceneManagement;
+using UnityEngine.InputSystem;
+internal class CommandScript:IRunCommand{
+ const string Root=@"C:\Users\15352\Documents\Codex\2026-10-27\task-2\render-fix21\final-eye95";
+ static UnityEngine.Object Ref(UnityEngine.Object target,string field){using(var s=new SerializedObject(target)){var p=s.FindProperty(field);if(p==null)throw new InvalidOperationException("Missing source field: "+field);return p.objectReferenceValue;}}
+ static Obj58 State(){var s=InputSystem.settings;return new Obj58{["utc"]=DateTime.UtcNow.ToString("O"),["project"]=Application.dataPath,["version"]=Application.unityVersion,["domain"]=AppDomain.CurrentDomain.Id,["playing"]=EditorApplication.isPlaying,["compiling"]=EditorApplication.isCompiling,["updating"]=EditorApplication.isUpdating,["inputId"]=s?s.GetEntityId().ToString():null,["inputJSON"]=s?JsonUtility.ToJson(s):null,["optionsEnabled"]=EditorSettings.enterPlayModeOptionsEnabled,["options"]=(int)EditorSettings.enterPlayModeOptions,["scenes"]=new Arr58(Enumerable.Range(0,SceneManager.sceneCount).Select(i=>new Obj58{["path"]=SceneManager.GetSceneAt(i).path,["dirty"]=SceneManager.GetSceneAt(i).isDirty})),["dirty"]=new Arr58(Resources.FindObjectsOfTypeAll<UnityEngine.Object>().Where(o=>o&&EditorUtility.IsPersistent(o)&&EditorUtility.IsDirty(o)).OrderBy(o=>AssetDatabase.GetAssetPath(o)).Select(o=>new Obj58{["path"]=AssetDatabase.GetAssetPath(o),["type"]=o.GetType().FullName,["id"]=o.GetEntityId().ToString()}))};}
+ static int Wrap(int x,int n,TextureWrapMode mode){if(mode==TextureWrapMode.Clamp)return Math.Max(0,Math.Min(n-1,x));if(mode==TextureWrapMode.Repeat)return(x%n+n)%n;throw new NotSupportedException("Mirror not assumed");}
+ public void Execute(ExecutionResult result){
+  var before=State();var report=new Obj58{["before"]=before,["PlayEntries"]=0,["assetWrites"]=0,["settingsWrites"]=0,["GPUDispatches"]=0};
+  try{
+   if(EditorApplication.isPlayingOrWillChangePlaymode||EditorApplication.isCompiling||EditorApplication.isUpdating)throw new InvalidOperationException("Stable Edit required");
+   var request=Json58.Parse(File.ReadAllText(Path.Combine(Root,"ALPHA_REQUEST95.json")));if(request["queries"].Count>32768)throw new InvalidOperationException("Query budget");
+   var boot=Resources.FindObjectsOfTypeAll<MonoBehaviour>().Single(b=>b&&b.gameObject.scene.IsValid()&&b.GetType().Name=="GameplayShellBootstrap");var shell=Ref(boot,"shellPrefab")as Component;var native=shell.GetComponentsInChildren<MonoBehaviour>(true).Single(b=>b&&b.GetType().Name=="NativePlayer395");var surface=Ref(Ref(Ref(Ref(native,"host"),"main"),"motion"),"surface");SkinnedMeshRenderer src;
+   var srcs=new Dictionary<int,SkinnedMeshRenderer>();using(var so=new SerializedObject(surface))for(int i=0;i<so.FindProperty("source").arraySize;i++)srcs[i]=so.FindProperty("source").GetArrayElementAtIndex(i).objectReferenceValue as SkinnedMeshRenderer;
+   string modelSHA;using(var hash=SHA256.Create())using(var file=File.OpenRead((string)request["modelAsset"]))modelSHA=BitConverter.ToString(hash.ComputeHash(file)).Replace("-","").ToLowerInvariant();if(modelSHA!=(string)request["modelSHA256"])throw new InvalidOperationException("Model changed");
+   var sources=new Obj58();var rows=new Arr58();long reads=0;var footprintBounds=new Dictionary<string,Vector2>();
+   foreach(var q in request["queries"]){int slot=(int)q["rendererSlot"],part=(int)q["sourceSubMesh"];src=srcs[slot];if(!src)throw new InvalidOperationException("Source slot missing");var mat=src.sharedMaterials[part];var texture=mat.GetTexture("_MainTex")as Texture2D;if(!texture||!texture.isReadable||texture.mipmapCount!=1||texture.filterMode!=FilterMode.Bilinear||texture.anisoLevel>1)throw new NotSupportedException("Only observed single-mip bilinear source is bounded");if(mat.mainTextureScale!=Vector2.one||mat.mainTextureOffset!=Vector2.zero)throw new NotSupportedException("UV transform changed");foreach(string key in new[]{"_UvAnimScrollXSpeed","_UvAnimScrollYSpeed","_UvAnimRotationSpeed"})if(mat.HasProperty(key)&&mat.GetFloat(key)!=0)throw new NotSupportedException("Animated UV needs captured time");
+    float factor=mat.GetColor("_Color").a;string keyPart=slot+"-"+part;if(sources[keyPart]==null)sources[keyPart]=new Obj58{["rendererSlot"]=slot,["subMesh"]=part,["material"]=mat.name,["materialId"]=mat.GetEntityId().ToString(),["texture"]=texture.name,["textureId"]=texture.GetEntityId().ToString(),["size"]=new Arr58(texture.width,texture.height),["mipmapCount"]=texture.mipmapCount,["filter"]=texture.filterMode.ToString(),["anisoLevel"]=texture.anisoLevel,["factorAlpha"]=factor,["alphaTest"]=mat.IsKeywordEnabled("_ALPHATEST_ON"),["alphaBlend"]=mat.IsKeywordEnabled("_ALPHABLEND_ON"),["cutoff"]=mat.GetFloat("_Cutoff"),["cullMode"]=mat.GetFloat("_M_CullMode"),["shader"]=AssetDatabase.GetAssetPath(mat.shader),["modelSHA256"]=modelSHA};
+    float u=(float)(double)q["uv"][0],v=(float)(double)q["uv"][1];int x=(int)Math.Floor(u*texture.width-.5),y=(int)Math.Floor(v*texture.height-.5);string footprint=keyPart+":"+x+":"+y;float lo,hi;if(footprintBounds.TryGetValue(footprint,out var prior)){lo=prior.x;hi=prior.y;}else{lo=1;hi=0;for(int j=0;j<2;j++)for(int i=0;i<2;i++){float a=texture.GetPixel(Wrap(x+i,texture.width,texture.wrapModeU),Wrap(y+j,texture.height,texture.wrapModeV)).a*factor;lo=Mathf.Min(lo,a);hi=Mathf.Max(hi,a);reads++;}footprintBounds.Add(footprint,new Vector2(lo,hi));}if(reads>32768)throw new InvalidOperationException("Unique alpha footprint read budget exceeded");rows.Add(new Obj58{["id"]=q["id"],["sourceSubMesh"]=part,["UVFloat32"]=new Arr58(u,v),["rendererSlot"]=slot,["footprintKey"]=footprint,["min"]=lo,["max"]=hi});
+   }
+   report["sources"]=sources;report["queries"]=rows;report["pixelGetterCalls"]=reads;report["uniqueFootprints"]=footprintBounds.Count;report["success"]=true;
+  }catch(Exception e){report["error"]=e.ToString();report["success"]=false;}
+  finally{var after=State();report["after"]=after;report["unchanged"]=new Obj58();foreach(string key in new[]{"project","version","domain","playing","compiling","updating","inputId","inputJSON","optionsEnabled","options","scenes","dirty"})report["unchanged"][key]=Json58.DeepEquals(before[key],after[key]);CreateOnly73.Text(Path.Combine(Root,"ALPHA_SOURCE95.json"),report.ToString());}
+  result.Log("91 bounded source-alpha read success="+report["success"]+"; no Play/settings/global/assets writes");
+ }
+}

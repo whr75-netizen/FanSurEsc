@@ -639,3 +639,23 @@ PID35364 Edit/domain1/scene clean, InputSettings native ID568105589213679894/22�
 같은4x skin control의 role/owner/alpha/coverage는 정확히 같지만 RGBA max0.0004570484, depth max0.0000057220 잔차가 있다. 명시적 linear→sRGB8 미리보기 변환에서 닫힘 변형 마지막프레임의1표본만1코드 차이가 남는다(RESULT94 좌표/RGBA 보존). backing 공급기와 최종 합성은 미채택이다.
 `MotionScope94:Advance/Apply` 요청 Close getter와 평가메쉬를 동일 상태로 해석하면 안 된다. frame101 getter100인데 메쉬는 첫프레임과 동일, frame102 getter0에서 메쉬 delta0.02499783/skin2x414→436이다. 카메라 sourceFrame5.333333/evaluatedFrame5.25 고정과 별도로 native Close 평가가 한프레임 늦게 나타났다. 이번 최소4프레임은 실제 재개방을 포착하지 못했다. PNG는 요청값/메쉬 delta를 함께 표시하며 Close/reopen·보행 안정성 성공으로 세지 않는다.
 정상 Edit 종료 후 공개 상태 차이0, dirty31 동일, 별도47/47 직렬화 exact, InputSettings ID568105589213679894/22값·장치·옵션·시간·pipeline/global 복원, own pass/material/RT 회수, RT30→30이다. 신규 Console/프로젝트 로그 예외0이며 과거 ZBinning 오류는 기존 기록으로 보존했다. allocated +33.008MiB는 내부 할당 카운터 차이이며 물리 RAM·누수 확정이 아니다. CUA/SaveAssets/ClearDirty/GC/앱 종료/추가 Play 없음.
+
+## Eye95 — 같은 프레임 가림·현재 바탕·공동 선택의 격리 GPU 검증 (제품77 유지)
+
+- 최신 산출물: `experiments/pixel-pipeline/2026-11-01-whole-eye95/INDEX.html`. 커밋은 해당 경로 `git log -1 --format=%H -- <경로>`로 조회한다. Assets 수정/import0, 제품 기본77 유지.
+
+- `MotionScope95.Apply/Advance`: 정상 ScaleBake378와 같은 `BakeMesh(expected,true)` 및 output-space 변환으로 평가 정점/눈 sampleFace 오차0일 때만 캡처. 첫 false-scale 기준 실패 Play는0packet으로 정상 종료했고, 수정 후 Play1회에서99,100,102,104,105,107,108의110planes씩770planes를 얻었다. 조건 선택 스냅샷이며7연속 움직임 프레임은 아니다.
+
+- `NativeRetarget95.RecordGraph/DrawGraph/Dispose`, `GraphSources95.RecordRenderGraph`: 눈별·파트별 material8개를 분리해 deferred property 덮임을 막고, source/control/현재 바탕을 같은 URP Graph 조명 문맥에서 생성한다. actual S3와 physical control5필드 차이0. own RTHandle wrapper는 transferOwnership=false로 release 후 자기 RT만 해제한다.
+
+- `ownership95.main`, `solve95.main`: UV7 eye-owner 계약으로 현재 feature가 대체하는 원본 iris/white/highlight/eyeline을 외부 가림에서 중복 계산하지 않는다. 실제 피부/안검·반대 눈·머리/몸은 계속 가림이다. 보호 record14.z는 전체 composed-source 표시이므로 전부 안검으로 보호하지 않고 visible role5인 native 안검만 그대로 보존한다. 바탕은 같은 native 표본 위치의 현재 physical 또는 feature-local skin source를 사용하며 source UV/primitive를 기록한다. 주변색 추정/평균/임의 깊이 없음.
+
+- `solve95.source_texel/resolve_identity_tie`: frame102 canonical(12,4) 홍채:흰자 mass7:7에서 이전100과 같은 현재 가시 source texel(eye1,role1,220,79)일 때만 동률을 푼다. 화면 RGB 평균이 아니며 sourceKey가 없거나 alpha/가림이 불확실하면 원래 출력+invalid를 유지한다. cold tie는 미해결. source sequence/mesh/topology/template/bounds가 scope이며 실제 runtime port에는 generation/view lifetime 연결이 추가로 필요하다.
+
+- `FinalGPU95Final.Execute`, `validate_final95.main`: frozen 선택을 colour/실제 Native395 owner/depth 세 개 Float32 LUT로21번 GPU 대입하여 차이0·팔레트 밖0. owner.w를 alpha로 오독한 중간 Close replay는 의미 검증 통과가 아니며 최종본은 실제 source primitive ID로 수정했다. 완전 Close104/105의 보정 scope에 iris/white owner0, 바탕 누락/미확정0. open99/100과 reopen107/108 canonical signature 동일. 검사는150개이나 미관/시간 안정성 증거와 구분한다.
+
+- 94의 preview1코드는 blue 선형 .3993057013/.3994446099가 sRGB8 반올림 경계 .3993615253 양쪽에 있기 때문이다. 원시 source draw 부동소수 차이의 정확한 상류 원인은 미확정.95는 RGB8 roundtrip 없이 실제 Float32 source값을 LUT에 넣으며 변환 오차를 임의 색 오차 허용으로 숨기지 않는다.
+
+- PNG 원래 크기/nearest12/7상태 GIF를 직접 검수했다. 눈 노출 크기·갈색/피부 스타일 차이는 미술 승인되지 않았고 live 공동 selector는 아직 Python oracle이다. 실제 C#/HLSL로 source ownership/current visibility/cache를 이식하지 않았으므로 제품 적용/전체 미관 성공/움직임 안정화 완료가 아니다. 다음 통합 판단은 이 결과와 cold-tie/state/lifetime 한계를 먼저 읽는다.
+
+- 종료 Edit, GameMap1 clean, dirty31/47직렬화 내용/동일 InputSettings22값·장치·옵션·pipeline/time 보존. 외부 global journal getter 불일치0·buffer global writes0. RT30→30. capture 할당량 변화는 SUMMARY95의 Unity allocated counter이며 physical RAM/누수 판정이 아니다. 이번150검사 후 read-only 검증도47/47 exact·공개 상태 차이0·신규 Console 오류0. 원본 사용자30 tracked 변경/보호32파일은 커밋 전후 별도 해시 확인한다.

@@ -1,0 +1,962 @@
+{
+  "capability": {
+    "delayFramesFromUnityDocumentation": 3,
+    "deviceName": "AMD Radeon RX 9070 XT",
+    "deviceType": "Direct3D11",
+    "explicitGPUEnabledCustomSampler": true,
+    "profilerOrPlayerSettingsChanged": false,
+    "supportsGpuRecorder": true
+  },
+  "sampling": "GPU-enabled URP ProfilingSampler custom samplers; documented three-frame delayed aggregate, sourceFrameThreeEarlier is nominal lag association, not a hardware event fence",
+  "scope": "query=BVH refit/query/joint select; excludes canonical Pack and retarget draws; source=non-eye11draw only; world=PackWorld98 only; compose=finalcandidate only; oldcomparison/readbacks unbudgeted",
+  "limitations": "Editor, diagnostic readback and two-view extra work; not shipping frame time or FPS; near-zero compose sample does not establish zero cost; source/retarget/whole pipeline not fully profiled",
+  "budgets": [
+    {
+      "marker": "View99 A compose GPU",
+      "observationsWithSamples": 10,
+      "GPUcountRange": [
+        1,
+        1
+      ],
+      "GPUmsPerRecordedBlockMinMedianMax": [
+        0.0,
+        0.0,
+        3.9999998989515007e-05
+      ],
+      "CPUNotSubstituted": true,
+      "nearZeroIsNotZeroCost": true
+    },
+    {
+      "marker": "View99 A non-eye GPU",
+      "observationsWithSamples": 10,
+      "GPUcountRange": [
+        1,
+        1
+      ],
+      "GPUmsPerRecordedBlockMinMedianMax": [
+        0.0258799996227026,
+        0.035280000418424606,
+        0.0363599993288517
+      ],
+      "CPUNotSubstituted": true,
+      "nearZeroIsNotZeroCost": false
+    },
+    {
+      "marker": "View99 A query GPU",
+      "observationsWithSamples": 10,
+      "GPUcountRange": [
+        1,
+        1
+      ],
+      "GPUmsPerRecordedBlockMinMedianMax": [
+        0.2703999876976013,
+        0.4104200005531311,
+        0.5393999814987183
+      ],
+      "CPUNotSubstituted": true,
+      "nearZeroIsNotZeroCost": false
+    },
+    {
+      "marker": "View99 A world GPU",
+      "observationsWithSamples": 10,
+      "GPUcountRange": [
+        1,
+        1
+      ],
+      "GPUmsPerRecordedBlockMinMedianMax": [
+        0.0020000000949949026,
+        0.002639999962411821,
+        0.00343999988399446
+      ],
+      "CPUNotSubstituted": true,
+      "nearZeroIsNotZeroCost": false
+    },
+    {
+      "marker": "View99 B non-eye GPU",
+      "observationsWithSamples": 8,
+      "GPUcountRange": [
+        2,
+        2
+      ],
+      "GPUmsPerRecordedBlockMinMedianMax": [
+        0.025760000571608543,
+        0.030300000682473183,
+        0.031599998474121094
+      ],
+      "CPUNotSubstituted": true,
+      "nearZeroIsNotZeroCost": false
+    },
+    {
+      "marker": "View99 B query GPU",
+      "observationsWithSamples": 8,
+      "GPUcountRange": [
+        2,
+        2
+      ],
+      "GPUmsPerRecordedBlockMinMedianMax": [
+        0.3384599983692169,
+        0.401869997382164,
+        0.5047600269317627
+      ],
+      "CPUNotSubstituted": true,
+      "nearZeroIsNotZeroCost": false
+    },
+    {
+      "marker": "View99 B world GPU",
+      "observationsWithSamples": 6,
+      "GPUcountRange": [
+        1,
+        1
+      ],
+      "GPUmsPerRecordedBlockMinMedianMax": [
+        0.0017600000137463212,
+        0.002459999988786876,
+        0.0027600000612437725
+      ],
+      "CPUNotSubstituted": true,
+      "nearZeroIsNotZeroCost": false
+    }
+  ],
+  "raw": [
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.04619999974966049,
+      "GPUcount": 1,
+      "GPUms": 0.4384799897670746,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 4,
+      "sourceFrameThreeEarlier": 97,
+      "readAtFrame": 100,
+      "readAtSerial": 7
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.45570001006126404,
+      "GPUcount": 1,
+      "GPUms": 0.03548000007867813,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 4,
+      "sourceFrameThreeEarlier": 97,
+      "readAtFrame": 100,
+      "readAtSerial": 7
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.13089999556541443,
+      "GPUcount": 2,
+      "GPUms": 0.8033599853515625,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 4,
+      "sourceFrameThreeEarlier": 97,
+      "readAtFrame": 100,
+      "readAtSerial": 7
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.31150001287460327,
+      "GPUcount": 2,
+      "GPUms": 0.061080001294612885,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 4,
+      "sourceFrameThreeEarlier": 97,
+      "readAtFrame": 100,
+      "readAtSerial": 7
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 3,
+      "CPUms": 0.02160000056028366,
+      "GPUcount": 1,
+      "GPUms": 0.0027600000612437725,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 4,
+      "sourceFrameThreeEarlier": 97,
+      "readAtFrame": 100,
+      "readAtSerial": 7
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 0,
+      "GPUms": 0,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 4,
+      "sourceFrameThreeEarlier": 97,
+      "readAtFrame": 100,
+      "readAtSerial": 7
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 3,
+      "CPUms": 0.009800000116229057,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 4,
+      "sourceFrameThreeEarlier": 97,
+      "readAtFrame": 100,
+      "readAtSerial": 7
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.05339999869465828,
+      "GPUcount": 1,
+      "GPUms": 0.4045200049877167,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 5,
+      "sourceFrameThreeEarlier": 98,
+      "readAtFrame": 101,
+      "readAtSerial": 8
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.17810000479221344,
+      "GPUcount": 1,
+      "GPUms": 0.0363599993288517,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 5,
+      "sourceFrameThreeEarlier": 98,
+      "readAtFrame": 101,
+      "readAtSerial": 8
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.08299999684095383,
+      "GPUcount": 2,
+      "GPUms": 1.0095200538635254,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 5,
+      "sourceFrameThreeEarlier": 98,
+      "readAtFrame": 101,
+      "readAtSerial": 8
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.28929999470710754,
+      "GPUcount": 2,
+      "GPUms": 0.06164000183343887,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 5,
+      "sourceFrameThreeEarlier": 98,
+      "readAtFrame": 101,
+      "readAtSerial": 8
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 1,
+      "CPUms": 0.005799999926239252,
+      "GPUcount": 1,
+      "GPUms": 0.00267999991774559,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 5,
+      "sourceFrameThreeEarlier": 98,
+      "readAtFrame": 101,
+      "readAtSerial": 8
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.06949999928474426,
+      "GPUcount": 0,
+      "GPUms": 0,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 5,
+      "sourceFrameThreeEarlier": 98,
+      "readAtFrame": 101,
+      "readAtSerial": 8
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 1,
+      "CPUms": 0.006300000008195639,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 5,
+      "sourceFrameThreeEarlier": 98,
+      "readAtFrame": 101,
+      "readAtSerial": 8
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.06689999997615814,
+      "GPUcount": 1,
+      "GPUms": 0.45320001244544983,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 6,
+      "sourceFrameThreeEarlier": 99,
+      "readAtFrame": 102,
+      "readAtSerial": 9
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.3068999946117401,
+      "GPUcount": 1,
+      "GPUms": 0.03548000007867813,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 6,
+      "sourceFrameThreeEarlier": 99,
+      "readAtFrame": 102,
+      "readAtSerial": 9
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.11500000208616257,
+      "GPUcount": 2,
+      "GPUms": 0.8125200271606445,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 6,
+      "sourceFrameThreeEarlier": 99,
+      "readAtFrame": 102,
+      "readAtSerial": 9
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.3700000047683716,
+      "GPUcount": 2,
+      "GPUms": 0.06319999694824219,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 6,
+      "sourceFrameThreeEarlier": 99,
+      "readAtFrame": 102,
+      "readAtSerial": 9
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.01489999983459711,
+      "GPUcount": 1,
+      "GPUms": 0.0026000000070780516,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 6,
+      "sourceFrameThreeEarlier": 99,
+      "readAtFrame": 102,
+      "readAtSerial": 9
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.03880000114440918,
+      "GPUcount": 0,
+      "GPUms": 0,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 6,
+      "sourceFrameThreeEarlier": 99,
+      "readAtFrame": 102,
+      "readAtSerial": 9
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.006300000008195639,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 6,
+      "sourceFrameThreeEarlier": 99,
+      "readAtFrame": 102,
+      "readAtSerial": 9
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.05820000171661377,
+      "GPUcount": 1,
+      "GPUms": 0.39684000611305237,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 7,
+      "sourceFrameThreeEarlier": 100,
+      "readAtFrame": 103,
+      "readAtSerial": 10
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.18240000307559967,
+      "GPUcount": 1,
+      "GPUms": 0.03508000075817108,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 7,
+      "sourceFrameThreeEarlier": 100,
+      "readAtFrame": 103,
+      "readAtSerial": 10
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.121799997985363,
+      "GPUcount": 2,
+      "GPUms": 0.8041200041770935,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 7,
+      "sourceFrameThreeEarlier": 100,
+      "readAtFrame": 103,
+      "readAtSerial": 10
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.37689998745918274,
+      "GPUcount": 2,
+      "GPUms": 0.061080001294612885,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 7,
+      "sourceFrameThreeEarlier": 100,
+      "readAtFrame": 103,
+      "readAtSerial": 10
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.015399999916553497,
+      "GPUcount": 1,
+      "GPUms": 0.00279999990016222,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 7,
+      "sourceFrameThreeEarlier": 100,
+      "readAtFrame": 103,
+      "readAtSerial": 10
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.024399999529123306,
+      "GPUcount": 1,
+      "GPUms": 0.002360000042244792,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 7,
+      "sourceFrameThreeEarlier": 100,
+      "readAtFrame": 103,
+      "readAtSerial": 10
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.007499999832361937,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 7,
+      "sourceFrameThreeEarlier": 100,
+      "readAtFrame": 103,
+      "readAtSerial": 10
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.066600002348423,
+      "GPUcount": 1,
+      "GPUms": 0.2703999876976013,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 8,
+      "sourceFrameThreeEarlier": 101,
+      "readAtFrame": 104,
+      "readAtSerial": 11
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.25870001316070557,
+      "GPUcount": 1,
+      "GPUms": 0.0258799996227026,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 8,
+      "sourceFrameThreeEarlier": 101,
+      "readAtFrame": 104,
+      "readAtSerial": 11
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.11590000241994858,
+      "GPUcount": 2,
+      "GPUms": 0.6780400276184082,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 8,
+      "sourceFrameThreeEarlier": 101,
+      "readAtFrame": 104,
+      "readAtSerial": 11
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.4551999866962433,
+      "GPUcount": 2,
+      "GPUms": 0.052000001072883606,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 8,
+      "sourceFrameThreeEarlier": 101,
+      "readAtFrame": 104,
+      "readAtSerial": 11
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.043699998408555984,
+      "GPUcount": 1,
+      "GPUms": 0.00343999988399446,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 8,
+      "sourceFrameThreeEarlier": 101,
+      "readAtFrame": 104,
+      "readAtSerial": 11
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.03920000046491623,
+      "GPUcount": 1,
+      "GPUms": 0.0017600000137463212,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 8,
+      "sourceFrameThreeEarlier": 101,
+      "readAtFrame": 104,
+      "readAtSerial": 11
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.018300000578165054,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 8,
+      "sourceFrameThreeEarlier": 101,
+      "readAtFrame": 104,
+      "readAtSerial": 11
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.04349999874830246,
+      "GPUcount": 1,
+      "GPUms": 0.5393999814987183,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 9,
+      "sourceFrameThreeEarlier": 102,
+      "readAtFrame": 105,
+      "readAtSerial": 12
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.23029999434947968,
+      "GPUcount": 1,
+      "GPUms": 0.03587999939918518,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 9,
+      "sourceFrameThreeEarlier": 102,
+      "readAtFrame": 105,
+      "readAtSerial": 12
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.094200000166893,
+      "GPUcount": 2,
+      "GPUms": 0.8030400276184082,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 9,
+      "sourceFrameThreeEarlier": 102,
+      "readAtFrame": 105,
+      "readAtSerial": 12
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 4,
+      "CPUms": 0.32190001010894775,
+      "GPUcount": 2,
+      "GPUms": 0.060120001435279846,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 9,
+      "sourceFrameThreeEarlier": 102,
+      "readAtFrame": 105,
+      "readAtSerial": 12
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.01489999983459711,
+      "GPUcount": 1,
+      "GPUms": 0.0020000000949949026,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 9,
+      "sourceFrameThreeEarlier": 102,
+      "readAtFrame": 105,
+      "readAtSerial": 12
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.023399999365210533,
+      "GPUcount": 1,
+      "GPUms": 0.0026000000070780516,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 9,
+      "sourceFrameThreeEarlier": 102,
+      "readAtFrame": 105,
+      "readAtSerial": 12
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.006399999838322401,
+      "GPUcount": 1,
+      "GPUms": 3.9999998989515007e-05,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 9,
+      "sourceFrameThreeEarlier": 102,
+      "readAtFrame": 105,
+      "readAtSerial": 12
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.08959999680519104,
+      "GPUcount": 1,
+      "GPUms": 0.41444000601768494,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 10,
+      "sourceFrameThreeEarlier": 103,
+      "readAtFrame": 106,
+      "readAtSerial": 13
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.23579999804496765,
+      "GPUcount": 1,
+      "GPUms": 0.03483999893069267,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 10,
+      "sourceFrameThreeEarlier": 103,
+      "readAtFrame": 106,
+      "readAtSerial": 13
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 2,
+      "GPUms": 0.6769199967384338,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 10,
+      "sourceFrameThreeEarlier": 103,
+      "readAtFrame": 106,
+      "readAtSerial": 13
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 2,
+      "GPUms": 0.05152000114321709,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 10,
+      "sourceFrameThreeEarlier": 103,
+      "readAtFrame": 106,
+      "readAtSerial": 13
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.017100000753998756,
+      "GPUcount": 1,
+      "GPUms": 0.002319999970495701,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 10,
+      "sourceFrameThreeEarlier": 103,
+      "readAtFrame": 106,
+      "readAtSerial": 13
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.025699999183416367,
+      "GPUcount": 1,
+      "GPUms": 0.00215999991632998,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 10,
+      "sourceFrameThreeEarlier": 103,
+      "readAtFrame": 106,
+      "readAtSerial": 13
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.011099999770522118,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 10,
+      "sourceFrameThreeEarlier": 103,
+      "readAtFrame": 106,
+      "readAtSerial": 13
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.05950000137090683,
+      "GPUcount": 1,
+      "GPUms": 0.4033200144767761,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 11,
+      "sourceFrameThreeEarlier": 104,
+      "readAtFrame": 107,
+      "readAtSerial": 14
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.25429999828338623,
+      "GPUcount": 1,
+      "GPUms": 0.03500000014901161,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 11,
+      "sourceFrameThreeEarlier": 104,
+      "readAtFrame": 107,
+      "readAtSerial": 14
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 2,
+      "GPUms": 0.8047199845314026,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 11,
+      "sourceFrameThreeEarlier": 104,
+      "readAtFrame": 107,
+      "readAtSerial": 14
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 2,
+      "GPUms": 0.05868000164628029,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 11,
+      "sourceFrameThreeEarlier": 104,
+      "readAtFrame": 107,
+      "readAtSerial": 14
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.0203000009059906,
+      "GPUcount": 1,
+      "GPUms": 0.0021200000774115324,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 11,
+      "sourceFrameThreeEarlier": 104,
+      "readAtFrame": 107,
+      "readAtSerial": 14
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 1,
+      "GPUms": 0.0027600000612437725,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 11,
+      "sourceFrameThreeEarlier": 104,
+      "readAtFrame": 107,
+      "readAtSerial": 14
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.009100000374019146,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 11,
+      "sourceFrameThreeEarlier": 104,
+      "readAtFrame": 107,
+      "readAtSerial": 14
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.047200001776218414,
+      "GPUcount": 1,
+      "GPUms": 0.4105199873447418,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 12,
+      "sourceFrameThreeEarlier": 105,
+      "readAtFrame": 108,
+      "readAtSerial": 15
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.16419999301433563,
+      "GPUcount": 1,
+      "GPUms": 0.03480000048875809,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 12,
+      "sourceFrameThreeEarlier": 105,
+      "readAtFrame": 108,
+      "readAtSerial": 15
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 0,
+      "GPUms": 0,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 12,
+      "sourceFrameThreeEarlier": 105,
+      "readAtFrame": 108,
+      "readAtSerial": 15
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 0,
+      "GPUms": 0,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 12,
+      "sourceFrameThreeEarlier": 105,
+      "readAtFrame": 108,
+      "readAtSerial": 15
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.0364999994635582,
+      "GPUcount": 1,
+      "GPUms": 0.0022799998987466097,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 12,
+      "sourceFrameThreeEarlier": 105,
+      "readAtFrame": 108,
+      "readAtSerial": 15
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 1,
+      "GPUms": 0.0025599999353289604,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 12,
+      "sourceFrameThreeEarlier": 105,
+      "readAtFrame": 108,
+      "readAtSerial": 15
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.02290000021457672,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 12,
+      "sourceFrameThreeEarlier": 105,
+      "readAtFrame": 108,
+      "readAtSerial": 15
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.043800000101327896,
+      "GPUcount": 1,
+      "GPUms": 0.4103200137615204,
+      "name": "View99 A query GPU",
+      "serialWhenObserved": 13,
+      "sourceFrameThreeEarlier": 106,
+      "readAtFrame": 109,
+      "readAtSerial": 16
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.15070000290870667,
+      "GPUcount": 1,
+      "GPUms": 0.035920001566410065,
+      "name": "View99 A non-eye GPU",
+      "serialWhenObserved": 13,
+      "sourceFrameThreeEarlier": 106,
+      "readAtFrame": 109,
+      "readAtSerial": 16
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 0,
+      "GPUms": 0,
+      "name": "View99 B query GPU",
+      "serialWhenObserved": 13,
+      "sourceFrameThreeEarlier": 106,
+      "readAtFrame": 109,
+      "readAtSerial": 16
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 0,
+      "GPUms": 0,
+      "name": "View99 B non-eye GPU",
+      "serialWhenObserved": 13,
+      "sourceFrameThreeEarlier": 106,
+      "readAtFrame": 109,
+      "readAtSerial": 16
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.032600000500679016,
+      "GPUcount": 1,
+      "GPUms": 0.00267999991774559,
+      "name": "View99 A world GPU",
+      "serialWhenObserved": 13,
+      "sourceFrameThreeEarlier": 106,
+      "readAtFrame": 109,
+      "readAtSerial": 16
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 0,
+      "CPUms": 0,
+      "GPUcount": 0,
+      "GPUms": 0,
+      "name": "View99 B world GPU",
+      "serialWhenObserved": 13,
+      "sourceFrameThreeEarlier": 106,
+      "readAtFrame": 109,
+      "readAtSerial": 16
+    },
+    {
+      "CPUNotSubstituteForGPU": true,
+      "CPUcount": 2,
+      "CPUms": 0.011599999852478504,
+      "GPUcount": 1,
+      "GPUms": 0,
+      "name": "View99 A compose GPU",
+      "serialWhenObserved": 13,
+      "sourceFrameThreeEarlier": 106,
+      "readAtFrame": 109,
+      "readAtSerial": 16
+    }
+  ]
+}

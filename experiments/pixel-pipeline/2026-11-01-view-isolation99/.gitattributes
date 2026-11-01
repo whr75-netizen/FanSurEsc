@@ -1,0 +1,5 @@
+# Exact captured bytes and SHA256 remain valid across Git checkouts.
+* -text whitespace=cr-at-eol
+# Immutable dynamic-compiler evidence includes original whitespace-only lines.
+capture/*.cs whitespace=cr-at-eol,-blank-at-eol
+capture/RUN_*.cs.txt whitespace=cr-at-eol,-blank-at-eol

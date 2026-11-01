@@ -1,0 +1,62 @@
+[
+  {
+    "mode": "Read99",
+    "request": {
+      "utc": "2026-11-01T16:59:59.849936+00:00",
+      "pid": 35364,
+      "sourceSHA256": "b9a767a5d6d16679a329b3c7a99bbb01ef1e766dd6270a838c0db093eade6d2e"
+    },
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=31"
+  },
+  {
+    "mode": "Compile99",
+    "request": {
+      "utc": "2026-11-01T17:00:15.103556+00:00",
+      "pid": 35364,
+      "sourceSHA256": "0febd6daa3fa8784d11511eec82dd335ff8964172f692207ebcc47c466a86d0f"
+    },
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 95 full source/joint observer compile-only; no Play"
+  },
+  {
+    "mode": "Capture99",
+    "request": {
+      "utc": "2026-11-01T17:02:21.204142+00:00",
+      "pid": 35364,
+      "sourceSHA256": "703a15af207bdc3dd43d0018a8c6a19a0c653dd6e238d3f35de680a3da8fdaa1"
+    },
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 67 single normal Play armed; observer owns normal exit/restore, no repeated rendering"
+  },
+  {
+    "mode": "Post99",
+    "request": {
+      "utc": "2026-11-01T17:02:59.711064+00:00",
+      "pid": 35364,
+      "sourceSHA256": "7bbefb0761a1ec8f50345924ec7f5406def97f3552b7ae5936c3af1dcd83a64f"
+    },
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 66 read only: Play=False compiling=False dirty=31"
+  },
+  {
+    "mode": "Verify99",
+    "request": {
+      "utc": "2026-11-01T17:03:10.926432+00:00",
+      "pid": 35364,
+      "sourceSHA256": "590c204232d003017eceba09fbe2745e449df3dff01f2b8569bfa9f5c45235e1"
+    },
+    "compiled": true,
+    "executed": true,
+    "compilationLogs": "",
+    "executionLogs": "[Log] 80 separate read-only settings/native content verification"
+  }
+]

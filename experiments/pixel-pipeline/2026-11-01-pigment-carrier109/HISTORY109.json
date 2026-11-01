@@ -1,0 +1,4817 @@
+{
+  "kind": "conditional-source-history-among-equivalent-108-layouts",
+  "tests": {
+    "sourceScoreContinuousCoordinateInvarianceChecks": 63,
+    "fullProblemRotationReflectionOrderChecks": 9,
+    "candidateOrderInvariant": true,
+    "initialAndConflictingHistoryRemainMultiple": true,
+    "occlusionBeforeHistory": true,
+    "notAnEndToEndPhaseRasterTest": true,
+    "actualTiedLayoutTransformAndOrderChecks": 18
+  },
+  "frames": [
+    {
+      "frame": 99,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame99",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": null,
+          "frameGap": null,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": false,
+          "initialMultipleSolutionsRemain": false
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": null,
+          "frameGap": null,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": false,
+          "initialMultipleSolutionsRemain": false
+        }
+      ]
+    },
+    {
+      "frame": 101,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame101",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 211,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 3,
+          "4": 5
+        },
+        "2": {
+          "1": 4,
+          "4": 4
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 99,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "184331/247950"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "188/551",
+                "4": "181/450"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 99,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "39763/46256"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "195/944",
+                "4": "32/49"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 103,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame103",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 123,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 2,
+          "4": 4
+        },
+        "2": {
+          "1": 4,
+          "4": 3
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 101,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "1936/2737"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "44/119",
+                "4": "132/391"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 101,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "178234/155465"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "904/1003",
+                "4": "38/155"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 105,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame105",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 36,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.001781800333117145,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 3
+        },
+        "2": {
+          "1": 2,
+          "4": 2
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 103,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "6/11"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": "6/11"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 2,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 103,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "25/21",
+              "10/7"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "23/42",
+                "4": "9/14"
+              },
+              {
+                "1": "11/14",
+                "4": "9/14"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true,
+          "immutableSourceFormNondominatedIndices": [
+            0
+          ],
+          "immutableSourceFormPartVectors": [
+            {
+              "1": "1/3",
+              "4": "6/5"
+            },
+            {
+              "1": "1",
+              "4": "6/5"
+            }
+          ],
+          "sourceFormAlreadyDistinguishesThisCase": true,
+          "differences": [
+            {
+              "pointsYX": [
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  1
+                ],
+                [
+                  3,
+                  2
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  4,
+                  0
+                ],
+                [
+                  4,
+                  1
+                ],
+                [
+                  4,
+                  2
+                ],
+                [
+                  4,
+                  3
+                ],
+                [
+                  4,
+                  4
+                ],
+                [
+                  4,
+                  5
+                ],
+                [
+                  4,
+                  6
+                ],
+                [
+                  4,
+                  7
+                ],
+                [
+                  5,
+                  2
+                ],
+                [
+                  5,
+                  3
+                ],
+                [
+                  5,
+                  4
+                ],
+                [
+                  5,
+                  5
+                ]
+              ],
+              "labels": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                2,
+                3,
+                3,
+                3,
+                3,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "pointsYX": [
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  1
+                ],
+                [
+                  3,
+                  2
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  4,
+                  0
+                ],
+                [
+                  4,
+                  1
+                ],
+                [
+                  4,
+                  2
+                ],
+                [
+                  4,
+                  3
+                ],
+                [
+                  4,
+                  4
+                ],
+                [
+                  4,
+                  5
+                ],
+                [
+                  4,
+                  6
+                ],
+                [
+                  4,
+                  7
+                ],
+                [
+                  5,
+                  2
+                ],
+                [
+                  5,
+                  3
+                ],
+                [
+                  5,
+                  4
+                ],
+                [
+                  5,
+                  5
+                ]
+              ],
+              "labels": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                2,
+                3,
+                3,
+                3,
+                3,
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 107,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame107",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 105,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 105,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 109,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame109",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 36,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.001781800333117145,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 3
+        },
+        "2": {
+          "1": 2,
+          "4": 2
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 105,
+          "frameGap": 4,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 2,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 105,
+          "frameGap": 4,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0",
+              "4/3"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              },
+              {
+                "1": "4/3",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true,
+          "immutableSourceFormNondominatedIndices": [
+            0
+          ],
+          "immutableSourceFormPartVectors": [
+            {
+              "1": "1/3",
+              "4": "6/5"
+            },
+            {
+              "1": "1",
+              "4": "6/5"
+            }
+          ],
+          "sourceFormAlreadyDistinguishesThisCase": true,
+          "differences": [
+            {
+              "pointsYX": [
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  1
+                ],
+                [
+                  3,
+                  2
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  4,
+                  0
+                ],
+                [
+                  4,
+                  1
+                ],
+                [
+                  4,
+                  2
+                ],
+                [
+                  4,
+                  3
+                ],
+                [
+                  4,
+                  4
+                ],
+                [
+                  4,
+                  5
+                ],
+                [
+                  4,
+                  6
+                ],
+                [
+                  4,
+                  7
+                ],
+                [
+                  5,
+                  2
+                ],
+                [
+                  5,
+                  3
+                ],
+                [
+                  5,
+                  4
+                ],
+                [
+                  5,
+                  5
+                ]
+              ],
+              "labels": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                2,
+                3,
+                3,
+                3,
+                3,
+                0,
+                0,
+                0,
+                1,
+                0
+              ]
+            },
+            {
+              "pointsYX": [
+                [
+                  3,
+                  0
+                ],
+                [
+                  3,
+                  1
+                ],
+                [
+                  3,
+                  2
+                ],
+                [
+                  3,
+                  3
+                ],
+                [
+                  4,
+                  0
+                ],
+                [
+                  4,
+                  1
+                ],
+                [
+                  4,
+                  2
+                ],
+                [
+                  4,
+                  3
+                ],
+                [
+                  4,
+                  4
+                ],
+                [
+                  4,
+                  5
+                ],
+                [
+                  4,
+                  6
+                ],
+                [
+                  4,
+                  7
+                ],
+                [
+                  5,
+                  2
+                ],
+                [
+                  5,
+                  3
+                ],
+                [
+                  5,
+                  4
+                ],
+                [
+                  5,
+                  5
+                ]
+              ],
+              "labels": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                2,
+                3,
+                3,
+                3,
+                3,
+                0,
+                0,
+                0,
+                0,
+                1
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "frame": 111,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame111",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 123,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 2,
+          "4": 4
+        },
+        "2": {
+          "1": 4,
+          "4": 3
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 109,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "18/17"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": "18/17"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 109,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "911/510"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "35/51",
+                "4": "11/10"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 113,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame113",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 211,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 3,
+          "4": 5
+        },
+        "2": {
+          "1": 4,
+          "4": 4
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 111,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "50608/56525"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "64/133",
+                "4": "176/425"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 111,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "178234/155465"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "904/1003",
+                "4": "38/155"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 115,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame115",
+      "stage": "evaluated-blink106",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 113,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "7299/6175"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "176/247",
+                "4": "223/475"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 113,
+          "frameGap": 2,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "18809/17936"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "195/944",
+                "4": "16/19"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 121,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame121",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 115,
+          "frameGap": 6,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 115,
+          "frameGap": 6,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 122,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame122",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 121,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 121,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 123,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame123",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 122,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 122,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 124,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame124",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 123,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 123,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 125,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame125",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 124,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 124,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 126,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame126",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 125,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 125,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 127,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame127",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 126,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 126,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 128,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame128",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 127,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 127,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 129,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame129",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 128,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 128,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 130,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame130",
+      "stage": "open-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 287,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 129,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 129,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 139,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame139",
+      "stage": "open-walk",
+      "sourceKeyCheck": {
+        "examined": 267,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 130,
+          "frameGap": 9,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "7226/11115"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "134/585",
+                "4": "8/19"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 130,
+          "frameGap": 9,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "856213/1803936"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "421/2208",
+                "4": "232/817"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 140,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame140",
+      "stage": "open-walk",
+      "sourceKeyCheck": {
+        "examined": 267,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 139,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 139,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "2/69"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "2/69",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 141,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame141",
+      "stage": "open-walk",
+      "sourceKeyCheck": {
+        "examined": 265,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 140,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "22009/347985"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "13/495",
+                "4": "26/703"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 140,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "10/391"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "10/391",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 142,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame142",
+      "stage": "open-walk",
+      "sourceKeyCheck": {
+        "examined": 266,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 141,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "4/111"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "4/111"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 141,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "29576/538747"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "24/1139",
+                "4": "16/473"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 143,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame143",
+      "stage": "open-walk",
+      "sourceKeyCheck": {
+        "examined": 266,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 142,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "3257/49665"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "13/473",
+                "4": "4/105"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 142,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "2/67"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "2/67",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 144,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame144",
+      "stage": "open-walk",
+      "sourceKeyCheck": {
+        "examined": 267,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 143,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "2/35"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "2/35"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 143,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "13/330"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "13/330"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 145,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame145",
+      "stage": "open-walk",
+      "sourceKeyCheck": {
+        "examined": 271,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 144,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "11/210"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "11/210"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 144,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "13627/254265"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "16/737",
+                "4": "11/345"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 146,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame146",
+      "stage": "open-walk",
+      "sourceKeyCheck": {
+        "examined": 271,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 145,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "1/18"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "1/18"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 145,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "7549/18216"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "10/99",
+                "4": "173/552"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 147,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame147",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 253,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 5
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 146,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "186497/189630"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "208/645",
+                "4": "583/882"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 146,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "144051551345/178838394763"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "520/2961",
+                "4": "3081463385/4892235723"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 148,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame148",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 192,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 3
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 147,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "1638314/1485435"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "298/645",
+                "4": "1476/2303"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 147,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "53864782775/26837415433"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "17/47",
+                "4": "939524096/571008839"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 149,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame149",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 123,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0018831419329731203,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 2,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 148,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "346206/293045"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "794/1247",
+                "4": "128/235"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 148,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "6/55"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "6/55",
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 150,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame150",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 78,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0018831419329731203,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 5
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 149,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "1801/1885"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "134/377",
+                "4": "3/5"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "status": "no-visible-pigment",
+          "historyCannotCreateUnsupportedParts": true
+        }
+      ]
+    },
+    {
+      "frame": 151,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame151",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 34,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0018831419329731203,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 3
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 150,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "451/273"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "81/91",
+                "4": "16/21"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "status": "no-visible-pigment",
+          "historyCannotCreateUnsupportedParts": true
+        }
+      ]
+    },
+    {
+      "frame": 152,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame152",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 83,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0018831419329731203,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 5
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 151,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "13/7"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "6/7",
+                "4": "1"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "status": "no-visible-pigment",
+          "historyCannotCreateUnsupportedParts": true
+        }
+      ]
+    },
+    {
+      "frame": 153,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame153",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 125,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0018831419329731203,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 5
+        },
+        "2": {
+          "1": 4,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 152,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "75699/142352"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "80/217",
+                "4": "107/656"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 149,
+          "frameGap": 4,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "1/5"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "1/5",
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 154,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame154",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 207,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 3
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 153,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "1456109/1814988"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "628/1581",
+                "4": "465/1148"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 153,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "34/33"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "34/33",
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 155,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame155",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 253,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 154,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "44677/46410"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "146/255",
+                "4": "71/182"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 154,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "4396/2805"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "206/561",
+                "4": "6/5"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 156,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame156",
+      "stage": "open-turn",
+      "sourceKeyCheck": {
+        "examined": 271,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 4,
+          "4": 6
+        },
+        "2": {
+          "1": 4,
+          "4": 6
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 155,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "269644/295815"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "154/615",
+                "4": "318/481"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 155,
+          "frameGap": 1,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "1798/3213"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "94/357",
+                "4": "8/27"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 162,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame162",
+      "stage": "closed-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 6,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 6,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 166,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame166",
+      "stage": "closed-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 10,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 10,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 170,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame170",
+      "stage": "closed-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 14,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 14,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 171,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame171",
+      "stage": "closed-measured-phase",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 15,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 15,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 188,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame188",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 32,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 32,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 189,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame189",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 33,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 33,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 190,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame190",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 34,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 34,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 191,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame191",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 35,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "status": "no-visible-pigment",
+          "historyCannotCreateUnsupportedParts": true
+        }
+      ]
+    },
+    {
+      "frame": 192,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame192",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 36,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "status": "no-visible-pigment",
+          "historyCannotCreateUnsupportedParts": true
+        }
+      ]
+    },
+    {
+      "frame": 193,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame193",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 37,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "status": "no-visible-pigment",
+          "historyCannotCreateUnsupportedParts": true
+        }
+      ]
+    },
+    {
+      "frame": 194,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame194",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 38,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 38,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 195,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame195",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 39,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 39,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 196,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame196",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 40,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 40,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 197,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame197",
+      "stage": "closed-turn",
+      "sourceKeyCheck": {
+        "examined": 0,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 0,
+          "4": 0
+        },
+        "2": {
+          "1": 0,
+          "4": 0
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 41,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 41,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": null,
+                "4": null
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 204,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame204",
+      "stage": "partial-hair-product77-hair-on",
+      "sourceKeyCheck": {
+        "examined": 194,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 3,
+          "4": 4
+        },
+        "2": {
+          "1": 4,
+          "4": 4
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 48,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "47966/65379"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "326/589",
+                "4": "20/111"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 156,
+          "frameGap": 48,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "30796/34713"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "374/1197",
+                "4": "50/87"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 207,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame207",
+      "stage": "partial-hair-product77-hair-off",
+      "sourceKeyCheck": {
+        "examined": 194,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 3,
+          "4": 4
+        },
+        "2": {
+          "1": 4,
+          "4": 4
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 204,
+          "frameGap": 3,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 204,
+          "frameGap": 3,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    },
+    {
+      "frame": 210,
+      "sourceId": "eye107-20261101T203819878Z-b90efeef-frame210",
+      "stage": "partial-hair-product77-hair-restored",
+      "sourceKeyCheck": {
+        "examined": 194,
+        "unresolvedSourceKeys": 0,
+        "bankRGB8Mismatch": 0,
+        "maxGPUFloatVsAnalyticSRGBDecode": 0.0019122132668001335,
+        "sampleScale": 4,
+        "primary108SampleScale": 8
+      },
+      "currentlyVisibleSourceBankKeys": {
+        "1": {
+          "1": 3,
+          "4": 4
+        },
+        "2": {
+          "1": 4,
+          "4": 4
+        }
+      },
+      "eyes": [
+        {
+          "owner": 1,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 207,
+          "frameGap": 3,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        },
+        {
+          "owner": 2,
+          "candidatesBefore": 1,
+          "candidatesAfter": 1,
+          "candidateOrderIndependentSelection": [
+            0
+          ],
+          "previousCapturedFrame": 207,
+          "frameGap": 3,
+          "notNecessarilyAdjacentFrames": true,
+          "historyAvailable": true,
+          "priorBranches": 1,
+          "chosenIndices": [
+            0
+          ],
+          "exactScores": [
+            [
+              "0"
+            ]
+          ],
+          "partVectorsDecideNotWeightedSum": [
+            [
+              {
+                "1": "0",
+                "4": "0"
+              }
+            ]
+          ],
+          "priorBranchesAgree": true
+        }
+      ]
+    }
+  ],
+  "immutableSourceBankCells": 20,
+  "changesCanonicalForm": false,
+  "newRGB": false,
+  "productApplied": false,
+  "limitations": [
+    "108 mass objective remains unadopted; history does not repair its fragmented lid.",
+    "Iris/white source-ID ranking uses actual4x source metadata; primary costs remain8x.",
+    "Native pigment curve cache is separate and not yet a full joint layout/history controller.",
+    "Captured states have frame gaps; no new runtime temporal-stability claim.",
+    "Current source/face eligibility is primary; external hair remains the original separate composition stage."
+  ]
+}

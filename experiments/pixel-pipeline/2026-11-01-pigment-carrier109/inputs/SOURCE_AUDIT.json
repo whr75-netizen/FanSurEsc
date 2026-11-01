@@ -1,0 +1,2181 @@
+{
+  "model": {
+    "path": "C:\\Users\\15352\\Desktop\\작업폴더\\AvatarSample_A.vrm",
+    "SHA256": "0e2fd0fc90308da3172ecf4e674fdeb4f054ebd617005caa5b997a2ca339cce3",
+    "bytes": 18495680,
+    "asset": {
+      "generator": "VRoid Studio-2.14.0",
+      "version": "2.0"
+    },
+    "meta": {
+      "name": "AvatarSample_A",
+      "authors": [
+        "pixiv VRoid Project"
+      ],
+      "thumbnailImage": 24,
+      "licenseUrl": "https://vrm.dev/licenses/1.0/",
+      "avatarPermission": "onlyAuthor",
+      "allowExcessivelyViolentUsage": true,
+      "allowExcessivelySexualUsage": true,
+      "commercialUsage": "personalNonProfit",
+      "allowPoliticalOrReligiousUsage": true,
+      "allowAntisocialOrHateUsage": true,
+      "creditNotation": "unnecessary",
+      "allowRedistribution": true,
+      "modification": "allowModification"
+    }
+  },
+  "materials": [
+    {
+      "materialId": 0,
+      "name": "N00_000_00_FaceMouth_00_FACE (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 0,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 0,
+        "source": 0,
+        "name": "_01"
+      },
+      "image": {
+        "imageId": 0,
+        "name": "_01",
+        "mimeType": "image/png",
+        "bytes": 51432,
+        "SHA256": "76acbc6191cc92f2d00a356b31f5889e5133d592c081aaa006af4776b9d0bd33",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-0.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          0.9331069,
+          0.620915949,
+          0.71056664
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 0
+        },
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 1
+        },
+        "parametricRimColorFactor": [
+          0,
+          0,
+          0
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 1,
+      "name": "N00_000_00_EyeIris_00_EYE (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 3,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 3,
+        "source": 3,
+        "name": "_02"
+      },
+      "image": {
+        "imageId": 3,
+        "name": "_02",
+        "mimeType": "image/png",
+        "bytes": 154744,
+        "SHA256": "11d1dfda2897e6e253692b670ccee82e42633ef317d03ac6f39f796336d498a2",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-3.png"
+      },
+      "alphaMode": "BLEND",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": -2,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 3
+        },
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 1
+        },
+        "parametricRimColorFactor": [
+          0,
+          0,
+          0
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 2,
+      "name": "N00_000_00_EyeHighlight_00_EYE (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 4,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 4,
+        "source": 4,
+        "name": "_03"
+      },
+      "image": {
+        "imageId": 4,
+        "name": "_03",
+        "mimeType": "image/png",
+        "bytes": 27274,
+        "SHA256": "3ed814ac34c4706446ae7c27fe7b30995262724d6ee3196ade0013a6671f02dd",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-4.png"
+      },
+      "alphaMode": "BLEND",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": -1,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 4
+        },
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 1
+        },
+        "parametricRimColorFactor": [
+          0,
+          0,
+          0
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 3,
+      "name": "N00_000_00_Face_00_SKIN (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 5,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 5,
+        "source": 5,
+        "name": "_04"
+      },
+      "image": {
+        "imageId": 5,
+        "name": "_04",
+        "mimeType": "image/png",
+        "bytes": 734700,
+        "SHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-5.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 5
+        },
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.005769958,
+          0.005769958,
+          0.005769958
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "worldCoordinates",
+        "outlineWidthFactor": 0.00075,
+        "outlineWidthMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 26
+        },
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 0,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 4,
+      "name": "N00_000_00_EyeWhite_00_EYE (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 7,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 7,
+        "source": 7,
+        "name": "_06"
+      },
+      "image": {
+        "imageId": 7,
+        "name": "_06",
+        "mimeType": "image/png",
+        "bytes": 230082,
+        "SHA256": "b6ede6a05e704e23397ba3065a92b7fa8ac1961bd17582ae3b65238f14cd29a1",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-7.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 7
+        },
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 1
+        },
+        "parametricRimColorFactor": [
+          0,
+          0,
+          0
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 5,
+      "name": "N00_000_00_FaceBrow_00_FACE (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 8,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 8,
+        "source": 8,
+        "name": "_07"
+      },
+      "image": {
+        "imageId": 8,
+        "name": "_07",
+        "mimeType": "image/png",
+        "bytes": 33503,
+        "SHA256": "cf7e85d0b2cb94a0bd429652461a396b4c1d8cd1692dec0a378341ceca42f058",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-8.png"
+      },
+      "alphaMode": "BLEND",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 8
+        },
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0,
+          0,
+          0
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 6,
+      "name": "N00_000_00_FaceEyeline_00_FACE (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 9,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 9,
+        "source": 9,
+        "name": "_09"
+      },
+      "image": {
+        "imageId": 9,
+        "name": "_09",
+        "mimeType": "image/png",
+        "bytes": 81448,
+        "SHA256": "32476919c11a2986435460542cdf3e8de8c11c8327cea6cf0a34ce6cda4f52f6",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-9.png"
+      },
+      "alphaMode": "BLEND",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": -2,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 9
+        },
+        "shadingShiftFactor": -0.0500000119,
+        "shadingToonyFactor": 0.0500000119,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0,
+          0,
+          0
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 7,
+      "name": "N00_000_00_Body_00_SKIN (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 10,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 10,
+        "source": 10,
+        "name": "_10"
+      },
+      "image": {
+        "imageId": 10,
+        "name": "_10",
+        "mimeType": "image/png",
+        "bytes": 3287372,
+        "SHA256": "4ba4fafe7187c32de6514a5d4677ebe28a5fdd258ee0d96082f2d1836487900d",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-10.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 10
+        },
+        "shadingShiftFactor": 1,
+        "shadingToonyFactor": 1,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.005769958,
+          0.005769958,
+          0.005769958
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "worldCoordinates",
+        "outlineWidthFactor": 0.00075,
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 0,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 8,
+      "name": "N00_001_02_Bottoms_01_CLOTH (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 12,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 12,
+        "source": 12,
+        "name": "_12"
+      },
+      "image": {
+        "imageId": 12,
+        "name": "_12",
+        "mimeType": "image/png",
+        "bytes": 179766,
+        "SHA256": "e963718ed5dc65009e4f113f8d745d7f119eec7637ace88f186d540590185852",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-12.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 12
+        },
+        "shadingShiftFactor": 1,
+        "shadingToonyFactor": 1,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.005769958,
+          0.005769958,
+          0.005769958
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "worldCoordinates",
+        "outlineWidthFactor": 0.00075,
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 0,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 9,
+      "name": "N00_001_01_Shoes_01_CLOTH (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 13,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 13,
+        "source": 13,
+        "name": "_13"
+      },
+      "image": {
+        "imageId": 13,
+        "name": "_13",
+        "mimeType": "image/png",
+        "bytes": 172507,
+        "SHA256": "d9388455ee4c7bb35fd113db84af24fe8d58528572a14d9753196902c685b462",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-13.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 13
+        },
+        "shadingShiftFactor": 1,
+        "shadingToonyFactor": 1,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.005769958,
+          0.005769958,
+          0.005769958
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "worldCoordinates",
+        "outlineWidthFactor": 0.00075,
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 0,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 10,
+      "name": "N00_005_01_Tops_01_CLOTH (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 14,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 14,
+        "source": 14,
+        "name": "_14"
+      },
+      "image": {
+        "imageId": 14,
+        "name": "_14",
+        "mimeType": "image/png",
+        "bytes": 1049774,
+        "SHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-14.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 14
+        },
+        "shadingShiftFactor": 1,
+        "shadingToonyFactor": 1,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.005769958,
+          0.005769958,
+          0.005769958
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 7.999984,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "worldCoordinates",
+        "outlineWidthFactor": 0.00075,
+        "outlineColorFactor": [
+          0.0612460561,
+          0.008568122,
+          0.014443838
+        ],
+        "outlineLightingMixFactor": 0,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 11,
+      "name": "N00_000_Hair_00_HAIR_01 (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 15,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 15,
+        "source": 15,
+        "name": "_15"
+      },
+      "image": {
+        "imageId": 15,
+        "name": "_15",
+        "mimeType": "image/png",
+        "bytes": 100687,
+        "SHA256": "9ac49cae8ad7d0b5b5d95ef9f6a9c33564fd37bbdde47f66a567c3e1796d1dfe",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-15.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 15
+        },
+        "shadingShiftFactor": -0.35,
+        "shadingToonyFactor": 0.350000024,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.00378651824,
+          0.00378651824,
+          0.00378651824
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 8.61537552,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.04509234,
+          0.0168820675,
+          0.0207817834
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 12,
+      "name": "N00_000_Hair_00_HAIR_02 (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 18,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 18,
+        "source": 18,
+        "name": "_17"
+      },
+      "image": {
+        "imageId": 18,
+        "name": "_17",
+        "mimeType": "image/png",
+        "bytes": 144488,
+        "SHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-18.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 18
+        },
+        "shadingShiftFactor": -0.35,
+        "shadingToonyFactor": 0.350000024,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.00378651824,
+          0.00378651824,
+          0.00378651824
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 8.61537552,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.04518619,
+          0.016807368,
+          0.020288555
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 13,
+      "name": "N00_000_Hair_00_HAIR_03 (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 20,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 20,
+        "source": 20,
+        "name": "_19"
+      },
+      "image": {
+        "imageId": 20,
+        "name": "_19",
+        "mimeType": "image/png",
+        "bytes": 192506,
+        "SHA256": "63243977c6826b164a91fbc227cb89dd017e8f604b1c4a8aad202128c3de28ec",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-20.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 20
+        },
+        "shadingShiftFactor": -0.35,
+        "shadingToonyFactor": 0.350000024,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.00378651824,
+          0.00378651824,
+          0.00378651824
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 8.61537552,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.04518619,
+          0.016807368,
+          0.020288555
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    },
+    {
+      "materialId": 14,
+      "name": "N00_000_Hair_00_HAIR_04 (Instance)",
+      "baseColorFactorLinear": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "baseColorTexture": {
+        "index": 22,
+        "texCoord": 0,
+        "extensions": {
+          "KHR_texture_transform": {
+            "offset": [
+              0,
+              0
+            ],
+            "scale": [
+              1,
+              1
+            ]
+          }
+        }
+      },
+      "texture": {
+        "sampler": 22,
+        "source": 22,
+        "name": "_21"
+      },
+      "image": {
+        "imageId": 22,
+        "name": "_21",
+        "mimeType": "image/png",
+        "bytes": 49461,
+        "SHA256": "cd3d96796b8e14a35beffae375e416960ac2dfcce230e5644ec671c14e1c47e8",
+        "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-22.png"
+      },
+      "alphaMode": "MASK",
+      "alphaCutoff": 0.5,
+      "MToon": {
+        "specVersion": "1.0",
+        "transparentWithZWrite": false,
+        "renderQueueOffsetNumber": 0,
+        "shadeColorFactor": [
+          1,
+          1,
+          1
+        ],
+        "shadeMultiplyTexture": {
+          "extensions": {
+            "KHR_texture_transform": {
+              "offset": [
+                0,
+                0
+              ],
+              "scale": [
+                1,
+                1
+              ]
+            }
+          },
+          "index": 22
+        },
+        "shadingShiftFactor": -0.35,
+        "shadingToonyFactor": 0.350000024,
+        "giEqualizationFactor": 0.9,
+        "matcapFactor": [
+          1,
+          1,
+          1
+        ],
+        "matcapTexture": {
+          "index": 25
+        },
+        "parametricRimColorFactor": [
+          0.00378651824,
+          0.00378651824,
+          0.00378651824
+        ],
+        "rimLightingMixFactor": 1,
+        "parametricRimFresnelPowerFactor": 8.61537552,
+        "parametricRimLiftFactor": 0.1,
+        "outlineWidthMode": "none",
+        "outlineColorFactor": [
+          0.04518619,
+          0.016807368,
+          0.020288555
+        ],
+        "outlineLightingMixFactor": 1,
+        "uvAnimationScrollXSpeedFactor": 0,
+        "uvAnimationScrollYSpeedFactor": 0,
+        "uvAnimationRotationSpeedFactor": 0
+      }
+    }
+  ],
+  "primitiveMap": [
+    {
+      "meshId": 0,
+      "meshName": "Face (merged)(Clone)",
+      "primitiveId": 0,
+      "materialId": 0,
+      "attributes": {
+        "POSITION": 0,
+        "NORMAL": 1,
+        "TEXCOORD_0": 2,
+        "JOINTS_0": 4,
+        "WEIGHTS_0": 3
+      },
+      "indicesAccessor": 119
+    },
+    {
+      "meshId": 0,
+      "meshName": "Face (merged)(Clone)",
+      "primitiveId": 1,
+      "materialId": 1,
+      "attributes": {
+        "POSITION": 0,
+        "NORMAL": 1,
+        "TEXCOORD_0": 2,
+        "JOINTS_0": 4,
+        "WEIGHTS_0": 3
+      },
+      "indicesAccessor": 120
+    },
+    {
+      "meshId": 0,
+      "meshName": "Face (merged)(Clone)",
+      "primitiveId": 2,
+      "materialId": 2,
+      "attributes": {
+        "POSITION": 0,
+        "NORMAL": 1,
+        "TEXCOORD_0": 2,
+        "JOINTS_0": 4,
+        "WEIGHTS_0": 3
+      },
+      "indicesAccessor": 121
+    },
+    {
+      "meshId": 0,
+      "meshName": "Face (merged)(Clone)",
+      "primitiveId": 3,
+      "materialId": 3,
+      "attributes": {
+        "POSITION": 0,
+        "NORMAL": 1,
+        "TEXCOORD_0": 2,
+        "JOINTS_0": 4,
+        "WEIGHTS_0": 3
+      },
+      "indicesAccessor": 122
+    },
+    {
+      "meshId": 0,
+      "meshName": "Face (merged)(Clone)",
+      "primitiveId": 4,
+      "materialId": 4,
+      "attributes": {
+        "POSITION": 0,
+        "NORMAL": 1,
+        "TEXCOORD_0": 2,
+        "JOINTS_0": 4,
+        "WEIGHTS_0": 3
+      },
+      "indicesAccessor": 123
+    },
+    {
+      "meshId": 0,
+      "meshName": "Face (merged)(Clone)",
+      "primitiveId": 5,
+      "materialId": 5,
+      "attributes": {
+        "POSITION": 0,
+        "NORMAL": 1,
+        "TEXCOORD_0": 2,
+        "JOINTS_0": 4,
+        "WEIGHTS_0": 3
+      },
+      "indicesAccessor": 124
+    },
+    {
+      "meshId": 0,
+      "meshName": "Face (merged)(Clone)",
+      "primitiveId": 6,
+      "materialId": 6,
+      "attributes": {
+        "POSITION": 0,
+        "NORMAL": 1,
+        "TEXCOORD_0": 2,
+        "JOINTS_0": 4,
+        "WEIGHTS_0": 3
+      },
+      "indicesAccessor": 125
+    },
+    {
+      "meshId": 1,
+      "meshName": "Body (merged)",
+      "primitiveId": 0,
+      "materialId": 7,
+      "attributes": {
+        "POSITION": 126,
+        "NORMAL": 127,
+        "TEXCOORD_0": 128,
+        "JOINTS_0": 130,
+        "WEIGHTS_0": 129
+      },
+      "indicesAccessor": 131
+    },
+    {
+      "meshId": 1,
+      "meshName": "Body (merged)",
+      "primitiveId": 1,
+      "materialId": 8,
+      "attributes": {
+        "POSITION": 126,
+        "NORMAL": 127,
+        "TEXCOORD_0": 128,
+        "JOINTS_0": 130,
+        "WEIGHTS_0": 129
+      },
+      "indicesAccessor": 132
+    },
+    {
+      "meshId": 1,
+      "meshName": "Body (merged)",
+      "primitiveId": 2,
+      "materialId": 9,
+      "attributes": {
+        "POSITION": 126,
+        "NORMAL": 127,
+        "TEXCOORD_0": 128,
+        "JOINTS_0": 130,
+        "WEIGHTS_0": 129
+      },
+      "indicesAccessor": 133
+    },
+    {
+      "meshId": 1,
+      "meshName": "Body (merged)",
+      "primitiveId": 3,
+      "materialId": 10,
+      "attributes": {
+        "POSITION": 126,
+        "NORMAL": 127,
+        "TEXCOORD_0": 128,
+        "JOINTS_0": 130,
+        "WEIGHTS_0": 129
+      },
+      "indicesAccessor": 134
+    },
+    {
+      "meshId": 2,
+      "meshName": "Hair001 (merged)",
+      "primitiveId": 0,
+      "materialId": 11,
+      "attributes": {
+        "POSITION": 135,
+        "NORMAL": 136,
+        "TEXCOORD_0": 137,
+        "JOINTS_0": 139,
+        "WEIGHTS_0": 138
+      },
+      "indicesAccessor": 140
+    },
+    {
+      "meshId": 2,
+      "meshName": "Hair001 (merged)",
+      "primitiveId": 1,
+      "materialId": 12,
+      "attributes": {
+        "POSITION": 135,
+        "NORMAL": 136,
+        "TEXCOORD_0": 137,
+        "JOINTS_0": 139,
+        "WEIGHTS_0": 138
+      },
+      "indicesAccessor": 141
+    },
+    {
+      "meshId": 2,
+      "meshName": "Hair001 (merged)",
+      "primitiveId": 2,
+      "materialId": 13,
+      "attributes": {
+        "POSITION": 135,
+        "NORMAL": 136,
+        "TEXCOORD_0": 137,
+        "JOINTS_0": 139,
+        "WEIGHTS_0": 138
+      },
+      "indicesAccessor": 142
+    },
+    {
+      "meshId": 2,
+      "meshName": "Hair001 (merged)",
+      "primitiveId": 3,
+      "materialId": 14,
+      "attributes": {
+        "POSITION": 135,
+        "NORMAL": 136,
+        "TEXCOORD_0": 137,
+        "JOINTS_0": 139,
+        "WEIGHTS_0": 138
+      },
+      "indicesAccessor": 143
+    }
+  ],
+  "images": [
+    {
+      "imageId": 0,
+      "name": "_01",
+      "mimeType": "image/png",
+      "bytes": 51432,
+      "SHA256": "76acbc6191cc92f2d00a356b31f5889e5133d592c081aaa006af4776b9d0bd33",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-0.png"
+    },
+    {
+      "imageId": 1,
+      "name": "Shader_NoneBlack",
+      "mimeType": "image/png",
+      "bytes": 69,
+      "SHA256": "9e084b8d331ed370ca9822b57c207a18b7ec0aa672a2b0487d2caaa86df26567",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-1.png"
+    },
+    {
+      "imageId": 2,
+      "name": "Shader_NoneNormal",
+      "mimeType": "image/png",
+      "bytes": 79,
+      "SHA256": "d76fc537166ea42dad9f97cde34574ae348397e1279710fb69b8f2e743b2cc95",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-2.png"
+    },
+    {
+      "imageId": 3,
+      "name": "_02",
+      "mimeType": "image/png",
+      "bytes": 154744,
+      "SHA256": "11d1dfda2897e6e253692b670ccee82e42633ef317d03ac6f39f796336d498a2",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-3.png"
+    },
+    {
+      "imageId": 4,
+      "name": "_03",
+      "mimeType": "image/png",
+      "bytes": 27274,
+      "SHA256": "3ed814ac34c4706446ae7c27fe7b30995262724d6ee3196ade0013a6671f02dd",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-4.png"
+    },
+    {
+      "imageId": 5,
+      "name": "_04",
+      "mimeType": "image/png",
+      "bytes": 734700,
+      "SHA256": "0d10d325f6db38fef89de680e3ad83b23034aa502be8ef79d85ae90f2e67d96e",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-5.png"
+    },
+    {
+      "imageId": 6,
+      "name": "_05",
+      "mimeType": "image/png",
+      "bytes": 501027,
+      "SHA256": "dca1fea84bde4c850d99e8913f2860fb3a87edf483e0baf54e81f6aa101ac331",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-6.png"
+    },
+    {
+      "imageId": 7,
+      "name": "_06",
+      "mimeType": "image/png",
+      "bytes": 230082,
+      "SHA256": "b6ede6a05e704e23397ba3065a92b7fa8ac1961bd17582ae3b65238f14cd29a1",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-7.png"
+    },
+    {
+      "imageId": 8,
+      "name": "_07",
+      "mimeType": "image/png",
+      "bytes": 33503,
+      "SHA256": "cf7e85d0b2cb94a0bd429652461a396b4c1d8cd1692dec0a378341ceca42f058",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-8.png"
+    },
+    {
+      "imageId": 9,
+      "name": "_09",
+      "mimeType": "image/png",
+      "bytes": 81448,
+      "SHA256": "32476919c11a2986435460542cdf3e8de8c11c8327cea6cf0a34ce6cda4f52f6",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-9.png"
+    },
+    {
+      "imageId": 10,
+      "name": "_10",
+      "mimeType": "image/png",
+      "bytes": 3287372,
+      "SHA256": "4ba4fafe7187c32de6514a5d4677ebe28a5fdd258ee0d96082f2d1836487900d",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-10.png"
+    },
+    {
+      "imageId": 11,
+      "name": "_11",
+      "mimeType": "image/png",
+      "bytes": 2454319,
+      "SHA256": "c1f03762154dd74c79c12f461a9b2ddd53d495f662ded4bc7842ac0cb168ca92",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-11.png"
+    },
+    {
+      "imageId": 12,
+      "name": "_12",
+      "mimeType": "image/png",
+      "bytes": 179766,
+      "SHA256": "e963718ed5dc65009e4f113f8d745d7f119eec7637ace88f186d540590185852",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-12.png"
+    },
+    {
+      "imageId": 13,
+      "name": "_13",
+      "mimeType": "image/png",
+      "bytes": 172507,
+      "SHA256": "d9388455ee4c7bb35fd113db84af24fe8d58528572a14d9753196902c685b462",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-13.png"
+    },
+    {
+      "imageId": 14,
+      "name": "_14",
+      "mimeType": "image/png",
+      "bytes": 1049774,
+      "SHA256": "3bcd756996ec028186187eed20677ee6b78472b4ce55f2d41a41e0cdaeef8e2c",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-14.png"
+    },
+    {
+      "imageId": 15,
+      "name": "_15",
+      "mimeType": "image/png",
+      "bytes": 100687,
+      "SHA256": "9ac49cae8ad7d0b5b5d95ef9f6a9c33564fd37bbdde47f66a567c3e1796d1dfe",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-15.png"
+    },
+    {
+      "imageId": 16,
+      "name": "_16",
+      "mimeType": "image/png",
+      "bytes": 6944,
+      "SHA256": "e28dd7aa18101b8775942b445674a166cdf391513bfdf420d7a05473214daed0",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-16.png"
+    },
+    {
+      "imageId": 17,
+      "name": "N00_000_Hair_00_nml",
+      "mimeType": "image/png",
+      "bytes": 97368,
+      "SHA256": "86426d781334c6a440439db9039a9a47ce8b9f16f82fd805a56c6f0f8047bf52",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-17.png"
+    },
+    {
+      "imageId": 18,
+      "name": "_17",
+      "mimeType": "image/png",
+      "bytes": 144488,
+      "SHA256": "4f6f96e95177d14cb292355c55d34bd23d6aaadb652a811cd5ec15792a08d124",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-18.png"
+    },
+    {
+      "imageId": 19,
+      "name": "_18",
+      "mimeType": "image/png",
+      "bytes": 6944,
+      "SHA256": "e28dd7aa18101b8775942b445674a166cdf391513bfdf420d7a05473214daed0",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-19.png"
+    },
+    {
+      "imageId": 20,
+      "name": "_19",
+      "mimeType": "image/png",
+      "bytes": 192506,
+      "SHA256": "63243977c6826b164a91fbc227cb89dd017e8f604b1c4a8aad202128c3de28ec",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-20.png"
+    },
+    {
+      "imageId": 21,
+      "name": "_20",
+      "mimeType": "image/png",
+      "bytes": 6944,
+      "SHA256": "e28dd7aa18101b8775942b445674a166cdf391513bfdf420d7a05473214daed0",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-21.png"
+    },
+    {
+      "imageId": 22,
+      "name": "_21",
+      "mimeType": "image/png",
+      "bytes": 49461,
+      "SHA256": "cd3d96796b8e14a35beffae375e416960ac2dfcce230e5644ec671c14e1c47e8",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-22.png"
+    },
+    {
+      "imageId": 23,
+      "name": "_22",
+      "mimeType": "image/png",
+      "bytes": 6944,
+      "SHA256": "e28dd7aa18101b8775942b445674a166cdf391513bfdf420d7a05473214daed0",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-23.png"
+    },
+    {
+      "imageId": 24,
+      "name": "Thumbnail",
+      "mimeType": "image/png",
+      "bytes": 1730983,
+      "SHA256": "4891e29095eb6028e3f3d3ea37bfe641dc9518c5a3bc20880bd8d274ca953696",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-24.png"
+    },
+    {
+      "imageId": 25,
+      "name": "MatcapWarp",
+      "mimeType": "image/png",
+      "bytes": 69,
+      "SHA256": "9e084b8d331ed370ca9822b57c207a18b7ec0aa672a2b0487d2caaa86df26567",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-25.png"
+    },
+    {
+      "imageId": 26,
+      "name": "N00_000_00_Face_00_out",
+      "mimeType": "image/png",
+      "bytes": 14079,
+      "SHA256": "d5c7fc19d8aa5279d9e006cd283dd280d82a36a2ed9239fec92fb2cb359c1816",
+      "file": "C:\\Users\\15352\\Documents\\Codex\\2026-10-30\\task\\model-source\\image-26.png"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    },
+    {
+      "magFilter": 9729,
+      "minFilter": 9729,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "Argon": {
+    "filesCompared": [
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\render_v12_exact_gamemap1_331_contract.py",
+        "SHA256": "663561b2bf7d96037dd09c0fe255775b624d41f6aed44cafb2de865ae56c9c79"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\render_v12_for_gamemap1_base.py",
+        "SHA256": "b1aa2bd132518e39bc78466376e78d99f6f4d6d408a7699469ba378cbca26116"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\UnityUniversalPixelPipeline_v12.cs",
+        "SHA256": "16ace3c8206b357da17e03360abc849b7d275726a6c65eab8c8ae6cb60c572b8"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\unityvrmpixelpipeline (1).cs",
+        "SHA256": "a60fb017561e98b6d71a0252a955a7007768f856a283f3abe3796f6263f83ed5"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\unityvrmpixelpipeline.cs",
+        "SHA256": "cde9533404349e151c92e9cd414ad1b3b0a0efe21639c99169daaf8c0bb72873"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\UniversalPartPixelCompositor_v12.compute",
+        "SHA256": "5b398414f61b2ca1e15ccceb4727e393d666390e74b3b51ee1ab1e71726a090e"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\UniversalPartPixelGbuffer_v12.shader",
+        "SHA256": "a0ebbcdd24a7da94d8498db1b22fbef8a0fef6292513d2fdb3129473789286d4"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\vrm_3d_pixel_pipeline (1).py",
+        "SHA256": "a60fb017561e98b6d71a0252a955a7007768f856a283f3abe3796f6263f83ed5"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\vrm_3d_pixel_pipeline.py",
+        "SHA256": "cde9533404349e151c92e9cd414ad1b3b0a0efe21639c99169daaf8c0bb72873"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\vrm_3d_pixel_pipeline_v12_universal.py",
+        "SHA256": "b39d3f7dc3db00110ecdbbec38d2bce99195f796d1cc8915402b52c043f926d5"
+      },
+      {
+        "file": "C:\\Users\\15352\\Desktop\\작업폴더\\Argon\\vrm_3d_pixel_pipeline_v13_math_complete.py",
+        "SHA256": "8a8465594d1201307506e27cb3cd4a37eb9d4d177ef02e6cdedb49e9b6398420"
+      }
+    ],
+    "directMarkerMatches": [],
+    "relevantFunctions": [
+      {
+        "file": "unityvrmpixelpipeline (1).cs",
+        "line": 1050,
+        "signature": "def shade_hair_mesh_3d_gradient("
+      },
+      {
+        "file": "vrm_3d_pixel_pipeline (1).py",
+        "line": 1050,
+        "signature": "def shade_hair_mesh_3d_gradient("
+      },
+      {
+        "file": "vrm_3d_pixel_pipeline_v12_universal.py",
+        "line": 1365,
+        "signature": "def shade_intrinsic_cel_cluster("
+      },
+      {
+        "file": "vrm_3d_pixel_pipeline_v12_universal.py",
+        "line": 1424,
+        "signature": "def shade_hair_mesh_3d_gradient("
+      }
+    ],
+    "limit": "Marker checks establish no direct match for these colour functions/constants in inspected top-level files; they do not prove unrelated project code has no Argon ancestry."
+  },
+  "currentWeb": {
+    "path": "C:\\Users\\15352\\Desktop\\작업폴더\\아트검토\\31_머리색_슬라이더\\index.html",
+    "SHA256": "fa945d046c211aea0c419b627713c9865b1a61fab18872fee58460e0bf519fff",
+    "sourceId": "8d6a0a4cb858aab8e95db46aa5113cfd7bdaec7682c4c4f1bfa2618c0d4a8aa6",
+    "sourceDataKeys": [
+      "width",
+      "height",
+      "cell",
+      "hairPixels",
+      "hairCells",
+      "sourceId",
+      "timestampUTC",
+      "frame",
+      "gMin",
+      "gMax",
+      "logicalX",
+      "logicalYTop",
+      "screenX",
+      "screenYTop",
+      "sourceDescription",
+      "originalRGBA",
+      "hairMask",
+      "gFloat32LE",
+      "thresholds",
+      "regionGeometry"
+    ],
+    "geometryKeys": [
+      "width",
+      "height",
+      "worldPixel",
+      "depth",
+      "clear",
+      "owner"
+    ],
+    "missingForSourceMapping": [
+      "same-frame per-cell original UV/texture source lookup",
+      "verified original per-cell sampled baseColourLinear before lighting",
+      "stable material/feature source IDs and source-model hash link"
+    ]
+  }
+}

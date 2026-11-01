@@ -3,7 +3,8 @@ import sys,json,numpy as np
 from PIL import Image
 H=Path(__file__).resolve().parent;sys.path.insert(0,str(H.parent/'uv-features64'))
 from aa_transition103 import peaks,tests
-from inspect_source103 import colours
+def colours(labels,mask):
+ out=np.zeros((*mask.shape,4),np.uint8);v=labels[mask].astype(np.uint32)+1;out[mask,:3]=np.stack([(v*73)%223+32,(v*131)%223+32,(v*191)%223+32],axis=-1).astype(np.uint8);out[mask,3]=255;return out
 def main():
  toy=tests();print(json.dumps(toy),flush=True);rows=[]
  for part in [3,6]:

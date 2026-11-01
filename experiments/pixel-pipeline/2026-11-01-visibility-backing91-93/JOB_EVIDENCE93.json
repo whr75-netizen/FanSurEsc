@@ -1,0 +1,731 @@
+{
+  "status": "READ_ONLY_SOURCE_AND_LOG_EVIDENCE",
+  "firstAttachmentFailure": {
+    "timestampLocalInEditor": "[22:44:20]",
+    "type": "Error",
+    "message": "IndexOutOfRangeException: A FixedAttachmentArray can only contain 8 items.\nUnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler.FixedAttachmentArray`1[DataType].Add (DataType& data) (at ./Library/PackageCache/com.unity.render-pipelines.core@a4c9a9793789/Runtime/RenderGraph/Compiler/FixedAttachmentArray.cs:111)\nUnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler.NativePassData..ctor (UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler.PassData& pass, UnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler.CompilerContextData ctx) (at ./Library/PackageCache/com.unity.render-pipelines.core@a4c9a9793789/Runtime/RenderGraph/Compiler/PassesData.cs:721)\nUnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler.NativePassCompiler.TryMergeNativePasses () (at ./Library/PackageCache/com.unity.render-pipelines.core@a4c9a9793789/Runtime/RenderGraph/Compiler/NativePassCompiler.cs:689)\nUnityEngine.Rendering.RenderGraphModule.NativeRenderPassCompiler.NativePassCompiler.Compile (UnityEngine.Rendering.RenderGraphModule.RenderGraphResourceRegistry resources) (at ./Library/PackageCache/com.unity.render-pipelines.core@a4c9a9793789/Runtime/RenderGraph/Compiler/NativePassCompiler.cs:150)\nUnityEngine.Rendering.RenderGraphModule.RenderGraph.CompileNativeRenderGraph (System.Int32 graphHash) (at ./Library/PackageCache/com.unity.render-pipelines.core@a4c9a9793789/Runtime/RenderGraph/RenderGraph.Compiler.cs:20)\nUnityEngine.Rendering.RenderGraphModule.RenderGraph.Execute () (at ./Library/PackageCache/com.unity.render-pipelines.core@a4c9a9793789/Runtime/RenderGraph/RenderGraph.cs:1322)\nUnityEngine.Rendering.RenderGraphModule.RenderGraph.EndRecordingAndExecute () (at ./Library/PackageCache/com.unity.render-pipelines.core@a4c9a9793789/Runtime/RenderGraph/RenderGraph.cs:1262)\nUnityEngine.Rendering.Universal.UniversalRenderPipeline.RecordAndExecuteRenderGraph (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.ScriptableRenderContext context, UnityEngine.Rendering.Universal.ScriptableRenderer renderer, UnityEngine.Rendering.CommandBuffer cmd, UnityEngine.Camera camera) (at ./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/UniversalRenderPipelineRenderGraph.cs:28)\nUnityEngine.Camera:Render()\nHeadLocal367:RenderFrame() (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:32)\nGameplay397:Present() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:33)\nGameplay397:LateUpdate() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:13)\n",
+    "stackTrace": "Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs"
+  },
+  "firstSubsequentJobFailure": {
+    "timestampLocalInEditor": "[22:44:20]",
+    "type": "Error",
+    "message": "InvalidOperationException: The previously scheduled job ZBinningJob writes to the Unity.Collections.NativeArray`1[System.UInt32] ZBinningJob.bins. You must call JobHandle.Complete() on the job ZBinningJob, before you can write to the Unity.Collections.NativeArray`1[System.UInt32] safely.\nUnity.Collections.LowLevel.Unsafe.AtomicSafetyHandle.CheckWriteAndThrowNoEarlyOut (Unity.Collections.LowLevel.Unsafe.AtomicSafetyHandle handle) (at <2f52b751ded44e96b74c2c8a24c6c65b>:0)\nUnityEngine.Rendering.Universal.Internal.ForwardLights.PreSetup (UnityEngine.Rendering.Universal.UniversalRenderingData renderingData, UnityEngine.Rendering.Universal.UniversalCameraData cameraData, UnityEngine.Rendering.Universal.UniversalLightData lightData) (at ./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/ForwardLights.cs:404)\nUnityEngine.Rendering.Universal.UniversalRenderer.OnBeforeRendering (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph) (at ./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/UniversalRendererRenderGraph.cs:749)\nUnityEngine.Rendering.Universal.UniversalRenderer.OnRecordRenderGraph (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.ScriptableRenderContext context) (at ./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/UniversalRendererRenderGraph.cs:655)\nUnityEngine.Rendering.Universal.ScriptableRenderer.RecordRenderGraph (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.ScriptableRenderContext context) (at ./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/ScriptableRenderer.cs:936)\nUnityEngine.Rendering.Universal.UniversalRenderPipeline.RecordAndExecuteRenderGraph (UnityEngine.Rendering.RenderGraphModule.RenderGraph renderGraph, UnityEngine.Rendering.ScriptableRenderContext context, UnityEngine.Rendering.Universal.ScriptableRenderer renderer, UnityEngine.Rendering.CommandBuffer cmd, UnityEngine.Camera camera) (at ./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/UniversalRenderPipelineRenderGraph.cs:27)\nUnityEngine.Camera:Render()\nHeadLocal367:RenderFrame() (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:32)\nGameplay397:Present() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:33)\nGameplay397:LateUpdate() (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:13)\n",
+    "stackTrace": "Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs"
+  },
+  "jobErrorsInBoundedConsole": 8,
+  "source": {
+    "attachmentCapacity": {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.render-pipelines.core@a4c9a9793789\\Runtime\\RenderGraph\\Compiler\\FixedAttachmentArray.cs",
+      "SHA256": "3475c4848c36a20ece1d6c3a73a6c6f54934cf2c473aeb5dec4e6d9dc1ea6981",
+      "lines": [
+        {
+          "line": 18,
+          "text": ""
+        },
+        {
+          "line": 19,
+          "text": "        /// <summary>"
+        },
+        {
+          "line": 20,
+          "text": "        /// The maximum number of elements that can be stored in the array."
+        },
+        {
+          "line": 21,
+          "text": "        /// </summary>"
+        },
+        {
+          "line": 22,
+          "text": "        public const int MaxAttachments = 8;"
+        },
+        {
+          "line": 23,
+          "text": ""
+        },
+        {
+          "line": 24,
+          "text": "        /// This is a fixed size struct that emulates itself as an array"
+        },
+        {
+          "line": 25,
+          "text": "        /// similar to how Unity.Math emulates fixed size arrays"
+        },
+        {
+          "line": 26,
+          "text": "        private DataType a0, a1, a2, a3, a4, a5, a6, a7;"
+        },
+        {
+          "line": 27,
+          "text": "        private int activeAttachments;"
+        },
+        {
+          "line": 28,
+          "text": ""
+        },
+        {
+          "line": 29,
+          "text": "        /// <summary>"
+        },
+        {
+          "line": 30,
+          "text": "        /// Created an new array with the specified number of attachments."
+        }
+      ]
+    },
+    "attachmentAddFailure": {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.render-pipelines.core@a4c9a9793789\\Runtime\\RenderGraph\\Compiler\\FixedAttachmentArray.cs",
+      "SHA256": "3475c4848c36a20ece1d6c3a73a6c6f54934cf2c473aeb5dec4e6d9dc1ea6981",
+      "lines": [
+        {
+          "line": 100,
+          "text": "#endif"
+        },
+        {
+          "line": 101,
+          "text": "            int index = activeAttachments;"
+        },
+        {
+          "line": 102,
+          "text": "            unsafe"
+        },
+        {
+          "line": 103,
+          "text": "            {"
+        },
+        {
+          "line": 104,
+          "text": "                fixed (FixedAttachmentArray<DataType>* self = &this)"
+        },
+        {
+          "line": 105,
+          "text": "                {"
+        },
+        {
+          "line": 106,
+          "text": "                    DataType* array = (DataType*)self;"
+        },
+        {
+          "line": 107,
+          "text": "                    array[index] = data;"
+        },
+        {
+          "line": 108,
+          "text": "                }"
+        },
+        {
+          "line": 109,
+          "text": "            }"
+        },
+        {
+          "line": 110,
+          "text": "            activeAttachments++;"
+        },
+        {
+          "line": 111,
+          "text": "            return index;"
+        },
+        {
+          "line": 112,
+          "text": "        }"
+        },
+        {
+          "line": 113,
+          "text": ""
+        },
+        {
+          "line": 114,
+          "text": "        /// <summary>"
+        },
+        {
+          "line": 115,
+          "text": "        /// Get the element at the specified index in the array."
+        },
+        {
+          "line": 116,
+          "text": "        /// </summary>"
+        }
+      ]
+    },
+    "jobPreSetup": {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.render-pipelines.universal@d7774c218bdf\\Runtime\\ForwardLights.cs",
+      "SHA256": "3131afcecbe0dd7cdd35e5e65b5656ae6241fc9c629dd9d057a526f9d9d9dd32",
+      "lines": [
+        {
+          "line": 381,
+          "text": "        internal void PreSetup(UniversalRenderingData renderingData, UniversalCameraData cameraData, UniversalLightData lightData)"
+        },
+        {
+          "line": 382,
+          "text": "        {"
+        },
+        {
+          "line": 383,
+          "text": "            if (m_UseForwardPlus)"
+        },
+        {
+          "line": 384,
+          "text": "            {"
+        },
+        {
+          "line": 385,
+          "text": "                using var _ = new ProfilingScope(m_ProfilingSamplerFPSetup);"
+        },
+        {
+          "line": 386,
+          "text": ""
+        },
+        {
+          "line": 387,
+          "text": "                if (!m_CullingHandle.IsCompleted)"
+        },
+        {
+          "line": 388,
+          "text": "                {"
+        },
+        {
+          "line": 389,
+          "text": "                    throw new InvalidOperationException(\"Forward+ jobs have not completed yet.\");"
+        },
+        {
+          "line": 390,
+          "text": "                }"
+        },
+        {
+          "line": 391,
+          "text": ""
+        },
+        {
+          "line": 392,
+          "text": "                if (m_TileMasks.Length != UniversalRenderPipeline.maxTileWords)"
+        },
+        {
+          "line": 393,
+          "text": "                {"
+        },
+        {
+          "line": 394,
+          "text": "                    m_ZBins.Dispose();"
+        },
+        {
+          "line": 395,
+          "text": "                    m_ZBinsBuffer.Dispose();"
+        },
+        {
+          "line": 396,
+          "text": "                    m_TileMasks.Dispose();"
+        },
+        {
+          "line": 397,
+          "text": "                    m_TileMasksBuffer.Dispose();"
+        },
+        {
+          "line": 398,
+          "text": "                    CreateForwardPlusBuffers();"
+        },
+        {
+          "line": 399,
+          "text": "                }"
+        },
+        {
+          "line": 400,
+          "text": "                else"
+        },
+        {
+          "line": 401,
+          "text": "                {"
+        },
+        {
+          "line": 402,
+          "text": "                    unsafe"
+        },
+        {
+          "line": 403,
+          "text": "                    {"
+        },
+        {
+          "line": 404,
+          "text": "                        UnsafeUtility.MemClear(m_ZBins.GetUnsafePtr(), m_ZBins.Length * sizeof(uint));"
+        },
+        {
+          "line": 405,
+          "text": "                        UnsafeUtility.MemClear(m_TileMasks.GetUnsafePtr(), m_TileMasks.Length * sizeof(uint));"
+        },
+        {
+          "line": 406,
+          "text": "                    }"
+        },
+        {
+          "line": 407,
+          "text": "                }"
+        },
+        {
+          "line": 408,
+          "text": ""
+        },
+        {
+          "line": 409,
+          "text": "#if ENABLE_VR && ENABLE_XR_MODULE"
+        },
+        {
+          "line": 410,
+          "text": "                var viewCount = cameraData.xr.enabled && cameraData.xr.singlePassEnabled ? 2 : 1;"
+        },
+        {
+          "line": 411,
+          "text": "#else"
+        },
+        {
+          "line": 412,
+          "text": "                var viewCount = 1;"
+        },
+        {
+          "line": 413,
+          "text": "#endif"
+        },
+        {
+          "line": 414,
+          "text": ""
+        },
+        {
+          "line": 415,
+          "text": "                var worldToViews = new Fixed2<float4x4>(cameraData.GetViewMatrix(0), cameraData.GetViewMatrix(math.min(1, viewCount - 1)));"
+        },
+        {
+          "line": 416,
+          "text": "                var viewToClips = new Fixed2<float4x4>(cameraData.GetProjectionMatrix(0), cameraData.GetProjectionMatrix(math.min(1, viewCount - 1)));"
+        },
+        {
+          "line": 417,
+          "text": ""
+        },
+        {
+          "line": 418,
+          "text": "                m_CullingHandle = ScheduleClusteringJobs("
+        },
+        {
+          "line": 419,
+          "text": "                    lightData.mainLightIndex != -1,"
+        },
+        {
+          "line": 420,
+          "text": "                    lightData.supportsAdditionalLights,"
+        },
+        {
+          "line": 421,
+          "text": "                    lightData.visibleLights,"
+        }
+      ]
+    },
+    "jobCompletionInSetupLights": {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.render-pipelines.universal@d7774c218bdf\\Runtime\\ForwardLights.cs",
+      "SHA256": "3131afcecbe0dd7cdd35e5e65b5656ae6241fc9c629dd9d057a526f9d9d9dd32",
+      "lines": [
+        {
+          "line": 476,
+          "text": "        internal void SetupLights(UnsafeCommandBuffer cmd, UniversalRenderingData renderingData, UniversalCameraData cameraData, UniversalLightData lightData)"
+        },
+        {
+          "line": 477,
+          "text": "        {"
+        },
+        {
+          "line": 478,
+          "text": "            int additionalLightsCount = lightData.additionalLightsCount;"
+        },
+        {
+          "line": 479,
+          "text": "            bool additionalLightsPerVertex = lightData.shadeAdditionalLightsPerVertex;"
+        },
+        {
+          "line": 480,
+          "text": "            using (new ProfilingScope(m_ProfilingSampler))"
+        },
+        {
+          "line": 481,
+          "text": "            {"
+        },
+        {
+          "line": 482,
+          "text": "                if (m_UseForwardPlus)"
+        },
+        {
+          "line": 483,
+          "text": "                {"
+        },
+        {
+          "line": 484,
+          "text": "                    if (lightData.reflectionProbeAtlas)"
+        },
+        {
+          "line": 485,
+          "text": "                    {"
+        },
+        {
+          "line": 486,
+          "text": "                        m_ReflectionProbeManager.UpdateGpuData(CommandBufferHelpers.GetNativeCommandBuffer(cmd), ref renderingData.cullResults);"
+        },
+        {
+          "line": 487,
+          "text": "                    }"
+        },
+        {
+          "line": 488,
+          "text": ""
+        },
+        {
+          "line": 489,
+          "text": "                    using (new ProfilingScope(m_ProfilingSamplerFPComplete))"
+        },
+        {
+          "line": 490,
+          "text": "                    {"
+        },
+        {
+          "line": 491,
+          "text": "                        m_CullingHandle.Complete();"
+        },
+        {
+          "line": 492,
+          "text": "                    }"
+        },
+        {
+          "line": 493,
+          "text": ""
+        },
+        {
+          "line": 494,
+          "text": "                    using (new ProfilingScope(m_ProfilingSamplerFPUpload))"
+        },
+        {
+          "line": 495,
+          "text": "                    {"
+        },
+        {
+          "line": 496,
+          "text": "                        m_ZBinsBuffer.SetData(m_ZBins.Reinterpret<float4>(UnsafeUtility.SizeOf<uint>()));"
+        },
+        {
+          "line": 497,
+          "text": "                        m_TileMasksBuffer.SetData(m_TileMasks.Reinterpret<float4>(UnsafeUtility.SizeOf<uint>()));"
+        },
+        {
+          "line": 498,
+          "text": "                        cmd.SetGlobalConstantBuffer(m_ZBinsBuffer, \"urp_ZBinBuffer\", 0, UniversalRenderPipeline.maxZBinWords * 4);"
+        },
+        {
+          "line": 499,
+          "text": "                        cmd.SetGlobalConstantBuffer(m_TileMasksBuffer, \"urp_TileBuffer\", 0, UniversalRenderPipeline.maxTileWords * 4);"
+        }
+      ]
+    },
+    "jobCompletionInCleanup": {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.render-pipelines.universal@d7774c218bdf\\Runtime\\ForwardLights.cs",
+      "SHA256": "3131afcecbe0dd7cdd35e5e65b5656ae6241fc9c629dd9d057a526f9d9d9dd32",
+      "lines": [
+        {
+          "line": 576,
+          "text": "        internal void Cleanup()"
+        },
+        {
+          "line": 577,
+          "text": "        {"
+        },
+        {
+          "line": 578,
+          "text": "            if (m_UseForwardPlus)"
+        },
+        {
+          "line": 579,
+          "text": "            {"
+        },
+        {
+          "line": 580,
+          "text": "                m_CullingHandle.Complete();"
+        },
+        {
+          "line": 581,
+          "text": "                m_ZBins.Dispose();"
+        },
+        {
+          "line": 582,
+          "text": "                m_TileMasks.Dispose();"
+        },
+        {
+          "line": 583,
+          "text": "                m_ZBinsBuffer.Dispose();"
+        },
+        {
+          "line": 584,
+          "text": "                m_ZBinsBuffer = null;"
+        },
+        {
+          "line": 585,
+          "text": "                m_TileMasksBuffer.Dispose();"
+        },
+        {
+          "line": 586,
+          "text": "                m_TileMasksBuffer = null;"
+        },
+        {
+          "line": 587,
+          "text": "                m_ReflectionProbeManager.Dispose();"
+        },
+        {
+          "line": 588,
+          "text": "            }"
+        }
+      ]
+    },
+    "nativeCompileBeforeExecute": {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.render-pipelines.core@a4c9a9793789\\Runtime\\RenderGraph\\RenderGraph.cs",
+      "SHA256": "821c84cacb42d65ed8506a98558969a805e96913b4ff2e61f2c6508c55e2744a",
+      "lines": [
+        {
+          "line": 1309,
+          "text": "        {"
+        },
+        {
+          "line": 1310,
+          "text": "            m_ExecutionExceptionWasRaised = false;"
+        },
+        {
+          "line": 1311,
+          "text": "            m_RenderGraphState = RenderGraphState.Executing;"
+        },
+        {
+          "line": 1312,
+          "text": ""
+        },
+        {
+          "line": 1313,
+          "text": "#if DEVELOPMENT_BUILD || UNITY_EDITOR"
+        },
+        {
+          "line": 1314,
+          "text": "                if (m_RenderGraphContext.cmd == null)"
+        },
+        {
+          "line": 1315,
+          "text": "                    throw new InvalidOperationException(\"RenderGraph.BeginRecording was not called before executing the render graph.\");"
+        },
+        {
+          "line": 1316,
+          "text": ""
+        },
+        {
+          "line": 1317,
+          "text": "            ClearCacheIfNewActiveDebugSession();"
+        },
+        {
+          "line": 1318,
+          "text": "#endif"
+        },
+        {
+          "line": 1319,
+          "text": ""
+        },
+        {
+          "line": 1320,
+          "text": "            int graphHash = m_EnableCompilationCaching ? ComputeGraphHash() : 0;"
+        },
+        {
+          "line": 1321,
+          "text": ""
+        },
+        {
+          "line": 1322,
+          "text": "            CompileNativeRenderGraph(graphHash);"
+        },
+        {
+          "line": 1323,
+          "text": ""
+        },
+        {
+          "line": 1324,
+          "text": "            // Must be set after compilation when the compiler has been initialized"
+        },
+        {
+          "line": 1325,
+          "text": "            m_RenderGraphContext.compilerContext = nativeCompiler?.contextData;"
+        },
+        {
+          "line": 1326,
+          "text": ""
+        },
+        {
+          "line": 1327,
+          "text": "            m_Resources.BeginExecute(m_CurrentFrameIndex);"
+        },
+        {
+          "line": 1328,
+          "text": ""
+        },
+        {
+          "line": 1329,
+          "text": "#if UNITY_EDITOR || DEVELOPMENT_BUILD"
+        },
+        {
+          "line": 1330,
+          "text": "            // Feeding Render Graph Viewer before resource deallocation at pass execution"
+        },
+        {
+          "line": 1331,
+          "text": "            GenerateDebugData(graphHash);"
+        },
+        {
+          "line": 1332,
+          "text": "#endif"
+        },
+        {
+          "line": 1333,
+          "text": "            ExecuteNativeRenderGraph();"
+        },
+        {
+          "line": 1334,
+          "text": ""
+        },
+        {
+          "line": 1335,
+          "text": "            // Clear the shader bindings for all global textures to make sure bindings don't leak outside the graph"
+        },
+        {
+          "line": 1336,
+          "text": "            ClearGlobalBindings();"
+        },
+        {
+          "line": 1337,
+          "text": "        }"
+        },
+        {
+          "line": 1338,
+          "text": ""
+        },
+        {
+          "line": 1339,
+          "text": "        class ProfilingScopePassData"
+        },
+        {
+          "line": 1340,
+          "text": "        {"
+        },
+        {
+          "line": 1341,
+          "text": "            public ProfilingSampler sampler;"
+        },
+        {
+          "line": 1342,
+          "text": "        }"
+        },
+        {
+          "line": 1343,
+          "text": ""
+        },
+        {
+          "line": 1344,
+          "text": "        const string k_BeginProfilingSamplerPassName = \"BeginProfile\";"
+        },
+        {
+          "line": 1345,
+          "text": "        const string k_EndProfilingSamplerPassName = \"EndProfile\";"
+        }
+      ]
+    },
+    "normalDefaultRendererFallback": {
+      "path": "C:\\Users\\15352\\Documents\\work\\Fantasy Survival Escape Game\\Library\\PackageCache\\com.unity.render-pipelines.universal@d7774c218bdf\\Runtime\\UniversalRenderPipeline.cs",
+      "SHA256": "950300f252bb4bcd9c0f75406b4e72196ee705562a3ea24128fb5b0c59d68cbd",
+      "lines": [
+        {
+          "line": 1458,
+          "text": "        static ScriptableRenderer GetRenderer(Camera camera, UniversalAdditionalCameraData additionalCameraData)"
+        },
+        {
+          "line": 1459,
+          "text": "        {"
+        },
+        {
+          "line": 1460,
+          "text": "            var renderer = additionalCameraData != null ? additionalCameraData.scriptableRenderer : null;"
+        },
+        {
+          "line": 1461,
+          "text": "            if (renderer == null || camera.cameraType == CameraType.SceneView)"
+        },
+        {
+          "line": 1462,
+          "text": "                renderer = asset.scriptableRenderer;"
+        },
+        {
+          "line": 1463,
+          "text": "            return renderer;"
+        },
+        {
+          "line": 1464,
+          "text": "        }"
+        },
+        {
+          "line": 1465,
+          "text": ""
+        },
+        {
+          "line": 1466,
+          "text": "        internal static void InitializeScaledDimensions(Camera camera, UniversalCameraData cameraData)"
+        },
+        {
+          "line": 1467,
+          "text": "        {"
+        },
+        {
+          "line": 1468,
+          "text": "            cameraData.scaledWidth = Mathf.Max(1, (int) (camera.pixelWidth * cameraData.renderScale));"
+        },
+        {
+          "line": 1469,
+          "text": "            cameraData.scaledHeight = Mathf.Max(1, (int) (camera.pixelHeight * cameraData.renderScale));"
+        }
+      ]
+    }
+  },
+  "observedSequence": "22:44:20 attachment/compiler exception first; then22:44:20~22:44:21 ForwardLights.PreSetup ZBinningJob safety errors; normal Play exit at13:44:22.861Z. UTC/local editor timestamp formats are preserved rather than silently treated as one format.",
+  "sourceBasedInference": "PreSetup schedules Forward+ jobs before graph execution; SetupLights completes the handle during execution, and Cleanup also completes/disposes engine-owned arrays. Compile abort can skip the execution completion point. Subsequent IsCompleted check passing is not the same as Complete returning NativeArray ownership. This explains the error sequence, but the live private job handle/stack was not inspected.",
+  "notProven": [
+    "exact live job ownership/status after Exit",
+    "that a normal public renderer recreation would preserve all internal state",
+    "that shadow texture lifetime alone explains the earlier g mismatch"
+  ],
+  "publicPostState": {
+    "utc": "2026-11-01T13:44:50.6836176Z",
+    "project": "C:/Users/15352/Documents/work/Fantasy Survival Escape Game/Assets",
+    "playing": false,
+    "paused": false,
+    "compiling": false,
+    "updating": false,
+    "dirty": 31,
+    "scenes": [
+      {
+        "active": true,
+        "dirty": false,
+        "loaded": true,
+        "path": "Assets/Scenes/GameMap1.unity"
+      }
+    ],
+    "inputNativeId": "568105589213679894",
+    "nativeExact47": true
+  },
+  "interventions": {
+    "jobComplete": false,
+    "privateReflection": false,
+    "rendererDisposeOrRecreate": false,
+    "newPlayAfterError": false,
+    "resetOrKill": false
+  },
+  "UnsafePassContract": {
+    "officialAPI": "https://docs.unity3d.com/6000.0/Documentation/Manual/urp/render-graph-unsafe-pass.html",
+    "purpose": "Use the documented CommandBuffer interface in a graph; native pass attachment merging is not used. This does not change approval/security settings.",
+    "ownWrites": "24 owned colour RTHandles plus4 owned depth RTHandles declared Write using UseTexture. Per-group materials4 are distinct.",
+    "borrowedReads": "main/additional shadow handles declared Read when valid; UseAllGlobalTextures for existing shader sampling; never release or replace borrowed shadow textures or buffers.",
+    "execution": "SetRenderTarget and DrawMesh recorded inside UnsafeGraphContext; no nested Graphics.ExecuteCommandBuffer. No SetRenderAttachment in UnsafePass.",
+    "lifetime": "Remove only own beginCamera callback; release only owned RTHandles/materials after capture/failure exit. Renderer/camera asset unchanged.",
+    "verified": "full external compile-only success; no GPU validation"
+  },
+  "nextDecisionRisk": "Any operation that disposes/recreates the existing user renderer may lose internal native caches/job state not covered by serialized snapshots. No such action is prepared for execution or taken; a safe supported recovery scope must be reviewed first."
+}

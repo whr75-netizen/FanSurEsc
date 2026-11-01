@@ -1,0 +1,147 @@
+{
+  "status": "PARTIAL_DIAGNOSIS_COMPLETE_GPU_GRAPH_FIX_BLOCKED",
+  "productDefault": 77,
+  "productIntegrated": false,
+  "visibility": {
+    "remainingNativePixels": 56,
+    "backingNativePixels": 36,
+    "eyelineNativePixels": 20,
+    "robustBackgroundNativePixels": 4,
+    "remainingUncertainNativePixels": 16,
+    "opaqueBlockedOldUnknown": 47,
+    "decisionMeaning": "Current conservative mass rule only. label0 means no new eye takeover, not a background RGB or approved artistic deletion."
+  },
+  "oldBacking96": {
+    "count": 96,
+    "opaqueAtExactOldTarget": 96,
+    "oldRGBRecovered": false
+  },
+  "newBacking": {
+    "newSourceId": "eye91b-20261101T132932928Z-cfa639ef",
+    "CloseSequenceSkinPixels": [
+      414,
+      414,
+      414,
+      429,
+      429,
+      436,
+      436,
+      414
+    ],
+    "actualVacatedMissingCellsWithNewTypedSkin": [
+      0,
+      0,
+      0,
+      1,
+      1,
+      4,
+      4,
+      0
+    ],
+    "max4xRGBAControlError": 0.1585937738418579,
+    "adopted": false
+  },
+  "lighting": {
+    "actualSameFrameNormalDifference": 0.0,
+    "actualSameFrameSHDifference": 0.0,
+    "producerG": 0.2378789484500885,
+    "manualG": 0.17524763941764832,
+    "producerMainLit": 0.02909740060567856,
+    "manualMainLit": 0.021436326205730438,
+    "availableEqual": true,
+    "SHGainAdopted": false,
+    "exactShadowResourceCauseConfirmed": false,
+    "mainLightTermContextDifferenceConfirmed": true
+  },
+  "restoration": [
+    {
+      "run": "capture91",
+      "frames": 8,
+      "PlayExited": true,
+      "error": null,
+      "stateChanges": [],
+      "nativeExact": 47,
+      "dirty": 31,
+      "InputSettingsId": "568105589213679894",
+      "RTbeforeAfter": [
+        30,
+        30
+      ],
+      "internalAllocatedBytesDelta": 25054452,
+      "ownedReleased": true,
+      "GPUInternalJobStateCoveredBySnapshot": false
+    },
+    {
+      "run": "capture91b",
+      "frames": 8,
+      "PlayExited": true,
+      "error": null,
+      "stateChanges": [],
+      "nativeExact": 47,
+      "dirty": 31,
+      "InputSettingsId": "568105589213679894",
+      "RTbeforeAfter": [
+        30,
+        30
+      ],
+      "internalAllocatedBytesDelta": 21759695,
+      "ownedReleased": true,
+      "GPUInternalJobStateCoveredBySnapshot": false
+    },
+    {
+      "run": "capture92",
+      "frames": 3,
+      "PlayExited": true,
+      "error": null,
+      "stateChanges": [],
+      "nativeExact": 47,
+      "dirty": 31,
+      "InputSettingsId": "568105589213679894",
+      "RTbeforeAfter": [
+        30,
+        30
+      ],
+      "internalAllocatedBytesDelta": 33581001,
+      "ownedReleased": true,
+      "GPUInternalJobStateCoveredBySnapshot": false
+    },
+    {
+      "run": "capture93",
+      "frames": 0,
+      "PlayExited": true,
+      "error": "System.InvalidOperationException: Runtime paused before observer ready; do not override unidentified pause\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x00457] in <4629b88e024749aca500eb1c36e453e9>:0 ",
+      "stateChanges": [],
+      "nativeExact": 47,
+      "dirty": 31,
+      "InputSettingsId": "568105589213679894",
+      "RTbeforeAfter": [
+        30,
+        30
+      ],
+      "internalAllocatedBytesDelta": 34095667,
+      "ownedReleased": true,
+      "GPUInternalJobStateCoveredBySnapshot": false
+    },
+    {
+      "run": "capture93b",
+      "frames": 0,
+      "PlayExited": true,
+      "error": "System.InvalidOperationException: Runtime paused before observer ready; do not override unidentified pause\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x00457] in <183fe6d1707a421dbf64e1a3872f5cd7>:0 ",
+      "stateChanges": [],
+      "nativeExact": 47,
+      "dirty": 31,
+      "InputSettingsId": "568105589213679894",
+      "RTbeforeAfter": [
+        30,
+        30
+      ],
+      "internalAllocatedBytesDelta": 62935511,
+      "ownedReleased": true,
+      "GPUInternalJobStateCoveredBySnapshot": false
+    }
+  ],
+  "GPUBlocker": "Graph raster pass exceeded8 total attachments (8colour+depth); subsequent URP ZBinningJob safety errors. Existing user data restored but internal renderer job state not proven. UnsafePass correction compiled only.",
+  "newNativePluginOrUnityCSharpAssets": false,
+  "newPlayRequestsPending": 0,
+  "CUAorResetorSaveAssetsorForceKill": false
+}

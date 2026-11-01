@@ -1,0 +1,14 @@
+from pathlib import Path
+import sys
+HERE=Path(__file__).resolve().parent;OUT=HERE/'capture91b'
+source=OUT/'Capture91B.cs';s=source.read_text();needle='  var source=f.motion.surface.source[1];'
+extra='''  var occluders91=new Arr58();foreach(int slot91 in new[]{0,2}){var filter91=f.motion.surface.outputs[slot91];if(filter91.sharedMesh.vertexCount>65536)throw new InvalidOperationException("Occluder geometry budget");AuxMesh("source-evaluated-"+slot91,filter91.sharedMesh,filter91.transform.localToWorldMatrix,frame);var src91=f.motion.surface.source[slot91];var materialRows91=new Arr58();for(int sm91=0;sm91<src91.sharedMaterials.Length;sm91++){var mat91=src91.sharedMaterials[sm91];var tex91=mat91.GetTexture("_MainTex")as Texture2D;materialRows91.Add(new Obj58{["subMesh"]=sm91,["materialName"]=mat91.name,["materialId"]=mat91.GetEntityId().ToString(),["shader"]=AssetDatabase.GetAssetPath(mat91.shader),["factor"]=V(mat91.GetColor("_Color")),["alphaTest"]=mat91.IsKeywordEnabled("_ALPHATEST_ON"),["alphaBlend"]=mat91.IsKeywordEnabled("_ALPHABLEND_ON"),["cutoff"]=mat91.GetFloat("_Cutoff"),["cull"]=mat91.GetFloat("_M_CullMode"),["textureName"]=tex91?tex91.name:null,["textureId"]=tex91?tex91.GetEntityId().ToString():null,["textureSize"]=tex91?new Arr58(tex91.width,tex91.height):null,["uvScale"]=V(mat91.mainTextureScale),["uvOffset"]=V(mat91.mainTextureOffset)});}occluders91.Add(new Obj58{["rendererSlot"]=slot91,["sourceMeshGUID"]=AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(src91.sharedMesh)),["evaluatedMeshId"]=filter91.sharedMesh.GetEntityId().ToString(),["vertexCount"]=filter91.sharedMesh.vertexCount,["materials"]=materialRows91});}report["occluderGeometry91"]=occluders91;
+'''
+assert s.count(needle)==1
+modified=s.replace(needle,extra+needle)
+if '--emit-patch'in sys.argv:
+ line=next(x for x in s.splitlines()if x.startswith(needle));print('*** Begin Patch\n*** Update File: '+source.relative_to(Path.cwd()).as_posix()+'\n@@\n-'+line+'\n'+''.join('+'+l+'\n'for l in(extra+line).splitlines())+'*** End Patch');raise SystemExit
+assert 'occluders91'in s
+old=(OUT/'RUN_Capture91B.cs.txt').read_text();prefix=old[:old.index('internal class CommandScript')];command=s[s.index('internal class CommandScript'):];(OUT/'RUN_Capture91B.cs.txt').write_text(prefix+command+'\n}\n',encoding='utf-8')
+compile=command.replace(' public void Execute(ExecutionResult result)\n {',' public void Execute(ExecutionResult result)\n {result.Log("91B final runner compile-only");return;}\n void PreparedGeom91B(ExecutionResult result)\n {',1);assert 'void PreparedGeom91B'in compile
+(OUT/'RUN_CompileGeom91B.cs.txt').write_text(prefix+compile+'\n}\n',encoding='utf-8');p=OUT/'relay91.py';relay=p.read_text().replace("'Verify91B')","'Verify91B','CompileGeom91B')");p.write_text(relay,encoding='utf-8');print('Added only necessary current body/hair evaluated geometry; same source/frame/serial.')

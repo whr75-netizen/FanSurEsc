@@ -566,3 +566,22 @@ W 소유권은 `CACHE_OWNERSHIP77.json`과 전체 Assets 참조12개로 감사�
 `analyse87.py:main`, `test_archive87.py:run`은 완료 marker와1885개 plane의 source/frame/serial/view·원본 role/RGB·76 guard를 검증했다. RAW_MANIFEST planes 리스트가 한 프레임 이전 객체를 참조한 exporter 결함은 발견 그대로 보존했다. binary 헤더는 모두 해당 프레임과 일치한다. `prepare87.py`에 packet commit 직전 `report["planes"]=planes` 수정만 준비했으며 기존 raw나 실행된 소스를 덮어쓰지 않았다. raw86/87.zip과 독립 오프라인 재검사, 원배율/nearest PNG·실제 시퀀스 GIF를 보관했다. 미관/전체 움직임 안정화 성공 주장은 없다.
 
 두 시험 종료 후 Edit/GameMap1 clean/domain1, 원래29 dirty identity/내용, native45/45 ExactUTF8, 같은 InputSettings ID568105589213679894·22필드 SHA ca3f68bea248d3f95f9daef0889228a710740dd1efc8867ffda63b97b07f4286·장치, 카메라/후크/옵션/time/pipeline/global74를 보존했다.87 자체 자원과 shader 참조 원복, RT30→30. GetTotalAllocatedMemoryLong +33.62MiB는 내부 할당 측정이며 물리RAM/누수 확정이 아니다. 제한된 최근 Console 비교에서 신규 warning/error는 없었다. CUA/설정 포인터 교체/SaveAssets/GC/C# import/삭제/초기화/push는 수행하지 않았다.
+
+
+## Eye88 — 특징 로컬 coverage 캐시와 연속 앵커, 격리 GPU 검증
+
+최신 비교: `experiments/pixel-pipeline/2026-11-01-feature-local88/INDEX.html`. **제품77 유지, 전체 눈/가림/최종 합성 미통합.** 새 Assets 변경은 기본 경로에서 참조하지 않는 `EyeBoundaryRestore348/Shaders/FeatureLayer88.compute:Draw`와 meta뿐이다. 현재 커밋은 이 실험 경로의 `git log -1 --format=%H -- <path>`로 찾는다. 원래30개 사용자/product tracked 해시는 불변이다.
+
+`feature_layer88.py:FeatureCache.update/project/cell_area`는 원본 Template216의 parent/iris/sclera20픽셀 영역을 pose homography로 forward 투영하고 공통 anchor를 뺀 로컬 격자에 coverage로 배치한다. foreground/part coverage로 점유를 선택하고 해당 part 최대 기여 source 텍셀의 P 인덱스를 보존한다. RGB 평균이나 매 프레임 화면 centre-nearest로 역할을 다시 결정하지 않는다. 이 coverage convention은 유일한 미술 정답의 증명이 아니다. 동률·다른 owner 겹침·소스 part 소실은 임의 선택 대신 Unsupported다. source bank20텍셀 수를 가시 셀 수로 강제하지 않는다(실제 sweep pose 로컬25셀, native2x100표본).
+
+`FeatureCache.update/invalidate/dispose`, `raster`는 canonical support/파트/P 인덱스와 연속 anchor를 분리한다. 순수 이동은 anchor만 바꾸고 source/모델/뷰/state 및 실제 비이동 투영변형은 캐시를 무효화한다. float32 좌표 크기에서 유도한 수치 허용오차만 사용한다. caller가 검증된 evaluated-state/원본 key를 공급해야 하며, 이 연결은 제품에 없다. 미등록 Close는 열린 form으로 대체하지 않는다. cache는 renderer/view 소유1개이고 static 공유/화면 RGB history가 없다. 다중뷰/모델교체/이중 dispose는 pure helper 반례를 검사한 것이며 실제 복수 런타임 renderer 수명 검증은 아니다.
+
+`replay88.py:canonical/rays/depth_at/main`, `test88.py:main`은 실제87의 열린 입력24프레임과 합성17×17=289위상을 사용했다. 실제 .99997944셀 sweep10프레임에서 canonical part/색 관계 서명1종·native intrinsic100표본이며 반복 이동으로 재생성하지 않는다. 실제 포즈 변화는 재생성한다. 최종2x native 래스터 이전 anchor는 소수 좌표로 보존한다. 유한2x 출력에서0.1셀마다 새 위치가 보인다는 주장은 하지 않는다.49 정수이동 한계,53 any(front) 전체기각,74 iris 독립선택에 의한 다른part 침범,87 화면 nearest 면적변화에 대한22개 회귀를 기록했다. 과거53/55의 실제 destination4x mask에서 앞선 일부 fragment 때문에 전체를 기각하지 않았으나, 잔여 표본 면적을 최종 셀 채택 보장으로 해석하지 않는다.74의 전체 과거 최종RGB 재합성이 아니라 공동 occupancy의 구조적 회귀다.
+
+`FeatureLayer88.compute:Draw`, `GPU88.cs:Execute`는 explicit Vector4/16B 버퍼와 자체3RT에 저장 실제24입력을 재생했다. `validate_gpu88.py:main`, portable `test_saved88.py:run`에서 source support 재생성24개·GPU 색/ID/coverage72필드 차이0. palette는 literal P[index], g를 RGB에 곱하거나 RGB/시간 평균하지 않는다. canonical palette 변경과 support 불변도 검사했다. alpha는 별도 가시량 계측이며 일반 alpha blend를 실행하지 않았다. 이 레이어를 그대로 blend하여 P 밖 색을 만들면 계약 위반이다. `OUTPUT_CONTRACT88.json`이 source층/coverage/미구현 최종 합성을 구분한다.
+
+**남은 실패:** `VISIBILITY_TRACE88.json`에서 같은 canonical(4,-1),owner1/iris/P7가 유지되지만 head sample(224.75,51.75)의 S3 native안검 alpha0→.996078로 가시량1→.003922가 된다. 가시량 양수 native 표본은 sweep에서37/36/33/40…개로 변한다. 이 수치는 실제 최종 채택 셀 수가 아니다. 가림전 RGB와 coverage 그림을 따로 보아야 하며 거의 가려진 RGB를 밝은 최종 눈으로 표시하지 않는다. source4x sampling·최종 표본 위치·가상 authored 눈 평면과 실제 native 피부/안검의 대응이 아직 분리되지 않았다. 재구성 ray/가상평면은 actual333 depth 최대오차3.53e-6로 일치하지만 실제 mesh 표면 대응의 증명은 아니다. 피부를 통째로 무시하거나 모든 face를 실제 lid로 가정하지 않았다.
+
+다음 제품 연결 전에 authored parent/iris와 실제 native 안검/aperture를 같은 feature-local frame에 묶는 source 대응, 원본 눈 제거/실제 clean backing, 최종 palette-exact owner 선택이 필요하다. 현재 native 안검은 별도 관측 가림층으로 유지하며 새 canonical lid key-form을 만들었다고 하지 않는다. 다른 가림 객체의 실제 변형/material alpha까지 확인된 키 없이 가림을 캐시/동결하면 안 된다. Close/reopen와 실제 scene 연속 적용·미관 성공은 미검증이다. 추가 미술 형태나 pixel-size 상수는 선택하지 않았다.
+
+실행은 Edit에서 Play0/global변경0, C# Assets import0이었다. 처음 using 번들 형식 오류는 미실행, 이어 Interop namespace 금지는 해당 기능과 struct 전송을 제거하고 표준 Vector4 배열 경로로 변경했다. 보안 설정은 변경하지 않았다. 새 compute import messages0/domain1, native45/45, dirty29/동일 InputSettings 객체·22개 값/장치·씬·옵션·시간·pipeline 보존, RT30→30. 소유buffer/RT/clone은 finally 회수하고 빌린 자원은 해제하지 않는다. 입력mask최대163840B/readback11232B, 내부allocated −.0555MiB는 물리RAM/누수 증명이 아니다. 현재 실행 대기/차단은 없고 제품 기본 경로는 바꾸지 않았다.

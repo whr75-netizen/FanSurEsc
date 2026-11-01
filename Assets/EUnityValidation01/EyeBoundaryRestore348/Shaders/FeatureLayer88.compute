@@ -1,0 +1,35 @@
+#pragma kernel Draw
+// Group-local support constructed from original source pixels. RGB is a
+// palette lookup, with independent fractional visibility in alpha/debug.
+StructuredBuffer<float4> _Cells88;
+StructuredBuffer<float4> _Palette88,_Meta88;
+int _Count88,_PaletteCount88;
+int2 _Size88,_MetaSize88;
+int4 _SourceROI88;
+float _Scale88;
+float2 _Origin88,_Anchor88;
+float4 _RayBase88,_RayX88,_RayY88,_RayDepth88,_Plane088,_Plane188;
+int2 _Owners88;
+RWTexture2D<float4> _Colour88,_Identity88,_Coverage88;
+float4 M88(int channel,int2 p){return _Meta88[channel*_MetaSize88.x*_MetaSize88.y+p.y*_MetaSize88.x+p.x];}
+[numthreads(8,8,1)]void Draw(uint3 gid:SV_DispatchThreadID){
+ int2 outp=gid.xy;if(any(outp>=_Size88))return;
+ _Colour88[outp]=0;_Identity88[outp]=0;_Coverage88[outp]=0;
+ // Only the final native output grid is discrete. No rounded feature delta.
+ float2 p=_Origin88+(float2(outp)+.5)/_Scale88;
+ int2 local=(int2)floor(p-_Anchor88+.5);int chosen=-1;
+ for(int i=0;i<_Count88;i++){float4 key=_Cells88[2*i];if(all((int2)key.xy==local)){chosen=i;break;}}
+ if(chosen<0)return;float4 key=_Cells88[2*chosen],source=_Cells88[2*chosen+1];int palette=(int)source.x;
+ if(palette<0||palette>=_PaletteCount88)return;
+ _Identity88[outp]=float4(key.zw,palette+1,source.y+1);
+ int2 samplep=(int2)floor(float2(p.x-_SourceROI88.x,272-p.y-_SourceROI88.y)*4);
+ if(any(samplep<0)||any(samplep>=_MetaSize88)){_Coverage88[outp]=float4(0,-1,local);return;}
+ float4 plane=(int)key.z==_Owners88.x?_Plane088:_Plane188;
+ float3 near=_RayBase88.xyz+p.x*_RayX88.xyz+p.y*_RayY88.xyz;
+ float depth=-(dot(plane.xyz,near)+plane.w)/dot(plane.xyz,_RayDepth88.xyz);
+ float visibility=1;int why=0;
+ // channels: S0 actual skin/lid, S3 native eyelid, S4 hair,S5 brow,S6 body.
+ for(int c=0;c<5;c++){float4 m=M88(c,samplep);if(m.x>0&&m.y>.5&&m.w>1e-6&&m.x<depth){visibility*=1-(c==4?1:saturate(m.w));why|=1<<(c==0?0:c+2);}}
+ _Coverage88[outp]=float4(visibility,why,local);
+ if(visibility>0)_Colour88[outp]=float4(_Palette88[palette].rgb,visibility);
+}

@@ -1,0 +1,138 @@
+{
+  "frames": [
+    {
+      "frame": 99,
+      "sourceId": "eye102-20261101T193509493Z-0325fa19-frame99",
+      "requestedClose": 0,
+      "evaluatedSourceError": 0,
+      "canonicalSize": [
+        72,
+        32
+      ],
+      "rawLidSamples": 156,
+      "rawAlphaSum": 113.56163787841797,
+      "afterNativeSkinQueryAlphaSum": 113.5616455078125,
+      "queryUnknownSamples": 0,
+      "sampleCullOrOcclusionLoss": 0.0,
+      "positiveSourceLogicalCells": 31,
+      "positiveVisibleLogicalCells": 31,
+      "selectedLidCells": 5,
+      "perEye": [
+        {
+          "eye": 1,
+          "rawSourceSamples": 64,
+          "rawAlphaSum": 45.42808532714844,
+          "queryVisibleAlphaSum": 45.42808532714844
+        },
+        {
+          "eye": 2,
+          "rawSourceSamples": 92,
+          "rawAlphaSum": 68.1335678100586,
+          "queryVisibleAlphaSum": 68.1335678100586
+        }
+      ]
+    },
+    {
+      "frame": 104,
+      "sourceId": "eye102-20261101T193509493Z-0325fa19-frame104",
+      "requestedClose": 100,
+      "evaluatedSourceError": 0,
+      "canonicalSize": [
+        72,
+        32
+      ],
+      "rawLidSamples": 149,
+      "rawAlphaSum": 108.46337890625,
+      "afterNativeSkinQueryAlphaSum": 96.77503204345703,
+      "queryUnknownSamples": 0,
+      "sampleCullOrOcclusionLoss": 11.688346862792969,
+      "positiveSourceLogicalCells": 26,
+      "positiveVisibleLogicalCells": 26,
+      "selectedLidCells": 1,
+      "perEye": [
+        {
+          "eye": 1,
+          "rawSourceSamples": 62,
+          "rawAlphaSum": 45.9210205078125,
+          "queryVisibleAlphaSum": 41.94307327270508
+        },
+        {
+          "eye": 2,
+          "rawSourceSamples": 87,
+          "rawAlphaSum": 62.5423583984375,
+          "queryVisibleAlphaSum": 54.83195877075195
+        }
+      ]
+    },
+    {
+      "frame": 107,
+      "sourceId": "eye102-20261101T193509493Z-0325fa19-frame107",
+      "requestedClose": 0,
+      "evaluatedSourceError": 0,
+      "canonicalSize": [
+        72,
+        32
+      ],
+      "rawLidSamples": 156,
+      "rawAlphaSum": 113.56163787841797,
+      "afterNativeSkinQueryAlphaSum": 113.5616455078125,
+      "queryUnknownSamples": 0,
+      "sampleCullOrOcclusionLoss": 0.0,
+      "positiveSourceLogicalCells": 31,
+      "positiveVisibleLogicalCells": 31,
+      "selectedLidCells": 5,
+      "perEye": [
+        {
+          "eye": 1,
+          "rawSourceSamples": 64,
+          "rawAlphaSum": 45.42808532714844,
+          "queryVisibleAlphaSum": 45.42808532714844
+        },
+        {
+          "eye": 2,
+          "rawSourceSamples": 92,
+          "rawAlphaSum": 68.1335678100586,
+          "queryVisibleAlphaSum": 68.1335678100586
+        }
+      ]
+    }
+  ],
+  "CPUReferenceMismatches": [],
+  "productDefault": 77,
+  "newShaderChanges": 0,
+  "finding": "Per-cell feature/canvas majority is still an area sampler. It does not impose connected closed-lid curve support. Diagnose source/culling loss separately from post-Query area rejection.",
+  "restoration": {
+    "PlayExited": true,
+    "nativeExact": 46,
+    "nativeUnavailable": [
+      {
+        "equal": null,
+        "path": "ProjectSettings/ProjectSettings.asset",
+        "status": "Unavailable",
+        "type": "UnityEditor.AssetImporter"
+      }
+    ],
+    "unavailableMeaning": "Temporary importer wrapper expired; actual PlayerSettings is separately exact. No full 47/47 claim.",
+    "input": {
+      "deviceEnabledStates": true,
+      "devicesSame": true,
+      "exactJSON": true,
+      "hideFlags": true,
+      "keyboardSame": true,
+      "nativeId": "568105589213679894",
+      "sameAliveReference": true
+    },
+    "options": true,
+    "time": true,
+    "pipeline": true,
+    "globals": [],
+    "RT": [
+      30,
+      30
+    ],
+    "allocatedBytes": [
+      2019416004,
+      2045133198
+    ]
+  }
+}

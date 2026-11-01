@@ -1,0 +1,97 @@
+[
+  {
+    "part": 3,
+    "inputSHA256": "090e2342e3675dd291ddae865d04b59f804ef68834a5cbdf3962e5d42e7ddc3d",
+    "policy": {
+      "algorithm": "FH2004 Algorithm1 independent implementation",
+      "weights": "sRGB8 Euclidean, masked Gaussian sigma .8 for detection only",
+      "k": 300,
+      "connectivity": 4,
+      "minSizeMerge": false,
+      "paletteApplied": false
+    },
+    "regions": 681,
+    "singletons": 311,
+    "regionsUnder8Texels": 523,
+    "boundaryTexels": 30048,
+    "largestRegions": [
+      569765,
+      147464,
+      24122,
+      23746,
+      16015,
+      15783,
+      11233,
+      11153,
+      5887,
+      4041,
+      3924,
+      3336
+    ],
+    "regionLRangeMax": 0.7143369949531293,
+    "seconds": 1.625477099994896,
+    "graphEdges": 1728421,
+    "graphEdgeBytes": 27654736,
+    "scalpSkinProbe": [
+      {
+        "cropXY": [
+          503,
+          9
+        ],
+        "RGB8": [
+          42,
+          20,
+          21
+        ],
+        "region": 13
+      },
+      {
+        "cropXY": [
+          461,
+          760
+        ],
+        "RGB8": [
+          254,
+          248,
+          231
+        ],
+        "region": 619
+      }
+    ],
+    "scalpSkinSeparated": true
+  },
+  {
+    "part": 6,
+    "inputSHA256": "35fba6648192f2245796f1650c94f75807b95fa6b6d23b09aa80164a0eefe5ac",
+    "policy": {
+      "algorithm": "FH2004 Algorithm1 independent implementation",
+      "weights": "sRGB8 Euclidean, masked Gaussian sigma .8 for detection only",
+      "k": 300,
+      "connectivity": 4,
+      "minSizeMerge": false,
+      "paletteApplied": false
+    },
+    "regions": 200,
+    "singletons": 47,
+    "regionsUnder8Texels": 95,
+    "boundaryTexels": 7768,
+    "largestRegions": [
+      7979,
+      7977,
+      1579,
+      1579,
+      1226,
+      1226,
+      642,
+      642,
+      582,
+      582,
+      581,
+      518
+    ],
+    "regionLRangeMax": 0.5810025166261625,
+    "seconds": 0.06035030001658015,
+    "graphEdges": 65688,
+    "graphEdgeBytes": 1051008
+  }
+]

@@ -1,0 +1,311 @@
+{
+  "success": true,
+  "message": "Tool 'GetConsoleLogs' executed successfully",
+  "data": {
+    "logs": [
+      {
+        "message": " - Added 시험용 빨강 가방 (+1행) (ID 10) x1: Slot 11\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[03:51:00]"
+      },
+      {
+        "message": " - Added 시험용 초록 가방 (+2행) (ID 11) x1: Slot 23\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[03:51:00]"
+      },
+      {
+        "message": " - Added 시험용 파랑 가방 (+3행) (ID 12) x1: Slot 31\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[03:51:00]"
+      },
+      {
+        "message": " - Added 시험용 육각 방어구 (ID 13) x1: Slot 32\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[03:51:00]"
+      },
+      {
+        "message": "[InitializeStartingItems] Finished. Items: 12\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:328)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[03:51:00]"
+      },
+      {
+        "message": "Player placed at spawn 'BaseEntry' in scene 'GameMap1'.\nUnityEngine.Debug:Log (object,UnityEngine.Object)\nFantasySurvival.SceneFlow.SceneSpawnController:TryPlacePlayer (string,bool) (at Assets/Scripts/SceneFlow/SceneSpawnController.cs:250)\nFantasySurvival.SceneFlow.SceneSpawnController:Start () (at Assets/Scripts/SceneFlow/SceneSpawnController.cs:31)\n",
+        "stackTrace": "Assets/Scripts/SceneFlow/SceneSpawnController.cs",
+        "type": "Info",
+        "timestamp": "[03:51:00]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEditor.GUIView:ProcessEvent (UnityEngine.EntityId,intptr,bool&)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[03:51:00]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEngine.Camera:Render ()\nHeadLocal367:RenderFrame () (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:32)\nNativePlayer395:RenderPose (single,bool) (at Assets/EUnityValidation01/NativePlayer395/Runtime/NativePlayer395.cs:86)\nGameplay397:BeginGameplay () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:22)\nGameplay397:LateUpdate () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:13)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[03:51:03]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEngine.Camera:Render ()\nHeadLocal367:RenderFrame () (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:32)\nNativePlayer395:RenderPose (single,bool) (at Assets/EUnityValidation01/NativePlayer395/Runtime/NativePlayer395.cs:86)\nGameplay397:BeginGameplay () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:22)\nGameplay397:LateUpdate () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:13)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[03:51:03]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 12 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEditor.GUIView:ProcessEvent (UnityEngine.EntityId,intptr,bool&)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[03:51:24]"
+      },
+      {
+        "message": "[Editor Test] Direct gameplay Play uses isolated temporary save/recovery storage: C:\\Users\\15352\\AppData\\Local\\Temp\\DefaultCompany\\Fantasy Survival Escape Game\\FantasySurvivalDirectPlay\\cf846be317af4e6eaea8e9234096ee19\nUnityEngine.Debug:Log (object)\nFantasySurvival.SaveSystem.EditorDirectPlayStorageIsolation:TryActivate (string&) (at Assets/Scripts/Save/EditorDirectPlayStorageIsolation.cs:61)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:23)\n",
+        "stackTrace": "Assets/Scripts/Save/EditorDirectPlayStorageIsolation.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": "[InitializeStartingItems] Adding items from ItemDatabase...\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:308)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added Handgun (ID 1) x1: Slot 0\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added Handgun 2 (ID 2) x1: Slot 2\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added Rifle (ID 3) x1: Slot 4\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added Sniper Rifle (ID 4) x1: Slot 16\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added Submachine Gun (ID 5) x1: Slot 21\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added 치료제 (ID 7) x5: Slot 8\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added 총알 (ID 8) x5: Slot 9\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added 음식 (ID 9) x5: Slot 10\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added 시험용 빨강 가방 (+1행) (ID 10) x1: Slot 11\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added 시험용 초록 가방 (+2행) (ID 11) x1: Slot 23\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added 시험용 파랑 가방 (+3행) (ID 12) x1: Slot 31\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": " - Added 시험용 육각 방어구 (ID 13) x1: Slot 32\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": "[InitializeStartingItems] Finished. Items: 12\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:328)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:35:10]"
+      },
+      {
+        "message": "Player placed at spawn 'BaseEntry' in scene 'GameMap1'.\nUnityEngine.Debug:Log (object,UnityEngine.Object)\nFantasySurvival.SceneFlow.SceneSpawnController:TryPlacePlayer (string,bool) (at Assets/Scripts/SceneFlow/SceneSpawnController.cs:250)\nFantasySurvival.SceneFlow.SceneSpawnController:Start () (at Assets/Scripts/SceneFlow/SceneSpawnController.cs:31)\n",
+        "stackTrace": "Assets/Scripts/SceneFlow/SceneSpawnController.cs",
+        "type": "Info",
+        "timestamp": "[04:35:11]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEditor.GUIView:ProcessEvent (UnityEngine.EntityId,intptr,bool&)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[04:35:11]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEngine.Camera:Render ()\nHeadLocal367:RenderFrame () (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:32)\nNativePlayer395:RenderPose (single,bool) (at Assets/EUnityValidation01/NativePlayer395/Runtime/NativePlayer395.cs:86)\nGameplay397:BeginGameplay () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:22)\nGameplay397:LateUpdate () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:13)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[04:35:14]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEngine.Camera:Render ()\nHeadLocal367:RenderFrame () (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:32)\nNativePlayer395:RenderPose (single,bool) (at Assets/EUnityValidation01/NativePlayer395/Runtime/NativePlayer395.cs:86)\nGameplay397:BeginGameplay () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:22)\nGameplay397:LateUpdate () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:13)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[04:35:14]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 12 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEditor.GUIView:ProcessEvent (UnityEngine.EntityId,intptr,bool&)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[04:35:21]"
+      },
+      {
+        "message": "[Editor Test] Direct gameplay Play uses isolated temporary save/recovery storage: C:\\Users\\15352\\AppData\\Local\\Temp\\DefaultCompany\\Fantasy Survival Escape Game\\FantasySurvivalDirectPlay\\3c00208d61db4a0cac5df61be871b75e\nUnityEngine.Debug:Log (object)\nFantasySurvival.SaveSystem.EditorDirectPlayStorageIsolation:TryActivate (string&) (at Assets/Scripts/Save/EditorDirectPlayStorageIsolation.cs:61)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:23)\n",
+        "stackTrace": "Assets/Scripts/Save/EditorDirectPlayStorageIsolation.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": "[InitializeStartingItems] Adding items from ItemDatabase...\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:308)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added Handgun (ID 1) x1: Slot 0\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added Handgun 2 (ID 2) x1: Slot 2\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added Rifle (ID 3) x1: Slot 4\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added Sniper Rifle (ID 4) x1: Slot 16\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added Submachine Gun (ID 5) x1: Slot 21\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added 치료제 (ID 7) x5: Slot 8\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added 총알 (ID 8) x5: Slot 9\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added 음식 (ID 9) x5: Slot 10\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added 시험용 빨강 가방 (+1행) (ID 10) x1: Slot 11\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added 시험용 초록 가방 (+2행) (ID 11) x1: Slot 23\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added 시험용 파랑 가방 (+3행) (ID 12) x1: Slot 31\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": " - Added 시험용 육각 방어구 (ID 13) x1: Slot 32\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryAddStartingItem (VariableInventorySystem.StandardStashViewData,int,string&) (at Assets/Scripts/InventoryUIManager.cs:358)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:311)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": "[InitializeStartingItems] Finished. Items: 12\nUnityEngine.Debug:Log (object)\nInventoryUIManager:TryCreateStartingInventory (VariableInventorySystem.StandardStashViewData&,string&) (at Assets/Scripts/InventoryUIManager.cs:328)\nInventoryUIManager:Awake () (at Assets/Scripts/InventoryUIManager.cs:119)\nUnityEngine.Object:Instantiate<FantasySurvival.SceneFlow.PersistentGameplayShell> (FantasySurvival.SceneFlow.PersistentGameplayShell)\nFantasySurvival.SceneFlow.GameplayShellBootstrap:Awake () (at Assets/Scripts/SceneFlow/GameplayShellBootstrap.cs:39)\n",
+        "stackTrace": "Assets/Scripts/InventoryUIManager.cs",
+        "type": "Info",
+        "timestamp": "[04:41:14]"
+      },
+      {
+        "message": "Player placed at spawn 'BaseEntry' in scene 'GameMap1'.\nUnityEngine.Debug:Log (object,UnityEngine.Object)\nFantasySurvival.SceneFlow.SceneSpawnController:TryPlacePlayer (string,bool) (at Assets/Scripts/SceneFlow/SceneSpawnController.cs:250)\nFantasySurvival.SceneFlow.SceneSpawnController:Start () (at Assets/Scripts/SceneFlow/SceneSpawnController.cs:31)\n",
+        "stackTrace": "Assets/Scripts/SceneFlow/SceneSpawnController.cs",
+        "type": "Info",
+        "timestamp": "[04:41:15]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEditor.GUIView:ProcessEvent (UnityEngine.EntityId,intptr,bool&)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[04:41:15]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEngine.Camera:Render ()\nHeadLocal367:RenderFrame () (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:32)\nNativePlayer395:RenderPose (single,bool) (at Assets/EUnityValidation01/NativePlayer395/Runtime/NativePlayer395.cs:86)\nGameplay397:BeginGameplay () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:22)\nGameplay397:LateUpdate () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:13)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[04:41:18]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 13 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEngine.Camera:Render ()\nHeadLocal367:RenderFrame () (at Assets/EUnityValidation01/HeadLocal367/Runtime/HeadLocal367.cs:32)\nNativePlayer395:RenderPose (single,bool) (at Assets/EUnityValidation01/NativePlayer395/Runtime/NativePlayer395.cs:86)\nGameplay397:BeginGameplay () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:22)\nGameplay397:LateUpdate () (at Assets/EUnityValidation01/MatchedPlayer397/Gameplay397.cs:13)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[04:41:18]"
+      },
+      {
+        "message": "Reduced additional punctual light shadows resolution by 2 to make 12 shadow maps fit in the 2048x2048 shadow atlas. To avoid this, increase shadow atlas size, decrease big shadow resolutions, or reduce the number of shadow maps active in the same frame\nUnityEditor.GUIView:ProcessEvent (UnityEngine.EntityId,intptr,bool&)\n",
+        "stackTrace": "./Library/PackageCache/com.unity.render-pipelines.universal@d7774c218bdf/Runtime/Passes/AdditionalLightsShadowCasterPass.cs",
+        "type": "Info",
+        "timestamp": "[04:41:24]"
+      }
+    ],
+    "totalCount": 50,
+    "errorCount": 0,
+    "warningCount": 0
+  }
+}

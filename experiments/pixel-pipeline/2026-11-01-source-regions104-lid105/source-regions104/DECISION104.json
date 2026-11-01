@@ -1,0 +1,25 @@
+{
+  "scope": "source native UV connected colour-region evidence; independent of g/Q/P and screen ownership",
+  "input": "unchanged source-regions103 native UV SAT masks/PNG hashes; parts3 and6",
+  "coordinates": "native cropped texel centres, origin top-left, +x right/+y down, units texels; no UV reprojection in104",
+  "hypothesis1": {
+    "method": "FH2004 Algorithm1, 4-neighbour source RGB graph, sigma=.8, k=300, no minimum-area merge",
+    "prediction": "a closed partition can separate finite AA transitions without hand joining contour gaps",
+    "observed": "scalp/skin separated, but681 face regions/311singleton texels; AA toy step split into9bands",
+    "status": "not adopted as feature/family partition",
+    "source": "https://cs.brown.edu/people/pfelzens/papers/seg-ijcv.pdf"
+  },
+  "hypothesis2": {
+    "method": "h-minima morphology markers followed by our positive additive geodesic graph labelling, NOT exact Beucher watershed",
+    "h": "2sqrt(6) RGB8 gradient code units, outward-rounded to16.16; bounds two-ended half-code perturbation, not artistic saliency",
+    "prediction": "precision-scale minima cancellation avoids AA strips while keeping strong source regions",
+    "observed": "face36/0singleton, lid370/10singleton; actual cheek stroke merged with skin parent",
+    "status": "potential parent evidence only; NOT a flat palette family or a complete feature hierarchy",
+    "importantCorrection": "Native authored RGB8 values are exact source data. A latent half-code perturbation bound does not prove a subtle painted mark is noise or expendable.",
+    "implementationCorrection": "An initial minimax/plateau-distance flood failed the Lcorner rotate90 test. It was rejected before native-source execution; current integer positive additive path metric passes that test and is explicitly our choice.",
+    "sources": ["https://digitalcommons.usu.edu/microscopy/vol1992/iss6/28/", "https://scikit-image.org/docs/stable/api/skimage.morphology.html#skimage.morphology.h_minima"]
+  },
+  "fixedInvariants": ["source RGBA unchanged", "material/sourceRegion/occlusionOwner separate", "no minimum-area deletion", "no colour-bin connected-components", "no output RGB blur", "no final RGB*g", "no palette/lighting dependency in source labels"],
+  "nextDiscriminatingTest": "Retain continuous source colour fields and low-contrast coherent child features inside the strong parent partition; do not promote a whole parent to one P. The cheek probe(382,704)/(380,704)/(384,704) is a required counterexample.",
+  "notClaimed": ["semantic feature identification", "all-source automatic saliency", "complete face/lid finite palette", "outline resolver", "art success", "temporal stability"]
+}

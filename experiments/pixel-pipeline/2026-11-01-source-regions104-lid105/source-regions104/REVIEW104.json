@@ -1,0 +1,137 @@
+[
+  {
+    "part": 3,
+    "connectivity": {
+      "103": {
+        "labels": 5,
+        "disconnectedRegionIds": []
+      },
+      "FH": {
+        "labels": 681,
+        "disconnectedRegionIds": []
+      },
+      "geodesic": {
+        "labels": 36,
+        "disconnectedRegionIds": []
+      }
+    },
+    "oneAnchorPaletteAdopted": false,
+    "weakRidgesNotSemanticTruth": true,
+    "thinCheekStrokeProbe": {
+      "sourceROIOnlyDiagnostic": [
+        310,
+        620,
+        115,
+        90
+      ],
+      "sourceRGB8ResidualNorm": 10.35615758860399,
+      "old64ThinRidge": false,
+      "samples": [
+        {
+          "cropXY": [
+            382,
+            704
+          ],
+          "RGB8": [
+            253,
+            228,
+            208
+          ],
+          "coarse103": 2,
+          "FH": 495,
+          "geodesic": 8,
+          "hypotheticalFlatAnchorRGB8": [
+            248,
+            203,
+            179
+          ]
+        },
+        {
+          "cropXY": [
+            380,
+            704
+          ],
+          "RGB8": [
+            254,
+            235,
+            213
+          ],
+          "coarse103": 2,
+          "FH": 619,
+          "geodesic": 8,
+          "hypotheticalFlatAnchorRGB8": [
+            248,
+            203,
+            179
+          ]
+        },
+        {
+          "cropXY": [
+            384,
+            704
+          ],
+          "RGB8": [
+            254,
+            237,
+            216
+          ],
+          "coarse103": 2,
+          "FH": 495,
+          "geodesic": 8,
+          "hypotheticalFlatAnchorRGB8": [
+            248,
+            203,
+            179
+          ]
+        }
+      ],
+      "sameGeodesicRegion": true,
+      "finding": "A flat anchor for this parent would erase an observed thin source stroke. Keep child/source evidence; do not adopt flat P."
+    },
+    "skinRegionExtrema": [
+      {
+        "cropXY": [
+          595,
+          198
+        ],
+        "RGB8": [
+          140,
+          95,
+          88
+        ],
+        "L": 0.5315373967835992
+      },
+      {
+        "cropXY": [
+          461,
+          760
+        ],
+        "RGB8": [
+          254,
+          248,
+          231
+        ],
+        "L": 0.9792281219211157
+      }
+    ]
+  },
+  {
+    "part": 6,
+    "connectivity": {
+      "103": {
+        "labels": 28,
+        "disconnectedRegionIds": []
+      },
+      "FH": {
+        "labels": 200,
+        "disconnectedRegionIds": []
+      },
+      "geodesic": {
+        "labels": 370,
+        "disconnectedRegionIds": []
+      }
+    },
+    "oneAnchorPaletteAdopted": false,
+    "weakRidgesNotSemanticTruth": true
+  }
+]

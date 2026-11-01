@@ -408,3 +408,14 @@ Profiler allocated는 05:28:07→05:28:17에 +476637854bytes(+454.557MiB), reser
 판정: 저장 기하로 **조건부 가림 구간 계산은 가능**하며 새 geometry 캡처가 반드시 필요한 상태는 아니다. 그러나 실제 Native333은 material cull과 MToon alpha 판정을 사용하고 원본 hair11~14도 MASK 재질이다. 현재 runtime keywords/cutoff/cull/texture sampling 및 구간 전체에서 target fragment가 살아남는지는 미기록이다. 따라서 기하상 무가림을 실제 최종 표시 확정으로, 잠재가림을 실제 제거 대상으로 승격하지 않는다. 독립적인 미술 기준곡선도 없으므로 이번 결과에서 확정하여 보정에 쓸 구간은0개다. 새 후보·Q/색/팔레트 수정 없이 종료한다.
 
 추가 관측 최소 범위는 geometry 재수집 자체가 아니라 actual runtime material/alpha/cull/sampler 상태와 필요한 source 경계 구간의 fragment 생존·owner/depth 검증이다. 조명 등고선의 기준은 별도 문제여서 dense g 관측 또는 명시된 설계 기준이 필요하다. 눈 최소 입력 계약은 `NEXT_INPUT70.json`을 유지한다. 이번에는 Unity 호출/Play/import/화면 제어0회. 제품 및 기존 사용자 파일은 변경하지 않았으며 관련 커밋은 이 절을 추가한 Git 이력에서 확인한다.
+
+## 눈 관찰기72 — 외부 명령 결합 준비, SDK 승인 상호작용에서 차단
+
+`experiments/pixel-pipeline/2026-11-01-eye-observer72/RESULT72.json` 참조. 최신 사용자 승인 후 기존 공식 relay로 PID35364/Unity6000.5.9f1/GameMap1을 확인했다.06:37:24~06:40:10UTC 전후 읽기에서 Edit/scene clean/dirty29개와 각 identity, domain1, Play옵션 false/None, pause/time/pipeline/build scenes가 동일했다. 관련 디스크31파일 SHA도 동일하다. 관찰기의 전체 PlayerSettings 백업/비교는 **미실행**이므로 전 native 내용 동등성을 주장하지 않는다.
+
+- `build72.py`: 기존 CaptureRetry66와 EyeReadback70/UnityEyeBuffer70를 Assets 밖에서 결합한다. 첫 동적 컴파일은 namespace 오류로 실행되지 않았다. 설치 SDK `SyntaxTreeUtility.MoveToNamespace`가 첫 namespace만 바꾸는 것을 확인하고, 전체 소스를 SDK가 원래 사용하는 단일 outer namespace 안에 넣어 결합했다. SDK나 패키지는 수정하지 않았다.
+- `Capture72.cs:Capture`: 실제 `n.host.headEyes/mainEyes`와 해당 full/view를 맞추고 ROI의 typed48/256byte reader를 호출한다. 생산 모드에 따라 counts를 명시적으로 skipped로 기록하고, 동일 frame/serial/source/view 검사를 유지한다. `NativeSnapshot72.Backup/Compare`는 실행 전에 로드된 dirty 자산 및 설정의 직렬화 백업과 전체 PlayerSettings 존재를 확인하고 종료 후 비교하도록 준비했다. 대형 메쉬 비교는 기존 선형 스트리밍 SHA 경로다. 그러나 이 관찰기 호출은 아직 보내지 않았다.
+- 컴파일 검증 재시도는 `User interactions are not supported for MCP tool calls. Tools requiring user interaction cannot be called via MCP.`로 차단됐다. 설치 SDK `RunCommandCodeAnalyzer.k_UnsafeMethods`가 reader의 `System.IO.File.Move`(.partial→완료 파일)를 위험 연산으로 분류하고, `RunCommandTool`이 실행 전에 승인을 요구하지만 `NoOpToolInteractions`는 MCP에서 이를 지원하지 않는다. 전체 컴파일 성공 플래그는 반환되지 않았으므로 성공 확정으로 쓰지 않는다.
+- Play0회, 캡처 호출0회, 옵션변경0회, Native backup/capture state 파일 없음. 별도 읽기 전용 Post72는 정상 응답했다. GPU 자원/빌린 버퍼를 생성·해제하지 않았고 Assets import/재컴파일/정리/우회도 하지 않았다. 새 GPU 데이터가 없으므로 눈 연결 검증도 미수행이다.
+
+현재 blocker는 사용자 승인 부재가 아니라 **SDK의 승인 상호작용을 현재 MCP가 지원하지 않는 것**이다. File.Move를 다른 파일 API/Reflection으로 바꾸어 우회하지 않았다. 다음 선택은 승인 상호작용을 지원하는 정식 통로 또는 이름 변경 없이 새 파일만 쓰는 별도 완료-marker 프로토콜의 사전 검토다. 후자는 이번에 구현·실행하지 않았으며 reader/consumer 계약과 실패 복구를 먼저 검토해야 한다. 사용자 화면 제어 없이 이 문제를 해결하기 전에는 Capture72를 실행하지 않는다. 이번 커밋은 이 절과 외부 준비 코드/차단 증거만 포함하며 제품 통합·미술 성공이 아니다.

@@ -1,0 +1,56 @@
+{
+  "status": "blocked-before-observer-execution",
+  "firstCompile": "failed; namespace integration, no execution",
+  "secondCompile": "MCP user-interaction gate; compilation/execution flags not returned",
+  "exactError": "UNEXPECTED_ERROR: User interactions are not supported for MCP tool calls. Tools requiring user interaction cannot be called via MCP.",
+  "gateOperation": "Readback70.Counts/Records call File.Move from owned .partial to completed result; installed SDK unsafe-method list contains System.IO.File.Move",
+  "gateEvidence": [
+    "RunCommandTool.RunCommand:WaitForUser before RunCommandUtils.Execute",
+    "NoOpToolInteractions.WaitForUser:throws NotSupportedException for MCP",
+    "RunCommandCodeAnalyzer.k_UnsafeMethods:System.IO.File.Move"
+  ],
+  "PlayEntries": 0,
+  "captureInvocationSent": false,
+  "snapshotOrCaptureStatePresent": false,
+  "currentPid": 35364,
+  "beforeUtc": "2026-11-01T06:37:24.1562595Z",
+  "afterUtc": "2026-11-01T06:40:10.3661778Z",
+  "currentChecks": {
+    "project": true,
+    "version": true,
+    "domain": true,
+    "playing": true,
+    "paused": true,
+    "transitioning": true,
+    "compiling": true,
+    "updating": true,
+    "scenes": true,
+    "optionsEnabled": true,
+    "options": true,
+    "timeScale": true,
+    "captureDeltaTime": true,
+    "graphicsPipelinePath": true,
+    "qualityPipelinePath": true,
+    "buildScenes": true,
+    "dirty": true
+  },
+  "dirtyBefore": 29,
+  "dirtyAfter": 29,
+  "disk31Changed": [],
+  "nativeFullPlayerSettingsCompared": false,
+  "reasonNativeNotCompared": "Observer never executed and full snapshot was not produced; metadata equality is not full native-content proof",
+  "memoryBefore": {
+    "GetMonoUsedSizeLong": 1390825472,
+    "GetTotalAllocatedMemoryLong": 1760473993,
+    "GetTotalReservedMemoryLong": 2357678080
+  },
+  "memoryAfter": {
+    "GetMonoUsedSizeLong": 1309335552,
+    "GetTotalAllocatedMemoryLong": 1619317293,
+    "GetTotalReservedMemoryLong": 2286055424
+  },
+  "resourcesOwnedOrBorrowedCreated": false,
+  "unsafeRetryPerformed": false,
+  "UnityImportPlayOrSettingsChanges": false,
+  "needsDecision": "Use a supported approval-capable command channel, or review a genuinely append-only completion-marker protocol with no rename/move/delete before any new observer execution. No reflection/API substitution or UI approval bypass attempted."
+}

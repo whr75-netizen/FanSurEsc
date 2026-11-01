@@ -1,0 +1,28 @@
+{
+  "scope": "future Template GetPixels crop only; product algorithm unchanged",
+  "error": "calibration referenceBounds are top-left, GetPixels expects bottom-left",
+  "correctedFormula": "bottomY = height - ceil(topMax) - 2; height = (height - floor(topMin) + 2) - bottomY",
+  "rawCaptureUnchanged": true,
+  "correctedProducerExecuted": false,
+  "currentAnalysisReference": "original prefab-bound Texture2D assets decoded offline in TEMPLATE_REFERENCE100.npz",
+  "checks": [
+    {
+      "topBounds": [
+        77,
+        80
+      ],
+      "height": 272,
+      "expandedBottom": 190,
+      "expandedHeight": 7
+    },
+    {
+      "topBounds": [
+        0,
+        272
+      ],
+      "height": 272,
+      "bottom": 0,
+      "heightClamped": 272
+    }
+  ]
+}

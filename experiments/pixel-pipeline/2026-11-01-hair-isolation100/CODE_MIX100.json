@@ -1,0 +1,32 @@
+[
+  {
+    "file": "Assets\\EUnityValidation01\\Restore250R2\\Shaders\\Auto245Fragment.hlsl",
+    "line": 51,
+    "code": " if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){half3 baseColour,shadeEndpoint;Auto245Palette(uv,source.rgb,baseColour,shadeEndpoint);float continuous=ContinuousSurfaceLight335(input,material);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));level=ProviderSurfaceLevel335(level,(int)round(_Auto245Role),input.pos.xy,-TransformWorldToView(input.positionWS).z);float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);return float4(SurfaceLayerOutput335(baseColour,factor,continuous,level),alpha);}\n half shadow=Auto245Shadow(input,material);\n if(_Auto245Stage<1.5)return half4(shadow.xxx,alpha);\n half3 lit,shade;Auto245Palette(uv,source.rgb,lit,shade);\n if(_Auto245Stage>3.5)return half4(shade,alpha);\n if(_Auto245Stage>2.5)return half4(lit,alpha);\n return half4(shadow>.5?shade:lit,alpha);\n}"
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\SkinPalette302\\Shaders\\BodyPalette302.hlsl",
+    "line": 56,
+    "code": " if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){half3 baseColour,shadeEndpoint;Auto245Palette(uv,source.rgb,baseColour,shadeEndpoint);float continuous=ContinuousSurfaceLight335(input,material);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));level=ProviderSurfaceLevel335(level,(int)round(_Auto245Role),input.pos.xy,-TransformWorldToView(input.positionWS).z);float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);return float4(SurfaceLayerOutput335(baseColour,factor,continuous,level),alpha);}\n half shadow=Auto245Shadow(input,material);\n if(_Auto245Stage<1.5)return half4(shadow.xxx,alpha);\n half3 lit,shade;Auto245Palette(uv,source.rgb,lit,shade);\n if(_Auto245Stage>3.5)return half4(shade,alpha);\n if(_Auto245Stage>2.5)return half4(lit,alpha);\n return half4(shadow>.5?shade:lit,alpha);\n}"
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\SkinPalette302\\Shaders\\FaceSceneLight335.hlsl",
+    "line": 53,
+    "code": "float QuantizedSurfaceLight335(float continuous,int role){\n float levels=max(2,round(role==3?_FaceShadeSteps335:_SurfaceShadeSteps335));\n return floor(saturate(continuous)*(levels-1)+.5)/(levels-1);\n}\nfloat3 ShadeFactor335(float2 uv,int role,float level){\n // Illumination never reads the per-pixel colour layer. Preserve its texture detail.\n float3 minimumShade=_SurfaceOwnShade335.xxx;\n // Face semantic profile only. The albedo texture and colour palette are untouched.\n if(role==3&&_FaceShadeTint335>.5)minimumShade*=_FaceShadeChromaticity335.rgb;\n if(role==7&&tex2D(_Auto245StockMember,uv).r>.5){"
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\SkinPalette302\\Shaders\\FaceSceneLight335.hlsl",
+    "line": 57,
+    "code": "float3 ShadeFactor335(float2 uv,int role,float level){\n // Illumination never reads the per-pixel colour layer. Preserve its texture detail.\n float3 minimumShade=_SurfaceOwnShade335.xxx;\n // Face semantic profile only. The albedo texture and colour palette are untouched.\n if(role==3&&_FaceShadeTint335>.5)minimumShade*=_FaceShadeChromaticity335.rgb;\n if(role==7&&tex2D(_Auto245StockMember,uv).r>.5){\n  // Existing region constants, independent of sampled albedo; no new tint.\n  float3 reference=_Auto245StockLit.rgb;\n  minimumShade=float3(reference.r>0?_Auto245StockShade.r/reference.r:1,reference.g>0?_Auto245StockShade.g/reference.g:1,reference.b>0?_Auto245StockShade.b/reference.b:1);\n }"
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\SkinPalette302\\Shaders\\FaceSceneLight335.hlsl",
+    "line": 70,
+    "code": "float3 SurfaceLayerOutput335(float3 colour,float3 factor,float continuous,float quantized){\n if(_SurfaceLayerView335==1)return colour;\n if(_SurfaceLayerView335==2)return continuous.xxx;\n if(_SurfaceLayerView335==3)return quantized.xxx;\n return colour*factor;\n}"
+  },
+  {
+    "file": "Assets\\EUnityValidation01\\GameMapIntegration333\\Shaders\\OwnerLines333.compute",
+    "line": 5,
+    "code": "Texture2D<uint> _FloodRead;RWTexture2D<uint> _FloodWrite;RWTexture2D<float4> _Colour,_Audit,_PaletteAudit256;int2 _Size;float _LineTone;int _UsePalette256;float4 _DeepCream256,_DeepSkin256;"
+  }
+]

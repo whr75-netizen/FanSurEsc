@@ -1,0 +1,97 @@
+[
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 217,
+    "code": " int role=(int)round(owner.x),source=role==2?2:role==5?1:role==7?3:-1;"
+  },
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 218,
+    "code": " if(source<0||((role==2||role==5)&&!domain))return false;"
+  },
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 238,
+    "code": " feature=role==2?2:role==5?1:5;return weight>0&&eyeId>0;"
+  },
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 292,
+    "code": "  if(colour.a>0){int role=win==1?4:(win==5||win==7)?6:win==6?3:1;float3 rgb=colour.rgb;if(win==5||win==7){rgb=_EyeLayerView348==1?colour.rgb:_EyeLayerView348==2?shade.xxx:_EyeLayerView348==3?shade.yyy:colour.rgb*shade.z;}c=float4(rgb,1);o=float4(role+1,eyeId,depthWin,1);surfaceSupport=float4(uvWin.xy,uvWin.z,supportWin+1);int sr=supportWin==0?3:supportWin==1?4:supportWin==2?1:6;if(supportWin!=4)baryResult=float4(barycentric(restWin.xyz,sr,(int)round(uvWin.z)),sr+1);status=0;}else{status=2;visibleFeature=0;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 296,
+    "code": " if(!nativeRayVisible21&&cov(hair)&&hair.x<o.z){float4 hc=_HairRGBA.Load(int3(p,0));float3 hcRGB=hc.rgb;if(round(oldMeta.y)==round(hair.y)&&oldOwner.z==hair.x)hcRGB=old.rgb;else if(round(raw.y)==round(hair.y))hcRGB=_PostLine.Load(int3(p,0)).rgb;c=float4(lerp(c.rgb,hcRGB,saturate(hair.w)),1);o=float4(hair.y,hair.z,hair.x,3);visibleFeature=0;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 297,
+    "code": " if(!nativeRayVisible21&&cov(brow)&&brow.x<o.z&&(!cov(hair)||hair.x>=brow.x)){float4 br=_BrowRGBA.Load(int3(p,0));c=float4(lerp(c.rgb,br.rgb,saturate(brow.w)),1);o=float4(brow.y,brow.z,brow.x,4);visibleFeature=0;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 299,
+    "code": " record.colour=c;record.owner=o;record.intrinsic=float4(intrinsicWin,eyeId,bestIntrinsicCount,1);record.visible=float4(visibleFeature,eyeId,winCount,repIndex);record.histA=histVisible;record.histB=histIntrinsic;record.surface=surfaceSupport;record.pigment=pig;record.audit=float4(status,noSupport,hairBlocked,bodyBlocked);record.domain=float4(1,oldDomain?1:0,bestIntrinsicCount>0?1:0,0);record.bary=baryResult;if(supportWin>=0&&repIndex>=0){int2 sq=lc*4+int2(repIndex%4,repIndex/4);float4 sm=supportWin==4?float4(depthWin,7,1,0):M(supportWin,sq);record.supportMeta=float4(sm.x,sm.y,sm.w,(win==5||win==6||win==7)?0:1);}record.control=float4(1,preserveBody?1:0,0,NativeSourceReady77()&&visibleFeature==5?77:0);"
+  },
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 303,
+    "code": "[numthreads(8,8,1)]void UnpackA(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];_Output348[p]=r.colour;_Owner348[p]=r.owner;_Intrinsic348[p]=r.intrinsic;_Visible348[p]=r.visible;_HistA348[p]=r.histA;_HistB348[p]=r.histB;_Surface348[p]=r.surface;_Pigment348[p]=r.pigment;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/EyeBoundaryRestore348/Shaders/EyeFeature348.compute",
+    "line": 305,
+    "code": "[numthreads(8,8,1)]void Merge(uint3 id:SV_DispatchThreadID){int2 p=id.xy;if(any(p>=int2(480,272)))return;Pixel348 r=_RecordsRead348[p.y*480+p.x];if(r.control.x<.5)return;_OldDomain[p]=r.domain;if(r.control.y>.5)return;_Before[p]=r.colour;_Colour[p]=r.colour;_Owner[p]=r.globalOwner;_PreparedMeta[p]=r.preparedMeta;_PreparedUV[p]=r.preparedUV;_ResolvedMeta[p]=float4(r.preparedMeta.x,r.preparedMeta.y,r.preparedMeta.z,r.globalOwner.w);_ResolvedUV[p]=r.preparedUV;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/EyeCompose333.compute",
+    "line": 16,
+    "code": " float4 c=_Reference.Load(int3(p,0));float4 owner=float4(fm.y,fm.z,fm.x,0);float4 intrinsic=0,audit=0;"
+  },
+  {
+    "file": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/EyeCompose333.compute",
+    "line": 20,
+    "code": " if(!ap){int role=(int)round(fm.y)-1;bool legacy=(role==1||role==2||role==4||role==6)&&(round(fm.z)==1||round(fm.z)==2);if(legacy){if(cov(bm)){c=bc;owner=float4(bm.y,bm.z,bm.x,5);audit.x=1;}else{owner=float4(-1,0,0,9);audit.y=1;}}}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/EyeCompose333.compute",
+    "line": 21,
+    "code": " else{int eye=(int)round(tr.y);float4 plane=eye==2?_Plane262_0:_Plane262_1;float3 near=_RayBase.xyz+(top.x+.5)*_RayX.xyz+(top.y+.5)*_RayY.xyz;float depth=-(dot(plane.xyz,near)+plane.w)/dot(plane.xyz,_RayDepth.xyz);c=float4(tc.rgb,1);owner=float4(tr.x+1,eye,depth,1);intrinsic=float4(tr.x,eye,depth,selected?1:0);float closest=depth;bool baseIsSelected=selected&&round(bm.y)==12&&abs(bm.x-allHair.x)<=.00002;bool browHidden=cov(allHair)&&cov(brow)&&allHair.x<brow.x;"
+  },
+  {
+    "file": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/EyeCompose333.compute",
+    "line": 24,
+    "code": "  if(cov(other)&&other.x<closest){float4 hc=_OtherHairRGBA.Load(np);c=float4(lerp(tc.rgb,hc.rgb,saturate(other.w)),1);owner=float4(other.y,other.z,other.x,3);closest=other.x;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/GameMapIntegration333/Shaders/EyeCompose333.compute",
+    "line": 26,
+    "code": "  if(cov(brow)&&brow.x<closest&&!browHidden){float4 br=_BrowRGBA.Load(np);c=float4(lerp(tc.rgb,br.rgb,saturate(brow.w)),1);owner=float4(brow.y,brow.z,brow.x,4);closest=brow.x;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/Restore250R2/Shaders/Auto245Fragment.hlsl",
+    "line": 40,
+    "code": " if(role==8&&_Restore250Bottom>.5){lit=_Restore250LowerLit.rgb;shade=_Restore250LowerShade.rgb;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/Restore250R2/Shaders/Auto245Fragment.hlsl",
+    "line": 41,
+    "code": " if(role==10&&tex2D(_Auto245CreamMember,uv).r>.5){shade=_Auto245CreamShade.rgb;}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/Restore250R2/Shaders/Auto245Fragment.hlsl",
+    "line": 42,
+    "code": " if(role==3){shade=ownLit*.72;} // Existing A241 own-pigment shade endpoint, automatic mask replaces its old hand-authored region."
+  },
+  {
+    "file": "Assets/EUnityValidation01/Restore250R2/Shaders/Auto245Fragment.hlsl",
+    "line": 43,
+    "code": " if(role==7){if(tex2D(_Auto245StockMember,uv).r>.5){lit=_Auto245StockLit.rgb;shade=_Auto245StockShade.rgb;}else if(tex2D(_Auto245BodySkinMember,uv).r>.5){shade=_Auto245SkinShade.rgb;}}"
+  },
+  {
+    "file": "Assets/EUnityValidation01/Restore250R2/Shaders/Auto245Fragment.hlsl",
+    "line": 51,
+    "code": " if(_SurfaceLayers335>.5&&LayeredRole335((int)round(_Auto245Role))){half3 baseColour,shadeEndpoint;Auto245Palette(uv,source.rgb,baseColour,shadeEndpoint);float continuous=ContinuousSurfaceLight335(input,material);float level=QuantizedSurfaceLight335(continuous,(int)round(_Auto245Role));level=ProviderSurfaceLevel335(level,(int)round(_Auto245Role),input.pos.xy,-TransformWorldToView(input.positionWS).z);float3 factor=ShadeFactor335(uv,(int)round(_Auto245Role),level);return float4(SurfaceLayerOutput335(baseColour,factor,continuous,level),alpha);}"
+  }
+]

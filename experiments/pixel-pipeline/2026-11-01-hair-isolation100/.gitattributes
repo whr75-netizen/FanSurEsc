@@ -1,0 +1,4 @@
+# Captured evidence must keep exact bytes across checkouts.
+* -text whitespace=cr-at-eol
+capture/*.cs whitespace=cr-at-eol,-blank-at-eol
+capture/RUN_*.cs.txt whitespace=cr-at-eol,-blank-at-eol

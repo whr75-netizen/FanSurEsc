@@ -1,0 +1,53 @@
+{
+  "PlayEntries": 1,
+  "validCapturedFrames": 0,
+  "stage": "restoration-incomplete",
+  "error": "System.InvalidOperationException: Actual gameplay input differs from requested virtual input; no substitution\r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.MotionScope78.Snapshot () [0x00040] in <9879ebf263274cb882a0a6b1d190011a>:0 \r\n  at Unity.AI.Assistant.Agent.Dynamic.Extension.Editor.CommandScript.Tick () [0x00764] in <9879ebf263274cb882a0a6b1d190011a>:0 ",
+  "motionRestoreReport": {
+    "allRestored": false,
+    "animatorSpeed": true,
+    "captureDelta": true,
+    "errors": [
+      "ArgumentNullException: Value cannot be null.\r\nParameter name: value"
+    ],
+    "keyboardCurrent": true,
+    "mapEnabled": true,
+    "movementSpeed": true,
+    "ownedDeviceRemoved": true,
+    "ownedSettingsReleased": true,
+    "settingsContent": false,
+    "settingsReference": false
+  },
+  "otherEditorStateEqual": {
+    "dirty": true,
+    "scenes": true,
+    "domain": true,
+    "playing": true,
+    "paused": true,
+    "optionsEnabled": true,
+    "options": true,
+    "timeScale": true,
+    "captureDeltaTime": true,
+    "graphicsPipelinePath": true,
+    "qualityPipelinePath": true,
+    "runInBackground": true,
+    "playerRunInBackground": true
+  },
+  "nativeContentExact": 44,
+  "nativeUnavailable": [
+    {
+      "equal": null,
+      "path": "ProjectSettings/ProjectSettings.asset",
+      "status": "Unavailable",
+      "type": "UnityEditor.AssetImporter"
+    }
+  ],
+  "globalsRestored": true,
+  "RTbefore": 30,
+  "RTafter": 30,
+  "borrowedRestNotDisposed": true,
+  "borrowedRestReferenceUntouched": true,
+  "ownedProbeReleased": true,
+  "currentSettings": "managed22-field values available; native object destroyed, no new settings assigned",
+  "recoveryExecution": false
+}

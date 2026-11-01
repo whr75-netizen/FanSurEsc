@@ -509,3 +509,14 @@ W 소유권은 `CACHE_OWNERSHIP77.json`과 전체 Assets 참조12개로 감사�
 복원: PID35364 Edit/domain1, GameMap1 clean, Assets/ProjectSettings dirty29 identity 및 내용 보존, options false/None/background false/time/pipeline/global 복구. native44/45 ExactUTF8이며 비dirty ProjectSettings AssetImporter1은 unavailable이다. path 없는 Editor Object/SceneVisibilityState 각1개의 raw dirty 증가를 기록했고 소유권 근거 없이 지우지 않았다. RT30→30, 임시 버퍼/셰이더만 해제하고 빌린 참조·morph·afterPose를 복원했다. 최종 Unity 내부 allocated+32.18MiB/capture-only 약0.00125MiB는 물리 RAM/누수 확정이 아니다. C# Assets import/recompile, SaveAssets, CUA, 종료/reset/push는 없었다.
 
 미완: 전체 눈 joint shape/state bank, 곡선 전체와 소수 좌표의 연속 이동, 긴 회전/보행/모든 모델 미관은 해결·검증하지 않았다. 원배율/확대 PNG를 직접 봤지만 거친 눈 모양은 남아 있다. 기존 user LayerMode19 선행 변경 때문에 전체 main compute 함수는 HEAD에 독립 적용 불가하므로 통째로 stage하지 않는다. 새 helper 실제 경로6파일과 분리 가능한 RW 선언 hunk만 선택 보존하며, 정확한 전체 작업 source/전후 snapshot/PRODUCT77.patch/컴팩트 실제 fixture는 위 실험에 남긴다. user 기존29개 다른 tracked 파일 해시는 불변이다.
+
+
+## Eye78 — 움직임 관찰기 입력 수명 사고, 제품77 유지/유효 캡처0
+
+`experiments/pixel-pipeline/2026-11-01-motion-input78/INDEX.html`에 사고와 복구 근거를 보존한다. Play1회, 준비 중 실제 입력0으로 첫 캡처 전에 중단했다. 원래 임시 InputSettings를 clone으로 교체하면 InputManager.settings setter가 이전 HideAndDontSave 객체를 파괴한다는 계약을 놓쳐 원래 참조로 복원하지 못했다. 현재 InputSettings는 관리 참조가 있으나 native 객체가 파괴돼 Unity bool=false, loaded settings0이다. 공개 getter/JsonUtility의 관리 데이터22필드는 남아 있으며 `INPUT_SETTINGS_RECOVERED78.json` SHA ca3f68bea248d3f95f9daef0889228a710740dd1efc8867ffda63b97b07f4286으로 외부 보존했다. Unity 종료의 JSON overwrite/backup clear 코드와 시험 값이0/0으로 돌아온 관리 필드를 대조했으며 기본값을 추정한 것이 아니다. 원래 native identity 및 비직렬화 feature flags는 복원을 보장하지 않는다. 실제 UI 입력 동작은 검증하지 않았다.
+
+현재 읽기 조사 단계로 새 설정 생성/연결·초기화·재시작·추가Play는 실행하지 않았다. 최소안은 이 실제 JSON으로 새 InputSettings native 객체를 채운 뒤22필드 roundtrip을 확인하고 public setter로 연결하는 것이다. 채택되면 InputManager의 임시 객체 소유권을 따르며 활성 참조를 Destroy하면 안 된다. SerializedObject로 읽은 domain backup은 이미 빈 문자열이었고 Reflection/내부 reset은 사용하지 않았다.
+
+`MotionScope78.FAILED.cs:Start/Dispose`와 실패 runner는 당시 코드이다. `MotionScope78.cs`는 **미컴파일·미실행 제안**이며 설정 포인터를 교체하지 않고 외부 JSON을 먼저 저장한 뒤 transient 두 필드만 바꿔 복원한다. 입력은 queue만 하고 정상 Dynamic update를 기다린다. 기존 Editor callback에서의 `InputSystem.Update()`가 Editor 상태에 이벤트를 소비했을 가능성은 source에 근거한 가설이며 아직 재검증하지 않았다. 복구 확인 전 이 제안을 실행하지 않는다.
+
+자산/씬/기타 옵션은 별도 대조했다: PID35364 Edit/domain1, 사용자 dirty29 identity 동일, native44/45 exact(비dirty Importer1 unavailable), globals 복구, options false/None/background false/time/pipeline 동일, RT30→30, 임시 장치/관찰기 자원 해제와 실제 product rest buffer 미교체 확인. 프로젝트 tracked30 해시는 모두 불변이다. 따라서 입력 native 상태 사고를 다른 상태 보존이나 움직임 품질 성공으로 감추지 않는다.

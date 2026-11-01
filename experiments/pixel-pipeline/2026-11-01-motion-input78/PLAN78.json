@@ -1,0 +1,35 @@
+{
+  "frameBudget": {
+    "phase": 6,
+    "walk": 8,
+    "turn": 10
+  },
+  "warmupFrames": {
+    "initialDirectionSettle": 5,
+    "walkTransition": 8
+  },
+  "PlayEntries": 1,
+  "normalDrivers": [
+    "PlayerMovement.Update -> StepMove",
+    "Animator controller",
+    "Gameplay397.Present -> HeadLocal367.RenderFrame"
+  ],
+  "input": "owned temporary virtual InputSystem Keyboard, cloned InputSettings, existing enabled map",
+  "testOnlyChanges": [
+    "fixed1/60 captureDelta",
+    "phase speed=sceneCellPitch*.25/dt",
+    "Animator speed0 only phase; original speed restored for walk/turn"
+  ],
+  "restoration": [
+    "own device/settings retired, borrowed settings/current keyboard restored",
+    "movement/Animator speeds restored before normal Play exit",
+    "existing global/scene/assets/options/time/pipeline journal"
+  ],
+  "readback": "same frame source geometry/camera, counts48/records256 bounded ROI; full960 image once only",
+  "restBuffer": "not replaced/not disposed by observer; actual product-owned cache read only for provenance",
+  "limits": [
+    "phase may be cancelled by physical/controller changes; require actual input/pose/displacement evidence",
+    "8 walk frames after8 transition warmup are a short segment, not a full gait cycle",
+    "No OS input/CUA, source mesh switch, Assets C# import or product mutation planned"
+  ]
+}

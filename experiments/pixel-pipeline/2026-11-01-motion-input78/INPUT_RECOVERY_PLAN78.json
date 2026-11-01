@@ -1,0 +1,27 @@
+{
+  "status": "READ_ONLY_RECOVERY_PLAN_NOT_EXECUTED",
+  "payloadSource": "run/MANAGED_INPUT_VALUES78.json via public JsonUtility.ToJson(InputSystem.settings), despite destroyed native wrapper",
+  "payloadSHA256": "ca3f68bea248d3f95f9daef0889228a710740dd1efc8867ffda63b97b07f4286",
+  "serializedTopLevelFields": 22,
+  "provenance": [
+    "Installed InputSystemEditorInitializer.OnPlayModeChange saves JSON on ExitingEditMode, overwrites the settings target and clears backup on EnteredEditMode.",
+    "Domain backup currently empty; managed settings fields are back to Background0/EditorBehavior0, unlike test IgnoreFocus/AllDeviceInputAlwaysGoesToGameView.",
+    "Managed reference is not null and serializes22 fields, native object false and zero loaded InputSettings objects. This is not all settings values being absent."
+  ],
+  "minimalProposedCalls": [
+    "Require stable Edit, current managed/native state unchanged and saved payload hash matching.",
+    "Create one owned InputSettings native object; populate it from recovered JSON BEFORE assigning it.",
+    "JsonUtility roundtrip must match the22-field payload; use original InputManager temporary-object ownership HideAndDontSave.",
+    "Assign InputSystem.settings through public setter only after verification; do not destroy it once adopted by InputManager.",
+    "Re-read native alive,22-field JSON equality, options/dirty/project files; do not Play."
+  ],
+  "notAllowed": [
+    "No default-value guess/reset, app restart, Reflection, asset save/import, device/global reset or new Play."
+  ],
+  "unrecoverableOrUnverified": [
+    "Original native object identity cannot be recreated.",
+    "NonSerialized InputSettings.m_FeatureFlags were not backed up and are not proven restored by JSON.",
+    "Actual OS/UI/game input behavior after recovery remains untested; public managed getters currently work, native-object dependent checks fail."
+  ],
+  "observerProposal": "MotionScope78.cs is offline/uncompiled: no settings pointer replacement/destruction, external full backup before changing transient fields, queue-only normal Dynamic update; prepare78 glue updated. No retry until restoration and validation."
+}
